@@ -4105,9 +4105,7 @@ class PokemonRedStateReader:
 
         count = self._memory.read_u8(RamAddress.NUM_SPRITES)
         if count > 15:
-            raise CurrentMapObjectError(
-                f"current map exposes impossible sprite count {count}"
-            )
+            raise CurrentMapObjectError(f"current map exposes impossible sprite count {count}")
         hidden = self._read_hidden_current_sprite_indices()
         found: list[CurrentMapObject] = []
         occupied: set[tuple[int, int]] = set()
@@ -4128,9 +4126,7 @@ class PokemonRedStateReader:
                 )
             at = padded_y - 4, padded_x - 4
             if at in occupied:
-                raise CurrentMapObjectError(
-                    f"multiple current map objects occupy coordinate {at}"
-                )
+                raise CurrentMapObjectError(f"multiple current map objects occupy coordinate {at}")
             occupied.add(at)
             found.append(
                 CurrentMapObject(
@@ -4151,9 +4147,10 @@ class PokemonRedStateReader:
         """Recognize the field interval between sight and trainer battle.
 
         ``wMiscFlags`` bit zero is overloaded by field actions, so it is not
-        sufficient by itself.  A sight engagement also owns movement input or
-        runs the engine's scripted NPC walk; requiring both sides avoids
-        treating a stale successful-item flag as an encounter.
+        sufficient by itself.  A sight engagement also owns movement input,
+        runs the engine's scripted NPC walk, or leaves the map's trainer-text
+        script active. Requiring both sides avoids treating a stale successful-
+        item flag as an encounter while retaining defeated-trainer dialogue.
         """
 
         if not self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x01:
@@ -4163,6 +4160,7 @@ class PokemonRedStateReader:
             readiness.joy_ignore & JOY_IGNORE_MOVEMENT_MASK
             or readiness.npc_movement_script_table
             or readiness.status_flags_5 & 0x01
+            or self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
         )
 
     def read_current_strength_boulders(self) -> tuple[CurrentStrengthBoulder, ...]:
@@ -4244,9 +4242,7 @@ class PokemonRedStateReader:
             address = int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + toggle_index // 8
             if self._memory.read_u8(address) & (1 << (toggle_index % 8)):
                 hidden.add(sprite_index)
-        raise CurrentStrengthBoulderError(
-            "toggleable object list lacks its bounded sentinel"
-        )
+        raise CurrentStrengthBoulderError("toggleable object list lacks its bounded sentinel")
 
     def read_current_map_blocks(self) -> CurrentMapBlocks:
         """Read the active mutable block grid from Red's bordered map buffer.
@@ -5132,10 +5128,7 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("story:starter_selection_ready")
     if _event(events, EventFlag.GOT_POKEDEX):
         facts.add("story:pokedex_received")
-    if (
-        raw.status_flags_1 is not None
-        and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK
-    ):
+    if raw.status_flags_1 is not None and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK:
         facts.add(SAFFRON_GUARD_ACCESS_FACT)
 
     map_facts = {

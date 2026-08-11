@@ -166,9 +166,7 @@ def test_raw_state_reads_repel_steps_from_the_revision_pinned_address() -> None:
 
 def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> None:
     with pytest.raises(VisibleMapObjectError, match="impossible sprite count"):
-        PokemonRedStateReader(
-            RecordingMemory({0xD4E1: 16})
-        ).read_visible_map_objects()
+        PokemonRedStateReader(RecordingMemory({0xD4E1: 16})).read_visible_map_objects()
 
 
 def test_strength_boulders_keep_offscreen_slots_and_use_map_sprite_movement_bytes() -> None:
@@ -308,15 +306,15 @@ def test_current_map_objects_keep_dynamic_offscreen_coordinates_and_exclude_hidd
 
 def test_trainer_engagement_requires_seen_flag_and_script_control() -> None:
     stale_field_success = PokemonRedStateReader(RecordingMemory({0xCD60: 0x01}))
-    scripted_trainer = PokemonRedStateReader(
-        RecordingMemory({0xCD60: 0x01, 0xCD6B: 0xF0})
-    )
+    scripted_trainer = PokemonRedStateReader(RecordingMemory({0xCD60: 0x01, 0xCD6B: 0xF0}))
+    trainer_text_script = PokemonRedStateReader(RecordingMemory({0xCD60: 0x01, 0xDA39: 0x01}))
     movement_without_seen_flag = PokemonRedStateReader(
         RecordingMemory({0xCC57: 0x02, 0xCD6B: 0xF0})
     )
 
     assert not stale_field_success.trainer_engagement_active()
     assert scripted_trainer.trainer_engagement_active()
+    assert trainer_text_script.trainer_engagement_active()
     assert not movement_without_seen_flag.trainer_engagement_active()
 
 

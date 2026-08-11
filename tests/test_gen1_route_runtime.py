@@ -80,6 +80,17 @@ class TrainerIntroExecutor:
         return action
 
 
+@dataclass
+class TrainerDialogueExecutor:
+    reader: FakeReader
+    actions: int = 0
+
+    def execute(self, action: object) -> object:
+        self.actions += 1
+        self.reader.trainer_engagement = False
+        return action
+
+
 def raw(*, battle_state: int = 0) -> RawGameState:
     return RawGameState(
         game_started=True,
@@ -227,6 +238,7 @@ def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
     assert receipt.resumed_at == (8, 7)
     assert receipt.details == {
         "battle_plan_id": "generated-route-map-12-trainer-1",
+        "battle_started": True,
         "intro_pulses": 1,
         "verified": True,
     }
@@ -234,6 +246,28 @@ def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
     assert handler.trainer_evidence == [receipt]
     with pytest.raises(RouteExecutionError, match="trainer budget"):
         handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
+
+
+def test_combined_handler_closes_defeated_trainer_dialogue_without_a_battle() -> None:
+    fake = FakeReader(raw(), trainer_engagement=True)
+    executor = TrainerDialogueExecutor(fake)
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, executor),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=1,
+        stabilization_frames=24,
+    )
+
+    receipt = handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
+
+    assert receipt.kind == "trainer_dialogue"
+    assert receipt.details == {
+        "battle_started": False,
+        "intro_pulses": 1,
+        "verified": True,
+    }
+    assert executor.actions == 1
 
 
 def test_wild_handler_publishes_the_existing_authenticated_receipt(

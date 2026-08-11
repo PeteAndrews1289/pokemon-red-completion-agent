@@ -260,6 +260,24 @@ class Gen1RouteInterruptionHandler:
             intro_pulses += 1
             active = self.reader.read()
 
+            if (
+                active.battle_state == 0
+                and not self.reader.trainer_engagement_active()
+                and self.reader.read_input_readiness().ready
+            ):
+                receipt = InterruptionReceipt(
+                    kind="trainer_dialogue",
+                    resumed_map=interruption.map_id,
+                    resumed_at=interruption.at,
+                    details={
+                        "battle_started": False,
+                        "intro_pulses": intro_pulses,
+                        "verified": True,
+                    },
+                )
+                self.trainer_evidence.append(receipt)
+                return receipt
+
         ordinal = len(self.trainer_evidence) + 1
         battle_plan_id = f"generated-route-map-{interruption.map_id}-trainer-{ordinal}"
         try:
@@ -290,6 +308,7 @@ class Gen1RouteInterruptionHandler:
             resumed_at=interruption.at,
             details={
                 "battle_plan_id": battle_plan_id,
+                "battle_started": True,
                 "intro_pulses": intro_pulses,
                 "verified": True,
             },
