@@ -23,6 +23,8 @@ from pokemon_red_completion.generation_one import UNAVAILABLE_IN_BLUE, UNAVAILAB
 RECORD = Path("docs/evidence/acquisition-routes-2026-08-11.json")
 TRADE_EVOLUTIONS = {65, 68, 76, 94}
 MEW = 151
+SOURCE_COMMIT = "7fb928b31dc36667bcdcd50b32706b02d491ebb3"
+SOURCE_BUNDLE = "26c163bc9579e91ac52fc60f5fd750ea0c63a8d81b7261d6f394bd83f254b865"
 
 
 @pytest.fixture(scope="module")
@@ -39,6 +41,19 @@ def test_every_ordinary_retail_cartridge_route_is_now_in_scope(record: dict) -> 
     assert "Mew remains absent" in record["interpretation"]
     for route in ("starters", "gifts", "fossils", "Game Corner", "fixed encounters"):
         assert route in record["scope"]
+
+
+def test_evidence_is_bound_to_clean_source_and_public_rom_fingerprints(record: dict) -> None:
+    assert record["status"] == "ok"
+    assert record["source"] == {
+        "git_commit": SOURCE_COMMIT,
+        "worktree_dirty": False,
+    }
+    assert record["executable_source_bundle_sha256"] == SOURCE_BUNDLE
+    assert set(record["roms"]) == {"red", "blue"}
+    assert record["roms"]["red"]["title"] == "POKEMON RED"
+    assert record["roms"]["blue"]["title"] == "POKEMON BLUE"
+    assert "/Users/" not in json.dumps(record)
 
 
 def test_scripted_route_ledger_preserves_costs_choices_and_renewability(record: dict) -> None:
