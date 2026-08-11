@@ -174,12 +174,19 @@ after the generated approach, with one strategic decision, one matching outcome 
 failures. Because this used an already-opened state against an uncommitted working tree, it is an
 integration diagnostic only—not a source-bound public result, clean-power rehearsal or dataset row.
 
+The first published command then failed earlier than the emulator: its 96-character rehearsal
+episode name exceeded the private root's intentionally stricter 80-character directory contract.
+No private episode, partial artifact or game outcome was created. The same audit revealed that the
+86-character counted strategic prefix would also have failed later. Both forms now derive
+78-character names, enforce the storage ceiling in the strategic protocol and cross the actual
+private `begin_episode` boundary in tests. The rehearsal remains 0/1 because no game run began.
+
 ## Code and CI audit
 
 At this checkpoint the repository contains 152 source modules and 176 test modules. The local CI
 equivalent produced:
 
-- **2,599 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,600 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
@@ -192,10 +199,10 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `d899b69be3d5abcea8d6e385b2b7f4ead837bdef56e899ce76b589bc33186f97` |
-| Source bundle SHA-256 | `ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a` |
-| Teacher execution SHA-256 | `b466a3d9141c8d023244af28eeb2c1c5bb553a9aaf38e728806cf0f72cdfd9c9` |
-| Slot assignment SHA-256 | `b685ee8d404f74b550bf3b3d169a3e110e67c98198cbf688c5824ec318e805b0` |
+| Registry SHA-256 | `465323b544d3837f47ced7f49af01ddda12b07132ef387e348a06c3d1b48f969` |
+| Source bundle SHA-256 | `25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc` |
+| Teacher execution SHA-256 | `9b61c9fff90cb5fc9da9f8b14d603295a0651f5ad0565395633ab9477ed12610` |
+| Slot assignment SHA-256 | `0165b4609408a068f305f1cee81cf84fd463be18f184b7ccbea217cdd3f468bc` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -204,11 +211,11 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `fee1647d4e8d29e275de323fe1486bd076814f77722bbebc52193b7640f2d037` |
+| Strategic registry SHA-256 | `df5da4f3eecf189d5da33ce4b9601f90e6e0cbe5c4e689c11d32c9bd2eb34624` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `5d1cbef0bdaf8400af5449a1f50fc697e7a8105c5848819c355ac30906104c4f` |
-| Rehearsal assignment SHA-256 | `cb311a5b71794eac8b72097704093e7b2d94fade8b5a99d180ba76ceb7988143` |
-| First train assignment SHA-256 | `b2e2c92e1c07e1bc278b9f3decd6be0964cfc283f81c74ba13fc2cad646a9145` |
+| Strategic teacher execution SHA-256 | `0b11d43f7ddd9fc13525232d07faea022d95624624096450b5ba9e61b5e24d17` |
+| Rehearsal assignment SHA-256 | `56482706ad693557c5296cf0ed9fbf056cbc5c50b3e0a8e0a499fbafcd509e1c` |
+| First train assignment SHA-256 | `12c91d19c702af3e1d016d23d76ad246b7f7631cb9bbae86d530e3480d5c6115` |
 
 ## Ranked gaps
 

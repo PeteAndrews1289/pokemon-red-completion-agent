@@ -156,6 +156,11 @@ captured-state preflight then completed the generated approach plus all 28 Tower
 ten required battles with one joined strategic decision/outcome and zero recording failures. That
 preflight is not a clean-power root or dataset row; root `1710001` remains unopened.
 
+The first published command found a separate harness defect before emulator startup: the derived
+episode name exceeded the private store's 80-character safety limit. No artifact or game outcome
+was created. Counted and rehearsal names are now both 78 characters, the protocol enforces that
+ceiling, and a regression crosses the real private writer boundary before another publication.
+
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
 that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before

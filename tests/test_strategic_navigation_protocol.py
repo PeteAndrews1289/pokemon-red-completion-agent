@@ -10,8 +10,10 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_EPISODE_PREFIX,
     STRATEGIC_NAVIGATION_REGISTRY_DIGEST_RELATIVE_PATH,
     STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX,
     StrategicNavigationProtocolError,
     load_committed_strategic_navigation_registry,
     parse_strategic_navigation_registry,
@@ -92,11 +94,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "fee1647d4e8d29e275de323fe1486bd076814f77722bbebc52193b7640f2d037"
+        == "df5da4f3eecf189d5da33ce4b9601f90e6e0cbe5c4e689c11d32c9bd2eb34624"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a"
+        == "25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -104,7 +106,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "5d1cbef0bdaf8400af5449a1f50fc697e7a8105c5848819c355ac30906104c4f"
+        == "0b11d43f7ddd9fc13525232d07faea022d95624624096450b5ba9e61b5e24d17"
     )
     assert digest == {
         "bytes": len(payload),
@@ -120,7 +122,8 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
 
     assert first == registry.assignment("red-strategic-v1-01-train")
     assert first.root_lineage_id == f"red-strategic-root-{first.assignment_id}"
-    assert first.episode_id == f"red-strategic-teacher-{first.assignment_id}"
+    assert first.episode_id == f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{first.assignment_id}"
+    assert len(first.episode_id) <= 80
     assert first.collection_slot_ordinal == 1
     assert first.partition_slot_ordinal == 1
     assert first.declared_partition_slots == 5
@@ -145,6 +148,10 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
     assert episode_metadata["split"] == metadata["split"]
 
     rehearsal = registry.rehearsal_assignment()
+    assert rehearsal.episode_id == (
+        f"{STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX}{rehearsal.assignment_id}"
+    )
+    assert len(rehearsal.episode_id) <= 80
     assert "/" not in json.dumps(rehearsal.metadata_dict(), sort_keys=True)
     with pytest.raises(StrategicNavigationProtocolError, match="committed assignment"):
         rehearsal.episode_metadata()

@@ -115,6 +115,14 @@ counter therefore stays at zero. The next honest reveal is not a model score; it
 preassigned clean-power rehearsal reaches the same boundary and whether one genuine strategic
 choice per root is enough data to justify opening the learning split.
 
+The first published command never reached the game. The rehearsal's content-derived name was 96
+characters, while the private store accepts at most 80. Worse, the counted strategic names were 86,
+so this was not a rehearsal-only typo; the protocol and storage contracts had never met. No episode
+directory or game outcome existed, which kept the root unopened. Both identity forms are now 78
+characters, the protocol rejects longer values, and the test suite opens and aborts both through the
+real private writer. It is a small failure with a useful lesson for the video: end-to-end means the
+boring boundaries too.
+
 ## August 10: the route outlived its Repel
 
 The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14

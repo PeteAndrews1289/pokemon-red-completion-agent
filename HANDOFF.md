@@ -44,6 +44,15 @@ already-opened development state; it did **not** execute root `1710001`, was not
 evidence, and cannot enter training. The clean-power rehearsal is still **0/1**, strategic train is
 **0/5**, validation **0/2**, and test **0/5**.
 
+The first invocation of the published bridge at `ef7ad72` stopped before private episode creation
+or emulator startup. The strategic protocol allowed 96-character identifiers, while the private
+store deliberately caps episode directory names at 80. Both the counted strategic prefix (86
+characters with its digest) and rehearsal prefix (96) were therefore structurally unwriteable.
+There was no episode, partial artifact or observed game outcome, so the root remains unopened. The
+protocol now derives 78-character counted and rehearsal episode names, enforces the storage ceiling,
+and tests both assignment kinds through the real `PrivateArtifactRoot.begin_episode` boundary.
+This is a harness qualification failure, not a Pokémon-run failure.
+
 Immediate next action after this exact source is committed, pushed and green is:
 
 ```bash
@@ -60,10 +69,10 @@ checkpoint or open a train/validation/test root. If it passes, load it through
 whether one genuine choice per whole root is enough before opening train root 1.
 
 Current prospective v95 identity is registry
-`d899b69be3d5abcea8d6e385b2b7f4ead837bdef56e899ce76b589bc33186f97`, source bundle
-`ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a`, teacher execution
-`b466a3d9141c8d023244af28eeb2c1c5bb553a9aaf38e728806cf0f72cdfd9c9`, and first assignment
-`b685ee8d404f74b550bf3b3d169a3e110e67c98198cbf688c5824ec318e805b0`. It remains 0/10.
+`465323b544d3837f47ced7f49af01ddda12b07132ef387e348a06c3d1b48f969`, source bundle
+`25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc`, teacher execution
+`9b61c9fff90cb5fc9da9f8b14d603295a0651f5ad0565395633ab9477ed12610`, and first assignment
+`0165b4609408a068f305f1cee81cf84fd463be18f184b7ccbea217cdd3f468bc`. It remains 0/10.
 
 ## Strategic collection roots are preassigned but unopened — 2026-08-11
 
@@ -121,11 +130,11 @@ coverage, and only then decide whether to open train root 01. Do not start from 
 roots while building that harness.
 
 Registry SHA is
-`fee1647d4e8d29e275de323fe1486bd076814f77722bbebc52193b7640f2d037`; strategic teacher
-execution is `5d1cbef0bdaf8400af5449a1f50fc697e7a8105c5848819c355ac30906104c4f`; source bundle is
-`ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a`; rehearsal assignment is
-`cb311a5b71794eac8b72097704093e7b2d94fade8b5a99d180ba76ceb7988143`; first train assignment is
-`b2e2c92e1c07e1bc278b9f3decd6be0964cfc283f81c74ba13fc2cad646a9145`.
+`df5da4f3eecf189d5da33ce4b9601f90e6e0cbe5c4e689c11d32c9bd2eb34624`; strategic teacher
+execution is `0b11d43f7ddd9fc13525232d07faea022d95624624096450b5ba9e61b5e24d17`; source bundle is
+`25dc1e45e8d46a6e829ef6c38057c0d36484c9404c9c44d1ad7639ad265dbfcc`; rehearsal assignment is
+`56482706ad693557c5296cf0ed9fbf056cbc5c50b3e0a8e0a499fbafcd509e1c`; first train assignment is
+`12c91d19c702af3e1d016d23d76ad246b7f7631cb9bbae86d530e3480d5c6115`.
 
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 

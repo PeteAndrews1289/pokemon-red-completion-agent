@@ -69,6 +69,10 @@
 > chapter continues. A private checkpoint preflight completed the generated approach plus all 28
 > Tower checkpoints and ten required battles with one joined strategic decision/outcome and zero
 > recording failures. It did not execute the rehearsal root and is not training evidence.
+> The first published invocation then exposed a namespace mismatch before the emulator started:
+> strategic episode IDs could exceed the private store's 80-character limit. No episode or game
+> outcome was created. Both counted and rehearsal IDs are now bounded at 78 characters and tested
+> through the real private writer boundary; the rehearsal therefore remains unopened.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

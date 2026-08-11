@@ -18,6 +18,10 @@ from pokemon_red_completion.runtime_identity import (
     PYBOY_INVENTORY_SCHEMA,
     RUNTIME_IDENTITY_SCHEMA,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    parse_strategic_navigation_registry,
+)
 
 
 def _separate_devices(root: Path, repository: Path):
@@ -42,6 +46,23 @@ def _make_store(tmp_path: Path):
 
 def _mode(path: Path) -> int:
     return stat.S_IMODE(path.stat().st_mode)
+
+
+def test_strategic_assignments_fit_the_private_episode_namespace(tmp_path: Path) -> None:
+    _, _, store = _make_store(tmp_path)
+    project_root = Path(__file__).resolve().parents[1]
+    registry = parse_strategic_navigation_registry(
+        (project_root / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    assignments = (
+        registry.assignment("red-strategic-v1-01-train"),
+        registry.rehearsal_assignment(),
+    )
+
+    for assignment in assignments:
+        writer = store.begin_episode(assignment.episode_id)
+        summary = writer.abort("identity_probe")
+        assert summary.status == "failed"
 
 
 def _episode_header_with_runtime_name(name: str) -> dict[str, object]:

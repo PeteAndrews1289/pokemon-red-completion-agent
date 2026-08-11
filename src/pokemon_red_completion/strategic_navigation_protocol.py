@@ -75,6 +75,9 @@ STRATEGIC_NAVIGATION_POLICY_ID = "qualified-completion-order-v1"
 STRATEGIC_NAVIGATION_REGIME = "within_game_whole_root"
 STRATEGIC_NAVIGATION_REHEARSAL_ID = "red-strategic-navigation-rehearsal-v1"
 STRATEGIC_NAVIGATION_REHEARSAL_SEED = 1_710_001
+STRATEGIC_NAVIGATION_EPISODE_PREFIX = "red-strategic-"
+STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX = "red-strat-reh-"
+STRATEGIC_NAVIGATION_PRIVATE_EPISODE_ID_MAX_LENGTH = 80
 
 _PARTITION_COUNTS = {"test": 5, "train": 5, "validation": 2}
 _RUN_COUNT = sum(_PARTITION_COUNTS.values())
@@ -180,7 +183,9 @@ class StrategicNavigationAssignment:
             raise StrategicNavigationProtocolError("strategic assignment digest differs")
         if self.root_lineage_id != f"red-strategic-root-{self.assignment_id}":
             raise StrategicNavigationProtocolError("strategic assignment lineage differs")
-        if self.episode_id != f"red-strategic-teacher-{self.assignment_id}":
+        if self.episode_id != (
+            f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{self.assignment_id}"
+        ) or len(self.episode_id) > STRATEGIC_NAVIGATION_PRIVATE_EPISODE_ID_MAX_LENGTH:
             raise StrategicNavigationProtocolError("strategic assignment episode differs")
         if self.source_commit is not None and _GIT_OID.fullmatch(self.source_commit) is None:
             raise StrategicNavigationProtocolError("strategic assignment commit differs")
@@ -296,7 +301,9 @@ class StrategicNavigationRehearsalAssignment:
             raise StrategicNavigationProtocolError(
                 "strategic rehearsal assignment lineage differs"
             )
-        if self.episode_id != f"red-strategic-rehearsal-teacher-{self.assignment_id}":
+        if self.episode_id != (
+            f"{STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX}{self.assignment_id}"
+        ) or len(self.episode_id) > STRATEGIC_NAVIGATION_PRIVATE_EPISODE_ID_MAX_LENGTH:
             raise StrategicNavigationProtocolError(
                 "strategic rehearsal assignment episode differs"
             )
@@ -404,7 +411,7 @@ class StrategicNavigationCollectionRegistry:
             schedule_sha256=run.schedule_sha256,
             assignment_id=assignment_id,
             root_lineage_id=f"red-strategic-root-{assignment_id}",
-            episode_id=f"red-strategic-teacher-{assignment_id}",
+            episode_id=f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{assignment_id}",
             collection_slot_ordinal=ordinal,
             declared_collection_slots=len(self.runs),
             partition_slot_ordinal=partition_ordinal,
@@ -447,7 +454,9 @@ class StrategicNavigationCollectionRegistry:
             schedule_sha256=rehearsal.schedule_sha256,
             assignment_id=assignment_id,
             root_lineage_id=f"red-strategic-rehearsal-root-{assignment_id}",
-            episode_id=f"red-strategic-rehearsal-teacher-{assignment_id}",
+            episode_id=(
+                f"{STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX}{assignment_id}"
+            ),
             source_bundle_sha256=self.execution.source_bundle_sha256,
             teacher_execution_sha256=self.execution.teacher_execution_sha256,
             source_commit=self.execution.source_commit,

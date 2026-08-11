@@ -116,6 +116,13 @@ VALIDATION 0 / 2; REHEARSAL 0 / 1**. The line is: **“The code path is ready. T
 run.”** End this episode on the clean-power command and the harder question for the next video:
 **IS ONE REAL STRATEGIC CHOICE PER GAME ENOUGH TO TRAIN ANYTHING?**
 
+Keep the first command failure. The emulator never opens; instead, put **96-CHARACTER EPISODE ID**
+against **80-CHARACTER PRIVATE LIMIT**. Then reveal that counted IDs were 86 too. Show the absence
+of a partial artifact and leave every counter at zero. Shorten both forms to 78, run them through the
+actual private writer in the test suite, and say: **“A protocol is not end-to-end until its name fits
+through the door.”** This is a clean, relatable engineering beat between the preflight and the real
+rehearsal.
+
 ## Resource episode: the route outlived its Repel
 
 Put three remaining handwritten strings over Victory Road: **51 ROOM STEPS**, **56 ROOM STEPS** and
