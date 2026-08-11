@@ -40,7 +40,7 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
     require_clean_source,
 )
-from pokemon_red_completion.rom import verify_rom  # noqa: E402
+from pokemon_red_completion.rom import supported_rom_for, verify_rom  # noqa: E402
 from pokemon_red_completion.route_plan import (  # noqa: E402
     RoutePlanningError,
     compose_route,
@@ -81,8 +81,8 @@ def _map_name(map_id: int) -> str:
         return f"MAP_{map_id}"
 
 
-def _audit_cartridge(rom_path: Path) -> dict[str, object]:
-    fingerprint = verify_rom(rom_path)
+def _audit_cartridge(rom_path: Path, title_ref: str) -> dict[str, object]:
+    fingerprint = verify_rom(rom_path, supported_rom_for(title_ref))
     rom = rom_path.read_bytes()
     maps = map_graph(rom)
     macro = macro_graph_from_nodes(maps)
@@ -113,6 +113,7 @@ def _audit_cartridge(rom_path: Path) -> dict[str, object]:
         )
 
     return {
+        "title_ref": title_ref,
         "rom": fingerprint.public_dict(),
         "topology_only": {
             "map_ids": list(topology_path.maps),
@@ -166,9 +167,16 @@ def main(argv: list[str] | None = None) -> int:
     if working_source_bundle_sha256(PROJECT_ROOT) != source_bundle:
         raise JointRouteAuditError("the executable source differs from its commit")
 
-    cartridges = [_audit_cartridge(args.red_rom), _audit_cartridge(args.blue_rom)]
+    cartridges = [
+        _audit_cartridge(args.red_rom, "red"),
+        _audit_cartridge(args.blue_rom, "blue"),
+    ]
     projections = [
-        {key: value for key, value in cartridge.items() if key != "rom"}
+        {
+            key: value
+            for key, value in cartridge.items()
+            if key not in {"rom", "title_ref"}
+        }
         for cartridge in cartridges
     ]
     if projections[0] != projections[1]:
