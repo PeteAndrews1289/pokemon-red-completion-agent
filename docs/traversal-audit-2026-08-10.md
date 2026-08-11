@@ -27,6 +27,12 @@ NPC. Live state exposed it from `(6,15)`; the executor replanned before input, r
 an alternate suffix, and returned to `(12,11)`. All 43 movement requests were acknowledged. A
 visible object is not stored as permanent terrain; only the settled failed-step fallback is durable.
 
+Cut is now proved by a fifth source-bound route as a staged map mutation, not a possession edge.
+The planner stopped at Celadon `(20,46)`, the field adapter observed exactly block `$35 → $4C` and
+tile `$3D → $2C` with the player stationary and control restored, then terrain was rebuilt from the
+live unpadded block grid. Only that post-action graph authorized crossing former tree `(20,47)`.
+The route acknowledged 60/60 movements and returned to Center `(3,3)`.
+
 ## What is proved now
 
 | Layer | Current evidence | Authority boundary |
@@ -34,17 +40,18 @@ visible object is not stored as permanent terrain; only the settled failed-step 
 | Macro topology | 220 reachable maps and 78 reciprocal connections in both cartridges | Connectivity is not proof that a story- or capability-gated passage is open |
 | Passage geometry | 1,484 exact connection transitions, 558 ordinary warp arrivals, 242 indexed dynamic returns and 2 scripted lift exits; full Red/Blue structures agree | Boundary returns need a separate outward action and adjacent exterior arrival; lifts remain menu-scripted |
 | Static terrain | 48,216 standable coordinates and 154,653 directed land edges, including 749 ledge transitions | Initial land geometry, not current object or script state |
-| Stateful mechanics | 8 ledge rules, 11 land-pair rules and 3 water-pair rules feed executable land/water mode graphs; 9 Cut swaps and 25 initial boulders remain decoded inventory | Surf is live-qualified; Cut and Strength are not yet executable state transitions |
+| Stateful mechanics | 8 ledge rules, 11 land-pair rules and 3 water-pair rules feed executable land/water mode graphs; 9 Cut swaps drive staged live block replacement; 25 initial boulders remain decoded inventory | Surf and one-tree Cut are live-qualified; repeated Cut and Strength need broader state-search coverage |
 | Route composition | Game-neutral `RoutePlan` selects reachable endpoints and flattens every edge into exact source/expected state | Macro path cost is still selected before local path cost |
 | Closed-loop execution | Game-neutral runtime acknowledges coordinates and map transitions, bounds readiness/retries/interruptions, projects current visible occupancy, discovers remaining blockers and replans | Visible occupancy is viewport-bounded; hidden/off-screen and unclassified obstacles still rely on failed-step fallback |
-| Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans. Surf: 13/13 steps, exact land→water→land round trip. Visible-object route: 43/43 movement requests, one pre-input replan | Four clean uncounted Red probes; Cut, Strength and story gates remain outside authority |
+| Live falsification | Center: 86/86 steps, 3 wilds, 0 replans. Mart: 108 acknowledged steps/112 requests, 1 wild, 2 replans. Surf: 13/13 steps, exact land→water→land round trip. Visible-object route: 43/43 movement requests, one pre-input replan. Cut: 60/60 route movements, exact one-block mutation, post-observation crossing | Five clean uncounted Red probes; Strength and story gates remain outside authority |
 
 The public records are [the complete map extraction](evidence/map-graph-2026-08-10.json),
 [the traversal extraction](evidence/traversal-rules-2026-08-10.json),
 [the control route](evidence/pallet-viridian-composed-route-probe-2026-08-10.json), and
 [the replanning route](evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json), and
 [the Surf round trip](evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json), and
-[the visible-object route](evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
+[the visible-object route](evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and
+[the staged Cut crossing](evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
 ## Corrections made during this milestone
 
@@ -154,10 +161,11 @@ Static headers join locations even when a guard, locked door, one-way script or 
 prevents traversal. Generation-specific predicates should filter the game-neutral edges from
 observed badge, party-move, event and movement-mode facts. Unknown requirements remain unavailable.
 
-### P1 — Cut and Strength change state
+### P1 — Strength and repeated Cut change state
 
-Cut replaces blocks and requires graph recomputation. Strength moves objects and needs bounded
-puzzle search over player/boulder state. Neither should be represented as a permanently open edge.
+One-tree Cut now replaces an observed block and recomputes its graph. Repeated or multi-tree plans
+still need broader mutation-state coverage. Strength moves objects and needs bounded puzzle search
+over player/boulder state. Neither mechanic should be represented as a permanently open edge.
 
 ### P2 — route optimization is still layered, not globally joint
 
@@ -174,14 +182,14 @@ and composition layer. Add that before completion-run authority.
 
 ## Ordered next milestones
 
-1. **Implement Cut as observed mutation.** Rebuild the local graph only after the live block
-   replacement is acknowledged; possession alone must not open the edge.
-2. **Implement Strength as bounded push search.** Search player/boulder state rather than treating
+1. **Implement Strength as bounded push search.** Search player/boulder state rather than treating
    possession as puzzle completion.
-3. **Classify permanent and story-gated blocks.** Preserve visible occupancy and failed-step fallback,
+2. **Classify permanent and story-gated blocks.** Preserve visible occupancy and failed-step fallback,
    but do not infer passage meaning from either one.
-4. **Filter one closed/open story gate.** Establish both states independently and prove the same
+3. **Filter one closed/open story gate.** Establish both states independently and prove the same
    passage changes availability without changing static topology.
+4. **Qualify repeated Cut.** Exercise two mutations in one map lifecycle and retain exact receipts
+   without promoting capability into permanent access.
 5. **Jointly price macro alternatives.** Compare local approach plus passage cost before selecting
    the map path; the current layered optimizer can miss a cheaper recovery detour.
 6. **Collect strategic navigation examples.** Store candidate destinations, semantic need, route

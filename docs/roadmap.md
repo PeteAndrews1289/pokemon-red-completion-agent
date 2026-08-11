@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): advance from visible occupancy to map mutation
+## Current focus (2026-08-10): advance from Cut mutation to pushed-object state
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -38,15 +38,22 @@ stationary `(6,14)` NPC from `(6,15)`, caused one zero-input replan, and the rou
 before returning to `(12,11)`. All 43 movements were acknowledged from 43 requests. See the
 [visible-object receipt](evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
 
-This closes currently rendered occupancy, not general navigation. Hidden/off-screen objects still
-need bounded failed-step discovery; Cut mutations, Strength pushes and story flags remain
-unavailable. The ordered gates are now:
+Cut is now closed at clean source `8a0b794`. The planner walks only to a candidate stance; the
+Generation I adapter requires a Cascade Badge, living Cut holder, exact live block/tile mutation
+and restored input. Terrain is rebuilt from the reread RAM grid before a crossing is planned. The
+Celadon probe observed block `$35 → $4C`, tile `$3D → $2C`, crossed former tree `(20,47)`, and
+returned to Center `(3,3)` after 60/60 acknowledged route movements. See the
+[staged Cut receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
-1. Add Cut as an observed block replacement and recompute the local graph after use.
-2. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
+This closes one passage-changing Cut contract, not general navigation. Hidden/off-screen objects
+still need bounded failed-step discovery; Strength pushes and story flags remain unavailable. The
+ordered gates are now:
+
+1. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
    possession flag.
-3. Filter one story-gated passage from observed semantic predicates, independently prove its closed
+2. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
+3. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
 4. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
 5. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner

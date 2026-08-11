@@ -13,6 +13,9 @@
 > holder, traveled in observed water mode, and returned to the exact shore origin in land mode.
 > A fourth source-bound probe deliberately left ROM object positions unblocked, observed a live
 > Cinnabar NPC at `(6,14)`, and replanned before sending the input that would enter its square.
+> A fifth source-bound probe staged Cut honestly: it walked only to a Celadon tree, observed live
+> block `0x35 → 0x4C` and tile `0x3D → 0x2C`, rebuilt terrain from RAM, then crossed the former tree
+> and returned to the exact Center boundary.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
@@ -20,7 +23,8 @@
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
-> [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json).
+> [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and the
+> [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -47,8 +51,11 @@ mode. The same revision-pinned observer now projects only currently rendered non
 temporary planner constraints. A live adversarial route saw Cinnabar's stationary NPC from
 `(6,15)`, replanned before pressing toward `(6,14)`, reached its goal by the alternate path, and
 returned to the exact shore origin. Failed-step discovery remains the fallback for off-screen or
-otherwise unclassified obstacles; Cut and Strength remain stateful future adapters rather than
-pretend-open edges.
+otherwise unclassified obstacles. Cut is now a staged state transition rather than a pretend-open
+edge: capability only selects a cutting stance, the field adapter requires one exact live block
+replacement and restored input, and the crossing is planned from the reread RAM grid. The Celadon
+proof acknowledged block `0x35 → 0x4C`, tile `0x3D → 0x2C`, crossed `(20,47)`, and returned to
+Center `(3,3)`. Strength and story gates remain stateful future adapters.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

@@ -14,6 +14,37 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Cut is an observed mutation, not a possession edge — 2026-08-10
+
+Clean source `8a0b794a11c5b5e9a93878c341cd6152f9af6864` closes the first map-mutation
+gate. `PokemonRedStateReader` now reads the active unpadded block grid from Red's bordered
+`wOverworldMap` buffer. Terrain can be rebuilt from those explicit mutable block ids rather than
+quietly returning to the cartridge's initial layout. Independent nonuniform fixtures exercise the
+live-buffer stride, dimensions, block replacement and exact affected step cell.
+
+Cut capability requires the Cascade Badge, a complete observed party and a living move holder. The
+planner may use the cartridge's nine block swaps to choose a reachable cutting stance and predict
+whether the replacement is useful, but that prediction is never execution authority. It walks only
+to the stance. The bounded Generation I field adapter then faces the tree, selects the observed
+holder and Cut menu row, keeps the player at the source coordinate, and accepts success only when
+the tile in front changes, exactly one expected live block changes, party/bag state is preserved and
+input control is restored. Only then does the caller reread the entire block grid, rebuild terrain
+and plan the crossing.
+
+The authenticated Celadon probe selected source `(20,46)`, target `(20,47)` and block `(10,23)`.
+Live RAM acknowledged block `$35 → $4C`, tile `$3D → $2C`, one changed block, and restored control.
+The former tree changed from unstandable to standable; a newly computed path entered it as the first
+step and continued to `(20,48)`. Center exit, approach, crossing and return acknowledged **60/60**
+route movements; the full field-menu run used 80 actions / 3,576 frames, returned to Center `(3,3)`,
+released every control and changed no ROM-adjacent artifact. Record:
+[celadon-staged-cut-route-probe-2026-08-10.json](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json).
+
+This proves one transferable Cut contract, not general navigation authority. Cut grass is optional
+rather than a blocked passage; repeated/multi-tree route planning still needs broader coverage.
+Strength requires player/boulder state search, and story-gated passages need independently observed
+closed/open predicates. Do those next, preserve failed-step fallback for off-screen unknowns, keep
+generated routing outside the completion run, and leave counted v95 sealed at **0/10**.
+
 ## Visible occupancy is observed before the route acts — 2026-08-10
 
 Clean source `1c6eb31fc61f40e440c8c33482f88bb3c0dd9fbe` closes the direct visible-object

@@ -15,6 +15,24 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 10 Cut episode: the badge is not the bridge
+
+Open with the party screen: DUX knows Cut, the Cascade Badge is lit, and the tree is still visibly
+there. Put the misleading implementation on screen—`has_cut = true`, therefore the edge is open—then
+delete it. The line is: **“Owning an action is not the same as observing its result.”**
+
+Show the staged version as three cards: **ROUTE TO THE STANCE → ACT AND VERIFY → REBUILD AND ROUTE**.
+At Celadon `(20,46)`, pause on the live values. Block `$35` becomes `$4C`; the tile in front changes
+from `$3D` to `$2C`; exactly one block differs; the player has not moved; input control has returned.
+Only then let the new path appear through `(20,47)` to `(20,48)`. End on the proof card:
+**60/60 route movements acknowledged, 80 total actions, 3,576 frames, exact Center return, no save
+write**.
+
+The transfer point is stronger than “the AI can use Cut.” The planner owns intent, the title adapter
+owns menus and cartridge layout, and current game state owns truth. Close by replacing the single
+tree with a Strength boulder: now the obstacle moves too, so the next planner must search player and
+object state together.
+
 ## August 10 visible-object episode: look before you press
 
 Open on the old recovery loop pressing Left twice into an NPC before the route changes. Then rewind
@@ -31,8 +49,7 @@ exact return to `(12,11)`, no save write**.
 
 The narrative line is: **“A map says where someone started. Perception says where they are.”** Show
 the limitation beside it: the overlay covers currently rendered sprites, not off-screen objects,
-Cut blocks, Strength puzzles, or story gates. The next episode begins when Cut changes the map
-itself.
+Strength puzzles, or story gates. Cut is handled by the separate observed-mutation episode.
 
 ## August 10 navigation episode: delete 86 directions
 

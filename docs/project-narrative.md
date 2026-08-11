@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: owning Cut did not mean the tree was gone
+
+The cartridge had already yielded all nine Cut block replacements. It would have been easy to add
+`move:cut` to an edge and call the passage open. That would answer an inventory question, not a
+world-state question: Cut leaves the player in place and mutates the active map buffer. Until the
+game acknowledges that mutation, the old collision map is still the only honest one.
+
+The new planner therefore stops at a cutting stance. Cascade Badge plus a complete party and living
+Cut holder permit the field action, while the cartridge swap table can predict which tree would be
+useful. The title adapter faces that tree, navigates the live party menu, and refuses success unless
+the tile in front changes, exactly the expected block changes, party and bag state remain intact,
+and control returns. Prediction ends there. The system rereads Red's bordered `wOverworldMap`
+buffer, extracts the active unpadded grid, rebuilds terrain, and asks the router a new question.
+
+Celadon supplied the falsification. From the authenticated Center state, cartridge search chose
+source `(20,46)` and tree `(20,47)`. Live memory changed block `$35` to `$4C` at `(10,23)` and tile
+`$3D` to `$2C`; no second block changed. The target was unstandable before and standable afterward.
+Only then did the replacement route step into the former tree and continue to `(20,48)`. Across the
+Center exit, approach, crossing and return, all 60 route movements were acknowledged; the complete
+field-menu probe used 80 actions / 3,576 frames and returned to `(3,3)` without a save artifact.
+The [public receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json) binds the result to
+clean source.
+
+This is the architecture the later games need. A model can decide *why* a blocked destination is
+worth opening; a cartridge adapter handles how that title expresses Cut; the live world—not the
+model and not the static map—decides whether the passage actually changed. Strength is next because
+it adds a harder state space: both player and boulder coordinates move.
+
 ## August 10: the route looked before it walked
 
 Failed movement had already taught the router how to recover, but only after it pressed into the
@@ -24,8 +52,8 @@ that claim to clean source.
 
 This is a small but important transfer boundary. The route does not memorize where one Cinnabar NPC
 started; it asks the current game which space is occupied. It still does not understand why a guard
-blocks a passage, how Cut changes a block, or how Strength changes a boulder state. Those are the
-next distinct state transitions, beginning with Cut.
+blocks a passage or how Strength changes a boulder state. Cut's separate observed-mutation layer now
+answers the map-block case.
 
 ## August 10: water became state, not scenery
 

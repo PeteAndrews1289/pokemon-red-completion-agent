@@ -446,6 +446,27 @@ exists.
 
 ---
 
+## Act XIII: the tree had to disappear twice
+
+Once in cartridge data, where block `$35` predicts replacement `$4C`. Once again in the live game,
+where the prediction has no authority until RAM actually changes.
+
+That distinction reshaped Cut. The planner reaches a stance and stops. The field adapter proves a
+living holder and badge, navigates the menus, keeps the player still, and accepts only one exact
+block mutation with control restored. Then the old path is thrown away. Terrain is rebuilt from the
+active map buffer and a new route is allowed to cross.
+
+Celadon made the contract visible: `(20,47)` was solid, block `$35` became `$4C`, tile `$3D` became
+`$2C`, and only then did the next plan step onto the former tree and continue east. Sixty route
+movements were acknowledged around the full Center round trip; not one was justified by merely
+owning HM01.
+
+The system did not learn where Celadon's tree is. It learned where responsibility belongs: strategy
+chooses what to open, the adapter performs the title-specific mechanic, and observation decides
+whether the world changed. Strength is the next test because both sides of that transition move.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -499,8 +520,9 @@ Being precise about this matters more than the story sounding finished.
   and replanning around both a disclosed artificial blocker and a naturally moving NPC. A third
   generated route has boarded, traversed and exited Surf from observed movement mode, then returned
   to its exact shore origin. A fourth generated route directly observed a Cinnabar NPC, replanned
-  before sending an input into its occupied square, and returned to its origin. Cut, Strength and
-  story gates remain outside authority.
+  before sending an input into its occupied square, and returned to its origin. A fifth staged Cut,
+  verified one exact Celadon block mutation, rebuilt terrain from live RAM, crossed the former tree,
+  and returned to Center. Strength and story gates remain outside authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

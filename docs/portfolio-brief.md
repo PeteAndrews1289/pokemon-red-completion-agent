@@ -10,11 +10,12 @@ reroll, the system learned a bounded recovery branch and later completed that al
 objective model plus authored skills. The official ten-root campaign remains 0/10.
 
 The newest engineering milestone attacks the largest portability problem: fixed navigation. Red
-and Blue now produce the same complete static land graph—154,653 directed edges over 48,216
-coordinates—and a clean source-bound live probe generated thirteen Route 1 inputs, crossed a
-one-way ledge and proved the reverse input was blocked. The implementation keeps controller action
-(`down`) separate from transition meaning (`ledge`) and refuses to flatten Surf, Cut or Strength
-into fake static permissions.
+and Blue produce the same complete static land graph—154,653 directed edges over 48,216
+coordinates—but stateful mechanics stay separate. Surf is an observed movement mode; visible NPCs
+are temporary live constraints; Cut is a staged mutation. In the Celadon proof, capability only
+authorized walking to a stance. Live RAM then acknowledged block `$35 → $4C` and tile `$3D → $2C`,
+terrain was rebuilt, and only the new graph crossed the former tree. Strength is still refused as a
+fake possession permission because it needs player/boulder state search.
 
 That pair is the best interview story in the repository. It demonstrates causal evaluation,
 calibration against rare actions, separation of model errors from executor errors, source-bound

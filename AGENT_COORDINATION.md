@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-10 Lane A Cut checkpoint:** staged Cut is live-qualified at source `8a0b794`. The
+> adapter reads Red's mutable unpadded map blocks, capability requires Cascade plus a complete party
+> with a living Cut holder, and cartridge swaps may select only the cutting stance. The field macro
+> accepts one exact block/tile mutation with restored input; terrain and the crossing route are
+> rebuilt from the observed post-action RAM grid. Celadon changed block `$35 → $4C` and tile
+> `$3D → $2C`, crossed former tree `(20,47)`, returned to Center `(3,3)`, acknowledged 60/60 route
+> movements, released controls and wrote no ROM-adjacent artifact. Record:
+> `docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json`. Next: Strength player/boulder
+> search, one independently proved closed/open story gate, and targeted multi-tree Cut coverage.
+> Generated routing remains outside completion-run authority; counted v95 remains sealed at 0/10.
+
 > **2026-08-10 Lane A visible-object checkpoint:** direct current occupancy is live-qualified at
 > source `1c6eb31`. The Gen I adapter reads visible non-player sprite slots and the neutral executor
 > treats them as temporary replan constraints before input; settled failed steps remain the durable
