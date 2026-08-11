@@ -1,9 +1,14 @@
-"""Integrity-checked goal-conditioned navigation demonstrations.
+"""Integrity-checked movement-control traces for navigation diagnostics.
 
 The teacher trajectory records every executed macro action, but movement is only
 useful supervision when it is tied to the active semantic objective and proves a
 world-state transition.  This module performs that join without exposing ROM
 addresses or treating menu cursor movement as overworld navigation.
+
+These examples are deliberately *not* strategic destination labels and are not
+promotion-eligible.  They may diagnose control or support low-level pretraining,
+but the transferable policy boundary ranks semantic destinations while the
+deterministic route planner owns exact directions.
 """
 
 from __future__ import annotations
@@ -110,7 +115,10 @@ class NavigationEpisodeDataset:
         directions = Counter(example.direction for example in self.examples)
         return {
             "schema": "navigation-episode-dataset-summary-v1",
+            "intended_use": "movement_control_diagnostics_only",
+            "label_granularity": "individual_direction",
             "examples": len(self.examples),
+            "strategic_destination_decisions": 0,
             "objective_count": len({example.objective_id for example in self.examples}),
             "checkpoint_count": len(
                 {example.target_checkpoint_id for example in self.examples}

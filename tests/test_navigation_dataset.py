@@ -204,7 +204,10 @@ def test_navigation_dataset_joins_progressing_moves_to_active_objectives() -> No
     assert dataset.excluded_nonprogress_moves == 1
     assert dataset.public_summary() == {
         "schema": "navigation-episode-dataset-summary-v1",
+        "intended_use": "movement_control_diagnostics_only",
+        "label_granularity": "individual_direction",
         "examples": 2,
+        "strategic_destination_decisions": 0,
         "objective_count": 2,
         "checkpoint_count": 2,
         "area_count": 1,
