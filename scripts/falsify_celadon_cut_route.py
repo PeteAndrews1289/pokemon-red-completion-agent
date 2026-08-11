@@ -1,11 +1,12 @@
-"""Try to disprove a staged cartridge-computed Cut crossing in live Red.
+"""Try to disprove repeated cartridge-computed Cut crossings in live Red.
 
 An authenticated private Celadon capture supplies only the starting game
 state. The probe exits the Pokémon Center, reads the city's mutable map blocks
 from RAM, chooses a reachable tree using cartridge terrain and Cut swap data,
 and walks only to the cutting stance. It executes Cut through the bounded field
 menu compiler, requires one exact live block replacement plus restored input,
-rebuilds terrain from RAM, and only then plans and executes the crossing.
+rebuilds terrain from RAM, and only then plans and executes the crossing. It
+then repeats that entire process for the city's other tree using the new grid.
 
 The capture and ROM are private inputs and never appear in the public receipt.
 
@@ -38,9 +39,7 @@ from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.gen1_cut import (  # noqa: E402
     CUT_PASSAGE_TILES,
-    CutTraversalCandidate,
-    CutTraversalError,
-    plan_cut_candidate,
+    plan_nearest_cut_candidate,
 )
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort  # noqa: E402
 from pokemon_red_completion.gen1_maps import (  # noqa: E402
@@ -49,7 +48,6 @@ from pokemon_red_completion.gen1_maps import (  # noqa: E402
 )
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver  # noqa: E402
 from pokemon_red_completion.gen1_terrain import (  # noqa: E402
-    Terrain,
     terrain_from_blocks,
     tilesets,
     walkable_world,
@@ -57,7 +55,6 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     LAND_MODE,
-    TraversalRules,
     local_graph,
     traversal_rules,
 )
@@ -82,6 +79,7 @@ from pokemon_red_completion.route_executor import (  # noqa: E402
 from pokemon_red_completion.route_plan import RoutePlan, plan_route  # noqa: E402
 
 REQUIRED_CAPTURE_OBJECTIVES = frozenset({"defeat_misty", "obtain_cut"})
+REQUIRED_CUT_COUNT = 2
 
 
 class CeladonCutProbeError(RuntimeError):
@@ -150,48 +148,6 @@ def _replanner(macro: MacroGraph, local_graphs: dict[int, LocalGraph]):
         )
 
     return replan
-
-
-def _nearest_cut_candidate(
-    rom: bytes,
-    terrain: Terrain,
-    rules: TraversalRules,
-    sets,
-    start: tuple[int, int],
-    raw,
-    *,
-    water_set_ids: frozenset[int],
-) -> CutTraversalCandidate:
-    candidates: list[CutTraversalCandidate] = []
-    eligible = CUT_PASSAGE_TILES.get(terrain.tileset, frozenset())
-    for y, row in enumerate(terrain.tiles):
-        for x, tile in enumerate(row):
-            if tile not in eligible:
-                continue
-            try:
-                candidate = plan_cut_candidate(
-                    rom,
-                    terrain,
-                    rules,
-                    sets,
-                    start,
-                    (y, x),
-                    raw,
-                    water_set_ids=water_set_ids,
-                )
-            except CutTraversalError:
-                continue
-            candidates.append(candidate)
-    if not candidates:
-        raise CeladonCutProbeError("no reachable staged Celadon Cut candidate was found")
-    return min(
-        candidates,
-        key=lambda candidate: (
-            candidate.predicted_cost,
-            candidate.target_at,
-            candidate.source_at,
-        ),
-    )
 
 
 def _one_block_delta(
@@ -305,107 +261,217 @@ def main(argv: list[str] | None = None) -> int:
             replanner=replan,
             limits=limits,
         )
+        route_reports = [exit_report]
         city_start = exit_report.terminal.at
-        before_raw = reader.read()
-        blocks_before = reader.read_current_map_blocks()
-        if blocks_before.map_id != city or before_raw.map_id != city:
+        current_raw = reader.read()
+        current_blocks = reader.read_current_map_blocks()
+        if current_blocks.map_id != city or current_raw.map_id != city:
             raise CeladonCutProbeError("live block read did not belong to Celadon City")
-        terrain_before = terrain_from_blocks(
+        current_terrain = terrain_from_blocks(
             rom,
             city,
-            blocks_before.rows,
+            current_blocks.rows,
             sets,
             water_set_ids=surf_tilesets,
         )
-        local_graphs[city] = local_graph(terrain_before, rules)
-        candidate = _nearest_cut_candidate(
-            rom,
-            terrain_before,
-            rules,
-            sets,
-            city_start,
-            before_raw,
-            water_set_ids=surf_tilesets,
-        )
+        local_graphs[city] = local_graph(current_terrain, rules)
+        current_at = city_start
+        cut_stages: list[dict[str, object]] = []
+        cut_block_locations: set[tuple[int, int]] = set()
 
-        approach_plan = plan_route(
-            macro,
-            local_graphs,
-            city,
-            city_start,
-            city,
-            start_mode=LAND_MODE,
-            goal_at=candidate.source_at,
-            goal_mode=LAND_MODE,
-        )
-        approach_report = execute_route(
-            approach_plan,
-            field_actions,
-            observer,
-            replanner=replan,
-            limits=limits,
-        )
-        if approach_report.terminal.at != candidate.source_at:
-            raise CeladonCutProbeError("approach did not reach the selected cutting stance")
-
-        field_actions.execute(
-            MacroAction(
-                MacroActionKind.FIELD_MOVE,
-                f"cut:{candidate.direction.value}",
+        for ordinal in range(1, REQUIRED_CUT_COUNT + 1):
+            current_raw = reader.read()
+            if (
+                current_raw.map_id != city
+                or (current_raw.player_y, current_raw.player_x) != current_at
+            ):
+                raise CeladonCutProbeError("Cut iteration did not begin at observed live state")
+            candidate = plan_nearest_cut_candidate(
+                rom,
+                current_terrain,
+                rules,
+                sets,
+                current_at,
+                current_raw,
+                water_set_ids=surf_tilesets,
             )
-        )
-        if len(field_actions.cut_receipts) != 1:
-            raise CeladonCutProbeError("Cut produced no unique mutation receipt")
-        cut_receipt = field_actions.cut_receipts[0]
-        blocks_after = reader.read_current_map_blocks()
-        observed_delta = _one_block_delta(blocks_before.rows, blocks_after.rows)
-        terrain_after = terrain_from_blocks(
-            rom,
-            city,
-            blocks_after.rows,
-            sets,
-            water_set_ids=surf_tilesets,
-        )
-        local_graphs[city] = local_graph(terrain_after, rules)
-        try:
-            observed_continuation = find_local_path(
-                local_graphs[city],
-                candidate.source_at,
-                candidate.target_at,
+            if candidate.block_at in cut_block_locations:
+                raise CeladonCutProbeError("fresh planning selected an already cleared Cut block")
+
+            approach_plan = plan_route(
+                macro,
+                local_graphs,
+                city,
+                current_at,
+                city,
                 start_mode=LAND_MODE,
+                goal_at=candidate.source_at,
                 goal_mode=LAND_MODE,
             )
-        except LocalRouterError as error:
-            raise CeladonCutProbeError("observed Cut mutation did not open its target") from error
+            approach_report = execute_route(
+                approach_plan,
+                field_actions,
+                observer,
+                replanner=replan,
+                limits=limits,
+            )
+            if approach_report.terminal.at != candidate.source_at:
+                raise CeladonCutProbeError("approach did not reach the selected cutting stance")
 
-        dy, dx = candidate.direction.delta
-        beyond = candidate.target_at[0] + dy, candidate.target_at[1] + dx
-        cross_goal = beyond if terrain_after.can_stand(*beyond) else candidate.target_at
-        cross_plan = plan_route(
-            macro,
-            local_graphs,
-            city,
-            candidate.source_at,
-            city,
-            start_mode=LAND_MODE,
-            goal_at=cross_goal,
-            goal_mode=LAND_MODE,
-        )
-        if not cross_plan.steps or cross_plan.steps[0].expected_at != candidate.target_at:
-            raise CeladonCutProbeError("post-Cut route did not cross the observed former tree")
-        cross_report = execute_route(
-            cross_plan,
-            field_actions,
-            observer,
-            replanner=replan,
-            limits=limits,
+            receipt_count_before = len(field_actions.cut_receipts)
+            field_actions.execute(
+                MacroAction(
+                    MacroActionKind.FIELD_MOVE,
+                    f"cut:{candidate.direction.value}",
+                )
+            )
+            if len(field_actions.cut_receipts) != receipt_count_before + 1:
+                raise CeladonCutProbeError("Cut produced no unique mutation receipt")
+            cut_receipt = field_actions.cut_receipts[-1]
+            blocks_after = reader.read_current_map_blocks()
+            observed_delta = _one_block_delta(current_blocks.rows, blocks_after.rows)
+            terrain_after = terrain_from_blocks(
+                rom,
+                city,
+                blocks_after.rows,
+                sets,
+                water_set_ids=surf_tilesets,
+            )
+            local_graphs[city] = local_graph(terrain_after, rules)
+            try:
+                observed_continuation = find_local_path(
+                    local_graphs[city],
+                    candidate.source_at,
+                    candidate.target_at,
+                    start_mode=LAND_MODE,
+                    goal_mode=LAND_MODE,
+                )
+            except LocalRouterError as error:
+                raise CeladonCutProbeError(
+                    "observed Cut mutation did not open its target"
+                ) from error
+
+            if observed_delta != (
+                candidate.block_at,
+                candidate.before_block,
+                candidate.after_block,
+            ):
+                raise CeladonCutProbeError(
+                    "live block delta disagreed with the selected Cut candidate"
+                )
+            if (
+                cut_receipt.block_at != candidate.block_at
+                or cut_receipt.block_before != candidate.before_block
+                or cut_receipt.block_after != candidate.after_block
+            ):
+                raise CeladonCutProbeError(
+                    "field receipt disagreed with the selected Cut candidate"
+                )
+            if current_terrain.can_stand(*candidate.target_at):
+                raise CeladonCutProbeError("selected Cut target was already standable")
+            if not terrain_after.can_stand(*candidate.target_at):
+                raise CeladonCutProbeError("observed Cut target remained unstandable")
+            if terrain_after.tiles[candidate.target_at[0]][candidate.target_at[1]] != (
+                cut_receipt.target_tile_after
+            ):
+                raise CeladonCutProbeError(
+                    "rebuilt terrain disagreed with the observed front tile"
+                )
+
+            dy, dx = candidate.direction.delta
+            beyond = candidate.target_at[0] + dy, candidate.target_at[1] + dx
+            cross_goal = beyond if terrain_after.can_stand(*beyond) else candidate.target_at
+            cross_plan = plan_route(
+                macro,
+                local_graphs,
+                city,
+                candidate.source_at,
+                city,
+                start_mode=LAND_MODE,
+                goal_at=cross_goal,
+                goal_mode=LAND_MODE,
+            )
+            if not cross_plan.steps or cross_plan.steps[0].expected_at != candidate.target_at:
+                raise CeladonCutProbeError(
+                    "post-Cut route did not cross the observed former tree"
+                )
+            cross_report = execute_route(
+                cross_plan,
+                field_actions,
+                observer,
+                replanner=replan,
+                limits=limits,
+            )
+            route_reports.extend((approach_report, cross_report))
+
+            cut_stages.append(
+                {
+                    "ordinal": ordinal,
+                    "selection": {
+                        "planning_grid": (
+                            "initial_live_ram"
+                            if ordinal == 1
+                            else "live_ram_after_previous_cut"
+                        ),
+                        "start_yx": list(current_at),
+                        "source_yx": list(candidate.source_at),
+                        "target_yx": list(candidate.target_at),
+                        "direction": candidate.direction.value,
+                        "block_yx": list(candidate.block_at),
+                        "predicted_approach_steps": len(candidate.approach.edges),
+                        "predicted_continuation_steps": len(
+                            candidate.predicted_continuation.edges
+                        ),
+                        "prediction_used_as_execution_authority": False,
+                    },
+                    "mutation": {
+                        "block_before": candidate.before_block,
+                        "block_after": candidate.after_block,
+                        "target_tile_before": cut_receipt.target_tile_before,
+                        "target_tile_after": cut_receipt.target_tile_after,
+                        "changed_block_count": 1,
+                        "player_stayed_at_source": True,
+                        "input_ready_after_mutation": True,
+                        "target_standable_before": False,
+                        "target_standable_after": True,
+                        "observed_post_cut_path_yx": [
+                            list(coordinate)
+                            for coordinate in observed_continuation.coordinates
+                        ],
+                    },
+                    "cut_receipt": {
+                        "party_index": cut_receipt.party_index,
+                        "submenu_row": cut_receipt.submenu_row,
+                        "confirmation_count": cut_receipt.confirmation_count,
+                    },
+                    "plans": {
+                        "approach": _public_plan(approach_plan),
+                        "observed_crossing": _public_plan(cross_plan),
+                    },
+                    "execution": {
+                        "approach": _public_execution(approach_report),
+                        "observed_crossing": _public_execution(cross_report),
+                    },
+                }
+            )
+            cut_block_locations.add(candidate.block_at)
+            current_at = cross_report.terminal.at
+            current_blocks = blocks_after
+            current_terrain = terrain_after
+
+        if len(cut_block_locations) != REQUIRED_CUT_COUNT:
+            raise CeladonCutProbeError("repeated Cut did not mutate distinct blocks")
+        remaining_cut_tiles = sum(
+            tile in CUT_PASSAGE_TILES.get(current_terrain.tileset, frozenset())
+            for row in current_terrain.tiles
+            for tile in row
         )
 
         return_plan = plan_route(
             macro,
             local_graphs,
             city,
-            cross_report.terminal.at,
+            current_at,
             center,
             start_mode=LAND_MODE,
             goal_at=(3, 3),
@@ -418,6 +484,7 @@ def main(argv: list[str] | None = None) -> int:
             replanner=replan,
             limits=limits,
         )
+        route_reports.append(return_report)
         final = reader.read()
         final_ready = reader.read_input_readiness().ready
         frames_executed = emulator.frame_count
@@ -425,22 +492,6 @@ def main(argv: list[str] | None = None) -> int:
 
     if before_artifacts != _adjacent_artifacts(args.rom):
         raise CeladonCutProbeError("the no-save probe changed a ROM-adjacent artifact")
-    if observed_delta != (candidate.block_at, candidate.before_block, candidate.after_block):
-        raise CeladonCutProbeError("live block delta disagreed with the selected Cut candidate")
-    if (
-        cut_receipt.block_at != candidate.block_at
-        or cut_receipt.block_before != candidate.before_block
-        or cut_receipt.block_after != candidate.after_block
-    ):
-        raise CeladonCutProbeError("field receipt disagreed with the selected Cut candidate")
-    if terrain_before.can_stand(*candidate.target_at):
-        raise CeladonCutProbeError("selected Cut target was already standable")
-    if not terrain_after.can_stand(*candidate.target_at):
-        raise CeladonCutProbeError("observed Cut target remained unstandable")
-    if terrain_after.tiles[candidate.target_at[0]][candidate.target_at[1]] != (
-        cut_receipt.target_tile_after
-    ):
-        raise CeladonCutProbeError("rebuilt terrain disagreed with the observed front tile")
     if (
         final.map_id != center
         or (final.player_y, final.player_x) != (3, 3)
@@ -449,7 +500,7 @@ def main(argv: list[str] | None = None) -> int:
         raise CeladonCutProbeError("probe did not return to the stable Celadon Center boundary")
 
     payload = {
-        "schema": "celadon-staged-cut-route-probe-v1",
+        "schema": "celadon-repeated-cut-route-probe-v1",
         "recorded_on": args.recorded_on,
         "status": "ok",
         "rom": fingerprint.public_dict(),
@@ -462,51 +513,36 @@ def main(argv: list[str] | None = None) -> int:
             "required_verified_objectives": sorted(REQUIRED_CAPTURE_OBJECTIVES),
         },
         "authority_under_test": (
-            "Cartridge terrain and Cut block-swap data selected a cutting stance. Live RAM "
+            "Cartridge terrain and Cut block-swap data selected each cutting stance. Live RAM "
             "supplied badge, living move holder, current block grid, tile in front, exact "
-            "mutation, restored readiness and every coordinate acknowledgement. The crossing "
-            "was planned only from the observed post-Cut grid."
+            "mutation, restored readiness and every coordinate acknowledgement. After each "
+            "single mutation, the next selection and crossing were planned only from the "
+            "newly observed grid."
         ),
-        "selection": {
+        "initial": {
             "city_start_yx": list(city_start),
-            "source_yx": list(candidate.source_at),
-            "target_yx": list(candidate.target_at),
-            "direction": candidate.direction.value,
-            "block_yx": list(candidate.block_at),
-            "predicted_approach_steps": len(candidate.approach.edges),
-            "predicted_continuation_steps": len(candidate.predicted_continuation.edges),
-            "prediction_used_as_execution_authority": False,
         },
-        "mutation": {
-            "block_before": candidate.before_block,
-            "block_after": candidate.after_block,
-            "target_tile_before": cut_receipt.target_tile_before,
-            "target_tile_after": cut_receipt.target_tile_after,
-            "changed_block_count": 1,
-            "player_stayed_at_source": True,
-            "input_ready_after_mutation": True,
-            "target_standable_before": False,
-            "target_standable_after": True,
-            "observed_post_cut_path_yx": [
-                list(coordinate) for coordinate in observed_continuation.coordinates
-            ],
+        "repeated_cut": {
+            "required_cut_count": REQUIRED_CUT_COUNT,
+            "observed_cut_count": len(cut_stages),
+            "distinct_mutated_block_count": len(cut_block_locations),
+            "remaining_cut_tiles_after": remaining_cut_tiles,
+            "durable_cut_edges_added": 0,
         },
-        "cut_receipt": {
-            "party_index": cut_receipt.party_index,
-            "submenu_row": cut_receipt.submenu_row,
-            "confirmation_count": cut_receipt.confirmation_count,
-        },
+        "cut_stages": cut_stages,
         "plans": {
             "center_exit": _public_plan(exit_plan),
-            "cut_approach": _public_plan(approach_plan),
-            "observed_crossing": _public_plan(cross_plan),
             "center_return": _public_plan(return_plan),
         },
         "execution": {
             "center_exit": _public_execution(exit_report),
-            "cut_approach": _public_execution(approach_report),
-            "observed_crossing": _public_execution(cross_report),
             "center_return": _public_execution(return_report),
+        },
+        "route_totals": {
+            "movement_requests": sum(report.movement_requests for report in route_reports),
+            "acknowledged_steps": sum(len(report.executed_steps) for report in route_reports),
+            "interruption_count": sum(len(report.interruptions) for report in route_reports),
+            "replan_count": sum(len(report.replans) for report in route_reports),
         },
         "final": {
             "map_id": int(final.map_id),
@@ -521,8 +557,9 @@ def main(argv: list[str] | None = None) -> int:
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     print(
-        f"wrote {args.out}: Cut {candidate.before_block:#04x}->{candidate.after_block:#04x} "
-        f"at {candidate.block_at}, crossed {candidate.target_at}, returned to Celadon Center"
+        f"wrote {args.out}: verified {len(cut_stages)} distinct Cut mutations, "
+        f"cleared {REQUIRED_CUT_COUNT - remaining_cut_tiles}/{REQUIRED_CUT_COUNT} trees, "
+        "returned to Celadon Center"
     )
     return 0
 

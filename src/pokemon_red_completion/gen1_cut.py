@@ -159,3 +159,57 @@ def plan_cut_candidate(
             candidate.direction.value,
         ),
     )
+
+
+def plan_nearest_cut_candidate(
+    rom: bytes,
+    terrain: Terrain,
+    rules: TraversalRules,
+    sets: Mapping[int, Tileset],
+    start: tuple[int, int],
+    raw: RawGameState,
+    *,
+    blocked: Collection[tuple[int, int]] = (),
+    water_set_ids: frozenset[int] | None = None,
+) -> CutTraversalCandidate:
+    """Choose the cheapest reachable tree mutation in the current live grid.
+
+    This deliberately plans one mutation only.  A caller that needs several
+    trees must execute the returned field action, verify its live block
+    replacement, rebuild ``Terrain`` from RAM, and call this function again.
+    Cleared trees disappear from the eligible tile set in that new terrain, so
+    no durable Cut edge or speculative sequence enters the route graph.
+    """
+
+    eligible_tiles = CUT_PASSAGE_TILES.get(terrain.tileset, frozenset())
+    candidates: list[CutTraversalCandidate] = []
+    for y, row in enumerate(terrain.tiles):
+        for x, tile in enumerate(row):
+            if tile not in eligible_tiles:
+                continue
+            try:
+                candidate = plan_cut_candidate(
+                    rom,
+                    terrain,
+                    rules,
+                    sets,
+                    start,
+                    (y, x),
+                    raw,
+                    blocked=blocked,
+                    water_set_ids=water_set_ids,
+                )
+            except CutTraversalError:
+                continue
+            candidates.append(candidate)
+    if not candidates:
+        raise CutTraversalError(f"no reachable staged Cut candidate from {start}")
+    return min(
+        candidates,
+        key=lambda candidate: (
+            candidate.predicted_cost,
+            candidate.target_at,
+            candidate.source_at,
+            candidate.direction.value,
+        ),
+    )

@@ -21,7 +21,11 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
-from pokemon_red_completion.gen1_cut import CutTraversalError, plan_cut_candidate
+from pokemon_red_completion.gen1_cut import (
+    CutTraversalError,
+    plan_cut_candidate,
+    plan_nearest_cut_candidate,
+)
 from pokemon_red_completion.gen1_maps import MAP_HEADER_BANKS, MAP_HEADER_POINTERS
 from pokemon_red_completion.gen1_terrain import (
     TILESET_COUNT,
@@ -279,6 +283,63 @@ def test_cut_candidate_stages_approach_before_a_predicted_block_replacement() ->
             (0, 4),
             replace(raw, party_hp=(0,)),
         )
+
+
+def test_nearest_cut_candidate_requires_a_fresh_grid_between_two_trees() -> None:
+    open_block = block(*([(WALKABLE_TILE,) * 4] * 4))
+    tree_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (0x3D, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    cut_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (WALKABLE_TILE, SOLID_TILE, WALKABLE_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    rom = cartridge(
+        block_ids=[[3, 7, 3, 7, 3]],
+        blocks={3: open_block, 7: tree_block, 9: cut_block},
+    )
+    sets = tilesets(rom)
+    current = terrain_from_blocks(rom, 0, ((3, 7, 3, 7, 3),), sets)
+    rules = TraversalRules((), (), (), (CutBlockSwap(7, 9),), ())
+    raw = RawGameState(
+        game_started=True,
+        map_id=0,
+        player_y=0,
+        player_x=0,
+        party_count=1,
+        battle_state=0,
+        badge_bits=int(Badge.CASCADE),
+        party_hp=(20,),
+        party_moves=((CUT_MOVE_ID,),),
+    )
+
+    first = plan_nearest_cut_candidate(rom, current, rules, sets, (0, 0), raw)
+    assert (first.source_at, first.target_at, first.block_at) == (
+        (0, 1),
+        (0, 2),
+        (0, 1),
+    )
+
+    observed_after_first = terrain_with_block(rom, current, first.block_at, 9, sets)
+    second = plan_nearest_cut_candidate(
+        rom,
+        observed_after_first,
+        rules,
+        sets,
+        (0, 4),
+        replace(raw, player_x=4),
+    )
+    assert (second.source_at, second.target_at, second.block_at) == (
+        (0, 5),
+        (0, 6),
+        (0, 3),
+    )
+    assert second.block_at != first.block_at
 
 
 def test_tall_grass_is_found_where_the_tileset_says_it_is() -> None:
