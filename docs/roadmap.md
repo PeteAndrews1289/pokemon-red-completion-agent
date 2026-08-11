@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-11): extend the proved Strength state search across Victory Road
+## Current focus (2026-08-10): move from solved Strength puzzles to semantic navigation
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -45,32 +45,34 @@ Celadon probe observed block `$35 → $4C`, tile `$3D → $2C`, crossed former t
 returned to Center `(3,3)` after 60/60 acknowledged route movements. See the
 [staged Cut receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
-The first Strength gate is now live-qualified at clean executable source `a3f9528`. The reader
-retains all pushable boulders, including off-screen slots, and bounded Dijkstra searches the player
-plus every current boulder rather than opening a possession edge. From authenticated Victory Road
-1F `(17,8)`, it explored 3,845 states and produced a 57-step plan with 39 walks and 18 pushes. Live
-execution acknowledged every transition, moved the selected boulder to switch `(13,17)`, set the
-switch event and restored input. The proof also corrected controller semantics: one held pulse
-spans the engine's two internal checks, the player stays behind, and 120 frames are required to
-observe the post-dust boulder again. See the
-[Strength receipt](evidence/victory-road-strength-state-search-probe-2026-08-11.json).
+Strength is now live-qualified across the full Victory Road puzzle chain at clean executable source
+`8dbee6f`. Five bounded searches explored 44,525 states and acknowledged 247/247 derived
+transitions: 189 walks, 57 pushes and one cross-floor drop. Map toggle flags now distinguish
+off-screen from absent objects, so hidden 2F boulder 13 does not enter the first search, 3F boulder
+10 disappears at the hole, and the returned object appears on 2F. Immediate dust plus the exact
+settled state acknowledges 3F pushes even though that room consumes the persistent pushed flag.
+See the [full Strength receipt](evidence/victory-road-strength-chain-probe-2026-08-10.json).
 
-This closes one passage-changing Cut contract and one Strength switch, not general navigation.
-Unknown off-screen non-boulder objects still need bounded failed-step discovery, and story flags
-remain unavailable. The ordered gates are now:
+This closes the stateful Strength puzzle mechanics, not general Victory Road navigation. The two
+inter-room routes and repel-expiry setup remain authored. A shortest-path experiment exposed trainer
+sight as the next missing semantic predicate: a trainer can enter engagement movement after the
+route is planned, which is neither a wall nor an ordinary moving-object replan. The ordered gates
+are now:
 
-1. Extend the same Strength search across Victory Road 2F/3F switches and the falling-boulder
-   cross-map transition; replace authored boulder corridors only after independent live proofs.
+1. Model trainer facing, engage distance and defeated/active state; prove one route avoids or
+   intentionally resolves a sight line without confusing scripted movement with a blocked edge.
 2. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
-3. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
-4. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+3. Replace Victory Road's two authored inter-room routes and repel-boundary setup only after trainer
+   sight and resource renewal are first-class route state.
+4. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
+5. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-5. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+6. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-6. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+7. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-7. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
+8. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 

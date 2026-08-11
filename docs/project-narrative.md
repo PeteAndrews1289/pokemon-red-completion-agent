@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the same boulder state survived three floors
+
+The first Strength proof ended with an honest limitation: one switch is not a transferable puzzle
+system. Victory Road's remaining rooms supplied the falsification. A boulder can be stored
+off-screen, hidden by a global toggle, consumed by a hole script, and shown as a different floor's
+active object. Those states all look like `$FF` in the viewport field, so “not rendered” could not
+mean “not there.”
+
+The reader now joins Red's current-map sprite/global-toggle list to its 256 toggle flags. The first
+2F search sees boulders 11 and 12 but correctly excludes hidden boulder 13. The 3F hole removes
+boulder 10 from the active puzzle, then 2F shows boulder 13 at `(16,23)` for the final switch. The
+planner did not need a special copied route for any of those changes: it ran five bounded searches
+over the player and all toggle-present boulders.
+
+The authenticated replay explored 44,525 states and executed 247 derived transitions: 189 walks,
+57 ordinary pushes and one terminal drop. The five phases took 58, 25, 47, 87 and 30 steps. Every
+phase set its cartridge event and restored input. On 3F the room script cleared the persistent push
+flag before the observer could read it, but the engine's immediate dust bit plus the exact settled
+state provided two independent facts instead of a relaxed assertion. The
+[full-chain receipt](evidence/victory-road-strength-chain-probe-2026-08-10.json) is bound to clean
+source and contains no private ROM or checkpoint path.
+
+The boundary is equally important. The 51- and 56-step paths between puzzle rooms and the
+repel-expiry setup are still authored. A generated shortest exit walked into a trainer's engagement
+script, revealing that trainer sight is semantic state, not just occupancy. The system now
+understands the boulder puzzle across floors; it does not yet get to call all of Victory Road
+generated navigation.
+
 ## August 11: the boulder made the state space move
 
 Strength looked like the next field move after Cut, but it changed the planning problem. The map
@@ -29,8 +57,8 @@ to clean source and proves no adjacent save artifact changed.
 
 That is the transferable lesson: the model should choose the goal and weigh puzzle cost; a title
 adapter should expose legal mechanics; search should own exact movement; and the emulator should
-veto every false assumption. The next test is not another 1F replay. It is whether the same state
-representation survives 2F, 3F and a boulder falling between maps.
+veto every false assumption. The section above records the answer: the representation survived 2F,
+3F and the cross-map fall; trainer sight and inter-room routing became the next boundary instead.
 
 ## August 10: owning Cut did not mean the tree was gone
 

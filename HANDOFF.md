@@ -14,6 +14,33 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Strength now survives switches, hiding and a cross-floor drop — 2026-08-10
+
+Clean executable source `8dbee6f4235273eb2b04c45b457ac53ad2d260b0` extends the bounded
+player-and-boulder search through the full Victory Road puzzle chain. The authenticated
+post-Giovanni replay runs five searches: 1F switch, 2F switch 1, 3F switch, 3F hole, and 2F switch
+2. Together they explored **44,525 states** and executed **247/247 derived transitions**: 189 walks,
+57 ordinary pushes and one terminal drop. The phase totals are `(58, 25, 47, 87, 30)` steps and
+`(3,934, 2,519, 31,841, 572, 5,659)` explored states. All switch/hole event flags set, every input
+returned to readiness, controls were released, and no ROM-adjacent artifact changed. Record:
+[victory-road-strength-chain-probe-2026-08-10.json](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json).
+
+Two engine distinctions are now mandatory. First, `$FF` image index means off-screen, not absent.
+The reader resolves the current map's sprite/global-toggle list against `wToggleableObjectFlags`,
+so hidden 2F boulder 13 is excluded before the hole, 3F boulder 10 disappears after the drop, and
+the same cross-floor object appears on 2F at `(16,23)`. Second, Victory Road 3F reads and clears
+`BIT_PUSHED_BOULDER` every frame. The executor therefore samples `BIT_BOULDER_DUST` immediately
+after the held pulse, then requires the exact settled player/all-boulder state; it does not weaken
+the receipt when the room script consumes the persistent bit.
+
+The evidence is deliberately narrower than “generated Victory Road.” The old inter-room routes
+(51 and 56 steps) and the 14-direction repel-expiry setup remain authored. An attempted shortest
+generated exit exposed the next real navigation gap: trainer sight is viewport- and script-state
+dependent, so static collision plus current coordinates is insufficient. Do not fold that failure
+into Strength. Next implement trainer engagement/sight and one story-gated passage as explicit
+semantic state, then replace the authored room-to-room travel. Generated navigation remains outside
+the counted completion run, and v95 remains sealed at **0/10**.
+
 ## Strength is bounded player-and-boulder search — 2026-08-11
 
 Clean executable source `a3f95287f0b944926cadb2287488f4d662639031` closes the first
@@ -43,11 +70,9 @@ requires a separate walk into the vacated square. Finally, the dust animation te
 boulder at 60 frames, then restores its exact slot/coordinate and input control by 120 frames. Do
 not shorten that settle or treat the transient disappearance as a solved switch.
 
-This proves one 1F switch, not all Strength navigation. Next derive and execute the remaining
-Victory Road 2F/3F switch and hole goals, including cross-map falling-boulder state, then replace
-the old authored Strength corridors only after each semantic transition passes independently.
-Story-gated passages and repeated Cut remain separate gates. Generated routing stays outside the
-counted completion run, and v95 remains sealed at **0/10**.
+This section is the historical first-switch milestone. The newer checkpoint above supersedes its
+remaining-work paragraph: 2F/3F switches and the cross-map hole now pass, while inter-room travel,
+trainer sight, story-gated passages and repeated Cut remain separate gates.
 
 ## Cut is an observed mutation, not a possession edge — 2026-08-10
 

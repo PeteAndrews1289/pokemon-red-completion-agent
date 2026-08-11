@@ -15,6 +15,30 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Full Victory Road follow-up: off-screen, hidden, and on another floor
+
+Reopen the 1F proof card and ask the obvious challenge: **“Did this learn Strength, or one room?”**
+Replace the single map with five cards: **1F SWITCH → 2F SWITCH → 3F SWITCH → HOLE → 2F SWITCH**.
+Keep one boulder sprite card visible while its state label changes from off-screen, to hidden, to
+dropped, to shown on another floor. The line is: **“The same blank viewport marker described four
+different truths.”**
+
+Animate the corrected observation joining sprite slots to global toggle flags. Before the hole, 2F
+boulder 13 is excluded because its toggle says hidden. After the 3F drop, boulder 10 leaves that
+floor and boulder 13 appears at `(16,23)`. Put the aggregate proof on screen:
+**44,525 states → 247 derived steps → 189 walks + 57 pushes + 1 drop**. Then show the five phase
+lengths: **58 / 25 / 47 / 87 / 30**.
+
+Use 3F for the controller twist. The room script consumes the ordinary pushed-boulder bit, so the
+proof samples the dust bit immediately and then waits for the exact player/all-boulder state. Say:
+**“A missing receipt is not permission to lower the standard; it is a reason to find the receipt
+the room actually preserves.”**
+
+End on the honest limitation card. The boulder puzzles are generated, but the two room-to-room
+routes and repel renewal are still authored. Show the failed shortest route waking a trainer and
+label the next episode **TRAINER SIGHT IS STATE**. That gives the audience progress, a concrete new
+failure, and a clean reason the project is not pretending to be finished.
+
 ## August 11 Strength episode: the obstacle moved, and the player did not
 
 Open on the old Victory Road direction string, then replace it with one state card:
@@ -33,9 +57,8 @@ the boulder disappear, then advance to 120 frames when the same sprite is visibl
 switch. Say: **“A snapshot can be accurate and still describe the middle of an action.”**
 
 End with the proof card: **57/57 transitions acknowledged, 18/18 exact pushes, switch event set,
-178 post-boundary actions, controls released, no save write**. Keep the limitation visible: this is
-Victory Road 1F, not general Strength. The next episode tests 2F, 3F, and a boulder falling to a
-different map—the point where a merely memorized Red solution should stop transferring.
+178 post-boundary actions, controls released, no save write**. Keep the historical limitation
+visible: this was Victory Road 1F. The follow-up section above shows the later cross-floor result.
 
 ## August 10 Cut episode: the badge is not the bridge
 
