@@ -3,7 +3,32 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-11): requalify after attempts 1–6
+## Current focus (2026-08-11): build a context-diverse strategic benchmark
+
+The repaired 703,275-record rehearsal is qualified, but counted collection is paused before the new
+train root 01. Exact historical measurement found only three candidate-order-invariant contexts in
+nine successful train rows. The proposed validation set would repeat those contexts twice, so it
+cannot test unseen-choice generalization or establish superiority to the 2/3 cost baseline.
+
+The new item 0 is the [experiment-design audit](strategic-experiment-design-audit-2026-08-11.md):
+
+1. add permutation-invariant policy-context fingerprints and fail any exact train/validation
+   context overlap;
+2. preregister a context/scenario split rather than counting repeated full-game rows as new
+   strategic situations;
+3. expand real objective boundaries to three-to-five genuine candidates where possible;
+4. reach at least 24 distinct train, 12 validation and 12 sealed-test contexts, including at least
+   six preregistered validation contexts where teacher and cost-only baseline disagree;
+5. use exact paired evaluation on unique held-out contexts, with confidence intervals and explicit
+   clustering of timing replicates; and
+6. collect these as short authenticated scenario episodes, retaining full clean-power games for
+   end-to-end causal qualification.
+
+Only after an uncounted scenario-suite rehearsal proves those gates may a counted strategic root
+open. The earlier 5-train/2-validation full-game registry remains a preserved protocol artifact, not
+an authorized collection plan.
+
+## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
 
 Attempts 1–6 have now run once under frozen source `5a8617e`. Three train roots completed and
 authenticated, two train roots failed, and the first validation root completed the game but failed
@@ -22,7 +47,7 @@ Ordered gates from here:
 1. **Completed:** pass the complete ROM-free gate, publish repair `5ba39cf` and require green exact-commit CI.
 2. **Completed:** execute only uncounted rehearsal assignment `0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84` from clean power. It reached 312/312, 36/36 and Hall of Fame.
 3. **Completed:** strictly reload the completed rehearsal. Manifest `df58b5536ce70f6e57ba0ac190d33787cc6fad278f2b6124a1a079c7f33fee79` contains 703,275 records, three successful strategic joins, one trainer interruption and no recording loss.
-4. **Next:** execute the new registry's five train roots and two validation roots once each. Never use a learning root to debug the harness and keep all five test roots sealed.
+4. **Superseded by the experiment-design audit above:** do not execute these repeated learning roots. Replace the campaign with context-disjoint scenario assignments while keeping all five test roots sealed.
 5. Audit lineage separation, semantic coverage, answer-position balance, route-cost/shape baselines, interruptions, failures and censoring before selecting features.
 6. Freeze normalization and train the first permutation-equivariant candidate scorer. Compare against cost-only and shape baselines, then require shadow and bounded causal evaluation without a teacher fallback hiding disagreements.
 7. Expand strategic density and completion authority: generated story routing, recovery/resupply, party construction, acquisition/storage/evolution/trade scheduling and a living-Pokédex curriculum.

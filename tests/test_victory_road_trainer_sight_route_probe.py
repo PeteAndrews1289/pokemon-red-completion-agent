@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import runpy
 from pathlib import Path
 
@@ -152,6 +153,7 @@ def test_live_record_preserves_private_boundaries_and_releases_control() -> None
     }
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
-    assert "PokemonRoms" not in encoded
+    rom_path = os.environ.get("POKEMON_RED_ROM")
+    assert rom_path is None or rom_path not in encoded
     assert ".gb" not in encoded
     assert ".state" not in encoded

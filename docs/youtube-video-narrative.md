@@ -33,6 +33,25 @@ complete; catching, storage, evolution scheduling and trade orchestration are no
 
 ## Learning-boundary episode: do not train the shortest path
 
+### Twist: nine labels were only three questions
+
+After celebrating the repaired rehearsal, stack the three successful historical train roots. Show
+their nine strategic rows, then group identical candidate-order-invariant inputs until only three
+cards remain: Tower/Eevee, Koga/Warden, Dojo/Sabrina. Leave candidate shuffles visible as rotations
+of the same card. The line is: **“I had nine records. I had only three questions.”**
+
+Put the planned validation counter at six and calculate the best possible result against the 2/3
+cost baseline: **PERFECT 6/6 → p = 0.0878**. Then try the apparently smarter paired comparison. The
+baseline loses on only the Tower context, so after clustering duplicates there is one independent
+discordance. Stamp the campaign **CANNOT SUPPORT ITS CLAIM** before another root starts.
+
+Replace the full-game counter with a context registry: **24 TRAIN / 12 VALIDATION / 12 SEALED
+TEST**, three-to-five genuine candidates, candidate-order-invariant fingerprints, and at least six
+predeclared validation contexts that challenge the cost baseline. Show short authenticated scenario
+episodes branching from real boundaries, while one full-game run remains above them as causal
+qualification. End with: **“The expensive part should prove the agent survives the game—not repeat
+the same label.”**
+
 ### Payoff: six roots, three different kinds of truth
 
 After the qualified rehearsal, put six preregistered cards on screen and reveal them only once.

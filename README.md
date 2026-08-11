@@ -68,8 +68,12 @@
 > campaign. Published repair `5ba39cf` passed CI and its fresh uncounted rehearsal completed 312/312,
 > 36/36 and Hall of Fame, then promoted 703,275 records with a strict manifest reload. All three
 > strategic outcomes succeeded, answer positions were 2:1 and the cost baseline was 2/3. The next
-> gate is a new 5-train/2-validation collection; no numeric feature schema is frozen and no
-> navigation model is claimed.
+> audit then found that nine historical train rows represented only three candidate-order-invariant
+> contexts. Counted collection is paused: repeating those same contexts in validation cannot test
+> strategic generalization or reliably beat the baseline. The next gate is a preregistered,
+> context-diverse scenario benchmark with paired evaluation—not another five 47-million-frame
+> reruns. No numeric feature schema is frozen and no navigation model is claimed. See the
+> [experiment-design audit](docs/strategic-experiment-design-audit-2026-08-11.md).
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

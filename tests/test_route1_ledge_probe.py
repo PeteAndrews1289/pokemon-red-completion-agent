@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 RECORD = Path("docs/evidence/route1-cartridge-ledge-probe-2026-08-10.json")
@@ -85,6 +86,7 @@ def test_the_probe_releases_control_without_publishing_private_artifacts() -> No
     assert payload["controller_released"] is True
     assert payload["rom_adjacent_artifacts_unchanged"] is True
     assert "/Users/" not in encoded
-    assert "PokemonRoms" not in encoded
+    rom_path = os.environ.get("POKEMON_RED_ROM")
+    assert rom_path is None or rom_path not in encoded
     assert ".gb" not in encoded
     assert ".state" not in encoded

@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: nine rows became three questions
+
+The repaired rehearsal earned a clean green ending, but the next audit asked a more uncomfortable
+question: how much new information did the expensive roots actually produce? Across three
+authenticated training games, nine strategic rows collapsed to three unique situations. Candidate
+shuffling changed where the answer appeared. Battle timing changed the route lineage. Neither
+changed what the model was being asked: Tower or Eevee, Koga or Warden, Dojo or Sabrina.
+
+That distinction stopped the next campaign. Two validation games would have repeated the same
+three questions, and even a perfect six-of-six score could not beat the observed two-thirds cost
+baseline at a conventional exact threshold. Pairing predictions with the baseline is statistically
+better, but the baseline is wrong on only one unique situation, leaving no real power after repeated
+contexts are clustered correctly.
+
+The project therefore refused to spend five more 47-million-frame runs manufacturing duplicate
+labels. The next dataset is organized around preregistered, candidate-order-invariant strategic
+contexts, with genuine multi-way choices and short authenticated scenario episodes. Full games
+still matter—they prove the chosen policy can survive the whole cartridge—but they stop being an
+expensive substitute for decision diversity.
+
 ## August 11: the first six roots turned failure into an experiment
 
 The first counted campaign finally replaced “almost ready to train” with six immutable outcomes.

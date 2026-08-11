@@ -1,5 +1,25 @@
 # Current capability and code audit — 2026-08-11
 
+## Experiment-design stop after the repaired rehearsal
+
+The qualified repair does not authorize the newly regenerated counted campaign. A canonical
+read-only comparison of the three successful historical train episodes found nine strategic rows
+but only three candidate-order-invariant policy contexts and four ordered inputs. Candidate
+permutation and battle-timing variation are robustness evidence; they are not new strategic
+situations. The planned validation roots would repeat the same Tower/Eevee, Koga/Warden and
+Dojo/Sabrina inputs already present in train.
+
+Six repeated validation rows cannot carry the intended baseline claim. Perfect 6/6 against a fixed
+2/3 null has one-sided exact tail `0.0878`. A paired comparison is preferable, but the cost baseline
+is wrong on only one unique context; duplicating that context across two roots gives a perfect model
+two row-level discordant wins and exact two-sided McNemar `0.5`. At the proper unique-context unit
+there is only one discordance. Model-development admission must therefore include context
+fingerprinting, context-disjoint partitions and a preregistered paired endpoint before collection.
+
+The complete redesign and minimum-capability targets are in the
+[strategic experiment-design audit](strategic-experiment-design-audit-2026-08-11.md). Until those
+gates exist, train and validation remain closed and test remains sealed.
+
 ## Attempts 1–6 audit update
 
 The first counted strategic campaign is no longer prospective. Attempts 1–6 ran once under frozen
@@ -41,8 +61,9 @@ objectives, Hall of Fame, 703,275 promoted records and a strict manifest reload.
 examples succeeded, answer positions were 2:1, the route-cost baseline was 2/3 and one trainer
 interruption was retained. The
 [public qualification receipt](evidence/strategic-rehearsal-repair-qualification-2026-08-11.json)
-contains the non-private identity and audit summary. New counted root 01 may now open; no later root
-or sealed test root should open out of order.
+contains the non-private identity and audit summary. This technically qualified root 01 under the
+old protocol, but the later experiment-design audit supersedes that authorization: root 01 remains
+closed until the context-diversity gate is implemented, and test remains sealed.
 
 ## Executive verdict
 

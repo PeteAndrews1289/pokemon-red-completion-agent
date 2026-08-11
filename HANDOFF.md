@@ -14,6 +14,34 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Counted collection paused: three roots contained only three unique contexts — 2026-08-11
+
+Do **not** open the repaired registry's first train root yet. A post-qualification experiment audit
+found that the nominal nine strategic rows in the three successful historical train roots collapse
+to three candidate-order-invariant policy contexts and four ordered inputs. Train and validation
+would repeat Tower/Eevee, Koga/Warden and Dojo/Sabrina; unique decision IDs prove record identity,
+not unseen strategic situations.
+
+The statistical consequence is decisive. Against the observed 2/3 cost-only baseline, perfect 6/6
+validation has one-sided binomial tail `0.0878`. Paired evaluation is correct but cannot rescue the
+current rows: the baseline is wrong on only one of the three unique contexts. Repeating it in two
+validation roots yields only two row-level discordant wins for a perfect scorer (two-sided exact
+McNemar `0.5`), or one discordant win after correct context clustering. Increasing candidate count
+also helps only when the extra destinations are genuine; it does not create independent contexts.
+
+The repair rehearsal at `5ba39cf` remains qualified engineering evidence. Its source and private
+episode are not changed or relabeled. The next work is the context-diverse experiment redesign in
+[the design audit](docs/strategic-experiment-design-audit-2026-08-11.md): permutation-invariant
+fingerprints that fail train/validation overlap, a preregistered scenario/context split, genuine
+three-to-five-way choices, at least 24 distinct train/12 validation/12 sealed-test contexts, and an
+exact paired primary endpoint. Short authenticated scenario episodes must replace repeated
+47-million-frame games as the main ranking-data source; full games remain causal qualification.
+
+The audit also found eleven tracked tests—not five—checking the literal private folder fragment
+`PokemonRoms`. They now compare a public receipt against the actual `POKEMON_RED_ROM` environment
+value when present, while retaining the broader home/volume/suffix guards. This changes tests only,
+not the frozen teacher source bundle or registry.
+
 ## Attempts 1–6 completed; campaign retired for two bounded repairs — 2026-08-11
 
 The first counted strategic campaign ran once through its first five train assignments and first
@@ -63,11 +91,11 @@ all succeeded; candidate positions were `{0: 2, 1: 1}`, route-cost-only matched 
 trainer interruption was retained, and there were zero movement labels or censored examples. See
 the [qualification receipt](docs/evidence/strategic-rehearsal-repair-qualification-2026-08-11.json).
 
-Immediate next sequence: open the new registry's five train and two validation roots once each,
-starting with `red-strategic-v1-01-train`; preserve every result; then run the complete coverage and
-partition audit. Do not mix the three historical train episodes with new-registry roots, do not
-edit `src/` during emulator execution, and do not open a test root. Only after that audit should the
-numeric feature schema be frozen and the first shared candidate scorer trained.
+This once made the immediate next sequence appear to be opening the new registry's five train and
+two validation roots. The experiment-design stop above supersedes that instruction: no counted root
+may open until context diversity and paired evaluation are preregistered. Do not mix the three
+historical train episodes with new-registry roots, edit `src/` during emulator execution, or open a
+test root.
 
 ## Three-choice rehearsal passed; counted launcher now needs its exact replay — 2026-08-11
 

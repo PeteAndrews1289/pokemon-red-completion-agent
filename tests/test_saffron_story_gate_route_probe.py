@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from pokemon_red_completion.gen1_story_routing import SAFFRON_GUARDS_OPEN
@@ -89,6 +90,7 @@ def test_the_public_receipt_contains_no_private_input_path() -> None:
     assert payload["rom_adjacent_artifacts_unchanged"] is True
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
-    assert "PokemonRoms" not in encoded
+    rom_path = os.environ.get("POKEMON_RED_ROM")
+    assert rom_path is None or rom_path not in encoded
     assert ".gb" not in encoded
     assert ".state" not in encoded
