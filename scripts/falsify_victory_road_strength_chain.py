@@ -47,9 +47,6 @@ from pokemon_red_completion.gen1_repel import (  # noqa: E402
 from pokemon_red_completion.gen1_route_runtime import (  # noqa: E402
     Gen1TraversalObserver,
 )
-from pokemon_red_completion.gen1_story_routing import (  # noqa: E402
-    apply_gen1_story_requirements,
-)
 from pokemon_red_completion.gen1_strength import (  # noqa: E402
     Gen1StrengthExecutor,
     StrengthExecutionReport,
@@ -349,7 +346,6 @@ def _compose_live_passage(
         rules,
         blocked=reader.read_current_object_coordinates(),
     )
-    graphs = apply_gen1_story_requirements(graphs)
     start_at = raw.player_y, raw.player_x
     plan = plan_route(
         macro,
