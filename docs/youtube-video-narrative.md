@@ -15,6 +15,28 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## August 11 Strength episode: the obstacle moved, and the player did not
+
+Open on the old Victory Road direction string, then replace it with one state card:
+**PLAYER + ALL BOULDER COORDINATES**. Pan the camera away from two boulders and keep their RAM cards
+on screen. The line is: **“Off-screen is not gone.”**
+
+Animate the search around three rules: normal walks avoid current boulders; a push needs legal empty
+ground beyond; and success means a boulder reaches switch `(13,17)`. Put the result on screen before
+the emulator starts: **3,845 states explored → 57 actions → 39 walks + 18 pushes**.
+
+Use the live failures as the story. First, the Strength bit turns on while two text boxes remain;
+the apparent ready state swallows movement. Second, one held Down pulse moves the boulder but leaves
+Red standing still. Alternate PUSH and STEP cards to explain why the old repeated directions worked
+without understanding why. Finally freeze the last push at 60 frames, when the dust animation makes
+the boulder disappear, then advance to 120 frames when the same sprite is visibly restored on the
+switch. Say: **“A snapshot can be accurate and still describe the middle of an action.”**
+
+End with the proof card: **57/57 transitions acknowledged, 18/18 exact pushes, switch event set,
+178 post-boundary actions, controls released, no save write**. Keep the limitation visible: this is
+Victory Road 1F, not general Strength. The next episode tests 2F, 3F, and a boulder falling to a
+different map—the point where a merely memorized Red solution should stop transferring.
+
 ## August 10 Cut episode: the badge is not the bridge
 
 Open with the party screen: DUX knows Cut, the Cascade Badge is lit, and the tree is still visibly

@@ -2,7 +2,7 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
-> **Latest verified results (August 10, 2026):** the six-role learned stack completed one uncounted
+> **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,
 > recovered without a reroll, and later completed under the objective model plus authored skills.
 > The newest navigation layer composes routes from Red and Blue cartridge geometry and executes
@@ -16,6 +16,9 @@
 > A fifth source-bound probe staged Cut honestly: it walked only to a Celadon tree, observed live
 > block `0x35 → 0x4C` and tile `0x3D → 0x2C`, rebuilt terrain from RAM, then crossed the former tree
 > and returned to the exact Center boundary.
+> A sixth source-bound probe replaced Victory Road 1F's authored boulder route with bounded search
+> over the player and all three live boulders, including off-screen slots. It explored 3,845 states,
+> executed 57/57 acknowledged transitions with 18 exact pushes, and set the cartridge switch event.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
@@ -24,7 +27,8 @@
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
 > [visible-object route](docs/evidence/cinnabar-visible-object-route-probe-2026-08-10.json), and the
-> [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json).
+> [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json), plus the
+> [Strength state search](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -55,7 +59,10 @@ otherwise unclassified obstacles. Cut is now a staged state transition rather th
 edge: capability only selects a cutting stance, the field adapter requires one exact live block
 replacement and restored input, and the crossing is planned from the reread RAM grid. The Celadon
 proof acknowledged block `0x35 → 0x4C`, tile `0x3D → 0x2C`, crossed `(20,47)`, and returned to
-Center `(3,3)`. Strength and story gates remain stateful future adapters.
+Center `(3,3)`. Strength is now explicit player-and-boulder search: the live 1F proof retained all
+three boulders, explored 3,845 states, acknowledged 39 walks plus 18 pushes, and put sprite 5 on
+switch `(13,17)` while preserving the party and bag. Remaining Victory Road switch/hole mechanics
+and story gates are still stateful future adapters.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

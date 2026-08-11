@@ -14,6 +14,41 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Strength is bounded player-and-boulder search — 2026-08-11
+
+Clean executable source `a3f95287f0b944926cadb2287488f4d662639031` closes the first
+live Strength puzzle. `PokemonRedStateReader` now reads every pushable boulder from the complete
+current-map sprite table, including `$FF` off-screen objects. Capability requires Rainbow Badge, a
+complete observed party and a living Strength holder. The planner runs bounded Dijkstra over
+`(player coordinate, every boulder slot/coordinate)` rather than turning Strength possession into
+an open edge. Ordinary movement avoids every current boulder; a push is admitted only when the
+square beyond is a cartridge-decoded ordinary walk, not stairs, an elevation violation, another
+boulder or a supplied non-boulder object.
+
+The authenticated probe starts from the post-Giovanni capture, lets the qualified teacher reach
+Victory Road 1F `(17,8)`, and stops before the old authored boulder route. It activates Strength
+through the observed party/menu row, reads all three live boulders, and searches for any boulder on
+the cartridge script's switch coordinate `(13,17)`. The resulting plan costs 75 engine attempts:
+**57 controller steps, 39 walks, 18 pushes and 3,845 explored states** under a 100,000-state bound.
+All 57 live transitions passed. Every push kept the player stationary, moved only sprite 5 by one
+square and exposed the engine's pushed-boulder flag; the final event opened the barrier. The probe
+used 178 post-boundary actions, released every control, preserved party/bag state and changed no
+ROM-adjacent artifact. Record:
+[victory-road-strength-state-search-probe-2026-08-11.json](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json).
+
+Three live corrections are part of the contract. Strength's active flag appears two confirmations
+before its text/menu boundary is actually closed. One frame-safe held direction spans the engine's
+two internal push checks, so a push is one controller pulse and leaves the player behind; advancing
+requires a separate walk into the vacated square. Finally, the dust animation temporarily hides the
+boulder at 60 frames, then restores its exact slot/coordinate and input control by 120 frames. Do
+not shorten that settle or treat the transient disappearance as a solved switch.
+
+This proves one 1F switch, not all Strength navigation. Next derive and execute the remaining
+Victory Road 2F/3F switch and hole goals, including cross-map falling-boulder state, then replace
+the old authored Strength corridors only after each semantic transition passes independently.
+Story-gated passages and repeated Cut remain separate gates. Generated routing stays outside the
+counted completion run, and v95 remains sealed at **0/10**.
+
 ## Cut is an observed mutation, not a possession edge — 2026-08-10
 
 Clean source `8a0b794a11c5b5e9a93878c341cd6152f9af6864` closes the first map-mutation

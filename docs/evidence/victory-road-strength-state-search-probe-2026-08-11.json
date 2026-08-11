@@ -1,0 +1,553 @@
+{
+  "activation": {
+    "already_active": false,
+    "confirmation_count": 2,
+    "party_index": 0,
+    "submenu_row": 0
+  },
+  "boundary": {
+    "map_id": 108,
+    "player_yx": [
+      17,
+      8
+    ],
+    "ready": true
+  },
+  "capture": {
+    "checkpoint_id": "portable_loop_defeat_giovanni_terminal",
+    "required_verified_objectives": [
+      "defeat_giovanni",
+      "obtain_strength"
+    ]
+  },
+  "execution": {
+    "acknowledged_steps": 57,
+    "actions_executed_after_boundary": 178,
+    "controller_inputs": 57,
+    "controller_released": true,
+    "frames_executed": 300601,
+    "passed": true,
+    "push_receipts": [
+      {
+        "boulder_after_yx": [
+          16,
+          5
+        ],
+        "boulder_before_yx": [
+          15,
+          5
+        ],
+        "boulder_index": 5,
+        "direction": "down",
+        "engine_attempt_cost": 2,
+        "ordinal": 9,
+        "player_after_yx": [
+          14,
+          5
+        ],
+        "player_before_yx": [
+          14,
+          5
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          16,
+          6
+        ],
+        "boulder_before_yx": [
+          16,
+          5
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 13,
+        "player_after_yx": [
+          16,
+          4
+        ],
+        "player_before_yx": [
+          16,
+          4
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          16,
+          7
+        ],
+        "boulder_before_yx": [
+          16,
+          6
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 15,
+        "player_after_yx": [
+          16,
+          5
+        ],
+        "player_before_yx": [
+          16,
+          5
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          16,
+          8
+        ],
+        "boulder_before_yx": [
+          16,
+          7
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 17,
+        "player_after_yx": [
+          16,
+          6
+        ],
+        "player_before_yx": [
+          16,
+          6
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          16,
+          9
+        ],
+        "boulder_before_yx": [
+          16,
+          8
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 19,
+        "player_after_yx": [
+          16,
+          7
+        ],
+        "player_before_yx": [
+          16,
+          7
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          15,
+          9
+        ],
+        "boulder_before_yx": [
+          16,
+          9
+        ],
+        "boulder_index": 5,
+        "direction": "up",
+        "engine_attempt_cost": 2,
+        "ordinal": 23,
+        "player_after_yx": [
+          17,
+          9
+        ],
+        "player_before_yx": [
+          17,
+          9
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          9
+        ],
+        "boulder_before_yx": [
+          15,
+          9
+        ],
+        "boulder_index": 5,
+        "direction": "up",
+        "engine_attempt_cost": 2,
+        "ordinal": 25,
+        "player_after_yx": [
+          16,
+          9
+        ],
+        "player_before_yx": [
+          16,
+          9
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          10
+        ],
+        "boulder_before_yx": [
+          14,
+          9
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 29,
+        "player_after_yx": [
+          14,
+          8
+        ],
+        "player_before_yx": [
+          14,
+          8
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          11
+        ],
+        "boulder_before_yx": [
+          14,
+          10
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 31,
+        "player_after_yx": [
+          14,
+          9
+        ],
+        "player_before_yx": [
+          14,
+          9
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          12
+        ],
+        "boulder_before_yx": [
+          14,
+          11
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 33,
+        "player_after_yx": [
+          14,
+          10
+        ],
+        "player_before_yx": [
+          14,
+          10
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          13
+        ],
+        "boulder_before_yx": [
+          14,
+          12
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 35,
+        "player_after_yx": [
+          14,
+          11
+        ],
+        "player_before_yx": [
+          14,
+          11
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          14
+        ],
+        "boulder_before_yx": [
+          14,
+          13
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 37,
+        "player_after_yx": [
+          14,
+          12
+        ],
+        "player_before_yx": [
+          14,
+          12
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          15
+        ],
+        "boulder_before_yx": [
+          14,
+          14
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 39,
+        "player_after_yx": [
+          14,
+          13
+        ],
+        "player_before_yx": [
+          14,
+          13
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          14,
+          16
+        ],
+        "boulder_before_yx": [
+          14,
+          15
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 41,
+        "player_after_yx": [
+          14,
+          14
+        ],
+        "player_before_yx": [
+          14,
+          14
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          13,
+          16
+        ],
+        "boulder_before_yx": [
+          14,
+          16
+        ],
+        "boulder_index": 5,
+        "direction": "up",
+        "engine_attempt_cost": 2,
+        "ordinal": 45,
+        "player_after_yx": [
+          15,
+          16
+        ],
+        "player_before_yx": [
+          15,
+          16
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          12,
+          16
+        ],
+        "boulder_before_yx": [
+          13,
+          16
+        ],
+        "boulder_index": 5,
+        "direction": "up",
+        "engine_attempt_cost": 2,
+        "ordinal": 47,
+        "player_after_yx": [
+          14,
+          16
+        ],
+        "player_before_yx": [
+          14,
+          16
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          12,
+          17
+        ],
+        "boulder_before_yx": [
+          12,
+          16
+        ],
+        "boulder_index": 5,
+        "direction": "right",
+        "engine_attempt_cost": 2,
+        "ordinal": 53,
+        "player_after_yx": [
+          12,
+          15
+        ],
+        "player_before_yx": [
+          12,
+          15
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      },
+      {
+        "boulder_after_yx": [
+          13,
+          17
+        ],
+        "boulder_before_yx": [
+          12,
+          17
+        ],
+        "boulder_index": 5,
+        "direction": "down",
+        "engine_attempt_cost": 2,
+        "ordinal": 57,
+        "player_after_yx": [
+          11,
+          17
+        ],
+        "player_before_yx": [
+          11,
+          17
+        ],
+        "player_stationary": true,
+        "pushed_flag_observed": true
+      }
+    ],
+    "switch_event_set": true,
+    "wait_actions": 57
+  },
+  "planner": {
+    "algorithm": "bounded_dijkstra_player_and_all_boulders",
+    "cost": 75,
+    "explored_states": 3845,
+    "goal_boulder_yx": [
+      13,
+      17
+    ],
+    "initial": {
+      "boulders": [
+        {
+          "sprite_index": 5,
+          "yx": [
+            15,
+            5
+          ]
+        },
+        {
+          "sprite_index": 6,
+          "yx": [
+            2,
+            14
+          ]
+        },
+        {
+          "sprite_index": 7,
+          "yx": [
+            10,
+            2
+          ]
+        }
+      ],
+      "player_yx": [
+        17,
+        8
+      ]
+    },
+    "max_states": 100000,
+    "push_engine_attempt_cost": 2,
+    "pushes": 18,
+    "steps": 57,
+    "terminal": {
+      "boulders": [
+        {
+          "sprite_index": 5,
+          "yx": [
+            13,
+            17
+          ]
+        },
+        {
+          "sprite_index": 6,
+          "yx": [
+            2,
+            14
+          ]
+        },
+        {
+          "sprite_index": 7,
+          "yx": [
+            10,
+            2
+          ]
+        }
+      ],
+      "player_yx": [
+        11,
+        17
+      ]
+    },
+    "walks": 39
+  },
+  "recorded_on": "2026-08-11",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "rom_adjacent_artifacts_unchanged": true,
+  "schema": "victory-road-strength-state-search-probe-v1",
+  "source": {
+    "git_commit": "a3f95287f0b944926cadb2287488f4d662639031",
+    "source_bundle_sha256": "135d4ee9f3f3d090f423d55014b2ed2121917fdd631f1790c5bbbcac543bb116"
+  },
+  "status": "ok"
+}

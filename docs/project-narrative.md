@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the boulder made the state space move
+
+Strength looked like the next field move after Cut, but it changed the planning problem. The map
+does not merely replace a block; the player and several boulders form a puzzle state. Worse, Red
+keeps off-screen boulders alive in RAM with an unavailable image marker. A planner that watches only
+the viewport can quietly turn a real boulder into empty floor.
+
+The new search state is explicit: player coordinate plus every live boulder slot and coordinate.
+Ordinary walks cannot enter a current boulder. A push exists only when the cartridge says the square
+beyond is an ordinary legal walk, it is not stairs or an elevation violation, and no other object
+occupies it. The goal is semantic—put a boulder on the switch—not a copied direction string.
+
+Live play corrected the controller model twice. Strength's active bit appeared while two text boxes
+were still open, even though the ordinary readiness bytes were clear. Then the first push disproved
+the assumed two-pulse transaction: one held direction spans both engine checks, moves the boulder,
+and leaves the player stationary. A repeated advance is therefore push, walk into the vacated
+square, push again. At the final switch, the dust animation hid the boulder at 60 frames before
+restoring the exact same sprite on the switch at 120; treating the first snapshot as object
+consumption would have made another green lie.
+
+From the authenticated post-Giovanni lineage, the teacher stopped at Victory Road 1F `(17,8)` before
+its authored puzzle. The cartridge-derived search explored 3,845 states and generated 57 actions:
+39 walks and 18 pushes. Live RAM acknowledged all 57, every push moved only the planned boulder and
+kept the player in place, and the last push set the switch event at `(13,17)`. The
+[public receipt](evidence/victory-road-strength-state-search-probe-2026-08-11.json) binds the result
+to clean source and proves no adjacent save artifact changed.
+
+That is the transferable lesson: the model should choose the goal and weigh puzzle cost; a title
+adapter should expose legal mechanics; search should own exact movement; and the emulator should
+veto every false assumption. The next test is not another 1F replay. It is whether the same state
+representation survives 2F, 3F and a boulder falling between maps.
+
 ## August 10: owning Cut did not mean the tree was gone
 
 The cartridge had already yielded all nine Cut block replacements. It would have been easy to add

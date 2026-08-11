@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): advance from Cut mutation to pushed-object state
+## Current focus (2026-08-11): extend the proved Strength state search across Victory Road
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -45,12 +45,22 @@ Celadon probe observed block `$35 → $4C`, tile `$3D → $2C`, crossed former t
 returned to Center `(3,3)` after 60/60 acknowledged route movements. See the
 [staged Cut receipt](evidence/celadon-staged-cut-route-probe-2026-08-10.json).
 
-This closes one passage-changing Cut contract, not general navigation. Hidden/off-screen objects
-still need bounded failed-step discovery; Strength pushes and story flags remain unavailable. The
-ordered gates are now:
+The first Strength gate is now live-qualified at clean executable source `a3f9528`. The reader
+retains all pushable boulders, including off-screen slots, and bounded Dijkstra searches the player
+plus every current boulder rather than opening a possession edge. From authenticated Victory Road
+1F `(17,8)`, it explored 3,845 states and produced a 57-step plan with 39 walks and 18 pushes. Live
+execution acknowledged every transition, moved the selected boulder to switch `(13,17)`, set the
+switch event and restored input. The proof also corrected controller semantics: one held pulse
+spans the engine's two internal checks, the player stays behind, and 120 frames are required to
+observe the post-dust boulder again. See the
+[Strength receipt](evidence/victory-road-strength-state-search-probe-2026-08-11.json).
 
-1. Add Strength as bounded player/boulder search over observed push state; do not reduce it to a
-   possession flag.
+This closes one passage-changing Cut contract and one Strength switch, not general navigation.
+Unknown off-screen non-boulder objects still need bounded failed-step discovery, and story flags
+remain unavailable. The ordered gates are now:
+
+1. Extend the same Strength search across Victory Road 2F/3F switches and the falling-boulder
+   cross-map transition; replace authored boulder corridors only after independent live proofs.
 2. Filter one story-gated passage from observed semantic predicates, independently prove its closed
    and open states, and keep unknown predicates unavailable.
 3. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
