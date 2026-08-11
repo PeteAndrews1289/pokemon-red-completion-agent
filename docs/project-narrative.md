@@ -48,19 +48,29 @@ censored interruption, neither success nor failure. Whole roots form dataset par
 reader rejects extra identity fields, title-specific tags, provenance drift, malformed metrics and
 missing or duplicated outcomes.
 
-The restraint is part of the result: the repository now contains **two unassigned live strategic
+The restraint is part of the result: the repository now contains **three unassigned live strategic
 calibrations and zero train/validation decisions**, with no frozen numeric feature schema and no
-strategic navigation model. The first offered two safe hubs, selected route cost 15 over 87, bound
-that choice to the exact plan and completed 14/14 acknowledged movements. The second was a genuine
-progression branch: Koga's Gym carried `challenge` semantics at cost 21 while the Warden/Strength
-objective carried `acquire_resource` semantics at cost 24. Qualified completion order chose the Gym
-and the generic executor completed 20/20 movements with zero replans. Both policy projections omit
-route identity and arrows; both remain promotion-ineligible, and the second still agrees with the
-minimum-cost baseline. What now exists is the trustworthy collection seam plus its first real
-branch. The next experiment must populate it across disjoint roots, include choices that reject the
-cheapest route, inspect the implemented coverage and shape baselines, then decide what model is
-justified. “Ready to collect the right data” is a smaller claim than “the AI learned navigation,”
-but it is the claim that can eventually transfer.
+strategic navigation model. The first offered two safe hubs, selected route cost 15 over 87 and
+completed 14/14 acknowledged movements. The second was a genuine Koga-versus-Strength progression
+branch at costs 21/24 and completed 20/20 movements. The third finally broke the shortest-path
+baseline: after the Celadon Hideout, the teacher chose story-critical Pokémon Tower at cost 178 over
+optional Eevee at cost 60. The generic executor crossed nine maps, acknowledged 174/174 movements,
+resolved one unavoidable Route 8 trainer engagement and reached Tower 1F with zero replans.
+
+That pass only exists because six failed source-bound attempts were preserved instead of erased.
+They exposed dropped ledge transients, an omitted Saffron story condition, missing tunnel return
+context, no trainer-battle recovery, defeated-trainer dialogue misclassification and finally an
+overly narrow public evidence vocabulary. Exact cartridge scripts now supply six `wLastMap` tunnel
+overrides, and a bounded live-state handler can finish a trainer battle, settle the dialogue and
+resume the bound route without receiving chapter identity. The public failure lineage is as
+important as the green receipt: it shows how the emulator falsified the abstraction each time.
+
+All three policy projections omit route identity and arrows; all remain promotion-ineligible. What
+now exists is a trustworthy collection seam plus one non-cost-minimizing calibration. The next
+experiment must preassign disjoint roots, populate real train and untouched validation lineages,
+inspect the implemented coverage and shape baselines, then decide what numeric representation and
+model are justified. “Ready to collect the right data” is a smaller claim than “the AI learned
+navigation,” but it is the claim that can eventually transfer.
 
 ## August 10: the route outlived its Repel
 

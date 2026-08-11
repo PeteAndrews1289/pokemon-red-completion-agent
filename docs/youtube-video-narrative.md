@@ -43,18 +43,48 @@ Show the three outcome lanes. Green: **SUCCESS → teacher-choice label + positi
 NOT RERUN**. Then show the dataset guardrails rejecting `viridian_city`, an extra destination
 identity field, a duplicated outcome and a split lineage that appears in both train and validation.
 
-End with the most important counter: **UNASSIGNED CALIBRATIONS: 2 / TRAIN: 0 / VALIDATION: 0**.
+End with the most important counter: **UNASSIGNED CALIBRATIONS: 3 / TRAIN: 0 / VALIDATION: 0**.
 Show the first calibration choosing a cost-15 safe hub over a cost-87 one, then reaching home with
 14/14 movements acknowledged. Label it **PLUMBING PROOF — NOT TRAINING DATA**. Then show the real
 branch: **KOGA'S GYM — CHALLENGE — COST 21** versus **WARDEN — ACQUIRE RESOURCE — COST 24**. The
 qualified teacher chooses the Gym and the generic executor reaches it after 20/20 acknowledged
 movements with zero replans. Label it **GENUINE BRANCH — STILL UNASSIGNED** and show that the choice
-also matches the cheapest-route baseline. The line is:
+also matches the cheapest-route baseline. Then tease the third card without resolving it:
+**POKÉMON TOWER — STORY — 178** versus **EEVEE — OPTIONAL — 60**. The line is:
 **“This is not the navigation model. This is the point where I finally know what the navigation
-model should be asked to learn.”** The next episode collects genuine multi-destination choices,
-especially cases where the right answer is not the cheapest route, measures route-cost and
-candidate-shape baselines, freezes features only after observing coverage, then attempts shadow and
-causal control.
+model should be asked to learn.”**
+
+## Route episode: the shortest route was the wrong objective
+
+Open on the post-Hideout Celadon state with two cards. Make the route-cost baseline choose the
+optional Eevee at **60**. Then let the semantic teacher choose Pokémon Tower at **178**. Put the
+delta—**+118 COST FOR STORY PROGRESS**—in the center. This is the first calibration where the right
+label cannot be explained by shortest path.
+
+Animate the nine-map route across Celadon, Route 7, the underground passage, Route 8, Lavender and
+Tower 1F. At the tunnel, peel back the map overlay and show the important engine detail: six entrance
+scripts write the outside map to `wLastMap`. The router now derives that context from the cartridge;
+there is no special-case “Celadon tunnel” route in Python.
+
+Do not jump straight to green. Put six source commits on screen as failed run cards:
+
+1. **LEDGE TRANSIENT NOT DECLARED**
+2. **TRANSIENT LOST DURING COMPOSITION**
+3. **SAFFRON STORY GATE OMITTED**
+4. **ROUTE 8 TRAINER NOT HANDLED**
+5. **DEFEATED-TRAINER DIALOGUE MISREAD**
+6. **SUCCESSFUL ROUTE, REJECTED EVIDENCE VOCABULARY**
+
+Pause on the Route 8 trainer. Show that the route handler sees only live usable moves, power,
+accuracy, type, STAB, PP and Disable state—not “this is Route 8 trainer 1.” It finishes the battle,
+settles the field dialogue and returns to the same route binding. Then reveal the final receipt:
+**174 REQUESTS / 174 ACKNOWLEDGED / 1 TRAINER ENGAGEMENT / 0 REPLANS / TOWER 1F**.
+
+End by returning to the counter: **CALIBRATION 3 / TRAIN 0 / VALIDATION 0**. Say: **“I proved the
+teacher can generate a useful non-shortest-path label. I have not proved a model can learn it.”**
+The next episode preassigns independent whole roots to train and untouched validation, collects
+both successes and failures, audits semantic coverage against the cost-only baseline, then freezes
+features and trains the destination scorer.
 
 ## Resource episode: the route outlived its Repel
 

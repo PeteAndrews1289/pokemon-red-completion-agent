@@ -48,17 +48,21 @@
 > semantic destinations from availability and route cost while the deterministic planner owns exact
 > movement. Decisions and outcomes survive in authenticated private trajectories; failures remain
 > negative evidence and power loss remains censored. No strategic navigation records have been
-> collected into train or validation yet. Two unassigned live calibrations prove the
-> binding/recording seam: a safe-hub plumbing check and a genuine Koga-vs-Strength progression
-> branch. The latter reached Fuchsia Gym after 20/20 acknowledged movements, but it is still one
-> promotion-ineligible root whose choice agrees with minimum route cost. No numeric feature schema
-> is frozen and no navigation model is claimed.
+> collected into train or validation yet. Three unassigned live calibrations prove the
+> binding/recording seam. The newest is the first that rejects the shortest route: after Team
+> Rocket's Celadon Hideout, the teacher selected the story-critical Pokémon Tower at cost 178 over
+> a cost-60 optional Eevee pickup. The generic executor acknowledged 174/174 movements across nine
+> maps, resumed after one unavoidable trainer battle and reached Tower 1F with zero replans. This is
+> still promotion-ineligible calibration evidence, not training data. No numeric feature schema is
+> frozen and no navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
 > [safe-hub calibration](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
-> [genuine-branch calibration](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json), plus the
+> [genuine-branch calibration](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json),
+> [non-cost calibration](docs/evidence/celadon-strategic-objective-route-probe-2026-08-11.json), and
+> [failed-attempt lineage](docs/evidence/celadon-strategic-objective-route-failures-2026-08-11.json), plus the
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
@@ -84,9 +88,11 @@ control, and progressively trained specialists.**
 
 Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates, 154,653 directed
 static land edges, 1,484 exact connection transitions, 558 ordinary warp arrivals and 242 dynamic
-return warps. Boundary returns now retain the distinct action that walks out of the map; vertical
-doorways land beyond their exterior warp while horizontal pass-through gates settle on it. Red and
-Blue agree on the complete decoded structures. The first multi-map composer
+return warps. Six tunnel entrances now recover their retained outside-map context from exact
+cartridge script writes to `wLastMap`, rather than from a hand-maintained table. Boundary returns
+retain the distinct action that walks out of the map; vertical doorways land beyond their exterior
+warp while horizontal pass-through gates settle on it. Red and Blue agree on the complete decoded
+structures. The first multi-map composer
 selected reachable passage endpoints and produced an 86-action Pallet → Route 1 → Viridian → Center
 plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. A second
 Mart run acknowledged 108 executed steps, recovered from one disclosed artificial block, routed
@@ -114,25 +120,29 @@ semantic hazards rather than walls. The authenticated 1F probe replanned before 
 and reached the exit approach with 50/50 movements and no encounter. Route 7's Saffron threshold
 now requires an opaque observed story fact: closed and unknown observations reject the same static
 corridor, while the live open flag admits it. The source-bound proof crossed both directions and
-entered Saffron after 11/11 acknowledged movements. This qualifies one story predicate; special
-scripted trainer-like objects and other story locks remain explicit open work. Repel is now an
+entered Saffron after 11/11 acknowledged movements. This qualifies one story predicate. The generic
+executor can now cross an unavoidable trainer sight lane, resolve the battle from live move state,
+settle the defeated-trainer dialogue and resume the same bound route. Other story locks and broader
+non-trainer menu/script interruptions remain explicit open work. Repel is now an
 observed renewable route resource: unknown fails closed, zero plus inventory invokes an exact
 title-adapter receipt, and active state proceeds without menu work. Live Victory Road replaced the
 51- and 56-step room strings with composed warp routes and renewed the final Max Repel at 3F `(1,9)`
 inside Strength. Repeated Cut and joint local/macro pricing are also closed. The post-final-switch
-route to Indigo, shared menu/script interruption recovery, broader story predicates and general
+route to Indigo, broader non-trainer menu/script interruption recovery, additional story predicates and general
 completion-run routing authority remain open.
 
 Acquisition knowledge now covers every ordinary retail route in Red and Blue: wild tables, rods,
 evolution, ten in-game trades and 30 scripted opportunities in each title. Either cartridge can
 reach 135 species alone or 139 with a trade partner. The new strategic-navigation data seam is
 ready to record genuine destination choices and their consumed outcomes without copying map
-identity or movement actions into policy input. Two unassigned live calibrations now exercise it.
+identity or movement actions into policy input. Three unassigned live calibrations now exercise it.
 The first compared safe-hub routes, selected cost 15 over 87 and acknowledged all 14 movements. The
 second compared a challenge route with an acquire-resource route, selected Koga's Gym at cost 21
-over the Warden at cost 24 and acknowledged all 20 selected-plan movements. Train and validation
-still contain **0 strategic navigation decisions**; no numeric feature schema or navigation model
-exists.
+over the Warden at cost 24 and acknowledged all 20 selected-plan movements. The third compared the
+story-critical Pokémon Tower with an optional Eevee pickup, deliberately rejected the cost-60
+minimum for the cost-178 story route, and acknowledged all 174 movements through one handled trainer
+engagement. Train and validation still contain **0 strategic navigation decisions**; no numeric
+feature schema or navigation model exists.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

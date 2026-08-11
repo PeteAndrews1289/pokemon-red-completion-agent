@@ -111,32 +111,46 @@ become imitation targets; successful learned actions and route failures remain o
 and external power loss remains censored rather than being rerun or mislabeled. Whole-lineage split
 audits, authenticated private trajectory loading, semantic outcome retention, coverage summaries,
 and route-cost/shape baselines are implemented. The honest dataset count is still **zero collected
-train/validation strategic decisions**. Two unassigned live calibrations now prove the binding seam.
-The first offered two safe hubs at costs 15/87 and reached home after 14/14 acknowledged movements.
-The second offered Koga's Gym (`challenge`) and the Warden/Strength objective (`acquire_resource`)
-at costs 21/24; qualified completion order selected the Gym and reached it after 20/20 acknowledged
-movements with zero replans. See the
+train/validation strategic decisions**. Three unassigned live calibrations now prove the binding
+seam. The first offered two safe hubs at costs 15/87 and reached home after 14/14 acknowledged
+movements. The second offered Koga's Gym (`challenge`) and the Warden/Strength objective
+(`acquire_resource`) at costs 21/24; qualified completion order selected the Gym and reached it
+after 20/20 acknowledged movements with zero replans. The third started after the Celadon Hideout,
+offered the story-critical Pokémon Tower at cost 178 and optional Eevee at cost 60, rejected the
+minimum-cost choice and reached Tower 1F after 174/174 acknowledged movements. The executor crossed
+nine maps, handled one unavoidable Route 8 trainer engagement and used zero replans. See the
 [safe-hub receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
-[genuine-branch receipt](evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json). Both are
-promotion-ineligible, the second still agrees with minimum route cost, and the numeric feature
-schema is deliberately not frozen.
+[genuine-branch receipt](evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json), plus the
+[non-cost receipt](evidence/celadon-strategic-objective-route-probe-2026-08-11.json) and its
+[six-attempt failure lineage](evidence/celadon-strategic-objective-route-failures-2026-08-11.json).
+All are promotion-ineligible development calibrations, and the numeric feature schema is
+deliberately not frozen.
+
+That long route also corrected the traversal substrate rather than hiding exceptions in a Python
+route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
+that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before
+candidate selection. A narrow Generation I interruption handler can resolve an unavoidable trainer
+battle from live move/PP/type/Disable state, settle defeated-trainer field dialogue and return
+control to the same route binding. It receives no chapter or trainer answer key; broader menus and
+scripts remain unsupported.
 
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Instrument real multi-candidate destination branches across independent generated-teacher roots,
-   deliberately including cases where semantic value makes the teacher reject the cheapest route.
-   Assign whole roots to train or untouched validation before collection. Keep successes, route
-   failures and external interruptions; never invent a choice merely to increase the denominator.
+1. Preassign independent whole generated-teacher roots to train or untouched validation, then
+   collect genuine multi-candidate destination branches. Include progression, recovery, resupply,
+   training, collection and optional-reward choices; keep both cost-aligned and non-cost-minimizing
+   decisions, all route failures and censored external interruptions. Never invent a choice merely
+   to increase the denominator.
 2. Run the implemented candidate/tag/outcome, selected-index shape, route-cost and split-leakage
    audits on those authenticated episodes. Freeze a normalized numeric feature schema only after
    the observed data proves which distinctions exist.
 3. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
    then require shadow and fresh causal qualifications with no teacher fallback.
-4. Close the remaining completion-routing admission gaps: shared menu/script recovery, additional
-   story and special-object predicates, the post-final-switch Indigo route, and a systematic
-   decoder/composer mutation score.
+4. Close the remaining completion-routing admission gaps: broader non-trainer menu/script recovery,
+   additional story and special-object predicates, the post-final-switch Indigo route, and a
+   systematic decoder/composer mutation score.
 5. Add Crystal's thin adapter and run the preregistered zero-shot, few-shot and from-scratch
    navigation benchmark before expanding any Gen II teacher script.
 

@@ -1,0 +1,360 @@
+{
+  "schema": "celadon-strategic-objective-route-probe-v1",
+  "recorded_on": "2026-08-11",
+  "status": "ok",
+  "source": {
+    "git_commit": "d3747f0758bd9a54b0c2ba2805b2bbf3b1fb38db",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "capture": {
+    "schema": "pokemon-private-captured-progress-v1",
+    "state_sha256": "1967a1fb0057df84dd54897f368d4cc1c7f6298aea37f76593dc5461ae1ab979",
+    "checkpoint_id": "portable_loop_clear_rocket_hideout_terminal",
+    "checkpoint_label": "Portable loop completed clear_rocket_hideout",
+    "checkpoints_completed": 144,
+    "checkpoints_total": 312,
+    "verified_objective_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "defeat_misty",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_surge",
+      "reach_lavender",
+      "reach_celadon",
+      "clear_rocket_hideout",
+      "obtain_silph_scope"
+    ]
+  },
+  "authority_under_test": "The completion teacher preferred story progress over a closer optional collection reward. Cartridge-derived geometry bound the selected destination to an exact plan, and the game-neutral executor required live acknowledgement for every movement while retaining nested return-warp context.",
+  "selection_rule": "qualified completion-teacher objective order",
+  "route_cost_baseline": {
+    "unique_minimum_destination": "pokemon.red:destination:eevee_gift",
+    "minimum_cost": 60,
+    "teacher_selected_minimum": false,
+    "teacher_selected_cost": 178,
+    "selected_cost_above_minimum": 118
+  },
+  "candidate_plans": {
+    "pokemon.red:destination:pokemon_tower": {
+      "schema": "route-plan-summary-v1",
+      "maps": [
+        "CELADON_POKECENTER",
+        "CELADON_CITY",
+        "ROUTE_7",
+        "UNDERGROUND_PATH_ROUTE_7",
+        "UNDERGROUND_PATH_WEST_EAST",
+        "UNDERGROUND_PATH_ROUTE_8",
+        "ROUTE_8",
+        "LAVENDER_TOWN",
+        "POKEMON_TOWER_1F"
+      ],
+      "map_ids": [
+        133,
+        6,
+        18,
+        77,
+        121,
+        80,
+        19,
+        4,
+        142
+      ],
+      "start_yx": [
+        3,
+        3
+      ],
+      "terminal_yx": [
+        17,
+        10
+      ],
+      "route_cost": 178,
+      "route_steps": 174,
+      "map_transitions": 8,
+      "full_projection_sha256": "a2ea817fbe00bfe41d66820859db61c1fc32c12fcc5faea43ca85c8c223081a7"
+    },
+    "pokemon.red:destination:eevee_gift": {
+      "schema": "route-plan-summary-v1",
+      "maps": [
+        "CELADON_POKECENTER",
+        "CELADON_CITY",
+        "CELADON_MANSION_1F",
+        "CELADON_MANSION_2F",
+        "CELADON_MANSION_3F",
+        "CELADON_MANSION_ROOF",
+        "CELADON_MANSION_ROOF_HOUSE"
+      ],
+      "map_ids": [
+        133,
+        6,
+        128,
+        129,
+        130,
+        131,
+        132
+      ],
+      "start_yx": [
+        3,
+        3
+      ],
+      "terminal_yx": [
+        7,
+        2
+      ],
+      "route_cost": 60,
+      "route_steps": 55,
+      "map_transitions": 6,
+      "full_projection_sha256": "e1c3839508cd4247f742e8600b5ee69d6fe52341e6ac3e5baf7251c614ef6649"
+    }
+  },
+  "selected_destination": "pokemon.red:destination:pokemon_tower",
+  "selected_execution": {
+    "schema": "route-execution-summary-v1",
+    "passed": true,
+    "movement_requests": 174,
+    "wait_actions": 14,
+    "acknowledged_steps": 174,
+    "interruptions": [
+      {
+        "kind": "trainer_engagement",
+        "resumed_map_id": 19,
+        "resumed_yx": [
+          6,
+          27
+        ],
+        "details": {
+          "battle_plan_id": "generated-route-map-19-trainer-1",
+          "battle_started": true,
+          "intro_pulses": 15,
+          "verified": true
+        }
+      }
+    ],
+    "replans": [],
+    "terminal_map_id": 142,
+    "terminal_yx": [
+      17,
+      10
+    ],
+    "terminal_ready": true,
+    "terminal_last_outside_map_id": 4,
+    "executed_steps_sha256": "a9d3715b58940adcadc913123594d8a76d3379dfcb91d66cab3eb9ef40d796e2",
+    "full_projection_sha256": "299a4f1d5928a56ab87e9ffb36563c00ce52bffed80cdc34f48e047d7dc20199"
+  },
+  "final_map": {
+    "id": 142,
+    "name": "POKEMON_TOWER_1F"
+  },
+  "final_yx": [
+    17,
+    10
+  ],
+  "final_last_outside_map": {
+    "id": 4,
+    "name": "LAVENDER_TOWN"
+  },
+  "frames_executed": 15997,
+  "controller_released": true,
+  "private_capture_unchanged": true,
+  "rom_adjacent_artifacts_unchanged": true,
+  "strategic_navigation": {
+    "scope": "unassigned non-cost-minimizing calibration; excluded from model development",
+    "record": {
+      "schema": "strategic-navigation-record-v1",
+      "decision": {
+        "schema": "strategic-navigation-decision-v1",
+        "decision_id": "666210e045a7b73d72bd7b6abc166a2b085f8597df62f5ab4347fb86a61b0442",
+        "episode_id": "celadon-story-over-collection-calibration-2026-08-11",
+        "decision_index": 0,
+        "root_lineage_id": "celadon-post-hideout-diagnostic-root",
+        "partition": "unassigned",
+        "provenance": {
+          "actor": "deterministic_teacher",
+          "policy_id": "qualified-completion-order-v1"
+        },
+        "semantic_need_tags": [
+          "advance_story",
+          "remove_blocker"
+        ],
+        "origin_semantic_tags": [
+          "overworld",
+          "safe_hub"
+        ],
+        "origin_region_ref": "pokemon.red:region:celadon",
+        "candidates": [
+          {
+            "destination_ref": "pokemon.red:destination:pokemon_tower",
+            "binding_index": 0,
+            "semantic_tags": [
+              "remove_blocker",
+              "story_progress"
+            ],
+            "availability": "available",
+            "route_cost": 178,
+            "route_steps": 174,
+            "map_transitions": 8,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          },
+          {
+            "destination_ref": "pokemon.red:destination:eevee_gift",
+            "binding_index": 1,
+            "semantic_tags": [
+              "acquire_party_member",
+              "collection",
+              "optional_reward"
+            ],
+            "availability": "available",
+            "route_cost": 60,
+            "route_steps": 55,
+            "map_transitions": 6,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          }
+        ],
+        "selected_destination_ref": "pokemon.red:destination:pokemon_tower",
+        "selected_index": 0
+      },
+      "outcome": {
+        "schema": "strategic-navigation-outcome-v1",
+        "decision_id": "666210e045a7b73d72bd7b6abc166a2b085f8597df62f5ab4347fb86a61b0442",
+        "selected_destination_ref": "pokemon.red:destination:pokemon_tower",
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 174,
+        "acknowledged_steps": 174,
+        "wait_actions": 14,
+        "replans": [],
+        "interruptions": [
+          {
+            "kind": "trainer_engagement",
+            "outcome": "resumed"
+          }
+        ],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "identity_free_trajectory_decision": {
+      "schema_version": 1,
+      "decision_id": "666210e045a7b73d72bd7b6abc166a2b085f8597df62f5ab4347fb86a61b0442",
+      "episode_id": "celadon-story-over-collection-calibration-2026-08-11",
+      "step_index": 0,
+      "snapshot": {
+        "schema_version": 1,
+        "game_id": "pokemon.red",
+        "mode": "overworld",
+        "location": null,
+        "facts": [
+          "need:advance_story",
+          "need:remove_blocker"
+        ],
+        "features": {
+          "candidate_count": 2
+        }
+      },
+      "snapshot_sha256": "fa2f02cbdb6bf9164d0cfb415278c423f73f3a0b13a3f1fd7612f6a0f5d6773d",
+      "context": {
+        "schema_version": 1,
+        "objective_id": null,
+        "policy_id": "qualified-completion-order-v1",
+        "actor": "deterministic_teacher",
+        "metadata": {
+          "skill_id": "pokemon.core.strategic-navigation.v1",
+          "root_lineage_id": "celadon-post-hideout-diagnostic-root",
+          "partition": "unassigned",
+          "strategic_decision_index": 0,
+          "policy_input": {
+            "schema": "strategic-navigation-policy-input-v1",
+            "semantic_need_tags": [
+              "advance_story",
+              "remove_blocker"
+            ],
+            "origin_semantic_tags": [
+              "overworld",
+              "safe_hub"
+            ],
+            "candidates": [
+              {
+                "binding_index": 0,
+                "semantic_tags": [
+                  "remove_blocker",
+                  "story_progress"
+                ],
+                "availability": "available",
+                "route_cost": 178,
+                "route_steps": 174,
+                "map_transitions": 8,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              },
+              {
+                "binding_index": 1,
+                "semantic_tags": [
+                  "acquire_party_member",
+                  "collection",
+                  "optional_reward"
+                ],
+                "availability": "available",
+                "route_cost": 60,
+                "route_steps": 55,
+                "map_transitions": 6,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              }
+            ]
+          }
+        }
+      },
+      "decision_type": "strategic_navigation_selection",
+      "action": {
+        "kind": "select_destination",
+        "selected_candidate_index": 0
+      }
+    },
+    "identity_free_trajectory_outcome": {
+      "schema_version": 1,
+      "event_id": "666210e045a7b73d72bd7b6abc166a2b085f8597df62f5ab4347fb86a61b0442:outcome",
+      "episode_id": "celadon-story-over-collection-calibration-2026-08-11",
+      "step_index": 174,
+      "kind": "strategic_navigation_outcome",
+      "payload": {
+        "decision_id": "666210e045a7b73d72bd7b6abc166a2b085f8597df62f5ab4347fb86a61b0442",
+        "selected_candidate_index": 0,
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 174,
+        "acknowledged_steps": 174,
+        "wait_actions": 14,
+        "replans": [],
+        "interruptions": [
+          {
+            "kind": "trainer_engagement",
+            "outcome": "resumed"
+          }
+        ],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "numeric_feature_schema_frozen": false,
+    "promotion_eligible": false
+  }
+}

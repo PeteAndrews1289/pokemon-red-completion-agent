@@ -14,6 +14,48 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
+
+Clean source `d3747f0758bd9a54b0c2ba2805b2bbf3b1fb38db` closes the first long,
+non-cost-minimizing strategic route. From the authenticated post-Hideout Celadon checkpoint, two
+real objectives were available: the story-critical Pokémon Tower at route cost 178, and the
+optional Celadon Eevee pickup at cost 60. Qualified completion semantics selected the Tower. The
+bound nine-map route crossed Route 7's underground passage, Route 8 and Lavender, acknowledged
+174/174 movement requests, resolved one unavoidable trainer engagement and reached
+`POKEMON_TOWER_1F` at `(17,10)` with zero replans. The public record is
+[celadon-strategic-objective-route-probe-2026-08-11.json](docs/evidence/celadon-strategic-objective-route-probe-2026-08-11.json).
+
+The route forced six real corrections before it passed. Ledge settlement had to remain declared
+through plan composition; the objective planner had to apply the observed Saffron story predicate;
+six tunnel entrances had to derive their retained outside-map context from bounded cartridge
+scripts that write `wLastMap`; the executor needed an explicit battle-aware trainer interruption
+contract; defeated-trainer field dialogue needed to count as active script control; and the public
+evidence vocabulary had to normalize both battle and dialogue forms to one reviewed
+`trainer_engagement` kind. None of the failed attempts produced a public success receipt or a
+training record. Their source-bound sequence is preserved in
+[celadon-strategic-objective-route-failures-2026-08-11.json](docs/evidence/celadon-strategic-objective-route-failures-2026-08-11.json).
+
+The interruption handler is deliberately narrow. It chooses from the live active Pokémon's usable
+moves using power, accuracy, type effectiveness, STAB, PP and Disable state; it receives no chapter,
+trainer or species answer key. It can flee a wild encounter, finish an unavoidable trainer battle,
+settle the corresponding field dialogue and return authority to the unchanged route binding. It
+does not make arbitrary menus or every Kanto script safe for generated routing.
+
+Do not promote this result. There are now **three unassigned live strategic calibrations**, but
+still **0 train and 0 validation records**, no frozen numeric feature schema and no strategic
+navigation model. The Celadon decision proves that semantics can beat the route-cost baseline; it
+does not provide an independent train/validation estimate because it was a development root. The
+next modeling step is to preassign whole, independent roots to train or untouched validation,
+collect every consumed success/failure/interruption, inspect the implemented baselines, then freeze
+features and train only if the coverage supports it.
+
+The prospective v95 identities at this checkpoint are registry
+`cd07e356c0b81cd1e9c4b5f39927cc95d77d20c4ac898fe16f23ba437e593b6c`, source bundle
+`6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a`, teacher execution
+`27c3bd17b60d711aeaa74959317b632eba88ab13362cb377ff3f59c45a3bf3c5`, and slot assignment
+`5a486e75f989e13803f4a29f09039e8c7af4eee412a86b044fd114d927a95b98`. Regeneration still does
+not open v95; counted collection remains 0/10.
+
 ## Strategic navigation is collectable, but no strategic model exists — 2026-08-11
 
 Source checkpoints `33dd0d81600b818d121a420a158d91479adc161f` and
@@ -63,20 +105,20 @@ identity-free projection contains semantic needs, candidate metrics and selected
 destination binding, map id, coordinate or arrow action. Record:
 [fuchsia-strategic-objective-route-probe-2026-08-11.json](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json).
 
-Do not overstate this milestone. There are **0 train/validation strategic navigation records**,
-two unassigned calibrations (one trivial plumbing check and one genuine branch), no frozen numeric
-feature schema and no strategic navigation model. The Fuchsia choice also agrees with the
-minimum-route-cost baseline, so it cannot establish useful feature value by itself. The old
+This earlier checkpoint is superseded by the Pokémon Tower result above. There are still **0
+train/validation strategic navigation records**, but now three unassigned calibrations: one trivial
+plumbing check and two genuine branches, including one that rejects minimum route cost. There is no
+frozen numeric feature schema and no strategic navigation model. The old
 `navigation_dataset.py` contains
 individual direction traces for control diagnostics only; its public summary now says so and stays
 `promotion_eligible: false`. The next work is to instrument genuine multi-destination branches in
-independent teacher/generated roots—especially decisions that reject the cheapest route—preserve
-successes/failures/interruptions, then inspect coverage before choosing a numeric representation.
+preassigned, independent teacher/generated roots, preserve successes/failures/interruptions, then
+inspect coverage before choosing a numeric representation.
 Current prospective registry SHA is
-`c7f5fc87371a0c3fc2fcf545dbd44d6626fd4b06fa5b1f02021dc17cde539f95`; source bundle is
-`beb4bbd8151886588953f085d82dcc09423a02279fd0f6754b60656014f2e4c8`; teacher execution is
-`4218e4318d5df03769d33a6f945ed58e3462a016d329a7730fb3bc3863f6783c`; slot assignment is
-`049c57918437a2000f4c7a5c87cfa56a709e4c75dc6bfa2e4125eb3f781b2809`.
+`cd07e356c0b81cd1e9c4b5f39927cc95d77d20c4ac898fe16f23ba437e593b6c`; source bundle is
+`6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a`; teacher execution is
+`27c3bd17b60d711aeaa74959317b632eba88ab13362cb377ff3f59c45a3bf3c5`; slot assignment is
+`5a486e75f989e13803f4a29f09039e8c7af4eee412a86b044fd114d927a95b98`.
 
 ## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
 

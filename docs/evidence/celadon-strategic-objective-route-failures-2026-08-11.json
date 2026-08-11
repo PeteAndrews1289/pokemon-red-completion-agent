@@ -1,0 +1,53 @@
+{
+  "schema": "celadon-strategic-objective-route-failure-lineage-v1",
+  "recorded_on": "2026-08-11",
+  "status": "closed_by_successful_replay",
+  "scope": "Public diagnostic lineage from one unassigned calibration. Failed attempts emitted no strategic training record and are excluded from model development.",
+  "successful_source_commit": "d3747f0758bd9a54b0c2ba2805b2bbf3b1fb38db",
+  "successful_evidence": "celadon-strategic-objective-route-probe-2026-08-11.json",
+  "promotion_eligible": false,
+  "failed_attempts": [
+    {
+      "source_commit": "33a89cc67ff913d02e2afc05ec0a19ca110fa6f6",
+      "failure_phase": "live_route_execution",
+      "category": "undeclared_staged_ledge",
+      "boundary": "Route 7 ledge reported the adjacent tile before the landing tile",
+      "correction": "Represent a declared transient coordinate for one-input ledge movement"
+    },
+    {
+      "source_commit": "335f25e85139f2d90ca83329f3a39168078c87f4",
+      "failure_phase": "live_route_execution",
+      "category": "composed_route_dropped_transient",
+      "boundary": "The local ledge edge carried its transient but segment composition discarded it",
+      "correction": "Retain transient coordinates in composed route steps"
+    },
+    {
+      "source_commit": "504c82c06ae7786dafb5035cad18f5f1ece39dd5",
+      "failure_phase": "route_selection",
+      "category": "story_requirements_omitted",
+      "boundary": "The calibration harness selected the statically walkable but closed Saffron guard house",
+      "correction": "Apply observed Generation I story requirements to candidate local graphs"
+    },
+    {
+      "source_commit": "bfe3a9e39a6eff7610d6e5b5119385207c19a3f7",
+      "failure_phase": "live_route_execution",
+      "category": "trainer_script_interruption_unhandled",
+      "boundary": "Route 8 trainer-script control looked like a settled failed movement",
+      "correction": "Bind mechanics-ranked trainer-battle handling and explicit hazard authority"
+    },
+    {
+      "source_commit": "350d2f48b448469435d59ac2c3429dfd3ba7cc9c",
+      "failure_phase": "live_route_execution",
+      "category": "defeated_trainer_dialogue_misclassified",
+      "boundary": "The map displayed defeated-trainer text while the old readiness projection reported free movement",
+      "correction": "Treat the paired trainer flag and active map script as a typed engagement boundary"
+    },
+    {
+      "source_commit": "ef8785f1a892f253afd2a0060a99f6d7c326e824",
+      "failure_phase": "public_evidence_serialization",
+      "category": "interruption_vocabulary_mismatch",
+      "boundary": "The route reached Pokemon Tower but the public strategic schema rejected a title-specific trainer-battle receipt label",
+      "correction": "Normalize battle and dialogue resolutions to trainer_engagement while retaining battle_started evidence"
+    }
+  ]
+}
