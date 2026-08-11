@@ -20,13 +20,19 @@ from pokemon_red_completion.strategic_navigation import (
     DestinationAvailability,
     DestinationUnavailableReason,
     NavigationDestinationCandidate,
+    NavigationFailureReason,
     NavigationOutcomeStatus,
+    StrategicInterruptionKind,
     StrategicInterruptionOutcome,
+    StrategicInterruptionResolution,
     StrategicNavigationDecision,
     StrategicNavigationError,
     StrategicNavigationLedger,
     StrategicNavigationRecord,
+    StrategicNavigationTag,
     StrategicReplanOutcome,
+    StrategicReplanReason,
+    StrategicResourceKind,
     successful_navigation_outcome,
     unsuccessful_navigation_outcome,
 )
@@ -65,18 +71,27 @@ def _decision(plan: RoutePlan | None = None) -> StrategicNavigationDecision:
         partition="train",
         actor="deterministic_teacher",
         policy_id="strategic-teacher-v1",
-        semantic_need_tags=("advance_story", "reach_next_challenge"),
-        origin_semantic_tags=("overworld", "safe_hub"),
+        semantic_need_tags=(
+            StrategicNavigationTag.ADVANCE_STORY,
+            StrategicNavigationTag.REACH_NEXT_CHALLENGE,
+        ),
+        origin_semantic_tags=(
+            StrategicNavigationTag.OVERWORLD,
+            StrategicNavigationTag.SAFE_HUB,
+        ),
         origin_region_ref="pokemon.red:region:origin",
         candidates=(
             NavigationDestinationCandidate.from_plan(
                 "pokemon.red:destination:progression",
-                ("challenge", "story_progress"),
+                (
+                    StrategicNavigationTag.CHALLENGE,
+                    StrategicNavigationTag.STORY_PROGRESS,
+                ),
                 selected_plan,
             ),
             NavigationDestinationCandidate.unavailable(
                 "pokemon.red:destination:optional_reward",
-                ("optional_reward",),
+                (StrategicNavigationTag.OPTIONAL_REWARD,),
                 DestinationUnavailableReason.MISSING_CAPABILITY,
             ),
         ),
@@ -192,16 +207,49 @@ def test_decision_requires_a_genuine_available_choice() -> None:
     with pytest.raises(StrategicNavigationError, match="duplicated"):
         replace(decision, candidates=(decision.candidates[0], decision.candidates[0]))
     with pytest.raises(StrategicNavigationError, match="unique and sorted"):
-        replace(decision, semantic_need_tags=("z", "a"))
+        replace(
+            decision,
+            semantic_need_tags=(
+                StrategicNavigationTag.TRAINING,
+                StrategicNavigationTag.ADVANCE_STORY,
+            ),
+        )
+    with pytest.raises(StrategicNavigationError, match="immutable tuple"):
+        replace(decision, candidates=list(decision.candidates))  # type: ignore[arg-type]
+    with pytest.raises(StrategicNavigationError, match="actor must be non-empty"):
+        replace(decision, actor=7)  # type: ignore[arg-type]
 
 
 def test_free_text_unavailability_reasons_cannot_leak_game_specific_state() -> None:
     with pytest.raises(StrategicNavigationError, match="semantic reason"):
         NavigationDestinationCandidate(
             destination_ref="pokemon.red:destination:blocked",
-            semantic_tags=("optional_reward",),
+            semantic_tags=(StrategicNavigationTag.OPTIONAL_REWARD,),
             availability=DestinationAvailability.UNAVAILABLE,
             unavailability_reason="blocked at map 13 coordinate 4,7",  # type: ignore[arg-type]
+        )
+
+
+def test_outcome_runtime_types_fail_closed_before_serialization() -> None:
+    decision = _decision()
+
+    with pytest.raises(StrategicNavigationError, match="status is unsupported"):
+        replace(
+            unsuccessful_navigation_outcome(
+                decision,
+                status=NavigationOutcomeStatus.FAILED,
+                reason=NavigationFailureReason.WORLD_STATE_DIVERGED,
+            ),
+            status="failed",  # type: ignore[arg-type]
+        )
+    with pytest.raises(StrategicNavigationError, match="immutable tuple"):
+        replace(
+            unsuccessful_navigation_outcome(
+                decision,
+                status=NavigationOutcomeStatus.FAILED,
+                reason=NavigationFailureReason.WORLD_STATE_DIVERGED,
+            ),
+            replans=[],  # type: ignore[arg-type]
         )
 
 
@@ -215,11 +263,16 @@ def test_success_aggregates_live_route_events_without_arrow_labels() -> None:
 
     assert outcome.status is NavigationOutcomeStatus.SUCCEEDED
     assert outcome.acknowledged_steps == 2
-    assert outcome.replans == (StrategicReplanOutcome(1, "visible_object", 4),)
-    assert outcome.interruptions == (
-        StrategicInterruptionOutcome("wild_battle", "resumed"),
+    assert outcome.replans == (
+        StrategicReplanOutcome(1, StrategicReplanReason.VISIBLE_OBJECT, 4),
     )
-    assert outcome.resource_renewals == ("encounter_suppression",)
+    assert outcome.interruptions == (
+        StrategicInterruptionOutcome(
+            StrategicInterruptionKind.WILD_BATTLE,
+            StrategicInterruptionResolution.RESUMED,
+        ),
+    )
+    assert outcome.resource_renewals == (StrategicResourceKind.ENCOUNTER_SUPPRESSION,)
     assert len(record.record_sha256) == 64
     for forbidden in ('"action"', '"direction"', '"coordinate"', '"map_id"'):
         assert forbidden not in encoded
@@ -245,10 +298,15 @@ def test_interrupted_decisions_are_consumed_once_in_the_append_only_ledger() -> 
     outcome = unsuccessful_navigation_outcome(
         decision,
         status=NavigationOutcomeStatus.INTERRUPTED,
-        reason="external_power_loss",
+        reason=NavigationFailureReason.EXTERNAL_POWER_LOSS,
         movement_requests=3,
         acknowledged_steps=2,
-        interruptions=(StrategicInterruptionOutcome("power_loss", "not_resumed"),),
+        interruptions=(
+            StrategicInterruptionOutcome(
+                StrategicInterruptionKind.EXTERNAL_POWER_LOSS,
+                StrategicInterruptionResolution.CENSORED,
+            ),
+        ),
     )
     record = StrategicNavigationRecord(decision, outcome)
     ledger = StrategicNavigationLedger()
@@ -260,7 +318,7 @@ def test_interrupted_decisions_are_consumed_once_in_the_append_only_ledger() -> 
         "records": 1,
         "outcomes": {"interrupted": 1},
         "replan_reasons": {},
-        "interruption_kinds": {"power_loss": 1},
+        "interruption_kinds": {"external_power_loss": 1},
         "movement_action_labels": 0,
         "promotion_eligible": False,
     }
@@ -270,7 +328,7 @@ def test_interrupted_decisions_are_consumed_once_in_the_append_only_ledger() -> 
         unsuccessful_navigation_outcome(
             decision,
             status=NavigationOutcomeStatus.SUCCEEDED,
-            reason="wrong API",
+            reason=NavigationFailureReason.WORLD_STATE_DIVERGED,
         )
 
 

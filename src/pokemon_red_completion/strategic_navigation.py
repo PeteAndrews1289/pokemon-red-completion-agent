@@ -19,7 +19,11 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 
 from pokemon_red_completion.actions import MacroActionKind
-from pokemon_red_completion.route_executor import RouteExecutionReport
+from pokemon_red_completion.route_executor import (
+    InterruptionReceipt,
+    RouteExecutionReport,
+    RouteReplanReceipt,
+)
 from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.trajectory import canonical_sha256
 
@@ -57,10 +61,90 @@ class NavigationOutcomeStatus(StrEnum):
     INTERRUPTED = "interrupted"
 
 
-def _semantic_tags(values: tuple[str, ...], *, subject: str) -> tuple[str, ...]:
-    if not values or any(not isinstance(value, str) or not value for value in values):
-        raise StrategicNavigationError(f"{subject} must contain non-empty strings")
-    if values != tuple(sorted(set(values))):
+class NavigationFailureReason(StrEnum):
+    """Portable failure/censor reasons retained without exception text."""
+
+    CAPABILITY_LOST = "capability_lost"
+    EXTERNAL_POWER_LOSS = "external_power_loss"
+    INTERRUPTION_UNRECOVERED = "interruption_unrecovered"
+    PLANNER_NO_ROUTE = "planner_no_route"
+    REPLAN_BUDGET_EXHAUSTED = "replan_budget_exhausted"
+    RESOURCE_UNAVAILABLE = "resource_unavailable"
+    STEP_ACKNOWLEDGEMENT_EXHAUSTED = "step_acknowledgement_exhausted"
+    TERMINAL_STATE_MISMATCH = "terminal_state_mismatch"
+    WORLD_STATE_DIVERGED = "world_state_diverged"
+
+
+class StrategicReplanReason(StrEnum):
+    """Game-neutral causes currently emitted by the route executor."""
+
+    SETTLED_FAILED_STEP = "settled_failed_step"
+    TRAINER_SIGHT = "trainer_sight"
+    VISIBLE_OBJECT = "visible_object"
+
+
+class StrategicInterruptionKind(StrEnum):
+    """Interruption classes safe to expose to a cross-title policy."""
+
+    EXTERNAL_POWER_LOSS = "external_power_loss"
+    MENU_OR_SCRIPT = "menu_or_script"
+    TRAINER_ENGAGEMENT = "trainer_engagement"
+    WILD_BATTLE = "wild_battle"
+
+
+class StrategicInterruptionResolution(StrEnum):
+    """Whether control returned after an interruption."""
+
+    CENSORED = "censored"
+    NOT_RESUMED = "not_resumed"
+    RESUMED = "resumed"
+
+
+class StrategicResourceKind(StrEnum):
+    """Step-bounded resources currently represented by traversal."""
+
+    ENCOUNTER_SUPPRESSION = "encounter_suppression"
+
+
+class StrategicNavigationTag(StrEnum):
+    """Reviewed portable vocabulary; title-specific names are not valid tags."""
+
+    ACQUIRE_PARTY_MEMBER = "acquire_party_member"
+    ACQUIRE_RESOURCE = "acquire_resource"
+    ADVANCE_STORY = "advance_story"
+    CHALLENGE = "challenge"
+    COLLECTION = "collection"
+    COMPLETE_COLLECTION = "complete_collection"
+    ENCOUNTER_VENUE = "encounter_venue"
+    EVOLUTION = "evolution"
+    EXPLORE = "explore"
+    HEALING = "healing"
+    IMPROVE_TEAM = "improve_team"
+    OPTIONAL_REWARD = "optional_reward"
+    OVERWORLD = "overworld"
+    PUZZLE = "puzzle"
+    REACH_NEXT_CHALLENGE = "reach_next_challenge"
+    RECOVERY = "recovery"
+    REMOVE_BLOCKER = "remove_blocker"
+    RESUPPLY = "resupply"
+    RETURN_TO_SAFETY = "return_to_safety"
+    SAFE_HUB = "safe_hub"
+    SHOP = "shop"
+    STORY_PROGRESS = "story_progress"
+    TRAINING = "training"
+    TRANSIT = "transit"
+
+
+def _semantic_tags(
+    values: tuple[StrategicNavigationTag, ...],
+    *,
+    subject: str,
+) -> tuple[StrategicNavigationTag, ...]:
+    if not values or any(not isinstance(value, StrategicNavigationTag) for value in values):
+        raise StrategicNavigationError(
+            f"{subject} must use the strategic navigation vocabulary"
+        )
+    if values != tuple(sorted(set(values), key=lambda item: item.value)):
         raise StrategicNavigationError(f"{subject} must be unique and sorted")
     return values
 
@@ -75,7 +159,7 @@ class NavigationDestinationCandidate:
     """
 
     destination_ref: str
-    semantic_tags: tuple[str, ...]
+    semantic_tags: tuple[StrategicNavigationTag, ...]
     availability: DestinationAvailability
     route_cost: int | None = None
     route_steps: int | None = None
@@ -85,8 +169,10 @@ class NavigationDestinationCandidate:
     unavailability_reason: DestinationUnavailableReason | None = None
 
     def __post_init__(self) -> None:
-        if not self.destination_ref:
+        if not isinstance(self.destination_ref, str) or not self.destination_ref:
             raise StrategicNavigationError("a destination candidate needs a binding reference")
+        if not isinstance(self.availability, DestinationAvailability):
+            raise StrategicNavigationError("destination availability is unsupported")
         _semantic_tags(self.semantic_tags, subject="destination semantic tags")
         metrics = (
             self.route_cost,
@@ -123,7 +209,7 @@ class NavigationDestinationCandidate:
     def from_plan(
         cls,
         destination_ref: str,
-        semantic_tags: tuple[str, ...],
+        semantic_tags: tuple[StrategicNavigationTag, ...],
         plan: RoutePlan,
     ) -> NavigationDestinationCandidate:
         """Project strategic metrics without retaining any movement action."""
@@ -147,7 +233,7 @@ class NavigationDestinationCandidate:
     def unavailable(
         cls,
         destination_ref: str,
-        semantic_tags: tuple[str, ...],
+        semantic_tags: tuple[StrategicNavigationTag, ...],
         reason: DestinationUnavailableReason,
         *,
         unknown: bool = False,
@@ -170,7 +256,7 @@ class NavigationDestinationCandidate:
             raise ValueError("binding index must be a non-negative integer")
         return {
             "binding_index": binding_index,
-            "semantic_tags": list(self.semantic_tags),
+            "semantic_tags": [item.value for item in self.semantic_tags],
             "availability": self.availability.value,
             "route_cost": self.route_cost,
             "route_steps": self.route_steps,
@@ -187,7 +273,7 @@ class NavigationDestinationCandidate:
     def public_dict(self) -> dict[str, object]:
         return {
             "destination_ref": self.destination_ref,
-            "semantic_tags": list(self.semantic_tags),
+            "semantic_tags": [item.value for item in self.semantic_tags],
             "availability": self.availability.value,
             "route_cost": self.route_cost,
             "route_steps": self.route_steps,
@@ -212,8 +298,8 @@ class StrategicNavigationDecision:
     partition: str
     actor: str
     policy_id: str
-    semantic_need_tags: tuple[str, ...]
-    origin_semantic_tags: tuple[str, ...]
+    semantic_need_tags: tuple[StrategicNavigationTag, ...]
+    origin_semantic_tags: tuple[StrategicNavigationTag, ...]
     origin_region_ref: str
     candidates: tuple[NavigationDestinationCandidate, ...]
     selected_destination_ref: str
@@ -227,7 +313,7 @@ class StrategicNavigationDecision:
             "origin_region_ref",
             "selected_destination_ref",
         ):
-            if not getattr(self, name):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
                 raise StrategicNavigationError(f"{name} must be non-empty")
         if type(self.decision_index) is not int or self.decision_index < 0:  # noqa: E721
             raise StrategicNavigationError("decision index must be a non-negative integer")
@@ -235,6 +321,8 @@ class StrategicNavigationDecision:
             raise StrategicNavigationError("strategic navigation partition is unsupported")
         _semantic_tags(self.semantic_need_tags, subject="semantic need tags")
         _semantic_tags(self.origin_semantic_tags, subject="origin semantic tags")
+        if not isinstance(self.candidates, tuple):
+            raise StrategicNavigationError("destination candidates must be an immutable tuple")
         if len(self.candidates) < 2:
             raise StrategicNavigationError(
                 "a strategic navigation decision needs at least two candidates"
@@ -268,7 +356,7 @@ class StrategicNavigationDecision:
                 "episode_id": self.episode_id,
                 "decision_index": self.decision_index,
                 "root_lineage_id": self.root_lineage_id,
-                "semantic_need_tags": list(self.semantic_need_tags),
+                "semantic_need_tags": [item.value for item in self.semantic_need_tags],
                 "origin_region_ref": self.origin_region_ref,
                 "candidate_refs": [item.destination_ref for item in self.candidates],
             }
@@ -279,8 +367,8 @@ class StrategicNavigationDecision:
 
         return {
             "schema": "strategic-navigation-policy-input-v1",
-            "semantic_need_tags": list(self.semantic_need_tags),
-            "origin_semantic_tags": list(self.origin_semantic_tags),
+            "semantic_need_tags": [item.value for item in self.semantic_need_tags],
+            "origin_semantic_tags": [item.value for item in self.origin_semantic_tags],
             "candidates": [
                 candidate.policy_features(binding_index=index)
                 for index, candidate in enumerate(self.candidates)
@@ -296,8 +384,8 @@ class StrategicNavigationDecision:
             "root_lineage_id": self.root_lineage_id,
             "partition": self.partition,
             "provenance": {"actor": self.actor, "policy_id": self.policy_id},
-            "semantic_need_tags": list(self.semantic_need_tags),
-            "origin_semantic_tags": list(self.origin_semantic_tags),
+            "semantic_need_tags": [item.value for item in self.semantic_need_tags],
+            "origin_semantic_tags": [item.value for item in self.origin_semantic_tags],
             "origin_region_ref": self.origin_region_ref,
             "candidates": [
                 {
@@ -314,14 +402,14 @@ class StrategicNavigationDecision:
 @dataclass(frozen=True, slots=True)
 class StrategicReplanOutcome:
     ordinal: int
-    reason: str
+    reason: StrategicReplanReason
     replacement_route_steps: int
 
     def __post_init__(self) -> None:
         if type(self.ordinal) is not int or self.ordinal <= 0:  # noqa: E721
             raise StrategicNavigationError("replan ordinal must be positive")
-        if not self.reason:
-            raise StrategicNavigationError("replan outcome needs a reason")
+        if not isinstance(self.reason, StrategicReplanReason):
+            raise StrategicNavigationError("replan outcome needs a semantic reason")
         if (
             type(self.replacement_route_steps) is not int  # noqa: E721
             or self.replacement_route_steps < 0
@@ -331,22 +419,26 @@ class StrategicReplanOutcome:
     def public_dict(self) -> dict[str, object]:
         return {
             "ordinal": self.ordinal,
-            "reason": self.reason,
+            "reason": self.reason.value,
             "replacement_route_steps": self.replacement_route_steps,
         }
 
 
 @dataclass(frozen=True, slots=True)
 class StrategicInterruptionOutcome:
-    kind: str
-    outcome: str
+    kind: StrategicInterruptionKind
+    outcome: StrategicInterruptionResolution
 
     def __post_init__(self) -> None:
-        if not self.kind or not self.outcome:
-            raise StrategicNavigationError("interruption kind and outcome must be non-empty")
+        if not isinstance(self.kind, StrategicInterruptionKind) or not isinstance(
+            self.outcome, StrategicInterruptionResolution
+        ):
+            raise StrategicNavigationError(
+                "interruption kind and outcome must use semantic vocabularies"
+            )
 
     def public_dict(self) -> dict[str, object]:
-        return {"kind": self.kind, "outcome": self.outcome}
+        return {"kind": self.kind.value, "outcome": self.outcome.value}
 
 
 @dataclass(frozen=True, slots=True)
@@ -362,12 +454,24 @@ class StrategicNavigationOutcome:
     wait_actions: int
     replans: tuple[StrategicReplanOutcome, ...] = ()
     interruptions: tuple[StrategicInterruptionOutcome, ...] = ()
-    resource_renewals: tuple[str, ...] = ()
-    failure_reason: str | None = None
+    resource_renewals: tuple[StrategicResourceKind, ...] = ()
+    failure_reason: NavigationFailureReason | None = None
 
     def __post_init__(self) -> None:
-        if not self.decision_id or not self.selected_destination_ref:
+        if (
+            not isinstance(self.decision_id, str)
+            or not self.decision_id
+            or not isinstance(self.selected_destination_ref, str)
+            or not self.selected_destination_ref
+        ):
             raise StrategicNavigationError("navigation outcome identity is incomplete")
+        if not isinstance(self.status, NavigationOutcomeStatus):
+            raise StrategicNavigationError("navigation outcome status is unsupported")
+        if not isinstance(self.terminal_reached, bool):
+            raise StrategicNavigationError("terminal reached must be a boolean")
+        for name in ("replans", "interruptions", "resource_renewals"):
+            if not isinstance(getattr(self, name), tuple):
+                raise StrategicNavigationError(f"{name} must be an immutable tuple")
         for name in ("movement_requests", "acknowledged_steps", "wait_actions"):
             value = getattr(self, name)
             if type(value) is not int or value < 0:  # noqa: E721
@@ -376,14 +480,18 @@ class StrategicNavigationOutcome:
             range(1, len(self.replans) + 1)
         ):
             raise StrategicNavigationError("replan outcomes must be contiguous")
-        if any(not kind for kind in self.resource_renewals):
-            raise StrategicNavigationError("resource renewal kinds must be non-empty")
+        if any(
+            not isinstance(kind, StrategicResourceKind) for kind in self.resource_renewals
+        ):
+            raise StrategicNavigationError("resource renewals must use semantic kinds")
         if self.status is NavigationOutcomeStatus.SUCCEEDED:
             if not self.terminal_reached or self.failure_reason is not None:
                 raise StrategicNavigationError(
                     "a successful navigation outcome must reach its terminal without failure"
                 )
-        elif self.terminal_reached or not self.failure_reason:
+        elif self.terminal_reached or not isinstance(
+            self.failure_reason, NavigationFailureReason
+        ):
             raise StrategicNavigationError(
                 "a failed or interrupted navigation outcome needs a reason and no terminal"
             )
@@ -400,8 +508,10 @@ class StrategicNavigationOutcome:
             "wait_actions": self.wait_actions,
             "replans": [item.public_dict() for item in self.replans],
             "interruptions": [item.public_dict() for item in self.interruptions],
-            "resource_renewals": list(self.resource_renewals),
-            "failure_reason": self.failure_reason,
+            "resource_renewals": [item.value for item in self.resource_renewals],
+            "failure_reason": (
+                None if self.failure_reason is None else self.failure_reason.value
+            ),
         }
 
 
@@ -445,15 +555,11 @@ def successful_navigation_outcome(
         movement_requests=report.movement_requests,
         acknowledged_steps=len(report.executed_steps),
         wait_actions=report.wait_actions,
-        replans=tuple(
-            StrategicReplanOutcome(item.ordinal, item.reason, item.replacement_steps)
-            for item in report.replans
+        replans=tuple(_strategic_replan(item) for item in report.replans),
+        interruptions=tuple(_resumed_interruption(item) for item in report.interruptions),
+        resource_renewals=tuple(
+            _strategic_resource(item.kind) for item in report.resource_renewals
         ),
-        interruptions=tuple(
-            StrategicInterruptionOutcome(item.kind, "resumed")
-            for item in report.interruptions
-        ),
-        resource_renewals=tuple(item.kind for item in report.resource_renewals),
     )
 
 
@@ -461,13 +567,13 @@ def unsuccessful_navigation_outcome(
     decision: StrategicNavigationDecision,
     *,
     status: NavigationOutcomeStatus,
-    reason: str,
+    reason: NavigationFailureReason,
     movement_requests: int = 0,
     acknowledged_steps: int = 0,
     wait_actions: int = 0,
     replans: tuple[StrategicReplanOutcome, ...] = (),
     interruptions: tuple[StrategicInterruptionOutcome, ...] = (),
-    resource_renewals: tuple[str, ...] = (),
+    resource_renewals: tuple[StrategicResourceKind, ...] = (),
 ) -> StrategicNavigationOutcome:
     """Preserve a consumed failure or external interruption without rerunning it."""
 
@@ -486,6 +592,44 @@ def unsuccessful_navigation_outcome(
         resource_renewals=resource_renewals,
         failure_reason=reason,
     )
+
+
+def _strategic_replan(receipt: RouteReplanReceipt) -> StrategicReplanOutcome:
+    reason = receipt.reason
+    try:
+        semantic_reason = StrategicReplanReason(reason)
+    except ValueError as error:
+        raise StrategicNavigationError(
+            f"route report contains unsupported replan reason {reason!r}"
+        ) from error
+    return StrategicReplanOutcome(
+        receipt.ordinal,
+        semantic_reason,
+        receipt.replacement_steps,
+    )
+
+
+def _resumed_interruption(receipt: InterruptionReceipt) -> StrategicInterruptionOutcome:
+    kind = receipt.kind
+    try:
+        semantic_kind = StrategicInterruptionKind(kind)
+    except ValueError as error:
+        raise StrategicNavigationError(
+            f"route report contains unsupported interruption kind {kind!r}"
+        ) from error
+    return StrategicInterruptionOutcome(
+        semantic_kind,
+        StrategicInterruptionResolution.RESUMED,
+    )
+
+
+def _strategic_resource(kind: str) -> StrategicResourceKind:
+    try:
+        return StrategicResourceKind(kind)
+    except ValueError as error:
+        raise StrategicNavigationError(
+            f"route report contains unsupported resource kind {kind!r}"
+        ) from error
 
 
 @dataclass(frozen=True, slots=True)
@@ -533,10 +677,12 @@ class StrategicNavigationLedger:
     def public_summary(self) -> dict[str, object]:
         outcomes = Counter(record.outcome.status.value for record in self._records)
         replan_reasons = Counter(
-            replan.reason for record in self._records for replan in record.outcome.replans
+            replan.reason.value
+            for record in self._records
+            for replan in record.outcome.replans
         )
         interruption_kinds = Counter(
-            interruption.kind
+            interruption.kind.value
             for record in self._records
             for interruption in record.outcome.interruptions
         )
