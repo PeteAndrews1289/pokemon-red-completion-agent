@@ -21,11 +21,21 @@ from pokemon_red_completion.provenance import (
     canonical_sha256,
 )
 from pokemon_red_completion.rom import RomFingerprint
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    parse_strategic_navigation_registry,
+)
 
 
 def _collection_registry():
     return parse_collection_registry(
         (cli.REPOSITORY_ROOT / COLLECTION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+
+
+def _strategic_registry():
+    return parse_strategic_navigation_registry(
+        (cli.REPOSITORY_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
     )
 
 
@@ -1696,10 +1706,11 @@ def test_record_command_wires_private_episode_and_prints_path_free_summary(
         *,
         watch: bool,
         speed: int | None,
-        progress,
-        trajectory_sink: FakeSink,
-        trajectory_episode_id: str,
-        battle_start_offsets: object,
+            progress,
+            trajectory_sink: FakeSink,
+            trajectory_episode_id: str,
+            strategic_navigation_assignment: object,
+            battle_start_offsets: object,
     ) -> FakePlayReport:
         observed.update(
             rom=path,
@@ -1707,8 +1718,9 @@ def test_record_command_wires_private_episode_and_prints_path_free_summary(
             speed=speed,
             progress=progress,
             trajectory_sink=trajectory_sink,
-            trajectory_episode_id=trajectory_episode_id,
-            battle_start_offsets=battle_start_offsets,
+                trajectory_episode_id=trajectory_episode_id,
+                strategic_navigation_assignment=strategic_navigation_assignment,
+                battle_start_offsets=battle_start_offsets,
         )
         return FakePlayReport()
 
@@ -1759,6 +1771,7 @@ def test_record_command_wires_private_episode_and_prints_path_free_summary(
     assert observed["speed"] == 2
     assert observed["progress"] is cli._print_qualified_progress
     assert observed["trajectory_episode_id"] == expected_episode_id
+    assert observed["strategic_navigation_assignment"] is None
     assert observed["battle_start_offsets"] is None
     assert observed["metadata_rom"] == private_path
     assert observed["metadata_episode_id"] == expected_episode_id
@@ -2029,10 +2042,11 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
         *,
         watch: bool,
         speed: int | None,
-        progress,
-        trajectory_sink: FakeSink,
-        trajectory_episode_id: str,
-        battle_start_offsets,
+            progress,
+            trajectory_sink: FakeSink,
+            trajectory_episode_id: str,
+            strategic_navigation_assignment: object,
+            battle_start_offsets,
     ) -> FakeReport:
         observed.update(
             run_path=path,
@@ -2040,8 +2054,9 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
             run_speed=speed,
             run_progress=progress,
             run_sink=trajectory_sink,
-            run_episode_id=trajectory_episode_id,
-            run_offsets=battle_start_offsets,
+                run_episode_id=trajectory_episode_id,
+                run_strategic_assignment=strategic_navigation_assignment,
+                run_offsets=battle_start_offsets,
         )
         return FakeReport()
 
@@ -2084,6 +2099,7 @@ def test_planned_record_uses_the_frozen_identity_and_exact_offsets(
     assert observed["metadata_execution"] == registry.execution
     assert observed["metadata_schedule_dry_run"] is None
     assert observed["run_episode_id"] == assignment.episode_id
+    assert observed["run_strategic_assignment"] is None
     assert observed["run_offsets"] == assignment.offsets
     assert observed["header"] == {"planned": True}
 
@@ -2231,6 +2247,124 @@ def test_schedule_dry_run_uses_disjoint_offsets_without_touching_the_campaign_le
     assert observed["qualification_dry_run"] == dry_run
     assert observed["qualification_episode_id"] == expected_episode_id
     assert payload["dry_run_qualification"]["status"] == "qualified"
+
+
+def test_strategic_rehearsal_uses_only_the_committed_uncounted_assignment(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    registry = _strategic_registry()
+    registry = replace(
+        registry,
+        execution=replace(registry.execution, source_commit="a" * 40),
+    )
+    assignment = registry.rehearsal_assignment()
+    offsets = registry.schedule.offsets(assignment.harness_seed)
+    private_path = Path("/private/Pokemon Red.gb")
+    private_root_path = Path("/private/external/trajectories")
+    observed: dict[str, object] = {}
+
+    class FakeReport:
+        verified_objectives = tuple(objective.id for objective in cli.COMPLETION_QUEST)
+        next_objective = None
+
+        def public_dict(self) -> dict[str, object]:
+            return {"game_complete": True}
+
+    monkeypatch.setattr(cli, "resolve_rom_path", lambda _argument: private_path)
+    monkeypatch.setattr(
+        cli,
+        "load_committed_strategic_navigation_registry",
+        lambda _root: registry,
+    )
+    monkeypatch.setattr(
+        cli,
+        "_strategic_recording_metadata",
+        lambda path, *, episode_id, watch, speed, assignment, execution, offsets: (
+            observed.update(
+                metadata_path=path,
+                metadata_episode_id=episode_id,
+                metadata_watch=watch,
+                metadata_speed=speed,
+                metadata_assignment=assignment,
+                metadata_execution=execution,
+                metadata_offsets=offsets,
+            )
+            or {"strategic": True}
+        ),
+    )
+    private_root = object()
+    monkeypatch.setattr(
+        cli,
+        "open_private_root",
+        lambda root, *, repository_root: (
+            observed.update(private_root_path=root, repository_root=repository_root)
+            or private_root
+        ),
+    )
+
+    def capture(root, **kwargs):
+        observed.update(capture_root=root, capture=kwargs)
+        return (
+            FakeReport(),
+            {
+                "schema": "private-episode-summary-v1",
+                "episode_id": kwargs["episode_id"],
+                "status": "complete",
+                "stream_records": {"episode": 1},
+                "total_records": 1,
+                "total_bytes": 1,
+                "manifest_sha256": "b" * 64,
+            },
+        )
+
+    monkeypatch.setattr(cli, "_capture_private_recording", capture)
+
+    assert (
+        cli.main(
+            [
+                "record",
+                "--private-root",
+                str(private_root_path),
+                "--rom",
+                str(private_path),
+                "--strategic-rehearsal",
+            ]
+        )
+        == 0
+    )
+
+    payload = json.loads(capsys.readouterr().out)
+    assert observed["metadata_episode_id"] == assignment.episode_id
+    assert observed["metadata_assignment"] == assignment
+    assert observed["metadata_execution"] == registry.execution
+    assert observed["metadata_offsets"] == offsets
+    assert observed["capture_root"] is private_root
+    capture_arguments = observed["capture"]
+    assert isinstance(capture_arguments, dict)
+    assert capture_arguments["battle_start_offsets"] == offsets
+    assert capture_arguments["strategic_navigation_assignment"] == assignment
+    assert payload["strategic_rehearsal"] == {
+        "assignment_id": assignment.assignment_id,
+        "counted": False,
+        "partition": "unassigned",
+        "registry_sha256": registry.registry_sha256,
+    }
+
+
+def test_recording_modes_keep_strategic_rehearsal_mutually_exclusive() -> None:
+    parser = cli._parser()
+
+    with pytest.raises(SystemExit):
+        parser.parse_args(
+            [
+                "record",
+                "--private-root",
+                "/private/external/trajectories",
+                "--strategic-rehearsal",
+                "--schedule-dry-run",
+            ]
+        )
 
 
 def test_record_rejects_an_unknown_collection_run_without_echoing_it(
@@ -2453,6 +2587,83 @@ def test_planned_recording_metadata_binds_assignment_and_schedule(
             assignment=assignment,
             execution=registry.execution,
         )
+
+
+def test_strategic_recording_metadata_binds_exact_rehearsal_contract(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    private_rom = Path("/private/Pokemon Red.gb")
+    source = SourceIdentity("a" * 40, False)
+    registry = _strategic_registry()
+    execution = replace(registry.execution, source_commit=source.git_commit)
+    registry = replace(registry, execution=execution)
+    assignment = registry.rehearsal_assignment()
+    offsets = registry.schedule.offsets(assignment.harness_seed)
+    base_metadata: dict[str, object] = {
+        "configuration": {
+            "behavior_configuration_sha256": execution.behavior_configuration_sha256,
+        },
+        "configuration_sha256": "stale",
+        "objective_graph_sha256": execution.objective_graph_sha256,
+    }
+    monkeypatch.setattr(
+        cli,
+        "_recording_metadata",
+        lambda path, *, episode_id, watch, speed: (
+            base_metadata
+            if (
+                path == private_rom
+                and episode_id == assignment.episode_id
+                and watch is False
+                and speed is None
+            )
+            else pytest.fail("unexpected base metadata request")
+        ),
+    )
+    monkeypatch.setattr(
+        cli,
+        "detect_source_identity",
+        lambda root, *, include_untracked: source,
+    )
+    monkeypatch.setattr(cli, "require_published_source", lambda _root, _source: None)
+    monkeypatch.setattr(
+        cli,
+        "committed_source_bundle_sha256",
+        lambda _root, *, revision: execution.source_bundle_sha256,
+    )
+    monkeypatch.setattr(
+        cli,
+        "working_source_bundle_sha256",
+        lambda _root: execution.source_bundle_sha256,
+    )
+
+    metadata = cli._strategic_recording_metadata(
+        private_rom,
+        episode_id=assignment.episode_id,
+        watch=False,
+        speed=None,
+        assignment=assignment,
+        execution=execution,
+        offsets=offsets,
+    )
+
+    expected_header = assignment.episode_metadata()
+    for key, value in expected_header.items():
+        assert metadata[key] == value
+    configuration = metadata["configuration"]
+    assert isinstance(configuration, dict)
+    assert configuration["battle_start_schedule"] == {
+        "assignment_id": assignment.assignment_id,
+        "offsets": [offset.public_dict() for offset in offsets],
+        "registry_sha256": assignment.registry_sha256,
+        "schedule_sha256": assignment.schedule_sha256,
+        "schema": cli.BATTLE_START_SCHEDULE_SCHEMA,
+    }
+    assert configuration["strategic_navigation"] == {
+        "decision_contract_sha256": execution.decision_contract_sha256,
+        "teacher_execution_sha256": execution.teacher_execution_sha256,
+    }
+    assert metadata["configuration_sha256"] == canonical_sha256(configuration)
 
 
 def test_scheduled_metadata_rejects_a_commit_change_after_registry_load(

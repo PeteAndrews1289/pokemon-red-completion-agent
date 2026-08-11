@@ -92,8 +92,8 @@ SEALED TEST / 1 REHEARSAL**. Animate a unique timing schedule and content-derive
 onto every root. End on **0/5 TRAIN — 0/2 VALIDATION** and say: **“Preregistering data does not give
 you data. It makes the data you collect next believable.”** Add one final lock on the other side of
 the run: the private episode must carry the same assignment, source, split and policy or the loader
-rejects it; test stays sealed by default. The next executable task is to connect these assignments
-to the clean-power teacher and qualify the rehearsal before opening train root 1.
+rejects it; test stays sealed by default. The connection to one clean-power branch is now complete;
+the next executable task is to qualify the rehearsal before opening train root 1.
 
 Then show the audit correction: the rehearsal originally had a seed but no bindable assignment.
 Give it its own `UNASSIGNED / COUNTED: FALSE` identity. Animate the decision entering the private
@@ -103,6 +103,18 @@ power dies here, the attempt may be incomplete—but the choice cannot disappear
 Follow it with a failed route card that is visibly nonzero: acknowledged prefix, movement requests,
 waits, replans and interruptions. Strip the terminal map/coordinate before the card enters the
 dataset. The line is: **“Failure is training evidence only if you measure what actually happened.”**
+
+Now close the loop on that promise. Show the full teacher timeline from power-on, then replace only
+the post-Hideout Celadon-to-Tower segment with the bound generated plan. Put a lock on the command:
+**REHEARSAL ASSIGNMENT ONLY / UNASSIGNED / COUNTED FALSE**. Animate the decision card entering the
+trajectory before the first directional input and the outcome card joining before Tower 2F.
+
+Use the private checkpoint preflight as a clearly labeled dress rehearsal: **OPENED DEVELOPMENT
+STATE — NOT DATA**. Let the counters finish at **28 TOWER CHECKPOINTS / 10 REQUIRED BATTLES / 1
+DECISION / 1 OUTCOME / 0 RECORDING FAILURES**. Then refuse to move the dataset counter: **TRAIN 0 / 5;
+VALIDATION 0 / 2; REHEARSAL 0 / 1**. The line is: **“The code path is ready. The experiment has not
+run.”** End this episode on the clean-power command and the harder question for the next video:
+**IS ONE REAL STRATEGIC CHOICE PER GAME ENOUGH TO TRAIN ANYTHING?**
 
 ## Resource episode: the route outlived its Repel
 

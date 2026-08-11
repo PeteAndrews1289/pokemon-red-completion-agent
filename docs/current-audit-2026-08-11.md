@@ -20,11 +20,16 @@ navigation model has shadow or causal authority. Counted v95 remains **0/10**.
 The split is no longer an open design question. A second prospective registry preassigns five
 whole power-on train roots, two validation roots and five sealed test roots, with a distinct
 uncounted rehearsal. Exact assignment identity is now required before a decision may claim any
-non-unassigned partition. All strategic slots remain unopened.
+non-unassigned partition. The assignment is now connected to one deliberately narrow clean-power
+branch: the post-Hideout teacher records Tower versus Eevee before acting, executes the exact bound
+generated route, and consumes its measured outcome before the Tower interior continues. A private
+checkpoint preflight passed that generated approach and the complete Tower chapter, but it was not
+a clean-power root and cannot become data. All strategic slots remain unopened.
 
 That claim boundary is healthy. The next highest-value work is no longer another isolated route
-mechanic; it is collecting genuine multi-destination decisions across independent roots and using
-them to test whether a portable destination ranker learns more than route cost or candidate shape.
+mechanic or another registry. It is qualifying the one rehearsal, auditing whether its sparse
+decision coverage can support learning, and only then deciding whether the preassigned learning
+roots should open or the campaign should be expanded first.
 
 ## What is now proved
 
@@ -156,28 +161,41 @@ diagnosis, but never a silently missing decision or a consumed learning slot. Th
 outcome must share one sink; if the decision write fails, the observer marks the episode ineligible
 and refuses to write an orphan outcome.
 
+The new full-run bridge uses that contract rather than bypassing it. `--strategic-rehearsal` loads
+the committed registry, derives the sole uncounted assignment and exact 74-battle schedule, requires
+clean published source, writes the assignment-authenticated header and supplies the assignment to
+the teacher. At the post-Hideout boundary, the teacher plans both Tower and Eevee candidates,
+records the Tower choice, executes the selected plan and consumes its route report or typed failure.
+The generated Route 8 trainer remains outside the frozen battle schedule; Tower reward accounting
+begins afterward so that the added encounter cannot falsify the ten-battle interior receipt.
+
+A private captured-state preflight passed all 28 Tower checkpoints and ten mandatory Tower battles
+after the generated approach, with one strategic decision, one matching outcome and zero recording
+failures. Because this used an already-opened state against an uncommitted working tree, it is an
+integration diagnostic only—not a source-bound public result, clean-power rehearsal or dataset row.
+
 ## Code and CI audit
 
-At this checkpoint the repository contains 152 source modules and 173 test modules. The local CI
+At this checkpoint the repository contains 152 source modules and 176 test modules. The local CI
 equivalent produced:
 
-- **2,587 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,599 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
 - Ruff clean;
-- mypy clean under the declared scope; and
-- GitHub Actions green through the preceding published checkpoints; the final evidence/documentation
-  commit was subjected to the same local gate before publication.
+- mypy clean across its declared 154-source-file scope; and
+- GitHub Actions green through the preceding published checkpoint; exact-commit CI remains a
+  required publication gate for the bridge in addition to this local result.
 
 The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `338e86c602c852080b5e066203cb489579f6a61442501be21b576a501cdf8994` |
-| Source bundle SHA-256 | `542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0` |
-| Teacher execution SHA-256 | `6bceb2b4e4849481c51b5fb586f1bac71ecb817f3768058f3c00b3d2acb13e0c` |
-| Slot assignment SHA-256 | `068fd00857df4c72565f445824a4f4453ac6fb745f5c174df7376298bf0cc283` |
+| Registry SHA-256 | `d899b69be3d5abcea8d6e385b2b7f4ead837bdef56e899ce76b589bc33186f97` |
+| Source bundle SHA-256 | `ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a` |
+| Teacher execution SHA-256 | `b466a3d9141c8d023244af28eeb2c1c5bb553a9aaf38e728806cf0f72cdfd9c9` |
+| Slot assignment SHA-256 | `b685ee8d404f74b550bf3b3d169a3e110e67c98198cbf688c5824ec318e805b0` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -186,15 +204,15 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `91a8c707f02d2bb273601c50a079c7fef20eb9a5e831ca5371eb4e3383969de2` |
+| Strategic registry SHA-256 | `fee1647d4e8d29e275de323fe1486bd076814f77722bbebc52193b7640f2d037` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `167a9dc04973e314944b9d0e98724386005a3baad8b32fe81faf71122d5cf554` |
-| Rehearsal assignment SHA-256 | `662e0ddab6d3d966773781cf36b9eeb60d2e8d81b17d23ff80e1a9f88bcb4602` |
-| First train assignment SHA-256 | `a6420e67da5602ee6cfbac99c7ea4fe16abb22689268b2749e2ebca29d86a31e` |
+| Strategic teacher execution SHA-256 | `5d1cbef0bdaf8400af5449a1f50fc697e7a8105c5848819c355ac30906104c4f` |
+| Rehearsal assignment SHA-256 | `cb311a5b71794eac8b72097704093e7b2d94fade8b5a99d180ba76ceb7988143` |
+| First train assignment SHA-256 | `b2e2c92e1c07e1bc278b9f3decd6be0964cfc283f81c74ba13fc2cad646a9145` |
 
 ## Ranked gaps
 
-### P0 — the collection harness is not yet connected to the full teacher
+### P0 — the rehearsal is executable but has not run
 
 The schema, live binding, split registry, strict assigned-episode loader, pre-execution observer and
 audit are ready, but the useful dataset denominator remains zero. The
@@ -205,26 +223,28 @@ validation. Synthetic choices such as selecting between two arbitrary Viridian b
 make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
 collection or optional reward destinations. Preassignment and output authentication are complete;
-full-run instrumentation and the one allowed rehearsal are next.
+one full-run branch is instrumented, and the one allowed rehearsal is next.
 
 The execution-side failure prerequisite is now closed. `execute_route` attaches a typed semantic
 reason and measured partial trace to its error, including the acknowledged prefix before a
 replanner fails. The strategic conversion verifies the failed initial plan against the selected
 binding, retains portable counts/receipts, and excludes the last map and coordinate. The remaining
-P0 work is to call this seam from genuine branches in the clean-power teacher and consume the
-success or failure outcome before the chapter continues or raises.
+P0 bridge now calls this seam around Tower versus Eevee and consumes the success or failure before
+the chapter continues or raises. The remaining risk is empirical: a complete clean-power root may
+reach that branch in a state not represented by the captured-state preflight.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will
 encode assumptions rather than observed decisions.
 
-### P0 — generated navigation does not own a completion run
+### P0 — generated navigation owns one branch, not the completion run
 
 Individual mechanics and routes are strong, and the generic router has now completed a nine-map,
-174-step strategic route through an unavoidable trainer battle. The completion teacher still does
-not broadly dispatch it, and the final post-switch Victory Road→Indigo path remains authored. A
-model choosing an objective or destination still does not mean the generic navigator executed it
-throughout the game.
+174-step strategic route through an unavoidable trainer battle. The exact rehearsal path can now
+dispatch that approach inside the full teacher, but this is one conditional branch. The completion
+teacher still does not broadly dispatch generated routes, and the final post-switch Victory
+Road→Indigo path remains authored. A model choosing an objective or destination still does not mean
+the generic navigator executed it throughout the game.
 
 ### P1 — semantic passage coverage is incomplete
 
@@ -255,31 +275,33 @@ from dataset/split audits before adding model code.
 
 ## Ordered roadmap
 
-1. **Connect the full-run collector.** Emit each pre-execution choice and exactly one measured
-   success or typed partial-failure outcome around genuine teacher/generated route branches, using
-   only the committed rehearsal assignment at first.
-2. **Qualify the rehearsal.** Run root `1710001`, audit candidate coverage, route-cost and shape
-   baselines, interruption handling and terminal joins. Fix the harness without consuming a train
-   or validation root.
-3. **Collect the learning roots.** After the rehearsal freezes the harness, run all five train roots
-   and both validation roots once. Preserve failures and censor external interruption; do not open
-   the five test roots.
-4. **Expand semantic coverage.** Include progression, recovery, resupply, training, collection and
-   optional-reward choices, with both cost-aligned and non-cost-minimizing teacher decisions.
-5. **Audit before featurizing.** Publish counts by need tag, candidate count, selected index,
+1. **Publish the bridge.** Commit and push the exact source/registries, then require green CI for
+   that commit before any private clean-power execution.
+2. **Qualify the rehearsal.** Run only root `1710001`; preserve a failed partial episode and never
+   edit source during the run or substitute a train/validation/test root for debugging.
+3. **Audit before opening learning roots.** Authenticate the episode, verify its decision/outcome
+   join, and measure candidate coverage, route-cost and shape baselines, interruptions and terminal
+   state.
+4. **Resolve the density decision.** One Tower-versus-Eevee choice per whole run may be too little
+   supervision. If so, add genuine recovery, resupply, training, collection and optional-reward
+   branches, then preregister a fresh campaign instead of changing the current one after exposure.
+5. **Collect the learning roots only if coverage is adequate.** Execute all five train roots and
+   both validation roots once. Preserve failures and censor external interruption; do not open the
+   five test roots.
+6. **Audit before featurizing.** Publish counts by need tag, candidate count, selected index,
    availability, route cost, replan reason, interruption and outcome. Measure route-cost-only and
    candidate-shape baselines.
-6. **Freeze and train.** Preregister normalization, a shared permutation-equivariant candidate
+7. **Freeze and train.** Preregister normalization, a shared permutation-equivariant candidate
    scorer, train-only selection and validation criteria. Keep the deterministic teacher in
    collection authority.
-7. **Shadow, then act.** Run fresh shadow roots, followed by a bounded causal route-choice trial
+8. **Shadow, then act.** Run fresh shadow roots, followed by a bounded causal route-choice trial
    with exact binding, no disagreement fallback and an independent outcome referee.
-8. **Close completion routing.** Add broader non-trainer menu/script recovery, more
+9. **Close completion routing.** Add broader non-trainer menu/script recovery, more
    story/special-object predicates, the generated post-final-switch Indigo route and systematic
    mutation scoring.
-9. **Test transfer.** Implement the thin Crystal adapter and compare frozen-Red zero-shot, fixed
+10. **Test transfer.** Implement the thin Crystal adapter and compare frozen-Red zero-shot, fixed
    few-shot adaptation and from-scratch training under the same route-choice metrics.
-10. **Expand completion.** Only after the play/transfer gates, add autonomous storage, evolution,
+11. **Expand completion.** Only after the play/transfer gates, add autonomous storage, evolution,
    trade and multi-save orchestration toward the living-Pokédex and 100% goals.
 
 ## Portfolio narrative

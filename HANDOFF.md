@@ -14,6 +14,57 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The strategic rehearsal now reaches the clean-power teacher — 2026-08-11
+
+The prospective protocol is no longer waiting for a call site. An exact
+`StrategicNavigationEpisodeAssignment` can now enter `run_qualified_play` only beside the same
+trajectory sink and episode ID. The full teacher constructs a one-pending-choice observer and
+substitutes one generated branch at the authenticated post-Hideout boundary. Ordinary `play`,
+ordinary `record`, battle collection and every other chapter remain unchanged.
+
+That branch plans two real cartridge-derived candidates from Celadon Center: story-critical
+Pokémon Tower and the optional Eevee gift. It records the teacher's Tower selection before the
+first route action, executes the exact bound plan through the generic acknowledge/interruption/
+replan loop, and consumes either the measured success or the typed partial failure before control
+returns to the Tower chapter. A route failure is re-raised only after its negative strategic
+outcome has been joined. The generated Route 8 trainer is intentionally outside the frozen
+74-battle schedule, and Tower's fixed reward accounting now begins after the generated approach so
+that the extra trainer reward cannot corrupt the ten-battle chapter contract.
+
+The CLI exposes this only through `record --strategic-rehearsal`. It loads the committed registry,
+uses the one unassigned rehearsal assignment and its exact schedule, requires clean published
+source, writes the assignment's exact collection/source/split/policy header, and reports
+`counted=false`. The flag is mutually exclusive with ordinary schedule diagnostics and counted
+battle collection.
+
+A private captured-state preflight exercised the same new approach followed by the entire Tower
+chapter: 28/28 checkpoints, ten required Tower battles, one strategic decision, one outcome, zero
+recording failures, and a passing chapter report. This was a fast integration check against an
+already-opened development state; it did **not** execute root `1710001`, was not source-bound public
+evidence, and cannot enter training. The clean-power rehearsal is still **0/1**, strategic train is
+**0/5**, validation **0/2**, and test **0/5**.
+
+Immediate next action after this exact source is committed, pushed and green is:
+
+```bash
+pokemon-red-completion record \
+  --private-root <initialized-private-root> \
+  --rom <private-red-rom> \
+  --strategic-rehearsal
+```
+
+Do not edit `src/` while that run is active. If it fails, preserve the `.failed.partial` episode
+and inspect whether the strategic decision has its measured outcome; do not relabel a development
+checkpoint or open a train/validation/test root. If it passes, load it through
+`load_assigned_strategic_navigation_episode`, run coverage and cost/shape baselines, then decide
+whether one genuine choice per whole root is enough before opening train root 1.
+
+Current prospective v95 identity is registry
+`d899b69be3d5abcea8d6e385b2b7f4ead837bdef56e899ce76b589bc33186f97`, source bundle
+`ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a`, teacher execution
+`b466a3d9141c8d023244af28eeb2c1c5bb553a9aaf38e728806cf0f72cdfd9c9`, and first assignment
+`b685ee8d404f74b550bf3b3d169a3e110e67c98198cbf688c5824ec318e805b0`. It remains 0/10.
+
 ## Strategic collection roots are preassigned but unopened — 2026-08-11
 
 The prospective registry
@@ -41,9 +92,9 @@ The output side now has the same fail-closed boundary. A committed assignment pr
 collection, source, split and policy blocks required in the private episode header. The assigned
 episode loader refuses a merely local assignment, rejects any changed run, schedule, lineage,
 partition, source or policy identity, and keeps test episodes sealed unless an eventual evaluation
-call explicitly opens them. It then applies the existing strict decision/outcome join. This is the
-last integrity prerequisite before connecting the clean-power teacher collector; it does not
-consume a slot or create data.
+call explicitly opens them. It then applies the existing strict decision/outcome join. The newer
+checkpoint above connects that integrity shell to one clean-power branch; this section itself did
+not consume a slot or create data.
 
 The trajectory seam also no longer waits for a successful route before writing its choice. The
 whole-run observer records the identity-free decision before the first route action, permits only
@@ -51,30 +102,30 @@ one pending choice, and joins exactly one later semantic outcome at the current 
 Power loss therefore leaves an incomplete episode rather than erasing the attempted decision, and
 a sink failure marks the episode ineligible without changing game control. A final review also
 requires the decision and outcome to use the identical sink and suppresses an orphan outcome when
-the preceding decision write failed. The observer exists and is tested; the clean-power teacher
-still needs to invoke it around genuine generated routes.
+the preceding decision write failed. The observer is now invoked around the post-Hideout strategic
+Tower approach described above.
 
 Route failures now preserve measured evidence too. `execute_route` attaches a typed semantic reason,
 last observation, acknowledged prefix, movement requests, waits, replans, interruptions and resource
 renewals to every route error, including replanner failure. The strategic boundary verifies that the
 failed initial plan is the selected binding, converts only the portable fields to a negative
 outcome, and omits the last map/coordinate. This closes the temptation to fabricate zero-filled
-failures. The next implementation is the clean-power generated-route bridge that uses the observer
-and consumes either the success report or this typed failure before propagating control failure.
+failures. The clean-power generated-route bridge now consumes either the success report or this
+typed failure before propagating control failure.
 
 No strategic slot has been consumed. The current counts remain **train 0/5, validation 0/2, test
 0/5, rehearsal 0/1**. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
-calibrations and cannot be relabeled. The next step is to connect strategic decision/outcome
-recording to the full clean-power teacher, run the single rehearsal, audit its genuine candidate
-coverage, and only then open train root 01. Do not start from the held-out test roots while building
-that harness.
+calibrations and cannot be relabeled. Strategic decision/outcome recording is complete for one
+branch; next run the single rehearsal, audit its genuine candidate
+coverage, and only then decide whether to open train root 01. Do not start from the held-out test
+roots while building that harness.
 
 Registry SHA is
-`91a8c707f02d2bb273601c50a079c7fef20eb9a5e831ca5371eb4e3383969de2`; strategic teacher
-execution is `167a9dc04973e314944b9d0e98724386005a3baad8b32fe81faf71122d5cf554`; source bundle is
-`542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0`; rehearsal assignment is
-`662e0ddab6d3d966773781cf36b9eeb60d2e8d81b17d23ff80e1a9f88bcb4602`; first train assignment is
-`a6420e67da5602ee6cfbac99c7ea4fe16abb22689268b2749e2ebca29d86a31e`.
+`fee1647d4e8d29e275de323fe1486bd076814f77722bbebc52193b7640f2d037`; strategic teacher
+execution is `5d1cbef0bdaf8400af5449a1f50fc697e7a8105c5848819c355ac30906104c4f`; source bundle is
+`ed90c9e1d844e67f2bbdbba44b72a9e651818578609e1d43385d53b759bf799a`; rehearsal assignment is
+`cb311a5b71794eac8b72097704093e7b2d94fade8b5a99d180ba76ceb7988143`; first train assignment is
+`b2e2c92e1c07e1bc278b9f3decd6be0964cfc283f81c74ba13fc2cad646a9145`.
 
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 

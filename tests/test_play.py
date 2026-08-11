@@ -59,6 +59,10 @@ from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_1_wild import move_with_wild_flees
 from pokemon_red_completion.saffron import FRESH_WATER_PRICE, THUNDER_STONE_PRICE
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    parse_strategic_navigation_registry,
+)
 from pokemon_red_completion.trajectory import (
     InMemoryTrajectorySink,
     RecordingExecutor,
@@ -2569,6 +2573,38 @@ def test_battle_start_offsets_require_auditable_policy_evidence() -> None:
         run_qualified_play(
             Path("/private/Pokemon Red.gb"),
             battle_start_offsets=(),
+        )
+
+
+def test_strategic_navigation_assignment_requires_matching_trajectory_episode() -> None:
+    registry = parse_strategic_navigation_registry(
+        (
+            Path(__file__).resolve().parents[1]
+            / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH
+        ).read_bytes()
+    )
+    assignment = replace(registry.rehearsal_assignment(), source_commit="a" * 40)
+
+    with pytest.raises(ValueError, match="requires a trajectory sink"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            strategic_navigation_assignment=assignment,
+        )
+
+    with pytest.raises(ValueError, match="must match the trajectory episode"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            trajectory_sink=InMemoryTrajectorySink(),
+            trajectory_episode_id="wrong-episode",
+            strategic_navigation_assignment=assignment,
+        )
+
+
+def test_strategic_navigation_assignment_rejects_unknown_type() -> None:
+    with pytest.raises(TypeError, match="unsupported type"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            strategic_navigation_assignment=object(),  # type: ignore[arg-type]
         )
 
 

@@ -99,6 +99,22 @@ interruptions, renewals and a portable reason. The dataset keeps those semantics
 Red map and coordinate. A failed choice can now become honest negative evidence without being
 rerun, discarded or represented as a fake all-zero attempt.
 
+The collection shell is now connected to one real clean-power boundary. A rehearsal-only lane
+loads the committed uncounted assignment, binds its exact timing schedule and episode header, then
+hands that identity to the full teacher. After Hideout, the teacher records Tower versus Eevee
+before movement, lets the cartridge planner and generic executor own the selected approach, and
+joins success or typed failure before the existing Tower interior continues. Ordinary runs still
+use the authored approach; no broad navigation authority was smuggled in with instrumentation.
+
+Before risking the sole power-on rehearsal, the bridge was exercised from the existing private
+post-Hideout checkpoint through the complete Tower chapter. It passed 28 checkpoints and ten
+required battles with one decision/outcome pair and no recording failure. That is useful
+engineering evidence and deliberately weak modeling evidence: the state was already opened, the
+source was not yet a published commit, and the run did not add a row to train or validation. The
+counter therefore stays at zero. The next honest reveal is not a model score; it is whether the
+preassigned clean-power rehearsal reaches the same boundary and whether one genuine strategic
+choice per root is enough data to justify opening the learning split.
+
 ## August 10: the route outlived its Repel
 
 The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14

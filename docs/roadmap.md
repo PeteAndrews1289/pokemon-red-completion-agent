@@ -145,7 +145,16 @@ The matching output gate is now implemented too. A counted episode header must r
 assignment's exact collection, source bundle, source commit, split, actor and policy identity before
 its decision/outcome stream can load. Local-only assignments, drifted metadata and test episodes
 opened through the normal learning path fail closed. This completes the prospective data-integrity
-shell; the next code belongs in the full teacher collector, not another registry layer.
+shell.
+
+The first full-teacher bridge is now complete. Only an exact strategic assignment activates it.
+After Hideout, the teacher records the Tower-versus-Eevee choice before movement, executes the
+bound generated Tower approach, consumes a measured success or typed failure, and then resumes the
+existing Tower interior. Ordinary runs retain the authored approach. The CLI exposes the bridge
+only as the committed, explicitly uncounted `record --strategic-rehearsal` lane. A private
+captured-state preflight then completed the generated approach plus all 28 Tower checkpoints and
+ten required battles with one joined strategic decision/outcome and zero recording failures. That
+preflight is not a clean-power root or dataset row; root `1710001` remains unopened.
 
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
@@ -159,24 +168,23 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Connect the tested strategic trajectory observer to genuine generated-route branches in the
-   clean-power teacher. Use only the committed, explicitly uncounted rehearsal assignment for root
-   `1710001` while debugging the harness. `execute_route` now supplies typed partial-failure
-   evidence, so consume its real acknowledgements, requests, waits, replans and interruptions
-   before propagating a failed chapter. Keep every route failure and censor external interruption.
-2. Qualify that rehearsal, then execute the five train and two validation roots exactly once.
-   Include progression, recovery, resupply, training, collection and optional-reward branches with
-   both cost-aligned and non-cost-minimizing choices. Keep the five test roots sealed.
-3. Run the implemented candidate/tag/outcome, selected-index shape, route-cost and split-leakage
-   audits on those authenticated episodes. Freeze a normalized numeric feature schema only after
-   the observed data proves which distinctions exist.
-4. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
-   then require shadow and fresh causal qualifications with no teacher fallback.
-5. Close the remaining completion-routing admission gaps: broader non-trainer menu/script recovery,
-   additional story and special-object predicates, the post-final-switch Indigo route, and a
-   systematic decoder/composer mutation score.
-6. Add Crystal's thin adapter and run the preregistered zero-shot, few-shot and from-scratch
-   navigation benchmark before expanding any Gen II teacher script.
+1. Publish the exact bridge source and require a fresh green CI run for that commit.
+2. Execute only rehearsal root `1710001`. Preserve any failed partial episode; do not edit source
+   during execution, retry it under another identity, or open train/validation/test to debug it.
+3. Load the completed rehearsal through the assigned-episode gate and audit its join, candidate
+   coverage, interruption evidence, cost baseline and candidate-shape baseline.
+4. Decide whether one strategic choice per whole root can support the intended scorer. If not,
+   instrument additional genuine recovery, resupply, training, collection and optional-reward
+   branches and preregister a fresh campaign before consuming learning roots.
+5. If rehearsal coverage is adequate, execute the five train and two validation roots once. Keep
+   the five test roots sealed and preserve failures or external censoring exactly as observed.
+6. Freeze numeric normalization only after the observed train/validation coverage audit. Train a
+   shared candidate scorer, compare it to the cost and shape baselines, then require fresh shadow
+   and bounded causal trials with no disagreement fallback.
+7. Close broader completion routing: non-trainer menu/script recovery, more story/special-object
+   predicates, the post-final-switch Indigo route and systematic decoder/composer mutation scores.
+8. Add Crystal's thin adapter and run the preregistered Red-frozen zero-shot, fixed few-shot and
+   from-scratch comparison before expanding a full Gen II teacher script.
 
 The full reasoning, risks and admission criteria are in the
 [current audit](current-audit-2026-08-11.md). None of this opens v95; counted v95 remains 0/10.

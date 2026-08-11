@@ -185,6 +185,10 @@ from pokemon_red_completion.pewter import (
 )
 from pokemon_red_completion.planner_model import ObjectiveRanker
 from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
+from pokemon_red_completion.post_hideout_strategic_route import (
+    PostHideoutStrategicApproach,
+    PostHideoutStrategicRouteError,
+)
 from pokemon_red_completion.red_collection import (
     RedCollectionProgress,
     summarize_red_collection,
@@ -203,6 +207,8 @@ from pokemon_red_completion.route_1_wild import (
     Route1WildFleeEvidence,
     move_route_1_with_wild_flees,
 )
+from pokemon_red_completion.route_executor import RouteExecutionError
+from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.sabrina import (
     SABRINA_CHECKPOINT_COUNT,
     SabrinaChapterError,
@@ -237,6 +243,15 @@ from pokemon_red_completion.ss_anne import (
     SSAnneChapterReport,
     SSAnneProgress,
     run_ss_anne_chapter,
+)
+from pokemon_red_completion.strategic_navigation import StrategicNavigationError
+from pokemon_red_completion.strategic_navigation_protocol import (
+    StrategicNavigationAssignment,
+    StrategicNavigationEpisodeAssignment,
+    StrategicNavigationRehearsalAssignment,
+)
+from pokemon_red_completion.strategic_navigation_trajectory import (
+    StrategicNavigationTrajectoryObserver,
 )
 from pokemon_red_completion.strength import (
     STRENGTH_CHECKPOINT_COUNT,
@@ -1109,6 +1124,7 @@ def run_qualified_play(
     progress: ProgressSink | None = None,
     trajectory_sink: TrajectorySink | None = None,
     trajectory_episode_id: str | None = None,
+    strategic_navigation_assignment: StrategicNavigationEpisodeAssignment | None = None,
     battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
     battle_model: BattleMoveRanker | None = None,
     battle_control_model: BattleControlMLP | None = None,
@@ -1129,6 +1145,20 @@ def run_qualified_play(
     """Run every currently qualified objective in one clean, no-save session."""
     if (trajectory_sink is None) != (trajectory_episode_id is None):
         raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
+    if strategic_navigation_assignment is not None:
+        if not isinstance(
+            strategic_navigation_assignment,
+            (StrategicNavigationAssignment, StrategicNavigationRehearsalAssignment),
+        ):
+            raise TypeError("strategic_navigation_assignment has an unsupported type")
+        if trajectory_sink is None or trajectory_episode_id is None:
+            raise ValueError(
+                "strategic navigation collection requires a trajectory sink and episode"
+            )
+        if trajectory_episode_id != strategic_navigation_assignment.episode_id:
+            raise ValueError(
+                "strategic navigation assignment must match the trajectory episode"
+            )
     if (
         battle_start_offsets is not None
         and trajectory_sink is None
@@ -1208,6 +1238,8 @@ def run_qualified_play(
         )
         recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
         objective_observer: SemanticObjectiveDecisionObserver | None = None
+        strategic_navigation_observer: StrategicNavigationTrajectoryObserver | None = None
+        strategic_tower_approach: PostHideoutStrategicApproach | None = None
         objective_policy: ModelObjectivePolicy | None = None
         training_candidate_audit = (
             TrainingCandidateShadowAudit(training_candidate_model)
@@ -1261,6 +1293,18 @@ def run_qualified_play(
                 recorder=recording_executor,
                 policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
             )
+            if strategic_navigation_assignment is not None:
+                strategic_navigation_observer = StrategicNavigationTrajectoryObserver(
+                    assignment=strategic_navigation_assignment,
+                    snapshot_provider=snapshot_encoder,
+                    recorder=recording_executor,
+                    sink=trajectory_sink,
+                )
+                strategic_tower_approach = PostHideoutStrategicApproach(
+                    rom=Path(rom_path).read_bytes(),
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
             try:
                 objective_observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[0])
             except Exception:
@@ -1421,8 +1465,15 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_tower_progress_bridge(progress),
+                strategic_approach=strategic_tower_approach,
             )
-        except TowerChapterError as error:
+        except (
+            PostHideoutStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+            TowerChapterError,
+        ) as error:
             raise QualifiedPlayError(str(error)) from error
 
         try:
@@ -1752,6 +1803,8 @@ def run_qualified_play(
             and trajectory_episode_id is not None
             and recording_executor is not None
         ):
+            if strategic_navigation_observer is not None:
+                strategic_navigation_observer.require_settled()
             try:
                 trajectory_sink.record_event(
                     SparseEvent(

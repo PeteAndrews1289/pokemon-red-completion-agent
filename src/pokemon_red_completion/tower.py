@@ -55,6 +55,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.route_executor import RouteExecutionReport
 
 TOWER_CHECKPOINT_COUNT = 28
 TOWER_TRAINER_REWARD_TOTAL = 7_325
@@ -202,6 +203,12 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
+
+
+class TowerStrategicApproach(Protocol):
+    """Optional generated route that owns the Celadon-to-Tower approach."""
+
+    def execute(self, executor: ChapterExecutor) -> RouteExecutionReport: ...
 
 
 class TowerChapterError(RuntimeError):
@@ -423,6 +430,7 @@ def run_tower_chapter(
     *,
     timing: TowerTiming = DEFAULT_TOWER_TIMING,
     progress: ProgressSink | None = None,
+    strategic_approach: TowerStrategicApproach | None = None,
 ) -> TowerChapterReport:
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -431,7 +439,6 @@ def run_tower_chapter(
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
     _require(start, MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
-    money_before = _money(emulator)
     starting_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if (
         ItemId.SILPH_SCOPE not in _bag(emulator)
@@ -441,22 +448,37 @@ def run_tower_chapter(
     run.potion_inventory.append(starting_super_potions)
     _checkpoint(records, progress, emulator, reader.read(), "scope_ready", "Silph Scope ready")
 
-    for route, label in (
-        (CENTER_EXIT, "Celadon Center exit"),
-        (CELADON_EAST, "Celadon east"),
-        (ROUTE_7, "Route 7"),
-        (ROUTE_7_GATE, "Route 7 gate"),
-        (WEST_GATE_TO_TUNNEL, "west underground gate"),
-        (UNDERGROUND_EAST, "Underground Path"),
-        (EAST_GATE_EXIT, "east underground gate"),
-    ):
-        _move(actions, reader, emulator, run, route, timing, label)
-    _navigate_route_8_east(actions, reader, emulator, run, timing)
-    for route, label in (
-        (LAVENDER_TO_TOWER, "Lavender Tower entry"),
-        (TOWER_1_TO_2, "Tower 2F"),
-    ):
-        _move(actions, reader, emulator, run, route, timing, label)
+    if strategic_approach is None:
+        for route, label in (
+            (CENTER_EXIT, "Celadon Center exit"),
+            (CELADON_EAST, "Celadon east"),
+            (ROUTE_7, "Route 7"),
+            (ROUTE_7_GATE, "Route 7 gate"),
+            (WEST_GATE_TO_TUNNEL, "west underground gate"),
+            (UNDERGROUND_EAST, "Underground Path"),
+            (EAST_GATE_EXIT, "east underground gate"),
+        ):
+            _move(actions, reader, emulator, run, route, timing, label)
+        _navigate_route_8_east(actions, reader, emulator, run, timing)
+        _move(
+            actions,
+            reader,
+            emulator,
+            run,
+            LAVENDER_TO_TOWER,
+            timing,
+            "Lavender Tower entry",
+        )
+    else:
+        approach = strategic_approach.execute(actions)
+        if not approach.passed:
+            raise TowerChapterError("Strategic Tower approach returned a failed route report.")
+        entry = reader.read()
+        _require(entry, MapId.POKEMON_TOWER_1F, (10, 17), "Strategic Tower entry")
+        if not _observe_protected_party(run, entry):
+            raise TowerChapterError("Strategic Tower approach changed the protected party.")
+    money_before = _money(emulator)
+    _move(actions, reader, emulator, run, TOWER_1_TO_2, timing, "Tower 2F")
     _require(reader.read(), MapId.POKEMON_TOWER_2F, (18, 9), "Tower 2F")
     _checkpoint(records, progress, emulator, reader.read(), "tower_2f", "Reached Tower 2F")
 

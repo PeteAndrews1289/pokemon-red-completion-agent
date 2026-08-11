@@ -108,6 +108,12 @@ from pokemon_red_completion.schedule_audit import (
     ScheduleAttestationError,
     audit_schedule_attestations,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    StrategicNavigationEpisodeAssignment,
+    StrategicNavigationExecution,
+    StrategicNavigationProtocolError,
+    load_committed_strategic_navigation_registry,
+)
 from pokemon_red_completion.training_candidate_model import (
     TrainingCandidateModelError,
     load_training_candidate_model,
@@ -601,6 +607,14 @@ def _parser() -> argparse.ArgumentParser:
         ),
     )
     recording_mode.add_argument(
+        "--strategic-rehearsal",
+        action="store_true",
+        help=(
+            "Run the committed, explicitly uncounted strategic-navigation rehearsal; "
+            "no train, validation, or test slot is consumed."
+        ),
+    )
+    recording_mode.add_argument(
         "--diagnostic-schedule-seed",
         type=int,
         help=(
@@ -795,6 +809,7 @@ def _capture_private_recording(
     watch: bool,
     speed: int | None,
     battle_start_offsets: tuple[BattleStartOffset, ...] | None,
+    strategic_navigation_assignment: StrategicNavigationEpisodeAssignment | None = None,
 ) -> tuple[QualifiedPlayReport, dict[str, object]]:
     writer = private_root.begin_episode(episode_id)
     with writer:
@@ -811,6 +826,7 @@ def _capture_private_recording(
             progress=_print_qualified_progress,
             trajectory_sink=trajectory_sink,
             trajectory_episode_id=episode_id,
+            strategic_navigation_assignment=strategic_navigation_assignment,
             battle_start_offsets=battle_start_offsets,
         )
     if battle_start_offsets is not None:
@@ -1029,6 +1045,77 @@ def _recording_metadata(
         "collection": collection,
         "split": split,
     }
+
+
+def _strategic_recording_metadata(
+    rom_path: Path,
+    *,
+    episode_id: str,
+    watch: bool,
+    speed: int | None,
+    assignment: StrategicNavigationEpisodeAssignment,
+    execution: StrategicNavigationExecution,
+    offsets: tuple[BattleStartOffset, ...],
+) -> dict[str, object]:
+    """Build a full runtime header with the exact strategic assignment blocks."""
+
+    if episode_id != assignment.episode_id:
+        raise ValueError("strategic assignment must match the planned episode identity")
+    if assignment.source_commit is None or execution.source_commit is None:
+        raise EvaluationIdentityError(
+            "Strategic collection requires a registry loaded from one exact commit."
+        )
+    if assignment.source_commit != execution.source_commit:
+        raise EvaluationIdentityError("Strategic assignment and execution commits differ.")
+    metadata = _recording_metadata(
+        rom_path,
+        episode_id=episode_id,
+        watch=watch,
+        speed=speed,
+    )
+    source = detect_source_identity(REPOSITORY_ROOT, include_untracked=True)
+    require_clean_source(source)
+    require_published_source(REPOSITORY_ROOT, source)
+    if source.git_commit != execution.source_commit:
+        raise EvaluationIdentityError(
+            "The source commit changed after the strategic registry was loaded."
+        )
+    committed_bundle = committed_source_bundle_sha256(
+        REPOSITORY_ROOT,
+        revision=execution.source_commit,
+    )
+    if (
+        committed_bundle != execution.source_bundle_sha256
+        or working_source_bundle_sha256(REPOSITORY_ROOT) != execution.source_bundle_sha256
+        or metadata.get("objective_graph_sha256") != execution.objective_graph_sha256
+    ):
+        raise EvaluationIdentityError(
+            "The local teacher does not match the frozen strategic execution contract."
+        )
+    configuration = metadata.get("configuration")
+    if not isinstance(configuration, dict):
+        raise TypeError("strategic recording configuration must be a mapping")
+    if (
+        configuration.get("behavior_configuration_sha256")
+        != execution.behavior_configuration_sha256
+    ):
+        raise EvaluationIdentityError(
+            "The strategic behavior configuration differs from its frozen execution."
+        )
+    configuration["battle_start_schedule"] = {
+        "assignment_id": assignment.assignment_id,
+        "offsets": [offset.public_dict() for offset in offsets],
+        "registry_sha256": assignment.registry_sha256,
+        "schedule_sha256": assignment.schedule_sha256,
+        "schema": BATTLE_START_SCHEDULE_SCHEMA,
+    }
+    configuration["strategic_navigation"] = {
+        "decision_contract_sha256": execution.decision_contract_sha256,
+        "teacher_execution_sha256": execution.teacher_execution_sha256,
+    }
+    metadata["configuration_sha256"] = canonical_sha256(configuration)
+    metadata.update(assignment.episode_metadata())
+    return metadata
 
 
 def _run_battle_learning(
@@ -2119,6 +2206,8 @@ def main(arguments: Sequence[str] | None = None) -> int:
             assignment = None
             schedule_dry_run = None
             registry = None
+            strategic_assignment = None
+            strategic_registry = None
             diagnostic_offsets = None
             diagnostic_schedule_sha256 = None
             if args.collection_run is not None or args.schedule_dry_run:
@@ -2131,28 +2220,52 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 diagnostic_offsets, diagnostic_schedule_sha256 = _diagnostic_schedule(
                     args.diagnostic_schedule_seed
                 )
+            elif args.strategic_rehearsal:
+                strategic_registry = load_committed_strategic_navigation_registry(
+                    REPOSITORY_ROOT
+                )
+                strategic_assignment = strategic_registry.rehearsal_assignment()
             episode_id = (
-                assignment.episode_id
-                if assignment is not None
+                strategic_assignment.episode_id
+                if strategic_assignment is not None
                 else (
-                    f"red-dry-run-{uuid.uuid4().hex}"
-                    if schedule_dry_run is not None
+                    assignment.episode_id
+                    if assignment is not None
                     else (
-                        f"red-schedule-diagnostic-{uuid.uuid4().hex}"
-                        if diagnostic_offsets is not None
-                        else f"red-teacher-{uuid.uuid4().hex}"
+                        f"red-dry-run-{uuid.uuid4().hex}"
+                        if schedule_dry_run is not None
+                        else (
+                            f"red-schedule-diagnostic-{uuid.uuid4().hex}"
+                            if diagnostic_offsets is not None
+                            else f"red-teacher-{uuid.uuid4().hex}"
+                        )
                     )
                 )
             )
-            metadata = _recording_metadata(
-                rom_path,
-                episode_id=episode_id,
-                watch=args.watch,
-                speed=args.speed,
-                assignment=assignment,
-                execution=(registry.execution if registry is not None else None),
-                schedule_dry_run=schedule_dry_run,
-            )
+            if strategic_assignment is not None and strategic_registry is not None:
+                strategic_offsets = strategic_registry.schedule.offsets(
+                    strategic_assignment.harness_seed
+                )
+                metadata = _strategic_recording_metadata(
+                    rom_path,
+                    episode_id=episode_id,
+                    watch=args.watch,
+                    speed=args.speed,
+                    assignment=strategic_assignment,
+                    execution=strategic_registry.execution,
+                    offsets=strategic_offsets,
+                )
+            else:
+                strategic_offsets = None
+                metadata = _recording_metadata(
+                    rom_path,
+                    episode_id=episode_id,
+                    watch=args.watch,
+                    speed=args.speed,
+                    assignment=assignment,
+                    execution=(registry.execution if registry is not None else None),
+                    schedule_dry_run=schedule_dry_run,
+                )
             if diagnostic_offsets is not None:
                 if diagnostic_schedule_sha256 is None:
                     raise RuntimeError("diagnostic schedule digest is unavailable")
@@ -2167,10 +2280,12 @@ def main(arguments: Sequence[str] | None = None) -> int:
                 repository_root=REPOSITORY_ROOT,
             )
             battle_start_offsets = (
-                assignment.offsets
-                if assignment is not None
+                strategic_offsets
+                if strategic_offsets is not None
                 else schedule_dry_run.offsets
                 if schedule_dry_run is not None
+                else assignment.offsets
+                if assignment is not None
                 else diagnostic_offsets
             )
             dry_run_qualification = None
@@ -2243,6 +2358,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
                     watch=args.watch,
                     speed=args.speed,
                     battle_start_offsets=battle_start_offsets,
+                    strategic_navigation_assignment=strategic_assignment,
                 )
             _print_qualified_summary(qualified_report)
             public_play = qualified_report.public_dict()
@@ -2254,6 +2370,13 @@ def main(arguments: Sequence[str] | None = None) -> int:
             }
             if dry_run_qualification is not None:
                 payload["dry_run_qualification"] = dry_run_qualification.public_dict()
+            if strategic_assignment is not None:
+                payload["strategic_rehearsal"] = {
+                    "assignment_id": strategic_assignment.assignment_id,
+                    "counted": False,
+                    "partition": strategic_assignment.partition,
+                    "registry_sha256": strategic_assignment.registry_sha256,
+                }
     except (
         BootstrapError,
         BattleControlModelError,
@@ -2271,6 +2394,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
         RomValidationError,
         RuntimeIdentityError,
         ScheduleAttestationError,
+        StrategicNavigationProtocolError,
         TrainingCandidateModelError,
     ) as error:
         parser.error(

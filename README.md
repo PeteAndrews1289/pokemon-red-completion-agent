@@ -63,8 +63,14 @@
 > now has a distinct committed-but-unassigned identity, and choices are recorded before route
 > execution so failures cannot vanish from the stream. No slot has been executed, so the honest
 > collected count remains zero.
-> Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
-> inside a completion run. See the
+> The first clean-power integration slice is now implemented: an exact rehearsal assignment makes
+> the full teacher record the post-Hideout Tower-versus-Eevee choice before acting, execute the
+> bound cartridge-derived route, and record measured success or typed failure before the Tower
+> chapter continues. A private checkpoint preflight completed the generated approach plus all 28
+> Tower checkpoints and ten required battles with one joined strategic decision/outcome and zero
+> recording failures. It did not execute the rehearsal root and is not training evidence.
+> Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
+> across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
 > [safe-hub calibration](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
@@ -163,8 +169,12 @@ source, split and policy identity; the learning path refuses the test partition.
 slots and the rehearsal remain unopened. The uncounted rehearsal now has its own derived episode
 and lineage, while a one-pending-choice observer writes each decision before execution and joins its
 single consumed outcome afterward. Route exceptions now retain typed, measured partial progress and
-convert to portable negative evidence instead of a zero-filled placeholder. The full teacher has
-not invoked that observer yet.
+convert to portable negative evidence instead of a zero-filled placeholder. The full teacher now
+has one deliberately narrow invocation after the Celadon Hideout: a committed
+`--strategic-rehearsal` recording substitutes the generated Tower-versus-Eevee approach, while
+ordinary play and every other chapter retain their existing authority. A private checkpoint
+preflight passed the generated approach and complete Tower chapter, but the sole clean-power
+rehearsal remains unopened.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
@@ -1045,6 +1055,12 @@ pokemon-red-completion record --private-root /absolute/private/trajectory-direct
 pokemon-red-completion record \
   --private-root /absolute/private/trajectory-directory \
   --schedule-dry-run
+
+# Execute the separately preregistered, uncounted strategic-navigation rehearsal.
+# This uses its exact derived episode identity and does not consume train/validation/test:
+pokemon-red-completion record \
+  --private-root /absolute/private/trajectory-directory \
+  --strategic-rehearsal
 
 # Before freezing another campaign, fuzz arbitrary uncounted timing schedules:
 pokemon-red-completion record \
