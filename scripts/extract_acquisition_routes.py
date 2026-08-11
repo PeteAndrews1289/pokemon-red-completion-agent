@@ -7,8 +7,9 @@ and Kingler in Blue -- because both cartridges offer all four on a rod. It also
 misses six that *are* exclusive and appear in no wild table at all, because they
 are only ever reached by evolving something that does.
 
-So this reads the wild tables, the three rods, the ten in-game trades and the
-evolution graph together, closes the catchable set under all of them, and
+So this reads the wild tables, the three rods, the ten in-game trades, the
+evolution graph, three starters, gifts, fossils, Game Corner prizes and fixed
+encounters together, closes the direct set under evolution and swaps, and
 differences the two cartridges. The eleven-species exclusive lists fall out.
 They used to be typed.
 
@@ -26,11 +27,20 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date
 from pathlib import Path
+from typing import Any
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.collection_protocol import (  # noqa: E402
+    committed_source_bundle_sha256,
+    working_source_bundle_sha256,
+)
+from pokemon_red_completion.gen1_acquisition import (  # noqa: E402
+    ScriptedAcquisition,
+    scripted_acquisitions,
+)
 from pokemon_red_completion.gen1_cartridge import (  # noqa: E402
     catchable_species,
     evolution_graph,
@@ -40,6 +50,10 @@ from pokemon_red_completion.gen1_cartridge import (  # noqa: E402
     reachable_species,
     version_exclusives,
     wild_tables,
+)
+from pokemon_red_completion.provenance import (  # noqa: E402
+    detect_source_identity,
+    require_clean_source,
 )
 from pokemon_red_completion.rom import (  # noqa: E402
     resolve_title_rom_path,
@@ -65,7 +79,9 @@ def without_trading(rom: bytes) -> set[int]:
     """
 
     graph = evolution_graph(rom)
-    reached = set(catchable_species(rom))
+    reached = set(catchable_species(rom)) | {
+        item.species for item in scripted_acquisitions(rom)
+    }
     frontier = list(reached)
     while frontier:
         species = frontier.pop()
@@ -77,11 +93,12 @@ def without_trading(rom: bytes) -> set[int]:
     return reached
 
 
-def describe(rom: bytes) -> dict[str, object]:
+def describe(rom: bytes) -> dict[str, Any]:
     tables = fishing_tables(rom)
     wild = wild_species(rom)
     rods = tables.species()
     trades = in_game_trades(rom)
+    scripted = scripted_acquisitions(rom)
     caught = catchable_species(rom)
     reachable = reachable_species(rom)
     return {
@@ -105,6 +122,9 @@ def describe(rom: bytes) -> dict[str, object]:
             for slot in tables.anywhere
         ],
         "catchable": sorted(caught),
+        "scripted_acquisitions": [_scripted_record(item) for item in scripted],
+        "scripted_direct_species": sorted({item.species for item in scripted}),
+        "all_direct_source_species": sorted(caught | {item.species for item in scripted}),
         "reachable_through_parsed_routes_alone": sorted(reachable),
         "reachable_through_parsed_routes_with_a_trade_partner": sorted(
             reachable_species(rom, with_trade_partner=True)
@@ -112,16 +132,38 @@ def describe(rom: bytes) -> dict[str, object]:
     }
 
 
+def _scripted_record(item: ScriptedAcquisition) -> dict[str, object]:
+    return {
+        "source": item.source.value,
+        "species": item.species,
+        "level": item.level,
+        "choice_group": item.choice_group,
+        "repeatable": item.repeatable,
+        "cost": item.cost,
+        "map_id": item.map_id,
+        "at": list(item.at) if item.at is not None else None,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=None, help="evidence file to write")
-    parser.add_argument("--recorded-on", default=date.today().isoformat())
+    parser.add_argument("--recorded-on", required=True)
     args = parser.parse_args(argv)
 
+    source = detect_source_identity(PROJECT_ROOT, include_untracked=False)
+    require_clean_source(source)
+    if source.git_commit is None:  # pragma: no cover - established above
+        raise RuntimeError("the source commit is unavailable")
+    source_bundle = committed_source_bundle_sha256(PROJECT_ROOT, revision=source.git_commit)
+    if working_source_bundle_sha256(PROJECT_ROOT) != source_bundle:
+        raise RuntimeError("the executable source differs from its commit")
+
     roms: dict[str, bytes] = {}
+    fingerprints: dict[str, object] = {}
     for title in TITLES:
         path = resolve_title_rom_path(title)
-        verify_rom(path, supported_rom_for(title))
+        fingerprints[title] = verify_rom(path, supported_rom_for(title)).public_dict()
         roms[title] = path.read_bytes()
 
     described = {title: describe(rom) for title, rom in roms.items()}
@@ -133,6 +175,7 @@ def main(argv: list[str] | None = None) -> int:
             f"{len(found['rod_species'])} on a rod "
             f"({len(found['rod_only_species'])} of them nowhere else), "
             f"{len(found['catchable'])} catchable, "
+            f"{len(found['scripted_acquisitions'])} scripted opportunities, "
             f"{len(found['reachable_through_parsed_routes_alone'])} "
             "reachable through parsed routes alone"
         )
@@ -157,19 +200,26 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(
             json.dumps(
                 {
-                    "schema": "pokemon-acquisition-routes-v1",
+                    "schema": "pokemon-acquisition-routes-v2",
                     "recorded_on": args.recorded_on,
+                    "status": "ok",
+                    "source": source.public_dict(),
+                    "executable_source_bundle_sha256": source_bundle,
+                    "roms": fingerprints,
                     "interpretation": (
-                        "The reachable-through-parsed-routes sets are lower bounds, "
-                        "not complete single-cartridge or single-run reach. Gifts, "
-                        "fossils, Game Corner prizes, starters and static encounters "
-                        "remain absent. Fishing equality compares every decoded rod, "
-                        "level, map and species slot across both verified cartridges."
+                        "The reachable-through-parsed-routes sets now cover every "
+                        "ordinary retail-cartridge species route. They express whether "
+                        "a title can ever yield a species, not which mutually exclusive "
+                        "choices coexist in one save. Mew remains absent because no "
+                        "ordinary cartridge route yields it. Fishing equality compares "
+                        "every decoded rod, level, map and species slot across both "
+                        "verified cartridges."
                     ),
                     "scope": (
                         "wild grass and water tables, the three rods, the evolution "
-                        "graph and the ten in-game trades. Gifts, fossils and the Game "
-                        "Corner are further routes and are not read here."
+                        "graph, the ten in-game trades, starters, gifts, fossils, Game "
+                        "Corner prizes and fixed encounters, all decoded independently "
+                        "from both verified cartridges."
                     ),
                     "by_title": described,
                     "version_exclusives": {

@@ -8,7 +8,7 @@ wrong in both directions at once -- it counted four species that are not
 exclusive and missed six that are.
 
 These tests hold that accounting. They need no ROM: the reads are the
-measurement and live in ``docs/evidence/acquisition-routes-2026-08-10.json``.
+measurement and live in ``docs/evidence/acquisition-routes-2026-08-11.json``.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ from pokemon_red_completion.gen1_cartridge import (
 )
 from pokemon_red_completion.generation_one import UNAVAILABLE_IN_BLUE, UNAVAILABLE_IN_RED
 
-RECORD = Path("docs/evidence/acquisition-routes-2026-08-10.json")
+RECORD = Path("docs/evidence/acquisition-routes-2026-08-11.json")
 
 
 @pytest.fixture(scope="module")
@@ -133,9 +133,10 @@ def test_a_trade_partner_is_worth_exactly_the_trade_evolutions(record: dict) -> 
         assert partnered - alone == {65, 68, 76, 94}
 
 
-def test_parsed_route_reach_is_not_presented_as_complete_cartridge_reach(record: dict) -> None:
-    assert "lower bounds" in record["interpretation"]
-    assert "static encounters remain absent" in record["interpretation"]
+def test_parsed_route_reach_states_its_exact_choice_boundary(record: dict) -> None:
+    assert "every ordinary retail-cartridge species route" in record["interpretation"]
+    assert "not which mutually exclusive choices coexist" in record["interpretation"]
+    assert "Mew remains absent" in record["interpretation"]
     assert "every decoded rod" in record["interpretation"]
 
 

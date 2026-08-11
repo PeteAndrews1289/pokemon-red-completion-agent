@@ -647,21 +647,28 @@ def catchable_species(rom: bytes) -> frozenset[int]:
 
 
 def reachable_species(rom: bytes, *, with_trade_partner: bool = False) -> frozenset[int]:
-    """What the catchable set grows into through the routes parsed so far.
+    """What all parsed direct sources grow into through evolution and swaps.
 
-    Three routes compound, so they are applied until nothing more falls out
-    rather than once each: evolving something you caught, swapping something you
-    caught with a character in the world, and evolving what they gave you.
+    Direct sources include grass, water, rods, starters, gifts, fossils, Game
+    Corner prizes and fixed encounters.  Three routes then compound, so they are
+    applied until nothing more falls out rather than once each: evolving
+    something obtained, swapping it with a character in the world, and evolving
+    what they gave you.
 
     ``with_trade_partner`` decides whether *trade evolutions* count -- those need
     a second concurrent save, which the in-game swaps do not. A lone cartridge
-    cannot perform them. Gifts, static encounters, fossils, starters and Game
-    Corner prizes are deliberately absent, so this is a measured lower bound,
-    not the complete set a cartridge or one run can reach.
+    cannot perform them.  This is species-level existential reach, not a claim
+    that every one-of choice can coexist in one save and not a claim that Mew is
+    available from an ordinary retail cartridge.
     """
 
+    # Imported lazily because the scripted decoder reuses the species and map
+    # primitives in this module.  Keeping the dependency at call time avoids a
+    # module cycle while preserving one public reachability function.
+    from pokemon_red_completion.gen1_acquisition import scripted_species
+
     return grow_collection(
-        catchable_species(rom),
+        catchable_species(rom) | scripted_species(rom),
         evolutions=evolution_graph(rom),
         swaps={trade.get_species: trade.give_species for trade in in_game_trades(rom)},
         with_trade_partner=with_trade_partner,
@@ -722,12 +729,10 @@ def version_exclusives(
     on a rod, and six more are exclusive without appearing in any wild table at
     all, because they are only ever reached by evolving something that does.
 
-    Trade evolutions are included on both sides. The result is a candidate
-    exclusivity set until every acquisition route is parsed: gifts, static
-    encounters, fossils, starters and Game Corner prizes could in principle
-    add a species to one side. The supported Red and Blue result agrees with the
-    declared eleven-species sets, but agreement is not a substitute for reading
-    the remaining routes.
+    Trade evolutions are included on both sides.  Every ordinary retail-cartridge
+    acquisition route is now parsed; Mew remains correctly absent.  Choice groups
+    do not distort this comparison because it asks whether a species is ever
+    obtainable from a title, not whether every choice can coexist in one save.
     """
 
     first = reachable_species(first_rom, with_trade_partner=True)
