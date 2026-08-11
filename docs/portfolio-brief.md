@@ -1,5 +1,29 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 11 headline
+
+The project now separates three things that game-agent portfolios often collapse: cartridge
+knowledge, deterministic mechanics and learned strategy. Red/Blue parsing derives exact ordinary
+acquisition reach—135 species solo, 139 with a trade partner—rather than relying on a hand-written
+Pokédex list. The game-neutral router has live evidence for stateful Surf, visible occupancy,
+repeated Cut, the complete cross-floor Strength puzzle, trainer sight, a closed/open story gate and
+resource renewal. Joint local/macro search rejects a real impossible shortcut on both cartridges.
+
+The newest learning seam deliberately does **not** train on those arrow sequences. It records real
+multi-destination choices from reviewed cross-title semantics and route costs, keeps exact bindings
+private to execution, and joins every choice to one success, failure or censored interruption.
+Successful routes may supervise imitation; failed routes remain negative outcome evidence; power
+loss is not quietly rerun. The authenticated writer/reader and lineage audit are implemented, but
+the honest count is still zero strategic navigation examples and no navigation model.
+
+That makes the best current interview story: I did not use a neural network where exact search was
+the better tool, and I did not create synthetic labels to claim training had started. I built the
+measurement boundary first, preserved negative outcomes, and made the next model earn its authority
+against route-cost and candidate-shape baselines. See the
+[current audit](current-audit-2026-08-11.md),
+[acquisition evidence](evidence/acquisition-routes-2026-08-11.json), and
+[joint-routing evidence](evidence/joint-route-pricing-audit-2026-08-11.json).
+
 ## August 10 headline
 
 The combined six-role learned stack has a complete uncounted derived-timing run through Hall of Fame:
@@ -20,7 +44,7 @@ fake possession permission because it needs player/boulder state search.
 That pair is the best interview story in the repository. It demonstrates causal evaluation,
 calibration against rare actions, separation of model errors from executor errors, source-bound
 experiment lineage, and honest negative evidence. See the
-[current audit](current-audit-2026-08-10.md),
+[August 10 audit](current-audit-2026-08-10.md),
 [navigation audit](traversal-audit-2026-08-10.md),
 [passing receipt](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
 and [failure receipt](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
@@ -57,8 +81,10 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Cartridge-derived navigation | Red/Blue static graphs agree; one generated Pallet route and one source-bound one-way-ledge probe pass live | Multi-map composition, dynamic objects and field capabilities remain outside completion-run authority |
-| Repository gate | More than 2,300 tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Runtime ROM tests remain private and explicitly separated from CI |
+| Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; one story gate; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
+| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join and whole-lineage audit | 0 collected examples; no numeric schema, model, shadow result or causal authority |
+| Acquisition knowledge | Exact Red/Blue ordinary reach: 135 solo / 139 with trade partner | No autonomous living-Pokédex execution or multi-save/trade orchestration |
+| Repository gate | 2,538 non-ROM tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
 
 ## Architecture in one minute
 
@@ -146,6 +172,13 @@ and many mechanic skills remain authored. A portable clean-start objective loop 
 Fame, but many choices are affordance-masked and the strict battle model fails the balanced Lorelei
 role contract. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or autonomous
 living-Pokédex result yet.
+
+The strategic navigation collection seam is implemented, but it contains zero real records. Exact
+route mechanics are substantially stronger than the older paragraph implies; what remains authored
+is when the completion teacher invokes them and how unsupported story/menu boundaries recover. The
+next credible navigation claim requires disjoint train/validation lineages, baselines, a frozen
+numeric representation, shadow evaluation and fresh causal authority—not one more successful Red
+route.
 
 The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
 matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution.

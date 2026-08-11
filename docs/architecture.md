@@ -51,8 +51,9 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Battle action ranking | Learned policy with legal-action masks | Model-controlled Red battle qualifications with no disagreement fallback | Authored curriculum and Red battle executor |
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
-| Navigation, menus and recovery | Deterministic bounded skills plus cartridge-derived search and composition | One 86-action live four-map plan, one local Pallet route and one directed-ledge probe | Shared live replanning, dynamic objects and stateful field mechanics are not yet completion-run ready |
-| Collection planning | Typed deterministic planner | Red living-set targets, storage/evolution directives and multi-run coverage planning | No autonomous living-Pokédex execution yet |
+| Navigation mechanics | Deterministic cartridge-derived planner, title adapter and closed-loop executor | Multi-map land routes; Surf mode; live occupancy; repeated Cut; full Strength chain; trainer sight; one closed/open story gate; resource renewal; joint local/macro pricing | Completion teacher still owns most route invocation, menu/script recovery, special story objects and the final Indigo exit |
+| Strategic navigation choice | Data contract only; deterministic teacher has not emitted records | Identity-free destination schema, reviewed semantic vocabulary, authenticated decision/outcome join and lineage audit | 0 collected choices; no frozen numeric features, model, shadow result or causal authority |
+| Collection planning | Typed deterministic planner plus cartridge-derived reachability | Exact ordinary retail reach: 135 species solo / 139 with a trade partner on each Red or Blue cartridge | No autonomous living-Pokédex execution, storage rotation, multi-save or trade orchestration yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the
 objective. A model matching a teacher in shadow does not mean it controlled execution. A safe
@@ -101,6 +102,14 @@ Learned components are small authenticated artifacts loaded behind typed interfa
 - the training controller selects `seek`, `fight`, `flee`, `heal`, or `stop`; and
 - the strategic candidate ranker scores a variable number of possible trainees or encounter
   venues with one shared network.
+
+Strategic *navigation* is the next learned seam, not an existing model. Its implemented contract
+ranks at least two semantic destinations from a reviewed cross-title vocabulary and route metrics.
+The authenticated trajectory stores the choice and one consumed outcome, but exact button actions,
+map ids, coordinates and destination bindings are excluded from policy input. Successful teacher
+routes may become imitation targets, route failures remain outcome evidence, and external power
+loss remains censored. Collection currently contains zero such records, so a numeric feature schema
+would be premature.
 
 The candidate ranker is deliberately permutation-equivariant. Its 27 normalized features exclude
 species IDs, move IDs, party-slot identity, map IDs, area names, memory addresses, and route
@@ -184,8 +193,9 @@ scratch under the same metrics.
 | Concern | Primary modules |
 | --- | --- |
 | Semantic state and emulator boundary | `observation.py`, `emulator.py`, `red_player_observer.py` |
-| Cartridge topology and traversal | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py` |
-| Game-neutral route search | `global_router.py`, `local_router.py` |
+| Cartridge topology, traversal and acquisition | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py`, `gen1_acquisition.py` |
+| Game-neutral route search and execution | `global_router.py`, `local_router.py`, `route_plan.py`, `route_executor.py` |
+| Strategic navigation records and datasets | `strategic_navigation.py`, `strategic_navigation_trajectory.py`, `strategic_navigation_dataset.py` |
 | Quest planning and portable loop | `quest.py`, `player_loop.py`, `learned_planner_policy.py` |
 | Bounded skill contracts and Red adapters | `objective_skills.py`, `red_objective_skills.py` |
 | Battle learning | `battle_policy.py`, `battle_runtime.py`, `battle_model.py` |
@@ -207,5 +217,5 @@ when the same learned interfaces produce measured value on a title they were not
 
 For the newest navigation measurements and risks, see the
 [knowledge-to-action audit](traversal-audit-2026-08-10.md). For the full capability ledger, see the
-[current audit](current-audit-2026-08-10.md). For the dependency order, see the
+[current audit](current-audit-2026-08-11.md). For the dependency order, see the
 [roadmap](roadmap.md). For the experiment story, see the [project narrative](project-narrative.md).

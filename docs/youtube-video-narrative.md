@@ -15,6 +15,40 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Acquisition reveal: 108 was never the answer
+
+Open with two confident counters: **RED 108 / BLUE 112**. Then reveal the missing cartridge lanes
+one at a time—rods, trades, gifts, fossils, prizes and fixed encounters—and cross out both totals.
+Use Horsea/Seadra versus Krabby/Kingler as the visual twist: the wild tables differ, but the rods
+are identical, so a “version exclusive” list built from grass and caves answers the wrong question.
+
+Build the final equation on screen: **wild + fishing + evolution + 10 trades + 30 scripts = 135
+solo / 139 with partner**. Split the remaining gaps into three cards: **11 OTHER-VERSION SPECIES**,
+**4 TRADE EVOLUTIONS IF SOLO**, **MEW UNOBTAINABLE**. Put the fossil and Dojo choices on branching
+cards and say: **“Reachable somewhere is not coexisting on one save.”**
+
+The story line is: **“Before teaching an agent to complete a Pokédex, I had to make the cartridge—not
+my spreadsheet—the authority on what completion means.”** Close honestly: acquisition knowledge is
+complete; catching, storage, evolution scheduling and trade orchestration are not.
+
+## Learning-boundary episode: do not train the shortest path
+
+Start with a wall of arrow labels from a successful route. Feed them toward a model, then stop and
+delete them. Replace the training target with one card: **WHY GO THERE NEXT?** Place two or more
+semantic destinations beneath it, each with availability, route cost, transitions, field actions
+and mode changes. Keep map names and coordinates on the executor side of a hard vertical boundary.
+
+Show the three outcome lanes. Green: **SUCCESS → teacher-choice label + positive outcome**. Red:
+**ROUTE FAILURE → negative outcome, not a positive imitation label**. Gray: **POWER LOSS → CENSORED,
+NOT RERUN**. Then show the dataset guardrails rejecting `viridian_city`, an extra destination
+identity field, a duplicated outcome and a split lineage that appears in both train and validation.
+
+End with the most important counter: **STRATEGIC RECORDS COLLECTED: 0**. The line is:
+**“This is not the navigation model. This is the point where I finally know what the navigation
+model should be asked to learn.”** The next episode collects genuine multi-destination choices,
+measures route-cost and candidate-shape baselines, freezes features only after observing coverage,
+then attempts shadow and causal control.
+
 ## Resource episode: the route outlived its Repel
 
 Put three remaining handwritten strings over Victory Road: **51 ROOM STEPS**, **56 ROOM STEPS** and

@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): carry semantic navigation through resource boundaries
+## Current focus (2026-08-11): collect genuine strategic navigation lineages
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -93,22 +93,44 @@ at combined cost 317 with 314 acknowledgement contracts. See the
 [joint pricing audit](evidence/joint-route-pricing-audit-2026-08-11.json). It is static route
 evidence, not live completion-run authority.
 
+The ordinary retail acquisition graph is now cartridge-complete at source `7fb928b`. Wild tables,
+fishing, evolution and in-game trades are joined to 30 scripted opportunities per title: starters,
+direct gifts, Dojo choices, fossils, Game Corner prizes and fixed encounters. Red and Blue each
+reach 135 species alone and 139 with a trade partner; the remaining gaps are the other title's
+eleven exclusives, four trade evolutions without a partner, and unobtainable Mew. Choice groups
+remain explicit, so existential reach is not confused with one-save coexistence. See the
+[acquisition audit](evidence/acquisition-routes-2026-08-11.json).
+
+Strategic navigation now has a durable, fail-closed data seam at source `f43219d`, hardened at
+`bcd9935`. A teacher or future model chooses among at least two semantic destinations; the
+deterministic planner retains exact directions. The model-facing view contains a reviewed
+cross-title tag vocabulary, candidate
+availability and route costs, but no map ids, coordinates, destination names or arrow labels.
+Every decision must join to exactly one outcome. Successful teacher choices can become imitation
+targets, route failures remain negative outcome evidence, and external power loss remains censored
+rather than being rerun or mislabeled. Whole-lineage split audits and the authenticated private
+trajectory writer/reader are implemented. The honest dataset count is still **zero collected
+strategic decisions**, and the numeric feature schema is deliberately not frozen.
+
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
-   prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-2. Record strategic destination choices, replans and interruption outcomes for learning. Exact
-   arrow sequences remain planner outputs, not imitation labels.
-3. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
-   preserve the neutral
-   executor contract, then run the
-   defined zero-shot/few-shot/from-scratch navigation benchmark.
+1. Instrument real multi-candidate destination branches in generated teacher routes and collect
+   separate train and validation lineages. Keep successes, route failures and external
+   interruptions; never invent a choice merely to increase the denominator.
+2. Audit candidate/tag/outcome coverage, selected-index shape baselines and split leakage. Freeze a
+   normalized numeric feature schema only after the observed data proves which distinctions exist.
+3. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
+   then require shadow and fresh causal qualifications with no teacher fallback.
+4. Close the remaining completion-routing admission gaps: shared menu/script recovery, additional
+   story and special-object predicates, the post-final-switch Indigo route, and a systematic
+   decoder/composer mutation score.
+5. Add Crystal's thin adapter and run the preregistered zero-shot, few-shot and from-scratch
+   navigation benchmark before expanding any Gen II teacher script.
 
 The full reasoning, risks and admission criteria are in the
-[knowledge-to-action audit](traversal-audit-2026-08-10.md). None of this opens v95; counted v95
-remains 0/10.
+[current audit](current-audit-2026-08-11.md). None of this opens v95; counted v95 remains 0/10.
 
 ## Current focus (2026-08-10)
 

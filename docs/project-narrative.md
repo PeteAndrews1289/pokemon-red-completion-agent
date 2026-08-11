@@ -1,5 +1,60 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the cartridge closed the Pokédex arithmetic
+
+The old acquisition total was a lower bound wearing a precise number. Wild tables and evolution
+said Red could reach 108 species and Blue 112, but the calculation had never read every way the
+game actually hands the player a Pokémon. That omission distorted version exclusives too: fishing
+made Horsea/Seadra and Krabby/Kingler available in both games, while species such as Vileplume and
+Primeape exist only by evolving a title-specific encounter.
+
+The completed decoder now joins grass/cave encounters, rods, evolution, ten in-game trades and 30
+scripted opportunities in each cartridge. Those scripts cover Oak's three starters, Eevee, Lapras,
+the two Fighting Dojo choices, three fossils, six repeatable Game Corner prizes and fourteen fixed
+encounters. Prices use the cartridge's BCD values; static objects come from map data; Snorlax comes
+from the battle script that writes its species. Independent nonuniform fixtures target the exact
+stride, terminator and operand mistakes that once survived decorative tests.
+
+The result is both larger and more honest: either title can reach 135 species alone and 139 with a
+trade partner. Without that partner, the four trade evolutions are absent. With one, the only gaps
+are the other cartridge's eleven exclusives and Mew. Choice groups remain explicit, because “this
+cartridge can produce Kabuto or Omanyte” is not the same as “one save can own both.” The
+[acquisition record](evidence/acquisition-routes-2026-08-11.json) binds Red and Blue independently
+to the clean source that produced those totals.
+
+This did not create an autonomous living Pokédex. It completed the teacher's knowledge of what is
+obtainable. Catch execution, storage rotation, evolution scheduling, trades and multiple save
+lineages are still behavior the agent must learn or execute. That distinction—complete knowledge,
+incomplete agency—is the project's recurring theme.
+
+## August 11: stop teaching arrows and record decisions
+
+Once routes could cross maps, react to people, use field moves, solve boulder puzzles and renew a
+Repel, the tempting next move was to label every successful direction and train a navigator. That
+would reward a neural network for imitating answers the cartridge and deterministic search can
+already compute exactly. Worse, it would encourage the model to memorize Red's coordinates instead
+of learning a skill that can survive Crystal.
+
+The new boundary records a harder decision: given a semantic need, which of at least two genuine
+destinations should the agent choose? The policy sees reviewed cross-title tags, availability,
+route cost, transition count, field-action count and mode changes. It does not see destination
+names, map ids, coordinates or arrow sequences. A private binding still connects the chosen index
+to the real route, but the deterministic planner owns every movement.
+
+Outcome handling is as important as the input. Each decision must join to exactly one consumed
+result. A successful teacher route may become a positive imitation label. A failed route remains
+negative outcome evidence instead of being silently retried until green. A power loss remains a
+censored interruption, neither success nor failure. Whole roots form dataset partitions, and the
+reader rejects extra identity fields, title-specific tags, provenance drift, malformed metrics and
+missing or duplicated outcomes.
+
+The restraint is part of the result: the repository currently contains **zero collected strategic
+navigation decisions**, no frozen numeric feature schema and no strategic navigation model. What
+now exists is the trustworthy collection seam. The next experiment must populate it with real
+multi-destination branches, inspect coverage and shape baselines, then decide what model is
+justified. “Ready to collect the right data” is a smaller claim than “the AI learned navigation,”
+but it is the claim that can eventually transfer.
+
 ## August 10: the route outlived its Repel
 
 The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14
@@ -367,7 +422,8 @@ game outcome. The system refused to reroll, separated model error from teacher e
 failure into a precisely bounded next lesson. See the
 [passing receipt](evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
 the [failure receipt](evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json),
-and the [current audit](current-audit-2026-08-10.md).
+and the [August 10 audit](current-audit-2026-08-10.md). The superseding capability view is the
+[August 11 audit](current-audit-2026-08-11.md).
 
 ## August 9: offline accuracy met causal reality
 

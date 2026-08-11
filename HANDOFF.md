@@ -14,6 +14,61 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Strategic navigation is collectable, but no strategic model exists — 2026-08-11
+
+Source checkpoints `33dd0d81600b818d121a420a158d91479adc161f` and
+`f43219d` define the learning boundary the routing work was meant to reach. A strategic decision
+contains a real set of at least two destinations, portable need/origin/destination tags,
+availability and deterministic route metrics. The selected destination binding is retained for
+execution, but the policy view omits every binding reference, map id, coordinate and movement
+action. Exact directions stay in `route_plan.py` and `route_executor.py`; they are not imitation
+labels.
+
+The follow-up checkpoint closes the durable data path. Only a reviewed cross-title semantic tag
+vocabulary may enter policy input. Free-text failure, replan, interruption and resource values are
+replaced by bounded semantic enums. A private trajectory stores the identity-free choice and a
+paired consumed outcome. Its reader rejects extra identity fields, title-specific tags, malformed
+candidate metrics, split/provenance drift, duplicate decisions, missing outcomes and multiple
+outcomes. Successful teacher routes supply imitation labels; failed routes supply negative outcome
+evidence; an external power loss is censored rather than silently called failure or rerun. Whole
+root lineages, not individual decisions, form train/validation boundaries.
+
+Audit checkpoint `bcd9935` closes an in-memory integrity hole: the frozen example dataclass had
+contained a mutable nested policy dictionary. Policy inputs and every candidate mapping are now
+recursively immutable after canonical parsing, with regressions that reject top-level and nested
+mutation.
+
+Do not overstate this milestone. There are **0 collected strategic navigation records**, no frozen
+numeric feature schema and no strategic navigation model. The old `navigation_dataset.py` contains
+individual direction traces for control diagnostics only; its public summary now says so and stays
+`promotion_eligible: false`. The next work is to instrument genuine multi-destination branches in
+teacher/generated routes, preserve successes/failures/interruptions, then inspect coverage before
+choosing a numeric representation. Current prospective registry SHA is
+`8f8041a708e7cc131255ee7cf0f9bee4b8a7b79755a3cd056bb004e08fb0fce1`; source bundle is
+`a8ff02b3f24110527afc7a24356c59d2e2eed252468af122bae60c30fd43d354`.
+
+## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
+
+Clean source `7fb928b31dc36667bcdcd50b32706b02d491ebb3` and evidence commit `81a990f`
+close the old 108/112 lower bound. The cartridge decoder now joins wild grass/cave tables, rods,
+evolution, ten in-game trades and 30 scripted opportunities in each title: three Oak starters, two
+direct gifts, two Dojo gifts, three fossils, six repeatable Game Corner prizes and fourteen fixed
+encounters. Static encounters come from map object blocks; Snorlax comes from exact battle-script
+writes. Independent fixtures kill stride, terminator, BCD-price, starter-counterpick and
+gift/fossil-operand mistakes.
+
+The exact existential reach is **135 species on one title alone** and **139 with a trade partner**.
+Without a partner, four trade evolutions remain absent; with one, only the other title's eleven
+version exclusives and Mew remain. Choice groups remain explicit: a cartridge being capable of
+producing both fossils across different saves does not mean one save can hold both without a trade.
+Red and Blue were decoded and compared independently. The public record is
+[acquisition-routes-2026-08-11.json](docs/evidence/acquisition-routes-2026-08-11.json).
+
+This completes ordinary retail acquisition knowledge, not autonomous living-Pokédex execution.
+Storage, party rotation, catch execution, resource replenishment, evolution scheduling and
+multi-run/trade orchestration still need live authority. Mew remains outside ordinary cartridge
+reach.
+
 ## Victory Road now crosses rooms and renews its own Repel — 2026-08-10
 
 Clean executable source bundle `2c31afaf232726ea7c4b7a50b6bbac7d03eed8fc019c0e799af205d3cce84e35`

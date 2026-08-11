@@ -40,9 +40,18 @@
 > rejected it and derived the nine-map Viridian Forest route with cost 317 and 314 acknowledgement
 > steps. Batched local targets reduced a representative Pallet→Celadon planning query from roughly
 > 12.3 seconds to 0.17 seconds on the audit machine. This remains static planning evidence.
+> Cartridge acquisition knowledge is now complete for ordinary retail Red and Blue. Wild, fishing,
+> evolution, ten in-game trades and 30 scripted opportunities per title derive exact existential
+> reach: 135 species on one cartridge, or 139 with a trade partner. The remaining gaps are the other
+> title's eleven exclusives, four trade evolutions without a partner, and Mew.
+> The strategic-navigation collection seam is also implemented. A future model will rank genuine
+> semantic destinations from availability and route cost while the deterministic planner owns exact
+> movement. Decisions and outcomes survive in authenticated private trajectories; failures remain
+> negative evidence and power loss remains censored. No strategic navigation records have been
+> collected yet, no numeric feature schema is frozen, and no navigation model is being claimed.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
-> [capability audit](docs/current-audit-2026-08-10.md),
+> [current audit](docs/current-audit-2026-08-11.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
@@ -55,7 +64,8 @@
 > the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json)
 > and [Saffron story gate](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json), plus the
 > [composed resource chain](docs/evidence/victory-road-composed-resource-chain-probe-2026-08-10.json),
-> and the [joint route-pricing audit](docs/evidence/joint-route-pricing-audit-2026-08-11.json).
+> the [joint route-pricing audit](docs/evidence/joint-route-pricing-audit-2026-08-11.json), and the
+> [acquisition audit](docs/evidence/acquisition-routes-2026-08-11.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -103,8 +113,17 @@ scripted trainer-like objects and other story locks remain explicit open work. R
 observed renewable route resource: unknown fails closed, zero plus inventory invokes an exact
 title-adapter receipt, and active state proceeds without menu work. Live Victory Road replaced the
 51- and 56-step room strings with composed warp routes and renewed the final Max Repel at 3F `(1,9)`
-inside Strength. The post-final-switch route to Indigo, repeated Cut and broader generated-routing
-authority remain open.
+inside Strength. Repeated Cut and joint local/macro pricing are also closed. The post-final-switch
+route to Indigo, shared menu/script interruption recovery, broader story predicates and general
+completion-run routing authority remain open.
+
+Acquisition knowledge now covers every ordinary retail route in Red and Blue: wild tables, rods,
+evolution, ten in-game trades and 30 scripted opportunities in each title. Either cartridge can
+reach 135 species alone or 139 with a trade partner. The new strategic-navigation data seam is
+ready to record genuine destination choices and their consumed outcomes without copying map
+identity or movement actions into policy input. Its current denominator is deliberately explicit:
+**0 collected strategic navigation decisions**, no frozen numeric feature schema and no navigation
+model.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

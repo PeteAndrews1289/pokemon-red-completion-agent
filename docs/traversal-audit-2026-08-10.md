@@ -1,5 +1,26 @@
 # Knowledge-to-action audit — 2026-08-10
 
+## 2026-08-11 superseding status
+
+The original ordered mechanics list is now largely closed. Repeated Cut, the complete cross-floor
+Strength chain, trainer sight, one closed/open story passage, renewable Repel state, Victory Road's
+two inter-room routes and joint local/macro pricing all have source-bound evidence. Ordinary retail
+acquisition reach is also complete at 135 species solo / 139 with a trade partner. See the
+[current audit](current-audit-2026-08-11.md) for exact claims and remaining risks.
+
+Strategic navigation has moved from prose to a durable data contract. The policy boundary ranks at
+least two semantic destinations and excludes map ids, coordinates, binding names and movement
+actions. A reviewed cross-title vocabulary, authenticated trajectory writer/reader, one-outcome
+join, failure/censor semantics and lineage split audit are implemented. The older arrow-level
+navigation dataset is control diagnostics only. No strategic records have yet been collected and
+no numeric navigation model exists.
+
+The remaining admission gates are shared menu/script interruption recovery, broader story and
+special-object predicates, the post-final-switch Indigo route, systematic mutation scoring, genuine
+strategic train/validation lineages and then the Crystal transfer benchmark. This section
+supersedes every older “next milestone” list below; those lists remain as the historical audit that
+led to the current design.
+
 ## Post-audit closure: renewable resources and Victory Road rooms
 
 Source bundle `2c31afaf232726ea7c4b7a50b6bbac7d03eed8fc019c0e799af205d3cce84e35`
