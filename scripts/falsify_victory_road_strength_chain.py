@@ -229,13 +229,16 @@ def _solve_phase(
         (raw.player_y, raw.player_x),
         reader.read_current_strength_boulders(),
     )
+    live_non_boulder_occupancy = (
+        reader.read_current_object_coordinates() - initial.occupied
+    )
     plan = plan_strength(
         terrain,
         rules,
         initial,
         goal,
         raw,
-        blocked=occupancy[raw.map_id],
+        blocked=occupancy[raw.map_id] | live_non_boulder_occupancy,
         max_states=100_000,
     )
     execution = Gen1StrengthExecutor(actions, reader, emulator).execute(plan)
@@ -269,8 +272,7 @@ def _derive_walk_route(
         sets,
         water_set_ids=surf_tileset_ids,
     )
-    boulders = reader.read_current_strength_boulders()
-    blocked = occupancy[raw.map_id] | frozenset(item.at for item in boulders)
+    blocked = occupancy[raw.map_id] | reader.read_current_object_coordinates()
     path = find_local_path(
         local_graph(terrain, rules, blocked=blocked),
         (raw.player_y, raw.player_x),

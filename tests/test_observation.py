@@ -26,6 +26,8 @@ from pokemon_red_completion.observation import (
     Badge,
     CurrentMapBlocks,
     CurrentMapBlocksError,
+    CurrentMapObject,
+    CurrentMapObjectError,
     CurrentStrengthBoulder,
     CurrentStrengthBoulderError,
     EventFlag,
@@ -237,6 +239,60 @@ def test_strength_boulders_exclude_toggle_hidden_slots_not_merely_offscreen_ones
     assert reader.read_current_strength_boulders() == (
         CurrentStrengthBoulder(1, (4, 5), 0, 0, 0x10),
     )
+
+
+def test_current_map_objects_keep_dynamic_offscreen_coordinates_and_exclude_hidden() -> None:
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                0xD4E1: 3,
+                0xC110: 6,
+                0xC111: 1,
+                0xC112: 0x20,
+                0xC214: 9,
+                0xC215: 11,
+                0xC120: 7,
+                0xC121: 3,
+                0xC122: 0xFF,
+                0xC224: 7,
+                0xC225: 7,
+                0xC130: 8,
+                0xC234: 12,
+                0xC235: 13,
+                0xD5CE: 3,
+                0xD5CF: 0x60,
+                0xD5D0: 0xFF,
+                0xD5B2: 0x01,
+            }
+        )
+    )
+
+    assert reader.read_current_map_objects() == (
+        CurrentMapObject(1, 6, (5, 7), 1, 0x20),
+        CurrentMapObject(2, 7, (3, 3), 3, 0xFF),
+    )
+    assert reader.read_current_map_objects()[0].visible
+    assert not reader.read_current_map_objects()[1].visible
+    assert reader.read_current_map_objects()[1].moving
+    assert reader.read_current_object_coordinates() == frozenset({(5, 7), (3, 3)})
+
+
+def test_current_map_objects_refuse_duplicate_active_coordinates() -> None:
+    with pytest.raises(CurrentMapObjectError, match="multiple current map objects"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {
+                    0xD4E1: 2,
+                    0xD5CE: 0xFF,
+                    0xC110: 6,
+                    0xC214: 8,
+                    0xC215: 9,
+                    0xC120: 7,
+                    0xC224: 8,
+                    0xC225: 9,
+                }
+            )
+        ).read_current_map_objects()
 
     slot_state_1 = 0xC110
     slot_state_2 = 0xC210

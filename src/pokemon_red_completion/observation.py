@@ -1338,6 +1338,35 @@ class CurrentStrengthBoulder:
         return self.image_index != 0xFF
 
 
+class CurrentMapObjectError(ValueError):
+    """Raised when the active map-wide sprite table is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentMapObject:
+    """One toggle-present map object, whether inside the viewport or not."""
+
+    sprite_index: int
+    picture_id: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a map sprite index must be between 1 and 15")
+        if not 1 <= self.picture_id <= 0xFF:
+            raise ValueError("a current map sprite needs a picture id")
+
+    @property
+    def visible(self) -> bool:
+        return self.image_index != 0xFF
+
+    @property
+    def moving(self) -> bool:
+        return self.movement_status == 3
+
+
 class CurrentMapBlocksError(ValueError):
     """Raised when Red's live bordered block buffer is internally impossible."""
 
@@ -4061,6 +4090,52 @@ class PokemonRedStateReader:
 
     def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
         return frozenset(item.at for item in self.read_visible_map_objects())
+
+    def read_current_map_objects(self) -> tuple[CurrentMapObject, ...]:
+        """Read every toggle-present object from the map-wide sprite table."""
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise CurrentMapObjectError(
+                f"current map exposes impossible sprite count {count}"
+            )
+        hidden = self._read_hidden_current_sprite_indices()
+        found: list[CurrentMapObject] = []
+        occupied: set[tuple[int, int]] = set()
+        for sprite_index in range(1, count + 1):
+            if sprite_index in hidden:
+                continue
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            picture_id = self._memory.read_u8(state_1)
+            if picture_id == 0:
+                continue
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise CurrentMapObjectError(
+                    f"current sprite {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            at = padded_y - 4, padded_x - 4
+            if at in occupied:
+                raise CurrentMapObjectError(
+                    f"multiple current map objects occupy coordinate {at}"
+                )
+            occupied.add(at)
+            found.append(
+                CurrentMapObject(
+                    sprite_index=sprite_index,
+                    picture_id=picture_id,
+                    at=at,
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=self._memory.read_u8(state_1 + 2),
+                )
+            )
+        return tuple(found)
+
+    def read_current_object_coordinates(self) -> frozenset[tuple[int, int]]:
+        return frozenset(item.at for item in self.read_current_map_objects())
 
     def read_current_strength_boulders(self) -> tuple[CurrentStrengthBoulder, ...]:
         """Read every pushable boulder from the current map's live sprite slots.
