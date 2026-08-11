@@ -181,8 +181,12 @@ preflight passed the generated approach and complete Tower chapter. The first cl
 then failed honestly at checkpoint 16, before any strategic choice: its early Bug Catcher battle
 exhausted Tackle and the teacher kept selecting it. The retained uncounted episode cannot enter
 training. Its exact schedule now clears checkpoint 17 after a trace-derived per-turn usable-move
-repair and a semantic transit gate; train remains 0/5, validation 0/2 and test 0/5. The repaired,
-regenerated rehearsal identity must pass before any learning root opens.
+repair and a semantic transit gate. The next source-bound attempt proved that fix, then failed at
+checkpoint 23 when the one required Route 3 trainer excluded from the Bubble policy survived until
+Squirtle fainted at its last opponent's 2 HP. That failed episode is also retained. The exact
+schedule clears checkpoint 24 when all required Route 3 trainers use the fully stocked STAB move;
+the twelve-Potion reserve and all victory gates remain intact. Train remains 0/5, validation 0/2
+and test 0/5. The newly regenerated rehearsal identity must pass before any learning root opens.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

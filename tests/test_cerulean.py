@@ -648,7 +648,8 @@ def test_cerulean_route_is_pinned_at_critical_segments() -> None:
     assert MT_MOON_B1F_EXIT_SEED_WAIT == 1
     assert MT_MOON_ZUBAT_SEED_WAIT == 155
     assert MT_MOON_ZUBAT_PRE_THROW_WAIT == 3
-    assert frozenset({0, 3, 6}) == ROUTE_3_BUBBLE_TRAINER_INDEXES
+    assert ROUTE_3_REQUIRED_TRAINER_INDEXES == (0, 1, 3, 6)
+    assert frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES) == ROUTE_3_BUBBLE_TRAINER_INDEXES
     assert ROUTE_3_REJOIN_SEED_WAIT == 8
     assert len(ROUTE_4_FIRST_LEDGE_APPROACH_DIRECTIONS) == 20
     assert len(ROUTE_4_MIDDLE_DIRECTIONS) == 39

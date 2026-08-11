@@ -50,7 +50,7 @@ from pokemon_red_completion.route_1_wild import (
 
 CERULEAN_CHECKPOINT_COUNT = 15
 ROUTE_3_REQUIRED_TRAINER_INDEXES = tuple(spec[0] for spec in ROUTE_3_REQUIRED_TRAINER_SPECS)
-ROUTE_3_BUBBLE_TRAINER_INDEXES = frozenset({0, 3, 6})
+ROUTE_3_BUBBLE_TRAINER_INDEXES = frozenset(ROUTE_3_REQUIRED_TRAINER_INDEXES)
 CERULEAN_QUALIFICATION_BOUNDARIES = tuple(
     boundary for boundary in CeruleanBoundary if boundary is not CeruleanBoundary.UNKNOWN
 )

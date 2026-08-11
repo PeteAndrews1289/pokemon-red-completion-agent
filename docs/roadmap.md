@@ -169,6 +169,14 @@ accepts a living status-free party for the HP-preserving transit to Pewter's man
 exact failed schedule now clears checkpoint 17 in an in-memory diagnostic. The failed source-bound
 episode stays failed; source regeneration creates a distinct repaired rehearsal identity.
 
+That repaired identity passed Forest and Brock, then failed at checkpoint 23 during Route 3 trainer
+1, still before the strategic decision. Its 3,472-record partial is retained. The trace shows the
+teacher spending its only surplus Potion after the trainer's second Pokémon, protecting the twelve
+required route Potions, and then using Tackle until Squirtle reached 0 HP with the final opponent at
+2 HP; Bubble remained at 30 PP. The exact-schedule counterfactual clears checkpoint 24 when trainer
+1 joins the Bubble policy already used by every other required Route 3 trainer. The next prospective
+rehearsal identity includes that repair.
+
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
 that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before
@@ -181,8 +189,8 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Publish the exact early-battle repair and regenerated registries, then require a fresh green CI
-   run for that commit.
+1. Publish the exact Route 3 STAB-policy repair and regenerated registries, then require a fresh
+   green CI run for that commit.
 2. Execute only the repaired source's regenerated rehearsal identity under schedule `1710001`.
    Preserve both failed partials if it fails again; never overwrite an identity, edit source during
    execution, or open train/validation/test to debug it.

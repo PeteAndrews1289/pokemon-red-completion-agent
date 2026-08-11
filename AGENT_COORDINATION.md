@@ -1,17 +1,16 @@
 # Three-agent coordination
 
-> **2026-08-11 Lane A strategic-rehearsal checkpoint:** the first real clean-power strategic
-> rehearsal at published source `ab69be7` opened its uncounted identity and failed at checkpoint
-> 16/312, before Tower-versus-Eevee and before any strategic decision. Preserve its 2,086-record
-> failed partial. The trace proved the mandatory Forest Bug Catcher survived at 6/27 HP after
-> Tackle reached zero; repeated generic confirmation could not finish it. The teacher now chooses a
-> usable Tackle/Bubble on every actionable turn, separates transient faint dialogue from move
-> selection, and admits a living status-free lead to the HP-preserving Pewter-heal corridor while
-> retaining the poisoned reserve gate. Exact schedule `1710001` now clears checkpoint 17 in an
-> in-memory diagnostic. Full ROM-free gate: 2,604 passed, 3 deselected, 1 xfailed; Ruff, mypy,
-> docs, privacy and both registries pass. Next: publish, require exact-commit CI, then run only the
-> regenerated uncounted rehearsal assignment. Train remains 0/5, validation 0/2, test 0/5; do not
-> open any learning root or overwrite the failed identity.
+> **2026-08-11 Lane A strategic-rehearsal checkpoint:** preserve two source-bound uncounted failed
+> partials; both stopped before Tower-versus-Eevee and contain zero strategic decisions. Source
+> `ab69be7` failed at 16/312 when the Forest Bug Catcher survived with 6/27 HP after Tackle reached
+> zero. Source `1904b59` proved that repair, Brock and Route 3 trainer 0, then failed at checkpoint
+> 23 with Squirtle at 0/35, the last opponent at 2/30, twelve protected Potions and Bubble at 30 PP.
+> The first repair selects a usable Tackle/Bubble on every actionable turn and separates transient
+> faint dialogue. The second removes trainer 1's lone handwritten exclusion from the required Route
+> 3 Bubble policy. Exact schedule `1710001` now clears checkpoints 17 and 24 in uncounted in-memory
+> diagnostics. Next: full gate, publish, exact-commit CI, then run only the newly regenerated
+> rehearsal assignment. Train remains 0/5, validation 0/2, test 0/5; never overwrite either failed
+> identity or open a learning root for debugging.
 
 > **2026-08-10 Lane A Cut checkpoint:** staged Cut is live-qualified at source `8a0b794`. The
 > adapter reads Red's mutable unpadded map blocks, capability requires Cascade plus a complete party

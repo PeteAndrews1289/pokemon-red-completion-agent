@@ -1014,8 +1014,11 @@ version has to prove the model learned something worth carrying into a game it h
   singleton-objective and fixed-mechanics limitations.
 - The first uncounted clean-power strategic rehearsal failure: show the 16/312 checkpoint counter,
   the retained failed artifact, Weedle at 6/27 HP, exhausted Tackle, and zero strategic decisions.
-  Then show the exact schedule clearing checkpoint 17 after the usable-move repair. Do not show a
-  312/312 or Hall-of-Fame card until the repaired source-bound rehearsal actually earns it.
+  Then show the exact schedule clearing checkpoint 17 after the usable-move repair, followed by the
+  second honest failure: Squirtle at 0 HP, the final Route 3 opponent at 2 HP, twelve protected
+  Potions and a fully stocked Bubble. Show the same schedule clearing checkpoint 24 after removing
+  the one handwritten Tackle exception. Do not show a 312/312 or Hall-of-Fame card until a repaired
+  source-bound rehearsal actually earns it.
 - A cartridge-to-graph-to-tile animation, followed by the Route 1 generated path overlay and live
   two-square ledge hop. Show `action=down` beside `kind=ledge`, the blocked reverse input, the clean
   source commit, and “Cut/Surf/Strength not yet executable” at the same time.

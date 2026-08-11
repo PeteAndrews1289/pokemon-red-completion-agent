@@ -68,6 +68,18 @@ Pewter heal; poison still requires the conservative reserve. The exact `1710001`
 Viridian Forest at checkpoint 17 with 5 decisions, 1,340 executions and 16 events in an in-memory,
 uncounted diagnostic. That replay opened no private episode or learning slot.
 
+Published repair `1904b59` passed exact-commit CI and the regenerated rehearsal then proved the
+Forest repair, Brock and the first Route 3 trainer before failing at checkpoint 23. The second
+retained failed partial has 3,472 records (7 decisions, 2,339 executions, 23 events and 1,102
+snapshots), still before any strategic decision. Trainer 1's three-Pokémon party reduced Squirtle to
+7 HP; the teacher spent its one surplus Potion, protected the remaining twelve-item route floor,
+then continued Tackle until Squirtle fainted with the last opponent at 2/30 HP. Bubble still had
+30 PP. The cause was a single handwritten exclusion from the otherwise Bubble-based required Route
+3 roster, not insufficient inventory. An in-memory counterfactual that adds trainer 1 to the same
+STAB policy clears checkpoint 24 under the exact schedule with 7 decisions, 2,345 executions and 23
+events. The source now applies Bubble to all four required Route 3 trainers without weakening the
+Potion floor or victory gate.
+
 The repair regenerates a new source-bound prospective rehearsal assignment. Immediate next action
 after this exact source is committed, pushed and green is:
 
@@ -86,10 +98,10 @@ it passes, load it through
 whether one genuine choice per whole root is enough before opening train root 1.
 
 Current prospective v95 identity is registry
-`094457e55949e2845b0c9c615803f18300b9740b93695a5f768a89ed869b26cd`, source bundle
-`32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9`, teacher execution
-`4a174d2a0bcefd49ef44e1b618b108b70ea98b6b690eead67e780d07c10fcfcf`, and first assignment
-`0b18eb2f4b6728148925983e781512772c6c138cda46b5766bf381d677c62215`. It remains 0/10.
+`1212dfa5bd23deda55b22aee593d1e32cdbe20abf40bce9202040c26d41243cb`, source bundle
+`990d365bf093e1b85765ea99673d92e1aae0c491d6ddc671d81bcb331e6a8bd1`, teacher execution
+`09086e68615f50e101b2c094c7dc4d779ac33d621fe76faf4f98db8c10fde9d7`, and first assignment
+`d90a5476e21f184950235edfe1f3fe64351ab3917ecb3c93820f22fb91581524`. It remains 0/10.
 
 ## Strategic collection roots are preassigned but unopened — 2026-08-11
 
@@ -140,19 +152,20 @@ failures. The clean-power generated-route bridge now consumes either the success
 typed failure before propagating control failure.
 
 No counted strategic slot has been consumed. The current counts remain **train 0/5, validation
-0/2, test 0/5**. One older source-bound rehearsal failed before reaching a strategic decision; the
-repaired-source prospective rehearsal remains unopened. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
-calibrations and cannot be relabeled. Strategic decision/outcome recording is complete for one
+0/2, test 0/5**. Two older source-bound rehearsals failed before reaching a strategic decision; the
+newest repaired-source prospective rehearsal remains unopened. Existing Pallet, Fuchsia and Celadon
+checkpoints remain opened development calibrations and cannot be relabeled. Strategic
+decision/outcome recording is complete for one
 branch; next run the single rehearsal, audit its genuine candidate
 coverage, and only then decide whether to open train root 01. Do not start from the held-out test
 roots while building that harness.
 
 Registry SHA is
-`0b2fceb76b33d09cd6b01041417fc33b476142d76c8fd6110cca1e526fd1fdcb`; strategic teacher
-execution is `ed4117cbef706348ded249e3d7b5aac6f567006b0e78dac4e5f4a871ddb45e6a`; source bundle is
-`32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9`; rehearsal assignment is
-`4c9d467e7bcaeeb871fc070e8becec0209bf123c6f0d112c48d4e5626e46381c`; first train assignment is
-`da8e4f0b0c28997c2c850053b89e091a3f288ad6dd89db66efd127318492d94d`.
+`9694bcab348d378d282c1b717d2842487709e43e765d71124583f160a8bca2d0`; strategic teacher
+execution is `b144ade83a6522aec776477ed1c64d756f305ef3651b2f8793c48003549c1e2e`; source bundle is
+`990d365bf093e1b85765ea99673d92e1aae0c491d6ddc671d81bcb331e6a8bd1`; rehearsal assignment is
+`20d1a55e79799b8b8a478265c917bded28cfc319e1785f5ba8bb15a95c3edb86`; first train assignment is
+`eb150e9709921d35cb11f195e28ec6d1c0c015e0e48ecdad0ae43825748c34b5`.
 
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 

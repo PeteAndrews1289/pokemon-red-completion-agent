@@ -25,8 +25,9 @@ branch: the post-Hideout teacher records Tower versus Eevee before acting, execu
 generated route, and consumes its measured outcome before the Tower interior continues. A private
 checkpoint preflight passed that generated approach and the complete Tower chapter, but it was not
 a clean-power root and cannot become data. The first genuine clean-power rehearsal then failed at
-checkpoint 16, before any strategic decision, and is retained as uncounted negative harness
-evidence. All train, validation and test slots remain unopened.
+checkpoint 16, before any strategic decision. Its repaired source-bound successor cleared that gate
+and then failed at checkpoint 23, also before the strategic branch. Both are retained as uncounted
+negative harness evidence. All train, validation and test slots remain unopened.
 
 That claim boundary is healthy. The exact failed schedule now clears its former Viridian Forest
 gate after a trace-derived repair. The next highest-value work is publishing that source, qualifying
@@ -152,8 +153,8 @@ being increased by changing a string in a calibration script. After collection, 
 episode loader independently matches the header's collection, source bundle, source commit, split,
 actor and policy to that assignment before applying the strict decision/outcome join. It refuses
 local-only assignments and keeps test episodes sealed by default. Current counted status is **train
-0/5, validation 0/2, test 0/5**. One earlier source-bound rehearsal failed before the strategic
-branch; the repaired-source prospective rehearsal identity remains unopened.
+0/5, validation 0/2, test 0/5**. Two earlier source-bound rehearsals failed before the strategic
+branch; the newest repaired-source prospective rehearsal identity remains unopened.
 
 The registry's rehearsal declaration is now executable as an authenticated identity rather than
 just a seed. Its derived episode and lineage stay `unassigned`, its attempt is explicitly
@@ -202,6 +203,20 @@ corridor to Pewter's mandatory heal, while poison still requires the conservativ
 in-memory replay under schedule `1710001` now clears checkpoint 17 with 5 decisions, 1,340
 executions and 16 events. It opens no episode and consumes no split.
 
+Published repair `1904b59` passed exact-commit CI. Its regenerated clean-power rehearsal cleared
+Forest, Brock and Route 3 trainer 0, then failed during trainer 1 at checkpoint 23. The second
+retained partial contains 3,472 records: 7 decisions, 2,339 executions, 23 events and 1,102
+snapshots. It still contains no strategic navigation decision. The battle trace shows a three-
+Pokémon trainer reducing Squirtle to 7 HP; the teacher consumed its one surplus Potion, retained the
+twelve-Potion route floor, and resumed Tackle. Squirtle fainted at 0/35 while the final opponent had
+2/30 HP. Bubble remained at 30 PP.
+
+This was another authored-policy defect rather than inadequate inventory: trainer 1 was the only
+required Route 3 trainer excluded from the Bubble set. An in-memory exact-schedule counterfactual
+that removes that one exception reaches checkpoint 24 with 7 decisions, 2,345 executions and 23
+events. The source now derives the Bubble set from all required Route 3 trainer indexes, retaining
+the Potion floor, battle recovery and victory contracts.
+
 ## Code and CI audit
 
 At this checkpoint the repository contains 152 source modules and 176 test modules. The local CI
@@ -220,10 +235,10 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `094457e55949e2845b0c9c615803f18300b9740b93695a5f768a89ed869b26cd` |
-| Source bundle SHA-256 | `32e04b678bb6c940fe793cbb83df6ceb5c9ab07b23c2226ef5adf39a0d5b2ae9` |
-| Teacher execution SHA-256 | `4a174d2a0bcefd49ef44e1b618b108b70ea98b6b690eead67e780d07c10fcfcf` |
-| Slot assignment SHA-256 | `0b18eb2f4b6728148925983e781512772c6c138cda46b5766bf381d677c62215` |
+| Registry SHA-256 | `1212dfa5bd23deda55b22aee593d1e32cdbe20abf40bce9202040c26d41243cb` |
+| Source bundle SHA-256 | `990d365bf093e1b85765ea99673d92e1aae0c491d6ddc671d81bcb331e6a8bd1` |
+| Teacher execution SHA-256 | `09086e68615f50e101b2c094c7dc4d779ac33d621fe76faf4f98db8c10fde9d7` |
+| Slot assignment SHA-256 | `d90a5476e21f184950235edfe1f3fe64351ab3917ecb3c93820f22fb91581524` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -232,11 +247,11 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `0b2fceb76b33d09cd6b01041417fc33b476142d76c8fd6110cca1e526fd1fdcb` |
+| Strategic registry SHA-256 | `9694bcab348d378d282c1b717d2842487709e43e765d71124583f160a8bca2d0` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `ed4117cbef706348ded249e3d7b5aac6f567006b0e78dac4e5f4a871ddb45e6a` |
-| Rehearsal assignment SHA-256 | `4c9d467e7bcaeeb871fc070e8becec0209bf123c6f0d112c48d4e5626e46381c` |
-| First train assignment SHA-256 | `da8e4f0b0c28997c2c850053b89e091a3f288ad6dd89db66efd127318492d94d` |
+| Strategic teacher execution SHA-256 | `b144ade83a6522aec776477ed1c64d756f305ef3651b2f8793c48003549c1e2e` |
+| Rehearsal assignment SHA-256 | `20d1a55e79799b8b8a478265c917bded28cfc319e1785f5ba8bb15a95c3edb86` |
+| First train assignment SHA-256 | `eb150e9709921d35cb11f195e28ec6d1c0c015e0e48ecdad0ae43825748c34b5` |
 
 ## Ranked gaps
 
@@ -251,9 +266,9 @@ validation. Synthetic choices such as selecting between two arbitrary Viridian b
 make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
 collection or optional reward destinations. Preassignment and output authentication are complete;
-one full-run branch is instrumented. The first clean-power attempt failed before that branch and
-taught the teacher how to handle exhausted PP safely. Publish the repair and run only its
-regenerated uncounted assignment next.
+one full-run branch is instrumented. Two clean-power attempts failed before that branch and taught
+the teacher how to handle exhausted PP and a bad early move policy safely. Publish the current
+repair and run only its regenerated uncounted assignment next.
 
 The execution-side failure prerequisite is now closed. `execute_route` attaches a typed semantic
 reason and measured partial trace to its error, including the acknowledged prefix before a
