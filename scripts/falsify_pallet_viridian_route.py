@@ -76,6 +76,18 @@ from pokemon_red_completion.route_executor import (  # noqa: E402
     execute_route,
 )
 from pokemon_red_completion.route_plan import RoutePlan, plan_route  # noqa: E402
+from pokemon_red_completion.strategic_navigation import (  # noqa: E402
+    StrategicNavigationTag,
+)
+from pokemon_red_completion.strategic_navigation_binding import (  # noqa: E402
+    DestinationRouteBinding,
+    bind_strategic_navigation_decision,
+)
+from pokemon_red_completion.strategic_navigation_trajectory import (  # noqa: E402
+    strategic_navigation_decision_record,
+    strategic_navigation_outcome_event,
+)
+from pokemon_red_completion.trajectory import SemanticSnapshot  # noqa: E402
 
 
 class PalletViridianRouteProbeError(RuntimeError):
@@ -84,6 +96,7 @@ class PalletViridianRouteProbeError(RuntimeError):
 
 DESTINATIONS = {
     "center": MapId.VIRIDIAN_POKECENTER,
+    "home": MapId.REDS_HOUSE_1F,
     "mart": MapId.VIRIDIAN_MART,
 }
 
@@ -216,6 +229,14 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="suppress two first-step inputs to force a disclosed live replan",
     )
+    parser.add_argument(
+        "--record-safe-hub-choice",
+        action="store_true",
+        help=(
+            "with --destination home, bind Pallet home versus Viridian Center as an "
+            "unassigned strategic safe-hub calibration choice"
+        ),
+    )
     args = parser.parse_args(argv)
 
     rom_path = resolve_rom_path(args.rom)
@@ -253,6 +274,54 @@ def main(argv: list[str] | None = None) -> int:
         start_yx,
         destination.value,
     )
+    strategic_choice = None
+    if args.record_safe_hub_choice:
+        if args.destination != "home":
+            raise PalletViridianRouteProbeError(
+                "safe-hub calibration requires --destination home"
+            )
+        center_plan = plan_route(
+            macro,
+            local_graphs,
+            MapId.PALLET_TOWN.value,
+            start_yx,
+            MapId.VIRIDIAN_POKECENTER.value,
+        )
+        bindings = (
+            DestinationRouteBinding.available(
+                "pokemon.red:destination:pallet_home",
+                (
+                    StrategicNavigationTag.RECOVERY,
+                    StrategicNavigationTag.SAFE_HUB,
+                ),
+                plan,
+            ),
+            DestinationRouteBinding.available(
+                "pokemon.red:destination:viridian_center",
+                (
+                    StrategicNavigationTag.RECOVERY,
+                    StrategicNavigationTag.SAFE_HUB,
+                ),
+                center_plan,
+            ),
+        )
+        if plan.cost >= center_plan.cost:
+            raise PalletViridianRouteProbeError(
+                "home is no longer the lower-cost available safe hub"
+            )
+        strategic_choice = bind_strategic_navigation_decision(
+            episode_id="pallet-safe-hub-calibration-2026-08-11",
+            decision_index=0,
+            root_lineage_id="pallet-safe-hub-diagnostic-root",
+            partition="unassigned",
+            actor="deterministic_teacher",
+            policy_id="lowest-route-cost-safe-hub-v1",
+            semantic_need_tags=(StrategicNavigationTag.RETURN_TO_SAFETY,),
+            origin_semantic_tags=(StrategicNavigationTag.OVERWORLD,),
+            origin_region_ref="pokemon.red:region:pallet",
+            bindings=bindings,
+            selected_destination_ref="pokemon.red:destination:pallet_home",
+        )
     if not plan.steps:
         raise PalletViridianRouteProbeError("the composed route contains no movement")
     before_artifacts = _adjacent_artifacts(rom_path)
@@ -347,9 +416,45 @@ def main(argv: list[str] | None = None) -> int:
         raise PalletViridianRouteProbeError(
             "the no-save probe changed a ROM-adjacent artifact"
         )
+    final_map_id = final.map_id
+    final_x = final.player_x
+    final_y = final.player_y
+    if final_map_id is None or final_x is None or final_y is None:
+        raise PalletViridianRouteProbeError("the final route position is incomplete")
+
+    strategic_payload = None
+    if strategic_choice is not None:
+        strategic_record = strategic_choice.successful_record(report)
+        trajectory_decision = strategic_navigation_decision_record(
+            strategic_record,
+            SemanticSnapshot(
+                game_id="pokemon.red",
+                mode="overworld",
+                facts=("need:return_to_safety",),
+                features={"candidate_count": len(strategic_record.decision.candidates)},
+            ),
+            step_index=0,
+        )
+        trajectory_outcome = strategic_navigation_outcome_event(
+            strategic_record,
+            step_index=len(report.executed_steps),
+        )
+        strategic_payload = {
+            "scope": "unassigned calibration; excluded from model development",
+            "selection_rule": "lowest route cost among two available safe hubs",
+            "record": strategic_record.public_dict(),
+            "identity_free_trajectory_decision": trajectory_decision.to_dict(),
+            "identity_free_trajectory_outcome": trajectory_outcome.to_dict(),
+            "numeric_feature_schema_frozen": False,
+            "promotion_eligible": False,
+        }
 
     payload = {
-        "schema": "pallet-viridian-closed-loop-route-probe-v2",
+        "schema": (
+            "pallet-strategic-safe-hub-route-probe-v1"
+            if strategic_payload is not None
+            else "pallet-viridian-closed-loop-route-probe-v2"
+        ),
         "recorded_on": args.recorded_on,
         "status": "ok",
         "rom": fingerprint.public_dict(),
@@ -385,13 +490,14 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "wild_flees": [flee.public_dict() for flee in wild_handler.evidence],
-        "final_map": {"id": int(final.map_id), "name": MapId(final.map_id).name},
-        "final_yx": [final.player_y, final.player_x],
+        "final_map": {"id": int(final_map_id), "name": MapId(final_map_id).name},
+        "final_yx": [final_y, final_x],
         "planned_actions": len(plan.actions),
         "actions_executed_during_plan": plan_actions_executed,
         "frames_executed": frames_executed,
         "controller_released": controller_released,
         "rom_adjacent_artifacts_unchanged": artifacts_unchanged,
+        "strategic_navigation": strategic_payload,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

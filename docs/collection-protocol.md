@@ -478,13 +478,13 @@ The prospective campaign published by this version has these independent golden 
 | Field | Frozen value |
 | --- | --- |
 | Registry bytes | `7000` |
-| Registry SHA-256 | `8f8041a708e7cc131255ee7cf0f9bee4b8a7b79755a3cd056bb004e08fb0fce1` |
-| Source bundle SHA-256 | `a8ff02b3f24110527afc7a24356c59d2e2eed252468af122bae60c30fd43d354` |
+| Registry SHA-256 | `defc6f4d4388140633b438c64fd49ebd25ec99c7e8b37c2170e6b4e906cd971f` |
+| Source bundle SHA-256 | `098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e` |
 | Behavior configuration SHA-256 | `bdca346b2cbb97cf43d79a8cf7f0d8eab90dacfb6610bb5c2f97028435f985b8` |
 | Objective graph SHA-256 | `d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de` |
-| Teacher execution SHA-256 | `dc749d106a42cb276f819674d2ca496351692ea65716bb232eddcb371ea76f33` |
+| Teacher execution SHA-256 | `704d7ad79b7afada760d27c82aa7d41b1f534c691faa20813fbecd59665a59a6` |
 | Dry-run schedule SHA-256 | `8f74fcc50610702ace7f44b3ed3b44409f38cba96d6fe195ef2ae2c497adbf67` |
-| Slot `01` assignment ID | `71406825790f789ba7c7efba4784cc4df35aba14e140112aa5ba77addd9d4420` |
+| Slot `01` assignment ID | `bbd8c7b4c61f6feeb7b00db54c6dcca114d40c621a110759b33142586d6355be` |
 
 The tests independently pin these values so an accidental registry, source, behavior, objective,
 or assignment change fails before collection.
