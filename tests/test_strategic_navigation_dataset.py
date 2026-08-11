@@ -4,6 +4,7 @@ import json
 from collections.abc import Iterator
 from copy import deepcopy
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -27,7 +28,12 @@ from pokemon_red_completion.strategic_navigation_dataset import (
     StrategicNavigationDataset,
     StrategicNavigationDatasetError,
     audit_strategic_navigation_partitions,
+    load_assigned_strategic_navigation_episode,
     load_strategic_navigation_episode,
+)
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    parse_strategic_navigation_registry,
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
     STRATEGIC_NAVIGATION_DECISION_TYPE,
@@ -36,6 +42,8 @@ from pokemon_red_completion.strategic_navigation_trajectory import (
     strategic_navigation_outcome_event,
 )
 from pokemon_red_completion.trajectory import InMemoryTrajectorySink, SemanticSnapshot
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class _Reader:
@@ -48,27 +56,34 @@ class _Reader:
         episode_id: str = "episode-root-train-001",
         root_lineage_id: str = "root-train-001",
         partition: str = "train",
+        policy_id: str = "strategic-teacher-v1",
+        assigned_metadata: dict[str, object] | None = None,
     ) -> None:
         self.streams = streams
         self.episode_id = episode_id
         self.root_lineage_id = root_lineage_id
         self.partition = partition
+        self.policy_id = policy_id
+        self.assigned_metadata = assigned_metadata
 
     def read_header(self) -> dict[str, object]:
+        metadata: dict[str, object] = {
+            "policy": {
+                "actor": "deterministic_teacher",
+                "policy_id": self.policy_id,
+            },
+            "split": {
+                "root_lineage_id": self.root_lineage_id,
+                "partition": self.partition,
+            },
+        }
+        if self.assigned_metadata is not None:
+            metadata.update(deepcopy(self.assigned_metadata))
         return {
             "record_type": "episode",
             "trajectory_schema": "pokemon.trajectory.v1",
             "episode_id": self.episode_id,
-            "metadata": {
-                "policy": {
-                    "actor": "deterministic_teacher",
-                    "policy_id": "strategic-teacher-v1",
-                },
-                "split": {
-                    "root_lineage_id": self.root_lineage_id,
-                    "partition": self.partition,
-                },
-            },
+            "metadata": metadata,
         }
 
     def iter_stream(self, stream: str) -> Iterator[dict[str, object]]:
@@ -83,12 +98,13 @@ def _record(
     partition: str = "train",
     actor: str = "deterministic_teacher",
     policy_id: str = "strategic-teacher-v1",
+    episode_id: str | None = None,
     need_tags: tuple[StrategicNavigationTag, ...] = (
         StrategicNavigationTag.ADVANCE_STORY,
     ),
 ) -> StrategicNavigationRecord:
     decision = StrategicNavigationDecision(
-        episode_id=f"episode-{root}",
+        episode_id=episode_id or f"episode-{root}",
         decision_index=index,
         root_lineage_id=root,
         partition=partition,
@@ -158,6 +174,9 @@ def _reader(
     *,
     root: str = "root-train-001",
     partition: str = "train",
+    episode_id: str | None = None,
+    policy_id: str = "strategic-teacher-v1",
+    assigned_metadata: dict[str, object] | None = None,
     statuses: tuple[NavigationOutcomeStatus, ...] = (
         NavigationOutcomeStatus.SUCCEEDED,
         NavigationOutcomeStatus.FAILED,
@@ -170,7 +189,14 @@ def _reader(
         location="pokemon.test:area:origin",
     )
     records = tuple(
-        _record(index, status, root=root, partition=partition)
+        _record(
+            index,
+            status,
+            root=root,
+            partition=partition,
+            episode_id=episode_id,
+            policy_id=policy_id,
+        )
         for index, status in enumerate(statuses)
     )
     return _Reader(
@@ -191,9 +217,11 @@ def _reader(
                 for index, record in enumerate(records)
             ],
         },
-        episode_id=f"episode-{root}",
+        episode_id=episode_id or f"episode-{root}",
         root_lineage_id=root,
         partition=partition,
+        policy_id=policy_id,
+        assigned_metadata=assigned_metadata,
     )
 
 
@@ -416,6 +444,94 @@ def test_authenticated_episode_reader_joins_decisions_to_consumed_outcomes() -> 
         "numeric_feature_schema_frozen": False,
         "promotion_eligible": False,
     }
+
+
+def test_assigned_reader_requires_committed_metadata_and_seals_test() -> None:
+    registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    local_assignment = registry.learning_assignment("red-strategic-v1-01-train")
+    with pytest.raises(StrategicNavigationDatasetError, match="committed source"):
+        load_assigned_strategic_navigation_episode(
+            _reader(),
+            assignment=local_assignment,
+        )
+
+    assignment = replace(local_assignment, source_commit="a" * 40)
+    reader = _reader(
+        root=assignment.root_lineage_id,
+        partition=assignment.partition,
+        episode_id=assignment.episode_id,
+        policy_id="qualified-completion-order-v1",
+        assigned_metadata=assignment.episode_metadata(),
+        statuses=(NavigationOutcomeStatus.SUCCEEDED,),
+    )
+
+    dataset = load_assigned_strategic_navigation_episode(
+        reader,
+        assignment=assignment,
+    )
+
+    assert dataset.episode_id == assignment.episode_id
+    assert dataset.root_lineage_id == assignment.root_lineage_id
+    assert dataset.partition == "train"
+
+    test_assignment = replace(
+        registry.assignment("red-strategic-v1-08-test"),
+        source_commit="b" * 40,
+    )
+    with pytest.raises(StrategicNavigationDatasetError, match="must remain unopened"):
+        load_assigned_strategic_navigation_episode(
+            reader,
+            assignment=test_assignment,
+        )
+
+
+@pytest.mark.parametrize(
+    "drifted_block",
+    ("collection", "policy", "source", "source_bundle_sha256", "split"),
+)
+def test_assigned_reader_rejects_each_drifted_identity_block(
+    drifted_block: str,
+) -> None:
+    registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    assignment = replace(
+        registry.learning_assignment("red-strategic-v1-01-train"),
+        source_commit="a" * 40,
+    )
+    metadata = assignment.episode_metadata()
+    if drifted_block == "collection":
+        collection = metadata["collection"]
+        assert isinstance(collection, dict)
+        collection["run_id"] = "red-strategic-v1-02-train"
+    elif drifted_block == "policy":
+        policy = metadata["policy"]
+        assert isinstance(policy, dict)
+        policy["policy_id"] = "spoofed-policy-v1"
+    elif drifted_block == "source":
+        metadata["source"] = {"git_commit": "b" * 40}
+    elif drifted_block == "source_bundle_sha256":
+        metadata["source_bundle_sha256"] = "b" * 64
+    else:
+        split = metadata["split"]
+        assert isinstance(split, dict)
+        split["partition"] = "validation"
+    reader = _reader(
+        root=assignment.root_lineage_id,
+        partition=assignment.partition,
+        episode_id=assignment.episode_id,
+        policy_id="qualified-completion-order-v1",
+        assigned_metadata=metadata,
+        statuses=(NavigationOutcomeStatus.SUCCEEDED,),
+    )
+
+    with pytest.raises(StrategicNavigationDatasetError, match="differs"):
+        load_assigned_strategic_navigation_episode(
+            reader,
+            assignment=assignment,
+        )
 
 
 def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> None:

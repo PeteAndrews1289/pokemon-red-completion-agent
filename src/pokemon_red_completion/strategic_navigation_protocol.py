@@ -211,6 +211,26 @@ class StrategicNavigationAssignment:
             },
         }
 
+    def episode_metadata(self) -> dict[str, object]:
+        """Return the authenticated header blocks required by dataset loading."""
+
+        if self.source_commit is None:
+            raise StrategicNavigationProtocolError(
+                "strategic episode metadata requires a committed assignment"
+            )
+        collection = self.metadata_dict()
+        split = collection.pop("split")
+        return {
+            "collection": collection,
+            "policy": {
+                "actor": STRATEGIC_NAVIGATION_ACTOR,
+                "policy_id": STRATEGIC_NAVIGATION_POLICY_ID,
+            },
+            "source": {"git_commit": self.source_commit},
+            "source_bundle_sha256": self.source_bundle_sha256,
+            "split": split,
+        }
+
 
 @dataclass(frozen=True, slots=True)
 class StrategicNavigationCollectionRegistry:

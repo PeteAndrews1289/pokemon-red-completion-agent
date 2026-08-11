@@ -135,6 +135,12 @@ accepts arbitrary `train`/`validation` strings; the exact committed assignment m
 lineage, partition, actor and policy. All strategic counts remain zero because no slot—including
 the rehearsal—has run.
 
+The matching output gate is now implemented too. A counted episode header must reproduce the
+assignment's exact collection, source bundle, source commit, split, actor and policy identity before
+its decision/outcome stream can load. Local-only assignments, drifted metadata and test episodes
+opened through the normal learning path fail closed. This completes the prospective data-integrity
+shell; the next code belongs in the full teacher collector, not another registry layer.
+
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
 that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before

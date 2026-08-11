@@ -83,6 +83,8 @@ Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935`, route-bindi
 - external interruption censoring, including power loss;
 - authenticated private trajectory decision/outcome records;
 - a strict reader that rejects identity leakage, schema drift and join tampering;
+- assignment-authenticated episode loading that rejects local-only provenance, collection/source/
+  split/policy drift and premature test access;
 - recursively immutable in-memory policy examples after canonical parsing; and
 - whole-root split and semantic-coverage audits;
 - authenticated loaded-episode auditing without discarding replan, interruption, resource or
@@ -133,7 +135,10 @@ the complete portable tag/outcome vocabulary and the fields forbidden from polic
 The binding layer now refuses arbitrary counted provenance. A `train`, `validation` or `test`
 decision requires its exact committed assignment; episode, lineage, partition, actor and policy
 must all agree. The learning accessor refuses test roots. This prevents the collection counter from
-being increased by changing a string in a calibration script. Current status is **train 0/5,
+being increased by changing a string in a calibration script. After collection, the assigned
+episode loader independently matches the header's collection, source bundle, source commit, split,
+actor and policy to that assignment before applying the strict decision/outcome join. It refuses
+local-only assignments and keeps test episodes sealed by default. Current status is **train 0/5,
 validation 0/2, test 0/5, rehearsal 0/1**.
 
 ## Code and CI audit
@@ -141,7 +146,7 @@ validation 0/2, test 0/5, rehearsal 0/1**.
 At this checkpoint the repository contains 152 source modules and 173 test modules. The local CI
 equivalent produced:
 
-- **2,571 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,577 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
@@ -154,10 +159,10 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `cf238c5147bc2087146999a93d20092572860f3a45d517ce1077691d5f2d27df` |
-| Source bundle SHA-256 | `5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d` |
-| Teacher execution SHA-256 | `c4607c031128f2e31f87fe804856e74e369fd3e851634885e7c71e78897933f8` |
-| Slot assignment SHA-256 | `421aa6ecb6a11b3f34a63e6ad27833c758a2a8c7d3ea64111bf04fc5a1244b2d` |
+| Registry SHA-256 | `e8335bbfb23c7304a0e4738975ef44d9b3f9ae36bf2e9e7f61633e4d5b935e8d` |
+| Source bundle SHA-256 | `2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df` |
+| Teacher execution SHA-256 | `3d8bc4d0c002213e8a0f21ec7aa212b506b831b1bee98b3ae5ee64ad42d214bd` |
+| Slot assignment SHA-256 | `bda259bd0a3971589941b65d79b6d0d7a7352956d458ac34453a81392e2a1652` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -166,25 +171,25 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `b83d0b650801058db17d5ec250b0ec3b72d5db566cf5274cac3644a14ac830c2` |
+| Strategic registry SHA-256 | `b74a88907c5eb308fa7086a67cfecc19c2663e4184978080c15449719e54e91e` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `ec32fec4e8fddd11383ee60ebfdff7e86fa2e1af616fddef659b2f60777640a5` |
-| First train assignment SHA-256 | `9dfba88942adc178fe12b897d2a847ceea735a8b9a7251a44403fa17f037d88e` |
+| Strategic teacher execution SHA-256 | `d544efb040f5c83da654df07db56b126867417180abea3ac314dc88151e24451` |
+| First train assignment SHA-256 | `44e79be73347b9f2a8385381174e00089d0cd818d4b591dc6d4bc53fd0b8400a` |
 
 ## Ranked gaps
 
 ### P0 — the collection harness is not yet connected to the full teacher
 
-The schema, live binding, split registry and audit are ready, but the useful dataset denominator
-remains zero. The
+The schema, live binding, split registry, strict assigned-episode loader and audit are ready, but
+the useful dataset denominator remains zero. The
 safe-hub calibration answers an easy route-cost question; the Fuchsia calibration is a genuine
 branch that still agrees with cost; and the Celadon calibration proves one semantic choice can
 reject a much shorter route. All three are development roots and none can enter training or
 validation. Synthetic choices such as selecting between two arbitrary Viridian buildings would
 make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
-collection or optional reward destinations. Preassignment is complete; full-run instrumentation and
-the one allowed rehearsal are next.
+collection or optional reward destinations. Preassignment and output authentication are complete;
+full-run instrumentation and the one allowed rehearsal are next.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will

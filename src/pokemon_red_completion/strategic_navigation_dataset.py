@@ -35,6 +35,11 @@ from pokemon_red_completion.strategic_navigation import (
     StrategicReplanReason,
     StrategicResourceKind,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_ACTOR,
+    STRATEGIC_NAVIGATION_POLICY_ID,
+    StrategicNavigationAssignment,
+)
 from pokemon_red_completion.strategic_navigation_trajectory import (
     STRATEGIC_NAVIGATION_DECISION_TYPE,
     STRATEGIC_NAVIGATION_OUTCOME_KIND,
@@ -527,6 +532,64 @@ def load_strategic_navigation_episode(
         policy_id=policy_id,
         examples=tuple(examples),
     )
+
+
+def load_assigned_strategic_navigation_episode(
+    reader: EpisodeReader,
+    *,
+    assignment: StrategicNavigationAssignment,
+    allow_test: bool = False,
+) -> CollectedStrategicNavigationDataset:
+    """Load one episode only when its header matches a committed root assignment."""
+
+    if not isinstance(assignment, StrategicNavigationAssignment):
+        raise TypeError("assignment must be a StrategicNavigationAssignment")
+    if assignment.source_commit is None:
+        raise StrategicNavigationDatasetError(
+            "assigned strategic episode requires committed source identity"
+        )
+    if assignment.partition == "test" and not allow_test:
+        raise StrategicNavigationDatasetError(
+            "the strategic navigation test partition must remain unopened"
+        )
+    header = _mapping(reader.read_header(), subject="episode header")
+    metadata = _mapping(header.get("metadata"), subject="episode metadata")
+    expected = assignment.episode_metadata()
+    for key in ("policy", "source", "source_bundle_sha256", "split"):
+        if metadata.get(key) != expected[key]:
+            raise StrategicNavigationDatasetError(
+                f"assigned strategic episode {key} differs"
+            )
+    collection = _mapping(
+        metadata.get("collection"),
+        subject="strategic episode collection metadata",
+    )
+    expected_collection = _mapping(
+        expected["collection"],
+        subject="expected strategic collection metadata",
+    )
+    if collection != expected_collection:
+        raise StrategicNavigationDatasetError(
+            "assigned strategic episode collection identity differs"
+        )
+    dataset = load_strategic_navigation_episode(reader)
+    if (
+        dataset.episode_id,
+        dataset.root_lineage_id,
+        dataset.partition,
+        dataset.actor,
+        dataset.policy_id,
+    ) != (
+        assignment.episode_id,
+        assignment.root_lineage_id,
+        assignment.partition,
+        STRATEGIC_NAVIGATION_ACTOR,
+        STRATEGIC_NAVIGATION_POLICY_ID,
+    ):
+        raise StrategicNavigationDatasetError(
+            "assigned strategic episode provenance differs"
+        )
+    return dataset
 
 
 def _policy_input(value: object, *, subject: str) -> dict[str, object]:

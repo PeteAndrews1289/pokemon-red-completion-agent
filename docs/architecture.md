@@ -117,8 +117,10 @@ The collection split is now a separate authenticated authority. A canonical regi
 train, two validation and five sealed test roots, plus one rehearsal, before execution. Each root is
 bound to an exact source bundle, teacher configuration, objective graph, semantic decision contract
 and timing schedule. A non-unassigned decision cannot be constructed from caller-supplied strings;
-it must match the committed assignment. The full teacher still needs to emit these strategic
-decision/outcome pairs before any root can be consumed.
+it must match the committed assignment. The output loader separately requires the episode header's
+collection, source, split and policy blocks to match the same assignment, then applies the strict
+one-decision/one-outcome join; the normal learning path cannot open test episodes. The full teacher
+still needs to emit these strategic decision/outcome pairs before any root can be consumed.
 
 The candidate ranker is deliberately permutation-equivariant. Its 27 normalized features exclude
 species IDs, move IDs, party-slot identity, map IDs, area names, memory addresses, and route

@@ -81,11 +81,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "b83d0b650801058db17d5ec250b0ec3b72d5db566cf5274cac3644a14ac830c2"
+        == "b74a88907c5eb308fa7086a67cfecc19c2663e4184978080c15449719e54e91e"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d"
+        == "2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -93,7 +93,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "ec32fec4e8fddd11383ee60ebfdff7e86fa2e1af616fddef659b2f60777640a5"
+        == "d544efb040f5c83da654df07db56b126867417180abea3ac314dc88151e24451"
     )
     assert digest == {
         "bytes": len(payload),
@@ -126,6 +126,12 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
     assert "/" not in json.dumps(metadata, sort_keys=True)
     with pytest.raises(StrategicNavigationProtocolError, match="digest differs"):
         replace(first, assignment_id="0" * 64)
+    with pytest.raises(StrategicNavigationProtocolError, match="committed assignment"):
+        first.episode_metadata()
+    committed = replace(first, source_commit="a" * 40)
+    episode_metadata = committed.episode_metadata()
+    assert episode_metadata["source"] == {"git_commit": "a" * 40}
+    assert episode_metadata["split"] == metadata["split"]
 
 
 def test_parser_rejects_noncanonical_duplicate_or_drifted_registry() -> None:

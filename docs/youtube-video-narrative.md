@@ -90,8 +90,10 @@ Add a short post-credit correction: the code still accepted a caller typing `par
 Show that line being rejected, then reveal the canonical split card: **5 TRAIN / 2 VALIDATION / 5
 SEALED TEST / 1 REHEARSAL**. Animate a unique timing schedule and content-derived lineage ID locking
 onto every root. End on **0/5 TRAIN — 0/2 VALIDATION** and say: **“Preregistering data does not give
-you data. It makes the data you collect next believable.”** The next executable task is to connect
-these assignments to the clean-power teacher and qualify the rehearsal before opening train root 1.
+you data. It makes the data you collect next believable.”** Add one final lock on the other side of
+the run: the private episode must carry the same assignment, source, split and policy or the loader
+rejects it; test stays sealed by default. The next executable task is to connect these assignments
+to the clean-power teacher and qualify the rehearsal before opening train root 1.
 
 ## Resource episode: the route outlived its Repel
 

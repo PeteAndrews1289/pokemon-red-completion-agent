@@ -82,8 +82,10 @@ validation and five sealed test, each with a distinct battle-timing schedule. On
 rehearsal is the only root allowed for harness debugging. Assignment IDs bind registry, source,
 teacher execution, seed, schedule and partition; counted strategic decisions must match the exact
 episode, lineage, actor and policy. Existing opened checkpoints cannot be relabeled, and the normal
-learning accessor refuses the test partition. The counts remain train 0/5 and validation 0/2. The
-important advance is that the next data point can now be *prospective*.
+learning accessor refuses the test partition. The recorded episode must then reproduce the same
+collection, source, split and policy identity before its decisions and outcomes can load. A local
+assignment or changed run metadata is rejected rather than counted. The counts remain train 0/5
+and validation 0/2. The important advance is that the next data point can now be *prospective*.
 
 ## August 10: the route outlived its Repel
 

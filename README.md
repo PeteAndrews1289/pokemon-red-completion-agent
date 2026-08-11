@@ -58,7 +58,9 @@
 > A separate prospective collection registry now preassigns five whole power-on train roots, two
 > validation roots and five sealed test roots, plus one uncounted rehearsal. Distinct timing
 > schedules are frozen before outcomes; counted decision binding rejects invented partitions or
-> lineage IDs. No slot has been executed, so the honest collected count remains zero.
+> lineage IDs. The assigned-episode loader also verifies the exact collection, source, split and
+> policy header before accepting an output, and keeps test episodes sealed by default. No slot has
+> been executed, so the honest collected count remains zero.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
@@ -154,8 +156,9 @@ Prospective collection is now partitioned before execution: five whole roots for
 validation and five sealed for eventual test, with a separate rehearsal seed. The registry binds
 each root to an exact source bundle, teacher execution, portable semantic contract and distinct
 battle-timing schedule. Non-unassigned strategic decisions cannot be constructed without the exact
-committed assignment, and the learning accessor refuses the test partition. All 12 counted slots
-and the rehearsal remain unopened.
+committed assignment. Recorded outputs must independently match that assignment's collection,
+source, split and policy identity; the learning path refuses the test partition. All 12 counted
+slots and the rehearsal remain unopened.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
