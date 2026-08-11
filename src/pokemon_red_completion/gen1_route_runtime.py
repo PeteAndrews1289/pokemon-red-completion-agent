@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol
 
@@ -41,6 +42,7 @@ class Gen1TraversalObserver:
 
     reader: PokemonRedStateReader
     hazard_projector: Gen1HazardProjector | None = None
+    capability_projector: Callable[[RawGameState], frozenset[str]] | None = None
 
     def observe(self) -> TraversalSnapshot:
         raw = self.reader.read()
@@ -66,6 +68,17 @@ class Gen1TraversalObserver:
             if interruption is not None or self.hazard_projector is None
             else self.hazard_projector.observe_hazards(raw)
         )
+        projected_capabilities = (
+            self.capability_projector(raw)
+            if self.capability_projector is not None
+            else frozenset()
+        )
+        if not isinstance(projected_capabilities, frozenset) or any(
+            not isinstance(item, str) or not item for item in projected_capabilities
+        ):
+            raise RouteExecutionError(
+                "Gen I capability projector returned an invalid capability set"
+            )
         return TraversalSnapshot(
             map_id=raw.map_id,
             at=(raw.player_y, raw.player_x),
@@ -74,7 +87,7 @@ class Gen1TraversalObserver:
             mode=movement_mode.traversal_mode,
             occupied=occupied,
             hazards=hazards,
-            capabilities=gen1_story_capabilities(raw),
+            capabilities=gen1_story_capabilities(raw).union(projected_capabilities),
             resources=(gen1_repel_resource(raw),),
             last_outside_map=self.reader.read_retained_outside_map(),
         )

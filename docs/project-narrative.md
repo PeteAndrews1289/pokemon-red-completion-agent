@@ -24,6 +24,14 @@ That last zero is the point: the registry reports **48 planned situations / 0 au
 contexts / collection closed**. A prospective benchmark should be capable of proving the model
 wrong before it is allowed to produce a flattering score.
 
+The short execution boundary now exists. The important change is not another route script; it is
+an honest experimental unit. One assignment binds a public quest frontier to an exact private save
+digest and one published teacher. A read-only phase proves all declared destinations can be planned
+before any one-shot artifact is opened. The write phase records the strategic choice first, moves
+only toward the selected objective's approach, records one outcome and reopens the final artifact
+to prove it contains exactly one decision. The first live run is still pending, so the story does
+not yet claim a collected row. The twelve test situations remain sealed.
+
 ## August 11: nine rows became three questions
 
 The repaired rehearsal earned a clean green ending, but the next audit asked a more uncomfortable

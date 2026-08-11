@@ -13,9 +13,10 @@ observed:
 | test | 12 | sealed |
 
 The registry is a plan, not a dataset. It reports zero authenticated live policy contexts and keeps
-collection closed. A later emulator rehearsal must still reach every declared frontier, measure
-the genuine routes, join the teacher's selection to an outcome, and demonstrate that the 48 rows
-remain distinct after identity and candidate order are removed.
+collection closed. A later emulator rehearsal must still reach every learning frontier, measure
+the genuine routes, join the teacher's selection to an outcome, and demonstrate that the 36
+train/validation rows remain distinct after identity and candidate order are removed. The 12 test
+frontiers stay sealed until final evaluation; running them in a rehearsal would open the test set.
 
 ## Where the situations came from
 
@@ -75,15 +76,32 @@ choose replacements.
 
 ## What remains before training
 
-1. Add an authenticated scenario-execution assignment that binds one registry row to a source
-   commit, private capture digest, trajectory episode and one-attempt outcome.
-2. Create or derive clean source captures for the declared alternate progress frontiers. A capture
-   is ROM-derived private material and never enters the repository.
-3. Run an uncounted 48-scenario rehearsal. Audit measured uniqueness, candidate order, cost
-   discordance, route outcomes, failures and interruptions.
-4. Freeze the passing source and registry. Collect train and validation once; keep test unopened.
+1. **Complete in code:** authenticated rehearsal assignments bind one non-test registry row to the
+   committed execution, exact private capture envelope/state and one-shot episode identity.
+2. **Complete in code:** the short executor preflights all candidates before writing, records the
+   choice before movement, consumes one route outcome and strictly reloads exactly one decision.
+3. **Next live gate:** publish the source, run the command's read-only preflight, then execute one
+   uncounted learning scenario. Expand to all 36 train/validation situations only after the first
+   artifact passes strict reload. Captures remain private and never enter the repository.
+4. Audit measured uniqueness, candidate order, the six validation cost-baseline disagreements,
+   route availability and failure/censoring. Only then open one-attempt counted train/validation
+   collection. Keep all 12 test situations sealed until final evaluation.
 5. Fit and compare the first permutation-equivariant scorer on unique contexts, then shadow it in a
    full game before granting bounded route-choice authority.
+
+The command is intentionally two-stage:
+
+```bash
+.venv/bin/python scripts/rehearse_strategic_scenario.py \
+  --scenario-id red-strategic-scenario-v2-001-train \
+  --state "$SCENARIO_STATE" \
+  --private-root "$PRIVATE_ROOT"
+
+# Add --execute only after the read-only preflight reports ready.
+```
+
+It refuses dirty or unpublished source, never writes beside the ROM, and emits no private path in
+its public result or failure message.
 
 The old 703,275-record clean-power rehearsal remains the end-to-end integration proof. The old
 5/2/5 whole-root registry remains historical and unauthorized. Neither is relabeled into the new

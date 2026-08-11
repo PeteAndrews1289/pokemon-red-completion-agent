@@ -33,6 +33,14 @@ complete; catching, storage, evolution scheduling and trade orchestration are no
 
 ## Learning-boundary episode: do not train the shortest path
 
+Add the short-scenario handoff as the next visual beat. Show a save-state fingerprint, scenario
+commitment and published-source fingerprint converging into one gray **UNCOUNTED** card. Before the
+card turns green, show every candidate route being planned in a read-only preflight. Then animate
+the choice record landing on disk before the first movement arrow, followed by exactly one outcome
+and an immediate manifest reload. Keep the twelve test cards face down. The line is: **“A short run
+is useful only if it is as hard to relabel or rerun as the full experiment.”** Until a live episode
+passes, label this panel **HARNESS BUILT / LIVE ROWS 0**.
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

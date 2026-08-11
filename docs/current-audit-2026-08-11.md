@@ -12,10 +12,25 @@ A canonical v2 scenario registry now fixes 48 graph-legal frontiers at 24 train,
 binary frontiers remain binary. Six validation situations are preregistered baseline-challenge
 hypotheses by placing the origin in a region with a legal non-teacher goal.
 
-This is prospective design evidence only. Live authenticated scenario contexts remain zero and
-collection remains closed. The next code boundary is a source/capture/episode-bound scenario
-executor, followed by one uncounted 48-scenario rehearsal. See the
-[scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
+The source/capture/episode boundary now exists. A scenario rehearsal assignment is unassigned by
+construction and commits to the registry/scenario digests, exact private checkpoint envelope and
+state digest, committed source bundle, source commit and teacher execution. A reviewed catalog maps
+all 18 candidate objectives to Red approach maps and seven allowed origin regions. Reaching an
+approach is never represented as completing the objective.
+
+The official short-run command defaults to read-only preflight. It reloads the capture, validates
+its exact objective frontier and coarse origin, plans every declared candidate with live field/story
+capabilities, and refuses to open a private episode unless all candidates are executable. With
+`--execute`, the one-shot recorder writes the choice before movement, executes only the selected
+approach, consumes one outcome and strictly reloads the sealed artifact to require exactly one
+successful strategic row. Test scenarios remain inaccessible through both assignment and route
+lookup.
+
+This is still prospective implementation evidence: no live scenario episode has run, authenticated
+live contexts remain zero and collection remains closed. After publication, the next boundary is
+one read-only preflight and one uncounted learning-scenario execution. The full learning rehearsal
+is 24 train plus 12 validation situations; the 12 test situations remain sealed until final
+evaluation. See the [scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
 
 ## Experiment-design stop after the repaired rehearsal
 

@@ -64,6 +64,9 @@ STRATEGIC_NAVIGATION_REHEARSAL_SCHEMA = (
 STRATEGIC_NAVIGATION_REHEARSAL_ASSIGNMENT_SCHEMA = (
     "pokemon-strategic-navigation-rehearsal-assignment-v1"
 )
+STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_ASSIGNMENT_SCHEMA = (
+    "pokemon-strategic-navigation-scenario-rehearsal-assignment-v1"
+)
 STRATEGIC_NAVIGATION_CONTRACT_SCHEMA = "pokemon-strategic-navigation-contract-v1"
 
 STRATEGIC_NAVIGATION_COLLECTION_ID = "red-strategic-navigation-v1"
@@ -77,6 +80,10 @@ STRATEGIC_NAVIGATION_REHEARSAL_ID = "red-strategic-navigation-rehearsal-v1"
 STRATEGIC_NAVIGATION_REHEARSAL_SEED = 1_710_001
 STRATEGIC_NAVIGATION_EPISODE_PREFIX = "red-strategic-"
 STRATEGIC_NAVIGATION_REHEARSAL_EPISODE_PREFIX = "red-strat-reh-"
+STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX = "red-scen-reh-"
+STRATEGIC_NAVIGATION_SCENARIO_COLLECTION_ID = (
+    "red-strategic-navigation-scenarios-v2"
+)
 STRATEGIC_NAVIGATION_PRIVATE_EPISODE_ID_MAX_LENGTH = 80
 
 _PARTITION_COUNTS = {"test": 5, "train": 5, "validation": 2}
@@ -360,8 +367,146 @@ class StrategicNavigationRehearsalAssignment:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class StrategicNavigationScenarioRehearsalAssignment:
+    """One source- and capture-bound short-scenario harness rehearsal.
+
+    This assignment is deliberately uncounted.  It lets the live executor and
+    durable trajectory join be falsified without spending a preregistered
+    train or validation situation.  The private store's one-shot episode
+    identity makes the exact scenario/capture/source tuple non-repeatable.
+    """
+
+    collection_id: str
+    registry_sha256: str
+    scenario_id: str
+    scenario_sha256: str
+    scenario_partition: str
+    capture_envelope_sha256: str
+    capture_state_sha256: str
+    checkpoint_id: str
+    assignment_id: str
+    root_lineage_id: str
+    episode_id: str
+    source_bundle_sha256: str
+    teacher_execution_sha256: str
+    source_commit: str
+    partition: str = "unassigned"
+
+    def __post_init__(self) -> None:
+        if self.collection_id != STRATEGIC_NAVIGATION_SCENARIO_COLLECTION_ID:
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal collection differs"
+            )
+        for value, subject in (
+            (self.registry_sha256, "strategic scenario registry digest"),
+            (self.scenario_sha256, "strategic scenario digest"),
+            (self.capture_envelope_sha256, "strategic scenario capture envelope digest"),
+            (self.capture_state_sha256, "strategic scenario capture state digest"),
+            (self.assignment_id, "strategic scenario rehearsal assignment identity"),
+            (self.source_bundle_sha256, "strategic scenario source digest"),
+            (self.teacher_execution_sha256, "strategic scenario execution digest"),
+        ):
+            _sha256(value, subject)
+        _safe_id(self.scenario_id, "strategic scenario identity")
+        _safe_id(self.checkpoint_id, "strategic scenario checkpoint identity")
+        if self.scenario_partition not in _PARTITION_COUNTS:
+            raise StrategicNavigationProtocolError(
+                "strategic scenario source partition differs"
+            )
+        if self.partition != "unassigned":
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal partition must remain unassigned"
+            )
+        if (
+            not isinstance(self.source_commit, str)
+            or _GIT_OID.fullmatch(self.source_commit) is None
+        ):
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal commit differs"
+            )
+        expected_assignment = collection_document_sha256(
+            {
+                "capture_envelope_sha256": self.capture_envelope_sha256,
+                "capture_state_sha256": self.capture_state_sha256,
+                "checkpoint_id": self.checkpoint_id,
+                "collection_id": self.collection_id,
+                "registry_sha256": self.registry_sha256,
+                "scenario_id": self.scenario_id,
+                "scenario_partition": self.scenario_partition,
+                "scenario_sha256": self.scenario_sha256,
+                "schema": STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_ASSIGNMENT_SCHEMA,
+                "source_bundle_sha256": self.source_bundle_sha256,
+                "source_commit": self.source_commit,
+                "teacher_execution_sha256": self.teacher_execution_sha256,
+            }
+        )
+        if self.assignment_id != expected_assignment:
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal assignment digest differs"
+            )
+        if self.root_lineage_id != f"red-scenario-rehearsal-root-{self.assignment_id}":
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal lineage differs"
+            )
+        if self.episode_id != (
+            f"{STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX}"
+            f"{self.assignment_id}"
+        ) or len(self.episode_id) > STRATEGIC_NAVIGATION_PRIVATE_EPISODE_ID_MAX_LENGTH:
+            raise StrategicNavigationProtocolError(
+                "strategic scenario rehearsal episode differs"
+            )
+
+    def metadata_dict(self) -> dict[str, object]:
+        return {
+            "assignment_id": self.assignment_id,
+            "attempt": {
+                "attempts_per_slot": 1,
+                "counted": False,
+                "purpose": "scenario_harness_rehearsal",
+            },
+            "capture": {
+                "checkpoint_id": self.checkpoint_id,
+                "envelope_sha256": self.capture_envelope_sha256,
+                "state_sha256": self.capture_state_sha256,
+            },
+            "collection_id": self.collection_id,
+            "execution": {
+                "source_bundle_sha256": self.source_bundle_sha256,
+                "teacher_execution_sha256": self.teacher_execution_sha256,
+            },
+            "registry_sha256": self.registry_sha256,
+            "scenario": {
+                "partition": self.scenario_partition,
+                "scenario_id": self.scenario_id,
+                "scenario_sha256": self.scenario_sha256,
+            },
+            "split": {
+                "partition": self.partition,
+                "regime": "within_game_authenticated_scenario_rehearsal",
+                "root_lineage_id": self.root_lineage_id,
+            },
+        }
+
+    def episode_metadata(self) -> dict[str, object]:
+        collection = self.metadata_dict()
+        split = collection.pop("split")
+        return {
+            "collection": collection,
+            "policy": {
+                "actor": STRATEGIC_NAVIGATION_ACTOR,
+                "policy_id": STRATEGIC_NAVIGATION_POLICY_ID,
+            },
+            "source": {"git_commit": self.source_commit},
+            "source_bundle_sha256": self.source_bundle_sha256,
+            "split": split,
+        }
+
+
 StrategicNavigationEpisodeAssignment = (
-    StrategicNavigationAssignment | StrategicNavigationRehearsalAssignment
+    StrategicNavigationAssignment
+    | StrategicNavigationRehearsalAssignment
+    | StrategicNavigationScenarioRehearsalAssignment
 )
 
 

@@ -17,9 +17,18 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
+from pokemon_red_completion.collection_protocol import collection_document_sha256
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.quest import QuestGraph
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_SCENARIO_COLLECTION_ID,
+    STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_ASSIGNMENT_SCHEMA,
+    STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX,
+    StrategicNavigationExecution,
+    StrategicNavigationScenarioRehearsalAssignment,
+)
 
 STRATEGIC_SCENARIO_REGISTRY_RELATIVE_PATH = (
     "configs/red-strategic-navigation-scenarios-v2.json"
@@ -34,7 +43,7 @@ STRATEGIC_SCENARIO_REGISTRY_DIGEST_SCHEMA = (
     "pokemon-strategic-navigation-scenario-registry-digest-v2"
 )
 STRATEGIC_SCENARIO_SCHEMA = "pokemon-strategic-navigation-scenario-v2"
-STRATEGIC_SCENARIO_COLLECTION_ID = "red-strategic-navigation-scenarios-v2"
+STRATEGIC_SCENARIO_COLLECTION_ID = STRATEGIC_NAVIGATION_SCENARIO_COLLECTION_ID
 STRATEGIC_SCENARIO_REGIME = "within_game_authenticated_scenario"
 STRATEGIC_SCENARIO_MINIMUM_CANDIDATES = 2
 STRATEGIC_SCENARIO_MAXIMUM_CANDIDATES = 5
@@ -156,6 +165,71 @@ class StrategicNavigationScenarioRegistry:
                 )
             return item
         raise StrategicScenarioProtocolError("unknown strategic scenario")
+
+    def rehearsal_assignment(
+        self,
+        scenario_id: str,
+        *,
+        capture: CapturedProgressEnvelope,
+        execution: StrategicNavigationExecution,
+    ) -> StrategicNavigationScenarioRehearsalAssignment:
+        """Bind one uncounted rehearsal to exact scenario, state and source.
+
+        Test scenarios remain inaccessible through :meth:`scenario`.  Exact
+        equality is intentional: a checkpoint with additional completed
+        objectives is a different decision frontier, not this scenario.
+        """
+
+        if not isinstance(capture, CapturedProgressEnvelope):
+            raise TypeError("capture must be a CapturedProgressEnvelope")
+        if not isinstance(execution, StrategicNavigationExecution):
+            raise TypeError("execution must be a StrategicNavigationExecution")
+        if execution.source_commit is None:
+            raise StrategicScenarioProtocolError(
+                "scenario rehearsal requires committed source identity"
+            )
+        scenario = self.scenario(scenario_id)
+        if frozenset(capture.verified_objective_ids) != frozenset(
+            scenario.completed_objective_ids
+        ):
+            raise StrategicScenarioProtocolError(
+                "capture objective frontier differs from strategic scenario"
+            )
+        envelope_sha256 = canonical_sha256(capture.to_dict())
+        assignment_payload = {
+            "capture_envelope_sha256": envelope_sha256,
+            "capture_state_sha256": capture.state_sha256,
+            "checkpoint_id": capture.checkpoint_id,
+            "collection_id": STRATEGIC_SCENARIO_COLLECTION_ID,
+            "registry_sha256": self.registry_sha256,
+            "scenario_id": scenario.scenario_id,
+            "scenario_partition": scenario.partition,
+            "scenario_sha256": scenario.scenario_sha256,
+            "schema": STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_ASSIGNMENT_SCHEMA,
+            "source_bundle_sha256": execution.source_bundle_sha256,
+            "source_commit": execution.source_commit,
+            "teacher_execution_sha256": execution.teacher_execution_sha256,
+        }
+        assignment_id = collection_document_sha256(assignment_payload)
+        return StrategicNavigationScenarioRehearsalAssignment(
+            collection_id=STRATEGIC_SCENARIO_COLLECTION_ID,
+            registry_sha256=self.registry_sha256,
+            scenario_id=scenario.scenario_id,
+            scenario_sha256=scenario.scenario_sha256,
+            scenario_partition=scenario.partition,
+            capture_envelope_sha256=envelope_sha256,
+            capture_state_sha256=capture.state_sha256,
+            checkpoint_id=capture.checkpoint_id,
+            assignment_id=assignment_id,
+            root_lineage_id=f"red-scenario-rehearsal-root-{assignment_id}",
+            episode_id=(
+                f"{STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX}"
+                f"{assignment_id}"
+            ),
+            source_bundle_sha256=execution.source_bundle_sha256,
+            teacher_execution_sha256=execution.teacher_execution_sha256,
+            source_commit=execution.source_commit,
+        )
 
     def public_summary(self) -> dict[str, object]:
         return {

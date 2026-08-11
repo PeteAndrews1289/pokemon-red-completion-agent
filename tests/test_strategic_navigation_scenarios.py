@@ -3,12 +3,19 @@ from __future__ import annotations
 import hashlib
 import json
 from copy import deepcopy
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    StrategicNavigationProtocolError,
+    parse_strategic_navigation_registry,
+)
 from pokemon_red_completion.strategic_navigation_scenarios import (
     STRATEGIC_SCENARIO_REGISTRY_DIGEST_RELATIVE_PATH,
     STRATEGIC_SCENARIO_REGISTRY_RELATIVE_PATH,
@@ -21,6 +28,7 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = PROJECT_ROOT / STRATEGIC_SCENARIO_REGISTRY_RELATIVE_PATH
 DIGEST_PATH = PROJECT_ROOT / STRATEGIC_SCENARIO_REGISTRY_DIGEST_RELATIVE_PATH
+EXECUTION_REGISTRY_PATH = PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH
 
 
 def _canonical(value: object) -> bytes:
@@ -103,6 +111,117 @@ def test_registry_preregisters_powered_splits_without_claiming_live_rows() -> No
     test = next(item for item in registry.scenarios if item.partition == "test")
     with pytest.raises(StrategicScenarioProtocolError, match="must remain unopened"):
         registry.scenario(test.scenario_id)
+
+
+def test_rehearsal_assignment_binds_scenario_capture_and_committed_source() -> None:
+    registry = parse_strategic_navigation_scenario_registry(REGISTRY_PATH.read_bytes())
+    scenario = registry.learning_scenarios()[0]
+    capture = CapturedProgressEnvelope(
+        state_sha256="1" * 64,
+        checkpoint_id="scenario-capture-001",
+        checkpoint_label="private scenario boundary",
+        checkpoints_completed=3,
+        checkpoints_total=40,
+        verified_objective_ids=scenario.completed_objective_ids,
+    )
+    execution_registry = parse_strategic_navigation_registry(
+        EXECUTION_REGISTRY_PATH.read_bytes()
+    )
+    execution = replace(execution_registry.execution, source_commit="2" * 40)
+
+    assignment = registry.rehearsal_assignment(
+        scenario.scenario_id,
+        capture=capture,
+        execution=execution,
+    )
+
+    assert assignment.partition == "unassigned"
+    assert assignment.scenario_partition == scenario.partition
+    assert assignment.scenario_sha256 == scenario.scenario_sha256
+    assert assignment.capture_state_sha256 == capture.state_sha256
+    assert len(assignment.episode_id) <= 80
+    assert assignment == registry.rehearsal_assignment(
+        scenario.scenario_id,
+        capture=capture,
+        execution=execution,
+    )
+    metadata = assignment.episode_metadata()
+    collection = metadata["collection"]
+    assert isinstance(collection, dict)
+    assert collection["attempt"] == {
+        "attempts_per_slot": 1,
+        "counted": False,
+        "purpose": "scenario_harness_rehearsal",
+    }
+    assert metadata["split"] == {
+        "partition": "unassigned",
+        "regime": "within_game_authenticated_scenario_rehearsal",
+        "root_lineage_id": assignment.root_lineage_id,
+    }
+    assert "/" not in json.dumps(metadata, sort_keys=True)
+
+    with pytest.raises(StrategicNavigationProtocolError, match="digest differs"):
+        replace(assignment, capture_state_sha256="3" * 64)
+    with pytest.raises(StrategicNavigationProtocolError, match="commit differs"):
+        replace(assignment, source_commit=None)  # type: ignore[arg-type]
+
+
+def test_rehearsal_assignment_rejects_frontier_drift_and_sealed_test() -> None:
+    registry = parse_strategic_navigation_scenario_registry(REGISTRY_PATH.read_bytes())
+    scenario = registry.learning_scenarios()[0]
+    execution_registry = parse_strategic_navigation_registry(
+        EXECUTION_REGISTRY_PATH.read_bytes()
+    )
+    execution = replace(execution_registry.execution, source_commit="4" * 40)
+    drifted_capture = CapturedProgressEnvelope(
+        state_sha256="5" * 64,
+        checkpoint_id="scenario-capture-drifted",
+        checkpoint_label="private scenario boundary",
+        checkpoints_completed=4,
+        checkpoints_total=40,
+        verified_objective_ids=(*scenario.completed_objective_ids, "help_bill"),
+    )
+    with pytest.raises(StrategicScenarioProtocolError, match="frontier differs"):
+        registry.rehearsal_assignment(
+            scenario.scenario_id,
+            capture=drifted_capture,
+            execution=execution,
+        )
+
+    test = next(item for item in registry.scenarios if item.partition == "test")
+    test_capture = replace(
+        drifted_capture,
+        verified_objective_ids=test.completed_objective_ids,
+    )
+    with pytest.raises(StrategicScenarioProtocolError, match="must remain unopened"):
+        registry.rehearsal_assignment(
+            test.scenario_id,
+            capture=test_capture,
+            execution=execution,
+        )
+
+
+def test_rehearsal_assignment_requires_committed_execution() -> None:
+    registry = parse_strategic_navigation_scenario_registry(REGISTRY_PATH.read_bytes())
+    scenario = registry.learning_scenarios()[0]
+    execution = parse_strategic_navigation_registry(
+        EXECUTION_REGISTRY_PATH.read_bytes()
+    ).execution
+    capture = CapturedProgressEnvelope(
+        state_sha256="6" * 64,
+        checkpoint_id="scenario-capture-uncommitted",
+        checkpoint_label="private scenario boundary",
+        checkpoints_completed=0,
+        checkpoints_total=40,
+        verified_objective_ids=scenario.completed_objective_ids,
+    )
+
+    with pytest.raises(StrategicScenarioProtocolError, match="committed source"):
+        registry.rehearsal_assignment(
+            scenario.scenario_id,
+            capture=capture,
+            execution=execution,
+        )
 
 
 def test_registry_and_digest_have_stable_public_identities() -> None:

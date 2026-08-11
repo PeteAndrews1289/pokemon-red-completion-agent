@@ -14,6 +14,42 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Short-scenario rehearsal boundary implemented — 2026-08-11
+
+The next execution boundary is implemented but not live-qualified. A new uncounted rehearsal
+assignment commits to the canonical scenario and registry digests, exact private capture envelope
+and state digest, checkpoint identity, committed source bundle and commit, and teacher execution
+identity. Its split is always `unassigned`; the original scenario partition is authenticated
+provenance only. The normal scenario accessor still refuses test, so a test specification cannot
+become a rehearsal assignment.
+
+The reviewed Red adapter covers all 18 candidate objectives and seven origin regions. Destinations
+are approach maps—Bill's House, gyms, gates, Tower, Silph, Mansion and similar handoff points—not
+claims that the corresponding bounded skill has completed. Live preflight requires an exact
+objective frontier, a ready origin boundary and executable routes for every declared candidate
+before it opens a one-shot private episode.
+
+`scripts/rehearse_strategic_scenario.py` is the official two-stage command. Without `--execute` it
+is read-only. With `--execute`, it records the identity-free choice before movement, runs only the
+preregistered teacher's selected approach, records one measured outcome, writes a terminal marker
+and immediately reloads the sealed episode. Promotion fails unless that reload contains exactly one
+successful strategic decision. A complete, failed or interrupted episode identity cannot be reused.
+
+No emulator run was performed in this source state. Live authenticated scenario contexts remain
+zero and collection remains closed. The executable-source change regenerated the prospective
+identities: source bundle `f1b6c605c299d36d6262ef16897a7d32a493e3b17b6e15405be134bf4d3268cc`,
+battle registry `a03ee7a074c910340247bf1783450aaba3cf975f27b8a32b6984b6eaa9b76ca7`,
+historical whole-root strategic registry
+`7c8e74f982a1ef21cb17421ddf350d9903e8f63fb5122632430672439ab0d3ff` and teacher execution
+`f6ab6fee9d17a8d62bc1d421ed20b0960fa20334ebfce94ddf14fa24e6c092c2`. The v2 scenario registry is
+unchanged at `c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`.
+
+Immediate sequence: finish the complete local gate, commit and push, require exact-commit CI, find
+or create a private checkpoint whose verified objective set exactly matches scenario 001, run the
+read-only preflight, and only then spend one uncounted rehearsal episode. Do not edit `src/` during
+that emulator run. Do not rehearse the 12 test situations; the live learning rehearsal covers 24
+train plus 12 validation situations, while test remains sealed for final evaluation.
+
 ## Scenario registry and powered admission gate implemented — 2026-08-11
 
 The design stop below is now executable rather than aspirational. Strategic examples have a
@@ -38,12 +74,11 @@ partition counts and family isolation. The normal accessor refuses test. “Seal
 scenario has been executed or had an outcome observed; their prospective specifications are public,
 as the earlier sealed root seeds were.
 
-The immediate next engineering task is an authenticated short-scenario execution assignment. It
-must bind one registry row to a committed source, a private state digest, one trajectory episode and
-one attempt, then record the live identity-free context and measured outcome. After that, run an
-uncounted 48-scenario rehearsal and require the collected audit—not the registry—to prove 24/12
-unique contexts and six validation baseline disagreements. Do not open train, validation or test
-before the rehearsal passes. See the
+The next live task is to qualify the authenticated short-scenario execution boundary described
+above. After that, build the 36-situation train/validation rehearsal and require the collected
+audit—not the registry—to prove 24/12 unique contexts and six validation baseline disagreements.
+Do not open counted train or validation before the rehearsal passes, and keep test sealed until
+final evaluation. See the
 [scenario audit](docs/strategic-scenario-registry-audit-2026-08-11.md) and
 [design receipt](docs/evidence/strategic-scenario-registry-design-2026-08-11.json).
 

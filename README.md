@@ -74,6 +74,10 @@
 > context-diverse scenario benchmark with paired evaluation—not another five 47-million-frame
 > reruns. No numeric feature schema is frozen and no navigation model is claimed. See the
 > [experiment-design audit](docs/strategic-experiment-design-audit-2026-08-11.md).
+> The short-scenario harness is now implemented: exact capture/source assignment, read-only
+> all-candidate preflight, record-before-movement execution and strict one-decision reload. It has
+> not yet run live, so authenticated scenario rows remain **0** and collection stays closed. The 12
+> test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

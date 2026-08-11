@@ -37,6 +37,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (
     StrategicNavigationAssignment,
     StrategicNavigationEpisodeAssignment,
     StrategicNavigationRehearsalAssignment,
+    StrategicNavigationScenarioRehearsalAssignment,
 )
 
 
@@ -211,7 +212,10 @@ def bind_strategic_navigation_decision(
             pass
         elif not isinstance(
             collection_assignment,
-            StrategicNavigationRehearsalAssignment,
+            (
+                StrategicNavigationRehearsalAssignment,
+                StrategicNavigationScenarioRehearsalAssignment,
+            ),
         ):
             raise StrategicNavigationError(
                 "an unassigned strategic decision can claim only the rehearsal assignment"

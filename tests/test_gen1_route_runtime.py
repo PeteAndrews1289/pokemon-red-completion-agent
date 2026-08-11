@@ -153,6 +153,30 @@ def test_observer_projects_only_observed_open_story_capabilities() -> None:
     )
 
 
+def test_observer_unions_explicit_title_capability_projection() -> None:
+    fake = FakeReader(replace(raw(), status_flags_1=SAFFRON_GUARD_ACCESS_MASK))
+
+    observed = Gen1TraversalObserver(
+        reader_as_real(fake),
+        capability_projector=lambda _raw: frozenset({"field:cut", "field:surf"}),
+    ).observe()
+
+    assert observed.capabilities == frozenset(
+        {"field:cut", "field:surf", "story:saffron_guards_open"}
+    )
+
+
+def test_observer_rejects_malformed_title_capability_projection() -> None:
+    fake = FakeReader(raw())
+    observer = Gen1TraversalObserver(
+        reader_as_real(fake),
+        capability_projector=lambda _raw: {"move:cut"},  # type: ignore[arg-type,return-value]
+    )
+
+    with pytest.raises(RouteExecutionError, match="invalid capability set"):
+        observer.observe()
+
+
 def test_observer_requires_a_started_coordinate_state() -> None:
     fake = FakeReader(
         RawGameState(False, None, None, None, None, None),

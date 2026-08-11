@@ -89,8 +89,9 @@ the baseline if the effect exists.
    three-to-five-candidate sets without changing the selected completion route.
 3. Define the context/scenario registry and short authenticated execution lane; retain whole-lineage
    provenance and sealed test access.
-4. Run an uncounted scenario-suite rehearsal and audit diversity, cost-baseline discordance,
-   candidate balance, joins and failure handling.
+4. Run an uncounted 36-situation train/validation rehearsal and audit diversity, cost-baseline
+   discordance, candidate balance, joins and failure handling. Keep the 12 test situations sealed
+   until final evaluation.
 5. Freeze the new registry, collect train and validation once, then fit the first scorer.
 6. Use full-game shadow and bounded causal control only after the held-out context benchmark passes.
 
@@ -100,12 +101,15 @@ six-row validation design is adequate.
 
 ## Implementation update
 
-Items 1–3 now have a tested prospective implementation. The collection audit clusters exact
+Items 1–3 now have a tested implementation. The collection audit clusters exact
 candidate-order-invariant contexts and fails overlap, conflicting labels, underpowered partitions
 or fewer than six validation baseline disagreements. The v2 scenario registry fixes 48 graph-legal
 frontiers at 24/12/12 before live measurement and keeps ordinary test access closed.
 
 The distinction remains strict: a graph-legal registry situation is not yet an authenticated policy
-context. The next gate is the short execution assignment and uncounted scenario-suite rehearsal
-described in the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). Counted
-collection remains closed.
+context. The short execution assignment, all-candidate read-only preflight, one-shot recorder and
+strict one-decision reload are implemented, but no live episode has run. The next gate is one
+published-source uncounted learning-scenario rehearsal, followed by the 36-situation
+train/validation inventory described in the
+[registry audit](strategic-scenario-registry-audit-2026-08-11.md). Counted collection remains
+closed and test remains sealed.

@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.strategic_navigation import (
     DestinationAvailability,
     NavigationDestinationCandidate,
@@ -34,6 +35,9 @@ from pokemon_red_completion.strategic_navigation_dataset import (
 from pokemon_red_completion.strategic_navigation_protocol import (
     STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
     parse_strategic_navigation_registry,
+)
+from pokemon_red_completion.strategic_navigation_scenarios import (
+    load_strategic_navigation_scenario_registry,
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
     STRATEGIC_NAVIGATION_DECISION_TYPE,
@@ -644,6 +648,41 @@ def test_assigned_reader_authenticates_uncounted_rehearsal_episode() -> None:
     assert dataset.partition == "unassigned"
     assert dataset.episode_id == assignment.episode_id
     assert dataset.public_summary()["promotion_eligible"] is False
+
+
+def test_assigned_scenario_rehearsal_rejects_more_than_one_decision() -> None:
+    execution_registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    scenario_registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    scenario = scenario_registry.learning_scenarios()[0]
+    capture = CapturedProgressEnvelope(
+        state_sha256="c" * 64,
+        checkpoint_id="scenario-dataset-fixture",
+        checkpoint_label="private scenario boundary",
+        checkpoints_completed=7,
+        checkpoints_total=40,
+        verified_objective_ids=scenario.completed_objective_ids,
+    )
+    assignment = scenario_registry.rehearsal_assignment(
+        scenario.scenario_id,
+        capture=capture,
+        execution=replace(execution_registry.execution, source_commit="d" * 40),
+    )
+    reader = _reader(
+        root=assignment.root_lineage_id,
+        partition=assignment.partition,
+        episode_id=assignment.episode_id,
+        policy_id="qualified-completion-order-v1",
+        assigned_metadata=assignment.episode_metadata(),
+        statuses=(
+            NavigationOutcomeStatus.SUCCEEDED,
+            NavigationOutcomeStatus.SUCCEEDED,
+        ),
+    )
+
+    with pytest.raises(StrategicNavigationDatasetError, match="exactly one decision"):
+        load_assigned_strategic_navigation_episode(reader, assignment=assignment)
 
 
 def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> None:

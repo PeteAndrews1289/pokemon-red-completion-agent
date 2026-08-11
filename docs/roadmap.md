@@ -24,9 +24,10 @@ The new item 0 is the [experiment-design audit](strategic-experiment-design-audi
 6. collect these as short authenticated scenario episodes, retaining full clean-power games for
    end-to-end causal qualification.
 
-Only after an uncounted scenario-suite rehearsal proves those gates may a counted strategic root
-open. The earlier 5-train/2-validation full-game registry remains a preserved protocol artifact, not
-an authorized collection plan.
+Only after an uncounted learning-scenario rehearsal proves those gates may counted strategic
+scenarios open. The 12 test situations remain sealed until final evaluation; rehearsing them would
+contradict that claim. The earlier 5-train/2-validation full-game registry remains a preserved
+protocol artifact, not an authorized collection plan.
 
 Implementation status:
 
@@ -40,9 +41,14 @@ Implementation status:
 4. **Complete:** canonical v2 scenario registry with 24 train, 12 validation and 12 sealed test
    situations across twelve teacher objectives. Twenty-seven situations contain three to five
    genuine graph-legal candidates; no unreachable filler was added to the 21 binary frontiers.
-5. **In progress:** bind each scenario to a committed source, authenticated private capture,
-   one-attempt trajectory and measured route outcome.
-6. **Pending:** uncounted 48-scenario live rehearsal, followed by the diversity and baseline audit.
+5. **Complete in code; no live row claimed:** each rehearsal assignment binds one non-test scenario
+   to the exact registry row, committed source/execution, private checkpoint envelope and state
+   digest. The one-shot recorder writes the choice before movement, permits one outcome, and
+   immediately reloads the sealed artifact to require exactly one successful decision.
+6. **Pending live evidence:** publish the source, run one read-only checkpoint preflight and one
+   uncounted learning-scenario execution, then build the remaining train/validation capture
+   inventory. Audit the 36 learning situations for uniqueness and the six validation baseline
+   disagreements. Keep all 12 test situations sealed until the final preregistered evaluation.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The registry still reports
 zero authenticated live contexts and `collection_open: false`; prospective rows do not satisfy the
@@ -74,10 +80,11 @@ Ordered gates from here:
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
 The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
-The nearest honest milestone is now **one complete uncounted 48-scenario rehearsal** proving that
-the prospective situations become distinct live policy inputs with at least six measured
-validation baseline disagreements. The first strategic model follows a one-attempt scenario
-train/validation collection and its admission audit.
+The nearest honest milestone is now **one successful uncounted short-scenario rehearsal**, followed
+by the complete 36-situation learning capture inventory. That inventory must prove the prospective
+train/validation situations become distinct live policy inputs with at least six measured
+validation baseline disagreements. The first strategic model follows one-attempt counted scenario
+collection and its admission audit; the 12 test situations stay sealed until final evaluation.
 
 ## Previous focus (2026-08-11): collect genuine strategic navigation lineages
 

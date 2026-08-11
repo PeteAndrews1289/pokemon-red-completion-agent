@@ -42,6 +42,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (
     StrategicNavigationAssignment,
     StrategicNavigationEpisodeAssignment,
     StrategicNavigationRehearsalAssignment,
+    StrategicNavigationScenarioRehearsalAssignment,
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
     STRATEGIC_NAVIGATION_DECISION_TYPE,
@@ -581,7 +582,11 @@ def load_assigned_strategic_navigation_episode(
 
     if not isinstance(
         assignment,
-        (StrategicNavigationAssignment, StrategicNavigationRehearsalAssignment),
+        (
+            StrategicNavigationAssignment,
+            StrategicNavigationRehearsalAssignment,
+            StrategicNavigationScenarioRehearsalAssignment,
+        ),
     ):
         raise TypeError("assignment must be a strategic episode assignment")
     if assignment.source_commit is None:
@@ -628,6 +633,12 @@ def load_assigned_strategic_navigation_episode(
     ):
         raise StrategicNavigationDatasetError(
             "assigned strategic episode provenance differs"
+        )
+    if isinstance(assignment, StrategicNavigationScenarioRehearsalAssignment) and (
+        len(dataset.examples) != 1 or dataset.examples[0].decision_index != 0
+    ):
+        raise StrategicNavigationDatasetError(
+            "strategic scenario rehearsal must contain exactly one decision"
         )
     return dataset
 
