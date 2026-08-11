@@ -132,6 +132,26 @@ def test_a_pokemon_centre_can_be_left_again(record: dict) -> None:
     ]
 
 
+def test_entrance_scripts_retarget_their_tunnel_returns(record: dict) -> None:
+    """The second entrance must return to its own route, not the first one's."""
+
+    found = record["by_title"]["red"]
+
+    assert found["retained_outside_overrides"] == {
+        str(MapId.DIGLETTS_CAVE_ROUTE_2.value): MapId.ROUTE_2.value,
+        str(MapId.UNDERGROUND_PATH_ROUTE_5.value): MapId.ROUTE_5.value,
+        str(MapId.UNDERGROUND_PATH_ROUTE_6.value): MapId.ROUTE_6.value,
+        str(MapId.UNDERGROUND_PATH_ROUTE_7.value): MapId.ROUTE_7.value,
+        str(MapId.UNDERGROUND_PATH_ROUTE_8.value): MapId.ROUTE_8.value,
+        str(MapId.DIGLETTS_CAVE_ROUTE_11.value): MapId.ROUTE_11.value,
+    }
+    assert found["contextual_return_journeys"]["UNDERGROUND_PATH_WEST_EAST->ROUTE_8"] == [
+        MapId.UNDERGROUND_PATH_WEST_EAST.value,
+        MapId.UNDERGROUND_PATH_ROUTE_8.value,
+        MapId.ROUTE_8.value,
+    ]
+
+
 def test_pallet_town_has_three_buildings_and_two_roads(adjacency: dict[int, set[int]]) -> None:
     """The sketch listed four neighbours; the cartridge gives five."""
 
@@ -185,8 +205,15 @@ def test_a_route_prefers_the_cheaper_way_around() -> None:
     """Search, not adjacency: the shortest path is found, not the first one."""
 
     graph = {
-        1: MapNode(1, 4, 4, (Passage(2, PassageKind.CONNECTION, Heading.NORTH),
-                             Passage(4, PassageKind.WARP, at=(1, 1)))),
+        1: MapNode(
+            1,
+            4,
+            4,
+            (
+                Passage(2, PassageKind.CONNECTION, Heading.NORTH),
+                Passage(4, PassageKind.WARP, at=(1, 1)),
+            ),
+        ),
         2: MapNode(2, 4, 4, (Passage(3, PassageKind.CONNECTION, Heading.NORTH),)),
         3: MapNode(3, 4, 4, (Passage(5, PassageKind.CONNECTION, Heading.NORTH),)),
         4: MapNode(4, 4, 4, (Passage(5, PassageKind.WARP, at=(2, 2)),)),

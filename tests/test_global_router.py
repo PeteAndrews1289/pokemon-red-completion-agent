@@ -131,6 +131,21 @@ def test_an_outside_warp_updates_the_retained_return_target() -> None:
     )
 
 
+def test_a_scripted_interior_override_retargets_a_later_return() -> None:
+    graph = MacroGraph(
+        edges={
+            2: (MacroEdge(3, kind="warp"),),
+            3: (MacroEdge(4, kind="warp"),),
+            4: (MacroEdge(None, kind="return"),),
+        },
+        retained_outside_overrides={4: 1},
+    )
+
+    assert find_macro_route(graph, 2, 1, last_outside=0) == (2, 3, 4, 1)
+    with pytest.raises(GlobalRouterError):
+        find_macro_route(graph, 2, 0, last_outside=0)
+
+
 def test_an_edge_must_cost_something() -> None:
     """A free edge would let the search loop without ever settling."""
 

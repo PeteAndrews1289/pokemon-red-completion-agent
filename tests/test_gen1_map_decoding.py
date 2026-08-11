@@ -59,6 +59,8 @@ class Cartridge:
         tileset: int = 0,
         connections: dict[Heading, int] | None = None,
         warps: tuple[tuple[int, int, int, int], ...] = (),
+        retained_outside_override: int | None = None,
+        retained_outside_after_call: bool = False,
     ) -> None:
         """Write one map: its header, its connections and its warps."""
 
@@ -109,18 +111,28 @@ class Cartridge:
 
         objects = header + len(body) + 2
         body.extend(objects.to_bytes(2, "little"))
-        self.data[header : header + len(body)] = body
 
         doors = bytearray([0, len(warps)])
         for y, x, destination_warp, destination in warps:
             doors.extend([y, x, destination_warp, destination])
             assert len(doors) % WARP_WIDTH == 2, "a warp is four bytes wide"
+        script = b""
+        if retained_outside_override is not None:
+            script_address = objects + len(doors)
+            body[7:9] = script_address.to_bytes(2, "little")
+            # Literal machine code, independent of the decoder's constants:
+            # ld a, <map>; ld [wLastMap], a; ret
+            prefix = b"\xcd\x34\x12" if retained_outside_after_call else b""
+            script = prefix + bytes((0x3E, retained_outside_override, 0xEA, 0x65, 0xD3, 0xC9))
+
+        self.data[header : header + len(body)] = body
         self.data[objects : objects + len(doors)] = doors
+        self.data[objects + len(doors) : objects + len(doors) + len(script)] = script
 
         self.data[MAP_HEADER_BANKS + map_id] = BANK
         at = MAP_HEADER_POINTERS + 2 * map_id
         self.data[at : at + 2] = header.to_bytes(2, "little")
-        self.next_free = objects + len(doors) + 1
+        self.next_free = objects + len(doors) + len(script) + 1
 
     def bytes(self) -> bytes:
         # Every slot not written above must decode as unused, or the reader
@@ -307,6 +319,39 @@ def test_a_nested_interior_return_keeps_the_outdoor_map() -> None:
     assert routes_between(graph, 2, 3, last_outside=0) == (2, 3)
 
 
+@pytest.mark.parametrize("after_call", [False, True])
+def test_an_entrance_script_can_retarget_a_nested_return(after_call: bool) -> None:
+    """Some tunnel entrances replace ``LAST_MAP`` as soon as they load.
+
+    The route enters from map 0, crosses two interiors, and returns to map 1.
+    That result exists only because map 3's script contains a constant
+    ``wLastMap`` initializer; ordinary nested-interior semantics would return
+    to map 0 instead.
+    """
+
+    cartridge = Cartridge()
+    cartridge.add(
+        0,
+        connections={Heading.NORTH: 1},
+        warps=((1, 1, 0, 2),),
+    )
+    cartridge.add(1, connections={Heading.SOUTH: 0})
+    cartridge.add(2, tileset=1, warps=((2, 2, 0, 3),))
+    cartridge.add(
+        3,
+        tileset=1,
+        warps=((3, 3, 0, RETURN_TO_LAST_MAP),),
+        retained_outside_override=1,
+        retained_outside_after_call=after_call,
+    )
+
+    graph = read_map_graph(cartridge.bytes())
+
+    assert graph[3].retained_outside_override == 1
+    assert routes_between(graph, 2, 1, last_outside=0) == (2, 3, 1)
+    assert routes_between(graph, 2, 0, last_outside=0) == (2, 3, 1, 0)
+
+
 def test_a_warp_to_a_slot_holding_no_map_is_marked_not_dropped() -> None:
     """A lift picks its floor at runtime, so the data cannot name one."""
 
@@ -397,10 +442,6 @@ def test_an_encounter_map_that_cannot_be_reached_refuses_the_read() -> None:
         )
 
     with pytest.raises(CartridgeReadError, match="wild encounter tables"):
-        verify_against_encounter_reads(
-            reachable={0, 1}, with_wild_tables={1, 9}, fishable=set()
-        )
+        verify_against_encounter_reads(reachable={0, 1}, with_wild_tables={1, 9}, fishable=set())
     with pytest.raises(CartridgeReadError, match="Super Rod"):
-        verify_against_encounter_reads(
-            reachable={0, 1}, with_wild_tables=set(), fishable={4}
-        )
+        verify_against_encounter_reads(reachable={0, 1}, with_wild_tables=set(), fishable={4})

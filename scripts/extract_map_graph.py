@@ -55,9 +55,7 @@ SAMPLE_JOURNEYS = (
 )
 
 
-def summarise(
-    rom: bytes, graph: Mapping[int, MapNode] | None = None
-) -> dict[str, object]:
+def summarise(rom: bytes, graph: Mapping[int, MapNode] | None = None) -> dict[str, object]:
     graph = map_graph(rom) if graph is None else graph
     counts = {
         kind.value: sum(
@@ -73,7 +71,15 @@ def summarise(
                 MapId.VIRIDIAN_CITY.value,
                 last_outside=MapId.VIRIDIAN_CITY.value,
             )
-        )
+        ),
+        "UNDERGROUND_PATH_WEST_EAST->ROUTE_8": list(
+            routes_between(
+                graph,
+                MapId.UNDERGROUND_PATH_WEST_EAST.value,
+                MapId.ROUTE_8.value,
+                last_outside=MapId.ROUTE_7.value,
+            )
+        ),
     }
     return {
         "maps": len(graph),
@@ -97,13 +103,16 @@ def summarise(
             for passage in node.passages
             if passage.kind is PassageKind.RETURN
         ),
+        "retained_outside_overrides": {
+            str(map_id): node.retained_outside_override
+            for map_id, node in sorted(graph.items())
+            if node.retained_outside_override is not None
+        },
         "maps_with_a_scripted_exit": sorted(
             map_id for map_id, node in graph.items() if node.has_a_scripted_exit
         ),
         "named_maps_reachable": sorted(m.value for m in MapId if m.value in graph),
-        "maps_with_wild_tables_reachable": sorted(
-            m for m in wild_tables(rom) if m in graph
-        ),
+        "maps_with_wild_tables_reachable": sorted(m for m in wild_tables(rom) if m in graph),
         "fishable_maps_reachable": sorted(m for m in fishing_tables(rom).by_map if m in graph),
         "adjacency": {
             str(map_id): sorted(node.neighbours()) for map_id, node in sorted(graph.items())
@@ -146,18 +155,20 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(
             json.dumps(
                 {
-                    "schema": "pokemon-map-graph-v2",
+                    "schema": "pokemon-map-graph-v3",
                     "recorded_on": args.recorded_on,
                     "comparison_scope": (
                         "cartridges_agree compares every decoded MapNode and Passage, "
                         "including tilesets, warp indices and arrivals, raw connection "
-                        "geometry, exact coordinate transitions, and return semantics."
+                        "geometry, exact coordinate transitions, return semantics, "
+                        "and bounded constant wLastMap initializers in map scripts."
                     ),
                     "scope": (
                         "Map headers, coordinate-bearing edge connections and warps. "
-                        "Return warps resolve through retained outside-map state. This "
-                        "still does not say whether the way is open: Surf, Cut, Strength "
-                        "and story gates are separate state."
+                        "Return warps resolve through retained outside-map state, "
+                        "including constant entrance-script overrides. This still does "
+                        "not say whether the way is open: Surf, Cut, Strength and story "
+                        "gates are separate state."
                     ),
                     "starting_map": STARTING_MAP,
                     "cartridges_agree": agree,

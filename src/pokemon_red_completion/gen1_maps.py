@@ -69,6 +69,11 @@ CONNECTION_STRUCT_BYTES = 11
 CONNECTION_FLAG_LIMIT = 0x0F
 WARP_STRUCT_BYTES = 4
 WARP_COUNT_LIMIT = 32
+SCRIPT_POINTER_OFFSET = 7
+LOAD_IMMEDIATE_A_OPCODE = 0x3E
+STORE_A_ABSOLUTE_OPCODE = 0xEA
+CALL_OPCODE = 0xCD
+WLASTMAP_ADDRESS = 0xD365
 
 #: A warp whose destination is this returns to whichever map warped in. Shops
 #: and Pokémon Centres use it because one interior serves many towns, so the
@@ -172,9 +177,7 @@ class ConnectionGeometry:
         """Every exact border coordinate accepted by this connection."""
 
         source_height, source_width = (dimension * 2 for dimension in source_size)
-        destination_height, destination_width = (
-            dimension * 2 for dimension in destination_size
-        )
+        destination_height, destination_width = (dimension * 2 for dimension in destination_size)
         if self.destination_width != destination_size[1]:
             raise CartridgeReadError(
                 "a connection's destination width disagrees with its target header"
@@ -229,6 +232,7 @@ class _Header:
     height: int
     width: int
     connections: dict[Heading, tuple[int, ConnectionGeometry]]
+    retained_outside_override: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -286,11 +290,10 @@ class MapNode:
     passages: tuple[Passage, ...]
     tileset: int = -1
     warp_locations: tuple[tuple[int, int], ...] = ()
+    retained_outside_override: int | None = None
 
     def neighbours(self) -> frozenset[int]:
-        return frozenset(
-            passage.to_map for passage in self.passages if passage.to_map is not None
-        )
+        return frozenset(passage.to_map for passage in self.passages if passage.to_map is not None)
 
     @property
     def has_a_scripted_exit(self) -> bool:
@@ -320,9 +323,7 @@ def read_map_graph(rom: bytes) -> dict[int, MapNode]:
         STARTING_MAP,
         passages,
         outside_maps={
-            map_id
-            for map_id, header in headers.items()
-            if header.tileset in OUTSIDE_TILESETS
+            map_id for map_id, header in headers.items() if header.tileset in OUTSIDE_TILESETS
         },
     )
     verify_connections_are_two_sided(reachable, one_sided)
@@ -334,6 +335,7 @@ def read_map_graph(rom: bytes) -> dict[int, MapNode]:
             passages=tuple(passages.get(map_id, ())),
             tileset=headers[map_id].tileset,
             warp_locations=tuple(warp.at for warp in warps.get(map_id, ())),
+            retained_outside_override=headers[map_id].retained_outside_override,
         )
         for map_id in sorted(reachable)
         if map_id in headers
@@ -398,6 +400,18 @@ def _read_headers(
             height=rom[header_offset + 1],
             width=rom[header_offset + 2],
             connections=found,
+            retained_outside_override=_retained_outside_override(
+                rom,
+                bank,
+                int.from_bytes(
+                    rom[
+                        header_offset + SCRIPT_POINTER_OFFSET : header_offset
+                        + SCRIPT_POINTER_OFFSET
+                        + 2
+                    ],
+                    "little",
+                ),
+            ),
         )
         warps[map_id] = _read_warps(rom, bank, cursor)
 
@@ -417,8 +431,43 @@ def _read_headers(
             height=header_record.height,
             width=header_record.width,
             connections=agreed,
+            retained_outside_override=header_record.retained_outside_override,
         )
+    for map_id, header in kept.items():
+        override = header.retained_outside_override
+        if override is None:
+            continue
+        target = kept.get(override)
+        if target is None or target.tileset not in OUTSIDE_TILESETS:
+            raise CartridgeReadError(
+                f"map {map_id} script sets retained outside map to invalid target {override}"
+            )
     return kept, warps, one_sided
+
+
+def _retained_outside_override(
+    rom: bytes,
+    bank: int,
+    script_address: int,
+) -> int | None:
+    """Decode the bounded constant ``wLastMap`` initializer used by entrances."""
+
+    if not 0x4000 <= script_address <= 0x7FFF:
+        return None
+    at = bank_offset(bank, script_address)
+    for prefix, required_opcode in ((0, None), (3, CALL_OPCODE)):
+        if required_opcode is not None and rom[at] != required_opcode:
+            continue
+        candidate = rom[at + prefix : at + prefix + 5]
+        if len(candidate) != 5:
+            continue
+        if (
+            candidate[0] == LOAD_IMMEDIATE_A_OPCODE
+            and candidate[2] == STORE_A_ABSOLUTE_OPCODE
+            and int.from_bytes(candidate[3:5], "little") == WLASTMAP_ADDRESS
+        ):
+            return candidate[1]
+    return None
 
 
 def _read_warps(rom: bytes, bank: int, cursor: int) -> list[_Warp]:
@@ -685,11 +734,12 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
             )
             for map_id, node in graph.items()
         },
-        outside_nodes=frozenset(
-            map_id for map_id, node in graph.items() if node.is_outside
-        ),
-        warp_locations={
-            map_id: node.warp_locations for map_id, node in graph.items()
+        outside_nodes=frozenset(map_id for map_id, node in graph.items() if node.is_outside),
+        warp_locations={map_id: node.warp_locations for map_id, node in graph.items()},
+        retained_outside_overrides={
+            map_id: node.retained_outside_override
+            for map_id, node in graph.items()
+            if node.retained_outside_override is not None
         },
     )
 

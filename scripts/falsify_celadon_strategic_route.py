@@ -29,6 +29,7 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1TraversalObserver,
     Gen1WildFleeHandler,
 )
+from pokemon_red_completion.gen1_story_routing import apply_gen1_story_requirements
 from pokemon_red_completion.gen1_terrain import walkable_world
 from pokemon_red_completion.gen1_traversal import (
     local_graph,
@@ -121,14 +122,16 @@ def main(argv: list[str] | None = None) -> int:
     macro = macro_graph_from_nodes(maps)
     world = walkable_world(rom)
     rules = traversal_rules(rom, maps)
-    local_graphs = {
-        map_id: local_graph(
-            terrain,
-            rules,
-            blocked={event.at for event in map_object_events(rom, {map_id})},
-        )
-        for map_id, terrain in world.items()
-    }
+    local_graphs = apply_gen1_story_requirements(
+        {
+            map_id: local_graph(
+                terrain,
+                rules,
+                blocked={event.at for event in map_object_events(rom, {map_id})},
+            )
+            for map_id, terrain in world.items()
+        }
+    )
 
     timing = DEFAULT_QUALIFIED_PLAY_TIMING
     with PyBoyAdapter(rom_path) as emulator:
@@ -173,9 +176,7 @@ def main(argv: list[str] | None = None) -> int:
         }
         minimum_cost = min(plan.cost for plan in plans.values())
         minimum_destinations = tuple(
-            destination
-            for destination, plan in plans.items()
-            if plan.cost == minimum_cost
+            destination for destination, plan in plans.items() if plan.cost == minimum_cost
         )
         if minimum_destinations != (COLLECTION_DESTINATION,):
             raise CeladonStrategicRouteProbeError(

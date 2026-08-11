@@ -99,6 +99,10 @@ class MacroGraph:
     #: Warp coordinates by map and cartridge order. Return edges use their
     #: destination index to resolve an arrival after their target is known.
     warp_locations: Mapping[int, tuple[Coordinate, ...]] = field(default_factory=dict)
+    #: Title scripts may deliberately replace retained return context when an
+    #: interior loads. Underground exits use this to point at their own route
+    #: rather than the outside map from which the tunnel was entered.
+    retained_outside_overrides: Mapping[int, int] = field(default_factory=dict)
 
     def neighbors(self, node: int) -> tuple[MacroEdge, ...]:
         return tuple(self.edges.get(node, ()))
@@ -148,6 +152,9 @@ def advance_macro_state(
     next_last_outside = retained_outside
     if edge.kind == "warp" and current in graph.outside_nodes:
         next_last_outside = current
+    scripted_override = graph.retained_outside_overrides.get(edge.target_map)
+    if scripted_override is not None:
+        next_last_outside = scripted_override
     return edge.target_map, next_last_outside
 
 
