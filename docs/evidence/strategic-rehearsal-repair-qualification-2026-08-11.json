@@ -1,0 +1,64 @@
+{
+  "assignment": {
+    "assignment_id": "0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84",
+    "counted": false,
+    "partition": "unassigned",
+    "registry_sha256": "8de74d114ce681af1681f395f0bd16c571d1954a928bc1a0b083ace4dfd8674e"
+  },
+  "dataset_audit": {
+    "available_candidates": 6,
+    "candidate_count": 2,
+    "examples": 3,
+    "interruption_kind_counts": {
+      "trainer_engagement": 1
+    },
+    "movement_action_labels": 0,
+    "outcomes": {
+      "succeeded": 3
+    },
+    "route_cost": {
+      "maximum": 178,
+      "minimum": 21
+    },
+    "route_cost_only_baseline": {
+      "cases": 3,
+      "matches": 2
+    },
+    "selected_index_counts": {
+      "0": 2,
+      "1": 1
+    }
+  },
+  "episode": {
+    "manifest_sha256": "df58b5536ce70f6e57ba0ac190d33787cc6fad278f2b6124a1a079c7f33fee79",
+    "status": "complete",
+    "stream_records": {
+      "decisions": 2849,
+      "episode": 1,
+      "events": 396,
+      "executions": 615918,
+      "snapshots": 84111
+    },
+    "total_bytes": 677231210,
+    "total_records": 703275
+  },
+  "game": {
+    "checkpoints": {
+      "completed": 312,
+      "declared": 312
+    },
+    "game_complete": true,
+    "hall_of_fame": true,
+    "objectives": {
+      "completed": 36,
+      "declared": 36
+    }
+  },
+  "qualification": {
+    "commit": "5ba39cfc336c332d764556d213e59bc3a729cb5e",
+    "exact_commit_ci": "passed",
+    "recording_promotion": "passed",
+    "strict_dataset_reload": "passed"
+  },
+  "schema": "strategic-rehearsal-repair-qualification-v1"
+}

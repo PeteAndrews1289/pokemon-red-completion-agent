@@ -19,17 +19,18 @@ changes, the old campaign is retired and the registries have new identities.
 
 Ordered gates from here:
 
-1. Pass the complete ROM-free gate, publish the repair and require green exact-commit CI.
-2. Execute only uncounted rehearsal assignment `0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84` from clean power. Preserve any failure and never edit source during the run.
-3. Strictly reload the completed rehearsal and audit all 312 checkpoints, 36 objectives, 74 scheduled battle starts, three strategic joins and zero recording loss.
-4. If qualified, execute the new registry's five train roots and two validation roots once each. Never use a learning root to debug the harness and keep all five test roots sealed.
+1. **Completed:** pass the complete ROM-free gate, publish repair `5ba39cf` and require green exact-commit CI.
+2. **Completed:** execute only uncounted rehearsal assignment `0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84` from clean power. It reached 312/312, 36/36 and Hall of Fame.
+3. **Completed:** strictly reload the completed rehearsal. Manifest `df58b5536ce70f6e57ba0ac190d33787cc6fad278f2b6124a1a079c7f33fee79` contains 703,275 records, three successful strategic joins, one trainer interruption and no recording loss.
+4. **Next:** execute the new registry's five train roots and two validation roots once each. Never use a learning root to debug the harness and keep all five test roots sealed.
 5. Audit lineage separation, semantic coverage, answer-position balance, route-cost/shape baselines, interruptions, failures and censoring before selecting features.
 6. Freeze normalization and train the first permutation-equivariant candidate scorer. Compare against cost-only and shape baselines, then require shadow and bounded causal evaluation without a teacher fallback hiding disagreements.
 7. Expand strategic density and completion authority: generated story routing, recovery/resupply, party construction, acquisition/storage/evolution/trade scheduling and a living-Pokédex curriculum.
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
-The nearest honest milestone is therefore **a qualified repaired rehearsal**, not “training has
-started.” The first model follows one complete fresh train/validation campaign.
+The repaired rehearsal is now qualified. The nearest honest milestone is therefore **one complete
+fresh 5-train/2-validation campaign**, not “the model is trained.” The first strategic model follows
+that campaign's admission audit.
 
 ## Previous focus (2026-08-11): collect genuine strategic navigation lineages
 

@@ -36,7 +36,13 @@ The repaired source has a new source bundle
 `7a1d73a44946c6c5a938668034d404aeb9d32dc677d59da88e86be66abe2503a` and strategic registry
 `8de74d114ce681af1681f395f0bd16c571d1954a928bc1a0b083ace4dfd8674e`. Old-source completed roots
 remain immutable historical evidence but cannot be combined with the new campaign. The new source
-must pass its uncounted rehearsal before any new counted root opens.
+passed its exact uncounted rehearsal at published commit `5ba39cf`: 312/312 checkpoints, 36/36
+objectives, Hall of Fame, 703,275 promoted records and a strict manifest reload. All three strategic
+examples succeeded, answer positions were 2:1, the route-cost baseline was 2/3 and one trainer
+interruption was retained. The
+[public qualification receipt](evidence/strategic-rehearsal-repair-qualification-2026-08-11.json)
+contains the non-private identity and audit summary. New counted root 01 may now open; no later root
+or sealed test root should open out of order.
 
 ## Executive verdict
 

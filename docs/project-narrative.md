@@ -29,6 +29,13 @@ roots stay as historical proof; the next campaign starts only after a fresh unco
 qualifies the repaired source. This is slower than treating every green Hall of Fame as data, but it
 is exactly the discipline that makes a future Red-to-Crystal transfer result believable.
 
+That new rehearsal passed. It crossed the repaired full-health Diglett capture, retained the later
+ball reserve, survived the entire balanced-team battle curriculum, completed Hall of Fame and
+promoted 703,275 records without the three-record loss that invalidated validation. Its three
+strategic decisions all joined to successful outcomes, including the non-shortest Tower route and
+its real trainer interruption. The repair is now qualified; the next chapter is a fresh counted
+campaign, not another round of harness debugging.
+
 ## August 11: three choices made the rehearsal worth collecting
 
 The first qualified strategic rehearsal completed 312/312 checkpoints, all 36 objectives and Hall

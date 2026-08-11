@@ -55,12 +55,19 @@ is `7907b2a18b4092f7f565d0917ab1f8119f53273b0c932937338c4c5830d6c3b0`; and the n
 rehearsal assignment is
 `0450466c244197e95c41d3163b7ac8f1a56e835c1c99c91bf24cc671b6c6eb84`.
 
-Immediate next sequence: publish the repaired source and require green CI; run only the new
-uncounted rehearsal; strictly authenticate its game completion and complete record stream; then
-open a fresh 5-train/2-validation campaign once each. Do not mix the three historical train
-episodes with new-registry roots, do not edit `src/` during emulator execution, and do not open a
-test root. Only after a complete coverage audit should the numeric feature schema be frozen and
-the first shared candidate scorer trained.
+Commit `5ba39cf` passed exact-commit CI, and its uncounted rehearsal then qualified the repaired
+source. It completed 312/312 checkpoints, 36/36 objectives and Hall of Fame, promoted 703,275
+records (677,231,210 bytes), and strictly reloaded manifest
+`df58b5536ce70f6e57ba0ac190d33787cc6fad278f2b6124a1a079c7f33fee79`. Its three strategic examples
+all succeeded; candidate positions were `{0: 2, 1: 1}`, route-cost-only matched 2/3, one Tower-route
+trainer interruption was retained, and there were zero movement labels or censored examples. See
+the [qualification receipt](docs/evidence/strategic-rehearsal-repair-qualification-2026-08-11.json).
+
+Immediate next sequence: open the new registry's five train and two validation roots once each,
+starting with `red-strategic-v1-01-train`; preserve every result; then run the complete coverage and
+partition audit. Do not mix the three historical train episodes with new-registry roots, do not
+edit `src/` during emulator execution, and do not open a test root. Only after that audit should the
+numeric feature schema be frozen and the first shared candidate scorer trained.
 
 ## Three-choice rehearsal passed; counted launcher now needs its exact replay — 2026-08-11
 

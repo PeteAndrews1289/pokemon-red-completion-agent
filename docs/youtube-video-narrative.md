@@ -57,6 +57,13 @@ campaign, preserve its three authenticated train roots as historical evidence, a
 new **UNCOUNTED REHEARSAL**. The line is: **“A fixed teacher creates a new experiment. It does not
 rewrite the old one.”**
 
+Then pay that restraint off. Run the repaired rehearsal across the same cards: Diglett caught,
+Forest reserve funded, 1,500-battle training milestone, 312/312, Hall of Fame. Hold on finalization
+where validation previously failed, then reveal **703,275 RECORDS / MANIFEST VERIFIED / 0 RECORDS
+LOST**. Audit the three strategic choices as **3 SUCCEEDED / POSITION 2:1 / COST BASELINE 2:3 / 1
+TRAINER INTERRUPTION**. End on the first fresh train root still locked and say: **“Now the teacher
+has earned the right to make new data.”**
+
 Start with a wall of arrow labels from a successful route. Feed them toward a model, then stop and
 delete them. Replace the training target with one card: **WHY GO THERE NEXT?** Place two or more
 semantic destinations beneath it, each with availability, route cost, transitions, field actions

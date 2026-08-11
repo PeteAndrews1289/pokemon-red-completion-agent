@@ -65,8 +65,11 @@
 > The shared failure boundaries are now repaired: Diglett is weakened once by Ground-immune
 > Spearow before the ball loop, and a fresh battle-runtime entry can roll forward stale observer
 > state left by an external capture/training exit. Those source changes create a new registry and
-> campaign. The next gate is its fresh uncounted rehearsal, followed by a new 5-train/2-validation
-> collection; no numeric feature schema is frozen and no navigation model is claimed.
+> campaign. Published repair `5ba39cf` passed CI and its fresh uncounted rehearsal completed 312/312,
+> 36/36 and Hall of Fame, then promoted 703,275 records with a strict manifest reload. All three
+> strategic outcomes succeeded, answer positions were 2:1 and the cost baseline was 2/3. The next
+> gate is a new 5-train/2-validation collection; no numeric feature schema is frozen and no
+> navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
