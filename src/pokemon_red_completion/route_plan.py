@@ -425,18 +425,26 @@ def _warp_transition(
         if index is None or index >= len(locations):
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
-        if edge.exit_action is not None:
+        if edge.exit_action in {"up", "down"}:
+            # A vertical boundary return is the ordinary Gen I doorway case:
+            # the engine walks the player one tile beyond the destination warp.
+            # Horizontal pass-through gates instead settle *on* the outside
+            # warp tile.  Treating both animations alike made the Route 7 gate
+            # predict (10, 19) after a right exit while live RAM reported the
+            # cartridge's actual (10, 18).
             dy, dx = {
                 "up": (-1, 0),
-                "right": (0, 1),
                 "down": (1, 0),
-                "left": (0, -1),
             }.get(edge.exit_action, (0, 0))
             if (dy, dx) == (0, 0):
                 raise RoutePlanningError(
                     f"unsupported boundary return action {edge.exit_action!r}"
                 )
             arrival = arrival[0] + dy, arrival[1] + dx
+        elif edge.exit_action not in {None, "left", "right"}:
+            raise RoutePlanningError(
+                f"unsupported boundary return action {edge.exit_action!r}"
+            )
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
     action = edge.exit_action if edge.exit_action is not None else approach.edges[-1].action
