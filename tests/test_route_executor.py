@@ -44,12 +44,9 @@ class FakeWorld:
         field(default_factory=dict)
     )
     actions: list[MacroAction] = field(default_factory=list)
-    occupancy_after_waits: dict[int, frozenset[tuple[int, int]]] = field(
-        default_factory=dict
-    )
-    hazards_after_waits: dict[int, tuple[TraversalHazard, ...]] = field(
-        default_factory=dict
-    )
+    occupancy_after_waits: dict[int, frozenset[tuple[int, int]]] = field(default_factory=dict)
+    hazards_after_waits: dict[int, tuple[TraversalHazard, ...]] = field(default_factory=dict)
+    interruptions_after_waits: dict[int, str] = field(default_factory=dict)
     wait_count: int = 0
 
     def execute(self, action: MacroAction) -> object:
@@ -60,6 +57,8 @@ class FakeWorld:
                 self.occupied = self.occupancy_after_waits[self.wait_count]
             if self.wait_count in self.hazards_after_waits:
                 self.hazards = self.hazards_after_waits[self.wait_count]
+            if self.wait_count in self.interruptions_after_waits:
+                self.interruption = self.interruptions_after_waits[self.wait_count]
             if self.pending_arrival is not None:
                 self.map_id, self.at = self.pending_arrival
                 self.pending_arrival = None
@@ -117,9 +116,7 @@ class FakeResourceManager:
             return None
         if not resource.carried_units:
             raise RouteExecutionError("resource is depleted without a carried renewal")
-        self.world.resources = (
-            TraversalResource(resource.kind, 250, resource.carried_units - 1),
-        )
+        self.world.resources = (TraversalResource(resource.kind, 250, resource.carried_units - 1),)
         self.world.ready = True
         return ResourceRenewalReceipt(
             kind=resource.kind,
@@ -144,6 +141,11 @@ class ClearingHandler:
             resumed_map=self.world.map_id,
             resumed_at=self.world.at,
         )
+
+
+@dataclass
+class TrainerClearingHandler(ClearingHandler):
+    handled_hazard_kinds: frozenset[str] = frozenset({"trainer_sight"})
 
 
 def connection_plan() -> tuple[RoutePlan, MacroGraph, dict[int, LocalGraph]]:
@@ -237,9 +239,7 @@ def test_a_resource_expiring_on_the_terminal_step_is_settled_before_handoff() ->
         def execute(self, action: MacroAction) -> object:
             result = super().execute(action)
             if action == MacroAction(MacroActionKind.MOVE, "right"):
-                self.resources = (
-                    TraversalResource("encounter_suppression", 0, 1),
-                )
+                self.resources = (TraversalResource("encounter_suppression", 0, 1),)
                 self.ready = False
             return result
 
@@ -527,7 +527,7 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
             (1, (1, 1), "right"): (1, (1, 2)),
             (1, (1, 2), "up"): (1, (0, 2)),
             (1, (0, 2), "up"): (2, (7, 2)),
-        }
+        },
     )
 
     def replan(request: ReplanRequest) -> RoutePlan:
@@ -648,6 +648,40 @@ def test_a_semantic_hazard_replans_without_becoming_visible_occupancy() -> None:
     assert report.replans[0].reason == "trainer_sight"
     assert report.movement_requests == 4
     assert world.actions[0] == MacroAction(MacroActionKind.MOVE, "down")
+
+
+def test_an_explicit_handler_can_cross_and_settle_a_semantic_hazard() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((0, 1), action="right"),),
+                (0, 1): (LocalEdge((0, 2), action="right"),),
+                (0, 2): (),
+            }
+        )
+    }
+    plan = plan_route(MacroGraph({1: ()}), local, 1, (0, 0), 1, goal_at=(0, 2))
+    world = FakeWorld(
+        hazards=(TraversalHazard((0, 1), "trainer_sight"),),
+        transitions={
+            (1, (0, 0), "right"): (1, (0, 1)),
+            (1, (0, 1), "right"): (1, (0, 2)),
+        },
+        interruptions_after_waits={1: "trainer_engagement"},
+    )
+
+    report = execute_route(
+        plan,
+        world,
+        world,
+        interruption_handler=TrainerClearingHandler(world),
+    )
+
+    assert report.passed
+    assert not report.replans
+    assert [receipt.kind for receipt in report.interruptions] == ["trainer_engagement"]
+    assert report.wait_actions == 1
+    assert report.movement_requests == 2
 
 
 def test_an_object_seen_during_settle_replans_before_a_retry() -> None:

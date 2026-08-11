@@ -5,9 +5,22 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeError,
+    MoveSlotPolicy,
+    run_adaptive_trainer_battle,
+)
+from pokemon_red_completion.battle_semantics import STAB_MULTIPLIER
 from pokemon_red_completion.gen1_repel import gen1_repel_resource
 from pokemon_red_completion.gen1_story_routing import gen1_story_capabilities
 from pokemon_red_completion.observation import MapId, PokemonRedStateReader, RawGameState
+from pokemon_red_completion.red_battle_catalog import (
+    PokemonRedBattleCatalog,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
+)
 from pokemon_red_completion.route_1_wild import Route1WildFleeEvidence, flee_wild
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
@@ -119,6 +132,170 @@ class Gen1WildFleeHandler:
             resumed_at=(receipt.player_y, receipt.player_x),
             details=receipt.public_dict(),
         )
+
+
+_BATTLE_CATALOG = PokemonRedBattleCatalog()
+
+
+def strongest_usable_move_slot(raw: RawGameState) -> int:
+    """Choose a damaging move from live mechanics, without chapter identity."""
+
+    moves = raw.battler_moves
+    pp = raw.battler_pp
+    attacker_id = raw.active_party_species_id
+    if attacker_id is None and raw.party_species_ids:
+        index = raw.active_party_index or 0
+        if 0 <= index < len(raw.party_species_ids):
+            attacker_id = raw.party_species_ids[index]
+    if moves is None or pp is None or attacker_id is None or raw.enemy_species_id is None:
+        raise RouteExecutionError("route battle lacks mechanics-ranked move evidence")
+
+    attacker = _BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(attacker_id))
+    defender = _BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(raw.enemy_species_id))
+    usable: list[tuple[tuple[bool, float, float, int, int, int], int]] = []
+    for index, (move_id, packed_pp) in enumerate(zip(moves, pp, strict=False)):
+        slot = index + 1
+        current_pp = packed_pp & 0x3F
+        if (
+            move_id == 0
+            or current_pp == 0
+            or (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
+        ):
+            continue
+        move = _BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move_id))
+        damaging = move.category != "status" and move.power > 0
+        effectiveness = _BATTLE_CATALOG.type_effectiveness(
+            move.type_name,
+            defender.types,
+        )
+        stab = STAB_MULTIPLIER if move.type_name in attacker.types else 1.0
+        usable.append(
+            (
+                (
+                    damaging,
+                    move.power * move.accuracy * effectiveness * stab,
+                    effectiveness,
+                    move.power,
+                    current_pp,
+                    -slot,
+                ),
+                slot,
+            )
+        )
+    if not usable:
+        raise RouteExecutionError("route battle has no usable move")
+    return max(usable)[1]
+
+
+@dataclass(slots=True)
+class Gen1RouteInterruptionHandler:
+    """Resolve wild encounters and unavoidable trainer battles in one route."""
+
+    executor: RouteActionPort
+    reader: PokemonRedStateReader
+    maximum_flees: int
+    maximum_trainer_battles: int
+    stabilization_frames: int
+    route_name: str = "cartridge-composed route"
+    max_trainer_intro_pulses: int = 32
+    move_slot_policy: MoveSlotPolicy = strongest_usable_move_slot
+    handled_hazard_kinds: frozenset[str] = field(
+        default=frozenset({"trainer_sight"}),
+        init=False,
+    )
+    trainer_evidence: list[InterruptionReceipt] = field(default_factory=list, init=False)
+    _wild: Gen1WildFleeHandler = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        if type(self.maximum_trainer_battles) is not int or self.maximum_trainer_battles < 0:  # noqa: E721
+            raise ValueError("maximum_trainer_battles must be a non-negative integer")
+        if type(self.max_trainer_intro_pulses) is not int or self.max_trainer_intro_pulses <= 0:  # noqa: E721
+            raise ValueError("max_trainer_intro_pulses must be a positive integer")
+        if not callable(self.move_slot_policy):
+            raise TypeError("move_slot_policy must be callable")
+        self._wild = Gen1WildFleeHandler(
+            self.executor,
+            self.reader,
+            maximum_flees=self.maximum_flees,
+            stabilization_frames=self.stabilization_frames,
+            route_name=self.route_name,
+        )
+
+    @property
+    def wild_evidence(self) -> tuple[Route1WildFleeEvidence, ...]:
+        return tuple(self._wild.evidence)
+
+    def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
+        if interruption.interruption == "wild_battle":
+            return self._wild.handle(interruption)
+        if interruption.interruption not in {"trainer_engagement", "battle:2"}:
+            raise RouteExecutionError(f"Gen I route cannot dismiss {interruption.interruption!r}")
+        if len(self.trainer_evidence) >= self.maximum_trainer_battles:
+            raise RouteExecutionError(
+                f"{self.route_name} exceeded its {self.maximum_trainer_battles}-trainer budget"
+            )
+
+        initial = self.reader.read()
+        if (
+            initial.map_id != interruption.map_id
+            or (
+                initial.player_y,
+                initial.player_x,
+            )
+            != interruption.at
+        ):
+            raise RouteExecutionError("trainer interruption drifted before recovery")
+        intro_pulses = 0
+        active = initial
+        while active.battle_state != 2:
+            if active.battle_state == 1:
+                raise RouteExecutionError("wild battle replaced a trainer engagement")
+            if active.battle_state not in {0, None}:
+                raise RouteExecutionError(
+                    f"trainer engagement exposed battle state {active.battle_state!r}"
+                )
+            if intro_pulses >= self.max_trainer_intro_pulses:
+                raise RouteExecutionError("trainer engagement exceeded its intro budget")
+            self.executor.execute(MacroAction(MacroActionKind.CONFIRM))
+            intro_pulses += 1
+            active = self.reader.read()
+
+        ordinal = len(self.trainer_evidence) + 1
+        battle_plan_id = f"generated-route-map-{interruption.map_id}-trainer-{ordinal}"
+        try:
+            final = run_adaptive_trainer_battle(
+                self.reader,
+                self.executor,
+                self.move_slot_policy,
+                expected_map=interruption.map_id,
+                intent=BattleIntent(
+                    objective_id="route_traversal",
+                    battle_plan_id=battle_plan_id,
+                ),
+                label=f"{self.route_name} trainer {ordinal}",
+                consume_battle_start_schedule=False,
+            )
+        except BattleRuntimeError as error:
+            raise RouteExecutionError(str(error)) from error
+        if (
+            final.battle_state != 0
+            or final.map_id != interruption.map_id
+            or (final.player_y, final.player_x) != interruption.at
+            or not self.reader.read_input_readiness().ready
+        ):
+            raise RouteExecutionError("trainer battle failed to restore its route boundary")
+        receipt = InterruptionReceipt(
+            kind="trainer_battle",
+            resumed_map=interruption.map_id,
+            resumed_at=interruption.at,
+            details={
+                "battle_plan_id": battle_plan_id,
+                "intro_pulses": intro_pulses,
+                "verified": True,
+            },
+        )
+        self.trainer_evidence.append(receipt)
+        return receipt
 
 
 def _interruption_kind(battle_state: int) -> str | None:

@@ -310,6 +310,7 @@ def execute_route(
         if (
             step.can_discover_blocker
             and hazard is not None
+            and not _handler_resolves_hazard(interruption_handler, hazard)
             and replanner is not None
             and len(replans) < limits.max_replans
         ):
@@ -330,11 +331,35 @@ def execute_route(
         attempts = 0
         step_interruptions = 0
         replaced = False
+        handled_hazard = (
+            hazard
+            if hazard is not None and _handler_resolves_hazard(interruption_handler, hazard)
+            else None
+        )
         while True:
             actions.execute(step.macro_action)
             movement_requests += 1
             attempts += 1
             observed = observer.observe()
+
+            if (
+                handled_hazard is not None
+                and observed.interruption is None
+                and _matches(
+                    observed,
+                    step.expected_map,
+                    step.expected_at,
+                    mode=step.expected_mode,
+                )
+            ):
+                # Generation I trainer sight moves the player first and starts
+                # its engagement script a few frames later.  A handler may
+                # explicitly accept that semantic hazard; give the declared
+                # interruption one bounded settle before acknowledging the
+                # movement that entered it.
+                _wait(actions, limits.transition_settle_frames)
+                wait_actions += 1
+                observed = observer.observe()
 
             if observed.interruption is not None:
                 if len(interruptions) >= limits.max_interruptions:
@@ -488,6 +513,7 @@ def execute_route(
             if (
                 step.can_discover_blocker
                 and hazard is not None
+                and not _handler_resolves_hazard(interruption_handler, hazard)
                 and replanner is not None
                 and len(replans) < limits.max_replans
             ):
@@ -505,6 +531,8 @@ def execute_route(
                 pending = list(replacement.steps)
                 replaced = True
                 break
+            if hazard is not None and _handler_resolves_hazard(interruption_handler, hazard):
+                handled_hazard = hazard
 
             # Only infer a live blocker after the input has had a bounded
             # chance to finish.  Gen I can leave the source coordinates
@@ -612,14 +640,24 @@ def _with_live_constraints(
     combined = dict(durable)
     current_constraints = current.occupied | frozenset(item.at for item in current.hazards)
     if current_constraints:
-        combined[current.map_id] = (
-            combined.get(current.map_id, frozenset()) | current_constraints
-        )
+        combined[current.map_id] = combined.get(current.map_id, frozenset()) | current_constraints
     return combined
 
 
 def _hazard_at(snapshot: TraversalSnapshot, at: Coordinate) -> TraversalHazard | None:
     return next((item for item in snapshot.hazards if item.at == at), None)
+
+
+def _handler_resolves_hazard(
+    handler: InterruptionHandler | None,
+    hazard: TraversalHazard,
+) -> bool:
+    """Require an explicit handler capability before entering a known hazard."""
+
+    if handler is None:
+        return False
+    kinds: object = getattr(handler, "handled_hazard_kinds", frozenset())
+    return isinstance(kinds, frozenset) and hazard.kind in kinds
 
 
 def _request_replacement(

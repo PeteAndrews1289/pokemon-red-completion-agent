@@ -6,8 +6,10 @@ from typing import cast
 import pytest
 
 from pokemon_red_completion.gen1_route_runtime import (
+    Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
     Gen1WildFleeHandler,
+    strongest_usable_move_slot,
 )
 from pokemon_red_completion.observation import (
     SAFFRON_GUARD_ACCESS_MASK,
@@ -63,6 +65,18 @@ class FakeReader:
 @dataclass
 class FakeExecutor:
     def execute(self, action: object) -> object:
+        return action
+
+
+@dataclass
+class TrainerIntroExecutor:
+    reader: FakeReader
+    actions: int = 0
+
+    def execute(self, action: object) -> object:
+        self.actions += 1
+        self.reader.raw = replace(self.reader.raw, battle_state=2)
+        self.reader.trainer_engagement = False
         return action
 
 
@@ -162,6 +176,64 @@ def test_trainer_walkup_is_typed_before_battle_ram_changes() -> None:
     assert not observed.ready
     assert observed.occupied == frozenset()
     assert fake.occupancy_reads == 0
+
+
+def test_route_battle_policy_prefers_effective_damaging_move_evidence() -> None:
+    state = replace(
+        raw(battle_state=2),
+        party_species_ids=(179,),
+        active_party_index=0,
+        active_party_species_id=179,
+        active_party_moves=(39, 55, 61, 0),
+        active_party_pp=(30, 25, 20, 0),
+        enemy_species_id=165,
+    )
+
+    assert strongest_usable_move_slot(state) == 3
+    assert (
+        strongest_usable_move_slot(
+            replace(state, player_disabled_move_slot=3, player_disable_turns=2)
+        )
+        == 2
+    )
+
+
+def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeReader(raw(), trainer_engagement=True)
+    executor = TrainerIntroExecutor(fake)
+
+    def finish_battle(*args: object, **kwargs: object) -> RawGameState:
+        assert fake.raw.battle_state == 2
+        fake.raw = replace(fake.raw, battle_state=0)
+        return fake.raw
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle",
+        finish_battle,
+    )
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, executor),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=1,
+        stabilization_frames=24,
+    )
+
+    receipt = handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
+
+    assert receipt.kind == "trainer_battle"
+    assert receipt.resumed_at == (8, 7)
+    assert receipt.details == {
+        "battle_plan_id": "generated-route-map-12-trainer-1",
+        "intro_pulses": 1,
+        "verified": True,
+    }
+    assert executor.actions == 1
+    assert handler.trainer_evidence == [receipt]
+    with pytest.raises(RouteExecutionError, match="trainer budget"):
+        handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
 
 
 def test_wild_handler_publishes_the_existing_authenticated_receipt(

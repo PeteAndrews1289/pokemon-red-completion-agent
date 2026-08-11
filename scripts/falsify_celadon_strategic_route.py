@@ -26,11 +26,12 @@ from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
 from pokemon_red_completion.gen1_route_runtime import (
+    Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
-    Gen1WildFleeHandler,
 )
 from pokemon_red_completion.gen1_story_routing import apply_gen1_story_requirements
 from pokemon_red_completion.gen1_terrain import walkable_world
+from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
 from pokemon_red_completion.gen1_traversal import (
     local_graph,
     map_object_events,
@@ -146,7 +147,10 @@ def main(argv: list[str] | None = None) -> int:
             raise CeladonStrategicRouteProbeError(
                 "the capture is not the ready post-Hideout Celadon Center boundary"
             )
-        observer = Gen1TraversalObserver(reader)
+        observer = Gen1TraversalObserver(
+            reader,
+            hazard_projector=Gen1TrainerSightProjector(rom, reader),
+        )
         observed = observer.observe()
         if observed.last_outside_map != MapId.CELADON_CITY:
             raise CeladonStrategicRouteProbeError(
@@ -230,10 +234,11 @@ def main(argv: list[str] | None = None) -> int:
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
         )
         actions = CountingExecutor(controller)
-        wild_handler = Gen1WildFleeHandler(
+        interruption_handler = Gen1RouteInterruptionHandler(
             actions,
             reader,
             maximum_flees=8,
+            maximum_trainer_battles=8,
             stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
             route_name="generated post-Hideout Celadon-to-Tower route",
         )
@@ -265,7 +270,7 @@ def main(argv: list[str] | None = None) -> int:
             strategic_choice.selected_plan,
             actions,
             observer,
-            interruption_handler=wild_handler,
+            interruption_handler=interruption_handler,
             replanner=replan,
             limits=limits,
         )
