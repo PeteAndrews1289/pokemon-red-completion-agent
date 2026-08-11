@@ -14,7 +14,7 @@ import argparse
 import hashlib
 import json
 import sys
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -51,6 +51,7 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
     water_tilesets,
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
+    Direction,
     TraversalRules,
     local_graph,
     map_object_events,
@@ -60,7 +61,7 @@ from pokemon_red_completion.lavender import (  # noqa: E402
     DEFAULT_LAVENDER_TIMING,
     _use_bag_item,
 )
-from pokemon_red_completion.local_router import find_local_path  # noqa: E402
+from pokemon_red_completion.local_router import LocalGraph, find_local_path  # noqa: E402
 from pokemon_red_completion.observation import (  # noqa: E402
     EventFlag,
     ItemId,
@@ -122,6 +123,7 @@ class _SolvedPhase:
 class _DerivedWalkReceipt:
     acknowledged_steps: int
     replans: int
+    rejected_edges: int
 
 
 def _stop_at_strength_boundary(progress: VictoryRoadProgress) -> None:
@@ -267,6 +269,10 @@ def _derive_walk_route(
     rules: TraversalRules,
     occupancy: dict[int, frozenset[tuple[int, int]]],
     reader: PokemonRedStateReader,
+    *,
+    rejected_edges: Collection[
+        tuple[tuple[int, int], tuple[int, int]]
+    ] = (),
 ) -> tuple[str, ...]:
     raw = reader.read()
     if raw.map_id is None or raw.player_y is None or raw.player_x is None:
@@ -280,8 +286,21 @@ def _derive_walk_route(
         water_set_ids=surf_tileset_ids,
     )
     blocked = occupancy[raw.map_id] | reader.read_current_object_coordinates()
+    graph = local_graph(terrain, rules, blocked=blocked)
+    rejected = frozenset(rejected_edges)
+    if rejected:
+        graph = LocalGraph(
+            {
+                source: tuple(
+                    edge
+                    for edge in outgoing
+                    if (source, edge.target) not in rejected
+                )
+                for source, outgoing in graph.edges.items()
+            }
+        )
     path = find_local_path(
-        local_graph(terrain, rules, blocked=blocked),
+        graph,
         (raw.player_y, raw.player_x),
         goal,
     )
@@ -310,18 +329,41 @@ def _execute_derived_walk(
     source_map = start.map_id
     acknowledged = 0
     replans = 0
+    rejected_edges: set[tuple[tuple[int, int], tuple[int, int]]] = set()
     while replans <= max_replans:
         route = _derive_walk_route(
-            goal, rom, sets, surf_tileset_ids, rules, occupancy, reader
+            goal,
+            rom,
+            sets,
+            surf_tileset_ids,
+            rules,
+            occupancy,
+            reader,
+            rejected_edges=rejected_edges,
         )
         blocked = False
         for direction in route:
+            before = reader.read()
             try:
                 _step(actions, reader, direction, label)
             except VictoryRoadChapterError:
                 current = reader.read()
                 if current.map_id != source_map or current.battle_state not in {0, None}:
                     raise
+                if (
+                    before.player_y is None
+                    or before.player_x is None
+                    or current.player_y != before.player_y
+                    or current.player_x != before.player_x
+                ):
+                    raise
+                dy, dx = Direction(direction).delta
+                rejected_edges.add(
+                    (
+                        (before.player_y, before.player_x),
+                        (before.player_y + dy, before.player_x + dx),
+                    )
+                )
                 replans += 1
                 blocked = True
                 break
@@ -331,11 +373,15 @@ def _execute_derived_walk(
                     raise VictoryRoadStrengthChainProbeError(
                         f"{label} entered the wrong map"
                     )
-                return _DerivedWalkReceipt(acknowledged, replans)
+                return _DerivedWalkReceipt(
+                    acknowledged, replans, len(rejected_edges)
+                )
         if not blocked:
             current = reader.read()
             if current.map_id == expected_map:
-                return _DerivedWalkReceipt(acknowledged, replans)
+                return _DerivedWalkReceipt(
+                    acknowledged, replans, len(rejected_edges)
+                )
             raise VictoryRoadStrengthChainProbeError(
                 f"{label} reached {goal} without its map transition"
             )
@@ -610,6 +656,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "acknowledged_steps": item.acknowledged_steps,
                     "replans": item.replans,
+                    "rejected_edges": item.rejected_edges,
                 }
                 for item in derived_inter_phase_routes
             ],
