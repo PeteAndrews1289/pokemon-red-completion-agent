@@ -72,20 +72,30 @@ acknowledged with no interruption or replan. The first attempt also corrected ho
 geometry: pass-through gates settle on the outside warp, unlike vertical door walk-outs. See the
 [story-gate receipt](evidence/saffron-story-gate-route-probe-2026-08-10.json).
 
-This closes one real story predicate, not general Victory Road navigation or every Kanto script.
-Special scripted trainer-like objects remain separate, and Victory Road's inter-room travel plus
-repel-expiry setup remain authored. The ordered gates are now:
+Resource renewal and the two open Victory Road room transitions are now live-qualified at source
+bundle `2c31afaf`. The neutral executor observes remaining effect plus carried renewals and records a
+typed receipt; the Red adapter treats unknown as unavailable, settles the expiry prompt, consumes
+exactly one item and proves counter/inventory/control state. The 51-step 1F→2F and 56-step 2F→3F
+routes are now composed from each floor's live post-switch terrain and exact warp geometry. All
+107/107 route movements were acknowledged; trainer sight caused one safe replan. The authored
+14-step expiry setup is gone: Max Repel naturally reached zero inside the 3F Strength search at
+`(1,9)`, renewed to 250 from the final carried item, and resumed. All five phases passed with 267
+derived puzzle steps and 65 pushes/drop receipts. See the
+[composed resource receipt](evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
 
-1. Make resource renewal first-class, then replace Victory Road's authored inter-room routes and
-   repel-boundary setup with composed execution through their exact warp/resource boundaries.
-2. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
-3. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
+Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
+completion teacher's post-final-switch exit remains authored. The ordered gates are now:
+
+1. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
+2. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-4. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+3. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-5. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+4. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-6. Add Crystal's thin adapter now that direct occupancy and one story predicate preserve the neutral
+5. Add Crystal's thin adapter now that direct occupancy, one story predicate and resource renewal
+   preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 

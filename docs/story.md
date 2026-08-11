@@ -496,6 +496,32 @@ authored preamble.
 
 ---
 
+## Act XV: the path paid for its own protection
+
+Victory Road still had three invisible cheats: two copied strings between floors and a third walk
+whose only purpose was to make Repel expire where the script expected. The boulders were planned,
+but the journey connecting them was not.
+
+The route now observes Repel like any other finite resource. Active means continue. Unknown means
+stop. Zero plus a carried renewal means settle the prompt, consume exactly one item, prove the new
+counter and unchanged player/party, then resume. The same receipt works inside ordinary walking and
+inside Strength search; the puzzle does not get a weaker inventory rule just because its protection
+ran out.
+
+The cartridge composed both missing room changes: 51 steps from 1F to 2F and 56 from 2F to 3F,
+each through an exact warp, every movement acknowledged. Trainer sight changed the first suffix once
+without causing a battle. With the 14-step expiry walk deleted, the final Max Repel reached zero
+naturally at 3F `(1,9)`. One confirmation, one item, 250 restored steps, same search.
+
+That changed the headline. The five puzzle plans now take 267 steps and 65 pushes/drop receipts.
+The third search explores 54,305 states because it starts at the real 3F arrival rather than after a
+hand-selected head start. The larger number is the more transferable result.
+
+The route to Indigo after the final switch is still teacher-authored. This is not full generated
+completion; it is one more removed answer key and one more mechanic represented as observable state.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -554,8 +580,10 @@ Being precise about this matters more than the story sounding finished.
   and returned to Center. Five bounded searches then solved Victory Road's full Strength chain, and
   a trainer-sight proof replanned before engagement. One observed Route 7 story predicate now keeps
   closed and unknown Saffron states unavailable, then admits the same corridor after the live flag
-  opens. Resource renewal, repeated Cut, other story scripts and general generated routing remain
-  outside completion-run authority.
+  opens. Both open Victory Road room transitions are now composed, and Repel renewed from observed
+  zero inside Strength without an authored expiry walk. Repeated Cut, other story scripts, the
+  post-final-switch Indigo route and general generated routing remain outside completion-run
+  authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

@@ -15,6 +15,25 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Resource episode: the route outlived its Repel
+
+Put three remaining handwritten strings over Victory Road: **51 ROOM STEPS**, **56 ROOM STEPS** and
+**14 STEPS TO FORCE EXPIRY**. Delete all three. Replace the first two with live map overlays ending
+at exact warp coordinates; show **107 requests / 107 acknowledgements**, then briefly flash the one
+trainer-sight replan that stayed battle-free.
+
+Let the first Max Repel expire naturally during the third boulder search. Freeze at 3F `(1,9)` and
+show the state card: **remaining 0 / carried 1 / input prompt active**. One confirmation dismisses
+the prompt; one item disappears; the counter becomes 250; the player and party do not change. Then
+resume the same Strength plan. The line is: **“A resource boundary is not a route failure. It is a
+state transition the route has to know how to pay for.”**
+
+Do not reuse the old 247-step headline. The natural 3F origin makes the five searches total 267
+steps and 65 pushes/drop receipts, with the third search exploring 54,305 states. Put the old and
+new origins side by side and say: **“The shorter result had a hidden head start.”** Close with the
+honest boundary: post-final-switch travel to Indigo is still teacher-authored, and generated routes
+still do not own the counted campaign.
+
 ## Story-gate episode: open floor, closed world
 
 Begin with the Route 7 guard house rendered twice. Do not change a tile between the frames. Draw the

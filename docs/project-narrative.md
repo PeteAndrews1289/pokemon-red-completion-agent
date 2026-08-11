@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: the route outlived its Repel
+
+The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14
+directions chosen only to make Repel expire at a convenient boundary. They were reproducible, but
+they were not knowledge a model could carry into Crystal.
+
+The neutral traversal state now includes renewable step resources. A title adapter sees unknown,
+zero and active as different truths. At zero, Red must settle the expiry prompt, consume exactly one
+observed Repel-family item, prove the effect counter, bag delta, unchanged position/party and ready
+controls, then return a receipt. The same adapter is used by ordinary route execution and inside the
+Strength executor, where inventory is otherwise protected byte-for-byte.
+
+Live post-switch terrain now composes both room changes through cartridge warps. The first route
+takes 51 acknowledged movements and replans once around trainer sight; the second takes 56 with no
+replan. Neither enters battle. With the 14-step setup deleted, the third Strength search begins at
+the natural 3F arrival `(7,23)`. The old Repel reaches zero mid-search at `(1,9)`, one prompt
+confirmation settles, the final Max Repel is consumed, its counter becomes 250, and search resumes.
+All five events pass with 267 derived puzzle transitions and 65 pushes/drop receipts. The
+[composed resource receipt](evidence/victory-road-composed-resource-chain-probe-2026-08-10.json)
+binds the result to clean source.
+
+The larger third search—54,305 explored states instead of 31,841—is useful evidence. The earlier
+number depended on a hand-selected preamble that moved the player closer to the puzzle while burning
+a resource. Removing that convenience made the honest planning cost visible. The next gate is
+repeated Cut, followed by joint local-plus-macro pricing and strategic navigation records.
+
 ## August 10: open floor did not mean open world
 
 Route 7's guard house contains an ordinary five-step corridor in the cartridge terrain whether or

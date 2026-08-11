@@ -14,6 +14,33 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Victory Road now crosses rooms and renews its own Repel — 2026-08-10
+
+Clean executable source bundle `2c31afaf232726ea7c4b7a50b6bbac7d03eed8fc019c0e799af205d3cce84e35`
+and probe commit `254b846ff11bcb31d0a4359278ea43c2795fbdbc` make step-bounded resources
+part of the neutral traversal contract. A snapshot carries remaining effect and carried renewals;
+unknown, depleted and active are distinct. The generic executor asks a title adapter to renew before
+movement and stores the receipt. Red's adapter dismisses the expiry prompt under a bound, consumes
+exactly one observed Repel-family item, verifies the new counter, unchanged player/party, exact bag
+delta and restored controls, and fails closed without state or inventory. Strength uses the same
+manager between puzzle steps without weakening its protected-state check.
+
+The authenticated full-chain probe removes all three older authored gaps. The 1F→2F and 2F→3F
+direction strings are replaced by live mutable-terrain plans of **51** and **56** steps, each ending
+in an exact cartridge-decoded warp. Every movement was acknowledged; the first route replanned once
+around live trainer sight and neither route entered a battle. The 14-step “walk until Repel expires”
+setup is deleted. The first Max Repel naturally reaches zero during the third Strength search at 3F
+`(1,9)`; one prompt confirmation settles, one final Max Repel is consumed, the counter becomes 250,
+and the same search resumes. All five switch/hole events pass with **267 derived puzzle steps** and
+**65 pushes/drop receipts**. Record:
+[victory-road-composed-resource-chain-probe-2026-08-10.json](docs/evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
+
+The third phase is now 67 steps / 54,305 explored states because it begins at the natural 3F warp,
+not after the deleted 14-step expiry preamble. That is the new honest baseline. Next qualify repeated
+Cut, then joint local-plus-macro pricing, acquisition coverage, strategic navigation records and the
+Crystal adapter. The post-final-switch route to Indigo remains authored completion-teacher behavior;
+generated routing remains outside counted-run authority and v95 stays **0/10**.
+
 ## The same floor is closed, unknown, then open — 2026-08-10
 
 Clean executable source `40a05d160b66e5e8e00f4ca95bb76841752694eb` adds opaque semantic

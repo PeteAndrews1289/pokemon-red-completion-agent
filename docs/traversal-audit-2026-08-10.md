@@ -1,5 +1,27 @@
 # Knowledge-to-action audit — 2026-08-10
 
+## Post-audit closure: renewable resources and Victory Road rooms
+
+Source bundle `2c31afaf232726ea7c4b7a50b6bbac7d03eed8fc019c0e799af205d3cce84e35`
+adds observed step resources and typed renewal receipts to the neutral executor. Red distinguishes
+unknown, zero and active Repel state; settles an expiry prompt under a bound; consumes exactly one
+observed item; and proves counter, bag, player, party and control state. The same manager operates
+inside Strength without weakening protected inventory checks.
+
+The authenticated full-chain probe replaces Victory Road's 51- and 56-step inter-room strings with
+live mutable-terrain plans through exact warps. All 107 route movements were acknowledged, with one
+trainer-sight replan and no battle. It also deletes the authored 14-direction expiry setup. Repel
+reaches zero naturally during the third Strength search at 3F `(1,9)`, renews to 250 from the last
+Max Repel, and resumes the plan. All five events pass with 267 derived steps and 65 pushes/drop
+receipts. See the
+[composed resource record](evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
+
+This supersedes the older text below where Strength, resource renewal or those two room boundaries
+remain listed as open. Repeated Cut is now the next navigation gate, followed by joint macro/local
+pricing, acquisition coverage, strategic navigation records and Crystal transfer. The
+post-final-switch route to Indigo remains authored, and generated routing still has no counted-run
+authority.
+
 ## Post-audit closure: the first story predicate
 
 Source `40a05d160b66e5e8e00f4ca95bb76841752694eb` closes the audit's first semantic

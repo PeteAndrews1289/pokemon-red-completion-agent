@@ -27,8 +27,10 @@
 > engagement or battle. A seventh proof now binds Route 7's Saffron corridor to an observed story
 > predicate: closed and unknown states rejected the statically walkable floor without input; after
 > the guard handoff, generated plans crossed both directions and entered Saffron after 11/11
-> acknowledged movements. Travel through Victory Road's room warps and repel-expiry boundary remain
-> explicitly authored rather than being misreported as generated navigation.
+> acknowledged movements. The next proof removes Victory Road's two authored room routes and
+> Repel-expiry setup: 107/107 composed route movements crossed both exact warps, one trainer-sight
+> replan stayed battle-free, and a Max Repel renewed from observed zero inside the third Strength
+> search. All five puzzles still settled, now from the natural 3F arrival rather than a staged walk.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [capability audit](docs/current-audit-2026-08-10.md),
@@ -41,7 +43,8 @@
 > [Strength state search](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json)
 > and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json), plus
 > the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json)
-> and [Saffron story gate](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json).
+> and [Saffron story gate](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json), plus the
+> [composed resource chain](docs/evidence/victory-road-composed-resource-chain-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -85,8 +88,12 @@ and reached the exit approach with 50/50 movements and no encounter. Route 7's S
 now requires an opaque observed story fact: closed and unknown observations reject the same static
 corridor, while the live open flag admits it. The source-bound proof crossed both directions and
 entered Saffron after 11/11 acknowledged movements. This qualifies one story predicate; special
-scripted trainer-like objects, resource renewal, other story locks and the remaining Victory Road
-inter-room boundaries are still explicit open work.
+scripted trainer-like objects and other story locks remain explicit open work. Repel is now an
+observed renewable route resource: unknown fails closed, zero plus inventory invokes an exact
+title-adapter receipt, and active state proceeds without menu work. Live Victory Road replaced the
+51- and 56-step room strings with composed warp routes and renewed the final Max Repel at 3F `(1,9)`
+inside Strength. The post-final-switch route to Indigo, repeated Cut and broader generated-routing
+authority remain open.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of
