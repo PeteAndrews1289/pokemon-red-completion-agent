@@ -254,7 +254,9 @@ equivalent produced:
 - **2,606 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
-- exact prospective-registry regeneration;
+- exact battle and strategic prospective-registry regeneration locally; GitHub CI currently
+  enforces the battle registry, while the strategic check remains explicit in the pull-request
+  checklist until the publishing credential has workflow scope;
 - Ruff clean;
 - mypy clean across its declared 154-source-file scope; and
 - GitHub Actions green through the preceding published checkpoint; exact-commit CI remains a
