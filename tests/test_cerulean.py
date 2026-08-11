@@ -30,6 +30,7 @@ from pokemon_red_completion.cerulean import (
     MT_MOON_POTION_PICKUP_POSITION,
     MT_MOON_POTION_RETURN_DIRECTIONS,
     MT_MOON_POTION_TOGGLE_INDEX,
+    MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES,
     MT_MOON_ZUBAT_PRE_THROW_WAIT,
     MT_MOON_ZUBAT_SEED_WAIT,
     PEWTER_TO_CENTER_DIRECTIONS,
@@ -53,6 +54,7 @@ from pokemon_red_completion.cerulean import (
     _pp_at,
     _reverse_directions,
     _route_3_victory_sequence,
+    _seek_mt_moon_zubat,
     _select_battle_move,
     _use_battle_potion,
     _use_route_3_recovery_potion,
@@ -70,6 +72,7 @@ from pokemon_red_completion.observation import (
     SQUIRTLE_SPECIES_ID,
     SUPER_NERD_TRAINER_CLASS_ID,
     WARTORTLE_SPECIES_ID,
+    ZUBAT_SPECIES_ID,
     BattleMenuPhase,
     BattleMenuState,
     CeruleanBoundary,
@@ -122,6 +125,60 @@ def _raw(
         battle_result=0,
         first_party_moves=(0x21, 0x27, 0x91, 0x37),
         first_party_pp=(34, 30, 20, 11),
+    )
+
+
+def test_mt_moon_zubat_search_observes_a_delayed_target_on_the_return_step() -> None:
+    origin = _raw(MapId.MT_MOON_1F, 14, 32)
+    upper = replace(origin, player_y=31)
+    target = replace(
+        origin,
+        battle_state=1,
+        enemy_species_id=ZUBAT_SPECIES_ID,
+        enemy_level=7,
+        enemy_hp=23,
+        enemy_max_hp=23,
+    )
+
+    class _Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        returning = False
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE and action.value == "up":
+                reader.state = upper
+            elif action.kind is MacroActionKind.MOVE and action.value == "down":
+                reader.state = origin
+                self.returning = True
+            elif action.kind is MacroActionKind.WAIT and self.returning:
+                reader.state = target
+            return object()
+
+    executor = _Executor()
+    observed, flees, retries, attempts = _seek_mt_moon_zubat(  # type: ignore[arg-type]
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+    )
+
+    assert observed is target
+    assert flees == ()
+    assert retries == 0
+    assert attempts == 1
+    assert [
+        action.value for action in executor.actions if action.kind is MacroActionKind.MOVE
+    ] == ["up", "down"]
+    assert executor.actions[-1] == MacroAction(
+        MacroActionKind.WAIT,
+        repeat=MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES,
     )
 
 

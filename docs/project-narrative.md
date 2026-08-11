@@ -2902,6 +2902,24 @@ Lance, Champion, and Hall of Fame. Seed `990027` completed 74/74 scheduled battl
 observed objectives with a healthy 66/55/55/55/55/55 party. A loss in the first battle had become a
 different but complete curriculum rather than a reason to discard the root.
 
+## The search only watched half of its own path
+
+The first source-bound strategic rehearsal to reach Mt. Moon still failed before making a
+strategic choice. It had already proved the Forest move fallback, Brock and every required Route 3
+trainer. The Zubat timeout initially looked like unlucky encounter sampling, but the trace recorded
+the exact level-seven target on the return step. A generic return helper immediately fled it because
+the target predicate existed only on the outward step. The final movement also showed an encounter
+appearing one frame after the movement receipt. The repair made both directions first-class probes
+with the same target, drift, stabilization and flee-accounting contracts.
+
+The exact-schedule in-memory replay then crossed Zubat capture, Rocket, the fossil guard, the Helix
+Fossil and the whole cave. Its next failure revealed a complementary smell: the Cerulean Center
+route deliberately pressed `down` into a wall, relying on a previously swallowed input to make the
+remaining coordinates line up. Removing the collision and acknowledging each real step carried the
+same diagnostic through 275 of 312 checkpoints and 1,250 balanced-team battles before a deliberate
+stop. The two bugs share one lesson: a failed input and an unobserved return edge are not harmless
+timing details; they are missing state transitions.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

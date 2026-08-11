@@ -86,6 +86,7 @@ ROUTE_3_STEP_RETRY_WAIT_FRAMES = 24
 ROUTE_3_WILD_STABILIZATION_FRAMES = 120
 MT_MOON_ZUBAT_SEARCH_CYCLES = 64
 MT_MOON_ZUBAT_SEARCH_MAX_FLEES = 32
+MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES = 1
 MT_MOON_MAX_WILD_FLEES = 64
 CENTER_TO_ROUTE_3_DIRECTIONS = _directions("R" * 3 + "U" * 4 + "R" * 3 + "U" * 4 + "R" * 21)
 ROUTE_3_TO_PEWTER_CENTER_DIRECTIONS = _directions(
@@ -1305,7 +1306,7 @@ def _seek_mt_moon_zubat(
     int,
     int,
 ]:
-    """Search one reversible grass edge for the exact level-seven Zubat lesson."""
+    """Search both directions of one reversible cave edge for the target Zubat."""
 
     origin = reader.read()
     if (
@@ -1317,23 +1318,78 @@ def _seek_mt_moon_zubat(
     flees: tuple[Route1WildFleeEvidence, ...] = ()
     movement_retries = 0
     for search_attempt in range(1, MT_MOON_ZUBAT_SEARCH_CYCLES + 1):
+        observed, outbound_flees, outbound_retries, target_found = (
+            _probe_mt_moon_zubat_step(
+                executor,
+                reader,
+                direction="up",
+                starting_position=(14, 32),
+                destination=(14, 31),
+                used_flees=len(flees),
+            )
+        )
+        flees += outbound_flees
+        movement_retries += outbound_retries
+        if target_found:
+            return observed, flees, movement_retries, search_attempt
+
+        observed, return_flees, return_retries, target_found = (
+            _probe_mt_moon_zubat_step(
+                executor,
+                reader,
+                direction="down",
+                starting_position=(14, 31),
+                destination=(14, 32),
+                used_flees=len(flees),
+            )
+        )
+        flees += return_flees
+        movement_retries += return_retries
+        if target_found:
+            return observed, flees, movement_retries, search_attempt
+    raise CeruleanChapterError("Mt. Moon Zubat search exhausted its bounded semantic search.")
+
+
+def _probe_mt_moon_zubat_step(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    direction: str,
+    starting_position: tuple[int, int],
+    destination: tuple[int, int],
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, bool]:
+    """Move one search edge while treating either direction as a target probe."""
+
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    for movement_attempt in range(1, ROUTE_3_MAX_STEP_ATTEMPTS + 1):
         before = reader.read()
         if (
             before.map_id != MapId.MT_MOON_1F
-            or (before.player_x, before.player_y) != (14, 32)
+            or (before.player_x, before.player_y) != starting_position
             or before.battle_state != 0
         ):
-            raise CeruleanChapterError("Mt. Moon Zubat search lost its reversible origin.")
-        executor.execute(MacroAction(MacroActionKind.MOVE, "up"))
-        _wait(executor, 1)
+            raise CeruleanChapterError("Mt. Moon Zubat search lost its reversible edge.")
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+        # Wild transitions can become observable one frame after the movement
+        # receipt. Without this symmetric wait, a target encountered while
+        # returning to the origin can be mistaken for a completed empty step.
+        _wait(executor, MT_MOON_ZUBAT_ENCOUNTER_WAIT_FRAMES)
         observed = reader.read()
-        consumed = (observed.player_x, observed.player_y) == (14, 31)
+        position = (observed.player_x, observed.player_y)
+        consumed = position == destination
+
         if observed.battle_state:
-            if observed.battle_state != 1 or observed.map_id != MapId.MT_MOON_1F:
-                raise CeruleanChapterError("Mt. Moon Zubat search met a non-wild battle.")
+            if (
+                observed.battle_state != 1
+                or observed.map_id != MapId.MT_MOON_1F
+                or position not in {starting_position, destination}
+            ):
+                raise CeruleanChapterError("Mt. Moon Zubat search met a drifting battle.")
             if observed.enemy_species_id == ZUBAT_SPECIES_ID and observed.enemy_level == 7:
-                return observed, flees, movement_retries, search_attempt
-            if len(flees) >= MT_MOON_ZUBAT_SEARCH_MAX_FLEES:
+                return observed, flees, movement_attempt - 1, True
+            if used_flees + len(flees) >= MT_MOON_ZUBAT_SEARCH_MAX_FLEES:
                 raise CeruleanChapterError("Mt. Moon Zubat search exhausted its flee budget.")
             flees += (
                 flee_wild(
@@ -1346,30 +1402,28 @@ def _seek_mt_moon_zubat(
                     error_type=CeruleanChapterError,
                 ),
             )
-        elif not consumed:
-            if (observed.player_x, observed.player_y) != (14, 32):
-                raise CeruleanChapterError("Mt. Moon Zubat search drifted off its grass edge.")
-            movement_retries += 1
-            _wait(executor, ROUTE_3_STEP_RETRY_WAIT_FRAMES)
-            continue
+            settled = reader.read()
+            expected_position = destination if consumed else starting_position
+            if (
+                settled.map_id != MapId.MT_MOON_1F
+                or (settled.player_x, settled.player_y) != expected_position
+                or settled.battle_state != 0
+            ):
+                raise CeruleanChapterError("Mt. Moon Zubat flee did not restore its search edge.")
+            if consumed:
+                return settled, flees, movement_attempt - 1, False
+        elif consumed:
+            if observed.first_party_hp == 0:
+                raise CeruleanChapterError("The active party member fainted during Zubat search.")
+            return observed, flees, movement_attempt - 1, False
+        elif observed.map_id != MapId.MT_MOON_1F or position != starting_position:
+            raise CeruleanChapterError("Mt. Moon Zubat search drifted off its reversible edge.")
 
-        if consumed:
-            _, return_flees, return_retries = move_with_wild_flees(
-                executor,
-                reader,
-                ("down",),
-                "Mt. Moon Zubat search-origin return",
-                expected_map_id=MapId.MT_MOON_1F,
-                route_name="Mt. Moon",
-                maximum_flees=MT_MOON_ZUBAT_SEARCH_MAX_FLEES - len(flees),
-                stabilization_frames=ROUTE_3_WILD_STABILIZATION_FRAMES,
-                maximum_step_attempts=ROUTE_3_MAX_STEP_ATTEMPTS,
-                step_retry_wait_frames=ROUTE_3_STEP_RETRY_WAIT_FRAMES,
-                error_type=CeruleanChapterError,
-            )
-            flees += return_flees
-            movement_retries += return_retries
-    raise CeruleanChapterError("Mt. Moon Zubat search exhausted its bounded semantic search.")
+        if movement_attempt == ROUTE_3_MAX_STEP_ATTEMPTS:
+            raise CeruleanChapterError("Mt. Moon Zubat search exhausted its step retry bound.")
+        _wait(executor, ROUTE_3_STEP_RETRY_WAIT_FRAMES)
+
+    raise AssertionError("unreachable Mt. Moon Zubat movement loop")
 
 
 def _collect_mt_moon_tm01(

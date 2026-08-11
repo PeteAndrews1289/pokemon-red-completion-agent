@@ -1019,6 +1019,14 @@ version has to prove the model learned something worth carrying into a game it h
   Potions and a fully stocked Bubble. Show the same schedule clearing checkpoint 24 after removing
   the one handwritten Tackle exception. Do not show a 312/312 or Hall-of-Fame card until a repaired
   source-bound rehearsal actually earns it.
+- Continue with the third honest failure rather than jumping to success. Show every required Route
+  3 trainer cleared and the run reaching Mt. Moon, then replay the level-seven Zubat appearing on
+  the *return* step and being fled by a one-sided search. Draw the same target predicate on both
+  arrows and caption it **“A reversible search has two observation surfaces.”** Follow with the
+  complete cave and Cerulean checkpoints, then expose the next chapter's second `down` as a wall
+  collision masquerading as a wait. Replace it with acknowledged movement and show the repaired
+  diagnostic reaching 275/312 plus 1,250 balanced-team battles. Label it uncounted and deliberately
+  interrupted; do not present it as a completed strategic episode.
 - A cartridge-to-graph-to-tile animation, followed by the Route 1 generated path overlay and live
   two-square ledge hop. Show `action=down` beside `kind=ledge`, the blocked reverse input, the clean
   source commit, and “Cut/Surf/Strength not yet executable” at the same time.

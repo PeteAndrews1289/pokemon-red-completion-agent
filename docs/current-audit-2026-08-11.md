@@ -29,6 +29,16 @@ checkpoint 16, before any strategic decision. Its repaired source-bound successo
 and then failed at checkpoint 23, also before the strategic branch. Both are retained as uncounted
 negative harness evidence. All train, validation and test slots remain unopened.
 
+A third published rehearsal at `c1e5d11` cleared both repairs, all required Route 3 trainers and
+Mt. Moon entry before failing at checkpoint 28. Its 5,301-record partial also contains zero
+strategic decisions. The trace found the exact level-seven Zubat on the search's return step, where
+a generic helper fled it because target qualification existed only on the outbound step. The
+repaired search observes both directions after a one-frame transition wait. An exact-schedule
+in-memory replay then passed the complete Mt. Moon/Cerulean chapter and, after replacing a wall
+collision used as an implicit timing wait with acknowledged movement, continued through checkpoint
+275 and 1,250 balanced-team battles. That deliberately interrupted diagnostic proves the repair
+prefix; it is not a completed rehearsal or dataset episode.
+
 That claim boundary is healthy. The exact failed schedule now clears its former Viridian Forest
 gate after a trace-derived repair. The next highest-value work is publishing that source, qualifying
 its regenerated rehearsal identity, auditing whether its sparse decision coverage can support
@@ -153,8 +163,8 @@ being increased by changing a string in a calibration script. After collection, 
 episode loader independently matches the header's collection, source bundle, source commit, split,
 actor and policy to that assignment before applying the strict decision/outcome join. It refuses
 local-only assignments and keeps test episodes sealed by default. Current counted status is **train
-0/5, validation 0/2, test 0/5**. Two earlier source-bound rehearsals failed before the strategic
-branch; the newest repaired-source prospective rehearsal identity remains unopened.
+0/5, validation 0/2, test 0/5**. Three source-bound rehearsals failed before the strategic branch;
+the newest repaired-source prospective rehearsal identity remains unopened.
 
 The registry's rehearsal declaration is now executable as an authenticated identity rather than
 just a seed. Its derived episode and lineage stay `unassigned`, its attempt is explicitly
@@ -217,12 +227,31 @@ that removes that one exception reaches checkpoint 24 with 7 decisions, 2,345 ex
 events. The source now derives the Bubble set from all required Route 3 trainer indexes, retaining
 the Potion floor, battle recovery and victory contracts.
 
+The resulting published source `c1e5d11` generated a third rehearsal identity. That clean-power
+run reached Mt. Moon at checkpoint 28 after proving Forest, Brock and all four Route 3 trainers.
+It stopped in the bounded Zubat search with 5,301 records (7 decisions, 3,533 executions, 28 events
+and 1,732 snapshots), still before any strategic decision. Chronological execution/snapshot joining
+showed five Mt. Moon Zubat encounters. Crucially, the level-seven target appeared on a return
+movement and was automatically fled; the terminal level-nine encounter merely became observable
+one frame after the final return receipt. The timeout was therefore a one-sided observation defect,
+not evidence that 64 search cycles were too few.
+
+The repair gives outward and return steps the same target predicate, coordinate/drift validation,
+flee budget and stabilization wait. Its regression reveals the return target only during the
+one-frame post-movement wait and requires zero flees. The exact-schedule in-memory replay then
+completed Zubat capture, both cave floors, Rocket, Super Nerd, the Helix Fossil, Route 4 and
+Cerulean. The next chapter immediately exposed an invalid two-down Center path: the second down is
+a wall collision and old success depended on the first input being swallowed. The corrected route
+contains one down and acknowledges every actual movement. With both counterfactuals active, the
+replay continued through checkpoint 275 and 1,250 training battles, levels
+`(48, 48, 55, 47, 47, 47)`, before a deliberate in-memory stop.
+
 ## Code and CI audit
 
 At this checkpoint the repository contains 152 source modules and 176 test modules. The local CI
 equivalent produced:
 
-- **2,604 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,606 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
@@ -235,10 +264,10 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `1212dfa5bd23deda55b22aee593d1e32cdbe20abf40bce9202040c26d41243cb` |
-| Source bundle SHA-256 | `990d365bf093e1b85765ea99673d92e1aae0c491d6ddc671d81bcb331e6a8bd1` |
-| Teacher execution SHA-256 | `09086e68615f50e101b2c094c7dc4d779ac33d621fe76faf4f98db8c10fde9d7` |
-| Slot assignment SHA-256 | `d90a5476e21f184950235edfe1f3fe64351ab3917ecb3c93820f22fb91581524` |
+| Registry SHA-256 | `b35491c2dd822ff5acc41781f87a5d08e05350a047b6f1ff2ee8bfafda349d3b` |
+| Source bundle SHA-256 | `255249795b61dc16f97e932af2773cd7a57c30cd24dcaf77e3242c09844cb906` |
+| Teacher execution SHA-256 | `5db046a56fae5719d1da511dafa8c3d0fab951edff43463a4583fc3f206d131c` |
+| Slot assignment SHA-256 | `71432884d80c0cc96bbaa6a4a69209105140d9933ee83f13475edd0de13a0c1e` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -247,11 +276,11 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `9694bcab348d378d282c1b717d2842487709e43e765d71124583f160a8bca2d0` |
+| Strategic registry SHA-256 | `dbbc677946e777ecfee79a904631c8349b4dd3ec4dc52b3341f21f5c9af16054` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `b144ade83a6522aec776477ed1c64d756f305ef3651b2f8793c48003549c1e2e` |
-| Rehearsal assignment SHA-256 | `20d1a55e79799b8b8a478265c917bded28cfc319e1785f5ba8bb15a95c3edb86` |
-| First train assignment SHA-256 | `eb150e9709921d35cb11f195e28ec6d1c0c015e0e48ecdad0ae43825748c34b5` |
+| Strategic teacher execution SHA-256 | `7ba3f804d106dcd86ae6307982ae64227c606883ce1db1efb792f841245be19e` |
+| Rehearsal assignment SHA-256 | `4b4ba1b1823efd77c622443af2defc18711fcbe2fcfdfc187fce3912f81e30c8` |
+| First train assignment SHA-256 | `ef3f9afe8fc59625c63475d4d9d9a636c9f4ce845c0f95dd9bfa059c76761a1e` |
 
 ## Ranked gaps
 
@@ -266,9 +295,9 @@ validation. Synthetic choices such as selecting between two arbitrary Viridian b
 make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
 collection or optional reward destinations. Preassignment and output authentication are complete;
-one full-run branch is instrumented. Two clean-power attempts failed before that branch and taught
-the teacher how to handle exhausted PP and a bad early move policy safely. Publish the current
-repair and run only its regenerated uncounted assignment next.
+one full-run branch is instrumented. Three clean-power attempts failed before that branch and
+taught the teacher how to handle exhausted PP, a bad early move policy and a one-sided encounter
+search safely. Publish the current repair and run only its regenerated uncounted assignment next.
 
 The execution-side failure prerequisite is now closed. `execute_route` attaches a typed semantic
 reason and measured partial trace to its error, including the acknowledged prefix before a
@@ -321,10 +350,10 @@ from dataset/split audits before adding model code.
 
 ## Ordered roadmap
 
-1. **Publish the bridge.** Commit and push the exact source/registries, then require green CI for
-   that commit before any private clean-power execution.
-2. **Qualify the rehearsal.** Run only root `1710001`; preserve a failed partial episode and never
-   edit source during the run or substitute a train/validation/test root for debugging.
+1. **Publish the current repair.** Commit and push the bidirectional search, acknowledged Cerulean
+   handoff and exact registries, then require green CI for that commit.
+2. **Qualify the rehearsal.** Run only root `1710001`; preserve all three failed identities and
+   never edit source during the run or substitute a train/validation/test root for debugging.
 3. **Audit before opening learning roots.** Authenticate the episode, verify its decision/outcome
    join, and measure candidate coverage, route-cost and shape baselines, interruptions and terminal
    state.

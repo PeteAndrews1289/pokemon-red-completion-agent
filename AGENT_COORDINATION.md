@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-11 Lane A Mt. Moon/Cerulean checkpoint:** preserve a third source-bound uncounted
+> partial from `c1e5d11`. It proved both earlier repairs, all four required Route 3 trainers and
+> Mt. Moon entry before stopping at checkpoint 28 with zero strategic decisions. Its 5,301 records
+> show the exact level-seven Zubat was encountered on the return half of the reversible search and
+> automatically fled; the old search inspected only the outbound half. The replacement observes
+> both directions after a one-frame encounter-settle wait and has a delayed-return regression.
+> The same exact schedule then passed all 15 Mt. Moon/Cerulean checkpoints in an uncounted in-memory
+> diagnostic. That replay exposed and removed a second-down wall collision that the next chapter
+> used as an implicit timing wait; acknowledged movement on the real one-down Center path then
+> continued through checkpoint 275 and 1,250 balanced-team battles before a deliberate diagnostic
+> stop. Publish, require exact-commit CI, then run only the regenerated rehearsal assignment. Train
+> remains 0/5, validation 0/2, test 0/5; never overwrite any failed identity or use a learning root
+> for debugging.
+
 > **2026-08-11 Lane A strategic-rehearsal checkpoint:** preserve two source-bound uncounted failed
 > partials; both stopped before Tower-versus-Eevee and contain zero strategic decisions. Source
 > `ab69be7` failed at 16/312 when the Forest Bug Catcher survived with 6/27 HP after Tackle reached

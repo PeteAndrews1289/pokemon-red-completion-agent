@@ -177,6 +177,17 @@ required route Potions, and then using Tackle until Squirtle reached 0 HP with t
 1 joins the Bubble policy already used by every other required Route 3 trainer. The next prospective
 rehearsal identity includes that repair.
 
+Published source `c1e5d11` proved both repairs, all four required Route 3 trainers and Mt. Moon
+entry before the third source-bound rehearsal failed at checkpoint 28. The 5,301-record partial is
+retained and still contains zero strategic decisions. Its trace shows that the exact level-seven
+Zubat appeared on the return half of the reversible search and was automatically fled because only
+the outbound half checked the target predicate. The symmetric search now observes both directions
+after a one-frame encounter-settle wait. An exact-schedule in-memory replay passed the full cave
+and Cerulean boundary, then exposed a wall collision used as an implicit timing wait on the next
+Center route. Removing that collision and acknowledging every real movement carried the diagnostic
+through checkpoint 275 and 1,250 balanced-team battles. It was deliberately stopped and is not a
+completed rehearsal or training record.
+
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
 that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before
@@ -189,10 +200,10 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Publish the exact Route 3 STAB-policy repair and regenerated registries, then require a fresh
-   green CI run for that commit.
+1. Publish the bidirectional Zubat search and acknowledged Cerulean handoff with regenerated
+   registries, then require a fresh green CI run for that commit.
 2. Execute only the repaired source's regenerated rehearsal identity under schedule `1710001`.
-   Preserve both failed partials if it fails again; never overwrite an identity, edit source during
+   Preserve all three failed partials if it fails again; never overwrite an identity, edit source during
    execution, or open train/validation/test to debug it.
 3. Load a completed rehearsal through the assigned-episode gate and audit its join, candidate
    coverage, interruption evidence, cost baseline and candidate-shape baseline.

@@ -14,6 +14,49 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The third rehearsal reached Mt. Moon and exposed a bidirectional search defect — 2026-08-11
+
+Published source `c1e5d11` passed the exhausted-move Forest repair and the all-required-trainers
+Bubble policy. Its exact clean-power rehearsal crossed Brock, all four required Route 3 trainers,
+Route 4 and Mt. Moon entry, then failed at checkpoint 28 before Tower versus Eevee. Preserve the
+third uncounted partial. It contains 5,301 records (7 objective decisions, 3,533 executions, 28
+events and 1,732 snapshots) and **zero strategic navigation decisions**.
+
+The trace disproved the timeout message. During the bounded Zubat search the teacher encountered
+species `0x6B` at level seven on the return step and automatically fled it, because only the
+outbound `up` step applied the target predicate. The final return movement also showed that a wild
+transition can become visible one frame after its movement receipt. The search now applies the
+same species/level predicate, drift checks, flee accounting and one-frame stabilization in both
+directions. A unit regression delays the target until the return-step wait and requires the search
+to return it without fleeing.
+
+An exact-schedule, in-memory, uncounted replay then passed the complete Mt. Moon chapter: Zubat
+capture, both cave floors, Rocket, Super Nerd, Helix Fossil, exit and Cerulean arrival through
+checkpoint 36. It next exposed a separate chapter-handoff defect. The Cerulean Center route sent
+two `down` inputs even though the second is a wall collision; historical success depended on the
+first input being swallowed. The route now contains the one traversable down step and uses the
+existing acknowledged movement helper. With that in-memory counterfactual the same schedule
+continued through checkpoint 275 and 1,250 balanced-team battles, reaching levels
+`(48, 48, 55, 47, 47, 47)` before the disposable diagnostic was deliberately interrupted so the
+source could be frozen. This is strong repair evidence, but it was neither a completed rehearsal
+nor a dataset episode and contains no strategic branch.
+
+Immediate next action: publish this source and regenerated registries, require exact-commit green
+CI, then execute only the new uncounted rehearsal assignment under seed `1710001`. Do not retry or
+rename any of the three failed source-bound identities. If the new rehearsal reaches the strategic
+branch, audit its pre-execution decision and measured outcome before opening a train root. Train is
+0/5, validation 0/2 and sealed test is 0/5.
+
+Current prospective identities are v95 registry
+`b35491c2dd822ff5acc41781f87a5d08e05350a047b6f1ff2ee8bfafda349d3b`, source bundle
+`255249795b61dc16f97e932af2773cd7a57c30cd24dcaf77e3242c09844cb906`, teacher execution
+`5db046a56fae5719d1da511dafa8c3d0fab951edff43463a4583fc3f206d131c` and first assignment
+`71432884d80c0cc96bbaa6a4a69209105140d9933ee83f13475edd0de13a0c1e`. Strategic registry is
+`dbbc677946e777ecfee79a904631c8349b4dd3ec4dc52b3341f21f5c9af16054`, teacher execution
+`7ba3f804d106dcd86ae6307982ae64227c606883ce1db1efb792f841245be19e`, rehearsal assignment
+`4b4ba1b1823efd77c622443af2defc18711fcbe2fcfdfc187fce3912f81e30c8` and first train assignment
+`ef3f9afe8fc59625c63475d4d9d9a636c9f4ce845c0f95dd9bfa059c76761a1e`.
+
 ## The first clean-power rehearsal found a real early-teacher defect — 2026-08-11
 
 The prospective protocol is no longer waiting for a call site. An exact

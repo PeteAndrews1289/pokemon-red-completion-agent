@@ -30,6 +30,7 @@ from pokemon_red_completion.cascade import (
     CERULEAN_GYM_TRAINER_RECOVERY_HP,
     CERULEAN_RIVAL_MAX_POTION_RESERVE,
     CERULEAN_RIVAL_RECOVERY_HP_THRESHOLDS,
+    CERULEAN_TO_CENTER_DIRECTIONS,
     DEFAULT_CASCADE_TIMING,
     FIELD_ITEM_MENU_CLOSE_PULSES,
     GYM_TRAINER_DIRECTIONS,
@@ -119,6 +120,16 @@ def test_cerulean_nugget_topup_restores_spent_antidotes() -> None:
     ) == (3, 2, 1, 0)
     with pytest.raises(CascadeChapterError, match="invalid live quantity"):
         _cerulean_antidote_topup_quantity(4)
+
+
+def test_cerulean_center_route_avoids_the_west_entry_wall_collision() -> None:
+    assert (
+        "down",
+        *("right",) * 19,
+        "up",
+        "up",
+        "up",
+    ) == CERULEAN_TO_CENTER_DIRECTIONS
 
 
 def test_verified_cerulean_route_retries_a_swallowed_pedestrian_step() -> None:

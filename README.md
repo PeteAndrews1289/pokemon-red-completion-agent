@@ -73,6 +73,14 @@
 > strategic episode IDs could exceed the private store's 80-character limit. No episode or game
 > outcome was created. Both counted and rehearsal IDs are now bounded at 78 characters and tested
 > through the real private writer boundary; the rehearsal therefore remains unopened.
+> Three source-bound rehearsal partials are now preserved. The newest passed Forest, Brock and all
+> required Route 3 trainers, then stopped in Mt. Moon after the search automatically fled the exact
+> level-seven Zubat on its return step. Search now observes and qualifies encounters in both
+> directions. An exact-schedule in-memory replay proved the complete Mt. Moon/Cerulean chapter,
+> then replaced a Cerulean wall collision used as an implicit timing wait with acknowledged
+> movement on the actual route. It continued through checkpoint 275/312 and 1,250 balanced-team
+> battles before a deliberate diagnostic stop. This is repair evidence, not a completed strategic
+> episode; train and validation remain empty.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

@@ -114,7 +114,10 @@ def _directions(compact: str) -> tuple[str, ...]:
     return tuple(lookup[direction] for direction in compact)
 
 
-CERULEAN_TO_CENTER_DIRECTIONS = _directions("DD" + "R" * 19 + "UUU")
+# The west-entry boundary is already at y=18. One down reaches the eastbound
+# lane; a second down collides with the map edge and must not be used as an
+# implicit timing wait.
+CERULEAN_TO_CENTER_DIRECTIONS = _directions("D" + "R" * 19 + "UUU")
 CENTER_HEAL_APPROACH_DIRECTIONS = _directions("UUUU")
 CENTER_HEAL_TO_PC_DIRECTIONS = _directions("D" + "R" * 10)
 CENTER_PC_TO_HEAL_DIRECTIONS = _directions("L" * 10 + "U")
@@ -392,7 +395,12 @@ def run_cascade_chapter(
         records=None,
     )
 
-    _move(chapter_executor, reader, CERULEAN_TO_CENTER_DIRECTIONS, "Cerulean Center")
+    _move_verified(
+        chapter_executor,
+        reader,
+        CERULEAN_TO_CENTER_DIRECTIONS,
+        "Cerulean Center",
+    )
     _wait(chapter_executor, timing.transition_wait_frames)
     _heal(
         chapter_executor,
