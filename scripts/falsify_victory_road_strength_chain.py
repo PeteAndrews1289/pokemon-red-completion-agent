@@ -367,7 +367,11 @@ def main(argv: list[str] | None = None) -> int:
             _solve_phase(
                 "victory_road_2f_switch_1",
                 EventFlag.VICTORY_ROAD_2F_BOULDER_ON_SWITCH_1,
-                StrengthGoal(VR2_SWITCH_1_YX, boulder_index=11),
+                StrengthGoal(
+                    VR2_SWITCH_1_YX,
+                    boulder_index=11,
+                    player_at=(16, 2),
+                ),
                 rom,
                 sets,
                 surf_tileset_ids,
