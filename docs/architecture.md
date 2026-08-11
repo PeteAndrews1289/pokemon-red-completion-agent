@@ -52,7 +52,7 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
 | Navigation mechanics | Deterministic cartridge-derived planner, title adapter and closed-loop executor | Multi-map land routes; Surf mode; live occupancy; repeated Cut; full Strength chain; trainer sight; one closed/open story gate; resource renewal; joint local/macro pricing; a 174-step route resumed through one trainer engagement | Completion teacher still owns most route invocation, broader non-trainer menu/script recovery, special story objects and the final Indigo exit |
-| Strategic navigation choice | Data contract plus deterministic calibration teacher | Identity-free schema, reviewed vocabulary, authenticated join/lineage audit, collection baselines, and three unassigned live calibrations—including one that selected a cost-178 story objective over a cost-60 optional pickup | 0 train/validation choices; no frozen numeric features, model, shadow result or causal authority |
+| Strategic navigation choice | Data contract plus deterministic calibration teacher | Identity-free schema, reviewed vocabulary, authenticated join/lineage audit, collection baselines, three unassigned live calibrations, and a prospective 5-train/2-validation/5-sealed-test whole-root registry | 0 collected train/validation choices; full-run collector is not connected; no frozen numeric features, model, shadow result or causal authority |
 | Collection planning | Typed deterministic planner plus cartridge-derived reachability | Exact ordinary retail reach: 135 species solo / 139 with a trade partner on each Red or Blue cartridge | No autonomous living-Pokédex execution, storage rotation, multi-save or trade orchestration yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the
@@ -112,6 +112,13 @@ failures remain outcome evidence, and external power loss remains censored. Thre
 calibrations prove binding and recording, including a long Celadon→Pokémon Tower branch that rejects
 the minimum-route-cost candidate and resumes after a trainer engagement. Train and validation still
 contain zero records, so a numeric feature schema would be premature.
+
+The collection split is now a separate authenticated authority. A canonical registry fixes five
+train, two validation and five sealed test roots, plus one rehearsal, before execution. Each root is
+bound to an exact source bundle, teacher configuration, objective graph, semantic decision contract
+and timing schedule. A non-unassigned decision cannot be constructed from caller-supplied strings;
+it must match the committed assignment. The full teacher still needs to emit these strategic
+decision/outcome pairs before any root can be consumed.
 
 The candidate ranker is deliberately permutation-equivariant. Its 27 normalized features exclude
 species IDs, move IDs, party-slot identity, map IDs, area names, memory addresses, and route

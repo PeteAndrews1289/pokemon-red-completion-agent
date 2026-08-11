@@ -126,6 +126,15 @@ nine maps, handled one unavoidable Route 8 trainer engagement and used zero repl
 All are promotion-ineligible development calibrations, and the numeric feature schema is
 deliberately not frozen.
 
+Whole-root preassignment is now closed. The canonical
+[collection registry](../configs/red-strategic-navigation-collection-v1.json) fixes five train,
+two validation and five sealed test roots plus one uncounted rehearsal before any outcome is
+observed. Each root has a distinct 74-battle timing schedule and an assignment derived from the
+registry, source bundle, teacher execution and partition. Counted decision binding no longer
+accepts arbitrary `train`/`validation` strings; the exact committed assignment must match episode,
+lineage, partition, actor and policy. All strategic counts remain zero because no slot—including
+the rehearsal—has run.
+
 That long route also corrected the traversal substrate rather than hiding exceptions in a Python
 route. Six tunnel entrances now derive retained outside-map context from bounded cartridge scripts
 that write `wLastMap`. Ledge transients survive composition. Story requirements are applied before
@@ -138,20 +147,21 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Preassign independent whole generated-teacher roots to train or untouched validation, then
-   collect genuine multi-candidate destination branches. Include progression, recovery, resupply,
-   training, collection and optional-reward choices; keep both cost-aligned and non-cost-minimizing
-   decisions, all route failures and censored external interruptions. Never invent a choice merely
-   to increase the denominator.
-2. Run the implemented candidate/tag/outcome, selected-index shape, route-cost and split-leakage
+1. Connect the strategic decision/outcome stream to genuine generated-route branches in the
+   clean-power teacher. Use only the committed rehearsal root `1710001` while debugging the
+   harness; keep every route failure and censor external interruption.
+2. Qualify that rehearsal, then execute the five train and two validation roots exactly once.
+   Include progression, recovery, resupply, training, collection and optional-reward branches with
+   both cost-aligned and non-cost-minimizing choices. Keep the five test roots sealed.
+3. Run the implemented candidate/tag/outcome, selected-index shape, route-cost and split-leakage
    audits on those authenticated episodes. Freeze a normalized numeric feature schema only after
    the observed data proves which distinctions exist.
-3. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
+4. Train and compare a shared candidate scorer against route-cost and candidate-shape baselines,
    then require shadow and fresh causal qualifications with no teacher fallback.
-4. Close the remaining completion-routing admission gaps: broader non-trainer menu/script recovery,
+5. Close the remaining completion-routing admission gaps: broader non-trainer menu/script recovery,
    additional story and special-object predicates, the post-final-switch Indigo route, and a
    systematic decoder/composer mutation score.
-5. Add Crystal's thin adapter and run the preregistered zero-shot, few-shot and from-scratch
+6. Add Crystal's thin adapter and run the preregistered zero-shot, few-shot and from-scratch
    navigation benchmark before expanding any Gen II teacher script.
 
 The full reasoning, risks and admission criteria are in the

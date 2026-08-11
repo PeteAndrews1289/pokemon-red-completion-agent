@@ -17,6 +17,11 @@ teacher choice rejects the minimum-route-cost baseline. Train and validation sti
 strategic navigation records. No numeric navigation feature schema is frozen, and no strategic
 navigation model has shadow or causal authority. Counted v95 remains **0/10**.
 
+The split is no longer an open design question. A second prospective registry preassigns five
+whole power-on train roots, two validation roots and five sealed test roots, with a distinct
+uncounted rehearsal. Exact assignment identity is now required before a decision may claim any
+non-unassigned partition. All strategic slots remain unopened.
+
 That claim boundary is healthy. The next highest-value work is no longer another isolated route
 mechanic; it is collecting genuine multi-destination decisions across independent roots and using
 them to test whether a portable destination ranker learns more than route cost or candidate shape.
@@ -116,12 +121,27 @@ emitted a public success receipt or a training record.
 The older `navigation_dataset.py` is explicitly labeled individual-direction control diagnostics,
 reports zero strategic decisions and remains ineligible for promotion.
 
+### Prospective strategic collection protocol
+
+The canonical
+[strategic collection registry](../configs/red-strategic-navigation-collection-v1.json) fixes the
+whole-root split and perturbation schedule before collection: 5 train, 2 validation, 5 sealed test,
+plus one uncounted rehearsal. Each assignment is derived from the registry SHA, harness seed,
+distinct 74-battle schedule, frozen teacher execution and partition. The decision contract hashes
+the complete portable tag/outcome vocabulary and the fields forbidden from policy input.
+
+The binding layer now refuses arbitrary counted provenance. A `train`, `validation` or `test`
+decision requires its exact committed assignment; episode, lineage, partition, actor and policy
+must all agree. The learning accessor refuses test roots. This prevents the collection counter from
+being increased by changing a string in a calibration script. Current status is **train 0/5,
+validation 0/2, test 0/5, rehearsal 0/1**.
+
 ## Code and CI audit
 
-At this checkpoint the repository contains 151 source modules and 172 test modules. The local CI
+At this checkpoint the repository contains 152 source modules and 173 test modules. The local CI
 equivalent produced:
 
-- **2,565 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,571 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
@@ -134,26 +154,37 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `cd07e356c0b81cd1e9c4b5f39927cc95d77d20c4ac898fe16f23ba437e593b6c` |
-| Source bundle SHA-256 | `6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a` |
-| Teacher execution SHA-256 | `27c3bd17b60d711aeaa74959317b632eba88ab13362cb377ff3f59c45a3bf3c5` |
-| Slot assignment SHA-256 | `5a486e75f989e13803f4a29f09039e8c7af4eee412a86b044fd114d927a95b98` |
+| Registry SHA-256 | `cf238c5147bc2087146999a93d20092572860f3a45d517ce1077691d5f2d27df` |
+| Source bundle SHA-256 | `5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d` |
+| Teacher execution SHA-256 | `c4607c031128f2e31f87fe804856e74e369fd3e851634885e7c71e78897933f8` |
+| Slot assignment SHA-256 | `421aa6ecb6a11b3f34a63e6ad27833c758a2a8c7d3ea64111bf04fc5a1244b2d` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
 
+The separate strategic registry is also prospective:
+
+| Field | Value |
+| --- | --- |
+| Strategic registry SHA-256 | `b83d0b650801058db17d5ec250b0ec3b72d5db566cf5274cac3644a14ac830c2` |
+| Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
+| Strategic teacher execution SHA-256 | `ec32fec4e8fddd11383ee60ebfdff7e86fa2e1af616fddef659b2f60777640a5` |
+| First train assignment SHA-256 | `9dfba88942adc178fe12b897d2a847ceea735a8b9a7251a44403fa17f037d88e` |
+
 ## Ranked gaps
 
-### P0 — no train/validation strategic navigation data exists
+### P0 — the collection harness is not yet connected to the full teacher
 
-The schema, live binding and audit are ready, but the useful dataset denominator remains zero. The
+The schema, live binding, split registry and audit are ready, but the useful dataset denominator
+remains zero. The
 safe-hub calibration answers an easy route-cost question; the Fuchsia calibration is a genuine
 branch that still agrees with cost; and the Celadon calibration proves one semantic choice can
 reject a much shorter route. All three are development roots and none can enter training or
 validation. Synthetic choices such as selecting between two arbitrary Viridian buildings would
-make the counter rise without teaching a real decision. Preassign independent whole roots, then
+make the counter rise without teaching a real decision. Use the preassigned whole roots to
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
-collection or optional reward destinations.
+collection or optional reward destinations. Preassignment is complete; full-run instrumentation and
+the one allowed rehearsal are next.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will
@@ -196,26 +227,30 @@ from dataset/split audits before adding model code.
 
 ## Ordered roadmap
 
-1. **Preassign and collect disjoint roots.** Before execution, assign multiple independent whole
-   roots to train and at least one to untouched validation. Add strategic recording only around
-   genuine multi-candidate teacher/generated branches, and retain every consumed success, failure
-   or interruption once.
-2. **Expand semantic coverage.** Include progression, recovery, resupply, training, collection and
+1. **Connect the full-run collector.** Emit a choice and exactly one consumed outcome around genuine
+   teacher/generated route branches, using only the committed rehearsal assignment at first.
+2. **Qualify the rehearsal.** Run root `1710001`, audit candidate coverage, route-cost and shape
+   baselines, interruption handling and terminal joins. Fix the harness without consuming a train
+   or validation root.
+3. **Collect the learning roots.** After the rehearsal freezes the harness, run all five train roots
+   and both validation roots once. Preserve failures and censor external interruption; do not open
+   the five test roots.
+4. **Expand semantic coverage.** Include progression, recovery, resupply, training, collection and
    optional-reward choices, with both cost-aligned and non-cost-minimizing teacher decisions.
-3. **Audit before featurizing.** Publish counts by need tag, candidate count, selected index,
+5. **Audit before featurizing.** Publish counts by need tag, candidate count, selected index,
    availability, route cost, replan reason, interruption and outcome. Measure route-cost-only and
    candidate-shape baselines.
-4. **Freeze and train.** Preregister normalization, a shared permutation-equivariant candidate
+6. **Freeze and train.** Preregister normalization, a shared permutation-equivariant candidate
    scorer, train-only selection and validation criteria. Keep the deterministic teacher in
    collection authority.
-5. **Shadow, then act.** Run fresh shadow roots, followed by a bounded causal route-choice trial
+7. **Shadow, then act.** Run fresh shadow roots, followed by a bounded causal route-choice trial
    with exact binding, no disagreement fallback and an independent outcome referee.
-6. **Close completion routing.** Add broader non-trainer menu/script recovery, more
+8. **Close completion routing.** Add broader non-trainer menu/script recovery, more
    story/special-object predicates, the generated post-final-switch Indigo route and systematic
    mutation scoring.
-7. **Test transfer.** Implement the thin Crystal adapter and compare frozen-Red zero-shot, fixed
+9. **Test transfer.** Implement the thin Crystal adapter and compare frozen-Red zero-shot, fixed
    few-shot adaptation and from-scratch training under the same route-choice metrics.
-8. **Expand completion.** Only after the play/transfer gates, add autonomous storage, evolution,
+10. **Expand completion.** Only after the play/transfer gates, add autonomous storage, evolution,
    trade and multi-save orchestration toward the living-Pokédex and 100% goals.
 
 ## Portfolio narrative

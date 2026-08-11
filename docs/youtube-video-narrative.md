@@ -82,9 +82,16 @@ settles the field dialogue and returns to the same route binding. Then reveal th
 
 End by returning to the counter: **CALIBRATION 3 / TRAIN 0 / VALIDATION 0**. Say: **“I proved the
 teacher can generate a useful non-shortest-path label. I have not proved a model can learn it.”**
-The next episode preassigns independent whole roots to train and untouched validation, collects
-both successes and failures, audits semantic coverage against the cost-only baseline, then freezes
-features and trains the destination scorer.
+The next episode uses preassigned whole roots to collect both successes and failures, audits
+semantic coverage against the cost-only baseline, then freezes features and trains the destination
+scorer.
+
+Add a short post-credit correction: the code still accepted a caller typing `partition="train"`.
+Show that line being rejected, then reveal the canonical split card: **5 TRAIN / 2 VALIDATION / 5
+SEALED TEST / 1 REHEARSAL**. Animate a unique timing schedule and content-derived lineage ID locking
+onto every root. End on **0/5 TRAIN — 0/2 VALIDATION** and say: **“Preregistering data does not give
+you data. It makes the data you collect next believable.”** The next executable task is to connect
+these assignments to the clean-power teacher and qualify the rehearsal before opening train root 1.
 
 ## Resource episode: the route outlived its Repel
 

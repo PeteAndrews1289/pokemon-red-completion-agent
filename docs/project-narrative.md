@@ -72,6 +72,19 @@ inspect the implemented coverage and shape baselines, then decide what numeric r
 model are justified. “Ready to collect the right data” is a smaller claim than “the AI learned
 navigation,” but it is the claim that can eventually transfer.
 
+The next failure mode was procedural rather than in-game. The binding function would accept any
+caller-supplied `partition="train"` and lineage string. The dataset reader could detect overlap
+later, but nothing proved that a supposed train root had been assigned before its outcome was seen.
+That made “collect across disjoint roots” a promise, not a protocol.
+
+A separate canonical registry now fixes twelve power-on roots in advance: five train, two
+validation and five sealed test, each with a distinct battle-timing schedule. One additional
+rehearsal is the only root allowed for harness debugging. Assignment IDs bind registry, source,
+teacher execution, seed, schedule and partition; counted strategic decisions must match the exact
+episode, lineage, actor and policy. Existing opened checkpoints cannot be relabeled, and the normal
+learning accessor refuses the test partition. The counts remain train 0/5 and validation 0/2. The
+important advance is that the next data point can now be *prospective*.
+
 ## August 10: the route outlived its Repel
 
 The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14

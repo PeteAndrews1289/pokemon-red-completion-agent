@@ -14,6 +14,36 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Strategic collection roots are preassigned but unopened — 2026-08-11
+
+The prospective registry
+[red-strategic-navigation-collection-v1.json](configs/red-strategic-navigation-collection-v1.json)
+turns the next modeling step into a real experiment. It preassigns twelve independent power-on
+roots before any outcome is observed: five train, two validation and five sealed test. One separate
+uncounted rehearsal root (`1710001`) is the only schedule intended for integration debugging. Every
+root has a distinct 74-battle timing schedule, a one-attempt identity, and a path-free assignment,
+lineage and episode ID derived from the canonical registry.
+
+This also closes a spoofing gap in the earlier seam. `bind_strategic_navigation_decision` previously
+accepted arbitrary `partition="train"` and root strings. Any future non-unassigned binding now
+requires the exact `StrategicNavigationAssignment`; its episode, lineage, partition, actor and
+policy must all match. The normal learning accessor refuses test assignments. The committed loader
+reads the registry and digest from Git, verifies the source bundle, and the CI regenerates both the
+old v95 registry and this one exactly.
+
+No strategic slot has been consumed. The current counts remain **train 0/5, validation 0/2, test
+0/5, rehearsal 0/1**. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
+calibrations and cannot be relabeled. The next step is to connect strategic decision/outcome
+recording to the full clean-power teacher, run the single rehearsal, audit its genuine candidate
+coverage, and only then open train root 01. Do not start from the held-out test roots while building
+that harness.
+
+Registry SHA is
+`b83d0b650801058db17d5ec250b0ec3b72d5db566cf5274cac3644a14ac830c2`; strategic teacher
+execution is `ec32fec4e8fddd11383ee60ebfdff7e86fa2e1af616fddef659b2f60777640a5`; source bundle is
+`5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d`; first train assignment is
+`9dfba88942adc178fe12b897d2a847ceea735a8b9a7251a44403fa17f037d88e`.
+
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 
 Clean source `d3747f0758bd9a54b0c2ba2805b2bbf3b1fb38db` closes the first long,
@@ -50,10 +80,10 @@ collect every consumed success/failure/interruption, inspect the implemented bas
 features and train only if the coverage supports it.
 
 The prospective v95 identities at this checkpoint are registry
-`cd07e356c0b81cd1e9c4b5f39927cc95d77d20c4ac898fe16f23ba437e593b6c`, source bundle
-`6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a`, teacher execution
-`27c3bd17b60d711aeaa74959317b632eba88ab13362cb377ff3f59c45a3bf3c5`, and slot assignment
-`5a486e75f989e13803f4a29f09039e8c7af4eee412a86b044fd114d927a95b98`. Regeneration still does
+`cf238c5147bc2087146999a93d20092572860f3a45d517ce1077691d5f2d27df`, source bundle
+`5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d`, teacher execution
+`c4607c031128f2e31f87fe804856e74e369fd3e851634885e7c71e78897933f8`, and slot assignment
+`421aa6ecb6a11b3f34a63e6ad27833c758a2a8c7d3ea64111bf04fc5a1244b2d`. Regeneration still does
 not open v95; counted collection remains 0/10.
 
 ## Strategic navigation is collectable, but no strategic model exists — 2026-08-11
@@ -115,10 +145,10 @@ individual direction traces for control diagnostics only; its public summary now
 preassigned, independent teacher/generated roots, preserve successes/failures/interruptions, then
 inspect coverage before choosing a numeric representation.
 Current prospective registry SHA is
-`cd07e356c0b81cd1e9c4b5f39927cc95d77d20c4ac898fe16f23ba437e593b6c`; source bundle is
-`6aac96358335db465eabc09c9ae197bfc7bc035d2d95ce768347e01b59d25d2a`; teacher execution is
-`27c3bd17b60d711aeaa74959317b632eba88ab13362cb377ff3f59c45a3bf3c5`; slot assignment is
-`5a486e75f989e13803f4a29f09039e8c7af4eee412a86b044fd114d927a95b98`.
+`cf238c5147bc2087146999a93d20092572860f3a45d517ce1077691d5f2d27df`; source bundle is
+`5dada17bf6debbf1b566004e64c276fad0f15b131f1c4586f1d0f2e737866e2d`; teacher execution is
+`c4607c031128f2e31f87fe804856e74e369fd3e851634885e7c71e78897933f8`; slot assignment is
+`421aa6ecb6a11b3f34a63e6ad27833c758a2a8c7d3ea64111bf04fc5a1244b2d`.
 
 ## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
 

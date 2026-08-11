@@ -55,6 +55,10 @@
 > maps, resumed after one unavoidable trainer battle and reached Tower 1F with zero replans. This is
 > still promotion-ineligible calibration evidence, not training data. No numeric feature schema is
 > frozen and no navigation model is claimed.
+> A separate prospective collection registry now preassigns five whole power-on train roots, two
+> validation roots and five sealed test roots, plus one uncounted rehearsal. Distinct timing
+> schedules are frozen before outcomes; counted decision binding rejects invented partitions or
+> lineage IDs. No slot has been executed, so the honest collected count remains zero.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
@@ -63,6 +67,8 @@
 > [genuine-branch calibration](docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json),
 > [non-cost calibration](docs/evidence/celadon-strategic-objective-route-probe-2026-08-11.json), and
 > [failed-attempt lineage](docs/evidence/celadon-strategic-objective-route-failures-2026-08-11.json), plus the
+> [prospective strategic collection registry](configs/red-strategic-navigation-collection-v1.json),
+> plus the
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
@@ -143,6 +149,13 @@ story-critical Pokémon Tower with an optional Eevee pickup, deliberately reject
 minimum for the cost-178 story route, and acknowledged all 174 movements through one handled trainer
 engagement. Train and validation still contain **0 strategic navigation decisions**; no numeric
 feature schema or navigation model exists.
+
+Prospective collection is now partitioned before execution: five whole roots for train, two for
+validation and five sealed for eventual test, with a separate rehearsal seed. The registry binds
+each root to an exact source bundle, teacher execution, portable semantic contract and distinct
+battle-timing schedule. Non-unassigned strategic decisions cannot be constructed without the exact
+committed assignment, and the learning accessor refuses the test partition. All 12 counted slots
+and the rehearsal remain unopened.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -25,6 +26,12 @@ from pokemon_red_completion.strategic_navigation_binding import (
     DestinationRouteBinding,
     bind_strategic_navigation_decision,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH,
+    parse_strategic_navigation_registry,
+)
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _plans() -> tuple[RoutePlan, RoutePlan]:
@@ -181,3 +188,50 @@ def test_success_requires_the_bound_plan_and_failure_remains_consumed() -> None:
     assert failed.outcome.failure_reason is NavigationFailureReason.REPLAN_BUDGET_EXHAUSTED
     with pytest.raises(StrategicNavigationError, match="did not execute"):
         bound.successful_record(_report(_plans()[1]))
+
+
+def test_counted_binding_requires_exact_committed_assignment() -> None:
+    registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    assignment = registry.learning_assignment("red-strategic-v1-01-train")
+    arguments = {
+        "episode_id": assignment.episode_id,
+        "decision_index": 0,
+        "root_lineage_id": assignment.root_lineage_id,
+        "partition": assignment.partition,
+        "actor": "deterministic_teacher",
+        "policy_id": "qualified-completion-order-v1",
+        "semantic_need_tags": (
+            StrategicNavigationTag.HEALING,
+            StrategicNavigationTag.RECOVERY,
+        ),
+        "origin_semantic_tags": (StrategicNavigationTag.OVERWORLD,),
+        "origin_region_ref": "pokemon.test:region:origin",
+        "bindings": _bindings(),
+        "selected_destination_ref": "pokemon.test:destination:safe",
+    }
+
+    with pytest.raises(StrategicNavigationError, match="requires a committed"):
+        bind_strategic_navigation_decision(**arguments)
+
+    with pytest.raises(StrategicNavigationError, match="loaded from committed"):
+        bind_strategic_navigation_decision(
+            **arguments,
+            collection_assignment=assignment,
+        )
+
+    committed_assignment = replace(assignment, source_commit="a" * 40)
+    bound = bind_strategic_navigation_decision(
+        **arguments,
+        collection_assignment=committed_assignment,
+    )
+
+    assert bound.decision.partition == "train"
+    assert bound.decision.root_lineage_id == assignment.root_lineage_id
+
+    with pytest.raises(StrategicNavigationError, match="provenance differs"):
+        bind_strategic_navigation_decision(
+            **{**arguments, "episode_id": "spoofed-episode"},
+            collection_assignment=committed_assignment,
+        )

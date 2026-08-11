@@ -27,6 +27,9 @@ from pokemon_red_completion.strategic_navigation import (
     successful_navigation_outcome,
     unsuccessful_navigation_outcome,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    StrategicNavigationAssignment,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -173,9 +176,39 @@ def bind_strategic_navigation_decision(
     origin_region_ref: str,
     bindings: tuple[DestinationRouteBinding, ...],
     selected_destination_ref: str,
+    collection_assignment: StrategicNavigationAssignment | None = None,
 ) -> BoundStrategicNavigationDecision:
     """Build one choice and return only the selected exact route for execution."""
 
+    if partition == "unassigned":
+        if collection_assignment is not None:
+            raise StrategicNavigationError(
+                "an unassigned strategic decision cannot claim a collection assignment"
+            )
+    elif collection_assignment is None:
+        raise StrategicNavigationError(
+            "a counted strategic decision requires a committed collection assignment"
+        )
+    elif collection_assignment.source_commit is None:
+        raise StrategicNavigationError(
+            "a counted strategic decision requires an assignment loaded from committed source"
+        )
+    elif (
+        episode_id,
+        root_lineage_id,
+        partition,
+        actor,
+        policy_id,
+    ) != (
+        collection_assignment.episode_id,
+        collection_assignment.root_lineage_id,
+        collection_assignment.partition,
+        "deterministic_teacher",
+        "qualified-completion-order-v1",
+    ):
+        raise StrategicNavigationError(
+            "strategic decision provenance differs from its collection assignment"
+        )
     if not isinstance(bindings, tuple):
         raise StrategicNavigationError("route bindings must be an immutable tuple")
     if any(not isinstance(binding, DestinationRouteBinding) for binding in bindings):

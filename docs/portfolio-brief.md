@@ -23,6 +23,12 @@ after one unavoidable trainer encounter and reached Tower 1F after 174/174 ackno
 with zero replans. It proves the label is not merely shortest-path supervision, but it remains a
 development calibration—not evidence of learning.
 
+The next experiment is now preregistered rather than aspirational: five whole power-on train roots,
+two validation roots, five sealed test roots and one rehearsal, each with a unique timing schedule
+fixed before outcomes. The binding API will not accept a caller-invented train label; it requires
+the exact committed assignment. All slots remain unopened, so this improves experimental validity
+without inflating the dataset count.
+
 That makes the best current interview story: I did not use a neural network where exact search was
 the better tool, and I did not create synthetic labels to claim training had started. I built the
 measurement boundary first, preserved negative outcomes, and made the next model earn its authority
@@ -33,7 +39,8 @@ against route-cost and candidate-shape baselines. See the
 [safe-hub calibration](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
 [genuine-branch calibration](evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json), the
 [non-cost calibration](evidence/celadon-strategic-objective-route-probe-2026-08-11.json), and its
-[six failed precursors](evidence/celadon-strategic-objective-route-failures-2026-08-11.json).
+[six failed precursors](evidence/celadon-strategic-objective-route-failures-2026-08-11.json), plus the
+[prospective collection registry](../configs/red-strategic-navigation-collection-v1.json).
 
 ## August 10 headline
 
@@ -93,9 +100,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
 | Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; one story gate; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
-| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, collection baselines and three live unassigned calibrations, including a cost-178 story choice over a cost-60 optional pickup | 0 train/validation examples; no numeric schema, model, shadow result or causal authority |
+| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, collection baselines, three unassigned live calibrations and a prospective 5/2/5 whole-root split with sealed test access | 0 collected train/validation examples; full-run collector not connected; no numeric schema, model, shadow result or causal authority |
 | Acquisition knowledge | Exact Red/Blue ordinary reach: 135 solo / 139 with trade partner | No autonomous living-Pokédex execution or multi-save/trade orchestration |
-| Repository gate | 2,565 non-ROM tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
+| Repository gate | 2,571 non-ROM tests, Ruff, mypy, public-artifact, documentation, and two source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
 
 ## Architecture in one minute
 
@@ -190,9 +197,10 @@ outcome capture and identity-free projection. The third now proves a story choic
 118 cost units shorter and still execute 174 steps through a trainer interruption. Exact route
 mechanics are substantially stronger than the older paragraph implies; what remains authored is
 when the completion teacher invokes them and how unsupported story/menu boundaries recover. The
-next credible navigation claim requires preassigned, disjoint train/validation lineages, a frozen
+next credible navigation claim requires collecting the preassigned, disjoint train/validation lineages, a frozen
 numeric representation, shadow evaluation and fresh causal authority—not one more successful Red
-development route.
+development route. The split is now preassigned; connecting and qualifying the one rehearsal root
+is the remaining gate before train root 01 may open.
 
 The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
 matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution.
