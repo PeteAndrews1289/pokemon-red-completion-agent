@@ -516,7 +516,7 @@ def main(argv: list[str] | None = None) -> int:
             surf_tileset_ids,
             rules,
             int(MapId.VICTORY_ROAD_2F),
-            (0, 8),
+            (8, 0),
         )
         passage_plans.append(plan)
         passage_reports.append(
@@ -562,7 +562,7 @@ def main(argv: list[str] | None = None) -> int:
             surf_tileset_ids,
             rules,
             int(MapId.VICTORY_ROAD_3F),
-            (23, 7),
+            (7, 23),
         )
         passage_plans.append(plan)
         passage_reports.append(
