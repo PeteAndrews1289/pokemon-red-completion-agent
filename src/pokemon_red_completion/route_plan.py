@@ -187,6 +187,7 @@ class RoutePlan:
                         action_kind=edge.action_kind,
                         source_mode=modes[index],
                         expected_mode=modes[index + 1],
+                        transient_at=(None if triggers_passage else edge.transient),
                     )
                 )
             if not segment.transition_action_in_approach:
