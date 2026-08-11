@@ -24,6 +24,12 @@ uncounted rehearsal root (`1710001`) is the only schedule intended for integrati
 root has a distinct 74-battle timing schedule, a one-attempt identity, and a path-free assignment,
 lineage and episode ID derived from the canonical registry.
 
+An audit after preregistration found that the counted roots had derivable assignments but the
+declared rehearsal did not. That gap is now closed: the rehearsal has its own source-bound
+assignment, episode and lineage, remains `partition="unassigned"`, and carries
+`attempt.counted=false`. The binder accepts that one committed rehearsal identity but still rejects
+a counted assignment on an unassigned decision.
+
 This also closes a spoofing gap in the earlier seam. `bind_strategic_navigation_decision` previously
 accepted arbitrary `partition="train"` and root strings. Any future non-unassigned binding now
 requires the exact `StrategicNavigationAssignment`; its episode, lineage, partition, actor and
@@ -39,6 +45,23 @@ call explicitly opens them. It then applies the existing strict decision/outcome
 last integrity prerequisite before connecting the clean-power teacher collector; it does not
 consume a slot or create data.
 
+The trajectory seam also no longer waits for a successful route before writing its choice. The
+whole-run observer records the identity-free decision before the first route action, permits only
+one pending choice, and joins exactly one later semantic outcome at the current execution step.
+Power loss therefore leaves an incomplete episode rather than erasing the attempted decision, and
+a sink failure marks the episode ineligible without changing game control. A final review also
+requires the decision and outcome to use the identical sink and suppresses an orphan outcome when
+the preceding decision write failed. The observer exists and is tested; the clean-power teacher
+still needs to invoke it around genuine generated routes.
+
+Route failures now preserve measured evidence too. `execute_route` attaches a typed semantic reason,
+last observation, acknowledged prefix, movement requests, waits, replans, interruptions and resource
+renewals to every route error, including replanner failure. The strategic boundary verifies that the
+failed initial plan is the selected binding, converts only the portable fields to a negative
+outcome, and omits the last map/coordinate. This closes the temptation to fabricate zero-filled
+failures. The next implementation is the clean-power generated-route bridge that uses the observer
+and consumes either the success report or this typed failure before propagating control failure.
+
 No strategic slot has been consumed. The current counts remain **train 0/5, validation 0/2, test
 0/5, rehearsal 0/1**. Existing Pallet, Fuchsia and Celadon checkpoints remain opened development
 calibrations and cannot be relabeled. The next step is to connect strategic decision/outcome
@@ -47,10 +70,11 @@ coverage, and only then open train root 01. Do not start from the held-out test 
 that harness.
 
 Registry SHA is
-`b74a88907c5eb308fa7086a67cfecc19c2663e4184978080c15449719e54e91e`; strategic teacher
-execution is `d544efb040f5c83da654df07db56b126867417180abea3ac314dc88151e24451`; source bundle is
-`2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df`; first train assignment is
-`44e79be73347b9f2a8385381174e00089d0cd818d4b591dc6d4bc53fd0b8400a`.
+`91a8c707f02d2bb273601c50a079c7fef20eb9a5e831ca5371eb4e3383969de2`; strategic teacher
+execution is `167a9dc04973e314944b9d0e98724386005a3baad8b32fe81faf71122d5cf554`; source bundle is
+`542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0`; rehearsal assignment is
+`662e0ddab6d3d966773781cf36b9eeb60d2e8d81b17d23ff80e1a9f88bcb4602`; first train assignment is
+`a6420e67da5602ee6cfbac99c7ea4fe16abb22689268b2749e2ebca29d86a31e`.
 
 ## The teacher rejected the shortest route and reached Pokémon Tower — 2026-08-11
 
@@ -88,10 +112,10 @@ collect every consumed success/failure/interruption, inspect the implemented bas
 features and train only if the coverage supports it.
 
 The prospective v95 identities at this checkpoint are registry
-`e8335bbfb23c7304a0e4738975ef44d9b3f9ae36bf2e9e7f61633e4d5b935e8d`, source bundle
-`2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df`, teacher execution
-`3d8bc4d0c002213e8a0f21ec7aa212b506b831b1bee98b3ae5ee64ad42d214bd`, and slot assignment
-`bda259bd0a3971589941b65d79b6d0d7a7352956d458ac34453a81392e2a1652`. Regeneration still does
+`338e86c602c852080b5e066203cb489579f6a61442501be21b576a501cdf8994`, source bundle
+`542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0`, teacher execution
+`6bceb2b4e4849481c51b5fb586f1bac71ecb817f3768058f3c00b3d2acb13e0c`, and slot assignment
+`068fd00857df4c72565f445824a4f4453ac6fb745f5c174df7376298bf0cc283`. Regeneration still does
 not open v95; counted collection remains 0/10.
 
 ## Strategic navigation is collectable, but no strategic model exists — 2026-08-11
@@ -153,10 +177,10 @@ individual direction traces for control diagnostics only; its public summary now
 preassigned, independent teacher/generated roots, preserve successes/failures/interruptions, then
 inspect coverage before choosing a numeric representation.
 Current prospective registry SHA is
-`e8335bbfb23c7304a0e4738975ef44d9b3f9ae36bf2e9e7f61633e4d5b935e8d`; source bundle is
-`2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df`; teacher execution is
-`3d8bc4d0c002213e8a0f21ec7aa212b506b831b1bee98b3ae5ee64ad42d214bd`; slot assignment is
-`bda259bd0a3971589941b65d79b6d0d7a7352956d458ac34453a81392e2a1652`.
+`338e86c602c852080b5e066203cb489579f6a61442501be21b576a501cdf8994`; source bundle is
+`542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0`; teacher execution is
+`6bceb2b4e4849481c51b5fb586f1bac71ecb817f3768058f3c00b3d2acb13e0c`; slot assignment is
+`068fd00857df4c72565f445824a4f4453ac6fb745f5c174df7376298bf0cc283`.
 
 ## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
 

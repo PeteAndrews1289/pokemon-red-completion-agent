@@ -135,6 +135,12 @@ accepts arbitrary `train`/`validation` strings; the exact committed assignment m
 lineage, partition, actor and policy. All strategic counts remain zero because no slot—including
 the rehearsal—has run.
 
+The rehearsal is now a first-class assignment too, not merely a declared seed. Its content-derived
+episode and lineage remain `unassigned`, its attempt is explicitly uncounted, and a counted
+assignment cannot impersonate it. The trajectory observer records the strategic choice before the
+first route action, allows one pending choice, then requires exactly one matching outcome. This
+preserves failed and power-interrupted attempts instead of reconstructing only successes later.
+
 The matching output gate is now implemented too. A counted episode header must reproduce the
 assignment's exact collection, source bundle, source commit, split, actor and policy identity before
 its decision/outcome stream can load. Local-only assignments, drifted metadata and test episodes
@@ -153,9 +159,11 @@ This closes one real story predicate and the named Victory Road resource/inter-r
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the
 completion teacher's post-final-switch exit remains authored. The ordered gates are now:
 
-1. Connect the strategic decision/outcome stream to genuine generated-route branches in the
-   clean-power teacher. Use only the committed rehearsal root `1710001` while debugging the
-   harness; keep every route failure and censor external interruption.
+1. Connect the tested strategic trajectory observer to genuine generated-route branches in the
+   clean-power teacher. Use only the committed, explicitly uncounted rehearsal assignment for root
+   `1710001` while debugging the harness. `execute_route` now supplies typed partial-failure
+   evidence, so consume its real acknowledgements, requests, waits, replans and interruptions
+   before propagating a failed chapter. Keep every route failure and censor external interruption.
 2. Qualify that rehearsal, then execute the five train and two validation roots exactly once.
    Include progression, recovery, resupply, training, collection and optional-reward branches with
    both cost-aligned and non-cost-minimizing choices. Keep the five test roots sealed.

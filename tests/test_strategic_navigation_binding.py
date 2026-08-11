@@ -9,6 +9,8 @@ from pokemon_red_completion.global_router import MacroGraph
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.route_executor import (
     ExecutedRouteStep,
+    RouteExecutionFailureReason,
+    RouteExecutionFailureReport,
     RouteExecutionReport,
     TraversalSnapshot,
 )
@@ -190,6 +192,35 @@ def test_success_requires_the_bound_plan_and_failure_remains_consumed() -> None:
         bound.successful_record(_report(_plans()[1]))
 
 
+def test_measured_route_failure_becomes_portable_negative_evidence() -> None:
+    bound = _bound()
+    failure = RouteExecutionFailureReport(
+        initial_plan=bound.selected_plan,
+        reason=RouteExecutionFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED,
+        last_observation=TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+        executed_steps=(),
+        interruptions=(),
+        replans=(),
+        movement_requests=3,
+        wait_actions=2,
+    )
+
+    record = bound.failed_route_record(failure)
+
+    assert record.outcome.status is NavigationOutcomeStatus.FAILED
+    assert record.outcome.failure_reason is (
+        NavigationFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED
+    )
+    assert record.outcome.movement_requests == 3
+    assert record.outcome.acknowledged_steps == 0
+    assert record.outcome.wait_actions == 2
+
+    with pytest.raises(StrategicNavigationError, match="did not execute"):
+        bound.failed_route_record(
+            replace(failure, initial_plan=_plans()[1])
+        )
+
+
 def test_counted_binding_requires_exact_committed_assignment() -> None:
     registry = parse_strategic_navigation_registry(
         (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
@@ -234,4 +265,49 @@ def test_counted_binding_requires_exact_committed_assignment() -> None:
         bind_strategic_navigation_decision(
             **{**arguments, "episode_id": "spoofed-episode"},
             collection_assignment=committed_assignment,
+        )
+
+
+def test_rehearsal_binding_is_authenticated_but_remains_unassigned() -> None:
+    registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    rehearsal = registry.rehearsal_assignment()
+    arguments = {
+        "episode_id": rehearsal.episode_id,
+        "decision_index": 0,
+        "root_lineage_id": rehearsal.root_lineage_id,
+        "partition": rehearsal.partition,
+        "actor": "deterministic_teacher",
+        "policy_id": "qualified-completion-order-v1",
+        "semantic_need_tags": (StrategicNavigationTag.ADVANCE_STORY,),
+        "origin_semantic_tags": (StrategicNavigationTag.OVERWORLD,),
+        "origin_region_ref": "pokemon.test:region:origin",
+        "bindings": _bindings(),
+        "selected_destination_ref": "pokemon.test:destination:progress",
+    }
+
+    with pytest.raises(StrategicNavigationError, match="loaded from committed"):
+        bind_strategic_navigation_decision(
+            **arguments,
+            collection_assignment=rehearsal,
+        )
+
+    committed = replace(rehearsal, source_commit="a" * 40)
+    bound = bind_strategic_navigation_decision(
+        **arguments,
+        collection_assignment=committed,
+    )
+
+    assert bound.decision.partition == "unassigned"
+    assert bound.decision.episode_id == rehearsal.episode_id
+
+    counted = replace(
+        registry.learning_assignment("red-strategic-v1-01-train"),
+        source_commit="a" * 40,
+    )
+    with pytest.raises(StrategicNavigationError, match="only the rehearsal"):
+        bind_strategic_navigation_decision(
+            **arguments,
+            collection_assignment=counted,
         )

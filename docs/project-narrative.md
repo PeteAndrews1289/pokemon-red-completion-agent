@@ -87,6 +87,18 @@ collection, source, split and policy identity before its decisions and outcomes 
 assignment or changed run metadata is rejected rather than counted. The counts remain train 0/5
 and validation 0/2. The important advance is that the next data point can now be *prospective*.
 
+One final audit caught a hole in that promise: the rehearsal had a frozen seed and schedule but no
+derived assignment of its own. It now receives a distinct source-bound episode and lineage while
+remaining explicitly `unassigned` and uncounted. The recorder also writes the teacher's choice
+before the route begins and permits only one later matching outcome. A crash can leave an
+incomplete rehearsal, but it cannot erase the decision and leave only the successful retries.
+
+The corresponding failure path is measured rather than reconstructed. When generated routing
+fails, its exception carries the acknowledged prefix, attempted movements, waits, replans,
+interruptions, renewals and a portable reason. The dataset keeps those semantics but drops the last
+Red map and coordinate. A failed choice can now become honest negative evidence without being
+rerun, discarded or represented as a fake all-zero attempt.
+
 ## August 10: the route outlived its Repel
 
 The full Strength proof still hid three strings: 51 inputs from 1F to 2F, 56 from 2F to 3F, and 14

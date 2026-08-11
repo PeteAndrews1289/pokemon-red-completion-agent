@@ -59,8 +59,10 @@
 > validation roots and five sealed test roots, plus one uncounted rehearsal. Distinct timing
 > schedules are frozen before outcomes; counted decision binding rejects invented partitions or
 > lineage IDs. The assigned-episode loader also verifies the exact collection, source, split and
-> policy header before accepting an output, and keeps test episodes sealed by default. No slot has
-> been executed, so the honest collected count remains zero.
+> policy header before accepting an output, and keeps test episodes sealed by default. The rehearsal
+> now has a distinct committed-but-unassigned identity, and choices are recorded before route
+> execution so failures cannot vanish from the stream. No slot has been executed, so the honest
+> collected count remains zero.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
@@ -158,7 +160,11 @@ each root to an exact source bundle, teacher execution, portable semantic contra
 battle-timing schedule. Non-unassigned strategic decisions cannot be constructed without the exact
 committed assignment. Recorded outputs must independently match that assignment's collection,
 source, split and policy identity; the learning path refuses the test partition. All 12 counted
-slots and the rehearsal remain unopened.
+slots and the rehearsal remain unopened. The uncounted rehearsal now has its own derived episode
+and lineage, while a one-pending-choice observer writes each decision before execution and joins its
+single consumed outcome afterward. Route exceptions now retain typed, measured partial progress and
+convert to portable negative evidence instead of a zero-filled placeholder. The full teacher has
+not invoked that observer yet.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

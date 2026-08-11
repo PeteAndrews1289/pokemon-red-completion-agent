@@ -534,6 +534,30 @@ def test_assigned_reader_rejects_each_drifted_identity_block(
         )
 
 
+def test_assigned_reader_authenticates_uncounted_rehearsal_episode() -> None:
+    registry = parse_strategic_navigation_registry(
+        (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
+    )
+    assignment = replace(registry.rehearsal_assignment(), source_commit="a" * 40)
+    reader = _reader(
+        root=assignment.root_lineage_id,
+        partition=assignment.partition,
+        episode_id=assignment.episode_id,
+        policy_id="qualified-completion-order-v1",
+        assigned_metadata=assignment.episode_metadata(),
+        statuses=(NavigationOutcomeStatus.SUCCEEDED,),
+    )
+
+    dataset = load_assigned_strategic_navigation_episode(
+        reader,
+        assignment=assignment,
+    )
+
+    assert dataset.partition == "unassigned"
+    assert dataset.episode_id == assignment.episode_id
+    assert dataset.public_summary()["promotion_eligible"] is False
+
+
 def test_authenticated_lineages_feed_partition_coverage_and_baseline_audit() -> None:
     training = load_strategic_navigation_episode(_reader())
     validation = load_strategic_navigation_episode(

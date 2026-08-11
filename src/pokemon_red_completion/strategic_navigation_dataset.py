@@ -39,6 +39,8 @@ from pokemon_red_completion.strategic_navigation_protocol import (
     STRATEGIC_NAVIGATION_ACTOR,
     STRATEGIC_NAVIGATION_POLICY_ID,
     StrategicNavigationAssignment,
+    StrategicNavigationEpisodeAssignment,
+    StrategicNavigationRehearsalAssignment,
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
     STRATEGIC_NAVIGATION_DECISION_TYPE,
@@ -537,13 +539,16 @@ def load_strategic_navigation_episode(
 def load_assigned_strategic_navigation_episode(
     reader: EpisodeReader,
     *,
-    assignment: StrategicNavigationAssignment,
+    assignment: StrategicNavigationEpisodeAssignment,
     allow_test: bool = False,
 ) -> CollectedStrategicNavigationDataset:
     """Load one episode only when its header matches a committed root assignment."""
 
-    if not isinstance(assignment, StrategicNavigationAssignment):
-        raise TypeError("assignment must be a StrategicNavigationAssignment")
+    if not isinstance(
+        assignment,
+        (StrategicNavigationAssignment, StrategicNavigationRehearsalAssignment),
+    ):
+        raise TypeError("assignment must be a strategic episode assignment")
     if assignment.source_commit is None:
         raise StrategicNavigationDatasetError(
             "assigned strategic episode requires committed source identity"

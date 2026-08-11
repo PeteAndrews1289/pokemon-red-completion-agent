@@ -61,6 +61,9 @@ STRATEGIC_NAVIGATION_ASSIGNMENT_SCHEMA = (
 STRATEGIC_NAVIGATION_REHEARSAL_SCHEMA = (
     "pokemon-strategic-navigation-collection-rehearsal-v1"
 )
+STRATEGIC_NAVIGATION_REHEARSAL_ASSIGNMENT_SCHEMA = (
+    "pokemon-strategic-navigation-rehearsal-assignment-v1"
+)
 STRATEGIC_NAVIGATION_CONTRACT_SCHEMA = "pokemon-strategic-navigation-contract-v1"
 
 STRATEGIC_NAVIGATION_COLLECTION_ID = "red-strategic-navigation-v1"
@@ -233,6 +236,129 @@ class StrategicNavigationAssignment:
 
 
 @dataclass(frozen=True, slots=True)
+class StrategicNavigationRehearsalAssignment:
+    """Path-free identity for the sole uncounted integration rehearsal."""
+
+    collection_id: str
+    registry_sha256: str
+    rehearsal_id: str
+    harness_seed: int
+    schedule_sha256: str
+    assignment_id: str
+    root_lineage_id: str
+    episode_id: str
+    source_bundle_sha256: str
+    teacher_execution_sha256: str
+    partition: str = "unassigned"
+    source_commit: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.collection_id != STRATEGIC_NAVIGATION_COLLECTION_ID:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment collection differs"
+            )
+        for value, subject in (
+            (self.registry_sha256, "strategic rehearsal registry digest"),
+            (self.schedule_sha256, "strategic rehearsal schedule digest"),
+            (self.assignment_id, "strategic rehearsal assignment identity"),
+            (self.source_bundle_sha256, "strategic rehearsal source digest"),
+            (self.teacher_execution_sha256, "strategic rehearsal execution digest"),
+        ):
+            _sha256(value, subject)
+        if self.rehearsal_id != STRATEGIC_NAVIGATION_REHEARSAL_ID:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment identity differs"
+            )
+        if self.harness_seed != STRATEGIC_NAVIGATION_REHEARSAL_SEED:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment seed differs"
+            )
+        if self.partition != "unassigned":
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal partition must remain unassigned"
+            )
+        expected_assignment = collection_document_sha256(
+            {
+                "collection_id": STRATEGIC_NAVIGATION_COLLECTION_ID,
+                "harness_seed": self.harness_seed,
+                "registry_sha256": self.registry_sha256,
+                "rehearsal_id": self.rehearsal_id,
+                "schedule_sha256": self.schedule_sha256,
+                "schema": STRATEGIC_NAVIGATION_REHEARSAL_ASSIGNMENT_SCHEMA,
+                "teacher_execution_sha256": self.teacher_execution_sha256,
+            }
+        )
+        if self.assignment_id != expected_assignment:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment digest differs"
+            )
+        if self.root_lineage_id != f"red-strategic-rehearsal-root-{self.assignment_id}":
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment lineage differs"
+            )
+        if self.episode_id != f"red-strategic-rehearsal-teacher-{self.assignment_id}":
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment episode differs"
+            )
+        if self.source_commit is not None and _GIT_OID.fullmatch(self.source_commit) is None:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal assignment commit differs"
+            )
+
+    def metadata_dict(self) -> dict[str, object]:
+        return {
+            "assignment_id": self.assignment_id,
+            "attempt": {
+                "attempts_per_slot": 1,
+                "counted": False,
+                "purpose": "collection_harness_rehearsal",
+            },
+            "collection_id": self.collection_id,
+            "execution": {
+                "source_bundle_sha256": self.source_bundle_sha256,
+                "teacher_execution_sha256": self.teacher_execution_sha256,
+            },
+            "harness_seed": self.harness_seed,
+            "rehearsal_id": self.rehearsal_id,
+            "registry_sha256": self.registry_sha256,
+            "schedule": {
+                "schema": BATTLE_START_SCHEDULE_SCHEMA,
+                "schedule_sha256": self.schedule_sha256,
+            },
+            "split": {
+                "partition": self.partition,
+                "regime": STRATEGIC_NAVIGATION_REGIME,
+                "root_lineage_id": self.root_lineage_id,
+            },
+        }
+
+    def episode_metadata(self) -> dict[str, object]:
+        """Return the authenticated header blocks for the uncounted rehearsal."""
+
+        if self.source_commit is None:
+            raise StrategicNavigationProtocolError(
+                "strategic rehearsal metadata requires a committed assignment"
+            )
+        collection = self.metadata_dict()
+        split = collection.pop("split")
+        return {
+            "collection": collection,
+            "policy": {
+                "actor": STRATEGIC_NAVIGATION_ACTOR,
+                "policy_id": STRATEGIC_NAVIGATION_POLICY_ID,
+            },
+            "source": {"git_commit": self.source_commit},
+            "source_bundle_sha256": self.source_bundle_sha256,
+            "split": split,
+        }
+
+
+StrategicNavigationEpisodeAssignment = (
+    StrategicNavigationAssignment | StrategicNavigationRehearsalAssignment
+)
+
+
+@dataclass(frozen=True, slots=True)
 class StrategicNavigationCollectionRegistry:
     """Canonical prospective strategic-navigation collection plan."""
 
@@ -297,6 +423,35 @@ class StrategicNavigationCollectionRegistry:
                 "the strategic navigation test partition must remain unopened"
             )
         return assignment
+
+    def rehearsal_assignment(self) -> StrategicNavigationRehearsalAssignment:
+        """Derive the one authenticated, uncounted harness-debugging root."""
+
+        rehearsal = self.rehearsal
+        assignment_id = collection_document_sha256(
+            {
+                "collection_id": STRATEGIC_NAVIGATION_COLLECTION_ID,
+                "harness_seed": rehearsal.harness_seed,
+                "registry_sha256": self.registry_sha256,
+                "rehearsal_id": rehearsal.rehearsal_id,
+                "schedule_sha256": rehearsal.schedule_sha256,
+                "schema": STRATEGIC_NAVIGATION_REHEARSAL_ASSIGNMENT_SCHEMA,
+                "teacher_execution_sha256": self.execution.teacher_execution_sha256,
+            }
+        )
+        return StrategicNavigationRehearsalAssignment(
+            collection_id=STRATEGIC_NAVIGATION_COLLECTION_ID,
+            registry_sha256=self.registry_sha256,
+            rehearsal_id=rehearsal.rehearsal_id,
+            harness_seed=rehearsal.harness_seed,
+            schedule_sha256=rehearsal.schedule_sha256,
+            assignment_id=assignment_id,
+            root_lineage_id=f"red-strategic-rehearsal-root-{assignment_id}",
+            episode_id=f"red-strategic-rehearsal-teacher-{assignment_id}",
+            source_bundle_sha256=self.execution.source_bundle_sha256,
+            teacher_execution_sha256=self.execution.teacher_execution_sha256,
+            source_commit=self.execution.source_commit,
+        )
 
 
 def strategic_navigation_contract_document() -> dict[str, object]:

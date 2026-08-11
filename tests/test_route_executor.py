@@ -12,13 +12,14 @@ from pokemon_red_completion.route_executor import (
     ReplanRequest,
     ResourceRenewalReceipt,
     RouteExecutionError,
+    RouteExecutionFailureReason,
     RouteExecutionLimits,
     TraversalHazard,
     TraversalResource,
     TraversalSnapshot,
     execute_route,
 )
-from pokemon_red_completion.route_plan import RoutePlan, plan_route
+from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
 
 
 @dataclass
@@ -212,7 +213,7 @@ def test_a_depleted_resource_without_inventory_fails_before_movement() -> None:
         resources=(TraversalResource("encounter_suppression", 0, 0),),
     )
 
-    with pytest.raises(RouteExecutionError, match="without a carried renewal"):
+    with pytest.raises(RouteExecutionError, match="without a carried renewal") as caught:
         execute_route(
             plan,
             world,
@@ -221,6 +222,10 @@ def test_a_depleted_resource_without_inventory_fails_before_movement() -> None:
         )
 
     assert world.actions == []
+    assert caught.value.reason is RouteExecutionFailureReason.RESOURCE_UNAVAILABLE
+    assert caught.value.failure is not None
+    assert caught.value.failure.movement_requests == 0
+    assert caught.value.failure.executed_steps == ()
 
 
 def test_a_resource_expiring_on_the_terminal_step_is_settled_before_handoff() -> None:
@@ -783,15 +788,57 @@ def test_route_drift_fails_instead_of_becoming_a_replan() -> None:
     plan, _, _ = connection_plan()
     world = FakeWorld(transitions={(1, (0, 0), "right"): (1, (9, 9))})
 
-    with pytest.raises(RouteExecutionError, match="route drifted"):
+    with pytest.raises(RouteExecutionError, match="route drifted") as caught:
         execute_route(plan, world, world)
+
+    assert caught.value.reason is RouteExecutionFailureReason.WORLD_STATE_DIVERGED
+    assert caught.value.failure is not None
+    assert caught.value.failure.movement_requests == 1
+    assert caught.value.failure.last_observation is not None
+    assert caught.value.failure.last_observation.at == (9, 9)
+
+
+def test_replanner_failure_retains_the_acknowledged_prefix() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((0, 1), action="right"),),
+                (0, 1): (LocalEdge((0, 2), action="right"),),
+                (0, 2): (),
+            }
+        )
+    }
+    plan = plan_route(MacroGraph({1: ()}), local, 1, (0, 0), 1, goal_at=(0, 2))
+    world = FakeWorld(
+        transitions={(1, (0, 0), "right"): (1, (0, 1))},
+    )
+
+    def no_route(_request: ReplanRequest) -> RoutePlan:
+        raise RoutePlanningError("no replacement route")
+
+    with pytest.raises(RouteExecutionError, match="replanning found no") as caught:
+        execute_route(
+            plan,
+            world,
+            world,
+            replanner=no_route,
+            limits=RouteExecutionLimits(replan_after_unchanged=1),
+        )
+
+    assert caught.value.reason is RouteExecutionFailureReason.PLANNER_NO_ROUTE
+    assert caught.value.failure is not None
+    assert len(caught.value.failure.executed_steps) == 1
+    assert caught.value.failure.movement_requests == 2
+    assert caught.value.failure.wait_actions == 1
+    assert caught.value.failure.last_observation is not None
+    assert caught.value.failure.last_observation.at == (0, 1)
 
 
 def test_readiness_is_bounded_and_observed_before_movement() -> None:
     plan, _, _ = connection_plan()
     world = FakeWorld(ready=False)
 
-    with pytest.raises(RouteExecutionError, match="step .* exceeded"):
+    with pytest.raises(RouteExecutionError, match="step .* exceeded") as caught:
         execute_route(
             plan,
             world,
@@ -802,3 +849,9 @@ def test_readiness_is_bounded_and_observed_before_movement() -> None:
             ),
         )
     assert world.actions[0].kind is MacroActionKind.WAIT
+    assert caught.value.reason is (
+        RouteExecutionFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED
+    )
+    assert caught.value.failure is not None
+    assert caught.value.failure.movement_requests == 1
+    assert caught.value.failure.executed_steps == ()

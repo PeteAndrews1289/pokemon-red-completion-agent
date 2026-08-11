@@ -10,7 +10,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from pokemon_red_completion.route_executor import RouteExecutionReport
+from pokemon_red_completion.route_executor import (
+    RouteExecutionFailureReport,
+    RouteExecutionReport,
+)
 from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.strategic_navigation import (
     DestinationUnavailableReason,
@@ -26,9 +29,14 @@ from pokemon_red_completion.strategic_navigation import (
     StrategicResourceKind,
     successful_navigation_outcome,
     unsuccessful_navigation_outcome,
+    unsuccessful_navigation_outcome_from_route_failure,
 )
 from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_ACTOR,
+    STRATEGIC_NAVIGATION_POLICY_ID,
     StrategicNavigationAssignment,
+    StrategicNavigationEpisodeAssignment,
+    StrategicNavigationRehearsalAssignment,
 )
 
 
@@ -162,6 +170,24 @@ class BoundStrategicNavigationDecision:
             ),
         )
 
+    def failed_route_record(
+        self,
+        failure: RouteExecutionFailureReport,
+    ) -> StrategicNavigationRecord:
+        """Convert one measured executor failure into portable negative evidence."""
+
+        if failure.initial_plan != self.selected_plan:
+            raise StrategicNavigationError(
+                "route failure did not execute the bound strategic plan"
+            )
+        return StrategicNavigationRecord(
+            self.decision,
+            unsuccessful_navigation_outcome_from_route_failure(
+                self.decision,
+                failure,
+            ),
+        )
+
 
 def bind_strategic_navigation_decision(
     *,
@@ -176,16 +202,25 @@ def bind_strategic_navigation_decision(
     origin_region_ref: str,
     bindings: tuple[DestinationRouteBinding, ...],
     selected_destination_ref: str,
-    collection_assignment: StrategicNavigationAssignment | None = None,
+    collection_assignment: StrategicNavigationEpisodeAssignment | None = None,
 ) -> BoundStrategicNavigationDecision:
     """Build one choice and return only the selected exact route for execution."""
 
     if partition == "unassigned":
-        if collection_assignment is not None:
+        if collection_assignment is None:
+            pass
+        elif not isinstance(
+            collection_assignment,
+            StrategicNavigationRehearsalAssignment,
+        ):
             raise StrategicNavigationError(
-                "an unassigned strategic decision cannot claim a collection assignment"
+                "an unassigned strategic decision can claim only the rehearsal assignment"
             )
-    elif collection_assignment is None:
+        elif collection_assignment.source_commit is None:
+            raise StrategicNavigationError(
+                "a strategic rehearsal requires an assignment loaded from committed source"
+            )
+    elif not isinstance(collection_assignment, StrategicNavigationAssignment):
         raise StrategicNavigationError(
             "a counted strategic decision requires a committed collection assignment"
         )
@@ -193,7 +228,7 @@ def bind_strategic_navigation_decision(
         raise StrategicNavigationError(
             "a counted strategic decision requires an assignment loaded from committed source"
         )
-    elif (
+    if collection_assignment is not None and (
         episode_id,
         root_lineage_id,
         partition,
@@ -203,8 +238,8 @@ def bind_strategic_navigation_decision(
         collection_assignment.episode_id,
         collection_assignment.root_lineage_id,
         collection_assignment.partition,
-        "deterministic_teacher",
-        "qualified-completion-order-v1",
+        STRATEGIC_NAVIGATION_ACTOR,
+        STRATEGIC_NAVIGATION_POLICY_ID,
     ):
         raise StrategicNavigationError(
             "strategic decision provenance differs from its collection assignment"

@@ -85,6 +85,12 @@ Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935`, route-bindi
 - a strict reader that rejects identity leakage, schema drift and join tampering;
 - assignment-authenticated episode loading that rejects local-only provenance, collection/source/
   split/policy drift and premature test access;
+- a source-bound rehearsal assignment that remains explicitly unassigned and uncounted;
+- pre-execution strategic choice recording with one pending-decision/consumed-outcome state
+  machine, so a failed or interrupted route cannot disappear from the episode;
+- typed partial route-failure evidence retaining measured acknowledgements, requests, waits,
+  replans, interruptions and renewals while dropping the terminal map/coordinate at the strategic
+  boundary;
 - recursively immutable in-memory policy examples after canonical parsing; and
 - whole-root split and semantic-coverage audits;
 - authenticated loaded-episode auditing without discarding replan, interruption, resource or
@@ -141,12 +147,21 @@ actor and policy to that assignment before applying the strict decision/outcome 
 local-only assignments and keeps test episodes sealed by default. Current status is **train 0/5,
 validation 0/2, test 0/5, rehearsal 0/1**.
 
+The registry's rehearsal declaration is now executable as an authenticated identity rather than
+just a seed. Its derived episode and lineage stay `unassigned`, its attempt is explicitly
+`counted=false`, and the binder rejects substituting a counted root into that lane. The trajectory
+observer writes each choice before route execution, holds one pending decision, and accepts exactly
+one matching outcome afterward. A power loss can therefore produce an incomplete rehearsal for
+diagnosis, but never a silently missing decision or a consumed learning slot. The decision and
+outcome must share one sink; if the decision write fails, the observer marks the episode ineligible
+and refuses to write an orphan outcome.
+
 ## Code and CI audit
 
 At this checkpoint the repository contains 152 source modules and 173 test modules. The local CI
 equivalent produced:
 
-- **2,577 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,587 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
@@ -159,10 +174,10 @@ The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `e8335bbfb23c7304a0e4738975ef44d9b3f9ae36bf2e9e7f61633e4d5b935e8d` |
-| Source bundle SHA-256 | `2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df` |
-| Teacher execution SHA-256 | `3d8bc4d0c002213e8a0f21ec7aa212b506b831b1bee98b3ae5ee64ad42d214bd` |
-| Slot assignment SHA-256 | `bda259bd0a3971589941b65d79b6d0d7a7352956d458ac34453a81392e2a1652` |
+| Registry SHA-256 | `338e86c602c852080b5e066203cb489579f6a61442501be21b576a501cdf8994` |
+| Source bundle SHA-256 | `542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0` |
+| Teacher execution SHA-256 | `6bceb2b4e4849481c51b5fb586f1bac71ecb817f3768058f3c00b3d2acb13e0c` |
+| Slot assignment SHA-256 | `068fd00857df4c72565f445824a4f4453ac6fb745f5c174df7376298bf0cc283` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
@@ -171,17 +186,18 @@ The separate strategic registry is also prospective:
 
 | Field | Value |
 | --- | --- |
-| Strategic registry SHA-256 | `b74a88907c5eb308fa7086a67cfecc19c2663e4184978080c15449719e54e91e` |
+| Strategic registry SHA-256 | `91a8c707f02d2bb273601c50a079c7fef20eb9a5e831ca5371eb4e3383969de2` |
 | Decision-contract SHA-256 | `d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6` |
-| Strategic teacher execution SHA-256 | `d544efb040f5c83da654df07db56b126867417180abea3ac314dc88151e24451` |
-| First train assignment SHA-256 | `44e79be73347b9f2a8385381174e00089d0cd818d4b591dc6d4bc53fd0b8400a` |
+| Strategic teacher execution SHA-256 | `167a9dc04973e314944b9d0e98724386005a3baad8b32fe81faf71122d5cf554` |
+| Rehearsal assignment SHA-256 | `662e0ddab6d3d966773781cf36b9eeb60d2e8d81b17d23ff80e1a9f88bcb4602` |
+| First train assignment SHA-256 | `a6420e67da5602ee6cfbac99c7ea4fe16abb22689268b2749e2ebca29d86a31e` |
 
 ## Ranked gaps
 
 ### P0 — the collection harness is not yet connected to the full teacher
 
-The schema, live binding, split registry, strict assigned-episode loader and audit are ready, but
-the useful dataset denominator remains zero. The
+The schema, live binding, split registry, strict assigned-episode loader, pre-execution observer and
+audit are ready, but the useful dataset denominator remains zero. The
 safe-hub calibration answers an easy route-cost question; the Fuchsia calibration is a genuine
 branch that still agrees with cost; and the Celadon calibration proves one semantic choice can
 reject a much shorter route. All three are development roots and none can enter training or
@@ -190,6 +206,13 @@ make the counter rise without teaching a real decision. Use the preassigned whol
 instrument branches where the teacher genuinely weighs progression, recovery, resupply, training,
 collection or optional reward destinations. Preassignment and output authentication are complete;
 full-run instrumentation and the one allowed rehearsal are next.
+
+The execution-side failure prerequisite is now closed. `execute_route` attaches a typed semantic
+reason and measured partial trace to its error, including the acknowledged prefix before a
+replanner fails. The strategic conversion verifies the failed initial plan against the selected
+binding, retains portable counts/receipts, and excludes the last map and coordinate. The remaining
+P0 work is to call this seam from genuine branches in the clean-power teacher and consume the
+success or failure outcome before the chapter continues or raises.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will
@@ -232,8 +255,9 @@ from dataset/split audits before adding model code.
 
 ## Ordered roadmap
 
-1. **Connect the full-run collector.** Emit a choice and exactly one consumed outcome around genuine
-   teacher/generated route branches, using only the committed rehearsal assignment at first.
+1. **Connect the full-run collector.** Emit each pre-execution choice and exactly one measured
+   success or typed partial-failure outcome around genuine teacher/generated route branches, using
+   only the committed rehearsal assignment at first.
 2. **Qualify the rehearsal.** Run root `1710001`, audit candidate coverage, route-cost and shape
    baselines, interruption handling and terminal joins. Fix the harness without consuming a train
    or validation root.

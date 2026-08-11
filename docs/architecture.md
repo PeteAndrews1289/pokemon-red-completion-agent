@@ -122,6 +122,18 @@ collection, source, split and policy blocks to match the same assignment, then a
 one-decision/one-outcome join; the normal learning path cannot open test episodes. The full teacher
 still needs to emit these strategic decision/outcome pairs before any root can be consumed.
 
+The uncounted rehearsal uses a separate derived assignment whose partition remains `unassigned`;
+it cannot be confused with a learning slot. During an episode, the strategic observer writes the
+choice before the route starts, admits only one pending choice, and records exactly one matching
+outcome after execution. An external interruption can therefore leave a censored/incomplete
+episode, but cannot make the attempted choice disappear from provenance. Decision and outcome
+writes must share the same sink, and a failed decision write cannot produce an orphan outcome.
+
+Failed route execution has the same evidence boundary. The executor attaches a typed reason and
+measured partial trace; the strategic adapter verifies the initial plan against the selected
+binding, keeps portable counts and semantic receipts, and omits the final map/coordinate. The
+collector therefore need not choose between dropping failures and inventing empty metrics.
+
 The candidate ranker is deliberately permutation-equivariant. Its 27 normalized features exclude
 species IDs, move IDs, party-slot identity, map IDs, area names, memory addresses, and route
 indices. Each candidate is scored independently, then normalized within the current set. Teacher

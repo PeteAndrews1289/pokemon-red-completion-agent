@@ -172,6 +172,7 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
         "bytes": len(registry_payload),
         "decision_contract_sha256": decision_contract_sha256,
         "learning_roots": 7,
+        "rehearsal_assignment_sha256": parsed.rehearsal_assignment().assignment_id,
         "registry_sha256": registry_sha256,
         "source_bundle_sha256": source_bundle_sha256,
         "teacher_execution_sha256": execution["teacher_execution_sha256"],

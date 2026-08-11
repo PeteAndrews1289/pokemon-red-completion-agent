@@ -95,6 +95,15 @@ the run: the private episode must carry the same assignment, source, split and p
 rejects it; test stays sealed by default. The next executable task is to connect these assignments
 to the clean-power teacher and qualify the rehearsal before opening train root 1.
 
+Then show the audit correction: the rehearsal originally had a seed but no bindable assignment.
+Give it its own `UNASSIGNED / COUNTED: FALSE` identity. Animate the decision entering the private
+stream before the first route input, followed later by one outcome lock. The line is: **“If the
+power dies here, the attempt may be incomplete—but the choice cannot disappear.”**
+
+Follow it with a failed route card that is visibly nonzero: acknowledged prefix, movement requests,
+waits, replans and interruptions. Strip the terminal map/coordinate before the card enters the
+dataset. The line is: **“Failure is training evidence only if you measure what actually happened.”**
+
 ## Resource episode: the route outlived its Repel
 
 Put three remaining handwritten strings over Victory Road: **51 ROOM STEPS**, **56 ROOM STEPS** and

@@ -64,6 +64,17 @@ def test_registry_is_canonical_preassigned_and_seals_test_roots() -> None:
     assert registry.rehearsal.schedule_sha256 not in {
         run.schedule_sha256 for run in registry.runs
     }
+    rehearsal = registry.rehearsal_assignment()
+    assert rehearsal.partition == "unassigned"
+    assert rehearsal.harness_seed == 1_710_001
+    assert rehearsal.metadata_dict()["attempt"] == {
+        "attempts_per_slot": 1,
+        "counted": False,
+        "purpose": "collection_harness_rehearsal",
+    }
+    assert rehearsal.assignment_id not in {
+        registry.assignment(run.run_id).assignment_id for run in registry.runs
+    }
     assert registry.learning_assignment("red-strategic-v1-01-train").partition == "train"
     assert (
         registry.learning_assignment("red-strategic-v1-06-validation").partition
@@ -81,11 +92,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "b74a88907c5eb308fa7086a67cfecc19c2663e4184978080c15449719e54e91e"
+        == "91a8c707f02d2bb273601c50a079c7fef20eb9a5e831ca5371eb4e3383969de2"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "2c2268156da6ee7918cbf25dd74e872c0bfac2df46e003b90ed066a660f222df"
+        == "542b780c6a9f599d467bdd52afb856a1972c00a976ddc46c3261214bbf52d5a0"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -93,7 +104,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "d544efb040f5c83da654df07db56b126867417180abea3ac314dc88151e24451"
+        == "167a9dc04973e314944b9d0e98724386005a3baad8b32fe81faf71122d5cf554"
     )
     assert digest == {
         "bytes": len(payload),
@@ -132,6 +143,19 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
     episode_metadata = committed.episode_metadata()
     assert episode_metadata["source"] == {"git_commit": "a" * 40}
     assert episode_metadata["split"] == metadata["split"]
+
+    rehearsal = registry.rehearsal_assignment()
+    assert "/" not in json.dumps(rehearsal.metadata_dict(), sort_keys=True)
+    with pytest.raises(StrategicNavigationProtocolError, match="committed assignment"):
+        rehearsal.episode_metadata()
+    committed_rehearsal = replace(rehearsal, source_commit="b" * 40)
+    rehearsal_metadata = committed_rehearsal.episode_metadata()
+    assert rehearsal_metadata["source"] == {"git_commit": "b" * 40}
+    assert rehearsal_metadata["split"] == {
+        "partition": "unassigned",
+        "regime": "within_game_whole_root",
+        "root_lineage_id": rehearsal.root_lineage_id,
+    }
 
 
 def test_parser_rejects_noncanonical_duplicate_or_drifted_registry() -> None:
@@ -198,3 +222,4 @@ def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None
         REGISTRY_PATH.read_bytes()
     ).registry_sha256
     assert loaded.execution.source_commit is not None
+    assert loaded.rehearsal_assignment().source_commit == loaded.execution.source_commit

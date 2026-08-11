@@ -21,6 +21,7 @@ from enum import StrEnum
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
+    RouteExecutionFailureReport,
     RouteExecutionReport,
     RouteReplanReceipt,
 )
@@ -591,6 +592,60 @@ def unsuccessful_navigation_outcome(
         interruptions=interruptions,
         resource_renewals=resource_renewals,
         failure_reason=reason,
+    )
+
+
+def unsuccessful_navigation_outcome_from_route_failure(
+    decision: StrategicNavigationDecision,
+    failure: RouteExecutionFailureReport,
+) -> StrategicNavigationOutcome:
+    """Preserve measured partial execution without leaking its terminal identity."""
+
+    if not isinstance(failure, RouteExecutionFailureReport):
+        raise TypeError("failure must be a RouteExecutionFailureReport")
+    selected = decision.selected_candidate
+    if (
+        selected.route_cost,
+        selected.route_steps,
+        selected.map_transitions,
+        selected.field_actions,
+        selected.mode_changes,
+    ) != (
+        failure.initial_plan.cost,
+        len(failure.initial_plan.steps),
+        len(failure.initial_plan.segments),
+        sum(
+            step.action_kind is MacroActionKind.FIELD_MOVE
+            for step in failure.initial_plan.steps
+        ),
+        sum(
+            step.source_mode != step.expected_mode
+            for step in failure.initial_plan.steps
+        ),
+    ):
+        raise StrategicNavigationError(
+            "the selected candidate metrics do not match the failed initial plan"
+        )
+    try:
+        reason = NavigationFailureReason(failure.reason.value)
+    except ValueError as error:  # pragma: no cover - shared vocabulary is tested
+        raise StrategicNavigationError(
+            "route failure contains an unsupported semantic reason"
+        ) from error
+    return unsuccessful_navigation_outcome(
+        decision,
+        status=NavigationOutcomeStatus.FAILED,
+        reason=reason,
+        movement_requests=failure.movement_requests,
+        acknowledged_steps=len(failure.executed_steps),
+        wait_actions=failure.wait_actions,
+        replans=tuple(_strategic_replan(item) for item in failure.replans),
+        interruptions=tuple(
+            _resumed_interruption(item) for item in failure.interruptions
+        ),
+        resource_renewals=tuple(
+            _strategic_resource(item.kind) for item in failure.resource_renewals
+        ),
     )
 
 

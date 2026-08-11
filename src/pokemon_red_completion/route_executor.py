@@ -12,15 +12,44 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from enum import StrEnum
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.global_router import Coordinate
-from pokemon_red_completion.route_plan import RoutePlan, RouteStep
+from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, RouteStep
+
+
+class RouteExecutionFailureReason(StrEnum):
+    """Portable reason attached to a measured partial route failure."""
+
+    INTERRUPTION_UNRECOVERED = "interruption_unrecovered"
+    PLANNER_NO_ROUTE = "planner_no_route"
+    RESOURCE_UNAVAILABLE = "resource_unavailable"
+    STEP_ACKNOWLEDGEMENT_EXHAUSTED = "step_acknowledgement_exhausted"
+    TERMINAL_STATE_MISMATCH = "terminal_state_mismatch"
+    WORLD_STATE_DIVERGED = "world_state_diverged"
 
 
 class RouteExecutionError(RuntimeError):
-    """Raised when live state cannot truthfully acknowledge a route."""
+    """Raised with measured evidence when a route fails closed."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        reason: RouteExecutionFailureReason = (
+            RouteExecutionFailureReason.WORLD_STATE_DIVERGED
+        ),
+    ) -> None:
+        super().__init__(message)
+        self.reason = reason
+        self.failure: RouteExecutionFailureReport | None = None
+
+    def attach_failure(self, failure: RouteExecutionFailureReport) -> None:
+        if self.failure is not None:
+            raise RuntimeError("route execution failure evidence is already attached")
+        self.failure = failure
 
 
 @dataclass(frozen=True, slots=True)
@@ -220,6 +249,60 @@ class RouteExecutionReport:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class RouteExecutionFailureReport:
+    """Measured progress retained when route execution raises."""
+
+    initial_plan: RoutePlan
+    reason: RouteExecutionFailureReason
+    last_observation: TraversalSnapshot | None
+    executed_steps: tuple[ExecutedRouteStep, ...]
+    interruptions: tuple[InterruptionReceipt, ...]
+    replans: tuple[RouteReplanReceipt, ...]
+    movement_requests: int
+    wait_actions: int
+    resource_renewals: tuple[ResourceRenewalReceipt, ...] = ()
+
+
+@dataclass(slots=True)
+class _RouteExecutionTrace:
+    initial_plan: RoutePlan
+    last_observation: TraversalSnapshot | None = None
+    executed_steps: list[ExecutedRouteStep] = field(default_factory=list)
+    interruptions: list[InterruptionReceipt] = field(default_factory=list)
+    replans: list[RouteReplanReceipt] = field(default_factory=list)
+    movement_requests: int = 0
+    wait_actions: int = 0
+    resource_renewals: list[ResourceRenewalReceipt] = field(default_factory=list)
+
+    def failure_report(
+        self,
+        reason: RouteExecutionFailureReason,
+    ) -> RouteExecutionFailureReport:
+        return RouteExecutionFailureReport(
+            initial_plan=self.initial_plan,
+            reason=reason,
+            last_observation=self.last_observation,
+            executed_steps=tuple(self.executed_steps),
+            interruptions=tuple(self.interruptions),
+            replans=tuple(self.replans),
+            movement_requests=self.movement_requests,
+            wait_actions=self.wait_actions,
+            resource_renewals=tuple(self.resource_renewals),
+        )
+
+
+@dataclass(slots=True)
+class _TracingTraversalObserver:
+    delegate: TraversalObserver
+    trace: _RouteExecutionTrace
+
+    def observe(self) -> TraversalSnapshot:
+        current = self.delegate.observe()
+        self.trace.last_observation = current
+        return current
+
+
 def execute_route(
     plan: RoutePlan,
     actions: RouteActionPort,
@@ -232,7 +315,46 @@ def execute_route(
 ) -> RouteExecutionReport:
     """Execute until every movement is acknowledged or a bound fails closed."""
 
+    trace = _RouteExecutionTrace(plan)
+    traced_observer = _TracingTraversalObserver(observer, trace)
+    try:
+        return _execute_route(
+            plan,
+            actions,
+            traced_observer,
+            interruption_handler=interruption_handler,
+            replanner=replanner,
+            resource_manager=resource_manager,
+            limits=limits,
+            trace=trace,
+        )
+    except RouteExecutionError as error:
+        error.attach_failure(trace.failure_report(error.reason))
+        raise
+    except RoutePlanningError as error:
+        wrapped = RouteExecutionError(
+            "route replanning found no candidate",
+            reason=RouteExecutionFailureReason.PLANNER_NO_ROUTE,
+        )
+        wrapped.attach_failure(trace.failure_report(wrapped.reason))
+        raise wrapped from error
+
+
+def _execute_route(
+    plan: RoutePlan,
+    actions: RouteActionPort,
+    observer: TraversalObserver,
+    *,
+    interruption_handler: InterruptionHandler | None,
+    replanner: RouteReplanner | None,
+    resource_manager: RouteResourceManager | None,
+    limits: RouteExecutionLimits,
+    trace: _RouteExecutionTrace,
+) -> RouteExecutionReport:
+    """Execute one route while updating the caller-owned failure trace."""
+
     current = observer.observe()
+    trace.last_observation = current
     _require_position(
         current,
         plan.macro_path.maps[0],
@@ -241,13 +363,11 @@ def execute_route(
         mode=plan.start_mode,
     )
     pending = list(plan.steps)
-    executed: list[ExecutedRouteStep] = []
-    interruptions: list[InterruptionReceipt] = []
-    replans: list[RouteReplanReceipt] = []
-    renewals: list[ResourceRenewalReceipt] = []
+    executed = trace.executed_steps
+    interruptions = trace.interruptions
+    replans = trace.replans
+    renewals = trace.resource_renewals
     blocked: dict[int, frozenset[Coordinate]] = {}
-    movement_requests = 0
-    wait_actions = 0
 
     while pending:
         step = pending[0]
@@ -264,9 +384,13 @@ def execute_route(
                 observer,
                 resource_manager,
             )
+            trace.last_observation = current
             if renewal is not None:
                 if len(renewals) >= limits.max_resource_renewals:
-                    raise RouteExecutionError("route exceeded its resource-renewal budget")
+                    raise RouteExecutionError(
+                        "route exceeded its resource-renewal budget",
+                        reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+                    )
                 renewals.append(renewal)
         current, new_receipts, waits = _wait_until_ready(
             current,
@@ -276,8 +400,9 @@ def execute_route(
             limits,
             used_interruptions=len(interruptions),
         )
+        trace.last_observation = current
         interruptions.extend(new_receipts)
-        wait_actions += waits
+        trace.wait_actions += waits
         _require_position(
             current,
             step.source_map,
@@ -338,9 +463,10 @@ def execute_route(
         )
         while True:
             actions.execute(step.macro_action)
-            movement_requests += 1
+            trace.movement_requests += 1
             attempts += 1
             observed = observer.observe()
+            trace.last_observation = observed
 
             if (
                 handled_hazard is not None
@@ -358,28 +484,38 @@ def execute_route(
                 # interruption one bounded settle before acknowledging the
                 # movement that entered it.
                 _wait(actions, limits.transition_settle_frames)
-                wait_actions += 1
+                trace.wait_actions += 1
                 observed = observer.observe()
+                trace.last_observation = observed
 
             if observed.interruption is not None:
                 if len(interruptions) >= limits.max_interruptions:
-                    raise RouteExecutionError("route exceeded its interruption budget")
+                    raise RouteExecutionError(
+                        "route exceeded its interruption budget",
+                        reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                    )
                 if interruption_handler is None:
                     raise RouteExecutionError(
-                        f"unhandled route interruption {observed.interruption!r}"
+                        f"unhandled route interruption {observed.interruption!r}",
+                        reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                     )
                 receipt = interruption_handler.handle(observed)
                 interruptions.append(receipt)
                 step_interruptions += 1
                 observed = observer.observe()
+                trace.last_observation = observed
                 if observed.interruption is not None:
-                    raise RouteExecutionError("interruption handler did not restore traversal")
+                    raise RouteExecutionError(
+                        "interruption handler did not restore traversal",
+                        reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                    )
                 if (receipt.resumed_map, receipt.resumed_at) != (
                     observed.map_id,
                     observed.at,
                 ):
                     raise RouteExecutionError(
-                        "interruption receipt disagrees with resumed observation"
+                        "interruption receipt disagrees with resumed observation",
+                        reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                     )
 
             crossed_map_before_coordinates = (
@@ -398,27 +534,37 @@ def execute_route(
                 # before coordinates settle. Neither is an acknowledgement
                 # until one bounded wait exposes the exact terminal state.
                 _wait(actions, limits.transition_settle_frames)
-                wait_actions += 1
+                trace.wait_actions += 1
                 observed = observer.observe()
+                trace.last_observation = observed
                 if observed.interruption is not None:
                     if len(interruptions) >= limits.max_interruptions:
-                        raise RouteExecutionError("route exceeded its interruption budget")
+                        raise RouteExecutionError(
+                            "route exceeded its interruption budget",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                        )
                     if interruption_handler is None:
                         raise RouteExecutionError(
-                            f"unhandled route interruption {observed.interruption!r}"
+                            f"unhandled route interruption {observed.interruption!r}",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                         )
                     receipt = interruption_handler.handle(observed)
                     interruptions.append(receipt)
                     step_interruptions += 1
                     observed = observer.observe()
+                    trace.last_observation = observed
                     if observed.interruption is not None:
-                        raise RouteExecutionError("interruption handler did not restore traversal")
+                        raise RouteExecutionError(
+                            "interruption handler did not restore traversal",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                        )
                     if (receipt.resumed_map, receipt.resumed_at) != (
                         observed.map_id,
                         observed.at,
                     ):
                         raise RouteExecutionError(
-                            "interruption receipt disagrees with resumed observation"
+                            "interruption receipt disagrees with resumed observation",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                         )
 
             if _matches(
@@ -452,8 +598,9 @@ def execute_route(
             current = observed
 
             _wait(actions, limits.retry_wait_frames)
-            wait_actions += 1
+            trace.wait_actions += 1
             current = observer.observe()
+            trace.last_observation = current
             current, new_receipts, waits = _wait_until_ready(
                 current,
                 actions,
@@ -462,9 +609,10 @@ def execute_route(
                 limits,
                 used_interruptions=len(interruptions),
             )
+            trace.last_observation = current
             interruptions.extend(new_receipts)
             step_interruptions += len(new_receipts)
-            wait_actions += waits
+            trace.wait_actions += waits
             if _matches(
                 current,
                 step.expected_map,
@@ -564,7 +712,10 @@ def execute_route(
             if attempts >= limits.max_step_attempts:
                 raise RouteExecutionError(
                     f"route step {step.action} at {step.source_at} exceeded "
-                    f"{limits.max_step_attempts} attempts"
+                    f"{limits.max_step_attempts} attempts",
+                    reason=(
+                        RouteExecutionFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED
+                    ),
                 )
 
         if replaced:
@@ -576,9 +727,13 @@ def execute_route(
             observer,
             resource_manager,
         )
+        trace.last_observation = current
         if renewal is not None:
             if len(renewals) >= limits.max_resource_renewals:
-                raise RouteExecutionError("route exceeded its resource-renewal budget")
+                raise RouteExecutionError(
+                    "route exceeded its resource-renewal budget",
+                    reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+                )
             renewals.append(renewal)
     current, new_receipts, waits = _wait_until_ready(
         current,
@@ -588,27 +743,29 @@ def execute_route(
         limits,
         used_interruptions=len(interruptions),
     )
+    trace.last_observation = current
     interruptions.extend(new_receipts)
-    wait_actions += waits
-    _require_position(
-        current,
-        plan.terminal_map,
-        plan.terminal_at,
-        "route terminal",
-        mode=plan.terminal_mode,
-    )
+    trace.wait_actions += waits
+    if not _matches(current, plan.terminal_map, plan.terminal_at, mode=plan.terminal_mode):
+        raise RouteExecutionError(
+            "route terminal did not match the declared goal",
+            reason=RouteExecutionFailureReason.TERMINAL_STATE_MISMATCH,
+        )
     report = RouteExecutionReport(
         initial_plan=plan,
         terminal=current,
         executed_steps=tuple(executed),
         interruptions=tuple(interruptions),
         replans=tuple(replans),
-        movement_requests=movement_requests,
-        wait_actions=wait_actions,
+        movement_requests=trace.movement_requests,
+        wait_actions=trace.wait_actions,
         resource_renewals=tuple(renewals),
     )
     if not report.passed:
-        raise RouteExecutionError("route report failed its terminal contract")
+        raise RouteExecutionError(
+            "route report failed its terminal contract",
+            reason=RouteExecutionFailureReason.TERMINAL_STATE_MISMATCH,
+        )
     return report
 
 
@@ -617,19 +774,37 @@ def _renew_resource(
     observer: TraversalObserver,
     manager: RouteResourceManager,
 ) -> tuple[TraversalSnapshot, ResourceRenewalReceipt | None]:
-    receipt = manager.renew_if_needed(current)
+    try:
+        receipt = manager.renew_if_needed(current)
+    except RouteExecutionError as error:
+        raise RouteExecutionError(
+            str(error),
+            reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+        ) from error
     if receipt is None:
         return current, None
     observed = observer.observe()
     if (receipt.map_id, receipt.at) != (current.map_id, current.at):
-        raise RouteExecutionError("resource receipt disagrees with its source position")
+        raise RouteExecutionError(
+            "resource receipt disagrees with its source position",
+            reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+        )
     if (observed.map_id, observed.at) != (current.map_id, current.at):
-        raise RouteExecutionError("resource renewal moved the player")
+        raise RouteExecutionError(
+            "resource renewal moved the player",
+            reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+        )
     if observed.interruption is not None:
-        raise RouteExecutionError("resource renewal left an active interruption")
+        raise RouteExecutionError(
+            "resource renewal left an active interruption",
+            reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+        )
     resource = next((item for item in observed.resources if item.kind == receipt.kind), None)
     if resource is None or resource.remaining != receipt.after_remaining:
-        raise RouteExecutionError("resource receipt disagrees with renewed observation")
+        raise RouteExecutionError(
+            "resource receipt disagrees with renewed observation",
+            reason=RouteExecutionFailureReason.RESOURCE_UNAVAILABLE,
+        )
     return observed, receipt
 
 
@@ -716,19 +891,31 @@ def _wait_until_ready(
     for _ in range(limits.max_readiness_waits + 1):
         if current.interruption is not None:
             if used_interruptions + len(receipts) >= limits.max_interruptions:
-                raise RouteExecutionError("route exceeded its interruption budget")
+                raise RouteExecutionError(
+                    "route exceeded its interruption budget",
+                    reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                )
             if interruption_handler is None:
-                raise RouteExecutionError(f"unhandled route interruption {current.interruption!r}")
+                raise RouteExecutionError(
+                    f"unhandled route interruption {current.interruption!r}",
+                    reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                )
             receipt = interruption_handler.handle(current)
             receipts.append(receipt)
             current = observer.observe()
             if current.interruption is not None:
-                raise RouteExecutionError("interruption handler did not restore traversal")
+                raise RouteExecutionError(
+                    "interruption handler did not restore traversal",
+                    reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                )
             if (receipt.resumed_map, receipt.resumed_at) != (
                 current.map_id,
                 current.at,
             ):
-                raise RouteExecutionError("interruption receipt disagrees with resumed observation")
+                raise RouteExecutionError(
+                    "interruption receipt disagrees with resumed observation",
+                    reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                )
             continue
         if current.ready:
             return current, tuple(receipts), waits
