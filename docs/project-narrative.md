@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 10: open floor did not mean open world
+
+Route 7's guard house contains an ordinary five-step corridor in the cartridge terrain whether or
+not the guards allow passage. A static graph therefore answers the wrong question. The transferable
+question is whether an observed world predicate currently authorizes the exact threshold edge.
+
+The neutral graph now accepts opaque requirements; the Red adapter alone knows that status byte
+bit `$40` means the Saffron guards have been bribed. Satisfied, unsatisfied and unknown are distinct
+states, and only satisfied facts become capabilities. Unknown is not a softer closed state that a
+planner may optimistically cross—it is unavailable until the game supplies evidence.
+
+The live probe starts from authenticated post-Erika progress. On the west boundary, Fresh Water is
+present and RAM reports `$00`. The unfiltered graph still derives five Right inputs, while both the
+observed closed state and a deliberately missing observation reject the plan with zero generated
+inputs. The teacher performs the story handoff; the item disappears and RAM becomes `$40`. Without
+changing the graph, generated plans cross the threshold westbound and eastbound, leave through the
+exact Route 7 return and continue into Saffron City. Eleven requests produce eleven acknowledged
+movements with no interruption or replan. The
+[story-gate receipt](evidence/saffron-story-gate-route-probe-2026-08-10.json) binds the claim to
+clean source.
+
+The first attempt also made the cartridge correct the router. Horizontal gate exits settle on the
+outside warp; they do not use the one-tile walk-out played by vertical doors. The strict executor
+rejected the predicted `(10,19)` when RAM reported `(10,18)`, the composer was fixed, and the proof
+was rerun from committed source. The next boundary is resource renewal: a route that outlives Repel
+must be able to observe, price and renew that resource rather than relying on an authored setup.
+
 ## August 10: the shortest route woke the trainer
 
 The full Strength chain ended by exposing a different kind of obstacle. The generated exit route

@@ -467,6 +467,35 @@ whether the world changed. Strength is the next test because both sides of that 
 
 ---
 
+## Act XIV: the floor stayed open while the world said no
+
+Route 7's guard house is five walkable tiles from west to east in every static read. Before the
+guard receives a drink, those tiles are not a route. The obstacle is not collision and the map does
+not mutate. It is a story fact.
+
+The neutral graph now attaches opaque requirements to exact directed edges. Red's adapter observes
+the Saffron guard bit as satisfied, unsatisfied or unknown, and publishes only satisfied facts as
+capabilities. That last distinction is the safety rule: missing memory cannot become optimistic
+permission.
+
+The proof watched the same passage change meaning without changing topology. With Fresh Water still
+in the bag and status byte `$00`, an ordinary graph found five Right inputs while the semantic graph
+rejected them and sent nothing. After the teacher gave the drink away, RAM became `$40`. Generated
+routes crossed back west, forward east, exited the gate and entered Saffron: eleven requests,
+eleven acknowledgements, no replan.
+
+The first attempt failed one step later. The composer expected the horizontal gate to use the same
+one-tile exterior walk-out as a Pokémon Center door. Live RAM settled on the Route 7 warp instead.
+That failure was kept long enough to correct the abstraction, then the proof was rerun from clean
+committed source. A story about intelligence that hides the emulator's veto would be less valuable
+than the bug.
+
+This is one predicate, not a universal story interpreter. The next route must manage something that
+depletes while it moves: Repel. That requires renewal to become planner state rather than another
+authored preamble.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -522,7 +551,11 @@ Being precise about this matters more than the story sounding finished.
   to its exact shore origin. A fourth generated route directly observed a Cinnabar NPC, replanned
   before sending an input into its occupied square, and returned to its origin. A fifth staged Cut,
   verified one exact Celadon block mutation, rebuilt terrain from live RAM, crossed the former tree,
-  and returned to Center. Strength and story gates remain outside authority.
+  and returned to Center. Five bounded searches then solved Victory Road's full Strength chain, and
+  a trainer-sight proof replanned before engagement. One observed Route 7 story predicate now keeps
+  closed and unknown Saffron states unavailable, then admits the same corridor after the live flag
+  opens. Resource renewal, repeated Cut, other story scripts and general generated routing remain
+  outside completion-run authority.
 - A member that is too weak for where the run happens to be is now routed somewhere that suits it,
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;

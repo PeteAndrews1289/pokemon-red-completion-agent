@@ -14,6 +14,32 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## The same floor is closed, unknown, then open — 2026-08-10
+
+Clean executable source `40a05d160b66e5e8e00f4ca95bb76841752694eb` adds opaque semantic
+requirements to exact directed local edges and observes Red's Saffron guard flag as one of three
+states: satisfied, unsatisfied or unknown. Only satisfied facts become route capabilities. The
+first binding covers both rows and both directions across the Route 7 guard-house threshold;
+unknown memory is deliberately unavailable rather than guessed open.
+
+The authenticated post-Erika probe reaches the west side with Fresh Water in the bag. Static
+cartridge terrain still supplies a five-step corridor, but the observed `$00` story byte and a
+synthetic unknown observation both make that corridor unroutable, and the semantic planner sends
+zero inputs. The existing teacher gives the drink to the guard. Live RAM changes to `$40`, Fresh
+Water disappears, and the same immutable graph admits the predicate. Generated plans then cross
+westbound and eastbound, leave through the exact Route 7 return, and continue through the east
+connection into Saffron. All **11/11** movements settle with no interruption or replan. Record:
+[saffron-story-gate-route-probe-2026-08-10.json](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json).
+
+The first live attempt also corrected a general route-composition error. Vertical doorway returns
+play a one-tile walk-out after the destination warp; horizontal pass-through gates settle on the
+outside warp itself. The old uniform offset predicted Route 7 `(10,19)` while live RAM correctly
+reported `(10,18)`. The corrected composer and regression are part of the evidence-bound source.
+One story predicate is now qualified, not every lock or script in Kanto. Next make resource renewal
+first-class and replace Victory Road's authored room-to-room and repel-boundary travel. Repeated
+Cut, joint macro/local pricing, acquisition routes and strategic navigation records follow.
+Generated navigation remains outside completion-run authority and counted v95 remains **0/10**.
+
 ## Trainer sight is route state, not a blocked edge — 2026-08-10
 
 Clean executable source `95e8b827668a165b6ca707dceb594460a5bf2d42` joins two independent

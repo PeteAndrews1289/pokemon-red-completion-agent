@@ -1,0 +1,212 @@
+{
+  "actions_executed": 1139,
+  "capture": {
+    "checkpoint_id": "portable_loop_defeat_erika_terminal",
+    "required_verified_objective": "defeat_erika"
+  },
+  "closed_observation": {
+    "capabilities": [],
+    "fresh_water_present": true,
+    "generated_inputs_sent": 0,
+    "predicate_state": "unsatisfied",
+    "semantic_plan_available": false,
+    "static_unfiltered_plan": {
+      "actions": [
+        "right",
+        "right",
+        "right",
+        "right",
+        "right"
+      ],
+      "maps": [
+        76
+      ],
+      "start_yx": [
+        4,
+        0
+      ],
+      "steps": [
+        {
+          "action": "right",
+          "expected_map": 76,
+          "expected_yx": [
+            4,
+            1
+          ],
+          "requirements": [],
+          "source_map": 76,
+          "source_yx": [
+            4,
+            0
+          ]
+        },
+        {
+          "action": "right",
+          "expected_map": 76,
+          "expected_yx": [
+            4,
+            2
+          ],
+          "requirements": [],
+          "source_map": 76,
+          "source_yx": [
+            4,
+            1
+          ]
+        },
+        {
+          "action": "right",
+          "expected_map": 76,
+          "expected_yx": [
+            4,
+            3
+          ],
+          "requirements": [
+            "story:saffron_guards_open"
+          ],
+          "source_map": 76,
+          "source_yx": [
+            4,
+            2
+          ]
+        },
+        {
+          "action": "right",
+          "expected_map": 76,
+          "expected_yx": [
+            4,
+            4
+          ],
+          "requirements": [
+            "story:saffron_guards_open"
+          ],
+          "source_map": 76,
+          "source_yx": [
+            4,
+            3
+          ]
+        },
+        {
+          "action": "right",
+          "expected_map": 76,
+          "expected_yx": [
+            4,
+            5
+          ],
+          "requirements": [],
+          "source_map": 76,
+          "source_yx": [
+            4,
+            4
+          ]
+        }
+      ],
+      "terminal_yx": [
+        4,
+        5
+      ]
+    },
+    "status_flags_1": 0,
+    "unknown_predicate_plan_available": false
+  },
+  "controller_released": true,
+  "generated_execution": {
+    "gate_exit": {
+      "acknowledged_steps": 1,
+      "interruptions": [],
+      "movement_requests": 1,
+      "passed": true,
+      "replans": 0,
+      "terminal_map": 18,
+      "terminal_ready": true,
+      "terminal_yx": [
+        10,
+        18
+      ]
+    },
+    "open_backtrack": {
+      "acknowledged_steps": 3,
+      "interruptions": [],
+      "movement_requests": 3,
+      "passed": true,
+      "replans": 0,
+      "terminal_map": 76,
+      "terminal_ready": true,
+      "terminal_yx": [
+        4,
+        0
+      ]
+    },
+    "open_forward_crossing": {
+      "acknowledged_steps": 5,
+      "interruptions": [],
+      "movement_requests": 5,
+      "passed": true,
+      "replans": 0,
+      "terminal_map": 76,
+      "terminal_ready": true,
+      "terminal_yx": [
+        4,
+        5
+      ]
+    },
+    "saffron_connection": {
+      "acknowledged_steps": 2,
+      "interruptions": [],
+      "movement_requests": 2,
+      "passed": true,
+      "replans": 0,
+      "terminal_map": 10,
+      "terminal_ready": true,
+      "terminal_yx": [
+        18,
+        0
+      ]
+    },
+    "semantic_threshold_crossed_eastbound": true,
+    "semantic_threshold_crossed_westbound": true,
+    "terminal_map_id": 10,
+    "terminal_yx": [
+      18,
+      0
+    ],
+    "total_acknowledged_steps": 11,
+    "total_movement_requests": 11
+  },
+  "open_observation": {
+    "capabilities": [
+      "story:saffron_guards_open"
+    ],
+    "fresh_water_present": false,
+    "predicate_state": "satisfied",
+    "status_flags_1": 64
+  },
+  "passage": {
+    "east_yx": [
+      4,
+      5
+    ],
+    "map_id": 76,
+    "predicate": "story:saffron_guards_open",
+    "static_topology_changed_between_observations": false,
+    "west_yx": [
+      4,
+      0
+    ]
+  },
+  "recorded_on": "2026-08-10",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "rom_adjacent_artifacts_unchanged": true,
+  "schema": "saffron-story-gate-route-probe-v1",
+  "source": {
+    "git_commit": "40a05d160b66e5e8e00f4ca95bb76841752694eb",
+    "source_bundle_sha256": "1b884ee9539881d9d95465156627d309f1ef70c0cea3d60f139c4fa79b5e2020"
+  },
+  "status": "ok",
+  "terminal_frame": 136072
+}

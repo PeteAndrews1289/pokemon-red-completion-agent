@@ -24,7 +24,10 @@
 > view range and defeated state from cartridge data. Its deliberately unsafe 50-step candidate
 > entered the male trainer's sight line; the live executor sent no input toward `(4,3)`, replanned
 > once to a five-step safe suffix, and reached `(1,2)` after 50/50 acknowledged movements with no
-> engagement or battle. Travel through the room warp and the repel-expiry boundary remain
+> engagement or battle. A seventh proof now binds Route 7's Saffron corridor to an observed story
+> predicate: closed and unknown states rejected the statically walkable floor without input; after
+> the guard handoff, generated plans crossed both directions and entered Saffron after 11/11
+> acknowledged movements. Travel through Victory Road's room warps and repel-expiry boundary remain
 > explicitly authored rather than being misreported as generated navigation.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
@@ -37,7 +40,8 @@
 > [staged Cut crossing](docs/evidence/celadon-staged-cut-route-probe-2026-08-10.json), plus the
 > [Strength state search](docs/evidence/victory-road-strength-state-search-probe-2026-08-11.json)
 > and [full Strength chain](docs/evidence/victory-road-strength-chain-probe-2026-08-10.json), plus
-> the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json).
+> the [trainer-sight route](docs/evidence/victory-road-trainer-sight-route-probe-2026-08-10.json)
+> and [Saffron story gate](docs/evidence/saffron-story-gate-route-probe-2026-08-10.json).
 
 [![CI](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -50,8 +54,8 @@ control, and progressively trained specialists.**
 
 Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates, 154,653 directed
 static land edges, 1,484 exact connection transitions, 558 ordinary warp arrivals and 242 dynamic
-return warps. Boundary returns now retain the distinct action that walks out of the map and the
-adjacent exterior arrival rather than pretending that entering the warp tile is enough. Red and
+return warps. Boundary returns now retain the distinct action that walks out of the map; vertical
+doorways land beyond their exterior warp while horizontal pass-through gates settle on it. Red and
 Blue agree on the complete decoded structures. The first multi-map composer
 selected reachable passage endpoints and produced an 86-action Pallet → Route 1 → Viridian → Center
 plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. A second
@@ -77,9 +81,12 @@ independent engine receipt. Trainer sight remains separate from the Strength cla
 own adapter: object events and trainer headers derive active facing/range/event lanes, current
 rendered state may override facing, and the generic executor treats those lanes as temporary
 semantic hazards rather than walls. The authenticated 1F probe replanned before entering `(4,3)`
-and reached the exit approach with 50/50 movements and no encounter. Story gates, special scripted
-trainer-like objects, resource renewal and the remaining inter-room boundaries are still explicit
-open work.
+and reached the exit approach with 50/50 movements and no encounter. Route 7's Saffron threshold
+now requires an opaque observed story fact: closed and unknown observations reject the same static
+corridor, while the live open flag admits it. The source-bound proof crossed both directions and
+entered Saffron after 11/11 acknowledged movements. This qualifies one story predicate; special
+scripted trainer-like objects, resource renewal, other story locks and the remaining Victory Road
+inter-room boundaries are still explicit open work.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

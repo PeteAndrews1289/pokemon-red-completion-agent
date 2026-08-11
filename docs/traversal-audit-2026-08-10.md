@@ -1,5 +1,23 @@
 # Knowledge-to-action audit — 2026-08-10
 
+## Post-audit closure: the first story predicate
+
+Source `40a05d160b66e5e8e00f4ca95bb76841752694eb` closes the audit's first semantic
+passage gate. Route 7's Saffron threshold now carries an opaque requirement on four exact directed
+edges. Live RAM supplies satisfied/unsatisfied state; missing RAM stays unknown; only satisfied
+facts are routed. An authenticated post-Erika probe showed the static five-step corridor while the
+closed and unknown semantic projections both rejected it with zero inputs. After Fresh Water was
+consumed and status bit `$40` appeared, generated plans crossed both directions, exited to Route 7
+and entered Saffron after 11/11 acknowledged movements. The
+[receipt](evidence/saffron-story-gate-route-probe-2026-08-10.json) is bound to clean source.
+
+Live play also split boundary-return geometry correctly: vertical doorways walk one tile beyond
+their destination warp; horizontal gates settle on it. The next ordered navigation gate is now
+first-class resource renewal followed by replacement of Victory Road's authored inter-room and
+repel-expiry routes. Repeated Cut, joint macro/local pricing, acquisition coverage, strategic
+navigation records and Crystal transfer remain open. This addendum supersedes the older ranked-gap
+text below where it says story-state filtering is still absent.
+
 ## Executive verdict
 
 Static composition and closed-loop land execution are proved across two continuous live routes.

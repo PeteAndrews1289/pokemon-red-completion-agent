@@ -15,6 +15,23 @@ Follow an evidence-driven attempt to turn a reliable Pokémon Red speed-running 
 learned player that can make decisions, recover from surprises, and eventually transfer what it
 learns to other Pokémon games.
 
+## Story-gate episode: open floor, closed world
+
+Begin with the Route 7 guard house rendered twice. Do not change a tile between the frames. Draw the
+same five-step path in both, then stamp the first **REJECTED: FLAG `$00`** and the second
+**AVAILABLE: FLAG `$40`**. The line is: **“The map never changed. What the world allowed did.”**
+
+Show three predicate cards—satisfied, unsatisfied, unknown—and let only satisfied emit a route
+capability. Put Fresh Water beside the closed observation; then animate the guard handoff, remove
+the item, and flip the bit. Play the generated westbound and eastbound crossings and the final
+Route 7→Saffron connection with **11 requests / 11 acknowledgements / 0 replans** on screen.
+
+Keep the failed first attempt. The route predicted exterior `(10,19)`, but live RAM stopped at
+`(10,18)`. Contrast a vertical Pokémon Center doorway, which plays a one-tile walk-out, with the
+horizontal gate, which settles on its outside warp. Say: **“The emulator did not merely validate
+the plan; it corrected the abstraction.”** Close on the next limitation card: **ONE STORY FLAG IS
+NOT EVERY SCRIPT. NEXT: ROUTES THAT RENEW THEIR OWN RESOURCES.**
+
 ## Trainer-sight episode: the route was open, but control was not
 
 Open on the generated Victory Road route failing at `(5,3)`. Freeze the frame as the trainer moves

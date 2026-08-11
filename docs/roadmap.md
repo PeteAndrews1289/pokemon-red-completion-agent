@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-10): move from solved Strength puzzles to semantic navigation
+## Current focus (2026-08-10): carry semantic navigation through resource boundaries
 
 The game-neutral route executor is implemented and live-qualified at source `6b2cf65`. It requires
 exact acknowledgement after every movement, tolerates Gen I's staggered map/coordinate transition,
@@ -62,22 +62,30 @@ adversarial 1F proof began with a 50-step candidate crossing male trainer square
 suffix, acknowledged 50/50 movements and reached `(1,2)` with no engagement, battle, wait or save
 write. See the [trainer-sight receipt](evidence/victory-road-trainer-sight-route-probe-2026-08-10.json).
 
-This closes standard fighting-map trainer-sight avoidance, not general Victory Road navigation.
-Special scripted trainer-like objects remain separate, the exit proof stops adjacent to the warp,
-and the second inter-room route plus repel-expiry setup remain authored. The ordered gates are now:
+The first closed/open story passage is now live-qualified at source `40a05d1`. Exact directed
+edges across Route 7's Saffron guard house require the opaque fact `story:saffron_guards_open`.
+Before the guard receives Fresh Water, static terrain still offers a five-step corridor, but the
+observed closed flag and an unknown observation both make it unavailable with zero generated
+inputs. After the handoff sets RAM bit `$40`, generated plans cross the same graph in both
+directions, leave to Route 7 and enter Saffron City. All 11/11 generated movements were
+acknowledged with no interruption or replan. The first attempt also corrected horizontal return
+geometry: pass-through gates settle on the outside warp, unlike vertical door walk-outs. See the
+[story-gate receipt](evidence/saffron-story-gate-route-probe-2026-08-10.json).
 
-1. Filter one story-gated passage from observed semantic predicates, independently prove its closed
-   and open states, and keep unknown predicates unavailable.
-2. Make resource renewal first-class, then replace Victory Road's authored inter-room routes and
+This closes one real story predicate, not general Victory Road navigation or every Kanto script.
+Special scripted trainer-like objects remain separate, and Victory Road's inter-room travel plus
+repel-expiry setup remain authored. The ordered gates are now:
+
+1. Make resource renewal first-class, then replace Victory Road's authored inter-room routes and
    repel-boundary setup with composed execution through their exact warp/resource boundaries.
-3. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
-4. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
+2. Qualify repeated and multi-tree Cut planning without weakening the live mutation receipt.
+3. Upgrade macro search to compare local-plus-passage cost across alternate map paths, rather than
    selecting a macro path before local cost is known.
-5. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
+4. Read remaining acquisition routes—starters, gifts, fossils, static encounters and Game Corner
    prizes—so one-cartridge reachability becomes complete rather than a lower bound.
-6. Record strategic destination choices, replans and interruption outcomes for learning. Exact
+5. Record strategic destination choices, replans and interruption outcomes for learning. Exact
    arrow sequences remain planner outputs, not imitation labels.
-7. Add Crystal's thin adapter after direct occupancy and one story predicate preserve the neutral
+6. Add Crystal's thin adapter now that direct occupancy and one story predicate preserve the neutral
    executor contract, then run the
    defined zero-shot/few-shot/from-scratch navigation benchmark.
 
