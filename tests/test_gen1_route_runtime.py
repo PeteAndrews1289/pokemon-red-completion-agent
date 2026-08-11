@@ -234,7 +234,7 @@ def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
 
     receipt = handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
 
-    assert receipt.kind == "trainer_battle"
+    assert receipt.kind == "trainer_engagement"
     assert receipt.resumed_at == (8, 7)
     assert receipt.details == {
         "battle_plan_id": "generated-route-map-12-trainer-1",
@@ -261,7 +261,7 @@ def test_combined_handler_closes_defeated_trainer_dialogue_without_a_battle() ->
 
     receipt = handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
 
-    assert receipt.kind == "trainer_dialogue"
+    assert receipt.kind == "trainer_engagement"
     assert receipt.details == {
         "battle_started": False,
         "intro_pulses": 1,

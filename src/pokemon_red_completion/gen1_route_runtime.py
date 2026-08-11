@@ -266,7 +266,7 @@ class Gen1RouteInterruptionHandler:
                 and self.reader.read_input_readiness().ready
             ):
                 receipt = InterruptionReceipt(
-                    kind="trainer_dialogue",
+                    kind="trainer_engagement",
                     resumed_map=interruption.map_id,
                     resumed_at=interruption.at,
                     details={
@@ -303,7 +303,7 @@ class Gen1RouteInterruptionHandler:
         ):
             raise RouteExecutionError("trainer battle failed to restore its route boundary")
         receipt = InterruptionReceipt(
-            kind="trainer_battle",
+            kind="trainer_engagement",
             resumed_map=interruption.map_id,
             resumed_at=interruption.at,
             details={
