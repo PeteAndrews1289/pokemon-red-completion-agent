@@ -18,7 +18,11 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.route_1_wild import Route1WildFleeEvidence
-from pokemon_red_completion.route_executor import RouteExecutionError, TraversalSnapshot
+from pokemon_red_completion.route_executor import (
+    RouteExecutionError,
+    TraversalResource,
+    TraversalSnapshot,
+)
 
 
 @dataclass
@@ -66,6 +70,8 @@ def raw(*, battle_state: int = 0) -> RawGameState:
         player_y=8,
         party_count=1,
         battle_state=battle_state,
+        bag_items=(),
+        repel_remaining_steps=0,
     )
 
 
@@ -85,6 +91,7 @@ def test_observer_keeps_coordinates_game_neutral_and_marks_wild_battle() -> None
         interruption="wild_battle",
         mode="land",
         occupied=frozenset(),
+        resources=(TraversalResource("encounter_suppression", 0, 0),),
     )
     assert fake.occupancy_reads == 0, "overworld sprite RAM is not decoded during battle"
 

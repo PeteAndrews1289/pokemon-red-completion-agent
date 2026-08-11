@@ -146,6 +146,15 @@ def test_raw_state_reads_the_saffron_guard_flag_from_an_independent_address() ->
     assert 0xD728 in memory.reads
 
 
+def test_raw_state_reads_repel_steps_from_the_revision_pinned_address() -> None:
+    memory = RecordingMemory({0xD732: 0x01, 0xD0DB: 37})
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert raw.repel_remaining_steps == 37
+    assert 0xD0DB in memory.reads
+
+
 def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> None:
     with pytest.raises(VisibleMapObjectError, match="impossible sprite count"):
         PokemonRedStateReader(

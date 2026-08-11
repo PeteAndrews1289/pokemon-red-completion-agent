@@ -10,9 +10,11 @@ from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
     ReplanRequest,
+    ResourceRenewalReceipt,
     RouteExecutionError,
     RouteExecutionLimits,
     TraversalHazard,
+    TraversalResource,
     TraversalSnapshot,
     execute_route,
 )
@@ -27,6 +29,7 @@ class FakeWorld:
     interruption: str | None = None
     occupied: frozenset[tuple[int, int]] = frozenset()
     hazards: tuple[TraversalHazard, ...] = ()
+    resources: tuple[TraversalResource, ...] = ()
     transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = field(
         default_factory=dict
     )
@@ -91,6 +94,38 @@ class FakeWorld:
             interruption=self.interruption,
             occupied=self.occupied,
             hazards=self.hazards,
+            resources=self.resources,
+        )
+
+
+@dataclass
+class FakeResourceManager:
+    world: FakeWorld
+    calls: int = 0
+
+    def renew_if_needed(
+        self,
+        current: TraversalSnapshot,
+    ) -> ResourceRenewalReceipt | None:
+        self.calls += 1
+        (resource,) = current.resources
+        if resource.remaining is None:
+            raise RouteExecutionError("resource state is unknown")
+        if resource.remaining > 0:
+            return None
+        if not resource.carried_units:
+            raise RouteExecutionError("resource is depleted without a carried renewal")
+        self.world.resources = (
+            TraversalResource(resource.kind, 250, resource.carried_units - 1),
+        )
+        self.world.ready = True
+        return ResourceRenewalReceipt(
+            kind=resource.kind,
+            map_id=current.map_id,
+            at=current.at,
+            before_remaining=0,
+            after_remaining=250,
+            units_consumed=1,
         )
 
 
@@ -131,6 +166,96 @@ def test_each_requested_movement_needs_live_acknowledgement() -> None:
     assert report.movement_requests == 2
     assert report.wait_actions == 1, "the cross-map transition receives one settling wait"
     assert [receipt.movement_requests for receipt in report.executed_steps] == [1, 1]
+
+
+def test_a_depleted_route_resource_is_renewed_before_the_next_input() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((0, 1), action="right"),),
+                (0, 1): (),
+            }
+        )
+    }
+    plan = plan_route(MacroGraph({1: ()}), local, 1, (0, 0), 1, goal_at=(0, 1))
+    world = FakeWorld(
+        ready=False,
+        resources=(TraversalResource("encounter_suppression", 0, 1),),
+        transitions={(1, (0, 0), "right"): (1, (0, 1))},
+    )
+    manager = FakeResourceManager(world)
+
+    report = execute_route(plan, world, world, resource_manager=manager)
+
+    assert report.passed
+    assert report.movement_requests == 1
+    assert report.resource_renewals == (
+        ResourceRenewalReceipt(
+            kind="encounter_suppression",
+            map_id=1,
+            at=(0, 0),
+            before_remaining=0,
+            after_remaining=250,
+            units_consumed=1,
+        ),
+    )
+    assert world.actions == [MacroAction(MacroActionKind.MOVE, "right")]
+
+
+def test_a_depleted_resource_without_inventory_fails_before_movement() -> None:
+    plan, _, _ = connection_plan()
+    world = FakeWorld(
+        resources=(TraversalResource("encounter_suppression", 0, 0),),
+    )
+
+    with pytest.raises(RouteExecutionError, match="without a carried renewal"):
+        execute_route(
+            plan,
+            world,
+            world,
+            resource_manager=FakeResourceManager(world),
+        )
+
+    assert world.actions == []
+
+
+def test_a_resource_expiring_on_the_terminal_step_is_settled_before_handoff() -> None:
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (LocalEdge((0, 1), action="right"),),
+                (0, 1): (),
+            }
+        )
+    }
+    plan = plan_route(MacroGraph({1: ()}), local, 1, (0, 0), 1, goal_at=(0, 1))
+
+    @dataclass
+    class TerminalExpiryWorld(FakeWorld):
+        def execute(self, action: MacroAction) -> object:
+            result = super().execute(action)
+            if action == MacroAction(MacroActionKind.MOVE, "right"):
+                self.resources = (
+                    TraversalResource("encounter_suppression", 0, 1),
+                )
+                self.ready = False
+            return result
+
+    world = TerminalExpiryWorld(
+        resources=(TraversalResource("encounter_suppression", 1, 1),),
+        transitions={(1, (0, 0), "right"): (1, (0, 1))},
+    )
+
+    report = execute_route(
+        plan,
+        world,
+        world,
+        resource_manager=FakeResourceManager(world),
+    )
+
+    assert report.passed
+    assert len(report.resource_renewals) == 1
+    assert report.terminal.ready
 
 
 def test_a_same_map_coordinate_goal_executes_its_terminal_approach() -> None:

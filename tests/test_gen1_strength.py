@@ -30,7 +30,14 @@ from pokemon_red_completion.observation import (
     RawGameState,
     ReadOnlyMemory,
 )
-from pokemon_red_completion.route_executor import RouteActionPort
+from pokemon_red_completion.route_executor import (
+    ResourceRenewalReceipt,
+    RouteActionPort,
+    RouteResourceManager,
+    TraversalObserver,
+    TraversalResource,
+    TraversalSnapshot,
+)
 
 
 def terrain(
@@ -228,6 +235,20 @@ class StrengthWorld:
             return value
         return 0
 
+    def observe(self) -> TraversalSnapshot:
+        return TraversalSnapshot(
+            map_id=int(self.raw.map_id or 0),
+            at=(int(self.raw.player_y or 0), int(self.raw.player_x or 0)),
+            ready=True,
+            resources=(
+                TraversalResource(
+                    "encounter_suppression",
+                    self.raw.repel_remaining_steps,
+                    sum(quantity for _item, quantity in (self.raw.bag_items or ())),
+                ),
+            ),
+        )
+
     def execute(self, action: MacroAction) -> object:
         self.actions.append(action)
         if action.kind is MacroActionKind.WAIT:
@@ -289,6 +310,64 @@ def test_executor_requires_the_held_pulse_engine_flag_and_exact_result() -> None
         (0, 2),
         (0, 3),
     )
+
+
+@dataclass
+class StrengthResourceManager:
+    world: StrengthWorld
+
+    def renew_if_needed(
+        self,
+        current: TraversalSnapshot,
+    ) -> ResourceRenewalReceipt | None:
+        (resource,) = current.resources
+        if resource.remaining:
+            return None
+        self.world.raw = replace(
+            self.world.raw,
+            bag_items=(),
+            repel_remaining_steps=250,
+        )
+        return ResourceRenewalReceipt(
+            kind=resource.kind,
+            map_id=current.map_id,
+            at=current.at,
+            before_remaining=0,
+            after_remaining=250,
+            units_consumed=1,
+        )
+
+
+def test_strength_renews_a_depleted_resource_without_weakening_party_protection() -> None:
+    world_map = terrain((".....", "....."))
+    initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 2)),))
+    plan = plan_strength(
+        world_map,
+        rules(),
+        initial,
+        StrengthGoal((0, 3)),
+        raw((0, 0)),
+    )
+    world = StrengthWorld(
+        raw=replace(
+            raw((0, 0)),
+            bag_items=((0x39, 1),),
+            repel_remaining_steps=0,
+        )
+    )
+
+    report = Gen1StrengthExecutor(
+        cast(RouteActionPort, world),
+        cast(PokemonRedStateReader, world),
+        cast(ReadOnlyMemory, world),
+        resource_manager=cast(RouteResourceManager, StrengthResourceManager(world)),
+        resource_observer=cast(TraversalObserver, world),
+    ).execute(plan)
+
+    assert report.passed
+    assert len(report.resource_renewals) == 1
+    assert report.resource_renewals[0].after_remaining == 250
+    assert world.raw.bag_items == ()
 
 
 def test_executor_accepts_transient_dust_when_a_map_script_consumes_the_push_flag() -> None:

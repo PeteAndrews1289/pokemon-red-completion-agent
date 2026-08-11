@@ -611,6 +611,7 @@ class ItemId(IntEnum):
     POTION = 0x14
     REPEL = 0x1E
     THUNDER_STONE = 0x21
+    SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
@@ -1037,6 +1038,7 @@ class RawGameState:
     active_party_pp: tuple[int, ...] | None = None
     player_money: int | None = None
     status_flags_1: int | None = None
+    repel_remaining_steps: int | None = None
 
     @property
     def battler_level(self) -> int | None:
@@ -3663,6 +3665,7 @@ class PokemonRedStateReader:
             active_party_pp=active_party_pp,
             player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
             status_flags_1=self._memory.read_u8(RamAddress.STATUS_FLAGS_1),
+            repel_remaining_steps=self._memory.read_u8(RamAddress.REPEL_REMAINING_STEPS),
         )
 
         if self._encounter_log is not None:

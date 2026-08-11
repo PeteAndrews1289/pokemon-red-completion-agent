@@ -2,8 +2,10 @@
 
 The authenticated post-Giovanni capture supplies the origin. The qualified
 teacher reaches the first puzzle boundary, then live RAM and cartridge-derived
-terrain drive four bounded player-and-boulder searches: the 1F switch, the 2F
-switch, the 3F switch and hole, and the returned-boulder switch on 2F.
+terrain drive five bounded player-and-boulder searches. Cartridge-composed
+routes replace both authored room changes. A generic observed-resource manager
+renews Repel wherever its counter actually reaches zero, including inside a
+Strength plan, rather than walking an authored expiry preamble.
 
 The capture and ROM are private inputs and never appear in the public receipt.
 """
@@ -22,6 +24,10 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.trainer_sight import (  # noqa: E402
+    Gen1TrainerSightProjector,
+)
+
 from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.captured_progress import load_captured_progress  # noqa: E402
@@ -35,7 +41,19 @@ from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
     Gen1FieldMovePort,
     Gen1StrengthReceipt,
 )
-from pokemon_red_completion.gen1_maps import map_graph  # noqa: E402
+from pokemon_red_completion.gen1_maps import (  # noqa: E402
+    macro_graph_from_nodes,
+    map_graph,
+)
+from pokemon_red_completion.gen1_repel import (  # noqa: E402
+    Gen1RepelRenewalManager,
+)
+from pokemon_red_completion.gen1_route_runtime import (  # noqa: E402
+    Gen1TraversalObserver,
+)
+from pokemon_red_completion.gen1_story_routing import (  # noqa: E402
+    apply_gen1_story_requirements,
+)
 from pokemon_red_completion.gen1_strength import (  # noqa: E402
     Gen1StrengthExecutor,
     StrengthExecutionReport,
@@ -48,10 +66,12 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
     Tileset,
     terrain_from_blocks,
     tilesets,
+    walkable_world,
     water_tilesets,
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     TraversalRules,
+    local_graph,
     map_object_events,
     traversal_rules,
 )
@@ -71,14 +91,17 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_clean_source,
 )
 from pokemon_red_completion.rom import verify_rom  # noqa: E402
-from pokemon_red_completion.route_executor import RouteActionPort  # noqa: E402
+from pokemon_red_completion.route_executor import (  # noqa: E402
+    ReplanRequest,
+    RouteActionPort,
+    RouteExecutionLimits,
+    RouteExecutionReport,
+    RouteReplanner,
+    execute_route,
+)
+from pokemon_red_completion.route_plan import RoutePlan, plan_route  # noqa: E402
 from pokemon_red_completion.victory_road import (  # noqa: E402
-    VR1_TO_2F,
-    VR2_TO_3F,
     VictoryRoadProgress,
-    _directions,
-    _move,
-    _settle_confirm,
     _step,
     run_victory_road_chapter,
 )
@@ -96,9 +119,6 @@ VR2_SWITCH_1_YX = (16, 1)
 VR3_SWITCH_YX = (5, 3)
 VR3_HOLE_YX = (15, 23)
 VR2_SWITCH_2_YX = (16, 9)
-VR3_REPEL_BOUNDARY = _directions("UUULUURULLLLL")
-
-
 class VictoryRoadStrengthChainProbeError(RuntimeError):
     """Raised when the full live Strength proof cannot satisfy its contract."""
 
@@ -197,6 +217,49 @@ def _phase_payload(phase: _SolvedPhase) -> dict[str, object]:
                 }
                 for receipt in execution.pushes
             ],
+            "resource_renewals": [
+                {
+                    "kind": receipt.kind,
+                    "map_id": receipt.map_id,
+                    "at_yx": list(receipt.at),
+                    "before_remaining": receipt.before_remaining,
+                    "after_remaining": receipt.after_remaining,
+                    "units_consumed": receipt.units_consumed,
+                    "details": dict(receipt.details),
+                }
+                for receipt in execution.resource_renewals
+            ],
+        },
+    }
+
+
+def _route_payload(plan: RoutePlan, report: RouteExecutionReport) -> dict[str, object]:
+    return {
+        "map_ids": list(plan.macro_path.maps),
+        "start_yx": list(plan.start_at),
+        "terminal_yx": list(plan.terminal_at),
+        "steps": len(plan.steps),
+        "passages": [step.kind for step in plan.steps if step.kind != "walk"],
+        "execution": {
+            "passed": report.passed,
+            "movement_requests": report.movement_requests,
+            "acknowledged_steps": len(report.executed_steps),
+            "interruptions": [item.kind for item in report.interruptions],
+            "replans": [item.reason for item in report.replans],
+            "terminal_map_id": report.terminal.map_id,
+            "terminal_yx": list(report.terminal.at),
+            "resource_renewals": [
+                {
+                    "kind": receipt.kind,
+                    "map_id": receipt.map_id,
+                    "at_yx": list(receipt.at),
+                    "before_remaining": receipt.before_remaining,
+                    "after_remaining": receipt.after_remaining,
+                    "units_consumed": receipt.units_consumed,
+                    "details": dict(receipt.details),
+                }
+                for receipt in report.resource_renewals
+            ],
         },
     }
 
@@ -213,6 +276,8 @@ def _solve_phase(
     actions: RouteActionPort,
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
+    resource_manager: Gen1RepelRenewalManager,
+    route_observer: Gen1TraversalObserver,
 ) -> _SolvedPhase:
     raw = reader.read()
     if raw.map_id is None or raw.player_y is None or raw.player_x is None:
@@ -241,7 +306,13 @@ def _solve_phase(
         blocked=occupancy[raw.map_id] | live_non_boulder_occupancy,
         max_states=100_000,
     )
-    execution = Gen1StrengthExecutor(actions, reader, emulator).execute(plan)
+    execution = Gen1StrengthExecutor(
+        actions,
+        reader,
+        emulator,
+        resource_manager=resource_manager,
+        resource_observer=route_observer,
+    ).execute(plan)
     final = reader.read()
     if (
         not execution.passed
@@ -250,6 +321,61 @@ def _solve_phase(
     ):
         raise VictoryRoadStrengthChainProbeError(f"{phase_id} did not settle exactly")
     return _SolvedPhase(phase_id, raw.map_id, event, goal, plan, execution)
+
+
+def _compose_live_passage(
+    rom: bytes,
+    reader: PokemonRedStateReader,
+    macro,
+    static_graphs,
+    sets: Mapping[int, Tileset],
+    surf_tileset_ids: frozenset[int],
+    rules: TraversalRules,
+    target_map: int,
+    target_at: tuple[int, int],
+) -> tuple[RoutePlan, RouteReplanner]:
+    raw = reader.read()
+    if raw.map_id is None or raw.player_y is None or raw.player_x is None:
+        raise VictoryRoadStrengthChainProbeError("live passage lacks a start coordinate")
+    terrain = terrain_from_blocks(
+        rom,
+        raw.map_id,
+        reader.read_current_map_blocks().rows,
+        sets,
+        water_set_ids=surf_tileset_ids,
+    )
+    graphs = dict(static_graphs)
+    graphs[raw.map_id] = local_graph(
+        terrain,
+        rules,
+        blocked=reader.read_current_object_coordinates(),
+    )
+    graphs = apply_gen1_story_requirements(graphs)
+    start_at = raw.player_y, raw.player_x
+    plan = plan_route(
+        macro,
+        graphs,
+        raw.map_id,
+        start_at,
+        target_map,
+        goal_at=target_at,
+        last_outside=int(MapId.ROUTE_23),
+    )
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        return plan_route(
+            macro,
+            graphs,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+            capabilities=request.current.capabilities,
+            last_outside=int(MapId.ROUTE_23),
+        )
+
+    return plan, replan
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -282,8 +408,10 @@ def main(argv: list[str] | None = None) -> int:
 
     rom = args.rom.read_bytes()
     maps = map_graph(rom)
+    macro = macro_graph_from_nodes(maps)
     rules = traversal_rules(rom, maps)
     sets = tilesets(rom)
+    static_world = walkable_world(rom)
     surf_tileset_ids = water_tilesets(rom)
     object_events = map_object_events(rom, VICTORY_ROAD_MAPS)
     occupancy = {
@@ -291,6 +419,14 @@ def main(argv: list[str] | None = None) -> int:
             event.at
             for event in object_events
             if event.map_id == map_id and not event.is_boulder
+        )
+        for map_id in VICTORY_ROAD_MAPS
+    }
+    static_graphs = {
+        map_id: local_graph(
+            static_world[map_id],
+            rules,
+            blocked={event.at for event in object_events if event.map_id == map_id},
         )
         for map_id in VICTORY_ROAD_MAPS
     }
@@ -328,8 +464,23 @@ def main(argv: list[str] | None = None) -> int:
 
         counted = CountingExecutor(controller)
         field = Gen1FieldMovePort(counted, reader, emulator)
+        projector = Gen1TrainerSightProjector(rom, reader)
+        route_observer = Gen1TraversalObserver(reader, hazard_projector=projector)
+
+        def use_repel(item_id: int) -> None:
+            _use_bag_item(
+                counted,
+                reader,
+                emulator,
+                DEFAULT_LAVENDER_TIMING,
+                item_id,
+            )
+
+        resource_manager = Gen1RepelRenewalManager(counted, reader, use_repel)
         activations: list[Gen1StrengthReceipt] = []
         phases: list[_SolvedPhase] = []
+        passage_plans: list[RoutePlan] = []
+        passage_reports: list[RouteExecutionReport] = []
 
         _use_bag_item(
             counted,
@@ -357,9 +508,32 @@ def main(argv: list[str] | None = None) -> int:
                 counted,
                 reader,
                 emulator,
+                resource_manager,
+                route_observer,
             )
         )
-        _move(counted, reader, VR1_TO_2F, "planned Strength probe 2F entry")
+        plan, replanner = _compose_live_passage(
+            rom,
+            reader,
+            macro,
+            static_graphs,
+            sets,
+            surf_tileset_ids,
+            rules,
+            int(MapId.VICTORY_ROAD_2F),
+            (0, 8),
+        )
+        passage_plans.append(plan)
+        passage_reports.append(
+            execute_route(
+                plan,
+                counted,
+                route_observer,
+                replanner=replanner,
+                resource_manager=resource_manager,
+                limits=RouteExecutionLimits(max_replans=4),
+            )
+        )
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -380,21 +554,35 @@ def main(argv: list[str] | None = None) -> int:
                 counted,
                 reader,
                 emulator,
+                resource_manager,
+                route_observer,
             )
         )
-        _move(counted, reader, VR2_TO_3F, "planned Strength probe 3F entry")
+        plan, replanner = _compose_live_passage(
+            rom,
+            reader,
+            macro,
+            static_graphs,
+            sets,
+            surf_tileset_ids,
+            rules,
+            int(MapId.VICTORY_ROAD_3F),
+            (23, 7),
+        )
+        passage_plans.append(plan)
+        passage_reports.append(
+            execute_route(
+                plan,
+                counted,
+                route_observer,
+                replanner=replanner,
+                resource_manager=resource_manager,
+                limits=RouteExecutionLimits(max_replans=4),
+            )
+        )
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
-        _move(counted, reader, VR3_REPEL_BOUNDARY, "planned Strength probe repel boundary")
-        _settle_confirm(counted, reader, 4)
-        _use_bag_item(
-            counted,
-            reader,
-            emulator,
-            DEFAULT_LAVENDER_TIMING,
-            ItemId.MAX_REPEL,
-        )
         phases.append(
             _solve_phase(
                 "victory_road_3f_switch",
@@ -408,6 +596,8 @@ def main(argv: list[str] | None = None) -> int:
                 counted,
                 reader,
                 emulator,
+                resource_manager,
+                route_observer,
             )
         )
         phases.append(
@@ -423,6 +613,8 @@ def main(argv: list[str] | None = None) -> int:
                 counted,
                 reader,
                 emulator,
+                resource_manager,
+                route_observer,
             )
         )
 
@@ -453,6 +645,8 @@ def main(argv: list[str] | None = None) -> int:
                 counted,
                 reader,
                 emulator,
+                resource_manager,
+                route_observer,
             )
         )
 
@@ -462,13 +656,23 @@ def main(argv: list[str] | None = None) -> int:
         frames_executed = emulator.frame_count
         controller_released = not emulator.pressed_buttons
 
+    renewals = tuple(
+        renewal
+        for report in passage_reports
+        for renewal in report.resource_renewals
+    ) + tuple(
+        renewal
+        for phase in phases
+        for renewal in phase.execution.resource_renewals
+    )
+
     if before_artifacts != _adjacent_artifacts(args.rom):
         raise VictoryRoadStrengthChainProbeError(
             "the no-save probe changed a ROM-adjacent artifact"
         )
 
     payload = {
-        "schema": "victory-road-strength-chain-probe-v1",
+        "schema": "victory-road-composed-resource-chain-probe-v1",
         "recorded_on": args.recorded_on,
         "status": "ok",
         "rom": fingerprint.public_dict(),
@@ -491,16 +695,22 @@ def main(argv: list[str] | None = None) -> int:
             "phases": [_phase_payload(phase) for phase in phases],
         },
         "execution": {
-            "passed": all(phase.execution.passed for phase in phases),
+            "passed": all(phase.execution.passed for phase in phases)
+            and all(report.passed for report in passage_reports),
             "activations": [_activation_payload(item) for item in activations],
             "derived_phase_steps": sum(len(phase.plan.steps) for phase in phases),
             "derived_phase_pushes": sum(
                 len(phase.execution.pushes) for phase in phases
             ),
-            "authored_inter_phase_route_steps": [
-                len(VR1_TO_2F),
-                len(VR2_TO_3F),
+            "composed_inter_phase_routes": [
+                _route_payload(plan, report)
+                for plan, report in zip(
+                    passage_plans,
+                    passage_reports,
+                    strict=True,
+                )
             ],
+            "authored_inter_phase_route_steps": 0,
             "actions_executed_after_boundary": counted.actions_executed,
             "frames_executed": frames_executed,
             "controller_released": controller_released,
@@ -510,8 +720,20 @@ def main(argv: list[str] | None = None) -> int:
         },
         "resource_boundary": {
             "kind": "repel_expiry",
-            "authored_direction_count": len(VR3_REPEL_BOUNDARY),
-            "puzzle_search_resumed_after_replenishment": True,
+            "authored_direction_count": 0,
+            "renewals": [
+                {
+                    "kind": receipt.kind,
+                    "map_id": receipt.map_id,
+                    "at_yx": list(receipt.at),
+                    "before_remaining": receipt.before_remaining,
+                    "after_remaining": receipt.after_remaining,
+                    "units_consumed": receipt.units_consumed,
+                    "details": dict(receipt.details),
+                }
+                for receipt in renewals
+            ],
+            "puzzle_search_resumed_after_observed_replenishment": bool(renewals),
         },
         "rom_adjacent_artifacts_unchanged": True,
     }

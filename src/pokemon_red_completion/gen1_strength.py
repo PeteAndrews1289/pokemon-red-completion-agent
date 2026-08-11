@@ -30,7 +30,12 @@ from pokemon_red_completion.observation import (
     RawGameState,
     ReadOnlyMemory,
 )
-from pokemon_red_completion.route_executor import RouteActionPort
+from pokemon_red_completion.route_executor import (
+    ResourceRenewalReceipt,
+    RouteActionPort,
+    RouteResourceManager,
+    TraversalObserver,
+)
 
 Coordinate = tuple[int, int]
 STAIRS_TILE = 0x15
@@ -199,6 +204,7 @@ class StrengthExecutionReport:
     controller_inputs: int
     wait_actions: int
     pushes: tuple[StrengthPushReceipt, ...]
+    resource_renewals: tuple[ResourceRenewalReceipt, ...] = ()
 
     @property
     def passed(self) -> bool:
@@ -213,11 +219,18 @@ class Gen1StrengthExecutor:
     reader: PokemonRedStateReader
     memory: ReadOnlyMemory
     timing: StrengthExecutionTiming = DEFAULT_STRENGTH_EXECUTION_TIMING
+    resource_manager: RouteResourceManager | None = None
+    resource_observer: TraversalObserver | None = None
     push_receipts: list[StrengthPushReceipt] = field(default_factory=list, init=False)
+    resource_receipts: list[ResourceRenewalReceipt] = field(default_factory=list, init=False)
     _inputs: int = field(default=0, init=False)
     _waits: int = field(default=0, init=False)
 
     def execute(self, plan: StrengthPlan) -> StrengthExecutionReport:
+        if (self.resource_manager is None) != (self.resource_observer is None):
+            raise StrengthPlanningError(
+                "Strength resource management needs both manager and observer"
+            )
         before_raw = self.reader.read()
         map_id = _require_live_overworld(before_raw)
         protected = _protected_state(before_raw)
@@ -227,12 +240,14 @@ class Gen1StrengthExecutor:
             raise StrengthPlanningError("live Strength state does not match the plan start")
 
         for ordinal, step in enumerate(plan.steps, start=1):
+            protected = self._renew_resource(map_id, step.source, protected)
             self._wait_ready(map_id, step.source, protected)
             if step.kind == "walk":
                 self._execute_walk(map_id, ordinal, step, protected)
             else:
                 self._execute_boulder_step(map_id, ordinal, step, protected)
         terminal = self._observe_state(map_id)
+        protected = self._renew_resource(map_id, terminal, protected)
         self._wait_terminal_ready(map_id, terminal, protected)
         return StrengthExecutionReport(
             plan=plan,
@@ -241,7 +256,40 @@ class Gen1StrengthExecutor:
             controller_inputs=self._inputs,
             wait_actions=self._waits,
             pushes=tuple(self.push_receipts),
+            resource_renewals=tuple(self.resource_receipts),
         )
+
+    def _renew_resource(
+        self,
+        map_id: int,
+        expected: StrengthState,
+        protected: tuple[object, ...],
+    ) -> tuple[object, ...]:
+        if self.resource_manager is None or self.resource_observer is None:
+            return protected
+        snapshot = self.resource_observer.observe()
+        if snapshot.map_id != map_id or snapshot.at != expected.player_at:
+            raise StrengthPlanningError("resource observation changed the Strength boundary")
+        receipt = self.resource_manager.renew_if_needed(snapshot)
+        if receipt is None:
+            return protected
+        observed = self.resource_observer.observe()
+        if (
+            (receipt.map_id, receipt.at) != (map_id, expected.player_at)
+            or (observed.map_id, observed.at) != (map_id, expected.player_at)
+            or observed.interruption is not None
+        ):
+            raise StrengthPlanningError("resource renewal changed the Strength boundary")
+        resource = next(
+            (item for item in observed.resources if item.kind == receipt.kind),
+            None,
+        )
+        if resource is None or resource.remaining != receipt.after_remaining:
+            raise StrengthPlanningError("resource renewal receipt disagrees with observation")
+        after = self.reader.read()
+        _require_protected_except_bag(after, protected)
+        self.resource_receipts.append(receipt)
+        return _protected_state(after)
 
     def _execute_walk(
         self,
@@ -603,6 +651,14 @@ def _protected_state(raw: RawGameState) -> tuple[object, ...]:
 def _require_protected(raw: RawGameState, expected: tuple[object, ...]) -> None:
     if _protected_state(raw) != expected:
         raise StrengthPlanningError("Strength execution changed protected party or bag state")
+
+
+def _require_protected_except_bag(
+    raw: RawGameState,
+    expected: tuple[object, ...],
+) -> None:
+    if _protected_state(raw)[:-1] != expected[:-1]:
+        raise StrengthPlanningError("resource renewal changed protected party state")
 
 
 def _boulder_at(state: StrengthState, sprite_index: int) -> Coordinate:

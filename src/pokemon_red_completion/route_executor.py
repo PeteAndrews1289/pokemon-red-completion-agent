@@ -24,6 +24,25 @@ class RouteExecutionError(RuntimeError):
 
 
 @dataclass(frozen=True, slots=True)
+class TraversalResource:
+    """One observed step-bounded resource used while a route is executing."""
+
+    kind: str
+    remaining: int | None
+    carried_units: int | None
+
+    def __post_init__(self) -> None:
+        if not self.kind:
+            raise ValueError("a traversal resource needs a kind")
+        for name, value in (
+            ("remaining", self.remaining),
+            ("carried_units", self.carried_units),
+        ):
+            if value is not None and (type(value) is not int or value < 0):  # noqa: E721
+                raise ValueError(f"{name} must be a non-negative integer or unknown")
+
+
+@dataclass(frozen=True, slots=True)
 class TraversalSnapshot:
     """The minimum live state the generic executor is allowed to consume."""
 
@@ -35,6 +54,7 @@ class TraversalSnapshot:
     occupied: frozenset[Coordinate] = frozenset()
     hazards: tuple[TraversalHazard, ...] = ()
     capabilities: frozenset[str] = frozenset()
+    resources: tuple[TraversalResource, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -76,6 +96,36 @@ class InterruptionHandler(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
+class ResourceRenewalReceipt:
+    """Evidence that a depleted route resource was restored in place."""
+
+    kind: str
+    map_id: int
+    at: Coordinate
+    before_remaining: int
+    after_remaining: int
+    units_consumed: int
+    details: Mapping[str, object] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.kind:
+            raise ValueError("a resource renewal needs a kind")
+        if self.before_remaining != 0:
+            raise ValueError("a resource may be renewed only at its observed zero boundary")
+        if type(self.after_remaining) is not int or self.after_remaining <= 0:  # noqa: E721
+            raise ValueError("a renewal must restore a positive remaining amount")
+        if type(self.units_consumed) is not int or self.units_consumed <= 0:  # noqa: E721
+            raise ValueError("a renewal must consume a positive carried quantity")
+
+
+class RouteResourceManager(Protocol):
+    def renew_if_needed(
+        self,
+        current: TraversalSnapshot,
+    ) -> ResourceRenewalReceipt | None: ...
+
+
+@dataclass(frozen=True, slots=True)
 class ReplanRequest:
     """Current truth and accumulated blockers supplied to a route planner."""
 
@@ -96,6 +146,7 @@ class RouteExecutionLimits:
     max_readiness_waits: int = 16
     max_interruptions: int = 8
     max_replans: int = 4
+    max_resource_renewals: int = 8
     replan_after_unchanged: int = 2
     retry_wait_frames: int = 24
     readiness_wait_frames: int = 24
@@ -107,6 +158,7 @@ class RouteExecutionLimits:
             ("max_readiness_waits", self.max_readiness_waits),
             ("max_interruptions", self.max_interruptions),
             ("max_replans", self.max_replans),
+            ("max_resource_renewals", self.max_resource_renewals),
             ("replan_after_unchanged", self.replan_after_unchanged),
             ("retry_wait_frames", self.retry_wait_frames),
             ("readiness_wait_frames", self.readiness_wait_frames),
@@ -152,6 +204,7 @@ class RouteExecutionReport:
     replans: tuple[RouteReplanReceipt, ...]
     movement_requests: int
     wait_actions: int
+    resource_renewals: tuple[ResourceRenewalReceipt, ...] = ()
 
     @property
     def passed(self) -> bool:
@@ -173,6 +226,7 @@ def execute_route(
     *,
     interruption_handler: InterruptionHandler | None = None,
     replanner: RouteReplanner | None = None,
+    resource_manager: RouteResourceManager | None = None,
     limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS,
 ) -> RouteExecutionReport:
     """Execute until every movement is acknowledged or a bound fails closed."""
@@ -189,6 +243,7 @@ def execute_route(
     executed: list[ExecutedRouteStep] = []
     interruptions: list[InterruptionReceipt] = []
     replans: list[RouteReplanReceipt] = []
+    renewals: list[ResourceRenewalReceipt] = []
     blocked: dict[int, frozenset[Coordinate]] = {}
     movement_requests = 0
     wait_actions = 0
@@ -202,6 +257,16 @@ def execute_route(
             "step source",
             mode=step.source_mode,
         )
+        if resource_manager is not None:
+            current, renewal = _renew_resource(
+                current,
+                observer,
+                resource_manager,
+            )
+            if renewal is not None:
+                if len(renewals) >= limits.max_resource_renewals:
+                    raise RouteExecutionError("route exceeded its resource-renewal budget")
+                renewals.append(renewal)
         current, new_receipts, waits = _wait_until_ready(
             current,
             actions,
@@ -466,6 +531,16 @@ def execute_route(
         if replaced:
             continue
 
+    if resource_manager is not None:
+        current, renewal = _renew_resource(
+            current,
+            observer,
+            resource_manager,
+        )
+        if renewal is not None:
+            if len(renewals) >= limits.max_resource_renewals:
+                raise RouteExecutionError("route exceeded its resource-renewal budget")
+            renewals.append(renewal)
     current, new_receipts, waits = _wait_until_ready(
         current,
         actions,
@@ -491,10 +566,32 @@ def execute_route(
         replans=tuple(replans),
         movement_requests=movement_requests,
         wait_actions=wait_actions,
+        resource_renewals=tuple(renewals),
     )
     if not report.passed:
         raise RouteExecutionError("route report failed its terminal contract")
     return report
+
+
+def _renew_resource(
+    current: TraversalSnapshot,
+    observer: TraversalObserver,
+    manager: RouteResourceManager,
+) -> tuple[TraversalSnapshot, ResourceRenewalReceipt | None]:
+    receipt = manager.renew_if_needed(current)
+    if receipt is None:
+        return current, None
+    observed = observer.observe()
+    if (receipt.map_id, receipt.at) != (current.map_id, current.at):
+        raise RouteExecutionError("resource receipt disagrees with its source position")
+    if (observed.map_id, observed.at) != (current.map_id, current.at):
+        raise RouteExecutionError("resource renewal moved the player")
+    if observed.interruption is not None:
+        raise RouteExecutionError("resource renewal left an active interruption")
+    resource = next((item for item in observed.resources if item.kind == receipt.kind), None)
+    if resource is None or resource.remaining != receipt.after_remaining:
+        raise RouteExecutionError("resource receipt disagrees with renewed observation")
+    return observed, receipt
 
 
 def _with_live_constraints(
