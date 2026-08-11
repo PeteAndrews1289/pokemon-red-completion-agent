@@ -140,11 +140,11 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "f096982931f211500945256b3f1db9ccafc8294ad6baabbaabbb7bbfedb6237d"
+        == "b7f937460d9e11548e72aa1714d0f2791e3bc68f7d648fac05ae246e58ec65db"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "07c2604cc9ed8e48c6536e271fa00d195eb9c8e08fd9f28e7fc09d36c4703c7e"
+        == "2763aa7d36fcdef717a040d9229682dc90734cf517374dacc0ebb6a3d5598e6f"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +156,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "e7ed33cc34442914f4a51cf3fdb878303a81f25e0067867d71c099c2b64fea8f"
+        == "1241840cb201c53ed36939e94437b1dbd8df1c3bf58f5fb5c6850e3cc6908d68"
     )
-    assert first.assignment_id == "1c2ed949228a5c785d813870d6d843c5d37aecb77d0adf0dedc7cb87adb0ada9"
+    assert first.assignment_id == "61f3bfdfff0359bf1f94f66146d9d193f011c4c5f206ae1bc748ec7950f82c25"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:

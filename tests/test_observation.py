@@ -136,6 +136,16 @@ def test_visible_map_objects_use_the_engine_unavailable_marker_and_live_coordina
     assert reader.read_visible_object_coordinates() == frozenset({(1, 3), (6, 2)})
 
 
+def test_raw_state_reads_the_saffron_guard_flag_from_an_independent_address() -> None:
+    # wStatusFlags6 starts the timer; wStatusFlags1 carries the guard bit.
+    memory = RecordingMemory({0xD732: 0x01, 0xD728: 0x40})
+
+    raw = PokemonRedStateReader(memory).read()
+
+    assert raw.status_flags_1 == 0x40
+    assert 0xD728 in memory.reads
+
+
 def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> None:
     with pytest.raises(VisibleMapObjectError, match="impossible sprite count"):
         PokemonRedStateReader(

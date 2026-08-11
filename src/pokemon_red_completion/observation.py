@@ -671,6 +671,8 @@ class Badge(IntFlag):
     EARTH = 1 << 7
 
 
+SAFFRON_GUARD_ACCESS_MASK = 0x40
+SAFFRON_GUARD_ACCESS_FACT = "story:saffron_guards_open"
 GAME_TIMER_COUNTING_MASK = 0x01
 REDS_HOUSE_2F_NOOP_SCRIPT = 1
 OAKS_LAB_SELECTION_READY_SCRIPT = 6
@@ -1034,6 +1036,7 @@ class RawGameState:
     active_party_moves: tuple[int, ...] | None = None
     active_party_pp: tuple[int, ...] | None = None
     player_money: int | None = None
+    status_flags_1: int | None = None
 
     @property
     def battler_level(self) -> int | None:
@@ -3659,6 +3662,7 @@ class PokemonRedStateReader:
             active_party_moves=active_party_moves,
             active_party_pp=active_party_pp,
             player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
+            status_flags_1=self._memory.read_u8(RamAddress.STATUS_FLAGS_1),
         )
 
         if self._encounter_log is not None:
@@ -5114,6 +5118,11 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("story:starter_selection_ready")
     if _event(events, EventFlag.GOT_POKEDEX):
         facts.add("story:pokedex_received")
+    if (
+        raw.status_flags_1 is not None
+        and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK
+    ):
+        facts.add(SAFFRON_GUARD_ACCESS_FACT)
 
     map_facts = {
         MapId.PEWTER_CITY: "location:pewter_city",

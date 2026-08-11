@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import cast
 
 import pytest
@@ -10,6 +10,7 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1WildFleeHandler,
 )
 from pokemon_red_completion.observation import (
+    SAFFRON_GUARD_ACCESS_MASK,
     InputReadiness,
     MapId,
     OverworldMovementMode,
@@ -95,6 +96,16 @@ def test_observer_projects_current_visible_object_occupancy() -> None:
 
     assert observed.occupied == frozenset({(7, 7), (9, 8)})
     assert fake.occupancy_reads == 1
+
+
+def test_observer_projects_only_observed_open_story_capabilities() -> None:
+    closed = FakeReader(raw())
+    opened = FakeReader(replace(raw(), status_flags_1=SAFFRON_GUARD_ACCESS_MASK))
+
+    assert Gen1TraversalObserver(reader_as_real(closed)).observe().capabilities == frozenset()
+    assert Gen1TraversalObserver(reader_as_real(opened)).observe().capabilities == frozenset(
+        {"story:saffron_guards_open"}
+    )
 
 
 def test_observer_requires_a_started_coordinate_state() -> None:

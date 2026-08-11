@@ -34,6 +34,7 @@ class TraversalSnapshot:
     mode: str | None = None
     occupied: frozenset[Coordinate] = frozenset()
     hazards: tuple[TraversalHazard, ...] = ()
+    capabilities: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True, slots=True)

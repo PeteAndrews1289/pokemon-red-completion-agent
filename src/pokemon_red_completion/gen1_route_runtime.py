@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.gen1_story_routing import gen1_story_capabilities
 from pokemon_red_completion.observation import MapId, PokemonRedStateReader, RawGameState
 from pokemon_red_completion.route_1_wild import Route1WildFleeEvidence, flee_wild
 from pokemon_red_completion.route_executor import (
@@ -59,6 +60,7 @@ class Gen1TraversalObserver:
             mode=movement_mode.traversal_mode,
             occupied=occupied,
             hazards=hazards,
+            capabilities=gen1_story_capabilities(raw),
         )
 
 

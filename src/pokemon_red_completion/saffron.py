@@ -35,6 +35,7 @@ from pokemon_red_completion.navigation import (
     shortest_path,
 )
 from pokemon_red_completion.observation import (
+    SAFFRON_GUARD_ACCESS_MASK,
     ItemId,
     MapId,
     PokemonRedStateReader,
@@ -46,7 +47,7 @@ from pokemon_red_completion.tower import party_core_intact
 SAFFRON_CHECKPOINT_COUNT = 10
 FRESH_WATER_PRICE = 200
 THUNDER_STONE_PRICE = 2100
-GUARD_DRINK_FLAG = 0x40
+GUARD_DRINK_FLAG = SAFFRON_GUARD_ACCESS_MASK
 EEVEE = 0x66
 JOLTEON = 0x68
 ROOF_HOUSE_GRID = GridMap(
