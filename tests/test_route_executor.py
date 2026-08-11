@@ -24,6 +24,7 @@ class FakeWorld:
     at: tuple[int, int] = (0, 0)
     ready: bool = True
     interruption: str | None = None
+    occupied: frozenset[tuple[int, int]] = frozenset()
     transitions: dict[tuple[int, tuple[int, int], str], tuple[int, tuple[int, int]]] = field(
         default_factory=dict
     )
@@ -37,10 +38,17 @@ class FakeWorld:
         field(default_factory=dict)
     )
     actions: list[MacroAction] = field(default_factory=list)
+    occupancy_after_waits: dict[int, frozenset[tuple[int, int]]] = field(
+        default_factory=dict
+    )
+    wait_count: int = 0
 
     def execute(self, action: MacroAction) -> object:
         self.actions.append(action)
         if action.kind is MacroActionKind.WAIT:
+            self.wait_count += 1
+            if self.wait_count in self.occupancy_after_waits:
+                self.occupied = self.occupancy_after_waits[self.wait_count]
             if self.pending_arrival is not None:
                 self.map_id, self.at = self.pending_arrival
                 self.pending_arrival = None
@@ -74,6 +82,7 @@ class FakeWorld:
             at=self.at,
             ready=self.ready and self.interruption is None,
             interruption=self.interruption,
+            occupied=self.occupied,
         )
 
 
@@ -362,6 +371,7 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
     assert report.passed
     assert len(report.replans) == 1
     assert report.replans[0].newly_blocked == (0, 1)
+    assert report.replans[0].reason == "settled_failed_step"
     assert report.movement_requests == 7, "two blocked requests plus five replacement steps"
     assert [step.step.action for step in report.executed_steps] == [
         "down",
@@ -370,6 +380,141 @@ def test_repeated_live_blocking_replans_around_the_discovered_square() -> None:
         "up",
         "up",
     ]
+
+
+def _visible_blocker_fixture() -> tuple[RoutePlan, MacroGraph, dict[int, LocalGraph]]:
+    macro = MacroGraph({1: ()})
+    local = {
+        1: LocalGraph(
+            {
+                (0, 0): (
+                    LocalEdge((0, 1), action="right"),
+                    LocalEdge((1, 0), action="down"),
+                ),
+                (0, 1): (LocalEdge((0, 2), action="right"),),
+                (1, 0): (LocalEdge((1, 1), action="right"),),
+                (1, 1): (LocalEdge((1, 2), action="right"),),
+                (1, 2): (LocalEdge((0, 2), action="up"),),
+                (0, 2): (),
+            }
+        )
+    }
+    return (
+        plan_route(macro, local, 1, (0, 0), 1, goal_at=(0, 2)),
+        macro,
+        local,
+    )
+
+
+def _visible_blocker_world(**kwargs: object) -> FakeWorld:
+    return FakeWorld(
+        transitions={
+            (1, (0, 0), "down"): (1, (1, 0)),
+            (1, (1, 0), "right"): (1, (1, 1)),
+            (1, (1, 1), "right"): (1, (1, 2)),
+            (1, (1, 2), "up"): (1, (0, 2)),
+        },
+        **kwargs,  # type: ignore[arg-type]
+    )
+
+
+def test_a_visible_object_replans_before_requesting_its_square() -> None:
+    initial, macro, local = _visible_blocker_fixture()
+    world = _visible_blocker_world(occupied=frozenset({(0, 1)}))
+    requests: list[ReplanRequest] = []
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        requests.append(request)
+        world.occupied = frozenset()
+        return plan_route(
+            macro,
+            local,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+        )
+
+    report = execute_route(initial, world, world, replanner=replan)
+
+    assert report.passed
+    assert requests[0].blocked == {1: frozenset({(0, 1)})}
+    assert report.movement_requests == 4
+    assert report.replans[0].reason == "visible_object"
+    assert report.replans[0].newly_blocked == (0, 1)
+    assert world.actions[0] == MacroAction(MacroActionKind.MOVE, "down")
+
+
+def test_an_object_seen_during_settle_replans_before_a_retry() -> None:
+    initial, macro, local = _visible_blocker_fixture()
+    world = _visible_blocker_world(
+        occupancy_after_waits={1: frozenset({(0, 1)})},
+    )
+    requests: list[ReplanRequest] = []
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        requests.append(request)
+        world.occupied = frozenset()
+        return plan_route(
+            macro,
+            local,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+        )
+
+    report = execute_route(initial, world, world, replanner=replan)
+
+    assert report.passed
+    assert requests[0].blocked == {1: frozenset({(0, 1)})}
+    assert report.movement_requests == 5, "one failed request plus the four-step detour"
+    assert report.replans[0].reason == "visible_object"
+    moves = [action for action in world.actions if action.kind is MacroActionKind.MOVE]
+    assert moves[:2] == [
+        MacroAction(MacroActionKind.MOVE, "right"),
+        MacroAction(MacroActionKind.MOVE, "down"),
+    ]
+
+
+def test_a_departed_visible_object_does_not_become_a_durable_blocker() -> None:
+    initial, macro, local = _visible_blocker_fixture()
+    world = FakeWorld(
+        occupied=frozenset({(0, 1)}),
+        transitions={
+            (1, (0, 0), "right"): (1, (0, 1)),
+            (1, (0, 1), "right"): (1, (0, 2)),
+        },
+    )
+    requests: list[ReplanRequest] = []
+
+    def replan(request: ReplanRequest) -> RoutePlan:
+        requests.append(request)
+        world.occupied = frozenset()
+        return plan_route(
+            macro,
+            local,
+            request.current.map_id,
+            request.current.at,
+            request.goal_map,
+            goal_at=request.goal_at,
+            blocked=request.blocked,
+        )
+
+    report = execute_route(initial, world, world, replanner=replan)
+
+    assert report.passed
+    assert [request.blocked for request in requests] == [
+        {1: frozenset({(0, 1)})},
+        {1: frozenset({(1, 0)})},
+    ]
+    assert [receipt.reason for receipt in report.replans] == [
+        "visible_object",
+        "settled_failed_step",
+    ]
+    assert report.movement_requests == 4
 
 
 def test_route_drift_fails_instead_of_becoming_a_replan() -> None:

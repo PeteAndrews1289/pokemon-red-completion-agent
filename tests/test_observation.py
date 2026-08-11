@@ -51,6 +51,8 @@ from pokemon_red_completion.observation import (
     SurgeProgressTracker,
     SurgeState,
     TravelBoundary,
+    VisibleMapObject,
+    VisibleMapObjectError,
     event_flag_is_set,
     location_label,
     semantic_facts,
@@ -85,6 +87,68 @@ class BankedRecordingMemory(RecordingMemory):
     def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
         self.cartridge_reads.append((bank, address))
         return self.cartridge_values.get((bank, address), 0)
+
+
+def test_visible_map_objects_use_the_engine_unavailable_marker_and_live_coordinates() -> None:
+    # Literal upstream addresses are intentional: deriving this fixture from
+    # RamAddress would let a wrong production constant change both sides of
+    # the test and survive.
+    slot_1_state_1 = 0xC110
+    slot_1_state_2 = 0xC210
+    slot_2_state_1 = 0xC120
+    slot_3_state_1 = 0xC130
+    slot_3_state_2 = 0xC230
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                0xD4E1: 3,
+                slot_1_state_1: 41,
+                slot_1_state_1 + 1: 1,
+                slot_1_state_1 + 2: 0x10,
+                slot_1_state_2 + 4: 5,
+                slot_1_state_2 + 5: 7,
+                slot_2_state_1: 6,
+                slot_2_state_1 + 2: 0xFF,
+                slot_3_state_1: 16,
+                slot_3_state_1 + 1: 3,
+                slot_3_state_1 + 2: 0x30,
+                slot_3_state_2 + 4: 10,
+                slot_3_state_2 + 5: 6,
+            }
+        )
+    )
+
+    visible = reader.read_visible_map_objects()
+
+    assert visible == (
+        VisibleMapObject(1, 41, (1, 3), 1, 0x10),
+        VisibleMapObject(3, 16, (6, 2), 3, 0x30),
+    )
+    assert visible[0].moving is False
+    assert visible[1].moving is True
+    assert reader.read_visible_object_coordinates() == frozenset({(1, 3), (6, 2)})
+
+
+def test_visible_map_object_read_refuses_impossible_count_and_coordinates() -> None:
+    with pytest.raises(VisibleMapObjectError, match="impossible sprite count"):
+        PokemonRedStateReader(
+            RecordingMemory({0xD4E1: 16})
+        ).read_visible_map_objects()
+
+    slot_state_1 = 0xC110
+    slot_state_2 = 0xC210
+    with pytest.raises(VisibleMapObjectError, match="invalid padded coordinate"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {
+                    0xD4E1: 1,
+                    slot_state_1: 41,
+                    slot_state_1 + 2: 0x10,
+                    slot_state_2 + 4: 3,
+                    slot_state_2 + 5: 7,
+                }
+            )
+        ).read_visible_map_objects()
 
 
 def _saved_box_banks(

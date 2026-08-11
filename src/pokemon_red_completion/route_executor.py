@@ -32,6 +32,7 @@ class TraversalSnapshot:
     ready: bool
     interruption: str | None = None
     mode: str | None = None
+    occupied: frozenset[Coordinate] = frozenset()
 
 
 @dataclass(frozen=True, slots=True)
@@ -115,11 +116,17 @@ class ExecutedRouteStep:
 
 @dataclass(frozen=True, slots=True)
 class RouteReplanReceipt:
+    """Why a candidate changed; only settled failed steps become durable."""
+
     ordinal: int
     map_id: int
     at: Coordinate
+    # Kept for schema compatibility with the first route evidence. For a
+    # ``visible_object`` receipt this is the temporary occupied coordinate
+    # that caused the replan, not a permanently blacklisted square.
     newly_blocked: Coordinate
     replacement_steps: int
+    reason: str = "settled_failed_step"
 
 
 @dataclass(frozen=True, slots=True)
@@ -198,6 +205,26 @@ def execute_route(
             "ready step source",
             mode=step.source_mode,
         )
+
+        if (
+            step.can_discover_blocker
+            and step.expected_at in current.occupied
+            and replanner is not None
+            and len(replans) < limits.max_replans
+        ):
+            ordinal = len(replans) + 1
+            replacement, replan_receipt = _request_replacement(
+                plan,
+                current,
+                _with_visible_blockers(blocked, current),
+                ordinal,
+                step.expected_at,
+                "visible_object",
+                replanner,
+            )
+            replans.append(replan_receipt)
+            pending = list(replacement.steps)
+            continue
 
         attempts = 0
         step_interruptions = 0
@@ -325,6 +352,27 @@ def execute_route(
                 mode=step.source_mode,
             )
 
+            if (
+                step.can_discover_blocker
+                and step.expected_at in current.occupied
+                and replanner is not None
+                and len(replans) < limits.max_replans
+            ):
+                ordinal = len(replans) + 1
+                replacement, replan_receipt = _request_replacement(
+                    plan,
+                    current,
+                    _with_visible_blockers(blocked, current),
+                    ordinal,
+                    step.expected_at,
+                    "visible_object",
+                    replanner,
+                )
+                replans.append(replan_receipt)
+                pending = list(replacement.steps)
+                replaced = True
+                break
+
             # Only infer a live blocker after the input has had a bounded
             # chance to finish.  Gen I can leave the source coordinates
             # visible while a walk animation is in flight; replanning before
@@ -338,37 +386,16 @@ def execute_route(
                 map_blocked = blocked.get(step.source_map, frozenset()) | {step.expected_at}
                 blocked[step.source_map] = frozenset(map_blocked)
                 ordinal = len(replans) + 1
-                replacement = replanner(
-                    ReplanRequest(
-                        current=current,
-                        goal_map=plan.terminal_map,
-                        goal_at=plan.terminal_at,
-                        blocked=dict(blocked),
-                        ordinal=ordinal,
-                    )
-                )
-                _require_position(
+                replacement, replan_receipt = _request_replacement(
+                    plan,
                     current,
-                    replacement.macro_path.maps[0],
-                    replacement.start_at,
-                    "replacement route start",
-                    mode=replacement.start_mode,
+                    _with_visible_blockers(blocked, current),
+                    ordinal,
+                    step.expected_at,
+                    "settled_failed_step",
+                    replanner,
                 )
-                if (
-                    replacement.terminal_map != plan.terminal_map
-                    or replacement.terminal_at != plan.terminal_at
-                    or replacement.terminal_mode != plan.terminal_mode
-                ):
-                    raise RouteExecutionError("replacement route changed the declared goal")
-                replans.append(
-                    RouteReplanReceipt(
-                        ordinal=ordinal,
-                        map_id=current.map_id,
-                        at=current.at,
-                        newly_blocked=step.expected_at,
-                        replacement_steps=len(replacement.steps),
-                    )
-                )
+                replans.append(replan_receipt)
                 pending = list(replacement.steps)
                 replaced = True
                 break
@@ -411,6 +438,57 @@ def execute_route(
     if not report.passed:
         raise RouteExecutionError("route report failed its terminal contract")
     return report
+
+
+def _with_visible_blockers(
+    durable: Mapping[int, frozenset[Coordinate]],
+    current: TraversalSnapshot,
+) -> dict[int, frozenset[Coordinate]]:
+    combined = dict(durable)
+    if current.occupied:
+        combined[current.map_id] = combined.get(current.map_id, frozenset()) | current.occupied
+    return combined
+
+
+def _request_replacement(
+    plan: RoutePlan,
+    current: TraversalSnapshot,
+    blocked: Mapping[int, frozenset[Coordinate]],
+    ordinal: int,
+    newly_blocked: Coordinate,
+    reason: str,
+    replanner: RouteReplanner,
+) -> tuple[RoutePlan, RouteReplanReceipt]:
+    replacement = replanner(
+        ReplanRequest(
+            current=current,
+            goal_map=plan.terminal_map,
+            goal_at=plan.terminal_at,
+            blocked=dict(blocked),
+            ordinal=ordinal,
+        )
+    )
+    _require_position(
+        current,
+        replacement.macro_path.maps[0],
+        replacement.start_at,
+        "replacement route start",
+        mode=replacement.start_mode,
+    )
+    if (
+        replacement.terminal_map != plan.terminal_map
+        or replacement.terminal_at != plan.terminal_at
+        or replacement.terminal_mode != plan.terminal_mode
+    ):
+        raise RouteExecutionError("replacement route changed the declared goal")
+    return replacement, RouteReplanReceipt(
+        ordinal=ordinal,
+        map_id=current.map_id,
+        at=current.at,
+        newly_blocked=newly_blocked,
+        replacement_steps=len(replacement.steps),
+        reason=reason,
+    )
 
 
 def _wait_until_ready(

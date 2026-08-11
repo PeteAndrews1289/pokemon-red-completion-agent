@@ -32,6 +32,8 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    SPRITE_STATE_DATA_1 = 0xC100
+    SPRITE_STATE_DATA_2 = 0xC200
     TILE_MAP = 0xC3A0
     PLAYER_FACING_DIRECTION = 0xC109
     TOP_MENU_ITEM_Y = 0xCC24
@@ -101,6 +103,7 @@ class RamAddress(IntEnum):
     CURRENT_MAP = 0xD35E
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    NUM_SPRITES = 0xD4E1
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
@@ -1271,6 +1274,33 @@ class InputReadiness:
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
             and self.walk_counter == 0
         )
+
+
+class VisibleMapObjectError(ValueError):
+    """Raised when revision-pinned live sprite state is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class VisibleMapObject:
+    """One currently rendered, collision-bearing non-player map sprite."""
+
+    sprite_index: int
+    picture_id: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a map sprite index must be between 1 and 15")
+        if not 1 <= self.picture_id <= 0xFF:
+            raise ValueError("a visible map sprite needs a picture id")
+        if self.image_index == 0xFF:
+            raise ValueError("an off-screen sprite is not visibly occupying a coordinate")
+
+    @property
+    def moving(self) -> bool:
+        return self.movement_status == 3
 
 
 class OverworldMovementModeError(ValueError):
@@ -3926,6 +3956,48 @@ class PokemonRedStateReader:
             movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
             walk_counter=self._memory.read_u8(RamAddress.WALK_COUNTER),
         )
+
+    def read_visible_map_objects(self) -> tuple[VisibleMapObject, ...]:
+        """Project collision-bearing sprites that Red currently renders.
+
+        The pinned engine stores fifteen non-player sprite slots in two
+        parallel 16-byte tables. ``image_index == 0xff`` is the engine's own
+        unavailable marker for a hidden or off-screen object, so this method
+        deliberately promises visible occupancy rather than every object on
+        the map. Failed-step discovery remains necessary outside that window.
+        """
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise VisibleMapObjectError(f"current map exposes impossible sprite count {count}")
+        found: list[VisibleMapObject] = []
+        for sprite_index in range(1, count + 1):
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            picture_id = self._memory.read_u8(state_1)
+            image_index = self._memory.read_u8(state_1 + 2)
+            if picture_id == 0 or image_index == 0xFF:
+                continue
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise VisibleMapObjectError(
+                    f"visible sprite {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            found.append(
+                VisibleMapObject(
+                    sprite_index=sprite_index,
+                    picture_id=picture_id,
+                    at=(padded_y - 4, padded_x - 4),
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=image_index,
+                )
+            )
+        return tuple(found)
+
+    def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
+        return frozenset(item.at for item in self.read_visible_map_objects())
 
     def read_overworld_movement_mode(self) -> OverworldMovementMode:
         raw = self._memory.read_u8(RamAddress.WALK_BIKE_SURF_STATE)

@@ -32,12 +32,18 @@ class Gen1TraversalObserver:
             raise RouteExecutionError("Gen I traversal state is unavailable")
         interruption = _interruption_kind(raw.battle_state)
         movement_mode = self.reader.read_overworld_movement_mode()
+        occupied = (
+            frozenset()
+            if interruption is not None
+            else self.reader.read_visible_object_coordinates()
+        )
         return TraversalSnapshot(
             map_id=raw.map_id,
             at=(raw.player_y, raw.player_x),
             ready=(interruption is None and self.reader.read_input_readiness().ready),
             interruption=interruption,
             mode=movement_mode.traversal_mode,
+            occupied=occupied,
         )
 
 

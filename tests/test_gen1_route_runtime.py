@@ -24,6 +24,8 @@ from pokemon_red_completion.route_executor import RouteExecutionError, Traversal
 class FakeReader:
     raw: RawGameState
     ready: bool = True
+    occupied: frozenset[tuple[int, int]] = frozenset()
+    occupancy_reads: int = 0
 
     def read(self) -> RawGameState:
         return self.raw
@@ -39,6 +41,10 @@ class FakeReader:
 
     def read_overworld_movement_mode(self) -> OverworldMovementMode:
         return OverworldMovementMode.WALKING
+
+    def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
+        self.occupancy_reads += 1
+        return self.occupied
 
 
 @dataclass
@@ -63,7 +69,7 @@ def reader_as_real(fake: FakeReader) -> PokemonRedStateReader:
 
 
 def test_observer_keeps_coordinates_game_neutral_and_marks_wild_battle() -> None:
-    fake = FakeReader(raw(battle_state=1))
+    fake = FakeReader(raw(battle_state=1), occupied=frozenset({(8, 8)}))
 
     observed = Gen1TraversalObserver(reader_as_real(fake)).observe()
 
@@ -73,7 +79,18 @@ def test_observer_keeps_coordinates_game_neutral_and_marks_wild_battle() -> None
         ready=False,
         interruption="wild_battle",
         mode="land",
+        occupied=frozenset(),
     )
+    assert fake.occupancy_reads == 0, "overworld sprite RAM is not decoded during battle"
+
+
+def test_observer_projects_current_visible_object_occupancy() -> None:
+    fake = FakeReader(raw(), occupied=frozenset({(7, 7), (9, 8)}))
+
+    observed = Gen1TraversalObserver(reader_as_real(fake)).observe()
+
+    assert observed.occupied == frozenset({(7, 7), (9, 8)})
+    assert fake.occupancy_reads == 1
 
 
 def test_observer_requires_a_started_coordinate_state() -> None:
