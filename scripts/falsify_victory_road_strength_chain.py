@@ -75,6 +75,7 @@ from pokemon_red_completion.provenance import (  # noqa: E402
 from pokemon_red_completion.rom import verify_rom  # noqa: E402
 from pokemon_red_completion.route_executor import RouteActionPort  # noqa: E402
 from pokemon_red_completion.victory_road import (  # noqa: E402
+    VictoryRoadChapterError,
     VictoryRoadProgress,
     _directions,
     _move,
@@ -115,6 +116,12 @@ class _SolvedPhase:
     goal: StrengthGoal
     plan: StrengthPlan
     execution: StrengthExecutionReport
+
+
+@dataclass(frozen=True, slots=True)
+class _DerivedWalkReceipt:
+    acknowledged_steps: int
+    replans: int
 
 
 def _stop_at_strength_boundary(progress: VictoryRoadProgress) -> None:
@@ -283,6 +290,58 @@ def _derive_walk_route(
     return tuple(edge.action for edge in path.edges)
 
 
+def _execute_derived_walk(
+    goal: tuple[int, int],
+    expected_map: MapId,
+    label: str,
+    rom: bytes,
+    sets: Mapping[int, Tileset],
+    surf_tileset_ids: frozenset[int],
+    rules: TraversalRules,
+    occupancy: dict[int, frozenset[tuple[int, int]]],
+    actions: RouteActionPort,
+    reader: PokemonRedStateReader,
+    *,
+    max_replans: int = 16,
+) -> _DerivedWalkReceipt:
+    start = reader.read()
+    if start.map_id is None:
+        raise VictoryRoadStrengthChainProbeError(f"{label} lacks a source map")
+    source_map = start.map_id
+    acknowledged = 0
+    replans = 0
+    while replans <= max_replans:
+        route = _derive_walk_route(
+            goal, rom, sets, surf_tileset_ids, rules, occupancy, reader
+        )
+        blocked = False
+        for direction in route:
+            try:
+                _step(actions, reader, direction, label)
+            except VictoryRoadChapterError:
+                current = reader.read()
+                if current.map_id != source_map or current.battle_state not in {0, None}:
+                    raise
+                replans += 1
+                blocked = True
+                break
+            acknowledged += 1
+            if reader.read().map_id != source_map:
+                if reader.read().map_id != expected_map:
+                    raise VictoryRoadStrengthChainProbeError(
+                        f"{label} entered the wrong map"
+                    )
+                return _DerivedWalkReceipt(acknowledged, replans)
+        if not blocked:
+            current = reader.read()
+            if current.map_id == expected_map:
+                return _DerivedWalkReceipt(acknowledged, replans)
+            raise VictoryRoadStrengthChainProbeError(
+                f"{label} reached {goal} without its map transition"
+            )
+    raise VictoryRoadStrengthChainProbeError(f"{label} exhausted its replan budget")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, required=True)
@@ -361,7 +420,7 @@ def main(argv: list[str] | None = None) -> int:
         field = Gen1FieldMovePort(counted, reader, emulator)
         activations: list[Gen1StrengthReceipt] = []
         phases: list[_SolvedPhase] = []
-        derived_inter_phase_routes: list[int] = []
+        derived_inter_phase_routes: list[_DerivedWalkReceipt] = []
 
         _use_bag_item(
             counted,
@@ -387,11 +446,20 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        route = _derive_walk_route(
-            (1, 1), rom, sets, surf_tileset_ids, rules, occupancy, reader
+        derived_inter_phase_routes.append(
+            _execute_derived_walk(
+                (1, 1),
+                MapId.VICTORY_ROAD_2F,
+                "planned Strength probe 2F entry",
+                rom,
+                sets,
+                surf_tileset_ids,
+                rules,
+                occupancy,
+                counted,
+                reader,
+            )
         )
-        derived_inter_phase_routes.append(len(route))
-        _move(counted, reader, route, "planned Strength probe 2F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -410,11 +478,20 @@ def main(argv: list[str] | None = None) -> int:
                 emulator,
             )
         )
-        route = _derive_walk_route(
-            (7, 23), rom, sets, surf_tileset_ids, rules, occupancy, reader
+        derived_inter_phase_routes.append(
+            _execute_derived_walk(
+                (7, 23),
+                MapId.VICTORY_ROAD_3F,
+                "planned Strength probe 3F entry",
+                rom,
+                sets,
+                surf_tileset_ids,
+                rules,
+                occupancy,
+                counted,
+                reader,
+            )
         )
-        derived_inter_phase_routes.append(len(route))
-        _move(counted, reader, route, "planned Strength probe 3F entry")
 
         field.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
         activations.append(field.strength_receipts[-1])
@@ -529,7 +606,13 @@ def main(argv: list[str] | None = None) -> int:
             "derived_phase_pushes": sum(
                 len(phase.execution.pushes) for phase in phases
             ),
-            "derived_inter_phase_route_steps": derived_inter_phase_routes,
+            "derived_inter_phase_routes": [
+                {
+                    "acknowledged_steps": item.acknowledged_steps,
+                    "replans": item.replans,
+                }
+                for item in derived_inter_phase_routes
+            ],
             "actions_executed_after_boundary": counted.actions_executed,
             "frames_executed": frames_executed,
             "controller_released": controller_released,
