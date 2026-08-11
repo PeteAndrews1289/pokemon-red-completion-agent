@@ -11,6 +11,9 @@ CENTER_RECORD = Path(
 MART_RECORD = Path(
     "docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json"
 )
+STRATEGIC_RECORD = Path(
+    "docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json"
+)
 
 
 def load_record(path: Path) -> dict[str, object]:
@@ -162,3 +165,70 @@ def test_fault_replanning_changes_the_executed_pallet_connection() -> None:
         MapId.VIRIDIAN_CITY,
         MapId.VIRIDIAN_MART,
     ]
+
+
+def test_safe_hub_calibration_binds_two_real_routes_to_one_live_outcome() -> None:
+    record = load_record(STRATEGIC_RECORD)
+    strategic = record["strategic_navigation"]
+    decision = strategic["record"]["decision"]
+    outcome = strategic["record"]["outcome"]
+
+    assert record["schema"] == "pallet-strategic-safe-hub-route-probe-v1"
+    assert record["source"] == {
+        "git_commit": "bf3fc76d8c571fd56acdb81da7aaed4fa97e5255",
+        "worktree_dirty": False,
+    }
+    assert record["executable_source_bundle_sha256"] == (
+        "098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e"
+    )
+    assert record["destination"] == "home"
+    assert record["plan"]["map_ids"] == [MapId.PALLET_TOWN, MapId.REDS_HOUSE_1F]
+    assert record["planned_actions"] == 14
+    assert record["execution"]["passed"] is True
+    assert record["execution"]["acknowledged_steps"] == 14
+    assert record["execution"]["movement_requests"] == 14
+    assert record["final_yx"] == [7, 2]
+    assert record["controller_released"] is True
+    assert record["rom_adjacent_artifacts_unchanged"] is True
+    assert strategic["scope"] == "unassigned calibration; excluded from model development"
+    assert strategic["selection_rule"] == (
+        "lowest route cost among two available safe hubs"
+    )
+    assert strategic["numeric_feature_schema_frozen"] is False
+    assert strategic["promotion_eligible"] is False
+    assert [candidate["route_cost"] for candidate in decision["candidates"]] == [15, 87]
+    assert [candidate["route_steps"] for candidate in decision["candidates"]] == [14, 86]
+    assert decision["selected_index"] == 0
+    assert outcome["decision_id"] == decision["decision_id"]
+    assert outcome["status"] == "succeeded"
+    assert outcome["acknowledged_steps"] == decision["candidates"][0]["route_steps"]
+
+
+def test_safe_hub_policy_projection_contains_no_route_identity_or_arrow_labels() -> None:
+    record = load_record(STRATEGIC_RECORD)
+    strategic = record["strategic_navigation"]
+    decision = strategic["identity_free_trajectory_decision"]
+    outcome = strategic["identity_free_trajectory_outcome"]
+    encoded = json.dumps(
+        {"context": decision["context"], "action": decision["action"], "outcome": outcome},
+        sort_keys=True,
+    )
+
+    for forbidden in (
+        "destination_ref",
+        "origin_region_ref",
+        "pokemon.red:destination",
+        '"direction"',
+        '"coordinate"',
+        '"map_id"',
+        '"left"',
+        '"right"',
+        '"up"',
+        '"down"',
+    ):
+        assert forbidden not in encoded
+    assert decision["action"] == {
+        "kind": "select_destination",
+        "selected_candidate_index": 0,
+    }
+    assert outcome["payload"]["decision_id"] == decision["decision_id"]

@@ -11,9 +11,10 @@ two important knowledge/data boundaries:
    sequences.
 
 The agent is **not** yet a learned open-world Pokémon player. The completion teacher still owns most
-navigation invocation and title-specific mechanics. No strategic navigation records have been
-collected, no numeric navigation feature schema is frozen, and no strategic navigation model has
-shadow or causal authority. Counted v95 remains **0/10**.
+navigation invocation and title-specific mechanics. One explicitly unassigned live calibration now
+proves the strategic binding and recording seam, but train and validation still contain zero
+strategic navigation records. No numeric navigation feature schema is frozen, and no strategic
+navigation model has shadow or causal authority. Counted v95 remains **0/10**.
 
 That claim boundary is healthy. The next highest-value work is no longer another isolated route
 mechanic; it is collecting genuine multi-destination decisions across independent roots and using
@@ -57,7 +58,8 @@ did not merely replay a route.
 
 ### Strategic navigation data boundary
 
-Source checkpoints `33dd0d8`, `f43219d` and hardening commit `bcd9935` implement:
+Source checkpoints `33dd0d8`, `f43219d`, hardening commit `bcd9935` and route-binding commit
+`bf3fc76` implement:
 
 - genuine candidate sets of at least two destinations;
 - a reviewed cross-title vocabulary for need, origin and destination semantics;
@@ -73,41 +75,52 @@ Source checkpoints `33dd0d8`, `f43219d` and hardening commit `bcd9935` implement
 - recursively immutable in-memory policy examples after canonical parsing; and
 - whole-root split and semantic-coverage audits.
 
+The first end-to-end live calibration starts from post-Pokédex Pallet with two real safe-hub
+destinations. Home costs 15 with 14 route steps; Viridian Center costs 87 with 86 route steps. A
+deterministic lowest-cost teacher selects home, the exact bound plan reaches Red's house with 14/14
+movements acknowledged and controls released, and the identity-free trajectory projection contains
+no route binding, map id, coordinate or arrow label. The source-bound
+[calibration receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) is explicitly
+unassigned and ineligible for model development. It proves plumbing, not useful supervision.
+
 The older `navigation_dataset.py` is explicitly labeled individual-direction control diagnostics,
 reports zero strategic decisions and remains ineligible for promotion.
 
 ## Code and CI audit
 
-At this checkpoint the repository contains 146 source modules and 168 test modules. The local CI
+At this checkpoint the repository contains 149 source modules and 169 test modules. The local CI
 equivalent produced:
 
-- **2,538 passed, 3 deselected integration tests, 1 expected failure**;
+- **2,545 passed, 3 deselected integration tests, 1 expected failure**;
 - public-artifact scanning with no ROM, private path or secret leakage;
 - documentation link validation;
 - exact prospective-registry regeneration;
 - Ruff clean;
 - mypy clean under the declared scope; and
-- GitHub Actions green on the two strategic-navigation checkpoints.
+- GitHub Actions green through the route-binding source checkpoint; the evidence commit was then
+  subjected to the same local gate before publication.
 
 The prospective v95 identities after the strategic data seam are:
 
 | Field | Value |
 | --- | --- |
-| Registry SHA-256 | `8f8041a708e7cc131255ee7cf0f9bee4b8a7b79755a3cd056bb004e08fb0fce1` |
-| Source bundle SHA-256 | `a8ff02b3f24110527afc7a24356c59d2e2eed252468af122bae60c30fd43d354` |
-| Teacher execution SHA-256 | `dc749d106a42cb276f819674d2ca496351692ea65716bb232eddcb371ea76f33` |
+| Registry SHA-256 | `defc6f4d4388140633b438c64fd49ebd25ec99c7e8b37c2170e6b4e906cd971f` |
+| Source bundle SHA-256 | `098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e` |
+| Teacher execution SHA-256 | `704d7ad79b7afada760d27c82aa7d41b1f534c691faa20813fbecd59665a59a6` |
 
 The collection registry remains prospective. Regeneration caused by source changes does not open or
 consume v95; counted runs remain 0/10.
 
 ## Ranked gaps
 
-### P0 — no strategic navigation data exists
+### P0 — no train/validation strategic navigation data exists
 
-The schema is ready, but its honest denominator is zero. Synthetic choices such as selecting
-between two arbitrary Viridian buildings would make the counter rise without teaching a real
-decision. Instrument branches where the teacher genuinely weighs progression, recovery, resupply,
-training, collection or optional reward destinations.
+The schema and live binding are ready, but the useful dataset denominator remains zero. The one
+unassigned safe-hub calibration deliberately answers an easy route-cost question and cannot enter
+training or validation. Synthetic choices such as selecting between two arbitrary Viridian
+buildings would make the counter rise without teaching a real decision. Instrument branches where
+the teacher genuinely weighs progression, recovery, resupply, training, collection or optional
+reward destinations.
 
 Do not freeze numeric features first. Collect the semantic/raw route projections, inspect their
 coverage and correlations, then preregister normalization and baselines. Otherwise the schema will

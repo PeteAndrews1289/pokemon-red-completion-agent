@@ -48,11 +48,13 @@
 > semantic destinations from availability and route cost while the deterministic planner owns exact
 > movement. Decisions and outcomes survive in authenticated private trajectories; failures remain
 > negative evidence and power loss remains censored. No strategic navigation records have been
-> collected yet, no numeric feature schema is frozen, and no navigation model is being claimed.
+> collected into train or validation yet. One unassigned live safe-hub calibration proves the
+> binding/recording seam; no numeric feature schema is frozen and no navigation model is claimed.
 > Counted v95 remains unopened at **0/10**, and general generated routing is not yet authorized
 > inside a completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),
 > [navigation audit](docs/traversal-audit-2026-08-10.md), and
+> [strategic calibration](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json), plus the
 > [control route](docs/evidence/pallet-viridian-composed-route-probe-2026-08-10.json) and
 > [replanning route](docs/evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json),
 > plus the [Surf round trip](docs/evidence/cinnabar-cartridge-surf-route-probe-2026-08-10.json) and
@@ -121,9 +123,10 @@ Acquisition knowledge now covers every ordinary retail route in Red and Blue: wi
 evolution, ten in-game trades and 30 scripted opportunities in each title. Either cartridge can
 reach 135 species alone or 139 with a trade partner. The new strategic-navigation data seam is
 ready to record genuine destination choices and their consumed outcomes without copying map
-identity or movement actions into policy input. Its current denominator is deliberately explicit:
-**0 collected strategic navigation decisions**, no frozen numeric feature schema and no navigation
-model.
+identity or movement actions into policy input. One unassigned live calibration compared two
+safe-hub routes, selected cost 15 over cost 87 and acknowledged all 14 selected-plan movements.
+Train and validation still contain **0 strategic navigation decisions**; no numeric feature schema
+or navigation model exists.
 
 The deterministic teacher is a complete, reproducible expert oracle: **312/312 semantic
 checkpoints**, **36/36 objectives**, a six-member final-form team, the Champion, and the Hall of

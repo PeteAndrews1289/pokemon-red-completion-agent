@@ -48,12 +48,15 @@ censored interruption, neither success nor failure. Whole roots form dataset par
 reader rejects extra identity fields, title-specific tags, provenance drift, malformed metrics and
 missing or duplicated outcomes.
 
-The restraint is part of the result: the repository currently contains **zero collected strategic
-navigation decisions**, no frozen numeric feature schema and no strategic navigation model. What
-now exists is the trustworthy collection seam. The next experiment must populate it with real
-multi-destination branches, inspect coverage and shape baselines, then decide what model is
-justified. “Ready to collect the right data” is a smaller claim than “the AI learned navigation,”
-but it is the claim that can eventually transfer.
+The restraint is part of the result: the repository now contains **one unassigned live strategic
+calibration and zero train/validation decisions**, with no frozen numeric feature schema and no
+strategic navigation model. The calibration offered two real safe hubs, selected route cost 15 over
+87, bound that choice to the exact plan and completed 14/14 acknowledged movements. Its policy
+projection contains no route identity or arrows, but the cost-only choice is deliberately ineligible
+for model development. What now exists is the trustworthy collection seam. The next experiment must
+populate it with real multi-destination branches, inspect coverage and shape baselines, then decide
+what model is justified. “Ready to collect the right data” is a smaller claim than “the AI learned
+navigation,” but it is the claim that can eventually transfer.
 
 ## August 10: the route outlived its Repel
 

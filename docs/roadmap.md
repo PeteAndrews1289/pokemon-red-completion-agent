@@ -110,7 +110,11 @@ Every decision must join to exactly one outcome. Successful teacher choices can 
 targets, route failures remain negative outcome evidence, and external power loss remains censored
 rather than being rerun or mislabeled. Whole-lineage split audits and the authenticated private
 trajectory writer/reader are implemented. The honest dataset count is still **zero collected
-strategic decisions**, and the numeric feature schema is deliberately not frozen.
+train/validation strategic decisions**. One unassigned live calibration now proves the binding
+seam: two real safe hubs cost 15 and 87, the lower-cost Pallet route reached home after 14/14
+acknowledged movements, and its model-facing record contains no route identity or arrow label. See
+the [calibration receipt](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json). The
+numeric feature schema is deliberately not frozen.
 
 This closes one real story predicate and the named Victory Road resource/inter-room gaps, not every
 Kanto script or all travel to Indigo. Special scripted trainer-like objects remain separate and the

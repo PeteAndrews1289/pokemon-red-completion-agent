@@ -43,7 +43,9 @@ Show the three outcome lanes. Green: **SUCCESS → teacher-choice label + positi
 NOT RERUN**. Then show the dataset guardrails rejecting `viridian_city`, an extra destination
 identity field, a duplicated outcome and a split lineage that appears in both train and validation.
 
-End with the most important counter: **STRATEGIC RECORDS COLLECTED: 0**. The line is:
+End with the most important counter: **UNASSIGNED CALIBRATIONS: 1 / TRAIN: 0 / VALIDATION: 0**.
+Show the calibration choosing a cost-15 safe hub over a cost-87 one, then reaching home with 14/14
+movements acknowledged. Label it **PLUMBING PROOF — NOT TRAINING DATA**. The line is:
 **“This is not the navigation model. This is the point where I finally know what the navigation
 model should be asked to learn.”** The next episode collects genuine multi-destination choices,
 measures route-cost and candidate-shape baselines, freezes features only after observing coverage,

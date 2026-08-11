@@ -38,14 +38,23 @@ contained a mutable nested policy dictionary. Policy inputs and every candidate 
 recursively immutable after canonical parsing, with regressions that reject top-level and nested
 mutation.
 
-Do not overstate this milestone. There are **0 collected strategic navigation records**, no frozen
-numeric feature schema and no strategic navigation model. The old `navigation_dataset.py` contains
+Clean source `bf3fc76d8c571fd56acdb81da7aaed4fa97e5255` then proved the complete binding
+seam with one explicitly unassigned live calibration. From post-Pokédex Pallet, home and Viridian
+Center were both available safe hubs at costs 15/87 and 14/86 route steps. The lowest-cost teacher
+selected home; the executor acknowledged 14/14 movements, crossed the exact warp, released controls
+and changed no ROM-adjacent artifact. The identity-free trajectory retained only semantic tags,
+metrics and selected index. Record:
+[pallet-strategic-safe-hub-route-probe-2026-08-11.json](docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json).
+
+Do not overstate this milestone. There are **0 train/validation strategic navigation records**,
+one unassigned route-cost calibration, no frozen numeric feature schema and no strategic navigation
+model. The old `navigation_dataset.py` contains
 individual direction traces for control diagnostics only; its public summary now says so and stays
 `promotion_eligible: false`. The next work is to instrument genuine multi-destination branches in
 teacher/generated routes, preserve successes/failures/interruptions, then inspect coverage before
 choosing a numeric representation. Current prospective registry SHA is
-`8f8041a708e7cc131255ee7cf0f9bee4b8a7b79755a3cd056bb004e08fb0fce1`; source bundle is
-`a8ff02b3f24110527afc7a24356c59d2e2eed252468af122bae60c30fd43d354`.
+`defc6f4d4388140633b438c64fd49ebd25ec99c7e8b37c2170e6b4e906cd971f`; source bundle is
+`098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e`.
 
 ## Ordinary Red/Blue acquisition reach is cartridge-complete — 2026-08-11
 

@@ -14,7 +14,9 @@ multi-destination choices from reviewed cross-title semantics and route costs, k
 private to execution, and joins every choice to one success, failure or censored interruption.
 Successful routes may supervise imitation; failed routes remain negative outcome evidence; power
 loss is not quietly rerun. The authenticated writer/reader and lineage audit are implemented, but
-the honest count is still zero strategic navigation examples and no navigation model.
+the honest model-development count is still zero strategic navigation examples and no navigation
+model. One unassigned live calibration compared two real safe hubs, selected cost 15 over 87 and
+executed the exact bound route with 14/14 movements acknowledged. It proves the seam, not learning.
 
 That makes the best current interview story: I did not use a neural network where exact search was
 the better tool, and I did not create synthetic labels to claim training had started. I built the
@@ -22,7 +24,8 @@ measurement boundary first, preserved negative outcomes, and made the next model
 against route-cost and candidate-shape baselines. See the
 [current audit](current-audit-2026-08-11.md),
 [acquisition evidence](evidence/acquisition-routes-2026-08-11.json), and
-[joint-routing evidence](evidence/joint-route-pricing-audit-2026-08-11.json).
+[joint-routing evidence](evidence/joint-route-pricing-audit-2026-08-11.json), plus the
+[strategic calibration](evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json).
 
 ## August 10 headline
 
@@ -82,9 +85,9 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
 | Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; one story gate; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
-| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join and whole-lineage audit | 0 collected examples; no numeric schema, model, shadow result or causal authority |
+| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, whole-lineage audit and one live unassigned calibration | 0 train/validation examples; no numeric schema, model, shadow result or causal authority |
 | Acquisition knowledge | Exact Red/Blue ordinary reach: 135 solo / 139 with trade partner | No autonomous living-Pokédex execution or multi-save/trade orchestration |
-| Repository gate | 2,538 non-ROM tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
+| Repository gate | 2,545 non-ROM tests, Ruff, mypy, public-artifact, documentation, and source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
 
 ## Architecture in one minute
 
@@ -173,12 +176,14 @@ Fame, but many choices are affordance-masked and the strict battle model fails t
 role contract. There is no Crystal benchmark, clean-start 8/10 learned-stack series, or autonomous
 living-Pokédex result yet.
 
-The strategic navigation collection seam is implemented, but it contains zero real records. Exact
-route mechanics are substantially stronger than the older paragraph implies; what remains authored
-is when the completion teacher invokes them and how unsupported story/menu boundaries recover. The
-next credible navigation claim requires disjoint train/validation lineages, baselines, a frozen
-numeric representation, shadow evaluation and fresh causal authority—not one more successful Red
-route.
+The strategic navigation collection seam is implemented and has one live unassigned calibration,
+but it contains zero train/validation records. The calibration demonstrates exact decision-to-plan
+binding, outcome capture and identity-free projection; its trivial lowest-cost safe-hub decision is
+not useful supervision. Exact route mechanics are substantially stronger than the older paragraph
+implies; what remains authored is when the completion teacher invokes them and how unsupported
+story/menu boundaries recover. The next credible navigation claim requires disjoint
+train/validation lineages, baselines, a frozen numeric representation, shadow evaluation and fresh
+causal authority—not one more successful Red route.
 
 The immediate modeling gap is no longer vague. The old battle controller could not observe reserve
 matchups. Feature schema v3 now can, and it binds the chosen semantic candidate to switch execution.
