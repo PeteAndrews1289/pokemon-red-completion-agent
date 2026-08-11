@@ -301,3 +301,157 @@ def test_a_terminal_local_goal_continues_from_the_exact_cross_map_arrival() -> N
     assert plan.actions == ("right", "right", "right", "right")
     assert plan.terminal_approach is not None
     assert plan.terminal_approach.coordinates == ((4, 0), (4, 1), (4, 2))
+
+
+def test_joint_search_prefers_more_maps_when_the_real_local_route_is_cheaper() -> None:
+    direct = MacroEdge(
+        2,
+        coordinate_transitions=(MacroTransition((0, 5), (4, 0), "right"),),
+    )
+    detour = MacroEdge(
+        3,
+        coordinate_transitions=(MacroTransition((0, 1), (0, 0), "right"),),
+    )
+    finish = MacroEdge(
+        2,
+        coordinate_transitions=(MacroTransition((0, 1), (4, 0), "right"),),
+    )
+
+    plan = plan_route(
+        MacroGraph({1: (direct, detour), 3: (finish,)}),
+        {
+            1: line(*((0, x) for x in range(6))),
+            3: line((0, 0), (0, 1)),
+        },
+        1,
+        (0, 0),
+        2,
+    )
+
+    assert plan.macro_path.maps == (1, 3, 2)
+    assert plan.actions == ("right", "right", "right", "right")
+    assert plan.cost == 4
+
+
+def test_joint_search_skips_a_topological_edge_with_no_local_approach() -> None:
+    unreachable_direct = MacroEdge(2, kind="warp", at=(9, 9), arrival_at=(4, 0))
+    detour = MacroEdge(
+        3,
+        coordinate_transitions=(MacroTransition((0, 1), (0, 0), "right"),),
+    )
+    finish = MacroEdge(
+        2,
+        coordinate_transitions=(MacroTransition((0, 1), (4, 0), "right"),),
+    )
+
+    plan = plan_route(
+        MacroGraph({1: (unreachable_direct, detour), 3: (finish,)}),
+        {
+            1: line((0, 0), (0, 1)),
+            3: line((0, 0), (0, 1)),
+        },
+        1,
+        (0, 0),
+        2,
+    )
+
+    assert plan.macro_path.maps == (1, 3, 2)
+    assert unreachable_direct not in plan.macro_path.edges
+
+
+def test_terminal_local_cost_is_part_of_the_cross_map_choice() -> None:
+    expensive_arrival = MacroEdge(
+        2,
+        coordinate_transitions=(MacroTransition((0, 1), (0, 0), "right"),),
+    )
+    detour = MacroEdge(
+        3,
+        coordinate_transitions=(MacroTransition((0, 2), (0, 0), "right"),),
+    )
+    cheap_arrival = MacroEdge(
+        2,
+        coordinate_transitions=(MacroTransition((0, 1), (0, 9), "right"),),
+    )
+
+    plan = plan_route(
+        MacroGraph({1: (expensive_arrival, detour), 3: (cheap_arrival,)}),
+        {
+            1: line((0, 0), (0, 1), (0, 2)),
+            2: line(*((0, x) for x in range(11))),
+            3: line((0, 0), (0, 1)),
+        },
+        1,
+        (0, 0),
+        2,
+        goal_at=(0, 10),
+    )
+
+    assert plan.macro_path.maps == (1, 3, 2)
+    assert plan.segments[-1].transition.arrival_at == (0, 9)
+    assert plan.terminal_approach is not None
+    assert plan.terminal_approach.coordinates == ((0, 9), (0, 10))
+    assert plan.cost == 6
+
+
+def test_joint_search_keeps_connection_endpoints_open_for_downstream_cost() -> None:
+    first_connection = MacroEdge(
+        2,
+        coordinate_transitions=(
+            MacroTransition((0, 1), (0, 0), "right"),
+            MacroTransition((0, 2), (0, 9), "right"),
+        ),
+    )
+    finish = MacroEdge(
+        3,
+        coordinate_transitions=(MacroTransition((0, 10), (0, 0), "right"),),
+    )
+
+    plan = plan_route(
+        MacroGraph({1: (first_connection,), 2: (finish,)}),
+        {
+            1: line((0, 0), (0, 1), (0, 2)),
+            2: line(*((0, x) for x in range(11))),
+        },
+        1,
+        (0, 0),
+        3,
+    )
+
+    assert plan.macro_path.maps == (1, 2, 3)
+    assert plan.segments[0].transition.exit_at == (0, 2)
+    assert plan.segments[0].transition.arrival_at == (0, 9)
+    assert plan.cost == 5
+
+
+def test_joint_search_can_leave_and_return_to_another_local_component() -> None:
+    enter = MacroEdge(2, kind="warp", at=(0, 1), arrival_at=(0, 0))
+    nested = MacroEdge(3, kind="warp", at=(0, 1), arrival_at=(0, 0))
+    return_outside = MacroEdge(
+        None,
+        kind="return",
+        at=(0, 1),
+        destination_warp_index=0,
+    )
+    outside_local = line((0, 0), (0, 1))
+    outside_local = LocalGraph({**outside_local.edges, (9, 9): ()})
+
+    plan = plan_route(
+        MacroGraph(
+            {1: (enter,), 2: (nested,), 3: (return_outside,)},
+            outside_nodes=frozenset({1}),
+            warp_locations={1: ((9, 9),)},
+        ),
+        {
+            1: outside_local,
+            2: line((0, 0), (0, 1)),
+            3: line((0, 0), (0, 1)),
+        },
+        1,
+        (0, 0),
+        1,
+        goal_at=(9, 9),
+    )
+
+    assert plan.macro_path.maps == (1, 2, 3, 1)
+    assert plan.terminal_at == (9, 9)
+    assert plan.cost == 6

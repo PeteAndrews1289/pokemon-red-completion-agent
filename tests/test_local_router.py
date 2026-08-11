@@ -8,6 +8,7 @@ from pokemon_red_completion.local_router import (
     LocalGraph,
     LocalRouterError,
     find_local_path,
+    find_local_paths,
     find_nearest_transition,
     without_coordinates,
 )
@@ -208,3 +209,36 @@ def test_a_goal_mode_is_not_satisfied_by_the_same_coordinate_in_another_mode() -
 
     assert path.modes == ("land", "water")
     assert len(path.edges) == 1
+
+
+def test_one_search_prices_multiple_goals_and_omits_the_unreachable() -> None:
+    graph = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (0, 1),
+                    action="surf:right",
+                    requirements=frozenset({"surf"}),
+                    required_mode="land",
+                    result_mode="water",
+                ),
+            ),
+            (0, 1): (LocalEdge((0, 2), action="right", required_mode="water"),),
+        }
+    )
+    general = ((0, 1), None)
+    exact = ((0, 2), "water")
+    unreachable = ((9, 9), None)
+
+    paths = find_local_paths(
+        graph,
+        (0, 0),
+        {general, exact, unreachable},
+        capabilities=frozenset({"surf"}),
+        start_mode="land",
+    )
+
+    assert paths[general].coordinates == ((0, 0), (0, 1))
+    assert paths[general].modes == ("land", "water")
+    assert paths[exact].coordinates == ((0, 0), (0, 1), (0, 2))
+    assert unreachable not in paths

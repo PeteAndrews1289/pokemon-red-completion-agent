@@ -13,6 +13,7 @@ segment.
 
 from __future__ import annotations
 
+import heapq
 from collections.abc import Mapping
 from dataclasses import dataclass
 
@@ -23,14 +24,16 @@ from pokemon_red_completion.global_router import (
     MacroGraph,
     MacroPath,
     MacroTransition,
-    find_macro_path,
+    advance_macro_state,
 )
 from pokemon_red_completion.local_router import (
+    LocalGoal,
     LocalGraph,
     LocalPath,
     LocalRouterError,
     TraversalMode,
     find_local_path,
+    find_local_paths,
     without_coordinates,
 )
 
@@ -210,6 +213,25 @@ class RoutePlan:
     def terminal_map(self) -> int:
         return self.macro_path.maps[-1]
 
+    @property
+    def cost(self) -> int:
+        """Combined local movement and declared cross-map passage cost."""
+
+        segment_cost = sum(
+            sum(edge.cost for edge in segment.approach.edges) + macro_edge.cost
+            for segment, macro_edge in zip(
+                self.segments,
+                self.macro_path.edges,
+                strict=True,
+            )
+        )
+        terminal_cost = (
+            0
+            if self.terminal_approach is None
+            else sum(edge.cost for edge in self.terminal_approach.edges)
+        )
+        return segment_cost + terminal_cost
+
 
 def compose_route(
     graph: MacroGraph,
@@ -239,39 +261,17 @@ def compose_route(
         local = local_graphs.get(source_map)
         if local is None:
             raise RoutePlanningError(f"map {source_map} has no local traversal graph")
-        if edge.kind == "connection":
-            approach, transition = _best_connection(
-                local,
-                current_at,
-                edge,
-                capabilities=capabilities,
-                start_mode=current_mode,
-            )
-            action_in_approach = False
-        elif edge.kind in {"warp", "return"}:
-            approach, transition, action_in_approach = _warp_transition(
-                graph,
-                local,
-                current_at,
-                target_map,
-                edge,
-                capabilities=capabilities,
-                start_mode=current_mode,
-            )
-        else:
-            raise RoutePlanningError(f"map {source_map} uses unsupported {edge.kind!r} transition")
-        segments.append(
-            RouteSegment(
-                source_map=source_map,
-                target_map=target_map,
-                approach=approach,
-                transition=transition,
-                passage_kind=edge.kind,
-                transition_action_in_approach=action_in_approach,
-            )
+        segment = _compose_segment(
+            graph,
+            local,
+            _ComposedState(source_map, current_at, current_mode, None),
+            target_map,
+            edge,
+            capabilities=capabilities,
         )
-        current_at = transition.arrival_at
-        current_mode = approach.modes[-1]
+        segments.append(segment)
+        current_at = segment.transition.arrival_at
+        current_mode = segment.approach.modes[-1]
     terminal_approach: LocalPath | None = None
     if goal_at is not None:
         terminal_map = macro_path.maps[-1]
@@ -318,28 +318,311 @@ def plan_route(
     goal_at: Coordinate | None = None,
     goal_mode: TraversalMode = None,
 ) -> RoutePlan:
-    """Search both routing layers while excluding currently observed blockers."""
+    """Jointly price map passages and local movement around live blockers.
+
+    A topology-only macro path can be locally impossible or much more
+    expensive than a route through additional maps. The search state therefore
+    retains map, coordinate, movement mode and outside-return context. Every
+    candidate macro edge is priced by its cheapest reachable exact passage,
+    and a coordinate goal on the final map is part of that same optimization.
+    """
 
     unavailable = {} if blocked is None else blocked
     projected = {
         map_id: without_coordinates(local, unavailable.get(map_id, frozenset()))
         for map_id, local in local_graphs.items()
     }
-    macro_path = find_macro_path(
+    return _find_composed_route(
         graph,
-        start_map,
-        goal_map,
-        last_outside=last_outside,
-    )
-    return compose_route(
-        graph,
-        macro_path,
         projected,
+        start_map,
         start_at,
+        goal_map,
         capabilities=capabilities,
+        last_outside=last_outside,
         start_mode=start_mode,
         goal_at=goal_at,
         goal_mode=goal_mode,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class _ComposedState:
+    map_id: int
+    at: Coordinate
+    mode: TraversalMode
+    last_outside: int | None
+
+
+def _find_composed_route(
+    graph: MacroGraph,
+    local_graphs: Mapping[int, LocalGraph],
+    start_map: int,
+    start_at: Coordinate,
+    goal_map: int,
+    *,
+    capabilities: frozenset[str],
+    last_outside: int | None,
+    start_mode: TraversalMode,
+    goal_at: Coordinate | None,
+    goal_mode: TraversalMode,
+) -> RoutePlan:
+    if goal_at is None and goal_mode is not None:
+        raise ValueError("a goal movement mode requires a goal coordinate")
+
+    start = _ComposedState(start_map, start_at, start_mode, last_outside)
+    frontier: list[tuple[int, int, _ComposedState]] = [(0, 0, start)]
+    best_cost: dict[_ComposedState, int] = {start: 0}
+    came_from: dict[
+        _ComposedState,
+        tuple[_ComposedState, MacroEdge, RouteSegment],
+    ] = {}
+    best_goal: tuple[int, int, _ComposedState, LocalPath | None] | None = None
+    local_path_cache: dict[
+        tuple[int, Coordinate, TraversalMode],
+        dict[LocalGoal, LocalPath],
+    ] = {}
+    sequence = 1
+
+    while frontier:
+        cost, _, state = heapq.heappop(frontier)
+        if cost != best_cost.get(state):
+            continue
+        if best_goal is not None and cost >= best_goal[0]:
+            break
+
+        if state.map_id == goal_map and goal_at is None:
+            best_goal = (cost, sequence, state, None)
+            break
+
+        local = local_graphs.get(state.map_id)
+        if local is None:
+            continue
+        cache_key = (state.map_id, state.at, state.mode)
+        local_paths = local_path_cache.get(cache_key)
+        if local_paths is None:
+            goals = _local_goals(graph, state.map_id)
+            if state.map_id == goal_map and goal_at is not None:
+                goals.add((goal_at, goal_mode))
+            local_paths = find_local_paths(
+                local,
+                state.at,
+                goals,
+                capabilities=capabilities,
+                start_mode=state.mode,
+            )
+            local_path_cache[cache_key] = local_paths
+
+        if state.map_id == goal_map and goal_at is not None:
+            terminal = local_paths.get((goal_at, goal_mode))
+            if terminal is not None:
+                terminal_cost = sum(edge.cost for edge in terminal.edges)
+                candidate = (cost + terminal_cost, sequence, state, terminal)
+                if best_goal is None or candidate[:2] < best_goal[:2]:
+                    best_goal = candidate
+                sequence += 1
+                if terminal_cost == 0:
+                    break
+
+        for edge in graph.neighbors(state.map_id):
+            advanced = advance_macro_state(
+                graph,
+                (state.map_id, state.last_outside),
+                edge,
+            )
+            if advanced is None:
+                continue
+            target_map, next_last_outside = advanced
+            try:
+                candidates = _compose_segment_candidates(
+                    graph,
+                    local,
+                    state,
+                    target_map,
+                    edge,
+                    capabilities=capabilities,
+                    local_paths=local_paths,
+                )
+            except RoutePlanningError:
+                continue
+            for segment in candidates:
+                segment_cost = sum(
+                    local_edge.cost for local_edge in segment.approach.edges
+                )
+                candidate_cost = cost + segment_cost + edge.cost
+                following = _ComposedState(
+                    target_map,
+                    segment.transition.arrival_at,
+                    segment.approach.modes[-1],
+                    next_last_outside,
+                )
+                if candidate_cost >= best_cost.get(following, candidate_cost + 1):
+                    continue
+                best_cost[following] = candidate_cost
+                came_from[following] = (state, edge, segment)
+                heapq.heappush(frontier, (candidate_cost, sequence, following))
+                sequence += 1
+
+    if best_goal is None:
+        destination = f"map {goal_map}"
+        if goal_at is not None:
+            destination += f" coordinate {goal_at}"
+        raise RoutePlanningError(
+            f"no locally composable route from map {start_map} {start_at} to {destination}"
+        )
+    _, _, terminal_state, terminal_approach = best_goal
+    return _reconstruct_composed_route(
+        came_from,
+        start,
+        terminal_state,
+        terminal_approach,
+    )
+
+
+def _local_goals(graph: MacroGraph, map_id: int) -> set[LocalGoal]:
+    goals: set[LocalGoal] = set()
+    for edge in graph.neighbors(map_id):
+        if edge.kind == "connection":
+            goals.update((transition.exit_at, None) for transition in edge.coordinate_transitions)
+        elif edge.kind in {"warp", "return"} and edge.at is not None:
+            goals.add((edge.at, None))
+    return goals
+
+
+def _compose_segment(
+    graph: MacroGraph,
+    local: LocalGraph,
+    state: _ComposedState,
+    target_map: int,
+    edge: MacroEdge,
+    *,
+    capabilities: frozenset[str],
+) -> RouteSegment:
+    candidates = _compose_segment_candidates(
+        graph,
+        local,
+        state,
+        target_map,
+        edge,
+        capabilities=capabilities,
+        local_paths=None,
+    )
+    return min(
+        enumerate(candidates),
+        key=lambda ordered: (
+            sum(local_edge.cost for local_edge in ordered[1].approach.edges),
+            ordered[0],
+        ),
+    )[1]
+
+
+def _compose_segment_candidates(
+    graph: MacroGraph,
+    local: LocalGraph,
+    state: _ComposedState,
+    target_map: int,
+    edge: MacroEdge,
+    *,
+    capabilities: frozenset[str],
+    local_paths: Mapping[LocalGoal, LocalPath] | None,
+) -> tuple[RouteSegment, ...]:
+    if edge.kind == "connection":
+        if not edge.coordinate_transitions:
+            raise RoutePlanningError("a connection has no decoded coordinate transitions")
+        candidates: list[RouteSegment] = []
+        for transition in edge.coordinate_transitions:
+            approach: LocalPath | None
+            if local_paths is None:
+                try:
+                    approach = find_local_path(
+                        local,
+                        state.at,
+                        transition.exit_at,
+                        capabilities=capabilities,
+                        start_mode=state.mode,
+                    )
+                except LocalRouterError:
+                    continue
+            else:
+                approach = local_paths.get((transition.exit_at, None))
+            if approach is None:
+                continue
+            candidates.append(
+                RouteSegment(
+                    source_map=state.map_id,
+                    target_map=target_map,
+                    approach=approach,
+                    transition=transition,
+                    passage_kind=edge.kind,
+                    transition_action_in_approach=False,
+                )
+            )
+        if not candidates:
+            raise RoutePlanningError(
+                "no decoded connection coordinate is locally reachable"
+            )
+        return tuple(candidates)
+    if edge.kind in {"warp", "return"}:
+        approach, transition, action_in_approach = _warp_transition(
+            graph,
+            local,
+            state.at,
+            target_map,
+            edge,
+            capabilities=capabilities,
+            start_mode=state.mode,
+            local_paths=local_paths,
+        )
+        return (
+            RouteSegment(
+                source_map=state.map_id,
+                target_map=target_map,
+                approach=approach,
+                transition=transition,
+                passage_kind=edge.kind,
+                transition_action_in_approach=action_in_approach,
+            ),
+        )
+    raise RoutePlanningError(f"map {state.map_id} uses unsupported {edge.kind!r} transition")
+
+
+def _reconstruct_composed_route(
+    came_from: Mapping[
+        _ComposedState,
+        tuple[_ComposedState, MacroEdge, RouteSegment],
+    ],
+    start: _ComposedState,
+    goal: _ComposedState,
+    terminal_approach: LocalPath | None,
+) -> RoutePlan:
+    states = [goal]
+    edges: list[MacroEdge] = []
+    segments: list[RouteSegment] = []
+    current = goal
+    while current != start:
+        previous, edge, segment = came_from[current]
+        states.append(previous)
+        edges.append(edge)
+        segments.append(segment)
+        current = previous
+    ordered_states = tuple(reversed(states))
+    ordered_edges = tuple(reversed(edges))
+    ordered_segments = tuple(reversed(segments))
+    terminal_at = (
+        goal.at if terminal_approach is None else terminal_approach.coordinates[-1]
+    )
+    terminal_mode = goal.mode if terminal_approach is None else terminal_approach.modes[-1]
+    return RoutePlan(
+        macro_path=MacroPath(
+            maps=tuple(state.map_id for state in ordered_states),
+            edges=ordered_edges,
+        ),
+        start_at=start.at,
+        start_mode=start.mode,
+        segments=ordered_segments,
+        terminal_approach=terminal_approach,
+        terminal_at=terminal_at,
+        terminal_mode=terminal_mode,
     )
 
 
@@ -360,36 +643,6 @@ def _local_steps(map_id: int, path: LocalPath) -> tuple[RouteStep, ...]:
     )
 
 
-def _best_connection(
-    local: LocalGraph,
-    start: Coordinate,
-    edge: MacroEdge,
-    *,
-    capabilities: frozenset[str],
-    start_mode: TraversalMode,
-) -> tuple[LocalPath, MacroTransition]:
-    if not edge.coordinate_transitions:
-        raise RoutePlanningError("a connection has no decoded coordinate transitions")
-    candidates: list[tuple[int, int, LocalPath, MacroTransition]] = []
-    for order, transition in enumerate(edge.coordinate_transitions):
-        try:
-            approach = find_local_path(
-                local,
-                start,
-                transition.exit_at,
-                capabilities=capabilities,
-                start_mode=start_mode,
-            )
-        except LocalRouterError:
-            continue
-        cost = sum(local_edge.cost for local_edge in approach.edges) + edge.cost
-        candidates.append((cost, order, approach, transition))
-    if not candidates:
-        raise RoutePlanningError("no decoded connection coordinate is locally reachable")
-    _, _, approach, transition = min(candidates, key=lambda candidate: candidate[:2])
-    return approach, transition
-
-
 def _warp_transition(
     graph: MacroGraph,
     local: LocalGraph,
@@ -399,19 +652,26 @@ def _warp_transition(
     *,
     capabilities: frozenset[str],
     start_mode: TraversalMode,
+    local_paths: Mapping[LocalGoal, LocalPath] | None = None,
 ) -> tuple[LocalPath, MacroTransition, bool]:
     if edge.at is None:
         raise RoutePlanningError("a warp has no trigger coordinate")
-    try:
-        approach = find_local_path(
-            local,
-            start,
-            edge.at,
-            capabilities=capabilities,
-            start_mode=start_mode,
-        )
-    except LocalRouterError as error:
-        raise RoutePlanningError(f"warp at {edge.at} is not locally reachable") from error
+    approach: LocalPath | None
+    if local_paths is None:
+        try:
+            approach = find_local_path(
+                local,
+                start,
+                edge.at,
+                capabilities=capabilities,
+                start_mode=start_mode,
+            )
+        except LocalRouterError as error:
+            raise RoutePlanningError(f"warp at {edge.at} is not locally reachable") from error
+    else:
+        approach = local_paths.get((edge.at, None))
+    if approach is None:
+        raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
     action_in_approach = edge.exit_action is None
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(

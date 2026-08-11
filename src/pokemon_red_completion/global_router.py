@@ -126,6 +126,31 @@ class MacroPath:
 RouteState = tuple[int, int | None]
 
 
+def advance_macro_state(
+    graph: MacroGraph,
+    state: RouteState,
+    edge: MacroEdge,
+) -> RouteState | None:
+    """Resolve one edge, including Generation-neutral retained-return state.
+
+    Both the topology-only router and the coordinate-aware composer use this
+    transition. Keeping it here prevents their handling of nested interiors
+    and outside-map warps from drifting apart.
+    """
+
+    current, retained_outside = state
+    if edge.kind == "return":
+        if retained_outside is None:
+            return None
+        return retained_outside, retained_outside
+    if edge.target_map is None:  # guarded by MacroEdge, defensive for adapters
+        return None
+    next_last_outside = retained_outside
+    if edge.kind == "warp" and current in graph.outside_nodes:
+        next_last_outside = current
+    return edge.target_map, next_last_outside
+
+
 def find_macro_path(
     graph: MacroGraph,
     start: int,
@@ -153,26 +178,14 @@ def find_macro_path(
         cost, _, state = heapq.heappop(frontier)
         if cost != best_cost.get(state):
             continue
-        current, retained_outside = state
+        current, _ = state
         if current == goal:
             return _reconstruct_path(came_from, start_state, state)
 
         for edge in graph.neighbors(current):
-            neighbor: int
-            next_last_outside: int | None
-            if edge.kind == "return":
-                if retained_outside is None:
-                    continue
-                neighbor = retained_outside
-                next_last_outside = retained_outside
-            else:
-                if edge.target_map is None:  # guarded by MacroEdge, defensive for adapters
-                    continue
-                neighbor = edge.target_map
-                next_last_outside = retained_outside
-                if edge.kind == "warp" and current in graph.outside_nodes:
-                    next_last_outside = current
-            next_state = (neighbor, next_last_outside)
+            next_state = advance_macro_state(graph, state, edge)
+            if next_state is None:
+                continue
             candidate_cost = cost + edge.cost
             if candidate_cost >= best_cost.get(next_state, candidate_cost + 1):
                 continue
