@@ -31,7 +31,10 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 )
 from pokemon_red_completion.emulator import PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
-from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort  # noqa: E402
+from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
+    Gen1FieldMovePort,
+    Gen1StrengthReceipt,
+)
 from pokemon_red_completion.gen1_maps import map_graph  # noqa: E402
 from pokemon_red_completion.gen1_strength import (  # noqa: E402
     Gen1StrengthExecutor,
@@ -188,13 +191,20 @@ def main(argv: list[str] | None = None) -> int:
             ItemId.MAX_REPEL,
         )
         field = Gen1FieldMovePort(counted, reader, emulator)
-        activation = field.execute(
+        activation_result = field.execute(
             MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate")
         )
+        if not isinstance(activation_result, Gen1StrengthReceipt):
+            raise VictoryRoadStrengthProbeError(
+                "Strength activation returned an unexpected receipt"
+            )
+        activation = activation_result
         if len(field.strength_receipts) != 1:
             raise VictoryRoadStrengthProbeError("Strength activation lacked one receipt")
 
         raw_before = reader.read()
+        if raw_before.player_y is None or raw_before.player_x is None:
+            raise VictoryRoadStrengthProbeError("Strength boundary lost its position")
         blocks = reader.read_current_map_blocks()
         if blocks.map_id != MapId.VICTORY_ROAD_1F:
             raise VictoryRoadStrengthProbeError("live block buffer changed maps")
@@ -206,7 +216,7 @@ def main(argv: list[str] | None = None) -> int:
             water_set_ids=surf_tilesets,
         )
         initial_state = StrengthState.from_observation(
-            (int(raw_before.player_y), int(raw_before.player_x)),
+            (raw_before.player_y, raw_before.player_x),
             reader.read_current_strength_boulders(),
         )
         plan = plan_strength(
@@ -285,8 +295,11 @@ def main(argv: list[str] | None = None) -> int:
                     "player_after_yx": list(receipt.player_after),
                     "boulder_before_yx": list(receipt.boulder_before),
                     "boulder_after_yx": list(receipt.boulder_after),
+                    "boulder_removed": receipt.boulder_removed,
                     "player_stationary": receipt.player_stationary,
+                    "boulder_dust_observed": receipt.boulder_dust_observed,
                     "pushed_flag_observed": receipt.pushed_flag_observed,
+                    "engine_acknowledged": receipt.engine_acknowledged,
                     "engine_attempt_cost": receipt.engine_attempt_cost,
                 }
                 for receipt in execution.pushes

@@ -106,6 +106,7 @@ def test_visible_map_objects_use_the_engine_unavailable_marker_and_live_coordina
         RecordingMemory(
             {
                 0xD4E1: 3,
+                0xD5CE: 0xFF,
                 slot_1_state_1: 41,
                 slot_1_state_1 + 1: 1,
                 slot_1_state_1 + 2: 0x10,
@@ -147,6 +148,7 @@ def test_strength_boulders_keep_offscreen_slots_and_use_map_sprite_movement_byte
         RecordingMemory(
             {
                 0xD4E1: 3,
+                0xD5CE: 0xFF,
                 0xC110: 0x3F,
                 0xC111: 1,
                 0xC112: 0x10,
@@ -179,7 +181,14 @@ def test_strength_boulder_read_refuses_impossible_coordinates_and_duplicates() -
     with pytest.raises(CurrentStrengthBoulderError, match="invalid padded coordinate"):
         PokemonRedStateReader(
             RecordingMemory(
-                {0xD4E1: 1, 0xC110: 0x3F, 0xC214: 3, 0xC215: 9, 0xD4E4: 0x10}
+                {
+                    0xD4E1: 1,
+                    0xD5CE: 0xFF,
+                    0xC110: 0x3F,
+                    0xC214: 3,
+                    0xC215: 9,
+                    0xD4E4: 0x10,
+                }
             )
         ).read_current_strength_boulders()
 
@@ -188,6 +197,7 @@ def test_strength_boulder_read_refuses_impossible_coordinates_and_duplicates() -
             RecordingMemory(
                 {
                     0xD4E1: 2,
+                    0xD5CE: 0xFF,
                     0xC110: 0x3F,
                     0xC214: 8,
                     0xC215: 9,
@@ -199,6 +209,34 @@ def test_strength_boulder_read_refuses_impossible_coordinates_and_duplicates() -
                 }
             )
         ).read_current_strength_boulders()
+
+
+def test_strength_boulders_exclude_toggle_hidden_slots_not_merely_offscreen_ones() -> None:
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                0xD4E1: 2,
+                0xC110: 0x3F,
+                0xC114: 0,
+                0xC214: 8,
+                0xC215: 9,
+                0xD4E4: 0x10,
+                0xC120: 0x3F,
+                0xC122: 0xFF,
+                0xC224: 12,
+                0xC225: 13,
+                0xD4E6: 0x10,
+                0xD5CE: 2,
+                0xD5CF: 0x60,
+                0xD5D0: 0xFF,
+                0xD5B2: 0x01,
+            }
+        )
+    )
+
+    assert reader.read_current_strength_boulders() == (
+        CurrentStrengthBoulder(1, (4, 5), 0, 0, 0x10),
+    )
 
     slot_state_1 = 0xC110
     slot_state_2 = 0xC210

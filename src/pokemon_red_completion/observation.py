@@ -116,6 +116,7 @@ class RamAddress(IntEnum):
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
+    TOGGLEABLE_OBJECT_LIST = 0xD5CE
     OAKS_LAB_SCRIPT = 0xD5F0
     PALLET_TOWN_SCRIPT = 0xD5F1
     VIRIDIAN_CITY_SCRIPT = 0xD5F4
@@ -4067,7 +4068,10 @@ class PokemonRedStateReader:
         Unlike :meth:`read_visible_map_objects`, this observation deliberately
         retains ``image_index == 0xff`` entries. Red keeps off-screen boulders'
         map coordinates in state data 2, and a puzzle planner must not turn
-        those temporarily unrendered objects into empty floor.
+        those temporarily unrendered objects into empty floor. It does exclude
+        objects whose current-map toggle flag says they are removed: those
+        slots also retain coordinates and an off-screen image marker, but the
+        collision engine no longer treats them as present.
         """
 
         count = self._memory.read_u8(RamAddress.NUM_SPRITES)
@@ -4075,9 +4079,12 @@ class PokemonRedStateReader:
             raise CurrentStrengthBoulderError(
                 f"current map exposes impossible sprite count {count}"
             )
+        hidden = self._read_hidden_current_sprite_indices()
         found: list[CurrentStrengthBoulder] = []
         occupied: set[tuple[int, int]] = set()
         for sprite_index in range(1, count + 1):
+            if sprite_index in hidden:
+                continue
             state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
             if self._memory.read_u8(state_1) != 0x3F:
                 continue
@@ -4110,6 +4117,33 @@ class PokemonRedStateReader:
                 )
             )
         return tuple(found)
+
+    def _read_hidden_current_sprite_indices(self) -> frozenset[int]:
+        """Resolve the engine's current-map sprite/global-toggle pairs."""
+
+        base = int(RamAddress.TOGGLEABLE_OBJECT_LIST)
+        hidden: set[int] = set()
+        seen: set[int] = set()
+        for entry_index in range(16 + 1):
+            sprite_index = self._memory.read_u8(base + entry_index * 2)
+            if sprite_index == 0xFF:
+                return frozenset(hidden)
+            if not 1 <= sprite_index <= 15:
+                raise CurrentStrengthBoulderError(
+                    f"toggleable object list exposes invalid sprite {sprite_index}"
+                )
+            if sprite_index in seen:
+                raise CurrentStrengthBoulderError(
+                    f"toggleable object list repeats sprite {sprite_index}"
+                )
+            seen.add(sprite_index)
+            toggle_index = self._memory.read_u8(base + entry_index * 2 + 1)
+            address = int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + toggle_index // 8
+            if self._memory.read_u8(address) & (1 << (toggle_index % 8)):
+                hidden.add(sprite_index)
+        raise CurrentStrengthBoulderError(
+            "toggleable object list lacks its bounded sentinel"
+        )
 
     def read_current_map_blocks(self) -> CurrentMapBlocks:
         """Read the active mutable block grid from Red's bordered map buffer.

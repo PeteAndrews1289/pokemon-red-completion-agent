@@ -36,6 +36,7 @@ Coordinate = tuple[int, int]
 STAIRS_TILE = 0x15
 STRENGTH_PUSH_COST = 2
 STRENGTH_ACTIVE_MASK = 1 << 0
+BOULDER_DUST_MASK = 1 << 1
 PUSHED_BOULDER_MASK = 1 << 7
 
 
@@ -96,10 +97,19 @@ class StrengthGoal:
     boulder_at: Coordinate
     boulder_index: int | None = None
     player_at: Coordinate | None = None
+    remove_boulder: bool = False
+
+    def __post_init__(self) -> None:
+        if self.remove_boulder and self.boulder_index is None:
+            raise ValueError("a disappearing Strength goal must name its boulder")
 
     def satisfied_by(self, state: StrengthState) -> bool:
         if self.player_at is not None and state.player_at != self.player_at:
             return False
+        if self.remove_boulder:
+            return all(
+                item.sprite_index != self.boulder_index for item in state.boulders
+            )
         return any(
             item.at == self.boulder_at
             and (self.boulder_index is None or item.sprite_index == self.boulder_index)
@@ -116,10 +126,10 @@ class StrengthStep:
     boulder_index: int | None = None
 
     def __post_init__(self) -> None:
-        if self.kind not in {"walk", "push"}:
-            raise ValueError("a Strength step must be a walk or push")
-        if (self.kind == "push") != (self.boulder_index is not None):
-            raise ValueError("only a push step names a boulder")
+        if self.kind not in {"walk", "push", "drop"}:
+            raise ValueError("a Strength step must be a walk, push, or drop")
+        if (self.kind in {"push", "drop"}) != (self.boulder_index is not None):
+            raise ValueError("only a push or drop step names a boulder")
 
     @property
     def cost(self) -> int:
@@ -170,9 +180,15 @@ class StrengthPushReceipt:
     player_after: Coordinate
     boulder_before: Coordinate
     boulder_after: Coordinate
+    boulder_removed: bool
     player_stationary: bool
+    boulder_dust_observed: bool
     pushed_flag_observed: bool
     engine_attempt_cost: int
+
+    @property
+    def engine_acknowledged(self) -> bool:
+        return self.boulder_dust_observed or self.pushed_flag_observed
 
 
 @dataclass(frozen=True, slots=True)
@@ -215,7 +231,7 @@ class Gen1StrengthExecutor:
             if step.kind == "walk":
                 self._execute_walk(map_id, ordinal, step, protected)
             else:
-                self._execute_push(map_id, ordinal, step, protected)
+                self._execute_boulder_step(map_id, ordinal, step, protected)
         terminal = self._observe_state(map_id)
         self._wait_terminal_ready(map_id, terminal, protected)
         return StrengthExecutionReport(
@@ -246,7 +262,7 @@ class Gen1StrengthExecutor:
             "exhausted its acknowledgement budget"
         )
 
-    def _execute_push(
+    def _execute_boulder_step(
         self,
         map_id: int,
         ordinal: int,
@@ -255,20 +271,41 @@ class Gen1StrengthExecutor:
     ) -> None:
         assert step.boulder_index is not None
         before_boulder = _boulder_at(step.source, step.boulder_index)
-        after_boulder = _boulder_at(step.result, step.boulder_index)
+        dy, dx = step.direction.delta
+        after_boulder = before_boulder[0] + dy, before_boulder[1] + dx
+        removed = step.kind == "drop"
+        if removed:
+            if any(
+                item.sprite_index == step.boulder_index for item in step.result.boulders
+            ):
+                raise StrengthPlanningError("a Strength drop retained its boulder")
+        elif _boulder_at(step.result, step.boulder_index) != after_boulder:
+            raise StrengthPlanningError("a Strength push has an invalid planned destination")
 
-        self._pulse_direction(step.direction)
+        self.actions.execute(MacroAction(MacroActionKind.MOVE, step.direction.value))
+        self._inputs += 1
+        immediate_raw = self.reader.read()
+        if immediate_raw.map_id != map_id or immediate_raw.battle_state not in {0, None}:
+            raise StrengthPlanningError("Strength push left the controllable overworld")
+        _require_protected(immediate_raw, protected)
+        immediate_flags = self.memory.read_u8(RamAddress.MISC_FLAGS)
+        boulder_dust = bool(immediate_flags & BOULDER_DUST_MASK)
+        pushed_flag = bool(immediate_flags & PUSHED_BOULDER_MASK)
+        self.actions.execute(
+            MacroAction(MacroActionKind.WAIT, repeat=self.timing.settle_frames)
+        )
+        self._waits += 1
         after_push = self._checked_state(map_id, protected)
-        pushed_flag = bool(
+        pushed_flag = pushed_flag or bool(
             self.memory.read_u8(RamAddress.MISC_FLAGS) & PUSHED_BOULDER_MASK
         )
         if after_push != step.result:
             raise StrengthPlanningError(
                 f"Strength push step {ordinal} did not make the exact state transition"
             )
-        if not pushed_flag:
+        if not (boulder_dust or pushed_flag):
             raise StrengthPlanningError(
-                f"Strength push step {ordinal} lacked the engine pushed-boulder flag"
+                f"Strength push step {ordinal} lacked an engine push acknowledgement"
             )
         self.push_receipts.append(
             StrengthPushReceipt(
@@ -279,8 +316,10 @@ class Gen1StrengthExecutor:
                 player_after=step.result.player_at,
                 boulder_before=before_boulder,
                 boulder_after=after_boulder,
+                boulder_removed=removed,
                 player_stationary=step.source.player_at == step.result.player_at,
-                pushed_flag_observed=True,
+                boulder_dust_observed=boulder_dust,
+                pushed_flag_observed=pushed_flag,
                 engine_attempt_cost=STRENGTH_PUSH_COST,
             )
         )
@@ -390,6 +429,10 @@ def plan_strength(
         raise StrengthPlanningError("Strength planning starts outside standable terrain")
     if not terrain.can_stand(*goal.boulder_at):
         raise StrengthPlanningError("Strength goal is outside standable terrain")
+    if goal.remove_boulder and all(
+        item.sprite_index != goal.boulder_index for item in initial.boulders
+    ):
+        raise StrengthPlanningError("disappearing Strength goal boulder is not present")
     unavailable = frozenset(blocked)
     if initial.player_at in unavailable or initial.occupied & unavailable:
         raise StrengthPlanningError("non-boulder occupancy overlaps the initial Strength state")
@@ -414,7 +457,7 @@ def plan_strength(
             )
         if goal.satisfied_by(current):
             return _reconstruct(came_from, initial, current, cost, explored)
-        for step in _neighbors(terrain, graph, current):
+        for step in _neighbors(terrain, graph, current, goal):
             following = step.result
             candidate = cost + step.cost
             if candidate >= best_cost.get(following, candidate + 1):
@@ -432,6 +475,7 @@ def _neighbors(
     terrain: Terrain,
     graph: LocalGraph,
     state: StrengthState,
+    goal: StrengthGoal,
 ) -> tuple[StrengthStep, ...]:
     by_coordinate = {item.at: item for item in state.boulders}
     found: list[StrengthStep] = []
@@ -456,19 +500,37 @@ def _neighbors(
             continue
         if _walk_edge(graph, adjacent, beyond, direction) is None:
             continue
-        moved = tuple(
-            sorted(
-                StrengthBoulder(item.sprite_index, beyond)
-                if item.sprite_index == boulder.sprite_index
-                else item
-                for item in state.boulders
-            )
+        drops_at_goal = (
+            goal.remove_boulder
+            and boulder.sprite_index == goal.boulder_index
+            and beyond == goal.boulder_at
         )
+        if drops_at_goal:
+            moved = tuple(
+                item
+                for item in state.boulders
+                if item.sprite_index != boulder.sprite_index
+            )
+        else:
+            moved = tuple(
+                sorted(
+                    StrengthBoulder(item.sprite_index, beyond)
+                    if item.sprite_index == boulder.sprite_index
+                    else item
+                    for item in state.boulders
+                )
+            )
         # Red moves the boulder but not the player. A repeated push therefore
         # needs a separate ordinary walk into the newly vacated square.
         following = StrengthState(state.player_at, moved)
         found.append(
-            StrengthStep("push", direction, state, following, boulder.sprite_index)
+            StrengthStep(
+                "drop" if drops_at_goal else "push",
+                direction,
+                state,
+                following,
+                boulder.sprite_index,
+            )
         )
     return tuple(found)
 

@@ -114,6 +114,37 @@ def test_planner_tracks_multiple_boulders_in_state_instead_of_deleting_offscreen
     )
 
 
+def test_planner_models_a_scripted_hole_as_one_terminal_boulder_removal() -> None:
+    world = terrain((".....",))
+    initial = StrengthState((0, 0), (StrengthBoulder(6, (0, 1)),))
+
+    plan = plan_strength(
+        world,
+        rules(),
+        initial,
+        StrengthGoal((0, 2), boulder_index=6, remove_boulder=True),
+        raw((0, 0)),
+    )
+
+    assert [step.kind for step in plan.steps] == ["drop"]
+    assert plan.steps[0].boulder_index == 6
+    assert plan.states[-1] == StrengthState((0, 0), ())
+
+
+def test_disappearing_goal_requires_a_named_present_boulder() -> None:
+    with pytest.raises(ValueError, match="must name"):
+        StrengthGoal((0, 2), remove_boulder=True)
+
+    with pytest.raises(StrengthPlanningError, match="is not present"):
+        plan_strength(
+            terrain((".....",)),
+            rules(),
+            StrengthState((0, 0), (StrengthBoulder(6, (0, 1)),)),
+            StrengthGoal((0, 2), boulder_index=7, remove_boulder=True),
+            raw((0, 0)),
+        )
+
+
 def test_planner_rejects_stairs_elevation_pairs_and_occupied_push_destinations() -> None:
     stair_world = terrain((".....",), tiles={(0, 3): 0x15})
     initial = StrengthState((0, 1), (StrengthBoulder(1, (0, 2)),))
@@ -170,6 +201,8 @@ class StrengthWorld:
     status_flags_1: int = 1
     pushed: bool = False
     suppress_pushed_flag: bool = False
+    expose_boulder_dust: bool = False
+    boulder_dust: bool = False
     move_player_on_push: bool = False
     actions: list[MacroAction] = field(default_factory=list)
 
@@ -189,12 +222,16 @@ class StrengthWorld:
         if address == RamAddress.STATUS_FLAGS_1:
             return self.status_flags_1
         if address == RamAddress.MISC_FLAGS:
-            return (1 << 7) if self.pushed and not self.suppress_pushed_flag else 0
+            value = (1 << 1) if self.boulder_dust else 0
+            if self.pushed and not self.suppress_pushed_flag:
+                value |= 1 << 7
+            return value
         return 0
 
     def execute(self, action: MacroAction) -> object:
         self.actions.append(action)
         if action.kind is MacroActionKind.WAIT:
+            self.boulder_dust = False
             return action
         assert action.kind is MacroActionKind.MOVE
         assert isinstance(action.value, str)
@@ -218,6 +255,7 @@ class StrengthWorld:
         if self.move_player_on_push:
             self.raw = replace(self.raw, player_y=adjacent[0], player_x=adjacent[1])
         self.pushed = True
+        self.boulder_dust = self.expose_boulder_dust
         return action
 
 
@@ -244,6 +282,7 @@ def test_executor_requires_the_held_pulse_engine_flag_and_exact_result() -> None
     assert report.controller_inputs == 2  # one approach walk and one held push pulse
     assert len(report.pushes) == 1
     assert report.pushes[0].player_stationary
+    assert not report.pushes[0].boulder_removed
     assert report.pushes[0].pushed_flag_observed
     assert report.pushes[0].engine_attempt_cost == 2
     assert (report.pushes[0].boulder_before, report.pushes[0].boulder_after) == (
@@ -252,7 +291,67 @@ def test_executor_requires_the_held_pulse_engine_flag_and_exact_result() -> None
     )
 
 
-def test_executor_fails_closed_if_a_push_moves_the_player_or_lacks_engine_flag() -> None:
+def test_executor_accepts_transient_dust_when_a_map_script_consumes_the_push_flag() -> None:
+    world_map = terrain((".....",))
+    initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 1)),))
+    plan = plan_strength(
+        world_map,
+        rules(),
+        initial,
+        StrengthGoal((0, 2)),
+        raw((0, 0)),
+    )
+    world = StrengthWorld(
+        boulders={1: (0, 1)},
+        suppress_pushed_flag=True,
+        expose_boulder_dust=True,
+    )
+
+    report = Gen1StrengthExecutor(
+        cast(RouteActionPort, world),
+        cast(PokemonRedStateReader, world),
+        cast(ReadOnlyMemory, world),
+    ).execute(plan)
+
+    assert report.passed
+    assert report.pushes[0].boulder_dust_observed
+    assert not report.pushes[0].pushed_flag_observed
+    assert report.pushes[0].engine_acknowledged
+
+
+def test_executor_acknowledges_an_exact_terminal_boulder_removal() -> None:
+    world_map = terrain((".....",))
+    initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 1)),))
+    plan = plan_strength(
+        world_map,
+        rules(),
+        initial,
+        StrengthGoal((0, 2), boulder_index=1, remove_boulder=True),
+        raw((0, 0)),
+    )
+    world = StrengthWorld(boulders={1: (0, 1)})
+
+    original_execute = world.execute
+
+    def execute_and_remove(action: MacroAction) -> object:
+        result = original_execute(action)
+        if action.kind is MacroActionKind.WAIT and world.pushed:
+            world.boulders.clear()
+        return result
+
+    world.execute = execute_and_remove  # type: ignore[method-assign]
+    report = Gen1StrengthExecutor(
+        cast(RouteActionPort, world),
+        cast(PokemonRedStateReader, world),
+        cast(ReadOnlyMemory, world),
+    ).execute(plan)
+
+    assert report.passed
+    assert report.pushes[0].boulder_removed
+    assert report.pushes[0].boulder_after == (0, 2)
+
+
+def test_executor_fails_closed_if_a_push_moves_the_player_or_lacks_engine_ack() -> None:
     world_map = terrain((".....",))
     initial = StrengthState((0, 0), (StrengthBoulder(1, (0, 1)),))
     plan = plan_strength(
@@ -272,7 +371,7 @@ def test_executor_fails_closed_if_a_push_moves_the_player_or_lacks_engine_flag()
         ).execute(plan)
 
     no_flag = StrengthWorld(boulders={1: (0, 1)}, suppress_pushed_flag=True)
-    with pytest.raises(StrengthPlanningError, match="lacked the engine pushed-boulder flag"):
+    with pytest.raises(StrengthPlanningError, match="lacked an engine push acknowledgement"):
         Gen1StrengthExecutor(
             cast(RouteActionPort, no_flag),
             cast(PokemonRedStateReader, no_flag),
