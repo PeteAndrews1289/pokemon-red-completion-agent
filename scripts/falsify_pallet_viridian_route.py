@@ -18,7 +18,6 @@ plan. It is evidence about recovery authority, not evidence of a live NPC.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 from dataclasses import dataclass
@@ -68,10 +67,14 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     require_clean_source,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
+from pokemon_red_completion.route_evidence import (  # noqa: E402
+    public_route_execution,
+    public_route_plan,
+    rom_adjacent_artifacts,
+)
 from pokemon_red_completion.route_executor import (  # noqa: E402
     ReplanRequest,
     RouteExecutionLimits,
-    RouteExecutionReport,
     TraversalSnapshot,
     execute_route,
 )
@@ -126,92 +129,6 @@ class FirstStepBlockerInjector:
             self.suppressed += 1
             return action
         return self.delegate.execute(action)
-
-
-def _artifact_identity(path: Path) -> tuple[bool, str | None]:
-    if not path.exists():
-        return False, None
-    return True, hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _adjacent_artifacts(rom_path: Path) -> tuple[tuple[bool, str | None], ...]:
-    return tuple(
-        _artifact_identity(Path(f"{rom_path}{suffix}"))
-        for suffix in (".ram", ".rtc", ".state")
-    )
-
-
-def _public_plan(plan: RoutePlan) -> dict[str, object]:
-    return {
-        "maps": [MapId(map_id).name for map_id in plan.macro_path.maps],
-        "map_ids": list(plan.macro_path.maps),
-        "start_yx": list(plan.start_at),
-        "terminal_yx": list(plan.terminal_at),
-        "actions": list(plan.actions),
-        "segments": [
-            {
-                "source_map": MapId(segment.source_map).name,
-                "source_map_id": segment.source_map,
-                "target_map": MapId(segment.target_map).name,
-                "target_map_id": segment.target_map,
-                "approach_coordinates_yx": [
-                    list(coordinate) for coordinate in segment.approach.coordinates
-                ],
-                "actions": list(segment.actions),
-                "transition": {
-                    "exit_yx": list(segment.transition.exit_at),
-                    "arrival_yx": list(segment.transition.arrival_at),
-                    "action": segment.transition.action,
-                    "action_in_approach": segment.transition_action_in_approach,
-                },
-            }
-            for segment in plan.segments
-        ],
-    }
-
-
-def _public_execution(report: RouteExecutionReport) -> dict[str, object]:
-    return {
-        "passed": report.passed,
-        "movement_requests": report.movement_requests,
-        "wait_actions": report.wait_actions,
-        "acknowledged_steps": len(report.executed_steps),
-        "steps": [
-            {
-                "source_map_id": receipt.step.source_map,
-                "source_yx": list(receipt.step.source_at),
-                "action": receipt.step.action,
-                "expected_map_id": receipt.step.expected_map,
-                "expected_yx": list(receipt.step.expected_at),
-                "kind": receipt.step.kind,
-                "movement_requests": receipt.movement_requests,
-                "interruption_count": receipt.interruption_count,
-            }
-            for receipt in report.executed_steps
-        ],
-        "interruptions": [
-            {
-                "kind": receipt.kind,
-                "resumed_map_id": receipt.resumed_map,
-                "resumed_yx": list(receipt.resumed_at),
-                "details": dict(receipt.details),
-            }
-            for receipt in report.interruptions
-        ],
-        "replans": [
-            {
-                "ordinal": receipt.ordinal,
-                "map_id": receipt.map_id,
-                "at_yx": list(receipt.at),
-                "newly_blocked_yx": list(receipt.newly_blocked),
-                "replacement_steps": receipt.replacement_steps,
-            }
-            for receipt in report.replans
-        ],
-        "terminal_map_id": report.terminal.map_id,
-        "terminal_yx": list(report.terminal.at),
-        "terminal_ready": report.terminal.ready,
-    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -324,7 +241,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     if not plan.steps:
         raise PalletViridianRouteProbeError("the composed route contains no movement")
-    before_artifacts = _adjacent_artifacts(rom_path)
+    before_artifacts = rom_adjacent_artifacts(rom_path)
 
     timing = DEFAULT_PEWTER_TIMING
     with PyBoyAdapter(rom_path) as emulator:
@@ -411,7 +328,7 @@ def main(argv: list[str] | None = None) -> int:
         frames_executed = emulator.frame_count
         controller_released = not emulator.pressed_buttons
 
-    artifacts_unchanged = before_artifacts == _adjacent_artifacts(rom_path)
+    artifacts_unchanged = before_artifacts == rom_adjacent_artifacts(rom_path)
     if not artifacts_unchanged:
         raise PalletViridianRouteProbeError(
             "the no-save probe changed a ROM-adjacent artifact"
@@ -473,8 +390,8 @@ def main(argv: list[str] | None = None) -> int:
             "blockers."
         ),
         "destination": args.destination,
-        "plan": _public_plan(plan),
-        "execution": _public_execution(report),
+        "plan": public_route_plan(plan, map_name=lambda value: MapId(value).name),
+        "execution": public_route_execution(report),
         "fault_injection": {
             "enabled": args.inject_first_step_blocker,
             "kind": "suppressed movement requests" if injected_blocker else None,

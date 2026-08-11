@@ -66,6 +66,8 @@ class StrategicNavigationExample:
     decision_index: int
     root_lineage_id: str
     partition: str
+    actor: str
+    policy_id: str
     policy_input: Mapping[str, object]
     selected_candidate_index: int
     outcome_status: NavigationOutcomeStatus
@@ -75,7 +77,14 @@ class StrategicNavigationExample:
     failure_reason: NavigationFailureReason | None = None
 
     def __post_init__(self) -> None:
-        for name in ("decision_id", "episode_id", "root_lineage_id", "partition"):
+        for name in (
+            "decision_id",
+            "episode_id",
+            "root_lineage_id",
+            "partition",
+            "actor",
+            "policy_id",
+        ):
             if not isinstance(getattr(self, name), str) or not getattr(self, name):
                 raise StrategicNavigationDatasetError(f"{name} must be non-empty")
         if type(self.decision_index) is not int or self.decision_index < 0:  # noqa: E721
@@ -115,9 +124,12 @@ class StrategicNavigationExample:
 
     @property
     def teacher_choice_target(self) -> int | None:
-        """Return a positive imitation label only after successful execution."""
+        """Return a label only for a successfully executed deterministic-teacher choice."""
 
-        if self.outcome_status is NavigationOutcomeStatus.SUCCEEDED:
+        if (
+            self.outcome_status is NavigationOutcomeStatus.SUCCEEDED
+            and self.actor == "deterministic_teacher"
+        ):
             return self.selected_candidate_index
         return None
 
@@ -217,6 +229,8 @@ class StrategicNavigationDataset:
                 decision_index=record.decision.decision_index,
                 root_lineage_id=record.decision.root_lineage_id,
                 partition=record.decision.partition,
+                actor=record.decision.actor,
+                policy_id=record.decision.policy_id,
                 policy_input=record.decision.policy_input(),
                 selected_candidate_index=record.decision.selected_index,
                 outcome_status=record.outcome.status,
@@ -305,8 +319,16 @@ class CollectedStrategicNavigationDataset:
                 item.episode_id,
                 item.root_lineage_id,
                 item.partition,
+                item.actor,
+                item.policy_id,
             )
-            != (self.episode_id, self.root_lineage_id, self.partition)
+            != (
+                self.episode_id,
+                self.root_lineage_id,
+                self.partition,
+                self.actor,
+                self.policy_id,
+            )
             for item in self.examples
         ):
             raise StrategicNavigationDatasetError(
@@ -481,6 +503,8 @@ def load_strategic_navigation_episode(
                 decision_index=strategic_index,
                 root_lineage_id=root_lineage_id,
                 partition=partition,
+                actor=actor,
+                policy_id=policy_id,
                 policy_input=policy_input,
                 selected_candidate_index=selected_index,
                 outcome_status=outcome.status,

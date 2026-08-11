@@ -237,6 +237,22 @@ def test_dataset_separates_successful_imitation_failure_and_censoring() -> None:
     }
 
 
+def test_successful_learned_choice_is_outcome_evidence_not_teacher_imitation() -> None:
+    dataset = StrategicNavigationDataset.from_records(
+        (
+            _record(
+                0,
+                NavigationOutcomeStatus.SUCCEEDED,
+                actor="learned_policy",
+            ),
+        )
+    )
+
+    assert dataset.examples[0].teacher_choice_target is None
+    assert dataset.examples[0].outcome_target is True
+    assert dataset.public_summary()["teacher_choice_examples"] == 0
+
+
 def test_dataset_rejects_mixed_provenance_and_out_of_order_episode_indexes() -> None:
     first = _record(1, NavigationOutcomeStatus.SUCCEEDED)
     second = _record(0, NavigationOutcomeStatus.SUCCEEDED)
