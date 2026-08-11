@@ -52,6 +52,7 @@ from pokemon_red_completion.gen1_terrain import (  # noqa: E402
 )
 from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     Direction,
+    MapObjectEvent,
     TraversalRules,
     local_graph,
     map_object_events,
@@ -99,6 +100,14 @@ VR3_SWITCH_YX = (5, 3)
 VR3_HOLE_YX = (15, 23)
 VR2_SWITCH_2_YX = (16, 9)
 VR3_REPEL_BOUNDARY = _directions("UUULUURULLLLL")
+TRAINER_TEXT_MASK = 1 << 6
+MAX_CONSERVATIVE_TRAINER_SIGHT = 5
+OBJECT_FACING_DIRECTIONS = {
+    0xD0: Direction.DOWN,
+    0xD1: Direction.UP,
+    0xD2: Direction.LEFT,
+    0xD3: Direction.RIGHT,
+}
 
 
 class VictoryRoadStrengthChainProbeError(RuntimeError):
@@ -208,6 +217,26 @@ def _phase_payload(phase: _SolvedPhase) -> dict[str, object]:
             ],
         },
     }
+
+
+def _conservative_object_occupancy(
+    map_id: int,
+    object_events: Collection[MapObjectEvent],
+) -> frozenset[tuple[int, int]]:
+    occupied: set[tuple[int, int]] = set()
+    for value in object_events:
+        if value.map_id != map_id or value.is_boulder:
+            continue
+        occupied.add(value.at)
+        direction = OBJECT_FACING_DIRECTIONS.get(value.direction_or_range)
+        if not value.text_id & TRAINER_TEXT_MASK or direction is None:
+            continue
+        dy, dx = direction.delta
+        occupied.update(
+            (value.y + distance * dy, value.x + distance * dx)
+            for distance in range(1, MAX_CONSERVATIVE_TRAINER_SIGHT + 1)
+        )
+    return frozenset(occupied)
 
 
 def _solve_phase(
@@ -350,6 +379,8 @@ def _execute_derived_walk(
                 current = reader.read()
                 if current.map_id != source_map or current.battle_state not in {0, None}:
                     raise
+                if not reader.read_input_readiness().ready:
+                    raise
                 if (
                     before.player_y is None
                     or before.player_x is None
@@ -423,11 +454,7 @@ def main(argv: list[str] | None = None) -> int:
     surf_tileset_ids = water_tilesets(rom)
     object_events = map_object_events(rom, VICTORY_ROAD_MAPS)
     occupancy = {
-        map_id: frozenset(
-            event.at
-            for event in object_events
-            if event.map_id == map_id and not event.is_boulder
-        )
+        map_id: _conservative_object_occupancy(map_id, object_events)
         for map_id in VICTORY_ROAD_MAPS
     }
     before_artifacts = _adjacent_artifacts(args.rom)
