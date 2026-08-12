@@ -3,7 +3,40 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-11): build a context-diverse strategic benchmark
+## Current focus (2026-08-12): teach alternate valid story orders
+
+Current measured coverage is **31 authenticated envelopes, 24 distinct frontiers and 10 exact
+learning scenarios**: four train and six validation. Scenarios 003, 007, 011 and 015 qualify four
+of the six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
+12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
+receipts and the current state review are in the
+[August 12 audit](current-audit-2026-08-12.md).
+
+The remaining challenge contexts cannot be truthfully constructed by replaying the canonical
+teacher order. The executable [curriculum-order audit](evidence/strategic-curriculum-order-audit-2026-08-12.json)
+finds 21 of 36 learning frontiers whose exact objective set conflicts with the operational
+prerequisites of a currently qualified skill. This is a teacher-coverage gap, not a cartridge
+impossibility.
+
+The ordered gates are:
+
+1. publish the cartridge gatehouse repairs, qualification receipts and order audit, then require
+   green exact-commit CI;
+2. build an early-Erika skill to unlock scenarios 009, 010, 014 and the Erika component of 023;
+3. qualify Gold Teeth/Strength without Surf and Koga-before-Surf to unlock 017–019;
+4. construct and rehearse validation scenarios 019 and 023 exactly once, then rerun the paired
+   six-challenge cost-baseline audit;
+5. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
+6. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
+   actually measured; and
+7. only then open counted collection, freeze normalization, train the shared candidate scorer and
+   evaluate once on the 12 still-sealed test contexts.
+
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 26 missing
+learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
+the corresponding live teacher skill is available.
+
+## Previous focus (2026-08-11): build a context-diverse strategic benchmark
 
 The repaired 703,275-record rehearsal is qualified, but counted collection is paused before the new
 train root 01. Exact historical measurement found only three candidate-order-invariant contexts in

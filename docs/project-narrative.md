@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 12: one winning route was not yet a curriculum
+
+The next two validation questions looked like more routing work. They were not. Scenario 019 asks
+what to do after Koga and Strength while Surf is still incomplete. Scenario 023 asks what to do
+after Erika while Koga is still incomplete. Pokémon Red permits both states, but the teacher had
+learned only one operational order: Safari and Surf supplied the Gold Teeth, Surf powered the Koga
+party boundary, and the later Erika chapter started after Koga and Strength.
+
+That difference is now executable evidence. A path-free curriculum-order audit compares every
+learning frontier with the prerequisites of the currently qualified skills. Twenty-one of 36
+frontiers require at least one alternate-order lesson. It never reads a private save and never
+opens test. The result changed the engineering question from “why can the router not find this
+state?” to “what new experience must the teacher demonstrate without smuggling in a forbidden
+objective?”
+
+Before reaching that limit, the same campaign produced three more exact contexts. Scenario 011
+selected Fuchsia from three choices and completed 149 movements through one trainer interruption.
+Scenario 015 offered five choices spanning costs 55–624, selected Surf, and completed 624 movements
+through trainer and wild interruptions plus one live-object replan. Scenario 005 used a bounded
+Saffron lesson only to construct its exact Celadon question, then selected Hideout in a separate
+31-movement rehearsal. All three are immutable unassigned episodes with one strategic label, one
+outcome and zero arrow-key labels.
+
+The scoreboard is now 31 authenticated captures, 24 distinct frontiers, 10 exact learning
+contexts, four of six cost-baseline challenges and zero counted rows. The next work is deliberately
+new experience: Erika before Koga, Koga and Strength before Surf, and Cinnabar before Sabrina. That
+is the bridge from a teacher that can repeat one successful playthrough to a teacher that can show
+a model what remains invariant when the order changes.
+
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 
 Scenario 006 looked like a cheap new calibration: authenticate the exact pre-Hideout Celadon

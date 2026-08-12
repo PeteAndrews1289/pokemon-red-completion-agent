@@ -1,5 +1,34 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New opening beat: the route was complete, the curriculum was not
+
+Open on two apparently contradictory save cards:
+
+- **KOGA + STRENGTH / SURF NOT YET OBTAINED**
+- **ERIKA DEFEATED / KOGA NOT YET DEFEATED**
+
+Put a green **LEGAL IN POKÉMON RED** stamp on both, then try to connect each to the teacher. The
+first path should stop at **KOGA SKILL REQUIRES SURF** and **STRENGTH SKILL EXPECTS SAFARI GOLD
+TEETH**. The second should stop at **ERIKA SKILL STARTS POST-KOGA**. Say: **“The script knew how to
+win. It did not yet know how to teach every valid order.”**
+
+Reveal the audit counter: **21 / 36 LEARNING FRONTIERS NEED AN ALTERNATE-ORDER LESSON**. Keep a
+smaller caption beneath it: **NOT IMPOSSIBLE GAME STATES — MISSING TEACHER EXPERIENCE**. This is the
+cleanest explanation for why building a transferable model is harder than recording a completed
+playthrough.
+
+Then show the progress earned before that discovery. Let scenario 011 add one green validation
+card: **3 CHOICES / FUCHSIA SELECTED / 149 STEPS / 1 TRAINER / 0 REPLANS**. Follow with scenario 015
+as the visual payoff: five candidate cards with costs **624, 621, 106, 55, 581**, Surf selected,
+then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 1,400 RECORDS**.
+Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
+TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
+
+Update the persistent scoreboard to **31 AUTHENTICATED CAPTURES / 24 DISTINCT FRONTIERS / 10 EXACT
+CONTEXTS / 4 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. The next-act cards should be
+**ERIKA BEFORE KOGA**, **KOGA + STRENGTH BEFORE SURF**, and **CINNABAR BEFORE SABRINA**. Do not show
+these as complete until their own cartridge receipts exist.
+
 ## Working title
 
 **I Taught an AI to Beat Pokémon Red — Then Discovered It Had Learned Almost Nothing**

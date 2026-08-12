@@ -14,6 +14,47 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Four challenge contexts qualified; alternate-order curriculum is the blocker — 2026-08-12
+
+Frozen source `fc3b91a` passed the full local gate (2,707 passed, three skipped, one expected
+failure), Ruff and GitHub CI run `31566363870`. Its cartridge-derived gatehouse work decodes
+automatic warp tiles and directional carpets, models boundary-specific arrivals, rejects inert
+upper gate rows and verifies all four return directions. This source then constructed exact
+validation scenario 015 and completed its one permitted uncounted rehearsal: five available
+candidates, Surf selected, 624/624 acknowledged movements, one trainer interruption, one wild
+interruption, one visible-object replan, 24 waits and 1,400 authenticated records. It has no
+movement labels and remains unassigned, uncounted and promotion-ineligible. See the
+[scenario-015 receipt](docs/evidence/strategic-scenario-015-rehearsal-qualification-2026-08-12.json).
+
+Validation scenario 011 is also qualified under published `9320a99`: three candidates, Fuchsia
+selected, 149/149 movements, one trainer interruption, zero replans and 465 records. Scenario 005
+was then constructed from the exact Celadon capture by adding only Saffron access and returning to
+the Celadon origin. Its uncounted rehearsal selected Hideout and completed 31/31 movements with no
+interruption or replan. See the [scenario-011](docs/evidence/strategic-scenario-011-rehearsal-qualification-2026-08-12.json)
+and [scenario-005](docs/evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json)
+receipts.
+
+Measured inventory is now **31 authenticated envelopes, 24 unique frontiers, 10 exact learning
+scenarios and 26 missing**. Exact coverage is four train and six validation contexts. The measured
+cost-baseline challenge set is 4/6: 003, 007, 011 and 015. Counted train and validation remain zero;
+all 12 test scenarios remain sealed. The path-free current receipt is
+[here](docs/evidence/strategic-frontier-inventory-2026-08-12.json).
+
+The key blocker is now explicit. The game permits alternate story orders that the current qualified
+teacher skills do not. A new static audit checks the 36 learning frontiers against the operational
+prerequisites of the Koga, Strength, Erika and Cinnabar skills and finds 21 incompatibilities. It
+does not inspect private captures or test. Scenario 019 requires Koga and Strength while Surf is
+absent, but today's Koga skill starts Surf-ready and today's Strength skill gets its Gold Teeth from
+the Surf chapter. Scenario 023 requires Erika while Koga is absent, but today's Erika skill starts
+post-Koga/post-Strength. These are missing teacher curricula, not impossible cartridge states. See
+the [order audit](docs/evidence/strategic-curriculum-order-audit-2026-08-12.json) and
+[current audit](docs/current-audit-2026-08-12.md).
+
+Ordered next work: qualify early Erika; split a Gold-Teeth-only Safari resource path from Surf and
+qualify Koga-before-Surf; add Cinnabar-before-Sabrina; then construct scenarios 019 and 023 and
+rerun the six-context paired baseline audit. Do not revise the preregistered registry merely to fit
+the canonical teacher order. Do not open counted collection or test to debug these skills.
+
 ## Bounded-skill scenario construction implemented; live qualification pending — 2026-08-11
 
 Scenario 006 has now been re-authenticated from the old Celadon capture without movement or an

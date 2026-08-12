@@ -1,0 +1,101 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-015-validation-skill-materialized",
+    "envelope_sha256": "c64cf9041f9012e930172f9de519e6c06d5726a02e9d5986d29350f776b50aae",
+    "state_sha256": "358aa7501a71ec91745b12e1d75d10066945e32aeb58b4f69124abc26af3ca62",
+    "verified_objective_count": 19
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "completed_objective_id": "reach_fuchsia",
+    "counted": false,
+    "episode_created": false,
+    "post_skill_relocation": {
+      "acknowledged_steps": 586,
+      "interruptions": 12,
+      "replans": 3,
+      "wait_actions": 35
+    },
+    "pre_skill_relocation": {
+      "acknowledged_steps": 140,
+      "interruptions": 1,
+      "replans": 0,
+      "wait_actions": 8
+    },
+    "skill": {
+      "actions_executed": 3088,
+      "frames_executed": 370100
+    },
+    "source_registry_assignment_opened": false,
+    "status": "complete",
+    "target_scenario_exact": true
+  },
+  "episode": {
+    "assignment_id": "726259ee3a8957c678c608089478d491231a28e18615648c8a99bfff5e093421",
+    "dataset": {
+      "candidate_count": 5,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-726259ee3a8957c678c608089478d491231a28e18615648c8a99bfff5e093421",
+    "execution": {
+      "acknowledged_steps": 624,
+      "interruptions": {
+        "trainer_engagement": 1,
+        "wild_battle": 1
+      },
+      "movement_requests": 624,
+      "replans": {
+        "visible_object": 1
+      },
+      "selected_objective": "obtain_surf",
+      "status": "succeeded",
+      "wait_actions": 24
+    },
+    "manifest": {
+      "bytes": 2430192,
+      "records": 1400,
+      "sha256": "d4243f1bd0342584bee10e3e335214d0a4f4fca51153da25c6bdf2c8e2cb344a",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 736,
+        "snapshots": 660
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 5,
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "route_cost_max": 624,
+    "route_cost_min": 55,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "scenario_id": "red-strategic-scenario-v2-015-validation",
+    "scenario_sha256": "0a53109a15d5ce5422ff7bc87edcd70aeb09c1d59f3ff3fcd93c081b21c20d3f",
+    "source_partition": "validation"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31566363870,
+    "ci_status": "success",
+    "git_commit": "fc3b91adee7c306508d7c8a75411988180ce59ee",
+    "source_bundle_sha256": "f5093e8871f9b10e35ce5c483f568cff4b5808014fde831bac948ac16a0c3e41",
+    "teacher_execution_sha256": "16788074c95162ef812ea9932d477e40c32f26a4411df655c7744335e9b074e4"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

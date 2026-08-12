@@ -1,0 +1,55 @@
+{
+  "claim": "These are current qualified-teacher order gaps, not impossible cartridge states.",
+  "current_validation_challenge_gaps": [
+    {
+      "blocked_objectives": [
+        "defeat_koga",
+        "obtain_strength"
+      ],
+      "required_but_absent_objective_ids": [
+        "obtain_surf"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-019-validation"
+    },
+    {
+      "blocked_objectives": [
+        "defeat_erika"
+      ],
+      "required_but_absent_objective_ids": [
+        "defeat_koga"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-023-validation"
+    }
+  ],
+  "incompatible_learning_scenario_count": 21,
+  "learning_scenarios_checked": 36,
+  "live_skill_availability_checked": false,
+  "private_captures_opened": 0,
+  "qualified_skill_contract_count": 4,
+  "required_alternate_curricula": {
+    "defeat_erika_before_koga_or_strength": [
+      "red-strategic-scenario-v2-009-train",
+      "red-strategic-scenario-v2-010-train",
+      "red-strategic-scenario-v2-014-train",
+      "red-strategic-scenario-v2-023-validation"
+    ],
+    "defeat_koga_before_surf": [
+      "red-strategic-scenario-v2-017-train",
+      "red-strategic-scenario-v2-018-train",
+      "red-strategic-scenario-v2-019-validation"
+    ],
+    "obtain_strength_before_surf": [
+      "red-strategic-scenario-v2-018-train",
+      "red-strategic-scenario-v2-019-validation"
+    ],
+    "reach_cinnabar_before_sabrina": [
+      "red-strategic-scenario-v2-027-validation",
+      "red-strategic-scenario-v2-031-validation",
+      "red-strategic-scenario-v2-035-validation",
+      "red-strategic-scenario-v2-039-validation",
+      "red-strategic-scenario-v2-041-train"
+    ]
+  },
+  "schema": "strategic-curriculum-order-audit-summary-v1",
+  "test_scenarios_opened": 0
+}

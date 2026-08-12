@@ -1,0 +1,90 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-005-train-skill-materialized",
+    "envelope_sha256": "06f16a4c931d2299f827ae3b53144d43b329ce007d0c9c6ec567c591e0b33d90",
+    "state_sha256": "0e311789bbef36ce8b8a4047b02c6f0aa059ed3fa47f06d7c3c5b36868640f07",
+    "verified_objective_count": 15
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "episode": {
+    "assignment_id": "e663800d3f386599e750fa369a96fd5fffa2a7ec1ea0833d60a631055f2ae8b7",
+    "dataset": {
+      "candidate_count": 2,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-e663800d3f386599e750fa369a96fd5fffa2a7ec1ea0833d60a631055f2ae8b7",
+    "execution": {
+      "acknowledged_steps": 31,
+      "interruptions": {},
+      "movement_requests": 31,
+      "replans": 0,
+      "selected_objective": "clear_rocket_hideout",
+      "status": "succeeded",
+      "wait_actions": 1
+    },
+    "manifest": {
+      "bytes": 131921,
+      "records": 69,
+      "sha256": "08bf546c525fe14eae659b8b4e5759a3d56e0bb7506ebd2555b28740696b1a01",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 32,
+        "snapshots": 33
+      }
+    }
+  },
+  "materialization": {
+    "completed_objective_id": "reach_saffron",
+    "counted": false,
+    "episode_created": false,
+    "post_skill_relocation": {
+      "acknowledged_steps": 54,
+      "interruptions": 0,
+      "replans": 0,
+      "wait_actions": 5
+    },
+    "skill": {
+      "actions_executed": 543,
+      "frames_executed": 62463
+    },
+    "source_registry_assignment_opened": false,
+    "status": "complete",
+    "target_scenario_exact": true
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 2,
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "route_cost_max": 106,
+    "route_cost_min": 32,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "scenario_id": "red-strategic-scenario-v2-005-train",
+    "scenario_sha256": "8039c12c1304e6e49af987faa8ccce9f486de6b5adadfa9d77e98a959a3e371a",
+    "source_partition": "train"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31566363870,
+    "ci_status": "success",
+    "git_commit": "fc3b91adee7c306508d7c8a75411988180ce59ee",
+    "source_bundle_sha256": "f5093e8871f9b10e35ce5c483f568cff4b5808014fde831bac948ac16a0c3e41",
+    "teacher_execution_sha256": "16788074c95162ef812ea9932d477e40c32f26a4411df655c7744335e9b074e4"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

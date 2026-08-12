@@ -1,0 +1,149 @@
+{
+  "authenticated_capture_envelopes": 31,
+  "claim_boundary": {
+    "fresh_terminal_frontier_checked": false,
+    "live_skill_availability_checked": false,
+    "target_origin_checked": false,
+    "test_scenarios_opened": 0
+  },
+  "exact_learning_scenario_count": 10,
+  "exact_learning_scenario_ids": [
+    "red-strategic-scenario-v2-001-train",
+    "red-strategic-scenario-v2-002-train",
+    "red-strategic-scenario-v2-003-validation",
+    "red-strategic-scenario-v2-005-train",
+    "red-strategic-scenario-v2-006-train",
+    "red-strategic-scenario-v2-007-validation",
+    "red-strategic-scenario-v2-011-validation",
+    "red-strategic-scenario-v2-015-validation",
+    "red-strategic-scenario-v2-043-validation",
+    "red-strategic-scenario-v2-047-validation"
+  ],
+  "invalid_capture_envelopes_excluded": 1,
+  "learning_scenarios": 36,
+  "logical_one_skill_target_count": 13,
+  "logical_one_skill_targets": [
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 3,
+      "objective_ids": ["help_bill"],
+      "target_scenario_id": "red-strategic-scenario-v2-002-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 2,
+      "objective_ids": ["reach_vermilion"],
+      "target_scenario_id": "red-strategic-scenario-v2-003-validation",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["reach_saffron"],
+      "target_scenario_id": "red-strategic-scenario-v2-005-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["reach_celadon"],
+      "target_scenario_id": "red-strategic-scenario-v2-006-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["clear_rocket_hideout"],
+      "target_scenario_id": "red-strategic-scenario-v2-007-validation",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": false,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["defeat_erika"],
+      "target_scenario_id": "red-strategic-scenario-v2-009-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": false,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["defeat_erika"],
+      "target_scenario_id": "red-strategic-scenario-v2-010-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["rescue_fuji"],
+      "target_scenario_id": "red-strategic-scenario-v2-011-validation",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": false,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["defeat_erika"],
+      "target_scenario_id": "red-strategic-scenario-v2-014-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["reach_fuchsia"],
+      "target_scenario_id": "red-strategic-scenario-v2-015-validation",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": false,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["reach_cinnabar"],
+      "target_scenario_id": "red-strategic-scenario-v2-041-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["reach_saffron"],
+      "target_scenario_id": "red-strategic-scenario-v2-043-validation",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": ["liberate_silph"],
+      "target_scenario_id": "red-strategic-scenario-v2-047-validation",
+      "unique_source_frontiers": 1
+    }
+  ],
+  "missing_learning_scenario_count": 26,
+  "missing_learning_scenario_ids": [
+    "red-strategic-scenario-v2-009-train",
+    "red-strategic-scenario-v2-010-train",
+    "red-strategic-scenario-v2-013-train",
+    "red-strategic-scenario-v2-014-train",
+    "red-strategic-scenario-v2-017-train",
+    "red-strategic-scenario-v2-018-train",
+    "red-strategic-scenario-v2-019-validation",
+    "red-strategic-scenario-v2-021-train",
+    "red-strategic-scenario-v2-022-train",
+    "red-strategic-scenario-v2-023-validation",
+    "red-strategic-scenario-v2-025-train",
+    "red-strategic-scenario-v2-026-train",
+    "red-strategic-scenario-v2-027-validation",
+    "red-strategic-scenario-v2-029-train",
+    "red-strategic-scenario-v2-030-train",
+    "red-strategic-scenario-v2-031-validation",
+    "red-strategic-scenario-v2-033-train",
+    "red-strategic-scenario-v2-034-train",
+    "red-strategic-scenario-v2-035-validation",
+    "red-strategic-scenario-v2-037-train",
+    "red-strategic-scenario-v2-038-train",
+    "red-strategic-scenario-v2-039-validation",
+    "red-strategic-scenario-v2-041-train",
+    "red-strategic-scenario-v2-042-train",
+    "red-strategic-scenario-v2-045-train",
+    "red-strategic-scenario-v2-046-train"
+  ],
+  "schema": "strategic-frontier-inventory-v1",
+  "unique_authenticated_frontiers": 24
+}
