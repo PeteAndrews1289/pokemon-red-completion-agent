@@ -14,6 +14,37 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 023 authenticated; five of six validation challenges qualified — 2026-08-12
+
+Published source `225b918` qualified Erika after Strength and before Koga from the exact Fuchsia
+frontier. It preserved four already-defeated optional route trainers, changed badge bits from
+`0x07` to `0x0f`, returned a healed four-member party and completed in 3,338 actions / 493,055
+frames. Its exact CI run `31571116510` passed. The
+[Erika-after-Strength receipt](docs/evidence/erika-after-strength-qualification-2026-08-12.json)
+is path-free.
+
+Published source `c789fab` then corrected Silph's supply contract to top up X Special and X
+Accuracy stocks instead of assuming an empty bag. This matters because the authenticated frontier
+already carries one X Accuracy. The money proof now accounts for carried stock, 2,716 tests pass,
+and CI run `31571804338` is green. From the exact scenario-022 state, the construction pipeline
+completed Erika, relocated 71 steps from Celadon to the declared Saffron boundary, and liberated
+Silph in 5,065 actions / 1,691,257 frames. The result is exact validation scenario 023 with 23
+verified objectives.
+
+Scenario 023 then passed preflight and its only official uncounted rehearsal. The teacher chose
+Koga over the cheaper Sabrina candidate, completed 604 movements through two wild interruptions
+and one trainer engagement, used 19 waits, performed zero replans, and wrote 1,437 records / one
+successful strategic label / zero movement labels. See the
+[scenario-023 receipt](docs/evidence/strategic-scenario-023-rehearsal-qualification-2026-08-12.json).
+
+The current measured inventory is **37 authenticated envelopes, 29 distinct frontiers, 13 exact
+learning scenarios and 23 missing**. Exact coverage is six train and seven validation contexts.
+Five of six preregistered validation cost-baseline challenges are qualified: 003, 007, 011, 015
+and 023. Counted train/validation remain zero and all 12 test contexts remain sealed. The static
+teacher-order audit is now **14**, down from 21; scenario 023 is no longer a blocker. The next
+highest-value lesson is validation scenario 019: Gold Teeth/Strength and Koga before Surf. Do not
+claim 010/014; their post-Fuji Blastoise Erika schedule remains unqualified.
+
 ## Early Erika qualified; scenario 009 authenticated — 2026-08-12
 
 Published source `fc2c47a` passed 2,714 tests, Ruff, mypy, all frozen-registry checks and exact

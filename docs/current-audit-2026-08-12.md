@@ -2,21 +2,21 @@
 
 ## Outcome first
 
-Update after the initial audit: early Erika is now live-qualified under published `fc2c47a` and
-green CI run `31569081316`. Scenario 009 is also exactly constructed and rehearsed. The static
-teacher-order gap fell from **21 to 15**. Scenario 023 remains conditionally blocked because its
-post-Strength/pre-Koga party matches neither Erika curriculum. Counted data and test access remain zero. See the
-[early-Erika](evidence/early-erika-curriculum-qualification-2026-08-12.json) and
-[scenario 009](evidence/strategic-scenario-009-rehearsal-qualification-2026-08-12.json) receipts.
+Update after the initial audit: both early Erika and Erika after Strength/before Koga are now
+live-qualified. Scenario 023 is exactly constructed and rehearsed. The static teacher-order gap
+fell from **21 to 14**, and scenario 023 is no longer among the blockers. Counted data and test
+access remain zero. See the [early-Erika](evidence/early-erika-curriculum-qualification-2026-08-12.json),
+[Erika-after-Strength](evidence/erika-after-strength-qualification-2026-08-12.json), and
+[scenario 023](evidence/strategic-scenario-023-rehearsal-qualification-2026-08-12.json) receipts.
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **35 authenticated capture envelopes, 27 distinct frontiers and
-12 exact learning scenarios**. The exact contexts are six train scenarios and six validation
+The private inventory now contains **37 authenticated capture envelopes, 29 distinct frontiers and
+13 exact learning scenarios**. The exact contexts are six train scenarios and seven validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
-Four of the six preregistered validation cost-baseline challenges are now live-qualified: scenarios
-003, 007, 011 and 015. Scenario 015 is the strongest context so far: five available choices with
+Five of the six preregistered validation cost-baseline challenges are now live-qualified: scenarios
+003, 007, 011, 015 and 023. Scenario 015 is the widest context so far: five available choices with
 route costs from 55 to 624, one teacher-selected Surf approach, 624 acknowledged movements, one
 trainer interruption, one wild interruption and one visible-object replan. Its immutable episode
 contains 1,400 records and no movement-imitation label. See the
@@ -29,7 +29,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 24 missing learning scenarios and excludes one known invalid
+current measurement. It reports 23 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -58,17 +58,16 @@ Those are not the same graph.
 
 The updated static curriculum-order audit records three operational contracts that are stricter
 than the game's public prerequisites. It checks all 36 learning scenarios without reading private
-captures or opening test. It finds **15 exact learning frontiers incompatible with the current
-qualified teacher order**, down from 21 after early Erika removed six blockers. This is a
+captures or opening test. It finds **14 exact learning frontiers incompatible with the current
+qualified teacher order**, down from 21 after the two Erika curricula removed seven blockers. This is a
 teacher-coverage result, not evidence that those cartridge states are impossible. See the
 [curriculum-order receipt](evidence/strategic-curriculum-order-audit-2026-08-12.json).
 
-The two remaining validation challenges expose the gap directly:
+The remaining validation challenge exposes the gap directly:
 
 | Scenario | Exact frontier requires | Current teacher additionally requires | Missing curriculum |
 |---|---|---|---|
 | 019 | Koga and Strength while Surf is incomplete | Koga uses the Surf-ready party; Strength consumes Gold Teeth obtained by the Surf chapter | Koga-before-Surf and a Gold-Teeth/Strength path that does not award Surf |
-| 023 | Erika after Strength while Koga is incomplete | Early Erika accepts the pre-Surf party; late Erika requires Koga | Erika-after-Strength/before-Koga |
 
 The same issue explains the current paper-only one-skill matches:
 
@@ -91,8 +90,8 @@ claim.
 Current exact coverage is:
 
 - train: 6 of 24 planned contexts;
-- validation: 6 of 12 planned contexts;
-- validation cost-baseline challenges: 4 of 6;
+- validation: 7 of 12 planned contexts;
+- validation cost-baseline challenges: 5 of 6;
 - test: 0 of 12 opened, as required; and
 - counted examples: 0.
 
@@ -102,17 +101,18 @@ even if the code ran perfectly.
 
 ## Ordered next work
 
-1. Construct and rehearse scenario 023 from the now-qualified early-Erika frontier.
-2. Extend or separately qualify early Erika for the post-Fuji Blastoise boundary used by 010/014;
+1. **Complete:** qualify Erika after Strength/before Koga, construct scenario 023, and complete its
+   official uncounted rehearsal.
+2. Extend or separately qualify Erika for the post-Fuji Blastoise boundary used by 010/014;
    direct diagnostics showed a distinct deterministic leader battle schedule, so do not overclaim it.
-   This unlocks three train contexts and is required by validation scenario 023.
+   This unlocks adjacent train contexts without conflating their distinct battle schedule.
 3. Split the Safari teaching path into independently verified resource outcomes where the
    cartridge permits it: obtain Gold Teeth without claiming Surf, then teach Strength. Build a
    Koga-before-Surf battle boundary that does not depend on Surf as the battle move. Together these
    unlock validation scenario 019 and adjacent train contexts.
 4. Add a Surf-from-Pallet or equivalent **Cinnabar-before-Sabrina** route rather than reusing the
    current post-Sabrina Fly chapter.
-5. Materialize and rehearse scenarios 019 and 023 once each. Recompute the paired cost-baseline
+5. Materialize and rehearse scenario 019 once. Recompute the paired cost-baseline
    audit across all six challenges.
 6. Continue the remaining non-test contexts in dependency order, measuring unique policy inputs
    rather than counting repeated emulator trajectories.

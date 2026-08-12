@@ -16,8 +16,15 @@ after Erika while Koga is still incomplete. Pokémon Red permits both states, bu
 learned only one operational order: Safari and Surf supplied the Gold Teeth, Surf powered the Koga
 party boundary, and the later Erika chapter started after Koga and Strength.
 
+The teacher has now learned the second of those states. A post-Strength Erika lesson preserved the
+already-defeated route trainers, returned healed, and unlocked exact scenario 023. The following
+rehearsal chose Koga over a much cheaper Sabrina route and completed 604 movements through three
+interruptions with one strategic label and no arrow-key labels. Silph also exposed a genuine
+composition bug: its supply lesson had to preserve an existing X Accuracy instead of assuming an
+empty bag.
+
 That difference is now executable evidence. A path-free curriculum-order audit compares every
-learning frontier with the prerequisites of the currently qualified skills. Twenty-one of 36
+learning frontier with the prerequisites of the currently qualified skills. Fourteen of 36
 frontiers require at least one alternate-order lesson. It never reads a private save and never
 opens test. The result changed the engineering question from “why can the router not find this
 state?” to “what new experience must the teacher demonstrate without smuggling in a forbidden
@@ -31,9 +38,9 @@ Saffron lesson only to construct its exact Celadon question, then selected Hideo
 31-movement rehearsal. All three are immutable unassigned episodes with one strategic label, one
 outcome and zero arrow-key labels.
 
-The scoreboard is now 35 authenticated captures, 27 distinct frontiers, 12 exact learning
-contexts, four of six cost-baseline challenges and zero counted rows. The next work is deliberately
-new experience: Erika before Koga, Koga and Strength before Surf, and Cinnabar before Sabrina. That
+The scoreboard is now 37 authenticated captures, 29 distinct frontiers, 13 exact learning
+contexts, five of six cost-baseline challenges and zero counted rows. The next work is deliberately
+new experience: Koga and Strength before Surf, the separate post-Fuji Erika boundary, and Cinnabar before Sabrina. That
 is the bridge from a teacher that can repeat one successful playthrough to a teacher that can show
 a model what remains invariant when the order changes.
 

@@ -5,14 +5,15 @@
 
 ## Current focus (2026-08-12): teach alternate valid story orders
 
-Early Erika is now complete under published `fc2c47a` / CI `31569081316`, and scenario 009 has one
-qualified uncounted rehearsal. The lesson taught Ice Beam, used one bounded X Special, defeated
-Erika before Koga and returned healed in 2,321 actions / 351,092 frames. The curriculum-order audit
-now reports **15**, not 21, incompatible learning frontiers. Scenario 023 exposed a narrower
-Erika-after-Strength/before-Koga blocker; scenario 019's Koga/Strength-before-Surf blocker remains.
+Both Erika-before-Koga boundaries are now cartridge-qualified. Published `225b918` / CI
+`31571116510` handles the post-Strength party, and published `c789fab` / CI `31571804338` preserves
+carried battle-item stock through Silph. Scenario 023 is exact and has completed its official
+uncounted rehearsal: Koga selected over Sabrina, 604 movements, three handled interruptions, zero
+replans and zero movement labels. The curriculum-order audit now reports **14**, not 21,
+incompatible learning frontiers. Scenario 019's Koga/Strength-before-Surf blocker remains.
 
-Current measured coverage is **35 authenticated envelopes, 27 distinct frontiers and 12 exact
-learning scenarios**: six train and six validation. Scenarios 003, 007, 011 and 015 qualify four
+Current measured coverage is **37 authenticated envelopes, 29 distinct frontiers and 13 exact
+learning scenarios**: six train and seven validation. Scenarios 003, 007, 011, 015 and 023 qualify five
 of the six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -20,7 +21,7 @@ receipts and the current state review are in the
 
 The remaining challenge contexts cannot be truthfully constructed by replaying the canonical
 teacher order. The executable [curriculum-order audit](evidence/strategic-curriculum-order-audit-2026-08-12.json)
-finds 15 of 36 learning frontiers whose exact objective set conflicts with the operational
+finds 14 of 36 learning frontiers whose exact objective set conflicts with the operational
 prerequisites of a currently qualified skill. This is a teacher-coverage gap, not a cartridge
 impossibility.
 
@@ -28,10 +29,10 @@ The ordered gates are:
 
 1. publish the cartridge gatehouse repairs, qualification receipts and order audit, then require
    green exact-commit CI;
-2. **complete:** qualify early Erika and scenario 009; next qualify the distinct post-Fuji battle
-   boundary needed by 010/014 and construct scenario 023;
+2. **complete:** qualify early Erika, Erika after Strength, scenarios 009 and 023; next qualify the
+   distinct post-Fuji battle boundary needed by 010/014;
 3. qualify Gold Teeth/Strength without Surf and Koga-before-Surf to unlock 017–019;
-4. construct and rehearse validation scenarios 019 and 023 exactly once, then rerun the paired
+4. construct and rehearse validation scenario 019 exactly once, then rerun the paired
    six-challenge cost-baseline audit;
 5. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
 6. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
@@ -39,7 +40,7 @@ The ordered gates are:
 7. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 24 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 23 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

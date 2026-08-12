@@ -1,6 +1,6 @@
 {
   "claim": "These are current qualified-teacher order gaps, not impossible cartridge states.",
-  "incompatible_learning_scenario_count": 15,
+  "incompatible_learning_scenario_count": 14,
   "incompatible_learning_scenarios": [
     {
       "current_qualified_skill_blockers": [
@@ -67,19 +67,6 @@
       ],
       "partition": "train",
       "scenario_id": "red-strategic-scenario-v2-021-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "defeat_erika",
-          "reason": "The early Erika skill accepts the pre-Surf Celadon party; the post-Strength Erika skill still requires the post-Koga party.",
-          "required_but_absent_objective_ids": [
-            "defeat_koga"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-023-validation"
     },
     {
       "current_qualified_skill_blockers": [
@@ -215,7 +202,7 @@
   "learning_scenarios_checked": 36,
   "live_skill_availability_checked": false,
   "private_captures_opened": 0,
-  "qualified_skill_contract_count": 4,
+  "qualified_skill_contract_count": 3,
   "schema": "strategic-curriculum-order-audit-v1",
   "test_scenarios_opened": 0
 }

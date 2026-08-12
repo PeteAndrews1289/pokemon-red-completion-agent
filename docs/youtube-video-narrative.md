@@ -4,7 +4,7 @@
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW
 QUALIFIED**. Show **ICE BEAM + 1 X SPECIAL / 2,321 ACTIONS / 351,092 FRAMES / HEALED RETURN**, then
-animate the audit counter falling from **21 → 15**. Follow it with scenario 009's card:
+animate the audit counter falling from **21 → 14**. Follow it with scenario 009's card:
 **2 CHOICES / COST 18–137 / 17 STEPS / 41 RECORDS / 0 BUTTON LABELS**. Keep the post-Fuji variant
 amber: it produced a different deterministic leader schedule and was not claimed as solved.
 
@@ -15,10 +15,12 @@ Open on two apparently contradictory save cards:
 
 Put a green **LEGAL IN POKÉMON RED** stamp on both, then try to connect each to the teacher. The
 first path should stop at **KOGA SKILL REQUIRES SURF** and **STRENGTH SKILL EXPECTS SAFARI GOLD
-TEETH**. The second should stop at **ERIKA SKILL STARTS POST-KOGA**. Say: **“The script knew how to
-win. It did not yet know how to teach every valid order.”**
+TEETH**. The second initially stops at **ERIKA SKILL STARTS POST-KOGA**, then turns green after the
+post-Strength lesson. Show scenario 023 choosing Koga over Sabrina and completing **604 STEPS / 3
+INTERRUPTIONS / 0 REPLANS / 0 BUTTON LABELS**. Say: **“The script knew how to win. It had to learn
+how to teach every valid order.”**
 
-Reveal the audit counter: **21 / 36 LEARNING FRONTIERS NEED AN ALTERNATE-ORDER LESSON**. Keep a
+Reveal the current audit counter: **14 / 36 LEARNING FRONTIERS NEED AN ALTERNATE-ORDER LESSON**. Keep a
 smaller caption beneath it: **NOT IMPOSSIBLE GAME STATES — MISSING TEACHER EXPERIENCE**. This is the
 cleanest explanation for why building a transferable model is harder than recording a completed
 playthrough.
@@ -30,9 +32,9 @@ then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 
 Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
 TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
 
-Update the persistent scoreboard to **35 AUTHENTICATED CAPTURES / 27 DISTINCT FRONTIERS / 12 EXACT
-CONTEXTS / 4 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. The next-act cards should be
-**ERIKA BEFORE KOGA**, **KOGA + STRENGTH BEFORE SURF**, and **CINNABAR BEFORE SABRINA**. Do not show
+Update the persistent scoreboard to **37 AUTHENTICATED CAPTURES / 29 DISTINCT FRONTIERS / 13 EXACT
+CONTEXTS / 5 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. The next-act cards should be
+**POST-FUJI ERIKA**, **KOGA + STRENGTH BEFORE SURF**, and **CINNABAR BEFORE SABRINA**. Do not show
 these as complete until their own cartridge receipts exist.
 
 ## Working title
