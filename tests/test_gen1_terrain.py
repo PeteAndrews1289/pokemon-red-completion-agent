@@ -24,7 +24,9 @@ from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_cut import (
     CutTraversalError,
     plan_cut_candidate,
+    plan_cut_candidate_in_graphs,
     plan_nearest_cut_candidate,
+    staged_cut_path,
 )
 from pokemon_red_completion.gen1_maps import MAP_HEADER_BANKS, MAP_HEADER_POINTERS
 from pokemon_red_completion.gen1_terrain import (
@@ -40,11 +42,21 @@ from pokemon_red_completion.gen1_terrain import (
     water_tilesets,
 )
 from pokemon_red_completion.gen1_traversal import (
+    CUT_CAPABILITY,
     CUT_MOVE_ID,
+    LAND_MODE,
     CutBlockSwap,
     TraversalRules,
+    local_graph,
+    surf_local_graph,
 )
+from pokemon_red_completion.global_router import MacroEdge, MacroGraph
 from pokemon_red_completion.observation import Badge, RawGameState
+from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_plan import RoutePlanningError
+from pokemon_red_completion.strategic_navigation_scenario_runtime import (
+    StrategicScenarioRouteWorld,
+)
 
 RECORD = Path("docs/evidence/terrain-2026-08-10.json")
 
@@ -273,6 +285,30 @@ def test_cut_candidate_stages_approach_before_a_predicted_block_replacement() ->
     assert candidate.approach.coordinates == ((0, 0), (0, 1))
     assert candidate.predicted_continuation.coordinates == ((0, 1), (0, 2), (0, 3), (0, 4))
 
+    graph_candidate = plan_cut_candidate_in_graphs(
+        rom,
+        current,
+        rules,
+        sets,
+        (0, 0),
+        (0, 4),
+        capabilities=frozenset({CUT_CAPABILITY}),
+        before_graph=local_graph(current, rules),
+        graph_builder=lambda predicted: local_graph(predicted, rules),
+        required_block_at=(0, 1),
+    )
+    staged = staged_cut_path(graph_candidate)
+    assert staged.coordinates == ((0, 0), (0, 1), (0, 1), (0, 2), (0, 3), (0, 4))
+    assert tuple(edge.action for edge in staged.edges) == (
+        "right",
+        "cut:right",
+        "right",
+        "right",
+        "right",
+    )
+    assert staged.edges[1].target == graph_candidate.source_at
+    assert staged.edges[1].requirements == frozenset({CUT_CAPABILITY})
+
     with pytest.raises(CutTraversalError, match="living move holder"):
         plan_cut_candidate(
             rom,
@@ -340,6 +376,61 @@ def test_nearest_cut_candidate_requires_a_fresh_grid_between_two_trees() -> None
         (0, 3),
     )
     assert second.block_at != first.block_at
+
+
+def test_scenario_route_stages_cut_before_crossing_a_blocked_warp_path() -> None:
+    open_block = block(*([(WALKABLE_TILE,) * 4] * 4))
+    tree_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (0x3D, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    cut_block = block(
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (WALKABLE_TILE, SOLID_TILE, WALKABLE_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+        (SOLID_TILE, SOLID_TILE, SOLID_TILE, SOLID_TILE),
+    )
+    rom = cartridge(
+        block_ids=[[3, 7, 3]],
+        blocks={3: open_block, 7: tree_block, 9: cut_block},
+    )
+    sets = tilesets(rom)
+    terrain = terrain_from_blocks(rom, 0, ((3, 7, 3),), sets)
+    rules = TraversalRules((), (), (), (CutBlockSwap(7, 9),), ())
+    warp = MacroEdge(1, kind="warp", at=(0, 4), arrival_at=(1, 1))
+    route_world = StrategicScenarioRouteWorld(
+        macro_graph=MacroGraph({0: (warp,)}),
+        local_graphs={0: surf_local_graph(terrain, rules)},
+        rom=rom,
+        terrain={0: terrain},
+        rules=rules,
+        tilesets=sets,
+        water_tilesets=frozenset(),
+        object_blockers={0: frozenset()},
+    )
+    start = TraversalSnapshot(
+        map_id=0,
+        at=(0, 0),
+        ready=True,
+        mode=LAND_MODE,
+        capabilities=frozenset({CUT_CAPABILITY}),
+    )
+
+    plan = route_world._plan_candidate(start, 1)
+
+    cut_steps = [step for step in plan.steps if step.action == "cut:right"]
+    assert plan.actions == ("right", "cut:right", "right", "right", "right")
+    assert plan.cost == 9
+    assert len(cut_steps) == 1
+    assert cut_steps[0].source_at == cut_steps[0].expected_at == (0, 1)
+    assert plan.steps[2].source_at == (0, 1)
+    assert plan.steps[2].expected_at == (0, 2)
+    assert plan.steps[-1].expected_map == 1
+
+    with pytest.raises(RoutePlanningError, match="observed party cannot use Cut"):
+        route_world._plan_candidate(replace(start, capabilities=frozenset()), 1)
 
 
 def test_tall_grass_is_found_where_the_tileset_says_it_is() -> None:

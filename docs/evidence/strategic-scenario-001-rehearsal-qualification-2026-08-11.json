@@ -1,0 +1,89 @@
+{
+  "claim_boundary": {
+    "authenticated_live_contexts": 1,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "corrected_safe_fork": {
+    "assignment_id": "1cd17b3c7c812ebe2e7e17dda4017ebcd99173eb6d6d7d2edaa1df50d660000b",
+    "candidate_route_costs": [
+      144,
+      15
+    ],
+    "checkpoint_id": "scenario_001_shared_prerequisites_cleared",
+    "dataset": {
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-1cd17b3c7c812ebe2e7e17dda4017ebcd99173eb6d6d7d2edaa1df50d660000b",
+    "execution": {
+      "acknowledged_steps": 143,
+      "interruptions": {
+        "trainer_engagement": 5
+      },
+      "movement_requests": 143,
+      "replans": 0,
+      "selected_candidate_index": 0,
+      "selected_objective": "help_bill",
+      "status": "succeeded",
+      "wait_actions": 8
+    },
+    "manifest": {
+      "bytes": 805875,
+      "records": 787,
+      "sha256": "2dd916aeb787ce07d66b639b03f67afb8590f89cf75d0d23bf1f3c32064f8225",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 533,
+        "snapshots": 250
+      }
+    },
+    "shared_prerequisites": [
+      "clear_cerulean_rival",
+      "clear_nugget_bridge",
+      "return_to_cerulean_safe_hub"
+    ]
+  },
+  "initial_unsafe_fork": {
+    "assignment_id": "ca61abca59d7bef69f0b2e9d5c894ee8766828a20639f7a07ec44feb20cb3ae3",
+    "checkpoint_id": "cerulean_reached",
+    "diagnosis": "The candidate choice was recorded before a story prerequisite shared by both candidates. The scripted rival occupied the only north passage, so a visible-object replan correctly failed closed.",
+    "episode_id": "red-scen-reh-ca61abca59d7bef69f0b2e9d5c894ee8766828a20639f7a07ec44feb20cb3ae3",
+    "execution": {
+      "acknowledged_steps": 32,
+      "failure_reason": "planner_no_route",
+      "movement_requests": 34,
+      "replan_reason": "visible_object",
+      "replans": 1,
+      "selected_candidate_index": 0,
+      "status": "failed",
+      "wait_actions": 7
+    },
+    "manifest": {
+      "bytes": 119465,
+      "reason_code": "unhandled_exception",
+      "records": 78,
+      "sha256": "f966e38fd0f14d4b05f075c4c2be418d7b113f7c4735d572371dafd879fc86e8"
+    }
+  },
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-001-train",
+    "scenario_sha256": "5d3a41b79711d029ec6a6a05c0723cb83b5ce10aa59ca75b1a4cf782eb41be4a"
+  },
+  "recorded_on": "2026-08-11",
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "git_commit": "318a1c390f9d9f306308076755d5ec302b51c86f",
+    "source_bundle_sha256": "24db34ae9a9c5c4618899fe62758813b85df9732a0a99559c503f4d80406eb34",
+    "teacher_execution_sha256": "0fd75b19c0dd718c5cc98114c4ee2ad690be8e51ed66d109a0c5a1c53f78071a"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

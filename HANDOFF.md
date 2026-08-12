@@ -14,6 +14,47 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## First scenario qualified; second preflight exposed Cut composition — 2026-08-11
+
+Published repair `318a1c3` passed exact-commit CI. Scenario 001's initial Cerulean capture then
+opened one uncounted episode and failed honestly: the scripted rival occupied the only north
+passage, producing 32 acknowledged steps, one `visible_object` replan and a terminal
+`planner_no_route` outcome. The mistake was experimental placement, not route recovery—the choice
+had been asked before clearing a prerequisite shared by both Bill and Misty.
+
+A new authenticated capture cleared the rival and Nugget Bridge, returned to the Cerulean safe hub
+and preserved the exact same seven-objective frontier. Its one-shot rehearsal succeeded: the
+teacher selected Bill at cost 144 over nearby Misty at cost 15, acknowledged all 143 movements,
+handled five trainer engagements, replanned zero times and strictly reloaded 787 records containing
+exactly one choice and one successful outcome. It is the first authenticated live v2 context, but
+its split is `unassigned`, promotion is false and it is not training data. The path-free public
+lineage is in
+[the scenario-001 qualification receipt](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
+
+The durable capture rule is now explicit: make the strategic choice only after prerequisites shared
+by every candidate, while every candidate objective itself remains incomplete. A scan of 19
+authenticated progress envelopes found exact frontiers for only two of the 36 learning scenarios
+(001 and 007); the other 34 still need materialization.
+
+Scenario 007's read-only preflight correctly rejected Erika while Fuji and Saffron were available.
+The static route graph knew the party could use Cut and the executor could perform Cut, but no route
+could represent “approach tree → mutate one block → cross the observed replacement.” The current
+candidate repair stages that action explicitly. Against the real cartridge and authenticated
+post-Hideout state, the diagnostic now makes all three candidates available: Fuji cost 178, Erika
+cost 104 with exactly one `cut:down`, and Saffron cost 33. Synthetic regression coverage requires
+the Cut step to keep the player at the cutting stance and the following step to enter the former
+tree. This is not yet source-bound evidence: publish, require exact-commit CI, and rerun the official
+read-only preflight before opening any scenario-007 episode.
+
+Working prospective identities after the Cut-source change are source bundle
+`0dd25d28c83d987e4cef88a4665d34ee334bdb2595109f136e3e6c01ec1dd273`, battle registry
+`d24ac843b10037ea4e9d009a01145c430061475e0df9f99d87e421aace507466` and historical strategic
+registry `95adb54ef3c003a75e4bdb19ad86c52d6f811d05ba5d8fe7a5e835adfc5c8f2a`. The v2 scenario registry
+remains `c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`; its static
+`live_policy_contexts_authenticated: 0` field is prospective registry metadata, while measured live
+evidence now contains one uncounted context. Collection remains closed and all 12 test situations
+remain sealed.
+
 ## First short-scenario checkpoint captured; preflight found a special-trainer gap — 2026-08-11
 
 Published commit `2f3199e` passed exact-commit CI. The qualified teacher was then replayed only to

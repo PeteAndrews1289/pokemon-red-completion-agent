@@ -1,5 +1,36 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the first useful label chose the route ten times longer
+
+The special-trainer repair passed CI, but the first scenario episode still failed. It had asked the
+right strategic question at the wrong physical moment: Cerulean's rival and Nugget Bridge were
+prerequisites shared by both Bill and Misty, yet the capture stopped before them. The route executed
+32 acknowledged steps, saw the rival occupy the only north passage, replanned once and failed
+closed. That artifact stayed failed.
+
+The corrected capture did not change the question or smuggle either answer into the starting facts.
+It cleared only the shared prerequisites, returned to the safe hub and retained the same seven-item
+objective frontier. This time the teacher chose Bill's cost-144 approach over Misty's cost-15 gym,
+handled five trainer engagements and acknowledged all 143 movements without replanning. The sealed
+artifact reloaded exactly one choice and one success across 787 records.
+
+That is the first authenticated v2 scenario context, and it is exactly the kind of example the
+project needed: a shortest-path learner would be confidently wrong. It is still unassigned and
+cannot enter training. One useful example proves the collection seam, not a model.
+
+The next capture immediately found another abstraction gap. From post-Hideout Celadon, Fuji and
+Saffron planned normally, but Erika appeared unreachable even though the party could use Cut. The
+system had separately proved how to perform and verify Cut; it had never composed that mutation
+inside a destination route. The new plan makes the intermediate state explicit: walk to the tree,
+Cut without changing coordinates, then cross only the cartridge-predicted replacement. A diagnostic
+now gives all three candidates honest costs—Fuji 178, Erika 104 with one Cut, Saffron 33—but the
+official source-bound preflight waits for publication and green CI.
+
+The broader bottleneck is now visible. Nineteen authenticated progress captures exactly match only
+two of the 36 learning frontiers. The next dataset work is less about another marathon playthrough
+and more about manufacturing honest decision boundaries after shared prerequisites, while leaving
+each candidate objective unfinished.
+
 ## August 11: the first short run stopped before taking a step
 
 The first exact scenario state came from the same proven teacher, stopped at checkpoint 36 of 312
@@ -39,17 +70,17 @@ Fuji, Surf or Strength, and Saffron's local challenge competes with Koga. These 
 the shortest-route baseline, not measured wins. Cartridge routing must confirm all six in an
 uncounted rehearsal before a single training row is collected.
 
-That last zero is the point: the registry reports **48 planned situations / 0 authenticated live
-contexts / collection closed**. A prospective benchmark should be capable of proving the model
-wrong before it is allowed to produce a flattering score.
+At registry freeze, that last zero was the point: the design receipt reported **48 planned
+situations / 0 authenticated live contexts / collection closed**. A prospective benchmark should
+be capable of proving the model wrong before it is allowed to produce a flattering score.
 
 The short execution boundary now exists. The important change is not another route script; it is
 an honest experimental unit. One assignment binds a public quest frontier to an exact private save
 digest and one published teacher. A read-only phase proves all declared destinations can be planned
 before any one-shot artifact is opened. The write phase records the strategic choice first, moves
 only toward the selected objective's approach, records one outcome and reopens the final artifact
-to prove it contains exactly one decision. The first live run is still pending, so the story does
-not yet claim a collected row. The twelve test situations remain sealed.
+to prove it contains exactly one decision. At this checkpoint the first live run was still pending;
+the newer section above records its later qualification. The twelve test situations remain sealed.
 
 ## August 11: nine rows became three questions
 

@@ -38,8 +38,9 @@ commitment and published-source fingerprint converging into one gray **UNCOUNTED
 card turns green, show every candidate route being planned in a read-only preflight. Then animate
 the choice record landing on disk before the first movement arrow, followed by exactly one outcome
 and an immediate manifest reload. Keep the twelve test cards face down. The line is: **“A short run
-is useful only if it is as hard to relabel or rerun as the full experiment.”** Until a live episode
-passes, label this panel **HARNESS BUILT / LIVE ROWS 0**.
+is useful only if it is as hard to relabel or rerun as the full experiment.”** Begin with **HARNESS
+BUILT / LIVE CONTEXTS 0**, then let the later corrected Cerulean run change only the context counter
+to one; counted rows remain zero.
 
 ### First live beat: zero steps was the correct result
 
@@ -50,6 +51,29 @@ had assumed every trainer-marked object used the ordinary line-of-sight system; 
 disagreed. Keep the episode counter at zero and say: **“The safest run was the one that refused to
 take its first step.”** Then show the special-trainer regression, a new source fingerprint and CI
 gate before the same frozen checkpoint can be retried.
+
+### Payoff: the ten-times-longer route was the lesson
+
+Do not jump directly from the decoder fix to a green result. Show the first episode writing its
+choice, walking 32 steps and meeting the scripted rival in the only north corridor. Freeze on
+**VISIBLE OBJECT → REPLAN → NO ROUTE**, then preserve the failed card. Explain that the question was
+asked before a prerequisite shared by both answers.
+
+Move the capture boundary—not the labels—past the rival and Nugget Bridge, then return to the same
+Cerulean hub with the same seven completed objectives. Put the two candidate costs side by side:
+**MISTY 15 / BILL 144**. Highlight the teacher choosing Bill, then reveal **143/143 MOVEMENTS / 5
+TRAINERS HANDLED / 0 REPLANS / 1 CHOICE + 1 SUCCESS**. The line is: **“My first useful training-shaped
+example was the one a shortest-path agent would get wrong.”** Immediately stamp it **UNASSIGNED —
+NOT TRAINING DATA**.
+
+### Next obstacle: knowing Cut is not the same as planning through Cut
+
+Use three post-Hideout cards: **FUJI 178**, **ERIKA UNREACHABLE**, **SAFFRON 33**. Split the system
+diagram: the executor already knows how to perform and verify Cut, while the planner still sees a
+static tree. Then animate a three-stage route—approach the tree, same-square `cut:down`, cross the
+replacement—and change Erika to **104 / 1 FIELD ACTION**. Keep a final padlock over the episode:
+**LOCAL DIAGNOSTIC ONLY — PUBLISH + CI + READ-ONLY PREFLIGHT REQUIRED**. This is a clean visual for
+why passing mechanics tests is not the same as composing those mechanics into agency.
 
 ### Twist: nine labels were only three questions
 

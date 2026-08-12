@@ -76,10 +76,16 @@
 > [experiment-design audit](docs/strategic-experiment-design-audit-2026-08-11.md).
 > The short-scenario harness is now implemented: exact capture/source assignment, read-only
 > all-candidate preflight, record-before-movement execution and strict one-decision reload.
-> Published source `2f3199e` produced the first exact private checkpoint at Cerulean, but its
-> read-only preflight correctly opened no episode when a scripted rival exposed a missing
-> trainer-sight distinction. That repair is pending publication and exact-commit CI; authenticated
-> scenario rows remain **0**, collection stays closed, and the 12 test situations remain sealed.
+> Published repair `318a1c3` then qualified the first live context. An initial unsafe Cerulean fork
+> failed and was preserved; after shared rival/Bridge prerequisites, the exact same seven-objective
+> frontier selected Bill at cost 144 over Misty at 15, acknowledged 143/143 movements, handled five
+> trainer engagements and strictly reloaded one unassigned successful example. It is **1
+> authenticated context / 0 counted rows**—not training data. A post-Hideout scenario-007
+> preflight next exposed the missing route composition for Cut. The current candidate repair now
+> plans all three choices, including Erika through one explicit `cut:down`; publication, green CI
+> and the official read-only rerun are still required before that episode can open. See the
+> [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
+> Collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
 > [current audit](docs/current-audit-2026-08-11.md),

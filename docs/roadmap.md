@@ -41,21 +41,30 @@ Implementation status:
 4. **Complete:** canonical v2 scenario registry with 24 train, 12 validation and 12 sealed test
    situations across twelve teacher objectives. Twenty-seven situations contain three to five
    genuine graph-legal candidates; no unreachable filler was added to the 21 binary frontiers.
-5. **Complete in code; no live row claimed:** each rehearsal assignment binds one non-test scenario
+5. **Complete and live-qualified once:** each rehearsal assignment binds one non-test scenario
    to the exact registry row, committed source/execution, private checkpoint envelope and state
    digest. The one-shot recorder writes the choice before movement, permits one outcome, and
-   immediately reloads the sealed artifact to require exactly one successful decision.
-6. **In live preflight:** published source `2f3199e` produced an authenticated private checkpoint at
-   scenario 001's exact Cerulean frontier. The first read-only attempt exposed a legitimate scripted
-   rival with no ordinary trainer-sight header; it opened no episode and consumed no assignment.
-   Publish the special-trainer repair, require green CI, rerun both candidate plans and execute one
-   uncounted learning scenario only if preflight is ready. Then build the remaining train/validation
-   capture inventory and audit the 36 learning situations for uniqueness and the six validation
-   baseline disagreements. Keep all 12 test situations sealed until final evaluation.
+   immediately reloads the sealed artifact to require exactly one successful decision. Scenario
+   001 now supplies one authenticated, unassigned context: Bill cost 144 versus Misty cost 15,
+   143/143 movements, five handled trainer engagements and zero replans. Its earlier unsafe-fork
+   failure is retained beside the corrected success in the
+   [qualification receipt](evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
+6. **Cut-aware candidate preflight implemented; source-bound rerun next:** the authenticated
+   post-Hideout capture exactly matches scenario 007, but its first read-only preflight found Erika
+   unavailable because a static graph could not compose Cut. The new staged plan reaches the tree,
+   emits one same-coordinate field action and crosses only the predicted cartridge replacement.
+   A real-cartridge diagnostic now plans Fuji at cost 178, Erika at 104 with one `cut:down`, and
+   Saffron at 33. Publish this source, require green CI, then rerun the official read-only preflight.
+   Do not open its episode unless all three candidates pass under that published identity.
+7. **Capture inventory:** 19 authenticated envelopes cover exact frontiers for only scenarios 001
+   and 007. Materialize the other 34 learning boundaries using the shared-prerequisite rule, then
+   audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
+   test situations sealed until final evaluation.
 
-See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The registry still reports
-zero authenticated live contexts and `collection_open: false`; prospective rows do not satisfy the
-admission gate by themselves.
+See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
+receipt still reports zero because it describes the prospective registry, not later measurements.
+Measured evidence now contains one authenticated uncounted context; `collection_open` remains false
+and prospective rows do not satisfy the admission gate by themselves.
 
 ## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
 
@@ -83,7 +92,7 @@ Ordered gates from here:
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
 The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
-The nearest honest milestone is now **one successful uncounted short-scenario rehearsal**, followed
+The nearest honest milestone is now **a published all-candidate scenario-007 preflight**, followed
 by the complete 36-situation learning capture inventory. That inventory must prove the prospective
 train/validation situations become distinct live policy inputs with at least six measured
 validation baseline disagreements. The first strategic model follows one-attempt counted scenario

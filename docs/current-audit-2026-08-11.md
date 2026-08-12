@@ -1,21 +1,39 @@
 # Current capability and code audit — 2026-08-11
 
-## First live short-scenario boundary
+## First live short scenario qualified; Cut-aware preflight next
 
-Published source `2f3199e` passed CI, and the proven teacher produced a private authenticated
-checkpoint at 36/312, “Reached Cerulean City.” Its seven verified objectives exactly equal scenario
-001's preregistered frontier. The state was not opened as an episode.
+Published source `318a1c3` passed CI and repaired the scripted-trainer distinction found by the
+first read-only Cerulean preflight. The original checkpoint then opened one uncounted episode. It
+recorded the Bill choice before movement, acknowledged 32 steps and failed after the scripted rival
+occupied the only north passage. One `visible_object` replan ended at `planner_no_route`; the failed
+78-record artifact remains immutable.
 
-The read-only preflight then found a real adapter error before any route choice: Cerulean's scripted
-rival has the object trainer bit but no standard line-of-sight header. The cartridge distinguishes
-it with special facing/movement byte `$FF`. The repaired projector requests headers only for the
-four ordinary trainer facings and leaves special encounters to map scripts; a mutation-resistant
-regression covers the all-scripted case. Cartridge read errors are also contained by the command's
-path-withholding failure boundary.
+That was a capture-boundary error. The choice preceded a prerequisite shared by both candidates.
+A second authenticated capture cleared the rival and Nugget Bridge, returned to the Cerulean safe
+hub and retained the exact same seven completed objectives. Its rehearsal selected Bill despite
+route cost 144 versus Misty's 15, acknowledged 143/143 movements, handled five trainer engagements,
+replanned zero times and strictly reloaded 787 records containing exactly one successful strategic
+example. It is unassigned, promotion-ineligible evidence—not training data. The
+[public receipt](evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json) preserves
+both the failed and successful lineages without private paths.
 
-This is useful live falsification, not a scenario row. The repair must be committed, pushed and
-green before the same frozen checkpoint may be retried. Authenticated live contexts remain zero,
-collection is closed, and all 12 test situations remain sealed.
+Nineteen authenticated capture envelopes currently supply exact objective frontiers for only two
+of the 36 learning situations: scenario 001 and scenario 007. Scenario 007's post-Hideout read-only
+preflight found Fuji and Saffron executable but Erika unavailable. The defect was architectural:
+the runtime projected Cut capability and could execute its live menu, but its static route graph
+could not express a block mutation inside a route.
+
+The current candidate source adds a staged Cut plan. It reaches an adjacent stance on the original
+grid, emits one same-coordinate field action, then uses the cartridge-declared replacement only as
+a predicted continuation; the live field-move port must still verify the exact block change before
+the next step is accepted. A real-cartridge diagnostic against the authenticated capture now plans
+Fuji at cost 178, Erika at 104 with one `cut:down`, and Saffron at 33. Synthetic coverage proves the
+Cut step and first crossing cannot collapse into an invented walk. This result still needs a clean
+published source, exact-commit CI and the official read-only preflight before scenario 007 may open.
+
+Measured status is **one authenticated uncounted context, zero counted scenario rows, collection
+closed, 12 test situations sealed**. The prospective registry's embedded zero remains a design-time
+snapshot and should not be misreported as the live evidence count.
 
 ## Scenario redesign implementation update
 
@@ -43,9 +61,9 @@ approach, consumes one outcome and strictly reloads the sealed artifact to requi
 successful strategic row. Test scenarios remain inaccessible through both assignment and route
 lookup.
 
-This is still prospective implementation evidence: no live scenario episode has run, authenticated
-live contexts remain zero and collection remains closed. After publication, the next boundary is
-one read-only preflight and one uncounted learning-scenario execution. The full learning rehearsal
+The execution boundary now has one authenticated live qualification, while counted collection
+remains closed. The next boundary is the published scenario-007 all-candidate preflight, followed by
+materializing and rehearsing the other 34 missing learning frontiers. The full learning rehearsal
 is 24 train plus 12 validation situations; the 12 test situations remain sealed until final
 evaluation. See the [scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
 

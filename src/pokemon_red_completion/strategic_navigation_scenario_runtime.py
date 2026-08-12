@@ -3,19 +3,38 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from pokemon_red_completion.actions import MacroAction
+from pokemon_red_completion.gen1_cut import (
+    CUT_PASSAGE_TILES,
+    CutTraversalError,
+    plan_cut_candidate_in_graphs,
+    staged_cut_path,
+)
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
-from pokemon_red_completion.gen1_story_routing import apply_gen1_story_requirements
-from pokemon_red_completion.gen1_terrain import walkable_world
+from pokemon_red_completion.gen1_story_routing import (
+    ROUTE_7_GATE_REQUIREMENTS,
+    apply_gen1_story_requirements,
+)
+from pokemon_red_completion.gen1_terrain import (
+    Terrain,
+    Tileset,
+    terrain_with_block,
+    tilesets,
+    walkable_world,
+    water_tilesets,
+)
 from pokemon_red_completion.gen1_traversal import (
+    CUT_CAPABILITY,
+    LAND_MODE,
+    TraversalRules,
     map_object_events,
     surf_local_graph,
     traversal_rules,
 )
 from pokemon_red_completion.global_router import MacroGraph
-from pokemon_red_completion.local_router import LocalGraph
+from pokemon_red_completion.local_router import LocalGraph, LocalPath, without_coordinates
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.red_trajectory import POKEMON_RED_GAME_ID
 from pokemon_red_completion.route_executor import (
@@ -31,6 +50,7 @@ from pokemon_red_completion.route_executor import (
     TraversalSnapshot,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
+from pokemon_red_completion.semantic_traversal import apply_local_passage_requirements
 from pokemon_red_completion.strategic_navigation import (
     DestinationUnavailableReason,
     StrategicNavigationTag,
@@ -74,6 +94,12 @@ class StrategicScenarioRouteWorld:
 
     macro_graph: MacroGraph
     local_graphs: Mapping[int, LocalGraph]
+    rom: bytes
+    terrain: Mapping[int, Terrain]
+    rules: TraversalRules
+    tilesets: Mapping[int, Tileset]
+    water_tilesets: frozenset[int]
+    object_blockers: Mapping[int, frozenset[tuple[int, int]]]
 
     @classmethod
     def from_rom(cls, rom: bytes) -> StrategicScenarioRouteWorld:
@@ -82,17 +108,215 @@ class StrategicScenarioRouteWorld:
         maps = map_graph(rom)
         rules = traversal_rules(rom, maps)
         terrain = walkable_world(rom)
+        sets = tilesets(rom)
+        surf_sets = water_tilesets(rom)
+        blockers = {
+            map_id: frozenset(event.at for event in map_object_events(rom, {map_id}))
+            for map_id in terrain
+        }
         local_graphs = apply_gen1_story_requirements(
             {
                 map_id: surf_local_graph(
                     local,
                     rules,
-                    blocked={event.at for event in map_object_events(rom, {map_id})},
+                    blocked=blockers[map_id],
                 )
                 for map_id, local in terrain.items()
             }
         )
-        return cls(macro_graph_from_nodes(maps), local_graphs)
+        return cls(
+            macro_graph_from_nodes(maps),
+            local_graphs,
+            rom,
+            terrain,
+            rules,
+            sets,
+            surf_sets,
+            blockers,
+        )
+
+    def _graph_for_terrain(self, terrain: Terrain) -> LocalGraph:
+        """Rebuild one predicted grid without dropping global requirements."""
+
+        map_id = terrain.map_id
+        graph = surf_local_graph(
+            terrain,
+            self.rules,
+            blocked=self.object_blockers[map_id],
+        )
+        requirements = tuple(
+            requirement for requirement in ROUTE_7_GATE_REQUIREMENTS if requirement.map_id == map_id
+        )
+        if requirements:
+            graph = apply_local_passage_requirements(
+                {map_id: graph},
+                requirements,
+            )[map_id]
+        return graph
+
+    def _staged_cut_plan(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+        blocked: Mapping[int, frozenset[tuple[int, int]]] | None = None,
+    ) -> RoutePlan:
+        """Find the cheapest route enabled by exactly one explicit Cut action."""
+
+        if CUT_CAPABILITY not in start.capabilities:
+            raise RoutePlanningError("the observed party cannot use Cut")
+        unavailable = (
+            {start.map_id: start.occupied}
+            if blocked is None
+            else blocked
+        )
+        replacements = {swap.before: swap.after for swap in self.rules.cut_block_swaps}
+        candidates: list[tuple[RoutePlan, int, tuple[int, int]]] = []
+        for map_id, terrain in self.terrain.items():
+            if terrain.blocks is None:
+                continue
+            eligible_tiles = CUT_PASSAGE_TILES.get(terrain.tileset, frozenset())
+            blocks = sorted(
+                {
+                    (y // 2, x // 2)
+                    for y, row in enumerate(terrain.tiles)
+                    for x, tile in enumerate(row)
+                    if tile in eligible_tiles and terrain.blocks[y // 2][x // 2] in replacements
+                }
+            )
+            for block_at in blocks:
+                before_block = terrain.blocks[block_at[0]][block_at[1]]
+                predicted = terrain_with_block(
+                    self.rom,
+                    terrain,
+                    block_at,
+                    replacements[before_block],
+                    self.tilesets,
+                    water_set_ids=self.water_tilesets,
+                )
+                predicted_graphs = dict(self.local_graphs)
+                predicted_graphs[map_id] = self._graph_for_terrain(predicted)
+                try:
+                    hypothetical = plan_route(
+                        self.macro_graph,
+                        predicted_graphs,
+                        start.map_id,
+                        start.at,
+                        goal_map,
+                        blocked=unavailable,
+                        capabilities=start.capabilities,
+                        last_outside=start.last_outside_map,
+                        start_mode=start.mode,
+                        goal_at=goal_at,
+                    )
+                except RoutePlanningError:
+                    continue
+
+                local_uses: list[tuple[int | None, LocalPath]] = [
+                    (index, segment.approach)
+                    for index, segment in enumerate(hypothetical.segments)
+                    if segment.source_map == map_id
+                ]
+                if (
+                    hypothetical.terminal_map == map_id
+                    and hypothetical.terminal_approach is not None
+                ):
+                    local_uses.append((None, hypothetical.terminal_approach))
+                for segment_index, local_use in local_uses:
+                    map_blocked = unavailable.get(map_id, frozenset())
+                    before_graph = without_coordinates(
+                        self.local_graphs[map_id],
+                        map_blocked,
+                    )
+
+                    def graph_builder(
+                        changed: Terrain,
+                        *,
+                        blocked: frozenset[tuple[int, int]] = map_blocked,
+                    ) -> LocalGraph:
+                        return without_coordinates(
+                            self._graph_for_terrain(changed),
+                            blocked,
+                        )
+
+                    try:
+                        cut = plan_cut_candidate_in_graphs(
+                            self.rom,
+                            terrain,
+                            self.rules,
+                            self.tilesets,
+                            local_use.coordinates[0],
+                            local_use.coordinates[-1],
+                            capabilities=start.capabilities,
+                            before_graph=before_graph,
+                            graph_builder=graph_builder,
+                            start_mode=local_use.modes[0],
+                            field_mode=LAND_MODE,
+                            goal_mode=local_use.modes[-1],
+                            required_block_at=block_at,
+                            water_set_ids=self.water_tilesets,
+                        )
+                    except CutTraversalError:
+                        continue
+                    staged = staged_cut_path(cut)
+                    if segment_index is None:
+                        candidate = replace(
+                            hypothetical,
+                            terminal_approach=staged,
+                            terminal_at=staged.coordinates[-1],
+                            terminal_mode=staged.modes[-1],
+                        )
+                    else:
+                        segments = list(hypothetical.segments)
+                        segments[segment_index] = replace(
+                            segments[segment_index],
+                            approach=staged,
+                        )
+                        candidate = replace(hypothetical, segments=tuple(segments))
+                    candidates.append((candidate, map_id, block_at))
+        if not candidates:
+            raise RoutePlanningError(
+                f"no staged Cut route from map {start.map_id} to map {goal_map}"
+            )
+        return min(
+            candidates,
+            key=lambda item: (
+                item[0].cost,
+                item[1],
+                item[2],
+                item[0].actions,
+            ),
+        )[0]
+
+    def _plan_candidate(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+        blocked: Mapping[int, frozenset[tuple[int, int]]] | None = None,
+    ) -> RoutePlan:
+        try:
+            return plan_route(
+                self.macro_graph,
+                self.local_graphs,
+                start.map_id,
+                start.at,
+                goal_map,
+                blocked=({start.map_id: start.occupied} if blocked is None else blocked),
+                capabilities=start.capabilities,
+                last_outside=start.last_outside_map,
+                start_mode=start.mode,
+                goal_at=goal_at,
+            )
+        except RoutePlanningError:
+            return self._staged_cut_plan(
+                start,
+                goal_map,
+                goal_at=goal_at,
+                blocked=blocked,
+            )
 
     def plan_bindings(
         self,
@@ -110,17 +334,7 @@ class StrategicScenarioRouteWorld:
             if not isinstance(spec, ScenarioObjectiveDestinationSpec):
                 raise TypeError("scenario destination specs contain an invalid value")
             try:
-                plan = plan_route(
-                    self.macro_graph,
-                    self.local_graphs,
-                    start.map_id,
-                    start.at,
-                    spec.goal_map.value,
-                    blocked={start.map_id: start.occupied},
-                    capabilities=start.capabilities,
-                    last_outside=start.last_outside_map,
-                    start_mode=start.mode,
-                )
+                plan = self._plan_candidate(start, spec.goal_map.value)
             except RoutePlanningError:
                 bindings.append(
                     DestinationRouteBinding.unavailable(
@@ -144,16 +358,10 @@ class StrategicScenarioRouteWorld:
 
         def replan(request: ReplanRequest) -> RoutePlan:
             current = request.current
-            return plan_route(
-                self.macro_graph,
-                self.local_graphs,
-                current.map_id,
-                current.at,
+            return self._plan_candidate(
+                current,
                 request.goal_map,
                 blocked=request.blocked,
-                capabilities=current.capabilities,
-                last_outside=current.last_outside_map,
-                start_mode=current.mode,
                 goal_at=request.goal_at,
             )
 
