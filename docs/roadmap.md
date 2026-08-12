@@ -83,7 +83,7 @@ Implementation status:
    passed CI, enforced the portable envelope identity at production and completed scenario 002 →
    003 with 199/199 movements, four handled interruptions and zero replans. Scenario 003 then
    selected Misty at cost 152 over Cut at 58, acknowledged 148/148 movements and strictly reloaded
-   one unassigned success. It is the first measured validation cost-baseline disagreement.
+   one unassigned success. It is one of two measured validation cost-baseline disagreements.
 10. **Implemented; live qualification pending:** add the complementary bounded-skill materializer.
     It may use an authenticated pre-registry teacher capture as construction input without opening
     that source as a scenario, but it executes exactly one registered skill and admits output only
@@ -91,7 +91,7 @@ Implementation status:
     source, then derive validation scenario 043 with `reach_saffron` from the existing post-Erika
     Celadon capture and scenario 047 with `liberate_silph` from 043. Preflight and rehearse each once
     without opening counted collection. This should raise measured coverage from four to six live
-    contexts if both cartridge runs pass; it does not satisfy any of the five still-missing
+   contexts if both cartridge runs pass; it does not satisfy any of the four still-missing
     cost-baseline challenge measurements.
 11. **Scenario 043 construction passed; preflight repair implemented:** the live Saffron capture
     was exact, but preflight correctly rejected the branch because the static router retained the
@@ -110,14 +110,17 @@ Implementation status:
 13. **Scenario 047 qualified:** published source passed CI, both choices remained executable, and the
     teacher completed all 67 Sabrina-approach movements with no interruption or replan. The strict
     reload produced one unassigned success and no movement labels. Measured coverage is now six live
-    contexts / zero counted rows; validation cost-baseline challenge coverage remains 1/6 because
-    scenarios 043 and 047 are context-density evidence, not preregistered challenge rows.
-14. **Inventory measured:** 24 authenticated envelopes contain 18 unique envelope frontiers and six
-    exact learning scenarios; 30 remain. Four uncovered targets are one-skill compatible on paper.
-    Live inspection shows three distinct next actions: re-authenticate scenario 006 from its stale
-    pre-Celadon envelope, directly materialize scenario 041 with `reach_cinnabar`, and add a bounded
-    post-skill relocation seam before scenarios 009/010 can satisfy their Lavender origins. This
-    inventory opens no test scenario and reports no private path or capture identity.
+    contexts / zero counted rows; scenarios 043 and 047 are context-density evidence, not
+    preregistered challenge rows. The measured challenge counter is 2/6 because both scenarios 003
+    and 007 reject their unique cost-only minima.
+14. **Inventory measured and refreshed:** 25 authenticated envelopes contain 19 unique envelope
+    frontiers and seven exact learning scenarios; 29 remain. The logical one-skill scan now reports
+    ten targets, but intentionally does not claim live skill availability or target origin.
+    Scenario 006 has been re-authenticated and qualified. The explicit bounded post-skill relocation
+    seam is implemented for a future compatible source whose skill terminal differs from the target
+    origin. The paper-matched sources for 009/010 still fail live skill availability, so relocation
+    alone does not construct them. This inventory opens no test scenario and reports no private path
+    or capture identity.
 15. **Implemented; live qualification pending:** add a no-action capture authenticator for states
     whose old envelope is semantically behind their current location. It may re-envelope scenario
     006 only if fresh observation already equals all 14 objectives and the Celadon origin; it cannot
@@ -137,6 +140,21 @@ Implementation status:
     from a referenced malformed one; only the latter is corruption. Preserve the second failed
     assignment without an outcome, publish and gate this narrower repair, then preflight a fresh
     source-bound identity.
+18. **Scenario 006 qualified; post-skill relocation implemented:** published source `6a62e61`
+    passed CI and the third assignment completed 29/29 movements with two waits, no interruption or
+    replan, and one strict three-candidate choice/outcome join. Inventory is now 25 envelopes, 19
+    unique frontiers, seven exact learning scenarios and 29 missing. The skill materializer can now
+    explicitly relocate a stable skill terminal to the target's declared origin using the same
+    cartridge route, field-action, interruption and replanning contracts; it still writes no
+    episode or label and admits output only after exact fresh frontier/origin checks. Publish and
+    gate before live use. Before revisiting 009/010, obtain a compatible authenticated source or
+    implement a narrower truthful skill; their current paper matches are unavailable live.
+19. **Audit repair implemented:** construction now latches semantic progress after every skill and
+    relocation input, not only at the terminal. A route that crosses an unplanned objective region
+    therefore produces an extra fact and fails the exact target frontier instead of silently
+    omitting it. The next constructor work is availability-aware: split canonical chapter skills
+    whose operational preconditions are stricter than the quest graph's legal counterfactual
+    frontiers, beginning with early Saffron access needed by validation scenario 015.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
@@ -173,7 +191,7 @@ Ordered gates from here:
 
 The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
 The nearest honest milestone is now **materializing the next missing learning frontier**, prioritizing
-the other five validation baseline-challenge contexts, followed
+the other four validation baseline-challenge contexts, followed
 by the complete 36-situation learning capture inventory. That inventory must prove the prospective
 train/validation situations become distinct live policy inputs with at least six measured
 validation baseline disagreements. The first strategic model follows one-attempt counted scenario

@@ -4,8 +4,10 @@
 This is not a data-collection command.  It may consume an authenticated
 teacher capture whose frontier is not itself a learning scenario, but it never
 opens that frontier as a policy context.  The command executes one explicitly
-declared bounded skill, verifies the exact target frontier from fresh live
-state, and writes a new private state/envelope without an episode or label.
+declared bounded skill, may explicitly relocate its stable terminal to a
+declared target-origin map through the cartridge-derived router, verifies the
+exact target frontier from fresh live state, and writes a new private
+state/envelope without an episode or label.
 """
 
 from __future__ import annotations
@@ -19,6 +21,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.actions import MacroAction  # noqa: E402
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.captured_progress import (  # noqa: E402
     CapturedProgressError,
@@ -30,9 +33,28 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
     working_source_bundle_sha256,
 )
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
-from pokemon_red_completion.executor import FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
+    Gen1FieldMovePort,
+    surf_permission,
+)
+from pokemon_red_completion.gen1_route_runtime import (  # noqa: E402
+    Gen1RouteInterruptionHandler,
+    Gen1TraversalObserver,
+)
+from pokemon_red_completion.gen1_trainer_sight import (  # noqa: E402
+    Gen1TrainerSightProjector,
+)
+from pokemon_red_completion.gen1_traversal import (  # noqa: E402
+    cut_capabilities,
+    strength_capabilities,
+    surf_capabilities,
+)
 from pokemon_red_completion.objective_skills import ObjectiveSkillError  # noqa: E402
-from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
+from pokemon_red_completion.observation import (  # noqa: E402
+    PokemonRedStateReader,
+    RawGameState,
+)
 from pokemon_red_completion.provenance import (  # noqa: E402
     EvaluationIdentityError,
     detect_source_identity,
@@ -53,16 +75,23 @@ from pokemon_red_completion.rom import (  # noqa: E402
 )
 from pokemon_red_completion.route import COMPLETION_QUEST  # noqa: E402
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa: E402
+from pokemon_red_completion.route_executor import (  # noqa: E402
+    RouteActionPort,
+    RouteExecutionLimits,
+    execute_route,
+)
 from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     StrategicNavigationProtocolError,
     load_committed_strategic_navigation_registry,
 )
 from pokemon_red_completion.strategic_navigation_scenario_routes import (  # noqa: E402
+    STRATEGIC_SCENARIO_ORIGIN_MAPS,
     StrategicScenarioRouteCatalogError,
     require_objective_skill_materialization_step,
     require_scenario_origin,
 )
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
+    StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
 )
 from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E402
@@ -86,7 +115,44 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
+    parser.add_argument(
+        "--relocate-to-origin",
+        action="store_true",
+        help=(
+            "after the skill, execute one bounded cartridge-derived route to the "
+            "target scenario's declared origin"
+        ),
+    )
     return parser
+
+
+RELOCATION_LIMITS = RouteExecutionLimits(
+    max_step_attempts=8,
+    max_readiness_waits=16,
+    max_interruptions=8,
+    max_replans=8,
+    replan_after_unchanged=2,
+    retry_wait_frames=24,
+    readiness_wait_frames=24,
+    transition_settle_frames=180,
+)
+
+
+class _SemanticTrackingExecutor:
+    """Latch every construction-side semantic effect after controller input."""
+
+    def __init__(
+        self,
+        delegate: RouteActionPort,
+        observer: CapturedPokemonRedObserver,
+    ) -> None:
+        self._delegate = delegate
+        self._observer = observer
+
+    def execute(self, action: MacroAction) -> object:
+        result = self._delegate.execute(action)
+        self._observer.observe()
+        return result
 
 
 def _require_private_new_output(destination: Path, rom_path: Path) -> Path:
@@ -137,6 +203,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
     rom_path = resolve_rom_path(args.rom)
     verify_rom(rom_path)
+    rom = rom_path.read_bytes()
     out_state = _require_private_new_output(args.out_state, rom_path)
     state_path = args.state.resolve()
     envelope_path = (args.envelope or Path(f"{state_path}.json")).resolve()
@@ -176,10 +243,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             emulator,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
         )
+        tracked_controller = _SemanticTrackingExecutor(
+            controller,
+            semantic_observer,
+        )
         skills = build_red_midgame_objective_skill_registry(
             emulator,
             reader,
-            controller,
+            tracked_controller,
         )
         skill = skills.require_for(objective)
         availability = skill.availability(before)
@@ -188,6 +259,81 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "bounded objective skill is unavailable at the source boundary"
             )
         skill_report = skills.execute_bounded(skill)
+
+        relocation_report = None
+        after_skill = reader.read()
+        if (
+            after_skill.map_id is None
+            or after_skill.player_y is None
+            or after_skill.player_x is None
+            or after_skill.battle_state != 0
+            or not reader.read_input_readiness().ready
+        ):
+            raise StrategicScenarioRuntimeError(
+                "bounded objective skill did not end at a stable ready boundary"
+            )
+        target_origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(
+            target_scenario.origin_region
+        )
+        if target_origin_maps is None:
+            raise StrategicScenarioRuntimeError(
+                "target scenario has no declared origin maps"
+            )
+        if after_skill.map_id not in target_origin_maps:
+            if not args.relocate_to_origin:
+                raise StrategicScenarioRuntimeError(
+                    "bounded skill terminal differs from the target origin; "
+                    "explicit relocation is required"
+                )
+            counted = CountingExecutor(tracked_controller)
+            route_world = StrategicScenarioRouteWorld.from_rom(rom)
+            field_actions = Gen1FieldMovePort(
+                counted,
+                reader,
+                emulator,
+                cut_block_swaps={
+                    swap.before: swap.after
+                    for swap in route_world.rules.cut_block_swaps
+                },
+            )
+
+            def field_capabilities(observed: RawGameState) -> frozenset[str]:
+                capabilities = cut_capabilities(observed).union(
+                    strength_capabilities(observed)
+                )
+                permission = surf_permission(emulator, observed)
+                return capabilities.union(
+                    surf_capabilities(
+                        observed,
+                        surf_allowed=permission.allowed,
+                    )
+                )
+
+            traversal_observer = Gen1TraversalObserver(
+                reader,
+                hazard_projector=Gen1TrainerSightProjector(rom, reader),
+                capability_projector=field_capabilities,
+            )
+            relocation_plan = route_world.plan_to_any_map(
+                traversal_observer.observe(),
+                frozenset(item.value for item in target_origin_maps),
+            )
+            interruption_handler = Gen1RouteInterruptionHandler(
+                field_actions,
+                reader,
+                maximum_flees=8,
+                maximum_trainer_battles=8,
+                stabilization_frames=120,
+                route_name="strategic scenario construction relocation",
+            )
+            relocation_report = execute_route(
+                relocation_plan,
+                field_actions,
+                traversal_observer,
+                interruption_handler=interruption_handler,
+                replanner=route_world.replanner(),
+                limits=RELOCATION_LIMITS,
+            )
 
         final_raw = reader.read()
         if (
@@ -237,6 +383,31 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "skill": {
             "actions_executed": skill_report.actions_executed,
             "frames_executed": skill_report.frames_executed,
+        },
+        "relocation": {
+            "requested": args.relocate_to_origin,
+            "performed": relocation_report is not None,
+            "acknowledged_steps": (
+                0
+                if relocation_report is None
+                else len(relocation_report.executed_steps)
+            ),
+            "interruptions": (
+                0
+                if relocation_report is None
+                else len(relocation_report.interruptions)
+            ),
+            "movement_requests": (
+                0
+                if relocation_report is None
+                else relocation_report.movement_requests
+            ),
+            "replans": (
+                0 if relocation_report is None else len(relocation_report.replans)
+            ),
+            "wait_actions": (
+                0 if relocation_report is None else relocation_report.wait_actions
+            ),
         },
         "capture": {
             "checkpoint_id": output_envelope.checkpoint_id,

@@ -41,6 +41,25 @@ outcome label. See its
 [failure receipt](docs/evidence/strategic-scenario-006-second-rehearsal-failure-2026-08-11.json).
 Publish and gate the new decoder source before a third, newly identified attempt.
 
+Published decoder repair `6a62e61` passed CI run `31558012949`. The third source-bound
+assignment completed and strictly reloaded: 29/29 movements, two waits, zero interruption or
+replan, one three-candidate teacher choice, one successful outcome and no movement labels. Scenario
+006 is the seventh authenticated live context and remains unassigned, uncounted and
+promotion-ineligible. Its two failed predecessors remain immutable without outcome targets. See the
+[qualification receipt](docs/evidence/strategic-scenario-006-rehearsal-qualification-2026-08-11.json).
+
+The path-free inventory now verifies 25 envelopes, 19 unique frontiers, seven exact learning
+scenarios and 29 missing. It also exposed a limitation in its logical one-skill report: it does not
+check live skill availability or target origin. A post-skill relocation option is now implemented
+for the useful subset. It requires an explicit flag, a stable skill terminal, and one bounded
+cartridge-derived route to a declared target-origin map using the same field-action, interruption,
+retry and replan contracts. Final fresh objectives and origin must still equal the target exactly;
+every skill and relocation input re-observes and latches semantic progress so an intermediate city
+cannot disappear from the final frontier. Construction creates no episode or label. Publish and
+gate before live use. Scenarios 009/010
+motivate the origin seam, but their currently matched source frontiers still fail the live skill
+availability contracts; they need a compatible source or a narrower truthful skill first.
+
 The first materializer could derive only one registry edge: scenario 002 → 003 by reaching
 Vermilion. That is too narrow for the midgame, where a truthful frontier is usually created by a
 bounded chapter skill rather than by entering one map. A second fail-closed construction lane now
@@ -84,24 +103,25 @@ unconsumed read-only preflight.
 Published `08bd7e2` passed CI run `31556628124`. Scenario 047's repeat preflight was ready with no
 existing episode; the teacher then selected Sabrina and completed all 67 movements with zero
 interruptions or replans. The immutable unassigned episode has 143 records, one choice, one
-successful outcome and no movement labels. Measured coverage is now **six authenticated live
-contexts / zero counted rows**. Scenarios 043 and 047 are genuine policy contexts but neither is one
-of the validation cost-baseline challenge rows, so the measured challenge count remains 1/6.
+successful outcome and no movement labels. That checkpoint brought coverage to six; the later
+scenario-006 qualification brings it to **seven authenticated live contexts / zero counted rows**.
+Scenarios 043 and 047 are genuine policy contexts but neither is one
+of the validation cost-baseline challenge rows. A later audit corrected the measured challenge
+count to 2/6: scenarios 003 and 007 both reject the unique cost-only minimum.
 
-A new path-free private inventory now verifies 24 capture envelopes (one known rejected diagnostic
-is excluded), 18 unique envelope frontiers, six exact learning scenarios and 30 missing scenarios.
-The pure one-skill audit finds eight logical targets, four already covered and four prospective.
-Fresh live inspection narrows the latter honestly: scenario 006's old envelope omits the current
-Celadon location fact even though live observation has it; scenarios 009 and 010 need post-skill
-relocation to their Lavender origin; scenario 041 is aligned for direct `reach_cinnabar`
-materialization. The inventory deliberately does not claim live availability, origin or terminal
-frontier checks. See the path-free
+A new path-free private inventory now verifies 25 capture envelopes (one known rejected diagnostic
+is excluded), 19 unique envelope frontiers, seven exact learning scenarios and 29 missing scenarios.
+The pure one-skill audit finds ten logical targets, but deliberately does not claim live skill
+availability, origin or terminal frontier checks. Scenario 006 is now exact. Scenarios 009 and 010
+have a paper origin mismatch, but their matched sources also fail live skill availability. Scenario
+041 likewise lacks the prerequisites required by the current Cinnabar skill. See the path-free
 [inventory receipt](docs/evidence/strategic-frontier-inventory-2026-08-11.json).
 
 A complementary no-action capture authenticator is implemented for the scenario-006 case. It
 requires clean published source, an authenticated input state, a stable ready overworld, exact
 fresh target objectives and the declared target origin before writing a new private state/envelope.
-It cannot open an episode or test scenario. Live qualification remains pending publication.
+It cannot open an episode or test scenario. Scenario 006 has now passed this authentication and its
+downstream rehearsal as described above.
 
 ## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
 

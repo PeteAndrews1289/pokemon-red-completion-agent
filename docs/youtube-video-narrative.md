@@ -123,7 +123,7 @@ character in the envelope name—a colon—and show the consumer's portable-ID g
 that gate to checkpoint creation, rerun under published source and reveal the same state digest.
 Only then deal scenario 003's cards: **CUT 58 / MISTY 152**. Highlight Misty, show **148/148 / 0
 REPLANS / 315 RECORDS**, increment **LIVE CONTEXTS 4**, and mark **VALIDATION BASELINE DISAGREEMENTS
-1/6** while counted rows remain zero.
+2/6** while counted rows remain zero.
 
 ### Two guards, two story thresholds
 
@@ -134,15 +134,37 @@ Remove static objects one at a time until the old security guard at `(22,18)` is
 disconnect. Then show the cartridge swap after Fuji: security guard hidden, sleeping Rocket shown
 one tile east. Bind only the old square to both rescue flags, republish, and reveal **SILPH 36**.
 The teacher completes **35/35 / 0 INTERRUPTIONS / 0 REPLANS / 79 RECORDS**. Increment live contexts
-to five, but leave baseline challenges at 1/6.
+to five, but do not change the baseline-challenge counter; the corrected measured total is 2/6
+because scenarios 003 and 007 already reject their unique cost-only minima.
 
 Now let the bounded Silph skill run at emulator speed: **4,969 ACTIONS / 1,674,353 FRAMES / EXACT
 24-OBJECTIVE FRONTIER**. Scenario 047 fails before opening an episode because Sabrina has no route.
 Repeat the localization at the Rocket below Saffron Gym, then tie that single coordinate to the
 Silph-Giovanni victory flag. After the source and CI gates, reveal **SABRINA 68 / CINNABAR 856** and
 the final rehearsal: **67/67 / 0 INTERRUPTIONS / 0 REPLANS / 143 RECORDS**. Set the scoreboard to
-**LIVE CONTEXTS 6 / COUNTED ROWS 0 / BASELINE CHALLENGES 1 OF 6**. The line is: **“More examples
+**LIVE CONTEXTS 6 / COUNTED ROWS 0 / BASELINE CHALLENGES 2 OF 6**. The line is: **“More examples
 help the model; only the preregistered counterexamples can justify the claim.”**
+
+### The poster Rocket was a trainer, but not that kind of trainer
+
+Return to Celadon for scenario 006. Deal three cards: **HIDEOUT 30 / SAFFRON 33 / ERIKA 104** and
+select Hideout. Let the first attempt enter Game Corner, then freeze on the contradictory transition
+frame: destination map ID, old coordinates, input blocked. Stamp it **FAILED / NO OUTCOME LABEL**.
+Show the observer withholding map-local objects until the 180-frame settle.
+
+The second attempt reaches the correct `(15,17)` entrance, then fails on the poster Rocket. Split
+the screen into two cartridge structures: **TRAINER OBJECT BIT: YES** and **LINE-OF-SIGHT HEADER:
+ABSENT**. The line is: **“He is a trainer when I talk to him, not a trainer who can see me.”** Keep
+the malformed-header tests red when a real table is damaged, but allow an absent reference to mean
+no sight lane. After commit and CI, run the third identity: **29/29 / 2 WAITS / 0 INTERRUPTIONS / 0
+REPLANS / 67 RECORDS**. Move the scoreboard to **LIVE CONTEXTS 7 / COUNTED ROWS 0**.
+
+End the beat with the construction problem rather than another failure. Draw a skill ending in one
+city and a target question declared in another. Add **EXPLICIT RELOCATION** between them: stable
+skill terminal, cartridge-derived route, bounded field moves and interruptions, exact final origin
+and frontier, still **NO EPISODE / NO LABEL**. Then show the honest remaining red light: the
+paper-matched sources for scenarios 009 and 010 do not meet the current skills' live availability
+contracts. Relocation solves geography, not missing prerequisites.
 
 ### Twist: nine labels were only three questions
 

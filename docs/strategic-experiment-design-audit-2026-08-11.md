@@ -111,5 +111,5 @@ authenticated policy context. The short execution assignment, all-candidate read
 one-shot recorder and strict one-decision reload are implemented. Six uncounted learning scenarios
 have now passed live; 30 remain. A path-free capture inventory identifies four uncovered logical
 one-skill targets, but live origin and frontier checks still gate them. Counted collection remains
-closed, baseline-challenge coverage is 1/6, and test remains sealed. See the
+closed, baseline-challenge coverage is 2/6, and test remains sealed. See the
 [registry audit](strategic-scenario-registry-audit-2026-08-11.md).

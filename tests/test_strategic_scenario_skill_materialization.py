@@ -11,9 +11,11 @@ from materialize_strategic_scenario_skill import (  # noqa: E402
     PROJECT_ROOT,
     _materialized_checkpoint_id,
     _require_private_new_output,
+    _SemanticTrackingExecutor,
     main,
 )
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
     StrategicScenarioRuntimeError,
 )
@@ -31,6 +33,7 @@ def test_skill_materializer_help_names_its_non_collection_boundary(
     assert "not a data-collection command" in output
     assert "--target-scenario-id" in output
     assert "--complete-objective-id" in output
+    assert "--relocate-to-origin" in output
     assert "--source-scenario-id" not in output
 
 
@@ -43,6 +46,29 @@ def test_skill_materialized_checkpoint_id_is_portable() -> None:
         "red-strategic-scenario-v2-043-validation-skill-materialized"
     )
     assert ":" not in checkpoint_id
+
+
+def test_construction_executor_latches_semantics_after_every_action() -> None:
+    calls: list[str] = []
+
+    class Delegate:
+        def execute(self, action: MacroAction) -> object:
+            calls.append(f"execute:{action.value}")
+            return action
+
+    class Observer:
+        def observe(self) -> object:
+            calls.append("observe")
+            return object()
+
+    action = MacroAction(MacroActionKind.MOVE, "left")
+    executor = _SemanticTrackingExecutor(  # type: ignore[arg-type]
+        Delegate(),
+        Observer(),
+    )
+
+    assert executor.execute(action) is action
+    assert calls == ["execute:left", "observe"]
 
 
 def test_skill_materializer_accepts_only_new_private_non_rom_adjacent_output(

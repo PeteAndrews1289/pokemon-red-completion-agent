@@ -76,18 +76,20 @@ choose replacements.
 
 ## What remains before training
 
-Live update: six of the 36 learning scenarios are now authenticated as uncounted contexts (001,
-002, 003, 007, 043 and 047), while counted train/validation collection remains unopened. A path-free
-inventory verifies 24 capture envelopes, 18 unique envelope frontiers and 30 missing learning
-scenarios. It identifies four additional logical one-skill targets, but only scenario 041 is already
-aligned for direct construction; scenario 006 needs a fresh frontier envelope and scenarios 009/010
-need relocation to their declared Lavender origin. Baseline-challenge coverage remains 1/6.
+Live update: seven of the 36 learning scenarios are now authenticated as uncounted contexts (001,
+002, 003, 006, 007, 043 and 047), while counted train/validation collection remains unopened. A
+path-free inventory verifies 25 capture envelopes, 19 unique envelope frontiers and 29 missing
+learning scenarios. It identifies additional logical one-skill targets but does not claim live
+availability or origin. Scenario 006 is now exact. Scenarios 009/010 demonstrate an origin mismatch,
+but their currently matched sources also fail live skill availability and therefore cannot use the
+new relocation seam yet. Baseline-challenge coverage is 2/6 because
+scenarios 003 and 007 both measured a teacher choice against the unique cost-only minimum.
 
 1. **Complete in code:** authenticated rehearsal assignments bind one non-test registry row to the
    committed execution, exact private capture envelope/state and one-shot episode identity.
 2. **Complete in code:** the short executor preflights all candidates before writing, records the
    choice before movement, consumes one route outcome and strictly reloads exactly one decision.
-3. **In progress:** expand the six qualified contexts toward all 36 train/validation situations.
+3. **In progress:** expand the seven qualified contexts toward all 36 train/validation situations.
    Captures remain private and never enter the repository.
 4. Audit measured uniqueness, candidate order, the six validation cost-baseline disagreements,
    route availability and failure/censoring. Only then open one-attempt counted train/validation

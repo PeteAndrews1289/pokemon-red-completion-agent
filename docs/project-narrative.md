@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the poster Rocket was a trainer, but not that kind of trainer
+
+Scenario 006 looked like a cheap new calibration: authenticate the exact pre-Hideout Celadon
+frontier, ask among Hideout, Saffron and Erika, then walk to the selected approach. The capture was
+exact and all three choices preflighted. The first one-shot crossed into Game Corner and stopped
+honestly after 30 recorded movements. During the transition, Red exposed the destination map ID
+while coordinates and object RAM still belonged to the source animation. The observer now preserves
+that not-ready state but withholds map-local occupancy and trainer lanes until the transition
+settles.
+
+The second assignment proved that repair by recording the entering input, a 180-frame wait and the
+correct ready arrival at `(15,17)`. Then it exposed a different category error. The Rocket at the
+poster has Red's trainer object bit and an ordinary facing byte, but it is fought only after direct
+interaction; the map script has no line-of-sight trainer-header table. The decoder had treated
+“there is no table” as equivalent to “the referenced table is corrupt.” It now returns no sight
+lane only when the script has no plausible table reference, while every referenced malformed table
+still fails the structural tests.
+
+After each repair was committed, pushed and independently gated by CI, the third assignment
+completed: 29/29 movements, two waits, no interruption or replan, 67 authenticated records, one
+three-candidate choice, one success and no movement labels. The failed assignments remain immutable
+and unlabeled. The scoreboard is **seven live contexts / zero counted rows / two of six measured
+validation challenges**.
+
+That work also clarified capture construction. Some bounded skills create the right objective
+frontier but end in the wrong scenario region. The constructor now supports an explicit post-skill
+relocation: it requires a stable skill terminal, derives the cheapest route to a declared target
+origin from the cartridge, retains bounded field moves, interruptions and replanning, and
+re-observes semantics after every input so a crossed objective region cannot vanish at the terminal.
+It still writes a capture only after fresh frontier and origin equality. It is travel for
+constructing a question, not another answer label.
+
 ## August 11: two guards turned static maps into a changing world
 
 The first capture constructor could only finish location objectives. Midgame progress needed a
@@ -21,9 +53,12 @@ Published source then qualified both questions. Scenario 043 offered Silph at co
 at 856; the teacher chose Silph and completed all 35 movements. Scenario 047 offered Sabrina at 68
 and Cinnabar at 856; the teacher chose Sabrina and completed all 67. Neither run interrupted or
 replanned, both strict reloads contained exactly one choice and success, and neither dataset
-contains movement labels. The scoreboard is now **six authenticated contexts / zero counted rows**.
+contains movement labels. The later scenario-006 qualification raises the scoreboard to **seven
+authenticated contexts / zero counted rows**.
 Because neither is a preregistered cost-baseline challenge, the more important challenge counter
-stays 1/6. More contexts are useful; only the right contexts can authorize training.
+does not move because of these two scenarios. A later evidence audit corrected the counter to 2/6:
+both scenarios 003 and 007 reject their unique cost-only minima. More contexts are useful; only the
+right contexts can authorize training.
 
 ## August 11: the map was right, but the police officer had moved
 

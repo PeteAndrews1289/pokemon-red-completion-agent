@@ -1,5 +1,40 @@
 # Current capability and code audit — 2026-08-11
 
+## Seventh live short scenario qualified
+
+The no-action authenticator admitted scenario 006 only after fresh Red state matched its exact
+14-objective Celadon frontier. All three candidate approaches preflighted, but two source-bound
+attempts then failed immutably without outcome labels. The first entered Game Corner while the
+destination map still exposed transition coordinates and caught map-local object projection before
+input was ready. The second proved the bounded transition wait and stable `(15,17)` arrival, then
+found that the interaction-only poster Rocket has a trainer object bit but no line-of-sight header
+table. The repairs now withhold map-local projections during transitions and distinguish a genuinely
+absent trainer-header table from a referenced malformed one. Existing structural corruption tests
+remain fail-closed.
+
+Published source `6a62e61` passed CI run `31558012949`. The third assignment selected the Hideout
+approach and completed 29/29 movements with two waits, zero interruptions and zero replans. Strict
+reload authenticated 67 records, one three-candidate teacher choice, one success and no movement
+labels. Measured status is seven live uncounted contexts, zero counted rows, 25 authenticated
+capture envelopes, 19 unique frontiers, seven exact learning scenarios and 29 missing. The two
+failed assignments remain part of the evidence rather than being retried or relabeled.
+
+The skill constructor now has an explicit post-skill relocation phase for scenarios whose exact
+objective frontier is right but whose skill terminal is outside the declared origin. Relocation
+requires a stable skill boundary, chooses the cheapest reachable declared origin through the
+cartridge-derived router, and uses the same field-action, interruption, retry and replan contracts.
+Every skill and relocation input re-observes semantic state, so an intermediate location objective
+cannot be omitted merely because the route ends elsewhere. Fresh final frontier and origin checks
+still gate the private capture, and no episode or label is created. Scenarios 009/010 explain why
+the seam is necessary, but are not yet authorized live uses:
+their paper-matched source frontiers fail the current skills' availability requirements. They need
+a compatible authenticated source or a narrower bounded skill before relocation can help.
+
+Audit correction: scenario 007 is one of the six preregistered validation cost-baseline challenges,
+and its teacher chose Fuji at cost 178 over the unique cost-only minimum at 33. Together with
+scenario 003, measured challenge coverage is 2/6. Earlier 1/6 text was stale documentation, not a
+dataset or registry error.
+
 ## Sixth live short scenario qualified
 
 The bounded-skill constructor turned one authenticated post-Erika teacher capture into validation
@@ -25,9 +60,10 @@ execution shape; strict reload authenticated 143 records. See the
 [scenario-043](evidence/strategic-scenario-043-rehearsal-qualification-2026-08-11.json) and
 [scenario-047](evidence/strategic-scenario-047-rehearsal-qualification-2026-08-11.json) receipts.
 
-Measured status is now **six authenticated uncounted contexts, zero counted rows, collection
-closed, 12 test situations sealed**. These two contexts improve midgame density but are not among
-the six preregistered validation cost-baseline challenge rows, so challenge coverage remains 1/6.
+Measured status after the later scenario-006 qualification is **seven authenticated uncounted
+contexts, zero counted rows, collection closed, 12 test situations sealed**. Scenarios 043 and 047
+improve midgame density but are not among the six preregistered validation cost-baseline challenge
+rows. Challenge coverage is 2/6: scenarios 003 and 007 both reject the unique cost-only minimum.
 The code gate at this checkpoint is 2,677 passing non-integration tests, three intentionally
 deselected runtime tests, one expected failure, Ruff, mypy, documentation, privacy and regenerated
 source-bound registries.

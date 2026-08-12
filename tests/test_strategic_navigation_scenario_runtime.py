@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, replace
 from pathlib import Path
+from types import SimpleNamespace
+from typing import cast
 
 import pytest
 
@@ -20,7 +22,7 @@ from pokemon_red_completion.route_executor import (
     RouteExecutionLimits,
     TraversalSnapshot,
 )
-from pokemon_red_completion.route_plan import plan_route
+from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
 from pokemon_red_completion.strategic_navigation import DestinationUnavailableReason
 from pokemon_red_completion.strategic_navigation_binding import DestinationRouteBinding
 from pokemon_red_completion.strategic_navigation_protocol import (
@@ -31,6 +33,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     scenario_destination_specs,
 )
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
+    StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
     record_strategic_scenario_rehearsal,
     require_executable_scenario_bindings,
@@ -267,4 +270,44 @@ def test_failed_route_consumes_one_outcome_and_cannot_be_retried(tmp_path: Path)
             traversal_observer=world,
             bindings=bindings,
             selected_destination_ref=selected,
+        )
+
+
+def test_origin_relocation_selects_the_cheapest_reachable_declared_map(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    plans = {
+        7: cast(
+            RoutePlan,
+            SimpleNamespace(cost=19, terminal_map=7, terminal_at=(3, 4), actions=("up",)),
+        ),
+        9: cast(
+            RoutePlan,
+            SimpleNamespace(cost=11, terminal_map=9, terminal_at=(8, 2), actions=("left",)),
+        ),
+    }
+
+    def plan(_self: object, _start: TraversalSnapshot, goal_map: int) -> RoutePlan:
+        if goal_map == 8:
+            raise RoutePlanningError("unreachable fixture")
+        return plans[goal_map]
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "_plan_candidate", plan)
+
+    selected = world.plan_to_any_map(
+        TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+        frozenset({7, 8, 9}),
+    )
+
+    assert selected is plans[9]
+
+
+def test_origin_relocation_rejects_an_empty_goal_set() -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+
+    with pytest.raises(TypeError, match="relocation goals"):
+        world.plan_to_any_map(
+            TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+            frozenset(),
         )

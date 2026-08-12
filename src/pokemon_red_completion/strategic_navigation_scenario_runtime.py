@@ -359,6 +359,39 @@ class StrategicScenarioRouteWorld:
                 )
         return tuple(bindings)
 
+    def plan_to_any_map(
+        self,
+        start: TraversalSnapshot,
+        goal_maps: frozenset[int],
+    ) -> RoutePlan:
+        """Choose the cheapest deterministic route to one declared origin map."""
+
+        if not isinstance(start, TraversalSnapshot):
+            raise TypeError("scenario relocation start must be a traversal snapshot")
+        if (
+            not isinstance(goal_maps, frozenset)
+            or not goal_maps
+            or any(type(item) is not int or item < 0 for item in goal_maps)  # noqa: E721
+        ):
+            raise TypeError("scenario relocation goals must be non-negative map IDs")
+        candidates: list[RoutePlan] = []
+        for goal_map in sorted(goal_maps):
+            try:
+                candidates.append(self._plan_candidate(start, goal_map))
+            except RoutePlanningError:
+                continue
+        if not candidates:
+            raise RoutePlanningError("no route reaches a declared scenario origin")
+        return min(
+            candidates,
+            key=lambda plan: (
+                plan.cost,
+                plan.terminal_map,
+                plan.terminal_at,
+                plan.actions,
+            ),
+        )
+
     def replanner(self) -> RouteReplanner:
         """Recompute the same declared goal after a measured live blocker."""
 

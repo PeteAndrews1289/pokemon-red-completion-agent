@@ -23,15 +23,15 @@ after one unavoidable trainer encounter and reached Tower 1F after 174/174 ackno
 with zero replans. It proves the label is not merely shortest-path supervision, but it remains a
 development calibration—not evidence of learning.
 
-The newer context-diverse benchmark now has six authenticated short-scenario calibrations and zero
+The newer context-diverse benchmark now has seven authenticated short-scenario calibrations and zero
 counted rows. Its first four forced fail-closed repairs in return-warp timing and arrival, custom
 trainer recovery, boundary control and portable envelope identity. The next two exercised a new
 bounded-skill capture constructor and found a deeper world-model issue: the cartridge hides the
 Silph entrance guard after Fuji and the Saffron Gym guard after Giovanni, while static topology had
 kept both forever. Binding only those coordinates to observed story flags made both candidate sets
 executable. The teacher completed Silph and Sabrina approaches with 35/35 and 67/67 acknowledged
-movements, zero interruption or replan, and no movement labels. The first measured validation
-disagreement with the cost-only baseline remains the Vermilion context; five more preregistered
+movements, zero interruption or replan, and no movement labels. Scenarios 003 and 007 are measured
+validation disagreements with the cost-only baseline; four more preregistered
 challenge disagreements are still required before collection can support the paired comparison.
 
 The next experiment is now preregistered rather than aspirational: five whole power-on train roots,
@@ -111,7 +111,7 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
 | Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; multiple observed story thresholds; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
-| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, six exact v2 scenario contexts, collection baselines and sealed test access | 0 counted train/validation examples; 1/6 validation challenge contexts measured; no frozen numeric schema, model, shadow result or causal authority |
+| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, seven exact v2 scenario contexts, collection baselines and sealed test access | 0 counted train/validation examples; 2/6 validation challenge contexts measured; no frozen numeric schema, model, shadow result or causal authority |
 | Acquisition knowledge | Exact Red/Blue ordinary reach: 135 solo / 139 with trade partner | No autonomous living-Pokédex execution or multi-save/trade orchestration |
 | Repository gate | 2,677 non-integration tests, Ruff, mypy, public-artifact, documentation, and three source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
 
