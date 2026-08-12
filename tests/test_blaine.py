@@ -310,6 +310,8 @@ def test_lead_training_skips_a_live_disabled_move() -> None:
         20,
         6,
         1,
+        active_party_hp=172,
+        active_party_max_hp=172,
         first_party_pp=(8, 4, 0, 3),
         player_disabled_move_slot=4,
         player_disable_turns=3,
@@ -319,6 +321,15 @@ def test_lead_training_skips_a_live_disabled_move() -> None:
     with pytest.raises(_PauseForTeamTrainingRecovery):
         _mansion_training_move_slot(
             replace(raw, first_party_pp=(8, 0, 0, 0), player_disabled_move_slot=1)
+        )
+    with pytest.raises(_PauseForTeamTrainingRecovery):
+        _mansion_training_move_slot(
+            replace(
+                raw,
+                active_party_hp=154,
+                active_party_max_hp=172,
+                first_party_pp=(8, 4, 0, 3),
+            )
         )
 
 

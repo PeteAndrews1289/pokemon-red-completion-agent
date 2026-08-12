@@ -140,7 +140,7 @@ JOLTEON_SPECIES_ID = 0x68
 MANSION_TRAINING_POLICY = TrainingPolicy(
     target_level=60,
     preferred_move_slots=(4, 2, 3, 1),
-    retreat_hp_ratio=0.45,
+    retreat_hp_ratio=0.90,
     reserve_total_pp=2,
     max_enemy_level_delta=0,
     max_battles=800,
@@ -2533,6 +2533,15 @@ def _team_training_preferred_slots(state: RawGameState) -> tuple[int, ...]:
 def _mansion_training_move_slot(state: RawGameState) -> int:
     """Rank live lead-training attacks while respecting temporary Disable."""
 
+    hp = state.battler_hp
+    max_hp = state.battler_max_hp
+    if (
+        hp is None
+        or max_hp is None
+        or max_hp <= 0
+        or hp / max_hp <= MANSION_TRAINING_POLICY.retreat_hp_ratio
+    ):
+        raise _PauseForTeamTrainingRecovery
     disabled = state.player_disabled_move_slot or 0 if (state.player_disable_turns or 0) > 0 else 0
     slots = tuple(slot for slot in MANSION_TRAINING_POLICY.preferred_move_slots if slot != disabled)
     try:
