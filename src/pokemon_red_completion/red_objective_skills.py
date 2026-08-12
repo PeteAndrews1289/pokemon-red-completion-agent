@@ -15,11 +15,21 @@ from pokemon_red_completion.champion import run_champion_chapter
 from pokemon_red_completion.cinnabar import run_cinnabar_chapter
 from pokemon_red_completion.dojo import run_dojo_chapter
 from pokemon_red_completion.domain import GameState
-from pokemon_red_completion.erika import ErikaTiming, run_erika_chapter
+from pokemon_red_completion.erika import (
+    EarlyErikaChapterReport,
+    ErikaChapterReport,
+    ErikaTiming,
+    run_early_erika_chapter,
+    run_erika_chapter,
+)
 from pokemon_red_completion.executor import ChapterExecutor
 from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
 from pokemon_red_completion.giovanni import run_giovanni_chapter
-from pokemon_red_completion.hideout import EmulatorState, HideoutTiming, run_hideout_chapter
+from pokemon_red_completion.hideout import (
+    EmulatorState,
+    HideoutTiming,
+    run_hideout_chapter,
+)
 from pokemon_red_completion.koga import KogaTiming, run_koga_chapter
 from pokemon_red_completion.lance import run_lance_chapter
 from pokemon_red_completion.lorelei import run_lorelei_chapter
@@ -28,7 +38,7 @@ from pokemon_red_completion.objective_skills import (
     ObjectiveSkillExecution,
     ObjectiveSkillRegistry,
 )
-from pokemon_red_completion.observation import PokemonRedStateReader
+from pokemon_red_completion.observation import MapId, PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
 from pokemon_red_completion.sabrina import run_sabrina_chapter
 from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
@@ -316,7 +326,7 @@ class ObtainStrengthObjectiveSkill:
 
 @dataclass(frozen=True, slots=True)
 class DefeatErikaObjectiveSkill:
-    """Execute the qualified post-Strength return and Celadon Gym chapter."""
+    """Execute either qualified legal-order Celadon Gym curriculum."""
 
     emulator: EmulatorState
     reader: PokemonRedStateReader
@@ -330,29 +340,47 @@ class DefeatErikaObjectiveSkill:
     max_frames: int = 5_000_000
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
-        executable = (
+        post_strength = (
             state.mode.value == "overworld"
             and state.location == "fuchsia_pokecenter"
             and "badge:soul" in state.facts
             and "move:strength_available" in state.facts
             and "badge:rainbow" not in state.facts
         )
+        pre_koga = (
+            state.mode.value == "overworld"
+            and state.location == "celadon_pokecenter"
+            and "story:rocket_hideout_cleared" in state.facts
+            and "item:silph_scope" in state.facts
+            and "badge:rainbow" not in state.facts
+        )
+        executable = post_strength or pre_koga
         return ObjectiveSkillAvailability(
             executable,
             (
-                "Observed the post-Strength Fuchsia Center boundary."
+                "Observed a qualified pre-Koga Celadon or post-Strength Fuchsia boundary."
                 if executable
-                else "Requires Fuchsia Center after Koga and the Strength lesson."
+                else "Requires a qualified Celadon or Fuchsia Erika boundary."
             ),
         )
 
     def execute(self) -> ObjectiveSkillExecution:
-        report = run_erika_chapter(
-            self.emulator,
-            self.reader,
-            self.executor,
-            timing=self.timing,
-        )
+        raw = self.reader.read()
+        report: EarlyErikaChapterReport | ErikaChapterReport
+        if raw.map_id == MapId.CELADON_POKECENTER:
+            report = run_early_erika_chapter(
+                self.emulator,
+                self.reader,
+                self.executor,
+                timing=self.timing,
+            )
+        else:
+            report = run_erika_chapter(
+                self.emulator,
+                self.reader,
+                self.executor,
+                timing=self.timing,
+            )
         return ObjectiveSkillExecution(
             actions_executed=report.actions_executed,
             frames_executed=report.frames_executed,
@@ -603,8 +631,12 @@ class DefeatBlaineObjectiveSkill:
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None
-    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None
-    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None
+    training_candidate_decision_sink: (
+        Callable[[TrainingCandidateDecision], None] | None
+    ) = None
+    training_candidate_decision_authority: (
+        Callable[[TrainingCandidateDecision], int] | None
+    ) = None
     objective_id: str = "defeat_blaine"
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
@@ -753,7 +785,9 @@ class DefeatLoreleiObjectiveSkill:
         )
         return ObjectiveSkillAvailability(
             executable,
-            "Observed the qualified Indigo terminal." if executable else "Requires Indigo.",
+            "Observed the qualified Indigo terminal."
+            if executable
+            else "Requires Indigo.",
         )
 
     def execute(self) -> ObjectiveSkillExecution:
@@ -927,7 +961,9 @@ def build_red_midgame_objective_skill_registry(
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None,
-    training_candidate_decision_sink: (Callable[[TrainingCandidateDecision], None] | None) = None,
+    training_candidate_decision_sink: (
+        Callable[[TrainingCandidateDecision], None] | None
+    ) = None,
     training_candidate_decision_authority: (
         Callable[[TrainingCandidateDecision], int] | None
     ) = None,

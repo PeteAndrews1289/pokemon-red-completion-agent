@@ -102,11 +102,15 @@ STRATEGIC_SCENARIO_DESTINATIONS: Mapping[str, ScenarioObjectiveDestinationSpec] 
     item.objective_id: item
     for item in (
         ScenarioObjectiveDestinationSpec("help_bill", MapId.BILLS_HOUSE, _BLOCKER_TAGS),
-        ScenarioObjectiveDestinationSpec("defeat_misty", MapId.CERULEAN_GYM, _BATTLE_TAGS),
+        ScenarioObjectiveDestinationSpec(
+            "defeat_misty", MapId.CERULEAN_GYM, _BATTLE_TAGS
+        ),
         ScenarioObjectiveDestinationSpec(
             "reach_vermilion", MapId.VERMILION_CITY, _REACH_TAGS
         ),
-        ScenarioObjectiveDestinationSpec("obtain_cut", MapId.SS_ANNE_1F, _RESOURCE_TAGS),
+        ScenarioObjectiveDestinationSpec(
+            "obtain_cut", MapId.SS_ANNE_1F, _RESOURCE_TAGS
+        ),
         ScenarioObjectiveDestinationSpec(
             "clear_rocket_hideout", MapId.GAME_CORNER, _CHALLENGE_BLOCKER_TAGS
         ),
@@ -128,8 +132,12 @@ STRATEGIC_SCENARIO_DESTINATIONS: Mapping[str, ScenarioObjectiveDestinationSpec] 
         ScenarioObjectiveDestinationSpec(
             "obtain_strength", MapId.WARDENS_HOUSE, _RESOURCE_TAGS
         ),
-        ScenarioObjectiveDestinationSpec("defeat_koga", MapId.FUCHSIA_GYM, _BATTLE_TAGS),
-        ScenarioObjectiveDestinationSpec("defeat_erika", MapId.CELADON_GYM, _BATTLE_TAGS),
+        ScenarioObjectiveDestinationSpec(
+            "defeat_koga", MapId.FUCHSIA_GYM, _BATTLE_TAGS
+        ),
+        ScenarioObjectiveDestinationSpec(
+            "defeat_erika", MapId.CELADON_GYM, _BATTLE_TAGS
+        ),
         # The gate is the bounded Saffron-access skill's honest handoff point.
         ScenarioObjectiveDestinationSpec(
             "reach_saffron", MapId.ROUTE_7_GATE, _REACH_TAGS
@@ -146,7 +154,9 @@ STRATEGIC_SCENARIO_DESTINATIONS: Mapping[str, ScenarioObjectiveDestinationSpec] 
         ScenarioObjectiveDestinationSpec(
             "obtain_secret_key", MapId.POKEMON_MANSION_1F, _PUZZLE_RESOURCE_TAGS
         ),
-        ScenarioObjectiveDestinationSpec("defeat_blaine", MapId.CINNABAR_GYM, _BATTLE_TAGS),
+        ScenarioObjectiveDestinationSpec(
+            "defeat_blaine", MapId.CINNABAR_GYM, _BATTLE_TAGS
+        ),
         ScenarioObjectiveDestinationSpec(
             "defeat_giovanni", MapId.VIRIDIAN_GYM, _BATTLE_TAGS
         ),
@@ -168,9 +178,8 @@ STRATEGIC_SCENARIO_ORIGIN_MAPS: Mapping[str, frozenset[MapId]] = {
 # Exact stable boundaries consumed by the construction skills that need to be
 # reached from a different authenticated scenario origin.  Coordinates are
 # (row, column), matching TraversalSnapshot.at and the local router.
-STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[
-    str, tuple[MapId, tuple[int, int]]
-] = {
+STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[str, tuple[MapId, tuple[int, int]]] = {
+    "defeat_erika": (MapId.CELADON_POKECENTER, (3, 3)),
     "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
     "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
 }
@@ -310,8 +319,7 @@ def require_objective_skill_materialization_step(
     """
 
     if not isinstance(source_completed_objective_ids, frozenset) or any(
-        not isinstance(item, str) or not item
-        for item in source_completed_objective_ids
+        not isinstance(item, str) or not item for item in source_completed_objective_ids
     ):
         raise TypeError("source completed objectives must be a string frozenset")
     if not isinstance(target, StrategicNavigationScenario):
@@ -374,8 +382,7 @@ def require_objective_skill_intermediate_step(
     """
 
     if not isinstance(source_completed_objective_ids, frozenset) or any(
-        not isinstance(item, str) or not item
-        for item in source_completed_objective_ids
+        not isinstance(item, str) or not item for item in source_completed_objective_ids
     ):
         raise TypeError("source completed objectives must be a string frozenset")
     if not isinstance(target, StrategicNavigationScenario):

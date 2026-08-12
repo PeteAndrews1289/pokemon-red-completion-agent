@@ -7,11 +7,13 @@ from pokemon_red_completion.erika import (
     BLASTOISE_SPECIES_ID,
     CENTER_EXIT_TWO,
     DEFAULT_ERIKA_TIMING,
+    EARLY_ERIKA_CHECKPOINT_COUNT,
     ERIKA_CHECKPOINT_COUNT,
     ERIKA_CLASS,
     ERIKA_OPPONENT,
     MOVEMENT_RETRY_WAIT_FRAMES,
     STRENGTH,
+    EarlyErikaChapterReport,
     ErikaChapterReport,
     ErikaCheckpoint,
     ErikaTiming,
@@ -164,6 +166,65 @@ def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
     )
 
     assert erika_module._erika_move_slot(raw) == 3
+
+
+def test_early_erika_report_requires_exact_pre_koga_transition() -> None:
+    initial = replace(
+        _terminal(),
+        badge_bits=0x07,
+        party_species_ids=(0xB3, 0x40, 0x3B),
+        first_party_level=36,
+        first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
+        first_party_pp=(25, 30, 20, 25),
+    )
+    final = replace(
+        initial,
+        badge_bits=0x0F,
+        first_party_level=38,
+        first_party_moves=(0x2C, 0x27, 0x3A, 0x37),
+        first_party_pp=(25, 30, 10, 25),
+    )
+    report = EarlyErikaChapterReport(
+        records=tuple(
+            ErikaCheckpoint(str(index), str(index), final)
+            for index in range(EARLY_ERIKA_CHECKPOINT_COUNT)
+        ),
+        initial_raw=initial,
+        final_raw=final,
+        erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
+        ice_beam_pp_spent=3,
+        tm13_transfer_before_event=True,
+        money_before=10_000,
+        money_after=13_856,
+        badge_bits_before=0x07,
+        badge_bits_after=0x0F,
+        gym_events_before=(False,) * 7,
+        gym_events_after=(True,) * 7,
+        final_bag=((int(ItemId.TM21_MEGA_DRAIN), 1),),
+        party_hp=(105, 47, 40),
+        party_max_hp=(105, 47, 40),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["curriculum"] == "pre_koga_celadon"
+    assert not replace(report, badge_bits_after=0x1F).passed
+    assert not replace(report, tm13_transfer_before_event=False).passed
+
+
+def test_early_erika_policy_prioritizes_ice_beam() -> None:
+    raw = replace(
+        _terminal(),
+        battle_state=2,
+        first_party_moves=(0x2C, 0x27, 0x3A, 0x37),
+        first_party_pp=(25, 30, 10, 25),
+    )
+
+    assert erika_module._early_erika_move_slot(raw) == 3
+    assert erika_module._early_erika_move_slot(replace(raw, first_party_pp=(25, 30, 0, 25))) == 1
 
 
 def test_route_training_handles_transformed_ditto_and_requires_safe_health() -> None:

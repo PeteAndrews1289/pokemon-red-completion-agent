@@ -77,7 +77,9 @@ def test_registry_is_canonical_preassigned_and_seals_test_roots() -> None:
     assert rehearsal.assignment_id not in {
         registry.assignment(run.run_id).assignment_id for run in registry.runs
     }
-    assert registry.learning_assignment("red-strategic-v1-01-train").partition == "train"
+    assert (
+        registry.learning_assignment("red-strategic-v1-01-train").partition == "train"
+    )
     assert (
         registry.learning_assignment("red-strategic-v1-06-validation").partition
         == "validation"
@@ -94,11 +96,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "7c1cadad609c9e1067838808e566dc190659fd811afbbb646e6f03a446e03bbb"
+        == "6af06c7026d8d9d2662855ef43e5bdbccbbeeb8809a874488215cb85ee661dfe"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "fa70f5889bd2b08d537cb5afc6059a689f697888f45d457fa9d93e2d93a07066"
+        == "2b750723bfc19ea8635d368d6b14930086aad9411452a7e09e27745665054155"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -106,7 +108,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "1d000e94566dbfb96b0a3b603ac11e2b904e49625eebe9b2ca71e7400f656844"
+        == "d64cb94c419a0723e6caa791b770b38bb4c0bc8e7593e36ae0e6f4637f992a27"
     )
     assert digest == {
         "bytes": len(payload),
@@ -122,7 +124,10 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
 
     assert first == registry.assignment("red-strategic-v1-01-train")
     assert first.root_lineage_id == f"red-strategic-root-{first.assignment_id}"
-    assert first.episode_id == f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{first.assignment_id}"
+    assert (
+        first.episode_id
+        == f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{first.assignment_id}"
+    )
     assert len(first.episode_id) <= 80
     assert first.collection_slot_ordinal == 1
     assert first.partition_slot_ordinal == 1
@@ -225,8 +230,11 @@ def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None
 
     loaded = load_committed_strategic_navigation_registry(repository)
 
-    assert loaded.registry_sha256 == parse_strategic_navigation_registry(
-        REGISTRY_PATH.read_bytes()
-    ).registry_sha256
+    assert (
+        loaded.registry_sha256
+        == parse_strategic_navigation_registry(
+            REGISTRY_PATH.read_bytes()
+        ).registry_sha256
+    )
     assert loaded.execution.source_commit is not None
     assert loaded.rehearsal_assignment().source_commit == loaded.execution.source_commit

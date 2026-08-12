@@ -41,9 +41,12 @@ def test_route_catalog_exactly_covers_preregistered_scenarios() -> None:
         assert tuple(item.objective_id for item in specs) == (
             scenario.candidate_objective_ids
         )
-        assert specs[
-            scenario.candidate_objective_ids.index(scenario.teacher_objective_id)
-        ].objective_id == scenario.teacher_objective_id
+        assert (
+            specs[
+                scenario.candidate_objective_ids.index(scenario.teacher_objective_id)
+            ].objective_id
+            == scenario.teacher_objective_id
+        )
 
 
 def test_fuchsia_candidate_stops_at_its_authenticated_skill_boundary() -> None:
@@ -55,6 +58,7 @@ def test_fuchsia_candidate_stops_at_its_authenticated_skill_boundary() -> None:
 
 def test_construction_boundaries_are_exact_and_intentionally_narrow() -> None:
     assert STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES == {
+        "defeat_erika": (MapId.CELADON_POKECENTER, (3, 3)),
         "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
         "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
     }
@@ -96,7 +100,9 @@ def test_destination_spec_rejects_unknown_map_and_weak_tag_schema() -> None:
 def test_origin_preflight_accepts_only_declared_city_boundary() -> None:
     registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
     scenario = next(
-        item for item in registry.learning_scenarios() if item.origin_region == "cerulean"
+        item
+        for item in registry.learning_scenarios()
+        if item.origin_region == "cerulean"
     )
 
     assert require_scenario_origin(scenario, MapId.CERULEAN_POKECENTER) == (
@@ -162,7 +168,9 @@ def test_navigation_materialization_rejects_approach_or_frontier_overclaims() ->
             ),
             "reach_vermilion",
         )
-    with pytest.raises(StrategicScenarioRouteCatalogError, match="target scenario origin"):
+    with pytest.raises(
+        StrategicScenarioRouteCatalogError, match="target scenario origin"
+    ):
         require_navigation_materialization_step(
             valid_source,
             replace(valid_target, origin_region="celadon"),

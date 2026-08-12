@@ -58,6 +58,7 @@ ERIKA_TRAINER_REWARD_TOTAL = 4_056
 ERIKA_ICE_BEAM_PREPARATION_COST = 200
 
 ERIKA_CHECKPOINT_COUNT = 12
+EARLY_ERIKA_CHECKPOINT_COUNT = 11
 STRENGTH = 0x46
 ERIKA_OPPONENT = 0xED
 ERIKA_CLASS = 0x25
@@ -78,6 +79,9 @@ BATTLE_COMMAND_COORDINATES = {
     2: (1, 0),
     3: (1, 1),
 }
+ERIKA_LASS_BATTLE_PLAN = RedBattlePlanId.ERIKA_CELADON_GYM_LASS
+ERIKA_COOLTRAINER_BATTLE_PLAN = RedBattlePlanId.ERIKA_CELADON_GYM_COOLTRAINER
+ERIKA_LEADER_BATTLE_PLAN = RedBattlePlanId.ERIKA_LEADER
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -240,9 +244,7 @@ class ErikaChapterReport:
             and self.moves_after == (0x82, STRENGTH, ICE_BEAM_MOVE, 0x39)
             and self.money_before >= 0
             and self.money_after
-            == self.money_before
-            + ERIKA_TRAINER_REWARD_TOTAL
-            - ERIKA_ICE_BEAM_PREPARATION_COST
+            == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - ERIKA_ICE_BEAM_PREPARATION_COST
             and self.badge_bits == 0x1F
             and self.beat_gym_flags & int(Badge.RAINBOW)
             and self.got_tm21
@@ -348,6 +350,300 @@ class ErikaChapterReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class EarlyErikaChapterReport:
+    """Evidence for the legal pre-Koga Celadon Gym curriculum."""
+
+    records: tuple[ErikaCheckpoint, ...]
+    initial_raw: RawGameState
+    final_raw: RawGameState
+    erika_identity: tuple[int, int, int, int]
+    ice_beam_pp_spent: int
+    tm13_transfer_before_event: bool
+    money_before: int
+    money_after: int
+    badge_bits_before: int
+    badge_bits_after: int
+    gym_events_before: tuple[bool, ...]
+    gym_events_after: tuple[bool, ...]
+    final_bag: tuple[tuple[int, int], ...]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        initial_species = tuple(self.initial_raw.party_species_ids or ())
+        final_species = tuple(self.final_raw.party_species_ids or ())
+        return (
+            len(self.records) == EARLY_ERIKA_CHECKPOINT_COUNT
+            and initial_species
+            in {
+                (0xB3, 0x40, 0x3B),
+                (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
+            }
+            and final_species == initial_species
+            and self.initial_raw.first_party_moves == (0x2C, 0x27, 0x3D, 0x37)
+            and self.final_raw.first_party_moves == (0x2C, 0x27, ICE_BEAM_MOVE, 0x37)
+            and self.final_raw.first_party_pp == (25, 30, 10, 25)
+            and self.erika_identity == (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1)
+            and 0 < self.ice_beam_pp_spent <= 10
+            and self.tm13_transfer_before_event
+            and self.money_after
+            == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - ERIKA_ICE_BEAM_PREPARATION_COST
+            and self.badge_bits_before == 0x07
+            and self.badge_bits_after == 0x0F
+            and self.gym_events_before == (False,) * 7
+            and self.gym_events_after == (True,) * 7
+            and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
+            and int(ItemId.TM13_ICE_BEAM) not in dict(self.final_bag)
+            and int(ItemId.FRESH_WATER) not in dict(self.final_bag)
+            and self.final_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
+        return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "defeat_erika",
+            "curriculum": "pre_koga_celadon",
+            "ice_beam_preparation": {
+                "move_id": ICE_BEAM_MOVE,
+                "pp_spent": self.ice_beam_pp_spent,
+                "transfer_before_event": self.tm13_transfer_before_event,
+                "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
+            },
+            "rainbow_badge": {
+                "badges_before": self.badge_bits_before,
+                "badges_after": self.badge_bits_after,
+            },
+            "money_remaining": self.money_after,
+            "party": {
+                "species": list(self.final_raw.party_species_ids or ()),
+                "lead_level": self.final_raw.first_party_level,
+                "hp": list(self.party_hp),
+                "max_hp": list(self.party_max_hp),
+                "status": list(self.party_status),
+                "moves": list(self.final_raw.first_party_moves or ()),
+                "pp": list(self.final_raw.first_party_pp or ()),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+def run_early_erika_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: ErikaTiming = DEFAULT_ERIKA_TIMING,
+    progress: ProgressSink | None = None,
+) -> EarlyErikaChapterReport:
+    """Defeat Erika from the legal post-Hideout Celadon boundary, before Koga."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[ErikaCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CELADON_POKECENTER, (3, 3), "early Erika boundary")
+    if (
+        tuple(initial.party_species_ids or ())
+        not in {(0xB3, 0x40, 0x3B), (BLASTOISE_SPECIES_ID, 0x40, 0x3B)}
+        or initial.first_party_moves != (0x2C, 0x27, 0x3D, 0x37)
+        or initial.first_party_pp != (25, 30, 20, 25)
+        or _party_hp(emulator) != _party_max_hp(emulator)
+        or any(_party_status(emulator))
+        or emulator.read_u8(RamAddress.OBTAINED_BADGES) != 0x07
+        or _event(emulator, EventFlag.BEAT_ERIKA)
+        or _event(emulator, EventFlag.GOT_TM21)
+        or _event(emulator, EventFlag.GOT_TM13)
+        or ItemId.TM21_MEGA_DRAIN in _bag(emulator)
+        or ItemId.TM13_ICE_BEAM in _bag(emulator)
+    ):
+        raise ErikaChapterError("Early Erika input boundary is not pristine.")
+    money_before = _money(emulator)
+    badge_bits_before = emulator.read_u8(RamAddress.OBTAINED_BADGES)
+    events_before = _gym_events(emulator)
+    _checkpoint(
+        records, progress, emulator, initial, "early_erika_ready", "Early Celadon boundary ready"
+    )
+
+    try:
+        _, tm13_transfer_before_event = acquire_and_teach_ice_beam_from_celadon_center(
+            actions,  # type: ignore[arg-type]
+            reader,
+            emulator,
+            expected_moves_before=(0x2C, 0x27, 0x3D, 0x37),
+            expected_moves_after=(0x2C, 0x27, ICE_BEAM_MOVE, 0x37),
+            expected_pp_after=(25, 30, 10, 25),
+        )
+    except SilphChapterError as error:
+        raise ErikaChapterError(f"Early Erika Ice Beam preparation failed: {error}") from error
+    _checkpoint(
+        records, progress, emulator, reader.read(), "ice_beam_ready", "Ice Beam lesson complete"
+    )
+
+    _move(actions, reader, emulator, CENTER_EXIT_TWO, timing, "Center exit")
+    _move(actions, reader, emulator, CITY_TO_OUTER_TREE, timing, "outer tree")
+    _cut(actions, reader, emulator, timing, "down", 0x2C, "outer Cut")
+    _move(actions, reader, emulator, ("down",), timing, "outer crossing")
+    _move(actions, reader, emulator, LOWER_CITY_TO_GYM, timing, "Gym door")
+    _move(actions, reader, emulator, ("up",), timing, "Gym entry")
+    _checkpoint(records, progress, emulator, reader.read(), "gym_entered", "Entered Celadon Gym")
+
+    _move(actions, reader, emulator, ("up",) * 6, timing, "Lass trigger", allow_trigger=True)
+    _enter_battle(actions, reader, timing, "Celadon Gym Lass")
+    _require_identity(emulator, (0xCB, 0x03, 0xCB, 17), "Celadon Gym Lass")
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Celadon Gym Lass",
+        ERIKA_LASS_BATTLE_PLAN,
+        move_selector=_early_erika_move_slot,
+    )
+    _checkpoint(records, progress, emulator, reader.read(), "lass_defeated", "Defeated Gym Lass")
+
+    _move(actions, reader, emulator, _directions("UUUR"), timing, "inner tree")
+    _cut(actions, reader, emulator, timing, "up", 0x2B, "inner Cut")
+    _move(
+        actions, reader, emulator, ("up", "up"), timing, "Cooltrainer trigger", allow_trigger=True
+    )
+    _enter_battle(actions, reader, timing, "Celadon Gym Cooltrainer")
+    _require_identity(emulator, (0xE8, 0x20, 0xE8, 1), "Celadon Gym Cooltrainer")
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Celadon Gym Cooltrainer",
+        ERIKA_COOLTRAINER_BATTLE_PLAN,
+        move_selector=_early_erika_move_slot,
+    )
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "cooltrainer_defeated",
+        "Defeated required Gym Cooltrainer",
+    )
+
+    _cut(actions, reader, emulator, timing, "down", 0x2B, "inner re-Cut")
+    _move(actions, reader, emulator, ("down",), timing, "inner re-cross")
+    _move(actions, reader, emulator, GYM_EXIT, timing, "Gym recovery exit")
+    _move(actions, reader, emulator, GYM_TO_OUTER_TREE_SOUTH, timing, "outer tree south")
+    _cut(actions, reader, emulator, timing, "up", 0x2C, "outer re-Cut")
+    _move(actions, reader, emulator, ("up",), timing, "outer re-cross")
+    _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "Center recovery")
+    _heal(actions, reader, emulator, timing)
+    _checkpoint(
+        records, progress, emulator, reader.read(), "gym_recovered", "Recovered after trainers"
+    )
+
+    _move(actions, reader, emulator, CENTER_EXIT, timing, "Center exit two")
+    _move(actions, reader, emulator, CITY_TO_OUTER_TREE, timing, "outer tree two")
+    _cut(actions, reader, emulator, timing, "down", 0x2C, "outer Cut two")
+    _move(actions, reader, emulator, ("down",), timing, "outer crossing two")
+    _move(actions, reader, emulator, LOWER_CITY_TO_GYM, timing, "Gym door two")
+    _move(actions, reader, emulator, ("up",), timing, "Gym entry two")
+    _move(actions, reader, emulator, ("up",) * 9 + ("right",), timing, "inner tree two")
+    _cut(actions, reader, emulator, timing, "up", 0x2B, "inner Cut two")
+    _move(actions, reader, emulator, ("down",), timing, "reversible down")
+    _move(actions, reader, emulator, ("up",), timing, "reversible up")
+    _move(actions, reader, emulator, _directions("UULUU"), timing, "Erika stance")
+    _require(reader.read(), MapId.CELADON_GYM, (4, 4), "Erika stance")
+    _checkpoint(records, progress, emulator, reader.read(), "erika_stance", "Reached Erika")
+
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.movement_frames)
+    _enter_battle(actions, reader, timing, "Erika")
+    identity = _identity(emulator)
+    _require_identity(emulator, (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1), "Erika")
+    _checkpoint(records, progress, emulator, reader.read(), "erika_battle", "Verified Erika")
+    before_pp = reader.read().first_party_pp
+    _battle(
+        reader,
+        actions,
+        MapId.CELADON_GYM,
+        timing,
+        "Erika",
+        ERIKA_LEADER_BATTLE_PLAN,
+        move_selector=_early_erika_move_slot,
+    )
+    after_pp = reader.read().first_party_pp
+    if before_pp is None or after_pp is None:
+        raise ErikaChapterError("Early Erika battle lacks PP evidence.")
+    ice_beam_spent = (before_pp[2] & 0x3F) - (after_pp[2] & 0x3F)
+    _checkpoint(records, progress, emulator, reader.read(), "erika_defeated", "Defeated Erika")
+
+    for _ in range(timing.dialogue_pulses):
+        if (
+            _event(emulator, EventFlag.BEAT_ERIKA)
+            and _event(emulator, EventFlag.GOT_TM21)
+            and emulator.read_u8(RamAddress.OBTAINED_BADGES) & int(Badge.RAINBOW)
+            and _gym_events(emulator) == (True,) * 7
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    else:
+        raise ErikaChapterError("Early Erika rewards did not settle.")
+    _checkpoint(
+        records, progress, emulator, reader.read(), "rainbow_received", "Received Rainbow Badge"
+    )
+
+    _move(actions, reader, emulator, _directions("DDR"), timing, "inner exit approach")
+    _cut(actions, reader, emulator, timing, "down", 0x2B, "victory inner Cut")
+    _move(actions, reader, emulator, ("down",), timing, "victory inner crossing")
+    _move(actions, reader, emulator, GYM_EXIT, timing, "victory Gym exit")
+    _move(actions, reader, emulator, GYM_TO_OUTER_TREE_SOUTH, timing, "victory outer tree")
+    _cut(actions, reader, emulator, timing, "up", 0x2C, "victory outer Cut")
+    _move(actions, reader, emulator, ("up",), timing, "victory outer crossing")
+    _move(actions, reader, emulator, OUTER_TREE_TO_CENTER, timing, "victory Center")
+    _heal(actions, reader, emulator, timing)
+    final = reader.read()
+    _checkpoint(records, progress, emulator, final, "erika_stable", "Healed Rainbow boundary")
+
+    report = EarlyErikaChapterReport(
+        records=tuple(records),
+        initial_raw=initial,
+        final_raw=final,
+        erika_identity=identity,
+        ice_beam_pp_spent=ice_beam_spent,
+        tm13_transfer_before_event=tm13_transfer_before_event,
+        money_before=money_before,
+        money_after=_money(emulator),
+        badge_bits_before=badge_bits_before,
+        badge_bits_after=emulator.read_u8(RamAddress.OBTAINED_BADGES),
+        gym_events_before=events_before,
+        gym_events_after=_gym_events(emulator),
+        final_bag=tuple(sorted(_bag(emulator).items())),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise ErikaChapterError("Early Erika evidence failed its terminal contract.")
+    return report
+
+
 def run_erika_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -364,9 +660,7 @@ def run_erika_chapter(
     initial_moves = tuple(initial.first_party_moves or ())
     initial_pp = tuple(initial.first_party_pp or ())
     skull_bash_source = (
-        "natural_level_42"
-        if initial_moves == (SKULL_BASH, STRENGTH, 0x3D, 0x39)
-        else "tm40"
+        "natural_level_42" if initial_moves == (SKULL_BASH, STRENGTH, 0x3D, 0x39) else "tm40"
     )
     if (
         _money(emulator) < 0
@@ -417,12 +711,17 @@ def run_erika_chapter(
         (CELADON_CENTER_ENTRY, MapId.CELADON_POKECENTER, (3, 7), "celadon_center"),
     )
     for route, map_id, coordinate, label in route_legs:
-        training_leg = route_training if label in {
-            "fuchsia_exited",
-            "route15_west",
-            "route15_gate",
-            "route15_east",
-        } else None
+        training_leg = (
+            route_training
+            if label
+            in {
+                "fuchsia_exited",
+                "route15_west",
+                "route15_gate",
+                "route15_east",
+            }
+            else None
+        )
         _move(
             actions,
             reader,
@@ -536,7 +835,7 @@ def run_erika_chapter(
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Lass",
-        RedBattlePlanId.ERIKA_CELADON_GYM_LASS,
+        ERIKA_LASS_BATTLE_PLAN,
     )
     _checkpoint(records, progress, emulator, reader.read(), "lass_defeated", "Defeated Gym Lass")
 
@@ -559,7 +858,7 @@ def run_erika_chapter(
         MapId.CELADON_GYM,
         timing,
         "Celadon Gym Cooltrainer",
-        RedBattlePlanId.ERIKA_CELADON_GYM_COOLTRAINER,
+        ERIKA_COOLTRAINER_BATTLE_PLAN,
     )
     _checkpoint(
         records,
@@ -626,7 +925,7 @@ def run_erika_chapter(
         MapId.CELADON_GYM,
         timing,
         "Erika",
-        RedBattlePlanId.ERIKA_LEADER,
+        ERIKA_LEADER_BATTLE_PLAN,
     )
     after_pp = reader.read().first_party_pp
     if before_pp is None or after_pp is None:
@@ -726,15 +1025,10 @@ def _move(
             after = reader.read()
             if after.battle_state == 1:
                 level = after.first_party_level
-                if (
-                    route_training is not None
-                    and level is not None
-                ):
+                if route_training is not None and level is not None:
                     battle_continues = True
                     if not _route_training_safe(after):
-                        battle_continues = _switch_route_training_escort(
-                            actions, reader, emulator
-                        )
+                        battle_continues = _switch_route_training_escort(actions, reader, emulator)
                     if battle_continues:
                         try:
                             run_adaptive_wild_battle(
@@ -757,11 +1051,11 @@ def _move(
                 if allow_trigger and index == len(route):
                     return
                 raise ErikaChapterError(f"Unexpected trainer during {label}.")
-            if (
-                (after.map_id, after.player_x, after.player_y)
-                == (before.map_id, before.player_x, before.player_y)
-                and not reader.read_input_readiness().ready
-            ):
+            if (after.map_id, after.player_x, after.player_y) == (
+                before.map_id,
+                before.player_x,
+                before.player_y,
+            ) and not reader.read_input_readiness().ready:
                 # Extra training changes when an earlier Repel expires.  Clear
                 # that semantic field message instead of encoding its old step.
                 _pulse(
@@ -804,10 +1098,7 @@ def _route_training_safe(raw: RawGameState) -> bool:
         and maximum > 0
         and hp / maximum >= 0.75
         and any(
-            len(moves) >= slot
-            and len(pp) >= slot
-            and moves[slot - 1] != 0
-            and pp[slot - 1] & 0x3F
+            len(moves) >= slot and len(pp) >= slot and moves[slot - 1] != 0 and pp[slot - 1] & 0x3F
             for slot in attacking_slots
         )
     )
@@ -857,9 +1148,7 @@ def _switch_route_training_escort(
         and status[index] == 0
     )
     if raw.battle_state != 1 or not candidates:
-        raise ErikaChapterError(
-            "Route training has no healthy reserve for safe shared experience."
-        )
+        raise ErikaChapterError("Route training has no healthy reserve for safe shared experience.")
     # Absolute durability matters more than percentage here: the freshly
     # caught Snorlax is the qualified absorber, while Diglett can be at full
     # health and still be knocked out by one Route 15 attack.
@@ -1012,8 +1301,7 @@ def _run_route15_training(
         raise ErikaChapterError("Route 15 training lost its field position.")
     if not 20 <= raw.player_x <= 21 or raw.player_y != 9:
         raise ErikaChapterError(
-            "Route 15 training left its qualified grass pair: "
-            f"{(raw.player_x, raw.player_y)!r}."
+            f"Route 15 training left its qualified grass pair: {(raw.player_x, raw.player_y)!r}."
         )
     _move(
         actions,
@@ -1105,9 +1393,7 @@ def _use_route_training_rare_candy(
         or _bag(emulator).get(ItemId.RARE_CANDY, 0) != 1
         or not reader.read_input_readiness().ready
     ):
-        raise ErikaChapterError(
-            "Route-training Rare Candy lacks its level-40 field boundary."
-        )
+        raise ErikaChapterError("Route-training Rare Candy lacks its level-40 field boundary.")
 
     menu_timing = LavenderTiming(wait_frames=timing.movement_frames)
     _open_bag(actions, emulator, menu_timing)  # type: ignore[arg-type]
@@ -1179,14 +1465,24 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
     raise ErikaChapterError("Menu cursor missed its semantic target.")
 
 
-def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None:
+def _battle(
+    reader,
+    actions,
+    map_id,
+    timing,
+    label,
+    battle_plan_id: str,
+    *,
+    move_selector: Callable[[RawGameState], int] | None = None,
+) -> None:
     last_error: BattleRuntimeError | None = None
+    selected_move = move_selector or _erika_move_slot
     for _ in range(timing.battle_recoveries):
         try:
             run_adaptive_trainer_battle(
                 reader,
                 actions,
-                _erika_move_slot,
+                selected_move,
                 expected_map=int(map_id),
                 intent=BattleIntent(
                     "defeat_erika",
@@ -1195,9 +1491,7 @@ def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None
                     required_move_ref=None,
                 ),
                 required_move_id=None,
-                timing=BattleRuntimeTiming(
-                    max_runtime_pulses=1600 if label == "Erika" else 960
-                ),
+                timing=BattleRuntimeTiming(max_runtime_pulses=1600 if label == "Erika" else 960),
                 label=label,
                 unknown_cancel_interval=3,
             )
@@ -1206,9 +1500,7 @@ def _battle(reader, actions, map_id, timing, label, battle_plan_id: str) -> None
             last_error = error
             if reader.read().battle_state == 0:
                 return
-    raise ErikaChapterError(
-        f"{label} exceeded bounded battle recoveries: {last_error}."
-    )
+    raise ErikaChapterError(f"{label} exceeded bounded battle recoveries: {last_error}.")
 
 
 def _erika_move_slot(raw: RawGameState) -> int:
@@ -1228,6 +1520,24 @@ def _erika_move_slot(raw: RawGameState) -> int:
         ):
             return slot
     raise ErikaChapterError("Erika battle has no usable ranked move.")
+
+
+def _early_erika_move_slot(raw: RawGameState) -> int:
+    moves = raw.first_party_moves
+    pp = raw.first_party_pp
+    if moves is None or pp is None:
+        raise ErikaChapterError("Early Erika battle lacks live move and PP evidence.")
+    for slot in (3, 1, 2, 4):
+        index = slot - 1
+        if (
+            len(moves) > index
+            and len(pp) > index
+            and moves[index] != 0
+            and pp[index] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise ErikaChapterError("Early Erika battle has no usable ranked move.")
 
 
 def _enter_battle(actions, reader, timing, label) -> None:

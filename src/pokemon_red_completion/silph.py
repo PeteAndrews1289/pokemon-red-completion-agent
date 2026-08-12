@@ -795,6 +795,14 @@ def acquire_and_teach_ice_beam_from_celadon_center(
     emulator: EmulatorState,
     *,
     timing: SilphTiming = DEFAULT_SILPH_TIMING,
+    expected_moves_before: tuple[int, int, int, int] = (0x82, 0x46, 0x3D, 0x39),
+    expected_moves_after: tuple[int, int, int, int] = (
+        0x82,
+        0x46,
+        ICE_BEAM_MOVE,
+        0x39,
+    ),
+    expected_pp_after: tuple[int, int, int, int] = (15, 15, 10, 15),
 ) -> tuple[RawGameState, bool]:
     """Install Ice Beam and return through the Center's entrance while still healed."""
 
@@ -803,6 +811,8 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         status != 0 for status in _party_status(emulator)
     ):
         raise SilphChapterError("Celadon Ice Beam boundary requires a healed party.")
+    if reader.read().first_party_moves != expected_moves_before:
+        raise SilphChapterError("Celadon Ice Beam boundary has an unexpected move set.")
     money_before = _money(emulator)
     _move(actions, reader, CENTER_EXIT, timing)
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
@@ -833,6 +843,8 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         emulator,
         timing,
         money_before=money_before,
+        expected_moves_before=expected_moves_before,
+        expected_moves_after=expected_moves_after,
     )
     _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
     _move(actions, reader, ROOF_TO_5F, timing)
@@ -863,8 +875,8 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-            and upgraded.first_party_pp == (15, 15, 10, 15)
+            and upgraded.first_party_moves == expected_moves_after
+            and upgraded.first_party_pp == expected_pp_after
             and reader.read_input_readiness().ready
         ):
             return upgraded, transfer_before_event
@@ -1009,6 +1021,13 @@ def _acquire_and_teach_ice_beam_on_roof(
     timing: SilphTiming,
     *,
     money_before: int,
+    expected_moves_before: tuple[int, int, int, int] = (0x82, 0x46, 0x3D, 0x39),
+    expected_moves_after: tuple[int, int, int, int] = (
+        0x82,
+        0x46,
+        ICE_BEAM_MOVE,
+        0x39,
+    ),
 ) -> bool:
     _require(reader.read(), MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof")
     _move(actions, reader, ROOF_TO_VENDING, timing)
@@ -1073,7 +1092,14 @@ def _acquire_and_teach_ice_beam_on_roof(
         reader,
         LavenderTiming(wait_frames=timing.menu_frames),
     )
-    _teach_ice_beam(actions, reader, emulator, timing)
+    _teach_ice_beam(
+        actions,
+        reader,
+        emulator,
+        timing,
+        expected_moves_before=expected_moves_before,
+        expected_moves_after=expected_moves_after,
+    )
     return transfer_before_event
 
 
@@ -1410,7 +1436,17 @@ def _teach_ice_beam(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    expected_moves_before: tuple[int, int, int, int] = (0x82, 0x46, 0x3D, 0x39),
+    expected_moves_after: tuple[int, int, int, int] = (
+        0x82,
+        0x46,
+        ICE_BEAM_MOVE,
+        0x39,
+    ),
 ) -> None:
+    if reader.read().first_party_moves != expected_moves_before:
+        raise SilphChapterError("TM13 lesson started from an unexpected move set.")
     menu_timing = LavenderTiming(wait_frames=timing.menu_frames)
     _open_bag(actions, emulator, menu_timing)  # type: ignore[arg-type]
     _select_bag_item(  # type: ignore[arg-type]
@@ -1443,16 +1479,13 @@ def _teach_ice_beam(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     for _ in range(24):
         raw = reader.read()
-        if raw.first_party_moves == (
-            0x82,
-            0x46,
-            ICE_BEAM_MOVE,
-            0x39,
-        ) and ItemId.TM13_ICE_BEAM not in _bag(emulator):
+        if raw.first_party_moves == expected_moves_after and ItemId.TM13_ICE_BEAM not in _bag(
+            emulator
+        ):
             _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
             return
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
-    raise SilphChapterError("TM13 did not replace BubbleBeam and consume the TM.")
+    raise SilphChapterError("TM13 did not replace the declared move and consume the TM.")
 
 
 def _buy_supplies(

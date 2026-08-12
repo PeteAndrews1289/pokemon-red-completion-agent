@@ -118,7 +118,9 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
     assert len(registry.schedule.battle_plan_ids) == 74
     assert len({run.harness_seed for run in registry.runs}) == 12
     assert len({run.schedule_sha256 for run in registry.runs}) == 12
-    assert registry.schedule_dry_run.harness_seed not in {run.harness_seed for run in registry.runs}
+    assert registry.schedule_dry_run.harness_seed not in {
+        run.harness_seed for run in registry.runs
+    }
     assert registry.schedule_dry_run.schedule_sha256 not in {
         run.schedule_sha256 for run in registry.runs
     }
@@ -140,11 +142,11 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "b4820610e8d73a4388b60ab300fc590cf198641af7775bb3a37a300e0ef1465d"
+        == "e3e4bda0b5c6232e05f57fd563b7e9d7cd8ece205d57bfc2d88c28a8a00ce2c6"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "fa70f5889bd2b08d537cb5afc6059a689f697888f45d457fa9d93e2d93a07066"
+        == "2b750723bfc19ea8635d368d6b14930086aad9411452a7e09e27745665054155"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +158,12 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "141f01b7899ce1fc24f75b781f6fe8f4af52cd94b4d9c07d62c3e5dc3ae386e8"
+        == "9d758df99b9c949f308ee0858afe706e2c17bcf5d6d008393c32c8d173337df8"
     )
-    assert first.assignment_id == "c7936b71c278c2069710176a7afaa3de81d73c931aacad70a922f31cd8f370b8"
+    assert (
+        first.assignment_id
+        == "3f8ad2b84f54d1d6f174f3cc49138843192b0e36486a929251358df707db0347"
+    )
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
@@ -182,9 +187,15 @@ def test_schedule_expansion_is_deterministic_bounded_and_content_addressed() -> 
     assert first[-1].battle_plan_id == RED_BATTLE_PLAN_IDS[-1]
     assert first[-1].frames == 190
     assert all(0 <= offset.frames <= 255 for offset in first)
-    assert run.schedule_sha256 == "6e37dcb8a759c7dc3b76ee643b97b368359d51807f875231124c4bfc84ff8ec6"
+    assert (
+        run.schedule_sha256
+        == "6e37dcb8a759c7dc3b76ee643b97b368359d51807f875231124c4bfc84ff8ec6"
+    )
     assert registry.schedule.schedule_sha256(run.harness_seed) == run.schedule_sha256
-    assert registry.schedule.schedule_sha256(registry.runs[1].harness_seed) != run.schedule_sha256
+    assert (
+        registry.schedule.schedule_sha256(registry.runs[1].harness_seed)
+        != run.schedule_sha256
+    )
 
 
 def test_assignment_ids_are_stable_collision_safe_and_path_free() -> None:
@@ -212,8 +223,13 @@ def test_assignment_ids_are_stable_collision_safe_and_path_free() -> None:
     assert first.declared_collection_slots == 12
     assert first.partition_slot_ordinal == 1
     assert first.declared_partition_slots == 5
-    assert len({registry.assignment(run.run_id).assignment_id for run in registry.runs}) == 12
-    assert len({registry.assignment(run.run_id).episode_id for run in registry.runs}) == 12
+    assert (
+        len({registry.assignment(run.run_id).assignment_id for run in registry.runs})
+        == 12
+    )
+    assert (
+        len({registry.assignment(run.run_id).episode_id for run in registry.runs}) == 12
+    )
 
     metadata = first.metadata_dict()
     assert metadata["harness_seed"] == 1590001
@@ -382,7 +398,9 @@ def test_parser_rejects_schedule_schema_limits_and_seed_checksum_mismatch() -> N
 
     mismatch = _document()
     _runs(mismatch)[0]["harness_seed"] = 9999
-    with pytest.raises(CollectionProtocolError, match="does not match its harness seed"):
+    with pytest.raises(
+        CollectionProtocolError, match="does not match its harness seed"
+    ):
         parse_collection_registry(_canonical(mismatch))
 
 
@@ -396,7 +414,9 @@ def test_parser_rejects_duplicate_run_seed_schedule_and_partition_counts() -> No
     duplicate_seed = _document()
     duplicate_seed_runs = _runs(duplicate_seed)
     duplicate_seed_runs[1]["harness_seed"] = duplicate_seed_runs[0]["harness_seed"]
-    duplicate_seed_runs[1]["schedule_sha256"] = duplicate_seed_runs[0]["schedule_sha256"]
+    duplicate_seed_runs[1]["schedule_sha256"] = duplicate_seed_runs[0][
+        "schedule_sha256"
+    ]
     with pytest.raises(CollectionProtocolError, match="harness seeds must be unique"):
         parse_collection_registry(_canonical(duplicate_seed))
 
@@ -436,16 +456,23 @@ def test_parser_requires_the_fixed_disjoint_dry_run_seed() -> None:
         parse_collection_registry(_canonical(document))
 
 
-def test_committed_loader_reads_head_not_a_modified_working_file(tmp_path: Path) -> None:
+def test_committed_loader_reads_head_not_a_modified_working_file(
+    tmp_path: Path,
+) -> None:
     repository = _committed_repository(tmp_path)
     target = repository / COLLECTION_REGISTRY_RELATIVE_PATH
 
     target.write_bytes(b"working tree tampering")
     registry = load_committed_collection_registry(repository)
 
-    assert registry.registry_sha256 == hashlib.sha256(REGISTRY_PATH.read_bytes()).hexdigest()
+    assert (
+        registry.registry_sha256
+        == hashlib.sha256(REGISTRY_PATH.read_bytes()).hexdigest()
+    )
     assert registry.partition_counts == {"test": 5, "train": 5, "validation": 2}
-    assert committed_source_bundle_sha256(repository) == working_source_bundle_sha256(PROJECT_ROOT)
+    assert committed_source_bundle_sha256(repository) == working_source_bundle_sha256(
+        PROJECT_ROOT
+    )
 
 
 def test_committed_loader_rejects_a_valid_but_different_registry_digest(
@@ -497,7 +524,9 @@ def test_committed_loader_rejects_executable_changes_but_accepts_docs_only_commi
     }
 
     source = repository / "src" / "pokemon_red_completion" / "__init__.py"
-    source.write_text(source.read_text(encoding="utf-8") + "\n# changed\n", encoding="utf-8")
+    source.write_text(
+        source.read_text(encoding="utf-8") + "\n# changed\n", encoding="utf-8"
+    )
     _commit(repository, "change executable")
     with pytest.raises(CollectionProtocolError, match="executable source"):
         load_committed_collection_registry(repository)

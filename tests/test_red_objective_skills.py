@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import pytest
 
 from pokemon_red_completion.domain import GameMode, GameState
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.red_objective_skills import (
     CrossVictoryRoadObjectiveSkill,
     DefeatAgathaObjectiveSkill,
@@ -41,7 +42,9 @@ class _Report:
         return {"status": "ok", "trainers": 5}
 
 
-def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary() -> None:
+def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary() -> (
+    None
+):
     registry = build_red_midgame_objective_skill_registry(
         object(),  # type: ignore[arg-type]
         object(),  # type: ignore[arg-type]
@@ -97,7 +100,9 @@ def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary()
     )
 
 
-def test_red_hideout_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:
+def test_red_hideout_skill_matches_graph_and_preserves_mechanics_evidence(
+    monkeypatch,
+) -> None:
     calls: list[tuple[object, object, object]] = []
 
     def fake_run(emulator, reader, executor, *, timing):
@@ -125,7 +130,9 @@ def test_red_hideout_skill_matches_graph_and_preserves_mechanics_evidence(monkey
     assert calls == [(emulator, reader, executor)]
 
 
-def test_red_tower_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:
+def test_red_tower_skill_matches_graph_and_preserves_mechanics_evidence(
+    monkeypatch,
+) -> None:
     calls: list[tuple[object, object, object]] = []
 
     def fake_run(emulator, reader, executor, *, timing):
@@ -210,7 +217,9 @@ def test_blaine_skill_forwards_training_control_without_changing_default_contrac
     assert received == [(sink, authority, candidate_sink, candidate_authority)]
 
 
-def test_red_fuchsia_skill_matches_graph_and_preserves_mechanics_evidence(monkeypatch) -> None:
+def test_red_fuchsia_skill_matches_graph_and_preserves_mechanics_evidence(
+    monkeypatch,
+) -> None:
     calls: list[tuple[object, object, object]] = []
 
     def fake_run(emulator, reader, executor, *, timing):
@@ -266,7 +275,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     champion = DefeatChampionObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     celadon = GameState(
         GameMode.OVERWORLD,
-        facts=frozenset({"item:silph_scope"}),
+        facts=frozenset({"item:silph_scope", "story:rocket_hideout_cleared"}),
         location="celadon_pokecenter",
     )
     lavender = GameState(
@@ -290,6 +299,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert strength.availability(surf_ready).executable
     post_strength = surf_ready.with_facts("badge:soul", "move:strength_available")
     assert erika.availability(post_strength).executable
+    assert erika.availability(celadon).executable
     post_erika = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"badge:rainbow"}),
@@ -363,11 +373,15 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     )
     assert champion.availability(champion_room).executable
     assert champion.additional_effect_facts == frozenset({"game:hall_of_fame"})
-    automatic_terminal = champion_room.with_facts("league:champion_defeated", "game:hall_of_fame")
+    automatic_terminal = champion_room.with_facts(
+        "league:champion_defeated", "game:hall_of_fame"
+    )
     assert not champion.availability(automatic_terminal).executable
 
 
-def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypatch) -> None:
+def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(
+    monkeypatch,
+) -> None:
     calls: list[tuple[object, object, object]] = []
 
     def fake_run(emulator, reader, executor, *, timing):
@@ -405,7 +419,6 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             300,
             40_000,
         ),
-        (DefeatErikaObjectiveSkill, "run_erika_chapter", "defeat_erika", 2_000, 300_000),
         (
             ReachSaffronObjectiveSkill,
             "run_saffron_access_chapter",
@@ -455,9 +468,21 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
             4_000,
             500_000,
         ),
-        (DefeatLoreleiObjectiveSkill, "run_lorelei_chapter", "defeat_lorelei", 800, 100_000),
+        (
+            DefeatLoreleiObjectiveSkill,
+            "run_lorelei_chapter",
+            "defeat_lorelei",
+            800,
+            100_000,
+        ),
         (DefeatBrunoObjectiveSkill, "run_bruno_chapter", "defeat_bruno", 800, 100_000),
-        (DefeatAgathaObjectiveSkill, "run_agatha_chapter", "defeat_agatha", 800, 100_000),
+        (
+            DefeatAgathaObjectiveSkill,
+            "run_agatha_chapter",
+            "defeat_agatha",
+            800,
+            100_000,
+        ),
         (DefeatLanceObjectiveSkill, "run_lance_chapter", "defeat_lance", 800, 100_000),
         (
             DefeatChampionObjectiveSkill,
@@ -492,6 +517,38 @@ def test_red_fuchsia_followup_skills_match_graph_and_preserve_evidence(
     assert skill.expected_facts == objective.completion_facts
     assert result.actions_executed == actions
     assert result.frames_executed == frames
+
+
+@pytest.mark.parametrize(
+    ("map_id", "runner_name"),
+    (
+        (MapId.CELADON_POKECENTER, "run_early_erika_chapter"),
+        (MapId.FUCHSIA_POKECENTER, "run_erika_chapter"),
+    ),
+)
+def test_erika_skill_dispatches_from_the_live_authenticated_boundary(
+    monkeypatch, map_id: MapId, runner_name: str
+) -> None:
+    calls: list[str] = []
+
+    class _Reader:
+        def read(self):
+            return type("Raw", (), {"map_id": map_id})()
+
+    def fake_run(emulator, reader, executor, **kwargs):
+        calls.append(runner_name)
+        return _Report(actions_executed=2_000, frames_executed=300_000)
+
+    monkeypatch.setattr(
+        f"pokemon_red_completion.red_objective_skills.{runner_name}", fake_run
+    )
+    skill = DefeatErikaObjectiveSkill(object(), _Reader(), object())  # type: ignore[arg-type]
+
+    result = skill.execute()
+
+    assert result.actions_executed == 2_000
+    assert result.frames_executed == 300_000
+    assert calls == [runner_name]
 
 
 def test_red_sabrina_skill_composes_dojo_curriculum_and_gym(monkeypatch) -> None:
