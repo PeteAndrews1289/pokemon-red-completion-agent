@@ -672,7 +672,7 @@ def run_silph_chapter(
     _run_battle(
         reader,
         actions,
-        4,
+        _silph_giovanni_move_slot,
         MapId.SILPH_CO_11F,
         "Silph Giovanni",
         RedBattlePlanId.SILPH_11F_GIOVANNI,
@@ -1750,6 +1750,25 @@ def _silph_fixed_move_slot(raw: RawGameState, *, preferred: int) -> int:
         ):
             return slot
     raise SilphChapterError("Silph fixed-slot policy has no legal move with PP.")
+
+
+def _silph_giovanni_move_slot(raw: RawGameState) -> int:
+    """Use the strongest qualified Ground/Rock answer in each Silph lineage."""
+
+    moves = raw.battler_moves or ()
+    pp = raw.battler_pp or ()
+    disabled = raw.player_disabled_move_slot if (raw.player_disable_turns or 0) > 0 else None
+    for move_id in (0x82, ICE_BEAM_MOVE):
+        for index, observed_move in enumerate(moves):
+            slot = index + 1
+            if (
+                observed_move == move_id
+                and len(pp) >= slot
+                and pp[index] & 0x3F
+                and slot != disabled
+            ):
+                return slot
+    return _silph_fixed_move_slot(raw, preferred=4)
 
 
 class _PauseBattle(BattleControlRequest):

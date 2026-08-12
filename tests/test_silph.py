@@ -425,6 +425,35 @@ def test_silph_report_accepts_full_rival_recovery_budget() -> None:
     assert report.passed
 
 
+@pytest.mark.parametrize(
+    ("moves", "expected_slot"),
+    (
+        ((0x82, 0x46, 0x3A, 0x39), 1),
+        ((0x2C, 0x46, 0x3A, 0x37), 3),
+        ((0x2C, 0x27, 0x3A, 0x37), 3),
+    ),
+)
+def test_silph_giovanni_policy_uses_the_strongest_lineage_move(
+    moves: tuple[int, int, int, int],
+    expected_slot: int,
+) -> None:
+    raw = replace(_terminal(), first_party_moves=moves, first_party_pp=(15, 15, 10, 15))
+
+    assert silph_module._silph_giovanni_move_slot(raw) == expected_slot
+
+
+def test_silph_giovanni_policy_respects_disable_and_pp() -> None:
+    raw = replace(
+        _terminal(),
+        first_party_moves=(0x82, 0x46, 0x3A, 0x39),
+        first_party_pp=(15, 15, 0, 15),
+        player_disabled_move_slot=1,
+        player_disable_turns=2,
+    )
+
+    assert silph_module._silph_giovanni_move_slot(raw) == 4
+
+
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     route_items = {item: 1 for item in SILPH_PC_DEPOSIT_ITEMS}
 
