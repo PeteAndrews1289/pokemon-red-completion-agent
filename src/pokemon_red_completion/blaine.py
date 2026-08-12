@@ -953,6 +953,12 @@ def run_mansion_secret_key_chapter(
         len(initial_bag),
         initial_bag.get(ItemId.POTION, 0),
         bide_present=bide_present,
+        force_potion_sale=(
+            len(initial_bag) == 18
+            and not bide_present
+            and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
+            and initial_bag.get(ItemId.TM21_MEGA_DRAIN, 0) == 0
+        ),
     )
     (
         capacity_great_ball_required,
@@ -1137,6 +1143,12 @@ def run_blaine_chapter(
         len(initial_bag),
         initial_bag.get(ItemId.POTION, 0),
         bide_present=bide_present,
+        force_potion_sale=(
+            len(initial_bag) == 18
+            and not bide_present
+            and initial_bag.get(ItemId.ANTIDOTE, 0) == 0
+            and initial_bag.get(ItemId.TM21_MEGA_DRAIN, 0) == 0
+        ),
     )
     (
         capacity_great_ball_required,
@@ -1980,6 +1992,7 @@ def _blaine_capacity_input_slots(
     potion_quantity: int,
     *,
     bide_present: bool,
+    force_potion_sale: bool = False,
 ) -> tuple[int, int]:
     """Remove obsolete Potions when Mansion pickups otherwise exceed capacity."""
 
@@ -1989,10 +2002,18 @@ def _blaine_capacity_input_slots(
         raise BlaineChapterError("Unsupported Blaine Potion quantity.")
     if type(bide_present) is not bool:
         raise TypeError("bide_present must be a bool")
-    potion_sale_required = input_slots == 20 or (input_slots == 19 and not bide_present)
+    if type(force_potion_sale) is not bool:
+        raise TypeError("force_potion_sale must be a bool")
+    potion_sale_required = (
+        input_slots == 20
+        or (input_slots == 19 and not bide_present)
+        or force_potion_sale
+    )
     if potion_sale_required:
         if potion_quantity == 0:
             raise BlaineChapterError("Capacity-bound Blaine input lacks obsolete Potions to sell.")
+        if force_potion_sale and (input_slots != 18 or bide_present):
+            raise BlaineChapterError("Forced early Potion sale has an unsupported input lineage.")
         return input_slots - 1, potion_quantity
     return input_slots, 0
 

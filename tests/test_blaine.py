@@ -269,6 +269,19 @@ def test_blaine_sells_obsolete_potions_for_capacity_bound_inputs() -> None:
     assert _blaine_capacity_input_slots(19, 5, bide_present=False) == (18, 5)
     assert _blaine_capacity_input_slots(20, 5, bide_present=True) == (19, 5)
     assert _blaine_capacity_input_slots(20, 5, bide_present=False) == (19, 5)
+    assert _blaine_capacity_input_slots(
+        18,
+        6,
+        bide_present=False,
+        force_potion_sale=True,
+    ) == (17, 6)
+    with pytest.raises(BlaineChapterError, match="unsupported input lineage"):
+        _blaine_capacity_input_slots(
+            17,
+            6,
+            bide_present=False,
+            force_potion_sale=True,
+        )
 
 
 def test_team_training_navigates_the_two_column_battle_menu() -> None:
