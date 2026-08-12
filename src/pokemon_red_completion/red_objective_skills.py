@@ -561,7 +561,6 @@ class ReachCinnabarObjectiveSkill:
             state.mode.value == "overworld"
             and state.location == "celadon_pokecenter"
             and "badge:soul" in state.facts
-            and "move:strength_available" in state.facts
             and "move:surf_available" in state.facts
         )
         executable = (

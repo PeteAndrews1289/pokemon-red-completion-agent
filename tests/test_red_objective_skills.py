@@ -333,9 +333,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert cinnabar.availability(post_sabrina).executable
     pre_sabrina_cinnabar = GameState(
         GameMode.OVERWORLD,
-        facts=frozenset(
-            {"badge:soul", "move:strength_available", "move:surf_available"}
-        ),
+        facts=frozenset({"badge:soul", "move:surf_available"}),
         location="celadon_pokecenter",
     )
     assert cinnabar.availability(pre_sabrina_cinnabar).executable
