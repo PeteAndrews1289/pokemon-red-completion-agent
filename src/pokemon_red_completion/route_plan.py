@@ -677,7 +677,15 @@ def _warp_transition(
         approach = local_paths.get((edge.at, None))
     if approach is None:
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
-    action_in_approach = edge.exit_action is None
+    # Gen I suppresses immediate retrigger when an ordinary entry deposits the
+    # player on its return warp. Starting on that coordinate therefore needs
+    # the decoded outward action. Approaching a return warp from elsewhere is
+    # different: the final step onto its trigger performs the transition, just
+    # like an ordinary warp. Cerulean's robbed house exposes both states in one
+    # traversal (bottom-door arrival, then top-door internal approach).
+    action_in_approach = edge.exit_action is None or (
+        edge.kind == "return" and bool(approach.edges)
+    )
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(
             "route begins on a warp trigger; moving away and re-entering is not planned yet"
@@ -712,7 +720,13 @@ def _warp_transition(
             )
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
-    action = edge.exit_action if edge.exit_action is not None else approach.edges[-1].action
+    action = (
+        approach.edges[-1].action
+        if action_in_approach
+        else edge.exit_action
+    )
+    if action is None:  # pragma: no cover - guarded by the cases above
+        raise RoutePlanningError("warp transition has no triggering action")
     return (
         approach,
         MacroTransition(

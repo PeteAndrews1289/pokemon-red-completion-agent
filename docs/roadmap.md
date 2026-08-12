@@ -70,13 +70,16 @@ Implementation status:
    and 007. Materialize the other 33 learning boundaries using the shared-prerequisite rule, then
    audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
    test situations sealed until final evaluation.
-9. **Implemented; source gate pending:** a bounded scenario materializer can derive the five
+9. **Implemented; first live attempt found a return-warp defect:** a bounded scenario materializer can derive the five
    registry transitions that add exactly one live-observable navigation objective. It rejects an
    approach unless its complete quest contract equals the destination map's observed location and
    that map belongs to the target scenario origin. It also requires an exact source capture,
    all-candidate preflight, stable target state, exact target frontier and a new private output;
-   it creates no episode. Publish it, require exact-commit CI, then use scenario 002 → 003 via
-   `reach_vermilion` as the first live falsification.
+   it creates no episode. Published source `e4a817c` passed CI. Its scenario 002 → 003 attempt then
+   entered the robbed house and failed without output when stepping onto the internally approached
+   top return tile triggered immediately, one action earlier than planned. The repair distinguishes
+   that state from starting on an arrival-protected return warp; the corrected route has 199 inputs
+   at unchanged cost 205. Publish, gate and retry it before opening scenario 003.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

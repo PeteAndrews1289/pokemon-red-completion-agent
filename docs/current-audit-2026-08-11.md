@@ -46,6 +46,20 @@ beside the ROM or over an existing artifact, and it creates no episode or label.
 transitions meet this narrow contract; scenario 002 → 003 through `reach_vermilion` is first after
 source publication and CI.
 
+Published materializer source `e4a817c` passed exact-commit CI, but its first live use failed closed
+and wrote no state, envelope or episode. The route entered Cerulean's robbed house, crossed it, then
+treated the top return warp like the bottom entry warp: walk onto the tile, stand there, press out.
+Live Red instead returned to Cerulean on the entering step. The map exposed a state distinction the
+static return edge had erased—arrival onto a return warp suppresses immediate retrigger, while an
+internally approached return fires as soon as the player enters it.
+
+The current repair makes the last local edge the transition whenever a return warp is approached
+from elsewhere; only a route already starting on the warp uses the separate decoded outward action.
+The real-cartridge plan now predicts map 62 `(1,3)` directly to Cerulean `(8,27)` and applies the
+same rule to the Underground Path exit. Planned inputs drop from 201 to 199 at unchanged cost 205.
+Focused tests preserve both cases. The repair still needs publication and exact-commit CI before the
+materialization retry.
+
 ## First two live short scenarios qualified
 
 Published source `318a1c3` passed CI and repaired the scripted-trainer distinction found by the

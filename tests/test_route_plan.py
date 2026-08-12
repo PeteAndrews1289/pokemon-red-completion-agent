@@ -123,6 +123,36 @@ def test_a_boundary_return_walks_out_and_lands_beyond_the_destination_door() -> 
     assert plan.steps[-1].expected_at == (10, 4)
 
 
+def test_an_internally_approached_boundary_return_triggers_on_entry() -> None:
+    edge = MacroEdge(
+        None,
+        kind="return",
+        at=(0, 3),
+        exit_action="up",
+        destination_warp_index=1,
+    )
+    path = MacroPath((62, 3), (edge,))
+    graph = MacroGraph(
+        {62: (edge,)},
+        warp_locations={3: ((11, 27), (9, 27))},
+    )
+
+    plan = compose_route(
+        graph,
+        path,
+        {62: line((2, 3), (1, 3), (0, 3))},
+        (2, 3),
+    )
+
+    assert plan.actions == ("up", "up")
+    assert plan.terminal_at == (8, 27)
+    assert plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].source_map == 62
+    assert plan.steps[-1].source_at == (1, 3)
+    assert plan.steps[-1].expected_map == 3
+    assert plan.steps[-1].expected_at == (8, 27)
+
+
 def test_a_horizontal_boundary_return_settles_on_the_outside_warp() -> None:
     """Gen I pass-through gates do not play the vertical door walk-out."""
 

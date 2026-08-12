@@ -63,8 +63,9 @@ class MacroEdge:
     arrival_at: tuple[int, int] | None = None
     #: Which border to cross for a connection, when the source game exposes it.
     heading: str | None = None
-    #: Direction pressed after reaching an edge warp. Generation I interior
-    #: returns sit on the map border and fire only when the player walks out.
+    #: Outward direction used when a route *starts* on an edge warp after
+    #: arriving from outside. Walking onto a different return tile from inside
+    #: triggers that return on the entering step instead.
     exit_action: str | None = None
     #: Exact candidates for crossing a map connection.
     coordinate_transitions: tuple[MacroTransition, ...] = ()

@@ -100,6 +100,13 @@ with a rejected Gym approach: **ARRIVING IS NOT DEFEATING**. Keep the output lab
 CHECKPOINT — NO EPISODE, NO LABEL**. This gives the capture campaign a visible assembly line without
 suggesting that movement can manufacture story completion.
 
+Do not let the assembly line work on its first shot. Follow Red into the robbed house and freeze as
+the top doorway returns to Cerulean on the step the planner thought would merely occupy the warp
+tile. Split the animation: **SPAWNED ON RETURN TILE → PRESS OUT** versus **WALKED ONTO RETURN TILE →
+WARP NOW**. Stamp the attempt **NO CHECKPOINT / NO EPISODE**, then remove the redundant input at both
+the house and Underground Path exits. The line is: **“The same coordinate can require different
+control depending on how you arrived there.”**
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

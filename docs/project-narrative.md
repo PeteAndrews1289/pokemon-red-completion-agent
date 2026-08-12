@@ -32,6 +32,15 @@ and cannot create a training episode. The route must pass first, the final live 
 next registered frontier exactly, and only then may a new private checkpoint be written. This turns
 repeated travel into infrastructure without turning convenience into a label.
 
+Its first run did exactly what a useful boundary should do: it refused to produce the checkpoint.
+Red entered the robbed house, walked toward its second door, and warped back to Cerulean one input
+earlier than the route contract predicted. The planner knew how to leave a building when it started
+on the entry warp; it had generalized that into “every return warp needs a second outward press.”
+The cartridge showed the missing state: walking onto another return tile triggers immediately.
+The repaired route keeps those cases separate and shortens the Vermilion plan by two inputs—one at
+the robbed house and one at the Underground Path. No failed output had to be relabeled or deleted,
+because none had been admitted in the first place.
+
 ## August 11: the first useful label chose the route ten times longer
 
 The special-trainer repair passed CI, but the first scenario episode still failed. It had asked the

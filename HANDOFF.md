@@ -46,14 +46,24 @@ exact target frontier from fresh observation, and writes a new private state/env
 episode or training row. It refuses battle, item and interaction approaches, existing outputs,
 repository outputs, ROM-adjacent outputs and sealed test scenarios.
 
-The registry contains five such navigation-only transitions. The first intended use is scenario
-002 → 003 by observing `reach_vermilion`; publish and gate the tool before running it. Working
-prospective identities are source bundle
-`074db6f93be5772b5869cb77446daf73154523355f1c7b1f86161ac152edd084`, battle registry
-`eae377664a026b51809d1a2c9a54832a917b4bc161c81f17880f0169014122e0`, battle teacher execution
-`fe15f1d5ea462fb6ec77b19745efc6b39f679ef0dc8687bae570b2bf3269c6f6`, historical strategic
-registry `afc7482841deab5f75e578ff0d8ee3bc1e4370c71251ed75d48b3a45e41b337d` and historical strategic
-teacher execution `cf8a412c70414a914737940e5aa9622d960f4c92ab5b3cfb4a397e3cda952118`.
+The registry contains five such navigation-only transitions. Published tool source `e4a817c` passed
+exact-commit CI run `31551717481`, then the first scenario 002 → 003 materialization failed closed
+without a state, envelope or episode. Live Red entered the robbed house correctly, but walking from
+inside onto its top return tile immediately returned to Cerulean. The planner expected to stand on
+that tile and send a second outward input. This exposed two return-warp states: a player deposited on
+the entry warp needs an outward input, while a player approaching another return tile triggers it on
+the entering step.
+
+The current repair preserves the arrival case and marks an internally approached return's final
+local step as the cross-map transition. The exact route now predicts the robbed-house return from
+map 62 `(1,3)` directly to Cerulean `(8,27)`, and applies the same rule to the later underground
+exit; total planned inputs fall from 201 to 199 while route cost remains 205. Publish and gate this
+repair before retrying materialization. Working prospective identities are source bundle
+`0b812f73e7deddbaa6967d9aea5603038b22614e9f4ab52e02192f192b3e2241`, battle registry
+`77868448d572b96d38d4b12aa4225e55568bcf1f7a302827632a7ce81c047dd0`, battle teacher execution
+`1cfe33044228545f3fe9dce1d992ce614eebe1ad346e273b5f52e39c1515e784`, historical strategic
+registry `2c94ba4d955e7eb9273bb532c5e8770477e35e357cb5eaf4335a4ae2332563b6` and historical strategic
+teacher execution `7dd0537ba253e89c6ec99b698d860bf7fc3fa2c031c0190df09c9453011ad66e`.
 
 ## Third learning frontier captured; scenario 002 exposed a movable-story-object gap — 2026-08-11
 
