@@ -65,6 +65,7 @@ from pokemon_red_completion.blaine import (
     _settle_mansion_training_forced_switch,
     _team_training_move_guard,
     _team_training_move_slot,
+    _tm38_capacity_sale_required,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
@@ -264,6 +265,13 @@ def test_blaine_antidote_capacity_plan_handles_consumed_and_retained_fillers() -
     with pytest.raises(BlaineChapterError, match="Unsupported Blaine Antidote capacity"):
         _sell_antidote_before_mansion(19, 100)
     assert BLAINE_TM21_SALE_VALUE == 2_500
+
+
+def test_post_mansion_blaine_accepts_both_cartridge_reward_boundaries() -> None:
+    assert not _tm38_capacity_sale_required(got_tm38=True, occupied_bag_slots=19)
+    assert _tm38_capacity_sale_required(got_tm38=False, occupied_bag_slots=20)
+    with pytest.raises(BlaineChapterError, match="withheld TM38 without a full bag"):
+        _tm38_capacity_sale_required(got_tm38=False, occupied_bag_slots=19)
 
 
 def test_blaine_replaces_an_early_sold_bide_capacity_slot() -> None:

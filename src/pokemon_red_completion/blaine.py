@@ -864,7 +864,8 @@ class BlaineAfterMansionReport:
     secret_key_quantity: int
     tm14_quantity: int
     x_accuracy_retained: bool
-    capacity_item_sold: ItemId
+    tm38_reward_delayed: bool
+    capacity_item_sold: ItemId | None
     initial_money: int
     money_remaining: int
     party_hp: tuple[int, ...]
@@ -901,7 +902,11 @@ class BlaineAfterMansionReport:
             and self.secret_key_quantity == 1
             and self.tm14_quantity == 1
             and self.x_accuracy_retained
-            and self.capacity_item_sold not in (self.final_raw.bag_item_ids or ())
+            and self.tm38_reward_delayed == (self.capacity_item_sold is not None)
+            and (
+                self.capacity_item_sold is None
+                or self.capacity_item_sold not in (self.final_raw.bag_item_ids or ())
+            )
             and self.money_remaining > self.initial_money
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
@@ -940,6 +945,11 @@ class BlaineAfterMansionReport:
             "rewards": {
                 "tm38": self.tm38_quantity,
                 "volcano_badge": self.volcano_badge,
+                "tm38_delivery": (
+                    "delayed_after_capacity_sale"
+                    if self.tm38_reward_delayed
+                    else "immediate"
+                ),
             },
             "terminal": {
                 "map": int(self.final_raw.map_id),
@@ -1888,37 +1898,44 @@ def run_blaine_after_mansion_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "blaine_defeated", "Defeated Blaine")
     if not _event(emulator, EventFlag.BEAT_BLAINE):
         raise BlaineChapterError("Blaine victory event did not settle.")
-    if _event(emulator, EventFlag.GOT_TM38):
-        raise BlaineChapterError("Full-bag reward boundary unexpectedly accepted TM38.")
-
-    _move(actions, reader, BLAINE_TO_GYM_EXIT, "Blaine to Gym exit")
-    _move(actions, reader, ("down", "down"), "Cinnabar Gym exit")
-    _require(reader.read(), MapId.CINNABAR_ISLAND, (18, 4), "Gym exterior")
-    _move(
-        actions,
-        reader,
-        ("down",) * 8 + ("left",) * 3 + ("up",),
-        "Cinnabar Mart return",
+    tm38_reward_delayed = _tm38_capacity_sale_required(
+        got_tm38=_event(emulator, EventFlag.GOT_TM38),
+        occupied_bag_slots=len(_bag(emulator)),
     )
-    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
-    _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
-    _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    capacity_sale_item = ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
-    _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
-    if _bag(emulator).get(capacity_sale_item, 0):
-        raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
-    _close(actions, reader)
-    _move(actions, reader, MART_TO_GYM, "Mart to Cinnabar Gym")
-    _require(reader.read(), MapId.CINNABAR_GYM, (16, 16), "Gym reward return")
-    _move(actions, reader, GYM_RETURN_TO_BLAINE, "Blaine reward approach")
-    _require(reader.read(), MapId.CINNABAR_GYM, (3, 4), "Blaine reward approach")
-    _face_and_interact(actions, "up")
-    for _ in range(16):
-        if _event(emulator, EventFlag.GOT_TM38):
-            break
-        _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise BlaineChapterError("Blaine did not award TM38 after the bag slot was freed.")
+    capacity_sale_item: ItemId | None = None
+    if tm38_reward_delayed:
+        _move(actions, reader, BLAINE_TO_GYM_EXIT, "Blaine to Gym exit")
+        _move(actions, reader, ("down", "down"), "Cinnabar Gym exit")
+        _require(reader.read(), MapId.CINNABAR_ISLAND, (18, 4), "Gym exterior")
+        _move(
+            actions,
+            reader,
+            ("down",) * 8 + ("left",) * 3 + ("up",),
+            "Cinnabar Mart return",
+        )
+        _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
+        _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
+        _pulse(actions, MacroActionKind.MOVE, "left", 120)
+        capacity_sale_item = (
+            ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
+        )
+        _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
+        if _bag(emulator).get(capacity_sale_item, 0):
+            raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
+        _close(actions, reader)
+        _move(actions, reader, MART_TO_GYM, "Mart to Cinnabar Gym")
+        _require(reader.read(), MapId.CINNABAR_GYM, (16, 16), "Gym reward return")
+        _move(actions, reader, GYM_RETURN_TO_BLAINE, "Blaine reward approach")
+        _require(reader.read(), MapId.CINNABAR_GYM, (3, 4), "Blaine reward approach")
+        _face_and_interact(actions, "up")
+        for _ in range(16):
+            if _event(emulator, EventFlag.GOT_TM38):
+                break
+            _pulse(actions, MacroActionKind.CONFIRM)
+        else:
+            raise BlaineChapterError("Blaine did not award TM38 after the bag slot was freed.")
+    elif _bag(emulator).get(ItemId.TM38_FIRE_BLAST, 0) != 1:
+        raise BlaineChapterError("Immediate TM38 reward event lacks the TM in the bag.")
     _checkpoint(records, progress, emulator, reader.read(), "tm38_received", "Received TM38")
 
     _move(actions, reader, BLAINE_TO_GYM_EXIT, "Blaine reward to Gym exit")
@@ -1954,7 +1971,8 @@ def run_blaine_after_mansion_chapter(
         secret_key_quantity=_bag(emulator).get(ItemId.SECRET_KEY, 0),
         tm14_quantity=_bag(emulator).get(ItemId.TM14_BLIZZARD, 0),
         x_accuracy_retained=_bag(emulator).get(ItemId.X_ACCURACY, 0) == 1,
-        capacity_item_sold=capacity_items[0],
+        tm38_reward_delayed=tm38_reward_delayed,
+        capacity_item_sold=capacity_sale_item,
         initial_money=initial_money,
         money_remaining=_money(emulator),
         party_hp=_party_hp(emulator),
@@ -2018,6 +2036,19 @@ def _open_sell_menu(actions, emulator) -> None:
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
         raise BlaineChapterError("Cinnabar shop did not select SELL.")
     _pulse(actions, MacroActionKind.CONFIRM)
+
+
+def _tm38_capacity_sale_required(*, got_tm38: bool, occupied_bag_slots: int) -> bool:
+    """Distinguish immediate rewards from the game's full-bag retry lesson."""
+
+    if got_tm38:
+        return False
+    if occupied_bag_slots != 20:
+        raise BlaineChapterError(
+            "Blaine withheld TM38 without a full bag: "
+            f"occupied_slots={occupied_bag_slots}."
+        )
+    return True
 
 
 def _sell_antidote_before_mansion(
