@@ -63,14 +63,6 @@ RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
             "Strength-before-Surf moveset."
         ),
     ),
-    QualifiedSkillOrderContract(
-        objective_id="reach_cinnabar",
-        required_objective_ids=frozenset({"obtain_surf", "defeat_sabrina"}),
-        reason=(
-            "The qualified Cinnabar chapter starts from the post-Sabrina Saffron "
-            "boundary and uses that route's Fly preparation."
-        ),
-    ),
 )
 
 

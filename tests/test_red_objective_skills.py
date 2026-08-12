@@ -329,6 +329,21 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert sabrina.availability(post_silph).executable
     post_sabrina = post_silph.with_facts("badge:marsh", "move:surf_available")
     assert cinnabar.availability(post_sabrina).executable
+    pre_sabrina_cinnabar = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset(
+            {"badge:soul", "move:strength_available", "move:surf_available"}
+        ),
+        location="celadon_pokecenter",
+    )
+    assert cinnabar.availability(pre_sabrina_cinnabar).executable
+    assert not cinnabar.availability(
+        GameState(
+            GameMode.OVERWORLD,
+            facts=frozenset({"move:surf_available"}),
+            location="celadon_pokecenter",
+        )
+    ).executable
     cinnabar_center = post_sabrina.with_facts("location:cinnabar_island")
     cinnabar_center = GameState(
         cinnabar_center.mode,

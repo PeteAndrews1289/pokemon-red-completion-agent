@@ -61,16 +61,7 @@ def test_audit_finds_early_erika_and_early_cinnabar_curriculum_gaps() -> None:
     ):
         assert scenario_id not in by_id
 
-    assert by_id["red-strategic-scenario-v2-041-train"]["current_qualified_skill_blockers"] == [
-        {
-            "objective_id": "reach_cinnabar",
-            "required_but_absent_objective_ids": ["defeat_sabrina"],
-            "reason": (
-                "The qualified Cinnabar chapter starts from the post-Sabrina "
-                "Saffron boundary and uses that route's Fly preparation."
-            ),
-        }
-    ]
+    assert "red-strategic-scenario-v2-041-train" not in by_id
 
 
 def test_contract_rejects_unknown_self_and_empty_prerequisites() -> None:

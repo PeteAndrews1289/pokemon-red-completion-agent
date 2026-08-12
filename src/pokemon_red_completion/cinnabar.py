@@ -41,7 +41,7 @@ from pokemon_red_completion.silph import (
 from pokemon_red_completion.tower import party_core_intact
 
 CINNABAR_CHECKPOINT_COUNT = 6
-CINNABAR_MIN_LEAD_LEVEL = 47
+CINNABAR_MIN_LEAD_LEVEL = 44
 CINNABAR_MAX_INPUT_BAG_SLOTS = 19
 FLY_MOVE_ID = 0x13
 DUX_MOVES_BEFORE = (0x40, 0x1C, 0x0F, 0x1F)
@@ -126,6 +126,7 @@ class CinnabarChapterReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    input_map: int
 
     @property
     def passed(self) -> bool:
@@ -174,6 +175,10 @@ class CinnabarChapterReport:
             and self.final_raw.first_party_max_hp == self.party_max_hp[0]
             and all(status == 0 for status in self.party_status)
             and self.controller_released
+            and self.input_map in {
+                int(MapId.SAFFRON_POKECENTER),
+                int(MapId.CELADON_POKECENTER),
+            }
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -226,6 +231,7 @@ class CinnabarChapterReport:
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
+            "input_map": self.input_map,
         }
 
 
@@ -259,7 +265,10 @@ def run_cinnabar_chapter(
     actions = CountingExecutor(executor)
     records: list[CinnabarCheckpoint] = []
     initial = reader.read()
-    _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Sabrina boundary")
+    if initial.map_id not in {MapId.SAFFRON_POKECENTER, MapId.CELADON_POKECENTER}:
+        raise CinnabarChapterError("Cinnabar route requires a qualified city-center boundary.")
+    _require(initial, initial.map_id, (3, 3), "Cinnabar input boundary")
+    input_map = int(initial.map_id)
     initial_bag = _bag(emulator)
     rare_candy_before = initial_bag.get(ItemId.RARE_CANDY, 0)
     bag_slots_before = len(initial_bag)
@@ -269,13 +278,14 @@ def run_cinnabar_chapter(
         raise CinnabarChapterError("HM02 input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "cinnabar_ready", "Cinnabar route ready")
 
-    for label, route in (
-        ("Saffron gate", SAFFRON_CENTER_TO_ROUTE_7_GATE),
-        ("Route 7 west", ROUTE_7_GATE_TO_WEST),
-        ("Route 7 connection", ROUTE_7_WEST_TO_CONNECTION),
-        ("Celadon arrival", ROUTE_7_CONNECTION_TO_CELADON_CITY),
-    ):
-        _move(actions, reader, route, label, frames=720)
+    if initial.map_id == MapId.SAFFRON_POKECENTER:
+        for label, route in (
+            ("Saffron gate", SAFFRON_CENTER_TO_ROUTE_7_GATE),
+            ("Route 7 west", ROUTE_7_GATE_TO_WEST),
+            ("Route 7 connection", ROUTE_7_WEST_TO_CONNECTION),
+            ("Celadon arrival", ROUTE_7_CONNECTION_TO_CELADON_CITY),
+        ):
+            _move(actions, reader, route, label, frames=720)
     _move(actions, reader, CELADON_TO_ROUTE_16_TREE, "Route 16 Cut tree")
     _require(reader.read(), MapId.ROUTE_16, (34, 10), "Route 16 tree")
     _cut(actions, reader, emulator, DEFAULT_ERIKA_TIMING, "up", 0x2C, "Route 16 Cut")
@@ -358,6 +368,7 @@ def run_cinnabar_chapter(
         emulator.frame_count - start_frames,
         actions.actions_executed,
         not emulator.pressed_buttons,
+        input_map,
     )
     if not report.passed:
         raise CinnabarChapterError(f"Cinnabar evidence contract failed: {report.public_dict()!r}.")
