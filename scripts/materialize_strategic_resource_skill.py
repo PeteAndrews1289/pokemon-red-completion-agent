@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Materialize one construction-only resource without opening a policy context.
 
-The first supported lesson collects Gold Teeth while deliberately leaving HM03
-untouched.  It preserves the source's verified completion objectives, writes a
-new authenticated private capture, and never creates an episode or label.
+Supported lessons collect Gold Teeth without HM03 or acquire and teach HM02/Fly.
+Each preserves the source's verified completion objectives, writes a new
+authenticated private capture, and never creates an episode or label.
 """
 
 from __future__ import annotations
@@ -31,6 +31,11 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 )
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.fly_resource import (  # noqa: E402
+    FlyResourceError,
+    FlyResourceReport,
+    run_fly_resource_chapter,
+)
 from pokemon_red_completion.observation import (  # noqa: E402
     ItemId,
     MapId,
@@ -54,6 +59,7 @@ from pokemon_red_completion.rom import (  # noqa: E402
 from pokemon_red_completion.route import COMPLETION_QUEST  # noqa: E402
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa: E402
 from pokemon_red_completion.safari import (  # noqa: E402
+    GoldTeethChapterReport,
     SafariChapterError,
     run_gold_teeth_chapter,
 )
@@ -69,7 +75,7 @@ from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E40
     load_strategic_navigation_scenario_registry,
 )
 
-SUPPORTED_RESOURCE_ID = "gold_teeth"
+SUPPORTED_RESOURCE_IDS = ("fly", "gold_teeth")
 
 
 class _SemanticTrackingExecutor:
@@ -90,7 +96,7 @@ class _SemanticTrackingExecutor:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target-scenario-id", required=True)
-    parser.add_argument("--acquire-resource-id", choices=(SUPPORTED_RESOURCE_ID,), required=True)
+    parser.add_argument("--acquire-resource-id", choices=SUPPORTED_RESOURCE_IDS, required=True)
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument("--envelope", type=Path, default=None, help="defaults to <state>.json")
     parser.add_argument("--out-state", type=Path, required=True)
@@ -148,15 +154,30 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         emulator.load_state(state_path)
         reader = PokemonRedStateReader(emulator)
         raw = reader.read()
-        if (
-            not raw.game_started
-            or raw.map_id != MapId.FUCHSIA_POKECENTER
-            or (raw.player_x, raw.player_y) != (3, 3)
-            or raw.battle_state != 0
-            or not reader.read_input_readiness().ready
-        ):
+        stable_boundary = (
+            raw.game_started
+            and raw.battle_state == 0
+            and reader.read_input_readiness().ready
+        )
+        if args.acquire_resource_id == "gold_teeth":
+            stable_boundary = stable_boundary and (
+                raw.map_id == MapId.FUCHSIA_POKECENTER
+                and (raw.player_x, raw.player_y) == (3, 3)
+            )
+        else:
+            stable_boundary = stable_boundary and (
+                (
+                    raw.map_id == MapId.CELADON_CITY
+                    and (raw.player_x, raw.player_y) == (49, 11)
+                )
+                or (
+                    raw.map_id == MapId.CELADON_POKECENTER
+                    and (raw.player_x, raw.player_y) == (3, 3)
+                )
+            )
+        if not stable_boundary:
             raise StrategicScenarioRuntimeError(
-                "resource source is not the stable Fuchsia Center boundary"
+                "resource source is not the required stable lesson boundary"
             )
         observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, capture)
         before = observer.observe()
@@ -166,30 +187,49 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             raise StrategicScenarioRuntimeError(
                 "resource source must be a strict subset of the target frontier"
             )
-        if "item:gold_teeth" in before.facts or "move:surf_available" in before.facts:
+        if args.acquire_resource_id == "gold_teeth" and (
+            "item:gold_teeth" in before.facts or "move:surf_available" in before.facts
+        ):
             raise StrategicScenarioRuntimeError(
                 "Gold Teeth resource source is not pristine or already contains Surf"
             )
+        if args.acquire_resource_id == "fly" and ItemId.HM02_FLY in _bag(emulator):
+            raise StrategicScenarioRuntimeError("Fly resource source already contains HM02")
 
         controller = FrameSafeExecutor(
             emulator,
             DEFAULT_NEW_GAME_TIMING.controller_timing(),
         )
         tracked = _SemanticTrackingExecutor(controller, observer)
-        report = run_gold_teeth_chapter(emulator, reader, tracked)
+        report: GoldTeethChapterReport | FlyResourceReport
+        if args.acquire_resource_id == "gold_teeth":
+            report = run_gold_teeth_chapter(emulator, reader, tracked)
+            encounters_fled = report.encounters_fled
+        else:
+            report = run_fly_resource_chapter(emulator, reader, tracked)
+            encounters_fled = report.wild_battles
         after = observer.observe()
-        if (
-            COMPLETION_QUEST.completed_ids(after) != completed_before
-            or "item:gold_teeth" not in after.facts
+        objectives_changed = COMPLETION_QUEST.completed_ids(after) != completed_before
+        gold_teeth_failed = args.acquire_resource_id == "gold_teeth" and (
+            "item:gold_teeth" not in after.facts
             or "move:surf_available" in after.facts
             or ItemId.HM03_SURF in _bag(emulator)
-        ):
+        )
+        fly_failed = args.acquire_resource_id == "fly" and (
+            ItemId.HM02_FLY not in _bag(emulator) or not report.passed
+        )
+        if objectives_changed or gold_teeth_failed or fly_failed:
             raise StrategicScenarioRuntimeError(
-                "resource lesson changed objectives or failed the Gold Teeth/no-Surf contract"
+                "resource lesson changed objectives or failed its acquisition contract"
             )
         final = reader.read()
+        expected_map = (
+            MapId.FUCHSIA_POKECENTER
+            if args.acquire_resource_id == "gold_teeth"
+            else MapId.CELADON_POKECENTER
+        )
         if (
-            final.map_id != MapId.FUCHSIA_POKECENTER
+            final.map_id != expected_map
             or (final.player_x, final.player_y) != (3, 3)
             or final.battle_state != 0
             or not reader.read_input_readiness().ready
@@ -202,9 +242,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         output_envelope = write_captured_progress(
             Path(f"{out_state}.json"),
             state_path=out_state,
-            checkpoint_id=f"{target.scenario_id}-toward-gold-teeth-resource-materialized",
+            checkpoint_id=(
+                f"{target.scenario_id}-toward-{args.acquire_resource_id}-resource-materialized"
+            ),
             checkpoint_label=(
-                f"Materialized Gold Teeth toward {target.scenario_id} without HM03"
+                f"Materialized {args.acquire_resource_id} toward {target.scenario_id} "
+                "without an objective label"
             ),
             checkpoints_completed=capture.checkpoints_completed,
             checkpoints_total=capture.checkpoints_total,
@@ -233,7 +276,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "skill": {
             "actions_executed": report.actions_executed,
             "frames_executed": report.frames_executed,
-            "encounters_fled": report.encounters_fled,
+            "encounters_fled": encounters_fled,
         },
         "capture": {
             "checkpoint_id": output_envelope.checkpoint_id,
@@ -253,6 +296,7 @@ def main(argv: list[str] | None = None) -> int:
         CollectionProtocolError,
         EmulatorError,
         EvaluationIdentityError,
+        FlyResourceError,
         OSError,
         ResumedStateError,
         RomValidationError,

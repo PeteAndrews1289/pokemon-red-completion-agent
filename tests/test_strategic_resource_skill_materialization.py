@@ -29,6 +29,7 @@ def test_resource_materializer_help_is_explicitly_non_collection(
     assert "construction-only resource" in output
     assert "--acquire-resource-id" in output
     assert "gold_teeth" in output
+    assert "fly" in output
     assert "--execute" not in output
 
 
