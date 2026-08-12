@@ -729,14 +729,12 @@ def _warp_transition(
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
     # Gen I suppresses immediate retrigger when an ordinary entry deposits the
     # player on its return warp. Starting on that coordinate therefore needs
-    # the decoded outward action. Non-boundary return tiles and top-boundary
-    # returns fire when approached from inside, but bottom and horizontal map-
-    # edge returns require a separate outward input after reaching the edge.
-    # Cerulean's robbed-house rear door and the south Underground Path exit are
-    # the live cartridge witnesses for the two vertical cases.
-    action_in_approach = edge.exit_action is None or (
-        edge.kind == "return" and edge.exit_action == "up" and bool(approach.edges)
-    )
+    # the decoded outward action. The Generation I adapter clears that action
+    # only when the source tileset's cartridge table marks this exact tile as
+    # an automatic door/warp. Geometry alone is insufficient: Cerulean's
+    # robbed-house top door fires on entry, while the Underground Path top edge
+    # needs a second UP from the same coordinate.
+    action_in_approach = edge.exit_action is None
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(
             "route begins on a warp trigger; moving away and re-entering is not planned yet"
@@ -751,10 +749,9 @@ def _warp_transition(
         arrival = locations[index]
         if edge.exit_action in {"up", "down"} and not action_in_approach:
             # Pressing outward through a vertical boundary return plays the
-            # doorway animation one tile beyond the exterior warp. The one
-            # exception above is an internally approached top return, which
-            # fires on the entering step and settles *on* that exterior warp.
-            # Horizontal pass-through gates also settle on the outside warp.
+            # doorway animation one tile beyond the exterior warp. Automatic
+            # doors arrive through the ``action_in_approach`` case above and
+            # settle on the destination warp instead.
             dy, dx = {
                 "up": (-1, 0),
                 "down": (1, 0),

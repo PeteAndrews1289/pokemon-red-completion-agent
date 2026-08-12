@@ -34,6 +34,7 @@ from pokemon_red_completion.gen1_terrain import (
     TILESET_ENTRY_BYTES,
     TILESET_TABLE,
     Terrain,
+    automatic_warp_tiles,
     steps_between,
     terrain_for,
     terrain_from_blocks,
@@ -60,7 +61,7 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 
 RECORD = Path("docs/evidence/terrain-2026-08-10.json")
 
-ROM_BYTES = 0x10000
+ROM_BYTES = 0x20000
 MAP_BANK = 1  # in bank 1 a banked address equals its flat offset
 #: The tileset deliberately lives in a *different* bank from the map.
 #:
@@ -75,6 +76,8 @@ BLOCKSET_AT = TILESET_BANK * 0x4000 + (BLOCKSET_ADDRESS - 0x4000)
 HEADER_AT = 0x4100
 BLOCKS_AT = 0x4200
 TEST_WATER_TILESETS_TABLE = 0xE8E0
+TEST_WARP_TILE_POINTERS = 0xC4CC
+TEST_DOOR_TILE_POINTERS = 0x1A62C
 
 WALKABLE_TILE = 0x01
 SOLID_TILE = 0x02
@@ -103,6 +106,34 @@ def cartridge(
     data[TEST_WATER_TILESETS_TABLE : TEST_WATER_TILESETS_TABLE + 10] = bytes(
         (0, 3, 5, 7, 13, 14, 17, 22, 23, 0xFF)
     )
+
+    # Independently laid-out automatic warp lists.  The pointers deliberately
+    # target banks 3 and 6, so a flat-pointer or wrong-bank decoder reads a
+    # different part of this fixture.
+    for tileset_id in range(24):
+        address = 0x4700 + 4 * tileset_id
+        pointer_at = TEST_WARP_TILE_POINTERS + 2 * tileset_id
+        data[pointer_at : pointer_at + 2] = address.to_bytes(2, "little")
+        flat = 3 * 0x4000 + (address - 0x4000)
+        values = {
+            8: (0x32,),
+            11: (0x13,),
+        }.get(tileset_id, ())
+        data[flat : flat + len(values) + 1] = bytes((*values, 0xFF))
+
+    door_tilesets = (0, 3, 2, 8, 9, 10, 12, 13, 18, 19, 20, 22, 23)
+    for record, tileset_id in enumerate(door_tilesets):
+        address = 0x6800 + 4 * record
+        pointer_at = TEST_DOOR_TILE_POINTERS + 3 * record
+        data[pointer_at] = tileset_id
+        data[pointer_at + 1 : pointer_at + 3] = address.to_bytes(2, "little")
+        flat = 6 * 0x4000 + (address - 0x4000)
+        values = {
+            0: (0x1B, 0x58),
+            8: (0x54,),
+        }.get(tileset_id, ())
+        data[flat : flat + len(values) + 1] = bytes((*values, 0))
+    data[TEST_DOOR_TILE_POINTERS + 3 * len(door_tilesets)] = 0xFF
 
     data[COLLISION_AT : COLLISION_AT + len(walkable)] = bytes(walkable)
     data[COLLISION_AT + len(walkable)] = 0xFF
@@ -467,6 +498,31 @@ def test_water_tilesets_are_decoded_from_the_cartridge_table() -> None:
     rom = cartridge(block_ids=[[0]], blocks={0: CORNERS})
 
     assert water_tilesets(rom) == frozenset({0, 3, 5, 7, 13, 14, 17, 22, 23})
+
+
+def test_automatic_warp_tiles_union_warp_and_sparse_door_tables() -> None:
+    rom = cartridge(block_ids=[[0]], blocks={0: CORNERS})
+
+    decoded = automatic_warp_tiles(rom)
+
+    assert decoded[0] == frozenset({0x1B, 0x58})
+    assert decoded[8] == frozenset({0x32, 0x54})
+    assert decoded[11] == frozenset({0x13})
+    assert decoded[1] == frozenset()
+
+
+def test_automatic_warp_tables_refuse_bad_pointer_and_duplicate_tileset() -> None:
+    bad_pointer = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    bad_pointer[TEST_WARP_TILE_POINTERS : TEST_WARP_TILE_POINTERS + 2] = (0x1234).to_bytes(
+        2, "little"
+    )
+    with pytest.raises(CartridgeReadError, match="outside the bank window"):
+        automatic_warp_tiles(bytes(bad_pointer))
+
+    duplicate = bytearray(cartridge(block_ids=[[0]], blocks={0: CORNERS}))
+    duplicate[TEST_DOOR_TILE_POINTERS + 3] = duplicate[TEST_DOOR_TILE_POINTERS]
+    with pytest.raises(CartridgeReadError, match="tileset table is invalid"):
+        automatic_warp_tiles(bytes(duplicate))
 
 
 def test_water_and_shore_tiles_are_separate_from_walkable_ground() -> None:

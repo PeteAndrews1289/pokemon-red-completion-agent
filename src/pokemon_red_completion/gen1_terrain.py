@@ -64,6 +64,7 @@ TILESET_TABLE = 0xC7BE
 TILESET_ENTRY_BYTES = 12
 TILESET_COUNT = 24
 COLLISION_LIST_LIMIT = 128
+AUTOMATIC_WARP_TILE_LIMIT = 32
 BLOCK_SIDE = 4
 BLOCK_TILES = BLOCK_SIDE * BLOCK_SIDE
 STEPS_PER_BLOCK = 2
@@ -89,6 +90,17 @@ WATER_TILE = 0x14
 EAST_SHORE_TILE = 0x48
 USUAL_SHORE_TILE = 0x32
 SHIP_PORT_TILESET = 14
+
+#: Pointer array consulted by ``IsPlayerStandingOnDoorTileOrWarpTile``.  Every
+#: tileset owns one $FF-terminated list in bank 3.
+WARP_TILE_ID_POINTERS = 0xC4CC
+WARP_TILE_ID_BANK = 3
+
+#: Sparse ``tileset, pointer`` records consulted first by the same routine.
+#: Door lists live in bank 6 and use zero rather than $FF as their terminator.
+DOOR_TILE_ID_POINTERS = 0x1A62C
+DOOR_TILE_ID_BANK = 6
+DOOR_TILESET_RECORDS = 13
 
 
 @dataclass(frozen=True, slots=True)
@@ -182,6 +194,74 @@ def water_tilesets(rom: bytes) -> frozenset[int]:
     if len(found) != WATER_TILESET_COUNT or len(set(found)) != WATER_TILESET_COUNT:
         raise CartridgeReadError("the water tileset table is incomplete or duplicated")
     return frozenset(found)
+
+
+def automatic_warp_tiles(rom: bytes) -> dict[int, frozenset[int]]:
+    """Tiles that trigger a warp as soon as Red steps onto them.
+
+    Other warp coordinates are directional: the player may stand on the
+    coordinate and has to keep moving toward an edge or warp carpet.  That
+    distinction cannot be inferred from the coordinate alone.  In particular,
+    Cerulean's robbed-house top door and the Underground Path top edge occupy
+    the same geometric position but have different trigger semantics.
+    """
+
+    found: dict[int, set[int]] = {index: set() for index in range(TILESET_COUNT)}
+    for tileset_id in range(TILESET_COUNT):
+        pointer_at = WARP_TILE_ID_POINTERS + 2 * tileset_id
+        pointer = int.from_bytes(rom[pointer_at : pointer_at + 2], "little")
+        if not 0x4000 <= pointer <= 0x7FFF:
+            raise CartridgeReadError(
+                f"tileset {tileset_id}'s automatic-warp pointer is outside the bank window"
+            )
+        cursor = bank_offset(WARP_TILE_ID_BANK, pointer)
+        values = _terminated_tile_ids(
+            rom,
+            cursor,
+            terminator=0xFF,
+            subject=f"tileset {tileset_id}'s automatic-warp list",
+        )
+        found[tileset_id].update(values)
+
+    cursor = DOOR_TILE_ID_POINTERS
+    seen_tilesets: set[int] = set()
+    for _ in range(DOOR_TILESET_RECORDS):
+        tileset_id = rom[cursor]
+        if tileset_id >= TILESET_COUNT or tileset_id in seen_tilesets:
+            raise CartridgeReadError("the automatic-door tileset table is invalid")
+        pointer = int.from_bytes(rom[cursor + 1 : cursor + 3], "little")
+        if not 0x4000 <= pointer <= 0x7FFF:
+            raise CartridgeReadError("an automatic-door pointer is outside the bank window")
+        values = _terminated_tile_ids(
+            rom,
+            bank_offset(DOOR_TILE_ID_BANK, pointer),
+            terminator=0,
+            subject=f"tileset {tileset_id}'s automatic-door list",
+        )
+        found[tileset_id].update(values)
+        seen_tilesets.add(tileset_id)
+        cursor += 3
+    if rom[cursor] != 0xFF:
+        raise CartridgeReadError("the automatic-door tileset table does not end")
+    return {index: frozenset(values) for index, values in found.items()}
+
+
+def _terminated_tile_ids(
+    rom: bytes,
+    cursor: int,
+    *,
+    terminator: int,
+    subject: str,
+) -> tuple[int, ...]:
+    values: list[int] = []
+    while rom[cursor] != terminator:
+        values.append(rom[cursor])
+        cursor += 1
+        if len(values) > AUTOMATIC_WARP_TILE_LIMIT:
+            raise CartridgeReadError(f"{subject} does not end")
+    if len(set(values)) != len(values):
+        raise CartridgeReadError(f"{subject} contains a duplicate")
+    return tuple(values)
 
 
 def tilesets(rom: bytes) -> dict[int, Tileset]:

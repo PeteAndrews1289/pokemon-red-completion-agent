@@ -98,6 +98,41 @@ def test_pass_through_gate_entry_actions_derive_from_destination_boundary() -> N
     assert gen1_maps._boundary_entry_action(header, (0, 0)) is None
 
 
+def test_cartridge_tile_semantics_override_geometric_warp_guess() -> None:
+    automatic = Passage(
+        to_map=None,
+        kind=PassageKind.RETURN,
+        at=(0, 1),
+        exit_action="up",
+        destination_warp_index=0,
+    )
+    directional = Passage(
+        to_map=None,
+        kind=PassageKind.RETURN,
+        at=(0, 2),
+        exit_action="up",
+        destination_warp_index=1,
+    )
+    graph = {
+        9: MapNode(
+            map_id=9,
+            height=1,
+            width=2,
+            passages=(automatic, directional),
+            tileset=8,
+        )
+    }
+
+    projected = gen1_maps._with_automatic_warp_triggers(
+        graph,
+        {9: ((0x11, 0x54, 0x37, 0x11), (0x11, 0x11, 0x11, 0x11))},
+        {8: frozenset({0x54})},
+    )
+
+    assert projected[9].passages[0].exit_action is None
+    assert projected[9].passages[1].exit_action == "up"
+
+
 def test_both_cartridges_carry_the_same_world(record: dict) -> None:
     """Keep the legacy comparison's narrower evidence boundary visible."""
 

@@ -43,7 +43,7 @@ independent reads, so agreement between them is evidence rather than restatement
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.gen1_cartridge import (
@@ -351,6 +351,25 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
     """
 
     graph = read_map_graph(rom)
+    # Imported here to keep the low-level map-header and terrain decoders from
+    # forming a module import cycle.  The executable graph needs both reads:
+    # coordinates say *where* a warp is, while the tileset tables say whether
+    # merely entering that coordinate triggers it.
+    from pokemon_red_completion.gen1_terrain import (
+        automatic_warp_tiles,
+        terrain_for,
+        tilesets,
+    )
+
+    sets = tilesets(rom)
+    graph = _with_automatic_warp_triggers(
+        graph,
+        {
+            map_id: terrain_for(rom, map_id, sets).tiles
+            for map_id in graph
+        },
+        automatic_warp_tiles(rom),
+    )
     verify_against_encounter_reads(
         reachable=set(graph),
         named_maps={item.value for item in MapId},
@@ -358,6 +377,29 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         fishable=set(fishing_tables(rom).by_map),
     )
     return graph
+
+
+def _with_automatic_warp_triggers(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    automatic_tiles: Mapping[int, frozenset[int]],
+) -> dict[int, MapNode]:
+    """Clear extra-input actions where cartridge tile tables trigger on entry."""
+
+    projected: dict[int, MapNode] = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+        triggers = automatic_tiles[node.tileset]
+        passages = tuple(
+            replace(passage, exit_action=None)
+            if passage.at is not None
+            and passage.exit_action is not None
+            and tiles[passage.at[0]][passage.at[1]] in triggers
+            else passage
+            for passage in node.passages
+        )
+        projected[map_id] = replace(node, passages=passages)
+    return projected
 
 
 def _read_headers(

@@ -148,12 +148,11 @@ def test_a_boundary_return_walks_out_and_lands_beyond_the_destination_door() -> 
     assert plan.steps[-1].expected_at == (10, 4)
 
 
-def test_an_internally_approached_top_boundary_return_triggers_on_entry() -> None:
+def test_an_automatic_top_boundary_return_triggers_on_entry() -> None:
     edge = MacroEdge(
         None,
         kind="return",
         at=(0, 3),
-        exit_action="up",
         destination_warp_index=1,
     )
     path = MacroPath((62, 3), (edge,))
@@ -176,6 +175,36 @@ def test_an_internally_approached_top_boundary_return_triggers_on_entry() -> Non
     assert plan.steps[-1].source_at == (1, 3)
     assert plan.steps[-1].expected_map == 3
     assert plan.steps[-1].expected_at == (9, 27)
+
+
+def test_a_directional_top_boundary_return_needs_outward_input() -> None:
+    edge = MacroEdge(
+        None,
+        kind="return",
+        at=(0, 3),
+        exit_action="up",
+        destination_warp_index=1,
+    )
+    path = MacroPath((73, 17), (edge,))
+    graph = MacroGraph(
+        {73: (edge,)},
+        warp_locations={17: ((1, 9), (1, 10))},
+    )
+
+    plan = compose_route(
+        graph,
+        path,
+        {73: line((2, 3), (1, 3), (0, 3))},
+        (2, 3),
+    )
+
+    assert plan.actions == ("up", "up", "up")
+    assert plan.terminal_at == (0, 10)
+    assert not plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].source_map == 73
+    assert plan.steps[-1].source_at == (0, 3)
+    assert plan.steps[-1].expected_map == 17
+    assert plan.steps[-1].expected_at == (0, 10)
 
 
 def test_an_internally_approached_bottom_boundary_return_needs_outward_input() -> None:
