@@ -31,6 +31,9 @@ from pokemon_red_completion.silph import (
     MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
     MART_5F_GENTLEMAN_RETURN_YIELD_POSITION,
     MART_5F_GENTLEMAN_YIELD_POSITION,
+    POST_SURF_NO_STRENGTH_MOVES_AFTER_ICE_BEAM,
+    POST_SURF_NO_STRENGTH_MOVES_BEFORE_ICE_BEAM,
+    POST_SURF_NO_STRENGTH_PP_AFTER_ICE_BEAM,
     POST_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
     POST_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM,
     POST_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
@@ -356,6 +359,15 @@ def test_silph_report_accepts_qualified_early_pre_surf_lineage() -> None:
         EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     )
     assert report.passed
+
+
+def test_silph_accepts_the_post_erika_no_strength_lineage() -> None:
+    assert silph_module.SILPH_ICE_BEAM_LINEAGES[
+        POST_SURF_NO_STRENGTH_MOVES_BEFORE_ICE_BEAM
+    ] == (
+        POST_SURF_NO_STRENGTH_MOVES_AFTER_ICE_BEAM,
+        POST_SURF_NO_STRENGTH_PP_AFTER_ICE_BEAM,
+    )
 
 
 def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
