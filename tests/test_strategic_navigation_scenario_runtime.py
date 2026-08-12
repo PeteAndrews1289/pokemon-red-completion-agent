@@ -45,6 +45,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
+    bind_scenario_interruption_limits,
     record_strategic_scenario_rehearsal,
     require_executable_scenario_bindings,
 )
@@ -54,6 +55,33 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 from pokemon_red_completion.trajectory import SemanticSnapshot
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_scenario_interruption_limit_covers_both_handler_budgets() -> None:
+    base = RouteExecutionLimits(max_interruptions=2)
+
+    bound = bind_scenario_interruption_limits(
+        base,
+        maximum_flees=12,
+        maximum_trainer_battles=12,
+    )
+
+    assert bound.max_interruptions == 24
+    assert base.max_interruptions == 2
+    assert (
+        bind_scenario_interruption_limits(
+            base,
+            maximum_flees=0,
+            maximum_trainer_battles=0,
+        ).max_interruptions
+        == 1
+    )
+    with pytest.raises(ValueError, match="maximum_flees"):
+        bind_scenario_interruption_limits(
+            base,
+            maximum_flees=-1,
+            maximum_trainer_battles=0,
+        )
 
 
 @dataclass

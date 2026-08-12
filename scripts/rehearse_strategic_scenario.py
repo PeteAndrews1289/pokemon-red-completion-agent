@@ -14,7 +14,6 @@ import hashlib
 import json
 import sys
 from collections.abc import Mapping
-from dataclasses import replace
 from pathlib import Path
 from typing import Any, cast
 
@@ -124,6 +123,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (  # noq
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
     StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
+    bind_scenario_interruption_limits,
     record_strategic_scenario_rehearsal,
     require_executable_scenario_bindings,
 )
@@ -393,12 +393,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             selected_destination_ref=selected,
             interruption_handler_factory=interruption_factory,
             replanner=route_world.replanner(),
-            limits=replace(
+            limits=bind_scenario_interruption_limits(
                 DEFAULT_LIMITS,
-                max_interruptions=max(
-                    1,
-                    args.maximum_flees + args.maximum_trainer_battles,
-                ),
+                maximum_flees=args.maximum_flees,
+                maximum_trainer_battles=args.maximum_trainer_battles,
             ),
         )
 

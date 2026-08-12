@@ -95,6 +95,28 @@ class StrategicScenarioRuntimeError(RuntimeError):
     """Raised before a rehearsal can overstate a branch or durable result."""
 
 
+def bind_scenario_interruption_limits(
+    limits: RouteExecutionLimits,
+    *,
+    maximum_flees: int,
+    maximum_trainer_battles: int,
+) -> RouteExecutionLimits:
+    """Bind the route-wide cap to both independently bounded interruption types."""
+
+    if not isinstance(limits, RouteExecutionLimits):
+        raise TypeError("scenario limits must be RouteExecutionLimits")
+    for name, value in (
+        ("maximum_flees", maximum_flees),
+        ("maximum_trainer_battles", maximum_trainer_battles),
+    ):
+        if type(value) is not int or value < 0:  # noqa: E721
+            raise ValueError(f"{name} must be a non-negative integer")
+    return replace(
+        limits,
+        max_interruptions=max(1, maximum_flees + maximum_trainer_battles),
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class StrategicScenarioRouteWorld:
     """Immutable cartridge-derived routing inputs shared by all candidates."""
