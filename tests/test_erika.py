@@ -8,6 +8,8 @@ from pokemon_red_completion.erika import (
     CENTER_EXIT_TWO,
     DEFAULT_ERIKA_TIMING,
     EARLY_ERIKA_CHECKPOINT_COUNT,
+    EARLY_ERIKA_ICE_BEAM_LINEAGES,
+    EARLY_ERIKA_PARTIES,
     ERIKA_CHECKPOINT_COUNT,
     ERIKA_CLASS,
     ERIKA_OPPONENT,
@@ -229,6 +231,64 @@ def test_early_erika_report_requires_exact_pre_koga_transition() -> None:
     assert report.public_dict()["curriculum"] == "pre_koga_celadon"
     assert not replace(report, badge_bits_after=0x1F).passed
     assert not replace(report, tm13_transfer_before_event=False).passed
+
+
+def test_early_erika_report_accepts_the_exact_post_surf_lineage() -> None:
+    initial = replace(
+        _terminal(),
+        badge_bits=0x07,
+        party_count=4,
+        party_species_ids=(BLASTOISE_SPECIES_ID, 0x40, 0x3B, 0x84),
+        first_party_level=43,
+        first_party_moves=(0x2C, 0x27, 0x3D, 0x39),
+        first_party_pp=(25, 30, 20, 15),
+    )
+    final = replace(
+        initial,
+        badge_bits=0x0F,
+        first_party_level=44,
+        first_party_moves=(0x2C, 0x27, 0x3A, 0x39),
+        first_party_pp=(25, 30, 10, 15),
+    )
+    report = EarlyErikaChapterReport(
+        records=tuple(
+            ErikaCheckpoint(str(index), str(index), final)
+            for index in range(EARLY_ERIKA_CHECKPOINT_COUNT)
+        ),
+        initial_raw=initial,
+        final_raw=final,
+        erika_identity=(ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1),
+        ice_beam_pp_spent=2,
+        tm13_transfer_before_event=True,
+        x_special_used=1,
+        money_before=10_000,
+        money_after=11_856,
+        badge_bits_before=0x07,
+        badge_bits_after=0x0F,
+        gym_events_before=(False,) * 7,
+        gym_events_after=(True,) * 7,
+        final_bag=(
+            (int(ItemId.TM21_MEGA_DRAIN), 1),
+            (int(ItemId.X_ACCURACY), 1),
+            (int(ItemId.X_SPECIAL), 2),
+        ),
+        party_hp=(140, 47, 40, 31),
+        party_max_hp=(140, 47, 40, 31),
+        party_status=(0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert initial.party_species_ids in EARLY_ERIKA_PARTIES
+    assert EARLY_ERIKA_ICE_BEAM_LINEAGES[
+        (initial.first_party_moves, initial.first_party_pp)
+    ] == (final.first_party_moves, final.first_party_pp)
+    assert report.passed
+    assert not replace(
+        report,
+        initial_raw=replace(initial, party_species_ids=(*initial.party_species_ids[:-1], 0x85)),
+    ).passed
 
 
 def test_early_erika_policy_prioritizes_ice_beam() -> None:

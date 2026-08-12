@@ -66,6 +66,23 @@ ERIKA_OPPONENT = 0xED
 ERIKA_CLASS = 0x25
 SKULL_BASH = 0x82
 BLASTOISE_SPECIES_ID = 0x1C
+EARLY_ERIKA_PARTIES = frozenset(
+    {
+        (0xB3, 0x40, 0x3B),
+        (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
+        (BLASTOISE_SPECIES_ID, 0x40, 0x3B, 0x84),
+    }
+)
+EARLY_ERIKA_ICE_BEAM_LINEAGES = {
+    ((0x2C, 0x27, 0x3D, 0x37), (25, 30, 20, 25)): (
+        (0x2C, 0x27, ICE_BEAM_MOVE, 0x37),
+        (25, 30, 10, 25),
+    ),
+    ((0x2C, 0x27, 0x3D, 0x39), (25, 30, 20, 15)): (
+        (0x2C, 0x27, ICE_BEAM_MOVE, 0x39),
+        (25, 30, 10, 15),
+    ),
+}
 MOVEMENT_RETRY_WAIT_FRAMES = 12
 GYM_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_CELADON_GYM_TRAINER_0) + index) for index in range(7)
@@ -384,22 +401,24 @@ class EarlyErikaChapterReport:
     def passed(self) -> bool:
         initial_species = tuple(self.initial_raw.party_species_ids or ())
         final_species = tuple(self.final_raw.party_species_ids or ())
+        lineage = EARLY_ERIKA_ICE_BEAM_LINEAGES.get(
+            (
+                tuple(self.initial_raw.first_party_moves or ()),
+                tuple(self.initial_raw.first_party_pp or ()),
+            )
+        )
         allowed_final_species = (
-            {(0xB3, 0x40, 0x3B), (BLASTOISE_SPECIES_ID, 0x40, 0x3B)}
-            if initial_species == (0xB3, 0x40, 0x3B)
+            {initial_species, (BLASTOISE_SPECIES_ID, *initial_species[1:])}
+            if initial_species and initial_species[0] == 0xB3
             else {initial_species}
         )
         return (
             len(self.records) == EARLY_ERIKA_CHECKPOINT_COUNT
-            and initial_species
-            in {
-                (0xB3, 0x40, 0x3B),
-                (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
-            }
+            and initial_species in EARLY_ERIKA_PARTIES
             and final_species in allowed_final_species
-            and self.initial_raw.first_party_moves == (0x2C, 0x27, 0x3D, 0x37)
-            and self.final_raw.first_party_moves == (0x2C, 0x27, ICE_BEAM_MOVE, 0x37)
-            and self.final_raw.first_party_pp == (25, 30, 10, 25)
+            and lineage is not None
+            and self.final_raw.first_party_moves == lineage[0]
+            and self.final_raw.first_party_pp == lineage[1]
             and self.erika_identity == (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1)
             and 0 < self.ice_beam_pp_spent <= 10
             and self.tm13_transfer_before_event
@@ -473,11 +492,15 @@ def run_early_erika_chapter(
     records: list[ErikaCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.CELADON_POKECENTER, (3, 3), "early Erika boundary")
+    lineage = EARLY_ERIKA_ICE_BEAM_LINEAGES.get(
+        (
+            tuple(initial.first_party_moves or ()),
+            tuple(initial.first_party_pp or ()),
+        )
+    )
     if (
-        tuple(initial.party_species_ids or ())
-        not in {(0xB3, 0x40, 0x3B), (BLASTOISE_SPECIES_ID, 0x40, 0x3B)}
-        or initial.first_party_moves != (0x2C, 0x27, 0x3D, 0x37)
-        or initial.first_party_pp != (25, 30, 20, 25)
+        tuple(initial.party_species_ids or ()) not in EARLY_ERIKA_PARTIES
+        or lineage is None
         or _party_hp(emulator) != _party_max_hp(emulator)
         or any(_party_status(emulator))
         or emulator.read_u8(RamAddress.OBTAINED_BADGES) != 0x07
@@ -500,9 +523,9 @@ def run_early_erika_chapter(
             actions,  # type: ignore[arg-type]
             reader,
             emulator,
-            expected_moves_before=(0x2C, 0x27, 0x3D, 0x37),
-            expected_moves_after=(0x2C, 0x27, ICE_BEAM_MOVE, 0x37),
-            expected_pp_after=(25, 30, 10, 25),
+            expected_moves_before=tuple(initial.first_party_moves or ()),
+            expected_moves_after=lineage[0],
+            expected_pp_after=lineage[1],
             buy_silph_battle_items=True,
         )
     except SilphChapterError as error:
