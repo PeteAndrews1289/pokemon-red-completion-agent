@@ -344,11 +344,11 @@ class JolteonResourceReport:
             len(self.records) == 4
             and self.money_before >= THUNDER_STONE_PRICE
             and self.money_after == self.money_before - THUNDER_STONE_PRICE
-            and len(self.party_before) == 3
+            and len(self.party_before) in {3, 4}
             and self.party_after == (*self.party_before, JOLTEON)
             and EEVEE not in self.party_after
-            and self.final_raw.map_id == MapId.CELADON_CITY
-            and (self.final_raw.player_x, self.final_raw.player_y) == (10, 14)
+            and self.final_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
             and self.final_raw.party_species_ids == self.party_after
             and party_core_intact(self.party_after)
@@ -653,6 +653,36 @@ class SaffronReturnReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class SaffronResourceAccessReport:
+    """Proof that a missing balanced-team resource preceded Saffron access."""
+
+    jolteon: JolteonResourceReport
+    access: SaffronAccessChapterReport
+
+    @property
+    def passed(self) -> bool:
+        return self.jolteon.passed and self.access.passed
+
+    @property
+    def frames_executed(self) -> int:
+        return self.jolteon.frames_executed + self.access.frames_executed
+
+    @property
+    def actions_executed(self) -> int:
+        return self.jolteon.actions_executed + self.access.actions_executed
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "reach_saffron",
+            "balanced_team_resource": self.jolteon.public_dict(),
+            "access": self.access.public_dict(),
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+        }
+
+
 def run_saffron_guard_resource_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -913,7 +943,7 @@ def run_saffron_objective_chapter(
     *,
     timing: SaffronTiming = DEFAULT_SAFFRON_TIMING,
     progress: ProgressSink | None = None,
-) -> SaffronAccessChapterReport | SaffronReturnReport:
+) -> SaffronAccessChapterReport | SaffronResourceAccessReport | SaffronReturnReport:
     """Open Saffron once, or reuse an independently authenticated open gate."""
 
     if emulator.read_u8(RamAddress.STATUS_FLAGS_1) & GUARD_DRINK_FLAG:
@@ -924,6 +954,26 @@ def run_saffron_objective_chapter(
             timing=timing,
             progress=progress,
         )
+    party = tuple(reader.read().party_species_ids or ())
+    if len(party) in {3, 4} and JOLTEON not in party and EEVEE not in party:
+        jolteon = run_jolteon_resource_chapter(
+            emulator,
+            reader,
+            executor,
+            timing=timing,
+            progress=progress,
+        )
+        access = run_saffron_access_chapter(
+            emulator,
+            reader,
+            executor,
+            timing=timing,
+            progress=progress,
+        )
+        report = SaffronResourceAccessReport(jolteon=jolteon, access=access)
+        if not report.passed:
+            raise SaffronChapterError("Balanced-team Saffron access evidence failed.")
+        return report
     return run_saffron_access_chapter(
         emulator,
         reader,
@@ -1136,7 +1186,7 @@ def run_jolteon_resource_chapter(
     party_before = tuple(initial.party_species_ids or ())
     money_before = _money(emulator)
     if (
-        len(party_before) != 3
+        len(party_before) not in {3, 4}
         or EEVEE in party_before
         or JOLTEON in party_before
         or money_before < THUNDER_STONE_PRICE
@@ -1211,11 +1261,25 @@ def run_jolteon_resource_chapter(
         (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "Mart 2F return"),
         (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "Mart 1F return"),
         (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "Mart exit"),
+        (
+            CELADON_CITY_TO_CENTER,
+            MapId.CELADON_POKECENTER,
+            (3, 7),
+            "Celadon Center return",
+        ),
+        (("up",) * 4, MapId.CELADON_POKECENTER, (3, 3), "Celadon nurse boundary"),
     ):
         _move(actions, reader, emulator, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     final = reader.read()
-    _checkpoint(records, progress, emulator, final, "jolteon_terminal", "Stable Celadon boundary")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        final,
+        "jolteon_terminal",
+        "Stable Celadon Center boundary",
+    )
     report = JolteonResourceReport(
         records=tuple(records),
         final_raw=final,

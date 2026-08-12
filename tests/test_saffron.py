@@ -579,6 +579,10 @@ def test_saffron_objective_dispatches_from_observed_guard_flag(
         def read_u8(self, address: object) -> int:
             return guard_flag
 
+    class Reader:
+        def read(self) -> RawGameState:
+            return replace(_terminal(), party_species_ids=PARTY_AFTER)
+
     def access(*args: object, **kwargs: object) -> str:
         calls.append("access")
         return "access"
@@ -590,17 +594,58 @@ def test_saffron_objective_dispatches_from_observed_guard_flag(
     monkeypatch.setattr(saffron, "run_saffron_access_chapter", access)
     monkeypatch.setattr(saffron, "run_saffron_return_chapter", returned)
 
-    assert saffron.run_saffron_objective_chapter(Emulator(), object(), object()) == selected  # type: ignore[arg-type]
+    assert saffron.run_saffron_objective_chapter(Emulator(), Reader(), object()) == selected  # type: ignore[arg-type]
     assert calls == [selected]
+
+
+def test_saffron_objective_recruits_missing_jolteon_before_access(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    class Emulator:
+        def read_u8(self, address: object) -> int:
+            return 0
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return replace(_terminal(), party_species_ids=PARTY_BEFORE)
+
+    class Part:
+        passed = True
+        actions_executed = 10
+        frames_executed = 20
+
+        def public_dict(self) -> dict[str, object]:
+            return {"status": "ok"}
+
+    def recruit(*args: object, **kwargs: object) -> Part:
+        calls.append("jolteon")
+        return Part()
+
+    def access(*args: object, **kwargs: object) -> Part:
+        calls.append("access")
+        return Part()
+
+    monkeypatch.setattr(saffron, "run_jolteon_resource_chapter", recruit)
+    monkeypatch.setattr(saffron, "run_saffron_access_chapter", access)
+
+    report = saffron.run_saffron_objective_chapter(Emulator(), Reader(), object())  # type: ignore[arg-type]
+
+    assert isinstance(report, saffron.SaffronResourceAccessReport)
+    assert report.passed
+    assert report.actions_executed == 20
+    assert report.frames_executed == 40
+    assert calls == ["jolteon", "access"]
 
 
 def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() -> None:
     party_after = (*TOWER_FINAL_PARTY, 0x68)
     raw = replace(
         _terminal(),
-        map_id=MapId.CELADON_CITY,
-        player_x=10,
-        player_y=14,
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
         party_count=4,
         party_species_ids=party_after,
     )
@@ -624,6 +669,35 @@ def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() ->
     assert not replace(report, money_after=report.money_after + 1).passed
     assert not replace(report, party_before=TOWER_FINAL_PARTY[:2]).passed
     assert not replace(report, controller_released=False).passed
+
+
+def test_jolteon_resource_report_accepts_a_four_member_alternate_order_party() -> None:
+    party_before = (*TOWER_FINAL_PARTY, 0x84)
+    party_after = (*party_before, 0x68)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=5,
+        party_species_ids=party_after,
+    )
+    report = JolteonResourceReport(
+        records=tuple(SaffronCheckpoint(str(index), str(index), raw) for index in range(4)),
+        final_raw=raw,
+        money_before=10_000,
+        money_after=10_000 - THUNDER_STONE_PRICE,
+        party_before=party_before,
+        party_after=party_after,
+        party_hp=(130, 52, 37, 120, 72),
+        party_max_hp=(130, 52, 37, 120, 72),
+        party_status=(0, 0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
 
 
 def test_saffron_report_accepts_level_44_healed_lineage() -> None:
