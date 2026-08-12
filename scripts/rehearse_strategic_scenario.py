@@ -14,6 +14,7 @@ import hashlib
 import json
 import sys
 from collections.abc import Mapping
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, cast
 
@@ -135,7 +136,7 @@ from pokemon_red_completion.trajectory import RecordingExecutor  # noqa: E402
 DEFAULT_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
-    max_interruptions=8,
+    max_interruptions=16,
     max_replans=8,
     replan_after_unchanged=2,
     retry_wait_frames=24,
@@ -180,6 +181,8 @@ def _metadata(
     runtime: RuntimeIdentity,
     watch: bool,
     speed: int | None,
+    maximum_flees: int,
+    maximum_trainer_battles: int,
 ) -> dict[str, object]:
     metadata = dict(assignment.episode_metadata())
     runtime_public = runtime.public_dict()
@@ -191,6 +194,8 @@ def _metadata(
             "watch": watch,
         },
         "execution_mode": "one_choice_then_selected_approach",
+        "maximum_flees": maximum_flees,
+        "maximum_trainer_battles": maximum_trainer_battles,
         "scenario_rehearsal": True,
         "trajectory_reload_required": True,
     }
@@ -250,6 +255,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         runtime=runtime,
         watch=args.watch,
         speed=args.speed,
+        maximum_flees=args.maximum_flees,
+        maximum_trainer_battles=args.maximum_trainer_battles,
     )
     private_root = open_private_root(
         args.private_root,
@@ -386,7 +393,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             selected_destination_ref=selected,
             interruption_handler_factory=interruption_factory,
             replanner=route_world.replanner(),
-            limits=DEFAULT_LIMITS,
+            limits=replace(
+                DEFAULT_LIMITS,
+                max_interruptions=max(
+                    1,
+                    args.maximum_flees + args.maximum_trainer_battles,
+                ),
+            ),
         )
 
     if hashlib.sha256(state_path.read_bytes()).hexdigest() != state_sha256_before:
