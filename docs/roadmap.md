@@ -40,8 +40,10 @@ The ordered gates are:
 5. **complete:** construct and rehearse scenario 037 from the post-Silph Surf bridge;
 6. **complete:** Jolteon and Snorlax are authenticated construction-only members; the pre-Surf
    Sabrina lineage is qualified and scenario 013 is exact and rehearsed;
-7. **in progress:** Cinnabar-before-Sabrina now constructs exact scenario 041; repair bounded
-   healing or Fly-aware return routing after its preserved Route 21 trainer-battle failure;
+7. **in progress:** Cinnabar-before-Sabrina constructs exact scenario 041. The authenticated return
+   route now reaches 639/700 steps after bounded healing, general wild fleeing, Seafoam-current
+   exclusion, source-boundary warp decoding and combined interruption accounting; publish and
+   live-check the remaining Route 5 source-tile directional trigger;
 8. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
 9. only then open counted collection, freeze normalization, train the shared candidate scorer and

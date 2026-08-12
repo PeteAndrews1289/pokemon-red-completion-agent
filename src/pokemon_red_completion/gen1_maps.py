@@ -367,6 +367,11 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         map_id: terrain_for(rom, map_id, sets).tiles
         for map_id in graph
     }
+    graph = _with_directional_warp_actions(
+        graph,
+        terrain_tiles,
+        directional_warp_tiles(rom),
+    )
     graph = _with_automatic_warp_triggers(
         graph,
         terrain_tiles,
@@ -384,6 +389,54 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         fishable=set(fishing_tables(rom).by_map),
     )
     return graph
+
+
+def _with_directional_warp_actions(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    directional_tiles: Mapping[str, frozenset[int]],
+) -> dict[int, MapNode]:
+    """Derive a second input from the outdoor tile immediately beyond a warp."""
+
+    delta = {
+        "up": (-1, 0),
+        "down": (1, 0),
+        "left": (0, -1),
+        "right": (0, 1),
+    }
+    projected: dict[int, MapNode] = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+
+        def derive(
+            passage: Passage,
+            *,
+            source_tileset: int = node.tileset,
+            source_tiles: tuple[tuple[int, ...], ...] = tiles,
+        ) -> Passage:
+            if (
+                passage.kind is not PassageKind.WARP
+                or passage.exit_action is not None
+                or passage.at is None
+                or source_tileset not in OUTSIDE_TILESETS
+            ):
+                return passage
+            actions = tuple(
+                action
+                for action, (dy, dx) in delta.items()
+                if 0 <= passage.at[0] + dy < len(source_tiles)
+                and 0 <= passage.at[1] + dx
+                < len(source_tiles[passage.at[0] + dy])
+                and source_tiles[passage.at[0] + dy][passage.at[1] + dx]
+                in directional_tiles[action]
+            )
+            return replace(passage, exit_action=actions[0]) if len(actions) == 1 else passage
+
+        projected[map_id] = replace(
+            node,
+            passages=tuple(derive(passage) for passage in node.passages),
+        )
+    return projected
 
 
 def _with_automatic_warp_triggers(

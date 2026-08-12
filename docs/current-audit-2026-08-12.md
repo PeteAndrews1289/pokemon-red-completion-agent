@@ -80,7 +80,10 @@ The remaining paper-only one-skill matches include:
 - scenario 013 is now exact: Jolteon and Snorlax are independent no-label resources, and Sabrina
   is qualified on the resulting pre-Surf six-member lineage;
 - scenario 041 now has an exact pre-Sabrina Cinnabar capture, but its first immutable rehearsal
-  failed after the generic route fighter exhausted the lead across two Route 21 trainers. See the
+  failed after the generic route fighter exhausted the lead across two Route 21 trainers. Bounded
+  healing, all-map wild fleeing, Seafoam-current exclusion, directional source warps and combined
+  interruption budgets are now repaired. The latest immutable attempt reached 639/700 route steps
+  and isolated Route 5's outdoor directional trigger; its source-tile fix is locally green. See the
   [construction/failure receipt](evidence/strategic-scenario-041-construction-and-rehearsal-failure-2026-08-12.json).
 
 This audit prevents a misleading loop: the inventory can still say “one objective differs,” but
@@ -114,8 +117,9 @@ even if the code ran perfectly.
    010 and 014 without weakening the move/PP evidence contract.
 3. **Complete:** split Fly and Gold Teeth into independently verified resource lessons, teach
    Strength and Koga before Surf, and qualify Silph on that move lineage.
-4. **Complete:** add a Celadon-to-Cinnabar pre-Sabrina lesson. Next add bounded route-battle
-   recovery or Fly-aware return routing and requalify scenario 041 under a new rehearsal identity.
+4. **In progress:** add a Celadon-to-Cinnabar pre-Sabrina lesson and harden its return route. Exact
+   construction is complete; publish the final Route 5 directional-trigger decode, require green
+   CI, then make one fresh scenario-041 rehearsal.
 5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
    six unique disagreements and a best-case two-sided exact p-value of 0.03125.
 6. **Complete:** construct scenarios 025 and 026 from exact authenticated branches. Continue the

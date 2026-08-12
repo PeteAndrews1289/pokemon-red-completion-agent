@@ -143,6 +143,43 @@ def test_cartridge_tile_semantics_override_geometric_warp_guess() -> None:
     assert projected[9].passages[1].exit_action == "up"
 
 
+def test_outdoor_directional_tile_adds_the_required_second_warp_input() -> None:
+    passage = Passage(
+        to_map=70,
+        kind=PassageKind.WARP,
+        at=(1, 1),
+        arrival_at=(0, 4),
+    )
+    graph = {
+        16: MapNode(
+            map_id=16,
+            height=2,
+            width=2,
+            passages=(passage,),
+            tileset=0,
+        )
+    }
+    tiles = (
+        (0x23, 0x23, 0x23, 0x23),
+        (0x23, 0x23, 0x23, 0x23),
+        (0x23, 0x12, 0x23, 0x23),
+        (0x23, 0x23, 0x23, 0x23),
+    )
+
+    projected = gen1_maps._with_directional_warp_actions(
+        graph,
+        {16: tiles},
+        {
+            "up": frozenset(),
+            "down": frozenset({0x12}),
+            "left": frozenset(),
+            "right": frozenset(),
+        },
+    )
+
+    assert projected[16].passages[0].exit_action == "down"
+
+
 def test_inert_gate_row_is_removed_by_directional_tile_in_front() -> None:
     upper = Passage(
         to_map=76,

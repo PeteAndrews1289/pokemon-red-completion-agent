@@ -48,7 +48,27 @@
       "records": 490,
       "status": "failed"
     },
-    "next_required_repair": "bounded healing or a Fly-aware return route for generic strategic traversal"
+    "latest_authenticated_attempt": {
+      "acknowledged_steps": 639,
+      "candidate_route_costs": [
+        29,
+        700
+      ],
+      "interruptions_resumed": {
+        "wild_battle": 14
+      },
+      "immutable_failure_manifest": {
+        "bytes": 2713092,
+        "records": 1602,
+        "status": "failed"
+      },
+      "replans": 1,
+      "selected_teacher_destination": "reach_saffron",
+      "source_ci_run_id": 31589889626,
+      "source_git_commit": "b189f65a6425807c20c5199e206c673338356b8f",
+      "terminal_boundary": "Route 5 outdoor Underground Path directional trigger"
+    },
+    "next_required_repair": "publish and live-qualify the source-tile directional warp action decoder"
   },
   "scenario_id": "red-strategic-scenario-v2-041-train",
   "scenario_sha256": "ca7272ff86ca5c2a942c3c0770e099520a5c47dacd09a85041a697d091e165d6",
