@@ -87,9 +87,11 @@ until only the officer at `(12,27)` explains the failure. Then show the cartridg
 moving that officer while the neighboring officer stays put.
 
 Animate the repaired abstraction as **STATIC FLOOR + STORY-CONTROLLED OBJECT + DURABLE EVENT**, then
-reveal **VERMILION 205 / 201 STEPS**. Keep the status card at **DIAGNOSTIC — NOT A LIVE CONTEXT YET**
-until the published-source rehearsal. The line is: **“A route planner needs to know not just where
-the walls are, but which parts of the world can change—and why.”**
+reveal **VERMILION 205 / 201 STEPS**. After the published-source gate, show the actual choice:
+**MISTY 15**, followed by **14/14 MOVEMENTS / 0 INTERRUPTIONS / 0 REPLANS / 35 RECORDS**. Mark
+Vermilion **PREFLIGHTED, NOT EXECUTED**, increment the live-context counter to three and leave
+counted rows at zero. The line is: **“A route planner needs to know not just where the walls are,
+but which parts of the world can change—and why.”**
 
 ### Twist: nine labels were only three questions
 

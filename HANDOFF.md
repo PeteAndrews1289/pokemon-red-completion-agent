@@ -14,6 +14,29 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 002 qualified; third live context remains uncounted — 2026-08-11
+
+Published source `a546d79` passed exact-commit CI run `31551065013`. Its official read-only preflight
+loaded the authenticated post-Bill Cerulean capture, verified that no episode existed and made both
+scenario 002 candidates available: Misty cost 15 over 14 steps, and Vermilion cost 205 over 201
+steps through the newly modelled robbed-house passage.
+
+The single permitted uncounted episode selected Misty at policy index 0, acknowledged 14/14
+movements with one wait, and had zero interruptions and zero replans. Strict reload found 35 records:
+one decision, one successful outcome, one episode record, two events, 15 executions and 16 snapshots.
+Manifest `ee68ec7eeaf7374b51996b8760e653186dfea013efb4f6495bf26ccdfb5ab282`
+is complete. The episode is `unassigned`, promotion is false and it is not training data.
+
+The Vermilion candidate proves that the post-Bill predicate participates in official source-bound
+planning, but the selected route did not cross the officer's former square. Do not misreport it as
+a live crossing. The path-free lineage and this boundary are in
+[the scenario-002 qualification receipt](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json).
+
+Measured evidence is now three authenticated uncounted contexts and zero counted rows. Capture
+inventory remains 21 authenticated envelopes covering scenarios 001, 002 and 007; 33 learning
+frontiers still need materialization. Collection remains closed and all 12 test situations remain
+sealed.
+
 ## Third learning frontier captured; scenario 002 exposed a movable-story-object gap — 2026-08-11
 
 The qualified teacher was replayed to checkpoint 54/312, “Left Bill's House with the S.S. Ticket,”

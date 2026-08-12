@@ -18,9 +18,11 @@ post-Bill capture now yields a 201-step route to Vermilion. The second officer b
 never moved and remains blocked.
 
 This is the same lesson as Cut in a subtler form: a map graph is not a world model unless it can
-represent why geometry changes. The new route is diagnostic evidence until the repaired source
-passes CI and the official one-shot scenario succeeds. The scoreboard therefore stays at two live
-uncounted contexts, even though three exact learning frontiers now exist.
+represent why geometry changes. Published source and CI made both candidates available. The
+one-shot episode then chose Misty, acknowledged all 14 movements and strictly reloaded one success
+without interruption or replan. Vermilion's story route was preflighted but not selected, so the
+honest claim is narrower than a live crossing. The scoreboard is now three live uncounted contexts,
+zero training rows.
 
 ## August 11: the first useful label chose the route ten times longer
 

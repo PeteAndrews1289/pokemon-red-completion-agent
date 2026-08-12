@@ -1,6 +1,6 @@
 # Current capability and code audit — 2026-08-11
 
-## Third learning frontier captured; movable story object under repair
+## Third live short scenario qualified
 
 The teacher has now produced two additional authenticated envelopes for scenario 002: one at
 checkpoint 54/312 after leaving Bill's House, and one after a 176-action bounded return to the
@@ -13,16 +13,22 @@ world projected every cartridge object coordinate as permanent. Differential pla
 problem to the officer at Cerulean `(12,27)`: the officer blocks the robbed-house approach before
 Bill is helped and is displaced afterward. The neighboring officer at `(12,28)` remains present.
 
-The current source introduces one observed story predicate backed by the durable post-Bill event,
+Published source `a546d79` introduces one observed story predicate backed by the durable post-Bill event,
 removes only the displaced coordinate from static blockers, and requires that predicate on all six
 directed edges through the square. Closed and unknown observations fail shut. Focused tests cover
-the exact edge set, event transition and blocker selectivity. A real-cartridge diagnostic from the
-exact capture now plans Misty at cost 15/14 steps and Vermilion at cost 205/201 steps. Those results
-are planning evidence only; exact-commit CI and the official one-shot rehearsal remain mandatory.
+the exact edge set, event transition and blocker selectivity. Exact-commit CI passed, after which
+the official preflight planned Misty at cost 15/14 steps and Vermilion at cost 205/201 steps.
+
+The single permitted episode selected Misty, acknowledged all 14 movements with one wait, and had
+zero interruptions and zero replans. Strict reload authenticated 35 records containing exactly one
+decision and one successful outcome. The episode is unassigned and promotion-ineligible. Vermilion
+was an available unselected candidate, so its story route is official preflight evidence rather
+than a claim that this episode crossed the officer's former square. See the
+[scenario-002 receipt](evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json).
 
 Inventory is now **21 authenticated envelopes, three exact learning frontiers (001, 002 and 007),
-33 missing frontiers**. Measured status remains **two authenticated uncounted contexts, zero counted
-scenario rows, collection closed, 12 test situations sealed** until scenario 002 completes.
+33 missing frontiers**. Measured status is **three authenticated uncounted contexts, zero counted
+scenario rows, collection closed, 12 test situations sealed**.
 
 ## First two live short scenarios qualified
 
@@ -91,9 +97,9 @@ approach, consumes one outcome and strictly reloads the sealed artifact to requi
 successful strategic row. Test scenarios remain inaccessible through both assignment and route
 lookup.
 
-The execution boundary has two authenticated live qualifications, while counted collection remains
-closed. The newer section above adds scenario 002's exact capture but not yet a live qualification.
-The next boundary after it is materializing and rehearsing the other 33 missing learning frontiers.
+The execution boundary had two authenticated live qualifications at this checkpoint. The newer
+section above adds scenario 002 as the third. Counted collection remains closed; the next boundary
+is materializing and rehearsing the other 33 missing learning frontiers.
 The full learning rehearsal
 is 24 train plus 12 validation situations; the 12 test situations remain sealed until final
 evaluation. See the [scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).

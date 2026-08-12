@@ -83,10 +83,16 @@
 > scenario-007 preflight next exposed the missing route composition for Cut. Published repair
 > `926587e` passed CI, planned Erika through one explicit `cut:down`, and made all three candidates
 > executable. Its one-shot episode then chose Fuji at cost 178 over Erika's 104 and Saffron's 33,
-> acknowledged 174/174 movements and strictly reloaded one three-way success. Honest status is **2
-> authenticated contexts / 0 counted rows**—neither is training data. See the
-> [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json)
-> and [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json).
+> acknowledged 174/174 movements and strictly reloaded one three-way success. Scenario 002 then
+> exposed a movable-story-object gap: the post-Bill police officer at Cerulean `(12,27)` had been
+> treated as permanent geometry. Published repair `a546d79` bound that displacement to the observed
+> Bill event, passed CI and made both Misty (cost 15) and Vermilion (cost 205) available. Its one-shot
+> episode selected Misty, acknowledged 14/14 movements and reloaded one success with no interruption
+> or replan. Honest status is **3 authenticated contexts / 0 counted rows**—none is training data.
+> See the
+> [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json),
+> [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json),
+> and [scenario-002 qualification](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json).
 > Collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
