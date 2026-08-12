@@ -11,6 +11,7 @@ from pokemon_red_completion.fly_resource import (
     CENTER_TO_ROUTE_16_TREE,
     CINNABAR_CENTER_TO_OUTDOORS,
     FLY_RESOURCE_CHECKPOINT_COUNT,
+    FUCHSIA_EAST_SOURCE_CITY_BOUNDARY,
     CinnabarFlyArrivalReport,
     FlyRelocationReport,
     FlyResourceCheckpoint,
@@ -169,6 +170,15 @@ def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
             map_id=MapId.CELADON_CITY,
             player_x=49,
             player_y=11,
+        ),
+    ).passed
+    assert replace(
+        report,
+        initial_raw=replace(
+            report.initial_raw,
+            map_id=MapId.FUCHSIA_CITY,
+            player_x=FUCHSIA_EAST_SOURCE_CITY_BOUNDARY[0],
+            player_y=FUCHSIA_EAST_SOURCE_CITY_BOUNDARY[1],
         ),
     ).passed
     assert not replace(report, final_bag=report.final_bag[:-1]).passed

@@ -37,6 +37,7 @@ FLY_RESOURCE_CHECKPOINT_COUNT = 5
 FLY_ATTEMPT_LIMIT = 10
 SOURCE_CITY_BOUNDARY = (49, 11)
 FUCHSIA_SOURCE_CITY_BOUNDARY = (19, 28)
+FUCHSIA_EAST_SOURCE_CITY_BOUNDARY = (39, 16)
 CELADON_CENTER_DOOR = (41, 9)
 CINNABAR_CENTER_TO_OUTDOORS = ("down",) * 5
 CELADON_CENTER_TO_OUTDOORS = ("down",) * 5
@@ -267,6 +268,7 @@ class CinnabarFlyArrivalReport:
                 (MapId.CELADON_POKECENTER, 3, 3),
                 (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
                 (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
+                (MapId.FUCHSIA_CITY, *FUCHSIA_EAST_SOURCE_CITY_BOUNDARY),
             }
             and self.initial_raw.battle_state == 0
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
@@ -516,6 +518,7 @@ def relocate_celadon_to_cinnabar_by_fly(
             (MapId.CELADON_POKECENTER, 3, 3),
             (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
             (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
+            (MapId.FUCHSIA_CITY, *FUCHSIA_EAST_SOURCE_CITY_BOUNDARY),
         }
         or initial.battle_state != 0
         or not _event(emulator, EventFlag.GOT_HM02)

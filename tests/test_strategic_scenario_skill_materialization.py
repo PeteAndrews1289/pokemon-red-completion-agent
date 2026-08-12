@@ -87,6 +87,10 @@ def test_cinnabar_fly_relocation_accepts_qualified_mainland_origins() -> None:
         replace(raw, map_id=MapId.FUCHSIA_CITY, player_x=19, player_y=28),
         (MapId.CINNABAR_POKECENTER, (3, 3)),
     )
+    assert _can_fly_to_cinnabar_skill_boundary(
+        replace(raw, map_id=MapId.FUCHSIA_CITY, player_x=39, player_y=16),
+        (MapId.CINNABAR_POKECENTER, (3, 3)),
+    )
     assert not _can_fly_from_cinnabar_to_origin(
         replace(raw, map_id=MapId.CINNABAR_ISLAND),
         frozenset({MapId.CELADON_CITY, MapId.CELADON_POKECENTER}),

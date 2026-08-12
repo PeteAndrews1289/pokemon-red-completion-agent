@@ -36,6 +36,8 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.fly_resource import (  # noqa: E402
+    FUCHSIA_EAST_SOURCE_CITY_BOUNDARY,
+    FUCHSIA_SOURCE_CITY_BOUNDARY,
     relocate_celadon_to_cinnabar_by_fly,
     relocate_cinnabar_to_celadon_by_fly,
     relocate_cinnabar_to_fuchsia_by_fly,
@@ -263,7 +265,8 @@ def _can_fly_to_cinnabar_skill_boundary(
         in {
             (MapId.CELADON_POKECENTER, 3, 3),
             (MapId.CELADON_CITY, 49, 11),
-            (MapId.FUCHSIA_CITY, 19, 28),
+            (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
+            (MapId.FUCHSIA_CITY, *FUCHSIA_EAST_SOURCE_CITY_BOUNDARY),
         }
         and boundary == (MapId.CINNABAR_POKECENTER, (3, 3))
     )
