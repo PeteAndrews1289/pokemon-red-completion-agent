@@ -455,6 +455,7 @@ def test_silph_rival_reentry_preserves_the_exact_bounded_recovery_intent(
 
 
 def test_silph_report_accepts_full_rival_recovery_budget() -> None:
+    assert SILPH_RIVAL_MAX_POTIONS == 7
     report = replace(
         _report(),
         rival_potions_used=SILPH_RIVAL_MAX_POTIONS,

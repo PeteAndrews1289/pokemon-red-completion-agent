@@ -93,7 +93,10 @@ HYPER_POTION_PRICE = 1_500
 X_SPECIAL_PURCHASE_QUANTITY = 3
 SILPH_X_SPECIAL_SUPPLY_TARGET = 4
 SILPH_RIVAL_RECOVERY_HP = 80
-SILPH_RIVAL_MAX_POTIONS = 4
+# The canonical six-member lineages need at most four.  The authenticated
+# pre-HM Koga lineage reaches Silph with four members and may legitimately use
+# the complete seven-potion supply it bought for this bounded rival battle.
+SILPH_RIVAL_MAX_POTIONS = HYPER_POTION_PURCHASE_QUANTITY
 SILPH_PC_DEPOSIT_ITEMS = (
     ItemId.SS_TICKET,
     ItemId.LIFT_KEY,
