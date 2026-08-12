@@ -570,15 +570,18 @@ def _store_obsolete_key_items(
     timing: SilphTiming,
 ) -> None:
     before = _bag(emulator)
-    if not _sabrina_capacity_ready(before):
+    deposit_items = _sabrina_capacity_deposit_items(before)
+    if deposit_items is None:
         raise SabrinaChapterError(
             "Sabrina inventory cleanup lacks safe capacity or its spent key items."
         )
-    expected_slots = len(before) - len(PC_DEPOSIT_ITEMS)
+    if not deposit_items:
+        return
+    expected_slots = len(before) - len(deposit_items)
 
     _move(actions, reader, ("down",) + ("right",) * 10, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
-    for item in PC_DEPOSIT_ITEMS:
+    for item in deposit_items:
         _deposit_pc_item(actions, reader, emulator, item, timing)
     returned = reader.read()
     after = _bag(emulator)
@@ -588,7 +591,7 @@ def _store_obsolete_key_items(
         or not reader.read_input_readiness().ready
         or len(after) != expected_slots
         or len(after) > 18
-        or any(item in after for item in PC_DEPOSIT_ITEMS)
+        or any(item in after for item in deposit_items)
     ):
         raise SabrinaChapterError("Saffron PC cleanup did not restore safe field capacity.")
     _move(actions, reader, ("left",) * 10 + ("up",), timing)
@@ -596,9 +599,18 @@ def _store_obsolete_key_items(
 
 
 def _sabrina_capacity_ready(bag: Mapping[object, int]) -> bool:
-    """Prove that archiving two obsolete keys leaves room for the Gym reward."""
+    """Prove that the remaining obsolete keys can make room for the Gym reward."""
 
-    return len(bag) <= 20 and all(bag.get(item, 0) == 1 for item in PC_DEPOSIT_ITEMS)
+    return _sabrina_capacity_deposit_items(bag) is not None
+
+
+def _sabrina_capacity_deposit_items(
+    bag: Mapping[object, int],
+) -> tuple[ItemId, ...] | None:
+    """Select present obsolete keys only when archiving them reaches 18 slots."""
+
+    available = tuple(item for item in PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
+    return available if len(bag) - len(available) <= 18 else None
 
 
 def _deposit_pc_item(

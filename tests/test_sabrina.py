@@ -20,6 +20,7 @@ from pokemon_red_completion.sabrina import (
     SabrinaTurn,
     _confirm_selected_pc_deposit,
     _encounter_party,
+    _sabrina_capacity_deposit_items,
     _sabrina_capacity_ready,
     _sabrina_move_slot,
     _sabrina_recovery_required,
@@ -101,7 +102,15 @@ def test_sabrina_capacity_accepts_a_consumed_recovery_stack() -> None:
     assert not _sabrina_capacity_ready(
         {**key_items, **{1000 + index: 1 for index in range(19)}}
     )
-    assert not _sabrina_capacity_ready({ItemId.SILPH_SCOPE: 1})
+    prearchived_scope = {
+        ItemId.CARD_KEY: 1,
+        **{1000 + index: 1 for index in range(18)},
+    }
+    assert _sabrina_capacity_deposit_items(prearchived_scope) == (ItemId.CARD_KEY,)
+    assert _sabrina_capacity_ready(prearchived_scope)
+    assert _sabrina_capacity_deposit_items({1000 + index: 1 for index in range(18)}) == ()
+    assert _sabrina_capacity_ready({1000 + index: 1 for index in range(18)})
+    assert not _sabrina_capacity_ready({1000 + index: 1 for index in range(19)})
 
 
 def test_sabrina_turn_receipts_preserve_party_transitions() -> None:
