@@ -59,6 +59,7 @@ def test_fuchsia_candidate_stops_at_its_authenticated_skill_boundary() -> None:
 def test_construction_boundaries_are_exact_and_intentionally_narrow() -> None:
     assert STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES == {
         "defeat_erika": (MapId.CELADON_POKECENTER, (3, 3)),
+        "defeat_sabrina": (MapId.SAFFRON_POKECENTER, (3, 3)),
         "liberate_silph": (MapId.SAFFRON_POKECENTER, (3, 3)),
         "obtain_surf": (MapId.FUCHSIA_POKECENTER, (3, 3)),
         "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
