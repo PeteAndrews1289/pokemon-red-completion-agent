@@ -69,6 +69,15 @@ class FakeExecutor:
 
 
 @dataclass
+class FakeHazardProjector:
+    calls: int = 0
+
+    def observe_hazards(self, raw: RawGameState) -> tuple[object, ...]:
+        self.calls += 1
+        raise AssertionError("transient map state must not be projected")
+
+
+@dataclass
 class TrainerIntroExecutor:
     reader: FakeReader
     actions: int = 0
@@ -133,6 +142,23 @@ def test_observer_projects_current_visible_object_occupancy() -> None:
 
     assert observed.occupied == frozenset({(7, 7), (9, 8)})
     assert fake.occupancy_reads == 1
+
+
+def test_observer_withholds_map_objects_and_hazards_during_transition() -> None:
+    fake = FakeReader(raw(), ready=False, occupied=frozenset({(7, 7)}))
+    hazards = FakeHazardProjector()
+
+    observed = Gen1TraversalObserver(
+        reader_as_real(fake),
+        hazard_projector=cast(object, hazards),  # type: ignore[arg-type]
+    ).observe()
+
+    assert not observed.ready
+    assert observed.interruption is None
+    assert observed.occupied == frozenset()
+    assert observed.hazards == ()
+    assert fake.occupancy_reads == 0
+    assert hazards.calls == 0
 
 
 def test_observer_projects_live_nested_return_context() -> None:

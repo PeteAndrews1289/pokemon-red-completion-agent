@@ -1,0 +1,84 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-006-train-authenticated",
+    "envelope_sha256": "f62d3930e46e478411defc0d61f57f8bfccae9a15481b813351cee17ded5011a",
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22",
+    "verified_objective_count": 14
+  },
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 6,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "diagnosis": {
+    "code_repair": "Withhold visible-object and trainer-hazard projection until a map transition reports input-ready.",
+    "last_observed_location": {
+      "area_ref": "pokemon.red.gb.us.rev0:area:game_corner",
+      "input_ready": false,
+      "mode": "scripted_or_blocked",
+      "x": 28,
+      "y": 19
+    },
+    "result": "The route crossed into Game Corner, then attempted live map-object projection while the cartridge still exposed transient destination-map coordinates."
+  },
+  "episode": {
+    "assignment_id": "a259bb38db368c15907c5d2b7480335deba50e01248209a9a2a13b709ce78230",
+    "episode_id": "red-scen-reh-a259bb38db368c15907c5d2b7480335deba50e01248209a9a2a13b709ce78230",
+    "failure_reason": "unhandled_exception",
+    "immutable": true,
+    "manifest": {
+      "bytes": 124882,
+      "records": 63,
+      "sha256": "d84bfddbcd27cc4c449ac886ee722d5bc34f43419340bf0423134e21aabf5a0c",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "executions": 30,
+        "snapshots": 31
+      }
+    },
+    "movement_requests_recorded": 30,
+    "outcome_recorded": false,
+    "selected_objective": "clear_rocket_hideout",
+    "status": "failed"
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "candidates_in_policy_order": [
+      {
+        "objective_id": "clear_rocket_hideout",
+        "route_cost": 104
+      },
+      {
+        "objective_id": "defeat_erika",
+        "route_cost": 30
+      },
+      {
+        "objective_id": "reach_saffron",
+        "route_cost": 33
+      }
+    ],
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-11",
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-006-train",
+    "scenario_sha256": "cd3efcf6bf47ba420183a77bc3a8caaff9e988cbede221addda972782909084c",
+    "source_partition": "train"
+  },
+  "schema": "strategic-scenario-rehearsal-failure-v1",
+  "source": {
+    "ci_run_id": 31557159414,
+    "ci_status": "success",
+    "git_commit": "e26d7d4bd4d8b98f25bf3b513ee0207ab741542b",
+    "source_bundle_sha256": "5d8b9b902012d9064fc95e54b21bc5edff513f47dc6e6970b29f99426811241c",
+    "teacher_execution_sha256": "395618a673e5a5f116ec1f50510d5bf984e1e3babcc11e8b8a0816e71a1681ec"
+  },
+  "status": "failed_immutable_rehearsal"
+}

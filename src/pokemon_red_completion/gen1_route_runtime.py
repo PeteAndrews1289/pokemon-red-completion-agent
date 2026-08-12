@@ -57,15 +57,17 @@ class Gen1TraversalObserver:
         interruption = _interruption_kind(raw.battle_state)
         if interruption is None and self.reader.trainer_engagement_active():
             interruption = "trainer_engagement"
+        input_ready = self.reader.read_input_readiness().ready
+        ready = interruption is None and input_ready
         movement_mode = self.reader.read_overworld_movement_mode()
         occupied = (
             frozenset()
-            if interruption is not None
+            if not ready
             else self.reader.read_visible_object_coordinates()
         )
         hazards = (
             ()
-            if interruption is not None or self.hazard_projector is None
+            if not ready or self.hazard_projector is None
             else self.hazard_projector.observe_hazards(raw)
         )
         projected_capabilities = (
@@ -82,7 +84,7 @@ class Gen1TraversalObserver:
         return TraversalSnapshot(
             map_id=raw.map_id,
             at=(raw.player_y, raw.player_x),
-            ready=(interruption is None and self.reader.read_input_readiness().ready),
+            ready=ready,
             interruption=interruption,
             mode=movement_mode.traversal_mode,
             occupied=occupied,

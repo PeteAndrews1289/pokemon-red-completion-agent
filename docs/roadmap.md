@@ -122,6 +122,14 @@ Implementation status:
     whose old envelope is semantically behind their current location. It may re-envelope scenario
     006 only if fresh observation already equals all 14 objectives and the Celadon origin; it cannot
     move, select a candidate, create an episode or access test.
+16. **Scenario 006 authenticated; first rehearsal failed immutably; repair gated locally:** fresh
+    observation admitted the exact 14-objective Celadon frontier and all three candidate approaches
+    preflighted. The selected Hideout approach crossed into Game Corner, then failed after 30
+    recorded movements because map-local object/hazard projection ran against the transition's
+    not-ready coordinates. The observer now returns the transient state without reading those
+    map-local structures until input is ready. The failed assignment remains a censored diagnostic,
+    not a training context. Publish the repaired source, require green exact-commit CI, and only
+    then use the new source-bound rehearsal identity.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

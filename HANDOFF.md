@@ -16,6 +16,19 @@ going stale is exactly the failure this project keeps having.
 
 ## Bounded-skill scenario construction implemented; live qualification pending — 2026-08-11
 
+Scenario 006 has now been re-authenticated from the old Celadon capture without movement or an
+episode. Fresh live observation proved the exact 14-objective frontier and Celadon origin. All
+three candidates then passed official preflight, but the one permitted rehearsal failed honestly
+after 30 recorded movements. It crossed into Game Corner while Red still exposed transient
+destination-map coordinates and input was blocked; the traversal observer tried to decode live
+objects and trainer lanes before that transition settled. The failed assignment is immutable and
+contains no outcome target. The observer now withholds those map-local projections until input is
+ready, with a regression test that makes either premature reader call fail. Frozen registries were
+regenerated for the repaired source and the full ROM-free gate passes. Publish and require green
+exact-commit CI before making a fresh source-bound attempt; never retry or relabel assignment
+`a259bb38…`. See the path-free
+[failure receipt](docs/evidence/strategic-scenario-006-first-rehearsal-failure-2026-08-11.json).
+
 The first materializer could derive only one registry edge: scenario 002 → 003 by reaching
 Vermilion. That is too narrow for the midgame, where a truthful frontier is usually created by a
 bounded chapter skill rather than by entering one map. A second fail-closed construction lane now
