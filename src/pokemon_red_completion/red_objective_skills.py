@@ -256,7 +256,7 @@ class DefeatKogaObjectiveSkill:
             and (
                 "move:surf_available" in state.facts
                 or "move:strength_available" in state.facts
-                or "move:bubblebeam_slot_3" in state.facts
+                or "move:koga_attack_slot_3" in state.facts
             )
             and "badge:soul" not in state.facts
         )

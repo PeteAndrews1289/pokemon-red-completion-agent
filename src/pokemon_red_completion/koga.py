@@ -57,6 +57,8 @@ STRENGTH = 0x46
 STRENGTH_SLOT = 2
 BUBBLE_BEAM = 0x3D
 BUBBLE_BEAM_SLOT = 3
+ICE_BEAM = 0x3A
+ICE_BEAM_SLOT = 3
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
@@ -247,6 +249,7 @@ class KogaChapterReport:
                 (SURF, SURF_SLOT),
                 (STRENGTH, STRENGTH_SLOT),
                 (BUBBLE_BEAM, BUBBLE_BEAM_SLOT),
+                (ICE_BEAM, ICE_BEAM_SLOT),
             }
             and self.final_raw.first_party_moves is not None
             and self.final_raw.first_party_moves[self.attack_move_slot - 1]
@@ -330,14 +333,14 @@ def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
     if moves[STRENGTH_SLOT - 1] == STRENGTH and SURF not in moves:
         return STRENGTH, STRENGTH_SLOT
     if (
-        moves[BUBBLE_BEAM_SLOT - 1] == BUBBLE_BEAM
+        moves[BUBBLE_BEAM_SLOT - 1] in {BUBBLE_BEAM, ICE_BEAM}
         and SURF not in moves
         and STRENGTH not in moves
     ):
-        return BUBBLE_BEAM, BUBBLE_BEAM_SLOT
+        return moves[BUBBLE_BEAM_SLOT - 1], BUBBLE_BEAM_SLOT
     raise KogaChapterError(
         "Koga input lacks Surf, pre-Surf Strength, and the authenticated "
-        "pre-HM BubbleBeam layout."
+        "pre-HM BubbleBeam/Ice Beam layout."
     )
 
 
@@ -347,6 +350,7 @@ def _koga_attack_max_pp(attack_move_id: int) -> int:
             SURF: 15,
             STRENGTH: 15,
             BUBBLE_BEAM: 20,
+            ICE_BEAM: 10,
         }[attack_move_id]
     except KeyError:
         raise KogaChapterError("Koga primary move has no qualified PP contract.") from None

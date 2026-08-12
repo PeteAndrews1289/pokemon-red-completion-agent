@@ -5233,11 +5233,11 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
     if (
         raw.first_party_moves is not None
         and len(raw.first_party_moves) == 4
-        and raw.first_party_moves[2] == 0x3D
+        and raw.first_party_moves[2] in {0x3A, 0x3D}
         and 0x39 not in raw.first_party_moves
         and 0x46 not in raw.first_party_moves
     ):
-        facts.add("move:bubblebeam_slot_3")
+        facts.add("move:koga_attack_slot_3")
 
     if raw.map_id == MapId.HALL_OF_FAME and _event(events, EventFlag.BEAT_CHAMPION_RIVAL):
         facts.add(HALL_OF_FAME_FACT)

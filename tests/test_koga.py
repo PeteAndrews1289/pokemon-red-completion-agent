@@ -14,6 +14,8 @@ from pokemon_red_completion.koga import (
     CENTER_TO_TAMER2,
     DEFAULT_KOGA_TIMING,
     GYM_TO_JUGGLER3,
+    ICE_BEAM,
+    ICE_BEAM_SLOT,
     JUGGLER3_TO_CENTER,
     JUGGLER3_TO_TAMER2,
     JUGGLER_4_PIVOT_HP_THRESHOLD,
@@ -327,13 +329,32 @@ def test_koga_accepts_authenticated_pre_hm_bubblebeam_curriculum() -> None:
     assert _koga_attack_max_pp(SURF) == 15
 
 
+def test_koga_accepts_authenticated_post_erika_ice_beam_curriculum() -> None:
+    ice_beam_raw = replace(
+        _raw(),
+        first_party_moves=(0x2C, 0x27, ICE_BEAM, 0x37),
+        first_party_pp=(25, 30, 10, 25),
+    )
+    report = replace(
+        _report(),
+        final_raw=ice_beam_raw,
+        attack_move_id=ICE_BEAM,
+        attack_move_slot=ICE_BEAM_SLOT,
+        attack_pp=10,
+    )
+
+    assert _koga_primary_attack(ice_beam_raw) == (ICE_BEAM, ICE_BEAM_SLOT)
+    assert _koga_attack_max_pp(ICE_BEAM) == 10
+    assert report.passed
+
+
 def test_koga_rejects_unknown_primary_move_pp_contract() -> None:
     with pytest.raises(KogaChapterError, match="no qualified PP contract"):
         _koga_attack_max_pp(0xFF)
 
 
 def test_koga_rejects_an_unauthenticated_primary_move_layout() -> None:
-    unsupported = replace(_raw(), first_party_moves=(0x2C, 0x27, 0x3A, 0x37))
+    unsupported = replace(_raw(), first_party_moves=(0x2C, 0x27, 0x2D, 0x37))
 
     with pytest.raises(KogaChapterError, match="lacks Surf.*pre-Surf Strength.*BubbleBeam"):
         _koga_primary_attack(unsupported)
