@@ -165,6 +165,17 @@ STRATEGIC_SCENARIO_ORIGIN_MAPS: Mapping[str, frozenset[MapId]] = {
 }
 
 
+# Exact stable boundaries consumed by the construction skills that need to be
+# reached from a different authenticated scenario origin.  Coordinates are
+# (row, column), matching TraversalSnapshot.at and the local router.
+STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[
+    str, tuple[MapId, tuple[int, int]]
+] = {
+    "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
+    "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
+}
+
+
 def validate_scenario_route_catalog(
     registry: StrategicNavigationScenarioRegistry,
     *,

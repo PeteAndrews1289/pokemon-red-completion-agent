@@ -33,6 +33,7 @@ def test_skill_materializer_help_names_its_non_collection_boundary(
     assert "not a data-collection command" in output
     assert "--target-scenario-id" in output
     assert "--complete-objective-id" in output
+    assert "--relocate-to-skill-boundary" in output
     assert "--relocate-to-origin" in output
     assert "--source-scenario-id" not in output
 

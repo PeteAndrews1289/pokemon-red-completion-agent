@@ -392,6 +392,21 @@ class StrategicScenarioRouteWorld:
             ),
         )
 
+    def plan_to_map(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        """Plan one explicit construction relocation, optionally to a coordinate."""
+
+        if not isinstance(start, TraversalSnapshot):
+            raise TypeError("scenario relocation start must be a traversal snapshot")
+        if type(goal_map) is not int or goal_map < 0:  # noqa: E721
+            raise TypeError("scenario relocation goal must be a non-negative map ID")
+        return self._plan_candidate(start, goal_map, goal_at=goal_at)
+
     def replanner(self) -> RouteReplanner:
         """Recompute the same declared goal after a measured live blocker."""
 

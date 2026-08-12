@@ -311,3 +311,32 @@ def test_origin_relocation_rejects_an_empty_goal_set() -> None:
             TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
             frozenset(),
         )
+
+
+def test_skill_relocation_preserves_the_exact_declared_coordinate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    expected = cast(RoutePlan, SimpleNamespace())
+    calls: list[tuple[int, tuple[int, int] | None]] = []
+
+    def plan(
+        _self: object,
+        _start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        calls.append((goal_map, goal_at))
+        return expected
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "_plan_candidate", plan)
+
+    actual = world.plan_to_map(
+        TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+        6,
+        goal_at=(3, 3),
+    )
+
+    assert actual is expected
+    assert calls == [(6, (3, 3))]

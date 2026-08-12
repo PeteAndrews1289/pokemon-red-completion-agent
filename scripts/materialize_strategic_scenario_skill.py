@@ -78,13 +78,16 @@ from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa
 from pokemon_red_completion.route_executor import (  # noqa: E402
     RouteActionPort,
     RouteExecutionLimits,
+    RouteExecutionReport,
     execute_route,
 )
+from pokemon_red_completion.route_plan import RoutePlan  # noqa: E402
 from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     StrategicNavigationProtocolError,
     load_committed_strategic_navigation_registry,
 )
 from pokemon_red_completion.strategic_navigation_scenario_routes import (  # noqa: E402
+    STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES,
     STRATEGIC_SCENARIO_ORIGIN_MAPS,
     StrategicScenarioRouteCatalogError,
     require_objective_skill_materialization_step,
@@ -115,6 +118,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
+    parser.add_argument(
+        "--relocate-to-skill-boundary",
+        action="store_true",
+        help=(
+            "before the skill, execute one bounded cartridge-derived route to "
+            "its declared exact input boundary when the source is elsewhere"
+        ),
+    )
     parser.add_argument(
         "--relocate-to-origin",
         action="store_true",
@@ -253,7 +264,82 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             tracked_controller,
         )
         skill = skills.require_for(objective)
+        route_world = StrategicScenarioRouteWorld.from_rom(rom)
+        counted = CountingExecutor(tracked_controller)
+        field_actions = Gen1FieldMovePort(
+            counted,
+            reader,
+            emulator,
+            cut_block_swaps={
+                swap.before: swap.after for swap in route_world.rules.cut_block_swaps
+            },
+        )
+
+        def field_capabilities(observed: RawGameState) -> frozenset[str]:
+            capabilities = cut_capabilities(observed).union(
+                strength_capabilities(observed)
+            )
+            permission = surf_permission(emulator, observed)
+            return capabilities.union(
+                surf_capabilities(
+                    observed,
+                    surf_allowed=permission.allowed,
+                )
+            )
+
+        traversal_observer = Gen1TraversalObserver(
+            reader,
+            hazard_projector=Gen1TrainerSightProjector(rom, reader),
+            capability_projector=field_capabilities,
+        )
+
+        def execute_relocation(
+            plan: RoutePlan,
+            *,
+            route_name: str,
+        ) -> RouteExecutionReport:
+            interruption_handler = Gen1RouteInterruptionHandler(
+                field_actions,
+                reader,
+                maximum_flees=8,
+                maximum_trainer_battles=8,
+                stabilization_frames=120,
+                route_name=route_name,
+            )
+            return execute_route(
+                plan,
+                field_actions,
+                traversal_observer,
+                interruption_handler=interruption_handler,
+                replanner=route_world.replanner(),
+                limits=RELOCATION_LIMITS,
+            )
+
+        pre_skill_relocation_report = None
         availability = skill.availability(before)
+        if not availability.executable and args.relocate_to_skill_boundary:
+            boundary = STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES.get(
+                args.complete_objective_id
+            )
+            if boundary is None:
+                raise StrategicScenarioRuntimeError(
+                    "bounded objective has no declared construction boundary"
+                )
+            boundary_map, boundary_at = boundary
+            pre_skill_relocation_report = execute_relocation(
+                route_world.plan_to_map(
+                    traversal_observer.observe(),
+                    boundary_map.value,
+                    goal_at=boundary_at,
+                ),
+                route_name="strategic scenario pre-skill relocation",
+            )
+            before = semantic_observer.observe()
+            if COMPLETION_QUEST.completed_ids(before) != initial_completed:
+                raise StrategicScenarioRuntimeError(
+                    "pre-skill relocation changed the authenticated frontier"
+                )
+            availability = skill.availability(before)
         if not availability.executable:
             raise StrategicScenarioRuntimeError(
                 "bounded objective skill is unavailable at the source boundary"
@@ -285,54 +371,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     "bounded skill terminal differs from the target origin; "
                     "explicit relocation is required"
                 )
-            counted = CountingExecutor(tracked_controller)
-            route_world = StrategicScenarioRouteWorld.from_rom(rom)
-            field_actions = Gen1FieldMovePort(
-                counted,
-                reader,
-                emulator,
-                cut_block_swaps={
-                    swap.before: swap.after
-                    for swap in route_world.rules.cut_block_swaps
-                },
-            )
-
-            def field_capabilities(observed: RawGameState) -> frozenset[str]:
-                capabilities = cut_capabilities(observed).union(
-                    strength_capabilities(observed)
-                )
-                permission = surf_permission(emulator, observed)
-                return capabilities.union(
-                    surf_capabilities(
-                        observed,
-                        surf_allowed=permission.allowed,
-                    )
-                )
-
-            traversal_observer = Gen1TraversalObserver(
-                reader,
-                hazard_projector=Gen1TrainerSightProjector(rom, reader),
-                capability_projector=field_capabilities,
-            )
             relocation_plan = route_world.plan_to_any_map(
                 traversal_observer.observe(),
                 frozenset(item.value for item in target_origin_maps),
             )
-            interruption_handler = Gen1RouteInterruptionHandler(
-                field_actions,
-                reader,
-                maximum_flees=8,
-                maximum_trainer_battles=8,
-                stabilization_frames=120,
-                route_name="strategic scenario construction relocation",
-            )
-            relocation_report = execute_route(
+            relocation_report = execute_relocation(
                 relocation_plan,
-                field_actions,
-                traversal_observer,
-                interruption_handler=interruption_handler,
-                replanner=route_world.replanner(),
-                limits=RELOCATION_LIMITS,
+                route_name="strategic scenario post-skill relocation",
             )
 
         final_raw = reader.read()
@@ -383,6 +428,35 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "skill": {
             "actions_executed": skill_report.actions_executed,
             "frames_executed": skill_report.frames_executed,
+        },
+        "pre_skill_relocation": {
+            "requested": args.relocate_to_skill_boundary,
+            "performed": pre_skill_relocation_report is not None,
+            "acknowledged_steps": (
+                0
+                if pre_skill_relocation_report is None
+                else len(pre_skill_relocation_report.executed_steps)
+            ),
+            "interruptions": (
+                0
+                if pre_skill_relocation_report is None
+                else len(pre_skill_relocation_report.interruptions)
+            ),
+            "movement_requests": (
+                0
+                if pre_skill_relocation_report is None
+                else pre_skill_relocation_report.movement_requests
+            ),
+            "replans": (
+                0
+                if pre_skill_relocation_report is None
+                else len(pre_skill_relocation_report.replans)
+            ),
+            "wait_actions": (
+                0
+                if pre_skill_relocation_report is None
+                else pre_skill_relocation_report.wait_actions
+            ),
         },
         "relocation": {
             "requested": args.relocate_to_origin,

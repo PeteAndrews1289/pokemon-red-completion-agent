@@ -8,6 +8,7 @@ import pytest
 from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.strategic_navigation import StrategicNavigationTag
 from pokemon_red_completion.strategic_navigation_scenario_routes import (
+    STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES,
     STRATEGIC_SCENARIO_DESTINATIONS,
     STRATEGIC_SCENARIO_ORIGIN_MAPS,
     ScenarioObjectiveDestinationSpec,
@@ -49,6 +50,13 @@ def test_fuchsia_candidate_stops_at_its_authenticated_skill_boundary() -> None:
 
     assert spec.goal_map is MapId.LAVENDER_POKECENTER
     assert spec.goal_map is not MapId.FUCHSIA_CITY
+
+
+def test_construction_boundaries_are_exact_and_intentionally_narrow() -> None:
+    assert STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES == {
+        "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
+        "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
+    }
 
 
 def test_route_catalog_kills_missing_key_and_mismatched_binding() -> None:
