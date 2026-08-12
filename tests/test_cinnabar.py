@@ -64,6 +64,7 @@ def test_cinnabar_restores_each_qualified_lead_lineage_exactly() -> None:
     assert LEAD_MOVE_PP_LINEAGES == {
         (0x82, 0x46, 0x3A, 0x39): (15, 15, 10, 15),
         (0x2C, 0x46, 0x3D, 0x39): (25, 15, 20, 15),
+        (0x2C, 0x27, 0x3D, 0x39): (25, 30, 20, 15),
     }
     for moves, pp in LEAD_MOVE_PP_LINEAGES.items():
         assert _cinnabar_lead_moves_restored(moves, pp)
