@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 12 scene: the party became the curriculum
+
+Scenario 013 is a compact version of the whole project story. The shortest engineering answer was
+to loosen Sabrina's party requirement. The useful answer was to teach the missing experience.
+Jolteon and Snorlax became independent resource lessons, each played on the cartridge while leaving
+the strategic objective set unchanged. The Dojo then supplied member six.
+
+That fuller state found two bugs a mocked run did not. A fixed PC confirmation sequence stored one
+extra inventory item, and Sabrina's teacher only understood the later Surf move set. The repaired
+teacher stops PC input on the observed item transition and separately qualifies the earlier Ice
+Beam/Bite battle policy. The official rehearsal finally asks one clean question—Fuchsia or
+Erika—then records the destination decision, not the 136 arrow inputs. It is the difference between
+filming a scripted speedrun and constructing experience a model may actually learn from.
+
 ## New opening beat: the route was complete, the curriculum was not
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW

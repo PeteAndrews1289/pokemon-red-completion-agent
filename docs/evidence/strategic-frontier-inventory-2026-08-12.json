@@ -1,12 +1,12 @@
 {
-  "authenticated_capture_envelopes": 52,
+  "authenticated_capture_envelopes": 57,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
     "target_origin_checked": false,
     "test_scenarios_opened": 0
   },
-  "exact_learning_scenario_count": 19,
+  "exact_learning_scenario_count": 20,
   "exact_learning_scenario_ids": [
     "red-strategic-scenario-v2-001-train",
     "red-strategic-scenario-v2-002-train",
@@ -17,6 +17,7 @@
     "red-strategic-scenario-v2-009-train",
     "red-strategic-scenario-v2-010-train",
     "red-strategic-scenario-v2-011-validation",
+    "red-strategic-scenario-v2-013-train",
     "red-strategic-scenario-v2-014-train",
     "red-strategic-scenario-v2-015-validation",
     "red-strategic-scenario-v2-019-validation",
@@ -106,8 +107,8 @@
       "unique_source_frontiers": 1
     },
     {
-      "already_exact": false,
-      "authenticated_source_envelopes": 2,
+      "already_exact": true,
+      "authenticated_source_envelopes": 6,
       "objective_ids": [
         "defeat_sabrina"
       ],
@@ -221,9 +222,8 @@
       "unique_source_frontiers": 3
     }
   ],
-  "missing_learning_scenario_count": 17,
+  "missing_learning_scenario_count": 16,
   "missing_learning_scenario_ids": [
-    "red-strategic-scenario-v2-013-train",
     "red-strategic-scenario-v2-017-train",
     "red-strategic-scenario-v2-018-train",
     "red-strategic-scenario-v2-021-train",
@@ -242,5 +242,5 @@
     "red-strategic-scenario-v2-046-train"
   ],
   "schema": "strategic-frontier-inventory-v1",
-  "unique_authenticated_frontiers": 38
+  "unique_authenticated_frontiers": 39
 }

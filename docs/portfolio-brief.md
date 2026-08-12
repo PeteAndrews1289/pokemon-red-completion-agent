@@ -2,8 +2,8 @@
 
 ## August 12 update
 
-The strategic benchmark now has 52 authenticated captures, 38 distinct frontiers and 19 exact
-non-test contexts: 11/24 train and 8/12 validation. All six preregistered validation challenges are
+The strategic benchmark now has 57 authenticated captures, 39 distinct frontiers and 20 exact
+non-test contexts: 12/24 train and 8/12 validation. All six preregistered validation challenges are
 live-qualified, but counted data remains zero and all 12 test contexts remain sealed. Scenario 037
 is the newest exact rehearsal: the teacher chose Erika at route cost 106 over a 77-cost Cinnabar
 alternative, then completed 102 movements with no replan and no movement-imitation labels.
@@ -14,9 +14,11 @@ in the rival and boss battles. Sabrina still cannot be admitted from that state 
 has three members and the balanced Dojo/Sabrina curriculum requires five before recruiting member
 six. The project records that as a missing recruitment curriculum rather than relaxing the team
 contract or manufacturing a label.
-The first repair is already cartridge-qualified: Jolteon is now a construction-only party lesson
-that preserves all 19 completion objectives and emits no policy example. The remaining fifth-member
-lesson is to separate Snorlax capture from the act of reaching Fuchsia.
+Both repairs are now cartridge-qualified: Jolteon and Snorlax are construction-only party lessons
+that preserve all 19 completion objectives and emit no policy example. Sabrina then recruits the
+sixth member and succeeds before Surf using a separately qualified Ice Beam/Bite policy. Exact
+scenario 013 is rehearsed: Fuchsia was selected over Erika, 136 movements completed without
+interruption or replan, and no movement-imitation label was emitted.
 
 ## August 11 headline
 

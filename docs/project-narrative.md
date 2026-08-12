@@ -47,9 +47,9 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 52 authenticated captures, 38 distinct frontiers, 19 exact learning
+The scoreboard is now 57 authenticated captures, 39 distinct frontiers, 20 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 11/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 12/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
 experience: Koga without Surf or Strength, Cinnabar before Sabrina and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
@@ -71,8 +71,13 @@ before the Dojo recruits member six. The gap is no longer “Sabrina failed”; 
 curriculum requirement—teach two accessible captures and their development before Fuchsia.
 The first half of that requirement is now real: a construction-only lesson returns to Celadon,
 receives Eevee, buys one Thunder Stone, evolves Jolteon and preserves the 19-objective frontier.
-It creates neither a strategic example nor a hidden `reach_saffron` label. Snorlax remains the
-fifth-member lesson that must be separated from actually reaching Fuchsia.
+It creates neither a strategic example nor a hidden `reach_saffron` label. Snorlax is now the
+matching fifth-member resource lesson. That fuller party exposed two honest composition bugs: a
+fixed PC confirmation count could archive an extra item, and Sabrina only recognized the later
+Surf move set. State-driven deposit confirmation and an explicitly qualified pre-Surf Ice
+Beam/Bite policy repaired both without accepting arbitrary states. The exact scenario-013 rehearsal
+then chose Fuchsia over Erika and completed 136 movements with one strategic label and no arrow-key
+labels.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

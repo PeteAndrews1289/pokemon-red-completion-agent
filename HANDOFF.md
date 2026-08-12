@@ -14,6 +14,25 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 013 authenticated through independent team building — 2026-08-12
+
+Published `b02f79f` / CI `31585485654` closes exact train scenario 013. Construction first
+liberated Silph, then acquired Jolteon and Snorlax as independent resource lessons that preserved
+the same 19-objective frontier and created no policy label. The Sabrina skill recruited Hitmonlee
+as member six, defeated Sabrina before the Surf detour, and produced an exact 20-objective Saffron
+capture. Its official uncounted rehearsal chose Fuchsia over Erika, completed 136 acknowledged
+movements plus seven waits with zero interruption or replan, and wrote one strategic label and
+zero movement labels. See the [scenario 013 receipt](docs/evidence/strategic-scenario-013-rehearsal-qualification-2026-08-12.json).
+
+Two live failures improved the teacher rather than weakening its assertions. PC deposit
+confirmation now stops on the requested bag transition instead of accidentally storing the next
+item. Sabrina now explicitly qualifies both the pre-Surf Ice Beam/Bite lineage and the later
+Surf/Ice Beam lineage; arbitrary move sets still fail closed. The measured inventory is now **57
+authenticated envelopes, 39 distinct frontiers, 20 exact learning contexts and 16 missing**:
+twelve train and eight validation. Counted collection remains zero and all 12 test contexts remain
+sealed. Next prioritize Cinnabar-before-Sabrina for scenario 041 and Koga without Surf/Strength for
+scenarios 017/021.
+
 ## Scenario 037 authenticated; scenario 013 reaches its honest party boundary — 2026-08-12
 
 Exact train scenario 037 is now constructed and rehearsed. Construction added only `obtain_surf`,

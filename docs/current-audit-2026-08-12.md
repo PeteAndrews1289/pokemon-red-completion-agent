@@ -12,8 +12,8 @@ the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualificati
 and the [scenario 037 receipt](evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **52 authenticated capture envelopes, 38 distinct frontiers and
-19 exact learning scenarios**. The exact contexts are eleven train scenarios and eight validation
+The private inventory now contains **57 authenticated capture envelopes, 39 distinct frontiers and
+20 exact learning scenarios**. The exact contexts are twelve train scenarios and eight validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
@@ -35,7 +35,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 17 missing learning scenarios and excludes one known invalid
+current measurement. It reports 16 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -76,8 +76,8 @@ The remaining paper-only one-skill matches include:
 
 - scenarios 009, 010 and 014 are now qualified across the pre- and post-Erika Tower lineages;
 - scenarios 017 and 021 still need Koga without either Surf or Strength; and
-- scenario 013 now has an authenticated post-Silph frontier and a construction-only Jolteon
-  lesson; it still needs an independent Snorlax capture before the five-member Dojo/Sabrina boundary; and
+- scenario 013 is now exact: Jolteon and Snorlax are independent no-label resources, and Sabrina
+  is qualified on the resulting pre-Surf six-member lineage;
 - scenario 041 needs a Cinnabar route before Sabrina instead of the current post-Sabrina/Fly
   chapter.
 
@@ -94,7 +94,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 11 of 24 planned contexts;
+- train: 12 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -121,9 +121,9 @@ even if the code ran perfectly.
    than repeated trajectories.
 7. **Complete:** construct and rehearse scenario 037; its teacher chose Erika at cost 106 over the
    77-cost Cinnabar route with no interruption or replan.
-8. **Complete:** split Jolteon into a construction-only party resource and authenticate it without
-   changing the 19-objective frontier. Next split Snorlax capture from Fuchsia completion, then build the independent
-   Cinnabar-before-Sabrina chapter for scenario 041.
+8. **Complete:** split Jolteon and Snorlax into construction-only party resources, preserve the
+   19-objective frontier, qualify Sabrina before Surf and rehearse exact scenario 013. Next build
+   the independent Cinnabar-before-Sabrina chapter for scenario 041.
 9. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 
