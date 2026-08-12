@@ -32,7 +32,7 @@ from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
 from pokemon_red_completion.sabrina import run_sabrina_chapter
 from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
-from pokemon_red_completion.saffron import SaffronTiming, run_saffron_chapter
+from pokemon_red_completion.saffron import SaffronTiming, run_saffron_access_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
 from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
@@ -362,7 +362,7 @@ class DefeatErikaObjectiveSkill:
 
 @dataclass(frozen=True, slots=True)
 class ReachSaffronObjectiveSkill:
-    """Execute the qualified Celadon reward, vending, and guard chapter."""
+    """Execute the qualified vending and guard-access chapter."""
 
     emulator: EmulatorState
     reader: PokemonRedStateReader
@@ -379,20 +379,19 @@ class ReachSaffronObjectiveSkill:
         executable = (
             state.mode.value == "overworld"
             and state.location == "celadon_pokecenter"
-            and "badge:rainbow" in state.facts
             and "location:saffron_city" not in state.facts
         )
         return ObjectiveSkillAvailability(
             executable,
             (
-                "Observed the post-Erika Celadon Center boundary."
+                "Observed the pre-access Celadon Center boundary."
                 if executable
-                else "Requires Celadon Center after Erika before Saffron access."
+                else "Requires Celadon Center before Saffron access."
             ),
         )
 
     def execute(self) -> ObjectiveSkillExecution:
-        report = run_saffron_chapter(
+        report = run_saffron_access_chapter(
             self.emulator,
             self.reader,
             self.executor,
@@ -604,12 +603,8 @@ class DefeatBlaineObjectiveSkill:
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None
-    training_candidate_decision_sink: (
-        Callable[[TrainingCandidateDecision], None] | None
-    ) = None
-    training_candidate_decision_authority: (
-        Callable[[TrainingCandidateDecision], int] | None
-    ) = None
+    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None
+    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None
     objective_id: str = "defeat_blaine"
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
@@ -932,9 +927,7 @@ def build_red_midgame_objective_skill_registry(
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None,
-    training_candidate_decision_sink: (
-        Callable[[TrainingCandidateDecision], None] | None
-    ) = None,
+    training_candidate_decision_sink: (Callable[[TrainingCandidateDecision], None] | None) = None,
     training_candidate_decision_authority: (
         Callable[[TrainingCandidateDecision], int] | None
     ) = None,

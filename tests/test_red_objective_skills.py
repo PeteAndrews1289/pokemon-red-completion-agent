@@ -182,6 +182,7 @@ def test_blaine_skill_forwards_training_control_without_changing_default_contrac
         "pokemon_red_completion.red_objective_skills.run_blaine_after_mansion_chapter",
         fake_run,
     )
+
     def sink(decision) -> None:
         return None
 
@@ -295,6 +296,12 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         location="celadon_pokecenter",
     )
     assert saffron.availability(post_erika).executable
+    pre_erika = GameState(
+        GameMode.OVERWORLD,
+        facts=frozenset(),
+        location="celadon_pokecenter",
+    )
+    assert saffron.availability(pre_erika).executable
     saffron_center = GameState(
         GameMode.OVERWORLD,
         facts=frozenset({"location:saffron_city"}),
@@ -356,9 +363,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     )
     assert champion.availability(champion_room).executable
     assert champion.additional_effect_facts == frozenset({"game:hall_of_fame"})
-    automatic_terminal = champion_room.with_facts(
-        "league:champion_defeated", "game:hall_of_fame"
-    )
+    automatic_terminal = champion_room.with_facts("league:champion_defeated", "game:hall_of_fame")
     assert not champion.availability(automatic_terminal).executable
 
 
@@ -403,7 +408,7 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(monkeypat
         (DefeatErikaObjectiveSkill, "run_erika_chapter", "defeat_erika", 2_000, 300_000),
         (
             ReachSaffronObjectiveSkill,
-            "run_saffron_chapter",
+            "run_saffron_access_chapter",
             "reach_saffron",
             1_000,
             150_000,

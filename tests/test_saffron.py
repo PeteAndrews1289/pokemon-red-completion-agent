@@ -9,8 +9,10 @@ from pokemon_red_completion.saffron import (
     DEFAULT_SAFFRON_TIMING,
     FRESH_WATER_PRICE,
     GUARD_DRINK_FLAG,
+    SAFFRON_ACCESS_CHECKPOINT_COUNT,
     SAFFRON_CHECKPOINT_COUNT,
     THUNDER_STONE_PRICE,
+    SaffronAccessChapterReport,
     SaffronChapterReport,
     SaffronCheckpoint,
     SaffronTiming,
@@ -29,9 +31,7 @@ def _terminal() -> RawGameState:
         player_y=3,
         party_count=5,
         battle_state=0,
-        badge_bits=int(
-            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
-        ),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL),
         party_species_ids=PARTY_AFTER,
         first_party_level=42,
         first_party_hp=130,
@@ -403,6 +403,60 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
         "flag_after_dialogue": GUARD_DRINK_FLAG,
         "consumed_before_global_access": True,
     }
+
+
+def test_saffron_access_report_accepts_pre_erika_party_and_preserves_it() -> None:
+    party = TOWER_FINAL_PARTY
+    moves = (0x2C, 0x27, 0x3D, 0x37)
+    pp = (25, 30, 20, 25)
+    raw = replace(
+        _terminal(),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+        party_count=len(party),
+        party_species_ids=party,
+        first_party_level=36,
+        first_party_hp=98,
+        first_party_max_hp=98,
+        first_party_moves=moves,
+        first_party_pp=pp,
+    )
+    bag = ((int(ItemId.POKE_BALL), 8),)
+    report = SaffronAccessChapterReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_ACCESS_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        money_before=11_852,
+        money_after_purchase=11_852 - FRESH_WATER_PRICE,
+        money_after=11_852 - FRESH_WATER_PRICE,
+        vending_cursor=0,
+        fresh_water_before=0,
+        fresh_water_after_purchase=1,
+        fresh_water_after_guard=0,
+        guard_flag_before=0,
+        guard_flag_after_consumption=0,
+        guard_flag_after_dialogue=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        party_before=party,
+        party_after=party,
+        lead_level_before=36,
+        lead_moves_before=moves,
+        lead_pp_before=pp,
+        party_hp=(98, 53, 37),
+        party_max_hp=(98, 53, 37),
+        party_status=(0, 0, 0),
+        battle_free=True,
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["optional_party_construction"] is False
+    assert not replace(report, party_after=(*party, 0x68)).passed
+    assert not replace(report, final_raw=replace(raw, first_party_level=37)).passed
 
 
 def test_saffron_report_accepts_level_44_healed_lineage() -> None:
