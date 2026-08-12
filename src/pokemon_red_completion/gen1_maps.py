@@ -583,17 +583,24 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
 
 
 def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
-    """Return the inward action for a horizontal pass-through gate arrival.
+    """Return the extra inward action for a pass-through gate arrival.
 
-    Vertical boundary arrivals are ordinary doors and fire while they are
-    entered.  Horizontal boundary arrivals are the distinct gatehouse shape
-    that requires a second same-direction input from the outdoor warp tile.
+    Horizontal boundary arrivals require a second same-direction input from
+    the outdoor warp tile.  A top-boundary arrival has the same two-input
+    shape: Red first steps down onto the outdoor entrance and then continues
+    down into the gate.  Bottom-boundary arrivals are upward-facing doors and
+    fire on the entering step.  Route 5's north Underground Path entrance and
+    Route 8's south entrance are the live witnesses for that asymmetry.
     """
 
     y, x = at
     maximum_y = header.height * 2 - 1
     maximum_x = header.width * 2 - 1
-    if y in {0, maximum_y}:
+    if y in {0, maximum_y} and x in {0, maximum_x}:
+        return None
+    if y == 0:
+        return "down"
+    if y == maximum_y:
         return None
     candidates = tuple(
         action
