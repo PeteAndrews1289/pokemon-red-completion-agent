@@ -1953,7 +1953,12 @@ def _silph_giovanni_move_slot(raw: RawGameState) -> int:
     moves = raw.battler_moves or ()
     pp = raw.battler_pp or ()
     disabled = raw.player_disabled_move_slot if (raw.player_disable_turns or 0) > 0 else None
-    for move_id in (0x82, ICE_BEAM_MOVE):
+    # Surf is both super-effective and receives Blastoise's same-type bonus.
+    # The older policy preferred Skull Bash merely because it occupied slot
+    # one; its charge turn let this valid level-44 lineage faint to Rhyhorn
+    # without damaging it.  Pre-Surf lineages continue through Ice Beam and
+    # then Water Gun before any neutral physical fallback.
+    for move_id in (0x39, ICE_BEAM_MOVE, 0x37, 0x82):
         for index, observed_move in enumerate(moves):
             slot = index + 1
             if (

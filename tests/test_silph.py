@@ -465,7 +465,8 @@ def test_silph_report_accepts_full_rival_recovery_budget() -> None:
 @pytest.mark.parametrize(
     ("moves", "expected_slot"),
     (
-        ((0x82, 0x46, 0x3A, 0x39), 1),
+        ((0x82, 0x46, 0x3A, 0x39), 4),
+        ((0x2C, 0x46, 0x3A, 0x39), 4),
         ((0x2C, 0x46, 0x3A, 0x37), 3),
         ((0x2C, 0x27, 0x3A, 0x37), 3),
     ),
@@ -483,12 +484,12 @@ def test_silph_giovanni_policy_respects_disable_and_pp() -> None:
     raw = replace(
         _terminal(),
         first_party_moves=(0x82, 0x46, 0x3A, 0x39),
-        first_party_pp=(15, 15, 0, 15),
-        player_disabled_move_slot=1,
+        first_party_pp=(15, 15, 10, 15),
+        player_disabled_move_slot=4,
         player_disable_turns=2,
     )
 
-    assert silph_module._silph_giovanni_move_slot(raw) == 4
+    assert silph_module._silph_giovanni_move_slot(raw) == 3
 
 
 def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
