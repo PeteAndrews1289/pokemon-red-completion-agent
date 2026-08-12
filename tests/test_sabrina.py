@@ -1,5 +1,6 @@
 from dataclasses import replace
 
+import pokemon_red_completion.sabrina as sabrina_module
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 from pokemon_red_completion.sabrina import (
     ALAKAZAM_HYPER_POTION_THRESHOLD,
@@ -14,11 +15,38 @@ from pokemon_red_completion.sabrina import (
     SABRINA_TO_CITY,
     SABRINA_X_SPECIAL_USES,
     SabrinaTurn,
+    _confirm_selected_pc_deposit,
     _encounter_party,
     _sabrina_capacity_ready,
     _sabrina_move_slot,
     _sabrina_recovery_required,
 )
+
+
+def test_pc_deposit_confirmation_stops_at_the_requested_bag_transition(
+    monkeypatch,
+) -> None:
+    confirmations: list[object] = []
+
+    monkeypatch.setattr(
+        sabrina_module,
+        "_bag",
+        lambda _emulator: {ItemId.SILPH_SCOPE: 1} if len(confirmations) < 2 else {},
+    )
+    monkeypatch.setattr(
+        sabrina_module,
+        "_pulse",
+        lambda *args, **kwargs: confirmations.append((args, kwargs)),
+    )
+
+    _confirm_selected_pc_deposit(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ItemId.SILPH_SCOPE,
+        sabrina_module.SilphTiming(),
+    )
+
+    assert len(confirmations) == 2
 
 
 def test_sabrina_routes_are_source_and_live_stable() -> None:

@@ -595,14 +595,35 @@ def _deposit_pc_item(
     _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.menu_frames)
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     _select_bag_list_item(actions, emulator, item, timing)
-    for _ in range(3):
-        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _confirm_selected_pc_deposit(actions, emulator, item, timing)
     if item in _bag(emulator):
         raise SabrinaChapterError(f"Saffron PC did not store {item.name}.")
     for _ in range(4):
         _pulse(actions, MacroActionKind.CANCEL, timing, frames=timing.menu_frames)
     if not reader.read_input_readiness().ready:
         raise SabrinaChapterError(f"Saffron PC did not close after storing {item.name}.")
+
+
+def _confirm_selected_pc_deposit(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    """Confirm only until the selected item leaves the bag.
+
+    The number of menus between the bag list and the deposit result depends on
+    the selected stack.  A fixed confirmation count can acknowledge the result
+    and then select the next bag entry, silently depositing an unrelated item.
+    The live bag transition is the semantic terminal we actually require.
+    """
+
+    for _ in range(3):
+        if item not in _bag(emulator):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if item in _bag(emulator):
+        raise SabrinaChapterError(f"Saffron PC did not store {item.name}.")
 
 
 def _select_menu_cursor(
