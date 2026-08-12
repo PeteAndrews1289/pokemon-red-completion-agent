@@ -43,6 +43,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     scenario_destination_specs,
 )
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
+    STRATEGIC_SCENARIO_MAXIMUM_FLEES,
     StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
     bind_scenario_interruption_limits,
@@ -58,6 +59,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_scenario_interruption_limit_covers_both_handler_budgets() -> None:
+    assert STRATEGIC_SCENARIO_MAXIMUM_FLEES == 32
     base = RouteExecutionLimits(max_interruptions=2)
 
     bound = bind_scenario_interruption_limits(

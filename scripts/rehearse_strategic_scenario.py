@@ -121,6 +121,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (  # noq
     scenario_destination_specs,
 )
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
+    STRATEGIC_SCENARIO_MAXIMUM_FLEES,
     StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
     bind_scenario_interruption_limits,
@@ -168,7 +169,11 @@ def _parser() -> argparse.ArgumentParser:
         help="show a view-only game window during execution",
     )
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
-    parser.add_argument("--maximum-flees", type=int, default=8)
+    parser.add_argument(
+        "--maximum-flees",
+        type=int,
+        default=STRATEGIC_SCENARIO_MAXIMUM_FLEES,
+    )
     parser.add_argument("--maximum-trainer-battles", type=int, default=8)
     return parser
 

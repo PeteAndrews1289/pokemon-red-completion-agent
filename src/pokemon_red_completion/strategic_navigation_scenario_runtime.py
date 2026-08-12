@@ -95,6 +95,9 @@ class StrategicScenarioRuntimeError(RuntimeError):
     """Raised before a rehearsal can overstate a branch or durable result."""
 
 
+STRATEGIC_SCENARIO_MAXIMUM_FLEES = 32
+
+
 def bind_scenario_interruption_limits(
     limits: RouteExecutionLimits,
     *,
