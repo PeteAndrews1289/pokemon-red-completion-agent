@@ -189,7 +189,7 @@ def observe_gen1_story_predicates(raw: RawGameState) -> tuple[PredicateObservati
         route_12_snorlax_state = PredicateState.UNKNOWN
     elif event_flag_is_set(
         raw.event_flags,
-        int(EventFlag.FIGHT_ROUTE12_SNORLAX),
+        int(EventFlag.BEAT_ROUTE12_SNORLAX),
     ):
         route_12_snorlax_state = PredicateState.SATISFIED
     else:

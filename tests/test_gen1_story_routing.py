@@ -410,7 +410,7 @@ def test_route_12_snorlax_flag_opens_only_its_displaced_object_square() -> None:
     before = raw(status_flags_1=0, event_flags=bytes(172))
     after = raw(
         status_flags_1=0,
-        event_flags=_event_flags(EventFlag.FIGHT_ROUTE12_SNORLAX),
+        event_flags=_event_flags(EventFlag.BEAT_ROUTE12_SNORLAX),
     )
 
     with pytest.raises(LocalRouterError, match="no permitted local route"):
