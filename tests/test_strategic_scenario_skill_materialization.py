@@ -37,6 +37,8 @@ def test_skill_materializer_help_names_its_non_collection_boundary(
     assert "--intermediate-toward-target" in output
     assert "--relocate-to-skill-boundary" in output
     assert "--relocate-to-origin" in output
+    assert "--maximum-flees" in output
+    assert "--maximum-trainer-battles" in output
     assert "--source-scenario-id" not in output
 
 

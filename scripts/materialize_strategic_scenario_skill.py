@@ -127,6 +127,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
+    parser.add_argument("--maximum-flees", type=int, default=8)
+    parser.add_argument("--maximum-trainer-battles", type=int, default=8)
     parser.add_argument(
         "--relocate-to-skill-boundary",
         action="store_true",
@@ -211,6 +213,10 @@ def _intermediate_checkpoint_id(
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
+    if args.maximum_flees < 0 or args.maximum_trainer_battles < 0:
+        raise StrategicScenarioRuntimeError(
+            "interruption budgets must be non-negative"
+        )
     if args.intermediate_toward_target and args.relocate_to_origin:
         raise StrategicScenarioRuntimeError(
             "intermediate construction cannot claim the target scenario origin"
@@ -329,8 +335,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             interruption_handler = Gen1RouteInterruptionHandler(
                 field_actions,
                 reader,
-                maximum_flees=8,
-                maximum_trainer_battles=8,
+                maximum_flees=args.maximum_flees,
+                maximum_trainer_battles=args.maximum_trainer_battles,
                 stabilization_frames=120,
                 route_name=route_name,
             )
@@ -467,6 +473,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "target_scenario_exact": not args.intermediate_toward_target,
         "completed_objective_id": args.complete_objective_id,
         "expected_objectives_added": sorted(expected_added),
+        "interruption_budgets": {
+            "maximum_flees": args.maximum_flees,
+            "maximum_trainer_battles": args.maximum_trainer_battles,
+        },
         "skill": {
             "actions_executed": skill_report.actions_executed,
             "frames_executed": skill_report.frames_executed,
