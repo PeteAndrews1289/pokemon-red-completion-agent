@@ -43,6 +43,9 @@ from pokemon_red_completion.blaine import (
     MANSION_TRAINING_POLICY,
     MANSION_TRAINING_VENUE,
     MANSION_VOLATILE_ENEMY_SPECIES,
+    PRE_SAFFRON_BALANCED_ROSTER,
+    PRE_SAFFRON_DEVELOPMENT_POLICY,
+    PRE_SAFFRON_TEAM_POLICY,
     QUIZ_ANSWERS,
     QUIZ_CORRECT_ANSWERS,
     QUIZ_TEXT_PULSES,
@@ -150,6 +153,11 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
         MANSION_DEVELOPMENT_POLICY.roster.species_ids
     )
     assert MANSION_TEAM_POLICY.required_size == 6
+    assert PRE_SAFFRON_TEAM_POLICY.required_size == 4
+    assert PRE_SAFFRON_DEVELOPMENT_POLICY.roster is PRE_SAFFRON_BALANCED_ROSTER
+    assert set(PRE_SAFFRON_BALANCED_ROSTER.species_ids) < set(
+        MANSION_DEVELOPMENT_POLICY.roster.species_ids
+    )
     assert MANSION_TEAM_POLICY.max_battles == 7_000
     assert MANSION_TEAM_POLICY.max_battles < MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL
     assert MANSION_TEAM_POLICY.max_healing_trips == 2_000

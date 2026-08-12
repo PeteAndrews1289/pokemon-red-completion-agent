@@ -8,7 +8,7 @@ order are pinned to pret/pokered commit
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -81,6 +81,7 @@ from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     DevelopedTeamPolicy,
     DevelopedTeamReport,
+    TeamRosterPlan,
     TeamTrainingDirective,
     plan_team_development,
     summarize_team_development,
@@ -152,6 +153,18 @@ MANSION_DEVELOPMENT_POLICY = DevelopedTeamPolicy(
     level_parity=COMPLETION_LEVEL_PARITY,
     parity_opposition_level=INDIGO_MAX_OPPOSITION_LEVEL,
 )
+PRE_SAFFRON_BALANCED_ROSTER = TeamRosterPlan(
+    tuple(
+        slot
+        for slot in RED_BALANCED_ROSTER.slots
+        if slot.species_id
+        in {BLASTOISE_SPECIES_ID, DUGTRIO_SPECIES_ID, 0x40, 0x84}
+    )
+)
+PRE_SAFFRON_DEVELOPMENT_POLICY = replace(
+    MANSION_DEVELOPMENT_POLICY,
+    roster=PRE_SAFFRON_BALANCED_ROSTER,
+)
 #: How far below the League a natural playthrough arrives.  A player who used a
 #: team throughout the game reaches Indigo in the mid-fifties; that is the band
 #: where switching and type choices still decide battles.  Above it the team
@@ -219,6 +232,10 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
     # completed block while remaining a finite, independently enforced bound.
     max_healing_trips=2_000,
     max_faints=0,
+)
+PRE_SAFFRON_TEAM_POLICY = replace(
+    MANSION_TEAM_POLICY,
+    required_size=len(PRE_SAFFRON_BALANCED_ROSTER.slots),
 )
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0
@@ -1336,8 +1353,18 @@ def run_blaine_chapter(
         "Returned safely from Mansion",
     )
 
+    development_policy = (
+        PRE_SAFFRON_DEVELOPMENT_POLICY
+        if initial.party_count == len(PRE_SAFFRON_BALANCED_ROSTER.slots)
+        else MANSION_DEVELOPMENT_POLICY
+    )
+    team_policy = (
+        PRE_SAFFRON_TEAM_POLICY
+        if development_policy is PRE_SAFFRON_DEVELOPMENT_POLICY
+        else MANSION_TEAM_POLICY
+    )
     development = plan_team_development(
-        PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
+        PokemonRedPartyReader(emulator).read(), development_policy
     )
     team_battles = 0
     team_healing_trips = 0
@@ -1346,7 +1373,7 @@ def run_blaine_chapter(
             actions,
             reader,
             emulator,
-            policy=MANSION_TEAM_POLICY,
+            policy=team_policy,
             venues=(
                 ROUTE_11_TRAINING_VENUE,
                 DIGLETTS_CAVE_TRAINING_VENUE,
@@ -1378,7 +1405,7 @@ def run_blaine_chapter(
         actions,
         reader,
         emulator,
-        policy=MANSION_TEAM_POLICY,
+        policy=team_policy,
         venues=(
             ROUTE_11_TRAINING_VENUE,
             DIGLETTS_CAVE_TRAINING_VENUE,
@@ -1426,7 +1453,11 @@ def run_blaine_chapter(
         "Trained safely in Pokémon Mansion",
     )
 
-    team_readiness = _qualify_mansion_team_development(reader, emulator)
+    team_readiness = _qualify_mansion_team_development(
+        reader,
+        emulator,
+        policy=development_policy,
+    )
     if not team_readiness.passed:
         raise BlaineChapterError("Team development failed the parity contract.")
 
@@ -1658,8 +1689,18 @@ def run_blaine_after_mansion_chapter(
     if _events(emulator, GYM_TRAINER_EVENTS) != (False,) * 7:
         raise BlaineChapterError("A Cinnabar Gym trainer was already defeated.")
 
+    development_policy = (
+        PRE_SAFFRON_DEVELOPMENT_POLICY
+        if initial.party_count == len(PRE_SAFFRON_BALANCED_ROSTER.slots)
+        else MANSION_DEVELOPMENT_POLICY
+    )
+    team_policy = (
+        PRE_SAFFRON_TEAM_POLICY
+        if development_policy is PRE_SAFFRON_DEVELOPMENT_POLICY
+        else MANSION_TEAM_POLICY
+    )
     development = plan_team_development(
-        PokemonRedPartyReader(emulator).read(), MANSION_DEVELOPMENT_POLICY
+        PokemonRedPartyReader(emulator).read(), development_policy
     )
     team_battles = 0
     team_healing_trips = 0
@@ -1668,7 +1709,7 @@ def run_blaine_after_mansion_chapter(
             actions,
             reader,
             emulator,
-            policy=MANSION_TEAM_POLICY,
+            policy=team_policy,
             venues=(
                 ROUTE_11_TRAINING_VENUE,
                 DIGLETTS_CAVE_TRAINING_VENUE,
@@ -1702,7 +1743,7 @@ def run_blaine_after_mansion_chapter(
         actions,
         reader,
         emulator,
-        policy=MANSION_TEAM_POLICY,
+        policy=team_policy,
         venues=(
             ROUTE_11_TRAINING_VENUE,
             DIGLETTS_CAVE_TRAINING_VENUE,
@@ -1752,7 +1793,11 @@ def run_blaine_after_mansion_chapter(
         "Trained safely in Pokémon Mansion",
     )
 
-    team_readiness = _qualify_mansion_team_development(reader, emulator)
+    team_readiness = _qualify_mansion_team_development(
+        reader,
+        emulator,
+        policy=development_policy,
+    )
     if not team_readiness.passed:
         raise BlaineChapterError("Team development failed the parity contract.")
 
@@ -2516,12 +2561,14 @@ def _training_attack_pp_reserve(
 def _qualify_mansion_team_development(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    *,
+    policy: DevelopedTeamPolicy = MANSION_DEVELOPMENT_POLICY,
 ) -> DevelopedTeamReport:
     """Require final available forms and the level-60 completion workhorse."""
 
     party = PokemonRedPartyReader(emulator).read()
-    decision = plan_team_development(party, MANSION_DEVELOPMENT_POLICY)
-    report = summarize_team_development(party, MANSION_DEVELOPMENT_POLICY)
+    decision = plan_team_development(party, policy)
+    report = summarize_team_development(party, policy)
     if decision.directive is not TeamTrainingDirective.STOP or not report.passed:
         raise BlaineChapterError(
             "Mansion team development stopped before readiness: "
