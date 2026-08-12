@@ -199,12 +199,12 @@ def test_a_directional_top_boundary_return_needs_outward_input() -> None:
     )
 
     assert plan.actions == ("up", "up", "up")
-    assert plan.terminal_at == (0, 10)
+    assert plan.terminal_at == (1, 10)
     assert not plan.segments[0].transition_action_in_approach
     assert plan.steps[-1].source_map == 73
     assert plan.steps[-1].source_at == (0, 3)
     assert plan.steps[-1].expected_map == 17
-    assert plan.steps[-1].expected_at == (0, 10)
+    assert plan.steps[-1].expected_at == (1, 10)
 
 
 def test_an_internally_approached_bottom_boundary_return_needs_outward_input() -> None:

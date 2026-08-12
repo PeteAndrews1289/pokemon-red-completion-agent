@@ -747,18 +747,13 @@ def _warp_transition(
         if index is None or index >= len(locations):
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
-        if edge.exit_action in {"up", "down"} and not action_in_approach:
-            # Pressing outward through a vertical boundary return plays the
-            # doorway animation one tile beyond the exterior warp. Automatic
-            # doors arrive through the ``action_in_approach`` case above and
-            # settle on the destination warp instead.
-            dy, dx = {
-                "up": (-1, 0),
-                "down": (1, 0),
-            }.get(edge.exit_action, (0, 0))
-            if (dy, dx) == (0, 0):
-                raise RoutePlanningError(f"unsupported boundary return action {edge.exit_action!r}")
-            arrival = arrival[0] + dy, arrival[1] + dx
+        if edge.exit_action == "down" and not action_in_approach:
+            # South-facing exits play the doorway step one square beyond the
+            # exterior warp. A directional north exit still requires its
+            # second UP inside, but settles *on* the outside warp. Route 6's
+            # north Underground Path gate is the live witness; its planner has
+            # to move sideways/down before heading north or it retriggers.
+            arrival = arrival[0] + 1, arrival[1]
         elif edge.exit_action not in {None, "up", "down", "left", "right"}:
             raise RoutePlanningError(f"unsupported boundary return action {edge.exit_action!r}")
     if arrival is None:
