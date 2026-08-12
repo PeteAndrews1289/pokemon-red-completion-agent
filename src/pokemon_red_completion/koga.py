@@ -251,8 +251,7 @@ class KogaChapterReport:
             and self.final_raw.first_party_moves is not None
             and self.final_raw.first_party_moves[self.attack_move_slot - 1]
             == self.attack_move_id
-            and self.attack_pp
-            == (20 if self.attack_move_id == BUBBLE_BEAM else 15)
+            and self.attack_pp == _koga_attack_max_pp(self.attack_move_id)
             and self.controller_released
         )
 
@@ -342,6 +341,17 @@ def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
     )
 
 
+def _koga_attack_max_pp(attack_move_id: int) -> int:
+    try:
+        return {
+            SURF: 15,
+            STRENGTH: 15,
+            BUBBLE_BEAM: 20,
+        }[attack_move_id]
+    except KeyError:
+        raise KogaChapterError("Koga primary move has no qualified PP contract.") from None
+
+
 def run_koga_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -360,6 +370,7 @@ def run_koga_chapter(
     initial_bag = _bag_tuple(emulator)
     initial_money = _money(emulator)
     attack_move_id, attack_move_slot = _koga_primary_attack(initial)
+    attack_move_max_pp = _koga_attack_max_pp(attack_move_id)
     if any(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS):
         raise KogaChapterError("Fuchsia Gym trainers were not pristine at chapter start.")
     if _event(emulator, EventFlag.BEAT_KOGA) or _event(emulator, EventFlag.GOT_TM06):
@@ -420,6 +431,7 @@ def run_koga_chapter(
         emulator,
         timing,
         attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
     )
     _move(actions, reader, CENTER_TO_TAMER2, timing, "Tamer 2 sight line")
     battles.append(
@@ -446,6 +458,7 @@ def run_koga_chapter(
         emulator,
         timing,
         attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
     )
     _checkpoint(
         records,
@@ -493,6 +506,7 @@ def run_koga_chapter(
         emulator,
         timing,
         attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
     )
     _checkpoint(records, progress, emulator, reader.read(), "recovery2", "Healed before Koga")
 
@@ -563,6 +577,7 @@ def run_koga_chapter(
         emulator,
         timing,
         attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
     )
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Koga boundary")
@@ -1139,6 +1154,7 @@ def _heal_center(
     timing: KogaTiming,
     *,
     attack_move_slot: int = SURF_SLOT,
+    attack_move_max_pp: int = 15,
 ) -> None:
     approach = reader.read()
     _move(
@@ -1159,7 +1175,7 @@ def _heal_center(
                 (reader.read().first_party_pp or (0, 0, 0, 0))[attack_move_slot - 1]
                 & 0x3F
             )
-            == 15
+            == attack_move_max_pp
         ):
             _clear_text(actions, reader, timing)
             return

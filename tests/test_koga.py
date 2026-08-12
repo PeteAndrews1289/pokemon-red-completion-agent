@@ -34,6 +34,7 @@ from pokemon_red_completion.koga import (
     KogaChapterReport,
     KogaCheckpoint,
     KogaTiming,
+    _koga_attack_max_pp,
     _koga_fainted_pivot_target,
     _koga_matchup_pivot_target,
     _koga_move_slot,
@@ -322,6 +323,13 @@ def test_koga_accepts_authenticated_pre_hm_bubblebeam_curriculum() -> None:
     assert report.passed
     assert report.public_dict()["mandatory_trainers"][0]["move_id"] == BUBBLE_BEAM
     assert report.public_dict()["mandatory_trainers"][0]["move_slot"] == BUBBLE_BEAM_SLOT
+    assert _koga_attack_max_pp(BUBBLE_BEAM) == 20
+    assert _koga_attack_max_pp(SURF) == 15
+
+
+def test_koga_rejects_unknown_primary_move_pp_contract() -> None:
+    with pytest.raises(KogaChapterError, match="no qualified PP contract"):
+        _koga_attack_max_pp(0xFF)
 
 
 def test_koga_rejects_an_unauthenticated_primary_move_layout() -> None:
