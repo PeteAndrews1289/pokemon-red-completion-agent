@@ -398,6 +398,7 @@ class SilphChapterReport:
     rival_x_special_used: int
     giovanni_x_special_used: int
     hyper_potions_remaining: int
+    max_repel_before: int
     max_repel_remaining: int
     route_items_archived: bool
     card_key_quantity: int
@@ -443,7 +444,8 @@ class SilphChapterReport:
             and self.giovanni_x_special_used == 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
-            and self.max_repel_remaining == 0
+            and 0 <= self.max_repel_before <= 99
+            and self.max_repel_remaining == self.max_repel_before
             and self.route_items_archived
             and self.card_key_quantity == 1
             and self.master_ball_quantity == 1
@@ -485,6 +487,7 @@ class SilphChapterReport:
                 "x_special_used_by_rival_policy": self.rival_x_special_used,
                 "x_special_used_by_giovanni_policy": self.giovanni_x_special_used,
                 "remaining": self.hyper_potions_remaining,
+                "max_repel_carried_in": self.max_repel_before,
                 "max_repel_bought": 0,
                 "max_repel_remaining": self.max_repel_remaining,
             },
@@ -841,6 +844,7 @@ def run_silph_chapter(
         rival_x_special_used=x_special_before - x_special_after_rival,
         giovanni_x_special_used=x_special_before_giovanni - x_special_after_giovanni,
         hyper_potions_remaining=_bag(emulator).get(ItemId.HYPER_POTION, 0),
+        max_repel_before=initial_bag.get(ItemId.MAX_REPEL, 0),
         max_repel_remaining=_bag(emulator).get(ItemId.MAX_REPEL, 0),
         route_items_archived=route_items_archived,
         card_key_quantity=_bag(emulator).get(ItemId.CARD_KEY, 0),
@@ -856,7 +860,9 @@ def run_silph_chapter(
         actions_executed=actions.actions_executed,
     )
     if not report.passed:
-        raise SilphChapterError("Silph evidence failed its terminal contract.")
+        raise SilphChapterError(
+            f"Silph evidence failed its terminal contract: {report.public_dict()!r}."
+        )
     return report
 
 

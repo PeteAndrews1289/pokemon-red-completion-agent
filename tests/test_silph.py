@@ -161,6 +161,7 @@ def _report() -> SilphChapterReport:
         rival_x_special_used=1,
         giovanni_x_special_used=1,
         hyper_potions_remaining=7,
+        max_repel_before=0,
         max_repel_remaining=0,
         route_items_archived=True,
         card_key_quantity=1,
@@ -244,8 +245,9 @@ def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:
         "used_by_rival_policy": 0,
         "x_special_used_by_rival_policy": 1,
         "x_special_used_by_giovanni_policy": 1,
-        "remaining": 7,
-        "max_repel_bought": 0,
+            "remaining": 7,
+            "max_repel_carried_in": 0,
+            "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
 
@@ -1149,8 +1151,9 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
         "used_by_rival_policy": 0,
         "x_special_used_by_rival_policy": 1,
         "x_special_used_by_giovanni_policy": 1,
-        "remaining": 7,
-        "max_repel_bought": 0,
+            "remaining": 7,
+            "max_repel_carried_in": 0,
+            "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
     assert THIRD_FLOOR_GUARD == (
