@@ -181,7 +181,7 @@ def test_erika_policy_falls_back_when_strength_is_disabled() -> None:
     assert erika_module._erika_move_slot(raw) == 3
 
 
-def test_early_erika_report_requires_exact_pre_koga_transition() -> None:
+def test_early_erika_report_requires_exact_badge_transition() -> None:
     initial = replace(
         _terminal(),
         badge_bits=0x07,
@@ -230,7 +230,14 @@ def test_early_erika_report_requires_exact_pre_koga_transition() -> None:
     )
 
     assert report.passed
-    assert report.public_dict()["curriculum"] == "pre_koga_celadon"
+    assert report.public_dict()["curriculum"] == "celadon_without_strength"
+    assert replace(
+        report,
+        initial_raw=replace(initial, badge_bits=0x17),
+        final_raw=replace(final, badge_bits=0x1F),
+        badge_bits_before=0x17,
+        badge_bits_after=0x1F,
+    ).passed
     assert not replace(report, badge_bits_after=0x1F).passed
     assert not replace(report, tm13_transfer_before_event=False).passed
 

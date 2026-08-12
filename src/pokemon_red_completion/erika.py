@@ -377,7 +377,7 @@ class ErikaChapterReport:
 
 @dataclass(frozen=True, slots=True)
 class EarlyErikaChapterReport:
-    """Evidence for the legal pre-Koga Celadon Gym curriculum."""
+    """Evidence for the legal Celadon Gym curriculum without Strength."""
 
     records: tuple[ErikaCheckpoint, ...]
     initial_raw: RawGameState
@@ -434,8 +434,9 @@ class EarlyErikaChapterReport:
             == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - EARLY_ERIKA_BATTLE_PREPARATION_COST
             + self.x_special_before_supply * X_SPECIAL_PRICE
             + self.x_accuracy_before_supply * X_ACCURACY_REPLACEMENT_PRICE
-            and self.badge_bits_before == 0x07
-            and self.badge_bits_after == 0x0F
+            and self.badge_bits_before in {0x07, 0x17}
+            and self.badge_bits_after
+            == self.badge_bits_before | int(Badge.RAINBOW)
             and self.gym_events_before == (False,) * 7
             and self.gym_events_after == (True,) * 7
             and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
@@ -458,7 +459,7 @@ class EarlyErikaChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_erika",
-            "curriculum": "pre_koga_celadon",
+            "curriculum": "celadon_without_strength",
             "ice_beam_preparation": {
                 "move_id": ICE_BEAM_MOVE,
                 "pp_spent": self.ice_beam_pp_spent,
@@ -498,7 +499,7 @@ def run_early_erika_chapter(
     timing: ErikaTiming = DEFAULT_ERIKA_TIMING,
     progress: ProgressSink | None = None,
 ) -> EarlyErikaChapterReport:
-    """Defeat Erika from the legal post-Hideout Celadon boundary, before Koga."""
+    """Defeat Erika from the legal post-Hideout Celadon boundary without Strength."""
 
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -516,7 +517,7 @@ def run_early_erika_chapter(
         or lineage is None
         or _party_hp(emulator) != _party_max_hp(emulator)
         or any(_party_status(emulator))
-        or emulator.read_u8(RamAddress.OBTAINED_BADGES) != 0x07
+        or emulator.read_u8(RamAddress.OBTAINED_BADGES) not in {0x07, 0x17}
         or _event(emulator, EventFlag.BEAT_ERIKA)
         or _event(emulator, EventFlag.GOT_TM21)
         or _event(emulator, EventFlag.GOT_TM13)
