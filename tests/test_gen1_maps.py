@@ -98,6 +98,16 @@ def test_pass_through_gate_entry_actions_derive_from_destination_boundary() -> N
     assert gen1_maps._boundary_entry_action(header, (0, 0)) is None
 
 
+def test_boundary_return_actions_point_out_of_each_map_edge() -> None:
+    header = gen1_maps._Header(tileset=0, height=4, width=3, connections={})
+
+    assert gen1_maps._boundary_return_action(header, (0, 3)) == "up"
+    assert gen1_maps._boundary_return_action(header, (7, 3)) == "down"
+    assert gen1_maps._boundary_return_action(header, (3, 0)) == "left"
+    assert gen1_maps._boundary_return_action(header, (3, 5)) == "right"
+    assert gen1_maps._boundary_return_action(header, (0, 0)) is None
+
+
 def test_cartridge_tile_semantics_override_geometric_warp_guess() -> None:
     automatic = Passage(
         to_map=None,

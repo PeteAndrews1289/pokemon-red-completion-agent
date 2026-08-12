@@ -673,8 +673,8 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
         for condition, action in (
             (y == 0, "up"),
             (y == maximum_y, "down"),
-            (x == 0, "right"),
-            (x == maximum_x, "left"),
+            (x == 0, "left"),
+            (x == maximum_x, "right"),
         )
         if condition
     )
