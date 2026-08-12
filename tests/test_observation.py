@@ -10,6 +10,7 @@ from pokemon_red_completion.observation import (
     BROCK_OPPONENT_ID,
     BROCK_TRAINER_CLASS_ID,
     BUBBLE_MOVE_ID,
+    CERULEAN_ROCKET_TRIGGER_X,
     EVENT_FLAG_BYTES,
     EXITING_DOOR_MOVEMENT_MASK,
     OAKS_LAB_SELECTION_READY_SCRIPT,
@@ -316,6 +317,28 @@ def test_trainer_engagement_requires_seen_flag_and_script_control() -> None:
     assert scripted_trainer.trainer_engagement_active()
     assert trainer_text_script.trainer_engagement_active()
     assert not movement_without_seen_flag.trainer_engagement_active()
+
+
+def test_cerulean_rocket_custom_preamble_is_a_typed_trainer_engagement() -> None:
+    event_byte = int(RamAddress.EVENT_FLAGS) + int(EventFlag.BEAT_CERULEAN_ROCKET_THIEF) // 8
+    event_mask = 1 << (int(EventFlag.BEAT_CERULEAN_ROCKET_THIEF) % 8)
+    preamble = {
+        RamAddress.CURRENT_MAP: MapId.CERULEAN_CITY,
+        RamAddress.PLAYER_X: CERULEAN_ROCKET_TRIGGER_X,
+        RamAddress.PLAYER_Y: 9,
+        RamAddress.PLAYER_MOVING_DIRECTION: 8,
+    }
+
+    assert PokemonRedStateReader(RecordingMemory(preamble)).trainer_engagement_active()
+    assert not PokemonRedStateReader(
+        RecordingMemory({**preamble, event_byte: event_mask})
+    ).trainer_engagement_active()
+    assert not PokemonRedStateReader(
+        RecordingMemory({**preamble, RamAddress.PLAYER_X: CERULEAN_ROCKET_TRIGGER_X - 1})
+    ).trainer_engagement_active()
+    assert not PokemonRedStateReader(
+        RecordingMemory({**preamble, RamAddress.JOY_IGNORE: 1})
+    ).trainer_engagement_active()
 
 
 def test_current_map_objects_refuse_duplicate_active_coordinates() -> None:

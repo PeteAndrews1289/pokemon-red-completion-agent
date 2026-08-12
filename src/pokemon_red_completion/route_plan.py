@@ -679,12 +679,15 @@ def _warp_transition(
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
     # Gen I suppresses immediate retrigger when an ordinary entry deposits the
     # player on its return warp. Starting on that coordinate therefore needs
-    # the decoded outward action. Approaching a return warp from elsewhere is
-    # different: the final step onto its trigger performs the transition, just
-    # like an ordinary warp. Cerulean's robbed house exposes both states in one
-    # traversal (bottom-door arrival, then top-door internal approach).
+    # the decoded outward action. Non-boundary return tiles and top-boundary
+    # returns fire when approached from inside, but bottom and horizontal map-
+    # edge returns require a separate outward input after reaching the edge.
+    # Cerulean's robbed-house rear door and the south Underground Path exit are
+    # the live cartridge witnesses for the two vertical cases.
     action_in_approach = edge.exit_action is None or (
-        edge.kind == "return" and bool(approach.edges)
+        edge.kind == "return"
+        and edge.exit_action == "up"
+        and bool(approach.edges)
     )
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(
@@ -699,13 +702,11 @@ def _warp_transition(
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
         if edge.exit_action in {"up", "down"} and not action_in_approach:
-            # Starting on an arrival-protected vertical return and pressing
-            # outward plays the doorway animation one tile beyond the exterior
-            # warp. An internally approached return fires on the entering step
-            # and settles *on* that exterior warp instead. Horizontal
-            # pass-through gates also settle on the outside warp. Treating all
-            # three cases alike broke first Route 7, then Cerulean's robbed
-            # house in the opposite direction.
+            # Pressing outward through a vertical boundary return plays the
+            # doorway animation one tile beyond the exterior warp. The one
+            # exception above is an internally approached top return, which
+            # fires on the entering step and settles *on* that exterior warp.
+            # Horizontal pass-through gates also settle on the outside warp.
             dy, dx = {
                 "up": (-1, 0),
                 "down": (1, 0),

@@ -4151,11 +4151,37 @@ class PokemonRedStateReader:
         runs the engine's scripted NPC walk, or leaves the map's trainer-text
         script active. Requiring both sides avoids treating a stale successful-
         item flag as an encounter while retaining defeated-trainer dialogue.
+
+        Cerulean's required Rocket begins through a custom map script. On its
+        first frame the ordinary sight flag and script bytes are still clear;
+        the only live control evidence is Red's otherwise-ready movement latch
+        at one of the cartridge-pinned Rocket trigger squares. Recognize that
+        exact preamble before applying the ordinary trainer rule.
         """
 
+        readiness = self.read_input_readiness()
+        rocket_event = int(EventFlag.BEAT_CERULEAN_ROCKET_THIEF)
+        rocket_defeated = bool(
+            self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + rocket_event // 8)
+            & (1 << (rocket_event % 8))
+        )
+        only_movement_latched = (
+            readiness.player_moving_direction != 0
+            and replace(readiness, player_moving_direction=0).ready
+        )
+        if (
+            self._memory.read_u8(RamAddress.CURRENT_MAP) == MapId.CERULEAN_CITY
+            and self._memory.read_u8(RamAddress.PLAYER_X) == CERULEAN_ROCKET_TRIGGER_X
+            and self._memory.read_u8(RamAddress.PLAYER_Y) in CERULEAN_ROCKET_TRIGGER_YS
+            and self._memory.read_u8(RamAddress.IS_IN_BATTLE) == 0
+            and self._memory.read_u8(RamAddress.CERULEAN_CITY_SCRIPT) == 0
+            and self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
+            and not rocket_defeated
+            and only_movement_latched
+        ):
+            return True
         if not self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x01:
             return False
-        readiness = self.read_input_readiness()
         return bool(
             readiness.joy_ignore & JOY_IGNORE_MOVEMENT_MASK
             or readiness.npc_movement_script_table
