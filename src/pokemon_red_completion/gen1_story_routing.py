@@ -3,10 +3,10 @@
 Route 7's guard house has statically walkable corridors whose live access is
 decided by a durable guard flag. Cerulean's robbed-house approach and Saffron's
 Silph entrance have the opposite geometry problem: an object occupies the
-passage before a story event and is displaced afterward. Cartridge terrain
-remains responsible for geometry; this adapter contributes only the
-title-specific predicates and object coordinates whose static occupancy those
-predicates replace.
+passage before a story event and is displaced afterward. Route 12's Snorlax
+uses the same pattern. Cartridge terrain remains responsible for geometry;
+this adapter contributes only the title-specific predicates and object
+coordinates whose static occupancy those predicates replace.
 """
 
 from __future__ import annotations
@@ -36,6 +36,8 @@ SILPH_ENTRANCE_OPEN = "story:silph_entrance_open"
 SAFFRON_SILPH_SECURITY_GUARD_AT = (22, 18)
 SAFFRON_GYM_OPEN = "story:saffron_gym_open"
 SAFFRON_GYM_ROCKET_GUARD_AT = (4, 34)
+ROUTE_12_SNORLAX_CLEARED = "story:route_12_snorlax_cleared"
+ROUTE_12_SNORLAX_AT = (62, 10)
 
 # The two corridor rows are independent. Requiring both directions prevents a
 # planner from treating an unknown reverse crossing as free merely because a
@@ -107,11 +109,29 @@ SAFFRON_GYM_REQUIREMENTS = tuple(
     )
 )
 
+# The flute encounter removes the Route 12 Snorlax object permanently.  Keep
+# its cartridge terrain square and bind every direction through it to the
+# independently observed encounter flag.
+ROUTE_12_SNORLAX_REQUIREMENTS = tuple(
+    LocalPassageRequirement(
+        map_id=int(MapId.ROUTE_12),
+        source_at=source,
+        target_at=target,
+        predicate=ROUTE_12_SNORLAX_CLEARED,
+    )
+    for adjacent in ((61, 10), (63, 10), (62, 9), (62, 11))
+    for source, target in (
+        (adjacent, ROUTE_12_SNORLAX_AT),
+        (ROUTE_12_SNORLAX_AT, adjacent),
+    )
+)
+
 GEN1_STORY_PASSAGE_REQUIREMENTS = (
     *ROUTE_7_GATE_REQUIREMENTS,
     *CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
     *SILPH_ENTRANCE_REQUIREMENTS,
     *SAFFRON_GYM_REQUIREMENTS,
+    *ROUTE_12_SNORLAX_REQUIREMENTS,
 )
 
 GEN1_STORY_DISPLACED_OBJECTS: Mapping[int, frozenset[tuple[int, int]]] = {
@@ -122,6 +142,7 @@ GEN1_STORY_DISPLACED_OBJECTS: Mapping[int, frozenset[tuple[int, int]]] = {
             SAFFRON_GYM_ROCKET_GUARD_AT,
         }
     ),
+    int(MapId.ROUTE_12): frozenset({ROUTE_12_SNORLAX_AT}),
 }
 
 
@@ -164,11 +185,21 @@ def observe_gen1_story_predicates(raw: RawGameState) -> tuple[PredicateObservati
         gym_state = PredicateState.SATISFIED
     else:
         gym_state = PredicateState.UNSATISFIED
+    if not raw.game_started or raw.event_flags is None:
+        route_12_snorlax_state = PredicateState.UNKNOWN
+    elif event_flag_is_set(
+        raw.event_flags,
+        int(EventFlag.FIGHT_ROUTE12_SNORLAX),
+    ):
+        route_12_snorlax_state = PredicateState.SATISFIED
+    else:
+        route_12_snorlax_state = PredicateState.UNSATISFIED
     return (
         PredicateObservation(SAFFRON_GUARDS_OPEN, guard_state),
         PredicateObservation(CERULEAN_ROBBED_HOUSE_OPEN, house_state),
         PredicateObservation(SILPH_ENTRANCE_OPEN, silph_state),
         PredicateObservation(SAFFRON_GYM_OPEN, gym_state),
+        PredicateObservation(ROUTE_12_SNORLAX_CLEARED, route_12_snorlax_state),
     )
 
 

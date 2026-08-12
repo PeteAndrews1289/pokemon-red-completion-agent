@@ -7,6 +7,9 @@ from pokemon_red_completion.gen1_story_routing import (
     CERULEAN_ROBBED_HOUSE_POLICE_AT,
     CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
     ROUTE_7_GATE_REQUIREMENTS,
+    ROUTE_12_SNORLAX_AT,
+    ROUTE_12_SNORLAX_CLEARED,
+    ROUTE_12_SNORLAX_REQUIREMENTS,
     SAFFRON_GUARDS_OPEN,
     SAFFRON_GYM_OPEN,
     SAFFRON_GYM_REQUIREMENTS,
@@ -111,11 +114,27 @@ def saffron_story_graph() -> LocalGraph:
     )
 
 
+def route_12_snorlax_graph() -> LocalGraph:
+    adjacent = ((61, 10), (63, 10), (62, 9), (62, 11))
+    return LocalGraph(
+        {
+            ROUTE_12_SNORLAX_AT: tuple(
+                LocalEdge(coordinate, "out") for coordinate in adjacent
+            ),
+            **{
+                coordinate: (LocalEdge(ROUTE_12_SNORLAX_AT, "in"),)
+                for coordinate in adjacent
+            },
+        }
+    )
+
+
 def story_graphs() -> dict[int, LocalGraph]:
     return {
         int(MapId.ROUTE_7_GATE): gate_graph(),
         int(MapId.CERULEAN_CITY): police_graph(),
         int(MapId.SAFFRON_CITY): saffron_story_graph(),
+        int(MapId.ROUTE_12): route_12_snorlax_graph(),
     }
 
 
@@ -374,6 +393,45 @@ def test_silph_victory_opens_only_the_displaced_saffron_gym_guard_square() -> No
     assert SAFFRON_GYM_OPEN in gen1_story_capabilities(after_silph)
 
 
+def test_route_12_snorlax_flag_opens_only_its_displaced_object_square() -> None:
+    assert ROUTE_12_SNORLAX_AT == (62, 10)
+    assert {
+        (item.source_at, item.target_at, item.predicate)
+        for item in ROUTE_12_SNORLAX_REQUIREMENTS
+    } == {
+        (source, target, ROUTE_12_SNORLAX_CLEARED)
+        for adjacent in ((61, 10), (63, 10), (62, 9), (62, 11))
+        for source, target in (
+            (adjacent, ROUTE_12_SNORLAX_AT),
+            (ROUTE_12_SNORLAX_AT, adjacent),
+        )
+    }
+    projected = apply_gen1_story_requirements(story_graphs())[int(MapId.ROUTE_12)]
+    before = raw(status_flags_1=0, event_flags=bytes(172))
+    after = raw(
+        status_flags_1=0,
+        event_flags=_event_flags(EventFlag.FIGHT_ROUTE12_SNORLAX),
+    )
+
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(
+            projected,
+            (61, 10),
+            (63, 10),
+            capabilities=gen1_story_capabilities(before),
+        )
+    opened = find_local_path(
+        projected,
+        (61, 10),
+        (63, 10),
+        capabilities=gen1_story_capabilities(after),
+    )
+
+    assert opened.coordinates == ((61, 10), (62, 10), (63, 10))
+    assert ROUTE_12_SNORLAX_CLEARED in gen1_story_capabilities(after)
+    assert ROUTE_12_SNORLAX_CLEARED not in gen1_story_capabilities(before)
+
+
 def test_static_blockers_remove_only_story_displaced_objects() -> None:
     assert gen1_story_static_object_blockers(
         int(MapId.CERULEAN_CITY),
@@ -384,5 +442,9 @@ def test_static_blockers_remove_only_story_displaced_objects() -> None:
         {(4, 34), (22, 18), (22, 19), (23, 23)},
     ) == frozenset({(22, 19), (23, 23)})
     assert gen1_story_static_object_blockers(99, {(1, 2)}) == frozenset({(1, 2)})
+    assert gen1_story_static_object_blockers(
+        int(MapId.ROUTE_12),
+        {ROUTE_12_SNORLAX_AT, (31, 14)},
+    ) == frozenset({(31, 14)})
     with pytest.raises(ValueError, match="lacks story-displaced"):
         gen1_story_static_object_blockers(int(MapId.CERULEAN_CITY), {(12, 28)})
