@@ -139,8 +139,10 @@ class CinnabarChapterReport:
     def passed(self) -> bool:
         return (
             len(self.records) == CINNABAR_CHECKPOINT_COUNT
-            and self.rare_candy_before == 0
-            and self.rare_candy_after == 0
+            and _cinnabar_rare_candy_preserved(
+                self.rare_candy_before,
+                self.rare_candy_after,
+            )
             and _cinnabar_bag_capacity_preserved(
                 self.bag_slots_before,
                 self.bag_slots_after_candy,
@@ -256,9 +258,15 @@ def _wild_flee_public(item: CeladonWildFleeEvidence) -> dict[str, object]:
 
 
 def _cinnabar_bag_capacity_preserved(before: int, after_optional_candy: int) -> bool:
-    """Require one free HM02 slot while allowing a consumed recovery stack."""
+    """Require one free HM02 slot without silently changing bag capacity."""
 
     return 0 < before <= CINNABAR_MAX_INPUT_BAG_SLOTS and after_optional_candy == before
+
+
+def _cinnabar_rare_candy_preserved(before: int, after: int) -> bool:
+    """Preserve an absent or valid carried stack across the Fly lesson."""
+
+    return 0 <= before == after <= 99
 
 
 def run_cinnabar_chapter(

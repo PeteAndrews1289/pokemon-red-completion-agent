@@ -13,6 +13,7 @@ from pokemon_red_completion.cinnabar import (
     ROUTE_21_TO_CINNABAR,
     TREE_TO_FLY_HOUSE,
     _cinnabar_bag_capacity_preserved,
+    _cinnabar_rare_candy_preserved,
 )
 from pokemon_red_completion.observation import (
     EventFlag,
@@ -48,6 +49,13 @@ def test_cinnabar_capacity_allows_a_consumed_recovery_stack_before_hm02() -> Non
     assert _cinnabar_bag_capacity_preserved(19, 19)
     assert not _cinnabar_bag_capacity_preserved(20, 20)
     assert not _cinnabar_bag_capacity_preserved(17, 18)
+
+
+def test_cinnabar_preserves_optional_rare_candy_stack() -> None:
+    assert _cinnabar_rare_candy_preserved(0, 0)
+    assert _cinnabar_rare_candy_preserved(1, 1)
+    assert not _cinnabar_rare_candy_preserved(1, 0)
+    assert not _cinnabar_rare_candy_preserved(0, 1)
 
 
 def test_cinnabar_source_ids_are_exact() -> None:
