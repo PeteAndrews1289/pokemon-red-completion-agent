@@ -378,6 +378,11 @@ class EarlyErikaChapterReport:
     def passed(self) -> bool:
         initial_species = tuple(self.initial_raw.party_species_ids or ())
         final_species = tuple(self.final_raw.party_species_ids or ())
+        allowed_final_species = (
+            {(0xB3, 0x40, 0x3B), (BLASTOISE_SPECIES_ID, 0x40, 0x3B)}
+            if initial_species == (0xB3, 0x40, 0x3B)
+            else {initial_species}
+        )
         return (
             len(self.records) == EARLY_ERIKA_CHECKPOINT_COUNT
             and initial_species
@@ -385,7 +390,7 @@ class EarlyErikaChapterReport:
                 (0xB3, 0x40, 0x3B),
                 (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
             }
-            and final_species == initial_species
+            and final_species in allowed_final_species
             and self.initial_raw.first_party_moves == (0x2C, 0x27, 0x3D, 0x37)
             and self.final_raw.first_party_moves == (0x2C, 0x27, ICE_BEAM_MOVE, 0x37)
             and self.final_raw.first_party_pp == (25, 30, 10, 25)
@@ -1592,11 +1597,16 @@ def _require_identity(emulator, expected, label) -> None:
 
 
 def _require(raw, map_id, coordinate, label) -> None:
+    species = tuple(raw.party_species_ids or ())
+    party_is_supported = party_core_intact(raw.party_species_ids) or species in {
+        (0xB3, 0x40, 0x3B),
+        (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
+    }
     if (
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or not party_core_intact(raw.party_species_ids)
+        or not party_is_supported
     ):
         raise ErikaChapterError(
             f"{label} missed gate: map={raw.map_id}, "
