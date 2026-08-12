@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -30,16 +31,31 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
     working_source_bundle_sha256,
 )
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
-from pokemon_red_completion.executor import FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.fly_resource import (  # noqa: E402
     FlyResourceError,
     FlyResourceReport,
     run_fly_resource_chapter,
 )
+from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
+    Gen1FieldMovePort,
+    surf_permission,
+)
+from pokemon_red_completion.gen1_route_runtime import (  # noqa: E402
+    Gen1RouteInterruptionHandler,
+    Gen1TraversalObserver,
+)
+from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector  # noqa: E402
+from pokemon_red_completion.gen1_traversal import (  # noqa: E402
+    cut_capabilities,
+    strength_capabilities,
+    surf_capabilities,
+)
 from pokemon_red_completion.observation import (  # noqa: E402
     ItemId,
     MapId,
     PokemonRedStateReader,
+    RawGameState,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
     EvaluationIdentityError,
@@ -58,6 +74,13 @@ from pokemon_red_completion.rom import (  # noqa: E402
 )
 from pokemon_red_completion.route import COMPLETION_QUEST  # noqa: E402
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts  # noqa: E402
+from pokemon_red_completion.route_executor import (  # noqa: E402
+    RouteActionPort,
+    RouteExecutionLimits,
+    RouteExecutionReport,
+    execute_route,
+)
+from pokemon_red_completion.route_plan import RoutePlan  # noqa: E402
 from pokemon_red_completion.safari import (  # noqa: E402
     GoldTeethChapterReport,
     SafariChapterError,
@@ -68,6 +91,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     load_committed_strategic_navigation_registry,
 )
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
+    StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
 )
 from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E402
@@ -76,12 +100,26 @@ from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E40
 )
 
 SUPPORTED_RESOURCE_IDS = ("fly", "gold_teeth")
+RESOURCE_BOUNDARIES = {
+    "fly": (MapId.CELADON_POKECENTER, (3, 3)),
+    "gold_teeth": (MapId.FUCHSIA_POKECENTER, (3, 3)),
+}
+RELOCATION_LIMITS = RouteExecutionLimits(
+    max_step_attempts=8,
+    max_readiness_waits=16,
+    max_interruptions=8,
+    max_replans=8,
+    replan_after_unchanged=2,
+    retry_wait_frames=24,
+    readiness_wait_frames=24,
+    transition_settle_frames=180,
+)
 
 
 class _SemanticTrackingExecutor:
     def __init__(
         self,
-        delegate: FrameSafeExecutor,
+        delegate: RouteActionPort,
         observer: CapturedPokemonRedObserver,
     ) -> None:
         self._delegate = delegate
@@ -103,7 +141,32 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
+    parser.add_argument("--maximum-flees", type=int, default=8)
+    parser.add_argument("--maximum-trainer-battles", type=int, default=8)
+    parser.add_argument("--maximum-interruptions", type=int, default=8)
+    parser.add_argument(
+        "--relocate-to-resource-boundary",
+        action="store_true",
+        help="execute one bounded cartridge-derived route to the lesson boundary",
+    )
     return parser
+
+
+def _at_resource_boundary(raw: RawGameState, resource_id: str) -> bool:
+    map_id, coordinate = RESOURCE_BOUNDARIES[resource_id]
+    exact = (
+        raw.game_started
+        and raw.map_id == map_id
+        and (raw.player_x, raw.player_y) == coordinate
+        and raw.battle_state == 0
+    )
+    return exact or (
+        resource_id == "fly"
+        and raw.game_started
+        and raw.map_id == MapId.CELADON_CITY
+        and (raw.player_x, raw.player_y) == (49, 11)
+        and raw.battle_state == 0
+    )
 
 
 def _require_private_new_output(destination: Path, rom_path: Path) -> Path:
@@ -123,6 +186,12 @@ def _require_private_new_output(destination: Path, rom_path: Path) -> Path:
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
+    if (
+        args.maximum_flees < 0
+        or args.maximum_trainer_battles < 0
+        or args.maximum_interruptions < 0
+    ):
+        raise StrategicScenarioRuntimeError("interruption budgets must be non-negative")
 
     source_identity = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source_identity)
@@ -143,6 +212,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
     rom_path = resolve_rom_path(args.rom)
     verify_rom(rom_path)
+    rom = rom_path.read_bytes()
     out_state = _require_private_new_output(args.out_state, rom_path)
     state_path = args.state.resolve()
     envelope_path = (args.envelope or Path(f"{state_path}.json")).resolve()
@@ -154,30 +224,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         emulator.load_state(state_path)
         reader = PokemonRedStateReader(emulator)
         raw = reader.read()
-        stable_boundary = (
-            raw.game_started
-            and raw.battle_state == 0
-            and reader.read_input_readiness().ready
-        )
-        if args.acquire_resource_id == "gold_teeth":
-            stable_boundary = stable_boundary and (
-                raw.map_id == MapId.FUCHSIA_POKECENTER
-                and (raw.player_x, raw.player_y) == (3, 3)
-            )
-        else:
-            stable_boundary = stable_boundary and (
-                (
-                    raw.map_id == MapId.CELADON_CITY
-                    and (raw.player_x, raw.player_y) == (49, 11)
-                )
-                or (
-                    raw.map_id == MapId.CELADON_POKECENTER
-                    and (raw.player_x, raw.player_y) == (3, 3)
-                )
-            )
-        if not stable_boundary:
+        if (
+            not raw.game_started
+            or raw.map_id is None
+            or raw.player_x is None
+            or raw.player_y is None
+            or raw.battle_state != 0
+            or not reader.read_input_readiness().ready
+        ):
             raise StrategicScenarioRuntimeError(
-                "resource source is not the required stable lesson boundary"
+                "resource source is not a stable ready overworld boundary"
             )
         observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, capture)
         before = observer.observe()
@@ -186,6 +242,83 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if not completed_before < target_completed:
             raise StrategicScenarioRuntimeError(
                 "resource source must be a strict subset of the target frontier"
+            )
+        controller = FrameSafeExecutor(
+            emulator,
+            DEFAULT_NEW_GAME_TIMING.controller_timing(),
+        )
+        tracked = _SemanticTrackingExecutor(controller, observer)
+        route_world = StrategicScenarioRouteWorld.from_rom(rom)
+        counted = CountingExecutor(tracked)
+        field_actions = Gen1FieldMovePort(
+            counted,
+            reader,
+            emulator,
+            cut_block_swaps={
+                swap.before: swap.after for swap in route_world.rules.cut_block_swaps
+            },
+        )
+
+        def field_capabilities(observed: RawGameState) -> frozenset[str]:
+            capabilities = cut_capabilities(observed).union(
+                strength_capabilities(observed)
+            )
+            permission = surf_permission(emulator, observed)
+            return capabilities.union(
+                surf_capabilities(observed, surf_allowed=permission.allowed)
+            )
+
+        traversal_observer = Gen1TraversalObserver(
+            reader,
+            hazard_projector=Gen1TrainerSightProjector(rom, reader),
+            capability_projector=field_capabilities,
+        )
+
+        def execute_relocation(plan: RoutePlan) -> RouteExecutionReport:
+            interruption_handler = Gen1RouteInterruptionHandler(
+                field_actions,
+                reader,
+                maximum_flees=args.maximum_flees,
+                maximum_trainer_battles=args.maximum_trainer_battles,
+                stabilization_frames=120,
+                route_name="strategic resource pre-lesson relocation",
+            )
+            return execute_route(
+                plan,
+                field_actions,
+                traversal_observer,
+                interruption_handler=interruption_handler,
+                replanner=route_world.replanner(),
+                limits=replace(
+                    RELOCATION_LIMITS,
+                    max_interruptions=args.maximum_interruptions,
+                ),
+            )
+
+        relocation_report = None
+        if not _at_resource_boundary(raw, args.acquire_resource_id):
+            if not args.relocate_to_resource_boundary:
+                raise StrategicScenarioRuntimeError(
+                    "resource source differs from the lesson boundary; "
+                    "explicit relocation is required"
+                )
+            boundary_map, boundary_at = RESOURCE_BOUNDARIES[args.acquire_resource_id]
+            relocation_report = execute_relocation(
+                route_world.plan_to_map(
+                    traversal_observer.observe(),
+                    boundary_map.value,
+                    goal_at=boundary_at,
+                )
+            )
+            raw = reader.read()
+            before = observer.observe()
+            if COMPLETION_QUEST.completed_ids(before) != completed_before:
+                raise StrategicScenarioRuntimeError(
+                    "resource relocation changed the authenticated frontier"
+                )
+        if not _at_resource_boundary(raw, args.acquire_resource_id):
+            raise StrategicScenarioRuntimeError(
+                "resource relocation did not reach the exact lesson boundary"
             )
         if args.acquire_resource_id == "gold_teeth" and (
             "item:gold_teeth" in before.facts or "move:surf_available" in before.facts
@@ -196,11 +329,6 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if args.acquire_resource_id == "fly" and ItemId.HM02_FLY in _bag(emulator):
             raise StrategicScenarioRuntimeError("Fly resource source already contains HM02")
 
-        controller = FrameSafeExecutor(
-            emulator,
-            DEFAULT_NEW_GAME_TIMING.controller_timing(),
-        )
-        tracked = _SemanticTrackingExecutor(controller, observer)
         report: GoldTeethChapterReport | FlyResourceReport
         if args.acquire_resource_id == "gold_teeth":
             report = run_gold_teeth_chapter(emulator, reader, tracked)
@@ -235,7 +363,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             or not reader.read_input_readiness().ready
         ):
             raise StrategicScenarioRuntimeError(
-                "resource lesson did not end at the stable Fuchsia boundary"
+                "resource lesson did not end at its stable boundary"
             )
 
         emulator.save_state(out_state)
@@ -273,6 +401,23 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "source_registry_assignment_opened": False,
         "verified_objectives_added": [],
         "surf_objective_added": False,
+        "pre_resource_relocation": {
+            "requested": args.relocate_to_resource_boundary,
+            "performed": relocation_report is not None,
+            "acknowledged_steps": (
+                0 if relocation_report is None else len(relocation_report.executed_steps)
+            ),
+            "interruptions": (
+                0 if relocation_report is None else len(relocation_report.interruptions)
+            ),
+            "movement_requests": (
+                0 if relocation_report is None else relocation_report.movement_requests
+            ),
+            "replans": 0 if relocation_report is None else len(relocation_report.replans),
+            "wait_actions": (
+                0 if relocation_report is None else relocation_report.wait_actions
+            ),
+        },
         "skill": {
             "actions_executed": report.actions_executed,
             "frames_executed": report.frames_executed,

@@ -97,6 +97,22 @@ SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
 ICE_BEAM_MOVE = 0x3A
+POST_SURF_MOVES_BEFORE_ICE_BEAM = (0x82, 0x46, 0x3D, 0x39)
+POST_SURF_MOVES_AFTER_ICE_BEAM = (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
+POST_SURF_PP_AFTER_ICE_BEAM = (15, 15, 10, 15)
+PRE_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM = (0x2C, 0x46, 0x3D, 0x37)
+PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM = (0x2C, 0x46, ICE_BEAM_MOVE, 0x37)
+PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM = (25, 15, 10, 25)
+SILPH_ICE_BEAM_LINEAGES = {
+    POST_SURF_MOVES_BEFORE_ICE_BEAM: (
+        POST_SURF_MOVES_AFTER_ICE_BEAM,
+        POST_SURF_PP_AFTER_ICE_BEAM,
+    ),
+    PRE_SURF_STRENGTH_MOVES_BEFORE_ICE_BEAM: (
+        PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
+        PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
+    ),
+}
 ROOF_GIRL_Y = 0xC224
 ROOF_GIRL_X = 0xC225
 ROOF_NERD_Y = 0xC214
@@ -296,6 +312,8 @@ class SilphChapterReport:
     tm13_after_teaching: int
     upgraded_moves: tuple[int, int, int, int]
     upgraded_pp: tuple[int, int, int, int]
+    expected_upgraded_moves: tuple[int, int, int, int]
+    expected_upgraded_pp: tuple[int, int, int, int]
     x_special_before_supply: int
     x_accuracy_before_supply: int
     rival_potions_used: int
@@ -327,8 +345,8 @@ class SilphChapterReport:
             and self.other_roof_rewards_untouched
             and self.fresh_water_after_reward == 0
             and self.tm13_after_teaching == 0
-            and self.upgraded_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-            and self.upgraded_pp == (15, 15, 10, 15)
+            and self.upgraded_moves == self.expected_upgraded_moves
+            and self.upgraded_pp == self.expected_upgraded_pp
             and self.money_before >= 0
             and self.money_after
             == self.money_before
@@ -355,8 +373,8 @@ class SilphChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
             and party_core_intact(self.final_raw.party_species_ids)
-            and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and self.final_raw.first_party_moves == self.expected_upgraded_moves
+            and self.final_raw.first_party_pp == self.expected_upgraded_pp
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and self.controller_released
@@ -424,11 +442,17 @@ def run_silph_chapter(
     initial_bag = _bag(emulator)
     x_special_before_supply = initial_bag.get(ItemId.X_SPECIAL, 0)
     x_accuracy_before_supply = initial_bag.get(ItemId.X_ACCURACY, 0)
-    tm13_preinstalled = (
-        _event(emulator, EventFlag.GOT_TM13)
-        and initial.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-        and initial.first_party_pp == (15, 15, 10, 15)
+    lineage = SILPH_ICE_BEAM_LINEAGES.get(initial.first_party_moves or ())
+    installed_lineage = next(
+        (
+            (moves, pp)
+            for moves, pp in SILPH_ICE_BEAM_LINEAGES.values()
+            if initial.first_party_moves == moves and initial.first_party_pp == pp
+        ),
+        None,
     )
+    tm13_preinstalled = _event(emulator, EventFlag.GOT_TM13) and installed_lineage is not None
+    expected_upgraded = installed_lineage if tm13_preinstalled else lineage
     if (
         initial_bag.get(ItemId.CARD_KEY, 0)
         or initial_bag.get(ItemId.MASTER_BALL, 0)
@@ -436,11 +460,13 @@ def run_silph_chapter(
         or initial_bag.get(ItemId.FRESH_WATER, 0)
         or initial_bag.get(ItemId.TM13_ICE_BEAM, 0)
         or (_event(emulator, EventFlag.GOT_TM13) and not tm13_preinstalled)
+        or expected_upgraded is None
         or _event(emulator, 0x18D)
         or _event(emulator, 0x18E)
         or lapras_before & GOT_LAPRAS_MASK
     ):
         raise SilphChapterError("Silph input boundary is not pristine.")
+    assert expected_upgraded is not None
     _checkpoint(records, progress, emulator, initial, "silph_ready", "Silph plan ready")
 
     # A Route 8 training excursion was drafted here and is not wired, for the
@@ -457,11 +483,16 @@ def run_silph_chapter(
         upgraded = reader.read()
         tm13_transfer_ordered = False
     else:
+        if lineage is None:
+            raise SilphChapterError("Silph Ice Beam lineage was not selected.")
         upgraded, tm13_transfer_ordered = _acquire_and_teach_ice_beam(
             actions,
             reader,
             emulator,
             timing,
+            expected_moves_before=initial.first_party_moves or (),
+            expected_moves_after=lineage[0],
+            expected_pp_after=lineage[1],
         )
 
     # X Special is a Silph-rival resource, not part of Erika's earlier TM13
@@ -717,6 +748,8 @@ def run_silph_chapter(
         tm13_after_teaching=_bag(emulator).get(ItemId.TM13_ICE_BEAM, 0),
         upgraded_moves=upgraded.first_party_moves or (),
         upgraded_pp=upgraded.first_party_pp or (),
+        expected_upgraded_moves=expected_upgraded[0],
+        expected_upgraded_pp=expected_upgraded[1],
         x_special_before_supply=x_special_before_supply,
         x_accuracy_before_supply=x_accuracy_before_supply,
         rival_potions_used=potion_before - potion_after,
@@ -746,6 +779,10 @@ def _acquire_and_teach_ice_beam(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    expected_moves_before: tuple[int, int, int, int] = POST_SURF_MOVES_BEFORE_ICE_BEAM,
+    expected_moves_after: tuple[int, int, int, int] = POST_SURF_MOVES_AFTER_ICE_BEAM,
+    expected_pp_after: tuple[int, int, int, int] = POST_SURF_PP_AFTER_ICE_BEAM,
 ) -> tuple[RawGameState, bool]:
     money_before = _money(emulator)
     _move(actions, reader, SAFFRON_CENTER_TO_ROUTE_7_GATE, timing)
@@ -782,6 +819,8 @@ def _acquire_and_teach_ice_beam(
         emulator,
         timing,
         money_before=money_before,
+        expected_moves_before=expected_moves_before,
+        expected_moves_after=expected_moves_after,
     )
     _navigate_roof_to(actions, reader, emulator, (12, 3), timing)
     _return_roof_to_saffron(actions, reader, timing)
@@ -793,8 +832,8 @@ def _acquire_and_teach_ice_beam(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and upgraded.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
-            and upgraded.first_party_pp == (15, 15, 10, 15)
+            and upgraded.first_party_moves == expected_moves_after
+            and upgraded.first_party_pp == expected_pp_after
             and reader.read_input_readiness().ready
         ):
             return upgraded, transfer_before_event

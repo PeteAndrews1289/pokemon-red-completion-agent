@@ -28,6 +28,8 @@ from pokemon_red_completion.silph import (
     MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION,
     MART_5F_GENTLEMAN_RETURN_YIELD_POSITION,
     MART_5F_GENTLEMAN_YIELD_POSITION,
+    PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
+    PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
     ROOF_GIRL_X,
     ROOF_GIRL_Y,
     ROOF_NERD_X,
@@ -142,6 +144,8 @@ def _report() -> SilphChapterReport:
         tm13_after_teaching=0,
         upgraded_moves=(0x82, 0x46, 0x3A, 0x39),
         upgraded_pp=(15, 15, 10, 15),
+        expected_upgraded_moves=(0x82, 0x46, 0x3A, 0x39),
+        expected_upgraded_pp=(15, 15, 10, 15),
         x_special_before_supply=0,
         x_accuracy_before_supply=0,
         rival_potions_used=0,
@@ -201,6 +205,24 @@ def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:
         "max_repel_bought": 0,
         "max_repel_remaining": 0,
     }
+
+
+def test_silph_report_accepts_qualified_pre_surf_strength_lineage() -> None:
+    final = replace(
+        _terminal(),
+        first_party_moves=PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
+        first_party_pp=PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
+    )
+    report = replace(
+        _report(),
+        final_raw=final,
+        upgraded_moves=PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
+        upgraded_pp=PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
+        expected_upgraded_moves=PRE_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
+        expected_upgraded_pp=PRE_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
+    )
+
+    assert report.passed
 
 
 def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
