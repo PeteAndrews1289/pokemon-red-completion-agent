@@ -567,7 +567,10 @@ def test_silph_verified_movement_retries_a_swallowed_input() -> None:
     assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
 
 
-def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
+@pytest.mark.parametrize("label", ("X Special Mart 3F", "X Accuracy Mart 3F"))
+def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs(
+    label: str,
+) -> None:
     blocked = replace(
         _terminal(),
         map_id=MapId.CELADON_MART_2F,
@@ -600,7 +603,7 @@ def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs() -> None:
         Reader(),  # type: ignore[arg-type]
         ("up",),
         replace(DEFAULT_SILPH_TIMING, movement_frames=1),
-        "X Special Mart 3F",
+        label,
     )
 
     assert (final.map_id, final.player_x, final.player_y) == (

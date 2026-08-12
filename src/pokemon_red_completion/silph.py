@@ -2678,6 +2678,7 @@ def _move_verified(
                 label
                 in {
                     "X Special Mart entry",
+                    "X Accuracy Mart approach",
                     "Celadon Ice Beam Mart approach",
                 }
                 and before.map_id == MapId.CELADON_CITY
@@ -2702,7 +2703,7 @@ def _move_verified(
                     state = _yield_to_celadon_mart_entry_customer(actions, reader, timing)
                 continue
             if (
-                label == "X Special Mart 3F"
+                label in {"X Special Mart 3F", "X Accuracy Mart 3F"}
                 and before.map_id == MapId.CELADON_MART_2F
                 and (before.player_x, before.player_y) == MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION
                 and direction == "up"
@@ -2710,7 +2711,7 @@ def _move_verified(
                 state = _yield_to_mart_2f_ascent_customer(actions, reader, timing)
                 continue
             if (
-                label == "X Special clerk approach"
+                label in {"X Special clerk approach", "X Accuracy clerk approach"}
                 and before.map_id == MapId.CELADON_MART_5F
                 and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_BLOCK_POSITION
                 and direction == "left"
@@ -2718,7 +2719,7 @@ def _move_verified(
                 state = _yield_to_mart_5f_gentleman(actions, reader, timing)
                 continue
             if (
-                label == "X Special clerk return"
+                label in {"X Special clerk return", "X Accuracy clerk return"}
                 and before.map_id == MapId.CELADON_MART_5F
                 and (before.player_x, before.player_y) == MART_5F_GENTLEMAN_RETURN_BLOCK_POSITION
                 and direction == "right"
