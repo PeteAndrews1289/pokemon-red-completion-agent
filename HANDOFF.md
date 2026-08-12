@@ -14,6 +14,28 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 041 qualified after cartridge-trigger audit — 2026-08-12
+
+Published `17ed269` / CI `31598896281` completes the Cinnabar-before-Sabrina strategic context.
+Construction first opens the four Saffron guards as a no-label resource lesson, returning to the
+same healed Celadon boundary with all 22 objectives unchanged. The independent Cinnabar lesson then
+adds only `reach_cinnabar`, yielding the exact 23-objective scenario-041 frontier.
+
+The official uncounted rehearsal selected the intended 701-cost Saffron approach over the 29-cost
+Secret Key, acknowledged 690 movements, resumed 14 wild battles, replanned once around a visible
+object and completed. Its 1,709-record immutable episode contains one teacher choice, one success
+and **zero movement labels**. It is unassigned and ineligible for promotion; counted collection is
+still zero and all 12 test contexts remain sealed. See the
+[qualification receipt](docs/evidence/strategic-scenario-041-rehearsal-qualification-2026-08-12.json).
+
+Two last failures were world-model evidence, not emulator randomness. Only Route 7 had been bound
+to the global Saffron guard flag, allowing an illegal Route 5 crossing. After all four houses were
+bound, Route 7 exposed a warp record whose tile was in neither the cartridge's automatic nor
+directional trigger tables. The planner now discards such inert rows. Do not remove either guard:
+the exact distinction is what made the 690-step run executable. The next direct inventory target is
+scenario 042 (`obtain_secret_key`) from this exact Cinnabar frontier; scenarios 017/021 remain the
+two genuine qualified-teacher-order gaps.
+
 ## Scenario 041 exact; long-route rehearsal reached Route 5 — 2026-08-12
 
 Published `c63e168` / CI `31586368651` qualifies Cinnabar before Sabrina from the Celadon

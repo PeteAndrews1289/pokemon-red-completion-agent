@@ -20,6 +20,14 @@ Route 21 trainer. Freeze the frame and label it **EXACT CONTEXT ≠ QUALIFIED RE
 episode stays immutable; the next engineering problem is now concrete: give generic route battles
 bounded healing or let the world model reason about Fly.
 
+Then pay off the failure chain instead of cutting straight to green. Show the route reaching Route
+5 and discovering that only one of four Saffron guard houses had been modeled. Add the same global
+flag to all four. On Route 7, freeze again on two visually plausible warp rows and cross one out:
+**HEADER RECORD / NO CARTRIDGE TRIGGER / NOT EXECUTABLE**. Finish with the successful card:
+**SAFFRON SELECTED / SECRET KEY COST 29 / 690 STEPS / 14 WILD BATTLES / 1 REPLAN / 0 BUTTON
+LABELS**. The narration is: **“The failures were not rerolls. Each one removed a false claim from
+the world model.”**
+
 ## New opening beat: the route was complete, the curriculum was not
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW

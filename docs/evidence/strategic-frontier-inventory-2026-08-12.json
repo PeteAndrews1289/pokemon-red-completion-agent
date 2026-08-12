@@ -1,5 +1,5 @@
 {
-  "authenticated_capture_envelopes": 58,
+  "authenticated_capture_envelopes": 70,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
@@ -194,7 +194,7 @@
     },
     {
       "already_exact": true,
-      "authenticated_source_envelopes": 1,
+      "authenticated_source_envelopes": 3,
       "objective_ids": [
         "reach_cinnabar"
       ],
@@ -203,7 +203,7 @@
     },
     {
       "already_exact": false,
-      "authenticated_source_envelopes": 1,
+      "authenticated_source_envelopes": 11,
       "objective_ids": [
         "obtain_secret_key"
       ],
@@ -212,7 +212,7 @@
     },
     {
       "already_exact": true,
-      "authenticated_source_envelopes": 2,
+      "authenticated_source_envelopes": 4,
       "objective_ids": [
         "defeat_koga",
         "reach_saffron"

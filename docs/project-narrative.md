@@ -87,6 +87,17 @@ two trainer interruptions, then the generic route fighter fainted because it has
 policy. The immutable failure turns the next task into a precise systems question—bounded recovery
 or Fly-aware routing—not another vague complaint about emulator randomness.
 
+That long route now completes, and the final two failures sharpened the story again. The map model
+had protected only one of Saffron's four guard houses, so its shortest path illegally crossed a
+different closed gate. After all four were tied to the same observed cartridge flag, Route 7
+revealed an inert warp row: a header record existed, but its tile appeared in neither automatic nor
+directional trigger tables. The executable graph now rejects both overclaims. A construction-only
+drink lesson opens the guards without adding an objective; the separate Cinnabar lesson adds only
+`reach_cinnabar`. From that exact state, the official uncounted rehearsal chose Saffron over the
+nearby Secret Key and completed 690 acknowledged movements through 14 wild encounters and one live
+replan. The result is one strategic label, one outcome and zero arrow-key labels—not a disguised
+recording of the teacher's route.
+
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 
 Scenario 006 looked like a cheap new calibration: authenticate the exact pre-Hideout Celadon

@@ -12,7 +12,7 @@ the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualificati
 and the [scenario 037 receipt](evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **58 authenticated capture envelopes, 40 distinct frontiers and
+The private inventory now contains **70 authenticated capture envelopes, 40 distinct frontiers and
 21 exact learning scenarios**. The exact contexts are thirteen train scenarios and eight validation
 scenarios. Scenario 041's exact context has a preserved failed rehearsal; no failed row is promoted:
 **counted train = 0, counted validation = 0, test
@@ -79,12 +79,13 @@ The remaining paper-only one-skill matches include:
 - scenarios 017 and 021 still need Koga without either Surf or Strength; and
 - scenario 013 is now exact: Jolteon and Snorlax are independent no-label resources, and Sabrina
   is qualified on the resulting pre-Surf six-member lineage;
-- scenario 041 now has an exact pre-Sabrina Cinnabar capture, but its first immutable rehearsal
-  failed after the generic route fighter exhausted the lead across two Route 21 trainers. Bounded
-  healing, all-map wild fleeing, Seafoam-current exclusion, directional source warps and combined
-  interruption budgets are now repaired. The latest immutable attempt reached 639/700 route steps
-  and isolated Route 5's outdoor directional trigger; its source-tile fix is locally green. See the
-  [construction/failure receipt](evidence/strategic-scenario-041-construction-and-rehearsal-failure-2026-08-12.json).
+- scenario 041 is now qualified. Construction opens all four Saffron guards as a no-label resource,
+  adds only `reach_cinnabar`, and preserves the exact pre-Sabrina frontier. Its official rehearsal
+  chose the 701-cost Saffron approach over the 29-cost Secret Key, acknowledged 690 movements,
+  resumed 14 wild battles and replanned once. It emits one strategic label and zero movement labels.
+  The final repairs bound every guard house to the global flag and removed outdoor warp rows absent
+  from both cartridge trigger tables. See the
+  [qualification receipt](evidence/strategic-scenario-041-rehearsal-qualification-2026-08-12.json).
 
 This audit prevents a misleading loop: the inventory can still say “one objective differs,” but
 the implementation now separately reports that the only qualified skill for that objective would
@@ -117,9 +118,8 @@ even if the code ran perfectly.
    010 and 014 without weakening the move/PP evidence contract.
 3. **Complete:** split Fly and Gold Teeth into independently verified resource lessons, teach
    Strength and Koga before Surf, and qualify Silph on that move lineage.
-4. **In progress:** add a Celadon-to-Cinnabar pre-Sabrina lesson and harden its return route. Exact
-   construction is complete; publish the final Route 5 directional-trigger decode, require green
-   CI, then make one fresh scenario-041 rehearsal.
+4. **Complete:** add a Celadon-to-Cinnabar pre-Sabrina lesson, open Saffron access without a label,
+   and qualify the 690-step return route from exact scenario 041.
 5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
    six unique disagreements and a best-case two-sided exact p-value of 0.03125.
 6. **Complete:** construct scenarios 025 and 026 from exact authenticated branches. Continue the

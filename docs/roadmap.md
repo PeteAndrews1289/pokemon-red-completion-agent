@@ -12,7 +12,7 @@ Surf, Silph added the last objective, and construction returned to Celadon. The 
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
 labels. The curriculum-order audit now reports **2**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **58 authenticated envelopes, 40 distinct frontiers and 21 exact
+Current measured coverage is **70 authenticated envelopes, 40 distinct frontiers and 21 exact
 learning scenarios**: thirteen train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
@@ -40,13 +40,15 @@ The ordered gates are:
 5. **complete:** construct and rehearse scenario 037 from the post-Silph Surf bridge;
 6. **complete:** Jolteon and Snorlax are authenticated construction-only members; the pre-Surf
    Sabrina lineage is qualified and scenario 013 is exact and rehearsed;
-7. **in progress:** Cinnabar-before-Sabrina constructs exact scenario 041. The authenticated return
-   route now reaches 639/700 steps after bounded healing, general wild fleeing, Seafoam-current
-   exclusion, source-boundary warp decoding and combined interruption accounting; publish and
-   live-check the remaining Route 5 source-tile directional trigger;
-8. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
+7. **complete:** Cinnabar-before-Sabrina and the no-label Saffron-guard resource compose into exact
+   scenario 041. Its rehearsal chose Saffron over Secret Key, acknowledged 690 movements, resumed
+   14 wild battles and replanned once. All four guard houses now share the observed access flag and
+   inert outdoor warp records are rejected from the executable graph;
+8. construct and rehearse scenario 042 by adding `obtain_secret_key` from the qualified exact
+   scenario-041 Cinnabar frontier;
+9. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
-9. only then open counted collection, freeze normalization, train the shared candidate scorer and
+10. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
 The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 15 missing

@@ -1,0 +1,78 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "cinnabar": {
+      "actions_executed": 658,
+      "envelope_sha256": "c01e000a759b9115e436d09a8276578462d7786668d9afb5befed5ee2cc4ba1d",
+      "frames_executed": 80376,
+      "objective_ids_added": ["reach_cinnabar"],
+      "state_sha256": "d91bd4c72df58806ee2f84456a9ee2bb2b84391dddc8ef06c54bbd6135e572fb",
+      "verified_objective_count": 23
+    },
+    "saffron_guard_resource": {
+      "actions_executed": 679,
+      "envelope_sha256": "82bf8c41efb4214c46b3b7e851c1f87edca55b3ef709e91aabd7629064e33a11",
+      "episode_created": false,
+      "frames_executed": 80415,
+      "objective_ids_added": [],
+      "state_sha256": "859997b875cb5435928b23ac5cc1364d6dbc8c57d16d7f6db93f29bc06ce9682",
+      "verified_objective_count": 22
+    }
+  },
+  "failure_lineage": {
+    "closed_route5_guard": {
+      "finding": "the route graph bound only Route 7 to the global guard flag",
+      "repair": "bind all four Saffron guard-house trigger crossings"
+    },
+    "inert_route7_row": {
+      "acknowledged_steps": 687,
+      "failure_manifest_sha256": "50519c8c61829aa2e0694ab7015ca5b1b340fa85349f7cae037c801daa64a724",
+      "finding": "an outdoor warp record with neither an automatic nor directional cartridge trigger remained routable",
+      "immutable_failure_records": 1702,
+      "repair": "discard outdoor warp rows that have no cartridge-recognized trigger"
+    }
+  },
+  "rehearsal": {
+    "assignment_id": "51a38c654014426f2c7cd40967e9fa1129b72ff34e421238aece98555020a004",
+    "candidate_route_costs": [701, 29],
+    "dataset": {
+      "censored_examples": 0,
+      "movement_action_labels": 0,
+      "outcome_examples": 1,
+      "teacher_choice_examples": 1,
+      "unique_teacher_choice_contexts": 1
+    },
+    "episode": {
+      "bytes": 2902041,
+      "manifest_sha256": "8ece1c37d0d803e907b1e83040eb87bbfb7a15e4a1df3f2469309bbee58af55c",
+      "records": 1709,
+      "status": "complete"
+    },
+    "route": {
+      "acknowledged_steps": 690,
+      "interruptions": {"wild_battle": 14},
+      "movement_requests": 692,
+      "replans": {"visible_object": 1},
+      "wait_actions": 27
+    },
+    "selected_candidate_index": 0,
+    "selected_teacher_destination": "reach_saffron",
+    "status": "complete"
+  },
+  "recorded_on": "2026-08-12",
+  "scenario_id": "red-strategic-scenario-v2-041-train",
+  "scenario_sha256": "ca7272ff86ca5c2a942c3c0770e099520a5c47dacd09a85041a697d091e165d6",
+  "source": {
+    "ci_run_id": 31598896281,
+    "ci_status": "success",
+    "git_commit": "17ed2692b0de22a912f55abb83879f6925b3eb38",
+    "source_bundle_sha256": "1cb9bdb0ec2ead83c6c84b1991307788ba3d3758a6da34351736c39f0d238d1a",
+    "teacher_execution_sha256": "dae08b866c612b4b0f40d3e8948145604d38cbce73e2c78d90e848bba4f3daff"
+  },
+  "status": "qualified"
+}
