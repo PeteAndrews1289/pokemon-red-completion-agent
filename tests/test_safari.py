@@ -14,6 +14,9 @@ from pokemon_red_completion.safari import (
     POST_SILPH_MOVES_AFTER_SURF,
     POST_SILPH_MOVES_BEFORE_SURF,
     POST_SILPH_PP_AFTER_SURF,
+    PRE_SILPH_STRENGTH_MOVES_AFTER_SURF,
+    PRE_SILPH_STRENGTH_MOVES_BEFORE_SURF,
+    PRE_SILPH_STRENGTH_PP_AFTER_SURF,
     SAFARI_CHECKPOINT_COUNT,
     GoldTeethChapterReport,
     SafariChapterReport,
@@ -173,6 +176,32 @@ def test_safari_report_accepts_exact_post_silph_surf_lineage() -> None:
         qualified,
         moves_before=(0x2C, 0x46, 0x01, 0x37),
     ).passed
+
+
+def test_safari_report_accepts_strength_before_silph_surf_lineage() -> None:
+    report = _report()
+    initial_bag = tuple(sorted((*report.initial_bag, (int(ItemId.TM40_SKULL_BASH), 1))))
+    final_bag = tuple(sorted((*initial_bag, (int(ItemId.HM03_SURF), 1))))
+    raw = replace(
+        report.final_raw,
+        first_party_moves=PRE_SILPH_STRENGTH_MOVES_AFTER_SURF,
+        first_party_pp=PRE_SILPH_STRENGTH_PP_AFTER_SURF,
+    )
+    qualified = replace(
+        report,
+        final_raw=raw,
+        initial_bag=initial_bag,
+        final_bag=final_bag,
+        gold_teeth=False,
+        gold_teeth_precollected=True,
+        moves_before=PRE_SILPH_STRENGTH_MOVES_BEFORE_SURF,
+        moves_after=PRE_SILPH_STRENGTH_MOVES_AFTER_SURF,
+        pp_before=(25, 15, 20, 25),
+        pp_after_teach=PRE_SILPH_STRENGTH_PP_AFTER_SURF,
+        pp_after=PRE_SILPH_STRENGTH_PP_AFTER_SURF,
+    )
+
+    assert qualified.passed
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

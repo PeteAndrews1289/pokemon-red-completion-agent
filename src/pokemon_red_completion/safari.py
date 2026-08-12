@@ -34,11 +34,18 @@ EXPECTED_MOVES_BEFORE = (0x2C, 0x27, 0x3D, WATER_GUN)
 EXPECTED_MOVES_AFTER = (0x2C, 0x27, 0x3D, SURF)
 SURF_PP = 15
 EXPECTED_PP_AFTER = (25, 30, 20, SURF_PP)
+PRE_SILPH_STRENGTH_MOVES_BEFORE_SURF = (0x2C, 0x46, 0x3D, WATER_GUN)
+PRE_SILPH_STRENGTH_MOVES_AFTER_SURF = (0x2C, 0x46, 0x3D, SURF)
+PRE_SILPH_STRENGTH_PP_AFTER_SURF = (25, 15, 20, SURF_PP)
 POST_SILPH_MOVES_BEFORE_SURF = (0x2C, 0x46, 0x3A, WATER_GUN)
 POST_SILPH_MOVES_AFTER_SURF = (0x2C, 0x46, 0x3A, SURF)
 POST_SILPH_PP_AFTER_SURF = (25, 15, 10, SURF_PP)
 SURF_MOVE_LINEAGES: dict[tuple[int, ...], tuple[tuple[int, ...], tuple[int, ...]]] = {
     EXPECTED_MOVES_BEFORE: (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+    PRE_SILPH_STRENGTH_MOVES_BEFORE_SURF: (
+        PRE_SILPH_STRENGTH_MOVES_AFTER_SURF,
+        PRE_SILPH_STRENGTH_PP_AFTER_SURF,
+    ),
     POST_SILPH_MOVES_BEFORE_SURF: (
         POST_SILPH_MOVES_AFTER_SURF,
         POST_SILPH_PP_AFTER_SURF,
@@ -545,7 +552,7 @@ def run_safari_chapter(
         raise SafariChapterError(f"Unexpected pre-Surf moves: {moves_before!r}.")
     expected_moves_after, expected_pp_after = lineage
     gold_teeth_precollected = (
-        moves_before == POST_SILPH_MOVES_BEFORE_SURF
+        moves_before != EXPECTED_MOVES_BEFORE
         and ItemId.TM40_SKULL_BASH in _bag(emulator)
         and ItemId.GOLD_TEETH not in _bag(emulator)
     )
