@@ -53,12 +53,17 @@ Live Red instead returned to Cerulean on the entering step. The map exposed a st
 static return edge had erased—arrival onto a return warp suppresses immediate retrigger, while an
 internally approached return fires as soon as the player enters it.
 
-The current repair makes the last local edge the transition whenever a return warp is approached
-from elsewhere; only a route already starting on the warp uses the separate decoded outward action.
-The real-cartridge plan now predicts map 62 `(1,3)` directly to Cerulean `(8,27)` and applies the
-same rule to the Underground Path exit. Planned inputs drop from 201 to 199 at unchanged cost 205.
-Focused tests preserve both cases. The repair still needs publication and exact-commit CI before the
-materialization retry.
+Trigger repair `c134184` passed exact-commit CI. The next live attempt performed that transition on
+the right input, then exposed the matching arrival difference: internally entering the return
+settled on Cerulean's exterior warp `(9,27)`, while the planner still predicted the one-tile-beyond
+coordinate `(8,27)` used by an outward doorway animation. It also wrote no state, envelope or episode.
+
+The current repair binds both halves to the same state. The last local edge is the transition and
+settles on the destination warp whenever a return is approached from elsewhere; only a route already
+starting on an arrival-protected vertical return uses a separate outward action and a one-tile
+arrival offset. The real-cartridge plan now predicts map 62 `(1,3)` directly to Cerulean `(9,27)`
+and applies the same rule to the Underground Path exit. Planned inputs remain 199 at route cost 205.
+Focused tests preserve both cases. Publication and exact-commit CI are still required before retry.
 
 ## First two live short scenarios qualified
 

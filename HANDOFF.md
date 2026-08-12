@@ -54,16 +54,21 @@ that tile and send a second outward input. This exposed two return-warp states: 
 the entry warp needs an outward input, while a player approaching another return tile triggers it on
 the entering step.
 
-The current repair preserves the arrival case and marks an internally approached return's final
-local step as the cross-map transition. The exact route now predicts the robbed-house return from
-map 62 `(1,3)` directly to Cerulean `(8,27)`, and applies the same rule to the later underground
-exit; total planned inputs fall from 201 to 199 while route cost remains 205. Publish and gate this
-repair before retrying materialization. Working prospective identities are source bundle
-`0b812f73e7deddbaa6967d9aea5603038b22614e9f4ab52e02192f192b3e2241`, battle registry
-`77868448d572b96d38d4b12aa4225e55568bcf1f7a302827632a7ce81c047dd0`, battle teacher execution
-`1cfe33044228545f3fe9dce1d992ce614eebe1ad346e273b5f52e39c1515e784`, historical strategic
-registry `2c94ba4d955e7eb9273bb532c5e8770477e35e357cb5eaf4335a4ae2332563b6` and historical strategic
-teacher execution `7dd0537ba253e89c6ec99b698d860bf7fc3fa2c031c0190df09c9453011ad66e`.
+Published trigger repair `c134184` passed exact-commit CI run `31552072374`. The next attempt crossed
+on the correct entering input, then failed closed because its arrival still used the other state's
+animation: predicted Cerulean `(8,27)`, observed `(9,27)`. Neither attempt wrote a state, envelope or
+episode. The current repair now binds both trigger and arrival geometry to the same distinction.
+An internally approached return's final local step is the transition and settles on the exterior
+warp; only an arrival-protected vertical return uses a separate outward input and lands one tile
+beyond it. The exact route now predicts map 62 `(1,3)` directly to Cerulean `(9,27)`, applies the
+same rule to the later underground exit and contains 199 inputs at route cost 205.
+
+Publish and gate this arrival repair before retrying materialization. Working prospective identities
+are source bundle `0ec6ba645c6a0b34f1f2a87489f607e09e80df8bd4208e6cf961c9319093bcc6`, battle registry
+`78ffe42f55b8102268dd2c35cc9718d7497fef7fdcb2c053088ce074d78f6f19`, battle teacher execution
+`f8ef441442f8f4d3ad1a1f2a47dc3ee152ab8cb2835ed1dac56d00116a77f299`, historical strategic
+registry `43338a39ac58f9c11209729de7ccabeca3c67d467e6c12c6a4c57f493d5e56e7` and historical strategic
+teacher execution `e95690cfc058a68b58489a418ed70ce089b32179d11cd7e5fe7f088d8ee92968`.
 
 ## Third learning frontier captured; scenario 002 exposed a movable-story-object gap — 2026-08-11
 

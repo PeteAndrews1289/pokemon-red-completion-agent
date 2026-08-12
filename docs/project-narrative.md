@@ -41,6 +41,11 @@ The repaired route keeps those cases separate and shortens the Vermilion plan by
 the robbed house and one at the Underground Path. No failed output had to be relabeled or deleted,
 because none had been admitted in the first place.
 
+The first repair fixed when the warp fired, but the next attempt found the other half of the state:
+where Red lands. Walking onto the internal return settled on the exterior doorway tile; pressing
+out from a protected arrival warp plays the extra step beyond it. The second repair binds trigger
+and arrival together. Again, the failed attempt produced no checkpoint and no example.
+
 ## August 11: the first useful label chose the route ten times longer
 
 The special-trainer repair passed CI, but the first scenario episode still failed. It had asked the

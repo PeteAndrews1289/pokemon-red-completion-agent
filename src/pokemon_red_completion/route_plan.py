@@ -698,13 +698,14 @@ def _warp_transition(
         if index is None or index >= len(locations):
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
-        if edge.exit_action in {"up", "down"}:
-            # A vertical boundary return is the ordinary Gen I doorway case:
-            # the engine walks the player one tile beyond the destination warp.
-            # Horizontal pass-through gates instead settle *on* the outside
-            # warp tile.  Treating both animations alike made the Route 7 gate
-            # predict (10, 19) after a right exit while live RAM reported the
-            # cartridge's actual (10, 18).
+        if edge.exit_action in {"up", "down"} and not action_in_approach:
+            # Starting on an arrival-protected vertical return and pressing
+            # outward plays the doorway animation one tile beyond the exterior
+            # warp. An internally approached return fires on the entering step
+            # and settles *on* that exterior warp instead. Horizontal
+            # pass-through gates also settle on the outside warp. Treating all
+            # three cases alike broke first Route 7, then Cerulean's robbed
+            # house in the opposite direction.
             dy, dx = {
                 "up": (-1, 0),
                 "down": (1, 0),
@@ -714,7 +715,7 @@ def _warp_transition(
                     f"unsupported boundary return action {edge.exit_action!r}"
                 )
             arrival = arrival[0] + dy, arrival[1] + dx
-        elif edge.exit_action not in {None, "left", "right"}:
+        elif edge.exit_action not in {None, "up", "down", "left", "right"}:
             raise RoutePlanningError(
                 f"unsupported boundary return action {edge.exit_action!r}"
             )

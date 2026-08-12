@@ -77,9 +77,11 @@ Implementation status:
    all-candidate preflight, stable target state, exact target frontier and a new private output;
    it creates no episode. Published source `e4a817c` passed CI. Its scenario 002 → 003 attempt then
    entered the robbed house and failed without output when stepping onto the internally approached
-   top return tile triggered immediately, one action earlier than planned. The repair distinguishes
-   that state from starting on an arrival-protected return warp; the corrected route has 199 inputs
-   at unchanged cost 205. Publish, gate and retry it before opening scenario 003.
+   top return tile triggered immediately, one action earlier than planned. Trigger repair `c134184`
+   passed CI, but the next attempt then showed that an internally approached return settles on the
+   exterior warp rather than one tile beyond it. Both attempts wrote no output. The current repair
+   binds trigger and arrival to the same state distinction; the corrected route has 199 inputs at
+   unchanged cost 205. Publish, gate and retry it before opening scenario 003.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

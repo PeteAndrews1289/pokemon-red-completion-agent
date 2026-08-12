@@ -107,6 +107,11 @@ WARP NOW**. Stamp the attempt **NO CHECKPOINT / NO EPISODE**, then remove the re
 the house and Underground Path exits. The line is: **“The same coordinate can require different
 control depending on how you arrived there.”**
 
+Then add one more frame to each side: the spawned-on case lands **ONE TILE BEYOND** the outside
+doorway, while the walked-on case lands **ON THE OUTSIDE WARP**. Let the first repair pass the trigger
+and fail on this arrival coordinate. Preserve the second **NO CHECKPOINT** card. It is a compact way
+to show that transition timing and transition geometry are one contract, not two unrelated patches.
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

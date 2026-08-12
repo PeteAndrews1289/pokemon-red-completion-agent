@@ -145,12 +145,12 @@ def test_an_internally_approached_boundary_return_triggers_on_entry() -> None:
     )
 
     assert plan.actions == ("up", "up")
-    assert plan.terminal_at == (8, 27)
+    assert plan.terminal_at == (9, 27)
     assert plan.segments[0].transition_action_in_approach
     assert plan.steps[-1].source_map == 62
     assert plan.steps[-1].source_at == (1, 3)
     assert plan.steps[-1].expected_map == 3
-    assert plan.steps[-1].expected_at == (8, 27)
+    assert plan.steps[-1].expected_at == (9, 27)
 
 
 def test_a_horizontal_boundary_return_settles_on_the_outside_warp() -> None:
