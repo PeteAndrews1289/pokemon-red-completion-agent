@@ -86,11 +86,12 @@ SAFFRON_DEVELOPMENT_POLICY = BalancedTeamPolicy(
 SILPH_CHECKPOINT_COUNT = 12
 X_ACCURACY_REPLACEMENT_PRICE = 950
 X_SPECIAL_PRICE = 350
-SILPH_NET_MONEY_DELTA = -2_301 - X_ACCURACY_REPLACEMENT_PRICE
+SILPH_NET_MONEY_DELTA = -2_651 - X_ACCURACY_REPLACEMENT_PRICE
 SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
 HYPER_POTION_PURCHASE_QUANTITY = 7
 HYPER_POTION_PRICE = 1_500
 X_SPECIAL_PURCHASE_QUANTITY = 3
+SILPH_X_SPECIAL_SUPPLY_TARGET = 4
 SILPH_RIVAL_RECOVERY_HP = 80
 SILPH_RIVAL_MAX_POTIONS = 4
 SILPH_PC_DEPOSIT_ITEMS = (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
@@ -993,7 +994,7 @@ def _buy_silph_x_special(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     x_special_quantity = _mart_top_up_quantity(
         _bag(emulator).get(ItemId.X_SPECIAL, 0),
-        target=X_SPECIAL_PURCHASE_QUANTITY,
+        target=SILPH_X_SPECIAL_SUPPLY_TARGET,
         label="X Special",
     )
     if x_special_quantity:
@@ -1004,7 +1005,7 @@ def _buy_silph_x_special(
             absolute_index=6,
             item=ItemId.X_SPECIAL,
             quantity=x_special_quantity,
-            target_bag_quantity=X_SPECIAL_PURCHASE_QUANTITY,
+            target_bag_quantity=SILPH_X_SPECIAL_SUPPLY_TARGET,
         )
     x_accuracy_quantity = _mart_top_up_quantity(
         _bag(emulator).get(ItemId.X_ACCURACY, 0),
@@ -1117,7 +1118,7 @@ def _acquire_silph_x_special(
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "X Special Saffron return")
     _move(actions, reader, ("up",) * 4, timing)
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "X Special restored boundary")
-    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != X_SPECIAL_PURCHASE_QUANTITY:
+    if _bag(emulator).get(ItemId.X_SPECIAL, 0) != SILPH_X_SPECIAL_SUPPLY_TARGET:
         raise SilphChapterError("Silph X Special purchase failed.")
 
 

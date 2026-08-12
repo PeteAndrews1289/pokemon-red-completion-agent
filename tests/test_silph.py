@@ -48,6 +48,7 @@ from pokemon_red_completion.silph import (
     SILPH_ENTRANCE_APPROACH,
     SILPH_PC_DEPOSIT_ITEMS,
     SILPH_RIVAL_MAX_POTIONS,
+    SILPH_X_SPECIAL_SUPPLY_TARGET,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
     SilphChapterError,
@@ -141,7 +142,7 @@ def _report() -> SilphChapterReport:
         ),
         final_raw=raw,
         money_before=32_047,
-        money_after=28_796,
+        money_after=28_446,
         tm13_event=True,
         tm13_preinstalled=False,
         tm13_transfer_before_event=True,
@@ -177,6 +178,7 @@ def _report() -> SilphChapterReport:
 def test_silph_timing_is_positive_and_bounded() -> None:
     assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
     assert X_SPECIAL_PURCHASE_QUANTITY == 3
+    assert SILPH_X_SPECIAL_SUPPLY_TARGET == 4
     assert BATTLE_ITEM_SETTLE_PULSES == 720
     for field in fields(SilphTiming):
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
@@ -1132,7 +1134,7 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
 def test_silph_report_accepts_the_pre_erika_ice_beam_upgrade() -> None:
     report = replace(
         _report(),
-        money_after=28_996,
+        money_after=28_646,
         tm13_preinstalled=True,
         tm13_transfer_before_event=False,
     )
