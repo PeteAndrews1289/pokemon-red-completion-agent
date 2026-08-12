@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from materialize_strategic_scenario_skill import (  # noqa: E402
     PROJECT_ROOT,
+    _can_fly_from_cinnabar_to_origin,
     _intermediate_checkpoint_id,
     _materialized_checkpoint_id,
     _require_private_new_output,
@@ -18,6 +20,7 @@ from materialize_strategic_scenario_skill import (  # noqa: E402
 )
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind  # noqa: E402
+from pokemon_red_completion.observation import MapId, RawGameState  # noqa: E402
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (  # noqa: E402
     StrategicScenarioRuntimeError,
 )
@@ -66,6 +69,23 @@ def test_skill_materialized_checkpoint_id_is_portable() -> None:
     assert _route_materialized_checkpoint_id(
         "red-strategic-scenario-v2-045-train"
     ) == "red-strategic-scenario-v2-045-train-route-materialized"
+
+
+def test_cinnabar_fly_relocation_is_restricted_to_a_celadon_origin() -> None:
+    raw = RawGameState(True, MapId.CINNABAR_POKECENTER, 3, 3, 4, 0)
+
+    assert _can_fly_from_cinnabar_to_origin(
+        raw,
+        frozenset({MapId.CELADON_CITY, MapId.CELADON_POKECENTER}),
+    )
+    assert not _can_fly_from_cinnabar_to_origin(
+        raw,
+        frozenset({MapId.SAFFRON_CITY, MapId.SAFFRON_POKECENTER}),
+    )
+    assert not _can_fly_from_cinnabar_to_origin(
+        replace(raw, map_id=MapId.CINNABAR_ISLAND),
+        frozenset({MapId.CELADON_CITY, MapId.CELADON_POKECENTER}),
+    )
 
 
 def test_construction_executor_latches_semantics_after_every_action() -> None:

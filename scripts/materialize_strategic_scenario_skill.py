@@ -35,6 +35,9 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 )
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
+from pokemon_red_completion.fly_resource import (  # noqa: E402
+    relocate_cinnabar_to_celadon_by_fly,
+)
 from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
     Gen1FieldMovePort,
     surf_permission,
@@ -53,6 +56,7 @@ from pokemon_red_completion.gen1_traversal import (  # noqa: E402
 )
 from pokemon_red_completion.objective_skills import ObjectiveSkillError  # noqa: E402
 from pokemon_red_completion.observation import (  # noqa: E402
+    MapId,
     PokemonRedStateReader,
     RawGameState,
 )
@@ -222,6 +226,19 @@ def _intermediate_checkpoint_id(
 
 def _route_materialized_checkpoint_id(target_scenario_id: str) -> str:
     return f"{target_scenario_id}-route-materialized"
+
+
+def _can_fly_from_cinnabar_to_origin(
+    after_skill: RawGameState,
+    target_origin_maps: frozenset[MapId] | None,
+) -> bool:
+    """Select the qualified island return when Celadon is the declared origin."""
+
+    return (
+        after_skill.map_id == MapId.CINNABAR_POKECENTER
+        and target_origin_maps is not None
+        and MapId.CELADON_POKECENTER in target_origin_maps
+    )
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
@@ -435,6 +452,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             skill_report = skills.execute_bounded(skill)
 
         relocation_report = None
+        fly_relocation_report = None
         after_skill = reader.read()
         if (
             after_skill.map_id is None
@@ -460,14 +478,28 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     "bounded skill terminal differs from the target origin; "
                     "explicit relocation is required"
                 )
-            relocation_plan = route_world.plan_to_any_map(
-                traversal_observer.observe(),
-                frozenset(item.value for item in target_origin_maps),
-            )
-            relocation_report = execute_relocation(
-                relocation_plan,
-                route_name="strategic scenario post-skill relocation",
-            )
+            if _can_fly_from_cinnabar_to_origin(after_skill, target_origin_maps):
+                fly_relocation_report = relocate_cinnabar_to_celadon_by_fly(
+                    emulator,
+                    reader,
+                    tracked_controller,
+                )
+                if (
+                    COMPLETION_QUEST.completed_ids(semantic_observer.observe())
+                    != expected_final
+                ):
+                    raise StrategicScenarioRuntimeError(
+                        "post-skill Fly relocation changed the authenticated frontier"
+                    )
+            else:
+                relocation_plan = route_world.plan_to_any_map(
+                    traversal_observer.observe(),
+                    frozenset(item.value for item in target_origin_maps),
+                )
+                relocation_report = execute_relocation(
+                    relocation_plan,
+                    route_name="strategic scenario post-skill relocation",
+                )
 
         final_raw = reader.read()
         if (
@@ -604,7 +636,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         },
         "relocation": {
             "requested": args.relocate_to_origin,
-            "performed": relocation_report is not None,
+            "performed": (
+                relocation_report is not None or fly_relocation_report is not None
+            ),
+            "method": (
+                "fly"
+                if fly_relocation_report is not None
+                else ("route" if relocation_report is not None else None)
+            ),
             "acknowledged_steps": (
                 0
                 if relocation_report is None
@@ -625,6 +664,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             ),
             "wait_actions": (
                 0 if relocation_report is None else relocation_report.wait_actions
+            ),
+            "fly_attempts": (
+                0
+                if fly_relocation_report is None
+                else len(fly_relocation_report.fly_landings)
+            ),
+            "fly_actions": (
+                0
+                if fly_relocation_report is None
+                else fly_relocation_report.actions_executed
             ),
         },
         "capture": {

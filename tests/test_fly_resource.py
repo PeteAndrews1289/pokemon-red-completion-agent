@@ -8,7 +8,9 @@ from pokemon_red_completion.cinnabar import (
 )
 from pokemon_red_completion.fly_resource import (
     CENTER_TO_ROUTE_16_TREE,
+    CINNABAR_CENTER_TO_OUTDOORS,
     FLY_RESOURCE_CHECKPOINT_COUNT,
+    FlyRelocationReport,
     FlyResourceCheckpoint,
     FlyResourceReport,
 )
@@ -79,6 +81,58 @@ def test_fly_resource_report_rejects_mutated_contract_fields() -> None:
         replace(report, records=report.records[:-1]),
         replace(report, got_hm02=False),
         replace(report, dux_moves_after=DUX_MOVES_BEFORE),
+        replace(report, fly_landings=()),
+        replace(report, party_hp_after=(124, 53, 37, 140)),
+        replace(report, controller_released=False),
+    )
+
+    assert all(not candidate.passed for candidate in invalid)
+
+
+def _relocation_report() -> FlyRelocationReport:
+    initial = replace(
+        _raw(),
+        map_id=MapId.CINNABAR_POKECENTER,
+        first_party_moves=(44, 70, 61, 57),
+        first_party_pp=(25, 15, 20, 15),
+    )
+    final = replace(initial, map_id=MapId.CELADON_POKECENTER)
+    bag = ((4, 1), (15, 7), (int(ItemId.HM02_FLY), 1))
+    return FlyRelocationReport(
+        initial_raw=initial,
+        final_raw=final,
+        initial_bag=bag,
+        final_bag=bag,
+        dux_moves=DUX_MOVES_AFTER,
+        dux_pp_before=DUX_PP_AFTER,
+        dux_pp_after=DUX_PP_AFTER,
+        fly_landings=((int(MapId.CELADON_CITY), 49),),
+        party_hp_before=(125, 53, 37, 140),
+        party_hp_after=(125, 53, 37, 140),
+        party_max_hp_before=(125, 53, 37, 140),
+        party_max_hp_after=(125, 53, 37, 140),
+        party_status_before=(0, 0, 0, 0),
+        party_status_after=(0, 0, 0, 0),
+        frames_executed=10_000,
+        actions_executed=100,
+        controller_released=True,
+    )
+
+
+def test_fly_relocation_report_proves_story_neutral_celadon_return() -> None:
+    report = _relocation_report()
+
+    assert CINNABAR_CENTER_TO_OUTDOORS == ("down",) * 5
+    assert report.passed
+    assert report.public_dict()["relocation"] == "cinnabar_to_celadon_by_fly"
+    assert report.public_dict()["objective_added"] is False
+
+
+def test_fly_relocation_report_rejects_protected_state_drift() -> None:
+    report = _relocation_report()
+    invalid = (
+        replace(report, final_bag=report.final_bag[:-1]),
+        replace(report, dux_pp_after=(35, 15, 30, 14)),
         replace(report, fly_landings=()),
         replace(report, party_hp_after=(124, 53, 37, 140)),
         replace(report, controller_released=False),
