@@ -58,15 +58,23 @@ Implementation status:
    Fuji, acknowledged 174/174 movements, handled one trainer engagement and strictly reloaded one
    successful three-way context with zero replans. The Cut route was preflighted but not selected;
    live Cut execution remains established by the separate repeated-Cut proof.
-7. **Capture inventory:** 19 authenticated envelopes cover exact frontiers for only scenarios 001
-   and 007. Materialize the other 34 learning boundaries using the shared-prerequisite rule, then
+7. **Scenario 002 captured; story repair implemented:** two new authenticated envelopes replay the
+   teacher through Bill and return to a ready Cerulean hub with exactly scenario 002's eight-objective
+   frontier. Its official read-only preflight under `72ce90e` planned Misty at cost 15 but failed
+   before episode creation because the static map treated Cerulean's post-Bill police officer as a
+   permanent blocker. The current source derives the officer's displacement at `(12,27)` from the
+   durable Bill event, keeps the other officer blocked and plans Vermilion at cost 205. Complete the
+   source/CI gate and official one-shot rehearsal before counting this as a third live context.
+8. **Capture inventory:** 21 authenticated envelopes cover exact frontiers for scenarios 001, 002
+   and 007. Materialize the other 33 learning boundaries using the shared-prerequisite rule, then
    audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
    test situations sealed until final evaluation.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
-Measured evidence now contains two authenticated uncounted contexts; `collection_open` remains false
-and prospective rows do not satisfy the admission gate by themselves.
+Measured evidence still contains two authenticated uncounted contexts; scenario 002 is an exact
+capture plus diagnostic until its published-source rehearsal succeeds. `collection_open` remains
+false and prospective rows do not satisfy the admission gate by themselves.
 
 ## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
 

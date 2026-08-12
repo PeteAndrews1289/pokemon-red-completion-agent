@@ -14,6 +14,42 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Third learning frontier captured; scenario 002 exposed a movable-story-object gap — 2026-08-11
+
+The qualified teacher was replayed to checkpoint 54/312, “Left Bill's House with the S.S. Ticket,”
+then moved under a bounded private capture procedure back to the Cerulean safe hub. The resulting
+authenticated state is ready at map 3 coordinate `(18,19)`, contains exactly scenario 002's eight
+completed objectives and leaves both Misty and Vermilion incomplete. The return used 176 bounded
+actions and did not open a scenario episode.
+
+The official read-only preflight under published source `72ce90e` found Misty at cost 15 but rejected
+Vermilion as unreachable, so it failed before assignment consumption or episode creation. Removing
+all static object blockers made the route appear at cost 205; minimizing that difference identified
+one Cerulean object at `(12,27)`. The cartridge places a police officer there before Bill is helped
+and displaces it after durable event `LEFT_BILLS_HOUSE_AFTER_HELPING`. A second officer at `(12,28)`
+does not move and remains blocked.
+
+The current repair removes only `(12,27)` from permanent object blockers, guards every traversable
+edge through that coordinate with a new `story:cerulean_robbed_house_open` predicate, and derives
+that predicate from the observed Bill event flag. Closed and unknown states fail shut; the satisfied
+state exposes the passage. Focused synthetic tests prove the exact six guarded edge directions and
+that the unrelated officer remains a blocker. A real-cartridge read-only diagnostic from the exact
+scenario capture now plans both candidates: Misty cost 15 over 14 steps, and Vermilion cost 205 over
+201 steps. This diagnostic is not the official source-bound rehearsal and is not a training row.
+
+Capture inventory is now 21 authenticated envelopes covering exact frontiers for scenarios 001,
+002 and 007; the other 33 learning frontiers still need materialization. Measured evidence remains
+two authenticated uncounted contexts and zero counted rows until this source passes the complete
+gate, exact-commit CI and scenario 002's official one-shot rehearsal. Test remains sealed.
+
+Working prospective identities after this story-source change are source bundle
+`2a3051a14d42057d8ee33aa7da4ddbd7ff9d8156ccdeb4b9085ecfaae71b8d25`, battle registry
+`d74f1aaf80adcbf3832cc32c70aff968062e5c8684ae5585794a296e87a26192`, battle teacher execution
+`771368b8111af1bad0f8ff12bf8d4086d8a54351a906a7273e64b9b82dab05d5`, historical strategic
+registry `ad6dfbbc38e330141dc1bb024d79fc5441ae5ec9f96972c547260fb1f2f71833` and historical strategic
+teacher execution `706381aea37f21f8ad5a7cb665c3a8b8c19bc8e51b2bccb94d5f91c1b8f50c49`. The v2 scenario registry
+remains `c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`.
+
 ## First scenario qualified; second preflight exposed Cut composition — 2026-08-11
 
 Published repair `318a1c3` passed exact-commit CI. Scenario 001's initial Cerulean capture then
@@ -32,9 +68,9 @@ lineage is in
 [the scenario-001 qualification receipt](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
 
 The durable capture rule is now explicit: make the strategic choice only after prerequisites shared
-by every candidate, while every candidate objective itself remains incomplete. A scan of 19
-authenticated progress envelopes found exact frontiers for only two of the 36 learning scenarios
-(001 and 007); the other 34 still need materialization.
+by every candidate, while every candidate objective itself remains incomplete. A then-current scan
+of 19 authenticated progress envelopes found exact frontiers for only two of the 36 learning
+scenarios (001 and 007). The newer checkpoint above supersedes that inventory.
 
 Scenario 007's first read-only preflight correctly rejected Erika while Fuji and Saffron were available.
 The static route graph knew the party could use Cut and the executor could perform Cut, but no route

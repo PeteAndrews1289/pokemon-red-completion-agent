@@ -14,8 +14,9 @@ from pokemon_red_completion.gen1_cut import (
 )
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
 from pokemon_red_completion.gen1_story_routing import (
-    ROUTE_7_GATE_REQUIREMENTS,
+    GEN1_STORY_PASSAGE_REQUIREMENTS,
     apply_gen1_story_requirements,
+    gen1_story_static_object_blockers,
 )
 from pokemon_red_completion.gen1_terrain import (
     Terrain,
@@ -111,7 +112,10 @@ class StrategicScenarioRouteWorld:
         sets = tilesets(rom)
         surf_sets = water_tilesets(rom)
         blockers = {
-            map_id: frozenset(event.at for event in map_object_events(rom, {map_id}))
+            map_id: gen1_story_static_object_blockers(
+                map_id,
+                (event.at for event in map_object_events(rom, {map_id})),
+            )
             for map_id in terrain
         }
         local_graphs = apply_gen1_story_requirements(
@@ -145,7 +149,9 @@ class StrategicScenarioRouteWorld:
             blocked=self.object_blockers[map_id],
         )
         requirements = tuple(
-            requirement for requirement in ROUTE_7_GATE_REQUIREMENTS if requirement.map_id == map_id
+            requirement
+            for requirement in GEN1_STORY_PASSAGE_REQUIREMENTS
+            if requirement.map_id == map_id
         )
         if requirements:
             graph = apply_local_passage_requirements(

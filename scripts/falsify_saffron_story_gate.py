@@ -228,10 +228,14 @@ def main(argv: list[str] | None = None) -> int:
                 if (
                     raw.map_id != GATE_MAP
                     or (raw.player_y, raw.player_x) != WEST_YX
-                    or snapshot.capabilities
+                    or SAFFRON_GUARDS_OPEN in snapshot.capabilities
                 ):
                     raise SaffronStoryGateProbeError("closed guard boundary changed")
-                (predicate,) = observe_gen1_story_predicates(raw)
+                predicate = next(
+                    item
+                    for item in observe_gen1_story_predicates(raw)
+                    if item.name == SAFFRON_GUARDS_OPEN
+                )
                 if predicate.state is not PredicateState.UNSATISFIED:
                     raise SaffronStoryGateProbeError("guard predicate was not observed closed")
                 unfiltered = plan_route(
@@ -312,13 +316,17 @@ def main(argv: list[str] | None = None) -> int:
 
         if open_raw is None:  # pragma: no cover - guarded by exception above
             raise SaffronStoryGateProbeError("open guard observation is unavailable")
-        (open_predicate,) = observe_gen1_story_predicates(open_raw)
+        open_predicate = next(
+            item
+            for item in observe_gen1_story_predicates(open_raw)
+            if item.name == SAFFRON_GUARDS_OPEN
+        )
         observer = Gen1TraversalObserver(reader)
         open_snapshot = observer.observe()
         if (
             open_predicate.state is not PredicateState.SATISFIED
             or open_snapshot.at != TRIGGER_YX
-            or open_snapshot.capabilities != frozenset({SAFFRON_GUARDS_OPEN})
+            or SAFFRON_GUARDS_OPEN not in open_snapshot.capabilities
             or ItemId.FRESH_WATER in (open_raw.bag_item_ids or ())
         ):
             raise SaffronStoryGateProbeError("open guard predicate did not settle")

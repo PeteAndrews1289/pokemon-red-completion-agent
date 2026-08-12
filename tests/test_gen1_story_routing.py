@@ -3,10 +3,14 @@ from __future__ import annotations
 import pytest
 
 from pokemon_red_completion.gen1_story_routing import (
+    CERULEAN_ROBBED_HOUSE_OPEN,
+    CERULEAN_ROBBED_HOUSE_POLICE_AT,
+    CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
     ROUTE_7_GATE_REQUIREMENTS,
     SAFFRON_GUARDS_OPEN,
     apply_gen1_story_requirements,
     gen1_story_capabilities,
+    gen1_story_static_object_blockers,
     observe_gen1_story_predicates,
 )
 from pokemon_red_completion.local_router import (
@@ -17,6 +21,7 @@ from pokemon_red_completion.local_router import (
 )
 from pokemon_red_completion.observation import (
     SAFFRON_GUARD_ACCESS_MASK,
+    EventFlag,
     MapId,
     RawGameState,
     semantic_facts,
@@ -24,7 +29,11 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.semantic_traversal import PredicateState
 
 
-def raw(*, status_flags_1: int | None) -> RawGameState:
+def raw(
+    *,
+    status_flags_1: int | None,
+    event_flags: bytes | None = None,
+) -> RawGameState:
     return RawGameState(
         game_started=True,
         map_id=MapId.ROUTE_7_GATE,
@@ -33,6 +42,7 @@ def raw(*, status_flags_1: int | None) -> RawGameState:
         party_count=1,
         battle_state=0,
         status_flags_1=status_flags_1,
+        event_flags=event_flags,
     )
 
 
@@ -55,6 +65,27 @@ def gate_graph() -> LocalGraph:
     return LocalGraph(edges)
 
 
+def police_graph() -> LocalGraph:
+    center = (12, 27)
+    adjacent = ((11, 27), (12, 26), (13, 27))
+    return LocalGraph(
+        {
+            center: tuple(LocalEdge(coordinate, "out") for coordinate in adjacent),
+            **{
+                coordinate: (LocalEdge(center, "in"),)
+                for coordinate in adjacent
+            },
+        }
+    )
+
+
+def story_graphs() -> dict[int, LocalGraph]:
+    return {
+        int(MapId.ROUTE_7_GATE): gate_graph(),
+        int(MapId.CERULEAN_CITY): police_graph(),
+    }
+
+
 @pytest.mark.parametrize(
     ("status", "expected"),
     (
@@ -67,7 +98,11 @@ def test_guard_flag_distinguishes_unknown_closed_and_open(
     status: int | None,
     expected: PredicateState,
 ) -> None:
-    (observed,) = observe_gen1_story_predicates(raw(status_flags_1=status))
+    observations = {
+        item.name: item
+        for item in observe_gen1_story_predicates(raw(status_flags_1=status))
+    }
+    observed = observations[SAFFRON_GUARDS_OPEN]
 
     assert observed.name == SAFFRON_GUARDS_OPEN
     assert observed.state is expected
@@ -92,9 +127,7 @@ def test_both_corridor_rows_and_directions_require_the_same_durable_fact() -> No
 
 @pytest.mark.parametrize("row", (3, 4))
 def test_the_same_static_gate_is_closed_unknown_and_open_when_observed(row: int) -> None:
-    projected = apply_gen1_story_requirements(
-        {int(MapId.ROUTE_7_GATE): gate_graph()}
-    )[int(MapId.ROUTE_7_GATE)]
+    projected = apply_gen1_story_requirements(story_graphs())[int(MapId.ROUTE_7_GATE)]
 
     for status in (None, 0):
         with pytest.raises(LocalRouterError, match="no permitted local route"):
@@ -121,3 +154,87 @@ def test_semantic_state_exposes_only_the_observed_open_guard_fact() -> None:
     assert SAFFRON_GUARDS_OPEN in semantic_facts(
         raw(status_flags_1=0x40)
     )
+
+
+def _event_flags(*events: EventFlag) -> bytes:
+    payload = bytearray(max(int(event) for event in events) // 8 + 1)
+    for event in events:
+        byte, bit = divmod(int(event), 8)
+        payload[byte] |= 1 << bit
+    return bytes(payload)
+
+
+@pytest.mark.parametrize(
+    ("event_flags", "expected"),
+    (
+        (None, PredicateState.UNKNOWN),
+        (bytes(172), PredicateState.UNSATISFIED),
+        (
+            _event_flags(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING),
+            PredicateState.SATISFIED,
+        ),
+    ),
+)
+def test_bill_flag_distinguishes_unknown_closed_and_open(
+    event_flags: bytes | None,
+    expected: PredicateState,
+) -> None:
+    observations = {
+        item.name: item
+        for item in observe_gen1_story_predicates(
+            raw(status_flags_1=0, event_flags=event_flags)
+        )
+    }
+
+    assert observations[CERULEAN_ROBBED_HOUSE_OPEN].state is expected
+
+
+def test_bill_completion_opens_only_the_story_guarded_police_square() -> None:
+    assert CERULEAN_ROBBED_HOUSE_POLICE_AT == (12, 27)
+    assert {
+        (item.source_at, item.target_at, item.predicate)
+        for item in CERULEAN_ROBBED_HOUSE_REQUIREMENTS
+    } == {
+        (source, target, CERULEAN_ROBBED_HOUSE_OPEN)
+        for adjacent in ((11, 27), (12, 26), (13, 27))
+        for source, target in (
+            (adjacent, (12, 27)),
+            ((12, 27), adjacent),
+        )
+    }
+    projected = apply_gen1_story_requirements(story_graphs())[int(MapId.CERULEAN_CITY)]
+    unknown = raw(status_flags_1=0)
+    before_bill = raw(status_flags_1=0, event_flags=bytes(172))
+    after_bill = raw(
+        status_flags_1=0,
+        event_flags=_event_flags(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING),
+    )
+
+    for unavailable in (unknown, before_bill):
+        with pytest.raises(LocalRouterError, match="no permitted local route"):
+            find_local_path(
+                projected,
+                (13, 27),
+                (11, 27),
+                capabilities=gen1_story_capabilities(unavailable),
+            )
+    opened = find_local_path(
+        projected,
+        (13, 27),
+        (11, 27),
+        capabilities=gen1_story_capabilities(after_bill),
+    )
+
+    assert opened.coordinates == ((13, 27), (12, 27), (11, 27))
+    assert CERULEAN_ROBBED_HOUSE_OPEN in gen1_story_capabilities(after_bill)
+    assert CERULEAN_ROBBED_HOUSE_OPEN not in gen1_story_capabilities(before_bill)
+
+
+def test_static_blockers_remove_only_the_story_displaced_police_object() -> None:
+    assert gen1_story_static_object_blockers(
+        int(MapId.CERULEAN_CITY),
+        {(12, 27), (12, 28)},
+    ) == frozenset({(12, 28)})
+    assert gen1_story_static_object_blockers(99, {(1, 2)}) == frozenset({(1, 2)})
+    with pytest.raises(ValueError, match="lacks story-displaced"):
+        gen1_story_static_object_blockers(int(MapId.CERULEAN_CITY), {(12, 28)})

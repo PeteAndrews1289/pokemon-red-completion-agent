@@ -78,6 +78,19 @@ THIS EPISODE**. This is a clean visual for why passing mechanics tests is not th
 those mechanics into agency—and why candidate validation and selected-route execution are different
 claims.
 
+### The map did not know the police officer had moved
+
+Follow Cut with a smaller, stranger failure. Show the post-Bill Cerulean capture offering **MISTY**
+and **VERMILION**. Let Misty turn green at **15**, then stamp Vermilion **NO ROUTE** before any
+episode is opened. Fade every object off the map and reveal a route; bring them back one at a time
+until only the officer at `(12,27)` explains the failure. Then show the cartridge's post-Bill event
+moving that officer while the neighboring officer stays put.
+
+Animate the repaired abstraction as **STATIC FLOOR + STORY-CONTROLLED OBJECT + DURABLE EVENT**, then
+reveal **VERMILION 205 / 201 STEPS**. Keep the status card at **DIAGNOSTIC — NOT A LIVE CONTEXT YET**
+until the published-source rehearsal. The line is: **“A route planner needs to know not just where
+the walls are, but which parts of the world can change—and why.”**
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

@@ -1,6 +1,30 @@
 # Current capability and code audit — 2026-08-11
 
-## First live short scenario qualified; Cut-aware preflight next
+## Third learning frontier captured; movable story object under repair
+
+The teacher has now produced two additional authenticated envelopes for scenario 002: one at
+checkpoint 54/312 after leaving Bill's House, and one after a 176-action bounded return to the
+Cerulean safe hub. The latter is ready at `(18,19)`, contains exactly the eight completed objectives
+committed by scenario 002 and leaves both Misty and Vermilion unfinished.
+
+Its official read-only preflight under published source `72ce90e` failed safely before opening an
+episode. Misty's Gym planned at cost 15, while Vermilion appeared unreachable because the route
+world projected every cartridge object coordinate as permanent. Differential planning reduced the
+problem to the officer at Cerulean `(12,27)`: the officer blocks the robbed-house approach before
+Bill is helped and is displaced afterward. The neighboring officer at `(12,28)` remains present.
+
+The current source introduces one observed story predicate backed by the durable post-Bill event,
+removes only the displaced coordinate from static blockers, and requires that predicate on all six
+directed edges through the square. Closed and unknown observations fail shut. Focused tests cover
+the exact edge set, event transition and blocker selectivity. A real-cartridge diagnostic from the
+exact capture now plans Misty at cost 15/14 steps and Vermilion at cost 205/201 steps. Those results
+are planning evidence only; exact-commit CI and the official one-shot rehearsal remain mandatory.
+
+Inventory is now **21 authenticated envelopes, three exact learning frontiers (001, 002 and 007),
+33 missing frontiers**. Measured status remains **two authenticated uncounted contexts, zero counted
+scenario rows, collection closed, 12 test situations sealed** until scenario 002 completes.
+
+## First two live short scenarios qualified
 
 Published source `318a1c3` passed CI and repaired the scripted-trainer distinction found by the
 first read-only Cerulean preflight. The original checkpoint then opened one uncounted episode. It
@@ -17,9 +41,9 @@ example. It is unassigned, promotion-ineligible evidence—not training data. Th
 [public receipt](evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json) preserves
 both the failed and successful lineages without private paths.
 
-Nineteen authenticated capture envelopes currently supply exact objective frontiers for only two
-of the 36 learning situations: scenario 001 and scenario 007. Scenario 007's post-Hideout read-only
-preflight found Fuji and Saffron executable but Erika unavailable. The defect was architectural:
+At that checkpoint, 19 authenticated capture envelopes supplied exact objective frontiers for only
+two of the 36 learning situations: scenario 001 and scenario 007. Scenario 007's post-Hideout
+read-only preflight found Fuji and Saffron executable but Erika unavailable. The defect was architectural:
 the runtime projected Cut capability and could execute its live menu, but its static route graph
 could not express a block mutation inside a route.
 
@@ -67,9 +91,10 @@ approach, consumes one outcome and strictly reloads the sealed artifact to requi
 successful strategic row. Test scenarios remain inaccessible through both assignment and route
 lookup.
 
-The execution boundary now has two authenticated live qualifications, while counted collection
-remains closed. The next boundary is materializing and rehearsing the other 34 missing learning
-frontiers. The full learning rehearsal
+The execution boundary has two authenticated live qualifications, while counted collection remains
+closed. The newer section above adds scenario 002's exact capture but not yet a live qualification.
+The next boundary after it is materializing and rehearsing the other 33 missing learning frontiers.
+The full learning rehearsal
 is 24 train plus 12 validation situations; the 12 test situations remain sealed until final
 evaluation. See the [scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
 

@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: the map was right, but the police officer had moved
+
+The third exact learning boundary came after Bill. The teacher stopped at checkpoint 54, returned
+to Cerulean under a bounded capture procedure and preserved the precise eight-objective frontier for
+scenario 002. Misty and Vermilion were both still valid next choices. The read-only preflight found
+the nearby Gym immediately, then declared Vermilion unreachable without taking a step or opening an
+episode.
+
+The cartridge geometry was not wrong. The route model had frozen every object at its original map
+coordinate, including the police officer who blocks the robbed-house passage before Bill and moves
+afterward. Removing every object made Vermilion routable; minimizing the change isolated the single
+officer at `(12,27)`. The fix does not pretend the square is always empty. It removes that one
+story-controlled object from permanent geometry, then guards the passage with the cartridge's
+durable “left Bill's house after helping” event. Unknown and pre-Bill states stay closed, while the
+post-Bill capture now yields a 201-step route to Vermilion. The second officer beside the passage
+never moved and remains blocked.
+
+This is the same lesson as Cut in a subtler form: a map graph is not a world model unless it can
+represent why geometry changes. The new route is diagnostic evidence until the repaired source
+passes CI and the official one-shot scenario succeeds. The scoreboard therefore stays at two live
+uncounted contexts, even though three exact learning frontiers now exist.
+
 ## August 11: the first useful label chose the route ten times longer
 
 The special-trainer repair passed CI, but the first scenario episode still failed. It had asked the
@@ -28,10 +50,11 @@ The episode chose Fuji anyway, acknowledged all 174 movements and retained one t
 That is a second useful non-shortest example and the first three-way context. Erika's Cut plan was
 not selected, so it remains preflight evidence rather than another live Cut execution claim.
 
-The broader bottleneck is now visible. Nineteen authenticated progress captures exactly match only
-two of the 36 learning frontiers. The next dataset work is less about another marathon playthrough
-and more about manufacturing honest decision boundaries after shared prerequisites, while leaving
-each candidate objective unfinished.
+The broader bottleneck is now visible. That first inventory had 19 authenticated progress captures
+matching only two of the 36 learning frontiers; the newer post-Bill capture raises it to 21 envelopes
+and three frontiers. The next dataset work is less about another marathon playthrough and more about
+manufacturing honest decision boundaries after shared prerequisites, while leaving each candidate
+objective unfinished.
 
 ## August 11: the first short run stopped before taking a step
 

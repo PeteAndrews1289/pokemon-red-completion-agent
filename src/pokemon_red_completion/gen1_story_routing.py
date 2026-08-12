@@ -1,21 +1,24 @@
 """Generation I story predicates projected onto the neutral local router.
 
-The first qualified binding is Route 7's Saffron guard house. Its static
-terrain exposes two east/west corridors in both states, while the engine's
-durable guard-access flag decides whether either threshold is executable.
-Cartridge terrain remains responsible for geometry; this adapter contributes
-only the title-specific semantic predicate.
+Route 7's guard house has statically walkable corridors whose live access is
+decided by a durable guard flag. Cerulean's robbed-house approach has the
+opposite geometry problem: one police object occupies the passage before Bill
+is helped and is displaced afterward. Cartridge terrain remains responsible
+for geometry; this adapter contributes only the title-specific predicates and
+the one object coordinate whose static occupancy those predicates replace.
 """
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 
 from pokemon_red_completion.local_router import LocalGraph
 from pokemon_red_completion.observation import (
     SAFFRON_GUARD_ACCESS_MASK,
+    EventFlag,
     MapId,
     RawGameState,
+    event_flag_is_set,
 )
 from pokemon_red_completion.semantic_traversal import (
     LocalPassageRequirement,
@@ -26,6 +29,8 @@ from pokemon_red_completion.semantic_traversal import (
 )
 
 SAFFRON_GUARDS_OPEN = "story:saffron_guards_open"
+CERULEAN_ROBBED_HOUSE_OPEN = "story:cerulean_robbed_house_open"
+CERULEAN_ROBBED_HOUSE_POLICE_AT = (12, 27)
 
 # The two corridor rows are independent. Requiring both directions prevents a
 # planner from treating an unknown reverse crossing as free merely because a
@@ -44,17 +49,56 @@ ROUTE_7_GATE_REQUIREMENTS = tuple(
     )
 )
 
+# Before Bill is helped, a police officer occupies this square in Cerulean and
+# blocks the robbed-house passage. The event script moves the officer afterward.
+# Keep the coordinate in the graph, require the durable Bill flag on every edge
+# through it, and remove only this story-displaced object from static blockers.
+CERULEAN_ROBBED_HOUSE_REQUIREMENTS = tuple(
+    LocalPassageRequirement(
+        map_id=int(MapId.CERULEAN_CITY),
+        source_at=source,
+        target_at=target,
+        predicate=CERULEAN_ROBBED_HOUSE_OPEN,
+    )
+    for adjacent in ((11, 27), (12, 26), (13, 27))
+    for source, target in (
+        (adjacent, CERULEAN_ROBBED_HOUSE_POLICE_AT),
+        (CERULEAN_ROBBED_HOUSE_POLICE_AT, adjacent),
+    )
+)
+
+GEN1_STORY_PASSAGE_REQUIREMENTS = (
+    *ROUTE_7_GATE_REQUIREMENTS,
+    *CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
+)
+
+GEN1_STORY_DISPLACED_OBJECTS: Mapping[int, frozenset[tuple[int, int]]] = {
+    int(MapId.CERULEAN_CITY): frozenset({CERULEAN_ROBBED_HOUSE_POLICE_AT}),
+}
+
 
 def observe_gen1_story_predicates(raw: RawGameState) -> tuple[PredicateObservation, ...]:
     """Classify supported durable story predicates from one raw observation."""
 
     if not raw.game_started or raw.status_flags_1 is None:
-        state = PredicateState.UNKNOWN
+        guard_state = PredicateState.UNKNOWN
     elif raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK:
-        state = PredicateState.SATISFIED
+        guard_state = PredicateState.SATISFIED
     else:
-        state = PredicateState.UNSATISFIED
-    return (PredicateObservation(SAFFRON_GUARDS_OPEN, state),)
+        guard_state = PredicateState.UNSATISFIED
+    if not raw.game_started or raw.event_flags is None:
+        house_state = PredicateState.UNKNOWN
+    elif event_flag_is_set(
+        raw.event_flags,
+        int(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING),
+    ):
+        house_state = PredicateState.SATISFIED
+    else:
+        house_state = PredicateState.UNSATISFIED
+    return (
+        PredicateObservation(SAFFRON_GUARDS_OPEN, guard_state),
+        PredicateObservation(CERULEAN_ROBBED_HOUSE_OPEN, house_state),
+    )
 
 
 def gen1_story_capabilities(raw: RawGameState) -> frozenset[str]:
@@ -68,4 +112,19 @@ def apply_gen1_story_requirements(
 ) -> dict[int, LocalGraph]:
     """Bind every currently modelled Generation I story threshold."""
 
-    return apply_local_passage_requirements(graphs, ROUTE_7_GATE_REQUIREMENTS)
+    return apply_local_passage_requirements(graphs, GEN1_STORY_PASSAGE_REQUIREMENTS)
+
+
+def gen1_story_static_object_blockers(
+    map_id: int,
+    object_coordinates: Iterable[tuple[int, int]],
+) -> frozenset[tuple[int, int]]:
+    """Remove only objects whose displacement is guarded by a story predicate."""
+
+    coordinates = frozenset(object_coordinates)
+    displaced = GEN1_STORY_DISPLACED_OBJECTS.get(map_id, frozenset())
+    if not displaced.issubset(coordinates):
+        raise ValueError(
+            f"map {map_id} lacks story-displaced objects {sorted(displaced - coordinates)}"
+        )
+    return coordinates - displaced
