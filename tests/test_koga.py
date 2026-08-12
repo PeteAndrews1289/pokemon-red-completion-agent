@@ -199,6 +199,22 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
     assert public["rewards"]["regular_trainers_deactivated"] is True
 
 
+def test_koga_consumes_one_x_accuracy_and_preserves_surplus() -> None:
+    report = _report()
+    initial = tuple(
+        (item_id, 2 if item_id == int(ItemId.X_ACCURACY) else quantity)
+        for item_id, quantity in report.initial_bag
+    )
+    surplus = replace(
+        report,
+        initial_bag=initial,
+        final_bag=koga_module._koga_reward_bag(initial),
+    )
+
+    assert surplus.passed
+    assert (int(ItemId.X_ACCURACY), 1) in surplus.final_bag
+
+
 def test_juggler_three_recovery_returns_before_tamer_two() -> None:
     assert koga_module.TAMER2_TO_CENTER == ("down",) * 4 + JUGGLER3_TO_CENTER
     assert CENTER_TO_TAMER2 == CENTER_TO_GYM + GYM_TO_JUGGLER3 + JUGGLER3_TO_TAMER2

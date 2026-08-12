@@ -521,8 +521,8 @@ def run_koga_chapter(
     _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     bag_before_koga = _bag_tuple(emulator)
-    if _bag(emulator).get(ItemId.X_ACCURACY, 0) != 1:
-        raise KogaChapterError("Koga requires the carried Pokémon Tower X Accuracy.")
+    if _bag(emulator).get(ItemId.X_ACCURACY, 0) < 1:
+        raise KogaChapterError("Koga requires a carried X Accuracy.")
     battles.append(
         _fight(
             actions,
@@ -951,7 +951,7 @@ def _battle_koga_x_accuracy(
     ):
         raise KogaChapterError("Koga X Accuracy requires the trainer MAIN menu.")
     before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
-    if before != 1:
+    if before < 1:
         raise KogaChapterError(f"Koga X Accuracy reserve mismatch: {before!r}.")
     command = reader.read_battle_menu_state(raw).selected_main_command
     if command == 0:
@@ -991,9 +991,11 @@ def _koga_reward_bag(
     initial_bag: tuple[tuple[int, int], ...],
 ) -> tuple[tuple[int, int], ...]:
     inventory = Counter(dict(initial_bag))
-    if inventory[int(ItemId.X_ACCURACY)] != 1:
+    if inventory[int(ItemId.X_ACCURACY)] < 1:
         return ()
-    del inventory[int(ItemId.X_ACCURACY)]
+    inventory[int(ItemId.X_ACCURACY)] -= 1
+    if inventory[int(ItemId.X_ACCURACY)] == 0:
+        del inventory[int(ItemId.X_ACCURACY)]
     inventory[int(ItemId.TM06_TOXIC)] += 1
     return tuple(sorted(inventory.items()))
 
