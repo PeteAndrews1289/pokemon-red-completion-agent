@@ -56,6 +56,13 @@ def _directions(value: str) -> tuple[str, ...]:
 
 
 CELADON_TO_ROUTE_16_TREE = _directions("DDDD" + "L" * 16)
+CELADON_CENTER_TO_ROUTE_16_TREE = (
+    ("down",) * 8
+    + ("left",) * 22
+    + ("down", "left")
+    + ("down",) * 4
+    + ("left",) * 24
+)
 TREE_TO_FLY_HOUSE = _directions("UUUULLLLLULLLLLLLLLLDLLLLDLLLLLLLLLLU")
 PALLET_TO_SHORE = _directions("DDLL" + "D" * 9)
 ROUTE_21_TO_CINNABAR = _directions("D" * 17 + "RDL" + "D" * 5 + "L" + "D" * 67)
@@ -286,7 +293,12 @@ def run_cinnabar_chapter(
             ("Celadon arrival", ROUTE_7_CONNECTION_TO_CELADON_CITY),
         ):
             _move(actions, reader, route, label, frames=720)
-    _move(actions, reader, CELADON_TO_ROUTE_16_TREE, "Route 16 Cut tree")
+    tree_route = (
+        CELADON_CENTER_TO_ROUTE_16_TREE
+        if initial.map_id == MapId.CELADON_POKECENTER
+        else CELADON_TO_ROUTE_16_TREE
+    )
+    _move(actions, reader, tree_route, "Route 16 Cut tree")
     _require(reader.read(), MapId.ROUTE_16, (34, 10), "Route 16 tree")
     _cut(actions, reader, emulator, DEFAULT_ERIKA_TIMING, "up", 0x2C, "Route 16 Cut")
     _move(actions, reader, ("up",), "Cut crossing")
