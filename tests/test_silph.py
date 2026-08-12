@@ -62,7 +62,9 @@ from pokemon_red_completion.silph import (
     _battle_healing_item_target_fainted_before_consumption,
     _battle_healing_item_target_hp,
     _battle_healing_item_verified_terminal_exit,
+    _buy_silph_x_special,
     _celadon_ice_beam_capacity_deposit_items,
+    _celadon_ice_beam_x_special_target,
     _enter_silph_elevator,
     _enter_silph_from_city,
     _interact_with_roof_girl,
@@ -210,6 +212,12 @@ def test_silph_mart_top_up_preserves_authenticated_carried_stock() -> None:
 
     with pytest.raises(SilphChapterError, match="outside the supported range"):
         _mart_top_up_quantity(4, target=3, label="X Special")
+
+    assert _celadon_ice_beam_x_special_target(True) == X_SPECIAL_PURCHASE_QUANTITY
+    assert _celadon_ice_beam_x_special_target(False) == 0
+    assert _buy_silph_x_special.__kwdefaults__ == {
+        "x_special_target": SILPH_X_SPECIAL_SUPPLY_TARGET
+    }
 
 
 def test_celadon_ice_beam_capacity_reserves_supply_and_roof_slots() -> None:

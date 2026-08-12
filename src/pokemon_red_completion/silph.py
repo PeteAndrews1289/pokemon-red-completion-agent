@@ -999,7 +999,15 @@ def acquire_and_teach_ice_beam_from_celadon_center(
             _move(actions, reader, route[-2:], timing)
         _require(reader.read(), map_id, coordinate, label)
     if buy_silph_battle_items:
-        _buy_silph_x_special(actions, reader, emulator, timing)
+        _buy_silph_x_special(
+            actions,
+            reader,
+            emulator,
+            timing,
+            x_special_target=_celadon_ice_beam_x_special_target(
+                buy_silph_battle_items
+            ),
+        )
     roof_money_before = _money(emulator)
     _move_verified(
         actions,
@@ -1073,11 +1081,19 @@ def _celadon_ice_beam_capacity_deposit_items(
     return available[:slots_to_free]
 
 
+def _celadon_ice_beam_x_special_target(buy_silph_battle_items: bool) -> int:
+    """Keep Erika's three-item lesson distinct from Silph's four-item reserve."""
+
+    return X_SPECIAL_PURCHASE_QUANTITY if buy_silph_battle_items else 0
+
+
 def _buy_silph_x_special(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: SilphTiming,
+    *,
+    x_special_target: int = SILPH_X_SPECIAL_SUPPLY_TARGET,
 ) -> None:
     menu_timing = LavenderTiming(wait_frames=timing.menu_frames)
     _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "Silph X Special boundary")
@@ -1098,7 +1114,7 @@ def _buy_silph_x_special(
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     x_special_quantity = _mart_top_up_quantity(
         _bag(emulator).get(ItemId.X_SPECIAL, 0),
-        target=SILPH_X_SPECIAL_SUPPLY_TARGET,
+        target=x_special_target,
         label="X Special",
     )
     if x_special_quantity:
@@ -1109,7 +1125,7 @@ def _buy_silph_x_special(
             absolute_index=6,
             item=ItemId.X_SPECIAL,
             quantity=x_special_quantity,
-            target_bag_quantity=SILPH_X_SPECIAL_SUPPLY_TARGET,
+            target_bag_quantity=x_special_target,
         )
     x_accuracy_quantity = _mart_top_up_quantity(
         _bag(emulator).get(ItemId.X_ACCURACY, 0),
