@@ -11,6 +11,9 @@ from pokemon_red_completion.safari import (
     EXPECTED_MOVES_BEFORE,
     EXPECTED_PP_AFTER,
     GOLD_TEETH_CHECKPOINT_COUNT,
+    POST_SILPH_MOVES_AFTER_SURF,
+    POST_SILPH_MOVES_BEFORE_SURF,
+    POST_SILPH_PP_AFTER_SURF,
     SAFARI_CHECKPOINT_COUNT,
     GoldTeethChapterReport,
     SafariChapterReport,
@@ -138,6 +141,30 @@ def test_safari_timing_is_positive_and_bounded() -> None:
         and getattr(DEFAULT_SAFARI_TIMING, field.name) > 0
         for field in fields(SafariTiming)
     )
+
+
+def test_safari_report_accepts_exact_post_silph_surf_lineage() -> None:
+    report = _report()
+    raw = replace(
+        report.final_raw,
+        first_party_moves=POST_SILPH_MOVES_AFTER_SURF,
+        first_party_pp=POST_SILPH_PP_AFTER_SURF,
+    )
+    qualified = replace(
+        report,
+        final_raw=raw,
+        moves_before=POST_SILPH_MOVES_BEFORE_SURF,
+        moves_after=POST_SILPH_MOVES_AFTER_SURF,
+        pp_before=(25, 15, 10, 25),
+        pp_after_teach=POST_SILPH_PP_AFTER_SURF,
+        pp_after=POST_SILPH_PP_AFTER_SURF,
+    )
+
+    assert qualified.passed
+    assert not replace(
+        qualified,
+        moves_before=(0x2C, 0x46, 0x01, 0x37),
+    ).passed
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))

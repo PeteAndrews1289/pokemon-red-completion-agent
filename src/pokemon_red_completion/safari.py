@@ -28,6 +28,16 @@ EXPECTED_MOVES_BEFORE = (0x2C, 0x27, 0x3D, WATER_GUN)
 EXPECTED_MOVES_AFTER = (0x2C, 0x27, 0x3D, SURF)
 SURF_PP = 15
 EXPECTED_PP_AFTER = (25, 30, 20, SURF_PP)
+POST_SILPH_MOVES_BEFORE_SURF = (0x2C, 0x46, 0x3A, WATER_GUN)
+POST_SILPH_MOVES_AFTER_SURF = (0x2C, 0x46, 0x3A, SURF)
+POST_SILPH_PP_AFTER_SURF = (25, 15, 10, SURF_PP)
+SURF_MOVE_LINEAGES: dict[tuple[int, ...], tuple[tuple[int, ...], tuple[int, ...]]] = {
+    EXPECTED_MOVES_BEFORE: (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+    POST_SILPH_MOVES_BEFORE_SURF: (
+        POST_SILPH_MOVES_AFTER_SURF,
+        POST_SILPH_PP_AFTER_SURF,
+    ),
+}
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -149,6 +159,7 @@ class SafariChapterReport:
 
     @property
     def passed(self) -> bool:
+        lineage = SURF_MOVE_LINEAGES.get(self.moves_before)
         expected_final_bag = tuple(
             sorted(
                 (
@@ -171,11 +182,11 @@ class SafariChapterReport:
             and not self.in_safari_zone
             and self.safari_steps == 0
             and self.safari_balls == 0
-            and self.moves_before == EXPECTED_MOVES_BEFORE
-            and self.moves_after == EXPECTED_MOVES_AFTER
+            and lineage is not None
+            and self.moves_after == lineage[0]
             and len(self.pp_before) == 4
             and self.pp_after_teach == (*self.pp_before[:3], SURF_PP)
-            and self.pp_after == EXPECTED_PP_AFTER
+            and self.pp_after == lineage[1]
             and 0 <= self.encounters_fled <= 20
             and self.final_bag == expected_final_bag
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
@@ -518,8 +529,10 @@ def run_safari_chapter(
     initial_bag = _bag_tuple(emulator)
     initial_money = _money(emulator)
     moves_before = tuple(initial.first_party_moves or ())
-    if moves_before != EXPECTED_MOVES_BEFORE:
+    lineage = SURF_MOVE_LINEAGES.get(moves_before)
+    if lineage is None:
         raise SafariChapterError(f"Unexpected pre-Surf moves: {moves_before!r}.")
+    expected_moves_after, expected_pp_after = lineage
     pp_before = tuple(initial.first_party_pp or ())
     if len(pp_before) != 4 or any(pp <= 0 for pp in pp_before):
         raise SafariChapterError(f"Unexpected pre-Surf PP: {pp_before!r}.")
@@ -599,7 +612,14 @@ def run_safari_chapter(
     ball_milestones.append(_balls(emulator))
     _checkpoint(records, progress, emulator, reader.read(), "hm03", "Won reusable HM03")
 
-    taught = _teach_surf(actions, reader, emulator, timing, pp_before=pp_before)
+    taught = _teach_surf(
+        actions,
+        reader,
+        emulator,
+        timing,
+        pp_before=pp_before,
+        expected_moves_after=expected_moves_after,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "surf", "Taught Surf over Water Gun")
 
     encounters += _move(actions, reader, emulator, HOUSE_EXIT, timing, "Secret House exit")
@@ -640,7 +660,7 @@ def run_safari_chapter(
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
         if _party_hp(emulator) == _party_max_hp(emulator) and all(
             status == 0 for status in _party_status(emulator)
-        ) and reader.read().first_party_pp == EXPECTED_PP_AFTER:
+        ) and reader.read().first_party_pp == expected_pp_after:
             break
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
@@ -689,6 +709,7 @@ def _teach_surf(
     timing: SafariTiming,
     *,
     pp_before: tuple[int, ...],
+    expected_moves_after: tuple[int, ...],
 ) -> RawGameState:
     actions.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(actions, timing.wait_frames)
@@ -715,7 +736,7 @@ def _teach_surf(
     for _ in range(timing.dialogue_pulses):
         raw = reader.read()
         if (
-            raw.first_party_moves == EXPECTED_MOVES_AFTER
+            raw.first_party_moves == expected_moves_after
             and raw.first_party_pp == (*pp_before[:3], SURF_PP)
             and ItemId.HM03_SURF in _bag(emulator)
         ):
