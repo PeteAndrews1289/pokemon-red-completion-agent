@@ -1,55 +1,208 @@
 {
   "claim": "These are current qualified-teacher order gaps, not impossible cartridge states.",
-  "current_validation_challenge_gaps": [
+  "incompatible_learning_scenario_count": 14,
+  "incompatible_learning_scenarios": [
     {
-      "blocked_objectives": [
-        "defeat_koga",
-        "obtain_strength"
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "defeat_koga",
+          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        }
       ],
-      "required_but_absent_objective_ids": [
-        "obtain_surf"
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-017-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "defeat_koga",
+          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        },
+        {
+          "objective_id": "obtain_strength",
+          "reason": "The qualified Strength chapter requires Gold Teeth supplied by the current Safari/Surf chapter.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        }
       ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-018-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "defeat_koga",
+          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        },
+        {
+          "objective_id": "obtain_strength",
+          "reason": "The qualified Strength chapter requires Gold Teeth supplied by the current Safari/Surf chapter.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        }
+      ],
+      "partition": "validation",
       "scenario_id": "red-strategic-scenario-v2-019-validation"
     },
     {
-      "blocked_objectives": [
-        "defeat_erika"
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "defeat_koga",
+          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
+          "required_but_absent_objective_ids": [
+            "obtain_surf"
+          ]
+        }
       ],
-      "required_but_absent_objective_ids": [
-        "defeat_koga"
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-021-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
       ],
-      "scenario_id": "red-strategic-scenario-v2-023-validation"
+      "partition": "validation",
+      "scenario_id": "red-strategic-scenario-v2-027-validation"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-030-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "validation",
+      "scenario_id": "red-strategic-scenario-v2-031-validation"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "validation",
+      "scenario_id": "red-strategic-scenario-v2-035-validation"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-038-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "validation",
+      "scenario_id": "red-strategic-scenario-v2-039-validation"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-041-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-042-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-045-train"
+    },
+    {
+      "current_qualified_skill_blockers": [
+        {
+          "objective_id": "reach_cinnabar",
+          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
+          "required_but_absent_objective_ids": [
+            "defeat_sabrina"
+          ]
+        }
+      ],
+      "partition": "train",
+      "scenario_id": "red-strategic-scenario-v2-046-train"
     }
   ],
-  "incompatible_learning_scenario_count": 21,
   "learning_scenarios_checked": 36,
   "live_skill_availability_checked": false,
   "private_captures_opened": 0,
-  "qualified_skill_contract_count": 4,
-  "required_alternate_curricula": {
-    "defeat_erika_before_koga_or_strength": [
-      "red-strategic-scenario-v2-009-train",
-      "red-strategic-scenario-v2-010-train",
-      "red-strategic-scenario-v2-014-train",
-      "red-strategic-scenario-v2-023-validation"
-    ],
-    "defeat_koga_before_surf": [
-      "red-strategic-scenario-v2-017-train",
-      "red-strategic-scenario-v2-018-train",
-      "red-strategic-scenario-v2-019-validation"
-    ],
-    "obtain_strength_before_surf": [
-      "red-strategic-scenario-v2-018-train",
-      "red-strategic-scenario-v2-019-validation"
-    ],
-    "reach_cinnabar_before_sabrina": [
-      "red-strategic-scenario-v2-027-validation",
-      "red-strategic-scenario-v2-031-validation",
-      "red-strategic-scenario-v2-035-validation",
-      "red-strategic-scenario-v2-039-validation",
-      "red-strategic-scenario-v2-041-train"
-    ]
-  },
-  "schema": "strategic-curriculum-order-audit-summary-v1",
+  "qualified_skill_contract_count": 3,
+  "schema": "strategic-curriculum-order-audit-v1",
   "test_scenarios_opened": 0
 }

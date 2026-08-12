@@ -1,0 +1,19 @@
+{
+  "actions_executed": 2321,
+  "badge_bits_after": 15,
+  "badge_bits_before": 7,
+  "ci_run_id": 31569081316,
+  "controller_released": true,
+  "curriculum": "pre_koga_celadon",
+  "frames_executed": 351092,
+  "ice_beam_move_id": 58,
+  "ice_beam_pp_spent_against_erika": 3,
+  "money_remaining": 13708,
+  "party_healed": true,
+  "party_species_ids": [28, 64, 59],
+  "source_commit": "fc2c47a4dcd6e2a2d437595a29535b76f837f097",
+  "status": "qualified",
+  "test_scenarios_opened": 0,
+  "tm13_transfer_before_event": true,
+  "x_special_used": 1
+}

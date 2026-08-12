@@ -1,12 +1,12 @@
 {
-  "authenticated_capture_envelopes": 31,
+  "authenticated_capture_envelopes": 33,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
     "target_origin_checked": false,
     "test_scenarios_opened": 0
   },
-  "exact_learning_scenario_count": 10,
+  "exact_learning_scenario_count": 11,
   "exact_learning_scenario_ids": [
     "red-strategic-scenario-v2-001-train",
     "red-strategic-scenario-v2-002-train",
@@ -14,6 +14,7 @@
     "red-strategic-scenario-v2-005-train",
     "red-strategic-scenario-v2-006-train",
     "red-strategic-scenario-v2-007-validation",
+    "red-strategic-scenario-v2-009-train",
     "red-strategic-scenario-v2-011-validation",
     "red-strategic-scenario-v2-015-validation",
     "red-strategic-scenario-v2-043-validation",
@@ -26,98 +27,124 @@
     {
       "already_exact": true,
       "authenticated_source_envelopes": 3,
-      "objective_ids": ["help_bill"],
+      "objective_ids": [
+        "help_bill"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-002-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 2,
-      "objective_ids": ["reach_vermilion"],
+      "objective_ids": [
+        "reach_vermilion"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-003-validation",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["reach_saffron"],
+      "objective_ids": [
+        "reach_saffron"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-005-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["reach_celadon"],
+      "objective_ids": [
+        "reach_celadon"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-006-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["clear_rocket_hideout"],
+      "objective_ids": [
+        "clear_rocket_hideout"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-007-validation",
-      "unique_source_frontiers": 1
-    },
-    {
-      "already_exact": false,
-      "authenticated_source_envelopes": 1,
-      "objective_ids": ["defeat_erika"],
-      "target_scenario_id": "red-strategic-scenario-v2-009-train",
-      "unique_source_frontiers": 1
-    },
-    {
-      "already_exact": false,
-      "authenticated_source_envelopes": 1,
-      "objective_ids": ["defeat_erika"],
-      "target_scenario_id": "red-strategic-scenario-v2-010-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["rescue_fuji"],
+      "objective_ids": [
+        "defeat_erika"
+      ],
+      "target_scenario_id": "red-strategic-scenario-v2-009-train",
+      "unique_source_frontiers": 1
+    },
+    {
+      "already_exact": false,
+      "authenticated_source_envelopes": 3,
+      "objective_ids": [
+        "defeat_erika",
+        "rescue_fuji"
+      ],
+      "target_scenario_id": "red-strategic-scenario-v2-010-train",
+      "unique_source_frontiers": 2
+    },
+    {
+      "already_exact": true,
+      "authenticated_source_envelopes": 1,
+      "objective_ids": [
+        "rescue_fuji"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-011-validation",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": false,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["defeat_erika"],
+      "objective_ids": [
+        "defeat_erika"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-014-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["reach_fuchsia"],
+      "objective_ids": [
+        "reach_fuchsia"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-015-validation",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": false,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["reach_cinnabar"],
+      "objective_ids": [
+        "reach_cinnabar"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-041-train",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["reach_saffron"],
+      "objective_ids": [
+        "reach_saffron"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-043-validation",
       "unique_source_frontiers": 1
     },
     {
       "already_exact": true,
       "authenticated_source_envelopes": 1,
-      "objective_ids": ["liberate_silph"],
+      "objective_ids": [
+        "liberate_silph"
+      ],
       "target_scenario_id": "red-strategic-scenario-v2-047-validation",
       "unique_source_frontiers": 1
     }
   ],
-  "missing_learning_scenario_count": 26,
+  "missing_learning_scenario_count": 25,
   "missing_learning_scenario_ids": [
-    "red-strategic-scenario-v2-009-train",
     "red-strategic-scenario-v2-010-train",
     "red-strategic-scenario-v2-013-train",
     "red-strategic-scenario-v2-014-train",
@@ -145,5 +172,5 @@
     "red-strategic-scenario-v2-046-train"
   ],
   "schema": "strategic-frontier-inventory-v1",
-  "unique_authenticated_frontiers": 24
+  "unique_authenticated_frontiers": 25
 }

@@ -2,6 +2,14 @@
 
 ## August 12: one winning route was not yet a curriculum
 
+The first alternate-order lesson now works on the cartridge. From the post-Hideout Celadon state,
+the teacher obtains and teaches Ice Beam, buys one bounded battle setup, defeats Erika before Koga,
+and returns healed with the exact Rainbow Badge transition. The published run took 2,321 actions
+and 351,092 frames. Scenario 009 then turned that experience into a clean strategic question: two
+choices, 17 movements, one destination label, and no arrow-key labels. The static gap counter fell
+from 21 to 14. A second post-Fuji Blastoise boundary exposed a different leader battle schedule and
+remains honestly unqualified rather than being folded into the successful claim.
+
 The next two validation questions looked like more routing work. They were not. Scenario 019 asks
 what to do after Koga and Strength while Surf is still incomplete. Scenario 023 asks what to do
 after Erika while Koga is still incomplete. Pokémon Red permits both states, but the teacher had
@@ -23,7 +31,7 @@ Saffron lesson only to construct its exact Celadon question, then selected Hideo
 31-movement rehearsal. All three are immutable unassigned episodes with one strategic label, one
 outcome and zero arrow-key labels.
 
-The scoreboard is now 31 authenticated captures, 24 distinct frontiers, 10 exact learning
+The scoreboard is now 33 authenticated captures, 25 distinct frontiers, 11 exact learning
 contexts, four of six cost-baseline challenges and zero counted rows. The next work is deliberately
 new experience: Erika before Koga, Koga and Strength before Surf, and Cinnabar before Sabrina. That
 is the bridge from a teacher that can repeat one successful playthrough to a teacher that can show

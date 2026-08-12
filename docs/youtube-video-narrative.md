@@ -2,6 +2,12 @@
 
 ## New opening beat: the route was complete, the curriculum was not
 
+Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW
+QUALIFIED**. Show **ICE BEAM + 1 X SPECIAL / 2,321 ACTIONS / 351,092 FRAMES / HEALED RETURN**, then
+animate the audit counter falling from **21 → 14**. Follow it with scenario 009's card:
+**2 CHOICES / COST 18–137 / 17 STEPS / 41 RECORDS / 0 BUTTON LABELS**. Keep the post-Fuji variant
+amber: it produced a different deterministic leader schedule and was not claimed as solved.
+
 Open on two apparently contradictory save cards:
 
 - **KOGA + STRENGTH / SURF NOT YET OBTAINED**
@@ -24,7 +30,7 @@ then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 
 Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
 TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
 
-Update the persistent scoreboard to **31 AUTHENTICATED CAPTURES / 24 DISTINCT FRONTIERS / 10 EXACT
+Update the persistent scoreboard to **33 AUTHENTICATED CAPTURES / 25 DISTINCT FRONTIERS / 11 EXACT
 CONTEXTS / 4 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. The next-act cards should be
 **ERIKA BEFORE KOGA**, **KOGA + STRENGTH BEFORE SURF**, and **CINNABAR BEFORE SABRINA**. Do not show
 these as complete until their own cartridge receipts exist.

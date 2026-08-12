@@ -14,6 +14,29 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Early Erika qualified; scenario 009 authenticated — 2026-08-12
+
+Published source `fc2c47a` passed 2,714 tests, Ruff, mypy, all frozen-registry checks and exact
+GitHub CI run `31569081316`. It adds a legal pre-Koga Erika curriculum from the post-Hideout
+Celadon boundary. The teacher buys Fresh Water, derives TM13 from the rooftop exchange, replaces
+Bubble with Ice Beam, purchases a bounded X Special setup, defeats the two required Gym trainers
+and Erika, and returns healed. The cartridge qualification took 2,321 actions / 351,092 frames,
+changed badge bits from `0x07` to `0x0f`, spent three Ice Beam PP against Erika and released the
+controller. See the [qualification receipt](docs/evidence/early-erika-curriculum-qualification-2026-08-12.json).
+
+That lesson removed Erika's alternate-order contract from the static audit: incompatible learning
+frontiers fell from **21 to 14**, and validation scenario 023 is no longer blocked by teacher order.
+Scenario 009 was then constructed exactly, relocated to Lavender, and rehearsed once: two
+candidates at costs 18–137, one successful teacher choice, 17 movements, 41 records, zero movement
+labels, unassigned and uncounted. See the
+[scenario-009 receipt](docs/evidence/strategic-scenario-009-rehearsal-qualification-2026-08-12.json).
+
+Do not overclaim scenarios 010/014 yet. Their post-Fuji level-39 Blastoise source reaches Erika
+under a different deterministic battle schedule; direct diagnostics showed the same policy can
+faint against the leader. Experimental item variants were discarded and are not in source.
+Next: qualify that second early-Erika battle boundary or construct 010 from a compatible earlier
+source, construct scenario 023, then prioritize Gold-Teeth/Strength and Koga-before-Surf for 019.
+
 ## Four challenge contexts qualified; alternate-order curriculum is the blocker — 2026-08-12
 
 Frozen source `fc3b91a` passed the full local gate (2,707 passed, three skipped, one expected
@@ -34,8 +57,8 @@ interruption or replan. See the [scenario-011](docs/evidence/strategic-scenario-
 and [scenario-005](docs/evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json)
 receipts.
 
-Measured inventory is now **31 authenticated envelopes, 24 unique frontiers, 10 exact learning
-scenarios and 26 missing**. Exact coverage is four train and six validation contexts. The measured
+Measured inventory is now **33 authenticated envelopes, 25 unique frontiers, 11 exact learning
+scenarios and 25 missing**. Exact coverage is five train and six validation contexts. The measured
 cost-baseline challenge set is 4/6: 003, 007, 011 and 015. Counted train and validation remain zero;
 all 12 test scenarios remain sealed. The path-free current receipt is
 [here](docs/evidence/strategic-frontier-inventory-2026-08-12.json).
