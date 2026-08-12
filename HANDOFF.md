@@ -37,6 +37,24 @@ inventory remains 21 authenticated envelopes covering scenarios 001, 002 and 007
 frontiers still need materialization. Collection remains closed and all 12 test situations remain
 sealed.
 
+The next-source tool is now implemented but not yet live-used. `materialize_strategic_scenario.py`
+can turn one authenticated non-test scenario capture into another only when the target frontier adds
+exactly one source-candidate objective, that objective's entire completion contract is the live
+location of its approach map, and the map belongs to the target origin. It preflights every source
+candidate, executes the declared route under the same acknowledge/retry/replan bounds, verifies the
+exact target frontier from fresh observation, and writes a new private state/envelope without an
+episode or training row. It refuses battle, item and interaction approaches, existing outputs,
+repository outputs, ROM-adjacent outputs and sealed test scenarios.
+
+The registry contains five such navigation-only transitions. The first intended use is scenario
+002 → 003 by observing `reach_vermilion`; publish and gate the tool before running it. Working
+prospective identities are source bundle
+`074db6f93be5772b5869cb77446daf73154523355f1c7b1f86161ac152edd084`, battle registry
+`eae377664a026b51809d1a2c9a54832a917b4bc161c81f17880f0169014122e0`, battle teacher execution
+`fe15f1d5ea462fb6ec77b19745efc6b39f679ef0dc8687bae570b2bf3269c6f6`, historical strategic
+registry `afc7482841deab5f75e578ff0d8ee3bc1e4370c71251ed75d48b3a45e41b337d` and historical strategic
+teacher execution `cf8a412c70414a914737940e5aa9622d960f4c92ab5b3cfb4a397e3cda952118`.
+
 ## Third learning frontier captured; scenario 002 exposed a movable-story-object gap — 2026-08-11
 
 The qualified teacher was replayed to checkpoint 54/312, “Left Bill's House with the S.S. Ticket,”

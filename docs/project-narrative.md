@@ -24,6 +24,14 @@ without interruption or replan. Vermilion's story route was preflighted but not 
 honest claim is narrower than a live crossing. The scoreboard is now three live uncounted contexts,
 zero training rows.
 
+That result also exposed a useful way to shorten the next capture. Scenario 003 differs from
+scenario 002 by one fact: reaching Vermilion. A reusable materializer now permits exactly that kind
+of transition—but only when arriving at the destination is the objective's complete observed
+contract. It cannot turn “arrived at a Gym” into “defeated the leader,” cannot open a test scenario,
+and cannot create a training episode. The route must pass first, the final live facts must equal the
+next registered frontier exactly, and only then may a new private checkpoint be written. This turns
+repeated travel into infrastructure without turning convenience into a label.
+
 ## August 11: the first useful label chose the route ten times longer
 
 The special-trainer repair passed CI, but the first scenario episode still failed. It had asked the

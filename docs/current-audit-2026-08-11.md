@@ -30,6 +30,22 @@ Inventory is now **21 authenticated envelopes, three exact learning frontiers (0
 33 missing frontiers**. Measured status is **three authenticated uncounted contexts, zero counted
 scenario rows, collection closed, 12 test situations sealed**.
 
+### Bounded navigation-frontier materialization
+
+The next capture no longer needs an ad-hoc movement helper. A new command accepts an exact
+non-test source scenario, a non-test target scenario and one declared source candidate, but only
+authorizes the transition if the target adds exactly that one objective and the objective's entire
+completion contract is the destination map's live location. This deliberately excludes Gym,
+interaction and item approaches: arriving at Misty's Gym is not defeating Misty.
+
+Before movement it authenticates the source frontier and preflights every candidate. During
+movement it uses the same bounded field actions, interruptions and replanning as rehearsal. After
+movement it requires a ready target-region boundary and recomputes the exact target frontier from
+live state before writing a new private state and envelope. It cannot write inside the repository,
+beside the ROM or over an existing artifact, and it creates no episode or label. Five registry
+transitions meet this narrow contract; scenario 002 → 003 through `reach_vermilion` is first after
+source publication and CI.
+
 ## First two live short scenarios qualified
 
 Published source `318a1c3` passed CI and repaired the scripted-trainer distinction found by the

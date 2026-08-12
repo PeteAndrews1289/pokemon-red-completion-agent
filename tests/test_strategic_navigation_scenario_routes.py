@@ -12,6 +12,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     STRATEGIC_SCENARIO_ORIGIN_MAPS,
     ScenarioObjectiveDestinationSpec,
     StrategicScenarioRouteCatalogError,
+    require_navigation_materialization_step,
     require_scenario_origin,
     scenario_destination_specs,
     validate_scenario_route_catalog,
@@ -100,3 +101,53 @@ def test_origin_catalog_kills_missing_region_and_test_stays_sealed() -> None:
     test = next(item for item in registry.scenarios if item.partition == "test")
     with pytest.raises(StrategicScenarioProtocolError, match="must remain unopened"):
         scenario_destination_specs(registry, test.scenario_id)
+
+
+def test_navigation_materialization_requires_one_live_location_transition() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    source = registry.scenario("red-strategic-scenario-v2-002-train")
+    target = registry.scenario("red-strategic-scenario-v2-003-validation")
+
+    spec = require_navigation_materialization_step(
+        source,
+        target,
+        "reach_vermilion",
+    )
+
+    assert spec.objective_id == "reach_vermilion"
+    assert spec.goal_map is MapId.VERMILION_CITY
+
+
+def test_navigation_materialization_rejects_approach_or_frontier_overclaims() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    source = registry.scenario("red-strategic-scenario-v2-001-train")
+    target = registry.scenario("red-strategic-scenario-v2-002-train")
+
+    with pytest.raises(
+        StrategicScenarioRouteCatalogError,
+        match="does not itself complete",
+    ):
+        require_navigation_materialization_step(source, target, "help_bill")
+    with pytest.raises(StrategicScenarioRouteCatalogError, match="not a source"):
+        require_navigation_materialization_step(source, target, "reach_vermilion")
+
+    valid_source = target
+    valid_target = registry.scenario("red-strategic-scenario-v2-003-validation")
+    with pytest.raises(StrategicScenarioRouteCatalogError, match="add exactly one"):
+        require_navigation_materialization_step(
+            valid_source,
+            replace(
+                valid_target,
+                completed_objective_ids=(
+                    *valid_target.completed_objective_ids,
+                    "obtain_cut",
+                ),
+            ),
+            "reach_vermilion",
+        )
+    with pytest.raises(StrategicScenarioRouteCatalogError, match="target scenario origin"):
+        require_navigation_materialization_step(
+            valid_source,
+            replace(valid_target, origin_region="celadon"),
+            "reach_vermilion",
+        )

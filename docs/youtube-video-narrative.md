@@ -93,6 +93,13 @@ Vermilion **PREFLIGHTED, NOT EXECUTED**, increment the live-context counter to t
 counted rows at zero. The line is: **“A route planner needs to know not just where the walls are,
 but which parts of the world can change—and why.”**
 
+For the transition to the next card, show scenario 002 and scenario 003 differing by one tile-like
+fact: **REACH VERMILION**. Introduce the narrow capture materializer with three locks:
+**ONE REGISTERED OBJECTIVE / COMPLETION IS THE LIVE LOCATION / EXACT TARGET FRONTIER**. Contrast it
+with a rejected Gym approach: **ARRIVING IS NOT DEFEATING**. Keep the output labeled **PRIVATE
+CHECKPOINT — NO EPISODE, NO LABEL**. This gives the capture campaign a visible assembly line without
+suggesting that movement can manufacture story completion.
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

@@ -70,6 +70,13 @@ Implementation status:
    and 007. Materialize the other 33 learning boundaries using the shared-prerequisite rule, then
    audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
    test situations sealed until final evaluation.
+9. **Implemented; source gate pending:** a bounded scenario materializer can derive the five
+   registry transitions that add exactly one live-observable navigation objective. It rejects an
+   approach unless its complete quest contract equals the destination map's observed location and
+   that map belongs to the target scenario origin. It also requires an exact source capture,
+   all-candidate preflight, stable target state, exact target frontier and a new private output;
+   it creates no episode. Publish it, require exact-commit CI, then use scenario 002 → 003 via
+   `reach_vermilion` as the first live falsification.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

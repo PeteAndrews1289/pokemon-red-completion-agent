@@ -11,7 +11,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.observation import MapId, location_label
+from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.strategic_navigation import StrategicNavigationTag
 from pokemon_red_completion.strategic_navigation_scenarios import (
     StrategicNavigationScenario,
@@ -213,6 +214,65 @@ def scenario_destination_specs(
         STRATEGIC_SCENARIO_DESTINATIONS[objective_id]
         for objective_id in scenario.candidate_objective_ids
     )
+
+
+def require_navigation_materialization_step(
+    source: StrategicNavigationScenario,
+    target: StrategicNavigationScenario,
+    objective_id: str,
+    *,
+    catalog: Mapping[str, ScenarioObjectiveDestinationSpec] = (
+        STRATEGIC_SCENARIO_DESTINATIONS
+    ),
+) -> ScenarioObjectiveDestinationSpec:
+    """Authorize one approach whose observed location creates the target frontier.
+
+    Most destination approaches do *not* complete their objective: arriving at a
+    Gym is not defeating its leader.  This narrow seam accepts only a one-objective
+    registry transition whose completion fact is exactly the destination map's
+    live location and whose target origin includes that map.
+    """
+
+    if not isinstance(source, StrategicNavigationScenario) or not isinstance(
+        target, StrategicNavigationScenario
+    ):
+        raise TypeError("materialization scenarios must be strategic scenarios")
+    if objective_id not in source.candidate_objective_ids:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is not a source-scenario candidate"
+        )
+    source_completed = frozenset(source.completed_objective_ids)
+    target_completed = frozenset(target.completed_objective_ids)
+    if objective_id in source_completed or target_completed != source_completed.union(
+        (objective_id,)
+    ):
+        raise StrategicScenarioRouteCatalogError(
+            "materialization must add exactly one incomplete candidate objective"
+        )
+    try:
+        spec = catalog[objective_id]
+    except KeyError as error:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective lacks a destination binding"
+        ) from error
+    if spec.objective_id != objective_id:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective binding identity differs"
+        )
+    live_location = location_label(spec.goal_map)
+    expected_fact = None if live_location is None else f"location:{live_location}"
+    if COMPLETION_QUEST.objective(objective_id).completion_facts != frozenset(
+        {expected_fact}
+    ):
+        raise StrategicScenarioRouteCatalogError(
+            "materialized approach does not itself complete a location objective"
+        )
+    target_origins = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(target.origin_region)
+    if target_origins is None or spec.goal_map not in target_origins:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized destination differs from the target scenario origin"
+        )
+    return spec
 
 
 def require_scenario_origin(
