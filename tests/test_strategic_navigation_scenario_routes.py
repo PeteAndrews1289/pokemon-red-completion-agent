@@ -63,6 +63,7 @@ def test_construction_boundaries_are_exact_and_intentionally_narrow() -> None:
         "defeat_sabrina": (MapId.SAFFRON_POKECENTER, (3, 3)),
         "liberate_silph": (MapId.SAFFRON_POKECENTER, (3, 3)),
         "obtain_surf": (MapId.FUCHSIA_POKECENTER, (3, 3)),
+        "reach_cinnabar": (MapId.CELADON_POKECENTER, (3, 3)),
         "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
         "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
         "rescue_fuji": (MapId.CELADON_POKECENTER, (3, 3)),
