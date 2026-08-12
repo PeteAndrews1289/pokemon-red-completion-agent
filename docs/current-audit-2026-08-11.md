@@ -1,5 +1,37 @@
 # Current capability and code audit — 2026-08-11
 
+## Sixth live short scenario qualified
+
+The bounded-skill constructor turned one authenticated post-Erika teacher capture into validation
+scenario 043 by completing only `reach_saffron`, then turned that exact 043 capture into scenario
+047 by completing only `liberate_silph`. Both outputs matched their declared objective frontier and
+Saffron origin under fresh live observation. Construction created no episode, choice or label. The
+first skill used 1,206 actions / 146,128 frames; the second used 4,969 actions / 1,674,353 frames.
+
+Each downstream preflight then failed before consuming its unassigned rehearsal. These were not
+flaky retries. The cartridge begins with a security guard on the Silph entrance and a Rocket below
+Saffron Gym, then hides each at a different durable story threshold. The static route world had
+kept both original object coordinates forever. Differential planning isolated exactly one
+disconnecting coordinate in each state. The repaired adapter removes only those coordinates from
+permanent geometry and requires independently observed facts on every usable edge: both Mr. Fuji
+rescue flags for the Silph entrance, and the Silph-Giovanni victory flag for Saffron Gym. Unknown or
+pre-event states remain closed.
+
+After exact-commit CI, scenario 043 exposed Silph at cost 36 and Cinnabar at 856. The teacher chose
+Silph and completed 35/35 movements with zero interruption or replan; strict reload authenticated
+79 records, one choice, one success and no movement labels. Scenario 047 exposed Sabrina at cost 68
+and Cinnabar at 856. The teacher chose Sabrina and completed 67/67 movements with the same clean
+execution shape; strict reload authenticated 143 records. See the
+[scenario-043](evidence/strategic-scenario-043-rehearsal-qualification-2026-08-11.json) and
+[scenario-047](evidence/strategic-scenario-047-rehearsal-qualification-2026-08-11.json) receipts.
+
+Measured status is now **six authenticated uncounted contexts, zero counted rows, collection
+closed, 12 test situations sealed**. These two contexts improve midgame density but are not among
+the six preregistered validation cost-baseline challenge rows, so challenge coverage remains 1/6.
+The code gate at this checkpoint is 2,677 passing non-integration tests, three intentionally
+deselected runtime tests, one expected failure, Ruff, mypy, documentation, privacy and regenerated
+source-bound registries.
+
 ## Fourth live short scenario qualified
 
 Scenario 003 is now the first frontier created entirely by the bounded materializer and accepted by

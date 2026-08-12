@@ -56,6 +56,28 @@ its edges only when the Silph-Giovanni victory flag is observed. On the live 047
 plans at cost 68 and Cinnabar at 856. Publish and pass exact-commit CI before repeating 047's still-
 unconsumed read-only preflight.
 
+Published `08bd7e2` passed CI run `31556628124`. Scenario 047's repeat preflight was ready with no
+existing episode; the teacher then selected Sabrina and completed all 67 movements with zero
+interruptions or replans. The immutable unassigned episode has 143 records, one choice, one
+successful outcome and no movement labels. Measured coverage is now **six authenticated live
+contexts / zero counted rows**. Scenarios 043 and 047 are genuine policy contexts but neither is one
+of the validation cost-baseline challenge rows, so the measured challenge count remains 1/6.
+
+A new path-free private inventory now verifies 24 capture envelopes (one known rejected diagnostic
+is excluded), 18 unique envelope frontiers, six exact learning scenarios and 30 missing scenarios.
+The pure one-skill audit finds eight logical targets, four already covered and four prospective.
+Fresh live inspection narrows the latter honestly: scenario 006's old envelope omits the current
+Celadon location fact even though live observation has it; scenarios 009 and 010 need post-skill
+relocation to their Lavender origin; scenario 041 is aligned for direct `reach_cinnabar`
+materialization. The inventory deliberately does not claim live availability, origin or terminal
+frontier checks. See the path-free
+[inventory receipt](docs/evidence/strategic-frontier-inventory-2026-08-11.json).
+
+A complementary no-action capture authenticator is implemented for the scenario-006 case. It
+requires clean published source, an authenticated input state, a stable ready overworld, exact
+fresh target objectives and the declared target origin before writing a new private state/envelope.
+It cannot open an episode or test scenario. Live qualification remains pending publication.
+
 ## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
 
 Published source `a3598a2` passed exact-commit CI run `31553282113`. It is the first source whose

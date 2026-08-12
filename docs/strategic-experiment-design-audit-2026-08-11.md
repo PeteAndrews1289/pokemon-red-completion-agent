@@ -106,10 +106,10 @@ candidate-order-invariant contexts and fails overlap, conflicting labels, underp
 or fewer than six validation baseline disagreements. The v2 scenario registry fixes 48 graph-legal
 frontiers at 24/12/12 before live measurement and keeps ordinary test access closed.
 
-The distinction remains strict: a graph-legal registry situation is not yet an authenticated policy
-context. The short execution assignment, all-candidate read-only preflight, one-shot recorder and
-strict one-decision reload are implemented, but no live episode has run. The next gate is one
-published-source uncounted learning-scenario rehearsal, followed by the 36-situation
-train/validation inventory described in the
-[registry audit](strategic-scenario-registry-audit-2026-08-11.md). Counted collection remains
-closed and test remains sealed.
+The distinction remains strict: a graph-legal registry situation is not automatically an
+authenticated policy context. The short execution assignment, all-candidate read-only preflight,
+one-shot recorder and strict one-decision reload are implemented. Six uncounted learning scenarios
+have now passed live; 30 remain. A path-free capture inventory identifies four uncovered logical
+one-skill targets, but live origin and frontier checks still gate them. Counted collection remains
+closed, baseline-challenge coverage is 1/6, and test remains sealed. See the
+[registry audit](strategic-scenario-registry-audit-2026-08-11.md).

@@ -15,7 +15,7 @@ private to execution, and joins every choice to one success, failure or censored
 Successful routes may supervise imitation; failed routes remain negative outcome evidence; power
 loss is not quietly rerun. The authenticated writer/reader and lineage audit are implemented, but
 the honest model-development count is still zero train/validation strategic navigation examples and
-no navigation model. Three unassigned live calibrations now prove the seam. The first selected cost
+no navigation model. Earlier route calibrations proved the seam. The first selected cost
 15 over 87 between safe hubs; the second selected Koga's Gym at cost 21 over the Warden at cost 24.
 The third is the important control: after the Celadon Hideout, story semantics selected Pokémon
 Tower at cost 178 over optional Eevee at cost 60. The generic executor crossed nine maps, resumed
@@ -23,14 +23,16 @@ after one unavoidable trainer encounter and reached Tower 1F after 174/174 ackno
 with zero replans. It proves the label is not merely shortest-path supervision, but it remains a
 development calibration—not evidence of learning.
 
-The newer context-diverse benchmark now has four authenticated short-scenario calibrations and zero
-counted rows. Its latest validation context was materialized from an exact post-Bill frontier rather
-than replaying a full game. The cartridge forced four fail-closed repairs—return-warp timing and
-arrival, a custom Rocket preamble, bottom-edge exit control and portable envelope identity—before
-the state was admitted. From Vermilion, the teacher then selected Misty's cost-152 route over the
-cost-58 Cut route and completed 148/148 movements. That is the first measured validation
-disagreement with the cost-only baseline; five more preregistered disagreements are still required
-before collection can support the planned paired comparison.
+The newer context-diverse benchmark now has six authenticated short-scenario calibrations and zero
+counted rows. Its first four forced fail-closed repairs in return-warp timing and arrival, custom
+trainer recovery, boundary control and portable envelope identity. The next two exercised a new
+bounded-skill capture constructor and found a deeper world-model issue: the cartridge hides the
+Silph entrance guard after Fuji and the Saffron Gym guard after Giovanni, while static topology had
+kept both forever. Binding only those coordinates to observed story flags made both candidate sets
+executable. The teacher completed Silph and Sabrina approaches with 35/35 and 67/67 acknowledged
+movements, zero interruption or replan, and no movement labels. The first measured validation
+disagreement with the cost-only baseline remains the Vermilion context; five more preregistered
+challenge disagreements are still required before collection can support the paired comparison.
 
 The next experiment is now preregistered rather than aspirational: five whole power-on train roots,
 two validation roots, five sealed test roots and one rehearsal, each with a unique timing schedule
@@ -108,10 +110,10 @@ The project therefore asks a harder question than “can code beat Pokémon Red?
 | Strict four-model rehearsal | 3,220 model move decisions and zero teacher query/fallback through a Lorelei win | Correctly rejected: 19/19 attacks from slot 1 and zero role switches |
 | Reserve-aware controller | Four complete lineages; 98.2394% / 94.7537% held-out class metrics; 17/17 fresh offline targets; 13/13 isolated causal bindings; combined canonical Hall of Fame with 21/21 targets | Paired timing root exposed a deterministic early-game referee defect before model decisions; perturbation qualification remains |
 | Prospective evaluation | Source/model/root-bound ten-run registry and independent 8-of-10 checker | Campaign remains unopened at 0/10 until reserve-aware battle control qualifies |
-| Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; one story gate; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
-| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, collection baselines, three unassigned live calibrations and a prospective 5/2/5 whole-root split with sealed test access | 0 collected train/validation examples; full-run collector not connected; no numeric schema, model, shadow result or causal authority |
+| Cartridge-derived navigation | Multi-map acknowledgement/replan; Surf; live occupancy; repeated Cut; full Strength chain; trainer sight; multiple observed story thresholds; resource renewal; joint pricing | Completion teacher still owns broad invocation, menu/script recovery and final Indigo travel |
+| Strategic navigation data | Identity-free choice/outcome schema, reviewed vocabulary, authenticated trajectory join, six exact v2 scenario contexts, collection baselines and sealed test access | 0 counted train/validation examples; 1/6 validation challenge contexts measured; no frozen numeric schema, model, shadow result or causal authority |
 | Acquisition knowledge | Exact Red/Blue ordinary reach: 135 solo / 139 with trade partner | No autonomous living-Pokédex execution or multi-save/trade orchestration |
-| Repository gate | 2,571 non-ROM tests, Ruff, mypy, public-artifact, documentation, and two source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
+| Repository gate | 2,677 non-integration tests, Ruff, mypy, public-artifact, documentation, and three source-bound registry checks | Three runtime ROM tests remain private and explicitly separated from CI; one expected failure is retained |
 
 ## Architecture in one minute
 

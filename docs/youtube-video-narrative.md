@@ -125,6 +125,25 @@ Only then deal scenario 003's cards: **CUT 58 / MISTY 152**. Highlight Misty, sh
 REPLANS / 315 RECORDS**, increment **LIVE CONTEXTS 4**, and mark **VALIDATION BASELINE DISAGREEMENTS
 1/6** while counted rows remain zero.
 
+### Two guards, two story thresholds
+
+Extend the capture assembly line beyond location objectives. Start from the post-Erika capture and
+show one bounded skill producing scenario 043: **REACH SAFFRON / 1,206 ACTIONS / 146,128 FRAMES /
+NO LABEL**. Its read-only preflight turns Cinnabar green at **856**, but Silph says **NO ROUTE**.
+Remove static objects one at a time until the old security guard at `(22,18)` is the sole
+disconnect. Then show the cartridge swap after Fuji: security guard hidden, sleeping Rocket shown
+one tile east. Bind only the old square to both rescue flags, republish, and reveal **SILPH 36**.
+The teacher completes **35/35 / 0 INTERRUPTIONS / 0 REPLANS / 79 RECORDS**. Increment live contexts
+to five, but leave baseline challenges at 1/6.
+
+Now let the bounded Silph skill run at emulator speed: **4,969 ACTIONS / 1,674,353 FRAMES / EXACT
+24-OBJECTIVE FRONTIER**. Scenario 047 fails before opening an episode because Sabrina has no route.
+Repeat the localization at the Rocket below Saffron Gym, then tie that single coordinate to the
+Silph-Giovanni victory flag. After the source and CI gates, reveal **SABRINA 68 / CINNABAR 856** and
+the final rehearsal: **67/67 / 0 INTERRUPTIONS / 0 REPLANS / 143 RECORDS**. Set the scoreboard to
+**LIVE CONTEXTS 6 / COUNTED ROWS 0 / BASELINE CHALLENGES 1 OF 6**. The line is: **“More examples
+help the model; only the preregistered counterexamples can justify the claim.”**
+
 ### Twist: nine labels were only three questions
 
 After celebrating the repaired rehearsal, stack the three successful historical train roots. Show

@@ -102,12 +102,13 @@
 > only an exact non-test target frontier with no episode or label. Its first live targets are
 > validation scenarios 043 and 047 through the qualified Saffron and Silph skills; measured coverage
 > is now **5 authenticated contexts / 0 counted rows** after scenario 043 passed. Scenario 047 has
-> been constructed exactly; its Saffron Gym story-gate repair is awaiting published-source
-> qualification.
+> also passed after its Saffron Gym story gate was bound to the observed Silph-victory flag, bringing
+> measured coverage to **6 authenticated contexts / 0 counted rows**.
 > See the
 > [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json),
 > [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json),
 > [scenario-043 qualification](docs/evidence/strategic-scenario-043-rehearsal-qualification-2026-08-11.json),
+> [scenario-047 qualification](docs/evidence/strategic-scenario-047-rehearsal-qualification-2026-08-11.json),
 > [scenario-002 qualification](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json),
 > and [scenario-003 qualification](docs/evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
 > Collection stays closed, and the 12 test situations remain sealed.

@@ -76,13 +76,19 @@ choose replacements.
 
 ## What remains before training
 
+Live update: six of the 36 learning scenarios are now authenticated as uncounted contexts (001,
+002, 003, 007, 043 and 047), while counted train/validation collection remains unopened. A path-free
+inventory verifies 24 capture envelopes, 18 unique envelope frontiers and 30 missing learning
+scenarios. It identifies four additional logical one-skill targets, but only scenario 041 is already
+aligned for direct construction; scenario 006 needs a fresh frontier envelope and scenarios 009/010
+need relocation to their declared Lavender origin. Baseline-challenge coverage remains 1/6.
+
 1. **Complete in code:** authenticated rehearsal assignments bind one non-test registry row to the
    committed execution, exact private capture envelope/state and one-shot episode identity.
 2. **Complete in code:** the short executor preflights all candidates before writing, records the
    choice before movement, consumes one route outcome and strictly reloads exactly one decision.
-3. **Next live gate:** publish the source, run the command's read-only preflight, then execute one
-   uncounted learning scenario. Expand to all 36 train/validation situations only after the first
-   artifact passes strict reload. Captures remain private and never enter the repository.
+3. **In progress:** expand the six qualified contexts toward all 36 train/validation situations.
+   Captures remain private and never enter the repository.
 4. Audit measured uniqueness, candidate order, the six validation cost-baseline disagreements,
    route availability and failure/censoring. Only then open one-attempt counted train/validation
    collection. Keep all 12 test situations sealed until final evaluation.

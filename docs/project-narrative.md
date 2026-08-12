@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 11: two guards turned static maps into a changing world
+
+The first capture constructor could only finish location objectives. Midgame progress needed a
+stronger but still narrow boundary: load an authenticated teacher state, execute exactly one
+registered bounded skill, and write a new capture only if fresh observation equals one declared
+non-test frontier. It creates no choice, episode or label, and it never treats its source as a
+policy context. That let the existing post-Erika state produce scenario 043 by reaching Saffron,
+then let scenario 043 produce scenario 047 by liberating Silph.
+
+Both exact captures initially failed their read-only policy preflight. After Mr. Fuji was rescued,
+the cartridge hid the security guard on Silph's doorway and showed a sleeping Rocket beside it; the
+route model kept the old guard square blocked. After Giovanni fell in Silph, the cartridge hid the
+Rocket below Saffron Gym; the route model kept that square blocked too. Each failure happened before
+an episode existed. Differential planning reduced each map-wide failure to one coordinate, and the
+repairs opened only that coordinate behind the corresponding observed story flags. The map stayed
+cartridge-derived; the adapter learned why two pieces of its occupancy change.
+
+Published source then qualified both questions. Scenario 043 offered Silph at cost 36 and Cinnabar
+at 856; the teacher chose Silph and completed all 35 movements. Scenario 047 offered Sabrina at 68
+and Cinnabar at 856; the teacher chose Sabrina and completed all 67. Neither run interrupted or
+replanned, both strict reloads contained exactly one choice and success, and neither dataset
+contains movement labels. The scoreboard is now **six authenticated contexts / zero counted rows**.
+Because neither is a preregistered cost-baseline challenge, the more important challenge counter
+stays 1/6. More contexts are useful; only the right contexts can authorize training.
+
 ## August 11: the map was right, but the police officer had moved
 
 The third exact learning boundary came after Bill. The teacher stopped at checkpoint 54, returned

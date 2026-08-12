@@ -107,6 +107,21 @@ Implementation status:
     now opens only that coordinate when the observed victory flag is set. Live diagnostic planning
     exposes Sabrina at cost 68 and Cinnabar at 856. Publish, pass CI, then repeat the still-unconsumed
     047 preflight and execute one uncounted rehearsal if ready.
+13. **Scenario 047 qualified:** published source passed CI, both choices remained executable, and the
+    teacher completed all 67 Sabrina-approach movements with no interruption or replan. The strict
+    reload produced one unassigned success and no movement labels. Measured coverage is now six live
+    contexts / zero counted rows; validation cost-baseline challenge coverage remains 1/6 because
+    scenarios 043 and 047 are context-density evidence, not preregistered challenge rows.
+14. **Inventory measured:** 24 authenticated envelopes contain 18 unique envelope frontiers and six
+    exact learning scenarios; 30 remain. Four uncovered targets are one-skill compatible on paper.
+    Live inspection shows three distinct next actions: re-authenticate scenario 006 from its stale
+    pre-Celadon envelope, directly materialize scenario 041 with `reach_cinnabar`, and add a bounded
+    post-skill relocation seam before scenarios 009/010 can satisfy their Lavender origins. This
+    inventory opens no test scenario and reports no private path or capture identity.
+15. **Implemented; live qualification pending:** add a no-action capture authenticator for states
+    whose old envelope is semantically behind their current location. It may re-envelope scenario
+    006 only if fresh observation already equals all 14 objectives and the Celadon origin; it cannot
+    move, select a candidate, create an episode or access test.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
