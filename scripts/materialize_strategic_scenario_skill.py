@@ -16,6 +16,7 @@ import argparse
 import hashlib
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -129,6 +130,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
     parser.add_argument("--maximum-flees", type=int, default=8)
     parser.add_argument("--maximum-trainer-battles", type=int, default=8)
+    parser.add_argument("--maximum-interruptions", type=int, default=8)
     parser.add_argument(
         "--relocate-to-skill-boundary",
         action="store_true",
@@ -213,7 +215,11 @@ def _intermediate_checkpoint_id(
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
-    if args.maximum_flees < 0 or args.maximum_trainer_battles < 0:
+    if (
+        args.maximum_flees < 0
+        or args.maximum_trainer_battles < 0
+        or args.maximum_interruptions < 0
+    ):
         raise StrategicScenarioRuntimeError(
             "interruption budgets must be non-negative"
         )
@@ -346,7 +352,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 traversal_observer,
                 interruption_handler=interruption_handler,
                 replanner=route_world.replanner(),
-                limits=RELOCATION_LIMITS,
+                limits=replace(
+                    RELOCATION_LIMITS,
+                    max_interruptions=args.maximum_interruptions,
+                ),
             )
 
         pre_skill_relocation_report = None
@@ -475,6 +484,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "expected_objectives_added": sorted(expected_added),
         "interruption_budgets": {
             "maximum_flees": args.maximum_flees,
+            "maximum_interruptions": args.maximum_interruptions,
             "maximum_trainer_battles": args.maximum_trainer_battles,
         },
         "skill": {
