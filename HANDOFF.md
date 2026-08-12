@@ -14,6 +14,29 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenarios 025 and 026 authenticated — 2026-08-12
+
+Published `77fb370` / CI `31577543478` added the exact post-Surf-plus-Strength Silph lineage. From
+scenario 022, construction relocated 577 steps to Saffron, liberated Silph in 6,469 actions /
+1,920,356 frames, returned 535 steps to Fuchsia, and added only `liberate_silph`. Exact train
+scenario 025 then selected Koga from three candidates at costs 659, 507 and 70, finishing 69
+movements plus one wait with no interruption or replan.
+
+Published `7080a1e` introduced the exact post-Surf early-Erika party/move lineage; published
+`6c01b5a` / CI `31578394249` then made its money proof account for authenticated carried X
+Accuracy stock. From the post-Surf construction frontier, Erika took 1,964 actions / 332,978
+frames and the two relocations acknowledged 602 and 562 steps. It added only `defeat_erika`.
+Exact scenario 026 selected Koga from three candidates at costs 520, 30 and 70 and again completed
+69 movements plus one wait with no interruption, replan or movement label. See the
+[combined receipt](docs/evidence/strategic-scenarios-025-026-rehearsal-qualification-2026-08-12.json).
+
+The inventory is now **49 authenticated envelopes, 36 distinct frontiers, 18 exact learning
+contexts and 18 missing**: ten train and eight validation. Counted train/validation remain zero and
+all 12 test contexts remain sealed. The strategic diversity gate is therefore 10/24 train and 8/12
+validation. The remaining adjacent graph targets are less direct; prioritize scenario 037 where
+the inventory exposes a two-objective bridge, then the Koga-without-Surf/Strength and
+Cinnabar-before-Sabrina teacher gaps.
+
 ## Scenarios 010 and 014 authenticated — 2026-08-12
 
 Published `1efec83` / CI `31576607328` qualifies Pokémon Tower on both explicit slot-three

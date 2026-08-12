@@ -22,6 +22,11 @@ TEETH**, then turn green one lesson at a time: **FLY RESOURCE → GOLD TEETH WIT
 the post-Strength Erika lesson and scenario 023's Koga choice. Say: **“The script knew how to win.
 It had to learn how to teach every valid order.”**
 
+Add a quick second payoff: the lessons must also compose in the opposite direction. Show
+**POST-SURF + STRENGTH → SILPH** and **POST-SURF + 4-MEMBER PARTY → ERIKA**, then deal the scenario
+025 and 026 cards. Both select Koga from three choices; both finish in **69 STEPS / 0 INTERRUPTIONS /
+0 REPLANS / 0 BUTTON LABELS**.
+
 Reveal the current audit counter: **12 / 36 LEARNING FRONTIERS NEED AN ALTERNATE-ORDER LESSON**. Keep a
 smaller caption beneath it: **NOT IMPOSSIBLE GAME STATES — MISSING TEACHER EXPERIENCE**. This is the
 cleanest explanation for why building a transferable model is harder than recording a completed
@@ -34,11 +39,11 @@ then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 
 Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
 TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
 
-Update the persistent scoreboard to **45 AUTHENTICATED CAPTURES / 32 DISTINCT FRONTIERS / 14 EXACT
+Update the persistent scoreboard to **49 AUTHENTICATED CAPTURES / 36 DISTINCT FRONTIERS / 18 EXACT
 CONTEXTS / 6 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. Add the paired-capability card:
 **6 DISAGREEMENTS / BEST-CASE EXACT P = 0.03125 / TRAINING STILL CLOSED**. The next-act cards should
-be **POST-FUJI ERIKA**, **CINNABAR BEFORE SABRINA**, and **REMAINING NON-TEST CONTEXTS**. Do not show
-these as complete until their own cartridge receipts exist.
+be **KOGA WITHOUT SURF/STRENGTH**, **CINNABAR BEFORE SABRINA**, and **REMAINING NON-TEST CONTEXTS**.
+Do not show these as complete until their own cartridge receipts exist.
 
 ## Working title
 

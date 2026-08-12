@@ -1,12 +1,12 @@
 {
-  "authenticated_capture_envelopes": 47,
+  "authenticated_capture_envelopes": 49,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
     "target_origin_checked": false,
     "test_scenarios_opened": 0
   },
-  "exact_learning_scenario_count": 16,
+  "exact_learning_scenario_count": 18,
   "exact_learning_scenario_ids": [
     "red-strategic-scenario-v2-001-train",
     "red-strategic-scenario-v2-002-train",
@@ -22,6 +22,8 @@
     "red-strategic-scenario-v2-019-validation",
     "red-strategic-scenario-v2-022-train",
     "red-strategic-scenario-v2-023-validation",
+    "red-strategic-scenario-v2-025-train",
+    "red-strategic-scenario-v2-026-train",
     "red-strategic-scenario-v2-043-validation",
     "red-strategic-scenario-v2-047-validation"
   ],
@@ -142,15 +144,16 @@
     },
     {
       "already_exact": true,
-      "authenticated_source_envelopes": 1,
+      "authenticated_source_envelopes": 2,
       "objective_ids": [
+        "defeat_erika",
         "liberate_silph"
       ],
       "target_scenario_id": "red-strategic-scenario-v2-023-validation",
-      "unique_source_frontiers": 1
+      "unique_source_frontiers": 2
     },
     {
-      "already_exact": false,
+      "already_exact": true,
       "authenticated_source_envelopes": 1,
       "objective_ids": [
         "liberate_silph"
@@ -159,7 +162,7 @@
       "unique_source_frontiers": 1
     },
     {
-      "already_exact": false,
+      "already_exact": true,
       "authenticated_source_envelopes": 1,
       "objective_ids": [
         "defeat_erika"
@@ -169,12 +172,13 @@
     },
     {
       "already_exact": false,
-      "authenticated_source_envelopes": 1,
+      "authenticated_source_envelopes": 2,
       "objective_ids": [
+        "defeat_koga",
         "obtain_surf"
       ],
       "target_scenario_id": "red-strategic-scenario-v2-037-train",
-      "unique_source_frontiers": 1
+      "unique_source_frontiers": 2
     },
     {
       "already_exact": false,
@@ -206,14 +210,12 @@
       "unique_source_frontiers": 2
     }
   ],
-  "missing_learning_scenario_count": 20,
+  "missing_learning_scenario_count": 18,
   "missing_learning_scenario_ids": [
     "red-strategic-scenario-v2-013-train",
     "red-strategic-scenario-v2-017-train",
     "red-strategic-scenario-v2-018-train",
     "red-strategic-scenario-v2-021-train",
-    "red-strategic-scenario-v2-025-train",
-    "red-strategic-scenario-v2-026-train",
     "red-strategic-scenario-v2-027-validation",
     "red-strategic-scenario-v2-029-train",
     "red-strategic-scenario-v2-030-train",
@@ -230,5 +232,5 @@
     "red-strategic-scenario-v2-046-train"
   ],
   "schema": "strategic-frontier-inventory-v1",
-  "unique_authenticated_frontiers": 34
+  "unique_authenticated_frontiers": 36
 }

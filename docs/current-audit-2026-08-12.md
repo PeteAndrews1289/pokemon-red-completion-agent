@@ -5,13 +5,14 @@
 Update after the initial audit: the teacher now qualifies Fly as an independent resource, Gold
 Teeth without Surf, Strength before Surf, Koga on that Strength lineage, Silph on the same pre-Surf
 party, and Pokémon Tower on both the pre- and post-Erika move lineages. Exact scenarios 010, 014
-and 019 are constructed and rehearsed. The static teacher-order gap fell from **21 to 12**. Counted
+019, 025 and 026 are constructed and rehearsed. The static teacher-order gap fell from **21 to 12**. Counted
 data and test access remain zero. See the [scenario 019 receipt](evidence/strategic-scenario-019-rehearsal-qualification-2026-08-12.json)
-and the [010/014 receipt](evidence/strategic-scenarios-010-014-rehearsal-qualification-2026-08-12.json).
+the [010/014 receipt](evidence/strategic-scenarios-010-014-rehearsal-qualification-2026-08-12.json),
+and the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **47 authenticated capture envelopes, 34 distinct frontiers and
-16 exact learning scenarios**. The exact contexts are eight train scenarios and eight validation
+The private inventory now contains **49 authenticated capture envelopes, 36 distinct frontiers and
+18 exact learning scenarios**. The exact contexts are ten train scenarios and eight validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
@@ -33,7 +34,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 20 missing learning scenarios and excludes one known invalid
+current measurement. It reports 18 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -90,7 +91,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 8 of 24 planned contexts;
+- train: 10 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -112,8 +113,9 @@ even if the code ran perfectly.
    current post-Sabrina Fly chapter.
 5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
    six unique disagreements and a best-case two-sided exact p-value of 0.03125.
-6. Continue the remaining non-test contexts in dependency order, starting with scenario 025 from
-   exact scenario 022, while measuring unique policy inputs rather than repeated trajectories.
+6. **Complete:** construct scenarios 025 and 026 from exact authenticated branches. Continue the
+   remaining non-test contexts in dependency order, next examining scenario 037's two-objective
+   bridge, while measuring unique policy inputs rather than repeated trajectories.
 7. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 

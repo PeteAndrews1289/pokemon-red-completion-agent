@@ -1,0 +1,153 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "source_partition": "train"
+  },
+  "scenarios": [
+    {
+      "capture": {
+        "checkpoint_id": "red-strategic-scenario-v2-025-train-skill-materialized",
+        "envelope_sha256": "b421e9c681d148fbaac0ea64a6df73828fd7a75da74bf3fb5ef7265091617abc",
+        "state_sha256": "7eac62aaf5186afdc0ed59364c8a3e2b224ae6192a5995bcaae1fd42d51e065c",
+        "verified_objective_count": 22
+      },
+      "construction": {
+        "counted": false,
+        "episode_created": false,
+        "objective_ids_added": [
+          "liberate_silph"
+        ],
+        "post_skill_relocation": {
+          "acknowledged_steps": 535,
+          "interruptions": 0,
+          "replans": 0,
+          "wait_actions": 17
+        },
+        "pre_skill_relocation": {
+          "acknowledged_steps": 577,
+          "interruptions": 2,
+          "replans": 1,
+          "wait_actions": 24
+        },
+        "skill": {
+          "actions_executed": 6469,
+          "frames_executed": 1920356
+        },
+        "source_registry_assignment_opened": false,
+        "target_scenario_exact": true
+      },
+      "episode": {
+        "assignment_id": "1f46baacc3f121e46c241625af7a1570be47c4b6fa90cff66de890881f81bab4",
+        "candidate_route_costs": [
+          659,
+          507,
+          70
+        ],
+        "execution": {
+          "acknowledged_steps": 69,
+          "interruptions": 0,
+          "replans": 0,
+          "selected_candidate_index": 2,
+          "selected_objective": "defeat_koga",
+          "status": "succeeded",
+          "wait_actions": 1
+        },
+        "manifest": {
+          "bytes": 280510,
+          "records": 145,
+          "sha256": "d1b203d24a13961453142bda886a033ad938a98f2e55a80cf8f4b247584330a7"
+        },
+        "movement_labels": 0,
+        "partition": "unassigned",
+        "strategic_contexts": 1,
+        "teacher_choice_examples": 1
+      },
+      "scenario_id": "red-strategic-scenario-v2-025-train",
+      "scenario_sha256": "c63b4efafa667a34ccd4c110de6857d2738fb5201104443fff9ad3ee3ecab6fd",
+      "source": {
+        "ci_run_id": 31577543478,
+        "ci_status": "success",
+        "git_commit": "77fb3707aa4c19d33512f7947deb1e18d1081b4f",
+        "source_bundle_sha256": "146c1ddfaa0ee8436f87c1cfddfb633f2d08046252858d937fdf826aa865094d",
+        "teacher_execution_sha256": "a79bc5e01f1eb00f39d1f79e5c98a8e18cfaeea2e6827f678c9faa2aa409b716"
+      }
+    },
+    {
+      "capture": {
+        "checkpoint_id": "red-strategic-scenario-v2-026-train-skill-materialized",
+        "envelope_sha256": "c1c6d759fac4016de77b1222a2187ccc998560d88aa3dc17504046a6b07c7505",
+        "state_sha256": "2d44a1ed32102e2f493cb2ac2fad54a0ee3e5f772b031fedf2559bbbd6a39f18",
+        "verified_objective_count": 21
+      },
+      "construction": {
+        "counted": false,
+        "episode_created": false,
+        "objective_ids_added": [
+          "defeat_erika"
+        ],
+        "post_skill_relocation": {
+          "acknowledged_steps": 562,
+          "interruptions": 2,
+          "replans": 0,
+          "wait_actions": 24
+        },
+        "pre_skill_relocation": {
+          "acknowledged_steps": 602,
+          "interruptions": 4,
+          "replans": 1,
+          "wait_actions": 27
+        },
+        "skill": {
+          "actions_executed": 1964,
+          "frames_executed": 332978
+        },
+        "source_registry_assignment_opened": false,
+        "target_scenario_exact": true
+      },
+      "episode": {
+        "assignment_id": "dd51531193862ce9515512cf22eb147f655f72436660955db4458f0eced89c12",
+        "candidate_route_costs": [
+          520,
+          30,
+          70
+        ],
+        "execution": {
+          "acknowledged_steps": 69,
+          "interruptions": 0,
+          "replans": 0,
+          "selected_candidate_index": 2,
+          "selected_objective": "defeat_koga",
+          "status": "succeeded",
+          "wait_actions": 1
+        },
+        "manifest": {
+          "bytes": 280477,
+          "records": 145,
+          "sha256": "2e24e97d9dde5360cdbe6b0bdddf56f61b364c1a5898747ddbfa78716ada5275"
+        },
+        "movement_labels": 0,
+        "partition": "unassigned",
+        "strategic_contexts": 1,
+        "teacher_choice_examples": 1
+      },
+      "scenario_id": "red-strategic-scenario-v2-026-train",
+      "scenario_sha256": "c9fde3495732b5ddd8f559b61259a53a8bcd218fe8624a0687971ce59e7bbac5",
+      "source": {
+        "ci_run_id": 31578394249,
+        "ci_status": "success",
+        "git_commit": "6c01b5a25adcc47c77e41192102da82a55c74825",
+        "source_bundle_sha256": "d6482f0ad23b620b2cfc4237820649a714bc57e8c58188ebb31b4f1ad3ebede4",
+        "teacher_execution_sha256": "55aa141289690714481e15a4580022ed73862f2a40afcf766905a5c0a3703022"
+      }
+    }
+  ],
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "status": "qualified_uncounted_rehearsals"
+}

@@ -12,8 +12,8 @@ Surf, Silph added the last objective, and construction returned to Celadon. The 
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
 labels. The curriculum-order audit now reports **12**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **47 authenticated envelopes, 34 distinct frontiers and 16 exact
-learning scenarios**: eight train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+Current measured coverage is **49 authenticated envelopes, 36 distinct frontiers and 18 exact
+learning scenarios**: ten train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -43,7 +43,7 @@ The ordered gates are:
 7. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 20 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 18 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

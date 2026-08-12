@@ -47,14 +47,20 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 47 authenticated captures, 34 distinct frontiers, 16 exact learning
+The scoreboard is now 49 authenticated captures, 36 distinct frontiers, 18 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 8/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 10/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
 experience: Koga without Surf or Strength, Cinnabar before Sabrina and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
 weakening their battle proof. That is the bridge from a teacher that can repeat one successful
 playthrough to a teacher that can show a model what remains invariant when the order changes.
+
+The next two train contexts reinforced that lesson. Scenario 025 required Silph to recognize the
+post-Surf-plus-Strength Bite lineage; scenario 026 required early Erika to recognize a four-member
+post-Surf party and to price supplies from carried stock. Both were encoded as exact lineages, both
+constructed only their declared objective, and both rehearsals chose Koga with no interruption,
+replan or arrow-key label.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 
