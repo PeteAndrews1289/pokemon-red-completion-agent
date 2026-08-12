@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from materialize_strategic_scenario_skill import (  # noqa: E402
     PROJECT_ROOT,
     _can_fly_from_cinnabar_to_origin,
+    _can_fly_to_cinnabar_skill_boundary,
     _intermediate_checkpoint_id,
     _materialized_checkpoint_id,
     _require_private_new_output,
@@ -71,7 +72,7 @@ def test_skill_materialized_checkpoint_id_is_portable() -> None:
     ) == "red-strategic-scenario-v2-045-train-route-materialized"
 
 
-def test_cinnabar_fly_relocation_is_restricted_to_a_celadon_origin() -> None:
+def test_cinnabar_fly_relocation_accepts_qualified_mainland_origins() -> None:
     raw = RawGameState(True, MapId.CINNABAR_POKECENTER, 3, 3, 4, 0)
 
     assert _can_fly_from_cinnabar_to_origin(
@@ -81,6 +82,10 @@ def test_cinnabar_fly_relocation_is_restricted_to_a_celadon_origin() -> None:
     assert not _can_fly_from_cinnabar_to_origin(
         raw,
         frozenset({MapId.SAFFRON_CITY, MapId.SAFFRON_POKECENTER}),
+    )
+    assert _can_fly_to_cinnabar_skill_boundary(
+        replace(raw, map_id=MapId.FUCHSIA_CITY, player_x=19, player_y=28),
+        (MapId.CINNABAR_POKECENTER, (3, 3)),
     )
     assert not _can_fly_from_cinnabar_to_origin(
         replace(raw, map_id=MapId.CINNABAR_ISLAND),

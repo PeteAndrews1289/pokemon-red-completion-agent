@@ -263,6 +263,7 @@ def _can_fly_to_cinnabar_skill_boundary(
         in {
             (MapId.CELADON_POKECENTER, 3, 3),
             (MapId.CELADON_CITY, 49, 11),
+            (MapId.FUCHSIA_CITY, 19, 28),
         }
         and boundary == (MapId.CINNABAR_POKECENTER, (3, 3))
     )

@@ -36,6 +36,7 @@ from pokemon_red_completion.tower import party_core_intact
 FLY_RESOURCE_CHECKPOINT_COUNT = 5
 FLY_ATTEMPT_LIMIT = 10
 SOURCE_CITY_BOUNDARY = (49, 11)
+FUCHSIA_SOURCE_CITY_BOUNDARY = (19, 28)
 CELADON_CENTER_DOOR = (41, 9)
 CINNABAR_CENTER_TO_OUTDOORS = ("down",) * 5
 CELADON_CENTER_TO_OUTDOORS = ("down",) * 5
@@ -238,7 +239,7 @@ class FlyRelocationReport:
 
 @dataclass(frozen=True, slots=True)
 class CinnabarFlyArrivalReport:
-    """Evidence for a story-neutral Celadon-to-Cinnabar Fly relocation."""
+    """Evidence for a story-neutral mainland-to-Cinnabar Fly relocation."""
 
     initial_raw: RawGameState
     final_raw: RawGameState
@@ -265,6 +266,7 @@ class CinnabarFlyArrivalReport:
             in {
                 (MapId.CELADON_POKECENTER, 3, 3),
                 (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
+                (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
             }
             and self.initial_raw.battle_state == 0
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
@@ -497,7 +499,7 @@ def relocate_celadon_to_cinnabar_by_fly(
     reader: PokemonRedStateReader,
     executor: ChapterExecutor,
 ) -> CinnabarFlyArrivalReport:
-    """Reach an unlocked Cinnabar boundary from Celadon without story effects."""
+    """Reach unlocked Cinnabar from a qualified mainland Fly boundary."""
 
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
@@ -513,6 +515,7 @@ def relocate_celadon_to_cinnabar_by_fly(
         not in {
             (MapId.CELADON_POKECENTER, 3, 3),
             (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
+            (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
         }
         or initial.battle_state != 0
         or not _event(emulator, EventFlag.GOT_HM02)
@@ -521,13 +524,16 @@ def relocate_celadon_to_cinnabar_by_fly(
         or dux_pp_before != DUX_PP_AFTER
         or not party_core_intact(initial.party_species_ids)
     ):
-        raise FlyResourceError("Celadon Fly relocation input is not qualified.")
+        raise FlyResourceError("Mainland Fly relocation input is not qualified.")
 
     if initial.map_id == MapId.CELADON_POKECENTER:
         _move(actions, reader, CELADON_CENTER_TO_OUTDOORS, "Celadon Fly departure")
     outdoors = reader.read()
-    if outdoors.map_id != MapId.CELADON_CITY or outdoors.battle_state != 0:
-        raise FlyResourceError("Celadon Center exit did not reach the city field.")
+    if (
+        outdoors.map_id not in {MapId.CELADON_CITY, MapId.FUCHSIA_CITY}
+        or outdoors.battle_state != 0
+    ):
+        raise FlyResourceError("Fly departure did not reach a qualified city field.")
     landings = _fly_to_destination(
         actions,
         reader,
