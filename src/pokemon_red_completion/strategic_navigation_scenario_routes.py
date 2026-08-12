@@ -15,6 +15,7 @@ from pokemon_red_completion.observation import MapId, location_label
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.strategic_navigation import StrategicNavigationTag
 from pokemon_red_completion.strategic_navigation_scenarios import (
+    STRATEGIC_SCENARIO_AUTOMATIC_COMPLETIONS,
     StrategicNavigationScenario,
     StrategicNavigationScenarioRegistry,
     StrategicScenarioProtocolError,
@@ -273,6 +274,68 @@ def require_navigation_materialization_step(
             "materialized destination differs from the target scenario origin"
         )
     return spec
+
+
+def require_objective_skill_materialization_step(
+    source_completed_objective_ids: frozenset[str],
+    target: StrategicNavigationScenario,
+    objective_id: str,
+) -> frozenset[str]:
+    """Authorize one bounded skill that creates an exact non-test frontier.
+
+    Unlike :func:`require_navigation_materialization_step`, the source does not
+    need to be another registry row.  That is intentional: older authenticated
+    teacher captures may be useful construction inputs even when their exact
+    frontier was assigned to the sealed test partition later.  This function
+    never opens or evaluates that source frontier.  It only permits a declared
+    objective that is dependency-legal at the observed source and whose known
+    automatic objective effects produce the target frontier exactly.
+    """
+
+    if not isinstance(source_completed_objective_ids, frozenset) or any(
+        not isinstance(item, str) or not item
+        for item in source_completed_objective_ids
+    ):
+        raise TypeError("source completed objectives must be a string frozenset")
+    if not isinstance(target, StrategicNavigationScenario):
+        raise TypeError("target must be a strategic scenario")
+    known_objective_ids = frozenset(item.id for item in COMPLETION_QUEST)
+    if source_completed_objective_ids.difference(known_objective_ids):
+        raise StrategicScenarioRouteCatalogError(
+            "source frontier contains an unknown objective"
+        )
+    if any(
+        not COMPLETION_QUEST.objective(item).prerequisites.issubset(
+            source_completed_objective_ids
+        )
+        for item in source_completed_objective_ids
+    ):
+        raise StrategicScenarioRouteCatalogError(
+            "source frontier violates objective prerequisites"
+        )
+    try:
+        objective = COMPLETION_QUEST.objective(objective_id)
+    except KeyError as error:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is unknown"
+        ) from error
+    if objective_id in source_completed_objective_ids:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is already complete"
+        )
+    if not objective.prerequisites.issubset(source_completed_objective_ids):
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is not dependency-legal at the source"
+        )
+    expected_added = frozenset({objective_id}).union(
+        STRATEGIC_SCENARIO_AUTOMATIC_COMPLETIONS.get(objective_id, frozenset())
+    )
+    target_completed = frozenset(target.completed_objective_ids)
+    if target_completed != source_completed_objective_ids.union(expected_added):
+        raise StrategicScenarioRouteCatalogError(
+            "bounded skill must produce the target frontier exactly"
+        )
+    return expected_added
 
 
 def require_scenario_origin(

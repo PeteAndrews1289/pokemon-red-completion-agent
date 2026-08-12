@@ -96,6 +96,12 @@
 > 58, acknowledged 148/148 movements and strictly reloaded one 315-record success. Honest status is
 > **4 authenticated contexts / 0 counted rows**—none is training data. This is the first measured
 > validation disagreement with the cost-only baseline.
+> A complementary construction lane is now implemented for midgame frontiers created by bounded
+> chapter skills rather than map entry. It may consume an authenticated pre-registry teacher
+> capture without opening that source as a policy context, executes one declared skill, and writes
+> only an exact non-test target frontier with no episode or label. Its first live targets are
+> validation scenarios 043 and 047 through the qualified Saffron and Silph skills; measured coverage
+> remains four until those published-source cartridge runs pass.
 > See the
 > [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json),
 > [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json),

@@ -84,6 +84,15 @@ Implementation status:
    003 with 199/199 movements, four handled interruptions and zero replans. Scenario 003 then
    selected Misty at cost 152 over Cut at 58, acknowledged 148/148 movements and strictly reloaded
    one unassigned success. It is the first measured validation cost-baseline disagreement.
+10. **Implemented; live qualification pending:** add the complementary bounded-skill materializer.
+    It may use an authenticated pre-registry teacher capture as construction input without opening
+    that source as a scenario, but it executes exactly one registered skill and admits output only
+    when fresh observation equals a declared non-test target frontier and origin. First publish the
+    source, then derive validation scenario 043 with `reach_saffron` from the existing post-Erika
+    Celadon capture and scenario 047 with `liberate_silph` from 043. Preflight and rehearse each once
+    without opening counted collection. This should raise measured coverage from four to six live
+    contexts if both cartridge runs pass; it does not satisfy any of the five still-missing
+    cost-baseline challenge measurements.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

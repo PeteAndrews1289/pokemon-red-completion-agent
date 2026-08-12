@@ -14,6 +14,25 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Bounded-skill scenario construction implemented; live qualification pending — 2026-08-11
+
+The first materializer could derive only one registry edge: scenario 002 → 003 by reaching
+Vermilion. That is too narrow for the midgame, where a truthful frontier is usually created by a
+bounded chapter skill rather than by entering one map. A second fail-closed construction lane now
+accepts an authenticated teacher capture without treating its source frontier as a policy context,
+executes exactly one registered bounded objective skill, and writes a target capture only when fresh
+live observation equals one declared non-test scenario exactly. It refuses dirty/unpublished source,
+repository or ROM-adjacent output, an unavailable skill, prerequisite drift, extra progress, a wrong
+terminal origin, or a non-ready terminal. It creates no decision, outcome, episode or label.
+
+This distinction lets pre-registry teacher captures remain useful without opening a source frontier
+that the later registry assigned to sealed test. The source is construction input only; the target
+must pass the ordinary non-test accessor. The first planned live use is the authenticated post-Erika
+Celadon capture → scenario 043 by the qualified Saffron skill, followed by scenario 043 → 047 by the
+qualified Silph skill. Publish and require exact-commit CI before either run. Then preflight and
+rehearse 043 and 047 once each, still uncounted. Until those runs succeed, measured status remains
+four authenticated uncounted contexts and zero counted rows.
+
 ## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
 
 Published source `a3598a2` passed exact-commit CI run `31553282113`. It is the first source whose

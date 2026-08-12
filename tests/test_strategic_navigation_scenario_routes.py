@@ -13,6 +13,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     ScenarioObjectiveDestinationSpec,
     StrategicScenarioRouteCatalogError,
     require_navigation_materialization_step,
+    require_objective_skill_materialization_step,
     require_scenario_origin,
     scenario_destination_specs,
     validate_scenario_route_catalog,
@@ -150,4 +151,78 @@ def test_navigation_materialization_rejects_approach_or_frontier_overclaims() ->
             valid_source,
             replace(valid_target, origin_region="celadon"),
             "reach_vermilion",
+        )
+
+
+def test_objective_skill_materialization_accepts_exact_non_registry_source() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    target = registry.scenario("red-strategic-scenario-v2-043-validation")
+    source_completed = frozenset(target.completed_objective_ids).difference(
+        {"reach_saffron"}
+    )
+
+    assert require_objective_skill_materialization_step(
+        source_completed,
+        target,
+        "reach_saffron",
+    ) == frozenset({"reach_saffron"})
+
+
+def test_objective_skill_materialization_accepts_automatic_effects() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    target = registry.scenario("red-strategic-scenario-v2-007-validation")
+    source_completed = frozenset(target.completed_objective_ids).difference(
+        {"clear_rocket_hideout", "obtain_silph_scope"}
+    )
+
+    assert require_objective_skill_materialization_step(
+        source_completed,
+        target,
+        "clear_rocket_hideout",
+    ) == frozenset({"clear_rocket_hideout", "obtain_silph_scope"})
+
+
+def test_objective_skill_materialization_rejects_extra_target_progress() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    target = registry.scenario("red-strategic-scenario-v2-047-validation")
+    source_completed = frozenset(target.completed_objective_ids).difference(
+        {"liberate_silph", "defeat_erika"}
+    )
+
+    with pytest.raises(
+        StrategicScenarioRouteCatalogError,
+        match="target frontier exactly",
+    ):
+        require_objective_skill_materialization_step(
+            source_completed,
+            target,
+            "liberate_silph",
+        )
+
+
+def test_objective_skill_materialization_rejects_invalid_source_frontier() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    target = registry.scenario("red-strategic-scenario-v2-043-validation")
+    valid_source = frozenset(target.completed_objective_ids).difference(
+        {"reach_saffron"}
+    )
+
+    with pytest.raises(
+        StrategicScenarioRouteCatalogError,
+        match="unknown objective",
+    ):
+        require_objective_skill_materialization_step(
+            valid_source.union({"not_a_real_objective"}),
+            target,
+            "reach_saffron",
+        )
+
+    with pytest.raises(
+        StrategicScenarioRouteCatalogError,
+        match="violates objective prerequisites",
+    ):
+        require_objective_skill_materialization_step(
+            valid_source.difference({"reach_lavender"}),
+            target,
+            "reach_saffron",
         )
