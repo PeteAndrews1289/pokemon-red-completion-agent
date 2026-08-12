@@ -48,6 +48,9 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     ICE_BEAM_MOVE,
+    X_ACCURACY_REPLACEMENT_PRICE,
+    X_SPECIAL_PRICE,
+    X_SPECIAL_PURCHASE_QUANTITY,
     SilphChapterError,
     _battle_x_special,
     _deposit_pc_item,
@@ -383,6 +386,8 @@ class EarlyErikaChapterReport:
     ice_beam_pp_spent: int
     tm13_transfer_before_event: bool
     x_special_used: int
+    x_special_before_supply: int
+    x_accuracy_before_supply: int
     money_before: int
     money_after: int
     badge_bits_before: int
@@ -423,8 +428,12 @@ class EarlyErikaChapterReport:
             and 0 < self.ice_beam_pp_spent <= 10
             and self.tm13_transfer_before_event
             and self.x_special_used == 1
+            and 0 <= self.x_special_before_supply <= X_SPECIAL_PURCHASE_QUANTITY
+            and 0 <= self.x_accuracy_before_supply <= 1
             and self.money_after
             == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - EARLY_ERIKA_BATTLE_PREPARATION_COST
+            + self.x_special_before_supply * X_SPECIAL_PRICE
+            + self.x_accuracy_before_supply * X_ACCURACY_REPLACEMENT_PRICE
             and self.badge_bits_before == 0x07
             and self.badge_bits_after == 0x0F
             and self.gym_events_before == (False,) * 7
@@ -456,7 +465,11 @@ class EarlyErikaChapterReport:
                 "transfer_before_event": self.tm13_transfer_before_event,
                 "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
             },
-            "x_special_used": self.x_special_used,
+            "battle_supply": {
+                "x_special_carried_in": self.x_special_before_supply,
+                "x_accuracy_carried_in": self.x_accuracy_before_supply,
+                "x_special_used": self.x_special_used,
+            },
             "rainbow_badge": {
                 "badges_before": self.badge_bits_before,
                 "badges_after": self.badge_bits_after,
@@ -512,6 +525,8 @@ def run_early_erika_chapter(
     ):
         raise ErikaChapterError("Early Erika input boundary is not pristine.")
     money_before = _money(emulator)
+    x_special_before_supply = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    x_accuracy_before_supply = _bag(emulator).get(ItemId.X_ACCURACY, 0)
     badge_bits_before = emulator.read_u8(RamAddress.OBTAINED_BADGES)
     events_before = _gym_events(emulator)
     _checkpoint(
@@ -670,6 +685,8 @@ def run_early_erika_chapter(
         ice_beam_pp_spent=ice_beam_spent,
         tm13_transfer_before_event=tm13_transfer_before_event,
         x_special_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
+        x_special_before_supply=x_special_before_supply,
+        x_accuracy_before_supply=x_accuracy_before_supply,
         money_before=money_before,
         money_after=_money(emulator),
         badge_bits_before=badge_bits_before,
