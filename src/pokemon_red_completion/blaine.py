@@ -13,6 +13,10 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    switch_active_battler,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
     BattleResourcePolicy,
@@ -2902,6 +2906,20 @@ def _mansion_training_venue() -> TrainingVenue:
 MANSION_TRAINING_VENUE = _mansion_training_venue()
 
 
+def _mansion_training_fainted_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+) -> int | None:
+    """Choose the healthiest reserve after the lead faints in a wild lesson."""
+
+    if raw.battle_state != 1 or (raw.battler_hp or 0) > 0:
+        return None
+    living_reserves = tuple(
+        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > 0
+    )
+    return max(living_reserves, default=(0, -1))[1] if living_reserves else None
+
+
 def _run_mansion_training(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -2961,6 +2979,31 @@ def _run_mansion_training(
                     transient_zero_pp_main_is_dialogue=True,
                 )
             except BattleRuntimeError as error:
+                if "active battler fainted" in str(error):
+                    target = _mansion_training_fainted_pivot_target(
+                        reader.read(),
+                        _party_hp(emulator),
+                    )
+                    if target is None:
+                        raise BlaineChapterError(
+                            "Mansion training fainted without a living escape reserve."
+                        ) from error
+                    try:
+                        switch_active_battler(
+                            actions,
+                            reader,
+                            emulator,
+                            target,
+                            expected_battle_state=1,
+                            label="Mansion training fainted-member escape",
+                        )
+                    except ProtectedRecoveryError as recovery_error:
+                        raise BlaineChapterError(
+                            "Mansion training could not settle its forced switch."
+                        ) from recovery_error
+                    _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
+                    battles_fled += 1
+                    continue
                 if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
                     raise
                 _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)

@@ -59,6 +59,7 @@ from pokemon_red_completion.blaine import (
     _blaine_capacity_input_slots,
     _blaine_capacity_plan,
     _encounter_party,
+    _mansion_training_fainted_pivot_target,
     _mansion_training_move_slot,
     _sell_antidote_before_mansion,
     _team_training_move_guard,
@@ -318,6 +319,32 @@ def test_lead_training_skips_a_live_disabled_move() -> None:
         _mansion_training_move_slot(
             replace(raw, first_party_pp=(8, 0, 0, 0), player_disabled_move_slot=1)
         )
+
+
+def test_mansion_training_fainted_pivot_uses_the_healthiest_living_reserve() -> None:
+    fainted = RawGameState(
+        True,
+        MapId.POKEMON_MANSION_1F,
+        5,
+        20,
+        6,
+        1,
+        active_party_hp=0,
+    )
+
+    assert _mansion_training_fainted_pivot_target(
+        fainted,
+        (0, 71, 0, 142, 88, 109),
+    ) == 3
+    assert _mansion_training_fainted_pivot_target(fainted, (0, 0, 0)) is None
+    assert _mansion_training_fainted_pivot_target(
+        replace(fainted, active_party_hp=1),
+        (1, 71, 142),
+    ) is None
+    assert _mansion_training_fainted_pivot_target(
+        replace(fainted, battle_state=0),
+        (0, 71, 142),
+    ) is None
 
 
 def test_team_training_selects_damaging_moves_for_the_active_species() -> None:
