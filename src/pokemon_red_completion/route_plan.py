@@ -402,7 +402,7 @@ def _find_composed_route(
         local = local_graphs.get(state.map_id)
         if local is None:
             continue
-        local = _without_warp_transit(
+        local = without_warp_transit(
             local,
             graph.warp_locations.get(state.map_id, ()),
             start_at=state.at,
@@ -486,7 +486,7 @@ def _find_composed_route(
     )
 
 
-def _without_warp_transit(
+def without_warp_transit(
     graph: LocalGraph,
     warp_locations: tuple[Coordinate, ...],
     *,

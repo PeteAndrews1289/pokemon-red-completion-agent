@@ -50,7 +50,12 @@ from pokemon_red_completion.route_executor import (
     TraversalObserver,
     TraversalSnapshot,
 )
-from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
+from pokemon_red_completion.route_plan import (
+    RoutePlan,
+    RoutePlanningError,
+    plan_route,
+    without_warp_transit,
+)
 from pokemon_red_completion.semantic_traversal import apply_local_passage_requirements
 from pokemon_red_completion.strategic_navigation import (
     DestinationUnavailableReason,
@@ -231,19 +236,31 @@ class StrategicScenarioRouteWorld:
                     local_uses.append((None, hypothetical.terminal_approach))
                 for segment_index, local_use in local_uses:
                     map_blocked = unavailable.get(map_id, frozenset())
-                    before_graph = without_coordinates(
-                        self.local_graphs[map_id],
-                        map_blocked,
+                    before_graph = without_warp_transit(
+                        without_coordinates(
+                            self.local_graphs[map_id],
+                            map_blocked,
+                        ),
+                        self.macro_graph.warp_locations.get(map_id, ()),
+                        start_at=local_use.coordinates[0],
                     )
 
                     def graph_builder(
                         changed: Terrain,
                         *,
                         blocked: frozenset[tuple[int, int]] = map_blocked,
+                        warp_locations: tuple[tuple[int, int], ...] = (
+                            self.macro_graph.warp_locations.get(map_id, ())
+                        ),
+                        local_start: tuple[int, int] = local_use.coordinates[0],
                     ) -> LocalGraph:
-                        return without_coordinates(
-                            self._graph_for_terrain(changed),
-                            blocked,
+                        return without_warp_transit(
+                            without_coordinates(
+                                self._graph_for_terrain(changed),
+                                blocked,
+                            ),
+                            warp_locations,
+                            start_at=local_start,
                         )
 
                     try:

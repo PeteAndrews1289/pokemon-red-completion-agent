@@ -30,8 +30,8 @@ from pokemon_red_completion.route_executor import (
 from pokemon_red_completion.route_plan import (
     RoutePlan,
     RoutePlanningError,
-    _without_warp_transit,
     plan_route,
+    without_warp_transit,
 )
 from pokemon_red_completion.strategic_navigation import DestinationUnavailableReason
 from pokemon_red_completion.strategic_navigation_binding import DestinationRouteBinding
@@ -363,7 +363,7 @@ def test_unrelated_warp_is_an_endpoint_not_a_local_shortcut() -> None:
             (0, 2): (LocalEdge((0, 1), "left"),),
         }
     )
-    projected = _without_warp_transit(
+    projected = without_warp_transit(
         graph,
         ((0, 1),),
         start_at=(0, 0),
@@ -373,7 +373,7 @@ def test_unrelated_warp_is_an_endpoint_not_a_local_shortcut() -> None:
     with pytest.raises(LocalRouterError, match="no permitted local route"):
         find_local_path(projected, (0, 0), (0, 2))
 
-    arriving = _without_warp_transit(
+    arriving = without_warp_transit(
         graph,
         ((0, 1),),
         start_at=(0, 1),
