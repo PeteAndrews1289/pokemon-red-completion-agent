@@ -215,6 +215,7 @@ class MapId(IntEnum):
     MT_MOON_POKECENTER = 0x44
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
+    ROUTE_7_GATE = 0x4C
     UNDERGROUND_PATH_ROUTE_7 = 0x4D
     UNDERGROUND_PATH_ROUTE_8 = 0x50
     DIGLETTS_CAVE_ROUTE_11 = 0x55
@@ -259,7 +260,6 @@ class MapId(IntEnum):
     CELADON_MANSION_ROOF = 0x83
     CELADON_MANSION_ROOF_HOUSE = 0x84
     CELADON_MART_5F = 0x88
-    ROUTE_7_GATE = 0x4C
     FIGHTING_DOJO = 0xB1
     SAFFRON_GYM = 0xB2
     SAFFRON_MART = 0xB4
@@ -5107,6 +5107,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
+        MapId.ROUTE_7_GATE: "route_7_gate",
         MapId.UNDERGROUND_PATH_ROUTE_7: "underground_path_route_7",
         MapId.UNDERGROUND_PATH_ROUTE_8: "underground_path_route_8",
         MapId.BILLS_HOUSE: "bills_house",

@@ -7,10 +7,14 @@ from pokemon_red_completion.gen1_story_routing import (
     CERULEAN_ROBBED_HOUSE_OPEN,
     CERULEAN_ROBBED_HOUSE_POLICE_AT,
     CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
+    ROUTE_5_GATE_MAP_ID,
+    ROUTE_6_GATE_MAP_ID,
     ROUTE_7_GATE_REQUIREMENTS,
+    ROUTE_8_GATE_MAP_ID,
     ROUTE_12_SNORLAX_AT,
     ROUTE_12_SNORLAX_CLEARED,
     ROUTE_12_SNORLAX_REQUIREMENTS,
+    SAFFRON_GUARD_GATE_REQUIREMENTS,
     SAFFRON_GUARDS_OPEN,
     SAFFRON_GYM_OPEN,
     SAFFRON_GYM_REQUIREMENTS,
@@ -103,6 +107,21 @@ def gate_graph() -> LocalGraph:
     return LocalGraph(edges)
 
 
+def vertical_gate_graph() -> LocalGraph:
+    """Independent two-column fixture matching the measured six-row rooms."""
+
+    edges: dict[tuple[int, int], tuple[LocalEdge, ...]] = {}
+    for row in range(6):
+        for column in (3, 4):
+            outgoing: list[LocalEdge] = []
+            if row:
+                outgoing.append(LocalEdge((row - 1, column), "up"))
+            if row < 5:
+                outgoing.append(LocalEdge((row + 1, column), "down"))
+            edges[row, column] = tuple(outgoing)
+    return LocalGraph(edges)
+
+
 def police_graph() -> LocalGraph:
     center = (12, 27)
     adjacent = ((11, 27), (12, 26), (13, 27))
@@ -160,7 +179,10 @@ def route_12_snorlax_graph() -> LocalGraph:
 
 def story_graphs() -> dict[int, LocalGraph]:
     return {
+        ROUTE_5_GATE_MAP_ID: vertical_gate_graph(),
+        ROUTE_6_GATE_MAP_ID: vertical_gate_graph(),
         int(MapId.ROUTE_7_GATE): gate_graph(),
+        ROUTE_8_GATE_MAP_ID: gate_graph(),
         int(MapId.CERULEAN_CITY): police_graph(),
         int(MapId.SAFFRON_CITY): saffron_story_graph(),
         int(MapId.ROUTE_12): route_12_snorlax_graph(),
@@ -204,6 +226,47 @@ def test_both_corridor_rows_and_directions_require_the_same_durable_fact() -> No
         (int(MapId.ROUTE_7_GATE), (4, 2), (4, 3), SAFFRON_GUARDS_OPEN),
         (int(MapId.ROUTE_7_GATE), (4, 3), (4, 2), SAFFRON_GUARDS_OPEN),
     }
+
+
+def test_all_four_saffron_guard_houses_bind_both_lanes_and_directions() -> None:
+    assert len(SAFFRON_GUARD_GATE_REQUIREMENTS) == 16
+    by_map: dict[int, set[tuple[tuple[int, int], tuple[int, int]]]] = {}
+    for item in SAFFRON_GUARD_GATE_REQUIREMENTS:
+        assert item.predicate == SAFFRON_GUARDS_OPEN
+        by_map.setdefault(item.map_id, set()).add((item.source_at, item.target_at))
+
+    assert set(by_map) == {
+        ROUTE_5_GATE_MAP_ID,
+        ROUTE_6_GATE_MAP_ID,
+        int(MapId.ROUTE_7_GATE),
+        ROUTE_8_GATE_MAP_ID,
+    }
+    assert all(len(edges) == 4 for edges in by_map.values())
+
+
+@pytest.mark.parametrize(
+    ("map_id", "start", "goal"),
+    (
+        (ROUTE_5_GATE_MAP_ID, (0, 3), (5, 3)),
+        (ROUTE_6_GATE_MAP_ID, (0, 4), (5, 4)),
+        (int(MapId.ROUTE_7_GATE), (3, 0), (3, 5)),
+        (ROUTE_8_GATE_MAP_ID, (4, 0), (4, 5)),
+    ),
+)
+def test_every_saffron_gate_is_closed_until_the_global_flag_is_observed(
+    map_id: int,
+    start: tuple[int, int],
+    goal: tuple[int, int],
+) -> None:
+    projected = apply_gen1_story_requirements(story_graphs())[int(map_id)]
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(projected, start, goal, capabilities=frozenset())
+    assert find_local_path(
+        projected,
+        start,
+        goal,
+        capabilities=frozenset({SAFFRON_GUARDS_OPEN}),
+    ).coordinates[0::5] == (start, goal)
 
 
 @pytest.mark.parametrize("row", (3, 4))

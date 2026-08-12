@@ -11,11 +11,13 @@ from pokemon_red_completion.saffron import (
     GUARD_DRINK_FLAG,
     SAFFRON_ACCESS_CHECKPOINT_COUNT,
     SAFFRON_CHECKPOINT_COUNT,
+    SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT,
     THUNDER_STONE_PRICE,
     JolteonResourceReport,
     SaffronAccessChapterReport,
     SaffronChapterReport,
     SaffronCheckpoint,
+    SaffronGuardResourceReport,
     SaffronTiming,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
@@ -458,6 +460,59 @@ def test_saffron_access_report_accepts_pre_erika_party_and_preserves_it() -> Non
     assert report.public_dict()["optional_party_construction"] is False
     assert not replace(report, party_after=(*party, 0x68)).passed
     assert not replace(report, final_raw=replace(raw, first_party_level=37)).passed
+
+
+def test_saffron_guard_resource_report_preserves_frontier_party_and_inventory() -> None:
+    party = TOWER_FINAL_PARTY
+    moves = (0x82, 0x46, 0x3A, 0x39)
+    pp = (15, 15, 10, 15)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_POKECENTER,
+        party_count=len(party),
+        party_species_ids=party,
+        first_party_level=44,
+        first_party_hp=130,
+        first_party_max_hp=130,
+        first_party_moves=moves,
+        first_party_pp=pp,
+    )
+    bag = ((int(ItemId.POKE_BALL), 8),)
+    report = SaffronGuardResourceReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        money_before=11_852,
+        money_after=11_852 - FRESH_WATER_PRICE,
+        vending_cursor=0,
+        fresh_water_before=0,
+        fresh_water_after_purchase=1,
+        fresh_water_after_guard=0,
+        guard_flag_before=0,
+        guard_flag_after_consumption=0,
+        guard_flag_after_dialogue=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        party_before=party,
+        party_after=party,
+        lead_level_before=44,
+        lead_moves_before=moves,
+        lead_pp_before=pp,
+        party_hp_before=(130, 53, 37),
+        party_hp_after=(130, 53, 37),
+        party_max_hp=(130, 53, 37),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["objective_label_created"] is False
+    assert not replace(report, bag_after=(*bag, (int(ItemId.FRESH_WATER), 1))).passed
+    assert not replace(report, guard_flag_after_consumption=GUARD_DRINK_FLAG).passed
 
 
 def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() -> None:

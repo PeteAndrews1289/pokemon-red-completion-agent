@@ -2,7 +2,8 @@
 """Materialize one construction-only resource without opening a policy context.
 
 Supported lessons collect Gold Teeth without HM03, acquire and teach HM02/Fly,
-or recruit Jolteon without changing a completion objective.
+recruit Jolteon, open Saffron's global guard access, or clear Snorlax without
+changing a completion objective.
 Each preserves the source's verified completion objectives, writes a new
 authenticated private capture, and never creates an episode or label.
 """
@@ -93,7 +94,9 @@ from pokemon_red_completion.safari import (  # noqa: E402
 )
 from pokemon_red_completion.saffron import (  # noqa: E402
     JolteonResourceReport,
+    SaffronGuardResourceReport,
     run_jolteon_resource_chapter,
+    run_saffron_guard_resource_chapter,
 )
 from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     StrategicNavigationProtocolError,
@@ -108,11 +111,18 @@ from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E40
     load_strategic_navigation_scenario_registry,
 )
 
-SUPPORTED_RESOURCE_IDS = ("fly", "gold_teeth", "jolteon", "snorlax")
+SUPPORTED_RESOURCE_IDS = (
+    "fly",
+    "gold_teeth",
+    "jolteon",
+    "saffron_guards",
+    "snorlax",
+)
 RESOURCE_BOUNDARIES = {
     "fly": (MapId.CELADON_POKECENTER, (3, 3)),
     "gold_teeth": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "jolteon": (MapId.CELADON_POKECENTER, (3, 3)),
+    "saffron_guards": (MapId.CELADON_POKECENTER, (3, 3)),
     "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
 }
 RELOCATION_LIMITS = RouteExecutionLimits(
@@ -344,6 +354,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             GoldTeethChapterReport
             | FlyResourceReport
             | JolteonResourceReport
+            | SaffronGuardResourceReport
             | SnorlaxResourceReport
         )
         if args.acquire_resource_id == "gold_teeth":
@@ -354,6 +365,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             encounters_fled = 0
         elif args.acquire_resource_id == "snorlax":
             report = run_snorlax_resource_chapter(emulator, reader, tracked)
+            encounters_fled = 0
+        elif args.acquire_resource_id == "saffron_guards":
+            report = run_saffron_guard_resource_chapter(emulator, reader, tracked)
             encounters_fled = 0
         else:
             report = run_fly_resource_chapter(emulator, reader, tracked)
@@ -370,12 +384,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         jolteon_failed = args.acquire_resource_id == "jolteon" and not report.passed
         snorlax_failed = args.acquire_resource_id == "snorlax" and not report.passed
+        saffron_guards_failed = (
+            args.acquire_resource_id == "saffron_guards" and not report.passed
+        )
         if (
             objectives_changed
             or gold_teeth_failed
             or fly_failed
             or jolteon_failed
             or snorlax_failed
+            or saffron_guards_failed
         ):
             raise StrategicScenarioRuntimeError(
                 "resource lesson changed objectives or failed its acquisition contract"
@@ -385,6 +403,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "fly": (MapId.CELADON_POKECENTER, (3, 3)),
             "gold_teeth": (MapId.FUCHSIA_POKECENTER, (3, 3)),
             "jolteon": (MapId.CELADON_CITY, (10, 14)),
+            "saffron_guards": (MapId.CELADON_POKECENTER, (3, 3)),
             "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
         }[args.acquire_resource_id]
         if (

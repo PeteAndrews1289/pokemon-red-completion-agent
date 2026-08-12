@@ -1,7 +1,7 @@
 """Generation I story predicates projected onto the neutral local router.
 
-Route 7's guard house has statically walkable corridors whose live access is
-decided by a durable guard flag. Cerulean's robbed-house approach and Saffron's
+Saffron's four guard houses have statically walkable corridors whose live
+access is decided by one durable guard flag. Cerulean's robbed-house approach and Saffron's
 Silph entrance have the opposite geometry problem: an object occupies the
 passage before a story event and is displaced afterward. Route 12's Snorlax
 uses the same pattern. Cartridge terrain remains responsible for geometry;
@@ -41,22 +41,51 @@ ROUTE_12_SNORLAX_CLEARED = "story:route_12_snorlax_cleared"
 ROUTE_12_SNORLAX_AT = (62, 10)
 SEAFOAM_CURRENT_CONTROL = "field:seafoam_current_control"
 SEAFOAM_INTERIOR_MAP_IDS = frozenset(range(0x9F, 0xA3))
+ROUTE_5_GATE_MAP_ID = 0x46
+ROUTE_6_GATE_MAP_ID = 0x49
+ROUTE_8_GATE_MAP_ID = 0x4F
 
-# The two corridor rows are independent. Requiring both directions prevents a
-# planner from treating an unknown reverse crossing as free merely because a
-# run cannot normally begin inside Saffron before the flag is set.
-ROUTE_7_GATE_REQUIREMENTS = tuple(
+# The cartridge scripts trigger on x=3/4,y=3 in Route 5; x=3/4,y=2 in
+# Route 6; x=3,y=3/4 in Route 7; and x=2,y=3/4 in Route 8.  Bind the edge
+# crossed to enter each trigger row/column in both directions.  Covering all
+# four houses matters even when Route 7 is the destination: a global shortest
+# path may otherwise cut illegally through Saffron via another closed gate.
+_NORTH_SOUTH_GUARD_REQUIREMENTS = tuple(
     LocalPassageRequirement(
-        map_id=int(MapId.ROUTE_7_GATE),
+        map_id=int(map_id),
         source_at=source,
         target_at=target,
         predicate=SAFFRON_GUARDS_OPEN,
     )
+    for map_id in (ROUTE_5_GATE_MAP_ID, ROUTE_6_GATE_MAP_ID)
+    for column in (3, 4)
+    for source, target in (
+        ((2, column), (3, column)),
+        ((3, column), (2, column)),
+    )
+)
+_EAST_WEST_GUARD_REQUIREMENTS = tuple(
+    LocalPassageRequirement(
+        map_id=map_id,
+        source_at=source,
+        target_at=target,
+        predicate=SAFFRON_GUARDS_OPEN,
+    )
+    for map_id in (int(MapId.ROUTE_7_GATE), ROUTE_8_GATE_MAP_ID)
     for row in (3, 4)
     for source, target in (
         ((row, 2), (row, 3)),
         ((row, 3), (row, 2)),
     )
+)
+SAFFRON_GUARD_GATE_REQUIREMENTS = (
+    *_NORTH_SOUTH_GUARD_REQUIREMENTS,
+    *_EAST_WEST_GUARD_REQUIREMENTS,
+)
+ROUTE_7_GATE_REQUIREMENTS = tuple(
+    item
+    for item in SAFFRON_GUARD_GATE_REQUIREMENTS
+    if item.map_id == int(MapId.ROUTE_7_GATE)
 )
 
 # Before Bill is helped, a police officer occupies this square in Cerulean and
@@ -130,7 +159,7 @@ ROUTE_12_SNORLAX_REQUIREMENTS = tuple(
 )
 
 GEN1_STORY_PASSAGE_REQUIREMENTS = (
-    *ROUTE_7_GATE_REQUIREMENTS,
+    *SAFFRON_GUARD_GATE_REQUIREMENTS,
     *CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
     *SILPH_ENTRANCE_REQUIREMENTS,
     *SAFFRON_GYM_REQUIREMENTS,

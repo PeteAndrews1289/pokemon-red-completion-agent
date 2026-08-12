@@ -46,6 +46,7 @@ from pokemon_red_completion.tower import party_core_intact
 
 SAFFRON_CHECKPOINT_COUNT = 10
 SAFFRON_ACCESS_CHECKPOINT_COUNT = 8
+SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT = 7
 FRESH_WATER_PRICE = 200
 THUNDER_STONE_PRICE = 2100
 GUARD_DRINK_FLAG = SAFFRON_GUARD_ACCESS_MASK
@@ -126,6 +127,19 @@ CITY_TO_ROUTE_7 = ("right",) * 4 + ("up",) * 3 + ("right",) * 36
 ROUTE_7_TO_GATE = _directions("RRRRRRRRRDDDDDDDRR")
 GATE_TO_SAFFRON = ("right",) * 6
 SAFFRON_TO_CENTER = ("right",) * 2 + ("down",) * 12 + ("right",) * 6 + ("up",)
+
+
+def _reverse(route: Iterable[str]) -> tuple[str, ...]:
+    opposite = {"up": "down", "down": "up", "left": "right", "right": "left"}
+    return tuple(opposite[direction] for direction in reversed(tuple(route)))
+
+
+ROUTE_7_GATE_TO_WEST = ("left",) * 4
+# Route 7's southbound ledge makes the eastbound path non-reversible.  This is
+# the same qualified lower-corridor return used by the Silph supply lesson.
+ROUTE_7_WEST_TO_CONNECTION = _directions("LLLUULLLLUUUUUULLLLD")
+ROUTE_7_CONNECTION_TO_CELADON_CITY = _reverse(CITY_TO_ROUTE_7)
+CELADON_CITY_TO_CENTER = _reverse(CITY_TO_MART[:-1]) + ("up",)
 
 
 class EmulatorState(Protocol):
@@ -460,6 +474,248 @@ class SaffronAccessChapterReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class SaffronGuardResourceReport:
+    """Construction-only proof that opens the four Saffron guard houses."""
+
+    records: tuple[SaffronCheckpoint, ...]
+    final_raw: RawGameState
+    money_before: int
+    money_after: int
+    vending_cursor: int
+    fresh_water_before: int
+    fresh_water_after_purchase: int
+    fresh_water_after_guard: int
+    guard_flag_before: int
+    guard_flag_after_consumption: int
+    guard_flag_after_dialogue: int
+    bag_before: tuple[tuple[int, int], ...]
+    bag_after: tuple[tuple[int, int], ...]
+    party_before: tuple[int, ...]
+    party_after: tuple[int, ...]
+    lead_level_before: int | None
+    lead_moves_before: tuple[int, ...] | None
+    lead_pp_before: tuple[int, ...] | None
+    party_hp_before: tuple[int, ...]
+    party_hp_after: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT
+            and self.money_before >= FRESH_WATER_PRICE
+            and self.money_after == self.money_before - FRESH_WATER_PRICE
+            and self.vending_cursor == 0
+            and self.fresh_water_before == 0
+            and self.fresh_water_after_purchase == 1
+            and self.fresh_water_after_guard == 0
+            and self.guard_flag_before & GUARD_DRINK_FLAG == 0
+            and self.guard_flag_after_consumption & GUARD_DRINK_FLAG == 0
+            and self.guard_flag_after_dialogue & GUARD_DRINK_FLAG
+            and self.bag_before == self.bag_after
+            and self.final_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.battle_state == 0
+            and self.party_after == self.party_before
+            and self.final_raw.first_party_level == self.lead_level_before
+            and self.final_raw.first_party_moves == self.lead_moves_before
+            and self.final_raw.first_party_pp == self.lead_pp_before
+            and self.party_hp_after == self.party_hp_before == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp_after)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "resource": "saffron_guard_access",
+            "objective_label_created": False,
+            "vending_machine": {
+                "cursor": self.vending_cursor,
+                "item_id": int(ItemId.FRESH_WATER),
+                "price": FRESH_WATER_PRICE,
+                "money": [self.money_before, self.money_after],
+            },
+            "guard_handoff": {
+                "fresh_water": [
+                    self.fresh_water_before,
+                    self.fresh_water_after_purchase,
+                    self.fresh_water_after_guard,
+                ],
+                "flag_before": self.guard_flag_before,
+                "flag_after_consumption": self.guard_flag_after_consumption,
+                "flag_after_dialogue": self.guard_flag_after_dialogue,
+                "consumed_before_global_access": True,
+            },
+            "party_preserved": self.party_after == self.party_before,
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+def run_saffron_guard_resource_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: SaffronTiming = DEFAULT_SAFFRON_TIMING,
+    progress: ProgressSink | None = None,
+) -> SaffronGuardResourceReport:
+    """Open global Saffron access and return to Celadon without an objective."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[SaffronCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CELADON_POKECENTER, (3, 3), "guard resource boundary")
+    initial_bag = _bag(emulator)
+    initial_money = _money(emulator)
+    party_before = tuple(initial.party_species_ids or ())
+    hp_before = _party_hp(emulator)
+    initial_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
+    if (
+        not party_before
+        or initial_money < FRESH_WATER_PRICE
+        or initial_bag.get(ItemId.FRESH_WATER, 0)
+        or initial_bag.get(ItemId.SODA_POP, 0)
+        or initial_bag.get(ItemId.LEMONADE, 0)
+        or initial_flag & GUARD_DRINK_FLAG
+        or hp_before != _party_max_hp(emulator)
+        or any(_party_status(emulator))
+    ):
+        raise SaffronChapterError("Saffron guard resource input is not pristine.")
+    _checkpoint(records, progress, emulator, initial, "guard_resource_ready", "Celadon ready")
+
+    _move(actions, reader, emulator, CENTER_EXIT, timing, "Celadon Center exit")
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior")
+    for route, map_id, coordinate, label in (
+        (CITY_TO_MART, MapId.CELADON_MART_1F, (16, 7), "mart_1f"),
+        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "mart_2f"),
+        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "mart_3f"),
+        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "mart_4f"),
+        (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "mart_5f"),
+        (MART_5F_TO_ROOF, MapId.CELADON_MART_ROOF, (15, 3), "mart_roof"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _checkpoint(records, progress, emulator, reader.read(), "roof_reached", "Vending roof")
+
+    _move(actions, reader, emulator, ROOF_TO_VENDING, timing, "vending stance")
+    _require(reader.read(), MapId.CELADON_MART_ROOF, (12, 3), "vending stance")
+    actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+    _wait(actions, timing.movement_frames)
+    actions.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(actions, timing.movement_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    vending_cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+    if vending_cursor != 0:
+        raise SaffronChapterError("Fresh Water vending cursor changed.")
+    for _ in range(timing.vending_pulses):
+        if (
+            _money(emulator) == initial_money - FRESH_WATER_PRICE
+            and _bag(emulator).get(ItemId.FRESH_WATER, 0) == 1
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=1)
+    else:
+        raise SaffronChapterError("Fresh Water purchase did not settle.")
+    fresh_water_after_purchase = _bag(emulator).get(ItemId.FRESH_WATER, 0)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    if not reader.read_input_readiness().ready:
+        raise SaffronChapterError("Vending dialogue did not close.")
+    _checkpoint(records, progress, emulator, reader.read(), "water_bought", "Fresh Water bought")
+
+    for route, map_id, coordinate, label in (
+        (ROOF_TO_5F, MapId.CELADON_MART_5F, (12, 2), "roof_return"),
+        (MART_5F_TO_4F, MapId.CELADON_MART_4F, (16, 2), "mart_4f_return"),
+        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "mart_3f_return"),
+        (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "mart_2f_return"),
+        (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "mart_1f_return"),
+        (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "mart_exit"),
+        (CITY_TO_ROUTE_7, MapId.ROUTE_7, (0, 3), "route_7"),
+        (ROUTE_7_TO_GATE, MapId.ROUTE_7_GATE, (0, 4), "route_7_gate"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _checkpoint(records, progress, emulator, reader.read(), "gate_reached", "Guard reached")
+
+    _move(actions, reader, emulator, ("right", "right"), timing, "guard approach")
+    _require(reader.read(), MapId.ROUTE_7_GATE, (2, 4), "guard approach")
+    _move(actions, reader, emulator, ("right",), timing, "guard trigger", allow_script=True)
+    _require(reader.read(), MapId.ROUTE_7_GATE, (3, 4), "guard trigger")
+    fresh_water_after_guard = _bag(emulator).get(ItemId.FRESH_WATER, 0)
+    flag_after_consumption = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
+    if fresh_water_after_guard or flag_after_consumption & GUARD_DRINK_FLAG:
+        raise SaffronChapterError("Guard handoff ordering was not item-before-flag.")
+    _checkpoint(records, progress, emulator, reader.read(), "drink_consumed", "Drink consumed")
+    for _ in range(timing.guard_pulses):
+        final_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
+        if final_flag & GUARD_DRINK_FLAG and reader.read_input_readiness().ready:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=1)
+    else:
+        raise SaffronChapterError("Guard dialogue did not grant global access.")
+    _checkpoint(records, progress, emulator, reader.read(), "guards_open", "All guards open")
+
+    for route, map_id, coordinate, label in (
+        (ROUTE_7_GATE_TO_WEST, MapId.ROUTE_7, (11, 10), "gate west exit"),
+        (ROUTE_7_WEST_TO_CONNECTION, MapId.ROUTE_7, (0, 3), "route 7 connection"),
+        (ROUTE_7_CONNECTION_TO_CELADON_CITY, MapId.CELADON_CITY, (10, 14), "Celadon return"),
+        (CELADON_CITY_TO_CENTER, MapId.CELADON_POKECENTER, (3, 7), "Center return"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _move(actions, reader, emulator, ("up",) * 4, timing, "stable Center boundary")
+    final = reader.read()
+    _require(final, MapId.CELADON_POKECENTER, (3, 3), "stable Center boundary")
+    _checkpoint(records, progress, emulator, final, "guard_resource_terminal", "Celadon restored")
+
+    report = SaffronGuardResourceReport(
+        records=tuple(records),
+        final_raw=final,
+        money_before=initial_money,
+        money_after=_money(emulator),
+        vending_cursor=vending_cursor,
+        fresh_water_before=initial_bag.get(ItemId.FRESH_WATER, 0),
+        fresh_water_after_purchase=fresh_water_after_purchase,
+        fresh_water_after_guard=fresh_water_after_guard,
+        guard_flag_before=initial_flag,
+        guard_flag_after_consumption=flag_after_consumption,
+        guard_flag_after_dialogue=final_flag,
+        bag_before=tuple(sorted(initial_bag.items())),
+        bag_after=tuple(sorted(_bag(emulator).items())),
+        party_before=party_before,
+        party_after=tuple(final.party_species_ids or ()),
+        lead_level_before=initial.first_party_level,
+        lead_moves_before=initial.first_party_moves,
+        lead_pp_before=initial.first_party_pp,
+        party_hp_before=hp_before,
+        party_hp_after=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise SaffronChapterError(
+            f"Saffron guard resource evidence failed: {report.public_dict()!r}."
+        )
+    return report
 
 
 def run_saffron_access_chapter(
