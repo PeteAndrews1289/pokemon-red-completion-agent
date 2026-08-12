@@ -1129,6 +1129,22 @@ def run_x_accuracy_resource_chapter(
     actions = CountingExecutor(executor)
     initial = reader.read()
     _require(initial, MapId.CELADON_POKECENTER, (3, 3), "X Accuracy resource boundary")
+    if _party_needs_healing(
+        _party_hp(emulator),
+        _party_max_hp(emulator),
+        _party_status(emulator),
+    ):
+        _heal(actions, timing)
+        initial = reader.read()
+        if (
+            _party_needs_healing(
+                _party_hp(emulator),
+                _party_max_hp(emulator),
+                _party_status(emulator),
+            )
+            or not reader.read_input_readiness().ready
+        ):
+            raise SilphChapterError("X Accuracy resource healing did not stabilize.")
     bag_before = _bag(emulator)
     money_before = _money(emulator)
     party_before = tuple(initial.party_species_ids or ())
@@ -1237,6 +1253,14 @@ def run_x_accuracy_resource_chapter(
             f"X Accuracy resource evidence failed: {report.public_dict()!r}."
         )
     return report
+
+
+def _party_needs_healing(
+    hp: tuple[int, ...],
+    maximum_hp: tuple[int, ...],
+    status: tuple[int, ...],
+) -> bool:
+    return hp != maximum_hp or any(status)
 
 
 def _acquire_silph_x_special(

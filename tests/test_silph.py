@@ -68,6 +68,7 @@ from pokemon_red_completion.silph import (
     _mart_2f_girl_coordinate,
     _mart_top_up_quantity,
     _move_verified,
+    _party_needs_healing,
     _plan_saffron_center_approach,
     _plan_saffron_route,
     _return_center_to_seventh,
@@ -101,6 +102,12 @@ def _terminal() -> RawGameState:
         first_party_moves=(0x82, 0x46, 0x3A, 0x39),
         first_party_pp=(15, 15, 10, 15),
     )
+
+
+def test_x_accuracy_resource_heals_only_a_damaged_or_statused_party() -> None:
+    assert not _party_needs_healing((10, 20), (10, 20), (0, 0))
+    assert _party_needs_healing((9, 20), (10, 20), (0, 0))
+    assert _party_needs_healing((10, 20), (10, 20), (0, 1))
 
 
 def test_mart_5f_customer_yield_is_source_pinned_and_bounded() -> None:
