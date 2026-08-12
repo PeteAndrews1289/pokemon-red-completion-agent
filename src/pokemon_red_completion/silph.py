@@ -332,6 +332,7 @@ class SilphChapterReport:
     x_accuracy_before_supply: int
     rival_potions_used: int
     rival_x_special_used: int
+    giovanni_x_special_used: int
     hyper_potions_remaining: int
     max_repel_remaining: int
     route_items_archived: bool
@@ -375,6 +376,7 @@ class SilphChapterReport:
             and 0 <= self.x_accuracy_before_supply <= 1
             and 0 <= self.rival_potions_used <= SILPH_RIVAL_MAX_POTIONS
             and self.rival_x_special_used == 1
+            and self.giovanni_x_special_used == 1
             and self.hyper_potions_remaining
             == HYPER_POTION_PURCHASE_QUANTITY - self.rival_potions_used
             and self.max_repel_remaining == 0
@@ -417,6 +419,7 @@ class SilphChapterReport:
                 "x_accuracy_carried_in": self.x_accuracy_before_supply,
                 "used_by_rival_policy": self.rival_potions_used,
                 "x_special_used_by_rival_policy": self.rival_x_special_used,
+                "x_special_used_by_giovanni_policy": self.giovanni_x_special_used,
                 "remaining": self.hyper_potions_remaining,
                 "max_repel_bought": 0,
                 "max_repel_remaining": self.max_repel_remaining,
@@ -613,6 +616,7 @@ def run_silph_chapter(
     x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     _run_rival_with_potions(reader, actions, emulator, timing)
     potion_after = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    x_special_after_rival = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_RIVAL)
     rival_potions_used = potion_before - potion_after
     if not 0 <= rival_potions_used <= SILPH_RIVAL_MAX_POTIONS:
@@ -669,6 +673,8 @@ def run_silph_chapter(
 
     _move(actions, reader, ("up", "up"), timing)
     _await_trainer_battle(actions, reader, timing)
+    x_special_before_giovanni = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    _battle_x_special(reader, actions, emulator, timing)
     _run_battle(
         reader,
         actions,
@@ -677,6 +683,7 @@ def run_silph_chapter(
         "Silph Giovanni",
         RedBattlePlanId.SILPH_11F_GIOVANNI,
     )
+    x_special_after_giovanni = _bag(emulator).get(ItemId.X_SPECIAL, 0)
     _require_event(emulator, EventFlag.BEAT_SILPH_CO_GIOVANNI)
     _checkpoint(
         records,
@@ -767,7 +774,8 @@ def run_silph_chapter(
         x_special_before_supply=x_special_before_supply,
         x_accuracy_before_supply=x_accuracy_before_supply,
         rival_potions_used=potion_before - potion_after,
-        rival_x_special_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
+        rival_x_special_used=x_special_before - x_special_after_rival,
+        giovanni_x_special_used=x_special_before_giovanni - x_special_after_giovanni,
         hyper_potions_remaining=_bag(emulator).get(ItemId.HYPER_POTION, 0),
         max_repel_remaining=_bag(emulator).get(ItemId.MAX_REPEL, 0),
         route_items_archived=route_items_archived,
