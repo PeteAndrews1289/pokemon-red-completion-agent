@@ -976,7 +976,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
             _deposit_pc_item(actions, reader, emulator, item, timing)
         _move(actions, reader, ("left",) * 10 + ("up",), timing)
         _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon PC return")
-    _move(actions, reader, CENTER_EXIT, timing)
+    _move_verified(actions, reader, CENTER_EXIT, timing, "Celadon Center exit")
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
     _move_verified(
         actions,
