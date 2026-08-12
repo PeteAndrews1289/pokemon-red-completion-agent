@@ -73,6 +73,7 @@ def _report() -> SafariChapterReport:
         in_safari_zone=False,
         safari_steps=0,
         safari_balls=0,
+        capacity_ready=True,
         moves_before=EXPECTED_MOVES_BEFORE,
         moves_after=EXPECTED_MOVES_AFTER,
         pp_before=(16, 30, 16, 25),

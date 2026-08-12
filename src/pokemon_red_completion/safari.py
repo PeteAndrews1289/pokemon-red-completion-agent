@@ -18,6 +18,12 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.silph import (
+    DEFAULT_SILPH_TIMING,
+    SILPH_PC_DEPOSIT_ITEMS,
+    SilphChapterError,
+    _deposit_pc_item,
+)
 from pokemon_red_completion.tower import party_core_intact
 
 SAFARI_CHECKPOINT_COUNT = 12
@@ -145,6 +151,7 @@ class SafariChapterReport:
     in_safari_zone: bool
     safari_steps: int
     safari_balls: int
+    capacity_ready: bool
     moves_before: tuple[int, ...]
     moves_after: tuple[int, ...]
     pp_before: tuple[int, ...]
@@ -183,6 +190,7 @@ class SafariChapterReport:
             and not self.in_safari_zone
             and self.safari_steps == 0
             and self.safari_balls == 0
+            and self.capacity_ready
             and lineage is not None
             and self.moves_after == lineage[0]
             and len(self.pp_before) == 4
@@ -211,6 +219,7 @@ class SafariChapterReport:
                 "initial_balls": self.balls_milestones[0],
                 "single_admission": True,
             },
+            "inventory_capacity_ready": self.capacity_ready,
             "route": {
                 "step_milestones": list(self.counter_milestones),
                 "balls_milestones": list(self.balls_milestones),
@@ -540,6 +549,45 @@ def run_safari_chapter(
         and ItemId.TM40_SKULL_BASH in _bag(emulator)
         and ItemId.GOLD_TEETH not in _bag(emulator)
     )
+    entry_bag = _bag(emulator)
+    if len(entry_bag) >= 20:
+        obsolete = next(
+            (item for item in SILPH_PC_DEPOSIT_ITEMS if entry_bag.get(item, 0) == 1),
+            None,
+        )
+        if not gold_teeth_precollected or obsolete is None:
+            raise SafariChapterError("Surf input lacks one safe HM03 inventory slot.")
+        _move(
+            actions,
+            reader,
+            emulator,
+            ("down",) + ("right",) * 10,
+            timing,
+            "Fuchsia PC approach",
+        )
+        try:
+            _deposit_pc_item(
+                actions,  # type: ignore[arg-type]
+                reader,
+                emulator,
+                obsolete,
+                DEFAULT_SILPH_TIMING,
+            )
+        except SilphChapterError as error:
+            raise SafariChapterError("Surf inventory cleanup failed.") from error
+        _move(
+            actions,
+            reader,
+            emulator,
+            ("left",) * 10 + ("up",),
+            timing,
+            "Fuchsia PC return",
+        )
+        _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 3), "post-cleanup boundary")
+    initial_bag = _bag_tuple(emulator)
+    capacity_ready = len(initial_bag) <= 19
+    if not capacity_ready:
+        raise SafariChapterError("Surf inventory cleanup did not free an HM03 slot.")
     pp_before = tuple(initial.first_party_pp or ())
     if len(pp_before) != 4 or any(pp <= 0 for pp in pp_before):
         raise SafariChapterError(f"Unexpected pre-Surf PP: {pp_before!r}.")
@@ -702,6 +750,7 @@ def run_safari_chapter(
         _event(emulator, EventFlag.IN_SAFARI_ZONE),
         _steps(emulator),
         _balls(emulator),
+        capacity_ready,
         moves_before,
         tuple(final.first_party_moves or ()),
         pp_before,
