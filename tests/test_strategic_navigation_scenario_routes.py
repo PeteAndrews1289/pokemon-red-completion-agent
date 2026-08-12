@@ -44,6 +44,13 @@ def test_route_catalog_exactly_covers_preregistered_scenarios() -> None:
         ].objective_id == scenario.teacher_objective_id
 
 
+def test_fuchsia_candidate_stops_at_its_authenticated_skill_boundary() -> None:
+    spec = STRATEGIC_SCENARIO_DESTINATIONS["reach_fuchsia"]
+
+    assert spec.goal_map is MapId.LAVENDER_POKECENTER
+    assert spec.goal_map is not MapId.FUCHSIA_CITY
+
+
 def test_route_catalog_kills_missing_key_and_mismatched_binding() -> None:
     registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
     missing = dict(STRATEGIC_SCENARIO_DESTINATIONS)

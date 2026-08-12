@@ -114,7 +114,13 @@ STRATEGIC_SCENARIO_DESTINATIONS: Mapping[str, ScenarioObjectiveDestinationSpec] 
             "rescue_fuji", MapId.POKEMON_TOWER_1F, _CHALLENGE_BLOCKER_TAGS
         ),
         ScenarioObjectiveDestinationSpec(
-            "reach_fuchsia", MapId.FUCHSIA_CITY, _REACH_TAGS
+            # The bounded Fuchsia skill starts at Lavender with the Poké Flute
+            # and owns the Snorlax encounter plus Routes 12–15.  Treating
+            # Fuchsia itself as the approach asked the neutral planner to cross
+            # the very story blocker this candidate exists to resolve.
+            "reach_fuchsia",
+            MapId.LAVENDER_POKECENTER,
+            _REACH_TAGS,
         ),
         ScenarioObjectiveDestinationSpec(
             "obtain_surf", MapId.SAFARI_ZONE_GATE, _RESOURCE_TAGS
