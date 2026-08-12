@@ -11,7 +11,12 @@ import pytest
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.global_router import MacroGraph
-from pokemon_red_completion.local_router import LocalEdge, LocalGraph
+from pokemon_red_completion.local_router import (
+    LocalEdge,
+    LocalGraph,
+    LocalRouterError,
+    find_local_path,
+)
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactError,
     initialize_private_root,
@@ -22,7 +27,12 @@ from pokemon_red_completion.route_executor import (
     RouteExecutionLimits,
     TraversalSnapshot,
 )
-from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
+from pokemon_red_completion.route_plan import (
+    RoutePlan,
+    RoutePlanningError,
+    _without_warp_transit,
+    plan_route,
+)
 from pokemon_red_completion.strategic_navigation import DestinationUnavailableReason
 from pokemon_red_completion.strategic_navigation_binding import DestinationRouteBinding
 from pokemon_red_completion.strategic_navigation_protocol import (
@@ -340,3 +350,35 @@ def test_skill_relocation_preserves_the_exact_declared_coordinate(
 
     assert actual is expected
     assert calls == [(6, (3, 3))]
+
+
+def test_unrelated_warp_is_an_endpoint_not_a_local_shortcut() -> None:
+    graph = LocalGraph(
+        {
+            (0, 0): (LocalEdge((0, 1), "right"),),
+            (0, 1): (
+                LocalEdge((0, 0), "left"),
+                LocalEdge((0, 2), "right"),
+            ),
+            (0, 2): (LocalEdge((0, 1), "left"),),
+        }
+    )
+    projected = _without_warp_transit(
+        graph,
+        ((0, 1),),
+        start_at=(0, 0),
+    )
+
+    assert projected.edges[(0, 1)] == ()
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(projected, (0, 0), (0, 2))
+
+    arriving = _without_warp_transit(
+        graph,
+        ((0, 1),),
+        start_at=(0, 1),
+    )
+    assert find_local_path(arriving, (0, 1), (0, 2)).coordinates == (
+        (0, 1),
+        (0, 2),
+    )

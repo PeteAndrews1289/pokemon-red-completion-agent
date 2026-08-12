@@ -402,6 +402,11 @@ def _find_composed_route(
         local = local_graphs.get(state.map_id)
         if local is None:
             continue
+        local = _without_warp_transit(
+            local,
+            graph.warp_locations.get(state.map_id, ()),
+            start_at=state.at,
+        )
         cache_key = (state.map_id, state.at, state.mode)
         local_paths = local_path_cache.get(cache_key)
         if local_paths is None:
@@ -478,6 +483,31 @@ def _find_composed_route(
         start,
         terminal_state,
         terminal_approach,
+    )
+
+
+def _without_warp_transit(
+    graph: LocalGraph,
+    warp_locations: tuple[Coordinate, ...],
+    *,
+    start_at: Coordinate,
+) -> LocalGraph:
+    """Make every unrelated warp an endpoint rather than traversable floor.
+
+    Entering a warp immediately changes maps, so a local path may end on one
+    but cannot leave it while pretending to remain on the same map.  The sole
+    exception is the route's observed start coordinate: exterior arrivals may
+    legitimately settle on a warp tile and must be able to walk away.
+    """
+
+    absorbing = frozenset(warp_locations).difference({start_at})
+    if not absorbing:
+        return graph
+    return LocalGraph(
+        {
+            source: (() if source in absorbing else outgoing)
+            for source, outgoing in graph.edges.items()
+        }
     )
 
 
