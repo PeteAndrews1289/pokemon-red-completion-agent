@@ -49,7 +49,18 @@ def test_audit_distinguishes_teacher_order_from_game_feasibility() -> None:
         },
     ]
 
-    assert "red-strategic-scenario-v2-023-validation" not in by_id
+    assert by_id["red-strategic-scenario-v2-023-validation"][
+        "current_qualified_skill_blockers"
+    ] == [
+        {
+            "objective_id": "defeat_erika",
+            "required_but_absent_objective_ids": ["defeat_koga"],
+            "reason": (
+                "The early Erika skill accepts the pre-Surf Celadon party; the "
+                "post-Strength Erika skill still requires the post-Koga party."
+            ),
+        }
+    ]
 
 
 def test_audit_finds_early_erika_and_early_cinnabar_curriculum_gaps() -> None:

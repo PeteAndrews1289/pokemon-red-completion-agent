@@ -28,6 +28,7 @@ class QualifiedSkillOrderContract:
     objective_id: str
     required_objective_ids: frozenset[str]
     reason: str
+    when_objective_ids: frozenset[str] = frozenset()
 
     def __post_init__(self) -> None:
         known = frozenset(item.id for item in COMPLETION_QUEST)
@@ -37,6 +38,7 @@ class QualifiedSkillOrderContract:
             not self.required_objective_ids
             or self.objective_id in self.required_objective_ids
             or not self.required_objective_ids.issubset(known)
+            or not self.when_objective_ids.issubset(known)
         ):
             raise ValueError("qualified skill contract prerequisites are invalid")
         if not self.reason:
@@ -61,6 +63,15 @@ RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
             "The qualified Strength chapter requires Gold Teeth supplied by the "
             "current Safari/Surf chapter."
         ),
+    ),
+    QualifiedSkillOrderContract(
+        objective_id="defeat_erika",
+        required_objective_ids=frozenset({"defeat_koga"}),
+        reason=(
+            "The early Erika skill accepts the pre-Surf Celadon party; the "
+            "post-Strength Erika skill still requires the post-Koga party."
+        ),
+        when_objective_ids=frozenset({"obtain_strength"}),
     ),
     QualifiedSkillOrderContract(
         objective_id="reach_cinnabar",
@@ -96,6 +107,8 @@ def audit_qualified_skill_order(
         blockers = []
         for objective_id in sorted(completed.intersection(contract_by_objective)):
             contract = contract_by_objective[objective_id]
+            if not contract.when_objective_ids.issubset(completed):
+                continue
             missing = sorted(contract.required_objective_ids.difference(completed))
             if not missing:
                 continue

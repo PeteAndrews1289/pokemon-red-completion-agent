@@ -7,7 +7,7 @@ the teacher obtains and teaches Ice Beam, buys one bounded battle setup, defeats
 and returns healed with the exact Rainbow Badge transition. The published run took 2,321 actions
 and 351,092 frames. Scenario 009 then turned that experience into a clean strategic question: two
 choices, 17 movements, one destination label, and no arrow-key labels. The static gap counter fell
-from 21 to 14. A second post-Fuji Blastoise boundary exposed a different leader battle schedule and
+from 21 to 15. A second post-Fuji Blastoise boundary exposed a different leader battle schedule and
 remains honestly unqualified rather than being folded into the successful claim.
 
 The next two validation questions looked like more routing work. They were not. Scenario 019 asks
@@ -31,7 +31,7 @@ Saffron lesson only to construct its exact Celadon question, then selected Hideo
 31-movement rehearsal. All three are immutable unassigned episodes with one strategic label, one
 outcome and zero arrow-key labels.
 
-The scoreboard is now 33 authenticated captures, 25 distinct frontiers, 11 exact learning
+The scoreboard is now 35 authenticated captures, 27 distinct frontiers, 12 exact learning
 contexts, four of six cost-baseline challenges and zero counted rows. The next work is deliberately
 new experience: Erika before Koga, Koga and Strength before Surf, and Cinnabar before Sabrina. That
 is the bridge from a teacher that can repeat one successful playthrough to a teacher that can show

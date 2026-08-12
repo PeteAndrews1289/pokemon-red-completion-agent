@@ -24,8 +24,9 @@ and Erika, and returns healed. The cartridge qualification took 2,321 actions / 
 changed badge bits from `0x07` to `0x0f`, spent three Ice Beam PP against Erika and released the
 controller. See the [qualification receipt](docs/evidence/early-erika-curriculum-qualification-2026-08-12.json).
 
-That lesson removed Erika's alternate-order contract from the static audit: incompatible learning
-frontiers fell from **21 to 14**, and validation scenario 023 is no longer blocked by teacher order.
+That lesson removed most Erika alternate-order blockers from the static audit: incompatible
+learning frontiers fell from **21 to 15**. Scenario 023 remains honestly blocked because it has
+Strength without Koga; neither the pre-Surf nor post-Koga Erika boundary accepts that party yet.
 Scenario 009 was then constructed exactly, relocated to Lavender, and rehearsed once: two
 candidates at costs 18–137, one successful teacher choice, 17 movements, 41 records, zero movement
 labels, unassigned and uncounted. See the
@@ -36,6 +37,14 @@ under a different deterministic battle schedule; direct diagnostics showed the s
 faint against the leader. Experimental item variants were discarded and are not in source.
 Next: qualify that second early-Erika battle boundary or construct 010 from a compatible earlier
 source, construct scenario 023, then prioritize Gold-Teeth/Strength and Koga-before-Surf for 019.
+
+Scenario 022 is also now exact and rehearsed. Construction relocated scenario 015 to Fuchsia,
+executed Surf (633 route movements, two interruptions, one replan), then Strength. Its uncounted
+three-candidate rehearsal spanned costs 21–695 and completed in 20 movements / 49 records without
+interruption, replan or movement labels. This raises inventory to **35 envelopes, 27 frontiers, 12
+exact learning scenarios and 24 missing**. Scenario 023 construction then failed closed before
+mutation at the conditional Erika boundary described above. See the
+[scenario-022 receipt](docs/evidence/strategic-scenario-022-rehearsal-qualification-2026-08-12.json).
 
 ## Four challenge contexts qualified; alternate-order curriculum is the blocker — 2026-08-12
 

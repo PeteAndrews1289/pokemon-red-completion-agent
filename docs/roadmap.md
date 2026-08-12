@@ -8,11 +8,11 @@
 Early Erika is now complete under published `fc2c47a` / CI `31569081316`, and scenario 009 has one
 qualified uncounted rehearsal. The lesson taught Ice Beam, used one bounded X Special, defeated
 Erika before Koga and returned healed in 2,321 actions / 351,092 frames. The curriculum-order audit
-now reports **14**, not 21, incompatible learning frontiers. Scenario 023's Erika-order blocker is
-closed; scenario 019's Koga/Strength-before-Surf blocker remains.
+now reports **15**, not 21, incompatible learning frontiers. Scenario 023 exposed a narrower
+Erika-after-Strength/before-Koga blocker; scenario 019's Koga/Strength-before-Surf blocker remains.
 
-Current measured coverage is **33 authenticated envelopes, 25 distinct frontiers and 11 exact
-learning scenarios**: five train and six validation. Scenarios 003, 007, 011 and 015 qualify four
+Current measured coverage is **35 authenticated envelopes, 27 distinct frontiers and 12 exact
+learning scenarios**: six train and six validation. Scenarios 003, 007, 011 and 015 qualify four
 of the six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -20,7 +20,7 @@ receipts and the current state review are in the
 
 The remaining challenge contexts cannot be truthfully constructed by replaying the canonical
 teacher order. The executable [curriculum-order audit](evidence/strategic-curriculum-order-audit-2026-08-12.json)
-finds 14 of 36 learning frontiers whose exact objective set conflicts with the operational
+finds 15 of 36 learning frontiers whose exact objective set conflicts with the operational
 prerequisites of a currently qualified skill. This is a teacher-coverage gap, not a cartridge
 impossibility.
 
@@ -39,7 +39,7 @@ The ordered gates are:
 7. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 25 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 24 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

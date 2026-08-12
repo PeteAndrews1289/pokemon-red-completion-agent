@@ -4,14 +4,14 @@
 
 Update after the initial audit: early Erika is now live-qualified under published `fc2c47a` and
 green CI run `31569081316`. Scenario 009 is also exactly constructed and rehearsed. The static
-teacher-order gap fell from **21 to 14**, and validation scenario 023 is no longer blocked by
-Erika's old post-Koga requirement. Counted data and test access remain zero. See the
+teacher-order gap fell from **21 to 15**. Scenario 023 remains conditionally blocked because its
+post-Strength/pre-Koga party matches neither Erika curriculum. Counted data and test access remain zero. See the
 [early-Erika](evidence/early-erika-curriculum-qualification-2026-08-12.json) and
 [scenario 009](evidence/strategic-scenario-009-rehearsal-qualification-2026-08-12.json) receipts.
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **33 authenticated capture envelopes, 25 distinct frontiers and
-11 exact learning scenarios**. The exact contexts are five train scenarios and six validation
+The private inventory now contains **35 authenticated capture envelopes, 27 distinct frontiers and
+12 exact learning scenarios**. The exact contexts are six train scenarios and six validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
@@ -29,7 +29,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 25 missing learning scenarios and excludes one known invalid
+current measurement. It reports 24 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -58,8 +58,8 @@ Those are not the same graph.
 
 The updated static curriculum-order audit records three operational contracts that are stricter
 than the game's public prerequisites. It checks all 36 learning scenarios without reading private
-captures or opening test. It finds **14 exact learning frontiers incompatible with the current
-qualified teacher order**, down from 21 after early Erika removed seven blockers. This is a
+captures or opening test. It finds **15 exact learning frontiers incompatible with the current
+qualified teacher order**, down from 21 after early Erika removed six blockers. This is a
 teacher-coverage result, not evidence that those cartridge states are impossible. See the
 [curriculum-order receipt](evidence/strategic-curriculum-order-audit-2026-08-12.json).
 
@@ -68,7 +68,7 @@ The two remaining validation challenges expose the gap directly:
 | Scenario | Exact frontier requires | Current teacher additionally requires | Missing curriculum |
 |---|---|---|---|
 | 019 | Koga and Strength while Surf is incomplete | Koga uses the Surf-ready party; Strength consumes Gold Teeth obtained by the Surf chapter | Koga-before-Surf and a Gold-Teeth/Strength path that does not award Surf |
-| 023 | Erika while Koga is incomplete | Resolved by the qualified pre-Koga Celadon curriculum | No remaining Erika-order blocker |
+| 023 | Erika after Strength while Koga is incomplete | Early Erika accepts the pre-Surf party; late Erika requires Koga | Erika-after-Strength/before-Koga |
 
 The same issue explains the current paper-only one-skill matches:
 
@@ -90,7 +90,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 5 of 24 planned contexts;
+- train: 6 of 24 planned contexts;
 - validation: 6 of 12 planned contexts;
 - validation cost-baseline challenges: 4 of 6;
 - test: 0 of 12 opened, as required; and
