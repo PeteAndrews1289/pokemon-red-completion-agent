@@ -44,6 +44,7 @@ def _raw() -> RawGameState:
 
 
 def test_snorlax_funding_sells_only_the_obsolete_cure_shortfall() -> None:
+    assert frozenset({0x3D, 0x3A}) == fuchsia_module.SNORLAX_RESOURCE_FISHER_MOVES
     assert fuchsia_module._snorlax_funding_sale_quantities(
         money=18_707,
         potions=3,

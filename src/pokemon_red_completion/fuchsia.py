@@ -71,6 +71,8 @@ FUCHSIA_DEVELOPMENT_POLICY = BalancedTeamPolicy(
 FUCHSIA_CHECKPOINT_COUNT = 14
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
+ICE_BEAM = 0x3A
+SNORLAX_RESOURCE_FISHER_MOVES = frozenset({BUBBLEBEAM, ICE_BEAM})
 SNORLAX = 0x84
 SNORLAX_BUBBLEBEAM_PP_BOUND = (1, 20)
 SNORLAX_RUNTIME_PULSE_BOUND = 720
@@ -549,6 +551,9 @@ def run_snorlax_resource_chapter(
 
     _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
     _move(actions, reader, emulator, run, ROUTE12_FISHER, timing, "Route 12 Fisher")
+    fisher_moves = reader.read().first_party_moves or ()
+    if len(fisher_moves) < 3 or fisher_moves[2] not in SNORLAX_RESOURCE_FISHER_MOVES:
+        raise FuchsiaChapterError("Snorlax resource Fisher move lineage is not qualified.")
     battles.append(
         _fight_trainer(
             actions,
@@ -558,7 +563,7 @@ def run_snorlax_resource_chapter(
             "Route 12 Fisher",
             (0xD6, 0x0E, 3),
             EventFlag.BEAT_ROUTE_12_TRAINER_0,
-            BUBBLEBEAM,
+            fisher_moves[2],
             3,
             8,
             FUCHSIA_FISHER_PLAN,
