@@ -71,34 +71,29 @@ def test_stepping_onto_a_warp_is_not_duplicated_as_an_extra_action() -> None:
     assert plan.steps[-1].expected_at == (7, 3)
 
 
-def test_connection_arrival_reenters_an_adjacent_protected_warp() -> None:
-    connection = MacroEdge(
+def test_pass_through_gate_warp_uses_a_second_inward_action() -> None:
+    edge = MacroEdge(
         2,
-        coordinate_transitions=(MacroTransition((0, 1), (4, 0), "right"),),
-        heading="east",
-    )
-    warp = MacroEdge(3, kind="warp", at=(4, 1), arrival_at=(2, 2))
-    graph = MacroGraph({1: (connection,), 2: (warp,)})
-    route_two = LocalGraph(
-        {
-            (4, 0): (LocalEdge((4, 1), action="right"),),
-            (4, 1): (LocalEdge((4, 0), action="left"),),
-        }
+        kind="warp",
+        at=(4, 1),
+        arrival_at=(3, 0),
+        exit_action="right",
     )
 
-    plan = plan_route(
-        graph,
-        {1: line((0, 0), (0, 1)), 2: route_two},
-        1,
-        (0, 0),
-        3,
+    plan = compose_route(
+        MacroGraph({1: (edge,)}),
+        MacroPath((1, 2), (edge,)),
+        {1: line((4, 0), (4, 1))},
+        (4, 0),
     )
 
-    assert plan.actions == ("right", "right", "right", "left", "right")
-    assert [step.kind for step in plan.steps[-3:]] == ["walk", "walk", "warp"]
-    assert plan.steps[-1].source_at == (4, 0)
-    assert plan.steps[-1].expected_map == 3
-    assert plan.steps[-1].expected_at == (2, 2)
+    assert plan.actions == ("right", "right")
+    assert not plan.segments[0].transition_action_in_approach
+    assert plan.steps[0].expected_map == 1
+    assert plan.steps[0].expected_at == (4, 1)
+    assert plan.steps[1].source_at == (4, 1)
+    assert plan.steps[1].expected_map == 2
+    assert plan.steps[1].expected_at == (3, 0)
 
 
 def test_a_return_resolves_its_arrival_after_its_map_target() -> None:

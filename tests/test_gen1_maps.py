@@ -21,6 +21,7 @@ from pathlib import Path
 
 import pytest
 
+import pokemon_red_completion.gen1_maps as gen1_maps
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_maps import (
     ConnectionGeometry,
@@ -84,6 +85,17 @@ def test_the_graph_agrees_with_the_encounter_reads(record: dict) -> None:
         assert str(map_id) in reachable
     for map_id in found["fishable_maps_reachable"]:
         assert str(map_id) in reachable
+
+
+def test_pass_through_gate_entry_actions_derive_from_destination_boundary() -> None:
+    header = gen1_maps._Header(tileset=0, height=4, width=3, connections={})
+
+    assert gen1_maps._boundary_entry_action(header, (3, 0)) == "right"
+    assert gen1_maps._boundary_entry_action(header, (3, 5)) == "left"
+    assert gen1_maps._boundary_entry_action(header, (0, 3)) == "down"
+    assert gen1_maps._boundary_entry_action(header, (7, 3)) == "up"
+    assert gen1_maps._boundary_entry_action(header, (3, 2)) is None
+    assert gen1_maps._boundary_entry_action(header, (0, 0)) is None
 
 
 def test_both_cartridges_carry_the_same_world(record: dict) -> None:

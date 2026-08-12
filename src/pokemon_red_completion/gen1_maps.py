@@ -533,6 +533,7 @@ def _assemble(
 
             kind = PassageKind.WARP if destination in headers else PassageKind.SCRIPTED
             arrival_at: tuple[int, int] | None = None
+            exit_action: str | None = None
             if kind is PassageKind.WARP:
                 destination_warps = warps.get(destination, ())
                 if door.destination_warp_index >= len(destination_warps):
@@ -541,10 +542,19 @@ def _assemble(
                         f"{door.destination_warp_index} on map {destination}"
                     )
                 arrival_at = destination_warps[door.destination_warp_index].at
+                # Pass-through gate maps place their arrival warp on an
+                # interior-map boundary.  The outdoor event is a two-input
+                # warp: first step onto its tile, then keep moving into the
+                # gate.  Route 8's Saffron gate is the live witness.
+                exit_action = _boundary_entry_action(
+                    headers[destination],
+                    arrival_at,
+                )
             passages.setdefault(map_id, []).append(
                 Passage(
                     to_map=destination if kind is PassageKind.WARP else None,
                     kind=kind,
+                    exit_action=exit_action,
                     at=door.at,
                     arrival_at=arrival_at,
                     destination_warp_index=door.destination_warp_index,
@@ -566,6 +576,25 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
             (y == maximum_y, "down"),
             (x == 0, "left"),
             (x == maximum_x, "right"),
+        )
+        if condition
+    )
+    return candidates[0] if len(candidates) == 1 else None
+
+
+def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
+    """Return the inward action for a warp arriving on an interior boundary."""
+
+    y, x = at
+    maximum_y = header.height * 2 - 1
+    maximum_x = header.width * 2 - 1
+    candidates = tuple(
+        action
+        for condition, action in (
+            (y == 0, "down"),
+            (y == maximum_y, "up"),
+            (x == 0, "right"),
+            (x == maximum_x, "left"),
         )
         if condition
     )
