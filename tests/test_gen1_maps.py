@@ -90,8 +90,8 @@ def test_the_graph_agrees_with_the_encounter_reads(record: dict) -> None:
 def test_pass_through_gate_entry_actions_derive_from_destination_boundary() -> None:
     header = gen1_maps._Header(tileset=0, height=4, width=3, connections={})
 
-    assert gen1_maps._boundary_entry_action(header, (3, 0)) == "left"
-    assert gen1_maps._boundary_entry_action(header, (3, 5)) == "right"
+    assert gen1_maps._boundary_entry_action(header, (3, 0)) == "right"
+    assert gen1_maps._boundary_entry_action(header, (3, 5)) == "left"
     assert gen1_maps._boundary_entry_action(header, (0, 3)) == "down"
     assert gen1_maps._boundary_entry_action(header, (7, 3)) is None
     assert gen1_maps._boundary_entry_action(header, (3, 2)) is None
@@ -131,6 +131,51 @@ def test_cartridge_tile_semantics_override_geometric_warp_guess() -> None:
 
     assert projected[9].passages[0].exit_action is None
     assert projected[9].passages[1].exit_action == "up"
+
+
+def test_inert_gate_row_is_removed_by_directional_tile_in_front() -> None:
+    upper = Passage(
+        to_map=76,
+        kind=PassageKind.WARP,
+        at=(1, 3),
+        arrival_at=(3, 5),
+        exit_action="left",
+    )
+    lower = Passage(
+        to_map=76,
+        kind=PassageKind.WARP,
+        at=(2, 3),
+        arrival_at=(4, 5),
+        exit_action="left",
+    )
+    graph = {
+        18: MapNode(
+            map_id=18,
+            height=2,
+            width=2,
+            passages=(upper, lower),
+            tileset=0,
+        )
+    }
+    tiles = (
+        (0x39, 0x39, 0x39, 0x39),
+        (0x39, 0x39, 0x17, 0x39),
+        (0x39, 0x39, 0x4B, 0x39),
+        (0x39, 0x39, 0x39, 0x39),
+    )
+
+    projected = gen1_maps._without_inert_directional_warps(
+        graph,
+        {18: tiles},
+        {
+            "up": frozenset(),
+            "down": frozenset(),
+            "left": frozenset({0x4B}),
+            "right": frozenset(),
+        },
+    )
+
+    assert projected[18].passages == (lower,)
 
 
 def test_both_cartridges_carry_the_same_world(record: dict) -> None:

@@ -102,6 +102,12 @@ DOOR_TILE_ID_POINTERS = 0x1A62C
 DOOR_TILE_ID_BANK = 6
 DOOR_TILESET_RECORDS = 13
 
+#: Four pointers, in down/up/left/right order, consulted by
+#: ``IsWarpTileInFrontOfPlayer`` for directional outdoor warps.
+WARP_CARPET_TILE_POINTERS = 0xC477
+WARP_CARPET_TILE_BANK = 3
+WARP_CARPET_ACTIONS = ("down", "up", "left", "right")
+
 
 @dataclass(frozen=True, slots=True)
 class Tileset:
@@ -244,6 +250,28 @@ def automatic_warp_tiles(rom: bytes) -> dict[int, frozenset[int]]:
     if rom[cursor] != 0xFF:
         raise CartridgeReadError("the automatic-door tileset table does not end")
     return {index: frozenset(values) for index, values in found.items()}
+
+
+def directional_warp_tiles(rom: bytes) -> dict[str, frozenset[int]]:
+    """Tile-in-front allowlists for non-automatic outdoor warp entries."""
+
+    found: dict[str, frozenset[int]] = {}
+    for index, action in enumerate(WARP_CARPET_ACTIONS):
+        pointer_at = WARP_CARPET_TILE_POINTERS + 2 * index
+        pointer = int.from_bytes(rom[pointer_at : pointer_at + 2], "little")
+        if not 0x4000 <= pointer <= 0x7FFF:
+            raise CartridgeReadError(
+                f"{action} directional-warp pointer is outside the bank window"
+            )
+        found[action] = frozenset(
+            _terminated_tile_ids(
+                rom,
+                bank_offset(WARP_CARPET_TILE_BANK, pointer),
+                terminator=0xFF,
+                subject=f"{action} directional-warp list",
+            )
+        )
+    return found
 
 
 def _terminated_tile_ids(

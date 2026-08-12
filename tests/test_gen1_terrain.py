@@ -35,6 +35,7 @@ from pokemon_red_completion.gen1_terrain import (
     TILESET_TABLE,
     Terrain,
     automatic_warp_tiles,
+    directional_warp_tiles,
     steps_between,
     terrain_for,
     terrain_from_blocks,
@@ -78,6 +79,7 @@ BLOCKS_AT = 0x4200
 TEST_WATER_TILESETS_TABLE = 0xE8E0
 TEST_WARP_TILE_POINTERS = 0xC4CC
 TEST_DOOR_TILE_POINTERS = 0x1A62C
+TEST_WARP_CARPET_POINTERS = 0xC477
 
 WALKABLE_TILE = 0x01
 SOLID_TILE = 0x02
@@ -106,6 +108,15 @@ def cartridge(
     data[TEST_WATER_TILESETS_TABLE : TEST_WATER_TILESETS_TABLE + 10] = bytes(
         (0, 3, 5, 7, 13, 14, 17, 22, 23, 0xFF)
     )
+
+    for index, values in enumerate(
+        ((0x12, 0x17), (0x5C,), (0x4B,), (0x0F,))
+    ):
+        address = 0x4600 + 4 * index
+        pointer_at = TEST_WARP_CARPET_POINTERS + 2 * index
+        data[pointer_at : pointer_at + 2] = address.to_bytes(2, "little")
+        flat = 3 * 0x4000 + (address - 0x4000)
+        data[flat : flat + len(values) + 1] = bytes((*values, 0xFF))
 
     # Independently laid-out automatic warp lists.  The pointers deliberately
     # target banks 3 and 6, so a flat-pointer or wrong-bank decoder reads a
@@ -509,6 +520,17 @@ def test_automatic_warp_tiles_union_warp_and_sparse_door_tables() -> None:
     assert decoded[8] == frozenset({0x32, 0x54})
     assert decoded[11] == frozenset({0x13})
     assert decoded[1] == frozenset()
+
+
+def test_directional_warp_tiles_preserve_action_order_and_banked_pointers() -> None:
+    rom = cartridge(block_ids=[[0]], blocks={0: CORNERS})
+
+    assert directional_warp_tiles(rom) == {
+        "down": frozenset({0x12, 0x17}),
+        "up": frozenset({0x5C}),
+        "left": frozenset({0x4B}),
+        "right": frozenset({0x0F}),
+    }
 
 
 def test_automatic_warp_tables_refuse_bad_pointer_and_duplicate_tileset() -> None:

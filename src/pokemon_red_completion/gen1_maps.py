@@ -357,18 +357,25 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
     # merely entering that coordinate triggers it.
     from pokemon_red_completion.gen1_terrain import (
         automatic_warp_tiles,
+        directional_warp_tiles,
         terrain_for,
         tilesets,
     )
 
     sets = tilesets(rom)
+    terrain_tiles = {
+        map_id: terrain_for(rom, map_id, sets).tiles
+        for map_id in graph
+    }
     graph = _with_automatic_warp_triggers(
         graph,
-        {
-            map_id: terrain_for(rom, map_id, sets).tiles
-            for map_id in graph
-        },
+        terrain_tiles,
         automatic_warp_tiles(rom),
+    )
+    graph = _without_inert_directional_warps(
+        graph,
+        terrain_tiles,
+        directional_warp_tiles(rom),
     )
     verify_against_encounter_reads(
         reachable=set(graph),
@@ -399,6 +406,56 @@ def _with_automatic_warp_triggers(
             for passage in node.passages
         )
         projected[map_id] = replace(node, passages=passages)
+    return projected
+
+
+def _without_inert_directional_warps(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    directional_tiles: Mapping[str, frozenset[int]],
+) -> dict[int, MapNode]:
+    """Drop outdoor warp rows whose tile in front fails the engine table.
+
+    Gatehouses expose paired warp records, but only the row facing a listed
+    carpet tile is executable.  Keeping both made the joint router prefer an
+    inert upper row on Route 7 even though the lower row is the real entrance.
+    """
+
+    delta = {
+        "up": (-1, 0),
+        "down": (1, 0),
+        "left": (0, -1),
+        "right": (0, 1),
+    }
+    projected: dict[int, MapNode] = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+
+        def executable(
+            passage: Passage,
+            *,
+            source_tileset: int = node.tileset,
+            source_tiles: tuple[tuple[int, ...], ...] = tiles,
+        ) -> bool:
+            if (
+                passage.kind is not PassageKind.WARP
+                or passage.exit_action is None
+                or passage.at is None
+                or source_tileset not in OUTSIDE_TILESETS
+            ):
+                return True
+            dy, dx = delta[passage.exit_action]
+            y, x = passage.at[0] + dy, passage.at[1] + dx
+            return (
+                0 <= y < len(source_tiles)
+                and 0 <= x < len(source_tiles[y])
+                and source_tiles[y][x] in directional_tiles[passage.exit_action]
+            )
+
+        projected[map_id] = replace(
+            node,
+            passages=tuple(passage for passage in node.passages if executable(passage)),
+        )
     return projected
 
 
@@ -616,8 +673,8 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
         for condition, action in (
             (y == 0, "up"),
             (y == maximum_y, "down"),
-            (x == 0, "left"),
-            (x == maximum_x, "right"),
+            (x == 0, "right"),
+            (x == maximum_x, "left"),
         )
         if condition
     )
@@ -647,8 +704,8 @@ def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
     candidates = tuple(
         action
         for condition, action in (
-            (x == 0, "left"),
-            (x == maximum_x, "right"),
+            (x == 0, "right"),
+            (x == maximum_x, "left"),
         )
         if condition
     )
