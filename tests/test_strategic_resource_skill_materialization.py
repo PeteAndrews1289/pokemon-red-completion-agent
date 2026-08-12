@@ -33,6 +33,7 @@ def test_resource_materializer_help_is_explicitly_non_collection(
     assert "--acquire-resource-id" in output
     assert "gold_teeth" in output
     assert "fly" in output
+    assert "jolteon" in output
     assert "--relocate-to-resource-boundary" in output
     assert "--execute" not in output
 
@@ -70,5 +71,6 @@ def test_resource_boundaries_are_exact_and_resource_specific() -> None:
 
     assert _at_resource_boundary(celadon, "fly")
     assert not _at_resource_boundary(celadon, "gold_teeth")
+    assert _at_resource_boundary(celadon, "jolteon")
     assert _at_resource_boundary(fuchsia, "gold_teeth")
     assert not _at_resource_boundary(replace(fuchsia, player_y=4), "gold_teeth")

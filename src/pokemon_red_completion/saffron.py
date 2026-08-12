@@ -307,6 +307,67 @@ class SaffronChapterReport:
 
 
 @dataclass(frozen=True, slots=True)
+class JolteonResourceReport:
+    """Construction-only party lesson, deliberately separate from Saffron access."""
+
+    records: tuple[SaffronCheckpoint, ...]
+    final_raw: RawGameState
+    money_before: int
+    money_after: int
+    party_before: tuple[int, ...]
+    party_after: tuple[int, ...]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == 4
+            and self.money_before >= THUNDER_STONE_PRICE
+            and self.money_after == self.money_before - THUNDER_STONE_PRICE
+            and len(self.party_before) == 3
+            and self.party_after == (*self.party_before, JOLTEON)
+            and EEVEE not in self.party_after
+            and self.final_raw.map_id == MapId.CELADON_CITY
+            and (self.final_raw.player_x, self.final_raw.player_y) == (10, 14)
+            and self.final_raw.battle_state == 0
+            and self.final_raw.party_species_ids == self.party_after
+            and party_core_intact(self.party_after)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "resource": "jolteon_party_member",
+            "party": {
+                "before": list(self.party_before),
+                "after": list(self.party_after),
+                "gift_species": EEVEE,
+                "evolved_species": JOLTEON,
+            },
+            "economy": {
+                "thunder_stone_price": THUNDER_STONE_PRICE,
+                "money": [self.money_before, self.money_after],
+            },
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class SaffronAccessChapterReport:
     """Evidence for the story access itself, without optional party construction."""
 
@@ -583,6 +644,123 @@ def run_saffron_access_chapter(
         raise SaffronChapterError(
             f"Saffron access evidence contract failed: {report.public_dict()!r}."
         )
+    return report
+
+
+def run_jolteon_resource_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: SaffronTiming = DEFAULT_SAFFRON_TIMING,
+    progress: ProgressSink | None = None,
+) -> JolteonResourceReport:
+    """Recruit and evolve Eevee without changing any completion objective."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[SaffronCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CELADON_POKECENTER, (3, 3), "Jolteon resource boundary")
+    party_before = tuple(initial.party_species_ids or ())
+    money_before = _money(emulator)
+    if (
+        len(party_before) != 3
+        or EEVEE in party_before
+        or JOLTEON in party_before
+        or money_before < THUNDER_STONE_PRICE
+        or _bag(emulator).get(ItemId.THUNDER_STONE, 0)
+        or _party_hp(emulator) != _party_max_hp(emulator)
+        or any(_party_status(emulator))
+    ):
+        raise SaffronChapterError("Jolteon resource input boundary is not pristine.")
+    _checkpoint(records, progress, emulator, initial, "jolteon_ready", "Party resource ready")
+
+    _move(actions, reader, emulator, CENTER_EXIT, timing, "Celadon Center exit")
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior")
+    _move(actions, reader, emulator, CITY_TO_MANSION_REAR, timing, "Mansion rear entrance")
+    if reader.read().map_id == MapId.CELADON_CITY and (
+        reader.read().player_x,
+        reader.read().player_y,
+    ) == (25, 3):
+        _move(actions, reader, emulator, ("down", "left"), timing, "Mansion left rear door")
+    if reader.read().map_id == MapId.CELADON_CITY:
+        actions.execute(MacroAction(MacroActionKind.INTERACT))
+        _wait(actions, timing.movement_frames)
+    _require(reader.read(), MapId.CELADON_MANSION_1F, (3, 1), "Mansion rear entrance")
+    for route, map_id, coordinate, label in (
+        (MANSION_1F_REAR_STAIRS, MapId.CELADON_MANSION_2F, (2, 1), "Mansion 2F"),
+        (MANSION_2F_REAR_STAIRS, MapId.CELADON_MANSION_3F, (4, 1), "Mansion 3F"),
+        (MANSION_3F_REAR_STAIRS, MapId.CELADON_MANSION_ROOF, (2, 2), "Mansion roof"),
+        (MANSION_ROOF_TO_HOUSE, MapId.CELADON_MANSION_ROOF_HOUSE, (2, 7), "Eevee house"),
+        (ROOF_HOUSE_TO_EEVEE, MapId.CELADON_MANSION_ROOF_HOUSE, (4, 2), "Eevee stance"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _receive_eevee(actions, reader, emulator, party_before, timing)
+    _checkpoint(records, progress, emulator, reader.read(), "eevee_received", "Received Eevee")
+
+    for route, map_id, coordinate, label in (
+        (EEVEE_TO_ROOF_HOUSE_EXIT, MapId.CELADON_MANSION_ROOF, (2, 8), "Eevee room exit"),
+        (MANSION_ROOF_TO_3F, MapId.CELADON_MANSION_3F, (2, 1), "Mansion roof descent"),
+        (MANSION_3F_TO_2F, MapId.CELADON_MANSION_2F, (4, 1), "Mansion 3F descent"),
+        (MANSION_2F_TO_1F, MapId.CELADON_MANSION_1F, (2, 1), "Mansion 2F descent"),
+        (MANSION_1F_TO_CITY, MapId.CELADON_CITY, (25, 3), "Mansion rear exit"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    mansion_exit = reader.read()
+    _move(
+        actions,
+        reader,
+        emulator,
+        (
+            MANSION_REAR_TO_CENTER_EXTERIOR_24
+            if (mansion_exit.player_x, mansion_exit.player_y) == (24, 3)
+            else MANSION_REAR_TO_CENTER_EXTERIOR_25
+        ),
+        timing,
+        "Mansion rear to Center exterior",
+    )
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior return")
+    for route, map_id, coordinate, label in (
+        (CITY_TO_MART, MapId.CELADON_MART_1F, (16, 7), "Mart 1F"),
+        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Mart 2F"),
+        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "Mart 3F"),
+        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "Mart 4F"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _purchase_thunder_stone(actions, reader, emulator, timing)
+    _evolve_eevee(actions, reader, emulator, timing)
+    _checkpoint(records, progress, emulator, reader.read(), "jolteon_evolved", "Evolved Jolteon")
+
+    for route, map_id, coordinate, label in (
+        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "Mart 3F return"),
+        (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "Mart 2F return"),
+        (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "Mart 1F return"),
+        (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "Mart exit"),
+    ):
+        _move(actions, reader, emulator, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    final = reader.read()
+    _checkpoint(records, progress, emulator, final, "jolteon_terminal", "Stable Celadon boundary")
+    report = JolteonResourceReport(
+        records=tuple(records),
+        final_raw=final,
+        money_before=money_before,
+        money_after=_money(emulator),
+        party_before=party_before,
+        party_after=tuple(final.party_species_ids or ()),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise SaffronChapterError(f"Jolteon resource evidence failed: {report.public_dict()!r}.")
     return report
 
 

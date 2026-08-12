@@ -12,6 +12,7 @@ from pokemon_red_completion.saffron import (
     SAFFRON_ACCESS_CHECKPOINT_COUNT,
     SAFFRON_CHECKPOINT_COUNT,
     THUNDER_STONE_PRICE,
+    JolteonResourceReport,
     SaffronAccessChapterReport,
     SaffronChapterReport,
     SaffronCheckpoint,
@@ -457,6 +458,38 @@ def test_saffron_access_report_accepts_pre_erika_party_and_preserves_it() -> Non
     assert report.public_dict()["optional_party_construction"] is False
     assert not replace(report, party_after=(*party, 0x68)).passed
     assert not replace(report, final_raw=replace(raw, first_party_level=37)).passed
+
+
+def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() -> None:
+    party_after = (*TOWER_FINAL_PARTY, 0x68)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_CITY,
+        player_x=10,
+        player_y=14,
+        party_count=4,
+        party_species_ids=party_after,
+    )
+    report = JolteonResourceReport(
+        records=tuple(SaffronCheckpoint(str(index), str(index), raw) for index in range(4)),
+        final_raw=raw,
+        money_before=10_000,
+        money_after=10_000 - THUNDER_STONE_PRICE,
+        party_before=TOWER_FINAL_PARTY,
+        party_after=party_after,
+        party_hp=(130, 52, 37, 72),
+        party_max_hp=(130, 52, 37, 72),
+        party_status=(0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["resource"] == "jolteon_party_member"
+    assert not replace(report, money_after=report.money_after + 1).passed
+    assert not replace(report, party_before=TOWER_FINAL_PARTY[:2]).passed
+    assert not replace(report, controller_released=False).passed
 
 
 def test_saffron_report_accepts_level_44_healed_lineage() -> None:
