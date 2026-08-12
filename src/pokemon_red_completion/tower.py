@@ -65,6 +65,8 @@ NEUTRAL_BATTLE_STAT_STAGE = 7
 TOWER_RIVAL_ACCURACY_HELPER_INDEX = 1
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
+ICE_BEAM = 0x3A
+QUALIFIED_TOWER_SPECIAL_MOVES = frozenset({BUBBLEBEAM, ICE_BEAM})
 RIVAL2 = (0xF2, 0x2A)
 CHANNELER = (0xF5, 0x2D)
 ROCKET = (0xE6, 0x1E)
@@ -423,6 +425,25 @@ def _observe_protected_party(run: _RunState, state: RawGameState) -> bool:
     return state.party_species_ids in TOWER_START_PARTIES and (state.first_party_hp or 0) > 0
 
 
+def _qualified_tower_special_move(state: RawGameState) -> int:
+    """Return the qualified slot-three attack for this chapter lineage."""
+
+    moves = state.first_party_moves
+    pp = state.first_party_pp
+    if (
+        moves is None
+        or pp is None
+        or len(moves) < 3
+        or len(pp) < 3
+        or moves[2] not in QUALIFIED_TOWER_SPECIAL_MOVES
+        or not pp[2] & 0x3F
+    ):
+        raise TowerChapterError(
+            "Tower input lacks qualified BubbleBeam or Ice Beam slot-three evidence."
+        )
+    return moves[2]
+
+
 def run_tower_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -439,6 +460,7 @@ def run_tower_chapter(
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
     _require(start, MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
+    tower_special_move = _qualified_tower_special_move(start)
     starting_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
     if (
         ItemId.SILPH_SCOPE not in _bag(emulator)
@@ -522,7 +544,7 @@ def run_tower_chapter(
             CHANNELER,
             10,
             EventFlag.BEAT_POKEMONTOWER_4_TRAINER_1,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_4F_CHANNELER,
             run=run,
@@ -561,7 +583,7 @@ def run_tower_chapter(
             CHANNELER,
             14,
             EventFlag.BEAT_POKEMONTOWER_5_TRAINER_0,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_5F_CHANNELER,
             run=run,
@@ -596,7 +618,7 @@ def run_tower_chapter(
             CHANNELER,
             19,
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_0,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_19,
             run=run,
@@ -618,7 +640,7 @@ def run_tower_chapter(
             CHANNELER,
             21,
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_2,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_21,
             run=run,
@@ -651,7 +673,7 @@ def run_tower_chapter(
             CHANNELER,
             20,
             EventFlag.BEAT_POKEMONTOWER_6_TRAINER_1,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_6F_CHANNELER_20,
             run=run,
@@ -671,7 +693,15 @@ def run_tower_chapter(
     _pickup(actions, reader, emulator, run, timing, "down", ItemId.RARE_CANDY)
     _checkpoint(records, progress, emulator, reader.read(), "rare_candy", "Removed Rare Candy gate")
     _move(actions, reader, emulator, run, TOWER_6_MAROWAK, timing, "Marowak")
-    battles.append(_fight_marowak(actions, reader, emulator, timing))
+    battles.append(
+        _fight_marowak(
+            actions,
+            reader,
+            emulator,
+            timing,
+            expected_move_id=tower_special_move,
+        )
+    )
     _checkpoint(records, progress, emulator, reader.read(), "marowak", "Calmed Marowak")
 
     # Marowak and the changed collection/economy lineage can leave the lead in
@@ -724,7 +754,7 @@ def run_tower_chapter(
             BITE,
             1,
             RedBattlePlanId.TOWER_7F_ROCKET_20,
-            finish_with_bubblebeam=True,
+            finish_with_special_move=True,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "rocket_20", "Defeated second Rocket")
@@ -745,7 +775,7 @@ def run_tower_chapter(
             ROCKET,
             21,
             EventFlag.BEAT_POKEMONTOWER_7_TRAINER_2,
-            BUBBLEBEAM,
+            tower_special_move,
             3,
             RedBattlePlanId.TOWER_7F_ROCKET_21,
             clear_after=False,
@@ -1100,7 +1130,7 @@ def _fight(
     bounded_recovery: bool = False,
     recovery_hp_threshold: int = 40,
     recovery_limit: int | None = None,
-    finish_with_bubblebeam: bool = False,
+    finish_with_special_move: bool = False,
 ) -> TowerBattleEvidence:
     if interact_direction is not None:
         for _attempt in range(3):
@@ -1190,7 +1220,7 @@ def _fight(
         ):
             raise _PauseForTowerAccuracyReset
         preferred = 3 if (
-            (finish_with_bubblebeam and selected_move_spent)
+            (finish_with_special_move and selected_move_spent)
             or (
                 bounded_recovery
                 and raw.enemy_species_id in {PIDGEOTTO_SPECIES_ID, TOWER_RIVAL_GROWLITHE}
@@ -1318,6 +1348,8 @@ def _fight_marowak(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: TowerTiming,
+    *,
+    expected_move_id: int,
 ) -> TowerBattleEvidence:
     battle = _enter_battle(actions, reader, timing, "restless Marowak", 1)
     if (
@@ -1331,9 +1363,10 @@ def _fight_marowak(
     if (
         before is None
         or battle.first_party_moves is None
-        or battle.first_party_moves[2] != BUBBLEBEAM
+        or expected_move_id not in QUALIFIED_TOWER_SPECIAL_MOVES
+        or battle.first_party_moves[2] != expected_move_id
     ):
-        raise TowerChapterError("Marowak lacks BubbleBeam PP evidence.")
+        raise TowerChapterError("Marowak lacks qualified slot-three PP evidence.")
     for _pulse_index in range(160):
         raw = reader.read()
         if raw.battle_state == 0:
@@ -1375,7 +1408,7 @@ def _fight_marowak(
         None,
         None,
         int(EventFlag.BEAT_GHOST_MAROWAK),
-        BUBBLEBEAM,
+        expected_move_id,
         spent,
         30,
     )

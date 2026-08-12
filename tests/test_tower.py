@@ -13,7 +13,9 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
 from pokemon_red_completion.tower import (
+    BUBBLEBEAM,
     DEFAULT_TOWER_TIMING,
+    ICE_BEAM,
     OPTIONAL_EVENTS,
     REQUIRED_EVENTS,
     ROUTE_8_EAST_GOAL,
@@ -27,12 +29,14 @@ from pokemon_red_completion.tower import (
     TOWER_RIVAL_IVYSAUR,
     TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD,
     TowerBattleEvidence,
+    TowerChapterError,
     TowerChapterReport,
     TowerCheckpoint,
     TowerTiming,
     _is_restless_marowak_battle,
     _observe_protected_party,
     _plan_route_8_east,
+    _qualified_tower_special_move,
     _route_8_coordinate_is_safe,
     _RunState,
     _scripted_trainer_identity,
@@ -137,6 +141,34 @@ def test_tower_timing_is_positive_and_bounded() -> None:
         (MacroActionKind.MOVE, "right", TOWER_LAVENDER_TIMING.wait_frames),
         (MacroActionKind.CONFIRM, None, 240),
     )
+
+
+@pytest.mark.parametrize("move_id", (BUBBLEBEAM, ICE_BEAM))
+def test_tower_accepts_each_qualified_slot_three_lineage(move_id: int) -> None:
+    state = replace(
+        _raw(),
+        first_party_moves=(0x2C, 0x27, move_id, 0x37),
+        first_party_pp=(25, 30, 5, 25),
+    )
+
+    assert _qualified_tower_special_move(state) == move_id
+
+
+@pytest.mark.parametrize(
+    ("moves", "pp"),
+    (
+        ((0x2C, 0x27, 0x01, 0x37), (25, 30, 5, 25)),
+        ((0x2C, 0x27, ICE_BEAM, 0x37), (25, 30, 0, 25)),
+        (None, (25, 30, 5, 25)),
+        ((0x2C, 0x27, ICE_BEAM, 0x37), None),
+    ),
+)
+def test_tower_rejects_unqualified_or_unusable_slot_three_lineage(
+    moves: tuple[int, ...] | None,
+    pp: tuple[int, ...] | None,
+) -> None:
+    with pytest.raises(TowerChapterError, match="qualified BubbleBeam or Ice Beam"):
+        _qualified_tower_special_move(replace(_raw(), first_party_moves=moves, first_party_pp=pp))
 
 
 def test_tower_rival_resets_inherited_accuracy_loss_against_ivysaur_once() -> None:
