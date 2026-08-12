@@ -93,6 +93,13 @@ Implementation status:
     without opening counted collection. This should raise measured coverage from four to six live
     contexts if both cartridge runs pass; it does not satisfy any of the five still-missing
     cost-baseline challenge measurements.
+11. **Scenario 043 construction passed; preflight repair implemented:** the live Saffron capture
+    was exact, but preflight correctly rejected the branch because the static router retained the
+    pre-rescue Silph security guard forever. Cartridge data and the live state localized the sole
+    disconnecting coordinate. The replacement rule now requires both Mr. Fuji rescue flags before
+    opening that coordinate and leaves the sleeping Rocket's adjacent coordinate blocked. Live
+    diagnostic planning now exposes both declared choices (Silph cost 36, Cinnabar cost 856).
+    Publish, pass CI, and rerun the unconsumed read-only preflight before any rehearsal execution.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

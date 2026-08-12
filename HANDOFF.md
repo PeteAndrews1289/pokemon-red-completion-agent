@@ -33,6 +33,17 @@ qualified Silph skill. Publish and require exact-commit CI before either run. Th
 rehearse 043 and 047 once each, still uncounted. Until those runs succeed, measured status remains
 four authenticated uncounted contexts and zero counted rows.
 
+The first live construction completed under published `367563e`: `reach_saffron` added exactly one
+objective, finished at the scenario-043 boundary after 1,206 actions / 146,128 frames, and wrote an
+authenticated 23-objective capture without an episode. The ordinary read-only preflight then failed
+before consuming its unassigned rehearsal because `liberate_silph` had no route. The diagnosis was
+specific: rescuing Mr. Fuji hides Saffron's security guard at the Silph doorway and shows a sleeping
+Rocket one tile aside, while the static router continued blocking the original guard coordinate.
+The router now removes only that displaced coordinate and requires both independently observed Fuji
+rescue flags on every usable edge through it. On the live capture this exposes
+`story:silph_entrance_open`; Silph plans at cost 36 and Cinnabar at 856. Publish and pass exact-commit
+CI before repeating the still-unconsumed preflight.
+
 ## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
 
 Published source `a3598a2` passed exact-commit CI run `31553282113`. It is the first source whose

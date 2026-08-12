@@ -8,6 +8,9 @@ from pokemon_red_completion.gen1_story_routing import (
     CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
     ROUTE_7_GATE_REQUIREMENTS,
     SAFFRON_GUARDS_OPEN,
+    SAFFRON_SILPH_SECURITY_GUARD_AT,
+    SILPH_ENTRANCE_OPEN,
+    SILPH_ENTRANCE_REQUIREMENTS,
     apply_gen1_story_requirements,
     gen1_story_capabilities,
     gen1_story_static_object_blockers,
@@ -79,10 +82,22 @@ def police_graph() -> LocalGraph:
     )
 
 
+def silph_entrance_graph() -> LocalGraph:
+    center = SAFFRON_SILPH_SECURITY_GUARD_AT
+    adjacent = ((21, 18), (22, 17), (23, 18))
+    return LocalGraph(
+        {
+            center: tuple(LocalEdge(coordinate, "out") for coordinate in adjacent),
+            **{coordinate: (LocalEdge(center, "in"),) for coordinate in adjacent},
+        }
+    )
+
+
 def story_graphs() -> dict[int, LocalGraph]:
     return {
         int(MapId.ROUTE_7_GATE): gate_graph(),
         int(MapId.CERULEAN_CITY): police_graph(),
+        int(MapId.SAFFRON_CITY): silph_entrance_graph(),
     }
 
 
@@ -230,11 +245,88 @@ def test_bill_completion_opens_only_the_story_guarded_police_square() -> None:
     assert CERULEAN_ROBBED_HOUSE_OPEN not in gen1_story_capabilities(before_bill)
 
 
-def test_static_blockers_remove_only_the_story_displaced_police_object() -> None:
+@pytest.mark.parametrize(
+    ("event_flags", "expected"),
+    (
+        (None, PredicateState.UNKNOWN),
+        (bytes(172), PredicateState.UNSATISFIED),
+        (
+            _event_flags(EventFlag.RESCUED_MR_FUJI),
+            PredicateState.UNSATISFIED,
+        ),
+        (
+            _event_flags(
+                EventFlag.RESCUED_MR_FUJI,
+                EventFlag.RESCUED_MR_FUJI_WORLD,
+            ),
+            PredicateState.SATISFIED,
+        ),
+    ),
+)
+def test_fuji_flags_distinguish_unknown_closed_and_open_silph_entrance(
+    event_flags: bytes | None,
+    expected: PredicateState,
+) -> None:
+    observations = {
+        item.name: item
+        for item in observe_gen1_story_predicates(
+            raw(status_flags_1=0, event_flags=event_flags)
+        )
+    }
+
+    assert observations[SILPH_ENTRANCE_OPEN].state is expected
+
+
+def test_fuji_rescue_opens_only_the_displaced_silph_guard_square() -> None:
+    assert SAFFRON_SILPH_SECURITY_GUARD_AT == (22, 18)
+    assert {
+        (item.source_at, item.target_at, item.predicate)
+        for item in SILPH_ENTRANCE_REQUIREMENTS
+    } == {
+        (source, target, SILPH_ENTRANCE_OPEN)
+        for adjacent in ((21, 18), (22, 17), (23, 18))
+        for source, target in (
+            (adjacent, SAFFRON_SILPH_SECURITY_GUARD_AT),
+            (SAFFRON_SILPH_SECURITY_GUARD_AT, adjacent),
+        )
+    }
+    projected = apply_gen1_story_requirements(story_graphs())[int(MapId.SAFFRON_CITY)]
+    before_rescue = raw(status_flags_1=0, event_flags=bytes(172))
+    after_rescue = raw(
+        status_flags_1=0,
+        event_flags=_event_flags(
+            EventFlag.RESCUED_MR_FUJI,
+            EventFlag.RESCUED_MR_FUJI_WORLD,
+        ),
+    )
+
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(
+            projected,
+            (23, 18),
+            (21, 18),
+            capabilities=gen1_story_capabilities(before_rescue),
+        )
+    opened = find_local_path(
+        projected,
+        (23, 18),
+        (21, 18),
+        capabilities=gen1_story_capabilities(after_rescue),
+    )
+
+    assert opened.coordinates == ((23, 18), (22, 18), (21, 18))
+    assert SILPH_ENTRANCE_OPEN in gen1_story_capabilities(after_rescue)
+
+
+def test_static_blockers_remove_only_story_displaced_objects() -> None:
     assert gen1_story_static_object_blockers(
         int(MapId.CERULEAN_CITY),
         {(12, 27), (12, 28)},
     ) == frozenset({(12, 28)})
+    assert gen1_story_static_object_blockers(
+        int(MapId.SAFFRON_CITY),
+        {(22, 18), (22, 19), (23, 23)},
+    ) == frozenset({(22, 19), (23, 23)})
     assert gen1_story_static_object_blockers(99, {(1, 2)}) == frozenset({(1, 2)})
     with pytest.raises(ValueError, match="lacks story-displaced"):
         gen1_story_static_object_blockers(int(MapId.CERULEAN_CITY), {(12, 28)})

@@ -1,11 +1,12 @@
 """Generation I story predicates projected onto the neutral local router.
 
 Route 7's guard house has statically walkable corridors whose live access is
-decided by a durable guard flag. Cerulean's robbed-house approach has the
-opposite geometry problem: one police object occupies the passage before Bill
-is helped and is displaced afterward. Cartridge terrain remains responsible
-for geometry; this adapter contributes only the title-specific predicates and
-the one object coordinate whose static occupancy those predicates replace.
+decided by a durable guard flag. Cerulean's robbed-house approach and Saffron's
+Silph entrance have the opposite geometry problem: an object occupies the
+passage before a story event and is displaced afterward. Cartridge terrain
+remains responsible for geometry; this adapter contributes only the
+title-specific predicates and object coordinates whose static occupancy those
+predicates replace.
 """
 
 from __future__ import annotations
@@ -31,6 +32,8 @@ from pokemon_red_completion.semantic_traversal import (
 SAFFRON_GUARDS_OPEN = "story:saffron_guards_open"
 CERULEAN_ROBBED_HOUSE_OPEN = "story:cerulean_robbed_house_open"
 CERULEAN_ROBBED_HOUSE_POLICE_AT = (12, 27)
+SILPH_ENTRANCE_OPEN = "story:silph_entrance_open"
+SAFFRON_SILPH_SECURITY_GUARD_AT = (22, 18)
 
 # The two corridor rows are independent. Requiring both directions prevents a
 # planner from treating an unknown reverse crossing as free merely because a
@@ -67,13 +70,33 @@ CERULEAN_ROBBED_HOUSE_REQUIREMENTS = tuple(
     )
 )
 
+# Rescuing Mr. Fuji hides the security guard on the Silph doorway approach and
+# shows a sleeping Rocket one square to its east. Keep the doorway coordinate
+# in the graph, require both durable rescue flags on every usable edge through
+# it, and leave the sleeping Rocket's separate coordinate statically blocked.
+SILPH_ENTRANCE_REQUIREMENTS = tuple(
+    LocalPassageRequirement(
+        map_id=int(MapId.SAFFRON_CITY),
+        source_at=source,
+        target_at=target,
+        predicate=SILPH_ENTRANCE_OPEN,
+    )
+    for adjacent in ((21, 18), (22, 17), (23, 18))
+    for source, target in (
+        (adjacent, SAFFRON_SILPH_SECURITY_GUARD_AT),
+        (SAFFRON_SILPH_SECURITY_GUARD_AT, adjacent),
+    )
+)
+
 GEN1_STORY_PASSAGE_REQUIREMENTS = (
     *ROUTE_7_GATE_REQUIREMENTS,
     *CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
+    *SILPH_ENTRANCE_REQUIREMENTS,
 )
 
 GEN1_STORY_DISPLACED_OBJECTS: Mapping[int, frozenset[tuple[int, int]]] = {
     int(MapId.CERULEAN_CITY): frozenset({CERULEAN_ROBBED_HOUSE_POLICE_AT}),
+    int(MapId.SAFFRON_CITY): frozenset({SAFFRON_SILPH_SECURITY_GUARD_AT}),
 }
 
 
@@ -95,9 +118,22 @@ def observe_gen1_story_predicates(raw: RawGameState) -> tuple[PredicateObservati
         house_state = PredicateState.SATISFIED
     else:
         house_state = PredicateState.UNSATISFIED
+    if not raw.game_started or raw.event_flags is None:
+        silph_state = PredicateState.UNKNOWN
+    elif all(
+        event_flag_is_set(raw.event_flags, int(event))
+        for event in (
+            EventFlag.RESCUED_MR_FUJI,
+            EventFlag.RESCUED_MR_FUJI_WORLD,
+        )
+    ):
+        silph_state = PredicateState.SATISFIED
+    else:
+        silph_state = PredicateState.UNSATISFIED
     return (
         PredicateObservation(SAFFRON_GUARDS_OPEN, guard_state),
         PredicateObservation(CERULEAN_ROBBED_HOUSE_OPEN, house_state),
+        PredicateObservation(SILPH_ENTRANCE_OPEN, silph_state),
     )
 
 
