@@ -316,6 +316,10 @@ def require_objective_skill_materialization_step(
         raise TypeError("source completed objectives must be a string frozenset")
     if not isinstance(target, StrategicNavigationScenario):
         raise TypeError("target must be a strategic scenario")
+    if target.partition == "test":
+        raise StrategicScenarioRouteCatalogError(
+            "test scenario must remain unopened during materialization"
+        )
     known_objective_ids = frozenset(item.id for item in COMPLETION_QUEST)
     if source_completed_objective_ids.difference(known_objective_ids):
         raise StrategicScenarioRouteCatalogError(
@@ -351,6 +355,71 @@ def require_objective_skill_materialization_step(
     if target_completed != source_completed_objective_ids.union(expected_added):
         raise StrategicScenarioRouteCatalogError(
             "bounded skill must produce the target frontier exactly"
+        )
+    return expected_added
+
+
+def require_objective_skill_intermediate_step(
+    source_completed_objective_ids: frozenset[str],
+    target: StrategicNavigationScenario,
+    objective_id: str,
+) -> frozenset[str]:
+    """Authorize one dependency-legal skill toward, but short of, a target.
+
+    Generated scenario rows are samples rather than a continuous progression
+    ladder.  This permits an authenticated construction-only frontier between
+    rows while proving that every completed objective remains a strict subset
+    of one declared, non-test target.  The intermediate is never opened as a
+    policy context and cannot be mistaken for the target scenario itself.
+    """
+
+    if not isinstance(source_completed_objective_ids, frozenset) or any(
+        not isinstance(item, str) or not item
+        for item in source_completed_objective_ids
+    ):
+        raise TypeError("source completed objectives must be a string frozenset")
+    if not isinstance(target, StrategicNavigationScenario):
+        raise TypeError("target must be a strategic scenario")
+    if target.partition == "test":
+        raise StrategicScenarioRouteCatalogError(
+            "test scenario must remain unopened during materialization"
+        )
+    known_objective_ids = frozenset(item.id for item in COMPLETION_QUEST)
+    if source_completed_objective_ids.difference(known_objective_ids):
+        raise StrategicScenarioRouteCatalogError(
+            "source frontier contains an unknown objective"
+        )
+    if any(
+        not COMPLETION_QUEST.objective(item).prerequisites.issubset(
+            source_completed_objective_ids
+        )
+        for item in source_completed_objective_ids
+    ):
+        raise StrategicScenarioRouteCatalogError(
+            "source frontier violates objective prerequisites"
+        )
+    try:
+        objective = COMPLETION_QUEST.objective(objective_id)
+    except KeyError as error:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is unknown"
+        ) from error
+    if objective_id in source_completed_objective_ids:
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is already complete"
+        )
+    if not objective.prerequisites.issubset(source_completed_objective_ids):
+        raise StrategicScenarioRouteCatalogError(
+            "materialized objective is not dependency-legal at the source"
+        )
+    expected_added = frozenset({objective_id}).union(
+        STRATEGIC_SCENARIO_AUTOMATIC_COMPLETIONS.get(objective_id, frozenset())
+    )
+    intermediate = source_completed_objective_ids.union(expected_added)
+    target_completed = frozenset(target.completed_objective_ids)
+    if not intermediate < target_completed:
+        raise StrategicScenarioRouteCatalogError(
+            "intermediate frontier must remain a strict subset of the target"
         )
     return expected_added
 

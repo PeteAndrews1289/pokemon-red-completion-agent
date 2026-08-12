@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from materialize_strategic_scenario_skill import (  # noqa: E402
     PROJECT_ROOT,
+    _intermediate_checkpoint_id,
     _materialized_checkpoint_id,
     _require_private_new_output,
     _SemanticTrackingExecutor,
@@ -33,6 +34,7 @@ def test_skill_materializer_help_names_its_non_collection_boundary(
     assert "not a data-collection command" in output
     assert "--target-scenario-id" in output
     assert "--complete-objective-id" in output
+    assert "--intermediate-toward-target" in output
     assert "--relocate-to-skill-boundary" in output
     assert "--relocate-to-origin" in output
     assert "--source-scenario-id" not in output
@@ -47,6 +49,15 @@ def test_skill_materialized_checkpoint_id_is_portable() -> None:
         "red-strategic-scenario-v2-043-validation-skill-materialized"
     )
     assert ":" not in checkpoint_id
+
+    intermediate = _intermediate_checkpoint_id(
+        "red-strategic-scenario-v2-015-validation",
+        "reach_saffron",
+    )
+    assert intermediate == (
+        "red-strategic-scenario-v2-015-validation-toward-reach_saffron-"
+        "skill-materialized"
+    )
 
 
 def test_construction_executor_latches_semantics_after_every_action() -> None:

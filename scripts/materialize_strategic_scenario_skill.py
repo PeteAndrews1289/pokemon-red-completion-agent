@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize one non-test scenario with one bounded objective skill.
+"""Materialize one non-test scenario or construction frontier with one skill.
 
 This is not a data-collection command.  It may consume an authenticated
 teacher capture whose frontier is not itself a learning scenario, but it never
@@ -90,6 +90,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (  # noq
     STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES,
     STRATEGIC_SCENARIO_ORIGIN_MAPS,
     StrategicScenarioRouteCatalogError,
+    require_objective_skill_intermediate_step,
     require_objective_skill_materialization_step,
     require_scenario_origin,
 )
@@ -107,6 +108,14 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target-scenario-id", required=True)
     parser.add_argument("--complete-objective-id", required=True)
+    parser.add_argument(
+        "--intermediate-toward-target",
+        action="store_true",
+        help=(
+            "write a construction-only strict subset of the declared target "
+            "instead of claiming the target scenario is complete"
+        ),
+    )
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument(
         "--envelope",
@@ -192,9 +201,20 @@ def _materialized_checkpoint_id(target_scenario_id: str) -> str:
     return f"{target_scenario_id}-skill-materialized"
 
 
+def _intermediate_checkpoint_id(
+    target_scenario_id: str,
+    objective_id: str,
+) -> str:
+    return f"{target_scenario_id}-toward-{objective_id}-skill-materialized"
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
+    if args.intermediate_toward_target and args.relocate_to_origin:
+        raise StrategicScenarioRuntimeError(
+            "intermediate construction cannot claim the target scenario origin"
+        )
 
     source_identity = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source_identity)
@@ -244,11 +264,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         before = semantic_observer.observe()
         initial_completed = COMPLETION_QUEST.completed_ids(before)
-        expected_added = require_objective_skill_materialization_step(
-            initial_completed,
-            target_scenario,
-            args.complete_objective_id,
-        )
+        if args.intermediate_toward_target:
+            expected_added = require_objective_skill_intermediate_step(
+                initial_completed,
+                target_scenario,
+                args.complete_objective_id,
+            )
+        else:
+            expected_added = require_objective_skill_materialization_step(
+                initial_completed,
+                target_scenario,
+                args.complete_objective_id,
+            )
+        expected_final = initial_completed.union(expected_added)
 
         controller = FrameSafeExecutor(
             emulator,
@@ -361,11 +389,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         target_origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(
             target_scenario.origin_region
         )
-        if target_origin_maps is None:
+        if not args.intermediate_toward_target and target_origin_maps is None:
             raise StrategicScenarioRuntimeError(
                 "target scenario has no declared origin maps"
             )
-        if after_skill.map_id not in target_origin_maps:
+        if (
+            not args.intermediate_toward_target
+            and target_origin_maps is not None
+            and after_skill.map_id not in target_origin_maps
+        ):
             if not args.relocate_to_origin:
                 raise StrategicScenarioRuntimeError(
                     "bounded skill terminal differs from the target origin; "
@@ -389,25 +421,34 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             raise StrategicScenarioRuntimeError(
                 "materialized capture did not end at a stable ready boundary"
             )
-        require_scenario_origin(target_scenario, final_raw.map_id)
+        if not args.intermediate_toward_target:
+            require_scenario_origin(target_scenario, final_raw.map_id)
         final_completed = COMPLETION_QUEST.completed_ids(semantic_observer.observe())
-        if final_completed != frozenset(target_scenario.completed_objective_ids):
+        if final_completed != expected_final:
             raise StrategicScenarioRuntimeError(
-                "materialized live frontier differs from the target scenario"
+                "materialized live frontier differs from the authorized result"
             )
 
         emulator.save_state(out_state)
         output_envelope = write_captured_progress(
             Path(f"{out_state}.json"),
             state_path=out_state,
-            checkpoint_id=_materialized_checkpoint_id(target_scenario.scenario_id),
+            checkpoint_id=(
+                _intermediate_checkpoint_id(
+                    target_scenario.scenario_id,
+                    args.complete_objective_id,
+                )
+                if args.intermediate_toward_target
+                else _materialized_checkpoint_id(target_scenario.scenario_id)
+            ),
             checkpoint_label=(
-                f"Materialized {target_scenario.scenario_id} by bounded skill "
+                f"Materialized {'toward ' if args.intermediate_toward_target else ''}"
+                f"{target_scenario.scenario_id} by bounded skill "
                 f"{args.complete_objective_id}"
             ),
             checkpoints_completed=capture.checkpoints_completed,
             checkpoints_total=capture.checkpoints_total,
-            verified_objective_ids=target_scenario.completed_objective_ids,
+            verified_objective_ids=tuple(sorted(expected_final)),
         )
 
     if hashlib.sha256(state_path.read_bytes()).hexdigest() != state_sha256_before:
@@ -423,6 +464,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "episode_created": False,
         "source_registry_assignment_opened": False,
         "target_scenario_id": target_scenario.scenario_id,
+        "target_scenario_exact": not args.intermediate_toward_target,
         "completed_objective_id": args.complete_objective_id,
         "expected_objectives_added": sorted(expected_added),
         "skill": {

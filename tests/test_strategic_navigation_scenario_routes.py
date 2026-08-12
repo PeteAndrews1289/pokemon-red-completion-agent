@@ -14,6 +14,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     ScenarioObjectiveDestinationSpec,
     StrategicScenarioRouteCatalogError,
     require_navigation_materialization_step,
+    require_objective_skill_intermediate_step,
     require_objective_skill_materialization_step,
     require_scenario_origin,
     scenario_destination_specs,
@@ -241,3 +242,40 @@ def test_objective_skill_materialization_rejects_invalid_source_frontier() -> No
             target,
             "reach_saffron",
         )
+
+
+def test_objective_skill_intermediate_stays_strictly_below_non_test_target() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    source = registry.scenario("red-strategic-scenario-v2-011-validation")
+    target = registry.scenario("red-strategic-scenario-v2-015-validation")
+
+    assert require_objective_skill_intermediate_step(
+        frozenset(source.completed_objective_ids),
+        target,
+        "reach_saffron",
+    ) == frozenset({"reach_saffron"})
+
+    exact_source = frozenset(target.completed_objective_ids).difference(
+        {"reach_fuchsia"}
+    )
+    with pytest.raises(StrategicScenarioRouteCatalogError, match="strict subset"):
+        require_objective_skill_intermediate_step(
+            exact_source,
+            target,
+            "reach_fuchsia",
+        )
+
+
+def test_objective_skill_materializers_keep_test_scenarios_sealed() -> None:
+    registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    target = next(item for item in registry.scenarios if item.partition == "test")
+    source = frozenset(target.completed_objective_ids).difference(
+        {target.teacher_objective_id}
+    )
+
+    for authorize in (
+        require_objective_skill_materialization_step,
+        require_objective_skill_intermediate_step,
+    ):
+        with pytest.raises(StrategicScenarioRouteCatalogError, match="remain unopened"):
+            authorize(source, target, target.teacher_objective_id)
