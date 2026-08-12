@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.gen1_story_routing import (
     CERULEAN_ROBBED_HOUSE_OPEN,
     CERULEAN_ROBBED_HOUSE_POLICE_AT,
@@ -15,8 +16,11 @@ from pokemon_red_completion.gen1_story_routing import (
     SAFFRON_GYM_REQUIREMENTS,
     SAFFRON_GYM_ROCKET_GUARD_AT,
     SAFFRON_SILPH_SECURITY_GUARD_AT,
+    SEAFOAM_CURRENT_CONTROL,
+    SEAFOAM_INTERIOR_MAP_IDS,
     SILPH_ENTRANCE_OPEN,
     SILPH_ENTRANCE_REQUIREMENTS,
+    apply_gen1_seafoam_current_requirements,
     apply_gen1_story_requirements,
     gen1_story_capabilities,
     gen1_story_static_object_blockers,
@@ -57,6 +61,31 @@ def raw(
 
 def test_guard_access_mask_is_the_independently_measured_status_bit() -> None:
     assert SAFFRON_GUARD_ACCESS_MASK == 0x40
+
+
+def test_seafoam_water_edges_fail_closed_without_current_control() -> None:
+    seafoam_map = min(SEAFOAM_INTERIOR_MAP_IDS)
+    graph = LocalGraph(
+        {
+            (0, 0): (
+                LocalEdge(
+                    (0, 1),
+                    "right",
+                    action_kind=MacroActionKind.FIELD_MOVE,
+                    required_mode="land",
+                    result_mode="water",
+                ),
+                LocalEdge((1, 0), "down", required_mode="land"),
+            ),
+            (0, 1): (LocalEdge((0, 2), "right", required_mode="water"),),
+        }
+    )
+
+    projected = apply_gen1_seafoam_current_requirements({seafoam_map: graph})[seafoam_map]
+
+    assert projected.neighbors((0, 0))[0].requirements == {SEAFOAM_CURRENT_CONTROL}
+    assert projected.neighbors((0, 0))[1].requirements == frozenset()
+    assert projected.neighbors((0, 1))[0].requirements == {SEAFOAM_CURRENT_CONTROL}
 
 
 def gate_graph() -> LocalGraph:

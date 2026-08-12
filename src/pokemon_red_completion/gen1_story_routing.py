@@ -12,6 +12,7 @@ coordinates whose static occupancy those predicates replace.
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
+from dataclasses import replace
 
 from pokemon_red_completion.local_router import LocalGraph
 from pokemon_red_completion.observation import (
@@ -38,6 +39,8 @@ SAFFRON_GYM_OPEN = "story:saffron_gym_open"
 SAFFRON_GYM_ROCKET_GUARD_AT = (4, 34)
 ROUTE_12_SNORLAX_CLEARED = "story:route_12_snorlax_cleared"
 ROUTE_12_SNORLAX_AT = (62, 10)
+SEAFOAM_CURRENT_CONTROL = "field:seafoam_current_control"
+SEAFOAM_INTERIOR_MAP_IDS = frozenset(range(0x9F, 0xA3))
 
 # The two corridor rows are independent. Requiring both directions prevents a
 # planner from treating an unknown reverse crossing as free merely because a
@@ -214,7 +217,39 @@ def apply_gen1_story_requirements(
 ) -> dict[int, LocalGraph]:
     """Bind every currently modelled Generation I story threshold."""
 
-    return apply_local_passage_requirements(graphs, GEN1_STORY_PASSAGE_REQUIREMENTS)
+    story_bound = apply_local_passage_requirements(graphs, GEN1_STORY_PASSAGE_REQUIREMENTS)
+    return apply_gen1_seafoam_current_requirements(story_bound)
+
+
+def apply_gen1_seafoam_current_requirements(
+    graphs: Mapping[int, LocalGraph],
+) -> dict[int, LocalGraph]:
+    """Fail closed on Seafoam water until its forced-current state is modelled.
+
+    Static collision says these water edges are traversable, but the live game
+    can carry Red between floors unless the boulder-current puzzle is settled.
+    No observer grants this capability yet; retaining the requirement makes
+    the global planner choose an executable route around Seafoam.
+    """
+
+    projected = dict(graphs)
+    for map_id in SEAFOAM_INTERIOR_MAP_IDS.intersection(projected):
+        graph = projected[map_id]
+        projected[map_id] = LocalGraph(
+            {
+                source: tuple(
+                    replace(
+                        edge,
+                        requirements=edge.requirements | {SEAFOAM_CURRENT_CONTROL},
+                    )
+                    if edge.required_mode == "water" or edge.result_mode == "water"
+                    else edge
+                    for edge in outgoing
+                )
+                for source, outgoing in graph.edges.items()
+            }
+        )
+    return projected
 
 
 def gen1_story_static_object_blockers(

@@ -15,6 +15,7 @@ from pokemon_red_completion.gen1_cut import (
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
 from pokemon_red_completion.gen1_story_routing import (
     GEN1_STORY_PASSAGE_REQUIREMENTS,
+    apply_gen1_seafoam_current_requirements,
     apply_gen1_story_requirements,
     gen1_story_static_object_blockers,
 )
@@ -163,7 +164,7 @@ class StrategicScenarioRouteWorld:
                 {map_id: graph},
                 requirements,
             )[map_id]
-        return graph
+        return apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
 
     def _staged_cut_plan(
         self,
