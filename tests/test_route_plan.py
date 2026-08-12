@@ -71,7 +71,7 @@ def test_stepping_onto_a_warp_is_not_duplicated_as_an_extra_action() -> None:
     assert plan.steps[-1].expected_at == (7, 3)
 
 
-def test_pass_through_gate_warp_uses_a_second_inward_action() -> None:
+def test_pass_through_gate_warp_transitions_on_the_source_trigger() -> None:
     edge = MacroEdge(
         2,
         kind="warp",
@@ -87,13 +87,12 @@ def test_pass_through_gate_warp_uses_a_second_inward_action() -> None:
         (4, 0),
     )
 
-    assert plan.actions == ("right", "right")
-    assert not plan.segments[0].transition_action_in_approach
-    assert plan.steps[0].expected_map == 1
-    assert plan.steps[0].expected_at == (4, 1)
-    assert plan.steps[1].source_at == (4, 1)
-    assert plan.steps[1].expected_map == 2
-    assert plan.steps[1].expected_at == (3, 0)
+    assert plan.actions == ("right",)
+    assert plan.segments[0].transition_action_in_approach
+    assert len(plan.steps) == 1
+    assert plan.steps[0].source_at == (4, 0)
+    assert plan.steps[0].expected_map == 2
+    assert plan.steps[0].expected_at == (3, 0)
 
 
 def test_a_return_resolves_its_arrival_after_its_map_target() -> None:
