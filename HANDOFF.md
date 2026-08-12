@@ -14,6 +14,23 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenarios 045 and 046 qualified — 2026-08-12
+
+Exact train scenarios 045 and 046 are constructed and rehearsed. Scenario 045 uses the new
+location-only route materializer: from exact 042 it routes directly to the declared Saffron origin,
+adds only `reach_saffron`, and does not invoke a skill or create a label during construction. Its
+rehearsal selects Silph at cost 56 over Blaine at 620 and completes 55 movements. Scenario 046 then
+adds only `liberate_silph`; its rehearsal selects Sabrina at cost 68 over Blaine at 578 and
+completes 67 movements. Both have zero interruption, replan and movement labels.
+
+The lineage found three late Silph assumptions: a fourth obsolete Silph Scope was needed for the
+20-slot bag; Skull Bash was incorrectly preferred to STAB Surf against Rhyhorn; and seven carried
+Max Repels were required to be zero rather than preserved. All now have explicit evidence contracts.
+See the [combined receipt](docs/evidence/strategic-scenarios-045-046-rehearsal-qualification-2026-08-12.json).
+Current inventory is **76 authenticated envelopes, 43 distinct frontiers, 24 exact learning
+contexts and 12 missing**: sixteen train and eight validation. Counted collection remains zero and
+all test contexts remain sealed.
+
 ## Scenario 042 qualified; Mansion return is anchor-aware — 2026-08-12
 
 Exact train scenario 042 is constructed and rehearsed. Construction acquired one X Accuracy as a

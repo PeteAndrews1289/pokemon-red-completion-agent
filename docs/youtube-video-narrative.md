@@ -35,6 +35,12 @@ observed healing anchors and a checked Fly return. Finish on the second decision
 **SAFFRON 701 / BLAINE 22 / SAFFRON SELECTED / 690 STEPS / 10 WILD BATTLES / 1 REPLAN / 0 BUTTON
 LABELS**. This is the visual proof that independent lessons compose into a later strategic context.
 
+Then compress the next chain into two cards: **045: SILPH 56 / BLAINE 620 / 55 STEPS** and
+**046: SABRINA 68 / BLAINE 578 / 67 STEPS**. Between them, show the full 20-slot bag, move the spent
+Silph Scope into the PC, preserve seven Max Repels, and replace Skull Bash's dangerous charge turn
+with Surf against Rhyhorn. Caption it **“LATE-GAME STATE IS NOT AN EARLY-GAME SAVE WITH MORE
+BADGES.”**
+
 ## New opening beat: the route was complete, the curriculum was not
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW
@@ -74,7 +80,7 @@ then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 
 Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
 TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
 
-Update the persistent scoreboard to **74 AUTHENTICATED CAPTURES / 41 DISTINCT FRONTIERS / 22 EXACT
+Update the persistent scoreboard to **76 AUTHENTICATED CAPTURES / 43 DISTINCT FRONTIERS / 24 EXACT
 CONTEXTS / 6 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. Add the paired-capability card:
 **6 DISAGREEMENTS / BEST-CASE EXACT P = 0.03125 / TRAINING STILL CLOSED**. The next-act cards should
 be **KOGA WITHOUT SURF/STRENGTH**, **CINNABAR BEFORE SABRINA**, and **REMAINING NON-TEST CONTEXTS**.

@@ -47,9 +47,9 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 74 authenticated captures, 41 distinct frontiers, 22 exact learning
+The scoreboard is now 76 authenticated captures, 43 distinct frontiers, 24 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 14/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 16/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
 experience: Koga without Surf or Strength, route-battle recovery and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
@@ -107,6 +107,14 @@ the save's live healing anchor. The repaired return observes four authenticated 
 back only when needed. The official rehearsal selected Saffron at cost 701 over Blaine at cost 22,
 completed the same 690-step strategic journey through 10 wild battles and one replan, and again
 recorded one destination label with zero arrow-key labels.
+
+The next two contexts exposed how late-game composition differs from replay. Returning to Saffron
+could not buy and consume the same guard drink again, so a location-only constructor routed to the
+city and proved `reach_saffron` as the sole delta. Scenario 045 then selected Silph in 55 steps.
+Silph itself met a full bag, an already-spent Scope, carried Repels, and Blastoise with Surf. The
+teacher archived only obsolete story items, preserved the Repels, and replaced a dangerous Skull
+Bash charge turn with the observed super-effective Surf. Scenario 046 selected Sabrina in 67 steps.
+Together they add two context-diverse choices without recording a single arrow-key target.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

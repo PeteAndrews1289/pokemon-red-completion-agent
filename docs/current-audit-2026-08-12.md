@@ -12,8 +12,8 @@ the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualificati
 and the [scenario 037 receipt](evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **74 authenticated capture envelopes, 41 distinct frontiers and
-22 exact learning scenarios**. The exact contexts are fourteen train scenarios and eight validation
+The private inventory now contains **76 authenticated capture envelopes, 43 distinct frontiers and
+24 exact learning scenarios**. The exact contexts are sixteen train scenarios and eight validation
 scenarios. Scenarios 041 and 042 both retain their failed precursors; no failed row is promoted:
 **counted train = 0, counted validation = 0, test
 opened = 0**.
@@ -36,7 +36,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 14 missing learning scenarios and excludes one known invalid
+current measurement. It reports 12 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -106,7 +106,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 14 of 24 planned contexts;
+- train: 16 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -140,7 +140,9 @@ even if the code ran perfectly.
 9. **Complete:** construct and rehearse exact scenario 042 through independent X Accuracy,
    Saffron-access, Cinnabar and Secret Key lessons. Next continue with scenario 045 from this exact
    frontier.
-10. Open counted train/validation collection only after the published admission thresholds pass.
+10. **Complete:** route-materialize scenario 045 and qualify late-game Silph for scenario 046.
+    Continue the remaining 12 non-test contexts in dependency order.
+11. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 
 ## Portfolio and research narrative

@@ -2,8 +2,8 @@
 
 ## August 12 update
 
-The strategic benchmark now has 74 authenticated captures, 41 distinct frontiers and 22 exact
-non-test contexts: 14/24 train and 8/12 validation. All six preregistered validation challenges are
+The strategic benchmark now has 76 authenticated captures, 43 distinct frontiers and 24 exact
+non-test contexts: 16/24 train and 8/12 validation. All six preregistered validation challenges are
 live-qualified, but counted data remains zero and all 12 test contexts remain sealed. Scenario 037
 is the newest exact rehearsal: the teacher chose Erika at route cost 106 over a 77-cost Cinnabar
 alternative, then completed 102 movements with no replan and no movement-imitation labels.
@@ -35,6 +35,12 @@ local option—Blaine at cost 22—in favor of the story-order Saffron destinati
 completes 690 movements through 10 wild battles and one replan. A failed materialization also found
 that Dig follows the save's live healing anchor; the repaired lesson observes Celadon, Cinnabar,
 Saffron or Vermilion instead of assuming the older Saffron lineage.
+
+Two more late-game contexts now compose from that state. A location-only constructor reaches
+Saffron directly without replaying the already-consumed guard drink; Scenario 045 selects Silph in
+55 movements. Late-game Silph then archives only spent story items, uses Surf rather than a
+two-turn neutral attack against Rhyhorn, preserves seven carried Repels, and produces Scenario 046;
+its rehearsal selects Sabrina in 67 movements. Both add one strategic label and zero button labels.
 
 ## August 11 headline
 
