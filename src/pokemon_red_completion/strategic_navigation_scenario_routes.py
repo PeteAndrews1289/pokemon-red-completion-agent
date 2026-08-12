@@ -183,6 +183,7 @@ STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[str, tuple[MapId, tuple[int, int]]
     "defeat_koga": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "defeat_sabrina": (MapId.SAFFRON_POKECENTER, (3, 3)),
     "liberate_silph": (MapId.SAFFRON_POKECENTER, (3, 3)),
+    "obtain_secret_key": (MapId.CINNABAR_POKECENTER, (3, 3)),
     "obtain_surf": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "reach_cinnabar": (MapId.CELADON_POKECENTER, (3, 3)),
     "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
