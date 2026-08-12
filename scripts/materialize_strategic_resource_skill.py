@@ -38,6 +38,10 @@ from pokemon_red_completion.fly_resource import (  # noqa: E402
     FlyResourceReport,
     run_fly_resource_chapter,
 )
+from pokemon_red_completion.fuchsia import (  # noqa: E402
+    SnorlaxResourceReport,
+    run_snorlax_resource_chapter,
+)
 from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
     Gen1FieldMovePort,
     surf_permission,
@@ -104,11 +108,12 @@ from pokemon_red_completion.strategic_navigation_scenarios import (  # noqa: E40
     load_strategic_navigation_scenario_registry,
 )
 
-SUPPORTED_RESOURCE_IDS = ("fly", "gold_teeth", "jolteon")
+SUPPORTED_RESOURCE_IDS = ("fly", "gold_teeth", "jolteon", "snorlax")
 RESOURCE_BOUNDARIES = {
     "fly": (MapId.CELADON_POKECENTER, (3, 3)),
     "gold_teeth": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "jolteon": (MapId.CELADON_POKECENTER, (3, 3)),
+    "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
 }
 RELOCATION_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
@@ -335,12 +340,20 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if args.acquire_resource_id == "fly" and ItemId.HM02_FLY in _bag(emulator):
             raise StrategicScenarioRuntimeError("Fly resource source already contains HM02")
 
-        report: GoldTeethChapterReport | FlyResourceReport | JolteonResourceReport
+        report: (
+            GoldTeethChapterReport
+            | FlyResourceReport
+            | JolteonResourceReport
+            | SnorlaxResourceReport
+        )
         if args.acquire_resource_id == "gold_teeth":
             report = run_gold_teeth_chapter(emulator, reader, tracked)
             encounters_fled = report.encounters_fled
         elif args.acquire_resource_id == "jolteon":
             report = run_jolteon_resource_chapter(emulator, reader, tracked)
+            encounters_fled = 0
+        elif args.acquire_resource_id == "snorlax":
+            report = run_snorlax_resource_chapter(emulator, reader, tracked)
             encounters_fled = 0
         else:
             report = run_fly_resource_chapter(emulator, reader, tracked)
@@ -356,7 +369,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             ItemId.HM02_FLY not in _bag(emulator) or not report.passed
         )
         jolteon_failed = args.acquire_resource_id == "jolteon" and not report.passed
-        if objectives_changed or gold_teeth_failed or fly_failed or jolteon_failed:
+        snorlax_failed = args.acquire_resource_id == "snorlax" and not report.passed
+        if (
+            objectives_changed
+            or gold_teeth_failed
+            or fly_failed
+            or jolteon_failed
+            or snorlax_failed
+        ):
             raise StrategicScenarioRuntimeError(
                 "resource lesson changed objectives or failed its acquisition contract"
             )
@@ -365,6 +385,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "fly": (MapId.CELADON_POKECENTER, (3, 3)),
             "gold_teeth": (MapId.FUCHSIA_POKECENTER, (3, 3)),
             "jolteon": (MapId.CELADON_CITY, (10, 14)),
+            "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
         }[args.acquire_resource_id]
         if (
             final.map_id != expected_terminal[0]

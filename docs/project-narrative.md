@@ -47,7 +47,7 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 51 authenticated captures, 38 distinct frontiers, 19 exact learning
+The scoreboard is now 52 authenticated captures, 38 distinct frontiers, 19 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
 planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 11/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
@@ -69,6 +69,10 @@ valuable because it stopped honestly: the early level-39 party can now clear Sil
 but it reaches Sabrina with only three members. The balanced-team Sabrina lesson requires five
 before the Dojo recruits member six. The gap is no longer “Sabrina failed”; it is a precise new
 curriculum requirement—teach two accessible captures and their development before Fuchsia.
+The first half of that requirement is now real: a construction-only lesson returns to Celadon,
+receives Eevee, buys one Thunder Stone, evolves Jolteon and preserves the 19-objective frontier.
+It creates neither a strategic example nor a hidden `reach_saffron` label. Snorlax remains the
+fifth-member lesson that must be separated from actually reaching Fuchsia.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

@@ -1,5 +1,5 @@
 {
-  "authenticated_capture_envelopes": 51,
+  "authenticated_capture_envelopes": 52,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
@@ -107,7 +107,7 @@
     },
     {
       "already_exact": false,
-      "authenticated_source_envelopes": 1,
+      "authenticated_source_envelopes": 2,
       "objective_ids": [
         "defeat_sabrina"
       ],

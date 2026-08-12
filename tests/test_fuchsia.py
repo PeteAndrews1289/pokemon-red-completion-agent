@@ -16,10 +16,13 @@ from pokemon_red_completion.fuchsia import (
     FuchsiaChapterReport,
     FuchsiaCheckpoint,
     FuchsiaTiming,
+    SnorlaxResourceReport,
     _select_battle_bag_item,
     _snorlax_move_slot,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RamAddress, RawGameState
+from pokemon_red_completion.saffron import JOLTEON
+from pokemon_red_completion.tower import TOWER_FINAL_PARTY
 
 
 def _raw() -> RawGameState:
@@ -53,6 +56,63 @@ def test_snorlax_funding_sells_only_the_obsolete_cure_shortfall() -> None:
         antidotes=3,
         required_cost=19_200,
     ) == (0, 0)
+
+
+def test_snorlax_resource_report_adds_the_fifth_member_at_lavender() -> None:
+    party_before = (*TOWER_FINAL_PARTY, JOLTEON)
+    party_after = (*party_before, fuchsia_module.SNORLAX)
+    raw = replace(
+        _raw(),
+        map_id=MapId.LAVENDER_POKECENTER,
+        party_count=5,
+        party_species_ids=party_after,
+    )
+    fisher = FuchsiaBattleEvidence(
+        "Route 12 Fisher",
+        0xD6,
+        0x0E,
+        3,
+        int(EventFlag.BEAT_ROUTE_12_TRAINER_0),
+        fuchsia_module.BUBBLEBEAM,
+        1,
+    )
+    capture = FuchsiaBattleEvidence(
+        "Route 12 Snorlax",
+        fuchsia_module.SNORLAX,
+        None,
+        None,
+        int(EventFlag.BEAT_ROUTE12_SNORLAX),
+        fuchsia_module.BUBBLEBEAM,
+        2,
+        (fuchsia_module.SNORLAX,),
+        30,
+        True,
+        4,
+        1,
+        party_before,
+        party_after,
+    )
+    report = SnorlaxResourceReport(
+        records=tuple(FuchsiaCheckpoint(str(index), str(index), raw) for index in range(4)),
+        battles=(fisher, capture),
+        final_raw=raw,
+        flute_retained=True,
+        fight_event_before=False,
+        fight_event_after=False,
+        beat_event_after=True,
+        final_bag=((int(ItemId.POKE_FLUTE), 1),),
+        party_hp=(114, 52, 63, 72, 130),
+        party_max_hp=(114, 52, 63, 72, 130),
+        party_status=(0, 0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["resource"] == "snorlax_party_member"
+    assert not replace(report, beat_event_after=False).passed
+    assert not replace(report, controller_released=False).passed
 
 
 def test_snorlax_funding_sells_early_ball_surplus_but_retains_one() -> None:

@@ -86,6 +86,7 @@ SNORLAX_ANTIDOTE_SALE_PROCEEDS = 50
 SNORLAX_POKE_BALL_SALE_PROCEEDS = 100
 SNORLAX_SUPER_POTION_SALE_PROCEEDS = 350
 SNORLAX_POKE_BALL_RESERVE = 1
+FUCHSIA_FISHER_PLAN = RedBattlePlanId.FUCHSIA_ROUTE_12_FISHER
 ROUTE13_BIRD_KEEPER_BITE_PP_BOUND = 15
 GREAT_BALL_PRICE = 600
 SUPER_POTION_PRICE = 700
@@ -446,10 +447,159 @@ class FuchsiaChapterReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class SnorlaxResourceReport:
+    """Construction-only fifth-member lesson, before Fuchsia is reached."""
+
+    records: tuple[FuchsiaCheckpoint, ...]
+    battles: tuple[FuchsiaBattleEvidence, ...]
+    final_raw: RawGameState
+    flute_retained: bool
+    fight_event_before: bool
+    fight_event_after: bool
+    beat_event_after: bool
+    final_bag: tuple[tuple[int, int], ...]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        capture = self.battles[1] if len(self.battles) == 2 else None
+        return (
+            len(self.records) == 4
+            and len(self.battles) == 2
+            and self.battles[0].trainer_number == 3
+            and capture is not None
+            and capture.captured
+            and 1 <= capture.balls_used <= SNORLAX_CAPTURE_POLICY.max_throws
+            and len(capture.party_before) == 4
+            and capture.party_after == (*capture.party_before, SNORLAX)
+            and self.flute_retained
+            and not self.fight_event_before
+            and not self.fight_event_after
+            and self.beat_event_after
+            and _bag_quantity(self.final_bag, ItemId.GREAT_BALL) == 0
+            and _bag_quantity(self.final_bag, ItemId.SUPER_POTION) == 0
+            and self.final_raw.map_id == MapId.LAVENDER_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.party_species_ids == capture.party_after
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        capture = self.battles[1]
+        return {
+            "status": "ok" if self.passed else "failed",
+            "resource": "snorlax_party_member",
+            "capture": {
+                "species": SNORLAX,
+                "level": 30,
+                "throws_used": capture.balls_used,
+                "recovery_items_used": capture.recovery_items_used,
+                "party_before": list(capture.party_before),
+                "party_after": list(capture.party_after),
+            },
+            "route_12_fisher_defeated": self.battles[0].trainer_number == 3,
+            "flute_retained": self.flute_retained,
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
 @dataclass(slots=True)
 class _RunState:
     wilds: list[object] = field(default_factory=list)
     trainers: list[object] = field(default_factory=list)
+
+
+def run_snorlax_resource_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: FuchsiaTiming = DEFAULT_FUCHSIA_TIMING,
+    progress: ProgressSink | None = None,
+) -> SnorlaxResourceReport:
+    """Capture Snorlax and return to Lavender without reaching Fuchsia."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    run = _RunState()
+    records: list[FuchsiaCheckpoint] = []
+    battles: list[FuchsiaBattleEvidence] = []
+    initial = reader.read()
+    _require(initial, MapId.LAVENDER_POKECENTER, (3, 3), "Snorlax resource boundary")
+    if (
+        len(initial.party_species_ids or ()) != 4
+        or SNORLAX in (initial.party_species_ids or ())
+        or ItemId.POKE_FLUTE not in _bag(emulator)
+        or _event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX)
+    ):
+        raise FuchsiaChapterError("Snorlax resource input boundary is not pristine.")
+    _checkpoint(records, progress, emulator, initial, "snorlax_ready", "Snorlax resource ready")
+
+    _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
+    _move(actions, reader, emulator, run, ROUTE12_FISHER, timing, "Route 12 Fisher")
+    battles.append(
+        _fight_trainer(
+            actions,
+            reader,
+            emulator,
+            timing,
+            "Route 12 Fisher",
+            (0xD6, 0x0E, 3),
+            EventFlag.BEAT_ROUTE_12_TRAINER_0,
+            BUBBLEBEAM,
+            3,
+            8,
+            FUCHSIA_FISHER_PLAN,
+            trigger_direction="right",
+        )
+    )
+    _move(actions, reader, emulator, run, FISHER_TO_LAVENDER, timing, "Fisher income return")
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "Fisher income return")
+    _checkpoint(records, progress, emulator, reader.read(), "fisher", "Funded capture reserve")
+    _purchase_snorlax_capture_reserve(actions, reader, emulator, run, timing)
+
+    _move(actions, reader, emulator, run, LAVENDER_TO_SNORLAX, timing, "Route 12 Snorlax")
+    fight_before = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
+    battles.append(_fight_snorlax(actions, reader, emulator, timing))
+    fight_after = _event(emulator, EventFlag.FIGHT_ROUTE12_SNORLAX)
+    _checkpoint(records, progress, emulator, reader.read(), "snorlax", "Captured Snorlax")
+    _move(actions, reader, emulator, run, SNORLAX_TO_LAVENDER, timing, "Lavender recovery return")
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 3), "Lavender recovery nurse")
+    _heal_at_nurse(actions, reader, emulator, timing)
+    _sell_capture_surplus(actions, reader, emulator, run, timing)
+    final = reader.read()
+    _checkpoint(records, progress, emulator, final, "snorlax_terminal", "Stable Lavender boundary")
+    report = SnorlaxResourceReport(
+        records=tuple(records),
+        battles=tuple(battles),
+        final_raw=final,
+        flute_retained=ItemId.POKE_FLUTE in _bag(emulator),
+        fight_event_before=fight_before,
+        fight_event_after=fight_after,
+        beat_event_after=_event(emulator, EventFlag.BEAT_ROUTE12_SNORLAX),
+        final_bag=_bag_tuple(emulator),
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise FuchsiaChapterError(f"Snorlax resource evidence failed: {report.public_dict()!r}.")
+    return report
 
 
 def run_fuchsia_chapter(
@@ -488,7 +638,7 @@ def run_fuchsia_chapter(
             BUBBLEBEAM,
             3,
             8,
-            RedBattlePlanId.FUCHSIA_ROUTE_12_FISHER,
+            FUCHSIA_FISHER_PLAN,
             trigger_direction="right",
         )
     )

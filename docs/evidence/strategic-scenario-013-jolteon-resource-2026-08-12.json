@@ -1,0 +1,39 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-013-train-toward-jolteon-resource-materialized",
+    "envelope_sha256": "3df89e754529dbef673798d2e8dce8ad22dd63ce2f3c04fbab52fc23754ecff6",
+    "state_sha256": "86012259cfa3af53bf57fe9f722cef2301b7a1de70f4736617de113cffb3ce76",
+    "verified_objective_count": 19
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "episode_created": false,
+    "exact_scenario": false,
+    "source_registry_assignment_opened": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "actions_executed": 763,
+    "encounters_fled": 0,
+    "frames_executed": 99672,
+    "objective_ids_added": [],
+    "pre_resource_relocation": {
+      "acknowledged_steps": 68,
+      "interruptions": 0,
+      "replans": 0,
+      "wait_actions": 6
+    },
+    "resource_id": "jolteon",
+    "status": "complete"
+  },
+  "recorded_on": "2026-08-12",
+  "source": {
+    "ci_run_id": 31582711551,
+    "ci_status": "success",
+    "git_commit": "cb01e9152af01becfdce7554bbd1c6a8b124fe2b",
+    "source_bundle_sha256": "25a3d40bdbbfec301bb45b259355b8d12ad50f3e64dcd8b2d44b8363559cd3b5",
+    "teacher_execution_sha256": "72632ed2e63ea29b27dc3e7e227169a6cec7bfe30af98a5c9a7b3935971fe796"
+  },
+  "status": "authenticated_construction_only_resource",
+  "target_scenario_id": "red-strategic-scenario-v2-013-train"
+}

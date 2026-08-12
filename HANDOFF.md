@@ -31,10 +31,17 @@ run added only `liberate_silph` in 6,447 actions / 1,945,171 frames. It does **n
 five before recruiting member six. The next honest seam is therefore two pre-Fuchsia recruitment
 lessons, not a weakened party assertion. See the [scenario 013 frontier receipt](docs/evidence/strategic-scenario-013-construction-frontier-2026-08-12.json).
 
-The measured inventory is now **51 authenticated envelopes, 38 distinct frontiers, 19 exact
+Published `cb01e91` / CI `31582711551` then split Jolteon from Saffron access as a construction-only
+party resource. From the post-Silph capture it relocated 68 acknowledged steps, received Eevee,
+bought exactly one Thunder Stone, evolved the gift and preserved all 19 objectives in 763 actions /
+99,672 frames. The party now has four members. See the
+[Jolteon resource receipt](docs/evidence/strategic-scenario-013-jolteon-resource-2026-08-12.json).
+The remaining scenario-013 seam is an independent Snorlax capture lesson before Fuchsia completion.
+
+The measured inventory is now **52 authenticated envelopes, 38 distinct frontiers, 19 exact
 learning contexts and 17 missing**: eleven train and eight validation. Counted collection remains
-zero and all 12 test contexts remain sealed. The next implementation priorities are the two early
-recruitment lessons for scenario 013 and Cinnabar-before-Sabrina for scenario 041; both are now
+zero and all 12 test contexts remain sealed. The next implementation priorities are the Snorlax
+resource lesson for scenario 013 and Cinnabar-before-Sabrina for scenario 041; both are now
 live-confirmed teacher-coverage gaps rather than speculative graph differences.
 
 ## Scenarios 025 and 026 authenticated — 2026-08-12
