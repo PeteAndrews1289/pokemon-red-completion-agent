@@ -50,11 +50,13 @@ from pokemon_red_completion.silph import (
     SILPH_RIVAL_MAX_POTIONS,
     SILPH_X_SPECIAL_SUPPLY_TARGET,
     THIRD_FLOOR_GUARD,
+    X_ACCURACY_REPLACEMENT_PRICE,
     X_SPECIAL_PURCHASE_QUANTITY,
     SilphChapterError,
     SilphChapterReport,
     SilphCheckpoint,
     SilphTiming,
+    XAccuracyResourceReport,
     _acquire_silph_x_special,
     _battle_healing_item,
     _battle_healing_item_target_fainted_before_consumption,
@@ -194,6 +196,32 @@ def test_silph_mart_top_up_preserves_authenticated_carried_stock() -> None:
 
     with pytest.raises(SilphChapterError, match="outside the supported range"):
         _mart_top_up_quantity(4, target=3, label="X Special")
+
+
+def test_x_accuracy_resource_report_proves_one_item_and_no_party_change() -> None:
+    final = replace(_terminal(), map_id=MapId.CELADON_POKECENTER)
+    before = ((int(ItemId.POKE_BALL), 1),)
+    report = XAccuracyResourceReport(
+        final_raw=final,
+        money_before=24_035,
+        money_after=24_035 - X_ACCURACY_REPLACEMENT_PRICE,
+        bag_before=before,
+        bag_after=(*before, (int(ItemId.X_ACCURACY), 1)),
+        party_before=TOWER_FINAL_PARTY,
+        party_after=TOWER_FINAL_PARTY,
+        party_hp_before=(139, 52, 37),
+        party_hp_after=(139, 52, 37),
+        party_max_hp=(139, 52, 37),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["objective_label_created"] is False
+    assert not replace(report, money_after=report.money_after + 1).passed
+    assert not replace(report, party_after=(*TOWER_FINAL_PARTY, 0x68)).passed
 
 
 def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:

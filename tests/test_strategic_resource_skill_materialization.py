@@ -36,6 +36,7 @@ def test_resource_materializer_help_is_explicitly_non_collection(
     assert "jolteon" in output
     assert "saffron_guards" in output
     assert "snorlax" in output
+    assert "x_accuracy" in output
     assert "--relocate-to-resource-boundary" in output
     assert "--execute" not in output
 
@@ -75,6 +76,7 @@ def test_resource_boundaries_are_exact_and_resource_specific() -> None:
     assert not _at_resource_boundary(celadon, "gold_teeth")
     assert _at_resource_boundary(celadon, "jolteon")
     assert _at_resource_boundary(celadon, "saffron_guards")
+    assert _at_resource_boundary(celadon, "x_accuracy")
     lavender = replace(celadon, map_id=MapId.LAVENDER_POKECENTER)
     assert _at_resource_boundary(lavender, "snorlax")
     assert _at_resource_boundary(fuchsia, "gold_teeth")

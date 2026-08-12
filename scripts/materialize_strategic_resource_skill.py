@@ -98,6 +98,10 @@ from pokemon_red_completion.saffron import (  # noqa: E402
     run_jolteon_resource_chapter,
     run_saffron_guard_resource_chapter,
 )
+from pokemon_red_completion.silph import (  # noqa: E402
+    XAccuracyResourceReport,
+    run_x_accuracy_resource_chapter,
+)
 from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     StrategicNavigationProtocolError,
     load_committed_strategic_navigation_registry,
@@ -117,6 +121,7 @@ SUPPORTED_RESOURCE_IDS = (
     "jolteon",
     "saffron_guards",
     "snorlax",
+    "x_accuracy",
 )
 RESOURCE_BOUNDARIES = {
     "fly": (MapId.CELADON_POKECENTER, (3, 3)),
@@ -124,6 +129,7 @@ RESOURCE_BOUNDARIES = {
     "jolteon": (MapId.CELADON_POKECENTER, (3, 3)),
     "saffron_guards": (MapId.CELADON_POKECENTER, (3, 3)),
     "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
+    "x_accuracy": (MapId.CELADON_POKECENTER, (3, 3)),
 }
 RELOCATION_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
@@ -356,6 +362,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             | JolteonResourceReport
             | SaffronGuardResourceReport
             | SnorlaxResourceReport
+            | XAccuracyResourceReport
         )
         if args.acquire_resource_id == "gold_teeth":
             report = run_gold_teeth_chapter(emulator, reader, tracked)
@@ -368,6 +375,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             encounters_fled = 0
         elif args.acquire_resource_id == "saffron_guards":
             report = run_saffron_guard_resource_chapter(emulator, reader, tracked)
+            encounters_fled = 0
+        elif args.acquire_resource_id == "x_accuracy":
+            report = run_x_accuracy_resource_chapter(emulator, reader, tracked)
             encounters_fled = 0
         else:
             report = run_fly_resource_chapter(emulator, reader, tracked)
@@ -387,6 +397,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         saffron_guards_failed = (
             args.acquire_resource_id == "saffron_guards" and not report.passed
         )
+        x_accuracy_failed = args.acquire_resource_id == "x_accuracy" and not report.passed
         if (
             objectives_changed
             or gold_teeth_failed
@@ -394,6 +405,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             or jolteon_failed
             or snorlax_failed
             or saffron_guards_failed
+            or x_accuracy_failed
         ):
             raise StrategicScenarioRuntimeError(
                 "resource lesson changed objectives or failed its acquisition contract"
@@ -405,6 +417,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "jolteon": (MapId.CELADON_CITY, (10, 14)),
             "saffron_guards": (MapId.CELADON_POKECENTER, (3, 3)),
             "snorlax": (MapId.LAVENDER_POKECENTER, (3, 3)),
+            "x_accuracy": (MapId.CELADON_POKECENTER, (3, 3)),
         }[args.acquire_resource_id]
         if (
             final.map_id != expected_terminal[0]

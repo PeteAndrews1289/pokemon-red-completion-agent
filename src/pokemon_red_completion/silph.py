@@ -128,6 +128,64 @@ SILPH_ICE_BEAM_LINEAGES = {
         EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     ),
 }
+
+
+@dataclass(frozen=True, slots=True)
+class XAccuracyResourceReport:
+    """Construction-only Celadon purchase used by alternate-order curricula."""
+
+    final_raw: RawGameState
+    money_before: int
+    money_after: int
+    bag_before: tuple[tuple[int, int], ...]
+    bag_after: tuple[tuple[int, int], ...]
+    party_before: tuple[int, ...]
+    party_after: tuple[int, ...]
+    party_hp_before: tuple[int, ...]
+    party_hp_after: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        expected_bag = dict(self.bag_before)
+        expected_bag[int(ItemId.X_ACCURACY)] = 1
+        return (
+            self.money_after == self.money_before - X_ACCURACY_REPLACEMENT_PRICE
+            and dict(self.bag_after) == expected_bag
+            and self.final_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.battle_state == 0
+            and self.party_after == self.party_before
+            and self.party_hp_after == self.party_hp_before == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp_after)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "resource": "x_accuracy",
+            "objective_label_created": False,
+            "purchase": {
+                "item_id": int(ItemId.X_ACCURACY),
+                "quantity": dict(self.bag_after).get(int(ItemId.X_ACCURACY), 0),
+                "price": X_ACCURACY_REPLACEMENT_PRICE,
+                "money": [self.money_before, self.money_after],
+            },
+            "party_preserved": self.party_after == self.party_before,
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
 ROOF_GIRL_Y = 0xC224
 ROOF_GIRL_X = 0xC225
 ROOF_NERD_Y = 0xC214
@@ -1042,6 +1100,129 @@ def _mart_top_up_quantity(current: int, *, target: int, label: str) -> int:
             f"current={current}, target={target}."
         )
     return target - current
+
+
+def run_x_accuracy_resource_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: SilphTiming = DEFAULT_SILPH_TIMING,
+) -> XAccuracyResourceReport:
+    """Buy exactly one X Accuracy and restore the healed Celadon boundary."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    initial = reader.read()
+    _require(initial, MapId.CELADON_POKECENTER, (3, 3), "X Accuracy resource boundary")
+    bag_before = _bag(emulator)
+    money_before = _money(emulator)
+    party_before = tuple(initial.party_species_ids or ())
+    hp_before = _party_hp(emulator)
+    if (
+        not party_before
+        or bag_before.get(ItemId.X_ACCURACY, 0)
+        or len(bag_before) >= 20
+        or money_before < X_ACCURACY_REPLACEMENT_PRICE
+        or hp_before != _party_max_hp(emulator)
+        or any(_party_status(emulator))
+    ):
+        raise SilphChapterError("X Accuracy resource input is not pristine.")
+
+    _move(actions, reader, CENTER_EXIT, timing)
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "X Accuracy Center exit")
+    _move_verified(
+        actions,
+        reader,
+        CELADON_CENTER_EXIT_TO_MART,
+        timing,
+        "X Accuracy Mart approach",
+    )
+    _require(reader.read(), MapId.CELADON_MART_1F, (16, 7), "X Accuracy Mart 1F")
+    for route, map_id, coordinate, label in (
+        (MART_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "X Accuracy Mart 2F"),
+        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "X Accuracy Mart 3F"),
+        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "X Accuracy Mart 4F"),
+        (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "X Accuracy Mart 5F"),
+    ):
+        _move_verified(actions, reader, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+
+    menu_timing = LavenderTiming(wait_frames=timing.menu_frames)
+    _move_verified(
+        actions,
+        reader,
+        _directions("LLLLLLLLDDDDLLLU"),
+        timing,
+        "X Accuracy clerk approach",
+    )
+    _require(reader.read(), MapId.CELADON_MART_5F, (5, 5), "X Accuracy clerk")
+    _pulse(actions, MacroActionKind.MOVE, timing, "up", timing.menu_frames)
+    _interact(actions, timing.menu_frames)
+    _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _buy_mart_item(
+        actions,  # type: ignore[arg-type]
+        emulator,
+        menu_timing,
+        absolute_index=0,
+        item=ItemId.X_ACCURACY,
+        quantity=1,
+        target_bag_quantity=1,
+    )
+    _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
+    _move_verified(
+        actions,
+        reader,
+        _directions("DRRRUUUURRRRRRRR"),
+        timing,
+        "X Accuracy clerk return",
+    )
+    _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "X Accuracy Mart return")
+
+    for route, map_id, coordinate, label in (
+        (("up",), MapId.CELADON_MART_4F, (16, 2), "X Accuracy Mart 4F return"),
+        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "X Accuracy Mart 3F return"),
+        (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "X Accuracy Mart 2F return"),
+    ):
+        _move_verified(actions, reader, route, timing, label)
+        _require(reader.read(), map_id, coordinate, label)
+    _return_mart_2f_to_1f(actions, reader, emulator, timing)
+    _move_verified(actions, reader, MART_TO_CITY, timing, "X Accuracy Mart exit")
+    _require(reader.read(), MapId.CELADON_CITY, (10, 14), "X Accuracy Celadon return")
+    _move_verified(
+        actions,
+        reader,
+        CELADON_MART_EXIT_TO_CENTER,
+        timing,
+        "X Accuracy Center return",
+    )
+    _require(reader.read(), MapId.CELADON_POKECENTER, (3, 7), "X Accuracy Center entry")
+    _move(actions, reader, ("up",) * 4, timing)
+    final = reader.read()
+    _require(final, MapId.CELADON_POKECENTER, (3, 3), "X Accuracy stable boundary")
+
+    report = XAccuracyResourceReport(
+        final_raw=final,
+        money_before=money_before,
+        money_after=_money(emulator),
+        bag_before=tuple(sorted(bag_before.items())),
+        bag_after=tuple(sorted(_bag(emulator).items())),
+        party_before=party_before,
+        party_after=tuple(final.party_species_ids or ()),
+        party_hp_before=hp_before,
+        party_hp_after=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise SilphChapterError(
+            f"X Accuracy resource evidence failed: {report.public_dict()!r}."
+        )
+    return report
 
 
 def _acquire_silph_x_special(
