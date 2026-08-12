@@ -117,6 +117,14 @@ def _parser() -> argparse.ArgumentParser:
             "instead of claiming the target scenario is complete"
         ),
     )
+    parser.add_argument(
+        "--complete-via-origin-route",
+        action="store_true",
+        help=(
+            "complete a reach-only objective by routing directly to the target "
+            "scenario origin instead of invoking a chapter skill"
+        ),
+    )
     parser.add_argument("--state", type=Path, required=True)
     parser.add_argument(
         "--envelope",
@@ -212,6 +220,10 @@ def _intermediate_checkpoint_id(
     return f"{target_scenario_id}-toward-{objective_id}-skill-materialized"
 
 
+def _route_materialized_checkpoint_id(target_scenario_id: str) -> str:
+    return f"{target_scenario_id}-route-materialized"
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
@@ -226,6 +238,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.intermediate_toward_target and args.relocate_to_origin:
         raise StrategicScenarioRuntimeError(
             "intermediate construction cannot claim the target scenario origin"
+        )
+    if args.complete_via_origin_route and (
+        args.intermediate_toward_target
+        or args.relocate_to_skill_boundary
+        or args.relocate_to_origin
+    ):
+        raise StrategicScenarioRuntimeError(
+            "origin-route completion cannot be combined with skill relocation"
         )
 
     source_identity = detect_source_identity(PROJECT_ROOT, include_untracked=True)
@@ -332,6 +352,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             hazard_projector=Gen1TrainerSightProjector(rom, reader),
             capability_projector=field_capabilities,
         )
+        target_origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(
+            target_scenario.origin_region
+        )
 
         def execute_relocation(
             plan: RoutePlan,
@@ -359,35 +382,57 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             )
 
         pre_skill_relocation_report = None
-        availability = skill.availability(before)
-        if not availability.executable and args.relocate_to_skill_boundary:
-            boundary = STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES.get(
-                args.complete_objective_id
-            )
-            if boundary is None:
-                raise StrategicScenarioRuntimeError(
-                    "bounded objective has no declared construction boundary"
+        completion_route_report = None
+        skill_report = None
+        if args.complete_via_origin_route:
+            if (
+                target_origin_maps is None
+                or not objective.completion_facts
+                or any(
+                    not fact.startswith("location:")
+                    for fact in objective.completion_facts
                 )
-            boundary_map, boundary_at = boundary
-            pre_skill_relocation_report = execute_relocation(
-                route_world.plan_to_map(
+            ):
+                raise StrategicScenarioRuntimeError(
+                    "origin-route completion is restricted to declared location objectives"
+                )
+            completion_route_report = execute_relocation(
+                route_world.plan_to_any_map(
                     traversal_observer.observe(),
-                    boundary_map.value,
-                    goal_at=boundary_at,
+                    frozenset(item.value for item in target_origin_maps),
                 ),
-                route_name="strategic scenario pre-skill relocation",
+                route_name="strategic scenario objective route",
             )
-            before = semantic_observer.observe()
-            if COMPLETION_QUEST.completed_ids(before) != initial_completed:
-                raise StrategicScenarioRuntimeError(
-                    "pre-skill relocation changed the authenticated frontier"
-                )
+        else:
             availability = skill.availability(before)
-        if not availability.executable:
-            raise StrategicScenarioRuntimeError(
-                "bounded objective skill is unavailable at the source boundary"
-            )
-        skill_report = skills.execute_bounded(skill)
+            if not availability.executable and args.relocate_to_skill_boundary:
+                boundary = STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES.get(
+                    args.complete_objective_id
+                )
+                if boundary is None:
+                    raise StrategicScenarioRuntimeError(
+                        "bounded objective has no declared construction boundary"
+                    )
+                boundary_map, boundary_at = boundary
+                pre_skill_relocation_report = execute_relocation(
+                    route_world.plan_to_map(
+                        traversal_observer.observe(),
+                        boundary_map.value,
+                        goal_at=boundary_at,
+                    ),
+                    route_name="strategic scenario pre-skill relocation",
+                )
+                before = semantic_observer.observe()
+                if COMPLETION_QUEST.completed_ids(before) != initial_completed:
+                    raise StrategicScenarioRuntimeError(
+                        "pre-skill relocation changed the authenticated frontier"
+                    )
+                availability = skill.availability(before)
+            if not availability.executable:
+                raise StrategicScenarioRuntimeError(
+                    "bounded objective skill is unavailable at the source boundary"
+                )
+            skill_report = skills.execute_bounded(skill)
 
         relocation_report = None
         after_skill = reader.read()
@@ -401,9 +446,6 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             raise StrategicScenarioRuntimeError(
                 "bounded objective skill did not end at a stable ready boundary"
             )
-        target_origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(
-            target_scenario.origin_region
-        )
         if not args.intermediate_toward_target and target_origin_maps is None:
             raise StrategicScenarioRuntimeError(
                 "target scenario has no declared origin maps"
@@ -454,12 +496,22 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     args.complete_objective_id,
                 )
                 if args.intermediate_toward_target
-                else _materialized_checkpoint_id(target_scenario.scenario_id)
+                else (
+                    _route_materialized_checkpoint_id(target_scenario.scenario_id)
+                    if args.complete_via_origin_route
+                    else _materialized_checkpoint_id(target_scenario.scenario_id)
+                )
             ),
             checkpoint_label=(
-                f"Materialized {'toward ' if args.intermediate_toward_target else ''}"
-                f"{target_scenario.scenario_id} by bounded skill "
+                f"Materialized {target_scenario.scenario_id} by bounded origin route "
                 f"{args.complete_objective_id}"
+                if args.complete_via_origin_route
+                else (
+                    f"Materialized "
+                    f"{'toward ' if args.intermediate_toward_target else ''}"
+                    f"{target_scenario.scenario_id} by bounded skill "
+                    f"{args.complete_objective_id}"
+                )
             ),
             checkpoints_completed=capture.checkpoints_completed,
             checkpoints_total=capture.checkpoints_total,
@@ -488,8 +540,38 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "maximum_trainer_battles": args.maximum_trainer_battles,
         },
         "skill": {
-            "actions_executed": skill_report.actions_executed,
-            "frames_executed": skill_report.frames_executed,
+            "performed": skill_report is not None,
+            "actions_executed": 0 if skill_report is None else skill_report.actions_executed,
+            "frames_executed": 0 if skill_report is None else skill_report.frames_executed,
+        },
+        "completion_route": {
+            "requested": args.complete_via_origin_route,
+            "performed": completion_route_report is not None,
+            "acknowledged_steps": (
+                0
+                if completion_route_report is None
+                else len(completion_route_report.executed_steps)
+            ),
+            "interruptions": (
+                0
+                if completion_route_report is None
+                else len(completion_route_report.interruptions)
+            ),
+            "movement_requests": (
+                0
+                if completion_route_report is None
+                else completion_route_report.movement_requests
+            ),
+            "replans": (
+                0
+                if completion_route_report is None
+                else len(completion_route_report.replans)
+            ),
+            "wait_actions": (
+                0
+                if completion_route_report is None
+                else completion_route_report.wait_actions
+            ),
         },
         "pre_skill_relocation": {
             "requested": args.relocate_to_skill_boundary,

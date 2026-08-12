@@ -12,6 +12,7 @@ from materialize_strategic_scenario_skill import (  # noqa: E402
     _intermediate_checkpoint_id,
     _materialized_checkpoint_id,
     _require_private_new_output,
+    _route_materialized_checkpoint_id,
     _SemanticTrackingExecutor,
     main,
 )
@@ -35,6 +36,7 @@ def test_skill_materializer_help_names_its_non_collection_boundary(
     assert "--target-scenario-id" in output
     assert "--complete-objective-id" in output
     assert "--intermediate-toward-target" in output
+    assert "--complete-via-origin-route" in output
     assert "--relocate-to-skill-boundary" in output
     assert "--relocate-to-origin" in output
     assert "--maximum-flees" in output
@@ -61,6 +63,9 @@ def test_skill_materialized_checkpoint_id_is_portable() -> None:
         "red-strategic-scenario-v2-015-validation-toward-reach_saffron-"
         "skill-materialized"
     )
+    assert _route_materialized_checkpoint_id(
+        "red-strategic-scenario-v2-045-train"
+    ) == "red-strategic-scenario-v2-045-train-route-materialized"
 
 
 def test_construction_executor_latches_semantics_after_every_action() -> None:
