@@ -180,6 +180,7 @@ STRATEGIC_SCENARIO_ORIGIN_MAPS: Mapping[str, frozenset[MapId]] = {
 # (row, column), matching TraversalSnapshot.at and the local router.
 STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[str, tuple[MapId, tuple[int, int]]] = {
     "defeat_erika": (MapId.CELADON_POKECENTER, (3, 3)),
+    "obtain_surf": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
     "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
 }
