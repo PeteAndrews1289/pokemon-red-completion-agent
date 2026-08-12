@@ -25,9 +25,13 @@ BITE = 0x2C
 SKULL_BASH = 0x82
 TAIL_WHIP = 0x27
 STRENGTH = 0x46
+WATER_GUN = 0x37
 EXPECTED_MOVES_BEFORE = (BITE, TAIL_WHIP, 0x3D, 0x39)
 EXPECTED_MOVES_AFTER = (BITE, STRENGTH, 0x3D, 0x39)
 EXPECTED_PP_AFTER = (25, 15, 20, 15)
+PRE_SURF_MOVES_BEFORE = (BITE, TAIL_WHIP, 0x3D, WATER_GUN)
+PRE_SURF_MOVES_AFTER = (BITE, STRENGTH, 0x3D, WATER_GUN)
+PRE_SURF_PP_AFTER = (25, 15, 20, 25)
 NATURAL_MOVES_BEFORE = (SKULL_BASH, TAIL_WHIP, 0x3D, 0x39)
 NATURAL_MOVES_AFTER = (SKULL_BASH, STRENGTH, 0x3D, 0x39)
 NATURAL_PP_AFTER = (15, 15, 20, 15)
@@ -148,6 +152,7 @@ class StrengthChapterReport:
             in {
                 (EXPECTED_MOVES_BEFORE, EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
                 (NATURAL_MOVES_BEFORE, NATURAL_MOVES_AFTER, NATURAL_PP_AFTER),
+                (PRE_SURF_MOVES_BEFORE, PRE_SURF_MOVES_AFTER, PRE_SURF_PP_AFTER),
             }
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
@@ -203,7 +208,8 @@ def run_strength_chapter(
     initial_money = _money(emulator)
     moves_before = tuple(initial.first_party_moves or ())
     if (
-        moves_before not in {EXPECTED_MOVES_BEFORE, NATURAL_MOVES_BEFORE}
+        moves_before
+        not in {EXPECTED_MOVES_BEFORE, NATURAL_MOVES_BEFORE, PRE_SURF_MOVES_BEFORE}
         or ItemId.GOLD_TEETH not in _bag(emulator)
         or ItemId.HM04_STRENGTH in _bag(emulator)
         or _event(emulator, EventFlag.GOT_HM04)
@@ -243,11 +249,11 @@ def run_strength_chapter(
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
 
-    expected_moves_after, expected_pp_after = (
-        (NATURAL_MOVES_AFTER, NATURAL_PP_AFTER)
-        if moves_before == NATURAL_MOVES_BEFORE
-        else (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER)
-    )
+    expected_moves_after, expected_pp_after = {
+        EXPECTED_MOVES_BEFORE: (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+        NATURAL_MOVES_BEFORE: (NATURAL_MOVES_AFTER, NATURAL_PP_AFTER),
+        PRE_SURF_MOVES_BEFORE: (PRE_SURF_MOVES_AFTER, PRE_SURF_PP_AFTER),
+    }[moves_before]
     _teach_strength(
         actions,
         reader,

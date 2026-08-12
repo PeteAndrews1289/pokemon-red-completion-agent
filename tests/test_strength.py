@@ -15,6 +15,9 @@ from pokemon_red_completion.strength import (
     NATURAL_MOVES_AFTER,
     NATURAL_MOVES_BEFORE,
     NATURAL_PP_AFTER,
+    PRE_SURF_MOVES_AFTER,
+    PRE_SURF_MOVES_BEFORE,
+    PRE_SURF_PP_AFTER,
     STRENGTH_CHECKPOINT_COUNT,
     StrengthChapterReport,
     StrengthCheckpoint,
@@ -121,6 +124,27 @@ def test_strength_report_accepts_naturally_learned_skull_bash_lineage() -> None:
 
     assert natural.passed
     assert natural.public_dict()["strength"]["moves_before"] == list(NATURAL_MOVES_BEFORE)
+
+
+def test_strength_report_accepts_gold_teeth_before_surf() -> None:
+    report = _report()
+    pre_surf_raw = replace(
+        report.final_raw,
+        first_party_moves=PRE_SURF_MOVES_AFTER,
+        first_party_pp=PRE_SURF_PP_AFTER,
+    )
+    pre_surf = replace(
+        report,
+        final_raw=pre_surf_raw,
+        moves_before=PRE_SURF_MOVES_BEFORE,
+        moves_after=PRE_SURF_MOVES_AFTER,
+        pp_after=PRE_SURF_PP_AFTER,
+    )
+
+    assert pre_surf.passed
+    assert pre_surf.public_dict()["strength"]["moves_before"] == list(
+        PRE_SURF_MOVES_BEFORE
+    )
 
 
 def test_strength_public_report_discloses_exact_reusable_hm_teaching() -> None:

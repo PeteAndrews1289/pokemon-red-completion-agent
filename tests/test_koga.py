@@ -23,6 +23,10 @@ from pokemon_red_completion.koga import (
     MUK_SPECIES_ID,
     OPTIONAL_TRAINER_EVENTS,
     REGULAR_TRAINER_EVENTS,
+    STRENGTH,
+    STRENGTH_SLOT,
+    SURF,
+    SURF_SLOT,
     KogaBattleEvidence,
     KogaChapterError,
     KogaChapterReport,
@@ -31,6 +35,7 @@ from pokemon_red_completion.koga import (
     _koga_fainted_pivot_target,
     _koga_matchup_pivot_target,
     _koga_move_slot,
+    _koga_primary_attack,
     _koga_reserve_pivot_target,
     _nurse_approach_directions,
     _observed_terminal_mutual_ko_after_exit,
@@ -110,7 +115,9 @@ def _report() -> KogaChapterReport:
         party_hp=(124, 47, 40),
         party_max_hp=(124, 47, 40),
         party_status=(0, 0, 0),
-        surf_pp=15,
+        attack_move_id=SURF,
+        attack_move_slot=SURF_SLOT,
+        attack_pp=15,
         frames_executed=120_000,
         actions_executed=900,
         controller_released=True,
@@ -155,7 +162,7 @@ def test_koga_report_requires_every_terminal_gate() -> None:
         replace(report, soul_badge_mirror=False),
         replace(report, party_hp=(123, 47, 40)),
         replace(report, final_money=33_388),
-        replace(report, surf_pp=14),
+        replace(report, attack_pp=14),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
@@ -166,7 +173,7 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
     assert public["status"] == "ok"
     assert public["objective"] == "defeat_koga"
     assert public["geographic_dependency"] == {
-        "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+        "reason": "eastern Fuchsia cannot legally return to Celadon before Soul Badge",
         "route15_return": "one_way_blocked",
         "cycling_road": "bicycle_required",
         "surf": "soul_badge_required",
@@ -178,7 +185,9 @@ def test_koga_public_report_is_honest_about_geography_and_minimum_trainers() -> 
         "mart_purchases": 0,
         "consumables_used": 1,
     }
-    assert public["koga"]["surf_pp_spent"] == 9
+    assert public["koga"]["primary_move_id"] == SURF
+    assert public["koga"]["primary_move_slot"] == SURF_SLOT
+    assert public["koga"]["primary_move_pp_spent"] == 9
     assert public["koga"]["terminal_mutual_ko"] is False
     assert public["koga"]["x_accuracy_used"] is True
     assert public["koga"]["party_restored_at_boundary"] is True
@@ -272,6 +281,32 @@ def test_koga_disable_fallback_uses_a_legal_ranked_reserve_attack() -> None:
     assert _koga_move_slot(raw, allow_disable_fallback=True) == 3
     with pytest.raises(KogaChapterError, match="no legal ranked attack"):
         _koga_move_slot(raw, allow_disable_fallback=False)
+
+
+def test_koga_accepts_strength_without_surf_as_a_distinct_curriculum() -> None:
+    strength_raw = replace(
+        _raw(),
+        first_party_moves=(0x2C, STRENGTH, 0x3D, 0x37),
+        first_party_pp=(25, 15, 20, 25),
+    )
+    report = replace(
+        _report(),
+        final_raw=strength_raw,
+        attack_move_id=STRENGTH,
+        attack_move_slot=STRENGTH_SLOT,
+    )
+
+    assert _koga_primary_attack(strength_raw) == (STRENGTH, STRENGTH_SLOT)
+    assert report.passed
+    assert report.public_dict()["mandatory_trainers"][0]["move_id"] == STRENGTH
+    assert report.public_dict()["mandatory_trainers"][0]["move_slot"] == STRENGTH_SLOT
+
+
+def test_koga_rejects_an_unauthenticated_primary_move_layout() -> None:
+    unsupported = replace(_raw(), first_party_moves=(0x2C, 0x27, 0x3D, 0x37))
+
+    with pytest.raises(KogaChapterError, match="neither Surf.*nor pre-Surf Strength"):
+        _koga_primary_attack(unsupported)
 
 
 def test_koga_low_hp_lead_pivots_to_the_healthiest_reserve() -> None:

@@ -295,6 +295,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     surf_ready = fuchsia_center.with_facts("move:surf_available", "item:gold_teeth")
     assert koga.availability(surf_ready).executable
     assert strength.availability(surf_ready).executable
+    strength_ready = fuchsia_center.with_facts("move:strength_available")
+    assert koga.availability(strength_ready).executable
     post_strength = surf_ready.with_facts("badge:soul", "move:strength_available")
     assert erika.availability(post_strength).executable
     assert erika.availability(

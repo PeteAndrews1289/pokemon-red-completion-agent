@@ -10,7 +10,9 @@ from pokemon_red_completion.safari import (
     EXPECTED_MOVES_AFTER,
     EXPECTED_MOVES_BEFORE,
     EXPECTED_PP_AFTER,
+    GOLD_TEETH_CHECKPOINT_COUNT,
     SAFARI_CHECKPOINT_COUNT,
+    GoldTeethChapterReport,
     SafariChapterReport,
     SafariCheckpoint,
     SafariTiming,
@@ -82,6 +84,53 @@ def _report() -> SafariChapterReport:
     )
 
 
+def _gold_teeth_report() -> GoldTeethChapterReport:
+    raw = replace(
+        _raw(),
+        first_party_moves=EXPECTED_MOVES_BEFORE,
+        first_party_pp=(25, 30, 20, 25),
+    )
+    initial_bag = ((0x04, 8), (0x28, 1), (0x49, 1))
+    final_bag = tuple(
+        sorted(
+            (
+                *initial_bag,
+                (int(ItemId.GOLD_TEETH), 1),
+                (int(ItemId.TM40_SKULL_BASH), 1),
+            )
+        )
+    )
+    return GoldTeethChapterReport(
+        records=tuple(
+            SafariCheckpoint(f"gate_{index}", f"Gate {index}", raw, 0, 0)
+            for index in range(GOLD_TEETH_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        initial_bag=initial_bag,
+        final_bag=final_bag,
+        initial_money=25_839,
+        final_money=25_339,
+        counter_milestones=(500, 472, 376, 238, 228, 0),
+        balls_milestones=(30,) * 6,
+        got_tm40_skull_bash=True,
+        gold_teeth=True,
+        got_hm03=False,
+        in_safari_zone=False,
+        safari_steps=0,
+        safari_balls=0,
+        moves_before=EXPECTED_MOVES_BEFORE,
+        moves_after=EXPECTED_MOVES_BEFORE,
+        pp_after=(25, 30, 20, 25),
+        encounters_fled=5,
+        party_hp=(114, 52, 37),
+        party_max_hp=(114, 52, 37),
+        party_status=(0, 0, 0),
+        frames_executed=180_000,
+        actions_executed=1_100,
+        controller_released=True,
+    )
+
+
 def test_safari_timing_is_positive_and_bounded() -> None:
     assert SafariTiming() == DEFAULT_SAFARI_TIMING
     assert all(
@@ -135,6 +184,35 @@ def test_safari_public_report_discloses_one_admission_and_reusable_hm() -> None:
     assert public["rewards"]["tm40_skull_bash"] is True
     assert public["surf"]["slot"] == 4
     assert public["cleanup"]["mechanism"] == "times_up"
+
+
+def test_gold_teeth_report_proves_hm03_was_not_obtained() -> None:
+    report = _gold_teeth_report()
+
+    assert report.passed
+    assert report.public_dict()["resource"] == "gold_teeth"
+    assert report.public_dict()["objective_added"] is False
+    assert report.public_dict()["rewards"] == {
+        "tm40_skull_bash": True,
+        "gold_teeth": True,
+        "hm03_untouched": True,
+    }
+    assert report.public_dict()["cleanup"]["mechanism"] == "times_up_before_secret_house"
+
+
+def test_gold_teeth_report_rejects_surf_or_incomplete_cleanup() -> None:
+    report = _gold_teeth_report()
+    invalid = (
+        replace(report, records=report.records[:-1]),
+        replace(report, got_hm03=True),
+        replace(report, moves_after=EXPECTED_MOVES_AFTER),
+        replace(report, pp_after=EXPECTED_PP_AFTER),
+        replace(report, counter_milestones=(500, 472, 376, 238, 228, 1)),
+        replace(report, safari_steps=1),
+        replace(report, controller_released=False),
+    )
+
+    assert all(not candidate.passed for candidate in invalid)
 
 
 def test_safari_source_addresses_and_ids_are_pinned() -> None:

@@ -236,7 +236,7 @@ class ObtainSurfObjectiveSkill:
 
 @dataclass(frozen=True, slots=True)
 class DefeatKogaObjectiveSkill:
-    """Execute the qualified Fuchsia Gym chapter from the Surf boundary."""
+    """Execute either qualified Fuchsia Gym battle curriculum."""
 
     emulator: EmulatorState
     reader: PokemonRedStateReader
@@ -253,15 +253,18 @@ class DefeatKogaObjectiveSkill:
         executable = (
             state.mode.value == "overworld"
             and state.location == "fuchsia_pokecenter"
-            and "move:surf_available" in state.facts
+            and (
+                "move:surf_available" in state.facts
+                or "move:strength_available" in state.facts
+            )
             and "badge:soul" not in state.facts
         )
         return ObjectiveSkillAvailability(
             executable,
             (
-                "Observed the Surf-ready Fuchsia Center boundary."
+                "Observed a Surf- or Strength-ready Fuchsia Center boundary."
                 if executable
-                else "Requires Fuchsia Center with Surf before Koga is defeated."
+                else "Requires Fuchsia Center with Surf or Strength before Koga is defeated."
             ),
         )
 

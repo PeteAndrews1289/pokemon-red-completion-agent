@@ -53,6 +53,8 @@ KOGA_CHECKPOINT_COUNT = 11
 KOGA_TRAINER_REWARD_TOTAL = 7_852
 SURF = 0x39
 SURF_SLOT = 4
+STRENGTH = 0x46
+STRENGTH_SLOT = 2
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
@@ -195,7 +197,9 @@ class KogaChapterReport:
     party_hp: tuple[int, ...]
     party_max_hp: tuple[int, ...]
     party_status: tuple[int, ...]
-    surf_pp: int
+    attack_move_id: int
+    attack_move_slot: int
+    attack_pp: int
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -236,7 +240,12 @@ class KogaChapterReport:
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and all(status == 0 for status in self.party_status)
-            and self.surf_pp == 15
+            and (self.attack_move_id, self.attack_move_slot)
+            in {(SURF, SURF_SLOT), (STRENGTH, STRENGTH_SLOT)}
+            and self.final_raw.first_party_moves is not None
+            and self.final_raw.first_party_moves[self.attack_move_slot - 1]
+            == self.attack_move_id
+            and self.attack_pp == 15
             and self.controller_released
         )
 
@@ -248,7 +257,7 @@ class KogaChapterReport:
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_koga",
             "geographic_dependency": {
-                "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+                "reason": "eastern Fuchsia cannot legally return to Celadon before Soul Badge",
                 "route15_return": "one_way_blocked",
                 "cycling_road": "bicycle_required",
                 "surf": "soul_badge_required",
@@ -261,7 +270,8 @@ class KogaChapterReport:
                     "trainer_class": item.trainer_class,
                     "trainer_number": item.trainer_number,
                     "event": item.event,
-                    "move_id": SURF,
+                    "move_id": self.attack_move_id,
+                    "move_slot": self.attack_move_slot,
                     "selected_pp_spent": item.selected_pp_spent,
                 }
                 for item in self.battles[:-1]
@@ -276,7 +286,9 @@ class KogaChapterReport:
                 "trainer_class": self.battles[-1].trainer_class,
                 "trainer_number": self.battles[-1].trainer_number,
                 "party": ["Koffing L37", "Muk L39", "Koffing L37", "Weezing L43"],
-                "surf_pp_spent": self.battles[-1].selected_pp_spent,
+                "primary_move_id": self.attack_move_id,
+                "primary_move_slot": self.attack_move_slot,
+                "primary_move_pp_spent": self.battles[-1].selected_pp_spent,
                 # Retained for receipt-schema compatibility. This describes
                 # the healed chapter boundary, not whether Selfdestruct
                 # caused a temporary terminal mutual KO inside the battle.
@@ -301,6 +313,21 @@ class KogaChapterReport:
         }
 
 
+def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
+    """Select one of the two cartridge-qualified Koga input curricula."""
+
+    moves = raw.first_party_moves
+    if moves is None or len(moves) != 4:
+        raise KogaChapterError("Koga input lacks complete lead move evidence.")
+    if moves[SURF_SLOT - 1] == SURF:
+        return SURF, SURF_SLOT
+    if moves[STRENGTH_SLOT - 1] == STRENGTH and SURF not in moves:
+        return STRENGTH, STRENGTH_SLOT
+    raise KogaChapterError(
+        "Koga input has neither Surf in slot four nor pre-Surf Strength in slot two."
+    )
+
+
 def run_koga_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -318,8 +345,7 @@ def run_koga_chapter(
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Surf boundary")
     initial_bag = _bag_tuple(emulator)
     initial_money = _money(emulator)
-    if initial.first_party_moves is None or initial.first_party_moves[SURF_SLOT - 1] != SURF:
-        raise KogaChapterError("Koga input lacks Surf in slot four.")
+    attack_move_id, attack_move_slot = _koga_primary_attack(initial)
     if any(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS):
         raise KogaChapterError("Fuchsia Gym trainers were not pristine at chapter start.")
     if _event(emulator, EventFlag.BEAT_KOGA) or _event(emulator, EventFlag.GOT_TM06):
@@ -356,6 +382,8 @@ def run_koga_chapter(
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
             KOGA_PP_BOUNDS[0][1],
             RedBattlePlanId.KOGA_JUGGLER_3,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
             allow_disable_fallback=True,
         )
     )
@@ -372,7 +400,13 @@ def run_koga_chapter(
     # fainted even though a reserve legally finishes the trainer. Restore the
     # complete party before initiating another sight-line battle.
     _move(actions, reader, JUGGLER3_TO_CENTER, timing, "post-Juggler 3 recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+    )
     _move(actions, reader, CENTER_TO_TAMER2, timing, "Tamer 2 sight line")
     battles.append(
         _fight(
@@ -385,12 +419,20 @@ def run_koga_chapter(
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
             8,
             RedBattlePlanId.KOGA_TAMER_2,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tamer2", "Defeated mandatory Tamer 2")
 
     _move(actions, reader, TAMER2_TO_CENTER, timing, "first Fuchsia recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+    )
     _checkpoint(
         records,
         progress,
@@ -412,6 +454,8 @@ def run_koga_chapter(
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
             8,
             RedBattlePlanId.KOGA_JUGGLER_4,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
             allow_disable_fallback=True,
             reserve_pivot_threshold=JUGGLER_4_PIVOT_HP_THRESHOLD,
         )
@@ -429,7 +473,13 @@ def run_koga_chapter(
     if trainer_events_before_koga != (False, True, False, False, True, True):
         raise KogaChapterError(f"Minimum-trainer gate changed: {trainer_events_before_koga!r}.")
     _move(actions, reader, JUGGLER4_TO_CENTER, timing, "second Fuchsia recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "recovery2", "Healed before Koga")
 
     _move(actions, reader, CENTER_TO_KOGA, timing, "Koga stance")
@@ -452,6 +502,8 @@ def run_koga_chapter(
             EventFlag.BEAT_KOGA,
             15,
             RedBattlePlanId.KOGA_LEADER,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
             clear_text=False,
             allow_disable_fallback=True,
             reserve_pivot_enemy_species=MUK_SPECIES_ID,
@@ -491,7 +543,13 @@ def run_koga_chapter(
     )
 
     _move(actions, reader, KOGA_TO_CENTER, timing, "post-Koga recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+    )
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Koga boundary")
     _checkpoint(records, progress, emulator, final, "koga_stable", "Stable healed Fuchsia boundary")
@@ -513,7 +571,9 @@ def run_koga_chapter(
         _party_hp(emulator),
         _party_max_hp(emulator),
         _party_status(emulator),
-        int((final.first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1] & 0x3F),
+        attack_move_id,
+        attack_move_slot,
+        int((final.first_party_pp or (0, 0, 0, 0))[attack_move_slot - 1] & 0x3F),
         emulator.frame_count - start_frames,
         actions.actions_executed,
         not emulator.pressed_buttons,
@@ -536,6 +596,8 @@ def _fight(
     max_spent: int,
     battle_plan_id: str,
     *,
+    attack_move_id: int,
+    attack_move_slot: int,
     clear_text: bool = True,
     allow_disable_fallback: bool = False,
     reserve_pivot_threshold: int | None = None,
@@ -575,7 +637,11 @@ def _fight(
         if pivot_target is not None:
             raise _PauseForKogaReservePivot(pivot_target)
         try:
-            return _koga_move_slot(raw, allow_disable_fallback=allow_disable_fallback)
+            return _koga_move_slot(
+                raw,
+                primary_slot=attack_move_slot,
+                allow_disable_fallback=allow_disable_fallback,
+            )
         except KogaChapterError as error:
             raise KogaChapterError(f"{label}: {error}") from error
 
@@ -587,7 +653,7 @@ def _fight(
         battle_plan_id=battle_plan_id,
         required_move_policy=required_policy,
         required_move_ref=(
-            None if allow_disable_fallback else pokemon_red_move_ref(SURF)
+            None if allow_disable_fallback else pokemon_red_move_ref(attack_move_id)
         ),
         boost_capabilities=(
             frozenset({BattleBoostStat.ACCURACY})
@@ -610,7 +676,7 @@ def _fight(
                     choose_move,
                     expected_map=MapId.FUCHSIA_GYM,
                     intent=intent,
-                    required_move_id=None if allow_disable_fallback else SURF,
+                    required_move_id=None if allow_disable_fallback else attack_move_id,
                     timing=KOGA_BATTLE_TIMING,
                     label=label,
                     unknown_cancel_interval=3,
@@ -693,7 +759,9 @@ def _fight(
         terminal_mutual_ko = True
     if before_pp is None or final.first_party_pp is None:
         raise KogaChapterError(f"{label} lacks PP evidence.")
-    spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (final.first_party_pp[SURF_SLOT - 1] & 0x3F)
+    spent = (before_pp[attack_move_slot - 1] & 0x3F) - (
+        final.first_party_pp[attack_move_slot - 1] & 0x3F
+    )
     max_hp = _party_max_hp(emulator)
     status = _party_status(emulator)
     if clear_text:
@@ -791,8 +859,13 @@ def _settle_terminal_mutual_ko(
     raise KogaChapterError("Koga terminal mutual-KO recovery exceeded its bound.")
 
 
-def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
-    """Choose Surf or the first legal reserve attack after Gen I Disable."""
+def _koga_move_slot(
+    raw: RawGameState,
+    *,
+    primary_slot: int = SURF_SLOT,
+    allow_disable_fallback: bool,
+) -> int:
+    """Choose the authenticated primary move or a legal reserve after Disable."""
 
     moves = raw.battler_moves
     pp = raw.battler_pp
@@ -801,7 +874,11 @@ def _koga_move_slot(raw: RawGameState, *, allow_disable_fallback: bool) -> int:
     candidates = (
         (1, 2, 3, 4)
         if raw.active_party_index not in {None, 0}
-        else ((SURF_SLOT, 3, 1, 2) if allow_disable_fallback else (SURF_SLOT,))
+        else (
+            (primary_slot, *(slot for slot in (4, 3, 1, 2) if slot != primary_slot))
+            if allow_disable_fallback
+            else (primary_slot,)
+        )
     )
     for slot in candidates:
         index = slot - 1
@@ -1046,6 +1123,8 @@ def _heal_center(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
+    *,
+    attack_move_slot: int = SURF_SLOT,
 ) -> None:
     approach = reader.read()
     _move(
@@ -1062,11 +1141,17 @@ def _heal_center(
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
             and all(status == 0 for status in _party_status(emulator))
-            and ((reader.read().first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1] & 0x3F) == 15
+            and (
+                (reader.read().first_party_pp or (0, 0, 0, 0))[attack_move_slot - 1]
+                & 0x3F
+            )
+            == 15
         ):
             _clear_text(actions, reader, timing)
             return
-    raise KogaChapterError("Fuchsia Center did not restore the complete party and Surf PP.")
+    raise KogaChapterError(
+        "Fuchsia Center did not restore the complete party and primary-move PP."
+    )
 
 
 def _nurse_approach_directions(raw: RawGameState) -> tuple[str, ...]:
