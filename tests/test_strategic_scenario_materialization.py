@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from materialize_strategic_scenario import (  # noqa: E402
     PROJECT_ROOT,
+    _materialized_checkpoint_id,
     _require_private_new_output,
     main,
 )
@@ -30,6 +31,13 @@ def test_materializer_help_names_its_non_collection_boundary(
     assert "--source-scenario-id" in output
     assert "--target-scenario-id" in output
     assert "--complete-objective-id" in output
+
+
+def test_materialized_checkpoint_id_uses_the_portable_safe_id_alphabet() -> None:
+    checkpoint_id = _materialized_checkpoint_id("red-strategic-scenario-v2-003-validation")
+
+    assert checkpoint_id == "red-strategic-scenario-v2-003-validation-materialized"
+    assert ":" not in checkpoint_id
 
 
 def test_materializer_accepts_only_new_private_non_rom_adjacent_output(

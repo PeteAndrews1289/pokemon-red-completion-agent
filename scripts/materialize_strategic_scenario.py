@@ -152,6 +152,10 @@ def _require_private_new_output(destination: Path, rom_path: Path) -> Path:
     return resolved
 
 
+def _materialized_checkpoint_id(target_scenario_id: str) -> str:
+    return f"{target_scenario_id}-materialized"
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
@@ -303,7 +307,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         output_envelope = write_captured_progress(
             Path(f"{out_state}.json"),
             state_path=out_state,
-            checkpoint_id=f"{target_scenario.scenario_id}:materialized",
+            checkpoint_id=_materialized_checkpoint_id(target_scenario.scenario_id),
             checkpoint_label=(
                 f"Materialized {target_scenario.scenario_id} by completing "
                 f"{materialized_spec.objective_id}"

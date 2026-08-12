@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 
 
 class CapturedProgressError(ValueError):
@@ -27,7 +28,9 @@ class CapturedProgressEnvelope:
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.state_sha256) is None:
             raise CapturedProgressError("capture state digest is invalid")
-        if not self.checkpoint_id or not self.checkpoint_label:
+        if _SAFE_ID.fullmatch(self.checkpoint_id) is None:
+            raise CapturedProgressError("capture checkpoint identity is invalid")
+        if not self.checkpoint_label:
             raise CapturedProgressError("capture checkpoint identity is absent")
         if not 0 <= self.checkpoints_completed <= self.checkpoints_total:
             raise CapturedProgressError("capture checkpoint counts are invalid")
