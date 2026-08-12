@@ -72,9 +72,11 @@ MAX_SABRINA_HYPER_POTIONS = 7
 SABRINA_X_SPECIAL_USES = 2
 PRE_SURF_SABRINA_MOVES = (0x2C, 0x27, 0x3A, 0x37)
 POST_SURF_SABRINA_MOVES = (0x82, 0x46, 0x3A, 0x39)
+POST_SURF_NO_STRENGTH_SABRINA_MOVES = (0x2C, 0x27, 0x3A, 0x39)
 SABRINA_TERMINAL_PP_BY_MOVES = {
     PRE_SURF_SABRINA_MOVES: (25, 30, 10, 25),
     POST_SURF_SABRINA_MOVES: (15, 15, 10, 15),
+    POST_SURF_NO_STRENGTH_SABRINA_MOVES: (25, 30, 10, 15),
 }
 SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
     max_runtime_pulses=720,
@@ -517,7 +519,10 @@ def _encounter_party(
 def _sabrina_move_slot(raw: RawGameState) -> int:
     if raw.first_party_moves == PRE_SURF_SABRINA_MOVES:
         priorities = (3, 1, 4)
-    elif raw.first_party_moves == POST_SURF_SABRINA_MOVES:
+    elif raw.first_party_moves in {
+        POST_SURF_SABRINA_MOVES,
+        POST_SURF_NO_STRENGTH_SABRINA_MOVES,
+    }:
         priorities = (3, 2, 4) if raw.enemy_species_id == 0x77 else (2, 4, 3)
     else:
         raise SabrinaChapterError("Sabrina policy observed an unqualified move lineage.")

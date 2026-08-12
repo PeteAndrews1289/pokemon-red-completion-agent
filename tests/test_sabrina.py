@@ -10,6 +10,7 @@ from pokemon_red_completion.sabrina import (
     HYPER_POTION_THRESHOLD,
     MAX_SABRINA_HYPER_POTIONS,
     PC_DEPOSIT_ITEMS,
+    POST_SURF_NO_STRENGTH_SABRINA_MOVES,
     POST_SURF_SABRINA_MOVES,
     PRE_SURF_SABRINA_MOVES,
     SABRINA_BATTLE_TIMING,
@@ -179,3 +180,23 @@ def test_sabrina_policy_qualifies_the_pre_surf_ice_beam_lineage() -> None:
     assert not _sabrina_terminal_moves_ready(
         replace(raw, first_party_pp=(24, 30, 10, 25))
     )
+
+
+def test_sabrina_policy_qualifies_the_post_surf_no_strength_lineage() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.SAFFRON_GYM,
+        player_x=9,
+        player_y=8,
+        party_count=6,
+        battle_state=2,
+        first_party_moves=POST_SURF_NO_STRENGTH_SABRINA_MOVES,
+        first_party_pp=(25, 30, 10, 15),
+        enemy_species_id=0x77,
+    )
+
+    assert _sabrina_move_slot(raw) == 3
+    assert _sabrina_move_slot(
+        replace(raw, player_disabled_move_slot=3, player_disable_turns=2)
+    ) == 2
+    assert _sabrina_terminal_moves_ready(raw)
