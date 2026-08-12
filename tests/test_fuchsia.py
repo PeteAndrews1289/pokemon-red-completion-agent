@@ -17,6 +17,7 @@ from pokemon_red_completion.fuchsia import (
     FuchsiaCheckpoint,
     FuchsiaTiming,
     SnorlaxResourceReport,
+    _fuchsia_route_attack,
     _select_battle_bag_item,
     _snorlax_move_slot,
 )
@@ -57,6 +58,15 @@ def test_snorlax_funding_sells_only_the_obsolete_cure_shortfall() -> None:
         antidotes=3,
         required_cost=19_200,
     ) == (0, 0)
+
+
+def test_fuchsia_route_accepts_pre_and_post_erika_slot_three_attacks() -> None:
+    assert _fuchsia_route_attack(_raw()) == (fuchsia_module.BUBBLEBEAM, 3)
+    assert _fuchsia_route_attack(
+        replace(_raw(), first_party_moves=(0x2C, 0x27, fuchsia_module.ICE_BEAM, 0x37))
+    ) == (fuchsia_module.ICE_BEAM, 3)
+    with pytest.raises(fuchsia_module.FuchsiaChapterError, match="BubbleBeam or Ice Beam"):
+        _fuchsia_route_attack(replace(_raw(), first_party_moves=(0x2C, 0x27, 0x2D, 0x37)))
 
 
 def test_snorlax_resource_report_adds_the_fifth_member_at_lavender() -> None:

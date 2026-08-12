@@ -625,6 +625,7 @@ def run_fuchsia_chapter(
     initial_bag = _bag_tuple(emulator)
     if ItemId.POKE_FLUTE not in _bag(emulator):
         raise FuchsiaChapterError("Fuchsia input lacks the qualified Poké Flute.")
+    route_move_id, route_move_slot = _fuchsia_route_attack(start)
     _checkpoint(records, progress, emulator, start, "fuji_ready", "Poké Flute ready")
 
     _move(actions, reader, emulator, run, LAVENDER_TO_ROUTE12, timing, "Route 12 entry")
@@ -640,8 +641,8 @@ def run_fuchsia_chapter(
             "Route 12 Fisher",
             (0xD6, 0x0E, 3),
             EventFlag.BEAT_ROUTE_12_TRAINER_0,
-            BUBBLEBEAM,
-            3,
+            route_move_id,
+            route_move_slot,
             8,
             FUCHSIA_FISHER_PLAN,
             trigger_direction="right",
@@ -720,8 +721,8 @@ def run_fuchsia_chapter(
             "Route 12 Rocker",
             (0xDC, 0x14, 2),
             EventFlag.BEAT_ROUTE_12_TRAINER_3,
-            BUBBLEBEAM,
-            3,
+            route_move_id,
+            route_move_slot,
             8,
             RedBattlePlanId.FUCHSIA_ROUTE_12_ROCKER,
             trigger_direction="down",
@@ -893,6 +894,23 @@ def _fight_trainer(
     )
 
 
+def _fuchsia_route_attack(raw: RawGameState) -> tuple[int, int]:
+    """Accept the authenticated pre- or post-Erika slot-three attack."""
+
+    moves = raw.first_party_moves or ()
+    pp = raw.first_party_pp or ()
+    if (
+        len(moves) == 4
+        and moves[2] in SNORLAX_RESOURCE_FISHER_MOVES
+        and len(pp) == 4
+        and pp[2] & 0x3F
+    ):
+        return moves[2], 3
+    raise FuchsiaChapterError(
+        "Fuchsia input lacks the authenticated BubbleBeam or Ice Beam layout."
+    )
+
+
 def _settle_trainer_identity(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -939,6 +957,7 @@ def _fight_snorlax(
     else:
         raise FuchsiaChapterError("Poké Flute did not wake the level-30 Route 12 Snorlax.")
     party_before = raw.party_species_ids or ()
+    move_id, _ = _fuchsia_route_attack(raw)
     before_pp = raw.first_party_pp
     final, balls_used, recovery_items_used = _run_wild_capture(
         actions,
@@ -970,7 +989,7 @@ def _fight_snorlax(
         None,
         None,
         int(EventFlag.BEAT_ROUTE12_SNORLAX),
-        BUBBLEBEAM,
+        move_id,
         spent,
         (SNORLAX,),
         30,
