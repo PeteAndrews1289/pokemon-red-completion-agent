@@ -178,7 +178,12 @@ def _report() -> SilphChapterReport:
 
 
 def test_silph_timing_is_positive_and_bounded() -> None:
-    assert SILPH_PC_DEPOSIT_ITEMS == (ItemId.SS_TICKET, ItemId.LIFT_KEY, ItemId.HELIX_FOSSIL)
+    assert SILPH_PC_DEPOSIT_ITEMS == (
+        ItemId.SS_TICKET,
+        ItemId.LIFT_KEY,
+        ItemId.HELIX_FOSSIL,
+        ItemId.SILPH_SCOPE,
+    )
     assert X_SPECIAL_PURCHASE_QUANTITY == 3
     assert SILPH_X_SPECIAL_SUPPLY_TARGET == 4
     assert BATTLE_ITEM_SETTLE_PULSES == 720
@@ -496,7 +501,7 @@ def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     }
     assert _silph_capacity_deposit_items(nineteen_slots) == SILPH_PC_DEPOSIT_ITEMS
     assert _silph_capacity_ready(nineteen_slots)
-    replacement_pending = {**route_items, **{1000 + index: 1 for index in range(13)}}
+    replacement_pending = {**route_items, **{1000 + index: 1 for index in range(12)}}
     assert len(replacement_pending) == 16
     assert _silph_capacity_deposit_items(replacement_pending) == (ItemId.SS_TICKET,)
     already_safe = {
