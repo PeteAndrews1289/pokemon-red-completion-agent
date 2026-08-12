@@ -98,8 +98,15 @@ Implementation status:
     pre-rescue Silph security guard forever. Cartridge data and the live state localized the sole
     disconnecting coordinate. The replacement rule now requires both Mr. Fuji rescue flags before
     opening that coordinate and leaves the sleeping Rocket's adjacent coordinate blocked. Live
-    diagnostic planning now exposes both declared choices (Silph cost 36, Cinnabar cost 856).
-    Publish, pass CI, and rerun the unconsumed read-only preflight before any rehearsal execution.
+    diagnostic planning exposed both declared choices (Silph cost 36, Cinnabar cost 856). Published
+    source passed CI, and the uncounted teacher then completed all 35 Silph-approach movements with
+    no interruption or replan. Measured coverage is five live contexts / zero counted rows.
+12. **Scenario 047 constructed; preflight repair implemented:** the bounded Silph skill completed in
+    4,969 actions / 1,674,353 frames and admitted the exact 24-objective target. Preflight localized
+    another stale static object: Giovanni's defeat hides the Rocket below Saffron Gym. The router
+    now opens only that coordinate when the observed victory flag is set. Live diagnostic planning
+    exposes Sabrina at cost 68 and Cinnabar at 856. Publish, pass CI, then repeat the still-unconsumed
+    047 preflight and execute one uncounted rehearsal if ready.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

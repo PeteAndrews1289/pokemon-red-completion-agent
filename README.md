@@ -93,18 +93,21 @@
 > Cerulean Rocket's custom dialogue preamble, a bottom-edge return and a non-portable checkpoint ID.
 > Published source `a3598a2` passed CI and completed the admitted transition with 199/199 movements,
 > four handled interruptions and zero replans. Scenario 003 then chose Misty at cost 152 over Cut at
-> 58, acknowledged 148/148 movements and strictly reloaded one 315-record success. Honest status is
-> **4 authenticated contexts / 0 counted rows**—none is training data. This is the first measured
+> 58, acknowledged 148/148 movements and strictly reloaded one 315-record success. That milestone
+> reached **4 authenticated contexts / 0 counted rows**—none was training data—and produced the first measured
 > validation disagreement with the cost-only baseline.
 > A complementary construction lane is now implemented for midgame frontiers created by bounded
 > chapter skills rather than map entry. It may consume an authenticated pre-registry teacher
 > capture without opening that source as a policy context, executes one declared skill, and writes
 > only an exact non-test target frontier with no episode or label. Its first live targets are
 > validation scenarios 043 and 047 through the qualified Saffron and Silph skills; measured coverage
-> remains four until those published-source cartridge runs pass.
+> is now **5 authenticated contexts / 0 counted rows** after scenario 043 passed. Scenario 047 has
+> been constructed exactly; its Saffron Gym story-gate repair is awaiting published-source
+> qualification.
 > See the
 > [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json),
 > [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json),
+> [scenario-043 qualification](docs/evidence/strategic-scenario-043-rehearsal-qualification-2026-08-11.json),
 > [scenario-002 qualification](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json),
 > and [scenario-003 qualification](docs/evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
 > Collection stays closed, and the 12 test situations remain sealed.

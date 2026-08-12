@@ -42,7 +42,19 @@ Rocket one tile aside, while the static router continued blocking the original g
 The router now removes only that displaced coordinate and requires both independently observed Fuji
 rescue flags on every usable edge through it. On the live capture this exposes
 `story:silph_entrance_open`; Silph plans at cost 36 and Cinnabar at 856. Publish and pass exact-commit
-CI before repeating the still-unconsumed preflight.
+CI before repeating the still-unconsumed preflight. Published `cd31097` passed CI run `31556138128`;
+the retry was ready with no existing episode, and the teacher completed the 35-step Silph approach
+with zero interruptions or replans. Its immutable unassigned episode has 79 records, one choice, one
+successful outcome and no movement labels. Measured coverage is now five live contexts / zero
+counted rows.
+
+That exact 043 capture then materialized scenario 047 through the bounded Silph skill: 4,969 actions,
+1,674,353 frames, one added objective and an authenticated 24-objective terminal. Preflight again
+failed before opening an episode because the Rocket below Saffron Gym remained statically blocked
+after Giovanni's defeat. A second narrow story predicate now removes only that coordinate and opens
+its edges only when the Silph-Giovanni victory flag is observed. On the live 047 state Sabrina now
+plans at cost 68 and Cinnabar at 856. Publish and pass exact-commit CI before repeating 047's still-
+unconsumed read-only preflight.
 
 ## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
 
