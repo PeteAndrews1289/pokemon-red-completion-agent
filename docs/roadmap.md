@@ -12,8 +12,8 @@ Surf, Silph added the last objective, and construction returned to Celadon. The 
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
 labels. The curriculum-order audit now reports **12**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **49 authenticated envelopes, 36 distinct frontiers and 18 exact
-learning scenarios**: ten train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+Current measured coverage is **51 authenticated envelopes, 38 distinct frontiers and 19 exact
+learning scenarios**: eleven train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -37,13 +37,16 @@ The ordered gates are:
 3. **complete:** qualify Fly, Gold Teeth/Strength without Surf, Koga-before-Surf and pre-Surf Silph;
 4. **complete:** construct and rehearse validation scenario 019 exactly once. The paired
    six-challenge capability audit now passes at best-case exact p = 0.03125;
-5. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
-6. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
+5. **complete:** construct and rehearse scenario 037 from the post-Silph Surf bridge;
+6. add two pre-Fuchsia recruitment lessons so scenario 013 can reach the five-member
+   Dojo/Sabrina input without falsely completing Fuchsia;
+7. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
+8. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
-7. only then open counted collection, freeze normalization, train the shared candidate scorer and
+9. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 18 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 17 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

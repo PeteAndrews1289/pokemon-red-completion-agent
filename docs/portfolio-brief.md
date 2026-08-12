@@ -1,5 +1,20 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 12 update
+
+The strategic benchmark now has 51 authenticated captures, 38 distinct frontiers and 19 exact
+non-test contexts: 11/24 train and 8/12 validation. All six preregistered validation challenges are
+live-qualified, but counted data remains zero and all 12 test contexts remain sealed. Scenario 037
+is the newest exact rehearsal: the teacher chose Erika at route cost 106 over a 77-cost Cinnabar
+alternative, then completed 102 movements with no replan and no movement-imitation labels.
+
+The strongest engineering result from the same session was a useful refusal. An early level-39
+lineage now clears Silph and Giovanni on the real cartridge, with item use separately accounted for
+in the rival and boss battles. Sabrina still cannot be admitted from that state because the party
+has three members and the balanced Dojo/Sabrina curriculum requires five before recruiting member
+six. The project records that as a missing recruitment curriculum rather than relaxing the team
+contract or manufacturing a label.
+
 ## August 11 headline
 
 The project now separates three things that game-agent portfolios often collapse: cartridge

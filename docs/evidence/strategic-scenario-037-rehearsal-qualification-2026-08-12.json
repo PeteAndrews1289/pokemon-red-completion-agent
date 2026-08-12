@@ -1,0 +1,80 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "capture": {
+      "checkpoint_id": "red-strategic-scenario-v2-037-train-skill-materialized",
+      "envelope_sha256": "5a6e3875fbce445b3c5787445696f8daffdd341a40e50ebab0dc4fbce455910a",
+      "state_sha256": "7cc6f0900d2e81d388f3668839f288c8f5694543ce7c39c84d1804e136c44f72",
+      "verified_objective_count": 23
+    },
+    "counted": false,
+    "episode_created": false,
+    "objective_ids_added": [
+      "obtain_surf"
+    ],
+    "post_skill_relocation": {
+      "acknowledged_steps": 536,
+      "interruptions": 0,
+      "replans": 0,
+      "wait_actions": 23
+    },
+    "pre_skill_relocation": {
+      "acknowledged_steps": 629,
+      "interruptions": 0,
+      "replans": 0,
+      "wait_actions": 23
+    },
+    "skill": {
+      "actions_executed": 1742,
+      "frames_executed": 221004
+    },
+    "source_registry_assignment_opened": false,
+    "target_scenario_exact": true
+  },
+  "episode": {
+    "assignment_id": "f1ade3082a331e99ce0acda33dc69586495a878c35021542f5aeb4051437cb10",
+    "candidate_route_costs": [
+      106,
+      872,
+      77
+    ],
+    "execution": {
+      "acknowledged_steps": 102,
+      "interruptions": 0,
+      "replans": 0,
+      "selected_candidate_index": 0,
+      "selected_objective": "defeat_erika",
+      "status": "succeeded",
+      "wait_actions": 1
+    },
+    "manifest": {
+      "bytes": 395225,
+      "records": 210,
+      "sha256": "e65964eb9eb1f0683b3446494f8fd9dece91d44c07d29b6f123f2fd67fbbdf93"
+    },
+    "movement_labels": 0,
+    "partition": "unassigned",
+    "strategic_contexts": 1,
+    "teacher_choice_examples": 1
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "source_partition": "train"
+  },
+  "scenario_id": "red-strategic-scenario-v2-037-train",
+  "scenario_sha256": "fe8ebe58bdf805fd7893dd297d18903b3d3cb8c9aad4764c6b39d41f3c25d648",
+  "source": {
+    "ci_run_id": 31579704231,
+    "ci_status": "success",
+    "git_commit": "2a5fcadcb3fb28574dda44b97e7a5d890d8da653",
+    "source_bundle_sha256": "93e782439dccbfbfd8f17735ea4189ef6b7cf84a0f1f0a1c049179cd6862977b",
+    "teacher_execution_sha256": "1c0759bab16f842706c6db2a4d52228dfcdb328f026b3a1b2bfd64fdf19ecc8a"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

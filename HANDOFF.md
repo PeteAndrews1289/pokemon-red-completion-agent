@@ -14,6 +14,29 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 037 authenticated; scenario 013 reaches its honest party boundary — 2026-08-12
+
+Exact train scenario 037 is now constructed and rehearsed. Construction added only `obtain_surf`,
+used 1,742 skill actions / 221,004 frames, and acknowledged 629 pre-skill plus 536 post-skill
+steps without interruption or replan. Its uncounted rehearsal ranked Erika, Sabrina and Cinnabar
+at costs 106, 872 and 77, deliberately chose Erika rather than the cheapest route, and completed
+102 movements plus one wait. The immutable artifact contains 210 records, one strategic label and
+zero movement labels. See the [scenario 037 receipt](docs/evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
+
+Published `f41f437` / CI `31581448352` also qualified the early level-39 Silph lineage through the
+actual Giovanni battle: the boss policy selects Surf or Ice Beam by observed move identity and
+accounts separately for one X Special used by the rival lesson and one by Giovanni. The cartridge
+run added only `liberate_silph` in 6,447 actions / 1,945,171 frames. It does **not** make scenario
+013 exact. The resulting party has three members while the balanced Sabrina/Dojo lesson requires
+five before recruiting member six. The next honest seam is therefore two pre-Fuchsia recruitment
+lessons, not a weakened party assertion. See the [scenario 013 frontier receipt](docs/evidence/strategic-scenario-013-construction-frontier-2026-08-12.json).
+
+The measured inventory is now **51 authenticated envelopes, 38 distinct frontiers, 19 exact
+learning contexts and 17 missing**: eleven train and eight validation. Counted collection remains
+zero and all 12 test contexts remain sealed. The next implementation priorities are the two early
+recruitment lessons for scenario 013 and Cinnabar-before-Sabrina for scenario 041; both are now
+live-confirmed teacher-coverage gaps rather than speculative graph differences.
+
 ## Scenarios 025 and 026 authenticated — 2026-08-12
 
 Published `77fb370` / CI `31577543478` added the exact post-Surf-plus-Strength Silph lineage. From

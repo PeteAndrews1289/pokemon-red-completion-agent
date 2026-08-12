@@ -1233,6 +1233,11 @@ version has to prove the model learned something worth carrying into a game it h
 
 ## Required visuals and receipts
 
+- Add the scenario 037 decision card: **Erika 106 / Sabrina 872 / Cinnabar 77**, with Erika selected,
+  102 acknowledged movements, zero replans and zero arrow-key labels. Follow it with the scenario
+  013 stop card: **Silph cleared / party 3 / Sabrina boundary requires 5**. Frame this as curriculum
+  discovery, not a failed speedrun—the missing lesson is honest team recruitment before Fuchsia.
+
 - Clean power-on through Hall of Fame footage with the checkpoint counter visible.
 - The `[49, 0, 0, 0, 0, 0]` and `[24, 0, 4, 0, 5, 1]` League vectors side by side.
 - A six-member party screen before the League and role-specific battle clips.

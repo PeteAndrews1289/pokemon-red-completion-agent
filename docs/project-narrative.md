@@ -47,9 +47,9 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 49 authenticated captures, 36 distinct frontiers, 18 exact learning
+The scoreboard is now 51 authenticated captures, 38 distinct frontiers, 19 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 10/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 11/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
 experience: Koga without Surf or Strength, Cinnabar before Sabrina and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
@@ -61,6 +61,14 @@ post-Surf-plus-Strength Bite lineage; scenario 026 required early Erika to recog
 post-Surf party and to price supplies from carried stock. Both were encoded as exact lineages, both
 constructed only their declared objective, and both rehearsals chose Koga with no interruption,
 replan or arrow-key label.
+
+Scenario 037 then added Surf to the post-Silph frontier and posed a three-way choice with costs
+106, 872 and 77. The teacher chose Erika, completed 102 movements without interruption or replan,
+and again produced one strategic label with no arrow-key labels. The next attempt was equally
+valuable because it stopped honestly: the early level-39 party can now clear Silph and Giovanni,
+but it reaches Sabrina with only three members. The balanced-team Sabrina lesson requires five
+before the Dojo recruits member six. The gap is no longer “Sabrina failed”; it is a precise new
+curriculum requirement—teach two accessible captures and their development before Fuchsia.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 
