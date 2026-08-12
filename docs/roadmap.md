@@ -130,6 +130,13 @@ Implementation status:
     map-local structures until input is ready. The failed assignment remains a censored diagnostic,
     not a training context. Publish the repaired source, require green exact-commit CI, and only
     then use the new source-bound rehearsal identity.
+17. **Transition repair proven; interaction-only trainer distinction implemented:** published
+    source `889bc5b` passed CI, and the next one-shot recorded both the transient Game Corner state
+    and its correct settled `(15,17)` boundary. It then found that the poster Rocket has a trainer
+    object bit but no line-of-sight header. The decoder now distinguishes a genuinely absent table
+    from a referenced malformed one; only the latter is corruption. Preserve the second failed
+    assignment without an outcome, publish and gate this narrower repair, then preflight a fresh
+    source-bound identity.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.

@@ -29,6 +29,18 @@ exact-commit CI before making a fresh source-bound attempt; never retry or relab
 `a259bb38…`. See the path-free
 [failure receipt](docs/evidence/strategic-scenario-006-first-rehearsal-failure-2026-08-11.json).
 
+Published repair `889bc5b` passed CI run `31557693436`. Its fresh assignment proved the transition
+guard: the episode recorded the entering input, a 180-frame wait, and the stable ready Game Corner
+arrival at `(15,17)`. It then failed immutably at the next projection. The Rocket guarding the
+poster is an interaction-only scripted trainer; its object retains Red's trainer bit and ordinary
+facing, but the map script contains no line-of-sight trainer-header table. The decoder formerly
+treated any such absence as structural corruption. It now returns no sight lanes only when the map
+script contains no plausible header reference, while referenced malformed tables continue to fail
+closed under the existing corruption tests. This second assignment is also consumed and has no
+outcome label. See its
+[failure receipt](docs/evidence/strategic-scenario-006-second-rehearsal-failure-2026-08-11.json).
+Publish and gate the new decoder source before a third, newly identified attempt.
+
 The first materializer could derive only one registry edge: scenario 002 → 003 by reaching
 Vermilion. That is too narrow for the midgame, where a truthful frontier is usually created by a
 bounded chapter skill rather than by entering one map. A second fail-closed construction lane now

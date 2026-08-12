@@ -93,6 +93,14 @@ def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
     assert trainer_headers(bytes(rom), {0}) == ()
 
 
+def test_ordinary_facing_interaction_trainer_without_a_header_table_has_no_lane() -> None:
+    rom = trainer_cartridge()
+    rom[SCRIPT + 4 : SCRIPT + 6] = (0x4500).to_bytes(2, "little")
+    rom[0x4500 : 0x4508] = bytes((0x18, 0x4C, 0x19, 0x4C, 0x69, 0x4C, 0xC9, 0xFA))
+
+    assert trainer_headers(bytes(rom), {0}) == ()
+
+
 def test_header_candidate_requires_the_real_stride_and_sentinel() -> None:
     mutated = trainer_cartridge()
     mutated[TRAINERS + 24] = 0

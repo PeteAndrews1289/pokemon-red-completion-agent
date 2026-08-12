@@ -155,6 +155,8 @@ def _trainer_headers_for_map(
         raise CartridgeReadError(f"map {map_id} has no readable script")
     script = bank_offset(bank, script_address)
     candidates: list[tuple[TrainerHeader, ...]] = []
+    plausible_references = 0
+    trainer_slots = {event.object_index for event in trainer_events}
     limit = min(len(rom) - 2, script + TRAINER_SCRIPT_SCAN_BYTES)
     for cursor in range(script, limit):
         if rom[cursor] != LOAD_HL_OPCODE:
@@ -162,6 +164,13 @@ def _trainer_headers_for_map(
         address = int.from_bytes(rom[cursor + 1 : cursor + 3], "little")
         if not 0x4000 <= address <= 0x7FFF:
             continue
+        referenced = bank_offset(bank, address)
+        event_address = int.from_bytes(rom[referenced + 2 : referenced + 4], "little")
+        if rom[referenced] in trainer_slots or (
+            rom[referenced + 1] & 0x0F == 0
+            and EVENT_FLAGS_START <= event_address < EVENT_FLAGS_END
+        ):
+            plausible_references += 1
         candidate = _decode_header_candidate(
             rom,
             bank,
@@ -174,6 +183,12 @@ def _trainer_headers_for_map(
     if candidates:
         longest = max(len(candidate) for candidate in candidates)
         candidates = [candidate for candidate in candidates if len(candidate) == longest]
+    if not candidates and plausible_references == 0:
+        # Interaction-only scripted trainers retain the object trainer bit but
+        # have no line-of-sight header. Their map scripts therefore reference
+        # no structure resembling a trainer-header table. This is distinct
+        # from a referenced table that fails structural validation below.
+        return ()
     if len(candidates) != 1:
         raise CartridgeReadError(
             f"map {map_id} exposes {len(candidates)} validated trainer-header tables"
