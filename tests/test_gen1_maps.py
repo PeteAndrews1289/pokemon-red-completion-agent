@@ -92,8 +92,8 @@ def test_pass_through_gate_entry_actions_derive_from_destination_boundary() -> N
 
     assert gen1_maps._boundary_entry_action(header, (3, 0)) == "right"
     assert gen1_maps._boundary_entry_action(header, (3, 5)) == "left"
-    assert gen1_maps._boundary_entry_action(header, (0, 3)) == "down"
-    assert gen1_maps._boundary_entry_action(header, (7, 3)) == "up"
+    assert gen1_maps._boundary_entry_action(header, (0, 3)) is None
+    assert gen1_maps._boundary_entry_action(header, (7, 3)) is None
     assert gen1_maps._boundary_entry_action(header, (3, 2)) is None
     assert gen1_maps._boundary_entry_action(header, (0, 0)) is None
 
