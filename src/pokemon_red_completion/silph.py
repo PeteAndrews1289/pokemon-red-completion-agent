@@ -961,6 +961,21 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         raise SilphChapterError("Celadon Ice Beam boundary requires a healed party.")
     if reader.read().first_party_moves != expected_moves_before:
         raise SilphChapterError("Celadon Ice Beam boundary has an unexpected move set.")
+    capacity_items = _celadon_ice_beam_capacity_deposit_items(
+        _bag(emulator),
+        buy_silph_battle_items=buy_silph_battle_items,
+    )
+    if capacity_items is None:
+        raise SilphChapterError(
+            "Celadon Ice Beam boundary cannot establish safe bag capacity."
+        )
+    if capacity_items:
+        _move(actions, reader, ("down",) + ("right",) * 10, timing)
+        _require(reader.read(), MapId.CELADON_POKECENTER, (13, 4), "Celadon PC approach")
+        for item in capacity_items:
+            _deposit_pc_item(actions, reader, emulator, item, timing)
+        _move(actions, reader, ("left",) * 10 + ("up",), timing)
+        _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon PC return")
     _move(actions, reader, CENTER_EXIT, timing)
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
     _move_verified(
@@ -1039,6 +1054,23 @@ def acquire_and_teach_ice_beam_from_celadon_center(
             return upgraded, transfer_before_event
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     raise SilphChapterError("Ice Beam upgrade did not reach the healed Celadon entrance boundary.")
+
+
+def _celadon_ice_beam_capacity_deposit_items(
+    bag: Mapping[object, int],
+    *,
+    buy_silph_battle_items: bool,
+) -> tuple[ItemId, ...] | None:
+    """Reserve slots for the optional X Special stack and roof item exchange."""
+
+    x_special_stack = int(
+        buy_silph_battle_items and not bag.get(ItemId.X_SPECIAL, 0)
+    )
+    slots_to_free = max(0, len(bag) + x_special_stack + 1 - 20)
+    available = tuple(item for item in SILPH_PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
+    if len(available) < slots_to_free:
+        return None
+    return available[:slots_to_free]
 
 
 def _buy_silph_x_special(
@@ -1505,18 +1537,18 @@ def _deposit_pc_item(
     for _ in range(3):
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
-        raise SilphChapterError("Saffron PC did not expose WITHDRAW ITEM.")
+        raise SilphChapterError("Center PC did not expose WITHDRAW ITEM.")
     _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.menu_frames)
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     _select_pc_bag_item(actions, emulator, item, timing)
     for _ in range(3):
         _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
     if item in _bag(emulator):
-        raise SilphChapterError(f"Saffron PC did not store {item.name}.")
+        raise SilphChapterError(f"Center PC did not store {item.name}.")
     for _ in range(4):
         _pulse(actions, MacroActionKind.CANCEL, timing, frames=timing.menu_frames)
     if not reader.read_input_readiness().ready:
-        raise SilphChapterError(f"Saffron PC did not close after storing {item.name}.")
+        raise SilphChapterError(f"Center PC did not close after storing {item.name}.")
 
 
 def _select_pc_menu_cursor(

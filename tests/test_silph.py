@@ -62,6 +62,7 @@ from pokemon_red_completion.silph import (
     _battle_healing_item_target_fainted_before_consumption,
     _battle_healing_item_target_hp,
     _battle_healing_item_verified_terminal_exit,
+    _celadon_ice_beam_capacity_deposit_items,
     _enter_silph_elevator,
     _enter_silph_from_city,
     _interact_with_roof_girl,
@@ -209,6 +210,24 @@ def test_silph_mart_top_up_preserves_authenticated_carried_stock() -> None:
 
     with pytest.raises(SilphChapterError, match="outside the supported range"):
         _mart_top_up_quantity(4, target=3, label="X Special")
+
+
+def test_celadon_ice_beam_capacity_reserves_supply_and_roof_slots() -> None:
+    full = {item: 1 for item in range(100, 118)}
+    full.update({ItemId.SS_TICKET: 1, ItemId.LIFT_KEY: 1})
+
+    assert _celadon_ice_beam_capacity_deposit_items(
+        full,
+        buy_silph_battle_items=True,
+    ) == (ItemId.SS_TICKET, ItemId.LIFT_KEY)
+    assert _celadon_ice_beam_capacity_deposit_items(
+        {item: 1 for item in range(18)},
+        buy_silph_battle_items=True,
+    ) == ()
+    assert _celadon_ice_beam_capacity_deposit_items(
+        {item: 1 for item in range(20)},
+        buy_silph_battle_items=True,
+    ) is None
 
 
 def test_x_accuracy_resource_report_proves_one_item_and_no_party_change() -> None:
