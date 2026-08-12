@@ -16,6 +16,9 @@ from pokemon_red_completion.silph import (
     CELADON_RETURN_PEDESTRIAN_CLEAR_POSITION,
     CELADON_RETURN_PEDESTRIAN_YIELD_POSITION,
     DEFAULT_SILPH_TIMING,
+    EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
+    EARLY_PRE_SURF_MOVES_BEFORE_ICE_BEAM,
+    EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION,
     MART_2F_ASCENT_CUSTOMER_CLEAR_ATTEMPTS,
     MART_2F_ASCENT_CUSTOMER_CLEAR_POSITION,
@@ -254,6 +257,30 @@ def test_silph_report_accepts_qualified_post_surf_strength_lineage() -> None:
     ] == (
         POST_SURF_STRENGTH_MOVES_AFTER_ICE_BEAM,
         POST_SURF_STRENGTH_PP_AFTER_ICE_BEAM,
+    )
+    assert report.passed
+
+
+def test_silph_report_accepts_qualified_early_pre_surf_lineage() -> None:
+    final = replace(
+        _terminal(),
+        first_party_moves=EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
+        first_party_pp=EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
+    )
+    report = replace(
+        _report(),
+        final_raw=final,
+        upgraded_moves=EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
+        upgraded_pp=EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
+        expected_upgraded_moves=EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
+        expected_upgraded_pp=EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
+    )
+
+    assert silph_module.SILPH_ICE_BEAM_LINEAGES[
+        EARLY_PRE_SURF_MOVES_BEFORE_ICE_BEAM
+    ] == (
+        EARLY_PRE_SURF_MOVES_AFTER_ICE_BEAM,
+        EARLY_PRE_SURF_PP_AFTER_ICE_BEAM,
     )
     assert report.passed
 
