@@ -23,7 +23,7 @@ from pokemon_red_completion.battle_runtime import (
 from pokemon_red_completion.battle_semantics import STAB_MULTIPLIER
 from pokemon_red_completion.gen1_repel import gen1_repel_resource
 from pokemon_red_completion.gen1_story_routing import gen1_story_capabilities
-from pokemon_red_completion.observation import MapId, PokemonRedStateReader, RawGameState
+from pokemon_red_completion.observation import PokemonRedStateReader, RawGameState
 from pokemon_red_completion.red_battle_catalog import (
     PokemonRedBattleCatalog,
     pokemon_red_move_ref,
@@ -134,15 +134,11 @@ class Gen1WildFleeHandler:
             or (encounter.player_y, encounter.player_x) != interruption.at
         ):
             raise RouteExecutionError("wild interruption drifted before recovery")
-        try:
-            expected_map = MapId(interruption.map_id)
-        except ValueError as error:
-            raise RouteExecutionError(f"unsupported Gen I map id {interruption.map_id}") from error
         receipt = flee_wild(
             self.executor,
             self.reader,
             encounter,
-            expected_map_id=expected_map,
+            expected_map_id=interruption.map_id,
             route_name=self.route_name,
             stabilization_frames=self.stabilization_frames,
             error_type=RouteExecutionError,

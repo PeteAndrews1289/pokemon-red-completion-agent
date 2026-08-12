@@ -451,7 +451,7 @@ def flee_wild(
     reader: PokemonRedStateReader,
     encounter: RawGameState,
     *,
-    expected_map_id: MapId,
+    expected_map_id: int,
     route_name: str,
     stabilization_frames: int,
     error_type: type[Exception],

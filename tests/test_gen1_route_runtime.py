@@ -480,3 +480,53 @@ def test_wild_handler_publishes_the_existing_authenticated_receipt(
     assert handler.evidence == [evidence]
     with pytest.raises(RouteExecutionError, match="flee budget"):
         handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "wild_battle"))
+
+
+def test_wild_handler_accepts_a_cartridge_map_not_named_by_the_legacy_enum(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    route_20_map_id = 0x1F
+    fake = FakeReader(
+        replace(raw(battle_state=1), map_id=route_20_map_id, player_x=53, player_y=15)
+    )
+    expected_maps: list[int] = []
+    evidence = Route1WildFleeEvidence(
+        initial_battle_state=1,
+        final_battle_state=0,
+        battle_result=2,
+        expected_map_id=route_20_map_id,
+        map_id=route_20_map_id,
+        player_x=53,
+        player_y=15,
+        enemy_species_id=24,
+        enemy_level=10,
+        initial_hp=43,
+        final_hp=43,
+        maximum_hp_preserved=True,
+        party_preserved=True,
+        level_preserved=True,
+        pp_preserved=True,
+        status_preserved=True,
+        control_ready=True,
+        run_attempts=1,
+        stabilization_frames=24,
+    )
+
+    def fake_flee(*args: object, **kwargs: object) -> Route1WildFleeEvidence:
+        expected_maps.append(cast(int, kwargs["expected_map_id"]))
+        return evidence
+
+    monkeypatch.setattr("pokemon_red_completion.gen1_route_runtime.flee_wild", fake_flee)
+    handler = Gen1WildFleeHandler(
+        cast(object, FakeExecutor()),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        stabilization_frames=24,
+    )
+
+    receipt = handler.handle(
+        TraversalSnapshot(route_20_map_id, (15, 53), False, "wild_battle")
+    )
+
+    assert expected_maps == [route_20_map_id]
+    assert receipt.resumed_map == route_20_map_id
