@@ -62,6 +62,7 @@ from pokemon_red_completion.blaine import (
     _mansion_training_fainted_pivot_target,
     _mansion_training_move_slot,
     _sell_antidote_before_mansion,
+    _settle_mansion_training_forced_switch,
     _team_training_move_guard,
     _team_training_move_slot,
 )
@@ -345,6 +346,28 @@ def test_mansion_training_fainted_pivot_uses_the_healthiest_living_reserve() -> 
         replace(fainted, battle_state=0),
         (0, 71, 142),
     ) is None
+
+
+def test_mansion_training_forced_switch_retries_a_transient_menu(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[int] = []
+
+    def switch(*args: object, **kwargs: object) -> None:
+        calls.append(int(args[3]))
+        if len(calls) < 3:
+            raise blaine_module.ProtectedRecoveryError("still settling")
+
+    monkeypatch.setattr(blaine_module, "switch_active_battler", switch)
+
+    _settle_mansion_training_forced_switch(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        4,
+    )
+
+    assert calls == [4, 4, 4]
 
 
 def test_team_training_selects_damaging_moves_for_the_active_species() -> None:

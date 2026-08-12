@@ -2920,6 +2920,34 @@ def _mansion_training_fainted_pivot_target(
     return max(living_reserves, default=(0, -1))[1] if living_reserves else None
 
 
+def _settle_mansion_training_forced_switch(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    target: int,
+) -> None:
+    """Give the six-member forced-party transition three observed settle windows."""
+
+    last_error: ProtectedRecoveryError | None = None
+    for _ in range(3):
+        try:
+            switch_active_battler(
+                actions,
+                reader,
+                emulator,
+                target,
+                expected_battle_state=1,
+                label="Mansion training fainted-member escape",
+            )
+        except ProtectedRecoveryError as error:
+            last_error = error
+            continue
+        return
+    raise BlaineChapterError(
+        "Mansion training could not settle its forced switch after three windows."
+    ) from last_error
+
+
 def _run_mansion_training(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -2988,19 +3016,12 @@ def _run_mansion_training(
                         raise BlaineChapterError(
                             "Mansion training fainted without a living escape reserve."
                         ) from error
-                    try:
-                        switch_active_battler(
-                            actions,
-                            reader,
-                            emulator,
-                            target,
-                            expected_battle_state=1,
-                            label="Mansion training fainted-member escape",
-                        )
-                    except ProtectedRecoveryError as recovery_error:
-                        raise BlaineChapterError(
-                            "Mansion training could not settle its forced switch."
-                        ) from recovery_error
+                    _settle_mansion_training_forced_switch(
+                        actions,
+                        reader,
+                        emulator,
+                        target,
+                    )
                     _flee(actions, reader, emulator, flee_run, MANSION_TRAINING_FLEE_TIMING)
                     battles_fled += 1
                     continue
