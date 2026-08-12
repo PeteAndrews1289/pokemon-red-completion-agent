@@ -49,6 +49,10 @@ DUX_MOVES_AFTER = (0x40, 0x1C, 0x0F, FLY_MOVE_ID)
 DUX_PP_BEFORE = (35, 15, 30, 20)
 DUX_PP_AFTER = (35, 15, 30, 15)
 ROUTE_21_EVENTS = tuple(range(0x511, 0x51A))
+LEAD_MOVE_PP_LINEAGES = {
+    (0x82, 0x46, 0x3A, 0x39): (15, 15, 10, 15),
+    (0x2C, 0x46, 0x3D, 0x39): (25, 15, 20, 15),
+}
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -176,8 +180,10 @@ class CinnabarChapterReport:
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and party_core_intact(self.final_raw.party_species_ids)
             and self.final_raw.first_party_level == self.lead_stats_before[0]
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and _cinnabar_lead_moves_restored(
+                self.final_raw.first_party_moves,
+                self.final_raw.first_party_pp,
+            )
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -267,6 +273,15 @@ def _cinnabar_rare_candy_preserved(before: int, after: int) -> bool:
     """Preserve an absent or valid carried stack across the Fly lesson."""
 
     return 0 <= before == after <= 99
+
+
+def _cinnabar_lead_moves_restored(
+    moves: tuple[int, ...],
+    pp: tuple[int, ...],
+) -> bool:
+    """Accept either qualified lead curriculum and its exact restored PP."""
+
+    return LEAD_MOVE_PP_LINEAGES.get(moves) == pp
 
 
 def run_cinnabar_chapter(
