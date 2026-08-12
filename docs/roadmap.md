@@ -66,29 +66,32 @@ Implementation status:
    from the durable Bill event, keeps the other officer blocked and passed exact-commit CI. Official
    preflight then planned Misty at cost 15 and Vermilion at 205. The one-shot episode selected Misty,
    acknowledged 14/14 movements and strictly reloaded one success with no interruption or replan.
-8. **Capture inventory:** 21 authenticated envelopes cover exact frontiers for scenarios 001, 002
-   and 007. Materialize the other 33 learning boundaries using the shared-prerequisite rule, then
+8. **Capture inventory:** 22 admitted authenticated envelopes cover exact frontiers for scenarios
+   001, 002, 003 and 007. Materialize the other 32 learning boundaries using the
+   shared-prerequisite rule, then
    audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
    test situations sealed until final evaluation.
-9. **Implemented; first live attempt found a return-warp defect:** a bounded scenario materializer can derive the five
+9. **Complete and live-qualified:** a bounded scenario materializer can derive the five
    registry transitions that add exactly one live-observable navigation objective. It rejects an
    approach unless its complete quest contract equals the destination map's observed location and
    that map belongs to the target scenario origin. It also requires an exact source capture,
    all-candidate preflight, stable target state, exact target frontier and a new private output;
    it creates no episode. Published source `e4a817c` passed CI. Its scenario 002 → 003 attempt then
-   entered the robbed house and failed without output when stepping onto the internally approached
-   top return tile triggered immediately, one action earlier than planned. Trigger repair `c134184`
-   passed CI, but the next attempt then showed that an internally approached return settles on the
-   exterior warp rather than one tile beyond it. Both attempts wrote no output. The current repair
-   binds trigger and arrival to the same state distinction; the corrected route has 199 inputs at
-   unchanged cost 205. Publish, gate and retry it before opening scenario 003.
+   entered the robbed house and exposed top-return trigger and arrival differences. Later attempts
+   exposed Cerulean Rocket's custom pre-battle movement latch, the bottom Underground Path exit's
+   separate outward input and a non-portable generated checkpoint ID. Published source `a3598a2`
+   passed CI, enforced the portable envelope identity at production and completed scenario 002 →
+   003 with 199/199 movements, four handled interruptions and zero replans. Scenario 003 then
+   selected Misty at cost 152 over Cut at 58, acknowledged 148/148 movements and strictly reloaded
+   one unassigned success. It is the first measured validation cost-baseline disagreement.
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
-Measured evidence now contains three authenticated uncounted contexts and zero counted rows.
+Measured evidence now contains four authenticated uncounted contexts and zero counted rows.
 `collection_open` remains false and prospective rows do not satisfy the admission gate by
 themselves. See the
-[scenario-002 receipt](evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json).
+[scenario-002 receipt](evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json) and
+[scenario-003 receipt](evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
 
 ## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
 
@@ -116,7 +119,8 @@ Ordered gates from here:
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
 The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
-The nearest honest milestone is now **materializing the next missing learning frontier**, followed
+The nearest honest milestone is now **materializing the next missing learning frontier**, prioritizing
+the other five validation baseline-challenge contexts, followed
 by the complete 36-situation learning capture inventory. That inventory must prove the prospective
 train/validation situations become distinct live policy inputs with at least six measured
 validation baseline disagreements. The first strategic model follows one-attempt counted scenario

@@ -37,14 +37,34 @@ Red entered the robbed house, walked toward its second door, and warped back to 
 earlier than the route contract predicted. The planner knew how to leave a building when it started
 on the entry warp; it had generalized that into “every return warp needs a second outward press.”
 The cartridge showed the missing state: walking onto another return tile triggers immediately.
-The repaired route keeps those cases separate and shortens the Vermilion plan by two inputs—one at
-the robbed house and one at the Underground Path. No failed output had to be relabeled or deleted,
-because none had been admitted in the first place.
+The repaired route keeps those cases separate at the robbed-house top door. No failed output had to
+be relabeled or deleted, because none had been admitted in the first place.
 
 The first repair fixed when the warp fired, but the next attempt found the other half of the state:
 where Red lands. Walking onto the internal return settled on the exterior doorway tile; pressing
 out from a protected arrival warp plays the extra step beyond it. The second repair binds trigger
 and arrival together. Again, the failed attempt produced no checkpoint and no example.
+
+The route then reached the Rocket behind the house and stopped for a different reason. Red's custom
+map script had latched movement at `(9,30)`, but the ordinary trainer-sight flags were not active
+yet. Waiting could never advance dialogue. The fix recognizes only that exact undefeated Rocket
+preamble from live map, position, event and control state, then hands it to the existing bounded
+trainer recovery. A diagnostic needed 22 confirmations, entered and won the battle, and resumed at
+the same coordinate. The same run disproved the tempting “all internally approached returns fire
+on entry” rule: the bottom Underground Path exit still needs a separate Down after reaching its
+edge tile. Top and bottom boundary returns now have independent regression witnesses.
+
+The next published run completed 199/199 movements and proved the exact nine-objective Vermilion
+frontier, yet the rehearsal still refused it. The generated checkpoint name contained a colon that
+the assignment's portable identity alphabet forbids. Moving that validation into envelope creation
+made the producer and consumer share one contract. The final source reproduced the identical state
+digest, and only that envelope was admitted.
+
+Scenario 003 offered Cut at cost 58 and Misty at 152. The teacher chose Misty—the longer candidate
+and the registry's intended validation challenge—then acknowledged 148/148 movements and sealed one
+successful 315-record episode. It remains unassigned and cannot train a model. But the project now
+has its fourth authenticated context and its first measured validation disagreement with the
+cost-only baseline: a small data point with a very clean provenance story.
 
 ## August 11: the first useful label chose the route ten times longer
 

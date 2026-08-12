@@ -14,6 +14,46 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 003 qualified; fourth live context remains uncounted — 2026-08-11
+
+Published source `a3598a2` passed exact-commit CI run `31553282113`. It is the first source whose
+bounded materializer both completes scenario 002 → 003 and writes a checkpoint identity accepted by
+the downstream authenticated assignment. The route completed `reach_vermilion` with 199/199
+acknowledged movements, four handled interruptions, 17 waits and zero replans. Fresh observation
+proved exactly scenario 003's nine-objective frontier before the private state/envelope was written;
+no episode or label was created by materialization.
+
+The official scenario-003 preflight then made both registered choices available from Vermilion:
+obtain Cut at cost 58/56 steps and return toward Misty at cost 152/148 steps. The teacher selected
+Misty at policy index 1, deliberately disagreeing with the cost-only baseline. The one permitted
+uncounted episode acknowledged all 148 movements with eight waits, zero interruptions and zero
+replans. Strict reload authenticated 315 records and exactly one successful strategic join.
+Manifest `082a24dcee1ded3dddeed058a3ccbe319f0905260b306203922276e5454c0e84`
+is complete. The episode remains `unassigned`, promotion is false and it is not training data. See
+[the scenario-003 qualification receipt](docs/evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
+
+The four failed materialization boundaries remain part of the evidence. Successive published
+sources exposed top-return trigger timing, return arrival geometry, Cerulean Rocket's custom
+dialogue preamble, and finally a colon in the generated checkpoint ID that the downstream safe-ID
+contract rejected. The final code types the Rocket preamble from live cartridge/RAM evidence,
+distinguishes top and bottom boundary returns, and enforces portable checkpoint IDs at envelope
+construction. No failed attempt became a strategic example.
+
+Measured status is now **four authenticated uncounted contexts, zero counted rows**. Capture
+inventory is **22 admitted envelopes covering scenarios 001, 002, 003 and 007; 32 learning
+frontiers remain**. Collection stays closed and all 12 test situations remain sealed. The next
+useful work is materializing the remaining non-test frontiers, prioritizing the other five
+preregistered validation cost-baseline challenges so the paired evaluation requirement is measured
+before counted collection opens.
+
+Current prospective identities are source bundle
+`261515d4606264d00804a7f2b5bc69377eb1c2553732382a58a4e134ce07f0c2`, battle registry
+`333b798ef6ca555dd9fb78972516ab39e9a0e803eb066eb894cc5f4a02b0653f`, battle teacher execution
+`aaaef03325bbe6b992ec5c2685f0037f2d2ff0dbfe61cf876b920c1f2feffc06`, historical strategic
+registry `b3d5e96a488dc1e454a87605944b90fc42258078462c1eac40b9c42e49054c01`
+and historical strategic teacher execution
+`2ad0dd747bb34c48dd86ea99ede3098e3381a30c5883fc2686267098523db623`.
+
 ## Scenario 002 qualified; third live context remains uncounted — 2026-08-11
 
 Published source `a546d79` passed exact-commit CI run `31551065013`. Its official read-only preflight

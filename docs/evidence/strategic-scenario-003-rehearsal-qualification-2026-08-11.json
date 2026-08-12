@@ -1,0 +1,132 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-003-validation-materialized",
+    "envelope_sha256": "bc69912e2f58678f8ab7378d07fdfcac7e7ec42937a2e1d535771edee70bc1e9",
+    "state_sha256": "6588186bcb5e484f005aa075910b82352634398b5a14a755187168841d5b1ec8",
+    "verified_objective_count": 9
+  },
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 4,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "diagnostic_lineage": [
+    {
+      "episode_created": false,
+      "output_created": false,
+      "result": "internally approached top return fired on entry rather than a second outward input",
+      "source_commit": "e4a817c4f67b7668ad5becb596549221cf100197"
+    },
+    {
+      "episode_created": false,
+      "output_created": false,
+      "result": "top return settled on the exterior warp rather than one tile beyond it",
+      "source_commit": "c13418440c6e434f7d8e7d387dd4c017e8c12359"
+    },
+    {
+      "episode_created": false,
+      "output_created": false,
+      "result": "Cerulean Rocket custom preamble waited for dialogue outside the ordinary trainer flags",
+      "source_commit": "bfe54bf71b83c4793c3a1c5c9f1486ce7566034c"
+    },
+    {
+      "episode_created": false,
+      "output_admitted": false,
+      "result": "route and frontier passed, but the materialized checkpoint identity used a non-portable separator",
+      "source_commit": "abad1e528a2e9adca07ac3584c46a1975754da94"
+    }
+  ],
+  "episode": {
+    "assignment_id": "f7a52ba21d4c5a279dc92816020e4145865eb58edddaf5c9235c3142ee6bdaf6",
+    "dataset": {
+      "candidate_count": 2,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-f7a52ba21d4c5a279dc92816020e4145865eb58edddaf5c9235c3142ee6bdaf6",
+    "execution": {
+      "acknowledged_steps": 148,
+      "interruptions": {},
+      "movement_requests": 148,
+      "replans": 0,
+      "selected_candidate_index": 1,
+      "selected_objective": "defeat_misty",
+      "status": "succeeded",
+      "wait_actions": 8
+    },
+    "manifest": {
+      "bytes": 392832,
+      "records": 315,
+      "sha256": "082a24dcee1ded3dddeed058a3ccbe319f0905260b306203922276e5454c0e84",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 156,
+        "snapshots": 155
+      }
+    }
+  },
+  "materialization": {
+    "candidate_count": 2,
+    "completed_objective_id": "reach_vermilion",
+    "counted": false,
+    "episode_created": false,
+    "route": {
+      "acknowledged_steps": 199,
+      "handled_interruptions": 4,
+      "movement_requests": 199,
+      "planned_cost": 204,
+      "replans": 0,
+      "wait_actions": 17
+    },
+    "source_assignment_id": "6f2bdf14b8d7c4e9b7d7f87e0b844c0317eeeb2646512d0502988cf65783a047",
+    "source_scenario_id": "red-strategic-scenario-v2-002-train",
+    "status": "complete",
+    "target_scenario_id": "red-strategic-scenario-v2-003-validation"
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 2,
+    "candidates_in_policy_order": [
+      {
+        "field_actions": 0,
+        "map_transitions": 2,
+        "objective_id": "obtain_cut",
+        "route_cost": 58,
+        "route_steps": 56
+      },
+      {
+        "field_actions": 0,
+        "map_transitions": 7,
+        "objective_id": "defeat_misty",
+        "route_cost": 152,
+        "route_steps": 148
+      }
+    ],
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 2,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-11",
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-003-validation",
+    "scenario_sha256": "c7b14fa991e2a750828d35a93bab226472359da634b4859d894c6c73b2e087a3",
+    "source_partition": "validation"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31553282113,
+    "ci_status": "success",
+    "git_commit": "a3598a21927d135478364c4471a46d92d2dffd44",
+    "source_bundle_sha256": "261515d4606264d00804a7f2b5bc69377eb1c2553732382a58a4e134ce07f0c2",
+    "teacher_execution_sha256": "2ad0dd747bb34c48dd86ea99ede3098e3381a30c5883fc2686267098523db623"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

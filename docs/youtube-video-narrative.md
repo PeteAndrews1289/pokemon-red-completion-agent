@@ -103,14 +103,27 @@ suggesting that movement can manufacture story completion.
 Do not let the assembly line work on its first shot. Follow Red into the robbed house and freeze as
 the top doorway returns to Cerulean on the step the planner thought would merely occupy the warp
 tile. Split the animation: **SPAWNED ON RETURN TILE → PRESS OUT** versus **WALKED ONTO RETURN TILE →
-WARP NOW**. Stamp the attempt **NO CHECKPOINT / NO EPISODE**, then remove the redundant input at both
-the house and Underground Path exits. The line is: **“The same coordinate can require different
+WARP NOW**. Stamp the attempt **NO CHECKPOINT / NO EPISODE**, then remove the redundant input at the
+robbed-house top door. The line is: **“The same coordinate can require different
 control depending on how you arrived there.”**
 
 Then add one more frame to each side: the spawned-on case lands **ONE TILE BEYOND** the outside
 doorway, while the walked-on case lands **ON THE OUTSIDE WARP**. Let the first repair pass the trigger
 and fail on this arrival coordinate. Preserve the second **NO CHECKPOINT** card. It is a compact way
 to show that transition timing and transition geometry are one contract, not two unrelated patches.
+
+Do not turn green yet. Freeze at `(9,30)` behind the house: **MOVEMENT LATCHED / TRAINER FLAG CLEAR /
+DIALOGUE NEEDS A**. Show waiting forever, then the exact custom-Rocket predicate handing control to
+the bounded trainer handler; tick **22 CONFIRMS → BATTLE → RESUME**. At the Underground Path, make
+the bottom exit contradict the top-door rule: **REACH EDGE TILE → PRESS DOWN → EXIT**. The line is:
+**“Every generalized rule had to survive a second cartridge witness.”**
+
+Let the 199-step route finally reach Vermilion, then reject its checkpoint anyway. Zoom into one
+character in the envelope name—a colon—and show the consumer's portable-ID gate refusing it. Move
+that gate to checkpoint creation, rerun under published source and reveal the same state digest.
+Only then deal scenario 003's cards: **CUT 58 / MISTY 152**. Highlight Misty, show **148/148 / 0
+REPLANS / 315 RECORDS**, increment **LIVE CONTEXTS 4**, and mark **VALIDATION BASELINE DISAGREEMENTS
+1/6** while counted rows remain zero.
 
 ### Twist: nine labels were only three questions
 

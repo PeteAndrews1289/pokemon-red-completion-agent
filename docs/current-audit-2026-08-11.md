@@ -1,5 +1,38 @@
 # Current capability and code audit — 2026-08-11
 
+## Fourth live short scenario qualified
+
+Scenario 003 is now the first frontier created entirely by the bounded materializer and accepted by
+the downstream one-shot rehearsal. Published source `a3598a2` passed exact-commit CI run
+`31553282113`. Starting from scenario 002's authenticated Cerulean state, it completed only
+`reach_vermilion`: 199/199 acknowledged movements, four handled interruptions, 17 wait actions and
+zero replans. Fresh semantic observation proved the target's exact nine-objective frontier before a
+new private state/envelope was written. Materialization itself created no episode and no label.
+
+The official read-only preflight made both scenario-003 candidates executable. Obtain Cut cost 58
+over 56 steps and two map transitions; the teacher's return toward Misty cost 152 over 148 steps and
+seven transitions. The teacher selected Misty at policy index 1, so this validation context is a
+measured disagreement with the cost-only baseline rather than merely a preregistered hypothesis.
+The uncounted episode acknowledged 148/148 movements, used eight waits, had zero interruption or
+replan and strictly reloaded 315 records with exactly one choice and one successful outcome. It is
+unassigned and promotion-ineligible. See the
+[scenario-003 receipt](evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
+
+Getting there exposed four separate contracts without consuming a row. The first attempt learned
+that an internally approached top return fires on entry. The second learned that it settles on the
+exterior warp. The third reached the Cerulean Rocket and found its custom pre-battle movement latch
+before ordinary trainer flags become active; the exact live predicate now delegates to bounded
+trainer recovery and completed the battle with 22 intro confirmations in diagnostic replay. The
+fourth completed the route but wrote a colon-bearing checkpoint ID rejected by the assignment's
+portable safe-ID alphabet. Envelope construction now enforces that alphabet, so a producer cannot
+write a checkpoint its consumer refuses.
+
+Inventory is now **22 admitted authenticated envelopes, four exact learning frontiers (001, 002,
+003 and 007), 32 missing frontiers**. Measured status is **four authenticated uncounted contexts,
+zero counted scenario rows, collection closed, 12 test situations sealed**. Scenario 003 supplies
+one of the six required validation baseline disagreements; five remain to be authenticated before
+the paired capability gate can pass.
+
 ## Third live short scenario qualified
 
 The teacher has now produced two additional authenticated envelopes for scenario 002: one at
@@ -58,12 +91,18 @@ the right input, then exposed the matching arrival difference: internally enteri
 settled on Cerulean's exterior warp `(9,27)`, while the planner still predicted the one-tile-beyond
 coordinate `(8,27)` used by an outward doorway animation. It also wrote no state, envelope or episode.
 
-The current repair binds both halves to the same state. The last local edge is the transition and
-settles on the destination warp whenever a return is approached from elsewhere; only a route already
-starting on an arrival-protected vertical return uses a separate outward action and a one-tile
-arrival offset. The real-cartridge plan now predicts map 62 `(1,3)` directly to Cerulean `(9,27)`
-and applies the same rule to the Underground Path exit. Planned inputs remain 199 at route cost 205.
-Focused tests preserve both cases. Publication and exact-commit CI are still required before retry.
+The next attempt bound both halves correctly at the robbed-house top door, then reached two new
+boundaries. Cerulean's Rocket begins with a custom movement latch before ordinary trainer flags are
+set, so the generic readiness loop waited forever; and the south Underground Path return requires
+an outward Down after reaching its bottom-edge warp, unlike the top-edge robbed-house return. Source
+`abad1e5` typed the exact Rocket preamble and distinguished top/bottom boundary returns. It passed
+CI and completed all 199 route movements with four handled interruptions and zero replans.
+
+That successful route still failed the downstream assignment gate because the new envelope's
+checkpoint ID contained a colon. Source `a3598a2` enforces the consumer's portable safe-ID alphabet
+at envelope construction, passed exact-commit CI and reproduced the same state digest. This final
+capture is the admitted scenario-003 frontier described above; the earlier envelope remains rejected
+diagnostic evidence and created no episode.
 
 ## First two live short scenarios qualified
 

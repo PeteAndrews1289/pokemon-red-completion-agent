@@ -88,11 +88,19 @@
 > treated as permanent geometry. Published repair `a546d79` bound that displacement to the observed
 > Bill event, passed CI and made both Misty (cost 15) and Vermilion (cost 205) available. Its one-shot
 > episode selected Misty, acknowledged 14/14 movements and reloaded one success with no interruption
-> or replan. Honest status is **3 authenticated contexts / 0 counted rows**—none is training data.
+> or replan. The bounded materializer then derived scenario 003 by completing only
+> `reach_vermilion`. Four fail-closed iterations exposed top-return trigger timing, arrival geometry,
+> Cerulean Rocket's custom dialogue preamble, a bottom-edge return and a non-portable checkpoint ID.
+> Published source `a3598a2` passed CI and completed the admitted transition with 199/199 movements,
+> four handled interruptions and zero replans. Scenario 003 then chose Misty at cost 152 over Cut at
+> 58, acknowledged 148/148 movements and strictly reloaded one 315-record success. Honest status is
+> **4 authenticated contexts / 0 counted rows**—none is training data. This is the first measured
+> validation disagreement with the cost-only baseline.
 > See the
 > [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json),
 > [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json),
-> and [scenario-002 qualification](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json).
+> [scenario-002 qualification](docs/evidence/strategic-scenario-002-rehearsal-qualification-2026-08-11.json),
+> and [scenario-003 qualification](docs/evidence/strategic-scenario-003-rehearsal-qualification-2026-08-11.json).
 > Collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
@@ -131,8 +139,10 @@ Cartridge knowledge now covers 220 reachable maps, 48,216 standable coordinates,
 static land edges, 1,484 exact connection transitions, 558 ordinary warp arrivals and 242 dynamic
 return warps. Six tunnel entrances now recover their retained outside-map context from exact
 cartridge script writes to `wLastMap`, rather than from a hand-maintained table. Boundary returns
-retain the distinct action that walks out of the map; vertical doorways land beyond their exterior
-warp while horizontal pass-through gates settle on it. Red and Blue agree on the complete decoded
+retain the distinct action that walks out of the map. Arrival-protected vertical doorways and
+bottom-edge exits require the outward action; an internally approached top return fires on entry.
+Vertical walk-outs land beyond their exterior warp while an entry-triggered top return and
+horizontal pass-through gates settle on it. Red and Blue agree on the complete decoded
 structures. The first multi-map composer
 selected reachable passage endpoints and produced an 86-action Pallet → Route 1 → Viridian → Center
 plan; live Red reached every decoded arrival and the final Center coordinate `(7, 3)`. A second

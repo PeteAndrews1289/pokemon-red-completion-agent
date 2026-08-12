@@ -23,6 +23,15 @@ after one unavoidable trainer encounter and reached Tower 1F after 174/174 ackno
 with zero replans. It proves the label is not merely shortest-path supervision, but it remains a
 development calibration—not evidence of learning.
 
+The newer context-diverse benchmark now has four authenticated short-scenario calibrations and zero
+counted rows. Its latest validation context was materialized from an exact post-Bill frontier rather
+than replaying a full game. The cartridge forced four fail-closed repairs—return-warp timing and
+arrival, a custom Rocket preamble, bottom-edge exit control and portable envelope identity—before
+the state was admitted. From Vermilion, the teacher then selected Misty's cost-152 route over the
+cost-58 Cut route and completed 148/148 movements. That is the first measured validation
+disagreement with the cost-only baseline; five more preregistered disagreements are still required
+before collection can support the planned paired comparison.
+
 The next experiment is now preregistered rather than aspirational: five whole power-on train roots,
 two validation roots, five sealed test roots and one rehearsal, each with a unique timing schedule
 fixed before outcomes. The binding API will not accept a caller-invented train label; it requires
