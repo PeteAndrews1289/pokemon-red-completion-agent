@@ -256,15 +256,16 @@ class DefeatKogaObjectiveSkill:
             and (
                 "move:surf_available" in state.facts
                 or "move:strength_available" in state.facts
+                or "move:bubblebeam_slot_3" in state.facts
             )
             and "badge:soul" not in state.facts
         )
         return ObjectiveSkillAvailability(
             executable,
             (
-                "Observed a Surf- or Strength-ready Fuchsia Center boundary."
+                "Observed a qualified Koga attack layout at Fuchsia Center."
                 if executable
-                else "Requires Fuchsia Center with Surf or Strength before Koga is defeated."
+                else "Requires Fuchsia Center with a qualified Koga attack layout."
             ),
         )
 

@@ -52,15 +52,15 @@ class QualifiedSkillOrderContract:
 # quest graph belong here.  For example, Strength's quest prerequisite is merely
 # reaching Fuchsia. Gold Teeth can now be collected without Surf and the Warden
 # lesson accepts that resource-only boundary. Koga accepts either the original
-# Surf moveset or the newly qualified Strength-before-Surf moveset.
+# Surf moveset, the Strength-before-Surf moveset, or the authenticated pre-HM
+# BubbleBeam layout.
 RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
     QualifiedSkillOrderContract(
         objective_id="defeat_koga",
         required_objective_ids=frozenset({"reach_fuchsia"}),
-        required_any_objective_ids=frozenset({"obtain_strength", "obtain_surf"}),
         reason=(
-            "The qualified Koga chapter requires either the Surf moveset or the "
-            "Strength-before-Surf moveset."
+            "The qualified Koga chapter requires the authenticated Fuchsia party "
+            "and one of its verified attack layouts."
         ),
     ),
 )

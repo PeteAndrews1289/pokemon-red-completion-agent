@@ -55,6 +55,8 @@ SURF = 0x39
 SURF_SLOT = 4
 STRENGTH = 0x46
 STRENGTH_SLOT = 2
+BUBBLE_BEAM = 0x3D
+BUBBLE_BEAM_SLOT = 3
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
@@ -241,11 +243,16 @@ class KogaChapterReport:
             and all(hp > 0 for hp in self.party_hp)
             and all(status == 0 for status in self.party_status)
             and (self.attack_move_id, self.attack_move_slot)
-            in {(SURF, SURF_SLOT), (STRENGTH, STRENGTH_SLOT)}
+            in {
+                (SURF, SURF_SLOT),
+                (STRENGTH, STRENGTH_SLOT),
+                (BUBBLE_BEAM, BUBBLE_BEAM_SLOT),
+            }
             and self.final_raw.first_party_moves is not None
             and self.final_raw.first_party_moves[self.attack_move_slot - 1]
             == self.attack_move_id
-            and self.attack_pp == 15
+            and self.attack_pp
+            == (20 if self.attack_move_id == BUBBLE_BEAM else 15)
             and self.controller_released
         )
 
@@ -314,7 +321,7 @@ class KogaChapterReport:
 
 
 def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
-    """Select one of the two cartridge-qualified Koga input curricula."""
+    """Select one of the cartridge-qualified Koga input curricula."""
 
     moves = raw.first_party_moves
     if moves is None or len(moves) != 4:
@@ -323,8 +330,15 @@ def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
         return SURF, SURF_SLOT
     if moves[STRENGTH_SLOT - 1] == STRENGTH and SURF not in moves:
         return STRENGTH, STRENGTH_SLOT
+    if (
+        moves[BUBBLE_BEAM_SLOT - 1] == BUBBLE_BEAM
+        and SURF not in moves
+        and STRENGTH not in moves
+    ):
+        return BUBBLE_BEAM, BUBBLE_BEAM_SLOT
     raise KogaChapterError(
-        "Koga input has neither Surf in slot four nor pre-Surf Strength in slot two."
+        "Koga input lacks Surf, pre-Surf Strength, and the authenticated "
+        "pre-HM BubbleBeam layout."
     )
 
 

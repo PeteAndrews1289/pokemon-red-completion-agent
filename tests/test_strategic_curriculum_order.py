@@ -33,19 +33,8 @@ def test_audit_distinguishes_teacher_order_from_game_feasibility() -> None:
 
     assert "red-strategic-scenario-v2-019-validation" not in by_id
 
-    scenario_017 = by_id["red-strategic-scenario-v2-017-train"]
-    assert scenario_017["partition"] == "train"
-    assert scenario_017["current_qualified_skill_blockers"] == [
-        {
-            "objective_id": "defeat_koga",
-            "required_but_absent_objective_ids": [],
-            "required_any_of_absent_objective_ids": ["obtain_strength", "obtain_surf"],
-            "reason": (
-                "The qualified Koga chapter requires either the Surf moveset or "
-                "the Strength-before-Surf moveset."
-            ),
-        },
-    ]
+    assert "red-strategic-scenario-v2-017-train" not in by_id
+    assert "red-strategic-scenario-v2-021-train" not in by_id
 
     assert "red-strategic-scenario-v2-023-validation" not in by_id
 

@@ -8,6 +8,8 @@ import pytest
 import pokemon_red_completion.koga as koga_module
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.koga import (
+    BUBBLE_BEAM,
+    BUBBLE_BEAM_SLOT,
     CENTER_TO_GYM,
     CENTER_TO_TAMER2,
     DEFAULT_KOGA_TIMING,
@@ -302,10 +304,30 @@ def test_koga_accepts_strength_without_surf_as_a_distinct_curriculum() -> None:
     assert report.public_dict()["mandatory_trainers"][0]["move_slot"] == STRENGTH_SLOT
 
 
-def test_koga_rejects_an_unauthenticated_primary_move_layout() -> None:
-    unsupported = replace(_raw(), first_party_moves=(0x2C, 0x27, 0x3D, 0x37))
+def test_koga_accepts_authenticated_pre_hm_bubblebeam_curriculum() -> None:
+    bubblebeam_raw = replace(
+        _raw(),
+        first_party_moves=(0x2C, 0x27, BUBBLE_BEAM, 0x37),
+        first_party_pp=(25, 30, 20, 25),
+    )
+    report = replace(
+        _report(),
+        final_raw=bubblebeam_raw,
+        attack_move_id=BUBBLE_BEAM,
+        attack_move_slot=BUBBLE_BEAM_SLOT,
+        attack_pp=20,
+    )
 
-    with pytest.raises(KogaChapterError, match="neither Surf.*nor pre-Surf Strength"):
+    assert _koga_primary_attack(bubblebeam_raw) == (BUBBLE_BEAM, BUBBLE_BEAM_SLOT)
+    assert report.passed
+    assert report.public_dict()["mandatory_trainers"][0]["move_id"] == BUBBLE_BEAM
+    assert report.public_dict()["mandatory_trainers"][0]["move_slot"] == BUBBLE_BEAM_SLOT
+
+
+def test_koga_rejects_an_unauthenticated_primary_move_layout() -> None:
+    unsupported = replace(_raw(), first_party_moves=(0x2C, 0x27, 0x3A, 0x37))
+
+    with pytest.raises(KogaChapterError, match="lacks Surf.*pre-Surf Strength.*BubbleBeam"):
         _koga_primary_attack(unsupported)
 
 

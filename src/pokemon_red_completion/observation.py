@@ -5230,6 +5230,14 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("move:surf_available")
     if ItemId.HM04_STRENGTH in items or _event(events, EventFlag.GOT_HM04):
         facts.add("move:strength_available")
+    if (
+        raw.first_party_moves is not None
+        and len(raw.first_party_moves) == 4
+        and raw.first_party_moves[2] == 0x3D
+        and 0x39 not in raw.first_party_moves
+        and 0x46 not in raw.first_party_moves
+    ):
+        facts.add("move:bubblebeam_slot_3")
 
     if raw.map_id == MapId.HALL_OF_FAME and _event(events, EventFlag.BEAT_CHAMPION_RIVAL):
         facts.add(HALL_OF_FAME_FACT)

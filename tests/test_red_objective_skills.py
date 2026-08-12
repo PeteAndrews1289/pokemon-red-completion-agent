@@ -292,6 +292,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert fuchsia.availability(lavender).executable
     assert not tower.availability(lavender).executable
     assert safari.availability(fuchsia_center).executable
+    assert not koga.availability(fuchsia_center).executable
+    assert koga.availability(fuchsia_center.with_facts("move:bubblebeam_slot_3")).executable
     surf_ready = fuchsia_center.with_facts("move:surf_available", "item:gold_teeth")
     assert koga.availability(surf_ready).executable
     assert strength.availability(surf_ready).executable

@@ -483,6 +483,15 @@ def test_gold_teeth_have_a_semantic_skill_affordance_fact() -> None:
     assert "item:gold_teeth" in semantic_facts(raw)
 
 
+def test_pre_hm_bubblebeam_layout_has_a_semantic_skill_affordance_fact() -> None:
+    raw = replace(_raw(map_id=MapId.FUCHSIA_POKECENTER), first_party_moves=(44, 39, 61, 55))
+
+    assert "move:bubblebeam_slot_3" in semantic_facts(raw)
+    assert "move:bubblebeam_slot_3" not in semantic_facts(
+        replace(raw, first_party_moves=(44, 70, 61, 55))
+    )
+
+
 def test_reader_hides_pregame_scratch_state() -> None:
     memory = RecordingMemory(
         {
