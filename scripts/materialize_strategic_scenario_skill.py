@@ -38,6 +38,7 @@ from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor 
 from pokemon_red_completion.fly_resource import (  # noqa: E402
     relocate_celadon_to_cinnabar_by_fly,
     relocate_cinnabar_to_celadon_by_fly,
+    relocate_cinnabar_to_fuchsia_by_fly,
 )
 from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
     Gen1FieldMovePort,
@@ -239,6 +240,17 @@ def _can_fly_from_cinnabar_to_origin(
         after_skill.map_id == MapId.CINNABAR_POKECENTER
         and target_origin_maps is not None
         and MapId.CELADON_POKECENTER in target_origin_maps
+    )
+
+
+def _can_fly_from_cinnabar_to_fuchsia(
+    after_skill: RawGameState,
+    target_origin_maps: frozenset[MapId] | None,
+) -> bool:
+    return (
+        after_skill.map_id == MapId.CINNABAR_POKECENTER
+        and target_origin_maps is not None
+        and MapId.FUCHSIA_CITY in target_origin_maps
     )
 
 
@@ -476,6 +488,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
         relocation_report = None
         fly_relocation_report = None
+        fuchsia_fly_report = None
         after_skill = reader.read()
         if (
             after_skill.map_id is None
@@ -513,6 +526,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 ):
                     raise StrategicScenarioRuntimeError(
                         "post-skill Fly relocation changed the authenticated frontier"
+                    )
+            elif _can_fly_from_cinnabar_to_fuchsia(after_skill, target_origin_maps):
+                fuchsia_fly_report = relocate_cinnabar_to_fuchsia_by_fly(
+                    emulator,
+                    reader,
+                    tracked_controller,
+                )
+                if (
+                    COMPLETION_QUEST.completed_ids(semantic_observer.observe())
+                    != expected_final
+                ):
+                    raise StrategicScenarioRuntimeError(
+                        "post-skill Fuchsia Fly changed the authenticated frontier"
                     )
             else:
                 relocation_plan = route_world.plan_to_any_map(
@@ -674,10 +700,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "requested": args.relocate_to_origin,
             "performed": (
                 relocation_report is not None or fly_relocation_report is not None
+                or fuchsia_fly_report is not None
             ),
             "method": (
                 "fly"
-                if fly_relocation_report is not None
+                if fly_relocation_report is not None or fuchsia_fly_report is not None
                 else ("route" if relocation_report is not None else None)
             ),
             "acknowledged_steps": (
@@ -704,12 +731,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "fly_attempts": (
                 0
                 if fly_relocation_report is None
-                else len(fly_relocation_report.fly_landings)
+                and fuchsia_fly_report is None
+                else len(
+                    fly_relocation_report.fly_landings
+                    if fly_relocation_report is not None
+                    else fuchsia_fly_report.fly_landings  # type: ignore[union-attr]
+                )
             ),
             "fly_actions": (
                 0
-                if fly_relocation_report is None
-                else fly_relocation_report.actions_executed
+                if fly_relocation_report is None and fuchsia_fly_report is None
+                else (
+                    fly_relocation_report.actions_executed
+                    if fly_relocation_report is not None
+                    else fuchsia_fly_report.actions_executed  # type: ignore[union-attr]
+                )
             ),
         },
         "capture": {

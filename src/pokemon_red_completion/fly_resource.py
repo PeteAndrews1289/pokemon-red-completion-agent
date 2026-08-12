@@ -298,6 +298,55 @@ class CinnabarFlyArrivalReport:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class FuchsiaFlyArrivalReport:
+    """Evidence for a story-neutral Cinnabar-to-Fuchsia Fly relocation."""
+
+    initial_raw: RawGameState
+    final_raw: RawGameState
+    initial_bag: tuple[tuple[int, int], ...]
+    final_bag: tuple[tuple[int, int], ...]
+    dux_moves: tuple[int, ...]
+    dux_pp_before: tuple[int, ...]
+    dux_pp_after: tuple[int, ...]
+    fly_landings: tuple[tuple[int, int], ...]
+    party_hp_before: tuple[int, ...]
+    party_hp_after: tuple[int, ...]
+    party_max_hp_before: tuple[int, ...]
+    party_max_hp_after: tuple[int, ...]
+    party_status_before: tuple[int, ...]
+    party_status_after: tuple[int, ...]
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.initial_raw.map_id == MapId.CINNABAR_POKECENTER
+            and (self.initial_raw.player_x, self.initial_raw.player_y) == (3, 3)
+            and self.initial_raw.battle_state == 0
+            and self.final_raw.map_id == MapId.FUCHSIA_CITY
+            and self.final_raw.battle_state == 0
+            and self.initial_raw.party_species_ids == self.final_raw.party_species_ids
+            and self.initial_raw.first_party_moves == self.final_raw.first_party_moves
+            and self.initial_raw.first_party_pp == self.final_raw.first_party_pp
+            and self.initial_bag == self.final_bag
+            and (int(ItemId.HM02_FLY), 1) in self.final_bag
+            and self.dux_moves == DUX_MOVES_AFTER
+            and self.dux_pp_before == DUX_PP_AFTER
+            and self.dux_pp_after == DUX_PP_AFTER
+            and bool(self.fly_landings)
+            and self.fly_landings[-1][0] == int(MapId.FUCHSIA_CITY)
+            and len(self.fly_landings) <= FLY_ATTEMPT_LIMIT
+            and self.party_hp_before == self.party_hp_after
+            and self.party_max_hp_before == self.party_max_hp_after
+            and self.party_status_before == self.party_status_after
+            and all(status == 0 for status in self.party_status_after)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.controller_released
+        )
+
+
 def run_fly_resource_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -512,6 +561,59 @@ def relocate_celadon_to_cinnabar_by_fly(
     )
     if not report.passed:
         raise FlyResourceError("Cinnabar Fly arrival evidence failed.")
+    return report
+
+
+def relocate_cinnabar_to_fuchsia_by_fly(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+) -> FuchsiaFlyArrivalReport:
+    """Return an authenticated Cinnabar boundary to Fuchsia without story effects."""
+
+    actions = CountingExecutor(executor)
+    initial = reader.read()
+    initial_bag = _bag_tuple(emulator)
+    hp_before = _party_hp(emulator)
+    max_hp_before = _party_max_hp(emulator)
+    status_before = _party_status(emulator)
+    dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
+    dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
+    if (
+        initial.map_id != MapId.CINNABAR_POKECENTER
+        or (initial.player_x, initial.player_y) != (3, 3)
+        or initial.battle_state != 0
+        or not _event(emulator, EventFlag.GOT_HM02)
+        or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
+        or dux_moves != DUX_MOVES_AFTER
+        or dux_pp_before != DUX_PP_AFTER
+        or not party_core_intact(initial.party_species_ids)
+    ):
+        raise FlyResourceError("Cinnabar-to-Fuchsia Fly input is not qualified.")
+
+    _move(actions, reader, CINNABAR_CENTER_TO_OUTDOORS, "Cinnabar Fly departure")
+    landings = _fly_to_destination(actions, reader, emulator, MapId.FUCHSIA_CITY)
+    final = reader.read()
+    report = FuchsiaFlyArrivalReport(
+        initial,
+        final,
+        initial_bag,
+        _bag_tuple(emulator),
+        dux_moves,
+        dux_pp_before,
+        _four(emulator, RamAddress.PARTY_MON_2_PP),
+        landings,
+        hp_before,
+        _party_hp(emulator),
+        max_hp_before,
+        _party_max_hp(emulator),
+        status_before,
+        _party_status(emulator),
+        actions.actions_executed,
+        not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise FlyResourceError("Fuchsia Fly arrival evidence failed.")
     return report
 
 

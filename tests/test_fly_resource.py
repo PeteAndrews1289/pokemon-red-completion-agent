@@ -15,6 +15,7 @@ from pokemon_red_completion.fly_resource import (
     FlyRelocationReport,
     FlyResourceCheckpoint,
     FlyResourceReport,
+    FuchsiaFlyArrivalReport,
 )
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 
@@ -171,3 +172,19 @@ def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
         ),
     ).passed
     assert not replace(report, final_bag=report.final_bag[:-1]).passed
+
+
+def test_fuchsia_fly_arrival_requires_exact_protected_state() -> None:
+    initial = replace(_raw(), map_id=MapId.CINNABAR_POKECENTER)
+    final = replace(initial, map_id=MapId.FUCHSIA_CITY, player_x=18, player_y=26)
+    bag = ((4, 1), (int(ItemId.HM02_FLY), 1))
+    report = FuchsiaFlyArrivalReport(
+        initial, final, bag, bag, DUX_MOVES_AFTER, DUX_PP_AFTER, DUX_PP_AFTER,
+        ((int(MapId.FUCHSIA_CITY), 18),),
+        (125, 53, 37, 140), (125, 53, 37, 140),
+        (125, 53, 37, 140), (125, 53, 37, 140),
+        (0, 0, 0, 0), (0, 0, 0, 0), 100, True,
+    )
+
+    assert report.passed
+    assert not replace(report, final_bag=((4, 1),)).passed
