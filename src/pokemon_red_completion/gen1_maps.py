@@ -367,20 +367,23 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         map_id: terrain_for(rom, map_id, sets).tiles
         for map_id in graph
     }
+    directional_tiles = directional_warp_tiles(rom)
+    automatic_tiles = automatic_warp_tiles(rom)
     graph = _with_directional_warp_actions(
         graph,
         terrain_tiles,
-        directional_warp_tiles(rom),
+        directional_tiles,
     )
     graph = _with_automatic_warp_triggers(
         graph,
         terrain_tiles,
-        automatic_warp_tiles(rom),
+        automatic_tiles,
     )
     graph = _without_inert_directional_warps(
         graph,
         terrain_tiles,
-        directional_warp_tiles(rom),
+        directional_tiles,
+        automatic_tiles,
     )
     verify_against_encounter_reads(
         reachable=set(graph),
@@ -466,6 +469,7 @@ def _without_inert_directional_warps(
     graph: Mapping[int, MapNode],
     tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
     directional_tiles: Mapping[str, frozenset[int]],
+    automatic_tiles: Mapping[int, frozenset[int]],
 ) -> dict[int, MapNode]:
     """Drop outdoor warp rows whose tile in front fails the engine table.
 
@@ -492,11 +496,16 @@ def _without_inert_directional_warps(
         ) -> bool:
             if (
                 passage.kind is not PassageKind.WARP
-                or passage.exit_action is None
                 or passage.at is None
                 or source_tileset not in OUTSIDE_TILESETS
             ):
                 return True
+            if source_tiles[passage.at[0]][passage.at[1]] in automatic_tiles[
+                source_tileset
+            ]:
+                return True
+            if passage.exit_action is None:
+                return False
             dy, dx = delta[passage.exit_action]
             y, x = passage.at[0] + dy, passage.at[1] + dx
             return (

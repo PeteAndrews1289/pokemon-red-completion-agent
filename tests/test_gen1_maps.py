@@ -220,9 +220,54 @@ def test_inert_gate_row_is_removed_by_directional_tile_in_front() -> None:
             "left": frozenset({0x4B}),
             "right": frozenset(),
         },
+        {0: frozenset()},
     )
 
     assert projected[18].passages == (lower,)
+
+
+def test_outdoor_warp_without_a_cartridge_trigger_is_not_executable() -> None:
+    inert = Passage(
+        to_map=76,
+        kind=PassageKind.WARP,
+        at=(1, 2),
+        arrival_at=(3, 5),
+    )
+    automatic = Passage(
+        to_map=76,
+        kind=PassageKind.WARP,
+        at=(2, 2),
+        arrival_at=(4, 5),
+    )
+    graph = {
+        18: MapNode(
+            map_id=18,
+            height=2,
+            width=2,
+            passages=(inert, automatic),
+            tileset=0,
+        )
+    }
+    tiles = (
+        (0x39, 0x39, 0x39, 0x39),
+        (0x39, 0x17, 0x23, 0x39),
+        (0x39, 0x17, 0x58, 0x39),
+        (0x39, 0x39, 0x39, 0x39),
+    )
+
+    projected = gen1_maps._without_inert_directional_warps(
+        graph,
+        {18: tiles},
+        {
+            "up": frozenset(),
+            "down": frozenset(),
+            "left": frozenset({0x4B}),
+            "right": frozenset(),
+        },
+        {0: frozenset({0x58})},
+    )
+
+    assert projected[18].passages == (automatic,)
 
 
 def test_both_cartridges_carry_the_same_world(record: dict) -> None:
