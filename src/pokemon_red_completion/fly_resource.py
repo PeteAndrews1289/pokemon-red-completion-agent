@@ -261,8 +261,11 @@ class CinnabarFlyArrivalReport:
     @property
     def passed(self) -> bool:
         return (
-            self.initial_raw.map_id == MapId.CELADON_POKECENTER
-            and (self.initial_raw.player_x, self.initial_raw.player_y) == (3, 3)
+            (self.initial_raw.map_id, self.initial_raw.player_x, self.initial_raw.player_y)
+            in {
+                (MapId.CELADON_POKECENTER, 3, 3),
+                (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
+            }
             and self.initial_raw.battle_state == 0
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
@@ -457,8 +460,11 @@ def relocate_celadon_to_cinnabar_by_fly(
     dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
     dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
     if (
-        initial.map_id != MapId.CELADON_POKECENTER
-        or (initial.player_x, initial.player_y) != (3, 3)
+        (initial.map_id, initial.player_x, initial.player_y)
+        not in {
+            (MapId.CELADON_POKECENTER, 3, 3),
+            (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
+        }
         or initial.battle_state != 0
         or not _event(emulator, EventFlag.GOT_HM02)
         or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
@@ -468,7 +474,8 @@ def relocate_celadon_to_cinnabar_by_fly(
     ):
         raise FlyResourceError("Celadon Fly relocation input is not qualified.")
 
-    _move(actions, reader, CELADON_CENTER_TO_OUTDOORS, "Celadon Fly departure")
+    if initial.map_id == MapId.CELADON_POKECENTER:
+        _move(actions, reader, CELADON_CENTER_TO_OUTDOORS, "Celadon Fly departure")
     outdoors = reader.read()
     if outdoors.map_id != MapId.CELADON_CITY or outdoors.battle_state != 0:
         raise FlyResourceError("Celadon Center exit did not reach the city field.")

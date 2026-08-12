@@ -161,4 +161,13 @@ def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
 
     assert CELADON_CENTER_TO_OUTDOORS == ("down",) * 5
     assert report.passed
+    assert replace(
+        report,
+        initial_raw=replace(
+            report.initial_raw,
+            map_id=MapId.CELADON_CITY,
+            player_x=49,
+            player_y=11,
+        ),
+    ).passed
     assert not replace(report, final_bag=report.final_bag[:-1]).passed

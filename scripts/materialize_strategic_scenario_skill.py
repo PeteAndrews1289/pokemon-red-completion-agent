@@ -247,8 +247,11 @@ def _can_fly_to_cinnabar_skill_boundary(
     boundary: tuple[MapId, tuple[int, int]],
 ) -> bool:
     return (
-        before.map_id == MapId.CELADON_POKECENTER
-        and (before.player_x, before.player_y) == (3, 3)
+        (before.map_id, before.player_x, before.player_y)
+        in {
+            (MapId.CELADON_POKECENTER, 3, 3),
+            (MapId.CELADON_CITY, 49, 11),
+        }
         and boundary == (MapId.CINNABAR_POKECENTER, (3, 3))
     )
 
