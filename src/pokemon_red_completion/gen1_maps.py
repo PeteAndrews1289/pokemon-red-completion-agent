@@ -647,8 +647,8 @@ def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
     candidates = tuple(
         action
         for condition, action in (
-            (x == 0, "right"),
-            (x == maximum_x, "left"),
+            (x == 0, "left"),
+            (x == maximum_x, "right"),
         )
         if condition
     )
