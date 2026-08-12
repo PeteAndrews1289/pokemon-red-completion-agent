@@ -727,13 +727,14 @@ def _warp_transition(
         approach = local_paths.get((edge.at, None))
     if approach is None:
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
-    # An ordinary warp always fires when its source trigger is entered.  Its
-    # ``exit_action`` describes the *destination* boundary's pass-through
-    # direction and must not turn that final source-map approach step into a
-    # fictitious same-map movement.  Returns are different: their action is
-    # decoded from the source boundary and remains separate unless the
-    # cartridge's automatic-warp table cleared it.
-    action_in_approach = edge.kind == "warp" or edge.exit_action is None
+    # Gen I suppresses immediate retrigger when an ordinary entry deposits the
+    # player on its return warp. Starting on that coordinate therefore needs
+    # the decoded outward action. The Generation I adapter clears that action
+    # only when the source tileset's cartridge table marks this exact tile as
+    # an automatic door/warp. Geometry alone is insufficient: Cerulean's
+    # robbed-house top door fires on entry, while the Underground Path top edge
+    # needs a second UP from the same coordinate.
+    action_in_approach = edge.exit_action is None
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(
             "route begins on a warp trigger; moving away and re-entering is not planned yet"

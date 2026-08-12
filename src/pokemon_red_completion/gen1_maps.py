@@ -641,14 +641,11 @@ def _assemble(
                         f"{door.destination_warp_index} on map {destination}"
                     )
                 arrival_at = destination_warps[door.destination_warp_index].at
-                # Pass-through gate maps place their arrival warp on an
-                # interior-map boundary.  The outdoor event is a two-input
-                # warp: first step onto its tile, then keep moving into the
-                # gate.  Route 8's Saffron gate is the live witness.
-                exit_action = _boundary_entry_action(
-                    headers[destination],
-                    arrival_at,
-                )
+                # Directional warp behavior belongs to the source trigger,
+                # not the destination arrival. Viridian Forest's north edge
+                # is the live asymmetric witness: its top warp needs a second
+                # UP, while the paired gate's bottom warp fires on entry.
+                exit_action = _boundary_warp_action(headers[map_id], door.at)
             passages.setdefault(map_id, []).append(
                 Passage(
                     to_map=destination if kind is PassageKind.WARP else None,
@@ -681,15 +678,12 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
     return candidates[0] if len(candidates) == 1 else None
 
 
-def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
-    """Return the extra inward action for a pass-through gate arrival.
+def _boundary_warp_action(header: _Header, at: tuple[int, int]) -> str | None:
+    """Return the extra outward action required by a source boundary warp.
 
-    Horizontal boundary arrivals require a second same-direction input from
-    the outdoor warp tile.  A top-boundary arrival has the same two-input
-    shape: Red first steps down onto the outdoor entrance and then continues
-    down into the gate.  Bottom-boundary arrivals are upward-facing doors and
-    fire on the entering step.  Route 5's north Underground Path entrance and
-    Route 8's south entrance are the live witnesses for that asymmetry.
+    Top and horizontal boundary triggers require a second outward input after
+    Red enters their coordinate. Bottom-boundary triggers fire on entry. The
+    cartridge automatic-warp table may subsequently clear any geometric guess.
     """
 
     y, x = at
@@ -698,14 +692,14 @@ def _boundary_entry_action(header: _Header, at: tuple[int, int]) -> str | None:
     if y in {0, maximum_y} and x in {0, maximum_x}:
         return None
     if y == 0:
-        return "down"
+        return "up"
     if y == maximum_y:
         return None
     candidates = tuple(
         action
         for condition, action in (
-            (x == 0, "right"),
-            (x == maximum_x, "left"),
+            (x == 0, "left"),
+            (x == maximum_x, "right"),
         )
         if condition
     )
