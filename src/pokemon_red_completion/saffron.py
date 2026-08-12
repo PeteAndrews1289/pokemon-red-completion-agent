@@ -736,7 +736,7 @@ def run_jolteon_resource_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "jolteon_evolved", "Evolved Jolteon")
 
     for route, map_id, coordinate, label in (
-        (MART_4F_TO_3F, MapId.CELADON_MART_3F, (12, 2), "Mart 3F return"),
+        (("up",), MapId.CELADON_MART_3F, (12, 2), "Mart 3F return"),
         (MART_3F_TO_2F, MapId.CELADON_MART_2F, (16, 2), "Mart 2F return"),
         (MART_2F_TO_1F, MapId.CELADON_MART_1F, (12, 2), "Mart 1F return"),
         (MART_TO_CITY, MapId.CELADON_CITY, (10, 14), "Mart exit"),
