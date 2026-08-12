@@ -803,6 +803,7 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         0x39,
     ),
     expected_pp_after: tuple[int, int, int, int] = (15, 15, 10, 15),
+    buy_silph_battle_items: bool = False,
 ) -> tuple[RawGameState, bool]:
     """Install Ice Beam and return through the Center's entrance while still healed."""
 
@@ -813,7 +814,6 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         raise SilphChapterError("Celadon Ice Beam boundary requires a healed party.")
     if reader.read().first_party_moves != expected_moves_before:
         raise SilphChapterError("Celadon Ice Beam boundary has an unexpected move set.")
-    money_before = _money(emulator)
     _move(actions, reader, CENTER_EXIT, timing)
     _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exit")
     _move_verified(
@@ -829,7 +829,6 @@ def acquire_and_teach_ice_beam_from_celadon_center(
         (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "Celadon Mart 3F"),
         (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "Celadon Mart 4F"),
         (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "Celadon Mart 5F"),
-        (MART_5F_TO_ROOF, MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof"),
     ):
         _move(actions, reader, route, timing)
         for _ in range(4):
@@ -837,12 +836,17 @@ def acquire_and_teach_ice_beam_from_celadon_center(
                 break
             _move(actions, reader, route[-2:], timing)
         _require(reader.read(), map_id, coordinate, label)
+    if buy_silph_battle_items:
+        _buy_silph_x_special(actions, reader, emulator, timing)
+    roof_money_before = _money(emulator)
+    _move(actions, reader, MART_5F_TO_ROOF, timing)
+    _require(reader.read(), MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof")
     transfer_before_event = _acquire_and_teach_ice_beam_on_roof(
         actions,
         reader,
         emulator,
         timing,
-        money_before=money_before,
+        money_before=roof_money_before,
         expected_moves_before=expected_moves_before,
         expected_moves_after=expected_moves_after,
     )

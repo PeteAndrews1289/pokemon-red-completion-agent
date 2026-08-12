@@ -46,8 +46,8 @@ class QualifiedSkillOrderContract:
 # Only constraints stricter than, or operationally important beyond, the public
 # quest graph belong here.  For example, Strength's quest prerequisite is merely
 # reaching Fuchsia, but the qualified Warden skill needs Gold Teeth supplied by
-# the currently qualified Safari/Surf chapter.  Erika and Koga likewise consume
-# party/move boundaries established by the later-order teacher run.
+# the currently qualified Safari/Surf chapter. Koga likewise consumes the
+# Surf-ready party/move boundary established by the later-order teacher run.
 RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
     QualifiedSkillOrderContract(
         objective_id="defeat_koga",
@@ -60,16 +60,6 @@ RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
         reason=(
             "The qualified Strength chapter requires Gold Teeth supplied by the "
             "current Safari/Surf chapter."
-        ),
-    ),
-    QualifiedSkillOrderContract(
-        objective_id="defeat_erika",
-        required_objective_ids=frozenset(
-            {"reach_celadon", "defeat_koga", "obtain_strength"}
-        ),
-        reason=(
-            "The qualified Erika chapter starts from the post-Koga, post-Strength "
-            "Fuchsia party boundary."
         ),
     ),
     QualifiedSkillOrderContract(
@@ -86,9 +76,7 @@ RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
 def audit_qualified_skill_order(
     registry: StrategicNavigationScenarioRegistry,
     *,
-    contracts: tuple[QualifiedSkillOrderContract, ...] = (
-        RED_QUALIFIED_SKILL_ORDER_CONTRACTS
-    ),
+    contracts: tuple[QualifiedSkillOrderContract, ...] = (RED_QUALIFIED_SKILL_ORDER_CONTRACTS),
 ) -> dict[str, object]:
     """Report exact frontiers incompatible with the current teacher order.
 
@@ -130,8 +118,7 @@ def audit_qualified_skill_order(
     return {
         "schema": "strategic-curriculum-order-audit-v1",
         "claim": (
-            "These are current qualified-teacher order gaps, not impossible "
-            "cartridge states."
+            "These are current qualified-teacher order gaps, not impossible cartridge states."
         ),
         "qualified_skill_contract_count": len(contracts),
         "learning_scenarios_checked": len(registry.learning_scenarios()),

@@ -37,10 +37,7 @@ def test_audit_distinguishes_teacher_order_from_game_feasibility() -> None:
         {
             "objective_id": "defeat_koga",
             "required_but_absent_objective_ids": ["obtain_surf"],
-            "reason": (
-                "The qualified Koga chapter starts at the Surf-ready Fuchsia "
-                "boundary."
-            ),
+            "reason": ("The qualified Koga chapter starts at the Surf-ready Fuchsia boundary."),
         },
         {
             "objective_id": "obtain_strength",
@@ -52,17 +49,7 @@ def test_audit_distinguishes_teacher_order_from_game_feasibility() -> None:
         },
     ]
 
-    scenario_023 = by_id["red-strategic-scenario-v2-023-validation"]
-    assert scenario_023["current_qualified_skill_blockers"] == [
-        {
-            "objective_id": "defeat_erika",
-            "required_but_absent_objective_ids": ["defeat_koga"],
-            "reason": (
-                "The qualified Erika chapter starts from the post-Koga, "
-                "post-Strength Fuchsia party boundary."
-            ),
-        }
-    ]
+    assert "red-strategic-scenario-v2-023-validation" not in by_id
 
 
 def test_audit_finds_early_erika_and_early_cinnabar_curriculum_gaps() -> None:
@@ -74,24 +61,9 @@ def test_audit_finds_early_erika_and_early_cinnabar_curriculum_gaps() -> None:
         "red-strategic-scenario-v2-010-train",
         "red-strategic-scenario-v2-014-train",
     ):
-        blockers = by_id[scenario_id]["current_qualified_skill_blockers"]
-        assert blockers == [
-            {
-                "objective_id": "defeat_erika",
-                "required_but_absent_objective_ids": [
-                    "defeat_koga",
-                    "obtain_strength",
-                ],
-                "reason": (
-                    "The qualified Erika chapter starts from the post-Koga, "
-                    "post-Strength Fuchsia party boundary."
-                ),
-            }
-        ]
+        assert scenario_id not in by_id
 
-    assert by_id["red-strategic-scenario-v2-041-train"][
-        "current_qualified_skill_blockers"
-    ] == [
+    assert by_id["red-strategic-scenario-v2-041-train"]["current_qualified_skill_blockers"] == [
         {
             "objective_id": "reach_cinnabar",
             "required_but_absent_objective_ids": ["defeat_sabrina"],
@@ -109,15 +81,11 @@ def test_contract_rejects_unknown_self_and_empty_prerequisites() -> None:
     with pytest.raises(ValueError, match="prerequisites are invalid"):
         QualifiedSkillOrderContract("defeat_koga", frozenset(), "reason")
     with pytest.raises(ValueError, match="prerequisites are invalid"):
-        QualifiedSkillOrderContract(
-            "defeat_koga", frozenset({"defeat_koga"}), "reason"
-        )
+        QualifiedSkillOrderContract("defeat_koga", frozenset({"defeat_koga"}), "reason")
 
 
 def test_audit_rejects_duplicate_contract_authority() -> None:
     registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
-    contract = QualifiedSkillOrderContract(
-        "defeat_koga", frozenset({"obtain_surf"}), "reason"
-    )
+    contract = QualifiedSkillOrderContract("defeat_koga", frozenset({"obtain_surf"}), "reason")
     with pytest.raises(ValueError, match="duplicate"):
         audit_qualified_skill_order(registry, contracts=(contract, contract))

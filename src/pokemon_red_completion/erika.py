@@ -49,6 +49,7 @@ from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     ICE_BEAM_MOVE,
     SilphChapterError,
+    _battle_x_special,
     _deposit_pc_item,
     acquire_and_teach_ice_beam_from_celadon_center,
 )
@@ -56,6 +57,7 @@ from pokemon_red_completion.tower import party_core_intact
 
 ERIKA_TRAINER_REWARD_TOTAL = 4_056
 ERIKA_ICE_BEAM_PREPARATION_COST = 200
+EARLY_ERIKA_BATTLE_PREPARATION_COST = 2_200
 
 ERIKA_CHECKPOINT_COUNT = 12
 EARLY_ERIKA_CHECKPOINT_COUNT = 11
@@ -360,6 +362,7 @@ class EarlyErikaChapterReport:
     erika_identity: tuple[int, int, int, int]
     ice_beam_pp_spent: int
     tm13_transfer_before_event: bool
+    x_special_used: int
     money_before: int
     money_after: int
     badge_bits_before: int
@@ -397,8 +400,9 @@ class EarlyErikaChapterReport:
             and self.erika_identity == (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1)
             and 0 < self.ice_beam_pp_spent <= 10
             and self.tm13_transfer_before_event
+            and self.x_special_used == 1
             and self.money_after
-            == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - ERIKA_ICE_BEAM_PREPARATION_COST
+            == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - EARLY_ERIKA_BATTLE_PREPARATION_COST
             and self.badge_bits_before == 0x07
             and self.badge_bits_after == 0x0F
             and self.gym_events_before == (False,) * 7
@@ -406,6 +410,8 @@ class EarlyErikaChapterReport:
             and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
             and int(ItemId.TM13_ICE_BEAM) not in dict(self.final_bag)
             and int(ItemId.FRESH_WATER) not in dict(self.final_bag)
+            and dict(self.final_bag).get(int(ItemId.X_SPECIAL)) == 2
+            and dict(self.final_bag).get(int(ItemId.X_ACCURACY)) == 1
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.party_hp == self.party_max_hp
@@ -428,6 +434,7 @@ class EarlyErikaChapterReport:
                 "transfer_before_event": self.tm13_transfer_before_event,
                 "cost": ERIKA_ICE_BEAM_PREPARATION_COST,
             },
+            "x_special_used": self.x_special_used,
             "rainbow_badge": {
                 "badges_before": self.badge_bits_before,
                 "badges_after": self.badge_bits_after,
@@ -493,6 +500,7 @@ def run_early_erika_chapter(
             expected_moves_before=(0x2C, 0x27, 0x3D, 0x37),
             expected_moves_after=(0x2C, 0x27, ICE_BEAM_MOVE, 0x37),
             expected_pp_after=(25, 30, 10, 25),
+            buy_silph_battle_items=True,
         )
     except SilphChapterError as error:
         raise ErikaChapterError(f"Early Erika Ice Beam preparation failed: {error}") from error
@@ -580,6 +588,11 @@ def run_early_erika_chapter(
     _require_identity(emulator, (ERIKA_OPPONENT, ERIKA_CLASS, ERIKA_OPPONENT, 1), "Erika")
     _checkpoint(records, progress, emulator, reader.read(), "erika_battle", "Verified Erika")
     before_pp = reader.read().first_party_pp
+    x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    try:
+        _battle_x_special(reader, actions, emulator, DEFAULT_SILPH_TIMING)
+    except SilphChapterError as error:
+        raise ErikaChapterError(f"Early Erika X Special failed: {error}") from error
     _battle(
         reader,
         actions,
@@ -630,6 +643,7 @@ def run_early_erika_chapter(
         erika_identity=identity,
         ice_beam_pp_spent=ice_beam_spent,
         tm13_transfer_before_event=tm13_transfer_before_event,
+        x_special_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         money_before=money_before,
         money_after=_money(emulator),
         badge_bits_before=badge_bits_before,
