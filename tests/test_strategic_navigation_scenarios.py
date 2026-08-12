@@ -78,8 +78,8 @@ def test_reachable_inventory_has_real_branch_density() -> None:
         >= 2
     ]
 
-    assert len(reachable) == 166
-    assert len(branching) == 129
+    assert len(reachable) == 158
+    assert len(branching) == 121
 
 
 def test_registry_preregisters_powered_splits_without_claiming_live_rows() -> None:
@@ -88,8 +88,8 @@ def test_registry_preregisters_powered_splits_without_claiming_live_rows() -> No
 
     assert registry.registry_sha256 == hashlib.sha256(payload).hexdigest()
     assert registry.partition_counts == {"test": 12, "train": 24, "validation": 12}
-    assert registry.candidate_count_counts == {2: 21, 3: 22, 4: 3, 5: 2}
-    assert registry.multiway_scenarios == 27
+    assert registry.candidate_count_counts == {2: 23, 3: 20, 4: 3, 5: 2}
+    assert registry.multiway_scenarios == 25
     assert registry.validation_challenge_hypotheses == 6
     assert registry.teacher_objective_counts == {
         "clear_rocket_hideout": 3,
@@ -101,9 +101,9 @@ def test_registry_preregisters_powered_splits_without_claiming_live_rows() -> No
         "liberate_silph": 3,
         "obtain_strength": 7,
         "obtain_surf": 7,
-        "reach_fuchsia": 4,
+        "reach_fuchsia": 5,
         "reach_saffron": 3,
-        "rescue_fuji": 4,
+        "rescue_fuji": 3,
     }
     assert registry.public_summary()["live_policy_contexts_authenticated"] == 0
     assert registry.public_summary()["collection_open"] is False
@@ -111,6 +111,31 @@ def test_registry_preregisters_powered_splits_without_claiming_live_rows() -> No
     test = next(item for item in registry.scenarios if item.partition == "test")
     with pytest.raises(StrategicScenarioProtocolError, match="must remain unopened"):
         registry.scenario(test.scenario_id)
+
+
+def test_silph_candidates_require_the_cartridge_proven_fuji_gate() -> None:
+    registry = parse_strategic_navigation_scenario_registry(REGISTRY_PATH.read_bytes())
+
+    assert "rescue_fuji" in COMPLETION_QUEST.objective(
+        "liberate_silph"
+    ).prerequisites
+    assert all(
+        "rescue_fuji" in scenario.completed_objective_ids
+        for scenario in registry.scenarios
+        if "liberate_silph" in scenario.candidate_objective_ids
+    )
+    assert {
+        scenario.scenario_id
+        for scenario in registry.scenarios
+        if scenario.cost_baseline_challenge_hypothesis
+    } == {
+        "red-strategic-scenario-v2-003-validation",
+        "red-strategic-scenario-v2-007-validation",
+        "red-strategic-scenario-v2-011-validation",
+        "red-strategic-scenario-v2-015-validation",
+        "red-strategic-scenario-v2-019-validation",
+        "red-strategic-scenario-v2-023-validation",
+    }
 
 
 def test_rehearsal_assignment_binds_scenario_capture_and_committed_source() -> None:
@@ -228,21 +253,21 @@ def test_registry_and_digest_have_stable_public_identities() -> None:
     registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
 
-    assert len(REGISTRY_PATH.read_bytes()) == 40_762
+    assert len(REGISTRY_PATH.read_bytes()) == 40_744
     assert (
         registry.registry_sha256
-        == "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7"
+        == "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71"
     )
     assert (
         registry.objective_graph_sha256
-        == "7ffd735c8a3dffdfa35fa60932bae79f8a52908cf7085fc96e0e4fbdc395cdeb"
+        == "4ba32cc5fa84b6b096f1bda8581b9e557e70c8732a40849d128be2b29eb5a528"
     )
     assert (
         registry.teacher_order_sha256
         == "b4b0292a38a062a33fd7449aecf8eca01433a19297558476ee2b8aa9fbeb8cf8"
     )
     assert digest == {
-        "bytes": 40_762,
+        "bytes": 40_744,
         "schema": "pokemon-strategic-navigation-scenario-registry-digest-v2",
         "sha256": registry.registry_sha256,
     }

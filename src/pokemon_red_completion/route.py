@@ -266,6 +266,7 @@ def build_completion_quest_graph() -> QuestGraph:
             Specialist.BATTLE,
             "clear_rocket_hideout",
             "reach_saffron",
+            "rescue_fuji",
             priority=20,
         ),
         _objective(

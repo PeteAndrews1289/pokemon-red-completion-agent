@@ -37,8 +37,11 @@ _TEACHER_OBJECTIVE_QUOTAS = {
     "help_bill": 1,
     "defeat_misty": 2,
     "clear_rocket_hideout": 3,
-    "rescue_fuji": 4,
-    "reach_fuchsia": 4,
+    # Cartridge story flags prove that Silph's entrance opens only after Fuji,
+    # leaving three genuine multi-candidate Fuji frontiers.  Move the spare
+    # quota to the next teacher instead of inventing an unavailable choice.
+    "rescue_fuji": 3,
+    "reach_fuchsia": 5,
     "obtain_surf": 7,
     "defeat_koga": 5,
     "obtain_strength": 7,
