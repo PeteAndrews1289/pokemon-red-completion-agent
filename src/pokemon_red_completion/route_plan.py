@@ -255,6 +255,7 @@ def compose_route(
 
     current_at = start_at
     current_mode = start_mode
+    arrival_protected = False
     segments: list[RouteSegment] = []
     for source_map, target_map, edge in zip(
         macro_path.maps[:-1],
@@ -268,7 +269,13 @@ def compose_route(
         segment = _compose_segment(
             graph,
             local,
-            _ComposedState(source_map, current_at, current_mode, None),
+            _ComposedState(
+                source_map,
+                current_at,
+                current_mode,
+                None,
+                arrival_protected,
+            ),
             target_map,
             edge,
             capabilities=capabilities,
@@ -276,6 +283,7 @@ def compose_route(
         segments.append(segment)
         current_at = segment.transition.arrival_at
         current_mode = segment.approach.modes[-1]
+        arrival_protected = edge.kind == "connection"
     terminal_approach: LocalPath | None = None
     if goal_at is not None:
         terminal_map = macro_path.maps[-1]
@@ -356,6 +364,7 @@ class _ComposedState:
     at: Coordinate
     mode: TraversalMode
     last_outside: int | None
+    arrival_protected: bool = False
 
 
 def _find_composed_route(
@@ -450,15 +459,14 @@ def _find_composed_route(
             except RoutePlanningError:
                 continue
             for segment in candidates:
-                segment_cost = sum(
-                    local_edge.cost for local_edge in segment.approach.edges
-                )
+                segment_cost = sum(local_edge.cost for local_edge in segment.approach.edges)
                 candidate_cost = cost + segment_cost + edge.cost
                 following = _ComposedState(
                     target_map,
                     segment.transition.arrival_at,
                     segment.approach.modes[-1],
                     next_last_outside,
+                    edge.kind == "connection",
                 )
                 if candidate_cost >= best_cost.get(following, candidate_cost + 1):
                     continue
@@ -562,9 +570,7 @@ def _compose_segment_candidates(
                 )
             )
         if not candidates:
-            raise RoutePlanningError(
-                "no decoded connection coordinate is locally reachable"
-            )
+            raise RoutePlanningError("no decoded connection coordinate is locally reachable")
         return tuple(candidates)
     if edge.kind in {"warp", "return"}:
         approach, transition, action_in_approach = _warp_transition(
@@ -575,6 +581,7 @@ def _compose_segment_candidates(
             edge,
             capabilities=capabilities,
             start_mode=state.mode,
+            arrival_protected=state.arrival_protected,
             local_paths=local_paths,
         )
         return (
@@ -612,9 +619,7 @@ def _reconstruct_composed_route(
     ordered_states = tuple(reversed(states))
     ordered_edges = tuple(reversed(edges))
     ordered_segments = tuple(reversed(segments))
-    terminal_at = (
-        goal.at if terminal_approach is None else terminal_approach.coordinates[-1]
-    )
+    terminal_at = goal.at if terminal_approach is None else terminal_approach.coordinates[-1]
     terminal_mode = goal.mode if terminal_approach is None else terminal_approach.modes[-1]
     return RoutePlan(
         macro_path=MacroPath(
@@ -657,6 +662,7 @@ def _warp_transition(
     *,
     capabilities: frozenset[str],
     start_mode: TraversalMode,
+    arrival_protected: bool = False,
     local_paths: Mapping[LocalGoal, LocalPath] | None = None,
 ) -> tuple[LocalPath, MacroTransition, bool]:
     if edge.at is None:
@@ -677,6 +683,35 @@ def _warp_transition(
         approach = local_paths.get((edge.at, None))
     if approach is None:
         raise RoutePlanningError(f"warp at {edge.at} is not locally reachable")
+    if edge.kind == "warp" and arrival_protected and len(approach.edges) == 1:
+        # Gen I protects the first tile entered after an outdoor connection.
+        # When that tile is also an ordinary warp, the movement lands on the
+        # warp without firing it.  Step back to the connection arrival and
+        # re-enter so the final edge, rather than the protected first edge, is
+        # the transition.  Route 8's west Saffron gate is the live witness.
+        try:
+            retreat = find_local_path(
+                local,
+                edge.at,
+                start,
+                capabilities=capabilities,
+                start_mode=approach.modes[-1],
+                goal_mode=start_mode,
+            )
+            reentry = find_local_path(
+                local,
+                start,
+                edge.at,
+                capabilities=capabilities,
+                start_mode=retreat.modes[-1],
+            )
+        except LocalRouterError as error:
+            raise RoutePlanningError(
+                "arrival-protected warp cannot be safely re-entered"
+            ) from error
+        if not retreat.edges or not reentry.edges:
+            raise RoutePlanningError("arrival-protected warp requires a bounded step-away route")
+        approach = _join_local_paths(approach, retreat, reentry)
     # Gen I suppresses immediate retrigger when an ordinary entry deposits the
     # player on its return warp. Starting on that coordinate therefore needs
     # the decoded outward action. Non-boundary return tiles and top-boundary
@@ -685,9 +720,7 @@ def _warp_transition(
     # Cerulean's robbed-house rear door and the south Underground Path exit are
     # the live cartridge witnesses for the two vertical cases.
     action_in_approach = edge.exit_action is None or (
-        edge.kind == "return"
-        and edge.exit_action == "up"
-        and bool(approach.edges)
+        edge.kind == "return" and edge.exit_action == "up" and bool(approach.edges)
     )
     if action_in_approach and not approach.edges:
         raise RoutePlanningError(
@@ -712,21 +745,13 @@ def _warp_transition(
                 "down": (1, 0),
             }.get(edge.exit_action, (0, 0))
             if (dy, dx) == (0, 0):
-                raise RoutePlanningError(
-                    f"unsupported boundary return action {edge.exit_action!r}"
-                )
+                raise RoutePlanningError(f"unsupported boundary return action {edge.exit_action!r}")
             arrival = arrival[0] + dy, arrival[1] + dx
         elif edge.exit_action not in {None, "up", "down", "left", "right"}:
-            raise RoutePlanningError(
-                f"unsupported boundary return action {edge.exit_action!r}"
-            )
+            raise RoutePlanningError(f"unsupported boundary return action {edge.exit_action!r}")
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
-    action = (
-        approach.edges[-1].action
-        if action_in_approach
-        else edge.exit_action
-    )
+    action = approach.edges[-1].action if action_in_approach else edge.exit_action
     if action is None:  # pragma: no cover - guarded by the cases above
         raise RoutePlanningError("warp transition has no triggering action")
     return (
@@ -738,3 +763,18 @@ def _warp_transition(
         ),
         action_in_approach,
     )
+
+
+def _join_local_paths(first: LocalPath, *following: LocalPath) -> LocalPath:
+    """Join continuous local paths without duplicating boundary states."""
+
+    coordinates = list(first.coordinates)
+    edges = list(first.edges)
+    modes = list(first.modes)
+    for path in following:
+        if coordinates[-1] != path.coordinates[0] or modes[-1] != path.modes[0]:
+            raise RoutePlanningError("local path join is not continuous")
+        coordinates.extend(path.coordinates[1:])
+        edges.extend(path.edges)
+        modes.extend(path.modes[1:])
+    return LocalPath(tuple(coordinates), tuple(edges), tuple(modes))
