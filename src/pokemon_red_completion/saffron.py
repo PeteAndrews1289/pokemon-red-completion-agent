@@ -435,7 +435,10 @@ class SaffronAccessChapterReport:
             and self.party_after == self.party_before
             and self.final_raw.first_party_level == self.lead_level_before
             and self.final_raw.first_party_moves == self.lead_moves_before
-            and self.final_raw.first_party_pp == self.lead_pp_before
+            and _pp_preserved_or_restored(
+                self.lead_pp_before,
+                self.final_raw.first_party_pp,
+            )
             and self.party_hp == self.party_max_hp
             and all(hp > 0 for hp in self.party_hp)
             and self.final_raw.first_party_hp == self.party_hp[0]
@@ -475,6 +478,20 @@ class SaffronAccessChapterReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
+
+
+def _pp_preserved_or_restored(
+    before: tuple[int, ...] | None,
+    after: tuple[int, ...] | None,
+) -> bool:
+    """Allow the terminal Center heal to restore, but never consume, move PP."""
+
+    return (
+        before is not None
+        and after is not None
+        and len(before) == len(after)
+        and all((end & 0x3F) >= (start & 0x3F) for start, end in zip(before, after, strict=True))
+    )
 
 
 @dataclass(frozen=True, slots=True)

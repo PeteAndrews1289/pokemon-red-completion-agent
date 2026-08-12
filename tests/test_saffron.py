@@ -462,6 +462,16 @@ def test_saffron_access_report_accepts_pre_erika_party_and_preserves_it() -> Non
     assert report.public_dict()["optional_party_construction"] is False
     assert not replace(report, party_after=(*party, 0x68)).passed
     assert not replace(report, final_raw=replace(raw, first_party_level=37)).passed
+    restored = replace(
+        report,
+        final_raw=replace(raw, first_party_pp=(25, 30, 25, 25)),
+        lead_pp_before=(20, 25, 20, 20),
+    )
+    assert restored.passed
+    assert not replace(
+        restored,
+        final_raw=replace(raw, first_party_pp=(19, 30, 25, 25)),
+    ).passed
 
 
 def test_saffron_guard_resource_report_preserves_frontier_party_and_inventory() -> None:
