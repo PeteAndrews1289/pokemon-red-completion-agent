@@ -5,23 +5,26 @@
 
 ## Current focus (2026-08-12): teach alternate valid story orders
 
-Both Erika-before-Koga boundaries are now cartridge-qualified. Published `225b918` / CI
-`31571116510` handles the post-Strength party, and published `c789fab` / CI `31571804338` preserves
-carried battle-item stock through Silph. Scenario 023 is exact and has completed its official
-uncounted rehearsal: Koga selected over Sabrina, 604 movements, three handled interruptions, zero
-replans and zero movement labels. The curriculum-order audit now reports **14**, not 21,
-incompatible learning frontiers. Scenario 019's Koga/Strength-before-Surf blocker remains.
+Scenario 019 is now exact and has completed its official uncounted rehearsal. Published `31d4fd2`
+qualified Fly as a construction-only resource; published `3a07158` added bounded resource
+relocation and a pre-Surf Silph move lineage. Gold Teeth, Strength and Koga then completed without
+Surf, Silph added the last objective, and construction returned to Celadon. The rehearsal selected
+Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
+labels. The curriculum-order audit now reports **12**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **37 authenticated envelopes, 29 distinct frontiers and 13 exact
-learning scenarios**: six train and seven validation. Scenarios 003, 007, 011, 015 and 023 qualify five
-of the six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
+Current measured coverage is **45 authenticated envelopes, 32 distinct frontiers and 14 exact
+learning scenarios**: six train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
 [August 12 audit](current-audit-2026-08-12.md).
+The [paired capability receipt](evidence/strategic-validation-cost-baseline-capability-audit-2026-08-12.json)
+records six unique cost-baseline disagreements and a best-case exact p-value of 0.03125; it does
+not claim that a model has been trained or evaluated.
 
 The remaining challenge contexts cannot be truthfully constructed by replaying the canonical
 teacher order. The executable [curriculum-order audit](evidence/strategic-curriculum-order-audit-2026-08-12.json)
-finds 14 of 36 learning frontiers whose exact objective set conflicts with the operational
+finds 12 of 36 learning frontiers whose exact objective set conflicts with the operational
 prerequisites of a currently qualified skill. This is a teacher-coverage gap, not a cartridge
 impossibility.
 
@@ -31,16 +34,16 @@ The ordered gates are:
    green exact-commit CI;
 2. **complete:** qualify early Erika, Erika after Strength, scenarios 009 and 023; next qualify the
    distinct post-Fuji battle boundary needed by 010/014;
-3. qualify Gold Teeth/Strength without Surf and Koga-before-Surf to unlock 017–019;
-4. construct and rehearse validation scenario 019 exactly once, then rerun the paired
-   six-challenge cost-baseline audit;
+3. **complete:** qualify Fly, Gold Teeth/Strength without Surf, Koga-before-Surf and pre-Surf Silph;
+4. **complete:** construct and rehearse validation scenario 019 exactly once. The paired
+   six-challenge capability audit now passes at best-case exact p = 0.03125;
 5. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
 6. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
 7. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 23 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 22 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

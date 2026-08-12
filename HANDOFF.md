@@ -14,6 +14,35 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 019 authenticated; all six validation challenges qualified — 2026-08-12
+
+Published `31d4fd2` / CI `31574110860` qualified HM02/Fly as a construction-only resource lesson.
+From the exact scenario-015 source it acquired HM02, taught DUX, bounded the town-map search to ten
+attempts, found Celadon on attempt eight and preserved all 19 completion objectives. Published
+`3a07158` / CI `31574677024` added bounded pre-resource relocation and a second explicit Silph
+Ice-Beam lineage for Strength before Surf. Its full local gate was 2,727 passed, three deselected
+and one expected failure.
+
+The authenticated scenario-019 chain is: exact scenario 015 → Fly resource → 647-step relocation
+to Fuchsia → Gold Teeth without HM03 → Strength → Koga → 577-step relocation to Saffron → pre-Surf
+Silph → 54-step return to Celadon. Construction added only the three objectives scenario 019
+requires (`obtain_strength`, `defeat_koga`, `liberate_silph`), opened no assignment and created no
+episode. The terminal envelope has 22 verified objectives and state digest `15f5fb95…`.
+
+Scenario 019 then passed preflight and its only official uncounted rehearsal. The teacher selected
+Surf from three candidates at costs 77, 624 and 106, completed 620 movements with 23 waits, zero
+interruptions and zero replans, and wrote 1,282 records / one strategic label / zero movement
+labels. See the [scenario-019 receipt](docs/evidence/strategic-scenario-019-rehearsal-qualification-2026-08-12.json).
+
+The measured inventory is now **45 authenticated envelopes, 32 distinct frontiers, 14 exact
+learning contexts and 22 missing**. Exact coverage is six train and eight validation. All six
+preregistered validation cost-baseline challenges (003, 007, 011, 015, 019, 023) disagree with
+their unique route-cost minima; best-case paired two-sided exact p is 0.03125. This makes the
+evaluation design capable, not the model trained. Counted train/validation remain zero, all 12 test
+contexts remain sealed, and the 6/24 train plus 8/12 validation diversity gate keeps training
+closed. The static teacher-order audit is 12; prioritize Cinnabar-before-Sabrina and the remaining
+non-test contexts next.
+
 ## Scenario 023 authenticated; five of six validation challenges qualified — 2026-08-12
 
 Published source `225b918` qualified Erika after Strength and before Koga from the exact Fuchsia

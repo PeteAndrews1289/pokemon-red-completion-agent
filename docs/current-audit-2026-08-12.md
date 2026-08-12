@@ -2,25 +2,28 @@
 
 ## Outcome first
 
-Update after the initial audit: both early Erika and Erika after Strength/before Koga are now
-live-qualified. Scenario 023 is exactly constructed and rehearsed. The static teacher-order gap
-fell from **21 to 14**, and scenario 023 is no longer among the blockers. Counted data and test
-access remain zero. See the [early-Erika](evidence/early-erika-curriculum-qualification-2026-08-12.json),
-[Erika-after-Strength](evidence/erika-after-strength-qualification-2026-08-12.json), and
-[scenario 023](evidence/strategic-scenario-023-rehearsal-qualification-2026-08-12.json) receipts.
+Update after the initial audit: the teacher now qualifies Fly as an independent resource, Gold
+Teeth without Surf, Strength before Surf, Koga on that Strength lineage and Silph on the same
+pre-Surf party. Exact scenario 019 is constructed and rehearsed. The static teacher-order gap fell
+from **21 to 12**. Counted data and test access remain zero. See the
+[scenario 019 receipt](evidence/strategic-scenario-019-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **37 authenticated capture envelopes, 29 distinct frontiers and
-13 exact learning scenarios**. The exact contexts are six train scenarios and seven validation
+The private inventory now contains **45 authenticated capture envelopes, 32 distinct frontiers and
+14 exact learning scenarios**. The exact contexts are six train scenarios and eight validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
-Five of the six preregistered validation cost-baseline challenges are now live-qualified: scenarios
-003, 007, 011, 015 and 023. Scenario 015 is the widest context so far: five available choices with
+All six preregistered validation cost-baseline challenges are now live-qualified: scenarios 003,
+007, 011, 015, 019 and 023. Scenario 015 is the widest context so far: five available choices with
 route costs from 55 to 624, one teacher-selected Surf approach, 624 acknowledged movements, one
 trainer interruption, one wild interruption and one visible-object replan. Its immutable episode
 contains 1,400 records and no movement-imitation label. See the
 [scenario 015 receipt](evidence/strategic-scenario-015-rehearsal-qualification-2026-08-12.json).
+Across the six unique challenge contexts, the deterministic teacher disagrees with every unique
+route-cost minimum. A perfect scorer would therefore have six paired wins and a best-case
+two-sided exact p-value of 0.03125. This passes the experiment-capability gate, not the model-training
+gate. See the [paired capability audit](evidence/strategic-validation-cost-baseline-capability-audit-2026-08-12.json).
 
 The same frozen source also constructed and qualified train scenario 005. The bounded Saffron skill
 added exactly `reach_saffron`, a cartridge route returned to the declared Celadon origin, and no
@@ -29,7 +32,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 23 missing learning scenarios and excludes one known invalid
+current measurement. It reports 22 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -56,23 +59,20 @@ The remaining difficulty is no longer ordinary routing. The quest graph says wha
 allows; the qualified teacher skills say what this particular teacher run knows how to demonstrate.
 Those are not the same graph.
 
-The updated static curriculum-order audit records three operational contracts that are stricter
+The updated static curriculum-order audit records two operational contracts that are stricter
 than the game's public prerequisites. It checks all 36 learning scenarios without reading private
-captures or opening test. It finds **14 exact learning frontiers incompatible with the current
-qualified teacher order**, down from 21 after the two Erika curricula removed seven blockers. This is a
+captures or opening test. It finds **12 exact learning frontiers incompatible with the current
+qualified teacher order**, down from 21 after the alternate-order curricula. This is a
 teacher-coverage result, not evidence that those cartridge states are impossible. See the
 [curriculum-order receipt](evidence/strategic-curriculum-order-audit-2026-08-12.json).
 
-The remaining validation challenge exposes the gap directly:
-
-| Scenario | Exact frontier requires | Current teacher additionally requires | Missing curriculum |
-|---|---|---|---|
-| 019 | Koga and Strength while Surf is incomplete | Koga uses the Surf-ready party; Strength consumes Gold Teeth obtained by the Surf chapter | Koga-before-Surf and a Gold-Teeth/Strength path that does not award Surf |
-
-The same issue explains the current paper-only one-skill matches:
+Scenario 019 previously exposed the gap directly. It now proves the repaired composition: Fly and
+Gold Teeth are resource lessons with no objective label, Strength and Koga complete before Surf,
+Silph accepts the resulting move lineage, and construction returns to the exact Celadon origin.
+The remaining paper-only one-skill matches include:
 
 - scenario 009 is qualified; 010 and 014 need the distinct post-Fuji Erika battle boundary;
-- scenarios 017–019 need Koga and/or Strength before Surf; and
+- scenarios 017 and 021 still need Koga without either Surf or Strength; and
 - scenario 041 needs a Cinnabar route before Sabrina instead of the current post-Sabrina/Fly
   chapter.
 
@@ -90,8 +90,8 @@ claim.
 Current exact coverage is:
 
 - train: 6 of 24 planned contexts;
-- validation: 7 of 12 planned contexts;
-- validation cost-baseline challenges: 5 of 6;
+- validation: 8 of 12 planned contexts;
+- validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
 - counted examples: 0.
 
@@ -106,14 +106,12 @@ even if the code ran perfectly.
 2. Extend or separately qualify Erika for the post-Fuji Blastoise boundary used by 010/014;
    direct diagnostics showed a distinct deterministic leader battle schedule, so do not overclaim it.
    This unlocks adjacent train contexts without conflating their distinct battle schedule.
-3. Split the Safari teaching path into independently verified resource outcomes where the
-   cartridge permits it: obtain Gold Teeth without claiming Surf, then teach Strength. Build a
-   Koga-before-Surf battle boundary that does not depend on Surf as the battle move. Together these
-   unlock validation scenario 019 and adjacent train contexts.
+3. **Complete:** split Fly and Gold Teeth into independently verified resource lessons, teach
+   Strength and Koga before Surf, and qualify Silph on that move lineage.
 4. Add a Surf-from-Pallet or equivalent **Cinnabar-before-Sabrina** route rather than reusing the
    current post-Sabrina Fly chapter.
-5. Materialize and rehearse scenario 019 once. Recompute the paired cost-baseline
-   audit across all six challenges.
+5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
+   six unique disagreements and a best-case two-sided exact p-value of 0.03125.
 6. Continue the remaining non-test contexts in dependency order, measuring unique policy inputs
    rather than counting repeated emulator trajectories.
 7. Open counted train/validation collection only after the published admission thresholds pass.
@@ -125,5 +123,6 @@ The strongest honest story is no longer “a script beat Pokémon.” It is that
 completion teacher was decomposed into authenticated semantic skills, then audited as a source of
 model supervision. Cartridge-derived routing, immutable failures and sealed evaluation exposed a
 research flaw that unit tests could not: a single successful play order does not teach alternate
-valid orders. The next phase expands the teacher from one route through the game into a curriculum
-that demonstrates the invariances a transferable Pokémon model is expected to learn.
+valid orders. The project now has enough preregistered disagreements to evaluate a scorer against
+route cost, but not enough train-context diversity to fit one honestly. The next phase fills the
+remaining non-test contexts before counted collection opens.

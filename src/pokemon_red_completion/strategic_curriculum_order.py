@@ -29,6 +29,7 @@ class QualifiedSkillOrderContract:
     required_objective_ids: frozenset[str]
     reason: str
     when_objective_ids: frozenset[str] = frozenset()
+    required_any_objective_ids: frozenset[str] = frozenset()
 
     def __post_init__(self) -> None:
         known = frozenset(item.id for item in COMPLETION_QUEST)
@@ -39,6 +40,8 @@ class QualifiedSkillOrderContract:
             or self.objective_id in self.required_objective_ids
             or not self.required_objective_ids.issubset(known)
             or not self.when_objective_ids.issubset(known)
+            or self.objective_id in self.required_any_objective_ids
+            or not self.required_any_objective_ids.issubset(known)
         ):
             raise ValueError("qualified skill contract prerequisites are invalid")
         if not self.reason:
@@ -47,21 +50,17 @@ class QualifiedSkillOrderContract:
 
 # Only constraints stricter than, or operationally important beyond, the public
 # quest graph belong here.  For example, Strength's quest prerequisite is merely
-# reaching Fuchsia, but the qualified Warden skill needs Gold Teeth supplied by
-# the currently qualified Safari/Surf chapter. Koga likewise consumes the
-# Surf-ready party/move boundary established by the later-order teacher run.
+# reaching Fuchsia. Gold Teeth can now be collected without Surf and the Warden
+# lesson accepts that resource-only boundary. Koga accepts either the original
+# Surf moveset or the newly qualified Strength-before-Surf moveset.
 RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
     QualifiedSkillOrderContract(
         objective_id="defeat_koga",
-        required_objective_ids=frozenset({"reach_fuchsia", "obtain_surf"}),
-        reason="The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
-    ),
-    QualifiedSkillOrderContract(
-        objective_id="obtain_strength",
-        required_objective_ids=frozenset({"reach_fuchsia", "obtain_surf"}),
+        required_objective_ids=frozenset({"reach_fuchsia"}),
+        required_any_objective_ids=frozenset({"obtain_strength", "obtain_surf"}),
         reason=(
-            "The qualified Strength chapter requires Gold Teeth supplied by the "
-            "current Safari/Surf chapter."
+            "The qualified Koga chapter requires either the Surf moveset or the "
+            "Strength-before-Surf moveset."
         ),
     ),
     QualifiedSkillOrderContract(
@@ -101,15 +100,21 @@ def audit_qualified_skill_order(
             if not contract.when_objective_ids.issubset(completed):
                 continue
             missing = sorted(contract.required_objective_ids.difference(completed))
-            if not missing:
-                continue
-            blockers.append(
-                {
-                    "objective_id": objective_id,
-                    "required_but_absent_objective_ids": missing,
-                    "reason": contract.reason,
-                }
+            missing_any = (
+                sorted(contract.required_any_objective_ids)
+                if contract.required_any_objective_ids.isdisjoint(completed)
+                else []
             )
+            if not missing and not missing_any:
+                continue
+            blocker: dict[str, object] = {
+                "objective_id": objective_id,
+                "required_but_absent_objective_ids": missing,
+                "reason": contract.reason,
+            }
+            if missing_any:
+                blocker["required_any_of_absent_objective_ids"] = missing_any
+            blockers.append(blocker)
         if blockers:
             incompatible.append(
                 {

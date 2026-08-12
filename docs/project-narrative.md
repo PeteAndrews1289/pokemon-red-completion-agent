@@ -38,11 +38,21 @@ Saffron lesson only to construct its exact Celadon question, then selected Hideo
 31-movement rehearsal. All three are immutable unassigned episodes with one strategic label, one
 outcome and zero arrow-key labels.
 
-The scoreboard is now 37 authenticated captures, 29 distinct frontiers, 13 exact learning
-contexts, five of six cost-baseline challenges and zero counted rows. The next work is deliberately
-new experience: Koga and Strength before Surf, the separate post-Fuji Erika boundary, and Cinnabar before Sabrina. That
-is the bridge from a teacher that can repeat one successful playthrough to a teacher that can show
-a model what remains invariant when the order changes.
+Scenario 019 supplied the missing experience rather than hiding the gap. Fly became an independent
+resource lesson. The router carried that state from Celadon to Fuchsia, Gold Teeth was collected
+without HM03, and Strength and Koga completed while Surf remained absent. Silph then had to learn a
+second explicit Blastoise lineage instead of assuming the old post-Surf moves. Only after all four
+transitions passed fresh semantic checks did construction return to Celadon and admit the exact
+question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
+or interruption, and emitted no arrow-key label.
+
+The scoreboard is now 45 authenticated captures, 32 distinct frontiers, 14 exact learning
+contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 6/24 train
+and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
+experience: the separate post-Fuji Erika boundary, Cinnabar before Sabrina and the remaining
+non-test contexts. That is the bridge from a teacher that can repeat one successful playthrough to
+a teacher that can show a model what remains invariant when the order changes.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

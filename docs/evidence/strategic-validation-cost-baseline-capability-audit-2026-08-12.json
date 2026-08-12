@@ -1,0 +1,85 @@
+{
+  "admission_boundary": {
+    "counted_examples": 0,
+    "exact_learning_contexts": 14,
+    "minimum_exact_train_contexts": 24,
+    "minimum_exact_validation_contexts": 12,
+    "model_training_admitted": false,
+    "test_scenarios_opened": 0
+  },
+  "claim": "The six preregistered validation challenge contexts can support a paired comparison against the unique route-cost minimum. This is an experiment-capability result, not a trained-model score.",
+  "paired_evaluation_capability": {
+    "baseline_disagreements": 6,
+    "baseline_matches": 0,
+    "challenge_contexts": 6,
+    "minimum_disagreements_required": 6,
+    "perfect_scorer_minimum_two_sided_exact_p": 0.03125,
+    "status": "capable"
+  },
+  "scenarios": [
+    {
+      "candidate_route_costs": [
+        58,
+        152
+      ],
+      "scenario_id": "red-strategic-scenario-v2-003-validation",
+      "selected_candidate_index": 1,
+      "unique_cost_minimum_index": 0
+    },
+    {
+      "candidate_route_costs": [
+        104,
+        178,
+        33
+      ],
+      "scenario_id": "red-strategic-scenario-v2-007-validation",
+      "selected_candidate_index": 1,
+      "unique_cost_minimum_index": 2
+    },
+    {
+      "candidate_route_costs": [
+        106,
+        19,
+        153
+      ],
+      "scenario_id": "red-strategic-scenario-v2-011-validation",
+      "selected_candidate_index": 2,
+      "unique_cost_minimum_index": 1
+    },
+    {
+      "candidate_route_costs": [
+        624,
+        621,
+        106,
+        55,
+        581
+      ],
+      "scenario_id": "red-strategic-scenario-v2-015-validation",
+      "selected_candidate_index": 0,
+      "unique_cost_minimum_index": 3
+    },
+    {
+      "candidate_route_costs": [
+        77,
+        624,
+        106
+      ],
+      "scenario_id": "red-strategic-scenario-v2-019-validation",
+      "selected_candidate_index": 1,
+      "unique_cost_minimum_index": 0
+    },
+    {
+      "candidate_route_costs": [
+        68,
+        605
+      ],
+      "scenario_id": "red-strategic-scenario-v2-023-validation",
+      "selected_candidate_index": 1,
+      "unique_cost_minimum_index": 0
+    }
+  ],
+  "schema": "strategic-validation-cost-baseline-capability-audit-v1",
+  "source_partition": "validation",
+  "status": "qualified",
+  "test_scenarios_opened": 0
+}

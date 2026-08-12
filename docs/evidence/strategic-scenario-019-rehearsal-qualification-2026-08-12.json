@@ -1,0 +1,131 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-019-validation-skill-materialized",
+    "envelope_sha256": "56db62afaed9e28deb8cb69fb0c1703ec31ec87f96e988d0068e3ad2dca83e36",
+    "state_sha256": "15f5fb95f2f0089f6e22b86364de75dfb030f7449ac7f431761c5762ff5fdec1",
+    "verified_objective_count": 22
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "counted": false,
+    "episode_created": false,
+    "fly_resource": {
+      "actions_executed": 564,
+      "encounters_fled": 1,
+      "frames_executed": 63340,
+      "objective_ids_added": []
+    },
+    "gold_teeth_resource": {
+      "actions_executed": 1588,
+      "encounters_fled": 6,
+      "frames_executed": 204216,
+      "objective_ids_added": [],
+      "pre_resource_relocation": {
+        "acknowledged_steps": 647,
+        "interruptions": 2,
+        "replans": 1,
+        "wait_actions": 25
+      },
+      "surf_obtained": false
+    },
+    "koga_skill": {
+      "actions_executed": 1479,
+      "frames_executed": 171844,
+      "objective_ids_added": [
+        "defeat_koga"
+      ]
+    },
+    "silph_skill": {
+      "actions_executed": 6241,
+      "frames_executed": 1938370,
+      "objective_ids_added": [
+        "liberate_silph"
+      ],
+      "post_skill_relocation": {
+        "acknowledged_steps": 54,
+        "interruptions": 0,
+        "replans": 0,
+        "wait_actions": 5
+      },
+      "pre_skill_relocation": {
+        "acknowledged_steps": 577,
+        "interruptions": 6,
+        "replans": 1,
+        "wait_actions": 25
+      }
+    },
+    "source_registry_assignment_opened": false,
+    "strength_skill": {
+      "actions_executed": 746,
+      "frames_executed": 96456,
+      "objective_ids_added": [
+        "obtain_strength"
+      ]
+    },
+    "target_scenario_exact": true
+  },
+  "episode": {
+    "assignment_id": "4e91eb5a3da6959a53c72f552f9a5ef52745ab15fb6d8af8c0cec6ea505b76b7",
+    "dataset": {
+      "candidate_count": 3,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-4e91eb5a3da6959a53c72f552f9a5ef52745ab15fb6d8af8c0cec6ea505b76b7",
+    "execution": {
+      "acknowledged_steps": 620,
+      "interruptions": {},
+      "movement_requests": 620,
+      "replans": 0,
+      "selected_candidate_index": 1,
+      "selected_objective": "obtain_surf",
+      "status": "succeeded",
+      "wait_actions": 23
+    },
+    "manifest": {
+      "bytes": 2292428,
+      "records": 1282,
+      "sha256": "685a275e1c878d2786952d942bbdf25751c0064f4b380245dc6eb9c8738c720f",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 643,
+        "snapshots": 635
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "route_cost_max": 624,
+    "route_cost_min": 77,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "scenario_id": "red-strategic-scenario-v2-019-validation",
+    "scenario_sha256": "8dc5b8c27eb2aeffd71eed171b8d0e7516f42d3939cb96588c7b552fcc833ed0",
+    "source_partition": "validation"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31574677024,
+    "ci_status": "success",
+    "git_commit": "3a071581b1802175c2f6bd41dbf6c34847e84040",
+    "source_bundle_sha256": "36b00404229b03210022001634034f822007dece5f7b94b57af581932fa35731",
+    "teacher_execution_sha256": "e830622e2210f3222805661d60efc460899b5566d4cede76130afe2a3c327788"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

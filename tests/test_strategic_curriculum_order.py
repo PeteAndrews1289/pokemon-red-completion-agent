@@ -31,20 +31,18 @@ def test_audit_distinguishes_teacher_order_from_game_feasibility() -> None:
     assert payload["private_captures_opened"] == 0
     assert "not impossible cartridge states" in str(payload["claim"])
 
-    scenario_019 = by_id["red-strategic-scenario-v2-019-validation"]
-    assert scenario_019["partition"] == "validation"
-    assert scenario_019["current_qualified_skill_blockers"] == [
+    assert "red-strategic-scenario-v2-019-validation" not in by_id
+
+    scenario_017 = by_id["red-strategic-scenario-v2-017-train"]
+    assert scenario_017["partition"] == "train"
+    assert scenario_017["current_qualified_skill_blockers"] == [
         {
             "objective_id": "defeat_koga",
-            "required_but_absent_objective_ids": ["obtain_surf"],
-            "reason": ("The qualified Koga chapter starts at the Surf-ready Fuchsia boundary."),
-        },
-        {
-            "objective_id": "obtain_strength",
-            "required_but_absent_objective_ids": ["obtain_surf"],
+            "required_but_absent_objective_ids": [],
+            "required_any_of_absent_objective_ids": ["obtain_strength", "obtain_surf"],
             "reason": (
-                "The qualified Strength chapter requires Gold Teeth supplied by "
-                "the current Safari/Surf chapter."
+                "The qualified Koga chapter requires either the Surf moveset or "
+                "the Strength-before-Surf moveset."
             ),
         },
     ]

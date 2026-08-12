@@ -1,15 +1,17 @@
 {
   "claim": "These are current qualified-teacher order gaps, not impossible cartridge states.",
-  "incompatible_learning_scenario_count": 14,
+  "incompatible_learning_scenario_count": 12,
   "incompatible_learning_scenarios": [
     {
       "current_qualified_skill_blockers": [
         {
           "objective_id": "defeat_koga",
-          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
-          "required_but_absent_objective_ids": [
+          "reason": "The qualified Koga chapter requires either the Surf moveset or the Strength-before-Surf moveset.",
+          "required_any_of_absent_objective_ids": [
+            "obtain_strength",
             "obtain_surf"
-          ]
+          ],
+          "required_but_absent_objective_ids": []
         }
       ],
       "partition": "train",
@@ -19,50 +21,12 @@
       "current_qualified_skill_blockers": [
         {
           "objective_id": "defeat_koga",
-          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
-          "required_but_absent_objective_ids": [
+          "reason": "The qualified Koga chapter requires either the Surf moveset or the Strength-before-Surf moveset.",
+          "required_any_of_absent_objective_ids": [
+            "obtain_strength",
             "obtain_surf"
-          ]
-        },
-        {
-          "objective_id": "obtain_strength",
-          "reason": "The qualified Strength chapter requires Gold Teeth supplied by the current Safari/Surf chapter.",
-          "required_but_absent_objective_ids": [
-            "obtain_surf"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-018-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "defeat_koga",
-          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
-          "required_but_absent_objective_ids": [
-            "obtain_surf"
-          ]
-        },
-        {
-          "objective_id": "obtain_strength",
-          "reason": "The qualified Strength chapter requires Gold Teeth supplied by the current Safari/Surf chapter.",
-          "required_but_absent_objective_ids": [
-            "obtain_surf"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-019-validation"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "defeat_koga",
-          "reason": "The qualified Koga chapter starts at the Surf-ready Fuchsia boundary.",
-          "required_but_absent_objective_ids": [
-            "obtain_surf"
-          ]
+          ],
+          "required_but_absent_objective_ids": []
         }
       ],
       "partition": "train",
@@ -202,7 +166,7 @@
   "learning_scenarios_checked": 36,
   "live_skill_availability_checked": false,
   "private_captures_opened": 0,
-  "qualified_skill_contract_count": 3,
+  "qualified_skill_contract_count": 2,
   "schema": "strategic-curriculum-order-audit-v1",
   "test_scenarios_opened": 0
 }
