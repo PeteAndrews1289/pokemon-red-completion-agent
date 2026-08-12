@@ -355,30 +355,65 @@ def test_skill_relocation_preserves_the_exact_declared_coordinate(
 def test_unrelated_warp_is_an_endpoint_not_a_local_shortcut() -> None:
     graph = LocalGraph(
         {
-            (0, 0): (LocalEdge((0, 1), "right"),),
-            (0, 1): (
-                LocalEdge((0, 0), "left"),
-                LocalEdge((0, 2), "right"),
+            (2, 1): (LocalEdge((2, 2), "right"),),
+            (2, 2): (
+                LocalEdge((2, 1), "left"),
+                LocalEdge((2, 3), "right"),
             ),
-            (0, 2): (LocalEdge((0, 1), "left"),),
+            (2, 3): (LocalEdge((2, 2), "left"),),
+            (4, 4): (),
         }
     )
     projected = without_warp_transit(
         graph,
-        ((0, 1),),
-        start_at=(0, 0),
+        ((2, 2),),
+        start_at=(2, 1),
     )
 
-    assert projected.edges[(0, 1)] == ()
+    assert projected.edges[(2, 2)] == ()
     with pytest.raises(LocalRouterError, match="no permitted local route"):
-        find_local_path(projected, (0, 0), (0, 2))
+        find_local_path(projected, (2, 1), (2, 3))
 
     arriving = without_warp_transit(
         graph,
-        ((0, 1),),
-        start_at=(0, 1),
+        ((2, 2),),
+        start_at=(2, 2),
     )
-    assert find_local_path(arriving, (0, 1), (0, 2)).coordinates == (
-        (0, 1),
-        (0, 2),
+    assert find_local_path(arriving, (2, 2), (2, 3)).coordinates == (
+        (2, 2),
+        (2, 3),
+    )
+
+
+def test_warp_arrival_can_leave_but_cannot_immediately_reenter() -> None:
+    graph = LocalGraph(
+        {
+            (0, 2): (LocalEdge((1, 2), "down"),),
+            (1, 1): (LocalEdge((1, 2), "right"),),
+            (1, 2): (
+                LocalEdge((0, 2), "up"),
+                LocalEdge((2, 2), "down"),
+                LocalEdge((1, 1), "left"),
+                LocalEdge((1, 3), "right"),
+            ),
+            (1, 3): (LocalEdge((1, 2), "left"),),
+            (2, 2): (LocalEdge((1, 2), "up"),),
+            (4, 4): (),
+        }
+    )
+
+    arriving = without_warp_transit(
+        graph,
+        ((1, 2),),
+        start_at=(1, 2),
+    )
+
+    assert {edge.action for edge in arriving.edges[(1, 2)]} == {
+        "down",
+        "left",
+        "right",
+    }
+    assert find_local_path(arriving, (1, 2), (2, 2)).coordinates == (
+        (1, 2),
+        (2, 2),
     )

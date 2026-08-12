@@ -500,12 +500,38 @@ def without_warp_transit(
     legitimately settle on a warp tile and must be able to walk away.
     """
 
-    absorbing = frozenset(warp_locations).difference({start_at})
-    if not absorbing:
+    warps = frozenset(warp_locations)
+    absorbing = warps.difference({start_at})
+    if not warps:
         return graph
+    max_y = max(source[0] for source in graph.edges)
+    max_x = max(source[1] for source in graph.edges)
+
+    def safe_start_departure(edge: object) -> bool:
+        if start_at not in warps:
+            return True
+        target = edge.target  # type: ignore[attr-defined]
+        if start_at[0] <= 1 and target[0] < start_at[0]:
+            return False
+        if start_at[0] >= max_y - 1 and target[0] > start_at[0]:
+            return False
+        if start_at[1] <= 1 and target[1] < start_at[1]:
+            return False
+        return not (
+            start_at[1] >= max_x - 1 and target[1] > start_at[1]
+        )
+
     return LocalGraph(
         {
-            source: (() if source in absorbing else outgoing)
+            source: (
+                ()
+                if source in absorbing
+                else tuple(
+                    edge
+                    for edge in outgoing
+                    if source != start_at or safe_start_departure(edge)
+                )
+            )
             for source, outgoing in graph.edges.items()
         }
     )
