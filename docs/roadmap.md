@@ -12,8 +12,8 @@ Surf, Silph added the last objective, and construction returned to Celadon. The 
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
 labels. The curriculum-order audit now reports **12**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **45 authenticated envelopes, 32 distinct frontiers and 14 exact
-learning scenarios**: six train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+Current measured coverage is **47 authenticated envelopes, 34 distinct frontiers and 16 exact
+learning scenarios**: eight train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -32,8 +32,8 @@ The ordered gates are:
 
 1. publish the cartridge gatehouse repairs, qualification receipts and order audit, then require
    green exact-commit CI;
-2. **complete:** qualify early Erika, Erika after Strength, scenarios 009 and 023; next qualify the
-   distinct post-Fuji battle boundary needed by 010/014;
+2. **complete:** qualify early Erika, Erika after Strength, and the post-Erika Ice Beam Tower
+   lineage; scenarios 009, 010, 014 and 023 are exact and rehearsed;
 3. **complete:** qualify Fly, Gold Teeth/Strength without Surf, Koga-before-Surf and pre-Surf Silph;
 4. **complete:** construct and rehearse validation scenario 019 exactly once. The paired
    six-challenge capability audit now passes at best-case exact p = 0.03125;
@@ -43,7 +43,7 @@ The ordered gates are:
 7. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 22 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 20 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

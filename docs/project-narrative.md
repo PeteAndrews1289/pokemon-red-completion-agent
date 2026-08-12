@@ -7,8 +7,9 @@ the teacher obtains and teaches Ice Beam, buys one bounded battle setup, defeats
 and returns healed with the exact Rainbow Badge transition. The published run took 2,321 actions
 and 351,092 frames. Scenario 009 then turned that experience into a clean strategic question: two
 choices, 17 movements, one destination label, and no arrow-key labels. The static gap counter fell
-from 21 to 15. A second post-Fuji Blastoise boundary exposed a different leader battle schedule and
-remains honestly unqualified rather than being folded into the successful claim.
+from 21 to 15. The later post-Erika lineage then exposed a different Tower move schedule: Ice Beam
+had lawfully replaced BubbleBeam in the same slot. Qualifying those two explicit lineages—without
+accepting arbitrary moves—unlocked exact scenarios 010 and 014.
 
 The next two validation questions looked like more routing work. They were not. Scenario 019 asks
 what to do after Koga and Strength while Surf is still incomplete. Scenario 023 asks what to do
@@ -24,7 +25,7 @@ composition bug: its supply lesson had to preserve an existing X Accuracy instea
 empty bag.
 
 That difference is now executable evidence. A path-free curriculum-order audit compares every
-learning frontier with the prerequisites of the currently qualified skills. Fourteen of 36
+learning frontier with the prerequisites of the currently qualified skills. Twelve of 36
 frontiers require at least one alternate-order lesson. It never reads a private save and never
 opens test. The result changed the engineering question from “why can the router not find this
 state?” to “what new experience must the teacher demonstrate without smuggling in a forbidden
@@ -46,13 +47,14 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 45 authenticated captures, 32 distinct frontiers, 14 exact learning
+The scoreboard is now 47 authenticated captures, 34 distinct frontiers, 16 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 6/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 8/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
-experience: the separate post-Fuji Erika boundary, Cinnabar before Sabrina and the remaining
-non-test contexts. That is the bridge from a teacher that can repeat one successful playthrough to
-a teacher that can show a model what remains invariant when the order changes.
+experience: Koga without Surf or Strength, Cinnabar before Sabrina and the remaining non-test
+contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
+weakening their battle proof. That is the bridge from a teacher that can repeat one successful
+playthrough to a teacher that can show a model what remains invariant when the order changes.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

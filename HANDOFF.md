@@ -14,6 +14,32 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenarios 010 and 014 authenticated — 2026-08-12
+
+Published `1efec83` / CI `31576607328` qualifies Pokémon Tower on both explicit slot-three
+lineages: BubbleBeam before Erika and Ice Beam after Erika. The runtime still rejects arbitrary
+moves, missing PP and a move change before Marowak. This repaired the real chapter ordering rather
+than weakening the battle evidence contract.
+
+Exact scenario 009 then relocated 167 steps to the Tower boundary, rescued Fuji in 2,492 actions /
+165,959 frames, and returned 163 steps to Celadon. It added only `rescue_fuji`, preserved 18
+verified objectives and created no episode during construction. Exact train scenario 010 passed
+preflight and its only uncounted rehearsal: the teacher chose Fuchsia at cost 153 over Saffron at
+19, completed 149 movements plus 12 waits, and recorded 324 records with one strategic label and
+zero movement labels.
+
+Scenario 010 then supplied scenario 014 by adding only `reach_saffron`. That construction used 534
+actions / 61,167 frames and preserved 19 objectives. Its one-shot rehearsal chose Fuchsia at cost
+137 over Silph at 36, completing 136 movements plus seven waits with no interruption or replan.
+See the [combined qualification receipt](docs/evidence/strategic-scenarios-010-014-rehearsal-qualification-2026-08-12.json).
+
+The measured inventory is now **47 authenticated envelopes, 34 distinct frontiers, 16 exact
+learning contexts and 20 missing**. Exact coverage is eight train and eight validation. Counted
+train/validation remain zero, all 12 test contexts remain sealed, and the 8/24 train plus 8/12
+validation diversity gate keeps training closed. Next pursue scenario 025 from exact scenario 022
+through the already-qualified Silph skill, then scenario 026 and the remaining non-test contexts;
+the main new teacher work is still Koga without Surf/Strength and Cinnabar before Sabrina.
+
 ## Scenario 019 authenticated; all six validation challenges qualified — 2026-08-12
 
 Published `31d4fd2` / CI `31574110860` qualified HM02/Fly as a construction-only resource lesson.

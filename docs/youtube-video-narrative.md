@@ -5,8 +5,9 @@
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW
 QUALIFIED**. Show **ICE BEAM + 1 X SPECIAL / 2,321 ACTIONS / 351,092 FRAMES / HEALED RETURN**, then
 animate the audit counter falling from **21 → 12**. Follow it with scenario 009's card:
-**2 CHOICES / COST 18–137 / 17 STEPS / 41 RECORDS / 0 BUTTON LABELS**. Keep the post-Fuji variant
-amber: it produced a different deterministic leader schedule and was not claimed as solved.
+**2 CHOICES / COST 18–137 / 17 STEPS / 41 RECORDS / 0 BUTTON LABELS**. Then pay off the later
+lineage: Tower accepts BubbleBeam before Erika or Ice Beam after Erika, but rejects arbitrary
+replacements. Scenarios 010 and 014 turn green with **2 MORE STRATEGIC LABELS / 0 BUTTON LABELS**.
 
 Open on two apparently contradictory save cards:
 
@@ -201,9 +202,9 @@ REPLANS / 67 RECORDS**. Move the scoreboard to **LIVE CONTEXTS 7 / COUNTED ROWS 
 End the beat with the construction problem rather than another failure. Draw a skill ending in one
 city and a target question declared in another. Add **EXPLICIT RELOCATION** between them: stable
 skill terminal, cartridge-derived route, bounded field moves and interruptions, exact final origin
-and frontier, still **NO EPISODE / NO LABEL**. Then show the honest remaining red light: the
-paper-matched sources for scenarios 009 and 010 do not meet the current skills' live availability
-contracts. Relocation solves geography, not missing prerequisites.
+and frontier, still **NO EPISODE / NO LABEL**. Then show the honest remaining red light:
+relocation solves geography, not missing prerequisites. Later, pay that setup off with the narrow
+Tower lineage repair rather than a weakened battle contract.
 
 ### Twist: nine labels were only three questions
 

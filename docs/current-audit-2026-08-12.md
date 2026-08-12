@@ -3,14 +3,15 @@
 ## Outcome first
 
 Update after the initial audit: the teacher now qualifies Fly as an independent resource, Gold
-Teeth without Surf, Strength before Surf, Koga on that Strength lineage and Silph on the same
-pre-Surf party. Exact scenario 019 is constructed and rehearsed. The static teacher-order gap fell
-from **21 to 12**. Counted data and test access remain zero. See the
-[scenario 019 receipt](evidence/strategic-scenario-019-rehearsal-qualification-2026-08-12.json).
+Teeth without Surf, Strength before Surf, Koga on that Strength lineage, Silph on the same pre-Surf
+party, and Pokémon Tower on both the pre- and post-Erika move lineages. Exact scenarios 010, 014
+and 019 are constructed and rehearsed. The static teacher-order gap fell from **21 to 12**. Counted
+data and test access remain zero. See the [scenario 019 receipt](evidence/strategic-scenario-019-rehearsal-qualification-2026-08-12.json)
+and the [010/014 receipt](evidence/strategic-scenarios-010-014-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **45 authenticated capture envelopes, 32 distinct frontiers and
-14 exact learning scenarios**. The exact contexts are six train scenarios and eight validation
+The private inventory now contains **47 authenticated capture envelopes, 34 distinct frontiers and
+16 exact learning scenarios**. The exact contexts are eight train scenarios and eight validation
 scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
 opened = 0**.
 
@@ -32,7 +33,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 22 missing learning scenarios and excludes one known invalid
+current measurement. It reports 20 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -71,7 +72,7 @@ Gold Teeth are resource lessons with no objective label, Strength and Koga compl
 Silph accepts the resulting move lineage, and construction returns to the exact Celadon origin.
 The remaining paper-only one-skill matches include:
 
-- scenario 009 is qualified; 010 and 014 need the distinct post-Fuji Erika battle boundary;
+- scenarios 009, 010 and 014 are now qualified across the pre- and post-Erika Tower lineages;
 - scenarios 017 and 021 still need Koga without either Surf or Strength; and
 - scenario 041 needs a Cinnabar route before Sabrina instead of the current post-Sabrina/Fly
   chapter.
@@ -89,7 +90,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 6 of 24 planned contexts;
+- train: 8 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -103,17 +104,16 @@ even if the code ran perfectly.
 
 1. **Complete:** qualify Erika after Strength/before Koga, construct scenario 023, and complete its
    official uncounted rehearsal.
-2. Extend or separately qualify Erika for the post-Fuji Blastoise boundary used by 010/014;
-   direct diagnostics showed a distinct deterministic leader battle schedule, so do not overclaim it.
-   This unlocks adjacent train contexts without conflating their distinct battle schedule.
+2. **Complete:** qualify Tower on the post-Erika Ice Beam lineage and construct/rehearse scenarios
+   010 and 014 without weakening the move/PP evidence contract.
 3. **Complete:** split Fly and Gold Teeth into independently verified resource lessons, teach
    Strength and Koga before Surf, and qualify Silph on that move lineage.
 4. Add a Surf-from-Pallet or equivalent **Cinnabar-before-Sabrina** route rather than reusing the
    current post-Sabrina Fly chapter.
 5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
    six unique disagreements and a best-case two-sided exact p-value of 0.03125.
-6. Continue the remaining non-test contexts in dependency order, measuring unique policy inputs
-   rather than counting repeated emulator trajectories.
+6. Continue the remaining non-test contexts in dependency order, starting with scenario 025 from
+   exact scenario 022, while measuring unique policy inputs rather than repeated trajectories.
 7. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 

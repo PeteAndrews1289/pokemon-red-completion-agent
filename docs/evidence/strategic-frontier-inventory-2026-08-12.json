@@ -1,12 +1,12 @@
 {
-  "authenticated_capture_envelopes": 45,
+  "authenticated_capture_envelopes": 47,
   "claim_boundary": {
     "fresh_terminal_frontier_checked": false,
     "live_skill_availability_checked": false,
     "target_origin_checked": false,
     "test_scenarios_opened": 0
   },
-  "exact_learning_scenario_count": 14,
+  "exact_learning_scenario_count": 16,
   "exact_learning_scenario_ids": [
     "red-strategic-scenario-v2-001-train",
     "red-strategic-scenario-v2-002-train",
@@ -15,7 +15,9 @@
     "red-strategic-scenario-v2-006-train",
     "red-strategic-scenario-v2-007-validation",
     "red-strategic-scenario-v2-009-train",
+    "red-strategic-scenario-v2-010-train",
     "red-strategic-scenario-v2-011-validation",
+    "red-strategic-scenario-v2-014-train",
     "red-strategic-scenario-v2-015-validation",
     "red-strategic-scenario-v2-019-validation",
     "red-strategic-scenario-v2-022-train",
@@ -82,7 +84,7 @@
       "unique_source_frontiers": 1
     },
     {
-      "already_exact": false,
+      "already_exact": true,
       "authenticated_source_envelopes": 3,
       "objective_ids": [
         "defeat_erika",
@@ -101,13 +103,14 @@
       "unique_source_frontiers": 1
     },
     {
-      "already_exact": false,
-      "authenticated_source_envelopes": 1,
+      "already_exact": true,
+      "authenticated_source_envelopes": 2,
       "objective_ids": [
-        "defeat_erika"
+        "defeat_erika",
+        "reach_saffron"
       ],
       "target_scenario_id": "red-strategic-scenario-v2-014-train",
-      "unique_source_frontiers": 1
+      "unique_source_frontiers": 2
     },
     {
       "already_exact": true,
@@ -203,11 +206,9 @@
       "unique_source_frontiers": 2
     }
   ],
-  "missing_learning_scenario_count": 22,
+  "missing_learning_scenario_count": 20,
   "missing_learning_scenario_ids": [
-    "red-strategic-scenario-v2-010-train",
     "red-strategic-scenario-v2-013-train",
-    "red-strategic-scenario-v2-014-train",
     "red-strategic-scenario-v2-017-train",
     "red-strategic-scenario-v2-018-train",
     "red-strategic-scenario-v2-021-train",
@@ -229,5 +230,5 @@
     "red-strategic-scenario-v2-046-train"
   ],
   "schema": "strategic-frontier-inventory-v1",
-  "unique_authenticated_frontiers": 32
+  "unique_authenticated_frontiers": 34
 }
