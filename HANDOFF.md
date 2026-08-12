@@ -36,15 +36,20 @@ by every candidate, while every candidate objective itself remains incomplete. A
 authenticated progress envelopes found exact frontiers for only two of the 36 learning scenarios
 (001 and 007); the other 34 still need materialization.
 
-Scenario 007's read-only preflight correctly rejected Erika while Fuji and Saffron were available.
+Scenario 007's first read-only preflight correctly rejected Erika while Fuji and Saffron were available.
 The static route graph knew the party could use Cut and the executor could perform Cut, but no route
 could represent “approach tree → mutate one block → cross the observed replacement.” The current
-candidate repair stages that action explicitly. Against the real cartridge and authenticated
-post-Hideout state, the diagnostic now makes all three candidates available: Fuji cost 178, Erika
-cost 104 with exactly one `cut:down`, and Saffron cost 33. Synthetic regression coverage requires
-the Cut step to keep the player at the cutting stance and the following step to enter the former
-tree. This is not yet source-bound evidence: publish, require exact-commit CI, and rerun the official
-read-only preflight before opening any scenario-007 episode.
+repair stages that action explicitly. Published source `926587e` passed exact-commit CI, after which
+the official read-only preflight made all three candidates available: Fuji cost 178, Erika cost 104
+with exactly one `cut:down`, and Saffron cost 33. Synthetic regression coverage requires the Cut
+step to keep the player at the cutting stance and the following step to enter the former tree.
+
+The single uncounted episode then selected Fuji—not the Cut route—at cost 178 over Saffron's 33 and
+Erika's 104. It acknowledged 174/174 movements, handled one trainer engagement, replanned zero
+times and strictly reloaded 517 records containing one three-way choice and one successful outcome.
+The Erika route is therefore qualified as an available preflight candidate, not as live Cut
+execution; the separate repeated-Cut probe remains the live field-action proof. See the
+[scenario-007 qualification receipt](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json).
 
 Working prospective identities after the Cut-source change are source bundle
 `0dd25d28c83d987e4cef88a4665d34ee334bdb2595109f136e3e6c01ec1dd273`, battle registry
@@ -52,7 +57,7 @@ Working prospective identities after the Cut-source change are source bundle
 registry `95adb54ef3c003a75e4bdb19ad86c52d6f811d05ba5d8fe7a5e835adfc5c8f2a`. The v2 scenario registry
 remains `c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7`; its static
 `live_policy_contexts_authenticated: 0` field is prospective registry metadata, while measured live
-evidence now contains one uncounted context. Collection remains closed and all 12 test situations
+evidence now contains two uncounted contexts. Collection remains closed and all 12 test situations
 remain sealed.
 
 ## First short-scenario checkpoint captured; preflight found a special-trainer gap — 2026-08-11

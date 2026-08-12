@@ -22,9 +22,11 @@ The next capture immediately found another abstraction gap. From post-Hideout Ce
 Saffron planned normally, but Erika appeared unreachable even though the party could use Cut. The
 system had separately proved how to perform and verify Cut; it had never composed that mutation
 inside a destination route. The new plan makes the intermediate state explicit: walk to the tree,
-Cut without changing coordinates, then cross only the cartridge-predicted replacement. A diagnostic
-now gives all three candidates honest costs—Fuji 178, Erika 104 with one Cut, Saffron 33—but the
-official source-bound preflight waits for publication and green CI.
+Cut without changing coordinates, then cross only the cartridge-predicted replacement. Published
+source and CI made all three candidates executable—Fuji 178, Erika 104 with one Cut, Saffron 33.
+The episode chose Fuji anyway, acknowledged all 174 movements and retained one trainer engagement.
+That is a second useful non-shortest example and the first three-way context. Erika's Cut plan was
+not selected, so it remains preflight evidence rather than another live Cut execution claim.
 
 The broader bottleneck is now visible. Nineteen authenticated progress captures exactly match only
 two of the 36 learning frontiers. The next dataset work is less about another marathon playthrough

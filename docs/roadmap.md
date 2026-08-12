@@ -49,13 +49,15 @@ Implementation status:
    143/143 movements, five handled trainer engagements and zero replans. Its earlier unsafe-fork
    failure is retained beside the corrected success in the
    [qualification receipt](evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
-6. **Cut-aware candidate preflight implemented; source-bound rerun next:** the authenticated
+6. **Complete:** the authenticated
    post-Hideout capture exactly matches scenario 007, but its first read-only preflight found Erika
    unavailable because a static graph could not compose Cut. The new staged plan reaches the tree,
    emits one same-coordinate field action and crosses only the predicted cartridge replacement.
-   A real-cartridge diagnostic now plans Fuji at cost 178, Erika at 104 with one `cut:down`, and
-   Saffron at 33. Publish this source, require green CI, then rerun the official read-only preflight.
-   Do not open its episode unless all three candidates pass under that published identity.
+   Published source `926587e` passed CI; the official preflight then planned Fuji at cost 178,
+   Erika at 104 with one `cut:down`, and Saffron at 33. The one-shot uncounted episode selected
+   Fuji, acknowledged 174/174 movements, handled one trainer engagement and strictly reloaded one
+   successful three-way context with zero replans. The Cut route was preflighted but not selected;
+   live Cut execution remains established by the separate repeated-Cut proof.
 7. **Capture inventory:** 19 authenticated envelopes cover exact frontiers for only scenarios 001
    and 007. Materialize the other 34 learning boundaries using the shared-prerequisite rule, then
    audit all 36 for unique live inputs and the six validation baseline disagreements. Keep all 12
@@ -63,7 +65,7 @@ Implementation status:
 
 See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
-Measured evidence now contains one authenticated uncounted context; `collection_open` remains false
+Measured evidence now contains two authenticated uncounted contexts; `collection_open` remains false
 and prospective rows do not satisfy the admission gate by themselves.
 
 ## Qualified repair checkpoint (2026-08-11): attempts 1–6 and rehearsal
@@ -92,7 +94,7 @@ Ordered gates from here:
 8. Add a thin Crystal adapter and run preregistered Red-frozen zero-shot, fixed few-shot and from-scratch comparisons before authoring a full Gen II teacher.
 
 The repaired full-game rehearsal is qualified, but the old 5-train/2-validation design is retired.
-The nearest honest milestone is now **a published all-candidate scenario-007 preflight**, followed
+The nearest honest milestone is now **materializing the next missing learning frontier**, followed
 by the complete 36-situation learning capture inventory. That inventory must prove the prospective
 train/validation situations become distinct live policy inputs with at least six measured
 validation baseline disagreements. The first strategic model follows one-attempt counted scenario

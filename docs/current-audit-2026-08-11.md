@@ -23,15 +23,21 @@ preflight found Fuji and Saffron executable but Erika unavailable. The defect wa
 the runtime projected Cut capability and could execute its live menu, but its static route graph
 could not express a block mutation inside a route.
 
-The current candidate source adds a staged Cut plan. It reaches an adjacent stance on the original
+The staged Cut repair reaches an adjacent stance on the original
 grid, emits one same-coordinate field action, then uses the cartridge-declared replacement only as
 a predicted continuation; the live field-move port must still verify the exact block change before
-the next step is accepted. A real-cartridge diagnostic against the authenticated capture now plans
-Fuji at cost 178, Erika at 104 with one `cut:down`, and Saffron at 33. Synthetic coverage proves the
-Cut step and first crossing cannot collapse into an invented walk. This result still needs a clean
-published source, exact-commit CI and the official read-only preflight before scenario 007 may open.
+the next step is accepted. Published source `926587e` passed exact-commit CI. The official preflight
+then planned Fuji at cost 178, Erika at 104 with one `cut:down`, and Saffron at 33. Synthetic
+coverage proves the Cut step and first crossing cannot collapse into an invented walk.
 
-Measured status is **one authenticated uncounted context, zero counted scenario rows, collection
+The one-shot episode selected Fuji at cost 178 despite both alternatives being shorter. It
+acknowledged all 174 movements, handled one trainer engagement, replanned zero times and strictly
+reloaded 517 records with one three-way success. Because Erika was not selected, this qualifies its
+Cut route only as an available candidate; it does not replace the separate live repeated-Cut proof.
+The [scenario-007 receipt](evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json)
+keeps that distinction explicit.
+
+Measured status is **two authenticated uncounted contexts, zero counted scenario rows, collection
 closed, 12 test situations sealed**. The prospective registry's embedded zero remains a design-time
 snapshot and should not be misreported as the live evidence count.
 
@@ -61,9 +67,9 @@ approach, consumes one outcome and strictly reloads the sealed artifact to requi
 successful strategic row. Test scenarios remain inaccessible through both assignment and route
 lookup.
 
-The execution boundary now has one authenticated live qualification, while counted collection
-remains closed. The next boundary is the published scenario-007 all-candidate preflight, followed by
-materializing and rehearsing the other 34 missing learning frontiers. The full learning rehearsal
+The execution boundary now has two authenticated live qualifications, while counted collection
+remains closed. The next boundary is materializing and rehearsing the other 34 missing learning
+frontiers. The full learning rehearsal
 is 24 train plus 12 validation situations; the 12 test situations remain sealed until final
 evaluation. See the [scenario registry audit](strategic-scenario-registry-audit-2026-08-11.md).
 

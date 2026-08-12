@@ -40,7 +40,7 @@ the choice record landing on disk before the first movement arrow, followed by e
 and an immediate manifest reload. Keep the twelve test cards face down. The line is: **“A short run
 is useful only if it is as hard to relabel or rerun as the full experiment.”** Begin with **HARNESS
 BUILT / LIVE CONTEXTS 0**, then let the later corrected Cerulean run change only the context counter
-to one; counted rows remain zero.
+to one and the three-way Celadon run change it to two; counted rows remain zero.
 
 ### First live beat: zero steps was the correct result
 
@@ -71,9 +71,12 @@ NOT TRAINING DATA**.
 Use three post-Hideout cards: **FUJI 178**, **ERIKA UNREACHABLE**, **SAFFRON 33**. Split the system
 diagram: the executor already knows how to perform and verify Cut, while the planner still sees a
 static tree. Then animate a three-stage route—approach the tree, same-square `cut:down`, cross the
-replacement—and change Erika to **104 / 1 FIELD ACTION**. Keep a final padlock over the episode:
-**LOCAL DIAGNOSTIC ONLY — PUBLISH + CI + READ-ONLY PREFLIGHT REQUIRED**. This is a clean visual for
-why passing mechanics tests is not the same as composing those mechanics into agency.
+replacement—and change Erika to **104 / 1 FIELD ACTION**. Run the source and CI gates, then make all
+three cards green. Reveal the actual teacher choice: **FUJI 178**, followed by **174/174 MOVEMENTS /
+1 TRAINER / 0 REPLANS / 517 RECORDS**. Keep a note on Erika: **ROUTE PREFLIGHTED, CUT NOT EXECUTED IN
+THIS EPISODE**. This is a clean visual for why passing mechanics tests is not the same as composing
+those mechanics into agency—and why candidate validation and selected-route execution are different
+claims.
 
 ### Twist: nine labels were only three questions
 

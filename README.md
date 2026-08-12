@@ -79,12 +79,14 @@
 > Published repair `318a1c3` then qualified the first live context. An initial unsafe Cerulean fork
 > failed and was preserved; after shared rival/Bridge prerequisites, the exact same seven-objective
 > frontier selected Bill at cost 144 over Misty at 15, acknowledged 143/143 movements, handled five
-> trainer engagements and strictly reloaded one unassigned successful example. It is **1
-> authenticated context / 0 counted rows**—not training data. A post-Hideout scenario-007
-> preflight next exposed the missing route composition for Cut. The current candidate repair now
-> plans all three choices, including Erika through one explicit `cut:down`; publication, green CI
-> and the official read-only rerun are still required before that episode can open. See the
-> [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json).
+> trainer engagements and strictly reloaded one unassigned successful example. A post-Hideout
+> scenario-007 preflight next exposed the missing route composition for Cut. Published repair
+> `926587e` passed CI, planned Erika through one explicit `cut:down`, and made all three candidates
+> executable. Its one-shot episode then chose Fuji at cost 178 over Erika's 104 and Saffron's 33,
+> acknowledged 174/174 movements and strictly reloaded one three-way success. Honest status is **2
+> authenticated contexts / 0 counted rows**—neither is training data. See the
+> [scenario-001 qualification](docs/evidence/strategic-scenario-001-rehearsal-qualification-2026-08-11.json)
+> and [scenario-007 qualification](docs/evidence/strategic-scenario-007-rehearsal-qualification-2026-08-11.json).
 > Collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
