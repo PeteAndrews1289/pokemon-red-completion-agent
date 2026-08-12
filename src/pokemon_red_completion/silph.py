@@ -102,6 +102,8 @@ SILPH_PC_DEPOSIT_ITEMS = (
     ItemId.LIFT_KEY,
     ItemId.HELIX_FOSSIL,
     ItemId.SILPH_SCOPE,
+    ItemId.POKE_FLUTE,
+    ItemId.RARE_CANDY,
 )
 STATUS_FLAGS_4 = 0xD72E
 GOT_LAPRAS_MASK = 0x01
@@ -1494,9 +1496,11 @@ def _store_spent_route_items(
     before = _bag(emulator)
     # A held-out battle schedule may consume the final item in a recovery
     # stack, legitimately reducing the number of occupied slots.  Capacity is
-    # the semantic requirement: depositing these three obsolete route items
+    # the semantic requirement: depositing only eligible completed-route items
     # must leave at most sixteen slots so the roof reward, supplies, Card Key,
-    # and Master Ball can all be received later.
+    # and Master Ball can all be received later.  The Poké Flute is spent after
+    # both routed Snorlax encounters, while the surplus Tower Rare Candy is an
+    # already-qualified archival candidate on the canonical Erika route too.
     deposit_items = _silph_capacity_deposit_items(before)
     if deposit_items is None:
         route_quantities = {item.name: before.get(item, 0) for item in SILPH_PC_DEPOSIT_ITEMS}

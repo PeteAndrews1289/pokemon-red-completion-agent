@@ -197,6 +197,8 @@ def test_silph_timing_is_positive_and_bounded() -> None:
         ItemId.LIFT_KEY,
         ItemId.HELIX_FOSSIL,
         ItemId.SILPH_SCOPE,
+        ItemId.POKE_FLUTE,
+        ItemId.RARE_CANDY,
     )
     assert X_SPECIAL_PURCHASE_QUANTITY == 3
     assert SILPH_X_SPECIAL_SUPPLY_TARGET == 4
@@ -551,7 +553,7 @@ def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     }
     assert _silph_capacity_deposit_items(nineteen_slots) == SILPH_PC_DEPOSIT_ITEMS
     assert _silph_capacity_ready(nineteen_slots)
-    replacement_pending = {**route_items, **{1000 + index: 1 for index in range(12)}}
+    replacement_pending = {**route_items, **{1000 + index: 1 for index in range(10)}}
     assert len(replacement_pending) == 16
     assert _silph_capacity_deposit_items(replacement_pending) == (ItemId.SS_TICKET,)
     already_safe = {
@@ -569,6 +571,25 @@ def test_silph_capacity_accepts_a_consumed_recovery_stack() -> None:
     }
     assert _silph_capacity_deposit_items(twenty_slots_without_enough_cleanup) is None
     assert not _silph_capacity_ready(twenty_slots_without_enough_cleanup)
+
+
+def test_silph_capacity_accepts_the_early_erika_completed_route_items() -> None:
+    completed_route_items = {
+        ItemId.SILPH_SCOPE: 1,
+        ItemId.POKE_FLUTE: 1,
+        ItemId.RARE_CANDY: 1,
+    }
+    nineteen_slots = {
+        **completed_route_items,
+        ItemId.X_ACCURACY: 1,
+        **{1000 + index: 1 for index in range(15)},
+    }
+
+    assert len(nineteen_slots) == 19
+    assert _silph_capacity_deposit_items(nineteen_slots) == tuple(
+        completed_route_items
+    )
+    assert _silph_capacity_ready(nineteen_slots)
 
 
 def test_mart_2f_customer_coordinate_uses_the_pinned_fourth_object_slot() -> None:
