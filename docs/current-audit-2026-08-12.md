@@ -12,9 +12,10 @@ the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualificati
 and the [scenario 037 receipt](evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **57 authenticated capture envelopes, 39 distinct frontiers and
-20 exact learning scenarios**. The exact contexts are twelve train scenarios and eight validation
-scenarios. All are still unassigned rehearsals: **counted train = 0, counted validation = 0, test
+The private inventory now contains **58 authenticated capture envelopes, 40 distinct frontiers and
+21 exact learning scenarios**. The exact contexts are thirteen train scenarios and eight validation
+scenarios. Scenario 041's exact context has a preserved failed rehearsal; no failed row is promoted:
+**counted train = 0, counted validation = 0, test
 opened = 0**.
 
 All six preregistered validation cost-baseline challenges are now live-qualified: scenarios 003,
@@ -35,7 +36,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 16 missing learning scenarios and excludes one known invalid
+current measurement. It reports 15 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -62,9 +63,9 @@ The remaining difficulty is no longer ordinary routing. The quest graph says wha
 allows; the qualified teacher skills say what this particular teacher run knows how to demonstrate.
 Those are not the same graph.
 
-The updated static curriculum-order audit records two operational contracts that are stricter
+The updated static curriculum-order audit records one operational contract that is stricter
 than the game's public prerequisites. It checks all 36 learning scenarios without reading private
-captures or opening test. It finds **12 exact learning frontiers incompatible with the current
+captures or opening test. It finds **2 exact learning frontiers incompatible with the current
 qualified teacher order**, down from 21 after the alternate-order curricula. This is a
 teacher-coverage result, not evidence that those cartridge states are impossible. See the
 [curriculum-order receipt](evidence/strategic-curriculum-order-audit-2026-08-12.json).
@@ -78,8 +79,9 @@ The remaining paper-only one-skill matches include:
 - scenarios 017 and 021 still need Koga without either Surf or Strength; and
 - scenario 013 is now exact: Jolteon and Snorlax are independent no-label resources, and Sabrina
   is qualified on the resulting pre-Surf six-member lineage;
-- scenario 041 needs a Cinnabar route before Sabrina instead of the current post-Sabrina/Fly
-  chapter.
+- scenario 041 now has an exact pre-Sabrina Cinnabar capture, but its first immutable rehearsal
+  failed after the generic route fighter exhausted the lead across two Route 21 trainers. See the
+  [construction/failure receipt](evidence/strategic-scenario-041-construction-and-rehearsal-failure-2026-08-12.json).
 
 This audit prevents a misleading loop: the inventory can still say “one objective differs,” but
 the implementation now separately reports that the only qualified skill for that objective would
@@ -94,7 +96,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 12 of 24 planned contexts;
+- train: 13 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -112,8 +114,8 @@ even if the code ran perfectly.
    010 and 014 without weakening the move/PP evidence contract.
 3. **Complete:** split Fly and Gold Teeth into independently verified resource lessons, teach
    Strength and Koga before Surf, and qualify Silph on that move lineage.
-4. Add a Surf-from-Pallet or equivalent **Cinnabar-before-Sabrina** route rather than reusing the
-   current post-Sabrina Fly chapter.
+4. **Complete:** add a Celadon-to-Cinnabar pre-Sabrina lesson. Next add bounded route-battle
+   recovery or Fly-aware return routing and requalify scenario 041 under a new rehearsal identity.
 5. **Complete:** materialize and rehearse scenario 019 once. The paired capability audit now has
    six unique disagreements and a best-case two-sided exact p-value of 0.03125.
 6. **Complete:** construct scenarios 025 and 026 from exact authenticated branches. Continue the
@@ -123,7 +125,8 @@ even if the code ran perfectly.
    77-cost Cinnabar route with no interruption or replan.
 8. **Complete:** split Jolteon and Snorlax into construction-only party resources, preserve the
    19-objective frontier, qualify Sabrina before Surf and rehearse exact scenario 013. Next build
-   the independent Cinnabar-before-Sabrina chapter for scenario 041.
+   the independent Cinnabar-before-Sabrina chapter for scenario 041. The construction is complete;
+   the return-route rehearsal recovery remains.
 9. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 

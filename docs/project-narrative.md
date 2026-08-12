@@ -47,11 +47,11 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 57 authenticated captures, 39 distinct frontiers, 20 exact learning
+The scoreboard is now 58 authenticated captures, 40 distinct frontiers, 21 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 12/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 13/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
-experience: Koga without Surf or Strength, Cinnabar before Sabrina and the remaining non-test
+experience: Koga without Surf or Strength, route-battle recovery and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
 weakening their battle proof. That is the bridge from a teacher that can repeat one successful
 playthrough to a teacher that can show a model what remains invariant when the order changes.
@@ -78,6 +78,14 @@ Surf move set. State-driven deposit confirmation and an explicitly qualified pre
 Beam/Bite policy repaired both without accepting arbitrary states. The exact scenario-013 rehearsal
 then chose Fuchsia over Erika and completed 136 movements with one strategic label and no arrow-key
 labels.
+
+The following lesson removed the largest remaining order mismatch. A Celadon-starting chapter now
+acquires Fly and reaches Cinnabar before Sabrina, producing exact scenario 041 in 688 actions and
+83,616 frames. That cut the static qualified-order gap from twelve scenarios to two. Its first
+rehearsal still failed honestly: the teacher chose the long return to Saffron, crossed 73 steps and
+two trainer interruptions, then the generic route fighter fainted because it has no healing
+policy. The immutable failure turns the next task into a precise systems question—bounded recovery
+or Fly-aware routing—not another vague complaint about emulator randomness.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

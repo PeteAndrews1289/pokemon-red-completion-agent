@@ -1,6 +1,6 @@
 {
   "claim": "These are current qualified-teacher order gaps, not impossible cartridge states.",
-  "incompatible_learning_scenario_count": 12,
+  "incompatible_learning_scenario_count": 2,
   "incompatible_learning_scenarios": [
     {
       "current_qualified_skill_blockers": [
@@ -31,142 +31,12 @@
       ],
       "partition": "train",
       "scenario_id": "red-strategic-scenario-v2-021-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-027-validation"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-030-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-031-validation"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-035-validation"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-038-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "validation",
-      "scenario_id": "red-strategic-scenario-v2-039-validation"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-041-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-042-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-045-train"
-    },
-    {
-      "current_qualified_skill_blockers": [
-        {
-          "objective_id": "reach_cinnabar",
-          "reason": "The qualified Cinnabar chapter starts from the post-Sabrina Saffron boundary and uses that route's Fly preparation.",
-          "required_but_absent_objective_ids": [
-            "defeat_sabrina"
-          ]
-        }
-      ],
-      "partition": "train",
-      "scenario_id": "red-strategic-scenario-v2-046-train"
     }
   ],
   "learning_scenarios_checked": 36,
   "live_skill_availability_checked": false,
   "private_captures_opened": 0,
-  "qualified_skill_contract_count": 2,
+  "qualified_skill_contract_count": 1,
   "schema": "strategic-curriculum-order-audit-v1",
   "test_scenarios_opened": 0
 }

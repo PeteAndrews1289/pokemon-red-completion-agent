@@ -15,6 +15,7 @@ import json
 import sys
 from collections.abc import Mapping
 from pathlib import Path
+from typing import Any, cast
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -24,6 +25,12 @@ from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E4
 from pokemon_red_completion.captured_progress import (  # noqa: E402
     CapturedProgressError,
     load_captured_progress,
+)
+from pokemon_red_completion.cascade import (  # noqa: E402
+    DEFAULT_CASCADE_TIMING,
+    POTION_HEAL_AMOUNT,
+    _bag_quantity,
+    _use_battle_recovery_item,
 )
 from pokemon_red_completion.collection_protocol import (  # noqa: E402
     CollectionProtocolError,
@@ -58,6 +65,7 @@ from pokemon_red_completion.gen1_traversal import (  # noqa: E402
     traversal_rules,
 )
 from pokemon_red_completion.observation import (  # noqa: E402
+    ItemId,
     PokemonRedStateReader,
     RawGameState,
 )
@@ -335,6 +343,25 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         def interruption_factory(
             recorder: RecordingExecutor[MacroAction, object],
         ) -> Gen1RouteInterruptionHandler:
+            def recovery_required(raw: RawGameState) -> bool:
+                return (
+                    _bag_quantity(cast(Any, emulator), ItemId.POTION) > 0
+                    and raw.first_party_hp is not None
+                    and 0 < raw.first_party_hp <= 40
+                )
+
+            def recover() -> None:
+                _use_battle_recovery_item(
+                    reader,
+                    cast(Any, recorder),
+                    cast(Any, emulator),
+                    DEFAULT_CASCADE_TIMING,
+                    item=ItemId.POTION,
+                    heal_amount=POTION_HEAL_AMOUNT,
+                    max_quantity=99,
+                    label="strategic route Potion",
+                )
+
             return Gen1RouteInterruptionHandler(
                 recorder,
                 reader,
@@ -342,6 +369,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 maximum_trainer_battles=args.maximum_trainer_battles,
                 stabilization_frames=120,
                 route_name="authenticated strategic scenario approach",
+                trainer_recovery_required=recovery_required,
+                trainer_recovery_action=recover,
+                maximum_trainer_recoveries=6,
             )
 
         result = record_strategic_scenario_rehearsal(

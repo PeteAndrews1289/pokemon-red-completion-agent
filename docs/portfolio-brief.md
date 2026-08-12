@@ -2,8 +2,8 @@
 
 ## August 12 update
 
-The strategic benchmark now has 57 authenticated captures, 39 distinct frontiers and 20 exact
-non-test contexts: 12/24 train and 8/12 validation. All six preregistered validation challenges are
+The strategic benchmark now has 58 authenticated captures, 40 distinct frontiers and 21 exact
+non-test contexts: 13/24 train and 8/12 validation. All six preregistered validation challenges are
 live-qualified, but counted data remains zero and all 12 test contexts remain sealed. Scenario 037
 is the newest exact rehearsal: the teacher chose Erika at route cost 106 over a 77-cost Cinnabar
 alternative, then completed 102 movements with no replan and no movement-imitation labels.
@@ -19,6 +19,12 @@ that preserve all 19 completion objectives and emit no policy example. Sabrina t
 sixth member and succeeds before Surf using a separately qualified Ice Beam/Bite policy. Exact
 scenario 013 is rehearsed: Fuchsia was selected over Erika, 136 movements completed without
 interruption or replan, and no movement-imitation label was emitted.
+
+Cinnabar-before-Sabrina is also now a real cartridge lesson rather than a graph-only possibility.
+It produced exact scenario 041 and reduced the teacher-order audit from twelve gaps to two. Its
+first rehearsal remains an intentionally preserved failure: after two Route 21 trainers, the
+generic route fighter fainted because it lacks bounded healing. That distinction—exact context,
+failed rehearsal, zero counted data—is central to the project's falsifiable autonomy story.
 
 ## August 11 headline
 

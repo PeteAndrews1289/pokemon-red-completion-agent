@@ -7,8 +7,15 @@ from dataclasses import dataclass, field
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
     BattleRuntimeError,
     MoveSlotPolicy,
     run_adaptive_trainer_battle,
@@ -214,6 +221,9 @@ class Gen1RouteInterruptionHandler:
     route_name: str = "cartridge-composed route"
     max_trainer_intro_pulses: int = 32
     move_slot_policy: MoveSlotPolicy = strongest_usable_move_slot
+    trainer_recovery_required: Callable[[RawGameState], bool] | None = None
+    trainer_recovery_action: Callable[[], None] | None = None
+    maximum_trainer_recoveries: int = 0
     handled_hazard_kinds: frozenset[str] = field(
         default=frozenset({"trainer_sight"}),
         init=False,
@@ -228,6 +238,17 @@ class Gen1RouteInterruptionHandler:
             raise ValueError("max_trainer_intro_pulses must be a positive integer")
         if not callable(self.move_slot_policy):
             raise TypeError("move_slot_policy must be callable")
+        if (self.trainer_recovery_required is None) != (
+            self.trainer_recovery_action is None
+        ):
+            raise ValueError("trainer recovery predicate and action must be configured together")
+        if (
+            type(self.maximum_trainer_recoveries) is not int  # noqa: E721
+            or self.maximum_trainer_recoveries < 0
+        ):
+            raise ValueError("maximum_trainer_recoveries must be a non-negative integer")
+        if self.trainer_recovery_required is not None and self.maximum_trainer_recoveries == 0:
+            raise ValueError("configured trainer recovery requires a positive recovery budget")
         self._wild = Gen1WildFleeHandler(
             self.executor,
             self.reader,
@@ -295,21 +316,57 @@ class Gen1RouteInterruptionHandler:
 
         ordinal = len(self.trainer_evidence) + 1
         battle_plan_id = f"generated-route-map-{interruption.map_id}-trainer-{ordinal}"
-        try:
-            final = run_adaptive_trainer_battle(
-                self.reader,
-                self.executor,
-                self.move_slot_policy,
-                expected_map=interruption.map_id,
-                intent=BattleIntent(
-                    objective_id="route_traversal",
-                    battle_plan_id=battle_plan_id,
-                ),
-                label=f"{self.route_name} trainer {ordinal}",
-                consume_battle_start_schedule=False,
-            )
-        except BattleRuntimeError as error:
-            raise RouteExecutionError(str(error)) from error
+        recoveries = 0
+
+        def guarded_policy(raw: RawGameState) -> int:
+            if (
+                self.trainer_recovery_required is not None
+                and self.trainer_recovery_required(raw)
+            ):
+                raise _PauseRouteTrainerRecovery
+            return self.move_slot_policy(raw)
+
+        while True:
+            try:
+                final = run_adaptive_trainer_battle(
+                    self.reader,
+                    self.executor,
+                    guarded_policy,
+                    expected_map=interruption.map_id,
+                    intent=BattleIntent(
+                        objective_id="route_traversal",
+                        battle_plan_id=battle_plan_id,
+                        resource_policy=(
+                            BattleResourcePolicy.BOUNDED_RECOVERY
+                            if self.trainer_recovery_required is not None
+                            else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+                        ),
+                        recovery_capabilities=(
+                            frozenset({BattleRecoveryCapability.RESTORE_HP})
+                            if self.trainer_recovery_required is not None
+                            else frozenset()
+                        ),
+                    ),
+                    label=f"{self.route_name} trainer {ordinal}",
+                    consume_battle_start_schedule=False,
+                )
+                break
+            except BattleRuntimeError as error:
+                if not recovery_request_matches(
+                    error.__cause__,
+                    _PauseRouteTrainerRecovery,
+                    accepted_needs=frozenset({"hp"}),
+                ):
+                    raise RouteExecutionError(str(error)) from error
+                if (
+                    self.trainer_recovery_action is None
+                    or recoveries >= self.maximum_trainer_recoveries
+                ):
+                    raise RouteExecutionError(
+                        f"{self.route_name} exhausted its trainer recovery budget"
+                    ) from error
+                self.trainer_recovery_action()
+                recoveries += 1
         if (
             final.battle_state != 0
             or final.map_id != interruption.map_id
@@ -325,11 +382,16 @@ class Gen1RouteInterruptionHandler:
                 "battle_plan_id": battle_plan_id,
                 "battle_started": True,
                 "intro_pulses": intro_pulses,
+                "recoveries": recoveries,
                 "verified": True,
             },
         )
         self.trainer_evidence.append(receipt)
         return receipt
+
+
+class _PauseRouteTrainerRecovery(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _interruption_kind(battle_state: int) -> str | None:

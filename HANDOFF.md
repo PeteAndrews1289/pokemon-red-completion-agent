@@ -14,6 +14,25 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 041 exact; return-route recovery remains — 2026-08-12
+
+Published `c63e168` / CI `31586368651` qualifies Cinnabar before Sabrina from the Celadon
+post-Koga/Surf/Strength boundary. The live cartridge run acquired and taught Fly, reached Cinnabar,
+added only `reach_cinnabar`, and created an exact 23-objective scenario-041 capture in 688 actions /
+83,616 frames. The static teacher-order audit consequently fell from 12 incompatible learning
+frontiers to **2**; only the Koga-without-Surf/Strength family remains.
+
+Scenario 041 is exact but **not rehearsal-qualified**. Its official immutable rehearsal selected
+the intended 848-cost return to Saffron over the 29-cost Secret Key, resumed after two Route 21
+trainer engagements, then fainted because generic strategic traversal has no bounded in-battle
+healing. The failed 490-record episode is preserved. Next add bounded recovery or Fly-aware return
+routing, then obtain a new preregistered rehearsal identity; never overwrite or relabel the failed
+episode. See the [scenario 041 failure receipt](docs/evidence/strategic-scenario-041-construction-and-rehearsal-failure-2026-08-12.json).
+
+The measured inventory is **58 authenticated envelopes, 40 distinct frontiers, 21 exact learning
+contexts and 15 missing**: thirteen train and eight validation. Counted collection remains zero;
+all 12 test contexts remain sealed.
+
 ## Scenario 013 authenticated through independent team building — 2026-08-12
 
 Published `b02f79f` / CI `31585485654` closes exact train scenario 013. Construction first

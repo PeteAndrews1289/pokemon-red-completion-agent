@@ -14,6 +14,12 @@ Beam/Bite battle policy. The official rehearsal finally asks one clean question�
 Erika—then records the destination decision, not the 136 arrow inputs. It is the difference between
 filming a scripted speedrun and constructing experience a model may actually learn from.
 
+Follow with **CINNABAR BEFORE SABRINA — CONSTRUCTED**, then show the teacher deliberately selecting
+the 848-cost Saffron return over the 29-cost Secret Key. At step 73 the lead faints after the second
+Route 21 trainer. Freeze the frame and label it **EXACT CONTEXT ≠ QUALIFIED REHEARSAL**. The failed
+episode stays immutable; the next engineering problem is now concrete: give generic route battles
+bounded healing or let the world model reason about Fly.
+
 ## New opening beat: the route was complete, the curriculum was not
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW

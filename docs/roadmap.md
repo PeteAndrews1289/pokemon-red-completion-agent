@@ -10,10 +10,10 @@ qualified Fly as a construction-only resource; published `3a07158` added bounded
 relocation and a pre-Surf Silph move lineage. Gold Teeth, Strength and Koga then completed without
 Surf, Silph added the last objective, and construction returned to Celadon. The rehearsal selected
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
-labels. The curriculum-order audit now reports **12**, not 21, incompatible learning frontiers.
+labels. The curriculum-order audit now reports **2**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **57 authenticated envelopes, 39 distinct frontiers and 20 exact
-learning scenarios**: twelve train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+Current measured coverage is **58 authenticated envelopes, 40 distinct frontiers and 21 exact
+learning scenarios**: thirteen train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -24,7 +24,7 @@ not claim that a model has been trained or evaluated.
 
 The remaining challenge contexts cannot be truthfully constructed by replaying the canonical
 teacher order. The executable [curriculum-order audit](evidence/strategic-curriculum-order-audit-2026-08-12.json)
-finds 12 of 36 learning frontiers whose exact objective set conflicts with the operational
+finds 2 of 36 learning frontiers whose exact objective set conflicts with the operational
 prerequisites of a currently qualified skill. This is a teacher-coverage gap, not a cartridge
 impossibility.
 
@@ -40,13 +40,14 @@ The ordered gates are:
 5. **complete:** construct and rehearse scenario 037 from the post-Silph Surf bridge;
 6. **complete:** Jolteon and Snorlax are authenticated construction-only members; the pre-Surf
    Sabrina lineage is qualified and scenario 013 is exact and rehearsed;
-7. build Cinnabar-before-Sabrina for scenario 041 and the later alternate-order families;
+7. **in progress:** Cinnabar-before-Sabrina now constructs exact scenario 041; repair bounded
+   healing or Fly-aware return routing after its preserved Route 21 trainer-battle failure;
 8. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
 9. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 16 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 15 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

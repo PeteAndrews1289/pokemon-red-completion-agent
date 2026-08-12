@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import cast
 
 import pytest
 
+from pokemon_red_completion.battle_runtime import BattleRuntimeError
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
@@ -290,6 +292,7 @@ def test_combined_handler_advances_a_trainer_intro_and_restores_the_boundary(
         "battle_plan_id": "generated-route-map-12-trainer-1",
         "battle_started": True,
         "intro_pulses": 1,
+        "recoveries": 0,
         "verified": True,
     }
     assert executor.actions == 1
@@ -318,6 +321,115 @@ def test_combined_handler_closes_defeated_trainer_dialogue_without_a_battle() ->
         "verified": True,
     }
     assert executor.actions == 1
+
+
+def test_combined_handler_resumes_after_one_bounded_trainer_recovery(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeReader(raw(), trainer_engagement=True)
+    executor = TrainerIntroExecutor(fake)
+    recoveries: list[str] = []
+
+    def finish_after_recovery(
+        _reader: object,
+        _executor: object,
+        policy: object,
+        **_kwargs: object,
+    ) -> RawGameState:
+        if not recoveries:
+            try:
+                cast(Callable[[RawGameState], int], policy)(fake.raw)
+            except Exception as request:
+                raise BattleRuntimeError("recovery requested") from request
+        fake.raw = replace(fake.raw, battle_state=0)
+        return fake.raw
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle",
+        finish_after_recovery,
+    )
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, executor),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=1,
+        stabilization_frames=24,
+        trainer_recovery_required=lambda _raw: not recoveries,
+        trainer_recovery_action=lambda: recoveries.append("potion"),
+        maximum_trainer_recoveries=1,
+    )
+
+    receipt = handler.handle(
+        TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement")
+    )
+
+    assert recoveries == ["potion"]
+    assert receipt.details["recoveries"] == 1
+
+
+def test_combined_handler_rejects_incomplete_trainer_recovery_configuration() -> None:
+    fake = FakeReader(raw())
+
+    with pytest.raises(ValueError, match="configured together"):
+        Gen1RouteInterruptionHandler(
+            cast(object, FakeExecutor()),  # type: ignore[arg-type]
+            reader_as_real(fake),
+            maximum_flees=1,
+            maximum_trainer_battles=1,
+            stabilization_frames=24,
+            trainer_recovery_required=lambda _raw: True,
+            maximum_trainer_recoveries=1,
+        )
+    with pytest.raises(ValueError, match="positive recovery budget"):
+        Gen1RouteInterruptionHandler(
+            cast(object, FakeExecutor()),  # type: ignore[arg-type]
+            reader_as_real(fake),
+            maximum_flees=1,
+            maximum_trainer_battles=1,
+            stabilization_frames=24,
+            trainer_recovery_required=lambda _raw: True,
+            trainer_recovery_action=lambda: None,
+        )
+
+
+def test_combined_handler_stops_at_the_trainer_recovery_budget(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeReader(raw(), trainer_engagement=True)
+    executor = TrainerIntroExecutor(fake)
+    recoveries: list[str] = []
+
+    def always_request_recovery(
+        _reader: object,
+        _executor: object,
+        policy: object,
+        **_kwargs: object,
+    ) -> RawGameState:
+        try:
+            cast(Callable[[RawGameState], int], policy)(fake.raw)
+        except Exception as request:
+            raise BattleRuntimeError("recovery requested") from request
+        raise AssertionError("policy should request recovery")
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle",
+        always_request_recovery,
+    )
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, executor),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=1,
+        stabilization_frames=24,
+        trainer_recovery_required=lambda _raw: True,
+        trainer_recovery_action=lambda: recoveries.append("potion"),
+        maximum_trainer_recoveries=1,
+    )
+
+    with pytest.raises(RouteExecutionError, match="exhausted its trainer recovery budget"):
+        handler.handle(TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "trainer_engagement"))
+
+    assert recoveries == ["potion"]
 
 
 def test_wild_handler_publishes_the_existing_authenticated_receipt(
