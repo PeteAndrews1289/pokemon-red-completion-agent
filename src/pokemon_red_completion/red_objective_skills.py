@@ -42,7 +42,7 @@ from pokemon_red_completion.observation import MapId, PokemonRedStateReader
 from pokemon_red_completion.quest import Specialist
 from pokemon_red_completion.sabrina import run_sabrina_chapter
 from pokemon_red_completion.safari import SafariTiming, run_safari_chapter
-from pokemon_red_completion.saffron import SaffronTiming, run_saffron_access_chapter
+from pokemon_red_completion.saffron import SaffronTiming, run_saffron_objective_chapter
 from pokemon_red_completion.silph import SilphTiming, run_silph_chapter
 from pokemon_red_completion.strength import StrengthTiming, run_strength_chapter
 from pokemon_red_completion.tower import TowerTiming, run_tower_chapter
@@ -421,7 +421,7 @@ class ReachSaffronObjectiveSkill:
         )
 
     def execute(self) -> ObjectiveSkillExecution:
-        report = run_saffron_access_chapter(
+        report = run_saffron_objective_chapter(
             self.emulator,
             self.reader,
             self.executor,

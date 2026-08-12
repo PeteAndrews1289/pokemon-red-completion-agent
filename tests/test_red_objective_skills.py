@@ -441,7 +441,7 @@ def test_red_safari_skill_matches_graph_and_declares_gold_teeth_effect(
         ),
         (
             ReachSaffronObjectiveSkill,
-            "run_saffron_access_chapter",
+            "run_saffron_objective_chapter",
             "reach_saffron",
             1_000,
             150_000,

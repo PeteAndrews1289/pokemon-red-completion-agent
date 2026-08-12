@@ -12,12 +12,14 @@ from pokemon_red_completion.saffron import (
     SAFFRON_ACCESS_CHECKPOINT_COUNT,
     SAFFRON_CHECKPOINT_COUNT,
     SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT,
+    SAFFRON_RETURN_CHECKPOINT_COUNT,
     THUNDER_STONE_PRICE,
     JolteonResourceReport,
     SaffronAccessChapterReport,
     SaffronChapterReport,
     SaffronCheckpoint,
     SaffronGuardResourceReport,
+    SaffronReturnReport,
     SaffronTiming,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
@@ -513,6 +515,73 @@ def test_saffron_guard_resource_report_preserves_frontier_party_and_inventory() 
     assert report.public_dict()["objective_label_created"] is False
     assert not replace(report, bag_after=(*bag, (int(ItemId.FRESH_WATER), 1))).passed
     assert not replace(report, guard_flag_after_consumption=GUARD_DRINK_FLAG).passed
+
+
+def test_saffron_return_report_reuses_open_gate_without_resource_drift() -> None:
+    raw = _terminal()
+    bag = ((int(ItemId.POKE_BALL), 8), (int(ItemId.X_ACCURACY), 1))
+    party = tuple(raw.party_species_ids or ())
+    report = SaffronReturnReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_RETURN_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        guard_flag_before=GUARD_DRINK_FLAG,
+        guard_flag_after=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        money_before=23_285,
+        money_after=23_285,
+        party_before=party,
+        party_after=party,
+        lead_level_before=raw.first_party_level,
+        lead_moves_before=raw.first_party_moves,
+        lead_level_after=raw.first_party_level,
+        lead_moves_after=raw.first_party_moves,
+        party_hp=(130, 53, 37, 144, 75, 79),
+        party_max_hp=(130, 53, 37, 144, 75, 79),
+        party_status=(0,) * 6,
+        frames_executed=50_000,
+        actions_executed=500,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["guard_access_reused"] is True
+    assert not replace(report, guard_flag_before=0).passed
+    assert not replace(report, money_after=23_284).passed
+    assert not replace(report, bag_after=bag[:-1]).passed
+
+
+@pytest.mark.parametrize(
+    ("guard_flag", "selected"),
+    ((0, "access"), (GUARD_DRINK_FLAG, "return")),
+)
+def test_saffron_objective_dispatches_from_observed_guard_flag(
+    monkeypatch: pytest.MonkeyPatch,
+    guard_flag: int,
+    selected: str,
+) -> None:
+    calls: list[str] = []
+
+    class Emulator:
+        def read_u8(self, address: object) -> int:
+            return guard_flag
+
+    def access(*args: object, **kwargs: object) -> str:
+        calls.append("access")
+        return "access"
+
+    def returned(*args: object, **kwargs: object) -> str:
+        calls.append("return")
+        return "return"
+
+    monkeypatch.setattr(saffron, "run_saffron_access_chapter", access)
+    monkeypatch.setattr(saffron, "run_saffron_return_chapter", returned)
+
+    assert saffron.run_saffron_objective_chapter(Emulator(), object(), object()) == selected  # type: ignore[arg-type]
+    assert calls == [selected]
 
 
 def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() -> None:

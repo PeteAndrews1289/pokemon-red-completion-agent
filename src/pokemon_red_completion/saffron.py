@@ -47,6 +47,7 @@ from pokemon_red_completion.tower import party_core_intact
 SAFFRON_CHECKPOINT_COUNT = 10
 SAFFRON_ACCESS_CHECKPOINT_COUNT = 8
 SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT = 7
+SAFFRON_RETURN_CHECKPOINT_COUNT = 5
 FRESH_WATER_PRICE = 200
 THUNDER_STONE_PRICE = 2100
 GUARD_DRINK_FLAG = SAFFRON_GUARD_ACCESS_MASK
@@ -566,6 +567,75 @@ class SaffronGuardResourceReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class SaffronReturnReport:
+    """Proof that an already-open guard route reaches a healed Saffron boundary."""
+
+    records: tuple[SaffronCheckpoint, ...]
+    final_raw: RawGameState
+    guard_flag_before: int
+    guard_flag_after: int
+    bag_before: tuple[tuple[int, int], ...]
+    bag_after: tuple[tuple[int, int], ...]
+    money_before: int
+    money_after: int
+    party_before: tuple[int, ...]
+    party_after: tuple[int, ...]
+    lead_level_before: int | None
+    lead_moves_before: tuple[int, ...] | None
+    lead_level_after: int | None
+    lead_moves_after: tuple[int, ...] | None
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            len(self.records) == SAFFRON_RETURN_CHECKPOINT_COUNT
+            and self.guard_flag_before & GUARD_DRINK_FLAG
+            and self.guard_flag_after & GUARD_DRINK_FLAG
+            and self.bag_after == self.bag_before
+            and self.money_after == self.money_before
+            and self.party_after == self.party_before
+            and self.lead_level_after == self.lead_level_before
+            and self.lead_moves_after == self.lead_moves_before
+            and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.battle_state == 0
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "objective": "reach_saffron",
+            "guard_access_reused": True,
+            "guard_flag_stable": bool(
+                self.guard_flag_before & self.guard_flag_after & GUARD_DRINK_FLAG
+            ),
+            "inventory_preserved": self.bag_after == self.bag_before,
+            "money_preserved": self.money_after == self.money_before,
+            "party_preserved": self.party_after == self.party_before,
+            "terminal": {
+                "map": int(self.final_raw.map_id),
+                "position": [self.final_raw.player_x, self.final_raw.player_y],
+                "party_hp": list(self.party_hp),
+                "party_max_hp": list(self.party_max_hp),
+                "party_status": list(self.party_status),
+            },
+            "frames_executed": self.frames_executed,
+            "actions_executed": self.actions_executed,
+            "controller_released": self.controller_released,
+        }
+
+
 def run_saffron_guard_resource_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -716,6 +786,134 @@ def run_saffron_guard_resource_chapter(
             f"Saffron guard resource evidence failed: {report.public_dict()!r}."
         )
     return report
+
+
+def run_saffron_return_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: SaffronTiming = DEFAULT_SAFFRON_TIMING,
+    progress: ProgressSink | None = None,
+) -> SaffronReturnReport:
+    """Reach Saffron after a separate lesson has already opened every guard."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    records: list[SaffronCheckpoint] = []
+    initial = reader.read()
+    _require(initial, MapId.CELADON_POKECENTER, (3, 3), "Saffron return boundary")
+    initial_flag = emulator.read_u8(RamAddress.STATUS_FLAGS_1)
+    bag_before = tuple(sorted(_bag(emulator).items()))
+    money_before = _money(emulator)
+    party_before = tuple(initial.party_species_ids or ())
+    if not party_before or initial_flag & GUARD_DRINK_FLAG == 0:
+        raise SaffronChapterError("Saffron return requires the observed open-guard boundary.")
+
+    # A cartridge-derived relocation can arrive at the nurse with legally
+    # depleted HP or PP.  Heal before taking the battle-free city route.
+    for _ in range(9):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(timing.heal_pulses):
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and all(status == 0 for status in _party_status(emulator))
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=1)
+    else:
+        raise SaffronChapterError("Celadon preparation healing did not settle.")
+    prepared = reader.read()
+    _checkpoint(records, progress, emulator, prepared, "saffron_return_ready", "Celadon ready")
+
+    _move(actions, reader, emulator, CENTER_EXIT, timing, "Celadon Center exit")
+    _require(reader.read(), MapId.CELADON_CITY, (41, 10), "Celadon Center exterior")
+    _move(actions, reader, emulator, CITY_TO_MART[:-1], timing, "Celadon west crossing")
+    _require(reader.read(), MapId.CELADON_CITY, (10, 14), "Celadon west crossing")
+    _checkpoint(records, progress, emulator, reader.read(), "celadon_crossed", "Crossed Celadon")
+
+    _move(actions, reader, emulator, CITY_TO_ROUTE_7, timing, "Route 7")
+    _require(reader.read(), MapId.ROUTE_7, (0, 3), "Route 7")
+    _move(actions, reader, emulator, ROUTE_7_TO_GATE, timing, "Route 7 gate")
+    _require(reader.read(), MapId.ROUTE_7_GATE, (0, 4), "Route 7 gate")
+    _checkpoint(records, progress, emulator, reader.read(), "open_gate_reached", "Open gate")
+
+    _move(actions, reader, emulator, ("right",) * 9, timing, "Saffron crossing")
+    _require(reader.read(), MapId.SAFFRON_CITY, (1, 18), "Saffron entry")
+    _checkpoint(records, progress, emulator, reader.read(), "saffron_reentered", "Saffron entered")
+    _move(actions, reader, emulator, SAFFRON_TO_CENTER, timing, "Saffron Center")
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center entry")
+    _move(actions, reader, emulator, ("up",) * 4, timing, "Saffron nurse")
+    for _ in range(9):
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.movement_frames)
+    for _ in range(timing.heal_pulses):
+        if (
+            _party_hp(emulator) == _party_max_hp(emulator)
+            and all(status == 0 for status in _party_status(emulator))
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=1)
+    else:
+        raise SaffronChapterError("Saffron return healing did not settle.")
+    final = reader.read()
+    _checkpoint(records, progress, emulator, final, "saffron_return_stable", "Saffron stable")
+
+    report = SaffronReturnReport(
+        records=tuple(records),
+        final_raw=final,
+        guard_flag_before=initial_flag,
+        guard_flag_after=emulator.read_u8(RamAddress.STATUS_FLAGS_1),
+        bag_before=bag_before,
+        bag_after=tuple(sorted(_bag(emulator).items())),
+        money_before=money_before,
+        money_after=_money(emulator),
+        party_before=party_before,
+        party_after=tuple(final.party_species_ids or ()),
+        lead_level_before=prepared.first_party_level,
+        lead_moves_before=prepared.first_party_moves,
+        lead_level_after=final.first_party_level,
+        lead_moves_after=final.first_party_moves,
+        party_hp=_party_hp(emulator),
+        party_max_hp=_party_max_hp(emulator),
+        party_status=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise SaffronChapterError(
+            f"Saffron return evidence contract failed: {report.public_dict()!r}."
+        )
+    return report
+
+
+def run_saffron_objective_chapter(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+    *,
+    timing: SaffronTiming = DEFAULT_SAFFRON_TIMING,
+    progress: ProgressSink | None = None,
+) -> SaffronAccessChapterReport | SaffronReturnReport:
+    """Open Saffron once, or reuse an independently authenticated open gate."""
+
+    if emulator.read_u8(RamAddress.STATUS_FLAGS_1) & GUARD_DRINK_FLAG:
+        return run_saffron_return_chapter(
+            emulator,
+            reader,
+            executor,
+            timing=timing,
+            progress=progress,
+        )
+    return run_saffron_access_chapter(
+        emulator,
+        reader,
+        executor,
+        timing=timing,
+        progress=progress,
+    )
 
 
 def run_saffron_access_chapter(
