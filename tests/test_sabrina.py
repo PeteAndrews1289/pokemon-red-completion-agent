@@ -10,6 +10,8 @@ from pokemon_red_completion.sabrina import (
     HYPER_POTION_THRESHOLD,
     MAX_SABRINA_HYPER_POTIONS,
     PC_DEPOSIT_ITEMS,
+    POST_SURF_SABRINA_MOVES,
+    PRE_SURF_SABRINA_MOVES,
     SABRINA_BATTLE_TIMING,
     SABRINA_PARTY,
     SABRINA_TO_CITY,
@@ -20,6 +22,7 @@ from pokemon_red_completion.sabrina import (
     _sabrina_capacity_ready,
     _sabrina_move_slot,
     _sabrina_recovery_required,
+    _sabrina_terminal_moves_ready,
 )
 
 
@@ -145,7 +148,7 @@ def test_sabrina_policy_avoids_a_live_disabled_move() -> None:
         player_y=8,
         party_count=3,
         battle_state=2,
-        first_party_moves=(0x82, 0x46, 0x3A, 0x39),
+        first_party_moves=POST_SURF_SABRINA_MOVES,
         first_party_pp=(15, 15, 10, 15),
         enemy_species_id=0x95,
         player_disabled_move_slot=2,
@@ -153,3 +156,26 @@ def test_sabrina_policy_avoids_a_live_disabled_move() -> None:
     )
 
     assert _sabrina_move_slot(raw) == 4
+
+
+def test_sabrina_policy_qualifies_the_pre_surf_ice_beam_lineage() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=MapId.SAFFRON_GYM,
+        player_x=9,
+        player_y=8,
+        party_count=6,
+        battle_state=2,
+        first_party_moves=PRE_SURF_SABRINA_MOVES,
+        first_party_pp=(25, 30, 10, 25),
+        enemy_species_id=0x26,
+    )
+
+    assert _sabrina_move_slot(raw) == 3
+    assert _sabrina_move_slot(
+        replace(raw, player_disabled_move_slot=3, player_disable_turns=2)
+    ) == 1
+    assert _sabrina_terminal_moves_ready(raw)
+    assert not _sabrina_terminal_moves_ready(
+        replace(raw, first_party_pp=(24, 30, 10, 25))
+    )

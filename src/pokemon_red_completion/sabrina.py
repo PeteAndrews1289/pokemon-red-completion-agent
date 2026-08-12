@@ -70,6 +70,12 @@ ALAKAZAM_HYPER_POTION_THRESHOLD = 95
 # consume the complete held-out reserve when her Alakazam damage requires it.
 MAX_SABRINA_HYPER_POTIONS = 7
 SABRINA_X_SPECIAL_USES = 2
+PRE_SURF_SABRINA_MOVES = (0x2C, 0x27, 0x3A, 0x37)
+POST_SURF_SABRINA_MOVES = (0x82, 0x46, 0x3A, 0x39)
+SABRINA_TERMINAL_PP_BY_MOVES = {
+    PRE_SURF_SABRINA_MOVES: (25, 30, 10, 25),
+    POST_SURF_SABRINA_MOVES: (15, 15, 10, 15),
+}
 SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
     max_runtime_pulses=720,
     max_move_menu_transition_pulses=24,
@@ -191,8 +197,7 @@ class SabrinaChapterReport:
             and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and _sabrina_terminal_moves_ready(self.final_raw)
             and self.controller_released
         )
 
@@ -257,6 +262,10 @@ def run_sabrina_chapter(
     _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Silph boundary")
     initial_money = _money(emulator)
     initial_bag = _bag(emulator)
+    if initial.first_party_moves not in SABRINA_TERMINAL_PP_BY_MOVES:
+        raise SabrinaChapterError(
+            "Sabrina input boundary has no qualified lead move lineage."
+        )
     if (
         _event(emulator, EventFlag.BEAT_SABRINA)
         or _event(emulator, EventFlag.GOT_TM46)
@@ -506,7 +515,12 @@ def _encounter_party(
 
 
 def _sabrina_move_slot(raw: RawGameState) -> int:
-    priorities = (3, 2, 4) if raw.enemy_species_id == 0x77 else (2, 4, 3)
+    if raw.first_party_moves == PRE_SURF_SABRINA_MOVES:
+        priorities = (3, 1, 4)
+    elif raw.first_party_moves == POST_SURF_SABRINA_MOVES:
+        priorities = (3, 2, 4) if raw.enemy_species_id == 0x77 else (2, 4, 3)
+    else:
+        raise SabrinaChapterError("Sabrina policy observed an unqualified move lineage.")
     pp = raw.first_party_pp or ()
     for slot in priorities:
         if (
@@ -522,8 +536,13 @@ def _sabrina_move_slot(raw: RawGameState) -> int:
 
 
 def _sabrina_turn_is_allowed(turn: SabrinaTurn) -> bool:
-    allowed = {2, 3, 4}
+    allowed = {1, 2, 3, 4}
     return turn.move_slot in allowed
+
+
+def _sabrina_terminal_moves_ready(raw: RawGameState) -> bool:
+    expected_pp = SABRINA_TERMINAL_PP_BY_MOVES.get(raw.first_party_moves)
+    return expected_pp is not None and raw.first_party_pp == expected_pp
 
 
 def _sabrina_status_is_supported(status: int) -> bool:
