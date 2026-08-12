@@ -12,9 +12,9 @@ the [025/026 receipt](evidence/strategic-scenarios-025-026-rehearsal-qualificati
 and the [scenario 037 receipt](evidence/strategic-scenario-037-rehearsal-qualification-2026-08-12.json).
 
 The strategic-learning campaign made measurable progress, but model training should remain closed.
-The private inventory now contains **70 authenticated capture envelopes, 40 distinct frontiers and
-21 exact learning scenarios**. The exact contexts are thirteen train scenarios and eight validation
-scenarios. Scenario 041's exact context has a preserved failed rehearsal; no failed row is promoted:
+The private inventory now contains **74 authenticated capture envelopes, 41 distinct frontiers and
+22 exact learning scenarios**. The exact contexts are fourteen train scenarios and eight validation
+scenarios. Scenarios 041 and 042 both retain their failed precursors; no failed row is promoted:
 **counted train = 0, counted validation = 0, test
 opened = 0**.
 
@@ -36,7 +36,7 @@ successful two-candidate teacher choice in 31 movements with no interruption or 
 [scenario 005 receipt](evidence/strategic-scenario-005-rehearsal-qualification-2026-08-12.json).
 
 The path-free [inventory receipt](evidence/strategic-frontier-inventory-2026-08-12.json) is the
-current measurement. It reports 15 missing learning scenarios and excludes one known invalid
+current measurement. It reports 14 missing learning scenarios and excludes one known invalid
 diagnostic envelope.
 
 ## What the cartridge-routing work fixed
@@ -86,6 +86,12 @@ The remaining paper-only one-skill matches include:
   The final repairs bound every guard house to the global flag and removed outdoor warp rows absent
   from both cartridge trigger tables. See the
   [qualification receipt](evidence/strategic-scenario-041-rehearsal-qualification-2026-08-12.json).
+- scenario 042 is now qualified. A no-label X Accuracy purchase composes with the guard and
+  Cinnabar lessons; the Mansion adds only `obtain_secret_key`. Its rehearsal again chooses the
+  701-cost Saffron route over a nearby alternative, completing 690 movements through 10 wild
+  battles and one replan with zero movement labels. The live lineage also removed a hidden
+  Saffron-only Dig-return assumption. See the
+  [qualification receipt](evidence/strategic-scenario-042-rehearsal-qualification-2026-08-12.json).
 
 This audit prevents a misleading loop: the inventory can still say “one objective differs,” but
 the implementation now separately reports that the only qualified skill for that objective would
@@ -100,7 +106,7 @@ claim.
 
 Current exact coverage is:
 
-- train: 13 of 24 planned contexts;
+- train: 14 of 24 planned contexts;
 - validation: 8 of 12 planned contexts;
 - validation cost-baseline challenges: 6 of 6;
 - test: 0 of 12 opened, as required; and
@@ -131,7 +137,10 @@ even if the code ran perfectly.
    19-objective frontier, qualify Sabrina before Surf and rehearse exact scenario 013. Next build
    the independent Cinnabar-before-Sabrina chapter for scenario 041. The construction is complete;
    the return-route rehearsal recovery remains.
-9. Open counted train/validation collection only after the published admission thresholds pass.
+9. **Complete:** construct and rehearse exact scenario 042 through independent X Accuracy,
+   Saffron-access, Cinnabar and Secret Key lessons. Next continue with scenario 045 from this exact
+   frontier.
+10. Open counted train/validation collection only after the published admission thresholds pass.
    Keep all 12 test situations sealed until the frozen model's final evaluation.
 
 ## Portfolio and research narrative

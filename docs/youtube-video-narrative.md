@@ -28,6 +28,13 @@ flag to all four. On Route 7, freeze again on two visually plausible warp rows a
 LABELS**. The narration is: **“The failures were not rerolls. Each one removed a false claim from
 the world model.”**
 
+Continue one objective later with **SECRET KEY — ACQUIRED**, but keep the preparation cards
+separate: **X ACCURACY RESOURCE / SAFFRON ACCESS / CINNABAR / MANSION**. On the first Mansion exit,
+show Dig landing in Celadon and cross out **“DIG ALWAYS RETURNS TO SAFFRON.”** Replace it with four
+observed healing anchors and a checked Fly return. Finish on the second decision card:
+**SAFFRON 701 / BLAINE 22 / SAFFRON SELECTED / 690 STEPS / 10 WILD BATTLES / 1 REPLAN / 0 BUTTON
+LABELS**. This is the visual proof that independent lessons compose into a later strategic context.
+
 ## New opening beat: the route was complete, the curriculum was not
 
 Add the first payoff immediately after the failed teacher connection: **ERIKA BEFORE KOGA — NOW
@@ -67,7 +74,7 @@ then **624 ACKNOWLEDGED STEPS / TRAINER + WILD INTERRUPTION / 1 OBJECT REPLAN / 
 Finally show scenario 005's construction and rehearsal as separate lanes: **SAFFRON SKILL + RETURN
 TO CELADON → NO LABEL**, then **HIDEOUT CHOICE → 31 STEPS → ONE LABEL**.
 
-Update the persistent scoreboard to **49 AUTHENTICATED CAPTURES / 36 DISTINCT FRONTIERS / 18 EXACT
+Update the persistent scoreboard to **74 AUTHENTICATED CAPTURES / 41 DISTINCT FRONTIERS / 22 EXACT
 CONTEXTS / 6 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. Add the paired-capability card:
 **6 DISAGREEMENTS / BEST-CASE EXACT P = 0.03125 / TRAINING STILL CLOSED**. The next-act cards should
 be **KOGA WITHOUT SURF/STRENGTH**, **CINNABAR BEFORE SABRINA**, and **REMAINING NON-TEST CONTEXTS**.

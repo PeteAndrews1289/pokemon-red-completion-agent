@@ -2,8 +2,8 @@
 
 ## August 12 update
 
-The strategic benchmark now has 70 authenticated captures, 40 distinct frontiers and 21 exact
-non-test contexts: 13/24 train and 8/12 validation. All six preregistered validation challenges are
+The strategic benchmark now has 74 authenticated captures, 41 distinct frontiers and 22 exact
+non-test contexts: 14/24 train and 8/12 validation. All six preregistered validation challenges are
 live-qualified, but counted data remains zero and all 12 test contexts remain sealed. Scenario 037
 is the newest exact rehearsal: the teacher chose Erika at route cost 106 over a 77-cost Cinnabar
 alternative, then completed 102 movements with no replan and no movement-imitation labels.
@@ -27,6 +27,14 @@ acknowledged 690 movements, resumed 14 wild battles, replanned once and emitted 
 Its preserved failures found two world-model overclaims: only one of four Saffron guard houses was
 bound to the global access flag, and an outdoor warp record with no cartridge-recognized trigger
 was still routable. Both now fail closed. Counted data remains zero.
+
+Scenario 042 carries that exact state one objective further without turning preparation into a
+label. The teacher buys one X Accuracy, opens Saffron access, reaches Cinnabar and obtains the
+Secret Key under four separate evidence contracts. Its official rehearsal again rejects the cheap
+local option—Blaine at cost 22—in favor of the story-order Saffron destination at cost 701, then
+completes 690 movements through 10 wild battles and one replan. A failed materialization also found
+that Dig follows the save's live healing anchor; the repaired lesson observes Celadon, Cinnabar,
+Saffron or Vermilion instead of assuming the older Saffron lineage.
 
 ## August 11 headline
 

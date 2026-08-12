@@ -14,6 +14,28 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Scenario 042 qualified; Mansion return is anchor-aware — 2026-08-12
+
+Exact train scenario 042 is constructed and rehearsed. Construction acquired one X Accuracy as a
+no-label resource, opened the Saffron guards without changing the 22-objective frontier, returned
+to Cinnabar, and recovered the Secret Key as the sole final objective delta. The official
+uncounted rehearsal then selected the intended 701-cost Saffron approach over the nearby 22-cost
+Blaine approach. It completed 690 acknowledged movements, resumed 10 wild battles, replanned once
+around a visible object, and wrote one strategic choice, one success and **zero movement labels**.
+The 1,631-record episode remains unassigned and ineligible for promotion. See the
+[qualification receipt](docs/evidence/strategic-scenario-042-rehearsal-qualification-2026-08-12.json).
+
+Published `5cdaf4b` / CI `31599900859` added the independently verified X Accuracy purchase.
+The first Mansion materialization then exposed another historical-lineage assumption: Dig returned
+to the save's live Celadon healing anchor, not the Saffron anchor used by older captures. Published
+`8a4fd16` / CI `31600563947` observes the landing, accepts only four authenticated city anchors,
+and flies to Cinnabar when necessary. The full suite is 2,761 passed, three skipped and one expected
+failure. Current inventory is **74 authenticated envelopes, 41 distinct frontiers, 22 exact
+learning contexts and 14 missing**: fourteen train and eight validation. Counted collection remains
+zero and all 12 test contexts remain sealed. Scenario 045 (`reach_saffron`) is now the direct
+one-skill target from the exact scenario-042 frontier; scenarios 017/021 remain the two static
+qualified-teacher-order gaps.
+
 ## Scenario 041 qualified after cartridge-trigger audit — 2026-08-12
 
 Published `17ed269` / CI `31598896281` completes the Cinnabar-before-Sabrina strategic context.

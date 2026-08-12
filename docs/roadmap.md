@@ -12,8 +12,8 @@ Surf, Silph added the last objective, and construction returned to Celadon. The 
 Surf from three candidates and completed 620 movements with zero interruptions, replans or movement
 labels. The curriculum-order audit now reports **2**, not 21, incompatible learning frontiers.
 
-Current measured coverage is **70 authenticated envelopes, 40 distinct frontiers and 21 exact
-learning scenarios**: thirteen train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
+Current measured coverage is **74 authenticated envelopes, 41 distinct frontiers and 22 exact
+learning scenarios**: fourteen train and eight validation. Scenarios 003, 007, 011, 015, 019 and 023
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
@@ -44,14 +44,15 @@ The ordered gates are:
    scenario 041. Its rehearsal chose Saffron over Secret Key, acknowledged 690 movements, resumed
    14 wild battles and replanned once. All four guard houses now share the observed access flag and
    inert outdoor warp records are rejected from the executable graph;
-8. construct and rehearse scenario 042 by adding `obtain_secret_key` from the qualified exact
-   scenario-041 Cinnabar frontier;
+8. **complete:** construct and rehearse scenario 042 by adding an independent X Accuracy resource
+   and `obtain_secret_key` from the qualified exact scenario-041 Cinnabar frontier. Its rehearsal
+   selected Saffron over Blaine and completed 690 movements through 10 wild interruptions;
 9. continue all remaining non-test contexts until the 24-train/12-validation diversity gate is
    actually measured; and
 10. only then open counted collection, freeze normalization, train the shared candidate scorer and
    evaluate once on the 12 still-sealed test contexts.
 
-The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 15 missing
+The [current inventory](evidence/strategic-frontier-inventory-2026-08-12.json) reports 14 missing
 learning scenarios. Its logical one-skill list remains a graph-difference report, not a claim that
 the corresponding live teacher skill is available.
 

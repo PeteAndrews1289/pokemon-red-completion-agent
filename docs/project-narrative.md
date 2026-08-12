@@ -47,9 +47,9 @@ transitions passed fresh semantic checks did construction return to Celadon and 
 question. Its rehearsal chose Surf from three candidates, completed 620 movements without a replan
 or interruption, and emitted no arrow-key label.
 
-The scoreboard is now 58 authenticated captures, 40 distinct frontiers, 21 exact learning
+The scoreboard is now 74 authenticated captures, 41 distinct frontiers, 22 exact learning
 contexts, all six cost-baseline challenges and zero counted rows. Six paired disagreements make the
-planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 13/24 train
+planned comparison statistically capable at best-case two-sided exact p = 0.03125, but 14/24 train
 and 8/12 validation coverage still keeps model training closed. The next work is deliberately new
 experience: Koga without Surf or Strength, route-battle recovery and the remaining non-test
 contexts. The post-Erika Ice Beam Tower lineage also unlocked scenarios 010 and 014 without
@@ -97,6 +97,16 @@ drink lesson opens the guards without adding an objective; the separate Cinnabar
 nearby Secret Key and completed 690 acknowledged movements through 14 wild encounters and one live
 replan. The result is one strategic label, one outcome and zero arrow-key labels—not a disguised
 recording of the teacher's route.
+
+Scenario 042 then tested whether those lessons actually compose. The Secret Key route needs one X
+Accuracy that the earlier Koga battle legitimately consumed, so the teacher learned a separate
+shop resource lesson instead of fabricating inventory. Four bounded stages produced an exact
+24-objective Cinnabar state. The first Mansion attempt recovered the key and then failed because
+Dig returned to Celadon, while the old script asserted Saffron. That was not bad timing: Dig follows
+the save's live healing anchor. The repaired return observes four authenticated anchors and flies
+back only when needed. The official rehearsal selected Saffron at cost 701 over Blaine at cost 22,
+completed the same 690-step strategic journey through 10 wild battles and one replan, and again
+recorded one destination label with zero arrow-key labels.
 
 ## August 11: the poster Rocket was a trainer, but not that kind of trainer
 

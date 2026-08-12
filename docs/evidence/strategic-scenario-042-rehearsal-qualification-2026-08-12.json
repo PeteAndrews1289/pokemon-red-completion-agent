@@ -1,0 +1,89 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "cinnabar": {
+      "actions_executed": 688,
+      "envelope_sha256": "cf4ac597c5937f5b05e71c4db36bf90cacb18160c152798110a30e962f31de81",
+      "frames_executed": 83496,
+      "objective_ids_added": ["reach_cinnabar"],
+      "state_sha256": "b61859a517c4b10f2972f312521ccb8793e2a911c84ca7ac8b715e06ee809ce4",
+      "verified_objective_count": 23
+    },
+    "saffron_guard_resource": {
+      "actions_executed": 670,
+      "envelope_sha256": "d2ca4055de98039cce8d7f5b823776d3973cdf4429758bbb8694dae63632a457",
+      "episode_created": false,
+      "frames_executed": 78880,
+      "objective_ids_added": [],
+      "state_sha256": "0e380659204cb77090e5c980f06811231575190b58348a1e3f97195b8816d6d5",
+      "verified_objective_count": 22
+    },
+    "secret_key": {
+      "actions_executed": 812,
+      "envelope_sha256": "8e1a03887e0c6b2aab846b7e1883633032d430251aae4fea47668d12690aadd7",
+      "frames_executed": 94188,
+      "objective_ids_added": ["obtain_secret_key"],
+      "state_sha256": "949db8219c7ae4dc9de8fd09388813a77fa7fa11e8fac41492deb6e73f126ba0",
+      "verified_objective_count": 24
+    },
+    "x_accuracy_resource": {
+      "actions_executed": 378,
+      "envelope_sha256": "292d76599fe267e53d7f6d5fbc461581970636fad27f010df047ff67c8adc4cb",
+      "episode_created": false,
+      "frames_executed": 134856,
+      "objective_ids_added": [],
+      "state_sha256": "19f29f95ab40ac71f6002d98c136647b156342334990648c2b80f92dc7fb9961",
+      "verified_objective_count": 22
+    }
+  },
+  "failure_lineage": {
+    "mansion_dig_anchor": {
+      "finding": "Dig returns to the save's observed blackout/healing anchor, which was Celadon on this legal lineage rather than the older assumed Saffron anchor",
+      "observed_landing": {"map": "celadon_city", "position": [41, 10]},
+      "repair": "accept the four authenticated anchors, observe the actual landing and Fly to Cinnabar only when required"
+    }
+  },
+  "rehearsal": {
+    "assignment_id": "1aefa963842967332a5a515f708958f644dab9a0daff5174df5dbb06371d217a",
+    "candidate_route_costs": [701, 22],
+    "dataset": {
+      "censored_examples": 0,
+      "movement_action_labels": 0,
+      "outcome_examples": 1,
+      "teacher_choice_examples": 1,
+      "unique_teacher_choice_contexts": 1
+    },
+    "episode": {
+      "bytes": 2802417,
+      "manifest_sha256": "b845f7dccd3b37ba94dd28410cee6d10efac4445c9d68694aa801e5505967d60",
+      "records": 1631,
+      "status": "complete"
+    },
+    "route": {
+      "acknowledged_steps": 690,
+      "interruptions": {"wild_battle": 10},
+      "movement_requests": 693,
+      "replans": {"visible_object": 1},
+      "wait_actions": 28
+    },
+    "selected_candidate_index": 1,
+    "selected_teacher_destination": "reach_saffron",
+    "status": "complete"
+  },
+  "recorded_on": "2026-08-12",
+  "scenario_id": "red-strategic-scenario-v2-042-train",
+  "scenario_sha256": "fe31a9ec54a8fdf313fe52325a2bbb2e1739aa6dc105ff7bcf8530a98deb9163",
+  "source": {
+    "ci_run_id": 31600563947,
+    "ci_status": "success",
+    "git_commit": "8a4fd16c0be049fe1f8637167cd4cd300bffc33f",
+    "source_bundle_sha256": "ff7f785791942011371e7dba1778abdf22dcdf3e687b2d21b338536ac2450da6",
+    "teacher_execution_sha256": "49e212ddd966d9b708d76ab3f16da84a0e064b8b25fcf7f7e7f009fc5402f2a7"
+  },
+  "status": "qualified"
+}
