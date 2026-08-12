@@ -42,6 +42,7 @@ from pokemon_red_completion.silph import (
     SILPH_RIVAL_MAX_POTIONS,
     THIRD_FLOOR_GUARD,
     X_SPECIAL_PURCHASE_QUANTITY,
+    SilphChapterError,
     SilphChapterReport,
     SilphCheckpoint,
     SilphTiming,
@@ -54,6 +55,7 @@ from pokemon_red_completion.silph import (
     _enter_silph_from_city,
     _interact_with_roof_girl,
     _mart_2f_girl_coordinate,
+    _mart_top_up_quantity,
     _move_verified,
     _plan_saffron_center_approach,
     _plan_saffron_route,
@@ -140,6 +142,8 @@ def _report() -> SilphChapterReport:
         tm13_after_teaching=0,
         upgraded_moves=(0x82, 0x46, 0x3A, 0x39),
         upgraded_pp=(15, 15, 10, 15),
+        x_special_before_supply=0,
+        x_accuracy_before_supply=0,
         rival_potions_used=0,
         rival_x_special_used=1,
         hyper_potions_remaining=7,
@@ -167,6 +171,36 @@ def test_silph_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SILPH_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SILPH_TIMING, **{field.name: 0})
+
+
+def test_silph_mart_top_up_preserves_authenticated_carried_stock() -> None:
+    assert _mart_top_up_quantity(0, target=3, label="X Special") == 3
+    assert _mart_top_up_quantity(1, target=3, label="X Special") == 2
+    assert _mart_top_up_quantity(3, target=3, label="X Special") == 0
+    assert _mart_top_up_quantity(1, target=1, label="X Accuracy") == 0
+
+    with pytest.raises(SilphChapterError, match="outside the supported range"):
+        _mart_top_up_quantity(4, target=3, label="X Special")
+
+
+def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:
+    report = replace(
+        _report(),
+        x_accuracy_before_supply=1,
+        money_after=_report().money_after + 950,
+    )
+
+    assert report.passed
+    assert report.public_dict()["supply"] == {
+        "hyper_potions_bought": 7,
+        "x_special_carried_in": 0,
+        "x_accuracy_carried_in": 1,
+        "used_by_rival_policy": 0,
+        "x_special_used_by_rival_policy": 1,
+        "remaining": 7,
+        "max_repel_bought": 0,
+        "max_repel_remaining": 0,
+    }
 
 
 def test_battle_healing_uses_the_shared_long_settle_bound() -> None:
@@ -961,6 +995,8 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
     assert report.passed
     assert report.public_dict()["supply"] == {
         "hyper_potions_bought": 7,
+        "x_special_carried_in": 0,
+        "x_accuracy_carried_in": 0,
         "used_by_rival_policy": 0,
         "x_special_used_by_rival_policy": 1,
         "remaining": 7,

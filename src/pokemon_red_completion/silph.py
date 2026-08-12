@@ -85,6 +85,7 @@ SAFFRON_DEVELOPMENT_POLICY = BalancedTeamPolicy(
 
 SILPH_CHECKPOINT_COUNT = 12
 X_ACCURACY_REPLACEMENT_PRICE = 950
+X_SPECIAL_PRICE = 350
 SILPH_NET_MONEY_DELTA = -2_301 - X_ACCURACY_REPLACEMENT_PRICE
 SILPH_PREINSTALLED_TM13_NET_MONEY_DELTA = SILPH_NET_MONEY_DELTA + FRESH_WATER_PRICE
 HYPER_POTION_PURCHASE_QUANTITY = 7
@@ -295,6 +296,8 @@ class SilphChapterReport:
     tm13_after_teaching: int
     upgraded_moves: tuple[int, int, int, int]
     upgraded_pp: tuple[int, int, int, int]
+    x_special_before_supply: int
+    x_accuracy_before_supply: int
     rival_potions_used: int
     rival_x_special_used: int
     hyper_potions_remaining: int
@@ -334,6 +337,10 @@ class SilphChapterReport:
                 if self.tm13_preinstalled
                 else SILPH_NET_MONEY_DELTA
             )
+            + self.x_special_before_supply * X_SPECIAL_PRICE
+            + self.x_accuracy_before_supply * X_ACCURACY_REPLACEMENT_PRICE
+            and 0 <= self.x_special_before_supply <= X_SPECIAL_PURCHASE_QUANTITY
+            and 0 <= self.x_accuracy_before_supply <= 1
             and 0 <= self.rival_potions_used <= SILPH_RIVAL_MAX_POTIONS
             and self.rival_x_special_used == 1
             and self.hyper_potions_remaining
@@ -374,6 +381,8 @@ class SilphChapterReport:
             },
             "supply": {
                 "hyper_potions_bought": HYPER_POTION_PURCHASE_QUANTITY,
+                "x_special_carried_in": self.x_special_before_supply,
+                "x_accuracy_carried_in": self.x_accuracy_before_supply,
                 "used_by_rival_policy": self.rival_potions_used,
                 "x_special_used_by_rival_policy": self.rival_x_special_used,
                 "remaining": self.hyper_potions_remaining,
@@ -413,6 +422,8 @@ def run_silph_chapter(
     money_before = _money(emulator)
     lapras_before = emulator.read_u8(STATUS_FLAGS_4)
     initial_bag = _bag(emulator)
+    x_special_before_supply = initial_bag.get(ItemId.X_SPECIAL, 0)
+    x_accuracy_before_supply = initial_bag.get(ItemId.X_ACCURACY, 0)
     tm13_preinstalled = (
         _event(emulator, EventFlag.GOT_TM13)
         and initial.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE, 0x39)
@@ -706,6 +717,8 @@ def run_silph_chapter(
         tm13_after_teaching=_bag(emulator).get(ItemId.TM13_ICE_BEAM, 0),
         upgraded_moves=upgraded.first_party_moves or (),
         upgraded_pp=upgraded.first_party_pp or (),
+        x_special_before_supply=x_special_before_supply,
+        x_accuracy_before_supply=x_accuracy_before_supply,
         rival_potions_used=potion_before - potion_after,
         rival_x_special_used=x_special_before - _bag(emulator).get(ItemId.X_SPECIAL, 0),
         hyper_potions_remaining=_bag(emulator).get(ItemId.HYPER_POTION, 0),
@@ -917,24 +930,36 @@ def _buy_silph_x_special(
     _interact(actions, timing.menu_frames)
     _select_cursor(actions, emulator, 0, menu_timing)  # type: ignore[arg-type]
     _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
-    _buy_mart_item(
-        actions,  # type: ignore[arg-type]
-        emulator,
-        menu_timing,
-        absolute_index=6,
-        item=ItemId.X_SPECIAL,
-        quantity=X_SPECIAL_PURCHASE_QUANTITY,
-        target_bag_quantity=X_SPECIAL_PURCHASE_QUANTITY,
+    x_special_quantity = _mart_top_up_quantity(
+        _bag(emulator).get(ItemId.X_SPECIAL, 0),
+        target=X_SPECIAL_PURCHASE_QUANTITY,
+        label="X Special",
     )
-    _buy_mart_item(
-        actions,  # type: ignore[arg-type]
-        emulator,
-        menu_timing,
-        absolute_index=0,
-        item=ItemId.X_ACCURACY,
-        quantity=1,
-        target_bag_quantity=1,
+    if x_special_quantity:
+        _buy_mart_item(
+            actions,  # type: ignore[arg-type]
+            emulator,
+            menu_timing,
+            absolute_index=6,
+            item=ItemId.X_SPECIAL,
+            quantity=x_special_quantity,
+            target_bag_quantity=X_SPECIAL_PURCHASE_QUANTITY,
+        )
+    x_accuracy_quantity = _mart_top_up_quantity(
+        _bag(emulator).get(ItemId.X_ACCURACY, 0),
+        target=1,
+        label="X Accuracy",
     )
+    if x_accuracy_quantity:
+        _buy_mart_item(
+            actions,  # type: ignore[arg-type]
+            emulator,
+            menu_timing,
+            absolute_index=0,
+            item=ItemId.X_ACCURACY,
+            quantity=x_accuracy_quantity,
+            target_bag_quantity=1,
+        )
     _close_menus(actions, reader, menu_timing)  # type: ignore[arg-type]
     _move_verified(
         actions,
@@ -944,6 +969,17 @@ def _buy_silph_x_special(
         "X Special clerk return",
     )
     _require(reader.read(), MapId.CELADON_MART_5F, (16, 2), "Silph X Special return")
+
+
+def _mart_top_up_quantity(current: int, *, target: int, label: str) -> int:
+    """Return the exact bounded purchase needed while preserving carried stock."""
+
+    if not 0 <= current <= target:
+        raise SilphChapterError(
+            f"Silph {label} stock is outside the supported range: "
+            f"current={current}, target={target}."
+        )
+    return target - current
 
 
 def _acquire_silph_x_special(
