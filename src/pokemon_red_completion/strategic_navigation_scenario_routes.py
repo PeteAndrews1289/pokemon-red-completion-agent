@@ -184,6 +184,7 @@ STRATEGIC_OBJECTIVE_SKILL_BOUNDARIES: Mapping[str, tuple[MapId, tuple[int, int]]
     "obtain_surf": (MapId.FUCHSIA_POKECENTER, (3, 3)),
     "reach_fuchsia": (MapId.LAVENDER_POKECENTER, (3, 3)),
     "reach_saffron": (MapId.CELADON_POKECENTER, (3, 3)),
+    "rescue_fuji": (MapId.CELADON_POKECENTER, (3, 3)),
 }
 
 
