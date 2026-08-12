@@ -38,6 +38,7 @@ FLY_ATTEMPT_LIMIT = 10
 SOURCE_CITY_BOUNDARY = (49, 11)
 CELADON_CENTER_DOOR = (41, 9)
 CINNABAR_CENTER_TO_OUTDOORS = ("down",) * 5
+CELADON_CENTER_TO_OUTDOORS = ("down",) * 5
 CENTER_TO_ROUTE_16_TREE = (
     ("down",) * 8
     + ("left",) * 22
@@ -235,6 +236,65 @@ class FlyRelocationReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class CinnabarFlyArrivalReport:
+    """Evidence for a story-neutral Celadon-to-Cinnabar Fly relocation."""
+
+    initial_raw: RawGameState
+    final_raw: RawGameState
+    initial_bag: tuple[tuple[int, int], ...]
+    final_bag: tuple[tuple[int, int], ...]
+    dux_moves: tuple[int, ...]
+    dux_pp_before: tuple[int, ...]
+    dux_pp_after: tuple[int, ...]
+    fly_landings: tuple[tuple[int, int], ...]
+    party_hp_before: tuple[int, ...]
+    party_hp_after: tuple[int, ...]
+    party_max_hp_before: tuple[int, ...]
+    party_max_hp_after: tuple[int, ...]
+    party_status_before: tuple[int, ...]
+    party_status_after: tuple[int, ...]
+    frames_executed: int
+    actions_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.initial_raw.map_id == MapId.CELADON_POKECENTER
+            and (self.initial_raw.player_x, self.initial_raw.player_y) == (3, 3)
+            and self.initial_raw.battle_state == 0
+            and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
+            and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
+            and self.final_raw.battle_state == 0
+            and self.initial_raw.party_species_ids == self.final_raw.party_species_ids
+            and self.initial_raw.first_party_moves == self.final_raw.first_party_moves
+            and self.initial_raw.first_party_pp == self.final_raw.first_party_pp
+            and self.initial_bag == self.final_bag
+            and (int(ItemId.HM02_FLY), 1) in self.final_bag
+            and self.dux_moves == DUX_MOVES_AFTER
+            and self.dux_pp_before == DUX_PP_AFTER
+            and self.dux_pp_after == DUX_PP_AFTER
+            and bool(self.fly_landings)
+            and self.fly_landings[-1][0] == int(MapId.CINNABAR_ISLAND)
+            and len(self.fly_landings) <= FLY_ATTEMPT_LIMIT
+            and self.party_hp_before == self.party_hp_after
+            and self.party_max_hp_before == self.party_max_hp_after
+            and self.party_status_before == self.party_status_after
+            and all(
+                0 < hp <= maximum
+                for hp, maximum in zip(
+                    self.party_hp_after,
+                    self.party_max_hp_after,
+                    strict=True,
+                )
+            )
+            and all(status == 0 for status in self.party_status_after)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.controller_released
+        )
+
+
 def run_fly_resource_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -380,17 +440,94 @@ def relocate_cinnabar_to_celadon_by_fly(
     return report
 
 
+def relocate_celadon_to_cinnabar_by_fly(
+    emulator: EmulatorState,
+    reader: PokemonRedStateReader,
+    executor: ChapterExecutor,
+) -> CinnabarFlyArrivalReport:
+    """Reach an unlocked Cinnabar boundary from Celadon without story effects."""
+
+    start_frames = emulator.frame_count
+    actions = CountingExecutor(executor)
+    initial = reader.read()
+    initial_bag = _bag_tuple(emulator)
+    hp_before = _party_hp(emulator)
+    max_hp_before = _party_max_hp(emulator)
+    status_before = _party_status(emulator)
+    dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
+    dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
+    if (
+        initial.map_id != MapId.CELADON_POKECENTER
+        or (initial.player_x, initial.player_y) != (3, 3)
+        or initial.battle_state != 0
+        or not _event(emulator, EventFlag.GOT_HM02)
+        or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
+        or dux_moves != DUX_MOVES_AFTER
+        or dux_pp_before != DUX_PP_AFTER
+        or not party_core_intact(initial.party_species_ids)
+    ):
+        raise FlyResourceError("Celadon Fly relocation input is not qualified.")
+
+    _move(actions, reader, CELADON_CENTER_TO_OUTDOORS, "Celadon Fly departure")
+    outdoors = reader.read()
+    if outdoors.map_id != MapId.CELADON_CITY or outdoors.battle_state != 0:
+        raise FlyResourceError("Celadon Center exit did not reach the city field.")
+    landings = _fly_to_destination(
+        actions,
+        reader,
+        emulator,
+        MapId.CINNABAR_ISLAND,
+    )
+    raw = reader.read()
+    if raw.map_id != MapId.CINNABAR_ISLAND or (raw.player_x, raw.player_y) != (11, 12):
+        raise FlyResourceError("Fly did not reach the measured Cinnabar landing.")
+    _move(actions, reader, ("up",) * 5, "Cinnabar Center normalization")
+    final = reader.read()
+
+    report = CinnabarFlyArrivalReport(
+        initial_raw=initial,
+        final_raw=final,
+        initial_bag=initial_bag,
+        final_bag=_bag_tuple(emulator),
+        dux_moves=dux_moves,
+        dux_pp_before=dux_pp_before,
+        dux_pp_after=_four(emulator, RamAddress.PARTY_MON_2_PP),
+        fly_landings=landings,
+        party_hp_before=hp_before,
+        party_hp_after=_party_hp(emulator),
+        party_max_hp_before=max_hp_before,
+        party_max_hp_after=_party_max_hp(emulator),
+        party_status_before=status_before,
+        party_status_after=_party_status(emulator),
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=actions.actions_executed,
+        controller_released=not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise FlyResourceError("Cinnabar Fly arrival evidence failed.")
+    return report
+
+
 def _fly_to_celadon(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+) -> tuple[tuple[int, int], ...]:
+    return _fly_to_destination(actions, reader, emulator, MapId.CELADON_CITY)
+
+
+def _fly_to_destination(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    destination: MapId,
 ) -> tuple[tuple[int, int], ...]:
     landings: list[tuple[int, int]] = []
     attempts = [("up", steps) for steps in range(1, FLY_ATTEMPT_LIMIT // 2 + 1)]
     attempts += [("down", steps) for steps in range(1, FLY_ATTEMPT_LIMIT // 2 + 1)]
     for direction, steps in attempts:
         origin = reader.read().map_id
-        if origin == MapId.CELADON_CITY:
+        if origin == destination:
             return tuple(landings)
         _open_fly_map(actions, reader, emulator)
         for _ in range(steps):
@@ -408,11 +545,13 @@ def _fly_to_celadon(
         if landed is None:
             raise FlyResourceError("Fly produced an unknown landing map.")
         landings.append((int(landed), int(raw.player_x or 0)))
-        if landed == MapId.CELADON_CITY:
+        if landed == destination:
             return tuple(landings)
         if landed == origin:
             _close(actions, reader)
-    raise FlyResourceError(f"Fly did not return to Celadon in {len(attempts)} attempts.")
+    raise FlyResourceError(
+        f"Fly did not reach map {int(destination):#04x} in {len(attempts)} attempts."
+    )
 
 
 def _open_fly_map(

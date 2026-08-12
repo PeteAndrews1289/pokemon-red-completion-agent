@@ -36,6 +36,7 @@ from pokemon_red_completion.collection_protocol import (  # noqa: E402
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter  # noqa: E402
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor  # noqa: E402
 from pokemon_red_completion.fly_resource import (  # noqa: E402
+    relocate_celadon_to_cinnabar_by_fly,
     relocate_cinnabar_to_celadon_by_fly,
 )
 from pokemon_red_completion.gen1_field_moves import (  # noqa: E402
@@ -241,6 +242,17 @@ def _can_fly_from_cinnabar_to_origin(
     )
 
 
+def _can_fly_to_cinnabar_skill_boundary(
+    before: RawGameState,
+    boundary: tuple[MapId, tuple[int, int]],
+) -> bool:
+    return (
+        before.map_id == MapId.CELADON_POKECENTER
+        and (before.player_x, before.player_y) == (3, 3)
+        and boundary == (MapId.CINNABAR_POKECENTER, (3, 3))
+    )
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
     if args.speed is not None and not args.watch:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
@@ -399,6 +411,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             )
 
         pre_skill_relocation_report = None
+        pre_skill_fly_report = None
         completion_route_report = None
         skill_report = None
         if args.complete_via_origin_route:
@@ -431,14 +444,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                         "bounded objective has no declared construction boundary"
                     )
                 boundary_map, boundary_at = boundary
-                pre_skill_relocation_report = execute_relocation(
-                    route_world.plan_to_map(
-                        traversal_observer.observe(),
-                        boundary_map.value,
-                        goal_at=boundary_at,
-                    ),
-                    route_name="strategic scenario pre-skill relocation",
-                )
+                if _can_fly_to_cinnabar_skill_boundary(reader.read(), boundary):
+                    pre_skill_fly_report = relocate_celadon_to_cinnabar_by_fly(
+                        emulator,
+                        reader,
+                        tracked_controller,
+                    )
+                else:
+                    pre_skill_relocation_report = execute_relocation(
+                        route_world.plan_to_map(
+                            traversal_observer.observe(),
+                            boundary_map.value,
+                            goal_at=boundary_at,
+                        ),
+                        route_name="strategic scenario pre-skill relocation",
+                    )
                 before = semantic_observer.observe()
                 if COMPLETION_QUEST.completed_ids(before) != initial_completed:
                     raise StrategicScenarioRuntimeError(
@@ -607,7 +627,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         },
         "pre_skill_relocation": {
             "requested": args.relocate_to_skill_boundary,
-            "performed": pre_skill_relocation_report is not None,
+            "performed": (
+                pre_skill_relocation_report is not None
+                or pre_skill_fly_report is not None
+            ),
+            "method": (
+                "fly"
+                if pre_skill_fly_report is not None
+                else ("route" if pre_skill_relocation_report is not None else None)
+            ),
             "acknowledged_steps": (
                 0
                 if pre_skill_relocation_report is None
@@ -632,6 +660,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 0
                 if pre_skill_relocation_report is None
                 else pre_skill_relocation_report.wait_actions
+            ),
+            "fly_attempts": (
+                0
+                if pre_skill_fly_report is None
+                else len(pre_skill_fly_report.fly_landings)
             ),
         },
         "relocation": {

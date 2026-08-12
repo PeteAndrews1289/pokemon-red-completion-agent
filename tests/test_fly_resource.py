@@ -7,9 +7,11 @@ from pokemon_red_completion.cinnabar import (
     DUX_PP_BEFORE,
 )
 from pokemon_red_completion.fly_resource import (
+    CELADON_CENTER_TO_OUTDOORS,
     CENTER_TO_ROUTE_16_TREE,
     CINNABAR_CENTER_TO_OUTDOORS,
     FLY_RESOURCE_CHECKPOINT_COUNT,
+    CinnabarFlyArrivalReport,
     FlyRelocationReport,
     FlyResourceCheckpoint,
     FlyResourceReport,
@@ -139,3 +141,24 @@ def test_fly_relocation_report_rejects_protected_state_drift() -> None:
     )
 
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
+    initial = replace(
+        _raw(),
+        first_party_moves=(44, 70, 61, 57),
+        first_party_pp=(25, 15, 20, 15),
+    )
+    final = replace(initial, map_id=MapId.CINNABAR_POKECENTER)
+    bag = ((4, 1), (15, 7), (int(ItemId.HM02_FLY), 1))
+    report = CinnabarFlyArrivalReport(
+        initial, final, bag, bag, DUX_MOVES_AFTER, DUX_PP_AFTER, DUX_PP_AFTER,
+        ((int(MapId.CINNABAR_ISLAND), 11),),
+        (125, 53, 37, 140), (125, 53, 37, 140),
+        (125, 53, 37, 140), (125, 53, 37, 140),
+        (0, 0, 0, 0), (0, 0, 0, 0), 10_000, 100, True,
+    )
+
+    assert CELADON_CENTER_TO_OUTDOORS == ("down",) * 5
+    assert report.passed
+    assert not replace(report, final_bag=report.final_bag[:-1]).passed
