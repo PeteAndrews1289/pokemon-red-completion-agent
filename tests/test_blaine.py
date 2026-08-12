@@ -33,6 +33,7 @@ from pokemon_red_completion.blaine import (
     MANSION_B1F_TO_NORTH_STATUE,
     MANSION_B1F_TO_SECRET_KEY,
     MANSION_DEVELOPMENT_POLICY,
+    MANSION_DIG_RETURN_MAPS,
     MANSION_ESCORT_ENEMY_SPECIES,
     MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
     MANSION_MAX_CONSECUTIVE_FLEES,
@@ -130,6 +131,12 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert BLAINE_MONEY_DELTA == 11_933
     assert BLAINE_ANTIDOTE_SALE_VALUE == 50
     assert BLAINE_MAX_WILD_FLEES == 3
+    assert MANSION_DIG_RETURN_MAPS == (
+        MapId.CINNABAR_ISLAND,
+        MapId.CELADON_CITY,
+        MapId.SAFFRON_CITY,
+        MapId.VERMILION_CITY,
+    )
     assert CENTER_TO_MANSION == (
         ("down",) * 5 + ("right",) * 7 + ("up",) * 7 + ("left", "up") + ("left",) * 11 + ("up",)
     )
@@ -167,6 +174,7 @@ def test_mansion_only_runner_stops_before_training_and_blaine() -> None:
     }
 
     assert "_pick_up_secret_key" in calls
+    assert "_return_from_mansion_to_cinnabar" in calls
     assert "run_red_team_balancing" not in calls
     assert "_run_mansion_training" not in calls
     assert "run_adaptive_trainer_battle" not in calls

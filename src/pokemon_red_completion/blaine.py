@@ -1076,8 +1076,7 @@ def run_mansion_secret_key_chapter(
         "Recovered Secret Key",
     )
 
-    _field_dig(actions, reader, emulator)
-    _field_fly_to_cinnabar(actions, reader, emulator)
+    _return_from_mansion_to_cinnabar(actions, reader, emulator)
     _move(actions, reader, ("up",), "Cinnabar Center entry")
     _move(actions, reader, ("up",) * 4, "Cinnabar nurse")
     _heal(actions, reader, emulator)
@@ -1311,10 +1310,7 @@ def run_blaine_chapter(
         "Recovered Secret Key",
     )
 
-    _field_dig(actions, reader, emulator)
-    _require(reader.read(), MapId.SAFFRON_CITY, (9, 30), "Mansion Dig return")
-    _field_fly_to_cinnabar(actions, reader, emulator)
-    _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "Cinnabar Fly return")
+    _return_from_mansion_to_cinnabar(actions, reader, emulator)
     _move(actions, reader, ("up",), "Cinnabar Center entry")
     _require(reader.read(), MapId.CINNABAR_POKECENTER, (3, 7), "Cinnabar Center")
     _move(actions, reader, ("up",) * 4, "Cinnabar nurse")
@@ -2210,6 +2206,40 @@ def _field_dig(
     ):
         raise BlaineChapterError("Field Dig changed protected party or inventory state.")
     return reader.read()
+
+
+MANSION_DIG_RETURN_MAPS = (
+    MapId.CINNABAR_ISLAND,
+    MapId.CELADON_CITY,
+    MapId.SAFFRON_CITY,
+    MapId.VERMILION_CITY,
+)
+
+
+def _return_from_mansion_to_cinnabar(actions, reader, emulator) -> None:
+    """Return from the Mansion for every authenticated healing anchor.
+
+    Dig returns to the save's current blackout/healing anchor, not to a place
+    implied by the objective frontier.  Older captures happened to return to
+    Saffron.  Construction lineages can legitimately retain Celadon, Cinnabar,
+    or Vermilion instead, so observe the landing and fly only when necessary.
+    """
+
+    destination = _field_dig(
+        actions,
+        reader,
+        emulator,
+        expected_map=MANSION_DIG_RETURN_MAPS,
+    )
+    if destination.map_id != MapId.CINNABAR_ISLAND:
+        _fly_to_town(
+            actions,
+            reader,
+            emulator,
+            MapId.CINNABAR_ISLAND,
+            "Mansion Dig return to Cinnabar",
+        )
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (11, 12), "Cinnabar return")
 
 
 def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
