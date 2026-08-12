@@ -67,6 +67,7 @@ def _report() -> SafariChapterReport:
         balls_milestones=(30,) * 7,
         got_tm40_skull_bash=True,
         gold_teeth=True,
+        gold_teeth_precollected=False,
         got_hm03=True,
         hm03_retained=True,
         in_safari_zone=False,
@@ -145,6 +146,8 @@ def test_safari_timing_is_positive_and_bounded() -> None:
 
 def test_safari_report_accepts_exact_post_silph_surf_lineage() -> None:
     report = _report()
+    initial_bag = tuple(sorted((*report.initial_bag, (int(ItemId.TM40_SKULL_BASH), 1))))
+    final_bag = tuple(sorted((*initial_bag, (int(ItemId.HM03_SURF), 1))))
     raw = replace(
         report.final_raw,
         first_party_moves=POST_SILPH_MOVES_AFTER_SURF,
@@ -153,6 +156,10 @@ def test_safari_report_accepts_exact_post_silph_surf_lineage() -> None:
     qualified = replace(
         report,
         final_raw=raw,
+        initial_bag=initial_bag,
+        final_bag=final_bag,
+        gold_teeth=False,
+        gold_teeth_precollected=True,
         moves_before=POST_SILPH_MOVES_BEFORE_SURF,
         moves_after=POST_SILPH_MOVES_AFTER_SURF,
         pp_before=(25, 15, 10, 25),

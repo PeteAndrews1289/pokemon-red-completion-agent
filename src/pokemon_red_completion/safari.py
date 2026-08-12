@@ -139,6 +139,7 @@ class SafariChapterReport:
     balls_milestones: tuple[int, ...]
     got_tm40_skull_bash: bool
     gold_teeth: bool
+    gold_teeth_precollected: bool
     got_hm03: bool
     hm03_retained: bool
     in_safari_zone: bool
@@ -160,23 +161,23 @@ class SafariChapterReport:
     @property
     def passed(self) -> bool:
         lineage = SURF_MOVE_LINEAGES.get(self.moves_before)
-        expected_final_bag = tuple(
-            sorted(
-                (
-                    *self.initial_bag,
-                    (int(ItemId.GOLD_TEETH), 1),
-                    (int(ItemId.HM03_SURF), 1),
-                    (int(ItemId.TM40_SKULL_BASH), 1),
-                )
+        new_items = (
+            ((int(ItemId.HM03_SURF), 1),)
+            if self.gold_teeth_precollected
+            else (
+                (int(ItemId.GOLD_TEETH), 1),
+                (int(ItemId.HM03_SURF), 1),
+                (int(ItemId.TM40_SKULL_BASH), 1),
             )
         )
+        expected_final_bag = tuple(sorted((*self.initial_bag, *new_items)))
         return (
             len(self.records) == SAFARI_CHECKPOINT_COUNT
             and self.initial_money - self.final_money == 500
             and self.counter_milestones == (500, 472, 376, 238, 228, 201, 0)
             and self.balls_milestones == (30,) * 7
             and self.got_tm40_skull_bash
-            and self.gold_teeth
+            and (self.gold_teeth != self.gold_teeth_precollected)
             and self.got_hm03
             and self.hm03_retained
             and not self.in_safari_zone
@@ -219,6 +220,7 @@ class SafariChapterReport:
             "rewards": {
                 "tm40_skull_bash": self.got_tm40_skull_bash,
                 "gold_teeth": self.gold_teeth,
+                "gold_teeth_precollected": self.gold_teeth_precollected,
                 "got_hm03_event": self.got_hm03,
                 "hm03_reusable_and_retained": self.hm03_retained,
             },
@@ -533,6 +535,11 @@ def run_safari_chapter(
     if lineage is None:
         raise SafariChapterError(f"Unexpected pre-Surf moves: {moves_before!r}.")
     expected_moves_after, expected_pp_after = lineage
+    gold_teeth_precollected = (
+        moves_before == POST_SILPH_MOVES_BEFORE_SURF
+        and ItemId.TM40_SKULL_BASH in _bag(emulator)
+        and ItemId.GOLD_TEETH not in _bag(emulator)
+    )
     pp_before = tuple(initial.first_party_pp or ())
     if len(pp_before) != 4 or any(pp <= 0 for pp in pp_before):
         raise SafariChapterError(f"Unexpected pre-Surf PP: {pp_before!r}.")
@@ -586,11 +593,21 @@ def run_safari_chapter(
         ball_milestones.append(_balls(emulator))
         _checkpoint(records, progress, emulator, reader.read(), checkpoint_id, label)
 
-    _pulse(actions, MacroActionKind.MOVE, "up", frames=timing.wait_frames)
-    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    if ItemId.GOLD_TEETH not in _bag(emulator):
-        raise SafariChapterError("Gold Teeth pickup failed.")
-    _checkpoint(records, progress, emulator, reader.read(), "teeth", "Collected Gold Teeth")
+    if gold_teeth_precollected:
+        _checkpoint(
+            records,
+            progress,
+            emulator,
+            reader.read(),
+            "teeth",
+            "Verified prior Gold Teeth route",
+        )
+    else:
+        _pulse(actions, MacroActionKind.MOVE, "up", frames=timing.wait_frames)
+        _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+        if ItemId.GOLD_TEETH not in _bag(emulator):
+            raise SafariChapterError("Gold Teeth pickup failed.")
+        _checkpoint(records, progress, emulator, reader.read(), "teeth", "Collected Gold Teeth")
 
     encounters += _move(actions, reader, emulator, TEETH_TO_HOUSE, timing, "Secret House")
     _require(reader.read(), MapId.SAFARI_ZONE_SECRET_HOUSE, (2, 7), "Secret House")
@@ -679,6 +696,7 @@ def run_safari_chapter(
         tuple(ball_milestones),
         ItemId.TM40_SKULL_BASH in _bag(emulator),
         ItemId.GOLD_TEETH in _bag(emulator),
+        gold_teeth_precollected,
         _event(emulator, EventFlag.GOT_HM03),
         ItemId.HM03_SURF in _bag(emulator),
         _event(emulator, EventFlag.IN_SAFARI_ZONE),
