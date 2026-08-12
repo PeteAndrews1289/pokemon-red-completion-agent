@@ -65,15 +65,6 @@ RED_QUALIFIED_SKILL_ORDER_CONTRACTS = (
         ),
     ),
     QualifiedSkillOrderContract(
-        objective_id="defeat_erika",
-        required_objective_ids=frozenset({"defeat_koga"}),
-        reason=(
-            "The early Erika skill accepts the pre-Surf Celadon party; the "
-            "post-Strength Erika skill still requires the post-Koga party."
-        ),
-        when_objective_ids=frozenset({"obtain_strength"}),
-    ),
-    QualifiedSkillOrderContract(
         objective_id="reach_cinnabar",
         required_objective_ids=frozenset({"obtain_surf", "defeat_sabrina"}),
         reason=(

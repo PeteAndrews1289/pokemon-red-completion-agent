@@ -203,6 +203,7 @@ class ErikaChapterReport:
     moves_after: tuple[int, ...]
     money_before: int
     money_after: int
+    badge_bits_before: int
     badge_bits: int
     beat_gym_flags: int
     got_tm21: bool
@@ -247,14 +248,15 @@ class ErikaChapterReport:
             and self.money_before >= 0
             and self.money_after
             == self.money_before + ERIKA_TRAINER_REWARD_TOTAL - ERIKA_ICE_BEAM_PREPARATION_COST
-            and self.badge_bits == 0x1F
+            and self.badge_bits_before in {0x07, 0x17}
+            and self.badge_bits == self.badge_bits_before | int(Badge.RAINBOW)
             and self.beat_gym_flags & int(Badge.RAINBOW)
             and self.got_tm21
             and self.beat_erika
             and self.gym_events_before == (False,) * 7
             and self.gym_events_after == (True,) * 7
-            and self.optional_route_events_before == (False,) * 20
-            and self.optional_route_events_after == (False,) * 20
+            and len(self.optional_route_events_before) == 20
+            and self.optional_route_events_after == self.optional_route_events_before
             and dict(self.final_bag).get(int(ItemId.TM21_MEGA_DRAIN)) == 1
             and int(ItemId.POKE_FLUTE) not in dict(self.final_bag)
             and int(ItemId.TM13_ICE_BEAM) not in dict(self.final_bag)
@@ -319,6 +321,7 @@ class ErikaChapterReport:
                 },
             },
             "rainbow_badge": {
+                "badges_before": self.badge_bits_before,
                 "obtained_badges": self.badge_bits,
                 "beat_gym_flags": self.beat_gym_flags,
                 "beat_erika": self.beat_erika,
@@ -695,6 +698,7 @@ def run_erika_chapter(
     ):
         raise ErikaChapterError("Erika input boundary is not pristine.")
     money_before = _money(emulator)
+    badge_bits_before = emulator.read_u8(RamAddress.OBTAINED_BADGES)
     events_before = _gym_events(emulator)
     optional_events_before = _optional_route_events(emulator)
     if initial.first_party_level is None:
@@ -999,6 +1003,7 @@ def run_erika_chapter(
         moves_after=tuple(final.first_party_moves or ()),
         money_before=money_before,
         money_after=_money(emulator),
+        badge_bits_before=badge_bits_before,
         badge_bits=emulator.read_u8(RamAddress.OBTAINED_BADGES),
         beat_gym_flags=emulator.read_u8(RamAddress.BEAT_GYM_FLAGS),
         got_tm21=_event(emulator, EventFlag.GOT_TM21),

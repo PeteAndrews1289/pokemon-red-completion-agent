@@ -839,7 +839,13 @@ def acquire_and_teach_ice_beam_from_celadon_center(
     if buy_silph_battle_items:
         _buy_silph_x_special(actions, reader, emulator, timing)
     roof_money_before = _money(emulator)
-    _move(actions, reader, MART_5F_TO_ROOF, timing)
+    _move_verified(
+        actions,
+        reader,
+        MART_5F_TO_ROOF,
+        timing,
+        "Celadon Ice Beam roof approach",
+    )
     _require(reader.read(), MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof")
     transfer_before_event = _acquire_and_teach_ice_beam_on_roof(
         actions,

@@ -42,9 +42,7 @@ class _Report:
         return {"status": "ok", "trainers": 5}
 
 
-def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary() -> (
-    None
-):
+def test_midgame_registry_has_one_canonical_skill_for_every_composite_boundary() -> None:
     registry = build_red_midgame_objective_skill_registry(
         object(),  # type: ignore[arg-type]
         object(),  # type: ignore[arg-type]
@@ -299,6 +297,13 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert strength.availability(surf_ready).executable
     post_strength = surf_ready.with_facts("badge:soul", "move:strength_available")
     assert erika.availability(post_strength).executable
+    assert erika.availability(
+        GameState(
+            GameMode.OVERWORLD,
+            facts=frozenset({"move:strength_available"}),
+            location="fuchsia_pokecenter",
+        )
+    ).executable
     assert erika.availability(celadon).executable
     post_erika = GameState(
         GameMode.OVERWORLD,
@@ -373,9 +378,7 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     )
     assert champion.availability(champion_room).executable
     assert champion.additional_effect_facts == frozenset({"game:hall_of_fame"})
-    automatic_terminal = champion_room.with_facts(
-        "league:champion_defeated", "game:hall_of_fame"
-    )
+    automatic_terminal = champion_room.with_facts("league:champion_defeated", "game:hall_of_fame")
     assert not champion.availability(automatic_terminal).executable
 
 
@@ -539,9 +542,7 @@ def test_erika_skill_dispatches_from_the_live_authenticated_boundary(
         calls.append(runner_name)
         return _Report(actions_executed=2_000, frames_executed=300_000)
 
-    monkeypatch.setattr(
-        f"pokemon_red_completion.red_objective_skills.{runner_name}", fake_run
-    )
+    monkeypatch.setattr(f"pokemon_red_completion.red_objective_skills.{runner_name}", fake_run)
     skill = DefeatErikaObjectiveSkill(object(), _Reader(), object())  # type: ignore[arg-type]
 
     result = skill.execute()

@@ -71,6 +71,7 @@ def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
         moves_after=(0x82, STRENGTH, 0x3A, 0x39),
         money_before=28_191,
         money_after=32_047,
+        badge_bits_before=0x17,
         badge_bits=0x1F,
         beat_gym_flags=int(
             Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
@@ -91,6 +92,15 @@ def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
     )
 
     assert report.passed
+    assert replace(
+        report,
+        badge_bits_before=0x07,
+        badge_bits=0x0F,
+        beat_gym_flags=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW),
+        optional_route_events_before=(True,) * 4 + (False,) * 16,
+        optional_route_events_after=(True,) * 4 + (False,) * 16,
+    ).passed
+    assert not replace(report, optional_route_events_after=(True,) + (False,) * 19).passed
     learning = report.public_dict()["erika"]["skull_bash_preparation"]
     assert learning == {
         "source": "Safari Zone North TM40",
@@ -134,6 +144,7 @@ def test_erika_report_accepts_two_post_battle_levels_and_rejects_incomplete_heal
         moves_after=(0x82, STRENGTH, 0x3A, 0x39),
         money_before=28_191,
         money_after=32_047,
+        badge_bits_before=0x17,
         badge_bits=0x1F,
         beat_gym_flags=int(
             Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL

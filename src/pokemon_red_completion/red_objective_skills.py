@@ -343,7 +343,6 @@ class DefeatErikaObjectiveSkill:
         post_strength = (
             state.mode.value == "overworld"
             and state.location == "fuchsia_pokecenter"
-            and "badge:soul" in state.facts
             and "move:strength_available" in state.facts
             and "badge:rainbow" not in state.facts
         )
@@ -631,12 +630,8 @@ class DefeatBlaineObjectiveSkill:
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None
-    training_candidate_decision_sink: (
-        Callable[[TrainingCandidateDecision], None] | None
-    ) = None
-    training_candidate_decision_authority: (
-        Callable[[TrainingCandidateDecision], int] | None
-    ) = None
+    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None
+    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None
     objective_id: str = "defeat_blaine"
     specialist: Specialist = Specialist.BATTLE
     expected_facts: frozenset[str] = frozenset({"badge:volcano"})
@@ -785,9 +780,7 @@ class DefeatLoreleiObjectiveSkill:
         )
         return ObjectiveSkillAvailability(
             executable,
-            "Observed the qualified Indigo terminal."
-            if executable
-            else "Requires Indigo.",
+            "Observed the qualified Indigo terminal." if executable else "Requires Indigo.",
         )
 
     def execute(self) -> ObjectiveSkillExecution:
@@ -961,9 +954,7 @@ def build_red_midgame_objective_skill_registry(
     training_decision_authority: (
         Callable[[TrainingControlDecision], TrainingControlAction] | None
     ) = None,
-    training_candidate_decision_sink: (
-        Callable[[TrainingCandidateDecision], None] | None
-    ) = None,
+    training_candidate_decision_sink: (Callable[[TrainingCandidateDecision], None] | None) = None,
     training_candidate_decision_authority: (
         Callable[[TrainingCandidateDecision], int] | None
     ) = None,
