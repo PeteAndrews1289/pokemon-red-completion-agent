@@ -552,6 +552,39 @@ being wrong honestly before it was allowed to make a final claim.
 
 ---
 
+## Act XVII: the rehearsal that failed before the ocean
+
+The first live qualification looked persuasive. From a public validation capture, the production
+adapter authenticated Celadon, relocated to Saffron, planned every candidate, closed without asking
+the teacher and changed nothing on disk. Its exact source passed CI. The typed receipt said what it
+had proved.
+
+Then the reviewer asked a better question: had it proved the route the sealed test would actually
+need? Two cases begin in Saffron and ask the model about Cinnabar. That means a journey through the
+sea, and the successful rehearsal had never touched Surf.
+
+The substitute was a train capture, not a peek at test. It started in Saffron with Cinnabar already
+authenticated by its completed story frontier. The run did not even reach the water. At the north
+gate of Viridian Forest, the map decoder said the destination warp was `(0,5)`. The cartridge said
+the player had finished the doorway animation at `(1,5)`. One tile was enough to stop the entire
+route.
+
+That mismatch already existed elsewhere in the system. A return edge through a south-facing door
+had taught the planner that the animation walks one square beyond the exterior warp. The code had
+mistaken the edge label—`return`—for the mechanic. Route 2 used an ordinary directional warp, but
+the cartridge played the same doorway step. The repair moved the rule to the behavior it describes.
+
+The failed qualification also exposed a reporting flaw. It closed safely, but the command left only
+a traceback unless someone manually preserved the observation. The next version writes evidence
+for failure as deliberately as for success: a typed negative receipt, no private path, no teacher,
+zero test access, unchanged capture, and a nonzero exit that automation cannot mistake for green.
+
+The seal still reads **0/12**. The most valuable result of the rehearsal was not that the agent
+crossed Kanto. It was that a cheap public failure prevented two expensive one-shot failures from
+being blamed on the model.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -620,8 +653,10 @@ Being precise about this matters more than the story sounding finished.
   the learned objective loop now reproduces the post-Celadon portion, not a clean-power route.
 - A five-coefficient strategic destination ranker was selected on 24 training choices and scored
   10/12 on 12 development choices versus 4/12 for cheapest route. This is development evidence.
-  Its one-shot 12-case final test remains unopened at 0/12; independent adapter audit, live
-  non-test relocation qualification, the real path-free catalog and owner authorization remain.
+  Its one-shot 12-case final test remains unopened at 0/12. One live Celadon-to-Saffron adapter
+  qualification passed; a harder public Saffron-to-Cinnabar rehearsal exposed and repaired a
+  doorway-arrival defect before Surf. Published hard-route requalification, independent
+  authorization audit, the real path-free catalog and owner authorization remain.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.

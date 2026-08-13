@@ -253,15 +253,52 @@ a live qualification result or authorization. The final local gate is 2,887 pass
 integration tests deselected and one expected failure; 93 focused boundary tests, generated
 identity checks, Ruff and mypy across 168 source files are also clean.
 
+## Finding 8: the easy relocation did not cover the hard relocation
+
+Schema v7 was published at exact commit `b640ecb1c140eff120196b0ad6f7702f2068d0e9`; CI passed, and
+the shared production path passed an explicit Celadon-to-Saffron validation qualification. Its
+typed evidence proved complete candidate planning, unchanged capture and ROM-adjacent artifacts,
+no teacher execution and zero sealed cases opened. The authorization-level audit independently
+verified all bindings, then refused authorization for a new reason: sealed cases 011 and 012 start
+in Saffron and relocate to Cinnabar through Routes 19 and 20. The adapter's relocation path had not
+yet performed a Surf crossing.
+
+Scenario 046 supplies an explicit train-partition Saffron capture whose completed frontier already
+authenticates Cinnabar. Its non-test qualification reproduced the exact relocation class without
+opening a test case. The run failed before reaching water. Route 2's south-facing ordinary warp at
+`(11,3)` decoded an arrival on map 47 at `(0,5)`, but live RAM settled at `(1,5)`. The planner had
+already measured this extra doorway step for a `return` edge and incorrectly restricted the rule to
+that edge kind. The failed attempt left the capture and ROM-adjacent artifacts unchanged, ran no
+teacher, and retained test access at 0/12. Its canonical failure evidence SHA-256 is
+`e00954d20e19b68acb828daf6a16a34d534df5b463238ae2754a5d6859df2e5f`; its typed `failed` receipt
+SHA-256 is `7fa9829427b30c6d81320d1eddabe13671560fa8c68f16680b8da4ad40ab22fc`.
+
+Schema v8 applies the live-measured one-tile settlement to any south-facing directional warp, while
+existing north and horizontal passage tests preserve their different semantics. A Route 2-specific
+regression distinguishes ordinary warps from returns. The qualifier now catches expected route
+execution/planning failures after authentication, rechecks source bytes and ROM-adjacent artifacts,
+emits a path-free v2 observation, builds and parses a typed `failed` receipt, writes both new files
+and exits nonzero. Exception text and private paths are never evidence fields, and a valid failed
+receipt still cannot authorize.
+
+The v8 plan is 13,664 bytes with SHA-256
+`fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`; source bundle
+`d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60`; teacher execution
+`827446bfe2f7c5b39da5311912b41872169804228010e211616d33dc79edd507`. The seventh pre-access
+amendment supersedes v7 while preserving the frozen model, twelve case identities, case order,
+endpoints and one-shot rules. Publication, exact-commit CI and a fresh Saffron-to-Cinnabar pass are
+still required; this source state does not claim authorization.
+
 ## Stop line and next work
 
 Do not open, preflight, materialize or score a private test capture yet. The safe order is:
 
-1. publish schema v7 as one exact commit and require green exact-commit CI;
-2. live-qualify the shared relocation path on one explicit non-test cartridge state, run no
+1. publish schema v8 as one exact commit and require green exact-commit CI;
+2. rerun the shared path on the explicit scenario-046 Saffron-to-Cinnabar non-test state, run no
    teacher, open zero test cases and preserve the path-free evidence plus typed receipt outside the
    repository;
-3. independently audit that exact commit and live evidence, producing a typed
+3. independently audit that exact commit, the historical failure and the fresh hard-route evidence,
+   producing a typed
    `approved_for_authorization` receipt only if the whole gate is clean;
 4. obtain a custodian-supplied canonical path-free manifest for the test catalog, then obtain owner
    authorization bound to the final plan, source, model, teacher, both favorable receipts and
@@ -286,10 +323,12 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Sealed executor/scorer implementation audit](evidence/strategic-sealed-executor-implementation-audit-2026-08-13.json)
 - [Superseded schema-v5 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v5-freeze-2026-08-13.json)
 - [Superseded schema-v6 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v6-freeze-2026-08-13.json)
-- [Current schema-v7 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json)
+- [Superseded schema-v7 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json)
+- [Current schema-v8 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v8-freeze-2026-08-13.json)
 - [ROM-free sealed-adapter qualification](evidence/strategic-sealed-adapter-rom-free-qualification-2026-08-13.json)
 - [Linear pre-test audit handoff](claude-linear-pre-test-audit-handoff-2026-08-13.md)
 - [Sealed endpoint-amendment audit handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md)
 - [Sealed executor/scorer audit handoff](claude-sealed-executor-audit-handoff-2026-08-13.md)
 - [Sealed adapter audit handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md)
 - [Typed-receipt and live-qualification audit handoff](claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md)
+- [Directional-warp repair audit handoff](claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md)

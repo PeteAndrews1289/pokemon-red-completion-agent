@@ -28,15 +28,17 @@
 > mandatory in owner authorization and runtime preflight, closed dataclass-cloning and root-symlink
 > loopholes, and requires cleanup capability before the execution ledger can start. Claude's next
 > audit killed 18/18 semantic mutations and approved live non-test qualification, but found that a
-> bare receipt digest could not distinguish approval from “changes required.” Schema v7 now parses
-> typed allowlisted verdicts bound to the exact plan, executable source bundle, full commit and
-> evidence; unfavorable receipts remain valid records but cannot authorize. The live qualifier
-> shares the production authentication/relocation/planning path, accepts one explicit learning
-> capture, refuses test-partition access, runs no teacher and verifies no state change. The exact
-> schema-v7 plan digest is
-> `d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`. Exact-commit CI, the live
-> non-test qualification, a final authorization-level audit, a custodian-supplied path-free
-> catalog and owner authorization are still gates. Test remains 0/12 and no authorization receipt
+> bare receipt digest could not distinguish approval from “changes required.” Schema v7 added typed
+> verdicts and passed a published Celadon-to-Saffron non-test qualification. The authorization-level
+> audit then found that two sealed cases require the harder Saffron-to-Cinnabar Surf relocation. A
+> public train capture exposed a real pre-Surf doorway mismatch: the cartridge settled one square
+> beyond the ordinary warp's decoded destination. The failed attempt changed no capture, ran no
+> teacher and opened 0/12 test cases; its negative receipt is preserved. Schema v8 generalizes the
+> measured doorway rule to directional ordinary warps and makes expected live failures write typed,
+> path-free `failed` receipts with a nonzero exit. The exact v8 plan digest is
+> `fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`. Exact-commit CI, a fresh
+> Saffron-to-Cinnabar qualification, final authorization-level audit, custodian-supplied path-free
+> catalog and owner authorization remain gates. Test remains 0/12 and no authorization receipt
 > exists. See the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted

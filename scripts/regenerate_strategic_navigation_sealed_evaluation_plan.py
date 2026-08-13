@@ -32,8 +32,8 @@ DEVELOPMENT_RECEIPT = (
     ROOT / "docs" / "evidence" / "strategic-navigation-linear-development-2026-08-13.json"
 )
 STRATEGIC_COLLECTION_REGISTRY = ROOT / "configs" / "red-strategic-navigation-collection-v1.json"
-PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v7"
-DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v7"
+PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
+DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8"
 CASE_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-case-v1"
 EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
 V1_PLAN_SHA256 = "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
@@ -42,6 +42,7 @@ V3_PLAN_SHA256 = "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4f
 V4_PLAN_SHA256 = "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
 V5_PLAN_SHA256 = "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
 V6_PLAN_SHA256 = "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
+V7_PLAN_SHA256 = "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
 FROZEN_MODEL_SHA256 = "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
 FROZEN_MODEL_FILE_SHA256 = "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd"
 FROZEN_FEATURES = (
@@ -139,6 +140,9 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             "catalog_contains_private_paths": False,
             "catalog_contains_route_costs_or_answers": False,
             "input_representation": "unlabeled_identity_free_policy_question",
+            "non_test_qualification_failure": (
+                "typed_failed_receipt_zero_test_access_and_nonzero_exit"
+            ),
             "private_case_open": "only_after_durable_case_claim",
             "teacher_execution": "only_after_durable_prediction_commitment",
         },
@@ -201,6 +205,17 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                     "distinguish_unfavorable_verdicts"
                 ),
                 "supersedes_plan_sha256": V6_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": (
+                    "bind_directional_warp_arrival_and_durable_failed_qualification_receipts"
+                ),
+                "reason": (
+                    "live_non_test_saffron_cinnabar_qualification_exposed_"
+                    "directional_door_arrival_mismatch"
+                ),
+                "supersedes_plan_sha256": V7_PLAN_SHA256,
             },
         ],
         "baseline": {

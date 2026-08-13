@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-13): independently audit and live-qualify the sealed adapter
+## Current focus (2026-08-13): requalify the hardest sealed-adapter relocation
 
 The non-test campaign is complete. All 36 counted learning scenarios were executed exactly once:
 24 train and 12 validation, with one successful destination choice per episode, 36 unique policy
@@ -34,7 +34,7 @@ access, the plan was amended: the ten challenges are the primary endpoint, all-t
 mandatory, and the other two cases form a separate safety gate. Claude approved that amendment and
 corrected the realistic power estimate to roughly 42–68% under an 85% challenge-validity
 assumption. The public executor/scorer core and prediction-first cartridge boundary are now
-implemented under a schema-v7 plan. The adapter uses a path-free digest catalog, accepts only the
+implemented under a schema-v8 plan. The adapter uses a path-free digest catalog, accepts only the
 exact frozen linear scorer, and exposes unlabeled identity-free candidate rows.
 
 Self-audit found that ten challenge origins differ from their source snapshot origins. The adapter
@@ -43,14 +43,22 @@ delta and plans candidates only after authenticating the declared challenge orig
 killed 18/18 semantic mutations and approved live qualification, but found that bare evidence
 digests could not distinguish favorable and unfavorable receipts.
 
-Schema v7 repairs that final human-memory dependency. Typed canonical receipts bind an allowlisted
+Schema v7 repaired that human-memory dependency. Typed canonical receipts bind an allowlisted
 verdict to the exact evaluation, plan, source bundle, full source commit and evidence. Only
 `approved_for_authorization` plus a `passed` non-test qualification with zero test cases opened can
 enter owner authorization or runtime preflight. The non-test command shares the production
 authentication/relocation/planning path, accepts one explicitly named learning capture, refuses the
 test partition before input access, runs no teacher and verifies no state or ROM-adjacent change.
-The exact plan is 13,262 bytes with SHA-256
-`d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`. Test remains **0/12 opened**;
+Published `b640ecb` passed that path from Celadon to Saffron. Claude's authorization audit then found
+that two public sealed cases require Saffron to Cinnabar through Surf, which remained unqualified.
+
+The explicit scenario-046 train capture exposed a real defect before Surf: a south-facing ordinary
+warp into the Viridian Forest north gate settled one tile beyond the decoded destination. The
+attempt ran no teacher, changed no capture or ROM-adjacent artifact and opened no test case. Schema
+v8 generalizes the measured doorway settlement to ordinary directional warps and ensures future
+expected live failures write a path-free typed `failed` receipt and exit nonzero. The exact plan is
+13,664 bytes with SHA-256
+`fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`. Test remains **0/12 opened**;
 no real catalog or owner authorization exists.
 
 Ordered next work:
@@ -73,25 +81,31 @@ Ordered next work:
 6. **Complete for schema v6:** Claude independently killed 18/18 adapter and optional-stopping
    mutations, found no answer leakage, approved live qualification and explicitly withheld
    authorization because receipt verdicts were not parsed.
-7. **Complete in source; publication pending:** schema v7 adds typed external-audit and non-test
+7. **Complete and live-qualified on one relocation:** schema v7 added typed external-audit and non-test
    qualification receipts with explicit verdict, plan, source-bundle, full-commit and evidence
-   binding. Authorization construction, parsing and preflight reject valid unfavorable receipts.
-8. Publish the exact source and require green CI. Then run the shared production path once on an
-   explicitly named non-test cartridge capture, without the teacher, and preserve the path-free
-   evidence and typed qualification receipt outside the repository.
-9. Independently attack that exact commit and live evidence using the
-   [authorization-readiness handoff](claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md).
+   binding. Published `b640ecb` passed Celadon-to-Saffron; authorization construction, parsing and
+   preflight reject valid unfavorable receipts.
+8. **Complete, failure preserved:** Claude's authorization audit identified the missing hard route.
+   Scenario 046 reproduced Saffron-to-Cinnabar without test access and failed at the measured Route
+   2 doorway settlement before Surf.
+9. **Complete in source; publication pending:** schema v8 repairs ordinary directional-warp arrival,
+   adds its exact regression and writes typed path-free evidence for expected qualification failures.
+10. Publish the exact v8 source and require green CI. Rerun the same explicit scenario-046
+   Saffron-to-Cinnabar qualification without the teacher; preserve both evidence and receipt outside
+   the repository.
+11. Independently attack that exact commit and live evidence using the
+   [directional-warp repair handoff](claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md).
    Only a typed `approved_for_authorization` verdict can satisfy the next gate.
-10. Obtain a custodian-supplied canonical path-free manifest for the twelve test captures. Do not
+12. Obtain a custodian-supplied canonical path-free manifest for the twelve test captures. Do not
    add private-storage enumeration to the sealed code and do not treat later evaluation authority
    as retroactive inventory permission.
-11. Only after those gates and explicit owner authorization, measure the frozen baseline capability
+13. Only after those gates and explicit owner authorization, measure the frozen baseline capability
    and run the one-shot model comparison. Publish every result, favorable, unfavorable, failed or
    inconclusive.
-12. Only after offline test, add shadow execution in live strategic choices. The deterministic
+14. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.
-13. Expand context semantics before cross-title transfer. The current 36 examples all express the
+15. Expand context semantics before cross-title transfer. The current 36 examples all express the
    same broad story-advance need and the same safe-overworld origin tags, so those feature columns
    are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
    training and recovery—not merely repeat Red's story sequence.

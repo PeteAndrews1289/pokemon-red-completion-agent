@@ -747,17 +747,17 @@ def _warp_transition(
         if index is None or index >= len(locations):
             raise RoutePlanningError(f"return to map {target_map} has no destination warp {index}")
         arrival = locations[index]
-        if edge.exit_action == "down" and not action_in_approach:
-            # South-facing exits play the doorway step one square beyond the
-            # exterior warp. A directional north exit still requires its
-            # second UP inside, but settles *on* the outside warp. Route 6's
-            # north Underground Path gate is the live witness; its planner has
-            # to move sideways/down before heading north or it retriggers.
-            arrival = arrival[0] + 1, arrival[1]
-        elif edge.exit_action not in {None, "up", "down", "left", "right"}:
-            raise RoutePlanningError(f"unsupported boundary return action {edge.exit_action!r}")
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
+    if edge.exit_action == "down" and not action_in_approach:
+        # South-facing directional passages play the doorway step one square
+        # beyond the destination warp. This is shared by returns and ordinary
+        # pass-through warps: Route 6's return and Route 2's Viridian Forest
+        # north gate are live cartridge witnesses. Directional north exits
+        # still settle *on* the outside warp.
+        arrival = arrival[0] + 1, arrival[1]
+    elif edge.exit_action not in {None, "up", "down", "left", "right"}:
+        raise RoutePlanningError(f"unsupported directional warp action {edge.exit_action!r}")
     action = approach.edges[-1].action if action_in_approach else edge.exit_action
     if action is None:  # pragma: no cover - guarded by the cases above
         raise RoutePlanningError("warp transition has no triggering action")

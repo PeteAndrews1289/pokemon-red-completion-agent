@@ -142,6 +142,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         source_commit=source.git_commit,
     )
     evidence_payload = observation.canonical_payload()
+    result_document = observation.public_dict()["result"]
+    if not isinstance(result_document, dict):  # pragma: no cover - trusted observation type
+        raise StrategicSealedAdapterError("qualification result is malformed")
+    status = result_document.get("status")
+    if status not in {"passed", "failed"}:
+        raise StrategicSealedAdapterError("qualification result status is invalid")
     receipt_payload = build_strategic_sealed_non_test_qualification_receipt(
         plan,
         receipt_id=args.receipt_id,
@@ -149,7 +155,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         issued_on=args.issued_on,
         source_commit=source.git_commit,
         evidence_sha256=observation.evidence_sha256,
-        verdict="passed",
+        verdict=status,
         sealed_test_cases_opened=0,
     )
     receipt = parse_strategic_sealed_non_test_qualification_receipt(
@@ -168,7 +174,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "schema": "strategic-sealed-non-test-qualification-command-result-v1",
         "sealed_test_cases_opened": 0,
         "source_commit": source.git_commit,
-        "status": "passed",
+        "status": status,
         "teacher_executed": False,
     }
 
@@ -190,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
             "Strategic sealed non-test qualification failed closed; private paths were withheld."
         )
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0
+    return 0 if result["status"] == "passed" else 1
 
 
 if __name__ == "__main__":

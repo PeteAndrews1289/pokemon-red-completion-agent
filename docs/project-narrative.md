@@ -3452,6 +3452,25 @@ same diagnostic through 275 of 312 checkpoints and 1,250 balanced-team battles b
 stop. The two bugs share one lesson: a failed input and an unobserved return edge are not harmless
 timing details; they are missing state transitions.
 
+## The hardest rehearsal failed one tile from its own prediction
+
+The sealed-evaluation boundary passed its first published non-test rehearsal from Celadon to
+Saffron, but an independent audit noticed that this did not cover the Saffron-to-Cinnabar Surf
+relocation required by two one-shot cases. An explicit train capture let the production adapter
+exercise that route while keeping all twelve test states closed.
+
+The attempt failed before Surf. A south-facing ordinary warp into the Viridian Forest north gate
+decoded an arrival at `(0,5)` while live RAM settled at `(1,5)`. The planner already modeled that
+extra doorway step for return edges; the cartridge proved the behavior belongs to the directional
+door mechanic, not the graph-edge label. The repair generalizes the measured rule and adds the exact
+ordinary-warp regression.
+
+The failed run also improved the evidence layer. Expected route failures now produce a durable,
+path-free typed `failed` receipt, prove that no teacher or sealed case was accessed, verify the
+source capture and ROM-adjacent artifacts are unchanged, and return a nonzero process status. That
+turns a live failure into a useful scientific result instead of an email, traceback, or ambiguous
+absence of success.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

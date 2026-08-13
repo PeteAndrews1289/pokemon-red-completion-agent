@@ -12,6 +12,10 @@ import pytest
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.private_artifacts import initialize_private_root
 from pokemon_red_completion.rom import RomFingerprint
+from pokemon_red_completion.route_executor import (
+    RouteExecutionError,
+    RouteExecutionFailureReason,
+)
 from pokemon_red_completion.runtime_identity import RuntimeFileIdentity, RuntimeIdentity
 from pokemon_red_completion.strategic_navigation_binding import (
     DestinationRouteBinding,
@@ -360,6 +364,7 @@ def test_non_test_qualification_uses_shared_path_without_teacher_or_test_access(
     assert observation.public_dict()["result"] == {
         "available_candidate_count": len(scenario.candidate_objective_ids),
         "candidate_count": len(scenario.candidate_objective_ids),
+        "candidate_planning_complete": True,
         "capture_unchanged": True,
         "rom_adjacent_artifacts_unchanged": True,
         "sealed_test_cases_opened": 0,
@@ -369,6 +374,92 @@ def test_non_test_qualification_uses_shared_path_without_teacher_or_test_access(
     assert hashlib.sha256(observation.canonical_payload()).hexdigest() == (
         observation.evidence_sha256
     )
+    assert str(tmp_path) not in json.dumps(observation.public_dict())
+
+
+def test_non_test_qualification_preserves_a_route_failure_without_private_paths(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    scenarios = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    scenario = scenarios.scenario("red-strategic-scenario-v2-015-validation")
+    state_path = tmp_path / "qualification.state"
+    state_path.write_bytes(b"authenticated non-test state")
+    state_sha256 = hashlib.sha256(state_path.read_bytes()).hexdigest()
+    envelope_path = tmp_path / "qualification.state.json"
+    envelope_path.write_text(
+        json.dumps(
+            {
+                "checkpoint_id": "non-test-qualification-failure-fixture",
+                "checkpoint_label": "Non-test qualification failure fixture",
+                "checkpoints_completed": 1,
+                "checkpoints_total": 1,
+                "schema": "pokemon-private-captured-progress-v1",
+                "state_sha256": state_sha256,
+                "verified_objective_ids": list(scenario.completed_objective_ids),
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="ascii",
+    )
+    rom_path = tmp_path / "qualification.gb"
+    rom_path.write_bytes(b"ROM-free qualification failure fixture")
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.verify_rom_bytes",
+        lambda payload, filename: RomFingerprint(
+            filename=filename,
+            title=POKEMON_RED_US_REV_0.title,
+            size_bytes=POKEMON_RED_US_REV_0.size_bytes,
+            sha1=POKEMON_RED_US_REV_0.sha1,
+            sha256=POKEMON_RED_US_REV_0.sha256,
+        ),
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
+        "StrategicScenarioRouteWorld.from_rom",
+        lambda payload: "route-world",
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.rom_adjacent_artifacts",
+        lambda path: (),
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
+        "_open_strategic_cartridge_context",
+        lambda **kwargs: (_ for _ in ()).throw(
+            RouteExecutionError(
+                f"private path must not escape: {state_path}",
+                reason=RouteExecutionFailureReason.WORLD_STATE_DIVERGED,
+            )
+        ),
+    )
+
+    observation = qualify_strategic_sealed_adapter_on_non_test_capture(
+        rom_path=rom_path,
+        state_path=state_path,
+        envelope_path=envelope_path,
+        plan=plan,
+        scenario_registry=scenarios,
+        scenario_id=scenario.scenario_id,
+        challenged_non_teacher_objective_id="liberate_silph",
+        source_commit="a" * 40,
+    )
+
+    assert observation.public_dict()["result"] == {
+        "available_candidate_count": None,
+        "candidate_count": len(scenario.candidate_objective_ids),
+        "candidate_planning_complete": False,
+        "capture_unchanged": True,
+        "failure_phase": "challenge_relocation",
+        "failure_reason": "world_state_diverged",
+        "rom_adjacent_artifacts_unchanged": True,
+        "sealed_test_cases_opened": 0,
+        "status": "failed",
+        "teacher_executed": False,
+    }
     assert str(tmp_path) not in json.dumps(observation.public_dict())
 
 

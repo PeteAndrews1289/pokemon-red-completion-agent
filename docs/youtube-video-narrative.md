@@ -1334,6 +1334,19 @@ next input, but discarded warp-arrival and connection-alignment fields still pre
 multi-map plan. That is a clean cliffhanger because the next engineering step follows from evidence,
 not ambition.
 
+Return to this doorway in the sealed-test chapter. First show the published Celadon-to-Saffron
+qualification pass, then overlay the two unopened cases that require Saffron-to-Cinnabar through
+Surf. Run the public scenario-046 substitute and freeze before the ocean: decoded arrival
+`map 47 (0,5)`, observed RAM `map 47 (1,5)`. Label the receipt **FAILED / TEACHER FALSE / TEST 0 OF
+12**. Then move the one-tile settlement rule from “return edge” to “south-facing directional door”
+and show the exact ordinary-warp regression. This is an unusually clean visual for the project's
+central idea: a graph can be topologically correct and still be one animation away from executable.
+
+Keep the negative receipt on screen. The first command closed safely but left a traceback; the
+repaired command writes path-free failure evidence and exits red on purpose. Do not cut directly
+from failure to a green sealed score. The next permissible green card is the same hard relocation
+on published v8 source, still with the test counter at zero.
+
 ### Act VIII: the Crystal test — 10:50–11:30
 
 Before leaving Red, add one short failure-to-recovery montage. Show fresh seed `990027` losing the

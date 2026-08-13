@@ -35,9 +35,9 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     payload = PLAN_PATH.read_bytes()
     plan = _plan()
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
-    expected_sha256 = "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
+    expected_sha256 = "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
 
-    assert len(payload) == 13262
+    assert len(payload) == 13664
     assert hashlib.sha256(payload).hexdigest() == expected_sha256
     assert payload == (
         json.dumps(
@@ -51,7 +51,7 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     )
     assert digest == {
         "bytes": len(payload),
-        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v7",
+        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8",
         "sha256": expected_sha256,
     }
     subprocess.run(
@@ -92,7 +92,7 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
         "training_epochs": 600,
     }
     assert plan["execution_source_bundle_sha256"] == (
-        "bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd"
+        "d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60"
     )
     assert plan["training_development_receipt_sha256"] == (
         "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612"
@@ -119,10 +119,10 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
             "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523"
         ),
         "source_bundle_sha256": (
-            "bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd"
+            "d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60"
         ),
         "teacher_execution_sha256": (
-            "4e74cb4249c2dadc7e051644d2f0771937ab5b44a6521cce78ee8401432001e2"
+            "827446bfe2f7c5b39da5311912b41872169804228010e211616d33dc79edd507"
         ),
     }
 
@@ -169,7 +169,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
     assert isinstance(access, dict)
     assert isinstance(amendments, list)
 
-    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v7"
+    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
     assert access["private_test_inputs_opened_at_freeze"] == 0
     assert amendments == [
         {
@@ -231,6 +231,19 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
             ),
             "supersedes_plan_sha256": (
                 "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": (
+                "bind_directional_warp_arrival_and_durable_failed_qualification_receipts"
+            ),
+            "reason": (
+                "live_non_test_saffron_cinnabar_qualification_exposed_"
+                "directional_door_arrival_mismatch"
+            ),
+            "supersedes_plan_sha256": (
+                "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
             ),
         },
     ]
@@ -408,6 +421,9 @@ def test_sealed_plan_binds_the_unlabeled_catalog_adapter_boundary() -> None:
         "catalog_contains_private_paths": False,
         "catalog_contains_route_costs_or_answers": False,
         "input_representation": "unlabeled_identity_free_policy_question",
+        "non_test_qualification_failure": (
+            "typed_failed_receipt_zero_test_access_and_nonzero_exit"
+        ),
         "private_case_open": "only_after_durable_case_claim",
         "teacher_execution": "only_after_durable_prediction_commitment",
     }

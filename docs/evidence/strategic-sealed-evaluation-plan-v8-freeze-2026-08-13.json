@@ -1,0 +1,65 @@
+{
+  "access": {
+    "live_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "amendment": {
+    "change": "bind_directional_warp_arrival_and_durable_failed_qualification_receipts",
+    "private_test_inputs_opened_before_amendment": 0,
+    "reason": "a live non-test Saffron-to-Cinnabar qualification exposed a directional doorway arrival mismatch before the Surf crossing",
+    "superseded_plan_sha256": "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
+  },
+  "failed_non_test_qualification": {
+    "capture_unchanged": true,
+    "evidence_sha256": "e00954d20e19b68acb828daf6a16a34d534df5b463238ae2754a5d6859df2e5f",
+    "expected_arrival": {
+      "map_id": 47,
+      "yx": [
+        0,
+        5
+      ]
+    },
+    "observed_arrival": {
+      "map_id": 47,
+      "yx": [
+        1,
+        5
+      ]
+    },
+    "receipt_sha256": "7fa9829427b30c6d81320d1eddabe13671560fa8c68f16680b8da4ad40ab22fc",
+    "relocation": "saffron_to_cinnabar",
+    "rom_adjacent_artifacts_unchanged": true,
+    "sealed_test_cases_opened": 0,
+    "source_commit": "b640ecb1c140eff120196b0ad6f7702f2068d0e9",
+    "teacher_executed": false,
+    "verdict": "failed"
+  },
+  "plan": {
+    "bytes": 13664,
+    "case_order_sha256": "8c913e7101efdfe33c21c849d46da6076653066869077e5043bcf60928a4f2ba",
+    "evaluation_id": "red-strategic-navigation-sealed-evaluation-v1",
+    "execution_source_bundle_sha256": "d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60",
+    "relative_path": "configs/red-strategic-navigation-sealed-evaluation-v1.json",
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v8",
+    "sha256": "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9",
+    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "teacher_execution_sha256": "827446bfe2f7c5b39da5311912b41872169804228010e211616d33dc79edd507"
+  },
+  "repair": {
+    "directional_door_arrival": "south-facing ordinary and return passages settle one tile beyond the destination warp",
+    "failure_receipt": "expected live route failures write a typed failed zero-test-access receipt and exit nonzero",
+    "observation_schema": "strategic-sealed-non-test-qualification-observation-v2"
+  },
+  "schema": "strategic-sealed-evaluation-plan-v8-freeze-v1",
+  "status": {
+    "actual_case_catalog_created": false,
+    "exact_commit_authorization_audit_required": true,
+    "hard_live_saffron_cinnabar_requalification_required": true,
+    "owner_authorization_required_after_audit": true,
+    "ready_to_open_private_test": false
+  }
+}

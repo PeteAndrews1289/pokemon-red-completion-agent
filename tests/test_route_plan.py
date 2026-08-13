@@ -96,6 +96,34 @@ def test_pass_through_gate_warp_uses_a_second_inward_action() -> None:
     assert plan.steps[1].expected_at == (3, 0)
 
 
+def test_south_facing_ordinary_warp_lands_beyond_the_destination_door() -> None:
+    """Route 2 -> Viridian Forest north gate is a directional ordinary warp."""
+
+    edge = MacroEdge(
+        47,
+        kind="warp",
+        at=(11, 3),
+        arrival_at=(0, 5),
+        exit_action="down",
+        destination_warp_index=1,
+    )
+
+    plan = compose_route(
+        MacroGraph({13: (edge,)}),
+        MacroPath((13, 47), (edge,)),
+        {13: line((11, 3))},
+        (11, 3),
+    )
+
+    assert plan.actions == ("down",)
+    assert plan.terminal_at == (1, 5)
+    assert not plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].source_map == 13
+    assert plan.steps[-1].source_at == (11, 3)
+    assert plan.steps[-1].expected_map == 47
+    assert plan.steps[-1].expected_at == (1, 5)
+
+
 def test_a_return_resolves_its_arrival_after_its_map_target() -> None:
     edge = MacroEdge(
         None,

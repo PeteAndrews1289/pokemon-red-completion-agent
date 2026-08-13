@@ -57,9 +57,11 @@ from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
 from pokemon_red_completion.route_executor import (
     RouteActionPort,
+    RouteExecutionError,
     RouteExecutionLimits,
     execute_route,
 )
+from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.runtime_identity import RuntimeIdentity
 from pokemon_red_completion.strategic_navigation_binding import (
     DestinationRouteBinding,
@@ -232,25 +234,33 @@ def qualify_strategic_sealed_adapter_on_non_test_capture(
 
     state_sha256_before = capture.state_sha256
     rom_adjacent_before = rom_adjacent_artifacts(resolved_rom)
-    context = _open_strategic_cartridge_context(
-        rom_path=resolved_rom,
-        rom=rom,
-        route_world=StrategicScenarioRouteWorld.from_rom(rom),
-        state_bytes=state_bytes,
-        envelope=capture,
-        scenario=scenario,
-        declared_origin_region=declared_origin_region,
-    )
+    execution_failure_reason: str | None = None
+    available_candidate_count: int | None = None
     try:
-        if len(context.bindings) != len(scenario.candidate_objective_ids) or any(
-            binding.plan is None for binding in context.bindings
-        ):
-            raise StrategicSealedAdapterError(
-                "non-test qualification candidate planning is incomplete"
-            )
-        available_candidate_count = len(context.bindings)
-    finally:
-        context.emulator.close()
+        context = _open_strategic_cartridge_context(
+            rom_path=resolved_rom,
+            rom=rom,
+            route_world=StrategicScenarioRouteWorld.from_rom(rom),
+            state_bytes=state_bytes,
+            envelope=capture,
+            scenario=scenario,
+            declared_origin_region=declared_origin_region,
+        )
+    except RouteExecutionError as error:
+        execution_failure_reason = error.reason.value
+    except RoutePlanningError:
+        execution_failure_reason = "planner_no_route"
+    else:
+        try:
+            if len(context.bindings) != len(scenario.candidate_objective_ids) or any(
+                binding.plan is None for binding in context.bindings
+            ):
+                raise StrategicSealedAdapterError(
+                    "non-test qualification candidate planning is incomplete"
+                )
+            available_candidate_count = len(context.bindings)
+        finally:
+            context.emulator.close()
     try:
         state_sha256_after = hashlib.sha256(resolved_state.read_bytes()).hexdigest()
     except OSError:
@@ -262,6 +272,23 @@ def qualify_strategic_sealed_adapter_on_non_test_capture(
     if rom_adjacent_artifacts(resolved_rom) != rom_adjacent_before:
         raise StrategicSealedAdapterError("non-test qualification created a ROM-adjacent artifact")
 
+    result: dict[str, object] = {
+        "available_candidate_count": available_candidate_count,
+        "candidate_count": len(scenario.candidate_objective_ids),
+        "candidate_planning_complete": execution_failure_reason is None,
+        "capture_unchanged": True,
+        "rom_adjacent_artifacts_unchanged": True,
+        "sealed_test_cases_opened": 0,
+        "status": "failed" if execution_failure_reason is not None else "passed",
+        "teacher_executed": False,
+    }
+    if execution_failure_reason is not None:
+        result.update(
+            {
+                "failure_phase": "challenge_relocation",
+                "failure_reason": execution_failure_reason,
+            }
+        )
     document = {
         "capture": {
             "checkpoint_id": capture.checkpoint_id,
@@ -279,22 +306,14 @@ def qualify_strategic_sealed_adapter_on_non_test_capture(
         "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
         "plan_sha256": plan.plan_sha256,
         "production_path": "authenticate_relocate_plan_close_without_teacher",
-        "result": {
-            "available_candidate_count": available_candidate_count,
-            "candidate_count": len(scenario.candidate_objective_ids),
-            "capture_unchanged": True,
-            "rom_adjacent_artifacts_unchanged": True,
-            "sealed_test_cases_opened": 0,
-            "status": "passed",
-            "teacher_executed": False,
-        },
+        "result": result,
         "rom_identity": fingerprint.public_dict(),
         "scenario": {
             "partition": scenario.partition,
             "scenario_id": scenario.scenario_id,
             "scenario_sha256": scenario.scenario_sha256,
         },
-        "schema": "strategic-sealed-non-test-qualification-observation-v1",
+        "schema": "strategic-sealed-non-test-qualification-observation-v2",
         "source_commit": source_commit,
     }
     return StrategicSealedNonTestQualificationObservation(document=document)

@@ -38,9 +38,9 @@ SEALED_EVALUATION_PLAN_RELATIVE_PATH = "configs/red-strategic-navigation-sealed-
 SEALED_EVALUATION_PLAN_DIGEST_RELATIVE_PATH = (
     "configs/red-strategic-navigation-sealed-evaluation-v1.digest.json"
 )
-SEALED_EVALUATION_PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v7"
+SEALED_EVALUATION_PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
 SEALED_EVALUATION_PLAN_DIGEST_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v7"
+    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8"
 )
 SEALED_EVALUATION_AUTHORIZATION_SCHEMA = (
     "pokemon-strategic-navigation-sealed-evaluation-authorization-v3"
@@ -604,6 +604,9 @@ def parse_strategic_sealed_evaluation_plan(
         "catalog_contains_private_paths": False,
         "catalog_contains_route_costs_or_answers": False,
         "input_representation": "unlabeled_identity_free_policy_question",
+        "non_test_qualification_failure": (
+            "typed_failed_receipt_zero_test_access_and_nonzero_exit"
+        ),
         "private_case_open": "only_after_durable_case_claim",
         "teacher_execution": "only_after_durable_prediction_commitment",
     }:
@@ -2582,6 +2585,19 @@ def _validate_amendments(value: object) -> None:
             ),
             "supersedes_plan_sha256": (
                 "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": (
+                "bind_directional_warp_arrival_and_durable_failed_qualification_receipts"
+            ),
+            "reason": (
+                "live_non_test_saffron_cinnabar_qualification_exposed_"
+                "directional_door_arrival_mismatch"
+            ),
+            "supersedes_plan_sha256": (
+                "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
             ),
         },
     ]

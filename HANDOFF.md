@@ -14,6 +14,38 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Schema-v8 hard-relocation repair awaiting publication — 2026-08-13
+
+Schema v7 was published at `b640ecb` and passed exact-commit CI plus a live Celadon-to-Saffron
+qualification. Claude's authorization audit accepted every receipt binding but correctly withheld
+authorization because sealed cases 011 and 012 require Saffron-to-Cinnabar, a Surf relocation the
+shared adapter had not exercised end to end. Test remained 0/12.
+
+The explicit scenario-046 train capture reproduced that hard route without touching test. It failed
+before Surf at Route 2's south-facing ordinary warp into the Viridian Forest north gate: the plan
+expected map 47 `(0,5)`, while live RAM settled at `(1,5)`. The capture and ROM-adjacent filesystem
+were unchanged, the teacher never ran and test remained 0/12. The failure is durably preserved as
+evidence digest `e00954d20e19b68acb828daf6a16a34d534df5b463238ae2754a5d6859df2e5f` and typed
+`failed` receipt digest `7fa9829427b30c6d81320d1eddabe13671560fa8c68f16680b8da4ad40ab22fc`.
+
+Schema v8 repairs the measured abstraction rather than special-casing a route. South-facing
+directional ordinary warps and return warps both settle one tile beyond the destination door;
+horizontal and north-facing behavior is unchanged. The qualifier also converts expected route
+execution/planning failures into path-free v2 observations and typed `failed` receipts, writes both
+durably, runs no teacher and exits nonzero. Negative evidence stays valid but cannot authorize.
+
+Current plan: 13,664 bytes, SHA-256
+`fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`; source bundle
+`d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60`; teacher execution
+`827446bfe2f7c5b39da5311912b41872169804228010e211616d33dc79edd507`. Cases, order, frozen model,
+endpoint and one-shot policy are unchanged. See the [v8 freeze](docs/evidence/strategic-sealed-evaluation-plan-v8-freeze-2026-08-13.json)
+and [repair audit handoff](docs/claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md).
+
+Next: publish this exact source, require green exact-commit CI, then rerun scenario 046's explicit
+Saffron-to-Cinnabar non-test qualification. Only a typed `passed` receipt bound to the v8 plan,
+source bundle and exact commit can return to Claude for an authorization-level audit. Do not open,
+inventory or hash a sealed capture; do not create an owner receipt or catalog yet.
+
 ## Schema-v7 typed evidence boundary ready for publication — 2026-08-13
 
 Claude's final schema-v6 audit killed 18/18 semantic mutations, confirmed optional stopping and
