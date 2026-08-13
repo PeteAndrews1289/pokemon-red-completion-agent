@@ -35,6 +35,7 @@ from pokemon_red_completion.tower import party_core_intact
 
 FLY_RESOURCE_CHECKPOINT_COUNT = 5
 FLY_ATTEMPT_LIMIT = 10
+FLY_MOVE_SLOT = 3
 SOURCE_CITY_BOUNDARY = (49, 11)
 FUCHSIA_SOURCE_CITY_BOUNDARY = (19, 28)
 FUCHSIA_EAST_SOURCE_CITY_BOUNDARY = (39, 16)
@@ -42,11 +43,7 @@ CELADON_CENTER_DOOR = (41, 9)
 CINNABAR_CENTER_TO_OUTDOORS = ("down",) * 5
 CELADON_CENTER_TO_OUTDOORS = ("down",) * 5
 CENTER_TO_ROUTE_16_TREE = (
-    ("down",) * 8
-    + ("left",) * 22
-    + ("down", "left")
-    + ("down",) * 4
-    + ("left",) * 24
+    ("down",) * 8 + ("left",) * 22 + ("down", "left") + ("down",) * 4 + ("left",) * 24
 )
 
 
@@ -62,6 +59,55 @@ class EmulatorState(Protocol):
 
 class FlyResourceError(RuntimeError):
     """Raised when the independent HM02 lesson loses semantic evidence."""
+
+
+def _qualified_fly_carrier(
+    moves: tuple[int, ...],
+    pp: tuple[int, ...],
+) -> bool:
+    """Whether the protected HM02 carrier can still perform Fly.
+
+    The acquisition lesson starts from one exact moveset, but later level-up
+    training is allowed to replace the carrier's other moves.  Relocation
+    therefore protects the capability that matters instead of pinning that
+    historical pre-training snapshot: Fly remains in its taught fourth slot
+    and has at least one usable PP.
+    """
+
+    return (
+        len(moves) == 4
+        and len(pp) == 4
+        and moves[FLY_MOVE_SLOT] == DUX_MOVES_AFTER[FLY_MOVE_SLOT]
+        and pp[FLY_MOVE_SLOT] > 0
+    )
+
+
+def _fly_input_failures(
+    *,
+    initial: RawGameState,
+    expected_boundaries: frozenset[tuple[MapId, int, int]],
+    got_hm02: bool,
+    hm02_entries: int,
+    dux_moves: tuple[int, ...],
+    dux_pp: tuple[int, ...],
+) -> tuple[str, ...]:
+    """Return path-free predicate names for a rejected Fly boundary."""
+
+    observed_boundary = (initial.map_id, initial.player_x, initial.player_y)
+    failures: list[str] = []
+    if observed_boundary not in expected_boundaries:
+        failures.append("boundary")
+    if initial.battle_state != 0:
+        failures.append("battle_state")
+    if not got_hm02:
+        failures.append("hm02_event")
+    if hm02_entries != 1:
+        failures.append("hm02_inventory")
+    if not _qualified_fly_carrier(dux_moves, dux_pp):
+        failures.append("fly_carrier")
+    if not party_core_intact(initial.party_species_ids):
+        failures.append("party_core")
+    return tuple(failures)
 
 
 @dataclass(frozen=True, slots=True)
@@ -192,9 +238,8 @@ class FlyRelocationReport:
             and self.initial_raw.first_party_pp == self.final_raw.first_party_pp
             and self.initial_bag == self.final_bag
             and (int(ItemId.HM02_FLY), 1) in self.final_bag
-            and self.dux_moves == DUX_MOVES_AFTER
-            and self.dux_pp_before == DUX_PP_AFTER
-            and self.dux_pp_after == DUX_PP_AFTER
+            and _qualified_fly_carrier(self.dux_moves, self.dux_pp_before)
+            and self.dux_pp_after == self.dux_pp_before
             and bool(self.fly_landings)
             and self.fly_landings[-1][0] == int(MapId.CELADON_CITY)
             and len(self.fly_landings) <= FLY_ATTEMPT_LIMIT
@@ -279,9 +324,8 @@ class CinnabarFlyArrivalReport:
             and self.initial_raw.first_party_pp == self.final_raw.first_party_pp
             and self.initial_bag == self.final_bag
             and (int(ItemId.HM02_FLY), 1) in self.final_bag
-            and self.dux_moves == DUX_MOVES_AFTER
-            and self.dux_pp_before == DUX_PP_AFTER
-            and self.dux_pp_after == DUX_PP_AFTER
+            and _qualified_fly_carrier(self.dux_moves, self.dux_pp_before)
+            and self.dux_pp_after == self.dux_pp_before
             and bool(self.fly_landings)
             and self.fly_landings[-1][0] == int(MapId.CINNABAR_ISLAND)
             and len(self.fly_landings) <= FLY_ATTEMPT_LIMIT
@@ -336,9 +380,8 @@ class FuchsiaFlyArrivalReport:
             and self.initial_raw.first_party_pp == self.final_raw.first_party_pp
             and self.initial_bag == self.final_bag
             and (int(ItemId.HM02_FLY), 1) in self.final_bag
-            and self.dux_moves == DUX_MOVES_AFTER
-            and self.dux_pp_before == DUX_PP_AFTER
-            and self.dux_pp_after == DUX_PP_AFTER
+            and _qualified_fly_carrier(self.dux_moves, self.dux_pp_before)
+            and self.dux_pp_after == self.dux_pp_before
             and bool(self.fly_landings)
             and self.fly_landings[-1][0] == int(MapId.FUCHSIA_CITY)
             and len(self.fly_landings) <= FLY_ATTEMPT_LIMIT
@@ -450,17 +493,18 @@ def relocate_cinnabar_to_celadon_by_fly(
     status_before = _party_status(emulator)
     dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
     dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
-    if (
-        initial.map_id != MapId.CINNABAR_POKECENTER
-        or (initial.player_x, initial.player_y) != (3, 3)
-        or initial.battle_state != 0
-        or not _event(emulator, EventFlag.GOT_HM02)
-        or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
-        or dux_moves != DUX_MOVES_AFTER
-        or dux_pp_before != DUX_PP_AFTER
-        or not party_core_intact(initial.party_species_ids)
-    ):
-        raise FlyResourceError("Cinnabar Fly relocation input is not qualified.")
+    failures = _fly_input_failures(
+        initial=initial,
+        expected_boundaries=frozenset({(MapId.CINNABAR_POKECENTER, 3, 3)}),
+        got_hm02=_event(emulator, EventFlag.GOT_HM02),
+        hm02_entries=initial_bag.count((int(ItemId.HM02_FLY), 1)),
+        dux_moves=dux_moves,
+        dux_pp=dux_pp_before,
+    )
+    if failures:
+        raise FlyResourceError(
+            f"Cinnabar Fly relocation input is not qualified: {','.join(failures)}."
+        )
 
     _move(actions, reader, CINNABAR_CENTER_TO_OUTDOORS, "Cinnabar Fly departure")
     outdoors = reader.read()
@@ -512,22 +556,25 @@ def relocate_celadon_to_cinnabar_by_fly(
     status_before = _party_status(emulator)
     dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
     dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
-    if (
-        (initial.map_id, initial.player_x, initial.player_y)
-        not in {
-            (MapId.CELADON_POKECENTER, 3, 3),
-            (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
-            (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
-            (MapId.FUCHSIA_CITY, *FUCHSIA_EAST_SOURCE_CITY_BOUNDARY),
-        }
-        or initial.battle_state != 0
-        or not _event(emulator, EventFlag.GOT_HM02)
-        or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
-        or dux_moves != DUX_MOVES_AFTER
-        or dux_pp_before != DUX_PP_AFTER
-        or not party_core_intact(initial.party_species_ids)
-    ):
-        raise FlyResourceError("Mainland Fly relocation input is not qualified.")
+    failures = _fly_input_failures(
+        initial=initial,
+        expected_boundaries=frozenset(
+            {
+                (MapId.CELADON_POKECENTER, 3, 3),
+                (MapId.CELADON_CITY, *SOURCE_CITY_BOUNDARY),
+                (MapId.FUCHSIA_CITY, *FUCHSIA_SOURCE_CITY_BOUNDARY),
+                (MapId.FUCHSIA_CITY, *FUCHSIA_EAST_SOURCE_CITY_BOUNDARY),
+            }
+        ),
+        got_hm02=_event(emulator, EventFlag.GOT_HM02),
+        hm02_entries=initial_bag.count((int(ItemId.HM02_FLY), 1)),
+        dux_moves=dux_moves,
+        dux_pp=dux_pp_before,
+    )
+    if failures:
+        raise FlyResourceError(
+            f"Mainland Fly relocation input is not qualified: {','.join(failures)}."
+        )
 
     if initial.map_id == MapId.CELADON_POKECENTER:
         _move(actions, reader, CELADON_CENTER_TO_OUTDOORS, "Celadon Fly departure")
@@ -588,17 +635,18 @@ def relocate_cinnabar_to_fuchsia_by_fly(
     status_before = _party_status(emulator)
     dux_moves = _four(emulator, RamAddress.PARTY_MON_2_MOVES)
     dux_pp_before = _four(emulator, RamAddress.PARTY_MON_2_PP)
-    if (
-        initial.map_id != MapId.CINNABAR_POKECENTER
-        or (initial.player_x, initial.player_y) != (3, 3)
-        or initial.battle_state != 0
-        or not _event(emulator, EventFlag.GOT_HM02)
-        or initial_bag.count((int(ItemId.HM02_FLY), 1)) != 1
-        or dux_moves != DUX_MOVES_AFTER
-        or dux_pp_before != DUX_PP_AFTER
-        or not party_core_intact(initial.party_species_ids)
-    ):
-        raise FlyResourceError("Cinnabar-to-Fuchsia Fly input is not qualified.")
+    failures = _fly_input_failures(
+        initial=initial,
+        expected_boundaries=frozenset({(MapId.CINNABAR_POKECENTER, 3, 3)}),
+        got_hm02=_event(emulator, EventFlag.GOT_HM02),
+        hm02_entries=initial_bag.count((int(ItemId.HM02_FLY), 1)),
+        dux_moves=dux_moves,
+        dux_pp=dux_pp_before,
+    )
+    if failures:
+        raise FlyResourceError(
+            f"Cinnabar-to-Fuchsia Fly input is not qualified: {','.join(failures)}."
+        )
 
     _move(actions, reader, CINNABAR_CENTER_TO_OUTDOORS, "Cinnabar Fly departure")
     landings = _fly_to_destination(actions, reader, emulator, MapId.FUCHSIA_CITY)
@@ -710,11 +758,7 @@ def _normalize_celadon_center(
             "Celadon Center normalization saw an unsupported arrival: "
             f"map={raw.map_id}, coordinate={(raw.player_x, raw.player_y)!r}."
         )
-    route = (
-        ("up",) * (raw.player_y - 10)
-        + ("left",) * (raw.player_x - 41)
-        + ("up",) * 5
-    )
+    route = ("up",) * (raw.player_y - 10) + ("left",) * (raw.player_x - 41) + ("up",) * 5
     _move(actions, reader, route, "Celadon Center normalization")
     _require(reader.read(), MapId.CELADON_POKECENTER, (3, 3), "Celadon Center boundary")
 
@@ -729,11 +773,7 @@ def _checkpoint(
 
 
 def _require(raw: RawGameState, map_id: MapId, coordinate: tuple[int, int], label: str) -> None:
-    if (
-        raw.map_id != map_id
-        or (raw.player_x, raw.player_y) != coordinate
-        or raw.battle_state != 0
-    ):
+    if raw.map_id != map_id or (raw.player_x, raw.player_y) != coordinate or raw.battle_state != 0:
         raise FlyResourceError(
             f"{label} missed gate: map={raw.map_id}, "
             f"coordinate={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state}."

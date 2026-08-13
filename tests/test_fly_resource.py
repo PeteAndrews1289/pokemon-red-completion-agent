@@ -17,6 +17,7 @@ from pokemon_red_completion.fly_resource import (
     FlyResourceCheckpoint,
     FlyResourceReport,
     FuchsiaFlyArrivalReport,
+    _qualified_fly_carrier,
 )
 from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 
@@ -132,6 +133,24 @@ def test_fly_relocation_report_proves_story_neutral_celadon_return() -> None:
     assert report.public_dict()["objective_added"] is False
 
 
+def test_fly_relocation_accepts_trained_carrier_without_weakening_fly_guard() -> None:
+    """Level-up moves may change, but Fly itself must remain usable and stable."""
+
+    trained_moves = (0xA3, DUX_MOVES_AFTER[1], DUX_MOVES_AFTER[2], DUX_MOVES_AFTER[3])
+    trained_pp = (20, 15, 30, 15)
+    report = replace(
+        _relocation_report(),
+        dux_moves=trained_moves,
+        dux_pp_before=trained_pp,
+        dux_pp_after=trained_pp,
+    )
+
+    assert report.passed
+    assert _qualified_fly_carrier(trained_moves, trained_pp)
+    assert not _qualified_fly_carrier((*trained_moves[:3], 0), trained_pp)
+    assert not _qualified_fly_carrier(trained_moves, (*trained_pp[:3], 0))
+
+
 def test_fly_relocation_report_rejects_protected_state_drift() -> None:
     report = _relocation_report()
     invalid = (
@@ -154,11 +173,23 @@ def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
     final = replace(initial, map_id=MapId.CINNABAR_POKECENTER)
     bag = ((4, 1), (15, 7), (int(ItemId.HM02_FLY), 1))
     report = CinnabarFlyArrivalReport(
-        initial, final, bag, bag, DUX_MOVES_AFTER, DUX_PP_AFTER, DUX_PP_AFTER,
+        initial,
+        final,
+        bag,
+        bag,
+        DUX_MOVES_AFTER,
+        DUX_PP_AFTER,
+        DUX_PP_AFTER,
         ((int(MapId.CINNABAR_ISLAND), 11),),
-        (125, 53, 37, 140), (125, 53, 37, 140),
-        (125, 53, 37, 140), (125, 53, 37, 140),
-        (0, 0, 0, 0), (0, 0, 0, 0), 10_000, 100, True,
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (0, 0, 0, 0),
+        (0, 0, 0, 0),
+        10_000,
+        100,
+        True,
     )
 
     assert CELADON_CENTER_TO_OUTDOORS == ("down",) * 5
@@ -189,11 +220,22 @@ def test_fuchsia_fly_arrival_requires_exact_protected_state() -> None:
     final = replace(initial, map_id=MapId.FUCHSIA_CITY, player_x=18, player_y=26)
     bag = ((4, 1), (int(ItemId.HM02_FLY), 1))
     report = FuchsiaFlyArrivalReport(
-        initial, final, bag, bag, DUX_MOVES_AFTER, DUX_PP_AFTER, DUX_PP_AFTER,
+        initial,
+        final,
+        bag,
+        bag,
+        DUX_MOVES_AFTER,
+        DUX_PP_AFTER,
+        DUX_PP_AFTER,
         ((int(MapId.FUCHSIA_CITY), 18),),
-        (125, 53, 37, 140), (125, 53, 37, 140),
-        (125, 53, 37, 140), (125, 53, 37, 140),
-        (0, 0, 0, 0), (0, 0, 0, 0), 100, True,
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (125, 53, 37, 140),
+        (0, 0, 0, 0),
+        (0, 0, 0, 0),
+        100,
+        True,
     )
 
     assert report.passed
