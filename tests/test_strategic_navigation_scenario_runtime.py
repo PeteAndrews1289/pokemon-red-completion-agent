@@ -221,6 +221,67 @@ def test_rehearsal_records_before_action_and_strictly_reloads_one_choice(
         )
 
 
+def test_rehearsal_records_an_explicit_authenticated_origin_override(
+    tmp_path: Path,
+) -> None:
+    scenario, assignment, specs, bindings, store, world = _fixture(tmp_path)
+    selected = require_executable_scenario_bindings(scenario, specs, bindings)
+
+    result = record_strategic_scenario_rehearsal(
+        store,
+        assignment=assignment,
+        scenario=scenario,
+        metadata=assignment.episode_metadata(),
+        snapshot_provider=_SnapshotProvider(),
+        action_delegate=world,
+        traversal_observer=world,
+        bindings=bindings,
+        selected_destination_ref=selected,
+        origin_region_ref="pokemon.red:region:saffron",
+    )
+
+    decisions = (
+        tmp_path / "private" / assignment.episode_id / "decisions.jsonl"
+    ).read_text(encoding="utf-8")
+    recorded = json.loads(decisions.splitlines()[0])
+    assert len(result.dataset.examples) == 1
+
+    default_root = tmp_path / "default-origin"
+    default_root.mkdir()
+    (
+        default_scenario,
+        default_assignment,
+        default_specs,
+        default_bindings,
+        default_store,
+        default_world,
+    ) = _fixture(default_root)
+    default_selected = require_executable_scenario_bindings(
+        default_scenario,
+        default_specs,
+        default_bindings,
+    )
+    record_strategic_scenario_rehearsal(
+        default_store,
+        assignment=default_assignment,
+        scenario=default_scenario,
+        metadata=default_assignment.episode_metadata(),
+        snapshot_provider=_SnapshotProvider(),
+        action_delegate=default_world,
+        traversal_observer=default_world,
+        bindings=default_bindings,
+        selected_destination_ref=default_selected,
+    )
+    default_decisions = (
+        default_root
+        / "private"
+        / default_assignment.episode_id
+        / "decisions.jsonl"
+    ).read_text(encoding="utf-8")
+    default_recorded = json.loads(default_decisions.splitlines()[0])
+    assert recorded["decision_id"] != default_recorded["decision_id"]
+
+
 def test_rehearsal_fails_before_private_write_on_binding_or_teacher_drift(
     tmp_path: Path,
 ) -> None:

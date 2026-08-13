@@ -522,6 +522,36 @@ completion; it is one more removed answer key and one more mechanic represented 
 
 ---
 
+## Act XVI: the sealed test almost measured the wrong thing
+
+Thirty-six genuine destination choices finally made a small learned scorer possible: 24 for
+training and 12 for development validation. The first neural model was rejected because roughly 753
+parameters were too many for 24 examples. A five-coefficient linear ranker, selected using training
+alone, then scored 10/12 on development validation while cheapest route scored 4/12.
+
+That was when the dangerous button appeared: run the final test.
+
+The review found four reasons not to press it. The original test guaranteed no cases where cheapest
+route should be wrong. The first replacement mixed two baseline-friendly safety cases into the
+primary statistic. Then the cartridge adapter assumed ten challenge snapshots had somehow already
+moved from their authenticated source city to the city where the challenge was supposed to be
+asked. Finally, the plan named audit and live-qualification gates without requiring their exact
+receipts at runtime, and its validated objects could be copied with a hidden constructor token.
+
+All four were repaired while the sealed counter stayed at zero. The current protocol binds the
+audit and non-test qualification evidence into authorization and preflight, then claims a case
+before access, authenticates the source save, relocates without creating a training label, rejects
+any change to completed story objectives, and only then shows identity-free route structure to the
+model. Predictions are committed before the teacher acts; no result or p-value is exposed until all
+twelve cases are consumed; a crash burns its case rather than creating a convenient rerun. The
+private root cannot hide behind a symlink, validated authority objects cannot be cloned, and the
+ledger cannot start without a cleanup boundary for a prepared emulator.
+
+The important result is still not a score. It is **0/12 opened**. The system became more capable of
+being wrong honestly before it was allowed to make a final claim.
+
+---
+
 ## Why a living Pokédex
 
 Every failure in this story has the same shape: a fixed sequence standing in where a decision should
@@ -588,6 +618,10 @@ Being precise about this matters more than the story sounding finished.
   travels there, and gains levels. That is new, and it is the mechanism the rest depends on.
 - A clean-power teacher run reaches its 60/55/55/55/55/55 readiness gate and completes the game;
   the learned objective loop now reproduces the post-Celadon portion, not a clean-power route.
+- A five-coefficient strategic destination ranker was selected on 24 training choices and scored
+  10/12 on 12 development choices versus 4/12 for cheapest route. This is development evidence.
+  Its one-shot 12-case final test remains unopened at 0/12; independent adapter audit, live
+  non-test relocation qualification, the real path-free catalog and owner authorization remain.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.

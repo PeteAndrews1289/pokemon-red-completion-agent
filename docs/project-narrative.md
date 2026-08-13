@@ -61,10 +61,29 @@ receipt digest, creating a second receipt would have created a fresh ledger. The
 before publication or test access. The ledger is now named by the frozen plan itself, so the first
 authorization to start owns the only attempt and every later receipt collides with immutable history.
 
-That is a protocol milestone, not the test result. The cartridge-facing adapter and exact private
-case catalog are deliberately still absent, no owner authorization exists, and every sealed card is
-still face down. The next scene is an independent attack on the executor core, followed by a
-non-test qualification of the adapter before the one-shot evidence is spent.
+The next adapter draft found another valuable reason to keep those cards face down. Ten challenge
+cases ask the same story frontier from a new city, but their authenticated source snapshots are
+still at the original scenario city. Treating the source as though it had already moved made the
+benchmark look executable when it was not. The repaired adapter now claims and authenticates the
+source, relocates without creating a label, proves the story frontier did not change, and only then
+lets the model see candidate route structure. Even the shuffle order is bound to the exact capture
+and source rather than chosen by a caller.
+
+That is an adapter milestone, not the test result. The catalog format and cartridge session exist,
+but the actual private catalog does not; no owner authorization exists, and every sealed card is
+still face down at 0/12. The next scene is an independent attack on the adapter and live relocation
+qualification on non-test states. Only then can a separately authorized inventory produce the
+digest that the final one-shot receipt must bind.
+
+One final self-audit turned those next steps from prose into authority. The previous plan said an
+external audit and a live non-test qualification were mandatory, but the runtime did not require
+the exact receipts. Worse, an ordinary dataclass copy could carry a loader's hidden validation token
+into a changed object. Schema v6 now binds both readiness-receipt digests through owner
+authorization, preflight, the immutable start ledger and the final result. Loader-issued objects
+cannot be cloned with `dataclasses.replace`; every private-root path component rejects symlinks;
+and the executor will not start unless a prepared emulator session can be aborted safely. That
+still does not manufacture either verdict. It makes it impossible to begin the sealed run without
+naming the exact evidence that earned permission.
 
 ## August 13: the first model-facing dataset finally became real
 

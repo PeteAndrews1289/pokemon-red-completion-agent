@@ -22,7 +22,8 @@ import json
 import math
 import re
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass, field
+from contextlib import suppress
+from dataclasses import InitVar, dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Protocol
@@ -40,13 +41,13 @@ SEALED_EVALUATION_PLAN_DIGEST_RELATIVE_PATH = (
     "configs/red-strategic-navigation-sealed-evaluation-v1.digest.json"
 )
 SEALED_EVALUATION_PLAN_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-v3"
+    "pokemon-strategic-navigation-sealed-evaluation-plan-v6"
 )
 SEALED_EVALUATION_PLAN_DIGEST_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v3"
+    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v6"
 )
 SEALED_EVALUATION_AUTHORIZATION_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-authorization-v1"
+    "pokemon-strategic-navigation-sealed-evaluation-authorization-v2"
 )
 SEALED_EVALUATION_CASE_OUTCOME_SCHEMA = (
     "pokemon-strategic-navigation-sealed-case-outcome-v1"
@@ -110,10 +111,10 @@ class StrategicSealedEvaluationPlan:
     source_scenario_registry_sha256: str
     teacher_execution_sha256: str
     cases: tuple[StrategicSealedEvaluationCase, ...]
-    _validation_token: object = field(repr=False, compare=False)
+    _validation_token: InitVar[object]
 
-    def __post_init__(self) -> None:
-        if self._validation_token is not _PLAN_VALIDATION_TOKEN:
+    def __post_init__(self, _validation_token: object) -> None:
+        if _validation_token is not _PLAN_VALIDATION_TOKEN:
             raise StrategicSealedEvaluationError(
                 "sealed evaluation plans must come from the canonical loader"
             )
@@ -152,10 +153,12 @@ class StrategicSealedAuthorization:
     model_file_sha256: str
     teacher_execution_sha256: str
     case_catalog_sha256: str
-    _validation_token: object = field(repr=False, compare=False)
+    external_audit_receipt_sha256: str
+    non_test_adapter_qualification_receipt_sha256: str
+    _validation_token: InitVar[object]
 
-    def __post_init__(self) -> None:
-        if self._validation_token is not _AUTHORIZATION_VALIDATION_TOKEN:
+    def __post_init__(self, _validation_token: object) -> None:
+        if _validation_token is not _AUTHORIZATION_VALIDATION_TOKEN:
             raise StrategicSealedEvaluationError(
                 "sealed authorizations must come from the canonical parser"
             )
@@ -170,13 +173,17 @@ class StrategicSealedRuntimeGrant:
     source_commit: str
     teacher_execution_sha256: str
     case_catalog_sha256: str
-    _validation_token: object = field(repr=False, compare=False)
+    external_audit_receipt_sha256: str
+    non_test_adapter_qualification_receipt_sha256: str
+    _validation_token: InitVar[object]
+    _issued_token: object = field(init=False, repr=False, compare=False)
 
-    def __post_init__(self) -> None:
-        if self._validation_token is not _PREFLIGHT_VALIDATION_TOKEN:
+    def __post_init__(self, _validation_token: object) -> None:
+        if _validation_token is not _PREFLIGHT_VALIDATION_TOKEN:
             raise StrategicSealedEvaluationError(
                 "sealed runtime grants must come from the preflight"
             )
+        object.__setattr__(self, "_issued_token", _validation_token)
 
 
 @dataclass(frozen=True, slots=True)
@@ -459,6 +466,9 @@ class StrategicSealedCaseRunner(Protocol):
     ) -> StrategicSealedTeacherResult:
         """Execute the teacher only after the executor commits predictions."""
 
+    def abort(self, case: StrategicSealedEvaluationCase) -> None:
+        """Release a prepared input when commitment or orchestration fails."""
+
 
 StrategicSealedProgressCallback = Callable[[StrategicSealedProgress], None]
 
@@ -509,6 +519,7 @@ def parse_strategic_sealed_evaluation_plan(
         document,
         {
             "access_policy",
+            "adapter_policy",
             "amendments",
             "attempt_policy",
             "baseline",
@@ -535,10 +546,32 @@ def parse_strategic_sealed_evaluation_plan(
     if document["access_policy"] != {
         "private_test_inputs_opened_at_freeze": 0,
         "requires_clean_published_exact_source": True,
-        "requires_external_audit": True,
+        "requires_external_audit": (
+            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+        ),
+        "requires_non_test_adapter_qualification": (
+            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+        ),
         "requires_owner_authorization": True,
     }:
         raise StrategicSealedEvaluationError("sealed access policy differs")
+    if document["adapter_policy"] != {
+        "candidate_order": "source_bound_assignment_hash_v1",
+        "candidate_planning": "after_authenticated_challenge_relocation",
+        "case_catalog_schema": (
+            "pokemon-strategic-navigation-sealed-case-catalog-v1"
+        ),
+        "challenge_relocation": (
+            "after_claim_deterministic_route_to_declared_origin_"
+            "with_zero_objective_delta"
+        ),
+        "catalog_contains_private_paths": False,
+        "catalog_contains_route_costs_or_answers": False,
+        "input_representation": "unlabeled_identity_free_policy_question",
+        "private_case_open": "only_after_durable_case_claim",
+        "teacher_execution": "only_after_durable_prediction_commitment",
+    }:
+        raise StrategicSealedEvaluationError("sealed adapter policy differs")
     if document["attempt_policy"] != {
         "attempts_per_case": 1,
         "failed_attempt_is_consumed": True,
@@ -712,6 +745,8 @@ def build_strategic_sealed_authorization(
     authorized_on: str,
     source_commit: str,
     case_catalog_sha256: str,
+    external_audit_receipt_sha256: str,
+    non_test_adapter_qualification_receipt_sha256: str,
 ) -> bytes:
     """Create the receipt only after the owner explicitly authorizes one-shot access."""
 
@@ -723,10 +758,17 @@ def build_strategic_sealed_authorization(
     if _GIT_OID.fullmatch(source_commit) is None:
         raise StrategicSealedEvaluationError("sealed authorization commit is invalid")
     _sha256(case_catalog_sha256, subject="sealed case catalog")
+    _sha256(external_audit_receipt_sha256, subject="sealed external audit receipt")
+    _sha256(
+        non_test_adapter_qualification_receipt_sha256,
+        subject="sealed non-test adapter qualification receipt",
+    )
     return _canonical_line(
         {
             "acknowledgements": {
                 "authorize_private_test_access": True,
+                "external_audit_approved": True,
+                "non_test_adapter_qualification_passed": True,
                 "one_shot_no_reruns": True,
                 "predictions_committed_before_teacher_action": True,
                 "publish_protocol_failure_after_any_post_open_halt": True,
@@ -738,11 +780,15 @@ def build_strategic_sealed_authorization(
             "case_catalog_sha256": case_catalog_sha256,
             "evaluation_id": plan.evaluation_id,
             "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
+            "external_audit_receipt_sha256": external_audit_receipt_sha256,
             "model": {
                 "canonical_sha256": plan.model_canonical_sha256,
                 "private_file_sha256": plan.model_file_sha256,
             },
             "plan_sha256": plan.plan_sha256,
+            "non_test_adapter_qualification_receipt_sha256": (
+                non_test_adapter_qualification_receipt_sha256
+            ),
             "schema": SEALED_EVALUATION_AUTHORIZATION_SCHEMA,
             "source_commit": source_commit,
             "teacher_execution_sha256": plan.teacher_execution_sha256,
@@ -774,7 +820,9 @@ def parse_strategic_sealed_authorization(
             "case_catalog_sha256",
             "evaluation_id",
             "execution_source_bundle_sha256",
+            "external_audit_receipt_sha256",
             "model",
+            "non_test_adapter_qualification_receipt_sha256",
             "plan_sha256",
             "schema",
             "source_commit",
@@ -803,6 +851,8 @@ def parse_strategic_sealed_authorization(
         )
     if document["acknowledgements"] != {
         "authorize_private_test_access": True,
+        "external_audit_approved": True,
+        "non_test_adapter_qualification_passed": True,
         "one_shot_no_reruns": True,
         "predictions_committed_before_teacher_action": True,
         "publish_protocol_failure_after_any_post_open_halt": True,
@@ -823,6 +873,14 @@ def parse_strategic_sealed_authorization(
     )
     if _GIT_OID.fullmatch(source_commit) is None:
         raise StrategicSealedEvaluationError("sealed authorization commit is invalid")
+    external_audit_receipt_sha256 = _sha256(
+        document["external_audit_receipt_sha256"],
+        subject="sealed external audit receipt",
+    )
+    non_test_adapter_qualification_receipt_sha256 = _sha256(
+        document["non_test_adapter_qualification_receipt_sha256"],
+        subject="sealed non-test adapter qualification receipt",
+    )
     return StrategicSealedAuthorization(
         authorization_sha256=hashlib.sha256(payload).hexdigest(),
         authorization_id=authorization_id,
@@ -836,6 +894,10 @@ def parse_strategic_sealed_authorization(
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=_sha256(
             document["case_catalog_sha256"], subject="sealed case catalog"
+        ),
+        external_audit_receipt_sha256=external_audit_receipt_sha256,
+        non_test_adapter_qualification_receipt_sha256=(
+            non_test_adapter_qualification_receipt_sha256
         ),
         _validation_token=_AUTHORIZATION_VALIDATION_TOKEN,
     )
@@ -853,6 +915,8 @@ def require_strategic_sealed_runtime_preflight(
     model_file_sha256: str,
     teacher_execution_sha256: str,
     case_catalog_sha256: str,
+    external_audit_receipt_sha256: str,
+    non_test_adapter_qualification_receipt_sha256: str,
 ) -> StrategicSealedRuntimeGrant:
     """Perform every identity refusal before the first case claim."""
 
@@ -876,6 +940,16 @@ def require_strategic_sealed_runtime_preflight(
             "teacher execution",
         ),
         (case_catalog_sha256, authorization.case_catalog_sha256, "case catalog"),
+        (
+            external_audit_receipt_sha256,
+            authorization.external_audit_receipt_sha256,
+            "external audit receipt",
+        ),
+        (
+            non_test_adapter_qualification_receipt_sha256,
+            authorization.non_test_adapter_qualification_receipt_sha256,
+            "non-test adapter qualification receipt",
+        ),
     )
     for actual, expected, subject in checks:
         if actual != expected:
@@ -886,6 +960,12 @@ def require_strategic_sealed_runtime_preflight(
         source_commit=authorization.source_commit,
         teacher_execution_sha256=authorization.teacher_execution_sha256,
         case_catalog_sha256=authorization.case_catalog_sha256,
+        external_audit_receipt_sha256=(
+            authorization.external_audit_receipt_sha256
+        ),
+        non_test_adapter_qualification_receipt_sha256=(
+            authorization.non_test_adapter_qualification_receipt_sha256
+        ),
         _validation_token=_PREFLIGHT_VALIDATION_TOKEN,
     )
 
@@ -1050,11 +1130,17 @@ def score_strategic_sealed_evaluation(
         "case_results": list(assessments),
         "case_catalog_sha256": authorization.case_catalog_sha256,
         "evaluation_id": plan.evaluation_id,
+        "external_audit_receipt_sha256": (
+            authorization.external_audit_receipt_sha256
+        ),
         "live_authority": {
             "blocked": not offline_gate_passed,
             "granted_by_this_result": False,
         },
         "offline_gate_passed": offline_gate_passed,
+        "non_test_adapter_qualification_receipt_sha256": (
+            authorization.non_test_adapter_qualification_receipt_sha256
+        ),
         "plan_sha256": plan.plan_sha256,
         "primary": {
             "both_correct": both_correct,
@@ -1119,8 +1205,10 @@ def execute_strategic_sealed_evaluation(
         raise TypeError("sealed execution requires a plan and authorization")
     if not isinstance(runtime_grant, StrategicSealedRuntimeGrant):
         raise TypeError("sealed execution requires a validated runtime grant")
-    if not callable(getattr(runner, "prepare", None)) or not callable(
-        getattr(runner, "execute_teacher", None)
+    if (
+        not callable(getattr(runner, "prepare", None))
+        or not callable(getattr(runner, "execute_teacher", None))
+        or not callable(getattr(runner, "abort", None))
     ):
         raise TypeError("sealed case runner is incomplete")
     if progress is not None and not callable(progress):
@@ -1208,8 +1296,14 @@ def execute_strategic_sealed_evaluation(
                     "execution_source_bundle_sha256": (
                         plan.execution_source_bundle_sha256
                     ),
+                    "external_audit_receipt_sha256": (
+                        authorization.external_audit_receipt_sha256
+                    ),
                     "model_canonical_sha256": plan.model_canonical_sha256,
                     "model_file_sha256": plan.model_file_sha256,
+                    "non_test_adapter_qualification_receipt_sha256": (
+                        authorization.non_test_adapter_qualification_receipt_sha256
+                    ),
                     "plan_sha256": plan.plan_sha256,
                     "schema": "strategic-sealed-evaluation-start-v1",
                     "source_commit": authorization.source_commit,
@@ -1269,11 +1363,13 @@ def execute_strategic_sealed_evaluation(
                 try:
                     prediction = runner.prepare(case)
                 except StrategicSealedCandidateUnavailableError:
+                    _abort_runner_case(runner, case)
                     outcome = failed_strategic_sealed_case_outcome(
                         case,
                         status="candidate_unavailable",
                     )
                 except Exception:
+                    _abort_runner_case(runner, case)
                     outcome = failed_strategic_sealed_case_outcome(
                         case,
                         status="failed",
@@ -1290,6 +1386,7 @@ def execute_strategic_sealed_evaluation(
                     try:
                         teacher = runner.execute_teacher(case)
                     except Exception:
+                        _abort_runner_case(runner, case)
                         outcome = failed_strategic_sealed_case_outcome(
                             case,
                             status="failed",
@@ -1312,6 +1409,7 @@ def execute_strategic_sealed_evaluation(
                 if progress is not None:
                     progress(StrategicSealedProgress(consumed_cases=case.ordinal))
             except BaseException:
+                _abort_runner_case(runner, case)
                 if _claim_exists(
                     private_root,
                     plan=plan,
@@ -1365,6 +1463,19 @@ def execute_strategic_sealed_evaluation(
             expected_result=result,
         )
     raise AssertionError("sealed collection session suppressed an exception")
+
+
+def _abort_runner_case(
+    runner: StrategicSealedCaseRunner,
+    case: StrategicSealedEvaluationCase,
+) -> None:
+    """Best-effort private-session cleanup without replacing the real failure."""
+
+    abort = getattr(runner, "abort", None)
+    if not callable(abort):
+        return
+    with suppress(BaseException):
+        abort(case)
 
 
 def _load_ledger(
@@ -1711,8 +1822,14 @@ def _validate_start_record(
         "case_order_sha256": canonical_sha256(list(plan.case_order)),
         "evaluation_id": plan.evaluation_id,
         "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
+        "external_audit_receipt_sha256": (
+            authorization.external_audit_receipt_sha256
+        ),
         "model_canonical_sha256": plan.model_canonical_sha256,
         "model_file_sha256": plan.model_file_sha256,
+        "non_test_adapter_qualification_receipt_sha256": (
+            authorization.non_test_adapter_qualification_receipt_sha256
+        ),
         "plan_sha256": plan.plan_sha256,
         "schema": "strategic-sealed-evaluation-start-v1",
         "source_commit": authorization.source_commit,
@@ -2048,6 +2165,14 @@ def _validate_authorization_binding(
     if _GIT_OID.fullmatch(authorization.source_commit) is None:
         raise StrategicSealedEvaluationError("sealed authorization commit is invalid")
     _sha256(authorization.case_catalog_sha256, subject="sealed case catalog")
+    _sha256(
+        authorization.external_audit_receipt_sha256,
+        subject="sealed external audit receipt",
+    )
+    _sha256(
+        authorization.non_test_adapter_qualification_receipt_sha256,
+        subject="sealed non-test adapter qualification receipt",
+    )
     if (
         authorization.plan_sha256 != plan.plan_sha256
         or authorization.execution_source_bundle_sha256
@@ -2065,7 +2190,7 @@ def _validate_runtime_grant(
     authorization: StrategicSealedAuthorization,
     runtime_grant: StrategicSealedRuntimeGrant,
 ) -> None:
-    if runtime_grant._validation_token is not _PREFLIGHT_VALIDATION_TOKEN:
+    if runtime_grant._issued_token is not _PREFLIGHT_VALIDATION_TOKEN:
         raise StrategicSealedEvaluationError("sealed runtime grant is invalid")
     if (
         runtime_grant.plan_sha256 != plan.plan_sha256
@@ -2076,6 +2201,10 @@ def _validate_runtime_grant(
         != authorization.teacher_execution_sha256
         or runtime_grant.case_catalog_sha256
         != authorization.case_catalog_sha256
+        or runtime_grant.external_audit_receipt_sha256
+        != authorization.external_audit_receipt_sha256
+        or runtime_grant.non_test_adapter_qualification_receipt_sha256
+        != authorization.non_test_adapter_qualification_receipt_sha256
     ):
         raise StrategicSealedEvaluationError("sealed runtime grant differs")
 
@@ -2101,6 +2230,39 @@ def _validate_amendments(value: object) -> None:
             ),
             "supersedes_plan_sha256": (
                 "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_case_catalog_and_cartridge_adapter_contract",
+            "reason": (
+                "complete_prediction_first_private_input_adapter_before_"
+                "external_audit_and_owner_authorization"
+            ),
+            "supersedes_plan_sha256": (
+                "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_authenticated_challenge_relocation_contract",
+            "reason": (
+                "independent_adapter_audit_found_source_and_declared_"
+                "challenge_origins_differ"
+            ),
+            "supersedes_plan_sha256": (
+                "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_readiness_receipts_and_unforgeable_runtime_objects",
+            "reason": (
+                "self_audit_found_descriptive_gates_and_copyable_"
+                "validation_tokens_were_not_sufficient"
+            ),
+            "supersedes_plan_sha256": (
+                "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
             ),
         },
     ]
@@ -2181,6 +2343,7 @@ def _validate_execution_policy(
             "intermediate_case_results",
             "intermediate_statistics",
             "prediction_commit",
+            "prepared_session_abort",
             "reopen_consumed_case",
             "restart_after_claim",
             "score_after_consumed_cases",
@@ -2199,6 +2362,9 @@ def _validate_execution_policy(
         "intermediate_case_results": "forbidden",
         "intermediate_statistics": "forbidden",
         "prediction_commit": "durable_before_deterministic_teacher_action",
+        "prepared_session_abort": (
+            "close_without_teacher_action_on_commitment_or_orchestration_failure"
+        ),
         "reopen_consumed_case": False,
         "restart_after_claim": (
             "consume_open_case_as_both_incorrect_continue_next_mark_protocol_failure"

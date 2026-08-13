@@ -65,6 +65,24 @@ def _assignment_ordered_bindings(
     return tuple(sorted(bindings, key=order_key))
 
 
+def ordered_strategic_navigation_bindings(
+    assignment_id: str,
+    decision_index: int,
+    bindings: tuple[DestinationRouteBinding, ...],
+) -> tuple[DestinationRouteBinding, ...]:
+    """Expose the exact identity-blind candidate order used by the recorder."""
+
+    if not isinstance(assignment_id, str) or not assignment_id:
+        raise StrategicNavigationError("strategic assignment identity is absent")
+    if type(decision_index) is not int or decision_index < 0:  # noqa: E721
+        raise StrategicNavigationError("strategic decision index is invalid")
+    if not isinstance(bindings, tuple) or any(
+        not isinstance(binding, DestinationRouteBinding) for binding in bindings
+    ):
+        raise StrategicNavigationError("strategic route bindings are invalid")
+    return _assignment_ordered_bindings(assignment_id, decision_index, bindings)
+
+
 def _validated_json_mapping(value: dict[str, object]) -> Mapping[str, JSONValue]:
     """Let trajectory constructors perform the authoritative deep validation."""
 
@@ -196,7 +214,7 @@ class StrategicNavigationTrajectoryObserver:
             raise StrategicNavigationError(
                 "a strategic decision still awaits its consumed outcome"
             )
-        ordered_bindings = _assignment_ordered_bindings(
+        ordered_bindings = ordered_strategic_navigation_bindings(
             self.assignment.assignment_id,
             self._next_decision_index,
             bindings,

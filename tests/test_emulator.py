@@ -36,6 +36,7 @@ class FakePyBoy:
         self.tick_calls: list[tuple[int, bool, bool]] = []
         self.speed: int | None = None
         self.alive = True
+        self.loaded_states: list[bytes] = []
 
     def set_emulation_speed(self, target_speed: int) -> None:
         self.speed = target_speed
@@ -54,6 +55,9 @@ class FakePyBoy:
     def stop(self, save: bool = True, **kwargs: object) -> None:
         assert not kwargs
         self.events.append(("stop", save))
+
+    def load_state(self, handle: io.BytesIO) -> None:
+        self.loaded_states.append(handle.read())
 
 
 class RecordingFactory:
@@ -181,6 +185,24 @@ def test_adapter_satisfies_frame_safe_controller_contract(
             (2, False, False),
             (3, False, False),
         ]
+
+
+def test_adapter_loads_already_authenticated_state_bytes(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+
+    with PyBoyAdapter(rom_path) as emulator:
+        emulator.load_state_bytes(b"verified private state")
+
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.loaded_states == [b"verified private state"]
+
+        with pytest.raises(EmulatorError, match="unavailable"):
+            emulator.load_state_bytes(b"")
 
 
 def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(

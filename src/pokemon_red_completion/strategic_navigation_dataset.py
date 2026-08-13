@@ -70,6 +70,72 @@ class StrategicNavigationDatasetError(RuntimeError):
 
 
 @dataclass(frozen=True, slots=True)
+class StrategicNavigationInferenceInput:
+    """One validated policy question with no teacher or outcome attached.
+
+    Runtime inference must not invent a selected index merely to reuse the
+    training-example type.  This object exposes exactly the identity-free
+    fields consumed by the scorer and can exist before a teacher acts.
+    """
+
+    policy_input: Mapping[str, object]
+
+    def __post_init__(self) -> None:
+        canonical = _policy_input(
+            _thaw_policy_input(self.policy_input),
+            subject="strategic inference policy input",
+        )
+        object.__setattr__(self, "policy_input", _freeze_policy_input(canonical))
+
+    @classmethod
+    def from_candidates(
+        cls,
+        *,
+        semantic_need_tags: tuple[StrategicNavigationTag, ...],
+        origin_semantic_tags: tuple[StrategicNavigationTag, ...],
+        candidates: tuple[NavigationDestinationCandidate, ...],
+    ) -> StrategicNavigationInferenceInput:
+        if not isinstance(candidates, tuple) or len(candidates) < 2:
+            raise StrategicNavigationDatasetError(
+                "strategic inference needs at least two immutable candidates"
+            )
+        if any(
+            not isinstance(candidate, NavigationDestinationCandidate)
+            for candidate in candidates
+        ):
+            raise StrategicNavigationDatasetError(
+                "strategic inference candidate is invalid"
+            )
+        return cls(
+            {
+                "schema": "strategic-navigation-policy-input-v1",
+                "semantic_need_tags": [
+                    item.value for item in semantic_need_tags
+                ],
+                "origin_semantic_tags": [
+                    item.value for item in origin_semantic_tags
+                ],
+                "candidates": [
+                    candidate.policy_features(binding_index=index)
+                    for index, candidate in enumerate(candidates)
+                ],
+            }
+        )
+
+    @property
+    def candidates(self) -> tuple[Mapping[str, object], ...]:
+        return _candidate_rows(self)
+
+    @property
+    def semantic_need_tags(self) -> tuple[str, ...]:
+        return _need_tags(self)
+
+    @property
+    def ordered_policy_input_sha256(self) -> str:
+        return strategic_ordered_policy_input_sha256(self.policy_input)
+
+
+@dataclass(frozen=True, slots=True)
 class StrategicNavigationExample:
     """One strategic choice with separate imitation and outcome targets."""
 
@@ -806,7 +872,7 @@ def _freeze_policy_input(value: dict[str, object]) -> Mapping[str, object]:
 
 
 def _candidate_rows(
-    example: StrategicNavigationExample,
+    example: StrategicNavigationExample | StrategicNavigationInferenceInput,
 ) -> tuple[Mapping[str, object], ...]:
     rows = example.policy_input.get("candidates")
     if not isinstance(rows, tuple) or any(not isinstance(row, Mapping) for row in rows):
@@ -816,7 +882,9 @@ def _candidate_rows(
     return rows
 
 
-def _need_tags(example: StrategicNavigationExample) -> tuple[str, ...]:
+def _need_tags(
+    example: StrategicNavigationExample | StrategicNavigationInferenceInput,
+) -> tuple[str, ...]:
     tags = example.policy_input.get("semantic_need_tags")
     if not isinstance(tags, tuple) or any(not isinstance(tag, str) for tag in tags):
         raise StrategicNavigationDatasetError(

@@ -39,8 +39,8 @@ DEVELOPMENT_RECEIPT = (
 STRATEGIC_COLLECTION_REGISTRY = (
     ROOT / "configs" / "red-strategic-navigation-collection-v1.json"
 )
-PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v3"
-DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v3"
+PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v6"
+DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v6"
 CASE_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-case-v1"
 EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
 V1_PLAN_SHA256 = (
@@ -48,6 +48,15 @@ V1_PLAN_SHA256 = (
 )
 V2_PLAN_SHA256 = (
     "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
+)
+V3_PLAN_SHA256 = (
+    "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec"
+)
+V4_PLAN_SHA256 = (
+    "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
+)
+V5_PLAN_SHA256 = (
+    "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
 )
 FROZEN_MODEL_SHA256 = (
     "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
@@ -137,8 +146,29 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
         "access_policy": {
             "private_test_inputs_opened_at_freeze": 0,
             "requires_clean_published_exact_source": True,
-            "requires_external_audit": True,
+            "requires_external_audit": (
+                "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            ),
+            "requires_non_test_adapter_qualification": (
+                "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            ),
             "requires_owner_authorization": True,
+        },
+        "adapter_policy": {
+            "candidate_order": "source_bound_assignment_hash_v1",
+            "candidate_planning": "after_authenticated_challenge_relocation",
+            "case_catalog_schema": (
+                "pokemon-strategic-navigation-sealed-case-catalog-v1"
+            ),
+            "challenge_relocation": (
+                "after_claim_deterministic_route_to_declared_origin_"
+                "with_zero_objective_delta"
+            ),
+            "catalog_contains_private_paths": False,
+            "catalog_contains_route_costs_or_answers": False,
+            "input_representation": "unlabeled_identity_free_policy_question",
+            "private_case_open": "only_after_durable_case_claim",
+            "teacher_execution": "only_after_durable_prediction_commitment",
         },
         "attempt_policy": {
             "attempts_per_case": 1,
@@ -166,6 +196,33 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                     "external_audit_required_durable_claim_before_private_case_access"
                 ),
                 "supersedes_plan_sha256": V2_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": "bind_case_catalog_and_cartridge_adapter_contract",
+                "reason": (
+                    "complete_prediction_first_private_input_adapter_before_"
+                    "external_audit_and_owner_authorization"
+                ),
+                "supersedes_plan_sha256": V3_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": "bind_authenticated_challenge_relocation_contract",
+                "reason": (
+                    "independent_adapter_audit_found_source_and_declared_"
+                    "challenge_origins_differ"
+                ),
+                "supersedes_plan_sha256": V4_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": "bind_readiness_receipts_and_unforgeable_runtime_objects",
+                "reason": (
+                    "self_audit_found_descriptive_gates_and_copyable_"
+                    "validation_tokens_were_not_sufficient"
+                ),
+                "supersedes_plan_sha256": V5_PLAN_SHA256,
             },
         ],
         "baseline": {
@@ -220,6 +277,9 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             "intermediate_case_results": "forbidden",
             "intermediate_statistics": "forbidden",
             "prediction_commit": "durable_before_deterministic_teacher_action",
+            "prepared_session_abort": (
+                "close_without_teacher_action_on_commitment_or_orchestration_failure"
+            ),
             "reopen_consumed_case": False,
             "restart_after_claim": (
                 "consume_open_case_as_both_incorrect_continue_next_mark_protocol_failure"

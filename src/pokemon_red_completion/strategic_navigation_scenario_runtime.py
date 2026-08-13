@@ -76,6 +76,7 @@ from pokemon_red_completion.strategic_navigation_runtime import (
     execute_strategic_navigation_route,
 )
 from pokemon_red_completion.strategic_navigation_scenario_routes import (
+    STRATEGIC_SCENARIO_ORIGIN_MAPS,
     ScenarioObjectiveDestinationSpec,
 )
 from pokemon_red_completion.strategic_navigation_scenarios import (
@@ -545,6 +546,7 @@ def record_strategic_scenario_rehearsal(
     traversal_observer: TraversalObserver,
     bindings: tuple[DestinationRouteBinding, ...],
     selected_destination_ref: str,
+    origin_region_ref: str | None = None,
     interruption_handler_factory: InterruptionHandlerFactory | None = None,
     replanner: RouteReplanner | None = None,
     resource_manager: RouteResourceManager | None = None,
@@ -577,6 +579,21 @@ def record_strategic_scenario_rehearsal(
     if selected_destination_ref != expected_selected:
         raise StrategicScenarioRuntimeError(
             "scenario rehearsal selection differs from the preregistered teacher"
+        )
+    resolved_origin_region_ref = (
+        f"pokemon.red:region:{scenario.origin_region}"
+        if origin_region_ref is None
+        else origin_region_ref
+    )
+    origin_prefix = "pokemon.red:region:"
+    if (
+        not isinstance(resolved_origin_region_ref, str)
+        or not resolved_origin_region_ref.startswith(origin_prefix)
+        or resolved_origin_region_ref.removeprefix(origin_prefix)
+        not in STRATEGIC_SCENARIO_ORIGIN_MAPS
+    ):
+        raise StrategicScenarioRuntimeError(
+            "scenario rehearsal origin region is unsupported"
         )
     expected_metadata = assignment.episode_metadata()
     for key in ("collection", "policy", "source", "source_bundle_sha256", "split"):
@@ -620,7 +637,7 @@ def record_strategic_scenario_rehearsal(
                 StrategicNavigationTag.OVERWORLD,
                 StrategicNavigationTag.SAFE_HUB,
             ),
-            origin_region_ref=f"pokemon.red:region:{scenario.origin_region}",
+            origin_region_ref=resolved_origin_region_ref,
             bindings=bindings,
             selected_destination_ref=selected_destination_ref,
             actions=recorder,

@@ -19,9 +19,15 @@ underpowered rather than reinterpreted.
 The project now turns those promises into code. A one-shot state machine binds source, model,
 teacher, case catalog and owner authorization before case one; durably claims inputs before access;
 commits model and baseline predictions before teacher execution; consumes crashes without reruns;
-and withholds every metric until all twelve outcomes exist. The ROM-free core passes 2,832 tests,
-linting and static typing. It is awaiting independent audit and still has no cartridge-facing sealed
-adapter or owner authorization. Final-test access remains **0/12**.
+and withholds every metric until all twelve outcomes exist. A strict path-free catalog boundary and
+prediction-first PyBoy adapter now sit behind that state machine. Self-audit caught a real benchmark
+execution flaw before access: ten challenge cases begin in a different city from the authenticated
+source snapshot. The adapter now relocates after claim without a label, refuses any objective
+change, and plans model candidates only at the declared origin. A later hardening pass made exact
+audit and non-test qualification receipts part of runtime authority, blocked cloning of validated
+objects, rejected symlinks throughout the private root and required cleanup capability before the
+immutable ledger can start. Independent adapter audit, live non-test qualification, the actual
+catalog and owner authorization remain pending. Final-test access remains **0/12**.
 
 ## August 12 update
 

@@ -5,9 +5,10 @@
 Claude's independent review found two real pre-test design defects, then its second pass found one
 power defect in the proposed repair. All three were caught before any sealed scenario was opened.
 The model-capacity and public test-capability defects are repaired, and Claude has approved the
-amended endpoint. The ROM-free executor/scorer core is now implemented for independent audit. The
-live cartridge adapter, exact case-catalog binding, owner authorization and exact-commit CI remain
-hard stops.
+amended endpoint. The ROM-free executor/scorer core, strict path-free catalog boundary and
+prediction-first cartridge adapter are now implemented. Readiness evidence is now mechanically
+bound into authorization and runtime preflight. Independent adapter audit, live non-test relocation
+qualification, an actual private catalog, owner authorization and exact-commit CI remain hard stops.
 
 The v2 collection is unchanged: 24 authenticated train choices, 12 development-validation choices,
 36 unique candidate-order-invariant contexts, no partition overlap and no failed or interrupted
@@ -115,7 +116,7 @@ underpowered evidence rather than proof that the model learned nothing.
 
 ## Finding 4: optional stopping is now an executable rule
 
-The plan is now schema v3 with digest
+At the executor-core checkpoint, the plan was schema v3 with digest
 `f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec`. Its amendment chain preserves
 both prior plan digests. The new source module provides a strict public loader, owner-authorization
 format, preflight grant, immutable private ledger, one-shot executor and final-only scorer.
@@ -147,24 +148,84 @@ that can improve the paired result.
 The ROM-free tests exercise preflight mismatches, authorization binding, fixed order, claim-before-
 access, prediction-before-teacher ordering, incomplete-score refusal, challenge/safety separation,
 unfavorable failed cases, cached-final verification, hard crash/restart consumption, runner
-identity mismatch, a pre-claim crash, and a second-authorization rerun attempt. The exact local gate is 2,832 passed,
-three integration tests deselected, one
-expected failure, Ruff clean and mypy clean across 165 source files.
+identity mismatch, a pre-claim crash, and a second-authorization rerun attempt. That historical
+local gate was 2,832 passed, three integration tests deselected, one expected failure, Ruff clean
+and mypy clean across 165 source files.
 
-This is not yet the cartridge-facing runner. The injected adapter boundary is intentional: it lets
-the protocol be attacked without touching a private input. The next implementation must build the
-real case catalog and map each claimed case into the existing private capture, frozen model,
-route-cost baseline and deterministic teacher while retaining this two-stage order.
+## Finding 5: challenge origin was not the source snapshot origin
+
+The adapter audit found a concrete execution gap before any sealed input was opened. Ten challenge
+cases deliberately move the evaluation question beside a tempting non-teacher objective. Their
+source scenarios authenticate a different origin. The first factory draft loaded that source and
+immediately required it to already be at the challenge origin—an impossible assumption disguised by
+ROM-free interface tests.
+
+Plan schema v5 freezes the repair. A claimed case now authenticates its original source region and
+exact completed-objective frontier, performs a deterministic relocation without recording a
+strategic decision, rejects any change to that frontier, authenticates the declared challenge
+region, and only then constructs candidate routes and an unlabeled model input. The teacher
+trajectory records the declared challenge origin. Candidate ordering is derived from the exact
+capture, scenario registry, source bundle, source commit and teacher execution rather than accepting
+an arbitrary nonce.
+
+The schema-v5 checkpoint was 12,505 bytes with SHA-256
+`2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6`. Its amendment chain retains
+schema-v4 digest `63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7`.
+Focused catalog, executor, adapter and relocation verification is 101 passed; synthetic objective
+drift closes the emulator before candidate planning. This historical checkpoint was not live
+cartridge qualification and is superseded by schema v6 below.
+
+One authority bootstrap remains explicit. The final owner receipt must bind the exact catalog
+digest, while building that catalog requires hashing the private test captures. The next step must
+therefore use narrowly scoped inventory-only owner permission or a custodian-supplied canonical
+path-free manifest. It must not silently inspect captures under an authorization that cannot yet be
+constructed.
+
+## Finding 6: descriptive readiness gates were not runtime authority
+
+The next self-audit found two fail-open seams while test access was still 0/12. First, the plan said
+that external audit and non-test qualification were required, but an authorization and runtime
+grant did not bind the exact evidence. Second, loader-issued frozen dataclasses carried a private
+constructor token as a normal field, so `dataclasses.replace` could copy that token while changing
+an authenticated value.
+
+Plan schema v6 freezes the repair. Owner authorization now names the exact SHA-256 of both the
+external-audit receipt and the non-test adapter-qualification receipt. Runtime preflight must be
+given the same two digests and refuses either mismatch before publishing its start record. Those
+identities persist in the immutable start ledger and final public result. Validation tokens are now
+required `InitVar` inputs and runtime grants retain a private issued-token check, so direct
+construction and ordinary dataclass cloning both fail.
+
+The private opener was hardened at the same boundary: its root must be absolute, and every path
+component from the filesystem anchor through the case directory is opened descriptor-relative with
+symlink following disabled. An executor runner must expose a cleanup boundary before the start
+record can exist, preventing a prepared emulator session from becoming uncloseable after a failed
+prediction commitment.
+
+The current plan is 12,914 bytes with SHA-256
+`9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`; source bundle
+`6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db`; teacher execution
+`7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd`. Its fifth pre-access
+amendment preserves schema-v5 digest
+`2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6`. The focused public gate is
+124 passed. The full repository gate is 2,872 passed, three integration tests deselected, one
+expected failure, Ruff clean and mypy clean across 168 source files. Receipt binding authenticates
+exact bytes plus the owner's acknowledgement; an independent reviewer should still decide whether
+typed receipt parsers are warranted before authorization. No audit or live-qualification verdict
+is being claimed here.
 
 ## Stop line and next work
 
 Do not open, preflight, materialize or score a private test capture yet. The safe order is:
 
-1. independently audit the ROM-free executor/scorer core without private access;
-2. implement and audit the cartridge-facing runner and exact case catalog using non-test fixtures;
+1. independently audit the catalog, cartridge adapter and readiness-receipt boundary without
+   private test access, producing a stable audit receipt;
+2. live-qualify challenge relocation using non-test cartridge fixtures only, producing a stable
+   qualification receipt;
 3. publish that exact source and require green exact-commit CI;
-4. obtain explicit owner authorization bound to the final plan, source, model, teacher and catalog;
-   and
+4. obtain explicit inventory-only authority or a custodian manifest to build the exact path-free
+   catalog, then obtain owner authorization bound to the final plan, source, model, teacher and
+   catalog; and
 5. only then measure baseline disagreements and execute the one-shot comparison, publishing every
    result whether favorable or unfavorable.
 
@@ -183,6 +244,10 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Linear and sealed-design mutation audit](evidence/strategic-linear-and-sealed-design-mutation-audit-2026-08-13.json)
 - [Sealed endpoint-amendment mutation audit](evidence/strategic-sealed-endpoint-amendment-mutation-audit-2026-08-13.json)
 - [Sealed executor/scorer implementation audit](evidence/strategic-sealed-executor-implementation-audit-2026-08-13.json)
+- [Superseded schema-v5 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v5-freeze-2026-08-13.json)
+- [Current schema-v6 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v6-freeze-2026-08-13.json)
+- [ROM-free sealed-adapter qualification](evidence/strategic-sealed-adapter-rom-free-qualification-2026-08-13.json)
 - [Linear pre-test audit handoff](claude-linear-pre-test-audit-handoff-2026-08-13.md)
 - [Sealed endpoint-amendment audit handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md)
 - [Sealed executor/scorer audit handoff](claude-sealed-executor-audit-handoff-2026-08-13.md)
+- [Sealed adapter audit handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md)

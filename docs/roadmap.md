@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-13): repair the sealed experiment before opening it
+## Current focus (2026-08-13): independently audit and live-qualify the sealed adapter
 
 The non-test campaign is complete. All 36 counted learning scenarios were executed exactly once:
 24 train and 12 validation, with one successful destination choice per episode, 36 unique policy
@@ -33,8 +33,19 @@ all-twelve primary paired test mixed in two asymmetric non-challenge cases. Befo
 access, the plan was amended: the ten challenges are the primary endpoint, all-twelve accuracy is
 mandatory, and the other two cases form a separate safety gate. Claude approved that amendment and
 corrected the realistic power estimate to roughly 42–68% under an 85% challenge-validity
-assumption. The public executor/scorer core is now implemented under a schema-v3 plan. It has not
-opened a test input, and it does not include or authorize the cartridge-facing private-case runner.
+assumption. The public executor/scorer core and prediction-first cartridge boundary are now
+implemented under a schema-v6 plan. The adapter uses a path-free digest catalog, accepts only the
+exact frozen linear scorer, and exposes unlabeled identity-free candidate rows.
+
+Self-audit found that ten challenge origins differ from their source snapshot origins. The adapter
+now authenticates the source state after claim, relocates without a label, rejects any objective
+delta and plans candidates only after authenticating the declared challenge origin. External-audit
+and non-test qualification receipt digests are now mandatory in owner authorization and runtime
+preflight; loader-issued authority objects cannot be cloned through dataclass replacement; the
+private root is opened without following any path-component symlink; and runner cleanup is required
+before the start ledger exists. The exact plan is 12,914 bytes with SHA-256
+`9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`. Test remains **0/12 opened**;
+no real catalog or owner authorization exists.
 
 Ordered next work:
 
@@ -43,21 +54,28 @@ Ordered next work:
 2. **Complete:** Claude approved the amended challenge-only primary endpoint, all-case descriptive
    endpoint and two-case safety endpoint. Nineteen semantic mutations were killed without using the
    whole-plan digest assertion as the oracle.
-3. **Implemented; independent audit pending:** the ROM-free sealed state machine requires preflight
+3. **Complete:** the ROM-free sealed state machine requires preflight
    identity checks before case one, durable claim before private access, prediction commitment
    before teacher action, fixed order, crash consumption, no reopening and final-only scoring.
-4. Independently attack that core using the
-   [executor/scorer handoff](claude-sealed-executor-audit-handoff-2026-08-13.md). Do not open a test
-   input. Resolve any finding and repeat the exact local gate.
-5. Build the cartridge-facing runner and exact case catalog behind the audited interface. Qualify
-   it against non-test fixtures only, bind its identities into the prospective authorization,
-   publish the exact commit and require green CI.
-6. Only after those gates and explicit owner authorization, measure the frozen baseline capability
+4. **Complete:** implement the strict catalog/parser/opener, prediction adapter and PyBoy session
+   behind that state machine. Candidate ordering is source-bound and the model input contains no
+   teacher label, destination identity or map identity.
+5. **Complete in ROM-free fixtures; live qualification pending:** authenticate the source frontier,
+   relocate challenges to the declared origin without a label or objective delta, then plan
+   candidates. The 36 non-test public shapes and synthetic cleanup/failure paths pass.
+6. Independently attack the adapter and receipt boundary using the
+   [adapter handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md), resolve every finding, and
+   preserve the exact audit receipt. Then live-qualify the exact relocation path on non-test
+   cartridge fixtures only and preserve that exact qualification receipt.
+7. Publish the exact source and require green CI. Separately obtain explicit inventory-only
+   permission to hash the twelve test captures—or a custodian-supplied path-free manifest—so the
+   real catalog can be created without pretending an evaluation receipt existed first.
+8. Only after those gates and explicit owner authorization, measure the frozen baseline capability
    and run the one-shot model comparison. Publish every result, favorable or unfavorable.
-7. Only after offline test, add shadow execution in live strategic choices. The deterministic
+9. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.
-8. Expand context semantics before cross-title transfer. The current 36 examples all express the
+10. Expand context semantics before cross-title transfer. The current 36 examples all express the
    same broad story-advance need and the same safe-overworld origin tags, so those feature columns
    are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
    training and recovery—not merely repeat Red's story sequence.

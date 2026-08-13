@@ -69,14 +69,27 @@ STRATEGIC_NAVIGATION_FEATURE_NAMES = (
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
+class StrategicNavigationModelInput(Protocol):
+    """Identity-free question accepted before or after a teacher label exists."""
+
+    @property
+    def policy_input(self) -> Mapping[str, object]: ...
+
+    @property
+    def candidates(self) -> tuple[Mapping[str, object], ...]: ...
+
+    @property
+    def semantic_need_tags(self) -> tuple[str, ...]: ...
+
+
 class StrategicNavigationScorer(Protocol):
     """Minimal shared interface for destination-ranking models."""
 
     def probabilities(
-        self, example: StrategicNavigationExample
+        self, example: StrategicNavigationModelInput
     ) -> NDArray[np.float64]: ...
 
-    def predict(self, example: StrategicNavigationExample) -> int: ...
+    def predict(self, example: StrategicNavigationModelInput) -> int: ...
 
     def to_dict(self) -> dict[str, object]: ...
 
@@ -171,7 +184,7 @@ class StrategicNavigationMLP:
             detached.setflags(write=False)
             object.__setattr__(self, name, detached)
 
-    def scores(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+    def scores(self, example: StrategicNavigationModelInput) -> NDArray[np.float64]:
         features = strategic_navigation_feature_matrix(example)
         normalized = (features - self.feature_mean) / self.feature_scale
         scores = np.tanh(normalized @ self.weights1 + self.bias1) @ self.weights2
@@ -179,14 +192,16 @@ class StrategicNavigationMLP:
             raise StrategicNavigationModelError("strategic candidate scores are invalid")
         return scores
 
-    def probabilities(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+    def probabilities(
+        self, example: StrategicNavigationModelInput
+    ) -> NDArray[np.float64]:
         scores = self.scores(example)
         shifted = scores - np.max(scores)
         probabilities = np.exp(shifted)
         probabilities /= np.sum(probabilities)
         return probabilities
 
-    def predict(self, example: StrategicNavigationExample) -> int:
+    def predict(self, example: StrategicNavigationModelInput) -> int:
         return int(np.argmax(self.probabilities(example)))
 
     def to_dict(self) -> dict[str, object]:
@@ -378,7 +393,7 @@ class StrategicNavigationLinear:
 
         return len(self.enabled_feature_names)
 
-    def scores(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+    def scores(self, example: StrategicNavigationModelInput) -> NDArray[np.float64]:
         features = strategic_navigation_feature_matrix(example)
         normalized = (features - self.feature_mean) / self.feature_scale
         scores = normalized @ self.weights
@@ -386,14 +401,16 @@ class StrategicNavigationLinear:
             raise StrategicNavigationModelError("strategic candidate scores are invalid")
         return scores
 
-    def probabilities(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+    def probabilities(
+        self, example: StrategicNavigationModelInput
+    ) -> NDArray[np.float64]:
         scores = self.scores(example)
         shifted = scores - np.max(scores)
         probabilities = np.exp(shifted)
         probabilities /= np.sum(probabilities)
         return probabilities
 
-    def predict(self, example: StrategicNavigationExample) -> int:
+    def predict(self, example: StrategicNavigationModelInput) -> int:
         return int(np.argmax(self.probabilities(example)))
 
     def to_dict(self) -> dict[str, object]:
@@ -546,7 +563,7 @@ class StrategicNavigationLinear:
 
 
 def strategic_navigation_feature_matrix(
-    example: StrategicNavigationExample,
+    example: StrategicNavigationModelInput,
 ) -> NDArray[np.float64]:
     """Project one identity-free variable-sized choice into frozen numeric rows."""
 
@@ -668,7 +685,7 @@ def evaluate_strategic_navigation_model(
     )
 
 
-def route_cost_baseline_prediction(example: StrategicNavigationExample) -> int:
+def route_cost_baseline_prediction(example: StrategicNavigationModelInput) -> int:
     available = tuple(
         (index, candidate.get("route_cost"))
         for index, candidate in enumerate(example.candidates)

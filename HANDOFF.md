@@ -14,6 +14,49 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Schema-v6 sealed boundary ready for independent audit — 2026-08-13
+
+The prediction-first cartridge boundary is implemented and ROM-free qualified. A strict path-free
+catalog binds the twelve frozen cases to capture envelope/state digests without containing paths,
+route costs, answers or outcomes. The production runner accepts only the exact frozen linear model,
+derives candidate ordering from the exact capture/scenario/source identities, commits model and
+cheapest-route predictions before the deterministic teacher acts, and closes an unexecuted session
+if commitment or orchestration fails.
+
+Self-audit found a material issue before any test input was accessed: ten challenge cases declare a
+different origin from their source scenario snapshot. The first factory draft incorrectly assumed a
+repositioned snapshot already existed. After durable claim,
+the adapter authenticates the original source origin and exact objective frontier, performs a
+deterministic no-label relocation to the declared challenge origin, rejects any objective delta,
+authenticates the new origin, and only then plans the candidates shown to the model. Synthetic
+wiring proves relocation precedes candidate planning and that objective drift closes the emulator.
+
+A second self-audit found that two prerequisite gates existed only as prose and that validated
+dataclasses could be copied with their hidden constructor token. Schema v6 binds exact external-
+audit and non-test qualification receipt digests into owner authorization, runtime preflight, the
+start ledger and the final result. Required `InitVar` tokens prevent ordinary dataclass cloning;
+the private opener rejects relative roots and symlinks in every absolute-path component; and the
+executor refuses to create its start record unless the runner exposes a prepared-session abort.
+
+Current plan: 12,914 bytes, SHA-256
+`9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`; source bundle
+`6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db`; teacher execution
+`7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd`. The fifth pre-access
+amendment preserves schema-v5 digest
+`2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6` as superseded. Focused
+protocol/catalog/adapter tests are 124 passed. The final repository gate is 2,872 passed, three
+integration tests deselected, one expected failure, Ruff clean and mypy clean across 168 source
+files. Test remains **0/12 opened**; no actual catalog or owner receipt exists.
+
+Next, give Claude [the adapter audit handoff](docs/claude-sealed-adapter-audit-handoff-2026-08-13.md)
+and keep every actual test capture closed. The audit and live non-test qualification must each
+produce a stable receipt whose digest can enter the final authorization. After findings are
+resolved, publish the exact source and require green CI. There is then a separate
+authority question: creating the real catalog requires hashing private captures before an owner
+receipt can bind the catalog digest. Obtain explicit inventory-only permission or a
+custodian-supplied canonical path-free manifest; do not bootstrap it by silently inspecting the
+test captures. Full evaluation authorization comes only afterward.
+
 ## Sealed executor/scorer core ready for independent audit — 2026-08-13
 
 Claude approved the amended ten-challenge primary endpoint after killing 19/19 semantic mutations

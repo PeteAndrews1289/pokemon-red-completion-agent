@@ -284,6 +284,14 @@ class PyBoyAdapter:
         with path.open("rb") as handle:
             self._require_backend().load_state(handle)
 
+    def load_state_bytes(self, payload: bytes) -> None:
+        """Restore already-authenticated state bytes without reopening a path."""
+
+        if not isinstance(payload, bytes) or not payload:
+            raise EmulatorError("saved state bytes are unavailable")
+        with io.BytesIO(payload) as handle:
+            self._require_backend().load_state(handle)
+
     def close(self) -> None:
         backend = self._backend
         self._window_event_pump = None

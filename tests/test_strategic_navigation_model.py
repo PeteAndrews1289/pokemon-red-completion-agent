@@ -10,6 +10,7 @@ import pytest
 from pokemon_red_completion.strategic_navigation import NavigationOutcomeStatus
 from pokemon_red_completion.strategic_navigation_dataset import (
     StrategicNavigationExample,
+    StrategicNavigationInferenceInput,
 )
 from pokemon_red_completion.strategic_navigation_model import (
     STRATEGIC_NAVIGATION_FEATURE_NAMES,
@@ -112,6 +113,32 @@ def test_shared_scorer_is_permutation_equivariant_and_round_trips() -> None:
         canonical_strategic_navigation_model_sha256(model)
     )
     assert not restored.weights1.flags.writeable
+
+
+def test_frozen_scorer_accepts_an_unlabeled_policy_question() -> None:
+    training = tuple(_example(index, reverse=index % 2 == 1) for index in range(12))
+    model = StrategicNavigationLinear.fit(
+        training,
+        enabled_feature_names=(
+            "candidate.route_cost.relative_rank",
+            "candidate.route_steps.relative_rank",
+            "candidate.map_transitions.relative_rank",
+            "candidate.field_actions.relative_rank",
+            "candidate.mode_changes.relative_rank",
+        ),
+        feature_set_id="relative_route",
+        epochs=300,
+    )
+    labeled = _example(20)
+    unlabeled = StrategicNavigationInferenceInput(labeled.policy_input)
+
+    assert not hasattr(unlabeled, "selected_candidate_index")
+    assert not hasattr(unlabeled, "outcome_status")
+    assert unlabeled.ordered_policy_input_sha256 == labeled.ordered_policy_input_sha256
+    assert model.probabilities(unlabeled) == pytest.approx(
+        model.probabilities(labeled)
+    )
+    assert model.predict(unlabeled) == model.predict(labeled)
 
 
 def test_model_beats_cheapest_route_on_synthetic_semantic_choices() -> None:

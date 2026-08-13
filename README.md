@@ -20,9 +20,17 @@
 > 42–68%, not the earlier 58–84% estimate. The public one-shot executor/scorer core is now
 > implemented: it fixes case order, durably claims a case before access, commits model and baseline
 > predictions before the teacher acts, consumes crashes without reopening a case, and cannot
-> calculate an intermediate p-value. It is ready for independent audit, not private execution; the
-> cartridge-facing case runner, exact catalog binding, owner authorization, and exact-commit CI are
-> still gates. Test remains 0/12 and no authorization receipt exists. See
+> calculate an intermediate p-value. The path-free catalog boundary, exact-linear prediction
+> adapter and PyBoy case session are now implemented and ROM-free qualified. Self-audit caught that
+> ten challenge origins differ from their source snapshots; the adapter now authenticates each source
+> frontier after claim, relocates without a label or objective change, and only then plans model
+> candidates. A second hardening pass made external-audit and non-test qualification receipt
+> digests mandatory in owner authorization and runtime preflight, closed dataclass-cloning and
+> root-symlink loopholes, and requires cleanup capability before the execution ledger can start.
+> The exact schema-v6 plan digest is
+> `9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`. Independent adapter audit,
+> live non-test relocation qualification, an actual path-free catalog, owner authorization and
+> exact-commit CI are still gates. Test remains 0/12 and no authorization receipt exists. See
 > the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted

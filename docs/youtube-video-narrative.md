@@ -39,6 +39,23 @@ the result panel appear. The line is: **“Even the p-value was sealed until sto
 choice.”** End on **TEST STILL 0 OF 12 → INDEPENDENT CORE AUDIT → NON-TEST ADAPTER QUALIFICATION →
 OWNER AUTHORIZATION → OPEN ONCE**.
 
+Add one final pre-test reveal before the authorization card. Draw each source snapshot in its
+authenticated city, then draw the ten challenge cards in Celadon, Saffron or Cinnabar. The first
+adapter tries to overlay them and fails: **SOURCE ORIGIN ≠ CHALLENGE ORIGIN**. Replace that jump with
+a locked sequence: **CLAIM → AUTHENTICATE SOURCE + STORY FRONTIER → RELOCATE WITH NO LABEL → VERIFY
+ZERO OBJECTIVE CHANGE → PLAN CANDIDATES**. If the frontier counter moves, close the emulator before
+the model receives a question. The line is: **“The benchmark changed where the question was asked;
+it was not allowed to change what the save had accomplished.”** End on **PLAN V5 / TEST 0 OF 12 /
+REAL CATALOG NOT YET CREATED**.
+
+Then replace **PLAN V5** with a final **PLAN V6** lock. Feed two unopened evidence cards into the
+authorization gate: **INDEPENDENT AUDIT RECEIPT** and **LIVE NON-TEST QUALIFICATION RECEIPT**. A
+mismatched digest turns the gate red before the ledger starts. Try to duplicate an authorized object
+and stamp the copy **REFUSED**; try a symlinked private root and stamp it **REFUSED**; remove the
+cleanup handle and show **START RECORD NOT CREATED**. The line is: **“Saying a gate existed was not
+enough. The run had to be cryptographically bound to the exact evidence that opened it.”** Keep
+**TEST 0 OF 12** visible throughout.
+
 ## August 13 scene: the counter finally leaves zero
 
 Open on the old scoreboard—**COUNTED DATA 0 / TEST OPENED 0**—then replace only the first number:

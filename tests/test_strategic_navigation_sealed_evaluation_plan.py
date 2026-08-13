@@ -40,10 +40,10 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     plan = _plan()
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
     expected_sha256 = (
-        "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec"
+        "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
     )
 
-    assert len(payload) == 11208
+    assert len(payload) == 12914
     assert hashlib.sha256(payload).hexdigest() == expected_sha256
     assert payload == (
         json.dumps(
@@ -57,7 +57,7 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     )
     assert digest == {
         "bytes": len(payload),
-        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v3",
+        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v6",
         "sha256": expected_sha256,
     }
     subprocess.run(
@@ -104,7 +104,7 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
         "training_epochs": 600,
     }
     assert plan["execution_source_bundle_sha256"] == (
-        "585fab5b42d9b409b9d7d6659d191987ba5a31958f9ac39734f6d1e07f9833b7"
+        "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db"
     )
     assert plan["training_development_receipt_sha256"] == (
         "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612"
@@ -112,7 +112,12 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
     assert access == {
         "private_test_inputs_opened_at_freeze": 0,
         "requires_clean_published_exact_source": True,
-        "requires_external_audit": True,
+        "requires_external_audit": (
+            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+        ),
+        "requires_non_test_adapter_qualification": (
+            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+        ),
         "requires_owner_authorization": True,
     }
     assert teacher == {
@@ -126,10 +131,10 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
             "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523"
         ),
         "source_bundle_sha256": (
-            "585fab5b42d9b409b9d7d6659d191987ba5a31958f9ac39734f6d1e07f9833b7"
+            "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db"
         ),
         "teacher_execution_sha256": (
-            "07748caa2e1aa4a2d582c80d1d06ab1afc9b9f6725c6d0fc8224ef9b1946073e"
+            "7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd"
         ),
     }
 
@@ -178,7 +183,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
     assert isinstance(access, dict)
     assert isinstance(amendments, list)
 
-    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v3"
+    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v6"
     assert access["private_test_inputs_opened_at_freeze"] == 0
     assert amendments == [
         {
@@ -200,6 +205,39 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
             ),
             "supersedes_plan_sha256": (
                 "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_case_catalog_and_cartridge_adapter_contract",
+            "reason": (
+                "complete_prediction_first_private_input_adapter_before_"
+                "external_audit_and_owner_authorization"
+            ),
+            "supersedes_plan_sha256": (
+                "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_authenticated_challenge_relocation_contract",
+            "reason": (
+                "independent_adapter_audit_found_source_and_declared_"
+                "challenge_origins_differ"
+            ),
+            "supersedes_plan_sha256": (
+                "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": "bind_readiness_receipts_and_unforgeable_runtime_objects",
+            "reason": (
+                "self_audit_found_descriptive_gates_and_copyable_"
+                "validation_tokens_were_not_sufficient"
+            ),
+            "supersedes_plan_sha256": (
+                "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
             ),
         },
     ]
@@ -360,10 +398,34 @@ def test_sealed_plan_forbids_optional_stopping_and_reopening_cases() -> None:
         "intermediate_case_results": "forbidden",
         "intermediate_statistics": "forbidden",
         "prediction_commit": "durable_before_deterministic_teacher_action",
+        "prepared_session_abort": (
+            "close_without_teacher_action_on_commitment_or_orchestration_failure"
+        ),
         "reopen_consumed_case": False,
         "restart_after_claim": (
             "consume_open_case_as_both_incorrect_continue_next_mark_protocol_failure"
         ),
         "score_after_consumed_cases": 12,
         "single_continuous_invocation_required": True,
+    }
+
+
+def test_sealed_plan_binds_the_unlabeled_catalog_adapter_boundary() -> None:
+    plan = _plan()
+
+    assert plan["adapter_policy"] == {
+        "candidate_order": "source_bound_assignment_hash_v1",
+        "candidate_planning": "after_authenticated_challenge_relocation",
+        "case_catalog_schema": (
+            "pokemon-strategic-navigation-sealed-case-catalog-v1"
+        ),
+        "challenge_relocation": (
+            "after_claim_deterministic_route_to_declared_origin_"
+            "with_zero_objective_delta"
+        ),
+        "catalog_contains_private_paths": False,
+        "catalog_contains_route_costs_or_answers": False,
+        "input_representation": "unlabeled_identity_free_policy_question",
+        "private_case_open": "only_after_durable_case_claim",
+        "teacher_execution": "only_after_durable_prediction_commitment",
     }

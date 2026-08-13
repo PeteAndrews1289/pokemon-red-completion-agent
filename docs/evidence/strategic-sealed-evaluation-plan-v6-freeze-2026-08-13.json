@@ -1,0 +1,77 @@
+{
+  "access": {
+    "live_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "amendments": [
+    {
+      "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
+      "private_test_inputs_opened_before_amendment": 0,
+      "superseded_plan_sha256": "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
+    },
+    {
+      "change": "bind_fail_closed_executor_and_optional_stopping_contract",
+      "private_test_inputs_opened_before_amendment": 0,
+      "superseded_plan_sha256": "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
+    },
+    {
+      "change": "bind_case_catalog_and_cartridge_adapter_contract",
+      "private_test_inputs_opened_before_amendment": 0,
+      "superseded_plan_sha256": "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec"
+    },
+    {
+      "change": "bind_authenticated_challenge_relocation_contract",
+      "private_test_inputs_opened_before_amendment": 0,
+      "reason": "the source snapshots authenticate their original scenario origins, while ten sealed challenges deliberately ask the same frontier from a different declared origin",
+      "superseded_plan_sha256": "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
+    },
+    {
+      "change": "bind_readiness_receipts_and_unforgeable_runtime_objects",
+      "private_test_inputs_opened_before_amendment": 0,
+      "reason": "descriptive audit gates and constructor-only validation tokens were insufficient runtime authority",
+      "superseded_plan_sha256": "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
+    }
+  ],
+  "adapter_policy": {
+    "candidate_order": "source_bound_assignment_hash_v1",
+    "candidate_planning": "after_authenticated_challenge_relocation",
+    "challenge_relocation": "after_claim_deterministic_route_to_declared_origin_with_zero_objective_delta",
+    "input_representation": "unlabeled_identity_free_policy_question",
+    "private_case_open": "only_after_durable_case_claim",
+    "teacher_execution": "only_after_durable_prediction_commitment"
+  },
+  "capability": {
+    "challenge_cases": 10,
+    "minimum_measured_disagreements_required": 6,
+    "non_challenge_safety_cases": 2,
+    "test_cases": 12
+  },
+  "plan": {
+    "bytes": 12914,
+    "case_order_sha256": "8c913e7101efdfe33c21c849d46da6076653066869077e5043bcf60928a4f2ba",
+    "evaluation_id": "red-strategic-navigation-sealed-evaluation-v1",
+    "execution_source_bundle_sha256": "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db",
+    "relative_path": "configs/red-strategic-navigation-sealed-evaluation-v1.json",
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v6",
+    "sha256": "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440",
+    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "teacher_execution_sha256": "7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd"
+  },
+  "readiness_binding": {
+    "external_audit_receipt": "digest required in owner authorization and runtime preflight",
+    "non_test_adapter_qualification_receipt": "digest required in owner authorization and runtime preflight",
+    "validated_objects": "loader issued and not cloneable through dataclass replacement"
+  },
+  "schema": "strategic-sealed-evaluation-plan-v6-freeze-v1",
+  "status": {
+    "actual_case_catalog_created": false,
+    "external_adapter_audit_required": true,
+    "live_cartridge_qualification_required": true,
+    "owner_authorization_required_after_audit": true,
+    "ready_to_open_private_test": false
+  }
+}
