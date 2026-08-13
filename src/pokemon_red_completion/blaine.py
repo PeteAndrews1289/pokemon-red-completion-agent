@@ -256,9 +256,12 @@ STRENGTH_MOVE_ID = 0x46
 # Muk can outlast a trainee's weak coverage and turn a safe starting-HP check
 # into a long attritional knockout. A held-out feature-v2 collection also
 # observed a level-29 Dugtrio knock out a full-health level-34 trainee before
-# the per-turn retreat callback could protect it. Both are fled rather than
-# gambling the zero-faint contract or feeding the already-high Blastoise.
-MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88, DUGTRIO_SPECIES_ID})
+# the per-turn retreat callback could protect it. The authenticated four-member
+# lineage then observed a Mansion Ponyta move first and knock out a 115-HP
+# Farfetch'd before its attack landed; the opponent remained at full health.
+# These are fled rather than gambling the zero-faint contract or feeding the
+# already-high Blastoise.
+MANSION_ESCORT_ENEMY_SPECIES = frozenset({0x88, DUGTRIO_SPECIES_ID, 0xA3})
 # Koffing and Weezing can end an encounter with Selfdestruct while a trainee is
 # switching to the escort. They are never assigned to a trainee directly. A
 # terminal Selfdestruct is counted only after the zero-faint check; otherwise
