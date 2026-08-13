@@ -980,16 +980,19 @@ def run_red_team_balancing(
                         )
                 current_venue = next(v for v in venues if v.band == target_band)
                 if (
-                    trainee_selection_changed
+                    (trainee_selection_changed or decision.target_slot != trainee.slot)
                     and not party.fainted_count
                     and decision.directive
                     not in {TeamTrainingDirective.STOP, TeamTrainingDirective.RECRUIT_MEMBER}
                 ):
-                    # Returning the teacher's candidate must be a behavioral no-op.
-                    # Recomputing this directive merely because an authority callback
-                    # existed caused an all-agreement causal run to exhaust 1,250 heals
-                    # while the same-root teacher completed in 1,031. Only an actual
-                    # alternate trainee needs a new directive binding.
+                    # Bind the mechanic directive to the member we can actually train.
+                    # ``plan_team_training`` starts from the globally weakest member,
+                    # while the venue filter may have to skip that member until a
+                    # gentler area is available. Obeying the global member's RESTORE
+                    # or SWITCH directive for the venue-compatible member creates a
+                    # zero-battle recovery loop. Returning the teacher's same
+                    # candidate remains a behavioral no-op unless the venue filter
+                    # itself selected a different member.
                     if member_is_unsafe_for_team_training(trainee, policy):
                         directive = TeamTrainingDirective.RESTORE_TEAM
                     elif trainee.slot != 1:

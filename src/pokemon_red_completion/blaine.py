@@ -239,14 +239,6 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
 PRE_SAFFRON_TEAM_POLICY = replace(
     MANSION_TEAM_POLICY,
     required_size=len(PRE_SAFFRON_BALANCED_ROSTER.slots),
-    # This authenticated alternate-order lineage reaches Cinnabar with four
-    # members instead of the mature six-member roster.  Its weaker participants
-    # trigger the same 90% retreat rule much more often: the first bounded run
-    # exhausted 2,000 Center trips before the level floor, while remaining
-    # inside the independent battle, step, action, frame, and zero-faint caps.
-    # Keep the safety/readiness contract unchanged and give this specifically
-    # identified curriculum its own finite recovery allowance.
-    max_healing_trips=4_000,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0

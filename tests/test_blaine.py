@@ -157,7 +157,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     )
     assert MANSION_TEAM_POLICY.required_size == 6
     assert PRE_SAFFRON_TEAM_POLICY.required_size == 4
-    assert PRE_SAFFRON_TEAM_POLICY.max_healing_trips == 4_000
+    assert PRE_SAFFRON_TEAM_POLICY.max_healing_trips == MANSION_TEAM_POLICY.max_healing_trips
     assert PRE_SAFFRON_DEVELOPMENT_POLICY.roster is PRE_SAFFRON_BALANCED_ROSTER
     assert set(PRE_SAFFRON_BALANCED_ROSTER.species_ids) < set(
         MANSION_DEVELOPMENT_POLICY.roster.species_ids

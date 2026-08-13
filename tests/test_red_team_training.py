@@ -733,6 +733,73 @@ def test_candidate_authority_agreement_is_behaviorally_a_no_op(
     assert authority_calls == teacher_calls == {"walk": 1, "heal": 0}
 
 
+def test_venue_compatible_trainee_rebinds_the_global_weaklings_restore_directive(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A temporarily untrainable weakling cannot force an infinite heal loop.
+
+    The global planner selects the level-10 second member and asks to restore it.
+    The measured venue cannot train that member, so the executor selects the
+    level-25 third member instead. The directive must follow that executable
+    choice; otherwise every recovery returns to this unchanged decision and no
+    encounter-seeking step is ever taken.
+    """
+
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 44),
+            (DUGTRIO_SPECIES_ID, 10),
+            (DUX_SPECIES_ID, 25),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 30),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    memory.party[1].hp = 20
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    calls = {"walk": 0, "heal": 0}
+
+    def walk(*_args: object) -> int:
+        calls["walk"] += 1
+        return 1
+
+    def heal(*_args: object) -> None:
+        calls["heal"] += 1
+
+    compatible = TrainingVenue(
+        band=GrindingArea(
+            "level-20-band",
+            20,
+            20,
+            rare_maximum_encounter_level=20,
+            measured_samples=100,
+        ),
+        map_id=TRAINING_MAP,
+        walk_to_grass=walk,
+        heal_and_return=heal,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+    )
+
+    with pytest.raises(RuntimeError, match="step budget exhausted"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=50,
+                required_size=6,
+                minimum_direct_level_advantage=5,
+                max_steps=1,
+                max_healing_trips=1,
+            ),
+            venues=[compatible],
+        )
+
+    assert calls == {"walk": 1, "heal": 0}
+
+
 def test_candidate_authority_executes_an_alternate_venue_binding(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
