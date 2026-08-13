@@ -56,6 +56,20 @@ cleanup handle and show **START RECORD NOT CREATED**. The line is: **“Saying a
 enough. The run had to be cryptographically bound to the exact evidence that opened it.”** Keep
 **TEST 0 OF 12** visible throughout.
 
+Then let Claude attack the lock: **18 MUTATIONS / 18 KILLED / APPROVED FOR LIVE REHEARSAL**. Feed a
+red receipt labeled **CHANGES REQUIRED** into the same digest slot as the green approval and let the
+old PLAN V6 gate open. Freeze immediately. The line is: **“The checksum proved which document I
+used. It did not prove what the document said.”** Replace the slot with a **PLAN V7 TYPED VERDICT**
+reader. Now the red receipt remains valid evidence but flashes **NON-AUTHORIZING**; only
+**APPROVED FOR AUTHORIZATION** and **QUALIFICATION PASSED / TEST CASES OPENED 0** can advance.
+
+Show the rehearsal as a separate transparent lane: **ONE EXPLICIT NON-TEST SAVE → AUTHENTICATE
+SOURCE → RELOCATE TO AN ALREADY-PROVED REGION → VERIFY ZERO STORY CHANGE → PLAN EVERY CANDIDATE →
+CLOSE WITHOUT TEACHER**. Keep a search icon crossed out over private storage and all twelve sealed
+cards face down. Until the cartridge run actually happens, stamp the lane **IMPLEMENTED — LIVE
+EVIDENCE PENDING**. This is a useful suspense beat because it distinguishes “the safety mechanism
+exists” from “the real emulator just proved it.”
+
 ## August 13 scene: the counter finally leaves zero
 
 Open on the old scoreboard—**COUNTED DATA 0 / TEST OPENED 0**—then replace only the first number:

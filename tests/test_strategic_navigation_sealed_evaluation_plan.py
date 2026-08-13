@@ -14,12 +14,8 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-PLAN_PATH = (
-    PROJECT_ROOT / "configs" / "red-strategic-navigation-sealed-evaluation-v1.json"
-)
-DIGEST_PATH = PLAN_PATH.with_name(
-    "red-strategic-navigation-sealed-evaluation-v1.digest.json"
-)
+PLAN_PATH = PROJECT_ROOT / "configs" / "red-strategic-navigation-sealed-evaluation-v1.json"
+DIGEST_PATH = PLAN_PATH.with_name("red-strategic-navigation-sealed-evaluation-v1.digest.json")
 
 
 def _plan() -> dict[str, object]:
@@ -39,11 +35,9 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     payload = PLAN_PATH.read_bytes()
     plan = _plan()
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
-    expected_sha256 = (
-        "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
-    )
+    expected_sha256 = "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
 
-    assert len(payload) == 12914
+    assert len(payload) == 13262
     assert hashlib.sha256(payload).hexdigest() == expected_sha256
     assert payload == (
         json.dumps(
@@ -57,7 +51,7 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     )
     assert digest == {
         "bytes": len(payload),
-        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v6",
+        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v7",
         "sha256": expected_sha256,
     }
     subprocess.run(
@@ -81,9 +75,7 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
     assert isinstance(teacher, dict)
 
     assert model == {
-        "canonical_sha256": (
-            "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
-        ),
+        "canonical_sha256": ("753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"),
         "enabled_feature_names": [
             "candidate.route_cost.relative_rank",
             "candidate.route_steps.relative_rank",
@@ -91,20 +83,16 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
             "candidate.field_actions.relative_rank",
             "candidate.mode_changes.relative_rank",
         ],
-        "feature_schema_id": (
-            "pokemon.core.strategic-navigation.destination-ranker.v1"
-        ),
+        "feature_schema_id": ("pokemon.core.strategic-navigation.destination-ranker.v1"),
         "feature_set_id": "relative_route",
         "l2": 0.1,
         "model_id": "pokemon.core.strategic-navigation.destination-ranker.linear.v1",
         "parameter_count": 5,
-        "private_file_sha256": (
-            "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd"
-        ),
+        "private_file_sha256": ("6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd"),
         "training_epochs": 600,
     }
     assert plan["execution_source_bundle_sha256"] == (
-        "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db"
+        "bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd"
     )
     assert plan["training_development_receipt_sha256"] == (
         "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612"
@@ -113,10 +101,10 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
         "private_test_inputs_opened_at_freeze": 0,
         "requires_clean_published_exact_source": True,
         "requires_external_audit": (
-            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            "typed_approved_for_authorization_receipt_bound_to_plan_source_bundle_and_commit"
         ),
         "requires_non_test_adapter_qualification": (
-            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            "typed_passed_zero_test_access_receipt_bound_to_plan_source_bundle_and_commit"
         ),
         "requires_owner_authorization": True,
     }
@@ -131,10 +119,10 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
             "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523"
         ),
         "source_bundle_sha256": (
-            "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db"
+            "bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd"
         ),
         "teacher_execution_sha256": (
-            "7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd"
+            "4e74cb4249c2dadc7e051644d2f0771937ab5b44a6521cce78ee8401432001e2"
         ),
     }
 
@@ -171,9 +159,7 @@ def test_sealed_plan_uses_all_public_test_frontiers_and_ten_real_hypotheses() ->
         assert isinstance(challenged, str)
         assert challenged in scenario.candidate_objective_ids
         assert challenged != scenario.teacher_objective_id
-        assert case["origin_region"] == COMPLETION_QUEST.objective(
-            challenged
-        ).target_region
+        assert case["origin_region"] == COMPLETION_QUEST.objective(challenged).target_region
 
 
 def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> None:
@@ -183,15 +169,14 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
     assert isinstance(access, dict)
     assert isinstance(amendments, list)
 
-    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v6"
+    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v7"
     assert access["private_test_inputs_opened_at_freeze"] == 0
     assert amendments == [
         {
             "amended_before_private_access": True,
             "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
             "reason": (
-                "independent_power_audit_found_non_challenge_cases_"
-                "asymmetric_for_primary_pairing"
+                "independent_power_audit_found_non_challenge_cases_asymmetric_for_primary_pairing"
             ),
             "supersedes_plan_sha256": (
                 "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
@@ -200,9 +185,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
         {
             "amended_before_private_access": True,
             "change": "bind_fail_closed_executor_and_optional_stopping_contract",
-            "reason": (
-                "external_audit_required_durable_claim_before_private_case_access"
-            ),
+            "reason": ("external_audit_required_durable_claim_before_private_case_access"),
             "supersedes_plan_sha256": (
                 "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
             ),
@@ -222,8 +205,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
             "amended_before_private_access": True,
             "change": "bind_authenticated_challenge_relocation_contract",
             "reason": (
-                "independent_adapter_audit_found_source_and_declared_"
-                "challenge_origins_differ"
+                "independent_adapter_audit_found_source_and_declared_challenge_origins_differ"
             ),
             "supersedes_plan_sha256": (
                 "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
@@ -238,6 +220,17 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
             ),
             "supersedes_plan_sha256": (
                 "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": ("bind_typed_receipt_verdicts_and_shared_non_test_production_qualification"),
+            "reason": (
+                "external_audit_found_bare_receipt_digests_could_not_"
+                "distinguish_unfavorable_verdicts"
+            ),
+            "supersedes_plan_sha256": (
+                "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
             ),
         },
     ]
@@ -313,9 +306,7 @@ def test_sealed_plan_reports_all_cases_and_keeps_non_challenges_as_safety() -> N
         "case_filter": "cost_baseline_challenge_hypothesis_false",
         "criterion": "all_cases_succeed_and_zero_model_incorrect_baseline_correct",
         "expected_case_count": 2,
-        "failure_effect": (
-            "block_live_authority_and_report_without_changing_primary_test"
-        ),
+        "failure_effect": ("block_live_authority_and_report_without_changing_primary_test"),
         "role": "preregistered_baseline_favorable_non_regression",
     }
 
@@ -362,19 +353,13 @@ def test_sealed_plan_scores_failures_and_ties_without_reruns_or_omissions() -> N
         "rerun_allowed": False,
     }
     assert plan["scoring_policy"] == {
-        "candidate_unavailable_after_claim": (
-            "case_consumed_model_and_baseline_incorrect"
-        ),
-        "failed_or_interrupted_after_claim": (
-            "case_consumed_model_and_baseline_incorrect"
-        ),
+        "candidate_unavailable_after_claim": ("case_consumed_model_and_baseline_incorrect"),
+        "failed_or_interrupted_after_claim": ("case_consumed_model_and_baseline_incorrect"),
         "incomplete_episode": "case_consumed_model_and_baseline_incorrect",
         "missing_case": "publish_incomplete_evaluation_as_protocol_failure",
         "model_prediction_tie": "incorrect",
         "teacher_target": "successful_deterministic_teacher_choice_only",
-        "preclaim_identity_or_catalog_failure": (
-            "open_zero_cases_and_refuse_execution"
-        ),
+        "preclaim_identity_or_catalog_failure": ("open_zero_cases_and_refuse_execution"),
     }
 
 
@@ -416,12 +401,9 @@ def test_sealed_plan_binds_the_unlabeled_catalog_adapter_boundary() -> None:
     assert plan["adapter_policy"] == {
         "candidate_order": "source_bound_assignment_hash_v1",
         "candidate_planning": "after_authenticated_challenge_relocation",
-        "case_catalog_schema": (
-            "pokemon-strategic-navigation-sealed-case-catalog-v1"
-        ),
+        "case_catalog_schema": ("pokemon-strategic-navigation-sealed-case-catalog-v1"),
         "challenge_relocation": (
-            "after_claim_deterministic_route_to_declared_origin_"
-            "with_zero_objective_delta"
+            "after_claim_deterministic_route_to_declared_origin_with_zero_objective_delta"
         ),
         "catalog_contains_private_paths": False,
         "catalog_contains_route_costs_or_answers": False,

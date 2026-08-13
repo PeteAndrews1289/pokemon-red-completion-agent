@@ -34,17 +34,23 @@ access, the plan was amended: the ten challenges are the primary endpoint, all-t
 mandatory, and the other two cases form a separate safety gate. Claude approved that amendment and
 corrected the realistic power estimate to roughly 42–68% under an 85% challenge-validity
 assumption. The public executor/scorer core and prediction-first cartridge boundary are now
-implemented under a schema-v6 plan. The adapter uses a path-free digest catalog, accepts only the
+implemented under a schema-v7 plan. The adapter uses a path-free digest catalog, accepts only the
 exact frozen linear scorer, and exposes unlabeled identity-free candidate rows.
 
 Self-audit found that ten challenge origins differ from their source snapshot origins. The adapter
 now authenticates the source state after claim, relocates without a label, rejects any objective
-delta and plans candidates only after authenticating the declared challenge origin. External-audit
-and non-test qualification receipt digests are now mandatory in owner authorization and runtime
-preflight; loader-issued authority objects cannot be cloned through dataclass replacement; the
-private root is opened without following any path-component symlink; and runner cleanup is required
-before the start ledger exists. The exact plan is 12,914 bytes with SHA-256
-`9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`. Test remains **0/12 opened**;
+delta and plans candidates only after authenticating the declared challenge origin. Claude then
+killed 18/18 semantic mutations and approved live qualification, but found that bare evidence
+digests could not distinguish favorable and unfavorable receipts.
+
+Schema v7 repairs that final human-memory dependency. Typed canonical receipts bind an allowlisted
+verdict to the exact evaluation, plan, source bundle, full source commit and evidence. Only
+`approved_for_authorization` plus a `passed` non-test qualification with zero test cases opened can
+enter owner authorization or runtime preflight. The non-test command shares the production
+authentication/relocation/planning path, accepts one explicitly named learning capture, refuses the
+test partition before input access, runs no teacher and verifies no state or ROM-adjacent change.
+The exact plan is 13,262 bytes with SHA-256
+`d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`. Test remains **0/12 opened**;
 no real catalog or owner authorization exists.
 
 Ordered next work:
@@ -61,21 +67,31 @@ Ordered next work:
    behind that state machine. Candidate ordering is source-bound and the model input contains no
    teacher label, destination identity or map identity.
 5. **Complete in ROM-free fixtures; live qualification pending:** authenticate the source frontier,
-   relocate challenges to the declared origin without a label or objective delta, then plan
-   candidates. The 36 non-test public shapes and synthetic cleanup/failure paths pass.
-6. Independently attack the adapter and receipt boundary using the
-   [adapter handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md), resolve every finding, and
-   preserve the exact audit receipt. Then live-qualify the exact relocation path on non-test
-   cartridge fixtures only and preserve that exact qualification receipt.
-7. Publish the exact source and require green CI. Separately obtain explicit inventory-only
-   permission to hash the twelve test captures—or a custodian-supplied path-free manifest—so the
-   real catalog can be created without pretending an evaluation receipt existed first.
-8. Only after those gates and explicit owner authorization, measure the frozen baseline capability
-   and run the one-shot model comparison. Publish every result, favorable or unfavorable.
-9. Only after offline test, add shadow execution in live strategic choices. The deterministic
+   relocate challenges to a different region already authenticated by the completed frontier,
+   reject any objective delta, then plan every candidate. The 36 non-test public shapes and
+   synthetic cleanup/failure paths pass.
+6. **Complete for schema v6:** Claude independently killed 18/18 adapter and optional-stopping
+   mutations, found no answer leakage, approved live qualification and explicitly withheld
+   authorization because receipt verdicts were not parsed.
+7. **Complete in source; publication pending:** schema v7 adds typed external-audit and non-test
+   qualification receipts with explicit verdict, plan, source-bundle, full-commit and evidence
+   binding. Authorization construction, parsing and preflight reject valid unfavorable receipts.
+8. Publish the exact source and require green CI. Then run the shared production path once on an
+   explicitly named non-test cartridge capture, without the teacher, and preserve the path-free
+   evidence and typed qualification receipt outside the repository.
+9. Independently attack that exact commit and live evidence using the
+   [authorization-readiness handoff](claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md).
+   Only a typed `approved_for_authorization` verdict can satisfy the next gate.
+10. Obtain a custodian-supplied canonical path-free manifest for the twelve test captures. Do not
+   add private-storage enumeration to the sealed code and do not treat later evaluation authority
+   as retroactive inventory permission.
+11. Only after those gates and explicit owner authorization, measure the frozen baseline capability
+   and run the one-shot model comparison. Publish every result, favorable, unfavorable, failed or
+   inconclusive.
+12. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.
-10. Expand context semantics before cross-title transfer. The current 36 examples all express the
+13. Expand context semantics before cross-title transfer. The current 36 examples all express the
    same broad story-advance need and the same safe-overworld origin tags, so those feature columns
    are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
    training and recovery—not merely repeat Red's story sequence.

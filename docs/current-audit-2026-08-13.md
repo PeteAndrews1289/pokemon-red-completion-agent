@@ -6,9 +6,12 @@ Claude's independent review found two real pre-test design defects, then its sec
 power defect in the proposed repair. All three were caught before any sealed scenario was opened.
 The model-capacity and public test-capability defects are repaired, and Claude has approved the
 amended endpoint. The ROM-free executor/scorer core, strict path-free catalog boundary and
-prediction-first cartridge adapter are now implemented. Readiness evidence is now mechanically
-bound into authorization and runtime preflight. Independent adapter audit, live non-test relocation
-qualification, an actual private catalog, owner authorization and exact-commit CI remain hard stops.
+prediction-first cartridge adapter are now implemented. Claude's adapter audit killed 18/18
+semantic mutations and approved live qualification, then found one final authority defect: bare
+receipt digests did not say whether the underlying verdict was favorable. Schema v7 now parses and
+enforces typed verdicts. Exact-commit CI, live non-test relocation qualification, a final
+authorization-level audit, a custodian-supplied path-free catalog and owner authorization remain
+hard stops.
 
 The v2 collection is unchanged: 24 authenticated train choices, 12 development-validation choices,
 36 unique candidate-order-invariant contexts, no partition overlap and no failed or interrupted
@@ -202,7 +205,7 @@ symlink following disabled. An executor runner must expose a cleanup boundary be
 record can exist, preventing a prepared emulator session from becoming uncloseable after a failed
 prediction commitment.
 
-The current plan is 12,914 bytes with SHA-256
+The schema-v6 plan was 12,914 bytes with SHA-256
 `9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`; source bundle
 `6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db`; teacher execution
 `7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd`. Its fifth pre-access
@@ -214,20 +217,57 @@ exact bytes plus the owner's acknowledgement; an independent reviewer should sti
 typed receipt parsers are warranted before authorization. No audit or live-qualification verdict
 is being claimed here.
 
+## Finding 7: a receipt digest did not encode its verdict
+
+Claude's final schema-v6 pass verified the optional-stopping boundary, found no answer-bearing test
+fixture and killed 18/18 one-at-a-time mutations without relying on the whole-plan digest. It
+approved the exact adapter design for the next gate—live qualification on non-test cartridge
+states—but correctly refused authorization. Owner authorization bound two receipt digests, while
+no parser established whether either receipt was favorable. A correctly bound audit saying
+`changes_required` could therefore satisfy the same digest-shaped slot as an approval.
+
+Schema v7 makes the evidence semantic. Canonical external-audit receipts allow three explicit
+verdicts: `approved_for_live_qualification`, `approved_for_authorization` and `changes_required`.
+Only the authorization verdict passes the owner gate. Canonical non-test receipts allow `passed`
+or `failed`; only `passed` with exactly zero sealed test cases opened can authorize. Both formats
+bind the evaluation, plan digest, executable source bundle, full source commit and evidence digest.
+The authorization builder, authorization parser and runtime preflight require the parser-issued
+typed objects and recheck those bindings and verdicts. A canonical negative receipt is retained as
+evidence but cannot be mistaken for permission.
+
+The same amendment adds a live qualification command that cannot search capture storage. It accepts
+one explicit train/validation state and envelope; the canonical registry refuses a test partition
+before reading either path. Its challenged non-teacher objective must relocate to a different
+region already authenticated by a completed objective, matching the sealed case-construction rule.
+Qualification calls the same production function as sealed execution: authenticate source origin
+and exact frontier, relocate without a label, prove zero objective delta, authenticate the declared
+region and plan all candidates. It then closes without a teacher action and verifies the capture
+and ROM-adjacent artifacts are unchanged.
+
+The v7 plan is 13,262 bytes with SHA-256
+`d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`; source bundle
+`bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd`; teacher execution
+`4e74cb4249c2dadc7e051644d2f0771937ab5b44a6521cce78ee8401432001e2`. It preserves the v6 digest
+as the sixth amendment and records zero private inputs opened. This is readiness engineering, not
+a live qualification result or authorization. The final local gate is 2,887 passed, three
+integration tests deselected and one expected failure; 93 focused boundary tests, generated
+identity checks, Ruff and mypy across 168 source files are also clean.
+
 ## Stop line and next work
 
 Do not open, preflight, materialize or score a private test capture yet. The safe order is:
 
-1. independently audit the catalog, cartridge adapter and readiness-receipt boundary without
-   private test access, producing a stable audit receipt;
-2. live-qualify challenge relocation using non-test cartridge fixtures only, producing a stable
-   qualification receipt;
-3. publish that exact source and require green exact-commit CI;
-4. obtain explicit inventory-only authority or a custodian manifest to build the exact path-free
-   catalog, then obtain owner authorization bound to the final plan, source, model, teacher and
+1. publish schema v7 as one exact commit and require green exact-commit CI;
+2. live-qualify the shared relocation path on one explicit non-test cartridge state, run no
+   teacher, open zero test cases and preserve the path-free evidence plus typed receipt outside the
+   repository;
+3. independently audit that exact commit and live evidence, producing a typed
+   `approved_for_authorization` receipt only if the whole gate is clean;
+4. obtain a custodian-supplied canonical path-free manifest for the test catalog, then obtain owner
+   authorization bound to the final plan, source, model, teacher, both favorable receipts and
    catalog; and
 5. only then measure baseline disagreements and execute the one-shot comparison, publishing every
-   result whether favorable or unfavorable.
+   result whether favorable, unfavorable, failed or inconclusive.
 
 A 12-case test can establish a very large paired effect but will still have a wide uncertainty
 interval. A later, larger cross-context evaluation is required for a precise performance estimate.
@@ -245,9 +285,11 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Sealed endpoint-amendment mutation audit](evidence/strategic-sealed-endpoint-amendment-mutation-audit-2026-08-13.json)
 - [Sealed executor/scorer implementation audit](evidence/strategic-sealed-executor-implementation-audit-2026-08-13.json)
 - [Superseded schema-v5 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v5-freeze-2026-08-13.json)
-- [Current schema-v6 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v6-freeze-2026-08-13.json)
+- [Superseded schema-v6 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v6-freeze-2026-08-13.json)
+- [Current schema-v7 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json)
 - [ROM-free sealed-adapter qualification](evidence/strategic-sealed-adapter-rom-free-qualification-2026-08-13.json)
 - [Linear pre-test audit handoff](claude-linear-pre-test-audit-handoff-2026-08-13.md)
 - [Sealed endpoint-amendment audit handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md)
 - [Sealed executor/scorer audit handoff](claude-sealed-executor-audit-handoff-2026-08-13.md)
 - [Sealed adapter audit handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md)
+- [Typed-receipt and live-qualification audit handoff](claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md)

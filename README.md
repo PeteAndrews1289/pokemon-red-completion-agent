@@ -24,14 +24,20 @@
 > adapter and PyBoy case session are now implemented and ROM-free qualified. Self-audit caught that
 > ten challenge origins differ from their source snapshots; the adapter now authenticates each source
 > frontier after claim, relocates without a label or objective change, and only then plans model
-> candidates. A second hardening pass made external-audit and non-test qualification receipt
-> digests mandatory in owner authorization and runtime preflight, closed dataclass-cloning and
-> root-symlink loopholes, and requires cleanup capability before the execution ledger can start.
-> The exact schema-v6 plan digest is
-> `9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440`. Independent adapter audit,
-> live non-test relocation qualification, an actual path-free catalog, owner authorization and
-> exact-commit CI are still gates. Test remains 0/12 and no authorization receipt exists. See
-> the [August 13 audit](docs/current-audit-2026-08-13.md).
+> candidates. A second hardening pass made external-audit and non-test qualification evidence
+> mandatory in owner authorization and runtime preflight, closed dataclass-cloning and root-symlink
+> loopholes, and requires cleanup capability before the execution ledger can start. Claude's next
+> audit killed 18/18 semantic mutations and approved live non-test qualification, but found that a
+> bare receipt digest could not distinguish approval from “changes required.” Schema v7 now parses
+> typed allowlisted verdicts bound to the exact plan, executable source bundle, full commit and
+> evidence; unfavorable receipts remain valid records but cannot authorize. The live qualifier
+> shares the production authentication/relocation/planning path, accepts one explicit learning
+> capture, refuses test-partition access, runs no teacher and verifies no state change. The exact
+> schema-v7 plan digest is
+> `d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`. Exact-commit CI, the live
+> non-test qualification, a final authorization-level audit, a custodian-supplied path-free
+> catalog and owner authorization are still gates. Test remains 0/12 and no authorization receipt
+> exists. See the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,

@@ -7,19 +7,27 @@ the sealed executor calls after publishing that case's durable claim.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from collections.abc import Mapping
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
 
 from pokemon_red_completion.actions import MacroAction
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
+from pokemon_red_completion.captured_progress import (
+    CapturedProgressEnvelope,
+    CapturedProgressError,
+    load_captured_progress,
+)
 from pokemon_red_completion.cascade import (
     DEFAULT_CASCADE_TIMING,
     POTION_HEAL_AMOUNT,
     _bag_quantity,
     _use_battle_recovery_item,
 )
+from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort, surf_permission
@@ -37,7 +45,7 @@ from pokemon_red_completion.gen1_traversal import (
 )
 from pokemon_red_completion.observation import ItemId, PokemonRedStateReader, RawGameState
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
-from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
 from pokemon_red_completion.red_trajectory import (
     POKEMON_CORE_ONTOLOGY_ID,
@@ -109,6 +117,189 @@ _SEALED_ROUTE_LIMITS = RouteExecutionLimits(
 )
 
 
+@dataclass(frozen=True, slots=True)
+class _StrategicCartridgeContext:
+    """Shared production path result used by sealed execution and qualification."""
+
+    emulator: PyBoyAdapter
+    reader: PokemonRedStateReader
+    traversal_observer: Gen1TraversalObserver
+    field_actions: Gen1FieldMovePort
+    route_world: StrategicScenarioRouteWorld
+    bindings: tuple[DestinationRouteBinding, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class StrategicSealedNonTestQualificationObservation:
+    """Path-free evidence from the exact production adapter preparation path."""
+
+    document: Mapping[str, object]
+
+    def canonical_payload(self) -> bytes:
+        return (
+            json.dumps(
+                self.document,
+                allow_nan=False,
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            ).encode("ascii")
+            + b"\n"
+        )
+
+    @property
+    def evidence_sha256(self) -> str:
+        return hashlib.sha256(self.canonical_payload()).hexdigest()
+
+    def public_dict(self) -> dict[str, object]:
+        return json.loads(json.dumps(self.document, sort_keys=True))
+
+
+def qualify_strategic_sealed_adapter_on_non_test_capture(
+    *,
+    rom_path: str | Path,
+    state_path: str | Path,
+    envelope_path: str | Path,
+    plan: StrategicSealedEvaluationPlan,
+    scenario_registry: StrategicNavigationScenarioRegistry,
+    scenario_id: str,
+    challenged_non_teacher_objective_id: str,
+    source_commit: str,
+) -> StrategicSealedNonTestQualificationObservation:
+    """Exercise production authentication, relocation, and planning without test data."""
+
+    if not isinstance(plan, StrategicSealedEvaluationPlan):
+        raise TypeError("plan must be a sealed evaluation plan")
+    if not isinstance(scenario_registry, StrategicNavigationScenarioRegistry):
+        raise TypeError("scenario_registry must be a scenario registry")
+    if scenario_registry.registry_sha256 != plan.source_scenario_registry_sha256:
+        raise StrategicSealedAdapterError(
+            "non-test qualification scenario registry differs from the plan"
+        )
+    if GIT_COMMIT.fullmatch(source_commit) is None:
+        raise StrategicSealedAdapterError("non-test qualification source commit is invalid")
+    scenario = scenario_registry.scenario(scenario_id)
+    if (
+        scenario.partition not in {"train", "validation"}
+        or challenged_non_teacher_objective_id not in scenario.candidate_objective_ids
+        or challenged_non_teacher_objective_id == scenario.teacher_objective_id
+    ):
+        raise StrategicSealedAdapterError("non-test qualification challenge is invalid")
+    challenged = COMPLETION_QUEST.objective(challenged_non_teacher_objective_id)
+    declared_origin_region = challenged.target_region
+    if declared_origin_region is None or declared_origin_region == scenario.origin_region:
+        raise StrategicSealedAdapterError(
+            "non-test qualification must exercise challenge relocation"
+        )
+    completed_regions = frozenset(
+        objective.target_region
+        for objective_id in scenario.completed_objective_ids
+        if (objective := COMPLETION_QUEST.objective(objective_id)).target_region is not None
+    )
+    if declared_origin_region not in completed_regions:
+        raise StrategicSealedAdapterError(
+            "non-test qualification challenge region is not authenticated"
+        )
+
+    resolved_rom = Path(rom_path).expanduser()
+    resolved_state = Path(state_path).expanduser()
+    resolved_envelope = Path(envelope_path).expanduser()
+    if not all(path.is_absolute() for path in (resolved_rom, resolved_state, resolved_envelope)):
+        raise StrategicSealedAdapterError("non-test qualification inputs must be absolute paths")
+    try:
+        rom = resolved_rom.read_bytes()
+        capture = load_captured_progress(
+            resolved_envelope,
+            state_path=resolved_state,
+        )
+        state_bytes = resolved_state.read_bytes()
+    except (CapturedProgressError, OSError):
+        raise StrategicSealedAdapterError("non-test qualification input is unavailable") from None
+    if hashlib.sha256(state_bytes).hexdigest() != capture.state_sha256 or frozenset(
+        capture.verified_objective_ids
+    ) != frozenset(scenario.completed_objective_ids):
+        raise StrategicSealedAdapterError(
+            "non-test qualification capture differs from its scenario"
+        )
+    fingerprint = verify_rom_bytes(rom, filename=resolved_rom.name)
+    if fingerprint.public_dict() != {
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "title": POKEMON_RED_US_REV_0.title,
+    }:
+        raise StrategicSealedAdapterError("non-test qualification ROM identity differs")
+
+    state_sha256_before = capture.state_sha256
+    rom_adjacent_before = rom_adjacent_artifacts(resolved_rom)
+    context = _open_strategic_cartridge_context(
+        rom_path=resolved_rom,
+        rom=rom,
+        route_world=StrategicScenarioRouteWorld.from_rom(rom),
+        state_bytes=state_bytes,
+        envelope=capture,
+        scenario=scenario,
+        declared_origin_region=declared_origin_region,
+    )
+    try:
+        if len(context.bindings) != len(scenario.candidate_objective_ids) or any(
+            binding.plan is None for binding in context.bindings
+        ):
+            raise StrategicSealedAdapterError(
+                "non-test qualification candidate planning is incomplete"
+            )
+        available_candidate_count = len(context.bindings)
+    finally:
+        context.emulator.close()
+    try:
+        state_sha256_after = hashlib.sha256(resolved_state.read_bytes()).hexdigest()
+    except OSError:
+        raise StrategicSealedAdapterError(
+            "non-test qualification capture became unavailable"
+        ) from None
+    if state_sha256_after != state_sha256_before:
+        raise StrategicSealedAdapterError("non-test qualification changed its capture")
+    if rom_adjacent_artifacts(resolved_rom) != rom_adjacent_before:
+        raise StrategicSealedAdapterError("non-test qualification created a ROM-adjacent artifact")
+
+    document = {
+        "capture": {
+            "checkpoint_id": capture.checkpoint_id,
+            "envelope_sha256": canonical_sha256(capture.to_dict()),
+            "state_sha256": capture.state_sha256,
+        },
+        "challenge": {
+            "declared_origin_region": declared_origin_region,
+            "non_teacher_objective_id": challenged_non_teacher_objective_id,
+            "region_authenticated_by_completed_objective": True,
+            "relocation_exercised": True,
+            "source_origin_region": scenario.origin_region,
+        },
+        "evaluation_id": plan.evaluation_id,
+        "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
+        "plan_sha256": plan.plan_sha256,
+        "production_path": "authenticate_relocate_plan_close_without_teacher",
+        "result": {
+            "available_candidate_count": available_candidate_count,
+            "candidate_count": len(scenario.candidate_objective_ids),
+            "capture_unchanged": True,
+            "rom_adjacent_artifacts_unchanged": True,
+            "sealed_test_cases_opened": 0,
+            "status": "passed",
+            "teacher_executed": False,
+        },
+        "rom_identity": fingerprint.public_dict(),
+        "scenario": {
+            "partition": scenario.partition,
+            "scenario_id": scenario.scenario_id,
+            "scenario_sha256": scenario.scenario_sha256,
+        },
+        "schema": "strategic-sealed-non-test-qualification-observation-v1",
+        "source_commit": source_commit,
+    }
+    return StrategicSealedNonTestQualificationObservation(document=document)
+
+
 class StrategicSealedPyBoySessionFactory:
     """Identity-bound factory that opens no capture before ``open_case``."""
 
@@ -145,29 +336,21 @@ class StrategicSealedPyBoySessionFactory:
         if (
             authorization.plan_sha256 != plan.plan_sha256
             or runtime_grant.plan_sha256 != plan.plan_sha256
-            or runtime_grant.authorization_sha256
-            != authorization.authorization_sha256
+            or runtime_grant.authorization_sha256 != authorization.authorization_sha256
             or catalog.catalog_sha256 != authorization.case_catalog_sha256
             or runtime_grant.case_catalog_sha256 != catalog.catalog_sha256
-            or scenario_registry.registry_sha256
-            != plan.source_scenario_registry_sha256
+            or scenario_registry.registry_sha256 != plan.source_scenario_registry_sha256
             or execution.source_commit != runtime_grant.source_commit
-            or execution.source_bundle_sha256
-            != plan.execution_source_bundle_sha256
-            or execution.teacher_execution_sha256
-            != plan.teacher_execution_sha256
+            or execution.source_bundle_sha256 != plan.execution_source_bundle_sha256
+            or execution.teacher_execution_sha256 != plan.teacher_execution_sha256
             or runtime.sha256 != catalog.runtime_sha256
         ):
-            raise StrategicSealedAdapterError(
-                "sealed PyBoy factory identity differs"
-            )
+            raise StrategicSealedAdapterError("sealed PyBoy factory identity differs")
         resolved_rom = Path(rom_path).expanduser().resolve()
         try:
             rom = resolved_rom.read_bytes()
         except OSError:
-            raise StrategicSealedAdapterError(
-                "sealed PyBoy ROM is unavailable"
-            ) from None
+            raise StrategicSealedAdapterError("sealed PyBoy ROM is unavailable") from None
         fingerprint = verify_rom_bytes(rom, filename=resolved_rom.name)
         if fingerprint.public_dict() != {
             "sha1": catalog.rom_sha1,
@@ -214,20 +397,14 @@ class StrategicSealedPyBoySessionFactory:
     ) -> StrategicSealedCartridgeSession:
         """Open one claimed source, relocate if declared, then plan candidates."""
 
-        if self._plan.case(case.case_id) != case or self._catalog.case(
-            case.case_id
-        ) is not entry:
-            raise StrategicSealedAdapterError(
-                "sealed PyBoy catalog entry differs from its case"
-            )
+        if self._plan.case(case.case_id) != case or self._catalog.case(case.case_id) is not entry:
+            raise StrategicSealedAdapterError("sealed PyBoy catalog entry differs from its case")
         if (
             scenario not in self._scenario_registry.scenarios
             or scenario.scenario_id != entry.source_scenario_id
             or scenario.scenario_sha256 != entry.source_scenario_sha256
         ):
-            raise StrategicSealedAdapterError(
-                "sealed PyBoy scenario differs from its registry"
-            )
+            raise StrategicSealedAdapterError("sealed PyBoy scenario differs from its registry")
         captured = open_strategic_sealed_case_input(
             self._capture_root,
             entry=entry,
@@ -239,107 +416,16 @@ class StrategicSealedPyBoySessionFactory:
             registry_sha256=self._scenario_registry.registry_sha256,
             execution=self._execution,
         )
-        emulator = PyBoyAdapter(self._rom_path, watch=False)
+        context = _open_strategic_cartridge_context(
+            rom_path=self._rom_path,
+            rom=self._rom,
+            route_world=self._route_world,
+            state_bytes=captured.state_bytes,
+            envelope=captured.envelope,
+            scenario=scenario,
+            declared_origin_region=case.origin_region,
+        )
         try:
-            emulator.start()
-            emulator.load_state_bytes(captured.state_bytes)
-            reader = PokemonRedStateReader(emulator)
-            raw = reader.read()
-            _require_ready_sealed_region(
-                scenario.origin_region,
-                raw,
-                reader,
-                subject="source",
-            )
-            semantic_observer = CapturedPokemonRedObserver(
-                reader,
-                COMPLETION_QUEST,
-                captured.envelope,
-            )
-            expected_frontier = frozenset(scenario.completed_objective_ids)
-            if COMPLETION_QUEST.completed_ids(
-                semantic_observer.observe()
-            ) != expected_frontier:
-                raise StrategicSealedAdapterError(
-                    "sealed source capture differs from its scenario frontier"
-                )
-
-            def field_capabilities(observed: RawGameState) -> frozenset[str]:
-                capabilities = cut_capabilities(observed).union(
-                    strength_capabilities(observed)
-                )
-                permission = surf_permission(emulator, observed)
-                return capabilities.union(
-                    surf_capabilities(
-                        observed,
-                        surf_allowed=permission.allowed,
-                    )
-                )
-
-            traversal_observer = Gen1TraversalObserver(
-                reader,
-                hazard_projector=Gen1TrainerSightProjector(self._rom, reader),
-                capability_projector=field_capabilities,
-            )
-            specs = tuple(
-                STRATEGIC_SCENARIO_DESTINATIONS[objective_id]
-                for objective_id in scenario.candidate_objective_ids
-            )
-            controller = FrameSafeExecutor(
-                emulator,
-                DEFAULT_NEW_GAME_TIMING.controller_timing(),
-            )
-            counted = CountingExecutor(controller)
-            rules = traversal_rules(self._rom, map_graph(self._rom))
-            field_actions = Gen1FieldMovePort(
-                counted,
-                reader,
-                emulator,
-                cut_block_swaps={
-                    swap.before: swap.after for swap in rules.cut_block_swaps
-                },
-            )
-            if case.origin_region != scenario.origin_region:
-                origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(case.origin_region)
-                if origin_maps is None:
-                    raise StrategicSealedAdapterError(
-                        "sealed challenge relocation region is unsupported"
-                    )
-                relocation = self._route_world.plan_to_any_map(
-                    traversal_observer.observe(),
-                    frozenset(map_id.value for map_id in origin_maps),
-                )
-                execute_route(
-                    relocation,
-                    field_actions,
-                    traversal_observer,
-                    interruption_handler=_sealed_interruption_handler(
-                        field_actions,
-                        reader,
-                        emulator,
-                        route_name="sealed strategic challenge relocation",
-                    ),
-                    replanner=self._route_world.replanner(),
-                    limits=bind_scenario_interruption_limits(
-                        _SEALED_ROUTE_LIMITS,
-                        maximum_flees=STRATEGIC_SCENARIO_MAXIMUM_FLEES,
-                        maximum_trainer_battles=_MAXIMUM_TRAINER_BATTLES,
-                    ),
-                )
-                if COMPLETION_QUEST.completed_ids(
-                    semantic_observer.observe()
-                ) != expected_frontier:
-                    raise StrategicSealedAdapterError(
-                        "sealed challenge relocation changed the scenario frontier"
-                    )
-            _require_ready_sealed_region(
-                case.origin_region,
-                reader.read(),
-                reader,
-                subject="declared",
-            )
-            start = traversal_observer.observe()
-            bindings = self._route_world.plan_bindings(specs, start)
             metadata = _sealed_episode_metadata(
                 assignment=assignment,
                 case=case,
@@ -350,23 +436,141 @@ class StrategicSealedPyBoySessionFactory:
                 runtime=self._runtime,
             )
             return _StrategicSealedPyBoySession(
-                emulator=emulator,
+                emulator=context.emulator,
                 rom_path=self._rom_path,
                 rom_adjacent_before=self._rom_adjacent_before,
                 private_root=self._private_root,
                 assignment=assignment,
                 scenario=scenario,
                 metadata=metadata,
-                reader=reader,
-                traversal_observer=traversal_observer,
-                field_actions=field_actions,
-                route_world=self._route_world,
-                bindings=bindings,
+                reader=context.reader,
+                traversal_observer=context.traversal_observer,
+                field_actions=context.field_actions,
+                route_world=context.route_world,
+                bindings=context.bindings,
                 origin_region_ref=f"pokemon.red:region:{case.origin_region}",
             )
         except BaseException:
-            emulator.close()
+            context.emulator.close()
             raise
+
+
+def _open_strategic_cartridge_context(
+    *,
+    rom_path: Path,
+    rom: bytes,
+    route_world: StrategicScenarioRouteWorld,
+    state_bytes: bytes,
+    envelope: CapturedProgressEnvelope,
+    scenario: StrategicNavigationScenario,
+    declared_origin_region: str,
+) -> _StrategicCartridgeContext:
+    """Authenticate, optionally relocate, and only then plan candidate routes."""
+
+    emulator = PyBoyAdapter(rom_path, watch=False)
+    try:
+        emulator.start()
+        emulator.load_state_bytes(state_bytes)
+        reader = PokemonRedStateReader(emulator)
+        raw = reader.read()
+        _require_ready_sealed_region(
+            scenario.origin_region,
+            raw,
+            reader,
+            subject="source",
+        )
+        semantic_observer = CapturedPokemonRedObserver(
+            reader,
+            COMPLETION_QUEST,
+            envelope,
+        )
+        expected_frontier = frozenset(scenario.completed_objective_ids)
+        if COMPLETION_QUEST.completed_ids(semantic_observer.observe()) != expected_frontier:
+            raise StrategicSealedAdapterError(
+                "sealed source capture differs from its scenario frontier"
+            )
+
+        def field_capabilities(observed: RawGameState) -> frozenset[str]:
+            capabilities = cut_capabilities(observed).union(strength_capabilities(observed))
+            permission = surf_permission(emulator, observed)
+            return capabilities.union(
+                surf_capabilities(
+                    observed,
+                    surf_allowed=permission.allowed,
+                )
+            )
+
+        traversal_observer = Gen1TraversalObserver(
+            reader,
+            hazard_projector=Gen1TrainerSightProjector(rom, reader),
+            capability_projector=field_capabilities,
+        )
+        specs = tuple(
+            STRATEGIC_SCENARIO_DESTINATIONS[objective_id]
+            for objective_id in scenario.candidate_objective_ids
+        )
+        controller = FrameSafeExecutor(
+            emulator,
+            DEFAULT_NEW_GAME_TIMING.controller_timing(),
+        )
+        counted = CountingExecutor(controller)
+        rules = traversal_rules(rom, map_graph(rom))
+        field_actions = Gen1FieldMovePort(
+            counted,
+            reader,
+            emulator,
+            cut_block_swaps={swap.before: swap.after for swap in rules.cut_block_swaps},
+        )
+        if declared_origin_region != scenario.origin_region:
+            origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(declared_origin_region)
+            if origin_maps is None:
+                raise StrategicSealedAdapterError(
+                    "sealed challenge relocation region is unsupported"
+                )
+            relocation = route_world.plan_to_any_map(
+                traversal_observer.observe(),
+                frozenset(map_id.value for map_id in origin_maps),
+            )
+            execute_route(
+                relocation,
+                field_actions,
+                traversal_observer,
+                interruption_handler=_sealed_interruption_handler(
+                    field_actions,
+                    reader,
+                    emulator,
+                    route_name="sealed strategic challenge relocation",
+                ),
+                replanner=route_world.replanner(),
+                limits=bind_scenario_interruption_limits(
+                    _SEALED_ROUTE_LIMITS,
+                    maximum_flees=STRATEGIC_SCENARIO_MAXIMUM_FLEES,
+                    maximum_trainer_battles=_MAXIMUM_TRAINER_BATTLES,
+                ),
+            )
+            if COMPLETION_QUEST.completed_ids(semantic_observer.observe()) != expected_frontier:
+                raise StrategicSealedAdapterError(
+                    "sealed challenge relocation changed the scenario frontier"
+                )
+        _require_ready_sealed_region(
+            declared_origin_region,
+            reader.read(),
+            reader,
+            subject="declared",
+        )
+        start = traversal_observer.observe()
+        bindings = route_world.plan_bindings(specs, start)
+        return _StrategicCartridgeContext(
+            emulator=emulator,
+            reader=reader,
+            traversal_observer=traversal_observer,
+            field_actions=field_actions,
+            route_world=route_world,
+            bindings=bindings,
+        )
+    except BaseException:
+        emulator.close()
+        raise
 
 
 class _StrategicSealedPyBoySession:
@@ -413,9 +617,7 @@ class _StrategicSealedPyBoySession:
 
     def execute_teacher(self) -> StrategicSealedCartridgeTeacherEvidence:
         if self._closed or self._executed:
-            raise StrategicSealedAdapterError(
-                "sealed PyBoy teacher session is not executable"
-            )
+            raise StrategicSealedAdapterError("sealed PyBoy teacher session is not executable")
         self._executed = True
 
         def interruption_factory(
@@ -428,17 +630,13 @@ class _StrategicSealedPyBoySession:
                 route_name="sealed strategic scenario approach",
             )
 
-        selected = (
-            f"pokemon.red:objective:{self._scenario.teacher_objective_id}:approach"
-        )
+        selected = f"pokemon.red:objective:{self._scenario.teacher_objective_id}:approach"
         result = record_strategic_scenario_rehearsal(
             self._private_root,
             assignment=self._assignment,
             scenario=self._scenario,
             metadata=self._metadata,
-            snapshot_provider=PokemonRedObservationEncoder.from_state_reader(
-                self._reader
-            ),
+            snapshot_provider=PokemonRedObservationEncoder.from_state_reader(self._reader),
             action_delegate=self._field_actions,
             traversal_observer=self._traversal_observer,
             bindings=self._bindings,
@@ -477,9 +675,7 @@ def _sealed_scenario_assignment(
     execution: StrategicNavigationExecution,
 ) -> StrategicNavigationScenarioRehearsalAssignment:
     if execution.source_commit is None:
-        raise StrategicSealedAdapterError(
-            "sealed scenario assignment lacks a committed source"
-        )
+        raise StrategicSealedAdapterError("sealed scenario assignment lacks a committed source")
     assignment_id = strategic_sealed_scenario_assignment_id(
         entry=entry,
         scenario=scenario,
@@ -499,10 +695,7 @@ def _sealed_scenario_assignment(
         checkpoint_id=entry.checkpoint_id,
         assignment_id=assignment_id,
         root_lineage_id=f"red-scenario-rehearsal-root-{assignment_id}",
-        episode_id=(
-            f"{STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX}"
-            f"{assignment_id}"
-        ),
+        episode_id=(f"{STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX}{assignment_id}"),
         source_bundle_sha256=execution.source_bundle_sha256,
         teacher_execution_sha256=execution.teacher_execution_sha256,
         source_commit=execution.source_commit,
@@ -520,9 +713,7 @@ def _sealed_episode_metadata(
     runtime: RuntimeIdentity,
 ) -> dict[str, object]:
     metadata = dict(assignment.episode_metadata())
-    configuration = json.loads(
-        json.dumps(STRATEGIC_SEALED_EXECUTION_CONFIGURATION)
-    )
+    configuration = json.loads(json.dumps(STRATEGIC_SEALED_EXECUTION_CONFIGURATION))
     metadata.update(
         {
             "adapter_id": POKEMON_RED_ADAPTER_ID,
@@ -601,9 +792,7 @@ def _require_ready_sealed_region(
 ) -> None:
     origin_maps = STRATEGIC_SCENARIO_ORIGIN_MAPS.get(region)
     if origin_maps is None:
-        raise StrategicSealedAdapterError(
-            "sealed case origin region is unsupported"
-        )
+        raise StrategicSealedAdapterError("sealed case origin region is unsupported")
     if (
         not raw.game_started
         or raw.map_id is None

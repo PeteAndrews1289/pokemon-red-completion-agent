@@ -85,6 +85,21 @@ and the executor will not start unless a prepared emulator session can be aborte
 still does not manufacture either verdict. It makes it impossible to begin the sealed run without
 naming the exact evidence that earned permission.
 
+Claude attacked that boundary with eighteen semantic mutations and killed every one. It approved
+the adapter for a live non-test rehearsal, then found the one thing a checksum could not say: what
+the receipt's verdict actually was. A digest of “changes required” was structurally as acceptable
+as a digest of “approved.” Schema v7 removes that last reliance on human memory. Audit and
+qualification receipts are now parsed records bound to the exact plan, executable source and full
+commit; a negative verdict remains valid evidence but cannot authorize anything.
+
+The live rehearsal was designed with the same care. It cannot search private storage or resolve a
+test scenario. It receives one explicit learning capture, relocates from its authenticated source
+city into a different region already proved by the completed story frontier, runs the exact same
+authentication and planning function the sealed adapter will use, and closes before the teacher
+acts. It must leave both capture and ROM surroundings unchanged. At this checkpoint the mechanism
+is implemented and the test is still **0/12**; publishing the exact commit, green CI and the actual
+cartridge rehearsal are the next evidence, not facts to narrate early.
+
 ## August 13: the first model-facing dataset finally became real
 
 The counter changed in the only way that matters: from prospective scenarios and uncounted

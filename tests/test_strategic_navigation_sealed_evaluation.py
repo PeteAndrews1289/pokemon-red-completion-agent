@@ -15,14 +15,20 @@ from pokemon_red_completion.strategic_navigation_sealed_evaluation import (
     StrategicSealedEvaluationCase,
     StrategicSealedEvaluationError,
     StrategicSealedEvaluationPlan,
+    StrategicSealedExternalAuditReceipt,
+    StrategicSealedNonTestQualificationReceipt,
     StrategicSealedPrediction,
     StrategicSealedProgress,
     StrategicSealedRuntimeGrant,
     StrategicSealedTeacherResult,
     build_strategic_sealed_authorization,
+    build_strategic_sealed_external_audit_receipt,
+    build_strategic_sealed_non_test_qualification_receipt,
     execute_strategic_sealed_evaluation,
     load_strategic_sealed_evaluation_plan,
     parse_strategic_sealed_authorization,
+    parse_strategic_sealed_external_audit_receipt,
+    parse_strategic_sealed_non_test_qualification_receipt,
     require_strategic_sealed_runtime_preflight,
     score_strategic_sealed_evaluation,
 )
@@ -30,8 +36,21 @@ from pokemon_red_completion.strategic_navigation_sealed_evaluation import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_COMMIT = "1" * 40
 CASE_CATALOG_SHA256 = "2" * 64
-EXTERNAL_AUDIT_RECEIPT_SHA256 = "3" * 64
-NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256 = "4" * 64
+EXTERNAL_AUDIT_EVIDENCE_SHA256 = "3" * 64
+NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256 = "4" * 64
+
+
+def _canonical(value: object) -> bytes:
+    return (
+        json.dumps(
+            value,
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
 
 
 class _NoopAbort:
@@ -53,8 +72,49 @@ def _store(tmp_path: Path):
     return private, store
 
 
+def _receipts(
+    plan: StrategicSealedEvaluationPlan,
+    *,
+    source_commit: str = SOURCE_COMMIT,
+    audit_verdict: str = "approved_for_authorization",
+    qualification_verdict: str = "passed",
+    suffix: str = "v1",
+) -> tuple[
+    StrategicSealedExternalAuditReceipt,
+    StrategicSealedNonTestQualificationReceipt,
+]:
+    audit = parse_strategic_sealed_external_audit_receipt(
+        build_strategic_sealed_external_audit_receipt(
+            plan,
+            receipt_id=f"external-audit-{suffix}",
+            issued_by="independent-auditor",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=EXTERNAL_AUDIT_EVIDENCE_SHA256,
+            verdict=audit_verdict,
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    qualification = parse_strategic_sealed_non_test_qualification_receipt(
+        build_strategic_sealed_non_test_qualification_receipt(
+            plan,
+            receipt_id=f"non-test-qualification-{suffix}",
+            issued_by="qualification-runner",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256,
+            verdict=qualification_verdict,
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    return audit, qualification
+
+
 def _protocol():
     plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    audit, qualification = _receipts(plan)
     payload = build_strategic_sealed_authorization(
         plan,
         authorization_id="peter-one-shot-v1",
@@ -62,12 +122,15 @@ def _protocol():
         authorized_on="2026-08-13",
         source_commit=SOURCE_COMMIT,
         case_catalog_sha256=CASE_CATALOG_SHA256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
-    authorization = parse_strategic_sealed_authorization(payload, plan=plan)
+    authorization = parse_strategic_sealed_authorization(
+        payload,
+        plan=plan,
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
+    )
     grant = require_strategic_sealed_runtime_preflight(
         plan,
         authorization,
@@ -79,10 +142,8 @@ def _protocol():
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=CASE_CATALOG_SHA256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     return plan, payload, authorization, grant
 
@@ -102,9 +163,7 @@ def _success(
         teacher_target_index=0,
         model_prediction_index=0 if model_correct else 1,
         baseline_prediction_index=0 if baseline_correct else 1,
-        policy_input_sha256=hashlib.sha256(
-            f"policy:{case.case_id}".encode("ascii")
-        ).hexdigest(),
+        policy_input_sha256=hashlib.sha256(f"policy:{case.case_id}".encode("ascii")).hexdigest(),
         episode_manifest_sha256=hashlib.sha256(
             f"episode:{case.case_id}".encode("ascii")
         ).hexdigest(),
@@ -125,9 +184,7 @@ def _prediction(
         model_prediction_tied=False,
         baseline_prediction_index=0 if baseline_correct else 1,
         baseline_prediction_tied=False,
-        policy_input_sha256=hashlib.sha256(
-            f"policy:{case.case_id}".encode("ascii")
-        ).hexdigest(),
+        policy_input_sha256=hashlib.sha256(f"policy:{case.case_id}".encode("ascii")).hexdigest(),
     )
 
 
@@ -157,6 +214,7 @@ def _passing_outcomes(plan) -> tuple[StrategicSealedCaseOutcome, ...]:
 
 def test_authorization_is_canonical_and_bound_to_every_frozen_identity() -> None:
     plan, payload, authorization, _ = _protocol()
+    audit, qualification = _receipts(plan)
 
     assert payload == (
         json.dumps(
@@ -169,28 +227,28 @@ def test_authorization_is_canonical_and_bound_to_every_frozen_identity() -> None
         + b"\n"
     )
     assert authorization.plan_sha256 == plan.plan_sha256
-    assert authorization.execution_source_bundle_sha256 == (
-        plan.execution_source_bundle_sha256
-    )
+    assert authorization.execution_source_bundle_sha256 == (plan.execution_source_bundle_sha256)
     assert authorization.model_canonical_sha256 == plan.model_canonical_sha256
     assert authorization.model_file_sha256 == plan.model_file_sha256
     assert authorization.teacher_execution_sha256 == plan.teacher_execution_sha256
-    assert authorization.external_audit_receipt_sha256 == (
-        EXTERNAL_AUDIT_RECEIPT_SHA256
-    )
+    assert authorization.external_audit_receipt_sha256 == audit.receipt_sha256
     assert authorization.non_test_adapter_qualification_receipt_sha256 == (
-        NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
+        qualification.receipt_sha256
     )
     assert authorization.authorization_sha256 == hashlib.sha256(payload).hexdigest()
 
     changed = json.loads(payload.decode("ascii"))
     changed["acknowledgements"]["publish_regardless_of_outcome"] = False
     changed_payload = (
-        json.dumps(changed, separators=(",", ":"), sort_keys=True).encode("ascii")
-        + b"\n"
+        json.dumps(changed, separators=(",", ":"), sort_keys=True).encode("ascii") + b"\n"
     )
     with pytest.raises(StrategicSealedEvaluationError, match="incomplete"):
-        parse_strategic_sealed_authorization(changed_payload, plan=plan)
+        parse_strategic_sealed_authorization(
+            changed_payload,
+            plan=plan,
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
+        )
 
     with pytest.raises(StrategicSealedEvaluationError, match="canonical loader"):
         StrategicSealedEvaluationPlan(
@@ -213,16 +271,12 @@ def test_authorization_is_canonical_and_bound_to_every_frozen_identity() -> None
             authorized_on=authorization.authorized_on,
             source_commit=authorization.source_commit,
             plan_sha256=authorization.plan_sha256,
-            execution_source_bundle_sha256=(
-                authorization.execution_source_bundle_sha256
-            ),
+            execution_source_bundle_sha256=(authorization.execution_source_bundle_sha256),
             model_canonical_sha256=authorization.model_canonical_sha256,
             model_file_sha256=authorization.model_file_sha256,
             teacher_execution_sha256=authorization.teacher_execution_sha256,
             case_catalog_sha256=authorization.case_catalog_sha256,
-            external_audit_receipt_sha256=(
-                authorization.external_audit_receipt_sha256
-            ),
+            external_audit_receipt_sha256=(authorization.external_audit_receipt_sha256),
             non_test_adapter_qualification_receipt_sha256=(
                 authorization.non_test_adapter_qualification_receipt_sha256
             ),
@@ -232,10 +286,224 @@ def test_authorization_is_canonical_and_bound_to_every_frozen_identity() -> None
         replace(plan, plan_sha256="f" * 64)
     with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(authorization, case_catalog_sha256="e" * 64)
+    with pytest.raises(StrategicSealedEvaluationError, match="canonical parser"):
+        StrategicSealedExternalAuditReceipt(
+            receipt_sha256=audit.receipt_sha256,
+            receipt_id=audit.receipt_id,
+            issued_by=audit.issued_by,
+            issued_on=audit.issued_on,
+            source_commit=audit.source_commit,
+            plan_sha256=audit.plan_sha256,
+            execution_source_bundle_sha256=(audit.execution_source_bundle_sha256),
+            evidence_sha256=audit.evidence_sha256,
+            verdict=audit.verdict,
+            _validation_token=object(),
+        )
+    with pytest.raises(StrategicSealedEvaluationError, match="canonical parser"):
+        StrategicSealedNonTestQualificationReceipt(
+            receipt_sha256=qualification.receipt_sha256,
+            receipt_id=qualification.receipt_id,
+            issued_by=qualification.issued_by,
+            issued_on=qualification.issued_on,
+            source_commit=qualification.source_commit,
+            plan_sha256=qualification.plan_sha256,
+            execution_source_bundle_sha256=(qualification.execution_source_bundle_sha256),
+            evidence_sha256=qualification.evidence_sha256,
+            verdict=qualification.verdict,
+            sealed_test_cases_opened=qualification.sealed_test_cases_opened,
+            _validation_token=object(),
+        )
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
+        replace(audit, verdict="changes_required")
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
+        replace(qualification, verdict="failed")
+
+
+def test_typed_evidence_receipts_reject_unfavorable_or_stale_claims() -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    approved_audit, passed_qualification = _receipts(plan)
+    live_only_audit, _ = _receipts(
+        plan,
+        audit_verdict="approved_for_live_qualification",
+        suffix="live-only",
+    )
+    _, failed_qualification = _receipts(
+        plan,
+        qualification_verdict="failed",
+        suffix="failed",
+    )
+    approved_payload = build_strategic_sealed_authorization(
+        plan,
+        authorization_id="approved-control",
+        authorized_by="test-owner",
+        authorized_on="2026-08-13",
+        source_commit=SOURCE_COMMIT,
+        case_catalog_sha256=CASE_CATALOG_SHA256,
+        external_audit_receipt=approved_audit,
+        non_test_adapter_qualification_receipt=passed_qualification,
+    )
+
+    with pytest.raises(
+        StrategicSealedEvaluationError,
+        match="did not approve authorization",
+    ):
+        build_strategic_sealed_authorization(
+            plan,
+            authorization_id="must-refuse-live-only-audit",
+            authorized_by="test-owner",
+            authorized_on="2026-08-13",
+            source_commit=SOURCE_COMMIT,
+            case_catalog_sha256=CASE_CATALOG_SHA256,
+            external_audit_receipt=live_only_audit,
+            non_test_adapter_qualification_receipt=passed_qualification,
+        )
+    with pytest.raises(
+        StrategicSealedEvaluationError,
+        match="did not pass cleanly",
+    ):
+        build_strategic_sealed_authorization(
+            plan,
+            authorization_id="must-refuse-failed-qualification",
+            authorized_by="test-owner",
+            authorized_on="2026-08-13",
+            source_commit=SOURCE_COMMIT,
+            case_catalog_sha256=CASE_CATALOG_SHA256,
+            external_audit_receipt=approved_audit,
+            non_test_adapter_qualification_receipt=failed_qualification,
+        )
+    with pytest.raises(
+        StrategicSealedEvaluationError,
+        match="did not approve authorization",
+    ):
+        parse_strategic_sealed_authorization(
+            approved_payload,
+            plan=plan,
+            external_audit_receipt=live_only_audit,
+            non_test_adapter_qualification_receipt=passed_qualification,
+        )
+
+    stale_payload = build_strategic_sealed_external_audit_receipt(
+        plan,
+        receipt_id="stale-external-audit",
+        issued_by="independent-auditor",
+        issued_on="2026-08-13",
+        source_commit="9" * 40,
+        evidence_sha256=EXTERNAL_AUDIT_EVIDENCE_SHA256,
+        verdict="approved_for_authorization",
+    )
+    with pytest.raises(StrategicSealedEvaluationError, match="source commit differs"):
+        parse_strategic_sealed_external_audit_receipt(
+            stale_payload,
+            plan=plan,
+            source_commit=SOURCE_COMMIT,
+        )
+
+    invalid_verdict = json.loads(stale_payload.decode("ascii"))
+    invalid_verdict["source_commit"] = SOURCE_COMMIT
+    invalid_verdict["verdict"] = "approved"
+    with pytest.raises(StrategicSealedEvaluationError, match="verdict is invalid"):
+        parse_strategic_sealed_external_audit_receipt(
+            _canonical(invalid_verdict),
+            plan=plan,
+            source_commit=SOURCE_COMMIT,
+        )
+
+    opened_test = json.loads(
+        build_strategic_sealed_non_test_qualification_receipt(
+            plan,
+            receipt_id="non-test-qualification-zero",
+            issued_by="qualification-runner",
+            issued_on="2026-08-13",
+            source_commit=SOURCE_COMMIT,
+            evidence_sha256=NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256,
+            verdict="passed",
+        ).decode("ascii")
+    )
+    opened_test["sealed_test_cases_opened"] = 1
+    with pytest.raises(StrategicSealedEvaluationError, match="opened a test case"):
+        parse_strategic_sealed_non_test_qualification_receipt(
+            _canonical(opened_test),
+            plan=plan,
+            source_commit=SOURCE_COMMIT,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    (
+        ("schema", "wrong-schema", "schema differs"),
+        ("evaluation_id", "wrong-evaluation", "evaluation differs"),
+        ("plan_sha256", "d" * 64, "plan differs"),
+        ("execution_source_bundle_sha256", "e" * 64, "source bundle differs"),
+    ),
+)
+def test_external_audit_receipt_parser_refuses_identity_drift(
+    field: str,
+    replacement: str,
+    message: str,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    payload = json.loads(
+        build_strategic_sealed_external_audit_receipt(
+            plan,
+            receipt_id="external-audit-identity-control",
+            issued_by="independent-auditor",
+            issued_on="2026-08-13",
+            source_commit=SOURCE_COMMIT,
+            evidence_sha256=EXTERNAL_AUDIT_EVIDENCE_SHA256,
+            verdict="approved_for_authorization",
+        ).decode("ascii")
+    )
+    payload[field] = replacement
+
+    with pytest.raises(StrategicSealedEvaluationError, match=message):
+        parse_strategic_sealed_external_audit_receipt(
+            _canonical(payload),
+            plan=plan,
+            source_commit=SOURCE_COMMIT,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    (
+        ("schema", "wrong-schema", "schema differs"),
+        ("evaluation_id", "wrong-evaluation", "evaluation differs"),
+        ("plan_sha256", "d" * 64, "plan differs"),
+        ("execution_source_bundle_sha256", "e" * 64, "source bundle differs"),
+        ("production_path", "alternate-path", "production path differs"),
+    ),
+)
+def test_non_test_qualification_receipt_parser_refuses_identity_drift(
+    field: str,
+    replacement: str,
+    message: str,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    payload = json.loads(
+        build_strategic_sealed_non_test_qualification_receipt(
+            plan,
+            receipt_id="non-test-qualification-identity-control",
+            issued_by="qualification-runner",
+            issued_on="2026-08-13",
+            source_commit=SOURCE_COMMIT,
+            evidence_sha256=NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256,
+            verdict="passed",
+        ).decode("ascii")
+    )
+    payload[field] = replacement
+
+    with pytest.raises(StrategicSealedEvaluationError, match=message):
+        parse_strategic_sealed_non_test_qualification_receipt(
+            _canonical(payload),
+            plan=plan,
+            source_commit=SOURCE_COMMIT,
+        )
 
 
 def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> None:
     plan, _, authorization, grant = _protocol()
+    audit, qualification = _receipts(plan)
 
     with pytest.raises(StrategicSealedEvaluationError, match="come from the preflight"):
         StrategicSealedRuntimeGrant(
@@ -244,18 +512,14 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             source_commit=SOURCE_COMMIT,
             teacher_execution_sha256=plan.teacher_execution_sha256,
             case_catalog_sha256=CASE_CATALOG_SHA256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt_sha256=audit.receipt_sha256,
+            non_test_adapter_qualification_receipt_sha256=(qualification.receipt_sha256),
             _validation_token=object(),
         )
     with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(grant, source_commit="b" * 40)
-    assert grant.external_audit_receipt_sha256 == EXTERNAL_AUDIT_RECEIPT_SHA256
-    assert grant.non_test_adapter_qualification_receipt_sha256 == (
-        NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-    )
+    assert grant.external_audit_receipt_sha256 == audit.receipt_sha256
+    assert grant.non_test_adapter_qualification_receipt_sha256 == (qualification.receipt_sha256)
     with pytest.raises(StrategicSealedEvaluationError, match="case catalog differs"):
         require_strategic_sealed_runtime_preflight(
             plan,
@@ -268,10 +532,8 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             model_file_sha256=plan.model_file_sha256,
             teacher_execution_sha256=plan.teacher_execution_sha256,
             case_catalog_sha256="3" * 64,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
         )
     with pytest.raises(
         StrategicSealedEvaluationError,
@@ -288,10 +550,8 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             model_file_sha256=plan.model_file_sha256,
             teacher_execution_sha256=plan.teacher_execution_sha256,
             case_catalog_sha256=CASE_CATALOG_SHA256,
-            external_audit_receipt_sha256="5" * 64,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=_receipts(plan, suffix="v2")[0],
+            non_test_adapter_qualification_receipt=qualification,
         )
     with pytest.raises(
         StrategicSealedEvaluationError,
@@ -308,8 +568,8 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             model_file_sha256=plan.model_file_sha256,
             teacher_execution_sha256=plan.teacher_execution_sha256,
             case_catalog_sha256=CASE_CATALOG_SHA256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256="5" * 64,
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=(_receipts(plan, suffix="v2")[1]),
         )
     with pytest.raises(StrategicSealedEvaluationError, match="clean published"):
         require_strategic_sealed_runtime_preflight(
@@ -323,10 +583,8 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             model_file_sha256=plan.model_file_sha256,
             teacher_execution_sha256=plan.teacher_execution_sha256,
             case_catalog_sha256=CASE_CATALOG_SHA256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
         )
 
 
@@ -338,9 +596,7 @@ def test_executor_requires_the_prepared_session_abort_boundary_before_start(
     calls: list[str] = []
 
     class MissingAbort:
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             calls.append(case.case_id)
             return _prediction(case, baseline_correct=False)
 
@@ -383,9 +639,7 @@ def test_scorer_refuses_every_incomplete_series_without_computing_a_metric(
 
     rows = _passing_outcomes(plan)
     for size in range(sealed.SEALED_EVALUATION_CASES):
-        with pytest.raises(
-            StrategicSealedEvaluationError, match="no metric is available"
-        ):
+        with pytest.raises(StrategicSealedEvaluationError, match="no metric is available"):
             score_strategic_sealed_evaluation(
                 plan,
                 rows[:size],
@@ -479,9 +733,7 @@ def test_unsuccessful_teacher_case_can_never_create_a_favorable_gate() -> None:
     assert isinstance(protocol, dict)
     assert isinstance(primary, dict)
     assert protocol["valid"] is False
-    assert "primary_case_without_successful_teacher_target" in protocol[
-        "protocol_failure_reasons"
-    ]
+    assert "primary_case_without_successful_teacher_target" in protocol["protocol_failure_reasons"]
     assert primary["successful_teacher_cases"] == 9
     assert result["offline_gate_passed"] is False
     assert result["status"] == "protocol_failure"
@@ -507,9 +759,7 @@ def test_executor_claims_before_access_and_never_emits_intermediate_metrics(
     monkeypatch.setattr(sealed, "_paired_two_sided_exact_p", observe_exact_test)
 
     class Runner(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             claim = store.find_sealed_record(
                 sealed._case_record_id("claim", case.ordinal, namespace),
                 expected_kind="strategic_sealed_claim",
@@ -567,9 +817,7 @@ def test_executor_aborts_prepared_sessions_for_every_caught_runner_failure(
     aborted: list[int] = []
 
     class Runner:
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             if case.ordinal == 1:
                 raise sealed.StrategicSealedCandidateUnavailableError(
                     "synthetic unavailable candidate"
@@ -609,9 +857,7 @@ def test_executor_aborts_prepared_sessions_for_every_caught_runner_failure(
     rerun_calls: list[str] = []
 
     class RejectRerun(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             rerun_calls.append(case.case_id)
             return _prediction(case, baseline_correct=False)
 
@@ -639,9 +885,7 @@ def test_second_authorization_cannot_create_a_fresh_ledger_for_the_same_plan(
     plan, _, authorization, grant = _protocol()
 
     class Finish(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             return _prediction(case, baseline_correct=not case.challenge)
 
         def execute_teacher(
@@ -657,6 +901,7 @@ def test_second_authorization_cannot_create_a_fresh_ledger_for_the_same_plan(
         runner=Finish(),
     )
 
+    audit, qualification = _receipts(plan)
     second_payload = build_strategic_sealed_authorization(
         plan,
         authorization_id="peter-one-shot-v2",
@@ -664,12 +909,15 @@ def test_second_authorization_cannot_create_a_fresh_ledger_for_the_same_plan(
         authorized_on="2026-08-14",
         source_commit=SOURCE_COMMIT,
         case_catalog_sha256=CASE_CATALOG_SHA256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
-    second = parse_strategic_sealed_authorization(second_payload, plan=plan)
+    second = parse_strategic_sealed_authorization(
+        second_payload,
+        plan=plan,
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
+    )
     second_grant = require_strategic_sealed_runtime_preflight(
         plan,
         second,
@@ -681,17 +929,13 @@ def test_second_authorization_cannot_create_a_fresh_ledger_for_the_same_plan(
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=CASE_CATALOG_SHA256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     calls: list[str] = []
 
     class RejectSecondRun(Finish):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             calls.append(case.case_id)
             return super().prepare(case)
 
@@ -712,9 +956,7 @@ def test_crash_consumes_open_case_and_restart_never_reopens_it(tmp_path: Path) -
     opened: list[str] = []
 
     class Crash(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             opened.append(case.case_id)
             return _prediction(case, baseline_correct=not case.challenge)
 
@@ -736,9 +978,7 @@ def test_crash_consumes_open_case_and_restart_never_reopens_it(tmp_path: Path) -
     resumed: list[str] = []
 
     class Finish(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             resumed.append(case.case_id)
             return _prediction(case, baseline_correct=not case.challenge)
 
@@ -794,9 +1034,7 @@ def test_crash_before_the_first_claim_consumes_no_case(
     opened: list[str] = []
 
     class Finish(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             opened.append(case.case_id)
             return _prediction(case, baseline_correct=not case.challenge)
 
@@ -840,9 +1078,7 @@ def test_runner_identity_mismatch_is_consumed_and_forces_protocol_failure(
     aborted: list[str] = []
 
     class WrongCase(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             wrong = plan.cases[case.ordinal % len(plan.cases)]
             return _prediction(wrong, baseline_correct=False)
 
@@ -867,9 +1103,7 @@ def test_runner_identity_mismatch_is_consumed_and_forces_protocol_failure(
     resumed: list[str] = []
 
     class Finish(_NoopAbort):
-        def prepare(
-            self, case: StrategicSealedEvaluationCase
-        ) -> StrategicSealedPrediction:
+        def prepare(self, case: StrategicSealedEvaluationCase) -> StrategicSealedPrediction:
             resumed.append(case.case_id)
             return _prediction(case, baseline_correct=not case.challenge)
 

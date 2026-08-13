@@ -60,12 +60,8 @@ def test_registry_is_canonical_preassigned_and_seals_test_roots() -> None:
     assert len(registry.runs) == 12
     assert len({run.harness_seed for run in registry.runs}) == 12
     assert len({run.schedule_sha256 for run in registry.runs}) == 12
-    assert registry.rehearsal.harness_seed not in {
-        run.harness_seed for run in registry.runs
-    }
-    assert registry.rehearsal.schedule_sha256 not in {
-        run.schedule_sha256 for run in registry.runs
-    }
+    assert registry.rehearsal.harness_seed not in {run.harness_seed for run in registry.runs}
+    assert registry.rehearsal.schedule_sha256 not in {run.schedule_sha256 for run in registry.runs}
     rehearsal = registry.rehearsal_assignment()
     assert rehearsal.partition == "unassigned"
     assert rehearsal.harness_seed == 1_710_001
@@ -77,13 +73,8 @@ def test_registry_is_canonical_preassigned_and_seals_test_roots() -> None:
     assert rehearsal.assignment_id not in {
         registry.assignment(run.run_id).assignment_id for run in registry.runs
     }
-    assert (
-        registry.learning_assignment("red-strategic-v1-01-train").partition == "train"
-    )
-    assert (
-        registry.learning_assignment("red-strategic-v1-06-validation").partition
-        == "validation"
-    )
+    assert registry.learning_assignment("red-strategic-v1-01-train").partition == "train"
+    assert registry.learning_assignment("red-strategic-v1-06-validation").partition == "validation"
     with pytest.raises(StrategicNavigationProtocolError, match="must remain unopened"):
         registry.learning_assignment("red-strategic-v1-08-test")
 
@@ -96,11 +87,11 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     assert len(payload) == 6019
     assert (
         registry.registry_sha256
-        == "eb73abbbae1c1042a7f3e7ecc78eaa8ed71a919fddf0dcc4c7c9f3e9ec7083e2"
+        == "bdb58056a45376eaf671cbb6b80689b3a3dcb47314303812cdbfc868b0efcd2e"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db"
+        == "bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd"
     )
     assert (
         registry.execution.decision_contract_sha256
@@ -108,7 +99,7 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd"
+        == "4e74cb4249c2dadc7e051644d2f0771937ab5b44a6521cce78ee8401432001e2"
     )
     assert digest == {
         "bytes": len(payload),
@@ -124,10 +115,7 @@ def test_assignment_identity_is_path_free_and_partition_bound() -> None:
 
     assert first == registry.assignment("red-strategic-v1-01-train")
     assert first.root_lineage_id == f"red-strategic-root-{first.assignment_id}"
-    assert (
-        first.episode_id
-        == f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{first.assignment_id}"
-    )
+    assert first.episode_id == f"{STRATEGIC_NAVIGATION_EPISODE_PREFIX}{first.assignment_id}"
     assert len(first.episode_id) <= 80
     assert first.collection_slot_ordinal == 1
     assert first.partition_slot_ordinal == 1
@@ -232,9 +220,7 @@ def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None
 
     assert (
         loaded.registry_sha256
-        == parse_strategic_navigation_registry(
-            REGISTRY_PATH.read_bytes()
-        ).registry_sha256
+        == parse_strategic_navigation_registry(REGISTRY_PATH.read_bytes()).registry_sha256
     )
     assert loaded.execution.source_commit is not None
     assert loaded.rehearsal_assignment().source_commit == loaded.execution.source_commit

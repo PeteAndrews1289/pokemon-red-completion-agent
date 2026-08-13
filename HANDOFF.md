@@ -14,6 +14,51 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Schema-v7 typed evidence boundary ready for publication — 2026-08-13
+
+Claude's final schema-v6 audit killed 18/18 semantic mutations, confirmed optional stopping and
+answer leakage were closed, and approved the adapter for live qualification on non-test cartridge
+states. It correctly withheld authorization: the runtime bound receipt digests but never parsed
+whether those receipts said “approved” or “do not proceed.” That left one human-memory dependency
+inside an otherwise fail-closed authority chain. The sealed test remained 0/12.
+
+Schema v7 closes that gap. Canonical typed receipts bind explicit allowlisted verdicts to the exact
+evaluation, plan digest, executable source bundle, full source commit and evidence digest. Only an
+external-audit verdict of `approved_for_authorization` and a non-test qualification verdict of
+`passed` with zero test cases opened can enter owner authorization. The authorization builder,
+authorization parser and runtime preflight all require the loader-issued typed objects; a valid
+negative receipt remains publishable but cannot become authority.
+
+The non-test qualifier now accepts one explicitly named train/validation capture and never searches
+private storage. Test lookup is refused by the canonical scenario registry before input paths are
+read. Qualification shares the sealed adapter's production authentication/relocation/planning
+function, requires relocation into a different region already authenticated by the completed
+frontier, plans every candidate, runs no teacher, and proves the capture and ROM-adjacent artifacts
+remain unchanged. The command itself requires clean published exact source and writes only new,
+explicit private outputs.
+
+Current plan: 13,262 bytes, SHA-256
+`d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a`; source bundle
+`bf98872814159e85024104befad2689a88fe589b289958d9091eb3464c8df0dd`; teacher execution
+`4e74cb4249c2dadc7e051644d2f0771937ab5b44a6521cce78ee8401432001e2`. The sixth pre-access
+amendment preserves schema-v6 digest
+`9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440` as superseded. See the
+[v7 freeze](docs/evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json) and the
+[authorization-readiness audit handoff](docs/claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md).
+
+The final local gate is 2,887 passed, three integration tests deselected and one expected failure.
+The 93-test focused protocol/adapter gate, all three generated identity checks, Ruff and mypy across
+168 source files are also clean.
+
+Next, publish this exact source and require green CI, then execute one explicit non-test live
+qualification without the teacher. Preserve its path-free evidence and typed receipt outside the
+repository so the source commit does not change. Have an independent reviewer audit that exact
+commit and evidence before issuing an authorization-level verdict. The only acceptable test
+catalog path is a custodian-supplied canonical path-free manifest, followed by explicit owner
+sign-off. Do not open, inventory or hash an actual sealed capture to shortcut those gates. The
+result-publication decision is already fixed: favorable, unfavorable, failed or inconclusive, the
+one-shot result must be published.
+
 ## Schema-v6 sealed boundary ready for independent audit — 2026-08-13
 
 The prediction-first cartridge boundary is implemented and ROM-free qualified. A strict path-free

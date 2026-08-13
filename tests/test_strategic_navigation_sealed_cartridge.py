@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import replace
 from pathlib import Path
@@ -25,6 +26,7 @@ from pokemon_red_completion.strategic_navigation_scenario_routes import (
     STRATEGIC_SCENARIO_ORIGIN_MAPS,
 )
 from pokemon_red_completion.strategic_navigation_scenarios import (
+    StrategicScenarioProtocolError,
     load_strategic_navigation_scenario_registry,
 )
 from pokemon_red_completion.strategic_navigation_sealed_adapter import (
@@ -34,6 +36,7 @@ from pokemon_red_completion.strategic_navigation_sealed_cartridge import (
     StrategicSealedPyBoySessionFactory,
     _sealed_episode_metadata,
     _sealed_scenario_assignment,
+    qualify_strategic_sealed_adapter_on_non_test_capture,
 )
 from pokemon_red_completion.strategic_navigation_sealed_catalog import (
     STRATEGIC_SEALED_CASE_CATALOG_ENTRY_SCHEMA,
@@ -42,15 +45,20 @@ from pokemon_red_completion.strategic_navigation_sealed_catalog import (
     parse_strategic_sealed_case_catalog,
 )
 from pokemon_red_completion.strategic_navigation_sealed_evaluation import (
+    StrategicSealedEvaluationPlan,
     build_strategic_sealed_authorization,
+    build_strategic_sealed_external_audit_receipt,
+    build_strategic_sealed_non_test_qualification_receipt,
     load_strategic_sealed_evaluation_plan,
     parse_strategic_sealed_authorization,
+    parse_strategic_sealed_external_audit_receipt,
+    parse_strategic_sealed_non_test_qualification_receipt,
     require_strategic_sealed_runtime_preflight,
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXTERNAL_AUDIT_RECEIPT_SHA256 = "3" * 64
-NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256 = "4" * 64
+EXTERNAL_AUDIT_EVIDENCE_SHA256 = "3" * 64
+NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256 = "4" * 64
 
 
 def _canonical(value: object) -> bytes:
@@ -64,6 +72,36 @@ def _canonical(value: object) -> bytes:
         ).encode("ascii")
         + b"\n"
     )
+
+
+def _receipts(plan: StrategicSealedEvaluationPlan, *, source_commit: str):
+    audit = parse_strategic_sealed_external_audit_receipt(
+        build_strategic_sealed_external_audit_receipt(
+            plan,
+            receipt_id="sealed-cartridge-external-audit",
+            issued_by="independent-auditor",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=EXTERNAL_AUDIT_EVIDENCE_SHA256,
+            verdict="approved_for_authorization",
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    qualification = parse_strategic_sealed_non_test_qualification_receipt(
+        build_strategic_sealed_non_test_qualification_receipt(
+            plan,
+            receipt_id="sealed-cartridge-non-test-qualification",
+            issued_by="qualification-runner",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256,
+            verdict="passed",
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    return audit, qualification
 
 
 def _runtime(*, suffix: str = "1") -> RuntimeIdentity:
@@ -106,9 +144,7 @@ def _catalog_document(runtime: RuntimeIdentity) -> dict[str, object]:
             for case in plan.cases
         ],
         "evaluation_id": plan.evaluation_id,
-        "execution_configuration_sha256": (
-            STRATEGIC_SEALED_EXECUTION_CONFIGURATION_SHA256
-        ),
+        "execution_configuration_sha256": (STRATEGIC_SEALED_EXECUTION_CONFIGURATION_SHA256),
         "game_id": STRATEGIC_NAVIGATION_GAME_ID,
         "plan_sha256": plan.plan_sha256,
         "rom_identity": {
@@ -132,6 +168,7 @@ def _protocol(runtime: RuntimeIdentity):
         plan=plan,
         scenario_registry=scenarios,
     )
+    audit, qualification = _receipts(plan, source_commit="a" * 40)
     authorization = parse_strategic_sealed_authorization(
         build_strategic_sealed_authorization(
             plan,
@@ -140,12 +177,12 @@ def _protocol(runtime: RuntimeIdentity):
             authorized_on="2026-08-13",
             source_commit="a" * 40,
             case_catalog_sha256=catalog.catalog_sha256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
         ),
         plan=plan,
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     grant = require_strategic_sealed_runtime_preflight(
         plan,
@@ -158,10 +195,8 @@ def _protocol(runtime: RuntimeIdentity):
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=catalog.catalog_sha256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     execution = replace(
         parse_strategic_navigation_registry(
@@ -190,8 +225,7 @@ def test_factory_constructor_authenticates_public_inputs_without_opening_a_case(
     opened: list[str] = []
 
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "verify_rom_bytes",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.verify_rom_bytes",
         lambda payload, filename: RomFingerprint(
             filename=filename,
             title=POKEMON_RED_US_REV_0.title,
@@ -206,8 +240,7 @@ def test_factory_constructor_authenticates_public_inputs_without_opening_a_case(
         lambda payload: object(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "rom_adjacent_artifacts",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.rom_adjacent_artifacts",
         lambda path: (),
     )
     monkeypatch.setattr(
@@ -236,6 +269,156 @@ def test_factory_constructor_authenticates_public_inputs_without_opening_a_case(
     assert factory.runtime_sha256 == runtime.sha256
 
 
+def test_non_test_qualification_uses_shared_path_without_teacher_or_test_access(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    scenarios = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    scenario = scenarios.scenario("red-strategic-scenario-v2-015-validation")
+    state_path = tmp_path / "qualification.state"
+    state_path.write_bytes(b"authenticated non-test state")
+    state_sha256 = hashlib.sha256(state_path.read_bytes()).hexdigest()
+    envelope_path = tmp_path / "qualification.state.json"
+    envelope_path.write_text(
+        json.dumps(
+            {
+                "checkpoint_id": "non-test-qualification-fixture",
+                "checkpoint_label": "Non-test qualification fixture",
+                "checkpoints_completed": 1,
+                "checkpoints_total": 1,
+                "schema": "pokemon-private-captured-progress-v1",
+                "state_sha256": state_sha256,
+                "verified_objective_ids": list(scenario.completed_objective_ids),
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="ascii",
+    )
+    rom_path = tmp_path / "qualification.gb"
+    rom_path.write_bytes(b"ROM-free qualification fixture")
+    calls: list[object] = []
+    bindings = tuple(SimpleNamespace(plan=object()) for _ in scenario.candidate_objective_ids)
+
+    class FakeEmulator:
+        def close(self) -> None:
+            calls.append("close")
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.verify_rom_bytes",
+        lambda payload, filename: RomFingerprint(
+            filename=filename,
+            title=POKEMON_RED_US_REV_0.title,
+            size_bytes=POKEMON_RED_US_REV_0.size_bytes,
+            sha1=POKEMON_RED_US_REV_0.sha1,
+            sha256=POKEMON_RED_US_REV_0.sha256,
+        ),
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
+        "StrategicScenarioRouteWorld.from_rom",
+        lambda payload: "route-world",
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.rom_adjacent_artifacts",
+        lambda path: (),
+    )
+
+    def shared_path(**kwargs: object) -> SimpleNamespace:
+        calls.append(kwargs)
+        return SimpleNamespace(emulator=FakeEmulator(), bindings=bindings)
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
+        "_open_strategic_cartridge_context",
+        shared_path,
+    )
+
+    observation = qualify_strategic_sealed_adapter_on_non_test_capture(
+        rom_path=rom_path,
+        state_path=state_path,
+        envelope_path=envelope_path,
+        plan=plan,
+        scenario_registry=scenarios,
+        scenario_id=scenario.scenario_id,
+        challenged_non_teacher_objective_id="liberate_silph",
+        source_commit="a" * 40,
+    )
+
+    invocation = cast(dict[str, object], calls[0])
+    assert invocation["declared_origin_region"] == "saffron"
+    assert invocation["scenario"] is scenario
+    assert calls[-1] == "close"
+    assert observation.public_dict()["challenge"] == {
+        "declared_origin_region": "saffron",
+        "non_teacher_objective_id": "liberate_silph",
+        "region_authenticated_by_completed_objective": True,
+        "relocation_exercised": True,
+        "source_origin_region": "celadon",
+    }
+    assert observation.public_dict()["result"] == {
+        "available_candidate_count": len(scenario.candidate_objective_ids),
+        "candidate_count": len(scenario.candidate_objective_ids),
+        "capture_unchanged": True,
+        "rom_adjacent_artifacts_unchanged": True,
+        "sealed_test_cases_opened": 0,
+        "status": "passed",
+        "teacher_executed": False,
+    }
+    assert hashlib.sha256(observation.canonical_payload()).hexdigest() == (
+        observation.evidence_sha256
+    )
+    assert str(tmp_path) not in json.dumps(observation.public_dict())
+
+
+def test_non_test_qualification_requires_an_authenticated_challenge_region(
+    tmp_path: Path,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    scenarios = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+
+    with pytest.raises(
+        StrategicSealedAdapterError,
+        match="challenge region is not authenticated",
+    ):
+        qualify_strategic_sealed_adapter_on_non_test_capture(
+            rom_path=tmp_path / "not-opened.gb",
+            state_path=tmp_path / "not-opened.state",
+            envelope_path=tmp_path / "not-opened.state.json",
+            plan=plan,
+            scenario_registry=scenarios,
+            scenario_id="red-strategic-scenario-v2-007-validation",
+            challenged_non_teacher_objective_id="reach_saffron",
+            source_commit="a" * 40,
+        )
+
+
+def test_non_test_qualification_refuses_the_sealed_test_partition(
+    tmp_path: Path,
+) -> None:
+    plan = load_strategic_sealed_evaluation_plan(PROJECT_ROOT)
+    scenarios = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
+    sealed_scenario_id = next(
+        scenario.scenario_id for scenario in scenarios.scenarios if scenario.partition == "test"
+    )
+
+    with pytest.raises(
+        StrategicScenarioProtocolError,
+        match="test scenario must remain unopened",
+    ):
+        qualify_strategic_sealed_adapter_on_non_test_capture(
+            rom_path=tmp_path / "not-opened.gb",
+            state_path=tmp_path / "not-opened.state",
+            envelope_path=tmp_path / "not-opened.state.json",
+            plan=plan,
+            scenario_registry=scenarios,
+            scenario_id=sealed_scenario_id,
+            challenged_non_teacher_objective_id="not-used",
+            source_commit="a" * 40,
+        )
+
+
 def test_factory_rejects_runtime_drift_before_reading_the_rom_or_capture(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -251,8 +434,7 @@ def test_factory_rejects_runtime_drift_before_reading_the_rom_or_capture(
     )
     calls: list[str] = []
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "verify_rom_bytes",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.verify_rom_bytes",
         lambda payload, filename: calls.append("rom"),
     )
 
@@ -305,10 +487,10 @@ def test_sealed_assignment_and_episode_metadata_bind_case_without_a_path() -> No
         "authorization_sha256": authorization.authorization_sha256,
         "case_catalog_sha256": catalog.catalog_sha256,
         "case_id": case.case_id,
-            "case_sha256": case.case_sha256,
-            "ordinal": case.ordinal,
-            "origin_region": case.origin_region,
-            "plan_sha256": plan.plan_sha256,
+        "case_sha256": case.case_sha256,
+        "ordinal": case.ordinal,
+        "origin_region": case.origin_region,
+        "plan_sha256": plan.plan_sha256,
         "schema": "strategic-sealed-scenario-episode-binding-v1",
     }
     assert all(
@@ -361,8 +543,7 @@ def test_factory_relocates_a_claimed_challenge_before_planning_candidates(
     reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
     events: list[str] = []
     bindings = tuple(
-        cast(DestinationRouteBinding, object())
-        for _ in scenario.candidate_objective_ids
+        cast(DestinationRouteBinding, object()) for _ in scenario.candidate_objective_ids
     )
 
     class FakeEmulator:
@@ -438,8 +619,7 @@ def test_factory_relocates_a_claimed_challenge_before_planning_candidates(
         lambda payload: route_world,
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "rom_adjacent_artifacts",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.rom_adjacent_artifacts",
         lambda path: (),
     )
     monkeypatch.setattr(
@@ -455,43 +635,35 @@ def test_factory_relocates_a_claimed_challenge_before_planning_candidates(
         lambda *args, **kwargs: emulator,
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "PokemonRedStateReader",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.PokemonRedStateReader",
         lambda value: reader,
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "CapturedPokemonRedObserver",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.CapturedPokemonRedObserver",
         lambda *args, **kwargs: FakeSemanticObserver(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "COMPLETION_QUEST",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.COMPLETION_QUEST",
         SimpleNamespace(completed_ids=lambda value: value),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "Gen1TrainerSightProjector",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.Gen1TrainerSightProjector",
         lambda *args, **kwargs: object(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "Gen1TraversalObserver",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.Gen1TraversalObserver",
         lambda *args, **kwargs: FakeTraversalObserver(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "FrameSafeExecutor",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.FrameSafeExecutor",
         lambda *args, **kwargs: object(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "CountingExecutor",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.CountingExecutor",
         lambda value: object(),
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "traversal_rules",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.traversal_rules",
         lambda *args: SimpleNamespace(cut_block_swaps=()),
     )
     monkeypatch.setattr(
@@ -500,13 +672,11 @@ def test_factory_relocates_a_claimed_challenge_before_planning_candidates(
     )
     field_actions = object()
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "Gen1FieldMovePort",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge.Gen1FieldMovePort",
         lambda *args, **kwargs: field_actions,
     )
     monkeypatch.setattr(
-        "pokemon_red_completion.strategic_navigation_sealed_cartridge."
-        "_sealed_interruption_handler",
+        "pokemon_red_completion.strategic_navigation_sealed_cartridge._sealed_interruption_handler",
         lambda *args, **kwargs: object(),
     )
     monkeypatch.setattr(

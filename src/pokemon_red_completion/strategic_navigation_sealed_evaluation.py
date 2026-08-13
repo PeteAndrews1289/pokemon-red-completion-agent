@@ -34,30 +34,26 @@ from pokemon_red_completion.private_artifacts import (
 )
 from pokemon_red_completion.provenance import canonical_sha256
 
-SEALED_EVALUATION_PLAN_RELATIVE_PATH = (
-    "configs/red-strategic-navigation-sealed-evaluation-v1.json"
-)
+SEALED_EVALUATION_PLAN_RELATIVE_PATH = "configs/red-strategic-navigation-sealed-evaluation-v1.json"
 SEALED_EVALUATION_PLAN_DIGEST_RELATIVE_PATH = (
     "configs/red-strategic-navigation-sealed-evaluation-v1.digest.json"
 )
-SEALED_EVALUATION_PLAN_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-v6"
-)
+SEALED_EVALUATION_PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v7"
 SEALED_EVALUATION_PLAN_DIGEST_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v6"
+    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v7"
 )
 SEALED_EVALUATION_AUTHORIZATION_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-authorization-v2"
+    "pokemon-strategic-navigation-sealed-evaluation-authorization-v3"
 )
-SEALED_EVALUATION_CASE_OUTCOME_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-case-outcome-v1"
+SEALED_EVALUATION_EXTERNAL_AUDIT_RECEIPT_SCHEMA = (
+    "pokemon-strategic-navigation-sealed-external-audit-receipt-v1"
 )
-SEALED_EVALUATION_PREDICTION_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-prediction-v1"
+SEALED_EVALUATION_NON_TEST_QUALIFICATION_RECEIPT_SCHEMA = (
+    "pokemon-strategic-navigation-sealed-non-test-qualification-receipt-v1"
 )
-SEALED_EVALUATION_RESULT_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-result-v1"
-)
+SEALED_EVALUATION_CASE_OUTCOME_SCHEMA = "pokemon-strategic-navigation-sealed-case-outcome-v1"
+SEALED_EVALUATION_PREDICTION_SCHEMA = "pokemon-strategic-navigation-sealed-prediction-v1"
+SEALED_EVALUATION_RESULT_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-result-v1"
 SEALED_EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
 SEALED_EVALUATION_CASES = 12
 SEALED_EVALUATION_PRIMARY_CASES = 10
@@ -66,11 +62,14 @@ SEALED_EVALUATION_MINIMUM_DISAGREEMENTS = 6
 
 _MAX_PLAN_BYTES = 1024 * 1024
 _MAX_AUTHORIZATION_BYTES = 64 * 1024
+_MAX_EVIDENCE_RECEIPT_BYTES = 64 * 1024
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_OID = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})\Z")
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _DATE = re.compile(r"20[0-9]{2}-[01][0-9]-[0-3][0-9]\Z")
 _PLAN_VALIDATION_TOKEN = object()
+_EXTERNAL_AUDIT_RECEIPT_VALIDATION_TOKEN = object()
+_NON_TEST_QUALIFICATION_RECEIPT_VALIDATION_TOKEN = object()
 _AUTHORIZATION_VALIDATION_TOKEN = object()
 _PREFLIGHT_VALIDATION_TOKEN = object()
 
@@ -136,6 +135,51 @@ class StrategicSealedEvaluationPlan:
         if len(matches) != 1:
             raise StrategicSealedEvaluationError("sealed evaluation case is unavailable")
         return matches[0]
+
+
+@dataclass(frozen=True, slots=True)
+class StrategicSealedExternalAuditReceipt:
+    """Typed audit verdict bound to the exact source proposed for authorization."""
+
+    receipt_sha256: str
+    receipt_id: str
+    issued_by: str
+    issued_on: str
+    source_commit: str
+    plan_sha256: str
+    execution_source_bundle_sha256: str
+    evidence_sha256: str
+    verdict: str
+    _validation_token: InitVar[object]
+
+    def __post_init__(self, _validation_token: object) -> None:
+        if _validation_token is not _EXTERNAL_AUDIT_RECEIPT_VALIDATION_TOKEN:
+            raise StrategicSealedEvaluationError(
+                "sealed external audit receipts must come from the canonical parser"
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class StrategicSealedNonTestQualificationReceipt:
+    """Typed production-adapter verdict proven without opening a sealed test case."""
+
+    receipt_sha256: str
+    receipt_id: str
+    issued_by: str
+    issued_on: str
+    source_commit: str
+    plan_sha256: str
+    execution_source_bundle_sha256: str
+    evidence_sha256: str
+    verdict: str
+    sealed_test_cases_opened: int
+    _validation_token: InitVar[object]
+
+    def __post_init__(self, _validation_token: object) -> None:
+        if _validation_token is not _NON_TEST_QUALIFICATION_RECEIPT_VALIDATION_TOKEN:
+            raise StrategicSealedEvaluationError(
+                "sealed non-test qualification receipts must come from the canonical parser"
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -272,9 +316,7 @@ class StrategicSealedTeacherResult:
             subject="sealed teacher candidate count",
         )
         if self.execution_status not in {"succeeded", "failed"}:
-            raise StrategicSealedEvaluationError(
-                "sealed teacher result status is invalid"
-            )
+            raise StrategicSealedEvaluationError("sealed teacher result status is invalid")
         if self.execution_status == "succeeded":
             _integer(
                 self.teacher_target_index,
@@ -286,10 +328,7 @@ class StrategicSealedTeacherResult:
                 self.episode_manifest_sha256,
                 subject="sealed episode manifest",
             )
-        elif (
-            self.teacher_target_index is not None
-            or self.episode_manifest_sha256 is not None
-        ):
+        elif self.teacher_target_index is not None or self.episode_manifest_sha256 is not None:
             raise StrategicSealedEvaluationError(
                 "failed sealed teacher result must not expose partial evidence"
             )
@@ -351,9 +390,7 @@ class StrategicSealedCaseOutcome:
                         continue
                     if name == "baseline prediction" and self.baseline_prediction_tied:
                         continue
-                    raise StrategicSealedEvaluationError(
-                        f"successful sealed case lacks {name}"
-                    )
+                    raise StrategicSealedEvaluationError(f"successful sealed case lacks {name}")
                 _integer(
                     prediction_value,
                     minimum=0,
@@ -370,16 +407,20 @@ class StrategicSealedCaseOutcome:
                 )
             _sha256(self.policy_input_sha256, subject="sealed policy input")
             _sha256(self.episode_manifest_sha256, subject="sealed episode manifest")
-        elif any(
-            value is not None
-            for value in (
-                self.teacher_target_index,
-                self.model_prediction_index,
-                self.baseline_prediction_index,
-                self.policy_input_sha256,
-                self.episode_manifest_sha256,
+        elif (
+            any(
+                value is not None
+                for value in (
+                    self.teacher_target_index,
+                    self.model_prediction_index,
+                    self.baseline_prediction_index,
+                    self.policy_input_sha256,
+                    self.episode_manifest_sha256,
+                )
             )
-        ) or self.model_prediction_tied or self.baseline_prediction_tied:
+            or self.model_prediction_tied
+            or self.baseline_prediction_tied
+        ):
             raise StrategicSealedEvaluationError(
                 "unsuccessful sealed case must not expose a partial prediction"
             )
@@ -485,9 +526,7 @@ def load_strategic_sealed_evaluation_plan(
         payload = plan_path.read_bytes()
         digest_payload = digest_path.read_bytes()
     except OSError as error:
-        raise StrategicSealedEvaluationError(
-            "sealed evaluation plan is unavailable"
-        ) from error
+        raise StrategicSealedEvaluationError("sealed evaluation plan is unavailable") from error
     return parse_strategic_sealed_evaluation_plan(payload, digest_payload=digest_payload)
 
 
@@ -547,10 +586,10 @@ def parse_strategic_sealed_evaluation_plan(
         "private_test_inputs_opened_at_freeze": 0,
         "requires_clean_published_exact_source": True,
         "requires_external_audit": (
-            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            "typed_approved_for_authorization_receipt_bound_to_plan_source_bundle_and_commit"
         ),
         "requires_non_test_adapter_qualification": (
-            "receipt_digest_bound_in_authorization_and_runtime_preflight"
+            "typed_passed_zero_test_access_receipt_bound_to_plan_source_bundle_and_commit"
         ),
         "requires_owner_authorization": True,
     }:
@@ -558,12 +597,9 @@ def parse_strategic_sealed_evaluation_plan(
     if document["adapter_policy"] != {
         "candidate_order": "source_bound_assignment_hash_v1",
         "candidate_planning": "after_authenticated_challenge_relocation",
-        "case_catalog_schema": (
-            "pokemon-strategic-navigation-sealed-case-catalog-v1"
-        ),
+        "case_catalog_schema": ("pokemon-strategic-navigation-sealed-case-catalog-v1"),
         "challenge_relocation": (
-            "after_claim_deterministic_route_to_declared_origin_"
-            "with_zero_objective_delta"
+            "after_claim_deterministic_route_to_declared_origin_with_zero_objective_delta"
         ),
         "catalog_contains_private_paths": False,
         "catalog_contains_route_costs_or_answers": False,
@@ -587,9 +623,7 @@ def parse_strategic_sealed_evaluation_plan(
         raise StrategicSealedEvaluationError("sealed baseline policy differs")
     if document["minimum_challenge_hypotheses"] != 6:
         raise StrategicSealedEvaluationError("sealed challenge minimum differs")
-    if document["preregistered_challenge_hypotheses"] != (
-        SEALED_EVALUATION_PRIMARY_CASES
-    ):
+    if document["preregistered_challenge_hypotheses"] != (SEALED_EVALUATION_PRIMARY_CASES):
         raise StrategicSealedEvaluationError("sealed challenge count differs")
     _validate_amendments(document["amendments"])
     _validate_endpoint_policy(document["endpoint_policy"])
@@ -603,9 +637,7 @@ def parse_strategic_sealed_evaluation_plan(
         document["source_scenario_registry_sha256"],
         subject="sealed source scenario registry",
     )
-    teacher_execution = _mapping(
-        document["teacher_execution"], subject="sealed teacher execution"
-    )
+    teacher_execution = _mapping(document["teacher_execution"], subject="sealed teacher execution")
     _exact_keys(
         teacher_execution,
         {
@@ -638,17 +670,17 @@ def parse_strategic_sealed_evaluation_plan(
     expected_teacher_execution_sha256 = hashlib.sha256(
         _canonical_line(
             {
-            "actor": "deterministic_teacher",
-            "adapter_id": "pokemon.red.gb.us.rev0.v1",
-            "behavior_configuration_sha256": behavior_sha256,
-            "collection_id": "red-strategic-navigation-v1",
-            "decision_contract_sha256": decision_contract_sha256,
-            "game_id": "pokemon.mainline:red:gb:us:rev0",
-            "objective_graph_sha256": objective_graph_sha256,
-            "ontology_id": "pokemon.core.v1",
-            "policy_id": "qualified-completion-order-v1",
-            "schema": "pokemon-strategic-navigation-teacher-execution-v1",
-            "source_bundle_sha256": source_bundle,
+                "actor": "deterministic_teacher",
+                "adapter_id": "pokemon.red.gb.us.rev0.v1",
+                "behavior_configuration_sha256": behavior_sha256,
+                "collection_id": "red-strategic-navigation-v1",
+                "decision_contract_sha256": decision_contract_sha256,
+                "game_id": "pokemon.mainline:red:gb:us:rev0",
+                "objective_graph_sha256": objective_graph_sha256,
+                "ontology_id": "pokemon.core.v1",
+                "policy_id": "qualified-completion-order-v1",
+                "schema": "pokemon-strategic-navigation-teacher-execution-v1",
+                "source_bundle_sha256": source_bundle,
             }
         )
     ).hexdigest()
@@ -674,11 +706,12 @@ def parse_strategic_sealed_evaluation_plan(
         },
         subject="sealed frozen model",
     )
-    if model.get("model_id") != (
-        "pokemon.core.strategic-navigation.destination-ranker.linear.v1"
-    ) or model.get("feature_schema_id") != (
-        "pokemon.core.strategic-navigation.destination-ranker.v1"
-    ) or model.get("feature_set_id") != "relative_route":
+    if (
+        model.get("model_id") != ("pokemon.core.strategic-navigation.destination-ranker.linear.v1")
+        or model.get("feature_schema_id")
+        != ("pokemon.core.strategic-navigation.destination-ranker.v1")
+        or model.get("feature_set_id") != "relative_route"
+    ):
         raise StrategicSealedEvaluationError("sealed model identity differs")
     if model.get("enabled_feature_names") != [
         "candidate.route_cost.relative_rank",
@@ -694,9 +727,7 @@ def parse_strategic_sealed_evaluation_plan(
         or model.get("training_epochs") != 600
     ):
         raise StrategicSealedEvaluationError("sealed model training contract differs")
-    model_sha256 = _sha256(
-        model.get("canonical_sha256"), subject="sealed model canonical digest"
-    )
+    model_sha256 = _sha256(model.get("canonical_sha256"), subject="sealed model canonical digest")
     model_file_sha256 = _sha256(
         model.get("private_file_sha256"), subject="sealed model file digest"
     )
@@ -704,9 +735,7 @@ def parse_strategic_sealed_evaluation_plan(
     raw_cases = document["cases"]
     if not isinstance(raw_cases, list) or len(raw_cases) != SEALED_EVALUATION_CASES:
         raise StrategicSealedEvaluationError("sealed case count differs")
-    execution = _mapping(
-        document["execution_policy"], subject="sealed execution policy"
-    )
+    execution = _mapping(document["execution_policy"], subject="sealed execution policy")
     candidate_counts = execution.get("candidate_counts_by_case")
     if not isinstance(candidate_counts, dict):
         raise StrategicSealedEvaluationError("sealed candidate counts differ")
@@ -737,6 +766,240 @@ def parse_strategic_sealed_evaluation_plan(
     )
 
 
+def build_strategic_sealed_external_audit_receipt(
+    plan: StrategicSealedEvaluationPlan,
+    *,
+    receipt_id: str,
+    issued_by: str,
+    issued_on: str,
+    source_commit: str,
+    evidence_sha256: str,
+    verdict: str,
+) -> bytes:
+    """Build a canonical audit attestation for an independent reviewer to issue."""
+
+    if not isinstance(plan, StrategicSealedEvaluationPlan):
+        raise TypeError("plan must be a sealed evaluation plan")
+    _safe_id(receipt_id, subject="sealed external audit receipt identity")
+    _safe_id(issued_by, subject="sealed external audit issuer identity")
+    _require_iso_date(issued_on, subject="sealed external audit issue date")
+    if _GIT_OID.fullmatch(source_commit) is None:
+        raise StrategicSealedEvaluationError("sealed external audit source commit is invalid")
+    _sha256(evidence_sha256, subject="sealed external audit evidence")
+    _external_audit_verdict(verdict)
+    return _canonical_line(
+        {
+            "evaluation_id": plan.evaluation_id,
+            "evidence_sha256": evidence_sha256,
+            "execution_source_bundle_sha256": (plan.execution_source_bundle_sha256),
+            "issued_by": issued_by,
+            "issued_on": issued_on,
+            "plan_sha256": plan.plan_sha256,
+            "receipt_id": receipt_id,
+            "schema": SEALED_EVALUATION_EXTERNAL_AUDIT_RECEIPT_SCHEMA,
+            "scope": "sealed_evaluation_authorization_readiness",
+            "source_commit": source_commit,
+            "verdict": verdict,
+        }
+    )
+
+
+def parse_strategic_sealed_external_audit_receipt(
+    payload: bytes,
+    *,
+    plan: StrategicSealedEvaluationPlan,
+    source_commit: str,
+) -> StrategicSealedExternalAuditReceipt:
+    """Parse an audit verdict and reject stale or non-allowlisted attestations."""
+
+    if not isinstance(plan, StrategicSealedEvaluationPlan):
+        raise TypeError("plan must be a sealed evaluation plan")
+    if _GIT_OID.fullmatch(source_commit) is None:
+        raise StrategicSealedEvaluationError("sealed external audit expected commit is invalid")
+    document = _decode_canonical(
+        payload,
+        maximum_bytes=_MAX_EVIDENCE_RECEIPT_BYTES,
+        subject="sealed external audit receipt",
+    )
+    _exact_keys(
+        document,
+        {
+            "evaluation_id",
+            "evidence_sha256",
+            "execution_source_bundle_sha256",
+            "issued_by",
+            "issued_on",
+            "plan_sha256",
+            "receipt_id",
+            "schema",
+            "scope",
+            "source_commit",
+            "verdict",
+        },
+        subject="sealed external audit receipt",
+    )
+    if document["schema"] != SEALED_EVALUATION_EXTERNAL_AUDIT_RECEIPT_SCHEMA:
+        raise StrategicSealedEvaluationError("sealed external audit receipt schema differs")
+    if document["scope"] != "sealed_evaluation_authorization_readiness":
+        raise StrategicSealedEvaluationError("sealed external audit receipt scope differs")
+    _validate_receipt_plan_binding(
+        document,
+        plan=plan,
+        source_commit=source_commit,
+        subject="sealed external audit receipt",
+    )
+    return StrategicSealedExternalAuditReceipt(
+        receipt_sha256=hashlib.sha256(payload).hexdigest(),
+        receipt_id=_safe_id(
+            document["receipt_id"],
+            subject="sealed external audit receipt identity",
+        ),
+        issued_by=_safe_id(
+            document["issued_by"],
+            subject="sealed external audit issuer identity",
+        ),
+        issued_on=_require_iso_date(
+            document["issued_on"],
+            subject="sealed external audit issue date",
+        ),
+        source_commit=source_commit,
+        plan_sha256=plan.plan_sha256,
+        execution_source_bundle_sha256=plan.execution_source_bundle_sha256,
+        evidence_sha256=_sha256(
+            document["evidence_sha256"],
+            subject="sealed external audit evidence",
+        ),
+        verdict=_external_audit_verdict(document["verdict"]),
+        _validation_token=_EXTERNAL_AUDIT_RECEIPT_VALIDATION_TOKEN,
+    )
+
+
+def build_strategic_sealed_non_test_qualification_receipt(
+    plan: StrategicSealedEvaluationPlan,
+    *,
+    receipt_id: str,
+    issued_by: str,
+    issued_on: str,
+    source_commit: str,
+    evidence_sha256: str,
+    verdict: str,
+    sealed_test_cases_opened: int = 0,
+) -> bytes:
+    """Build a canonical adapter qualification attestation for non-test states."""
+
+    if not isinstance(plan, StrategicSealedEvaluationPlan):
+        raise TypeError("plan must be a sealed evaluation plan")
+    _safe_id(receipt_id, subject="sealed non-test qualification receipt identity")
+    _safe_id(issued_by, subject="sealed non-test qualification issuer identity")
+    _require_iso_date(issued_on, subject="sealed non-test qualification issue date")
+    if _GIT_OID.fullmatch(source_commit) is None:
+        raise StrategicSealedEvaluationError(
+            "sealed non-test qualification source commit is invalid"
+        )
+    _sha256(evidence_sha256, subject="sealed non-test qualification evidence")
+    _non_test_qualification_verdict(verdict)
+    if sealed_test_cases_opened != 0:
+        raise StrategicSealedEvaluationError("sealed non-test qualification opened a test case")
+    return _canonical_line(
+        {
+            "evaluation_id": plan.evaluation_id,
+            "evidence_sha256": evidence_sha256,
+            "execution_source_bundle_sha256": (plan.execution_source_bundle_sha256),
+            "issued_by": issued_by,
+            "issued_on": issued_on,
+            "plan_sha256": plan.plan_sha256,
+            "production_path": ("authenticate_relocate_plan_close_without_teacher"),
+            "receipt_id": receipt_id,
+            "schema": SEALED_EVALUATION_NON_TEST_QUALIFICATION_RECEIPT_SCHEMA,
+            "scope": "production_adapter_non_test_cartridge_states",
+            "sealed_test_cases_opened": sealed_test_cases_opened,
+            "source_commit": source_commit,
+            "verdict": verdict,
+        }
+    )
+
+
+def parse_strategic_sealed_non_test_qualification_receipt(
+    payload: bytes,
+    *,
+    plan: StrategicSealedEvaluationPlan,
+    source_commit: str,
+) -> StrategicSealedNonTestQualificationReceipt:
+    """Parse a qualification verdict and prove it used no sealed test case."""
+
+    if not isinstance(plan, StrategicSealedEvaluationPlan):
+        raise TypeError("plan must be a sealed evaluation plan")
+    if _GIT_OID.fullmatch(source_commit) is None:
+        raise StrategicSealedEvaluationError(
+            "sealed non-test qualification expected commit is invalid"
+        )
+    document = _decode_canonical(
+        payload,
+        maximum_bytes=_MAX_EVIDENCE_RECEIPT_BYTES,
+        subject="sealed non-test qualification receipt",
+    )
+    _exact_keys(
+        document,
+        {
+            "evaluation_id",
+            "evidence_sha256",
+            "execution_source_bundle_sha256",
+            "issued_by",
+            "issued_on",
+            "plan_sha256",
+            "production_path",
+            "receipt_id",
+            "schema",
+            "scope",
+            "sealed_test_cases_opened",
+            "source_commit",
+            "verdict",
+        },
+        subject="sealed non-test qualification receipt",
+    )
+    if document["schema"] != SEALED_EVALUATION_NON_TEST_QUALIFICATION_RECEIPT_SCHEMA:
+        raise StrategicSealedEvaluationError("sealed non-test qualification receipt schema differs")
+    if document["scope"] != "production_adapter_non_test_cartridge_states":
+        raise StrategicSealedEvaluationError("sealed non-test qualification receipt scope differs")
+    if document["production_path"] != ("authenticate_relocate_plan_close_without_teacher"):
+        raise StrategicSealedEvaluationError(
+            "sealed non-test qualification production path differs"
+        )
+    if document["sealed_test_cases_opened"] != 0:
+        raise StrategicSealedEvaluationError("sealed non-test qualification opened a test case")
+    _validate_receipt_plan_binding(
+        document,
+        plan=plan,
+        source_commit=source_commit,
+        subject="sealed non-test qualification receipt",
+    )
+    return StrategicSealedNonTestQualificationReceipt(
+        receipt_sha256=hashlib.sha256(payload).hexdigest(),
+        receipt_id=_safe_id(
+            document["receipt_id"],
+            subject="sealed non-test qualification receipt identity",
+        ),
+        issued_by=_safe_id(
+            document["issued_by"],
+            subject="sealed non-test qualification issuer identity",
+        ),
+        issued_on=_require_iso_date(
+            document["issued_on"],
+            subject="sealed non-test qualification issue date",
+        ),
+        source_commit=source_commit,
+        plan_sha256=plan.plan_sha256,
+        execution_source_bundle_sha256=plan.execution_source_bundle_sha256,
+        evidence_sha256=_sha256(
+            document["evidence_sha256"],
+            subject="sealed non-test qualification evidence",
+        ),
+        verdict=_non_test_qualification_verdict(document["verdict"]),
+        sealed_test_cases_opened=0,
+        _validation_token=_NON_TEST_QUALIFICATION_RECEIPT_VALIDATION_TOKEN,
+    )
+
+
 def build_strategic_sealed_authorization(
     plan: StrategicSealedEvaluationPlan,
     *,
@@ -745,8 +1008,8 @@ def build_strategic_sealed_authorization(
     authorized_on: str,
     source_commit: str,
     case_catalog_sha256: str,
-    external_audit_receipt_sha256: str,
-    non_test_adapter_qualification_receipt_sha256: str,
+    external_audit_receipt: StrategicSealedExternalAuditReceipt,
+    non_test_adapter_qualification_receipt: (StrategicSealedNonTestQualificationReceipt),
 ) -> bytes:
     """Create the receipt only after the owner explicitly authorizes one-shot access."""
 
@@ -758,10 +1021,11 @@ def build_strategic_sealed_authorization(
     if _GIT_OID.fullmatch(source_commit) is None:
         raise StrategicSealedEvaluationError("sealed authorization commit is invalid")
     _sha256(case_catalog_sha256, subject="sealed case catalog")
-    _sha256(external_audit_receipt_sha256, subject="sealed external audit receipt")
-    _sha256(
-        non_test_adapter_qualification_receipt_sha256,
-        subject="sealed non-test adapter qualification receipt",
+    _validate_authorizing_receipts(
+        plan,
+        source_commit=source_commit,
+        external_audit_receipt=external_audit_receipt,
+        non_test_adapter_qualification_receipt=(non_test_adapter_qualification_receipt),
     )
     return _canonical_line(
         {
@@ -780,14 +1044,14 @@ def build_strategic_sealed_authorization(
             "case_catalog_sha256": case_catalog_sha256,
             "evaluation_id": plan.evaluation_id,
             "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
-            "external_audit_receipt_sha256": external_audit_receipt_sha256,
+            "external_audit_receipt_sha256": (external_audit_receipt.receipt_sha256),
             "model": {
                 "canonical_sha256": plan.model_canonical_sha256,
                 "private_file_sha256": plan.model_file_sha256,
             },
             "plan_sha256": plan.plan_sha256,
             "non_test_adapter_qualification_receipt_sha256": (
-                non_test_adapter_qualification_receipt_sha256
+                non_test_adapter_qualification_receipt.receipt_sha256
             ),
             "schema": SEALED_EVALUATION_AUTHORIZATION_SCHEMA,
             "source_commit": source_commit,
@@ -800,6 +1064,8 @@ def parse_strategic_sealed_authorization(
     payload: bytes,
     *,
     plan: StrategicSealedEvaluationPlan,
+    external_audit_receipt: StrategicSealedExternalAuditReceipt,
+    non_test_adapter_qualification_receipt: (StrategicSealedNonTestQualificationReceipt),
 ) -> StrategicSealedAuthorization:
     """Reject vague, stale, or selectively publishable owner authorization."""
 
@@ -836,9 +1102,7 @@ def parse_strategic_sealed_authorization(
         raise StrategicSealedEvaluationError("sealed authorization evaluation differs")
     if document["plan_sha256"] != plan.plan_sha256:
         raise StrategicSealedEvaluationError("sealed authorization plan differs")
-    if document["execution_source_bundle_sha256"] != (
-        plan.execution_source_bundle_sha256
-    ):
+    if document["execution_source_bundle_sha256"] != (plan.execution_source_bundle_sha256):
         raise StrategicSealedEvaluationError("sealed authorization source differs")
     if document["model"] != {
         "canonical_sha256": plan.model_canonical_sha256,
@@ -846,9 +1110,7 @@ def parse_strategic_sealed_authorization(
     }:
         raise StrategicSealedEvaluationError("sealed authorization model differs")
     if document["teacher_execution_sha256"] != plan.teacher_execution_sha256:
-        raise StrategicSealedEvaluationError(
-            "sealed authorization teacher execution differs"
-        )
+        raise StrategicSealedEvaluationError("sealed authorization teacher execution differs")
     if document["acknowledgements"] != {
         "authorize_private_test_access": True,
         "external_audit_approved": True,
@@ -862,17 +1124,19 @@ def parse_strategic_sealed_authorization(
     authorization_id = _safe_id(
         document["authorization_id"], subject="sealed authorization identity"
     )
-    authorized_by = _safe_id(
-        document["authorized_by"], subject="sealed authorizer identity"
-    )
+    authorized_by = _safe_id(document["authorized_by"], subject="sealed authorizer identity")
     authorized_on = _require_iso_date(
         document["authorized_on"], subject="sealed authorization date"
     )
-    source_commit = _text(
-        document["source_commit"], subject="sealed authorization commit"
-    )
+    source_commit = _text(document["source_commit"], subject="sealed authorization commit")
     if _GIT_OID.fullmatch(source_commit) is None:
         raise StrategicSealedEvaluationError("sealed authorization commit is invalid")
+    _validate_authorizing_receipts(
+        plan,
+        source_commit=source_commit,
+        external_audit_receipt=external_audit_receipt,
+        non_test_adapter_qualification_receipt=(non_test_adapter_qualification_receipt),
+    )
     external_audit_receipt_sha256 = _sha256(
         document["external_audit_receipt_sha256"],
         subject="sealed external audit receipt",
@@ -881,6 +1145,14 @@ def parse_strategic_sealed_authorization(
         document["non_test_adapter_qualification_receipt_sha256"],
         subject="sealed non-test adapter qualification receipt",
     )
+    if external_audit_receipt_sha256 != external_audit_receipt.receipt_sha256:
+        raise StrategicSealedEvaluationError("sealed external audit receipt differs")
+    if non_test_adapter_qualification_receipt_sha256 != (
+        non_test_adapter_qualification_receipt.receipt_sha256
+    ):
+        raise StrategicSealedEvaluationError(
+            "sealed non-test adapter qualification receipt differs"
+        )
     return StrategicSealedAuthorization(
         authorization_sha256=hashlib.sha256(payload).hexdigest(),
         authorization_id=authorization_id,
@@ -892,9 +1164,7 @@ def parse_strategic_sealed_authorization(
         model_canonical_sha256=plan.model_canonical_sha256,
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
-        case_catalog_sha256=_sha256(
-            document["case_catalog_sha256"], subject="sealed case catalog"
-        ),
+        case_catalog_sha256=_sha256(document["case_catalog_sha256"], subject="sealed case catalog"),
         external_audit_receipt_sha256=external_audit_receipt_sha256,
         non_test_adapter_qualification_receipt_sha256=(
             non_test_adapter_qualification_receipt_sha256
@@ -915,8 +1185,8 @@ def require_strategic_sealed_runtime_preflight(
     model_file_sha256: str,
     teacher_execution_sha256: str,
     case_catalog_sha256: str,
-    external_audit_receipt_sha256: str,
-    non_test_adapter_qualification_receipt_sha256: str,
+    external_audit_receipt: StrategicSealedExternalAuditReceipt,
+    non_test_adapter_qualification_receipt: (StrategicSealedNonTestQualificationReceipt),
 ) -> StrategicSealedRuntimeGrant:
     """Perform every identity refusal before the first case claim."""
 
@@ -926,9 +1196,13 @@ def require_strategic_sealed_runtime_preflight(
         raise TypeError("sealed preflight requires a plan and authorization")
     _validate_authorization_binding(plan, authorization)
     if source_clean is not True or source_published is not True:
-        raise StrategicSealedEvaluationError(
-            "sealed evaluation requires clean published source"
-        )
+        raise StrategicSealedEvaluationError("sealed evaluation requires clean published source")
+    _validate_authorizing_receipts(
+        plan,
+        source_commit=source_commit,
+        external_audit_receipt=external_audit_receipt,
+        non_test_adapter_qualification_receipt=(non_test_adapter_qualification_receipt),
+    )
     checks = (
         (source_commit, authorization.source_commit, "source commit"),
         (source_bundle_sha256, plan.execution_source_bundle_sha256, "source bundle"),
@@ -941,12 +1215,12 @@ def require_strategic_sealed_runtime_preflight(
         ),
         (case_catalog_sha256, authorization.case_catalog_sha256, "case catalog"),
         (
-            external_audit_receipt_sha256,
+            external_audit_receipt.receipt_sha256,
             authorization.external_audit_receipt_sha256,
             "external audit receipt",
         ),
         (
-            non_test_adapter_qualification_receipt_sha256,
+            non_test_adapter_qualification_receipt.receipt_sha256,
             authorization.non_test_adapter_qualification_receipt_sha256,
             "non-test adapter qualification receipt",
         ),
@@ -960,9 +1234,7 @@ def require_strategic_sealed_runtime_preflight(
         source_commit=authorization.source_commit,
         teacher_execution_sha256=authorization.teacher_execution_sha256,
         case_catalog_sha256=authorization.case_catalog_sha256,
-        external_audit_receipt_sha256=(
-            authorization.external_audit_receipt_sha256
-        ),
+        external_audit_receipt_sha256=(authorization.external_audit_receipt_sha256),
         non_test_adapter_qualification_receipt_sha256=(
             authorization.non_test_adapter_qualification_receipt_sha256
         ),
@@ -1062,23 +1334,17 @@ def score_strategic_sealed_evaluation(
     if halt_observed:
         protocol_failure_reasons.append("executor_halted_after_case_open")
     if primary_execution_failures:
-        protocol_failure_reasons.append(
-            "primary_case_without_successful_teacher_target"
-        )
+        protocol_failure_reasons.append("primary_case_without_successful_teacher_target")
     if not capability_met:
         protocol_failure_reasons.append("insufficient_measured_baseline_disagreements")
     protocol_valid = not protocol_failure_reasons
-    primary_significant = (
-        protocol_valid and wins > losses and p_value < 0.05
-    )
+    primary_significant = protocol_valid and wins > losses and p_value < 0.05
     safety_pairs = tuple(
         (outcome.model_correct, outcome.baseline_correct)
         for case, outcome in zip(plan.cases, rows, strict=True)
         if not case.challenge
     )
-    safety_failures = sum(
-        not model_ok and baseline_ok for model_ok, baseline_ok in safety_pairs
-    )
+    safety_failures = sum(not model_ok and baseline_ok for model_ok, baseline_ok in safety_pairs)
     safety_execution_failures = sum(
         outcome.execution_status != "succeeded"
         for case, outcome in zip(plan.cases, rows, strict=True)
@@ -1100,15 +1366,11 @@ def score_strategic_sealed_evaluation(
                 "candidate_count": candidate_count,
                 "cases": len(count_rows),
                 "model_accuracy": (
-                    sum(outcome.model_correct for outcome in count_rows)
-                    / len(count_rows)
+                    sum(outcome.model_correct for outcome in count_rows) / len(count_rows)
                 ),
-                "model_correct": sum(
-                    outcome.model_correct for outcome in count_rows
-                ),
+                "model_correct": sum(outcome.model_correct for outcome in count_rows),
                 "route_cost_baseline_accuracy": (
-                    sum(outcome.baseline_correct for outcome in count_rows)
-                    / len(count_rows)
+                    sum(outcome.baseline_correct for outcome in count_rows) / len(count_rows)
                 ),
                 "route_cost_baseline_correct": sum(
                     outcome.baseline_correct for outcome in count_rows
@@ -1120,9 +1382,7 @@ def score_strategic_sealed_evaluation(
             "cases": SEALED_EVALUATION_CASES,
             "model_accuracy": model_correct_all / SEALED_EVALUATION_CASES,
             "model_correct": model_correct_all,
-            "route_cost_baseline_accuracy": (
-                baseline_correct_all / SEALED_EVALUATION_CASES
-            ),
+            "route_cost_baseline_accuracy": (baseline_correct_all / SEALED_EVALUATION_CASES),
             "route_cost_baseline_correct": baseline_correct_all,
         },
         "authorization_sha256": authorization.authorization_sha256,
@@ -1130,9 +1390,7 @@ def score_strategic_sealed_evaluation(
         "case_results": list(assessments),
         "case_catalog_sha256": authorization.case_catalog_sha256,
         "evaluation_id": plan.evaluation_id,
-        "external_audit_receipt_sha256": (
-            authorization.external_audit_receipt_sha256
-        ),
+        "external_audit_receipt_sha256": (authorization.external_audit_receipt_sha256),
         "live_authority": {
             "blocked": not offline_gate_passed,
             "granted_by_this_result": False,
@@ -1228,9 +1486,7 @@ def execute_strategic_sealed_evaluation(
                 expected_kind="strategic_sealed_start",
             )
             if start is None:
-                raise StrategicSealedEvaluationError(
-                    "sealed final record exists without a start"
-                )
+                raise StrategicSealedEvaluationError("sealed final record exists without a start")
             _validate_start_record(start, plan=plan, authorization=authorization)
             outcomes, claimed = _load_ledger(
                 private_root,
@@ -1282,9 +1538,7 @@ def execute_strategic_sealed_evaluation(
                     namespace=namespace,
                 )
             ):
-                raise StrategicSealedEvaluationError(
-                    "sealed case ledger exists without a start"
-                )
+                raise StrategicSealedEvaluationError("sealed case ledger exists without a start")
             private_root.publish_sealed_record(
                 start_id,
                 kind="strategic_sealed_start",
@@ -1293,12 +1547,8 @@ def execute_strategic_sealed_evaluation(
                     "case_order_sha256": canonical_sha256(list(plan.case_order)),
                     "case_catalog_sha256": authorization.case_catalog_sha256,
                     "evaluation_id": plan.evaluation_id,
-                    "execution_source_bundle_sha256": (
-                        plan.execution_source_bundle_sha256
-                    ),
-                    "external_audit_receipt_sha256": (
-                        authorization.external_audit_receipt_sha256
-                    ),
+                    "execution_source_bundle_sha256": (plan.execution_source_bundle_sha256),
+                    "external_audit_receipt_sha256": (authorization.external_audit_receipt_sha256),
                     "model_canonical_sha256": plan.model_canonical_sha256,
                     "model_file_sha256": plan.model_file_sha256,
                     "non_test_adapter_qualification_receipt_sha256": (
@@ -1512,9 +1762,7 @@ def _load_ledger(
         if gap_seen:
             raise StrategicSealedEvaluationError("sealed case claims are not contiguous")
         if open_seen:
-            raise StrategicSealedEvaluationError(
-                "sealed ledger continued beyond an open case"
-            )
+            raise StrategicSealedEvaluationError("sealed ledger continued beyond an open case")
         _validate_claim_record(
             claim,
             case=case,
@@ -1624,22 +1872,21 @@ def _publish_prediction(
         expected_kind="strategic_sealed_claim",
     )
     if claim is None:
-        raise StrategicSealedEvaluationError(
-            "sealed prediction commitment lacks a claim"
-        )
+        raise StrategicSealedEvaluationError("sealed prediction commitment lacks a claim")
     _validate_claim_record(
         claim,
         case=case,
         plan=plan,
         authorization=authorization,
     )
-    if private_root.find_sealed_record(
-        _case_record_id("outcome", case.ordinal, namespace),
-        expected_kind="strategic_sealed_outcome",
-    ) is not None:
-        raise StrategicSealedEvaluationError(
-            "sealed prediction cannot replace a consumed outcome"
+    if (
+        private_root.find_sealed_record(
+            _case_record_id("outcome", case.ordinal, namespace),
+            expected_kind="strategic_sealed_outcome",
         )
+        is not None
+    ):
+        raise StrategicSealedEvaluationError("sealed prediction cannot replace a consumed outcome")
     private_root.publish_sealed_record(
         _case_record_id("prediction", case.ordinal, namespace),
         kind="strategic_sealed_prediction",
@@ -1784,16 +2031,21 @@ def _result_from_final_record(
     expected_result: StrategicSealedEvaluationResult,
 ) -> StrategicSealedEvaluationResult:
     raw = record.read()
-    if set(raw) != {
-        "authorization_sha256",
-        "plan_sha256",
-        "result",
-        "schema",
-    } or raw.get("schema") != "strategic-sealed-evaluation-final-record-v1":
+    if (
+        set(raw)
+        != {
+            "authorization_sha256",
+            "plan_sha256",
+            "result",
+            "schema",
+        }
+        or raw.get("schema") != "strategic-sealed-evaluation-final-record-v1"
+    ):
         raise StrategicSealedEvaluationError("sealed final record differs")
-    if raw.get("plan_sha256") != plan.plan_sha256 or raw.get(
-        "authorization_sha256"
-    ) != authorization.authorization_sha256:
+    if (
+        raw.get("plan_sha256") != plan.plan_sha256
+        or raw.get("authorization_sha256") != authorization.authorization_sha256
+    ):
         raise StrategicSealedEvaluationError("sealed final identity differs")
     result = _mapping(raw.get("result"), subject="sealed final result")
     if result.get("schema") != SEALED_EVALUATION_RESULT_SCHEMA:
@@ -1822,9 +2074,7 @@ def _validate_start_record(
         "case_order_sha256": canonical_sha256(list(plan.case_order)),
         "evaluation_id": plan.evaluation_id,
         "execution_source_bundle_sha256": plan.execution_source_bundle_sha256,
-        "external_audit_receipt_sha256": (
-            authorization.external_audit_receipt_sha256
-        ),
+        "external_audit_receipt_sha256": (authorization.external_audit_receipt_sha256),
         "model_canonical_sha256": plan.model_canonical_sha256,
         "model_file_sha256": plan.model_file_sha256,
         "non_test_adapter_qualification_receipt_sha256": (
@@ -1866,21 +2116,22 @@ def _prediction_from_record(
     authorization: StrategicSealedAuthorization,
 ) -> StrategicSealedPrediction:
     raw = record.read()
-    if set(raw) != {
-        "authorization_sha256",
-        "plan_sha256",
-        "prediction",
-        "schema",
-    } or raw.get("schema") != "strategic-sealed-evaluation-prediction-record-v1":
-        raise StrategicSealedEvaluationError(
-            "sealed prediction commitment record differs"
-        )
-    if raw.get("plan_sha256") != plan.plan_sha256 or raw.get(
-        "authorization_sha256"
-    ) != authorization.authorization_sha256:
-        raise StrategicSealedEvaluationError(
-            "sealed prediction commitment identity differs"
-        )
+    if (
+        set(raw)
+        != {
+            "authorization_sha256",
+            "plan_sha256",
+            "prediction",
+            "schema",
+        }
+        or raw.get("schema") != "strategic-sealed-evaluation-prediction-record-v1"
+    ):
+        raise StrategicSealedEvaluationError("sealed prediction commitment record differs")
+    if (
+        raw.get("plan_sha256") != plan.plan_sha256
+        or raw.get("authorization_sha256") != authorization.authorization_sha256
+    ):
+        raise StrategicSealedEvaluationError("sealed prediction commitment identity differs")
     row = _mapping(raw.get("prediction"), subject="sealed prediction commitment")
     _exact_keys(
         row,
@@ -1899,14 +2150,10 @@ def _prediction_from_record(
         subject="sealed prediction commitment",
     )
     if row["schema"] != SEALED_EVALUATION_PREDICTION_SCHEMA:
-        raise StrategicSealedEvaluationError(
-            "sealed prediction commitment schema differs"
-        )
+        raise StrategicSealedEvaluationError("sealed prediction commitment schema differs")
     return StrategicSealedPrediction(
         case_id=_text(row["case_id"], subject="sealed prediction case identity"),
-        case_sha256=_text(
-            row["case_sha256"], subject="sealed prediction case digest"
-        ),
+        case_sha256=_text(row["case_sha256"], subject="sealed prediction case digest"),
         ordinal=_integer(
             row["ordinal"],
             minimum=1,
@@ -1923,16 +2170,12 @@ def _prediction_from_record(
         model_prediction_tied=_boolean(
             row["model_prediction_tied"], subject="sealed model prediction tie"
         ),
-        baseline_prediction_index=_optional_integer(
-            row["baseline_prediction_index"]
-        ),
+        baseline_prediction_index=_optional_integer(row["baseline_prediction_index"]),
         baseline_prediction_tied=_boolean(
             row["baseline_prediction_tied"],
             subject="sealed baseline prediction tie",
         ),
-        policy_input_sha256=_text(
-            row["policy_input_sha256"], subject="sealed policy input"
-        ),
+        policy_input_sha256=_text(row["policy_input_sha256"], subject="sealed policy input"),
     )
 
 
@@ -1943,16 +2186,21 @@ def _outcome_from_record(
     authorization: StrategicSealedAuthorization,
 ) -> StrategicSealedCaseOutcome:
     raw = record.read()
-    if set(raw) != {
-        "authorization_sha256",
-        "outcome",
-        "plan_sha256",
-        "schema",
-    } or raw.get("schema") != "strategic-sealed-evaluation-outcome-record-v1":
+    if (
+        set(raw)
+        != {
+            "authorization_sha256",
+            "outcome",
+            "plan_sha256",
+            "schema",
+        }
+        or raw.get("schema") != "strategic-sealed-evaluation-outcome-record-v1"
+    ):
         raise StrategicSealedEvaluationError("sealed case outcome record differs")
-    if raw.get("plan_sha256") != plan.plan_sha256 or raw.get(
-        "authorization_sha256"
-    ) != authorization.authorization_sha256:
+    if (
+        raw.get("plan_sha256") != plan.plan_sha256
+        or raw.get("authorization_sha256") != authorization.authorization_sha256
+    ):
         raise StrategicSealedEvaluationError("sealed case outcome identity differs")
     row = _mapping(raw.get("outcome"), subject="sealed case outcome")
     _exact_keys(
@@ -1991,17 +2239,11 @@ def _outcome_from_record(
             maximum=5,
             subject="sealed candidate count",
         ),
-        execution_status=_text(
-            row["execution_status"], subject="sealed execution status"
-        ),
+        execution_status=_text(row["execution_status"], subject="sealed execution status"),
         teacher_target_index=_optional_integer(row["teacher_target_index"]),
         model_prediction_index=_optional_integer(row["model_prediction_index"]),
-        model_prediction_tied=_boolean(
-            row["model_prediction_tied"], subject="sealed model tie"
-        ),
-        baseline_prediction_index=_optional_integer(
-            row["baseline_prediction_index"]
-        ),
+        model_prediction_tied=_boolean(row["model_prediction_tied"], subject="sealed model tie"),
+        baseline_prediction_index=_optional_integer(row["baseline_prediction_index"]),
         baseline_prediction_tied=_boolean(
             row["baseline_prediction_tied"], subject="sealed baseline tie"
         ),
@@ -2049,9 +2291,7 @@ def _require_prediction_matches_case(
         case.ordinal,
         case.candidate_count,
     ):
-        raise StrategicSealedEvaluationError(
-            "sealed runner prediction differs from its case"
-        )
+        raise StrategicSealedEvaluationError("sealed runner prediction differs from its case")
 
 
 def _require_teacher_result_matches_case(
@@ -2059,9 +2299,7 @@ def _require_teacher_result_matches_case(
     case: StrategicSealedEvaluationCase,
 ) -> None:
     if not isinstance(teacher, StrategicSealedTeacherResult):
-        raise StrategicSealedEvaluationError(
-            "sealed runner returned an invalid teacher result"
-        )
+        raise StrategicSealedEvaluationError("sealed runner returned an invalid teacher result")
     if (
         teacher.case_id,
         teacher.case_sha256,
@@ -2073,9 +2311,7 @@ def _require_teacher_result_matches_case(
         case.ordinal,
         case.candidate_count,
     ):
-        raise StrategicSealedEvaluationError(
-            "sealed runner teacher result differs from its case"
-        )
+        raise StrategicSealedEvaluationError("sealed runner teacher result differs from its case")
 
 
 def _outcome_from_prediction_and_teacher(
@@ -2145,6 +2381,87 @@ def _require_prediction_consistent_with_outcome(
         )
 
 
+def _validate_receipt_plan_binding(
+    document: Mapping[str, object],
+    *,
+    plan: StrategicSealedEvaluationPlan,
+    source_commit: str,
+    subject: str,
+) -> None:
+    if document["evaluation_id"] != plan.evaluation_id:
+        raise StrategicSealedEvaluationError(f"{subject} evaluation differs")
+    if document["plan_sha256"] != plan.plan_sha256:
+        raise StrategicSealedEvaluationError(f"{subject} plan differs")
+    if document["execution_source_bundle_sha256"] != (plan.execution_source_bundle_sha256):
+        raise StrategicSealedEvaluationError(f"{subject} source bundle differs")
+    if document["source_commit"] != source_commit:
+        raise StrategicSealedEvaluationError(f"{subject} source commit differs")
+
+
+def _external_audit_verdict(value: object) -> str:
+    verdict = _text(value, subject="sealed external audit verdict")
+    if verdict not in {
+        "approved_for_live_qualification",
+        "approved_for_authorization",
+        "changes_required",
+    }:
+        raise StrategicSealedEvaluationError("sealed external audit verdict is invalid")
+    return verdict
+
+
+def _non_test_qualification_verdict(value: object) -> str:
+    verdict = _text(value, subject="sealed non-test qualification verdict")
+    if verdict not in {"passed", "failed"}:
+        raise StrategicSealedEvaluationError("sealed non-test qualification verdict is invalid")
+    return verdict
+
+
+def _validate_authorizing_receipts(
+    plan: StrategicSealedEvaluationPlan,
+    *,
+    source_commit: str,
+    external_audit_receipt: StrategicSealedExternalAuditReceipt,
+    non_test_adapter_qualification_receipt: (StrategicSealedNonTestQualificationReceipt),
+) -> None:
+    if not isinstance(
+        external_audit_receipt, StrategicSealedExternalAuditReceipt
+    ) or not isinstance(
+        non_test_adapter_qualification_receipt,
+        StrategicSealedNonTestQualificationReceipt,
+    ):
+        raise TypeError("sealed authorization requires typed evidence receipts")
+    _sha256(
+        external_audit_receipt.receipt_sha256,
+        subject="sealed external audit receipt",
+    )
+    _sha256(
+        non_test_adapter_qualification_receipt.receipt_sha256,
+        subject="sealed non-test adapter qualification receipt",
+    )
+    for receipt, subject in (
+        (external_audit_receipt, "sealed external audit receipt"),
+        (
+            non_test_adapter_qualification_receipt,
+            "sealed non-test qualification receipt",
+        ),
+    ):
+        if receipt.plan_sha256 != plan.plan_sha256:
+            raise StrategicSealedEvaluationError(f"{subject} plan differs")
+        if receipt.execution_source_bundle_sha256 != (plan.execution_source_bundle_sha256):
+            raise StrategicSealedEvaluationError(f"{subject} source bundle differs")
+        if receipt.source_commit != source_commit:
+            raise StrategicSealedEvaluationError(f"{subject} source commit differs")
+    if external_audit_receipt.verdict != "approved_for_authorization":
+        raise StrategicSealedEvaluationError("sealed external audit did not approve authorization")
+    if (
+        non_test_adapter_qualification_receipt.verdict != "passed"
+        or non_test_adapter_qualification_receipt.sealed_test_cases_opened != 0
+    ):
+        raise StrategicSealedEvaluationError(
+            "sealed non-test adapter qualification did not pass cleanly"
+        )
+
+
 def _validate_authorization_binding(
     plan: StrategicSealedEvaluationPlan,
     authorization: StrategicSealedAuthorization,
@@ -2175,12 +2492,10 @@ def _validate_authorization_binding(
     )
     if (
         authorization.plan_sha256 != plan.plan_sha256
-        or authorization.execution_source_bundle_sha256
-        != plan.execution_source_bundle_sha256
+        or authorization.execution_source_bundle_sha256 != plan.execution_source_bundle_sha256
         or authorization.model_canonical_sha256 != plan.model_canonical_sha256
         or authorization.model_file_sha256 != plan.model_file_sha256
-        or authorization.teacher_execution_sha256
-        != plan.teacher_execution_sha256
+        or authorization.teacher_execution_sha256 != plan.teacher_execution_sha256
     ):
         raise StrategicSealedEvaluationError("sealed execution authorization differs")
 
@@ -2194,13 +2509,10 @@ def _validate_runtime_grant(
         raise StrategicSealedEvaluationError("sealed runtime grant is invalid")
     if (
         runtime_grant.plan_sha256 != plan.plan_sha256
-        or runtime_grant.authorization_sha256
-        != authorization.authorization_sha256
+        or runtime_grant.authorization_sha256 != authorization.authorization_sha256
         or runtime_grant.source_commit != authorization.source_commit
-        or runtime_grant.teacher_execution_sha256
-        != authorization.teacher_execution_sha256
-        or runtime_grant.case_catalog_sha256
-        != authorization.case_catalog_sha256
+        or runtime_grant.teacher_execution_sha256 != authorization.teacher_execution_sha256
+        or runtime_grant.case_catalog_sha256 != authorization.case_catalog_sha256
         or runtime_grant.external_audit_receipt_sha256
         != authorization.external_audit_receipt_sha256
         or runtime_grant.non_test_adapter_qualification_receipt_sha256
@@ -2215,8 +2527,7 @@ def _validate_amendments(value: object) -> None:
             "amended_before_private_access": True,
             "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
             "reason": (
-                "independent_power_audit_found_non_challenge_cases_"
-                "asymmetric_for_primary_pairing"
+                "independent_power_audit_found_non_challenge_cases_asymmetric_for_primary_pairing"
             ),
             "supersedes_plan_sha256": (
                 "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
@@ -2225,9 +2536,7 @@ def _validate_amendments(value: object) -> None:
         {
             "amended_before_private_access": True,
             "change": "bind_fail_closed_executor_and_optional_stopping_contract",
-            "reason": (
-                "external_audit_required_durable_claim_before_private_case_access"
-            ),
+            "reason": ("external_audit_required_durable_claim_before_private_case_access"),
             "supersedes_plan_sha256": (
                 "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
             ),
@@ -2247,8 +2556,7 @@ def _validate_amendments(value: object) -> None:
             "amended_before_private_access": True,
             "change": "bind_authenticated_challenge_relocation_contract",
             "reason": (
-                "independent_adapter_audit_found_source_and_declared_"
-                "challenge_origins_differ"
+                "independent_adapter_audit_found_source_and_declared_challenge_origins_differ"
             ),
             "supersedes_plan_sha256": (
                 "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131d7"
@@ -2263,6 +2571,17 @@ def _validate_amendments(value: object) -> None:
             ),
             "supersedes_plan_sha256": (
                 "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": ("bind_typed_receipt_verdicts_and_shared_non_test_production_qualification"),
+            "reason": (
+                "external_audit_found_bare_receipt_digests_could_not_"
+                "distinguish_unfavorable_verdicts"
+            ),
+            "supersedes_plan_sha256": (
+                "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
             ),
         },
     ]
@@ -2296,13 +2615,9 @@ def _validate_endpoint_policy(value: object) -> None:
         },
         "safety": {
             "case_filter": "cost_baseline_challenge_hypothesis_false",
-            "criterion": (
-                "all_cases_succeed_and_zero_model_incorrect_baseline_correct"
-            ),
+            "criterion": ("all_cases_succeed_and_zero_model_incorrect_baseline_correct"),
             "expected_case_count": 2,
-            "failure_effect": (
-                "block_live_authority_and_report_without_changing_primary_test"
-            ),
+            "failure_effect": ("block_live_authority_and_report_without_changing_primary_test"),
             "role": "preregistered_baseline_favorable_non_regression",
         },
     }:
@@ -2311,18 +2626,12 @@ def _validate_endpoint_policy(value: object) -> None:
 
 def _validate_scoring_policy(value: object) -> None:
     if value != {
-        "candidate_unavailable_after_claim": (
-            "case_consumed_model_and_baseline_incorrect"
-        ),
-        "failed_or_interrupted_after_claim": (
-            "case_consumed_model_and_baseline_incorrect"
-        ),
+        "candidate_unavailable_after_claim": ("case_consumed_model_and_baseline_incorrect"),
+        "failed_or_interrupted_after_claim": ("case_consumed_model_and_baseline_incorrect"),
         "incomplete_episode": "case_consumed_model_and_baseline_incorrect",
         "missing_case": "publish_incomplete_evaluation_as_protocol_failure",
         "model_prediction_tie": "incorrect",
-        "preclaim_identity_or_catalog_failure": (
-            "open_zero_cases_and_refuse_execution"
-        ),
+        "preclaim_identity_or_catalog_failure": ("open_zero_cases_and_refuse_execution"),
         "teacher_target": "successful_deterministic_teacher_choice_only",
     }:
         raise StrategicSealedEvaluationError("sealed scoring policy differs")
@@ -2405,9 +2714,7 @@ def _parse_case(
     case_sha256 = _sha256(payload.pop("case_sha256"), subject="sealed case digest")
     if case_sha256 != canonical_sha256(payload):
         raise StrategicSealedEvaluationError("sealed case digest differs")
-    challenge = _boolean(
-        row["cost_baseline_challenge_hypothesis"], subject="sealed challenge flag"
-    )
+    challenge = _boolean(row["cost_baseline_challenge_hypothesis"], subject="sealed challenge flag")
     challenged = row["challenged_non_teacher_objective_id"]
     if challenged is not None:
         challenged = _safe_id(challenged, subject="sealed challenged objective")
@@ -2427,9 +2734,7 @@ def _parse_case(
     return StrategicSealedEvaluationCase(
         case_id=case_id,
         case_sha256=case_sha256,
-        source_scenario_id=_safe_id(
-            row["source_scenario_id"], subject="sealed source scenario"
-        ),
+        source_scenario_id=_safe_id(row["source_scenario_id"], subject="sealed source scenario"),
         source_scenario_sha256=_sha256(
             row["source_scenario_sha256"], subject="sealed source scenario digest"
         ),
@@ -2584,9 +2889,7 @@ def _validate_prediction_choice(
         raise StrategicSealedEvaluationError(f"{subject} tie must be boolean")
     if tied:
         if value is not None:
-            raise StrategicSealedEvaluationError(
-                f"tied {subject} must not select a candidate"
-            )
+            raise StrategicSealedEvaluationError(f"tied {subject} must not select a candidate")
         return
     if value is None:
         raise StrategicSealedEvaluationError(f"{subject} lacks a candidate")

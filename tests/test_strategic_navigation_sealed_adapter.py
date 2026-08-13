@@ -47,9 +47,14 @@ from pokemon_red_completion.strategic_navigation_sealed_catalog import (
 )
 from pokemon_red_completion.strategic_navigation_sealed_evaluation import (
     StrategicSealedCandidateUnavailableError,
+    StrategicSealedEvaluationPlan,
     build_strategic_sealed_authorization,
+    build_strategic_sealed_external_audit_receipt,
+    build_strategic_sealed_non_test_qualification_receipt,
     load_strategic_sealed_evaluation_plan,
     parse_strategic_sealed_authorization,
+    parse_strategic_sealed_external_audit_receipt,
+    parse_strategic_sealed_non_test_qualification_receipt,
     require_strategic_sealed_runtime_preflight,
 )
 from pokemon_red_completion.strategic_navigation_trajectory import (
@@ -57,8 +62,8 @@ from pokemon_red_completion.strategic_navigation_trajectory import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXTERNAL_AUDIT_RECEIPT_SHA256 = "3" * 64
-NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256 = "4" * 64
+EXTERNAL_AUDIT_EVIDENCE_SHA256 = "3" * 64
+NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256 = "4" * 64
 
 
 def _canonical(value: object) -> bytes:
@@ -72,6 +77,36 @@ def _canonical(value: object) -> bytes:
         ).encode("ascii")
         + b"\n"
     )
+
+
+def _receipts(plan: StrategicSealedEvaluationPlan, *, source_commit: str):
+    audit = parse_strategic_sealed_external_audit_receipt(
+        build_strategic_sealed_external_audit_receipt(
+            plan,
+            receipt_id="sealed-adapter-external-audit",
+            issued_by="independent-auditor",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=EXTERNAL_AUDIT_EVIDENCE_SHA256,
+            verdict="approved_for_authorization",
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    qualification = parse_strategic_sealed_non_test_qualification_receipt(
+        build_strategic_sealed_non_test_qualification_receipt(
+            plan,
+            receipt_id="sealed-adapter-non-test-qualification",
+            issued_by="qualification-runner",
+            issued_on="2026-08-13",
+            source_commit=source_commit,
+            evidence_sha256=NON_TEST_ADAPTER_QUALIFICATION_EVIDENCE_SHA256,
+            verdict="passed",
+        ),
+        plan=plan,
+        source_commit=source_commit,
+    )
+    return audit, qualification
 
 
 def _catalog_document() -> dict[str, object]:
@@ -96,9 +131,7 @@ def _catalog_document() -> dict[str, object]:
             for case in plan.cases
         ],
         "evaluation_id": plan.evaluation_id,
-        "execution_configuration_sha256": (
-            STRATEGIC_SEALED_EXECUTION_CONFIGURATION_SHA256
-        ),
+        "execution_configuration_sha256": (STRATEGIC_SEALED_EXECUTION_CONFIGURATION_SHA256),
         "game_id": STRATEGIC_NAVIGATION_GAME_ID,
         "plan_sha256": plan.plan_sha256,
         "rom_identity": {
@@ -209,17 +242,11 @@ def _bindings_for_scenario(
     *,
     costs: tuple[int, ...] | None = None,
 ) -> tuple[DestinationRouteBinding, ...]:
-    route_costs = costs or tuple(
-        range(1, len(scenario.candidate_objective_ids) + 1)
-    )
+    route_costs = costs or tuple(range(1, len(scenario.candidate_objective_ids) + 1))
     maximum = max(route_costs)
     graph = LocalGraph(
         {
-            (0, index): (
-                (LocalEdge((0, index + 1), action="right"),)
-                if index < maximum
-                else ()
-            )
+            (0, index): ((LocalEdge((0, index + 1), action="right"),) if index < maximum else ())
             for index in range(maximum + 1)
         }
     )
@@ -291,6 +318,7 @@ def _runner(
         plan=plan,
         scenario_registry=registry,
     )
+    audit, qualification = _receipts(plan, source_commit="a" * 40)
     authorization = parse_strategic_sealed_authorization(
         build_strategic_sealed_authorization(
             plan,
@@ -299,12 +327,12 @@ def _runner(
             authorized_on="2026-08-13",
             source_commit="a" * 40,
             case_catalog_sha256=catalog.catalog_sha256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
         ),
         plan=plan,
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     grant = require_strategic_sealed_runtime_preflight(
         plan,
@@ -317,10 +345,8 @@ def _runner(
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=catalog.catalog_sha256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     case = plan.cases[0]
     scenario = next(
@@ -356,9 +382,7 @@ def _runner(
         case_catalog_sha256=catalog.catalog_sha256,
         assignment_id=assignment_id,
         bindings=bindings or _bindings(),
-        teacher_ref=(
-            f"pokemon.red:objective:{scenario.teacher_objective_id}:approach"
-        ),
+        teacher_ref=(f"pokemon.red:objective:{scenario.teacher_objective_id}:approach"),
         evidence=evidence,
     )
     monkeypatch.setattr(
@@ -530,6 +554,7 @@ def test_adapter_rejects_a_factory_identity_before_opening_any_case(
         plan=plan,
         scenario_registry=registry,
     )
+    audit, qualification = _receipts(plan, source_commit="a" * 40)
     authorization = parse_strategic_sealed_authorization(
         build_strategic_sealed_authorization(
             plan,
@@ -538,12 +563,12 @@ def test_adapter_rejects_a_factory_identity_before_opening_any_case(
             authorized_on="2026-08-13",
             source_commit="a" * 40,
             case_catalog_sha256=catalog.catalog_sha256,
-            external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-            non_test_adapter_qualification_receipt_sha256=(
-                NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-            ),
+            external_audit_receipt=audit,
+            non_test_adapter_qualification_receipt=qualification,
         ),
         plan=plan,
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     grant = require_strategic_sealed_runtime_preflight(
         plan,
@@ -556,15 +581,11 @@ def test_adapter_rejects_a_factory_identity_before_opening_any_case(
         model_file_sha256=plan.model_file_sha256,
         teacher_execution_sha256=plan.teacher_execution_sha256,
         case_catalog_sha256=catalog.catalog_sha256,
-        external_audit_receipt_sha256=EXTERNAL_AUDIT_RECEIPT_SHA256,
-        non_test_adapter_qualification_receipt_sha256=(
-            NON_TEST_ADAPTER_QUALIFICATION_RECEIPT_SHA256
-        ),
+        external_audit_receipt=audit,
+        non_test_adapter_qualification_receipt=qualification,
     )
     scenario = next(
-        item
-        for item in registry.scenarios
-        if item.scenario_id == plan.cases[0].source_scenario_id
+        item for item in registry.scenarios if item.scenario_id == plan.cases[0].source_scenario_id
     )
     factory = _Factory(
         plan_sha256="f" * 64,
@@ -572,9 +593,7 @@ def test_adapter_rejects_a_factory_identity_before_opening_any_case(
         case_catalog_sha256=catalog.catalog_sha256,
         assignment_id="d" * 64,
         bindings=_bindings(),
-        teacher_ref=(
-            f"pokemon.red:objective:{scenario.teacher_objective_id}:approach"
-        ),
+        teacher_ref=(f"pokemon.red:objective:{scenario.teacher_objective_id}:approach"),
     )
     monkeypatch.setattr(
         "pokemon_red_completion.strategic_navigation_sealed_adapter."
@@ -601,7 +620,7 @@ def test_adapter_rejects_a_factory_identity_before_opening_any_case(
             runtime_grant=grant,
             catalog=catalog,
             scenario_registry=registry,
-                model=_linear_model(),
+            model=_linear_model(),
             session_factory=factory,
         )
 
@@ -652,7 +671,6 @@ def test_prediction_boundary_qualifies_all_36_non_test_scenario_shapes() -> None
     assert len(model.inputs) == 36
     assert observed_candidate_counts == {2, 3, 4, 5}
     assert all(
-        not hasattr(value, "selected_candidate_index")
-        and not hasattr(value, "outcome_status")
+        not hasattr(value, "selected_candidate_index") and not hasattr(value, "outcome_status")
         for value in model.inputs
     )
