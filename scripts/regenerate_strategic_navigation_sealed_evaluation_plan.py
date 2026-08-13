@@ -32,8 +32,8 @@ DEVELOPMENT_RECEIPT = (
     ROOT / "docs" / "evidence" / "strategic-navigation-linear-development-2026-08-13.json"
 )
 STRATEGIC_COLLECTION_REGISTRY = ROOT / "configs" / "red-strategic-navigation-collection-v1.json"
-PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
-DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8"
+PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v9"
+DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v9"
 CASE_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-case-v1"
 EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
 V1_PLAN_SHA256 = "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
@@ -43,6 +43,7 @@ V4_PLAN_SHA256 = "63b3855463fcf8834ee8ae7635df1726b78fcde52257b0c7c5a3ecb26de131
 V5_PLAN_SHA256 = "2f7ec30b096655d23626a7a98107df770fe7e9a26943240a45f5887e72a5cba6"
 V6_PLAN_SHA256 = "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440"
 V7_PLAN_SHA256 = "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
+V8_PLAN_SHA256 = "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
 FROZEN_MODEL_SHA256 = "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
 FROZEN_MODEL_FILE_SHA256 = "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd"
 FROZEN_FEATURES = (
@@ -216,6 +217,17 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                     "directional_door_arrival_mismatch"
                 ),
                 "supersedes_plan_sha256": V7_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": (
+                    "bind_destination_warp_trigger_and_connection_arrival_semantics"
+                ),
+                "reason": (
+                    "published_hard_non_test_qualification_exposed_destination_"
+                    "trigger_and_connection_arrival_semantics"
+                ),
+                "supersedes_plan_sha256": V8_PLAN_SHA256,
             },
         ],
         "baseline": {

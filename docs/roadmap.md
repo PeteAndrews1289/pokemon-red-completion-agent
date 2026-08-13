@@ -34,7 +34,7 @@ access, the plan was amended: the ten challenges are the primary endpoint, all-t
 mandatory, and the other two cases form a separate safety gate. Claude approved that amendment and
 corrected the realistic power estimate to roughly 42–68% under an 85% challenge-validity
 assumption. The public executor/scorer core and prediction-first cartridge boundary are now
-implemented under a schema-v8 plan. The adapter uses a path-free digest catalog, accepts only the
+implemented under a schema-v9 plan. The adapter uses a path-free digest catalog, accepts only the
 exact frozen linear scorer, and exposes unlabeled identity-free candidate rows.
 
 Self-audit found that ten challenge origins differ from their source snapshot origins. The adapter
@@ -55,11 +55,15 @@ that two public sealed cases require Saffron to Cinnabar through Surf, which rem
 The explicit scenario-046 train capture exposed a real defect before Surf: a south-facing ordinary
 warp into the Viridian Forest north gate settled one tile beyond the decoded destination. The
 attempt ran no teacher, changed no capture or ROM-adjacent artifact and opened no test case. Schema
-v8 generalizes the measured doorway settlement to ordinary directional warps and ensures future
-expected live failures write a path-free typed `failed` receipt and exit nonzero. The exact plan is
-13,664 bytes with SHA-256
-`fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`. Test remains **0/12 opened**;
-no real catalog or owner authorization exists.
+v8 generalized the measured doorway settlement and ensured future expected live failures write a
+path-free typed `failed` receipt and exit nonzero. Published `b82d290` then failed safely on the
+same route, showing that the extra destination step depends on the paired destination trigger, that
+Viridian Forest's bottom gate needs a second outward input, and that Route 21 source water can map
+to unusable Cinnabar coordinates. Schema v9 derives all three decisions from cartridge-backed graph
+semantics. Its public train rehearsal completed the full route with 550 acknowledged steps, nine
+interruptions, zero replans and both candidates available. The exact plan is 13,979 bytes with
+SHA-256 `40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138`.
+Test remains **0/12 opened**; no real catalog or owner authorization exists.
 
 Ordered next work:
 
@@ -88,11 +92,16 @@ Ordered next work:
 8. **Complete, failure preserved:** Claude's authorization audit identified the missing hard route.
    Scenario 046 reproduced Saffron-to-Cinnabar without test access and failed at the measured Route
    2 doorway settlement before Surf.
-9. **Complete in source; publication pending:** schema v8 repairs ordinary directional-warp arrival,
-   adds its exact regression and writes typed path-free evidence for expected qualification failures.
-10. Publish the exact v8 source and require green CI. Rerun the same explicit scenario-046
-   Saffron-to-Cinnabar qualification without the teacher; preserve both evidence and receipt outside
-   the repository.
+9. **Complete and published:** schema v8 repaired the first directional-warp mismatch and added
+   durable typed negative evidence. Exact-commit CI passed; the hard qualification then returned a
+   valid `failed` receipt with zero test access instead of disguising the remaining route defects.
+10. **Complete in source and public rehearsal:** schema v9 distinguishes automatic destination
+    triggers from directional ones, requires the bottom-boundary outward input and validates each
+    connection on the destination graph in the preserved traversal mode. Scenario 046 reached
+    Cinnabar and planned 2/2 candidates without a teacher.
+11. Publish exact v9 and require green CI. Rerun the official scenario-046 qualifier and preserve
+    its path-free typed receipt externally. Then obtain a final independent authorization audit;
+    only a favorable exact-v9 receipt may precede catalog custody and owner authorization.
 11. Independently attack that exact commit and live evidence using the
    [directional-warp repair handoff](claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md).
    Only a typed `approved_for_authorization` verdict can satisfy the next gate.

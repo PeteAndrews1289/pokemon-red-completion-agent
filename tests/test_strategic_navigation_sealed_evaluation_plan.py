@@ -35,9 +35,9 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     payload = PLAN_PATH.read_bytes()
     plan = _plan()
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
-    expected_sha256 = "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
+    expected_sha256 = "40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138"
 
-    assert len(payload) == 13664
+    assert len(payload) == 13979
     assert hashlib.sha256(payload).hexdigest() == expected_sha256
     assert payload == (
         json.dumps(
@@ -51,7 +51,7 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     )
     assert digest == {
         "bytes": len(payload),
-        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8",
+        "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v9",
         "sha256": expected_sha256,
     }
     subprocess.run(
@@ -92,7 +92,7 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
         "training_epochs": 600,
     }
     assert plan["execution_source_bundle_sha256"] == (
-        "d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60"
+        "4185db1272142f2311cbe7ba33568ad78922553a469c865108a0cc2f121e15ba"
     )
     assert plan["training_development_receipt_sha256"] == (
         "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612"
@@ -119,10 +119,10 @@ def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> No
             "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523"
         ),
         "source_bundle_sha256": (
-            "d1faf6f33dc609bae475d854053cc9e2a271c56114459511ee7816d06cef4b60"
+            "4185db1272142f2311cbe7ba33568ad78922553a469c865108a0cc2f121e15ba"
         ),
         "teacher_execution_sha256": (
-            "827446bfe2f7c5b39da5311912b41872169804228010e211616d33dc79edd507"
+            "2fcfca2a9e0a5a21f4075b5c7ef3a2e9faf1baa762027e0ffd28bf6735049c19"
         ),
     }
 
@@ -169,7 +169,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
     assert isinstance(access, dict)
     assert isinstance(amendments, list)
 
-    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
+    assert plan["schema"] == "pokemon-strategic-navigation-sealed-evaluation-plan-v9"
     assert access["private_test_inputs_opened_at_freeze"] == 0
     assert amendments == [
         {
@@ -244,6 +244,19 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
             ),
             "supersedes_plan_sha256": (
                 "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": (
+                "bind_destination_warp_trigger_and_connection_arrival_semantics"
+            ),
+            "reason": (
+                "published_hard_non_test_qualification_exposed_destination_"
+                "trigger_and_connection_arrival_semantics"
+            ),
+            "supersedes_plan_sha256": (
+                "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
             ),
         },
     ]

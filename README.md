@@ -33,13 +33,18 @@
 > audit then found that two sealed cases require the harder Saffron-to-Cinnabar Surf relocation. A
 > public train capture exposed a real pre-Surf doorway mismatch: the cartridge settled one square
 > beyond the ordinary warp's decoded destination. The failed attempt changed no capture, ran no
-> teacher and opened 0/12 test cases; its negative receipt is preserved. Schema v8 generalizes the
-> measured doorway rule to directional ordinary warps and makes expected live failures write typed,
-> path-free `failed` receipts with a nonzero exit. The exact v8 plan digest is
-> `fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9`. Exact-commit CI, a fresh
-> Saffron-to-Cinnabar qualification, final authorization-level audit, custodian-supplied path-free
-> catalog and owner authorization remain gates. Test remains 0/12 and no authorization receipt
-> exists. See the [August 13 audit](docs/current-audit-2026-08-13.md).
+> teacher and opened 0/12 test cases; its negative receipt is preserved. Published schema v8 then
+> failed safely on the same hard route and exposed two deeper alignment assumptions: whether the
+> destination warp itself is automatic, and whether a broad map connection lands on an executable
+> target tile in the current movement mode. Schema v9 now derives both sides of each passage from
+> cartridge data. An unpublished-source rehearsal completed the full Surf relocation with 550
+> acknowledged steps from 551 movement requests, nine bounded interruptions, zero replans and both
+> candidates available. The
+> exact v9 plan digest is
+> `40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138`. Exact-commit CI, a typed
+> published-source Saffron-to-Cinnabar qualification, final authorization-level audit, custodian-
+> supplied path-free catalog and owner authorization remain gates. Test remains 0/12 and no
+> authorization receipt exists. See the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,

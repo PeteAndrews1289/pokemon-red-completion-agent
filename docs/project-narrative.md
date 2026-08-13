@@ -3471,6 +3471,23 @@ source capture and ROM-adjacent artifacts are unchanged, and return a nonzero pr
 turns a live failure into a useful scientific result instead of an email, traceback, or ambiguous
 absence of success.
 
+Published v8 demonstrated why preserving failure matters. Its exact-commit qualification still
+failed, and the next diagnostics found three progressively deeper abstractions. First, a
+south-facing ordinary warp advances beyond its destination only when that destination is an
+automatic trigger; Route 6's directional return disproved the broader rule. Second, Viridian
+Forest's bottom warp needs a second outward input unless the cartridge's automatic-warp table says
+otherwise. Third, a map connection cannot be accepted merely because its source endpoint is
+reachable: Route 21 water columns can pair with Cinnabar collision or dry land.
+
+Schema v9 treats a passage as a relation between two executable states. It derives doorway
+settlement from the paired destination trigger, lets the cartridge automatic table override
+boundary geometry, and validates each connection arrival against the destination local graph,
+movement mode and capabilities. The same explicit train capture then completed the hard relocation:
+551 movement requests, 550 acknowledged steps, nine bounded interruptions, 29 waits, zero replans,
+Cinnabar in land mode and both strategic candidate routes available. It still ran no teacher and
+opened no sealed case. Publication and an exact-commit typed pass remain separate gates rather than
+being inferred from an unpublished diagnostic.
+
 ## Engineering and portfolio takeaways
 
 This project demonstrates:

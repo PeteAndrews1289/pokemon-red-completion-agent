@@ -1,5 +1,9 @@
 # External audit handoff: directional-warp repair and hard live qualification
 
+> **Superseded:** published v8 failed safely and led to schema v9. Audit the
+> [schema-v9 hard-relocation handoff](claude-sealed-hard-relocation-v9-audit-handoff-2026-08-13.md)
+> instead. This file remains the historical v8 record.
+
 This is a pre-authorization audit. Do not open, enumerate, hash, preflight, materialize or score a
 sealed test capture. Do not create an owner authorization receipt. The sealed counter is **0/12**.
 

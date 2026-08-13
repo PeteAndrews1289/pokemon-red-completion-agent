@@ -579,9 +579,26 @@ a traceback unless someone manually preserved the observation. The next version 
 for failure as deliberately as for success: a typed negative receipt, no private path, no teacher,
 zero test access, unchanged capture, and a nonzero exit that automation cannot mistake for green.
 
-The seal still reads **0/12**. The most valuable result of the rehearsal was not that the agent
-crossed Kanto. It was that a cheap public failure prevented two expensive one-shot failures from
-being blamed on the model.
+That first correction was still only a hypothesis. Published v8 failed safely on the same public
+route. The next observation separated two doors that looked identical from the source: Route 2
+lands on an automatic trigger and plays the extra inward step; Route 6 lands on a directional return
+and stops on it. After that distinction, Viridian Forest's bottom gate revealed its missing second
+`down`. After *that*, Surf finally worked—but the planner chose Route 21's cheapest source column
+without asking whether the paired Cinnabar square was water, land or even present.
+
+The durable lesson was larger than any one coordinate: crossing a boundary is a relation between
+two executable local states. Schema v9 checks the destination trigger for doorway animation,
+lets the cartridge's automatic-warp table override geometry, and refuses a map connection whose
+arrival cannot continue in the current movement mode.
+
+Then the same public train capture crossed Kanto. The route completed 550 acknowledged steps through
+nine wild interruptions with no replan, came ashore on Cinnabar in land mode, and planned both
+candidate destinations. No teacher ran. No source artifact changed. No typed success receipt was
+created from unpublished code.
+
+The seal still reads **0/12**. The most valuable result was not merely that the agent crossed Kanto.
+It was that three cheap public failures prevented two expensive one-shot failures from being blamed
+on the model—and that every failed version stayed failed in the record.
 
 ---
 
@@ -654,9 +671,10 @@ Being precise about this matters more than the story sounding finished.
 - A five-coefficient strategic destination ranker was selected on 24 training choices and scored
   10/12 on 12 development choices versus 4/12 for cheapest route. This is development evidence.
   Its one-shot 12-case final test remains unopened at 0/12. One live Celadon-to-Saffron adapter
-  qualification passed; a harder public Saffron-to-Cinnabar rehearsal exposed and repaired a
-  doorway-arrival defect before Surf. Published hard-route requalification, independent
-  authorization audit, the real path-free catalog and owner authorization remain.
+  qualification passed; the harder public Saffron-to-Cinnabar route then exposed destination-
+  trigger, bottom-gate and cross-map-arrival defects. The repaired v9 public rehearsal reaches
+  Cinnabar and plans both candidates. Published v9 qualification, independent authorization audit,
+  the real path-free catalog and owner authorization remain.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.

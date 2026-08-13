@@ -743,9 +743,10 @@ def _boundary_return_action(header: _Header, at: tuple[int, int]) -> str | None:
 def _boundary_warp_action(header: _Header, at: tuple[int, int]) -> str | None:
     """Return the extra outward action required by a source boundary warp.
 
-    Top and horizontal boundary triggers require a second outward input after
-    Red enters their coordinate. Bottom-boundary triggers fire on entry. The
-    cartridge automatic-warp table may subsequently clear any geometric guess.
+    A boundary trigger requires a second outward input after Red enters its
+    coordinate unless the cartridge automatic-warp table subsequently clears
+    the geometric guess. The latter distinction matters for interior-to-
+    interior gates as well as outdoor doors.
     """
 
     y, x = at
@@ -756,7 +757,7 @@ def _boundary_warp_action(header: _Header, at: tuple[int, int]) -> str | None:
     if y == 0:
         return "up"
     if y == maximum_y:
-        return None
+        return "down"
     candidates = tuple(
         action
         for condition, action in (

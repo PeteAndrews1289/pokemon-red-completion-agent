@@ -29,6 +29,20 @@ objects, rejected symlinks throughout the private root and required cleanup capa
 immutable ledger can start. Independent adapter audit, live non-test qualification, the actual
 catalog and owner authorization remain pending. Final-test access remains **0/12**.
 
+The qualification boundary has since produced the project's most useful kind of progress: a
+sequence of safe public failures. The easy Celadon-to-Saffron rehearsal passed, but an audit noticed
+that two sealed cases require Saffron-to-Cinnabar through Surf. The hard train substitute exposed an
+automatic doorway-animation mismatch; published v8 then exposed a directional destination, a
+bottom-gate input and an invalid cross-map arrival. Every attempt ran no teacher, left the source
+artifacts unchanged and kept all twelve test cases sealed.
+
+Schema v9 repairs the abstraction rather than scripting that route. A cross-map passage must now be
+executable on both sides under the current movement mode and capabilities. The same public capture
+completed 550 acknowledged steps, handled nine interruptions with no replan, reached Cinnabar in
+land mode and made both strategic candidates available. It is strong systems evidence, but it is
+still labeled correctly: an unpublished diagnostic awaiting exact-commit CI, typed qualification
+and independent authorization audit—not a final model result.
+
 ## August 12 update
 
 The strategic benchmark now has 76 authenticated captures, 43 distinct frontiers and 24 exact

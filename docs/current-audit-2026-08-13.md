@@ -8,10 +8,12 @@ The model-capacity and public test-capability defects are repaired, and Claude h
 amended endpoint. The ROM-free executor/scorer core, strict path-free catalog boundary and
 prediction-first cartridge adapter are now implemented. Claude's adapter audit killed 18/18
 semantic mutations and approved live qualification, then found one final authority defect: bare
-receipt digests did not say whether the underlying verdict was favorable. Schema v7 now parses and
-enforces typed verdicts. Exact-commit CI, live non-test relocation qualification, a final
-authorization-level audit, a custodian-supplied path-free catalog and owner authorization remain
-hard stops.
+receipt digests did not say whether the underlying verdict was favorable. Schema v7 parses and
+enforces typed verdicts. A published v8 hard-route qualification then failed safely and exposed
+three remaining source/destination passage assumptions. Schema v9 repairs them, and the exact
+public train rehearsal now reaches Cinnabar and plans both candidates. Exact-commit CI, an official
+typed qualification on that published v9 source, a final authorization-level audit, a custodian-
+supplied path-free catalog and owner authorization remain hard stops.
 
 The v2 collection is unchanged: 24 authenticated train choices, 12 development-validation choices,
 36 unique candidate-order-invariant contexts, no partition overlap and no failed or interrupted
@@ -289,12 +291,50 @@ amendment supersedes v7 while preserving the frozen model, twelve case identitie
 endpoints and one-shot rules. Publication, exact-commit CI and a fresh Saffron-to-Cinnabar pass are
 still required; this source state does not claim authorization.
 
+## Finding 9: both sides of a passage must be executable
+
+Schema v8 was published at exact commit `b82d29074463a550340d7f16f4e9dfd79023b58b`; CI passed, but
+the official scenario-046 hard qualification returned a typed `failed` receipt during challenge
+relocation. The capture and ROM-adjacent artifacts remained unchanged, no teacher ran and the test
+counter remained 0/12. Preserve evidence SHA-256
+`b800cb85ee25e1f87b52d1b3479855cda4e4e503815d3af3172c3c57822543cc` and receipt SHA-256
+`5dd2e0e9d74df4a980fbc2ce0325cb3a059ed98273f53993b15e84a798a872ee`.
+
+Successive diagnostics used only that explicit train capture. Route 2's south-facing ordinary warp
+settles beyond an automatic destination trigger, while Route 6's equivalent source direction lands
+on a directional Underground Path return. The rule therefore belongs to the paired destination,
+not source direction alone. Once repaired, the route reached Viridian Forest's bottom warp, where
+the cartridge required a second `down`; geometric bottom-boundary warps are directional unless the
+automatic-warp table says otherwise. Finally, the route reached Route 21 and exposed a broader
+connection-table error: a valid source-water endpoint can pair with a missing, collision or land
+coordinate on Cinnabar. A source-only route check is not an executable passage.
+
+Schema v9 binds those distinctions. Ordinary directional-warp settlement consults the decoded
+destination trigger. Boundary ordinary warps declare their geometric outward action before the
+cartridge automatic table may clear it. Connection candidates must exist in the target local graph
+and expose an inward edge permitted by the preserved traversal mode and current capabilities.
+Synthetic regressions distinguish absent and wrong-mode arrivals; the cartridge rehearsal proves
+the composition end to end.
+
+The repaired public rehearsal completed 551 movement requests with 550 acknowledgements, nine
+bounded interruptions, 29 waits and zero replans. It arrived on Cinnabar map 8 at `(0,10)` in land
+mode and planned both candidates. It ran no teacher, changed no source artifact and opened 0/12
+test cases. Because the source was not yet published, this was diagnostic evidence and deliberately
+created no typed success receipt.
+
+The v9 plan is 13,979 bytes with SHA-256
+`40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138`; source bundle
+`4185db1272142f2311cbe7ba33568ad78922553a469c865108a0cc2f121e15ba`; teacher execution
+`2fcfca2a9e0a5a21f4075b5c7ef3a2e9faf1baa762027e0ffd28bf6735049c19`. The eighth pre-access
+amendment supersedes exact v8 while preserving the model, all twelve cases, their order, endpoints
+and one-shot scoring rules.
+
 ## Stop line and next work
 
 Do not open, preflight, materialize or score a private test capture yet. The safe order is:
 
-1. publish schema v8 as one exact commit and require green exact-commit CI;
-2. rerun the shared path on the explicit scenario-046 Saffron-to-Cinnabar non-test state, run no
+1. publish schema v9 as one exact commit and require green exact-commit CI;
+2. rerun the official shared path on the explicit scenario-046 Saffron-to-Cinnabar non-test state, run no
    teacher, open zero test cases and preserve the path-free evidence plus typed receipt outside the
    repository;
 3. independently audit that exact commit, the historical failure and the fresh hard-route evidence,
@@ -324,7 +364,8 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Superseded schema-v5 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v5-freeze-2026-08-13.json)
 - [Superseded schema-v6 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v6-freeze-2026-08-13.json)
 - [Superseded schema-v7 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json)
-- [Current schema-v8 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v8-freeze-2026-08-13.json)
+- [Superseded schema-v8 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v8-freeze-2026-08-13.json)
+- [Current schema-v9 sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-v9-freeze-2026-08-13.json)
 - [ROM-free sealed-adapter qualification](evidence/strategic-sealed-adapter-rom-free-qualification-2026-08-13.json)
 - [Linear pre-test audit handoff](claude-linear-pre-test-audit-handoff-2026-08-13.md)
 - [Sealed endpoint-amendment audit handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md)
@@ -332,3 +373,4 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Sealed adapter audit handoff](claude-sealed-adapter-audit-handoff-2026-08-13.md)
 - [Typed-receipt and live-qualification audit handoff](claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md)
 - [Directional-warp repair audit handoff](claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md)
+- [Schema-v9 hard-relocation audit handoff](claude-sealed-hard-relocation-v9-audit-handoff-2026-08-13.md)

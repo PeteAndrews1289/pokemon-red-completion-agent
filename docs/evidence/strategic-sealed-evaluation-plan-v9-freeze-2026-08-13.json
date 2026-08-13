@@ -1,0 +1,79 @@
+{
+  "access": {
+    "live_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "amendment": {
+    "change": "bind_destination_warp_trigger_and_connection_arrival_semantics",
+    "private_test_inputs_opened_before_amendment": 0,
+    "reason": "published hard non-test qualification exposed destination-trigger and connection-arrival semantics",
+    "superseded_plan_sha256": "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
+  },
+  "plan": {
+    "bytes": 13979,
+    "case_order_sha256": "8c913e7101efdfe33c21c849d46da6076653066869077e5043bcf60928a4f2ba",
+    "evaluation_id": "red-strategic-navigation-sealed-evaluation-v1",
+    "execution_source_bundle_sha256": "4185db1272142f2311cbe7ba33568ad78922553a469c865108a0cc2f121e15ba",
+    "relative_path": "configs/red-strategic-navigation-sealed-evaluation-v1.json",
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v9",
+    "sha256": "40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138",
+    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "teacher_execution_sha256": "2fcfca2a9e0a5a21f4075b5c7ef3a2e9faf1baa762027e0ffd28bf6735049c19"
+  },
+  "published_v8_failed_non_test_qualification": {
+    "capture_unchanged": true,
+    "evidence_sha256": "b800cb85ee25e1f87b52d1b3479855cda4e4e503815d3af3172c3c57822543cc",
+    "failure_phase": "challenge_relocation",
+    "failure_reason": "world_state_diverged",
+    "receipt_sha256": "5dd2e0e9d74df4a980fbc2ce0325cb3a059ed98273f53993b15e84a798a872ee",
+    "relocation": "saffron_to_cinnabar",
+    "rom_adjacent_artifacts_unchanged": true,
+    "sealed_test_cases_opened": 0,
+    "source_commit": "b82d29074463a550340d7f16f4e9dfd79023b58b",
+    "teacher_executed": false,
+    "verdict": "failed"
+  },
+  "repair": {
+    "bottom_boundary_warp": "requires the geometric outward input unless the cartridge automatic-warp table clears it",
+    "connection_arrival": "must exist on the destination graph and permit an inward edge in the preserved traversal mode with current capabilities",
+    "directional_destination": "an ordinary south-facing warp settles beyond its destination only when the destination trigger is cartridge-classified as automatic"
+  },
+  "schema": "strategic-sealed-evaluation-plan-v9-freeze-v1",
+  "status": {
+    "actual_case_catalog_created": false,
+    "exact_commit_ci_required": true,
+    "hard_live_saffron_cinnabar_requalification_required": true,
+    "owner_authorization_required_after_audit": true,
+    "ready_to_open_private_test": false
+  },
+  "v9_public_rehearsal": {
+    "available_candidate_count": 2,
+    "candidate_count": 2,
+    "candidate_planning_complete": true,
+    "capture_unchanged": true,
+    "relocation": {
+      "acknowledged_steps": 550,
+      "interruptions": 9,
+      "movement_requests": 551,
+      "replans": 0,
+      "terminal_at": [
+        0,
+        10
+      ],
+      "terminal_map": 8,
+      "terminal_mode": "land",
+      "wait_actions": 29
+    },
+    "rom_adjacent_artifacts_unchanged": true,
+    "scenario_id": "red-strategic-scenario-v2-046-train",
+    "sealed_test_cases_opened": 0,
+    "source_state_sha256": "f79f1caa88dc8e317a3cbaf575355ab6ea3ef7a9ae6ef7b34dc78d72b6110c9b",
+    "status": "passed_on_unpublished_source",
+    "teacher_executed": false,
+    "typed_receipt_created": false
+  }
+}

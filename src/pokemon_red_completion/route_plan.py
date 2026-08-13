@@ -272,6 +272,7 @@ def compose_route(
             target_map,
             edge,
             capabilities=capabilities,
+            target_local=local_graphs.get(target_map),
         )
         segments.append(segment)
         current_at = segment.transition.arrival_at
@@ -451,6 +452,7 @@ def _find_composed_route(
                     edge,
                     capabilities=capabilities,
                     local_paths=local_paths,
+                    target_local=local_graphs.get(target_map),
                 )
             except RoutePlanningError:
                 continue
@@ -555,6 +557,7 @@ def _compose_segment(
     edge: MacroEdge,
     *,
     capabilities: frozenset[str],
+    target_local: LocalGraph | None,
 ) -> RouteSegment:
     candidates = _compose_segment_candidates(
         graph,
@@ -564,6 +567,7 @@ def _compose_segment(
         edge,
         capabilities=capabilities,
         local_paths=None,
+        target_local=target_local,
     )
     return min(
         enumerate(candidates),
@@ -583,6 +587,7 @@ def _compose_segment_candidates(
     *,
     capabilities: frozenset[str],
     local_paths: Mapping[LocalGoal, LocalPath] | None,
+    target_local: LocalGraph | None,
 ) -> tuple[RouteSegment, ...]:
     if edge.kind == "connection":
         if not edge.coordinate_transitions:
@@ -604,6 +609,13 @@ def _compose_segment_candidates(
             else:
                 approach = local_paths.get((transition.exit_at, None))
             if approach is None:
+                continue
+            if target_local is not None and not _connection_arrival_is_executable(
+                target_local,
+                transition.arrival_at,
+                approach.modes[-1],
+                capabilities,
+            ):
                 continue
             candidates.append(
                 RouteSegment(
@@ -640,6 +652,28 @@ def _compose_segment_candidates(
             ),
         )
     raise RoutePlanningError(f"map {state.map_id} uses unsupported {edge.kind!r} transition")
+
+
+def _connection_arrival_is_executable(
+    graph: LocalGraph,
+    at: Coordinate,
+    mode: TraversalMode,
+    capabilities: frozenset[str],
+) -> bool:
+    """Return whether a connection arrival can continue on the target map.
+
+    A connection preserves the current traversal mode. Checking only its
+    source endpoint can therefore select a coordinate that is absent from the
+    target graph or whose inward edge cannot be used in that mode. Route 21's
+    broad south connection exposed both kinds of invalid Cinnabar arrival.
+    """
+
+    if at not in graph.edges:
+        return False
+    return any(
+        edge.permits_mode(mode) and edge.requirements.issubset(capabilities)
+        for edge in graph.neighbors(at)
+    )
 
 
 def _reconstruct_composed_route(
@@ -749,12 +783,22 @@ def _warp_transition(
         arrival = locations[index]
     if arrival is None:
         raise RoutePlanningError("an ordinary warp has no decoded arrival coordinate")
-    if edge.exit_action == "down" and not action_in_approach:
-        # South-facing directional passages play the doorway step one square
-        # beyond the destination warp. This is shared by returns and ordinary
-        # pass-through warps: Route 6's return and Route 2's Viridian Forest
-        # north gate are live cartridge witnesses. Directional north exits
-        # still settle *on* the outside warp.
+    destination_triggers_on_entry = edge.kind == "warp" and any(
+        candidate.kind in {"return", "warp"}
+        and candidate.at == arrival
+        and candidate.exit_action is None
+        for candidate in graph.neighbors(target_map)
+    )
+    if (
+        edge.exit_action == "down"
+        and not action_in_approach
+        and (edge.kind == "return" or destination_triggers_on_entry)
+    ):
+        # A south-facing return plays the exterior doorway step. An ordinary
+        # directional warp plays the same inward step only when its destination
+        # warp is cartridge-classified as automatic: Route 2 -> Viridian
+        # Forest settles beyond the door, while Route 6 -> Underground Path
+        # lands on its directional return warp.
         arrival = arrival[0] + 1, arrival[1]
     elif edge.exit_action not in {None, "up", "down", "left", "right"}:
         raise RoutePlanningError(f"unsupported directional warp action {edge.exit_action!r}")

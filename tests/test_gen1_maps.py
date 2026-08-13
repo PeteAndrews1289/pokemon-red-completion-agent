@@ -93,7 +93,7 @@ def test_directional_warp_actions_derive_from_the_source_boundary() -> None:
     assert gen1_maps._boundary_warp_action(header, (3, 0)) == "left"
     assert gen1_maps._boundary_warp_action(header, (3, 5)) == "right"
     assert gen1_maps._boundary_warp_action(header, (0, 3)) == "up"
-    assert gen1_maps._boundary_warp_action(header, (7, 3)) is None
+    assert gen1_maps._boundary_warp_action(header, (7, 3)) == "down"
     assert gen1_maps._boundary_warp_action(header, (3, 2)) is None
     assert gen1_maps._boundary_warp_action(header, (0, 0)) is None
 

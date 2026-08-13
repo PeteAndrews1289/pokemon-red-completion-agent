@@ -52,6 +52,46 @@ def test_a_connection_selects_a_reachable_exact_endpoint() -> None:
     ]
 
 
+def test_a_connection_rejects_unusable_destination_coordinates_and_modes() -> None:
+    """Route 21 must arrive on Cinnabar water, not collision or dry land."""
+
+    absent = MacroTransition((0, 1), (0, 8), "down")
+    wrong_mode = MacroTransition((0, 2), (0, 10), "down")
+    usable_water = MacroTransition((0, 3), (0, 3), "down")
+    edge = MacroEdge(
+        2,
+        coordinate_transitions=(absent, wrong_mode, usable_water),
+        heading="south",
+    )
+    target = LocalGraph(
+        {
+            (0, 10): (LocalEdge((1, 10), action="down", required_mode="land"),),
+            (1, 10): (),
+            (0, 3): (
+                LocalEdge(
+                    (1, 3),
+                    action="down",
+                    kind="water_travel",
+                    required_mode="water",
+                ),
+            ),
+            (1, 3): (),
+        }
+    )
+
+    plan = compose_route(
+        MacroGraph({1: (edge,), 2: ()}),
+        MacroPath((1, 2), (edge,)),
+        {1: line((0, 0), (0, 1), (0, 2), (0, 3)), 2: target},
+        (0, 0),
+        start_mode="water",
+    )
+
+    assert plan.segments[0].transition == usable_water
+    assert plan.terminal_at == (0, 3)
+    assert plan.terminal_mode == "water"
+
+
 def test_stepping_onto_a_warp_is_not_duplicated_as_an_extra_action() -> None:
     edge = MacroEdge(2, kind="warp", at=(0, 2), arrival_at=(7, 3))
     path = MacroPath((1, 2), (edge,))
@@ -107,9 +147,15 @@ def test_south_facing_ordinary_warp_lands_beyond_the_destination_door() -> None:
         exit_action="down",
         destination_warp_index=1,
     )
+    automatic_return = MacroEdge(
+        None,
+        kind="return",
+        at=(0, 5),
+        destination_warp_index=1,
+    )
 
     plan = compose_route(
-        MacroGraph({13: (edge,)}),
+        MacroGraph({13: (edge,), 47: (automatic_return,)}),
         MacroPath((13, 47), (edge,)),
         {13: line((11, 3))},
         (11, 3),
@@ -122,6 +168,38 @@ def test_south_facing_ordinary_warp_lands_beyond_the_destination_door() -> None:
     assert plan.steps[-1].source_at == (11, 3)
     assert plan.steps[-1].expected_map == 47
     assert plan.steps[-1].expected_at == (1, 5)
+
+
+def test_south_facing_ordinary_warp_stays_on_directional_destination() -> None:
+    """Route 6 -> Underground Path lands on a return that still needs Up."""
+
+    edge = MacroEdge(
+        73,
+        kind="warp",
+        at=(1, 9),
+        arrival_at=(0, 3),
+        exit_action="down",
+        destination_warp_index=2,
+    )
+    directional_return = MacroEdge(
+        None,
+        kind="return",
+        at=(0, 3),
+        exit_action="up",
+        destination_warp_index=1,
+    )
+
+    plan = compose_route(
+        MacroGraph({17: (edge,), 73: (directional_return,)}),
+        MacroPath((17, 73), (edge,)),
+        {17: line((1, 9))},
+        (1, 9),
+    )
+
+    assert plan.actions == ("down",)
+    assert plan.terminal_at == (0, 3)
+    assert not plan.segments[0].transition_action_in_approach
+    assert plan.steps[-1].expected_at == (0, 3)
 
 
 def test_a_return_resolves_its_arrival_after_its_map_target() -> None:

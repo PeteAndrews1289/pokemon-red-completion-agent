@@ -38,9 +38,9 @@ SEALED_EVALUATION_PLAN_RELATIVE_PATH = "configs/red-strategic-navigation-sealed-
 SEALED_EVALUATION_PLAN_DIGEST_RELATIVE_PATH = (
     "configs/red-strategic-navigation-sealed-evaluation-v1.digest.json"
 )
-SEALED_EVALUATION_PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v8"
+SEALED_EVALUATION_PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v9"
 SEALED_EVALUATION_PLAN_DIGEST_SCHEMA = (
-    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v8"
+    "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v9"
 )
 SEALED_EVALUATION_AUTHORIZATION_SCHEMA = (
     "pokemon-strategic-navigation-sealed-evaluation-authorization-v3"
@@ -2598,6 +2598,19 @@ def _validate_amendments(value: object) -> None:
             ),
             "supersedes_plan_sha256": (
                 "d5ade0bf749b24f5d266f568daa7da96b715b166bd05c41c473f6d91722f582a"
+            ),
+        },
+        {
+            "amended_before_private_access": True,
+            "change": (
+                "bind_destination_warp_trigger_and_connection_arrival_semantics"
+            ),
+            "reason": (
+                "published_hard_non_test_qualification_exposed_destination_"
+                "trigger_and_connection_arrival_semantics"
+            ),
+            "supersedes_plan_sha256": (
+                "fe208ac5cf628bcd7301ae500622ae59e39bea271f60d817e2f70f3001fcc5d9"
             ),
         },
     ]

@@ -1343,9 +1343,16 @@ and show the exact ordinary-warp regression. This is an unusually clean visual f
 central idea: a graph can be topologically correct and still be one animation away from executable.
 
 Keep the negative receipt on screen. The first command closed safely but left a traceback; the
-repaired command writes path-free failure evidence and exits red on purpose. Do not cut directly
-from failure to a green sealed score. The next permissible green card is the same hard relocation
-on published v8 source, still with the test counter at zero.
+repaired command writes path-free failure evidence and exits red on purpose. Then show why the
+published v8 attempt also stays red. Use three quick split screens: Route 2's automatic destination
+versus Route 6's directional return; Viridian Forest's top automatic warp versus its bottom `down`
+trigger; Route 21's broad source water versus Cinnabar's collision/land columns. The visual rule is
+simple: an edge is not executable until both sides agree.
+
+Only then turn the public rehearsal green: **551 REQUESTS / 550 ACKNOWLEDGED / 9 INTERRUPTIONS / 0
+REPLANS / CINNABAR LAND / 2 OF 2 CANDIDATES**. Keep **UNPUBLISHED DIAGNOSTIC / NO RECEIPT / TEACHER
+FALSE / TEST 0 OF 12** visible. The next permissible authority card is the same hard relocation on
+published v9 source with a typed pass—not a sealed score.
 
 ### Act VIII: the Crystal test — 10:50–11:30
 
