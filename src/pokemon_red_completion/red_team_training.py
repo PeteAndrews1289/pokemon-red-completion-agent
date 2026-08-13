@@ -150,7 +150,12 @@ MEASURED_TRAINING_VENUES: tuple[GrindingArea, ...] = (
 )
 
 TRAINING_ATTACK_PP_RESERVE = {
-    BLASTOISE_SPECIES_ID: 16,
+    # A pre-Hydro-Pump Blastoise can have Surf as its only qualified training
+    # attack, and Surf restores to 15 PP. A reserve of 16 made that healthy,
+    # fully restored escort permanently unsafe and produced a zero-battle heal
+    # loop. Five keeps one third of the qualified pool in reserve while still
+    # admitting the authenticated level-44 carrier at full PP.
+    BLASTOISE_SPECIES_ID: 5,
     DUX_SPECIES_ID: 6,
     0x3B: 2,  # Diglett
     DUGTRIO_SPECIES_ID: 2,

@@ -69,8 +69,10 @@ from pokemon_red_completion.blaine import (
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RawGameState
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
 from pokemon_red_completion.red_team_training import (
     _PauseForTeamTrainingRecovery,
+    member_is_unsafe_for_team_training,
     run_red_team_balancing,
     trainee_should_fight_directly,
 )
@@ -578,6 +580,19 @@ def test_the_policy_margin_governs_and_no_species_silently_overrides_it() -> Non
 
     dugtrio = replace(dux, species_id=0x76, moves=(MoveObservation(0x5B, 10),))
     assert _training_attack_pp_reserve(dugtrio, policy) == 2
+
+    surf_carrier = replace(
+        dux,
+        species_id=BLASTOISE_SPECIES_ID,
+        moves=(MoveObservation(0x39, 15),),
+    )
+    assert _training_attack_pp(surf_carrier) == 15
+    assert _training_attack_pp_reserve(surf_carrier, policy) == 5
+    assert not member_is_unsafe_for_team_training(surf_carrier, policy)
+    assert member_is_unsafe_for_team_training(
+        replace(surf_carrier, moves=(MoveObservation(0x39, 5),)),
+        policy,
+    )
 
 
 def test_team_training_refuses_an_opponents_super_effective_stab_type() -> None:
