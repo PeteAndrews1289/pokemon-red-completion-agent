@@ -16,6 +16,7 @@ import stat
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
 
 import numpy as np
 from numpy.typing import NDArray
@@ -33,6 +34,9 @@ STRATEGIC_NAVIGATION_FEATURE_SCHEMA_ID = (
 )
 STRATEGIC_NAVIGATION_MODEL_ID = (
     "pokemon.core.strategic-navigation.destination-ranker.mlp.v1"
+)
+STRATEGIC_NAVIGATION_LINEAR_MODEL_ID = (
+    "pokemon.core.strategic-navigation.destination-ranker.linear.v1"
 )
 _METRIC_NAMES = (
     "route_cost",
@@ -63,6 +67,18 @@ STRATEGIC_NAVIGATION_FEATURE_NAMES = (
     "candidate.need_overlap_ratio",
 )
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+
+
+class StrategicNavigationScorer(Protocol):
+    """Minimal shared interface for destination-ranking models."""
+
+    def probabilities(
+        self, example: StrategicNavigationExample
+    ) -> NDArray[np.float64]: ...
+
+    def predict(self, example: StrategicNavigationExample) -> int: ...
+
+    def to_dict(self) -> dict[str, object]: ...
 
 
 class StrategicNavigationModelError(ValueError):
@@ -292,6 +308,243 @@ class StrategicNavigationMLP:
         return cls(weights1, bias1, weights2, mean, scale, seed)
 
 
+@dataclass(frozen=True, slots=True)
+class StrategicNavigationLinear:
+    """Score candidates with a deliberately small shared linear function."""
+
+    weights: NDArray[np.float64]
+    feature_mean: NDArray[np.float64]
+    feature_scale: NDArray[np.float64]
+    enabled_feature_names: tuple[str, ...]
+    feature_set_id: str
+    l2: float
+    training_epochs: int
+    model_id: str = STRATEGIC_NAVIGATION_LINEAR_MODEL_ID
+    feature_schema_id: str = STRATEGIC_NAVIGATION_FEATURE_SCHEMA_ID
+
+    def __post_init__(self) -> None:
+        width = len(STRATEGIC_NAVIGATION_FEATURE_NAMES)
+        arrays = tuple(
+            np.asarray(value, dtype=np.float64)
+            for value in (self.weights, self.feature_mean, self.feature_scale)
+        )
+        weights, mean, scale = arrays
+        if self.model_id != STRATEGIC_NAVIGATION_LINEAR_MODEL_ID:
+            raise StrategicNavigationModelError("strategic model identity is unsupported")
+        if self.feature_schema_id != STRATEGIC_NAVIGATION_FEATURE_SCHEMA_ID:
+            raise StrategicNavigationModelError("strategic feature schema is unsupported")
+        if any(value.shape != (width,) for value in arrays):
+            raise StrategicNavigationModelError("strategic linear model shapes are invalid")
+        if not all(np.all(np.isfinite(value)) for value in arrays) or np.any(scale <= 0):
+            raise StrategicNavigationModelError(
+                "strategic linear model parameters are not finite"
+            )
+        enabled = _canonical_enabled_feature_names(self.enabled_feature_names)
+        enabled_indexes = {
+            STRATEGIC_NAVIGATION_FEATURE_NAMES.index(name) for name in enabled
+        }
+        disabled = np.asarray(
+            [index not in enabled_indexes for index in range(width)], dtype=np.bool_
+        )
+        if np.any(weights[disabled] != 0.0):
+            raise StrategicNavigationModelError(
+                "disabled strategic linear features must have zero weight"
+            )
+        if not isinstance(self.feature_set_id, str) or re.fullmatch(
+            r"[a-z0-9][a-z0-9._-]{0,95}", self.feature_set_id
+        ) is None:
+            raise StrategicNavigationModelError("strategic feature-set identity is invalid")
+        if (
+            isinstance(self.l2, bool)
+            or not isinstance(self.l2, (int, float))
+            or not math.isfinite(float(self.l2))
+            or self.l2 < 0
+        ):
+            raise StrategicNavigationModelError("strategic linear regularization is invalid")
+        if type(self.training_epochs) is not int or self.training_epochs < 1:  # noqa: E721
+            raise StrategicNavigationModelError("strategic linear epoch count is invalid")
+        object.__setattr__(self, "enabled_feature_names", enabled)
+        object.__setattr__(self, "l2", float(self.l2))
+        for name, value in zip(
+            ("weights", "feature_mean", "feature_scale"), arrays, strict=True
+        ):
+            detached = value.copy()
+            detached.setflags(write=False)
+            object.__setattr__(self, name, detached)
+
+    @property
+    def parameter_count(self) -> int:
+        """Return the number of coefficients allowed to affect a score."""
+
+        return len(self.enabled_feature_names)
+
+    def scores(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+        features = strategic_navigation_feature_matrix(example)
+        normalized = (features - self.feature_mean) / self.feature_scale
+        scores = normalized @ self.weights
+        if scores.shape != (len(example.candidates),) or not np.all(np.isfinite(scores)):
+            raise StrategicNavigationModelError("strategic candidate scores are invalid")
+        return scores
+
+    def probabilities(self, example: StrategicNavigationExample) -> NDArray[np.float64]:
+        scores = self.scores(example)
+        shifted = scores - np.max(scores)
+        probabilities = np.exp(shifted)
+        probabilities /= np.sum(probabilities)
+        return probabilities
+
+    def predict(self, example: StrategicNavigationExample) -> int:
+        return int(np.argmax(self.probabilities(example)))
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "format_version": 1,
+            "model_id": self.model_id,
+            "feature_schema_id": self.feature_schema_id,
+            "feature_names": list(STRATEGIC_NAVIGATION_FEATURE_NAMES),
+            "enabled_feature_names": list(self.enabled_feature_names),
+            "feature_set_id": self.feature_set_id,
+            "parameter_count": self.parameter_count,
+            "l2": self.l2,
+            "training_epochs": self.training_epochs,
+            "weights": self.weights.tolist(),
+            "feature_mean": self.feature_mean.tolist(),
+            "feature_scale": self.feature_scale.tolist(),
+        }
+
+    @classmethod
+    def from_dict(cls, value: Mapping[str, object]) -> StrategicNavigationLinear:
+        names = value.get("feature_names")
+        enabled = value.get("enabled_feature_names")
+        feature_set_id = value.get("feature_set_id")
+        l2 = value.get("l2")
+        epochs = value.get("training_epochs")
+        if (
+            value.get("format_version") != 1
+            or value.get("model_id") != STRATEGIC_NAVIGATION_LINEAR_MODEL_ID
+            or value.get("feature_schema_id") != STRATEGIC_NAVIGATION_FEATURE_SCHEMA_ID
+            or not isinstance(names, list)
+            or tuple(names) != STRATEGIC_NAVIGATION_FEATURE_NAMES
+            or not isinstance(enabled, list)
+            or any(not isinstance(name, str) for name in enabled)
+            or not isinstance(feature_set_id, str)
+            or isinstance(l2, bool)
+            or not isinstance(l2, (int, float))
+            or type(epochs) is not int  # noqa: E721
+        ):
+            raise StrategicNavigationModelError("strategic model record is incompatible")
+        try:
+            model = cls(
+                weights=np.asarray(value["weights"], dtype=np.float64),
+                feature_mean=np.asarray(value["feature_mean"], dtype=np.float64),
+                feature_scale=np.asarray(value["feature_scale"], dtype=np.float64),
+                enabled_feature_names=tuple(enabled),
+                feature_set_id=feature_set_id,
+                l2=float(l2),
+                training_epochs=epochs,
+            )
+        except StrategicNavigationModelError:
+            raise
+        except (KeyError, TypeError, ValueError) as error:
+            raise StrategicNavigationModelError("strategic model record is invalid") from error
+        reported_parameter_count = value.get("parameter_count")
+        if (
+            type(reported_parameter_count) is not int  # noqa: E721
+            or reported_parameter_count != model.parameter_count
+        ):
+            raise StrategicNavigationModelError("strategic model record is incompatible")
+        return model
+
+    @classmethod
+    def fit(
+        cls,
+        examples: Iterable[StrategicNavigationExample],
+        *,
+        enabled_feature_names: Sequence[str],
+        feature_set_id: str,
+        epochs: int = 600,
+        learning_rate: float = 0.01,
+        l2: float = 0.01,
+    ) -> StrategicNavigationLinear:
+        rows = tuple(examples)
+        if not rows or any(row.partition != "train" for row in rows):
+            raise StrategicNavigationModelError(
+                "strategic fitting requires training-partition examples only"
+            )
+        if any(row.teacher_choice_target is None for row in rows):
+            raise StrategicNavigationModelError(
+                "strategic fitting requires successful teacher labels"
+            )
+        enabled = _canonical_enabled_feature_names(enabled_feature_names)
+        if type(epochs) is not int or epochs < 1:  # noqa: E721
+            raise StrategicNavigationModelError("strategic epoch count is invalid")
+        if (
+            isinstance(learning_rate, bool)
+            or not isinstance(learning_rate, (int, float))
+            or not math.isfinite(float(learning_rate))
+            or learning_rate <= 0
+            or isinstance(l2, bool)
+            or not isinstance(l2, (int, float))
+            or not math.isfinite(float(l2))
+            or l2 < 0
+        ):
+            raise StrategicNavigationModelError("strategic optimizer settings are invalid")
+
+        matrices = tuple(strategic_navigation_feature_matrix(row) for row in rows)
+        all_features = np.concatenate(matrices, axis=0)
+        mean = np.mean(all_features, axis=0)
+        scale = np.std(all_features, axis=0)
+        inactive = scale < 1e-8
+        scale[inactive] = 1.0
+        normalized = tuple((matrix - mean) / scale for matrix in matrices)
+        enabled_indexes = {
+            STRATEGIC_NAVIGATION_FEATURE_NAMES.index(name) for name in enabled
+        }
+        trainable = np.asarray(
+            [
+                index in enabled_indexes and not inactive[index]
+                for index in range(len(STRATEGIC_NAVIGATION_FEATURE_NAMES))
+            ],
+            dtype=np.bool_,
+        )
+        if not np.any(trainable):
+            raise StrategicNavigationModelError(
+                "strategic linear feature set is inactive in training"
+            )
+        weights = np.zeros(len(STRATEGIC_NAVIGATION_FEATURE_NAMES), dtype=np.float64)
+        first = np.zeros_like(weights)
+        second = np.zeros_like(weights)
+        for epoch in range(1, epochs + 1):
+            gradient = np.zeros_like(weights)
+            for row, features in zip(rows, normalized, strict=True):
+                selected = row.teacher_choice_target
+                assert selected is not None
+                logits = features @ weights
+                probabilities = np.exp(logits - np.max(logits))
+                probabilities /= np.sum(probabilities)
+                probabilities[selected] -= 1.0
+                gradient += features.T @ probabilities
+            gradient = gradient / len(rows) + float(l2) * weights
+            gradient[~trainable] = 0.0
+            first = 0.9 * first + 0.1 * gradient
+            second = 0.999 * second + 0.001 * gradient * gradient
+            weights -= float(learning_rate) * (
+                first / (1.0 - math.pow(0.9, epoch))
+            ) / (
+                np.sqrt(second / (1.0 - math.pow(0.999, epoch))) + 1e-8
+            )
+            weights[~trainable] = 0.0
+        return cls(
+            weights=weights,
+            feature_mean=mean,
+            feature_scale=scale,
+            enabled_feature_names=enabled,
+            feature_set_id=feature_set_id,
+            l2=float(l2),
+            training_epochs=epochs,
+        )
+
+
 def strategic_navigation_feature_matrix(
     example: StrategicNavigationExample,
 ) -> NDArray[np.float64]:
@@ -369,7 +622,7 @@ def strategic_navigation_feature_matrix(
 
 
 def evaluate_strategic_navigation_model(
-    model: StrategicNavigationMLP,
+    model: StrategicNavigationScorer,
     examples: Iterable[StrategicNavigationExample],
 ) -> StrategicNavigationModelMetrics:
     rows = tuple(examples)
@@ -427,7 +680,7 @@ def route_cost_baseline_prediction(example: StrategicNavigationExample) -> int:
 
 
 def canonical_strategic_navigation_model_sha256(
-    model: StrategicNavigationMLP,
+    model: StrategicNavigationScorer,
 ) -> str:
     payload = json.dumps(
         model.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=True
@@ -439,7 +692,7 @@ def load_strategic_navigation_model(
     path: str | Path,
     *,
     expected_sha256: str,
-) -> StrategicNavigationMLP:
+) -> StrategicNavigationMLP | StrategicNavigationLinear:
     if _SHA256.fullmatch(expected_sha256) is None:
         raise StrategicNavigationModelError("expected strategic model digest is invalid")
     source = Path(path)
@@ -458,7 +711,11 @@ def load_strategic_navigation_model(
         raise StrategicNavigationModelError("strategic model is invalid JSON") from error
     if not isinstance(raw, Mapping):
         raise StrategicNavigationModelError("strategic model must be an object")
-    return StrategicNavigationMLP.from_dict(raw)
+    if raw.get("model_id") == STRATEGIC_NAVIGATION_MODEL_ID:
+        return StrategicNavigationMLP.from_dict(raw)
+    if raw.get("model_id") == STRATEGIC_NAVIGATION_LINEAR_MODEL_ID:
+        return StrategicNavigationLinear.from_dict(raw)
+    raise StrategicNavigationModelError("strategic model identity is unsupported")
 
 
 def _paired_two_sided_exact_p(wins: int, losses: int) -> float:
@@ -475,64 +732,348 @@ def _known_int(value: object) -> int:
     return value
 
 
-def select_strategic_navigation_model(
+def _canonical_enabled_feature_names(values: Sequence[str]) -> tuple[str, ...]:
+    if isinstance(values, (str, bytes)) or not values:
+        raise StrategicNavigationModelError("strategic linear feature set is empty")
+    if any(not isinstance(name, str) for name in values):
+        raise StrategicNavigationModelError("strategic linear feature name is invalid")
+    if len(set(values)) != len(values):
+        raise StrategicNavigationModelError("strategic linear feature is duplicated")
+    allowed = set(STRATEGIC_NAVIGATION_FEATURE_NAMES)
+    if any(name not in allowed for name in values):
+        raise StrategicNavigationModelError("strategic linear feature is unknown")
+    selected = set(values)
+    canonical = tuple(
+        name for name in STRATEGIC_NAVIGATION_FEATURE_NAMES if name in selected
+    )
+    if tuple(values) != canonical:
+        raise StrategicNavigationModelError(
+            "strategic linear features must use canonical schema order"
+        )
+    return canonical
+
+
+def select_strategic_navigation_linear_model(
     training: Sequence[StrategicNavigationExample],
-    validation: Sequence[StrategicNavigationExample],
     *,
-    configurations: Sequence[tuple[int, float]] = (
-        (2, 0.1),
-        (4, 0.1),
-        (8, 0.1),
-        (4, 0.01),
-        (8, 0.01),
-        (16, 0.01),
-        (8, 0.001),
-    ),
+    feature_sets: Sequence[tuple[str, Sequence[str]]] | None = None,
+    l2_values: Sequence[float] = (0.001, 0.01, 0.1, 1.0, 10.0),
     epochs: int = 600,
     learning_rate: float = 0.01,
-    seed: int = 20260813,
-) -> tuple[StrategicNavigationMLP, tuple[dict[str, object], ...]]:
-    """Select on development validation; the sealed test remains untouched."""
+) -> tuple[StrategicNavigationLinear, dict[str, object]]:
+    """Choose a small linear ranker using training-only leave-one-out evidence.
 
-    if not training or not validation:
-        raise StrategicNavigationModelError("strategic selection needs both partitions")
-    if any(row.partition != "train" for row in training):
+    Validation is intentionally absent from this API.  Each feature-set and
+    regularization choice is scored by leaving out one training decision at a
+    time.  The final choice uses a one-standard-error simplicity rule so a
+    larger feature set must earn enough training-only evidence to justify its
+    extra coefficients.
+    """
+
+    rows = tuple(training)
+    if len(rows) < 3:
         raise StrategicNavigationModelError(
-            "strategic selection training rows must be in the training partition"
+            "strategic linear selection needs at least three training examples"
         )
-    if any(row.partition != "validation" for row in validation):
+    if any(row.partition != "train" for row in rows):
         raise StrategicNavigationModelError(
-            "strategic selection validation rows must be in the validation partition"
+            "strategic linear selection accepts training-partition examples only"
         )
-    trials: list[tuple[StrategicNavigationMLP, StrategicNavigationModelMetrics, float]] = []
-    for hidden_units, l2 in configurations:
-        model = StrategicNavigationMLP.fit(
-            training,
-            hidden_units=hidden_units,
-            epochs=epochs,
-            learning_rate=learning_rate,
-            l2=l2,
-            seed=seed,
+    if any(row.teacher_choice_target is None for row in rows):
+        raise StrategicNavigationModelError(
+            "strategic linear selection requires successful teacher labels"
         )
-        metrics = evaluate_strategic_navigation_model(model, validation)
-        trials.append((model, metrics, l2))
-    best = max(
-        trials,
-        key=lambda item: (
-            item[1].paired_wins_over_route_cost - item[1].paired_losses_to_route_cost,
-            item[1].accuracy,
-            -item[1].cross_entropy,
-            item[2],
-            -item[0].weights1.shape[1],
+    if type(epochs) is not int or epochs < 1:  # noqa: E721
+        raise StrategicNavigationModelError("strategic epoch count is invalid")
+    if not l2_values:
+        raise StrategicNavigationModelError("strategic linear selection needs l2 values")
+    canonical_l2: list[float] = []
+    for value in l2_values:
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(float(value))
+            or value < 0
+        ):
+            raise StrategicNavigationModelError(
+                "strategic linear selection l2 value is invalid"
+            )
+        canonical_l2.append(float(value))
+    if len(set(canonical_l2)) != len(canonical_l2):
+        raise StrategicNavigationModelError(
+            "strategic linear selection l2 value is duplicated"
+        )
+
+    candidates = (
+        _default_strategic_linear_feature_sets(rows)
+        if feature_sets is None
+        else _canonical_linear_feature_sets(feature_sets)
+    )
+    trial_rows: list[dict[str, object]] = []
+    best_by_feature_set: dict[str, dict[str, object]] = {}
+    for feature_set_id, names in candidates:
+        feature_set_trials: list[dict[str, object]] = []
+        for l2 in canonical_l2:
+            correct = 0
+            cross_entropy = 0.0
+            for held_out_index, held_out in enumerate(rows):
+                fold = rows[:held_out_index] + rows[held_out_index + 1 :]
+                model = StrategicNavigationLinear.fit(
+                    fold,
+                    enabled_feature_names=names,
+                    feature_set_id=feature_set_id,
+                    epochs=epochs,
+                    learning_rate=learning_rate,
+                    l2=l2,
+                )
+                target = held_out.teacher_choice_target
+                assert target is not None
+                probabilities = model.probabilities(held_out)
+                correct += int(int(np.argmax(probabilities)) == target)
+                cross_entropy -= math.log(max(float(probabilities[target]), 1e-12))
+            record: dict[str, object] = {
+                "feature_set_id": feature_set_id,
+                "feature_names": list(names),
+                "parameter_count": len(names),
+                "l2": l2,
+                "leave_one_out": {
+                    "examples": len(rows),
+                    "correct": correct,
+                    "accuracy": correct / len(rows),
+                    "cross_entropy": cross_entropy / len(rows),
+                },
+            }
+            feature_set_trials.append(record)
+            trial_rows.append(record)
+        best_regularization = min(
+            feature_set_trials,
+            key=lambda record: (
+                -_selection_correct(record),
+                _selection_cross_entropy(record),
+                -_selection_l2(record),
+            ),
+        )
+        best_by_feature_set[feature_set_id] = best_regularization
+
+    feature_set_winners = tuple(best_by_feature_set.values())
+    (
+        selected,
+        eligible,
+        best_accuracy,
+        standard_error,
+        one_standard_error_threshold,
+    ) = _select_one_standard_error_feature_set(
+        feature_set_winners,
+        example_count=len(rows),
+    )
+    selected_id = _selection_feature_set_id(selected)
+    selected_names = tuple(
+        name
+        for name in STRATEGIC_NAVIGATION_FEATURE_NAMES
+        if name in set(_selection_feature_names(selected))
+    )
+    selected_l2 = _selection_l2(selected)
+    final_model = StrategicNavigationLinear.fit(
+        rows,
+        enabled_feature_names=selected_names,
+        feature_set_id=selected_id,
+        epochs=epochs,
+        learning_rate=learning_rate,
+        l2=selected_l2,
+    )
+    published_trials = []
+    for record in trial_rows:
+        feature_set_id = _selection_feature_set_id(record)
+        feature_set_winner = best_by_feature_set[feature_set_id]
+        published_trials.append(
+            {
+                **record,
+                "best_regularization_for_feature_set": record is feature_set_winner,
+                "one_standard_error_eligible": (
+                    record is feature_set_winner and record in eligible
+                ),
+                "selected": record is selected,
+            }
+        )
+    selection = {
+        "schema": "strategic-navigation-linear-selection-v1",
+        "selection_data": "train_only",
+        "validation_used_for_selection": False,
+        "sealed_test_used_for_selection": False,
+        "cross_validation": "leave_one_training_example_out",
+        "regularization_selection": (
+            "highest_correct_then_lowest_cross_entropy_then_strongest_l2"
+        ),
+        "feature_set_selection": "one_standard_error_simplicity_rule",
+        "best_leave_one_out_accuracy": best_accuracy,
+        "best_leave_one_out_standard_error": standard_error,
+        "one_standard_error_accuracy_threshold": one_standard_error_threshold,
+        "selected_feature_set_id": selected_id,
+        "selected_feature_names": list(selected_names),
+        "selected_parameter_count": len(selected_names),
+        "selected_l2": selected_l2,
+        "trials": published_trials,
+    }
+    return final_model, selection
+
+
+def _select_one_standard_error_feature_set(
+    feature_set_winners: Sequence[Mapping[str, object]],
+    *,
+    example_count: int,
+) -> tuple[
+    Mapping[str, object],
+    tuple[Mapping[str, object], ...],
+    float,
+    float,
+    float,
+]:
+    if not feature_set_winners:
+        raise StrategicNavigationModelError(
+            "strategic linear selection has no feature-set winner"
+        )
+    if type(example_count) is not int or example_count < 1:  # noqa: E721
+        raise StrategicNavigationModelError(
+            "strategic linear selection example count is invalid"
+        )
+    best_correct = max(_selection_correct(record) for record in feature_set_winners)
+    if not 0 <= best_correct <= example_count:
+        raise StrategicNavigationModelError(
+            "strategic linear selection correct count is invalid"
+        )
+    best_accuracy = best_correct / example_count
+    standard_error = math.sqrt(
+        best_accuracy * (1.0 - best_accuracy) / example_count
+    )
+    threshold = best_accuracy - standard_error
+    eligible = tuple(
+        record
+        for record in feature_set_winners
+        if _selection_correct(record) / example_count >= threshold - 1e-12
+    )
+    selected = min(
+        eligible,
+        key=lambda record: (
+            _selection_parameter_count(record),
+            -_selection_correct(record),
+            _selection_cross_entropy(record),
+            -_selection_l2(record),
+            _selection_feature_set_id(record),
         ),
     )
-    records = tuple(
-        {
-            "hidden_units": int(model.weights1.shape[1]),
-            "l2": l2,
-            "selected": model is best[0],
-            "validation": metrics.public_dict(),
-        }
-        for model, metrics, l2 in trials
+    return selected, eligible, best_accuracy, standard_error, threshold
+
+
+def _default_strategic_linear_feature_sets(
+    training: Sequence[StrategicNavigationExample],
+) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    matrices = tuple(strategic_navigation_feature_matrix(row) for row in training)
+    all_features = np.concatenate(matrices, axis=0)
+    active_names = tuple(
+        name
+        for index, name in enumerate(STRATEGIC_NAVIGATION_FEATURE_NAMES)
+        if float(np.std(all_features[:, index])) >= 1e-8
     )
-    return best[0], records
+    route_cost_rank = ("candidate.route_cost.relative_rank",)
+    relative_route = tuple(
+        f"candidate.{metric}.relative_rank" for metric in _METRIC_NAMES
+    )
+    candidate_tags = tuple(
+        name for name in active_names if name.startswith("candidate.tag.")
+    )
+    raw = (
+        ("route_cost_rank", route_cost_rank),
+        ("relative_route", relative_route),
+        ("candidate_tags", candidate_tags),
+        ("candidate_tags_plus_cost", candidate_tags + route_cost_rank),
+        (
+            "candidate_tags_plus_relative_route",
+            candidate_tags + relative_route,
+        ),
+        ("all_training_active", active_names),
+    )
+    return _canonical_linear_feature_sets(raw)
+
+
+def _canonical_linear_feature_sets(
+    feature_sets: Sequence[tuple[str, Sequence[str]]],
+) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    if not feature_sets:
+        raise StrategicNavigationModelError(
+            "strategic linear selection needs feature sets"
+        )
+    result: list[tuple[str, tuple[str, ...]]] = []
+    identities: set[str] = set()
+    for feature_set_id, raw_names in feature_sets:
+        if not isinstance(feature_set_id, str) or re.fullmatch(
+            r"[a-z0-9][a-z0-9._-]{0,95}", feature_set_id
+        ) is None:
+            raise StrategicNavigationModelError(
+                "strategic linear feature-set identity is invalid"
+            )
+        if feature_set_id in identities:
+            raise StrategicNavigationModelError(
+                "strategic linear feature-set identity is duplicated"
+            )
+        identities.add(feature_set_id)
+        if isinstance(raw_names, (str, bytes)):
+            raise StrategicNavigationModelError(
+                "strategic linear feature set is invalid"
+            )
+        selected = set(raw_names)
+        ordered = tuple(
+            name for name in STRATEGIC_NAVIGATION_FEATURE_NAMES if name in selected
+        )
+        if len(ordered) != len(raw_names):
+            _canonical_enabled_feature_names(tuple(raw_names))
+            raise AssertionError("unreachable canonical feature-set state")
+        result.append((feature_set_id, _canonical_enabled_feature_names(ordered)))
+    return tuple(result)
+
+
+def _selection_feature_set_id(record: Mapping[str, object]) -> str:
+    value = record.get("feature_set_id")
+    if not isinstance(value, str):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return value
+
+
+def _selection_feature_names(record: Mapping[str, object]) -> tuple[str, ...]:
+    value = record.get("feature_names")
+    if not isinstance(value, list) or any(not isinstance(name, str) for name in value):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return tuple(value)
+
+
+def _selection_parameter_count(record: Mapping[str, object]) -> int:
+    value = record.get("parameter_count")
+    if type(value) is not int:  # noqa: E721
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return value
+
+
+def _selection_l2(record: Mapping[str, object]) -> float:
+    value = record.get("l2")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return float(value)
+
+
+def _selection_correct(record: Mapping[str, object]) -> int:
+    leave_one_out = record.get("leave_one_out")
+    if not isinstance(leave_one_out, Mapping):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    value = leave_one_out.get("correct")
+    if type(value) is not int:  # noqa: E721
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return value
+
+
+def _selection_cross_entropy(record: Mapping[str, object]) -> float:
+    leave_one_out = record.get("leave_one_out")
+    if not isinstance(leave_one_out, Mapping):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    value = leave_one_out.get("cross_entropy")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise StrategicNavigationModelError("strategic linear selection record is invalid")
+    return float(value)

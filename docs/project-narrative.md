@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 13: the audit stopped us from spending the test on the wrong experiment
+
+The first model was ready, authenticated and green across 2,801 tests. That made the next decision
+dangerous: a sealed set can be spent only once. Claude attacked the result before any test context
+was opened and found two problems that ordinary unit tests could not settle.
+
+The first model had roughly 753 fitted parameters for 24 training examples. Worse, it was the best
+of seven models compared on the same 12 development choices. Its 7/12 score over a 4/12 baseline
+was reported honestly, but it was not strong evidence. The repair did not recollect data or quietly
+reuse test. It replaced the active fit path with linear candidate scorers and selected feature set
+and regularization by leaving out each training choice in turn. A one-standard-error rule chose
+five relative-route coefficients over a 24-feature alternative that won only one additional
+training fold.
+
+After that choice was frozen, the development calculation rose to **10/12 versus 4/12**, six paired
+wins and zero losses. Exact p = 0.03125. The result is more promising precisely because the model is
+smaller and validation no longer chooses it. It is still development evidence, not the ending.
+
+The second finding was more important. The scenario generator deliberately placed six tempting
+cheap-route traps in validation and none in test. A paired test can only show the learned scorer
+beats cheapest route where they disagree; with fewer than six disagreements, even a perfect scorer
+cannot reach p < 0.05. A public-metadata-only audit found ten test frontiers that could support such
+a trap, but the current registry declares zero. No capture, route cost, episode or model prediction
+was opened to learn that.
+
+So the honest scoreboard is now: **capacity repaired, development 10/12, test still 0/12, sealed
+design repaired prospectively**. The replacement gives the twelve cases new identities, places all
+ten eligible cases beside a tempting non-teacher objective, binds the exact five-coefficient model
+and declares that ties, failures, interruptions, omissions and reruns cannot be massaged after the
+fact. The next scene is still not a triumphant test run. It is an external audit of that frozen plan
+before the one-shot evidence is spent.
+
 ## August 13: the first model-facing dataset finally became real
 
 The counter changed in the only way that matters: from prospective scenarios and uncounted

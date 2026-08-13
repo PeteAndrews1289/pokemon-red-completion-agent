@@ -4,11 +4,15 @@
 
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy
-> contexts, no partition overlap, and zero sealed-test scenarios opened. The first identity-free
-> destination ranker scores 7/12 on development validation versus 4/12 for cheapest route, with
-> three paired wins and zero losses. Exact p = 0.25, so this is a pre-test engineering result—not a
-> generalization claim or live autonomous player. The frozen model is awaiting independent audit
-> before any of the 12 test scenarios are opened. See the
+> contexts, no partition overlap, and zero sealed-test scenarios opened. Independent audit stopped
+> the first 753-parameter MLP before test. Its replacement is a five-coefficient linear ranker
+> selected entirely by training-only leave-one-out evaluation. It scores 10/12 on development
+> validation versus 4/12 for cheapest route, with six paired wins, zero losses and exact p =
+> 0.03125. This is still development evidence—not a generalization claim or live autonomous player.
+> A ROM-free audit also found that the current sealed registry preregisters zero test challenges,
+> so the original test design remains blocked. A replacement one-shot plan is now frozen around
+> the exact model and source with ten public challenge hypotheses, explicit failure/tie/no-rerun
+> rules and zero private inputs opened; it still requires external audit before authorization. See the
 > [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted

@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-13): external audit before sealed model test
+## Current focus (2026-08-13): repair the sealed experiment before opening it
 
 The non-test campaign is complete. All 36 counted learning scenarios were executed exactly once:
 24 train and 12 validation, with one successful destination choice per episode, 36 unique policy
@@ -11,25 +11,39 @@ contexts, no partition overlap and no admitted failure. Validation contains eigh
 with the unique cheapest-route baseline, so model development passed its preregistered admission
 gate. Test remains **0/12 opened**.
 
-The first destination ranker is now frozen privately. It shares one scorer across every candidate
-and consumes 92 identity-free features: portable semantic tags, availability, route measurements
-and within-set relative route measurements. Development validation selected an eight-unit MLP:
-7/12 correct versus 4/12 for route cost, three paired wins and zero paired losses. Exact paired
-p = 0.25, so this is a promising development result rather than a final research claim.
+Claude's pre-test audit correctly stopped the first destination ranker. The validation-selected
+eight-unit MLP had roughly 753 fitted parameters for 24 training examples. It remains preserved as
+a superseded development candidate.
+
+The capacity repair is complete. A deterministic five-coefficient linear scorer is now selected by
+training-only leave-one-out evaluation and a one-standard-error simplicity rule. Validation is not
+accepted by the selector. After selection, development validation is 10/12 versus 4/12 for route
+cost, with paired wins/losses 6/0 and exact p = 0.03125. This is development evidence, not a final
+claim.
+
+Claude also found that deliberate cost-baseline challenges were generated only in validation. A
+ROM-free audit confirms the 12 test rows declare zero challenges. Ten public test frontiers are
+structurally eligible for a local non-teacher alternative, but no private capture, route cost,
+episode or model prediction has been opened. The original test design is therefore blocked.
+
+A replacement evaluation plan is now frozen around the exact model and source. It assigns new case
+identities, preregisters all ten eligible challenge hypotheses and declares conservative handling of
+ties, unavailable candidates, failures, interruptions, omissions and reruns. It has not opened a
+test input and requires external audit plus owner authorization.
 
 Ordered next work:
 
-1. Have Claude independently audit the code and the two August 13 evidence receipts. Mutation-test
-   the partition guards, candidate-order equivariance, historical assignment reconstruction,
-   route-cost comparison and model authentication. Do not open test.
-2. If review is clean, commit the exact model digest and a one-shot test protocol that cannot tune,
-   rerun or silently omit a failed scenario.
-3. Execute the 12 sealed scenarios once under the frozen model and baseline, then publish the paired
-   result whether favorable or unfavorable.
-4. Only after offline test, add shadow execution in live strategic choices. The deterministic
+1. Have Claude independently audit the new linear model, training-only leave-one-out selector,
+   one-standard-error rule and structural sealed-design audit. Do not open test.
+2. Audit the frozen replacement plan and its ten challenge hypotheses.
+3. Publish the exact linear-model and plan digests and require green exact-commit CI.
+4. Only after that protocol passes external audit and receives owner authorization, measure the
+   frozen baseline capability and run
+   the one-shot model comparison. Publish every result, favorable or unfavorable.
+5. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.
-5. Expand context semantics before cross-title transfer. The current 36 examples all express the
+6. Expand context semantics before cross-title transfer. The current 36 examples all express the
    same broad story-advance need and the same safe-overworld origin tags, so those feature columns
    are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
    training and recovery—not merely repeat Red's story sequence.

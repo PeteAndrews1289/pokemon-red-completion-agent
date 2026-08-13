@@ -1,0 +1,15 @@
+{
+  "model": {
+    "canonical_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
+    "file_sha256": "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd",
+    "independent_refit_byte_identical": true
+  },
+  "private_test_inputs_accessed": false,
+  "prospective_source_bundle_sha256": "f8330ec8fbe4866318e3930170e2afc3fc05f08d3824422f9b4223618f42161c",
+  "schema": "strategic-navigation-linear-reproduction-audit-v1",
+  "summary": {
+    "file_sha256": "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612",
+    "independent_refit_byte_identical": true
+  },
+  "test_scenarios_opened": 0
+}

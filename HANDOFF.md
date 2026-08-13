@@ -14,6 +14,34 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Linear capacity repair complete; sealed design blocked — 2026-08-13
+
+Claude's independent audit stopped the sealed test for two valid reasons. The original
+validation-selected eight-unit MLP had roughly 753 fitted parameters for 24 training examples, and
+the test registry declared no cost-baseline challenge hypotheses. No test input was opened.
+
+The active fit path is now a five-coefficient shared linear scorer selected entirely from training
+data. Leave-one-out evaluation compared six feature families and five L2 values; a
+one-standard-error simplicity rule selected the relative ranks of route cost, route steps, map
+transitions, field actions and mode changes. Only afterward did development validation score 10/12
+against cheapest route at 4/12, with six paired wins, zero losses and exact p = 0.03125. Canonical
+model digest: `753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1`.
+Thirteen independent mutations of the new capacity and test-design boundaries were all killed.
+
+A separate ROM-free audit read only the committed registry. Test has zero declared challenges; ten
+of twelve public frontiers are structurally eligible for a local non-teacher alternative. That is
+not a measured route-cost disagreement. Test remains **0/12 opened** and is not authorized.
+
+A replacement one-shot plan now binds those twelve source frontiers to new case identities, all ten
+eligible challenge origins, the exact linear model and current source. It declares ties incorrect,
+consumes opened failures, forbids omissions/reruns and publishes every case. Plan digest:
+`ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b`.
+This is a prospective repair, not evidence that any baseline disagreement was measured.
+
+Next: audit [the linear handoff](docs/claude-linear-pre-test-audit-handoff-2026-08-13.md) and frozen
+plan, publish and require green exact-commit CI, then obtain owner authorization. Do not open,
+materialize, preflight or score a private test capture before that audit is complete.
+
 ## Counted strategic data and first model ready for external audit — 2026-08-13
 
 The v2 short-scenario campaign is complete: **36/36 counted train/validation scenarios**, split

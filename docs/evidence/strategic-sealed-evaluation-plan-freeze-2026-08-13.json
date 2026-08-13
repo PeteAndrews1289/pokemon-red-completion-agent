@@ -1,0 +1,34 @@
+{
+  "access": {
+    "live_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "capability": {
+    "minimum_measured_disagreements_required": 6,
+    "preregistered_challenge_hypotheses": 10,
+    "structural_hypothesis_is_measured_disagreement": false,
+    "test_cases": 12
+  },
+  "frozen_model": {
+    "canonical_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
+    "model_id": "pokemon.core.strategic-navigation.destination-ranker.linear.v1",
+    "parameter_count": 5
+  },
+  "plan": {
+    "bytes": 7758,
+    "evaluation_id": "red-strategic-navigation-sealed-evaluation-v1",
+    "execution_source_bundle_sha256": "f8330ec8fbe4866318e3930170e2afc3fc05f08d3824422f9b4223618f42161c",
+    "relative_path": "configs/red-strategic-navigation-sealed-evaluation-v1.json",
+    "sha256": "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b",
+    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71"
+  },
+  "schema": "strategic-sealed-evaluation-plan-freeze-v1",
+  "status": {
+    "external_audit_required": true,
+    "owner_authorization_required_after_audit": true,
+    "ready_to_open_private_test": false
+  }
+}

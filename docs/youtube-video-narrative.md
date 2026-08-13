@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 13 audit scene: stop before opening the envelope
+
+Put **2,801 TESTS GREEN / MODEL FROZEN / SEALED TEST 0 OF 12** on screen. Then stop the cursor over
+**RUN**. The line is: **“Green code was not the same thing as a capable experiment.”**
+
+Show the first model as **753 PARAMETERS / 24 TRAINING CHOICES / BEST OF 7 VALIDATION TRIALS** and
+stamp it **PRESERVED — SUPERSEDED BEFORE TEST**. Replace it with six simple scorecards. The largest
+gets 17/24 leave-one-out; the five-feature card gets 16/24 and falls inside the one-standard-error
+band. Select the smaller card. Cross out **VALIDATION SELECTS MODEL** and replace it with
+**TRAINING-ONLY LEAVE-ONE-OUT**.
+
+Now reveal the development result: **5 COEFFICIENTS / MODEL 10 OF 12 / CHEAPEST ROUTE 4 OF 12 /
+PAIRED 6–0 / EXACT P 0.03125**. Immediately label it **DEVELOPMENT — NOT FINAL**.
+
+For the second reveal, deal twelve sealed scenario cards. Put a red **DECLARED CHEAP-ROUTE TRAP**
+counter at **0**. Highlight ten cards as **STRUCTURALLY REPAIRABLE**, but keep their envelopes
+closed and their costs blank. Explain: **“We found where a fair test could be built. We did not
+peek at what the answers would be.”** Stamp new case IDs onto those cards, show **10 CHALLENGES /
+TIES WRONG / FAILURES CONSUMED / NO OMISSIONS / NO RERUNS**, then end on **TEST STILL 0 OF 12 →
+EXTERNAL AUDIT → OWNER AUTHORIZATION → OPEN ONCE**.
+
 ## August 13 scene: the counter finally leaves zero
 
 Open on the old scoreboard—**COUNTED DATA 0 / TEST OPENED 0**—then replace only the first number:

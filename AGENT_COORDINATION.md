@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-13 Lane C linear/test-design checkpoint:** Claude's audit stopped the old MLP before
+> sealed test. The active replacement is a five-coefficient shared linear ranker selected by
+> training-only leave-one-out evaluation and a one-standard-error simplicity rule. Development is
+> 10/12 versus cheapest route 4/12, paired 6/0, exact p = 0.03125; this is not a final claim. A
+> public-only design audit found zero declared test challenges and ten structurally eligible test
+> frontiers. A replacement plan now preregisters all ten under new case identities and binds the
+> exact model/source with conservative one-shot scoring. No private test capture, route cost,
+> episode or model prediction was accessed. Test is still 0/12 and blocked pending external audit,
+> publication and owner authorization. Start at
+> `docs/claude-linear-pre-test-audit-handoff-2026-08-13.md`.
+
 > **2026-08-13 Lane A/C pre-test checkpoint:** counted scenario collection is complete at 24 train
 > and 12 development-validation episodes, with 36 unique contexts, one successful strategic label
 > per episode and test still 0/12 opened. The first identity-free shared-candidate MLP is frozen:

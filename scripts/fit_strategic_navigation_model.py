@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fit the first destination ranker from counted strategic scenarios."""
+"""Fit a low-capacity destination ranker from counted strategic scenarios."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from pokemon_red_completion.strategic_navigation_model import (
     STRATEGIC_NAVIGATION_FEATURE_NAMES,
     canonical_strategic_navigation_model_sha256,
     evaluate_strategic_navigation_model,
-    select_strategic_navigation_model,
+    select_strategic_navigation_linear_model,
 )
 from pokemon_red_completion.strategic_navigation_protocol import (
     StrategicNavigationExecution,
@@ -75,7 +75,7 @@ def main() -> int:
         if dataset.partition == "validation"
         for example in dataset.examples
     )
-    model, trials = select_strategic_navigation_model(training, validation)
+    model, selection = select_strategic_navigation_linear_model(training)
     training_metrics = evaluate_strategic_navigation_model(model, training)
     validation_metrics = evaluate_strategic_navigation_model(model, validation)
 
@@ -87,11 +87,14 @@ def main() -> int:
             validation_metrics.accuracy
             > validation_metrics.route_cost_baseline_accuracy
         ),
-        "minimum_paired_wins": validation_metrics.paired_wins_over_route_cost >= 3,
+        "minimum_paired_wins": validation_metrics.paired_wins_over_route_cost >= 6,
         "zero_paired_losses": validation_metrics.paired_losses_to_route_cost == 0,
+        "paired_two_sided_exact_p_below_0_05": (
+            validation_metrics.paired_two_sided_exact_p < 0.05
+        ),
     }
     summary = {
-        "schema": "strategic-navigation-model-development-summary-v1",
+        "schema": "strategic-navigation-model-development-summary-v2",
         "collection": {
             "audit_receipt_sha256": hashlib.sha256(
                 COLLECTION_AUDIT.read_bytes()
@@ -112,16 +115,21 @@ def main() -> int:
             "title_specific_identity_used_as_feature": False,
         },
         "selection": {
-            "role": "development_validation_model_selection",
-            "trials": list(trials),
-            "sealed_test_used_for_selection": False,
+            "role": "training_only_model_selection",
+            **selection,
         },
         "model": {
             "model_id": model.model_id,
             "model_sha256": model_sha256,
             "private_model_file_sha256": model_file_sha256,
-            "hidden_units": int(model.weights1.shape[1]),
-            "training_seed": model.training_seed,
+            "feature_set_id": model.feature_set_id,
+            "enabled_feature_names": list(model.enabled_feature_names),
+            "parameter_count": model.parameter_count,
+            "l2": model.l2,
+            "training_epochs": model.training_epochs,
+            "supersedes_development_candidate_model_id": (
+                "pokemon.core.strategic-navigation.destination-ranker.mlp.v1"
+            ),
         },
         "training": training_metrics.public_dict(),
         "validation": validation_metrics.public_dict(),
@@ -131,10 +139,10 @@ def main() -> int:
         },
         "pre_test_gate": {
             **validation_gate,
+            "capacity_repair_passed": all(validation_gate.values()),
             "ready_for_external_audit": all(validation_gate.values()),
-            "ready_for_sealed_test_after_external_audit": all(
-                validation_gate.values()
-            ),
+            "ready_for_sealed_test_after_external_audit": False,
+            "sealed_test_design_repair_required": True,
             "validation_result_is_final_claim": False,
         },
     }
@@ -143,7 +151,8 @@ def main() -> int:
         json.dumps(
             {
                 "model_sha256": model_sha256,
-                "selected_hidden_units": int(model.weights1.shape[1]),
+                "selected_feature_set_id": model.feature_set_id,
+                "selected_parameter_count": model.parameter_count,
                 "validation_accuracy": validation_metrics.accuracy,
                 "validation_route_cost_baseline_accuracy": (
                     validation_metrics.route_cost_baseline_accuracy
@@ -155,6 +164,7 @@ def main() -> int:
                     validation_metrics.paired_losses_to_route_cost
                 ),
                 "ready_for_external_audit": all(validation_gate.values()),
+                "ready_for_sealed_test": False,
                 "sealed_test_opened": False,
             },
             sort_keys=True,

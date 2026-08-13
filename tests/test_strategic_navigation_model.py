@@ -13,12 +13,14 @@ from pokemon_red_completion.strategic_navigation_dataset import (
 )
 from pokemon_red_completion.strategic_navigation_model import (
     STRATEGIC_NAVIGATION_FEATURE_NAMES,
+    StrategicNavigationLinear,
     StrategicNavigationMLP,
     StrategicNavigationModelError,
+    _select_one_standard_error_feature_set,
     canonical_strategic_navigation_model_sha256,
     evaluate_strategic_navigation_model,
     load_strategic_navigation_model,
-    select_strategic_navigation_model,
+    select_strategic_navigation_linear_model,
     strategic_navigation_feature_matrix,
 )
 
@@ -131,14 +133,235 @@ def test_model_beats_cheapest_route_on_synthetic_semantic_choices() -> None:
 def test_training_rejects_validation_examples() -> None:
     with pytest.raises(StrategicNavigationModelError, match="training-partition"):
         StrategicNavigationMLP.fit((_example(0, partition="validation"),))
+    with pytest.raises(StrategicNavigationModelError, match="training-partition"):
+        StrategicNavigationLinear.fit(
+            (_example(0, partition="validation"),),
+            enabled_feature_names=("candidate.route_cost.relative_rank",),
+            feature_set_id="route_cost_rank",
+        )
 
 
-def test_model_selection_rejects_test_partition_as_validation() -> None:
-    training = tuple(_example(index) for index in range(4))
-    sealed = (_example(10, partition="test"),)
+def test_linear_model_is_permutation_equivariant_and_round_trips() -> None:
+    training = tuple(_example(index, reverse=index % 2 == 1) for index in range(12))
+    enabled = tuple(
+        f"candidate.{metric}.relative_rank"
+        for metric in (
+            "route_cost",
+            "route_steps",
+            "map_transitions",
+            "field_actions",
+            "mode_changes",
+        )
+    )
+    model = StrategicNavigationLinear.fit(
+        training,
+        enabled_feature_names=enabled,
+        feature_set_id="relative_route",
+        epochs=300,
+    )
+    forward = _example(20)
+    reversed_example = _example(20, reverse=True)
 
-    with pytest.raises(StrategicNavigationModelError, match="validation partition"):
-        select_strategic_navigation_model(training, sealed)
+    assert model.predict(forward) == 1
+    assert model.predict(reversed_example) == 0
+    assert model.probabilities(forward) == pytest.approx(
+        model.probabilities(reversed_example)[::-1]
+    )
+    restored = StrategicNavigationLinear.from_dict(model.to_dict())
+    assert canonical_strategic_navigation_model_sha256(restored) == (
+        canonical_strategic_navigation_model_sha256(model)
+    )
+    assert restored.parameter_count == 5
+    assert not restored.weights.flags.writeable
+
+
+@pytest.mark.parametrize("partition", ("validation", "test"))
+def test_linear_selection_rejects_non_training_partitions(partition: str) -> None:
+    non_training = tuple(_example(index, partition=partition) for index in range(4))
+
+    with pytest.raises(StrategicNavigationModelError, match="training-partition"):
+        select_strategic_navigation_linear_model(non_training, epochs=5)
+
+
+def test_linear_selection_rejects_validation_before_any_fold_is_fitted(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    validation = tuple(_example(index, partition="validation") for index in range(4))
+
+    def forbidden_fit(*args: object, **kwargs: object) -> StrategicNavigationLinear:
+        raise AssertionError("a non-training row reached linear fitting")
+
+    monkeypatch.setattr(StrategicNavigationLinear, "fit", forbidden_fit)
+
+    with pytest.raises(StrategicNavigationModelError, match="training-partition"):
+        select_strategic_navigation_linear_model(validation, epochs=5)
+
+
+def test_linear_selection_uses_training_only_one_standard_error_rule() -> None:
+    training = tuple(_example(index, reverse=index % 2 == 1) for index in range(6))
+    route_cost = ("candidate.route_cost.relative_rank",)
+    relative_route = tuple(
+        f"candidate.{metric}.relative_rank"
+        for metric in (
+            "route_cost",
+            "route_steps",
+            "map_transitions",
+            "field_actions",
+            "mode_changes",
+        )
+    )
+
+    model, selection = select_strategic_navigation_linear_model(
+        training,
+        feature_sets=(
+            ("route_cost_rank", route_cost),
+            ("relative_route", relative_route),
+        ),
+        l2_values=(0.01,),
+        epochs=100,
+    )
+
+    assert model.feature_set_id == "route_cost_rank"
+    assert model.parameter_count == 1
+    assert selection["selection_data"] == "train_only"
+    assert selection["validation_used_for_selection"] is False
+    assert selection["sealed_test_used_for_selection"] is False
+
+
+def test_one_standard_error_rule_prefers_five_features_within_best_uncertainty() -> None:
+    def trial(
+        feature_set_id: str,
+        *,
+        parameters: int,
+        correct: int,
+        cross_entropy: float,
+    ) -> dict[str, object]:
+        return {
+            "feature_set_id": feature_set_id,
+            "feature_names": list(STRATEGIC_NAVIGATION_FEATURE_NAMES[:parameters]),
+            "parameter_count": parameters,
+            "l2": 0.1,
+            "leave_one_out": {
+                "examples": 24,
+                "correct": correct,
+                "accuracy": correct / 24,
+                "cross_entropy": cross_entropy,
+            },
+        }
+
+    small = trial("relative_route", parameters=5, correct=16, cross_entropy=0.85)
+    large = trial("all_training_active", parameters=24, correct=17, cross_entropy=1.5)
+
+    selected, eligible, best, error, threshold = (
+        _select_one_standard_error_feature_set((small, large), example_count=24)
+    )
+
+    assert selected is small
+    assert eligible == (small, large)
+    assert best == pytest.approx(17 / 24)
+    assert error == pytest.approx(0.092780476)
+    assert threshold == pytest.approx(0.6155528527)
+
+
+def test_linear_selection_really_leaves_each_training_example_out(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    training = tuple(_example(index, reverse=index % 2 == 1) for index in range(4))
+    original_fit = StrategicNavigationLinear.fit
+    fitted_decision_ids: list[tuple[str, ...]] = []
+
+    def recording_fit(examples: object, **kwargs: object) -> StrategicNavigationLinear:
+        rows = tuple(examples)  # type: ignore[arg-type]
+        fitted_decision_ids.append(tuple(row.decision_id for row in rows))
+        return original_fit(rows, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(StrategicNavigationLinear, "fit", staticmethod(recording_fit))
+
+    select_strategic_navigation_linear_model(
+        training,
+        feature_sets=(("route_cost_rank", ("candidate.route_cost.relative_rank",)),),
+        l2_values=(0.01,),
+        epochs=5,
+    )
+
+    expected = {row.decision_id for row in training}
+    assert len(fitted_decision_ids) == 5
+    assert all(len(fold) == 3 for fold in fitted_decision_ids[:4])
+    assert {
+        next(iter(expected.difference(fold))) for fold in fitted_decision_ids[:4]
+    } == expected
+    assert set(fitted_decision_ids[-1]) == expected
+
+
+def test_linear_record_rejects_nonzero_disabled_weight() -> None:
+    model = StrategicNavigationLinear.fit(
+        tuple(_example(index) for index in range(6)),
+        enabled_feature_names=("candidate.route_cost.relative_rank",),
+        feature_set_id="route_cost_rank",
+        epochs=30,
+    )
+    payload = model.to_dict()
+    weights = payload["weights"]
+    assert isinstance(weights, list)
+    disabled = STRATEGIC_NAVIGATION_FEATURE_NAMES.index(
+        "candidate.route_steps.relative_rank"
+    )
+    weights[disabled] = 1.0
+
+    with pytest.raises(StrategicNavigationModelError, match="disabled"):
+        StrategicNavigationLinear.from_dict(payload)
+
+
+def test_linear_model_file_round_trip_uses_authenticated_dispatch(
+    tmp_path: Path,
+) -> None:
+    model = StrategicNavigationLinear.fit(
+        tuple(_example(index) for index in range(6)),
+        enabled_feature_names=("candidate.route_cost.relative_rank",),
+        feature_set_id="route_cost_rank",
+        epochs=30,
+    )
+    path = tmp_path / "strategic-linear-model.json"
+    path.write_text(json.dumps(model.to_dict(), sort_keys=True) + "\n")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    loaded = load_strategic_navigation_model(path, expected_sha256=digest)
+
+    assert isinstance(loaded, StrategicNavigationLinear)
+    assert loaded.predict(_example(20)) == model.predict(_example(20))
+
+
+def test_model_loader_rejects_unknown_authenticated_model_identity(
+    tmp_path: Path,
+) -> None:
+    model = StrategicNavigationLinear.fit(
+        tuple(_example(index) for index in range(6)),
+        enabled_feature_names=("candidate.route_cost.relative_rank",),
+        feature_set_id="route_cost_rank",
+        epochs=30,
+    )
+    payload = model.to_dict()
+    payload["model_id"] = "pokemon.core.strategic-navigation.unknown.v1"
+    path = tmp_path / "unknown-strategic-model.json"
+    path.write_text(json.dumps(payload, sort_keys=True) + "\n")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    with pytest.raises(StrategicNavigationModelError, match="identity"):
+        load_strategic_navigation_model(path, expected_sha256=digest)
+
+
+def test_linear_record_rejects_false_as_one_parameter() -> None:
+    model = StrategicNavigationLinear.fit(
+        tuple(_example(index) for index in range(6)),
+        enabled_feature_names=("candidate.route_cost.relative_rank",),
+        feature_set_id="route_cost_rank",
+        epochs=30,
+    )
+    payload = model.to_dict()
+    payload["parameter_count"] = True
+
+    with pytest.raises(StrategicNavigationModelError, match="incompatible"):
+        StrategicNavigationLinear.from_dict(payload)
 
 
 def test_unobserved_portable_tags_have_zero_fitted_input_weights() -> None:
