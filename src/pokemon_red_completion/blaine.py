@@ -239,6 +239,16 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
 PRE_SAFFRON_TEAM_POLICY = replace(
     MANSION_TEAM_POLICY,
     required_size=len(PRE_SAFFRON_BALANCED_ROSTER.slots),
+    # The four-member alternate-order lineage reached levels 51/51/51/51 with
+    # zero faints after 1,182 wins and 112,377 encounter steps, then exhausted
+    # the inherited 2,000-recovery ceiling four levels before readiness. This
+    # is now measured progress rather than the earlier zero-battle loop: the
+    # latter was independently repaired and regression-tested. Extrapolating
+    # the observed 1.69 recoveries per win leaves roughly 550 more trips for the
+    # remaining experience; 3,000 preserves over 80% headroom on that estimate
+    # while retaining independent battle, step, action, frame and zero-faint
+    # bounds.
+    max_healing_trips=3_000,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0
