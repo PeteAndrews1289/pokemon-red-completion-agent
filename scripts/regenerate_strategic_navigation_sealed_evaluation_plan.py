@@ -33,10 +33,13 @@ DEVELOPMENT_RECEIPT = (
     / "evidence"
     / "strategic-navigation-linear-development-2026-08-13.json"
 )
-PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v1"
-DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v1"
+PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v2"
+DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v2"
 CASE_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-case-v1"
 EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
+SUPERSEDED_PLAN_SHA256 = (
+    "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
+)
 FROZEN_MODEL_SHA256 = (
     "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
 )
@@ -124,11 +127,48 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             "publish_every_case": True,
             "rerun_allowed": False,
         },
+        "amendment": {
+            "amended_before_private_access": True,
+            "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
+            "reason": (
+                "independent_power_audit_found_non_challenge_cases_"
+                "asymmetric_for_primary_pairing"
+            ),
+            "supersedes_plan_sha256": SUPERSEDED_PLAN_SHA256,
+        },
         "baseline": {
             "policy_id": "unique-minimum-route-cost-v1",
             "prediction_tie": "incorrect",
         },
         "cases": cases,
+        "endpoint_policy": {
+            "all_case_accuracy": {
+                "case_filter": "all_registered_cases",
+                "expected_case_count": len(cases),
+                "metrics": ["model_accuracy", "route_cost_baseline_accuracy"],
+                "role": "mandatory_descriptive_report",
+            },
+            "primary": {
+                "case_filter": "cost_baseline_challenge_hypothesis_true",
+                "expected_case_count": challenge_count,
+                "minimum_measured_teacher_baseline_disagreements": 6,
+                "paired_test": (
+                    "two_sided_exact_mcnemar_on_discordant_correctness"
+                ),
+                "primary_unit": "one_unique_scenario",
+                "required_direction": "model_paired_wins_exceed_losses",
+                "significance_threshold": 0.05,
+            },
+            "safety": {
+                "case_filter": "cost_baseline_challenge_hypothesis_false",
+                "criterion": "zero_model_incorrect_baseline_correct",
+                "expected_case_count": len(cases) - challenge_count,
+                "failure_effect": (
+                    "block_live_authority_and_report_without_changing_primary_test"
+                ),
+                "role": "preregistered_baseline_favorable_non_regression",
+            },
+        },
         "evaluation_id": EVALUATION_ID,
         "execution_source_bundle_sha256": working_source_bundle_sha256(ROOT),
         "frozen_model": {
@@ -151,12 +191,8 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                 "case_consumed_model_and_baseline_incorrect"
             ),
             "incomplete_episode": "case_consumed_model_and_baseline_incorrect",
-            "minimum_measured_teacher_baseline_disagreements": 6,
             "missing_case": "publish_incomplete_evaluation_as_protocol_failure",
             "model_prediction_tie": "incorrect",
-            "paired_test": "two_sided_exact_mcnemar_on_discordant_correctness",
-            "primary_unit": "one_unique_scenario",
-            "significance_threshold": 0.05,
             "teacher_target": "successful_deterministic_teacher_choice_only",
             "unavailable_candidate_before_open": (
                 "do_not_open_case_and_publish_protocol_failure"
@@ -181,8 +217,10 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
         "bytes": len(payload),
         "evaluation_id": EVALUATION_ID,
         "plan_sha256": digest,
+        "primary_endpoint_cases": challenge_count,
         "preregistered_challenge_hypotheses": challenge_count,
         "private_test_inputs_opened": 0,
+        "safety_endpoint_cases": len(cases) - challenge_count,
         "test_cases": len(cases),
     }
     return payload, digest_payload, summary

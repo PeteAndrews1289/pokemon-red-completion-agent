@@ -29,8 +29,20 @@ So the honest scoreboard is now: **capacity repaired, development 10/12, test st
 design repaired prospectively**. The replacement gives the twelve cases new identities, places all
 ten eligible cases beside a tempting non-teacher objective, binds the exact five-coefficient model
 and declares that ties, failures, interruptions, omissions and reruns cannot be massaged after the
-fact. The next scene is still not a triumphant test run. It is an external audit of that frozen plan
-before the one-shot evidence is spent.
+fact.
+
+That audit found one more subtle failure before it cost a test. The paired endpoint included two
+cases that were not cheapest-route challenges. They were useful as guardrails—the model should not
+forget an easy baseline-favorable choice—but statistically they could add losses much more easily
+than wins. Mixing them into the primary test cut the chance of a conclusive result by more than half.
+
+The amendment did not delete those cases. It made the ten challenges the primary paired endpoint,
+kept accuracy over all twelve mandatory and turned the other two into a separately reported safety
+gate. It also preserved the first plan's digest in the amendment chain. Four challenge cases remain
+binary because their legal quest frontiers contain only two objectives; padding them after learning
+that the model did better on larger choices would make the benchmark look stronger by construction.
+The next scene is still not a triumphant test run. It is a final public-plan audit followed by a
+fail-closed executor audit before the one-shot evidence is spent.
 
 ## August 13: the first model-facing dataset finally became real
 

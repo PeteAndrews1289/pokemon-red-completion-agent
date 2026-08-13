@@ -12,8 +12,12 @@
 > A ROM-free audit also found that the current sealed registry preregisters zero test challenges,
 > so the original test design remains blocked. A replacement one-shot plan is now frozen around
 > the exact model and source with ten public challenge hypotheses, explicit failure/tie/no-rerun
-> rules and zero private inputs opened; it still requires external audit before authorization. See the
-> [August 13 audit](docs/current-audit-2026-08-13.md).
+> rules and zero private inputs opened. A second independent audit approved the model and protocol,
+> then caught a power defect before authorization: two non-challenge cases could hurt the paired
+> test without testing its intended hypothesis. The amended plan makes the ten challenge cases the
+> primary endpoint, reports accuracy over all twelve, and keeps the other two as a separate safety
+> check. Test remains 0/12 and the amendment still requires final audit before authorization. See
+> the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,

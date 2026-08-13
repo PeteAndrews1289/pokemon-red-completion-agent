@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+> **2026-08-13 Lane C endpoint-amendment checkpoint:** Claude's second audit approved the
+> five-coefficient selection and conservative scoring mechanics, then found that including two
+> non-challenge cases in the primary paired test sharply reduced power. Before any private access,
+> the plan was amended: ten challenge cases are the primary McNemar endpoint; all-twelve accuracy is
+> mandatory; the two non-challenge cases are a separate safety gate that can block live authority
+> but cannot alter the primary statistic. Amended digest `230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537`;
+> prior digest `ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b`
+> is superseded. Test is still 0/12. Start at
+> `docs/claude-sealed-endpoint-amendment-handoff-2026-08-13.md` and do not touch private test inputs.
+
 > **2026-08-13 Lane C linear/test-design checkpoint:** Claude's audit stopped the old MLP before
 > sealed test. The active replacement is a five-coefficient shared linear ranker selected by
 > training-only leave-one-out evaluation and a one-standard-error simplicity rule. Development is

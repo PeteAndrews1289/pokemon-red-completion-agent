@@ -19,7 +19,15 @@ counter at **0**. Highlight ten cards as **STRUCTURALLY REPAIRABLE**, but keep t
 closed and their costs blank. Explain: **“We found where a fair test could be built. We did not
 peek at what the answers would be.”** Stamp new case IDs onto those cards, show **10 CHALLENGES /
 TIES WRONG / FAILURES CONSUMED / NO OMISSIONS / NO RERUNS**, then end on **TEST STILL 0 OF 12 →
-EXTERNAL AUDIT → OWNER AUTHORIZATION → OPEN ONCE**.
+EXTERNAL AUDIT**.
+
+Then add the audit's final interruption. Put all twelve cards inside a bracket labeled **PRIMARY
+PAIRED TEST**, pull out the two non-challenge cards, and show the projected power rising from
+**21–37% → 58–84%**. Do not throw the cards away: place them under **SAFETY: MODEL MUST NOT LOSE
+WHERE BASELINE IS RIGHT**. Finish with three fixed lanes: **PRIMARY = 10 CHALLENGES / ACCURACY =
+ALL 12 / SAFETY = 2 NON-CHALLENGES**. The line is: **“We improved the question before opening the
+envelope, and we kept every case.”** End on **TEST STILL 0 OF 12 → FINAL PLAN AUDIT → EXECUTOR
+AUDIT → OWNER AUTHORIZATION → OPEN ONCE**.
 
 ## August 13 scene: the counter finally leaves zero
 

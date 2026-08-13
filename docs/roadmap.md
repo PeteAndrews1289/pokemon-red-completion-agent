@@ -26,20 +26,24 @@ ROM-free audit confirms the 12 test rows declare zero challenges. Ten public tes
 structurally eligible for a local non-teacher alternative, but no private capture, route cost,
 episode or model prediction has been opened. The original test design is therefore blocked.
 
-A replacement evaluation plan is now frozen around the exact model and source. It assigns new case
-identities, preregisters all ten eligible challenge hypotheses and declares conservative handling of
-ties, unavailable candidates, failures, interruptions, omissions and reruns. It has not opened a
-test input and requires external audit plus owner authorization.
+A first replacement evaluation plan assigned new case identities, preregistered all ten eligible
+challenge hypotheses and declared conservative handling of ties, unavailable candidates, failures,
+interruptions, omissions and reruns. Claude approved the model and mechanics, then found that its
+all-twelve primary paired test mixed in two asymmetric non-challenge cases. Before any private
+access, the plan was amended: the ten challenges are the primary endpoint, all-twelve accuracy is
+mandatory, and the other two cases form a separate safety gate. It has not opened a test input and
+requires final amendment audit plus owner authorization.
 
 Ordered next work:
 
-1. Have Claude independently audit the new linear model, training-only leave-one-out selector,
-   one-standard-error rule and structural sealed-design audit. Do not open test.
-2. Audit the frozen replacement plan and its ten challenge hypotheses.
-3. Publish the exact linear-model and plan digests and require green exact-commit CI.
-4. Only after that protocol passes external audit and receives owner authorization, measure the
-   frozen baseline capability and run
-   the one-shot model comparison. Publish every result, favorable or unfavorable.
+1. **Complete:** Claude independently approved the linear model, training-only leave-one-out
+   selector, one-standard-error rule and conservative one-shot mechanics. Test stayed sealed.
+2. Audit the amended challenge-only primary endpoint, all-case descriptive endpoint and two-case
+   safety endpoint.
+3. Build and independently audit the fail-closed sealed executor and result scorer against the exact
+   amended plan; publish it and require green exact-commit CI.
+4. Only after those gates and explicit owner authorization, measure the frozen baseline capability
+   and run the one-shot model comparison. Publish every result, favorable or unfavorable.
 5. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.

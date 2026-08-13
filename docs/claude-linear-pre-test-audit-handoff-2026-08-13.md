@@ -1,5 +1,9 @@
 # Claude Handoff: Linear Ranker and Sealed-Test Repair Audit
 
+> **Historical handoff:** this audit is complete. The first replacement plan digest below was
+> superseded, before any private access, by the challenge-only primary endpoint described in
+> [the endpoint-amendment handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md).
+
 ## Authority and stop line
 
 Audit the capacity repair and the ROM-free sealed-design finding. Do not open, materialize,

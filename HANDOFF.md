@@ -14,6 +14,32 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Sealed primary endpoint amended after second audit — 2026-08-13
+
+Claude independently approved the five-coefficient model selection and killed all twelve mutations
+of the first frozen plan. The audit then found one remaining design problem: the primary McNemar
+test mixed ten preregistered cheapest-route challenges with two non-challenge binary cases. Those
+two could readily add paired losses while having little opportunity to add wins. The plan was
+amended before any private test access; the old digest remains recorded as superseded.
+
+The primary endpoint is now exactly the ten challenge cases. It requires at least six measured
+teacher-versus-baseline disagreements, model paired wins greater than losses and two-sided exact p
+below 0.05. Accuracy for model and baseline across all twelve cases is mandatory. The two
+non-challenge cases form a separate non-regression check: any model-wrong/baseline-correct result is
+reported and blocks live authority but cannot change the primary statistic. Every case remains
+one-shot, mandatory and publishable under the same tie/failure/interruption rules.
+
+Amended plan digest:
+`230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537`.
+The prior digest
+`ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b`
+is not executable authority. Eighteen endpoint mutations were all killed without using the fixed
+digest test as the oracle; the restored full gate is 2,821 passed. Test remains **0/12 opened**.
+
+Next: audit [the endpoint amendment handoff](docs/claude-sealed-endpoint-amendment-handoff-2026-08-13.md),
+then build and independently audit the fail-closed sealed executor/result scorer. Explicit owner
+authorization comes only after both gates; do not open or preflight a private test input sooner.
+
 ## Linear capacity repair complete; sealed design blocked — 2026-08-13
 
 Claude's independent audit stopped the sealed test for two valid reasons. The original
@@ -32,15 +58,14 @@ A separate ROM-free audit read only the committed registry. Test has zero declar
 of twelve public frontiers are structurally eligible for a local non-teacher alternative. That is
 not a measured route-cost disagreement. Test remains **0/12 opened** and is not authorized.
 
-A replacement one-shot plan now binds those twelve source frontiers to new case identities, all ten
+A first replacement one-shot plan bound those twelve source frontiers to new case identities, all ten
 eligible challenge origins, the exact linear model and current source. It declares ties incorrect,
 consumes opened failures, forbids omissions/reruns and publishes every case. Plan digest:
 `ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b`.
-This is a prospective repair, not evidence that any baseline disagreement was measured.
+This prospective revision is preserved but superseded by the checkpoint above; it is not evidence
+that any baseline disagreement was measured.
 
-Next: audit [the linear handoff](docs/claude-linear-pre-test-audit-handoff-2026-08-13.md) and frozen
-plan, publish and require green exact-commit CI, then obtain owner authorization. Do not open,
-materialize, preflight or score a private test capture before that audit is complete.
+The linear audit was completed; continue from the newer endpoint-amendment checkpoint above.
 
 ## Counted strategic data and first model ready for external audit — 2026-08-13
 

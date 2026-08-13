@@ -2,9 +2,10 @@
 
 ## Outcome
 
-Claude's independent review found two real pre-test design defects. Both were caught before any
-sealed scenario was opened. The model-capacity defect is repaired; the sealed-test design defect is
-measured and remains a hard stop.
+Claude's independent review found two real pre-test design defects, then its second pass found one
+power defect in the proposed repair. All three were caught before any sealed scenario was opened.
+The model-capacity defect and public test-capability defect are repaired. The amended plan remains a
+hard stop until its final audit and the separate sealed executor gate are complete.
 
 The v2 collection is unchanged: 24 authenticated train choices, 12 development-validation choices,
 36 unique candidate-order-invariant contexts, no partition overlap and no failed or interrupted
@@ -66,26 +67,53 @@ episode, live route cost or model prediction. Ten of the twelve public test fron
 structurally eligible for a local non-teacher alternative, but eligibility is only a design option;
 it is not a measured baseline disagreement. The original sealed design therefore remains blocked.
 
-A replacement one-shot plan is now frozen without modifying the historical v2 registry. It gives
+A first replacement one-shot plan was frozen without modifying the historical v2 registry. It gives
 the twelve source test frontiers new evaluation-case identities and places all ten eligible cases at
 the declared non-teacher region. It binds the exact five-parameter model, source bundle, development
 receipt and source scenario registry. It also declares ties incorrect, consumes failed or interrupted
 opened cases, forbids omissions and reruns, and requires every result to be published. Plan digest:
 `ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b`.
 
-This plan repairs prospective capability; it does not manufacture measured disagreements. Those
-remain unknown until the frozen plan passes external audit and the owner authorizes private access.
+This first revision repaired prospective capability; it did not manufacture measured disagreements.
+Its digest is preserved as the superseded parent of the amended plan below.
+
+## Claude finding 3: primary-endpoint power
+
+Claude's second audit approved the five-parameter model selection, one-standard-error arithmetic and
+conservative scoring policy. Its session total reached 58 independent mutation probes with zero
+survivors. It then found that using all twelve cases for the primary paired test was needlessly
+asymmetric: the two non-challenge cases are designed around a baseline-favorable origin, so they can
+add model losses much more readily than model wins.
+
+The correction was made while private access was still 0/12. The primary endpoint is now the ten
+cases preregistered as cost-baseline challenges. It retains the six-measured-disagreement capability
+floor, two-sided exact McNemar test, p < 0.05 threshold and an explicit requirement that model wins
+exceed losses. Model and baseline accuracy over all twelve cases remains mandatory. The other two
+cases are a separate safety endpoint: any model-wrong/baseline-correct result is reported and blocks
+live authority, but does not enter or alter the primary statistic.
+
+The case identities and source scenarios did not change. Six challenge cases are multiway and four
+are binary. Each candidate list is the complete graph-legal frontier, so adding a third option to an
+existing binary case would be fabricated. Replacing cases after observing stronger development
+performance on multiway choices would change objective coverage to favor a known pattern; that was
+rejected. Candidate-count results will be published rather than optimized away.
+
+Amended plan digest:
+`230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537`.
+The amendment explicitly binds the superseded digest and records zero private inputs opened.
+Eighteen one-at-a-time mutations of the new endpoint semantics were all killed after regenerating
+the plan; the fixed canonical digest test was deliberately excluded as a probe oracle so these were
+semantic checks rather than checksum-only failures. The restored full gate is 2,821 passed, three
+integration tests deselected and one expected failure.
 
 ## Stop line and next work
 
 Do not open, preflight, materialize or score a private test capture yet. The safe order is:
 
-1. independently audit the linear implementation, train-only selection receipt and structural
-   test-design receipt;
-2. audit the replacement plan, its ten structural challenge hypotheses and all conservative scoring
-   rules;
-3. publish the exact source and require green CI;
-4. obtain explicit owner authorization for the frozen plan; and
+1. independently audit the amended primary, descriptive and safety endpoints without private access;
+2. build and independently audit a fail-closed executor and result scorer bound to the exact plan;
+3. publish that exact source and require green CI;
+4. obtain explicit owner authorization for the frozen plan and executor; and
 5. only then measure baseline disagreements and execute the one-shot comparison, publishing every
    result whether favorable or unfavorable.
 
@@ -102,4 +130,6 @@ interval. A later, larger cross-context evaluation is required for a precise per
 - [Replacement sealed-plan freeze](evidence/strategic-sealed-evaluation-plan-freeze-2026-08-13.json)
 - [Original targeted mutation audit](evidence/strategic-navigation-model-mutation-audit-2026-08-13.json)
 - [Linear and sealed-design mutation audit](evidence/strategic-linear-and-sealed-design-mutation-audit-2026-08-13.json)
+- [Sealed endpoint-amendment mutation audit](evidence/strategic-sealed-endpoint-amendment-mutation-audit-2026-08-13.json)
 - [Linear pre-test audit handoff](claude-linear-pre-test-audit-handoff-2026-08-13.md)
+- [Sealed endpoint-amendment audit handoff](claude-sealed-endpoint-amendment-handoff-2026-08-13.md)
