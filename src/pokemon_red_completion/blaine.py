@@ -161,8 +161,7 @@ PRE_SAFFRON_BALANCED_ROSTER = TeamRosterPlan(
     tuple(
         slot
         for slot in RED_BALANCED_ROSTER.slots
-        if slot.species_id
-        in {BLASTOISE_SPECIES_ID, DUGTRIO_SPECIES_ID, 0x40, 0x84}
+        if slot.species_id in {BLASTOISE_SPECIES_ID, DUGTRIO_SPECIES_ID, 0x40, 0x84}
     )
 )
 PRE_SAFFRON_DEVELOPMENT_POLICY = replace(
@@ -240,6 +239,14 @@ MANSION_TEAM_POLICY = BalancedTeamPolicy(
 PRE_SAFFRON_TEAM_POLICY = replace(
     MANSION_TEAM_POLICY,
     required_size=len(PRE_SAFFRON_BALANCED_ROSTER.slots),
+    # This authenticated alternate-order lineage reaches Cinnabar with four
+    # members instead of the mature six-member roster.  Its weaker participants
+    # trigger the same 90% retreat rule much more often: the first bounded run
+    # exhausted 2,000 Center trips before the level floor, while remaining
+    # inside the independent battle, step, action, frame, and zero-faint caps.
+    # Keep the safety/readiness contract unchanged and give this specifically
+    # identified curriculum its own finite recovery allowance.
+    max_healing_trips=4_000,
 )
 BATTLE_PARTY_MENU_COMMAND = 2
 PARTY_SUBMENU_SWITCH = 0
@@ -946,9 +953,7 @@ class BlaineAfterMansionReport:
                 "tm38": self.tm38_quantity,
                 "volcano_badge": self.volcano_badge,
                 "tm38_delivery": (
-                    "delayed_after_capacity_sale"
-                    if self.tm38_reward_delayed
-                    else "immediate"
+                    "delayed_after_capacity_sale" if self.tm38_reward_delayed else "immediate"
                 ),
             },
             "terminal": {
@@ -1377,9 +1382,7 @@ def run_blaine_chapter(
         if development_policy is PRE_SAFFRON_DEVELOPMENT_POLICY
         else MANSION_TEAM_POLICY
     )
-    development = plan_team_development(
-        PokemonRedPartyReader(emulator).read(), development_policy
-    )
+    development = plan_team_development(PokemonRedPartyReader(emulator).read(), development_policy)
     team_battles = 0
     team_healing_trips = 0
     if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
@@ -1663,14 +1666,10 @@ def run_blaine_after_mansion_chapter(
     *,
     progress: ProgressSink | None = None,
     training_decision_sink: Callable[[TrainingControlDecision], None] | None = None,
-    training_decision_authority: Callable[
-        [TrainingControlDecision], TrainingControlAction
-    ]
+    training_decision_authority: Callable[[TrainingControlDecision], TrainingControlAction]
     | None = None,
-    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None]
-    | None = None,
-    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int]
-    | None = None,
+    training_candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None,
+    training_candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None,
 ) -> BlaineAfterMansionReport:
     """Train the party and defeat Blaine after the Secret Key skill releases control."""
 
@@ -1691,9 +1690,7 @@ def run_blaine_after_mansion_chapter(
     ):
         raise BlaineChapterError("Post-Mansion Blaine boundary is not pristine.")
     capacity_items = tuple(
-        item
-        for item in (ItemId.GREAT_BALL, ItemId.TM34_BIDE)
-        if initial_bag.get(item, 0) == 1
+        item for item in (ItemId.GREAT_BALL, ItemId.TM34_BIDE) if initial_bag.get(item, 0) == 1
     )
     if len(capacity_items) != 1:
         raise BlaineChapterError("Post-Mansion boundary lacks one declared TM38 capacity item.")
@@ -1713,9 +1710,7 @@ def run_blaine_after_mansion_chapter(
         if development_policy is PRE_SAFFRON_DEVELOPMENT_POLICY
         else MANSION_TEAM_POLICY
     )
-    development = plan_team_development(
-        PokemonRedPartyReader(emulator).read(), development_policy
-    )
+    development = plan_team_development(PokemonRedPartyReader(emulator).read(), development_policy)
     team_battles = 0
     team_healing_trips = 0
     if development.directive is TeamTrainingDirective.EVOLVE_MEMBER:
@@ -1916,9 +1911,7 @@ def run_blaine_after_mansion_chapter(
         _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart return")
         _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk return")
         _pulse(actions, MacroActionKind.MOVE, "left", 120)
-        capacity_sale_item = (
-            ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
-        )
+        capacity_sale_item = ItemId.GREAT_BALL if capacity_great_ball_required else ItemId.TM34_BIDE
         _sell_current_bag_item(actions, reader, emulator, capacity_sale_item)
         if _bag(emulator).get(capacity_sale_item, 0):
             raise BlaineChapterError(f"{capacity_sale_item.name} capacity sale did not settle.")
@@ -1987,7 +1980,6 @@ def run_blaine_after_mansion_chapter(
     return report
 
 
-
 def _sell_current_bag_item(actions, reader, emulator, item: ItemId) -> None:
     before = _bag(emulator)
     if before.get(item, 0) != 1:
@@ -2045,8 +2037,7 @@ def _tm38_capacity_sale_required(*, got_tm38: bool, occupied_bag_slots: int) -> 
         return False
     if occupied_bag_slots != 20:
         raise BlaineChapterError(
-            "Blaine withheld TM38 without a full bag: "
-            f"occupied_slots={occupied_bag_slots}."
+            f"Blaine withheld TM38 without a full bag: occupied_slots={occupied_bag_slots}."
         )
     return True
 
@@ -2085,9 +2076,7 @@ def _blaine_capacity_input_slots(
     if type(force_potion_sale) is not bool:
         raise TypeError("force_potion_sale must be a bool")
     potion_sale_required = (
-        input_slots == 20
-        or (input_slots == 19 and not bide_present)
-        or force_potion_sale
+        input_slots == 20 or (input_slots == 19 and not bide_present) or force_potion_sale
     )
     if potion_sale_required:
         if potion_quantity == 0:
@@ -2361,6 +2350,7 @@ def _field_fly_to_vermilion_from_saffron(actions, reader, emulator) -> None:
         raise BlaineChapterError("Fly did not return to Vermilion from Saffron.")
     _pulse(actions, MacroActionKind.CONFIRM, frames=12)
 
+
 #: How many town-map cursor positions to try before giving up.
 #:
 #: The town map is not a list menu -- it writes to none of the standard menu
@@ -2505,7 +2495,6 @@ def _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator) -> None:
 
 def _field_fly_to_cinnabar_from_vermilion(actions, reader, emulator) -> None:
     _fly_to_town(actions, reader, emulator, MapId.CINNABAR_ISLAND, "Vermilion to Cinnabar")
-
 
 
 def _team_training_move_slot(state: RawGameState) -> int:
@@ -2692,12 +2681,12 @@ def _training_dig_to_vermilion(
             emulator,
             expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
         )
-        
+
     if raw.map_id == MapId.SAFFRON_CITY:
         _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
     elif raw.map_id == MapId.CINNABAR_ISLAND:
         _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
-        
+
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
 
@@ -2736,6 +2725,7 @@ def _digletts_cave_walk_to_grass(
         _CAVE_PACING["direction"] = "right" if direction == "left" else "left"
         return 0
     return 1
+
 
 def _route_11_heal_and_return(
     actions: CountingExecutor,
@@ -2821,7 +2811,7 @@ def _route_11_heal_and_return(
             f"{(raw.player_x, raw.player_y)!r}; "
             f"(map, x) while walking east: {trail!r}."
         )
-    _pulse(actions, MacroActionKind.CONFIRM, frames=12) # wait out transition
+    _pulse(actions, MacroActionKind.CONFIRM, frames=12)  # wait out transition
 
 
 def _digletts_cave_heal_and_return(
@@ -2830,23 +2820,23 @@ def _digletts_cave_heal_and_return(
     emulator: EmulatorState,
 ) -> None:
     _route_11_heal_and_return(actions, reader, emulator)
-    
+
     _move(actions, reader, ("right",) * 4, "Post-Spearow Diglett Cave approach")
     raw = reader.read()
     if raw.player_x is None or raw.player_x < 4:
         raise BlaineChapterError("Route 11 Diglett Cave approach failed")
-        
+
     def _directions(s: str) -> tuple[str, ...]:
         return tuple({"U": "up", "D": "down", "L": "left", "R": "right"}[c] for c in s)
-        
+
     _move(
         actions,
         reader,
         _directions("L" * (raw.player_x - 4) + "U"),
         "Diglett Cave Route 11 gate",
     )
-    _pulse(actions, MacroActionKind.CONFIRM, frames=60) # Wait transition
-    
+    _pulse(actions, MacroActionKind.CONFIRM, frames=60)  # Wait transition
+
     raw = reader.read()
     if raw.map_id != MapId.DIGLETTS_CAVE_ROUTE_11 or raw.player_x is None or raw.player_y is None:
         raise BlaineChapterError("Route 11 Diglett Cave gate did not load.")
@@ -2854,7 +2844,7 @@ def _digletts_cave_heal_and_return(
     to_cave += ("R" if raw.player_x < 4 else "L") * abs(raw.player_x - 4)
     _move(actions, reader, _directions(to_cave), "Diglett Cave entry")
     _pulse(actions, MacroActionKind.CONFIRM, frames=120)
-    
+
     entry = reader.read()
     if entry.map_id != MapId.DIGLETTS_CAVE or entry.player_x is None or entry.player_y is None:
         raise BlaineChapterError("Diglett Cave interior did not load")
@@ -2897,6 +2887,7 @@ def _route_11_training_venue() -> TrainingVenue:
 
 ROUTE_11_TRAINING_VENUE = _route_11_training_venue()
 
+
 def _digletts_cave_training_venue() -> TrainingVenue:
     """Diglett's Cave, bound to the band it was measured to field.
 
@@ -2907,9 +2898,7 @@ def _digletts_cave_training_venue() -> TrainingVenue:
     exactly how a Mansion band of "30-32" outlived the 155 samples saying 28-39.
     """
 
-    band = next(
-        area for area in MEASURED_TRAINING_VENUES if area.area_id == "digletts_cave"
-    )
+    band = next(area for area in MEASURED_TRAINING_VENUES if area.area_id == "digletts_cave")
     return TrainingVenue(
         band=band,
         map_id=int(MapId.DIGLETTS_CAVE),
@@ -2920,7 +2909,9 @@ def _digletts_cave_training_venue() -> TrainingVenue:
         move_guard=_team_training_move_guard,
     )
 
+
 DIGLETTS_CAVE_TRAINING_VENUE = _digletts_cave_training_venue()
+
 
 def _mansion_training_venue() -> TrainingVenue:
     """The Mansion, bound to the band it was actually measured to field.
@@ -2929,9 +2920,7 @@ def _mansion_training_venue() -> TrainingVenue:
     remains the late-game venue once a trainee can safely engage it.
     """
 
-    band = next(
-        area for area in MEASURED_TRAINING_VENUES if area.area_id == "pokemon_mansion_1f"
-    )
+    band = next(area for area in MEASURED_TRAINING_VENUES if area.area_id == "pokemon_mansion_1f")
     return TrainingVenue(
         band=band,
         map_id=int(MapId.POKEMON_MANSION_1F),
@@ -2954,9 +2943,7 @@ def _mansion_training_fainted_pivot_target(
 
     if raw.battle_state != 1 or (raw.battler_hp or 0) > 0:
         return None
-    living_reserves = tuple(
-        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > 0
-    )
+    living_reserves = tuple((hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > 0)
     return max(living_reserves, default=(0, -1))[1] if living_reserves else None
 
 

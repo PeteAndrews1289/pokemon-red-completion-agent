@@ -394,8 +394,7 @@ def open_party_member_submenu(
             return
         pulse(actions, MacroActionKind.CONFIRM)
     raise RuntimeError(
-        f"Could not open the party-member submenu for {label}; "
-        f"menu top remained {seen!r}."
+        f"Could not open the party-member submenu for {label}; menu top remained {seen!r}."
     )
 
 
@@ -418,9 +417,7 @@ def swap_field_party_slots(
     expected = list(before.species_ids())
     expected[first_index], expected[second_index] = expected[second_index], expected[first_index]
     selected = before.members[first_index]
-    field_move_count = sum(
-        move.move_id in GEN1_FIELD_MOVE_IDS for move in selected.known_moves
-    )
+    field_move_count = sum(move.move_id in GEN1_FIELD_MOVE_IDS for move in selected.known_moves)
 
     # Which submenu row means SWITCH has been guessed wrong three times: at
     # ``field_move_count + 1``, at ``field_move_count``, and by expecting the
@@ -482,7 +479,6 @@ def swap_field_party_slots(
         f"{label} could not swap slots {first_index + 1} and {second_index + 1}: "
         f"no submenu row changed the party. Tried (row, resulting order)={attempts!r}."
     )
-
 
 
 def battle_command_direction(current: int | None, target: int) -> str | None:
@@ -722,9 +718,7 @@ def run_red_team_balancing(
     decision_sink: Callable[[TrainingControlDecision], None] | None = None,
     candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None,
     candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None,
-    decision_authority: Callable[
-        [TrainingControlDecision], TrainingControlAction
-    ] | None = None,
+    decision_authority: Callable[[TrainingControlDecision], TrainingControlAction] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
     venues: Sequence[TrainingVenue],
@@ -1058,7 +1052,13 @@ def run_red_team_balancing(
         if decision.directive in {TeamTrainingDirective.STOP, TeamTrainingDirective.RECRUIT_MEMBER}:
             readiness = summarize_team_readiness(party, policy)
             if not readiness.passed:
-                raise RuntimeError(f"Team training stopped before readiness: {decision.reason}")
+                raise RuntimeError(
+                    "Team training stopped before readiness: "
+                    f"{decision.reason}; battles={battles}, steps={steps}, "
+                    f"healing_trips={healing_trips}, "
+                    f"levels={tuple(member.level for member in party.members)}, "
+                    f"faints={party.fainted_count}."
+                )
             selected = emit_decision(
                 TrainingControlAction.STOP,
                 decision.reason,
@@ -1304,7 +1304,8 @@ def run_red_team_balancing(
                 break
             selected = emit_decision(
                 TrainingControlAction.HEAL,
-                decision.reason if decision.directive is TeamTrainingDirective.RESTORE_TEAM
+                decision.reason
+                if decision.directive is TeamTrainingDirective.RESTORE_TEAM
                 else "escort is unsafe",
                 phase=TrainingControlPhase.OVERWORLD,
                 party=party,

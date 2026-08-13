@@ -157,6 +157,7 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     )
     assert MANSION_TEAM_POLICY.required_size == 6
     assert PRE_SAFFRON_TEAM_POLICY.required_size == 4
+    assert PRE_SAFFRON_TEAM_POLICY.max_healing_trips == 4_000
     assert PRE_SAFFRON_DEVELOPMENT_POLICY.roster is PRE_SAFFRON_BALANCED_ROSTER
     assert set(PRE_SAFFRON_BALANCED_ROSTER.species_ids) < set(
         MANSION_DEVELOPMENT_POLICY.roster.species_ids
@@ -352,19 +353,28 @@ def test_mansion_training_fainted_pivot_uses_the_healthiest_living_reserve() -> 
         active_party_hp=0,
     )
 
-    assert _mansion_training_fainted_pivot_target(
-        fainted,
-        (0, 71, 0, 142, 88, 109),
-    ) == 3
+    assert (
+        _mansion_training_fainted_pivot_target(
+            fainted,
+            (0, 71, 0, 142, 88, 109),
+        )
+        == 3
+    )
     assert _mansion_training_fainted_pivot_target(fainted, (0, 0, 0)) is None
-    assert _mansion_training_fainted_pivot_target(
-        replace(fainted, active_party_hp=1),
-        (1, 71, 142),
-    ) is None
-    assert _mansion_training_fainted_pivot_target(
-        replace(fainted, battle_state=0),
-        (0, 71, 142),
-    ) is None
+    assert (
+        _mansion_training_fainted_pivot_target(
+            replace(fainted, active_party_hp=1),
+            (1, 71, 142),
+        )
+        is None
+    )
+    assert (
+        _mansion_training_fainted_pivot_target(
+            replace(fainted, battle_state=0),
+            (0, 71, 142),
+        )
+        is None
+    )
 
 
 def test_mansion_training_forced_switch_retries_a_transient_menu(
@@ -623,9 +633,6 @@ def test_targeted_evolution_earns_participation_without_directly_fighting() -> N
     )
 
 
-
-
-
 def test_blaine_source_ids_are_exact() -> None:
     assert MapId.POKEMON_MANSION_1F == 0xA5
     assert MapId.CINNABAR_GYM == 0xA6
@@ -747,8 +754,7 @@ def test_mansion_policy_stops_once_the_party_reaches_league_parity() -> None:
         members=(member(1, 84), *(member(slot, 55) for slot in range(2, 7)))
     )
     assert (
-        plan_team_training(at_parity, MANSION_TEAM_POLICY).directive
-        is TeamTrainingDirective.STOP
+        plan_team_training(at_parity, MANSION_TEAM_POLICY).directive is TeamTrainingDirective.STOP
     )
 
     # A member genuinely short of the League still trains.
@@ -756,6 +762,5 @@ def test_mansion_policy_stops_once_the_party_reaches_league_parity() -> None:
         members=(member(1, 84), member(2, 30), *(member(slot, 55) for slot in range(3, 7)))
     )
     assert (
-        plan_team_training(below, MANSION_TEAM_POLICY).directive
-        is not TeamTrainingDirective.STOP
+        plan_team_training(below, MANSION_TEAM_POLICY).directive is not TeamTrainingDirective.STOP
     )
