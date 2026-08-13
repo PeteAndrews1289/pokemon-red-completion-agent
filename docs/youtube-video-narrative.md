@@ -23,11 +23,21 @@ EXTERNAL AUDIT**.
 
 Then add the audit's final interruption. Put all twelve cards inside a bracket labeled **PRIMARY
 PAIRED TEST**, pull out the two non-challenge cards, and show the projected power rising from
-**21–37% → 58–84%**. Do not throw the cards away: place them under **SAFETY: MODEL MUST NOT LOSE
+**21–37% → 42–68%** under the realistic assumption that the baseline is wrong on 85% of the
+challenges. Briefly cross out the earlier **58–84%** graphic and label it **CORRECTED: IT ASSUMED
+CHALLENGES COULD NEVER PRODUCE LOSSES**. Do not throw the cards away: place them under **SAFETY: MODEL MUST NOT LOSE
 WHERE BASELINE IS RIGHT**. Finish with three fixed lanes: **PRIMARY = 10 CHALLENGES / ACCURACY =
 ALL 12 / SAFETY = 2 NON-CHALLENGES**. The line is: **“We improved the question before opening the
-envelope, and we kept every case.”** End on **TEST STILL 0 OF 12 → FINAL PLAN AUDIT → EXECUTOR
-AUDIT → OWNER AUTHORIZATION → OPEN ONCE**.
+envelope, and we kept every case.”**
+
+Now show the optional-stopping gate as a twelve-slot conveyor belt. Before each sealed card touches
+the runner, stamp **CLAIMED**. Then lock two prediction cards—**MODEL** and **CHEAPEST ROUTE**—into
+a private box before the **TEACHER** door opens. The public monitor shows only **4/12 CONSUMED / NO
+METRICS AVAILABLE**. Pull the power cord during case five: burn that card, stamp the entire run
+**PROTOCOL FAILURE**, and resume at case six—never case five. Only when the belt reaches 12/12 does
+the result panel appear. The line is: **“Even the p-value was sealed until stopping was no longer a
+choice.”** End on **TEST STILL 0 OF 12 → INDEPENDENT CORE AUDIT → NON-TEST ADAPTER QUALIFICATION →
+OWNER AUTHORIZATION → OPEN ONCE**.
 
 ## August 13 scene: the counter finally leaves zero
 

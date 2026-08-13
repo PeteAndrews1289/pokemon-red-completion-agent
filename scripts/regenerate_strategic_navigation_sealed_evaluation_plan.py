@@ -15,6 +15,9 @@ from pokemon_red_completion.strategic_navigation_model import (
     STRATEGIC_NAVIGATION_FEATURE_SCHEMA_ID,
     STRATEGIC_NAVIGATION_LINEAR_MODEL_ID,
 )
+from pokemon_red_completion.strategic_navigation_protocol import (
+    parse_strategic_navigation_registry,
+)
 from pokemon_red_completion.strategic_navigation_scenarios import (
     load_strategic_navigation_scenario_registry,
 )
@@ -33,12 +36,18 @@ DEVELOPMENT_RECEIPT = (
     / "evidence"
     / "strategic-navigation-linear-development-2026-08-13.json"
 )
-PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v2"
-DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v2"
+STRATEGIC_COLLECTION_REGISTRY = (
+    ROOT / "configs" / "red-strategic-navigation-collection-v1.json"
+)
+PLAN_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-v3"
+DIGEST_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-plan-digest-v3"
 CASE_SCHEMA = "pokemon-strategic-navigation-sealed-evaluation-case-v1"
 EVALUATION_ID = "red-strategic-navigation-sealed-evaluation-v1"
-SUPERSEDED_PLAN_SHA256 = (
+V1_PLAN_SHA256 = (
     "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
+)
+V2_PLAN_SHA256 = (
+    "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
 )
 FROZEN_MODEL_SHA256 = (
     "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1"
@@ -70,6 +79,9 @@ def _canonical_line(value: object) -> bytes:
 
 def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
     registry = load_strategic_navigation_scenario_registry(ROOT)
+    teacher_execution = parse_strategic_navigation_registry(
+        STRATEGIC_COLLECTION_REGISTRY.read_bytes()
+    ).execution
     test_scenarios = tuple(
         scenario for scenario in registry.scenarios if scenario.partition == "test"
     )
@@ -112,7 +124,15 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
     )
     if len(cases) != 12 or challenge_count != 10:
         raise RuntimeError("sealed evaluation case capability differs")
+    candidate_counts_by_case = {
+        str(case["case_id"]): len(scenario.candidate_objective_ids)
+        for case, scenario in zip(cases, test_scenarios, strict=True)
+    }
+    case_order = [str(case["case_id"]) for case in cases]
 
+    source_bundle_sha256 = working_source_bundle_sha256(ROOT)
+    if teacher_execution.source_bundle_sha256 != source_bundle_sha256:
+        raise RuntimeError("sealed teacher execution source differs")
     document = {
         "access_policy": {
             "private_test_inputs_opened_at_freeze": 0,
@@ -127,15 +147,27 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             "publish_every_case": True,
             "rerun_allowed": False,
         },
-        "amendment": {
-            "amended_before_private_access": True,
-            "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
-            "reason": (
-                "independent_power_audit_found_non_challenge_cases_"
-                "asymmetric_for_primary_pairing"
-            ),
-            "supersedes_plan_sha256": SUPERSEDED_PLAN_SHA256,
-        },
+        "amendments": [
+            {
+                "amended_before_private_access": True,
+                "change": (
+                    "primary_endpoint_restricted_to_preregistered_challenge_cases"
+                ),
+                "reason": (
+                    "independent_power_audit_found_non_challenge_cases_"
+                    "asymmetric_for_primary_pairing"
+                ),
+                "supersedes_plan_sha256": V1_PLAN_SHA256,
+            },
+            {
+                "amended_before_private_access": True,
+                "change": "bind_fail_closed_executor_and_optional_stopping_contract",
+                "reason": (
+                    "external_audit_required_durable_claim_before_private_case_access"
+                ),
+                "supersedes_plan_sha256": V2_PLAN_SHA256,
+            },
+        ],
         "baseline": {
             "policy_id": "unique-minimum-route-cost-v1",
             "prediction_tie": "incorrect",
@@ -148,6 +180,12 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                 "metrics": ["model_accuracy", "route_cost_baseline_accuracy"],
                 "role": "mandatory_descriptive_report",
             },
+            "candidate_count_accuracy": {
+                "case_filter": "all_registered_cases",
+                "group_by": "candidate_count",
+                "metrics": ["model_accuracy", "route_cost_baseline_accuracy"],
+                "role": "mandatory_descriptive_report",
+            },
             "primary": {
                 "case_filter": "cost_baseline_challenge_hypothesis_true",
                 "expected_case_count": challenge_count,
@@ -157,11 +195,14 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
                 ),
                 "primary_unit": "one_unique_scenario",
                 "required_direction": "model_paired_wins_exceed_losses",
+                "required_successful_teacher_cases": challenge_count,
                 "significance_threshold": 0.05,
             },
             "safety": {
                 "case_filter": "cost_baseline_challenge_hypothesis_false",
-                "criterion": "zero_model_incorrect_baseline_correct",
+                "criterion": (
+                    "all_cases_succeed_and_zero_model_incorrect_baseline_correct"
+                ),
                 "expected_case_count": len(cases) - challenge_count,
                 "failure_effect": (
                     "block_live_authority_and_report_without_changing_primary_test"
@@ -170,7 +211,23 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             },
         },
         "evaluation_id": EVALUATION_ID,
-        "execution_source_bundle_sha256": working_source_bundle_sha256(ROOT),
+        "execution_policy": {
+            "candidate_counts_by_case": candidate_counts_by_case,
+            "case_claim": "durable_before_any_private_case_input_access",
+            "case_order": case_order,
+            "case_order_frozen": True,
+            "halt_after_first_claim": "publish_protocol_failure",
+            "intermediate_case_results": "forbidden",
+            "intermediate_statistics": "forbidden",
+            "prediction_commit": "durable_before_deterministic_teacher_action",
+            "reopen_consumed_case": False,
+            "restart_after_claim": (
+                "consume_open_case_as_both_incorrect_continue_next_mark_protocol_failure"
+            ),
+            "score_after_consumed_cases": len(cases),
+            "single_continuous_invocation_required": True,
+        },
+        "execution_source_bundle_sha256": source_bundle_sha256,
         "frozen_model": {
             "canonical_sha256": FROZEN_MODEL_SHA256,
             "enabled_feature_names": list(FROZEN_FEATURES),
@@ -187,19 +244,31 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
         ),
         "preregistered_challenge_hypotheses": challenge_count,
         "scoring_policy": {
-            "failed_or_interrupted_after_open": (
+            "candidate_unavailable_after_claim": (
+                "case_consumed_model_and_baseline_incorrect"
+            ),
+            "failed_or_interrupted_after_claim": (
                 "case_consumed_model_and_baseline_incorrect"
             ),
             "incomplete_episode": "case_consumed_model_and_baseline_incorrect",
             "missing_case": "publish_incomplete_evaluation_as_protocol_failure",
             "model_prediction_tie": "incorrect",
             "teacher_target": "successful_deterministic_teacher_choice_only",
-            "unavailable_candidate_before_open": (
-                "do_not_open_case_and_publish_protocol_failure"
+            "preclaim_identity_or_catalog_failure": (
+                "open_zero_cases_and_refuse_execution"
             ),
         },
         "schema": PLAN_SCHEMA,
         "source_scenario_registry_sha256": registry.registry_sha256,
+        "teacher_execution": {
+            "behavior_configuration_sha256": (
+                teacher_execution.behavior_configuration_sha256
+            ),
+            "decision_contract_sha256": teacher_execution.decision_contract_sha256,
+            "objective_graph_sha256": teacher_execution.objective_graph_sha256,
+            "source_bundle_sha256": teacher_execution.source_bundle_sha256,
+            "teacher_execution_sha256": teacher_execution.teacher_execution_sha256,
+        },
         "training_development_receipt_sha256": hashlib.sha256(
             DEVELOPMENT_RECEIPT.read_bytes()
         ).hexdigest(),
@@ -218,6 +287,8 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
         "evaluation_id": EVALUATION_ID,
         "plan_sha256": digest,
         "primary_endpoint_cases": challenge_count,
+        "case_order_sha256": canonical_sha256(case_order),
+        "intermediate_metrics_allowed": False,
         "preregistered_challenge_hypotheses": challenge_count,
         "private_test_inputs_opened": 0,
         "safety_endpoint_cases": len(cases) - challenge_count,

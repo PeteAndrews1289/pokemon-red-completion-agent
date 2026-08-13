@@ -1,5 +1,28 @@
 # Portfolio brief: a Pokémon agent built to make autonomy claims falsifiable
 
+## August 13 update
+
+The first strategic destination model is now frozen without spending the final test. An independent
+audit rejected a 753-parameter MLP fitted from only 24 training choices. The replacement is a
+five-coefficient linear scorer selected entirely by training-only leave-one-out evaluation; only
+after selection did it score 10/12 on development validation against 4/12 for cheapest route. That
+is promising development evidence, not a final claim.
+
+The audit also caught two experiment-design defects before any private case was opened. The original
+test registry declared no deliberate cheapest-route challenges, and the first replacement endpoint
+mixed two baseline-favorable safety cases into the primary comparison. The prospective plan now
+uses ten fixed challenges for a two-sided exact paired test, reports all twelve cases, and evaluates
+the other two as a separate safety gate. Its realistic chance of a conclusive outcome is roughly
+42–68% under an 85% challenge-validity assumption, so an inconclusive result will be published as
+underpowered rather than reinterpreted.
+
+The project now turns those promises into code. A one-shot state machine binds source, model,
+teacher, case catalog and owner authorization before case one; durably claims inputs before access;
+commits model and baseline predictions before teacher execution; consumes crashes without reruns;
+and withholds every metric until all twelve outcomes exist. The ROM-free core passes 2,832 tests,
+linting and static typing. It is awaiting independent audit and still has no cartridge-facing sealed
+adapter or owner authorization. Final-test access remains **0/12**.
+
 ## August 12 update
 
 The strategic benchmark now has 76 authenticated captures, 43 distinct frontiers and 24 exact

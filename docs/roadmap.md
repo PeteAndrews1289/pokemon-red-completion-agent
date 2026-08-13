@@ -31,23 +31,33 @@ challenge hypotheses and declared conservative handling of ties, unavailable can
 interruptions, omissions and reruns. Claude approved the model and mechanics, then found that its
 all-twelve primary paired test mixed in two asymmetric non-challenge cases. Before any private
 access, the plan was amended: the ten challenges are the primary endpoint, all-twelve accuracy is
-mandatory, and the other two cases form a separate safety gate. It has not opened a test input and
-requires final amendment audit plus owner authorization.
+mandatory, and the other two cases form a separate safety gate. Claude approved that amendment and
+corrected the realistic power estimate to roughly 42–68% under an 85% challenge-validity
+assumption. The public executor/scorer core is now implemented under a schema-v3 plan. It has not
+opened a test input, and it does not include or authorize the cartridge-facing private-case runner.
 
 Ordered next work:
 
 1. **Complete:** Claude independently approved the linear model, training-only leave-one-out
    selector, one-standard-error rule and conservative one-shot mechanics. Test stayed sealed.
-2. Audit the amended challenge-only primary endpoint, all-case descriptive endpoint and two-case
-   safety endpoint.
-3. Build and independently audit the fail-closed sealed executor and result scorer against the exact
-   amended plan; publish it and require green exact-commit CI.
-4. Only after those gates and explicit owner authorization, measure the frozen baseline capability
+2. **Complete:** Claude approved the amended challenge-only primary endpoint, all-case descriptive
+   endpoint and two-case safety endpoint. Nineteen semantic mutations were killed without using the
+   whole-plan digest assertion as the oracle.
+3. **Implemented; independent audit pending:** the ROM-free sealed state machine requires preflight
+   identity checks before case one, durable claim before private access, prediction commitment
+   before teacher action, fixed order, crash consumption, no reopening and final-only scoring.
+4. Independently attack that core using the
+   [executor/scorer handoff](claude-sealed-executor-audit-handoff-2026-08-13.md). Do not open a test
+   input. Resolve any finding and repeat the exact local gate.
+5. Build the cartridge-facing runner and exact case catalog behind the audited interface. Qualify
+   it against non-test fixtures only, bind its identities into the prospective authorization,
+   publish the exact commit and require green CI.
+6. Only after those gates and explicit owner authorization, measure the frozen baseline capability
    and run the one-shot model comparison. Publish every result, favorable or unfavorable.
-5. Only after offline test, add shadow execution in live strategic choices. The deterministic
+7. Only after offline test, add shadow execution in live strategic choices. The deterministic
    teacher retains authority until shadow evidence passes; model-controlled route selection is a
    later causal gate.
-6. Expand context semantics before cross-title transfer. The current 36 examples all express the
+8. Expand context semantics before cross-title transfer. The current 36 examples all express the
    same broad story-advance need and the same safe-overworld origin tags, so those feature columns
    are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
    training and recovery—not merely repeat Red's story sequence.

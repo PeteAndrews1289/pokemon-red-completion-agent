@@ -16,7 +16,13 @@
 > then caught a power defect before authorization: two non-challenge cases could hurt the paired
 > test without testing its intended hypothesis. The amended plan makes the ten challenge cases the
 > primary endpoint, reports accuracy over all twelve, and keeps the other two as a separate safety
-> check. Test remains 0/12 and the amendment still requires final audit before authorization. See
+> check. Claude approved that endpoint and corrected its realistic power estimate to roughly
+> 42–68%, not the earlier 58–84% estimate. The public one-shot executor/scorer core is now
+> implemented: it fixes case order, durably claims a case before access, commits model and baseline
+> predictions before the teacher acts, consumes crashes without reopening a case, and cannot
+> calculate an intermediate p-value. It is ready for independent audit, not private execution; the
+> cartridge-facing case runner, exact catalog binding, owner authorization, and exact-commit CI are
+> still gates. Test remains 0/12 and no authorization receipt exists. See
 > the [August 13 audit](docs/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted

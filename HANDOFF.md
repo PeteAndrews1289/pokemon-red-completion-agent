@@ -14,6 +14,45 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Sealed executor/scorer core ready for independent audit — 2026-08-13
+
+Claude approved the amended ten-challenge primary endpoint after killing 19/19 semantic mutations
+with the whole-plan digest test excluded as a probe oracle. It also corrected the realistic power
+estimate: under an 85% challenge-validity assumption, the chance of a conclusive result is roughly
+42–68%, not the earlier 58–84%. A null result will therefore remain compatible with an underpowered
+test and must still be published.
+
+The public one-shot state machine and final-only scorer are now implemented in
+`strategic_navigation_sealed_evaluation.py`. The plan is schema v3 and binds the fixed twelve-case
+order, exact candidate counts, model, source bundle, scenario registry and deterministic teacher
+execution. Before case one, an opaque runtime grant requires an exact owner receipt, clean and
+published source, exact source commit, model bytes, teacher execution and case-catalog digest.
+After start, every case is durably claimed before private input access. Model and cost-baseline
+predictions are committed before the teacher may execute. A crash consumes the open case, creates a
+permanent protocol failure and resumes only at the next case. The only intermediate public signal
+is `consumed/12`; no case result or statistic can be constructed until all twelve outcomes exist.
+The scorer then computes McNemar only over the ten challenge cases, reports the two safety cases
+separately and never grants live authority itself. The ledger namespace is plan-global rather than
+authorization-specific, so issuing a second receipt cannot create a fresh twelve-case attempt.
+
+The first implementation used an authorization-specific ledger namespace. Self-review caught that
+a second receipt could thereby create a second ledger for the same plan. No private case had been
+opened; the namespace is now plan-global, loader-issued plan/authorization objects are required,
+and a direct regression test proves a second authorization is refused before runner access.
+
+Current plan digest:
+`f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec`.
+Its amendment chain preserves both superseded digests. The local gate is 2,832 passed, three
+integration tests deselected, one expected failure, Ruff clean and mypy clean across 165 files.
+Test remains **0/12 opened**, and no owner authorization receipt was created.
+
+This checkpoint is the ROM-free protocol core, not the live cartridge adapter. Next: independently
+audit [the executor/scorer handoff](docs/claude-sealed-executor-audit-handoff-2026-08-13.md), then
+build and authenticate the cartridge-facing runner and exact case catalog behind the audited
+interface, test that adapter only on non-test fixtures, publish the exact commit and require green
+CI. Explicit owner authorization comes last. Do not open, preflight or inspect a private test input
+to complete any of those steps.
+
 ## Sealed primary endpoint amended after second audit — 2026-08-13
 
 Claude independently approved the five-coefficient model selection and killed all twelve mutations

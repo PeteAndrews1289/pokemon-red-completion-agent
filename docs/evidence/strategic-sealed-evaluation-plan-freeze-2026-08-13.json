@@ -2,22 +2,35 @@
   "access": {
     "live_route_costs_accessed": false,
     "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
     "private_test_captures_accessed": false,
     "private_test_episodes_accessed": false,
     "test_cases_opened": 0
   },
-  "amendment": {
-    "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
-    "private_test_inputs_opened_before_amendment": 0,
-    "reason": "independent power audit found the two non-challenge cases asymmetric for the primary paired test",
-    "superseded_plan_sha256": "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
-  },
+  "amendments": [
+    {
+      "change": "primary_endpoint_restricted_to_preregistered_challenge_cases",
+      "private_test_inputs_opened_before_amendment": 0,
+      "reason": "independent power audit found the two non-challenge cases asymmetric for the primary paired test",
+      "superseded_plan_sha256": "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
+    },
+    {
+      "change": "bind_fail_closed_executor_and_optional_stopping_contract",
+      "private_test_inputs_opened_before_amendment": 0,
+      "reason": "independent audit required durable claim, prediction commitment, fixed order and final-only statistics",
+      "superseded_plan_sha256": "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537"
+    }
+  ],
   "capability": {
     "challenge_binary_cases": 4,
     "challenge_multiway_cases": 6,
     "minimum_measured_disagreements_required": 6,
     "non_challenge_cases": 2,
     "preregistered_challenge_hypotheses": 10,
+    "realistic_conclusive_power_range_at_85_percent_challenge_validity": [
+      0.42,
+      0.68
+    ],
     "structural_hypothesis_is_measured_disagreement": false,
     "test_cases": 12
   },
@@ -26,36 +39,55 @@
       "cases": 12,
       "role": "mandatory descriptive report"
     },
+    "candidate_count_accuracy": {
+      "cases": 12,
+      "role": "mandatory descriptive report"
+    },
     "primary": {
       "cases": 10,
       "filter": "cost_baseline_challenge_hypothesis_true",
       "paired_test": "two_sided_exact_mcnemar_on_discordant_correctness",
       "required_direction": "model_paired_wins_exceed_losses",
+      "required_successful_teacher_cases": 10,
       "significance_threshold": 0.05
     },
     "safety": {
       "cases": 2,
-      "criterion": "zero_model_incorrect_baseline_correct",
+      "criterion": "all_cases_succeed_and_zero_model_incorrect_baseline_correct",
       "failure_effect": "block live authority and report without changing the primary test"
     }
+  },
+  "execution": {
+    "case_claim": "durable before any private case input access",
+    "case_order_sha256": "8c913e7101efdfe33c21c849d46da6076653066869077e5043bcf60928a4f2ba",
+    "intermediate_case_results": "forbidden",
+    "intermediate_statistics": "forbidden",
+    "prediction_commit": "durable before deterministic teacher action",
+    "reopen_consumed_case": false,
+    "restart_after_claim": "consume open case as both incorrect, continue next and mark protocol failure",
+    "score_after_consumed_cases": 12,
+    "single_continuous_invocation_required": true
   },
   "frozen_model": {
     "canonical_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
     "model_id": "pokemon.core.strategic-navigation.destination-ranker.linear.v1",
-    "parameter_count": 5
+    "parameter_count": 5,
+    "private_file_sha256": "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd"
   },
   "plan": {
-    "bytes": 8697,
+    "bytes": 11208,
     "evaluation_id": "red-strategic-navigation-sealed-evaluation-v1",
-    "execution_source_bundle_sha256": "f8330ec8fbe4866318e3930170e2afc3fc05f08d3824422f9b4223618f42161c",
+    "execution_source_bundle_sha256": "585fab5b42d9b409b9d7d6659d191987ba5a31958f9ac39734f6d1e07f9833b7",
     "relative_path": "configs/red-strategic-navigation-sealed-evaluation-v1.json",
-    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v2",
-    "sha256": "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537",
-    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71"
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v3",
+    "sha256": "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec",
+    "source_scenario_registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "teacher_execution_sha256": "07748caa2e1aa4a2d582c80d1d06ab1afc9b9f6725c6d0fc8224ef9b1946073e"
   },
   "schema": "strategic-sealed-evaluation-plan-freeze-v1",
   "status": {
-    "external_audit_required": true,
+    "cartridge_facing_runner_required": true,
+    "executor_core_external_audit_required": true,
     "owner_authorization_required_after_audit": true,
     "ready_to_open_private_test": false
   }

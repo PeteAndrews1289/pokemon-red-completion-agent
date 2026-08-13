@@ -41,8 +41,30 @@ kept accuracy over all twelve mandatory and turned the other two into a separate
 gate. It also preserved the first plan's digest in the amendment chain. Four challenge cases remain
 binary because their legal quest frontiers contain only two objectives; padding them after learning
 that the model did better on larger choices would make the benchmark look stronger by construction.
-The next scene is still not a triumphant test run. It is a final public-plan audit followed by a
-fail-closed executor audit before the one-shot evidence is spent.
+
+Claude approved that correction, then corrected its own optimistic power estimate. Once a challenge
+is allowed to be a genuinely uncertain hypothesis—not assumed to be a guaranteed baseline error—the
+realistic chance of a conclusive result is roughly **42–68%**, not 58–84%. That does not undo the
+repair. It changes how a null result must be narrated: publish it as an underpowered outcome, not as
+proof that the model cannot generalize.
+
+The next failure mode was human rather than statistical code: optional stopping. If anyone could see
+case results accumulate, a twelve-case run could be stopped when its p-value looked favorable. The
+new executor makes that impossible through its public interface. It claims each case before opening
+private input, commits both predictions before the teacher acts, stores case evidence privately,
+and exposes only a `consumed/12` counter. A statistic does not exist until all twelve cases have been
+consumed. A crash burns the current case, permanently marks the protocol failed and continues only
+with the next case. The final result still cannot grant live control.
+
+The first draft still had a rerun-shaped crack: because its private ledger name included the owner
+receipt digest, creating a second receipt would have created a fresh ledger. The review caught that
+before publication or test access. The ledger is now named by the frozen plan itself, so the first
+authorization to start owns the only attempt and every later receipt collides with immutable history.
+
+That is a protocol milestone, not the test result. The cartridge-facing adapter and exact private
+case catalog are deliberately still absent, no owner authorization exists, and every sealed card is
+still face down. The next scene is an independent attack on the executor core, followed by a
+non-test qualification of the adapter before the one-shot evidence is spent.
 
 ## August 13: the first model-facing dataset finally became real
 
