@@ -3,6 +3,37 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+## Current focus (2026-08-13): external audit before sealed model test
+
+The non-test campaign is complete. All 36 counted learning scenarios were executed exactly once:
+24 train and 12 validation, with one successful destination choice per episode, 36 unique policy
+contexts, no partition overlap and no admitted failure. Validation contains eight disagreements
+with the unique cheapest-route baseline, so model development passed its preregistered admission
+gate. Test remains **0/12 opened**.
+
+The first destination ranker is now frozen privately. It shares one scorer across every candidate
+and consumes 92 identity-free features: portable semantic tags, availability, route measurements
+and within-set relative route measurements. Development validation selected an eight-unit MLP:
+7/12 correct versus 4/12 for route cost, three paired wins and zero paired losses. Exact paired
+p = 0.25, so this is a promising development result rather than a final research claim.
+
+Ordered next work:
+
+1. Have Claude independently audit the code and the two August 13 evidence receipts. Mutation-test
+   the partition guards, candidate-order equivariance, historical assignment reconstruction,
+   route-cost comparison and model authentication. Do not open test.
+2. If review is clean, commit the exact model digest and a one-shot test protocol that cannot tune,
+   rerun or silently omit a failed scenario.
+3. Execute the 12 sealed scenarios once under the frozen model and baseline, then publish the paired
+   result whether favorable or unfavorable.
+4. Only after offline test, add shadow execution in live strategic choices. The deterministic
+   teacher retains authority until shadow evidence passes; model-controlled route selection is a
+   later causal gate.
+5. Expand context semantics before cross-title transfer. The current 36 examples all express the
+   same broad story-advance need and the same safe-overworld origin tags, so those feature columns
+   are correctly zero-weighted. Crystal must add varied needs—collection, healing, evolution,
+   training and recovery—not merely repeat Red's story sequence.
+
 ## Current focus (2026-08-12): teach alternate valid story orders
 
 Scenario 019 is now exact and has completed its official uncounted rehearsal. Published `31d4fd2`

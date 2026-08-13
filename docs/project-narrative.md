@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 13: the first model-facing dataset finally became real
+
+The counter changed in the only way that matters: from prospective scenarios and uncounted
+rehearsals to **36 authenticated counted choices**. Twenty-four belong to training and twelve to
+development validation. Every one begins from an exact cartridge state, presents two to five
+identity-free destination candidates, records one teacher choice, executes the selected approach
+and retains the outcome. None records the arrow sequence as a target. Failed attempts remain
+outside the dataset, and all twelve final-test situations are still sealed.
+
+That collection passed the audit the earlier whole-game campaign could not. It contains 36 unique
+strategic questions rather than three questions repeated across roots. Train and validation share
+no candidate-order-invariant context. Validation includes eight cases where the teacher rejects
+the cheapest available route, so the baseline comparison can expose whether a model learned more
+than “walk to the closest thing.”
+
+The first destination ranker is now fitted. One small neural scorer is shared across every
+candidate; its input is limited to portable semantic tags, availability and absolute/relative
+route structure. It never sees Kanto map names, coordinates, objective IDs, destination references,
+binding indices or answer position. On development validation it chose 7 of 12 destinations
+correctly; cheapest route chose 4. The model won three paired disagreements and lost none.
+
+That is progress, not a victory lap. Seven configurations were compared on development validation,
+and three discordant wins yield exact p = 0.25. The untouched test set is still the only honest
+final estimate. The stronger narrative is therefore not “the AI can play Pokémon now.” It is:
+after days of turning one brittle playthrough into varied, authenticated decisions, the project
+finally produced a model that beats a meaningful baseline often enough to deserve a sealed test.
+The next scene is an independent code audit, followed by one frozen, no-reroll evaluation.
+
 ## August 12: one winning route was not yet a curriculum
 
 The first alternate-order lesson now works on the cartridge. From the post-Hideout Celadon state,

@@ -2,6 +2,15 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
+> **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
+> 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy
+> contexts, no partition overlap, and zero sealed-test scenarios opened. The first identity-free
+> destination ranker scores 7/12 on development validation versus 4/12 for cheapest route, with
+> three paired wins and zero losses. Exact p = 0.25, so this is a pre-test engineering result—not a
+> generalization claim or live autonomous player. The frozen model is awaiting independent audit
+> before any of the 12 test scenarios are opened. See the
+> [August 13 audit](docs/current-audit-2026-08-13.md).
+
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,
 > recovered without a reroll, and later completed under the objective model plus authored skills.

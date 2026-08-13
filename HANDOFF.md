@@ -14,6 +14,33 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Counted strategic data and first model ready for external audit — 2026-08-13
+
+The v2 short-scenario campaign is complete: **36/36 counted train/validation scenarios**, split
+24 train and 12 validation, each with exactly one successful teacher destination choice and no
+movement-imitation target. Every episode was reloaded through its independently reconstructed
+scenario, capture and historical source assignment. There are 36 unique assignment IDs, 36 unique
+candidate-order-invariant contexts, no train/validation overlap, no conflicting targets and no
+failed episode admitted. The 12 test scenarios remain sealed and unopened. The path-free
+[collection audit](docs/evidence/strategic-counted-collection-audit-2026-08-13.json) is the durable
+receipt.
+
+The first shared-candidate MLP is fitted and frozen privately. Its 92-feature input contains only
+portable semantic tags, availability, route metrics and within-choice relative route structure.
+It contains no map IDs, coordinates, destination references, objective IDs, binding indices or
+candidate-position feature. Development validation selected an eight-hidden-unit model from seven
+declared configurations. It scored **7/12 (58.3%)** against the cheapest-route baseline's **4/12
+(33.3%)**, with three paired wins, zero paired losses and exact two-sided p = 0.25. This passes the
+engineering pre-test gate but is not a statistically significant final claim. See the
+[model receipt](docs/evidence/strategic-navigation-model-development-2026-08-13.json).
+
+Claude's next job is review, not retraining. Start with
+[the pre-test audit handoff](docs/claude-pre-test-audit-handoff-2026-08-13.md), attack the feature
+projection, partition guards, assignment reconstruction, model selection and evidence claims, and
+leave all test scenarios sealed. If that review is clean, freeze the exact model digest and define
+the one-shot sealed-test execution before opening any test capture. Do not tune against test,
+describe 7/12 as proof, or grant the model live route authority yet.
+
 ## Scenarios 045 and 046 qualified — 2026-08-12
 
 Exact train scenarios 045 and 046 are constructed and rehearsed. Scenario 045 uses the new

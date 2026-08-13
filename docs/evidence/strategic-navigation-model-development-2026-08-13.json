@@ -1,0 +1,65 @@
+{
+  "collection": {
+    "audit_receipt_sha256": "4e5e0767e51cfa6b231ed2c2193069acfe8469371012ca7f31ed6aaa8ec2a010",
+    "examples": 36,
+    "sealed_test_examples_opened": 0,
+    "train_examples": 24,
+    "validation_examples": 12
+  },
+  "feature_schema": {
+    "candidate_order_used_as_feature": false,
+    "candidate_scoring": "shared_per_candidate",
+    "feature_count": 92,
+    "feature_schema_id": "pokemon.core.strategic-navigation.destination-ranker.v1",
+    "title_specific_identity_used_as_feature": false
+  },
+  "model": {
+    "hidden_units": 8,
+    "model_id": "pokemon.core.strategic-navigation.destination-ranker.mlp.v1",
+    "model_sha256": "fbfb9a1eb4fad6c5e20222215fd0f1c9fb736149d90811131e166e5261ecf444",
+    "private_model_file_sha256": "b64329d0d692754728b492348cf029263e57f0168c8dd291e230a8ade0c32e10",
+    "training_seed": 20260813
+  },
+  "pre_test_gate": {
+    "accuracy_exceeds_route_cost_baseline": true,
+    "minimum_paired_wins": true,
+    "ready_for_external_audit": true,
+    "ready_for_sealed_test_after_external_audit": true,
+    "validation_result_is_final_claim": false,
+    "zero_paired_losses": true
+  },
+  "schema": "strategic-navigation-model-development-summary-v1",
+  "selection": {
+    "role": "development_validation_model_selection",
+    "sealed_test_used_for_selection": false,
+    "trials": [
+      {"accuracy": 0.5, "cross_entropy": 0.9039241602608065, "hidden_units": 2, "l2": 0.1, "losses": 0, "selected": false, "wins": 2},
+      {"accuracy": 0.5, "cross_entropy": 0.8583613331521103, "hidden_units": 4, "l2": 0.1, "losses": 0, "selected": false, "wins": 2},
+      {"accuracy": 0.5833333333333334, "cross_entropy": 0.8181731421512897, "hidden_units": 8, "l2": 0.1, "losses": 0, "selected": true, "wins": 3},
+      {"accuracy": 0.5, "cross_entropy": 1.4822401084274655, "hidden_units": 4, "l2": 0.01, "losses": 1, "selected": false, "wins": 3},
+      {"accuracy": 0.5, "cross_entropy": 0.8886931904413359, "hidden_units": 8, "l2": 0.01, "losses": 1, "selected": false, "wins": 3},
+      {"accuracy": 0.4166666666666667, "cross_entropy": 1.2131654144544275, "hidden_units": 16, "l2": 0.01, "losses": 2, "selected": false, "wins": 3},
+      {"accuracy": 0.5, "cross_entropy": 1.5837925182352894, "hidden_units": 8, "l2": 0.001, "losses": 1, "selected": false, "wins": 3}
+    ]
+  },
+  "training": {
+    "accuracy": 0.9166666666666666,
+    "cross_entropy": 0.351982724514198,
+    "examples": 24,
+    "paired_losses_to_route_cost": 0,
+    "paired_two_sided_exact_p": 0.00390625,
+    "paired_wins_over_route_cost": 9,
+    "route_cost_baseline_accuracy": 0.5416666666666666
+  },
+  "validation": {
+    "accuracy": 0.5833333333333334,
+    "cross_entropy": 0.8181731421512897,
+    "examples": 12,
+    "paired_both_correct": 4,
+    "paired_both_wrong": 5,
+    "paired_losses_to_route_cost": 0,
+    "paired_two_sided_exact_p": 0.25,
+    "paired_wins_over_route_cost": 3,
+    "route_cost_baseline_accuracy": 0.3333333333333333
+  }
+}

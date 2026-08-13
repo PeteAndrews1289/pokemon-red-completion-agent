@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 13 scene: the counter finally leaves zero
+
+Open on the old scoreboard—**COUNTED DATA 0 / TEST OPENED 0**—then replace only the first number:
+**36 COUNTED CHOICES / 24 TRAIN / 12 VALIDATION / TEST STILL 0**. Rapidly deal the candidate cards:
+17 two-way choices, 16 three-way choices, two four-way choices and one five-way choice. Overlay
+**36 UNIQUE QUESTIONS / 0 BUTTON LABELS / 0 FAILED ROWS PROMOTED**.
+
+Show the feature firewall as items being removed from the model's view: cross out **MAP NAME**,
+**COORDINATE**, **OBJECTIVE ID**, **DESTINATION ID**, **ANSWER SLOT**. Leave only **SEMANTIC TAGS +
+ROUTE STRUCTURE + AVAILABILITY**. Shuffle the candidate cards and show the probabilities shuffling
+with them. The line is: **“The model can prefer a kind of destination. It cannot memorize where
+Koga is or that the answer was card two.”**
+
+Then reveal the first score honestly: **MODEL 7/12 / CHEAPEST ROUTE 4/12 / PAIRED WINS 3 / LOSSES
+0**. Keep **EXACT P = 0.25** on screen long enough to read, followed by **PROMISING, NOT PROVEN**.
+Explain that validation chose among seven small models, while twelve test situations remain sealed.
+End the segment on **CLAUDE AUDIT → FREEZE DIGEST → ONE-SHOT TEST**, not on a claim of autonomy.
+The model has not controlled the live game yet; this is the first learned destination seam worthy
+of that next experiment.
+
 ## August 12 scene: the party became the curriculum
 
 Scenario 013 is a compact version of the whole project story. The shortest engineering answer was

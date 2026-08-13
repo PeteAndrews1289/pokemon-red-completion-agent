@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+> **2026-08-13 Lane A/C pre-test checkpoint:** counted scenario collection is complete at 24 train
+> and 12 development-validation episodes, with 36 unique contexts, one successful strategic label
+> per episode and test still 0/12 opened. The first identity-free shared-candidate MLP is frozen:
+> validation 7/12 versus cheapest-route 4/12, paired wins/losses 3/0, exact p = 0.25. This passes
+> the engineering gate, not a final significance claim. Claude should audit the historical
+> assignment reconstruction, 92-feature projection, partition guards, model-selection rule and
+> evidence before any test scenario is opened. The model has no live authority. Start at
+> `docs/claude-pre-test-audit-handoff-2026-08-13.md`.
+
 > **2026-08-11 Lane A/C scenario-design checkpoint:** the duplicate whole-root campaign remains
 > closed. Candidate-order-invariant fingerprints and paired unique-context admission are
 > implemented. The new v2 scenario registry prospectively fixes 48 graph-legal situations at
