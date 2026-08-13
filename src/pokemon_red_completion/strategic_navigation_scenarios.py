@@ -23,10 +23,13 @@ from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.quest import QuestGraph
 from pokemon_red_completion.strategic_navigation_protocol import (
+    STRATEGIC_NAVIGATION_SCENARIO_ASSIGNMENT_SCHEMA,
     STRATEGIC_NAVIGATION_SCENARIO_COLLECTION_ID,
+    STRATEGIC_NAVIGATION_SCENARIO_EPISODE_PREFIX,
     STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_ASSIGNMENT_SCHEMA,
     STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX,
     StrategicNavigationExecution,
+    StrategicNavigationScenarioAssignment,
     StrategicNavigationScenarioRehearsalAssignment,
 )
 
@@ -226,6 +229,77 @@ class StrategicNavigationScenarioRegistry:
                 f"{STRATEGIC_NAVIGATION_SCENARIO_REHEARSAL_EPISODE_PREFIX}"
                 f"{assignment_id}"
             ),
+            source_bundle_sha256=execution.source_bundle_sha256,
+            teacher_execution_sha256=execution.teacher_execution_sha256,
+            source_commit=execution.source_commit,
+        )
+
+    def learning_assignment(
+        self,
+        scenario_id: str,
+        *,
+        capture: CapturedProgressEnvelope,
+        execution: StrategicNavigationExecution,
+    ) -> StrategicNavigationScenarioAssignment:
+        """Bind one counted train/validation slot to exact state and source."""
+
+        if not isinstance(capture, CapturedProgressEnvelope):
+            raise TypeError("capture must be a CapturedProgressEnvelope")
+        if not isinstance(execution, StrategicNavigationExecution):
+            raise TypeError("execution must be a StrategicNavigationExecution")
+        if execution.source_commit is None:
+            raise StrategicScenarioProtocolError(
+                "scenario collection requires committed source identity"
+            )
+        scenario = self.scenario(scenario_id)
+        if frozenset(capture.verified_objective_ids) != frozenset(
+            scenario.completed_objective_ids
+        ):
+            raise StrategicScenarioProtocolError(
+                "capture objective frontier differs from strategic scenario"
+            )
+        learning = self.learning_scenarios()
+        partition_rows = tuple(
+            item for item in learning if item.partition == scenario.partition
+        )
+        collection_ordinal = learning.index(scenario) + 1
+        partition_ordinal = partition_rows.index(scenario) + 1
+        envelope_sha256 = canonical_sha256(capture.to_dict())
+        assignment_payload = {
+            "capture_envelope_sha256": envelope_sha256,
+            "capture_state_sha256": capture.state_sha256,
+            "checkpoint_id": capture.checkpoint_id,
+            "collection_id": STRATEGIC_SCENARIO_COLLECTION_ID,
+            "collection_slot_ordinal": collection_ordinal,
+            "declared_collection_slots": len(learning),
+            "declared_partition_slots": len(partition_rows),
+            "partition": scenario.partition,
+            "partition_slot_ordinal": partition_ordinal,
+            "registry_sha256": self.registry_sha256,
+            "scenario_id": scenario.scenario_id,
+            "scenario_sha256": scenario.scenario_sha256,
+            "schema": STRATEGIC_NAVIGATION_SCENARIO_ASSIGNMENT_SCHEMA,
+            "source_bundle_sha256": execution.source_bundle_sha256,
+            "source_commit": execution.source_commit,
+            "teacher_execution_sha256": execution.teacher_execution_sha256,
+        }
+        assignment_id = collection_document_sha256(assignment_payload)
+        return StrategicNavigationScenarioAssignment(
+            collection_id=STRATEGIC_SCENARIO_COLLECTION_ID,
+            registry_sha256=self.registry_sha256,
+            scenario_id=scenario.scenario_id,
+            scenario_sha256=scenario.scenario_sha256,
+            partition=scenario.partition,
+            capture_envelope_sha256=envelope_sha256,
+            capture_state_sha256=capture.state_sha256,
+            checkpoint_id=capture.checkpoint_id,
+            assignment_id=assignment_id,
+            root_lineage_id=f"red-scenario-root-{assignment_id}",
+            episode_id=f"{STRATEGIC_NAVIGATION_SCENARIO_EPISODE_PREFIX}{assignment_id}",
+            collection_slot_ordinal=collection_ordinal,
+            declared_collection_slots=len(learning),
+            partition_slot_ordinal=partition_ordinal,
+            declared_partition_slots=len(partition_rows),
             source_bundle_sha256=execution.source_bundle_sha256,
             teacher_execution_sha256=execution.teacher_execution_sha256,
             source_commit=execution.source_commit,

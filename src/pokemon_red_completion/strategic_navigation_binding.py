@@ -37,6 +37,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (
     StrategicNavigationAssignment,
     StrategicNavigationEpisodeAssignment,
     StrategicNavigationRehearsalAssignment,
+    StrategicNavigationScenarioAssignment,
     StrategicNavigationScenarioRehearsalAssignment,
 )
 
@@ -224,7 +225,10 @@ def bind_strategic_navigation_decision(
             raise StrategicNavigationError(
                 "a strategic rehearsal requires an assignment loaded from committed source"
             )
-    elif not isinstance(collection_assignment, StrategicNavigationAssignment):
+    elif not isinstance(
+        collection_assignment,
+        (StrategicNavigationAssignment, StrategicNavigationScenarioAssignment),
+    ):
         raise StrategicNavigationError(
             "a counted strategic decision requires a committed collection assignment"
         )

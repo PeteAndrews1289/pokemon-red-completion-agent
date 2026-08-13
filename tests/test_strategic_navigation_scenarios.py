@@ -249,6 +249,54 @@ def test_rehearsal_assignment_requires_committed_execution() -> None:
         )
 
 
+def test_learning_assignment_binds_one_counted_scenario_slot() -> None:
+    registry = parse_strategic_navigation_scenario_registry(REGISTRY_PATH.read_bytes())
+    scenario = registry.learning_scenarios()[0]
+    capture = CapturedProgressEnvelope(
+        state_sha256="7" * 64,
+        checkpoint_id="scenario-counted-001",
+        checkpoint_label="private counted boundary",
+        checkpoints_completed=3,
+        checkpoints_total=40,
+        verified_objective_ids=scenario.completed_objective_ids,
+    )
+    execution = replace(
+        parse_strategic_navigation_registry(EXECUTION_REGISTRY_PATH.read_bytes()).execution,
+        source_commit="8" * 40,
+    )
+
+    assignment = registry.learning_assignment(
+        scenario.scenario_id,
+        capture=capture,
+        execution=execution,
+    )
+
+    assert assignment.partition == "train"
+    assert assignment.collection_slot_ordinal == 1
+    assert assignment.declared_collection_slots == 36
+    assert assignment.partition_slot_ordinal == 1
+    assert assignment.declared_partition_slots == 24
+    assert len(assignment.episode_id) <= 80
+    assert assignment == registry.learning_assignment(
+        scenario.scenario_id,
+        capture=capture,
+        execution=execution,
+    )
+    metadata = assignment.episode_metadata()
+    collection = metadata["collection"]
+    assert isinstance(collection, dict)
+    assert collection["attempt"] == {"attempts_per_slot": 1, "counted": True}
+    assert metadata["split"] == {
+        "partition": "train",
+        "regime": "within_game_authenticated_scenario",
+        "root_lineage_id": assignment.root_lineage_id,
+    }
+    assert "/" not in json.dumps(metadata, sort_keys=True)
+
+    with pytest.raises(StrategicNavigationProtocolError, match="digest differs"):
+        replace(assignment, capture_state_sha256="9" * 64)
+
+
 def test_registry_and_digest_have_stable_public_identities() -> None:
     registry = load_strategic_navigation_scenario_registry(PROJECT_ROOT)
     digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))

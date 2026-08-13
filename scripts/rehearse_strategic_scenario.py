@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Preflight or execute one uncounted, authenticated strategic scenario.
+"""Preflight or execute one authenticated strategic scenario.
 
 The default mode is read-only: it reloads the exact private checkpoint, plans
 every preregistered candidate, and reports whether the branch is executable.
-Pass ``--execute`` only after that succeeds.  Execution creates one immutable
-private episode and can never consume a train, validation, or test assignment.
+Pass ``--execute`` only after that succeeds. By default execution creates an
+uncounted rehearsal. ``--counted`` consumes exactly one preregistered train or
+validation scenario; the registry keeps test inaccessible.
 """
 
 from __future__ import annotations
@@ -112,6 +113,7 @@ from pokemon_red_completion.strategic_navigation_dataset import (  # noqa: E402
 )
 from pokemon_red_completion.strategic_navigation_protocol import (  # noqa: E402
     StrategicNavigationProtocolError,
+    StrategicNavigationScenarioAssignment,
     StrategicNavigationScenarioRehearsalAssignment,
     load_committed_strategic_navigation_registry,
 )
@@ -164,6 +166,11 @@ def _parser() -> argparse.ArgumentParser:
         help="write and execute the uncounted one-shot rehearsal",
     )
     parser.add_argument(
+        "--counted",
+        action="store_true",
+        help="bind and execute the scenario's one counted train/validation slot",
+    )
+    parser.add_argument(
         "--watch",
         action="store_true",
         help="show a view-only game window during execution",
@@ -180,7 +187,8 @@ def _parser() -> argparse.ArgumentParser:
 
 def _metadata(
     *,
-    assignment: StrategicNavigationScenarioRehearsalAssignment,
+    assignment: StrategicNavigationScenarioAssignment
+    | StrategicNavigationScenarioRehearsalAssignment,
     objective_graph_sha256: str,
     rom_identity: Mapping[str, object],
     runtime: RuntimeIdentity,
@@ -201,7 +209,9 @@ def _metadata(
         "execution_mode": "one_choice_then_selected_approach",
         "maximum_flees": maximum_flees,
         "maximum_trainer_battles": maximum_trainer_battles,
-        "scenario_rehearsal": True,
+        "scenario_rehearsal": isinstance(
+            assignment, StrategicNavigationScenarioRehearsalAssignment
+        ),
         "trajectory_reload_required": True,
     }
     metadata.update(
@@ -224,6 +234,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise StrategicScenarioRuntimeError("--speed requires --watch")
     if args.watch and not args.execute:
         raise StrategicScenarioRuntimeError("--watch requires --execute")
+    if args.counted and not args.execute:
+        raise StrategicScenarioRuntimeError("--counted requires --execute")
     if args.maximum_flees < 0 or args.maximum_trainer_battles < 0:
         raise StrategicScenarioRuntimeError("interruption budgets must be non-negative")
 
@@ -247,10 +259,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     state_path = args.state
     envelope_path = args.envelope or Path(f"{state_path}.json")
     capture = load_captured_progress(envelope_path, state_path=state_path)
-    assignment = scenario_registry.rehearsal_assignment(
-        scenario.scenario_id,
-        capture=capture,
-        execution=execution,
+    assignment = (
+        scenario_registry.learning_assignment(
+            scenario.scenario_id,
+            capture=capture,
+            execution=execution,
+        )
+        if args.counted
+        else scenario_registry.rehearsal_assignment(
+            scenario.scenario_id,
+            capture=capture,
+            execution=execution,
+        )
     )
     runtime = build_runtime_identity()
     metadata = _metadata(
@@ -320,8 +340,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "schema": "strategic-navigation-scenario-preflight-v1",
             "status": "ready",
             "assignment_id": assignment.assignment_id,
-            "counted": False,
-            "partition": "unassigned",
+            "counted": args.counted,
+            "partition": assignment.partition,
             "scenario_id": scenario.scenario_id,
             "source_partition": scenario.partition,
             "candidate_count": len(bindings),

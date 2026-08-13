@@ -69,6 +69,7 @@ from pokemon_red_completion.strategic_navigation_dataset import (
     load_assigned_strategic_navigation_episode,
 )
 from pokemon_red_completion.strategic_navigation_protocol import (
+    StrategicNavigationScenarioAssignment,
     StrategicNavigationScenarioRehearsalAssignment,
 )
 from pokemon_red_completion.strategic_navigation_runtime import (
@@ -535,7 +536,8 @@ InterruptionHandlerFactory = Callable[
 def record_strategic_scenario_rehearsal(
     private_root: PrivateArtifactRoot,
     *,
-    assignment: StrategicNavigationScenarioRehearsalAssignment,
+    assignment: StrategicNavigationScenarioAssignment
+    | StrategicNavigationScenarioRehearsalAssignment,
     scenario: StrategicNavigationScenario,
     metadata: Mapping[str, object],
     snapshot_provider: SnapshotProvider,
@@ -552,8 +554,11 @@ def record_strategic_scenario_rehearsal(
 
     if not isinstance(private_root, PrivateArtifactRoot):
         raise TypeError("private_root must be a PrivateArtifactRoot")
-    if not isinstance(assignment, StrategicNavigationScenarioRehearsalAssignment):
-        raise TypeError("assignment must be a scenario rehearsal assignment")
+    if not isinstance(
+        assignment,
+        (StrategicNavigationScenarioAssignment, StrategicNavigationScenarioRehearsalAssignment),
+    ):
+        raise TypeError("assignment must be a strategic scenario assignment")
     if assignment.scenario_id != scenario.scenario_id:
         raise StrategicScenarioRuntimeError(
             "scenario rehearsal assignment differs from requested scenario"
