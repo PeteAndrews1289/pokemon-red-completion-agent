@@ -135,9 +135,9 @@ def test_catalog_objects_cannot_be_forged_directly() -> None:
             cases=catalog.cases,
             _validation_token=object(),
         )
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(catalog, runtime_sha256="b" * 64)
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(catalog.cases[0], capture_state_sha256="c" * 64)
 
 
@@ -291,7 +291,7 @@ def test_case_input_opener_reads_only_the_digest_bound_synthetic_layout(
     assert opened.state_bytes == state
     assert opened.envelope.checkpoint_id == "sealed-synthetic-01"
     assert opened.entry is catalog.cases[0]
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(opened, state_bytes=b"replacement")
 
 

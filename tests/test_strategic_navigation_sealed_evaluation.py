@@ -228,9 +228,9 @@ def test_authorization_is_canonical_and_bound_to_every_frozen_identity() -> None
             ),
             _validation_token=object(),
         )
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(plan, plan_sha256="f" * 64)
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(authorization, case_catalog_sha256="e" * 64)
 
 
@@ -250,7 +250,7 @@ def test_runtime_grant_cannot_be_forged_or_issued_for_a_preflight_mismatch() -> 
             ),
             _validation_token=object(),
         )
-    with pytest.raises(TypeError, match="InitVar"):
+    with pytest.raises((TypeError, ValueError), match="InitVar"):
         replace(grant, source_commit="b" * 40)
     assert grant.external_audit_receipt_sha256 == EXTERNAL_AUDIT_RECEIPT_SHA256
     assert grant.non_test_adapter_qualification_receipt_sha256 == (
