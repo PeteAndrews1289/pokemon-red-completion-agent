@@ -182,8 +182,13 @@ VIRIDIAN_TO_MART_DIRECTIONS = _directions("UUUUULUULUUUUUUUURRRRRRRRRRU")
 VIRIDIAN_MART_RETURN_DIRECTIONS = _directions("LLLLLLLLLLDDDDDDDDRDDRDDDDD")
 VIRIDIAN_TO_CENTER_DIRECTIONS = _directions("UUUUULUULUURRRRU")
 VIRIDIAN_CENTER_RETURN_DIRECTIONS = _directions("LLLLDDRDDRDDDDD")
-VERMILION_ROUTE_11_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 10 + "L" * 10)
-VERMILION_CENTER_TO_ROUTE_11 = _directions("R" * 10 + "D" * 10 + "RR")
+# The shortest vertical line through x=21 crosses the roaming Vermilion NPC's
+# measured tile at (21, 7).  Long team-training runs eventually meet a timing
+# where repeated UP pulses pin that NPC instead of letting it clear.  The
+# cartridge collision map provides an equal-cost parallel lane through x=20;
+# enter it below the roaming tile and use the exact inverse on the return leg.
+VERMILION_ROUTE_11_TO_CENTER_EXTERIOR = _directions("LL" + "U" * 6 + "L" + "U" * 4 + "L" * 9)
+VERMILION_CENTER_TO_ROUTE_11 = _directions("R" * 9 + "D" * 4 + "R" + "D" * 6 + "RR")
 VERMILION_PC_TO_NURSE = _directions("LLLLDLLLLDLUULU")
 VERMILION_NURSE_TO_EXIT = _directions("DDDDD")
 
@@ -846,9 +851,7 @@ def _buy_mart_item(
         if selected == item and current_quantity == quantity:
             break
         if selected != item:
-            raise SurgeChapterError(
-                f"Mart selected {selected:#04x}, expected {int(item):#04x}."
-            )
+            raise SurgeChapterError(f"Mart selected {selected:#04x}, expected {int(item):#04x}.")
         _pulse(executor, MacroActionKind.MOVE, "up", 120)
     else:
         raise SurgeChapterError(f"Mart quantity selector missed {quantity}.")
@@ -1057,9 +1060,7 @@ def _force_switch_failed_flee_to_living(
         )
     except ProtectedRecoveryError as error:
         restored = reader.read()
-        if restored.battle_state == 0 and any(
-            hp > 0 for hp in (restored.party_hp or ())
-        ):
+        if restored.battle_state == 0 and any(hp > 0 for hp in (restored.party_hp or ())):
             return restored
         raise SurgeChapterError(
             "Failed-flee shared switch failed: "
@@ -2369,14 +2370,8 @@ class _LiveWildCorridorSurveyExecutor:
 
         for attempt in range(ROUTE_1_WALKER_CLEAR_ATTEMPTS):
             state = self._reader.read()
-            gate = ROUTE_1_WALKER_GATES.get(
-                ((state.player_x, state.player_y), crossing_direction)
-            )
-            if (
-                state.map_id != MapId.ROUTE_1
-                or state.battle_state != 0
-                or gate is None
-            ):
+            gate = ROUTE_1_WALKER_GATES.get(((state.player_x, state.player_y), crossing_direction))
+            if state.map_id != MapId.ROUTE_1 or state.battle_state != 0 or gate is None:
                 raise SurgeChapterError("Route 1 walker recovery left its bounded approach gate.")
             yield_position, crossed_position = gate
 
@@ -2645,9 +2640,7 @@ def _force_switch_wild_capture_to_lead(
         or (restored.battler_hp or 0) <= 0
         or reader.read_battle_menu_state(restored).phase is not BattleMenuPhase.MAIN
     ):
-        raise SurgeChapterError(
-            f"{label} shared forced switch changed its protected target."
-        )
+        raise SurgeChapterError(f"{label} shared forced switch changed its protected target.")
     return restored
 
 
@@ -2909,8 +2902,7 @@ def _store_wild_collection_specimens(
     _confirm(executor, 9, 240)
     healed = reader.read()
     if (
-        healed.party_species_ids
-        != (WARTORTLE_SPECIES_ID, DUX_SPECIES_ID, DIGLETT_SPECIES_ID)
+        healed.party_species_ids != (WARTORTLE_SPECIES_ID, DUX_SPECIES_ID, DIGLETT_SPECIES_ID)
         or healed.party_hp != healed.party_max_hp
         or any(healed.party_status or ())
     ):

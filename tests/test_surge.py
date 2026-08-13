@@ -343,9 +343,7 @@ def test_encounter_aware_corridor_preserves_the_interrupted_grass_step(
 
 
 def test_post_collection_pc_route_visits_nurse_before_exiting() -> None:
-    assert surge_module._directions(
-        "LLLLDLLLLDLUULU"
-    ) == surge_module.VERMILION_PC_TO_NURSE
+    assert surge_module._directions("LLLLDLLLLDLUULU") == surge_module.VERMILION_PC_TO_NURSE
     assert surge_module._directions("DDDDD") == surge_module.VERMILION_NURSE_TO_EXIT
 
 
@@ -926,9 +924,10 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
     assert COLLECTION_POKE_BALL_TARGET == 30
     assert surge_module.FOREST_POKE_BALL_RESERVE == COLLECTION_POKE_BALL_TARGET
     assert surge_module.POKE_BALL_PRICE == 200
-    assert surge_module._directions(
-        "D" + "R" * 24 + "U" * 3 + "R" + "U" * 4
-    ) == surge_module.SHIP_1F_RETURN
+    assert (
+        surge_module._directions("D" + "R" * 24 + "U" * 3 + "R" + "U" * 4)
+        == surge_module.SHIP_1F_RETURN
+    )
     assert (
         surge_module._inverse_directions(surge_module.VIRIDIAN_TO_MART_DIRECTIONS[:-1])
         == surge_module.VIRIDIAN_MART_RETURN_DIRECTIONS
@@ -941,8 +940,28 @@ def test_source_pinned_surge_identity_and_dux_constants() -> None:
         == surge_module.VIRIDIAN_CENTER_RETURN_DIRECTIONS
     )
     assert (
-        surge_module._directions("LLUUUUUUUUUULLLLLLLLLL")
+        surge_module._directions("LLUUUUUULUUUULLLLLLLLL")
         == surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR
+    )
+    assert (
+        surge_module._directions("RRRRRRRRRDDDDRDDDDDDRR")
+        == surge_module.VERMILION_CENTER_TO_ROUTE_11
+    )
+    position = (23, 14)
+    trail = [position]
+    offsets = {"left": (-1, 0), "right": (1, 0), "up": (0, -1), "down": (0, 1)}
+    for direction in surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR:
+        dx, dy = offsets[direction]
+        position = (position[0] + dx, position[1] + dy)
+        trail.append(position)
+    assert position == (11, 4)
+    assert (21, 7) not in trail
+    assert (
+        tuple(
+            {"left": "right", "right": "left", "up": "down", "down": "up"}[direction]
+            for direction in reversed(surge_module.VERMILION_ROUTE_11_TO_CENTER_EXTERIOR)
+        )
+        == surge_module.VERMILION_CENTER_TO_ROUTE_11
     )
     assert (
         CATERPIE_SPECIES_ID,
