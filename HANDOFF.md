@@ -14,6 +14,52 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Portable goal manager becomes the active path — 2026-08-13
+
+The owner clarified the end goal: a model that can play Pokémon, learn new titles with less
+teaching, and eventually pursue a living collection across games. The sealed Red destination test
+is therefore paused—not invalidated—at 0/12. Do not resume capture construction or open a test case
+unless the owner explicitly restores that priority.
+
+The new active seam is implemented in `goal_manager.py`, `goal_manager_model.py`,
+`goal_manager_state.py`, and `goal_manager_trajectory.py`. It sits above strategic destination
+choice and chooses among nine portable intents: story, acquisition, team development, evolution,
+healing, resupply, storage, recovery, and exploration. A title adapter supplies normalized need
+pressure plus executable options; the model never receives title, map, objective, species, item,
+move, binding, party-slot, or candidate-position identity. Each kind has a fixed need mapping,
+duplicate kinds are rejected at this layer, and unavailable candidates must receive exactly zero
+probability before a private binding can execute. The live wrapper has no teacher query or
+disagreement fallback. The trajectory boundary writes a choice before action and requires exactly
+one typed result; failure stays negative evidence and interruption stays censored.
+
+The model and curriculum machinery are executable, but there is no production manager artifact:
+real data is 0 train / 0 validation. Synthetic tests prove only invariance, context dependence,
+masking, serialization, and causal binding. Do not relabel the existing 24/12 strategic-navigation
+corpus; it ranks destinations after `advance_story` is already fixed and cannot teach when to heal,
+catch, train, evolve, or manage storage.
+
+Default admission now requires 54 unique successful training contexts and 27 unique development
+contexts across all nine needs/kinds, 24 multiway training decisions, three semantic menus whose
+correct label changes with state, varied answer positions, whole-root separation, and no replay,
+conflict, or train/validation overlap. Environment identity exists only in provenance so Crystal
+can be held out. The older objective projector also now normalizes `badge_count` by an
+adapter-declared `badge_target`; Red defaults to eight while a full Crystal profile can declare
+sixteen.
+
+Next, in order:
+
+1. wire Red's existing live observations into the implemented `GoalStateEvidence` normalizer;
+2. enumerate one executable `GoalOpportunity` per kind and bind it to existing specialists;
+3. freeze a prospective source-bound microcontext assignment registry and connect the implemented
+   record-before-action observer to the Red loop;
+4. collect short 54/27 Red microcontexts rather than full-game duplicate roots;
+5. fit the bootstrap model, compare it with lowest-effort, fixed-priority, and highest-pressure
+   baselines, then run shadow and causal Red authority with no fallback; and
+6. freeze the model for Crystal zero-shot/few-shot/from-scratch microbenchmarks.
+
+The complete design and claim boundary are in
+[docs/portable-goal-manager.md](docs/portable-goal-manager.md).
+
 ## Schema-v9 hard relocation passes public rehearsal; publication pending — 2026-08-13
 
 Schema v8 was published at `b82d290` and passed exact-commit CI. Its scenario-046 train

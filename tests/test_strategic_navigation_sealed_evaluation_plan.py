@@ -65,6 +65,22 @@ def test_sealed_plan_is_canonical_digest_bound_and_reproducible() -> None:
     )
 
 
+def test_paused_plan_cannot_be_regenerated_implicitly() -> None:
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "scripts/regenerate_strategic_navigation_sealed_evaluation_plan.py",
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode != 0
+    assert "explicitly reviewed successor" in completed.stderr
+
+
 def test_sealed_plan_binds_the_five_parameter_model_without_opening_test() -> None:
     plan = _plan()
     model = plan["frozen_model"]
@@ -235,9 +251,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
         },
         {
             "amended_before_private_access": True,
-            "change": (
-                "bind_directional_warp_arrival_and_durable_failed_qualification_receipts"
-            ),
+            "change": ("bind_directional_warp_arrival_and_durable_failed_qualification_receipts"),
             "reason": (
                 "live_non_test_saffron_cinnabar_qualification_exposed_"
                 "directional_door_arrival_mismatch"
@@ -248,9 +262,7 @@ def test_sealed_plan_amendment_precedes_private_access_and_preserves_cases() -> 
         },
         {
             "amended_before_private_access": True,
-            "change": (
-                "bind_destination_warp_trigger_and_connection_arrival_semantics"
-            ),
+            "change": ("bind_destination_warp_trigger_and_connection_arrival_semantics"),
             "reason": (
                 "published_hard_non_test_qualification_exposed_destination_"
                 "trigger_and_connection_arrival_semantics"

@@ -19,6 +19,7 @@ from pokemon_red_completion.party import (
     PartyMemberObservation,
     PartyObservation,
 )
+from pokemon_red_completion.planner_semantics import ObjectiveFeatureProjector
 from pokemon_red_completion.pokedex import (
     ExclusionReason,
     LivingDex,
@@ -28,6 +29,7 @@ from pokemon_red_completion.pokedex import (
     summarize,
 )
 from pokemon_red_completion.red_pokedex import RED_POKEDEX_TARGET
+from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     GrindingArea,
@@ -211,3 +213,29 @@ def test_training_control_projection_is_invariant_to_title_identity() -> None:
         crystal_party,
         "mount_silver",
     )
+
+
+def test_objective_progress_normalizes_each_titles_declared_badge_target() -> None:
+    """A full Crystal run has sixteen badges; eight is only Red's default."""
+
+    projector = ObjectiveFeatureProjector(COMPLETION_QUEST)
+    candidates = (COMPLETION_QUEST.objective("defeat_koga"),)
+
+    def project(badge_count: int, badge_target: int):
+        return projector.project(
+            {
+                "facts": [],
+                "features": {
+                    "progress": {
+                        "badge_count": badge_count,
+                        "badge_target": badge_target,
+                    },
+                    "world": {"area_kind": "settlement"},
+                },
+                "location": "pokemon.test:area:start",
+            },
+            candidates,
+            objective_count=len(COMPLETION_QUEST),
+        ).candidate_vectors
+
+    assert project(4, 8) == pytest.approx(project(8, 16))

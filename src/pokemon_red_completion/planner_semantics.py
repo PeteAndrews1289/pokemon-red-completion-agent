@@ -95,8 +95,13 @@ class ObjectiveFeatureProjector:
         features = _mapping(snapshot.get("features"), subject="snapshot features")
         progress = _mapping(features.get("progress"), subject="progress features")
         badge_count = progress.get("badge_count", 0)
-        if type(badge_count) is not int or not 0 <= badge_count <= 8:  # noqa: E721
-            raise PlannerFeatureError("badge_count must be between zero and eight")
+        badge_target = progress.get("badge_target", 8)
+        if type(badge_target) is not int or badge_target < 1:  # noqa: E721
+            raise PlannerFeatureError("badge_target must be a positive integer")
+        if (  # noqa: E721
+            type(badge_count) is not int or not 0 <= badge_count <= badge_target
+        ):
+            raise PlannerFeatureError("badge_count must fit the declared badge target")
         world = _mapping(features.get("world"), subject="world features")
         area_kind = world.get("area_kind")
         if area_kind is not None and not isinstance(area_kind, str):
@@ -105,15 +110,13 @@ class ObjectiveFeatureProjector:
             fact for fact in facts if not fact.startswith("pokemon.core:")
         )
         progress_fraction = min(1.0, len(completed_objective_facts) / objective_count)
-        badge_fraction = badge_count / 8.0
+        badge_fraction = badge_count / badge_target
 
         rows: list[list[float]] = []
         candidate_ids: list[str] = []
         for candidate in candidates:
             specialist = candidate.specialist.value
-            completion_kinds = {
-                _fact_kind(fact) for fact in candidate.completion_facts
-            }
+            completion_kinds = {_fact_kind(fact) for fact in candidate.completion_facts}
             row: list[float] = [
                 1.0,
                 min(candidate.priority, 1000) / 1000.0,
@@ -122,12 +125,8 @@ class ObjectiveFeatureProjector:
             ]
             row.extend(float(specialist == name) for name in _SPECIALISTS)
             row.extend(float(name in completion_kinds) for name in _FACT_KINDS)
-            row.extend(
-                progress_fraction * float(specialist == name) for name in _SPECIALISTS
-            )
-            row.extend(
-                badge_fraction * float(name in completion_kinds) for name in _FACT_KINDS
-            )
+            row.extend(progress_fraction * float(specialist == name) for name in _SPECIALISTS)
+            row.extend(badge_fraction * float(name in completion_kinds) for name in _FACT_KINDS)
             row.append(
                 float(
                     candidate.target_region is not None

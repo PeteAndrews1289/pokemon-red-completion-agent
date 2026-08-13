@@ -2139,3 +2139,48 @@ observed objectives, 74/74 scheduled battles, Champion, and Hall of Fame. Agatha
 newly bounded Revive, restored its specialist, and left the complete party healthy for Lance and
 Champion. The next gate is one fresh uncounted derived-timing root under unchanged source. If it
 passes, freeze and decide whether to open v95; counted roots remain 0/10.
+
+## Transferable goal-manager lane — active from 2026-08-13
+
+The owner reset the priority from proving one more Red destination score to building the model
+architecture that can eventually play and collect across titles. Preserve the sealed destination
+test at 0/12, but do not spend the active lane manufacturing its missing captures.
+
+- [x] Define nine cross-title need pressures and nine semantic goal kinds above destination choice.
+- [x] Keep title, map, objective, species, item, move, binding, slot, and candidate-order identity
+  outside the policy projection.
+- [x] Give each kind a fixed need mapping so a title adapter cannot encode the teacher label as
+  authored expected utility.
+- [x] Reject duplicate kinds at the manager layer; same-kind destination ranking stays below it.
+- [x] Implement shared-candidate features, a train-only linear bootstrap, deterministic model
+  identity, authenticated loading, and per-environment/per-kind evaluation.
+- [x] Implement a causal wrapper with confidence gating, exact unavailable-option masking, private
+  rebinding, zero teacher queries, and separate singleton-versus-choice accounting.
+- [x] Add curriculum admission gates for unique contexts, whole-root splits, held-out titles,
+  multiway decisions, answer-position diversity, and repeated menus with different correct labels.
+- [x] Remove the objective projector's universal eight-badge ceiling; normalize against each
+  adapter's declared badge target.
+- [x] Add an independently testable, game-neutral evidence composer for collection, party
+  readiness/safety, storage, supply, progress, recovery, evolution, and world knowledge.
+- [ ] Wire the existing live Red observations into that composer without adding Red identity to
+  model input.
+- [ ] Enumerate one safely executable Red opportunity per goal kind and bind it to existing
+  objective, destination, collection, training, healing, storage, and recovery skills.
+- [x] Add record-before-action manager decisions and exactly one consumed success/failure/censored
+  outcome without recording private bindings in model input.
+- [ ] Freeze a source-bound assignment registry before collecting short Red manager contexts.
+- [ ] Preregister 54 short Red training contexts and 27 development contexts across all nine goal
+  kinds; group related roots before collection and keep a future title-held-out partition.
+- [x] Add static-priority and highest-pressure baselines alongside lowest-effort, with paired
+  reporting for each.
+- [ ] Fit only after the curriculum audit passes. Unit-test fixtures never count as gameplay data.
+- [ ] Run Red shadow evaluation, followed by causal goal authority with no teacher fallback and an
+  independent semantic referee.
+- [ ] Freeze the Red manager and compare Crystal zero-shot, few-shot adaptation, and from-scratch
+  learning on the same bounded tasks.
+- [ ] Expand acquisition, evolution, storage, breeding, trade, version, and multi-save adapters
+  until the same hierarchy can pursue each title's declared living-Pokédex contract.
+
+Exit gate: the learned manager makes genuine multi-need decisions under changed Red states and the
+same frozen representation provides measurable sample-efficiency value on a held-out title. A
+complete Red route alone does not satisfy this gate.

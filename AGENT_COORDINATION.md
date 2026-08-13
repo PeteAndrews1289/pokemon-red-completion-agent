@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-13 transferable-manager checkpoint (supersedes sealed-test priority):** the owner
+> clarified that the objective is a model that learns to play Pokémon and ultimately pursues a
+> living collection across games. The sealed Red destination test remains unopened at 0/12 and its
+> artifacts stay frozen, but it is no longer the active lane. The new active boundary is the
+> game-neutral goal manager in `goal_manager.py` / `goal_manager_model.py`: nine normalized needs,
+> nine semantic goal kinds, identity-free shared-candidate features, hard availability masking,
+> train-only fitting, three fixed baselines, held-out-environment audits, and a causal
+> no-teacher-fallback wrapper. `goal_manager_state.py` normalizes existing semantic evidence and
+> `goal_manager_trajectory.py` provides record-before-action choice/outcome joins. It still has zero
+> genuine multi-need examples; unit-test fixtures are not training evidence. Next wire the live Red
+> observations and executable opportunity enumerator, freeze short-context assignments, then
+> collect 54 train / 27 development contexts before fitting. Start at
+> `docs/portable-goal-manager.md`.
+
 > **2026-08-13 Lane C endpoint-amendment checkpoint:** Claude's second audit approved the
 > five-coefficient selection and conservative scoring mechanics, then found that including two
 > non-challenge cases in the primary paired test sharply reduced power. Before any private access,

@@ -206,6 +206,8 @@ def _protocol(runtime: RuntimeIdentity):
         parse_strategic_navigation_registry(
             (PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH).read_bytes()
         ).execution,
+        source_bundle_sha256=plan.execution_source_bundle_sha256,
+        teacher_execution_sha256=plan.teacher_execution_sha256,
         source_commit=authorization.source_commit,
     )
     return plan, scenarios, catalog, authorization, grant, execution

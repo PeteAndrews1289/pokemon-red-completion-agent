@@ -54,6 +54,14 @@ FROZEN_FEATURES = (
     "candidate.mode_changes.relative_rank",
 )
 
+# This lane is deliberately paused while the transferable goal manager is the
+# active experiment.  Source changes outside the frozen evaluator invalidate
+# its old authorization, but must not silently rewrite a one-shot plan.  A
+# future explicit reauthorization can regenerate a successor plan.
+PAUSE_FREEZE_EXISTING_PLAN = True
+PAUSED_PLAN_BYTES = 13_979
+PAUSED_PLAN_SHA256 = "40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138"
+
 
 def _canonical_line(value: object) -> bytes:
     return (
@@ -220,9 +228,7 @@ def _generated_payloads() -> tuple[bytes, bytes, dict[str, object]]:
             },
             {
                 "amended_before_private_access": True,
-                "change": (
-                    "bind_destination_warp_trigger_and_connection_arrival_semantics"
-                ),
+                "change": ("bind_destination_warp_trigger_and_connection_arrival_semantics"),
                 "reason": (
                     "published_hard_non_test_qualification_exposed_destination_"
                     "trigger_and_connection_arrival_semantics"
@@ -350,8 +356,40 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
-    payload, digest_payload, summary = _generated_payloads()
     if args.check:
+        if PAUSE_FREEZE_EXISTING_PLAN:
+            if not PLAN_PATH.is_file() or not DIGEST_PATH.is_file():
+                raise SystemExit("paused strategic sealed evaluation plan is absent")
+            payload = PLAN_PATH.read_bytes()
+            try:
+                digest = json.loads(DIGEST_PATH.read_bytes())
+                document = json.loads(payload)
+            except (UnicodeError, json.JSONDecodeError) as error:
+                raise SystemExit("paused strategic sealed evaluation plan is invalid") from error
+            if (
+                len(payload) != PAUSED_PLAN_BYTES
+                or hashlib.sha256(payload).hexdigest() != PAUSED_PLAN_SHA256
+                or not isinstance(document, dict)
+                or document.get("schema") != PLAN_SCHEMA
+                or not isinstance(digest, dict)
+                or digest.get("schema") != DIGEST_SCHEMA
+                or digest.get("bytes") != len(payload)
+                or digest.get("sha256") != hashlib.sha256(payload).hexdigest()
+            ):
+                raise SystemExit("paused strategic sealed evaluation plan digest differs")
+            print(
+                json.dumps(
+                    {
+                        "bytes": len(payload),
+                        "paused": True,
+                        "plan_sha256": hashlib.sha256(payload).hexdigest(),
+                        "private_test_inputs_opened": 0,
+                    },
+                    sort_keys=True,
+                )
+            )
+            return
+        payload, digest_payload, summary = _generated_payloads()
         if (
             not PLAN_PATH.is_file()
             or not DIGEST_PATH.is_file()
@@ -360,6 +398,11 @@ def main(argv: list[str] | None = None) -> None:
         ):
             raise SystemExit("strategic sealed evaluation plan is stale")
     else:
+        if PAUSE_FREEZE_EXISTING_PLAN:
+            raise SystemExit(
+                "strategic sealed evaluation is paused; create an explicitly reviewed successor"
+            )
+        payload, digest_payload, summary = _generated_payloads()
         PLAN_PATH.parent.mkdir(parents=True, exist_ok=True)
         PLAN_PATH.write_bytes(payload)
         DIGEST_PATH.write_bytes(digest_payload)

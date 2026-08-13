@@ -2,6 +2,21 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
+> **Current research direction (August 13, 2026):** Red is now explicitly the first curriculum,
+> not the product. A game-neutral long-horizon goal-manager seam is implemented above the existing
+> destination ranker and bounded specialists. It can rank story progress, acquisition, team
+> development, evolution, healing, resupply, storage, recovery, and exploration without receiving
+> game, map, objective, species, binding, slot, or candidate-position identity. Unavailable goals
+> are hard-masked and the causal wrapper has no teacher fallback. The new manager has **zero real
+> multi-need training examples today**; synthetic tests establish architecture invariants only.
+> Normalized campaign-state evidence, record-before-action collection, strict outcome joins, and
+> lowest-effort/static-priority/highest-pressure comparisons are now implemented. The next data
+> campaign is 54 short Red training contexts plus 27 development contexts, followed
+> by frozen zero-shot/few-shot/from-scratch Crystal evaluation. The earlier one-shot Red
+> destination test remains unopened at 0/12 but is paused because it does not answer the broader
+> “can this model play Pokémon?” question. See the
+> [portable goal-manager design](docs/portable-goal-manager.md).
+
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy
 > contexts, no partition overlap, and zero sealed-test scenarios opened. Independent audit stopped

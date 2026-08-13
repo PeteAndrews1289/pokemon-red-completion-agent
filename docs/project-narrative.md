@@ -1,5 +1,36 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 13: Red becomes the curriculum, not the product
+
+The project had not been building nothing. It had built the expensive substrate a transferable
+player needs: a deterministic Red expert, semantic state readers, verified battle and capture
+mechanics, party development, evolution, storage, cartridge-derived routing, bounded recovery,
+recorded decisions, and independent outcome checks. Those pieces answer *how* to carry out work in
+the game.
+
+The drift was one layer above them. Recent effort treated a sealed “which story destination?” test
+as though it were the gate to a Pokémon-playing model. That experiment is useful, but it begins
+after the important choice has already been made. It cannot teach when to stop story progress and
+heal, catch, train, evolve, resupply, rotate storage, recover control, or explore. The owner had
+repeatedly stated that cross-game play and eventual living-Pokédex completion were the goal; the
+roadmap had narrowed the milestone too far.
+
+The correction is additive rather than a rewrite. A new game-neutral goal manager sits above the
+existing destination ranker and specialists. It sees nine normalized need pressures and ranks nine
+semantic kinds of work without game, map, objective, species, item, move, binding, party slot, or
+candidate-position identity. The state composer normalizes different badge totals, Pokédex sizes,
+party levels, safety, supplies, storage, evolution, recovery, and world knowledge. The data path
+writes the choice before execution and consumes exactly one verified success, failure, or censored
+interruption. Evaluation includes lowest-effort, static-priority, and highest-pressure heuristics so
+a learned model cannot earn a claim merely by beating a weak convenience baseline.
+
+The honest number is still **0 real multi-need demonstrations**. The existing 24/12 strategic
+dataset remains useful for choosing a destination after story work is selected; it is not being
+relabelled as broader judgment. The next experiment is 54 short Red training contexts and 27
+development contexts spanning all nine needs, followed by causal Red authority and a frozen
+Crystal zero-shot/few-shot/from-scratch comparison. The sealed destination test stays unopened at
+0/12, preserved but paused.
+
 ## August 13: the audit stopped us from spending the test on the wrong experiment
 
 The first model was ready, authenticated and green across 2,801 tests. That made the next decision

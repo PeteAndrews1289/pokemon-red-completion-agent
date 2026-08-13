@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## New framing scene: we built the hands before the executive brain
+
+Open on a fast stack of verified capabilities: navigate, battle, capture, evolve, heal, shop,
+manage storage, recover. Label them **THE HANDS**. Then show the missing question above them:
+**WHAT KIND OF WORK SHOULD HAPPEN NEXT?**
+
+This is the candid turn in the story. The narrow destination model was real progress, but it was
+being treated as a project-level finish line even though the intended finish line had always been
+cross-game play and eventual living-Pokédex completion. Freeze the sealed-test counter at **0/12 —
+PRESERVED, PAUSED**, then insert the new manager between campaign state and the existing skills.
+Cycle the same menu through three states: injured party selects heal; safe underlevelled party
+selects train; ready party with a missing local species selects catch. Shuffle the cards and keep
+the answer unchanged. Replace Red bindings with Crystal bindings and keep the nine pressure bars.
+Label all of this **ARCHITECTURE TESTED / REAL DEMONSTRATIONS 0 / TRANSFER NOT YET CLAIMED**.
+
 ## August 13 audit scene: stop before opening the envelope
 
 Put **2,801 TESTS GREEN / MODEL FROZEN / SEALED TEST 0 OF 12** on screen. Then stop the cursor over
@@ -1354,7 +1369,7 @@ REPLANS / CINNABAR LAND / 2 OF 2 CANDIDATES**. Keep **UNPUBLISHED DIAGNOSTIC / N
 FALSE / TEST 0 OF 12** visible. The next permissible authority card is the same hard relocation on
 published v9 source with a typed pass—not a sealed score.
 
-### Act VIII: the Crystal test — 10:50–11:30
+### Act VIII: the goal manager and Crystal test — 10:50–11:30
 
 Before leaving Red, add one short failure-to-recovery montage. Show fresh seed `990027` losing the
 lab rival, then refuse the tempting reroll. Count thirteen Route 1 lessons with a Viridian Center
@@ -1367,10 +1382,16 @@ with the clean receipt: **47,317,703 frames; 74/74 battles; 36/36 objectives; Ha
 **“uncounted objective model + authored skills”** visible. That distinction is the scientific point
 of the sequence, not production trivia.
 
-The first transfer benchmark should be small enough to fail clearly: one battle and one local
-navigation task in Pokémon Crystal. Compare zero-shot performance, few-shot adaptation, and
-from-scratch training. The point is not to claim universal Pokémon intelligence after one test; it
-is to discover which Red abstractions were real and which were accidental details of one cartridge.
+Before Crystal, show the manager curriculum as short captured-state choices rather than more
+47-million-frame duplicate runs: 54 Red training contexts, 27 development contexts, all nine need
+families, and the same candidate menu requiring different answers as state changes. Compare the
+model with lowest effort, a static priority, and the strongest hand-authored pressure heuristic.
+
+The first transfer benchmark should then be small enough to fail clearly: equivalent goal,
+battle, and local-navigation tasks in Pokémon Crystal. Compare zero-shot performance, few-shot
+adaptation, and from-scratch training. The point is not to claim universal Pokémon intelligence
+after one test; it is to discover which Red abstractions were real and which were accidental
+details of one cartridge.
 
 ### Ending: why the Pokédex matters — 11:30–12:00
 
@@ -1446,6 +1467,8 @@ version has to prove the model learned something worth carrying into a game it h
   reserve-target audit improving from 5/11 to 9/11 when level is restored as an observable combat
   resource. Keep the candidate visibly marked rejected.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
+- The nine-pressure goal-manager card; keep **0 real demonstrations** visible until collection
+  produces an authenticated corpus.
 
 ## Honesty rules for the video
 

@@ -15,6 +15,9 @@ teacher fallback.
 flowchart LR
     Game["PyBoy + private Pokémon Red ROM"] --> Adapter["Red observation adapter"]
     Adapter --> State["Typed semantic state"]
+    State --> Manager["Portable goal manager"]
+    Manager --> Graph
+    Manager --> Skills
     State --> Graph["36-objective quest graph"]
     Graph --> Planner["Learned objective ranker"]
     State --> Planner
@@ -32,6 +35,7 @@ flowchart LR
 
     Adapter --> Referee["Independent completion + safety referee"]
     Planner --> Evidence["Decision and authority receipts"]
+    Manager --> Evidence
     Strategy --> Evidence
     Control --> Evidence
     Referee --> Evidence
@@ -52,7 +56,8 @@ referee then reobserves the cartridge instead of trusting a skill's success clai
 | Training action control | Learned five-action controller | Portable Blaine proof: 57,548 controlled battle/overworld decisions, 1,796 development battles, zero fallback | Candidate masks, hard safety gates, navigation and menu execution |
 | Trainee and venue strategy | Shared identity-free candidate scorer | 99.9004% sealed validation; isolated causal completion with 191 disagreements; portable Blaine completion and one clean-power Hall-of-Fame rehearsal with 400 disagreements | Still one uncounted fixed-route Red root; candidate eligibility and mechanics remain fixed |
 | Navigation mechanics | Deterministic cartridge-derived planner, title adapter and closed-loop executor | Multi-map land routes; Surf mode; live occupancy; repeated Cut; full Strength chain; trainer sight; one closed/open story gate; resource renewal; joint local/macro pricing; a 174-step route resumed through one trainer engagement | Completion teacher still owns most route invocation, broader non-trainer menu/script recovery, special story objects and the final Indigo exit |
-| Strategic navigation choice | Data contract plus deterministic calibration teacher | Identity-free schema, reviewed vocabulary, authenticated join/lineage audit, collection baselines, three unassigned live calibrations, and a prospective 5-train/2-validation/5-sealed-test whole-root registry | 0 collected train/validation choices; full-run collector is not connected; no frozen numeric features, model, shadow result or causal authority |
+| Strategic navigation choice | Frozen five-coefficient shared linear destination ranker | 24 train / 12 development choices; development 10/12 versus cheapest route 4/12, paired 6–0, exact p = 0.03125 | No live authority; sealed evaluation remains 0/12 and is paused |
+| Cross-title goal arbitration | Portable contract, trainable shared linear baseline, and causal no-fallback wrapper | ROM-free identity, permutation, masking, context-dependence, state normalization, record-before-action joins, held-out-environment, serialization, binding, and three-baseline tests | 0 genuine multi-need examples; live Red evidence wiring, opportunity enumeration, and prospective assignments are next |
 | Collection planning | Typed deterministic planner plus cartridge-derived reachability | Exact ordinary retail reach: 135 species solo / 139 with a trade partner on each Red or Blue cartridge | No autonomous living-Pokédex execution, storage rotation, multi-save or trade orchestration yet |
 
 This table is the claim boundary. A model choosing an objective does not mean it navigated to the
@@ -219,6 +224,7 @@ scratch under the same metrics.
 | Cartridge topology, traversal and acquisition | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py`, `gen1_acquisition.py` |
 | Game-neutral route search and execution | `global_router.py`, `local_router.py`, `route_plan.py`, `route_executor.py` |
 | Strategic navigation records and datasets | `strategic_navigation.py`, `strategic_navigation_trajectory.py`, `strategic_navigation_dataset.py` |
+| Cross-title goal arbitration | `goal_manager.py`, `goal_manager_model.py`, `goal_manager_state.py`, `goal_manager_trajectory.py` |
 | Quest planning and portable loop | `quest.py`, `player_loop.py`, `learned_planner_policy.py` |
 | Bounded skill contracts and Red adapters | `objective_skills.py`, `red_objective_skills.py` |
 | Battle learning | `battle_policy.py`, `battle_runtime.py`, `battle_model.py` |
