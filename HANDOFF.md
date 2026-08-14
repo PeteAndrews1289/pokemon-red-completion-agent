@@ -17,7 +17,10 @@ going stale is exactly the failure this project keeps having.
 ## Restoration-context materializer hardened locally — 2026-08-13
 
 The first damage setup was asking only whether *any* HP had been lost, while catalog admission asks
-whether normalized safety pressure is at least `0.5`. That mismatch is repaired. The setup now
+whether normalized safety pressure is at least `0.5`. The first published repair reached exactly
+`0.5`, but its read-only preflight correctly failed: the fixed completion-first teacher's emergency
+restoration gate is `0.55`, so it preferred the genuinely available exploration option. No receipt
+or episode was created. The pending repair targets `0.55` directly. The setup now
 creates real wild-battle turns by switching party members, refuses every faint, exits through the
 strongest observed member, and stops only at the same whole-party safety threshold the manager
 sees. Field contexts additionally require that the exact observed recovery plan is already payable;
@@ -30,9 +33,10 @@ nonsealed post–Victory Road boundary. The setup walks out of Indigo, flies to 
 derives the context using only controller actions. Its local no-write diagnostic completed in 976
 actions at exactly `0.5` safety pressure with six living members, stable input and released
 controls; the observed damage/status mix had a payable three-Full-Restore/two-Hyper-Potion plan.
+That state is preserved as a truthful failed preflight boundary and must not be relabeled.
 
-This is not yet a curated context. Publish this exact source, require green exact-commit CI, then
-materialize the new external field state, build its path-free profile, preflight restoration slot
+This is not yet a curated context. Publish the `0.55` repair, require green exact-commit CI, then
+materialize a new external field state, build its path-free profile, preflight restoration slot
 037, and execute one explicitly uncounted restoration rehearsal. Genuine data remains **0/54 train
 and 0/27 validation**; the three existing acquisition/resupply/recovery preflights remain setup
 evidence, not examples.

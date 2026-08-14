@@ -76,7 +76,10 @@ from pokemon_red_completion.surge import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-_ACTIVE_SAFETY_PRESSURE = 0.5
+# Catalog admission starts at 0.50, but the fixed completion-first teacher's
+# emergency restoration gate is 0.55.  Setup must reach the teacher contract
+# rather than merely scrape past the weaker structural threshold.
+_ACTIVE_SAFETY_PRESSURE = 0.55
 _DAMAGE_SWITCH_LIMIT = 64
 _MODES = (
     "mansion",

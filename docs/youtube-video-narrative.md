@@ -1496,8 +1496,10 @@ version has to prove the model learned something worth carrying into a game it h
   produces an authenticated corpus.
 - The restoration setup as a compact honesty sequence: **ONE HIT IS NOT 50% PARTY PRESSURE**, the
   underlevelled switch fainting and the status-without-cure attempts both stopping without a saved
-  example, then the late-game party reaching **0.500 SAFETY PRESSURE / 6 ALIVE / RECOVERY PAYABLE**.
-  Label the successful clip a no-write diagnostic until its published-source rehearsal exists.
+  example, then the late-game party reaching **0.500 SAFETY PRESSURE / 6 ALIVE / RECOVERY PAYABLE**
+  but losing the read-only teacher choice to exploration because the frozen emergency gate is
+  `0.55`. Follow with the corrected threshold; do not hide the competing option or call either
+  setup state training data.
 
 ## Honesty rules for the video
 

@@ -1,12 +1,15 @@
 # Three-agent coordination
 
 > **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real
-> whole-party safety-pressure threshold (`>= 0.5`) through observed in-battle switches, rejects every
+> whole-party safety-pressure threshold through observed in-battle switches, rejects every
 > faint, and requires a payable exact item plan only for field restoration. It can relocate the
 > authenticated post–Victory Road boundary from Indigo to Cinnabar through real movement and Fly.
 > A local no-write diagnostic reached exactly `0.5` pressure in 976 actions with all six members
 > alive, stable input, released controls and enough Full Restores/Hyper Potions for the observed
-> plan. Publish and pass exact-commit CI before creating the official external state or preflight.
+> plan. Its published external state then failed read-only preflight honestly because the fixed
+> teacher's restoration gate is `0.55` and exploration remained genuinely available; no receipt or
+> episode was created. The pending setup target is therefore `0.55`, not merely catalog admission's
+> `0.50`. Publish and pass exact-commit CI before creating the replacement external state.
 > Counted collection remains 0/54 train and 0/27 validation.
 
 > **2026-08-13 Red manager collection-harness checkpoint:** Lane A/C now has all nine real Red goal

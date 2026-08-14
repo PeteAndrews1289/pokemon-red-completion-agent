@@ -66,7 +66,7 @@ def test_damage_context_uses_real_battle_turns_and_active_pressure_gate() -> Non
 
     assert "switch_active_battler(" in source
     assert "party_safety_satisfaction(" in source
-    assert "_ACTIVE_SAFETY_PRESSURE = 0.5" in source
+    assert "_ACTIVE_SAFETY_PRESSURE = 0.55" in source
     assert "allowed a party member to faint" in source
     assert "plan_party_recovery(" in source
     assert "required.items()" in source
@@ -92,7 +92,7 @@ def _damaged_raw(*, bag_items: tuple[tuple[int, int], ...]) -> RawGameState:
         bag_items=bag_items,
         party_species_ids=(1, 2),
         party_levels=(50, 50),
-        party_hp=(50, 50),
+        party_hp=(45, 45),
         party_max_hp=(100, 100),
         party_status=(0, 0),
         party_moves=((1, 0, 0, 0), (1, 0, 0, 0)),

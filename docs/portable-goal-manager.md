@@ -174,7 +174,10 @@ transient movement latch. It never holds a button across save and never edits me
 Restoration setup now uses the manager's actual whole-party safety calculation rather than accepting
 one token hit. A controller-only diagnostic relocated a strong authenticated late-game party from
 Indigo to Cinnabar, deliberately absorbed wild attacks through observed battle switches, and ended
-with all six members alive at exactly `0.5` safety pressure. A field context is accepted only when
+with all six members alive at exactly `0.5` safety pressure. Its read-only preflight then rejected
+the state without a receipt: structural admission begins at `0.50`, but the fixed teacher's
+emergency restoration gate is `0.55`, so the teacher preferred exploration. Setup now targets that
+unchanged teacher gate while preserving the competing option. A field context is accepted only when
 its exact damage/status recovery plan is payable from the observed bag; a Center context does not
 pretend field items are required. This diagnostic wrote no context or episode. Exact-source
 publication, official materialization, preflight and an uncounted restoration execution remain the
