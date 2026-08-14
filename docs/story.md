@@ -26,7 +26,7 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
-## Current checkpoint: the sixth lesson refused to lie
+## Current checkpoint: the catalog recognized the same lesson twice
 
 The first curriculum board now holds 81 authenticated Red situations: nine examples for each of
 nine kinds of work, split into 54 training and 27 development-validation choices. All 81 passed a
@@ -48,6 +48,13 @@ lesson. Every exact frozen card must now complete a full rehearsal with no recor
 after all 81 mechanics execute and independently verify may a fresh campaign begin. The old pilot
 remains **5 successful, 1 failed, 0 models**—a small scoreboard that says more than another large
 green test count.
+
+The replacement kept its ball and sold an obsolete TM through the real shop. All 81 new inspections
+passed, yet the catalog refused to lock: the fifth and sixth states had the same strategic evidence.
+Money and an obsolete item made the saves different without making the lesson different. The next
+replacement consumes a real Rare Candy on the fully evolved lead, creating a one-level change the
+manager can actually observe. Its setup proves the exact item, level, party, health, move, money,
+story and location ledger. The uniqueness rule did not move.
 
 ---
 

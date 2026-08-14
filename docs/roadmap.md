@@ -33,6 +33,13 @@ succeed; checks real action accounting and protected inputs; and cannot open an 
 label. A replacement `story-funded` context moves TM34 liquidation into uncounted cartridge setup,
 leaving the Fuchsia skill with proved money, a free bag slot and its retained Poké Ball.
 
+That first replacement then passed 81/81 fresh preflights, but the freezer rejected the aggregate
+because slots 005 and 006 still encoded the same policy context. The sale changed cartridge bytes,
+not identity-free manager evidence. The repair keeps that rejection and derives a real development
+delta instead: use the funded state's Rare Candy on its fully evolved lead, prove exactly one lead
+level and one consumed item, and preserve every other protected field. A no-save live check has
+proved the level-39-to-40 mechanic; official materialization waits for publication and green CI.
+
 Ordered next work:
 
 1. **Complete:** qualify all nine goal families and construct 81 distinct semantic contexts with
@@ -41,13 +48,16 @@ Ordered next work:
    path-free catalog.
 3. **Complete, negative result preserved:** start collection once; authenticate slots 001–005 and
    retain slot 006's failed one-shot episode. Do not reuse or retry those identities.
-4. **In progress:** publish the full-execution rehearsal gate and `story-funded` materializer,
-   pass the complete ROM-free gate and exact-commit CI.
-5. Build a fresh slot-006 capture, then create a new 81-entry source-bound plan. Regenerate all 81
-   zero-action preflights into a new empty root and freeze a new catalog.
-6. Run the exact batch in `rehearse` mode. Require 81/81 selected bindings to execute and verify
+4. **Complete:** publish the full-execution rehearsal gate, the Fuchsia hard-input boundary and
+   `story-funded`; pass the complete ROM-free gate and exact-commit CI.
+5. **Failed safely:** the funded replacement and fresh 81/81 preflights reached freeze, which
+   rejected the duplicated slot-005/006 policy context without creating a catalog.
+6. **In progress:** publish `story-developed`, pass the complete gate and CI, materialize its exact
+   one-level cartridge transition, then rebuild all 81 preflights in a new source-bound plan and
+   freeze a unique catalog.
+7. Run the exact batch in `rehearse` mode. Require 81/81 selected bindings to execute and verify
    with zero episodes; repair/refreeze on any failure.
-7. Only after step 6, collect all 81 new one-shot episodes, strictly reload the admitted
+8. Only after step 7, collect all 81 new one-shot episodes, strictly reload the admitted
    train/development dataset and fit the first Red goal-manager model. Compare all frozen baselines,
    then proceed through shadow, causal Red authority and the Crystal transfer benchmark.
 

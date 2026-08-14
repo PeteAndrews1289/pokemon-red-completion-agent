@@ -79,6 +79,7 @@ from pokemon_red_completion.lavender import (
     _close_menus,
     _open_bag,
     _select_bag_item,
+    _select_cursor,
     _sell_single_mart_item,
 )
 from pokemon_red_completion.observation import (
@@ -86,6 +87,7 @@ from pokemon_red_completion.observation import (
     ItemId,
     MapId,
     PokemonRedStateReader,
+    RamAddress,
     RawGameState,
 )
 from pokemon_red_completion.provenance import (
@@ -187,6 +189,7 @@ _DAMAGE_MODES = frozenset(
 _MODES = (
     "stable",
     "story-funded",
+    "story-developed",
     "story-resource-scarce",
     "center",
     "mansion",
@@ -409,6 +412,135 @@ def _story_funded_boundary(
         )
 
 
+def _story_developed_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
+    """Consume one real Rare Candy at the funded Lavender story frontier.
+
+    This is a genuine development variant for two otherwise identical story
+    contexts.  The target is the already fully evolved Blastoise, so the setup
+    cannot cross an evolution boundary.  Admission proves the exact inventory,
+    level, party, health, move, money, and location deltas before the derived
+    state can become a catalog candidate.
+    """
+
+    before = reader.read()
+    before_inventory = dict(before.bag_items or ())
+    before_levels = tuple(before.party_levels or ())
+    before_species = tuple(before.party_species_ids or ())
+    before_hp = tuple(before.party_hp or ())
+    before_max_hp = tuple(before.party_max_hp or ())
+    before_status = tuple(before.party_status or ())
+    before_moves = tuple(before.party_moves or ())
+    before_pp = tuple(before.party_pp or ())
+    if (
+        before.battle_state
+        or before.map_id != MapId.LAVENDER_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or not reader.read_input_readiness().ready
+        or before.party_count is None
+        or before.party_count < 1
+        or len(before_species) != before.party_count
+        or len(before_levels) != before.party_count
+        or len(before_hp) != before.party_count
+        or len(before_max_hp) != before.party_count
+        or len(before_status) != before.party_count
+        or len(before_moves) != before.party_count
+        or len(before_pp) != before.party_count
+        or before_species[0] != BLASTOISE_SPECIES_ID
+        or not 1 <= before_levels[0] < 100
+        or before_hp != before_max_hp
+        or any(status != 0 for status in before_status)
+        or before_inventory.get(int(ItemId.POKE_BALL), 0) != 1
+        or before_inventory.get(int(ItemId.GREAT_BALL), 0) != 0
+        or before_inventory.get(int(ItemId.TM34_BIDE), 0) != 0
+        or before_inventory.get(int(ItemId.RARE_CANDY), 0) != 1
+        or type(before.player_money) is not int
+    ):
+        raise GoalManagerContextMaterializationError(
+            "developed story setup requires the exact funded Lavender frontier"
+        )
+
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.RARE_CANDY,
+        DEFAULT_LAVENDER_TIMING,
+    )
+    _pulse(
+        actions,
+        MacroActionKind.CONFIRM,
+        frames=DEFAULT_LAVENDER_TIMING.wait_frames,
+    )
+    for _ in range(DEFAULT_LAVENDER_TIMING.dialogue_pulses):
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) == (0, 1):
+            break
+        _pulse(
+            actions,
+            MacroActionKind.CONFIRM,
+            frames=DEFAULT_LAVENDER_TIMING.wait_frames,
+        )
+    else:
+        raise GoalManagerContextMaterializationError(
+            "developed story setup did not reach party selection"
+        )
+    _select_cursor(actions, emulator, 0, DEFAULT_LAVENDER_TIMING)
+    _pulse(
+        actions,
+        MacroActionKind.CONFIRM,
+        frames=DEFAULT_LAVENDER_TIMING.wait_frames,
+    )
+    for _ in range(64):
+        current = reader.read()
+        current_levels = tuple(current.party_levels or ())
+        if (
+            current_levels == (before_levels[0] + 1, *before_levels[1:])
+            and dict(current.bag_items or ()).get(int(ItemId.RARE_CANDY), 0) == 0
+        ):
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=180)
+    else:
+        raise GoalManagerContextMaterializationError(
+            "developed story setup did not consume its Rare Candy"
+        )
+
+    after = reader.read()
+    after_inventory = dict(after.bag_items or ())
+    after_levels = tuple(after.party_levels or ())
+    after_hp = tuple(after.party_hp or ())
+    after_max_hp = tuple(after.party_max_hp or ())
+    expected_inventory = dict(before_inventory)
+    expected_inventory.pop(int(ItemId.RARE_CANDY))
+    if (
+        after_inventory != expected_inventory
+        or tuple(after.party_species_ids or ()) != before_species
+        or after_levels != (before_levels[0] + 1, *before_levels[1:])
+        or tuple(after.party_status or ()) != before_status
+        or tuple(after.party_moves or ()) != before_moves
+        or tuple(after.party_pp or ()) != before_pp
+        or after_hp[1:] != before_hp[1:]
+        or after_max_hp[1:] != before_max_hp[1:]
+        or not after_hp
+        or after_hp != after_max_hp
+        or after_hp[0] <= before_hp[0]
+        or after.player_money != before.player_money
+        or after.map_id != before.map_id
+        or (after.player_x, after.player_y) != (before.player_x, before.player_y)
+        or after.battle_state
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "developed story setup changed more than its exact lead level"
+        )
+
+
 def _normalize_cinnabar_nurse(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -430,9 +562,11 @@ def _normalize_cinnabar_nurse(
             "goal-manager Cinnabar PC to nurse",
         )
         raw = reader.read()
-    elif raw.map_id in _STANDARD_FLY_CENTER_MAPS and raw.map_id != (
-        MapId.CINNABAR_POKECENTER
-    ) and (raw.player_x, raw.player_y) == (3, 3):
+    elif (
+        raw.map_id in _STANDARD_FLY_CENTER_MAPS
+        and raw.map_id != (MapId.CINNABAR_POKECENTER)
+        and (raw.player_x, raw.player_y) == (3, 3)
+    ):
         _move(
             actions,
             reader,
@@ -652,10 +786,7 @@ def _buy_hyper_potion_reserve(
         before_money is None
         or before_money < quantity * _HYPER_POTION_PRICE
         or current_quantity + quantity > 99
-        or (
-            int(ItemId.HYPER_POTION) not in before_inventory
-            and len(before_inventory) >= 20
-        )
+        or (int(ItemId.HYPER_POTION) not in before_inventory and len(before_inventory) >= 20)
     ):
         raise GoalManagerContextMaterializationError(
             "recovery setup cannot afford or store its exact Hyper Potion reserve"
@@ -1297,8 +1428,7 @@ def _apply_mode(
     blocked_direction: str | None = None,
 ) -> None:
     if great_ball_quantity is not None and (
-        mode not in {"acquisition-ready", "acquisition-damaged"}
-        or great_ball_quantity <= 0
+        mode not in {"acquisition-ready", "acquisition-damaged"} or great_ball_quantity <= 0
     ):
         raise GoalManagerContextMaterializationError(
             "Great Ball quantity is valid only for acquisition modes"
@@ -1317,16 +1447,13 @@ def _apply_mode(
             "safety-pressure bounds are valid only for damage modes"
         )
     if blocked_direction is not None and (
-        mode != "blocked-movement"
-        or blocked_direction not in {"up", "right", "down", "left"}
+        mode != "blocked-movement" or blocked_direction not in {"up", "right", "down", "left"}
     ):
         raise GoalManagerContextMaterializationError(
             "blocked direction is valid only for blocked-movement mode"
         )
     damage_target = (
-        _ACTIVE_SAFETY_PRESSURE
-        if target_safety_pressure is None
-        else target_safety_pressure
+        _ACTIVE_SAFETY_PRESSURE if target_safety_pressure is None else target_safety_pressure
     )
     if mode in _DAMAGE_MODES:
         _validate_damage_band(
@@ -1347,15 +1474,16 @@ def _apply_mode(
     if mode == "story-funded":
         _story_funded_boundary(actions, reader, emulator)
         return
+    if mode == "story-developed":
+        _story_developed_boundary(actions, reader, emulator)
+        return
     if mode == "blocked-movement":
         raw = reader.read()
         if raw.battle_state or not reader.read_input_readiness().ready:
             raise GoalManagerContextMaterializationError(
                 "blocked-control setup requires a stable overworld boundary"
             )
-        actions.execute(
-            MacroAction(MacroActionKind.MOVE, blocked_direction or "down")
-        )
+        actions.execute(MacroAction(MacroActionKind.MOVE, blocked_direction or "down"))
         if reader.read_input_readiness().ready:
             raise GoalManagerContextMaterializationError(
                 "released movement pulse did not create a blocked-control context"

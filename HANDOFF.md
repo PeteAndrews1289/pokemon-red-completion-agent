@@ -14,6 +14,32 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Replacement catalog rejected a duplicate; cartridge-derived development repair — 2026-08-14
+
+Published `206a7fe` closed the slot-006 failure at the correct boundary: Fuchsia is no longer
+offered unless the exact Lavender state retains a legal Poké Ball alongside the Poké Flute and the
+rest of the chapter's hard inputs. Exact-commit CI passed. A replacement slot 006 was then derived
+from the known-good slot-005 capture by selling TM34 in Lavender's real Mart. It retained one ball,
+returned stable to `(3,3)`, passed its individual read-only preflight, and the complete replacement
+plan passed **81/81** zero-action preflights under one source commit.
+
+The v2 catalog freezer nevertheless rejected the set before writing a catalog. That refusal is
+correct: slot 005 and the funded slot 006 had the same order-independent policy context. Money and
+an obsolete TM changed physically, but neither is part of the manager's identity-free pressure
+evidence; both states still had one capture item, the same team readiness and the same available
+story menu. Do not weaken the uniqueness rule, and retain the funded state only as rejected setup
+evidence.
+
+The pending repair adds a bounded `story-developed` setup. From that exact funded Lavender state it
+uses the carried Rare Candy on the already fully evolved Blastoise and admits the result only if
+the candy alone disappears, the lead alone gains exactly one level, species/moves/PP/status/money/
+location/story remain fixed, the party remains fully healthy, one Poké Ball remains and input is
+released. A no-save cartridge exercise proved the actual level-39-to-40 transition in 50 semantic
+actions, including HP 121-to-125, with every protected field preserved. Publish and pass CI before
+materializing the private capture. Then rebuild all 81 preflights, freeze, rehearse **81/81**, and
+only then collect a completely fresh 81-episode campaign and fit. Historical pilot remains
+**5 success / 1 failed / 0 models**; sealed destination test remains unopened at **0/12**.
+
 ## First counted campaign stopped honestly; execution rehearsal is now mandatory — 2026-08-14
 
 The exact-commit `4207981` preflight and catalog freeze completed: 81/81 contexts passed, all

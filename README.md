@@ -31,6 +31,11 @@
 > cartridge-derived story context sells obsolete TM34 at the real Lavender Mart while retaining the
 > required Poké Ball. Collection restarts under a fresh source identity only after **81/81** exact
 > rehearsals succeed. Historical pilot: **5 success / 1 failed / 0 models**; sealed test: **0/12**.
+> The first funded replacement passed all 81 read-only preflights but the freezer correctly rejected
+> it: its physical money/TM change was invisible to the manager, making slots 005 and 006 the same
+> semantic policy context. The replacement now earns a distinct team-readiness state by consuming a
+> real Rare Candy on the fully evolved lead, with exact cartridge checks over the one-level and
+> one-item delta. The uniqueness gate remains unchanged.
 
 > **Earlier goal-manager rehearsal milestone (August 14, 2026):** all nine goal families were
 > live-qualified from authenticated, nonsealed Red states: story progress, acquisition, one-level

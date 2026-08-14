@@ -1,5 +1,16 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 duplicate-lesson scene: different bytes are not different experience
+
+Show the funded replacement passing all 81 inspections, then let the catalog lock refuse to close.
+Place cards five and six side by side: their save hashes differ, but their pressure bars and story
+menu are identical. Overlay **81 PREFLIGHTS PASSED / CATALOG REJECTED / DUPLICATE POLICY CONTEXT**.
+
+Then return to the cartridge. Select the carried Rare Candy and use it on the fully evolved lead.
+Overlay **RARE CANDY −1 / BLASTOISE 39→40 / HP 121→125 / POKÉ BALL 1 / STORY UNCHANGED**. The line
+is: **“A new file is not a new lesson. The model has to be able to observe the difference.”** Keep
+the freezer rule fixed on screen while the replacement card becomes genuinely distinct.
+
 ## August 14 pilot scene: card six fails closed
 
 Let the 81-card lock finally close, then animate five story cards turning green. Card six travels

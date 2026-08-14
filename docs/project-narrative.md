@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: different save files were still the same lesson
+
+The repaired sixth state kept its ball, sold TM34 through the real Lavender shop and passed its own
+inspection. The rebuilt campaign then passed all 81 read-only checks. The catalog still refused to
+lock. Slots five and six were physically different but strategically identical: the manager does
+not see money or obsolete inventory identity, and both states reduced to the same pressures and
+the same available story choice. The freezer caught a duplicated lesson before it could inflate
+the dataset.
+
+The repair does not add a filename, weaken the rule or expose an identity feature. The cartridge
+already supplied a meaningful distinction: a Rare Candy carried by the funded state. A bounded
+setup uses it on the fully evolved Blastoise and proves that exactly one item disappears and only
+the lead gains one level, while species, moves, PP, status, money, story, location, health and the
+retained Poké Ball remain protected. A no-save live run performed the level-39-to-40 change in 50
+semantic actions and raised HP from 121 to 125. Once that code is published, the complete board is
+rebuilt and inspected again. **Different bytes are not automatically different experience.**
+
 ## August 14: the sixth card stopped the run
 
 The board finally locked: all 81 questions were regenerated against one green commit and the

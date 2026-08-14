@@ -78,6 +78,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "center" in modes
     assert "stable" in modes
     assert "story-funded" in result.stdout
+    assert "story-developed" in result.stdout
     assert "story-resource-scarce" in result.stdout
     assert "evolved-team" in result.stdout
     assert "acquisition-ready" in result.stdout
@@ -123,9 +124,7 @@ def test_blocked_context_preserves_location_and_uses_declared_semantic_action(
         blocked_direction="left",
     )
 
-    assert executed == [
-        module["MacroAction"](module["MacroActionKind"].MOVE, "left")
-    ]
+    assert executed == [module["MacroAction"](module["MacroActionKind"].MOVE, "left")]
     assert (reader.raw.map_id, reader.raw.player_x, reader.raw.player_y) == (
         MapId.CINNABAR_POKECENTER,
         3,
@@ -326,6 +325,98 @@ def test_story_funded_variant_rejects_missing_capture_or_sale_resources() -> Non
         match="exact Lavender capture frontier",
     ):
         module["_story_funded_boundary"](object(), reader, object())
+
+
+def test_story_developed_variant_consumes_one_candy_for_only_the_lead_level(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    original = replace(
+        _unevolved_party_raw(),
+        map_id=MapId.LAVENDER_POKECENTER,
+        bag_items=(
+            (int(ItemId.POTION), 6),
+            (int(ItemId.POKE_BALL), 1),
+            (int(ItemId.RARE_CANDY), 1),
+        ),
+        player_money=20_177,
+    )
+    reader = _Reader(original)
+    pulses: list[object] = []
+
+    class _Emulator:
+        @staticmethod
+        def read_u8(address: object) -> int:
+            return 1 if address == module["RamAddress"].TOP_MENU_ITEM_Y else 0
+
+    def pulse(_actions: object, kind: object, *_args: object, **_kwargs: object) -> None:
+        pulses.append(kind)
+        if len(pulses) == 2:
+            assert original.party_levels is not None
+            assert original.party_hp is not None
+            assert original.party_max_hp is not None
+            reader.raw = replace(
+                reader.raw,
+                bag_items=(
+                    (int(ItemId.POTION), 6),
+                    (int(ItemId.POKE_BALL), 1),
+                ),
+                party_levels=(original.party_levels[0] + 1, *original.party_levels[1:]),
+                party_hp=(original.party_hp[0] + 3, *original.party_hp[1:]),
+                party_max_hp=(
+                    original.party_max_hp[0] + 3,
+                    *original.party_max_hp[1:],
+                ),
+            )
+
+    globals_dict = module["_story_developed_boundary"].__globals__
+    monkeypatch.setitem(globals_dict, "_open_bag", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_select_cursor", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_pulse", pulse)
+    monkeypatch.setitem(globals_dict, "_close_menus", lambda *_args: None)
+
+    module["_story_developed_boundary"](object(), reader, _Emulator())
+
+    assert reader.raw.party_levels == (49, 20, 22, 30, 25, 30)
+    assert reader.raw.party_species_ids == original.party_species_ids
+    assert reader.raw.party_moves == original.party_moves
+    assert reader.raw.party_pp == original.party_pp
+    assert reader.raw.bag_items == (
+        (int(ItemId.POTION), 6),
+        (int(ItemId.POKE_BALL), 1),
+    )
+    assert reader.raw.player_money == 20_177
+    assert reader.raw.map_id == MapId.LAVENDER_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+
+
+@pytest.mark.parametrize(
+    ("changes", "message"),
+    (
+        ({"bag_items": ((int(ItemId.POKE_BALL), 1),)}, "exact funded Lavender"),
+        ({"party_species_ids": (64, 64, 59, 132, 104, 43)}, "exact funded Lavender"),
+        ({"party_levels": (100, 20, 22, 30, 25, 30)}, "exact funded Lavender"),
+    ),
+)
+def test_story_developed_variant_rejects_an_unqualified_lead_or_inventory(
+    changes: dict[str, object],
+    message: str,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    raw = replace(
+        _unevolved_party_raw(),
+        map_id=MapId.LAVENDER_POKECENTER,
+        bag_items=(
+            (int(ItemId.POKE_BALL), 1),
+            (int(ItemId.RARE_CANDY), 1),
+        ),
+        player_money=20_177,
+    )
+    reader = _Reader(replace(raw, **changes))
+
+    with pytest.raises(module["GoalManagerContextMaterializationError"], match=message):
+        module["_story_developed_boundary"](object(), reader, object())
 
 
 def test_damage_context_uses_real_battle_turns_and_active_pressure_gate() -> None:
@@ -1012,7 +1103,7 @@ def test_materializer_declares_distinct_center_and_pc_damage_destinations() -> N
     source = SCRIPT.read_text(encoding="utf-8")
 
     assert 'mode in {"damaged-center", "damaged-pc"}' in source
-    assert "pc_boundary=mode == \"damaged-pc\"" in source
+    assert 'pc_boundary=mode == "damaged-pc"' in source
     assert 'require_field_recovery=mode in {"damaged-field", "damaged-pc"}' in source
     assert "PC damage setup changed collection storage" in source
 
