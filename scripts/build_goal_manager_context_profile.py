@@ -165,7 +165,10 @@ def _providers(
     if args.mode == "pc":
         return (
             story,
-            _empty(RedGoalMechanic.CENTER_RESTORE),
+            # The PC stance is ten tiles east of the nurse-facing Center
+            # boundary.  Healing from here is therefore an observed bag-item
+            # action, not a Pokemon Center interaction.
+            _empty(RedGoalMechanic.FIELD_RESTORE),
             (
                 GoalKind.MANAGE_STORAGE,
                 RedGoalMechanic.BOX_SWITCH,

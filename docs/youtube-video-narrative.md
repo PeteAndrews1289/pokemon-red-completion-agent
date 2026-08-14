@@ -12,6 +12,17 @@ must have a unique authenticated save, unique policy situation and slot-matching
 The line is: **“If the curriculum cannot prove that context changes the answer, we find out before
 we spend a single one-shot demonstration.”**
 
+Use the first real split-screen receipt: **0.1342 → TRAIN / 0.5599 → HEAL**, with the same three
+menu cards and **0 EPISODES** on both sides. Then show the PC card failing its own audit because the
+nurse is ten tiles away. Replace **CENTER HEAL** with **BAG-ITEM HEAL**, keep the 18/20 box fixed,
+and reveal the emergency state: **0.5539 / 4 HYPER POTIONS PAYABLE / 18 SPECIMENS UNCHANGED**.
+
+For the field-context beat, show the cartridge shop receipt rather than a configuration constant:
+**PRODUCT 2 / HYPER POTION +1 / ₽1,500 / RETURNED TO NURSE**. Follow it with two bottles entering
+the bag, real Mansion encounters, and **0.1456 / EXACT TWO-ITEM RECOVERY PLAN**. The narration is:
+**“We did not lower the safety rule to make the data easier. We made the game state capable of
+honestly satisfying it.”**
+
 ## New framing scene: we built the hands before the executive brain
 
 Open on a fast stack of verified capabilities: navigate, battle, capture, evolve, heal, shop,

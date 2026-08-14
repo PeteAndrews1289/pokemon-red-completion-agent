@@ -67,6 +67,11 @@ from pokemon_red_completion.goal_manager_protocol import (
 )
 from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
+from pokemon_red_completion.lavender import (
+    DEFAULT_LAVENDER_TIMING,
+    _buy_mart_item,
+    _close_menus,
+)
 from pokemon_red_completion.observation import (
     RED_BOX_CAPACITY,
     ItemId,
@@ -121,6 +126,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # rather than merely scrape past the weaker structural threshold.
 _ACTIVE_SAFETY_PRESSURE = 0.55
 _ACQUISITION_GREAT_BALL_PURCHASE = 12
+_CINNABAR_HYPER_POTION_INDEX = 2
+_HYPER_POTION_PRICE = 1_500
 # With the fixed desired headroom of eight, an active box count of eighteen
 # leaves two slots and therefore creates exactly 0.75 storage pressure: the
 # completion-first teacher's hard storage gate.  Setup reaches that boundary
@@ -189,6 +196,12 @@ def _parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help="positive acquisition reserve override",
+    )
+    parser.add_argument(
+        "--hyper-potion-quantity",
+        type=int,
+        default=None,
+        help="positive exact recovery reserve purchase for field-recovery damage modes",
     )
     parser.add_argument(
         "--target-safety-pressure",
@@ -430,6 +443,105 @@ def _buy_great_ball_reserve(
         raise GoalManagerContextMaterializationError(
             f"{purpose} setup did not prove its exact ball reserve"
         )
+
+
+def _buy_hyper_potion_reserve(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    adapter: PokemonRedGoalStateAdapter,
+    *,
+    quantity: int,
+) -> None:
+    """Buy one exact recovery stack and return to the stable nurse boundary."""
+
+    if type(quantity) is not int or quantity <= 0:  # noqa: E721
+        raise ValueError("Hyper Potion reserve quantity must be a positive integer")
+    _move(actions, reader, CENTER_TO_MART, "goal-manager recovery Mart")
+    _require(
+        reader.read(),
+        MapId.CINNABAR_MART,
+        (3, 7),
+        "goal-manager recovery Mart entry",
+    )
+    _move(actions, reader, ("up", "up", "left"), "goal-manager recovery clerk")
+    _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    before = reader.read()
+    before_inventory = dict(before.bag_items or ())
+    before_money = before.player_money
+    current_quantity = before_inventory.get(int(ItemId.HYPER_POTION), 0)
+    if (
+        before_money is None
+        or before_money < quantity * _HYPER_POTION_PRICE
+        or current_quantity + quantity > 99
+        or (
+            int(ItemId.HYPER_POTION) not in before_inventory
+            and len(before_inventory) >= 20
+        )
+    ):
+        raise GoalManagerContextMaterializationError(
+            "recovery setup cannot afford or store its exact Hyper Potion reserve"
+        )
+
+    # Reuse the qualified provider's bounded dialogue reader, but bypass its
+    # goal-level availability gate: setup may need recovery stock even when a
+    # different resource category is the manager's current bottleneck.
+    purchase = RedMartPurchase(
+        absolute_index=_CINNABAR_HYPER_POTION_INDEX,
+        item=ItemId.HYPER_POTION,
+        quantity=quantity,
+        unit_price=_HYPER_POTION_PRICE,
+    )
+    provider = RedMartResupplyGoalProvider(
+        map_id=MapId.CINNABAR_MART,
+        player_x=2,
+        player_y=5,
+        interaction_direction="left",
+        purchases=(purchase,),
+        actions=actions,
+        reader=reader,
+        emulator=emulator,
+        adapter=adapter,
+    )
+    actions.execute(MacroAction(MacroActionKind.MOVE, "left"))
+    provider._settle()  # noqa: SLF001 - setup reuses the qualified bounded dialogue gate
+    provider._open_buy_list()  # noqa: SLF001
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=purchase.absolute_index,
+        item=int(purchase.item),
+        quantity=purchase.quantity,
+        target_bag_quantity=current_quantity + quantity,
+    )
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    after = reader.read()
+    expected_inventory = dict(before_inventory)
+    expected_inventory[int(ItemId.HYPER_POTION)] = current_quantity + quantity
+    if (
+        dict(after.bag_items or ()) != expected_inventory
+        or after.player_money != before_money - quantity * _HYPER_POTION_PRICE
+        or after.map_id != MapId.CINNABAR_MART
+        or (after.player_x, after.player_y) != (2, 5)
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "recovery setup did not prove its exact Hyper Potion reserve"
+        )
+
+    _move(
+        actions,
+        reader,
+        ("right", "down", "down") + _inverse(CENTER_TO_MART),
+        "goal-manager recovery Center return",
+    )
+    _require(
+        reader.read(),
+        MapId.CINNABAR_POKECENTER,
+        (3, 3),
+        "goal-manager recovery nurse return",
+    )
 
 
 def _fill_active_box_with_real_captures(
@@ -980,6 +1092,7 @@ def _apply_mode(
     adapter: PokemonRedGoalStateAdapter,
     *,
     great_ball_quantity: int | None,
+    hyper_potion_quantity: int | None,
     target_safety_pressure: float | None,
     maximum_safety_pressure: float | None,
 ) -> None:
@@ -989,6 +1102,13 @@ def _apply_mode(
     ):
         raise GoalManagerContextMaterializationError(
             "Great Ball quantity is valid only for acquisition modes"
+        )
+    if hyper_potion_quantity is not None and (
+        mode not in {"acquisition-damaged", "damaged-field", "damaged-pc"}
+        or hyper_potion_quantity <= 0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "Hyper Potion quantity is valid only for field-recovery damage modes"
         )
     if mode not in _DAMAGE_MODES and (
         target_safety_pressure is not None or maximum_safety_pressure is not None
@@ -1015,6 +1135,14 @@ def _apply_mode(
         actions.execute(MacroAction(MacroActionKind.WAIT))
         return
     _normalize_cinnabar_nurse(actions, reader, emulator)
+    if hyper_potion_quantity is not None:
+        _buy_hyper_potion_reserve(
+            actions,
+            reader,
+            emulator,
+            adapter,
+            quantity=hyper_potion_quantity,
+        )
     if mode == "center":
         return
     if mode == "mansion":
@@ -1081,7 +1209,7 @@ def _apply_mode(
             actions,
             reader,
             emulator,
-            require_field_recovery=mode == "damaged-field",
+            require_field_recovery=mode in {"damaged-field", "damaged-pc"},
             target_safety_pressure=damage_target,
             maximum_safety_pressure=maximum_safety_pressure,
         )
@@ -1145,6 +1273,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             emulator,
             adapter,
             great_ball_quantity=args.great_ball_quantity,
+            hyper_potion_quantity=args.hyper_potion_quantity,
             target_safety_pressure=args.target_safety_pressure,
             maximum_safety_pressure=args.maximum_safety_pressure,
         )

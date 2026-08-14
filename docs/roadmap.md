@@ -24,12 +24,16 @@ Ordered next work:
    `d873560`; exact-commit CI and the full ROM-free gate are green.
 2. **Complete:** qualify all nine goal families from authenticated nonsealed contexts with stable
    endpoints, bounded outcomes and zero episodes.
-3. Inventory eligible nonsealed source lineages and construct the 81 distinct questions. Preserve
-   54 train / 27 development separation, at least 24 genuine three-way training menus and three
-   repeated semantic menus whose correct choice changes with state. The read-only inventory found
-   111 authenticated nonsealed saves. A pending construction checkpoint adds bounded mild/emergency
-   damage, Center/PC relocation and a canonical private 81-entry batch plan; publish and live-test
-   it before producing v2 receipts.
+3. **In progress:** inventory eligible nonsealed source lineages and construct the 81 distinct
+   questions. The read-only inventory opened 111 authenticated saves. Real mild/emergency Center
+   states already prove the first same-menu reversal (develop at `0.1342`, restore at `0.5599`),
+   and a mild Mansion state selects acquisition from a three-way menu at `0.1071`. A live audit
+   corrected PC healing from the nurse-only mechanic to field items. Cartridge checks also proved
+   the exact Cinnabar Hyper Potion purchase, enabling payable early-Cinnabar field contexts.
+   Preserve 54 train / 27 development separation, at least 24 genuine three-way training menus and
+   three repeated semantic menus whose correct choice changes with state. Publish the
+   PC/recovery-reserve repair and regenerate every final receipt against that exact source before
+   producing the v2 catalog.
 4. Run read-only preflight on every assignment and reject duplicate state/question fingerprints,
    private-path leakage, unavailable selected goals and pressure manufactured outside the game.
 5. Freeze the complete private path-free catalog before any counted action. Schema v2 now rejects

@@ -156,6 +156,35 @@ def test_development_template_does_not_require_an_evolution_target(
     )
 
 
+def test_pc_template_uses_field_items_beside_box_management(tmp_path: Path) -> None:
+    destination = tmp_path / "pc-context.json"
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--mode",
+            "pc",
+            "--profile-id",
+            "pc-context",
+            "--out",
+            str(destination),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    profile = load_red_goal_context_profile(destination)
+    restore = next(
+        provider for provider in profile.providers if provider.kind is GoalKind.RESTORE_TEAM
+    )
+    assert restore.mechanic.value == "field_restore"
+    assert GoalKind.MANAGE_STORAGE in tuple(
+        provider.kind for provider in profile.providers
+    )
+
+
 def test_exploration_template_can_measure_discovery_without_capture(
     tmp_path: Path,
 ) -> None:

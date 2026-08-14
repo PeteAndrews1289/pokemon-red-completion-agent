@@ -52,6 +52,21 @@ content changed while the party was being damaged. A canonical external batch pl
 unique capture and profile identity to every public slot before preflight, while keeping every
 private path out of the repository and public summaries.
 
+The cartridge then corrected the plan twice. The same Center menu really did change its answer:
+development won at `0.1342` safety pressure and restoration won at `0.5599`, both before any action
+or episode. At the PC, however, the advertised Center-heal choice was fiction—the nurse skill can
+start only on the nurse's column. The profile now exposes bag-item healing there and refuses a
+damaged PC state unless its exact plan is payable. A live rehearsal returned to an 18/20 box at
+`0.5539` pressure with four Hyper Potions available and every specimen preserved.
+
+The earlier Cinnabar exploration states had money and free bag slots but only Potions and status
+cures. Rather than weaken the recovery contract, the setup performed a real shop transaction. The
+cartridge proved product index 2 is a Hyper Potion: +1 item, −₽1,500, stable clerk boundary. An
+explicit two-item reserve then survived a complete nurse-to-Mart-to-Mansion rehearsal, where real
+encounters produced `0.1456` pressure and an exactly payable two-item plan. The failed sources and
+the successful fixes are useful parts of the story: the curriculum is being discovered from the
+game, not drawn to match a spreadsheet.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

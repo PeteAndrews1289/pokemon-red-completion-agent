@@ -85,6 +85,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "--profile" not in result.stdout
     assert "--target-safety-pressure" in result.stdout
     assert "--maximum-safety-pressure" in result.stdout
+    assert "--hyper-potion-quantity" in result.stdout
 
 
 def test_blocked_context_uses_a_released_one_frame_semantic_action() -> None:
@@ -602,4 +603,83 @@ def test_materializer_declares_distinct_center_and_pc_damage_destinations() -> N
 
     assert 'mode in {"damaged-center", "damaged-pc"}' in source
     assert "pc_boundary=mode == \"damaged-pc\"" in source
+    assert 'require_field_recovery=mode in {"damaged-field", "damaged-pc"}' in source
     assert "PC damage setup changed collection storage" in source
+
+
+def test_recovery_reserve_is_exact_and_returns_to_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            bag_items=((int(ItemId.POTION), 6),),
+            player_money=5_000,
+        )
+    )
+    actions = SimpleNamespace(execute=lambda _action: None)
+
+    def move(_actions: object, _reader: object, _directions: object, label: str) -> None:
+        if label == "goal-manager recovery Mart":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.CINNABAR_MART,
+                player_x=3,
+                player_y=7,
+            )
+        elif label == "goal-manager recovery clerk":
+            reader.raw = replace(reader.raw, player_x=2, player_y=5)
+        elif label == "goal-manager recovery Center return":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.CINNABAR_POKECENTER,
+                player_x=3,
+                player_y=3,
+            )
+
+    class _Provider:
+        @staticmethod
+        def _settle() -> None:
+            return None
+
+        @staticmethod
+        def _open_buy_list() -> None:
+            return None
+
+    def buy(*_args: object, **kwargs: object) -> None:
+        assert kwargs["absolute_index"] == 2
+        assert kwargs["item"] == int(ItemId.HYPER_POTION)
+        assert kwargs["quantity"] == 2
+        reader.raw = replace(
+            reader.raw,
+            bag_items=(
+                (int(ItemId.POTION), 6),
+                (int(ItemId.HYPER_POTION), 2),
+            ),
+            player_money=2_000,
+        )
+
+    globals_dict = module["_buy_hyper_potion_reserve"].__globals__
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_pulse", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_buy_mart_item", buy)
+    monkeypatch.setitem(globals_dict, "_close_menus", lambda *_args: None)
+    monkeypatch.setitem(
+        globals_dict,
+        "RedMartResupplyGoalProvider",
+        lambda **_kwargs: _Provider(),
+    )
+
+    module["_buy_hyper_potion_reserve"](
+        actions,
+        reader,
+        object(),
+        SimpleNamespace(),
+        quantity=2,
+    )
+
+    assert reader.raw.map_id == MapId.CINNABAR_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert dict(reader.raw.bag_items or ())[int(ItemId.HYPER_POTION)] == 2
+    assert reader.raw.player_money == 2_000

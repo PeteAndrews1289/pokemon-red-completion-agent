@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+> **2026-08-14 live reversal checkpoint:** Mild and emergency Center states now prove the same
+> story/develop/restore menu selects development at `0.1342` safety pressure and restoration at
+> `0.5599`. A mild Mansion state proves acquire/restore/explore selects acquisition at `0.1071`.
+> The first PC probe exposed that Center restore is not executable from the PC stance; the pending
+> repair uses field-item restore and requires an exactly payable plan. Live no-save checks reached
+> the PC at `0.5539` with four Hyper Potions payable and all 18 boxed specimens unchanged. The
+> cartridge also proved Cinnabar product index 2 is a ₽1,500 Hyper Potion; an exact two-item reserve
+> enabled an early Cinnabar Mansion state at `0.1456` with a payable plan. Run the full gate,
+> publish, require exact-commit CI, then regenerate reversal preflights. Counted data remains 0/81.
+
 > **2026-08-14 curriculum-construction checkpoint:** The pending setup layer can relocate standard
 > Center and Cinnabar-PC states, target closed mild/emergency damage bands, preserve that damage on
 > return to the nurse or PC, and build stocked-and-damaged Mansion boundaries using real actions.

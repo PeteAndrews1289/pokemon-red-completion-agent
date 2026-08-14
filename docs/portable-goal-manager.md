@@ -159,6 +159,13 @@ callbacks, private paths, arbitrary provider JSON, or manager-target overrides. 
 collection can use Poké, Great, or Ultra Balls but reserves the unique Master Ball for legendary
 mechanics.
 
+PC restoration is explicitly field-item restoration: the PC stance is not the nurse boundary, and
+the setup refuses any damaged PC state whose observed recovery plan cannot be paid from the bag.
+Earlier Cinnabar lineages may buy an explicit Hyper Potion reserve through the actual Mart before
+damage. The cartridge-qualified transaction binds product index 2, ₽1,500 per item, complete bag
+equality apart from the requested stack, exact money change, stable return to the nurse and no
+story mutation.
+
 The first nonsealed live rehearsal has now crossed the setup-to-preflight boundary. A post–Secret
 Key capture reached a stable Mansion corridor through 82 controller actions; the resulting state
 offered acquisition and exploration, and the teacher selected acquisition at pressure `0.8917`
@@ -233,6 +240,11 @@ wild corridor. Emergency restoration contexts reuse the Center, PC and Mansion m
 teacher's safety gate. The resulting paired menus require different answers in different states:
 develop versus restore, manage storage versus restore, and acquire versus restore. Catalog freeze
 checks these properties from read-only preflight evidence before any one-shot collection begins.
+
+The first pair is now live: the identical story/development/restoration menu selected development
+at `0.1342` safety pressure and restoration at `0.5599`. Mild Mansion acquisition is also live from
+an acquire/restore/explore menu at `0.1071`. PC and field-recovery repairs have passed no-save live
+rehearsal and await publication plus fresh exact-source preflight; they are not counted examples.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and

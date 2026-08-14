@@ -14,6 +14,33 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## First catalog reversals live-qualified; publish before final curation — 2026-08-14
+
+The construction layer is no longer only unit-tested. A real mild Center context at safety pressure
+`0.1342` exposed story, development and restoration and selected development; the same semantic
+menu at `0.5599` selected restoration. That is the first of the three required same-menu answer
+reversals, proved read-only with no episode. A stocked Mansion context at `0.1071` exposed
+acquisition, restoration and exploration and selected acquisition. Its emergency counterpart is
+the next live check.
+
+The first PC preflight caught a truthful profile bug: the state was at `(13,4)`, ten tiles from the
+nurse boundary required by the Center-healing skill, so its menu contained storage but not healing.
+The PC profile now uses the field-item restoration mechanic, and `damaged-pc` refuses to save unless
+the exact observed recovery plan is payable. An in-memory cartridge rehearsal reached the PC at
+`0.5539` pressure with four Hyper Potions required and available, all 18 boxed specimens unchanged,
+every party member alive and stable control.
+
+Earlier Cinnabar lineages had enough money and bag space but only weak recovery items. Cartridge
+verification proved Cinnabar product index 2 is Hyper Potion: one purchase changed that stack by
+exactly one and money by exactly ₽1,500. The setup tool can now buy an explicit finite reserve,
+prove the complete inventory/economy delta and return to the nurse before creating real damage. A
+full no-save exploration rehearsal bought two, returned unchanged, reached a stable Mansion
+boundary at `0.1456` pressure and produced an exactly payable two-Hyper-Potion recovery plan.
+
+These repairs are still local and must pass the complete gate, publication and exact-commit CI.
+After that, regenerate PC and Mansion reversal preflights, construct the 81 final slot identities,
+and freeze the catalog. Counted data remains **0/54 train and 0/27 development validation**.
+
 ## Curriculum-construction batch hardened; live catalog build next — 2026-08-14
 
 The v2 freeze guards are published at `b8ff0d1`, and exact-commit CI is green. The next local
@@ -35,7 +62,8 @@ The planned train menus deliberately produce the three required state-dependent 
 development versus restoration at a Center, storage versus restoration at a PC, and acquisition
 versus restoration in the Mansion. Mild-damage development, acquisition, storage and exploration
 families provide at least 24 three-way train contexts; emergency variants reuse the same semantic
-menus but must select restoration. This code is not yet live-qualified or published. Genuine data
+menus but must select restoration. The batch checkpoint itself is published at `7b5e28c` with green
+exact-commit CI; the newer PC/recovery-reserve repair above is not yet published. Genuine data
 remains **0/54 train and 0/27 development validation**.
 
 ## All nine goal families live-qualified; catalog curation is next — 2026-08-14
