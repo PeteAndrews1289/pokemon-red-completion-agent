@@ -160,10 +160,12 @@ the earlier six-example validation defect, where even a perfect result could not
 
 1. **Complete:** bind its SHA-256 privately and verify title, size, SHA-1, and revision before
    emulator start.
-2. **Implemented and live-probed; exact-commit receipt pending:** qualify one whole-state banked
+2. **Complete:** qualify one whole-state banked
    party, Pokédex, inventory and storage bundle plus stable badge, map and control state. The fixed
    clean-power setup reaches the starting bedroom, proves uninitialized storage fails closed, uses
-   the real SAVE menu and compares complete reads across 600 no-input frames.
+   the real SAVE menu and compares complete reads across 600 no-input frames. The exact-commit
+   46-input / 33,276-frame result is preserved in the
+   [path-free qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
 3. Implement the smallest independently verified bindings needed to create genuine multi-need
    contexts. Begin with goal choice, one battle choice, and one local navigation round trip.
 4. Materialize all 72 private captures, then freeze a path-free catalog that satisfies the public

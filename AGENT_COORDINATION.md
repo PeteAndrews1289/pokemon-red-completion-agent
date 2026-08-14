@@ -23,11 +23,14 @@
 > the dashboard's real-ROM preview sent zero inputs and opened no context. Publish and pass exact-
 > commit CI before live banked-memory qualification. Do not replace the gates with ad hoc JSON or
 > score a partial sealed partition.
-> The pending whole-state qualifier has also been live-probed from clean power. Its fixed
+> Published `7bef917` and exact-commit CI run `31809030503` passed. The whole-state qualifier then
+> passed officially from clean power. Its fixed
 > qualification-only transcript reaches map group 24/map 7 at (3,3), proves pre-save PC bytes fail
 > closed, uses the real SAVE menu, and obtains matching complete observations across 600 no-input
-> frames. It totals 46 inputs and creates no label. Its official command refuses dirty or unpushed
-> source and has not yet run officially; publish and pass exact-commit CI first.
+> frames. It totals 46 inputs / 33,276 frames and creates no label. The path-free receipt is
+> `docs/evidence/crystal-banked-observation-qualification-2026-08-14.json`; all Crystal experiment
+> counters remain zero. Next implement one independently verified goal, battle and local-navigation
+> vertical slice before materializing any frozen context.
 
 > **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
 > contexts, but the first one-shot campaign stopped after five authenticated successes when public

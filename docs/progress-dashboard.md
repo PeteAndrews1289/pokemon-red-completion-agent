@@ -46,6 +46,10 @@ This is an adapter test, not a lesson. It starts from clean power, performs a bo
 setup and real in-game save, then compares two complete semantic reads. All zero-shot, adaptation,
 sealed-test, prediction and teacher counters remain zero.
 
+The first official run passed in 46 inputs / 33,276 frames after exact-commit CI. Its identity-safe
+result is preserved in the
+[Crystal banked-observation qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
+
 ## Safety boundary
 
 The dashboard binds only to this computer at `127.0.0.1`. Its server supports view-only GET

@@ -1,0 +1,74 @@
+{
+  "checks": {
+    "controller_released": true,
+    "post_save_observations_identical": true,
+    "pre_save_uninitialized_storage_rejected": true,
+    "rom_unchanged": true
+  },
+  "experiment": {
+    "adaptation_opened": 0,
+    "context_opened": false,
+    "prediction_computed": false,
+    "sealed_test_opened": 0,
+    "teacher_executed": false,
+    "zero_shot_opened": 0
+  },
+  "imitation_target_created": false,
+  "observation": {
+    "ownership": {
+      "boxed_specimens": 0,
+      "level_cap": 0,
+      "living": 0,
+      "opaque_eggs": 0,
+      "target": 250
+    },
+    "party": {
+      "capacity": 6,
+      "fainted": 0,
+      "maximum_level": null,
+      "minimum_level": null,
+      "size": 0
+    },
+    "pokedex": {
+      "registered": 0,
+      "seen": 0,
+      "target": 250
+    },
+    "resources": {
+      "ball_stacks": 0,
+      "capture_items": 0,
+      "item_stacks": 0,
+      "recovery_items": 0
+    },
+    "storage": {
+      "current_box": 1,
+      "free_slots": 280,
+      "occupied_slots": 0
+    }
+  },
+  "plan_sha256": "e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b",
+  "private_path_fields": 0,
+  "qualification_only_transcript": true,
+  "raw_address_fields": 0,
+  "rom": {
+    "sha1": "f2f52230b536214ef7c9924f483392993e226cfb",
+    "sha256": "fdcc3c8c43813cf8731fc037d2a6d191bac75439c34b24ba1c27526e6acdc8a2"
+  },
+  "runtime": {
+    "at_expected_start_location": true,
+    "badge_count": 0,
+    "input_ready": true,
+    "private_location_identity_fields": 0,
+    "raw_address_fields": 0
+  },
+  "schema": "pokemon.crystal.banked-observation-qualification.v1",
+  "setup": {
+    "actions": 46,
+    "actual_in_game_save": true,
+    "clean_power": true,
+    "frames": 33276,
+    "transcript_sha256": "325542d1b7527caa8b43efb4bb74a8b783fd4c7b6ccbcce650e269f2cb8690a3"
+  },
+  "source_commit": "7bef917f101154c8ee7c03635f9b66b6e32d7de1",
+  "status": "passed"
+}

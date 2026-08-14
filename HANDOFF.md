@@ -51,15 +51,16 @@ The counted Items and Balls pockets now have the same coherent reader and valida
 terminators, duplicate stacks, quantities and pocket membership before deriving capture and
 recovery reserves.
 
-The pending qualification source adds the missing whole-state boundary. Party, Pokédex, all
+Published `7bef917` adds the missing whole-state boundary. Party, Pokédex, all
 fourteen boxes and both counted pockets are each read coherently, then the complete semantic bundle
 is read a second time and accepted only if both moments match. Derived living ownership must not
 exceed registered Pokédex progress. A fixed qualification-only clean-power transcript has been
-live-probed against the exact cartridge: 40 inputs reach the ready starting bedroom, storage
+qualified against the exact cartridge: 40 inputs reach the ready starting bedroom, storage
 correctly rejects its uninitialized pre-save bytes, six menu inputs perform a real in-game save,
 and two complete post-save reads separated by 600 no-input frames match. This transcript creates no
-imitation target and cannot open a transfer slot. The official command additionally requires a
-clean, pushed exact commit; publish and pass CI before recording its path-free receipt.
+imitation target and cannot open a transfer slot. Exact-commit CI run `31809030503` passed before
+the official 46-input / 33,276-frame run. Its path-free receipt is
+[`docs/evidence/crystal-banked-observation-qualification-2026-08-14.json`](docs/evidence/crystal-banked-observation-qualification-2026-08-14.json).
 
 The owner supplied a lawful international v1.1 cartridge after the original v1.0 preregistration.
 Because the counters were still 0/18, 0/27, 0/27 and 0 predictions, v1 was retired without opening
@@ -91,12 +92,12 @@ publish this exact source, require green CI, and only then live-qualify banked r
 materializing any of the 72 v2 contexts. If the observation schema or fixed settings change after
 zero-shot, retire the entire experiment and create fresh identities.
 
-Published source `26bbf38` passed GitHub Actions and its local publication gate. The pending
-whole-state qualification source now passes its own larger local gate: **3,178 ROM-free tests
-passed**, three integration tests were intentionally deselected, one declared expected failure
-remained, and Ruff, whole-package mypy, privacy, documentation, plan and all source-bound registry
-checks passed. Its official command also rejected the dirty checkout before emulator start. It is
-still pending publication, exact-commit CI and the official live receipt.
+Published source `7bef917` passed GitHub Actions and its local publication gate: **3,181 ROM-free
+tests passed**, three integration tests were intentionally deselected, one declared expected
+failure remained, and Ruff, whole-package mypy, privacy, documentation, plan and all source-bound
+registry checks passed. Its official clean-power qualification then passed with no context, teacher,
+prediction or imitation target. Observation qualification is complete; the next gate is the first
+independently verified Crystal goal, battle and local-navigation vertical slice.
 
 The twelve sealed Red destination captures remain **0/12** and are unrelated to this experiment.
 
