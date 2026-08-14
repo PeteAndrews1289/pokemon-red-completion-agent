@@ -2,6 +2,15 @@
 
 ## August 14: Crystal became an experiment before it became another route
 
+The first Crystal route then revealed why the old arrow-script mindset was not enough. The planned
+round trip contained fourteen actual steps, but the cartridge needed eighteen directional inputs:
+four merely turned the character. The shared executor did not guess or spray another arrow. It saw
+that the coordinate had not changed, waited, retried within a fixed bound, and accepted each step
+only after the game acknowledged it. The same tiny world supported two honest high-level options:
+visit downstairs and return to explore, or remain downstairs to advance the story. Both ran and
+verified without asking either teacher or model. **The transferable object was not a Crystal button
+string; it was the contract “act, observe, and believe only what the game confirms.”**
+
 The first live cartridge surprise was not a battle or a route. Before the first in-game save,
 party, Pokédex and inventory were coherent but all fourteen PC boxes contained bytes with no valid
 species-list terminator. Treating those bytes as an empty collection would have been convenient—and

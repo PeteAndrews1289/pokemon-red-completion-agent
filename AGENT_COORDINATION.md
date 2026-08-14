@@ -31,6 +31,12 @@
 > `docs/evidence/crystal-banked-observation-qualification-2026-08-14.json`; all Crystal experiment
 > counters remain zero. Next implement one independently verified goal, battle and local-navigation
 > vertical slice before materializing any frozen context.
+> The pending goal/navigation source reuses the shared closed-loop route executor over one
+> source-derived two-room Crystal corridor. Its uncounted cartridge probe exposed four turn-only
+> inputs: 14 semantic steps required 18 acknowledged requests. Exploration returned to the exact
+> start in 18 requests / 3,684 frames; story reached the first-floor handoff in 9 / 1,842. Both
+> verifiers passed with teacher 0, predictions 0 and contexts 0. Publish and pass exact-commit CI
+> before the official receipt. Battle-choice qualification is still missing.
 
 > **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
 > contexts, but the first one-shot campaign stopped after five authenticated successes when public

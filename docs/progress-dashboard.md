@@ -50,6 +50,20 @@ The first official run passed in 46 inputs / 33,276 frames after exact-commit CI
 result is preserved in the
 [Crystal banked-observation qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
 
+Once the starting vertical-slice source is published and green, its two real goal bindings use the
+same view:
+
+```sh
+COMMIT=$(git rev-parse HEAD)
+python scripts/qualify_crystal_starting_vertical_slice.py \
+  --expected-source-commit "$COMMIT" \
+  --dashboard \
+  --hold-seconds 30
+```
+
+This highlights executable story/exploration pressures while the model remains **not executed**.
+It is a binding qualification, not a zero-shot prediction or teaching example.
+
 ## Safety boundary
 
 The dashboard binds only to this computer at `127.0.0.1`. Its server supports view-only GET

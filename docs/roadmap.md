@@ -58,10 +58,11 @@ Ordered next work:
    entry gate without opening a context, running a teacher or predicting.
 5. **Complete in observer preview; production wiring continues with each runner:** serve live game
    frames and identity-safe model/experiment telemetry through a view-only local dashboard.
-6. **Observation complete; vertical slice next:** exact-commit source passed CI, then a clean-power
-   run qualified one stable whole-state party/Pokédex/storage/inventory bundle across a real
-   in-game save and 600 no-input frames. Next implement one genuine multi-need goal context, one
-   battle choice and one local-navigation round trip with independent verification.
+6. **Observation complete; goal/navigation live-probed:** exact-commit source qualified one stable
+   whole-state bundle. The next source adds a genuine two-option starting goal menu and a
+   source-derived bedroom/first-floor round trip over the shared closed-loop router; both bindings
+   passed uncounted live probes. Publish and qualify them officially, then add the still-missing
+   independently verified battle choice.
 7. Materialize and freeze all 72 source-bound contexts. Run the 18-context Red zero-shot probe
    before collecting any Crystal adaptation label.
 8. Fit the fixed paired candidates, commit all sealed predictions, open the 27 test contexts once,

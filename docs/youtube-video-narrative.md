@@ -1,5 +1,15 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 Crystal scene: a turn is not a step
+
+Show the planned bedroom round trip as **14 SEMANTIC STEPS**, then keep a second counter for the
+controller. Four inputs visibly rotate the sprite while the coordinate stays fixed; each time, show
+**NOT ACKNOWLEDGED → BOUNDED RETRY**. The controller ends at **18 REQUESTS**, back on the exact
+starting square. Then split the same starting state into two cards: **EXPLORE — VISIT AND RETURN**
+and **ADVANCE STORY — STAY DOWNSTAIRS**. Both receive **INDEPENDENTLY VERIFIED**, while **TEACHER 0
+· MODEL 0 · CONTEXTS 0** stays on screen. The line is: **“We did not teach Crystal's arrows. We
+taught the executor not to confuse pressing a direction with moving.”**
+
 ## August 14 Crystal scene: an empty box is not random memory
 
 Show the clean-power run reaching the bedroom, then split the evidence panel: **PARTY 0 / POKÉDEX

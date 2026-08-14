@@ -99,6 +99,17 @@ registry checks passed. Its official clean-power qualification then passed with 
 prediction or imitation target. Observation qualification is complete; the next gate is the first
 independently verified Crystal goal, battle and local-navigation vertical slice.
 
+The pending source implements the goal/navigation half of that slice without adding a Crystal-only
+router. A source-derived corridor connects the player's bedroom and first floor through the existing
+game-neutral closed-loop route executor. On the live cartridge, the planner's 14 semantic steps
+required 18 controller requests because changing direction can turn without walking; every retry
+followed an unchanged coordinate observation. Two real goal bindings now share the same pristine
+question: exploration visits the first floor and returns (18 requests / 3,684 frames), while story
+progress reaches the first-floor handoff (9 requests / 1,842 frames). Both independent verifiers
+passed in an explicitly uncounted probe with no teacher, model prediction, context or label. The
+official script refuses dirty or unpushed source. Publish, pass exact-commit CI and record that
+receipt before calling the goal/navigation slice complete; the battle-choice half remains next.
+
 The twelve sealed Red destination captures remain **0/12** and are unrelated to this experiment.
 
 ## First Red goal manager trained and promoted to bounded causal authority — 2026-08-14
