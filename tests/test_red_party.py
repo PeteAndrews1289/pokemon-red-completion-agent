@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from pokemon_red_completion.observation import PARTY_LIMIT, RamAddress
+from pokemon_red_completion.observation import PARTY_LIMIT, RamAddress, RawGameState
 from pokemon_red_completion.party import (
     MOVE_SLOT_LIMIT,
     PARTY_SLOT_LIMIT,
@@ -25,6 +25,7 @@ from pokemon_red_completion.red_party import (
     PokemonRedPartyReader,
     decode_status,
     member_field_address,
+    party_observation_from_raw,
 )
 
 
@@ -186,6 +187,51 @@ def test_reader_returns_an_empty_party_before_the_starter_is_obtained() -> None:
     assert observed.size == 0
     assert observed.is_incomplete
     assert observed.weakest_trainable_member is None
+
+
+def test_raw_projection_uses_one_coherent_party_observation() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=1,
+        player_x=2,
+        player_y=3,
+        party_count=2,
+        battle_state=0,
+        party_species_ids=(0x1C, 0x76),
+        party_levels=(55, 48),
+        party_hp=(160, 90),
+        party_max_hp=(180, 120),
+        party_status=(0, 0x40),
+        party_moves=((57, 58, 55, 0), (91, 89, 0, 0)),
+        party_pp=((0xCF, 10, 5, 0), (10, 8, 0, 0)),
+    )
+
+    observed = party_observation_from_raw(raw)
+
+    assert observed.species_ids() == (0x1C, 0x76)
+    assert observed.members[0].total_pp == 30
+    assert observed.members[1].status is StatusCondition.PARALYSIS
+
+
+def test_raw_projection_rejects_a_mixed_length_party() -> None:
+    raw = RawGameState(
+        game_started=True,
+        map_id=1,
+        player_x=2,
+        player_y=3,
+        party_count=1,
+        battle_state=0,
+        party_species_ids=(),
+        party_levels=(5,),
+        party_hp=(10,),
+        party_max_hp=(10,),
+        party_status=(0,),
+        party_moves=((1, 0, 0, 0),),
+        party_pp=((10, 0, 0, 0),),
+    )
+
+    with pytest.raises(PartyReadError, match="species"):
+        party_observation_from_raw(raw)
 
 
 def test_reader_reads_a_full_six_member_party() -> None:

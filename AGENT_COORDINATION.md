@@ -1,5 +1,15 @@
 # Three-agent coordination
 
+> **2026-08-13 Red manager collection-harness checkpoint:** Lane A/C now has all nine real Red goal
+> providers, the fixed six-member/level-60 normalization contract, an 81-slot source-bound registry,
+> read-only preflight receipts, complete-catalog freeze, one-shot collection, strict dataset
+> admission and a fixed-hyperparameter fitter. Setup contexts and profiles are created only outside
+> the repository; setup uses real controller actions and is explicitly uncounted. Ordinary wild
+> capture supports Poké/Great/Ultra Balls and preserves the Master Ball. Genuine manager data is
+> still 0/54 train and 0/27 validation. Next publish, rehearse every nonsealed mechanic family, then
+> curate all 81 unique contexts before freezing or executing the catalog. The sealed destination
+> test remains 0/12 and out of scope. Start at `docs/portable-goal-manager.md`.
+
 > **2026-08-13 transferable-manager checkpoint (supersedes sealed-test priority):** the owner
 > clarified that the objective is a model that learns to play Pokémon and ultimately pursues a
 > living collection across games. The sealed Red destination test remains unopened at 0/12 and its

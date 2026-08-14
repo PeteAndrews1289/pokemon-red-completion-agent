@@ -453,6 +453,21 @@ class GoalManagerQuestion:
             }
         )
 
+    @property
+    def available_menu_sha256(self) -> str:
+        """Hash the executable semantic menu while ignoring order and bindings."""
+
+        return canonical_sha256(
+            {
+                "available_goal_kinds": sorted(
+                    item.kind.value
+                    for item in self.opportunities
+                    if item.availability is GoalAvailability.AVAILABLE
+                ),
+                "schema": "pokemon.core.available-goal-menu.v1",
+            }
+        )
+
 
 @dataclass(frozen=True, slots=True)
 class BoundGoalSelection:
@@ -753,7 +768,7 @@ def audit_goal_curriculum(
     menu_targets: defaultdict[str, set[GoalKind]] = defaultdict(set)
     for item in teacher:
         if item.partition == "train":
-            menu_targets[item.question.candidate_menu_sha256].add(item.selected_kind)
+            menu_targets[item.question.available_menu_sha256].add(item.selected_kind)
     context_dependent_menus = sum(len(targets) >= 2 for targets in menu_targets.values())
     if context_dependent_menus < rules.minimum_context_dependent_menus:
         reasons.append("candidate_menus_do_not_require_context")

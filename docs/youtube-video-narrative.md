@@ -191,6 +191,31 @@ CONTEXTS / 6 OF 6 CHALLENGES / COUNTED DATA 0 / TEST OPENED 0**. Add the paired-
 be **KOGA WITHOUT SURF/STRENGTH**, **CINNABAR BEFORE SABRINA**, and **REMAINING NON-TEST CONTEXTS**.
 Do not show these as complete until their own cartridge receipts exist.
 
+## Goal-manager training beat: the harness is not the model
+
+Add a nine-card menu after the destination-learning section: **STORY / CATCH / TRAIN / EVOLVE /
+HEAL / SHOP / BOX / RECOVER / EXPLORE**. Show the private Red mechanic disappearing behind each
+card until only normalized pressure, effort, risk, and availability remain. The narration is:
+**“Crystal does not share Red's map, but it does share the decision to heal before a risky fight or
+make room before catching something new.”**
+
+Then show the curriculum counter as **54 TRAIN / 27 DEVELOPMENT / 0 COLLECTED**. Do not animate it
+upward until genuine emulator episodes exist. Put three locks in front of every row: **EXACT SAVE +
+READ-ONLY PREFLIGHT + CHOICE WRITTEN BEFORE ACTION**. Contrast a setup save with a training row:
+walking to a Mart or taking damage can create a useful question, but it creates **NO LABEL / NO
+EPISODE**. This is the visual explanation for why several days of engineering can honestly end at
+zero training examples.
+
+Use the late-game ball repair as a compact payoff. First show the manager counting Poké, Great, and
+Ultra Balls as resources while the executor reaches only for a Poké Ball. Cross out the mismatch,
+then show the deterministic ordinary-ball order **POKÉ → GREAT → ULTRA**, with the Master Ball held
+back under **LEGENDARY RESERVE**. Say: **“A portable goal is only real when the title adapter can
+actually carry it out from the state that produced the decision.”**
+
+Close this beat with two targets on separate horizons: **LEVEL 60 CAMPAIGN TEAM** and **LEVEL 100
+PERFECT COLLECTION**. The first keeps routine training examples useful instead of teaching endless
+over-grinding; the second remains part of the long-term completion contract.
+
 ## Working title
 
 **I Taught an AI to Beat Pokémon Red — Then Discovered It Had Learned Almost Nothing**

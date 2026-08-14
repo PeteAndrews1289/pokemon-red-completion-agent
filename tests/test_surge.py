@@ -57,6 +57,7 @@ from pokemon_red_completion.surge import (
     SURGE_RECOVERY_HP_DENOMINATOR,
     SURGE_RECOVERY_HP_NUMERATOR,
     VIRIDIAN_FOREST_MAX_SURVEY_LEGS,
+    WILD_CAPTURE_BALL_PRIORITY,
     WILD_CAPTURE_DIRECT_THROW_SPECIES,
     WILD_CAPTURE_HIGH_RISK_HELPER_HP_RATIO,
     WILD_CAPTURE_HIGH_RISK_SPECIES,
@@ -65,6 +66,7 @@ from pokemon_red_completion.surge import (
     WILD_CAPTURE_PASSIVE_SPECIES,
     WILD_CAPTURE_POLICY,
     WILD_CAPTURE_THROWS_PER_ENCOUNTER,
+    LiveWildCorridorSurveyExecutor,
     SurgeChapterReport,
     SurgeCheckpoint,
     SurgeTiming,
@@ -72,8 +74,9 @@ from pokemon_red_completion.surge import (
     _force_switch_failed_flee_to_living,
     _force_switch_wild_capture_to_lead,
     _is_route_1_walker_gate,
-    _LiveWildCorridorSurveyExecutor,
     _navigate_to_gym_can,
+    _next_ordinary_capture_ball,
+    _ordinary_capture_ball_total,
     _party_moves_for_index,
     _plan_gym_can_path,
     _run_dig_battle,
@@ -89,6 +92,22 @@ from pokemon_red_completion.surge import (
 
 def test_ball_throw_dialogue_uses_non_selecting_settle_action() -> None:
     assert BALL_THROW_SETTLE_ACTION is MacroActionKind.CANCEL
+
+
+def test_ordinary_wild_capture_uses_late_game_balls_but_reserves_master_ball() -> None:
+    inventory = {
+        ItemId.MASTER_BALL: 1,
+        ItemId.GREAT_BALL: 2,
+        ItemId.ULTRA_BALL: 3,
+    }
+
+    assert WILD_CAPTURE_BALL_PRIORITY == (
+        ItemId.POKE_BALL,
+        ItemId.GREAT_BALL,
+        ItemId.ULTRA_BALL,
+    )
+    assert _ordinary_capture_ball_total(inventory) == 5
+    assert _next_ordinary_capture_ball(inventory) is ItemId.GREAT_BALL
 
 
 def test_mart_buy_list_waits_for_variable_purchase_dialogue(
@@ -240,7 +259,7 @@ def test_route_1_walker_recovery_yields_restores_and_crosses(
 
     monkeypatch.setattr(surge_module, "_survey_step", step)
     monkeypatch.setattr(surge_module, "_wait", lambda *_args: None)
-    live = object.__new__(_LiveWildCorridorSurveyExecutor)
+    live = object.__new__(LiveWildCorridorSurveyExecutor)
     live._reader = reader
     live._executor = object()
     live._timing = DEFAULT_SURGE_TIMING
@@ -287,7 +306,7 @@ def test_route_1_walker_recovery_also_crosses_southbound(
 
     monkeypatch.setattr(surge_module, "_survey_step", step)
     monkeypatch.setattr(surge_module, "_wait", lambda *_args: None)
-    live = object.__new__(_LiveWildCorridorSurveyExecutor)
+    live = object.__new__(LiveWildCorridorSurveyExecutor)
     live._reader = reader
     live._executor = object()
     live._timing = DEFAULT_SURGE_TIMING
@@ -1172,7 +1191,7 @@ def test_live_wild_corridor_rejects_ambiguous_source_contracts(
     arguments.update(overrides)
 
     with pytest.raises(ValueError, match=message):
-        _LiveWildCorridorSurveyExecutor(
+        LiveWildCorridorSurveyExecutor(
             object(),
             object(),
             object(),

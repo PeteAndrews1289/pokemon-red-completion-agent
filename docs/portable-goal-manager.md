@@ -139,9 +139,24 @@ It does not mean that a Red route script also works in Crystal.
 The manager contract, shared feature projector, train-only fitter, authenticated model loader,
 paired evaluator, hard-masked causal wrapper, curriculum audit, normalized state-evidence composer,
 record-before-action writer, strict decision/outcome loader, and ROM-free invariance tests are
-implemented. Evaluation reports three preregistered comparators: lowest effort, a static
-safety-first priority, and a stronger highest-pressure heuristic. A learned result must add value
-beyond the strongest relevant comparator; beating only a deliberately weak baseline is not enough.
+implemented. Red also has all nine finite live providers plus the authenticated profile, preflight,
+catalog, one-shot collection, dataset reload, and fitting commands. Evaluation reports three
+preregistered comparators: lowest effort, a static safety-first priority, and a stronger highest-
+pressure heuristic. A learned result must add value beyond the strongest relevant comparator;
+beating only a deliberately weak baseline is not enough.
+
+The Red normalization target is fixed before private context selection: party size six, ordinary
+team level 60, ten capture resources, eight recovery resources, and eight immediate storage slots.
+A context profile cannot weaken those targets to manufacture its assigned pressure or teacher
+label. Team-development examples execute one real weakest-member level quantum rather than replaying
+an entire late-game grind. Perfect level-100 collection remains a separate long-horizon contract.
+
+Setup tooling can derive Mansion, Mart, PC, blocked-dialogue, damaged-field, and damaged-Center
+boundaries from authenticated nonsealed captures. It does so with ordinary controller actions,
+writes only new external save/envelope files, preserves the story frontier, and creates no episode
+or label. The matching finite profile builder admits no callbacks, private paths, arbitrary provider
+JSON, or manager-target overrides. Ordinary wild collection can use Poké, Great, or Ultra Balls but
+reserves the unique Master Ball for legendary mechanics.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
@@ -158,22 +173,21 @@ and collect across games.
 
 ## Next implementation slices
 
-1. Wire Red's live party, Pokédex, collection, training, inventory, storage, progress, and recovery
-   readers into the implemented normalized state-evidence composer.
-2. Build an opportunity enumerator that exposes only executable semantic goals and binds them to
-   existing objective, destination, collection, team-development, healing, storage, and recovery
-   specialists.
-3. Freeze a prospective source-bound assignment registry for the short manager contexts and wire
-   the implemented record-before-action observer into the Red loop. Every choice must consume one
-   success, failure, or censored interruption.
-4. Preregister short Red contexts across all nine goal kinds. Prefer captured-state microtasks to
-   another set of 47-million-frame whole-game episodes.
-5. Collect the 54/27 development corpus, run the admission audit, fit the small model, and keep
-   model selection training-only while reporting all three fixed baselines.
+1. Publish the exact source-bound 81-slot registry and require green exact-commit CI.
+2. Rehearse every setup/profile/preflight family on nonsealed external captures. A rehearsal may
+   create a new setup save and receipt, but never a counted episode.
+3. Curate 54 unique train and 27 unique development-validation contexts, preserving separate source
+   lineages and obtaining at least 24 genuine three-way train menus plus three context-dependent
+   repeated menus. Build storage pressure through real catches and box use, never RAM edits.
+4. Freeze the complete private catalog before any counted action, then collect each one-shot episode
+   and run the strict admission audit.
+5. Fit the first genuine Red manager with the frozen training configuration and report all three
+   fixed baselines on development validation.
 6. Run Red shadow and causal campaigns with explicit manager authority and zero teacher fallback.
 7. Add the Crystal adapter and the zero-shot/few-shot/from-scratch benchmark.
-8. Expand acquisition, evolution, storage, breeding, trading, and multi-save mechanics until the
-   same hierarchy can pursue each title's declared living-Pokedex contract.
+8. Expand acquisition, evolution, storage, breeding, trading, legendary puzzles, version routing,
+   and multi-save mechanics until the same hierarchy can pursue each title's declared living-
+   Pokédex contract.
 
 The destination is still ambitious: complete games, recover from changed outcomes, and eventually
 collect every legally obtainable Pokemon across multiple titles. This manager makes that ambition

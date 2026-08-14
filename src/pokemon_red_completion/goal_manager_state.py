@@ -43,6 +43,7 @@ class GoalStateEvidence:
     story: CompletionProgress
     registered_collection: CompletionProgress
     living_collection: CompletionProgress
+    level_collection: CompletionProgress
     team_readiness: float
     evolution: CompletionProgress
     safety: float
@@ -56,6 +57,7 @@ class GoalStateEvidence:
             "story",
             "registered_collection",
             "living_collection",
+            "level_collection",
             "evolution",
             "world_knowledge",
         ):
@@ -65,7 +67,15 @@ class GoalStateEvidence:
             object.__setattr__(self, name, _unit(getattr(self, name), subject=name))
 
     def situation(self) -> GoalSituation:
-        """Compose strict collection/team/safety satisfaction into need pressure."""
+        """Compose campaign satisfaction into portable need pressure.
+
+        The ordinary collection need covers registration and living retention.
+        Level-100 development remains a separately reported completion tier: if
+        it were folded into this pressure, a fresh save would report maximum
+        collection urgency until the first level-100 specimen and could teach
+        the manager to grind instead of catch.  A later perfect-collection
+        curriculum can expose that development gate explicitly.
+        """
 
         return GoalSituation.from_satisfaction(
             story=self.story.satisfaction,
@@ -114,6 +124,10 @@ def goal_state_evidence(
         ),
         living_collection=CompletionProgress(
             completed=collection.living_count,
+            target=collection.living_target_count,
+        ),
+        level_collection=CompletionProgress(
+            completed=collection.level_cap_count,
             target=collection.living_target_count,
         ),
         team_readiness=party_readiness_satisfaction(

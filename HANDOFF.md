@@ -14,6 +14,44 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Red manager collection harness ready for publication — 2026-08-13
+
+The portable manager is no longer only a game-neutral design. Red now has a live state adapter and
+nine finite executable providers: story, wild acquisition, one-level team development, targeted
+Diglett evolution, field/Center restoration, Cinnabar Mart resupply, PC box rotation, control
+recovery, and wild encounter discovery. Profiles cannot change the training target: counted Red
+contexts always normalize against a six-member level-60 team, ten ordinary capture resources,
+eight recovery resources, and eight immediate storage slots. Level 100 remains a later perfect-
+collection objective, not an ordinary pressure that would teach routine over-grinding.
+
+The prospective corpus is fixed at 81 slots: 54 train and 27 development validation, six/three per
+goal kind. Each slot has a source-bound assignment, read-only preflight receipt, exact private
+capture/profile binding, one-shot episode identity, record-before-action trajectory, strict reload,
+and train-only fixed-hyperparameter fitter. The complete catalog must contain 81 unique states and
+questions, at least 24 genuine three-way training menus, and three repeated semantic menus whose
+teacher choice changes with state. A singleton emergency such as control recovery is permitted as
+an honest individual context; it cannot satisfy the corpus-level multiway requirement.
+
+Real collection is still **0/54 train and 0/27 validation**. Do not call the synthetic fixtures,
+old destination episodes, setup runs, or profiles training data. The setup tools materialize new
+mechanic boundaries only through real controller actions and cannot create episodes. A separate
+finite profile builder produces canonical path-free configuration. Ordinary wild acquisition now
+supports Poké, Great, and Ultra Balls while reserving the Master Ball for legendary work.
+
+Next, in order:
+
+1. publish the exact source-bound registry and require green exact-commit CI;
+2. rehearse each materialization/profile/preflight family on nonsealed external captures;
+3. build 81 unique train/validation contexts with separate source lineages, including 24 multiway
+   menus and real storage pressure rather than edited RAM;
+4. freeze the full private catalog before any counted action;
+5. collect each one-shot episode, run admission, and fit the first genuine Red goal-manager model;
+6. compare it with lowest-effort, fixed-priority, and highest-pressure baselines before granting
+   any shadow or causal authority.
+
+The sealed strategic-destination test remains frozen and unopened at 0/12. None of this work grants
+permission to inspect or execute it.
+
 ## Portable goal manager becomes the active path — 2026-08-13
 
 The owner clarified the end goal: a model that can play Pokémon, learn new titles with less

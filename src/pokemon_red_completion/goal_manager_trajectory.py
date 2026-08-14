@@ -236,6 +236,12 @@ class GoalManagerTrajectoryObserver:
     def pending_decision(self) -> PendingGoalManagerDecision | None:
         return self._pending
 
+    @property
+    def pending_was_recorded(self) -> bool:
+        """Whether the durable decision write for the pending choice succeeded."""
+
+        return self._pending is not None and self._pending_was_recorded
+
     def ordered_question(
         self,
         situation: GoalSituation,
@@ -355,6 +361,11 @@ class CollectedGoalManagerDataset:
     collection_id: str
     assignment_id: str
     source_commit: str
+    context_catalog_sha256: str
+    context_id: str
+    binding_manifest_sha256: str
+    capture_state_sha256: str
+    capture_envelope_sha256: str
     examples: tuple[GoalManagerExample, ...]
 
     def __post_init__(self) -> None:
@@ -375,6 +386,9 @@ class CollectedGoalManagerDataset:
                 "collection_id": self.collection_id,
                 "assignment_id": self.assignment_id,
                 "source_commit": self.source_commit,
+                "context_catalog_sha256": self.context_catalog_sha256,
+                "context_id": self.context_id,
+                "binding_manifest_sha256": self.binding_manifest_sha256,
             },
             "examples": len(self.examples),
             "outcomes": dict(
@@ -417,6 +431,20 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
     )
     source_commit = _string(
         goal_metadata.get("source_commit"), subject="goal-manager source commit"
+    )
+    context_catalog_sha256 = _digest(
+        goal_metadata.get("context_catalog_sha256"), subject="context catalog digest"
+    )
+    context_id = _digest(goal_metadata.get("context_id"), subject="context identity")
+    binding_manifest_sha256 = _digest(
+        goal_metadata.get("binding_manifest_sha256"),
+        subject="binding manifest digest",
+    )
+    capture_state_sha256 = _digest(
+        goal_metadata.get("state_sha256"), subject="captured state digest"
+    )
+    capture_envelope_sha256 = _digest(
+        goal_metadata.get("envelope_sha256"), subject="capture envelope digest"
     )
 
     decisions = [
@@ -545,6 +573,11 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
         collection_id=collection_id,
         assignment_id=assignment_id,
         source_commit=source_commit,
+        context_catalog_sha256=context_catalog_sha256,
+        context_id=context_id,
+        binding_manifest_sha256=binding_manifest_sha256,
+        capture_state_sha256=capture_state_sha256,
+        capture_envelope_sha256=capture_envelope_sha256,
         examples=tuple(examples),
     )
 

@@ -75,8 +75,27 @@ def write_captured_progress(
 
 
 def load_captured_progress(path: Path, *, state_path: Path) -> CapturedProgressEnvelope:
+    """Load one envelope and state from disk without a split validation read."""
+
     try:
-        value = json.loads(path.read_text(encoding="ascii"))
+        envelope_payload = path.read_bytes()
+        state_payload = state_path.read_bytes()
+    except OSError as error:
+        raise CapturedProgressError("capture progress envelope is invalid") from error
+    return parse_captured_progress(envelope_payload, state_bytes=state_payload)
+
+
+def parse_captured_progress(
+    payload: bytes,
+    *,
+    state_bytes: bytes,
+) -> CapturedProgressEnvelope:
+    """Authenticate in-memory envelope bytes against exact in-memory state bytes."""
+
+    if not isinstance(payload, bytes) or not isinstance(state_bytes, bytes):
+        raise TypeError("captured progress payloads must be bytes")
+    try:
+        value = json.loads(payload.decode("ascii"))
         envelope = CapturedProgressEnvelope(
             state_sha256=value["state_sha256"],
             checkpoint_id=value["checkpoint_id"],
@@ -85,8 +104,8 @@ def load_captured_progress(path: Path, *, state_path: Path) -> CapturedProgressE
             checkpoints_total=value["checkpoints_total"],
             verified_objective_ids=tuple(value["verified_objective_ids"]),
         )
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
         raise CapturedProgressError("capture progress envelope is invalid") from error
-    if hashlib.sha256(state_path.read_bytes()).hexdigest() != envelope.state_sha256:
+    if hashlib.sha256(state_bytes).hexdigest() != envelope.state_sha256:
         raise CapturedProgressError("capture state does not match its progress envelope")
     return envelope

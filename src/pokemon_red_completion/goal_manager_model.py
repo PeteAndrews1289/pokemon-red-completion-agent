@@ -34,6 +34,9 @@ from pokemon_red_completion.goal_manager import (
 
 GOAL_MANAGER_FEATURE_SCHEMA_ID = "pokemon.core.goal-manager.shared-candidate.v1"
 GOAL_MANAGER_MODEL_ID = "pokemon.core.goal-manager.linear.v1"
+GOAL_MANAGER_FIT_EPOCHS = 800
+GOAL_MANAGER_FIT_LEARNING_RATE = 0.02
+GOAL_MANAGER_FIT_L2 = 0.02
 
 # A deliberately simple, preregistered comparator: recover control and safety
 # first, then unblock resources/storage, then favor story progress over the
@@ -273,9 +276,9 @@ class GoalManagerLinearModel:
         cls,
         examples: Iterable[GoalManagerExample],
         *,
-        epochs: int = 800,
-        learning_rate: float = 0.02,
-        l2: float = 0.02,
+        epochs: int = GOAL_MANAGER_FIT_EPOCHS,
+        learning_rate: float = GOAL_MANAGER_FIT_LEARNING_RATE,
+        l2: float = GOAL_MANAGER_FIT_L2,
     ) -> GoalManagerLinearModel:
         """Fit only successful teacher choices from the training partition."""
 
@@ -345,6 +348,24 @@ class GoalManagerLinearModel:
             l2=float(l2),
             training_epochs=epochs,
         )
+
+
+def goal_manager_fit_configuration() -> dict[str, object]:
+    """Return the source-bound optimizer settings used by counted fitting.
+
+    The development-validation partition must not become a hyperparameter
+    search set.  The production fitting command therefore consumes this fixed
+    record instead of accepting optimizer settings from its command line.
+    """
+
+    return {
+        "epochs": GOAL_MANAGER_FIT_EPOCHS,
+        "l2": GOAL_MANAGER_FIT_L2,
+        "learning_rate": GOAL_MANAGER_FIT_LEARNING_RATE,
+        "model_id": GOAL_MANAGER_MODEL_ID,
+        "schema": "pokemon-core-goal-manager-fit-configuration-v1",
+        "selection": "fixed_before_context_collection",
+    }
 
 
 @dataclass(slots=True)

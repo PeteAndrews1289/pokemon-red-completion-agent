@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .observation import PARTY_LIMIT, RamAddress, ReadOnlyMemory
+from .observation import PARTY_LIMIT, RamAddress, RawGameState, ReadOnlyMemory
 from .party import (
     MOVE_SLOT_LIMIT,
     MoveObservation,
@@ -58,6 +58,64 @@ SNORLAX_SPECIES_ID = 0x84
 
 class PartyReadError(RuntimeError):
     """Raised when observed party memory cannot describe a coherent party."""
+
+
+def party_observation_from_raw(raw: RawGameState) -> PartyObservation:
+    """Project the party already present in one coherent Red observation.
+
+    ``PokemonRedPartyReader`` remains the richer adapter because it can include
+    experience.  The goal manager instead values a single-frame view: reading
+    the party again after story/control state could combine two different game
+    frames.  This projection deliberately uses only fields captured by
+    :meth:`PokemonRedStateReader.read`.
+    """
+
+    if not isinstance(raw, RawGameState):
+        raise TypeError("raw must be a RawGameState")
+    if not raw.game_started:
+        return PartyObservation()
+    count = raw.party_count
+    if type(count) is not int or not 0 <= count <= PARTY_LIMIT:  # noqa: E721
+        raise PartyReadError("raw party count is unavailable or invalid")
+    fields = {
+        "species": raw.party_species_ids,
+        "levels": raw.party_levels,
+        "hp": raw.party_hp,
+        "maximum hp": raw.party_max_hp,
+        "status": raw.party_status,
+        "moves": raw.party_moves,
+        "pp": raw.party_pp,
+    }
+    for name, values in fields.items():
+        if values is None or len(values) != count:
+            raise PartyReadError(f"raw party {name} does not match its count")
+    assert raw.party_species_ids is not None
+    assert raw.party_levels is not None
+    assert raw.party_hp is not None
+    assert raw.party_max_hp is not None
+    assert raw.party_status is not None
+    assert raw.party_moves is not None
+    assert raw.party_pp is not None
+    members = tuple(
+        PartyMemberObservation(
+            slot=index + 1,
+            species_id=raw.party_species_ids[index],
+            level=raw.party_levels[index],
+            hp=raw.party_hp[index],
+            max_hp=raw.party_max_hp[index],
+            status=decode_status(raw.party_status[index]),
+            moves=tuple(
+                MoveObservation(move_id=move_id, current_pp=pp & PP_VALUE_MASK)
+                for move_id, pp in zip(
+                    raw.party_moves[index],
+                    raw.party_pp[index],
+                    strict=True,
+                )
+            ),
+        )
+        for index in range(count)
+    )
+    return PartyObservation(members=members)
 
 
 #: The declared balanced roster for Pokémon Red.

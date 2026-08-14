@@ -38,13 +38,20 @@ def _member(
     )
 
 
-def _report(*, target: int, owned: int, living_target: int, living: int) -> CollectionReport:
+def _report(
+    *,
+    target: int,
+    owned: int,
+    living_target: int,
+    living: int,
+    level_cap: int | None = None,
+) -> CollectionReport:
     return CollectionReport(
         target_count=target,
         living_target_count=living_target,
         pokedex_owned_count=owned,
         living_count=living,
-        level_cap_count=0,
+        level_cap_count=living if level_cap is None else level_cap,
         missing_owned=tuple(f"missing-owned-{index}" for index in range(target - owned)),
         missing_living=tuple(f"missing-living-{index}" for index in range(living_target - living)),
         underleveled=(),
@@ -116,6 +123,32 @@ def test_living_collection_prevents_registration_from_claiming_completion() -> N
     )
 
     assert evidence.situation().pressure(GoalNeed.COLLECTION_PROGRESS) == 0.5
+
+
+def test_level_cap_is_reported_without_distorting_ordinary_collection_pressure() -> None:
+    evidence = goal_state_evidence(
+        story=CompletionProgress(8, 8),
+        collection=_report(
+            target=10,
+            owned=10,
+            living_target=8,
+            living=8,
+            level_cap=2,
+        ),
+        party=PartyObservation((_member(1, species_id=9, level=50),)),
+        required_party_size=1,
+        required_team_level=50,
+        evolution=CompletionProgress(1, 1),
+        available_resources=1,
+        desired_resources=1,
+        free_storage_slots=1,
+        desired_storage_headroom=1,
+        control_stable=True,
+        world_knowledge=CompletionProgress(1, 1),
+    )
+
+    assert evidence.level_collection.satisfaction == 0.25
+    assert evidence.situation().pressure(GoalNeed.COLLECTION_PROGRESS) == 0.0
 
 
 def test_party_readiness_counts_missing_members_and_relative_levels() -> None:

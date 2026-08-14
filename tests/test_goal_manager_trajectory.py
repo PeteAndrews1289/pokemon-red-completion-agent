@@ -72,6 +72,11 @@ class _Reader:
                     "collection_id": "portable-goal-curriculum-v1",
                     "assignment_id": "goal-assignment-1",
                     "source_commit": "1" * 40,
+                    "context_catalog_sha256": "2" * 64,
+                    "context_id": "3" * 64,
+                    "binding_manifest_sha256": "6" * 64,
+                    "state_sha256": "4" * 64,
+                    "envelope_sha256": "5" * 64,
                 },
             },
         }
@@ -177,6 +182,8 @@ def test_choice_is_written_before_execution_and_strictly_reloads() -> None:
     dataset = load_goal_manager_episode(_reader_from_sink(sink))
 
     assert len(dataset.examples) == 1
+    assert dataset.context_catalog_sha256 == "2" * 64
+    assert dataset.binding_manifest_sha256 == "6" * 64
     assert dataset.examples[0].selected_kind is GoalKind.ACQUIRE_SPECIES
     assert dataset.examples[0].teacher_choice_target == selected
     assert dataset.examples[0].question.policy_input == question.policy_input

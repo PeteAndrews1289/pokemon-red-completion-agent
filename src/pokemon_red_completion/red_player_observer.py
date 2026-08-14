@@ -53,21 +53,44 @@ class LivePokemonRedObserver:
         self._latched_facts.update(facts)
 
     def observe(self) -> GameState:
-        raw = self.reader.read()
+        return self.observe_raw(self.reader.read())
+
+    def observe_raw(self, raw: RawGameState) -> GameState:
+        """Project one already-read frame without creating a mixed observation.
+
+        Goal arbitration needs party, collection, control and story evidence from
+        the same stable boundary.  Accepting the caller's raw observation avoids
+        silently advancing the emulator or rereading a transitional frame while
+        the rest of that evidence is being assembled.
+        """
+
+        if not isinstance(raw, RawGameState):
+            raise TypeError("raw must be a RawGameState")
         live_facts = semantic_facts(raw)
         objective_facts = frozenset(
             fact for objective in self.graph for fact in objective.completion_facts
         )
         self._latched_facts.update(live_facts.intersection(objective_facts))
-        self._require_consistent(self._latched_facts, subject="live clean-start state")
+        self._require_consistent(
+            self._latched_facts,
+            subject="live clean-start state",
+            mode=game_mode(raw),
+        )
         return GameState(
             mode=game_mode(raw),
             facts=frozenset(self._latched_facts.union(live_facts)),
             location=location_label(raw.map_id),
         )
 
-    def _require_consistent(self, facts: set[str], *, subject: str) -> None:
-        state = GameState(mode=game_mode(self.reader.read()), facts=frozenset(facts))
+    def _require_consistent(
+        self,
+        facts: set[str],
+        *,
+        subject: str,
+        mode: GameMode | None = None,
+    ) -> None:
+        observed_mode = game_mode(self.reader.read()) if mode is None else mode
+        state = GameState(mode=observed_mode, facts=frozenset(facts))
         completed = self.graph.completed_ids(state)
         inconsistent = tuple(
             objective.id
@@ -128,7 +151,13 @@ class CapturedPokemonRedObserver:
         )
 
     def observe(self) -> GameState:
-        raw = self.reader.read()
+        return self.observe_raw(self.reader.read())
+
+    def observe_raw(self, raw: RawGameState) -> GameState:
+        """Project one caller-owned captured-state read at a coherent boundary."""
+
+        if not isinstance(raw, RawGameState):
+            raise TypeError("raw must be a RawGameState")
         live_facts = semantic_facts(raw)
         state = GameState(
             mode=game_mode(raw),

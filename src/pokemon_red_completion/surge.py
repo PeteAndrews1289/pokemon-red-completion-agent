@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter, deque
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -113,6 +113,15 @@ SURGE_ITEM_SETTLE_PULSES = 720
 SURGE_RECOVERY_HP_NUMERATOR = 1
 SURGE_RECOVERY_HP_DENOMINATOR = 1
 WILD_CAPTURE_THROWS_PER_ENCOUNTER = 5
+# Ordinary collection must never spend the unique Master Ball.  Prefer the
+# weakest supported ball first so the deterministic route retains stronger
+# reserves, while still allowing late-game contexts whose Mart sells only
+# Great or Ultra Balls.
+WILD_CAPTURE_BALL_PRIORITY = (
+    ItemId.POKE_BALL,
+    ItemId.GREAT_BALL,
+    ItemId.ULTRA_BALL,
+)
 BALL_THROW_SETTLE_ACTION = MacroActionKind.CANCEL
 ROUTE_1_WALKER_APPROACH = (14, 14)
 ROUTE_1_WALKER_YIELD = (15, 14)
@@ -1595,7 +1604,7 @@ def _survey_route_1(
 ) -> RedAreaExecutionReport:
     """Catch and retain Route 1's two wild species through live encounters."""
 
-    live = _LiveWildCorridorSurveyExecutor(
+    live = LiveWildCorridorSurveyExecutor(
         emulator,
         executor,
         reader,
@@ -1831,7 +1840,7 @@ def _run_viridian_forest_collection(
             f"map={raw.map_id!r}, coordinate={(raw.player_x, raw.player_y)!r}."
         )
 
-    live = _LiveWildCorridorSurveyExecutor(
+    live = LiveWildCorridorSurveyExecutor(
         emulator,
         executor,
         reader,
@@ -2149,7 +2158,7 @@ def _wild_weakening_turn_result(
     return current_enemy_hp < before_enemy_hp
 
 
-class _LiveWildCorridorSurveyExecutor:
+class LiveWildCorridorSurveyExecutor:
     """Bind a reversible two-endpoint wild corridor to the shared area loop."""
 
     def __init__(
@@ -2255,7 +2264,9 @@ class _LiveWildCorridorSurveyExecutor:
                     target_hp=raw.enemy_hp,
                     target_max_hp=raw.enemy_max_hp,
                     catcher=party.members[helper_index],
-                    balls_available=_bag(self._emulator).get(ItemId.POKE_BALL, 0),
+                    balls_available=_ordinary_capture_ball_total(
+                        _bag(self._emulator)
+                    ),
                     party_has_room=party.is_incomplete,
                     storage_has_room=any(
                         count < collection.box_capacity for count in collection.box_counts
@@ -2297,10 +2308,12 @@ class _LiveWildCorridorSurveyExecutor:
         raw = self._reader.read()
         if not raw.battle_state:
             raise RedAreaExecutionError(f"{self._label} cannot flee without an encounter")
-        balls = _bag(self._emulator).get(ItemId.POKE_BALL, 0)
+        balls = _ordinary_capture_ball_inventory(_bag(self._emulator))
         _flee(self._emulator, self._executor, self._reader, raw)
-        if _bag(self._emulator).get(ItemId.POKE_BALL, 0) != balls:
-            raise RedAreaExecutionError(f"{self._label} flee changed Poké Balls")
+        if _ordinary_capture_ball_inventory(_bag(self._emulator)) != balls:
+            raise RedAreaExecutionError(
+                f"{self._label} flee changed ordinary capture balls"
+            )
 
     def switch_box(self, box_index: int) -> None:
         raise RedAreaExecutionError(
@@ -2801,13 +2814,18 @@ def _try_catch_wild(
         raise SurgeChapterError(f"{label} capture received no target species.")
     if type(max_throws) is not int or max_throws <= 0:
         raise ValueError("max_throws must be a positive integer")
-    starting_balls = _bag(emulator).get(ItemId.POKE_BALL, 0)
+    starting_inventory = _ordinary_capture_ball_inventory(_bag(emulator))
+    starting_balls = sum(starting_inventory)
     if starting_balls <= 0:
-        raise SurgeChapterError(f"{label} capture has no Poké Balls remaining.")
-    for _ in range(min(starting_balls, max_throws)):
+        raise SurgeChapterError(
+            f"{label} capture has no ordinary capture balls remaining."
+        )
+    throws = min(starting_balls, max_throws)
+    for _ in range(throws):
+        ball = _next_ordinary_capture_ball(_bag(emulator))
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
-        _select_bag_item(emulator, executor, ItemId.POKE_BALL)
+        _select_bag_item(emulator, executor, ball)
         _pulse(executor, MacroActionKind.CONFIRM, frames=360)
         for _ in range(48):
             raw = reader.read()
@@ -2824,9 +2842,31 @@ def _try_catch_wild(
     if not raw.battle_state:
         raise SurgeChapterError(f"{label} capture retry lost its live encounter.")
     _flee(emulator, executor, reader, raw)
-    if _bag(emulator).get(ItemId.POKE_BALL, 0) != starting_balls - min(starting_balls, max_throws):
-        raise SurgeChapterError(f"{label} capture retry changed its ball accounting.")
+    ending_balls = _ordinary_capture_ball_total(_bag(emulator))
+    if ending_balls != starting_balls - throws:
+        raise SurgeChapterError(
+            f"{label} capture retry changed its ordinary-ball accounting."
+        )
     return False
+
+
+def _ordinary_capture_ball_inventory(
+    inventory: Mapping[int, int],
+) -> tuple[int, ...]:
+    return tuple(inventory.get(item, 0) for item in WILD_CAPTURE_BALL_PRIORITY)
+
+
+def _ordinary_capture_ball_total(inventory: Mapping[int, int]) -> int:
+    return sum(_ordinary_capture_ball_inventory(inventory))
+
+
+def _next_ordinary_capture_ball(inventory: Mapping[int, int]) -> ItemId:
+    try:
+        return next(
+            item for item in WILD_CAPTURE_BALL_PRIORITY if inventory.get(item, 0) > 0
+        )
+    except StopIteration as error:
+        raise SurgeChapterError("No ordinary capture ball remains") from error
 
 
 def _store_wild_collection_specimens(
