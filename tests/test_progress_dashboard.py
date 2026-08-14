@@ -12,6 +12,8 @@ from pokemon_red_completion.progress_dashboard import (
     DashboardExperimentState,
     DashboardFrameObserver,
     DashboardGoalPressure,
+    DashboardLearningComponent,
+    DashboardLiveEvaluationState,
     DashboardModelState,
     DashboardPartyMember,
     DashboardSnapshot,
@@ -113,6 +115,95 @@ def test_dashboard_snapshot_rejects_inconsistent_or_deceptive_status() -> None:
         DashboardGoalPressure("advance_story", 0.5, False, True)
     with pytest.raises(ProgressDashboardError, match="completed cannot exceed total"):
         DashboardExperimentState(zero_shot_completed=19)
+    with pytest.raises(ProgressDashboardError, match="three entries"):
+        DashboardExperimentState(counter_labels=("one", "two"))  # type: ignore[arg-type]
+
+
+def test_dashboard_supports_red_training_counter_labels() -> None:
+    experiment = DashboardExperimentState(
+        phase="live_evaluation",
+        zero_shot_completed=4,
+        zero_shot_total=4,
+        adaptation_completed=4,
+        adaptation_total=4,
+        sealed_completed=0,
+        sealed_total=1,
+        heading="Red training milestone",
+        eyebrow="Red hierarchical learner",
+        counter_labels=(
+            "Portable heads fitted",
+            "Held-out gates passed",
+            "Full Red shadow runs",
+        ),
+    ).public_dict()
+
+    assert experiment["heading"] == "Red training milestone"
+    assert experiment["counter_labels"] == {
+        "zero_shot": "Portable heads fitted",
+        "adaptation": "Held-out gates passed",
+        "sealed_test": "Full Red shadow runs",
+    }
+
+
+def test_dashboard_exposes_path_free_learning_evidence_and_live_scorecard() -> None:
+    component = DashboardLearningComponent(
+        name="Battle ranker",
+        scope="Ranks legal moves",
+        status="shadow",
+        authority="teacher_supervised",
+        train_examples=100,
+        validation_examples=40,
+        validation_accuracy=0.9,
+        baseline_accuracy=0.5,
+        model_sha256="a" * 64,
+    )
+    evaluation = DashboardLiveEvaluationState(
+        battle_decisions=10,
+        teacher_agreements=8,
+        teacher_disagreements=1,
+        teacher_queries=10,
+        teacher_fallbacks=2,
+        corrections_saved=2,
+        low_confidence_fallbacks=1,
+        team_decisions=4,
+        team_agreements=3,
+    )
+    snapshot = DashboardSnapshot(
+        game="Pokémon Red",
+        run_status="running",
+        stage="Pewter City",
+        message="Teacher-supervised live evaluation.",
+        model=DashboardModelState(
+            mode="shadow",
+            decisions=10,
+            teacher_queries=10,
+            fallbacks=2,
+        ),
+        learning_components=(component,),
+        live_evaluation=evaluation,
+    ).public_dict()
+
+    assert snapshot["learning_components"] == [component.public_dict()]
+    assert snapshot["live_evaluation"]["teacher_agreement_rate"] == pytest.approx(8 / 9)  # type: ignore[index]
+    assert snapshot["live_evaluation"]["team_accuracy"] == 0.75  # type: ignore[index]
+
+
+def test_dashboard_rejects_inconsistent_live_scorecard() -> None:
+    with pytest.raises(ProgressDashboardError, match="comparisons"):
+        DashboardLiveEvaluationState(
+            battle_decisions=1,
+            teacher_agreements=1,
+            teacher_disagreements=1,
+            teacher_queries=1,
+        )
+    with pytest.raises(ProgressDashboardError, match="match model decisions"):
+        DashboardSnapshot(
+            game="Pokémon Red",
+            run_status="running",
+            stage="test",
+            message="test",
+            live_evaluation=DashboardLiveEvaluationState(battle_decisions=1),
+        )
 
 
 def test_dependency_free_png_encoder_preserves_exact_rgb_pixels() -> None:
@@ -155,6 +246,8 @@ def test_loopback_dashboard_serves_status_video_and_no_control_methods() -> None
 
     assert "Pokémon Learning Observatory" in html
     assert "VIEW ONLY" in html
+    assert "Learned stack" in html
+    assert "Live shadow scorecard" in html
     assert status["dashboard"]["view_only"] is True
     assert status["dashboard"]["frame_ready"] is True
     assert status["controller_endpoints"] == 0

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from pathlib import Path
 
 import numpy as np
@@ -326,6 +327,40 @@ def test_model_assisted_policy_uses_confident_prediction_and_counts_coverage() -
     assert policy.public_dict()["model_coverage"] == 1.0
     assert policy.teacher_fallbacks == 0
     assert policy.teacher_queries == 1
+
+
+def test_model_assisted_policy_publishes_post_decision_progress_without_authority() -> None:
+    updates: list[Mapping[str, object]] = []
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.9,
+        progress_sink=updates.append,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 3) == 3
+    assert len(updates) == 1
+    assert updates[0]["decisions"] == 1
+    assert updates[0]["teacher_queries"] == 1
+    assert updates[0]["model_decisions"] == 1
+
+
+def test_model_assisted_policy_ignores_progress_observer_failure() -> None:
+    def broken_observer(update: Mapping[str, object]) -> None:
+        del update
+        raise RuntimeError("observer unavailable")
+
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.9,
+        progress_sink=broken_observer,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 3) == 3
+    assert policy.progress_sink_errors == 1
 
 
 def test_model_assisted_policy_executes_and_counts_teacher_correction() -> None:

@@ -2,30 +2,19 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
-> **Current research direction (August 14, 2026):** Red is now explicitly the first curriculum,
-> not the product. A game-neutral long-horizon goal-manager seam is implemented above the existing
-> destination ranker and bounded specialists. It can rank story progress, acquisition, team
-> development, evolution, healing, resupply, storage, recovery, and exploration without receiving
-> game, map, objective, species, binding, slot, or candidate-position identity. Unavailable goals
-> are hard-masked and the causal wrapper has no teacher fallback. A fresh exact-source campaign has
-> now completed 81/81 rehearsals, 81/81 one-shot episodes, a 54-example fit and a 27-example
-> development-validation evaluation. The first model reached 27/27 validation and then passed
-> 27/27 shadow plus 27/27 model-controlled live Red contexts, with zero teacher queries, fallbacks
-> or new episodes and a minimum confidence of 0.88096. This establishes bounded same-context live
-> authority—not unseen-state generalization or autonomous game completion. The next experiment is
-> the frozen Red model's zero-shot/few-shot/from-scratch Crystal comparison. Its ROM-free adapter,
-> bank-aware party/Pokédex decoder, fourteen-box living-ownership reader, private capability masks,
-> paired adaptation algorithm and
-> canonical 18/27/27 zero-shot/adaptation/sealed protocol are now implemented before any Crystal
-> label. Catalog-bound adaptation, fitted-model prediction commitments and all-or-nothing sealed
-> scoring prevent unrelated rows, changed weights or partial results from entering the claim. Live
-> work is now unlocked by an authenticated owner-supplied international v1.1 cartridge; the exact
-> source/symbol contract and a fresh 72-context v2 plan were frozen before boot, teaching, or
-> prediction. Current Crystal status remains 0/18 zero-shot, 0/27 adaptation, 0/27 sealed and 0
-> predictions. The earlier one-shot Red
-> destination test remains unopened at 0/12 but is paused because it does not answer the broader
-> “can this model play Pokémon?” question. See the
-> [portable goal-manager design](docs/portable-goal-manager.md).
+> **Current research direction (August 14, 2026):** Red is the training ground; Crystal is the
+> later transfer test. Four title-neutral or reusable learned heads now have fresh authenticated
+> fits: goal selection (54 train / 27 validation, 100%), strategic destination ranking (24 / 12,
+> 83% versus a 33% route-cost baseline), battle move ranking (3,320 / 1,268, 98.66%), and team-
+> development ranking (13,709 / 7,080, 99.90% on genuine choices). This is a hierarchical learner,
+> not one end-to-end neural policy. The first full Red evaluation keeps the deterministic teacher
+> as disagreement authority for battle moves, measures team-development choices in shadow, and
+> leaves the goal and destination heads offline until their live hierarchy is connected. Every
+> disagreement becomes a private correction instead of a failed imitation target. The exact plan
+> is [`configs/red-player-training-v1.json`](configs/red-player-training-v1.json); the fit evidence
+> is [path-free and public](docs/evidence/red-player-v1-training-start-2026-08-14.json). Crystal's
+> frozen 18/27/27 protocol remains untouched at 0/18, 0/27, 0/27 and 0 predictions, and Red's
+> separate sealed destination set remains 0/12.
 
 > **Crystal transfer preregistration (August 14, 2026):** the exact 72-context plan is
 > [`configs/crystal-goal-manager-transfer-v2.json`](configs/crystal-goal-manager-transfer-v2.json),
@@ -39,13 +28,13 @@
 > scoring. See the
 > [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
-> **Live dashboard:** Crystal runs can now publish rendered game frames and identity-safe semantic
-> status to a loopback-only **Pokémon Learning Observatory**. It shows the current stage, actions,
-> frames, party health, registered/living/level-100 collection counts, goal pressures, model choice
-> and confidence, teacher queries, fallbacks, evidence events, and all three experiment counters.
-> The browser surface accepts GET requests only and exposes zero controller endpoints. Use
-> `scripts/run_crystal_dashboard.py` for a no-input authenticated preview; the same observer is the
-> display surface for qualification, collection, fitting, and later causal runs. See the
+> **Live dashboard:** the loopback-only **Pokémon Learning Observatory** now has a Red training
+> mode as well as the Crystal preview. It shows the live game, current verified checkpoint,
+> emulation speed, collection progress, every learned head's train/validation evidence and
+> authority, plus live teacher agreement, model execution coverage, correction count, unsupported
+> contexts and team-ranker accuracy. The browser remains view-only: GET requests only and zero
+> controller endpoints. Run `scripts/run_red_training_dashboard.py` for the clean-power Red shadow
+> evaluation or `scripts/run_crystal_dashboard.py` for the no-input Crystal preview. See the
 > [dashboard guide](docs/progress-dashboard.md).
 
 > **Goal-manager promotion result (August 14, 2026):** the model scored 54/54 on train and 27/27 on

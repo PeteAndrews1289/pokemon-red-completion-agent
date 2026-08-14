@@ -3,6 +3,39 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+## Current focus (2026-08-14): evaluate the Red learner before Crystal
+
+The owner has frozen Crystal as the later transfer test and moved the active lane back to Red—not
+to improve the deterministic route, but to establish a real learned baseline first. Four reusable
+heads are fitted and authenticated: goal selection, destination ranking, battle moves, and team-
+development candidate/venue ranking. Their offline evidence is frozen in
+[`configs/red-player-training-v1.json`](../configs/red-player-training-v1.json) and
+[`red-player-v1-training-start-2026-08-14.json`](evidence/red-player-v1-training-start-2026-08-14.json).
+
+The first live experiment is deliberately supervised. The battle model predicts every supported
+move, but the teacher checks each proposal and executes the safe answer on disagreement or low
+confidence. Every such fallback becomes a private correction. The team-development model is scored
+in shadow. Goal and destination heads remain offline until the online hierarchy can give them real
+choices. The dashboard displays these authority boundaries alongside live game frames and exact
+agreement/correction statistics.
+
+Ordered next work:
+
+1. Publish the Red dashboard/observer harness and pass exact-commit CI.
+2. Run one clean-power Red teacher-supervised shadow evaluation through concurrent Champion and
+   Hall-of-Fame verification; preserve failure and corrections without promoting either.
+3. Audit disagreements, low-confidence cases, unsupported observations, team shadow accuracy,
+   route completion, and observer error counts.
+4. If corrections exist, refit under a new battle-model identity and repeat development shadow;
+   never reinterpret the failed or corrected model as having passed.
+5. Run bounded causal battle and team-development trials only after their preregistered gates pass.
+6. Connect the goal manager to genuine online choice menus and the destination ranker to the shared
+   capability-aware planner; fixed route dispatches do not count as learned decisions.
+7. Evaluate unfamiliar Red states/timing roots, then freeze the resulting Red learner as Crystal's
+   initialization. Keep Crystal at 0/18, 0/27, 0/27 and 0 predictions until that freeze.
+8. Resume the paired Red-initialized versus scratch Crystal protocol. Later expand the shared
+   mechanics toward breeding, trades, legendary puzzles and multi-version living-Pokédex work.
+
 ## Current focus (2026-08-14): falsify transfer on Crystal
 
 The first genuine Red goal manager is trained and promoted to bounded live authority. Source

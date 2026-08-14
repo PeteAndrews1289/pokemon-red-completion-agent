@@ -1,0 +1,74 @@
+{
+  "claim": "Four Red learned heads have fresh authenticated fits. This starts a hierarchical learner evaluation; no learned end-to-end player is claimed.",
+  "components": [
+    {
+      "baseline_accuracy": 0.9259259259259259,
+      "canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+      "fit_result": "byte-identical historical candidate reproduced under its exact source",
+      "name": "goal_manager",
+      "source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+      "train_examples": 54,
+      "validation_accuracy": 1.0,
+      "validation_examples": 27
+    },
+    {
+      "baseline_accuracy": 0.3333333333333333,
+      "canonical_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
+      "fit_result": "fresh five-parameter development candidate",
+      "name": "destination_ranker",
+      "paired_losses": 0,
+      "paired_two_sided_exact_p": 0.03125,
+      "paired_wins": 6,
+      "source_commit": "84344b9dfd15d83f7b7805b7e66f24c29acd4b79",
+      "train_examples": 24,
+      "validation_accuracy": 0.8333333333333334,
+      "validation_examples": 12
+    },
+    {
+      "baseline_accuracy": 0.4098073555166375,
+      "canonical_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+      "fit_result": "fresh corrected MLP; validation metrics matched the historical fit but bytes did not",
+      "legal_choice_rate": 1.0,
+      "name": "battle_move_ranker",
+      "source_commit": "84344b9dfd15d83f7b7805b7e66f24c29acd4b79",
+      "train_examples": 3320,
+      "validation_accuracy": 0.9865930599369085,
+      "validation_examples": 1268
+    },
+    {
+      "baseline_accuracy": 0.9566145092460882,
+      "canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+      "fit_result": "exact canonical model reproduced from two train and one validation lineages",
+      "name": "team_development_ranker",
+      "train_examples": 13709,
+      "validation_accuracy": 0.99900426742532,
+      "validation_examples": 7080
+    }
+  ],
+  "dashboard": {
+    "controller_endpoints": 0,
+    "learned_component_rows": 4,
+    "live_game_frames": true,
+    "live_model_teacher_scorecard": true,
+    "private_path_fields": 0,
+    "view_only": true
+  },
+  "experiment_plan": "configs/red-player-training-v1.json",
+  "live_evaluation": {
+    "battle_authority": "teacher_supervised",
+    "completed": 0,
+    "goal_and_destination_authority": "offline",
+    "status": "pending_exact_commit_ci",
+    "team_development_authority": "shadow_only",
+    "total": 1
+  },
+  "private_path_fields": 0,
+  "schema": "pokemon-red-player-training-start-evidence-v1",
+  "sealed_boundaries": {
+    "crystal_adaptation": "0/27",
+    "crystal_predictions": 0,
+    "crystal_sealed": "0/27",
+    "crystal_zero_shot": "0/18",
+    "red_destination_test": "0/12"
+  }
+}

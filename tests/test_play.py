@@ -2580,6 +2580,19 @@ def test_battle_start_offsets_require_auditable_policy_evidence() -> None:
         )
 
 
+def test_live_policy_observers_require_their_authenticated_models() -> None:
+    with pytest.raises(ValueError, match="battle policy progress requires a battle model"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            battle_policy_progress_sink=lambda report: None,
+        )
+    with pytest.raises(ValueError, match="training candidate progress requires"):
+        run_qualified_play(
+            Path("/private/Pokemon Red.gb"),
+            training_candidate_progress_sink=lambda report: None,
+        )
+
+
 def test_strategic_navigation_assignment_requires_matching_trajectory_episode() -> None:
     registry = parse_strategic_navigation_registry(
         (

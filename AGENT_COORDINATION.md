@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-14 Red-training checkpoint (supersedes Crystal as the active execution lane):** The
+> owner wants Red training/evaluation before Crystal transfer. Four heads are freshly fitted: goal
+> manager 54/27 at 100% validation, destination ranker 24/12 at 10/12 versus 4/12 route-cost,
+> corrected battle MLP 3,320/1,268 at 98.6593%, and team-development ranker 13,709/7,080 at
+> 99.9004% genuine validation accuracy. This is a hierarchical bundle, not an end-to-end neural
+> player. Publish and pass exact-commit CI, then run `scripts/run_red_training_dashboard.py` once
+> from clean power. Battle choices require teacher agreement and save disagreements as private
+> corrections; team development is shadow-only; goal and destination heads are offline. The
+> dashboard is view-only and shows exact evidence/authority/live counters. Do not open the 12 Red
+> sealed destinations or any Crystal context. Crystal stays 0/18, 0/27, 0/27 and 0 predictions as
+> the later transfer test. Start at `configs/red-player-training-v1.json` and
+> `docs/evidence/red-player-v1-training-start-2026-08-14.json`.
+
 > **2026-08-14 Crystal v1.1 entry checkpoint:** Red's nine-goal strategic component is trained on
 > 54 teacher-labeled contexts and promoted only for bounded, same-context choices. No learned
 > end-to-end agent has completed Red; most full-game authority still belongs to the deterministic

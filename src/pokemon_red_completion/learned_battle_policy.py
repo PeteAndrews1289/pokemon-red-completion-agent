@@ -73,6 +73,7 @@ class LearnedBattlePolicyError(RuntimeError):
 
 BattleCorrectionSink = Callable[[Mapping[str, object]], None]
 BattleControlSink = Callable[[Mapping[str, object]], None]
+BattleProgressSink = Callable[[Mapping[str, object]], None]
 
 
 @dataclass(slots=True)
@@ -93,6 +94,7 @@ class ModelAssistedBattlePolicy:
     )
     correction_sink: BattleCorrectionSink | None = None
     control_sink: BattleControlSink | None = None
+    progress_sink: BattleProgressSink | None = None
     observe_teacher_when_not_required: bool = False
     allow_teacher_queries: bool = True
     decisions: int = 0
@@ -136,6 +138,7 @@ class ModelAssistedBattlePolicy:
     switch_target_execution_decisions: int = 0
     switch_target_execution_rebindings: int = 0
     switch_target_execution_fallbacks: Counter[str] = field(default_factory=Counter)
+    progress_sink_errors: int = 0
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.confidence_threshold <= 1.0:
@@ -172,6 +175,19 @@ class ModelAssistedBattlePolicy:
             raise ValueError("control_confidence_threshold must be between zero and one")
 
     def choose_move(
+        self,
+        observation: BattlePolicyObservation,
+        fallback: Callable[[], int],
+        /,
+    ) -> int:
+        """Choose one move and publish observer-only counters after the attempt."""
+
+        try:
+            return self._choose_move(observation, fallback)
+        finally:
+            self._publish_progress()
+
+    def _choose_move(
         self,
         observation: BattlePolicyObservation,
         fallback: Callable[[], int],
@@ -428,6 +444,7 @@ class ModelAssistedBattlePolicy:
             "control_records": self.control_records,
             "typed_non_move_control_records": self.typed_non_move_control_records,
             "control_signals": dict(sorted(self.control_signals.items())),
+            "progress_sink_errors": self.progress_sink_errors,
         }
         if self.control_model is not None:
             control_model_payload = json.dumps(
@@ -501,6 +518,15 @@ class ModelAssistedBattlePolicy:
                 "last_intent_mask": self.control_last_intent_mask,
             }
         return result
+
+    def _publish_progress(self) -> None:
+        if self.progress_sink is None:
+            return
+        try:
+            self.progress_sink(self.public_dict())
+        except Exception:
+            # A dashboard or metrics observer never gains authority over play.
+            self.progress_sink_errors += 1
 
     def _execute_control_decision(
         self,

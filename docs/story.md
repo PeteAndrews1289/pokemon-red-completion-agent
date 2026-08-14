@@ -26,7 +26,27 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
-## Current checkpoint: the catalog recognized the same lesson twice
+## Current checkpoint: four learned pieces enter one visible Red run
+
+Red now has four freshly fitted decision-makers: what kind of work to pursue, which strategic
+destination to choose, which battle move to use, and which teammate/venue to develop. They learned
+from different genuine teacher datasets because those are different decisions. Their held-out Red
+scores range from 83.33% for the tiny five-weight destination model to more than 98% for battle and
+team development. Those are real models. They are not yet one autonomous player.
+
+The first full-game evaluation makes the gap visible. The battle model proposes a move while the
+teacher checks it. Agreement allows that proposal through; disagreement or low confidence uses the
+teacher move and preserves a correction. The team model predicts without controlling the training
+route. The goal and destination models wait offline until the hierarchy can offer them real choices.
+The live dashboard labels each boundary beside the game and keeps Crystal sealed for the eventual
+transfer test.
+
+That is the current meaning of “training Red”: fit reusable decisions, expose them to the entire
+game, keep the teacher where evidence still requires it, and turn every disagreement into the next
+lesson. A Hall-of-Fame result from this run will be a supervised compatibility result, not a claim
+that the model independently solved Red.
+
+## Earlier checkpoint: the catalog recognized the same lesson twice
 
 The first curriculum board now holds 81 authenticated Red situations: nine examples for each of
 nine kinds of work, split into 54 training and 27 development-validation choices. All 81 passed a

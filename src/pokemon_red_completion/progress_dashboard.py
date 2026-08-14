@@ -16,6 +16,7 @@ from __future__ import annotations
 import binascii
 import json
 import math
+import re
 import struct
 import threading
 import time
@@ -156,6 +157,121 @@ class DashboardModelState:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardLearningComponent:
+    """One path-free learned head and the evidence supporting it."""
+
+    name: str
+    scope: str
+    status: str
+    authority: str
+    train_examples: int
+    validation_examples: int
+    validation_accuracy: float | None
+    baseline_accuracy: float | None
+    model_sha256: str
+
+    def __post_init__(self) -> None:
+        _plain_text(self.name, subject="learning component name", maximum=64)
+        _plain_text(self.scope, subject="learning component scope", maximum=120)
+        if self.status not in {"fitting", "passed", "shadow", "offline", "causal", "blocked"}:
+            raise ProgressDashboardError("learning component status is unknown")
+        if self.authority not in {"offline", "shadow_only", "teacher_supervised", "causal"}:
+            raise ProgressDashboardError("learning component authority is unknown")
+        _count(self.train_examples, subject="learning component train examples")
+        _count(self.validation_examples, subject="learning component validation examples")
+        if self.validation_accuracy is not None:
+            _unit_interval(self.validation_accuracy, subject="learning component accuracy")
+        if self.baseline_accuracy is not None:
+            _unit_interval(self.baseline_accuracy, subject="learning component baseline accuracy")
+        if re.fullmatch(r"[0-9a-f]{64}", self.model_sha256) is None:
+            raise ProgressDashboardError("learning component model SHA-256 is invalid")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "name": self.name,
+            "scope": self.scope,
+            "status": self.status,
+            "authority": self.authority,
+            "train_examples": self.train_examples,
+            "validation_examples": self.validation_examples,
+            "validation_accuracy": self.validation_accuracy,
+            "baseline_accuracy": self.baseline_accuracy,
+            "model_sha256": self.model_sha256,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class DashboardLiveEvaluationState:
+    """Exact counters from a teacher-supervised live evaluation."""
+
+    battle_decisions: int = 0
+    teacher_agreements: int = 0
+    teacher_disagreements: int = 0
+    teacher_queries: int = 0
+    teacher_fallbacks: int = 0
+    corrections_saved: int = 0
+    low_confidence_fallbacks: int = 0
+    unsupported_observations: int = 0
+    team_decisions: int = 0
+    team_agreements: int = 0
+
+    def __post_init__(self) -> None:
+        for name in (
+            "battle_decisions",
+            "teacher_agreements",
+            "teacher_disagreements",
+            "teacher_queries",
+            "teacher_fallbacks",
+            "corrections_saved",
+            "low_confidence_fallbacks",
+            "unsupported_observations",
+            "team_decisions",
+            "team_agreements",
+        ):
+            _count(getattr(self, name), subject=name.replace("_", " "))
+        comparisons = self.teacher_agreements + self.teacher_disagreements
+        if comparisons > self.teacher_queries:
+            raise ProgressDashboardError("teacher comparisons cannot exceed teacher queries")
+        if self.teacher_fallbacks > self.teacher_queries:
+            raise ProgressDashboardError("teacher fallbacks cannot exceed teacher queries")
+        if self.corrections_saved > self.teacher_fallbacks:
+            raise ProgressDashboardError("saved corrections cannot exceed teacher fallbacks")
+        if (
+            self.low_confidence_fallbacks + self.unsupported_observations
+            > self.teacher_fallbacks
+        ):
+            raise ProgressDashboardError("typed fallbacks cannot exceed teacher fallbacks")
+        if self.team_agreements > self.team_decisions:
+            raise ProgressDashboardError("team agreements cannot exceed team decisions")
+
+    def public_dict(self) -> dict[str, object]:
+        comparisons = self.teacher_agreements + self.teacher_disagreements
+        return {
+            "battle_decisions": self.battle_decisions,
+            "teacher_agreements": self.teacher_agreements,
+            "teacher_disagreements": self.teacher_disagreements,
+            "teacher_queries": self.teacher_queries,
+            "teacher_fallbacks": self.teacher_fallbacks,
+            "corrections_saved": self.corrections_saved,
+            "low_confidence_fallbacks": self.low_confidence_fallbacks,
+            "unsupported_observations": self.unsupported_observations,
+            "teacher_agreement_rate": (
+                self.teacher_agreements / comparisons if comparisons else None
+            ),
+            "model_execution_rate": (
+                self.teacher_agreements / self.battle_decisions
+                if self.battle_decisions
+                else None
+            ),
+            "team_decisions": self.team_decisions,
+            "team_agreements": self.team_agreements,
+            "team_accuracy": (
+                self.team_agreements / self.team_decisions if self.team_decisions else None
+            ),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardExperimentState:
     phase: str = "qualification"
     zero_shot_completed: int = 0
@@ -165,6 +281,13 @@ class DashboardExperimentState:
     sealed_completed: int = 0
     sealed_total: int = 27
     predictions_committed: bool = False
+    heading: str = "Transfer experiment"
+    eyebrow: str = "Transfer learning run"
+    counter_labels: tuple[str, str, str] = (
+        "Zero-shot probe",
+        "Adaptation examples",
+        "Sealed test",
+    )
 
     def __post_init__(self) -> None:
         if self.phase not in {
@@ -177,6 +300,8 @@ class DashboardExperimentState:
             "sealed_test",
             "complete",
             "blocked",
+            "training",
+            "live_evaluation",
         }:
             raise ProgressDashboardError("experiment phase is unknown")
         for prefix in ("zero_shot", "adaptation", "sealed"):
@@ -186,6 +311,15 @@ class DashboardExperimentState:
                 raise ProgressDashboardError(f"{prefix} completed cannot exceed total")
         if not isinstance(self.predictions_committed, bool):
             raise ProgressDashboardError("prediction commitment flag must be boolean")
+        _plain_text(self.heading, subject="experiment heading", maximum=64)
+        _plain_text(self.eyebrow, subject="experiment eyebrow", maximum=64)
+        if (
+            not isinstance(self.counter_labels, tuple)
+            or len(self.counter_labels) != 3
+        ):
+            raise ProgressDashboardError("experiment counter labels must contain three entries")
+        for label in self.counter_labels:
+            _plain_text(label, subject="experiment counter label", maximum=64)
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -203,6 +337,13 @@ class DashboardExperimentState:
                 "total": self.sealed_total,
             },
             "predictions_committed": self.predictions_committed,
+            "heading": self.heading,
+            "eyebrow": self.eyebrow,
+            "counter_labels": {
+                "zero_shot": self.counter_labels[0],
+                "adaptation": self.counter_labels[1],
+                "sealed_test": self.counter_labels[2],
+            },
         }
 
 
@@ -229,6 +370,8 @@ class DashboardSnapshot:
     goals: tuple[DashboardGoalPressure, ...] = ()
     model: DashboardModelState = DashboardModelState()
     experiment: DashboardExperimentState = DashboardExperimentState()
+    learning_components: tuple[DashboardLearningComponent, ...] = ()
+    live_evaluation: DashboardLiveEvaluationState | None = None
     events: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -276,6 +419,23 @@ class DashboardSnapshot:
             raise ProgressDashboardError("model state is invalid")
         if not isinstance(self.experiment, DashboardExperimentState):
             raise ProgressDashboardError("experiment state is invalid")
+        if any(
+            not isinstance(item, DashboardLearningComponent)
+            for item in self.learning_components
+        ):
+            raise ProgressDashboardError("learning components are invalid")
+        component_names = tuple(item.name for item in self.learning_components)
+        if len(component_names) != len(set(component_names)):
+            raise ProgressDashboardError("learning component names must be unique")
+        if self.live_evaluation is not None:
+            if not isinstance(self.live_evaluation, DashboardLiveEvaluationState):
+                raise ProgressDashboardError("live evaluation state is invalid")
+            if self.live_evaluation.battle_decisions != self.model.decisions:
+                raise ProgressDashboardError("live battle decisions must match model decisions")
+            if self.live_evaluation.teacher_queries != self.model.teacher_queries:
+                raise ProgressDashboardError("live teacher queries must match model state")
+            if self.live_evaluation.teacher_fallbacks != self.model.fallbacks:
+                raise ProgressDashboardError("live teacher fallbacks must match model state")
         if len(self.events) > _MAX_EVENTS:
             raise ProgressDashboardError("dashboard event history is too long")
         for event in self.events:
@@ -307,6 +467,14 @@ class DashboardSnapshot:
             "goals": [item.public_dict() for item in self.goals],
             "model": self.model.public_dict(),
             "experiment": self.experiment.public_dict(),
+            "learning_components": [
+                component.public_dict() for component in self.learning_components
+            ],
+            "live_evaluation": (
+                self.live_evaluation.public_dict()
+                if self.live_evaluation is not None
+                else None
+            ),
             "events": list(self.events),
             "private_path_fields": 0,
             "raw_address_fields": 0,
@@ -578,7 +746,9 @@ class ProgressDashboardServer:
         self.close()
 
 
-_DASHBOARD_HTML = """<main id="observatory">
+_DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pokémon Learning Observatory</title>
+<main id="observatory">
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -617,6 +787,19 @@ _DASHBOARD_HTML = """<main id="observatory">
   .metric span { color: #8da096; font-size: 11px; }
   .counter { margin-top: 13px; }
   .counter-row { font-size: 12px; margin-bottom: 5px; }
+  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 13px; }
+  .score { min-width: 0; padding: 10px; border-left: 2px solid #355647; background: #0a1411; }
+  .score span { display: block; color: #8da096; font-size: 10px; }
+  .score b { display: block; margin-top: 3px; font-size: 18px; }
+  .score-detail { margin-top: 10px; color: #8da096; font: 11px/1.5 ui-monospace, monospace; }
+  .components { display: grid; gap: 8px; margin-top: 13px; }
+  .component { display: grid; grid-template-columns: minmax(130px, 1.25fr) 90px 112px 115px 72px; gap: 9px; align-items: center; padding: 9px 0; border-top: 1px solid #22372e; font-size: 11px; }
+  .component:first-child { border-top: 0; }
+  .component-name strong, .component-name span { display: block; }
+  .component-name span { margin-top: 3px; color: #82978a; line-height: 1.35; }
+  .component-status { color: #77e2a6; text-transform: uppercase; letter-spacing: .08em; }
+  .component-stat { color: #b6c8bd; font-family: ui-monospace, monospace; }
+  .component-digest { color: #82978a; font-family: ui-monospace, monospace; }
   .party { display: grid; gap: 9px; margin-top: 13px; }
   .party-member { padding: 10px 11px; border: 1px solid #223a30; border-radius: 11px; background: #0a1411; }
   .party-top strong { font-size: 13px; }
@@ -632,10 +815,11 @@ _DASHBOARD_HTML = """<main id="observatory">
   .events li { padding-left: 13px; position: relative; color: #aebfb5; font-size: 12px; line-height: 1.4; }
   .events li::before { content: ""; position: absolute; left: 0; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: #5bdc93; }
   @media (max-width: 920px) { #observatory { padding: 14px; } .layout { grid-template-columns: 1fr; } .screen-panel { padding: 12px; } }
+  @media (max-width: 640px) { .component { grid-template-columns: 1fr 1fr; } .component-name { grid-column: 1 / -1; } .score-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 500px) { .triplet { grid-template-columns: 1fr 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
 </style>
 <header class="top">
-  <div><div class="eyebrow">Transfer learning run</div><h1>Pokémon Learning Observatory</h1></div>
+  <div><div class="eyebrow" id="eyebrow">Transfer learning run</div><h1>Pokémon Learning Observatory</h1></div>
   <div class="live"><span id="status-dot" class="dot"></span><span id="connection">Connecting</span><span>·</span><span id="game">Pokémon Crystal 1.1</span></div>
 </header>
 <div class="layout">
@@ -659,9 +843,23 @@ _DASHBOARD_HTML = """<main id="observatory">
         <div class="metric"><span>Fallbacks</span><b id="fallbacks">0</b></div>
       </div>
     </section>
+    <section class="panel section" id="live-evaluation-panel" hidden>
+      <div class="section-head"><h2>Live shadow scorecard</h2><span class="muted">teacher is safety authority</span></div>
+      <div class="score-grid">
+        <div class="score"><span>Teacher agreement</span><b id="agreement-rate">—</b></div>
+        <div class="score"><span>Model executed</span><b id="execution-rate">—</b></div>
+        <div class="score"><span>Corrections saved</span><b id="corrections">0</b></div>
+        <div class="score"><span>Team ranker</span><b id="team-accuracy">—</b></div>
+      </div>
+      <div class="score-detail" id="evaluation-detail">Waiting for the first live decision.</div>
+    </section>
     <section class="panel section">
-      <div class="section-head"><h2>Transfer experiment</h2><span class="muted" id="phase">qualification</span></div>
+      <div class="section-head"><h2 id="experiment-heading">Transfer experiment</h2><span class="muted" id="phase">qualification</span></div>
       <div id="experiment"></div>
+    </section>
+    <section class="panel section" id="learning-components-panel" hidden>
+      <div class="section-head"><h2>Learned stack</h2><span class="muted">held-out Red evidence</span></div>
+      <div class="components" id="learning-components"></div>
     </section>
     <section class="panel section">
       <div class="section-head"><h2>Collection and party</h2><span class="muted" id="resources">0 balls · 0 free slots</span></div>
@@ -695,6 +893,18 @@ function barRow(label, value) {
   const fill = document.createElement("i"); fill.style.width = `${ratio * 100}%`; bar.append(fill);
   wrap.append(row, bar); return wrap;
 }
+function accuracy(value) { return value == null ? "—" : pct(value); }
+function componentRow(component) {
+  const row = document.createElement("div"); row.className = "component";
+  const name = document.createElement("div"); name.className = "component-name";
+  const title = document.createElement("strong"); title.textContent = component.name;
+  const scope = document.createElement("span"); scope.textContent = component.scope; name.append(title, scope);
+  const authority = document.createElement("div"); authority.className = "component-status"; authority.textContent = `${component.status} · ${component.authority.replaceAll("_", " ")}`;
+  const samples = document.createElement("div"); samples.className = "component-stat"; samples.textContent = `${fmt(component.train_examples)} train · ${fmt(component.validation_examples)} val`;
+  const score = document.createElement("div"); score.className = "component-stat"; score.textContent = `${accuracy(component.validation_accuracy)} vs ${accuracy(component.baseline_accuracy)}`;
+  const digest = document.createElement("div"); digest.className = "component-digest"; digest.textContent = component.model_sha256.slice(0, 10);
+  row.append(name, authority, samples, score, digest); return row;
+}
 function render(data) {
   safeText("game", data.game);
   safeText("connection", data.run_status);
@@ -705,12 +915,24 @@ function render(data) {
   safeText("choice", data.model.choice || "Waiting for context"); safeText("candidate", data.model.candidate); safeText("mode", data.model.mode);
   safeText("confidence", data.model.confidence == null ? "confidence —" : `confidence ${pct(data.model.confidence)}`);
   safeText("decisions", fmt(data.model.decisions)); safeText("teacher", fmt(data.model.teacher_queries)); safeText("fallbacks", fmt(data.model.fallbacks));
+  safeText("eyebrow", data.experiment.eyebrow || "Transfer learning run");
+  safeText("experiment-heading", data.experiment.heading || "Transfer experiment");
   safeText("phase", data.experiment.phase.replaceAll("_", " "));
+  const labels = data.experiment.counter_labels || {};
   const experiment = el("experiment"); experiment.replaceChildren(
-    barRow("Zero-shot probe", data.experiment.zero_shot),
-    barRow("Adaptation examples", data.experiment.adaptation),
-    barRow("Sealed test", data.experiment.sealed_test)
+    barRow(labels.zero_shot || "Zero-shot probe", data.experiment.zero_shot),
+    barRow(labels.adaptation || "Adaptation examples", data.experiment.adaptation),
+    barRow(labels.sealed_test || "Sealed test", data.experiment.sealed_test)
   );
+  const live = data.live_evaluation;
+  el("live-evaluation-panel").hidden = !live;
+  if (live) {
+    safeText("agreement-rate", accuracy(live.teacher_agreement_rate)); safeText("execution-rate", accuracy(live.model_execution_rate));
+    safeText("corrections", fmt(live.corrections_saved)); safeText("team-accuracy", accuracy(live.team_accuracy));
+    safeText("evaluation-detail", `${fmt(live.battle_decisions)} battle choices · ${fmt(live.teacher_disagreements)} disagreements · ${fmt(live.low_confidence_fallbacks)} low-confidence · ${fmt(live.unsupported_observations)} unsupported · ${fmt(live.team_decisions)} team choices`);
+  }
+  const componentPanel = el("learning-components-panel"); const components = el("learning-components");
+  componentPanel.hidden = !data.learning_components.length; components.replaceChildren(...data.learning_components.map(componentRow));
   safeText("registered", `${data.collection.registered}/${data.collection.target}`); safeText("living", data.collection.living); safeText("level-cap", data.collection.level_cap);
   safeText("resources", `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots`);
   const party = el("party"); party.replaceChildren();
@@ -752,6 +974,8 @@ __all__ = [
     "DashboardExperimentState",
     "DashboardFrameObserver",
     "DashboardGoalPressure",
+    "DashboardLearningComponent",
+    "DashboardLiveEvaluationState",
     "DashboardModelState",
     "DashboardPartyMember",
     "DashboardSnapshot",

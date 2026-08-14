@@ -1103,6 +1103,7 @@ def _training_candidate_runtime_report(
     model_file_sha256: str | None,
     authority: bool,
     controlled_decisions: int,
+    progress_sink_errors: int,
 ) -> dict[str, object] | None:
     if audit is None:
         return None
@@ -1116,6 +1117,7 @@ def _training_candidate_runtime_report(
             "teacher_fallback_on_model_disagreement": False if authority else None,
             "runtime_scope": "clean_power_fixed_objective_sequence",
             "promotion_eligible": False,
+            "progress_sink_errors": progress_sink_errors,
         }
     )
     return summary
@@ -1148,6 +1150,8 @@ def run_qualified_play(
     require_teacher_free_battle_policy: bool = False,
     battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
     battle_control_sink: Callable[[Mapping[str, object]], None] | None = None,
+    battle_policy_progress_sink: Callable[[Mapping[str, object]], None] | None = None,
+    training_candidate_progress_sink: Callable[[Mapping[str, object]], None] | None = None,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
@@ -1194,6 +1198,8 @@ def run_qualified_play(
         raise ValueError("battle_correction_sink requires a battle model")
     if battle_control_sink is not None and battle_model is None:
         raise ValueError("battle_control_sink requires a battle model")
+    if battle_policy_progress_sink is not None and battle_model is None:
+        raise ValueError("battle policy progress requires a battle model")
     if battle_control_model is not None and battle_model is None:
         raise ValueError("battle_control_model requires a battle move model")
     if execute_battle_control_model and battle_control_model is None:
@@ -1206,6 +1212,8 @@ def run_qualified_play(
         raise ValueError("training candidate model and file digest must be provided together")
     if execute_training_candidate_model and training_candidate_model is None:
         raise ValueError("training candidate execution requires an authenticated model")
+    if training_candidate_progress_sink is not None and training_candidate_model is None:
+        raise ValueError("training candidate progress requires an authenticated model")
     battle_start_schedule = (
         BattleStartScheduleController(battle_start_offsets)
         if battle_start_offsets is not None
@@ -1233,6 +1241,7 @@ def run_qualified_play(
                 require_teacher_agreement=require_battle_model_teacher_agreement,
                 correction_sink=battle_correction_sink,
                 control_sink=battle_control_sink,
+                progress_sink=battle_policy_progress_sink,
                 observe_teacher_when_not_required=(
                     (battle_correction_sink is not None or battle_control_sink is not None)
                     and not require_battle_model_teacher_agreement
@@ -1257,6 +1266,19 @@ def run_qualified_play(
             else None
         )
         training_candidate_controlled_decisions = 0
+        training_candidate_progress_errors = 0
+
+        def observe_training_candidate(decision: TrainingCandidateDecision) -> None:
+            nonlocal training_candidate_progress_errors
+            assert training_candidate_audit is not None
+            training_candidate_audit.observe(decision)
+            if training_candidate_progress_sink is None:
+                return
+            try:
+                training_candidate_progress_sink(training_candidate_audit.public_dict())
+            except Exception:
+                # Observer failures cannot change what the game executes.
+                training_candidate_progress_errors += 1
 
         def training_candidate_decision_authority(
             decision: TrainingCandidateDecision,
@@ -1264,7 +1286,7 @@ def run_qualified_play(
             nonlocal training_candidate_controlled_decisions
             assert training_candidate_audit is not None
             assert training_candidate_model is not None
-            training_candidate_audit.observe(decision)
+            observe_training_candidate(decision)
             training_candidate_controlled_decisions += 1
             return training_candidate_model.predict(decision.observation)
 
@@ -1619,7 +1641,7 @@ def run_qualified_play(
                 executor,
                 progress=_blaine_progress_bridge(progress),
                 training_candidate_decision_sink=(
-                    training_candidate_audit.observe
+                    observe_training_candidate
                     if training_candidate_audit is not None and not execute_training_candidate_model
                     else None
                 ),
@@ -1828,6 +1850,7 @@ def run_qualified_play(
                 model_file_sha256=training_candidate_model_file_sha256,
                 authority=execute_training_candidate_model,
                 controlled_decisions=training_candidate_controlled_decisions,
+                progress_sink_errors=training_candidate_progress_errors,
             ),
             training_candidate_authority_required=execute_training_candidate_model,
         )

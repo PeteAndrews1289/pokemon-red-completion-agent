@@ -9,12 +9,44 @@ needed to understand what the agent is doing and how far the experiment has prog
 - the model's current goal choice, confidence, teacher-query count and fallback count;
 - registered, living and level-cap collection totals, capture supplies and free storage;
 - party levels, health and status plus the currently available goal pressures;
-- the 18 zero-shot, 27 adaptation and 27 sealed-test counters; and
+- either the Crystal 18/27/27 transfer counters or the Red fitted/gated/live-run counters;
+- each Red learned head's role, authority, train/validation samples, validation score, comparison
+  baseline and model fingerprint;
+- live Red teacher agreement, execution coverage, saved corrections, low-confidence and unsupported
+  contexts, plus team-development shadow accuracy; and
 - recent identity-safe evidence events.
 
 The initial Crystal preview intentionally shows zero model and experiment progress. It authenticates
 the 1.1 cartridge and proves the display path without opening a context, asking the teacher, making
 a prediction, sending controller input or saving cartridge state.
+
+## Start the Red training evaluation
+
+The Red runner is the first full-game evaluation of the freshly fitted hierarchical learner. It
+requires a clean commit that is already pushed, the exact frozen battle and team-development
+candidates, and an initialized private artifact root for disagreements:
+
+```sh
+source .venv/bin/activate
+python scripts/run_red_training_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --battle-model /private/path/to/battle-model/model.jsonl \
+  --training-candidate-model /private/path/to/team-development-model.json \
+  --training-candidate-file-sha256 53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3 \
+  --corrections-root /private/path/to/initialized-artifact-root
+```
+
+The page opens at `http://127.0.0.1:8765/` and stays available after the run until `Ctrl-C`.
+`--no-browser` reuses a window already showing that address; `--hold-seconds 300` closes five
+minutes after the terminal result.
+
+This is deliberately teacher-supervised. A confident battle proposal executes only when the
+teacher agrees; disagreement or low confidence executes the teacher's choice and saves a private
+correction. The team-development ranker is measured but has no execution authority. The fitted
+goal manager and destination ranker appear in the learned-stack table but remain offline in this
+fixed full-game route. A green Hall-of-Fame result therefore proves fresh-model compatibility and
+correction coverage—not an autonomous end-to-end player. The frozen plan is
+[`configs/red-player-training-v1.json`](../configs/red-player-training-v1.json).
 
 ## Start the authenticated preview
 

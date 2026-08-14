@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: training finally meant fitting, then risking a full run
+
+The project paused at an important ambiguity. Red had produced a trustworthy teacher and several
+learned components, but it had not produced one autonomous model that played the game from power-on
+to the Hall of Fame. Calling the next Crystal experiment “transfer” before establishing the Red
+learner would turn architecture into a result. So Crystal stayed sealed and Red became the active
+training ground again.
+
+Four different decisions now have real fitted models behind them. A small goal manager learned
+which kind of work should happen next. A five-weight destination scorer learned when the shortest
+route is not the useful route. A battle network learned from 3,320 move choices and was evaluated on
+1,268 held-out decisions. A team-development network learned from 13,709 candidate/venue choices
+and faced 7,080 held-out examples. Their validation scores—100%, 83.33%, 98.66%, and 99.90% on the
+relevant genuine choices—are visible beside their baselines and exact fingerprints.
+
+They do not become a fictional monolith when the emulator starts. The first full Red evaluation
+draws the authority boundary on screen. The battle network proposes, but the teacher checks every
+proposal; agreement lets the proposal execute, while disagreement or low confidence executes the
+teacher's move and saves the moment as a correction. The team-development network predicts in
+shadow. Goal and destination models remain offline until the full hierarchy can give them genuine
+choices rather than score a route whose answer was already fixed.
+
+The Learning Observatory makes that distinction hard to miss. Beside the live game it shows every
+head's training and validation evidence, which one has authority, teacher agreement, execution
+coverage, corrections, unsupported contexts, team shadow accuracy, route checkpoints, frames and
+collection progress. There are no controls in the page. A dashboard failure cannot press a button
+or stop the player. **The first Red training milestone is not “the model beat Red.” It is “we can
+watch exactly which parts are learned while a full run creates the evidence needed to remove the
+teacher honestly.”**
+
 ## August 14: Crystal became an experiment before it became another route
 
 The first Crystal route then revealed why the old arrow-script mindset was not enough. The planned

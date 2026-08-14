@@ -1,0 +1,91 @@
+{
+  "authority": {
+    "battle_move": "teacher_supervised",
+    "destination_ranker": "offline",
+    "goal_manager": "offline",
+    "team_development": "shadow_only"
+  },
+  "claims": {
+    "does_not_establish": [
+      "end-to-end-autonomous-red-completion",
+      "unseen-seed-generalization",
+      "living-pokedex-completion",
+      "crystal-transfer"
+    ],
+    "establishes_if_passed": [
+      "fresh-model-clean-power-red-compatibility",
+      "live-battle-teacher-agreement-and-correction-coverage",
+      "live-team-development-shadow-agreement",
+      "champion-and-hall-of-fame-under-supervised-learned-heads"
+    ]
+  },
+  "correction_policy": {
+    "failed_run_is_not_a_promotion_result": true,
+    "private_corrections_retained": true,
+    "refit_requires_a_new_model_identity": true,
+    "teacher_disagreement_executes_teacher_choice": true
+  },
+  "experiment_id": "red-player-v1",
+  "models": [
+    {
+      "authority": "offline",
+      "canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+      "name": "goal_manager",
+      "train_examples": 54,
+      "validation_accuracy": 1.0,
+      "validation_examples": 27
+    },
+    {
+      "authority": "offline",
+      "canonical_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
+      "name": "destination_ranker",
+      "train_examples": 24,
+      "validation_accuracy": 0.8333333333333334,
+      "validation_examples": 12
+    },
+    {
+      "authority": "teacher_supervised",
+      "canonical_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+      "confidence_threshold": 0.39994808298904233,
+      "name": "battle_move_ranker",
+      "train_examples": 3320,
+      "validation_accuracy": 0.9865930599369085,
+      "validation_examples": 1268
+    },
+    {
+      "authority": "shadow_only",
+      "canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+      "name": "team_development_ranker",
+      "train_examples": 13709,
+      "validation_accuracy": 0.99900426742532,
+      "validation_examples": 7080
+    }
+  ],
+  "next_gates": [
+    "complete_one_clean-power-teacher-supervised-red-shadow-run",
+    "audit-every-disagreement-and-unsupported-context",
+    "refit-and-freeze-a-new-battle-candidate-if-corrections-exist",
+    "run-bounded-causal-trials-before-removing-teacher-authority",
+    "integrate-goal-and-destination-heads-into-the-online-hierarchy",
+    "evaluate-unseen-red-contexts-before-opening-crystal-transfer-contexts"
+  ],
+  "run": {
+    "clean_power": true,
+    "dashboard_controller_endpoints": 0,
+    "dashboard_view_only": true,
+    "full_red_shadow_runs_required": 1,
+    "save_on_exit": false
+  },
+  "schema": "pokemon-red-player-training-plan-v1",
+  "sealed_boundaries": {
+    "crystal_adaptation_opened": 0,
+    "crystal_sealed_opened": 0,
+    "crystal_zero_shot_opened": 0,
+    "red_destination_test_opened": 0
+  },
+  "source_gate": {
+    "clean_worktree_required": true,
+    "exact_commit_must_be_pushed": true,
+    "green_exact_commit_ci_required_before_official_run": true
+  }
+}

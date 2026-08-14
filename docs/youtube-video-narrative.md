@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 Red-training scene: four brains, one honest authority map
+
+Open on the live Red game inside the Pokémon Learning Observatory. Build four rows beside it:
+**GOAL MANAGER — 54/27 — 100%**, **DESTINATION — 24/12 — 83% VS 33%**, **BATTLE —
+3,320/1,268 — 98.66%**, and **TEAM DEVELOPMENT — 13,709/7,080 — 99.90% VS 95.66%**. Then
+place an authority label on each row: **OFFLINE / OFFLINE / TEACHER-SUPERVISED / SHADOW-ONLY**.
+
+During a battle, animate one proposal entering the teacher check. Agreement flows into the game;
+disagreement flows to both the teacher move and a **CORRECTION SAVED** counter. Keep four live
+numbers visible: teacher agreement, model execution coverage, corrections, and team shadow
+accuracy. The line is: **“We did train models on Red. We did not pretend four fitted pieces were
+already one autonomous player.”**
+
+End the scene by leaving Crystal's counters fixed at **0/18 / 0/27 / 0/27 / 0 PREDICTIONS**. The
+narration is: **“Crystal is more valuable untouched. First Red has to show us which knowledge can
+survive a whole game, and which parts still belong to the teacher.”** If the first full shadow run
+fails, keep its final checkpoint and correction count on screen; do not cut directly to a later
+success as though the first model passed.
+
 ## August 14 Crystal scene: a turn is not a step
 
 Show the planned bedroom round trip as **14 SEMANTIC STEPS**, then keep a second counter for the

@@ -15,6 +15,44 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Red training is active before Crystal transfer — 2026-08-14
+
+The owner explicitly changed the execution order: train and evaluate the reusable learner on Red
+before opening Crystal transfer contexts. This does not discard the frozen Crystal v2 protocol;
+it preserves it as the later transfer test. Crystal remains **0/18 zero-shot, 0/27 adaptation,
+0/27 sealed and 0 predictions**. The unrelated Red destination test remains **0/12 opened**.
+
+Four learned heads now have fresh authenticated fits. The goal manager reproduced its exact
+canonical model from 54 train / 27 development examples and remains 27/27 on validation. The
+five-parameter destination ranker is 10/12 versus 4/12 for route cost, paired 6–0 (`p = 0.03125`).
+The corrected battle MLP was freshly fit from 3,320 train and 1,268 validation decisions; validation
+is 98.6593%, free-choice accuracy 98.5114%, novel-visible accuracy 98.6780% and legal-choice rate
+100%. Its canonical hash is
+`822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f`; it needs a fresh live run
+before any promotion. The team-development candidate exactly reproduced canonical hash
+`9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026` from 13,709 train / 7,080
+validation examples and reaches 99.9004% genuine validation accuracy versus a 95.6615% shape
+baseline.
+
+The active evaluation is intentionally hierarchical, not an invented end-to-end model. In the
+first clean-power Red run, the battle ranker proposes each legal move and the teacher checks it;
+agreement executes the model proposal, disagreement or low confidence executes the teacher choice
+and records a private correction. The team-development ranker is shadow-only. Goal and destination
+heads are shown as fitted but remain offline until the online hierarchy is connected. Therefore a
+successful Hall-of-Fame run establishes fresh-model compatibility and live disagreement coverage,
+not autonomous Red completion, unseen-seed generalization, Pokédex completion or Crystal transfer.
+
+`scripts/run_red_training_dashboard.py` is the exact clean/pushed-source harness. Its loopback-only
+Pokémon Learning Observatory shows live frames, verified route progress, all four heads' training
+and validation evidence, authority boundaries, battle agreement/execution/correction statistics,
+team shadow accuracy and collection state. The display has no controller endpoint and observer
+errors cannot influence play. Start with
+[`configs/red-player-training-v1.json`](configs/red-player-training-v1.json),
+[`docs/evidence/red-player-v1-training-start-2026-08-14.json`](docs/evidence/red-player-v1-training-start-2026-08-14.json),
+and [`docs/progress-dashboard.md`](docs/progress-dashboard.md). Next publish this exact source, pass
+exact-commit CI, run one clean-power supervised shadow evaluation, audit every correction, and only
+then decide whether to refit or begin bounded causal trials.
+
 ## Crystal 1.1 authenticated; v2 transfer gate and live dashboard ready — 2026-08-14
 
 Do not resume Red maintenance or build a complete Crystal walkthrough. One Red strategic

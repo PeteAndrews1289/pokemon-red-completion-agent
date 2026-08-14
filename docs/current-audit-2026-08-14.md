@@ -1,5 +1,39 @@
 # Current audit — 2026-08-14
 
+## Red learner training start
+
+The active order changed at the owner's direction: establish the Red learner before spending the
+frozen Crystal transfer protocol. This is the first checkpoint where “Red training” is literal but
+still bounded. Four separate heads were fit from genuine teacher decisions; there is not one end-
+to-end policy and no learned model has yet completed a fresh full Red run.
+
+| Learned head | Train | Validation | Result | Live authority in first run |
+| --- | ---: | ---: | ---: | --- |
+| Goal manager | 54 | 27 | 100% | Offline |
+| Destination ranker | 24 | 12 | 83.33% vs 33.33% route-cost baseline | Offline |
+| Battle move ranker | 3,320 | 1,268 | 98.6593%; 100% legal | Teacher-supervised |
+| Team-development ranker | 13,709 | 7,080 | 99.9004% genuine vs 95.6615% shape baseline | Shadow-only |
+
+The goal-manager refit required its exact historical source because the authenticated catalog
+binds that identity; it reproduced the same canonical model. The destination model freshly
+reproduced the five-coefficient development result. The team-development refit reproduced the
+exact canonical model. The battle refit matched the historical validation metrics but produced a
+different canonical model, so it is a new candidate and cannot inherit a prior rollout claim.
+
+The new run harness therefore keeps the teacher as battle disagreement authority and writes each
+disagreement/low-confidence example to a private correction artifact. Runtime callbacks publish
+exact post-decision counters to the loopback dashboard, but callback failure is counted and cannot
+change play. The dashboard adds a learned-stack table, validation/baseline evidence, model hashes,
+live agreement and execution rates, corrections, unsupported observations, team shadow accuracy,
+route progress, game frames and collection state. It still accepts only GET and exposes no
+controller route.
+
+The exact next gate is publication plus green exact-commit CI, followed by one clean-power shadow
+run. Passing would prove fresh-model compatibility with the full teacher route and yield honest
+correction coverage. It would not prove an autonomous player, unseen-seed generalization, a living
+Pokédex or Crystal transfer. Red's 12 sealed destination captures and all Crystal v2 contexts
+remain unopened.
+
 ## Executive result
 
 The project has crossed its first real learning-and-authority milestone. The Red goal manager is no
