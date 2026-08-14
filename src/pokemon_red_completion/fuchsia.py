@@ -623,8 +623,10 @@ def run_fuchsia_chapter(
     start = reader.read()
     _require(start, MapId.LAVENDER_POKECENTER, (3, 3), "Fuji boundary")
     initial_bag = _bag_tuple(emulator)
-    if ItemId.POKE_FLUTE not in _bag(emulator):
-        raise FuchsiaChapterError("Fuchsia input lacks the qualified Poké Flute.")
+    if not fuchsia_input_boundary_ready(start):
+        raise FuchsiaChapterError(
+            "Fuchsia input lacks its qualified party, attack, or capture resources."
+        )
     route_move_id, route_move_slot = _fuchsia_route_attack(start)
     _checkpoint(records, progress, emulator, start, "fuji_ready", "Poké Flute ready")
 
@@ -909,6 +911,40 @@ def _fuchsia_route_attack(raw: RawGameState) -> tuple[int, int]:
     raise FuchsiaChapterError(
         "Fuchsia input lacks the authenticated BubbleBeam or Ice Beam layout."
     )
+
+
+def fuchsia_input_boundary_ready(raw: RawGameState) -> bool:
+    """Return whether observable state satisfies the chapter's hard inputs.
+
+    This covers prerequisites knowable before execution; full route success
+    still belongs to exact uncounted rehearsal.  Keeping these checks beside
+    the executor prevents the manager from seeing an option that is already
+    impossible, such as a Snorlax route with no retained legal ball.
+    """
+
+    inventory = dict(raw.bag_items or ())
+    party = tuple(raw.party_species_ids or ())
+    if (
+        raw.battle_state
+        or raw.map_id != MapId.LAVENDER_POKECENTER
+        or (raw.player_x, raw.player_y) != (3, 3)
+        or not 1 <= len(party) <= 5
+        or not party_core_intact(party)
+        or SNORLAX in party
+        or inventory.get(int(ItemId.POKE_FLUTE), 0) < 1
+        or inventory.get(int(ItemId.POKE_BALL), 0) < SNORLAX_POKE_BALL_RESERVE
+        or inventory.get(int(ItemId.GREAT_BALL), 0) != 0
+        or inventory.get(int(ItemId.TM34_BIDE), 0) not in {0, 1}
+        or any(inventory.get(int(item), 0) for item in OPTIONAL_ITEMS)
+        or type(raw.player_money) is not int
+        or raw.player_money < 0
+    ):
+        return False
+    try:
+        _fuchsia_route_attack(raw)
+    except FuchsiaChapterError:
+        return False
+    return True
 
 
 def _settle_trainer_identity(

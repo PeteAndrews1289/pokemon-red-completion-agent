@@ -18,10 +18,12 @@ semantic menus changed answer with cartridge state, and correct answers occupied
 candidate positions.
 
 The first counted pilot then found the missing gate. Five story episodes succeeded, but slot 006
-failed inside its selected Fuchsia mechanic after the mandatory Fisher leg. Read-only availability
-had proved what the teacher would choose, not that the exact long binding would finish. The failure
-and five successes remain immutable historical evidence; a failed outcome is not an imitation
-target, and no model was fitted.
+failed inside its selected Fuchsia mechanic after the mandatory Fisher leg. Its setup had discarded
+the final Poké Ball, but availability looked only for the Poké Flute; the executor's retained-ball
+precondition appeared much later. The availability boundary now checks that observable hard input
+before exposing the option. Read-only inspection had proved what the teacher would choose, not that
+the exact long binding would finish. The failure and five successes remain immutable historical
+evidence; a failed outcome is not an imitation target, and no model was fitted.
 
 The protocol now inserts full execution rehearsal after freeze. It reloads each exact state,
 reconstructs the frozen question and binding manifest, executes and independently verifies the

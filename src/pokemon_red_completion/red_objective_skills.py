@@ -23,7 +23,11 @@ from pokemon_red_completion.erika import (
     run_erika_chapter,
 )
 from pokemon_red_completion.executor import ChapterExecutor
-from pokemon_red_completion.fuchsia import FuchsiaTiming, run_fuchsia_chapter
+from pokemon_red_completion.fuchsia import (
+    FuchsiaTiming,
+    fuchsia_input_boundary_ready,
+    run_fuchsia_chapter,
+)
 from pokemon_red_completion.giovanni import run_giovanni_chapter
 from pokemon_red_completion.hideout import (
     EmulatorState,
@@ -160,18 +164,22 @@ class ReachFuchsiaObjectiveSkill:
     max_frames: int = 5_000_000
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
-        executable = (
+        semantic_boundary = (
             state.mode.value == "overworld"
             and state.location == "lavender_pokecenter"
             and "item:poke_flute" in state.facts
             and "location:fuchsia_city" not in state.facts
         )
+        executable = semantic_boundary and fuchsia_input_boundary_ready(self.reader.read())
         return ObjectiveSkillAvailability(
             executable,
             (
-                "Observed the Lavender Center boundary with the Poké Flute."
+                "Observed the funded Lavender Center boundary with the Poké Flute."
                 if executable
-                else "Requires Lavender Center with the Poké Flute before Fuchsia is reached."
+                else (
+                    "Requires a funded Lavender Center boundary with the Poké Flute "
+                    "before Fuchsia is reached."
+                )
             ),
         )
 

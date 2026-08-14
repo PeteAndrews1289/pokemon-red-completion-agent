@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from types import SimpleNamespace
 
 import pytest
 
 from pokemon_red_completion.domain import GameMode, GameState
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.fuchsia import BUBBLEBEAM
+from pokemon_red_completion.observation import ItemId, MapId, RawGameState
 from pokemon_red_completion.red_objective_skills import (
     CrossVictoryRoadObjectiveSkill,
     DefeatAgathaObjectiveSkill,
@@ -249,9 +251,29 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     emulator = object()
     reader = object()
     executor = object()
+    funded_fuchsia_raw = RawGameState(
+        game_started=True,
+        map_id=MapId.LAVENDER_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=3,
+        battle_state=0,
+        party_species_ids=(0x1C, 0x40, 0x3B),
+        first_party_moves=(0x2C, 0x27, BUBBLEBEAM, 0x37),
+        first_party_pp=(25, 30, 20, 25),
+        bag_items=(
+            (int(ItemId.POKE_FLUTE), 1),
+            (int(ItemId.POKE_BALL), 1),
+        ),
+        player_money=19_177,
+    )
     hideout = RocketHideoutObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     tower = PokemonTowerObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
-    fuchsia = ReachFuchsiaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    fuchsia = ReachFuchsiaObjectiveSkill(  # type: ignore[arg-type]
+        emulator,
+        SimpleNamespace(read=lambda: funded_fuchsia_raw),
+        executor,
+    )
     safari = ObtainSurfObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     koga = DefeatKogaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     strength = ObtainStrengthObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
@@ -290,6 +312,17 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     assert tower.availability(celadon).executable
     assert not hideout.availability(celadon).executable
     assert fuchsia.availability(lavender).executable
+    unfunded_fuchsia = ReachFuchsiaObjectiveSkill(  # type: ignore[arg-type]
+        emulator,
+        SimpleNamespace(
+            read=lambda: replace(
+                funded_fuchsia_raw,
+                bag_items=((int(ItemId.POKE_FLUTE), 1),),
+            )
+        ),
+        executor,
+    )
+    assert not unfunded_fuchsia.availability(lavender).executable
     assert not tower.availability(lavender).executable
     assert safari.availability(fuchsia_center).executable
     assert not koga.availability(fuchsia_center).executable

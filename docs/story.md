@@ -37,8 +37,11 @@ a menu and responding to a situation.
 
 The board was then inspected against one published, green commit and locked. Five real story
 lessons completed. The sixth defeated a mandatory trainer, returned to Lavender Center and failed
-inside the longer route. It stayed failed. Its identity was not retried, its selected choice did
-not become an imitation target, and no model was fitted.
+inside the longer route. Its setup had discarded the last Poké Ball, but the menu check looked only
+for the Poké Flute; the missing prerequisite was discovered only when the executor tried to fund
+the Snorlax capture. The check now happens before the choice is offered. The episode stayed failed:
+its identity was not retried, its selected choice did not become an imitation target, and no model
+was fitted.
 
 That failure found the missing rung between looking at a menu and safely spending a one-shot
 lesson. Every exact frozen card must now complete a full rehearsal with no recorder attached. Only

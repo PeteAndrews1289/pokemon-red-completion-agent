@@ -22,9 +22,12 @@ curriculum-diversity gates held, and the frozen path-free catalog digest is
 authenticated five successful story episodes and stopped on slot 006. That sixth episode is a
 real immutable failure, not a retry candidate: its teacher selected `advance_story`, completed the
 mandatory Route 12 Fisher leg, returned to Lavender Center, and then the long Fuchsia binding
-failed before capture-supply preparation could continue. The failed trajectory remains in the
-private root. It is not an imitation target, no model was fitted, and the five earlier successes
-must not be mixed into a replacement source-bound campaign.
+failed before capture-supply preparation could continue. The exact cause is now known. Slot 006's
+`story-resource-scarce` setup had discarded its last Poké Ball, while Fuchsia availability checked
+only the Poké Flute; the executor later requires one retained legal fallback ball. Availability now
+shares the chapter's observable hard-input boundary and rejects that impossible menu before teacher
+selection. The failed trajectory remains in the private root. It is not an imitation target, no
+model was fitted, and the five earlier successes must not be mixed into a replacement campaign.
 
 The defect was experimental, not merely local to one route. Read-only preflight proved that a
 choice existed and that the teacher would select it; it did not prove that the exact long binding

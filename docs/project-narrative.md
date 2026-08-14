@@ -5,7 +5,10 @@
 The board finally locked: all 81 questions were regenerated against one green commit and the
 path-free catalog passed every diversity gate. Then the teacher acted for real. Five story cards
 completed and authenticated. The sixth defeated the mandatory Route 12 Fisher, walked back to
-Lavender Center, and failed before its capture-supply preparation could continue.
+Lavender Center, and failed before its capture-supply preparation could continue. The save had no
+Poké Ball: setup had deliberately discarded the last one to vary resource pressure, while the
+availability check noticed only the Poké Flute. The impossible option looked valid until the
+executor reached its retained-ball proof. That prerequisite now lives at the availability boundary.
 
 That is the useful result. The system did not reinterpret the episode as success, reuse its
 identity or quietly train on the selected choice. The failed trajectory is permanent, failed

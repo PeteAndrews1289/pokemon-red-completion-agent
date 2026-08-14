@@ -6,6 +6,10 @@ Let the 81-card lock finally close, then animate five story cards turning green.
 down Route 12, defeats the Fisher, returns to Lavender Center—and turns red. Keep the counters on
 screen: **5 SUCCESS / 1 FAILED / 0 MODELS**. Do not erase the failed card.
 
+Zoom into its bag: **POKÉ FLUTE 1 / POKÉ BALL 0**. The menu guard had checked only the Flute; the
+executor did not discover the missing fallback ball until after the Fisher. Move the ball check
+upstream and show the impossible story card disappear before the teacher can select it.
+
 Explain the distinction visually. **PREFLIGHT** looks at the menu and predicts the teacher's
 choice. **REHEARSAL** performs the exact frozen mechanic with the recorder physically disconnected.
 **COLLECTION** is the only lane that can create a lesson. Insert rehearsal between the other two,

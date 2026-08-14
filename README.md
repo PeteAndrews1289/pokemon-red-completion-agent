@@ -22,8 +22,10 @@
 > exact-commit preflight and froze successfully. Its first counted pilot then stopped honestly:
 > slots 001–005 produced authenticated successful story episodes; slot 006 completed the mandatory
 > Route 12 Fisher leg, returned to Lavender Center and failed inside the selected long Fuchsia
-> binding. The failed episode is immutable, excluded from imitation targets and retained beside the
-> five successes; no model was fitted. The replacement protocol now adds a full uncounted execution
+> binding. Diagnosis found that setup had discarded the last Poké Ball while availability checked
+> only for the Poké Flute; the observable executor prerequisite is now enforced before selection.
+> The failed episode is immutable, excluded from imitation targets and retained beside the five
+> successes; no model was fitted. The replacement protocol adds a full uncounted execution
 > rehearsal between freeze and collection. It proves the exact frozen choice, binding, action count,
 > outcome verifier and protected inputs without a trajectory writer or episode root. A new
 > cartridge-derived story context sells obsolete TM34 at the real Lavender Mart while retaining the

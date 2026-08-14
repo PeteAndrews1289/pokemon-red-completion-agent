@@ -20,9 +20,12 @@ and exploration requires a new observed species rather than movement alone.
 
 The first exact-commit campaign did pass preflight and freeze all 81 contexts. Collection then
 proved why that was not enough: five story episodes succeeded, but slot 006 completed its mandatory
-Fisher battle, returned to Lavender Center and failed inside the selected Fuchsia binding. The
-failure is immutable and excluded from imitation targets; no model has been fitted. The old five
-successes remain historical rather than being reused under a replacement source identity.
+Fisher battle, returned to Lavender Center and failed inside the selected Fuchsia binding. Its
+setup had discarded the final Poké Ball, but availability checked only for the Poké Flute even
+though the executor requires one retained fallback ball. That hard prerequisite is now part of
+availability. The failure is immutable and excluded from imitation targets; no model has been
+fitted. The old five successes remain historical rather than being reused under a replacement
+source identity.
 
 The new gate is full execution rehearsal. It loads the exact frozen state, question, candidate
 order and binding manifest; executes the selected skill; requires its independent verifier to

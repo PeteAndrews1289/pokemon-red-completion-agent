@@ -20,6 +20,7 @@ from pokemon_red_completion.fuchsia import (
     _fuchsia_route_attack,
     _select_battle_bag_item,
     _snorlax_move_slot,
+    fuchsia_input_boundary_ready,
 )
 from pokemon_red_completion.observation import EventFlag, ItemId, MapId, RamAddress, RawGameState
 from pokemon_red_completion.saffron import JOLTEON
@@ -67,6 +68,52 @@ def test_fuchsia_route_accepts_pre_and_post_erika_slot_three_attacks() -> None:
     ) == (fuchsia_module.ICE_BEAM, 3)
     with pytest.raises(fuchsia_module.FuchsiaChapterError, match="BubbleBeam or Ice Beam"):
         _fuchsia_route_attack(replace(_raw(), first_party_moves=(0x2C, 0x27, 0x2D, 0x37)))
+
+
+def test_fuchsia_input_boundary_requires_the_executor_hard_inputs() -> None:
+    ready = replace(
+        _raw(),
+        map_id=MapId.LAVENDER_POKECENTER,
+        party_count=len(TOWER_FINAL_PARTY),
+        party_species_ids=TOWER_FINAL_PARTY,
+        bag_items=(
+            (int(ItemId.POKE_FLUTE), 1),
+            (int(ItemId.POKE_BALL), 1),
+            (int(ItemId.TM34_BIDE), 1),
+        ),
+        player_money=19_177,
+    )
+
+    assert fuchsia_input_boundary_ready(ready)
+    assert not fuchsia_input_boundary_ready(
+        replace(
+            ready,
+            bag_items=(
+                (int(ItemId.POKE_FLUTE), 1),
+                (int(ItemId.TM34_BIDE), 1),
+            ),
+        )
+    )
+    assert not fuchsia_input_boundary_ready(
+        replace(
+            ready,
+            bag_items=(
+                (int(ItemId.POKE_FLUTE), 1),
+                (int(ItemId.POKE_BALL), 1),
+                (int(ItemId.GREAT_BALL), 1),
+            ),
+        )
+    )
+    assert not fuchsia_input_boundary_ready(
+        replace(
+            ready,
+            party_count=6,
+            party_species_ids=(*TOWER_FINAL_PARTY, 1, 2, 3),
+        )
+    )
+    assert not fuchsia_input_boundary_ready(
+        replace(ready, first_party_moves=(0x2C, 0x27, 0x2D, 0x37))
+    )
 
 
 def test_snorlax_resource_report_adds_the_fifth_member_at_lavender() -> None:

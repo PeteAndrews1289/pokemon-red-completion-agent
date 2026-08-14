@@ -2,7 +2,10 @@
 
 > **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
 > contexts, but the first one-shot campaign stopped after five authenticated successes when public
-> slot 006 failed its long Fuchsia story binding after returning from the mandatory Fisher. Preserve
+> slot 006 failed its long Fuchsia story binding after returning from the mandatory Fisher. The
+> cause is pinned: `story-resource-scarce` discarded the last Poké Ball while availability checked
+> only for the Poké Flute. The pending source moves the executor's observable hard inputs into that
+> availability boundary, so the impossible option is masked before teacher selection. Preserve
 > all six episode identities as historical evidence; do not delete, retry or combine the five
 > successes with a replacement campaign. The pending source adds an uncounted full-execution stage:
 > it binds the exact frozen question and executable manifest, runs the selected skill and independent
