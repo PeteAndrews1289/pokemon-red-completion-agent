@@ -231,6 +231,12 @@ def _parser() -> argparse.ArgumentParser:
         default=None,
         help="optional closed upper damage bound; damage modes only",
     )
+    parser.add_argument(
+        "--blocked-direction",
+        choices=("up", "right", "down", "left"),
+        default=None,
+        help="one-frame movement used only for blocked-movement contexts",
+    )
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
     return parser
@@ -1211,6 +1217,7 @@ def _apply_mode(
     hyper_potion_quantity: int | None,
     target_safety_pressure: float | None,
     maximum_safety_pressure: float | None,
+    blocked_direction: str | None = None,
 ) -> None:
     if great_ball_quantity is not None and (
         mode not in {"acquisition-ready", "acquisition-damaged"}
@@ -1232,6 +1239,13 @@ def _apply_mode(
         raise GoalManagerContextMaterializationError(
             "safety-pressure bounds are valid only for damage modes"
         )
+    if blocked_direction is not None and (
+        mode != "blocked-movement"
+        or blocked_direction not in {"up", "right", "down", "left"}
+    ):
+        raise GoalManagerContextMaterializationError(
+            "blocked direction is valid only for blocked-movement mode"
+        )
     damage_target = (
         _ACTIVE_SAFETY_PRESSURE
         if target_safety_pressure is None
@@ -1252,6 +1266,20 @@ def _apply_mode(
         return
     if mode == "story-resource-scarce":
         _story_resource_scarce_boundary(actions, reader, emulator)
+        return
+    if mode == "blocked-movement":
+        raw = reader.read()
+        if raw.battle_state or not reader.read_input_readiness().ready:
+            raise GoalManagerContextMaterializationError(
+                "blocked-control setup requires a stable overworld boundary"
+            )
+        actions.execute(
+            MacroAction(MacroActionKind.MOVE, blocked_direction or "down")
+        )
+        if reader.read_input_readiness().ready:
+            raise GoalManagerContextMaterializationError(
+                "released movement pulse did not create a blocked-control context"
+            )
         return
     _normalize_cinnabar_nurse(actions, reader, emulator)
     if hyper_potion_quantity is not None:
@@ -1311,13 +1339,6 @@ def _apply_mode(
         )
         _require(reader.read(), MapId.CINNABAR_POKECENTER, (13, 4), "goal-manager PC")
         _pulse(actions, MacroActionKind.MOVE, "up", 60)
-        return
-    if mode == "blocked-movement":
-        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
-        if reader.read_input_readiness().ready:
-            raise GoalManagerContextMaterializationError(
-                "released movement pulse did not create a blocked-control context"
-            )
         return
     if mode == "evolved-team":
         _evolved_team_boundary(actions, reader, emulator)
@@ -1395,6 +1416,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             hyper_potion_quantity=args.hyper_potion_quantity,
             target_safety_pressure=args.target_safety_pressure,
             maximum_safety_pressure=args.maximum_safety_pressure,
+            blocked_direction=args.blocked_direction,
         )
         final = reader.read()
         completed_after = COMPLETION_QUEST.completed_ids(observer.observe())

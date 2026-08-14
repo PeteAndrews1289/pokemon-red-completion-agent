@@ -87,13 +87,51 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "--target-safety-pressure" in result.stdout
     assert "--maximum-safety-pressure" in result.stdout
     assert "--hyper-potion-quantity" in result.stdout
+    assert "--blocked-direction" in result.stdout
 
 
-def test_blocked_context_uses_a_released_one_frame_semantic_action() -> None:
+def test_blocked_context_preserves_location_and_uses_declared_semantic_action(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(_unevolved_party_raw())
+    executed: list[object] = []
+
+    class _Actions:
+        def execute(self, action: object) -> None:
+            executed.append(action)
+            reader.readiness = InputReadiness(0, 0, 0, 1, 0)
+
+    globals_dict = module["_apply_mode"].__globals__
+    monkeypatch.setitem(
+        globals_dict,
+        "_normalize_cinnabar_nurse",
+        lambda *_args: pytest.fail("blocked context must not relocate"),
+    )
+
+    module["_apply_mode"](
+        "blocked-movement",
+        _Actions(),
+        reader,
+        object(),
+        object(),
+        great_ball_quantity=None,
+        hyper_potion_quantity=None,
+        target_safety_pressure=None,
+        maximum_safety_pressure=None,
+        blocked_direction="left",
+    )
+
+    assert executed == [
+        module["MacroAction"](module["MacroActionKind"].MOVE, "left")
+    ]
+    assert (reader.raw.map_id, reader.raw.player_x, reader.raw.player_y) == (
+        MapId.CINNABAR_POKECENTER,
+        3,
+        3,
+    )
     source = SCRIPT.read_text(encoding="utf-8")
-
     assert "ControllerTiming()" in source
-    assert 'MacroAction(MacroActionKind.MOVE, "down")' in source
     assert ".press(" not in source
     assert ".release(" not in source
 
@@ -561,12 +599,13 @@ def test_storage_setup_waits_for_delayed_pc_transfer_persistence() -> None:
 class _Reader:
     def __init__(self, raw: RawGameState) -> None:
         self.raw = raw
+        self.readiness = InputReadiness(0, 0, 0, 0, 0)
 
     def read(self) -> RawGameState:
         return self.raw
 
     def read_input_readiness(self) -> InputReadiness:
-        return InputReadiness(0, 0, 0, 0, 0)
+        return self.readiness
 
 
 def _unevolved_party_raw() -> RawGameState:
