@@ -39,6 +39,8 @@ from pokemon_red_completion.captured_progress import (
     CapturedProgressError,
     write_captured_progress,
 )
+from pokemon_red_completion.celadon import CeladonChapterError
+from pokemon_red_completion.celadon import _flee as _timed_flee
 from pokemon_red_completion.collection_protocol import working_source_bundle_sha256
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter
 from pokemon_red_completion.executor import (
@@ -93,7 +95,9 @@ from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
 from pokemon_red_completion.surge import (
     VERMILION_PC_TO_NURSE,
     SurgeChapterError,
-    _flee,
+)
+from pokemon_red_completion.surge import (
+    _flee as _protected_flee,
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -206,7 +210,7 @@ def _mansion_boundary(
         MANSION_TRAINING_VENUE.walk_to_grass(actions, reader, emulator)
         raw = reader.read()
         if raw.battle_state:
-            _flee(emulator, actions, reader, raw)
+            _protected_flee(emulator, actions, reader, raw)
             raw = reader.read()
         if (
             raw.map_id == MapId.POKEMON_MANSION_1F
@@ -309,7 +313,7 @@ def _damage_party(
                     label="goal-manager safe escape lead",
                     wait_frames=120,
                 )
-            _flee(emulator, actions, reader, raw)
+            _protected_flee(emulator, actions, reader, raw)
         _require_safe_damage_state(reader.read())
     raise GoalManagerContextMaterializationError(
         "bounded wild encounters did not reach active safety pressure"
@@ -399,7 +403,7 @@ def _evolved_team_boundary(
         intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
         flee_timing=MANSION_TRAINING_FLEE_TIMING,
         hideout_timing=DEFAULT_HIDEOUT_TIMING,
-        flee_func=_flee,
+        flee_func=_timed_flee,
         volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
         escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
         max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
@@ -584,6 +588,7 @@ def main(argv: list[str] | None = None) -> int:
         summary = _run(args)
     except (
         BlaineChapterError,
+        CeladonChapterError,
         CapturedProgressError,
         EmulatorError,
         EvaluationIdentityError,

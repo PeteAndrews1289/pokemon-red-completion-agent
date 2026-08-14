@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import ast
+import inspect
 import runpy
 import subprocess
 import sys
 from pathlib import Path
 
+from pokemon_red_completion.celadon import _flee as _timed_flee
 from pokemon_red_completion.observation import ItemId, RawGameState
+from pokemon_red_completion.surge import _flee as _protected_flee
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "materialize_goal_manager_context.py"
@@ -89,8 +92,27 @@ def test_evolved_team_setup_reuses_the_qualified_bounded_mechanic() -> None:
     assert "run_red_team_balancing(" in source
     assert "red_team_development_quantum_policy(" in source
     assert "_targeted_evolution_index(" in source
+    assert "_flee as _timed_flee" in source
+    assert "flee_func=_timed_flee" in source
+    assert "_flee as _protected_flee" in source
     assert "evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID)" in source
     assert "after_levels[target_index] <= before_levels[target_index]" in source
+
+
+def test_materializer_keeps_setup_and_training_flee_contracts_distinct() -> None:
+    assert tuple(inspect.signature(_protected_flee).parameters) == (
+        "emulator",
+        "executor",
+        "reader",
+        "encounter",
+    )
+    assert tuple(inspect.signature(_timed_flee).parameters) == (
+        "executor",
+        "reader",
+        "emulator",
+        "run",
+        "timing",
+    )
 
 
 def _damaged_raw(*, bag_items: tuple[tuple[int, int], ...]) -> RawGameState:

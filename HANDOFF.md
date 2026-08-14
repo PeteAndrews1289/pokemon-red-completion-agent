@@ -33,9 +33,12 @@ species changes fail. Published `70bb8b8` passed exact-commit CI. Fresh slot-029
 offered all three goals and selected evolution at `0.8636` pressure. Its explicit uncounted live
 execution repeated the exact 21,604-action / 1,252,066-frame mechanic, changed Diglett level 22 to
 Dugtrio level 26, kept catalog progress at 3/22, and now verified successfully with zero faints,
-stable input and no episode. The pending setup-only `evolved-team` materializer must publish before
-saving that terminal as the source of a one-level development rehearsal. Genuine manager data
-remains **0/54 train and 0/27 validation**.
+stable input and no episode. Published `4bf0774` added the setup-only `evolved-team` materializer
+and passed CI, but the first setup attempt stopped before the trainer ran: the script passed the
+four-argument protected setup flee helper into the five-argument timed training contract. No state
+or envelope was created. The repair gives both helpers explicit names and has a regression over
+their exact signatures; publish it before retrying. Genuine manager data remains **0/54 train and
+0/27 validation**.
 
 ## Restoration-context materializer hardened locally — 2026-08-13
 

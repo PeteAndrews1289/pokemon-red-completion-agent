@@ -226,6 +226,10 @@ question.”** Keep **UNCOUNTED REHEARSAL / NO EPISODE** visible throughout.
 Then replay the same terminal under the repaired verifier and turn only the measurement card green:
 **21,604 ACTIONS / 1,252,066 FRAMES / EXACT TRANSFORMATION PASSED / CATALOG STILL 3 OF 22**. The
 unchanged catalog number is now a feature of the story, not something to hide.
+If the setup-tool failure is included, keep it to one beat: two identical `_flee` labels split into
+**PROTECTED SETUP ESCAPE (4 INPUTS)** and **TIMED TRAINING ESCAPE (5 INPUTS)**, followed by **FAILED
+BEFORE TRAINING / NO SAVE CREATED**. It is a concise example of why a green unit suite is not live
+mechanic qualification.
 
 ## Working title
 

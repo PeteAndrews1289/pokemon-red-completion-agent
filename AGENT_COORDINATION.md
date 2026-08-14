@@ -7,9 +7,11 @@
 > level 26 in 21,604 actions / 1,252,066 frames; the unrelated catalog aggregate correctly stayed
 > 3/22 while the exact transformation verifier succeeded. It ended outside battle, input-ready,
 > with zero faints and released controls; no episode or source artifact changed. Evolution is
-> live-qualified. The pending setup-only `evolved-team` mode must publish before materializing that
-> terminal as a reusable development context. Counted collection remains 0/54 train and 0/27
-> validation.
+> live-qualified. Published `4bf0774` added the setup-only `evolved-team` mode and passed CI, but
+> its first materialization stopped before training because the script supplied its four-argument
+> setup flee helper where the shared trainer requires the five-argument timed helper. It created no
+> output. The pending repair names and tests both signatures explicitly; publish before retrying.
+> Counted collection remains 0/54 train and 0/27 validation.
 
 > **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real
 > whole-party safety-pressure threshold through observed in-battle switches, rejects every

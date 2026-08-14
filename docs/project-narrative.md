@@ -44,6 +44,13 @@ story frontier and collection remain sound, nobody faints, and control returns. 
 campaign is still at zero examples: proving the measuring instrument comes before trusting its
 labels.
 
+Even setup reused the project's favorite kind of failure. The first formal post-evolution
+materializer passed every ROM-free check and CI, then stopped before its first training turn because
+two wild-escape helpers shared a private name but not a call contract: ordinary setup used four
+arguments, timed training used five. The command created no state. The repair names the two
+responsibilities explicitly and tests their signatures, turning a live integration mismatch into a
+stable boundary before the development lesson can inherit it.
+
 ## August 13: the audit stopped us from spending the test on the wrong experiment
 
 The first model was ready, authenticated and green across 2,801 tests. That made the next decision
