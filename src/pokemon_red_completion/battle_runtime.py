@@ -633,48 +633,50 @@ def execute_bounded_battle_move_turn(
             f"{label} cannot run while a global battle-policy override is active."
         )
 
-    initial = reader.read()
-    _require_present_state(initial, expected_map=expected_map, label=label)
-    if initial.battle_state != expected_battle_state:
-        raise BattleRuntimeError(
-            f"{label} must start in battle state {expected_battle_state}."
-        )
-    menu = _validated_menu(reader.read_battle_menu_state(initial), label=label)
-    if menu.phase is not BattleMenuPhase.MAIN:
-        raise BattleRuntimeError(f"{label} must start at the semantic MAIN menu.")
-    if initial.enemy_hp is None or initial.enemy_hp <= 0:
-        raise BattleRuntimeError(f"{label} lacks a live opponent at the policy boundary.")
-
-    slot = _choose_usable_slot(
-        lambda _state: selected_slot,
-        initial,
-        intent=None,
-        label=label,
-    )
-    if slot != selected_slot:
-        raise BattleRuntimeError(f"{label} did not preserve its requested move slot.")
-    initial_pp = _current_pp(initial, slot=slot, label=label)
-    measured = _MeasuredTurnExecutor(executor)
-    observed_pre_attack_frames = 0
-
-    def equalize_and_record_pre_attack_frames() -> None:
-        nonlocal observed_pre_attack_frames
-        if minimum_pre_attack_frames is not None:
-            remaining = minimum_pre_attack_frames - measured.frames_executed
-            if remaining < 0:
-                raise BattleRuntimeError(
-                    f"{label} exceeded its counterfactual pre-attack frame target."
-                )
-            if remaining:
-                measured.execute(MacroAction(MacroActionKind.WAIT, repeat=remaining))
-            if measured.frames_executed != minimum_pre_attack_frames:
-                raise BattleRuntimeError(
-                    f"{label} could not prove its counterfactual pre-attack frame target."
-                )
-        observed_pre_attack_frames = measured.frames_executed
-
     token = _ACTIVE_BATTLE_STATE.set(expected_battle_state)
     try:
+        initial = reader.read()
+        _require_present_state(initial, expected_map=expected_map, label=label)
+        if initial.battle_state != expected_battle_state:
+            raise BattleRuntimeError(
+                f"{label} must start in battle state {expected_battle_state}."
+            )
+        menu = _validated_menu(reader.read_battle_menu_state(initial), label=label)
+        if menu.phase is not BattleMenuPhase.MAIN:
+            raise BattleRuntimeError(f"{label} must start at the semantic MAIN menu.")
+        if initial.enemy_hp is None or initial.enemy_hp <= 0:
+            raise BattleRuntimeError(
+                f"{label} lacks a live opponent at the policy boundary."
+            )
+
+        slot = _choose_usable_slot(
+            lambda _state: selected_slot,
+            initial,
+            intent=None,
+            label=label,
+        )
+        if slot != selected_slot:
+            raise BattleRuntimeError(f"{label} did not preserve its requested move slot.")
+        initial_pp = _current_pp(initial, slot=slot, label=label)
+        measured = _MeasuredTurnExecutor(executor)
+        observed_pre_attack_frames = 0
+
+        def equalize_and_record_pre_attack_frames() -> None:
+            nonlocal observed_pre_attack_frames
+            if minimum_pre_attack_frames is not None:
+                remaining = minimum_pre_attack_frames - measured.frames_executed
+                if remaining < 0:
+                    raise BattleRuntimeError(
+                        f"{label} exceeded its counterfactual pre-attack frame target."
+                    )
+                if remaining:
+                    measured.execute(MacroAction(MacroActionKind.WAIT, repeat=remaining))
+                if measured.frames_executed != minimum_pre_attack_frames:
+                    raise BattleRuntimeError(
+                        f"{label} could not prove its counterfactual pre-attack frame target."
+                    )
+            observed_pre_attack_frames = measured.frames_executed
+
         move_executed = _execute_policy_turn(
             reader,
             measured,
@@ -688,22 +690,21 @@ def execute_bounded_battle_move_turn(
             label=label,
             before_attack=equalize_and_record_pre_attack_frames,
         )
+        final = reader.read()
+        _require_present_state(final, expected_map=expected_map, label=label)
+        if final.battle_state not in {0, expected_battle_state}:
+            raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        return BattleTurnExecution(
+            initial_state=initial,
+            final_state=final,
+            selected_slot=slot,
+            actions_executed=measured.actions_executed,
+            frames_executed=measured.frames_executed,
+            move_executed=move_executed,
+            pre_attack_frames=observed_pre_attack_frames,
+        )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)
-
-    final = reader.read()
-    _require_present_state(final, expected_map=expected_map, label=label)
-    if final.battle_state not in {0, expected_battle_state}:
-        raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
-    return BattleTurnExecution(
-        initial_state=initial,
-        final_state=final,
-        selected_slot=slot,
-        actions_executed=measured.actions_executed,
-        frames_executed=measured.frames_executed,
-        move_executed=move_executed,
-        pre_attack_frames=observed_pre_attack_frames,
-    )
 
 
 def run_adaptive_trainer_battle(

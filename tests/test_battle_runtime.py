@@ -287,6 +287,44 @@ def test_bounded_move_turn_executes_once_and_stops_at_observed_effect() -> None:
     assert confirmations == 2
 
 
+def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+        elif confirmations == 2:
+            runtime.raw = replace(
+                runtime.raw,
+                enemy_hp=11,
+                first_party_pp=(34, 30, 30, 11),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=1,
+    )
+
+    assert result.initial_state.battle_state == 1
+    assert result.final_state.battle_state == 1
+    assert result.move_executed
+    assert confirmations == 2
+
+
 def test_bounded_move_turn_rejects_invalid_policy_boundary_without_input() -> None:
     runtime = MeasuredTurnRuntime(
         menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
