@@ -38,6 +38,14 @@ mechanic boundaries only through real controller actions and cannot create episo
 finite profile builder produces canonical path-free configuration. Ordinary wild acquisition now
 supports Poké, Great, and Ultra Balls while reserving the Master Ball for legendary work.
 
+The first published live rehearsal derived a Mansion boundary from the nonsealed post–Secret Key
+capture in 82 actions and passed acquisition preflight with two real options, acquisition pressure
+`0.8917`, zero actions and zero episodes. A Cinnabar Mart rehearsal then failed safely because the
+20-slot bag could not add a new Ultra Ball stack; the template now extends the already-present Great
+Ball stack. That same failure exposed an uncaught zero-option question error. Preflight now emits
+the bounded `no_available_goal` failure before question construction, preventing a traceback from
+disclosing private paths. Re-run the Mart preflight only after this repair is published.
+
 Next, in order:
 
 1. publish the exact source-bound registry and require green exact-commit CI;

@@ -10,6 +10,13 @@
 > curate all 81 unique contexts before freezing or executing the catalog. The sealed destination
 > test remains 0/12 and out of scope. Start at `docs/portable-goal-manager.md`.
 
+> **Live rehearsal note:** the first nonsealed Mansion setup passed acquisition preflight with two
+> available goals and no action. The first Mart setup correctly found no available goal because its
+> full bag lacked a slot for a new Ultra Ball stack, but the CLI leaked a traceback while refusing
+> it. The pending repair buys into the existing Great Ball stack and converts zero bindings to the
+> sanitized `no_available_goal` reason before question construction. Publish and pass exact-commit
+> CI before repeating that Mart preflight.
+
 > **2026-08-13 transferable-manager checkpoint (supersedes sealed-test priority):** the owner
 > clarified that the objective is a model that learns to play Pokémon and ultimately pursues a
 > living collection across games. The sealed Red destination test remains unopened at 0/12 and its

@@ -53,7 +53,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--maximum-legs", type=int, default=64)
     parser.add_argument("--maximum-seek-steps", type=int, default=256)
     parser.add_argument("--maximum-encounters", type=int, default=32)
-    parser.add_argument("--ultra-ball-quantity", type=int, default=7)
+    parser.add_argument("--great-ball-quantity", type=int, default=7)
     parser.add_argument("--target-box-index", type=int, default=1)
     return parser
 
@@ -130,10 +130,10 @@ def _providers(
                     "interaction_direction": "left",
                     "purchases": [
                         {
-                            "absolute_index": 0,
-                            "item_id": int(ItemId.ULTRA_BALL),
-                            "quantity": args.ultra_ball_quantity,
-                            "unit_price": 1200,
+                            "absolute_index": 1,
+                            "item_id": int(ItemId.GREAT_BALL),
+                            "quantity": args.great_ball_quantity,
+                            "unit_price": 600,
                         }
                     ],
                 },

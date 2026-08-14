@@ -158,6 +158,14 @@ or label. The matching finite profile builder admits no callbacks, private paths
 JSON, or manager-target overrides. Ordinary wild collection can use Poké, Great, or Ultra Balls but
 reserves the unique Master Ball for legendary mechanics.
 
+The first nonsealed live rehearsal has now crossed the setup-to-preflight boundary. A post–Secret
+Key capture reached a stable Mansion corridor through 82 controller actions; the resulting state
+offered acquisition and exploration, and the teacher selected acquisition at pressure `0.8917`
+without taking an action. A Mart rehearsal then found a real inventory constraint before data
+collection: a full bag could not add an Ultra Ball stack. The fixed template extends the existing
+Great Ball stack instead, and zero executable goals are now rejected with a sanitized reason before
+a manager question can be constructed.
+
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
 context-dependence bugs. They are not gameplay data and are not a performance result.

@@ -222,6 +222,10 @@ def preflight_goal_manager_context(
         raise TypeError("capture must be a verified goal-manager context capture")
     observation = adapter.observe()
     binding_set = enumerator.enumerate(observation)
+    if not binding_set.bindings:
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager context preflight failed: no_available_goal"
+        )
     question = ordered_goal_manager_question(
         assignment_id=assignment.assignment_id,
         decision_index=0,

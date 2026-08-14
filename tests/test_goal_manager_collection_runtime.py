@@ -4,14 +4,18 @@ import hashlib
 from dataclasses import replace
 from pathlib import Path
 
+import pytest
+
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.captured_progress import write_captured_progress
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
+    GoalUnavailableReason,
 )
 from pokemon_red_completion.goal_manager_collection_runtime import (
+    GoalManagerCollectionRuntimeError,
     preflight_goal_manager_context,
     record_goal_manager_context,
 )
@@ -336,3 +340,33 @@ def test_preflight_accepts_an_honest_singleton_emergency_context(
     assert preflight.passed
     assert preflight.available_goal_count == 1
     assert preflight.available_goal_kinds == (GoalKind.ADVANCE_STORY,)
+
+
+def test_preflight_reports_zero_executable_goals_before_question_construction(
+    tmp_path: Path,
+) -> None:
+    observer = _Observer()
+    adapter = _adapter(observer)
+    unavailable = RedObservedGoalSkillProvider(
+        kind=GoalKind.ADVANCE_STORY,
+        binding_ref="pokemon.red:test:masked-story",
+        adapter=adapter,
+        availability=lambda _observation: RedGoalSkillAvailability.unavailable(
+            GoalUnavailableReason.NO_LEGAL_TARGET
+        ),
+        executor=lambda: GoalExecutionReport(0, 0, {}),
+        verifier=lambda _before, _after, _report: GoalVerification.succeeded(),
+        estimated_effort=0.1,
+        estimated_risk=0.1,
+    )
+
+    with pytest.raises(
+        GoalManagerCollectionRuntimeError,
+        match="no_available_goal",
+    ):
+        preflight_goal_manager_context(
+            assignment=_assignment(),
+            capture=_capture(tmp_path),
+            adapter=adapter,
+            enumerator=RedGoalOpportunityEnumerator((unavailable,)),
+        )

@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.red_goal_context_profile import (
     load_red_goal_context_profile,
 )
@@ -68,3 +68,29 @@ def test_builder_help_exposes_finite_templates_but_no_manager_target_override() 
     assert "blocked-dialogue" in result.stdout
     assert "--required-team-level" not in result.stdout
     assert "--provider-json" not in result.stdout
+
+
+def test_mart_template_extends_the_existing_great_ball_stack(tmp_path: Path) -> None:
+    destination = tmp_path / "mart-context.json"
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--mode",
+            "mart",
+            "--profile-id",
+            "mart-context",
+            "--out",
+            str(destination),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    profile = load_red_goal_context_profile(destination)
+    purchase = profile.providers[-2].parameters["purchases"][0]
+    assert purchase["absolute_index"] == 1
+    assert purchase["item_id"] == int(ItemId.GREAT_BALL)
+    assert purchase["quantity"] == 7
