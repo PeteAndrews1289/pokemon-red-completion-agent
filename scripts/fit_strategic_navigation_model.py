@@ -78,6 +78,14 @@ def main() -> int:
     model, selection = select_strategic_navigation_linear_model(training)
     training_metrics = evaluate_strategic_navigation_model(model, training)
     validation_metrics = evaluate_strategic_navigation_model(model, validation)
+    binary_training = tuple(row for row in training if len(row.candidates) == 2)
+    binary_validation = tuple(row for row in validation if len(row.candidates) == 2)
+    binary_training_metrics = evaluate_strategic_navigation_model(
+        model, binary_training
+    )
+    binary_validation_metrics = evaluate_strategic_navigation_model(
+        model, binary_validation
+    )
 
     _atomic_json(args.out_model, model.to_dict())
     model_file_sha256 = hashlib.sha256(args.out_model.read_bytes()).hexdigest()
@@ -133,6 +141,19 @@ def main() -> int:
         },
         "training": training_metrics.public_dict(),
         "validation": validation_metrics.public_dict(),
+        "candidate_count_audit": {
+            "purpose": (
+                "separate the chance-like binary menu from the wider menus that "
+                "dominate the aggregate result"
+            ),
+            "binary_training": binary_training_metrics.public_dict(),
+            "binary_validation": binary_validation_metrics.public_dict(),
+            "binary_validation_is_promotion_evidence": False,
+            "reason": (
+                "four validation decisions cannot establish transferable binary "
+                "destination ranking"
+            ),
+        },
         "sealed_test": {
             "opened": False,
             "evaluated": False,

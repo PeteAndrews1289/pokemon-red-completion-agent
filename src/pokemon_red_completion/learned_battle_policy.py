@@ -98,6 +98,10 @@ class ModelAssistedBattlePolicy:
     observe_teacher_when_not_required: bool = False
     allow_teacher_queries: bool = True
     decisions: int = 0
+    returned_move_decisions: int = 0
+    non_move_control_decisions: int = 0
+    failed_decisions: int = 0
+    interrupted_decisions: int = 0
     model_decisions: int = 0
     teacher_queries: int = 0
     teacher_fallbacks: int = 0
@@ -183,7 +187,19 @@ class ModelAssistedBattlePolicy:
         """Choose one move and publish observer-only counters after the attempt."""
 
         try:
-            return self._choose_move(observation, fallback)
+            result = self._choose_move(observation, fallback)
+        except BattleControlRequest:
+            self.non_move_control_decisions += 1
+            raise
+        except (KeyboardInterrupt, SystemExit):
+            self.interrupted_decisions += 1
+            raise
+        except Exception:
+            self.failed_decisions += 1
+            raise
+        else:
+            self.returned_move_decisions += 1
+            return result
         finally:
             self._publish_progress()
 
@@ -425,6 +441,28 @@ class ModelAssistedBattlePolicy:
                 else "learned_policy_teacher_free"
             ),
             "decisions": self.decisions,
+            "returned_move_decisions": self.returned_move_decisions,
+            "non_move_control_decisions": self.non_move_control_decisions,
+            "failed_decisions": self.failed_decisions,
+            "interrupted_decisions": self.interrupted_decisions,
+            "accounted_decisions": (
+                self.returned_move_decisions
+                + self.non_move_control_decisions
+                + self.failed_decisions
+                + self.interrupted_decisions
+            ),
+            "decision_accounting_complete": self.decisions
+            == (
+                self.returned_move_decisions
+                + self.non_move_control_decisions
+                + self.failed_decisions
+                + self.interrupted_decisions
+            ),
+            "returned_move_accounting_gap": (
+                self.returned_move_decisions
+                - self.model_decisions
+                - self.teacher_fallbacks
+            ),
             "model_decisions": self.model_decisions,
             "teacher_queries": self.teacher_queries,
             "teacher_queries_allowed": self.allow_teacher_queries,

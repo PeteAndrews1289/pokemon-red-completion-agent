@@ -5,8 +5,10 @@ import pytest
 from pokemon_red_completion.collection import CollectionReport
 from pokemon_red_completion.goal_manager import GoalNeed
 from pokemon_red_completion.goal_manager_state import (
+    ChallengeReadinessTarget,
     CompletionProgress,
     goal_state_evidence,
+    party_challenge_readiness_satisfaction,
     party_readiness_satisfaction,
     party_safety_satisfaction,
 )
@@ -164,6 +166,31 @@ def test_party_readiness_counts_missing_members_and_relative_levels() -> None:
         required_size=4,
         required_level=40,
     ) == pytest.approx((1.0 + 0.5 + 0.0 + 0.0) / 4)
+
+
+def test_challenge_relative_readiness_falsifies_a_global_level_cap() -> None:
+    party = PartyObservation(
+        tuple(
+            _member(slot, species_id=slot, level=60)
+            for slot in range(1, 7)
+        )
+    )
+    league = ChallengeReadinessTarget(
+        opponent_peak_level=55,
+        preparation_margin=0,
+        required_party_size=6,
+    )
+    stronger_postgame = ChallengeReadinessTarget(
+        opponent_peak_level=80,
+        preparation_margin=0,
+        required_party_size=6,
+    )
+
+    assert party_challenge_readiness_satisfaction(party, league) == 1.0
+    assert party_challenge_readiness_satisfaction(
+        party, stronger_postgame
+    ) == pytest.approx(0.75)
+    assert stronger_postgame.public_dict()["title_identity_included"] is False
 
 
 def test_party_safety_combines_hp_status_and_usable_actions() -> None:

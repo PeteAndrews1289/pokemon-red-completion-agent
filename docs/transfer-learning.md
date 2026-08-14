@@ -2,138 +2,99 @@
 
 ## What “understands how to play” means
 
-This project will treat understanding as a measured capability rather than a description of the
-model's internals. A policy demonstrates reusable Pokémon knowledge when it can:
+Understanding is an evaluated capability, not a description of model internals. A player shows
+reusable Pokémon knowledge when it can choose goals from semantic state, navigate and recover,
+battle and capture for outcomes, manage resources and party development, build a living collection,
+and need less new teaching in a held-out title than the same architecture starting from zero.
 
-- select sensible objectives from semantic progress rather than a memorized trace index;
-- navigate, interact, battle, manage resources, and recover under held-out variation;
-- explain its choice through a bounded objective, specialist, and action label;
-- complete Pokémon Red with the teacher disabled; and
-- reuse learned representations or policies in another Pokémon title with substantially less new
-  data than training that title from scratch.
+Completing a fixed Red route does not satisfy that definition. Red is the first curriculum; the
+product is the shared hierarchy plus thin title/revision adapters.
 
-Completing an exact recorded route does not satisfy this definition.
+## First prospective cross-title experiment
 
-## First prospective transfer experiment: Crystal
+The active first test is Crystal V3:
+[`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
+`b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+It remains review-gated and authorizes no private context access.
 
-The first real cross-title test is frozen before a Crystal label or prediction exists. The
-canonical plan is
-[`crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json), with
-SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
-It contains 72 disjoint semantic contexts:
+V1 (Crystal 1.0) and V2 (Crystal 1.1) are preserved as retired zero-access designs. V2's ordinary
+convex adaptation erased initialization in the Red calibration pilot, while its zero-loss
+conjunction was badly underpowered. Reusing its identities would turn a design repair into
+post-hoc selection, so V3 starts fresh.
 
-- 18 zero-shot probes, two for each of the nine portable goal kinds;
-- 27 adaptation examples, arranged as balanced prefixes of 9, 18 and 27; and
-- 27 one-shot sealed test contexts, three for each goal kind.
+V3 contains:
 
-The paired comparison holds the authenticated Red normalizer, Crystal rows, row order, optimizer
-and update count fixed. One candidate starts from the promoted Red weights and the comparator
-starts from zero weights. The primary endpoint is fixed at the nine-example adaptation budget over
-all 27 sealed contexts: Red initialization must win at least six discordant pairs and lose none,
-which gives an exact two-sided `p = 0.03125`. Missing predictions count as incorrect. All sealed
-predictions must be committed before any test teacher action, and the experiment cannot stop early
-or change its schema after seeing zero-shot behavior.
+- 27 adaptation contexts: three per portable goal kind, assigned as nine three-label folds; and
+- 54 independent sealed contexts: six per goal kind and six assigned to each fold.
 
-The ROM-free substrate is implemented: an identity-free nine-pressure projection, adapter-private
-capability masks and bindings, bank-aware coherent party and Pokédex readers, and paired fitting
-from Red and zero initialization. Canonical catalog, prediction-commitment and complete-outcome
-artifacts bind every later result to the exact plan, source, cartridge, question and fitted-model
-identities; partial sealed scoring is unavailable. The revision contract pins international
-Crystal v1.1 and `pokecrystal11.sym` from `pret/pokecrystal`; the owner's ROM path, bytes and exact
-SHA-256 remain private. The earlier v1.0 target was retired with every counter still zero and is
-preserved only as a superseded preregistration. The v1.1 entry gate passes, while current counters
-remain **0/18 zero-shot opened, 0/27 adaptation examples, 0/27 sealed test opened and 0
-predictions**. A view-only loopback dashboard now combines rendered game frames with semantic
-party, collection, goal, model and experiment status without exposing controller authority.
+The primary endpoint is zero-shot. Frozen authenticated Red weights and an all-zero control receive
+the same 54 questions with identical architecture, normalization, masks and menus. Predictions are
+committed before any sealed label. Discordant wins/losses are scored by a one-sided exact sign test
+at `alpha = 0.05`. At the smallest useful win/loss/tie effect 0.50/0.20/0.30, the design has 82.3%
+power. Missing predictions count as incorrect and optional stopping is impossible.
+
+The mandatory secondary endpoint uses prior-preserving adaptation. Each Red-prior and zero-prior
+candidate sees the same three examples in the same order with the same optimizer, normalizer and
+prior strength; only the prior center differs. It is descriptive support, not a replacement primary
+claim.
+
+No Crystal context, label or prediction has been opened for V3. The next operation is external
+review of the published code and plan, not cartridge execution.
 
 ## Transfer boundary
 
-The learned policy consumes a versioned Pokémon-mainline ontology. Every supported game supplies a
-thin adapter around its revision-specific emulator state:
+The shared model consumes a versioned Pokémon-mainline ontology. Each game supplies a thin adapter
+around revision-specific state and actions:
 
 ```mermaid
 flowchart LR
-    R["Red adapter"] --> O["Pokémon core observation"]
-    Y["Yellow adapter"] --> O
+    R["Red adapter"] --> O["Shared semantic observation"]
     C["Crystal adapter"] --> O
-    E["Emerald adapter"] --> O
-    O --> P["Shared planner and specialists"]
-    P --> A["Core action"]
-    A --> RC["Revision-specific action compiler"]
-    RC --> G["Game and independent referee"]
+    F["Future title adapter"] --> O
+    O --> P["Goal planner and learned skills"]
+    P --> A["Semantic action"]
+    A --> X["Revision-specific executor"]
+    X --> G["Game"]
+    G --> V["Independent verifier"]
+    V --> O
 ```
 
-The shared layer represents concepts such as:
+The shared layer represents mode, party condition, battle affordances, resources, collection state,
+capabilities, destination classes, goals and outcomes. Maps, coordinates, flags, NPCs, puzzles, raw
+addresses and cartridge identifiers stay behind the adapter. High-level policies never consume a
+teacher's expected label or a hidden completion flag.
 
-- overworld, dialogue, menu, battle, transition, and terminal modes;
-- routes, towns, interiors, gyms, caves, dungeons, and healing locations;
-- party members, types, moves, HP, PP, status, items, money, and capabilities;
-- navigation, interaction, menu, battle, recovery, and verification skills; and
-- goals such as acquiring a capability, defeating a major trainer, traversing a dungeon, or
-  completing the game.
+Identity-free inputs are necessary but not sufficient. Candidate menus must contain genuine
+reversals, and results are reported by candidate count. The current Red destination ranker is 19/19
+on menus of at least three candidates but only 10/17 on binary menus; that is a warning that menu
+shape can look like preference learning. Future transfer gates must beat a matched comparator on the
+hard subset, not only report aggregate accuracy.
 
-Maps, coordinates, story flags, NPCs, trainer parties, puzzles, and raw numeric identifiers remain
-namespaced to one game and revision. Raw RAM addresses, event bytes, screenshots, ROM data, and
-teacher-only diagnostics are never policy inputs.
+## Versioned evidence contract
 
-The first training-control transfer invariant is executable rather than aspirational. A contract
-test builds Red-like and Crystal-like parties with different species identifiers, move identifiers,
-and venue names but identical semantic levels, health, PP, progress, and safety affordances. Both
-adapters must project the exact same 25-feature training observation. This does not demonstrate
-Crystal transfer; it prevents those title identities from becoming shortcuts before that benchmark
-exists.
+Every private episode binds:
 
-Identity-free inputs are necessary and not sufficient. The first affordance-masked Red training
-candidate reached 100% held-out accuracy, but a baseline that saw only the candidate-action set
-also reached 100%: every two-action set had the same label in every observed state. A later
-transfer claim therefore requires at least one unchanged candidate set with multiple well-supported
-labels, plus a held-out improvement over that candidate-only baseline. Otherwise the model may be
-portable in format while learning no state-dependent Pokémon knowledge.
+- trajectory and semantic-observation schemas;
+- game, revision and source identities;
+- root lineage and train/development/test partition;
+- ordered and order-independent candidate-menu digests;
+- action, intervention and independent outcome records; and
+- model, comparator and adaptation configuration identities.
 
-Every episode therefore has two authority lanes:
-
-- the **policy observation** contains only semantic state the player could obtain from the game
-  world, battle screen, menus, and ordinary status screens; and
-- **teacher/referee annotations** may certify objectives and terminal evidence, but are stored as
-  labels and are never concatenated into model input.
-
-This prevents a policy from appearing competent by reading hidden story-event flags. During early
-control-trace collection, uncertain interface phases are labeled conservatively rather than
-advertising an incorrect action mask.
-
-## Versioned data contract
-
-Private training episodes use three independently pinned identities:
-
-- trajectory schema, describing records and linkage;
-- Pokémon core ontology, describing shared meanings; and
-- game adapter, describing one title and ROM revision.
-
-An episode contains a path-free manifest, action-aligned decision or execution records, and sparse
-semantic events. Descendants of one clean run or training snapshot inherit the same split
-partition, preventing nearby snapshot branches or DAgger corrections from leaking into held-out
-evaluation.
-
-The first recorder version captures executor-aligned control traces plus semantic state and
-checkpoints. The second layer adds higher-level decision spans at the shared adaptive battle move
-boundary: the model-facing snapshot contains only the Pokémon observation adapter's policy view,
-while one zero-based move target links to every executor action used to carry out that turn.
-Custom battle controllers and perturbed corrections remain separate follow-up coverage. Executor
-traces alone are not described as a finished behavioral-cloning dataset because dialogue pulses
-and waits would otherwise dominate it.
+Descendants of one root inherit one partition. Test contexts never become learner-update inputs.
+Failures and interruptions remain in fixed denominators. Teacher annotations may provide labels or
+safety interventions, but they are not policy inputs.
 
 ## Promotion ladder
 
-1. **Red teacher recording:** reproduce the frozen teacher while validating state-hash chains.
-2. **Red specialist learning:** train battle first, then navigation, interaction, inventory, and
-   recovery policies.
-3. **Red held-out completion:** complete clean runs across preregistered timing and perturbation
-   schedules with teacher fallback disabled.
-4. **Near-transfer title:** qualify the preregistered Crystal adapter and measure frozen-Red
-   zero-shot reuse, fixed few-shot adaptation and an exactly matched from-scratch comparator.
-5. **Cross-generation transfer:** add a later-generation title, retrain only game-specific
-   embeddings or adapters first, then measure how much shared policy knowledge survives.
+1. Run short Red scenario families for navigation, battle and party development.
+2. Produce a learner update and unseen outcome result in each before adding more infrastructure.
+3. Promote bounded Red authority one skill at a time.
+4. Connect the online goal loop and living-Pokédex dependency planner.
+5. Measure zero-shot and prior-preserving Crystal transfer through reviewed protocols.
+6. Compose learned Red skills only after bounded gates pass; full runs are final exams.
+7. Add later titles by extending adapters and the mechanic vocabulary, not by copying walkthroughs.
 
-For every transfer experiment, the repository will report the from-scratch baseline, reused
-weights, frozen components, new training episodes, success denominator, and teacher interventions.
-No cross-game claim is made until an entire title is held out from source-game training.
+For every transfer experiment, report frozen weights, from-scratch control, new labels, independent
+context count, exact numerator/denominator, interventions, failures, power and authority boundary.
+No cross-game claim is made until the target title was absent from source-game training.

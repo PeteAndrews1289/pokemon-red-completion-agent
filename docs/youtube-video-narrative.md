@@ -1,5 +1,39 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 audit scene: the missing thirteen and the experiment that erased transfer
+
+Open with three large figures that visibly fail to add up:
+**2,260 DECISIONS · 1,647 AGREEMENTS · 600 FALLBACKS**. Leave a blank card, then fill it with
+**13 HISTORICAL EXITS — TYPE UNKNOWN**. Split the rate display into
+**AGREEMENT 1,647/2,247** and **EXECUTION 1,647/2,260**. The line is: **“The denominator is part of
+the result. If thirteen decisions are unknown, the dashboard has to say unknown.”**
+
+Collapse 600 correction cards into **349 EXACT CLUSTERS / 206 SEMANTIC CLUSTERS**, then stamp them
+**NO COUNTERFACTUAL OUTCOMES — NOT REFIT LABELS**. Put every confidence marker above the old 0.3999
+threshold and show **LOW-CONFIDENCE FALLBACKS 0**. This makes the point that confidence was not
+acting as a safety channel.
+
+Next split the destination score by menu width: **3+ CHOICES 19/19** versus **BINARY 10/17**.
+Zoom into validation: **MODEL 2/4 · ROUTE COST 2/4 · PAIRED 0–0**. The narration is: **“Ten out of
+twelve was true. It just was not true for the hard reason we hoped.”**
+
+For Crystal, put the retired V2 card on a conveyor labelled **ORDINARY ADAPTATION**. At budgets 9,
+18 and 27, both Red and scratch emerge **27/27 · PAIRED 0–0**. Stamp the endpoint
+**ERASED INITIALIZATION** and show its old useful-effect power: **34.2%**.
+
+Replace it with the V3 board: **27 ADAPTATION / 54 SEALED / 3+ CANDIDATES / ZERO-SHOT PRIMARY**.
+Run two identical silhouettes—frozen Red weights and zero weights—toward a one-sided paired test.
+Overlay **82.3% POWER AT WIN/LOSS/TIE 0.50/0.20/0.30** and a padlock:
+**CLAUDE + ANTIGRAVITY REVIEW REQUIRED / CONTEXT ACCESS FALSE**.
+
+End on three doors only: **NAVIGATION / BATTLE / PARTY DEVELOPMENT**. Under each, show
+**200 SYNTHETIC CONTRACT EPISODES**, then cross out “trained” and replace it with
+**REAL SNAPSHOT ADAPTER NEXT**. The final line is: **“We stopped building the whole laboratory.
+Now one learned skill has to survive an unseen test before we earn a fourth room.”**
+
+The older V2 scenes below are historical footage. If used, label them **RETIRED UNOPENED DESIGN**
+and follow them immediately with the audit scene above.
+
 ## August 14 pivot scene: 85 million frames were not learning
 
 Open on the stopped dashboard: **1,250 TRAINING BATTLES · 85,058,060 FRAMES · PARTY
@@ -29,8 +63,9 @@ exam—not practice.”**
 ## August 14 Red-training scene: four brains, one honest authority map
 
 Open on the live Red game inside the Pokémon Learning Observatory. Build four rows beside it:
-**GOAL MANAGER — 54/27 — 100%**, **DESTINATION — 24/12 — 83% VS 33%**, **BATTLE —
-3,320/1,268 — 98.66%**, and **TEAM DEVELOPMENT — 13,709/7,080 — 99.90% VS 95.66%**. Then
+**GOAL MANAGER — 27/27 VS 25/27**, **DESTINATION — 10/12 VS 4/12; BINARY 2/4 VS 2/4**,
+**BATTLE — 1,125/1,142 VS 468/1,142 · 2 ROOTS**, and
+**TEAM DEVELOPMENT — 7,023/7,030 VS 6,725/7,030 · 1 ROOT**. Then
 place an authority label on each row: **OFFLINE / OFFLINE / TEACHER-SUPERVISED / SHADOW-ONLY**.
 
 During a battle, animate one proposal entering the teacher check. Agreement flows into the game;
@@ -39,9 +74,9 @@ numbers visible: teacher agreement, model execution coverage, corrections, and t
 accuracy. The line is: **“We did train models on Red. We did not pretend four fitted pieces were
 already one autonomous player.”**
 
-End the scene by leaving Crystal's counters fixed at **0/18 / 0/27 / 0/27 / 0 PREDICTIONS**. The
-narration is: **“Crystal is more valuable untouched. First Red has to show us which knowledge can
-survive a whole game, and which parts still belong to the teacher.”** If the first full shadow run
+End the scene with **V3 CONTEXT ACCESS FALSE / 0 PREDICTIONS / 0 SEALED OUTCOMES**. The narration
+is: **“Crystal is more valuable untouched. First the protocol has to preserve the difference
+between learned weights and starting from zero.”** If the first full shadow run
 fails, keep its final checkpoint and correction count on screen; do not cut directly to a later
 success as though the first model passed.
 

@@ -17,14 +17,18 @@
     "team_development": "shadow_only"
   },
   "battle_policy": {
+    "accounted_decisions": 2247,
     "decisions": 2260,
     "low_confidence_fallbacks": 0,
     "model_execution_rate": 0.7287610619469026,
+    "model_execution_rate_denominator": 2260,
     "teacher_agreement_rate": 0.732977303070761,
+    "teacher_agreement_rate_denominator": 2247,
     "teacher_agreements": 1647,
     "teacher_disagreements": 600,
     "teacher_fallbacks": 600,
     "teacher_queries": 2260,
+    "unclassified_decision_exits": 13,
     "unsupported_observations": 0
   },
   "claim": "The first clean-power Red player v1 shadow evaluation stopped safely during balanced-team development, retained its corrections, and promoted no model.",
@@ -59,7 +63,8 @@
   },
   "not_claimed": [
     "The exact runtime guard is not recoverable from the failed artifact.",
-    "The battle model did not qualify for promotion.",
+      "The battle model did not qualify for promotion.",
+      "The retained correction-only artifact cannot type the thirteen unclassified decision exits.",
     "The team model did not exercise live authority.",
     "No end-to-end learned player completed Red.",
     "No living-Pokedex or Crystal-transfer result was produced."

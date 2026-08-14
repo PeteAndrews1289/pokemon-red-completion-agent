@@ -75,3 +75,28 @@ def test_red_training_failure_status_never_includes_private_exception_text() -> 
     assert "QualifiedPlayError" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_red_training_diagnostic_snapshot_retains_latest_semantic_counters() -> None:
+    state = DashboardState()
+    tracker = RedTrainingDashboardTracker(state)
+    tracker.start()
+    tracker.on_progress(
+        QualifiedPlayProgress(
+            checkpoint_id="saffron_arrival",
+            label="Reached Saffron",
+            completed=41,
+            total=100,
+            frames_executed=12345,
+        )
+    )
+    tracker.on_battle_policy({"decisions": 12, "agreements": 9})
+    tracker.on_team_policy({"decisions": 7, "agreements": 6})
+
+    snapshot = tracker.diagnostic_snapshot()
+
+    assert snapshot["stage"] == "Reached Saffron"
+    assert snapshot["frame_count"] == 12345
+    assert snapshot["verified_checkpoints"] == 1
+    assert snapshot["battle_policy"] == {"decisions": 12, "agreements": 9}
+    assert snapshot["team_policy"] == {"decisions": 7, "agreements": 6}

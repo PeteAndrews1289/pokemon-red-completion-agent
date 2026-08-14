@@ -35,10 +35,14 @@ class TrainingCandidateModelError(ValueError):
 class TrainingCandidateMetrics:
     examples: int
     multi_candidate_examples: int
+    correct: int
+    shape_baseline_correct: int
     accuracy: float
     cross_entropy: float
     shape_baseline_accuracy: float
     genuine_accuracy: float
+    genuine_correct: int
+    genuine_shape_baseline_correct: int
     genuine_cross_entropy: float
     genuine_shape_baseline_accuracy: float
     kind_counts: tuple[tuple[str, int], ...]
@@ -46,15 +50,20 @@ class TrainingCandidateMetrics:
     genuine_kind_counts: tuple[tuple[str, int], ...]
     genuine_kind_accuracy: tuple[tuple[str, float], ...]
     candidate_count_accuracy: tuple[tuple[int, float], ...]
+    candidate_count_results: tuple[tuple[int, int, int], ...]
 
     def public_dict(self) -> dict[str, object]:
         return {
             "examples": self.examples,
             "multi_candidate_examples": self.multi_candidate_examples,
+            "correct": self.correct,
+            "shape_baseline_correct": self.shape_baseline_correct,
             "accuracy": self.accuracy,
             "cross_entropy": self.cross_entropy,
             "shape_baseline_accuracy": self.shape_baseline_accuracy,
             "genuine_accuracy": self.genuine_accuracy,
+            "genuine_correct": self.genuine_correct,
+            "genuine_shape_baseline_correct": self.genuine_shape_baseline_correct,
             "genuine_cross_entropy": self.genuine_cross_entropy,
             "genuine_shape_baseline_accuracy": self.genuine_shape_baseline_accuracy,
             "kind_counts": dict(self.kind_counts),
@@ -63,6 +72,14 @@ class TrainingCandidateMetrics:
             "genuine_kind_accuracy": dict(self.genuine_kind_accuracy),
             "candidate_count_accuracy": {
                 str(count): accuracy for count, accuracy in self.candidate_count_accuracy
+            },
+            "candidate_count_results": {
+                str(count): {
+                    "correct": correct,
+                    "examples": examples,
+                    "accuracy": correct / examples,
+                }
+                for count, correct, examples in self.candidate_count_results
             },
         }
 
@@ -462,10 +479,14 @@ def evaluate_training_candidate_model(
     return TrainingCandidateMetrics(
         examples=len(rows),
         multi_candidate_examples=sum(len(row.observation.candidates) > 1 for row in rows),
+        correct=correct,
+        shape_baseline_correct=baseline_correct,
         accuracy=correct / len(rows),
         cross_entropy=loss / len(rows),
         shape_baseline_accuracy=baseline_correct / len(rows),
         genuine_accuracy=genuine_correct / genuine_examples,
+        genuine_correct=genuine_correct,
+        genuine_shape_baseline_correct=genuine_baseline_correct,
         genuine_cross_entropy=genuine_loss / genuine_examples,
         genuine_shape_baseline_accuracy=(
             genuine_baseline_correct / genuine_examples
@@ -481,6 +502,10 @@ def evaluate_training_candidate_model(
         ),
         candidate_count_accuracy=tuple(
             (count, size_correct[count] / examples)
+            for count, examples in sorted(size_counts.items())
+        ),
+        candidate_count_results=tuple(
+            (count, size_correct[count], examples)
             for count, examples in sorted(size_counts.items())
         ),
     )

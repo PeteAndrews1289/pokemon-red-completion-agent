@@ -37,6 +37,58 @@ class CompletionProgress:
 
 
 @dataclass(frozen=True, slots=True)
+class ChallengeReadinessTarget:
+    """Title-neutral preparation target for the next declared challenge.
+
+    The opponent level comes from the adapter's current progression plan; it
+    is not a universal Red, Crystal, League, or level-100 constant.  A later
+    matchup model can add role and type requirements beside this conservative
+    level/roster floor without changing the shared meaning.
+    """
+
+    opponent_peak_level: int
+    required_party_size: int
+    preparation_margin: int = 0
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.opponent_peak_level) is not int  # noqa: E721
+            or not 1 <= self.opponent_peak_level <= 100
+        ):
+            raise GoalManagerError(
+                "challenge opponent peak level must be between one and one hundred"
+            )
+        if (
+            type(self.required_party_size) is not int  # noqa: E721
+            or not 1 <= self.required_party_size <= 6
+        ):
+            raise GoalManagerError(
+                "challenge required party size must be between one and six"
+            )
+        if (
+            type(self.preparation_margin) is not int  # noqa: E721
+            or not -20 <= self.preparation_margin <= 20
+        ):
+            raise GoalManagerError(
+                "challenge preparation margin must be between minus and plus twenty"
+            )
+
+    @property
+    def target_level(self) -> int:
+        return min(100, max(1, self.opponent_peak_level + self.preparation_margin))
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.challenge-readiness-target.v1",
+            "opponent_peak_level": self.opponent_peak_level,
+            "preparation_margin": self.preparation_margin,
+            "target_level": self.target_level,
+            "required_party_size": self.required_party_size,
+            "title_identity_included": False,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class GoalStateEvidence:
     """Identity-free satisfaction evidence immediately before arbitration."""
 
@@ -171,6 +223,21 @@ def party_readiness_satisfaction(
     ]
     member_readiness.extend(0.0 for _ in range(required_size - len(member_readiness)))
     return sum(member_readiness) / required_size
+
+
+def party_challenge_readiness_satisfaction(
+    party: PartyObservation,
+    target: ChallengeReadinessTarget,
+) -> float:
+    """Measure the party relative to the next challenge, not a global cap."""
+
+    if not isinstance(target, ChallengeReadinessTarget):
+        raise TypeError("target must be ChallengeReadinessTarget")
+    return party_readiness_satisfaction(
+        party,
+        required_size=target.required_party_size,
+        required_level=target.target_level,
+    )
 
 
 def party_safety_satisfaction(party: PartyObservation) -> float:

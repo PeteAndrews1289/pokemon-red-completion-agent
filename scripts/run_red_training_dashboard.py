@@ -9,6 +9,7 @@ import json
 import time
 import uuid
 import webbrowser
+from contextlib import suppress
 from pathlib import Path
 
 from pokemon_red_completion.battle_semantics import FEATURE_NAMES
@@ -102,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
     tracker = RedTrainingDashboardTracker(state)
     report: QualifiedPlayReport | None = None
     failure_type: str | None = None
+    failure_message_sha256: str | None = None
+    failure_snapshot: dict[str, object] | None = None
 
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         _emit(
@@ -123,67 +126,87 @@ def main(argv: list[str] | None = None) -> int:
         tracker.start()
         try:
             with writer:
-                writer.append(
-                    "metadata",
-                    {
-                        "record_type": "red_player_v1_shadow_run",
-                        "schema_version": 1,
-                        "source": source.public_dict(),
-                        "battle_model_sha256": battle_model_sha256,
-                        "training_candidate_model_sha256": (
-                            training_candidate_model_sha256
-                        ),
-                        "battle_feature_schema_id": (
-                            "pokemon.core.battle.move-ranker.v3"
-                        ),
-                        "battle_confidence_threshold": (
-                            args.battle_confidence_threshold
-                        ),
-                        "teacher_agreement_required": True,
-                        "training_candidate_authority": False,
-                        "goal_manager_authority": False,
-                        "destination_ranker_authority": False,
-                    },
-                )
-                with PyBoyAdapter(
-                    rom_path,
-                    frame_observer=tracker.frame_observer,
-                ) as emulator:
-                    report = run_qualified_play(
-                        rom_path,
-                        battle_model=battle_model,
-                        battle_model_confidence_threshold=(
-                            args.battle_confidence_threshold
-                        ),
-                        require_battle_model_teacher_agreement=True,
-                        require_teacher_free_battle_policy=False,
-                        battle_correction_sink=(
-                            lambda record: writer.append("corrections", record)
-                        ),
-                        battle_policy_progress_sink=tracker.on_battle_policy,
-                        training_candidate_model=training_candidate_model,
-                        training_candidate_model_file_sha256=(
-                            args.training_candidate_file_sha256
-                        ),
-                        execute_training_candidate_model=False,
-                        training_candidate_progress_sink=tracker.on_team_policy,
-                        progress=tracker.on_progress,
-                        _emulator=emulator,
+                try:
+                    writer.append(
+                        "metadata",
+                        {
+                            "record_type": "red_player_v1_shadow_run",
+                            "schema_version": 1,
+                            "source": source.public_dict(),
+                            "battle_model_sha256": battle_model_sha256,
+                            "training_candidate_model_sha256": (
+                                training_candidate_model_sha256
+                            ),
+                            "battle_feature_schema_id": (
+                                "pokemon.core.battle.move-ranker.v3"
+                            ),
+                            "battle_confidence_threshold": (
+                                args.battle_confidence_threshold
+                            ),
+                            "teacher_agreement_required": True,
+                            "training_candidate_authority": False,
+                            "goal_manager_authority": False,
+                            "destination_ranker_authority": False,
+                        },
                     )
-                writer.append(
-                    "summary",
-                    {
-                        "record_type": "red_player_v1_shadow_summary",
-                        "schema_version": 1,
-                        "battle_policy": report.battle_policy_report,
-                        "training_candidate_policy": (
-                            report.training_candidate_policy_report
-                        ),
-                        "game_complete": report.passed,
-                    },
-                )
-        except Exception as error:
-            failure_type = type(error).__name__
+                    with PyBoyAdapter(
+                        rom_path,
+                        frame_observer=tracker.frame_observer,
+                    ) as emulator:
+                        report = run_qualified_play(
+                            rom_path,
+                            battle_model=battle_model,
+                            battle_model_confidence_threshold=(
+                                args.battle_confidence_threshold
+                            ),
+                            require_battle_model_teacher_agreement=True,
+                            require_teacher_free_battle_policy=False,
+                            battle_correction_sink=(
+                                lambda record: writer.append("corrections", record)
+                            ),
+                            battle_policy_progress_sink=tracker.on_battle_policy,
+                            training_candidate_model=training_candidate_model,
+                            training_candidate_model_file_sha256=(
+                                args.training_candidate_file_sha256
+                            ),
+                            execute_training_candidate_model=False,
+                            training_candidate_progress_sink=tracker.on_team_policy,
+                            progress=tracker.on_progress,
+                            _emulator=emulator,
+                        )
+                    writer.append(
+                        "summary",
+                        {
+                            "record_type": "red_player_v1_shadow_summary",
+                            "schema_version": 1,
+                            "battle_policy": report.battle_policy_report,
+                            "training_candidate_policy": (
+                                report.training_candidate_policy_report
+                            ),
+                            "game_complete": report.passed,
+                        },
+                    )
+                except (Exception, KeyboardInterrupt, SystemExit) as error:
+                    failure_type = type(error).__name__
+                    failure_message_sha256 = _exception_message_sha256(error)
+                    failure_snapshot = tracker.diagnostic_snapshot()
+                    # Preserve the original emulator/runtime failure if diagnostic
+                    # retention itself encounters an I/O or validation error.
+                    with suppress(Exception):
+                        writer.append(
+                            "failure",
+                            _private_failure_record(
+                                error=error,
+                                snapshot=failure_snapshot,
+                            ),
+                        )
+                    raise
+        except (Exception, KeyboardInterrupt, SystemExit) as error:
+            failure_type = failure_type or type(error).__name__
+            failure_message_sha256 = (
+                failure_message_sha256 or _exception_message_sha256(error)
+            )
+            failure_snapshot = failure_snapshot or tracker.diagnostic_snapshot()
             tracker.fail_run(exception_type=failure_type)
         else:
             assert report is not None
@@ -193,6 +216,8 @@ def main(argv: list[str] | None = None) -> int:
             source=source.public_dict(),
             report=report,
             failure_type=failure_type,
+            failure_message_sha256=failure_message_sha256,
+            failure_snapshot=failure_snapshot,
             correction_artifact=writer.summary.public_dict(),
             battle_model_sha256=battle_model_sha256,
             training_candidate_model_sha256=training_candidate_model_sha256,
@@ -208,6 +233,8 @@ def _receipt(
     source: dict[str, str | bool],
     report: QualifiedPlayReport | None,
     failure_type: str | None,
+    failure_message_sha256: str | None,
+    failure_snapshot: dict[str, object] | None,
     correction_artifact: dict[str, object],
     battle_model_sha256: str,
     training_candidate_model_sha256: str,
@@ -250,6 +277,8 @@ def _receipt(
             "actions_executed": report.actions_executed if report is not None else None,
             "controller_released": report.controller_released if report is not None else None,
             "failure_type": failure_type,
+            "failure_message_sha256": failure_message_sha256,
+            "last_verified": failure_snapshot,
         },
         "battle_policy": battle_policy,
         "training_candidate_policy": team_policy,
@@ -260,6 +289,41 @@ def _receipt(
         "crystal_contexts_opened": 0,
         "private_path_fields": 0,
     }
+
+
+def _private_failure_record(
+    *,
+    error: BaseException,
+    snapshot: dict[str, object],
+) -> dict[str, object]:
+    message = str(error)
+    retained_message = _path_free_exception_message(message)
+    return {
+        "record_type": "red_player_v1_shadow_failure",
+        "schema_version": 2,
+        "exception_type": type(error).__name__,
+        "exception_message": retained_message,
+        "exception_message_retained_exactly": retained_message is not None,
+        "exception_message_sha256": _exception_message_sha256(error),
+        "last_verified": snapshot,
+    }
+
+
+def _exception_message_sha256(error: BaseException) -> str:
+    return hashlib.sha256(str(error).encode("utf-8")).hexdigest()
+
+
+def _path_free_exception_message(message: str) -> str | None:
+    """Retain exact text unless it could disclose a filesystem location."""
+
+    if (
+        "/" in message
+        or "\\" in message
+        or message.startswith("~")
+        or message.casefold().startswith("file:")
+    ):
+        return None
+    return message
 
 
 def _emit(payload: dict[str, object]) -> None:
@@ -288,6 +352,7 @@ if __name__ == "__main__":
                 "schema": "pokemon-red-player-v1-dashboard-error-v1",
                 "status": "blocked",
                 "reason": type(error).__name__,
+                "message_sha256": _exception_message_sha256(error),
                 "private_path_fields": 0,
             }
         )

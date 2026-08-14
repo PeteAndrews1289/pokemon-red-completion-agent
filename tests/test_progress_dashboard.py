@@ -153,9 +153,15 @@ def test_dashboard_exposes_path_free_learning_evidence_and_live_scorecard() -> N
         authority="teacher_supervised",
         train_examples=100,
         validation_examples=40,
-        validation_accuracy=0.9,
-        baseline_accuracy=0.5,
+        validation_correct=36,
+        baseline_correct=20,
         model_sha256="a" * 64,
+        independent_validation_units=4,
+        baseline_id="test_baseline",
+        paired_wins=4,
+        paired_losses=1,
+        paired_two_sided_exact_p=0.375,
+        candidate_count_results=((2, 7, 10),),
     )
     evaluation = DashboardLiveEvaluationState(
         battle_decisions=10,
@@ -185,6 +191,9 @@ def test_dashboard_exposes_path_free_learning_evidence_and_live_scorecard() -> N
 
     assert snapshot["learning_components"] == [component.public_dict()]
     assert snapshot["live_evaluation"]["teacher_agreement_rate"] == pytest.approx(8 / 9)  # type: ignore[index]
+    assert snapshot["live_evaluation"]["model_execution_rate"] == pytest.approx(8 / 10)  # type: ignore[index]
+    assert snapshot["live_evaluation"]["teacher_agreement_denominator"] == 9  # type: ignore[index]
+    assert snapshot["live_evaluation"]["model_execution_denominator"] == 10  # type: ignore[index]
     assert snapshot["live_evaluation"]["team_accuracy"] == 0.75  # type: ignore[index]
 
 
@@ -202,7 +211,20 @@ def test_dashboard_rejects_inconsistent_live_scorecard() -> None:
             run_status="running",
             stage="test",
             message="test",
-            live_evaluation=DashboardLiveEvaluationState(battle_decisions=1),
+            live_evaluation=DashboardLiveEvaluationState(
+                battle_decisions=1,
+                unclassified_decisions=1,
+            ),
+        )
+
+
+def test_live_scorecard_rejects_an_unacknowledged_decision_gap() -> None:
+    with pytest.raises(ProgressDashboardError, match="battle decisions must equal"):
+        DashboardLiveEvaluationState(
+            battle_decisions=10,
+            teacher_agreements=8,
+            teacher_fallbacks=1,
+            teacher_queries=9,
         )
 
 
@@ -248,6 +270,9 @@ def test_loopback_dashboard_serves_status_video_and_no_control_methods() -> None
     assert "VIEW ONLY" in html
     assert "Learned stack" in html
     assert "Live shadow scorecard" in html
+    assert "independent val units" in html
+    assert "historical unclassified" in html
+    assert "candidate audit" in html
     assert status["dashboard"]["view_only"] is True
     assert status["dashboard"]["frame_ready"] is True
     assert status["controller_endpoints"] == 0

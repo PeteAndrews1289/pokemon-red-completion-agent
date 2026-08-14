@@ -1,5 +1,55 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: two reviewers forced the project to count what was real
+
+The model-first pivot survived independent review, but the scorecard did not. The failed Red run
+said “2,260 decisions, 1,647 agreements, 600 disagreements.” Those last two numbers accounted for
+only 2,247 decisions. The missing thirteen could not be reconstructed from a correction-only
+artifact, so the honest repair was not a story about what they probably were. They became a visible
+category: **unclassified historical exits**. Agreement is now 1,647/2,247 classified comparisons;
+model execution is 1,647/2,260 total decisions.
+
+The impressive validation counts shrank when the unit of evidence became visible. The battle
+ranker had 1,142 genuine free-choice decisions but only two independent validation roots. The team
+ranker had 7,030 genuine decisions but one validation lineage. Thousands of correlated turns are
+useful training coverage, not thousands of independent experiments. The dashboard now shows both.
+
+The destination scorer supplied the sharpest warning. It was perfect on all nineteen development
+menus with three or more choices, but only 10/17 on binary menus. In validation alone it tied route
+cost 2/4, with no paired win or loss. The aggregate 10/12 result was real, but its advantage lived
+entirely where menu shape made the problem easier. Candidate-count coverage now appears beside the
+headline score.
+
+The 600 battle corrections also stopped looking like 600 lessons. They collapsed into 349 exact
+feature clusters and 206 quantized semantic clusters. Every one was above the supposed confidence
+safety threshold, and none contained the outcome of the model move the teacher rejected. They can
+map distribution shift; they cannot honestly tell the model which move was better.
+
+Antigravity attacked portability rather than statistics. A new contract expresses readiness
+relative to the next declared challenge. A synthetic bankrupt collector—with no balls, purchase,
+sellable resource, earning route or find route—now stops with a hard resource blocker instead of
+reselecting “catch something.” These contracts are not yet integrated into live title adapters.
+The first laboratory was cut to exactly three single-process
+families: navigation, battle and party development. Its 200 synthetic episodes per family prove the
+contract, not the game. Real snapshot-backed scenarios and the first learner update remain next.
+
+The biggest correction was Crystal. The V2 benchmark assumed Red initialization would survive
+ordinary adaptation. An offline Red pilot showed the opposite: after 9, 18 or 27 examples, Red and
+zero initialization both reached 27/27 and made no discordant choice. The optimizer erased the
+distinction the experiment meant to measure. Its zero-loss endpoint also had only 34.2% power at a
+useful effect.
+
+V2 retired without opening a context. V3 makes transfer impossible to hide behind adaptation: the
+primary question is frozen Red weights versus identical zero weights, zero-shot, across 54 sealed
+Crystal contexts. A one-sided exact paired test has 82.3% power at the declared useful effect. A
+secondary nine-fold experiment preserves each candidate's prior while giving both the same three
+labels. The plan remains closed until Claude and Antigravity review the published source.
+**The result of the audit was not more training. It was finally knowing what experiment could prove
+that training mattered.**
+
+The older V2 passages below are retained as the chronological record of the design this audit
+falsified; they do not describe the active protocol.
+
 ## August 14: the project stopped mistaking a final exam for practice
 
 The first live Red learner run did not reach the League. It stopped in Cinnabar after 1,250
@@ -46,10 +96,12 @@ training ground again.
 
 Four different decisions now have real fitted models behind them. A small goal manager learned
 which kind of work should happen next. A five-weight destination scorer learned when the shortest
-route is not the useful route. A battle network learned from 3,320 move choices and was evaluated on
-1,268 held-out decisions. A team-development network learned from 13,709 candidate/venue choices
-and faced 7,080 held-out examples. Their validation scores—100%, 83.33%, 98.66%, and 99.90% on the
-relevant genuine choices—are visible beside their baselines and exact fingerprints.
+route is not the useful route. A battle network learned from 3,320 move choices and reached
+1,125/1,142 genuine free-choice validation decisions over two roots, versus 468/1,142 for the
+majority baseline. A team-development network learned from 13,709 candidate/venue choices and
+reached 7,023/7,030 genuine choices over one validation lineage, versus 6,725/7,030 for the shape
+baseline. Goal and destination results remain 27/27 and 10/12, with exact baselines, independent
+units and candidate-count caveats visible beside them.
 
 They do not become a fictional monolith when the emulator starts. The first full Red evaluation
 draws the authority boundary on screen. The battle network proposes, but the teacher checks every

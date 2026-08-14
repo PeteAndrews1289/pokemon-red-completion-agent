@@ -110,6 +110,7 @@ class StrategicNavigationModelMetrics:
     paired_both_wrong: int
     paired_two_sided_exact_p: float
     candidate_count_accuracy: tuple[tuple[int, float], ...]
+    candidate_count_results: tuple[tuple[int, int, int], ...]
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -127,6 +128,14 @@ class StrategicNavigationModelMetrics:
             },
             "candidate_count_accuracy": {
                 str(count): accuracy for count, accuracy in self.candidate_count_accuracy
+            },
+            "candidate_count_results": {
+                str(count): {
+                    "correct": correct,
+                    "examples": examples,
+                    "accuracy": correct / examples,
+                }
+                for count, correct, examples in self.candidate_count_results
             },
         }
 
@@ -680,6 +689,10 @@ def evaluate_strategic_navigation_model(
         paired_two_sided_exact_p=_paired_two_sided_exact_p(wins, losses),
         candidate_count_accuracy=tuple(
             (count, matches / examples)
+            for count, (examples, matches) in sorted(by_size.items())
+        ),
+        candidate_count_results=tuple(
+            (count, matches, examples)
             for count, (examples, matches) in sorted(by_size.items())
         ),
     )

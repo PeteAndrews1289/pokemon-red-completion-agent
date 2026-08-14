@@ -17,6 +17,61 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Post-review model-first foundation — 2026-08-14
+
+Claude and Antigravity reviewed the model-first pivot at `9d67772`; both approved with conditions.
+Those conditions are now implemented for a second read-only review. No cartridge, teacher, sealed
+Red destination or Crystal experiment context was opened, and no model gained authority.
+
+Start from
+[`docs/evidence/model-first-measurement-audit-2026-08-14.json`](docs/evidence/model-first-measurement-audit-2026-08-14.json).
+The important corrections are:
+
+- The failed live run had 2,260 battle decisions, 1,647 model executions, 600 teacher fallbacks and
+  13 historical exits the correction-only artifact cannot type. Teacher agreement is
+  1,647/2,247 classified comparisons; execution is 1,647/2,260 decisions. Never merge those
+  denominators or guess the 13.
+- The 600 corrections contain 349 exact feature clusters and 206 quantized semantic clusters. All
+  exceed the old confidence threshold, none contains the counterfactual outcome of the rejected
+  model action, and none is eligible for refitting as a correctness label.
+- The destination ranker's measured advantage over route cost comes entirely from menus wider than
+  two candidates. Binary train is 8/13 versus 8/13; binary validation is 2/4 versus 2/4, paired
+  0–0. Treat 10/12 aggregate development accuracy with this limitation attached.
+- Dashboard evidence now carries integer numerator/denominator pairs, independent validation units,
+  paired outcomes, candidate-count subsets and explicit unclassified exits. Future failures retain
+  the last semantic boundary and policy counters plus the exact exception message when it contains
+  no path; path-bearing text is hashed and marked redacted.
+- The first scenario laboratory is deliberately one process and exactly three families:
+  navigation, battle and party development. Two hundred ROM-free synthetic contract episodes per
+  family pass, but real snapshot-backed adapters and the first learner update remain outstanding.
+  Do not add a fourth family, workers or broad dashboard infrastructure first.
+- New portable contracts distinguish replenish, investigate and hard-blocked acquisition and
+  measure party readiness against the next declared challenge instead of a fixed level. Synthetic
+  falsifiers pass: a state with no balls, purchase, sale, earning or find route blocks instead of
+  looping. Live Red and Crystal adapters have not yet migrated to these contracts; do not describe
+  the synthetic result as runtime authority.
+- Every Milestone 2–4 promotion design now states `n`, statistic, comparator, decision rule and
+  power or precision. Full runs remain prohibited.
+
+Crystal v2 is retired at zero access. An offline pilot on already-open Red development evidence
+showed why: after any ordinary positive adaptation budget, Red-initialized and zero-initialized
+models made identical 27/27 choices. Prospective V3 makes frozen zero-shot Red weights the primary
+candidate against an identical all-zero control on 54 sealed contexts. Its one-sided exact paired
+test has 82.3248% power at the declared win/loss/tie effect 0.50/0.20/0.30. A mandatory secondary
+analysis uses prior-preserving adaptation in nine three-label folds. Canonical plan:
+[`configs/crystal-goal-manager-transfer-v3.json`](configs/crystal-goal-manager-transfer-v3.json),
+SHA-256 `b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+The plan embeds all 81 slot assignments rather than only their totals; both partitions contain all
+36 possible pairwise candidate-order reversals. The complete ROM-free gate passes with 3,242 tests,
+three deselected integration tests and one documented expected failure.
+It authorizes no private access until the published commit receives fresh Claude and Antigravity
+reviews.
+
+Next work after review is not a Red replay or Crystal opening. Build real snapshot-backed adapters
+for the three scenario families, measure single-process throughput, produce one learner update and
+evaluate it on untouched scenario lineages. Stop if another infrastructure family is proposed
+first.
+
 ## Model-first pivot after the failed Red shadow run — 2026-08-14
 
 The owner correctly identified strategic drift: repeated full teacher runs consumed days while
@@ -30,8 +85,10 @@ Red player v1 did start from clean power at exact pushed source
 `66cd2d572545e2ef7d1988d3ad89aef1af9a4035`. It stopped safely during the long Cinnabar balanced-
 team block after 1,250 battles. The last reported party levels were
 `(42, 43, 43, 55, 42, 42)` at dashboard logical frame 85,058,060 and checkpoint 275/312. The battle
-head made 2,260 proposals: 1,647 teacher agreements and 600 disagreements, for 73.2977% agreement;
-there were no low-confidence or unsupported observations. The team candidate head matched
+head made 2,260 proposals: 1,647 executed agreements, 600 teacher fallbacks, and 13 exits that the
+retained correction-only artifact cannot classify. Agreement was 1,647/2,247 classified
+comparisons (73.2977%); execution was 1,647/2,260 decisions (72.8761%). There were no recorded
+low-confidence or unsupported fallbacks. The team candidate head matched
 260,899/260,905 teacher rankings (99.9977%) but remained shadow-only. The private failed artifact
 retains 600 corrections and one metadata record; no model or run was promoted. The path-free public
 record is
@@ -61,8 +118,9 @@ an early bounded transfer probe once shared interfaces work; it does not need a 
 
 Codex owns code, tests, experiments, documentation, commits, and pushes. Claude and Antigravity are
 read-only reviewers under [`docs/three-agent-workflow.md`](docs/three-agent-workflow.md). Their
-roadmap reviews are pending and must be adjudicated in
-[`docs/agent-review-log.md`](docs/agent-review-log.md) before expensive or sealed work.
+roadmap reviews and their adjudication are recorded in
+[`docs/agent-review-log.md`](docs/agent-review-log.md). The implementation above now awaits their
+second read-only review before expensive or sealed work.
 
 ## Red training is active before Crystal transfer — 2026-08-14 (superseded execution order)
 

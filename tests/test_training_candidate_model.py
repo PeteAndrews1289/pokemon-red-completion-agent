@@ -97,11 +97,18 @@ def test_shared_scorer_learns_two_state_dependent_choice_kinds() -> None:
     metrics = evaluate_training_candidate_model(model, examples, baseline=baseline)
 
     assert metrics.accuracy == 1.0
+    assert metrics.correct == metrics.examples
+    assert metrics.shape_baseline_correct < metrics.examples
     assert metrics.genuine_accuracy == 1.0
+    assert metrics.genuine_correct == metrics.multi_candidate_examples
+    assert (
+        metrics.genuine_shape_baseline_correct < metrics.multi_candidate_examples
+    )
     assert metrics.shape_baseline_accuracy < 0.6
     assert metrics.genuine_shape_baseline_accuracy < 0.6
     assert dict(metrics.kind_accuracy) == {"trainee": 1.0, "venue": 1.0}
     assert dict(metrics.genuine_kind_accuracy) == {"trainee": 1.0, "venue": 1.0}
+    assert metrics.candidate_count_results == ((2, 80, 80), (3, 80, 80))
 
 
 def test_genuine_metrics_are_not_inflated_by_singleton_choices() -> None:

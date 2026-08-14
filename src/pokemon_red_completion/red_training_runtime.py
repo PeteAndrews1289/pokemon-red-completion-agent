@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable, Mapping
+from copy import deepcopy
 from typing import TYPE_CHECKING
 
 from pokemon_red_completion.progress_dashboard import (
@@ -122,6 +123,29 @@ class RedTrainingDashboardTracker:
         )
         self._append_event(f"Shadow evaluation stopped safely ({exception_type})")
         self.publish()
+
+    def diagnostic_snapshot(self) -> dict[str, object]:
+        """Return the latest path-free semantic boundary and policy counters.
+
+        This snapshot is observational only.  It deliberately contains neither emulator
+        objects nor filesystem locations so the same structure can be retained privately
+        and summarized in a public failure receipt.
+        """
+
+        return {
+            "run_status": self._status,
+            "stage": self._stage,
+            "frame_count": self._frame_count,
+            "actions": self._actions,
+            "stage_progress": self._progress,
+            "location": self._location,
+            "verified_checkpoints": len(self._seen_checkpoints),
+            "battle_policy": deepcopy(self._battle_policy),
+            "team_policy": deepcopy(self._team_policy),
+            "registered_species": self._registered_species,
+            "living_species": self._living_species,
+            "level_cap_species": self._level_cap_species,
+        }
 
     def publish(self) -> None:
         elapsed = max(self._clock() - self._started_at, 1e-9)

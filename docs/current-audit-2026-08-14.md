@@ -1,5 +1,40 @@
 # Current audit — 2026-08-14
 
+## Post-review measurement and experiment-design audit
+
+Claude and Antigravity approved the model-first direction with conditions. This ROM-free checkpoint
+repairs the evidence foundation without promoting a model:
+
+- 2,260 live battle decisions are 1,647 model executions, 600 teacher fallbacks and 13 explicitly
+  unclassified historical exits. Agreement is 1,647/2,247 classified comparisons; execution is
+  1,647/2,260 decisions.
+- The 600 corrections form 349 exact feature clusters and 206 quantized semantic clusters. They
+  carry no comparative outcome and are diagnostic, not refit labels.
+- Independent validation units are visible beside decisions: goal 27 contexts, destination 12
+  lineages, battle 2 validation roots and team development 1 validation root.
+- Destination binary menus reproduce no edge over route cost (train 8/13 versus 8/13; validation
+  2/4 versus 2/4). Wider menus are 19/19, so 10/12 aggregate accuracy needs that caveat.
+- The initial scenario laboratory is one bounded process and exactly navigation, battle and party
+  development. Two hundred synthetic episodes per family validate contracts only; real
+  snapshot-backed adapters and learner updates remain incomplete.
+- New portable contracts make a bankrupt collection state return a hard resource blocker and make
+  readiness relative to a declared next challenge rather than a global level constant. These are
+  synthetic contract falsifiers; live title-adapter migration remains open.
+- Milestone 2–4 gates now freeze sample size, statistic, comparator, decision rule and power or
+  precision before evaluation.
+
+Crystal v2 is retired with every counter at zero. On already-open Red development contexts,
+ordinary positive-budget fitting made Red and zero initialization identical. V3 uses a zero-shot
+primary comparison across 54 sealed contexts and a prior-preserving three-label secondary analysis
+across nine folds. Its one-sided exact primary has 82.3248% power at the declared 0.50/0.20/0.30
+win/loss/tie effect. V3 authorizes no private access before fresh external review. See
+[the exact audit](evidence/model-first-measurement-audit-2026-08-14.json) and
+[canonical plan](../configs/crystal-goal-manager-transfer-v3.json).
+
+The plan embeds every one of its 81 slot assignments and exhibits all 36 possible pairwise
+candidate-order reversals in both partitions. Final ROM-free validation passed 3,242 tests, with
+three integration tests deselected and one documented expected failure.
+
 ## Strategic correction: the full-run loop was the wrong development loop
 
 The owner correctly stopped a pattern that the repository's own mission had already prohibited.
@@ -10,8 +45,9 @@ battle, and training problems to consume an entire power-on run before they beca
 The first Red player-v1 shadow run did produce useful negative evidence. It reached checkpoint
 275/312 and 1,250 balanced-team battles before stopping safely at last-reported levels
 `(42, 43, 43, 55, 42, 42)`. The dashboard observed 85,058,060 logical frames. The battle head made
-2,260 proposals, agreed with the teacher 1,647 times and disagreed 600 times; no proposal was low
-confidence or unsupported. The team candidate head matched 260,899 of 260,905 teacher choices but
+2,260 proposals: 1,647 executed agreements, 600 teacher fallbacks and 13 unclassified exits. The
+agreement denominator is 2,247 classified comparisons, not all decisions; no fallback was recorded
+as low-confidence or unsupported. The team candidate head matched 260,899 of 260,905 teacher choices but
 never had authority. No goal or destination head was online, no completion report existed, and no
 model was promoted.
 
@@ -53,8 +89,8 @@ to-end policy and no learned model has yet completed a fresh full Red run.
 | --- | ---: | ---: | ---: | --- |
 | Goal manager | 54 | 27 | 100% | Offline |
 | Destination ranker | 24 | 12 | 83.33% vs 33.33% route-cost baseline | Offline |
-| Battle move ranker | 3,320 | 1,268 | 98.6593%; 100% legal | Teacher-supervised |
-| Team-development ranker | 13,709 | 7,080 | 99.9004% genuine vs 95.6615% shape baseline | Shadow-only |
+| Battle move ranker | 3,320 | 1,142 free-choice / 2 roots | 1,125/1,142 vs 468/1,142 majority; 100% legal | Teacher-supervised |
+| Team-development ranker | 13,709 | 7,030 genuine / 1 root | 7,023/7,030 vs 6,725/7,030 shape baseline | Shadow-only |
 
 The goal-manager refit required its exact historical source because the authenticated catalog
 binds that identity; it reproduced the same canonical model. The destination model freshly

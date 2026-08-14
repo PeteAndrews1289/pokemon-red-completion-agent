@@ -11,28 +11,28 @@
 > promoted. The project will not replay the full route again until short randomized navigation,
 > battle, training, hierarchy, and collection scenarios pass frozen unseen gates. See the
 > [path-free failure evidence](docs/evidence/red-player-v1-shadow-failure-2026-08-14.json) and
-> [new roadmap](docs/model-first-roadmap.md). Crystal's frozen 18/27/27 protocol remains untouched at
-> 0/18, 0/27, 0/27 and 0 predictions; Red's sealed destination set remains 0/12.
+> [new roadmap](docs/model-first-roadmap.md). Exact accounting is 1,647 model executions, 600
+> teacher fallbacks and 13 explicitly unclassified historical exits over 2,260 battle decisions.
+> Red's sealed destination set remains 0/12.
 
-> **Crystal transfer preregistration (August 14, 2026):** the exact 72-context plan is
-> [`configs/crystal-goal-manager-transfer-v2.json`](configs/crystal-goal-manager-transfer-v2.json),
-> SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
-> The untouched v1.0 plan is preserved as superseded; it opened no context, label, or prediction.
-> Every partition covers all nine goal kinds. Nested adaptation budgets are 9/18/27, and the
-> primary paired endpoint is fixed at nine examples: at least six Red-initialized wins and zero
-> losses gives exact two-sided `p = 0.03125`. Both candidates use identical preprocessing, examples,
-> order and optimization; only their initial weights differ. Every sealed prediction must be
-> committed before the test teacher acts, and all 27 outcomes must be authenticated together before
-> scoring. See the
+> **Crystal transfer preregistration (August 14, 2026):** V1 and V2 are preserved as retired
+> zero-access designs. The active prospective plan is
+> [`configs/crystal-goal-manager-transfer-v3.json`](configs/crystal-goal-manager-transfer-v3.json),
+> SHA-256 `b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+> Frozen Red and all-zero weights are compared zero-shot on 54 sealed contexts by a one-sided exact
+> paired test. At the declared 0.50/0.20/0.30 win/loss/tie effect, power is 82.3%. A mandatory
+> secondary analysis uses 27 adaptation contexts in nine prior-preserving three-label folds. The
+> plan authorizes no private context access pending publication and fresh Claude/Antigravity
+> review. See the
 > [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
 > **Live dashboard:** the loopback-only **Pokémon Learning Observatory** now has a Red training
 > mode as well as the Crystal preview. It shows the live game, current verified checkpoint,
 > emulation speed, collection progress, every learned head's train/validation evidence and
-> authority, plus live teacher agreement, model execution coverage, correction count, unsupported
-> contexts and team-ranker accuracy. The browser remains view-only: GET requests only and zero
-> controller endpoints. Run `scripts/run_red_training_dashboard.py` for the clean-power Red shadow
-> evaluation or `scripts/run_crystal_dashboard.py` for the no-input Crystal preview. See the
+> authority, plus exact numerators/denominators, independent units, candidate-count coverage,
+> correction count, unclassified exits and team-ranker accuracy. The browser remains view-only:
+> GET requests only and zero controller endpoints. The old full-run Red harness is historical and
+> is not authorized for another replay. See the
 > [dashboard guide](docs/progress-dashboard.md).
 
 > **Goal-manager promotion result (August 14, 2026):** the model scored 54/54 on train and 27/27 on

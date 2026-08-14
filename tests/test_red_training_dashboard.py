@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
+from pokemon_red_completion.progress_dashboard import ProgressDashboardError
 from pokemon_red_completion.red_training_dashboard import (
     RED_TRAINING_COMPONENTS,
     live_evaluation_state,
@@ -40,6 +43,8 @@ def test_red_training_dashboard_is_honest_about_shadow_authority() -> None:
         "total": 1,
     }
     assert snapshot["live_evaluation"]["teacher_agreement_rate"] == 17 / 19  # type: ignore[index]
+    assert snapshot["live_evaluation"]["model_execution_rate"] == 17 / 19  # type: ignore[index]
+    assert snapshot["live_evaluation"]["decision_accounting_complete"] is True  # type: ignore[index]
     assert snapshot["live_evaluation"]["team_accuracy"] == 5 / 6  # type: ignore[index]
     assert len(snapshot["learning_components"]) == 4
     assert "/Users/" not in encoded
@@ -54,7 +59,8 @@ def test_red_training_components_bind_the_actual_fitted_models() -> None:
     assert by_name["Destination ranker"].validation_accuracy == 10 / 12
     assert by_name["Battle move ranker"].train_examples == 3320
     assert by_name["Battle move ranker"].authority == "teacher_supervised"
-    assert by_name["Team-development ranker"].validation_examples == 7080
+    assert by_name["Team-development ranker"].validation_examples == 7030
+    assert by_name["Team-development ranker"].independent_validation_units == 1
     assert by_name["Team-development ranker"].authority == "shadow_only"
 
 
@@ -81,3 +87,56 @@ def test_live_evaluation_projection_counts_exact_fallback_reasons() -> None:
     assert state["low_confidence_fallbacks"] == 1
     assert state["unsupported_observations"] == 1
     assert state["corrections_saved"] == 3
+
+
+def test_live_evaluation_exposes_legacy_unclassified_decisions() -> None:
+    state = live_evaluation_state(
+        {
+            "decisions": 2260,
+            "model_decisions": 1647,
+            "teacher_queries": 2260,
+            "teacher_fallbacks": 600,
+            "correction_records": 600,
+            "fallback_reasons": {"teacher_disagreement": 600},
+        },
+        None,
+    ).public_dict()
+
+    assert state["unclassified_decisions"] == 13
+    assert state["decision_accounting_complete"] is False
+    assert state["teacher_agreement_rate"] == 1647 / 2247
+    assert state["model_execution_rate"] == 1647 / 2260
+
+
+def test_live_evaluation_rejects_incomplete_new_terminal_accounting() -> None:
+    with pytest.raises(ProgressDashboardError, match="terminal accounting is incomplete"):
+        live_evaluation_state(
+            {
+                "decisions": 2,
+                "model_decisions": 1,
+                "teacher_fallbacks": 0,
+                "returned_move_decisions": 1,
+            },
+            None,
+        )
+
+
+def test_live_evaluation_accounts_for_a_graceful_interruption() -> None:
+    state = live_evaluation_state(
+        {
+            "decisions": 3,
+            "model_decisions": 1,
+            "teacher_queries": 2,
+            "teacher_fallbacks": 1,
+            "fallback_reasons": {"teacher_disagreement": 1},
+            "returned_move_decisions": 2,
+            "non_move_control_decisions": 0,
+            "failed_decisions": 0,
+            "interrupted_decisions": 1,
+        },
+        None,
+    ).public_dict()
+
+    assert state["interrupted_decisions"] == 1
+    assert state["unclassified_decisions"] == 0
+    assert state["decision_accounting_complete"] is True

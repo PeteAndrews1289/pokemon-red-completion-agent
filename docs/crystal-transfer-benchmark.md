@@ -2,73 +2,62 @@
 
 ## Current decision
 
-The first Crystal experiment tests one portable component before anyone writes a full Crystal
-walkthrough. Red has supplied a genuine nine-goal manager fitted from 54 teacher-labeled examples
-and given authority over 27 bounded, previously opened contexts. That is not a complete learned
-Red-playing agent, and no learned model has completed Red. Crystal now asks the next falsifiable
-question: do those narrow learned weights reduce the amount of new teaching required in a
-different generation?
+Crystal is an early falsifier of shared Pokémon knowledge, not a second walkthrough. The first
+question is deliberately narrow: do the frozen Red goal-manager weights make better zero-shot
+choices than the same model with zero weights on genuinely unseen Crystal contexts?
 
-The exact public plan is
-[`configs/crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json),
-with SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
-It contains no capture, teacher label, prediction, private path, or ROM bytes. The older twelve-case
-Red destination test remains 0/12 opened and is not reused.
+The active prospective plan is
+[`configs/crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json),
+SHA-256 `b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+It contains 27 adaptation slots and 54 sealed-test slots, no cartridge capture, label, prediction,
+private path or ROM byte. It explicitly sets private-context authorization to false and requires
+independent reviews from Claude and Antigravity before that changes.
 
-V1 named international Crystal 1.0. The owner later supplied 1.1 while every Crystal counter was
-still zero. V1 is preserved as a superseded preregistration; it was never booted and opened no
-context, label, or prediction. V2 uses fresh experiment and slot identities, so evidence from the
-two targets cannot be combined accidentally.
+The older protocols are history:
 
-## What is implemented before cartridge access
+- V1 named international Crystal 1.0 and was retired at zero access when the owner supplied 1.1.
+- V2 named Crystal 1.1 but used ordinary convex adaptation and a `wins >= 6, losses = 0` endpoint.
+  It is retired with 0 zero-shot contexts, 0 adaptation examples, 0 sealed contexts and 0
+  predictions opened.
 
-The ROM-free transfer gate is no longer a design note:
+V2 was not merely small. A same-title pilot over already-open Red development evidence showed that
+ordinary fitting made Red-initialized and zero-initialized candidates choose identically after 9,
+18 and 27 examples. Its endpoint therefore erased the distinction it was intended to test. The old
+zero-loss conjunction also had only 34.2% power at a useful 0.70/0.10/0.20 win/loss/tie effect.
 
-- Crystal projects story, registration, living ownership, level-cap ownership, evolution, team
-  readiness, safety, supplies, storage, control, and world knowledge into the same nine normalized
-  pressures used in Red.
-- Its model-facing projection contains no title, species, move, map, coordinate, item, RAM address,
-  capability identity, private binding, or candidate position.
-- A private capability vocabulary covers ordinary play plus Gen II completion mechanics: capture,
-  storage, level/item/happiness/time/trade evolution, breeding, time of day, field moves, static and
-  roaming encounters, and puzzle interaction.
-- Unknown and missing capabilities hard-mask a goal before its private resolver can advertise
-  executable authority. Every unavailable kind remains visible with a portable reason.
-- The revision-specific reader is bank-aware and uses a public allowlist derived from generated
-  symbols. It coherently double-reads party and Pokédex state, decodes Gen II party structs and
-  status bits, masks PP-Up bits, verifies the separate party species list and terminator, and
-  rejects torn or contradictory snapshots. Eggs fail closed until the later breeding-aware shared
-  observation contract can represent them without exposing their hidden species.
-- Pokédex progress covers the 250 non-event national targets and excludes event-only Celebi. That
-  does **not** mean one Crystal cartridge can obtain all 250: the later multi-cartridge collection
-  contract must account for version exclusives, trades and trade evolutions explicitly.
-- The read-only storage layer follows Crystal's actual fourteen-box layout across SRAM banks two
-  and three while substituting the live active-box copy from bank one for its stale saved copy. It
-  coherently re-reads all 280 slots, validates counts, terminators, struct/list agreement and
-  levels, derives living and level-100 ownership across party plus PC, and records eggs only as
-  opaque eggs.
-- The items and Balls pockets are also decoded coherently from counted item/quantity pairs. Pocket
-  membership, stack bounds, duplicate identities and terminators are checked before the adapter
-  reports capture-ball and team-recovery reserves to the portable pressure projection.
-- Transfer fitting now has two mechanically paired candidates. Both use the authenticated Red
-  feature mean and scale, the same Crystal rows in the same order, and the same fixed optimizer.
-  One begins with Red's learned weights; the conservative scratch comparator begins at zero. Each
-  budget resets from its original initialization.
-- A canonical path-free catalog binds every slot to its cartridge, source, state, question,
-  availability-menu and private-binding digests. Label-free hashing changes candidate order across
-  slots, and every partition must place its intended answer in at least eight of nine positions.
-- Prediction commitments require complete slot-by-predictor coverage. The frozen Red model and
-  three baselines have fixed public identities; after adaptation, all six fitted model hashes must
-  match every corresponding sealed prediction row.
-- Sealed results form one canonical 27-outcome artifact. The evaluator reconstructs the catalog,
-  commitment and outcome digests before scoring and cannot emit an intermediate statistic.
+## What is implemented without opening Crystal evidence
 
-These facts make the code ready for live qualification, not already qualified. The v1.1 entry gate
-now passes, but no Crystal context has been opened and no Crystal model prediction exists.
+The reusable substrate remains valuable:
 
-## Pinned cartridge and source boundary
+- Crystal projects story, registration, living ownership, evolution, team readiness, safety,
+  supplies, storage, control and world knowledge into the same nine normalized pressures used in
+  Red.
+- The model-facing projection excludes title, species, move, map, coordinate, item, raw address,
+  private binding and candidate position.
+- Private capability masks cover capture, storage, level/item/happiness/time/trade evolution,
+  breeding, time of day, field moves, static and roaming encounters, and puzzle interaction.
+- Bank-aware coherent readers validate party, Pokédex, storage and inventory state before exposing
+  semantic observations.
+- The source model and normalizer are authenticated, candidate menus are identity-free, and the
+  plan requires at least three available candidates per context plus answer-position diversity and
+  context-dependent reversals.
+- `adapt_from_prior` now keeps each candidate anchored to its own initial weights. Red and scratch
+  candidates use the same examples, order, optimizer, normalization and prior strength; only the
+  prior center differs.
+- The V3 generator and parser reproduce one canonical public plan and reject changes to
+  authorization, power, endpoint, prior comparison or V2 zero-access history.
+- The canonical file embeds every one of the 81 assignments. Adaptation and sealed partitions each
+  exhibit all 36 possible pairwise candidate-order reversals, so a later code change cannot silently
+  reshuffle the preregistered schedule.
 
-The first live target is Pokémon Crystal international v1.1:
+This is a preregistration substrate, not a completed transfer runner. V3 still needs its private
+catalog materializer, complete prediction commitment, one-shot outcome evaluator and reviewer
+approval. No V3 context may be materialized or opened until those gates exist and both reviewers
+approve the exact published commit.
+
+## Pinned target boundary
+
+The target remains Pokémon Crystal international v1.1:
 
 | Identity | Frozen value |
 | --- | --- |
@@ -82,111 +71,68 @@ The first live target is Pokémon Crystal international v1.1:
 | Symbol file | `pokecrystal11.sym` |
 | Symbol-file SHA-256 | `8a8b7a675bbb0e7b2e18d1604ecae68ac18aa0bd8f879cc58351489352bf8ef3` |
 
-The owner's exact ROM SHA-256 is bound only at runtime from the lawful private copy. Its path and
-bytes never enter Git. `scripts/check_crystal_transfer_entry_gate.py` passed this boundary without
-booting the game, opening a context, running the teacher, or computing a prediction. A checked-in
-fixture independently reproduces all 52 allowlisted WRAM/SRAM addresses from the pinned 1.1 symbol
-file rather than assuming that revision memory layouts are identical.
+The lawful ROM's path, bytes and exact SHA-256 stay private. Historical uncounted qualifications
+proved coherent banked observation and one shared closed-loop starting corridor without creating a
+transfer context, label or prediction. Those engineering qualifications are not transfer evidence.
 
-## Live progress dashboard
+## The 81-slot V3 experiment
 
-The **Pokémon Learning Observatory** is the human view of the run. It combines the latest rendered
-emulator frame with semantic information that already belongs to the observation/evidence layers:
-
-- current stage, location, action and frame counts, and emulation speed;
-- party levels, health and status;
-- registered, living and level-100 collection counts plus capture/storage headroom;
-- all nine goal pressures, availability, selected goal, confidence and authority mode;
-- decision, teacher-query and fallback totals;
-- zero-shot, adaptation and sealed-test counters; and
-- a short evidence event stream.
-
-It is deliberately not a controller. The server binds only to `127.0.0.1`, serves GET endpoints,
-rejects POST/PUT/DELETE, and reports zero controller endpoints in its own status. The emulator frame
-observer can request rendered pixels but has no button methods. `scripts/run_crystal_dashboard.py`
-provides an authenticated no-input preview; the production qualification and collection runners
-will publish their real semantic snapshots through the same in-memory observer.
-
-## The 72-context experiment
-
-Every partition covers all nine goal kinds evenly.
-
-| Partition | Contexts | Per goal kind | Label use |
+| Partition | Contexts | Per goal kind | Role |
 | --- | ---: | ---: | --- |
-| Zero-shot probe | 18 | 2 | Never fitted; Red predicts before the first Crystal label |
-| Adaptation | 27 | 3 | Nested fixed prefixes of 9, 18, and 27 examples |
-| Sealed test | 27 | 3 | Never fitted; opened once after every candidate prediction is committed |
+| Adaptation | 27 | 3 | Nine disjoint three-label folds for the mandatory secondary analysis |
+| Sealed test | 54 | 6 | Primary zero-shot paired comparison and fold-assigned secondary evaluation |
 
-The adaptation order is three complete nine-kind blocks. Therefore the 9-, 18-, and 27-example
-prefixes contain exactly one, two, and three examples of every kind. No budget can accidentally
-become “nine easy healing examples.” Every policy context must be unique, partitions may have zero
-context overlap, each context needs at least two candidates, each partition needs context-dependent
-menu reversals, and candidate answer positions must vary.
+Every sealed context is assigned to exactly one fold; each fold receives six sealed contexts. The
+primary candidates see no Crystal label. The secondary candidates see only their fold's three
+declared adaptation labels. The selected answer must appear in varied positions, candidate position
+is not a feature, partitions may not overlap, policy contexts must be unique and every menu must
+contain at least three available candidates.
 
-The execution order is fixed and represented by executable artifact gates:
+The fixed order is:
 
-1. Freeze the 18 zero-shot questions and commit Red's predictions before any Crystal label.
-2. Open that probe once, publish every result, and forbid it from selecting schema, architecture,
-   normalizer, optimizer, or budget.
-3. Collect the 27 adaptation examples in registry order.
-4. Reset and fit Red-initialized and zero-initialized candidates at 9, 18, and 27 examples.
-5. Commit every candidate's prediction for every sealed test question before the teacher acts.
-6. Execute each predeclared candidate/context identity at most once from authenticated paired
-   starting state, verify it independently, and preserve failures and interruptions.
-7. Score and publish all candidates without optional stopping.
+1. publish and externally review the exact code, plan and path-free catalog contracts;
+2. freeze the complete adaptation and sealed catalogs before any prediction or label;
+3. commit frozen-Red and zero-weight predictions for all 54 sealed questions;
+4. collect all 27 adaptation labels without opening a sealed label;
+5. fit each Red-prior and zero-prior fold from the same three examples and commit predictions for
+   its six assigned sealed contexts;
+6. open every sealed context once, preserving success, failure and interruption; and
+7. score the primary and mandatory secondary analyses without optional stopping.
 
-The fitter rejects an adaptation record unless its decision identity, ordered and order-independent
-question digests, availability menu, candidate order, selected answer, environment and independent
-episode lineage all match the frozen adaptation catalog. This prevents an unrelated but
-superficially balanced dataset from entering the correct optimizer.
+Any schema, candidate, normalizer, optimizer, prior strength or endpoint change after step 2 retires
+the entire V3 identity.
 
-If the schema or settings change after the zero-shot probe, this experiment is retired and a new
-plan with fresh contexts is required.
+## Powered primary endpoint
 
-## Statistical endpoint
+The candidate is the frozen authenticated Red model. The control has the same architecture,
+normalizer, hard masking and candidate menus with all-zero weights. On each of 54 independent
+sealed contexts, a paired win means only Red is correct and a paired loss means only the control is
+correct. Missing predictions are incorrect.
 
-The primary comparison is Red-initialized versus scratch at the smallest nine-example budget on all
-27 sealed test contexts. It uses a paired two-sided exact test. The preregistered success boundary
-requires at least six discordant wins and zero discordant losses for the Red initialization;
-`2 × (1/2)^6 = 0.03125`. Missing predictions count as incorrect. The 18- and 27-example comparisons,
-zero-shot baselines, calibration, per-kind accuracy, and paired causal outcomes are mandatory
-secondary reports, not alternative endpoints to choose after seeing results.
+The decision rule is a one-sided exact sign test conditional on discordant pairs at
+`alpha = 0.05`; Red must have more wins than losses and `p <= 0.05`. At the declared smallest useful
+effect — win 0.50, loss 0.20, tie 0.30 — 51 contexts are sufficient for 80% power and 54 provide
+82.3248% power. There is no zero-loss requirement.
 
-This design answers the sample-efficiency question with the same decisions on both sides. It avoids
-the earlier six-example validation defect, where even a perfect result could not beat chance at
-`p < 0.05`.
+The mandatory secondary report compares prior-preserving Red and zero initialization after three
+labels per fold. It publishes paired wins, losses, ties, accuracy and per-goal-kind results, but it
+cannot replace or rescue the zero-shot primary endpoint.
 
-## What happens now that the matching ROM is supplied
+## Dashboard boundary
 
-1. **Complete:** bind its SHA-256 privately and verify title, size, SHA-1, and revision before
-   emulator start.
-2. **Complete:** qualify one whole-state banked
-   party, Pokédex, inventory and storage bundle plus stable badge, map and control state. The fixed
-   clean-power setup reaches the starting bedroom, proves uninitialized storage fails closed, uses
-   the real SAVE menu and compares complete reads across 600 no-input frames. The exact-commit
-   46-input / 33,276-frame result is preserved in the
-   [path-free qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
-3. **Goal/navigation complete; battle next:** the pristine
-   starting question exposes real story and exploration bindings. The shared closed-loop executor
-   visits the first floor and returns, distinguishing turns from acknowledged movement. The
-   [exact-commit qualification](evidence/crystal-starting-vertical-slice-qualification-2026-08-14.json)
-   passed without a teacher, prediction or context. Add one independently verified battle choice
-   next; do not materialize a frozen context before all three seams qualify.
-4. Materialize all 72 private captures, then freeze a path-free catalog that satisfies the public
-   uniqueness, balance, menu-reversal, and candidate-position gates.
-5. Run the zero-shot phase before collecting any adaptation label. Do not begin with a full route.
-
-The first Crystal teacher is therefore a bounded context builder and verifier, not a walkthrough
-that hands the model an entire answer key. A full completion teacher becomes useful later as a
-curriculum generator for story, breeding, version routing, legendary prerequisites, and living-
-Pokédex mechanics.
+The Pokémon Learning Observatory remains a view-only loopback dashboard. It can show live frames,
+semantic state, exact numerators and denominators, independent evaluation units, candidate-count
+coverage, interventions and failures. It has no controller endpoint. No Crystal progress bar should
+move merely because the plan exists; V3 remains at zero until the reviewed runner performs an
+authorized operation.
 
 ## Claim boundary
 
-A successful primary endpoint would establish that Red initialization improved Crystal goal-choice
-sample efficiency under this fixed benchmark. It would not establish autonomous Crystal
-completion, battle or navigation transfer, a complete Crystal Pokédex, or a universal Pokémon
-player. Those are later gates. A failed endpoint is equally useful: it identifies whether the
-failure came from observation, availability masking, ranking, missing binding, execution,
-verification, source identity, or external interruption rather than collapsing everything into
-“the AI failed.”
+A successful primary endpoint would establish only that frozen Red goal-selection weights improve
+zero-shot Crystal goal choices under this benchmark. A successful secondary result would show that
+the advantage survives a tightly matched three-label adaptation. Neither establishes Crystal story
+completion, battle or navigation transfer, living-Pokédex completion or a universal Pokémon player.
+
+A failure is equally informative if the receipt separates observation, availability masking,
+ranking, binding, execution and verification. It must not be hidden by a second Crystal teacher
+script or a changed endpoint.

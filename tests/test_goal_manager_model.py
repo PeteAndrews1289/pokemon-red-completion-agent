@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 import pytest
 
@@ -23,6 +25,7 @@ from pokemon_red_completion.goal_manager_model import (
     evaluate_goal_manager_model,
     fixed_priority_goal_index,
     goal_manager_feature_matrix,
+    goal_manager_prior_adaptation_configuration,
     highest_pressure_goal_index,
 )
 
@@ -319,6 +322,42 @@ def test_model_round_trip_preserves_canonical_identity() -> None:
         canonical_goal_manager_model_sha256(model)
     )
     assert not restored.weights.flags.writeable
+
+
+def test_prior_adaptation_preserves_the_only_declared_initialization_difference() -> None:
+    source = GoalManagerLinearModel.fit(_training(), epochs=100)
+    scratch = source.zero_weight_comparator()
+    adaptation = tuple(
+        replace(row, partition="adaptation") for row in _training()[:6]
+    )
+    source_weights = source.weights.copy()
+
+    red_adapted = source.adapt_from_prior(
+        adaptation,
+        epochs=25,
+        prior_strength=0.2,
+    )
+    scratch_adapted = scratch.adapt_from_prior(
+        adaptation,
+        epochs=25,
+        prior_strength=0.2,
+    )
+
+    assert np.array_equal(source.weights, source_weights)
+    assert np.array_equal(red_adapted.feature_mean, scratch_adapted.feature_mean)
+    assert np.array_equal(red_adapted.feature_scale, scratch_adapted.feature_scale)
+    assert not np.array_equal(red_adapted.weights, scratch_adapted.weights)
+    assert canonical_goal_manager_model_sha256(red_adapted) == (
+        canonical_goal_manager_model_sha256(
+            source.adapt_from_prior(
+                adaptation,
+                epochs=25,
+                prior_strength=0.2,
+            )
+        )
+    )
+    configuration = goal_manager_prior_adaptation_configuration()
+    assert configuration["prior_center"] == "each_candidates_initial_weights"
 
 
 def test_fitting_rejects_validation_or_failed_teacher_rows() -> None:

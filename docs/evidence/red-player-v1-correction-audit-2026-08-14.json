@@ -1,0 +1,103 @@
+{
+  "claim": "Authenticated disagreement records were audited for coverage and distribution; no disagreement is labelled a model error without a causal outcome.",
+  "clusters": {
+    "exact_feature_projection_count": 349,
+    "largest_quantized_cluster_sizes": [
+      43,
+      38,
+      29,
+      27,
+      25,
+      23,
+      20,
+      17,
+      16,
+      11,
+      9,
+      9,
+      9,
+      9,
+      8,
+      7,
+      7,
+      6,
+      6,
+      6
+    ],
+    "quantized_semantic_count": 206
+  },
+  "confidence": {
+    "agreement_discrimination_auc": null,
+    "correction_only_bucket_counts": {
+      "0.0-0.1": 0,
+      "0.1-0.2": 0,
+      "0.2-0.3": 0,
+      "0.3-0.4": 0,
+      "0.4-0.5": 6,
+      "0.5-0.6": 27,
+      "0.6-0.7": 63,
+      "0.7-0.8": 54,
+      "0.8-0.9": 154,
+      "0.9-1.0": 296
+    },
+    "corrections_below_threshold": 0,
+    "maximum": 0.9999986444597219,
+    "mean": 0.8586697621511322,
+    "median": 0.8981285314286807,
+    "minimum": 0.40270081973832295,
+    "selection_threshold": 0.39994808298904233
+  },
+  "corrections": {
+    "battle_plan_count": 10,
+    "candidate_count_distribution": {
+      "3": 1,
+      "4": 599
+    },
+    "maximum_decision_index": 2248,
+    "minimum_decision_index": 24,
+    "model_teacher_candidate_confusion": {
+      "model_0_to_teacher_2": 163,
+      "model_0_to_teacher_3": 46,
+      "model_2_to_teacher_0": 4,
+      "model_2_to_teacher_1": 4,
+      "model_2_to_teacher_3": 153,
+      "model_3_to_teacher_0": 203,
+      "model_3_to_teacher_2": 27
+    },
+    "objective_counts": {
+      "build_balanced_team": 586,
+      "help_bill": 5,
+      "reach_lavender": 7,
+      "rescue_fuji": 2
+    },
+    "reason_counts": {
+      "teacher_disagreement": 600
+    },
+    "records": 600,
+    "unique_decision_indices": 600
+  },
+  "decision_accounting": {
+    "accounting_complete": false,
+    "classified_decisions": 2247,
+    "model_executions": 1647,
+    "teacher_fallbacks": 600,
+    "total_decisions": 2260,
+    "unclassified_decisions": 13
+  },
+  "limitations": [
+    "The artifact records corrections, not all model proposals.",
+    "The thirteen unclassified decisions cannot be typed from this artifact.",
+    "Agreement confidence and confidence AUC cannot be computed without agreement records.",
+    "Teacher-disagreed model actions were not executed, so comparative outcomes are absent.",
+    "Feature projections omit raw species and moveset identities; clusters are semantic approximations."
+  ],
+  "private_path_fields": 0,
+  "promotion_eligible": false,
+  "refit_eligible": false,
+  "schema": "pokemon-battle-correction-diagnostic-audit-v1",
+  "source": {
+    "artifact_manifest_sha256": "c50f2486d88e90cbd1489a49ed2037e6d81711d1dfed5779053e3c328690dfe0",
+    "battle_model_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+    "git_commit": "66cd2d572545e2ef7d1988d3ad89aef1af9a4035"
+  }
+}

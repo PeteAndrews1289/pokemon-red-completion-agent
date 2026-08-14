@@ -8,6 +8,22 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-14): build three real scenario families
+
+Claude and Antigravity's first model-roadmap review is implemented and awaiting a second review.
+The active work is exactly three single-process scenario families—navigation, battle and party
+development—followed by a learner update and untouched-lineage evaluation. The synthetic substrate,
+exact live accounting, candidate-count audit, challenge-relative readiness and bankrupt-resource
+contracts are implemented; real snapshot adapters and live integration of those contracts are not.
+Do not add workers, a fourth family or a full run first.
+
+Crystal v2 is retired at zero access. Prospective V3 is
+[`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
+`b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+Its 54-context zero-shot paired primary endpoint has 82.3248% power at the declared useful effect;
+27 adaptation contexts support a mandatory prior-preserving three-label secondary analysis. It
+authorizes no private context access before publication and fresh external review.
+
 ## Superseded focus (2026-08-14): evaluate the Red learner before Crystal
 
 The owner has frozen Crystal as the later transfer test and moved the active lane back to Red—not
@@ -41,7 +57,7 @@ Ordered next work:
 8. Resume the paired Red-initialized versus scratch Crystal protocol. Later expand the shared
    mechanics toward breeding, trades, legendary puzzles and multi-version living-Pokédex work.
 
-## Current focus (2026-08-14): falsify transfer on Crystal
+## Superseded focus (2026-08-14): falsify transfer on Crystal v2
 
 The first genuine Red goal manager is trained and promoted to bounded live authority. Source
 `74922cc` produced 81/81 successful full rehearsals, 54 train episodes and 27 development-

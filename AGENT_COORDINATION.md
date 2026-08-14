@@ -1,5 +1,28 @@
 # Three-agent coordination
 
+> **2026-08-14 post-review model-first checkpoint — highest active checkpoint:** Claude and
+> Antigravity's conditions on `9d67772` are implemented and await a second read-only review. Live
+> accounting is now 2,260 battle decisions = 1,647 model executions + 600 teacher fallbacks + 13
+> explicitly unclassified historical exits; teacher agreement uses 2,247 classified comparisons.
+> The correction audit found 349 exact and 206 quantized clusters but no outcome labels, so no
+> correction refit is authorized. The single-process scenario substrate supports exactly
+> navigation, battle and party development; synthetic contract runs are not real training.
+> Challenge-relative readiness and a bankrupt collection/resource falsifier close the two portable
+> contract defects; migration of live title adapters to those contracts is still open. Milestones
+> 2–4 now have powered or precision-bound gates.
+>
+> Crystal v2 is retired unopened because ordinary adaptation erased initialization in the Red
+> calibration pilot. Prospective V3 uses 27 adaptation plus 54 sealed contexts; frozen Red versus
+> all-zero weights is the zero-shot primary endpoint with 82.3248% power at the declared useful
+> effect. It is explicitly closed to private access pending publication and fresh Claude and
+> Antigravity review. No ROM, teacher, sealed context, prediction or authority promotion occurred.
+> The complete ROM-free gate passes: 3,242 tests passed, three integration tests were deselected,
+> and one documented expected failure remained.
+> Start at `docs/evidence/model-first-measurement-audit-2026-08-14.json`,
+> `configs/crystal-goal-manager-transfer-v3.json`, and `docs/model-first-roadmap.md`. Next build the
+> three real snapshot-backed scenario adapters and obtain a learner update plus unseen result; do
+> not add a fourth family, another full replay or a Crystal context first.
+
 > **2026-08-14 model-first pivot — highest active checkpoint:** The owner rejected the project's
 > drift toward repeatedly hardening and replaying the deterministic Red teacher. The first Red
 > player v1 shadow run stopped safely after 1,250 balanced-team battles at levels

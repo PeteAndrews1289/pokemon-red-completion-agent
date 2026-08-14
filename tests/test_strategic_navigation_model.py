@@ -155,6 +155,10 @@ def test_model_beats_cheapest_route_on_synthetic_semantic_choices() -> None:
     assert metrics.paired_wins_over_route_cost == 6
     assert metrics.paired_losses_to_route_cost == 0
     assert metrics.paired_two_sided_exact_p == 0.03125
+    assert metrics.candidate_count_results == ((2, 6, 6),)
+    assert metrics.public_dict()["candidate_count_results"] == {
+        "2": {"correct": 6, "examples": 6, "accuracy": 1.0}
+    }
 
 
 def test_training_rejects_validation_examples() -> None:

@@ -1,0 +1,232 @@
+{
+  "claim": "The existing Red heads are real but uneven, the first live shadow run is fully accounted only after preserving thirteen historical unknown exits, and the old Crystal v2 experiment could not distinguish transferred initialization after ordinary adaptation. This checkpoint promotes no authority and opens no sealed or target-title context.",
+  "component_evidence": {
+    "battle_move_ranker": {
+      "all_validation": {
+        "correct": 1251,
+        "independent_root_lineages": 2,
+        "total": 1268
+      },
+      "free_choice_validation": {
+        "correct": 1125,
+        "majority_baseline_correct": 468,
+        "total": 1142
+      },
+      "limitation": "Teacher-choice accuracy is not battle-outcome evidence."
+    },
+    "destination_ranker": {
+      "all_validation": {
+        "correct": 10,
+        "independent_lineages": 12,
+        "paired_losses": 0,
+        "paired_wins": 6,
+        "route_cost_baseline_correct": 4,
+        "total": 12
+      },
+      "binary_candidate_subset": {
+        "training_correct": 8,
+        "training_route_cost_baseline_correct": 8,
+        "training_total": 13,
+        "validation_correct": 2,
+        "validation_paired_losses": 0,
+        "validation_paired_wins": 0,
+        "validation_route_cost_baseline_correct": 2,
+        "validation_total": 4
+      },
+      "wider_menu_subset": {
+        "combined_correct": 19,
+        "combined_total": 19,
+        "validation_correct": 8,
+        "validation_total": 8
+      },
+      "limitation": "All measured advantage over route cost occurs in menus wider than two candidates; the binary subset shows no advantage."
+    },
+    "goal_manager": {
+      "highest_pressure_baseline_correct": 25,
+      "independent_validation_contexts": 27,
+      "model_correct": 27,
+      "total": 27
+    },
+    "team_development_ranker": {
+      "genuine_multi_candidate_validation": {
+        "correct": 7023,
+        "shape_only_baseline_correct": 6725,
+        "total": 7030
+      },
+      "independent_validation_lineages": 1,
+      "limitation": "Thousands of decisions from one lineage do not constitute thousands of independent evaluations."
+    }
+  },
+  "crystal_design": {
+    "v2_retired_unopened": {
+      "adaptation_examples_collected": 0,
+      "predictions_computed": 0,
+      "sealed_contexts_opened": 0,
+      "zero_shot_contexts_opened": 0
+    },
+    "v3": {
+      "achieved_power": 0.8232483563301717,
+      "adaptation_contexts": 27,
+      "alpha": 0.05,
+      "authorized_for_private_context_access": false,
+      "comparator": "same architecture, normalizer, masking, and candidate menus with zero weights",
+      "external_reviews_required": [
+        "claude",
+        "antigravity"
+      ],
+      "minimum_contexts_for_target_power": 51,
+      "plan_sha256": "b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7",
+      "primary_candidate": "frozen Red weights without Crystal adaptation",
+      "primary_endpoint": "one-sided exact sign test conditional on discordance",
+      "sealed_independent_contexts": 54,
+      "smallest_useful_effect": {
+        "loss_probability": 0.2,
+        "tie_probability": 0.3,
+        "win_probability": 0.5
+      },
+      "target_power": 0.8
+    }
+  },
+  "future_runtime_observability": {
+    "exact_path_free_exception_message_retained_privately_when_safe": true,
+    "last_semantic_stage_and_policy_counters_retained": true,
+    "path_bearing_exception_message": "private record retains only its SHA-256 and an explicit redaction flag",
+    "public_receipt_contains_exception_message_sha256": true
+  },
+  "live_shadow_accounting": {
+    "accounting_complete": false,
+    "classified_decisions": 2247,
+    "corrections_saved": 600,
+    "model_execution_denominator": 2260,
+    "model_executions": 1647,
+    "teacher_agreement_denominator": 2247,
+    "teacher_fallbacks": 600,
+    "total_battle_decisions": 2260,
+    "unclassified_historical_decisions": 13
+  },
+  "live_shadow_correction_audit": {
+    "confidence": {
+      "corrections_below_selection_threshold": 0,
+      "maximum": 0.9999986444597219,
+      "mean": 0.8586697621511322,
+      "median": 0.8981285314286807,
+      "minimum": 0.40270081973832295,
+      "selection_threshold": 0.39994808298904233
+    },
+    "exact_feature_clusters": 349,
+    "outcomes_present": false,
+    "quantized_semantic_clusters": 206,
+    "records": 600,
+    "refit_eligible": false
+  },
+  "mission_falsifiers": {
+    "challenge_readiness": {
+      "contract_complete": true,
+      "falsifier": "Party readiness changes when the declared next-challenge target changes; it is not a global level-cap constant.",
+      "live_title_adapter_integration_complete": false
+    },
+    "resource_economy": {
+      "contract_complete": true,
+      "falsifier": "A collection goal with no capture items, purchase, sale, earning, or find route is blocked rather than repeatedly retried as acquisition.",
+      "live_title_adapter_integration_complete": false
+    },
+    "scenario_lab": {
+      "families": [
+        "navigation",
+        "battle",
+        "party_development"
+      ],
+      "real_snapshot_adapters_complete": false,
+      "rom_free_contract_episodes_per_family": 200,
+      "substrate_complete": true
+    }
+  },
+  "promotion_eligible": false,
+  "red_initialization_pilot": {
+    "context_scope": "27 already-open Red development validation contexts",
+    "crystal_contexts_opened": 0,
+    "independent_contexts": 27,
+    "ordinary_adaptation": {
+      "budgets": [
+        9,
+        18,
+        27
+      ],
+      "paired_losses_each_budget": 0,
+      "paired_wins_each_budget": 0,
+      "red_correct_each_budget": 27,
+      "scratch_correct_each_budget": 27,
+      "interpretation": "The convex fit erased the initialization distinction at every historical positive budget."
+    },
+    "prior_preserving_low_shot_rotations": {
+      "budget_2": {
+        "red_correct_range": [
+          27,
+          27
+        ],
+        "reused_rotation_losses_total": 0,
+        "reused_rotation_wins_total": 73,
+        "scratch_correct_range": [
+          13,
+          24
+        ]
+      },
+      "budget_3": {
+        "red_correct_range": [
+          27,
+          27
+        ],
+        "reused_rotation_losses_total": 0,
+        "reused_rotation_wins_total": 62,
+        "scratch_correct_range": [
+          13,
+          27
+        ]
+      },
+      "budget_6": {
+        "red_correct_range": [
+          27,
+          27
+        ],
+        "reused_rotation_losses_total": 0,
+        "reused_rotation_wins_total": 25,
+        "scratch_correct_range": [
+          18,
+          27
+        ]
+      },
+      "limitation": "Nine rotations reuse the same 27 development contexts and are descriptive, not independent evidence."
+    },
+    "sealed_red_destination_contexts_opened": 0,
+    "transfer_claim": false
+  },
+  "schema": "pokemon-model-first-measurement-audit-v1",
+  "source_artifacts": {
+    "battle_correction_audit": {
+      "file": "docs/evidence/red-player-v1-correction-audit-2026-08-14.json",
+      "sha256": "38dcb1a1c9f8118789a4221f21647010595644a8315914d14f07124f9bad93dc"
+    },
+    "destination_development": {
+      "file": "docs/evidence/strategic-navigation-linear-development-2026-08-13.json",
+      "sha256": "ea6ab43761c4c274812b6fc38ed3ece25bc48f83d658cd8b22a391ab71ea5612"
+    },
+    "goal_manager_promotion": {
+      "file": "docs/evidence/red-goal-manager-promotion-2026-08-14.json",
+      "sha256": "888e3e881e63cb99ba84f7110e782be19b598f1d9af7d08d4bce8244ea506407"
+    },
+    "red_training_start": {
+      "file": "docs/evidence/red-player-v1-training-start-2026-08-14.json",
+      "sha256": "32a47667e7dc15d8bd12358b3c1cd7854ab201add5e22e393e1d6fc47fa508cb"
+    },
+    "shadow_failure": {
+      "file": "docs/evidence/red-player-v1-shadow-failure-2026-08-14.json",
+      "sha256": "3888e263073136a0c1f6ea67e7b762af99db73e0b1ffd5296ef5a917d996c5e7"
+    },
+    "team_development": {
+      "file": "docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json",
+      "sha256": "8c2b0fdaeccfdfc7b300daf026145da1daab4dbc062b1ebcfc986236b324ad97"
+    }
+  },
+  "target_title_contexts_opened": 0,
+  "test_partitions_opened": 0
+}

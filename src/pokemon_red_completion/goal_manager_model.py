@@ -300,6 +300,7 @@ class GoalManagerLinearModel:
             learning_rate=float(learning_rate),
             l2=float(l2),
             frozen_zero_mask=inactive,
+            regularization_center=None,
         )
         return cls(
             weights=weights,
@@ -341,12 +342,60 @@ class GoalManagerLinearModel:
             learning_rate=float(learning_rate),
             l2=float(l2),
             frozen_zero_mask=None,
+            regularization_center=None,
         )
         return GoalManagerLinearModel(
             weights=weights,
             feature_mean=self.feature_mean.copy(),
             feature_scale=self.feature_scale.copy(),
             l2=float(l2),
+            training_epochs=epochs,
+        )
+
+    def adapt_from_prior(
+        self,
+        examples: Iterable[GoalManagerExample],
+        *,
+        epochs: int = GOAL_MANAGER_FIT_EPOCHS,
+        learning_rate: float = GOAL_MANAGER_FIT_LEARNING_RATE,
+        prior_strength: float = GOAL_MANAGER_FIT_L2,
+    ) -> GoalManagerLinearModel:
+        """Adapt while regularizing toward the candidate's initial weights.
+
+        A convex linear scorer trained to convergence with ordinary weight
+        decay forgets whether it started from Red or from zero.  That makes an
+        initialization comparison structurally uninformative.  This paired
+        transfer primitive instead treats each initialization as a fixed MAP
+        prior: both candidates use the same examples, normalizer, optimizer,
+        update count, and prior strength; only the prior center differs.
+        """
+
+        rows = _validated_goal_manager_fit_rows(examples, partition="adaptation")
+        _validate_goal_manager_optimizer(
+            epochs=epochs,
+            learning_rate=learning_rate,
+            l2=prior_strength,
+        )
+        matrices = tuple(goal_manager_feature_matrix(item.question) for item in rows)
+        normalized = tuple(
+            (matrix - self.feature_mean) / self.feature_scale for matrix in matrices
+        )
+        prior = self.weights.copy()
+        weights = _optimize_goal_manager_weights(
+            rows,
+            normalized,
+            initial_weights=prior,
+            epochs=epochs,
+            learning_rate=float(learning_rate),
+            l2=float(prior_strength),
+            frozen_zero_mask=None,
+            regularization_center=prior,
+        )
+        return GoalManagerLinearModel(
+            weights=weights,
+            feature_mean=self.feature_mean.copy(),
+            feature_scale=self.feature_scale.copy(),
+            l2=float(prior_strength),
             training_epochs=epochs,
         )
 
@@ -394,6 +443,24 @@ def goal_manager_adaptation_configuration() -> dict[str, object]:
         "schema": "pokemon-core-goal-manager-adaptation-configuration-v1",
         "scratch_weights": "all_zero",
         "training_order": "registry_order",
+    }
+
+
+def goal_manager_prior_adaptation_configuration() -> dict[str, object]:
+    """Return the transfer configuration that preserves initialization as a prior."""
+
+    return {
+        "epochs_per_budget": GOAL_MANAGER_FIT_EPOCHS,
+        "learning_rate": GOAL_MANAGER_FIT_LEARNING_RATE,
+        "model_id": GOAL_MANAGER_MODEL_ID,
+        "normalization": "frozen_authenticated_source_for_both_candidates",
+        "prior_center": "each_candidates_initial_weights",
+        "prior_strength": GOAL_MANAGER_FIT_L2,
+        "red_initialized_prior": "authenticated_source_weights",
+        "reset_from_prior_at_each_budget": True,
+        "schema": "pokemon-core-goal-manager-prior-adaptation-configuration-v1",
+        "scratch_prior": "all_zero",
+        "training_order": "preregistered_order",
     }
 
 
@@ -451,8 +518,16 @@ def _optimize_goal_manager_weights(
     learning_rate: float,
     l2: float,
     frozen_zero_mask: NDArray[np.bool_] | None,
+    regularization_center: NDArray[np.float64] | None,
 ) -> NDArray[np.float64]:
     weights = np.asarray(initial_weights, dtype=np.float64).copy()
+    center = (
+        np.zeros_like(weights)
+        if regularization_center is None
+        else np.asarray(regularization_center, dtype=np.float64).copy()
+    )
+    if center.shape != weights.shape or not np.all(np.isfinite(center)):
+        raise GoalManagerModelError("goal-manager regularization center is invalid")
     first = np.zeros_like(weights)
     second = np.zeros_like(weights)
     for epoch in range(1, epochs + 1):
@@ -467,7 +542,7 @@ def _optimize_goal_manager_weights(
             target_position = int(np.flatnonzero(available == target)[0])
             probabilities[target_position] -= 1.0
             gradient += features[available].T @ probabilities
-        gradient = gradient / len(rows) + l2 * weights
+        gradient = gradient / len(rows) + l2 * (weights - center)
         if frozen_zero_mask is not None:
             gradient[frozen_zero_mask] = 0.0
         first = 0.9 * first + 0.1 * gradient

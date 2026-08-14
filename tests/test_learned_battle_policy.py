@@ -506,6 +506,9 @@ def test_teacher_free_policy_preserves_unsupported_observation_cause() -> None:
     assert policy.teacher_queries == 0
     assert policy.teacher_fallbacks == 0
     assert policy.unsupported_observation_errors == {"KeyError": 1}
+    assert policy.failed_decisions == 1
+    assert policy.interrupted_decisions == 0
+    assert policy.public_dict()["decision_accounting_complete"] is True
     assert policy.public_dict()["unsupported_observation_errors"] == {"KeyError": 1}
     assert policy.public_dict()["last_unsupported_observation"] == {
         "active_party_hp": None,
@@ -524,6 +527,27 @@ def test_teacher_free_policy_preserves_unsupported_observation_cause() -> None:
         "required_move_policy": "any_usable",
         "required_move_ref": None,
     }
+
+
+def test_interrupted_decision_is_counted_before_propagation() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+    )
+
+    def interrupt_teacher() -> int:
+        raise KeyboardInterrupt
+
+    with pytest.raises(KeyboardInterrupt):
+        policy.choose_move(_observation(), interrupt_teacher)
+
+    report = policy.public_dict()
+    assert report["interrupted_decisions"] == 1
+    assert report["accounted_decisions"] == 1
+    assert report["decision_accounting_complete"] is True
 
 
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:
@@ -565,6 +589,10 @@ def test_shadow_teacher_records_typed_control_signal() -> None:
 
     assert policy.control_records == 1
     assert policy.typed_non_move_control_records == 1
+    assert policy.non_move_control_decisions == 1
+    assert policy.returned_move_decisions == 0
+    assert policy.public_dict()["accounted_decisions"] == 1
+    assert policy.public_dict()["returned_move_accounting_gap"] == 0
     assert policy.control_signals == {"pokemon.core:battle:recovery": 1}
     assert records[0]["teacher_action"] == BattleAction.recovery().public_dict()
 
@@ -670,6 +698,11 @@ def test_control_sink_records_normal_model_move() -> None:
     assert 1 <= chosen <= 4
     assert policy.control_records == 1
     assert policy.typed_non_move_control_records == 0
+    assert policy.returned_move_decisions == 1
+    assert policy.non_move_control_decisions == 0
+    assert policy.failed_decisions == 0
+    assert policy.interrupted_decisions == 0
+    assert policy.public_dict()["decision_accounting_complete"] is True
     assert policy.control_signals == {f"pokemon.core:battle:move:{chosen}": 1}
     assert records[0]["teacher_action"] == BattleAction.move(chosen).public_dict()
 

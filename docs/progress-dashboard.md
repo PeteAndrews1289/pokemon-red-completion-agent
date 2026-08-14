@@ -18,22 +18,24 @@ needed to understand what the agent is doing and how far the experiment has prog
 - the model's current goal choice, confidence, teacher-query count and fallback count;
 - registered, living and level-cap collection totals, capture supplies and free storage;
 - party levels, health and status plus the currently available goal pressures;
-- either the Crystal 18/27/27 transfer counters or the Red fitted/gated/live-run counters;
-- each Red learned head's role, authority, train/validation samples, validation score, comparison
-  baseline and model fingerprint;
-- live Red teacher agreement, execution coverage, saved corrections, low-confidence and unsupported
-  contexts, plus team-development shadow accuracy; and
+- either the prospective Crystal V3 27-adaptation/54-sealed boundary or the Red
+  fitted/gated/live-run counters;
+- each Red learned head's role, authority, exact correct/total pair, independent validation units,
+  paired comparison, candidate-count subset and model fingerprint;
+- live Red teacher agreement over classified comparisons, execution over all decisions, saved
+  corrections, low-confidence, unsupported, non-move, failed and unclassified decisions, plus
+  exact team-development agreement; and
 - recent identity-safe evidence events.
 
 The initial Crystal preview intentionally shows zero model and experiment progress. It authenticates
 the 1.1 cartridge and proves the display path without opening a context, asking the teacher, making
 a prediction, sending controller input or saving cartridge state.
 
-## Start the Red training evaluation
+## Historical Red full-run harness — not currently authorized
 
-The Red runner is the first full-game evaluation of the freshly fitted hierarchical learner. It
-requires a clean commit that is already pushed, the exact frozen battle and team-development
-candidates, and an initialized private artifact root for disagreements:
+The command below produced the failed 85-million-frame shadow evidence. It is retained for
+reproducibility, but `NORTH_STAR.md` prohibits another full run until the bounded scenario gates
+pass. Do not launch it merely to populate the dashboard:
 
 ```sh
 source .venv/bin/activate
@@ -49,7 +51,7 @@ The page opens at `http://127.0.0.1:8765/` and stays available after the run unt
 `--no-browser` reuses a window already showing that address; `--hold-seconds 300` closes five
 minutes after the terminal result.
 
-This is deliberately teacher-supervised. A confident battle proposal executes only when the
+The historical run was deliberately teacher-supervised. A confident battle proposal executed only when the
 teacher agrees; disagreement or low confidence executes the teacher's choice and saves a private
 correction. The team-development ranker is measured but has no execution authority. The fitted
 goal manager and destination ranker appear in the learned-stack table but remain offline in this
@@ -117,6 +119,12 @@ validated, identity-safe snapshot to the display; the display never feeds data o
 back into the agent. Private paths, raw memory addresses and binding identities are excluded from
 the status document.
 
+The next active display target is the single-process navigation/battle/party-development scenario
+lab. It should show bounded episode throughput, untouched-lineage outcomes, interventions and exact
+failures only after real snapshot-backed adapters exist; synthetic contract tests must not move a
+training counter.
+
 The same observer boundary is intended for live qualification, demonstration collection, model
 fitting, zero-shot evaluation and later causal runs. A counter advances only when the corresponding
-authenticated workflow publishes real progress.
+authenticated workflow publishes real progress. Crystal V3 remains at zero and private-context
+access remains false until the published plan passes both external reviews.

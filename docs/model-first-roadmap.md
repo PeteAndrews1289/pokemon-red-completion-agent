@@ -83,33 +83,32 @@ experiments.
 
 Purpose: turn hours-long failures into seconds- or minutes-long experiments.
 
-Build a private development-state bank and a ROM-free public catalog for:
+Build a private development-state bank and a ROM-free public catalog for exactly three initial
+families:
 
 - local navigation and displaced starts;
-- wild and trainer battles;
-- party rotation and grinding;
-- healing, resupply, storage, and recovery decisions;
-- catching and evolution;
-- story and collection goal selection;
-- representative puzzles and field-move prerequisites.
+- wild and trainer battles; and
+- party rotation and grinding.
+
+Healing, resupply, storage, catching, evolution, story selection, collection and puzzles are
+explicitly deferred until these three families have produced a learner update and an unseen result.
 
 Each scenario declares semantic initial state, allowed actions, randomization dimensions, independent
 success verifier, maximum actions/frames, intervention policy, and privacy-safe result schema.
 Development snapshots never become sealed-test evidence.
 
-Infrastructure requirements:
+Initial infrastructure requirements:
 
 - deterministic replay when needed, with private snapshot restore for iteration;
 - randomized action timing, RNG offsets, positions, teams, HP/PP, inventory, and candidate order;
-- parallel headless workers after a measured CPU/memory benchmark;
-- interruption-safe episode storage on the external drive;
-- dashboard aggregation across workers;
+- one bounded process; parallel workers require a later measured throughput bottleneck;
+- interruption-safe episode records without a cross-worker platform; and
 - exact exception messages and bounded failure classifications.
 
 Exit gate:
 
-- at least one scenario family for navigation, battle, and training can execute hundreds of episodes
-  without a full-game replay;
+- one real snapshot-backed scenario family for each of navigation, battle, and training can execute
+  at least 200 bounded episodes without a full-game replay;
 - partitions and state lineages are explicit;
 - test scenarios remain untouched during fitting;
 - a failed episode identifies its exact guard and last semantic state.
@@ -142,15 +141,26 @@ Training curriculum:
 - Red development maps first, then the already-qualified Crystal corridor as an early transfer
   probe.
 
-Provisional exit gate, frozen before evaluation:
+Prospective exit design, frozen before evaluation:
 
-- at least 95% arrival on unseen randomized local tasks;
-- zero unbounded loops;
-- median executed path no more than 1.25 times the shortest currently traversable path;
-- no more than one blocked retry per 100 acknowledged movement steps, excluding deliberate
-  dynamic-obstacle probes;
-- at least 95% recovery from a one-step displacement;
-- measurable above-zero zero-shot success on the Crystal corridor before adaptation.
+- **Red arrival:** `n = 100` independent unseen randomized tasks. The statistic is successful
+  verified arrival; the comparator is a 90% minimum useful success null. An exact one-sided
+  binomial test passes only at 96/100 or better (`alpha = 0.02371`), with 81.8% power at a true 97%
+  success rate.
+- **Displacement recovery:** a separate `n = 100` unseen one-step perturbations uses the same
+  statistic, null, 96/100 decision rule and power calculation.
+- **Path overhead:** on the 100 arrival tasks, compare executed acknowledged steps with the
+  independently computed shortest currently traversable path. The upper one-sided 95% bootstrap
+  bound for the median ratio must be at most 1.25. All resampling details and the randomization seed
+  are frozen before results.
+- **Collision and termination safety:** accumulate at least 10,000 acknowledged movement steps. The
+  exact one-sided 95% Poisson upper bound must be at most one unintended blocked retry per 100
+  steps, and all 200 arrival/recovery episodes must terminate within their declared bound.
+- **Crystal zero-shot transfer:** use 54 independent, prospectively frozen corridor tasks and the
+  same inputs for a frozen-Red controller and an identical zero-initialized control. The statistic
+  is discordant task wins/losses; the rule is a one-sided exact sign test at `alpha = 0.05`.
+  At the smallest useful effect (win 0.50, loss 0.20, tie 0.30), power is 82.3%. One success no
+  longer passes this gate.
 
 Stop rule: if two iterations improve a Red route but not randomized displacement recovery, stop
 patching that route and revise the representation or planner.
@@ -172,14 +182,25 @@ Work:
   success, and objective satisfaction;
 - introduce trainer and wild scenario randomization before any full-route authority.
 
-Provisional exit gate, frozen before evaluation:
+Prospective exit design, frozen before evaluation:
 
-- 100% legal choices;
-- at least 95% objective success on unseen bounded battles;
-- less than 5% teacher intervention on supported unseen states;
-- no regression on required-move, capture, escape, or protected-party safety cases;
-- efficiency no worse than the teacher on a preregistered composite of turns, HP, and PP;
-- disagreement clusters are judged by outcomes rather than forced into agreement.
+- Use `n = 200` independent unseen bounded battles, stratified before collection across trainer,
+  wild, capture, escape, required-move and protected-party cases. Failed observations and exceptions
+  stay in the denominator.
+- **Objective success:** the statistic is independently verified objective completion. Require at
+  least 190/200. Against a 90% success null this exact one-sided rule has `alpha = 0.00807` and
+  96.0% power at a true 97% success rate.
+- **Intervention:** the statistic is any teacher intervention among all 200 attempts, not only
+  supported states. Require at most 9/200. Against a 10% intervention null this rule has
+  `alpha = 0.00353` and 91.9% power at a true 3% intervention rate.
+- **Legality and hard safety:** require 200/200 legal choices, zero protected-party violations and
+  no regression in any preregistered required-move, capture or escape stratum. These are hard
+  safety constraints rather than estimated competence claims.
+- **Efficiency non-inferiority:** replay the model and frozen teacher from the same state/RNG
+  schedule. A case is non-inferior when the preregistered turns/HP/PP cost is no more than 10% worse
+  than the teacher, with model failure counted as inferior. Require at least 190/200; against a 90%
+  within-margin null this has the same `alpha = 0.00807` and 96.0% power at a true 97% rate.
+- Disagreement clusters are judged by these outcomes rather than forced into agreement.
 
 Stop rule: if a label audit shows the teacher's choice is outcome-equivalent or worse, do not add it
 as a correction target. Change the objective or mark the choices equivalent.
@@ -206,15 +227,27 @@ The starter may remain an emergency escort, but should not be the default fighte
 its role target. Rotate to another viable trainee before healing. A faint is a costly outcome, not an
 automatic catastrophe; blackouts and unrecoverable losses remain hard failures.
 
-Provisional exit gate, frozen before evaluation:
+Prospective exit design, frozen before evaluation:
 
-- at least five completed training battles per Center visit on the median unseen episode;
-- at least three times the current experience-per-frame baseline;
-- zero blackouts and bounded faint rate;
-- every selected trainee gains experience or the policy explains a verified blocker;
-- evolution targets complete across randomized encounter timing;
-- the policy recognizes when a different venue is more efficient;
-- Red trainees and a bounded Crystal trainee task use the same semantic policy interface.
+- First publish a path-free bounded-scenario baseline receipt and freeze its digest. The historical
+  full-run receipt is not an experience-per-frame baseline because it did not retain experience.
+- Use `n = 120` paired unseen Red episodes, each evaluated against that frozen teacher policy from
+  the same initial state and RNG schedule. A win for the primary efficiency statistic means at
+  least three times the baseline experience per frame. Require at least 70/120 wins. Against a 50%
+  win null the exact one-sided rule has `alpha = 0.04120` and 94.7% power when the true win rate is
+  65%.
+- Use the same 120 episodes for Center efficiency: at least 70/120 must complete five or more
+  training battles per Center visit. This uses the same null, rule and power calculation.
+- Require zero blackouts, at most six total faints across 120 episodes, and a verified experience
+  gain or explicit semantic blocker for every selected trainee. The faint bound is now explicit.
+- At least 60 preregistered episodes must contain an evolution target; require 60/60 independently
+  verified evolutions despite randomized encounter timing.
+- Venue choice uses all 120 paired episodes against the frozen fixed-venue baseline. A one-sided
+  exact sign test at `alpha = 0.05`, with smallest useful win/loss/tie probabilities
+  0.25/0.08/0.67, has 94.4% power.
+- A separate 54-context Crystal trainee protocol must compare frozen Red initialization with an
+  identical zero-initialized control. At win/loss/tie 0.50/0.20/0.30, the one-sided paired exact
+  design has 82.3% power. No Crystal context opens until that protocol is frozen and reviewed.
 
 Stop rule: if a change lowers Center visits by using the overlevelled starter more often, reject it;
 it improved the metric by deleting the learning problem.
@@ -329,8 +362,13 @@ Learned authority gained: composed Red play.
 
 Purpose: measure whether Red knowledge reduces teaching, not build a second walkthrough.
 
-Preserve the frozen Crystal v2 partitions. Before opening them, use only separately declared
-development tasks for:
+Crystal v2 is retired with zero contexts, labels or predictions opened: ordinary convex adaptation
+erased the initialization difference in the already-open Red calibration pilot, and its zero-loss
+success conjunction had only 34.2% power at win/loss/tie probabilities 0.70/0.10/0.20. Preserve v2
+as history; never reuse its identities.
+
+The prospective v3 goal-manager experiment makes zero-shot transfer primary. Before opening it,
+use only separately declared development tasks for:
 
 - the already-qualified local corridor;
 - one battle choice;
@@ -338,15 +376,20 @@ development tasks for:
 - one goal choice;
 - one collection dependency.
 
-Compare the same shared model initialized from Red against a zero-initialized control with identical
-adapters, preprocessing, updates, and budgets. Add only thin Crystal observation and mechanic
-bindings; do not encode a Crystal route.
+V3 uses 54 independent sealed contexts with at least three candidates each. It compares frozen Red
+weights against the same architecture, normalizer, masking and menus with zero weights. The primary
+statistic is discordant wins/losses under a one-sided exact sign test at `alpha = 0.05`; at the
+declared smallest useful effect 0.50/0.20/0.30 it has 82.3% power. A mandatory secondary analysis
+uses 27 separate adaptation contexts in nine three-label folds and prior-preserving adaptation;
+only the prior center differs. Add only thin Crystal observation and mechanic bindings; do not
+encode a Crystal route.
 
 Exit gate:
 
 - all sealed protocol preconditions hold;
-- zero-shot results are committed before teaching;
-- Red initialization is compared against the control at identical adaptation budgets;
+- all frozen-Red and zero-weight predictions are committed before any sealed label;
+- the primary paired result uses all 54 contexts without optional stopping;
+- prior-preserving secondary candidates use identical folds, optimizer, normalizer and strength;
 - shared-policy failures are separated from missing game-specific capabilities;
 - transfer claims follow the frozen paired endpoint.
 
@@ -376,6 +419,11 @@ Long-term completion evidence reports:
 
 ## Dashboard redesign
 
+Only the exact numerator/denominator, independent-lineage, candidate-count and bounded-failure
+fields needed by the first three scenario families are active now. Worker aggregation and the
+broader observatory redesign remain deferred until those families produce a learner update and an
+unseen result.
+
 The observatory should prioritize learning and generalization rather than elapsed route progress:
 
 - episode throughput and worker health;
@@ -400,8 +448,8 @@ metric.
 3. Milestones 2–4 in parallel only after the laboratory supports them; integrate one at a time.
 4. Milestone 5: online hierarchy.
 5. Milestone 6: living-Pokédex planner and bounded acquisition chains.
-6. Milestone 8 development probes may begin after Milestones 2–5 have shared interfaces; frozen
-   Crystal evaluation remains sealed until authorized.
+6. Milestone 8 development probes may begin after Milestones 2–5 have shared interfaces; Crystal
+   v2 stays retired and prospective v3 remains sealed and review-gated until authorized.
 7. Milestone 7 full Red integration only after bounded gates pass.
 8. Milestone 9 follows demonstrated Red-to-Crystal transfer.
 

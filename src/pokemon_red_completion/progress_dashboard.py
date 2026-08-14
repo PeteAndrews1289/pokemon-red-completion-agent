@@ -166,9 +166,15 @@ class DashboardLearningComponent:
     authority: str
     train_examples: int
     validation_examples: int
-    validation_accuracy: float | None
-    baseline_accuracy: float | None
+    validation_correct: int
+    baseline_correct: int | None
     model_sha256: str
+    independent_validation_units: int
+    baseline_id: str | None = None
+    paired_wins: int | None = None
+    paired_losses: int | None = None
+    paired_two_sided_exact_p: float | None = None
+    candidate_count_results: tuple[tuple[int, int, int], ...] = ()
 
     def __post_init__(self) -> None:
         _plain_text(self.name, subject="learning component name", maximum=64)
@@ -179,12 +185,67 @@ class DashboardLearningComponent:
             raise ProgressDashboardError("learning component authority is unknown")
         _count(self.train_examples, subject="learning component train examples")
         _count(self.validation_examples, subject="learning component validation examples")
-        if self.validation_accuracy is not None:
-            _unit_interval(self.validation_accuracy, subject="learning component accuracy")
-        if self.baseline_accuracy is not None:
-            _unit_interval(self.baseline_accuracy, subject="learning component baseline accuracy")
+        _count(self.validation_correct, subject="learning component validation correct")
+        if self.validation_correct > self.validation_examples:
+            raise ProgressDashboardError(
+                "learning component validation correct cannot exceed examples"
+            )
+        if self.baseline_correct is not None:
+            _count(self.baseline_correct, subject="learning component baseline correct")
+            if self.baseline_correct > self.validation_examples:
+                raise ProgressDashboardError(
+                    "learning component baseline correct cannot exceed examples"
+                )
+        _count(
+            self.independent_validation_units,
+            subject="learning component independent validation units",
+        )
+        if self.independent_validation_units > self.validation_examples:
+            raise ProgressDashboardError(
+                "independent validation units cannot exceed validation examples"
+            )
+        if self.baseline_id is not None:
+            _plain_text(self.baseline_id, subject="learning component baseline", maximum=64)
+        paired = (self.paired_wins, self.paired_losses, self.paired_two_sided_exact_p)
+        if any(value is not None for value in paired):
+            if any(value is None for value in paired):
+                raise ProgressDashboardError("paired comparison must be complete")
+            assert self.paired_wins is not None
+            assert self.paired_losses is not None
+            assert self.paired_two_sided_exact_p is not None
+            _count(self.paired_wins, subject="learning component paired wins")
+            _count(self.paired_losses, subject="learning component paired losses")
+            _unit_interval(
+                self.paired_two_sided_exact_p,
+                subject="learning component paired p-value",
+            )
+        seen_candidate_counts: set[int] = set()
+        for candidate_count, correct, total in self.candidate_count_results:
+            if candidate_count < 2 or candidate_count in seen_candidate_counts:
+                raise ProgressDashboardError("candidate-count result identity is invalid")
+            seen_candidate_counts.add(candidate_count)
+            _count(correct, subject="candidate-count correct")
+            _count(total, subject="candidate-count total")
+            if total == 0 or correct > total:
+                raise ProgressDashboardError("candidate-count result is invalid")
         if re.fullmatch(r"[0-9a-f]{64}", self.model_sha256) is None:
             raise ProgressDashboardError("learning component model SHA-256 is invalid")
+
+    @property
+    def validation_accuracy(self) -> float | None:
+        return (
+            self.validation_correct / self.validation_examples
+            if self.validation_examples
+            else None
+        )
+
+    @property
+    def baseline_accuracy(self) -> float | None:
+        return (
+            self.baseline_correct / self.validation_examples
+            if self.baseline_correct is not None and self.validation_examples
+            else None
+        )
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -194,8 +255,29 @@ class DashboardLearningComponent:
             "authority": self.authority,
             "train_examples": self.train_examples,
             "validation_examples": self.validation_examples,
+            "validation_correct": self.validation_correct,
             "validation_accuracy": self.validation_accuracy,
+            "baseline_correct": self.baseline_correct,
             "baseline_accuracy": self.baseline_accuracy,
+            "baseline_id": self.baseline_id,
+            "independent_validation_units": self.independent_validation_units,
+            "paired_comparison": (
+                {
+                    "wins": self.paired_wins,
+                    "losses": self.paired_losses,
+                    "two_sided_exact_p": self.paired_two_sided_exact_p,
+                }
+                if self.paired_wins is not None
+                else None
+            ),
+            "candidate_count_results": {
+                str(candidate_count): {
+                    "correct": correct,
+                    "total": total,
+                    "accuracy": correct / total,
+                }
+                for candidate_count, correct, total in self.candidate_count_results
+            },
             "model_sha256": self.model_sha256,
         }
 
@@ -212,6 +294,10 @@ class DashboardLiveEvaluationState:
     corrections_saved: int = 0
     low_confidence_fallbacks: int = 0
     unsupported_observations: int = 0
+    non_move_control_decisions: int = 0
+    failed_decisions: int = 0
+    interrupted_decisions: int = 0
+    unclassified_decisions: int = 0
     team_decisions: int = 0
     team_agreements: int = 0
 
@@ -225,6 +311,10 @@ class DashboardLiveEvaluationState:
             "corrections_saved",
             "low_confidence_fallbacks",
             "unsupported_observations",
+            "non_move_control_decisions",
+            "failed_decisions",
+            "interrupted_decisions",
+            "unclassified_decisions",
             "team_decisions",
             "team_agreements",
         ):
@@ -243,6 +333,19 @@ class DashboardLiveEvaluationState:
             raise ProgressDashboardError("typed fallbacks cannot exceed teacher fallbacks")
         if self.team_agreements > self.team_decisions:
             raise ProgressDashboardError("team agreements cannot exceed team decisions")
+        accounted = (
+            self.teacher_agreements
+            + self.teacher_fallbacks
+            + self.non_move_control_decisions
+            + self.failed_decisions
+            + self.interrupted_decisions
+            + self.unclassified_decisions
+        )
+        if accounted != self.battle_decisions:
+            raise ProgressDashboardError(
+                "battle decisions must equal model executions, teacher fallbacks, control "
+                "decisions, failures, and explicitly unclassified decisions"
+            )
 
     def public_dict(self) -> dict[str, object]:
         comparisons = self.teacher_agreements + self.teacher_disagreements
@@ -255,14 +358,22 @@ class DashboardLiveEvaluationState:
             "corrections_saved": self.corrections_saved,
             "low_confidence_fallbacks": self.low_confidence_fallbacks,
             "unsupported_observations": self.unsupported_observations,
+            "non_move_control_decisions": self.non_move_control_decisions,
+            "failed_decisions": self.failed_decisions,
+            "interrupted_decisions": self.interrupted_decisions,
+            "unclassified_decisions": self.unclassified_decisions,
+            "accounted_decisions": self.battle_decisions,
+            "decision_accounting_complete": self.unclassified_decisions == 0,
             "teacher_agreement_rate": (
                 self.teacher_agreements / comparisons if comparisons else None
             ),
+            "teacher_agreement_denominator": comparisons,
             "model_execution_rate": (
                 self.teacher_agreements / self.battle_decisions
                 if self.battle_decisions
                 else None
             ),
+            "model_execution_denominator": self.battle_decisions,
             "team_decisions": self.team_decisions,
             "team_agreements": self.team_agreements,
             "team_accuracy": (
@@ -894,14 +1005,20 @@ function barRow(label, value) {
   wrap.append(row, bar); return wrap;
 }
 function accuracy(value) { return value == null ? "—" : pct(value); }
+function exactScore(correct, total) {
+  if (correct == null || total == null || Number(total) === 0) return "—";
+  return `${fmt(correct)}/${fmt(total)} (${accuracy(Number(correct) / Number(total))})`;
+}
 function componentRow(component) {
   const row = document.createElement("div"); row.className = "component";
   const name = document.createElement("div"); name.className = "component-name";
   const title = document.createElement("strong"); title.textContent = component.name;
-  const scope = document.createElement("span"); scope.textContent = component.scope; name.append(title, scope);
+  const scope = document.createElement("span");
+  const candidateAudit = Object.entries(component.candidate_count_results || {}).map(([count, result]) => `${count}-way ${result.correct}/${result.total}`).join(" · ");
+  scope.textContent = candidateAudit ? `${component.scope} · candidate audit: ${candidateAudit}` : component.scope; name.append(title, scope);
   const authority = document.createElement("div"); authority.className = "component-status"; authority.textContent = `${component.status} · ${component.authority.replaceAll("_", " ")}`;
-  const samples = document.createElement("div"); samples.className = "component-stat"; samples.textContent = `${fmt(component.train_examples)} train · ${fmt(component.validation_examples)} val`;
-  const score = document.createElement("div"); score.className = "component-stat"; score.textContent = `${accuracy(component.validation_accuracy)} vs ${accuracy(component.baseline_accuracy)}`;
+  const samples = document.createElement("div"); samples.className = "component-stat"; samples.textContent = `${fmt(component.train_examples)} train · ${fmt(component.independent_validation_units)} independent val units`;
+  const score = document.createElement("div"); score.className = "component-stat"; score.textContent = `${exactScore(component.validation_correct, component.validation_examples)} vs ${exactScore(component.baseline_correct, component.validation_examples)}`;
   const digest = document.createElement("div"); digest.className = "component-digest"; digest.textContent = component.model_sha256.slice(0, 10);
   row.append(name, authority, samples, score, digest); return row;
 }
@@ -927,9 +1044,10 @@ function render(data) {
   const live = data.live_evaluation;
   el("live-evaluation-panel").hidden = !live;
   if (live) {
-    safeText("agreement-rate", accuracy(live.teacher_agreement_rate)); safeText("execution-rate", accuracy(live.model_execution_rate));
-    safeText("corrections", fmt(live.corrections_saved)); safeText("team-accuracy", accuracy(live.team_accuracy));
-    safeText("evaluation-detail", `${fmt(live.battle_decisions)} battle choices · ${fmt(live.teacher_disagreements)} disagreements · ${fmt(live.low_confidence_fallbacks)} low-confidence · ${fmt(live.unsupported_observations)} unsupported · ${fmt(live.team_decisions)} team choices`);
+    safeText("agreement-rate", exactScore(live.teacher_agreements, live.teacher_agreement_denominator)); safeText("execution-rate", exactScore(live.teacher_agreements, live.model_execution_denominator));
+    safeText("corrections", fmt(live.corrections_saved)); safeText("team-accuracy", exactScore(live.team_agreements, live.team_decisions));
+    const accounting = live.decision_accounting_complete ? "complete accounting" : `${fmt(live.unclassified_decisions)} historical unclassified`;
+    safeText("evaluation-detail", `${fmt(live.battle_decisions)} battle choices · ${fmt(live.teacher_disagreements)} typed disagreements · ${fmt(live.low_confidence_fallbacks)} low-confidence · ${fmt(live.unsupported_observations)} unsupported · ${fmt(live.non_move_control_decisions)} non-move · ${fmt(live.failed_decisions)} failed · ${fmt(live.interrupted_decisions)} interrupted · ${accounting}`);
   }
   const componentPanel = el("learning-components-panel"); const components = el("learning-components");
   componentPanel.hidden = !data.learning_components.length; components.replaceChildren(...data.learning_components.map(componentRow));

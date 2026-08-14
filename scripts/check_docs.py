@@ -8,12 +8,16 @@ from urllib.parse import unquote
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 IGNORED_PREFIXES = ("#", "http://", "https://", "mailto:")
+IGNORED_DIRECTORIES = {".git", ".venv", "scratch"}
 
 
 def main() -> int:
     problems: list[str] = []
     for document in sorted(PROJECT_ROOT.rglob("*.md")):
-        if any(part in {".git", ".venv"} for part in document.relative_to(PROJECT_ROOT).parts):
+        if any(
+            part in IGNORED_DIRECTORIES
+            for part in document.relative_to(PROJECT_ROOT).parts
+        ):
             continue
         text = document.read_text(encoding="utf-8")
         for raw_target in MARKDOWN_LINK.findall(text):
