@@ -1,0 +1,53 @@
+{
+  "available_goal_kinds": [
+    "advance_story",
+    "explore"
+  ],
+  "checks": {
+    "controller_released": true,
+    "rom_unchanged": true
+  },
+  "experiment": {
+    "adaptation_opened": 0,
+    "context_opened": false,
+    "prediction_computed": false,
+    "sealed_test_opened": 0,
+    "teacher_executed": false,
+    "zero_shot_opened": 0
+  },
+  "exploration_binding": {
+    "actions": 18,
+    "frames": 3684,
+    "returned_to_start": true,
+    "semantic_steps": 14,
+    "verified": true
+  },
+  "imitation_target_created": false,
+  "plan_sha256": "e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b",
+  "policy_question_sha256": "e1ac0fc08d86be11c9b6ebe37e8934f6665e70df697397c7d5615d8961597304",
+  "private_location_identity_fields": 0,
+  "private_path_fields": 0,
+  "raw_address_fields": 0,
+  "rom": {
+    "sha1": "f2f52230b536214ef7c9924f483392993e226cfb",
+    "sha256": "fdcc3c8c43813cf8731fc037d2a6d191bac75439c34b24ba1c27526e6acdc8a2"
+  },
+  "schema": "pokemon.crystal.starting-vertical-slice-qualification.v1",
+  "setup": {
+    "actions": 46,
+    "actual_in_game_save": true,
+    "clean_power": true,
+    "menu_close_actions": 2,
+    "transcript_sha256": "325542d1b7527caa8b43efb4bb74a8b783fd4c7b6ccbcce650e269f2cb8690a3"
+  },
+  "source_commit": "ea13bb1c4d1cb49c3e72a206eb4db94aa576ff19",
+  "status": "passed",
+  "story_binding": {
+    "actions": 9,
+    "changed_map": true,
+    "frames": 1842,
+    "semantic_steps": 7,
+    "verified": true
+  },
+  "total_controller_actions": 75
+}

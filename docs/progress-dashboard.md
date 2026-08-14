@@ -64,6 +64,10 @@ python scripts/qualify_crystal_starting_vertical_slice.py \
 This highlights executable story/exploration pressures while the model remains **not executed**.
 It is a binding qualification, not a zero-shot prediction or teaching example.
 
+The first exact-commit run passed with 75 total controller inputs. Its two binding results and
+all-zero experiment counters are preserved in the
+[starting vertical-slice qualification receipt](evidence/crystal-starting-vertical-slice-qualification-2026-08-14.json).
+
 ## Safety boundary
 
 The dashboard binds only to this computer at `127.0.0.1`. Its server supports view-only GET

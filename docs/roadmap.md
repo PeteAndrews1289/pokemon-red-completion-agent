@@ -58,11 +58,10 @@ Ordered next work:
    entry gate without opening a context, running a teacher or predicting.
 5. **Complete in observer preview; production wiring continues with each runner:** serve live game
    frames and identity-safe model/experiment telemetry through a view-only local dashboard.
-6. **Observation complete; goal/navigation live-probed:** exact-commit source qualified one stable
-   whole-state bundle. The next source adds a genuine two-option starting goal menu and a
-   source-derived bedroom/first-floor round trip over the shared closed-loop router; both bindings
-   passed uncounted live probes. Publish and qualify them officially, then add the still-missing
-   independently verified battle choice.
+6. **Observation and goal/navigation complete; battle next:** exact-commit source qualified one
+   stable whole-state bundle, then a genuine two-option starting goal menu and source-derived
+   bedroom/first-floor round trip over the shared closed-loop router. Both bindings passed the
+   official unscored qualification. Add the still-missing independently verified battle choice.
 7. Materialize and freeze all 72 source-bound contexts. Run the 18-context Red zero-shot probe
    before collecting any Crystal adaptation label.
 8. Fit the fixed paired candidates, commit all sealed predictions, open the 27 test contexts once,

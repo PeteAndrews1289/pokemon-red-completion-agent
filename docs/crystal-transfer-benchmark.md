@@ -166,11 +166,12 @@ the earlier six-example validation defect, where even a perfect result could not
    the real SAVE menu and compares complete reads across 600 no-input frames. The exact-commit
    46-input / 33,276-frame result is preserved in the
    [path-free qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
-3. **Goal/navigation implemented and live-probed; exact-commit receipt pending:** the pristine
+3. **Goal/navigation complete; battle next:** the pristine
    starting question exposes real story and exploration bindings. The shared closed-loop executor
-   visits the first floor and returns, distinguishing turns from acknowledged movement. Add one
-   independently verified battle choice next; do not materialize a frozen context before all three
-   seams qualify.
+   visits the first floor and returns, distinguishing turns from acknowledged movement. The
+   [exact-commit qualification](evidence/crystal-starting-vertical-slice-qualification-2026-08-14.json)
+   passed without a teacher, prediction or context. Add one independently verified battle choice
+   next; do not materialize a frozen context before all three seams qualify.
 4. Materialize all 72 private captures, then freeze a path-free catalog that satisfies the public
    uniqueness, balance, menu-reversal, and candidate-position gates.
 5. Run the zero-shot phase before collecting any adaptation label. Do not begin with a full route.
