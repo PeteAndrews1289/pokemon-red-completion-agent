@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 rehearsal scene: card seven makes it farther, then loses
+
+Animate cards one through six completing with the recorder cable visibly unplugged. Card seven
+stops one tile short of the Celadon Mart stairs. Show a shopper crossing the route and the missed
+input, then replace the open-loop arrows with observed step confirmations. The repaired card reaches
+Silph 3F, where Blastoise faints with **OPPONENT HP 20**.
+
+Do not lower the battle verifier. Open the bag, consume the existing Rare Candy and overlay
+**BLASTOISE 39→40**. Replay the chapter to **6,209 ACTIONS / 1,922,436 FRAMES / PARTY FULLY HEALED**.
+The line is: **“Preflight proved the choice made sense. Rehearsal proved whether this exact state
+could survive the choice.”** Reset the board for a new source-bound freeze rather than resuming the
+failed catalog.
+
 ## August 14 duplicate-lesson scene: different bytes are not different experience
 
 Show the funded replacement passing all 81 inspections, then let the catalog lock refuse to close.

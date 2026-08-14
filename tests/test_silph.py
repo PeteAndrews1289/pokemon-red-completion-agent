@@ -634,7 +634,14 @@ def test_silph_verified_movement_retries_a_swallowed_input() -> None:
     assert (final.map_id, final.player_x, final.player_y) == (MapId.SAFFRON_MART, 3, 7)
 
 
-@pytest.mark.parametrize("label", ("X Special Mart 3F", "X Accuracy Mart 3F"))
+@pytest.mark.parametrize(
+    "label",
+    (
+        "Celadon Ice Beam Mart 3F",
+        "X Special Mart 3F",
+        "X Accuracy Mart 3F",
+    ),
+)
 def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs(
     label: str,
 ) -> None:
@@ -678,6 +685,14 @@ def test_silph_verified_movement_yields_on_mart_2f_before_3f_stairs(
         14,
         4,
     )
+
+
+def test_silph_ice_beam_floor_routes_use_verified_steps() -> None:
+    source = getsource(silph_module._acquire_and_teach_ice_beam)
+
+    assert '"Celadon Ice Beam Mart 3F"' in source
+    assert "_move_verified(actions, reader, route, timing, label)" in source
+    assert "route[-2:]" not in source
 
 
 def test_silph_verified_movement_yields_to_celadon_mart_entry_customer() -> None:

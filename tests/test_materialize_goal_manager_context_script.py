@@ -327,19 +327,64 @@ def test_story_funded_variant_rejects_missing_capture_or_sale_resources() -> Non
         module["_story_funded_boundary"](object(), reader, object())
 
 
+@pytest.mark.parametrize(
+    ("map_id", "bag_before", "bag_after", "money"),
+    (
+        (
+            MapId.LAVENDER_POKECENTER,
+            (
+                (int(ItemId.POTION), 6),
+                (int(ItemId.POKE_BALL), 1),
+                (int(ItemId.RARE_CANDY), 1),
+            ),
+            (
+                (int(ItemId.POTION), 6),
+                (int(ItemId.POKE_BALL), 1),
+            ),
+            20_177,
+        ),
+        (
+            MapId.SAFFRON_POKECENTER,
+            (
+                (int(ItemId.POTION), 6),
+                (int(ItemId.TM34_BIDE), 1),
+                (int(ItemId.X_ACCURACY), 1),
+                (int(ItemId.RARE_CANDY), 1),
+            ),
+            (
+                (int(ItemId.POTION), 6),
+                (int(ItemId.TM34_BIDE), 1),
+                (int(ItemId.X_ACCURACY), 1),
+            ),
+            18_977,
+        ),
+    ),
+)
 def test_story_developed_variant_consumes_one_candy_for_only_the_lead_level(
     monkeypatch: pytest.MonkeyPatch,
+    map_id: MapId,
+    bag_before: tuple[tuple[int, int], ...],
+    bag_after: tuple[tuple[int, int], ...],
+    money: int,
 ) -> None:
     module = runpy.run_path(str(SCRIPT))
+    base = _unevolved_party_raw()
+    assert base.party_species_ids is not None
+    assert base.party_moves is not None
+    assert base.party_pp is not None
     original = replace(
-        _unevolved_party_raw(),
-        map_id=MapId.LAVENDER_POKECENTER,
-        bag_items=(
-            (int(ItemId.POTION), 6),
-            (int(ItemId.POKE_BALL), 1),
-            (int(ItemId.RARE_CANDY), 1),
-        ),
-        player_money=20_177,
+        base,
+        map_id=map_id,
+        party_count=3,
+        party_species_ids=base.party_species_ids[:3],
+        party_levels=(39, 20, 22),
+        party_hp=(121, 53, 37),
+        party_max_hp=(121, 53, 37),
+        party_status=(0, 0, 0),
+        party_moves=base.party_moves[:3],
+        party_pp=base.party_pp[:3],
+        bag_items=bag_before,
+        player_money=money,
     )
     reader = _Reader(original)
     pulses: list[object] = []
@@ -357,10 +402,7 @@ def test_story_developed_variant_consumes_one_candy_for_only_the_lead_level(
             assert original.party_max_hp is not None
             reader.raw = replace(
                 reader.raw,
-                bag_items=(
-                    (int(ItemId.POTION), 6),
-                    (int(ItemId.POKE_BALL), 1),
-                ),
+                bag_items=bag_after,
                 party_levels=(original.party_levels[0] + 1, *original.party_levels[1:]),
                 party_hp=(original.party_hp[0] + 3, *original.party_hp[1:]),
                 party_max_hp=(
@@ -378,35 +420,43 @@ def test_story_developed_variant_consumes_one_candy_for_only_the_lead_level(
 
     module["_story_developed_boundary"](object(), reader, _Emulator())
 
-    assert reader.raw.party_levels == (49, 20, 22, 30, 25, 30)
+    assert reader.raw.party_levels == (40, 20, 22)
     assert reader.raw.party_species_ids == original.party_species_ids
     assert reader.raw.party_moves == original.party_moves
     assert reader.raw.party_pp == original.party_pp
-    assert reader.raw.bag_items == (
-        (int(ItemId.POTION), 6),
-        (int(ItemId.POKE_BALL), 1),
-    )
-    assert reader.raw.player_money == 20_177
-    assert reader.raw.map_id == MapId.LAVENDER_POKECENTER
+    assert reader.raw.bag_items == bag_after
+    assert reader.raw.player_money == money
+    assert reader.raw.map_id == map_id
     assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
 
 
 @pytest.mark.parametrize(
-    ("changes", "message"),
+    "changes",
     (
-        ({"bag_items": ((int(ItemId.POKE_BALL), 1),)}, "exact funded Lavender"),
-        ({"party_species_ids": (64, 64, 59, 132, 104, 43)}, "exact funded Lavender"),
-        ({"party_levels": (100, 20, 22, 30, 25, 30)}, "exact funded Lavender"),
+        {"bag_items": ((int(ItemId.POKE_BALL), 1),)},
+        {"party_species_ids": (64, 64, 59)},
+        {"party_levels": (100, 20, 22)},
     ),
 )
 def test_story_developed_variant_rejects_an_unqualified_lead_or_inventory(
     changes: dict[str, object],
-    message: str,
 ) -> None:
     module = runpy.run_path(str(SCRIPT))
+    base = _unevolved_party_raw()
+    assert base.party_species_ids is not None
+    assert base.party_moves is not None
+    assert base.party_pp is not None
     raw = replace(
-        _unevolved_party_raw(),
+        base,
         map_id=MapId.LAVENDER_POKECENTER,
+        party_count=3,
+        party_species_ids=base.party_species_ids[:3],
+        party_levels=(39, 20, 22),
+        party_hp=(121, 53, 37),
+        party_max_hp=(121, 53, 37),
+        party_status=(0, 0, 0),
+        party_moves=base.party_moves[:3],
+        party_pp=base.party_pp[:3],
         bag_items=(
             (int(ItemId.POKE_BALL), 1),
             (int(ItemId.RARE_CANDY), 1),
@@ -415,7 +465,10 @@ def test_story_developed_variant_rejects_an_unqualified_lead_or_inventory(
     )
     reader = _Reader(replace(raw, **changes))
 
-    with pytest.raises(module["GoalManagerContextMaterializationError"], match=message):
+    with pytest.raises(
+        module["GoalManagerContextMaterializationError"],
+        match="exact qualified three-member frontier",
+    ):
         module["_story_developed_boundary"](object(), reader, object())
 
 

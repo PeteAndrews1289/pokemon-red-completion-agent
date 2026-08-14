@@ -36,6 +36,12 @@
 > semantic policy context. The replacement now earns a distinct team-readiness state by consuming a
 > real Rare Candy on the fully evolved lead, with exact cartridge checks over the one-level and
 > one-item delta. The uniqueness gate remains unchanged.
+> That replacement froze successfully and its first six story bindings rehearsed successfully.
+> Slot 007 then stopped safely: verified movement repaired a Celadon Mart shopper collision, after
+> which the level-39 three-member party proved too weak for a Silph Rocket. A cartridge-derived
+> level-40 variant completed the entire Silph chapter in 6,209 actions and 1,922,436 frames. The two
+> affected Saffron validation captures now receive that exact one-candy setup before the catalog is
+> rebuilt; collection remains closed.
 
 > **Earlier goal-manager rehearsal milestone (August 14, 2026):** all nine goal families were
 > live-qualified from authenticated, nonsealed Red states: story progress, acquisition, one-level

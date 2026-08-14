@@ -905,17 +905,38 @@ def _acquire_and_teach_ice_beam(
     _move_verified(actions, reader, CELADON_CITY_TO_LEFT_MART, timing, "Celadon Mart entry")
     _require(reader.read(), MapId.CELADON_MART_1F, (2, 7), "Celadon Mart 1F")
     for route, map_id, coordinate, label in (
-        (MART_LEFT_1F_TO_2F, MapId.CELADON_MART_2F, (12, 2), "Celadon Mart 2F"),
-        (MART_2F_TO_3F, MapId.CELADON_MART_3F, (16, 2), "Celadon Mart 3F"),
-        (MART_3F_TO_4F, MapId.CELADON_MART_4F, (12, 2), "Celadon Mart 4F"),
-        (MART_4F_TO_5F, MapId.CELADON_MART_5F, (16, 2), "Celadon Mart 5F"),
-        (MART_5F_TO_ROOF, MapId.CELADON_MART_ROOF, (15, 3), "Celadon Mart roof"),
+        (
+            MART_LEFT_1F_TO_2F,
+            MapId.CELADON_MART_2F,
+            (12, 2),
+            "Celadon Ice Beam Mart 2F",
+        ),
+        (
+            MART_2F_TO_3F,
+            MapId.CELADON_MART_3F,
+            (16, 2),
+            "Celadon Ice Beam Mart 3F",
+        ),
+        (
+            MART_3F_TO_4F,
+            MapId.CELADON_MART_4F,
+            (12, 2),
+            "Celadon Ice Beam Mart 4F",
+        ),
+        (
+            MART_4F_TO_5F,
+            MapId.CELADON_MART_5F,
+            (16, 2),
+            "Celadon Ice Beam Mart 5F",
+        ),
+        (
+            MART_5F_TO_ROOF,
+            MapId.CELADON_MART_ROOF,
+            (15, 3),
+            "Celadon Ice Beam Mart roof",
+        ),
     ):
-        _move(actions, reader, route, timing)
-        for _ in range(4):
-            if reader.read().map_id == map_id:
-                break
-            _move(actions, reader, route[-2:], timing)
+        _move_verified(actions, reader, route, timing, label)
         _require(reader.read(), map_id, coordinate, label)
     transfer_before_event = _acquire_and_teach_ice_beam_on_roof(
         actions,
@@ -2786,7 +2807,12 @@ def _move_verified(
                     state = _yield_to_celadon_mart_entry_customer(actions, reader, timing)
                 continue
             if (
-                label in {"X Special Mart 3F", "X Accuracy Mart 3F"}
+                label
+                in {
+                    "Celadon Ice Beam Mart 3F",
+                    "X Special Mart 3F",
+                    "X Accuracy Mart 3F",
+                }
                 and before.map_id == MapId.CELADON_MART_2F
                 and (before.player_x, before.player_y) == MART_2F_ASCENT_CUSTOMER_BLOCK_POSITION
                 and direction == "up"

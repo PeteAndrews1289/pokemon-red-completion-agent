@@ -417,7 +417,7 @@ def _story_developed_boundary(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
 ) -> None:
-    """Consume one real Rare Candy at the funded Lavender story frontier.
+    """Consume one real Rare Candy at a qualified three-member story frontier.
 
     This is a genuine development variant for two otherwise identical story
     contexts.  The target is the already fully evolved Blastoise, so the setup
@@ -435,13 +435,27 @@ def _story_developed_boundary(
     before_status = tuple(before.party_status or ())
     before_moves = tuple(before.party_moves or ())
     before_pp = tuple(before.party_pp or ())
+    funded_lavender = (
+        before.map_id == MapId.LAVENDER_POKECENTER
+        and before.player_money == 20_177
+        and before_inventory.get(int(ItemId.POKE_BALL), 0) == 1
+        and before_inventory.get(int(ItemId.GREAT_BALL), 0) == 0
+        and before_inventory.get(int(ItemId.TM34_BIDE), 0) == 0
+    )
+    pre_silph_saffron = (
+        before.map_id == MapId.SAFFRON_POKECENTER
+        and before.player_money == 18_977
+        and before_inventory.get(int(ItemId.POKE_BALL), 0) in {0, 1}
+        and before_inventory.get(int(ItemId.GREAT_BALL), 0) == 0
+        and before_inventory.get(int(ItemId.TM34_BIDE), 0) == 1
+        and before_inventory.get(int(ItemId.X_ACCURACY), 0) == 1
+    )
     if (
         before.battle_state
-        or before.map_id != MapId.LAVENDER_POKECENTER
+        or not (funded_lavender or pre_silph_saffron)
         or (before.player_x, before.player_y) != (3, 3)
         or not reader.read_input_readiness().ready
-        or before.party_count is None
-        or before.party_count < 1
+        or before.party_count != 3
         or len(before_species) != before.party_count
         or len(before_levels) != before.party_count
         or len(before_hp) != before.party_count
@@ -450,17 +464,13 @@ def _story_developed_boundary(
         or len(before_moves) != before.party_count
         or len(before_pp) != before.party_count
         or before_species[0] != BLASTOISE_SPECIES_ID
-        or not 1 <= before_levels[0] < 100
+        or before_levels[0] != 39
         or before_hp != before_max_hp
         or any(status != 0 for status in before_status)
-        or before_inventory.get(int(ItemId.POKE_BALL), 0) != 1
-        or before_inventory.get(int(ItemId.GREAT_BALL), 0) != 0
-        or before_inventory.get(int(ItemId.TM34_BIDE), 0) != 0
         or before_inventory.get(int(ItemId.RARE_CANDY), 0) != 1
-        or type(before.player_money) is not int
     ):
         raise GoalManagerContextMaterializationError(
-            "developed story setup requires the exact funded Lavender frontier"
+            "developed story setup requires an exact qualified three-member frontier"
         )
 
     _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)

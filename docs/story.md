@@ -56,6 +56,13 @@ replacement consumes a real Rare Candy on the fully evolved lead, creating a one
 manager can actually observe. Its setup proves the exact item, level, party, health, move, money,
 story and location ledger. The uniqueness rule did not move.
 
+That replacement catalog froze, and its first six story cards completed a full rehearsal. The
+seventh found two more truths. A shopper in Celadon Mart swallowed an open-loop stair input, so the
+route adopted the collision-aware movement already used elsewhere in the building. Once inside
+Silph, the level-39 three-member party lost with 20 HP left on the opponent. Its own Rare Candy
+raised the lead to 40, after which the whole chapter completed and returned fully healed. The card
+was not “close enough”; the catalog is rebuilt from the stronger state.
+
 ---
 
 ## Act I: The run that wins and teaches nothing

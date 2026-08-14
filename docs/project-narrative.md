@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the seventh card reached the fight and lost
+
+The genuinely distinct replacement froze, and the first six story mechanics completed their full
+recorder-free rehearsal. Card seven stopped in Celadon Mart because a moving shopper swallowed one
+open-loop step. Two newer routes through the same aisle already had the answer: observe every step
+and yield in a bounded way when that shopper occupies the stair approach. With that repair, the
+card reached Silph Co.—and Blastoise fainted on the 3F Rocket with 20 HP left on the opponent.
+
+The state was strategically valid but mechanically too weak. Its own bag supplied the honest
+repair. Consuming one Rare Candy raised the fully evolved lead from level 39 to 40; from that state,
+the same chapter completed in 6,209 actions and 1,922,436 frames and returned all three party
+members fully healed. The other affected validation card has the same party but a different ball
+reserve, so both receive the same real development operation while retaining their distinct
+resource pressure. The third validation card passed unchanged. **Rehearsal turned “a valid choice”
+into the stronger requirement “a choice this exact state can finish.”**
+
 ## August 14: different save files were still the same lesson
 
 The repaired sixth state kept its ball, sold TM34 through the real Lavender shop and passed its own

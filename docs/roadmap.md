@@ -40,6 +40,13 @@ delta instead: use the funded state's Rare Candy on its fully evolved lead, prov
 level and one consumed item, and preserve every other protected field. A no-save live check has
 proved the level-39-to-40 mechanic; official materialization waits for publication and green CI.
 
+Published `64fc42c` then materialized that slot, passed 81/81 preflight and froze a fully unique
+catalog. Full execution rehearsal passed story slots 001–006 and stopped at slot 007. Collision-
+aware movement repaired a swallowed Celadon Mart stair input; the next diagnostic reached Silph
+and proved the level-39 three-member party underpowered. Consuming its existing Rare Candy produced
+a level-40 input that completed Silph in 6,209 actions / 1,922,436 frames. Slot 009 already passes
+unchanged. The current source repair applies the same exact development setup to slots 007 and 008.
+
 Ordered next work:
 
 1. **Complete:** qualify all nine goal families and construct 81 distinct semantic contexts with
@@ -52,12 +59,15 @@ Ordered next work:
    `story-funded`; pass the complete ROM-free gate and exact-commit CI.
 5. **Failed safely:** the funded replacement and fresh 81/81 preflights reached freeze, which
    rejected the duplicated slot-005/006 policy context without creating a catalog.
-6. **In progress:** publish `story-developed`, pass the complete gate and CI, materialize its exact
-   one-level cartridge transition, then rebuild all 81 preflights in a new source-bound plan and
-   freeze a unique catalog.
-7. Run the exact batch in `rehearse` mode. Require 81/81 selected bindings to execute and verify
+6. **Complete, superseded by rehearsal evidence:** publish `story-developed`, materialize slot 006,
+   pass 81/81 preflight and freeze a unique `64fc42c` catalog.
+7. **Failed safely at slot 007:** slots 001–006 fully executed; preserve the failure and supersede
+   the catalog after repairing Celadon Mart movement and the weak pre-Silph validation inputs.
+8. **In progress:** publish the verified-movement and Saffron level-40 setup, pass CI, materialize
+   slots 007–008, then rerun all 81 preflights and refreeze under the new source identity.
+9. Run the exact batch in `rehearse` mode. Require 81/81 selected bindings to execute and verify
    with zero episodes; repair/refreeze on any failure.
-8. Only after step 7, collect all 81 new one-shot episodes, strictly reload the admitted
+10. Only after step 9, collect all 81 new one-shot episodes, strictly reload the admitted
    train/development dataset and fit the first Red goal-manager model. Compare all frozen baselines,
    then proceed through shadow, causal Red authority and the Crystal transfer benchmark.
 

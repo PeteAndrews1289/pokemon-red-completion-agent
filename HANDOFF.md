@@ -16,6 +16,24 @@ going stale is exactly the failure this project keeps having.
 
 ## Replacement catalog rejected a duplicate; cartridge-derived development repair — 2026-08-14
 
+The first full-execution batch against published `64fc42c` passed story slots 001–006, including
+the repaired Fuchsia slot, then stopped safely at story-validation slot 007. The first failure was
+a swallowed Celadon Mart 2F input: the older Ice Beam route used open-loop movement while the newer
+X Accuracy and X Special routes through the same aisle already used verified steps and a bounded
+yield for the moving customer. Reusing that qualified movement reached Silph Co. and exposed the
+second input defect instead of hiding it: the level-39 three-member validation party fainted on the
+3F Rocket with the opponent at 20 HP.
+
+One real Rare Candy is sufficient and already exists in both affected Saffron states. A no-save
+cartridge diagnostic raised Blastoise from 39 to 40, then completed all of Silph in 6,209 actions /
+1,922,436 frames and ended the three-member party fully healed. The untouched third story-
+validation state also rehearsed successfully in 1,594 actions / 203,628 frames. The pending source
+therefore broadens the exact `story-developed` boundary to the two pre-Silph Saffron variants,
+including their with-ball/without-ball resource distinction, and makes the Ice Beam Mart floors
+use verified movement. Regenerate all source-bound registries, publish, pass CI, materialize fresh
+slot-007 and slot-008 captures, and rebuild/refreeze the 81-context catalog. Do not resume the
+`64fc42c` catalog: its rehearsal failed and its source identity is superseded.
+
 Published `206a7fe` closed the slot-006 failure at the correct boundary: Fuchsia is no longer
 offered unless the exact Lavender state retains a legal Poké Ball alongside the Poké Flute and the
 rest of the chapter's hard inputs. Exact-commit CI passed. A replacement slot 006 was then derived
