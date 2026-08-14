@@ -2,23 +2,34 @@
 
 > **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
 
-> **Current research direction (August 13, 2026):** Red is now explicitly the first curriculum,
+> **Current research direction (August 14, 2026):** Red is now explicitly the first curriculum,
 > not the product. A game-neutral long-horizon goal-manager seam is implemented above the existing
 > destination ranker and bounded specialists. It can rank story progress, acquisition, team
 > development, evolution, healing, resupply, storage, recovery, and exploration without receiving
 > game, map, objective, species, binding, slot, or candidate-position identity. Unavailable goals
-> are hard-masked and the causal wrapper has no teacher fallback. The first counted pilot now has
-> five authenticated successes and one immutable failure, but it is not an admitted replacement
-> dataset and no manager model has been fitted.
-> Normalized campaign-state evidence, record-before-action collection, strict outcome joins, and
-> lowest-effort/static-priority/highest-pressure comparisons are now implemented. The next data
-> campaign is 54 short Red training contexts plus 27 development contexts, followed
-> by frozen zero-shot/few-shot/from-scratch Crystal evaluation. The earlier one-shot Red
+> are hard-masked and the causal wrapper has no teacher fallback. A fresh exact-source campaign has
+> now completed 81/81 rehearsals, 81/81 one-shot episodes, a 54-example fit and a 27-example
+> development-validation evaluation. The first model reached 27/27 validation and then passed
+> 27/27 shadow plus 27/27 model-controlled live Red contexts, with zero teacher queries, fallbacks
+> or new episodes and a minimum confidence of 0.88096. This establishes bounded same-context live
+> authority—not unseen-state generalization or autonomous game completion. The next experiment is
+> the frozen Red model's zero-shot/few-shot/from-scratch Crystal comparison. The earlier one-shot Red
 > destination test remains unopened at 0/12 but is paused because it does not answer the broader
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
-> **Goal-manager collection status (August 14, 2026):** the 81-context curriculum passed one clean
+> **Goal-manager promotion result (August 14, 2026):** the model scored 54/54 on train and 27/27 on
+> development validation. Fixed priority scored 15/27 and lowest effort 16/27; paired exact tests
+> were 12–0 (p = 0.00048828125) and 11–0 (p = 0.0009765625). Highest pressure scored 25/27, so the
+> model's two-win edge over that stronger heuristic is promising but not statistically decisive.
+> Published source `20b77ca` authenticated the historical training registry, catalog, model and fit
+> summary, then ran all 27 open validation contexts twice. Shadow retained frozen-reference
+> authority; causal execution gave the model real binding authority. Both completed 80,613 actions /
+> 8,077,586 frames with 27/27 agreements and 27/27 independent successes. The twelve sealed
+> captures stayed closed. See the
+> [path-free evidence](docs/evidence/red-goal-manager-promotion-2026-08-14.json).
+
+> **Historical goal-manager collection build-up (August 14, 2026):** the 81-context curriculum passed one clean
 > exact-commit preflight and froze successfully. Its first counted pilot then stopped honestly:
 > slots 001–005 produced authenticated successful story episodes; slot 006 completed the mandatory
 > Route 12 Fisher leg, returned to Lavender Center and failed inside the selected long Fuchsia

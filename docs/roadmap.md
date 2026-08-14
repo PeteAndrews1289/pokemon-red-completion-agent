@@ -3,7 +3,34 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-14): prove every frozen binding before recollection
+## Current focus (2026-08-14): falsify transfer on Crystal
+
+The first genuine Red goal manager is trained and promoted to bounded live authority. Source
+`74922cc` produced 81/81 successful full rehearsals, 54 train episodes and 27 development-
+validation episodes. The shared-candidate model scored 54/54 and 27/27 respectively. Published
+promotion source `20b77ca` then passed all 27 open validation contexts in shadow and again with
+model-controlled causal authority: 27 agreements, 27 independent successes, 80,613 actions /
+8,077,586 frames, minimum confidence `0.8809568117777317`, zero teacher queries, zero fallbacks and
+zero episodes. The [path-free evidence](evidence/red-goal-manager-promotion-2026-08-14.json) records
+the exact source, model, plan and private receipt digests. The sealed Red destination test remains
+0/12 opened.
+
+That result closes the same-context Red integration gate. It does not establish unseen-context
+generalization, cross-title transfer, autonomous completion or living-Pokédex completion. The next
+ordered work is therefore:
+
+1. Freeze Crystal's adapter contract: normalized nine-pressure observation, capability masks and
+   private binding boundary, without title/species/map identity in model input.
+2. Implement the minimum executable Crystal vertical slice: one genuine multi-need goal context,
+   one battle decision and one local-navigation round trip, each with independent verification.
+3. Preregister disjoint Crystal microcontexts and a fixed comparison: frozen-Red zero-shot, a fixed
+   few-shot adaptation budget and the same architecture trained from scratch on that budget.
+4. Run zero-shot before any Crystal label is used. Report failures by missing observation,
+   unavailable mechanic, wrong ranking and execution/verifier failure rather than collapsing them.
+5. Only after the transfer result, expand toward breeding, trade evolution, time-of-day encounters,
+   version routing, legendary puzzles and coordinated multi-save living-Pokédex completion.
+
+## Historical focus (2026-08-14): prove every frozen binding before recollection
 
 The transferable goal manager—not the paused sealed destination test—is the active route to a
 Pokémon-playing model. The public 81-slot campaign, nine Red providers, profile/preflight/catalog
@@ -2230,19 +2257,19 @@ test at 0/12, but do not spend the active lane manufacturing its missing capture
   adapter's declared badge target.
 - [x] Add an independently testable, game-neutral evidence composer for collection, party
   readiness/safety, storage, supply, progress, recovery, evolution, and world knowledge.
-- [ ] Wire the existing live Red observations into that composer without adding Red identity to
+- [x] Wire the existing live Red observations into that composer without adding Red identity to
   model input.
-- [ ] Enumerate one safely executable Red opportunity per goal kind and bind it to existing
+- [x] Enumerate one safely executable Red opportunity per goal kind and bind it to existing
   objective, destination, collection, training, healing, storage, and recovery skills.
 - [x] Add record-before-action manager decisions and exactly one consumed success/failure/censored
   outcome without recording private bindings in model input.
-- [ ] Freeze a source-bound assignment registry before collecting short Red manager contexts.
-- [ ] Preregister 54 short Red training contexts and 27 development contexts across all nine goal
+- [x] Freeze a source-bound assignment registry before collecting short Red manager contexts.
+- [x] Preregister 54 short Red training contexts and 27 development contexts across all nine goal
   kinds; group related roots before collection and keep a future title-held-out partition.
 - [x] Add static-priority and highest-pressure baselines alongside lowest-effort, with paired
   reporting for each.
-- [ ] Fit only after the curriculum audit passes. Unit-test fixtures never count as gameplay data.
-- [ ] Run Red shadow evaluation, followed by causal goal authority with no teacher fallback and an
+- [x] Fit only after the curriculum audit passes. Unit-test fixtures never count as gameplay data.
+- [x] Run Red shadow evaluation, followed by causal goal authority with no teacher fallback and an
   independent semantic referee.
 - [ ] Freeze the Red manager and compare Crystal zero-shot, few-shot adaptation, and from-scratch
   learning on the same bounded tasks.

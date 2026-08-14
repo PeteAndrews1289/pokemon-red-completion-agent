@@ -11,13 +11,25 @@ ranker and below the completion contract.
 
 ## Current experimental status
 
-The first Red curriculum reached and passed its read-only gate. All 81 contexts were regenerated
-against one published commit and frozen with unique state, envelope, question and
+The first Red curriculum is now collected, fitted and live-promoted. All 81 contexts were
+regenerated against published source `74922cc` and frozen with unique state, envelope, question and
 order-independent policy-context fingerprints; 28 training choices were multiway, three identical
 semantic menus changed answer with cartridge state, and correct answers occupied all nine
-candidate positions.
+candidate positions. Exact full-execution rehearsal passed 81/81 before collection. Counted
+collection then completed 54 train and 27 development-validation episodes with no failure, partial
+namespace or rerun.
 
-The first counted pilot then found the missing gate. Five story episodes succeeded, but slot 006
+The shared-candidate linear manager scored 54/54 on train and 27/27 on development validation. It
+beat fixed priority (15/27; paired 12–0, exact p = 0.00048828125) and lowest effort (16/27; paired
+11–0, exact p = 0.0009765625). Highest pressure reached 25/27, so the model's 2–0 edge over that
+stronger heuristic is not decisive (p = 0.5). Published `20b77ca` then ran the 27 open validation
+contexts in authenticated shadow and causal modes. Both achieved 27/27 agreement and 27/27
+independently verified execution across 80,613 actions / 8,077,586 frames. Causal mode gave the
+model actual binding authority with zero teacher query, fallback or episode; minimum confidence was
+`0.8809568117777317` against the frozen 0.80 floor. The twelve sealed destination captures remain
+0/12 opened. This is same-context integration evidence, not unseen-context or cross-title proof.
+
+The historical first counted pilot found the missing rehearsal gate. Five story episodes succeeded, but slot 006
 failed inside its selected Fuchsia mechanic after the mandatory Fisher leg. Its setup had discarded
 the final Poké Ball, but availability looked only for the Poké Flute; the executor's retained-ball
 precondition appeared much later. The availability boundary now checks that observable hard input
@@ -266,12 +278,14 @@ checks these properties from read-only preflight evidence before any one-shot co
 
 The first pair is now live: the identical story/development/restoration menu selected development
 at `0.1342` safety pressure and restoration at `0.5599`. Mild Mansion acquisition is also live from
-an acquire/restore/explore menu at `0.1071`. PC and field-recovery repairs have passed no-save live
-rehearsal and await publication plus fresh exact-source preflight; they are not counted examples.
+an acquire/restore/explore menu at `0.1071`. PC and field-recovery repairs passed no-save live
+rehearsal at that intermediate checkpoint; they were later regenerated inside the successful
+exact-source campaign above.
 
-The new manager has **zero genuine teacher examples and no trained production artifact**. The
-synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
-context-dependence bugs. They are not gameplay data and are not a performance result.
+The manager now has **54 genuine training choices, 27 development-validation choices and one
+authenticated model artifact**. Synthetic examples in unit tests remain only falsification tools;
+the performance and authority claims above come exclusively from the private cartridge-derived
+corpus and path-free authenticated receipts.
 
 The existing strategic-navigation corpus contains 24 train and 12 development-validation choices.
 Those examples answer which story destination to pursue after the need was already fixed. They are
@@ -287,16 +301,16 @@ and collect across games.
 1. **Complete:** publish the exact source-bound 81-slot registry and require green exact-commit CI.
 2. **Complete:** rehearse every setup/profile/preflight family on nonsealed external captures. No
    rehearsal consumed a counted episode.
-3. Curate 54 unique train and 27 unique development-validation contexts, preserving separate source
+3. **Complete:** curate 54 unique train and 27 unique development-validation contexts, preserving separate source
    lineages and obtaining at least 24 genuine three-way train menus plus three context-dependent
    repeated menus. Build storage pressure through real catches and box use, never RAM edits.
-4. Freeze the complete private catalog before any counted action. The v2 freezer must report 81
+4. **Complete:** freeze the complete private catalog before any counted action. The v2 freezer reported 81
    unique policy contexts, at least 24 multiway train contexts, three context-dependent train menus
    and diverse selected positions. Then collect each one-shot episode and run strict admission.
-5. Fit the first genuine Red manager with the frozen training configuration and report all three
+5. **Complete:** fit the first genuine Red manager with the frozen training configuration and report all three
    fixed baselines on development validation.
-6. Run Red shadow and causal campaigns with explicit manager authority and zero teacher fallback.
-7. Add the Crystal adapter and the zero-shot/few-shot/from-scratch benchmark.
+6. **Complete:** run Red shadow and causal campaigns with explicit manager authority and zero teacher fallback.
+7. **Next:** add the Crystal adapter and the preregistered zero-shot/few-shot/from-scratch benchmark.
 8. Expand acquisition, evolution, storage, breeding, trading, legendary puzzles, version routing,
    and multi-save mechanics until the same hierarchy can pursue each title's declared living-
    Pokédex contract.

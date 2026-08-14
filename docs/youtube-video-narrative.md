@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 promotion scene: the reference cable comes out
+
+Open on the completed 81-card board. Sweep a first counter across it with the recorder visibly
+disconnected: **81/81 REHEARSED / 230,825 ACTIONS / 17,434,849 FRAMES / 0 EPISODES**. Then connect
+the recorder and fill the split: **54 TRAIN / 27 DEVELOPMENT / 81 ONE-SHOT SUCCESSES**.
+
+Reveal the first manager as a deliberately small shared scorer: **35 IDENTITY-FREE FEATURES / ONE
+FUNCTION FOR EVERY CANDIDATE**. Show its scorecard without overselling it: **MODEL 27/27 / FIXED
+PRIORITY 15/27 / LOWEST EFFORT 16/27 / HIGHEST PRESSURE 25/27**. Put the paired wins and exact
+p-values under the first two comparisons, then label the 2–0 advantage over highest pressure
+**PROMISING, NOT DECISIVE — p = 0.5**.
+
+For shadow, split every card into **PREDICT** and **EXECUTE** lanes. The model fills the first lane;
+the frozen reference owns the second. End at **27/27 AGREEMENT / 27/27 VERIFIED / MODEL AUTHORITY
+FALSE**. Authenticate that receipt on screen, then physically unplug the reference cable.
+
+Replay the same board in causal mode. This time the model index flows directly into the private Red
+binding and the independent verifier lights the card afterward. End on **27/27 MODEL-CONTROLLED /
+80,613 ACTIONS / 8,077,586 FRAMES / MIN CONFIDENCE 0.88096 / TEACHER QUERIES 0 / FALLBACKS 0 /
+EPISODES 0**. Keep **SEALED TEST 0/12** in a separate corner.
+
+The narration must make the boundary explicit: **“This proves the learned answer can control real
+Red mechanics in the open validation states. It does not yet prove a new state, a whole game, or a
+new cartridge.”** Then replace the Red cartridge with Crystal while leaving the nine pressure bars
+and shared scorer on screen. That is the experiment the result earns.
+
 ## August 14 rehearsal scene: card seven makes it farther, then loses
 
 Animate cards one through six completing with the recorder cable visibly unplugged. Card seven
@@ -1519,14 +1545,18 @@ of the sequence, not production trivia.
 
 Before Crystal, show the manager curriculum as short captured-state choices rather than more
 47-million-frame duplicate runs: 54 Red training contexts, 27 development contexts, all nine need
-families, and the same candidate menu requiring different answers as state changes. Compare the
-model with lowest effort, a static priority, and the strongest hand-authored pressure heuristic.
+families, and the same candidate menu requiring different answers as state changes. The completed
+scorecard is **27/27 model / 16/27 lowest effort / 15/27 static priority / 25/27 highest pressure**.
+Follow it with the authenticated shadow and causal cards above; do not leave the old zero-example
+graphic on screen after this point.
 
-Pay off the mechanics gate with nine cards, then refuse to call them training data. Three quick
+Pay off the historical mechanics gate with nine cards, then distinguish those uncounted
+qualifications from the later 81-example campaign. Three quick
 failure/recovery cuts explain why: **ROAR ENDED BATTLE / NO POKÉMON ADDED**, **GEN I PREPENDS TO THE
 BOX**, and **ROUTE 24 X=5 BLOCKED / X=4 EXECUTABLE**. Follow those with the semantic proofs:
-living collection +1, 18/20 box rotated with zero loss, and Pokédex seen 19→20. Put **9/9 HANDS
-QUALIFIED / 0/81 JUDGMENT EXAMPLES** across the final frame.
+living collection +1, 18/20 box rotated with zero loss, and Pokédex seen 19→20. First put **9/9
+HANDS QUALIFIED / 0/81 JUDGMENT EXAMPLES** across the historical frame, then advance it to
+**81/81 COLLECTED / FIRST MANAGER PROMOTED** rather than implying the zero still holds.
 
 Before the first training row, show the catalog gate rejecting a superficially complete stack of
 81 cards. Replace **81 DIFFERENT FILES** with four stronger checks: **81 UNIQUE SEMANTIC CONTEXTS / 24
@@ -1614,8 +1644,9 @@ version has to prove the model learned something worth carrying into a game it h
   reserve-target audit improving from 5/11 to 9/11 when level is restored as an observable combat
   resource. Keep the candidate visibly marked rejected.
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
-- The nine-pressure goal-manager card; keep **0 real demonstrations** visible until collection
-  produces an authenticated corpus.
+- The nine-pressure goal-manager card: begin with the historical **0 real demonstrations** frame,
+  then replace it with **54 TRAIN / 27 DEVELOPMENT / 27 CAUSAL SUCCESSES** and the two authenticated
+  promotion receipt hashes.
 - The restoration setup as a compact honesty sequence: **ONE HIT IS NOT 50% PARTY PRESSURE**, the
   underlevelled switch fainting and the status-without-cure attempts both stopping without a saved
   example, then the late-game party reaching **0.500 SAFETY PRESSURE / 6 ALIVE / RECOVERY PAYABLE**

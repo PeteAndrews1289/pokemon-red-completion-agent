@@ -1,6 +1,7 @@
 # Handoff
 
-Written 2026-08-07 for the agent taking over. Read this once, completely, before touching anything.
+Originally written 2026-08-07 and updated through 2026-08-14 for the agent taking over. Read this
+once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
 
@@ -13,6 +14,46 @@ supersede anything older that disagrees with them. Sections 1 through 10 below a
 orientation. If a number in a numbered section disagrees with a dated checkpoint above it, the
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
+
+## First Red goal manager trained and promoted to bounded causal authority — 2026-08-14
+
+The fresh `74922cc` campaign is complete. Its exact private catalog contains 81 unique cartridge
+states, ordered questions and order-independent policy contexts: 54 train and 27 development
+validation, with 28 multiway train choices, three same-menu answer reversals and all nine answer
+positions. Full uncounted rehearsal passed **81/81** in 230,825 actions / 17,434,849 frames. Counted
+collection then completed **81/81** one-shot episodes with no resume, failure or partial namespace.
+
+The first genuine shared-candidate linear manager was fitted from the 54 train examples. It reached
+**54/54 train and 27/27 development validation**, including 3/3 validation choices for every goal
+family. On validation it beat fixed priority (15/27; paired 12–0, exact p = 0.00048828125) and
+lowest effort (16/27; paired 11–0, exact p = 0.0009765625). The stronger highest-pressure heuristic
+reached 25/27; the model's two extra correct choices produce only p = 0.5, so report that comparison
+as a narrow development advantage, not a broad superiority claim. Candidate order, private binding
+identity and title identity are absent from the 35-feature projection.
+
+Published `20b77ca` adds the promotion boundary. It authenticates the historical registry and the
+private catalog/model/fit summary by digest, freezes a 0.80 confidence floor, accepts only the 27
+already-open validation contexts, and contains no episode writer. Shadow then passed **27/27
+agreement and 27/27 execution** while the frozen reference retained authority. Its receipt digest
+is `f064a66394946a6a942a50123c0106075290c824ebb8d2c14e03467f6136ca3d`.
+The authenticated causal replay passed **27/27 model-controlled selections and 27/27 independent
+verifiers** across 80,613 actions / 8,077,586 frames. Minimum confidence was `0.8809568117777317`,
+mean confidence `0.9884906214044127`, with zero teacher queries, fallbacks or episodes. Its receipt
+digest is `07e0956932b23018348b9c7a9d1c27f5b3a6c451abbf7680d8162b1e065ab11e`.
+The path-free public summary is
+[the Red goal-manager promotion evidence](docs/evidence/red-goal-manager-promotion-2026-08-14.json).
+
+This proves same-context live authority and source/binding compatibility. It does **not** prove
+unseen-context generalization, Crystal transfer, end-to-end autonomous completion or living-Pokédex
+completion. The twelve sealed Red destination captures remain **0/12 opened and 0/12 evaluated**.
+Do not open them as part of manager work.
+
+The active next lane is the smallest honest transfer test, not a full Crystal walkthrough: define
+Crystal's normalized campaign-state adapter and bounded bindings for representative goal, battle
+and local-navigation microcontexts; preregister zero-shot, fixed few-shot and from-scratch
+comparisons; then run the frozen Red manager before fitting on any Crystal label. Only after that
+transfer result should the project expand toward version routing, breeding, trade evolutions,
+legendary puzzles, multi-save coordination and each title's living-Pokédex contract.
 
 ## Replacement catalog rejected a duplicate; cartridge-derived development repair — 2026-08-14
 

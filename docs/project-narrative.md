@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the answer finally controlled the game
+
+The rebuilt curriculum cleared the gate that had consumed the previous week. Eighty-one exact
+bindings rehearsed successfully before a lesson was allowed to exist: 230,825 semantic actions and
+17,434,849 emulator frames with the recorder disconnected. Only then did collection create 81
+one-shot choices—54 train and 27 development validation—with no failed, resumed or partial episode.
+
+The first real goal manager is intentionally small: one shared 35-feature scoring function applied
+to every candidate, with no game, map, species, objective, private binding or candidate-position
+identity. It learned all 54 training choices and selected all 27 development choices correctly.
+That is stronger than fixed priority at 15/27 and lowest effort at 16/27. It is only narrowly above
+the hand-authored highest-pressure heuristic at 25/27, so that final comparison remains a reason to
+test transfer rather than a victory lap.
+
+Then the answer was separated from the hands. In shadow, the model predicted first while the frozen
+reference retained execution authority: 27 agreements and 27 verified mechanics. In causal mode,
+the reference cable was removed. The model's chosen candidate was rebound to the private Red skill
+and actually executed. All nine goal families passed three times each—27/27 choices and 27/27
+independent outcomes across 80,613 actions and 8,077,586 frames. Minimum confidence was 0.88096;
+teacher queries, teacher fallbacks and new episodes were all zero.
+
+This is the first moment the learned goal answer genuinely controlled the emulator. It is also a
+bounded result: the states were the already-open development contexts, not unseen ones, and the
+twelve sealed destination captures stayed closed. The next honest question is whether the same
+representation provides any zero-shot or sample-efficiency value in Crystal. **Red taught the
+vocabulary; Crystal now tests whether it was language or memorization.**
+
 ## August 14: the seventh card reached the fight and lost
 
 The genuinely distinct replacement froze, and the first six story mechanics completed their full
