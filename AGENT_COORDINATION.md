@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-14 shared-outcome/curve checkpoint — pending publication:** A title-neutral,
+> censor-safe preference envelope now accepts the existing battle, strategic-navigation and
+> party-development domain types without sharing their raw schemas. Navigation trials carry the
+> complete decision/outcome binding; party trials carry the exact identity-free candidate; wrong
+> bindings fail before a target exists. ROM-free conformance covers all three families.
+>
+> The first battle curve is prospectively frozen at four train and four untouched development
+> roots, with from-prior prefixes 1/2/4, no post-observation replacement, paired same-state
+> evaluation, typed flat prefixes and no inferential or promotion claim. The guarded eight-capture
+> runner exists but has not opened a cartridge. Publish, pass exact-commit CI, materialize and run
+> exactly this non-sealed catalog once; then produce one real navigation and party-development
+> outcome before any battle scaling. Teacher, sealed Red, Crystal and full replay remain zero.
+
 > **2026-08-14 first real outcome cycle — highest active checkpoint:** Exact source `51f76b5`
 > passed local and GitHub CI after a real wild-state attempt found and closed a battle-identity
 > binding bug. Two authenticated non-sealed lineages then yielded eight controller-proven

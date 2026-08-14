@@ -11,7 +11,9 @@ from pokemon_red_completion.battle_outcome_learning import (
     BattleOutcomeLearningError,
     BattleTurnOutcome,
     adapt_mlp_last_layer_from_outcomes,
+    compare_battle_outcome_preferences,
     evaluate_battle_outcome_preferences,
+    run_battle_outcome_learning_curve,
     run_battle_outcome_learning_cycle,
 )
 from pokemon_red_completion.battle_semantics import (
@@ -247,3 +249,182 @@ def test_partial_tie_splits_target_mass_across_all_best_candidates() -> None:
     assert example.best_candidate_indices == (1, 2)
     assert example.target_distribution.tolist() == [0.0, 0.5, 0.5]
     assert float(np.sum(example.target_distribution)) == 1.0
+
+
+def test_initial_learning_curve_fits_frozen_prefixes_from_the_same_prior() -> None:
+    base = _model()
+    training = tuple(
+        _example(
+            partition=ScenarioPartition.TRAIN,
+            lineage=f"train-root-{index}",
+            state_character=character,
+            scale=1.0 - index * 0.1,
+        )
+        for index, character in enumerate(("1", "2", "3", "4"))
+    )
+    development = tuple(
+        _example(
+            partition=ScenarioPartition.DEVELOPMENT,
+            lineage=f"development-root-{index}",
+            state_character=character,
+            scale=0.5 + index * 0.1,
+        )
+        for index, character in enumerate(("5", "6"))
+    )
+
+    curve = run_battle_outcome_learning_curve(
+        base,
+        training_examples=training,
+        development_examples=development,
+        training_sizes=(1, 2, 4),
+        epochs=100,
+        learning_rate=0.03,
+        prior_l2=0.01,
+    )
+
+    assert curve.training_sizes == (1, 2, 4)
+    assert curve.training_order_state_sha256 == tuple(
+        example.initial_state_sha256 for example in training
+    )
+    assert all(point.update is not None for point in curve.points)
+    assert all(
+        point.base_development.model_sha256
+        == curve.points[0].base_development.model_sha256
+        for point in curve.points
+    )
+    assert all(
+        point.paired_development.example_count == len(development)
+        and point.paired_development.updated_wins
+        + point.paired_development.base_wins
+        + point.paired_development.equivalent_choices
+        == len(development)
+        for point in curve.points
+    )
+    public = curve.public_dict()
+    assert public["development_reused_for_fitting"] is False
+    assert public["descriptive_initial_curve"] is True
+    assert public["inferential_claim"] is False
+    assert public["authority_promoted"] is False
+
+    with pytest.raises(BattleOutcomeLearningError, match="training states"):
+        replace(
+            curve.points[-1],
+            training_state_sha256=curve.points[-1].training_state_sha256[:-1],
+        )
+    with pytest.raises(BattleOutcomeLearningError, match="development catalog"):
+        replace(
+            curve,
+            development_root_lineage_ids=("different-development-root",) * 2,
+        )
+
+
+def test_flat_prefix_remains_a_no_update_curve_point_instead_of_being_replaced() -> None:
+    tied = _outcome(0.5)
+    first = replace(
+        _example(
+            partition=ScenarioPartition.TRAIN,
+            lineage="flat-root",
+            state_character="7",
+        ),
+        outcomes=(tied, tied, None),
+    )
+    training = (
+        first,
+        _example(
+            partition=ScenarioPartition.TRAIN,
+            lineage="signal-root-a",
+            state_character="8",
+        ),
+        _example(
+            partition=ScenarioPartition.TRAIN,
+            lineage="signal-root-b",
+            state_character="9",
+        ),
+    )
+    development = (
+        _example(
+            partition=ScenarioPartition.DEVELOPMENT,
+            lineage="development-root-a",
+            state_character="a",
+        ),
+        _example(
+            partition=ScenarioPartition.DEVELOPMENT,
+            lineage="development-root-b",
+            state_character="b",
+        ),
+    )
+
+    curve = run_battle_outcome_learning_curve(
+        _model(),
+        training_examples=training,
+        development_examples=development,
+        training_sizes=(1, 2, 3),
+        epochs=50,
+        learning_rate=0.03,
+        prior_l2=0.01,
+    )
+
+    assert curve.points[0].update is None
+    assert curve.points[0].status == "insufficient_preference_signal"
+    assert curve.points[0].paired_development.updated_wins == 0
+    assert curve.points[0].paired_development.base_wins == 0
+    assert curve.points[0].paired_development.equivalent_choices == 2
+    assert curve.points[1].update is not None
+    assert curve.points[2].update is not None
+
+
+def test_learning_curve_rejects_dependent_roots_and_optional_final_prefix() -> None:
+    training = tuple(
+        _example(
+            partition=ScenarioPartition.TRAIN,
+            lineage=f"root-{index}",
+            state_character=character,
+        )
+        for index, character in enumerate(("c", "d", "e", "f"))
+    )
+    development = (
+        _example(
+            partition=ScenarioPartition.DEVELOPMENT,
+            lineage="development-one",
+            state_character="0",
+        ),
+        _example(
+            partition=ScenarioPartition.DEVELOPMENT,
+            lineage="development-two",
+            state_character="1",
+        ),
+    )
+
+    with pytest.raises(BattleOutcomeLearningError, match="complete training catalog"):
+        run_battle_outcome_learning_curve(
+            _model(),
+            training_examples=training,
+            development_examples=development,
+            training_sizes=(1, 2, 3),
+        )
+    dependent = replace(training[1], root_lineage_id=training[0].root_lineage_id)
+    with pytest.raises(BattleOutcomeLearningError, match="independent training root"):
+        run_battle_outcome_learning_curve(
+            _model(),
+            training_examples=(training[0], dependent, training[2]),
+            development_examples=development,
+            training_sizes=(1, 2, 3),
+        )
+
+
+def test_paired_comparison_uses_selected_utility_and_preserves_equivalence() -> None:
+    example = _example(
+        partition=ScenarioPartition.DEVELOPMENT,
+        lineage="paired-development-root",
+        state_character="2",
+    )
+    base = _model()
+
+    paired = compare_battle_outcome_preferences(base, base, (example,))
+
+    assert paired.updated_wins == 0
+    assert paired.base_wins == 0
+    assert paired.equivalent_choices == 1
+    assert paired.discordant_examples == 0
+    assert paired.updated_better_one_sided_exact_p == 1.0
+    assert paired.public_dict()["inferential_claim"] is False

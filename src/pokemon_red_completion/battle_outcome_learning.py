@@ -274,6 +274,263 @@ class BattleOutcomeLearningCycle:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class BattleOutcomePairedEvaluation:
+    """Same-state utility comparison between a frozen prior and one update."""
+
+    base_model_sha256: str
+    updated_model_sha256: str
+    example_count: int
+    updated_wins: int
+    base_wins: int
+    equivalent_choices: int
+    base_correct_preferences: int
+    updated_correct_preferences: int
+    root_lineage_ids: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if (
+            _SHA256.fullmatch(self.base_model_sha256) is None
+            or _SHA256.fullmatch(self.updated_model_sha256) is None
+        ):
+            raise BattleOutcomeLearningError("paired evaluation model identity is invalid")
+        if type(self.example_count) is not int or self.example_count < 1:  # noqa: E721
+            raise BattleOutcomeLearningError("paired evaluation example count is invalid")
+        for value, name in (
+            (self.updated_wins, "updated win count"),
+            (self.base_wins, "base win count"),
+            (self.equivalent_choices, "equivalent choice count"),
+        ):
+            if type(value) is not int or value < 0:  # noqa: E721
+                raise BattleOutcomeLearningError(f"paired evaluation {name} is invalid")
+        if (
+            self.updated_wins + self.base_wins + self.equivalent_choices
+            != self.example_count
+        ):
+            raise BattleOutcomeLearningError("paired evaluation accounting is invalid")
+        for value, name in (
+            (self.base_correct_preferences, "base preference count"),
+            (self.updated_correct_preferences, "updated preference count"),
+        ):
+            if type(value) is not int or not 0 <= value <= self.example_count:  # noqa: E721
+                raise BattleOutcomeLearningError(f"{name} is invalid")
+        if (
+            not isinstance(self.root_lineage_ids, tuple)
+            or not self.root_lineage_ids
+            or len(self.root_lineage_ids) > self.example_count
+            or len(self.root_lineage_ids) != len(set(self.root_lineage_ids))
+            or any(_SAFE_ID.fullmatch(value) is None for value in self.root_lineage_ids)
+        ):
+            raise BattleOutcomeLearningError("paired evaluation root lineages are invalid")
+
+    @property
+    def discordant_examples(self) -> int:
+        return self.updated_wins + self.base_wins
+
+    @property
+    def updated_better_one_sided_exact_p(self) -> float:
+        """Exact paired sign-test tail; descriptive until a powered gate is frozen."""
+
+        total = self.discordant_examples
+        if total == 0:
+            return 1.0
+        return sum(
+            math.comb(total, successes) for successes in range(self.updated_wins, total + 1)
+        ) / (2**total)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.battle.outcome-paired-evaluation.v1",
+            "partition": ScenarioPartition.DEVELOPMENT.value,
+            "base_model_sha256": self.base_model_sha256,
+            "updated_model_sha256": self.updated_model_sha256,
+            "example_count": self.example_count,
+            "updated_wins": self.updated_wins,
+            "base_wins": self.base_wins,
+            "equivalent_choices": self.equivalent_choices,
+            "discordant_examples": self.discordant_examples,
+            "updated_better_one_sided_exact_p": self.updated_better_one_sided_exact_p,
+            "base_correct_preferences": self.base_correct_preferences,
+            "updated_correct_preferences": self.updated_correct_preferences,
+            "root_lineage_ids": list(self.root_lineage_ids),
+            "inferential_claim": False,
+            "learner_updates": 0,
+            "authority_promoted": False,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class BattleOutcomeLearningCurvePoint:
+    """One from-scratch prior-preserving update at a frozen prefix size."""
+
+    training_size: int
+    training_root_lineage_ids: tuple[str, ...]
+    training_state_sha256: tuple[str, ...]
+    update: BattleOutcomeUpdate | None
+    base_development: BattleOutcomeEvaluation
+    updated_development: BattleOutcomeEvaluation
+    paired_development: BattleOutcomePairedEvaluation
+
+    def __post_init__(self) -> None:
+        if type(self.training_size) is not int or self.training_size < 1:  # noqa: E721
+            raise BattleOutcomeLearningError("learning-curve training size is invalid")
+        if (
+            len(self.training_root_lineage_ids) != self.training_size
+            or len(self.training_root_lineage_ids)
+            != len(set(self.training_root_lineage_ids))
+            or any(
+                _SAFE_ID.fullmatch(value) is None
+                for value in self.training_root_lineage_ids
+            )
+        ):
+            raise BattleOutcomeLearningError("learning-curve training roots are invalid")
+        if (
+            len(self.training_state_sha256) != self.training_size
+            or len(self.training_state_sha256) != len(set(self.training_state_sha256))
+            or any(_SHA256.fullmatch(value) is None for value in self.training_state_sha256)
+        ):
+            raise BattleOutcomeLearningError("learning-curve training states are invalid")
+        if not isinstance(self.base_development, BattleOutcomeEvaluation) or not isinstance(
+            self.updated_development, BattleOutcomeEvaluation
+        ):
+            raise BattleOutcomeLearningError("learning-curve development evaluation is invalid")
+        if not isinstance(self.paired_development, BattleOutcomePairedEvaluation):
+            raise BattleOutcomeLearningError("learning-curve paired evaluation is invalid")
+        if (
+            self.base_development.example_count
+            != self.updated_development.example_count
+            or self.base_development.example_count
+            != self.paired_development.example_count
+            or self.base_development.model_sha256
+            != self.paired_development.base_model_sha256
+            or self.updated_development.model_sha256
+            != self.paired_development.updated_model_sha256
+        ):
+            raise BattleOutcomeLearningError(
+                "learning-curve development evidence does not share one comparison"
+            )
+        if self.update is None:
+            if self.base_development.model_sha256 != self.updated_development.model_sha256:
+                raise BattleOutcomeLearningError("a no-update curve point changed the model")
+        elif (
+            not isinstance(self.update, BattleOutcomeUpdate)
+            or self.update.report.training_example_count != self.training_size
+            or self.update.report.base_model_sha256
+            != self.base_development.model_sha256
+            or self.update.report.updated_model_sha256
+            != self.updated_development.model_sha256
+        ):
+            raise BattleOutcomeLearningError("learning-curve update binding is invalid")
+
+    @property
+    def status(self) -> str:
+        return "updated" if self.update is not None else "insufficient_preference_signal"
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.battle.outcome-learning-curve-point.v1",
+            "training_size": self.training_size,
+            "training_root_lineage_ids": list(self.training_root_lineage_ids),
+            "training_state_sha256": list(self.training_state_sha256),
+            "status": self.status,
+            "update": None if self.update is None else self.update.report.public_dict(),
+            "base_development": self.base_development.public_dict(),
+            "updated_development": self.updated_development.public_dict(),
+            "paired_development": self.paired_development.public_dict(),
+            "authority_promoted": False,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class BattleOutcomeLearningCurve:
+    """Descriptive prefix curve over independent roots and one untouched dev set."""
+
+    points: tuple[BattleOutcomeLearningCurvePoint, ...]
+    training_order_state_sha256: tuple[str, ...]
+    development_root_lineage_ids: tuple[str, ...]
+    development_state_sha256: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.points, tuple)
+            or len(self.points) < 3
+            or any(
+                not isinstance(point, BattleOutcomeLearningCurvePoint)
+                for point in self.points
+            )
+        ):
+            raise BattleOutcomeLearningError("an initial learning curve needs three points")
+        sizes = tuple(point.training_size for point in self.points)
+        if sizes != tuple(sorted(set(sizes))):
+            raise BattleOutcomeLearningError("learning-curve sizes must strictly increase")
+        if sizes[-1] != len(self.training_order_state_sha256):
+            raise BattleOutcomeLearningError(
+                "the final learning-curve point must use every training state"
+            )
+        if (
+            len(self.training_order_state_sha256)
+            != len(set(self.training_order_state_sha256))
+            or any(
+                _SHA256.fullmatch(value) is None
+                for value in self.training_order_state_sha256
+            )
+            or any(
+                point.training_state_sha256
+                != self.training_order_state_sha256[: point.training_size]
+                for point in self.points
+            )
+        ):
+            raise BattleOutcomeLearningError("learning-curve training order is invalid")
+        if (
+            not self.development_root_lineage_ids
+            or len(self.development_root_lineage_ids)
+            != len(self.development_state_sha256)
+            or len(self.development_root_lineage_ids)
+            != len(set(self.development_root_lineage_ids))
+            or len(self.development_state_sha256)
+            != len(set(self.development_state_sha256))
+            or any(
+                _SAFE_ID.fullmatch(value) is None
+                for value in self.development_root_lineage_ids
+            )
+            or any(
+                _SHA256.fullmatch(value) is None
+                for value in self.development_state_sha256
+            )
+        ):
+            raise BattleOutcomeLearningError("learning-curve development catalog is invalid")
+        expected_roots = set(self.development_root_lineage_ids)
+        if any(
+            set(point.base_development.root_lineage_ids) != expected_roots
+            or set(point.updated_development.root_lineage_ids) != expected_roots
+            or set(point.paired_development.root_lineage_ids) != expected_roots
+            for point in self.points
+        ):
+            raise BattleOutcomeLearningError(
+                "learning-curve points do not share the frozen development roots"
+            )
+
+    @property
+    def training_sizes(self) -> tuple[int, ...]:
+        return tuple(point.training_size for point in self.points)
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.battle.outcome-learning-curve.v1",
+            "training_sizes": list(self.training_sizes),
+            "training_order_state_sha256": list(self.training_order_state_sha256),
+            "development_root_lineage_ids": list(self.development_root_lineage_ids),
+            "development_state_sha256": list(self.development_state_sha256),
+            "points": [point.public_dict() for point in self.points],
+            "development_reused_for_fitting": False,
+            "descriptive_initial_curve": True,
+            "inferential_claim": False,
+            "sealed_test_cases_opened": 0,
+            "teacher_choice_targets": 0,
+            "authority_promoted": False,
+        }
+
+
 def adapt_mlp_last_layer_from_outcomes(
     base_model: MaskedMLPMoveRanker,
     examples: Iterable[BattleOutcomeExample],
@@ -286,9 +543,9 @@ def adapt_mlp_last_layer_from_outcomes(
 
     choices = tuple(examples)
     _require_examples(choices, partition=ScenarioPartition.TRAIN)
-    if any(not choice.learner_update_eligible for choice in choices):
+    if not any(choice.learner_update_eligible for choice in choices):
         raise BattleOutcomeLearningError(
-            "training outcome examples must contain a preference signal"
+            "training outcome examples contain no preference signal"
         )
     _require_hyperparameters(epochs, learning_rate, prior_l2)
     if any(example.features.feature_names != base_model.feature_names for example in choices):
@@ -369,10 +626,6 @@ def evaluate_battle_outcome_preferences(
 
     choices = tuple(examples)
     _require_examples(choices, partition=ScenarioPartition.DEVELOPMENT)
-    if any(not choice.learner_update_eligible for choice in choices):
-        raise BattleOutcomeLearningError(
-            "development outcome examples must contain a preference signal"
-        )
     if any(example.features.feature_names != model.feature_names for example in choices):
         raise BattleOutcomeLearningError("development features differ from the model schema")
     model_sha256 = _model_sha256(model)
@@ -438,6 +691,136 @@ def run_battle_outcome_learning_cycle(
     )
 
 
+def compare_battle_outcome_preferences(
+    base_model: MaskedMLPMoveRanker,
+    updated_model: MaskedMLPMoveRanker,
+    examples: Iterable[BattleOutcomeExample],
+) -> BattleOutcomePairedEvaluation:
+    """Compare selected utilities on the exact same untouched examples."""
+
+    choices = tuple(examples)
+    _require_examples(choices, partition=ScenarioPartition.DEVELOPMENT)
+    if any(
+        example.features.feature_names != base_model.feature_names
+        or example.features.feature_names != updated_model.feature_names
+        for example in choices
+    ):
+        raise BattleOutcomeLearningError("paired development features differ from a model schema")
+    base_sha256 = _model_sha256(base_model)
+    updated_sha256 = _model_sha256(updated_model)
+    updated_wins = base_wins = equivalent = 0
+    base_correct = updated_correct = 0
+    for example in choices:
+        base_index = _selected_candidate(base_model, example)
+        updated_index = _selected_candidate(updated_model, example)
+        base_correct += int(base_index in example.best_candidate_indices)
+        updated_correct += int(updated_index in example.best_candidate_indices)
+        base_outcome = example.outcomes[base_index]
+        updated_outcome = example.outcomes[updated_index]
+        if base_outcome is None or updated_outcome is None:  # pragma: no cover - mask invariant
+            raise AssertionError("masked model selected an unusable candidate")
+        difference = updated_outcome.utility - base_outcome.utility
+        if math.isclose(difference, 0.0, abs_tol=_UTILITY_TOLERANCE):
+            equivalent += 1
+        elif difference > 0:
+            updated_wins += 1
+        else:
+            base_wins += 1
+    if _model_sha256(base_model) != base_sha256 or _model_sha256(updated_model) != updated_sha256:
+        raise BattleOutcomeLearningError("paired development evaluation mutated a model")
+    return BattleOutcomePairedEvaluation(
+        base_model_sha256=base_sha256,
+        updated_model_sha256=updated_sha256,
+        example_count=len(choices),
+        updated_wins=updated_wins,
+        base_wins=base_wins,
+        equivalent_choices=equivalent,
+        base_correct_preferences=base_correct,
+        updated_correct_preferences=updated_correct,
+        root_lineage_ids=tuple(sorted({example.root_lineage_id for example in choices})),
+    )
+
+
+def run_battle_outcome_learning_curve(
+    base_model: MaskedMLPMoveRanker,
+    *,
+    training_examples: Iterable[BattleOutcomeExample],
+    development_examples: Iterable[BattleOutcomeExample],
+    training_sizes: tuple[int, ...],
+    epochs: int = 100,
+    learning_rate: float = 0.01,
+    prior_l2: float = 0.1,
+) -> BattleOutcomeLearningCurve:
+    """Fit frozen prefixes from the same prior and score one untouched dev set.
+
+    The caller-provided training order is part of the prospective design.  Flat
+    prefixes remain in the curve as typed no-update points; they are never
+    replaced after observing their outcomes.
+    """
+
+    training = tuple(training_examples)
+    development = tuple(development_examples)
+    _require_examples(training, partition=ScenarioPartition.TRAIN)
+    _require_examples(development, partition=ScenarioPartition.DEVELOPMENT)
+    _require_independent_curve_roots(training, subject="training")
+    _require_independent_curve_roots(development, subject="development")
+    _require_disjoint_partitions(training, development)
+    _require_curve_sizes(training_sizes, training_count=len(training))
+    _require_hyperparameters(epochs, learning_rate, prior_l2)
+
+    base_development = evaluate_battle_outcome_preferences(base_model, development)
+    points: list[BattleOutcomeLearningCurvePoint] = []
+    for size in training_sizes:
+        prefix = training[:size]
+        update = (
+            adapt_mlp_last_layer_from_outcomes(
+                base_model,
+                prefix,
+                epochs=epochs,
+                learning_rate=learning_rate,
+                prior_l2=prior_l2,
+            )
+            if any(example.learner_update_eligible for example in prefix)
+            else None
+        )
+        updated_model = base_model if update is None else update.model
+        updated_development = evaluate_battle_outcome_preferences(
+            updated_model,
+            development,
+        )
+        points.append(
+            BattleOutcomeLearningCurvePoint(
+                training_size=size,
+                training_root_lineage_ids=tuple(
+                    example.root_lineage_id for example in prefix
+                ),
+                training_state_sha256=tuple(
+                    example.initial_state_sha256 for example in prefix
+                ),
+                update=update,
+                base_development=base_development,
+                updated_development=updated_development,
+                paired_development=compare_battle_outcome_preferences(
+                    base_model,
+                    updated_model,
+                    development,
+                ),
+            )
+        )
+    return BattleOutcomeLearningCurve(
+        points=tuple(points),
+        training_order_state_sha256=tuple(
+            example.initial_state_sha256 for example in training
+        ),
+        development_root_lineage_ids=tuple(
+            example.root_lineage_id for example in development
+        ),
+        development_state_sha256=tuple(
+            example.initial_state_sha256 for example in development
+        ),
+    )
+
+
 def _require_examples(
     examples: tuple[BattleOutcomeExample, ...],
     *,
@@ -468,6 +851,63 @@ def _require_hyperparameters(epochs: int, learning_rate: float, prior_l2: float)
             or (float(value) <= 0 if positive else float(value) < 0)
         ):
             raise BattleOutcomeLearningError(f"{name} is invalid")
+
+
+def _require_independent_curve_roots(
+    examples: tuple[BattleOutcomeExample, ...],
+    *,
+    subject: str,
+) -> None:
+    roots = tuple(example.root_lineage_id for example in examples)
+    if len(roots) != len(set(roots)):
+        raise BattleOutcomeLearningError(
+            f"battle learning curve requires one independent {subject} root per example"
+        )
+
+
+def _require_disjoint_partitions(
+    training: tuple[BattleOutcomeExample, ...],
+    development: tuple[BattleOutcomeExample, ...],
+) -> None:
+    if {example.root_lineage_id for example in training} & {
+        example.root_lineage_id for example in development
+    }:
+        raise BattleOutcomeLearningError("root lineage crosses train and development")
+    if {example.initial_state_sha256 for example in training} & {
+        example.initial_state_sha256 for example in development
+    }:
+        raise BattleOutcomeLearningError("initial state crosses train and development")
+
+
+def _require_curve_sizes(
+    sizes: tuple[int, ...],
+    *,
+    training_count: int,
+) -> None:
+    if (
+        not isinstance(sizes, tuple)
+        or len(sizes) < 3
+        or any(type(value) is not int or value < 1 for value in sizes)  # noqa: E721
+        or sizes != tuple(sorted(set(sizes)))
+    ):
+        raise BattleOutcomeLearningError(
+            "battle learning curve needs at least three strictly increasing positive sizes"
+        )
+    if sizes[-1] != training_count:
+        raise BattleOutcomeLearningError(
+            "battle learning curve final size must consume the complete training catalog"
+        )
+
+
+def _selected_candidate(
+    model: MaskedMLPMoveRanker,
+    example: BattleOutcomeExample,
+) -> int:
+    return model.predict(
+        example.features.candidate_vectors,
+        legal_mask=example.features.legal_mask,
+        current_pp=example.features.current_pp,
+    )
 
 
 def _outcome_loss(

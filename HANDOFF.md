@@ -17,6 +17,34 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Shared outcome boundary and frozen first curve — 2026-08-14
+
+The next source checkpoint is prospective and cartridge-free. A new title-neutral outcome envelope
+now accepts the three initial scenario families without pretending they share raw fields. Battle
+adapts its existing controller-proven move utility. Navigation uses the existing identity-free
+destination matrix plus a complete `StrategicNavigationDecision`/outcome binding, so a route result
+cannot be relabelled onto another candidate. Party development uses the existing identity-free
+trainee/venue candidate itself plus exact before/after experience, battle, heal, faint, rotation and
+frame evidence. Censored or incomplete candidates produce no target; exact rounded equivalence is
+transitive; teacher choices remain zero.
+
+The first battle learning curve is frozen at 4 train + 4 untouched development contexts, with
+from-prior prefix fits at 1, 2 and 4. Every context needs its own lineage, root/capture state and
+initial semantic observation. Capture manifest v2 binds the source-state digest as well as the
+derived battle-state digest; the curve runner refuses legacy manifests that cannot prove that root
+binding. Catalog order is prospective. The first qualified encounter after
+each assigned root is retained; opponent, menu or outcome cannot trigger replacement or
+repartitioning. A flat prefix remains a typed no-update point. Every paired comparison reuses the
+same four development roots and is descriptive only. The exact public plan is
+[`docs/evidence/red-battle-learning-curve-plan-2026-08-14.json`](docs/evidence/red-battle-learning-curve-plan-2026-08-14.json),
+and the guarded runner is `scripts/run_battle_outcome_learning_curve.py`.
+
+No ROM, teacher, sealed Red case, Crystal context, private outcome or full-game replay was opened
+for this checkpoint. Next publish and pass exact-commit CI, materialize the eight non-sealed
+captures against that commit, execute the curve once, and publish the result. Then collect one real
+navigation outcome and one real party-development outcome through the new boundary. Do not widen
+or stratify the battle catalog before those two results.
+
 ## First real outcome-learning cycle — 2026-08-14
 
 Start with

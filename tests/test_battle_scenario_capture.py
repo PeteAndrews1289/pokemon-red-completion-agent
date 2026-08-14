@@ -44,6 +44,35 @@ def test_verified_opener_returns_bytes_and_no_private_path_fields(tmp_path) -> N
     assert "/" not in encoded
 
 
+def test_v2_manifest_binds_the_private_source_state_without_retaining_its_path(
+    tmp_path,
+) -> None:
+    state = b"derived battle state"
+    source_state_sha256 = "d" * 64
+    state_path = tmp_path / "derived.state"
+    manifest_path = tmp_path / "derived.state.json"
+    state_path.write_bytes(state)
+    manifest_path.write_bytes(
+        build_battle_scenario_capture_payload(
+            capture_id="battle-capture-v2",
+            root_lineage_id="red-lineage-v2",
+            partition=ScenarioPartition.DEVELOPMENT,
+            state_bytes=state,
+            initial_observation_sha256="b" * 64,
+            source_commit="c" * 40,
+            expected_map=165,
+            expected_battle_state=1,
+            source_state_sha256=source_state_sha256,
+        )
+    )
+
+    capture = open_battle_scenario_capture(state_path, manifest_path)
+
+    assert capture.manifest.source_state_sha256 == source_state_sha256
+    assert capture.manifest.public_dict()["schema"].endswith("capture-v2")
+    assert str(tmp_path) not in json.dumps(capture.manifest.public_dict())
+
+
 def test_opener_rejects_state_drift_noncanonical_manifest_and_symlinks(tmp_path) -> None:
     state_path = tmp_path / "private.state"
     manifest_path = tmp_path / "private.state.json"

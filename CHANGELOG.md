@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Added a title-neutral, censor-safe scenario-outcome contract plus thin adapters for the existing
+  battle, strategic-navigation and party-development domain types. Each family keeps its own
+  feature schema and verifier measurements; wrong candidate bindings, incomplete evidence and
+  cross-partition leakage fail before a learner target exists.
+- Froze the first descriptive battle learning curve at four train and four untouched development
+  contexts with 1/2/4 from-prior fits, paired same-state evaluation, typed flat prefixes, no
+  post-outcome replacement and no promotion claim. Added an eight-capture guarded runner without
+  opening Red, Crystal, a teacher or a sealed case.
+
 - Completed the first real teacher-free battle outcome cycle from two authenticated non-sealed Red
   lineages: eight controller-proven counterfactual move outcomes at equal pre-attack timing, one
   prior-preserving update, and one untouched-lineage evaluation. The update lowered fit loss but

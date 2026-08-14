@@ -11,6 +11,7 @@ from pathlib import Path
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 BATTLE_SCENARIO_CAPTURE_SCHEMA = "pokemon-private-battle-scenario-capture-v1"
+BATTLE_SCENARIO_CAPTURE_SCHEMA_V2 = "pokemon-private-battle-scenario-capture-v2"
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -32,6 +33,7 @@ class BattleScenarioCaptureManifest:
     source_commit: str
     expected_map: int
     expected_battle_state: int
+    source_state_sha256: str | None = None
 
     def __post_init__(self) -> None:
         for name in ("capture_id", "root_lineage_id"):
@@ -44,6 +46,11 @@ class BattleScenarioCaptureManifest:
             value = getattr(self, name)
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
                 raise BattleScenarioCaptureError(f"{name} is invalid")
+        if self.source_state_sha256 is not None and (
+            not isinstance(self.source_state_sha256, str)
+            or _SHA256.fullmatch(self.source_state_sha256) is None
+        ):
+            raise BattleScenarioCaptureError("source_state_sha256 is invalid")
         if not isinstance(self.source_commit, str) or _GIT_COMMIT.fullmatch(
             self.source_commit
         ) is None:
@@ -58,8 +65,12 @@ class BattleScenarioCaptureManifest:
             )
 
     def public_dict(self) -> dict[str, object]:
-        return {
-            "schema": BATTLE_SCENARIO_CAPTURE_SCHEMA,
+        result: dict[str, object] = {
+            "schema": (
+                BATTLE_SCENARIO_CAPTURE_SCHEMA
+                if self.source_state_sha256 is None
+                else BATTLE_SCENARIO_CAPTURE_SCHEMA_V2
+            ),
             "capture_id": self.capture_id,
             "root_lineage_id": self.root_lineage_id,
             "partition": self.partition.value,
@@ -69,6 +80,9 @@ class BattleScenarioCaptureManifest:
             "expected_map": self.expected_map,
             "expected_battle_state": self.expected_battle_state,
         }
+        if self.source_state_sha256 is not None:
+            result["source_state_sha256"] = self.source_state_sha256
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,6 +117,7 @@ def build_battle_scenario_capture_payload(
     source_commit: str,
     expected_map: int,
     expected_battle_state: int,
+    source_state_sha256: str | None = None,
 ) -> bytes:
     """Build the exact canonical sidecar for private state bytes."""
 
@@ -117,6 +132,7 @@ def build_battle_scenario_capture_payload(
         source_commit=source_commit,
         expected_map=expected_map,
         expected_battle_state=expected_battle_state,
+        source_state_sha256=source_state_sha256,
     )
     return _canonical_payload(manifest.public_dict())
 
@@ -152,7 +168,7 @@ def open_battle_scenario_capture(
 def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:
     try:
         value = json.loads(payload.decode("ascii"))
-        if not isinstance(value, dict) or set(value) != {
+        base_fields = {
             "schema",
             "capture_id",
             "root_lineage_id",
@@ -162,9 +178,20 @@ def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:
             "source_commit",
             "expected_map",
             "expected_battle_state",
-        }:
+        }
+        if not isinstance(value, dict):
             raise BattleScenarioCaptureError("capture manifest fields are invalid")
-        if value["schema"] != BATTLE_SCENARIO_CAPTURE_SCHEMA:
+        schema = value.get("schema")
+        expected_fields = (
+            base_fields
+            if schema == BATTLE_SCENARIO_CAPTURE_SCHEMA
+            else base_fields | {"source_state_sha256"}
+            if schema == BATTLE_SCENARIO_CAPTURE_SCHEMA_V2
+            else set()
+        )
+        if set(value) != expected_fields:
+            raise BattleScenarioCaptureError("capture manifest fields are invalid")
+        if not expected_fields:
             raise BattleScenarioCaptureError("capture manifest schema is invalid")
         manifest = BattleScenarioCaptureManifest(
             capture_id=value["capture_id"],
@@ -175,6 +202,7 @@ def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:
             source_commit=value["source_commit"],
             expected_map=value["expected_map"],
             expected_battle_state=value["expected_battle_state"],
+            source_state_sha256=value.get("source_state_sha256"),
         )
     except (
         BattleScenarioCaptureError,

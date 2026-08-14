@@ -1,5 +1,30 @@
 # Current audit — 2026-08-14
 
+## Shared outcome contract and first learning-curve design
+
+The battle-only record failed the cheapest three-family falsifier: it required PP, move damage and
+faint fields that navigation and party development do not have. The replacement is deliberately
+narrow rather than falsely universal. Each family keeps its own identity-free feature schema and
+prospectively ordered verifier objective; the common layer owns candidate/outcome joining,
+censoring, equivalence, preference targets and partition integrity.
+
+ROM-free tests now pass genuine domain types through that boundary. Navigation requires a full
+strategic decision/outcome record and rejects a result relabelled to another destination. Party
+development binds the exact candidate row and rejects changed features; its verifier derives
+experience per frame, battles per Center visit, evolution, faints and blackout from exact semantic
+before/after evidence. Trainee outcomes prioritize experience earned by the bound trainee, so an
+overlevelled escort cannot make a bad trainee choice look productive by taking the experience
+itself. Battle maps to exactly the same winners as the existing utility. No teacher label enters
+any target.
+
+The first executable learning curve is frozen prospectively at 4 train + 4 development roots and
+1/2/4 from-prior fits. All eight roots, capture states and semantic observations must be unique;
+new capture-manifest v2 binds each source-state digest rather than trusting a lineage name alone.
+Flat outcomes stay in place; failed or interrupted collection stops before fitting; the same four
+development roots score every point. It is descriptive and cannot promote authority. The runner
+has not yet opened Red. Next is publication/CI, one execution of that exact catalog, then one real
+navigation and one real party-development outcome before battle scaling.
+
 ## First real outcome-learning result
 
 The battle-first model laboratory now has its first executable result. Exact commit `51f76b5`

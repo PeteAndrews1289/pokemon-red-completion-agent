@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the shared abstraction got smaller, not larger
+
+The post-result audit asked a useful falsifier: could a navigation outcome and a party-development
+outcome honestly inhabit the battle learner's contract? They could not. `BattleTurnOutcome` assumes
+PP-proven moves, damage fractions and faint states. Renaming that structure “generic” would only
+hide battle coupling.
+
+The implemented boundary shares candidate vectors, availability, lineage, censoring, a frozen
+lexicographic objective and an outcome-derived target distribution. Domain adapters keep their own
+measurements. A navigation trial must carry the complete strategic decision/outcome binding; a
+party trial must carry the exact identity-free trainee or venue candidate. Negative tests relabel
+both and prove the join fails. Battle winners are unchanged, and no teacher selection becomes a
+target.
+
+The first curve is now prospective and executable: four ordered train contexts, four untouched
+development contexts, and 1/2/4 last-layer fits restarted from the same prior. The runner rejects
+duplicate lineages, states, observations and manifests; retains flat prefixes as no-update points;
+and reports paired selected utility on the same development roots. This is deliberately descriptive
+and grants no authority. It will run only after its source is published and green, and it cannot be
+expanded until one real navigation and one real party-development outcome survive the same seam.
+
 ## August 14: the first outcome lesson failed—and that was the result
 
 The first real model-first loop took two seconds. Two authenticated non-sealed Red lineages each

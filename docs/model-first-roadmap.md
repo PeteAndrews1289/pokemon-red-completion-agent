@@ -12,11 +12,22 @@ development result. The update regressed development from 1/1 to 0/1 and remains
 shadow-only evidence. This proves plumbing, not competence. See
 [the exact result](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
-The active next step is the smallest independent battle set that can draw an initial learning
-curve, followed immediately by one thin navigation adapter and one thin party-development adapter.
-First prove one outcome from each family fits the shared abstraction; only then widen and stratify
-the battle catalog. Do not promote the one-state candidate, open the 200-battle unseen gate early,
-expand into a full Red replay, or use Crystal as additional training data.
+The shared outcome boundary and the smallest initial battle-curve design are now implemented but
+not yet executed. Battle keeps its move features and health/terminal utility; navigation keeps its
+destination features and arrival/efficiency verifier; party development keeps its trainee/venue
+features and experience/heal/safety verifier. The learner-facing envelope sees only candidate
+vectors plus an outcome-derived preference, preserves censored cases, and rejects a result bound to
+the wrong decision or candidate. This passed ROM-free conformance across all three real domain
+types; it is interface evidence, not a real navigation or party outcome.
+
+The frozen next experiment uses four prospectively ordered train roots, four untouched development
+roots and from-prior prefixes of 1, 2 and 4. It is descriptive, retains flat prefixes as typed
+no-update points, forbids replacement after an encounter or outcome is seen, and grants no
+authority. See the [prospective plan](evidence/red-battle-learning-curve-plan-2026-08-14.json).
+Publish the runner, materialize exactly those eight non-sealed contexts, and execute it once. Then
+produce one thin real navigation outcome and one thin real party-development outcome before the
+battle catalog widens or stratifies. Do not promote the one-state candidate, open the 200-battle
+unseen gate early, expand into a full Red replay, or use Crystal as additional training data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the
@@ -67,6 +78,14 @@ satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion 
 minimum independent battle contexts needed for one learning curve, then build one thin real
 navigation and party-development outcome adapter before stratifying or scaling the battle data.
 Lower fit loss alone is no longer an acceptable progress measure.
+
+The next interface checkpoint is also complete in source: `scenario_outcomes.py` defines the
+title-neutral, censor-safe preference envelope, and `scenario_outcome_adapters.py` binds the
+existing battle, strategic-navigation and party-development types without flattening them into a
+fake universal record. The battle curve runner enforces exactly 4 train + 4 development captures,
+unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
+outcomes. It has not yet opened a cartridge. The milestone still lacks the curve result and real
+snapshot-backed navigation and party-development outcomes.
 
 ## Learning approach
 

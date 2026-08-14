@@ -26,6 +26,26 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: three different lessons, one honest report card
+
+The first battle lesson exposed the next architectural trap. Its record called itself
+“title-neutral,” but it still required move PP, damage and faint fields. Navigation does not deal
+damage. Party training does not have a move slot. Forcing them into that record would have produced
+one schema only by lying about what the games measured.
+
+The new boundary shares only what the learner genuinely needs: an identity-free candidate menu and
+an independently verified ordering of outcomes. Battle keeps damage and survival. Navigation keeps
+arrival, progress, collisions and route effort. Party development keeps experience, battles,
+Center visits, evolutions, faints and blackouts. Interrupted evidence stays censored, equal outcomes
+stay tied, and a result attached to the wrong candidate is rejected. Experience must reach the
+chosen trainee; letting the overlevelled escort take it does not earn credit.
+
+The first follow-up experiment is intentionally tiny and exact: four Red training battles, four
+untouched development battles, and three models fitted from the same prior with one, two and four
+contexts. It cannot prove battle competence. It can cheaply show whether adding a few independent
+lessons bends the curve in the right direction—or makes the failure worse—before the project pays
+for hundreds. Only after that result and one real navigation and party lesson does collection grow.
+
 ## Current checkpoint: the first lesson made the model worse
 
 The new development loop finally did what the old full-game loop could not. It restored two real,

@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 shared-boundary scene: stop calling battle fields universal
+
+Put three cards on screen: **BATTLE: DAMAGE / FAINT / PP**, **NAVIGATION: ARRIVAL / COLLISIONS /
+STEPS**, and **PARTY: XP / HEALS / EVOLUTION**. Try to push all three through a box labelled
+**BATTLE TURN OUTCOME**; let the last two visibly fail. Replace the box with the smaller shared
+question: **IDENTITY-FREE CANDIDATES + VERIFIED OUTCOME ORDER**.
+
+Show two deliberate attacks. Swap the destination attached to a route result: **REJECTED**. Change
+the trainee feature row attached to an experience result: **REJECTED**. Interrupt one execution and
+stamp it **CENSORED · NO TARGET**. Tie three rounded outcomes and split the target mass instead of
+inventing a winner.
+
+End on the prospective curve board: **4 TRAIN / 4 UNTOUCHED DEV / PREFIXES 1→2→4 / SAME PRIOR**.
+Add **FIRST QUALIFIED ENCOUNTER · NO REPLACEMENT AFTER OUTCOME · DESCRIPTIVE ONLY**. The line is:
+**“Before buying two hundred lessons, we are checking whether eight honest ones teach anything at
+all—and whether the same report card works outside battle.”**
+
 ## August 14 outcome-learning scene: lower loss, worse move
 
 Open on two identical battle frames. Split each into four branches labelled **TRY EVERY MOVE** and

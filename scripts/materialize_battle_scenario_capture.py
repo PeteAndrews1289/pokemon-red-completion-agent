@@ -191,6 +191,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         source_commit=source.git_commit,
         expected_map=int(MapId.POKEMON_MANSION_1F),
         expected_battle_state=1,
+        source_state_sha256=hashlib.sha256(source_bytes).hexdigest(),
     )
     out_manifest.write_bytes(manifest_payload)
     return {
