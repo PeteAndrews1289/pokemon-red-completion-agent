@@ -3,6 +3,29 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Narrow follow-up rechecks and Codex adjudication — 2026-08-14
+
+Reviewed source: exact commit `316147fddc592c627b87882f782ad224c350f5f2`, after green GitHub
+CI run `31834938341`. Both reviewers inspected only `99754b8..316147f` plus necessary callees.
+Neither opened a ROM, teacher, private/counted/sealed context or prediction.
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| Combined low-confidence/unsupported bound was lost while widening valid unsupported terminal outcomes | **Accept** | Claude produced an impossible accepted aggregate with six mutually exclusive low-confidence and six unsupported triggers carried by six fallback outcomes. Preserve the individual low-confidence bound and add the combined typed-trigger bound over fallback/control/failure/interruption outcomes. |
+| Relative-path redaction also removes numeric `X/Y` diagnostics | **Accept** | `checkpoint 275/312` became `checkpoint [private-path]`, defeating the diagnostic-retention goal. Relative paths still redact, while numeric fractions now remain exact. |
+| Assigned Crystal goal kind can disagree with the eventual teacher label | **Accept with stricter prospective rule** | Before any materializer exists, freeze fail-closed behavior: any adaptation or sealed mismatch retires the experiment; replacement, resampling, scoring and a transfer claim are forbidden; publish mismatch count and partition. |
+| The zero-weight control's sealed score is exactly 6/54 | **Reviewer retracted; Codex correction stands** | Availability masking changes the all-zero argmax to the first available candidate. Six position-zero contexts are a lower bound; the exact score is private and unknown before access. |
+| Source-derived passability is equivalent to teacher arrows | **Reviewer retracted; Codex rejection stands** | Antigravity found no executable fixed-string authority path and accepted the map/world-model distinction plus randomized-displacement gate. |
+| V3 is defective because it cannot execute Crystal goals | **Reviewer retracted; retain boundary** | V3 explicitly measures only goal-manager representation and grants no battle, navigation, story or collection authority. |
+| One paired battle outcome immediately generates learned authority | **Reject** | One result can prove the outcome/update plumbing. Milestone 1 explicitly grants no authority; bounded authority waits for the preregistered independent unseen gate. |
+
+Claude's independent full gate measured 3,246 passed, three deselected and one expected failure at
+`316147f`. Antigravity returned **approve**; Claude returned **approve with conditions**. The three
+accepted conditions above are implemented without private access. Revised V3 plan SHA-256:
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
+The resulting source passes 3,248 ROM-free tests, with the same three deselections and one expected
+failure; privacy, documentation, source bindings, generated plans, lint and types are green.
+
 ## Exact-implementation reviews and Codex adjudication — 2026-08-14
 
 Reviewed source: commit `99754b80dd37436810ae6f32423620e053eb94bc`.
@@ -36,7 +59,7 @@ inputs, not authority. Codex reproduced the material claims and made the decisio
 ### Resulting decision
 
 - Revised Crystal V3 SHA-256:
-  `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+  `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 - Private Crystal access remains false pending publication and narrow exact-commit re-review.
 - No ROM, teacher, private/counted/sealed context, label, prediction or authority promotion occurred.
 - Next capability lane after publication: one authenticated battle snapshot family from model action

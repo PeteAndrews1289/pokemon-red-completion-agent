@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 recheck scene: even the audit had a held-out test
+
+Show the same impossible dashboard record twice: first as accepted—**6 LOW CONFIDENCE + 6
+UNSUPPORTED / 6 FALLBACK OUTCOMES**—then rejected after restoring the combined guard. Cut to the
+failure message **CHECKPOINT 275/312 INCOMPLETE**. Let the privacy filter erase it, rewind, and run
+the corrected filter so the ratio survives while actual filesystem paths become
+**[PRIVATE-PATH]**.
+
+Then correct the reviewer on screen. Replace **ZERO CONTROL = 6/54** with **ZERO CONTROL ≥ 6;
+EXACT SCORE SEALED BY AVAILABILITY MASKS**. Finish with the new one-shot rule:
+**ASSIGNED LABEL MISMATCH → RETIRE / NO REPLACEMENT / NO SCORE / NO CLAIM**. The narration is:
+**“A reviewer changing their mind is not a failure of review. It is the point.”**
+
 ## August 14 audit scene: the missing thirteen and the experiment that erased transfer
 
 Open with three large figures that visibly fail to add up:

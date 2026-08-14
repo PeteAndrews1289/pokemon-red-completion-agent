@@ -80,6 +80,24 @@
     ],
     "reviewed_source_commit": "99754b80dd37436810ae6f32423620e053eb94bc"
   },
+  "external_review_narrow_recheck": {
+    "accepted_and_implemented": [
+      "combined mutually-exclusive typed-trigger accounting bound",
+      "numeric progress fractions survive path redaction",
+      "assigned-kind mismatch retires V3 without replacement, resampling, scoring, or transfer claim"
+    ],
+    "antigravity_verdict": "approve",
+    "claude_verdict": "approve_with_conditions",
+    "codex_rejected": [
+      "one paired battle outcome is sufficient to grant learned authority"
+    ],
+    "reviewed_source_commit": "316147fddc592c627b87882f782ad224c350f5f2",
+    "reviewer_retractions": [
+      "source-derived passability is equivalent to teacher arrow strings",
+      "V3 is defective because it cannot establish executable Crystal play",
+      "the zero-weight control has an exactly knowable 6-of-54 sealed score"
+    ]
+  },
   "crystal_design": {
     "v2_retired_unopened": {
       "adaptation_examples_collected": 0,
@@ -101,8 +119,17 @@
         "adaptation_each_of_nine_positions": 3,
         "sealed_each_of_nine_positions": 6
       },
+      "assigned_kind_mismatch_policy": {
+        "applies_to": [
+          "adaptation",
+          "sealed_test"
+        ],
+        "mismatch_count_and_partition_must_be_published": true,
+        "replacement_or_resampling_forbidden": true,
+        "result": "retire_without_scoring_or_transfer_claim"
+      },
       "minimum_contexts_for_target_power": 51,
-      "plan_sha256": "211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208",
+      "plan_sha256": "1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a",
       "primary_candidate": "frozen Red weights without Crystal adaptation",
       "primary_endpoint": "one-sided exact sign test conditional on discordance",
       "sealed_independent_contexts": 54,
@@ -124,6 +151,7 @@
   "future_runtime_observability": {
     "exact_path_free_exception_message_retained_privately_when_safe": true,
     "last_semantic_stage_and_policy_counters_retained": true,
+    "numeric_progress_fractions_retained": true,
     "path_bearing_exception_message": "private record replaces path tokens while preserving the remaining diagnostic text, original SHA-256, and an explicit redaction flag",
     "public_receipt_contains_exception_message_sha256": true
   },
@@ -181,7 +209,7 @@
   "rom_free_validation": {
     "documented_expected_failures": 1,
     "integration_tests_deselected": 3,
-    "passed": 3246,
+    "passed": 3248,
     "public_artifact_privacy": "passed",
     "source_bound_registries": [
       "battle_collection",

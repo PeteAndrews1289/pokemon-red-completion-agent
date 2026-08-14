@@ -402,6 +402,10 @@ analysis uses 27 separate adaptation contexts in nine three-label folds and prio
 adaptation; only the prior center differs. Add only thin Crystal observation and mechanic bindings;
 do not encode a Crystal route.
 
+The assigned kind is a preregistered expected label. Any adaptation or sealed teacher-label
+mismatch retires the entire V3 identity without replacement, resampling, scoring or a transfer
+claim; publish its count and partition. This is an integrity failure, not a context-search signal.
+
 Exit gate:
 
 - all sealed protocol preconditions hold;
@@ -409,6 +413,7 @@ Exit gate:
   label;
 - the primary paired result uses all 54 contexts without optional stopping;
 - the candidate reaches at least 27/54 and does not trail the highest-pressure heuristic;
+- zero assigned-kind/teacher-label mismatches occur, with no replacement or resampling;
 - prior-preserving secondary candidates use identical folds, optimizer, normalizer and strength;
 - shared-policy failures are separated from missing game-specific capabilities;
 - transfer claims follow the frozen paired endpoint.

@@ -21,12 +21,13 @@ Do not add workers, a fourth family or a full run first.
 
 Crystal v2 is retired at zero access. Prospective V3 is
 [`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
-`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 Its 54-context zero-shot paired primary endpoint has 82.3248% power at the declared useful effect;
 utility additionally requires at least 27/54 and no worse accuracy than the title-neutral
 highest-pressure heuristic. Twenty-seven adaptation contexts support a mandatory prior-preserving
 three-label secondary analysis. It authorizes no private context access before publication and
-fresh external review.
+fresh external review. Any assigned-kind/teacher-label mismatch retires the experiment without
+replacement, resampling, scoring or a transfer claim.
 
 ## Superseded focus (2026-08-14): evaluate the Red learner before Crystal
 

@@ -18,13 +18,14 @@
 > **Crystal transfer preregistration (August 14, 2026):** V1 and V2 are preserved as retired
 > zero-access designs. The active prospective plan is
 > [`configs/crystal-goal-manager-transfer-v3.json`](configs/crystal-goal-manager-transfer-v3.json),
-> SHA-256 `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+> SHA-256 `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 > Frozen Red and all-zero weights are compared zero-shot on 54 sealed contexts by a one-sided exact
 > paired test. At the declared 0.50/0.20/0.30 win/loss/tie effect, power is 82.3%. Significance
 > against that deliberately empty control is not enough: the Red model must also score at least
 > 27/54 and match or beat the frozen title-neutral highest-pressure heuristic. Every one of the nine
 > answer positions now occurs exactly three times in adaptation and six times in sealed test. A
-> mandatory secondary analysis uses nine prior-preserving three-label folds. The plan authorizes no
+> teacher-label mismatch retires the experiment without replacement, resampling, scoring or a
+> transfer claim. A mandatory secondary analysis uses nine prior-preserving three-label folds. The plan authorizes no
 > private context access pending publication and fresh Claude/Antigravity review. See the
 > [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 

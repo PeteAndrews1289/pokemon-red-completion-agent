@@ -91,6 +91,12 @@ def test_v3_retires_v2_at_zero_access_and_drops_the_zero_loss_conjunction() -> N
     assert "maximum_discordant_losses" not in endpoint
     assert endpoint["adequately_powered"] is True
     assert document["claims"]["assigned_goal_kind_is_expected_teacher_label"] is True
+    assert document["claims"]["assigned_kind_mismatch_policy"] == {
+        "applies_to": ["adaptation", "sealed_test"],
+        "mismatch_count_and_partition_must_be_published": True,
+        "replacement_or_resampling_forbidden": True,
+        "result": "retire_without_scoring_or_transfer_claim",
+    }
     assert document["claims"]["utility_gate"] == {
         "absolute_candidate_accuracy_floor": 0.5,
         "candidate_must_match_or_exceed_comparator_accuracy": True,
@@ -125,6 +131,14 @@ def test_v3_parser_rejects_a_high_risk_endpoint_or_authorization_mutation() -> N
         (("claims", "utility_gate", "absolute_candidate_accuracy_floor"), 0.1),
         (("claims", "utility_gate", "comparator_id"), "lowest_effort_goal_index"),
         (("claims", "assigned_goal_kind_is_expected_teacher_label"), False),
+        (
+            ("claims", "assigned_kind_mismatch_policy", "replacement_or_resampling_forbidden"),
+            False,
+        ),
+        (
+            ("claims", "assigned_kind_mismatch_policy", "result"),
+            "replace_until_balanced",
+        ),
         (("adaptation", "only_differing_field"), "optimizer"),
         (("supersedes", "v2_sealed_contexts_opened"), 1),
     ):

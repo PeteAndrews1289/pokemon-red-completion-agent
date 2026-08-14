@@ -227,6 +227,12 @@ def crystal_transfer_v3_plan_document() -> dict[str, object]:
         },
         "claims": {
             "assigned_goal_kind_is_expected_teacher_label": True,
+            "assigned_kind_mismatch_policy": {
+                "applies_to": ["adaptation", "sealed_test"],
+                "mismatch_count_and_partition_must_be_published": True,
+                "replacement_or_resampling_forbidden": True,
+                "result": "retire_without_scoring_or_transfer_claim",
+            },
             "does_not_establish": [
                 "end-to-end-crystal-completion",
                 "autonomous-living-pokedex-completion",
@@ -267,9 +273,11 @@ def crystal_transfer_v3_plan_document() -> dict[str, object]:
                 "sealed_contexts"
             ),
             "collect_all_adaptation_labels_without_opening_sealed_labels",
+            "retire_if_any_adaptation_label_differs_from_its_assigned_goal_kind",
             "fit_each_red_prior_and_zero_prior_fold_from_its_three_declared_examples",
             "commit_every_fold_model_prediction_for_its_assigned_sealed_contexts",
             "open_each_sealed_context_once_and_publish_all_outcomes",
+            "retire_if_any_sealed_label_differs_from_its_assigned_goal_kind",
             "score_primary_and_mandatory_secondary_without_optional_stopping",
         ],
         "schema": CRYSTAL_TRANSFER_V3_PLAN_SCHEMA,

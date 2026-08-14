@@ -54,6 +54,16 @@ def test_private_failure_record_redacts_common_path_forms_independently() -> Non
         assert forbidden not in repr(record)
 
 
+def test_private_failure_record_preserves_progress_fractions() -> None:
+    message = "checkpoint 275/312 incomplete; party 4/6 healthy; agreement 1647/2247"
+
+    record = _private_failure_record(error=RuntimeError(message), snapshot={})
+
+    assert record["exception_message"] == message
+    assert record["exception_message_retained_exactly"] is True
+    assert record["exception_message_redacted"] is False
+
+
 def test_private_failure_record_accepts_a_graceful_interrupt() -> None:
     error = KeyboardInterrupt("user requested stop")
 

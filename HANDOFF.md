@@ -17,6 +17,40 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Narrow exact-commit rechecks and final guard repair — 2026-08-14
+
+GitHub CI passed exact follow-up commit `316147f`. Claude and Antigravity then rechecked only the
+delta from `99754b8`, under the same no-ROM/no-teacher/no-private-context boundary. Antigravity
+returned **approve** and withdrew its earlier claims that the bounded V3 benchmark overclaimed
+executable Crystal play and that cartridge-derived passability was equivalent to teacher arrows.
+Claude returned **approve with conditions**, verified the complete 3,246-test gate independently,
+and withdrew its earlier claim that the all-zero comparator's sealed score was exactly 6/54:
+private availability masks make 6 a lower bound, not a knowable exact score.
+
+Three conditions are incorporated in the follow-up source:
+
+- Low-confidence and unsupported-observation triggers are mutually exclusive per decision. The
+  dashboard now retains their combined bound while still allowing an unsupported observation to
+  end as fallback, non-move control, failure or interruption.
+- Failure-message redaction still covers absolute, home, Windows, UNC, `file:` and relative paths,
+  but numeric diagnostics such as `checkpoint 275/312` and `agreement 1647/2247` survive exactly.
+- Crystal V3 now declares the assigned-kind/teacher-label mismatch rule before a materializer
+  exists. Any mismatch in adaptation or sealed test retires the entire experiment without
+  replacement, resampling, scoring or transfer claim; the count and partition must be published.
+  This avoids both regenerate-until-agreement selection bias and silent loss of exact balance.
+
+One Antigravity sentence was rejected: a single paired battle outcome can prove that the update
+pipeline works, but cannot grant learned authority. Milestone 1 still grants none directly;
+authority requires the preregistered unseen battle gate. Canonical Crystal V3 plan SHA-256 is
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
+
+No ROM, teacher, private/counted/sealed context, label, prediction or model authority was opened.
+After these three repairs, the current source passes 3,248 ROM-free tests; three integration tests
+remain deliberately deselected and one documented expected failure remains. Privacy, documentation,
+all source-bound registries, the Crystal V3 plan, Ruff and whole-package mypy are green.
+The next implementation remains one authenticated battle snapshot family through outcome, learner
+update and untouched-lineage evaluation—not another full run and not Crystal execution.
+
 ## Second-review adjudication and first-real-adapter order — 2026-08-14
 
 Claude and Antigravity independently audited exact commit `99754b8`. Their memos were advisory, not
@@ -38,7 +72,7 @@ a vote. Codex reproduced the load-bearing findings and made the following decisi
   `highest_pressure_goal_index` heuristic. The heuristic prediction is committed before labels.
   Both partitions now balance the expected answer exactly across all nine positions and still
   contain all 36 pairwise order reversals. Canonical plan SHA-256 is
-  `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+  `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 - Antigravity was right about batching risk: build the real battle adapter first and require one
   learner update plus untouched-lineage outcome before implementing navigation and party adapters.
   The 600 retained corrections select coverage only; they remain outcome-free and cannot train the
@@ -108,7 +142,7 @@ candidate against an identical all-zero control on 54 sealed contexts. Its one-s
 test has 82.3248% power at the declared win/loss/tie effect 0.50/0.20/0.30. A mandatory secondary
 analysis uses prior-preserving adaptation in nine three-label folds. Canonical plan:
 [`configs/crystal-goal-manager-transfer-v3.json`](configs/crystal-goal-manager-transfer-v3.json),
-SHA-256 `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+SHA-256 `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 The plan embeds all 81 slot assignments rather than only their totals; both partitions contain all
 36 possible pairwise candidate-order reversals and exact focus-position balance. The later
 second-review checkpoint adds a 27/54 absolute floor and a highest-pressure utility comparator.

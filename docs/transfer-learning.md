@@ -14,7 +14,7 @@ product is the shared hierarchy plus thin title/revision adapters.
 
 The active first test is Crystal V3:
 [`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
-`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 It remains review-gated and authorizes no private context access.
 
 V1 (Crystal 1.0) and V2 (Crystal 1.1) are preserved as retired zero-access designs. V2's ordinary
@@ -38,6 +38,10 @@ usefulness gate. The same prediction commitment therefore includes the title-neu
 `highest_pressure_goal_index` heuristic. Promotion additionally requires at least 27/54 absolute
 accuracy and requires the Red model to match or beat that heuristic. The answer position is exactly
 balanced in both partitions, and candidate position is never a model feature.
+
+The assigned goal kind is only the expected label used to preregister balance. Any eventual teacher
+label mismatch retires V3 without replacement, resampling, scoring or a transfer claim; its count
+and partition must be published. No materializer may weaken this rule.
 
 The mandatory secondary endpoint uses prior-preserving adaptation. Each Red-prior and zero-prior
 candidate sees the same three examples in the same order with the same optimizer, normalizer and

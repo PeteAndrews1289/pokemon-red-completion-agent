@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-14 narrow-recheck adjudication — highest active checkpoint:** Exact commit `316147f`
+> passed GitHub CI, then Antigravity approved and Claude approved with conditions. Antigravity
+> withdrew the corridor/action-string and V3-scope criticisms. Claude withdrew its exact 6/54
+> comparator claim after proving private availability masks choose the first available candidate.
+> The accepted final repairs restore the combined typed-trigger accounting bound, preserve numeric
+> `X/Y` diagnostics during path redaction, and make any assigned-kind/teacher-label mismatch retire
+> Crystal V3 without replacement, resampling, scoring or transfer claim. Revised V3 SHA-256 is
+> `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
+>
+> A single battle outcome may prove the learner-update pipeline but grants no authority. Build the
+> battle adapter first and evaluate untouched lineages under the frozen Milestone 3 gate before
+> navigation or party-development expansion. No ROM, teacher, private/counted/sealed context,
+> label, prediction or authority promotion occurred. The repaired source passes 3,248 ROM-free
+> tests; three integration tests remain deselected and one documented expected failure remains.
+
 > **2026-08-14 second-review adjudication — highest active checkpoint:** Claude and Antigravity
 > audited exact commit `99754b8`; Codex reproduced and adjudicated their findings rather than
 > accepting consensus. The real blockers are fixed in the follow-up source: fallback attempts
@@ -9,7 +24,7 @@
 > match or beat the title-neutral highest-pressure heuristic in addition to the powered Red-versus-
 > zero paired test. All nine focus positions occur exactly 3 times in adaptation and 6 times in
 > sealed test; plan SHA-256 is
-> `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+> `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 >
 > Next publish, pass exact-commit CI, and obtain narrow reviewer rechecks. Then build **only the real
 > battle scenario adapter first** and require one learner update plus untouched-lineage outcome

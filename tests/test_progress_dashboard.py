@@ -247,6 +247,18 @@ def test_live_scorecard_allows_unsupported_observation_to_end_as_non_move_contro
         )
 
 
+def test_live_scorecard_rejects_overlapping_typed_fallback_triggers() -> None:
+    with pytest.raises(ProgressDashboardError, match="typed fallback triggers"):
+        DashboardLiveEvaluationState(
+            battle_decisions=10,
+            teacher_agreements=4,
+            teacher_queries=10,
+            teacher_fallbacks=6,
+            low_confidence_fallbacks=6,
+            unsupported_observations=6,
+        )
+
+
 def test_dependency_free_png_encoder_preserves_exact_rgb_pixels() -> None:
     rgb = bytes((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
     payload = encode_rgb_png(2, 2, rgb)

@@ -339,6 +339,15 @@ class DashboardLiveEvaluationState:
             raise ProgressDashboardError(
                 "unsupported observations exceed their terminal outcomes"
             )
+        if self.low_confidence_fallbacks + self.unsupported_observations > (
+            self.teacher_fallbacks
+            + self.non_move_control_decisions
+            + self.failed_decisions
+            + self.interrupted_decisions
+        ):
+            raise ProgressDashboardError(
+                "typed fallback triggers exceed their terminal outcomes"
+            )
         if self.team_agreements > self.team_decisions:
             raise ProgressDashboardError("team agreements cannot exceed team decisions")
         accounted = (

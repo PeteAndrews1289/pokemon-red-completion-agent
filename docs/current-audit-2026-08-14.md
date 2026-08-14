@@ -1,5 +1,29 @@
 # Current audit — 2026-08-14
 
+## Narrow exact-commit rechecks
+
+Exact commit `316147f` passed GitHub CI and two tailored external rechecks. Antigravity approved and
+withdrew its prior corridor and V3-scope criticisms after tracing the active claim and authority
+boundaries. Claude approved with conditions, reproduced every accepted repair, and withdrew its
+exact-6/54 claim: the all-zero model chooses the first available candidate, while private
+availability masks are not in the public plan.
+
+The recheck found two small guard defects and one future design ambiguity. The dashboard now rejects
+an aggregate that assigns mutually exclusive low-confidence and unsupported triggers to the same
+terminal capacity. Path redaction preserves progress ratios such as `275/312` while continuing to
+remove absolute, home, Windows, UNC, URI and relative paths. Crystal V3 now fails the whole
+experiment closed if any eventual teacher label differs from its assigned kind: there is no
+replacement, resampling, scoring or transfer claim, and the mismatch count and partition must be
+published. This rule is frozen before a private materializer exists.
+
+One reviewer suggestion was not adopted. A single paired battle result proves pipeline wiring, not
+learned authority; promotion still requires independent unseen evidence under the Milestone 3 gate.
+No private evidence was accessed and V3 remains closed. Revised plan SHA-256 is
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
+The repaired source passes 3,248 ROM-free tests; three integration tests remain deliberately
+deselected and one documented expected failure remains. Privacy, docs, source-bound registries,
+the V3 generator, Ruff and whole-package mypy are green.
+
 ## Second-review adjudication
 
 The second read-only audit approved the foundation with conditions and found one reproducible live
@@ -16,7 +40,7 @@ messages retain their non-path diagnostic text. Scenario partition-overlap count
 Crystal schedule is exactly balanced across all nine answer positions, and a paired win over the
 zero-weight control is insufficient by itself: V3 additionally requires 27/54 and performance at
 least equal to the frozen title-neutral highest-pressure heuristic. Revised plan SHA-256 is
-`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+`1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 
 The implementation order is now serial: one real battle snapshot adapter must produce a learner
 update and untouched-lineage outcome before navigation and party-development live adapters are

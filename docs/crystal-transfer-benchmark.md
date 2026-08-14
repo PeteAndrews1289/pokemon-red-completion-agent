@@ -8,7 +8,7 @@ choices than the same model with zero weights on genuinely unseen Crystal contex
 
 The active prospective plan is
 [`configs/crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json),
-SHA-256 `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+SHA-256 `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 It contains 27 adaptation slots and 54 sealed-test slots, no cartridge capture, label, prediction,
 private path or ROM byte. It explicitly sets private-context authorization to false and requires
 independent reviews from Claude and Antigravity before that changes.
@@ -103,6 +103,12 @@ The fixed order is:
 
 Any schema, candidate, normalizer, optimizer, prior strength or endpoint change after step 2 retires
 the entire V3 identity.
+
+The assigned goal kind is a preregistered expected teacher label, not an instruction to the model.
+If any adaptation or sealed teacher label differs from that assignment, the complete experiment
+retires without replacement, resampling, scoring or a transfer claim. The mismatch count and
+partition are published. This fail-closed rule prevents both cherry-picked regeneration and a
+silent break in the exact class/position balance.
 
 ## Powered primary endpoint
 

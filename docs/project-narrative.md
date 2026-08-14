@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the reviewers audited the audit
+
+The exact follow-up commit passed GitHub, then both reviewers received narrower prompts aimed at
+their own earlier claims. Antigravity reversed two positions: a cartridge-derived passability map
+is world knowledge rather than a memorized action sequence, and Crystal V3 never claimed it could
+execute Crystal. Claude reversed its exact control-score calculation after following availability
+masking: six correct answers are guaranteed, but the private contexts decide whether the all-zero
+model gets more.
+
+The second pass still earned its keep. It found that two mutually exclusive diagnostic reasons
+could share one aggregate fallback count, and that privacy redaction turned `275/312` into a fake
+filesystem path. Both guards were tightened. It also forced the one-shot Crystal experiment to say
+what happens if a future teacher disagrees with a preregistered class: the whole identity retires,
+with no replacement context and no result. The reviewers were allowed to change their minds, Codex
+was allowed to disagree, and every change followed a falsifier instead of a vote.
+
 ## August 14: the reviewers were instruments, not judges
 
 The second review did not end in a vote. Claude found a concrete edge case: when an unsupported
