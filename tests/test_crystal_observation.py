@@ -9,6 +9,7 @@ from pokemon_crystal_completion.observation import (
     CRYSTAL_PARTY_CAPACITY,
     CRYSTAL_PARTY_STRUCT_LENGTH,
     CRYSTAL_POKEDEX_FLAG_BYTES,
+    CrystalObservationBundle,
     CrystalObservationError,
     CrystalStorageObservation,
     decode_crystal_box,
@@ -17,6 +18,7 @@ from pokemon_crystal_completion.observation import (
     decode_crystal_pokedex,
     derive_crystal_ownership_progress,
     read_crystal_inventory,
+    read_crystal_observation_bundle,
     read_crystal_party,
     read_crystal_pokedex,
     read_crystal_storage,
@@ -336,6 +338,70 @@ class _StableStorageMemory:
         return self.stored_boxes[box_number]
 
 
+class _StableCombinedMemory:
+    def __init__(
+        self,
+        *,
+        wram: dict[tuple[int, int, int], bytes],
+        active_box: bytes,
+        stored_boxes: dict[int, bytes],
+    ) -> None:
+        self.wram = wram
+        self.active_box = active_box
+        self.stored_boxes = stored_boxes
+        self.wram_calls: list[tuple[int, int, int]] = []
+        self.sram_calls: list[tuple[int, int, int]] = []
+
+    def read_wram(self, bank: int, address: int, length: int) -> bytes:
+        key = (bank, address, length)
+        self.wram_calls.append(key)
+        return self.wram[key]
+
+    def read_cartridge_ram(self, bank: int, address: int, length: int) -> bytes:
+        self.sram_calls.append((bank, address, length))
+        if (bank, address) == (
+            CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL.bank,
+            CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL.address,
+        ):
+            return self.active_box
+        box_number = next(
+            number
+            for number, symbol in CRYSTAL_STORED_BOX_SRAM_SYMBOLS.items()
+            if (symbol.bank, symbol.address) == (bank, address)
+        )
+        return self.stored_boxes[box_number]
+
+
+def _combined_memory(*, caught: bytes | None = None) -> _StableCombinedMemory:
+    species, structs = _party_bytes()
+    blank = _box_payload()
+
+    def value(name: str, length: int, payload: bytes) -> tuple[tuple[int, int, int], bytes]:
+        symbol = CRYSTAL_OBSERVATION_SYMBOLS[name]
+        return (symbol.bank, symbol.address, length), payload
+
+    registered = caught if caught is not None else _flags(1, 155, 200)
+    wram = dict(
+        (
+            value("wPartyCount", 1, bytes((2,))),
+            value("wPartySpecies", 7, species),
+            value("wPartyMon1", 288, structs),
+            value("wPokedexCaught", 32, registered),
+            value("wPokedexSeen", 32, registered),
+            value("wCurBox", 1, bytes((0,))),
+            value("wNumItems", 1, bytes((1,))),
+            value("wItems", 41, _pocket_payload(20, (0x10, 3))),
+            value("wNumBalls", 1, bytes((1,))),
+            value("wBalls", 25, _pocket_payload(12, (0x05, 8))),
+        )
+    )
+    return _StableCombinedMemory(
+        wram=wram,
+        active_box=_box_payload((1, 100)),
+        stored_boxes={number: blank for number in range(1, 15)},
+    )
+
+
 def test_live_read_helpers_request_bank_one_and_double_check_coherence() -> None:
     species, structs = _party_bytes()
     values = {
@@ -530,3 +596,84 @@ def test_live_party_reader_retries_when_struct_changes_without_roster_change() -
     memory = TornStructOnceMemory()
     assert read_crystal_party(memory, maximum_attempts=2).members[0].hp == 30
     assert memory.struct_reads == 4
+
+
+def test_live_bundle_is_stable_cross_checked_and_identity_free() -> None:
+    memory = _combined_memory()
+
+    bundle = read_crystal_observation_bundle(memory)
+
+    assert isinstance(bundle, CrystalObservationBundle)
+    assert bundle.party.species_ids() == (155, 200)
+    assert bundle.ownership.living.completed == 3
+    assert bundle.public_dict() == {
+        "party": {
+            "size": 2,
+            "capacity": 6,
+            "minimum_level": 30,
+            "maximum_level": 40,
+            "fainted": 1,
+        },
+        "pokedex": {"registered": 3, "seen": 3, "target": 250},
+        "ownership": {
+            "living": 3,
+            "level_cap": 1,
+            "target": 250,
+            "boxed_specimens": 1,
+            "opaque_eggs": 0,
+        },
+        "storage": {"current_box": 1, "occupied_slots": 1, "free_slots": 279},
+        "resources": {
+            "capture_items": 8,
+            "recovery_items": 3,
+            "item_stacks": 1,
+            "ball_stacks": 1,
+        },
+    }
+    assert "155" not in str(bundle.public_dict())
+    assert len(memory.sram_calls) == 56
+
+
+def test_live_bundle_rejects_living_species_missing_from_registered_count() -> None:
+    memory = _combined_memory(caught=_flags(155, 200))
+
+    with pytest.raises(CrystalObservationError, match="living ownership exceeds"):
+        read_crystal_observation_bundle(memory, maximum_attempts=1)
+
+
+def test_live_bundle_retries_a_cross_component_change() -> None:
+    original = _combined_memory()
+
+    class CrossComponentChange(_StableCombinedMemory):
+        caught_reads = 0
+        seen_reads = 0
+
+        def read_wram(self, bank: int, address: int, length: int) -> bytes:
+            if address == CRYSTAL_OBSERVATION_SYMBOLS["wPokedexCaught"].address:
+                self.caught_reads += 1
+                return _flags(1, 155, 200) if self.caught_reads <= 2 else _flags(1, 2, 155, 200)
+            if address == CRYSTAL_OBSERVATION_SYMBOLS["wPokedexSeen"].address:
+                self.seen_reads += 1
+                return _flags(1, 155, 200) if self.seen_reads <= 2 else _flags(1, 2, 155, 200)
+            return super().read_wram(bank, address, length)
+
+    memory = CrossComponentChange(
+        wram=original.wram,
+        active_box=original.active_box,
+        stored_boxes=original.stored_boxes,
+    )
+
+    bundle = read_crystal_observation_bundle(memory, maximum_attempts=2)
+
+    assert bundle.pokedex.registered.completed == 4
+    assert memory.caught_reads == 8
+    assert memory.seen_reads == 8
+
+
+@pytest.mark.parametrize("maximum_attempts", (0, -1, True, 1.5))
+def test_live_bundle_requires_a_positive_integer_bound(maximum_attempts: object) -> None:
+    with pytest.raises(CrystalObservationError, match="positive attempt bound"):
+        read_crystal_observation_bundle(  # type: ignore[arg-type]
+            _combined_memory(),
+            maximum_attempts=maximum_attempts,  # type: ignore[arg-type]
+        )

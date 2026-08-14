@@ -234,6 +234,73 @@ class CrystalOwnershipProgress:
                 raise CrystalObservationError(f"Crystal {name} is invalid")
 
 
+@dataclass(frozen=True, slots=True)
+class CrystalObservationBundle:
+    """One coherent, identity-free semantic view of completion state."""
+
+    party: PartyObservation
+    pokedex: CrystalPokedexProgress
+    storage: CrystalStorageObservation
+    inventory: CrystalInventoryObservation
+    ownership: CrystalOwnershipProgress
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.party, PartyObservation):
+            raise TypeError("party must be PartyObservation")
+        if not isinstance(self.pokedex, CrystalPokedexProgress):
+            raise TypeError("pokedex must be CrystalPokedexProgress")
+        if not isinstance(self.storage, CrystalStorageObservation):
+            raise TypeError("storage must be CrystalStorageObservation")
+        if not isinstance(self.inventory, CrystalInventoryObservation):
+            raise TypeError("inventory must be CrystalInventoryObservation")
+        if not isinstance(self.ownership, CrystalOwnershipProgress):
+            raise TypeError("ownership must be CrystalOwnershipProgress")
+        expected = derive_crystal_ownership_progress(self.party, self.storage)
+        if self.ownership != expected:
+            raise CrystalObservationError("Crystal ownership does not match party and storage")
+        if self.ownership.living.completed > self.pokedex.registered.completed:
+            raise CrystalObservationError(
+                "Crystal living ownership exceeds registered Pokédex progress"
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        """Return counts safe for receipts and the local progress dashboard."""
+
+        levels = self.party.levels
+        return {
+            "party": {
+                "size": self.party.size,
+                "capacity": self.party.capacity,
+                "minimum_level": min(levels) if levels else None,
+                "maximum_level": max(levels) if levels else None,
+                "fainted": sum(member.is_fainted for member in self.party.members),
+            },
+            "pokedex": {
+                "registered": self.pokedex.registered.completed,
+                "seen": self.pokedex.seen.completed,
+                "target": self.pokedex.registered.target,
+            },
+            "ownership": {
+                "living": self.ownership.living.completed,
+                "level_cap": self.ownership.level_cap.completed,
+                "target": self.ownership.living.target,
+                "boxed_specimens": self.ownership.boxed_specimens,
+                "opaque_eggs": self.ownership.opaque_eggs,
+            },
+            "storage": {
+                "current_box": self.storage.current_box_number,
+                "occupied_slots": self.storage.occupied_slots,
+                "free_slots": self.storage.free_slots,
+            },
+            "resources": {
+                "capture_items": self.inventory.capture_item_count,
+                "recovery_items": self.inventory.recovery_item_count,
+                "item_stacks": len(self.inventory.items),
+                "ball_stacks": len(self.inventory.balls),
+            },
+        }
+
+
 def derive_crystal_ownership_progress(
     party: PartyObservation,
     storage: CrystalStorageObservation,
@@ -677,6 +744,58 @@ def read_crystal_inventory(
     raise last_error or CrystalObservationError("Crystal inventory observation failed")
 
 
+def read_crystal_observation_bundle(
+    memory: CrystalStorageMemoryReader,
+    *,
+    maximum_attempts: int = 3,
+) -> CrystalObservationBundle:
+    """Read every completion component twice and accept only one stable moment."""
+
+    if type(maximum_attempts) is not int or maximum_attempts < 1:  # noqa: E721
+        raise CrystalObservationError("Crystal bundle read needs a positive attempt bound")
+    last_error: CrystalObservationError | None = None
+    for _ in range(maximum_attempts):
+        try:
+            before = _read_crystal_observation_components(memory)
+            after = _read_crystal_observation_components(memory)
+        except CrystalObservationError as error:
+            last_error = error
+            continue
+        if before != after:
+            last_error = CrystalObservationError(
+                "Crystal completion state changed during observation"
+            )
+            continue
+        party, pokedex, storage, inventory = before
+        try:
+            return CrystalObservationBundle(
+                party=party,
+                pokedex=pokedex,
+                storage=storage,
+                inventory=inventory,
+                ownership=derive_crystal_ownership_progress(party, storage),
+            )
+        except (CrystalObservationError, TypeError, ValueError) as error:
+            last_error = CrystalObservationError(str(error))
+    raise last_error or CrystalObservationError("Crystal bundle observation failed")
+
+
+def _read_crystal_observation_components(
+    memory: CrystalStorageMemoryReader,
+) -> tuple[
+    PartyObservation,
+    CrystalPokedexProgress,
+    CrystalStorageObservation,
+    CrystalInventoryObservation,
+]:
+    return (
+        read_crystal_party(memory, maximum_attempts=1),
+        read_crystal_pokedex(memory, maximum_attempts=1),
+        read_crystal_storage(memory, maximum_attempts=1),
+        read_crystal_inventory(memory, maximum_attempts=1),
+    )
+
+
 def _decode_crystal_pocket(
     *,
     count: int,
@@ -798,6 +917,7 @@ __all__ = [
     "CrystalInventoryObservation",
     "CrystalItemStack",
     "CrystalObservationError",
+    "CrystalObservationBundle",
     "CrystalOwnershipProgress",
     "CrystalPocket",
     "CrystalPokedexProgress",
@@ -812,5 +932,6 @@ __all__ = [
     "read_crystal_party",
     "read_crystal_pokedex",
     "read_crystal_inventory",
+    "read_crystal_observation_bundle",
     "read_crystal_storage",
 ]

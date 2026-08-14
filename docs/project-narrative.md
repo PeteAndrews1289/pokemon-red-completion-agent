@@ -2,6 +2,16 @@
 
 ## August 14: Crystal became an experiment before it became another route
 
+The first live cartridge surprise was not a battle or a route. Before the first in-game save,
+party, Pokédex and inventory were coherent but all fourteen PC boxes contained bytes with no valid
+species-list terminator. Treating those bytes as an empty collection would have been convenient—and
+false. The adapter rejected them. A fixed clean-power qualification then reached the starting
+bedroom, used Crystal's own SAVE menu, and read the full party/Pokédex/inventory/storage state twice
+across 600 untouched frames. Only after the complete moments matched did the state become eligible
+for later context construction. The dashboard showed the cartridge throughout while every model,
+teacher and experiment counter remained zero. **Before asking whether Red knowledge transfers, the
+project first proved that one Crystal observation means one real moment.**
+
 The next cartridge is no longer represented by a paragraph that says “few-shot.” Before seeing one
 Crystal teaching label, the project froze 72 questions: eighteen for a true zero-shot probe,
 twenty-seven for balanced adaptation, and twenty-seven for a one-opening sealed comparison. Every

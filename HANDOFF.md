@@ -17,8 +17,10 @@ going stale is exactly the failure this project keeps having.
 
 ## Crystal 1.1 authenticated; v2 transfer gate and live dashboard ready — 2026-08-14
 
-Do not resume Red maintenance or build a complete Crystal walkthrough. The Red manager is promoted;
-the active question is whether its weights reduce Crystal teaching.
+Do not resume Red maintenance or build a complete Crystal walkthrough. One Red strategic
+component—the nine-goal manager—is trained and promoted only for bounded, same-context choices;
+there is no trained end-to-end Red agent and no learned model has completed Red. The active
+question is whether this component's weights reduce Crystal teaching.
 
 The public Crystal gate is implemented. `goal_state.py` projects story, registered/living/level-cap
 collection, evolution, party readiness, safety, supplies, storage, control and world knowledge into
@@ -48,6 +50,16 @@ across party and PC. Stored eggs remain opaque and do not count as a known livin
 The counted Items and Balls pockets now have the same coherent reader and validate capacity,
 terminators, duplicate stacks, quantities and pocket membership before deriving capture and
 recovery reserves.
+
+The pending qualification source adds the missing whole-state boundary. Party, Pokédex, all
+fourteen boxes and both counted pockets are each read coherently, then the complete semantic bundle
+is read a second time and accepted only if both moments match. Derived living ownership must not
+exceed registered Pokédex progress. A fixed qualification-only clean-power transcript has been
+live-probed against the exact cartridge: 40 inputs reach the ready starting bedroom, storage
+correctly rejects its uninitialized pre-save bytes, six menu inputs perform a real in-game save,
+and two complete post-save reads separated by 600 no-input frames match. This transcript creates no
+imitation target and cannot open a transfer slot. The official command additionally requires a
+clean, pushed exact commit; publish and pass CI before recording its path-free receipt.
 
 The owner supplied a lawful international v1.1 cartridge after the original v1.0 preregistration.
 Because the counters were still 0/18, 0/27, 0/27 and 0 predictions, v1 was retired without opening
@@ -79,11 +91,12 @@ publish this exact source, require green CI, and only then live-qualify banked r
 materializing any of the 72 v2 contexts. If the observation schema or fixed settings change after
 zero-shot, retire the entire experiment and create fresh identities.
 
-The local publication gate is green: **3,161 ROM-free tests passed**, three integration tests were
-intentionally deselected, one declared expected failure remained, and Ruff, whole-package mypy,
-privacy, documentation, plan and all source-bound registry checks passed. The exact private
-cartridge entry gate also passed again with no context, teacher or prediction access. Publication
-and exact-commit CI are still required; do not infer them from the local result.
+Published source `26bbf38` passed GitHub Actions and its local publication gate. The pending
+whole-state qualification source now passes its own larger local gate: **3,178 ROM-free tests
+passed**, three integration tests were intentionally deselected, one declared expected failure
+remained, and Ruff, whole-package mypy, privacy, documentation, plan and all source-bound registry
+checks passed. Its official command also rejected the dirty checkout before emulator start. It is
+still pending publication, exact-commit CI and the official live receipt.
 
 The twelve sealed Red destination captures remain **0/12** and are unrelated to this experiment.
 

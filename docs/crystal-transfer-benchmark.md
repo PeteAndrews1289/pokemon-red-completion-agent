@@ -2,10 +2,12 @@
 
 ## Current decision
 
-The first Crystal experiment tests the portable goal manager before anyone writes a full Crystal
-walkthrough. Red has already supplied a genuine 54-example manager and 27/27 bounded live
-authority. Crystal now asks the next falsifiable question: do those learned weights reduce the
-amount of new teaching required in a different generation?
+The first Crystal experiment tests one portable component before anyone writes a full Crystal
+walkthrough. Red has supplied a genuine nine-goal manager fitted from 54 teacher-labeled examples
+and given authority over 27 bounded, previously opened contexts. That is not a complete learned
+Red-playing agent, and no learned model has completed Red. Crystal now asks the next falsifiable
+question: do those narrow learned weights reduce the amount of new teaching required in a
+different generation?
 
 The exact public plan is
 [`configs/crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json),
@@ -158,8 +160,10 @@ the earlier six-example validation defect, where even a perfect result could not
 
 1. **Complete:** bind its SHA-256 privately and verify title, size, SHA-1, and revision before
    emulator start.
-2. Qualify banked WRAM reads against stable party, Pokédex, inventory, storage, badge, map, and
-   control states; compare ordinary screens against decoded semantics.
+2. **Implemented and live-probed; exact-commit receipt pending:** qualify one whole-state banked
+   party, Pokédex, inventory and storage bundle plus stable badge, map and control state. The fixed
+   clean-power setup reaches the starting bedroom, proves uninitialized storage fails closed, uses
+   the real SAVE menu and compares complete reads across 600 no-input frames.
 3. Implement the smallest independently verified bindings needed to create genuine multi-need
    contexts. Begin with goal choice, one battle choice, and one local navigation round trip.
 4. Materialize all 72 private captures, then freeze a path-free catalog that satisfies the public

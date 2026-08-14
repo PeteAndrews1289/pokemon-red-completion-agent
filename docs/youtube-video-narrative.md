@@ -1,5 +1,15 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 Crystal scene: an empty box is not random memory
+
+Show the clean-power run reaching the bedroom, then split the evidence panel: **PARTY 0 / POKÉDEX
+0 / ITEMS 0 / PC STORAGE REJECTED — TERMINATOR MISSING**. Do not turn the PC number into zero.
+Open the real Start menu, choose SAVE, and let the same panel become **BOX 1 / 0 OCCUPIED / 280
+FREE**. Then duplicate the full semantic snapshot on a 600-frame timeline and stamp both copies
+**IDENTICAL**. Keep **TEACHER 0 / PREDICTIONS 0 / CONTEXTS 0** visible. The line is: **“Random
+pre-save bytes are not an empty collection. We made the cartridge initialize itself, then required
+the entire observed world to belong to one moment.”**
+
 ## August 14 Crystal 1.1 scene: the revision changed, the rules did not
 
 Put the frozen Crystal 1.0 card on screen beside **0/18 ZERO-SHOT / 0/27 ADAPTATION / 0/27 TEST / 0

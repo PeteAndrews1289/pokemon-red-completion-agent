@@ -31,6 +31,21 @@ The browser opens automatically. Stop the preview with `Ctrl-C`. Use `--no-brows
 browser window already has the displayed local address, or `--duration-seconds 60` for a bounded
 one-minute preview.
 
+After an exact source commit is pushed and its GitHub checks pass, the official banked-memory
+qualification can show the real setup and its semantic result in the same view:
+
+```sh
+COMMIT=$(git rev-parse HEAD)
+python scripts/qualify_crystal_banked_observation.py \
+  --expected-source-commit "$COMMIT" \
+  --dashboard \
+  --hold-seconds 30
+```
+
+This is an adapter test, not a lesson. It starts from clean power, performs a bounded new-game
+setup and real in-game save, then compares two complete semantic reads. All zero-shot, adaptation,
+sealed-test, prediction and teacher counters remain zero.
+
 ## Safety boundary
 
 The dashboard binds only to this computer at `127.0.0.1`. Its server supports view-only GET
