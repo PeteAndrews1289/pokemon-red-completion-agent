@@ -379,10 +379,31 @@ def parse_goal_manager_registry(payload: bytes) -> GoalManagerCollectionRegistry
 def load_committed_goal_manager_registry(
     repository_root: str | Path,
 ) -> GoalManagerCollectionRegistry:
+    """Load the registry committed at ``HEAD`` and bind it to that source."""
+
+    return load_committed_goal_manager_registry_at_revision(repository_root, "HEAD")
+
+
+def load_committed_goal_manager_registry_at_revision(
+    repository_root: str | Path,
+    revision: str,
+) -> GoalManagerCollectionRegistry:
+    """Authenticate a historical registry against its exact committed source.
+
+    Counted corpora and fitted models remain permanently bound to the commit
+    that declared them.  Promotion code may evolve afterwards, so evaluating a
+    frozen candidate must resolve its registry at the recorded training commit
+    instead of silently reinterpreting it as the registry at ``HEAD``.
+    """
+
+    if not isinstance(revision, str) or not revision or "\x00" in revision:
+        raise GoalManagerProtocolError("goal-manager revision identity is invalid")
     root = Path(repository_root).resolve()
-    commit = _git(root, ["rev-parse", "--verify", "HEAD^{commit}"], 256).decode(
-        "ascii"
-    ).strip()
+    commit = _git(
+        root,
+        ["rev-parse", "--verify", f"{revision}^{{commit}}"],
+        256,
+    ).decode("ascii").strip()
     if _GIT_OID.fullmatch(commit) is None:
         raise GoalManagerProtocolError("goal-manager commit identity is invalid")
     digest_payload = _git(

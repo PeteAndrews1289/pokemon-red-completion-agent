@@ -16,6 +16,7 @@ from pokemon_red_completion.goal_manager_protocol import (
     GOAL_MANAGER_REGISTRY_RELATIVE_PATH,
     GoalManagerProtocolError,
     load_committed_goal_manager_registry,
+    load_committed_goal_manager_registry_at_revision,
     parse_goal_manager_registry,
 )
 
@@ -164,10 +165,21 @@ def test_committed_loader_binds_registry_to_exact_executable_source(tmp_path: Pa
     )
 
     loaded = load_committed_goal_manager_registry(repository)
+    commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    historical = load_committed_goal_manager_registry_at_revision(repository, commit)
 
     assert loaded.execution.source_commit is not None
+    assert historical == loaded
     assignment = loaded.assignment(loaded.slots[-1].slot_id)
     assert assignment.source_commit == loaded.execution.source_commit
     assert assignment.episode_metadata()["source"] == {
         "git_commit": loaded.execution.source_commit
     }
+    with pytest.raises(GoalManagerProtocolError, match="unavailable"):
+        load_committed_goal_manager_registry_at_revision(repository, "f" * 40)
