@@ -25,6 +25,7 @@ from pokemon_red_completion.blaine import (
     MANSION_TRAINING_FLEE_TIMING,
     MANSION_TRAINING_VENUE,
     MANSION_VOLATILE_ENEMY_SPECIES,
+    MART_TO_MANSION,
     ROUTE_11_TRAINING_VENUE,
     BlaineChapterError,
     _fly_to_town,
@@ -52,7 +53,7 @@ from pokemon_red_completion.field_recovery import (
     FieldRecoveryError,
     plan_party_recovery,
 )
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogError,
     open_goal_manager_context_capture,
@@ -64,6 +65,7 @@ from pokemon_red_completion.goal_manager_protocol import (
 from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.observation import (
+    ItemId,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -78,7 +80,14 @@ from pokemon_red_completion.red_goal_context import (
     _targeted_evolution_index,
     red_team_development_quantum_policy,
 )
-from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
+from pokemon_red_completion.red_goal_manager import (
+    PokemonRedGoalStateAdapter,
+    RedGoalManagerConfig,
+)
+from pokemon_red_completion.red_goal_skills import (
+    RedMartPurchase,
+    RedMartResupplyGoalProvider,
+)
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
@@ -105,9 +114,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # emergency restoration gate is 0.55.  Setup must reach the teacher contract
 # rather than merely scrape past the weaker structural threshold.
 _ACTIVE_SAFETY_PRESSURE = 0.55
+_ACQUISITION_GREAT_BALL_PURCHASE = 12
 _DAMAGE_SWITCH_LIMIT = 64
 _MODES = (
     "mansion",
+    "acquisition-ready",
     "mart",
     "pc",
     "blocked-movement",
@@ -206,6 +217,16 @@ def _mansion_boundary(
     emulator: PyBoyAdapter,
 ) -> None:
     MANSION_TRAINING_VENUE.heal_and_return(actions, reader, emulator)
+    _settle_mansion_boundary(actions, reader, emulator)
+
+
+def _settle_mansion_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
+    """Reach a released, input-ready square inside the Mansion lane."""
+
     for _ in range(16):
         MANSION_TRAINING_VENUE.walk_to_grass(actions, reader, emulator)
         raw = reader.read()
@@ -224,6 +245,74 @@ def _mansion_boundary(
     )
 
 
+def _acquisition_ready_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    adapter: PokemonRedGoalStateAdapter,
+) -> None:
+    """Buy a proved capture reserve, then enter the real Mansion survey lane."""
+
+    _move(actions, reader, CENTER_TO_MART, "goal-manager acquisition Mart")
+    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "goal-manager acquisition Mart entry")
+    _move(actions, reader, ("up", "up", "left"), "goal-manager acquisition clerk")
+    _pulse(actions, MacroActionKind.MOVE, "left", 120)
+    before = reader.read()
+    before_inventory = dict(before.bag_items or ())
+    before_money = before.player_money
+    purchase = RedMartPurchase(
+        absolute_index=1,
+        item=ItemId.GREAT_BALL,
+        quantity=_ACQUISITION_GREAT_BALL_PURCHASE,
+        unit_price=600,
+    )
+    provider = RedMartResupplyGoalProvider(
+        map_id=MapId.CINNABAR_MART,
+        player_x=2,
+        player_y=5,
+        interaction_direction="left",
+        purchases=(purchase,),
+        actions=actions,
+        reader=reader,
+        emulator=emulator,
+        adapter=adapter,
+    )
+    offer = provider.offer(adapter.observe())
+    if offer.binding is None:
+        raise GoalManagerContextMaterializationError(
+            "acquisition-ready setup could not offer its qualified Mart purchase"
+        )
+    report = offer.binding.execute()
+    verification = offer.binding.verify(report)
+    after = reader.read()
+    after_inventory = dict(after.bag_items or ())
+    expected_money = (
+        None
+        if before_money is None
+        else before_money - _ACQUISITION_GREAT_BALL_PURCHASE * purchase.unit_price
+    )
+    if (
+        verification.status is not GoalDecisionOutcome.SUCCEEDED
+        or after_inventory.get(int(ItemId.GREAT_BALL), 0)
+        != before_inventory.get(int(ItemId.GREAT_BALL), 0) + _ACQUISITION_GREAT_BALL_PURCHASE
+        or after.player_money != expected_money
+        or after.map_id != MapId.CINNABAR_MART
+        or (after.player_x, after.player_y) != (2, 5)
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "acquisition-ready setup did not prove its exact ball reserve"
+        )
+    _move(actions, reader, MART_TO_MANSION, "goal-manager stocked Mansion")
+    _require(
+        reader.read(),
+        MapId.POKEMON_MANSION_1F,
+        (5, 27),
+        "goal-manager stocked Mansion entry",
+    )
+    _settle_mansion_boundary(actions, reader, emulator)
+
+
 def _damage_party(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
@@ -240,8 +329,7 @@ def _damage_party(
         species
         and len(species) == len(levels) == len(hp) == len(maximum)
         and all(
-            current > 0 and current == limit
-            for current, limit in zip(hp, maximum, strict=True)
+            current > 0 and current == limit for current, limit in zip(hp, maximum, strict=True)
         )
         and _safety_pressure(source) == 0.0
     ):
@@ -281,11 +369,7 @@ def _damage_party(
                     target_index = fastest_index
                 else:
                     target_index = max(
-                        (
-                            index
-                            for index in range(len(current_hp))
-                            if index != active_index
-                        ),
+                        (index for index in range(len(current_hp)) if index != active_index),
                         key=lambda index: (current_hp[index], levels[index], -index),
                     )
                 switch_active_battler(
@@ -362,10 +446,7 @@ def _damage_context_ready(
         return False
     inventory = dict(raw.bag_items or ())
     required = Counter(item for _, item in plan)
-    return all(
-        inventory.get(int(item), 0) >= quantity
-        for item, quantity in required.items()
-    )
+    return all(inventory.get(int(item), 0) >= quantity for item, quantity in required.items())
 
 
 def _evolved_team_boundary(
@@ -464,10 +545,14 @@ def _apply_mode(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
+    adapter: PokemonRedGoalStateAdapter,
 ) -> None:
     _normalize_cinnabar_nurse(actions, reader, emulator)
     if mode == "mansion":
         _mansion_boundary(actions, reader, emulator)
+        return
+    if mode == "acquisition-ready":
+        _acquisition_ready_boundary(actions, reader, emulator, adapter)
         return
     if mode == "mart":
         _move(actions, reader, CENTER_TO_MART, "goal-manager Cinnabar Mart")
@@ -526,8 +611,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     registry = load_committed_goal_manager_registry(PROJECT_ROOT)
     if (
         source.git_commit != registry.execution.source_commit
-        or working_source_bundle_sha256(PROJECT_ROOT)
-        != registry.execution.source_bundle_sha256
+        or working_source_bundle_sha256(PROJECT_ROOT) != registry.execution.source_bundle_sha256
     ):
         raise GoalManagerContextMaterializationError(
             "working source differs from the committed goal-manager registry"
@@ -547,6 +631,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         emulator.load_state_bytes(capture.state_bytes)
         reader = PokemonRedStateReader(emulator)
         observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, capture.envelope)
+        adapter = PokemonRedGoalStateAdapter(reader, observer, COMPLETION_QUEST)
         completed_before = COMPLETION_QUEST.completed_ids(observer.observe())
         timing = (
             ControllerTiming()
@@ -555,7 +640,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         controller = FrameSafeExecutor(emulator, timing)
         actions = CountingExecutor(controller)
-        _apply_mode(args.mode, actions, reader, emulator)
+        _apply_mode(args.mode, actions, reader, emulator, adapter)
         final = reader.read()
         completed_after = COMPLETION_QUEST.completed_ids(observer.observe())
         if (
@@ -626,9 +711,7 @@ def main(argv: list[str] | None = None) -> int:
         SurgeChapterError,
         OSError,
     ):
-        parser.error(
-            "Goal-manager materialization failed closed; private paths were withheld."
-        )
+        parser.error("Goal-manager materialization failed closed; private paths were withheld.")
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0
 

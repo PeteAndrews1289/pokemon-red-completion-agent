@@ -7,10 +7,12 @@ import subprocess
 import sys
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from pokemon_red_completion.celadon import _flee as _timed_flee
+from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 from pokemon_red_completion.observation import InputReadiness, ItemId, MapId, RawGameState
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
@@ -34,9 +36,7 @@ def _damage_context_ready(
 def test_materializer_uses_real_actions_and_never_edits_emulator_memory() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
     tree = ast.parse(source)
-    attributes = {
-        node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)
-    }
+    attributes = {node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)}
 
     assert "save_state" in attributes
     assert "write_u8" not in attributes
@@ -58,6 +58,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "blocked-movement" in result.stdout
     assert "damaged-center" in result.stdout
     assert "evolved-team" in result.stdout
+    assert "acquisition-ready" in result.stdout
     assert "mansion" in result.stdout
     assert "--slot-id" not in result.stdout
     assert "--profile" not in result.stdout
@@ -123,6 +124,81 @@ def test_materializer_keeps_setup_and_training_flee_contracts_distinct() -> None
         "run",
         "timing",
     )
+
+
+def test_acquisition_setup_proves_a_real_mart_reserve_before_entering_mansion(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            bag_items=((int(ItemId.GREAT_BALL), 1),),
+            player_money=30_000,
+        )
+    )
+
+    def move(_actions: object, _reader: object, _directions: object, label: str) -> None:
+        if label == "goal-manager acquisition Mart":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.CINNABAR_MART,
+                player_x=3,
+                player_y=7,
+            )
+        elif label == "goal-manager acquisition clerk":
+            reader.raw = replace(reader.raw, player_x=2, player_y=5)
+        elif label == "goal-manager stocked Mansion":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.POKEMON_MANSION_1F,
+                player_x=5,
+                player_y=27,
+            )
+
+    class _Binding:
+        def execute(self) -> object:
+            reader.raw = replace(
+                reader.raw,
+                bag_items=((int(ItemId.GREAT_BALL), 13),),
+                player_money=22_800,
+            )
+            return object()
+
+        def verify(self, _report: object) -> object:
+            return SimpleNamespace(status=GoalDecisionOutcome.SUCCEEDED)
+
+    class _Provider:
+        def offer(self, _observation: object) -> object:
+            return SimpleNamespace(binding=_Binding())
+
+    class _Venue:
+        @staticmethod
+        def walk_to_grass(*_args: object) -> int:
+            reader.raw = replace(reader.raw, player_y=26)
+            return 1
+
+    globals_dict = module["_acquisition_ready_boundary"].__globals__
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_pulse", lambda *_args: None)
+    monkeypatch.setitem(
+        globals_dict,
+        "RedMartResupplyGoalProvider",
+        lambda **_kwargs: _Provider(),
+    )
+    monkeypatch.setitem(globals_dict, "MANSION_TRAINING_VENUE", _Venue())
+
+    module["_acquisition_ready_boundary"](
+        object(),
+        reader,
+        object(),
+        SimpleNamespace(observe=lambda: object()),
+    )
+
+    assert reader.raw.map_id == MapId.POKEMON_MANSION_1F
+    assert (reader.raw.player_x, reader.raw.player_y) == (5, 26)
+    assert reader.raw.bag_items == ((int(ItemId.GREAT_BALL), 13),)
+    assert reader.raw.player_money == 22_800
 
 
 class _Reader:
@@ -208,6 +284,8 @@ def test_evolved_team_setup_relocates_the_verified_party_to_center(
         104,
         43,
     )
+
+
 def _damaged_raw(*, bag_items: tuple[tuple[int, int], ...]) -> RawGameState:
     return RawGameState(
         game_started=True,
