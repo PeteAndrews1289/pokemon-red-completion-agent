@@ -14,6 +14,25 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Targeted evolution verifier ready for publication — 2026-08-13
+
+The first uncounted evolution rehearsal proved the gameplay mechanic but exposed a semantic
+measurement error. From the authenticated post–Secret Key boundary, read-only preflight offered
+three genuine choices—story, team development and evolution—and selected evolution. The bounded
+mechanic then executed 21,604 actions / 1,252,066 frames and changed Diglett level 25 into Dugtrio
+level 26 with no episode written. The old verifier rejected that success because it watched the
+acquisition catalog's aggregate evolution count. Dugtrio is canonically obtainable in the wild in
+Red, so that unrelated counter cannot increase for this targeted transformation.
+
+The local repair leaves the catalog definition intact and verifies the actual claim instead: one
+and only one party slot must change from Diglett to Dugtrio in place, that member's level must
+increase, story progress must be identical, living and registered collection counts may not fall,
+input must be restored, and no party member may faint. A full mocked manager cycle proves success
+even while the aggregate catalog evolution count remains unchanged; reorderings and unrelated
+species changes fail. Publish the regenerated source-bound registries, require exact-commit CI,
+then rerun the uncounted live evolution rehearsal before building a post-evolution development
+context. Genuine manager data remains **0/54 train and 0/27 validation**.
+
 ## Restoration-context materializer hardened locally — 2026-08-13
 
 The first damage setup was asking only whether *any* HP had been lost, while catalog admission asks

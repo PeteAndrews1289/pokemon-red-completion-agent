@@ -1,5 +1,16 @@
 # Three-agent coordination
 
+> **2026-08-13 evolution-verification checkpoint:** The uncounted post–Secret Key evolution
+> rehearsal passed a genuine three-way preflight—story, development and evolution—and the
+> deterministic mechanic changed the living party from Diglett level 25 to Dugtrio level 26.
+> The episode was correctly withheld because the generic verifier watched the acquisition catalog's
+> evolution counter, where Dugtrio is canonically obtainable in the wild and therefore is not an
+> evolution target. The pending repair verifies the exact one-slot Diglett-to-Dugtrio living-party
+> transformation, level increase, unchanged story frontier, nondecreasing collection, stable input
+> and zero faints. ROM-free unit and manager-cycle tests pass. Regenerate every source-bound
+> registry, publish, require exact-commit CI, then rerun the uncounted live rehearsal. Counted
+> collection remains 0/54 train and 0/27 validation.
+
 > **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real
 > whole-party safety-pressure threshold through observed in-battle switches, rejects every
 > faint, and requires a payable exact item plan only for field restoration. It can relocate the

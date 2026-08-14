@@ -17,6 +17,16 @@
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
+> **Goal-manager rehearsal status (August 13, 2026):** resupply, transient-control recovery, field
+> restoration and Center restoration have now executed successfully from authenticated nonsealed
+> states without consuming a training episode; acquisition has passed read-only preflight. A
+> genuine three-way evolution context selected evolution and the bounded mechanic changed Diglett
+> level 25 into Dugtrio level 26, but the generic verifier watched an unrelated catalog aggregate
+> and rejected the otherwise successful outcome. The repair now checks the exact in-party
+> transformation, level gain, unchanged story frontier, stable input and zero faints. It is
+> ROM-free qualified and awaits published-source live replay. These are mechanic rehearsals, so the
+> honest training count remains **0/54 train and 0/27 development validation**.
+
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy
 > contexts, no partition overlap, and zero sealed-test scenarios opened. Independent audit stopped

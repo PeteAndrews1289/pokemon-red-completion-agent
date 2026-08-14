@@ -31,6 +31,19 @@ development contexts spanning all nine needs, followed by causal Red authority a
 Crystal zero-shot/few-shot/from-scratch comparison. The sealed destination test stays unopened at
 0/12, preserved but paused.
 
+The first live rehearsals made the distinction concrete. Resupply, lost-control recovery, field
+healing and Pokémon Center healing all completed from authenticated states while writing no
+training row. Evolution produced an even better failure: the manager saw three real choices and
+selected evolution; the mechanic then changed a level-25 Diglett into a level-26 Dugtrio, yet the
+verifier rejected it. The verifier had asked whether the acquisition catalog's number of pending
+evolutions changed. Because Red can also catch Dugtrio in the wild, that catalog quite correctly
+classifies Dugtrio as a wild target—and the wrong metric quite incorrectly called the observed
+evolution a failure. The repair does not rewrite the catalog to make the test pass. It checks the
+claim actually made: exactly one party slot changes from Diglett to Dugtrio, its level rises, the
+story frontier and collection remain sound, nobody faints, and control returns. This is why the
+campaign is still at zero examples: proving the measuring instrument comes before trusting its
+labels.
+
 ## August 13: the audit stopped us from spending the test on the wrong experiment
 
 The first model was ready, authenticated and green across 2,801 tests. That made the next decision

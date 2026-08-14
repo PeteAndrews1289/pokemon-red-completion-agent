@@ -3,6 +3,35 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+## Current focus (2026-08-13): finish live goal-family qualification before collection
+
+The transferable goal manager—not the paused sealed destination test—is the active route to a
+Pokémon-playing model. The public 81-slot campaign, nine Red providers, profile/preflight/catalog
+boundary, record-before-action collector and fixed fitter already exist. Genuine counted data is
+still **0/54 train and 0/27 development validation** because setup saves and uncounted rehearsals
+are deliberately not labels.
+
+Four live mechanics are now qualified end to end without consuming an episode: resupply, control
+recovery, field restoration and Pokémon Center restoration. Acquisition has passed read-only
+preflight. Evolution passed a genuine three-way preflight and the mechanic changed Diglett level
+25 into Dugtrio level 26, but the generic catalog-progress verifier rejected the outcome because
+Dugtrio's canonical acquisition method is wild capture. The source repair now verifies the exact
+living-party transformation instead of redefining global collection metrics.
+
+Ordered next work:
+
+1. Publish the targeted evolution verifier and regenerated source-bound registries; require green
+   exact-commit CI.
+2. Rerun the evolution preflight and uncounted execution on the published source. Preserve the old
+   false-negative rehearsal as evidence; do not relabel it.
+3. Materialize a post-evolution boundary and qualify one-level team development.
+4. Qualify acquisition, storage and exploration execution, then re-audit all nine families for
+   bounded success/failure semantics and distinct context construction.
+5. Only after every family is live-qualified, curate 81 unique contexts, freeze the complete
+   private catalog, collect the one-shot episodes and run strict admission.
+6. Fit the first Red goal-manager model, compare all three frozen baselines, then proceed through
+   shadow, causal Red authority and the Crystal transfer benchmark.
+
 ## Current focus (2026-08-13): requalify the hardest sealed-adapter relocation
 
 The non-test campaign is complete. All 36 counted learning scenarios were executed exactly once:

@@ -172,16 +172,20 @@ uses one fully released, one-frame semantic movement pulse and captures the cart
 transient movement latch. It never holds a button across save and never edits memory.
 
 Restoration setup now uses the manager's actual whole-party safety calculation rather than accepting
-one token hit. A controller-only diagnostic relocated a strong authenticated late-game party from
-Indigo to Cinnabar, deliberately absorbed wild attacks through observed battle switches, and ended
-with all six members alive at exactly `0.5` safety pressure. Its read-only preflight then rejected
-the state without a receipt: structural admission begins at `0.50`, but the fixed teacher's
-emergency restoration gate is `0.55`, so the teacher preferred exploration. Setup now targets that
-unchanged teacher gate while preserving the competing option. A field context is accepted only when
-its exact damage/status recovery plan is payable from the observed bag; a Center context does not
-pretend field items are required. This diagnostic wrote no context or episode. Exact-source
-publication, official materialization, preflight and an uncounted restoration execution remain the
-next gate.
+one token hit. The first controller-only state reached exactly `0.50` pressure and failed preflight
+honestly because the fixed teacher's emergency gate is `0.55`. The repaired setup then produced a
+field context at `0.6667` pressure with an exactly payable recovery plan and a Center context at the
+same pressure. Both offered genuine competing work, selected restoration in read-only preflight,
+and completed uncounted live execution: 152 actions in the field and 10 actions at the Center,
+full HP, cleared status, zero safety pressure, stable input and no episode.
+
+The evolution rehearsal then found a measurement bug rather than a gameplay bug. A genuine
+three-way menu selected evolution and the bounded mechanic changed Diglett level 25 into Dugtrio
+level 26. The generic progress verifier rejected it because Dugtrio is cataloged as wild-obtainable,
+so the acquisition graph's evolution counter does not move. The repair keeps that global catalog
+truth intact and verifies the exact one-slot living-party transformation, level increase, unchanged
+story frontier, nondecreasing collection, stable input and zero faints. It must pass a published-
+source live replay before team-development setup continues.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and

@@ -21,11 +21,16 @@ from pokemon_red_completion.blaine import (
     _flee,
 )
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager import (
+    GoalFailureReason,
+    GoalKind,
+    GoalUnavailableReason,
+)
 from pokemon_red_completion.goal_manager_context_catalog import GoalManagerContextCapture
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalExecutionReport,
+    GoalVerification,
 )
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.observation import (
@@ -63,6 +68,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedGoalSkillAvailability,
     RedMartPurchase,
     RedMartResupplyGoalProvider,
+    RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
 )
 from pokemon_red_completion.red_objective_skills import (
@@ -373,19 +379,60 @@ class _RedTeamGoalProvider:
                 },
             )
 
+        if self.kind is GoalKind.EVOLVE_SPECIES:
+            return RedObservedGoalSkillProvider(
+                kind=self.kind,
+                binding_ref="pokemon.red:evolution:diglett-to-dugtrio",
+                adapter=self.runtime.adapter,
+                availability=self._availability,
+                executor=execute,
+                verifier=self._verify_evolution,
+                estimated_effort=0.55,
+                estimated_risk=0.22,
+            ).offer(observation)
         return RedProgressGoalProvider(
             kind=self.kind,
-            binding_ref=(
-                "pokemon.red:development:one-level-quantum"
-                if self.kind is GoalKind.DEVELOP_TEAM
-                else "pokemon.red:evolution:diglett-to-dugtrio"
-            ),
+            binding_ref="pokemon.red:development:one-level-quantum",
             adapter=self.runtime.adapter,
             boundary=self._availability,
             executor=execute,
-            estimated_effort=(0.45 if self.kind is GoalKind.DEVELOP_TEAM else 0.55),
+            estimated_effort=0.45,
             estimated_risk=0.22,
         ).offer(observation)
+
+    def _verify_evolution(
+        self,
+        before: RedGoalObservation,
+        after: RedGoalObservation,
+        report: GoalExecutionReport,
+    ) -> GoalVerification:
+        before_story = self.runtime.adapter.graph.completed_ids(before.game_state)
+        after_story = self.runtime.adapter.graph.completed_ids(after.game_state)
+        target_index = _targeted_evolution_index(
+            before.party.species_ids(),
+            after.party.species_ids(),
+            source_species_id=DIGLETT_SPECIES_ID,
+            target_species_id=DUGTRIO_SPECIES_ID,
+        )
+        if (
+            before_story != after_story
+            or after.collection.collection.pokedex_owned_count
+            < before.collection.collection.pokedex_owned_count
+            or after.collection.collection.living_count
+            < before.collection.collection.living_count
+        ):
+            return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+        if (
+            target_index is None
+            or report.actions_executed <= 0
+            or after.raw.battle_state
+            or not after.input_ready
+            or after.party.fainted_count
+            or after.party.members[target_index].level
+            <= before.party.members[target_index].level
+        ):
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+        return GoalVerification.succeeded()
 
     def _availability(
         self,
@@ -407,9 +454,13 @@ class _RedTeamGoalProvider:
                 GoalUnavailableReason.MISSING_CAPABILITY
             )
         evolved_ref = red_species_ref(red_internal_species_number(DUGTRIO_SPECIES_ID))
+        living_refs = frozenset(
+            specimen.species_ref
+            for specimen in observation.collection_observation.specimens
+        )
         if self.kind is GoalKind.EVOLVE_SPECIES and (
             DIGLETT_SPECIES_ID not in observation.party.species_ids()
-            or evolved_ref in observation.collection_observation.owned_species
+            or evolved_ref in living_refs
         ):
             return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.NO_LEGAL_TARGET
@@ -422,6 +473,35 @@ class _RedTeamGoalProvider:
             self.runtime.profile.manager_config,
             kind=self.kind,
         )
+
+
+def _targeted_evolution_index(
+    before_species: tuple[int, ...],
+    after_species: tuple[int, ...],
+    *,
+    source_species_id: int,
+    target_species_id: int,
+) -> int | None:
+    """Return the sole exact source-to-target party transition, if present."""
+
+    if len(before_species) != len(after_species):
+        return None
+    changed = tuple(
+        index
+        for index, (before, after) in enumerate(
+            zip(before_species, after_species, strict=True)
+        )
+        if before != after
+    )
+    if len(changed) != 1:
+        return None
+    index = changed[0]
+    if (
+        before_species[index] != source_species_id
+        or after_species[index] != target_species_id
+    ):
+        return None
+    return index
 
 
 def red_team_development_quantum_policy(

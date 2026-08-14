@@ -2,8 +2,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+from dataclasses import replace
 from pathlib import Path
 
+import pytest
+
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.blaine import DIGLETT_SPECIES_ID
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind
 from pokemon_red_completion.goal_manager_context_catalog import (
@@ -20,6 +25,7 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
 from pokemon_red_completion.red_goal_context import (
+    _targeted_evolution_index,
     build_red_goal_context_runtime,
     red_team_development_quantum_policy,
 )
@@ -28,6 +34,7 @@ from pokemon_red_completion.red_goal_context_profile import (
     parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
+from pokemon_red_completion.red_party import DUGTRIO_SPECIES_ID
 
 
 class _Reader:
@@ -74,7 +81,7 @@ class _Reader:
 
 class _Emulator:
     frame_count = 0
-    pressed_buttons = frozenset()
+    pressed_buttons: frozenset[str] = frozenset()
 
     def read_u8(self, _address: int) -> int:
         return 0
@@ -89,6 +96,11 @@ class _Emulator:
         self.frame_count += frames
 
 
+class _ActionDelegate:
+    def execute(self, action: MacroAction) -> MacroAction:
+        return action
+
+
 def _canonical(value: object) -> bytes:
     return (
         json.dumps(value, separators=(",", ":"), sort_keys=True).encode("ascii")
@@ -96,7 +108,11 @@ def _canonical(value: object) -> bytes:
     )
 
 
-def _capture(tmp_path: Path):  # type: ignore[no-untyped-def]
+def _capture(
+    tmp_path: Path,
+    *,
+    verified_objective_ids: tuple[str, ...] = ("power_on",),
+):  # type: ignore[no-untyped-def]
     state = b"authenticated context state"
     state_path = tmp_path / "context.state"
     envelope_path = tmp_path / "context.state.json"
@@ -108,9 +124,9 @@ def _capture(tmp_path: Path):  # type: ignore[no-untyped-def]
                 "state_sha256": hashlib.sha256(state).hexdigest(),
                 "checkpoint_id": "goal-context-fixture",
                 "checkpoint_label": "Goal context fixture",
-                "checkpoints_completed": 1,
+                "checkpoints_completed": len(verified_objective_ids),
                 "checkpoints_total": 36,
-                "verified_objective_ids": ["power_on"],
+                "verified_objective_ids": list(verified_objective_ids),
             }
         )
     )
@@ -171,6 +187,41 @@ def _profile(profile_id: str):  # type: ignore[no-untyped-def]
     )
 
 
+def _team_profile(profile_id: str):  # type: ignore[no-untyped-def]
+    return parse_red_goal_context_profile(
+        _canonical(
+            {
+                "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+                "profile_id": profile_id,
+                "manager_config": {
+                    "required_party_size": 6,
+                    "required_team_level": 60,
+                    "desired_capture_items": 10,
+                    "desired_recovery_items": 8,
+                    "desired_storage_headroom": 8,
+                },
+                "providers": [
+                    {
+                        "kind": "advance_story",
+                        "mechanic": "midgame_story",
+                        "parameters": {},
+                    },
+                    {
+                        "kind": "develop_team",
+                        "mechanic": "balanced_team",
+                        "parameters": {},
+                    },
+                    {
+                        "kind": "evolve_species",
+                        "mechanic": "diglett_evolution",
+                        "parameters": {},
+                    },
+                ],
+            }
+        )
+    )
+
+
 def test_context_factory_binds_exact_profile_only_beside_policy_menu(
     tmp_path: Path,
 ) -> None:
@@ -183,7 +234,7 @@ def test_context_factory_binds_exact_profile_only_beside_policy_menu(
         reader=reader,  # type: ignore[arg-type]
     )
 
-    binding_set = runtime.enumerator(CountingExecutor(_Emulator())).enumerate(
+    binding_set = runtime.enumerator(CountingExecutor(_ActionDelegate())).enumerate(
         runtime.adapter.observe()
     )
 
@@ -218,10 +269,10 @@ def test_profile_identity_changes_private_manifest_without_changing_kind_menu(
         reader=reader,  # type: ignore[arg-type]
     )
 
-    first_set = first.enumerator(CountingExecutor(_Emulator())).enumerate(
+    first_set = first.enumerator(CountingExecutor(_ActionDelegate())).enumerate(
         first.adapter.observe()
     )
-    second_set = second.enumerator(CountingExecutor(_Emulator())).enumerate(
+    second_set = second.enumerator(CountingExecutor(_ActionDelegate())).enumerate(
         second.adapter.observe()
     )
 
@@ -264,3 +315,129 @@ def test_team_development_is_one_level_quantum_not_a_full_duplicate_grind() -> N
     assert development.required_size == 6
     assert evolution.minimum_level == 2
     assert evolution.required_size == party.size
+
+
+def test_targeted_evolution_requires_one_exact_in_place_species_change() -> None:
+    before = (28, DIGLETT_SPECIES_ID, 64)
+    after = (28, DUGTRIO_SPECIES_ID, 64)
+
+    assert (
+        _targeted_evolution_index(
+            before,
+            after,
+            source_species_id=DIGLETT_SPECIES_ID,
+            target_species_id=DUGTRIO_SPECIES_ID,
+        )
+        == 1
+    )
+    assert (
+        _targeted_evolution_index(
+            before,
+            (DUGTRIO_SPECIES_ID, 28, 64),
+            source_species_id=DIGLETT_SPECIES_ID,
+            target_species_id=DUGTRIO_SPECIES_ID,
+        )
+        is None
+    )
+    assert (
+        _targeted_evolution_index(
+            before,
+            (28, DUGTRIO_SPECIES_ID, 65),
+            source_species_id=DIGLETT_SPECIES_ID,
+            target_species_id=DUGTRIO_SPECIES_ID,
+        )
+        is None
+    )
+    assert (
+        _targeted_evolution_index(
+            before,
+            before,
+            source_species_id=DIGLETT_SPECIES_ID,
+            target_species_id=DUGTRIO_SPECIES_ID,
+        )
+        is None
+    )
+
+
+def test_targeted_evolution_verifies_living_transform_without_catalog_counter_change(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=2,
+        party_species_ids=(0x1C, DIGLETT_SPECIES_ID),
+        party_levels=(48, 25),
+        party_hp=(150, 50),
+        party_max_hp=(150, 50),
+        party_status=(0, 0),
+        party_moves=((57, 58, 55, 0), (1, 0, 0, 0)),
+        party_pp=((15, 10, 5, 0), (10, 0, 0, 0)),
+    )
+    emulator = _Emulator()
+    runtime = build_red_goal_context_runtime(
+        profile=_team_profile("evolution-fixture"),
+        capture=_capture(
+            tmp_path,
+            verified_objective_ids=(
+                "power_on",
+                "begin_adventure",
+                "choose_starter",
+                "receive_pokedex",
+                "reach_pewter",
+                "defeat_brock",
+                "reach_cerulean",
+                "help_bill",
+                "reach_vermilion",
+                "defeat_misty",
+                "obtain_cut",
+                "defeat_surge",
+                "reach_lavender",
+                "reach_celadon",
+                "clear_rocket_hideout",
+                "obtain_silph_scope",
+                "rescue_fuji",
+                "reach_fuchsia",
+                "obtain_surf",
+                "obtain_strength",
+                "defeat_koga",
+                "reach_cinnabar",
+            ),
+        ),
+        emulator=emulator,
+        reader=reader,  # type: ignore[arg-type]
+    )
+    actions = CountingExecutor(_ActionDelegate())
+
+    def evolve(*_args: object, **_kwargs: object) -> tuple[object, int, int]:
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        emulator.tick(1)
+        reader.raw = replace(
+            reader.raw,
+            party_species_ids=(0x1C, DUGTRIO_SPECIES_ID),
+            party_levels=(48, 26),
+        )
+        return object(), 1, 0
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.run_red_team_balancing",
+        evolve,
+    )
+    before = runtime.adapter.observe()
+    binding_set = runtime.enumerator(actions).enumerate(before)
+    binding = next(
+        item for item in binding_set.bindings if item.kind is GoalKind.EVOLVE_SPECIES
+    )
+
+    report = binding.execute()
+    verification = binding.verify(report)
+    after = runtime.adapter.observe()
+
+    assert before.evidence.evolution == after.evidence.evolution
+    assert after.party.species_ids() == (0x1C, DUGTRIO_SPECIES_ID)
+    assert report.actions_executed == 1
+    assert verification.status.value == "succeeded"

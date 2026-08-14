@@ -216,6 +216,14 @@ Close this beat with two targets on separate horizons: **LEVEL 60 CAMPAIGN TEAM*
 PERFECT COLLECTION**. The first keeps routine training examples useful instead of teaching endless
 over-grinding; the second remains part of the long-term completion contract.
 
+Add the evolution false-negative immediately after restoration. Put three cards on screen—**STORY
+/ TRAIN / EVOLVE**—then highlight EVOLVE. Show the party changing **DIGLETT 25 → DUGTRIO 26** and
+the old verifier still stamping **FAILED**. Reveal why: the acquisition catalog calls Dugtrio a
+wild target, so its aggregate evolution counter never moves. Replace the counter with the exact
+claim card: **ONE SLOT CHANGED / LEVEL INCREASED / STORY UNCHANGED / ZERO FAINTS / CONTROL
+RESTORED**. The narration is: **“The game did the right thing. Our measurement asked the wrong
+question.”** Keep **UNCOUNTED REHEARSAL / NO EPISODE** visible throughout.
+
 ## Working title
 
 **I Taught an AI to Beat Pokémon Red — Then Discovered It Had Learned Almost Nothing**
@@ -1498,8 +1506,11 @@ version has to prove the model learned something worth carrying into a game it h
   underlevelled switch fainting and the status-without-cure attempts both stopping without a saved
   example, then the late-game party reaching **0.500 SAFETY PRESSURE / 6 ALIVE / RECOVERY PAYABLE**
   but losing the read-only teacher choice to exploration because the frozen emergency gate is
-  `0.55`. Follow with the corrected threshold; do not hide the competing option or call either
-  setup state training data.
+  `0.55`. Follow with the two successful **0.6667 → 0.0** rehearsals—152 field actions and 10
+  Center actions—without hiding the competing options or calling any setup state training data.
+- The evolution verifier repair: **3 CHOICES / DIGLETT 25 → DUGTRIO 26 / MECHANIC SUCCEEDED /
+  WRONG AGGREGATE REJECTED IT / 0 EPISODES**. Show the exact living-party verifier replacing the
+  unrelated acquisition-catalog counter.
 
 ## Honesty rules for the video
 
