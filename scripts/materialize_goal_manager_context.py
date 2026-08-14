@@ -953,31 +953,52 @@ def _damage_party_at_mansion(
                         (index for index in range(len(current_hp)) if index != active_index),
                         key=lambda index: (current_hp[index], levels[index], -index),
                     )
-                switch_active_battler(
-                    actions,
-                    reader,
-                    emulator,
-                    target_index,
-                    expected_battle_state=1,
-                    label="goal-manager controlled wild damage",
-                    wait_frames=120,
-                )
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        target_index,
+                        expected_battle_state=1,
+                        label="goal-manager controlled wild damage",
+                        wait_frames=120,
+                    )
+                except ProtectedRecoveryError:
+                    # Roar and Teleport can end an ordinary wild battle during
+                    # the opponent's switch turn.  That is a legitimate
+                    # cartridge exit, not proof that the protected switch
+                    # itself failed, provided the battle really ended and the
+                    # complete living party still verifies.
+                    ended = reader.read()
+                    _require_safe_damage_state(ended)
+                    if ended.battle_state == 0:
+                        break
+                    raise
             # A weak encounter may exhaust its bounded switch window before it
             # can create the requested whole-party pressure.  Leave it safely
             # and continue through the already-bounded encounter loop instead
             # of treating one opponent as the entire setup budget.
             raw = reader.read()
             _require_safe_damage_state(raw)
+            if raw.battle_state == 0:
+                continue
             if raw.active_party_index != fastest_index:
-                switch_active_battler(
-                    actions,
-                    reader,
-                    emulator,
-                    fastest_index,
-                    expected_battle_state=1,
-                    label="goal-manager safe escape lead",
-                    wait_frames=120,
-                )
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        fastest_index,
+                        expected_battle_state=1,
+                        label="goal-manager safe escape lead",
+                        wait_frames=120,
+                    )
+                except ProtectedRecoveryError:
+                    ended = reader.read()
+                    _require_safe_damage_state(ended)
+                    if ended.battle_state == 0:
+                        continue
+                    raise
                 raw = reader.read()
             _protected_flee(emulator, actions, reader, raw)
         _require_safe_damage_state(reader.read())
