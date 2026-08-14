@@ -3,6 +3,33 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## First real battle-outcome cycle — 2026-08-14
+
+Claude and Antigravity reviewed frozen commit `49827c6` before cartridge execution and both returned
+**approve**. Claude had about 13% of its plan window left, so its assignment was deliberately a
+narrow recheck; Antigravity reported enough capacity for one bounded architecture pass. Neither
+reviewer opened a ROM, teacher, private context or sealed case.
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| Requested move choice could be replaced by global policy override | **Closed before review** | The bounded executor rejects an active override and proves the requested slot survived selection. |
+| Faint labels could be fabricated by battle exit, cleared identity or party switch | **Closed before review** | Opponent faint requires zero HP; move execution is controller-proven and retains the original party member's PP evidence. Wild flee, forced switch and double-KO regressions pass. |
+| Equal move counterfactuals could consume unequal RNG-advancing controller time | **Closed before review** | Every candidate is padded and checked at exactly 2,048 pre-attack frames. |
+| Flat utilities could fabricate a preference or crash the script | **Closed before review** | Ties remain typed and an uninformative pair writes a no-update result with no model. |
+| Real writer-to-loader path was untested | **Reviewer note corrected** | Claude inspected the mocked orchestration test but missed `test_battle_model_candidate_round_trips_through_real_private_writer`; the dedicated real writer/production-loader test passes. The live artifact later round-tripped to the same model digest. |
+
+The first live attempt then exposed a defect neither synthetic review had found: the initial wild
+state was validated before the declared battle identity was bound. Codex stopped without an
+artifact, repaired the transaction scope, added the truthful-wild regression and published
+`51f76b5`. Local validation passed 3,285 tests and exact GitHub CI run `31846019245` succeeded.
+
+The repaired experiment completed, but the candidate failed evaluation. Training objective fell
+from 5.5581 to 3.0173 while untouched development fell from 1/1 to 0/1. Decision: retain the
+authenticated private artifact and path-free receipt, keep the model shadow-only, and expand the
+battle context catalog before any authority discussion. Zero teacher, sealed Red, Crystal and
+full-replay access occurred. See
+[`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+
 ## Final exact-head recheck and condition closure — 2026-08-14
 
 Reviewed source: exact commit `5347d95d3a26c999524142df0e71160cafd282a5`, after green GitHub

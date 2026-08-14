@@ -1,5 +1,29 @@
 # Current audit — 2026-08-14
 
+## First real outcome-learning result
+
+The battle-first model laboratory now has its first executable result. Exact commit `51f76b5`
+passed GitHub CI run `31846019245` after the first real attempt exposed a missing wild-state
+regression: the bounded executor validated the initial state before binding its declared battle
+kind, so a truthful wild encounter collided with the trainer default. The repair moves the binding
+around the complete transaction and preserves fail-closed final validation.
+
+Two qualified, non-sealed post-Mansion lineages produced distinct train and development captures.
+All four supported moves in each capture were replayed from identical bytes, with exactly 2,048
+pre-attack frames. The eight move executions were controller-proven; teacher queries, teacher
+choice targets, full-game replays, sealed Red cases and Crystal contexts were all zero.
+
+The update is a negative model result. Its training objective fell from 5.5581 to 3.0173, but the
+frozen prior chose a best development move and the update chose the only inferior move. Development
+therefore fell from 1/1 to 0/1 and selected utility from 3.0 to 0.8169. The private model artifact
+authenticates and production-loads, but remains shadow-only with promotion false. Exact path-free
+evidence is
+[`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+
+The engineering gate is now ahead of the sample size, not the result. The next work is a bounded
+multi-context battle catalog and learning curve plus the navigation and party-development adapters
+needed to close Milestone 1. Any battle authority still requires the frozen 200-battle unseen gate.
+
 ## Final exact-head recheck and transactional move accounting
 
 Antigravity approved exact commit `5347d95` with no architecture blocker. Claude verified every

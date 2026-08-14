@@ -6,14 +6,16 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
-Final external recheck is closed. Before the first real battle adapter, returned move attribution
-was made transactional across fallible control-label recording and the producer now rejects a
-nonzero move-source gap. This removes a known observability trap but grants no authority. The active
-next step remains one authenticated battle snapshot family through outcome, learner update and
-untouched-lineage evaluation; do not expand navigation or party development first.
-Control-label writes, their counters and control history are one commit boundary. Before any later
-teacher-free dashboard is authorized, split model executions from actual teacher comparisons in
-the live projection; this is not a blocker for the supervised first adapter.
+The first real battle adapter is closed end to end. Two authenticated non-sealed lineages produced
+eight equal-timing move outcomes, a prior-preserving learner update and an untouched-lineage
+development result. The update regressed development from 1/1 to 0/1 and remains rejected,
+shadow-only evidence. This proves plumbing, not competence. See
+[the exact result](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+
+The active next step is a bounded multi-context battle catalog and learning curve, followed by the
+real navigation and party-development snapshot adapters required to finish Milestone 1. Do not
+promote the one-state candidate, open the 200-battle unseen gate early, expand into a full Red
+replay, or use Crystal as additional training data.
 
 ## Product definition
 
@@ -42,6 +44,23 @@ contract.
 
 No milestone below may silently expand into a full game replay. Each milestone has an exit gate and
 a stop rule.
+
+## Milestone 1 checkpoint — first real battle loop
+
+Completed at exact source `51f76b5`:
+
+- two path-free authenticated captures, one train and one development, from distinct serialized
+  non-sealed root lineages;
+- four supported moves per capture, restored independently from identical state bytes;
+- eight controller-proven outcomes at exactly 2,048 pre-attack frames;
+- one prior-preserving MLP update with zero teacher labels; and
+- one untouched-lineage comparison that correctly rejected the update after development fell from
+  1/1 to 0/1.
+
+This satisfies the serial “close one loop before building two more adapters” rule. It does not
+satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion gate. The next
+battle work must add independent semantic contexts and learning curves; lower fit loss alone is no
+longer an acceptable progress measure.
 
 ## Learning approach
 
@@ -478,8 +497,8 @@ metric.
 ## Current order of execution
 
 1. Milestone 0: failed-run postmortem and future diagnostic retention.
-2. Milestone 1: close one real battle scenario-to-update loop, then add navigation and training
-   adapters before the milestone exits.
+2. Milestone 1: the first real battle scenario-to-update loop is closed with a rejected candidate;
+   expand its context catalog and add navigation and training adapters before the milestone exits.
 3. Milestones 2–4 begin from those adapters and integrate one learned authority at a time.
 4. Milestone 5: online hierarchy.
 5. Milestone 6: living-Pokédex planner and bounded acquisition chains.

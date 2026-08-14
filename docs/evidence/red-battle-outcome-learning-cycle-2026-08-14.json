@@ -1,0 +1,189 @@
+{
+  "schema": "pokemon-red-battle-outcome-learning-cycle-evidence-v1",
+  "date": "2026-08-14",
+  "status": "plumbing_complete_candidate_rejected",
+  "claim": "One real teacher-free Red battle snapshot family produced authenticated counterfactual outcomes, one prior-preserving learner update, and an untouched-lineage development result. The update regressed and received no authority.",
+  "source": {
+    "git_commit": "51f76b54c6cc4cca441ea862eaf1573439c4f8a0",
+    "worktree_clean": true,
+    "published": true,
+    "github_ci": {
+      "conclusion": "success",
+      "run_id": 31846019245,
+      "url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/31846019245"
+    }
+  },
+  "pre_execution_review": {
+    "reviewed_commit": "49827c6159a235bc8a43ca6a6f1272acdb32cb46",
+    "claude_verdict": "approve",
+    "antigravity_verdict": "approve",
+    "writer_loader_gap_adjudication": "Claude's remaining S3 note inspected only the orchestration test. The dedicated real-private-writer to production-loader test existed separately and passed.",
+    "sealed_or_private_execution_by_reviewers": false
+  },
+  "live_failure_and_repair": {
+    "first_attempt_source_commit": "49827c6159a235bc8a43ca6a6f1272acdb32cb46",
+    "first_attempt_artifact_created": false,
+    "first_attempt_failure": "The bounded turn validated a truthful wild state while the battle-identity context still held its trainer default.",
+    "repair": "Bind the declared wild or trainer identity around the entire bounded transaction, including initial and final safety validation.",
+    "regression_test": "A truthful wild MAIN-menu state now executes one requested move and stops after its observed effect.",
+    "full_gate": {
+      "pytest_passed": 3285,
+      "pytest_skipped": 3,
+      "pytest_xfailed": 1,
+      "mypy_source_files": 206,
+      "privacy": "passed",
+      "documentation": "passed",
+      "registries": "passed",
+      "ruff": "passed"
+    }
+  },
+  "captures": [
+    {
+      "capture_id": "red-battle-outcome-train-51f76b5-root01",
+      "partition": "train",
+      "root_lineage_id": "training-control-v2-train-01",
+      "source_state_sha256": "62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e1315171925e80c9c",
+      "state_sha256": "6c553ce66b6ad35301d3bd5e95755e2194126a305e87e89aeb1085cbee389346",
+      "manifest_sha256": "bdd0f6e7bd9b319fa1cde2407aecc7a5d918b903074e6599680c670e7d86b487",
+      "initial_observation_sha256": "1e8747c3f67418d16c966a6f675a7975b66d4aa04ea4f9d398fb414af1580732",
+      "encounter_steps": 38,
+      "candidate_count": 4,
+      "supported_candidate_count": 4
+    },
+    {
+      "capture_id": "red-battle-outcome-development-51f76b5-root02",
+      "partition": "development",
+      "root_lineage_id": "training-control-v2-train-02-motion-repair",
+      "source_state_sha256": "b900d039a0c4df47b712867ddcb448bcff7fa79b88616bdf1e2e5fdf9e96b9b7",
+      "state_sha256": "2e426f08e44bcea270b7f800e7675292a597bbcd234a1e955e49d67abbc119f4",
+      "manifest_sha256": "eae2aba12141e1587dc71386311925dfe6be670dca31d68a728b16e814292840",
+      "initial_observation_sha256": "e11435ea8a0a4ca0f85eb2f3ba5e76b0ab71ebc552d1554eab3f018c8ff5813e",
+      "encounter_steps": 34,
+      "candidate_count": 4,
+      "supported_candidate_count": 4
+    }
+  ],
+  "capture_integrity": {
+    "same_semantic_parent_boundary": "portable_loop_post_secret_key",
+    "distinct_serialized_root_lineages": true,
+    "distinct_capture_states": true,
+    "distinct_initial_observations": true,
+    "partitions_disjoint": true,
+    "test_partition_opened": false,
+    "teacher_queries": 0,
+    "move_choices_during_capture": 0
+  },
+  "counterfactual_collection": {
+    "measured_candidates": 8,
+    "pre_attack_frames_per_candidate": 2048,
+    "all_moves_controller_proven": true,
+    "train": {
+      "best_candidate_indices": [
+        0,
+        3
+      ],
+      "utilities": [
+        3.0,
+        0.9222222222222223,
+        0.9555555555555556,
+        3.0
+      ],
+      "opponent_faints": [
+        true,
+        false,
+        false,
+        true
+      ],
+      "actions": 44,
+      "frames": 10232
+    },
+    "development": {
+      "best_candidate_indices": [
+        0,
+        2,
+        3
+      ],
+      "utilities": [
+        3.0,
+        0.8169014084507042,
+        3.0,
+        3.0
+      ],
+      "opponent_faints": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "actions": 42,
+      "frames": 10028
+    }
+  },
+  "learner_update": {
+    "base_model_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+    "updated_model_sha256": "de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11",
+    "model_type": "pokemon.core.battle.masked-mlp-ranker.v1",
+    "training_examples": 1,
+    "development_examples": 1,
+    "epochs": 100,
+    "learning_rate": 0.01,
+    "prior_l2": 0.1,
+    "objective_loss_before": 5.5580555856120855,
+    "objective_loss_after": 3.017262288274972,
+    "base_development_correct": 1,
+    "base_development_preference_accuracy": 1.0,
+    "updated_development_correct": 0,
+    "updated_development_preference_accuracy": 0.0,
+    "base_development_selected_utility": 3.0,
+    "updated_development_selected_utility": 0.8169014084507042,
+    "development_conclusion": "The one-state update overfit its training preference and made the untouched-lineage choice worse. Reject it for authority and future initialization claims."
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-outcome-update-fdd9a76922bc4ee384c2f6c883affc01",
+    "kind": "battle_outcome_cycle",
+    "manifest_sha256": "8abe7c10d39fb2270e307cde9b5043218e3f97e4f69503f07456e1a9251d649f",
+    "status": "complete",
+    "total_records": 4,
+    "total_bytes": 44074,
+    "stream_records": {
+      "evaluation": 1,
+      "model": 1,
+      "outcomes": 2
+    },
+    "stream_sha256": {
+      "evaluation": "e39743f236d07f3e18e373967f22b049425a1dc769a68429a9434889bdc0a6b2",
+      "model": "991ecc1bca7d04a1898e220cdebeb48e985268ddd513982f86e7b810c2c34457",
+      "outcomes": "12f82887c619a95bae1de63e63ce45636c002bc9ccbbde31c40af356312bc8b0"
+    },
+    "production_loader_round_trip": true,
+    "loaded_model_sha256": "de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11",
+    "private_path_fields": 0
+  },
+  "authority": {
+    "candidate": "shadow_only",
+    "promotion_gate_passed": false,
+    "authority_promoted": false,
+    "reason": "Development regressed and the preregistered independent unseen battle gate was not run."
+  },
+  "protected_access": {
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "full_game_replays": 0
+  },
+  "limitations": [
+    "One training state and one development state cannot estimate generalization.",
+    "The two serialized roots are distinct RNG lineages but share one semantic post-Mansion parent boundary.",
+    "Only one-turn wild move choices were measured; switching, catching, fleeing, trainer battles and multi-turn credit remain open.",
+    "Lower training objective loss did not imply a better development decision.",
+    "This is a plumbing result, not evidence that a model can complete Red or transfer to Crystal."
+  ],
+  "next_gate": [
+    "Turn the single-pair runner into a bounded authenticated battle catalog with many independent train and development contexts.",
+    "Stratify wild, trainer, capture, escape, required-move and protected-party objectives before collection.",
+    "Add learning curves and paired prior-versus-update development comparisons; preserve ties as equivalence instead of forcing a label.",
+    "Keep every candidate shadow-only until the frozen 200-battle Milestone 3 unseen gate passes.",
+    "Proceed with the navigation and party-development snapshot adapters required to close Milestone 1 without another full Red replay."
+  ]
+}

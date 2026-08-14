@@ -6,6 +6,21 @@ The first learned specialist ranks the moves that are actually available in a ba
 development step toward the learned/hybrid completion agent, not a replacement claim for the
 qualified teacher.
 
+## First teacher-free outcome update
+
+The imitation history below remains useful, but the active battle lane no longer treats a teacher
+slot as the truth. Exact source `51f76b5` completed one real snapshot-backed counterfactual cycle:
+two non-sealed Red lineages, four supported moves each, identical restore per move, exactly 2,048
+pre-attack frames, and outcome utilities derived from observed damage, faint and safety evidence.
+Teacher queries and choice targets were zero.
+
+The result rejected its own update. Training objective fell from 5.5581 to 3.0173, while the frozen
+prior's untouched-development preference accuracy of 1/1 became 0/1 after adaptation. The candidate
+is authenticated but shadow-only and unpromoted. That result proves the adapter/update path and
+falsifies a one-state curriculum; it does not supersede the frozen 200-battle promotion design in
+[the model-first roadmap](model-first-roadmap.md). Exact receipt:
+[`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+
 The first labeled episode contains one root lineage whose partition was recorded as
 `unassigned`. Dividing its decisions after collection cannot turn any part of it into an official
 held-out test. The episode may be used to validate the reader, feature projection, optimizer, model

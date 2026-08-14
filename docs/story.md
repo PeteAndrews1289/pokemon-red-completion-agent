@@ -26,6 +26,31 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: the first lesson made the model worse
+
+The new development loop finally did what the old full-game loop could not. It restored two real,
+authenticated Red battles and tried every legal move from exactly the same moment. The teacher did
+not vote. The game answered: damage, faint, survival and cost. Eight move outcomes arrived in two
+seconds instead of another overnight playthrough.
+
+The first attempt failed before a move. A safety check still assumed every bounded battle was a
+trainer battle, so it rejected the real wild encounter. That bug had survived thousands of tests
+because no test had asked the new one-turn executor to begin from a truthful wild state. The failed
+attempt wrote no model. The check was repaired, a real-wild regression was added, and the exact
+published commit passed again.
+
+Then the learner updated. Its training loss nearly halved. If this project were still optimizing
+pretty training numbers, that would have been the headline.
+
+The untouched battle gave the opposite answer. The old model chose one of three moves that knocked
+out the opponent. The updated model chose the only move that did not. Development went from one out
+of one to zero out of one. The candidate was rejected automatically and received no authority.
+
+That is the first real model-first success: not that the model improved, but that the system could
+teach from the game and still refuse a worse lesson. The next dataset needs many genuinely
+different battles, not more epochs on one convenient save. Navigation and party development now
+get the same short-scenario treatment. Full Red remains a final exam.
+
 ## Current checkpoint: stop replaying the answer key
 
 The four learned pieces did enter one visible Red run, and the run failed in the most useful way it

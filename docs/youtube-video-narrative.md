@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 outcome-learning scene: lower loss, worse move
+
+Open on two identical battle frames. Split each into four branches labelled **TRY EVERY MOVE** and
+put **2,048 PRE-ATTACK FRAMES** above all eight branches. Keep a small counter fixed at
+**TEACHER QUERIES: 0**. Let the cartridge fill in damage and faint outcomes.
+
+Interrupt before the first branch with the real failure:
+**TRUTHFUL WILD BATTLE → “UNEXPECTED WILD BATTLE”**. Show that no artifact was created, move the
+battle-kind binding around the whole transaction, and replay the permanent regression test. The
+line is: **“The first real example found the test we had forgotten to write.”**
+
+Then show the tempting graph: **TRAINING OBJECTIVE 5.5581 → 3.0173**. Pause. Replace it with the
+untouched result: **FROZEN PRIOR 1/1 · UPDATED MODEL 0/1** and
+**UTILITY 3.0 → 0.8169**. Stamp the new model **REJECTED · SHADOW ONLY · NO AUTHORITY**.
+
+Narration: **“This is what training looks like when the evaluation is allowed to say no. The
+pipeline worked. The one-state curriculum did not.”** End with the next board:
+**MORE INDEPENDENT BATTLES · NAVIGATION SCENARIOS · PARTY-DEVELOPMENT SCENARIOS · FULL RED LATER**.
+
 ## August 14 final-audit scene: one move, two counters
 
 Show one battle-choice card splitting into two terminal bins: **TEACHER FALLBACK** and **FAILED**.

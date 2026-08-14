@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the first outcome lesson failed—and that was the result
+
+The first real model-first loop took two seconds. Two authenticated non-sealed Red lineages each
+stopped at a wild battle's semantic MAIN menu. The runtime restored the exact bytes separately for
+all four supported moves and equalized controller work to 2,048 pre-attack frames. The teacher was
+never queried. Eight outcomes came from the cartridge itself.
+
+The first attempt found a real integration defect before it found an outcome. The bounded executor
+validated the initial state while its context still held the trainer-battle default, so it rejected
+a truthful wild encounter. No artifact was written. The repair bound the caller's declared battle
+kind around initial validation, execution and final validation, then added the exact missing
+wild-state regression. The complete local gate and GitHub CI passed at `51f76b5`.
+
+The repaired learner did exactly what an optimizer is supposed to do: its one-example objective
+fell from 5.5581 to 3.0173. It also did exactly what a useful experiment must be able to reveal: it
+made the untouched choice worse. The frozen prior chose a move with utility 3.0. The adapted model
+chose the lone inferior move at 0.8169. Preference accuracy fell from 1/1 to 0/1.
+
+The updated artifact authenticates and loads through the production model path, but stays
+shadow-only. No sealed case, Crystal context, teacher choice or full Red replay was used. The model
+did not “learn battle.” The system learned that one convenient state was not a curriculum.
+
+That distinction is the portfolio result: a game-grounded counterfactual pipeline, reproducible
+lineage separation, a typed fail-closed repair, and an evaluation strong enough to reject a lower-
+loss model. The next chapter is dataset breadth—many battle objectives and independent contexts—
+alongside the short navigation and party-development adapters required by Milestone 1.
+
 ## August 14: the last audit found a transaction boundary
 
 The final recheck almost ended with two approvals. Antigravity found the architecture and authority

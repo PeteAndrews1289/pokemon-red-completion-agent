@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Completed the first real teacher-free battle outcome cycle from two authenticated non-sealed Red
+  lineages: eight controller-proven counterfactual move outcomes at equal pre-attack timing, one
+  prior-preserving update, and one untouched-lineage evaluation. The update lowered fit loss but
+  regressed development from 1/1 to 0/1, so it remains rejected and shadow-only.
+- Fixed the real cycle's fail-closed wild-state blocker by binding the declared battle kind around
+  the entire bounded turn transaction, added the missing truthful-wild regression, and passed exact
+  GitHub CI plus 3,285 local tests.
+- Added a path-free outcome-cycle receipt and a view-only dashboard that can show the authenticated
+  battle frame, measured outcomes, model regression, zero protected-access counters and blocked
+  authority without replaying Red.
 - Decoded exact connection endpoints and destination-warp arrivals, corrected `$FF` returns to use
   retained outside-map state, added a game-neutral multi-map route composer, and proved an 86-action
   Pallet-to-Viridian-Center plan live from clean source across all three cartridge-declared arrivals.

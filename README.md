@@ -4,6 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
+> authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly
+> 2,048 pre-attack frames per counterfactual, zero teacher queries and no full replay. A
+> prior-preserving MLP update lowered its training objective from 5.5581 to 3.0173, but the frozen
+> prior was correct on the untouched development state and the update was not: **1/1 → 0/1**. The
+> new model remains shadow-only and gains no authority. This is the first real proof that the
+> teacher-free outcome/update plumbing works—and the first empirical warning that a one-state
+> update overfits. See the
+> [path-free evidence](docs/evidence/red-battle-outcome-learning-cycle-2026-08-14.json), the
+> [dashboard guide](docs/progress-dashboard.md), and the updated
+> [model-first roadmap](docs/model-first-roadmap.md). Red sealed test access, Crystal context access,
+> teacher queries and full-game replays all remained zero.
+
 > **Current research direction (August 14, 2026): model first, full runs last.** The first complete
 > Red player-v1 shadow evaluation stopped safely after 1,250 balanced-team battles and retained 600
 > battle corrections. It exposed fixed-route wall retries, excessively conservative healing, a

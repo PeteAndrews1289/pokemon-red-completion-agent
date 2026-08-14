@@ -33,6 +33,26 @@ The initial Crystal preview intentionally shows zero model and experiment progre
 the 1.1 cartridge and proves the display path without opening a context, asking the teacher, making
 a prediction, sending controller input or saving cartridge state.
 
+## Show the first Red outcome-learning result
+
+The current dashboard is a completed experiment view, not another full run. It shows the two
+authenticated captures, eight controller-proven move outcomes, fit-loss change, frozen-prior
+comparison, zero protected-access counters and the rejected authority state. With only the public
+receipt it shows a neutral screen; optionally supply either authenticated private capture to show
+the exact in-game battle frame. Loading that frame sends no controller input and saves nothing.
+
+```sh
+source .venv/bin/activate
+python scripts/run_battle_outcome_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --capture-state /private/path/to/development.state \
+  --capture-manifest /private/path/to/development.manifest.json
+```
+
+The capture is accepted only when its manifest digest appears in the tracked path-free result. Use
+`--no-browser` if the existing browser tab already points at `http://127.0.0.1:8765/`. The page is
+view-only and remains open until `Ctrl-C`.
+
 ## Historical Red full-run harness — not currently authorized
 
 The command below produced the failed 85-million-frame shadow evidence. It is retained for

@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-14 first real outcome cycle — highest active checkpoint:** Exact source `51f76b5`
+> passed local and GitHub CI after a real wild-state attempt found and closed a battle-identity
+> binding bug. Two authenticated non-sealed lineages then yielded eight controller-proven
+> counterfactual move outcomes at an equal 2,048 pre-attack frames, with zero teacher queries,
+> sealed Red access, Crystal access or full replay. The prior-preserving update lowered training
+> loss but regressed untouched development from 1/1 to 0/1, so candidate
+> `de284e6e…68a11` is rejected and remains shadow-only. The pipeline result is real; a competence
+> or authority claim is not.
+>
+> Next build a bounded multi-context battle catalog and learning curve, then the real navigation and
+> party-development snapshot adapters needed to close Milestone 1. The frozen 200-battle Milestone
+> 3 gate remains the only path to battle authority. Keep Claude work narrow because its plan window
+> was about 87% consumed at the last capacity check; Antigravity reported enough capacity for one
+> bounded architecture review. Neither reviewer runs cartridges, opens private contexts or edits.
+> See the
+> [path-free cycle evidence](docs/evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+
 > **2026-08-14 final-condition closure — highest active checkpoint:** Antigravity approved exact
 > commit `5347d95`; Claude approved with conditions after reproducing one control-sink accounting
 > defect in the configuration needed by the next battle-adapter lane. Codex accepted it. Model and

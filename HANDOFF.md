@@ -17,6 +17,52 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First real outcome-learning cycle — 2026-08-14
+
+Start with
+[`docs/evidence/red-battle-outcome-learning-cycle-2026-08-14.json`](docs/evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
+The first real battle snapshot family is now connected end to end. This closes the serial
+precondition that previously blocked the navigation and party-development adapters; it grants no
+learned authority.
+
+Two retained, qualified, non-sealed training-control roots were used. Both represent the same safe
+post-Mansion semantic boundary, but one is a distinct reversible-motion/RNG lineage. They were
+repartitioned prospectively for this plumbing cycle as one train capture and one development
+capture. Each materializer walked from Cinnabar Center to a real Mansion encounter, stopped at the
+semantic MAIN menu, authenticated four supported moves and made no move choice. Their capture-state,
+manifest and initial-observation hashes are distinct. The older validation root, all twelve sealed
+Red cases and every Crystal context remained closed.
+
+The first live attempt failed before artifact creation. `execute_bounded_battle_move_turn` checked
+the restored wild state before binding the caller's declared battle kind, so its trainer default
+rejected a truthful wild encounter as unexpected. Commit `51f76b5` binds the battle identity around
+the whole transaction and adds the missing real-wild regression. The complete local gate passed
+3,285 tests, three skips and one expected failure; whole-package mypy covered 206 source files.
+Exact GitHub CI run `31846019245` passed.
+
+The repaired cycle measured all eight moves from identical restored boundaries and equalized every
+candidate to 2,048 pre-attack frames. Training utilities were `[3.0, 0.9222, 0.9556, 3.0]`;
+development utilities were `[3.0, 0.8169, 3.0, 3.0]`. Every requested move was proven by the
+controller. No teacher choice was queried or used as a target.
+
+The last-layer prior-preserving update lowered its training objective from `5.5581` to `3.0173`,
+but it failed the only untouched-lineage comparison. The frozen MLP selected a best development
+move (`1/1`, utility `3.0`); the update selected the only inferior move (`0/1`, utility `0.8169`).
+Candidate SHA-256 `de284e6e295451f9988ec3be6dc0c6df43127b1c1d68dff500af52ce7fa68a11`
+round-trips through the production private-artifact loader, but remains **shadow-only and
+rejected**. Do not deploy it, initialize Crystal from it, or describe it as progress in battle
+competence.
+
+The result is valuable because the loop worked and the evidence refused the model. Next, turn the
+single-pair runner into a bounded multi-context battle catalog with learning curves and paired
+prior-versus-update development comparisons. Add the real navigation and party-development
+snapshot adapters required to finish Milestone 1. Milestone 3's frozen 200-battle unseen gate still
+controls any battle authority. Do not reopen a full Red route to collect these cases.
+
+The view-only result dashboard is `scripts/run_battle_outcome_dashboard.py`. It reads the public
+receipt, may display either authenticated capture as a no-input frame, and explicitly shows the
+candidate as blocked. It is evidence display, not a training actor.
+
 ## Final reviewer condition closed before the battle adapter — 2026-08-14
 
 Antigravity approved exact commit `5347d95` without an architecture condition. Claude independently
