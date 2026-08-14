@@ -24,7 +24,7 @@ _MODES = (
     "mansion",
     "mart",
     "pc",
-    "blocked-dialogue",
+    "blocked-movement",
     "damaged-field",
     "damaged-center",
 )
@@ -156,7 +156,7 @@ def _providers(
             ),
             recovery,
         )
-    if args.mode == "blocked-dialogue":
+    if args.mode == "blocked-movement":
         return (
             story,
             _empty(RedGoalMechanic.CENTER_RESTORE),

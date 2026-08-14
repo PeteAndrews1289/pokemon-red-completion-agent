@@ -33,8 +33,17 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
         text=True,
     )
 
-    assert "blocked-dialogue" in result.stdout
+    assert "blocked-movement" in result.stdout
     assert "damaged-center" in result.stdout
     assert "mansion" in result.stdout
     assert "--slot-id" not in result.stdout
     assert "--profile" not in result.stdout
+
+
+def test_blocked_context_uses_a_released_one_frame_semantic_action() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert "ControllerTiming()" in source
+    assert 'MacroAction(MacroActionKind.MOVE, "down")' in source
+    assert ".press(" not in source
+    assert ".release(" not in source

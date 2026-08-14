@@ -17,6 +17,12 @@
 > sanitized `no_available_goal` reason before question construction. Publish and pass exact-commit
 > CI before repeating that Mart preflight.
 
+> **Recovery rehearsal note:** nurse dialogue is still user-controllable under the normalized
+> readiness reader, so the old `blocked-dialogue` setup was rejected and is retired. The replacement
+> `blocked-movement` setup uses a released one-frame semantic movement action to preserve a genuine
+> transient movement latch. It must pass reload, preflight, and live recovery verification before
+> any recovery slot is curated.
+
 > **2026-08-13 transferable-manager checkpoint (supersedes sealed-test priority):** the owner
 > clarified that the objective is a model that learns to play Pokémon and ultimately pursues a
 > living collection across games. The sealed Red destination test remains unopened at 0/12 and its

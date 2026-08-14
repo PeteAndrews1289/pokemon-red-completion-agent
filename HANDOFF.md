@@ -46,6 +46,12 @@ Ball stack. That same failure exposed an uncaught zero-option question error. Pr
 the bounded `no_available_goal` failure before question construction, preventing a traceback from
 disclosing private paths. Re-run the Mart preflight only after this repair is published.
 
+The first attempted recovery setup also failed safely. Ordinary nurse text remains controllable and
+is intentionally not represented as lost overworld input, so it cannot truthfully teach
+`recover_control`. The replacement uses a one-frame semantic movement pulse whose button is fully
+released while the cartridge's movement latch remains active. Recovery must clear that authentic
+transient after reload; no menu, text flag, or RAM byte is fabricated.
+
 Next, in order:
 
 1. publish the exact source-bound registry and require green exact-commit CI;

@@ -151,7 +151,7 @@ A context profile cannot weaken those targets to manufacture its assigned pressu
 label. Team-development examples execute one real weakest-member level quantum rather than replaying
 an entire late-game grind. Perfect level-100 collection remains a separate long-horizon contract.
 
-Setup tooling can derive Mansion, Mart, PC, blocked-dialogue, damaged-field, and damaged-Center
+Setup tooling can derive Mansion, Mart, PC, blocked-movement, damaged-field, and damaged-Center
 boundaries from authenticated nonsealed captures. It does so with ordinary controller actions,
 writes only new external save/envelope files, preserves the story frontier, and creates no episode
 or label. The matching finite profile builder admits no callbacks, private paths, arbitrary provider
@@ -165,6 +165,11 @@ without taking an action. A Mart rehearsal then found a real inventory constrain
 collection: a full bag could not add an Ultra Ball stack. The fixed template extends the existing
 Great Ball stack instead, and zero executable goals are now rejected with a sanitized reason before
 a manager question can be constructed.
+
+An attempted nurse-dialogue recovery context was also rejected: text boxes remain controllable and
+therefore do not satisfy the normalized loss-of-overworld-control evidence. The replacement setup
+uses one fully released, one-frame semantic movement pulse and captures the cartridge's genuine
+transient movement latch. It never holds a button across save and never edits memory.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and

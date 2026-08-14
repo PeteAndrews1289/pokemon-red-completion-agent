@@ -65,7 +65,7 @@ def test_builder_help_exposes_finite_templates_but_no_manager_target_override() 
         text=True,
     )
 
-    assert "blocked-dialogue" in result.stdout
+    assert "blocked-movement" in result.stdout
     assert "--required-team-level" not in result.stdout
     assert "--provider-json" not in result.stdout
 

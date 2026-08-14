@@ -25,7 +25,11 @@ from pokemon_red_completion.captured_progress import (
 )
 from pokemon_red_completion.collection_protocol import working_source_bundle_sha256
 from pokemon_red_completion.emulator import EmulatorError, PyBoyAdapter
-from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    ControllerTiming,
+    CountingExecutor,
+    FrameSafeExecutor,
+)
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogError,
     open_goal_manager_context_capture,
@@ -55,7 +59,7 @@ _MODES = (
     "mansion",
     "mart",
     "pc",
-    "blocked-dialogue",
+    "blocked-movement",
     "damaged-field",
     "damaged-center",
 )
@@ -189,13 +193,11 @@ def _apply_mode(
         _require(reader.read(), MapId.CINNABAR_POKECENTER, (13, 4), "goal-manager PC")
         _pulse(actions, MacroActionKind.MOVE, "up", 60)
         return
-    if mode == "blocked-dialogue":
-        _pulse(actions, MacroActionKind.MOVE, "up", 60)
-        actions.execute(MacroAction(MacroActionKind.INTERACT))
-        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=60))
+    if mode == "blocked-movement":
+        actions.execute(MacroAction(MacroActionKind.MOVE, "down"))
         if reader.read_input_readiness().ready:
             raise GoalManagerContextMaterializationError(
-                "nurse interaction did not create a blocked-control context"
+                "released movement pulse did not create a blocked-control context"
             )
         return
     if mode in {"damaged-field", "damaged-center"}:
@@ -245,10 +247,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         reader = PokemonRedStateReader(emulator)
         observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, capture.envelope)
         completed_before = COMPLETION_QUEST.completed_ids(observer.observe())
-        controller = FrameSafeExecutor(
-            emulator,
-            DEFAULT_NEW_GAME_TIMING.controller_timing(),
+        timing = (
+            ControllerTiming()
+            if args.mode == "blocked-movement"
+            else DEFAULT_NEW_GAME_TIMING.controller_timing()
         )
+        controller = FrameSafeExecutor(emulator, timing)
         actions = CountingExecutor(controller)
         _apply_mode(args.mode, actions, reader, emulator)
         final = reader.read()
@@ -261,7 +265,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             raise GoalManagerContextMaterializationError(
                 "materialization changed story, retained input, or ended in battle"
             )
-        if args.mode != "blocked-dialogue" and not reader.read_input_readiness().ready:
+        if args.mode != "blocked-movement" and not reader.read_input_readiness().ready:
             raise GoalManagerContextMaterializationError(
                 "materialization did not end at a stable control boundary"
             )
