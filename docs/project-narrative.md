@@ -34,7 +34,7 @@ Crystal zero-shot/few-shot/from-scratch comparison. The sealed destination test 
 The first live rehearsals made the distinction concrete. Resupply, lost-control recovery, field
 healing and Pokémon Center healing all completed from authenticated states while writing no
 training row. Evolution produced an even better failure: the manager saw three real choices and
-selected evolution; the mechanic then changed a level-25 Diglett into a level-26 Dugtrio, yet the
+selected evolution; the mechanic then changed a level-22 Diglett into a level-26 Dugtrio, yet the
 verifier rejected it. The verifier had asked whether the acquisition catalog's number of pending
 evolutions changed. Because Red can also catch Dugtrio in the wild, that catalog quite correctly
 classifies Dugtrio as a wild target—and the wrong metric quite incorrectly called the observed

@@ -20,11 +20,13 @@ living-party transformation instead of redefining global collection metrics.
 
 Ordered next work:
 
-1. Publish the targeted evolution verifier and regenerated source-bound registries; require green
-   exact-commit CI.
-2. Rerun the evolution preflight and uncounted execution on the published source. Preserve the old
-   false-negative rehearsal as evidence; do not relabel it.
-3. Materialize a post-evolution boundary and qualify one-level team development.
+1. **Complete:** publish the targeted evolution verifier and regenerated source-bound registries;
+   exact-commit CI is green at `70bb8b8`.
+2. **Complete:** fresh slot-029 preflight selected evolution from three choices, and the uncounted
+   execution changed Diglett level 22 to Dugtrio level 26 while the exact verifier succeeded. The
+   old false-negative remains preserved and unrelabeled.
+3. Publish the setup-only `evolved-team` mode, materialize a post-evolution boundary and qualify
+   one-level team development.
 4. Qualify acquisition, storage and exploration execution, then re-audit all nine families for
    bounded success/failure semantics and distinct context construction.
 5. Only after every family is live-qualified, curate 81 unique contexts, freeze the complete

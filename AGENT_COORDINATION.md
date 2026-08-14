@@ -1,15 +1,15 @@
 # Three-agent coordination
 
-> **2026-08-13 evolution-verification checkpoint:** The uncounted post–Secret Key evolution
-> rehearsal passed a genuine three-way preflight—story, development and evolution—and the
-> deterministic mechanic changed the living party from Diglett level 25 to Dugtrio level 26.
-> The episode was correctly withheld because the generic verifier watched the acquisition catalog's
-> evolution counter, where Dugtrio is canonically obtainable in the wild and therefore is not an
-> evolution target. The pending repair verifies the exact one-slot Diglett-to-Dugtrio living-party
-> transformation, level increase, unchanged story frontier, nondecreasing collection, stable input
-> and zero faints. ROM-free unit and manager-cycle tests pass. Regenerate every source-bound
-> registry, publish, require exact-commit CI, then rerun the uncounted live rehearsal. Counted
-> collection remains 0/54 train and 0/27 validation.
+> **2026-08-13 evolution-verification checkpoint:** Published `70bb8b8` and exact-commit CI repaired
+> the evolution false negative without redefining the acquisition catalog. Fresh slot-029
+> preflight again exposed story, development and evolution, selected evolution at `0.8636` pressure
+> and ran zero actions. The explicit uncounted execution then changed Diglett level 22 to Dugtrio
+> level 26 in 21,604 actions / 1,252,066 frames; the unrelated catalog aggregate correctly stayed
+> 3/22 while the exact transformation verifier succeeded. It ended outside battle, input-ready,
+> with zero faints and released controls; no episode or source artifact changed. Evolution is
+> live-qualified. The pending setup-only `evolved-team` mode must publish before materializing that
+> terminal as a reusable development context. Counted collection remains 0/54 train and 0/27
+> validation.
 
 > **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real
 > whole-party safety-pressure threshold through observed in-battle switches, rejects every

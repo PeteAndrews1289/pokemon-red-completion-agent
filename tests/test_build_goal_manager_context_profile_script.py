@@ -66,8 +66,38 @@ def test_builder_help_exposes_finite_templates_but_no_manager_target_override() 
     )
 
     assert "blocked-movement" in result.stdout
+    assert "evolved-team" in result.stdout
     assert "--required-team-level" not in result.stdout
     assert "--provider-json" not in result.stdout
+
+
+def test_evolved_team_template_keeps_development_beside_story(tmp_path: Path) -> None:
+    destination = tmp_path / "evolved-team-context.json"
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--mode",
+            "evolved-team",
+            "--profile-id",
+            "evolved-team-context",
+            "--out",
+            str(destination),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    profile = load_red_goal_context_profile(destination)
+    assert tuple(provider.kind for provider in profile.providers) == (
+        GoalKind.ADVANCE_STORY,
+        GoalKind.DEVELOP_TEAM,
+        GoalKind.EVOLVE_SPECIES,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.RECOVER_CONTROL,
+    )
 
 
 def test_mart_template_extends_the_existing_great_ball_stack(tmp_path: Path) -> None:

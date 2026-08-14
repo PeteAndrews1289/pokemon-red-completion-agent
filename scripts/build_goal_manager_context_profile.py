@@ -27,6 +27,7 @@ _MODES = (
     "blocked-movement",
     "damaged-field",
     "damaged-center",
+    "evolved-team",
 )
 
 
@@ -162,7 +163,7 @@ def _providers(
             _empty(RedGoalMechanic.CENTER_RESTORE),
             recovery,
         )
-    if args.mode == "damaged-center":
+    if args.mode in {"damaged-center", "evolved-team"}:
         return (
             story,
             _empty(RedGoalMechanic.BALANCED_TEAM),

@@ -180,12 +180,16 @@ and completed uncounted live execution: 152 actions in the field and 10 actions 
 full HP, cleared status, zero safety pressure, stable input and no episode.
 
 The evolution rehearsal then found a measurement bug rather than a gameplay bug. A genuine
-three-way menu selected evolution and the bounded mechanic changed Diglett level 25 into Dugtrio
+three-way menu selected evolution and the bounded mechanic changed Diglett level 22 into Dugtrio
 level 26. The generic progress verifier rejected it because Dugtrio is cataloged as wild-obtainable,
 so the acquisition graph's evolution counter does not move. The repair keeps that global catalog
 truth intact and verifies the exact one-slot living-party transformation, level increase, unchanged
-story frontier, nondecreasing collection, stable input and zero faints. It must pass a published-
-source live replay before team-development setup continues.
+story frontier, nondecreasing collection, stable input and zero faints. Published `70bb8b8` passed
+CI; fresh slot-029 preflight selected evolution from the same three-way menu, and a 21,604-action /
+1,252,066-frame uncounted execution changed Diglett level 22 to Dugtrio level 26. The catalog
+aggregate correctly stayed 3/22 while the exact verifier succeeded, with zero faints, stable input,
+released controls and no episode. A setup-only post-evolution materializer is the next gate before
+team-development rehearsal.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and

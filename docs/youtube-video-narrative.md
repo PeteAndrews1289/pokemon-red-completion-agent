@@ -217,12 +217,15 @@ PERFECT COLLECTION**. The first keeps routine training examples useful instead o
 over-grinding; the second remains part of the long-term completion contract.
 
 Add the evolution false-negative immediately after restoration. Put three cards on screen—**STORY
-/ TRAIN / EVOLVE**—then highlight EVOLVE. Show the party changing **DIGLETT 25 → DUGTRIO 26** and
+/ TRAIN / EVOLVE**—then highlight EVOLVE. Show the party changing **DIGLETT 22 → DUGTRIO 26** and
 the old verifier still stamping **FAILED**. Reveal why: the acquisition catalog calls Dugtrio a
 wild target, so its aggregate evolution counter never moves. Replace the counter with the exact
 claim card: **ONE SLOT CHANGED / LEVEL INCREASED / STORY UNCHANGED / ZERO FAINTS / CONTROL
 RESTORED**. The narration is: **“The game did the right thing. Our measurement asked the wrong
 question.”** Keep **UNCOUNTED REHEARSAL / NO EPISODE** visible throughout.
+Then replay the same terminal under the repaired verifier and turn only the measurement card green:
+**21,604 ACTIONS / 1,252,066 FRAMES / EXACT TRANSFORMATION PASSED / CATALOG STILL 3 OF 22**. The
+unchanged catalog number is now a feature of the story, not something to hide.
 
 ## Working title
 
@@ -1508,7 +1511,7 @@ version has to prove the model learned something worth carrying into a game it h
   but losing the read-only teacher choice to exploration because the frozen emergency gate is
   `0.55`. Follow with the two successful **0.6667 → 0.0** rehearsals—152 field actions and 10
   Center actions—without hiding the competing options or calling any setup state training data.
-- The evolution verifier repair: **3 CHOICES / DIGLETT 25 → DUGTRIO 26 / MECHANIC SUCCEEDED /
+- The evolution verifier repair: **3 CHOICES / DIGLETT 22 → DUGTRIO 26 / MECHANIC SUCCEEDED /
   WRONG AGGREGATE REJECTED IT / 0 EPISODES**. Show the exact living-party verifier replacing the
   unrelated acquisition-catalog counter.
 

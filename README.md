@@ -23,9 +23,10 @@
 > genuine three-way evolution context selected evolution and the bounded mechanic changed Diglett
 > level 25 into Dugtrio level 26, but the generic verifier watched an unrelated catalog aggregate
 > and rejected the otherwise successful outcome. The repair now checks the exact in-party
-> transformation, level gain, unchanged story frontier, stable input and zero faints. It is
-> ROM-free qualified and awaits published-source live replay. These are mechanic rehearsals, so the
-> honest training count remains **0/54 train and 0/27 development validation**.
+> transformation, level gain, unchanged story frontier, stable input and zero faints. Published
+> source then repeated the 21,604-action mechanic and passed that verifier with released controls,
+> no faint and no episode. These are mechanic rehearsals, so the honest training count remains
+> **0/54 train and 0/27 development validation**.
 
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy

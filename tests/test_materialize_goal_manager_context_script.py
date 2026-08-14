@@ -47,6 +47,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
 
     assert "blocked-movement" in result.stdout
     assert "damaged-center" in result.stdout
+    assert "evolved-team" in result.stdout
     assert "mansion" in result.stdout
     assert "--slot-id" not in result.stdout
     assert "--profile" not in result.stdout
@@ -79,6 +80,17 @@ def test_late_game_context_relocates_from_indigo_through_real_fly() -> None:
     assert '"goal-manager Indigo departure"' in source
     assert "_fly_to_town(" in source
     assert "MapId.CINNABAR_ISLAND" in source
+
+
+def test_evolved_team_setup_reuses_the_qualified_bounded_mechanic() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert 'if mode == "evolved-team"' in source
+    assert "run_red_team_balancing(" in source
+    assert "red_team_development_quantum_policy(" in source
+    assert "_targeted_evolution_index(" in source
+    assert "evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID)" in source
+    assert "after_levels[target_index] <= before_levels[target_index]" in source
 
 
 def _damaged_raw(*, bag_items: tuple[tuple[int, int], ...]) -> RawGameState:

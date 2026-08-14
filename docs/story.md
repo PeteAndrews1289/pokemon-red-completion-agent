@@ -682,11 +682,13 @@ Being precise about this matters more than the story sounding finished.
   Acquisition has passed authenticated preflight; resupply, transient-control recovery, field
   restoration and Center restoration have executed successfully without consuming episodes. The
   two restoration contexts began at 66.67% safety pressure and ended fully healed, status-free and
-  stable. Evolution then passed a genuine three-way preflight and changed Diglett level 25 into
+  stable. Evolution then passed a genuine three-way preflight and changed Diglett level 22 into
   Dugtrio level 26, but an unrelated catalog aggregate falsely rejected the success. The repaired
-  verifier checks that exact transformation and awaits published-source replay. The manager still
-  has **zero genuine examples and no trained artifact**. That distinction is deliberate:
-  authenticated rehearsal evidence is not training data.
+  verifier checks that exact transformation. Published-source replay then changed Diglett level 22
+  into Dugtrio level 26 in 21,604 actions and passed with zero faints, stable control and no episode,
+  even as the honest catalog aggregate remained 3/22. The manager still has **zero genuine examples
+  and no trained artifact**. That distinction is deliberate: authenticated rehearsal evidence is
+  not training data.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.

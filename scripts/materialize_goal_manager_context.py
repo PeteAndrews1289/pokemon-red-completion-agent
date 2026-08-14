@@ -16,7 +16,16 @@ from pokemon_red_completion.battle_recovery import (
 )
 from pokemon_red_completion.blaine import (
     CENTER_TO_MART,
+    DIGLETT_SPECIES_ID,
+    DIGLETTS_CAVE_TRAINING_VENUE,
+    MANSION_BALANCED_TEAM_TRAINING_INTENT,
+    MANSION_ESCORT_ENEMY_SPECIES,
+    MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+    MANSION_MAX_CONSECUTIVE_FLEES,
+    MANSION_TRAINING_FLEE_TIMING,
     MANSION_TRAINING_VENUE,
+    MANSION_VOLATILE_ENEMY_SPECIES,
+    ROUTE_11_TRAINING_VENUE,
     BlaineChapterError,
     _fly_to_town,
     _heal,
@@ -41,6 +50,7 @@ from pokemon_red_completion.field_recovery import (
     FieldRecoveryError,
     plan_party_recovery,
 )
+from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogError,
     open_goal_manager_context_capture,
@@ -50,6 +60,7 @@ from pokemon_red_completion.goal_manager_protocol import (
     load_committed_goal_manager_registry,
 )
 from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
+from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.observation import (
     MapId,
     PokemonRedStateReader,
@@ -61,11 +72,21 @@ from pokemon_red_completion.provenance import (
     require_clean_source,
     require_published_source,
 )
-from pokemon_red_completion.red_party import party_observation_from_raw
+from pokemon_red_completion.red_goal_context import (
+    _targeted_evolution_index,
+    red_team_development_quantum_policy,
+)
+from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
+from pokemon_red_completion.red_party import (
+    BLASTOISE_SPECIES_ID,
+    DUGTRIO_SPECIES_ID,
+    party_observation_from_raw,
+)
 from pokemon_red_completion.red_player_observer import (
     CapturedPokemonRedObserver,
     ResumedStateError,
 )
+from pokemon_red_completion.red_team_training import run_red_team_balancing
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
@@ -88,6 +109,7 @@ _MODES = (
     "blocked-movement",
     "damaged-field",
     "damaged-center",
+    "evolved-team",
 )
 
 
@@ -342,6 +364,73 @@ def _damage_context_ready(
     )
 
 
+def _evolved_team_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
+    before = reader.read()
+    before_species = tuple(before.party_species_ids or ())
+    before_levels = tuple(before.party_levels or ())
+    if (
+        BLASTOISE_SPECIES_ID not in before_species
+        or DIGLETT_SPECIES_ID not in before_species
+        or DUGTRIO_SPECIES_ID in before_species
+        or len(before_species) != len(before_levels)
+    ):
+        raise GoalManagerContextMaterializationError(
+            "evolved-team setup requires the unevolved qualified party"
+        )
+    policy = red_team_development_quantum_policy(
+        party_observation_from_raw(before),
+        RedGoalManagerConfig(),
+        kind=GoalKind.EVOLVE_SPECIES,
+    )
+    run_red_team_balancing(
+        actions,
+        reader,
+        emulator,
+        policy=policy,
+        venues=(
+            ROUTE_11_TRAINING_VENUE,
+            DIGLETTS_CAVE_TRAINING_VENUE,
+            MANSION_TRAINING_VENUE,
+        ),
+        intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+        flee_timing=MANSION_TRAINING_FLEE_TIMING,
+        hideout_timing=DEFAULT_HIDEOUT_TIMING,
+        flee_func=_flee,
+        volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+        escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+        max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+        cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+        evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+        report_label="goal-manager evolved-team setup",
+        checkpoint_count=1,
+    )
+    after = reader.read()
+    target_index = _targeted_evolution_index(
+        before_species,
+        tuple(after.party_species_ids or ()),
+        source_species_id=DIGLETT_SPECIES_ID,
+        target_species_id=DUGTRIO_SPECIES_ID,
+    )
+    after_levels = tuple(after.party_levels or ())
+    _require_safe_damage_state(after)
+    if (
+        target_index is None
+        or len(after_levels) != len(before_levels)
+        or after_levels[target_index] <= before_levels[target_index]
+        or after.map_id
+        not in {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
+        or (after.player_x, after.player_y) != (3, 3)
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "evolved-team setup did not reach its exact stable transformation boundary"
+        )
+
+
 def _apply_mode(
     mode: str,
     actions: CountingExecutor,
@@ -374,6 +463,9 @@ def _apply_mode(
             raise GoalManagerContextMaterializationError(
                 "released movement pulse did not create a blocked-control context"
             )
+        return
+    if mode == "evolved-team":
+        _evolved_team_boundary(actions, reader, emulator)
         return
     if mode in {"damaged-field", "damaged-center"}:
         _damage_party(
