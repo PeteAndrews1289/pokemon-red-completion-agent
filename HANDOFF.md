@@ -51,6 +51,14 @@ exact-commit CI. After that, regenerate the Mansion reversal preflight, construc
 identities, and freeze the catalog. Counted data remains **0/54 train and 0/27 development
 validation**.
 
+The 111-save source inventory also found a distinct full-party validation lineage at the stable
+Fuchsia outdoor boundary. It knows Fly but is not inside the narrow set of Center states the first
+normalizer accepted. The pending generalization allows only the nine ordinary flyable outdoor city
+maps, invokes the existing observed-destination Fly mechanic, enters Cinnabar Center and heals. A
+live no-save check moved the authenticated Fuchsia state to the Cinnabar nurse in 214 actions with
+stable input and a fully healed party. This creates an independent source for development and
+storage contexts instead of deriving both partitions from the post–Secret Key save.
+
 ## Curriculum-construction batch hardened; live catalog build next — 2026-08-14
 
 The v2 freeze guards are published at `b8ff0d1`, and exact-commit CI is green. The next local

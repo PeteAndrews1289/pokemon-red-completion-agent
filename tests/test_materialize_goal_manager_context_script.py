@@ -179,6 +179,54 @@ def test_standard_center_context_relocates_to_cinnabar_before_healing(
     assert healed
 
 
+def test_fly_capable_outdoor_context_relocates_to_cinnabar_before_healing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            map_id=MapId.FUCHSIA_CITY,
+            player_x=39,
+            player_y=16,
+        )
+    )
+    healed = False
+
+    def fly(*_args: object) -> None:
+        reader.raw = replace(
+            reader.raw,
+            map_id=MapId.CINNABAR_ISLAND,
+            player_x=11,
+            player_y=12,
+        )
+
+    def move(_actions: object, _reader: object, directions: object, label: str) -> None:
+        assert tuple(directions) == ("up",) * 5
+        assert label == "goal-manager Cinnabar Center"
+        reader.raw = replace(
+            reader.raw,
+            map_id=MapId.CINNABAR_POKECENTER,
+            player_x=3,
+            player_y=3,
+        )
+
+    def heal(*_args: object) -> None:
+        nonlocal healed
+        healed = True
+
+    globals_dict = module["_normalize_cinnabar_nurse"].__globals__
+    monkeypatch.setitem(globals_dict, "_fly_to_town", fly)
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_heal", heal)
+
+    module["_normalize_cinnabar_nurse"](object(), reader, object())
+
+    assert reader.raw.map_id == MapId.CINNABAR_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert healed
+
+
 def test_storage_pc_context_returns_to_nurse_before_healing(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

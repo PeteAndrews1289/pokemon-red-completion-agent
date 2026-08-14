@@ -75,6 +75,14 @@ run reached `0.5746` after two encounters, with all six members alive and the ob
 Potion/two-Full-Restore plan fully payable. “Bounded” now describes the whole search rather than
 one arbitrarily weak opponent.
 
+Partition integrity created a different kind of navigation requirement. The obvious development
+and storage source was the post–Secret Key save, but deriving both training and validation from it
+would make “held out” mean little. The nonsealed inventory contained a second full six-member party
+standing outdoors in Fuchsia with Fly. The normalizer now accepts only ordinary flyable city maps,
+uses the same observed-destination Fly mechanic as the teacher, enters Cinnabar Center and heals.
+The first no-save proof took 214 actions and ended at the nurse with stable control. A small routing
+generalization therefore bought a genuinely separate experimental lineage.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

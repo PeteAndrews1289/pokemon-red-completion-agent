@@ -33,6 +33,9 @@ Ordered next work:
    Published `0bb98f2` and fresh read-only preflights now prove the PC reversal as well. A weak
    Mansion encounter exposed an inner/outer budget mismatch; the repaired no-save rehearsal safely
    continued into a second encounter and reached `0.5746` with a payable exact plan.
+   The inventory also identified an independent full-party, Fly-capable Fuchsia lineage. Its
+   whitelisted outdoor relocation reached the Cinnabar nurse live in 214 actions, allowing
+   development/storage validation contexts to avoid the post–Secret Key training root.
    Preserve 54 train / 27 development separation, at least 24 genuine three-way training menus and
    three repeated semantic menus whose correct choice changes with state. Publish the
    PC/recovery-reserve repair and regenerate every final receipt against that exact source before

@@ -15,6 +15,12 @@
 > members and a payable four-Hyper/two-Full-Restore plan. Publish before its preflight. Counted data
 > remains 0/81.
 
+> **Source-lineage note:** the read-only 111-save inventory identified a separate full-party,
+> Fly-capable Fuchsia outdoor source for validation-side team/storage construction. The pending
+> normalizer whitelists ordinary flyable outdoor city maps and uses the qualified Fly mechanic;
+> a live no-save check reached the Cinnabar nurse in 214 actions, fully healed and input-ready.
+> Publish before creating artifacts from this lineage.
+
 > **2026-08-14 curriculum-construction checkpoint:** The pending setup layer can relocate standard
 > Center and Cinnabar-PC states, target closed mild/emergency damage bands, preserve that damage on
 > return to the nurse or PC, and build stocked-and-damaged Mansion boundaries using real actions.

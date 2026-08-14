@@ -154,6 +154,19 @@ _STANDARD_FLY_CENTER_MAPS = frozenset(
         MapId.CINNABAR_POKECENTER,
     }
 )
+_STANDARD_FLY_OUTDOOR_MAPS = frozenset(
+    {
+        MapId.VIRIDIAN_CITY,
+        MapId.PEWTER_CITY,
+        MapId.CERULEAN_CITY,
+        MapId.LAVENDER_TOWN,
+        MapId.VERMILION_CITY,
+        MapId.CELADON_CITY,
+        MapId.FUCHSIA_CITY,
+        MapId.CINNABAR_ISLAND,
+        MapId.SAFFRON_CITY,
+    }
+)
 _DAMAGE_MODES = frozenset(
     {
         "acquisition-damaged",
@@ -277,6 +290,16 @@ def _normalize_cinnabar_nurse(
             emulator,
             MapId.CINNABAR_ISLAND,
             "goal-manager source Center to Cinnabar",
+        )
+        _move(actions, reader, ("up",) * 5, "goal-manager Cinnabar Center")
+        raw = reader.read()
+    elif raw.map_id in _STANDARD_FLY_OUTDOOR_MAPS:
+        _fly_to_town(
+            actions,
+            reader,
+            emulator,
+            MapId.CINNABAR_ISLAND,
+            "goal-manager outdoor source to Cinnabar",
         )
         _move(actions, reader, ("up",) * 5, "goal-manager Cinnabar Center")
         raw = reader.read()
