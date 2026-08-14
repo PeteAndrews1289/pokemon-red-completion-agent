@@ -4,6 +4,7 @@ import hashlib
 import json
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -24,13 +25,16 @@ from pokemon_red_completion.observation import (
     RedPokedexState,
 )
 from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
+from pokemon_red_completion.red_acquisition import RedAreaExecutionPolicy
 from pokemon_red_completion.red_goal_context import (
     _targeted_evolution_index,
+    _wild_provider,
     build_red_goal_context_runtime,
     red_team_development_quantum_policy,
 )
 from pokemon_red_completion.red_goal_context_profile import (
     RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+    RedGoalMechanic,
     parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
@@ -102,10 +106,7 @@ class _ActionDelegate:
 
 
 def _canonical(value: object) -> bytes:
-    return (
-        json.dumps(value, separators=(",", ":"), sort_keys=True).encode("ascii")
-        + b"\n"
-    )
+    return json.dumps(value, separators=(",", ":"), sort_keys=True).encode("ascii") + b"\n"
 
 
 def _capture(
@@ -317,6 +318,52 @@ def test_team_development_is_one_level_quantum_not_a_full_duplicate_grind() -> N
     assert evolution.required_size == party.size
 
 
+def test_wild_goal_context_binds_one_capture_quantum(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, object] = {}
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.LiveWildCorridorSurveyExecutor",
+        lambda *_args, **_kwargs: object(),
+    )
+
+    def provider(**kwargs: object) -> object:
+        captured.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.RedAreaSurveyGoalProvider",
+        provider,
+    )
+    parameters = {
+        "source_id": "wild:Route1:grass",
+        "label": "Route 1 capture lane",
+        "map_id": int(MapId.ROUTE_1),
+        "player_x": 10,
+        "player_y": 20,
+        "forward_directions": ("up",),
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 64,
+        "maximum_encounters": 16,
+    }
+
+    _wild_provider(
+        SimpleNamespace(emulator=object(), reader=object(), adapter=object()),
+        SimpleNamespace(
+            parameters=parameters,
+            mechanic=RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        ),
+        CountingExecutor(_ActionDelegate()),
+    )
+
+    policy = captured["policy"]
+    assert isinstance(policy, RedAreaExecutionPolicy)
+    assert policy.capture_quota == 1
+    assert policy.capture_in_requirement_order is True
+
+
 def test_targeted_evolution_requires_one_exact_in_place_species_change() -> None:
     before = (28, DIGLETT_SPECIES_ID, 64)
     after = (28, DUGTRIO_SPECIES_ID, 64)
@@ -429,9 +476,7 @@ def test_targeted_evolution_verifies_living_transform_without_catalog_counter_ch
     )
     before = runtime.adapter.observe()
     binding_set = runtime.enumerator(actions).enumerate(before)
-    binding = next(
-        item for item in binding_set.bindings if item.kind is GoalKind.EVOLVE_SPECIES
-    )
+    binding = next(item for item in binding_set.bindings if item.kind is GoalKind.EVOLVE_SPECIES)
 
     report = binding.execute()
     verification = binding.verify(report)

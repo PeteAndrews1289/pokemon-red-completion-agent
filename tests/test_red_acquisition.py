@@ -296,9 +296,7 @@ def test_source_priority_counts_duplicate_roots_and_filters_acquisition_kind() -
         90,
         116,
     )
-    forest = next(
-        item for item in priorities if item.source_id == "wild:ViridianForest:grass"
-    )
+    forest = next(item for item in priorities if item.source_id == "wild:ViridianForest:grass")
     assert forest.missing_specimen_count == 6
     assert tuple(red_species_number(ref) for ref in forest.missing_species_refs) == (
         10,
@@ -435,6 +433,32 @@ def test_area_executor_retries_a_bounded_failed_capture_on_a_fresh_encounter() -
     assert report.encounters_seen == 3
     assert report.captures == 2
     assert report.flees == 1
+
+
+def test_area_executor_can_return_one_verified_capture_quantum() -> None:
+    executor = _RouteOneSurveySimulation((16, 19))
+
+    report = run_red_area_survey(
+        "wild:Route1:grass",
+        executor,
+        policy=RedAreaExecutionPolicy(capture_quota=1),
+    )
+
+    assert not report.passed
+    assert report.initial_missing_species_refs == (
+        red_species_ref(16),
+        red_species_ref(19),
+    )
+    assert report.final_missing_species_refs == (red_species_ref(19),)
+    assert report.captures == 1
+    assert executor.captured == [(16, 0)]
+    assert executor.encounters == [19]
+
+
+@pytest.mark.parametrize("capture_quota", (0, -1, True))
+def test_area_capture_quantum_must_be_a_positive_integer(capture_quota: object) -> None:
+    with pytest.raises(ValueError, match="capture_quota"):
+        RedAreaExecutionPolicy(capture_quota=capture_quota)  # type: ignore[arg-type]
 
 
 def test_area_executor_enforces_its_encounter_bound() -> None:

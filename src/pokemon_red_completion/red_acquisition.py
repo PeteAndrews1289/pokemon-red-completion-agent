@@ -301,6 +301,7 @@ class RedAreaExecutionPolicy:
     max_actions: int = 2_000
     max_encounters: int = 400
     capture_in_requirement_order: bool = False
+    capture_quota: int | None = None
 
     def __post_init__(self) -> None:
         for name in ("max_actions", "max_encounters"):
@@ -309,6 +310,10 @@ class RedAreaExecutionPolicy:
                 raise ValueError(f"{name} must be a positive integer")
         if type(self.capture_in_requirement_order) is not bool:
             raise TypeError("capture_in_requirement_order must be a bool")
+        if self.capture_quota is not None and (
+            type(self.capture_quota) is not int or self.capture_quota <= 0
+        ):
+            raise ValueError("capture_quota must be a positive integer or None")
 
 
 @dataclass(frozen=True, slots=True)
@@ -453,10 +458,7 @@ def plan_red_area_encounter(
             "every root specimen assigned to this source is retained",
         )
     if encountered_species_ref is not None:
-        if (
-            required_species_ref is not None
-            and encountered_species_ref != required_species_ref
-        ):
+        if required_species_ref is not None and encountered_species_ref != required_species_ref:
             return RedAreaDecision(
                 RedAreaDirective.FLEE_ENCOUNTER,
                 source_id,
@@ -596,6 +598,22 @@ def run_red_area_survey(
                     f"{source_id} capture did not retain exactly one {species_ref}"
                 )
             captures += 1
+            if policy.capture_quota is not None and captures >= policy.capture_quota:
+                final = summarize_red_area_survey(
+                    source_id,
+                    after_observation,
+                    catalog,
+                )
+                return RedAreaExecutionReport(
+                    source_id,
+                    initial.missing_species_refs,
+                    final.missing_species_refs,
+                    action_count + 1,
+                    encounters_seen,
+                    captures,
+                    flees,
+                    box_switches,
+                )
             continue
         if decision.directive is RedAreaDirective.FLEE_ENCOUNTER:
             executor.flee_encounter()

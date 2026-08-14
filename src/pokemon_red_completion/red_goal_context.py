@@ -276,9 +276,7 @@ def _wild_provider(
     def boundary(observation: RedGoalObservation) -> RedGoalSkillAvailability:
         raw = observation.raw
         if raw.map_id != map_id or raw.player_x != x or raw.player_y != y:
-            return RedGoalSkillAvailability.unavailable(
-                GoalUnavailableReason.MISSING_CAPABILITY
-            )
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         return RedGoalSkillAvailability.available()
 
     if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
@@ -293,6 +291,7 @@ def _wild_provider(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
                 max_encounters=_integer(parameters, "maximum_encounters"),
                 capture_in_requirement_order=True,
+                capture_quota=1,
             ),
         )
     return RedEncounterDiscoveryGoalProvider(
@@ -418,8 +417,7 @@ class _RedTeamGoalProvider:
             before_story != after_story
             or after.collection.collection.pokedex_owned_count
             < before.collection.collection.pokedex_owned_count
-            or after.collection.collection.living_count
-            < before.collection.collection.living_count
+            or after.collection.collection.living_count < before.collection.collection.living_count
         ):
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         if (
@@ -428,8 +426,7 @@ class _RedTeamGoalProvider:
             or after.raw.battle_state
             or not after.input_ready
             or after.party.fainted_count
-            or after.party.members[target_index].level
-            <= before.party.members[target_index].level
+            or after.party.members[target_index].level <= before.party.members[target_index].level
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
@@ -446,25 +443,17 @@ class _RedTeamGoalProvider:
             or raw.player_y != 3
             or BLASTOISE_SPECIES_ID not in observation.party.species_ids()
         ):
-            return RedGoalSkillAvailability.unavailable(
-                GoalUnavailableReason.MISSING_CAPABILITY
-            )
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         if self.kind is GoalKind.DEVELOP_TEAM and observation.party.size < required_size:
-            return RedGoalSkillAvailability.unavailable(
-                GoalUnavailableReason.MISSING_CAPABILITY
-            )
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         evolved_ref = red_species_ref(red_internal_species_number(DUGTRIO_SPECIES_ID))
         living_refs = frozenset(
-            specimen.species_ref
-            for specimen in observation.collection_observation.specimens
+            specimen.species_ref for specimen in observation.collection_observation.specimens
         )
         if self.kind is GoalKind.EVOLVE_SPECIES and (
-            DIGLETT_SPECIES_ID not in observation.party.species_ids()
-            or evolved_ref in living_refs
+            DIGLETT_SPECIES_ID not in observation.party.species_ids() or evolved_ref in living_refs
         ):
-            return RedGoalSkillAvailability.unavailable(
-                GoalUnavailableReason.NO_LEGAL_TARGET
-            )
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
         return RedGoalSkillAvailability.available()
 
     def _policy(self, observation: RedGoalObservation) -> BalancedTeamPolicy:
@@ -488,18 +477,13 @@ def _targeted_evolution_index(
         return None
     changed = tuple(
         index
-        for index, (before, after) in enumerate(
-            zip(before_species, after_species, strict=True)
-        )
+        for index, (before, after) in enumerate(zip(before_species, after_species, strict=True))
         if before != after
     )
     if len(changed) != 1:
         return None
     index = changed[0]
-    if (
-        before_species[index] != source_species_id
-        or after_species[index] != target_species_id
-    ):
+    if before_species[index] != source_species_id or after_species[index] != target_species_id:
         return None
     return index
 
