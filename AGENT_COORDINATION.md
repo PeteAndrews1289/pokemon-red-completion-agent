@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-14 complete-candidate-catalog checkpoint:** All 81 external goal-manager captures,
+> profiles and read-only qualification receipts now exist: nine per semantic family, 54 train and
+> 27 development validation. All selected their assigned family without an action or episode. The
+> complete candidate set has 81 unique state, envelope, ordered-question and order-independent
+> policy-context digests, 28 multiway train menus, all three required same-menu answer reversals,
+> and labels in all nine shuffled positions. Published `9b528c6` repaired blocked-control setup so
+> it preserves each source location instead of normalizing every recovery context to Cinnabar; the
+> superseded outputs remain rejected evidence. The final nine Mansion contexts expose exploration
+> alone at `0.5161` world-knowledge pressure. A trial freeze correctly rejected the mixed receipts,
+> which bind three historical commits. Next publish this documentation checkpoint, wait for green
+> exact-commit CI, regenerate all 81 receipts into one new empty root, freeze that catalog, and only
+> then collect. Counted data remains 0/81; sealed test remains 0/12.
+
 > **2026-08-14 live reversal checkpoint:** Mild and emergency Center states now prove the same
 > story/develop/restore menu selects development at `0.1342` safety pressure and restoration at
 > `0.5599`. A mild Mansion state proves acquire/restore/explore selects acquisition at `0.1071`.

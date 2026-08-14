@@ -26,6 +26,20 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: the board is full, but the lesson has not started
+
+The first curriculum board now holds 81 authenticated Red situations: nine examples for each of
+nine kinds of work, split into 54 training and 27 development-validation choices. All 81 passed a
+read-only inspection, all protected fingerprints are unique, 28 training choices have at least
+three real options, and the correct answer appears in every shuffled position. Three identical
+menus even change their answer when the cartridge state changes—the difference between memorizing
+a menu and responding to a situation.
+
+Yet the training counter is still zero. Those inspections span three versions of the program, so
+the catalog gate refused to freeze them together. The entire board must be inspected once more
+against one published, green commit before the teacher may act. That refusal is the point: this
+project no longer calls preparation “learning” merely because it took a long time.
+
 ---
 
 ## Act I: The run that wins and teaches nothing

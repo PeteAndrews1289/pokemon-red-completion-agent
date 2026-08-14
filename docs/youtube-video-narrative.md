@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 freeze-gate scene: 81 ready, zero learned
+
+Fill the on-screen 81-card board one family at a time. End on nine **EXPLORE** cards, then show the
+audit counters: **81 UNIQUE STATES / 81 UNIQUE QUESTIONS / 28 MULTIWAY TRAIN / 3 MENU REVERSALS /
+ALL 9 ANSWER POSITIONS**. Keep a separate counter fixed at **0 TRAINING EPISODES**.
+
+Then try to turn the key. The freezer rejects the board because its qualification receipts span
+three published versions of the program. Overlay the line: **“Same data shape is not the same
+experiment.”** The next shot is a clean single-commit inspection sweeping across all 81 cards before
+the catalog lock closes. This is the transition from months of building and rehearsal into the
+first defensible model-training run.
+
+For the recovery beat, briefly show several different maps collapsing into one Cinnabar icon, then
+rewind it. The repaired setup leaves every source map in place and creates only a transient movement
+latch. For exploration, show the Mansion menu with **CATCH** removed and **EXPLORE 0.5161** selected.
+The narration is: **“Uniqueness is not different filenames. It is preserving the part of the world
+the model must learn to notice.”**
+
 ## August 14 catalog scene: the same menu needs a different answer
 
 Show three split-screen pairs. At the Pokémon Center, the same menu changes from **TRAIN** to

@@ -9,6 +9,21 @@ That question is now a first-class model boundary. The implementation lives in
 `goal_manager.py` and `goal_manager_model.py`. It is deliberately above the existing destination
 ranker and below the completion contract.
 
+## Current experimental status
+
+The first Red curriculum has reached its final pre-collection gate. All 81 prospective contexts
+exist outside the repository and have passed zero-action inspection: 54 train and 27 development
+validation, with nine assigned examples for every semantic goal family. Their state, envelope,
+question and order-independent policy-context fingerprints are all unique; 28 training choices are
+multiway; three identical semantic menus change their correct answer as cartridge state changes;
+and candidate shuffling places correct answers in all nine positions.
+
+This is not yet training data. The receipts were accumulated across three published source commits,
+and the catalog freezer correctly refuses to combine them. After this documentation checkpoint is
+published and exact-commit CI passes, one canonical batch will inspect all 81 states again into a
+new empty root. Only that single-commit receipt set can be frozen and spent on one-shot collection.
+The honest model count therefore remains zero until that boundary is crossed.
+
 ## The hierarchy
 
 ```mermaid

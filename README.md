@@ -17,6 +17,18 @@
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
+> **Goal-manager catalog status (August 14, 2026):** the prospective Red curriculum is now complete:
+> 81/81 external authenticated contexts, split into 54 train and 27 development validation, with
+> nine assigned examples for each semantic goal family. Zero-action qualification found 81 unique
+> states, envelopes, ordered questions and order-independent policy contexts; 28 multiway train
+> choices; all three required same-menu answer reversals; and correct answers spanning all nine
+> shuffled positions. Recovery contexts now preserve their source locations, and the final nine
+> Mansion contexts select exploration at `0.5161` world-knowledge pressure. These are still not
+> training labels. Their qualification receipts span three published commits, so the freezer
+> correctly refused the mixed set. The immediate gate is one clean 81-context preflight against
+> this final published commit, followed by catalog freeze, one-shot teacher collection and the
+> first fitted Red goal-manager model. Counted status remains **0/54 train, 0/27 development**.
+
 > **Goal-manager rehearsal status (August 14, 2026):** all nine goal families are now
 > live-qualified from authenticated, nonsealed Red states: story progress, acquisition, one-level
 > team development, evolution, restoration, resupply, storage, control recovery and exploration.

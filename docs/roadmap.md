@@ -3,13 +3,13 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-14): curate and freeze the complete goal-manager catalog
+## Current focus (2026-08-14): regenerate and freeze the qualified goal-manager catalog
 
 The transferable goal manager—not the paused sealed destination test—is the active route to a
 Pokémon-playing model. The public 81-slot campaign, nine Red providers, profile/preflight/catalog
 boundary, record-before-action collector and fixed fitter already exist. Genuine counted data is
-still **0/54 train and 0/27 development validation** because setup saves and uncounted rehearsals
-are deliberately not labels.
+still **0/54 train and 0/27 development validation** because setup saves, read-only inspections and
+uncounted rehearsals are deliberately not labels.
 
 All nine goal families are now live-qualified end to end without consuming an episode: story,
 acquisition, development, evolution, restoration, resupply, storage, recovery and exploration.
@@ -18,13 +18,21 @@ also hardened the measurement boundary: a capture requires exactly one new livin
 than an ended battle; storage respects Gen I prepend order and preserves the complete collection;
 and exploration requires a new observed species rather than movement alone.
 
+The prospective curriculum is now complete: 81/81 external captures, profiles and read-only
+qualification receipts; nine selected contexts per goal family; 81 distinct state, envelope,
+question and order-independent policy-context digests; 28 multiway train contexts; three
+same-menu answer reversals; and labels spanning all nine candidate positions. Recovery contexts
+now preserve their authenticated source locations, and all nine final Mansion contexts select
+exploration at `0.5161` world-knowledge pressure. A mixed-commit trial freeze refused as designed,
+so none of these receipts has been mistaken for the final catalog.
+
 Ordered next work:
 
 1. **Complete:** publish the provider, registry, materializer and verifier repairs through
    `d873560`; exact-commit CI and the full ROM-free gate are green.
 2. **Complete:** qualify all nine goal families from authenticated nonsealed contexts with stable
    endpoints, bounded outcomes and zero episodes.
-3. **In progress:** inventory eligible nonsealed source lineages and construct the 81 distinct
+3. **Complete:** inventory eligible nonsealed source lineages and construct the 81 distinct
    questions. The read-only inventory opened 111 authenticated saves. Real mild/emergency Center
    states already prove the first same-menu reversal (develop at `0.1342`, restore at `0.5599`),
    and a mild Mansion state selects acquisition from a three-way menu at `0.1071`. A live audit
@@ -36,17 +44,19 @@ Ordered next work:
    The inventory also identified an independent full-party, Fly-capable Fuchsia lineage. Its
    whitelisted outdoor relocation reached the Cinnabar nurse live in 214 actions, allowing
    development/storage validation contexts to avoid the post–Secret Key training root.
-   Preserve 54 train / 27 development separation, at least 24 genuine three-way training menus and
-   three repeated semantic menus whose correct choice changes with state. Publish the
-   PC/recovery-reserve repair and regenerate every final receipt against that exact source before
-   producing the v2 catalog.
-4. Run read-only preflight on every assignment and reject duplicate state/question fingerprints,
-   private-path leakage, unavailable selected goals and pressure manufactured outside the game.
-5. Freeze the complete private path-free catalog before any counted action. Schema v2 now rejects
+   The finished candidate set preserves 54 train / 27 development separation, 28 genuine multiway
+   train contexts and three repeated semantic menus whose correct choice changes with state.
+4. **Complete as qualification; final regeneration next:** read-only preflight has passed for every
+   assignment and rejected duplicate states during curation. Publish the final documentation/source
+   identity, wait for exact-commit CI, then regenerate all 81 receipts into one new empty root so
+   every receipt binds the same commit.
+5. Freeze the complete private path-free catalog from that single-commit root before any counted
+   action. Schema v2 rejects
    duplicated order-independent policy contexts, fewer than 24 multiway train contexts, fewer than
-   three context-dependent train menus and one-position labels. Then collect each one-shot episode
-   and run strict admission; never refill a consumed or failed slot.
-6. Fit the first Red goal-manager model, compare all three frozen baselines, then proceed through
+   three context-dependent train menus and one-position labels.
+6. Collect all 81 one-shot teacher episodes with strict resume semantics, build the admitted
+   train/development dataset, and fit the first Red goal-manager model. Compare all three frozen
+   baselines, then proceed through
    shadow, causal Red authority and the Crystal transfer benchmark.
 
 ## Current focus (2026-08-13): requalify the hardest sealed-adapter relocation

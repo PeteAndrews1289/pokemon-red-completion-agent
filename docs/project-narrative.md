@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: 81 questions, and still zero labels
+
+The curriculum now exists in full. There are 81 authenticated Red situations—54 for training and
+27 for development validation—with nine assigned examples for each kind of work the manager can
+choose. Every situation passed a read-only teacher inspection, every assigned choice won at the
+declared pressure threshold, and no inspection pressed a button or wrote an episode. The candidate
+set contains 81 unique cartridge states, 81 unique questions and 81 unique order-independent policy
+contexts. Twenty-eight training menus offer at least three genuine choices; three repeated menus
+change their correct answer when the underlying game state changes; and answer shuffling covers all
+nine positions.
+
+The final families supplied one more example of why the gate exists. Recovery setup had been moving
+every source to Cinnabar before creating a transient movement latch. The saves were byte-distinct,
+but the setup was erasing location diversity while claiming to preserve it. The repaired version
+leaves each authenticated map and campaign state in place, releases the movement input, and proves
+that control is temporarily unavailable. Nine replacement recovery contexts passed; the old ones
+were kept only as rejected evidence. Nine Mansion contexts then completed the grid by making
+exploration—not capture—the only executable discovery choice at `0.5161` world-knowledge pressure.
+
+The most important result is another refusal. The 81 qualification receipts were built while the
+implementation advanced through three published commits. A convenient freezer could have treated
+their matching shapes as good enough. This one rejected them because a one-shot experiment needs
+one exact executable identity. The next act is therefore precise: publish the final record, rerun
+all 81 zero-action inspections against that one green commit, freeze the path-free catalog, and
+only then let the teacher act. Until then the dramatic-looking board still reads **81 READY / 0
+TRAINING EPISODES / 0 MODELS**.
+
 ## August 14: the hands are qualified; now we build the judgment curriculum
 
 The pre-training mechanics gate is now complete. Each of the nine goal families has executed from

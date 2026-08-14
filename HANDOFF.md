@@ -14,6 +14,37 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Complete 81-context candidate catalog qualified; exact-commit freeze next — 2026-08-14
+
+The prospective Red goal-manager curriculum now has all **81/81** external captures, profiles and
+read-only qualification receipts: six train and three development-validation contexts for each of
+the nine semantic goal families. Every receipt selected its assigned family at pressure `>= 0.5`
+without executing an action or creating an episode. Across the complete candidate set, all 81 state,
+envelope, ordered-question and order-independent policy-context digests are distinct. There are 28
+multiway train contexts, the three preregistered same-menu answer reversals are present, and teacher
+labels occupy all nine shuffled candidate positions.
+
+Recovery curation exposed and repaired the last setup overclaim. The original blocked-control mode
+silently relocated every source to Cinnabar and therefore erased the very location diversity its
+slots were supposed to preserve. Published `9b528c6` keeps the authenticated source map and state,
+uses one released semantic movement input in a declared direction, and verifies that control is
+genuinely transiently unavailable. The old normalized outputs are retained only as rejected
+evidence; nine replacement contexts passed with unique semantic inputs.
+
+The final exploration family uses real Cinnabar Mansion boundaries with acquisition deliberately
+absent from the profile. All nine expose and select exploration at `0.5161` world-knowledge
+pressure, with distinct cartridge states and policy questions. These are prospective choices, not
+training labels; the already-qualified discovery skill still has to execute and independently
+verify one genuinely new sighting during counted collection.
+
+A trial freeze of the accumulated qualification receipts refused as designed because they span
+three published source commits. Do not weaken that refusal or freeze this mixed receipt directory.
+First publish this final documentation checkpoint and pass exact-commit CI. Then run the canonical
+81-entry batch into a **new empty** preflight root, freeze that single-commit path-free catalog, and
+only then start resumable one-shot collection. Counted data remains **0/54 train and 0/27
+development validation**; no goal-manager model has been fitted, and the sealed destination test
+remains unopened at 0/12.
+
 ## First catalog reversals live-qualified; publish before final curation — 2026-08-14
 
 The construction layer is no longer only unit-tested. A real mild Center context at safety pressure
