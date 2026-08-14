@@ -33,7 +33,9 @@ from pokemon_red_completion.goal_manager_runtime import (
     CompletionFirstGoalTeacher,
     GoalBindingSet,
     GoalDecisionAuthority,
+    GoalExecutionReport,
     GoalManagerExecutionResult,
+    GoalVerification,
     execute_goal_manager_decision,
 )
 from pokemon_red_completion.goal_manager_trajectory import (
@@ -210,6 +212,30 @@ class RecordedGoalManagerContext:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RehearsedGoalManagerContext:
+    """Uncounted end-to-end proof for one frozen manager context.
+
+    A rehearsal deliberately has no trajectory writer and therefore cannot
+    become a model target.  It exists to prove that the exact selected binding
+    can execute and pass its independent verifier before a one-shot assignment
+    is spent.
+    """
+
+    preflight: GoalManagerContextPreflight
+    execution: GoalManagerExecutionResult
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon-red-rehearsed-goal-manager-context-v1",
+            "preflight": self.preflight.public_dict(),
+            "execution": self.execution.public_dict(),
+            "counted": False,
+            "episode_created": False,
+            "private_path_fields": 0,
+        }
+
+
 def goal_binding_manifest_sha256(binding_set: GoalBindingSet) -> str:
     """Bind the private executable behind every model-facing candidate.
 
@@ -334,25 +360,12 @@ def record_goal_manager_context(
         enumerator=enumerator_factory(preflight_actions),
         authority=selected_authority,
     )
-    context = context_catalog.entry(assignment.slot_id)
-    if (
-        context.assignment_id != assignment.assignment_id
-        or context.capture_id != capture.capture_id
-        or context.state_sha256 != capture.state_sha256
-        or context.envelope_sha256 != capture.envelope_sha256
-        or context.question_sha256 != preflight.question_sha256
-        or context.policy_context_sha256 != preflight.policy_context_sha256
-        or context.available_menu_sha256 != preflight.available_menu_sha256
-        or context.selected_candidate_index != preflight.selected_candidate_index
-        or context.candidate_goal_kinds != preflight.candidate_goal_kinds
-        or context.binding_manifest_sha256 != preflight.binding_manifest_sha256
-        or context.selected_kind is not preflight.selected_kind
-        or context.available_goal_kinds != preflight.available_goal_kinds
-        or context.focus_pressure != preflight.focus_pressure
-    ):
-        raise GoalManagerCollectionRuntimeError(
-            "live preflight differs from the frozen context catalog"
-        )
+    _require_frozen_context_match(
+        assignment=assignment,
+        capture=capture,
+        context_catalog=context_catalog,
+        preflight=preflight,
+    )
 
     writer = private_root.begin_episode(assignment.episode_id)
     with writer:
@@ -456,6 +469,133 @@ def record_goal_manager_context(
         dataset=dataset,
         episode_summary=writer.summary.public_dict(),
     )
+
+
+def rehearse_goal_manager_context(
+    *,
+    assignment: GoalManagerAssignment,
+    capture: GoalManagerContextCapture,
+    context_catalog: GoalManagerContextCatalog,
+    adapter: PokemonRedGoalStateAdapter,
+    action_delegate: GoalActionPort,
+    enumerator_factory: GoalEnumeratorFactory,
+    authority: GoalDecisionAuthority | None = None,
+) -> RehearsedGoalManagerContext:
+    """Execute and verify one exact context without recording a model example."""
+
+    _require_committed_assignment(assignment)
+    if not isinstance(capture, GoalManagerContextCapture):
+        raise TypeError("capture must be a verified goal-manager context capture")
+    selected_authority = authority or CompletionFirstGoalTeacher()
+
+    preflight_actions = CountingExecutor(action_delegate)
+    preflight = preflight_goal_manager_context(
+        assignment=assignment,
+        capture=capture,
+        adapter=adapter,
+        enumerator=enumerator_factory(preflight_actions),
+        authority=selected_authority,
+    )
+    if preflight_actions.actions_executed:
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal preflight attempted an action"
+        )
+    _require_frozen_context_match(
+        assignment=assignment,
+        capture=capture,
+        context_catalog=context_catalog,
+        preflight=preflight,
+    )
+
+    actions = CountingExecutor(action_delegate)
+    observation = adapter.observe()
+    binding_set = enumerator_factory(actions).enumerate(observation)
+    if actions.actions_executed:
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal enumeration attempted an action"
+        )
+    question = ordered_goal_manager_question(
+        assignment_id=assignment.assignment_id,
+        decision_index=0,
+        situation=observation.situation,
+        opportunities=binding_set.opportunities,
+    )
+    if (
+        question.ordered_policy_input_sha256 != preflight.question_sha256
+        or question.policy_context_sha256 != preflight.policy_context_sha256
+        or question.available_menu_sha256 != preflight.available_menu_sha256
+        or goal_binding_manifest_sha256(binding_set)
+        != preflight.binding_manifest_sha256
+    ):
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal differs from its frozen preflight"
+        )
+    bound = _bound_selection(question, selected_authority.select(question))
+    if (
+        bound.kind is not assignment.focus_kind
+        or bound.kind is not preflight.selected_kind
+        or bound.selected_index != preflight.selected_candidate_index
+    ):
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal selection differs from its frozen preflight"
+        )
+
+    binding = binding_set.require(bound.binding_ref)
+    execution_report = binding.execute()
+    if not isinstance(execution_report, GoalExecutionReport):
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal executor returned an invalid report"
+        )
+    verification = binding.verify(execution_report)
+    if not isinstance(verification, GoalVerification):
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal verifier returned an invalid verdict"
+        )
+    if execution_report.actions_executed != actions.actions_executed:
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal action accounting differs from execution"
+        )
+    execution = GoalManagerExecutionResult(
+        selected_kind=bound.kind,
+        selected_candidate_index=bound.selected_index,
+        execution=execution_report,
+        verification=verification,
+        decision_recorded=False,
+        outcome_recorded=False,
+    )
+    if not execution.passed:
+        raise GoalManagerCollectionRuntimeError(
+            "goal-manager rehearsal failed independent verification"
+        )
+    return RehearsedGoalManagerContext(preflight=preflight, execution=execution)
+
+
+def _require_frozen_context_match(
+    *,
+    assignment: GoalManagerAssignment,
+    capture: GoalManagerContextCapture,
+    context_catalog: GoalManagerContextCatalog,
+    preflight: GoalManagerContextPreflight,
+) -> None:
+    context = context_catalog.entry(assignment.slot_id)
+    if (
+        context.assignment_id != assignment.assignment_id
+        or context.capture_id != capture.capture_id
+        or context.state_sha256 != capture.state_sha256
+        or context.envelope_sha256 != capture.envelope_sha256
+        or context.question_sha256 != preflight.question_sha256
+        or context.policy_context_sha256 != preflight.policy_context_sha256
+        or context.available_menu_sha256 != preflight.available_menu_sha256
+        or context.selected_candidate_index != preflight.selected_candidate_index
+        or context.candidate_goal_kinds != preflight.candidate_goal_kinds
+        or context.binding_manifest_sha256 != preflight.binding_manifest_sha256
+        or context.selected_kind is not preflight.selected_kind
+        or context.available_goal_kinds != preflight.available_goal_kinds
+        or context.focus_pressure != preflight.focus_pressure
+    ):
+        raise GoalManagerCollectionRuntimeError(
+            "live preflight differs from the frozen context catalog"
+        )
 
 
 def _bound_selection(question, selected: object) -> BoundGoalSelection:  # type: ignore[no-untyped-def]

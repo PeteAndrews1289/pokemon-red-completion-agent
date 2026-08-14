@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
+> contexts, but the first one-shot campaign stopped after five authenticated successes when public
+> slot 006 failed its long Fuchsia story binding after returning from the mandatory Fisher. Preserve
+> all six episode identities as historical evidence; do not delete, retry or combine the five
+> successes with a replacement campaign. The pending source adds an uncounted full-execution stage:
+> it binds the exact frozen question and executable manifest, runs the selected skill and independent
+> verifier without a trajectory writer, checks action accounting and protected inputs, and
+> prevalidates all 81 captures before its first action. A new `story-funded` setup sells TM34 through
+> the real Lavender Mart while retaining the Poké Ball. Publish and pass exact-commit CI, build a
+> fresh plan/catalog with that replacement, and collect only after **81/81** rehearsals pass.
+> Historical pilot: 5 success / 1 failed / 0 fitted models. Sealed test: 0/12.
+
 > **2026-08-14 complete-candidate-catalog checkpoint:** All 81 external goal-manager captures,
 > profiles and read-only qualification receipts now exist: nine per semantic family, 54 train and
 > 27 development validation. All selected their assigned family without an action or episode. The

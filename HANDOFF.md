@@ -14,6 +14,35 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## First counted campaign stopped honestly; execution rehearsal is now mandatory — 2026-08-14
+
+The exact-commit `4207981` preflight and catalog freeze completed: 81/81 contexts passed, all
+curriculum-diversity gates held, and the frozen path-free catalog digest is
+`7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83`. Counted collection then
+authenticated five successful story episodes and stopped on slot 006. That sixth episode is a
+real immutable failure, not a retry candidate: its teacher selected `advance_story`, completed the
+mandatory Route 12 Fisher leg, returned to Lavender Center, and then the long Fuchsia binding
+failed before capture-supply preparation could continue. The failed trajectory remains in the
+private root. It is not an imitation target, no model was fitted, and the five earlier successes
+must not be mixed into a replacement source-bound campaign.
+
+The defect was experimental, not merely local to one route. Read-only preflight proved that a
+choice existed and that the teacher would select it; it did not prove that the exact long binding
+could finish. This checkpoint adds a third, explicitly uncounted stage between catalog freeze and
+collection. Rehearsal reloads the exact frozen capture, reconstructs the exact question and binding
+manifest, executes the selected mechanic, runs its independent verifier, checks actual action
+accounting and protected-input integrity, and has no trajectory writer or private episode root.
+The batch validates every frozen capture before its first action and reports zero episodes.
+
+Slot 006 also gets a new cartridge-derived candidate rather than a rerun. The bounded
+`story-funded` setup uses Lavender's real Mart to sell the obsolete TM34, proves the exact
+inventory/cash delta, retains the required Poké Ball and returns to the same executable Center
+frontier. After publication and exact-commit CI, build a fresh 81-entry plan with this replacement,
+regenerate all preflights, freeze a new catalog, and require **81/81 successful full executions**
+before starting a new one-shot campaign. Any failed rehearsal means repair and refreeze; it never
+becomes data. Historical pilot status is **5 successful / 1 failed / 0 models**. The sealed
+destination test remains unopened at 0/12.
+
 ## Complete 81-context candidate catalog qualified; exact-commit freeze next — 2026-08-14
 
 The prospective Red goal-manager curriculum now has all **81/81** external captures, profiles and

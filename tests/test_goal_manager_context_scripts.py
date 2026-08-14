@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import ast
+import runpy
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PREFLIGHT = PROJECT_ROOT / "scripts" / "preflight_goal_manager_context.py"
+REHEARSE = PROJECT_ROOT / "scripts" / "rehearse_goal_manager_context.py"
 COLLECT = PROJECT_ROOT / "scripts" / "collect_goal_manager_context.py"
 
 
@@ -46,8 +50,34 @@ def test_counted_collector_uses_frozen_runtime_and_never_saves_over_inputs() -> 
     assert "save_state_bytes" not in calls
 
 
+def test_uncounted_rehearsal_executes_without_opening_an_episode() -> None:
+    calls = _call_names(REHEARSE)
+
+    assert "load_committed_goal_manager_registry" in calls
+    assert "parse_goal_manager_context_catalog" in calls
+    assert "load_state_bytes" in calls
+    assert "rehearse_goal_manager_context" in calls
+    assert "record_goal_manager_context" not in calls
+    assert "open_private_root" not in calls
+    assert "save_state" not in calls
+    assert "save_state_bytes" not in calls
+
+
+def test_uncounted_rehearsal_checks_protected_inputs_even_after_failure(
+    tmp_path: Path,
+) -> None:
+    module = runpy.run_path(str(REHEARSE))
+    protected = tmp_path / "context.state"
+    protected.write_bytes(b"before")
+    digests = module["_protected_file_digests"]((protected,))
+    protected.write_bytes(b"after")
+
+    with pytest.raises(RuntimeError, match="changed a protected input"):
+        module["_require_protected_files_unchanged"](digests)
+
+
 def test_goal_manager_context_commands_import_without_private_inputs() -> None:
-    for script in (PREFLIGHT, COLLECT):
+    for script in (PREFLIGHT, REHEARSE, COLLECT):
         result = subprocess.run(
             [sys.executable, str(script), "--help"],
             cwd=PROJECT_ROOT,

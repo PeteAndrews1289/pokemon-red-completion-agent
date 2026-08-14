@@ -26,7 +26,7 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
-## Current checkpoint: the board is full, but the lesson has not started
+## Current checkpoint: the sixth lesson refused to lie
 
 The first curriculum board now holds 81 authenticated Red situations: nine examples for each of
 nine kinds of work, split into 54 training and 27 development-validation choices. All 81 passed a
@@ -35,10 +35,16 @@ three real options, and the correct answer appears in every shuffled position. T
 menus even change their answer when the cartridge state changes—the difference between memorizing
 a menu and responding to a situation.
 
-Yet the training counter is still zero. Those inspections span three versions of the program, so
-the catalog gate refused to freeze them together. The entire board must be inspected once more
-against one published, green commit before the teacher may act. That refusal is the point: this
-project no longer calls preparation “learning” merely because it took a long time.
+The board was then inspected against one published, green commit and locked. Five real story
+lessons completed. The sixth defeated a mandatory trainer, returned to Lavender Center and failed
+inside the longer route. It stayed failed. Its identity was not retried, its selected choice did
+not become an imitation target, and no model was fitted.
+
+That failure found the missing rung between looking at a menu and safely spending a one-shot
+lesson. Every exact frozen card must now complete a full rehearsal with no recorder attached. Only
+after all 81 mechanics execute and independently verify may a fresh campaign begin. The old pilot
+remains **5 successful, 1 failed, 0 models**—a small scoreboard that says more than another large
+green test count.
 
 ---
 

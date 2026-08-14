@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 pilot scene: card six fails closed
+
+Let the 81-card lock finally close, then animate five story cards turning green. Card six travels
+down Route 12, defeats the Fisher, returns to Lavender Center—and turns red. Keep the counters on
+screen: **5 SUCCESS / 1 FAILED / 0 MODELS**. Do not erase the failed card.
+
+Explain the distinction visually. **PREFLIGHT** looks at the menu and predicts the teacher's
+choice. **REHEARSAL** performs the exact frozen mechanic with the recorder physically disconnected.
+**COLLECTION** is the only lane that can create a lesson. Insert rehearsal between the other two,
+then show all 81 cards required to cross it before the collection key becomes available.
+
+For the replacement, show the player walking into Lavender Mart and selling TM34. Overlay
+**TM34 −1 / MONEY +₽1,000 / POKÉ BALL 1 / RETURNED TO CENTER**. The narration is: **“We did not
+rerun the failed lesson until it happened to pass. We changed the state through the game, froze a
+new experiment, and demanded proof before spending it.”**
+
 ## August 14 freeze-gate scene: 81 ready, zero learned
 
 Fill the on-screen 81-card board one family at a time. End on nine **EXPLORE** cards, then show the

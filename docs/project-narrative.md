@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the sixth card stopped the run
+
+The board finally locked: all 81 questions were regenerated against one green commit and the
+path-free catalog passed every diversity gate. Then the teacher acted for real. Five story cards
+completed and authenticated. The sixth defeated the mandatory Route 12 Fisher, walked back to
+Lavender Center, and failed before its capture-supply preparation could continue.
+
+That is the useful result. The system did not reinterpret the episode as success, reuse its
+identity or quietly train on the selected choice. The failed trajectory is permanent, failed
+outcomes have no imitation target, and no model was fitted. The first five successes remain beside
+it as historical evidence rather than being smuggled into a replacement campaign.
+
+The failure exposed a gap between two different claims. Read-only preflight proved the menu and the
+teacher's choice. It did not prove the exact long mechanic behind that card. The collection
+protocol now has a third state: full execution rehearsal. It starts from the frozen capture,
+reconstructs the same identity-free question and private binding, executes the mechanic, runs the
+independent verifier and checks the actual action count—but it has no trajectory writer and cannot
+create a lesson. The batch checks all 81 captures before the first one moves.
+
+The replacement sixth state is also earned through the cartridge. An uncounted setup walks from
+Lavender Center to the Mart, sells the obsolete TM34, proves the exact ₽1,000 and inventory
+change, retains the one Poké Ball the Snorlax route requires, and returns to the same nurse
+boundary. The next catalog will not be spent until every one of its 81 exact bindings has completed
+this rehearsal. The honest scoreboard is now **5 SUCCESS / 1 FAILED / 0 MODELS**.
+
 ## August 14: 81 questions, and still zero labels
 
 The curriculum now exists in full. There are 81 authenticated Red situations—54 for training and

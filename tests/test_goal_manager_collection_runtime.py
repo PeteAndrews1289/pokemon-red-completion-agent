@@ -22,6 +22,7 @@ from pokemon_red_completion.goal_manager_collection_runtime import (
     GoalManagerCollectionRuntimeError,
     preflight_goal_manager_context,
     record_goal_manager_context,
+    rehearse_goal_manager_context,
 )
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogEntry,
@@ -347,6 +348,96 @@ def test_goal_context_preflight_and_recording_form_one_strict_episode(
     assert result.dataset.examples[0].selected_kind is GoalKind.ADVANCE_STORY
     assert result.episode_summary["status"] == "complete"
     assert result.public_dict()["private_path_fields"] == 0
+
+
+def test_goal_context_rehearsal_executes_and_verifies_without_recording(
+    tmp_path: Path,
+) -> None:
+    observer = _Observer()
+    adapter = _adapter(observer)
+    registry = _registry()
+    assignment = registry.assignment("red-goal-v1-001-advance_story-train-01")
+    world = _World(observer)
+    factory = _factory(adapter)
+    capture = _capture(tmp_path)
+    preflight = preflight_goal_manager_context(
+        assignment=assignment,
+        capture=capture,
+        adapter=adapter,
+        enumerator=factory(type("Actions", (), {"actions_executed": 0})()),
+    )
+    catalog = _catalog(registry, preflight)
+
+    result = rehearse_goal_manager_context(
+        assignment=assignment,
+        capture=capture,
+        context_catalog=catalog,
+        adapter=adapter,
+        action_delegate=world,
+        enumerator_factory=factory,
+    )
+
+    assert result.execution.passed
+    assert result.execution.execution is not None
+    assert result.execution.execution.actions_executed == 1
+    assert not result.execution.decision_recorded
+    assert not result.execution.outcome_recorded
+    assert result.public_dict()["counted"] is False
+    assert result.public_dict()["episode_created"] is False
+    assert result.public_dict()["private_path_fields"] == 0
+
+
+def test_goal_context_rehearsal_rejects_unreported_actions(
+    tmp_path: Path,
+) -> None:
+    observer = _Observer()
+    adapter = _adapter(observer)
+    registry = _registry()
+    assignment = registry.assignment("red-goal-v1-001-advance_story-train-01")
+    capture = _capture(tmp_path)
+
+    class _MisreportedWorld(_World):
+        pass
+
+    world = _MisreportedWorld(observer)
+
+    def factory(actions):  # type: ignore[no-untyped-def]
+        def execute() -> GoalExecutionReport:
+            actions.execute(MacroAction(MacroActionKind.WAIT))
+            return GoalExecutionReport(0, 1, {"bounded": True})
+
+        provider = RedObservedGoalSkillProvider(
+            kind=GoalKind.ADVANCE_STORY,
+            binding_ref="pokemon.red:test:misreported",
+            adapter=adapter,
+            availability=lambda _observation: RedGoalSkillAvailability.available(),
+            executor=execute,
+            verifier=lambda _before, _after, _report: GoalVerification.succeeded(),
+            estimated_effort=0.01,
+            estimated_risk=0.01,
+        )
+        return RedGoalOpportunityEnumerator((provider,))
+
+    preflight = preflight_goal_manager_context(
+        assignment=assignment,
+        capture=capture,
+        adapter=adapter,
+        enumerator=factory(type("Actions", (), {"actions_executed": 0})()),
+    )
+    catalog = _catalog(registry, preflight)
+
+    with pytest.raises(
+        GoalManagerCollectionRuntimeError,
+        match="action accounting differs",
+    ):
+        rehearse_goal_manager_context(
+            assignment=assignment,
+            capture=capture,
+            context_catalog=catalog,
+            adapter=adapter,
+            action_delegate=world,
+            enumerator_factory=factory,
+        )
 
 
 def test_preflight_accepts_an_honest_singleton_emergency_context(

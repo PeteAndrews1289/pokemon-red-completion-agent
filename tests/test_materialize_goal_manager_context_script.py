@@ -77,6 +77,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "acquisition-damaged" in modes
     assert "center" in modes
     assert "stable" in modes
+    assert "story-funded" in result.stdout
     assert "story-resource-scarce" in result.stdout
     assert "evolved-team" in result.stdout
     assert "acquisition-ready" in result.stdout
@@ -202,6 +203,129 @@ def test_story_resource_variant_rejects_a_non_story_center_boundary() -> None:
         match="stable Center frontier",
     ):
         module["_story_resource_scarce_boundary"](object(), reader, object())
+
+
+def test_story_funded_variant_sells_only_tm34_and_returns_to_lavender(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    original = replace(
+        _unevolved_party_raw(),
+        map_id=MapId.LAVENDER_POKECENTER,
+        bag_items=(
+            (int(ItemId.POTION), 6),
+            (int(ItemId.POKE_BALL), 1),
+            (int(ItemId.TM34_BIDE), 1),
+        ),
+        player_money=19_177,
+    )
+    reader = _Reader(original)
+    labels: list[str] = []
+
+    def move(_actions: object, _reader: object, directions: object, label: str) -> None:
+        labels.append(label)
+        route = tuple(directions)
+        if label == "funded story Center exit":
+            assert route == tuple(module["CENTER_EXIT"])
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.LAVENDER_TOWN,
+                player_x=3,
+                player_y=6,
+            )
+        elif label == "funded story Mart":
+            assert route == tuple(module["LAVENDER_CENTER_TO_MART"])
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.LAVENDER_MART,
+                player_x=3,
+                player_y=7,
+            )
+        elif label == "funded story Mart clerk":
+            assert route == tuple(module["LAVENDER_MART_TO_CLERK"])
+            reader.raw = replace(reader.raw, player_x=2, player_y=5)
+        elif label == "funded story Mart exit":
+            assert route == tuple(module["LAVENDER_MART_TO_TOWN"])
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.LAVENDER_TOWN,
+                player_x=15,
+                player_y=14,
+            )
+        elif label == "funded story Center return":
+            assert route == tuple(module["LAVENDER_MART_TO_CENTER"])
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.LAVENDER_POKECENTER,
+                player_x=3,
+                player_y=7,
+            )
+        else:
+            assert label == "funded story nurse boundary"
+            assert route == ("up",) * 4
+            reader.raw = replace(reader.raw, player_y=3)
+
+    def sell(
+        _actions: object,
+        _reader: object,
+        _emulator: object,
+        _timing: object,
+        item: ItemId,
+        *,
+        expected_proceeds: int,
+    ) -> None:
+        assert item is ItemId.TM34_BIDE
+        assert expected_proceeds == module["TM34_SALE_PROCEEDS"]
+        reader.raw = replace(
+            reader.raw,
+            bag_items=(
+                (int(ItemId.POTION), 6),
+                (int(ItemId.POKE_BALL), 1),
+            ),
+            player_money=20_177,
+        )
+
+    globals_dict = module["_story_funded_boundary"].__globals__
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_pulse", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_sell_single_mart_item", sell)
+
+    module["_story_funded_boundary"](object(), reader, object())
+
+    assert labels == [
+        "funded story Center exit",
+        "funded story Mart",
+        "funded story Mart clerk",
+        "funded story Mart exit",
+        "funded story Center return",
+        "funded story nurse boundary",
+    ]
+    assert reader.raw.map_id == MapId.LAVENDER_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert reader.raw.player_money == 20_177
+    assert reader.raw.party_species_ids == original.party_species_ids
+    assert reader.raw.bag_items == (
+        (int(ItemId.POTION), 6),
+        (int(ItemId.POKE_BALL), 1),
+    )
+
+
+def test_story_funded_variant_rejects_missing_capture_or_sale_resources() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            map_id=MapId.LAVENDER_POKECENTER,
+            bag_items=((int(ItemId.TM34_BIDE), 1),),
+            player_money=19_177,
+        )
+    )
+
+    with pytest.raises(
+        module["GoalManagerContextMaterializationError"],
+        match="exact Lavender capture frontier",
+    ):
+        module["_story_funded_boundary"](object(), reader, object())
 
 
 def test_damage_context_uses_real_battle_turns_and_active_pressure_gate() -> None:

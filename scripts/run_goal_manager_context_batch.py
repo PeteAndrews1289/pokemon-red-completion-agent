@@ -41,6 +41,7 @@ from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, ver
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PREFLIGHT_SCRIPT = PROJECT_ROOT / "scripts" / "preflight_goal_manager_context.py"
+REHEARSAL_SCRIPT = PROJECT_ROOT / "scripts" / "rehearse_goal_manager_context.py"
 COLLECTION_SCRIPT = PROJECT_ROOT / "scripts" / "collect_goal_manager_context.py"
 PLAN_SCHEMA = "pokemon-red-private-goal-manager-context-plan-v1"
 _MAX_PLAN_BYTES = 2 * 1024 * 1024
@@ -60,7 +61,11 @@ class _PlanEntry:
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--stage", choices=("preflight", "collect"), required=True)
+    parser.add_argument(
+        "--stage",
+        choices=("preflight", "rehearse", "collect"),
+        required=True,
+    )
     parser.add_argument("--plan", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--preflight-root", type=Path)
@@ -211,7 +216,7 @@ def _external_directory(path: Path | None, *, empty: bool) -> Path:
     return resolved
 
 
-def _invoke(command: list[str], *, slot_id: str) -> None:
+def _invoke(command: list[str], *, slot_id: str) -> dict[str, object]:
     result = subprocess.run(
         command,
         cwd=PROJECT_ROOT,
@@ -221,6 +226,17 @@ def _invoke(command: list[str], *, slot_id: str) -> None:
     )
     if result.returncode:
         raise GoalManagerContextBatchError(f"private batch stopped at public slot {slot_id}")
+    try:
+        summary = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        raise GoalManagerContextBatchError(
+            f"private batch received an invalid summary at public slot {slot_id}"
+        ) from None
+    if not isinstance(summary, dict):
+        raise GoalManagerContextBatchError(
+            f"private batch received an invalid summary at public slot {slot_id}"
+        )
+    return summary
 
 
 def _preflight(
@@ -263,6 +279,78 @@ def _preflight(
         "passed_contexts": len(entries),
         "actions_executed": 0,
         "episodes_created": 0,
+        "status": "complete",
+        "private_path_fields": 0,
+    }
+
+
+def _rehearse(
+    entries: tuple[_PlanEntry, ...],
+    registry: GoalManagerCollectionRegistry,
+    *,
+    rom_path: Path,
+    context_catalog: Path | None,
+) -> dict[str, object]:
+    if context_catalog is None:
+        raise GoalManagerContextBatchError("rehearsal requires a frozen context catalog")
+    catalog = parse_goal_manager_context_catalog(context_catalog.read_bytes(), registry)
+    for entry in entries:
+        context = catalog.entry(entry.slot_id)
+        capture = open_goal_manager_context_capture(entry.state, entry.envelope)
+        if (
+            capture.capture_id != context.capture_id
+            or capture.state_sha256 != context.state_sha256
+            or capture.envelope_sha256 != context.envelope_sha256
+        ):
+            raise GoalManagerContextBatchError(
+                "private rehearsal input differs from the frozen catalog"
+            )
+
+    actions_executed = 0
+    frames_executed = 0
+    for entry in entries:
+        summary = _invoke(
+            [
+                sys.executable,
+                str(REHEARSAL_SCRIPT),
+                "--slot-id",
+                entry.slot_id,
+                "--state",
+                str(entry.state),
+                "--envelope",
+                str(entry.envelope),
+                "--profile",
+                str(entry.profile),
+                "--context-catalog",
+                str(context_catalog),
+                "--rom",
+                str(rom_path),
+            ],
+            slot_id=entry.slot_id,
+        )
+        execution = summary.get("execution")
+        if (
+            summary.get("status") != "passed_uncounted_rehearsal"
+            or summary.get("counted") is not False
+            or summary.get("episode_created") is not False
+            or not isinstance(execution, dict)
+            or execution.get("status") != "succeeded"
+            or type(execution.get("actions_executed")) is not int
+            or type(execution.get("frames_executed")) is not int
+        ):
+            raise GoalManagerContextBatchError(
+                f"private batch received an invalid rehearsal at public slot {entry.slot_id}"
+            )
+        actions_executed += int(execution["actions_executed"])
+        frames_executed += int(execution["frames_executed"])
+    return {
+        "schema": "pokemon-red-goal-manager-rehearsal-batch-summary-v1",
+        "planned_contexts": len(entries),
+        "passed_contexts": len(entries),
+        "actions_executed": actions_executed,
+        "frames_executed": frames_executed,
+        "episodes_created": 0,
+        "counted": False,
         "status": "complete",
         "private_path_fields": 0,
     }
@@ -363,6 +451,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             registry,
             rom_path=rom_path,
             output_root=_external_directory(args.preflight_root, empty=True),
+        )
+    if args.stage == "rehearse":
+        if args.preflight_root is not None or args.private_root is not None:
+            raise GoalManagerContextBatchError(
+                "rehearsal does not accept preflight or collection output roots"
+            )
+        return _rehearse(
+            entries,
+            registry,
+            rom_path=rom_path,
+            context_catalog=args.context_catalog,
         )
     if args.preflight_root is not None:
         raise GoalManagerContextBatchError(

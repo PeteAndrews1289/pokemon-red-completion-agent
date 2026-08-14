@@ -7,8 +7,9 @@
 > destination ranker and bounded specialists. It can rank story progress, acquisition, team
 > development, evolution, healing, resupply, storage, recovery, and exploration without receiving
 > game, map, objective, species, binding, slot, or candidate-position identity. Unavailable goals
-> are hard-masked and the causal wrapper has no teacher fallback. The new manager has **zero real
-> multi-need training examples today**; synthetic tests establish architecture invariants only.
+> are hard-masked and the causal wrapper has no teacher fallback. The first counted pilot now has
+> five authenticated successes and one immutable failure, but it is not an admitted replacement
+> dataset and no manager model has been fitted.
 > Normalized campaign-state evidence, record-before-action collection, strict outcome joins, and
 > lowest-effort/static-priority/highest-pressure comparisons are now implemented. The next data
 > campaign is 54 short Red training contexts plus 27 development contexts, followed
@@ -17,19 +18,19 @@
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
-> **Goal-manager catalog status (August 14, 2026):** the prospective Red curriculum is now complete:
-> 81/81 external authenticated contexts, split into 54 train and 27 development validation, with
-> nine assigned examples for each semantic goal family. Zero-action qualification found 81 unique
-> states, envelopes, ordered questions and order-independent policy contexts; 28 multiway train
-> choices; all three required same-menu answer reversals; and correct answers spanning all nine
-> shuffled positions. Recovery contexts now preserve their source locations, and the final nine
-> Mansion contexts select exploration at `0.5161` world-knowledge pressure. These are still not
-> training labels. Their qualification receipts span three published commits, so the freezer
-> correctly refused the mixed set. The immediate gate is one clean 81-context preflight against
-> this final published commit, followed by catalog freeze, one-shot teacher collection and the
-> first fitted Red goal-manager model. Counted status remains **0/54 train, 0/27 development**.
+> **Goal-manager collection status (August 14, 2026):** the 81-context curriculum passed one clean
+> exact-commit preflight and froze successfully. Its first counted pilot then stopped honestly:
+> slots 001–005 produced authenticated successful story episodes; slot 006 completed the mandatory
+> Route 12 Fisher leg, returned to Lavender Center and failed inside the selected long Fuchsia
+> binding. The failed episode is immutable, excluded from imitation targets and retained beside the
+> five successes; no model was fitted. The replacement protocol now adds a full uncounted execution
+> rehearsal between freeze and collection. It proves the exact frozen choice, binding, action count,
+> outcome verifier and protected inputs without a trajectory writer or episode root. A new
+> cartridge-derived story context sells obsolete TM34 at the real Lavender Mart while retaining the
+> required Poké Ball. Collection restarts under a fresh source identity only after **81/81** exact
+> rehearsals succeed. Historical pilot: **5 success / 1 failed / 0 models**; sealed test: **0/12**.
 
-> **Goal-manager rehearsal status (August 14, 2026):** all nine goal families are now
+> **Earlier goal-manager rehearsal milestone (August 14, 2026):** all nine goal families were
 > live-qualified from authenticated, nonsealed Red states: story progress, acquisition, one-level
 > team development, evolution, restoration, resupply, storage, control recovery and exploration.
 > The last three qualifications deliberately found and repaired errors that green unit tests had
@@ -38,8 +39,8 @@
 > catches, respects Gen I's prepend box order and rotates a box with 18 occupied slots without
 > losing a specimen. Exploration follows a cartridge-checked Route 24 corridor and proves a new
 > sighting rather than merely counting movement. Every execution was explicitly uncounted and
-> returned stable control; the honest training count remains **0/54 train and 0/27 development
-> validation**. The next gate is to curate all 81 unique source-bound contexts, including 24
+> returned stable control. At that checkpoint the honest training count was **0/54 train and 0/27
+> development validation**. The next gate was to curate all 81 unique source-bound contexts, including 24
 > genuine three-way train menus and three state-dependent repeated menus, then freeze the complete
 > catalog before the first counted action. The freezer now proves those curriculum properties
 > prospectively: it preserves order-independent policy-context and available-menu digests, binds

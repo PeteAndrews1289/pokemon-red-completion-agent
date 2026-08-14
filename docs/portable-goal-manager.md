@@ -11,18 +11,24 @@ ranker and below the completion contract.
 
 ## Current experimental status
 
-The first Red curriculum has reached its final pre-collection gate. All 81 prospective contexts
-exist outside the repository and have passed zero-action inspection: 54 train and 27 development
-validation, with nine assigned examples for every semantic goal family. Their state, envelope,
-question and order-independent policy-context fingerprints are all unique; 28 training choices are
-multiway; three identical semantic menus change their correct answer as cartridge state changes;
-and candidate shuffling places correct answers in all nine positions.
+The first Red curriculum reached and passed its read-only gate. All 81 contexts were regenerated
+against one published commit and frozen with unique state, envelope, question and
+order-independent policy-context fingerprints; 28 training choices were multiway, three identical
+semantic menus changed answer with cartridge state, and correct answers occupied all nine
+candidate positions.
 
-This is not yet training data. The receipts were accumulated across three published source commits,
-and the catalog freezer correctly refuses to combine them. After this documentation checkpoint is
-published and exact-commit CI passes, one canonical batch will inspect all 81 states again into a
-new empty root. Only that single-commit receipt set can be frozen and spent on one-shot collection.
-The honest model count therefore remains zero until that boundary is crossed.
+The first counted pilot then found the missing gate. Five story episodes succeeded, but slot 006
+failed inside its selected Fuchsia mechanic after the mandatory Fisher leg. Read-only availability
+had proved what the teacher would choose, not that the exact long binding would finish. The failure
+and five successes remain immutable historical evidence; a failed outcome is not an imitation
+target, and no model was fitted.
+
+The protocol now inserts full execution rehearsal after freeze. It reloads each exact state,
+reconstructs the frozen question and binding manifest, executes and independently verifies the
+choice, checks action accounting and protected inputs, but has no writer and creates no episode.
+Every capture is validated against the catalog before the first rehearsal acts. A fresh campaign
+can begin only after all 81 rehearsals pass; any failure causes repair, new source identity,
+preflight and refreeze rather than a retry.
 
 ## The hierarchy
 

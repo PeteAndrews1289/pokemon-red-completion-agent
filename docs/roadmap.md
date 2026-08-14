@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-14): regenerate and freeze the qualified goal-manager catalog
+## Current focus (2026-08-14): prove every frozen binding before recollection
 
 The transferable goal manager—not the paused sealed destination test—is the active route to a
 Pokémon-playing model. The public 81-slot campaign, nine Red providers, profile/preflight/catalog
@@ -18,46 +18,35 @@ also hardened the measurement boundary: a capture requires exactly one new livin
 than an ended battle; storage respects Gen I prepend order and preserves the complete collection;
 and exploration requires a new observed species rather than movement alone.
 
-The prospective curriculum is now complete: 81/81 external captures, profiles and read-only
-qualification receipts; nine selected contexts per goal family; 81 distinct state, envelope,
-question and order-independent policy-context digests; 28 multiway train contexts; three
-same-menu answer reversals; and labels spanning all nine candidate positions. Recovery contexts
-now preserve their authenticated source locations, and all nine final Mansion contexts select
-exploration at `0.5161` world-knowledge pressure. A mixed-commit trial freeze refused as designed,
-so none of these receipts has been mistaken for the final catalog.
+The first exact-commit campaign did pass preflight and freeze all 81 contexts. Collection then
+proved why that was not enough: five story episodes succeeded, but slot 006 completed its mandatory
+Fisher battle, returned to Lavender Center and failed inside the selected Fuchsia binding. The
+failure is immutable and excluded from imitation targets; no model has been fitted. The old five
+successes remain historical rather than being reused under a replacement source identity.
+
+The new gate is full execution rehearsal. It loads the exact frozen state, question, candidate
+order and binding manifest; executes the selected skill; requires its independent verifier to
+succeed; checks real action accounting and protected inputs; and cannot open an episode or write a
+label. A replacement `story-funded` context moves TM34 liquidation into uncounted cartridge setup,
+leaving the Fuchsia skill with proved money, a free bag slot and its retained Poké Ball.
 
 Ordered next work:
 
-1. **Complete:** publish the provider, registry, materializer and verifier repairs through
-   `d873560`; exact-commit CI and the full ROM-free gate are green.
-2. **Complete:** qualify all nine goal families from authenticated nonsealed contexts with stable
-   endpoints, bounded outcomes and zero episodes.
-3. **Complete:** inventory eligible nonsealed source lineages and construct the 81 distinct
-   questions. The read-only inventory opened 111 authenticated saves. Real mild/emergency Center
-   states already prove the first same-menu reversal (develop at `0.1342`, restore at `0.5599`),
-   and a mild Mansion state selects acquisition from a three-way menu at `0.1071`. A live audit
-   corrected PC healing from the nurse-only mechanic to field items. Cartridge checks also proved
-   the exact Cinnabar Hyper Potion purchase, enabling payable early-Cinnabar field contexts.
-   Published `0bb98f2` and fresh read-only preflights now prove the PC reversal as well. A weak
-   Mansion encounter exposed an inner/outer budget mismatch; the repaired no-save rehearsal safely
-   continued into a second encounter and reached `0.5746` with a payable exact plan.
-   The inventory also identified an independent full-party, Fly-capable Fuchsia lineage. Its
-   whitelisted outdoor relocation reached the Cinnabar nurse live in 214 actions, allowing
-   development/storage validation contexts to avoid the post–Secret Key training root.
-   The finished candidate set preserves 54 train / 27 development separation, 28 genuine multiway
-   train contexts and three repeated semantic menus whose correct choice changes with state.
-4. **Complete as qualification; final regeneration next:** read-only preflight has passed for every
-   assignment and rejected duplicate states during curation. Publish the final documentation/source
-   identity, wait for exact-commit CI, then regenerate all 81 receipts into one new empty root so
-   every receipt binds the same commit.
-5. Freeze the complete private path-free catalog from that single-commit root before any counted
-   action. Schema v2 rejects
-   duplicated order-independent policy contexts, fewer than 24 multiway train contexts, fewer than
-   three context-dependent train menus and one-position labels.
-6. Collect all 81 one-shot teacher episodes with strict resume semantics, build the admitted
-   train/development dataset, and fit the first Red goal-manager model. Compare all three frozen
-   baselines, then proceed through
-   shadow, causal Red authority and the Crystal transfer benchmark.
+1. **Complete:** qualify all nine goal families and construct 81 distinct semantic contexts with
+   28 multiway train choices, three same-menu reversals and all nine answer positions.
+2. **Complete:** regenerate against `4207981`, pass 81/81 read-only preflights and freeze the exact
+   path-free catalog.
+3. **Complete, negative result preserved:** start collection once; authenticate slots 001–005 and
+   retain slot 006's failed one-shot episode. Do not reuse or retry those identities.
+4. **In progress:** publish the full-execution rehearsal gate and `story-funded` materializer,
+   pass the complete ROM-free gate and exact-commit CI.
+5. Build a fresh slot-006 capture, then create a new 81-entry source-bound plan. Regenerate all 81
+   zero-action preflights into a new empty root and freeze a new catalog.
+6. Run the exact batch in `rehearse` mode. Require 81/81 selected bindings to execute and verify
+   with zero episodes; repair/refreeze on any failure.
+7. Only after step 6, collect all 81 new one-shot episodes, strictly reload the admitted
+   train/development dataset and fit the first Red goal-manager model. Compare all frozen baselines,
+   then proceed through shadow, causal Red authority and the Crystal transfer benchmark.
 
 ## Current focus (2026-08-13): requalify the hardest sealed-adapter relocation
 

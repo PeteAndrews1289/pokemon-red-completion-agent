@@ -61,6 +61,7 @@ def test_batch_help_separates_read_only_preflight_from_counted_collection() -> N
     )
 
     assert "preflight" in result.stdout
+    assert "rehearse" in result.stdout
     assert "collect" in result.stdout
     assert "--context-catalog" in result.stdout
     assert "--private-root" in result.stdout
@@ -78,6 +79,7 @@ def test_batch_invokes_only_the_existing_guarded_stage_scripts() -> None:
     assert "record_goal_manager_context" not in calls
     assert "preflight_goal_manager_context" not in calls
     assert '"preflight_goal_manager_context.py"' in source
+    assert '"rehearse_goal_manager_context.py"' in source
     assert '"collect_goal_manager_context.py"' in source
 
 
@@ -118,3 +120,139 @@ def test_preflight_batch_root_must_be_empty_and_external(tmp_path: Path) -> None
         match="must be empty",
     ):
         module["_external_directory"](root, empty=True)
+
+
+def test_rehearsal_validates_every_frozen_capture_before_first_execution(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_bytes(b"catalog")
+    entries = tuple(
+        module["_PlanEntry"](
+            slot_id=f"slot-{ordinal}",
+            state=tmp_path / f"{ordinal}.state",
+            envelope=tmp_path / f"{ordinal}.state.json",
+            profile=tmp_path / f"{ordinal}.profile.json",
+        )
+        for ordinal in (1, 2)
+    )
+
+    class _Catalog:
+        @staticmethod
+        def entry(slot_id: str) -> SimpleNamespace:
+            return SimpleNamespace(
+                capture_id=slot_id,
+                state_sha256=f"state-{slot_id}",
+                envelope_sha256=f"envelope-{slot_id}",
+            )
+
+    calls: list[list[str]] = []
+    globals_dict = module["_rehearse"].__globals__
+    monkeypatch.setitem(
+        globals_dict,
+        "parse_goal_manager_context_catalog",
+        lambda *_args: _Catalog(),
+    )
+    monkeypatch.setitem(
+        globals_dict,
+        "open_goal_manager_context_capture",
+        lambda state, _envelope: SimpleNamespace(
+            capture_id=f"slot-{state.stem}",
+            state_sha256=f"state-slot-{state.stem}",
+            envelope_sha256=(
+                f"envelope-slot-{state.stem}"
+                if state.stem == "1"
+                else "deliberate-mismatch"
+            ),
+        ),
+    )
+    monkeypatch.setitem(
+        globals_dict,
+        "_invoke",
+        lambda command, **_kwargs: calls.append(command),
+    )
+
+    with pytest.raises(
+        module["GoalManagerContextBatchError"],
+        match="differs from the frozen catalog",
+    ):
+        module["_rehearse"](
+            entries,
+            object(),
+            rom_path=tmp_path / "game.gb",
+            context_catalog=catalog_path,
+        )
+
+    assert calls == []
+
+
+def test_rehearsal_batch_aggregates_only_uncounted_successes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    catalog_path = tmp_path / "catalog.json"
+    catalog_path.write_bytes(b"catalog")
+    entries = tuple(
+        module["_PlanEntry"](
+            slot_id=f"slot-{ordinal}",
+            state=tmp_path / f"{ordinal}.state",
+            envelope=tmp_path / f"{ordinal}.state.json",
+            profile=tmp_path / f"{ordinal}.profile.json",
+        )
+        for ordinal in (1, 2)
+    )
+
+    class _Catalog:
+        @staticmethod
+        def entry(slot_id: str) -> SimpleNamespace:
+            return SimpleNamespace(
+                capture_id=slot_id,
+                state_sha256=f"state-{slot_id}",
+                envelope_sha256=f"envelope-{slot_id}",
+            )
+
+    globals_dict = module["_rehearse"].__globals__
+    monkeypatch.setitem(
+        globals_dict,
+        "parse_goal_manager_context_catalog",
+        lambda *_args: _Catalog(),
+    )
+    monkeypatch.setitem(
+        globals_dict,
+        "open_goal_manager_context_capture",
+        lambda state, _envelope: SimpleNamespace(
+            capture_id=f"slot-{state.stem}",
+            state_sha256=f"state-slot-{state.stem}",
+            envelope_sha256=f"envelope-slot-{state.stem}",
+        ),
+    )
+    monkeypatch.setitem(
+        globals_dict,
+        "_invoke",
+        lambda _command, **_kwargs: {
+            "status": "passed_uncounted_rehearsal",
+            "counted": False,
+            "episode_created": False,
+            "execution": {
+                "status": "succeeded",
+                "actions_executed": 7,
+                "frames_executed": 90,
+            },
+        },
+    )
+
+    summary = module["_rehearse"](
+        entries,
+        object(),
+        rom_path=tmp_path / "game.gb",
+        context_catalog=catalog_path,
+    )
+
+    assert summary["passed_contexts"] == 2
+    assert summary["actions_executed"] == 14
+    assert summary["frames_executed"] == 180
+    assert summary["episodes_created"] == 0
+    assert summary["counted"] is False

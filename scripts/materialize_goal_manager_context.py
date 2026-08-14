@@ -68,11 +68,18 @@ from pokemon_red_completion.goal_manager_protocol import (
 from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.lavender import (
+    CENTER_EXIT,
     DEFAULT_LAVENDER_TIMING,
+    LAVENDER_CENTER_TO_MART,
+    LAVENDER_MART_TO_CENTER,
+    LAVENDER_MART_TO_CLERK,
+    LAVENDER_MART_TO_TOWN,
+    TM34_SALE_PROCEEDS,
     _buy_mart_item,
     _close_menus,
     _open_bag,
     _select_bag_item,
+    _sell_single_mart_item,
 )
 from pokemon_red_completion.observation import (
     RED_BOX_CAPACITY,
@@ -179,6 +186,7 @@ _DAMAGE_MODES = frozenset(
 )
 _MODES = (
     "stable",
+    "story-funded",
     "story-resource-scarce",
     "center",
     "mansion",
@@ -329,6 +337,75 @@ def _story_resource_scarce_boundary(
     ):
         raise GoalManagerContextMaterializationError(
             "story resource setup changed more than its exact Poké Ball reserve"
+        )
+
+
+def _story_funded_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
+    """Liquidate Bide and return to the exact executable Fuchsia frontier.
+
+    The Route 12–15 skill already treats TM34 as obsolete funding.  Performing
+    that deterministic sale during uncounted setup gives the counted skill an
+    empty bag slot and a proved cash reserve while retaining its required
+    Poké Ball.  Unlike a memory edit, the new state is reached entirely through
+    the cartridge's shop and is independently checked on both sides of the
+    inventory ledger.
+    """
+
+    before = reader.read()
+    before_inventory = dict(before.bag_items or ())
+    before_party = party_observation_from_raw(before)
+    if (
+        before.battle_state
+        or before.map_id != MapId.LAVENDER_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or not reader.read_input_readiness().ready
+        or before_inventory.get(int(ItemId.POKE_BALL), 0) != 1
+        or before_inventory.get(int(ItemId.GREAT_BALL), 0) != 0
+        or before_inventory.get(int(ItemId.TM34_BIDE), 0) != 1
+        or type(before.player_money) is not int
+    ):
+        raise GoalManagerContextMaterializationError(
+            "funded story setup requires the exact Lavender capture frontier"
+        )
+
+    _move(actions, reader, CENTER_EXIT, "funded story Center exit")
+    _require(reader.read(), MapId.LAVENDER_TOWN, (3, 6), "funded story Center exterior")
+    _move(actions, reader, LAVENDER_CENTER_TO_MART, "funded story Mart")
+    _require(reader.read(), MapId.LAVENDER_MART, (3, 7), "funded story Mart entrance")
+    _move(actions, reader, LAVENDER_MART_TO_CLERK, "funded story Mart clerk")
+    _pulse(actions, MacroActionKind.MOVE, "left", 60)
+    _sell_single_mart_item(
+        actions,
+        reader,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        ItemId.TM34_BIDE,
+        expected_proceeds=TM34_SALE_PROCEEDS,
+    )
+    _move(actions, reader, LAVENDER_MART_TO_TOWN, "funded story Mart exit")
+    _require(reader.read(), MapId.LAVENDER_TOWN, (15, 14), "funded story Mart exterior")
+    _move(actions, reader, LAVENDER_MART_TO_CENTER, "funded story Center return")
+    _require(reader.read(), MapId.LAVENDER_POKECENTER, (3, 7), "funded story Center entry")
+    _move(actions, reader, ("up",) * 4, "funded story nurse boundary")
+
+    after = reader.read()
+    expected_inventory = dict(before_inventory)
+    expected_inventory.pop(int(ItemId.TM34_BIDE))
+    if (
+        dict(after.bag_items or ()) != expected_inventory
+        or party_observation_from_raw(after) != before_party
+        or after.player_money != before.player_money + TM34_SALE_PROCEEDS
+        or after.map_id != MapId.LAVENDER_POKECENTER
+        or (after.player_x, after.player_y) != (3, 3)
+        or after.battle_state
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "funded story setup changed more than its exact TM34 sale"
         )
 
 
@@ -1266,6 +1343,9 @@ def _apply_mode(
         return
     if mode == "story-resource-scarce":
         _story_resource_scarce_boundary(actions, reader, emulator)
+        return
+    if mode == "story-funded":
+        _story_funded_boundary(actions, reader, emulator)
         return
     if mode == "blocked-movement":
         raw = reader.read()
