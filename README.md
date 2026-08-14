@@ -1,20 +1,18 @@
 # Pokémon Red Completion Agent
 
-> **Working on this repository?** Start with [HANDOFF.md](HANDOFF.md).
+> **Working on this repository?** Read [MISSION.md](MISSION.md),
+> [NORTH_STAR.md](NORTH_STAR.md), the
+> [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current research direction (August 14, 2026):** Red is the training ground; Crystal is the
-> later transfer test. Four title-neutral or reusable learned heads now have fresh authenticated
-> fits: goal selection (54 train / 27 validation, 100%), strategic destination ranking (24 / 12,
-> 83% versus a 33% route-cost baseline), battle move ranking (3,320 / 1,268, 98.66%), and team-
-> development ranking (13,709 / 7,080, 99.90% on genuine choices). This is a hierarchical learner,
-> not one end-to-end neural policy. The first full Red evaluation keeps the deterministic teacher
-> as disagreement authority for battle moves, measures team-development choices in shadow, and
-> leaves the goal and destination heads offline until their live hierarchy is connected. Every
-> disagreement becomes a private correction instead of a failed imitation target. The exact plan
-> is [`configs/red-player-training-v1.json`](configs/red-player-training-v1.json); the fit evidence
-> is [path-free and public](docs/evidence/red-player-v1-training-start-2026-08-14.json). Crystal's
-> frozen 18/27/27 protocol remains untouched at 0/18, 0/27, 0/27 and 0 predictions, and Red's
-> separate sealed destination set remains 0/12.
+> **Current research direction (August 14, 2026): model first, full runs last.** The first complete
+> Red player-v1 shadow evaluation stopped safely after 1,250 balanced-team battles and retained 600
+> battle corrections. It exposed fixed-route wall retries, excessively conservative healing, a
+> concentrated live battle disagreement, and missing exact failure diagnostics. No result was
+> promoted. The project will not replay the full route again until short randomized navigation,
+> battle, training, hierarchy, and collection scenarios pass frozen unseen gates. See the
+> [path-free failure evidence](docs/evidence/red-player-v1-shadow-failure-2026-08-14.json) and
+> [new roadmap](docs/model-first-roadmap.md). Crystal's frozen 18/27/27 protocol remains untouched at
+> 0/18, 0/27, 0/27 and 0 predictions; Red's sealed destination set remains 0/12.
 
 > **Crystal transfer preregistration (August 14, 2026):** the exact 72-context plan is
 > [`configs/crystal-goal-manager-transfer-v2.json`](configs/crystal-goal-manager-transfer-v2.json),

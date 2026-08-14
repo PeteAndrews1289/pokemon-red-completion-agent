@@ -1,5 +1,47 @@
 # Current audit — 2026-08-14
 
+## Strategic correction: the full-run loop was the wrong development loop
+
+The owner correctly stopped a pattern that the repository's own mission had already prohibited.
+The permanent goal was a transferable, living-Pokédex agent, but the newest operational checkpoint
+made another complete deterministic-teacher replay the active gate. That caused local navigation,
+battle, and training problems to consume an entire power-on run before they became visible.
+
+The first Red player-v1 shadow run did produce useful negative evidence. It reached checkpoint
+275/312 and 1,250 balanced-team battles before stopping safely at last-reported levels
+`(42, 43, 43, 55, 42, 42)`. The dashboard observed 85,058,060 logical frames. The battle head made
+2,260 proposals, agreed with the teacher 1,647 times and disagreed 600 times; no proposal was low
+confidence or unsupported. The team candidate head matched 260,899 of 260,905 teacher choices but
+never had authority. No goal or destination head was online, no completion report existed, and no
+model was promoted.
+
+The failed private artifact retained 600 corrections and one metadata record. Its path-free public
+record is
+[`evidence/red-player-v1-shadow-failure-2026-08-14.json`](evidence/red-player-v1-shadow-failure-2026-08-14.json).
+The runner retained only `RuntimeError`, not the message, so the exact bounded cause is unknown. The
+final frame places the stop in Cinnabar's overworld training loop. Recovery- or effort-bound failure
+is plausible but remains an inference. Future scenario receipts must retain exact causes and last
+semantic state.
+
+Visual observation added two findings that a terminal completion receipt would have missed. Fixed
+Saffron direction strings repeatedly pressed into collisions before their bounded retry succeeded.
+The team-training policy considers a member unsafe at 90% HP, any status or a 16-PP reserve; a prior
+successful lineage required 1,175 Center trips for 1,808 battles. Passing eventually does not make
+either behavior intelligent or transferable.
+
+The active correction is structural:
+
+- `MISSION.md` and `NORTH_STAR.md` now outrank all dated checkpoints;
+- every task declares learned authority, transfer test, cheapest falsifier, time box and stop rule;
+- authenticated short scenarios replace full replays as the development loop;
+- navigation, battle and training are evaluated by outcomes and efficiency rather than teacher
+  agreement alone;
+- full runs are prohibited until bounded unseen gates pass;
+- Codex implements while Claude and Antigravity audit read-only under a shared protocol.
+
+The active plan is [model-first-roadmap.md](model-first-roadmap.md). The next full Red run is not a
+current milestone.
+
 ## Red learner training start
 
 The active order changed at the owner's direction: establish the Red learner before spending the

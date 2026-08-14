@@ -1,8 +1,15 @@
 # Repository instructions
 
-Read [MISSION.md](MISSION.md) first — it states the goal every change is judged against. Then
-[AGENT_COORDINATION.md](AGENT_COORDINATION.md) for lanes, collision rules, and current open work.
-This file holds the standing engineering constraints; those two hold the direction and the plan.
+Read [MISSION.md](MISSION.md) first — it states the product every change is judged against. Then
+read [NORTH_STAR.md](NORTH_STAR.md), whose anti-drift contract outranks every roadmap, handoff, and
+dated checkpoint. Read [docs/model-first-roadmap.md](docs/model-first-roadmap.md) for the active
+strategy and [AGENT_COORDINATION.md](AGENT_COORDINATION.md) for ownership and current work. A newer
+dated checkpoint may not override the mission or north star.
+
+Before implementation, add the six-part mission check from `NORTH_STAR.md` to the working plan:
+reusable capability, learned authority, transfer test, cheapest falsifier, time box, and stop
+condition. Do not start a full-game run unless every full-run gate in `NORTH_STAR.md` is recorded.
+The default development loop uses short authenticated scenarios; full runs are final exams.
 
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 
@@ -18,3 +25,5 @@ This is the completion-first successor to the concluded `pokemon-red-ai` researc
 - Do not claim completion without concurrent Champion-event and Hall-of-Fame evidence.
 - Add ROM-free tests for every change; private-ROM integration tests must use the `integration`
   marker.
+- Codex owns implementation and publication. Claude and Antigravity are read-only reviewers by
+  default under `docs/three-agent-workflow.md`; do not let concurrent agents edit this worktree.

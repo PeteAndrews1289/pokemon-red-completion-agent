@@ -1,0 +1,79 @@
+{
+  "artifact": {
+    "kind": "battle_corrections",
+    "manifest_sha256": "c50f2486d88e90cbd1489a49ed2037e6d81711d1dfed5779053e3c328690dfe0",
+    "status": "failed",
+    "stream_records": {
+      "corrections": 600,
+      "metadata": 1
+    },
+    "total_bytes": 3190126,
+    "total_records": 601
+  },
+  "authority": {
+    "battle_move": "teacher_supervised",
+    "destination_ranker": "offline",
+    "goal_manager": "offline",
+    "team_development": "shadow_only"
+  },
+  "battle_policy": {
+    "decisions": 2260,
+    "low_confidence_fallbacks": 0,
+    "model_execution_rate": 0.7287610619469026,
+    "teacher_agreement_rate": 0.732977303070761,
+    "teacher_agreements": 1647,
+    "teacher_disagreements": 600,
+    "teacher_fallbacks": 600,
+    "teacher_queries": 2260,
+    "unsupported_observations": 0
+  },
+  "claim": "The first clean-power Red player v1 shadow evaluation stopped safely during balanced-team development, retained its corrections, and promoted no model.",
+  "collection_progress": null,
+  "crystal_contexts_opened": 0,
+  "dashboard_terminal_observation": {
+    "emulation_speed": 0.0,
+    "logical_frame": 85058060,
+    "party_levels_from_last_training_checkpoint": [
+      42,
+      43,
+      43,
+      55,
+      42,
+      42
+    ],
+    "route_checkpoints_completed": 275,
+    "route_checkpoints_total": 312,
+    "run_status": "failed",
+    "training_battles_completed": 1250
+  },
+  "experiment_id": "red-player-v1",
+  "failure": {
+    "exact_message_retained": false,
+    "inference": "The terminal dashboard and final rendered frame place the stop in the Cinnabar overworld training loop. A bounded training, recovery, or effort guard is plausible, but the exact guard cannot be established from the retained artifact.",
+    "promotion_eligible": false,
+    "type": "RuntimeError"
+  },
+  "models": {
+    "battle_move_canonical_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+    "team_development_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026"
+  },
+  "not_claimed": [
+    "The exact runtime guard is not recoverable from the failed artifact.",
+    "The battle model did not qualify for promotion.",
+    "The team model did not exercise live authority.",
+    "No end-to-end learned player completed Red.",
+    "No living-Pokedex or Crystal-transfer result was produced."
+  ],
+  "recorded_at": "2026-08-14",
+  "red_sealed_destinations_opened": 0,
+  "schema": "pokemon-red-player-v1-shadow-failure-evidence-v1",
+  "source": {
+    "git_commit": "66cd2d572545e2ef7d1988d3ad89aef1af9a4035",
+    "worktree_dirty": false
+  },
+  "team_development_policy": {
+    "agreements": 260899,
+    "decisions": 260905,
+    "shadow_accuracy": 0.9999770031237424
+  }
+}

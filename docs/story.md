@@ -26,7 +26,32 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
-## Current checkpoint: four learned pieces enter one visible Red run
+## Current checkpoint: stop replaying the answer key
+
+The four learned pieces did enter one visible Red run, and the run failed in the most useful way it
+could: it made the project's strategic mistake impossible to ignore.
+
+After 1,250 training battles and more than 85 million observed frames, the party was still in
+Cinnabar at levels `(42, 43, 43, 55, 42, 42)`. The battle model had disagreed with the teacher 600
+times. The team model had almost perfectly predicted hundreds of thousands of candidate rankings,
+but the teacher still acted. Navigation still followed fixed arrows, visibly pressing against
+Saffron walls until a retry registered. The recovery policy treated ten percent damage as a reason
+to visit a Center.
+
+That was not a model learning to play Pokémon. It was a model being examined inside a teacher's
+walkthrough—and using the entire game as the test harness made every local lesson painfully slow.
+
+So the project changed its unit of progress. It will restore authenticated development situations,
+randomize what matters, let the model act, permit bounded teacher intervention, and judge outcomes.
+Navigation is measured by arrival and collisions. Battles are measured by winning, damage, turns
+and resources. Training is measured by experience per frame and battles per heal. Goals are real
+only when the model has alternatives. Collection is organized around a living-Pokédex dependency
+plan. Crystal becomes an early test of whether shared skills transfer, not the next scripted route.
+
+Full games are now final exams. The daily work happens in scenarios short enough to fail, learn and
+retry hundreds of times.
+
+## Historical checkpoint: four learned pieces entered one visible Red run
 
 Red now has four freshly fitted decision-makers: what kind of work to pursue, which strategic
 destination to choose, which battle move to use, and which teammate/venue to develop. They learned

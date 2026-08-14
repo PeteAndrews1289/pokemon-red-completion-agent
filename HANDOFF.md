@@ -6,16 +6,65 @@ It is meant to make you *actually* oriented, not politely briefed — which mean
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
 
 Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
+[NORTH_STAR.md](NORTH_STAR.md) (the mandatory anti-drift contract),
+[docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
 **How to read this document.** Dated checkpoint sections accumulate at the top, newest first, and
-supersede anything older that disagrees with them. Sections 1 through 10 below are the durable
-orientation. If a number in a numbered section disagrees with a dated checkpoint above it, the
-checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
-going stale is exactly the failure this project keeps having.
+supersede older handoff evidence when they disagree. They never supersede `MISSION.md`,
+`NORTH_STAR.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
+orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
+an invalid task.
 
-## Red training is active before Crystal transfer — 2026-08-14
+## Model-first pivot after the failed Red shadow run — 2026-08-14
+
+The owner correctly identified strategic drift: repeated full teacher runs consumed days while
+very little end-to-end authority moved to a model. The mission had already ruled out optimizing Red
+completion reliability, but the newest operational checkpoint instructed another full replay and
+effectively overruled it. That governance error is now explicit. `MISSION.md` and `NORTH_STAR.md`
+outrank every dated checkpoint, and the active strategy is
+[`docs/model-first-roadmap.md`](docs/model-first-roadmap.md).
+
+Red player v1 did start from clean power at exact pushed source
+`66cd2d572545e2ef7d1988d3ad89aef1af9a4035`. It stopped safely during the long Cinnabar balanced-
+team block after 1,250 battles. The last reported party levels were
+`(42, 43, 43, 55, 42, 42)` at dashboard logical frame 85,058,060 and checkpoint 275/312. The battle
+head made 2,260 proposals: 1,647 teacher agreements and 600 disagreements, for 73.2977% agreement;
+there were no low-confidence or unsupported observations. The team candidate head matched
+260,899/260,905 teacher rankings (99.9977%) but remained shadow-only. The private failed artifact
+retains 600 corrections and one metadata record; no model or run was promoted. The path-free public
+record is
+[`docs/evidence/red-player-v1-shadow-failure-2026-08-14.json`](docs/evidence/red-player-v1-shadow-failure-2026-08-14.json).
+
+The runner retained only the exception type `RuntimeError`, not its message. The final frame and
+dashboard put the stop in the Cinnabar overworld training loop, but they cannot identify the exact
+guard. Do not turn a likely recovery/effort-bound explanation into fact and do not rerun the full
+game to recover it. Future scenarios and receipts must retain the exact bounded reason and last
+semantic state.
+
+Three qualitative observations are now first-class evidence:
+
+- Saffron's visible wall/building bumps came from fixed direction strings and a retry loop, not the
+  learned model. Passing the coordinate checkpoint does not make that transferable navigation.
+- The balanced-team policy marks a member unsafe at 90% HP, any status, or a 16-PP reserve and uses
+  a zero-faint contract. A prior success needed 1,175 Center trips for 1,808 battles; this is too
+  conservative for a scalable evolution/collection curriculum.
+- Late battle disagreements repeatedly paired a high-confidence model slot-four choice with a
+  generic first-usable teacher slot-one choice. Audit outcomes before treating all 600 as model
+  errors.
+
+No new full run is authorized. The next implementation sequence is: one-session postmortem,
+authenticated scenario laboratory, closed-loop navigation, outcome-aware battle policy, efficient
+party development, online goal hierarchy, and living-Pokédex dependency planning. Crystal becomes
+an early bounded transfer probe once shared interfaces work; it does not need a full teacher route.
+
+Codex owns code, tests, experiments, documentation, commits, and pushes. Claude and Antigravity are
+read-only reviewers under [`docs/three-agent-workflow.md`](docs/three-agent-workflow.md). Their
+roadmap reviews are pending and must be adjudicated in
+[`docs/agent-review-log.md`](docs/agent-review-log.md) before expensive or sealed work.
+
+## Red training is active before Crystal transfer — 2026-08-14 (superseded execution order)
 
 The owner explicitly changed the execution order: train and evaluate the reusable learner on Red
 before opening Crystal transfer contexts. This does not discard the frozen Crystal v2 protocol;

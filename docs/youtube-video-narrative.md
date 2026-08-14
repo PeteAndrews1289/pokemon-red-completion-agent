@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 pivot scene: 85 million frames were not learning
+
+Open on the stopped dashboard: **1,250 TRAINING BATTLES · 85,058,060 FRAMES · PARTY
+42/43/43/55/42/42**. Add the authority map underneath: goal and destination **OFFLINE**, team
+development **SHADOW**, battle **TEACHER-SUPERVISED**. Then reveal **600 DISAGREEMENTS** and
+**NO MODEL PROMOTED**.
+
+Cut back to Saffron footage. Let the character press into a wall repeatedly while the caption says
+**FIXED ROUTE RETRY — NOT MODEL NAVIGATION**. Cut to the Center loop and show the policy boundary:
+**HEAL AT 90% HP**. The narration is: **“The code could finish Red. We had accidentally turned that
+teacher into the product, then used an entire game whenever we needed a unit test.”**
+
+Show one disagreement: model slot four at high confidence, teacher slot one under “any usable
+move.” Put a question mark over both. **“Agreement could tell us whether the model copied the
+teacher. It could not tell us which move was better.”** Replace the agreement meter with outcome
+meters: win, turns, HP, PP, capture, safety.
+
+End on the new loop:
+
+**RESTORE SCENARIO → MODEL ACTS → TEACHER INTERVENES ONLY IF NEEDED → VERIFY OUTCOME → LEARN →
+UNSEEN TEST.**
+
+Then show the milestone order: navigation, battles, party development, goal hierarchy, living
+Pokédex, Red integration, Crystal transfer. The line is: **“From here on, a full run is a final
+exam—not practice.”**
+
 ## August 14 Red-training scene: four brains, one honest authority map
 
 Open on the live Red game inside the Pokémon Learning Observatory. Build four rows beside it:

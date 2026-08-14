@@ -1,5 +1,41 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the project stopped mistaking a final exam for practice
+
+The first live Red learner run did not reach the League. It stopped in Cinnabar after 1,250
+balanced-team battles, with five members still in the low forties and the escort at level 55. The
+dashboard had watched more than 85 million frames. The battle model had made 2,260 proposals and
+disagreed with its teacher 600 times. The team ranker almost perfectly predicted 260,905 teacher
+rankings, but it controlled none of them. Goal and destination models were still offline.
+
+Watching mattered. In Saffron, the player visibly pressed against walls and buildings while a fixed
+direction string retried. During training, the party returned for healing with a threshold so
+conservative that losing ten percent of a member's HP could end a trip. Neither behavior belonged
+to the model. Both were consequences of treating a deterministic teacher as the player and asking
+the model to fit into its route.
+
+The run also exposed a subtler trap. Late disagreements often had the model confidently choosing a
+fourth move while a generic teacher rule chose the first usable move. A disagreement counter could
+not say which choice was better. Blindly correcting the model would teach obedience, not battle
+skill. Outcomes—victory, turns, damage, PP, safety, capture intent—had to become the target.
+
+The failure did not preserve its exact exception message. That made one conclusion unavoidable:
+another power-on replay would be the worst way to learn what happened. The project had spent days
+using whole games as unit tests.
+
+The development strategy changed. Authenticated snapshots and short randomized scenarios now form
+the training loop. The teacher becomes an oracle that intervenes, not a route that owns the game.
+Navigation must replan after collisions. Battle choices must survive causal comparison. Party
+development must rotate useful members and price a Center trip. The goal hierarchy must actually
+act, and the living Pokédex must organize progression. A clean-power Red run returns only after
+those skills pass unseen bounded gates.
+
+The mission had said this from the beginning: Red is a curriculum, not the product. The new north-
+star contract makes that sentence operational, and Claude and Antigravity become independent
+reviewers of the plan while Codex remains the implementation owner. The story's next milestone is
+not another Hall-of-Fame screenshot. It is the first skill that improves on an unseen situation
+without the teacher choosing for it.
+
 ## August 14: training finally meant fitting, then risking a full run
 
 The project paused at an important ambiguity. Red had produced a trustworthy teacher and several

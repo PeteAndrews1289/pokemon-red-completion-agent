@@ -3,6 +3,10 @@
 Every agent and every contributor reads this first. If a proposed change does not serve the goal
 below, it does not belong in this repository — however good it looks on its own terms.
 
+Then read [NORTH_STAR.md](NORTH_STAR.md). It turns this mission into mandatory task filters,
+time boxes, stop rules, and a full-run gate. Authority flows from mission to north star to the
+active model-first roadmap; no newer checkpoint can reverse that order.
+
 ## The goal
 
 **Create a model that can actually play Pokémon.**

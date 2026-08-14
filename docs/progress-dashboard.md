@@ -1,5 +1,14 @@
 # Pokémon Learning Observatory
 
+> **Model-first pivot:** the first Red shadow dashboard stopped safely after 1,250 team-training
+> battles. It retained the failed state and correction count, but exposed two missing diagnostics:
+> the exact exception message was not retained, and live heal/party/efficiency data was too sparse
+> to explain the long training block. The next dashboard iteration follows
+> [model-first-roadmap.md](model-first-roadmap.md): scenario throughput, unseen success,
+> interventions, collisions/path overhead, battle outcomes, experience per frame, battles per heal,
+> party rotations, collection dependencies, and transfer replace whole-route percentage as the
+> primary progress view. Do not start another full run merely to populate this dashboard.
+
 The dashboard is the human view of a run. It combines the live emulator screen with the evidence
 needed to understand what the agent is doing and how far the experiment has progressed.
 

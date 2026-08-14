@@ -3,7 +3,12 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-14): evaluate the Red learner before Crystal
+> **Active strategy moved on 2026-08-14.** The current roadmap is
+> [model-first-roadmap.md](model-first-roadmap.md), governed by
+> [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
+> repeated full-route execution order is superseded and may not authorize another Red replay.
+
+## Superseded focus (2026-08-14): evaluate the Red learner before Crystal
 
 The owner has frozen Crystal as the later transfer test and moved the active lane back to Red—not
 to improve the deterministic route, but to establish a real learned baseline first. Four reusable

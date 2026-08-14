@@ -1,7 +1,31 @@
 # Three-agent coordination
 
+> **2026-08-14 model-first pivot — highest active checkpoint:** The owner rejected the project's
+> drift toward repeatedly hardening and replaying the deterministic Red teacher. The first Red
+> player v1 shadow run stopped safely after 1,250 balanced-team battles at levels
+> `(42, 43, 43, 55, 42, 42)`, 85,058,060 observed frames, 2,260 battle proposals, 600 teacher
+> disagreements, and 260,899/260,905 team shadow agreements. It promoted nothing. The exact
+> `RuntimeError` message was not retained, which is itself a diagnostic defect; do not reconstruct
+> it with another full run. Fixed Saffron direction strings visibly retried walls, and the 90%-HP
+> recovery policy caused excessive Center travel. Preserve the path-free
+> [failure evidence](docs/evidence/red-player-v1-shadow-failure-2026-08-14.json).
+>
+> The active strategy is now [NORTH_STAR.md](NORTH_STAR.md) plus the
+> [model-first roadmap](docs/model-first-roadmap.md). No further full Red replay is authorized.
+> Build authenticated short-scenario training first, then closed-loop navigation, outcome-aware
+> battle control, efficient party development, the online hierarchy, and the living-Pokédex
+> planner. Full runs become final exams after the bounded gates pass. Red's 12 sealed destinations
+> and all Crystal frozen partitions remain unopened.
+>
+> Codex is the implementation and publication owner. Claude is the read-only forensic/experimental
+> auditor; Antigravity is the read-only architecture/generalization challenger. The owner dispatches
+> them using [the three-agent workflow](docs/three-agent-workflow.md). They submit memos; they do not
+> edit this worktree, run cartridges, open contexts, or push. Codex adjudicates findings in
+> [the review log](docs/agent-review-log.md).
+
 > **2026-08-14 Red-training checkpoint (supersedes Crystal as the active execution lane):** The
-> owner wants Red training/evaluation before Crystal transfer. Four heads are freshly fitted: goal
+> **Superseded by the model-first pivot above.** The owner previously wanted Red
+> training/evaluation before Crystal transfer. Four heads are freshly fitted: goal
 > manager 54/27 at 100% validation, destination ranker 24/12 at 10/12 versus 4/12 route-cost,
 > corrected battle MLP 3,320/1,268 at 98.6593%, and team-development ranker 13,709/7,080 at
 > 99.9004% genuine validation accuracy. This is a hierarchical bundle, not an end-to-end neural
