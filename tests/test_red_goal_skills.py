@@ -32,6 +32,7 @@ from pokemon_red_completion.red_collection import (
     red_collection_observation,
     red_internal_species_number,
     red_species_number,
+    red_species_ref,
 )
 from pokemon_red_completion.red_goal_manager import PokemonRedGoalStateAdapter
 from pokemon_red_completion.red_goal_skills import (
@@ -390,9 +391,15 @@ def _internal_species_id(national_number: int) -> int:
 
 
 class _AreaExecutor:
-    def __init__(self, reader: _Reader, actions: CountingExecutor) -> None:
+    def __init__(
+        self,
+        reader: _Reader,
+        actions: CountingExecutor,
+        source_id: str = "wild:Route1:grass",
+    ) -> None:
         self.reader = reader
         self.actions = actions
+        self.source_id = source_id
         self.encountered: str | None = None
 
     def read_collection(self):  # type: ignore[no-untyped-def]
@@ -407,7 +414,7 @@ class _AreaExecutor:
 
     def seek_encounter(self) -> None:
         survey = summarize_red_area_survey(
-            "wild:Route1:grass",
+            self.source_id,
             self.read_collection(),
         )
         self.encountered = survey.missing_species_refs[0]
@@ -488,6 +495,46 @@ def test_area_survey_provider_captures_and_independently_reloads_collection() ->
         "wild:Route1:grass",
         adapter.observe().collection_observation,
     ).missing_species_refs
+
+
+def test_area_survey_verifies_one_required_duplicate_precursor() -> None:
+    reader = _Reader(raw=_raw(poke_balls=20), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    source_id = "wild:Route14:grass"
+    before_survey = summarize_red_area_survey(
+        source_id,
+        adapter.observe().collection_observation,
+    )
+    provider = RedAreaSurveyGoalProvider(
+        source_id=source_id,
+        area_executor=_AreaExecutor(reader, actions, source_id),
+        actions=actions,
+        emulator=port,
+        adapter=adapter,
+        policy=RedAreaExecutionPolicy(
+            max_actions=20,
+            max_encounters=20,
+            capture_in_requirement_order=True,
+            capture_quota=1,
+        ),
+    )
+
+    offer = provider.offer(adapter.observe())
+
+    assert offer.binding is not None
+    report = offer.binding.execute()
+    verdict = offer.binding.verify(report)
+    survey = summarize_red_area_survey(
+        source_id,
+        adapter.observe().collection_observation,
+    )
+    assert verdict.status.value == "succeeded"
+    assert report.evidence["captures"] == 1
+    assert report.evidence["initial_missing_specimens"] == before_survey.missing_specimen_count
+    assert report.evidence["final_missing_specimens"] == before_survey.missing_specimen_count - 1
+    assert survey.missing_species_refs[0] == red_species_ref(17)
 
 
 def test_area_survey_reserves_master_ball_for_nonordinary_targets() -> None:

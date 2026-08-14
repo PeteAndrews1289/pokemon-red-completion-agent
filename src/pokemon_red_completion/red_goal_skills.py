@@ -312,8 +312,7 @@ class RedFieldRestoreGoalProvider:
             after_inventory = dict(after.raw.bag_items or ())
             used = Counter(item for _, item in plan)
             if any(
-                after_inventory.get(int(item), 0)
-                != before_inventory.get(int(item), 0) - quantity
+                after_inventory.get(int(item), 0) != before_inventory.get(int(item), 0) - quantity
                 for item, quantity in used.items()
             ):
                 return GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
@@ -359,10 +358,7 @@ class RedFieldRestoreGoalProvider:
             return (), GoalUnavailableReason.NO_LEGAL_TARGET
         inventory = dict(raw.bag_items or ())
         required = Counter(item for _, item in plan)
-        if any(
-            inventory.get(int(item), 0) < quantity
-            for item, quantity in required.items()
-        ):
+        if any(inventory.get(int(item), 0) < quantity for item, quantity in required.items()):
             return (), GoalUnavailableReason.MISSING_RESOURCE
         return plan, None
 
@@ -481,21 +477,14 @@ class RedMartResupplyGoalProvider:
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
             inventory = dict(raw.bag_items or ())
-            new_slots = sum(
-                purchase.item not in inventory for purchase in self.purchases
-            )
+            new_slots = sum(purchase.item not in inventory for purchase in self.purchases)
             if len(inventory) + new_slots > 20:
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
-            cost = sum(
-                purchase.quantity * purchase.unit_price
-                for purchase in self.purchases
-            )
+            cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
             if raw.player_money is None or raw.player_money < cost:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.MISSING_RESOURCE
-                )
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
             projected = min(
                 headroom_satisfaction(
                     projected_capture,
@@ -509,25 +498,19 @@ class RedMartResupplyGoalProvider:
                 ),
             )
             if projected <= current.evidence.resources:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.NO_LEGAL_TARGET
-                )
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             return RedGoalSkillAvailability.available()
 
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
         before_inventory = dict(start.bag_items or ())
         before_money = start.player_money
-        total_cost = sum(
-            purchase.quantity * purchase.unit_price for purchase in self.purchases
-        )
+        total_cost = sum(purchase.quantity * purchase.unit_price for purchase in self.purchases)
 
         def execute() -> GoalExecutionReport:
             if before_money is None:
                 raise RedGoalSkillError("Mart resupply lacks money evidence")
-            self.actions.execute(
-                MacroAction(MacroActionKind.MOVE, self.interaction_direction)
-            )
+            self.actions.execute(MacroAction(MacroActionKind.MOVE, self.interaction_direction))
             self._settle()
             approached = self.reader.read()
             if (
@@ -573,21 +556,15 @@ class RedMartResupplyGoalProvider:
                 evidence={
                     "bounded": True,
                     "purchase_count": len(self.purchases),
-                    "quantity_purchased": sum(
-                        purchase.quantity for purchase in self.purchases
-                    ),
+                    "quantity_purchased": sum(purchase.quantity for purchase in self.purchases),
                     "money_spent": total_cost,
                 },
             )
 
-        purchase_ref = "-".join(
-            f"{int(item.item):02x}x{item.quantity}" for item in self.purchases
-        )
+        purchase_ref = "-".join(f"{int(item.item):02x}x{item.quantity}" for item in self.purchases)
         return RedProgressGoalProvider(
             kind=self.kind,
-            binding_ref=(
-                f"pokemon.red:resupply:mart-{int(self.map_id):02x}-{purchase_ref}"
-            ),
+            binding_ref=(f"pokemon.red:resupply:mart-{int(self.map_id):02x}-{purchase_ref}"),
             adapter=self.adapter,
             boundary=boundary,
             executor=execute,
@@ -648,9 +625,7 @@ class RedCenterRestoreGoalProvider:
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
             if current.evidence.safety >= 1.0:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.NO_LEGAL_TARGET
-                )
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if (
                 raw.map_id not in _POKEMON_CENTER_MAPS
                 or raw.player_x != 3
@@ -710,9 +685,7 @@ class RedCenterRestoreGoalProvider:
         ).offer(observation)
 
     def _settle(self) -> None:
-        self.actions.execute(
-            MacroAction(MacroActionKind.WAIT, repeat=self.settle_frames)
-        )
+        self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=self.settle_frames))
 
 
 @dataclass(frozen=True, slots=True)
@@ -780,11 +753,7 @@ class RedControlRecoveryGoalProvider:
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             if observation.party.species_ids() != after.party.species_ids():
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
-            if (
-                report.actions_executed <= 0
-                or after.raw.battle_state
-                or not after.input_ready
-            ):
+            if report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready:
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             return GoalVerification.succeeded()
 
@@ -819,9 +788,7 @@ class RedControlRecoveryGoalProvider:
         raise RedGoalSkillError("bounded control recovery did not restore input")
 
     def _settle(self) -> None:
-        self.actions.execute(
-            MacroAction(MacroActionKind.WAIT, repeat=self.settle_frames)
-        )
+        self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=self.settle_frames))
 
 
 @dataclass(frozen=True, slots=True)
@@ -855,9 +822,7 @@ class RedEncounterDiscoveryGoalProvider:
                     GoalUnavailableReason.TEMPORARILY_BLOCKED
                 )
             if current.evidence.world_knowledge.satisfaction >= 1.0:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.NO_LEGAL_TARGET
-                )
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if self.boundary is not None:
                 result = self.boundary(current)
                 if not isinstance(result, RedGoalSkillAvailability):
@@ -884,9 +849,9 @@ class RedEncounterDiscoveryGoalProvider:
                 if encounters > self.maximum_encounters:
                     break
                 observed = self.adapter.observe()
-                newly_seen = frozenset(
-                    observed.collection.pokedex.seen_target_numbers
-                ).difference(initially_seen)
+                newly_seen = frozenset(observed.collection.pokedex.seen_target_numbers).difference(
+                    initially_seen
+                )
                 self.area_executor.flee_encounter()
                 settled = self.adapter.observe()
                 if any(member.hp <= 0 for member in settled.party.members):
@@ -895,9 +860,7 @@ class RedEncounterDiscoveryGoalProvider:
                     )
                 if newly_seen:
                     return GoalExecutionReport(
-                        actions_executed=(
-                            self.actions.actions_executed - before_actions
-                        ),
+                        actions_executed=(self.actions.actions_executed - before_actions),
                         frames_executed=self.emulator.frame_count - before_frames,
                         evidence={
                             "bounded": True,
@@ -981,6 +944,7 @@ class RedAreaSurveyGoalProvider:
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
         before_story = self.adapter.graph.completed_ids(observation.game_state)
+        initial_missing_specimens = survey.missing_specimen_count
 
         def execute() -> GoalExecutionReport:
             report = run_red_area_survey(
@@ -988,6 +952,11 @@ class RedAreaSurveyGoalProvider:
                 self.area_executor,
                 policy=self.policy,
                 catalog=self.catalog,
+            )
+            final_survey = summarize_red_area_survey(
+                self.source_id,
+                self.area_executor.read_collection(),
+                self.catalog,
             )
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
@@ -1000,6 +969,8 @@ class RedAreaSurveyGoalProvider:
                     "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
                     "final_missing": len(report.final_missing_species_refs),
+                    "initial_missing_specimens": initial_missing_specimens,
+                    "final_missing_specimens": final_survey.missing_specimen_count,
                 },
             )
 
@@ -1018,9 +989,11 @@ class RedAreaSurveyGoalProvider:
                 self.catalog,
             )
             remaining = set(after_survey.missing_species_refs)
+            remaining_specimens = after_survey.missing_specimen_count
             captures = report.evidence.get("captures")
             if (
-                not remaining < initial_missing
+                not remaining <= initial_missing
+                or remaining_specimens >= initial_missing_specimens
                 or after.collection.collection.pokedex_owned_count < before_owned
                 or after.collection.collection.living_count < before_living
                 or report.actions_executed <= 0
@@ -1029,6 +1002,9 @@ class RedAreaSurveyGoalProvider:
                 or any(member.hp <= 0 for member in after.party.members)
                 or type(captures) is not int  # noqa: E721
                 or captures <= 0
+                or initial_missing_specimens - remaining_specimens != captures
+                or report.evidence.get("initial_missing_specimens") != initial_missing_specimens
+                or report.evidence.get("final_missing_specimens") != remaining_specimens
             ):
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             return GoalVerification.succeeded()

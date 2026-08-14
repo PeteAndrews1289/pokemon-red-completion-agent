@@ -243,6 +243,12 @@ class RedAreaSurvey:
         return tuple(item.species_ref for item in self.requirements if item.missing_count)
 
     @property
+    def missing_specimen_count(self) -> int:
+        """Count every retained root still needed, including evolution duplicates."""
+
+        return sum(item.missing_count for item in self.requirements)
+
+    @property
     def complete(self) -> bool:
         return not self.missing_species_refs
 
