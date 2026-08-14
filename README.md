@@ -29,7 +29,10 @@
 > returned stable control; the honest training count remains **0/54 train and 0/27 development
 > validation**. The next gate is to curate all 81 unique source-bound contexts, including 24
 > genuine three-way train menus and three state-dependent repeated menus, then freeze the complete
-> catalog before the first counted action.
+> catalog before the first counted action. The freezer now proves those curriculum properties
+> prospectively: it preserves order-independent policy-context and available-menu digests, binds
+> the exact candidate order and selected position, rejects repeated semantic contexts, and refuses
+> a catalog lacking multiway coverage, three menu reversals or answer-position diversity.
 
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy

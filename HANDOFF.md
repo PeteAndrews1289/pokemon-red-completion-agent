@@ -56,6 +56,16 @@ path-free catalog before any counted execution. Do not fill slots by copying a s
 setup run or manufacturing pressure in RAM. The sealed destination test remains frozen and
 unopened at 0/12.
 
+The first catalog audit found that the v1 freezer enforced 81 distinct save and question digests
+but deferred three decisive checks until after the one-shot episodes: order-independent policy
+context uniqueness, the 24 multiway-train minimum and three repeated menus with different teacher
+choices. That was a fail-late design. Schema v2 carries the policy-context digest, available-menu
+digest, exact candidate-kind order and selected index from read-only preflight into the frozen
+entry. Freeze now rejects replicated semantic inputs, insufficient multiway coverage, fewer than
+three context-dependent train menus and a single answer position. Old v1 rehearsal receipts are
+historical evidence only and must be regenerated against the new published source before catalog
+assembly. No counted slot was consumed by this change.
+
 ## Targeted evolution verifier live-qualified — 2026-08-13
 
 The first uncounted evolution rehearsal proved the gameplay mechanic but exposed a semantic

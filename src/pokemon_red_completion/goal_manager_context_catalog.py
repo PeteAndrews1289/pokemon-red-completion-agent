@@ -26,9 +26,12 @@ from pokemon_red_completion.goal_manager_protocol import (
     GoalManagerAssignment,
     GoalManagerCollectionRegistry,
 )
+from pokemon_red_completion.provenance import canonical_sha256
 
-GOAL_MANAGER_CONTEXT_CATALOG_SCHEMA = "pokemon-red-goal-manager-context-catalog-v1"
-GOAL_MANAGER_CONTEXT_ENTRY_SCHEMA = "pokemon-red-goal-manager-context-entry-v1"
+GOAL_MANAGER_CONTEXT_CATALOG_SCHEMA = "pokemon-red-goal-manager-context-catalog-v2"
+GOAL_MANAGER_CONTEXT_ENTRY_SCHEMA = "pokemon-red-goal-manager-context-entry-v2"
+_MINIMUM_MULTIWAY_TRAIN_CONTEXTS = 24
+_MINIMUM_CONTEXT_DEPENDENT_TRAIN_MENUS = 3
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _MAX_CATALOG_BYTES = 4 * 1024 * 1024
@@ -89,6 +92,10 @@ class GoalManagerContextCatalogEntry:
     state_sha256: str
     envelope_sha256: str
     question_sha256: str
+    policy_context_sha256: str
+    available_menu_sha256: str
+    selected_candidate_index: int
+    candidate_goal_kinds: tuple[GoalKind, ...]
     binding_manifest_sha256: str
     focus_pressure: float
     selected_kind: GoalKind
@@ -107,6 +114,8 @@ class GoalManagerContextCatalogEntry:
             (self.state_sha256, "state digest"),
             (self.envelope_sha256, "envelope digest"),
             (self.question_sha256, "question digest"),
+            (self.policy_context_sha256, "policy context digest"),
+            (self.available_menu_sha256, "available menu digest"),
             (self.binding_manifest_sha256, "binding manifest digest"),
             (self.context_id, "context digest"),
         ):
@@ -141,6 +150,27 @@ class GoalManagerContextCatalogEntry:
             raise GoalManagerContextCatalogError(
                 "selected goal kind must be available in its context"
             )
+        if (
+            type(self.selected_candidate_index) is not int  # noqa: E721
+            or not 0 <= self.selected_candidate_index < len(self.candidate_goal_kinds)
+        ):
+            raise GoalManagerContextCatalogError(
+                "selected candidate index is invalid"
+            )
+        if (
+            not isinstance(self.candidate_goal_kinds, tuple)
+            or len(self.candidate_goal_kinds) != len(GoalKind)
+            or set(self.candidate_goal_kinds) != set(GoalKind)
+            or self.candidate_goal_kinds[self.selected_candidate_index]
+            is not self.selected_kind
+        ):
+            raise GoalManagerContextCatalogError("candidate goal order is invalid")
+        if self.available_menu_sha256 != _available_menu_sha256(
+            self.available_goal_kinds
+        ):
+            raise GoalManagerContextCatalogError(
+                "available menu digest differs from its goal kinds"
+            )
         if self.context_id != _context_id(
             slot_id=self.slot_id,
             assignment_id=self.assignment_id,
@@ -148,6 +178,10 @@ class GoalManagerContextCatalogEntry:
             state_sha256=self.state_sha256,
             envelope_sha256=self.envelope_sha256,
             question_sha256=self.question_sha256,
+            policy_context_sha256=self.policy_context_sha256,
+            available_menu_sha256=self.available_menu_sha256,
+            selected_candidate_index=self.selected_candidate_index,
+            candidate_goal_kinds=self.candidate_goal_kinds,
             binding_manifest_sha256=self.binding_manifest_sha256,
             focus_pressure=float(self.focus_pressure),
             selected_kind=self.selected_kind,
@@ -168,6 +202,10 @@ class GoalManagerContextCatalogEntry:
         focus_pressure: float,
         selected_kind: GoalKind,
         available_goal_kinds: tuple[GoalKind, ...],
+        policy_context_sha256: str,
+        available_menu_sha256: str,
+        selected_candidate_index: int,
+        candidate_goal_kinds: tuple[GoalKind, ...],
     ) -> GoalManagerContextCatalogEntry:
         ordered = tuple(kind for kind in GoalKind if kind in set(available_goal_kinds))
         context_id = _context_id(
@@ -177,6 +215,10 @@ class GoalManagerContextCatalogEntry:
             state_sha256=state_sha256,
             envelope_sha256=envelope_sha256,
             question_sha256=question_sha256,
+            policy_context_sha256=policy_context_sha256,
+            available_menu_sha256=available_menu_sha256,
+            selected_candidate_index=selected_candidate_index,
+            candidate_goal_kinds=candidate_goal_kinds,
             binding_manifest_sha256=binding_manifest_sha256,
             focus_pressure=focus_pressure,
             selected_kind=selected_kind,
@@ -189,6 +231,10 @@ class GoalManagerContextCatalogEntry:
             state_sha256=state_sha256,
             envelope_sha256=envelope_sha256,
             question_sha256=question_sha256,
+            policy_context_sha256=policy_context_sha256,
+            available_menu_sha256=available_menu_sha256,
+            selected_candidate_index=selected_candidate_index,
+            candidate_goal_kinds=candidate_goal_kinds,
             binding_manifest_sha256=binding_manifest_sha256,
             focus_pressure=focus_pressure,
             selected_kind=selected_kind,
@@ -205,6 +251,10 @@ class GoalManagerContextCatalogEntry:
             "state_sha256": self.state_sha256,
             "envelope_sha256": self.envelope_sha256,
             "question_sha256": self.question_sha256,
+            "policy_context_sha256": self.policy_context_sha256,
+            "available_menu_sha256": self.available_menu_sha256,
+            "selected_candidate_index": self.selected_candidate_index,
+            "candidate_goal_kinds": [kind.value for kind in self.candidate_goal_kinds],
             "binding_manifest_sha256": self.binding_manifest_sha256,
             "focus_pressure": self.focus_pressure,
             "selected_kind": self.selected_kind.value,
@@ -230,7 +280,7 @@ class GoalManagerContextCatalog:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon-red-goal-manager-context-catalog-summary-v1",
+            "schema": "pokemon-red-goal-manager-context-catalog-summary-v2",
             "catalog_sha256": self.catalog_sha256,
             "collection_id": self.collection_id,
             "registry_sha256": self.registry_sha256,
@@ -239,6 +289,17 @@ class GoalManagerContextCatalog:
             "context_count": len(self.entries),
             "unique_state_count": len({entry.state_sha256 for entry in self.entries}),
             "unique_question_count": len({entry.question_sha256 for entry in self.entries}),
+            "unique_policy_context_count": len(
+                {entry.policy_context_sha256 for entry in self.entries}
+            ),
+            "multiway_train_contexts": sum(
+                len(entry.available_goal_kinds) >= 3
+                for entry in self.entries
+                if entry.slot_id and "-train-" in entry.slot_id
+            ),
+            "context_dependent_train_menus": _context_dependent_train_menu_count(
+                self.entries
+            ),
             "private_path_fields": 0,
         }
 
@@ -367,6 +428,10 @@ def _parse_entry(value: object) -> GoalManagerContextCatalogEntry:
             "state_sha256",
             "envelope_sha256",
             "question_sha256",
+            "policy_context_sha256",
+            "available_menu_sha256",
+            "selected_candidate_index",
+            "candidate_goal_kinds",
             "binding_manifest_sha256",
             "focus_pressure",
             "selected_kind",
@@ -380,9 +445,11 @@ def _parse_entry(value: object) -> GoalManagerContextCatalogEntry:
     try:
         selected = GoalKind(value["selected_kind"])
         raw_available = value["available_goal_kinds"]
-        if not isinstance(raw_available, list):
+        raw_candidates = value["candidate_goal_kinds"]
+        if not isinstance(raw_available, list) or not isinstance(raw_candidates, list):
             raise TypeError
         available = tuple(GoalKind(item) for item in raw_available)
+        candidates = tuple(GoalKind(item) for item in raw_candidates)
     except (KeyError, TypeError, ValueError):
         raise GoalManagerContextCatalogError("context catalog goal kinds are invalid") from None
     return GoalManagerContextCatalogEntry(
@@ -392,6 +459,19 @@ def _parse_entry(value: object) -> GoalManagerContextCatalogEntry:
         state_sha256=_string(value.get("state_sha256"), "state digest"),
         envelope_sha256=_string(value.get("envelope_sha256"), "envelope digest"),
         question_sha256=_string(value.get("question_sha256"), "question digest"),
+        policy_context_sha256=_string(
+            value.get("policy_context_sha256"),
+            "policy context digest",
+        ),
+        available_menu_sha256=_string(
+            value.get("available_menu_sha256"),
+            "available menu digest",
+        ),
+        selected_candidate_index=_integer(
+            value.get("selected_candidate_index"),
+            "selected candidate index",
+        ),
+        candidate_goal_kinds=candidates,
         binding_manifest_sha256=_string(
             value.get("binding_manifest_sha256"),
             "binding manifest digest",
@@ -432,6 +512,7 @@ def _validate_entries(
         ((entry.state_sha256 for entry in entries), "captured state"),
         ((entry.envelope_sha256 for entry in entries), "capture envelope"),
         ((entry.question_sha256 for entry in entries), "policy question"),
+        ((entry.policy_context_sha256 for entry in entries), "policy context"),
         ((entry.context_id for entry in entries), "context identity"),
     ):
         materialized = tuple(values)
@@ -439,6 +520,27 @@ def _validate_entries(
             raise GoalManagerContextCatalogError(
                 f"context catalog repeats a {subject}"
             )
+    train_entries = tuple(
+        entry
+        for entry in entries
+        if registry.assignment(entry.slot_id).partition == "train"
+    )
+    multiway = sum(len(entry.available_goal_kinds) >= 3 for entry in train_entries)
+    if multiway < _MINIMUM_MULTIWAY_TRAIN_CONTEXTS:
+        raise GoalManagerContextCatalogError(
+            "context catalog has insufficient multiway training contexts"
+        )
+    if (
+        _context_dependent_train_menu_count(train_entries)
+        < _MINIMUM_CONTEXT_DEPENDENT_TRAIN_MENUS
+    ):
+        raise GoalManagerContextCatalogError(
+            "context catalog has insufficient context-dependent training menus"
+        )
+    if len({entry.selected_candidate_index for entry in train_entries}) < 2:
+        raise GoalManagerContextCatalogError(
+            "context catalog lacks selected candidate position diversity"
+        )
 
 
 def _context_id(
@@ -449,6 +551,10 @@ def _context_id(
     state_sha256: str,
     envelope_sha256: str,
     question_sha256: str,
+    policy_context_sha256: str,
+    available_menu_sha256: str,
+    selected_candidate_index: int,
+    candidate_goal_kinds: tuple[GoalKind, ...],
     binding_manifest_sha256: str,
     focus_pressure: float,
     selected_kind: GoalKind,
@@ -463,6 +569,10 @@ def _context_id(
             "state_sha256": state_sha256,
             "envelope_sha256": envelope_sha256,
             "question_sha256": question_sha256,
+            "policy_context_sha256": policy_context_sha256,
+            "available_menu_sha256": available_menu_sha256,
+            "selected_candidate_index": selected_candidate_index,
+            "candidate_goal_kinds": [kind.value for kind in candidate_goal_kinds],
             "binding_manifest_sha256": binding_manifest_sha256,
             "focus_pressure": focus_pressure,
             "selected_kind": selected_kind.value,
@@ -508,6 +618,32 @@ def _number(value: object, subject: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise GoalManagerContextCatalogError(f"{subject} must be numeric")
     return float(value)
+
+
+def _integer(value: object, subject: str) -> int:
+    if type(value) is not int or value < 0:  # noqa: E721
+        raise GoalManagerContextCatalogError(f"{subject} must be a non-negative integer")
+    return value
+
+
+def _available_menu_sha256(kinds: tuple[GoalKind, ...]) -> str:
+    return canonical_sha256(
+        {
+            "available_goal_kinds": sorted(kind.value for kind in kinds),
+            "schema": "pokemon.core.available-goal-menu.v1",
+        }
+    )
+
+
+def _context_dependent_train_menu_count(
+    entries: tuple[GoalManagerContextCatalogEntry, ...],
+) -> int:
+    targets: dict[str, set[GoalKind]] = {}
+    for entry in entries:
+        if "-train-" not in entry.slot_id:
+            continue
+        targets.setdefault(entry.available_menu_sha256, set()).add(entry.selected_kind)
+    return sum(len(kinds) >= 2 for kinds in targets.values())
 
 
 def _digest(value: object, subject: str) -> str:

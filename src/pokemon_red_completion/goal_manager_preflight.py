@@ -21,7 +21,7 @@ from pokemon_red_completion.goal_manager_context_catalog import (
 )
 from pokemon_red_completion.goal_manager_protocol import GoalManagerAssignment
 
-GOAL_MANAGER_PREFLIGHT_SCHEMA = "pokemon-red-goal-manager-context-preflight-v1"
+GOAL_MANAGER_PREFLIGHT_SCHEMA = "pokemon-red-goal-manager-context-preflight-v2"
 
 
 class GoalManagerPreflightError(RuntimeError):
@@ -55,6 +55,12 @@ def build_goal_manager_preflight_payload(
             ],
             "focus_pressure": preflight.focus_pressure,
             "question_sha256": preflight.question_sha256,
+            "policy_context_sha256": preflight.policy_context_sha256,
+            "available_menu_sha256": preflight.available_menu_sha256,
+            "selected_candidate_index": preflight.selected_candidate_index,
+            "candidate_goal_kinds": [
+                kind.value for kind in preflight.candidate_goal_kinds
+            ],
             "binding_manifest_sha256": preflight.binding_manifest_sha256,
             "passed": True,
             "actions_executed": 0,
@@ -101,6 +107,10 @@ def parse_goal_manager_preflight(
             "available_goal_kinds",
             "focus_pressure",
             "question_sha256",
+            "policy_context_sha256",
+            "available_menu_sha256",
+            "selected_candidate_index",
+            "candidate_goal_kinds",
             "binding_manifest_sha256",
             "passed",
             "actions_executed",
@@ -127,11 +137,13 @@ def parse_goal_manager_preflight(
             "goal-manager preflight differs from its committed assignment"
         )
     raw_available = value.get("available_goal_kinds")
+    raw_candidates = value.get("candidate_goal_kinds")
     try:
         selected = GoalKind(_text(value, "selected_kind"))
-        if not isinstance(raw_available, list):
+        if not isinstance(raw_available, list) or not isinstance(raw_candidates, list):
             raise TypeError
         available = tuple(GoalKind(item) for item in raw_available)
+        candidates = tuple(GoalKind(item) for item in raw_candidates)
     except (TypeError, ValueError):
         raise GoalManagerPreflightError("goal-manager preflight kinds are invalid") from None
     preflight = GoalManagerContextPreflight(
@@ -146,6 +158,10 @@ def parse_goal_manager_preflight(
         available_goal_kinds=available,
         focus_pressure=_number(value, "focus_pressure"),
         question_sha256=_text(value, "question_sha256"),
+        policy_context_sha256=_text(value, "policy_context_sha256"),
+        available_menu_sha256=_text(value, "available_menu_sha256"),
+        selected_candidate_index=_integer(value, "selected_candidate_index"),
+        candidate_goal_kinds=candidates,
         binding_manifest_sha256=_text(value, "binding_manifest_sha256"),
     )
     _require_assignment(preflight, assignment)
@@ -169,6 +185,10 @@ def context_entry_from_preflight(
         focus_pressure=preflight.focus_pressure,
         selected_kind=preflight.selected_kind,
         available_goal_kinds=preflight.available_goal_kinds,
+        policy_context_sha256=preflight.policy_context_sha256,
+        available_menu_sha256=preflight.available_menu_sha256,
+        selected_candidate_index=preflight.selected_candidate_index,
+        candidate_goal_kinds=preflight.candidate_goal_kinds,
     )
 
 

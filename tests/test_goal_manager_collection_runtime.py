@@ -10,8 +10,12 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.captured_progress import write_captured_progress
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
     GoalFailureReason,
     GoalKind,
+    GoalManagerQuestion,
+    GoalOpportunity,
+    GoalSituation,
     GoalUnavailableReason,
 )
 from pokemon_red_completion.goal_manager_collection_runtime import (
@@ -135,10 +139,15 @@ def _assignment():  # type: ignore[no-untyped-def]
 
 def _catalog(registry, focused_preflight):  # type: ignore[no-untyped-def]
     entries = []
+    all_kinds = tuple(GoalKind)
     for ordinal, slot in enumerate(registry.slots, start=1):
         assignment = registry.assignment(slot.slot_id)
         if assignment.assignment_id == focused_preflight.assignment_id:
             question_sha256 = focused_preflight.question_sha256
+            policy_context_sha256 = focused_preflight.policy_context_sha256
+            available_menu_sha256 = focused_preflight.available_menu_sha256
+            selected_candidate_index = focused_preflight.selected_candidate_index
+            candidate_goal_kinds = focused_preflight.candidate_goal_kinds
             binding_manifest_sha256 = focused_preflight.binding_manifest_sha256
             capture_id = focused_preflight.capture_id
             state_sha256 = focused_preflight.state_sha256
@@ -146,9 +155,6 @@ def _catalog(registry, focused_preflight):  # type: ignore[no-untyped-def]
             focus_pressure = focused_preflight.focus_pressure
             available = focused_preflight.available_goal_kinds
         else:
-            question_sha256 = hashlib.sha256(
-                f"question-{ordinal}".encode("ascii")
-            ).hexdigest()
             binding_manifest_sha256 = hashlib.sha256(
                 f"bindings-{ordinal}".encode("ascii")
             ).hexdigest()
@@ -160,12 +166,38 @@ def _catalog(registry, focused_preflight):  # type: ignore[no-untyped-def]
                 f"envelope-{ordinal}".encode("ascii")
             ).hexdigest()
             focus_pressure = 0.5 + ordinal / 1_000
-            kinds = {slot.focus_kind}
-            for kind in GoalKind:
-                kinds.add(kind)
-                if len(kinds) == 3:
-                    break
-            available = tuple(kinds)
+            focus_index = all_kinds.index(slot.focus_kind)
+            group_start = (focus_index // 3) * 3
+            available_set = frozenset(all_kinds[group_start : group_start + 3])
+            available = tuple(kind for kind in GoalKind if kind in available_set)
+            shift = ordinal % len(all_kinds)
+            candidate_goal_kinds = all_kinds[shift:] + all_kinds[:shift]
+            question = GoalManagerQuestion(
+                GoalSituation(*(focus_pressure for _kind in GoalKind)),
+                tuple(
+                    GoalOpportunity(
+                        binding_ref=f"catalog:{ordinal}:{kind.value}",
+                        kind=kind,
+                        availability=(
+                            GoalAvailability.AVAILABLE
+                            if kind in available_set
+                            else GoalAvailability.UNAVAILABLE
+                        ),
+                        estimated_effort=0.1 if kind in available_set else None,
+                        estimated_risk=0.1 if kind in available_set else None,
+                        unavailable_reason=(
+                            None
+                            if kind in available_set
+                            else GoalUnavailableReason.MISSING_CAPABILITY
+                        ),
+                    )
+                    for kind in candidate_goal_kinds
+                ),
+            )
+            question_sha256 = question.ordered_policy_input_sha256
+            policy_context_sha256 = question.policy_context_sha256
+            available_menu_sha256 = question.available_menu_sha256
+            selected_candidate_index = candidate_goal_kinds.index(slot.focus_kind)
         entries.append(
             GoalManagerContextCatalogEntry.build(
                 assignment=assignment,
@@ -173,6 +205,10 @@ def _catalog(registry, focused_preflight):  # type: ignore[no-untyped-def]
                 state_sha256=state_sha256,
                 envelope_sha256=envelope_sha256,
                 question_sha256=question_sha256,
+                policy_context_sha256=policy_context_sha256,
+                available_menu_sha256=available_menu_sha256,
+                selected_candidate_index=selected_candidate_index,
+                candidate_goal_kinds=candidate_goal_kinds,
                 binding_manifest_sha256=binding_manifest_sha256,
                 focus_pressure=focus_pressure,
                 selected_kind=slot.focus_kind,

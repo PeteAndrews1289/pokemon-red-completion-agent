@@ -35,6 +35,15 @@ repeated semantic menus whose correct answer changes with state. Every slot must
 question to a unique source lineage. Until that catalog freezes, the honest training count remains
 0/54 and 0/27.
 
+One last audit moved that promise from prose into the irreversible gate. The first freezer could
+prove that 81 save files and ordered questions differed, but candidate shuffling made an ordered
+question digest too weak a proxy for a new semantic situation. Worse, multiway coverage and menu
+reversals were checked only after the episodes had been spent. Version 2 freezes the
+order-independent policy context, the available semantic menu, the exact candidate order and the
+teacher's selected position. It refuses the entire catalog before collection unless all 81 policy
+contexts are distinct, 24 train choices are genuinely multiway, three repeated menus demand
+different answers in different states, and labels occupy more than one candidate position.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

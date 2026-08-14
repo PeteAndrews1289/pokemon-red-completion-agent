@@ -29,8 +29,10 @@ Ordered next work:
    repeated semantic menus whose correct choice changes with state.
 4. Run read-only preflight on every assignment and reject duplicate state/question fingerprints,
    private-path leakage, unavailable selected goals and pressure manufactured outside the game.
-5. Freeze the complete private path-free catalog before any counted action. Then collect each
-   one-shot episode and run strict admission; never refill a consumed or failed slot.
+5. Freeze the complete private path-free catalog before any counted action. Schema v2 now rejects
+   duplicated order-independent policy contexts, fewer than 24 multiway train contexts, fewer than
+   three context-dependent train menus and one-position labels. Then collect each one-shot episode
+   and run strict admission; never refill a consumed or failed slot.
 6. Fit the first Red goal-manager model, compare all three frozen baselines, then proceed through
    shadow, causal Red authority and the Crystal transfer benchmark.
 

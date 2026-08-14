@@ -12,6 +12,15 @@
 > 0/27 development validation. Next curate all 81 unique source-bound contexts, freeze the complete
 > catalog, and only then execute one-shot collection. The sealed destination test remains 0/12.
 
+> **2026-08-14 pre-freeze audit checkpoint:** The v1 freezer could accept 81 unique files yet wait
+> until post-collection admission to discover duplicated semantic inputs, too few multiway choices,
+> insufficient menu reversals or one-position labels. Schema v2 moves those irreversible gates
+> before collection. Each preflight/catalog entry now binds the order-independent policy context,
+> available menu, complete candidate-kind order and selected index. Freeze requires 81 distinct
+> policy contexts, at least 24 three-way train contexts, three train menus with different selected
+> kinds and answer-position diversity. Regenerate all rehearsal preflights after publication; no
+> counted episode exists or was consumed.
+
 > **2026-08-13 evolution-verification checkpoint:** Published `70bb8b8` and exact-commit CI repaired
 > the evolution false negative without redefining the acquisition catalog. Fresh slot-029
 > preflight again exposed story, development and evolution, selected evolution at `0.8636` pressure

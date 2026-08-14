@@ -1437,6 +1437,12 @@ BOX**, and **ROUTE 24 X=5 BLOCKED / X=4 EXECUTABLE**. Follow those with the sema
 living collection +1, 18/20 box rotated with zero loss, and Pokédex seen 19→20. Put **9/9 HANDS
 QUALIFIED / 0/81 JUDGMENT EXAMPLES** across the final frame.
 
+Before the first training row, show the catalog gate rejecting a superficially complete stack of
+81 cards. Replace **81 DIFFERENT FILES** with four stronger checks: **81 UNIQUE SEMANTIC CONTEXTS / 24
+MULTIWAY TRAIN CHOICES / 3 SAME-MENU ANSWER REVERSALS / MULTIPLE ANSWER POSITIONS**. The line is:
+*“A shuffled question is not a new lesson, and the time to discover that is before one-shot data is
+spent.”*
+
 The first transfer benchmark should then be small enough to fail clearly: equivalent goal,
 battle, and local-navigation tasks in Pokémon Crystal. Compare zero-shot performance, few-shot
 adaptation, and from-scratch training. The point is not to claim universal Pokémon intelligence

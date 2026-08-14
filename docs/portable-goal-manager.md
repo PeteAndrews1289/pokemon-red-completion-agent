@@ -211,6 +211,14 @@ and added one genuine new sighting. Both executions ended stable and wrote no ep
 All nine goal families are therefore live-qualified end to end. This closes the mechanics gate,
 not the learning gate.
 
+The catalog freeze is also now a true prospective curriculum gate. Its first version guaranteed 81
+different state files and ordered questions, but the strongest semantic checks still ran only after
+one-shot execution. Version 2 preserves each read-only preflight's order-independent policy-context
+digest, available-menu digest, exact candidate-kind order and selected position. It refuses to
+freeze repeated semantic inputs, fewer than 24 multiway train contexts, fewer than three menus whose
+selected kind changes with state, or a corpus whose train labels occupy only one candidate position.
+Those failures are therefore found while contexts remain replaceable, not after episodes are spent.
+
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
 context-dependence bugs. They are not gameplay data and are not a performance result.
@@ -232,8 +240,9 @@ and collect across games.
 3. Curate 54 unique train and 27 unique development-validation contexts, preserving separate source
    lineages and obtaining at least 24 genuine three-way train menus plus three context-dependent
    repeated menus. Build storage pressure through real catches and box use, never RAM edits.
-4. Freeze the complete private catalog before any counted action, then collect each one-shot episode
-   and run the strict admission audit.
+4. Freeze the complete private catalog before any counted action. The v2 freezer must report 81
+   unique policy contexts, at least 24 multiway train contexts, three context-dependent train menus
+   and diverse selected positions. Then collect each one-shot episode and run strict admission.
 5. Fit the first genuine Red manager with the frozen training configuration and report all three
    fixed baselines on development validation.
 6. Run Red shadow and causal campaigns with explicit manager authority and zero teacher fallback.

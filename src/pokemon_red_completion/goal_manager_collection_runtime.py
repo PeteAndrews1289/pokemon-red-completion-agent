@@ -88,6 +88,10 @@ class GoalManagerContextPreflight:
     available_goal_kinds: tuple[GoalKind, ...]
     focus_pressure: float
     question_sha256: str
+    policy_context_sha256: str
+    available_menu_sha256: str
+    selected_candidate_index: int
+    candidate_goal_kinds: tuple[GoalKind, ...]
     binding_manifest_sha256: str
 
     def __post_init__(self) -> None:
@@ -102,6 +106,8 @@ class GoalManagerContextPreflight:
             (self.state_sha256, "state digest"),
             (self.envelope_sha256, "envelope digest"),
             (self.question_sha256, "question digest"),
+            (self.policy_context_sha256, "policy context digest"),
+            (self.available_menu_sha256, "available menu digest"),
             (self.binding_manifest_sha256, "binding manifest digest"),
         ):
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
@@ -126,6 +132,23 @@ class GoalManagerContextPreflight:
             raise GoalManagerCollectionRuntimeError(
                 "preflight selected goal is not available"
             )
+        if (
+            type(self.selected_candidate_index) is not int  # noqa: E721
+            or not 0 <= self.selected_candidate_index < len(self.candidate_goal_kinds)
+        ):
+            raise GoalManagerCollectionRuntimeError(
+                "preflight selected candidate index is invalid"
+            )
+        if (
+            not isinstance(self.candidate_goal_kinds, tuple)
+            or len(self.candidate_goal_kinds) != len(GoalKind)
+            or set(self.candidate_goal_kinds) != set(GoalKind)
+            or self.candidate_goal_kinds[self.selected_candidate_index]
+            is not self.selected_kind
+        ):
+            raise GoalManagerCollectionRuntimeError(
+                "preflight candidate order is invalid"
+            )
         if isinstance(self.focus_pressure, bool) or not isinstance(
             self.focus_pressure, (int, float)
         ):
@@ -144,7 +167,7 @@ class GoalManagerContextPreflight:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon-red-goal-manager-context-preflight-v1",
+            "schema": "pokemon-red-goal-manager-context-preflight-v2",
             "assignment_id": self.assignment_id,
             "slot_id": self.slot_id,
             "capture_id": self.capture_id,
@@ -156,6 +179,10 @@ class GoalManagerContextPreflight:
             "available_goal_kinds": [kind.value for kind in self.available_goal_kinds],
             "focus_pressure": self.focus_pressure,
             "question_sha256": self.question_sha256,
+            "policy_context_sha256": self.policy_context_sha256,
+            "available_menu_sha256": self.available_menu_sha256,
+            "selected_candidate_index": self.selected_candidate_index,
+            "candidate_goal_kinds": [kind.value for kind in self.candidate_goal_kinds],
             "binding_manifest_sha256": self.binding_manifest_sha256,
             "passed": self.passed,
             "private_binding_fields": 0,
@@ -254,6 +281,10 @@ def preflight_goal_manager_context(
         ),
         focus_pressure=question.situation.pressure(assignment.focus_need),
         question_sha256=question.ordered_policy_input_sha256,
+        policy_context_sha256=question.policy_context_sha256,
+        available_menu_sha256=question.available_menu_sha256,
+        selected_candidate_index=bound.selected_index,
+        candidate_goal_kinds=tuple(item.kind for item in question.opportunities),
         binding_manifest_sha256=goal_binding_manifest_sha256(binding_set),
     )
     if not preflight.passed:
@@ -310,6 +341,10 @@ def record_goal_manager_context(
         or context.state_sha256 != capture.state_sha256
         or context.envelope_sha256 != capture.envelope_sha256
         or context.question_sha256 != preflight.question_sha256
+        or context.policy_context_sha256 != preflight.policy_context_sha256
+        or context.available_menu_sha256 != preflight.available_menu_sha256
+        or context.selected_candidate_index != preflight.selected_candidate_index
+        or context.candidate_goal_kinds != preflight.candidate_goal_kinds
         or context.binding_manifest_sha256 != preflight.binding_manifest_sha256
         or context.selected_kind is not preflight.selected_kind
         or context.available_goal_kinds != preflight.available_goal_kinds

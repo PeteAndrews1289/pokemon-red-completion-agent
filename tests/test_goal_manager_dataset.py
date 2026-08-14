@@ -133,6 +133,12 @@ def _dataset(
         state_sha256=state_sha256,
         envelope_sha256=envelope_sha256,
         question_sha256=question.ordered_policy_input_sha256,
+        policy_context_sha256=question.policy_context_sha256,
+        available_menu_sha256=question.available_menu_sha256,
+        selected_candidate_index=selected,
+        candidate_goal_kinds=tuple(
+            opportunity.kind for opportunity in question.opportunities
+        ),
         binding_manifest_sha256=hashlib.sha256(
             f"bindings:{slot.slot_id}".encode()
         ).hexdigest(),
