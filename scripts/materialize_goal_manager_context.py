@@ -71,6 +71,8 @@ from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _buy_mart_item,
     _close_menus,
+    _open_bag,
+    _select_bag_item,
 )
 from pokemon_red_completion.observation import (
     RED_BOX_CAPACITY,
@@ -177,6 +179,7 @@ _DAMAGE_MODES = frozenset(
 )
 _MODES = (
     "stable",
+    "story-resource-scarce",
     "center",
     "mansion",
     "acquisition-ready",
@@ -252,6 +255,75 @@ def _new_external_output(destination: Path, rom_path: Path) -> Path:
 def _inverse(directions: tuple[str, ...]) -> tuple[str, ...]:
     opposite = {"up": "down", "right": "left", "down": "up", "left": "right"}
     return tuple(opposite[item] for item in reversed(directions))
+
+
+def _story_resource_scarce_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
+    """Discard one real Poké Ball while preserving an exact story boundary.
+
+    The midgame story skills are available only at their source Pokémon
+    Centers.  Relocating those captures to Cinnabar destroys the executable
+    story option, while copying a save would duplicate its policy context.
+    This bounded cartridge interaction creates one honest resource variant at
+    the same frontier without changing story, party, collection, or money.
+    """
+
+    before = reader.read()
+    before_inventory = dict(before.bag_items or ())
+    before_party = party_observation_from_raw(before)
+    if (
+        before.battle_state
+        or before.map_id not in _STANDARD_FLY_CENTER_MAPS
+        or (before.player_x, before.player_y) != (3, 3)
+        or not reader.read_input_readiness().ready
+        or before_inventory.get(int(ItemId.POKE_BALL), 0) != 1
+    ):
+        raise GoalManagerContextMaterializationError(
+            "story resource setup requires one Poké Ball at a stable Center frontier"
+        )
+
+    _open_bag(actions, emulator, DEFAULT_LAVENDER_TIMING)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.POKE_BALL,
+        DEFAULT_LAVENDER_TIMING,
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+    _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+    for _ in range(6):
+        current_quantity = dict(reader.read().bag_items or ()).get(
+            int(ItemId.POKE_BALL),
+            0,
+        )
+        if current_quantity == 0:
+            break
+        _pulse(actions, MacroActionKind.CONFIRM, frames=120)
+    else:
+        raise GoalManagerContextMaterializationError(
+            "story resource setup did not discard its exact Poké Ball"
+        )
+    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+
+    after = reader.read()
+    expected_inventory = dict(before_inventory)
+    expected_inventory.pop(int(ItemId.POKE_BALL))
+    if (
+        dict(after.bag_items or ()) != expected_inventory
+        or party_observation_from_raw(after) != before_party
+        or after.player_money != before.player_money
+        or after.map_id != before.map_id
+        or (after.player_x, after.player_y) != (before.player_x, before.player_y)
+        or after.battle_state
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "story resource setup changed more than its exact Poké Ball reserve"
+        )
 
 
 def _normalize_cinnabar_nurse(
@@ -1156,6 +1228,9 @@ def _apply_mode(
                 "stable materialization requires a released overworld boundary"
             )
         actions.execute(MacroAction(MacroActionKind.WAIT))
+        return
+    if mode == "story-resource-scarce":
+        _story_resource_scarce_boundary(actions, reader, emulator)
         return
     _normalize_cinnabar_nurse(actions, reader, emulator)
     if hyper_potion_quantity is not None:

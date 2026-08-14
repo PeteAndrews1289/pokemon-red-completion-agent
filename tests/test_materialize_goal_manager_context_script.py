@@ -77,6 +77,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "acquisition-damaged" in modes
     assert "center" in modes
     assert "stable" in modes
+    assert "story-resource-scarce" in result.stdout
     assert "evolved-team" in result.stdout
     assert "acquisition-ready" in result.stdout
     assert "storage-ready" in result.stdout
@@ -102,6 +103,67 @@ def test_stable_context_uses_one_semantic_wait_without_relocation() -> None:
 
     assert 'if mode == "stable"' in source
     assert "actions.execute(MacroAction(MacroActionKind.WAIT))" in source
+
+
+def test_story_resource_variant_discards_exactly_one_ball_at_the_same_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    original = replace(
+        _unevolved_party_raw(),
+        map_id=MapId.SAFFRON_POKECENTER,
+        bag_items=(
+            (int(ItemId.POTION), 6),
+            (int(ItemId.POKE_BALL), 1),
+        ),
+        player_money=18_977,
+    )
+    reader = _Reader(original)
+    pulses: list[tuple[object, ...]] = []
+
+    def pulse(_actions: object, kind: object, *args: object, **_kwargs: object) -> None:
+        pulses.append((kind, *args))
+        if len(pulses) == 5:
+            reader.raw = replace(
+                reader.raw,
+                bag_items=((int(ItemId.POTION), 6),),
+            )
+
+    globals_dict = module["_story_resource_scarce_boundary"].__globals__
+    monkeypatch.setitem(globals_dict, "_open_bag", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setitem(globals_dict, "_pulse", pulse)
+    monkeypatch.setitem(globals_dict, "_close_menus", lambda *_args: None)
+
+    module["_story_resource_scarce_boundary"](object(), reader, object())
+
+    assert reader.raw.map_id == MapId.SAFFRON_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert reader.raw.player_money == 18_977
+    assert reader.raw.party_species_ids == original.party_species_ids
+    assert reader.raw.bag_items == ((int(ItemId.POTION), 6),)
+    assert pulses[:3] == [
+        (module["MacroActionKind"].CONFIRM,),
+        (module["MacroActionKind"].MOVE, "down", 120),
+        (module["MacroActionKind"].CONFIRM,),
+    ]
+
+
+def test_story_resource_variant_rejects_a_non_story_center_boundary() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            map_id=MapId.CELADON_CITY,
+            bag_items=((int(ItemId.POKE_BALL), 1),),
+        )
+    )
+
+    with pytest.raises(
+        module["GoalManagerContextMaterializationError"],
+        match="stable Center frontier",
+    ):
+        module["_story_resource_scarce_boundary"](object(), reader, object())
 
 
 def test_damage_context_uses_real_battle_turns_and_active_pressure_gate() -> None:
