@@ -1431,6 +1431,12 @@ Before Crystal, show the manager curriculum as short captured-state choices rath
 families, and the same candidate menu requiring different answers as state changes. Compare the
 model with lowest effort, a static priority, and the strongest hand-authored pressure heuristic.
 
+Pay off the mechanics gate with nine cards, then refuse to call them training data. Three quick
+failure/recovery cuts explain why: **ROAR ENDED BATTLE / NO POKÉMON ADDED**, **GEN I PREPENDS TO THE
+BOX**, and **ROUTE 24 X=5 BLOCKED / X=4 EXECUTABLE**. Follow those with the semantic proofs:
+living collection +1, 18/20 box rotated with zero loss, and Pokédex seen 19→20. Put **9/9 HANDS
+QUALIFIED / 0/81 JUDGMENT EXAMPLES** across the final frame.
+
 The first transfer benchmark should then be small enough to fail clearly: equivalent goal,
 battle, and local-navigation tasks in Pokémon Crystal. Compare zero-shot performance, few-shot
 adaptation, and from-scratch training. The point is not to claim universal Pokémon intelligence
@@ -1522,6 +1528,11 @@ version has to prove the model learned something worth carrying into a game it h
 - The evolution verifier repair: **3 CHOICES / DIGLETT 22 → DUGTRIO 26 / MECHANIC SUCCEEDED /
   WRONG AGGREGATE REJECTED IT / 0 EPISODES**. Show the exact living-party verifier replacing the
   unrelated acquisition-catalog counter.
+- The final mechanics-gate montage: a Roar exit rejected because living collection did not grow;
+  the corrected Gen I prepend transition while a real active box reaches 18/20; the 36-action box
+  rotation preserving every specimen; and Route 24's rejected x=5 corridor beside the successful
+  x=4 route and new National #43 sighting. End with **ALL 9 LIVE-QUALIFIED / TRAIN 0 OF 54 /
+  VALIDATION 0 OF 27**.
 
 ## Honesty rules for the video
 

@@ -1,5 +1,40 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the hands are qualified; now we build the judgment curriculum
+
+The pre-training mechanics gate is now complete. Each of the nine goal families has executed from
+an authenticated, nonsealed Red state without borrowing a label from the setup: advance the story,
+acquire a species, develop the team, evolve a species, restore the team, resupply, manage storage,
+recover control and explore. Field items and a Pokémon Center independently cover restoration. The
+manager still has zero genuine examples because these runs tested whether its hands and measuring
+instruments work; they did not teach it which hand to choose.
+
+The last three rehearsals were valuable precisely because they did not go green immediately. The
+duplicate-precursor acquisition case caught one Ponyta and reduced the number of missing living
+specimens without changing the number of unique missing species. Then a Growlithe used Roar after a
+failed ball during storage setup. Battle state cleared, so the old helper called it a capture. The
+repair verifies a physical fact instead: the total number of living Pokémon across party and all
+boxes must increase by one. An animation ending is no longer allowed to stand in for collection.
+
+Building a nearly full active box through real catches exposed another cartridge truth: Generation
+I prepends new captures to box storage. The setup verifier had assumed append order and correctly
+refused its own first attempt. It now pins the observed prepend transition, preserves all other
+boxes and heals in bounded three-capture batches. The resulting 18/20 box created exactly `0.75`
+storage pressure. The manager selected storage, rotated into an empty box in 36 actions and gained
+18 free slots without losing a specimen.
+
+Exploration supplied the same lesson at map scale. A plausible Route 24 path entered a blocked
+column at x=5. Cartridge terrain and live movement moved the corridor to x=4. The repaired 38-action
+rehearsal encountered a genuinely unseen species, raised the Pokédex seen count from 19 to 20 and
+returned stable outside battle. “Walked somewhere” was never accepted as “learned something.”
+
+That changes the bottleneck. The project no longer needs another provider before training; it needs
+a defensible curriculum. The complete 81-context catalog must be assembled before any counted
+action: 54 train, 27 development validation, at least 24 real three-way training menus and three
+repeated semantic menus whose correct answer changes with state. Every slot must bind a unique
+question to a unique source lineage. Until that catalog freezes, the honest training count remains
+0/54 and 0/27.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

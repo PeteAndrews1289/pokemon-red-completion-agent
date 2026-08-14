@@ -151,12 +151,13 @@ A context profile cannot weaken those targets to manufacture its assigned pressu
 label. Team-development examples execute one real weakest-member level quantum rather than replaying
 an entire late-game grind. Perfect level-100 collection remains a separate long-horizon contract.
 
-Setup tooling can derive Mansion, Mart, PC, blocked-movement, damaged-field, and damaged-Center
-boundaries from authenticated nonsealed captures. It does so with ordinary controller actions,
-writes only new external save/envelope files, preserves the story frontier, and creates no episode
-or label. The matching finite profile builder admits no callbacks, private paths, arbitrary provider
-JSON, or manager-target overrides. Ordinary wild collection can use Poké, Great, or Ultra Balls but
-reserves the unique Master Ball for legendary mechanics.
+Setup tooling can derive Mansion, Mart, PC, blocked-movement, damaged-field, damaged-Center,
+post-evolution, storage-ready and exploration boundaries from authenticated nonsealed captures. It
+does so with ordinary controller actions, writes only new external save/envelope files, preserves
+the story frontier, and creates no episode or label. The matching finite profile builder admits no
+callbacks, private paths, arbitrary provider JSON, or manager-target overrides. Ordinary wild
+collection can use Poké, Great, or Ultra Balls but reserves the unique Master Ball for legendary
+mechanics.
 
 The first nonsealed live rehearsal has now crossed the setup-to-preflight boundary. A post–Secret
 Key capture reached a stable Mansion corridor through 82 controller actions; the resulting state
@@ -188,8 +189,27 @@ story frontier, nondecreasing collection, stable input and zero faints. Publishe
 CI; fresh slot-029 preflight selected evolution from the same three-way menu, and a 21,604-action /
 1,252,066-frame uncounted execution changed Diglett level 22 to Dugtrio level 26. The catalog
 aggregate correctly stayed 3/22 while the exact verifier succeeded, with zero faints, stable input,
-released controls and no episode. A setup-only post-evolution materializer is the next gate before
-team-development rehearsal.
+released controls and no episode. A setup-only post-evolution materializer was then required before
+the team-development rehearsal could run.
+
+That gate and every remaining mechanic rehearsal are now complete. Team development executes one
+real weakest-member level quantum from a post-evolution Center boundary. Acquisition retains one
+required specimen and verifies the duplicate-precursor case where the missing-specimen count falls
+while the unique-species count does not. Its verifier no longer equates an ended wild battle with a
+capture: party-plus-box living count must grow by exactly one, so Roar and Teleport cannot become
+false positive labels.
+
+Storage setup built pressure through real Mansion catches. It exposed Gen I's prepend box order,
+which is now verified directly, and uses bounded recovery after every three captures to prevent
+setup attrition. The admitted external boundary had 18 of 20 active-box slots occupied. Storage
+preflight selected `manage_storage` at pressure `0.75`; 36 actions / 4,512 frames rotated into an
+empty box, preserved the party and every living specimen, and gained 18 immediate slots. The first
+Route 24 exploration path failed closed at a blocked x=5 column. Cartridge terrain and live
+movement corrected it to the x=4 corridor; the replacement completed in 38 actions / 1,968 frames
+and added one genuine new sighting. Both executions ended stable and wrote no episode.
+
+All nine goal families are therefore live-qualified end to end. This closes the mechanics gate,
+not the learning gate.
 
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
@@ -206,9 +226,9 @@ and collect across games.
 
 ## Next implementation slices
 
-1. Publish the exact source-bound 81-slot registry and require green exact-commit CI.
-2. Rehearse every setup/profile/preflight family on nonsealed external captures. A rehearsal may
-   create a new setup save and receipt, but never a counted episode.
+1. **Complete:** publish the exact source-bound 81-slot registry and require green exact-commit CI.
+2. **Complete:** rehearse every setup/profile/preflight family on nonsealed external captures. No
+   rehearsal consumed a counted episode.
 3. Curate 54 unique train and 27 unique development-validation contexts, preserving separate source
    lineages and obtaining at least 24 genuine three-way train menus plus three context-dependent
    repeated menus. Build storage pressure through real catches and box use, never RAM edits.

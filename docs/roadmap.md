@@ -3,7 +3,7 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
-## Current focus (2026-08-13): finish live goal-family qualification before collection
+## Current focus (2026-08-14): curate and freeze the complete goal-manager catalog
 
 The transferable goal manager—not the paused sealed destination test—is the active route to a
 Pokémon-playing model. The public 81-slot campaign, nine Red providers, profile/preflight/catalog
@@ -11,30 +11,26 @@ boundary, record-before-action collector and fixed fitter already exist. Genuine
 still **0/54 train and 0/27 development validation** because setup saves and uncounted rehearsals
 are deliberately not labels.
 
-Four live mechanics are now qualified end to end without consuming an episode: resupply, control
-recovery, field restoration and Pokémon Center restoration. Acquisition has passed read-only
-preflight. Evolution passed a genuine three-way preflight and the mechanic changed Diglett level
-25 into Dugtrio level 26, but the generic catalog-progress verifier rejected the outcome because
-Dugtrio's canonical acquisition method is wild capture. The source repair now verifies the exact
-living-party transformation instead of redefining global collection metrics.
+All nine goal families are now live-qualified end to end without consuming an episode: story,
+acquisition, development, evolution, restoration, resupply, storage, recovery and exploration.
+Restoration covers both finite field-item and Pokémon Center execution. The last live rehearsals
+also hardened the measurement boundary: a capture requires exactly one new living specimen rather
+than an ended battle; storage respects Gen I prepend order and preserves the complete collection;
+and exploration requires a new observed species rather than movement alone.
 
 Ordered next work:
 
-1. **Complete:** publish the targeted evolution verifier and regenerated source-bound registries;
-   exact-commit CI is green at `70bb8b8`.
-2. **Complete:** fresh slot-029 preflight selected evolution from three choices, and the uncounted
-   execution changed Diglett level 22 to Dugtrio level 26 while the exact verifier succeeded. The
-   old false-negative remains preserved and unrelabeled.
-3. Published `4bf0774` added the setup-only `evolved-team` mode and passed CI. Its first run failed
-   before training because a four-argument setup flee helper was passed to a five-argument trainer
-   contract; no output was created. Published `4c14f10` repaired that seam and passed CI. Its retry
-   completed evolution but ended at the trainer's honest Diglett's Cave boundary, where development
-   is unavailable, so it again saved nothing. Publish the real Dig/Fly/Center relocation, then
-   materialize the post-evolution boundary and qualify one-level team development.
-4. Qualify acquisition, storage and exploration execution, then re-audit all nine families for
-   bounded success/failure semantics and distinct context construction.
-5. Only after every family is live-qualified, curate 81 unique contexts, freeze the complete
-   private catalog, collect the one-shot episodes and run strict admission.
+1. **Complete:** publish the provider, registry, materializer and verifier repairs through
+   `d873560`; exact-commit CI and the full ROM-free gate are green.
+2. **Complete:** qualify all nine goal families from authenticated nonsealed contexts with stable
+   endpoints, bounded outcomes and zero episodes.
+3. Inventory eligible nonsealed source lineages and construct the 81 distinct questions. Preserve
+   54 train / 27 development separation, at least 24 genuine three-way training menus and three
+   repeated semantic menus whose correct choice changes with state.
+4. Run read-only preflight on every assignment and reject duplicate state/question fingerprints,
+   private-path leakage, unavailable selected goals and pressure manufactured outside the game.
+5. Freeze the complete private path-free catalog before any counted action. Then collect each
+   one-shot episode and run strict admission; never refill a consumed or failed slot.
 6. Fit the first Red goal-manager model, compare all three frozen baselines, then proceed through
    shadow, causal Red authority and the Crystal transfer benchmark.
 

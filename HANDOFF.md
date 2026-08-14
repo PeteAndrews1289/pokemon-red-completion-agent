@@ -14,6 +14,48 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## All nine goal families live-qualified; catalog curation is next — 2026-08-14
+
+The pre-training mechanics gate is complete. Authenticated, nonsealed Red states have now executed
+all nine finite goal families without writing a training episode: advance story, acquire species,
+develop team, evolve species, restore team, resupply, manage storage, recover control and explore.
+Restoration is qualified through both the finite field-item and Pokémon Center paths. These are
+capability rehearsals, not demonstrations: genuine manager data remains **0/54 train and 0/27
+development validation**, and no model has been fitted from these runs.
+
+The final acquisition rehearsal retained one Ponyta from a duplicate-precursor question. It reduced
+canonical missing specimens from four to three even though the number of unique missing species
+stayed at three, proving that acquisition progress cannot be reduced to a set-size delta. That work
+then exposed a more dangerous runtime assumption during storage setup: a wild Growlithe used Roar
+after a failed ball, ended the battle, and the capture helper reported success solely because battle
+state cleared. Published `d873560` now accepts a wild capture only when the total living collection
+across party and all boxes grows by exactly one, while still verifying the ordinary-ball decrement.
+Roar, Teleport and other non-capture exits are negative outcomes.
+
+Storage pressure was materialized through real Mansion catches rather than memory edits. The first
+attempt failed closed because Gen I prepends a newly caught Pokémon to the active box instead of
+appending it; the repair verifies the actual prepend transition, preserves every other box and the
+party, and heals after bounded three-capture batches so setup cannot quietly attrit the team. The
+published external boundary has box 0 at 18/20. Fresh read-only preflight selected storage at
+pressure `0.75`; an explicitly uncounted 36-action / 4,512-frame execution changed the active box
+from 0 to 1, preserved all box counts and living specimens, gained 18 immediate slots and ended at
+the Cinnabar PC with stable input and no episode.
+
+Exploration's first Route 24 rehearsal also failed honestly: the proposed path entered a blocked
+column at `(5,16)`. Cartridge terrain plus live movement identified the executable corridor as six
+tiles left and then down through x=4. A fresh preflight exposed only exploration, and the uncounted
+execution completed in 38 actions / 1,968 frames, produced one encounter and one genuinely new
+sighting (National #43), and returned outside battle at `(4,20)` with the party intact and controls
+released.
+
+The active gate is no longer provider implementation. Curate **81 unique questions and source
+states**—54 train and 27 development validation—with at least 24 three-way training menus and three
+repeated semantic menus whose correct choice changes with state. Every context needs a separate
+source-bound assignment and clean read-only preflight. Freeze and validate the complete private,
+path-free catalog before any counted execution. Do not fill slots by copying a state, relabeling a
+setup run or manufacturing pressure in RAM. The sealed destination test remains frozen and
+unopened at 0/12.
+
 ## Targeted evolution verifier live-qualified — 2026-08-13
 
 The first uncounted evolution rehearsal proved the gameplay mechanic but exposed a semantic

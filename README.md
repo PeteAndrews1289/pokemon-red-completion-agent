@@ -17,16 +17,19 @@
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
-> **Goal-manager rehearsal status (August 13, 2026):** resupply, transient-control recovery, field
-> restoration and Center restoration have now executed successfully from authenticated nonsealed
-> states without consuming a training episode; acquisition has passed read-only preflight. A
-> genuine three-way evolution context selected evolution and the bounded mechanic changed Diglett
-> level 25 into Dugtrio level 26, but the generic verifier watched an unrelated catalog aggregate
-> and rejected the otherwise successful outcome. The repair now checks the exact in-party
-> transformation, level gain, unchanged story frontier, stable input and zero faints. Published
-> source then repeated the 21,604-action mechanic and passed that verifier with released controls,
-> no faint and no episode. These are mechanic rehearsals, so the honest training count remains
-> **0/54 train and 0/27 development validation**.
+> **Goal-manager rehearsal status (August 14, 2026):** all nine goal families are now
+> live-qualified from authenticated, nonsealed Red states: story progress, acquisition, one-level
+> team development, evolution, restoration, resupply, storage, control recovery and exploration.
+> The last three qualifications deliberately found and repaired errors that green unit tests had
+> not exposed. Acquisition now proves a capture by growth in the living collection instead of
+> treating any battle exit—including Roar—as success. Storage setup derives real pressure through
+> catches, respects Gen I's prepend box order and rotates a box with 18 occupied slots without
+> losing a specimen. Exploration follows a cartridge-checked Route 24 corridor and proves a new
+> sighting rather than merely counting movement. Every execution was explicitly uncounted and
+> returned stable control; the honest training count remains **0/54 train and 0/27 development
+> validation**. The next gate is to curate all 81 unique source-bound contexts, including 24
+> genuine three-way train menus and three state-dependent repeated menus, then freeze the complete
+> catalog before the first counted action.
 
 > **Latest verified result (August 13, 2026):** the context-diverse strategic campaign is complete:
 > 36 authenticated counted choices (24 train / 12 development validation), 36 unique policy

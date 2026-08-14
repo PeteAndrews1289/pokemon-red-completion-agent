@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-14 all-family qualification checkpoint:** The Red goal manager has now executed all
+> nine goal families from authenticated nonsealed states without consuming an episode: story,
+> acquisition, development, evolution, restoration (field and Center), resupply, storage, recovery
+> and exploration. Published `d873560` closes the last semantic capture gap: battle exit is not a
+> capture; total living specimens across party and boxes must grow by exactly one. Real Mansion
+> catches produced an 18/20 active box, exposing and then pinning Gen I's prepend order. An uncounted
+> storage execution rotated box 0 to box 1 in 36 actions / 4,512 frames with no collection loss.
+> Route 24 exploration rejected a blocked x=5 corridor, used the cartridge-checked x=4 corridor,
+> and produced one new sighting in 38 actions / 1,968 frames. Counted data is still 0/54 train and
+> 0/27 development validation. Next curate all 81 unique source-bound contexts, freeze the complete
+> catalog, and only then execute one-shot collection. The sealed destination test remains 0/12.
+
 > **2026-08-13 evolution-verification checkpoint:** Published `70bb8b8` and exact-commit CI repaired
 > the evolution false negative without redefining the acquisition catalog. Fresh slot-029
 > preflight again exposed story, development and evolution, selected evolution at `0.8636` pressure
