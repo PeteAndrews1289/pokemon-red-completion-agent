@@ -14,6 +14,36 @@ model's internals. A policy demonstrates reusable Pokémon knowledge when it can
 
 Completing an exact recorded route does not satisfy this definition.
 
+## First prospective transfer experiment: Crystal
+
+The first real cross-title test is frozen before a Crystal label or prediction exists. The
+canonical plan is
+[`crystal-goal-manager-transfer-v1.json`](../configs/crystal-goal-manager-transfer-v1.json), with
+SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+It contains 72 disjoint semantic contexts:
+
+- 18 zero-shot probes, two for each of the nine portable goal kinds;
+- 27 adaptation examples, arranged as balanced prefixes of 9, 18 and 27; and
+- 27 one-shot sealed test contexts, three for each goal kind.
+
+The paired comparison holds the authenticated Red normalizer, Crystal rows, row order, optimizer
+and update count fixed. One candidate starts from the promoted Red weights and the comparator
+starts from zero weights. The primary endpoint is fixed at the nine-example adaptation budget over
+all 27 sealed contexts: Red initialization must win at least six discordant pairs and lose none,
+which gives an exact two-sided `p = 0.03125`. Missing predictions count as incorrect. All sealed
+predictions must be committed before any test teacher action, and the experiment cannot stop early
+or change its schema after seeing zero-shot behavior.
+
+The ROM-free substrate is implemented: an identity-free nine-pressure projection, adapter-private
+capability masks and bindings, bank-aware coherent party and Pokédex readers, and paired fitting
+from Red and zero initialization. Canonical catalog, prediction-commitment and complete-outcome
+artifacts bind every later result to the exact plan, source, cartridge, question and fitted-model
+identities; partial sealed scoring is unavailable. The revision contract pins international
+Crystal v1.0 and the public source/symbol identities from `pret/pokecrystal`; the owner's ROM path,
+bytes and SHA-256 remain private. Current counters are **0/18 zero-shot opened, 0/27 adaptation
+examples, 0/27 sealed test opened and 0 predictions**. Live qualification is intentionally blocked
+until a matching lawfully owned cartridge is supplied through `POKEMON_CRYSTAL_ROM`.
+
 ## Transfer boundary
 
 The learned policy consumes a versioned Pokémon-mainline ontology. Every supported game supplies a
@@ -97,9 +127,8 @@ and waits would otherwise dominate it.
    recovery policies.
 3. **Red held-out completion:** complete clean runs across preregistered timing and perturbation
    schedules with teacher fallback disabled.
-4. **Near-transfer title:** implement a second adapter and measure zero-shot and few-shot reuse.
-   Pokémon Yellow is a useful first comparison because much of the generation-one mechanics and
-   world vocabulary overlap while progression and encounters differ.
+4. **Near-transfer title:** qualify the preregistered Crystal adapter and measure frozen-Red
+   zero-shot reuse, fixed few-shot adaptation and an exactly matched from-scratch comparator.
 5. **Cross-generation transfer:** add a later-generation title, retrain only game-specific
    embeddings or adapters first, then measure how much shared policy knowledge survives.
 

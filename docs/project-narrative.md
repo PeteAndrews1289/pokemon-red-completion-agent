@@ -1,5 +1,48 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: Crystal became an experiment before it became another route
+
+The next cartridge is no longer represented by a paragraph that says “few-shot.” Before seeing one
+Crystal teaching label, the project froze 72 questions: eighteen for a true zero-shot probe,
+twenty-seven for balanced adaptation, and twenty-seven for a one-opening sealed comparison. Every
+partition contains every one of the nine goal families. The adaptation stream is three complete
+nine-kind blocks, so its 9-, 18-, and 27-example learning curves cannot be manufactured from an
+easy cluster of healing choices.
+
+The comparison isolates the thing the project actually wants to measure. Both candidates inherit
+the exact authenticated Red feature scaling. Both receive the same Crystal rows in the same order,
+use the same optimizer, and take the same number of updates. One starts from the learned Red
+weights; the other starts at zero. At the primary nine-example budget, six paired test wins and no
+losses produce exact two-sided `p = 0.03125`. The larger budgets, calibration, per-kind scores and
+live outcomes must all be published, but none can replace that endpoint after the answer is known.
+
+Crystal's code boundary was built to match the experiment. Its banked Gen II reader uses pinned
+public symbols rather than remembered addresses, double-reads mutable party and Pokédex state, and
+rejects disagreement instead of averaging it away. The high-level projection keeps title, species,
+move, map, item, coordinate, address, capability and binding identity outside the model. Gen II
+mechanics—breeding, happiness and time evolution, trades, field moves, roaming encounters and
+puzzles—exist as private capability gates, not claims of implemented skill.
+
+Crystal's PC also stopped being an abstract number. Fourteen boxes span two saved SRAM banks, but
+the currently selected box lives in a separate active copy and can be newer than its saved twin.
+The reader reconstructs the honest 280-slot view, reads it twice, and refuses a torn snapshot. It
+can now distinguish registered species from specimens still owned and specimens that actually
+reached level 100. An egg remains an opaque egg; the code validates its structure but does not turn
+hidden cartridge bytes into knowledge the player was never shown.
+
+The paperwork became code as well. Each unlabeled context is frozen against the exact cartridge,
+source, state, question, menu and binding digests before a label exists. Candidate positions move
+by a label-free hash. The adaptation fitter refuses any row that is not the exact cataloged
+decision, and the six fitted model hashes must match the later prediction commitment. Finally, the
+score remains unavailable until all twenty-seven sealed outcomes form one authenticated artifact.
+There is no partial result to stare at and no quiet opportunity to stop on a flattering prefix.
+
+There is one honest pause. The machine has Red and Blue but no matching international v1.0 Crystal
+cartridge. Therefore the scoreboard is still **0/18 ZERO-SHOT / 0/27 ADAPTATION / 0/27 SEALED / 0
+PREDICTIONS**. The plan, decoder and falsification tests are ready; the private ROM digest, live
+memory qualification and bounded Crystal contexts are not. **The project designed how Crystal can
+prove it wrong before asking Crystal to prove it right.**
+
 ## August 14: the answer finally controlled the game
 
 The rebuilt curriculum cleared the gate that had consumed the previous week. Eighty-one exact

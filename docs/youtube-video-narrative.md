@@ -1,5 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 Crystal scene: the experiment cannot peek
+
+Lay out three sealed stacks: **18 ZERO-SHOT / 27 ADAPTATION / 27 TEST**. Shuffle the nine answer
+positions with the same visible label-free hash, then lock each card to cartridge, source, state,
+question, menu and binding fingerprints. Show the adaptation key accepting only the exact middle
+stack in frozen order.
+
+After fitting, place six distinct model fingerprints beside every test card before the teacher
+cable is connected. Finally, make the scoreboard physically require all twenty-seven outcome cards
+before it lights. The narration is: **“The code can reject a changed model, a substituted lesson,
+or a partial test result. We are not asking ourselves to resist peeking; we are removing the
+mechanism that would let us peek.”** Keep the honest live counter at **0 / 0 / 0 / 0 PREDICTIONS**
+until the matching Crystal cartridge is supplied.
+
 ## August 14 promotion scene: the reference cable comes out
 
 Open on the completed 81-card board. Sweep a first counter across it with the recorder visibly
@@ -1564,11 +1578,27 @@ MULTIWAY TRAIN CHOICES / 3 SAME-MENU ANSWER REVERSALS / MULTIPLE ANSWER POSITION
 *“A shuffled question is not a new lesson, and the time to discover that is before one-shot data is
 spent.”*
 
-The first transfer benchmark should then be small enough to fail clearly: equivalent goal,
-battle, and local-navigation tasks in Pokémon Crystal. Compare zero-shot performance, few-shot
-adaptation, and from-scratch training. The point is not to claim universal Pokémon intelligence
-after one test; it is to discover which Red abstractions were real and which were accidental
-details of one cartridge.
+Make the Crystal experiment visible before showing any Crystal result. Put 72 blank cards into
+three sealed rows: **18 ZERO-SHOT / 27 ADAPTATION / 27 TEST**. Color each row with the same nine goal
+kinds, twice, three times and three times. Then animate the adaptation row as three complete blocks
+of nine and stop at **BUDGET 9**. Split one model card into two copies. Both keep **SAME FEATURES /
+SAME SCALING / SAME EXAMPLES / SAME ORDER / SAME OPTIMIZER**; change only the footer to **RED
+WEIGHTS** versus **ZERO WEIGHTS**. Overlay the fixed primary rule: **6 WINS / 0 LOSSES / EXACT
+P=.03125**. This makes “transfer” mean reduced teaching rather than “the Crystal clip looked good.”
+
+Then show the architecture handoff. The nine pressure bars remain in place while Red's cartridge-
+specific bindings slide out and Crystal's private capability masks slide in. Briefly show the banked
+reader double-checking party and Pokédex memory, with **TITLE / SPECIES / MOVE / MAP / ADDRESS /
+BINDING NOT IN MODEL INPUT** beside it. Do not show raw private paths or ROM bytes.
+
+If filming before the cartridge arrives, end this act on the honest entry card: **0/18 ZERO-SHOT /
+0/27 ADAPTATION / 0/27 SEALED / 0 PREDICTIONS / MATCHING OWNER ROM REQUIRED**. That is progress,
+not filler: the experiment was designed before a result could influence it. Once live results
+exist, replace the entry card with all preregistered outcomes—successes and failures—and classify
+each miss as source identity, observation, availability mask, ranking, binding, execution,
+verification or interruption. The point is not to claim universal Pokémon intelligence after one
+test; it is to discover which Red abstractions were real and which were accidental details of one
+cartridge.
 
 ### Ending: why the Pokédex matters — 11:30–12:00
 

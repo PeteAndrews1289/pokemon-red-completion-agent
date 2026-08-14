@@ -156,6 +156,35 @@ def test_adapter_uses_verified_stream_and_safe_backend_flags(
     assert rom_stream.closed
 
 
+def test_adapter_reads_fixed_and_switchable_wram_without_writes(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+
+    with PyBoyAdapter(rom_path) as emulator:
+        assert recording_factory.backend is not None
+        recording_factory.backend.memory.values.update(
+            {
+                (0, 0xC100): 1,
+                (0, 0xC101): 2,
+                (1, 0xD100): 3,
+                (1, 0xD101): 4,
+            }
+        )
+        assert emulator.read_wram(0, 0xC100, 2) == bytes((1, 2))
+        assert emulator.read_wram(1, 0xD100, 2) == bytes((3, 4))
+
+        with pytest.raises(ValueError, match="fixed"):
+            emulator.read_wram(1, 0xC100, 1)
+        with pytest.raises(ValueError, match="switchable"):
+            emulator.read_wram(0, 0xD100, 1)
+        with pytest.raises(ValueError, match="one banked region"):
+            emulator.read_wram(0, 0xCFFF, 2)
+
+
 def test_adapter_satisfies_frame_safe_controller_contract(
     tmp_path: Path,
     accept_test_rom: None,
@@ -331,12 +360,26 @@ def test_adapter_fails_closed_on_invalid_operations(
         recording_factory.backend.memory.values[(3, 0xBFFF)] = 0x56
         assert emulator.read_cartridge_ram_u8(2, 0xA000) == 0x34
         assert emulator.read_cartridge_ram_u8(3, 0xBFFF) == 0x56
+        recording_factory.backend.memory.values[(1, 0xAD10)] = 0x78
+        recording_factory.backend.memory.values[(1, 0xAD11)] = 0x9A
+        assert emulator.read_cartridge_ram(1, 0xAD10, 2) == bytes((0x78, 0x9A))
         for bank in (-1, 0, 1, 4, True):
             with pytest.raises(ValueError, match="bank must be 2 or 3"):
                 emulator.read_cartridge_ram_u8(bank, 0xA000)
         for address in (-1, 0x9FFF, 0xC000, 0x10000, True):
             with pytest.raises(ValueError, match="between 0xA000 and 0xBFFF"):
                 emulator.read_cartridge_ram_u8(2, address)
+        for bank in (-1, 4, True):
+            with pytest.raises(ValueError, match="between 0 and 3"):
+                emulator.read_cartridge_ram(bank, 0xA000, 1)
+        for address in (-1, 0x9FFF, 0xC000, True):
+            with pytest.raises(ValueError, match="between 0xA000 and 0xBFFF"):
+                emulator.read_cartridge_ram(1, address, 1)
+        for length in (-1, 0, True):
+            with pytest.raises(ValueError, match="positive"):
+                emulator.read_cartridge_ram(1, 0xA000, length)
+        with pytest.raises(ValueError, match="inside one bank"):
+            emulator.read_cartridge_ram(1, 0xBFFF, 2)
 
         emulator.press("a")
         with pytest.raises(EmulatorError, match="already pressed"):

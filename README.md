@@ -13,10 +13,28 @@
 > 27/27 shadow plus 27/27 model-controlled live Red contexts, with zero teacher queries, fallbacks
 > or new episodes and a minimum confidence of 0.88096. This establishes bounded same-context live
 > authority—not unseen-state generalization or autonomous game completion. The next experiment is
-> the frozen Red model's zero-shot/few-shot/from-scratch Crystal comparison. The earlier one-shot Red
+> the frozen Red model's zero-shot/few-shot/from-scratch Crystal comparison. Its ROM-free adapter,
+> bank-aware party/Pokédex decoder, fourteen-box living-ownership reader, private capability masks,
+> paired adaptation algorithm and
+> canonical 18/27/27 zero-shot/adaptation/sealed protocol are now implemented before any Crystal
+> label. Catalog-bound adaptation, fitted-model prediction commitments and all-or-nothing sealed
+> scoring prevent unrelated rows, changed weights or partial results from entering the claim. Live
+> work awaits a matching owner-supplied international v1.0 cartridge; current Crystal
+> status is 0/18 zero-shot, 0/27 adaptation, 0/27 sealed and 0 predictions. The earlier one-shot Red
 > destination test remains unopened at 0/12 but is paused because it does not answer the broader
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
+
+> **Crystal transfer preregistration (August 14, 2026):** the exact 72-context plan is
+> [`configs/crystal-goal-manager-transfer-v1.json`](configs/crystal-goal-manager-transfer-v1.json),
+> SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+> Every partition covers all nine goal kinds. Nested adaptation budgets are 9/18/27, and the
+> primary paired endpoint is fixed at nine examples: at least six Red-initialized wins and zero
+> losses gives exact two-sided `p = 0.03125`. Both candidates use identical preprocessing, examples,
+> order and optimization; only their initial weights differ. Every sealed prediction must be
+> committed before the test teacher acts, and all 27 outcomes must be authenticated together before
+> scoring. See the
+> [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
 
 > **Goal-manager promotion result (August 14, 2026):** the model scored 54/54 on train and 27/27 on
 > development validation. Fixed priority scored 15/27 and lowest effort 16/27; paired exact tests

@@ -15,6 +15,66 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Crystal ROM-free transfer gate complete; live work awaits the cartridge — 2026-08-14
+
+Do not resume Red maintenance or build a complete Crystal walkthrough. The Red manager is promoted;
+the active question is whether its weights reduce Crystal teaching.
+
+The public Crystal gate is implemented. `goal_state.py` projects story, registered/living/level-cap
+collection, evolution, party readiness, safety, supplies, storage, control and world knowledge into
+the same nine pressures as Red. Model input contains no title, species, move, map, coordinate, item,
+raw address, capability identity or private binding. `goal_bindings.py` hard-masks unknown/missing
+capabilities before a resolver can expose authority. Its vocabulary includes Gen II completion
+mechanics such as happiness/time/trade evolution, breeding, time of day, storage, field moves,
+static/roaming encounters and puzzles; naming a capability is not evidence that it is live.
+
+`source_contract.py` pins international Crystal v1.0 (`PM_CRYSTAL`, 2,097,152 bytes, SHA-1
+`f4cd194bdee0d04ca4eac29e09b8e4e9d818c133`) to public `pret/pokecrystal` source commit
+`7a7881d0d62e0ddbd82dcf10e7116807487ac651` and generated-symbol commit
+`cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8`. The allowlisted symbol file digest is
+`697fe20b3c659273a3ab8aa85db2eb78dcf674a3dd17c98b52fc1dddd37783f2`. The bank-aware reader
+coherently double-reads and decodes Gen II party/Pokédex state; ROM-free tests pin struct stride,
+endianness, PP masking, status bits, species-list termination, event-only Celebi exclusion and
+torn-read retries. Egg-bearing parties intentionally fail closed until the later breeding-aware
+shared observation contract can represent an egg without leaking its hidden species.
+
+The same pinned symbol authority now covers Crystal's PC layout. `sBox` is the live active copy in
+SRAM bank one; `sBox1` through `sBox14` span banks two and three. The reader substitutes the active
+copy for the corresponding stale saved box, double-reads all fourteen boxes, validates box counts,
+list terminators, struct/list species and levels, and derives unique living plus level-100 ownership
+across party and PC. Stored eggs remain opaque and do not count as a known living species.
+The counted Items and Balls pockets now have the same coherent reader and validate capacity,
+terminators, duplicate stacks, quantities and pocket membership before deriving capture and
+recovery reserves.
+
+The exact transfer plan is
+[`configs/crystal-goal-manager-transfer-v1.json`](configs/crystal-goal-manager-transfer-v1.json),
+SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+It prospectively fixes 72 contexts: 18 zero-shot, 27 adaptation and 27 sealed test, with every
+partition balanced across all nine goal kinds. Adaptation prefixes are 9/18/27. The paired
+Red-initialized and zero-initialized candidates use the same authenticated Red normalizer, examples,
+order, optimizer and update count; only initial weights differ. The primary endpoint is budget 9,
+requiring at least six paired wins and zero losses (`p = 0.03125`). All sealed predictions commit
+before any test teacher action; no optional stopping or probe-driven schema tuning is allowed.
+
+The control plane is executable rather than documentary. Canonical path-free catalogs enforce
+slot/source/cartridge identity, partition disjointness, multiway coverage, same-menu answer
+reversals and shuffled answer positions. Adaptation records must match their frozen catalog rows
+and use separate episode lineages. The six fitted model hashes are mandatory inputs to the sealed
+prediction commitment. A canonical outcome set accepts all 27 sealed results together, and the
+evaluator reconstructs every digest before it can calculate the paired endpoint. Partial,
+reordered, mismatched or cloned artifacts fail closed.
+
+Current Crystal counters are **0/18 zero-shot opened, 0/27 adaptation examples, 0/27 sealed test
+opened, 0 predictions**. No matching Crystal ROM exists locally. When the owner supplies a lawful
+international v1.0 copy through `POKEMON_CRYSTAL_ROM`, first run
+`scripts/check_crystal_transfer_entry_gate.py`. It only fingerprints the ROM and reports a path-free
+gate; it does not boot, open a context, run the teacher or predict. Then live-qualify the banked
+reader before materializing any of the 72 contexts. If the observation schema or fixed settings
+change after zero-shot, retire the entire experiment and create fresh contexts.
+
+The twelve sealed Red destination captures remain **0/12** and are unrelated to this experiment.
+
 ## First Red goal manager trained and promoted to bounded causal authority — 2026-08-14
 
 The fresh `74922cc` campaign is complete. Its exact private catalog contains 81 unique cartridge

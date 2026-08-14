@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-14 Crystal preregistration checkpoint:** Red's nine-goal manager is already trained and
+> promoted; do not reopen its 12 sealed destination captures. The public Crystal transfer gate is
+> now implemented without opening a Crystal context or computing a prediction. It pins the
+> international v1.0 source contract, projects title-free campaign pressures, hard-masks private
+> capabilities, coherently decodes banked party/Pokédex state, and compares Red initialization with
+> zero initialization under identical preprocessing and updates. Canonical plan
+> `configs/crystal-goal-manager-transfer-v1.json` freezes 18 zero-shot, 27 adaptation and 27 sealed
+> contexts plus the budget-9 paired endpoint (at least 6 wins, 0 losses; exact two-sided
+> `p = 0.03125`). Current counters are 0/18, 0/27, 0/27 and 0 predictions. No matching Crystal ROM
+> exists locally, so the next authorized work is entry fingerprinting after the owner supplies a
+> lawful international v1.0 copy, followed by banked-reader qualification and bounded live
+> bindings. Do not build a complete Crystal route, tune from zero-shot results or expose private
+> paths/ROM identities in public artifacts.
+> Canonical catalog, adaptation-admission, model-identity commitment and complete 27-outcome gates
+> now exist. Do not replace them with ad hoc JSON or score a partial sealed partition.
+
 > **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
 > contexts, but the first one-shot campaign stopped after five authenticated successes when public
 > slot 006 failed its long Fuchsia story binding after returning from the mandatory Fisher. The

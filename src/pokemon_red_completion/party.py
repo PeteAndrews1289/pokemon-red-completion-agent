@@ -37,11 +37,11 @@ class StatusCondition(StrEnum):
     BURN = "burn"
     FREEZE = "freeze"
     PARALYSIS = "paralysis"
-    #: Badly poisoned. Gen 1 carries this as a volatile battle flag and reports
-    #: plain poison in the persistent status byte, so a Red adapter never emits
-    #: it. Gen 2 onward stores it persistently and its damage escalates each
-    #: turn, which changes whether a member is safe to keep in. A contract that
-    #: cannot say "toxic" forces every later adapter to lie about it.
+    #: Badly poisoned. Early games carry the escalating condition in battle
+    #: substatus while the party byte reports ordinary poison, so a party-only
+    #: Red or Crystal adapter does not emit it. A battle adapter may still need
+    #: this value because the increasing damage changes whether a member is safe
+    #: to keep in; later title adapters must follow their own storage semantics.
     TOXIC = "toxic"
 
 

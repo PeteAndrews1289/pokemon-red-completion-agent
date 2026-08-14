@@ -282,32 +282,8 @@ class GoalManagerLinearModel:
     ) -> GoalManagerLinearModel:
         """Fit only successful teacher choices from the training partition."""
 
-        rows = tuple(examples)
-        if not rows or any(item.partition != "train" for item in rows):
-            raise GoalManagerModelError(
-                "goal-manager fitting requires training-partition examples only"
-            )
-        if any(item.teacher_choice_target is None for item in rows):
-            raise GoalManagerModelError("goal-manager fitting requires successful teacher labels")
-        if len({item.question.policy_context_sha256 for item in rows}) != len(rows):
-            raise GoalManagerModelError("goal-manager fitting requires unique policy contexts")
-        if len({item.selected_kind for item in rows}) < 2:
-            raise GoalManagerModelError(
-                "goal-manager fitting requires more than one selected goal kind"
-            )
-        if type(epochs) is not int or epochs < 1:  # noqa: E721
-            raise GoalManagerModelError("goal-manager epoch count is invalid")
-        if (
-            isinstance(learning_rate, bool)
-            or not isinstance(learning_rate, (int, float))
-            or not math.isfinite(float(learning_rate))
-            or learning_rate <= 0
-            or isinstance(l2, bool)
-            or not isinstance(l2, (int, float))
-            or not math.isfinite(float(l2))
-            or l2 < 0
-        ):
-            raise GoalManagerModelError("goal-manager optimizer settings are invalid")
+        rows = _validated_goal_manager_fit_rows(examples, partition="train")
+        _validate_goal_manager_optimizer(epochs=epochs, learning_rate=learning_rate, l2=l2)
 
         matrices = tuple(goal_manager_feature_matrix(item.question) for item in rows)
         all_features = np.concatenate(matrices, axis=0)
@@ -316,37 +292,73 @@ class GoalManagerLinearModel:
         inactive = scale < 1e-8
         scale[inactive] = 1.0
         normalized = tuple((matrix - mean) / scale for matrix in matrices)
-        weights = np.zeros(len(GOAL_MANAGER_FEATURE_NAMES), dtype=np.float64)
-        first = np.zeros_like(weights)
-        second = np.zeros_like(weights)
-        for epoch in range(1, epochs + 1):
-            gradient = np.zeros_like(weights)
-            for item, features in zip(rows, normalized, strict=True):
-                available = np.asarray(item.question.available_indices, dtype=np.int64)
-                logits = features[available] @ weights
-                probabilities = np.exp(logits - np.max(logits))
-                probabilities /= np.sum(probabilities)
-                target = item.teacher_choice_target
-                assert target is not None
-                target_position = int(np.flatnonzero(available == target)[0])
-                probabilities[target_position] -= 1.0
-                gradient += features[available].T @ probabilities
-            gradient = gradient / len(rows) + float(l2) * weights
-            gradient[inactive] = 0.0
-            first = 0.9 * first + 0.1 * gradient
-            second = 0.999 * second + 0.001 * gradient * gradient
-            weights -= (
-                float(learning_rate)
-                * (first / (1.0 - math.pow(0.9, epoch)))
-                / (np.sqrt(second / (1.0 - math.pow(0.999, epoch))) + 1e-8)
-            )
-            weights[inactive] = 0.0
+        weights = _optimize_goal_manager_weights(
+            rows,
+            normalized,
+            initial_weights=np.zeros(len(GOAL_MANAGER_FEATURE_NAMES), dtype=np.float64),
+            epochs=epochs,
+            learning_rate=float(learning_rate),
+            l2=float(l2),
+            frozen_zero_mask=inactive,
+        )
         return cls(
             weights=weights,
             feature_mean=mean,
             feature_scale=scale,
             l2=float(l2),
             training_epochs=epochs,
+        )
+
+    def fine_tune(
+        self,
+        examples: Iterable[GoalManagerExample],
+        *,
+        epochs: int = GOAL_MANAGER_FIT_EPOCHS,
+        learning_rate: float = GOAL_MANAGER_FIT_LEARNING_RATE,
+        l2: float = GOAL_MANAGER_FIT_L2,
+    ) -> GoalManagerLinearModel:
+        """Adapt weights while preserving the source model's feature transform.
+
+        Transfer and from-scratch candidates must see the same feature scaling;
+        otherwise a claimed initialization benefit is confounded by different
+        preprocessing.  The scratch comparator is therefore a zero-weight copy
+        of the same authenticated source normalizer, while this method starts
+        from the authenticated source weights.  Both consume the exact same
+        examples, order, optimizer, and update count.
+        """
+
+        rows = _validated_goal_manager_fit_rows(examples, partition="adaptation")
+        _validate_goal_manager_optimizer(epochs=epochs, learning_rate=learning_rate, l2=l2)
+        matrices = tuple(goal_manager_feature_matrix(item.question) for item in rows)
+        normalized = tuple(
+            (matrix - self.feature_mean) / self.feature_scale for matrix in matrices
+        )
+        weights = _optimize_goal_manager_weights(
+            rows,
+            normalized,
+            initial_weights=self.weights,
+            epochs=epochs,
+            learning_rate=float(learning_rate),
+            l2=float(l2),
+            frozen_zero_mask=None,
+        )
+        return GoalManagerLinearModel(
+            weights=weights,
+            feature_mean=self.feature_mean.copy(),
+            feature_scale=self.feature_scale.copy(),
+            l2=float(l2),
+            training_epochs=epochs,
+        )
+
+    def zero_weight_comparator(self) -> GoalManagerLinearModel:
+        """Return the conservative scratch initialization for transfer tests."""
+
+        return GoalManagerLinearModel(
+            weights=np.zeros_like(self.weights),
+            feature_mean=self.feature_mean.copy(),
+            feature_scale=self.feature_scale.copy(),
+            l2=self.l2,
+            training_epochs=self.training_epochs,
         )
 
 
@@ -366,6 +378,108 @@ def goal_manager_fit_configuration() -> dict[str, object]:
         "schema": "pokemon-core-goal-manager-fit-configuration-v1",
         "selection": "fixed_before_context_collection",
     }
+
+
+def goal_manager_adaptation_configuration() -> dict[str, object]:
+    """Return the fixed paired transfer-training contract."""
+
+    return {
+        "epochs_per_budget": GOAL_MANAGER_FIT_EPOCHS,
+        "l2": GOAL_MANAGER_FIT_L2,
+        "learning_rate": GOAL_MANAGER_FIT_LEARNING_RATE,
+        "model_id": GOAL_MANAGER_MODEL_ID,
+        "normalization": "frozen_authenticated_source_for_both_candidates",
+        "red_initialized_weights": "authenticated_source_weights",
+        "reset_from_initialization_at_each_budget": True,
+        "schema": "pokemon-core-goal-manager-adaptation-configuration-v1",
+        "scratch_weights": "all_zero",
+        "training_order": "registry_order",
+    }
+
+
+def _validated_goal_manager_fit_rows(
+    examples: Iterable[GoalManagerExample],
+    *,
+    partition: str,
+) -> tuple[GoalManagerExample, ...]:
+    rows = tuple(examples)
+    if partition not in {"train", "adaptation"}:
+        raise GoalManagerModelError("goal-manager fitting partition is invalid")
+    if not rows or any(item.partition != partition for item in rows):
+        label = "training" if partition == "train" else "adaptation"
+        raise GoalManagerModelError(
+            f"goal-manager fitting requires {label}-partition examples only"
+        )
+    if any(item.teacher_choice_target is None for item in rows):
+        raise GoalManagerModelError("goal-manager fitting requires successful teacher labels")
+    if len({item.question.policy_context_sha256 for item in rows}) != len(rows):
+        raise GoalManagerModelError("goal-manager fitting requires unique policy contexts")
+    if len({item.selected_kind for item in rows}) < 2:
+        raise GoalManagerModelError(
+            "goal-manager fitting requires more than one selected goal kind"
+        )
+    return rows
+
+
+def _validate_goal_manager_optimizer(
+    *,
+    epochs: int,
+    learning_rate: float,
+    l2: float,
+) -> None:
+    if type(epochs) is not int or epochs < 1:  # noqa: E721
+        raise GoalManagerModelError("goal-manager epoch count is invalid")
+    if (
+        isinstance(learning_rate, bool)
+        or not isinstance(learning_rate, (int, float))
+        or not math.isfinite(float(learning_rate))
+        or learning_rate <= 0
+        or isinstance(l2, bool)
+        or not isinstance(l2, (int, float))
+        or not math.isfinite(float(l2))
+        or l2 < 0
+    ):
+        raise GoalManagerModelError("goal-manager optimizer settings are invalid")
+
+
+def _optimize_goal_manager_weights(
+    rows: tuple[GoalManagerExample, ...],
+    normalized: tuple[NDArray[np.float64], ...],
+    *,
+    initial_weights: NDArray[np.float64],
+    epochs: int,
+    learning_rate: float,
+    l2: float,
+    frozen_zero_mask: NDArray[np.bool_] | None,
+) -> NDArray[np.float64]:
+    weights = np.asarray(initial_weights, dtype=np.float64).copy()
+    first = np.zeros_like(weights)
+    second = np.zeros_like(weights)
+    for epoch in range(1, epochs + 1):
+        gradient = np.zeros_like(weights)
+        for item, features in zip(rows, normalized, strict=True):
+            available = np.asarray(item.question.available_indices, dtype=np.int64)
+            logits = features[available] @ weights
+            probabilities = np.exp(logits - np.max(logits))
+            probabilities /= np.sum(probabilities)
+            target = item.teacher_choice_target
+            assert target is not None
+            target_position = int(np.flatnonzero(available == target)[0])
+            probabilities[target_position] -= 1.0
+            gradient += features[available].T @ probabilities
+        gradient = gradient / len(rows) + l2 * weights
+        if frozen_zero_mask is not None:
+            gradient[frozen_zero_mask] = 0.0
+        first = 0.9 * first + 0.1 * gradient
+        second = 0.999 * second + 0.001 * gradient * gradient
+        weights -= (
+            learning_rate
+            * (first / (1.0 - math.pow(0.9, epoch)))
+            / (np.sqrt(second / (1.0 - math.pow(0.999, epoch))) + 1e-8)
+        )
+        if frozen_zero_mask is not None:
+            weights[frozen_zero_mask] = 0.0
+    return weights
 
 
 @dataclass(slots=True)

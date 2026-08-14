@@ -16,19 +16,47 @@ the exact source, model, plan and private receipt digests. The sealed Red destin
 0/12 opened.
 
 That result closes the same-context Red integration gate. It does not establish unseen-context
-generalization, cross-title transfer, autonomous completion or living-Pokédex completion. The next
-ordered work is therefore:
+generalization, cross-title transfer, autonomous completion or living-Pokédex completion.
 
-1. Freeze Crystal's adapter contract: normalized nine-pressure observation, capability masks and
-   private binding boundary, without title/species/map identity in model input.
-2. Implement the minimum executable Crystal vertical slice: one genuine multi-need goal context,
-   one battle decision and one local-navigation round trip, each with independent verification.
-3. Preregister disjoint Crystal microcontexts and a fixed comparison: frozen-Red zero-shot, a fixed
-   few-shot adaptation budget and the same architecture trained from scratch on that budget.
-4. Run zero-shot before any Crystal label is used. Report failures by missing observation,
-   unavailable mechanic, wrong ranking and execution/verifier failure rather than collapsing them.
-5. Only after the transfer result, expand toward breeding, trade evolution, time-of-day encounters,
-   version routing, legendary puzzles and coordinated multi-save living-Pokédex completion.
+The ROM-free Crystal transfer gate is now complete. Crystal has an identity-free nine-pressure
+projection, an adapter-private completion-capability vocabulary, hard capability masks, a private
+binding enumerator, and bank-aware coherent party/Pokédex decoders derived from a pinned
+`pret/pokecrystal` source and generated-symbol identity. Transfer fitting holds preprocessing,
+examples, order, optimizer and budgets constant while comparing authenticated Red weights with an
+all-zero initialization.
+
+The canonical plan
+[`crystal-goal-manager-transfer-v1.json`](../configs/crystal-goal-manager-transfer-v1.json) freezes
+72 contexts: 18 zero-shot, 27 adaptation and 27 sealed test, balanced across all nine goal kinds.
+Nested adaptation budgets are 9/18/27. The primary endpoint is the paired nine-example comparison;
+at least six Red-initialized wins and zero losses gives exact two-sided `p = 0.03125`. Every test
+prediction must be committed before any test teacher action. Plan SHA-256 is
+`f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+
+The ROM-free control plane is also complete. Path-free catalogs enforce exact slot order,
+cross-partition disjointness, genuine multiway menus, three same-menu answer reversals and broad
+answer-position coverage. Adaptation fitting accepts only exact catalog-bound successful teacher
+records. Prediction commitments authenticate the six fitted model identities, and sealed scoring
+requires one complete digest-bound 27-outcome artifact, so partial results cannot drive stopping.
+
+Ordered next work:
+
+1. **Complete:** freeze Crystal observation, capability, private-binding, source and paired-fitting
+   contracts with ROM-free adversarial tests.
+2. **Complete:** preregister disjoint zero-shot/adaptation/sealed partitions, fixed nested budgets,
+   a testable paired endpoint, prediction-before-label order and failure taxonomy.
+3. **Complete:** implement canonical unlabeled catalogs, model-bound prediction commitments,
+   catalog-bound adaptation admission and all-or-nothing sealed outcome scoring.
+4. **Blocked only on owner input:** obtain a lawful international v1.0 Crystal ROM. Bind its private
+   SHA-256 and pass the non-executing entry gate; no matching ROM exists locally today.
+5. Live-qualify banked reads, then implement one genuine multi-need goal context, one battle choice
+   and one local-navigation round trip with independent verification.
+6. Materialize and freeze all 72 source-bound contexts. Run the 18-context Red zero-shot probe
+   before collecting any Crystal adaptation label.
+7. Fit the fixed paired candidates, commit all sealed predictions, open the 27 test contexts once,
+   and publish success or failure without optional stopping.
+8. Only after that result, expand toward breeding, trade evolution, time-of-day encounters, version
+   routing, legendary puzzles and coordinated multi-save living-Pokédex completion.
 
 ## Historical focus (2026-08-14): prove every frozen binding before recollection
 

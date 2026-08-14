@@ -332,6 +332,30 @@ class PyBoyAdapter:
             raise ValueError("Address must be an integer in Work RAM (0xC000 to 0xDFFF)")
         return int(self._require_backend().memory[address])
 
+    def read_wram(self, bank: int, address: int, length: int) -> bytes:
+        """Read one exact fixed or switchable WRAM bank without changing it.
+
+        PyBoy's bank-qualified memory view addresses CGB WRAM directly.  This
+        avoids changing the live SVBK register merely to observe Crystal's
+        bank-one campaign state.
+        """
+
+        if type(bank) is not int or not 0 <= bank <= 7:  # noqa: E721
+            raise ValueError("WRAM bank must be between 0 and 7")
+        if type(address) is not int or not 0xC000 <= address <= 0xDFFF:  # noqa: E721
+            raise ValueError("WRAM address must be between 0xC000 and 0xDFFF")
+        if type(length) is not int or length < 1:  # noqa: E721
+            raise ValueError("WRAM read length must be positive")
+        region_end = 0xCFFF if address < 0xD000 else 0xDFFF
+        if address + length - 1 > region_end:
+            raise ValueError("WRAM read must remain inside one banked region")
+        if address < 0xD000 and bank != 0:
+            raise ValueError("fixed WRAM must use bank 0")
+        if address >= 0xD000 and bank == 0:
+            raise ValueError("switchable WRAM must use bank 1 through 7")
+        memory = self._require_backend().memory
+        return bytes(int(memory[bank, address + offset]) for offset in range(length))
+
     def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
         """Read one byte from Red's two dedicated saved-box SRAM banks.
 
@@ -345,6 +369,25 @@ class PyBoyAdapter:
         if type(address) is not int or not 0xA000 <= address <= 0xBFFF:
             raise ValueError("Collection SRAM address must be between 0xA000 and 0xBFFF")
         return int(self._require_backend().memory[bank, address])
+
+    def read_cartridge_ram(self, bank: int, address: int, length: int) -> bytes:
+        """Read one exact MBC cartridge-RAM bank without changing emulator state.
+
+        The shared port is intentionally read-only and restricted to the four
+        SRAM banks used by the pinned Red and Crystal cartridges. Title
+        adapters retain responsibility for allowlisting semantic regions.
+        """
+
+        if type(bank) is not int or not 0 <= bank <= 3:  # noqa: E721
+            raise ValueError("Cartridge RAM bank must be between 0 and 3")
+        if type(address) is not int or not 0xA000 <= address <= 0xBFFF:  # noqa: E721
+            raise ValueError("Cartridge RAM address must be between 0xA000 and 0xBFFF")
+        if type(length) is not int or length < 1:  # noqa: E721
+            raise ValueError("Cartridge RAM read length must be positive")
+        if address + length - 1 > 0xBFFF:
+            raise ValueError("Cartridge RAM read must remain inside one bank")
+        memory = self._require_backend().memory
+        return bytes(int(memory[bank, address + offset]) for offset in range(length))
 
     def press(self, button: str) -> None:
         normalized = self._validated_button(button)

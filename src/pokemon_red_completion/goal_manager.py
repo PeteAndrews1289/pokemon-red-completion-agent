@@ -22,7 +22,7 @@ from types import MappingProxyType
 
 from pokemon_red_completion.provenance import canonical_sha256
 
-_PARTITIONS = frozenset({"train", "validation", "test", "unassigned"})
+_PARTITIONS = frozenset({"train", "adaptation", "validation", "test", "unassigned"})
 
 
 class GoalManagerError(ValueError):

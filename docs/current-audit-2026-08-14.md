@@ -19,10 +19,40 @@ authority.
 | Teacher use during promotion | 0 queries; 0 fallbacks |
 | Promotion episodes | 0 |
 | Sealed destination test | 0/12 opened; 0/12 evaluated |
-| ROM-free gate | 3,056 passed; 1 declared expected failure; lint/types/artifacts green |
+| ROM-free gate | 3,149 passed; 1 declared expected failure; lint/types/artifacts green |
 
 The compact public record is
 [red-goal-manager-promotion-2026-08-14.json](evidence/red-goal-manager-promotion-2026-08-14.json).
+
+## Crystal pre-training gate added after Red promotion
+
+The next experiment is now preregistered before any Crystal label or prediction. A canonical
+72-context plan separates 18 zero-shot probes, 27 balanced adaptation examples and 27 sealed test
+contexts. Every partition covers all nine goal kinds; adaptation prefixes of 9, 18 and 27 contain
+exactly one, two and three examples per kind. Red-initialized and scratch candidates share the same
+authenticated Red normalizer, Crystal rows, row order, optimizer and update count. Only initial
+weights differ. The primary paired endpoint is fixed at nine examples and requires at least six
+wins with zero losses (`p = 0.03125`). Plan digest:
+`f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+
+Crystal also has a ROM-free semantic adapter, private capability masks and private binding boundary.
+The revision layer is pinned to public `pret/pokecrystal` source and generated symbols. Bank-aware
+decoders now coherently read Gen II party and Pokédex layouts and reject torn, contradictory or
+invalid state. A new read-only storage decoder covers all fourteen PC boxes across three SRAM
+banks, replaces the stale saved current box with Crystal's live active copy, and derives visible
+living and level-100 ownership without exposing egg internals. Counted Items and Balls pocket
+readers now supply validated capture and recovery reserves. Canonical catalogs enforce source,
+cartridge, slot, question, menu and binding
+identity plus cross-partition disjointness and answer-position diversity. Adaptation fitting now
+accepts only exact successful catalog rows from independent episode lineages. Prediction
+commitments authenticate the six fitted model hashes, and the evaluator accepts only one complete
+digest-bound 27-outcome set. The owner-ROM entry checker does not boot the game, run a teacher, open
+a context or compute a prediction.
+
+No matching Crystal ROM exists locally. Consequently Crystal remains **0/18 zero-shot opened,
+0/27 adaptation examples, and 0/27 sealed test opened**. The missing owner-supplied international
+v1.0 cartridge is now the only external input needed to begin live adapter qualification; its path
+and bytes will remain private.
 
 ## What the model actually learned
 
@@ -75,9 +105,10 @@ ranker can support. Four gaps remain:
 1. **Fresh-state generalization.** Red promotion reused the already-open validation contexts. Add
    preregistered perturbations or a genuinely new title; do not reuse the sealed destination test
    for this unrelated claim.
-2. **Cross-title observation and action adapters.** Crystal currently has only a skeletal battle
-   observation seam. It needs normalized goal evidence and a minimal set of real, independently
-   verified bindings.
+2. **Cross-title live qualification and actions.** Crystal's normalized goal evidence, source pin,
+   banked party/Pokédex decoder, capability masks and private binding contract now exist. A matching
+   owner ROM is still required to qualify those reads and implement a minimal set of real,
+   independently verified bindings.
 3. **Online hierarchy integration.** The manager has controlled one bounded decision at a time. A
    long-running player must repeatedly observe, choose, execute, verify, recover and replan without
    a hidden route deciding when the manager is consulted.
@@ -90,10 +121,11 @@ ranker can support. Four gaps remain:
 
 ### Gate 1 — Crystal transfer contract
 
-- Freeze Crystal's nine-pressure projection and capability vocabulary.
-- Specify one goal-choice, one battle and one local-navigation microtask with independent referees.
-- Keep Red model weights frozen and publish the zero-shot/few-shot/from-scratch protocol before
-  opening any Crystal teaching label.
+- **Complete:** freeze Crystal's nine-pressure projection, capability vocabulary, source identity,
+  private binding boundary and paired adaptation algorithm.
+- **Complete:** publish the 18/27/27 zero-shot/adaptation/sealed protocol before any Crystal label.
+- **Pending live input:** bind the matching owner-ROM SHA-256 and qualify one goal-choice, one battle
+  and one local-navigation microtask with independent referees.
 
 ### Gate 2 — minimum executable Crystal slice
 
