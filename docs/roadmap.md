@@ -30,6 +30,9 @@ Ordered next work:
    and a mild Mansion state selects acquisition from a three-way menu at `0.1071`. A live audit
    corrected PC healing from the nurse-only mechanic to field items. Cartridge checks also proved
    the exact Cinnabar Hyper Potion purchase, enabling payable early-Cinnabar field contexts.
+   Published `0bb98f2` and fresh read-only preflights now prove the PC reversal as well. A weak
+   Mansion encounter exposed an inner/outer budget mismatch; the repaired no-save rehearsal safely
+   continued into a second encounter and reached `0.5746` with a payable exact plan.
    Preserve 54 train / 27 development separation, at least 24 genuine three-way training menus and
    three repeated semantic menus whose correct choice changes with state. Publish the
    PC/recovery-reserve repair and regenerate every final receipt against that exact source before

@@ -30,6 +30,15 @@ the exact observed recovery plan is payable. An in-memory cartridge rehearsal re
 `0.5539` pressure with four Hyper Potions required and available, all 18 boxed specimens unchanged,
 every party member alive and stable control.
 
+Published `0bb98f2` passed exact-commit CI, and fresh preflight then proved the second required menu
+reversal. The identical story/restore/storage menu selected storage in the mild state and restore
+at `0.5539`; both inspections ran zero actions. The first emergency Mansion setup failed before
+saving because one weak encounter reached only `0.4216` pressure inside its 64-switch bound. That
+was not an exhaustion of the outer 48-encounter budget. The pending repair flees safely after one
+weak bounded encounter and continues the already-finite search. A no-save cartridge retry used two
+encounters, reached `0.5746`, kept all six members alive and ended with an exactly payable plan of
+four Hyper Potions and two Full Restores.
+
 Earlier Cinnabar lineages had enough money and bag space but only weak recovery items. Cartridge
 verification proved Cinnabar product index 2 is Hyper Potion: one purchase changed that stack by
 exactly one and money by exactly ₽1,500. The setup tool can now buy an explicit finite reserve,
@@ -37,9 +46,10 @@ prove the complete inventory/economy delta and return to the nurse before creati
 full no-save exploration rehearsal bought two, returned unchanged, reached a stable Mansion
 boundary at `0.1456` pressure and produced an exactly payable two-Hyper-Potion recovery plan.
 
-These repairs are still local and must pass the complete gate, publication and exact-commit CI.
-After that, regenerate PC and Mansion reversal preflights, construct the 81 final slot identities,
-and freeze the catalog. Counted data remains **0/54 train and 0/27 development validation**.
+The multi-encounter repair is still local and must pass the complete gate, publication and
+exact-commit CI. After that, regenerate the Mansion reversal preflight, construct the 81 final slot
+identities, and freeze the catalog. Counted data remains **0/54 train and 0/27 development
+validation**.
 
 ## Curriculum-construction batch hardened; live catalog build next — 2026-08-14
 

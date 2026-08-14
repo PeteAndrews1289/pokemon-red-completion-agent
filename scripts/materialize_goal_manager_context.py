@@ -867,10 +867,10 @@ def _damage_party_at_mansion(
                     label="goal-manager controlled wild damage",
                     wait_frames=120,
                 )
-            else:
-                raise GoalManagerContextMaterializationError(
-                    "bounded party switches did not reach active safety pressure"
-                )
+            # A weak encounter may exhaust its bounded switch window before it
+            # can create the requested whole-party pressure.  Leave it safely
+            # and continue through the already-bounded encounter loop instead
+            # of treating one opponent as the entire setup budget.
             raw = reader.read()
             _require_safe_damage_state(raw)
             if raw.active_party_index != fastest_index:

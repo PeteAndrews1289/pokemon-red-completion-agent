@@ -67,6 +67,14 @@ encounters produced `0.1456` pressure and an exactly payable two-item plan. The 
 the successful fixes are useful parts of the story: the curriculum is being discovered from the
 game, not drawn to match a spreadsheet.
 
+The emergency Mansion half found one more nested-boundary mistake. A weak opponent survived 64
+safe switches while whole-party pressure reached only `0.4216`; the setup stopped even though its
+outer contract still allowed 47 more encounters. The fix does not remove either limit. It safely
+flees at the inner bound and spends another unit of the existing outer budget. The next no-save
+run reached `0.5746` after two encounters, with all six members alive and the observed four-Hyper-
+Potion/two-Full-Restore plan fully payable. “Bounded” now describes the whole search rather than
+one arbitrarily weak opponent.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

@@ -598,6 +598,80 @@ def test_damage_band_rejects_an_upper_bound_below_its_target() -> None:
         function(0.40, 0.30)
 
 
+def test_damage_setup_can_continue_after_one_weak_encounter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        RawGameState(
+            game_started=True,
+            map_id=MapId.POKEMON_MANSION_1F,
+            player_x=5,
+            player_y=23,
+            party_count=2,
+            battle_state=0,
+            active_party_index=0,
+            party_species_ids=(1, 2),
+            party_levels=(50, 49),
+            party_hp=(100, 100),
+            party_max_hp=(100, 100),
+            party_status=(0, 0),
+            party_moves=((1, 0, 0, 0), (1, 0, 0, 0)),
+            party_pp=((10, 0, 0, 0), (10, 0, 0, 0)),
+        )
+    )
+    encounters = 0
+    flees = 0
+
+    class _Venue:
+        @staticmethod
+        def walk_to_grass(*_args: object) -> int:
+            nonlocal encounters
+            encounters += 1
+            reader.raw = replace(reader.raw, battle_state=1)
+            return 1
+
+    def switch(
+        _actions: object,
+        _reader: object,
+        _emulator: object,
+        target_index: int,
+        **_kwargs: object,
+    ) -> None:
+        hp = list(reader.raw.party_hp or ())
+        hp[target_index] -= 10
+        reader.raw = replace(
+            reader.raw,
+            active_party_index=target_index,
+            party_hp=tuple(hp),
+        )
+
+    def flee(*_args: object) -> None:
+        nonlocal flees
+        flees += 1
+        reader.raw = replace(reader.raw, battle_state=0)
+
+    globals_dict = module["_damage_party_at_mansion"].__globals__
+    monkeypatch.setitem(globals_dict, "_DAMAGE_SWITCH_LIMIT", 2)
+    monkeypatch.setitem(globals_dict, "MANSION_TRAINING_VENUE", _Venue())
+    monkeypatch.setitem(globals_dict, "switch_active_battler", switch)
+    monkeypatch.setitem(globals_dict, "_protected_flee", flee)
+
+    module["_damage_party_at_mansion"](
+        object(),
+        reader,
+        object(),
+        require_field_recovery=False,
+        target_safety_pressure=0.15,
+        maximum_safety_pressure=0.30,
+    )
+
+    assert encounters == 2
+    assert flees == 2
+    assert module["_safety_pressure"](reader.raw) >= 0.15
+    assert reader.raw.battle_state == 0
+
+
 def test_materializer_declares_distinct_center_and_pc_damage_destinations() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
 

@@ -7,8 +7,13 @@
 > repair uses field-item restore and requires an exactly payable plan. Live no-save checks reached
 > the PC at `0.5539` with four Hyper Potions payable and all 18 boxed specimens unchanged. The
 > cartridge also proved Cinnabar product index 2 is a ₽1,500 Hyper Potion; an exact two-item reserve
-> enabled an early Cinnabar Mansion state at `0.1456` with a payable plan. Run the full gate,
-> publish, require exact-commit CI, then regenerate reversal preflights. Counted data remains 0/81.
+> enabled an early Cinnabar Mansion state at `0.1456` with a payable plan. Published `0bb98f2`
+> passed CI; fresh PC preflights prove the same three-way menu selects storage when mild and restore
+> at `0.5539`. An emergency Mansion attempt then showed that one weak encounter could exhaust its
+> 64-switch sub-bound at only `0.4216` even though 47 outer encounters remained. The pending repair
+> flees and continues that finite outer loop; a live no-save retry reached `0.5746` with six living
+> members and a payable four-Hyper/two-Full-Restore plan. Publish before its preflight. Counted data
+> remains 0/81.
 
 > **2026-08-14 curriculum-construction checkpoint:** The pending setup layer can relocate standard
 > Center and Cinnabar-PC states, target closed mild/emergency damage bands, preserve that damage on

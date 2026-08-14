@@ -23,6 +23,12 @@ the bag, real Mansion encounters, and **0.1456 / EXACT TWO-ITEM RECOVERY PLAN**.
 **“We did not lower the safety rule to make the data easier. We made the game state capable of
 honestly satisfying it.”**
 
+Keep the first emergency Mansion failure. Show **64 SAFE SWITCHES / PRESSURE 0.4216 / 47
+ENCOUNTERS UNUSED**, then draw the inner switch bound inside the outer encounter bound. The repair
+flees instead of widening either box; encounter two reaches **0.5746 / 6 ALIVE / 4 HYPER + 2 FULL
+RESTORE PAYABLE**. The line is: **“A finite search can still be wrong about which loop owns the
+budget.”**
+
 ## New framing scene: we built the hands before the executive brain
 
 Open on a fast stack of verified capabilities: navigate, battle, capture, evolve, heal, shop,
