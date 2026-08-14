@@ -9,12 +9,18 @@
 > `de284e6e…68a11` is rejected and remains shadow-only. The pipeline result is real; a competence
 > or authority claim is not.
 >
-> Next build a bounded multi-context battle catalog and learning curve, then the real navigation and
-> party-development snapshot adapters needed to close Milestone 1. The frozen 200-battle Milestone
-> 3 gate remains the only path to battle authority. Keep Claude work narrow because its plan window
-> was about 87% consumed at the last capacity check; Antigravity reported enough capacity for one
-> bounded architecture review. Neither reviewer runs cartridges, opens private contexts or edits.
-> See the
+> Next collect only the smallest independent battle set that can draw an initial learning curve.
+> Before scaling or stratifying that Red catalog, prove one navigation outcome and one
+> party-development outcome fit the shared contract, then build one thin real adapter for each
+> family. Only after all three families survive that interface check should battle collection widen.
+> The frozen 200-battle Milestone 3 gate remains the only path to battle authority, and living-
+> Pokédex rollout work resumes after that gate rather than being silently forgotten.
+>
+> Capacity was checked immediately before the post-result audit: Claude showed 0% of its five-hour
+> window and 9% of its weekly plan used (Friday 10:00 AM reset); Antigravity exposes no numeric
+> quota but confirmed it could finish one bounded review. Both completed and approved exact commit
+> `95a451c`; neither reviewer is still running. Neither ran a cartridge, opened private context or
+> edited tracked source. See the
 > [path-free cycle evidence](docs/evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
 > **2026-08-14 final-condition closure — highest active checkpoint:** Antigravity approved exact

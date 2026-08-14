@@ -12,6 +12,12 @@
 - Added a path-free outcome-cycle receipt and a view-only dashboard that can show the authenticated
   battle frame, measured outcomes, model regression, zero protected-access counters and blocked
   authority without replaying Red.
+- Reordered the next model-first slice after two post-result audits: collect only the smallest
+  useful battle learning curve, prove thin navigation and party-development outcomes through the
+  shared abstraction, then stratify and scale. The roadmap now states when living-Pokédex rollout
+  resumes instead of leaving collection silently deferred.
+- Corrected the receipt's integration count from “skipped” to “deselected” and made the dashboard's
+  learned-stack evidence wrap into explicit candidate-versus-prior rows at ordinary desktop widths.
 - Decoded exact connection endpoints and destination-warp arrivals, corrected `$FF` returns to use
   retained outside-map state, added a game-neutral multi-map route composer, and proved an 86-action
   Pallet-to-Viridian-Center plan live from clean source across all three cartridge-declared arrivals.

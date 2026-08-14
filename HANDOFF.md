@@ -37,7 +37,8 @@ The first live attempt failed before artifact creation. `execute_bounded_battle_
 the restored wild state before binding the caller's declared battle kind, so its trainer default
 rejected a truthful wild encounter as unexpected. Commit `51f76b5` binds the battle identity around
 the whole transaction and adds the missing real-wild regression. The complete local gate passed
-3,285 tests, three skips and one expected failure; whole-package mypy covered 206 source files.
+3,285 tests, three integration deselections and one expected failure; whole-package mypy covered
+206 source files.
 Exact GitHub CI run `31846019245` passed.
 
 The repaired cycle measured all eight moves from identical restored boundaries and equalized every
@@ -53,15 +54,23 @@ round-trips through the production private-artifact loader, but remains **shadow
 rejected**. Do not deploy it, initialize Crystal from it, or describe it as progress in battle
 competence.
 
-The result is valuable because the loop worked and the evidence refused the model. Next, turn the
-single-pair runner into a bounded multi-context battle catalog with learning curves and paired
-prior-versus-update development comparisons. Add the real navigation and party-development
-snapshot adapters required to finish Milestone 1. Milestone 3's frozen 200-battle unseen gate still
-controls any battle authority. Do not reopen a full Red route to collect these cases.
+The result is valuable because the loop worked and the evidence refused the model. Next, collect
+only enough independent battle contexts to draw the first learning curve. Before expanding that
+into a stratified Red catalog, express one navigation outcome and one party-development outcome
+through the shared contract, then build one thin real adapter for each. Scale battle objectives
+only after all three families confirm the abstraction. Milestone 3's frozen 200-battle unseen gate
+still controls any battle authority. Do not reopen a full Red route to collect these cases.
 
 The view-only result dashboard is `scripts/run_battle_outcome_dashboard.py`. It reads the public
 receipt, may display either authenticated capture as a no-input frame, and explicitly shows the
 candidate as blocked. It is evidence display, not a training actor.
+
+Claude and Antigravity independently approved the frozen publication commit `95a451c`. Codex
+accepted Claude's sequencing objection above, corrected the receipt's `deselected` terminology,
+and made the living-Pokédex deferral explicit: acquisition planning remains a design constraint
+now, while executable living-Pokédex rollout work resumes after the Milestone 3 unseen battle gate.
+The dashboard's learned-stack row now wraps into labeled candidate/prior evidence instead of
+clipping at ordinary desktop widths. No reviewer was given cartridge or private-state access.
 
 ## Final reviewer condition closed before the battle adapter — 2026-08-14
 

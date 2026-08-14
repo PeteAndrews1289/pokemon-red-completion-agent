@@ -30,6 +30,25 @@ battle context catalog before any authority discussion. Zero teacher, sealed Red
 full-replay access occurred. See
 [`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
+### Post-result publication audit
+
+Both reviewers then approved exact publication commit `95a451c`. Capacity was checked before
+assignment: Claude had an unused five-hour window and 9% weekly usage; Antigravity exposed no
+numeric quota but confirmed it could complete the bounded review. Both finished; neither remains
+active.
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| Scale a large Red battle catalog before proving the outcome abstraction across navigation and party development | **Accept** | Cap battle collection at the smallest initial learning curve, then express one outcome and build one thin real adapter for each remaining family. Stratify and scale only after all three fit the shared boundary. |
+| Receipt calls three integration deselections “skips” | **Accept** | Rename the machine-readable field to `pytest_deselected`; the count was correct and the category name was not. |
+| The next-step list defers the living Pokédex without naming the decision or end condition | **Accept** | State that acquisition requirements constrain the work now and executable collection expansion resumes after the Milestone 3 unseen battle gate. |
+| Dashboard learned-stack evidence clips at an ordinary two-column desktop width | **Codex visual finding; accept** | Replace the fixed five-column row with a labeled, wrapping candidate/prior layout and verify the rendered localhost dashboard. |
+
+Claude also retracted its earlier writer-to-loader testing concern: the real private-writer to
+production-loader round-trip test already existed at `49827c6`; its earlier search had covered only
+new test files and missed the modified module. No authority, private access or executable action
+followed from either audit.
+
 ## Final exact-head recheck and condition closure — 2026-08-14
 
 Reviewed source: exact commit `5347d95d3a26c999524142df0e71160cafd282a5`, after green GitHub

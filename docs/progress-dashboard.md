@@ -51,7 +51,8 @@ python scripts/run_battle_outcome_dashboard.py \
 
 The capture is accepted only when its manifest digest appears in the tracked path-free result. Use
 `--no-browser` if the existing browser tab already points at `http://127.0.0.1:8765/`. The page is
-view-only and remains open until `Ctrl-C`.
+view-only and remains open until `Ctrl-C`. Learned-stack rows wrap at ordinary desktop widths and
+label the candidate and frozen-prior scores explicitly so a regression cannot be hidden by layout.
 
 ## Historical Red full-run harness — not currently authorized
 

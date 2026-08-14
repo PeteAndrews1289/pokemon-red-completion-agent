@@ -17,7 +17,8 @@ untouched result: **FROZEN PRIOR 1/1 · UPDATED MODEL 0/1** and
 
 Narration: **“This is what training looks like when the evaluation is allowed to say no. The
 pipeline worked. The one-state curriculum did not.”** End with the next board:
-**MORE INDEPENDENT BATTLES · NAVIGATION SCENARIOS · PARTY-DEVELOPMENT SCENARIOS · FULL RED LATER**.
+**SMALLEST BATTLE CURVE → ONE NAV OUTCOME → ONE PARTY OUTCOME → THEN SCALE**. Add a smaller line:
+**LIVING POKÉDEX RESUMES AFTER THE UNSEEN BATTLE GATE · FULL RED LATER**.
 
 ## August 14 final-audit scene: one move, two counters
 

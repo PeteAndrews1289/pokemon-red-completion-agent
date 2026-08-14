@@ -143,7 +143,7 @@ def battle_outcome_dashboard_snapshot(
                 f"{updated_correct}/{development_examples}; no authority granted"
             ),
             "Teacher 0 · sealed Red 0 · Crystal 0 · full-game replays 0",
-            "Next: expand the authenticated battle corpus and add navigation/training adapters",
+            "Next: smallest battle learning curve, then one thin navigation and party adapter",
         ),
     )
 

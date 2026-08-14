@@ -28,7 +28,7 @@
     "regression_test": "A truthful wild MAIN-menu state now executes one requested move and stops after its observed effect.",
     "full_gate": {
       "pytest_passed": 3285,
-      "pytest_skipped": 3,
+      "pytest_deselected": 3,
       "pytest_xfailed": 1,
       "mypy_source_files": 206,
       "privacy": "passed",

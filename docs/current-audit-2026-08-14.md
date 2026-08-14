@@ -20,9 +20,19 @@ authenticates and production-loads, but remains shadow-only with promotion false
 evidence is
 [`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
-The engineering gate is now ahead of the sample size, not the result. The next work is a bounded
-multi-context battle catalog and learning curve plus the navigation and party-development adapters
-needed to close Milestone 1. Any battle authority still requires the frozen 200-battle unseen gate.
+The engineering gate is now ahead of the sample size, not the result. The next work is the smallest
+independent battle set that can draw one learning curve, then one thin real navigation outcome and
+one thin real party-development outcome. Only after those three families demonstrate a shared
+interface should the Red battle catalog be stratified and scaled. Any battle authority still
+requires the frozen 200-battle unseen gate; living-Pokédex rollout resumes after that gate while
+acquisition requirements remain active design constraints now.
+
+Claude and Antigravity both approved frozen publication commit `95a451c`. Claude's substantive S3
+finding was accepted: scaling the only implemented family before testing the other two would batch
+dataset risk in the same way the earlier roadmap batched infrastructure risk. Its two cosmetic
+findings were also closed: the receipt now says `pytest_deselected`, and the roadmap explicitly
+names the collection deferral and its end condition. Independent browser QA found and repaired a
+learned-stack overflow; the dashboard now labels and wraps candidate-versus-prior evidence.
 
 ## Final exact-head recheck and transactional move accounting
 

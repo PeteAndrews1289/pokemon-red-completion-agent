@@ -47,9 +47,10 @@ out the opponent. The updated model chose the only move that did not. Developmen
 of one to zero out of one. The candidate was rejected automatically and received no authority.
 
 That is the first real model-first success: not that the model improved, but that the system could
-teach from the game and still refuse a worse lesson. The next dataset needs many genuinely
-different battles, not more epochs on one convenient save. Navigation and party development now
-get the same short-scenario treatment. Full Red remains a final exam.
+teach from the game and still refuse a worse lesson. The next step is deliberately not a huge Red
+battle matrix: collect the smallest set that can draw one learning curve, prove one navigation and
+one party-development outcome fit the same abstraction, and only then scale. Full Red remains a
+final exam; living-Pokédex rollout resumes after battle authority survives its unseen gate.
 
 ## Current checkpoint: stop replaying the answer key
 

@@ -24,8 +24,10 @@ did not “learn battle.” The system learned that one convenient state was not
 
 That distinction is the portfolio result: a game-grounded counterfactual pipeline, reproducible
 lineage separation, a typed fail-closed repair, and an evaluation strong enough to reject a lower-
-loss model. The next chapter is dataset breadth—many battle objectives and independent contexts—
-alongside the short navigation and party-development adapters required by Milestone 1.
+loss model. The next chapter starts with the smallest battle set that can draw a learning curve,
+then one thin navigation outcome and one thin party-development outcome. Only after those three
+families confirm the shared boundary does battle collection widen. Living-Pokédex rollout resumes
+after the unseen battle gate; its acquisition requirements still constrain the adapters now.
 
 ## August 14: the last audit found a transaction boundary
 

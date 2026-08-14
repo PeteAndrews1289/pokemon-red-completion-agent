@@ -921,13 +921,17 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
   .score b { display: block; margin-top: 3px; font-size: 18px; }
   .score-detail { margin-top: 10px; color: #8da096; font: 11px/1.5 ui-monospace, monospace; }
   .components { display: grid; gap: 8px; margin-top: 13px; }
-  .component { display: grid; grid-template-columns: minmax(130px, 1.25fr) 90px 112px 115px 72px; gap: 9px; align-items: center; padding: 9px 0; border-top: 1px solid #22372e; font-size: 11px; }
+  .component { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); grid-template-areas: "name name" "status samples" "score digest"; gap: 8px 14px; align-items: start; padding: 9px 0; border-top: 1px solid #22372e; font-size: 11px; }
   .component:first-child { border-top: 0; }
+  .component > * { min-width: 0; overflow-wrap: anywhere; }
+  .component-name { grid-area: name; }
   .component-name strong, .component-name span { display: block; }
   .component-name span { margin-top: 3px; color: #82978a; line-height: 1.35; }
-  .component-status { color: #77e2a6; text-transform: uppercase; letter-spacing: .08em; }
+  .component-status { grid-area: status; color: #77e2a6; text-transform: uppercase; letter-spacing: .08em; }
   .component-stat { color: #b6c8bd; font-family: ui-monospace, monospace; }
-  .component-digest { color: #82978a; font-family: ui-monospace, monospace; }
+  .component-samples { grid-area: samples; }
+  .component-score { grid-area: score; }
+  .component-digest { grid-area: digest; color: #82978a; font-family: ui-monospace, monospace; text-align: right; }
   .party { display: grid; gap: 9px; margin-top: 13px; }
   .party-member { padding: 10px 11px; border: 1px solid #223a30; border-radius: 11px; background: #0a1411; }
   .party-top strong { font-size: 13px; }
@@ -943,8 +947,8 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
   .events li { padding-left: 13px; position: relative; color: #aebfb5; font-size: 12px; line-height: 1.4; }
   .events li::before { content: ""; position: absolute; left: 0; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: #5bdc93; }
   @media (max-width: 920px) { #observatory { padding: 14px; } .layout { grid-template-columns: 1fr; } .screen-panel { padding: 12px; } }
-  @media (max-width: 640px) { .component { grid-template-columns: 1fr 1fr; } .component-name { grid-column: 1 / -1; } .score-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 500px) { .triplet { grid-template-columns: 1fr 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
+  @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .component { grid-template-columns: 1fr; grid-template-areas: "name" "status" "samples" "score" "digest"; } .component-digest { text-align: left; } .triplet { grid-template-columns: 1fr 1fr; } .goal { grid-template-columns: 102px 1fr 36px; } .top { align-items: start; flex-direction: column; } }
 </style>
 <header class="top">
   <div><div class="eyebrow" id="eyebrow">Transfer learning run</div><h1>Pokémon Learning Observatory</h1></div>
@@ -986,7 +990,7 @@ _DASHBOARD_HTML = """<meta name="viewport" content="width=device-width, initial-
       <div id="experiment"></div>
     </section>
     <section class="panel section" id="learning-components-panel" hidden>
-      <div class="section-head"><h2>Learned stack</h2><span class="muted">held-out Red evidence</span></div>
+      <div class="section-head"><h2>Learned stack</h2><span class="muted">held-out evidence</span></div>
       <div class="components" id="learning-components"></div>
     </section>
     <section class="panel section">
@@ -1034,9 +1038,9 @@ function componentRow(component) {
   const candidateAudit = Object.entries(component.candidate_count_results || {}).map(([count, result]) => `${count}-way ${result.correct}/${result.total}`).join(" · ");
   scope.textContent = candidateAudit ? `${component.scope} · candidate audit: ${candidateAudit}` : component.scope; name.append(title, scope);
   const authority = document.createElement("div"); authority.className = "component-status"; authority.textContent = `${component.status} · ${component.authority.replaceAll("_", " ")}`;
-  const samples = document.createElement("div"); samples.className = "component-stat"; samples.textContent = `${fmt(component.train_examples)} train · ${fmt(component.independent_validation_units)} independent val units`;
-  const score = document.createElement("div"); score.className = "component-stat"; score.textContent = `${exactScore(component.validation_correct, component.validation_examples)} vs ${exactScore(component.baseline_correct, component.validation_examples)}`;
-  const digest = document.createElement("div"); digest.className = "component-digest"; digest.textContent = component.model_sha256.slice(0, 10);
+  const samples = document.createElement("div"); samples.className = "component-stat component-samples"; samples.textContent = `${fmt(component.train_examples)} train · ${fmt(component.independent_validation_units)} independent val units`;
+  const score = document.createElement("div"); score.className = "component-stat component-score"; score.textContent = `candidate ${exactScore(component.validation_correct, component.validation_examples)} · prior ${exactScore(component.baseline_correct, component.validation_examples)}`;
+  const digest = document.createElement("div"); digest.className = "component-digest"; digest.textContent = `model ${component.model_sha256.slice(0, 10)}`;
   row.append(name, authority, samples, score, digest); return row;
 }
 function render(data) {

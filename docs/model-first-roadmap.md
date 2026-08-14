@@ -12,10 +12,15 @@ development result. The update regressed development from 1/1 to 0/1 and remains
 shadow-only evidence. This proves plumbing, not competence. See
 [the exact result](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
-The active next step is a bounded multi-context battle catalog and learning curve, followed by the
-real navigation and party-development snapshot adapters required to finish Milestone 1. Do not
-promote the one-state candidate, open the 200-battle unseen gate early, expand into a full Red
-replay, or use Crystal as additional training data.
+The active next step is the smallest independent battle set that can draw an initial learning
+curve, followed immediately by one thin navigation adapter and one thin party-development adapter.
+First prove one outcome from each family fits the shared abstraction; only then widen and stratify
+the battle catalog. Do not promote the one-state candidate, open the 200-battle unseen gate early,
+expand into a full Red replay, or use Crystal as additional training data.
+
+Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
+in the representation and adapter design now; executable collection expansion resumes after the
+Milestone 3 unseen battle gate passes, when capture decisions have earned bounded authority.
 
 ## Product definition
 
@@ -58,9 +63,10 @@ Completed at exact source `51f76b5`:
   1/1 to 0/1.
 
 This satisfies the serial “close one loop before building two more adapters” rule. It does not
-satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion gate. The next
-battle work must add independent semantic contexts and learning curves; lower fit loss alone is no
-longer an acceptable progress measure.
+satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion gate. Add only the
+minimum independent battle contexts needed for one learning curve, then build one thin real
+navigation and party-development outcome adapter before stratifying or scaling the battle data.
+Lower fit loss alone is no longer an acceptable progress measure.
 
 ## Learning approach
 
