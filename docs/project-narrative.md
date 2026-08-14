@@ -11,7 +11,7 @@ the arithmetic was impossible; the producer still called it complete.
 The fix was not another exception patch. Every returned move now crosses one transaction boundary:
 record the fallible control evidence first, then commit exactly one source—model or teacher. A
 second probe exposed the mirror image, a control-model low-confidence teacher move with no source
-at all, and the same boundary fixed it. The final gate rose to 3,251 tests. No cartridge was run and
+at all, and the same boundary fixed it. The final gate rose to 3,252 tests. No cartridge was run and
 no model gained authority; the point of the work was to keep the coming real learning experiment
 observable when it fails.
 

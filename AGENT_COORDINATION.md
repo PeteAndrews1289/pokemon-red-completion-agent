@@ -5,10 +5,13 @@
 > defect in the configuration needed by the next battle-adapter lane. Codex accepted it. Model and
 > teacher returned-move attribution now commits only after fallible control recording succeeds,
 > control-low-confidence teacher returns have exactly one source, and the producer's completeness
-> flag requires a zero source gap. The repaired source passes 3,251 ROM-free tests, with three
+> flag requires a zero source gap. The repaired source passes 3,252 ROM-free tests, with three
 > integration deselections and one expected failure. No private or executable evidence was opened.
 > Proceed with one authenticated battle snapshot family; a first outcome proves wiring only and
 > grants no learned authority.
+> A failed control-label sink must commit neither label counters nor action history. Teacher-free
+> dashboard projection remains a later instrumentation gate, not a reason to delay the supervised
+> battle snapshot adapter.
 
 > **2026-08-14 narrow-recheck adjudication — highest active checkpoint:** Exact commit `316147f`
 > passed GitHub CI, then Antigravity approved and Claude approved with conditions. Antigravity

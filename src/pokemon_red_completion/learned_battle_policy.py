@@ -463,9 +463,7 @@ class ModelAssistedBattlePolicy:
             + self.interrupted_decisions
         )
         returned_move_accounting_gap = (
-            self.returned_move_decisions
-            - self.model_decisions
-            - self.teacher_fallbacks
+            self.returned_move_decisions - self.model_decisions - self.teacher_fallbacks
         )
         result: dict[str, object] = {
             "schema": "pokemon-model-assisted-battle-policy-v1",
@@ -481,8 +479,7 @@ class ModelAssistedBattlePolicy:
             "interrupted_decisions": self.interrupted_decisions,
             "accounted_decisions": accounted_decisions,
             "decision_accounting_complete": (
-                self.decisions == accounted_decisions
-                and returned_move_accounting_gap == 0
+                self.decisions == accounted_decisions and returned_move_accounting_gap == 0
             ),
             "returned_move_accounting_gap": returned_move_accounting_gap,
             "model_decisions": self.model_decisions,
@@ -947,9 +944,7 @@ class ModelAssistedBattlePolicy:
                         predicted_action.kind is BattleActionKind.USE_BOOST
                         and predicted_action.boost_stat not in intent.boost_capabilities
                     ):
-                        raise BattleActionTargetError(
-                            "boost action lacks an executor capability"
-                        )
+                        raise BattleActionTargetError("boost action lacks an executor capability")
                 except BattleActionTargetError:
                     masked.append((predicted_ref, "capability_or_target_mask"))
                     continue
@@ -1104,28 +1099,30 @@ class ModelAssistedBattlePolicy:
                 ) from error
             assert resolved.party_slot is not None
             action = BattleAction.switch(resolved.party_slot)
+        history: BattleControlHistory | None = None
         if self.control_model is not None:
             history = self.control_history.before(intent.battle_plan_id, snapshot_payload)
             self._observe_control_model(snapshot, action, history)
+        if self.control_sink is not None:
+            next_record = self.control_records + 1
+            self.control_sink(
+                {
+                    "record_type": "battle_control_label",
+                    "schema_version": 1,
+                    "label_index": next_record,
+                    "decision_index": self.decisions,
+                    "battle_plan_id": intent.battle_plan_id,
+                    "objective_id": intent.objective_id,
+                    "observation": snapshot_payload,
+                    "teacher_action": action.public_dict(),
+                }
+            )
+            self.control_records = next_record
+            if action.kind.value != "select_move":
+                self.typed_non_move_control_records += 1
+            self.control_signals[action.semantic_ref] += 1
+        if history is not None:
             self.control_history.advance(action, snapshot_payload)
-        if self.control_sink is None:
-            return
-        self.control_records += 1
-        if action.kind.value != "select_move":
-            self.typed_non_move_control_records += 1
-        self.control_signals[action.semantic_ref] += 1
-        self.control_sink(
-            {
-                "record_type": "battle_control_label",
-                "schema_version": 1,
-                "label_index": self.control_records,
-                "decision_index": self.decisions,
-                "battle_plan_id": intent.battle_plan_id,
-                "objective_id": intent.objective_id,
-                "observation": snapshot_payload,
-                "teacher_action": action.public_dict(),
-            }
-        )
 
     def _observe_control_model(
         self,

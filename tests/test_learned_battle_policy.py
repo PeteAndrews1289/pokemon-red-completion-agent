@@ -580,9 +580,7 @@ def test_teacher_control_request_during_fallback_is_not_counted_as_returned_move
     assert report["fallback_reasons"] == {}
     assert report["returned_move_accounting_gap"] == 0
     assert report["decision_accounting_complete"] is True
-    assert live_evaluation_state(report, None).public_dict()[
-        "decision_accounting_complete"
-    ] is True
+    assert live_evaluation_state(report, None).public_dict()["decision_accounting_complete"] is True
 
 
 def test_failed_control_record_does_not_count_a_returned_teacher_move() -> None:
@@ -612,6 +610,38 @@ def test_failed_control_record_does_not_count_a_returned_teacher_move() -> None:
     assert report["decision_accounting_complete"] is True
     assert policy.progress_sink_errors == 0
     assert projected[0]["decision_accounting_complete"] is True
+
+
+def test_failed_control_sink_does_not_commit_label_counters_or_history() -> None:
+    def reject_label(record: Mapping[str, object]) -> None:
+        del record
+        raise RuntimeError("control label unavailable")
+
+    encoder = _ShadowEncoder()
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(0),
+        encoder=encoder,  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+        control_sink=reject_label,
+    )
+    observation = _observation()
+
+    with pytest.raises(RuntimeError, match="control label unavailable"):
+        policy.choose_move(observation, lambda: 1)
+
+    report = policy.public_dict()
+    assert report["control_records"] == 0
+    assert report["typed_non_move_control_records"] == 0
+    assert report["control_signals"] == {}
+    assert report["model_decisions"] == 0
+    assert report["failed_decisions"] == 1
+    assert report["returned_move_accounting_gap"] == 0
+    snapshot = encoder.snapshot_from_raw(observation.state).to_dict()
+    history = policy.control_history.before("battle-test", snapshot)
+    assert history.action_counts == (0,) * len(CONTROL_CLASS_REFS)
 
 
 def test_policy_complete_flag_requires_returned_move_source_accounting() -> None:
@@ -916,9 +946,7 @@ def test_control_low_confidence_teacher_move_has_one_return_source() -> None:
     assert report["fallback_reasons"] == {"control_low_confidence": 1}
     assert report["returned_move_accounting_gap"] == 0
     assert report["decision_accounting_complete"] is True
-    assert live_evaluation_state(report, None).public_dict()[
-        "decision_accounting_complete"
-    ] is True
+    assert live_evaluation_state(report, None).public_dict()["decision_accounting_complete"] is True
 
 
 def test_control_execution_preserves_move_teacher_gate() -> None:

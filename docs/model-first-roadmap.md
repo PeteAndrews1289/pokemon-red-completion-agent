@@ -11,6 +11,9 @@ was made transactional across fallible control-label recording and the producer 
 nonzero move-source gap. This removes a known observability trap but grants no authority. The active
 next step remains one authenticated battle snapshot family through outcome, learner update and
 untouched-lineage evaluation; do not expand navigation or party development first.
+Control-label writes, their counters and control history are one commit boundary. Before any later
+teacher-free dashboard is authorized, split model executions from actual teacher comparisons in
+the live projection; this is not a blocker for the supervised first adapter.
 
 ## Product definition
 

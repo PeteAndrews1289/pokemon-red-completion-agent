@@ -14,11 +14,17 @@ last fallible control-recording step. The same boundary correctly accounts for c
 low-confidence teacher moves, and producer completeness now requires a zero returned-move source
 gap. Negative tests reproduce the control-sink failure, the formerly missing control fallback
 source, and a terminally complete but source-incomplete forged report. The resulting source passes
-3,251 ROM-free tests, with three integration deselections and one documented expected failure; all
+3,252 ROM-free tests, with three integration deselections and one documented expected failure; all
 static, privacy, documentation, generator and registry gates remain green.
 
 No executable or private evidence was accessed. This repair removes a known trap from the next
 step; it does not grant authority or change the battle-first roadmap.
+
+Both reviewers approved exact repair commit `374d7d4`. One non-blocking consistency suggestion was
+also closed because it lies directly on the next collection path: a failed control-label sink now
+commits neither its record/signal counters nor control action history. The separate pre-existing
+teacher-free dashboard projection issue is deferred until teacher-free instrumentation and does not
+delay the supervised battle snapshot adapter.
 
 ## Narrow exact-commit rechecks
 

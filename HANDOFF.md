@@ -35,11 +35,17 @@ control-model low-confidence teacher return. The producer's `decision_accounting
 also requires a zero returned-move source gap. Three negative-direction tests distinguish all three
 repairs, and the canonical-parser test explains the separate byte-identity and semantic guards.
 
-The resulting source passes 3,251 ROM-free tests; three integration tests remain deliberately
+The resulting source passes 3,252 ROM-free tests; three integration tests remain deliberately
 deselected and one documented expected failure remains. The source-bound registries were
 regenerated and golden-pinned. No ROM, teacher, private/counted/sealed context, label, prediction,
 outcome or authority promotion occurred. The next step is still one authenticated battle snapshot
 family through bounded action, outcome, learner update and untouched-lineage evaluation.
+
+The final source recheck approved this repair and suggested two non-blocking follow-ups. The one
+that touches the next lane is closed in current source: a failed control-label sink no longer commits
+`control_records`, signal counts or action history. The separate teacher-free dashboard terminology
+issue is explicitly deferred until teacher-free instrumentation; it is absent from the supervised
+battle-adapter path and must be closed before a teacher-free dashboard is authorized.
 
 ## Narrow exact-commit rechecks and final guard repair — 2026-08-14
 

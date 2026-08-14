@@ -21,6 +21,12 @@ failure. Antigravity's architectural approval remains applicable: the repair cha
 not authority or sequencing. No ROM, teacher, private/counted/sealed context, label, prediction,
 outcome or promotion occurred.
 
+Both reviewers then approved exact repair commit `374d7d4`. Claude's remaining label-counter
+suggestion was accepted because the next battle adapter uses that sink: sink success now precedes
+label counters and control-history advancement. Its pre-existing teacher-free dashboard projection
+suggestion is deferred to the teacher-free instrumentation gate; the immediate adapter remains
+teacher-supervised. Current source passes 3,252 ROM-free tests.
+
 ## Narrow follow-up rechecks and Codex adjudication — 2026-08-14
 
 Reviewed source: exact commit `316147fddc592c627b87882f782ad224c350f5f2`, after green GitHub

@@ -106,7 +106,8 @@
     "repairs": [
       "returned model and teacher attribution commits only after fallible control recording",
       "producer completeness requires zero returned-move source gap",
-      "control-model low-confidence teacher move has exactly one returned source"
+      "control-model low-confidence teacher move has exactly one returned source",
+      "control-label counters and action history commit only after sink success"
     ],
     "scope": "no ROM, teacher, private/counted/sealed context, prediction, outcome, or authority promotion"
   },
@@ -221,7 +222,7 @@
   "rom_free_validation": {
     "documented_expected_failures": 1,
     "integration_tests_deselected": 3,
-    "passed": 3251,
+    "passed": 3252,
     "public_artifact_privacy": "passed",
     "source_bound_registries": [
       "battle_collection",

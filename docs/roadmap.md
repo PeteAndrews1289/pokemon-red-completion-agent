@@ -11,7 +11,7 @@
 ## Current checkpoint (2026-08-14): prove one real learning loop, then finish three families
 
 Claude and Antigravity's model-roadmap reviews and exact-head rechecks are closed. The final
-control-sink accounting condition is repaired and the ROM-free gate passes 3,251 tests.
+control-sink accounting condition is repaired and the ROM-free gate passes 3,252 tests.
 The Milestone 1 boundary remains exactly three single-process scenario families—navigation, battle
 and party development—but their live adapters are no longer batched. Build the battle adapter first
 and require one outcome-bearing learner update plus untouched-lineage result before implementing

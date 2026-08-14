@@ -10,7 +10,7 @@ teacher move with no source—and route it through the same boundary.
 
 The narration is: **“This was not game-playing progress, but it removed a failure that would have
 made the first real learning result untrustworthy. The audit did its job because we fixed the
-condition even though it did not block the prior demo.”** End on **3,251 TESTS / NO ROM OPENED / NO
+condition even though it did not block the prior demo.”** End on **3,252 TESTS / NO ROM OPENED / NO
 AUTHORITY GRANTED / BATTLE SNAPSHOT LOOP NEXT**.
 
 ## August 14 recheck scene: even the audit had a held-out test
