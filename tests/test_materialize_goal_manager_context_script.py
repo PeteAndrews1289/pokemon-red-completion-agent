@@ -5,10 +5,17 @@ import inspect
 import runpy
 import subprocess
 import sys
+from dataclasses import replace
 from pathlib import Path
 
+import pytest
+
 from pokemon_red_completion.celadon import _flee as _timed_flee
-from pokemon_red_completion.observation import ItemId, RawGameState
+from pokemon_red_completion.observation import InputReadiness, ItemId, MapId, RawGameState
+from pokemon_red_completion.red_party import (
+    BLASTOISE_SPECIES_ID,
+    DUGTRIO_SPECIES_ID,
+)
 from pokemon_red_completion.surge import _flee as _protected_flee
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -96,7 +103,10 @@ def test_evolved_team_setup_reuses_the_qualified_bounded_mechanic() -> None:
     assert "flee_func=_timed_flee" in source
     assert "_flee as _protected_flee" in source
     assert "evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID)" in source
-    assert "after_levels[target_index] <= before_levels[target_index]" in source
+    assert "evolved_levels[target_index] <= before_levels[target_index]" in source
+    assert '"evolved-team Center entry"' in source
+    assert "_training_dig_to_cinnabar(actions, reader, emulator)" in source
+    assert "tuple(final.party_species_ids or ()) != evolved_species" in source
 
 
 def test_materializer_keeps_setup_and_training_flee_contracts_distinct() -> None:
@@ -115,6 +125,89 @@ def test_materializer_keeps_setup_and_training_flee_contracts_distinct() -> None
     )
 
 
+class _Reader:
+    def __init__(self, raw: RawGameState) -> None:
+        self.raw = raw
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_input_readiness(self) -> InputReadiness:
+        return InputReadiness(0, 0, 0, 0, 0)
+
+
+def _unevolved_party_raw() -> RawGameState:
+    return RawGameState(
+        game_started=True,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=6,
+        battle_state=0,
+        party_species_ids=(BLASTOISE_SPECIES_ID, 64, 59, 132, 104, 43),
+        party_levels=(48, 20, 22, 30, 25, 30),
+        party_hp=(150, 50, 50, 100, 80, 80),
+        party_max_hp=(150, 50, 50, 100, 80, 80),
+        party_status=(0, 0, 0, 0, 0, 0),
+        party_moves=((57, 58, 55, 0),) * 6,
+        party_pp=((15, 10, 5, 0),) * 6,
+    )
+
+
+def test_evolved_team_setup_relocates_the_verified_party_to_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(_unevolved_party_raw())
+
+    def evolve(*_args: object, **_kwargs: object) -> tuple[None, int, int]:
+        reader.raw = replace(
+            reader.raw,
+            map_id=MapId.DIGLETTS_CAVE,
+            player_x=37,
+            player_y=31,
+            party_species_ids=(BLASTOISE_SPECIES_ID, 64, DUGTRIO_SPECIES_ID, 132, 104, 43),
+            party_levels=(49, 20, 26, 30, 25, 30),
+        )
+        return None, 24, 3
+
+    def dig_to_cinnabar(*_args: object) -> None:
+        reader.raw = replace(
+            reader.raw,
+            map_id=MapId.CINNABAR_ISLAND,
+            player_x=11,
+            player_y=12,
+        )
+
+    def move(_actions: object, _reader: object, _directions: object, label: str) -> None:
+        if label == "evolved-team Center entry":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.CINNABAR_POKECENTER,
+                player_x=3,
+                player_y=7,
+            )
+        elif label == "evolved-team nurse":
+            reader.raw = replace(reader.raw, player_x=3, player_y=3)
+
+    globals_dict = module["_evolved_team_boundary"].__globals__
+    monkeypatch.setitem(globals_dict, "run_red_team_balancing", evolve)
+    monkeypatch.setitem(globals_dict, "_training_dig_to_cinnabar", dig_to_cinnabar)
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_heal", lambda *_args: None)
+
+    module["_evolved_team_boundary"](object(), reader, object())
+
+    assert reader.raw.map_id == MapId.CINNABAR_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert reader.raw.party_species_ids == (
+        BLASTOISE_SPECIES_ID,
+        64,
+        DUGTRIO_SPECIES_ID,
+        132,
+        104,
+        43,
+    )
 def _damaged_raw(*, bag_items: tuple[tuple[int, int], ...]) -> RawGameState:
     return RawGameState(
         game_started=True,

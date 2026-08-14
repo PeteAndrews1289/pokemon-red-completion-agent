@@ -51,6 +51,14 @@ arguments, timed training used five. The command created no state. The repair na
 responsibilities explicitly and tests their signatures, turning a live integration mismatch into a
 stable boundary before the development lesson can inherit it.
 
+The corrected call then revealed that “training finished” and “the next manager question is ready”
+are different boundaries. The evolved party ended safely in Diglett's Cave at `(37,31)`, because
+the shared trainer deliberately returns to its venue after healing. The development provider only
+advertises at a qualified Center. Saving the cave state would have produced a useless context, so
+the setup refused it. The next repair does not relax availability; it executes the real Dig/Fly
+return to Cinnabar, heals, and proves the relocation preserved species and levels before writing a
+new setup save.
+
 ## August 13: the audit stopped us from spending the test on the wrong experiment
 
 The first model was ready, authenticated and green across 2,801 tests. That made the next decision

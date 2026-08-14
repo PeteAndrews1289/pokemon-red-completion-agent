@@ -230,6 +230,10 @@ If the setup-tool failure is included, keep it to one beat: two identical `_flee
 **PROTECTED SETUP ESCAPE (4 INPUTS)** and **TIMED TRAINING ESCAPE (5 INPUTS)**, followed by **FAILED
 BEFORE TRAINING / NO SAVE CREATED**. It is a concise example of why a green unit suite is not live
 mechanic qualification.
+The next setup card can make the hierarchy tangible: **EVOLUTION COMPLETE / DIGLETT'S CAVE / TRAIN
+GOAL UNAVAILABLE**. Animate the real Dig and Fly return to Cinnabar, then unlock **TRAIN** only at
+the healed Center boundary. The point is that a successful skill terminal is not automatically a
+useful next decision state.
 
 ## Working title
 

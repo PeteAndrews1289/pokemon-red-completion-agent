@@ -38,7 +38,12 @@ and passed CI, but the first setup attempt stopped before the trainer ran: the s
 four-argument protected setup flee helper into the five-argument timed training contract. No state
 or envelope was created. The repair gives both helpers explicit names and has a regression over
 their exact signatures; publish it before retrying. Genuine manager data remains **0/54 train and
-0/27 validation**.
+0/27 validation**. Published `4c14f10` passed CI, and its retry reached the real post-training
+terminal: Diglett's Cave `(37,31)`, evolved party `(28,64,118,132,104,43)`, levels
+`(49,20,26,30,25,30)`, zero status, stable input and released controls. The setup correctly refused
+to save because the development provider is unavailable there. No output exists. The pending
+repair performs the already qualified Dig/Fly return to Cinnabar, enters and heals at the Center,
+and verifies that relocation preserves the evolved species and levels before saving.
 
 ## Restoration-context materializer hardened locally — 2026-08-13
 

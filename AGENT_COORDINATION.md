@@ -11,6 +11,10 @@
 > its first materialization stopped before training because the script supplied its four-argument
 > setup flee helper where the shared trainer requires the five-argument timed helper. It created no
 > output. The pending repair names and tests both signatures explicitly; publish before retrying.
+> Published `4c14f10` passed that gate. Its retry completed evolution but correctly refused to save:
+> the shared trainer's honest terminal is Diglett's Cave `(37,31)`, while development is available
+> only at a qualified Center boundary. No output was created. The pending repair performs real
+> Dig/Fly/Center/heal relocation after verifying evolution, then proves the party is unchanged.
 > Counted collection remains 0/54 train and 0/27 validation.
 
 > **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real

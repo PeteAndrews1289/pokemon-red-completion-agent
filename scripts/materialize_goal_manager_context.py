@@ -412,26 +412,50 @@ def _evolved_team_boundary(
         report_label="goal-manager evolved-team setup",
         checkpoint_count=1,
     )
-    after = reader.read()
+    evolved = reader.read()
     target_index = _targeted_evolution_index(
         before_species,
-        tuple(after.party_species_ids or ()),
+        tuple(evolved.party_species_ids or ()),
         source_species_id=DIGLETT_SPECIES_ID,
         target_species_id=DUGTRIO_SPECIES_ID,
     )
-    after_levels = tuple(after.party_levels or ())
-    _require_safe_damage_state(after)
+    evolved_species = tuple(evolved.party_species_ids or ())
+    evolved_levels = tuple(evolved.party_levels or ())
+    _require_safe_damage_state(evolved)
     if (
         target_index is None
-        or len(after_levels) != len(before_levels)
-        or after_levels[target_index] <= before_levels[target_index]
-        or after.map_id
-        not in {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
-        or (after.player_x, after.player_y) != (3, 3)
+        or len(evolved_levels) != len(before_levels)
+        or evolved_levels[target_index] <= before_levels[target_index]
+        or evolved.battle_state
         or not reader.read_input_readiness().ready
     ):
         raise GoalManagerContextMaterializationError(
-            "evolved-team setup did not reach its exact stable transformation boundary"
+            "evolved-team setup did not reach its exact transformation boundary"
+        )
+    if evolved.map_id != MapId.CINNABAR_POKECENTER:
+        _training_dig_to_cinnabar(actions, reader, emulator)
+        _move(actions, reader, ("up",), "evolved-team Center entry")
+        _require(
+            reader.read(),
+            MapId.CINNABAR_POKECENTER,
+            (3, 7),
+            "evolved-team Center",
+        )
+    center = reader.read()
+    if (center.player_x, center.player_y) != (3, 3):
+        _move(actions, reader, ("up",) * 4, "evolved-team nurse")
+    _heal(actions, reader, emulator)
+    final = reader.read()
+    _require_safe_damage_state(final)
+    if (
+        tuple(final.party_species_ids or ()) != evolved_species
+        or tuple(final.party_levels or ()) != evolved_levels
+        or final.map_id != MapId.CINNABAR_POKECENTER
+        or (final.player_x, final.player_y) != (3, 3)
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "evolved-team relocation changed the party or missed the stable Center boundary"
         )
 
 

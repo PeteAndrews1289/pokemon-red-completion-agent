@@ -27,8 +27,10 @@ Ordered next work:
    old false-negative remains preserved and unrelabeled.
 3. Published `4bf0774` added the setup-only `evolved-team` mode and passed CI. Its first run failed
    before training because a four-argument setup flee helper was passed to a five-argument trainer
-   contract; no output was created. Publish the explicit helper-signature repair, then materialize
-   the post-evolution boundary and qualify one-level team development.
+   contract; no output was created. Published `4c14f10` repaired that seam and passed CI. Its retry
+   completed evolution but ended at the trainer's honest Diglett's Cave boundary, where development
+   is unavailable, so it again saved nothing. Publish the real Dig/Fly/Center relocation, then
+   materialize the post-evolution boundary and qualify one-level team development.
 4. Qualify acquisition, storage and exploration execution, then re-audit all nine families for
    bounded success/failure semantics and distinct context construction.
 5. Only after every family is live-qualified, curate 81 unique contexts, freeze the complete
