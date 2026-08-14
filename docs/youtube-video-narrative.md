@@ -1494,6 +1494,10 @@ version has to prove the model learned something worth carrying into a game it h
 - The first Crystal zero-shot/few-shot/from-scratch comparison when it exists.
 - The nine-pressure goal-manager card; keep **0 real demonstrations** visible until collection
   produces an authenticated corpus.
+- The restoration setup as a compact honesty sequence: **ONE HIT IS NOT 50% PARTY PRESSURE**, the
+  underlevelled switch fainting and the status-without-cure attempts both stopping without a saved
+  example, then the late-game party reaching **0.500 SAFETY PRESSURE / 6 ALIVE / RECOVERY PAYABLE**.
+  Label the successful clip a no-write diagnostic until its published-source rehearsal exists.
 
 ## Honesty rules for the video
 

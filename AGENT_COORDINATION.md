@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+> **2026-08-13 restoration-context checkpoint:** The damage setup now targets the manager's real
+> whole-party safety-pressure threshold (`>= 0.5`) through observed in-battle switches, rejects every
+> faint, and requires a payable exact item plan only for field restoration. It can relocate the
+> authenticated post–Victory Road boundary from Indigo to Cinnabar through real movement and Fly.
+> A local no-write diagnostic reached exactly `0.5` pressure in 976 actions with all six members
+> alive, stable input, released controls and enough Full Restores/Hyper Potions for the observed
+> plan. Publish and pass exact-commit CI before creating the official external state or preflight.
+> Counted collection remains 0/54 train and 0/27 validation.
+
 > **2026-08-13 Red manager collection-harness checkpoint:** Lane A/C now has all nine real Red goal
 > providers, the fixed six-member/level-60 normalization contract, an 81-slot source-bound registry,
 > read-only preflight receipts, complete-catalog freeze, one-shot collection, strict dataset

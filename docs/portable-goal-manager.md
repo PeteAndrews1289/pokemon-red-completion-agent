@@ -171,6 +171,15 @@ therefore do not satisfy the normalized loss-of-overworld-control evidence. The 
 uses one fully released, one-frame semantic movement pulse and captures the cartridge's genuine
 transient movement latch. It never holds a button across save and never edits memory.
 
+Restoration setup now uses the manager's actual whole-party safety calculation rather than accepting
+one token hit. A controller-only diagnostic relocated a strong authenticated late-game party from
+Indigo to Cinnabar, deliberately absorbed wild attacks through observed battle switches, and ended
+with all six members alive at exactly `0.5` safety pressure. A field context is accepted only when
+its exact damage/status recovery plan is payable from the observed bag; a Center context does not
+pretend field items are required. This diagnostic wrote no context or episode. Exact-source
+publication, official materialization, preflight and an uncounted restoration execution remain the
+next gate.
+
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
 context-dependence bugs. They are not gameplay data and are not a performance result.

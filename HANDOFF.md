@@ -14,6 +14,29 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Restoration-context materializer hardened locally — 2026-08-13
+
+The first damage setup was asking only whether *any* HP had been lost, while catalog admission asks
+whether normalized safety pressure is at least `0.5`. That mismatch is repaired. The setup now
+creates real wild-battle turns by switching party members, refuses every faint, exits through the
+strongest observed member, and stops only at the same whole-party safety threshold the manager
+sees. Field contexts additionally require that the exact observed recovery plan is already payable;
+Center contexts correctly need no field items.
+
+Two uncounted diagnostics failed safely and created no state or episode. The underlevelled post-key
+party lost a member on a switch; a stronger post-Blaine party immediately received a persistent
+status it could not cure with its inventory. The replacement source is the authenticated,
+nonsealed post–Victory Road boundary. The setup walks out of Indigo, flies to Cinnabar, heals, then
+derives the context using only controller actions. Its local no-write diagnostic completed in 976
+actions at exactly `0.5` safety pressure with six living members, stable input and released
+controls; the observed damage/status mix had a payable three-Full-Restore/two-Hyper-Potion plan.
+
+This is not yet a curated context. Publish this exact source, require green exact-commit CI, then
+materialize the new external field state, build its path-free profile, preflight restoration slot
+037, and execute one explicitly uncounted restoration rehearsal. Genuine data remains **0/54 train
+and 0/27 validation**; the three existing acquisition/resupply/recovery preflights remain setup
+evidence, not examples.
+
 ## Red manager collection harness ready for publication — 2026-08-13
 
 The portable manager is no longer only a game-neutral design. Red now has a live state adapter and

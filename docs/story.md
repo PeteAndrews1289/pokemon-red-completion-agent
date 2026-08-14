@@ -679,8 +679,11 @@ Being precise about this matters more than the story sounding finished.
   development, evolution, restoration, resupply, storage, recovery, and exploration. All nine have
   real bounded Red bindings, and an 81-context train/development protocol is implemented through
   authenticated preflight, record-before-action collection, strict reload, and train-only fitting.
-  It still has **zero genuine examples and no trained artifact**. That distinction is deliberate:
-  the harness being ready is not the model being trained.
+  Acquisition, resupply and transient-control setup boundaries have passed authenticated preflight.
+  A no-write restoration diagnostic also forced the real late-game party to exactly 50% normalized
+  safety through wild-battle switches, with all six members alive and the exact recovery bill in the
+  bag. It still has **zero genuine examples and no trained artifact**. That distinction is
+  deliberate: authenticated rehearsal evidence is not training data.
 - The team still does not choose its own battles. The escort still does most of the fighting.
 - No learned policy has completed the game. No cross-game transfer has been measured. The living
   Pokédex has not been started.

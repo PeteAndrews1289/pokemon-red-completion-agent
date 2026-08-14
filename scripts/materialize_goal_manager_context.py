@@ -6,13 +6,20 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    switch_active_battler,
+)
 from pokemon_red_completion.blaine import (
     CENTER_TO_MART,
     MANSION_TRAINING_VENUE,
     BlaineChapterError,
+    _fly_to_town,
+    _heal,
     _move,
     _pulse,
     _require,
@@ -30,6 +37,10 @@ from pokemon_red_completion.executor import (
     CountingExecutor,
     FrameSafeExecutor,
 )
+from pokemon_red_completion.field_recovery import (
+    FieldRecoveryError,
+    plan_party_recovery,
+)
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogError,
     open_goal_manager_context_capture,
@@ -38,13 +49,19 @@ from pokemon_red_completion.goal_manager_protocol import (
     GoalManagerProtocolError,
     load_committed_goal_manager_registry,
 )
-from pokemon_red_completion.observation import MapId, PokemonRedStateReader
+from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
+from pokemon_red_completion.observation import (
+    MapId,
+    PokemonRedStateReader,
+    RawGameState,
+)
 from pokemon_red_completion.provenance import (
     EvaluationIdentityError,
     detect_source_identity,
     require_clean_source,
     require_published_source,
 )
+from pokemon_red_completion.red_party import party_observation_from_raw
 from pokemon_red_completion.red_player_observer import (
     CapturedPokemonRedObserver,
     ResumedStateError,
@@ -52,9 +69,15 @@ from pokemon_red_completion.red_player_observer import (
 from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, verify_rom
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
-from pokemon_red_completion.surge import VERMILION_PC_TO_NURSE, SurgeChapterError, _flee
+from pokemon_red_completion.surge import (
+    VERMILION_PC_TO_NURSE,
+    SurgeChapterError,
+    _flee,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+_ACTIVE_SAFETY_PRESSURE = 0.5
+_DAMAGE_SWITCH_LIMIT = 64
 _MODES = (
     "mansion",
     "mart",
@@ -103,17 +126,49 @@ def _inverse(directions: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(opposite[item] for item in reversed(directions))
 
 
-def _require_cinnabar_nurse(reader: PokemonRedStateReader) -> None:
+def _normalize_cinnabar_nurse(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+) -> None:
     raw = reader.read()
-    if (
-        raw.map_id != MapId.CINNABAR_POKECENTER
-        or (raw.player_x, raw.player_y) != (3, 3)
-        or raw.battle_state
-        or not reader.read_input_readiness().ready
-    ):
+    if raw.battle_state or not reader.read_input_readiness().ready:
         raise GoalManagerContextMaterializationError(
-            "materialization requires the stable Cinnabar nurse boundary"
+            "materialization requires a stable relocation boundary"
         )
+    if raw.map_id == MapId.INDIGO_PLATEAU_LOBBY and (
+        raw.player_x,
+        raw.player_y,
+    ) == (2, 5):
+        _move(
+            actions,
+            reader,
+            ("right", "down", "down") + ("right",) * 4 + ("down",) * 5,
+            "goal-manager Indigo departure",
+        )
+        _require(
+            reader.read(),
+            MapId.INDIGO_PLATEAU,
+            (9, 6),
+            "goal-manager Indigo field",
+        )
+        _fly_to_town(
+            actions,
+            reader,
+            emulator,
+            MapId.CINNABAR_ISLAND,
+            "goal-manager Indigo to Cinnabar",
+        )
+        _move(actions, reader, ("up",) * 5, "goal-manager Cinnabar Center")
+        raw = reader.read()
+    if raw.map_id != MapId.CINNABAR_POKECENTER or (
+        raw.player_x,
+        raw.player_y,
+    ) != (3, 3):
+        raise GoalManagerContextMaterializationError(
+            "materialization did not reach the stable Cinnabar nurse boundary"
+        )
+    _heal(actions, reader, emulator)
 
 
 def _mansion_boundary(
@@ -144,26 +199,143 @@ def _damage_party(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
+    *,
+    require_field_recovery: bool,
 ) -> None:
+    source = reader.read()
+    species = source.party_species_ids or ()
+    levels = source.party_levels or ()
+    hp = source.party_hp or ()
+    maximum = source.party_max_hp or ()
+    if not (
+        species
+        and len(species) == len(levels) == len(hp) == len(maximum)
+        and all(
+            current > 0 and current == limit
+            for current, limit in zip(hp, maximum, strict=True)
+        )
+        and _safety_pressure(source) == 0.0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "damage materialization requires a complete healthy party observation"
+        )
     _mansion_boundary(actions, reader, emulator)
-    initial = reader.read()
-    initial_hp = initial.party_hp or ()
     for _ in range(48):
+        raw = reader.read()
+        if _damage_context_ready(
+            raw,
+            require_field_recovery=require_field_recovery,
+        ):
+            return
         MANSION_TRAINING_VENUE.walk_to_grass(actions, reader, emulator)
         raw = reader.read()
         if raw.battle_state:
-            _flee(emulator, actions, reader, raw)
+            fastest_index = max(
+                range(len(levels)),
+                key=lambda index: (levels[index], hp[index], -index),
+            )
+            for _ in range(_DAMAGE_SWITCH_LIMIT):
+                raw = reader.read()
+                _require_safe_damage_state(raw)
+                if _safety_pressure(raw) >= _ACTIVE_SAFETY_PRESSURE:
+                    break
+                active_index = raw.active_party_index
+                if active_index is None:
+                    raise GoalManagerContextMaterializationError(
+                        "damage materialization lost the active party index"
+                    )
+                current_hp = raw.party_hp or ()
+                if (
+                    _safety_pressure(raw) >= _ACTIVE_SAFETY_PRESSURE - 0.05
+                    and active_index != fastest_index
+                ):
+                    target_index = fastest_index
+                else:
+                    target_index = max(
+                        (
+                            index
+                            for index in range(len(current_hp))
+                            if index != active_index
+                        ),
+                        key=lambda index: (current_hp[index], levels[index], -index),
+                    )
+                switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    target_index,
+                    expected_battle_state=1,
+                    label="goal-manager controlled wild damage",
+                    wait_frames=120,
+                )
+            else:
+                raise GoalManagerContextMaterializationError(
+                    "bounded party switches did not reach active safety pressure"
+                )
             raw = reader.read()
-        hp = raw.party_hp or ()
-        if (
-            hp
-            and len(hp) == len(initial_hp)
-            and all(value > 0 for value in hp)
-            and hp != initial_hp
-        ):
-            return
+            _require_safe_damage_state(raw)
+            if raw.active_party_index != fastest_index:
+                switch_active_battler(
+                    actions,
+                    reader,
+                    emulator,
+                    fastest_index,
+                    expected_battle_state=1,
+                    label="goal-manager safe escape lead",
+                    wait_frames=120,
+                )
+            _flee(emulator, actions, reader, raw)
+        _require_safe_damage_state(reader.read())
     raise GoalManagerContextMaterializationError(
-        "bounded wild encounters did not produce safe party damage"
+        "bounded wild encounters did not reach active safety pressure"
+    )
+
+
+def _safety_pressure(raw: RawGameState) -> float:
+    return 1.0 - party_safety_satisfaction(party_observation_from_raw(raw))
+
+
+def _require_safe_damage_state(raw: RawGameState) -> None:
+    current_hp = raw.party_hp or ()
+    current_maximum = raw.party_max_hp or ()
+    current_status = raw.party_status or ()
+    if (
+        not current_hp
+        or len(current_hp) != len(current_maximum)
+        or len(current_hp) != len(current_status)
+    ):
+        raise GoalManagerContextMaterializationError(
+            "damage materialization lost complete party evidence"
+        )
+    if any(value <= 0 for value in current_hp):
+        raise GoalManagerContextMaterializationError(
+            "damage materialization allowed a party member to faint"
+        )
+
+
+def _damage_context_ready(
+    raw: RawGameState,
+    *,
+    require_field_recovery: bool,
+) -> bool:
+    _require_safe_damage_state(raw)
+    if _safety_pressure(raw) < _ACTIVE_SAFETY_PRESSURE:
+        return False
+    if not require_field_recovery:
+        return True
+    try:
+        plan = plan_party_recovery(
+            tuple(raw.party_hp or ()),
+            tuple(raw.party_max_hp or ()),
+            tuple(raw.party_status or ()),
+        )
+    except FieldRecoveryError:
+        return False
+    inventory = dict(raw.bag_items or ())
+    required = Counter(item for _, item in plan)
+    return all(
+        inventory.get(int(item), 0) >= quantity
+        for item, quantity in required.items()
     )
 
 
@@ -173,7 +345,7 @@ def _apply_mode(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
 ) -> None:
-    _require_cinnabar_nurse(reader)
+    _normalize_cinnabar_nurse(actions, reader, emulator)
     if mode == "mansion":
         _mansion_boundary(actions, reader, emulator)
         return
@@ -201,7 +373,12 @@ def _apply_mode(
             )
         return
     if mode in {"damaged-field", "damaged-center"}:
-        _damage_party(actions, reader, emulator)
+        _damage_party(
+            actions,
+            reader,
+            emulator,
+            require_field_recovery=mode == "damaged-field",
+        )
         if mode == "damaged-center":
             _training_dig_to_cinnabar(actions, reader, emulator)
             _move(actions, reader, ("up",), "goal-manager damaged Center entry")
@@ -212,6 +389,7 @@ def _apply_mode(
                 "goal-manager damaged Center",
             )
             _move(actions, reader, ("up",) * 4, "goal-manager damaged nurse")
+            _require_safe_damage_state(reader.read())
         return
     raise GoalManagerContextMaterializationError("materialization mode is unsupported")
 
@@ -314,9 +492,11 @@ def main(argv: list[str] | None = None) -> int:
         CapturedProgressError,
         EmulatorError,
         EvaluationIdentityError,
+        FieldRecoveryError,
         GoalManagerContextCatalogError,
         GoalManagerContextMaterializationError,
         GoalManagerProtocolError,
+        ProtectedRecoveryError,
         ResumedStateError,
         RomValidationError,
         SurgeChapterError,
