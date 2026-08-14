@@ -2264,9 +2264,7 @@ class LiveWildCorridorSurveyExecutor:
                     target_hp=raw.enemy_hp,
                     target_max_hp=raw.enemy_max_hp,
                     catcher=party.members[helper_index],
-                    balls_available=_ordinary_capture_ball_total(
-                        _bag(self._emulator)
-                    ),
+                    balls_available=_ordinary_capture_ball_total(_bag(self._emulator)),
                     party_has_room=party.is_incomplete,
                     storage_has_room=any(
                         count < collection.box_capacity for count in collection.box_counts
@@ -2311,9 +2309,7 @@ class LiveWildCorridorSurveyExecutor:
         balls = _ordinary_capture_ball_inventory(_bag(self._emulator))
         _flee(self._emulator, self._executor, self._reader, raw)
         if _ordinary_capture_ball_inventory(_bag(self._emulator)) != balls:
-            raise RedAreaExecutionError(
-                f"{self._label} flee changed ordinary capture balls"
-            )
+            raise RedAreaExecutionError(f"{self._label} flee changed ordinary capture balls")
 
     def switch_box(self, box_index: int) -> None:
         raise RedAreaExecutionError(
@@ -2816,12 +2812,11 @@ def _try_catch_wild(
         raise ValueError("max_throws must be a positive integer")
     starting_inventory = _ordinary_capture_ball_inventory(_bag(emulator))
     starting_balls = sum(starting_inventory)
+    starting_specimens = _living_specimen_count(reader)
     if starting_balls <= 0:
-        raise SurgeChapterError(
-            f"{label} capture has no ordinary capture balls remaining."
-        )
+        raise SurgeChapterError(f"{label} capture has no ordinary capture balls remaining.")
     throws = min(starting_balls, max_throws)
-    for _ in range(throws):
+    for throws_used in range(1, throws + 1):
         ball = _next_ordinary_capture_ball(_bag(emulator))
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
@@ -2831,7 +2826,29 @@ def _try_catch_wild(
             raw = reader.read()
             if raw.battle_state == 0:
                 _confirm_kind(executor, MacroActionKind.CANCEL, 6, 180)
-                return True
+                for settle_pulse in range(7):
+                    ending_specimens = _living_specimen_count(reader)
+                    if ending_specimens == starting_specimens + 1:
+                        ending_balls = _ordinary_capture_ball_total(_bag(emulator))
+                        if ending_balls != starting_balls - throws_used:
+                            raise SurgeChapterError(
+                                f"{label} capture changed ordinary balls by an invalid quantity."
+                            )
+                        return True
+                    if ending_specimens != starting_specimens:
+                        raise SurgeChapterError(
+                            f"{label} capture changed the living collection by an invalid quantity."
+                        )
+                    if settle_pulse < 6:
+                        _pulse(executor, MacroActionKind.CANCEL, frames=180)
+                ending_balls = _ordinary_capture_ball_total(_bag(emulator))
+                if ending_balls != starting_balls - throws_used:
+                    raise SurgeChapterError(
+                        f"{label} ended encounter changed ordinary-ball accounting."
+                    )
+                # Roar, Teleport and similar wild exits can end battle after a
+                # failed throw.  Battle termination is not capture evidence.
+                return False
             if (
                 raw.battle_state == 1
                 and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
@@ -2844,10 +2861,19 @@ def _try_catch_wild(
     _flee(emulator, executor, reader, raw)
     ending_balls = _ordinary_capture_ball_total(_bag(emulator))
     if ending_balls != starting_balls - throws:
-        raise SurgeChapterError(
-            f"{label} capture retry changed its ordinary-ball accounting."
-        )
+        raise SurgeChapterError(f"{label} capture retry changed its ordinary-ball accounting.")
     return False
+
+
+def _living_specimen_count(reader: PokemonRedStateReader) -> int:
+    """Count party plus all boxes without confusing a wild exit for a catch."""
+
+    raw = reader.read()
+    party = tuple(raw.party_species_ids or ())
+    if raw.party_count is None or raw.party_count != len(party):
+        raise SurgeChapterError("Wild capture lost complete party-count evidence.")
+    boxes = reader.read_all_box_states()
+    return len(party) + sum(boxes.counts)
 
 
 def _ordinary_capture_ball_inventory(
@@ -2862,9 +2888,7 @@ def _ordinary_capture_ball_total(inventory: Mapping[int, int]) -> int:
 
 def _next_ordinary_capture_ball(inventory: Mapping[int, int]) -> ItemId:
     try:
-        return next(
-            item for item in WILD_CAPTURE_BALL_PRIORITY if inventory.get(item, 0) > 0
-        )
+        return next(item for item in WILD_CAPTURE_BALL_PRIORITY if inventory.get(item, 0) > 0)
     except StopIteration as error:
         raise SurgeChapterError("No ordinary capture ball remains") from error
 

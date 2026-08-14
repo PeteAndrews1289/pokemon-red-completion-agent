@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import fields, replace
+from types import SimpleNamespace
 
 import pytest
 
@@ -108,6 +109,61 @@ def test_ordinary_wild_capture_uses_late_game_balls_but_reserves_master_ball() -
     )
     assert _ordinary_capture_ball_total(inventory) == 5
     assert _next_ordinary_capture_ball(inventory) is ItemId.GREAT_BALL
+
+
+@pytest.mark.parametrize(("persist_capture", "expected"), [(True, True), (False, False)])
+def test_wild_capture_requires_living_collection_growth_after_battle_exit(
+    monkeypatch: pytest.MonkeyPatch,
+    persist_capture: bool,
+    expected: bool,
+) -> None:
+    class Runtime:
+        raw = replace(_raw(), battle_state=1)
+        box_count = 0
+        confirmations = 0
+        bag = {ItemId.POKE_BALL: 3}
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_all_box_states(self) -> object:
+            return SimpleNamespace(counts=(self.box_count,) + (0,) * 11)
+
+    runtime = Runtime()
+
+    def pulse(
+        _executor: object,
+        kind: MacroActionKind,
+        *_args: object,
+        **_kwargs: object,
+    ) -> None:
+        if kind is not MacroActionKind.CONFIRM:
+            return
+        runtime.confirmations += 1
+        if runtime.confirmations == 2:
+            runtime.bag[ItemId.POKE_BALL] -= 1
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            if persist_capture:
+                runtime.box_count += 1
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: runtime.bag)
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_confirm_kind", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+
+    captured = surge_module._try_catch_wild(
+        runtime,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        runtime,  # type: ignore[arg-type]
+        0xA3,
+        "wild exit proof",
+        max_throws=5,
+    )
+
+    assert captured is expected
+    assert runtime.bag[ItemId.POKE_BALL] == 2
+    assert runtime.raw.battle_state == 0
 
 
 def test_mart_buy_list_waits_for_variable_purchase_dialogue(

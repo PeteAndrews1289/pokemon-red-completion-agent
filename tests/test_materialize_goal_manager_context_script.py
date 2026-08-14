@@ -237,10 +237,12 @@ class _StorageArea:
         outcomes: tuple[bool, ...],
         *,
         persist_capture: bool = True,
+        prepend_capture: bool = True,
     ) -> None:
         self.reader = reader
         self.outcomes = deque(outcomes)
         self.persist_capture = persist_capture
+        self.prepend_capture = prepend_capture
         self.pending: str | None = None
 
     def encountered_species_ref(self) -> str | None:
@@ -254,8 +256,12 @@ class _StorageArea:
         self.pending = None
         captured = self.outcomes.popleft()
         if captured and self.persist_capture:
-            self.reader.species[0].append(0xA3)
-            self.reader.levels[0].append(30)
+            if self.prepend_capture:
+                self.reader.species[0].insert(0, 0xA3)
+                self.reader.levels[0].insert(0, 30)
+            else:
+                self.reader.species[0].append(0xA3)
+                self.reader.levels[0].append(30)
         return captured
 
 
@@ -267,6 +273,7 @@ def test_storage_setup_requires_persistent_box_growth_from_real_capture_results(
     seek_steps, encounters, captures = module["_fill_active_box_with_real_captures"](
         area,
         reader,
+        settle_capture=lambda: None,
         target_count=18,
     )
 
@@ -286,8 +293,50 @@ def test_storage_setup_rejects_a_capture_claim_without_persistent_box_evidence()
         module["_fill_active_box_with_real_captures"](
             area,
             reader,
+            settle_capture=lambda: None,
             target_count=18,
         )
+
+
+def test_storage_setup_preserves_generation_one_prepend_order() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _StorageReader((17,) + (0,) * 11)
+    area = _StorageArea(reader, (True,), prepend_capture=False)
+
+    with pytest.raises(
+        module["GoalManagerContextMaterializationError"],
+        match="persistent box evidence",
+    ):
+        module["_fill_active_box_with_real_captures"](
+            area,
+            reader,
+            settle_capture=lambda: None,
+            target_count=18,
+        )
+
+
+def test_storage_setup_waits_for_delayed_pc_transfer_persistence() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _StorageReader((17,) + (0,) * 11)
+    area = _StorageArea(reader, (True,), persist_capture=False)
+    settle_calls = 0
+
+    def settle_capture() -> None:
+        nonlocal settle_calls
+        settle_calls += 1
+        if settle_calls == 2:
+            reader.species[0].insert(0, 0xA3)
+            reader.levels[0].insert(0, 30)
+
+    result = module["_fill_active_box_with_real_captures"](
+        area,
+        reader,
+        settle_capture=settle_capture,
+        target_count=18,
+    )
+
+    assert result == (1, 1, 1)
+    assert settle_calls == 2
 
 
 class _Reader:

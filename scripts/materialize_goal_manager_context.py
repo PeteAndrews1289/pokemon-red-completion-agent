@@ -55,6 +55,7 @@ from pokemon_red_completion.field_recovery import (
     FieldRecoveryError,
     plan_party_recovery,
 )
+from pokemon_red_completion.gen1_field_moves import DIG_MOVE_ID
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind
 from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCatalogError,
@@ -129,6 +130,8 @@ _STORAGE_GREAT_BALL_PURCHASE = 48
 _STORAGE_MAX_SEEK_STEPS = 4_096
 _STORAGE_MAX_ENCOUNTERS = 128
 _STORAGE_MAX_LEGS = 512
+_STORAGE_CAPTURE_SETTLE_PULSES = 12
+_STORAGE_CAPTURE_BATCH = 3
 _STORAGE_MANSION_DIRECTIONS = ("up",) * 7
 _DAMAGE_SWITCH_LIMIT = 64
 _MODES = (
@@ -359,6 +362,7 @@ def _fill_active_box_with_real_captures(
     area: LiveWildCorridorSurveyExecutor,
     reader: PokemonRedStateReader,
     *,
+    settle_capture: Callable[[], None],
     target_count: int,
 ) -> tuple[int, int, int]:
     """Catch into one active box until its exact pressure boundary is reached."""
@@ -377,7 +381,6 @@ def _fill_active_box_with_real_captures(
     initial_other_counts = tuple(
         count for index, count in enumerate(initial.counts) if index != active_index
     )
-    initial_species = initial.boxes[active_index].species_ids
     seek_steps = 0
     encounters = 0
     captures = 0
@@ -398,29 +401,36 @@ def _fill_active_box_with_real_captures(
         encounters += 1
         before = reader.read_all_box_states()
         before_count = before.counts[active_index]
+        before_species = before.boxes[active_index].species_ids
         captured = area.capture_encounter(encountered)
         if type(captured) is not bool:  # noqa: E721
             raise GoalManagerContextMaterializationError(
                 "storage setup capture result is not boolean"
             )
         after = reader.read_all_box_states()
-        after_count = after.counts[active_index]
         expected_delta = 1 if captured else 0
+        if captured and after.counts[active_index] == before_count:
+            for _ in range(_STORAGE_CAPTURE_SETTLE_PULSES):
+                settle_capture()
+                after = reader.read_all_box_states()
+                if after.counts[active_index] != before_count:
+                    break
+        after_count = after.counts[active_index]
         if (
             not after.storage_initialized
             or after.current_box_index != active_index
             or after_count != before_count + expected_delta
             or tuple(count for index, count in enumerate(after.counts) if index != active_index)
             != initial_other_counts
-            or after.boxes[active_index].species_ids[: len(initial_species)] != initial_species
+            or after.boxes[active_index].species_ids[expected_delta:] != before_species
         ):
             raise GoalManagerContextMaterializationError(
                 "storage setup capture result disagreed with persistent box evidence"
             )
         current_hp = reader.read().party_hp or ()
-        if not current_hp or any(hp <= 0 for hp in current_hp):
+        if not current_hp or not any(hp > 0 for hp in current_hp):
             raise GoalManagerContextMaterializationError(
-                "storage setup allowed a party member to faint"
+                "storage setup lost every living party member"
             )
         captures += expected_delta
     final = reader.read_all_box_states()
@@ -466,30 +476,60 @@ def _storage_ready_boundary(
         raise GoalManagerContextMaterializationError(
             "storage setup missed the south endpoint of its Mansion lane"
         )
-    area = LiveWildCorridorSurveyExecutor(
-        emulator,
-        actions,
-        reader,
-        DEFAULT_SURGE_TIMING,
-        label="storage-pressure Mansion capture lane",
-        forward_directions=_STORAGE_MANSION_DIRECTIONS,
-        starting_endpoint="south",
-        max_legs=_STORAGE_MAX_LEGS,
-    )
-    _fill_active_box_with_real_captures(
-        area,
-        reader,
-        target_count=_STORAGE_TARGET_ACTIVE_BOX_COUNT,
-    )
+    while reader.read_all_box_states().counts[active_index] < (_STORAGE_TARGET_ACTIVE_BOX_COUNT):
+        batch_start = reader.read_all_box_states().counts[active_index]
+        batch_target = min(
+            batch_start + _STORAGE_CAPTURE_BATCH,
+            _STORAGE_TARGET_ACTIVE_BOX_COUNT,
+        )
+        area = LiveWildCorridorSurveyExecutor(
+            emulator,
+            actions,
+            reader,
+            DEFAULT_SURGE_TIMING,
+            label="storage-pressure Mansion capture lane",
+            forward_directions=_STORAGE_MANSION_DIRECTIONS,
+            starting_endpoint="south",
+            max_legs=_STORAGE_MAX_LEGS,
+        )
+        _fill_active_box_with_real_captures(
+            area,
+            reader,
+            settle_capture=lambda: _pulse(
+                actions,
+                MacroActionKind.CANCEL,
+                frames=180,
+            ),
+            target_count=batch_target,
+        )
+        captured_raw = reader.read()
+        captured_hp = captured_raw.party_hp or ()
+        captured_moves = captured_raw.party_moves or ()
+        if (
+            tuple(captured_raw.party_species_ids or ()) != before_party
+            or len(captured_hp) != len(captured_moves)
+            or not any(
+                hp > 0 and DIG_MOVE_ID in moves
+                for hp, moves in zip(captured_hp, captured_moves, strict=True)
+            )
+        ):
+            raise GoalManagerContextMaterializationError(
+                "storage setup changed its party or lost its living Dig holder"
+            )
+        if batch_target < _STORAGE_TARGET_ACTIVE_BOX_COUNT:
+            MANSION_TRAINING_VENUE.heal_and_return(actions, reader, emulator)
+            _settle_mansion_boundary(actions, reader, emulator)
+            returned = reader.read()
+            if (returned.player_x, returned.player_y) != (5, 26):
+                raise GoalManagerContextMaterializationError(
+                    "storage setup missed its Mansion endpoint after batch recovery"
+                )
     captured = reader.read_all_box_states()
     if (
         captured.current_box_index != active_index
         or captured.counts[active_index] != _STORAGE_TARGET_ACTIVE_BOX_COUNT
-        or tuple(reader.read().party_species_ids or ()) != before_party
     ):
-        raise GoalManagerContextMaterializationError(
-            "storage setup changed its party or missed its active-box target"
-        )
+        raise GoalManagerContextMaterializationError("storage setup missed its active-box target")
     _training_dig_to_cinnabar(actions, reader, emulator)
     _move(actions, reader, ("up",), "goal-manager storage Center entry")
     _require(
