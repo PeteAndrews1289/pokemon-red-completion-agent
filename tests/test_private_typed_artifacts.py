@@ -6,9 +6,13 @@ import stat
 from pathlib import Path
 from typing import cast
 
+import numpy as np
 import pytest
 
 from pokemon_red_completion import private_artifacts as private_artifacts_module
+from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
+from pokemon_red_completion.battle_semantics import FEATURE_NAMES, FEATURE_SCHEMA_ID
+from pokemon_red_completion.learned_battle_policy import load_battle_model_artifact
 from pokemon_red_completion.private_artifacts import (
     EPISODE_FORMAT,
     PRIVATE_JSON_ARTIFACT_FORMAT,
@@ -109,6 +113,44 @@ def test_typed_artifact_is_canonical_private_and_distinct_from_an_episode(
 
     with pytest.raises(PrivateArtifactError, match="unsupported or missing"):
         store.open_episode("battle-ranker-001")
+
+
+def test_battle_model_candidate_round_trips_through_real_private_writer(
+    tmp_path: Path,
+) -> None:
+    root, store = _make_store(tmp_path)
+    model = MaskedMLPMoveRanker(
+        feature_names=FEATURE_NAMES,
+        feature_schema_id=FEATURE_SCHEMA_ID,
+        input_weights=np.zeros((2, len(FEATURE_NAMES)), dtype=np.float64),
+        hidden_bias=np.zeros(2, dtype=np.float64),
+        output_weights=np.asarray((0.25, -0.5), dtype=np.float64),
+        output_bias=0.0,
+        training_seed=7,
+    )
+    model_sha256 = hashlib.sha256(model.to_json().encode("utf-8")).hexdigest()
+
+    with store.begin_artifact(
+        "battle-outcome-round-trip",
+        kind="battle_outcome_cycle",
+    ) as writer:
+        writer.append(
+            "model",
+            {
+                "record_type": "battle_model_candidate",
+                "model": model.to_dict(),
+                "model_sha256": model_sha256,
+                "authority": "shadow_only",
+            },
+        )
+
+    loaded = load_battle_model_artifact(
+        root / "battle-outcome-round-trip" / "model.jsonl"
+    )
+
+    assert isinstance(loaded, MaskedMLPMoveRanker)
+    assert loaded.to_json() == model.to_json()
+    assert hashlib.sha256(loaded.to_json().encode("utf-8")).hexdigest() == model_sha256
 
 
 @pytest.mark.parametrize(

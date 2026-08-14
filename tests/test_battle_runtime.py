@@ -12,6 +12,7 @@ from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
 from pokemon_red_completion.battle_policy import choose_cerulean_rival_move_slot
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattlePolicyBoundary,
     BattlePolicyObservation,
     BattleRecoveryCapability,
     BattleResourcePolicy,
@@ -19,14 +20,17 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTimeoutError,
     BattleRuntimeTiming,
     BattleSwitchCapability,
+    BattleTurnExecution,
     RequiredMovePolicy,
     _confirm_attack_with_pp_gate,
     _require_present_state,
     _trainer_switch_prompt_visible,
+    advance_battle_to_policy_boundary,
     battle_policy_override_active,
     bind_battle_decision_observer,
     bind_battle_policy_override,
     bind_battle_schedule_observer,
+    execute_bounded_battle_move_turn,
     note_observed_battle_exit,
     recovery_action_due,
     run_adaptive_trainer_battle,
@@ -38,6 +42,7 @@ from pokemon_red_completion.battle_schedule import (
     bind_battle_start_schedule,
 )
 from pokemon_red_completion.collection_protocol import BattleStartOffset
+from pokemon_red_completion.executor import ExecutedAction
 from pokemon_red_completion.observation import (
     BULBASAUR_SPECIES_ID,
     PIDGEOTTO_SPECIES_ID,
@@ -182,6 +187,278 @@ class FakeRuntime:
         self.actions.append(action)
         if self.on_action is not None:
             self.on_action(action)
+
+
+class MeasuredTurnRuntime(FakeRuntime):
+    def execute(self, action: MacroAction) -> ExecutedAction:
+        self.actions.append(action)
+        if self.on_action is not None:
+            self.on_action(action)
+        frames = action.repeat if action.kind is MacroActionKind.WAIT else action.repeat * 2
+        return ExecutedAction(action, (), frames)
+
+
+def test_policy_boundary_advances_dialogue_without_querying_or_selecting() -> None:
+    runtime = MeasuredTurnRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    confirms = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirms
+        if action.kind is MacroActionKind.CONFIRM:
+            confirms += 1
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MAIN,
+                selected_main_command=2,
+            )
+
+    runtime.on_action = advance
+
+    boundary = advance_battle_to_policy_boundary(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        expected_battle_state=2,
+    )
+
+    assert isinstance(boundary, BattlePolicyBoundary)
+    assert boundary.state is runtime.raw
+    assert boundary.actions_executed == 2
+    assert boundary.frames_executed == 182
+    assert confirms == 1
+    assert runtime.raw.first_party_pp == (35, 30, 30, 11)
+
+
+def test_policy_boundary_returns_existing_main_without_controller_input() -> None:
+    runtime = MeasuredTurnRuntime()
+
+    boundary = advance_battle_to_policy_boundary(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        expected_battle_state=2,
+    )
+
+    assert boundary.actions_executed == 0
+    assert boundary.frames_executed == 0
+    assert runtime.actions == []
+
+
+def test_bounded_move_turn_executes_once_and_stops_at_observed_effect() -> None:
+    runtime = MeasuredTurnRuntime()
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+        elif confirmations == 2:
+            runtime.raw = replace(
+                runtime.raw,
+                enemy_hp=11,
+                first_party_pp=(34, 30, 30, 11),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=2,
+    )
+
+    assert isinstance(result, BattleTurnExecution)
+    assert result.initial_state.enemy_hp == 20
+    assert result.final_state.enemy_hp == 11
+    assert result.final_state.battle_state == 2
+    assert result.final_state.first_party_pp == (34, 30, 30, 11)
+    assert result.actions_executed == 4
+    assert result.frames_executed == 304
+    assert result.move_executed
+    assert result.pre_attack_frames == 122
+    assert confirmations == 2
+
+
+def test_bounded_move_turn_rejects_invalid_policy_boundary_without_input() -> None:
+    runtime = MeasuredTurnRuntime(
+        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+    )
+
+    with pytest.raises(BattleRuntimeError, match="semantic MAIN menu"):
+        execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1,
+            expected_battle_state=2,
+        )
+
+    assert runtime.actions == []
+
+
+def test_bounded_move_turn_equalizes_pre_attack_frames_across_move_slots() -> None:
+    def run(slot: int) -> BattleTurnExecution:
+        runtime = MeasuredTurnRuntime()
+
+        def advance(action: MacroAction) -> None:
+            if (
+                action.kind is MacroActionKind.CONFIRM
+                and runtime.menu.phase is BattleMenuPhase.MAIN
+            ):
+                runtime.menu = BattleMenuState(
+                    BattleMenuPhase.MOVE,
+                    selected_move_slot=1,
+                )
+            elif action.kind is MacroActionKind.MOVE:
+                runtime.menu = BattleMenuState(
+                    BattleMenuPhase.MOVE,
+                    selected_move_slot=slot,
+                )
+            elif (
+                action.kind is MacroActionKind.CONFIRM
+                and runtime.menu.phase is BattleMenuPhase.MOVE
+            ):
+                pp = list(runtime.raw.first_party_pp or ())
+                pp[slot - 1] -= 1
+                runtime.raw = replace(
+                    runtime.raw,
+                    enemy_hp=15,
+                    first_party_pp=tuple(pp),
+                )
+                runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+        runtime.on_action = advance
+        return execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=slot,
+            expected_battle_state=2,
+            minimum_pre_attack_frames=800,
+        )
+
+    slot_one = run(1)
+    slot_two = run(2)
+
+    assert slot_one.pre_attack_frames == slot_two.pre_attack_frames == 800
+    assert slot_one.move_executed and slot_two.move_executed
+    assert slot_one.frames_executed == slot_two.frames_executed == 982
+    assert slot_one.final_state.first_party_pp == (34, 30, 30, 11)
+    assert slot_two.final_state.first_party_pp == (35, 29, 30, 11)
+
+
+def test_bounded_move_turn_tracks_original_pp_after_forced_party_switch() -> None:
+    runtime = MeasuredTurnRuntime(
+        raw=replace(
+            _raw(),
+            party_count=2,
+            party_pp=((35, 30, 30, 11), (22, 18, 14, 10)),
+            active_party_index=0,
+            active_party_moves=(
+                TACKLE_MOVE_ID,
+                TAIL_WHIP_MOVE_ID,
+                MEGA_PUNCH_MOVE_ID,
+                WATER_GUN_MOVE_ID,
+            ),
+            active_party_pp=(35, 30, 30, 11),
+        )
+    )
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+        elif confirmations == 2:
+            runtime.raw = replace(
+                runtime.raw,
+                battle_state=0,
+                enemy_hp=0,
+                party_pp=((34, 30, 30, 11), (22, 18, 14, 10)),
+                active_party_index=1,
+                active_party_hp=40,
+                active_party_moves=(
+                    TACKLE_MOVE_ID,
+                    TAIL_WHIP_MOVE_ID,
+                    MEGA_PUNCH_MOVE_ID,
+                    WATER_GUN_MOVE_ID,
+                ),
+                active_party_pp=(22, 18, 14, 10),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=2,
+    )
+
+    assert result.move_executed
+    assert result.final_state.active_party_index == 1
+    assert result.final_state.active_party_pp == (22, 18, 14, 10)
+
+
+def test_bounded_move_turn_rejects_global_policy_override_without_input() -> None:
+    class Override:
+        def choose_move(
+            self,
+            observation: BattlePolicyObservation,
+            fallback: Callable[[], int],
+        ) -> int:
+            del observation, fallback
+            return 2
+
+    runtime = MeasuredTurnRuntime()
+    with (
+        bind_battle_policy_override(Override()),
+        pytest.raises(BattleRuntimeError, match="policy override"),
+    ):
+        execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1,
+            expected_battle_state=2,
+        )
+
+    assert runtime.actions == []
+
+
+def test_bounded_move_turn_rejects_unusable_slot_without_input() -> None:
+    runtime = MeasuredTurnRuntime()
+    runtime.raw = replace(
+        runtime.raw,
+        first_party_moves=(TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, MEGA_PUNCH_MOVE_ID, 0),
+    )
+
+    with pytest.raises(BattleRuntimeError, match="without move evidence"):
+        execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=4,
+            expected_battle_state=2,
+        )
+
+    assert runtime.actions == []
 
 
 class ImmediateBattleExitRuntime(FakeRuntime):
