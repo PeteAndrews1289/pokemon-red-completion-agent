@@ -3,6 +3,24 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Final exact-head recheck and condition closure — 2026-08-14
+
+Reviewed source: exact commit `5347d95d3a26c999524142df0e71160cafd282a5`, after green GitHub
+CI run `31836904787`. Antigravity returned **approve**. Claude returned **approve with conditions**
+after measuring 3,248 passed, three deselected and one expected failure.
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| A control sink/model can fail after a teacher fallback counter commits | **Accept** | A deterministic unsupported encoder plus a control sink produced one failed decision, one teacher fallback, a returned-source gap of -1 and a swallowed dashboard error. Returned model/teacher attribution now commits through one helper only after fallible control recording succeeds. |
+| Producer reports complete terminal accounting despite a nonzero returned-source gap | **Accept** | `decision_accounting_complete` now requires both one terminal per attempt and zero returned-move source gap. A forged terminally complete/source-incomplete report is a negative test. |
+| Control-model low confidence returns a teacher move without a returned source | **Codex extension of the same defect class** | The newly centralized teacher-return path gives it exactly one teacher source and a named `control_low_confidence` reason. |
+| Parser mutation list may be mistaken for semantic coverage | **Accept as clarification** | A test comment distinguishes canonical byte freezing from the independent literal-policy semantic assertion. No protocol change was required. |
+
+The repaired source passes 3,251 ROM-free tests with the same three deselections and one expected
+failure. Antigravity's architectural approval remains applicable: the repair changes accounting,
+not authority or sequencing. No ROM, teacher, private/counted/sealed context, label, prediction,
+outcome or promotion occurred.
+
 ## Narrow follow-up rechecks and Codex adjudication — 2026-08-14
 
 Reviewed source: exact commit `316147fddc592c627b87882f782ad224c350f5f2`, after green GitHub

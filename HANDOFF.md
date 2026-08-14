@@ -17,6 +17,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Final reviewer condition closed before the battle adapter — 2026-08-14
+
+Antigravity approved exact commit `5347d95` without an architecture condition. Claude independently
+measured 3,248 passing ROM-free tests and returned **approve with conditions** after finding one
+additional move-accounting defect reachable when a control sink or control model is configured.
+That is not the dashboard configuration that produced the historical Red run, but it is the
+configuration the next real battle-learning lane needs, so the condition was accepted immediately.
+
+The defect was another partial-commit failure: the teacher fallback counter advanced, then control
+label recording re-encoded the same unsupported observation and raised. One attempt consequently
+looked like both a teacher-returned move and a failed decision; the producer claimed complete
+accounting while the dashboard rejected the projection. Returned-move attribution is now
+transactional at one boundary: control recording succeeds first, then exactly one of the model or
+teacher counters commits. The same helper closes the analogous model path and correctly types a
+control-model low-confidence teacher return. The producer's `decision_accounting_complete` flag now
+also requires a zero returned-move source gap. Three negative-direction tests distinguish all three
+repairs, and the canonical-parser test explains the separate byte-identity and semantic guards.
+
+The resulting source passes 3,251 ROM-free tests; three integration tests remain deliberately
+deselected and one documented expected failure remains. The source-bound registries were
+regenerated and golden-pinned. No ROM, teacher, private/counted/sealed context, label, prediction,
+outcome or authority promotion occurred. The next step is still one authenticated battle snapshot
+family through bounded action, outcome, learner update and untouched-lineage evaluation.
+
 ## Narrow exact-commit rechecks and final guard repair — 2026-08-14
 
 GitHub CI passed exact follow-up commit `316147f`. Claude and Antigravity then rechecked only the

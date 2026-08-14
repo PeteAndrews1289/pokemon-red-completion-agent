@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 final-audit scene: one move, two counters
+
+Show one battle-choice card splitting into two terminal bins: **TEACHER FALLBACK** and **FAILED**.
+Flash the impossible source gap **-1**, then reveal the order of operations: **COUNTER COMMIT →
+CONTROL LABEL WRITE → ERROR**. Rewind it and replace the sequence with **CONTROL EVIDENCE →
+ONE SOURCE COMMIT → RETURN**. Add the mirror probe—a low-confidence control decision returning a
+teacher move with no source—and route it through the same boundary.
+
+The narration is: **“This was not game-playing progress, but it removed a failure that would have
+made the first real learning result untrustworthy. The audit did its job because we fixed the
+condition even though it did not block the prior demo.”** End on **3,251 TESTS / NO ROM OPENED / NO
+AUTHORITY GRANTED / BATTLE SNAPSHOT LOOP NEXT**.
+
 ## August 14 recheck scene: even the audit had a held-out test
 
 Show the same impossible dashboard record twice: first as accepted—**6 LOW CONFIDENCE + 6

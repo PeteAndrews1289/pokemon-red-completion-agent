@@ -98,6 +98,18 @@
       "the zero-weight control has an exactly knowable 6-of-54 sealed score"
     ]
   },
+  "external_review_final_recheck": {
+    "antigravity_verdict": "approve",
+    "claude_verdict": "approve_with_conditions",
+    "codex_adjudication": "accepted_and_repaired_before_battle_adapter",
+    "reviewed_source_commit": "5347d95d3a26c999524142df0e71160cafd282a5",
+    "repairs": [
+      "returned model and teacher attribution commits only after fallible control recording",
+      "producer completeness requires zero returned-move source gap",
+      "control-model low-confidence teacher move has exactly one returned source"
+    ],
+    "scope": "no ROM, teacher, private/counted/sealed context, prediction, outcome, or authority promotion"
+  },
   "crystal_design": {
     "v2_retired_unopened": {
       "adaptation_examples_collected": 0,
@@ -209,7 +221,7 @@
   "rom_free_validation": {
     "documented_expected_failures": 1,
     "integration_tests_deselected": 3,
-    "passed": 3248,
+    "passed": 3251,
     "public_artifact_privacy": "passed",
     "source_bound_registries": [
       "battle_collection",

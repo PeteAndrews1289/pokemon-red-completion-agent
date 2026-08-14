@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the last audit found a transaction boundary
+
+The final recheck almost ended with two approvals. Antigravity found the architecture and authority
+boundaries intact. Claude found one more concrete failure in the configuration the next battle
+learner would need: the teacher-move counter could commit before a control label finished writing.
+If that write failed, one decision became both a teacher fallback and a failure. The dashboard knew
+the arithmetic was impossible; the producer still called it complete.
+
+The fix was not another exception patch. Every returned move now crosses one transaction boundary:
+record the fallible control evidence first, then commit exactly one source—model or teacher. A
+second probe exposed the mirror image, a control-model low-confidence teacher move with no source
+at all, and the same boundary fixed it. The final gate rose to 3,251 tests. No cartridge was run and
+no model gained authority; the point of the work was to keep the coming real learning experiment
+observable when it fails.
+
 ## August 14: the reviewers audited the audit
 
 The exact follow-up commit passed GitHub, then both reviewers received narrower prompts aimed at

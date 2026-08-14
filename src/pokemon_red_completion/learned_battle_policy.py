@@ -281,14 +281,18 @@ class ModelAssistedBattlePolicy:
                 teacher_slot=teacher_slot,
                 reason=fallback_reason,
             )
-            self.teacher_fallbacks += 1
-            self.fallback_reasons[fallback_reason] += 1
-            self._record_control_action(observation, BattleAction.move(teacher_slot))
-            return teacher_slot
+            return self._return_teacher_move(
+                observation,
+                teacher_slot,
+                reason=fallback_reason,
+            )
         if fallback_reason is not None:
-            teacher_slot = self._fallback(query_teacher, fallback_reason)
-            self._record_control_action(observation, BattleAction.move(teacher_slot))
-            return teacher_slot
+            teacher_slot = query_teacher()
+            return self._return_teacher_move(
+                observation,
+                teacher_slot,
+                reason=fallback_reason,
+            )
         assert predicted_slot is not None
         if self.execute_control_model:
             assert batch is not None
@@ -329,10 +333,11 @@ class ModelAssistedBattlePolicy:
                     teacher_slot=teacher_slot,
                     reason="teacher_disagreement",
                 )
-                self.teacher_fallbacks += 1
-                self.fallback_reasons["teacher_disagreement"] += 1
-                self._record_control_action(observation, BattleAction.move(teacher_slot))
-                return teacher_slot
+                return self._return_teacher_move(
+                    observation,
+                    teacher_slot,
+                    reason="teacher_disagreement",
+                )
         elif self.observe_teacher_when_not_required:
             try:
                 teacher_slot = query_teacher()
@@ -361,15 +366,32 @@ class ModelAssistedBattlePolicy:
                         reason="teacher_disagreement",
                     )
                     self.shadow_teacher_disagreements += 1
-        self.model_decisions += 1
-        self._record_control_action(observation, BattleAction.move(predicted_slot))
-        return predicted_slot
+        return self._return_model_move(observation, predicted_slot)
 
-    def _fallback(self, fallback: Callable[[], int], reason: str) -> int:
-        result = fallback()
+    def _return_teacher_move(
+        self,
+        observation: BattlePolicyObservation,
+        slot: int,
+        *,
+        reason: str,
+    ) -> int:
+        """Commit teacher attribution only after fallible control recording succeeds."""
+
+        self._record_control_action(observation, BattleAction.move(slot))
         self.teacher_fallbacks += 1
         self.fallback_reasons[reason] += 1
-        return result
+        return slot
+
+    def _return_model_move(
+        self,
+        observation: BattlePolicyObservation,
+        slot: int,
+    ) -> int:
+        """Commit model attribution only after fallible control recording succeeds."""
+
+        self._record_control_action(observation, BattleAction.move(slot))
+        self.model_decisions += 1
+        return slot
 
     def _record_correction(
         self,
@@ -434,6 +456,17 @@ class ModelAssistedBattlePolicy:
         )
 
     def public_dict(self) -> dict[str, object]:
+        accounted_decisions = (
+            self.returned_move_decisions
+            + self.non_move_control_decisions
+            + self.failed_decisions
+            + self.interrupted_decisions
+        )
+        returned_move_accounting_gap = (
+            self.returned_move_decisions
+            - self.model_decisions
+            - self.teacher_fallbacks
+        )
         result: dict[str, object] = {
             "schema": "pokemon-model-assisted-battle-policy-v1",
             "actor": (
@@ -446,24 +479,12 @@ class ModelAssistedBattlePolicy:
             "non_move_control_decisions": self.non_move_control_decisions,
             "failed_decisions": self.failed_decisions,
             "interrupted_decisions": self.interrupted_decisions,
-            "accounted_decisions": (
-                self.returned_move_decisions
-                + self.non_move_control_decisions
-                + self.failed_decisions
-                + self.interrupted_decisions
+            "accounted_decisions": accounted_decisions,
+            "decision_accounting_complete": (
+                self.decisions == accounted_decisions
+                and returned_move_accounting_gap == 0
             ),
-            "decision_accounting_complete": self.decisions
-            == (
-                self.returned_move_decisions
-                + self.non_move_control_decisions
-                + self.failed_decisions
-                + self.interrupted_decisions
-            ),
-            "returned_move_accounting_gap": (
-                self.returned_move_decisions
-                - self.model_decisions
-                - self.teacher_fallbacks
-            ),
+            "returned_move_accounting_gap": returned_move_accounting_gap,
             "model_decisions": self.model_decisions,
             "teacher_queries": self.teacher_queries,
             "teacher_queries_allowed": self.allow_teacher_queries,
@@ -740,8 +761,11 @@ class ModelAssistedBattlePolicy:
                 if replacement is request:
                     raise
                 raise replacement from request
-            self._record_control_action(observation, BattleAction.move(teacher_slot))
-            return teacher_slot
+            return self._return_teacher_move(
+                observation,
+                teacher_slot,
+                reason="control_low_confidence",
+            )
 
         if predicted_ref == CONTROL_CLASS_REFS[0] and not self.allow_teacher_queries:
             self.control_execution_decisions += 1
@@ -981,16 +1005,12 @@ class ModelAssistedBattlePolicy:
                     teacher_slot=teacher_slot,
                     reason="teacher_disagreement",
                 )
-                self.teacher_fallbacks += 1
-                self.fallback_reasons["teacher_disagreement"] += 1
-                self._record_control_action(
+                return self._return_teacher_move(
                     observation,
-                    BattleAction.move(teacher_slot),
+                    teacher_slot,
+                    reason="teacher_disagreement",
                 )
-                return teacher_slot
-        self.model_decisions += 1
-        self._record_control_action(observation, BattleAction.move(predicted_slot))
-        return predicted_slot
+        return self._return_model_move(observation, predicted_slot)
 
     def _handle_teacher_request(
         self,

@@ -1,5 +1,25 @@
 # Current audit — 2026-08-14
 
+## Final exact-head recheck and transactional move accounting
+
+Antigravity approved exact commit `5347d95` with no architecture blocker. Claude verified every
+requested integrity claim and the 3,248-test gate, but found one reproducible defect outside the
+historical dashboard configuration and directly inside the next battle-control lane. When control
+recording was enabled, an unsupported observation could obtain a teacher move, increment the
+teacher fallback counter, fail while re-encoding the control label, and then terminate as a failed
+decision. The dashboard caught the double source; the producer's own completeness flag did not.
+
+Codex accepted the condition. All returned teacher/model attribution now commits only after the
+last fallible control-recording step. The same boundary correctly accounts for control-model
+low-confidence teacher moves, and producer completeness now requires a zero returned-move source
+gap. Negative tests reproduce the control-sink failure, the formerly missing control fallback
+source, and a terminally complete but source-incomplete forged report. The resulting source passes
+3,251 ROM-free tests, with three integration deselections and one documented expected failure; all
+static, privacy, documentation, generator and registry gates remain green.
+
+No executable or private evidence was accessed. This repair removes a known trap from the next
+step; it does not grant authority or change the battle-first roadmap.
+
 ## Narrow exact-commit rechecks
 
 Exact commit `316147f` passed GitHub CI and two tailored external rechecks. Antigravity approved and

@@ -125,6 +125,12 @@ class _Encoder:
         return {"battle_state": raw.battle_state}
 
 
+class _RejectingEncoder:
+    def snapshot_from_raw(self, raw: RawGameState) -> dict[str, object]:
+        del raw
+        raise ValueError("unsupported live observation")
+
+
 class _ControlEncoder:
     class Snapshot:
         def to_dict(self) -> dict[str, object]:
@@ -579,6 +585,52 @@ def test_teacher_control_request_during_fallback_is_not_counted_as_returned_move
     ] is True
 
 
+def test_failed_control_record_does_not_count_a_returned_teacher_move() -> None:
+    projected: list[dict[str, object]] = []
+
+    def validate_progress(report: Mapping[str, object]) -> None:
+        projected.append(live_evaluation_state(report, None).public_dict())
+
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_RejectingEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+        control_sink=lambda record: None,
+        progress_sink=validate_progress,
+    )
+
+    with pytest.raises(ValueError, match="unsupported live observation"):
+        policy.choose_move(_observation(), lambda: 1)
+
+    report = policy.public_dict()
+    assert report["returned_move_decisions"] == 0
+    assert report["failed_decisions"] == 1
+    assert report["teacher_fallbacks"] == 0
+    assert report["returned_move_accounting_gap"] == 0
+    assert report["decision_accounting_complete"] is True
+    assert policy.progress_sink_errors == 0
+    assert projected[0]["decision_accounting_complete"] is True
+
+
+def test_policy_complete_flag_requires_returned_move_source_accounting() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+    )
+    policy.decisions = 1
+    policy.returned_move_decisions = 1
+
+    report = policy.public_dict()
+
+    assert report["accounted_decisions"] == 1
+    assert report["returned_move_accounting_gap"] == 1
+    assert report["decision_accounting_complete"] is False
+
+
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:
     policy = ModelAssistedBattlePolicy(
         model=_model(),
@@ -842,6 +894,31 @@ def test_control_execution_can_suppress_a_teacher_recovery() -> None:
     execution = policy.public_dict()["control_model_execution"]
     assert isinstance(execution, dict)
     assert execution["teacher_requests_suppressed"] == 1
+
+
+def test_control_low_confidence_teacher_move_has_one_return_source() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        control_model=_control_model(0),
+        execute_control_model=True,
+        control_confidence_threshold=1.0,
+        encoder=_ShadowEncoder(),  # type: ignore[arg-type]
+        projector=_Projector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=False,
+    )
+
+    assert policy.choose_move(_observation(), lambda: 1) == 1
+    report = policy.public_dict()
+    assert report["returned_move_decisions"] == 1
+    assert report["teacher_fallbacks"] == 1
+    assert report["model_decisions"] == 0
+    assert report["fallback_reasons"] == {"control_low_confidence": 1}
+    assert report["returned_move_accounting_gap"] == 0
+    assert report["decision_accounting_complete"] is True
+    assert live_evaluation_state(report, None).public_dict()[
+        "decision_accounting_complete"
+    ] is True
 
 
 def test_control_execution_preserves_move_teacher_gate() -> None:

@@ -6,6 +6,12 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+Final external recheck is closed. Before the first real battle adapter, returned move attribution
+was made transactional across fallible control-label recording and the producer now rejects a
+nonzero move-source gap. This removes a known observability trap but grants no authority. The active
+next step remains one authenticated battle snapshot family through outcome, learner update and
+untouched-lineage evaluation; do not expand navigation or party development first.
+
 ## Product definition
 
 The target is a transferable hierarchical Pokémon-playing agent, not a perfect Pokémon Red macro.

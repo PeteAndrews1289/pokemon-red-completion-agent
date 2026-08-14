@@ -121,6 +121,8 @@ def test_v3_contains_no_capture_label_prediction_or_private_path() -> None:
 
 
 def test_v3_parser_rejects_a_high_risk_endpoint_or_authorization_mutation() -> None:
+    # The parser freezes canonical bytes. Literal policy assertions in the preceding
+    # test independently guard semantic drift when the generator itself is mutated.
     document = json.loads(PLAN_PATH.read_text(encoding="ascii"))
     mutations = []
     for path, value in (
