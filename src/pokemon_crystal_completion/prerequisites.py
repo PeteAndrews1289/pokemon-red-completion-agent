@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from pokemon_crystal_completion.source_contract import (
-    CRYSTAL_US_REV0_SOURCE_CONTRACT,
+    CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT,
     CrystalSourceContract,
 )
 from pokemon_crystal_completion.transfer_protocol import CrystalTransferPlan
@@ -73,12 +73,12 @@ def assess_crystal_transfer_prerequisites(
     if fingerprint is None:
         return CrystalTransferPrerequisiteAudit(
             plan_sha256=plan.plan_sha256,
-            source_contract=CRYSTAL_US_REV0_SOURCE_CONTRACT,
+            source_contract=CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT,
             rom_revision_verified=False,
         )
     if not isinstance(fingerprint, RomFingerprint):
         raise TypeError("fingerprint must be RomFingerprint or None")
-    expected = CRYSTAL_US_REV0_SOURCE_CONTRACT
+    expected = CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT
     mismatches: list[str] = []
     if fingerprint.title != expected.rom_header_title:
         mismatches.append("header title")

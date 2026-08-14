@@ -1,20 +1,26 @@
 # Three-agent coordination
 
-> **2026-08-14 Crystal preregistration checkpoint:** Red's nine-goal manager is already trained and
+> **2026-08-14 Crystal v1.1 entry checkpoint:** Red's nine-goal manager is already trained and
 > promoted; do not reopen its 12 sealed destination captures. The public Crystal transfer gate is
-> now implemented without opening a Crystal context or computing a prediction. It pins the
-> international v1.0 source contract, projects title-free campaign pressures, hard-masks private
+> implemented without opening a Crystal context or computing a prediction. The owner supplied
+> international v1.1 after the untouched v1.0 target was frozen, so v1 was retired at all-zero
+> counters and a fresh v2 experiment/source contract was created rather than accepting two
+> revisions under one identity. It projects title-free campaign pressures, hard-masks private
 > capabilities, coherently decodes banked party/Pokédex state, and compares Red initialization with
 > zero initialization under identical preprocessing and updates. Canonical plan
-> `configs/crystal-goal-manager-transfer-v1.json` freezes 18 zero-shot, 27 adaptation and 27 sealed
+> `configs/crystal-goal-manager-transfer-v2.json` freezes 18 zero-shot, 27 adaptation and 27 sealed
 > contexts plus the budget-9 paired endpoint (at least 6 wins, 0 losses; exact two-sided
-> `p = 0.03125`). Current counters are 0/18, 0/27, 0/27 and 0 predictions. No matching Crystal ROM
-> exists locally, so the next authorized work is entry fingerprinting after the owner supplies a
-> lawful international v1.0 copy, followed by banked-reader qualification and bounded live
-> bindings. Do not build a complete Crystal route, tune from zero-shot results or expose private
-> paths/ROM identities in public artifacts.
+> `p = 0.03125`). Current counters are 0/18, 0/27, 0/27 and 0 predictions. The matching Crystal 1.1
+> identity passed the non-executing entry gate. Next publish, pass CI, and live-qualify banked reads
+> plus bounded bindings. Do not build a complete Crystal route, tune from zero-shot results or
+> expose private paths/ROM identities in public artifacts.
 > Canonical catalog, adaptation-admission, model-identity commitment and complete 27-outcome gates
-> now exist. Do not replace them with ad hoc JSON or score a partial sealed partition.
+> now exist. Canonical v2 plan
+> `configs/crystal-goal-manager-transfer-v2.json` has SHA-256
+> `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`. The entry gate passes;
+> the dashboard's real-ROM preview sent zero inputs and opened no context. Publish and pass exact-
+> commit CI before live banked-memory qualification. Do not replace the gates with ad hoc JSON or
+> score a partial sealed partition.
 
 > **2026-08-14 execution-rehearsal checkpoint:** Exact-commit catalog `4207981` froze all 81
 > contexts, but the first one-shot campaign stopped after five authenticated successes when public

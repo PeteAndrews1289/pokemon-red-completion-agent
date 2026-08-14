@@ -18,8 +18,8 @@ Completing an exact recorded route does not satisfy this definition.
 
 The first real cross-title test is frozen before a Crystal label or prediction exists. The
 canonical plan is
-[`crystal-goal-manager-transfer-v1.json`](../configs/crystal-goal-manager-transfer-v1.json), with
-SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+[`crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json), with
+SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
 It contains 72 disjoint semantic contexts:
 
 - 18 zero-shot probes, two for each of the nine portable goal kinds;
@@ -39,10 +39,12 @@ capability masks and bindings, bank-aware coherent party and Pokédex readers, a
 from Red and zero initialization. Canonical catalog, prediction-commitment and complete-outcome
 artifacts bind every later result to the exact plan, source, cartridge, question and fitted-model
 identities; partial sealed scoring is unavailable. The revision contract pins international
-Crystal v1.0 and the public source/symbol identities from `pret/pokecrystal`; the owner's ROM path,
-bytes and SHA-256 remain private. Current counters are **0/18 zero-shot opened, 0/27 adaptation
-examples, 0/27 sealed test opened and 0 predictions**. Live qualification is intentionally blocked
-until a matching lawfully owned cartridge is supplied through `POKEMON_CRYSTAL_ROM`.
+Crystal v1.1 and `pokecrystal11.sym` from `pret/pokecrystal`; the owner's ROM path, bytes and exact
+SHA-256 remain private. The earlier v1.0 target was retired with every counter still zero and is
+preserved only as a superseded preregistration. The v1.1 entry gate passes, while current counters
+remain **0/18 zero-shot opened, 0/27 adaptation examples, 0/27 sealed test opened and 0
+predictions**. A view-only loopback dashboard now combines rendered game frames with semantic
+party, collection, goal, model and experiment status without exposing controller authority.
 
 ## Transfer boundary
 

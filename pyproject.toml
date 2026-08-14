@@ -50,7 +50,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
-  "integration: requires a private, lawfully obtained Pokemon Red ROM",
+  "integration: requires a private, lawfully obtained Pokemon ROM",
 ]
 
 [tool.mypy]

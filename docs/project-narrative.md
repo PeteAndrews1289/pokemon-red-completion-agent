@@ -37,11 +37,21 @@ decision, and the six fitted model hashes must match the later prediction commit
 score remains unavailable until all twenty-seven sealed outcomes form one authenticated artifact.
 There is no partial result to stare at and no quiet opportunity to stop on a flattering prefix.
 
-There is one honest pause. The machine has Red and Blue but no matching international v1.0 Crystal
-cartridge. Therefore the scoreboard is still **0/18 ZERO-SHOT / 0/27 ADAPTATION / 0/27 SEALED / 0
-PREDICTIONS**. The plan, decoder and falsification tests are ready; the private ROM digest, live
-memory qualification and bounded Crystal contexts are not. **The project designed how Crystal can
-prove it wrong before asking Crystal to prove it right.**
+Then the owner supplied international Crystal 1.1—not the 1.0 revision named by the frozen plan.
+The code did not weaken the cartridge check or quietly accept both revisions. The untouched v1
+experiment retired at **0/18 ZERO-SHOT / 0/27 ADAPTATION / 0/27 SEALED / 0 PREDICTIONS**, and a
+fresh v2 contract was derived from Crystal 1.1's exact public source and symbol map. All 52
+allowlisted observation and storage locations match that revision independently. The matching
+owner cartridge now passes a path-free, non-executing entry gate.
+
+That cartridge also made the work visible without making the display part of the controller. A
+loopback-only learning observatory shows live emulator frames beside the current stage, party,
+collection, goal pressures, model choice, confidence, teacher/fallback counts and the three frozen
+experiment counters. Its first authenticated preview displayed the animated Crystal title screen
+while sending no input, opening no context and computing no prediction. The zeroes are deliberate:
+the view proves the observer boundary before the first lesson exists. **The project designed how
+Crystal could prove it wrong, authenticated the exact cartridge, and made every later claim visible
+without giving the dashboard authority over the game.**
 
 ## August 14: the answer finally controlled the game
 

@@ -19,15 +19,18 @@
 > canonical 18/27/27 zero-shot/adaptation/sealed protocol are now implemented before any Crystal
 > label. Catalog-bound adaptation, fitted-model prediction commitments and all-or-nothing sealed
 > scoring prevent unrelated rows, changed weights or partial results from entering the claim. Live
-> work awaits a matching owner-supplied international v1.0 cartridge; current Crystal
-> status is 0/18 zero-shot, 0/27 adaptation, 0/27 sealed and 0 predictions. The earlier one-shot Red
+> work is now unlocked by an authenticated owner-supplied international v1.1 cartridge; the exact
+> source/symbol contract and a fresh 72-context v2 plan were frozen before boot, teaching, or
+> prediction. Current Crystal status remains 0/18 zero-shot, 0/27 adaptation, 0/27 sealed and 0
+> predictions. The earlier one-shot Red
 > destination test remains unopened at 0/12 but is paused because it does not answer the broader
 > “can this model play Pokémon?” question. See the
 > [portable goal-manager design](docs/portable-goal-manager.md).
 
 > **Crystal transfer preregistration (August 14, 2026):** the exact 72-context plan is
-> [`configs/crystal-goal-manager-transfer-v1.json`](configs/crystal-goal-manager-transfer-v1.json),
-> SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+> [`configs/crystal-goal-manager-transfer-v2.json`](configs/crystal-goal-manager-transfer-v2.json),
+> SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
+> The untouched v1.0 plan is preserved as superseded; it opened no context, label, or prediction.
 > Every partition covers all nine goal kinds. Nested adaptation budgets are 9/18/27, and the
 > primary paired endpoint is fixed at nine examples: at least six Red-initialized wins and zero
 > losses gives exact two-sided `p = 0.03125`. Both candidates use identical preprocessing, examples,
@@ -35,6 +38,15 @@
 > committed before the test teacher acts, and all 27 outcomes must be authenticated together before
 > scoring. See the
 > [Crystal transfer benchmark](docs/crystal-transfer-benchmark.md).
+
+> **Live dashboard:** Crystal runs can now publish rendered game frames and identity-safe semantic
+> status to a loopback-only **Pokémon Learning Observatory**. It shows the current stage, actions,
+> frames, party health, registered/living/level-100 collection counts, goal pressures, model choice
+> and confidence, teacher queries, fallbacks, evidence events, and all three experiment counters.
+> The browser surface accepts GET requests only and exposes zero controller endpoints. Use
+> `scripts/run_crystal_dashboard.py` for a no-input authenticated preview; the same observer is the
+> display surface for qualification, collection, fitting, and later causal runs. See the
+> [dashboard guide](docs/progress-dashboard.md).
 
 > **Goal-manager promotion result (August 14, 2026):** the model scored 54/54 on train and 27/27 on
 > development validation. Fixed priority scored 15/27 and lowest effort 16/27; paired exact tests

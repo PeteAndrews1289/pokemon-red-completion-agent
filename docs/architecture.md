@@ -13,7 +13,7 @@ teacher fallback.
 
 ```mermaid
 flowchart LR
-    Game["PyBoy + private Pokémon Red ROM"] --> Adapter["Red observation adapter"]
+    Game["PyBoy + private, lawfully obtained Pokémon cartridge"] --> Adapter["Title-specific observation adapter"]
     Adapter --> State["Typed semantic state"]
     State --> Manager["Portable goal manager"]
     Manager --> Graph

@@ -8,10 +8,15 @@ authority. Crystal now asks the next falsifiable question: do those learned weig
 amount of new teaching required in a different generation?
 
 The exact public plan is
-[`configs/crystal-goal-manager-transfer-v1.json`](../configs/crystal-goal-manager-transfer-v1.json),
-with SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+[`configs/crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json),
+with SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
 It contains no capture, teacher label, prediction, private path, or ROM bytes. The older twelve-case
 Red destination test remains 0/12 opened and is not reused.
+
+V1 named international Crystal 1.0. The owner later supplied 1.1 while every Crystal counter was
+still zero. V1 is preserved as a superseded preregistration; it was never booted and opened no
+context, label, or prediction. V2 uses fresh experiment and slot identities, so evidence from the
+two targets cannot be combined accidentally.
 
 ## What is implemented before cartridge access
 
@@ -56,27 +61,49 @@ The ROM-free transfer gate is no longer a design note:
 - Sealed results form one canonical 27-outcome artifact. The evaluator reconstructs the catalog,
   commitment and outcome digests before scoring and cannot emit an intermediate statistic.
 
-These facts make the code ready for live qualification, not already qualified. No Crystal context
-has been opened and no Crystal model prediction exists.
+These facts make the code ready for live qualification, not already qualified. The v1.1 entry gate
+now passes, but no Crystal context has been opened and no Crystal model prediction exists.
 
 ## Pinned cartridge and source boundary
 
-The first supported target is Pokémon Crystal international v1.0:
+The first live target is Pokémon Crystal international v1.1:
 
 | Identity | Frozen value |
 | --- | --- |
-| Game ID | `pokemon.mainline:crystal:gbc:us:rev0` |
+| Game ID | `pokemon.mainline:crystal:gbc:international:rev1` |
 | Header title | `PM_CRYSTAL` |
 | Size | 2,097,152 bytes |
-| SHA-1 | `f4cd194bdee0d04ca4eac29e09b8e4e9d818c133` |
+| Revision | 1 |
+| SHA-1 | `f2f52230b536214ef7c9924f483392993e226cfb` |
 | Source authority | [`pret/pokecrystal`](https://github.com/pret/pokecrystal) at `7a7881d0d62e0ddbd82dcf10e7116807487ac651` |
 | Generated-symbol authority | commit `cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8` |
-| Symbol-file SHA-256 | `697fe20b3c659273a3ab8aa85db2eb78dcf674a3dd17c98b52fc1dddd37783f2` |
+| Symbol file | `pokecrystal11.sym` |
+| Symbol-file SHA-256 | `8a8b7a675bbb0e7b2e18d1604ecae68ac18aa0bd8f879cc58351489352bf8ef3` |
 
-The owner's exact ROM SHA-256 is intentionally unbound. It is computed from the lawful private copy
-and added to private evaluation identity before any context inventory. Its path and bytes never
-enter Git. `scripts/check_crystal_transfer_entry_gate.py` reports this boundary without booting the
-game, opening a context, running the teacher, or computing a prediction.
+The owner's exact ROM SHA-256 is bound only at runtime from the lawful private copy. Its path and
+bytes never enter Git. `scripts/check_crystal_transfer_entry_gate.py` passed this boundary without
+booting the game, opening a context, running the teacher, or computing a prediction. A checked-in
+fixture independently reproduces all 52 allowlisted WRAM/SRAM addresses from the pinned 1.1 symbol
+file rather than assuming that revision memory layouts are identical.
+
+## Live progress dashboard
+
+The **Pokémon Learning Observatory** is the human view of the run. It combines the latest rendered
+emulator frame with semantic information that already belongs to the observation/evidence layers:
+
+- current stage, location, action and frame counts, and emulation speed;
+- party levels, health and status;
+- registered, living and level-100 collection counts plus capture/storage headroom;
+- all nine goal pressures, availability, selected goal, confidence and authority mode;
+- decision, teacher-query and fallback totals;
+- zero-shot, adaptation and sealed-test counters; and
+- a short evidence event stream.
+
+It is deliberately not a controller. The server binds only to `127.0.0.1`, serves GET endpoints,
+rejects POST/PUT/DELETE, and reports zero controller endpoints in its own status. The emulator frame
+observer can request rendered pixels but has no button methods. `scripts/run_crystal_dashboard.py`
+provides an authenticated no-input preview; the production qualification and collection runners
+will publish their real semantic snapshots through the same in-memory observer.
 
 ## The 72-context experiment
 
@@ -127,9 +154,10 @@ This design answers the sample-efficiency question with the same decisions on bo
 the earlier six-example validation defect, where even a perfect result could not beat chance at
 `p < 0.05`.
 
-## What happens when the matching ROM is supplied
+## What happens now that the matching ROM is supplied
 
-1. Bind its SHA-256 privately and verify title, size, SHA-1, and revision before emulator start.
+1. **Complete:** bind its SHA-256 privately and verify title, size, SHA-1, and revision before
+   emulator start.
 2. Qualify banked WRAM reads against stable party, Pokédex, inventory, storage, badge, map, and
    control states; compare ordinary screens against decoded semantics.
 3. Implement the smallest independently verified bindings needed to create genuine multi-need

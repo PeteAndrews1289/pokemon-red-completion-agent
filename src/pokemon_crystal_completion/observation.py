@@ -99,7 +99,7 @@ class CrystalBattleStateReader(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class CrystalPokedexProgress:
-    """Seen and caught progress against the non-event v1.0 registration target."""
+    """Seen and caught progress against the non-event Crystal registration target."""
 
     registered: CompletionProgress
     seen: CompletionProgress

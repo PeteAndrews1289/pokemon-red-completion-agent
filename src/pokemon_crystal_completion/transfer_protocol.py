@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 
 from pokemon_crystal_completion.source_contract import (
-    CRYSTAL_US_REV0_SOURCE_CONTRACT,
+    CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT,
 )
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_model import (
@@ -25,9 +25,9 @@ from pokemon_red_completion.goal_manager_model import (
     goal_manager_adaptation_configuration,
 )
 
-CRYSTAL_TRANSFER_PLAN_SCHEMA = "pokemon-core-goal-manager-transfer-plan-v1"
-CRYSTAL_TRANSFER_EXPERIMENT_ID = "red-to-crystal-goal-manager-v1"
-CRYSTAL_TRANSFER_PLAN_FILENAME = "crystal-goal-manager-transfer-v1.json"
+CRYSTAL_TRANSFER_PLAN_SCHEMA = "pokemon-core-goal-manager-transfer-plan-v2"
+CRYSTAL_TRANSFER_EXPERIMENT_ID = "red-to-crystal-goal-manager-v2"
+CRYSTAL_TRANSFER_PLAN_FILENAME = "crystal-goal-manager-transfer-v2.json"
 CRYSTAL_CANDIDATE_ORDER_DERIVATION = "sha256-experiment-slot-kind-v1"
 CRYSTAL_BASELINE_PREDICTOR_IDS = (
     "fixed_priority",
@@ -158,7 +158,7 @@ class CrystalTransferPlan:
                 for goal_kind in self.goal_kind_order:
                     partition_ordinal += 1
                     slot_id = (
-                        f"crystal-goal-transfer-{partition.name}-"
+                        f"crystal-goal-transfer-v2-{partition.name}-"
                         f"{partition_ordinal:03d}"
                     )
                     rows.append(
@@ -179,7 +179,7 @@ class CrystalTransferPlan:
     def ready_for_private_context_access(self) -> bool:
         """The plan is frozen, but the owner's exact ROM digest is not yet bound."""
 
-        return CRYSTAL_US_REV0_SOURCE_CONTRACT.live_identity_complete
+        return CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.live_identity_complete
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -338,10 +338,10 @@ def crystal_transfer_plan_document() -> dict[str, object]:
         "slot_schedule": {
             "generation": "partition_block_then_goal-kind-order-v1",
             "goal_kind_order": [kind.value for kind in _GOAL_KIND_ORDER],
-            "identity_prefix": "crystal-goal-transfer",
+            "identity_prefix": "crystal-goal-transfer-v2",
         },
         "source_candidate": dict(_RED_CANDIDATE),
-        "target_source": CRYSTAL_US_REV0_SOURCE_CONTRACT.public_dict(),
+        "target_source": CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.public_dict(),
     }
 
 
@@ -363,7 +363,7 @@ def crystal_transfer_candidate_order(slot_id: str) -> tuple[GoalKind, ...]:
 
     if (
         not isinstance(slot_id, str)
-        or not slot_id.startswith("crystal-goal-transfer-")
+        or not slot_id.startswith("crystal-goal-transfer-v2-")
         or len(slot_id) > 96
     ):
         raise CrystalTransferProtocolError("Crystal transfer slot identity is invalid")

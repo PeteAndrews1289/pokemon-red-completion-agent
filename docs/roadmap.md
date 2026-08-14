@@ -26,12 +26,19 @@ examples, order, optimizer and budgets constant while comparing authenticated Re
 all-zero initialization.
 
 The canonical plan
-[`crystal-goal-manager-transfer-v1.json`](../configs/crystal-goal-manager-transfer-v1.json) freezes
+[`crystal-goal-manager-transfer-v2.json`](../configs/crystal-goal-manager-transfer-v2.json) freezes
 72 contexts: 18 zero-shot, 27 adaptation and 27 sealed test, balanced across all nine goal kinds.
 Nested adaptation budgets are 9/18/27. The primary endpoint is the paired nine-example comparison;
 at least six Red-initialized wins and zero losses gives exact two-sided `p = 0.03125`. Every test
 prediction must be committed before any test teacher action. Plan SHA-256 is
-`f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+`e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
+
+The owner supplied international Crystal v1.1 after the untouched v1.0 plan was frozen. With every
+Crystal counter still zero, the old target was retired prospectively and v2 received fresh
+experiment/slot identities, the exact v1.1 ROM pin and `pokecrystal11.sym` authority. The
+non-executing entry gate now passes. A loopback-only dashboard also shows live rendered frames,
+semantic party/collection state, goal pressures, decisions, confidence and experiment counters;
+it exposes no controller method and the preview has executed no input.
 
 The ROM-free control plane is also complete. Path-free catalogs enforce exact slot order,
 cross-partition disjointness, genuine multiway menus, three same-menu answer reversals and broad
@@ -47,15 +54,17 @@ Ordered next work:
    a testable paired endpoint, prediction-before-label order and failure taxonomy.
 3. **Complete:** implement canonical unlabeled catalogs, model-bound prediction commitments,
    catalog-bound adaptation admission and all-or-nothing sealed outcome scoring.
-4. **Blocked only on owner input:** obtain a lawful international v1.0 Crystal ROM. Bind its private
-   SHA-256 and pass the non-executing entry gate; no matching ROM exists locally today.
-5. Live-qualify banked reads, then implement one genuine multi-need goal context, one battle choice
+4. **Complete:** authenticate the lawful international v1.1 owner ROM and pass the non-executing
+   entry gate without opening a context, running a teacher or predicting.
+5. **Complete in observer preview; production wiring continues with each runner:** serve live game
+   frames and identity-safe model/experiment telemetry through a view-only local dashboard.
+6. Live-qualify banked reads, then implement one genuine multi-need goal context, one battle choice
    and one local-navigation round trip with independent verification.
-6. Materialize and freeze all 72 source-bound contexts. Run the 18-context Red zero-shot probe
+7. Materialize and freeze all 72 source-bound contexts. Run the 18-context Red zero-shot probe
    before collecting any Crystal adaptation label.
-7. Fit the fixed paired candidates, commit all sealed predictions, open the 27 test contexts once,
+8. Fit the fixed paired candidates, commit all sealed predictions, open the 27 test contexts once,
    and publish success or failure without optional stopping.
-8. Only after that result, expand toward breeding, trade evolution, time-of-day encounters, version
+9. Only after that result, expand toward breeding, trade evolution, time-of-day encounters, version
    routing, legendary puzzles and coordinated multi-save living-Pokédex completion.
 
 ## Historical focus (2026-08-14): prove every frozen binding before recollection

@@ -15,7 +15,7 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
-## Crystal ROM-free transfer gate complete; live work awaits the cartridge — 2026-08-14
+## Crystal 1.1 authenticated; v2 transfer gate and live dashboard ready — 2026-08-14
 
 Do not resume Red maintenance or build a complete Crystal walkthrough. The Red manager is promoted;
 the active question is whether its weights reduce Crystal teaching.
@@ -28,11 +28,13 @@ capabilities before a resolver can expose authority. Its vocabulary includes Gen
 mechanics such as happiness/time/trade evolution, breeding, time of day, storage, field moves,
 static/roaming encounters and puzzles; naming a capability is not evidence that it is live.
 
-`source_contract.py` pins international Crystal v1.0 (`PM_CRYSTAL`, 2,097,152 bytes, SHA-1
-`f4cd194bdee0d04ca4eac29e09b8e4e9d818c133`) to public `pret/pokecrystal` source commit
+`source_contract.py` now pins international Crystal v1.1 (`PM_CRYSTAL`, 2,097,152 bytes, revision
+byte 1, SHA-1 `f2f52230b536214ef7c9924f483392993e226cfb`) to public `pret/pokecrystal`
+source commit
 `7a7881d0d62e0ddbd82dcf10e7116807487ac651` and generated-symbol commit
-`cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8`. The allowlisted symbol file digest is
-`697fe20b3c659273a3ab8aa85db2eb78dcf674a3dd17c98b52fc1dddd37783f2`. The bank-aware reader
+`cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8`. The `pokecrystal11.sym` digest is
+`8a8b7a675bbb0e7b2e18d1604ecae68ac18aa0bd8f879cc58351489352bf8ef3`; an independent raw-symbol
+fixture matches all 52 allowlisted WRAM/SRAM labels. The bank-aware reader
 coherently double-reads and decodes Gen II party/Pokédex state; ROM-free tests pin struct stride,
 endianness, PP masking, status bits, species-list termination, event-only Celebi exclusion and
 torn-read retries. Egg-bearing parties intentionally fail closed until the later breeding-aware
@@ -47,9 +49,11 @@ The counted Items and Balls pockets now have the same coherent reader and valida
 terminators, duplicate stacks, quantities and pocket membership before deriving capture and
 recovery reserves.
 
-The exact transfer plan is
-[`configs/crystal-goal-manager-transfer-v1.json`](configs/crystal-goal-manager-transfer-v1.json),
-SHA-256 `f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+The owner supplied a lawful international v1.1 cartridge after the original v1.0 preregistration.
+Because the counters were still 0/18, 0/27, 0/27 and 0 predictions, v1 was retired without opening
+anything rather than weakened to accept another revision. The exact replacement plan is
+[`configs/crystal-goal-manager-transfer-v2.json`](configs/crystal-goal-manager-transfer-v2.json),
+SHA-256 `e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
 It prospectively fixes 72 contexts: 18 zero-shot, 27 adaptation and 27 sealed test, with every
 partition balanced across all nine goal kinds. Adaptation prefixes are 9/18/27. The paired
 Red-initialized and zero-initialized candidates use the same authenticated Red normalizer, examples,
@@ -66,12 +70,20 @@ evaluator reconstructs every digest before it can calculate the paired endpoint.
 reordered, mismatched or cloned artifacts fail closed.
 
 Current Crystal counters are **0/18 zero-shot opened, 0/27 adaptation examples, 0/27 sealed test
-opened, 0 predictions**. No matching Crystal ROM exists locally. When the owner supplies a lawful
-international v1.0 copy through `POKEMON_CRYSTAL_ROM`, first run
-`scripts/check_crystal_transfer_entry_gate.py`. It only fingerprints the ROM and reports a path-free
-gate; it does not boot, open a context, run the teacher or predict. Then live-qualify the banked
-reader before materializing any of the 72 contexts. If the observation schema or fixed settings
-change after zero-shot, retire the entire experiment and create fresh contexts.
+opened, 0 predictions**. The non-executing entry gate passed against the owner-supplied v1.1 bytes;
+it booted nothing, opened no context, ran no teacher and computed no prediction. A separate
+no-input preview then proved the live dashboard frame path without claiming memory qualification.
+`progress_dashboard.py` serves rendered frames plus semantic run/model/collection state on
+loopback only, rejects POST/PUT/DELETE, and exposes no controller endpoint. The next step is to
+publish this exact source, require green CI, and only then live-qualify banked reads before
+materializing any of the 72 v2 contexts. If the observation schema or fixed settings change after
+zero-shot, retire the entire experiment and create fresh identities.
+
+The local publication gate is green: **3,161 ROM-free tests passed**, three integration tests were
+intentionally deselected, one declared expected failure remained, and Ruff, whole-package mypy,
+privacy, documentation, plan and all source-bound registry checks passed. The exact private
+cartridge entry gate also passed again with no context, teacher or prediction access. Publication
+and exact-commit CI are still required; do not infer them from the local result.
 
 The twelve sealed Red destination captures remain **0/12** and are unrelated to this experiment.
 

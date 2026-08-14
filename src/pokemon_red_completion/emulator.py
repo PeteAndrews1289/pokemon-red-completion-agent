@@ -6,7 +6,7 @@ from contextlib import suppress
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Protocol
+from typing import Any, Protocol, runtime_checkable
 
 from pokemon_red_completion.constants import POKEMON_RED_US_REV_0, SupportedRom
 from pokemon_red_completion.rom import (
@@ -52,6 +52,21 @@ class PyBoyBackend(Protocol):
     def save_state(self, file_like_object: Any) -> None: ...
 
     def load_state(self, file_like_object: Any) -> None: ...
+
+
+@runtime_checkable
+class EmulatorFrameObserver(Protocol):
+    """Read-only rendered-frame sink; it has no controller methods."""
+
+    def wants_frame(self, logical_frame: int) -> bool: ...
+
+    def publish_frame(
+        self,
+        width: int,
+        height: int,
+        rgb: bytes,
+        logical_frame: int,
+    ) -> None: ...
 
 
 PyBoyFactory = Callable[..., PyBoyBackend]
@@ -132,6 +147,7 @@ class PyBoyAdapter:
         watch: bool = False,
         speed: int | None = None,
         expected_rom: SupportedRom = POKEMON_RED_US_REV_0,
+        frame_observer: EmulatorFrameObserver | None = None,
     ) -> None:
         """``expected_rom`` names which cartridge this adapter will load.
 
@@ -146,6 +162,8 @@ class PyBoyAdapter:
             raise TypeError("watch must be a boolean")
         if not isinstance(expected_rom, SupportedRom):
             raise TypeError("expected_rom must be a SupportedRom")
+        if frame_observer is not None and not isinstance(frame_observer, EmulatorFrameObserver):
+            raise TypeError("frame_observer must implement EmulatorFrameObserver")
         if speed is not None and (not isinstance(speed, int) or isinstance(speed, bool)):
             raise TypeError("speed must be an integer or None")
         if watch:
@@ -165,6 +183,7 @@ class PyBoyAdapter:
         self._watch = watch
         self._window_name = window_name
         self._speed = resolved_speed
+        self._frame_observer = frame_observer
         self._backend: PyBoyBackend | None = None
         self._window_event_pump: WindowEventPump | None = None
         self._rom_stream: io.BytesIO | None = None
@@ -408,7 +427,7 @@ class PyBoyAdapter:
             raise ValueError("frames must be a positive integer")
         backend = self._require_backend()
         if not self._watch:
-            self._tick_backend(backend, frames, render=False)
+            self._tick_backend(backend, frames, render=self._frame_observer is not None)
             return
         for _ in range(frames):
             if self._window_event_pump is None:
@@ -424,12 +443,48 @@ class PyBoyAdapter:
         *,
         render: bool,
     ) -> None:
-        alive = bool(backend.tick(frames, render=render, sound=False))
+        observer = self._frame_observer
+        next_logical_frame = self._logical_frame + frames
+        capture_frame = observer is not None and observer.wants_frame(next_logical_frame)
+        render_frame = render if observer is None or self._watch else capture_frame
+        alive = bool(backend.tick(frames, render=render_frame, sound=False))
         self._logical_frame += frames
         if not alive:
             raise EmulatorEndedError(
                 f"Emulator ended before completing frame {self._logical_frame}."
             )
+        if observer is not None and capture_frame:
+            width, height, rgb = self._screen_rgb(backend)
+            observer.publish_frame(width, height, rgb, self._logical_frame)
+
+    @staticmethod
+    def _screen_rgb(backend: PyBoyBackend) -> tuple[int, int, bytes]:
+        """Copy PyBoy's rendered RGB/RGBA ndarray without exposing its backend."""
+
+        screen = getattr(backend, "screen", None)
+        pixels = getattr(screen, "ndarray", None)
+        shape = getattr(pixels, "shape", None)
+        tobytes = getattr(pixels, "tobytes", None)
+        if (
+            not isinstance(shape, tuple)
+            or len(shape) != 3
+            or any(type(value) is not int or value < 1 for value in shape)  # noqa: E721
+            or not callable(tobytes)
+        ):
+            raise EmulatorError("Rendered emulator frame is unavailable.")
+        height, width, channels = shape
+        if channels not in (3, 4) or width > 1024 or height > 1024:
+            raise EmulatorError("Rendered emulator frame dimensions are unsupported.")
+        raw = tobytes()
+        if not isinstance(raw, bytes) or len(raw) != width * height * channels:
+            raise EmulatorError("Rendered emulator frame bytes are inconsistent.")
+        if channels == 4:
+            rgb = bytearray(width * height * 3)
+            rgb[0::3] = raw[0::4]
+            rgb[1::3] = raw[1::4]
+            rgb[2::3] = raw[2::4]
+            raw = bytes(rgb)
+        return width, height, raw
 
     @staticmethod
     def _validated_button(button: str) -> str:

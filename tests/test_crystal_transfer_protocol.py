@@ -18,8 +18,8 @@ from pokemon_crystal_completion.transfer_protocol import (
 from pokemon_red_completion.goal_manager import GoalKind
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PLAN_PATH = PROJECT_ROOT / "configs" / "crystal-goal-manager-transfer-v1.json"
-PLAN_SHA256 = "f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69"
+PLAN_PATH = PROJECT_ROOT / "configs" / "crystal-goal-manager-transfer-v2.json"
+PLAN_SHA256 = "e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b"
 
 
 def _canonical(document: object) -> bytes:
@@ -85,10 +85,11 @@ def test_committed_transfer_plan_is_canonical_and_source_bound() -> None:
     }
     target = document["target_source"]
     assert isinstance(target, dict)
-    assert target["game_id"] == "pokemon.mainline:crystal:gbc:us:rev0"
+    assert target["game_id"] == "pokemon.mainline:crystal:gbc:international:rev1"
     assert target["rom"] == {
         "header_title": "PM_CRYSTAL",
-        "sha1": "f4cd194bdee0d04ca4eac29e09b8e4e9d818c133",
+        "revision": 1,
+        "sha1": "f2f52230b536214ef7c9924f483392993e226cfb",
         "sha256": None,
         "sha256_required_before_private_context_access": True,
         "size_bytes": 2_097_152,
@@ -116,8 +117,8 @@ def test_all_partitions_are_disjoint_balanced_and_nested_budgets_are_balanced() 
         assert Counter(slot.goal_kind for slot in adaptation[:budget]) == Counter(
             {kind: per_kind for kind in GoalKind}
         )
-    assert slots[0].slot_id == "crystal-goal-transfer-zero_shot_probe-001"
-    assert slots[-1].slot_id == "crystal-goal-transfer-sealed_test-027"
+    assert slots[0].slot_id == "crystal-goal-transfer-v2-zero_shot_probe-001"
+    assert slots[-1].slot_id == "crystal-goal-transfer-v2-sealed_test-027"
 
 
 def test_primary_endpoint_has_enough_discordance_to_be_testable() -> None:

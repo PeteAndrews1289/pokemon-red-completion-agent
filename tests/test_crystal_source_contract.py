@@ -1,36 +1,43 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
 from pokemon_crystal_completion.source_contract import (
     CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL,
+    CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT,
     CRYSTAL_OBSERVATION_SYMBOLS,
     CRYSTAL_ROM_ENVIRONMENT_VARIABLE,
     CRYSTAL_STORED_BOX_SRAM_SYMBOLS,
-    CRYSTAL_US_REV0_SOURCE_CONTRACT,
     CrystalMemorySymbol,
     CrystalSourceContract,
     CrystalSourceContractError,
     CrystalSramSymbol,
 )
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 
 def test_crystal_revision_is_pinned_without_a_private_path() -> None:
-    contract = CRYSTAL_US_REV0_SOURCE_CONTRACT
+    contract = CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT
     public = contract.public_dict()
 
-    assert contract.game_id == "pokemon.mainline:crystal:gbc:us:rev0"
-    assert contract.adapter_id == "pokemon.crystal.gbc.us.rev0.goal-state.v1"
+    assert contract.game_id == "pokemon.mainline:crystal:gbc:international:rev1"
+    assert contract.adapter_id == (
+        "pokemon.crystal.gbc.international.rev1.goal-state.v1"
+    )
     assert contract.rom_header_title == "PM_CRYSTAL"
     assert contract.rom_size_bytes == 2_097_152
-    assert contract.rom_sha1 == "f4cd194bdee0d04ca4eac29e09b8e4e9d818c133"
+    assert contract.rom_revision == 1
+    assert contract.rom_sha1 == "f2f52230b536214ef7c9924f483392993e226cfb"
     assert contract.source_commit == "7a7881d0d62e0ddbd82dcf10e7116807487ac651"
     assert contract.symbols_commit == "cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8"
     assert contract.symbols_sha256 == (
-        "697fe20b3c659273a3ab8aa85db2eb78dcf674a3dd17c98b52fc1dddd37783f2"
+        "8a8b7a675bbb0e7b2e18d1604ecae68ac18aa0bd8f879cc58351489352bf8ef3"
     )
+    assert contract.symbols_filename == "pokecrystal11.sym"
     assert contract.rom_sha256 is None
     assert not contract.live_identity_complete
     assert CRYSTAL_ROM_ENVIRONMENT_VARIABLE == "POKEMON_CRYSTAL_ROM"
@@ -93,19 +100,44 @@ def test_storage_symbols_match_the_pinned_generated_map() -> None:
     )
 
 
+def test_every_allowlisted_symbol_matches_the_independent_crystal11_fixture() -> None:
+    fixture = json.loads(
+        (
+            PROJECT_ROOT / "tests" / "fixtures" / "crystal11-observation-symbols.json"
+        ).read_text(encoding="ascii")
+    )
+    actual = {
+        name: f"{symbol.bank:02x}:{symbol.address:04x}"
+        for name, symbol in CRYSTAL_OBSERVATION_SYMBOLS.items()
+    }
+    actual[CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL.name] = (
+        f"{CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL.bank:02x}:"
+        f"{CRYSTAL_ACTIVE_BOX_SRAM_SYMBOL.address:04x}"
+    )
+    actual.update(
+        {
+            symbol.name: f"{symbol.bank:02x}:{symbol.address:04x}"
+            for symbol in CRYSTAL_STORED_BOX_SRAM_SYMBOLS.values()
+        }
+    )
+
+    assert actual == fixture
+    assert len(actual) == 52
+
+
 def test_owner_sha256_binding_is_path_free_and_does_not_mutate_the_template() -> None:
     digest = "ab" * 32
-    bound = CRYSTAL_US_REV0_SOURCE_CONTRACT.with_owner_rom_sha256(digest)
+    bound = CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.with_owner_rom_sha256(digest)
 
     assert bound.rom_sha256 == digest
     assert bound.live_identity_complete
-    assert CRYSTAL_US_REV0_SOURCE_CONTRACT.rom_sha256 is None
-    assert bound.source_commit == CRYSTAL_US_REV0_SOURCE_CONTRACT.source_commit
+    assert CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.rom_sha256 is None
+    assert bound.source_commit == CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.source_commit
     assert bound.public_dict()["rom"]["sha256"] == digest  # type: ignore[index]
 
     for bad in ("AB" * 32, "0" * 63, "g" * 64, ""):
         with pytest.raises(CrystalSourceContractError, match="SHA-256"):
-            CRYSTAL_US_REV0_SOURCE_CONTRACT.with_owner_rom_sha256(bad)
+            CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT.with_owner_rom_sha256(bad)
 
 
 def test_symbol_contract_rejects_wrong_bank_or_memory_region() -> None:
@@ -127,6 +159,7 @@ def test_symbol_contract_rejects_wrong_bank_or_memory_region() -> None:
         {"game_id": "pokemon.mainline:crystal:wrong"},
         {"rom_header_title": "WRONG"},
         {"rom_size_bytes": 1},
+        {"rom_revision": 0},
         {"rom_sha1": "0" * 40},
         {"source_commit": "0" * 40},
         {"symbols_commit": "0" * 40},

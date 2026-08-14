@@ -43,7 +43,7 @@ from pokemon_red_completion.goal_manager import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PLAN_PATH = PROJECT_ROOT / "configs" / "crystal-goal-manager-transfer-v1.json"
+PLAN_PATH = PROJECT_ROOT / "configs" / "crystal-goal-manager-transfer-v2.json"
 ROM_SHA256 = "c" * 64
 SOURCE_COMMIT = "a" * 40
 SOURCE_BUNDLE = "b" * 64

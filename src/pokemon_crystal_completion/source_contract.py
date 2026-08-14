@@ -2,7 +2,7 @@
 
 The adapter is deliberately pinned before a private cartridge is opened.  The
 source and generated symbol identities are public; the eventual owner-supplied
-ROM path is not.  A SHA-1 identifies the supported international v1.0 image,
+ROM path is not.  A SHA-1 identifies the supported international v1.1 image,
 while a SHA-256 remains a mandatory live-qualification field that can only be
 bound from the owner's exact copy.
 """
@@ -13,17 +13,18 @@ from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from types import MappingProxyType
 
-CRYSTAL_GAME_ID = "pokemon.mainline:crystal:gbc:us:rev0"
-CRYSTAL_ADAPTER_ID = "pokemon.crystal.gbc.us.rev0.goal-state.v1"
+CRYSTAL_GAME_ID = "pokemon.mainline:crystal:gbc:international:rev1"
+CRYSTAL_ADAPTER_ID = "pokemon.crystal.gbc.international.rev1.goal-state.v1"
 CRYSTAL_ROM_ENVIRONMENT_VARIABLE = "POKEMON_CRYSTAL_ROM"
 CRYSTAL_ROM_HEADER_TITLE = "PM_CRYSTAL"
 CRYSTAL_ROM_SIZE_BYTES = 2_097_152
-CRYSTAL_ROM_SHA1 = "f4cd194bdee0d04ca4eac29e09b8e4e9d818c133"
+CRYSTAL_ROM_REVISION = 1
+CRYSTAL_ROM_SHA1 = "f2f52230b536214ef7c9924f483392993e226cfb"
 CRYSTAL_SOURCE_REPOSITORY = "https://github.com/pret/pokecrystal"
 CRYSTAL_SOURCE_COMMIT = "7a7881d0d62e0ddbd82dcf10e7116807487ac651"
 CRYSTAL_SYMBOLS_COMMIT = "cc6fc04f19c645f5c40f64f8d88b2ab42c7bdde8"
-CRYSTAL_SYMBOLS_FILENAME = "pokecrystal.sym"
-CRYSTAL_SYMBOLS_SHA256 = "697fe20b3c659273a3ab8aa85db2eb78dcf674a3dd17c98b52fc1dddd37783f2"
+CRYSTAL_SYMBOLS_FILENAME = "pokecrystal11.sym"
+CRYSTAL_SYMBOLS_SHA256 = "8a8b7a675bbb0e7b2e18d1604ecae68ac18aa0bd8f879cc58351489352bf8ef3"
 
 
 class CrystalSourceContractError(ValueError):
@@ -152,6 +153,7 @@ class CrystalSourceContract:
     adapter_id: str = CRYSTAL_ADAPTER_ID
     rom_header_title: str = CRYSTAL_ROM_HEADER_TITLE
     rom_size_bytes: int = CRYSTAL_ROM_SIZE_BYTES
+    rom_revision: int = CRYSTAL_ROM_REVISION
     rom_sha1: str = CRYSTAL_ROM_SHA1
     rom_sha256: str | None = None
     source_repository: str = CRYSTAL_SOURCE_REPOSITORY
@@ -166,6 +168,7 @@ class CrystalSourceContract:
             "adapter_id": CRYSTAL_ADAPTER_ID,
             "rom_header_title": CRYSTAL_ROM_HEADER_TITLE,
             "rom_size_bytes": CRYSTAL_ROM_SIZE_BYTES,
+            "rom_revision": CRYSTAL_ROM_REVISION,
             "rom_sha1": CRYSTAL_ROM_SHA1,
             "source_repository": CRYSTAL_SOURCE_REPOSITORY,
             "source_commit": CRYSTAL_SOURCE_COMMIT,
@@ -198,6 +201,7 @@ class CrystalSourceContract:
             "adapter_id": self.adapter_id,
             "rom": {
                 "header_title": self.rom_header_title,
+                "revision": self.rom_revision,
                 "size_bytes": self.rom_size_bytes,
                 "sha1": self.rom_sha1,
                 "sha256": self.rom_sha256,
@@ -216,7 +220,7 @@ class CrystalSourceContract:
         }
 
 
-CRYSTAL_US_REV0_SOURCE_CONTRACT = CrystalSourceContract()
+CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT = CrystalSourceContract()
 
 
 def _validate_sha256(value: object) -> None:
@@ -234,12 +238,13 @@ __all__ = [
     "CRYSTAL_GAME_ID",
     "CRYSTAL_OBSERVATION_SYMBOLS",
     "CRYSTAL_ROM_ENVIRONMENT_VARIABLE",
+    "CRYSTAL_ROM_REVISION",
     "CRYSTAL_SOURCE_COMMIT",
     "CRYSTAL_SOURCE_REPOSITORY",
     "CRYSTAL_STORED_BOX_SRAM_SYMBOLS",
     "CRYSTAL_SYMBOLS_COMMIT",
     "CRYSTAL_SYMBOLS_SHA256",
-    "CRYSTAL_US_REV0_SOURCE_CONTRACT",
+    "CRYSTAL_INTERNATIONAL_REV1_SOURCE_CONTRACT",
     "CrystalMemorySymbol",
     "CrystalSramSymbol",
     "CrystalSourceContract",

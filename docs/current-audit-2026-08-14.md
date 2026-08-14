@@ -19,7 +19,7 @@ authority.
 | Teacher use during promotion | 0 queries; 0 fallbacks |
 | Promotion episodes | 0 |
 | Sealed destination test | 0/12 opened; 0/12 evaluated |
-| ROM-free gate | 3,149 passed; 1 declared expected failure; lint/types/artifacts green |
+| ROM-free gate | 3,161 passed; 3 integration tests deselected; 1 declared expected failure; lint/types/artifacts green |
 
 The compact public record is
 [red-goal-manager-promotion-2026-08-14.json](evidence/red-goal-manager-promotion-2026-08-14.json).
@@ -33,7 +33,7 @@ exactly one, two and three examples per kind. Red-initialized and scratch candid
 authenticated Red normalizer, Crystal rows, row order, optimizer and update count. Only initial
 weights differ. The primary paired endpoint is fixed at nine examples and requires at least six
 wins with zero losses (`p = 0.03125`). Plan digest:
-`f38f0033b08c0997c21c5e749f9beb5d6f66c8cb9adc1cc94a4399657fd10d69`.
+`e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`.
 
 Crystal also has a ROM-free semantic adapter, private capability masks and private binding boundary.
 The revision layer is pinned to public `pret/pokecrystal` source and generated symbols. Bank-aware
@@ -49,10 +49,27 @@ commitments authenticate the six fitted model hashes, and the evaluator accepts 
 digest-bound 27-outcome set. The owner-ROM entry checker does not boot the game, run a teacher, open
 a context or compute a prediction.
 
-No matching Crystal ROM exists locally. Consequently Crystal remains **0/18 zero-shot opened,
-0/27 adaptation examples, and 0/27 sealed test opened**. The missing owner-supplied international
-v1.0 cartridge is now the only external input needed to begin live adapter qualification; its path
-and bytes will remain private.
+The owner supplied international Crystal v1.1 after the v1.0 plan had been frozen but before any
+Crystal access. V1 is preserved as superseded at **0/18, 0/27, 0/27 and 0 predictions**. V2 uses
+fresh experiment and slot identities, SHA-1 `f2f52230b536214ef7c9924f483392993e226cfb`, pinned
+`pokecrystal11.sym` authority and plan digest
+`e07ef52b1146f4c0ee05d003eea2f10f949e41a84398bb071def37f43ebd720b`. Its non-executing entry
+gate passes against the owner's private exact bytes. No context, teacher or prediction was opened.
+
+A new **Pokémon Learning Observatory** supplies the requested visual boundary. A loopback-only
+local page combines live 160×144 emulator frames with stage/action/frame counts, party health,
+registered/living/level-100 collection, resources, all nine goal pressures, model choice and
+confidence, teacher/fallback counts, evidence events and the 18/27/27 experiment counters. HTTP
+writes are rejected and the frame observer has no controller methods. A real-ROM no-input preview
+displayed the animated Crystal title screen while keeping all experiment counters at zero. This is
+render-path evidence, not banked-memory qualification.
+
+The complete local publication gate now passes: 3,161 ROM-free tests, one declared expected
+failure, three integration tests intentionally deselected, Ruff, whole-package mypy, public-artifact
+privacy inspection, documentation links, the exact v2 plan rebuild and all source-bound registry
+rebuild checks. The exact cartridge entry gate also passes with zero context, teacher or prediction
+access. GitHub publication and exact-commit CI remain separate requirements before live banked
+memory qualification.
 
 ## What the model actually learned
 
@@ -106,9 +123,9 @@ ranker can support. Four gaps remain:
    preregistered perturbations or a genuinely new title; do not reuse the sealed destination test
    for this unrelated claim.
 2. **Cross-title live qualification and actions.** Crystal's normalized goal evidence, source pin,
-   banked party/Pokédex decoder, capability masks and private binding contract now exist. A matching
-   owner ROM is still required to qualify those reads and implement a minimal set of real,
-   independently verified bindings.
+   banked party/Pokédex decoder, capability masks and private binding contract now exist, and the
+   matching v1.1 owner ROM passes entry. The reads and a minimal set of real, independently verified
+   bindings still require exact-commit live qualification.
 3. **Online hierarchy integration.** The manager has controlled one bounded decision at a time. A
    long-running player must repeatedly observe, choose, execute, verify, recover and replan without
    a hidden route deciding when the manager is consulted.
@@ -124,8 +141,9 @@ ranker can support. Four gaps remain:
 - **Complete:** freeze Crystal's nine-pressure projection, capability vocabulary, source identity,
   private binding boundary and paired adaptation algorithm.
 - **Complete:** publish the 18/27/27 zero-shot/adaptation/sealed protocol before any Crystal label.
-- **Pending live input:** bind the matching owner-ROM SHA-256 and qualify one goal-choice, one battle
-  and one local-navigation microtask with independent referees.
+- **Complete:** bind and verify the matching owner-ROM SHA-256 without booting or opening a context.
+- **Pending exact-commit live work:** qualify banked reads, one goal choice, one battle and one local-
+  navigation microtask with independent referees.
 
 ### Gate 2 — minimum executable Crystal slice
 

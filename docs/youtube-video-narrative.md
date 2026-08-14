@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 Crystal 1.1 scene: the revision changed, the rules did not
+
+Put the frozen Crystal 1.0 card on screen beside **0/18 ZERO-SHOT / 0/27 ADAPTATION / 0/27 TEST / 0
+PREDICTIONS**. Then reveal the owner-supplied cartridge as **INTERNATIONAL 1.1**. Do not edit the old
+card. Stamp it **SUPERSEDED UNOPENED**, build a separate v2 card, and sweep an exact public-symbol
+check across **52/52 OBSERVATION LOCATIONS**. The line is: **“A different revision can move memory.
+We changed the experiment identity, not the definition of a match.”**
+
+Cut to the Pokémon Learning Observatory. Let the real animated Crystal title screen occupy the
+left side while the right side stays honestly empty: **MODEL WAITING / TEACHER 0 / FALLBACKS 0 /
+ZERO-SHOT 0 OF 18 / ADAPTATION 0 OF 27 / SEALED 0 OF 27**. Show a small **VIEW ONLY** label and no
+buttons. The narration is: **“This window can watch the cartridge and the evidence, but it cannot
+press a button. The first thing it proved was that we could observe the run without changing it.”**
+Later footage should replace these zeroes only from authenticated qualification, collection,
+fitting and evaluation receipts; never animate progress that the run did not earn.
+
 ## August 14 Crystal scene: the experiment cannot peek
 
 Lay out three sealed stacks: **18 ZERO-SHOT / 27 ADAPTATION / 27 TEST**. Shuffle the nine answer

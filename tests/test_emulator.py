@@ -23,6 +23,64 @@ class FakeMemory:
         return self.values.get(address, 0)
 
 
+class FakePixelArray:
+    shape = (2, 3, 4)
+
+    def tobytes(self) -> bytes:
+        return bytes(
+            (
+                1,
+                2,
+                3,
+                255,
+                4,
+                5,
+                6,
+                255,
+                7,
+                8,
+                9,
+                255,
+                10,
+                11,
+                12,
+                255,
+                13,
+                14,
+                15,
+                255,
+                16,
+                17,
+                18,
+                255,
+            )
+        )
+
+
+class FakeScreen:
+    ndarray = FakePixelArray()
+
+
+class RecordingFrameObserver:
+    def __init__(self, *, wants: bool = True) -> None:
+        self.wants = wants
+        self.requests: list[int] = []
+        self.frames: list[tuple[int, int, bytes, int]] = []
+
+    def wants_frame(self, logical_frame: int) -> bool:
+        self.requests.append(logical_frame)
+        return self.wants
+
+    def publish_frame(
+        self,
+        width: int,
+        height: int,
+        rgb: bytes,
+        logical_frame: int,
+    ) -> None:
+        self.frames.append((width, height, rgb, logical_frame))
+
+
 class FakePyBoy:
     def __init__(
         self,
@@ -32,6 +90,7 @@ class FakePyBoy:
         self.rom_stream = rom_stream
         self.kwargs = kwargs
         self.memory = FakeMemory({0xD732: 0x12})
+        self.screen = FakeScreen()
         self.events: list[tuple[str, str | int | bool]] = []
         self.tick_calls: list[tuple[int, bool, bool]] = []
         self.speed: int | None = None
@@ -214,6 +273,26 @@ def test_adapter_satisfies_frame_safe_controller_contract(
             (2, False, False),
             (3, False, False),
         ]
+
+
+def test_headless_frame_observer_gets_rendered_rgb_without_controller_authority(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+    observer = RecordingFrameObserver()
+
+    with PyBoyAdapter(rom_path, frame_observer=observer) as emulator:
+        emulator.tick(4)
+
+    assert recording_factory.backend is not None
+    assert recording_factory.backend.tick_calls == [(4, True, False)]
+    assert observer.requests == [4]
+    assert observer.frames == [
+        (3, 2, bytes(range(1, 19)), 4),
+    ]
 
 
 def test_adapter_loads_already_authenticated_state_bytes(
