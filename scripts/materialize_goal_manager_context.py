@@ -7,7 +7,9 @@ import argparse
 import hashlib
 import json
 from collections import Counter
+from collections.abc import Callable
 from pathlib import Path
+from typing import cast
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_recovery import (
@@ -65,6 +67,7 @@ from pokemon_red_completion.goal_manager_protocol import (
 from pokemon_red_completion.goal_manager_state import party_safety_satisfaction
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.observation import (
+    RED_BOX_CAPACITY,
     ItemId,
     MapId,
     PokemonRedStateReader,
@@ -102,7 +105,9 @@ from pokemon_red_completion.rom import RomValidationError, resolve_rom_path, ver
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
 from pokemon_red_completion.surge import (
+    DEFAULT_SURGE_TIMING,
     VERMILION_PC_TO_NURSE,
+    LiveWildCorridorSurveyExecutor,
     SurgeChapterError,
 )
 from pokemon_red_completion.surge import (
@@ -115,10 +120,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # rather than merely scrape past the weaker structural threshold.
 _ACTIVE_SAFETY_PRESSURE = 0.55
 _ACQUISITION_GREAT_BALL_PURCHASE = 12
+# With the fixed desired headroom of eight, an active box count of eighteen
+# leaves two slots and therefore creates exactly 0.75 storage pressure: the
+# completion-first teacher's hard storage gate.  Setup reaches that boundary
+# through genuine catches rather than editing box memory.
+_STORAGE_TARGET_ACTIVE_BOX_COUNT = 18
+_STORAGE_GREAT_BALL_PURCHASE = 48
+_STORAGE_MAX_SEEK_STEPS = 4_096
+_STORAGE_MAX_ENCOUNTERS = 128
+_STORAGE_MAX_LEGS = 512
+_STORAGE_MANSION_DIRECTIONS = ("up",) * 7
 _DAMAGE_SWITCH_LIMIT = 64
 _MODES = (
     "mansion",
     "acquisition-ready",
+    "storage-ready",
     "mart",
     "pc",
     "blocked-movement",
@@ -253,9 +269,47 @@ def _acquisition_ready_boundary(
 ) -> None:
     """Buy a proved capture reserve, then enter the real Mansion survey lane."""
 
-    _move(actions, reader, CENTER_TO_MART, "goal-manager acquisition Mart")
-    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "goal-manager acquisition Mart entry")
-    _move(actions, reader, ("up", "up", "left"), "goal-manager acquisition clerk")
+    _buy_great_ball_reserve(
+        actions,
+        reader,
+        emulator,
+        adapter,
+        quantity=_ACQUISITION_GREAT_BALL_PURCHASE,
+        purpose="acquisition",
+    )
+    _move(actions, reader, MART_TO_MANSION, "goal-manager stocked Mansion")
+    _require(
+        reader.read(),
+        MapId.POKEMON_MANSION_1F,
+        (5, 27),
+        "goal-manager stocked Mansion entry",
+    )
+    _settle_mansion_boundary(actions, reader, emulator)
+
+
+def _buy_great_ball_reserve(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    adapter: PokemonRedGoalStateAdapter,
+    *,
+    quantity: int,
+    purpose: str,
+) -> None:
+    """Use the qualified Mart mechanic and prove its exact persistent delta."""
+
+    if type(quantity) is not int or quantity <= 0:  # noqa: E721
+        raise ValueError("Great Ball reserve quantity must be a positive integer")
+    if not purpose:
+        raise ValueError("Great Ball reserve purpose must not be empty")
+    _move(actions, reader, CENTER_TO_MART, f"goal-manager {purpose} Mart")
+    _require(
+        reader.read(),
+        MapId.CINNABAR_MART,
+        (3, 7),
+        f"goal-manager {purpose} Mart entry",
+    )
+    _move(actions, reader, ("up", "up", "left"), f"goal-manager {purpose} clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
     before = reader.read()
     before_inventory = dict(before.bag_items or ())
@@ -263,7 +317,7 @@ def _acquisition_ready_boundary(
     purchase = RedMartPurchase(
         absolute_index=1,
         item=ItemId.GREAT_BALL,
-        quantity=_ACQUISITION_GREAT_BALL_PURCHASE,
+        quantity=quantity,
         unit_price=600,
     )
     provider = RedMartResupplyGoalProvider(
@@ -280,37 +334,194 @@ def _acquisition_ready_boundary(
     offer = provider.offer(adapter.observe())
     if offer.binding is None:
         raise GoalManagerContextMaterializationError(
-            "acquisition-ready setup could not offer its qualified Mart purchase"
+            f"{purpose} setup could not offer its qualified Mart purchase"
         )
     report = offer.binding.execute()
     verification = offer.binding.verify(report)
     after = reader.read()
     after_inventory = dict(after.bag_items or ())
-    expected_money = (
-        None
-        if before_money is None
-        else before_money - _ACQUISITION_GREAT_BALL_PURCHASE * purchase.unit_price
-    )
+    expected_money = None if before_money is None else before_money - quantity * purchase.unit_price
     if (
         verification.status is not GoalDecisionOutcome.SUCCEEDED
         or after_inventory.get(int(ItemId.GREAT_BALL), 0)
-        != before_inventory.get(int(ItemId.GREAT_BALL), 0) + _ACQUISITION_GREAT_BALL_PURCHASE
+        != before_inventory.get(int(ItemId.GREAT_BALL), 0) + quantity
         or after.player_money != expected_money
         or after.map_id != MapId.CINNABAR_MART
         or (after.player_x, after.player_y) != (2, 5)
         or not reader.read_input_readiness().ready
     ):
         raise GoalManagerContextMaterializationError(
-            "acquisition-ready setup did not prove its exact ball reserve"
+            f"{purpose} setup did not prove its exact ball reserve"
         )
-    _move(actions, reader, MART_TO_MANSION, "goal-manager stocked Mansion")
+
+
+def _fill_active_box_with_real_captures(
+    area: LiveWildCorridorSurveyExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    target_count: int,
+) -> tuple[int, int, int]:
+    """Catch into one active box until its exact pressure boundary is reached."""
+
+    initial = reader.read_all_box_states()
+    active_index = initial.current_box_index
+    initial_count = initial.counts[active_index]
+    if (
+        not initial.storage_initialized
+        or type(target_count) is not int  # noqa: E721
+        or not initial_count < target_count <= RED_BOX_CAPACITY
+    ):
+        raise GoalManagerContextMaterializationError(
+            "storage setup lacks an initialized, partially filled active box"
+        )
+    initial_other_counts = tuple(
+        count for index, count in enumerate(initial.counts) if index != active_index
+    )
+    initial_species = initial.boxes[active_index].species_ids
+    seek_steps = 0
+    encounters = 0
+    captures = 0
+    while reader.read_all_box_states().counts[active_index] < target_count:
+        encountered = area.encountered_species_ref()
+        if encountered is None:
+            if seek_steps >= _STORAGE_MAX_SEEK_STEPS:
+                raise GoalManagerContextMaterializationError(
+                    "storage setup exhausted its bounded encounter steps"
+                )
+            area.seek_encounter()
+            seek_steps += 1
+            continue
+        if encounters >= _STORAGE_MAX_ENCOUNTERS:
+            raise GoalManagerContextMaterializationError(
+                "storage setup exhausted its bounded encounters"
+            )
+        encounters += 1
+        before = reader.read_all_box_states()
+        before_count = before.counts[active_index]
+        captured = area.capture_encounter(encountered)
+        if type(captured) is not bool:  # noqa: E721
+            raise GoalManagerContextMaterializationError(
+                "storage setup capture result is not boolean"
+            )
+        after = reader.read_all_box_states()
+        after_count = after.counts[active_index]
+        expected_delta = 1 if captured else 0
+        if (
+            not after.storage_initialized
+            or after.current_box_index != active_index
+            or after_count != before_count + expected_delta
+            or tuple(count for index, count in enumerate(after.counts) if index != active_index)
+            != initial_other_counts
+            or after.boxes[active_index].species_ids[: len(initial_species)] != initial_species
+        ):
+            raise GoalManagerContextMaterializationError(
+                "storage setup capture result disagreed with persistent box evidence"
+            )
+        current_hp = reader.read().party_hp or ()
+        if not current_hp or any(hp <= 0 for hp in current_hp):
+            raise GoalManagerContextMaterializationError(
+                "storage setup allowed a party member to faint"
+            )
+        captures += expected_delta
+    final = reader.read_all_box_states()
+    if final.counts[active_index] != target_count or captures != target_count - initial_count:
+        raise GoalManagerContextMaterializationError(
+            "storage setup missed its exact active-box target"
+        )
+    return seek_steps, encounters, captures
+
+
+def _storage_ready_boundary(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    adapter: PokemonRedGoalStateAdapter,
+) -> None:
+    """Create real storage pressure, heal, and present the Cinnabar PC."""
+
+    before = reader.read()
+    before_party = tuple(before.party_species_ids or ())
+    before_boxes = reader.read_all_box_states()
+    active_index = before_boxes.current_box_index
+    if before.party_count != 6 or len(before_party) != 6:
+        raise GoalManagerContextMaterializationError("storage setup requires a full living party")
+    _buy_great_ball_reserve(
+        actions,
+        reader,
+        emulator,
+        adapter,
+        quantity=_STORAGE_GREAT_BALL_PURCHASE,
+        purpose="storage",
+    )
+    _move(actions, reader, MART_TO_MANSION, "goal-manager storage Mansion")
     _require(
         reader.read(),
         MapId.POKEMON_MANSION_1F,
         (5, 27),
-        "goal-manager stocked Mansion entry",
+        "goal-manager storage Mansion entry",
     )
     _settle_mansion_boundary(actions, reader, emulator)
+    settled = reader.read()
+    if (settled.player_x, settled.player_y) != (5, 26):
+        raise GoalManagerContextMaterializationError(
+            "storage setup missed the south endpoint of its Mansion lane"
+        )
+    area = LiveWildCorridorSurveyExecutor(
+        emulator,
+        actions,
+        reader,
+        DEFAULT_SURGE_TIMING,
+        label="storage-pressure Mansion capture lane",
+        forward_directions=_STORAGE_MANSION_DIRECTIONS,
+        starting_endpoint="south",
+        max_legs=_STORAGE_MAX_LEGS,
+    )
+    _fill_active_box_with_real_captures(
+        area,
+        reader,
+        target_count=_STORAGE_TARGET_ACTIVE_BOX_COUNT,
+    )
+    captured = reader.read_all_box_states()
+    if (
+        captured.current_box_index != active_index
+        or captured.counts[active_index] != _STORAGE_TARGET_ACTIVE_BOX_COUNT
+        or tuple(reader.read().party_species_ids or ()) != before_party
+    ):
+        raise GoalManagerContextMaterializationError(
+            "storage setup changed its party or missed its active-box target"
+        )
+    _training_dig_to_cinnabar(actions, reader, emulator)
+    _move(actions, reader, ("up",), "goal-manager storage Center entry")
+    _require(
+        reader.read(),
+        MapId.CINNABAR_POKECENTER,
+        (3, 7),
+        "goal-manager storage Center",
+    )
+    _move(actions, reader, ("up",) * 4, "goal-manager storage nurse")
+    _heal(actions, reader, emulator)
+    _move(
+        actions,
+        reader,
+        _inverse(VERMILION_PC_TO_NURSE),
+        "goal-manager storage PC",
+    )
+    _require(reader.read(), MapId.CINNABAR_POKECENTER, (13, 4), "goal-manager storage PC")
+    _pulse(actions, MacroActionKind.MOVE, "up", 60)
+    final = reader.read()
+    final_boxes = reader.read_all_box_states()
+    if (
+        final.battle_state
+        or final.party_hp != final.party_max_hp
+        or tuple(final.party_species_ids or ()) != before_party
+        or final_boxes != captured
+        or final_boxes.current_box_index != active_index
+        or final_boxes.counts[active_index] != _STORAGE_TARGET_ACTIVE_BOX_COUNT
+        or not reader.read_input_readiness().ready
+    ):
+        raise GoalManagerContextMaterializationError(
+            "storage setup did not preserve its healed PC decision boundary"
+        )
 
 
 def _damage_party(
@@ -484,7 +695,7 @@ def _evolved_team_boundary(
         intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
         flee_timing=MANSION_TRAINING_FLEE_TIMING,
         hideout_timing=DEFAULT_HIDEOUT_TIMING,
-        flee_func=_timed_flee,
+        flee_func=cast(Callable[..., None], _timed_flee),
         volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
         escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
         max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
@@ -553,6 +764,9 @@ def _apply_mode(
         return
     if mode == "acquisition-ready":
         _acquisition_ready_boundary(actions, reader, emulator, adapter)
+        return
+    if mode == "storage-ready":
+        _storage_ready_boundary(actions, reader, emulator, adapter)
         return
     if mode == "mart":
         _move(actions, reader, CENTER_TO_MART, "goal-manager Cinnabar Mart")

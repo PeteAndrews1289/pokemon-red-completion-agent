@@ -5,6 +5,7 @@ import inspect
 import runpy
 import subprocess
 import sys
+from collections import deque
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
@@ -13,7 +14,14 @@ import pytest
 
 from pokemon_red_completion.celadon import _flee as _timed_flee
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome
-from pokemon_red_completion.observation import InputReadiness, ItemId, MapId, RawGameState
+from pokemon_red_completion.observation import (
+    InputReadiness,
+    ItemId,
+    MapId,
+    RawGameState,
+    RedBoxCollectionState,
+    RedCurrentBoxState,
+)
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     DUGTRIO_SPECIES_ID,
@@ -59,6 +67,7 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
     assert "damaged-center" in result.stdout
     assert "evolved-team" in result.stdout
     assert "acquisition-ready" in result.stdout
+    assert "storage-ready" in result.stdout
     assert "mansion" in result.stdout
     assert "--slot-id" not in result.stdout
     assert "--profile" not in result.stdout
@@ -101,7 +110,7 @@ def test_evolved_team_setup_reuses_the_qualified_bounded_mechanic() -> None:
     assert "red_team_development_quantum_policy(" in source
     assert "_targeted_evolution_index(" in source
     assert "_flee as _timed_flee" in source
-    assert "flee_func=_timed_flee" in source
+    assert "flee_func=cast(Callable[..., None], _timed_flee)" in source
     assert "_flee as _protected_flee" in source
     assert "evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID)" in source
     assert "evolved_levels[target_index] <= before_levels[target_index]" in source
@@ -199,6 +208,86 @@ def test_acquisition_setup_proves_a_real_mart_reserve_before_entering_mansion(
     assert (reader.raw.player_x, reader.raw.player_y) == (5, 26)
     assert reader.raw.bag_items == ((int(ItemId.GREAT_BALL), 13),)
     assert reader.raw.player_money == 22_800
+
+
+class _StorageReader:
+    def __init__(self, counts: tuple[int, ...]) -> None:
+        self.raw = replace(_unevolved_party_raw(), party_hp=(150, 50, 50, 100, 80, 80))
+        self.species = [list(range(1, count + 1)) for count in counts]
+        self.levels = [[10] * count for count in counts]
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_all_box_states(self) -> RedBoxCollectionState:
+        return RedBoxCollectionState(
+            boxes=tuple(
+                RedCurrentBoxState(index, tuple(species), tuple(self.levels[index]))
+                for index, species in enumerate(self.species)
+            ),
+            current_box_index=0,
+            storage_initialized=True,
+        )
+
+
+class _StorageArea:
+    def __init__(
+        self,
+        reader: _StorageReader,
+        outcomes: tuple[bool, ...],
+        *,
+        persist_capture: bool = True,
+    ) -> None:
+        self.reader = reader
+        self.outcomes = deque(outcomes)
+        self.persist_capture = persist_capture
+        self.pending: str | None = None
+
+    def encountered_species_ref(self) -> str | None:
+        return self.pending
+
+    def seek_encounter(self) -> None:
+        self.pending = "pokemon:national:077"
+
+    def capture_encounter(self, species_ref: str) -> bool:
+        assert species_ref == self.pending
+        self.pending = None
+        captured = self.outcomes.popleft()
+        if captured and self.persist_capture:
+            self.reader.species[0].append(0xA3)
+            self.reader.levels[0].append(30)
+        return captured
+
+
+def test_storage_setup_requires_persistent_box_growth_from_real_capture_results() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _StorageReader((16, 1) + (0,) * 10)
+    area = _StorageArea(reader, (False, True, True))
+
+    seek_steps, encounters, captures = module["_fill_active_box_with_real_captures"](
+        area,
+        reader,
+        target_count=18,
+    )
+
+    assert (seek_steps, encounters, captures) == (3, 3, 2)
+    assert reader.read_all_box_states().counts == (18, 1) + (0,) * 10
+
+
+def test_storage_setup_rejects_a_capture_claim_without_persistent_box_evidence() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _StorageReader((17,) + (0,) * 11)
+    area = _StorageArea(reader, (True,), persist_capture=False)
+
+    with pytest.raises(
+        module["GoalManagerContextMaterializationError"],
+        match="persistent box evidence",
+    ):
+        module["_fill_active_box_with_real_captures"](
+            area,
+            reader,
+            target_count=18,
+        )
 
 
 class _Reader:
