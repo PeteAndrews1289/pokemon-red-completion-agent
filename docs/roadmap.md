@@ -26,7 +26,10 @@ Ordered next work:
    endpoints, bounded outcomes and zero episodes.
 3. Inventory eligible nonsealed source lineages and construct the 81 distinct questions. Preserve
    54 train / 27 development separation, at least 24 genuine three-way training menus and three
-   repeated semantic menus whose correct choice changes with state.
+   repeated semantic menus whose correct choice changes with state. The read-only inventory found
+   111 authenticated nonsealed saves. A pending construction checkpoint adds bounded mild/emergency
+   damage, Center/PC relocation and a canonical private 81-entry batch plan; publish and live-test
+   it before producing v2 receipts.
 4. Run read-only preflight on every assignment and reject duplicate state/question fingerprints,
    private-path leakage, unavailable selected goals and pressure manufactured outside the game.
 5. Freeze the complete private path-free catalog before any counted action. Schema v2 now rejects

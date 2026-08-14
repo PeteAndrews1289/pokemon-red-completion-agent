@@ -14,6 +14,30 @@ orientation. If a number in a numbered section disagrees with a dated checkpoint
 checkpoint wins — and the numbered section is a bug worth fixing, because "what is actually true"
 going stale is exactly the failure this project keeps having.
 
+## Curriculum-construction batch hardened; live catalog build next — 2026-08-14
+
+The v2 freeze guards are published at `b8ff0d1`, and exact-commit CI is green. The next local
+tooling checkpoint removes the remaining manual catalog-construction hazards before creating any
+new receipt. The context materializer can now relocate authenticated states from standard Pokémon
+Centers or the Cinnabar PC, preserve real battle damage while returning to either the nurse or PC,
+and derive stocked-and-damaged Mansion contexts. Damage targets accept a closed upper bound, so a
+supposedly mild choice cannot silently cross the teacher's `0.55` emergency-restoration gate.
+
+The private batch runner accepts one canonical external 81-entry plan. Before any preflight it
+requires exact registry order, unique absolute state/envelope/profile paths, unique authenticated
+captures and slot-matching capture/profile identities. Read-only preflight runs only into a new
+empty external directory. Counted collection is a separate stage: it compares every input with the
+frozen catalog, resumes only strictly valid completed episodes and fails before acting if any
+one-shot identity is partial, failed or interrupted. It does not weaken either guarded per-slot
+script.
+
+The planned train menus deliberately produce the three required state-dependent reversals:
+development versus restoration at a Center, storage versus restoration at a PC, and acquisition
+versus restoration in the Mansion. Mild-damage development, acquisition, storage and exploration
+families provide at least 24 three-way train contexts; emergency variants reuse the same semantic
+menus but must select restoration. This code is not yet live-qualified or published. Genuine data
+remains **0/54 train and 0/27 development validation**.
+
 ## All nine goal families live-qualified; catalog curation is next — 2026-08-14
 
 The pre-training mechanics gate is complete. Authenticated, nonsealed Red states have now executed

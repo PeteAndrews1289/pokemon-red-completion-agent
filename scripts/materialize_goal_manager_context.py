@@ -134,15 +134,40 @@ _STORAGE_CAPTURE_SETTLE_PULSES = 12
 _STORAGE_CAPTURE_BATCH = 3
 _STORAGE_MANSION_DIRECTIONS = ("up",) * 7
 _DAMAGE_SWITCH_LIMIT = 64
+_STANDARD_FLY_CENTER_MAPS = frozenset(
+    {
+        MapId.VIRIDIAN_POKECENTER,
+        MapId.PEWTER_POKECENTER,
+        MapId.CERULEAN_POKECENTER,
+        MapId.VERMILION_POKECENTER,
+        MapId.LAVENDER_POKECENTER,
+        MapId.FUCHSIA_POKECENTER,
+        MapId.CELADON_POKECENTER,
+        MapId.SAFFRON_POKECENTER,
+        MapId.CINNABAR_POKECENTER,
+    }
+)
+_DAMAGE_MODES = frozenset(
+    {
+        "acquisition-damaged",
+        "damaged-center",
+        "damaged-field",
+        "damaged-pc",
+    }
+)
 _MODES = (
+    "stable",
+    "center",
     "mansion",
     "acquisition-ready",
+    "acquisition-damaged",
     "storage-ready",
     "mart",
     "pc",
     "blocked-movement",
     "damaged-field",
     "damaged-center",
+    "damaged-pc",
     "evolved-team",
 )
 
@@ -159,6 +184,24 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--envelope", type=Path, default=None)
     parser.add_argument("--out-state", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
+    parser.add_argument(
+        "--great-ball-quantity",
+        type=int,
+        default=None,
+        help="positive acquisition reserve override",
+    )
+    parser.add_argument(
+        "--target-safety-pressure",
+        type=float,
+        default=None,
+        help="damage target; damage modes only",
+    )
+    parser.add_argument(
+        "--maximum-safety-pressure",
+        type=float,
+        default=None,
+        help="optional closed upper damage bound; damage modes only",
+    )
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--speed", type=int, choices=(1, 2, 4), default=None)
     return parser
@@ -195,7 +238,36 @@ def _normalize_cinnabar_nurse(
         raise GoalManagerContextMaterializationError(
             "materialization requires a stable relocation boundary"
         )
-    if raw.map_id == MapId.INDIGO_PLATEAU_LOBBY and (
+    if raw.map_id == MapId.CINNABAR_POKECENTER and (
+        raw.player_x,
+        raw.player_y,
+    ) == (13, 4):
+        _move(
+            actions,
+            reader,
+            VERMILION_PC_TO_NURSE,
+            "goal-manager Cinnabar PC to nurse",
+        )
+        raw = reader.read()
+    elif raw.map_id in _STANDARD_FLY_CENTER_MAPS and raw.map_id != (
+        MapId.CINNABAR_POKECENTER
+    ) and (raw.player_x, raw.player_y) == (3, 3):
+        _move(
+            actions,
+            reader,
+            ("down",) * 5,
+            "goal-manager source Center departure",
+        )
+        _fly_to_town(
+            actions,
+            reader,
+            emulator,
+            MapId.CINNABAR_ISLAND,
+            "goal-manager source Center to Cinnabar",
+        )
+        _move(actions, reader, ("up",) * 5, "goal-manager Cinnabar Center")
+        raw = reader.read()
+    elif raw.map_id == MapId.INDIGO_PLATEAU_LOBBY and (
         raw.player_x,
         raw.player_y,
     ) == (2, 5):
@@ -269,6 +341,8 @@ def _acquisition_ready_boundary(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
     adapter: PokemonRedGoalStateAdapter,
+    *,
+    quantity: int = _ACQUISITION_GREAT_BALL_PURCHASE,
 ) -> None:
     """Buy a proved capture reserve, then enter the real Mansion survey lane."""
 
@@ -277,7 +351,7 @@ def _acquisition_ready_boundary(
         reader,
         emulator,
         adapter,
-        quantity=_ACQUISITION_GREAT_BALL_PURCHASE,
+        quantity=quantity,
         purpose="acquisition",
     )
     _move(actions, reader, MART_TO_MANSION, "goal-manager stocked Mansion")
@@ -570,6 +644,8 @@ def _damage_party(
     emulator: PyBoyAdapter,
     *,
     require_field_recovery: bool,
+    target_safety_pressure: float = _ACTIVE_SAFETY_PRESSURE,
+    maximum_safety_pressure: float | None = None,
 ) -> None:
     source = reader.read()
     species = source.party_species_ids or ()
@@ -588,12 +664,59 @@ def _damage_party(
             "damage materialization requires a complete healthy party observation"
         )
     _mansion_boundary(actions, reader, emulator)
+    _damage_party_at_mansion(
+        actions,
+        reader,
+        emulator,
+        require_field_recovery=require_field_recovery,
+        target_safety_pressure=target_safety_pressure,
+        maximum_safety_pressure=maximum_safety_pressure,
+    )
+
+
+def _damage_party_at_mansion(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    *,
+    require_field_recovery: bool,
+    target_safety_pressure: float,
+    maximum_safety_pressure: float | None,
+) -> None:
+    """Create a bounded, living damage state from a stable Mansion lane."""
+
+    _validate_damage_band(target_safety_pressure, maximum_safety_pressure)
+    source = reader.read()
+    species = source.party_species_ids or ()
+    levels = source.party_levels or ()
+    hp = source.party_hp or ()
+    maximum = source.party_max_hp or ()
+    if not (
+        source.map_id == MapId.POKEMON_MANSION_1F
+        and species
+        and len(species) == len(levels) == len(hp) == len(maximum)
+        and all(
+            current > 0 and current == limit for current, limit in zip(hp, maximum, strict=True)
+        )
+        and _safety_pressure(source) == 0.0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "Mansion damage setup requires a complete healthy party boundary"
+        )
     for _ in range(48):
         raw = reader.read()
         if _damage_context_ready(
             raw,
             require_field_recovery=require_field_recovery,
+            target_safety_pressure=target_safety_pressure,
         ):
+            if (
+                maximum_safety_pressure is not None
+                and _safety_pressure(raw) > maximum_safety_pressure
+            ):
+                raise GoalManagerContextMaterializationError(
+                    "damage materialization exceeded its closed safety-pressure band"
+                )
             return
         MANSION_TRAINING_VENUE.walk_to_grass(actions, reader, emulator)
         raw = reader.read()
@@ -605,7 +728,7 @@ def _damage_party(
             for _ in range(_DAMAGE_SWITCH_LIMIT):
                 raw = reader.read()
                 _require_safe_damage_state(raw)
-                if _safety_pressure(raw) >= _ACTIVE_SAFETY_PRESSURE:
+                if _safety_pressure(raw) >= target_safety_pressure:
                     break
                 active_index = raw.active_party_index
                 if active_index is None:
@@ -614,7 +737,7 @@ def _damage_party(
                     )
                 current_hp = raw.party_hp or ()
                 if (
-                    _safety_pressure(raw) >= _ACTIVE_SAFETY_PRESSURE - 0.05
+                    _safety_pressure(raw) >= max(0.0, target_safety_pressure - 0.05)
                     and active_index != fastest_index
                 ):
                     target_index = fastest_index
@@ -648,6 +771,7 @@ def _damage_party(
                     label="goal-manager safe escape lead",
                     wait_frames=120,
                 )
+                raw = reader.read()
             _protected_flee(emulator, actions, reader, raw)
         _require_safe_damage_state(reader.read())
     raise GoalManagerContextMaterializationError(
@@ -656,7 +780,7 @@ def _damage_party(
 
 
 def _safety_pressure(raw: RawGameState) -> float:
-    return 1.0 - party_safety_satisfaction(party_observation_from_raw(raw))
+    return float(1.0 - party_safety_satisfaction(party_observation_from_raw(raw)))
 
 
 def _require_safe_damage_state(raw: RawGameState) -> None:
@@ -681,9 +805,11 @@ def _damage_context_ready(
     raw: RawGameState,
     *,
     require_field_recovery: bool,
+    target_safety_pressure: float = _ACTIVE_SAFETY_PRESSURE,
 ) -> bool:
     _require_safe_damage_state(raw)
-    if _safety_pressure(raw) < _ACTIVE_SAFETY_PRESSURE:
+    _validate_damage_band(target_safety_pressure, None)
+    if _safety_pressure(raw) < target_safety_pressure:
         return False
     if not require_field_recovery:
         return True
@@ -698,6 +824,61 @@ def _damage_context_ready(
     inventory = dict(raw.bag_items or ())
     required = Counter(item for _, item in plan)
     return all(inventory.get(int(item), 0) >= quantity for item, quantity in required.items())
+
+
+def _validate_damage_band(
+    target_safety_pressure: float,
+    maximum_safety_pressure: float | None,
+) -> None:
+    if (
+        isinstance(target_safety_pressure, bool)
+        or not isinstance(target_safety_pressure, (int, float))
+        or not 0.0 < float(target_safety_pressure) < 1.0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "damage target must be strictly between zero and one"
+        )
+    if maximum_safety_pressure is None:
+        return
+    if (
+        isinstance(maximum_safety_pressure, bool)
+        or not isinstance(maximum_safety_pressure, (int, float))
+        or not float(target_safety_pressure) <= float(maximum_safety_pressure) < 1.0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "damage maximum must contain the target below one"
+        )
+
+
+def _return_damaged_party_to_center(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: PyBoyAdapter,
+    *,
+    pc_boundary: bool,
+) -> None:
+    """Leave damage intact while returning through qualified Dig/Fly movement."""
+
+    _training_dig_to_cinnabar(actions, reader, emulator)
+    _move(actions, reader, ("up",), "goal-manager damaged Center entry")
+    _require(
+        reader.read(),
+        MapId.CINNABAR_POKECENTER,
+        (3, 7),
+        "goal-manager damaged Center",
+    )
+    _move(actions, reader, ("up",) * 4, "goal-manager damaged nurse")
+    _require_safe_damage_state(reader.read())
+    if not pc_boundary:
+        return
+    _move(
+        actions,
+        reader,
+        _inverse(VERMILION_PC_TO_NURSE),
+        "goal-manager damaged PC",
+    )
+    _require(reader.read(), MapId.CINNABAR_POKECENTER, (13, 4), "goal-manager damaged PC")
+    _pulse(actions, MacroActionKind.MOVE, "up", 60)
 
 
 def _evolved_team_boundary(
@@ -797,13 +978,73 @@ def _apply_mode(
     reader: PokemonRedStateReader,
     emulator: PyBoyAdapter,
     adapter: PokemonRedGoalStateAdapter,
+    *,
+    great_ball_quantity: int | None,
+    target_safety_pressure: float | None,
+    maximum_safety_pressure: float | None,
 ) -> None:
+    if great_ball_quantity is not None and (
+        mode not in {"acquisition-ready", "acquisition-damaged"}
+        or great_ball_quantity <= 0
+    ):
+        raise GoalManagerContextMaterializationError(
+            "Great Ball quantity is valid only for acquisition modes"
+        )
+    if mode not in _DAMAGE_MODES and (
+        target_safety_pressure is not None or maximum_safety_pressure is not None
+    ):
+        raise GoalManagerContextMaterializationError(
+            "safety-pressure bounds are valid only for damage modes"
+        )
+    damage_target = (
+        _ACTIVE_SAFETY_PRESSURE
+        if target_safety_pressure is None
+        else target_safety_pressure
+    )
+    if mode in _DAMAGE_MODES:
+        _validate_damage_band(
+            damage_target,
+            maximum_safety_pressure,
+        )
+    if mode == "stable":
+        raw = reader.read()
+        if raw.battle_state or not reader.read_input_readiness().ready:
+            raise GoalManagerContextMaterializationError(
+                "stable materialization requires a released overworld boundary"
+            )
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        return
     _normalize_cinnabar_nurse(actions, reader, emulator)
+    if mode == "center":
+        return
     if mode == "mansion":
         _mansion_boundary(actions, reader, emulator)
         return
     if mode == "acquisition-ready":
-        _acquisition_ready_boundary(actions, reader, emulator, adapter)
+        _acquisition_ready_boundary(
+            actions,
+            reader,
+            emulator,
+            adapter,
+            quantity=great_ball_quantity or _ACQUISITION_GREAT_BALL_PURCHASE,
+        )
+        return
+    if mode == "acquisition-damaged":
+        _acquisition_ready_boundary(
+            actions,
+            reader,
+            emulator,
+            adapter,
+            quantity=great_ball_quantity or _ACQUISITION_GREAT_BALL_PURCHASE,
+        )
+        _damage_party_at_mansion(
+            actions,
+            reader,
+            emulator,
+            require_field_recovery=True,
+            target_safety_pressure=damage_target,
+            maximum_safety_pressure=maximum_safety_pressure,
+        )
         return
     if mode == "storage-ready":
         _storage_ready_boundary(actions, reader, emulator, adapter)
@@ -834,24 +1075,27 @@ def _apply_mode(
     if mode == "evolved-team":
         _evolved_team_boundary(actions, reader, emulator)
         return
-    if mode in {"damaged-field", "damaged-center"}:
+    if mode in {"damaged-field", "damaged-center", "damaged-pc"}:
+        boxes_before = reader.read_all_box_states() if mode == "damaged-pc" else None
         _damage_party(
             actions,
             reader,
             emulator,
             require_field_recovery=mode == "damaged-field",
+            target_safety_pressure=damage_target,
+            maximum_safety_pressure=maximum_safety_pressure,
         )
-        if mode == "damaged-center":
-            _training_dig_to_cinnabar(actions, reader, emulator)
-            _move(actions, reader, ("up",), "goal-manager damaged Center entry")
-            _require(
-                reader.read(),
-                MapId.CINNABAR_POKECENTER,
-                (3, 7),
-                "goal-manager damaged Center",
+        if mode in {"damaged-center", "damaged-pc"}:
+            _return_damaged_party_to_center(
+                actions,
+                reader,
+                emulator,
+                pc_boundary=mode == "damaged-pc",
             )
-            _move(actions, reader, ("up",) * 4, "goal-manager damaged nurse")
-            _require_safe_damage_state(reader.read())
+        if boxes_before is not None and reader.read_all_box_states() != boxes_before:
+            raise GoalManagerContextMaterializationError(
+                "PC damage setup changed collection storage"
+            )
         return
     raise GoalManagerContextMaterializationError("materialization mode is unsupported")
 
@@ -894,7 +1138,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
         controller = FrameSafeExecutor(emulator, timing)
         actions = CountingExecutor(controller)
-        _apply_mode(args.mode, actions, reader, emulator, adapter)
+        _apply_mode(
+            args.mode,
+            actions,
+            reader,
+            emulator,
+            adapter,
+            great_ball_quantity=args.great_ball_quantity,
+            target_safety_pressure=args.target_safety_pressure,
+            maximum_safety_pressure=args.maximum_safety_pressure,
+        )
         final = reader.read()
         completed_after = COMPLETION_QUEST.completed_ids(observer.observe())
         if (
@@ -941,6 +1194,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "map_id": int(final.map_id or 0),
         "coordinate": [final.player_x, final.player_y],
         "input_ready": final_input_ready,
+        "safety_pressure": _safety_pressure(final),
     }
 
 

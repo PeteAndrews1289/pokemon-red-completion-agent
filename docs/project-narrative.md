@@ -44,6 +44,14 @@ teacher's selected position. It refuses the entire catalog before collection unl
 contexts are distinct, 24 train choices are genuinely multiway, three repeated menus demand
 different answers in different states, and labels occupy more than one candidate position.
 
+The next practical problem was turning that statistical contract into 81 real cartridge states
+without making the curator the hidden model. The construction tooling therefore gained bounded
+damage bands and explicit return paths to the Center and PC. A mild state must remain below the
+teacher's emergency gate; a restoration state must reach it; and PC variants must prove that no box
+content changed while the party was being damaged. A canonical external batch plan binds one
+unique capture and profile identity to every public slot before preflight, while keeping every
+private path out of the repository and public summaries.
+
 ## August 13: Red becomes the curriculum, not the product
 
 The project had not been building nothing. It had built the expensive substrate a transferable

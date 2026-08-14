@@ -1,5 +1,14 @@
 # Three-agent coordination
 
+> **2026-08-14 curriculum-construction checkpoint:** The pending setup layer can relocate standard
+> Center and Cinnabar-PC states, target closed mild/emergency damage bands, preserve that damage on
+> return to the nurse or PC, and build stocked-and-damaged Mansion boundaries using real actions.
+> A new canonical external batch plan requires all 81 slot-matching capture/profile identities and
+> unique inputs before it invokes the existing guarded preflight or collection scripts. Preflight
+> requires a new empty root; collection resumes only strictly valid completed episodes and rejects
+> any partial, failed or interrupted one-shot identity before acting. Publish and live-qualify this
+> checkpoint before creating v2 receipts. Counted data remains 0/81; sealed test remains 0/12.
+
 > **2026-08-14 all-family qualification checkpoint:** The Red goal manager has now executed all
 > nine goal families from authenticated nonsealed states without consuming an episode: story,
 > acquisition, development, evolution, restoration (field and Center), resupply, storage, recovery

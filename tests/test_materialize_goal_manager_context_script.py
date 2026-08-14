@@ -36,9 +36,16 @@ def _damage_context_ready(
     raw: RawGameState,
     *,
     require_field_recovery: bool,
+    target_safety_pressure: float = 0.55,
 ) -> bool:
     function = runpy.run_path(str(SCRIPT))["_damage_context_ready"]
-    return bool(function(raw, require_field_recovery=require_field_recovery))
+    return bool(
+        function(
+            raw,
+            require_field_recovery=require_field_recovery,
+            target_safety_pressure=target_safety_pressure,
+        )
+    )
 
 
 def test_materializer_uses_real_actions_and_never_edits_emulator_memory() -> None:
@@ -55,6 +62,7 @@ def test_materializer_uses_real_actions_and_never_edits_emulator_memory() -> Non
 
 
 def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
+    modes = runpy.run_path(str(SCRIPT))["_MODES"]
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "--help"],
         cwd=PROJECT_ROOT,
@@ -65,12 +73,18 @@ def test_materializer_help_declares_only_finite_uncounted_boundaries() -> None:
 
     assert "blocked-movement" in result.stdout
     assert "damaged-center" in result.stdout
+    assert "damaged-pc" in modes
+    assert "acquisition-damaged" in modes
+    assert "center" in modes
+    assert "stable" in modes
     assert "evolved-team" in result.stdout
     assert "acquisition-ready" in result.stdout
     assert "storage-ready" in result.stdout
     assert "mansion" in result.stdout
     assert "--slot-id" not in result.stdout
     assert "--profile" not in result.stdout
+    assert "--target-safety-pressure" in result.stdout
+    assert "--maximum-safety-pressure" in result.stdout
 
 
 def test_blocked_context_uses_a_released_one_frame_semantic_action() -> None:
@@ -80,6 +94,13 @@ def test_blocked_context_uses_a_released_one_frame_semantic_action() -> None:
     assert 'MacroAction(MacroActionKind.MOVE, "down")' in source
     assert ".press(" not in source
     assert ".release(" not in source
+
+
+def test_stable_context_uses_one_semantic_wait_without_relocation() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert 'if mode == "stable"' in source
+    assert "actions.execute(MacroAction(MacroActionKind.WAIT))" in source
 
 
 def test_damage_context_uses_real_battle_turns_and_active_pressure_gate() -> None:
@@ -100,6 +121,93 @@ def test_late_game_context_relocates_from_indigo_through_real_fly() -> None:
     assert '"goal-manager Indigo departure"' in source
     assert "_fly_to_town(" in source
     assert "MapId.CINNABAR_ISLAND" in source
+
+
+def test_standard_center_context_relocates_to_cinnabar_before_healing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            map_id=MapId.SAFFRON_POKECENTER,
+            player_x=3,
+            player_y=3,
+        )
+    )
+    healed = False
+
+    def move(_actions: object, _reader: object, directions: object, label: str) -> None:
+        assert tuple(directions) == ("down",) * 5 or tuple(directions) == ("up",) * 5
+        if label == "goal-manager source Center departure":
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.SAFFRON_CITY,
+                player_x=9,
+                player_y=30,
+            )
+        else:
+            reader.raw = replace(
+                reader.raw,
+                map_id=MapId.CINNABAR_POKECENTER,
+                player_x=3,
+                player_y=3,
+            )
+
+    def fly(*_args: object) -> None:
+        reader.raw = replace(
+            reader.raw,
+            map_id=MapId.CINNABAR_ISLAND,
+            player_x=11,
+            player_y=12,
+        )
+
+    def heal(*_args: object) -> None:
+        nonlocal healed
+        healed = True
+
+    globals_dict = module["_normalize_cinnabar_nurse"].__globals__
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_fly_to_town", fly)
+    monkeypatch.setitem(globals_dict, "_heal", heal)
+
+    module["_normalize_cinnabar_nurse"](object(), reader, object())
+
+    assert reader.raw.map_id == MapId.CINNABAR_POKECENTER
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert healed
+
+
+def test_storage_pc_context_returns_to_nurse_before_healing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = runpy.run_path(str(SCRIPT))
+    reader = _Reader(
+        replace(
+            _unevolved_party_raw(),
+            player_x=13,
+            player_y=4,
+        )
+    )
+    healed = False
+
+    def move(_actions: object, _reader: object, directions: object, label: str) -> None:
+        assert tuple(directions) == tuple(module["VERMILION_PC_TO_NURSE"])
+        assert label == "goal-manager Cinnabar PC to nurse"
+        reader.raw = replace(reader.raw, player_x=3, player_y=3)
+
+    def heal(*_args: object) -> None:
+        nonlocal healed
+        healed = True
+
+    globals_dict = module["_normalize_cinnabar_nurse"].__globals__
+    monkeypatch.setitem(globals_dict, "_move", move)
+    monkeypatch.setitem(globals_dict, "_heal", heal)
+
+    module["_normalize_cinnabar_nurse"](object(), reader, object())
+
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert healed
 
 
 def test_evolved_team_setup_reuses_the_qualified_bounded_mechanic() -> None:
@@ -459,3 +567,39 @@ def test_center_damage_gate_needs_pressure_but_not_field_items() -> None:
     raw = _damaged_raw(bag_items=())
 
     assert _damage_context_ready(raw, require_field_recovery=False)
+
+
+def test_damage_gate_honors_a_declared_mild_pressure_target() -> None:
+    raw = replace(
+        _damaged_raw(bag_items=()),
+        party_hp=(85, 85),
+    )
+
+    assert _damage_context_ready(
+        raw,
+        require_field_recovery=False,
+        target_safety_pressure=0.10,
+    )
+    assert not _damage_context_ready(
+        raw,
+        require_field_recovery=False,
+        target_safety_pressure=0.20,
+    )
+
+
+def test_damage_band_rejects_an_upper_bound_below_its_target() -> None:
+    function = runpy.run_path(str(SCRIPT))["_validate_damage_band"]
+
+    with pytest.raises(
+        function.__globals__["GoalManagerContextMaterializationError"],
+        match="contain the target",
+    ):
+        function(0.40, 0.30)
+
+
+def test_materializer_declares_distinct_center_and_pc_damage_destinations() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert 'mode in {"damaged-center", "damaged-pc"}' in source
+    assert "pc_boundary=mode == \"damaged-pc\"" in source
+    assert "PC damage setup changed collection storage" in source

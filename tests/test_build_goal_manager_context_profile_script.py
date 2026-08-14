@@ -124,3 +124,73 @@ def test_mart_template_extends_the_existing_great_ball_stack(tmp_path: Path) -> 
     assert purchase["absolute_index"] == 1
     assert purchase["item_id"] == int(ItemId.GREAT_BALL)
     assert purchase["quantity"] == 7
+
+
+def test_development_template_does_not_require_an_evolution_target(
+    tmp_path: Path,
+) -> None:
+    destination = tmp_path / "development-context.json"
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--mode",
+            "development",
+            "--profile-id",
+            "development-context",
+            "--out",
+            str(destination),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    profile = load_red_goal_context_profile(destination)
+    assert tuple(provider.kind for provider in profile.providers) == (
+        GoalKind.ADVANCE_STORY,
+        GoalKind.DEVELOP_TEAM,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.RECOVER_CONTROL,
+    )
+
+
+def test_exploration_template_can_measure_discovery_without_capture(
+    tmp_path: Path,
+) -> None:
+    destination = tmp_path / "exploration-context.json"
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--mode",
+            "exploration",
+            "--profile-id",
+            "exploration-context",
+            "--out",
+            str(destination),
+            "--map-id",
+            str(int(MapId.POKEMON_MANSION_1F)),
+            "--player-x",
+            "5",
+            "--player-y",
+            "20",
+            "--forward-direction",
+            "down",
+            "--starting-endpoint",
+            "north",
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    profile = load_red_goal_context_profile(destination)
+    assert tuple(provider.kind for provider in profile.providers) == (
+        GoalKind.ADVANCE_STORY,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.RECOVER_CONTROL,
+        GoalKind.EXPLORE,
+    )

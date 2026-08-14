@@ -21,7 +21,10 @@ from pokemon_red_completion.red_goal_context_profile import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 _MODES = (
+    "story",
     "mansion",
+    "exploration",
+    "development",
     "mart",
     "pc",
     "blocked-movement",
@@ -100,6 +103,12 @@ def _providers(
 ) -> tuple[tuple[GoalKind, RedGoalMechanic, Mapping[str, object]], ...]:
     story = _empty(RedGoalMechanic.MIDGAME_STORY)
     recovery = _empty(RedGoalMechanic.CONTROL_RECOVERY)
+    if args.mode == "story":
+        return (
+            story,
+            _empty(RedGoalMechanic.CENTER_RESTORE),
+            recovery,
+        )
     if args.mode in {"mansion", "damaged-field"}:
         wild = _wild_parameters(args)
         return (
@@ -109,6 +118,18 @@ def _providers(
                 RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
                 wild,
             ),
+            _empty(RedGoalMechanic.FIELD_RESTORE),
+            recovery,
+            (
+                GoalKind.EXPLORE,
+                RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                wild,
+            ),
+        )
+    if args.mode == "exploration":
+        wild = _wild_parameters(args)
+        return (
+            story,
             _empty(RedGoalMechanic.FIELD_RESTORE),
             recovery,
             (
@@ -168,6 +189,13 @@ def _providers(
             story,
             _empty(RedGoalMechanic.BALANCED_TEAM),
             _empty(RedGoalMechanic.DIGLETT_EVOLUTION),
+            _empty(RedGoalMechanic.CENTER_RESTORE),
+            recovery,
+        )
+    if args.mode == "development":
+        return (
+            story,
+            _empty(RedGoalMechanic.BALANCED_TEAM),
             _empty(RedGoalMechanic.CENTER_RESTORE),
             recovery,
         )

@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 catalog scene: the same menu needs a different answer
+
+Show three split-screen pairs. At the Pokémon Center, the same menu changes from **TRAIN** to
+**HEAL** as real battle damage crosses the safety threshold. At the PC, it changes from **SWITCH
+BOXES** to **HEAL**. In the Mansion, it changes from **CATCH** to **HEAL**. The cartridge creates
+every state; the setup code may move, battle, buy or save, but it never edits RAM.
+
+Then show 81 empty cards locking into a catalog before any **RUN** button becomes active. Each card
+must have a unique authenticated save, unique policy situation and slot-matching mechanic profile.
+The line is: **“If the curriculum cannot prove that context changes the answer, we find out before
+we spend a single one-shot demonstration.”**
+
 ## New framing scene: we built the hands before the executive brain
 
 Open on a fast stack of verified capabilities: navigate, battle, capture, evolve, heal, shop,

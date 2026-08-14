@@ -219,6 +219,21 @@ freeze repeated semantic inputs, fewer than 24 multiway train contexts, fewer th
 selected kind changes with state, or a corpus whose train labels occupy only one candidate position.
 Those failures are therefore found while contexts remain replaceable, not after episodes are spent.
 
+### Planned Red context matrix
+
+The Red curriculum uses state variation that the cartridge can actually produce, not copied saves
+or edited memory. Story contexts come from distinct authenticated objective frontiers. Evolution,
+resupply and recovery use their qualified Center, Mart and transient-control boundaries.
+Acquisition, development, restoration, storage and exploration add bounded real encounter damage
+where that creates a meaningful choice rather than merely a different file hash.
+
+Four six-example training families are deliberately multiway: mild-damage development at a
+Pokémon Center, stocked acquisition in the Mansion, storage pressure at the PC and discovery in a
+wild corridor. Emergency restoration contexts reuse the Center, PC and Mansion menus above the
+teacher's safety gate. The resulting paired menus require different answers in different states:
+develop versus restore, manage storage versus restore, and acquire versus restore. Catalog freeze
+checks these properties from read-only preflight evidence before any one-shot collection begins.
+
 The new manager has **zero genuine teacher examples and no trained production artifact**. The
 synthetic examples in unit tests only falsify candidate-order, binding-identity, masking, and
 context-dependence bugs. They are not gameplay data and are not a performance result.
