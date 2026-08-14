@@ -3,6 +3,48 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Exact-implementation reviews and Codex adjudication — 2026-08-14
+
+Reviewed source: commit `99754b80dd37436810ae6f32423620e053eb94bc`.
+
+Both reviewers returned **approve with conditions**. Their ignored scratch memos were evidence
+inputs, not authority. Codex reproduced the material claims and made the decisions below.
+
+### Claude findings
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| A fallback attempt increments `teacher_fallbacks` before the teacher may return typed non-move control | **Accept** | Reproduced: one decision became both a non-move outcome and a returned fallback; dashboard projection raised and the observer swallowed it. Increment only after a move returns; a negative-path test now requires a zero returned-move gap and a live dashboard projection. |
+| `adapt_from_prior` test survives mutation back to ordinary regularization | **Accept** | Mutation of `regularization_center=prior` to `None` preserved every old assertion. A strong-prior distance assertion now separates the intended implementation from the mutation. |
+| Zero-weight V3 significance can coexist with poor absolute accuracy | **Accept with correction** | The control is deterministic, but its exact score is **not** public because private availability masks determine the first available candidate; the claimed exact 6/54 is rejected. The core risk is real. V3 now also requires 27/54 and no worse accuracy than the frozen title-neutral highest-pressure heuristic. All predictions commit before labels. |
+| Path-bearing private failure messages lose all diagnostic text | **Accept** | Path tokens are now replaced with `[private-path]`; the remaining message, original digest and redaction status survive. |
+| Complete terminal accounting is reported but not consumed by a promotion gate | **Accept as a gate** | Every first Milestone 2–4 promotion must require zero unclassified decisions or name and count an independently reviewed exception. |
+| The negative direction of returned-move accounting is untested | **Accept** | Closed by the fallback-control test above. |
+| Scenario overlap counts are hardcoded literals | **Accept** | Counts are derived from specs; a constructor-bypass mutation test proves the public value changes when overlap exists. |
+| V3 adaptation focus positions are skewed | **Accept** | Regenerated before any access: each of nine positions occurs exactly 3 times in adaptation and 6 times in sealed test; all 36 pairwise reversals remain. |
+
+### Antigravity findings
+
+| Finding | Decision | Evidence and consequence |
+| --- | --- | --- |
+| Building three real adapters before one learner update batches infrastructure risk | **Accept** | Build battle first and require an outcome-bearing learner update plus untouched-lineage result before navigation or party-development adapter implementation. The 600 corrections guide coverage only; they remain invalid as outcome labels. |
+| V3 measures goal-manager representation, not executable Crystal play | **Reject as a defect; retain as claim boundary** | The benchmark and plan already say this explicitly and list end-to-end Crystal, living-Pokédex and beyond-goal transfer among what V3 cannot establish. No implementation claim depends on missing Crystal skill execution. |
+| Missing live migration of portable resource/readiness contracts is a present architecture defect | **Defer with integration gate** | The tracked source explicitly marks live integration incomplete and grants no runtime authority. Migrate each relevant adapter before its learned promotion; do not block the first battle loop on unrelated collection plumbing. |
+| Source-derived corridors are teacher arrow strings in disguise | **Reject** | A passability graph is adapter/world knowledge, not an action demonstration. The current Crystal slice uses shared closed-loop acknowledgement, retries turn-only inputs, fails closed on displacement and claims no learned navigation. Milestone 2 already requires 100 unseen displacements; fixed arrow strings remain prohibited. |
+| Three labels over 35 features make prior adaptation invalid | **Reject the proposed condition-number gate** | Rank deficiency is intentional in a MAP-prior comparison and a condition number would not distinguish correct prior anchoring from the v2 regression. The secondary is non-promotional; the accepted strong-prior mutation test guards the load-bearing implementation. |
+
+### Resulting decision
+
+- Revised Crystal V3 SHA-256:
+  `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+- Private Crystal access remains false pending publication and narrow exact-commit re-review.
+- No ROM, teacher, private/counted/sealed context, label, prediction or authority promotion occurred.
+- Next capability lane after publication: one authenticated battle snapshot family from model action
+  through outcome, learner update and untouched-lineage evaluation.
+- Follow-up validation: 3,246 ROM-free tests passed; three integration tests were deselected and
+  one documented expected failure remained. Privacy, docs, all three source-bound registries, the
+  Crystal V3 plan, Ruff and whole-package mypy also passed.
+
 ## Model-first roadmap reviews received — 2026-08-14
 
 Reviewed source: commit `9d6777231110fb503064fb76e65613225a4a40cc`.
@@ -58,7 +100,7 @@ Mission check for this implementation:
   fields, or if a proposed gate has no defensible denominator/comparator; record the limitation
   instead of collecting more data.
 
-### Implementation result awaiting second review
+### Implementation result reviewed at `99754b8` and superseded by the adjudication above
 
 - Exact live accounting now distinguishes 1,647 model executions over 2,260 decisions from 1,647
   teacher agreements over 2,247 classified comparisons; the 13 historical exits remain visibly

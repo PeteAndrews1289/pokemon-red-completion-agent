@@ -43,6 +43,12 @@ def test_v3_plan_is_canonical_balanced_powered_and_still_review_gated() -> None:
     assert Counter(item.fold for item in plan.sealed_test_slots) == Counter(
         {fold: 6 for fold in range(9)}
     )
+    assert Counter(item.focus_candidate_index for item in plan.adaptation_slots) == Counter(
+        {position: 3 for position in range(9)}
+    )
+    assert Counter(item.focus_candidate_index for item in plan.sealed_test_slots) == Counter(
+        {position: 6 for position in range(9)}
+    )
     assert CRYSTAL_TRANSFER_V3_PRIMARY_DESIGN.adequately_powered
     assert CRYSTAL_TRANSFER_V3_PRIMARY_DESIGN.minimum_contexts == 51
     assert not plan.authorized_for_private_context_access
@@ -52,6 +58,12 @@ def test_v3_plan_is_canonical_balanced_powered_and_still_review_gated() -> None:
     assert len(schedule["assignments"]) == 81
     assert schedule["adaptation_pairwise_order_reversals"] == 36
     assert schedule["sealed_test_pairwise_order_reversals"] == 36
+    assert schedule["adaptation_focus_position_counts"] == {
+        str(position): 3 for position in range(9)
+    }
+    assert schedule["sealed_test_focus_position_counts"] == {
+        str(position): 6 for position in range(9)
+    }
     assert all(
         len(assignment["candidate_goal_kinds"]) == len(GoalKind)
         for assignment in schedule["assignments"]
@@ -78,6 +90,16 @@ def test_v3_retires_v2_at_zero_access_and_drops_the_zero_loss_conjunction() -> N
     )
     assert "maximum_discordant_losses" not in endpoint
     assert endpoint["adequately_powered"] is True
+    assert document["claims"]["assigned_goal_kind_is_expected_teacher_label"] is True
+    assert document["claims"]["utility_gate"] == {
+        "absolute_candidate_accuracy_floor": 0.5,
+        "candidate_must_match_or_exceed_comparator_accuracy": True,
+        "comparator_id": "highest_pressure_goal_index",
+        "comparator_receives_same_identity_free_question": True,
+        "minimum_candidate_correct": 27,
+        "predictions_committed_before_any_sealed_label": True,
+        "zero_weight_sign_test_alone_is_not_promotion_eligible": True,
+    }
 
 
 def test_v3_contains_no_capture_label_prediction_or_private_path() -> None:
@@ -100,6 +122,9 @@ def test_v3_parser_rejects_a_high_risk_endpoint_or_authorization_mutation() -> N
         (("claims", "primary_endpoint", "target_power"), 0.50),
         (("claims", "primary_endpoint", "independent_contexts"), 27),
         (("claims", "primary_endpoint", "test"), "two_sided_exact"),
+        (("claims", "utility_gate", "absolute_candidate_accuracy_floor"), 0.1),
+        (("claims", "utility_gate", "comparator_id"), "lowest_effort_goal_index"),
+        (("claims", "assigned_goal_kind_is_expected_teacher_label"), False),
         (("adaptation", "only_differing_field"), "optimizer"),
         (("supersedes", "v2_sealed_contexts_opened"), 1),
     ):

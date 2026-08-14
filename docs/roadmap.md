@@ -8,21 +8,25 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
-## Current checkpoint (2026-08-14): build three real scenario families
+## Current checkpoint (2026-08-14): prove one real learning loop, then finish three families
 
 Claude and Antigravity's first model-roadmap review is implemented and awaiting a second review.
-The active work is exactly three single-process scenario families—navigation, battle and party
-development—followed by a learner update and untouched-lineage evaluation. The synthetic substrate,
-exact live accounting, candidate-count audit, challenge-relative readiness and bankrupt-resource
-contracts are implemented; real snapshot adapters and live integration of those contracts are not.
+The Milestone 1 boundary remains exactly three single-process scenario families—navigation, battle
+and party development—but their live adapters are no longer batched. Build the battle adapter first
+and require one outcome-bearing learner update plus untouched-lineage result before implementing
+the other two. The 600 retained disagreements inform coverage but are not training labels. The
+synthetic substrate, exact live accounting, candidate-count audit, challenge-relative readiness and
+bankrupt-resource contracts are implemented; real snapshot adapters and live integration are not.
 Do not add workers, a fourth family or a full run first.
 
 Crystal v2 is retired at zero access. Prospective V3 is
 [`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
-`b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
 Its 54-context zero-shot paired primary endpoint has 82.3248% power at the declared useful effect;
-27 adaptation contexts support a mandatory prior-preserving three-label secondary analysis. It
-authorizes no private context access before publication and fresh external review.
+utility additionally requires at least 27/54 and no worse accuracy than the title-neutral
+highest-pressure heuristic. Twenty-seven adaptation contexts support a mandatory prior-preserving
+three-label secondary analysis. It authorizes no private context access before publication and
+fresh external review.
 
 ## Superseded focus (2026-08-14): evaluate the Red learner before Crystal
 

@@ -366,9 +366,10 @@ class ModelAssistedBattlePolicy:
         return predicted_slot
 
     def _fallback(self, fallback: Callable[[], int], reason: str) -> int:
+        result = fallback()
         self.teacher_fallbacks += 1
         self.fallback_reasons[reason] += 1
-        return fallback()
+        return result
 
     def _record_correction(
         self,

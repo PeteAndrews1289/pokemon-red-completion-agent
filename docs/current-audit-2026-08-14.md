@@ -1,5 +1,34 @@
 # Current audit — 2026-08-14
 
+## Second-review adjudication
+
+The second read-only audit approved the foundation with conditions and found one reproducible live
+observability defect. An unsupported battle observation could ask the teacher for a fallback; if
+the teacher returned a typed control request instead of a move, `teacher_fallbacks` had already
+incremented. The policy then counted one non-move decision and one returned fallback for the same
+attempt. Dashboard projection rejected the contradiction, and the observer boundary counted the
+error instead of updating the display. The increment now commits only after a teacher move returns,
+and a direct negative-path test closes the gap.
+
+The audit also improved the test and experiment rather than adding more infrastructure. A mutation
+back to ordinary adaptation now fails a strong-prior distance assertion. Path-bearing exception
+messages retain their non-path diagnostic text. Scenario partition-overlap counts are derived. The
+Crystal schedule is exactly balanced across all nine answer positions, and a paired win over the
+zero-weight control is insufficient by itself: V3 additionally requires 27/54 and performance at
+least equal to the frozen title-neutral highest-pressure heuristic. Revised plan SHA-256 is
+`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+
+The implementation order is now serial: one real battle snapshot adapter must produce a learner
+update and untouched-lineage outcome before navigation and party-development live adapters are
+built. No reviewer claim was accepted by vote. Map-derived passability was not reclassified as a
+teacher arrow string, and intentional three-label MAP adaptation was not rejected merely because
+its feature matrix is rank-deficient. No ROM, teacher, sealed context or prediction was opened.
+
+The follow-up passes the complete ROM-free gate: 3,246 tests passed, three integration tests were
+deselected and one documented expected failure remained. Public-artifact privacy, documentation,
+the collection, goal-manager and strategic-navigation source bindings, the Crystal V3 plan, Ruff
+and whole-package mypy are green.
+
 ## Post-review measurement and experiment-design audit
 
 Claude and Antigravity approved the model-first direction with conditions. This ROM-free checkpoint

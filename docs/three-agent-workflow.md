@@ -53,9 +53,11 @@ source.
   recorded the scope. The prototype is advisory until Codex audits and ports it deliberately.
 - Private ROMs, saves, datasets, model artifacts, and machine paths never enter review memos or Git.
 
-Because Claude and Antigravity are separate applications, Codex cannot start or control them
-directly. The owner opens each application on the repository and gives it the corresponding prompt
-below. Review results can be pasted into the Codex task or saved under the ignored local inbox:
+Claude and Antigravity are separate applications. Normally the owner opens each application on the
+repository and gives it the corresponding prompt below. When the owner explicitly authorizes local
+desktop control and leaves the reviewer windows open, Codex may dispatch exact-commit prompts and
+monitor completion; that does not broaden either reviewer's read-only scope. Review results can be
+pasted into the Codex task or saved under the ignored local inbox:
 
 - `scratch/agent-inbox/claude/`
 - `scratch/agent-inbox/antigravity/`

@@ -8,6 +8,8 @@
 > interventions, collisions/path overhead, battle outcomes, experience per frame, battles per heal,
 > party rotations, collection dependencies, and transfer replace whole-route percentage as the
 > primary progress view. Do not start another full run merely to populate this dashboard.
+> Future private failure records preserve exact path-free text and replace path tokens inside
+> otherwise useful messages instead of discarding the entire diagnostic.
 
 The dashboard is the human view of a run. It combines the live emulator screen with the evidence
 needed to understand what the agent is doing and how far the experiment has progressed.
@@ -119,10 +121,11 @@ validated, identity-safe snapshot to the display; the display never feeds data o
 back into the agent. Private paths, raw memory addresses and binding identities are excluded from
 the status document.
 
-The next active display target is the single-process navigation/battle/party-development scenario
-lab. It should show bounded episode throughput, untouched-lineage outcomes, interventions and exact
-failures only after real snapshot-backed adapters exist; synthetic contract tests must not move a
-training counter.
+The next active display target is the single-process battle scenario adapter. It should show
+bounded episode throughput, learner-update eligibility, untouched-lineage outcomes, interventions
+and exact failures only after the real snapshot-backed adapter exists. Navigation and
+party-development views follow only after that first loop closes; synthetic contract tests must
+not move a training counter.
 
 The same observer boundary is intended for live qualification, demonstration collection, model
 fitting, zero-shot evaluation and later causal runs. A counter advances only when the corresponding

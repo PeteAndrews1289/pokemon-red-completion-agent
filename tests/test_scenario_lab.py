@@ -205,6 +205,22 @@ def test_catalog_rejects_lineage_or_state_leakage_between_partitions() -> None:
         )
 
 
+def test_public_overlap_counts_are_derived_even_if_constructor_is_bypassed() -> None:
+    train = _spec(ScenarioFamily.BATTLE)
+    development = replace(
+        _spec(ScenarioFamily.BATTLE, partition=ScenarioPartition.DEVELOPMENT),
+        root_lineage_id=train.root_lineage_id,
+        initial_state_sha256=train.initial_state_sha256,
+    )
+    catalog = object.__new__(ScenarioCatalog)
+    object.__setattr__(catalog, "specs", (train, development))
+
+    public = catalog.public_dict()
+
+    assert public["lineage_partition_overlap"] == 1
+    assert public["initial_state_partition_overlap"] == 1
+
+
 def test_public_spec_binds_environment_schema_and_exact_source() -> None:
     public = _spec(ScenarioFamily.NAVIGATION).public_dict()
 

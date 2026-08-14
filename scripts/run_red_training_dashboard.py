@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import time
 import uuid
 import webbrowser
@@ -303,7 +304,8 @@ def _private_failure_record(
         "schema_version": 2,
         "exception_type": type(error).__name__,
         "exception_message": retained_message,
-        "exception_message_retained_exactly": retained_message is not None,
+        "exception_message_retained_exactly": retained_message == message,
+        "exception_message_redacted": retained_message != message,
         "exception_message_sha256": _exception_message_sha256(error),
         "last_verified": snapshot,
     }
@@ -313,17 +315,18 @@ def _exception_message_sha256(error: BaseException) -> str:
     return hashlib.sha256(str(error).encode("utf-8")).hexdigest()
 
 
-def _path_free_exception_message(message: str) -> str | None:
-    """Retain exact text unless it could disclose a filesystem location."""
+_PRIVATE_PATH_TOKEN = re.compile(
+    r"(?i)(?:file:(?://)?[^\s'\"]+|(?<![\w])~(?:[/\\][^\s'\"]*)?"
+    r"|(?<![\w])(?:\.{1,2}[/\\]|(?:[a-z0-9_.-]+[/\\])+)[^\s'\"]+"
+    r"|(?<![\w])/(?:[^\s'\"]+)|(?<![\w])[a-z]:[/\\][^\s'\"]+"
+    r"|\\\\[^\s'\"]+)"
+)
 
-    if (
-        "/" in message
-        or "\\" in message
-        or message.startswith("~")
-        or message.casefold().startswith("file:")
-    ):
-        return None
-    return message
+
+def _path_free_exception_message(message: str) -> str:
+    """Retain diagnostic text while replacing path-bearing tokens."""
+
+    return _PRIVATE_PATH_TOKEN.sub("[private-path]", message)
 
 
 def _emit(payload: dict[str, object]) -> None:

@@ -8,7 +8,7 @@ choices than the same model with zero weights on genuinely unseen Crystal contex
 
 The active prospective plan is
 [`configs/crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json),
-SHA-256 `b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+SHA-256 `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
 It contains 27 adaptation slots and 54 sealed-test slots, no cartridge capture, label, prediction,
 private path or ROM byte. It explicitly sets private-context authorization to false and requires
 independent reviews from Claude and Antigravity before that changes.
@@ -47,8 +47,9 @@ The reusable substrate remains valuable:
 - The V3 generator and parser reproduce one canonical public plan and reject changes to
   authorization, power, endpoint, prior comparison or V2 zero-access history.
 - The canonical file embeds every one of the 81 assignments. Adaptation and sealed partitions each
-  exhibit all 36 possible pairwise candidate-order reversals, so a later code change cannot silently
-  reshuffle the preregistered schedule.
+  exhibit all 36 possible pairwise candidate-order reversals. Each of the nine focus positions
+  occurs exactly three times in adaptation and six times in sealed test, so a later code change
+  cannot silently reshuffle or skew the preregistered schedule.
 
 This is a preregistration substrate, not a completed transfer runner. V3 still needs its private
 catalog materializer, complete prediction commitment, one-shot outcome evaluator and reviewer
@@ -92,7 +93,8 @@ The fixed order is:
 
 1. publish and externally review the exact code, plan and path-free catalog contracts;
 2. freeze the complete adaptation and sealed catalogs before any prediction or label;
-3. commit frozen-Red and zero-weight predictions for all 54 sealed questions;
+3. commit frozen-Red, zero-weight and title-neutral highest-pressure predictions for all 54 sealed
+   questions;
 4. collect all 27 adaptation labels without opening a sealed label;
 5. fit each Red-prior and zero-prior fold from the same three examples and commit predictions for
    its six assigned sealed contexts;
@@ -114,6 +116,13 @@ The decision rule is a one-sided exact sign test conditional on discordant pairs
 effect — win 0.50, loss 0.20, tie 0.30 — 51 contexts are sufficient for 80% power and 54 provide
 82.3248% power. There is no zero-loss requirement.
 
+The zero-weight control is intentionally a no-learned-signal comparator, so statistical
+significance against it cannot alone authorize a transfer claim. The candidate must also answer at
+least 27/54 contexts correctly and must match or exceed the frozen title-neutral
+`highest_pressure_goal_index` heuristic on the same questions. All three prediction sets are
+committed before any sealed label. This preserves the source-weight test while preventing a weak
+absolute score from being promoted as useful Pokémon knowledge.
+
 The mandatory secondary report compares prior-preserving Red and zero initialization after three
 labels per fold. It publishes paired wins, losses, ties, accuracy and per-goal-kind results, but it
 cannot replace or rescue the zero-shot primary endpoint.
@@ -128,9 +137,10 @@ authorized operation.
 
 ## Claim boundary
 
-A successful primary endpoint would establish only that frozen Red goal-selection weights improve
-zero-shot Crystal goal choices under this benchmark. A successful secondary result would show that
-the advantage survives a tightly matched three-label adaptation. Neither establishes Crystal story
+A successful paired endpoint plus both utility gates would establish only that frozen Red
+goal-selection weights improve zero-shot Crystal goal choices and remain useful relative to one
+strong fixed heuristic under this benchmark. A successful adaptation result would show that the
+advantage survives a tightly matched three-label update. Neither establishes Crystal story
 completion, battle or navigation transfer, living-Pokédex completion or a universal Pokémon player.
 
 A failure is equally informative if the receipt separates observation, availability masking,

@@ -1,6 +1,26 @@
 # Three-agent coordination
 
-> **2026-08-14 post-review model-first checkpoint — highest active checkpoint:** Claude and
+> **2026-08-14 second-review adjudication — highest active checkpoint:** Claude and Antigravity
+> audited exact commit `99754b8`; Codex reproduced and adjudicated their findings rather than
+> accepting consensus. The real blockers are fixed in the follow-up source: fallback attempts
+> that end in teacher control no longer masquerade as returned moves, prior-preserving adaptation
+> has a mutation-killing strong-prior test, path-bearing failures retain redacted diagnostic text,
+> and scenario overlap counts are derived. Crystal V3 now requires 27/54 absolute accuracy and must
+> match or beat the title-neutral highest-pressure heuristic in addition to the powered Red-versus-
+> zero paired test. All nine focus positions occur exactly 3 times in adaptation and 6 times in
+> sealed test; plan SHA-256 is
+> `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+>
+> Next publish, pass exact-commit CI, and obtain narrow reviewer rechecks. Then build **only the real
+> battle scenario adapter first** and require one learner update plus untouched-lineage outcome
+> before navigation or party-development adapter expansion. The 600 corrections are coverage
+> diagnostics, not labels. V3 private access remains false. No ROM, teacher, sealed context,
+> prediction or authority promotion occurred. The follow-up passes 3,246 ROM-free tests, with
+> three integration tests deselected and one documented expected failure; privacy, docs, all
+> source-bound registries, the V3 plan, lint and whole-package types are green.
+
+> **2026-08-14 post-review model-first checkpoint — superseded by the second-review adjudication
+> above:** Claude and
 > Antigravity's conditions on `9d67772` are implemented and await a second read-only review. Live
 > accounting is now 2,260 battle decisions = 1,647 model executions + 600 teacher fallbacks + 13
 > explicitly unclassified historical exits; teacher agreement uses 2,247 classified comparisons.
@@ -19,9 +39,9 @@
 > The complete ROM-free gate passes: 3,242 tests passed, three integration tests were deselected,
 > and one documented expected failure remained.
 > Start at `docs/evidence/model-first-measurement-audit-2026-08-14.json`,
-> `configs/crystal-goal-manager-transfer-v3.json`, and `docs/model-first-roadmap.md`. Next build the
-> three real snapshot-backed scenario adapters and obtain a learner update plus unseen result; do
-> not add a fourth family, another full replay or a Crystal context first.
+> `configs/crystal-goal-manager-transfer-v3.json`, and `docs/model-first-roadmap.md`. The later
+> adjudication serializes the adapters: battle first, then navigation and party development. Do not
+> add a fourth family, another full replay or a Crystal context first.
 
 > **2026-08-14 model-first pivot — highest active checkpoint:** The owner rejected the project's
 > drift toward repeatedly hardening and replaying the deterministic Red teacher. The first Red

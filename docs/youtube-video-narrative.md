@@ -26,10 +26,16 @@ Run two identical silhouettes—frozen Red weights and zero weights—toward a o
 Overlay **82.3% POWER AT WIN/LOSS/TIE 0.50/0.20/0.30** and a padlock:
 **CLAUDE + ANTIGRAVITY REVIEW REQUIRED / CONTEXT ACCESS FALSE**.
 
+Then interrupt the celebration: the empty zero-weight control is intentionally weak. Add a third
+card—**HIGHEST PRESSURE, TITLE-NEUTRAL**—and two hard gates: **RED ≥ 27/54** and **RED ≥ FIXED
+HEURISTIC**. Deal the answer card evenly across all nine positions: **3 EACH IN ADAPTATION / 6 EACH
+IN SEALED TEST**. The line is: **“A significant win over nothing is not yet useful transfer.”**
+
 End on three doors only: **NAVIGATION / BATTLE / PARTY DEVELOPMENT**. Under each, show
-**200 SYNTHETIC CONTRACT EPISODES**, then cross out “trained” and replace it with
-**REAL SNAPSHOT ADAPTER NEXT**. The final line is: **“We stopped building the whole laboratory.
-Now one learned skill has to survive an unseen test before we earn a fourth room.”**
+**200 SYNTHETIC CONTRACT EPISODES**, then open only **BATTLE** and cross out “trained” in favor of
+**REAL SNAPSHOT → OUTCOME → LEARNER UPDATE → UNSEEN LINEAGE**. The final line is: **“We stopped
+building the whole laboratory. One learned skill has to close the loop before we build the next
+adapter.”**
 
 The older V2 scenes below are historical footage. If used, label them **RETIRED UNOPENED DESIGN**
 and follow them immediately with the audit scene above.

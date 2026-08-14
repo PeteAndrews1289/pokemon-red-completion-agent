@@ -14,7 +14,7 @@ product is the shared hierarchy plus thin title/revision adapters.
 
 The active first test is Crystal V3:
 [`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
-`b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+`211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
 It remains review-gated and authorizes no private context access.
 
 V1 (Crystal 1.0) and V2 (Crystal 1.1) are preserved as retired zero-access designs. V2's ordinary
@@ -32,6 +32,12 @@ the same 54 questions with identical architecture, normalization, masks and menu
 committed before any sealed label. Discordant wins/losses are scored by a one-sided exact sign test
 at `alpha = 0.05`. At the smallest useful win/loss/tie effect 0.50/0.20/0.30, the design has 82.3%
 power. Missing predictions count as incorrect and optional stopping is impossible.
+
+That paired test measures whether the frozen source weights contain signal; it is not by itself a
+usefulness gate. The same prediction commitment therefore includes the title-neutral
+`highest_pressure_goal_index` heuristic. Promotion additionally requires at least 27/54 absolute
+accuracy and requires the Red model to match or beat that heuristic. The answer position is exactly
+balanced in both partitions, and candidate position is never a model feature.
 
 The mandatory secondary endpoint uses prior-preserving adaptation. Each Red-prior and zero-prior
 candidate sees the same three examples in the same order with the same optimizer, normalizer and
@@ -87,8 +93,10 @@ safety interventions, but they are not policy inputs.
 
 ## Promotion ladder
 
-1. Run short Red scenario families for navigation, battle and party development.
-2. Produce a learner update and unseen outcome result in each before adding more infrastructure.
+1. Run the battle scenario adapter first and produce one learner update plus an untouched-lineage
+   outcome. The 600 retained disagreements guide coverage only; they are not outcome labels.
+2. Add navigation and party-development adapters only after that loop works, then produce a learner
+   update and unseen result in each before adding another family.
 3. Promote bounded Red authority one skill at a time.
 4. Connect the online goal loop and living-Pokédex dependency planner.
 5. Measure zero-shot and prior-preserving Crystal transfer through reviewed protocols.

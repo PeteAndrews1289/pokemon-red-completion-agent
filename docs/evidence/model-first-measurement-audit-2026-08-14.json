@@ -57,6 +57,29 @@
       "limitation": "Thousands of decisions from one lineage do not constitute thousands of independent evaluations."
     }
   },
+  "external_review_adjudication": {
+    "accepted_and_implemented": [
+      "commit teacher fallback counters only after a move returns",
+      "mutation-resistant strong-prior adaptation assertion",
+      "path-token-redacted private failure diagnostics",
+      "derived scenario partition-overlap counts",
+      "exact focus-position balance in both Crystal V3 partitions",
+      "Crystal V3 absolute accuracy and highest-pressure utility gates",
+      "one real battle learner-update loop before the other live adapters"
+    ],
+    "claude_verdict": "approve_with_conditions",
+    "antigravity_verdict": "approve_with_conditions",
+    "deferred_with_gate": [
+      "live resource and challenge-readiness adapter migration before relevant authority",
+      "zero unclassified decisions in the first learned-skill promotion receipt"
+    ],
+    "rejected": [
+      "map-derived passability graphs are equivalent to teacher arrow strings",
+      "raw condition number is a useful falsifier for intentional three-label MAP adaptation",
+      "the zero-weight control has an exactly public 6-of-54 score before availability masks exist"
+    ],
+    "reviewed_source_commit": "99754b80dd37436810ae6f32423620e053eb94bc"
+  },
   "crystal_design": {
     "v2_retired_unopened": {
       "adaptation_examples_collected": 0,
@@ -74,8 +97,12 @@
         "claude",
         "antigravity"
       ],
+      "focus_position_balance": {
+        "adaptation_each_of_nine_positions": 3,
+        "sealed_each_of_nine_positions": 6
+      },
       "minimum_contexts_for_target_power": 51,
-      "plan_sha256": "b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7",
+      "plan_sha256": "211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208",
       "primary_candidate": "frozen Red weights without Crystal adaptation",
       "primary_endpoint": "one-sided exact sign test conditional on discordance",
       "sealed_independent_contexts": 54,
@@ -84,13 +111,20 @@
         "tie_probability": 0.3,
         "win_probability": 0.5
       },
+      "utility_gate": {
+        "candidate_must_match_or_exceed": "highest_pressure_goal_index",
+        "minimum_candidate_accuracy": 0.5,
+        "minimum_candidate_correct": 27,
+        "predictions_committed_before_any_sealed_label": true,
+        "zero_weight_significance_alone_is_not_promotion_eligible": true
+      },
       "target_power": 0.8
     }
   },
   "future_runtime_observability": {
     "exact_path_free_exception_message_retained_privately_when_safe": true,
     "last_semantic_stage_and_policy_counters_retained": true,
-    "path_bearing_exception_message": "private record retains only its SHA-256 and an explicit redaction flag",
+    "path_bearing_exception_message": "private record replaces path tokens while preserving the remaining diagnostic text, original SHA-256, and an explicit redaction flag",
     "public_receipt_contains_exception_message_sha256": true
   },
   "live_shadow_accounting": {
@@ -137,11 +171,30 @@
         "party_development"
       ],
       "real_snapshot_adapters_complete": false,
+      "first_real_adapter": "battle",
+      "first_adapter_requires_learner_update_before_navigation_or_party_adapter_expansion": true,
       "rom_free_contract_episodes_per_family": 200,
       "substrate_complete": true
     }
   },
   "promotion_eligible": false,
+  "rom_free_validation": {
+    "documented_expected_failures": 1,
+    "integration_tests_deselected": 3,
+    "passed": 3246,
+    "public_artifact_privacy": "passed",
+    "source_bound_registries": [
+      "battle_collection",
+      "goal_manager",
+      "strategic_navigation"
+    ],
+    "static_gates": [
+      "documentation",
+      "crystal_v3_plan",
+      "ruff",
+      "whole_package_mypy"
+    ]
+  },
   "red_initialization_pilot": {
     "context_scope": "27 already-open Red development validation contexts",
     "crystal_contexts_opened": 0,

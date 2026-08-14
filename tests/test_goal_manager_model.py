@@ -359,6 +359,13 @@ def test_prior_adaptation_preserves_the_only_declared_initialization_difference(
     configuration = goal_manager_prior_adaptation_configuration()
     assert configuration["prior_center"] == "each_candidates_initial_weights"
 
+    strong_red = source.adapt_from_prior(
+        adaptation,
+        epochs=25,
+        prior_strength=5.0,
+    )
+    assert np.linalg.norm(strong_red.weights - source.weights) < 0.1
+
 
 def test_fitting_rejects_validation_or_failed_teacher_rows() -> None:
     validation = _example(

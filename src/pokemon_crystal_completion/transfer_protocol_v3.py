@@ -38,6 +38,9 @@ CRYSTAL_TRANSFER_V3_TEST_CONTEXTS = 54
 CRYSTAL_TRANSFER_V3_FOLDS = 9
 CRYSTAL_TRANSFER_V3_ADAPTATION_PER_FOLD = 3
 CRYSTAL_TRANSFER_V3_TEST_PER_FOLD = 6
+CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_ACCURACY = 0.50
+CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_CORRECT = 27
+CRYSTAL_TRANSFER_V3_UTILITY_COMPARATOR_ID = "highest_pressure_goal_index"
 CRYSTAL_TRANSFER_V3_PRIMARY_DESIGN = PairedExactDesign(
     independent_contexts=CRYSTAL_TRANSFER_V3_TEST_CONTEXTS,
     alpha=0.05,
@@ -155,7 +158,11 @@ def crystal_transfer_v3_slots() -> tuple[CrystalTransferV3Slot, ...]:
                     goal_kind=kind,
                     kind_ordinal=kind_ordinals[kind],
                     fold=fold,
-                    candidate_goal_kinds=_candidate_order(slot_id),
+                    candidate_goal_kinds=_candidate_order(
+                        slot_id,
+                        focus_kind=kind,
+                        focus_position=(partition_ordinal - 1) % len(_GOAL_KIND_ORDER),
+                    ),
                 )
             )
 
@@ -174,7 +181,11 @@ def crystal_transfer_v3_slots() -> tuple[CrystalTransferV3Slot, ...]:
                     goal_kind=kind,
                     kind_ordinal=kind_ordinal,
                     fold=fold,
-                    candidate_goal_kinds=_candidate_order(slot_id),
+                    candidate_goal_kinds=_candidate_order(
+                        slot_id,
+                        focus_kind=kind,
+                        focus_position=(partition_ordinal - 1) % len(_GOAL_KIND_ORDER),
+                    ),
                 )
             )
     result = (*adaptation, *sealed)
@@ -203,15 +214,19 @@ def crystal_transfer_v3_plan_document() -> dict[str, object]:
         },
         "catalog_gates": {
             "all_policy_contexts_unique": True,
-            "candidate_order_derivation": "sha256-experiment-slot-kind-v1",
+            "candidate_order_derivation": (
+                "balanced-focus-position-plus-sha256-experiment-slot-kind-v1"
+            ),
+            "exact_focus_position_balance_per_partition": True,
             "minimum_available_candidates_per_context": 3,
-            "minimum_context_dependent_menu_reversals": 18,
-            "minimum_distinct_focus_positions_per_partition": 8,
+            "minimum_context_dependent_menu_reversals": 36,
+            "minimum_distinct_focus_positions_per_partition": 9,
             "model_receives_candidate_position": False,
             "partition_policy_context_overlap": 0,
             "selected_candidate_positions_must_vary": True,
         },
         "claims": {
+            "assigned_goal_kind_is_expected_teacher_label": True,
             "does_not_establish": [
                 "end-to-end-crystal-completion",
                 "autonomous-living-pokedex-completion",
@@ -230,11 +245,27 @@ def crystal_transfer_v3_plan_document() -> dict[str, object]:
                 "missing_prediction_is_incorrect": True,
                 "partition": "sealed_test",
             },
+            "utility_gate": {
+                "absolute_candidate_accuracy_floor": (
+                    CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_ACCURACY
+                ),
+                "candidate_must_match_or_exceed_comparator_accuracy": True,
+                "comparator_id": CRYSTAL_TRANSFER_V3_UTILITY_COMPARATOR_ID,
+                "comparator_receives_same_identity_free_question": True,
+                "minimum_candidate_correct": (
+                    CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_CORRECT
+                ),
+                "predictions_committed_before_any_sealed_label": True,
+                "zero_weight_sign_test_alone_is_not_promotion_eligible": True,
+            },
         },
         "experiment_id": CRYSTAL_TRANSFER_V3_EXPERIMENT_ID,
         "prediction_order": [
             "freeze_catalog_before_any_prediction_or_label",
-            "commit_red_and_zero_weight_predictions_for_all_sealed_contexts",
+            (
+                "commit_red_zero_weight_and_highest_pressure_predictions_for_all_"
+                "sealed_contexts"
+            ),
             "collect_all_adaptation_labels_without_opening_sealed_labels",
             "fit_each_red_prior_and_zero_prior_fold_from_its_three_declared_examples",
             "commit_every_fold_model_prediction_for_its_assigned_sealed_contexts",
@@ -251,10 +282,12 @@ def crystal_transfer_v3_plan_document() -> dict[str, object]:
         "slot_schedule": {
             "adaptation_contexts": len(adaptation),
             "adaptation_fold_counts": _fold_counts(adaptation),
+            "adaptation_focus_position_counts": _focus_position_counts(adaptation),
             "goal_kind_order": [kind.value for kind in _GOAL_KIND_ORDER],
             "identity_prefix": "crystal-goal-transfer-v3",
             "sealed_test_contexts": len(sealed),
             "sealed_test_fold_counts": _fold_counts(sealed),
+            "sealed_test_focus_position_counts": _focus_position_counts(sealed),
             "sealed_test_goal_kind_counts": _kind_counts(sealed),
             "adaptation_pairwise_order_reversals": _pairwise_order_reversals(
                 adaptation
@@ -317,17 +350,24 @@ def load_crystal_transfer_v3_plan(repository_root: str | Path) -> CrystalTransfe
     return parse_crystal_transfer_v3_plan(path.read_bytes())
 
 
-def _candidate_order(slot_id: str) -> tuple[GoalKind, ...]:
-    return tuple(
-        sorted(
-            _GOAL_KIND_ORDER,
-            key=lambda kind: hashlib.sha256(
-                (
-                    f"{CRYSTAL_TRANSFER_V3_EXPERIMENT_ID}:{slot_id}:{kind.value}"
-                ).encode("ascii")
-            ).digest(),
-        )
+def _candidate_order(
+    slot_id: str,
+    *,
+    focus_kind: GoalKind,
+    focus_position: int,
+) -> tuple[GoalKind, ...]:
+    if not 0 <= focus_position < len(_GOAL_KIND_ORDER):
+        raise CrystalTransferV3ProtocolError("Crystal transfer focus position is invalid")
+    remaining = sorted(
+        (kind for kind in _GOAL_KIND_ORDER if kind is not focus_kind),
+        key=lambda kind: hashlib.sha256(
+            (
+                f"{CRYSTAL_TRANSFER_V3_EXPERIMENT_ID}:{slot_id}:{kind.value}"
+            ).encode("ascii")
+        ).digest(),
     )
+    remaining.insert(focus_position, focus_kind)
+    return tuple(remaining)
 
 
 def _validate_slot_schedule(slots: tuple[CrystalTransferV3Slot, ...]) -> None:
@@ -364,13 +404,21 @@ def _validate_slot_schedule(slots: tuple[CrystalTransferV3Slot, ...]) -> None:
             raise CrystalTransferV3ProtocolError(
                 "Crystal transfer V3 candidate menus are incomplete"
             )
-        if len({item.focus_candidate_index for item in partition}) < 8:
+        expected_position_count = len(partition) // len(_GOAL_KIND_ORDER)
+        if Counter(item.focus_candidate_index for item in partition) != Counter(
+            {
+                position: expected_position_count
+                for position in range(len(_GOAL_KIND_ORDER))
+            }
+        ):
             raise CrystalTransferV3ProtocolError(
-                "Crystal transfer V3 candidate positions are insufficient"
+                "Crystal transfer V3 focus positions are not exactly balanced"
             )
-        if _pairwise_order_reversals(partition) < 18:
+        if _pairwise_order_reversals(partition) != len(
+            tuple(combinations(_GOAL_KIND_ORDER, 2))
+        ):
             raise CrystalTransferV3ProtocolError(
-                "Crystal transfer V3 candidate-order reversals are insufficient"
+                "Crystal transfer V3 candidate-order reversals are incomplete"
             )
 
 
@@ -382,6 +430,13 @@ def _fold_counts(slots: tuple[CrystalTransferV3Slot, ...]) -> dict[str, int]:
 def _kind_counts(slots: tuple[CrystalTransferV3Slot, ...]) -> dict[str, int]:
     counts = Counter(item.goal_kind for item in slots)
     return {kind.value: counts[kind] for kind in GoalKind}
+
+
+def _focus_position_counts(
+    slots: tuple[CrystalTransferV3Slot, ...],
+) -> dict[str, int]:
+    counts = Counter(item.focus_candidate_index for item in slots)
+    return {str(position): counts[position] for position in range(len(_GOAL_KIND_ORDER))}
 
 
 def _pairwise_order_reversals(slots: tuple[CrystalTransferV3Slot, ...]) -> int:
@@ -412,10 +467,13 @@ def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
 __all__ = [
     "CRYSTAL_TRANSFER_V3_ADAPTATION_CONTEXTS",
     "CRYSTAL_TRANSFER_V3_EXPERIMENT_ID",
+    "CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_ACCURACY",
+    "CRYSTAL_TRANSFER_V3_MINIMUM_CANDIDATE_CORRECT",
     "CRYSTAL_TRANSFER_V3_PLAN_FILENAME",
     "CRYSTAL_TRANSFER_V3_PLAN_SCHEMA",
     "CRYSTAL_TRANSFER_V3_PRIMARY_DESIGN",
     "CRYSTAL_TRANSFER_V3_TEST_CONTEXTS",
+    "CRYSTAL_TRANSFER_V3_UTILITY_COMPARATOR_ID",
     "CrystalTransferV3Plan",
     "CrystalTransferV3ProtocolError",
     "CrystalTransferV3Slot",

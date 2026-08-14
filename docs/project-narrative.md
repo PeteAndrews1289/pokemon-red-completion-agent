@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the reviewers were instruments, not judges
+
+The second review did not end in a vote. Claude found a concrete edge case: when an unsupported
+battle state asked the teacher for help and the teacher answered with a switch, item or recovery
+request instead of a move, the fallback counter advanced too early. The policy said the decision
+ended as non-move control; the dashboard simultaneously said a fallback move returned. Its own
+integrity check rejected the update, recreating silent observability loss inside the repair meant
+to prevent it. A ten-line probe reproduced the failure. The counter now commits only after a move
+actually returns, and the probe is a permanent test.
+
+Antigravity's best criticism was about order rather than code. Building three live adapters before
+closing one learning loop would batch the risk again. Battle now goes first: one authenticated
+snapshot family must produce outcomes, a learner update and an untouched-lineage result before the
+navigation and party-development adapters expand. The 600 disagreements help choose scenarios;
+they still cannot become labels because the rejected moves were never executed.
+
+Other reviewer claims did not survive inspection. A map derived from cartridge/source collision
+data is not a memorized button string; closed-loop recovery and randomized displacement are the
+tests that distinguish them. A three-example, 35-feature adaptation is intentionally underdetermined
+because it is anchored to a prior, so its raw condition number would diagnose the design premise,
+not a defect.
+
+Crystal V3 did need a stronger definition of success. Beating an all-zero model can detect source
+signal while still being useless. The plan now requires at least 27/54 and no worse performance
+than a fixed title-neutral highest-pressure heuristic, all committed before labels. It also deals
+the expected answer exactly evenly across nine positions. The result is a better experiment without
+opening a single Crystal context. That is the three-agent process working as intended: propose,
+attack, reproduce, adjudicate, then change only what the evidence supports.
+
 ## August 14: two reviewers forced the project to count what was real
 
 The model-first pivot survived independent review, but the scorecard did not. The failed Red run

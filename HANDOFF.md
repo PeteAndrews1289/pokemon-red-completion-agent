@@ -17,6 +17,53 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Second-review adjudication and first-real-adapter order — 2026-08-14
+
+Claude and Antigravity independently audited exact commit `99754b8`. Their memos were advisory, not
+a vote. Codex reproduced the load-bearing findings and made the following decisions:
+
+- A teacher control request reached through the unsupported-observation fallback after
+  `teacher_fallbacks` had already incremented. The policy then reported a non-move outcome and a
+  returned fallback simultaneously; the dashboard rejected that contradiction and its observer
+  boundary swallowed the error. The increment now occurs only after the teacher returns a move,
+  and a negative-direction test proves the dashboard remains live.
+- The prior-preserving adaptation implementation was correct, but its test survived mutation back
+  to ordinary L2-to-zero fitting. A strong-prior distance assertion now distinguishes the intended
+  MAP prior by a wide margin.
+- Path-bearing failure messages no longer disappear from the private diagnostic. Path tokens are
+  replaced while the remaining text, original message digest and a redaction flag survive.
+- Crystal V3 remains a narrow goal-manager representation test. Its zero-weight comparison keeps
+  the powered paired endpoint, but significance against that weak control is not promotion. The
+  candidate must also score at least 27/54 and match or beat the frozen title-neutral
+  `highest_pressure_goal_index` heuristic. The heuristic prediction is committed before labels.
+  Both partitions now balance the expected answer exactly across all nine positions and still
+  contain all 36 pairwise order reversals. Canonical plan SHA-256 is
+  `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
+- Antigravity was right about batching risk: build the real battle adapter first and require one
+  learner update plus untouched-lineage outcome before implementing navigation and party adapters.
+  The 600 retained corrections select coverage only; they remain outcome-free and cannot train the
+  model as correctness labels.
+
+Two architecture criticisms were rejected. Source/cartridge-derived passability graphs are adapter
+knowledge, not teacher arrow strings; the current Crystal corridor is an explicitly bounded
+engineering qualification and Milestone 2 already requires randomized displacement recovery. A
+condition number on three-label, 35-feature MAP adaptation would merely rediscover intentional
+rank deficiency; the secondary is descriptive and the mutation-resistant prior test is the useful
+guard. Declared missing live adapters remain future integration, not evidence that synthetic
+contracts already have runtime authority.
+
+No ROM, teacher, private/counted/sealed context or prediction was opened. Crystal V3 private access
+remains false pending exact-commit re-review. The next implementation after publication is one
+authenticated battle snapshot family end to end: observe, act, intervene if required, retain the
+outcome, update the learner and evaluate an untouched lineage.
+
+The follow-up source passes the complete ROM-free gate: 3,246 tests passed, three integration tests
+were deselected and one documented expected failure remained. Public-artifact privacy,
+documentation links, all three source-bound registry checks, the Crystal V3 plan check, Ruff and
+whole-package mypy also pass. The source changes intentionally re-bound the battle, goal-manager
+and strategic-navigation registries; their regenerated identities are protected by independent
+golden tests.
+
 ## Post-review model-first foundation — 2026-08-14
 
 Claude and Antigravity reviewed the model-first pivot at `9d67772`; both approved with conditions.
@@ -39,8 +86,9 @@ The important corrections are:
   0–0. Treat 10/12 aggregate development accuracy with this limitation attached.
 - Dashboard evidence now carries integer numerator/denominator pairs, independent validation units,
   paired outcomes, candidate-count subsets and explicit unclassified exits. Future failures retain
-  the last semantic boundary and policy counters plus the exact exception message when it contains
-  no path; path-bearing text is hashed and marked redacted.
+  the last semantic boundary and policy counters plus exact path-free exception text; path-bearing
+  tokens are replaced while the remaining diagnostic text, original digest and redaction flag
+  survive.
 - The first scenario laboratory is deliberately one process and exactly three families:
   navigation, battle and party development. Two hundred ROM-free synthetic contract episodes per
   family pass, but real snapshot-backed adapters and the first learner update remain outstanding.
@@ -60,17 +108,19 @@ candidate against an identical all-zero control on 54 sealed contexts. Its one-s
 test has 82.3248% power at the declared win/loss/tie effect 0.50/0.20/0.30. A mandatory secondary
 analysis uses prior-preserving adaptation in nine three-label folds. Canonical plan:
 [`configs/crystal-goal-manager-transfer-v3.json`](configs/crystal-goal-manager-transfer-v3.json),
-SHA-256 `b7d7337161bdad1440b9c0ee8f95b8ec23e27973ee0571242eac5fc742668ad7`.
+SHA-256 `211e498d1e85d751935ad607f616b07886ad52914f197896815699dcdbcc2208`.
 The plan embeds all 81 slot assignments rather than only their totals; both partitions contain all
-36 possible pairwise candidate-order reversals. The complete ROM-free gate passes with 3,242 tests,
-three deselected integration tests and one documented expected failure.
+36 possible pairwise candidate-order reversals and exact focus-position balance. The later
+second-review checkpoint adds a 27/54 absolute floor and a highest-pressure utility comparator.
+The complete ROM-free gate at this checkpoint passed with 3,242 tests, three deselected integration
+tests and one documented expected failure.
 It authorizes no private access until the published commit receives fresh Claude and Antigravity
 reviews.
 
-Next work after review is not a Red replay or Crystal opening. Build real snapshot-backed adapters
-for the three scenario families, measure single-process throughput, produce one learner update and
-evaluate it on untouched scenario lineages. Stop if another infrastructure family is proposed
-first.
+Next work after review is not a Red replay or Crystal opening. The later adjudication builds only
+the real battle adapter first and requires one learner update plus untouched-lineage evaluation
+before the navigation and party-development adapters. Stop if another infrastructure family is
+proposed first.
 
 ## Model-first pivot after the failed Red shadow run — 2026-08-14
 

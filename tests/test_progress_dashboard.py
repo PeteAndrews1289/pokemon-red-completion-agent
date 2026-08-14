@@ -228,6 +228,25 @@ def test_live_scorecard_rejects_an_unacknowledged_decision_gap() -> None:
         )
 
 
+def test_live_scorecard_allows_unsupported_observation_to_end_as_non_move_control() -> None:
+    state = DashboardLiveEvaluationState(
+        battle_decisions=1,
+        teacher_queries=1,
+        unsupported_observations=1,
+        non_move_control_decisions=1,
+    ).public_dict()
+
+    assert state["decision_accounting_complete"] is True
+    assert state["teacher_fallbacks"] == 0
+
+    with pytest.raises(ProgressDashboardError, match="unsupported observations"):
+        DashboardLiveEvaluationState(
+            battle_decisions=1,
+            unsupported_observations=1,
+            unclassified_decisions=1,
+        )
+
+
 def test_dependency_free_png_encoder_preserves_exact_rgb_pixels() -> None:
     rgb = bytes((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
     payload = encode_rgb_png(2, 2, rgb)

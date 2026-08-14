@@ -197,8 +197,14 @@ class ScenarioCatalog:
                 f"{partition}:{family}": count
                 for (partition, family), count in sorted(counts.items())
             },
-            "lineage_partition_overlap": 0,
-            "initial_state_partition_overlap": 0,
+            "lineage_partition_overlap": _partition_overlap_count(
+                self.specs,
+                attribute="root_lineage_id",
+            ),
+            "initial_state_partition_overlap": _partition_overlap_count(
+                self.specs,
+                attribute="initial_state_sha256",
+            ),
             "private_path_fields": 0,
         }
 
@@ -827,6 +833,18 @@ def _forbidden_keys(value: object) -> set[str]:
         for child in value:
             result.update(_forbidden_keys(child))
     return result
+
+
+def _partition_overlap_count(
+    specs: tuple[ScenarioSpec, ...],
+    *,
+    attribute: str,
+) -> int:
+    partitions: dict[str, set[ScenarioPartition]] = {}
+    for spec in specs:
+        value = getattr(spec, attribute)
+        partitions.setdefault(value, set()).add(spec.partition)
+    return sum(len(items) > 1 for items in partitions.values())
 
 
 __all__ = [

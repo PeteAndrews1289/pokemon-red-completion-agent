@@ -46,6 +46,7 @@ from pokemon_red_completion.red_battle_catalog import (
     pokemon_red_move_ref,
     pokemon_red_species_ref,
 )
+from pokemon_red_completion.red_training_dashboard import live_evaluation_state
 
 
 def _model(*, power_weight: float = 10.0) -> MaskedLinearMoveRanker:
@@ -548,6 +549,34 @@ def test_interrupted_decision_is_counted_before_propagation() -> None:
     assert report["interrupted_decisions"] == 1
     assert report["accounted_decisions"] == 1
     assert report["decision_accounting_complete"] is True
+
+
+def test_teacher_control_request_during_fallback_is_not_counted_as_returned_move() -> None:
+    policy = ModelAssistedBattlePolicy(
+        model=_model(),
+        encoder=_Encoder(),  # type: ignore[arg-type]
+        projector=_RejectingProjector(),  # type: ignore[arg-type]
+        confidence_threshold=0.0,
+        require_teacher_agreement=True,
+    )
+
+    def request_recovery() -> int:
+        raise BattleControlRequest(BattleAction.recovery())
+
+    with pytest.raises(BattleControlRequest):
+        policy.choose_move(_observation(), request_recovery)
+
+    report = policy.public_dict()
+    assert report["returned_move_decisions"] == 0
+    assert report["non_move_control_decisions"] == 1
+    assert report["teacher_queries"] == 1
+    assert report["teacher_fallbacks"] == 0
+    assert report["fallback_reasons"] == {}
+    assert report["returned_move_accounting_gap"] == 0
+    assert report["decision_accounting_complete"] is True
+    assert live_evaluation_state(report, None).public_dict()[
+        "decision_accounting_complete"
+    ] is True
 
 
 def test_shadow_teacher_preserves_non_move_control_signal() -> None:

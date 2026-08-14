@@ -103,7 +103,14 @@ Initial infrastructure requirements:
 - randomized action timing, RNG offsets, positions, teams, HP/PP, inventory, and candidate order;
 - one bounded process; parallel workers require a later measured throughput bottleneck;
 - interruption-safe episode records without a cross-worker platform; and
-- exact exception messages and bounded failure classifications.
+- exact path-free exception messages, path-token-redacted diagnostic messages, and bounded failure
+  classifications.
+
+Build order inside this milestone is deliberately serial. First connect one authenticated battle
+snapshot family end to end: semantic observation, model action, bounded teacher intervention,
+outcome record, learner update and untouched-lineage evaluation. The retained 600 disagreements
+inform scenario coverage but are not labels. Do not build the navigation or party-development live
+adapter until that first loop produces either a valid update or a typed design failure.
 
 Exit gate:
 
@@ -112,6 +119,9 @@ Exit gate:
 - partitions and state lineages are explicit;
 - test scenarios remain untouched during fitting;
 - a failed episode identifies its exact guard and last semantic state.
+
+Every promotion receipt built on this laboratory must report complete terminal accounting and zero
+unclassified decisions, unless a separately reviewed exception is named and counted.
 
 Stop rule: do not add another scenario family until the first three produce learner updates and
 unseen evaluation results.
@@ -131,6 +141,11 @@ Architecture:
 - collision, turn-only input, displacement, NPC blocking, unexpected warp, and script start trigger
   replanning rather than repeated blind input;
 - the model ranks destinations and recovery choices while the verifier checks arrival.
+
+A cartridge- or source-derived passability graph is permitted adapter knowledge; it is not a
+teacher action sequence. The learned/reusable claim lives in destination choice, closed-loop action
+acknowledgement and recovery. A static arrow string is still prohibited, and the randomized
+displacement gate below is the discriminator.
 
 Training curriculum:
 
@@ -379,16 +394,21 @@ use only separately declared development tasks for:
 V3 uses 54 independent sealed contexts with at least three candidates each. It compares frozen Red
 weights against the same architecture, normalizer, masking and menus with zero weights. The primary
 statistic is discordant wins/losses under a one-sided exact sign test at `alpha = 0.05`; at the
-declared smallest useful effect 0.50/0.20/0.30 it has 82.3% power. A mandatory secondary analysis
-uses 27 separate adaptation contexts in nine three-label folds and prior-preserving adaptation;
-only the prior center differs. Add only thin Crystal observation and mechanic bindings; do not
-encode a Crystal route.
+declared smallest useful effect 0.50/0.20/0.30 it has 82.3% power. Because the zero-weight control
+is deliberately weak, significance alone cannot promote the result. The frozen Red candidate must
+also score at least 27/54 and match or beat the title-neutral `highest_pressure_goal_index`
+heuristic, whose predictions are committed at the same pre-label boundary. A mandatory secondary
+analysis uses 27 separate adaptation contexts in nine three-label folds and prior-preserving
+adaptation; only the prior center differs. Add only thin Crystal observation and mechanic bindings;
+do not encode a Crystal route.
 
 Exit gate:
 
 - all sealed protocol preconditions hold;
-- all frozen-Red and zero-weight predictions are committed before any sealed label;
+- all frozen-Red, zero-weight and highest-pressure predictions are committed before any sealed
+  label;
 - the primary paired result uses all 54 contexts without optional stopping;
+- the candidate reaches at least 27/54 and does not trail the highest-pressure heuristic;
 - prior-preserving secondary candidates use identical folds, optimizer, normalizer and strength;
 - shared-policy failures are separated from missing game-specific capabilities;
 - transfer claims follow the frozen paired endpoint.
@@ -444,8 +464,9 @@ metric.
 ## Current order of execution
 
 1. Milestone 0: failed-run postmortem and future diagnostic retention.
-2. Milestone 1: scenario laboratory for navigation, battle, and training.
-3. Milestones 2–4 in parallel only after the laboratory supports them; integrate one at a time.
+2. Milestone 1: close one real battle scenario-to-update loop, then add navigation and training
+   adapters before the milestone exits.
+3. Milestones 2–4 begin from those adapters and integrate one learned authority at a time.
 4. Milestone 5: online hierarchy.
 5. Milestone 6: living-Pokédex planner and bounded acquisition chains.
 6. Milestone 8 development probes may begin after Milestones 2–5 have shared interfaces; Crystal

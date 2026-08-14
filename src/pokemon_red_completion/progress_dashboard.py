@@ -326,11 +326,19 @@ class DashboardLiveEvaluationState:
             raise ProgressDashboardError("teacher fallbacks cannot exceed teacher queries")
         if self.corrections_saved > self.teacher_fallbacks:
             raise ProgressDashboardError("saved corrections cannot exceed teacher fallbacks")
-        if (
-            self.low_confidence_fallbacks + self.unsupported_observations
-            > self.teacher_fallbacks
+        if self.low_confidence_fallbacks > self.teacher_fallbacks:
+            raise ProgressDashboardError(
+                "low-confidence fallbacks cannot exceed teacher fallbacks"
+            )
+        if self.unsupported_observations > (
+            self.teacher_fallbacks
+            + self.non_move_control_decisions
+            + self.failed_decisions
+            + self.interrupted_decisions
         ):
-            raise ProgressDashboardError("typed fallbacks cannot exceed teacher fallbacks")
+            raise ProgressDashboardError(
+                "unsupported observations exceed their terminal outcomes"
+            )
         if self.team_agreements > self.team_decisions:
             raise ProgressDashboardError("team agreements cannot exceed team decisions")
         accounted = (
