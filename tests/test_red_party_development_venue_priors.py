@@ -4,6 +4,7 @@ import ast
 import copy
 import hashlib
 import json
+import sys
 from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
@@ -197,6 +198,21 @@ def test_composition_rejects_nonqualifying_route_trial(
         _composition(plan, drifted)
 
 
+@pytest.mark.parametrize(
+    "field",
+    ("fully_measured", "learner_update_eligible"),
+)
+def test_composition_rejects_an_outcome_excluded_from_learning(field: str) -> None:
+    plan, result = _documents()
+    drifted = copy.deepcopy(result)
+    collection = drifted["outcome_collection"]
+    assert isinstance(collection, dict)
+    collection[field] = False
+
+    with pytest.raises(RedPartyDevelopmentVenuePriorError, match="bounded evolution"):
+        _composition(plan, drifted)
+
+
 def test_composition_rejects_incomplete_center_phase_accounting() -> None:
     plan, result = _documents()
     drifted = copy.deepcopy(result)
@@ -267,7 +283,23 @@ def test_operational_contract_rejects_a_stateful_route_11_walker() -> None:
         )
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_three_waivers() -> None:
+def test_stateless_walker_proof_recomputes_the_loaded_ast(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        venue_prior_module,
+        "_loaded_element_ast_sha256",
+        lambda *_args, **_kwargs: "f" * 64,
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="positive statelessness proof",
+    ):
+        venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
+
+
+def test_source_compatibility_recomputes_exact_bundles_and_seven_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == (
@@ -277,19 +309,56 @@ def test_source_compatibility_recomputes_exact_bundles_and_three_waivers() -> No
         "969f6ae2f60282848d26d4097fcefe6e9881f3739d78b560bdf0f186482f6294"
     )
     assert attestation.waived_elements == (
+        "core.project-trainee-candidates",
+        "core.project-trainee-choice-set",
+        "core.project-venue-candidates",
+        "core.project-venue-choice-set",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
-        "training-venue.fresh-walk-to-grass",
+        "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "5565b3432a3586cf634d68a2654d64f693f89561464e9baeaa7fde1088fe6eae"
+        "cb9299da242d8516e0184f0a3579798dc5d5242bb8a459c3a2f5f2d7e2beebdc"
     )
     assert attestation.current_elements_sha256 == (
-        "ada5dd6f3cc4a014cec15f177522be0e8b5ed392e3f9a8d6fb61275a23dead26"
+        "f2cb0aa8bd469c38b24b97f1139208601c96d1011fe28dcf6898abba06c330c5"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "7db25bcca8d4b2821a7d5364637436e6977fd5f09bba316d773bc07ce137f756"
+        "5558e7ae6d70bb50fbd63d3397c3f378c9b24683c286a71c4962c6ddf131c65d"
     )
+
+
+def test_source_compatibility_covers_whole_venue_and_grinding_area_classes() -> None:
+    elements = {
+        spec.element_id: spec.qualname
+        for spec in venue_prior_module._ROUTE_11_SOURCE_ELEMENTS  # noqa: SLF001
+    }
+
+    assert elements["training-venue.contract"] == "TrainingVenue"
+    assert elements["core.grinding-area"] == "GrindingArea"
+    assert "training-venue.fresh-walk-to-grass" not in elements
+    assert "training-venue.is-in-map" not in elements
+
+
+def test_source_compatibility_rejects_an_uncovered_candidate_helper(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    existing = venue_prior_module._ROUTE_11_SOURCE_ELEMENTS  # noqa: SLF001
+    monkeypatch.setattr(
+        venue_prior_module,
+        "_ROUTE_11_SOURCE_ELEMENTS",
+        tuple(
+            spec
+            for spec in existing
+            if spec.element_id != "core.eligible-venues"
+        ),
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="untracked project code",
+    ):
+        venue_prior_module._require_route_11_source_closure()  # noqa: SLF001
 
 
 def test_operational_ast_digest_is_stable_across_supported_python_versions() -> None:
@@ -304,6 +373,56 @@ def test_operational_ast_digest_is_stable_across_supported_python_versions() -> 
     ) == "330afe6782e585ceb4d602d6654107636e260596646bf143e5ea99ee13ce931c"
 
 
+def test_operational_ast_distinguishes_list_and_tuple_fields() -> None:
+    assert venue_prior_module._canonical_ast_value([1, 2]) != (  # noqa: SLF001
+        venue_prior_module._canonical_ast_value((1, 2))  # noqa: SLF001
+    )
+
+
+def test_operational_ast_rejects_an_unsupported_scalar() -> None:
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="unsupported semantic value",
+    ):
+        venue_prior_module._canonical_ast_value(object())  # noqa: SLF001
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 12),
+    reason="PEP 695 type-parameter syntax requires Python 3.12+",
+)
+def test_operational_ast_retains_nonempty_type_parameters() -> None:
+    generic = ast.parse("def sample[T](value: T) -> T:\n    return value\n").body[0]
+    plain = ast.parse("def sample(value):\n    return value\n").body[0]
+
+    assert venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        generic,
+        qualname="sample",
+    ) != venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        plain,
+        qualname="sample",
+    )
+
+
+def test_operational_ast_ignores_comments_but_retains_docstrings() -> None:
+    baseline = ast.parse("def sample():\n    return 1\n").body[0]
+    commented = ast.parse("def sample():\n    # provenance note\n    return 1\n").body[0]
+    documented = ast.parse('def sample():\n    "semantic note"\n    return 1\n').body[0]
+
+    baseline_digest = venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        baseline,
+        qualname="sample",
+    )
+    assert baseline_digest == venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        commented,
+        qualname="sample",
+    )
+    assert baseline_digest != venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        documented,
+        qualname="sample",
+    )
+
+
 def test_source_compatibility_rejects_a_false_current_bundle_claim() -> None:
     attestation = _source_compatibility()
 
@@ -316,6 +435,63 @@ def test_source_compatibility_rejects_a_false_current_bundle_claim() -> None:
             current_commit=attestation.current_commit,
             current_source_bundle_sha256="f" * 64,
         )
+
+
+def test_source_compatibility_rejects_loaded_runtime_drift_independently(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    attestation = _source_compatibility()
+    loaded = venue_prior_module._loaded_source_element_rows()  # noqa: SLF001
+    drifted = list(loaded)
+    drifted[0] = {**drifted[0], "ast_sha256": "f" * 64}
+    monkeypatch.setattr(
+        venue_prior_module,
+        "_loaded_source_element_rows",
+        lambda: tuple(drifted),
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="loaded Route 11 runtime differs",
+    ):
+        attest_red_route_11_source_compatibility(
+            PROJECT_ROOT,
+            current_commit=attestation.current_commit,
+            current_source_bundle_sha256=(
+                attestation.current_source_bundle_sha256
+            ),
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    (
+        ("current_elements_sha256", "f" * 64),
+        ("unchanged_elements_sha256", "e" * 64),
+        ("waiver_allowlist_sha256", "d" * 64),
+        (
+            "waived_elements",
+            (
+                "core.project-trainee-candidates",
+                "core.project-trainee-choice-set",
+            ),
+        ),
+    ),
+)
+def test_operational_contract_rederives_every_attestation_projection(
+    field: str,
+    replacement: object,
+) -> None:
+    fabricated = replace(
+        _source_compatibility(),
+        **{field: replacement},
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="operational runtime differs",
+    ):
+        red_route_11_operational_contract(source_compatibility=fabricated)
 
 
 def test_source_compatibility_rejects_unlisted_historical_element_drift(

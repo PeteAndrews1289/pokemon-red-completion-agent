@@ -21,12 +21,14 @@ from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
+from typing import cast
 
 import pokemon_red_completion.battle_runtime as battle_runtime_module
 import pokemon_red_completion.blaine as blaine_module
 import pokemon_red_completion.celadon as celadon_module
 import pokemon_red_completion.red_team_training as red_team_training_module
 import pokemon_red_completion.team_training as team_training_module
+import pokemon_red_completion.training_candidate_rank as training_candidate_rank_module
 import pokemon_red_completion.training_venue as training_venue_module
 from pokemon_red_completion.battle_runtime import run_adaptive_wild_battle
 from pokemon_red_completion.blaine import (
@@ -59,6 +61,11 @@ from pokemon_red_completion.collection_protocol import (
     committed_source_bundle_sha256,
 )
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
+from pokemon_red_completion.party import (
+    PartyMemberObservation,
+    PartyObservation,
+    StatusCondition,
+)
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
     VenuePriorEvidence,
@@ -84,7 +91,30 @@ from pokemon_red_completion.red_team_training import (
 )
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
+    GrindingArea,
     TeamTrainingProgress,
+    member_can_train_at,
+    member_needs_training,
+    training_safety_ceiling,
+)
+from pokemon_red_completion.training_candidate_rank import (
+    TrainingCandidate,
+    TrainingCandidateDecision,
+    TrainingCandidateRankError,
+    TrainingCandidateSet,
+    TrainingChoiceKind,
+    _candidate_features,
+    _eligible_trainees,
+    _eligible_venues,
+    _ratio,
+    _ratio_float,
+    _signed_ratio,
+    bind_trainee_candidate,
+    bind_venue_candidate,
+    project_trainee_candidates,
+    project_trainee_choice_set,
+    project_venue_candidates,
+    project_venue_choice_set,
 )
 from pokemon_red_completion.training_venue import TrainingVenue
 
@@ -158,16 +188,160 @@ class _SourceCompatibilityWaiver:
 
 _ROUTE_11_SOURCE_ELEMENTS = (
     _SourceElement(
-        "training-venue.fresh-walk-to-grass",
+        "training-venue.contract",
         "src/pokemon_red_completion/training_venue.py",
-        "TrainingVenue.fresh_walk_to_grass",
-        TrainingVenue.fresh_walk_to_grass,
+        "TrainingVenue",
+        TrainingVenue,
     ),
     _SourceElement(
-        "training-venue.is-in-map",
-        "src/pokemon_red_completion/training_venue.py",
-        "TrainingVenue.is_in_map",
-        TrainingVenue.is_in_map,
+        "core.grinding-area",
+        "src/pokemon_red_completion/team_training.py",
+        "GrindingArea",
+        GrindingArea,
+    ),
+    _SourceElement(
+        "core.balanced-team-policy",
+        "src/pokemon_red_completion/team_training.py",
+        "BalancedTeamPolicy",
+        BalancedTeamPolicy,
+    ),
+    _SourceElement(
+        "core.party-member-observation",
+        "src/pokemon_red_completion/party.py",
+        "PartyMemberObservation",
+        PartyMemberObservation,
+    ),
+    _SourceElement(
+        "core.party-observation",
+        "src/pokemon_red_completion/party.py",
+        "PartyObservation",
+        PartyObservation,
+    ),
+    _SourceElement(
+        "core.status-condition",
+        "src/pokemon_red_completion/party.py",
+        "StatusCondition",
+        StatusCondition,
+    ),
+    _SourceElement(
+        "core.training-candidate-error",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "TrainingCandidateRankError",
+        TrainingCandidateRankError,
+    ),
+    _SourceElement(
+        "core.training-candidate",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "TrainingCandidate",
+        TrainingCandidate,
+    ),
+    _SourceElement(
+        "core.training-candidate-set",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "TrainingCandidateSet",
+        TrainingCandidateSet,
+    ),
+    _SourceElement(
+        "core.training-candidate-decision",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "TrainingCandidateDecision",
+        TrainingCandidateDecision,
+    ),
+    _SourceElement(
+        "core.training-choice-kind",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "TrainingChoiceKind",
+        TrainingChoiceKind,
+    ),
+    _SourceElement(
+        "core.project-trainee-candidates",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "project_trainee_candidates",
+        project_trainee_candidates,
+    ),
+    _SourceElement(
+        "core.project-trainee-choice-set",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "project_trainee_choice_set",
+        project_trainee_choice_set,
+    ),
+    _SourceElement(
+        "core.project-venue-candidates",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "project_venue_candidates",
+        project_venue_candidates,
+    ),
+    _SourceElement(
+        "core.project-venue-choice-set",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "project_venue_choice_set",
+        project_venue_choice_set,
+    ),
+    _SourceElement(
+        "core.bind-trainee-candidate",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "bind_trainee_candidate",
+        bind_trainee_candidate,
+    ),
+    _SourceElement(
+        "core.bind-venue-candidate",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "bind_venue_candidate",
+        bind_venue_candidate,
+    ),
+    _SourceElement(
+        "core.eligible-trainees",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_eligible_trainees",
+        _eligible_trainees,
+    ),
+    _SourceElement(
+        "core.eligible-venues",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_eligible_venues",
+        _eligible_venues,
+    ),
+    _SourceElement(
+        "core.candidate-features",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_candidate_features",
+        _candidate_features,
+    ),
+    _SourceElement(
+        "core.candidate-ratio",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_ratio",
+        _ratio,
+    ),
+    _SourceElement(
+        "core.candidate-ratio-float",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_ratio_float",
+        _ratio_float,
+    ),
+    _SourceElement(
+        "core.candidate-signed-ratio",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "_signed_ratio",
+        _signed_ratio,
+    ),
+    _SourceElement(
+        "core.member-can-train-at",
+        "src/pokemon_red_completion/team_training.py",
+        "member_can_train_at",
+        member_can_train_at,
+    ),
+    _SourceElement(
+        "core.member-needs-training",
+        "src/pokemon_red_completion/team_training.py",
+        "member_needs_training",
+        member_needs_training,
+    ),
+    _SourceElement(
+        "core.training-safety-ceiling",
+        "src/pokemon_red_completion/team_training.py",
+        "training_safety_ceiling",
+        training_safety_ceiling,
     ),
     _SourceElement(
         "red.route-11-training-venue",
@@ -275,12 +449,50 @@ _ROUTE_11_SOURCE_ELEMENTS = (
 
 _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
-        element_id="training-venue.fresh-walk-to-grass",
+        element_id="training-venue.contract",
+        observed_ast_sha256=(
+            "4fbbbd2b289fd575811b85b1d10968a9dd09c33a7abbb67547b649b9a3332747"
+        ),
+        current_ast_sha256=(
+            "748f27949b60ae4137a2b70df849a9def707b04947fc30e59ebf1061e2614c1d"
+        ),
+        justification_id="run-local-walker-preserves-route-11-venue-contract",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="core.project-trainee-candidates",
+        observed_ast_sha256=(
+            "a5a52755b578c8536ecaba3f914b2466bc43000484b6e98b9735d9e3badf854d"
+        ),
+        current_ast_sha256=(
+            "cbfae3d5858f961267b07e425216e5fb33d7fd8097ce02d55bf5388a68e8b62d"
+        ),
+        justification_id="extract-choice-set-preserves-teacher-trainee-selection",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="core.project-trainee-choice-set",
         observed_ast_sha256=None,
         current_ast_sha256=(
-            "ea0337ba37dbd8cb6b6a09ce3bfbe5aa5fcb80fbcfc092382912afbec2932ed7"
+            "221d1a8d1a9b64f8aa052345b55b70942dc698786f38cb5226765edc85472275"
         ),
-        justification_id="added-factory-preserves-stateless-route-11-callable",
+        justification_id="added-unlabeled-trainee-menu-preserves-teacher-selection",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="core.project-venue-candidates",
+        observed_ast_sha256=(
+            "359da3498012160695e59fbccf3ce4b1f93b1c2dae59d350e414d93d5a205ae4"
+        ),
+        current_ast_sha256=(
+            "4b731e174dcb3ec0412111dbcb7c687f0552405f1a4bd0325ff854728b06bfe7"
+        ),
+        justification_id="extract-choice-set-preserves-teacher-venue-selection",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="core.project-venue-choice-set",
+        observed_ast_sha256=None,
+        current_ast_sha256=(
+            "4a4ac69e4e2675fc92e3b3c4d8507c97844d6659dcaaf4c26419d44978926dbb"
+        ),
+        justification_id="added-unlabeled-venue-menu-preserves-teacher-selection",
     ),
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
@@ -302,6 +514,31 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
         ),
         justification_id="default-zero-traversal-counters-preserve-historical-summary",
     ),
+)
+
+_ROUTE_11_CANDIDATE_DIRECT_ROOTS = (
+    project_trainee_candidates,
+    project_venue_candidates,
+    bind_trainee_candidate,
+    bind_venue_candidate,
+)
+_ROUTE_11_CANDIDATE_DIRECT_DEPENDENCIES = (
+    *_ROUTE_11_CANDIDATE_DIRECT_ROOTS,
+    TrainingCandidateDecision,
+)
+_ROUTE_11_CANDIDATE_CLOSURE_ROOTS = (
+    *_ROUTE_11_CANDIDATE_DIRECT_ROOTS,
+    project_trainee_choice_set,
+    project_venue_choice_set,
+)
+_ROUTE_11_ATTRIBUTE_SEMANTICS = (
+    TrainingVenue,
+    GrindingArea,
+    BalancedTeamPolicy,
+    PartyMemberObservation,
+    PartyObservation,
+    StatusCondition,
+    TrainingChoiceKind,
 )
 
 
@@ -398,6 +635,7 @@ def attest_red_route_11_source_compatibility(
     """Prove every runtime element is unchanged or one exact reviewed waiver."""
 
     root = Path(repository_root)
+    _require_route_11_source_closure()
     if _GIT_OID.fullmatch(current_commit) is None:
         raise RedPartyDevelopmentVenuePriorError(
             "current compatibility source commit is invalid"
@@ -492,15 +730,7 @@ def attest_red_route_11_source_compatibility(
             scope="current",
         ),
         waived_elements=expected_waivers,
-        waiver_allowlist_sha256=canonical_sha256(
-            {
-                "schema": "pokemon.red.route-11-source-waiver-allowlist.v1",
-                "waivers": [
-                    waivers[element_id].public_dict()
-                    for element_id in expected_waivers
-                ],
-            }
-        ),
+        waiver_allowlist_sha256=_source_waiver_allowlist_sha256(waivers),
     )
 
 
@@ -513,11 +743,33 @@ def red_route_11_operational_contract(
     """Digest the current Red layers whose drift invalidates the observation."""
 
     _require_current_route_11_venue(venue)
+    _require_route_11_source_closure()
     if not isinstance(
         source_compatibility,
         VenuePriorSourceCompatibilityAttestation,
     ):
         raise TypeError("source compatibility is invalid")
+    current_rows = _loaded_source_element_rows()
+    expected_waivers = tuple(
+        sorted(
+            waiver.element_id
+            for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS
+        )
+    )
+    waived_ids = frozenset(expected_waivers)
+    expected_unchanged_rows = tuple(
+        row
+        for row in current_rows
+        if str(row["element_id"]) not in waived_ids
+    )
+    waiver_by_id = {
+        waiver.element_id: waiver
+        for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS
+    }
+    if len(waiver_by_id) != len(_ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS):
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 source waiver allowlist repeats an element"
+        )
     if (
         source_compatibility.observed_commit
         != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT
@@ -525,9 +777,17 @@ def red_route_11_operational_contract(
         != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_BUNDLE_SHA256
         or source_compatibility.current_elements_sha256
         != _source_element_rows_sha256(
-            _loaded_source_element_rows(),
+            current_rows,
             scope="current",
         )
+        or source_compatibility.unchanged_elements_sha256
+        != _source_element_rows_sha256(
+            expected_unchanged_rows,
+            scope="unchanged",
+        )
+        or source_compatibility.waived_elements != expected_waivers
+        or source_compatibility.waiver_allowlist_sha256
+        != _source_waiver_allowlist_sha256(waiver_by_id)
     ):
         raise RedPartyDevelopmentVenuePriorError(
             "Route 11 operational runtime differs from its source attestation"
@@ -1046,6 +1306,126 @@ def _loaded_source_element_rows() -> tuple[dict[str, object], ...]:
             ),
         )
         for spec in _ROUTE_11_SOURCE_ELEMENTS
+    )
+
+
+def _require_route_11_source_closure() -> None:
+    """Fail closed when the candidate seam reaches untracked project code.
+
+    The historical observation ran through the four candidate projection and
+    binding entry points in ``run_red_team_balancing``.  Tracking only those
+    wrappers is insufficient: a wrapper can keep the same source while a
+    helper beneath it changes.  Resolve the loaded same-project call graph and
+    require every discovered function or class to have its own semantic source
+    element.  Attribute-driven domain semantics are declared separately and
+    covered as whole classes because Python's AST does not carry receiver
+    types.
+    """
+
+    element_ids = tuple(spec.element_id for spec in _ROUTE_11_SOURCE_ELEMENTS)
+    if len(element_ids) != len(set(element_ids)):
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 source elements repeat an identity"
+        )
+    tracked = frozenset(spec.current_object for spec in _ROUTE_11_SOURCE_ELEMENTS)
+    required_attribute_semantics = frozenset(_ROUTE_11_ATTRIBUTE_SEMANTICS)
+    if not required_attribute_semantics.issubset(tracked):
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 attribute semantics are not source-covered"
+        )
+
+    direct_dependencies = frozenset(
+        dependency
+        for dependency in _resolved_project_call_dependencies(
+            run_red_team_balancing
+        )
+        if getattr(dependency, "__module__", None)
+        == training_candidate_rank_module.__name__
+    )
+    if direct_dependencies != frozenset(
+        _ROUTE_11_CANDIDATE_DIRECT_DEPENDENCIES
+    ):
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 candidate entry-point closure changed"
+        )
+
+    pending: list[Callable[..., object]] = [
+        cast(Callable[..., object], root)
+        for root in _ROUTE_11_CANDIDATE_CLOSURE_ROOTS
+    ]
+    visited: set[Callable[..., object]] = set()
+    while pending:
+        current = pending.pop()
+        if current in visited:
+            continue
+        visited.add(current)
+        if current not in tracked:
+            raise RedPartyDevelopmentVenuePriorError(
+                "Route 11 candidate closure contains an untracked root"
+            )
+        for dependency in _resolved_project_call_dependencies(current):
+            module_name = getattr(dependency, "__module__", "")
+            if not module_name.startswith("pokemon_red_completion"):
+                continue
+            if dependency not in tracked:
+                qualname = getattr(dependency, "__qualname__", repr(dependency))
+                raise RedPartyDevelopmentVenuePriorError(
+                    "Route 11 candidate closure contains untracked project "
+                    f"code: {module_name}.{qualname}"
+                )
+            if (
+                module_name == training_candidate_rank_module.__name__
+                and inspect.isfunction(dependency)
+            ):
+                pending.append(cast(Callable[..., object], dependency))
+
+
+def _resolved_project_call_dependencies(
+    value: Callable[..., object],
+) -> tuple[Callable[..., object] | type[object], ...]:
+    """Resolve direct named calls made by one loaded Python function."""
+
+    try:
+        tree = ast.parse(textwrap.dedent(inspect.getsource(value)))
+    except (OSError, TypeError, SyntaxError) as error:
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 closure source is unavailable"
+        ) from error
+    namespace = getattr(value, "__globals__", None)
+    if not isinstance(namespace, dict):
+        raise RedPartyDevelopmentVenuePriorError(
+            "Route 11 closure root has no Python globals"
+        )
+    dependencies: set[Callable[..., object] | type[object]] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Name):
+            continue
+        dependency = namespace.get(node.func.id)
+        if inspect.isfunction(dependency) or inspect.isclass(dependency):
+            dependencies.add(dependency)
+    return tuple(
+        sorted(
+            dependencies,
+            key=lambda item: (
+                getattr(item, "__module__", ""),
+                getattr(item, "__qualname__", ""),
+            ),
+        )
+    )
+
+
+def _source_waiver_allowlist_sha256(
+    waivers: Mapping[str, _SourceCompatibilityWaiver],
+) -> str:
+    expected_ids = tuple(sorted(waivers))
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.route-11-source-waiver-allowlist.v1",
+            "waivers": [
+                waivers[element_id].public_dict()
+                for element_id in expected_ids
+            ],
+        }
     )
 
 
