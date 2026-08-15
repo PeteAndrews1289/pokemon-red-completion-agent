@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-14 Cave traversal repair — highest active checkpoint:** Exact commit `51f0912` passed
+> 3,344 local tests and CI run `31860628652`. The audit causally reproduces the accepted V2 result's
+> 39 Cave transitions: the old helper moved off an automatic exit, hit a wall, then reversed across
+> the exit. The replacement is fresh per venue/run, excludes adapter-owned transition tiles,
+> acknowledges movement, fails closed on map drift, bounds no progress and exports identity-free
+> reliability counters. A negative control reproduces the departure; the repaired corridor makes
+> 12 successful steps with zero departures.
+>
+> This is not a new live result. V2 was not retried, no training example or model was added and
+> authority remains zero. Review
+> `docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json`; attack the causal trace,
+> independence of the regression fixture, per-run state isolation, fail-closed guards, counter
+> arithmetic and the claim boundary. The next live work must use a fresh independent non-sealed
+> context and new prospective identity. Claude and Antigravity review is pending.
+
 > **2026-08-14 corrected party-development result — highest active checkpoint:** Exact source
 > `00499bc` passed CI run `31858937755`; the V2 preflight was ready; and both fresh one-shot clones
 > evolved the same level-22 trainee at level 26 with zero faints. Lower band: 108 battles /

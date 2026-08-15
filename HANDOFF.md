@@ -17,6 +17,34 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Cave traversal defect repaired in source; live qualification pending — 2026-08-14
+
+The accepted V2 party result remains historical and unchanged. Its 39 higher-band venue transitions
+triggered a causal source audit rather than a retry. Cartridge geometry and a deterministic
+regression agree on the failure: Cave arrival is an automatic exit; the old global pacing helper
+stepped left once, hit terrain on its second left input, then reversed right across the exit. A
+negative control with no exclusion reproduces the map departure.
+
+Exact commit `51f09125acc57d8ba38de640c38a8b8f5fb599b8` replaces that helper with a generic
+warp-safe venue walker. The game adapter owns the two excluded transition coordinates; they do not
+enter learner features. Each venue receives a fresh walker per run. Every attempted movement is
+acknowledged, an unexpected map change fails closed, and two consecutive no-progress cycles stop
+instead of spinning. Public summaries expose only counts for attempts, successful steps, blocked
+attempts, excluded-transition skips and no-progress cycles.
+
+The positive regression traverses 12 corridor steps in 14 attempts with two blocked attempts, one
+excluded transition and zero map departures. The negative control reproduces the old departure.
+The full non-integration suite passed 3,344 tests with three deselections and one expected failure;
+Ruff, mypy, artifact, documentation and generated-registry checks passed; GitHub CI run
+`31860628652` passed for the exact commit.
+
+This is source-and-test qualification only. No repaired live emulator trial has run, the accepted
+V2 identity was not retried, no learner target was added, no model was fit and no authority moved.
+The next authorized step is a new prospective plan and identity using a fresh independent
+non-sealed party context, followed by read-only preflight and one bounded live traversal
+qualification. Do not reopen V2, a sealed Red case, Crystal or a full replay. Review the
+[path-free evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+
 ## Corrected party-development outcome accepted one target; model remains absent — 2026-08-14
 
 Exact commit `00499bc68b099ffcd0125a6777bc3b836a84ff0b` passed GitHub CI run
@@ -40,9 +68,10 @@ superiority, a party model, cross-context competence or transfer.
 The private artifact has four records / 7,208 bytes and manifest SHA-256
 `c6d7081b1653b4092529494665f7216da4bd5e5bc6ddbb27dcdaaa4e201e054c`. The path-free result is
 [`docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json`](docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json).
-Next keep this example bound to its exact source, diagnose and represent or repair Cave traversal
-reliability before fitting a party head, and collect independent party contexts alongside harder
-battle and blocker-navigation contexts. No unseen gate or full Red replay is authorized.
+That result required the Cave traversal diagnosis now completed at the newer checkpoint above.
+Keep the example bound to its exact source; independently qualify the repair live before fitting a
+party head, and collect independent party contexts alongside harder battle and blocker-navigation
+contexts. No unseen gate or full Red replay is authorized.
 
 ## First real party-development outcome executed; target rejected — 2026-08-14
 

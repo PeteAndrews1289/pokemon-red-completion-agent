@@ -3,6 +3,22 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Cave traversal causal repair — 2026-08-14
+
+Codex audited the 39 higher-band venue transitions in the accepted V2 party result without
+replaying either candidate. Cartridge-derived exit geometry and a deliberately minimal regression
+produce the same trace: leave the automatic exit, collide with terrain, reverse across the exit.
+The negative control omits the exclusion and departs the map; the repair completes 12 steps with
+zero departures.
+
+Decision: accept commit `51f0912` / CI run `31860628652` at the source-and-test boundary only. The
+generic walker is per-run, adapter-censored, map-drift-fail-closed and no-progress-bounded, with
+identity-free counters aggregated into party results. Do not rewrite or retry V2, add a learner
+target, fit a model or promote authority. Freeze a fresh independent non-sealed context under a new
+prospective identity for the first live qualification. Independent Claude and Antigravity review
+is pending and is not implied. Review packet:
+[`red-cave-traversal-reliability-repair-2026-08-14.json`](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+
 ## First real party-development plan and result — 2026-08-14
 
 Codex selected a same-goal venue counterfactual instead of comparing different trainees or replaying
@@ -50,7 +66,8 @@ cleanup. Higher band used 69 / 1,158,371 with 39 venue transitions + one require
 cleanup. Phase sums close, optional recovery is zero and budgeted calls remain 10/50 and 40/50.
 Decision: accept candidate 0 as one source-bound learner target at 6.664464 versus 5.977360 target
 XP per 1,000 frames; fit no model; grant no authority; and reject intrinsic band or transfer claims.
-The 39 Cave transitions must be attacked as a representation/executor issue before party fitting.
+The 39 Cave transitions required the causal representation/executor audit now recorded in the
+newer checkpoint above; independent live qualification still precedes party fitting.
 V2 review packet:
 [`red-party-development-outcome-result-v2-2026-08-14.json`](evidence/red-party-development-outcome-result-v2-2026-08-14.json).
 

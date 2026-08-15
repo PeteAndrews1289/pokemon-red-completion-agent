@@ -1,5 +1,27 @@
 # Current audit — 2026-08-14
 
+## Cave traversal: cause reproduced, repair qualified in source, live result pending
+
+The V2 result's 39 Cave transitions were not treated as noise or used to rerun the same experiment.
+The audit compared the pacing code with cartridge-derived transition geometry and reduced the
+behavior to a deterministic corridor. Arrival is an automatic exit. The old helper moves left,
+hits terrain on the next left input, reverses right and crosses the exit. Removing the transition
+exclusion in the regression reproduces that exact map departure.
+
+Commit `51f09125acc57d8ba38de640c38a8b8f5fb599b8` replaces global direction state with a fresh
+per-run walker, keeps transition coordinates inside the adapter, checks the map after every input,
+bounds consecutive no-progress cycles and emits identity-free traversal counters. The repaired
+corridor completes 12 steps in 14 attempts with two blocked moves, one excluded-transition skip and
+zero departures. The full non-integration suite passed 3,344 tests; exact GitHub CI run
+`31860628652` passed.
+
+The [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json) deliberately
+reports no live execution under the new source. V2 remains one accepted source-bound target, was
+not retried and is not retroactively deconfounded. No target, fitted model, generalization result
+or authority was added. Next freeze a new independent non-sealed party context under a new
+identity, qualify the source and preflight, then execute one bounded traversal check before more
+party data. Sealed Red, Crystal, the teacher and full replay remain closed.
+
 ## Corrected party-development result: one accepted target, no party model
 
 Exact source `00499bc` passed GitHub CI run `31858937755`. Its read-only V2 preflight authenticated
@@ -16,9 +38,9 @@ the total, optional recovery is zero, and budgeted calls are 10/50 and 40/50.
 
 The [V2 result](evidence/red-party-development-outcome-result-v2-2026-08-14.json) is one valid,
 source-bound train example. It fits no model and proves no intrinsic lower-band advantage,
-cross-context party policy or transfer. Before fitting, make traversal reliability observable or
-repair the Cave pacing/re-entry behavior, then collect independent party contexts. V1 remains
-rejected and was not rerun.
+cross-context party policy or transfer. The subsequent audit and source repair are recorded in the
+newer checkpoint above; independent live qualification and broader party contexts still precede
+fitting. V1 remains rejected and was not rerun.
 
 ## Party-development result: execution completed, accounting rejected the target
 

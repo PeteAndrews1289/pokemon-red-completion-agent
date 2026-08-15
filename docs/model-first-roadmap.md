@@ -6,6 +6,23 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: qualify the repaired traversal on a fresh live context
+
+The 39 Cave transitions in the accepted V2 party result now have a causal explanation. The old
+global pacing helper stepped off an automatic exit, hit terrain, then reversed across the exit.
+Exact commit `51f0912` replaces it with a fresh per-run, warp-safe walker; the adapter keeps
+transition coordinates private; map drift fails closed; no progress is bounded; and public
+telemetry is identity-free. The negative control reproduces the old departure, the repaired
+corridor completes 12 steps with zero departures, 3,344 tests pass, and exact CI run `31860628652`
+is green. See the [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+
+This closes the source/test seam, not the live seam. Do not rerun V2 or reinterpret its accepted
+target. Freeze a new independent non-sealed party context and prospective identity, pass exact-
+commit CI and read-only preflight, then run one bounded live traversal qualification. If its
+identity-free counters are sane and all guards hold, add independent party outcomes across trainee
+strength, health, PP, evolution distance and venue difficulty. Only then fit the first party head
+with separate train/development lineages and an untouched gate capable of measuring improvement.
+
 The first real battle adapter is closed end to end. Two authenticated non-sealed lineages produced
 eight equal-timing move outcomes, a prior-preserving learner update and an untouched-lineage
 development result. The update regressed development from 1/1 to 0/1 and remains rejected,
@@ -51,10 +68,10 @@ reconciled; budgeted calls were 10/50 and 40/50; and candidate 0 became one acce
 It used 108,324 fewer frames than candidate 1, whose cost included 39 bounded Cave re-entries.
 
 That is not permission to fit a party model from one confounded context. Keep the example bound to
-its exact executor source, diagnose and represent or repair venue traversal reliability, then
-freeze level-matched non-OHKO battles; navigation contexts with blockers and recovery; and
-independent party contexts spanning trainee strength, health, PP, evolution distance and venue
-difficulty.
+its exact executor source. The causal traversal audit and source repair are complete; a fresh
+independent live qualification is now required before new party outcomes. In parallel, freeze
+level-matched non-OHKO battles and navigation contexts with blockers and recovery, then expand
+party contexts across trainee strength, health, PP, evolution distance and venue difficulty.
 Keep train and development lineages separate from creation, build learning curves only when each
 family has enough independent decisions to expose improvement, and leave the unseen promotion
 gates closed. Do not scale the easy Mansion distribution, promote a ceiling curve candidate, replay

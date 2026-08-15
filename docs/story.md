@@ -26,6 +26,24 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: the cave stopped being mysterious
+
+Thirty-nine trips back into the same training venue looked at first like a noisy cost of using the
+higher-level area. It was not. The old walking helper began on an automatic exit, stepped away,
+met a wall, then reversed across the exit. A three-move reproduction explained more than another
+million-frame race would have.
+
+The fix gives every venue a fresh walker that knows which nearby transitions belong to the game
+adapter, acknowledges whether each step moved, stops if the map unexpectedly changes and refuses
+to loop forever. Its public report counts movement, blocks and avoided transitions without teaching
+the learner a map name, coordinate or button route. The repaired miniature corridor stays inside
+the venue; the same test with the safety removed reproduces the departure.
+
+The real game has not yet graded this repair. That boundary matters. The previous comparison was
+not replayed, its accepted lesson was not rewritten, no model was trained and no authority moved.
+The next grade comes from a new independent non-sealed moment with a new identity. This is how the
+project moves faster now: make bugs small before making experiments large.
+
 ## Current checkpoint: the accounting repair found the hidden cost
 
 The fresh comparison did not repeat the rejected run. It used a new preassigned moment, a new

@@ -4,6 +4,17 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Cave traversal defect repaired in source; independent live qualification remains (August 14,
+> 2026).** The accepted V2 result's 39 higher-band venue transitions are now causally explained:
+> the old pacing helper stepped away from an automatic Cave exit, hit a wall, then reversed across
+> that exit. Commit `51f0912` replaces the global helper with a fresh per-run walker that excludes
+> adapter-owned transition tiles, fails closed on map drift and publishes identity-free reliability
+> counters. The negative control reproduces the old departure; the repaired corridor completes 12
+> steps with zero departures; 3,344 tests and GitHub CI run `31860628652` pass. This is a qualified
+> implementation, not a new cartridge outcome. V2 was not rerun, no target or model was added, and
+> authority remains zero. See the
+> [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+
 > **Corrected party-development outcome (August 14, 2026): one target accepted, no model fit.**
 > Exact source `00499bc` passed GitHub CI run `31858937755` before two fresh identical-state clones
 > evolved the same level-22 trainee at level 26 with zero faints. The lower 9–15 band used 108
@@ -12,8 +23,9 @@
 > transitions + 1 required recovery + 1 cleanup, all inside the frozen 50-call in-loop bound. The
 > outcome accepted candidate 0 at **6.664 vs 5.977 target XP per 1,000 frames**. This is one
 > source-bound learner example, not proof that lower bands are intrinsically better: the 39 Cave
-> transitions expose current executor cost that must be represented or repaired before party-model
-> fitting. Model, generalization and authority remain zero. See the
+> transitions exposed executor cost. The source repair is documented above, but independent live
+> qualification and broader party contexts still precede party-model fitting. Model,
+> generalization and authority remain zero. See the
 > [V2 result](docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json) and
 > [dashboard guide](docs/progress-dashboard.md).
 

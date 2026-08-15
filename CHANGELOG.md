@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Causally reproduced the accepted V2 result's 39 Cave transitions and replaced global horizontal
+  pacing with a fresh per-run warp-safe walker. Adapter-owned transition exclusions, map-drift
+  failure, bounded no-progress handling and identity-free traversal counters passed 3,344 tests
+  and exact CI. Published the source/test-qualified repair without rerunning V2, claiming a live
+  result, adding a model target or promoting authority.
 - Completed the fresh V2 party comparison after exact commit `00499bc` passed CI. Both clones
   evolved safely; phase accounting reconciled at 10/50 and 40/50 budgeted Center calls plus one
   cleanup each; and the lower band produced one accepted source-bound target at 6.664 versus 5.977

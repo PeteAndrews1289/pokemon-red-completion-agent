@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: thirty-nine Cave trips became one reproducible bug
+
+The repaired counter had done its job: it made the higher band's thirty-nine venue transitions
+impossible to hide. The next step was not another cartridge run. The pacing code and the Cave's
+cartridge-derived geometry reduced the behavior to three inputs. The trainer arrived on an
+automatic exit, moved left, hit a wall with its next left input, then reversed right across the
+exit. A tiny negative control reproduced the departure without consuming another experiment.
+
+The replacement is intentionally more general than a Diglett's Cave patch. Each training venue now
+gets fresh run-local walking state. Its game adapter identifies transition tiles; the reusable
+walker avoids them, confirms every movement outcome, stops on an unexpected map change and refuses
+to spin forever when no progress is possible. It reports counts such as blocked moves and excluded
+transitions without exposing map identities or coordinates to the learner.
+
+Exact source passed 3,344 tests and GitHub CI. That is an engineering result, not gameplay evidence.
+The old V2 lesson stays attached to its old controller, and it was not rerun. Before this repair can
+support more party data, a new independent non-sealed context must qualify it live under a new
+prospective identity. The distinction is the project's central habit now: explain a failure with
+the smallest decisive experiment, then spend cartridge evidence only on a question the code is
+ready to answer.
+
 ## August 14: the repaired counter changed the answer
 
 The replacement ran only after its exact commit passed GitHub and a fresh preassigned train state

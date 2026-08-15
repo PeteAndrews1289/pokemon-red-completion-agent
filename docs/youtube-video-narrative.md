@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 traversal scene: explain thirty-nine trips with three moves
+
+Start on the V2 counter: **HIGHER BAND · 39 VENUE TRANSITIONS**. Freeze the million-frame footage
+and replace it with a three-tile diagram. Mark the starting tile **AUTOMATIC EXIT**. Animate
+**LEFT: MOVED · LEFT: WALL · RIGHT: EXITED**. Stamp it **CAUSE REPRODUCED**, not “probably bad
+navigation.”
+
+Split the screen. Left: **OLD GLOBAL PACING STATE** and the clone leaving the map. Right:
+**FRESH WALKER PER RUN · EXIT TILE EXCLUDED · MAP DRIFT STOPS · NO-PROGRESS BOUNDED**, followed by
+**12 STEPS · 0 DEPARTURES**. Keep the adapter/learner boundary visible:
+**GAME ADAPTER KNOWS THE EXIT · MODEL SEES RELIABILITY COUNTS, NOT COORDINATES**.
+
+End with the evidence ladder: **3,344 TESTS → EXACT CI GREEN → LIVE QUALIFICATION STILL LOCKED**.
+Narration: **“We fixed the bug without rerunning the race, but a passing simulation is not a new
+Pokémon result.”** Leave the final cards onscreen:
+**V2 UNCHANGED · MODEL NOT FIT · AUTHORITY ZERO · FRESH INDEPENDENT CONTEXT NEXT**.
+
 ## August 14 V2 party scene: the faster venue was not the higher-level venue
 
 Keep the rejected V1 card visible in the corner; do not rewrite it. Open two fresh clones under
