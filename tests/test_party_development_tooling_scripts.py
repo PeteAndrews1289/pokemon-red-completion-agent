@@ -8,8 +8,6 @@ from pathlib import Path
 
 import pytest
 
-from pokemon_red_completion.party_development_inventory import unit_bin
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INITIALIZER_PATH = PROJECT_ROOT / "scripts" / "initialize_party_development_prior.py"
 INVENTORY_PATH = PROJECT_ROOT / "scripts" / "inventory_party_development_checkpoints.py"
@@ -43,11 +41,32 @@ def test_party_development_private_writers_are_exclusive_and_owner_only(
         writer(target, value)  # type: ignore[operator]
 
 
-def test_inventory_pp_bin_matches_the_model_feature_scale() -> None:
+def test_inventory_pp_bin_uses_each_movesets_actual_capacity() -> None:
     pp_bin = INVENTORY["_pp_bin"]
+    pp_ratio = INVENTORY["_pp_ratio"]
 
-    for total_pp in (0, 32, 86, 128, 171, 255, 256):
-        assert pp_bin(total_pp) == unit_bin(total_pp / 256)  # type: ignore[operator]
+    moves = (1, 2, 0, 0)  # base PP 35 + 25
+    assert pp_bin(moves, (35, 25, 0, 0)) == "high"  # type: ignore[operator]
+    assert pp_bin(moves, (17, 12, 0, 0)) == "middle"  # type: ignore[operator]
+    assert pp_bin(moves, (3, 2, 0, 0)) == "low"  # type: ignore[operator]
+    assert pp_ratio((45, 0, 0, 0), (0xFD, 0, 0, 0)) == 1.0  # type: ignore[operator]
+
+
+@pytest.mark.parametrize(
+    ("moves", "pp", "match"),
+    (
+        ((1, 2, 0), (35, 25, 0), "vectors are invalid"),
+        ((0, 0, 0, 0), (1, 0, 0, 0), "empty checkpoint move"),
+        ((1, 0, 0, 0), (63, 0, 0, 0), "above its own maximum"),
+    ),
+)
+def test_inventory_pp_ratio_rejects_incoherent_vectors(
+    moves: tuple[int, ...], pp: tuple[int, ...], match: str
+) -> None:
+    pp_ratio = INVENTORY["_pp_ratio"]
+
+    with pytest.raises(RuntimeError, match=match):
+        pp_ratio(moves, pp)  # type: ignore[operator]
 
 
 def test_inventory_script_has_no_controller_or_input_execution_surface() -> None:

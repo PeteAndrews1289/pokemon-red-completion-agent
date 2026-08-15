@@ -31,6 +31,10 @@ from pokemon_red_completion.party_development_rank import (  # noqa: E402
     EvolutionRouteKind,
     PartyDevelopmentGoal,
 )
+from pokemon_red_completion.red_battle_catalog import (  # noqa: E402
+    PokemonRedBattleCatalog,
+    pokemon_red_move_ref,
+)
 from pokemon_red_completion.red_collection import (  # noqa: E402
     RED_SOLO_COLLECTION_CONTRACT,
     red_collection_observation,
@@ -38,6 +42,7 @@ from pokemon_red_completion.red_collection import (  # noqa: E402
     red_species_number,
 )
 from pokemon_red_completion.red_party import (  # noqa: E402
+    PP_VALUE_MASK,
     RED_BALANCED_ROSTER,
     PokemonRedPartyReader,
 )
@@ -47,6 +52,11 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 class PartyDevelopmentInventoryRunError(RuntimeError):
     """Raised before an inventory can silently omit or execute a checkpoint."""
+
+
+_BATTLE_CATALOG = PokemonRedBattleCatalog()
+_PP_UP_COUNT_SHIFT = 6
+_PP_UP_BONUS_CAP = 7
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -68,8 +78,57 @@ def _partition(checkpoint_id: str) -> ScenarioPartition:
     )
 
 
-def _pp_bin(total_pp: int) -> str:
-    return unit_bin(total_pp / 256)
+def _pp_ratio(
+    move_ids: tuple[int, ...], packed_pp: tuple[int, ...]
+) -> float:
+    """Return remaining PP over this moveset's actual Gen I maximum.
+
+    The top two bits of each PP byte count PP Ups. Red adds one fifth of the
+    move's base PP per use, with the per-use bonus capped at seven. Normalizing
+    by a global four-byte ceiling would classify a fresh low-PP moveset as
+    exhausted and would make the inventory's diversity gate misleading.
+    """
+
+    if (
+        not isinstance(move_ids, tuple)
+        or not isinstance(packed_pp, tuple)
+        or len(move_ids) != len(packed_pp)
+        or len(move_ids) != 4
+        or any(type(value) is not int or not 0 <= value <= 0xFF for value in move_ids)
+        or any(type(value) is not int or not 0 <= value <= 0xFF for value in packed_pp)
+    ):
+        raise PartyDevelopmentInventoryRunError(
+            "checkpoint move and PP vectors are invalid"
+        )
+    current_total = 0
+    maximum_total = 0
+    for move_id, packed_value in zip(move_ids, packed_pp, strict=True):
+        if move_id == 0:
+            if packed_value & PP_VALUE_MASK:
+                raise PartyDevelopmentInventoryRunError(
+                    "empty checkpoint move carries current PP"
+                )
+            continue
+        mechanics = _BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move_id))
+        pp_up_count = packed_value >> _PP_UP_COUNT_SHIFT
+        maximum_pp = mechanics.max_pp + pp_up_count * min(
+            mechanics.max_pp // 5,
+            _PP_UP_BONUS_CAP,
+        )
+        current_pp = packed_value & PP_VALUE_MASK
+        if current_pp > maximum_pp:
+            raise PartyDevelopmentInventoryRunError(
+                "checkpoint move reports PP above its own maximum"
+            )
+        current_total += current_pp
+        maximum_total += maximum_pp
+    if maximum_total == 0:
+        return 0.0
+    return current_total / maximum_total
+
+
+def _pp_bin(move_ids: tuple[int, ...], packed_pp: tuple[int, ...]) -> str:
+    return unit_bin(_pp_ratio(move_ids, packed_pp))
 
 
 def _route_kind(method: EvolutionMethod) -> EvolutionRouteKind:
@@ -140,11 +199,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             collection = red_collection_observation(pokedex, party, boxes)
             controls_ready = reader.read_input_readiness().ready
 
+        if (
+            raw.party_moves is None
+            or raw.party_pp is None
+            or len(raw.party_moves) != len(party.members)
+            or len(raw.party_pp) != len(party.members)
+        ):
+            raise PartyDevelopmentInventoryRunError(
+                "checkpoint party move and PP evidence is incomplete"
+            )
+
         living_numbers = frozenset(
             red_species_number(item.species_ref) for item in collection.specimens
         )
         members = []
-        for member in party.members:
+        for member_index, member in enumerate(party.members):
             national_number = red_internal_species_number(member.species_id)
             steps = cartridge_evolutions.get(national_number, ())
             routes: tuple[EvolutionRouteKind, ...] = tuple(
@@ -171,7 +240,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 PartyDevelopmentInventoryMember(
                     level=member.level,
                     hp_bin=unit_bin(member.hp_ratio),
-                    pp_bin=_pp_bin(member.total_pp),
+                    pp_bin=_pp_bin(
+                        raw.party_moves[member_index],
+                        raw.party_pp[member_index],
+                    ),
                     status_present=member.status.value != "healthy",
                     trainable=member.is_trainable,
                     evolution_routes=routes,
