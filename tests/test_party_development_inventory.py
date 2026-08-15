@@ -140,6 +140,72 @@ def test_inventory_rejects_reused_state_and_member_identity_order() -> None:
         replace(first, members=tuple(reversed(first.members)))
 
 
+def test_private_inventory_round_trip_reauthenticates_every_semantic_row() -> None:
+    inventory = PartyDevelopmentCheckpointInventory(
+        (
+            _entry(
+                checkpoint="party-development-development-01",
+                partition=ScenarioPartition.DEVELOPMENT,
+                digest="b",
+                low_health=False,
+            ),
+            _entry(
+                checkpoint="party-development-train-01",
+                partition=ScenarioPartition.TRAIN,
+                digest="a",
+                low_health=True,
+            ),
+        )
+    )
+
+    restored = PartyDevelopmentCheckpointInventory.from_private_dict(
+        inventory.private_dict()
+    )
+
+    assert restored == inventory
+    assert restored.inventory_sha256 == inventory.inventory_sha256
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    (
+        (lambda document: document.update(inspection_mode="controller"), "provenance"),
+        (
+            lambda document: document["entries"][0].update(  # type: ignore[index,union-attr]
+                map_identity_public=True
+            ),
+            "privacy",
+        ),
+        (
+            lambda document: document["entries"][0]["semantics"].update(  # type: ignore[index,union-attr]
+                registration_owned_count=21
+            ),
+            "semantic digest",
+        ),
+    ),
+)
+def test_private_inventory_loader_rejects_provenance_privacy_and_digest_drift(
+    mutation: object,
+    match: str,
+) -> None:
+    inventory = PartyDevelopmentCheckpointInventory(
+        (
+            _entry(
+                checkpoint="party-development-train-01",
+                partition=ScenarioPartition.TRAIN,
+                digest="a",
+                low_health=True,
+            ),
+        )
+    )
+    document = inventory.private_dict()
+    assert callable(mutation)
+    mutation(document)
+
+    with pytest.raises(PartyDevelopmentInventoryError, match=match):
+        PartyDevelopmentCheckpointInventory.from_private_dict(document)
+
+
 def test_resource_and_evolution_bins_are_deterministic() -> None:
     assert tuple(unit_bin(value) for value in (0.0, 0.2, 0.5, 0.9)) == (
         "empty",

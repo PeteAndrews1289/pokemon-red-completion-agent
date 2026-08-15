@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the seats are reserved, but the exam is still blank
+
+The read-only search looked at the same 81 safe Red states again and got the same inconvenient
+answer: there were many different teams, health levels and collection pressures, but not one
+depleted-PP context. So the project did not relabel “high PP everywhere” as diversity.
+
+Instead it reserved the exact source roots for the first curriculum: eight for training and six
+kept for development. Half the questions compare trainees and half compare places to train. The
+set covers balancing, evolution, living collection and missing team roles. Every root is independent
+of the old teacher model and the Route 11 evidence. A private plan keeps the identities; the
+[public receipt](evidence/party-development-question-reservation-2026-08-15.json) shows only what
+can safely be claimed.
+
+One source in each partition has been marked for a future natural PP lesson: battle normally,
+never heal, stop the first time PP reaches the middle band, and reject the attempt if anyone faints
+or the party/story changes unexpectedly. No memory edit, model guess or teacher answer is allowed.
+
+The honest board is **one prior · fourteen reserved roots · zero frozen menus · zero outcomes ·
+zero authority**. We have selected where to ask. We still need a concrete Red question builder,
+those two real depleted-PP states and a second trustworthy venue before the model receives a single
+new answer.
+
 ## Current checkpoint: one honest prior, no pretend training
 
 Claude's second attack finally approved the exact source for one narrow use. Codex composed the

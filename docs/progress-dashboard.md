@@ -1,5 +1,16 @@
 # Pokémon Learning Observatory
 
+> **Reservation checkpoint:** the project now has 14 privately reserved source roots—8 train and
+> 6 development—but still has zero frozen candidate menus and zero outcomes. The reservation spans
+> both trainee/venue choices, all four completion goals, three health bins and two evolution-route
+> types. Existing PP remains high only, so one root per partition is preregistered for a future
+> natural middle-PP materialization. The protocol forbids labels, teacher/model consultation,
+> memory edits, sealed access and replacement. One Route 11 prior is also insufficient for a real
+> venue comparison. The readiness display must therefore show **reserved 14 · menus 0 · outcomes
+> 0/14 · fit false · authority zero**, with the four blockers from the
+> [reservation receipt](evidence/party-development-question-reservation-2026-08-15.json). Do not
+> convert reservations or prospective PP bins into training progress.
+
 > **Model-first pivot:** the first Red shadow dashboard stopped safely after 1,250 team-training
 > battles. It retained the failed state and correction count, but exposed two missing diagnostics:
 > the exact exception message was not retained, and live heal/party/efficiency data was too sparse

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from collections.abc import Mapping
 from dataclasses import dataclass
+from typing import cast
 
 from pokemon_red_completion.party_development_rank import (
     EvolutionRouteKind,
@@ -106,6 +108,57 @@ class PartyDevelopmentInventoryMember:
             "living_target_needed": self.living_target_needed,
             "role_complete": self.role_complete,
         }
+
+    @classmethod
+    def from_private_dict(
+        cls, value: object
+    ) -> PartyDevelopmentInventoryMember:
+        """Restore one identity-free member from a private inventory row."""
+
+        expected = {
+            "evolution_routes",
+            "hp_bin",
+            "level",
+            "level_evolution_distance_bin",
+            "living_target_needed",
+            "pp_bin",
+            "registration_target_needed",
+            "role_complete",
+            "status_present",
+            "trainable",
+        }
+        if not isinstance(value, Mapping) or set(value) != expected:
+            raise PartyDevelopmentInventoryError(
+                "inventory member document is invalid"
+            )
+        routes = value["evolution_routes"]
+        if not isinstance(routes, list) or any(
+            not isinstance(item, str) for item in routes
+        ):
+            raise PartyDevelopmentInventoryError(
+                "inventory member evolution routes are invalid"
+            )
+        try:
+            return cls(
+                level=cast(int, value["level"]),
+                hp_bin=cast(str, value["hp_bin"]),
+                pp_bin=cast(str, value["pp_bin"]),
+                status_present=cast(bool, value["status_present"]),
+                trainable=cast(bool, value["trainable"]),
+                evolution_routes=tuple(EvolutionRouteKind(item) for item in routes),
+                level_evolution_distance_bin=cast(
+                    str, value["level_evolution_distance_bin"]
+                ),
+                registration_target_needed=cast(
+                    bool, value["registration_target_needed"]
+                ),
+                living_target_needed=cast(bool, value["living_target_needed"]),
+                role_complete=cast(bool, value["role_complete"]),
+            )
+        except (TypeError, ValueError) as error:
+            raise PartyDevelopmentInventoryError(
+                "inventory member document is invalid"
+            ) from error
 
 
 @dataclass(frozen=True, slots=True)
@@ -237,6 +290,111 @@ class PartyDevelopmentInventoryEntry:
             "private_path_fields": 0,
         }
 
+    @classmethod
+    def from_private_dict(
+        cls, value: object
+    ) -> PartyDevelopmentInventoryEntry:
+        """Restore and authenticate one checkpoint inventory entry."""
+
+        expected = {
+            "checkpoint_id",
+            "envelope_sha256",
+            "map_identity_public",
+            "party_slot_identity_public",
+            "private_path_fields",
+            "schema",
+            "semantic_signature_sha256",
+            "semantics",
+            "species_identity_public",
+            "state_sha256",
+        }
+        if not isinstance(value, Mapping) or set(value) != expected:
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint document is invalid"
+            )
+        if (
+            value["schema"]
+            != "pokemon.core.party-development-checkpoint-inventory-entry.v1"
+            or value["map_identity_public"] is not False
+            or value["party_slot_identity_public"] is not False
+            or value["species_identity_public"] is not False
+            or value["private_path_fields"] != 0
+        ):
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint privacy contract is invalid"
+            )
+        semantics = value["semantics"]
+        semantic_expected = {
+            "battle_active",
+            "controls_ready",
+            "goal_hints",
+            "living_target_count",
+            "living_unique_count",
+            "members",
+            "partition",
+            "registration_owned_count",
+            "registration_target_count",
+            "role_coverage_count",
+            "role_target_count",
+            "schema",
+            "specimen_count",
+            "storage_headroom",
+        }
+        if (
+            not isinstance(semantics, Mapping)
+            or set(semantics) != semantic_expected
+            or semantics["schema"]
+            != "pokemon.core.party-development-checkpoint-semantics.v1"
+        ):
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint semantics are invalid"
+            )
+        member_rows = semantics["members"]
+        goal_rows = semantics["goal_hints"]
+        if (
+            not isinstance(member_rows, list)
+            or not isinstance(goal_rows, list)
+            or any(not isinstance(item, str) for item in goal_rows)
+        ):
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint semantic rows are invalid"
+            )
+        try:
+            result = cls(
+                checkpoint_id=cast(str, value["checkpoint_id"]),
+                partition=ScenarioPartition(cast(str, semantics["partition"])),
+                state_sha256=cast(str, value["state_sha256"]),
+                envelope_sha256=cast(str, value["envelope_sha256"]),
+                controls_ready=cast(bool, semantics["controls_ready"]),
+                battle_active=cast(bool, semantics["battle_active"]),
+                members=tuple(
+                    PartyDevelopmentInventoryMember.from_private_dict(item)
+                    for item in member_rows
+                ),
+                registration_owned_count=cast(
+                    int, semantics["registration_owned_count"]
+                ),
+                registration_target_count=cast(
+                    int, semantics["registration_target_count"]
+                ),
+                living_unique_count=cast(int, semantics["living_unique_count"]),
+                living_target_count=cast(int, semantics["living_target_count"]),
+                specimen_count=cast(int, semantics["specimen_count"]),
+                role_coverage_count=cast(int, semantics["role_coverage_count"]),
+                role_target_count=cast(int, semantics["role_target_count"]),
+                storage_headroom=cast(int, semantics["storage_headroom"]),
+                goal_hints=tuple(PartyDevelopmentGoal(item) for item in goal_rows),
+            )
+        except (TypeError, ValueError) as error:
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint document is invalid"
+            ) from error
+        if value["semantic_signature_sha256"] != result.semantic_signature_sha256:
+            raise PartyDevelopmentInventoryError(
+                "inventory checkpoint semantic digest differs"
+            )
+        return result
+
 
 @dataclass(frozen=True, slots=True)
 class PartyDevelopmentCheckpointInventory:
@@ -280,6 +438,41 @@ class PartyDevelopmentCheckpointInventory:
             "inspection_mode": "read_only_no_controller_no_teacher",
             "private_path_fields": 0,
         }
+
+    @classmethod
+    def from_private_dict(
+        cls, value: object
+    ) -> PartyDevelopmentCheckpointInventory:
+        """Restore the exact read-only inventory emitted by the inspector."""
+
+        expected = {
+            "entries",
+            "inspection_mode",
+            "private_path_fields",
+            "schema",
+        }
+        if not isinstance(value, Mapping) or set(value) != expected:
+            raise PartyDevelopmentInventoryError(
+                "checkpoint inventory document is invalid"
+            )
+        rows = value["entries"]
+        if (
+            value["schema"]
+            != "pokemon.core.party-development-checkpoint-inventory.v1"
+            or value["inspection_mode"]
+            != "read_only_no_controller_no_teacher"
+            or value["private_path_fields"] != 0
+            or not isinstance(rows, list)
+        ):
+            raise PartyDevelopmentInventoryError(
+                "checkpoint inventory provenance is invalid"
+            )
+        return cls(
+            tuple(
+                PartyDevelopmentInventoryEntry.from_private_dict(item)
+                for item in rows
+            )
+        )
 
     def summary_dict(self) -> dict[str, object]:
         partitions = Counter(item.partition.value for item in self.entries)

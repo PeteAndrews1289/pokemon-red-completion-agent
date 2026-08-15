@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-15 exact-root reservation checkpoint:** Exact head `3ee15fd` passed CI run
+> `31900603291`; Claude's H2/M2/L2 recheck killed 28/28 valid mutations and approved read-only
+> inventory plus prospective construction. Codex reproduced the high-PP-only 81-state inventory
+> and reserved exactly 8 train / 6 development source roots under private plan `9097f73e…`.
+> Both decision kinds, all four product goals, three health bins and level/no-evolution routes are
+> represented. One source per partition is preregistered for natural PP depletion under protocol
+> `fcc0d4ae…`, which forbids labels, teacher/model consultation, memory edits, sealed access and
+> replacement. The
+> [public receipt](docs/evidence/party-development-question-reservation-2026-08-15.json) exposes no
+> root, state, path, species, map, slot or feature values.
+>
+> This does not advance menus or training: priors 1; reserved roots 14; menus 0; outcomes 0/14;
+> fits 0; controller/teacher 0; sealed/Crystal 0; replay 0; authority 0. Codex next qualifies the
+> concrete Red binding/preflight seam and prepares a separate minimal second-venue measurement.
+> Claude audits the immutable reservation and measurement boundaries. Antigravity remains idle
+> until real candidate menus exist, then attacks choice quality, transfer and living-Pokédex value.
+
 > **2026-08-15 first-prior checkpoint:** Exact head `3a24a2e` passed CI run `31896779190` and
 > Claude's immutable Python 3.11/3.14 delta audit returned **APPROVE** for one private Route 11
 > prior only. Codex composed it once from the authenticated V2 receipts. The private registry has

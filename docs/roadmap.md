@@ -8,6 +8,25 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): exact roots reserved, catalog still closed
+
+Exact head `3ee15fd` passed CI run `31900603291`, and Claude killed 28/28 targeted H2/M2/L2
+mutations. A repeated read-only inventory reproduced the 81-state pool and its real deficiency:
+every train and development source still has high PP. The new private reservation plan
+`9097f73e…` selects exactly 8 train and 6 development roots with both trainee/venue assignments,
+all four completion goals, three health bins, two evolution-route kinds and unique source states.
+It excludes every teacher-prior and Route 11 support identity.
+
+The [public receipt](evidence/party-development-question-reservation-2026-08-15.json) records one
+future natural PP materialization in each partition under a frozen no-label/no-prediction/no-memory-
+edit protocol. It also records the honest blockers: concrete Red menus are not bound, the PP states
+do not yet exist, and one qualified venue prior cannot support a genuine multi-candidate venue
+question. Thus reservations are 14 but menus remain 0; outcomes 0/14; fits and authority 0.
+
+Next: qualify the read-only Red binding/preflight adapter, separately measure and qualify one
+compatible second venue, then materialize only the two reserved PP contexts. Re-inventory and
+freeze the actual 8+6 candidate catalog before either reviewer permits outcome execution.
+
 ## Current checkpoint (2026-08-15): one venue prior, zero learning outcomes
 
 Exact head `3a24a2e` passed CI run `31896779190`, and Claude's immutable cross-Python delta audit

@@ -4,6 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current model-training gate (August 15, 2026): 14 source roots reserved; zero menus and zero
+> outcomes.** Exact head `3ee15fd` passed GitHub CI run `31900603291`, and Claude's final source
+> recheck killed 28/28 targeted mutations. A repeated read-only inventory authenticated 81
+> non-sealed Red states but again found high PP only. The new private reservation plan selects
+> exactly 8 independent train and 6 development roots, split across trainee/venue questions and
+> covering balance, evolution, living collection, party roles, three health bins and two evolution
+> routes. One root per partition is reserved for a future natural middle-PP context under a protocol
+> that forbids labels, teacher/model consultation, memory edits, sealed access and replacement.
+> The [path-free receipt](docs/evidence/party-development-question-reservation-2026-08-15.json)
+> exposes no private identities. This is not training data: a concrete Red binding, those two PP
+> states and a second compatible venue prior still precede the exact 8+6 menu freeze. Honest board:
+> **prior 1 · roots reserved 14 · menus 0 · outcomes 0/14 · fit false · authority zero**. The local
+> checkpoint passes 3,523 non-integration tests, Ruff, mypy over 224 source files and every
+> generated-registry check.
+
 > **The Route 11 proof now closes over its live candidate seam (August 15, 2026); training remains
 > 0/14.** Claude's first audit of the portable proof killed 34 of 43 mutations but correctly rejected
 > it: two on-path candidate projectors were outside the attestation, helper closure was not proved,

@@ -17,6 +17,40 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Exact 8+6 source roots reserved; no candidate menu or outcome opened — 2026-08-15
+
+Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`, and Claude's
+H2/M2/L2 recheck killed 28/28 valid mutations and returned **APPROVE** for read-only PP inventory
+and prospective question construction only. The repeated inventory reproduced all 81 accepted
+non-sealed goal-manager checkpoints and the same gap: health, goal and evolution-route diversity
+exist, but PP is high in every train and development state.
+
+Codex added a typed, non-executing reservation layer. It reauthenticates every inventory row,
+rejects teacher-prior and venue-prior root/state overlap, and deterministically reserves exactly
+8 train plus 6 untouched development source roots. Both partitions contain trainee and venue
+assignments, multiple completion goals, three health bins, level/no-evolution routes and distinct
+semantic contexts. The private T7 plan has digest `9097f73e…` and file digest `bb7f32b3…`; only the
+[path-free summary](docs/evidence/party-development-question-reservation-2026-08-15.json) is
+tracked.
+
+The implementation checkpoint passes 3,523 non-integration tests, with three intentional
+deselections and one expected failure, plus Ruff, mypy over 224 source files and all four generated-
+registry checks. Its working source bundle is `855327f1…`; publication and exact-head CI are the
+remaining source gates.
+
+Exactly one train root and one development root are reserved for a future natural-battle PP
+materialization. Protocol `fcc0d4ae…` forbids direct memory edits, healing before capture, labels,
+teacher queries, model predictions/fits, sealed access and replacement. It requires the first
+post-battle middle-PP state, aborts on a faint or unintended party/world mutation, and requires a
+new authenticated state plus read-only re-inventory before any menu is projected.
+
+Do not call these fourteen learner questions yet. Menus remain 0; outcomes 0/14; fits 0;
+controller/teacher 0; sealed Red/Crystal 0; replay 0; authority 0. Remaining blockers are concrete
+Red candidate binding, two unmaterialized PP contexts and a separately qualified second compatible
+venue prior. The next implementation slice is the read-only Red binding/preflight adapter plus a
+review packet for the smallest second-venue measurement. No controller action is authorized by
+this reservation alone.
+
 ## First frozen venue prior composed; catalog qualification is active — 2026-08-15
 
 Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` passed CI run `31896779190` with

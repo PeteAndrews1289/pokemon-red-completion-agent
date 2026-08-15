@@ -16,6 +16,7 @@ Current honest state:
 
 - completion-aware party outcomes: 0/14;
 - frozen current venue priors: 1;
+- privately reserved source roots: 8 train / 6 development;
 - concrete Red party menus: 0;
 - completion-aware party fits: 0;
 - model authority granted by this lane: 0;
@@ -23,15 +24,13 @@ Current honest state:
 - Crystal contexts opened by this lane: 0;
 - full Red replays authorized: 0.
 
-Exact head `3a24a2e` passed CI run `31896779190`. Claude's immutable Python 3.11/3.14 delta audit
-reproduced all 43 element and seven waiver identities, killed 42 of 47 valid mutations and returned
-**APPROVE** for one private Route 11 prior only. Codex composed it once from the two authenticated
-V2 receipts; its path-free summary is tracked and its one-entry registry remains private. No ROM,
-controller, teacher or outcome ran. Exact source `16ed83d` closes Claude's forward conditions
-locally with eight module-assignment elements, isolated type-parameter tests and an independent
-attestation-closure oracle. It passes 3,508 ROM-free tests and every local quality gate; source
-bundle `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`. Publication, exact-head
-CI and Claude's immutable three-finding recheck remain ahead of catalog reuse.
+Exact head `3ee15fd` passed CI run `31900603291`. Claude's H2/M2/L2 recheck killed 28/28 valid
+mutations and approved read-only inventory plus prospective construction. The repeated 81-state
+inventory again found high PP only. Codex has now reserved exact independent 8+6 source roots under
+plan `9097f73e…`, including one train and one development root for a future no-label natural PP
+materialization. This is a reservation, not a menu freeze: candidate menus and all learning
+counters remain zero. See the
+[path-free receipt](evidence/party-development-question-reservation-2026-08-15.json).
 
 ## Role 1: Codex — implementation and integration owner
 
@@ -55,16 +54,16 @@ Current Codex assignment:
 1. **Complete:** publish the source repair and obtain one green exact-head run.
 2. **Complete:** freeze the exact head and obtain Claude's narrow delta approval.
 3. **Complete:** compose the one private Route 11 prior and publish only its path-free summary.
-4. **Active:** publish the locally closed source-qualification conditions, obtain exact-head CI and
-   Claude's narrow recheck; then inventory existing non-sealed states for genuine PP diversity
-   without executing them. If the
-   8+6 gate still cannot pass, write a bounded context-materialization plan before pressing a
-   controller input.
-5. Materialize and freeze exactly 8 train and 6 untouched development **questions**, not outcomes.
-   Dispatch both reviewers on the immutable catalog.
-6. Execute only after both relevant findings are adjudicated. Stop on the first binding,
+4. **Complete:** source qualification, exact-head CI, Claude recheck and repeated read-only PP
+   inventory.
+5. **Active:** qualify the read-only concrete Red binding/preflight adapter. Separately design and
+   review the smallest second-compatible-venue measurement; do not promote the stale Cave result.
+6. After review, materialize only the two reserved middle-PP contexts and one second venue prior;
+   re-inventory and freeze the exact 8 train / 6 development **questions**, not outcomes. Dispatch
+   both reviewers on that immutable catalog.
+7. Execute only after both relevant findings are adjudicated. Stop on the first binding,
    accounting or durability failure; retain it and do not replace the identity.
-7. Fit one descriptive v2 update from the eight train outcomes and evaluate the six development
+8. Fit one descriptive v2 update from the eight train outcomes and evaluate the six development
    outcomes. Keep authority at zero. Expand decision coverage if the result is underpowered or
    choice-equivalent; do not tune until a tiny development set looks favorable.
 
@@ -95,18 +94,12 @@ Claude owns review of:
 - exact claim boundaries: source qualification, input freeze, execution, fit and authority are
   separate decisions.
 
-Claude's next assignment is deliberately narrow. After green CI, audit the immutable published
-successor containing source `16ed83d` without opening a ROM, private registry, menu or outcome.
-Attack only H2/M2/L2: remove any module-assignment source element; omit `Assign` or `AnnAssign`;
-mutate a committed load-bearing constant while making loaded and committed rows agree; broaden the
-empty-`type_params` exemption; and remove the closure call from `attest`. Verify all eight module
-paths, both historical module waivers, aggregate identities and Python 3.11/3.14 parity. A survivor
-is acceptable only with a proved independent guard and exact combined falsifier.
-
-Claude must return: exact commit reviewed, tests/mutations run, survivors, findings by severity,
-verdict, cheapest falsifier for each blocker, and the narrowest action authorized. Approval closes
-source reuse for the forthcoming question catalog; it does not authorize a second prior, menu or
-outcome execution, fitting, sealed Red, Crystal, a full replay or model authority.
+Claude's next assignment is the immutable reservation/preparation audit after publication. Verify
+the 8+6 selection is deterministic, excludes every teacher/venue support root and state, preserves
+the development partition, and cannot turn a planned PP bin into observed diversity. Attack the
+private-plan loader, closed counters, protocol digest and public/private boundary. Review the
+proposed second-venue measurement separately; approval of reservations must not authorize its
+controller actions.
 
 Claude's later assignment is the frozen 8+6 catalog audit. Attack question/result binding,
 independent roots, prior-support overlap, PP/health/evolution/goal diversity, candidate width,

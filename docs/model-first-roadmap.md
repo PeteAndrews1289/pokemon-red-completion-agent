@@ -18,12 +18,15 @@ Role ownership and exact handoffs are frozen in
    **APPROVE** for one private prior only.
 4. **Complete:** Codex composed one private Route 11 prior and published its path-free summary.
    Priors are now one; every learning counter remains zero.
-5. **Active:** close Claude's forward source-qualification conditions, then search existing
-   non-sealed states read-only for real PP diversity. If it is absent,
-   freeze and review a bounded context-materialization plan before any controller input.
-6. Freeze exactly 8 train and 6 untouched development questions. Claude audits binding,
-   independence, diversity and power. Antigravity audits whether the menus contain genuine choices,
-   serve the living-Pokédex product and have a Crystal falsifier.
+5. **Complete:** Claude approved the forward source conditions. The repeated read-only inventory
+   found 81 eligible non-sealed states but high PP only in both partitions.
+6. **Active:** fourteen independent source roots are now reserved—8 train and 6 untouched
+   development—with both decision kinds, all four completion goals, three health bins and two
+   evolution-route types. The reservation is not a candidate catalog. Qualify the concrete Red
+   binding adapter, obtain a second compatible venue prior under a separate reviewed measurement,
+   and naturally materialize the two preregistered middle-PP contexts under the frozen no-label
+   protocol. Re-inventory, freeze the exact menus, then send the immutable catalog to Claude for
+   integrity/power review and Antigravity for genuine-choice/transfer review.
 7. Execute each approved identity once with immediate durable private retention. Stop at the first
    binding/accounting failure and never replace an exposed identity.
 8. Fit once on eight train outcomes and compare once on six development outcomes. This is a
@@ -36,6 +39,40 @@ This bridge has one maintenance time box for CI/source qualification and one exp
 for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine alternatives, the
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
+
+## Current checkpoint: the 8+6 roots are reserved; the questions are not frozen
+
+Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`.
+Claude's narrow H2/M2/L2 recheck approved the 51-element/nine-waiver source proof after killing
+28/28 valid mutations. A second read-only inventory reproduced the 81-state pool exactly: 54 train,
+27 development, 30/14 distinct semantic contexts and high PP only in both partitions.
+
+The new reservation planner authenticates that inventory, the untouched v2 initial model and the
+one-entry Route 11 registry before selecting a root. It excludes all teacher-prior and venue-prior
+support roots/states, then deterministically reserves exactly 8 train and 6 development roots. The
+private plan digest is `9097f73e…`; its
+[path-free summary](evidence/party-development-question-reservation-2026-08-15.json) records 4/4
+train and 3/3 development trainee/venue assignments, all four product goals, three health bins,
+level/no-evolution coverage, eight/six distinct source semantics and six trainable members per
+source. Exact checkpoint identities remain private.
+
+The implementation checkpoint passes 3,523 non-integration tests, Ruff, mypy over 224 source files
+and every generated-registry check. Working source bundle: `855327f1…`. Publication and one
+exact-head CI run remain before independent review.
+
+One root in each partition is preregistered for natural PP depletion. The frozen protocol permits
+only ordinary battle damage, experience and PP consumption; it forbids memory edits, healing before
+capture, labels, teacher queries, predictions, fitting, sealed access and identity replacement. It
+stops at the first post-battle middle-PP state, aborts on a faint or unintended world/party change,
+and requires a new authenticated state plus read-only re-inventory before menu projection.
+
+This is honest progress but not model data. Candidate menus remain 0, outcomes 0/14, fits 0 and
+authority 0. Four blockers remain explicit: the concrete Red candidate bindings are not frozen,
+the two PP contexts are not materialized, a second compatible venue prior is absent, and therefore
+the prospective 8+6 catalog is not frozen. Next: qualify the concrete Red binding/preflight code,
+write and independently review the narrow second-venue measurement, then seek controller approval
+for only those three bounded preparations. No learner outcome, sealed Red/Crystal context or full
+run opens in this phase.
 
 ## Current checkpoint: the first prior exists, but no question has run
 

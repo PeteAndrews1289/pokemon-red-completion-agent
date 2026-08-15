@@ -1,5 +1,41 @@
 # Current audit — 2026-08-15
 
+## Question-root reservation and PP-materialization boundary
+
+Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`.
+Claude's forward H2/M2/L2 recheck killed 28/28 valid mutations and returned **APPROVE** for a
+read-only non-sealed PP inventory and prospective 8+6 construction only. Codex repeated the full
+81-checkpoint inventory and reproduced its prior hashes and counts: 54 train / 27 development,
+30 / 14 semantic contexts, 48 / 24 apparently multi-candidate-ready, health high/low/middle and
+level/none evolution routes in each partition, but high PP only in both.
+
+The accepted implementation adds strict private-inventory deserialization plus a non-executing
+question reservation plan. Input files are authenticated before use. Teacher-prior and venue-prior
+support roots/states are excluded, roots/states/envelopes cannot repeat, and each partition must
+meet the exact readiness-shaped source constraints. The real private plan reserves 8 train and
+6 development roots, split 4/4 and 3/3 across trainee/venue choices, with all four completion goals,
+three health bins, two evolution-route kinds and eight/six distinct semantic signatures. Plan
+digest: `9097f73eecaf0e38949fb6e76b0cc7a3c8bafa50c353b60a87f77e5519f4e30d`.
+
+The local gate passes 3,523 non-integration tests, three intentional deselections and one expected
+failure, Ruff, mypy over 224 source files and all four generated-registry checks. Working source
+bundle: `855327f1de2ee40a71c202678e76da028b248c582ae31aa7dc86a10f65d32ddf`.
+
+The PP protocol digest is
+`fcc0d4ae4260dee271bc4affe7af1187031d7382c8a4ff5568e7ba569c1cee87`. Exactly one source in each
+partition is reserved to stop at the first natural post-battle middle-PP state. It forbids memory
+edits, healing before capture, candidate outcomes, teacher queries, predictions/fits, sealed access
+and replacement. A faint, persistent status or unintended party/storage/story mutation aborts the
+identity. Any surviving state must be newly authenticated and inventoried before candidate
+projection.
+
+Disposition: **source roots reserved; catalog not frozen**. The
+[public receipt](evidence/party-development-question-reservation-2026-08-15.json) exposes no private
+root/state/path or candidate values. Priors 1; reservations 14; menus 0; outcomes 0/14; fits 0;
+controller/teacher 0; sealed/Crystal 0; replay 0; authority 0. Remaining blockers are concrete Red
+bindings, two PP materializations and a second compatible venue prior. The stale Cave result is not
+silently promoted.
+
 ## Claude approval and one-prior composition
 
 Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` and CI run `31896779190` were immutable and green.

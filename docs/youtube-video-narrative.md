@@ -1,5 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: fourteen empty question cards
+
+Open on **81 AUTHENTICATED STATES**. Sort them into colorful stacks for health, evolution and
+collection; then scan the PP column and turn every card the same color: **HIGH · HIGH · HIGH**.
+Narration: **“The pool was diverse—except where the model most needed to learn resource pressure.”**
+
+Bring in a locked reservation board with **8 TRAIN** and **6 DEVELOPMENT** empty slots. Fill them
+with anonymous root cards while three alarms stay armed: **NO PRIOR OVERLAP · NO REUSED STATE · NO
+PRIVATE IDENTITY ON GITHUB**. Split the slots into trainee and venue choices; add four badges:
+**BALANCE · EVOLUTION · LIVING COLLECTION · ROLE COVERAGE**.
+
+Circle one train slot and one development slot. Animate a tiny protocol: **ORDINARY BATTLES → PP
+MIDDLE → STOP → NEW AUTHENTICATED STATE → READ-ONLY RECHECK**. Put red X marks over **MEMORY EDIT ·
+HEAL · TEACHER · MODEL PREDICTION · REPLACEMENT**. If a party member faints, tear up that identity
+rather than swapping in an easier example.
+
+End on the board: **PRIOR 1 · ROOTS RESERVED 14 · MENUS 0 · OUTCOMES 0/14 · AUTHORITY 0**. Keep
+three locks visible: **CONCRETE RED BINDING · SECOND VENUE PRIOR · TWO PP MATERIALIZATIONS**.
+Narration: **“We finally know where the first questions belong. We still refuse to call an empty
+question card training data.”**
+
 ## August 15 scene: the board finally moves by one
 
 Open on Claude's final audit card: **42 / 47 VALID MUTATIONS KILLED · APPROVE ONE PRIOR ONLY**.

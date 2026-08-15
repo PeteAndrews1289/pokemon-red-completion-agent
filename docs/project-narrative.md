@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: fourteen places to ask—not fourteen answers
+
+The second inventory did not discover the missing lesson. It proved the first one was accurate:
+all 81 existing non-sealed Red checkpoints still had high PP. That meant “pick fourteen good-looking
+states” would produce a curriculum that could not pass its own resource-diversity gate.
+
+The next artifact therefore reserves questions without pretending to answer them. A typed planner
+authenticated the untouched model, the 81-state inventory and the one Route 11 prior, removed every
+root or state already consumed by either prior, then selected 8 train and 6 development sources.
+Both partitions contain trainee and venue assignments; together they cover balance, evolution,
+living collection and role coverage, three health bands, and level/no-evolution routes. The exact
+identities live only in the private T7 plan. The
+[public receipt](evidence/party-development-question-reservation-2026-08-15.json) carries the
+counts and digests, not species, maps, slots, paths or candidate values.
+
+Two of those sources—one train and one development—are now reserved for a deliberately boring but
+important experiment: use ordinary battles until PP first reaches the middle band, then stop and
+capture a new state. The protocol refuses the shortcuts most likely to contaminate the lesson:
+memory edits, healing first, asking the teacher, consulting the model, measuring a candidate
+outcome, replacing a failed identity, or quietly accepting a faint or story mutation.
+
+The scoreboard now has a new column: **prior 1 · roots reserved 14 · menus 0 · outcomes 0/14 ·
+authority 0**. That distinction is the point. We know where the first questions should come from;
+we do not yet have the final questions. A concrete Red binding adapter, two real PP-depleted states
+and a second independently qualified venue are still required before training begins.
+
 ## August 15: the first prior is real—and deliberately small
 
 The repaired proof finally survived the adversarial handoff. On the exact CI-green head, Claude
