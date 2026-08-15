@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-15 completion-aware party learner — highest active checkpoint:** Exact source
+> `42196d4` passed 3,373 local tests and CI run `31863588955`. The new v2 contract preserves the
+> v1 scorer as an exact initialization while adding living-collection, evolution, role, survival,
+> resource and prospective venue-operating semantics. Only complete counterfactual outcomes can
+> update it; development comparison is paired; consumed roots cannot be reused; and the first fit
+> is blocked until a diverse 8-train/6-development catalog exists.
+>
+> No emulator candidate ran, no teacher target or model fit occurred and protected access remains
+> zero. Claude and Antigravity should review
+> `docs/evidence/party-development-completion-v2-source-qualification-2026-08-15.json` before live
+> collection. Attack: identity leakage, target leakage, exact v1 equivalence, one-hot goal/evolution
+> contracts, living-retention priority, prior evidence timing, duplicate-root guards, paired
+> statistics and whether the readiness minimums can be gamed by semantically repeated states.
+> Review may reject or amend the design; it may not authorize sealed Red, Crystal or a full replay.
+
 > **2026-08-14 independent live Cave qualification — highest active checkpoint:** Exact source
 > `66ed6ee` passed 3,351 local tests and CI run `31861829598`; read-only preflight was ready; and
 > independent train slot 030 ran once. Its damaged/statused party recovered, entered on the

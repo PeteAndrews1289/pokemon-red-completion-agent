@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Completion-aware party learner source qualification — 2026-08-15
+
+Codex replaced the too-narrow “weakest member / highest safe band” learning boundary with a separate
+v2 representation tied to the final product. The historical 27-feature v1 ranker is unchanged and
+embeds exactly into 66 features. New values cover balance, evolution, living retention, roles,
+survival/resources and prospective venue evidence. Outcome learning uses complete measured menus,
+soft ties, train-only updates, persisted consumed roots and paired development comparisons.
+
+Decision: accept exact source `42196d4` / CI `31863588955` at the source boundary only. Before a
+first descriptive fit require the frozen 8-train/6-development diversity audit; before collecting,
+require independent Claude and Antigravity review of the representation, objective and gate. No
+live catalog, model competence, authority, Red completion or transfer claim exists. Review packet:
+[`party-development-completion-v2-source-qualification-2026-08-15.json`](evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
+
 ## Independent live Cave qualification — 2026-08-14
 
 Exact source `66ed6ee` passed 3,351 tests and CI run `31861829598`; read-only preflight

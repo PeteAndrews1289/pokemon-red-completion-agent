@@ -4,6 +4,17 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Completion-aware party learner source qualified (August 15, 2026); outcome collection has not
+> started.** Exact source `42196d4` passed 3,373 local tests and GitHub CI run `31863588955`. The
+> historical v1 teacher ranker remains frozen; a separate v2 head now represents balance,
+> evolution, living-Pokédex retention, party roles, survivability, PP/health and prospectively
+> frozen venue cost/reliability. It supports soft outcome ties, rejects censored evidence, embeds
+> the v1 scorer without changing its initial scores and evaluates updates against the same untouched
+> development decisions. A path-free gate blocks fitting until a diverse 8-train/6-development
+> catalog exists. No new emulator run, teacher label, model fit, sealed access, Crystal context or
+> authority change occurred. See the
+> [source qualification](docs/evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
+
 > **Independent Cave traversal qualification passed live (August 14, 2026).** Exact commit
 > `66ed6ee` passed 3,351 local tests and GitHub CI run `31861829598`; read-only preflight then
 > authenticated independent non-sealed train slot 030. Its two damaged and two statused members

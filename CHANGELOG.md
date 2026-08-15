@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Qualified a separate completion-aware party-development v2 representation and outcome learner at
+  exact commit `42196d4` / CI `31863588955`. Preserved exact v1 initialization, added living-
+  collection/evolution/role/survival/venue semantics, soft outcome targets, consumed-root guards,
+  paired development evaluation and a diversity gate that blocks fitting before an informative
+  8-train/6-development catalog exists. No emulator run, teacher label, model fit or authority
+  change occurred.
+
 - Completed the independent live Cave qualification after exact CI and read-only preflight. The
   damaged party recovered; the walker completed 12 successful steps in 14 attempts with one
   excluded-transition skip and zero departures; and the run sent zero battle commands. Published

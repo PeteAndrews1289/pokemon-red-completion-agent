@@ -7,6 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: stop teaching the wrong question
+
+The first team model had a spectacular number: roughly 99.9% held-out accuracy. It had learned what
+its teacher asked—pick the weakest trainable member and the strongest safe training band. But the
+model could not see whether an evolution was still required, whether evolving would erase the only
+living copy of a prior form, whether a member's team job was already finished, or whether a
+high-yield cave wasted time by repeatedly throwing the controller back outside.
+
+That is how a project can spend days “training” while moving away from its goal. More examples do
+not repair a question the input cannot ask.
+
+The new party head starts as the old model exactly: same 27 features, same weights, same scores. It
+then adds 39 portable facts about balance, evolution, living collection, roles, survival, PP/health
+and the measured operating cost of a venue. Species and maps remain private bindings. Only complete
+counterfactual outcomes can change the model; a power loss stays censored, tied outcomes share the
+target, and the same root can never be consumed twice.
+
+Most importantly, the code now refuses to fit merely because a few emulator races finished. It
+demands 8 independent training preferences and 6 untouched development preferences spanning two
+goals, both trainee and venue choices, wider menus and real semantic diversity. Passing that only
+starts a descriptive curve. It does not grant authority or shrink the later 120-episode Red and
+54-context Crystal tests.
+
+For once, “no new gameplay happened” is progress. Exact source passed 3,373 tests and GitHub CI,
+while Red input, teacher labels, model fitting and Crystal access all stayed zero. The next cartridge
+frame will be spent on evidence the final living-Pokédex agent can actually use.
+
 ## The premise
 
 Beating Pokémon Red with software is a solved problem. People have done it with scripts, with

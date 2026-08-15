@@ -8,6 +8,23 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): the party learner now matches the completion goal
+
+Source `42196d4` / CI `31863588955` freezes a separate completion-aware v2 representation and
+outcome learner. It preserves the historical v1 score exactly at initialization, then exposes
+balance, evolution, living collection, roles, survival, resources and prospective venue operating
+costs. Censored/partial trials cannot become labels; ties remain soft distributions; consumed train
+roots cannot be reused; and prior/update evaluation is paired on untouched development decisions.
+
+The next gate is data design, not another convenient run. A first descriptive fit requires 8 train
+and 6 development preferences with both choice kinds, at least two completion goals, a three-way
+menu, health/PP/evolution diversity and frozen priors for every venue candidate. Existing Cinnabar
+roots are independent in bytes but too similar in party semantics to satisfy that gate by
+themselves. Inventory non-sealed checkpoints, freeze a diverse catalog, obtain Claude and
+Antigravity review, then publish exact-source live collection instructions. Model fit, Red/Crystal
+execution and authority remain zero at this checkpoint. See the
+[path-free qualification](evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
+
 ## Current checkpoint (2026-08-14): three outcome families reached; widen genuine decision coverage
 
 The battle, navigation and party-development adapters have each reached real cartridge execution

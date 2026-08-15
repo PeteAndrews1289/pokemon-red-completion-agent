@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the model finally received the problem we actually care about
+
+The old team ranker was excellent at reproducing a narrow teacher rule: choose the weakest eligible
+party member, then the highest safe encounter band. Its 99.9% validation score was real, but its
+inputs could not express why a Pokémon still needed to evolve, whether evolving it would destroy
+the only retained living specimen, whether its team role was already complete, or whether a venue
+was expensive because reaching and staying there was unreliable. More runs would have made that
+mis-specified learner more confident.
+
+The replacement does not erase that experiment. It embeds all 27 historical features and the exact
+v1 MLP into a separate 66-feature v2 head, producing identical scores before outcome learning. The
+new values describe four portable pressures—balance, evolution, collection and role coverage—plus
+global completion ratios, health/PP, evolution route and distance, retention risk, emergency escort,
+survival and venue reliability/yield/travel/recovery priors. Concrete species, maps, slots and
+buttons remain outside the learner.
+
+Labels now come only from complete cloned outcomes. A blackout or loss of living/role/evolution
+progress is judged before raw XP speed. Censored runs remain censored, partial ties remain soft
+targets and each consumed root is remembered so it cannot quietly be trained twice. Prior and
+updated models are compared on the same untouched decisions—the statistical correction Claude had
+asked for when six independent binary validation choices could not support the old analysis.
+
+Exact source passed 3,373 tests and CI. No game ran. That is the point: the next expensive evidence
+will answer the right question. A first descriptive fit is blocked until 8 train and 6 development
+preferences span multiple goals, both trainee and venue decisions, wider menus, health/PP/evolution
+variation and frozen venue priors. The much larger promotion and Crystal transfer gates remain
+unchanged.
+
 ## August 14: the repaired walker met the game
 
 The grade ran only after its exact commit passed 3,351 tests and GitHub CI, then a separate

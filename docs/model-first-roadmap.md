@@ -6,6 +6,36 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: freeze the completion-aware party curriculum before collecting it
+
+Exact source `42196d4` passed 3,373 local tests, whole-source typing/lint gates and GitHub CI run
+`31863588955`. It does not mutate the historical teacher-imitation experiment. Instead it adds a
+versioned 66-feature party-development schema whose first 27 values are the exact v1 prefix and
+whose remaining values express the goal the project has always needed: team balance, evolution
+distance/method, living collection and retention risk, role completion, emergency escort,
+survival margin, and prospectively frozen venue reliability, yield, matchup, travel and recovery
+cost.
+
+The outcome learner starts from an exact score-preserving v1 embedding, zeroes every new input
+weight, and can update only from complete measured candidate menus. It accepts partial ties as soft
+targets, refuses censored evidence, persists consumed train roots/states and compares prior versus
+update on each identical untouched development decision. A paired exact test uses discordant
+correctness pairs; development is never fit.
+
+Before a descriptive first fit, require 8 independent learner-eligible train preferences and 6
+untouched development preferences, two completion goals per partition, trainee and venue choices
+in each, at least one three-way menu, two health/PP/evolution-route bins, and complete frozen prior
+evidence for all venue candidates. This threshold prevents another binary near-duplicate campaign;
+it is not promotion. The 120 paired unseen Red episodes and 54-context Crystal comparison below
+remain unchanged.
+
+No live v2 catalog exists yet. Do not fit synthetic examples, reinterpret the old V2 comparison,
+consume the remaining Cinnabar roots merely to reach a count, open Crystal, or run all of Red. Bind
+the authenticated historical prior, inventory non-sealed checkpoints without candidate execution,
+freeze semantic diversity and partition assignments, obtain external review, then publish the exact
+prospective live plan. See the
+[source qualification](evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
+
 ## Current checkpoint: traversal is live-qualified; widen the party curriculum
 
 The 39 Cave transitions in the accepted V2 party result now have a causal explanation. The old

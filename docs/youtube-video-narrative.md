@@ -1,5 +1,33 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: 99.9% accurate at the wrong job
+
+Open on the impressive old card: **TEAM RANKER · 99.9% VALIDATION**. Then put its entire vocabulary
+underneath: **WEAKEST MEMBER · HIGHEST SAFE BAND**. Ask four questions and let each return
+**NOT IN INPUT**: **EVOLUTION LEFT? · ONLY LIVING COPY? · ROLE ALREADY COMPLETE? · VENUE KEEPS
+EJECTING US?** Stamp the card **REAL RESULT · WRONG END PRODUCT**.
+
+Do not throw it away. Animate **V1: 27 FEATURES** sliding unchanged into the left side of
+**V2: 66 FEATURES**. Show the score meter stay perfectly still under
+**EXACT INITIAL EQUIVALENCE**. Then light the new groups:
+**BALANCE · EVOLUTION · LIVING COLLECTION · ROLES · SURVIVAL · PP/HEALTH · VENUE COST/RELIABILITY**.
+Keep **NO SPECIES · NO MAP · NO SLOT · NO BUTTON ROUTE** visible.
+
+Build the label pipeline as a filter:
+**COMPLETE CLONED OUTCOMES → SOFT PREFERENCE**;
+**POWER LOSS/CENSORED → NO TARGET**;
+**PARTIAL MENU → NO TARGET**;
+**REUSED ROOT → REJECTED**. Split the final development cards into the same decisions for
+**FROZEN PRIOR** and **OUTCOME UPDATE**, then label the statistic
+**PAIRED DISCORDANT CHOICES**, not two unrelated accuracy percentages.
+
+End on a dashboard gate at zero progress:
+**TRAIN 0/8 · DEVELOPMENT 0/6 · GOALS 0/2 · BOTH CHOICE TYPES REQUIRED · 3-WAY MENU REQUIRED ·
+HEALTH/PP/EVOLUTION DIVERSITY REQUIRED · VENUE PRIORS REQUIRED**. Under it:
+**3,373 TESTS · EXACT CI GREEN · GAME INPUT 0 · MODEL FIT 0 · AUTHORITY 0**. Narration:
+**“The breakthrough was not training longer. It was refusing to train until the model could see
+the game we ultimately want it to complete.”**
+
 ## August 14 live traversal scene: twelve steps, no return trip
 
 Turn the previous **PLAN** card over only after showing **EXACT COMMIT GREEN · PREFLIGHT READY**.

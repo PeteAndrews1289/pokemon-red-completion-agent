@@ -11,6 +11,15 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
+The next dashboard revision is now specified by the completion-aware party v2 source checkpoint.
+It must not show a fictional “training percent” before data exists. Its pre-fit view should show:
+eligible train/development preferences against the 8/6 minimum; goal and trainee/venue coverage;
+candidate-menu widths; health, PP and evolution-route bins; complete/missing venue priors; censored
+and partial trials; unique roots/states; and the reason the gate remains closed. After fitting it
+adds prior/update loss, winner probability, paired correctness wins/losses/ties and discordant-pair
+exact p-value. Authority and sealed/Crystal counters remain separate and zero. The current V2 party
+page remains historical; it is not rewritten as v2 model-training progress.
+
 The dashboard is the human view of a run. It combines the live emulator screen with the evidence
 needed to understand what the agent is doing and how far the experiment has progressed.
 

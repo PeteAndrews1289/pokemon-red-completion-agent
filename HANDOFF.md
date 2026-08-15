@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-14 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-15 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -16,6 +16,35 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 `NORTH_STAR.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
+
+## Completion-aware party learner source is qualified; data collection has not started — 2026-08-15
+
+Exact source `42196d462c32cb9c244938017b527a8672a5ab1d` passed 3,373 local
+non-integration tests, Ruff, whole-source mypy and GitHub CI run `31863588955`. It preserves the
+historical 27-feature v1 teacher ranker and adds a separate 66-feature v2 representation for the
+actual product: balance, evolution, living collection, role coverage, survival, PP/health and
+prospectively frozen venue reliability/yield/travel/recovery evidence.
+
+Teacher-free menu projectors now preserve trainee and venue counterfactuals even when the old
+teacher cannot label an identity-free tie. A 15-criterion outcome contract rejects censored or
+partial evidence and prioritizes blackout safety, completion retention and the declared goal before
+experience/Center/frame efficiency. The v1 MLP embeds with exactly identical initial scores; new
+features start at zero weight; only verified counterfactual outcome distributions may update it.
+Train roots are persisted and cannot be consumed twice. Development is read-only and evaluated as
+paired same-decision evidence, including a sign test over discordant correctness pairs.
+
+The prospective first-fit gate is deliberately ahead of collection: at least 8 independent train
+preferences and 6 untouched development preferences; at least two completion goals in each; both
+trainee and venue choices; a menu of at least three candidates; health, PP and evolution-route
+diversity; and frozen priors for every venue candidate. Passing permits only a descriptive first
+fit. The 120-episode Milestone 4 promotion gate is unchanged.
+
+No Red input, state execution, teacher query, sealed access, Crystal context, model fit or authority
+change occurred. The existing V2 party target and Cave qualification were not reopened. Next bind
+the exact historical v1 prior, inventory non-sealed checkpoints semantically, freeze a genuinely
+diverse train/development catalog, obtain Claude and Antigravity review, and only then publish a
+prospective live collection plan. Review the
+[path-free source qualification](docs/evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
 
 ## Independent live Cave qualification passed; party curriculum can widen — 2026-08-14
 
