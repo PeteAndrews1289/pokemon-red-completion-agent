@@ -17,6 +17,38 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## V2 1/2/4 battle curve complete; authority held — 2026-08-14
+
+Exact source `e6fae7f` passed 3,310 local tests, three integration deselections, one expected
+failure, and GitHub CI run `31852867031`. The privately frozen execution catalog remained unchanged:
+four reused training roots, four fresh development roots, eight unique source states, capture
+states, semantic observations and manifests, and four supported moves per context. Each root's
+first assigned encounter was retained. The curve runner executed exactly once.
+
+The result is complete and deliberately unpromoted. Thirty-two candidate outcomes, eight complete
+collections, three model candidates and one evaluation were durably written. The 1-, 2- and 4-root
+updates all lowered their own fit loss. The frozen prior nevertheless began at 4/4 development with
+mean selected utility 3.0, and every update stayed 4/4 with the same utility. Each paired comparison
+was 0 update wins / 0 prior wins / 4 equivalent choices. Three of four development contexts were
+flat—all four candidates had maximum utility—and 26/32 total branches fainted the opponent. This
+catalog proves that real Red outcomes can train and evaluate the model; it cannot show improved
+generalization because its development set is at the prior's ceiling.
+
+No curve candidate gains authority and none may initialize Crystal. Do not widen the same easy
+encounter distribution. The next required work is one real snapshot-backed navigation outcome and
+one real party-development outcome through the shared contract. After those two falsifiers, design
+fresh battle contexts prospectively around level-matched, non-OHKO decisions with varied health,
+status, matchups and resources. The 200-battle unseen gate remains closed. Teacher queries, teacher
+targets, sealed Red cases, Crystal contexts and full-game replays all remained zero.
+
+The path-free result is
+[`docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json`](docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json).
+Its private artifact manifest is authenticated by SHA-256
+`a852cc4b5f523c27c03bdde72df58628d85c0b84d76e3152bfd3858e537a431f`. The dashboard now
+projects all three curve points, paired counts, outcome diversity, protected-access counters and the
+no-authority decision. This checkpoint is ready for independent Claude and Antigravity review;
+neither review has been claimed yet.
+
 ## First curve attempt stopped; selected-turn v2 frozen — 2026-08-14
 
 Exact source `124867b` passed 3,307 local tests and GitHub CI run `31851435427`. Eight prospectively

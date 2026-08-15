@@ -19,16 +19,19 @@ missing evidence. The runner also opened its artifact too late to retain the fai
 path-free [v1 attempt receipt](evidence/red-battle-learning-curve-v1-attempt-2026-08-14.json)
 records zero fit, zero model and zero authority.
 
-The prospective [v2 plan](evidence/red-battle-learning-curve-plan-v2-2026-08-14.json) keeps the same
-small 1/2/4 curve but learns the action value of a **selected turn**. Cartridge suppression remains
-a diagnostic flag; its observed health and terminal result is still a consequence of the choice.
-Only failure to prove the selected-turn controller boundary is censored and fatal. Every candidate
-record is now persisted before the next trial. The four train roots may be reused, but all exposed
-v1 development roots are retired; four fresh development roots were frozen privately before any
-encounter or outcome. Publish v2, pass exact-commit CI, materialize against that commit, and execute
-once. Then produce one real navigation and one real party-development outcome before the battle
-catalog widens. Do not promote either earlier candidate, open the 200-battle unseen gate early,
-expand into a full Red replay, or use Crystal as additional training data.
+The [v2 curve](evidence/red-battle-learning-curve-v2-result-2026-08-14.json) is now complete. Exact
+source `e6fae7f` passed CI before the frozen four-train/four-development catalog ran once. It
+retained 32 candidate outcomes and trained distinct 1/2/4-root candidates without teacher labels.
+Every fit loss decreased, but the prior began at 4/4 development and every update stayed 4/4 with
+the same maximum selected utility: 0 paired update wins, 0 prior wins and 4 equivalent choices at
+every point. Three development contexts were completely flat and 26/32 branches were one-turn
+knockouts. The pipeline passed; improvement did not become measurable, so authority remains zero.
+
+Next produce one real navigation and one real party-development outcome before any battle catalog
+widens. Then freeze fresh level-matched, non-OHKO battle contexts with meaningful health, status,
+matchup and resource tradeoffs. Do not scale the easy Mansion distribution, promote a curve
+candidate, open the 200-battle unseen gate early, expand into a full Red replay, or use Crystal as
+additional training data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the
@@ -85,8 +88,9 @@ title-neutral, censor-safe preference envelope, and `scenario_outcome_adapters.p
 existing battle, strategic-navigation and party-development types without flattening them into a
 fake universal record. The battle curve runner enforces exactly 4 train + 4 development captures,
 unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
-outcomes. V1 stopped honestly before fit; v2 is the first eligible curve attempt. The milestone
-still lacks a curve result and real snapshot-backed navigation and party-development outcomes.
+outcomes. V1 stopped honestly before fit; v2 completed and showed a development ceiling rather than
+an improvement. The milestone now lacks only real snapshot-backed navigation and party-development
+outcomes before the battle curriculum is redesigned around harder decision boundaries.
 
 ## Learning approach
 

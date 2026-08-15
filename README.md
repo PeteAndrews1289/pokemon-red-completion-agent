@@ -4,6 +4,18 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **First Red learning curve (August 14, 2026): training works; improvement remains unproven.**
+> Exact source `e6fae7f` passed 3,310 local tests and GitHub CI before the frozen 4-train/4-
+> development catalog ran once. It retained 32 selected-turn outcomes and trained three distinct
+> 1/2/4-root last-layer candidates with zero teacher labels. All three lowered their fit loss, but
+> the frozen prior was already **4/4** on development and every update remained **4/4**, with zero
+> discordant choices and no utility change. Three of four development contexts made all four moves
+> equally best, and 26/32 branches were one-turn knockouts. This validates the real training and
+> evidence pipeline, not battle generalization or authority. See the
+> [path-free curve result](docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json) and
+> [dashboard guide](docs/progress-dashboard.md). Next: one real navigation outcome and one real
+> party-development outcome, then prospectively chosen level-matched, non-OHKO battle contexts.
+
 > **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
 > authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly
 > 2,048 pre-attack frames per counterfactual, zero teacher queries and no full replay. A

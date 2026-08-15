@@ -26,6 +26,23 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: a perfect score can still be a failed experiment
+
+The second curve attempt did what the first could not: it completed. Eight authenticated states
+produced 32 outcomes, and the model trained three times—from one root, two roots, then all four.
+Every fit loss fell. Nothing crashed, no teacher supplied a label, and every branch was written down
+before the next one began.
+
+Then the comparison said something less flattering. The original model was already right on all
+four development battles. The three updates were also right on all four, choosing outcomes with the
+same utility every time. Three battles had no meaningful answer at all because every move was an
+equally good knockout. Across the whole curve, 26 of 32 branches ended with the opponent fainting.
+
+That makes this a pipeline success and a learning non-result. The code can train from the game now;
+the chosen battles cannot tell whether training helped. No candidate gets control. Instead of
+buying a larger pile of the same easy examples, the project moves to real navigation and party
+development, then comes back to level-matched battles where choices carry consequences.
+
 ## Current checkpoint: choosing a move still matters when the move never happens
 
 The first eight-battle curve reached the cartridge only after its exact source passed GitHub. All

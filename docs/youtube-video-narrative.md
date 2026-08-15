@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 curve-result scene: 4/4 is not always good news
+
+Open with the repaired journal filling correctly: **32 OUTCOMES · 8 CONTEXTS · 3 MODELS · ZERO
+TEACHER LABELS**. Draw the three loss curves downward—`4.99→2.38`, `2.52→1.62`, `3.05→1.51`—then
+put a green **TRAINING PIPELINE WORKS** stamp on screen.
+
+Now reveal the development chart: **PRIOR 4/4 · 1 ROOT 4/4 · 2 ROOTS 4/4 · 4 ROOTS 4/4**. At first
+it looks triumphant. Then replace the confetti with **0 UPDATE WINS · 0 PRIOR WINS · 4 TIES** and fan
+out three battles where all four moves read **UTILITY 3.0**. Finish the reveal with **26/32 BRANCHES
+= ONE-TURN KNOCKOUT**.
+
+The narration: **“We had finally trained a model on real Pokémon outcomes—and discovered that our
+exam was too easy to tell us whether it learned anything.”** Stamp **AUTHORITY: ZERO**. End on three
+doors: **REAL NAVIGATION OUTCOME → REAL PARTY OUTCOME → LEVEL-MATCHED NON-OHKO BATTLES**. Keep
+Crystal, sealed Red and a full replay visibly locked.
+
 ## August 14 curve-stop scene: the choice happened, the move did not
 
 Start with **8 ROOTS / 8 UNIQUE CAPTURES / 4 MOVES EACH / CI GREEN**. Let the first candidate cards

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Show the first real Red outcome-learning result in the view-only dashboard."""
+"""Show the latest real Red outcome-learning result in the view-only dashboard."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ EVIDENCE_PATH = (
     PROJECT_ROOT
     / "docs"
     / "evidence"
-    / "red-battle-outcome-learning-cycle-2026-08-14.json"
+    / "red-battle-learning-curve-v2-result-2026-08-14.json"
 )
 
 

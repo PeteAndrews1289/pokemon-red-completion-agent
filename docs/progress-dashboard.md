@@ -15,13 +15,13 @@ The dashboard is the human view of a run. It combines the live emulator screen w
 needed to understand what the agent is doing and how far the experiment has progressed.
 
 The v1 bounded curve stopped before fitting when one selected development turn was mechanically
-suppressed; no model or evaluation should appear. Its path-free receipt must be shown as a failed
-harness attempt, including the discovered per-candidate retention gap. The replacement v2 contract
-uses four Red train captures, four fresh untouched development captures and 1/2/4 updates from the
-same prior. When executed, the dashboard
-must show each point's exact correct/total result, selected utility, paired prior wins/update wins/
-ties, flat no-update points, the shared development denominator, and zero authority. It must not
-turn a descriptive eight-context curve into the 200-battle promotion gate.
+suppressed; no model or evaluation exists for that attempt. V2 completed from four train captures
+and four fresh development captures. The dashboard now shows all 1/2/4 points, exact correct/total
+results, fit loss, paired prior wins/update wins/ties, outcome diversity, the shared development
+denominator, and zero authority. Its most important result is the ceiling warning: the prior and
+all updates were 4/4, three development contexts were completely flat, and 26/32 branches were
+one-turn knockouts. It must not turn a descriptive eight-context curve into the 200-battle
+promotion gate.
 
 ## What it shows
 
@@ -42,26 +42,28 @@ The initial Crystal preview intentionally shows zero model and experiment progre
 the 1.1 cartridge and proves the display path without opening a context, asking the teacher, making
 a prediction, sending controller input or saving cartridge state.
 
-## Show the first Red outcome-learning result
+## Show the latest Red outcome-learning curve
 
-The current dashboard is a completed experiment view, not another full run. It shows the two
-authenticated captures, eight controller-proven move outcomes, fit-loss change, frozen-prior
-comparison, zero protected-access counters and the rejected authority state. With only the public
-receipt it shows a neutral screen; optionally supply either authenticated private capture to show
-the exact in-game battle frame. Loading that frame sends no controller input and saves nothing.
+The current dashboard is a completed experiment view, not another full run. It shows eight
+authenticated captures, 32 selected-turn outcomes, all three from-prior fits, the frozen-prior
+comparison, outcome-diversity diagnostics, zero protected-access counters and the held-authority
+state. With only the public receipt it shows a neutral screen; optionally supply any authenticated
+v2 private capture to show its exact in-game battle frame. Loading that frame sends no controller
+input and saves nothing.
 
 ```sh
 source .venv/bin/activate
 python scripts/run_battle_outcome_dashboard.py \
   --rom "$POKEMON_RED_ROM" \
-  --capture-state /private/path/to/development.state \
-  --capture-manifest /private/path/to/development.manifest.json
+  --capture-state /private/path/to/v2-development.state \
+  --capture-manifest /private/path/to/v2-development.manifest.json
 ```
 
-The capture is accepted only when its manifest digest appears in the tracked path-free result. Use
+The capture is accepted only when its manifest digest appears in the tracked v2 result. Use
 `--no-browser` if the existing browser tab already points at `http://127.0.0.1:8765/`. The page is
 view-only and remains open until `Ctrl-C`. Learned-stack rows wrap at ordinary desktop widths and
-label the candidate and frozen-prior scores explicitly so a regression cannot be hidden by layout.
+label all three candidates and frozen-prior scores explicitly so a ceiling cannot be mistaken for
+improvement.
 
 ## Historical Red full-run harness — not currently authorized
 

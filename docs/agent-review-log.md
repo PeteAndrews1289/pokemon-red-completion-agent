@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## First 1/2/4 battle curve — 2026-08-14
+
+Codex executed the prospectively frozen v2 catalog only after exact-commit CI. The run completed
+without substitution and wrote every candidate outcome before the next branch. Post-result audit
+found no evidence leak or protected access, but did find a decisive experiment limitation: the
+prior was already 4/4 and three of four development contexts were flat. All three updates were
+choice-equivalent to the prior, so lower fit loss cannot be presented as improved gameplay.
+
+Decision: accept the training and persistence pipeline, reject authority promotion, and reject
+scaling this encounter distribution. One real navigation outcome and one real party-development
+outcome come next; harder level-matched, non-OHKO battle contexts follow only after that three-family
+check. Independent Claude and Antigravity review of this result is pending. The review packet is
+[`red-battle-learning-curve-v2-result-2026-08-14.json`](evidence/red-battle-learning-curve-v2-result-2026-08-14.json).
+
 ## First real battle-outcome cycle — 2026-08-14
 
 Claude and Antigravity reviewed frozen commit `49827c6` before cartridge execution and both returned

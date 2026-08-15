@@ -21,6 +21,26 @@ falsifies a one-state curriculum; it does not supersede the frozen 200-battle pr
 [the model-first roadmap](model-first-roadmap.md). Exact receipt:
 [`red-battle-outcome-learning-cycle-2026-08-14.json`](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
+## First 1/2/4 outcome-learning curve
+
+Exact source `e6fae7f` passed local and GitHub checks before a prospectively frozen catalog of four
+training and four fresh development roots executed once. Every context exposed four usable moves;
+the runtime restored exact state bytes for every branch and durably retained 32 selected-turn
+outcomes before fitting. No teacher choice became a target.
+
+The 1-, 2- and 4-root candidates all lowered fit loss, proving that the production model can be
+updated from real outcome preferences. They did not improve the frozen development result. The
+prior was already 4/4 at mean selected utility 3.0, and every candidate stayed 4/4 with 0 update
+wins, 0 prior wins and 4 equivalent choices. Three development contexts were completely flat and
+26/32 branches fainted the opponent, so the held-out set mostly asked which one-turn knockout to
+use. No candidate is promoted.
+
+The result changes the curriculum, not the authority level. Do not scale the same Mansion encounter
+distribution. First close the shared-outcome check with a real navigation result and a real
+party-development result. Then freeze battle states where candidates genuinely trade off survival,
+damage, status, matchup and resources. The exact path-free evidence is
+[`red-battle-learning-curve-v2-result-2026-08-14.json`](evidence/red-battle-learning-curve-v2-result-2026-08-14.json).
+
 The first labeled episode contains one root lineage whose partition was recorded as
 `unassigned`. Dividing its decisions after collection cannot turn any part of it into an official
 held-out test. The episode may be used to validate the reader, feature projection, optimizer, model

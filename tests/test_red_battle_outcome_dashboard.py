@@ -18,10 +18,22 @@ EVIDENCE_PATH = (
     / "evidence"
     / "red-battle-outcome-learning-cycle-2026-08-14.json"
 )
+CURVE_EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-battle-learning-curve-v2-result-2026-08-14.json"
+)
 
 
 def _evidence() -> dict[str, object]:
     value = json.loads(EVIDENCE_PATH.read_text(encoding="ascii"))
+    assert isinstance(value, dict)
+    return value
+
+
+def _curve_evidence() -> dict[str, object]:
+    value = json.loads(CURVE_EVIDENCE_PATH.read_text(encoding="ascii"))
     assert isinstance(value, dict)
     return value
 
@@ -55,4 +67,44 @@ def test_rejected_outcome_dashboard_requires_a_real_regression() -> None:
     learner["updated_development_correct"] = 1
 
     with pytest.raises(ProgressDashboardError, match="does not reproduce regression"):
+        battle_outcome_dashboard_snapshot(evidence)
+
+
+def test_learning_curve_projects_all_three_points_without_promoting_authority() -> None:
+    snapshot = battle_outcome_dashboard_snapshot(_curve_evidence())
+    payload = snapshot.public_dict()
+
+    assert snapshot.run_status == "passed"
+    assert snapshot.actions == 350
+    assert snapshot.frame_count == 81_652
+    assert snapshot.model.decisions == 32
+    assert snapshot.model.teacher_queries == 0
+    assert snapshot.experiment.phase == "complete"
+    assert snapshot.experiment.sealed_completed == 0
+    assert snapshot.experiment.sealed_total == 200
+    assert [component.train_examples for component in snapshot.learning_components] == [
+        1,
+        2,
+        4,
+    ]
+    assert all(
+        component.status == "offline"
+        and component.authority == "shadow_only"
+        and component.validation_correct == 4
+        and component.baseline_correct == 4
+        and component.paired_wins == 0
+        and component.paired_losses == 0
+        for component in snapshot.learning_components
+    )
+    assert payload["private_path_fields"] == 0
+    assert payload["controller_endpoints"] == 0
+
+
+def test_learning_curve_dashboard_rejects_an_authority_overclaim() -> None:
+    evidence = deepcopy(_curve_evidence())
+    decision = evidence["decision"]
+    assert isinstance(decision, dict)
+    decision["authority_promoted"] = True
+
+    with pytest.raises(ProgressDashboardError, match="overclaims learned authority"):
         battle_outcome_dashboard_snapshot(evidence)

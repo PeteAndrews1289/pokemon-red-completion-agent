@@ -1,5 +1,28 @@
 # Current audit — 2026-08-14
 
+## V2 curve result: the pipeline trained; the catalog could not measure improvement
+
+Exact source `e6fae7f` passed 3,310 local tests and GitHub CI run `31852867031` before any v2
+materialization. The frozen catalog remained 4 train + 4 fresh development, with eight unique root
+lineages, source states, capture states, observations and manifests. All contexts exposed four
+supported moves. The runner executed once and durably retained 32 candidate outcomes, eight
+collections, three model candidates and one evaluation.
+
+All three from-prior updates lowered fit loss: `4.9857 → 2.3762` at one root, `2.5191 → 1.6205` at
+two, and `3.0548 → 1.5070` at four. That is optimizer evidence, not generalization evidence. The
+prior already selected a best move in 4/4 development contexts with mean utility 3.0; every update
+made a utility-equivalent best choice in all four. Paired accounting was 0 update wins, 0 prior wins
+and 4 ties at every point. Three of the four development contexts gave all four candidates the same
+maximum utility, while 26/32 total branches fainted the opponent. The curve was dominated by easy
+one-turn wins.
+
+The correct decision is no promotion and no larger sample from the same distribution. The real
+training/evidence pipeline is validated, but battle improvement remains unproven. Build one real
+navigation outcome and one real party-development outcome next. Then prospectively freeze harder
+level-matched, non-OHKO battle states with health, status, matchup and resource tradeoffs. The exact
+result is [path-free](evidence/red-battle-learning-curve-v2-result-2026-08-14.json), and the updated
+dashboard makes the ceiling visible rather than presenting 4/4 as a promotion result.
+
 ## First 4+4 curve attempt: useful stop, no training claim
 
 Commit `124867b` passed 3,307 local tests and exact GitHub CI. Eight preassigned non-sealed roots

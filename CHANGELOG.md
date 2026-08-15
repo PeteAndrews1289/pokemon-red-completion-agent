@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Completed the exact-commit v2 Red 1/2/4 battle curve: 32 durable candidate outcomes, eight
+  independent contexts and three real last-layer candidates with zero teacher targets. All fits
+  lowered loss, but prior and updates were all 4/4 on a ceiling development set; no authority was
+  promoted. Added the path-free result and a dashboard view of every curve point, paired count and
+  outcome-diversity warning.
 - Ran the first prospective 4-train/4-development Red curve attempt only after commit `124867b`
   passed exact CI. All captures qualified, but a cartridge-suppressed development turn stopped the
   experiment before fitting; no model, evaluation or authority was produced.

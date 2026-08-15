@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-14 v2 curve result — highest active checkpoint:** Exact source `e6fae7f` passed 3,310
+> local tests and CI run `31852867031`; the frozen 4-train/4-development catalog then executed once.
+> It retained 32 candidate outcomes, eight collections, three 1/2/4-root model candidates and one
+> evaluation. Every update lowered fit loss, but the prior was already 4/4 at utility 3.0 and every
+> update stayed 4/4: 0 paired update wins, 0 prior wins, 4 equivalent choices. Three of four
+> development contexts were flat and 26/32 branches were one-turn knockouts. This validates
+> training plumbing, not improved competence. Authority remains zero.
+>
+> Reviewers should attack the path-free
+> `docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json`, the curve dashboard projection,
+> and the conclusion that this distribution is too easy. Next Codex work is one real navigation
+> outcome and one real party-development outcome. Only after both should a fresh battle curriculum
+> target level-matched, non-OHKO decisions. Do not reuse these development roots as unseen evidence,
+> scale Mansion encounters, open sealed Red, touch Crystal, or start a full replay. Teacher, sealed
+> Red, Crystal and full replay counters remain zero. Claude and Antigravity review is pending, not
+> implied by this checkpoint.
+
 > **2026-08-14 v1 curve stop / v2 selected-turn checkpoint — highest active checkpoint:** Exact
 > commit `124867b` passed 3,307 local tests and CI run `31851435427`. Eight preassigned non-sealed
 > captures materialized with unique roots/states/observations and four supported moves each. The

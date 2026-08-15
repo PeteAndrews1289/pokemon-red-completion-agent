@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: training finally ran—and the scoreboard was too easy
+
+The repaired curve ran once against exact-commit source. Eight authenticated battle states produced
+32 durable counterfactual outcomes, and three real candidates trained from one, two and four roots.
+Each candidate reduced its fitting loss. That was the mechanical milestone the project had spent so
+long approaching: cartridge outcomes now reach the model without becoming teacher imitation.
+
+But the development scoreboard could not distinguish learning from the prior. The prior was already
+4/4; every update stayed 4/4; every paired choice had the same utility. Three of the four
+development battles gave all four moves maximum reward, and 26 of 32 total branches knocked out the
+opponent in one turn. A perfect score here meant “the question was easy,” not “the model learned to
+play Pokémon.”
+
+So the curve produced a useful rejection rather than a victory graphic. The training pipeline is
+real; battle improvement is not yet demonstrated. Authority stays at zero. The next chapter leaves
+the easy battle loop long enough to prove real navigation and party-development outcomes, then
+returns to prospectively frozen battles where health, status, matchups and resources create actual
+choices.
+
 ## August 14: the first curve stopped on a real game mechanic
 
 Commit `124867b` passed 3,307 local tests and exact GitHub CI before eight preassigned non-sealed
