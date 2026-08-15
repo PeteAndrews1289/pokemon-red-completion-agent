@@ -17,6 +17,42 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Route 11 source closure repaired after Claude rejection — 2026-08-15
+
+Claude audited exact head `7f4d8de` after its CI run passed. Its corrected two-runtime mutation
+battery killed 34 of 43 mutations and returned **REJECT** for source qualification. The blocker was
+real: `run_red_team_balancing` directly called trainee/venue projectors that had changed since the
+observed `00499bc` run, but those projectors and their newly extracted choice-set helpers were not
+attested. A separate closure attack changed `TrainingVenue.__post_init__` and
+`GrindingArea.identity` without stopping composition. Claude also proved that the operational
+boundary recomputed the current-element digest but trusted supplied unchanged-element and waiver-
+allowlist digests. Nine test-level mutations survived, including the paired learning-eligibility
+guards and three cross-version AST distinctions.
+
+Codex accepted those findings. Exact source `41f6fff` expands the proof from 19 selected methods to
+43 semantic elements. It binds the complete `TrainingVenue` and `GrindingArea` classes; all six
+candidate entry points; every same-module helper reachable from them; candidate/domain classes; and
+their three external team-policy functions. A loaded AST closure check refuses a new or missing
+project dependency. Exactly seven reviewed waivers fire: the venue-class walker change, the two
+projector extractions, the two newly added unlabeled choice-set helpers, team-balancing walker
+telemetry, and default-zero execution counters. The operational boundary independently reconstructs
+current, unchanged and waiver-allowlist identities before accepting an attestation.
+
+The previously surviving semantic cases now have direct falsifiers: false `fully_measured` and
+`learner_update_eligible` each fail alone; the stateless proof must read the loaded walker; list and
+tuple AST fields differ; non-empty PEP 695 type parameters remain semantic; unsupported scalars fail
+closed; and comments are ignored while docstrings remain committed. Python 3.11 and 3.14 both
+produce element digest `f2cb0aa8bd469c38b24b97f1139208601c96d1011fe28dcf6898abba06c330c5`
+and waiver digest `5558e7ae6d70bb50fbd63d3397c3f378c9b24683c286a71c4962c6ddf131c65d`.
+The local gate passes 3,503 tests, three skips, one expected failure, Ruff, mypy over 223 files,
+documentation/public-artifact checks and all three generated registries. Source bundle:
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+
+This source is a repair candidate, not approval. Next: publish, require one green exact-head CI run,
+then give Claude the immutable delta for a read-only re-audit. Do not compose the private Route 11
+prior unless Claude approves. Priors 0, menus 0, outcomes 0/14, fits 0, controller/teacher 0, sealed
+Red 0, Crystal 0, replay 0 and authority 0.
+
 ## Cross-Python provenance repair complete; exact-head CI is the remaining gate — 2026-08-15
 
 The approved `fetch-depth: 0` workflow repair is published at `f1bb629`, so CI can now read the

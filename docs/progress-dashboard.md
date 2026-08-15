@@ -11,13 +11,15 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
-The current source checkpoint `f2ecc79` repairs the historical Route 11 venue-prior gate and makes
-its AST evidence identical on Python 3.11 and 3.14. The dashboard must not count that prior yet.
-Its source-compatibility attestation compares 19 operational elements across the observed and
-current commits and permits exactly three reviewed waivers; exact-head GitHub CI and Claude
-re-approval are still pending. Therefore the current readiness view
-remains **venue priors 0 · train 0/8 · development 0/6 · fit false · authority zero**. A future
-approved composition may change only the first value to one; it is not a training outcome.
+The current source checkpoint `41f6fff` repairs the historical Route 11 venue-prior gate after
+Claude rejected exact `7f4d8de`. The corrected audit killed 34/43 mutations and exposed missing
+on-path candidate functions, missing helper closure and trusted attestation fields. The remediation
+now compares 43 semantic elements with seven exact waivers, checks the recursively reachable
+candidate seam and re-derives every aggregate identity. Python 3.11 and 3.14 agree on the result;
+3,503 tests and every local quality gate pass. The dashboard must not count the prior yet: exact-
+head CI and Claude's delta re-approval remain pending. Therefore the current readiness view remains
+**venue priors 0 · train 0/8 · development 0/6 · fit false · authority zero**. A future approved
+composition may change only the first value to one; it is not a training outcome.
 
 Exact source `587fb18` adds one new readiness fact without changing a progress counter: every
 masked party candidate now has a typed, identity-free cause, and the cause vector is frozen with

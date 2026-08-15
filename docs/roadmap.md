@@ -8,6 +8,22 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): live source closure repaired; re-approval pending
+
+Claude's exact-`7f4d8de` audit killed 34 of 43 mutations and rejected source qualification. The
+proof omitted changed candidate projectors and new choice-set helpers used by the Route 11 runtime;
+it had no closure guard for implicit venue/grinding behavior and trusted two aggregate attestation
+fields at the operational boundary. Exact `41f6fff` binds 43 semantic elements with seven exact
+waivers, checks the recursively reachable candidate seam and re-derives all three aggregate
+identities. Direct tests kill the nine previously surviving semantic cases. Python 3.11 and 3.14
+produce identical element/waiver digests. The full local gate passes 3,503 tests plus Ruff, mypy,
+public/documentation and generated-registry checks; source bundle
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+
+Next: publish, require exact-head green CI, then Claude delta re-audit. Only an explicit approval
+opens composition of one private Route 11 prior. Priors 0, menus 0, outcomes 0/14, fits 0,
+sealed/Crystal 0, replay 0 and authority 0.
+
 ## Current checkpoint (2026-08-15): Route 11 evidence is machine- and interpreter-bound
 
 Claude rejected the initial concrete prior composer despite correct ratios because its source

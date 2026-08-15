@@ -23,13 +23,15 @@ Current honest state:
 - Crystal contexts opened by this lane: 0;
 - full Red replays authorized: 0.
 
-The owner-approved full-history checkout is published at `f1bb629`. The first run then exposed a
-separate Python 3.11/3.14 `ast.dump` portability defect. Source checkpoint
-`f2ecc7961c811d57d5572366dd7ec8a879e3c502` fixes it with a canonical typed AST document and
-preserves source bundle `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
-The canonical digest matches on both interpreters and the complete local gate passes 3,489 tests,
-but no reviewer should treat the successor publication head as qualified until exact-head CI is
-green and Claude attacks it.
+The history and cross-Python repairs passed exact-head CI at `7f4d8de`, but Claude's corrected
+43-mutation audit returned **REJECT**: 34 mutations died and nine exposed incomplete live-source
+coverage, missing helper closure, trusted aggregate attestation fields and semantic-oracle gaps.
+Codex repaired every accepted finding at exact `41f6fff`. The proof now covers 43 semantic elements
+with seven exact waivers, checks the recursively reachable candidate seam and reconstructs all
+three aggregate identities at the operational boundary. Python 3.11 and 3.14 produce identical
+element and waiver digests; 3,503 tests and every local quality gate pass. Source bundle:
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`. This is not approval: exact-
+head CI and Claude's read-only delta audit remain mandatory.
 
 ## Role 1: Codex — implementation and integration owner
 
@@ -50,11 +52,11 @@ authority. If they disagree, Codex runs the cheapest discriminating test and rec
 
 Current Codex assignment:
 
-1. Publish the already-approved CI history repair plus the cross-Python attestation repair and
-   current documentation, then obtain one green exact-head run. Do not repeatedly rerun a known
-   failure.
-2. Freeze that exact head and dispatch Claude's source-qualification re-audit.
-3. If and only if Claude approves, compose the one private Route 11 prior from authenticated V2
+1. Publish exact `41f6fff` plus synchronized documentation and obtain one green exact-head run. Do
+   not repeatedly rerun a known failure.
+2. Freeze that exact head and dispatch Claude's narrow delta re-audit against its nine survivors and
+   the accepted blocker/high/medium findings.
+3. If and only if Claude now approves, compose the one private Route 11 prior from authenticated V2
    receipts. Publish only the path-free summary; no ROM or controller is involved.
 4. Inventory existing non-sealed states for genuine PP diversity without executing them. If the
    8+6 gate still cannot pass, write a bounded context-materialization plan before pressing a
@@ -94,23 +96,15 @@ Claude owns review of:
 - exact claim boundaries: source qualification, input freeze, execution, fit and authority are
   separate decisions.
 
-Claude's next assignment is deliberately narrow. After green CI, audit the exact successor of
-`f2ecc79` without opening a ROM, private registry or outcome. Re-run or improve the prior mutation
-battery, especially:
-
-1. fake historical commit or bundle;
-2. current contract stamped onto historical evidence without compatibility;
-3. hardcoded rejected-sibling count;
-4. statelessness asserted without positively binding the walker;
-5. omission of `run_red_team_balancing`;
-6. omission of `red_team_training` or `TeamTrainingExecutionSummary`;
-7. omission of recovery modules;
-8. removal of measured-sample or measured-evidence guards; and
-9. removal or replacement of walker identity.
-
-Also verify on Python 3.11 and 3.14 that the canonical AST digest is identical, that only empty
-version-added `type_params` are ignored, and that deleting or changing a semantic AST field cannot
-survive.
+Claude's next assignment is deliberately narrow. After green CI, audit the immutable successor of
+`41f6fff` without opening a ROM, private registry or outcome. Re-run the corrected battery and
+attack the remediation directly: remove either changed projector or either new choice-set helper;
+mutate `TrainingVenue.__post_init__`, `GrindingArea.identity` or a reachable candidate helper;
+fabricate each of current/unchanged/waiver aggregate identities separately; bypass the loaded
+walker read; remove each learning-eligibility guard; collapse list/tuple AST tags; ignore non-empty
+type parameters; and accept an unsupported scalar. Verify Python 3.11/3.14 identity again. A
+surviving mutation is acceptable only with a proved independent redundant guard and an exact
+combined falsifier.
 
 Claude must return: exact commit reviewed, tests/mutations run, survivors, findings by severity,
 verdict, cheapest falsifier for each blocker, and the narrowest action authorized. An approval may

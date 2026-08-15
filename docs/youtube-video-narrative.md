@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: follow the arrows all the way down
+
+Start on a green CI badge, then place **34 KILLED / 43 MUTATIONS** beside it and stamp the source
+proof **REJECTED**. Animate `run_red_team_balancing` calling two candidate projectors; open each one
+to reveal a new choice-set helper outside the original 19-tile proof. Mutate
+`TrainingVenue.__post_init__` and `GrindingArea.identity`; show the old gate incorrectly stay green.
+
+Replace the 19 hand-picked tiles with **43 SEMANTIC ELEMENTS · 7 EXACT WAIVERS**. Draw the candidate
+call graph and make an undeclared helper trip a red closure alarm. Feed three attestation digests
+into the final boundary, then show the boundary recompute each one before accepting it. End on
+**41f6fff · PYTHON 3.11 = 3.14 · 3,503 TESTS · BUNDLE 4db4c1ee…**.
+
+Keep the experiment board unchanged: **PRIOR 0 · OUTCOMES 0/14 · AUTHORITY ZERO**. Narration:
+**“A proof is not complete because every box you drew is green. It is complete only if the arrows
+cannot leave the drawing.”** Next doors: **EXACT-HEAD CI** and **CLAUDE DELTA AUDIT**.
+
 ## August 15 scene: one meaning, two Pythons
 
 Show the first CI gate opening after **FULL GIT HISTORY** is enabled. Behind it, 33 source checks

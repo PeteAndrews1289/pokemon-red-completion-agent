@@ -3,6 +3,27 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Route 11 live-source closure — rejected and remediated 2026-08-15
+
+Claude audited exact `7f4d8de` only after green CI. Its first test-tier harness imported the target
+instead of the mutant; Claude disclosed and corrected that defect before reporting results. The
+corrected Python 3.11/3.14 battery killed 34 of 43 mutations and returned **REJECT**. Blocker: two
+changed projectors and two new choice-set helpers were live beneath `run_red_team_balancing` but
+untracked. High: no closure guard stopped mutations to implicit venue/grinding semantics. Medium:
+the final boundary trusted unchanged-element and waiver-allowlist digests. Nine individual test
+mutations survived, including paired learning-eligibility guards and AST type distinctions.
+
+Decision: accept the findings. Exact `41f6fff` binds 43 semantic elements with seven exact waivers,
+uses whole-class coverage for `TrainingVenue` and `GrindingArea`, recursively resolves the candidate
+seam's same-project calls, and re-derives current/unchanged/waiver identities at the operational
+boundary. Direct tests distinguish every reported survivor. Python 3.11 and 3.14 produce identical
+element and waiver digests. The full local gate passes 3,503 tests plus Ruff, mypy over 223 files,
+documentation/public-artifact checks and all generated registries; source bundle
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+
+Disposition: **pending exact-head CI and Claude delta re-audit**. No private prior, menu, outcome,
+fit, controller, teacher, sealed Red, Crystal, replay or authority is authorized.
+
 ## Route 11 CI portability defect — repaired, re-review pending 2026-08-15
 
 The owner approved full-history checkout and it was published at `f1bb629`. CI could then read

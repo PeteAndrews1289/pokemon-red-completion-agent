@@ -1,5 +1,34 @@
 # Current audit — 2026-08-15
 
+## Route 11 closure rejection and remediation
+
+Exact head `7f4d8de` passed GitHub CI, then Claude performed the required read-only audit under
+Python 3.11 and 3.14. After correcting its own mutation harness so mutants—not the target checkout—
+were actually imported, it killed 34 of 43 mutations and returned **REJECT**. Two changed projector
+functions and two new choice-set helpers were live under `run_red_team_balancing` but outside the
+attestation. `TrainingVenue.__post_init__` and `GrindingArea.identity` could change without stopping
+composition. The operational boundary re-derived `current_elements_sha256` but trusted supplied
+`unchanged_elements_sha256` and `waiver_allowlist_sha256`. Nine individual test mutations survived.
+
+Exact source `41f6fff` closes the accepted findings. Forty-three exact elements cover the complete
+venue/grinding contracts, six candidate entry points, their same-module transitive call closure,
+candidate/domain types and external team-policy functions. Seven exact waivers replace the previous
+three without a module-wide exception. A loaded closure check refuses undeclared dependencies, and
+the operational boundary independently re-derives current, unchanged and waiver identities.
+Dedicated falsifiers cover each learning-eligibility flag, loaded walker identity, list/tuple tags,
+non-empty PEP 695 type parameters and unsupported AST scalars. Comments remain non-semantic;
+docstrings remain committed.
+
+Python 3.11 and 3.14 agree on the 43-element digest
+`f2cb0aa8bd469c38b24b97f1139208601c96d1011fe28dcf6898abba06c330c5`
+and seven-waiver digest `5558e7ae6d70bb50fbd63d3397c3f378c9b24683c286a71c4962c6ddf131c65d`.
+The full local tree passes 3,503 tests, three skips and one expected failure; Ruff, mypy over 223
+files, documentation/public-artifact checks and all generated registries pass. Executable bundle:
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+
+Disposition: **repair complete locally; exact-head CI and Claude delta re-audit pending**. No prior,
+menu, outcome, fit, controller, teacher, sealed case, Crystal context, replay or authority advanced.
+
 ## CI portability audit and repair
 
 The approved `fetch-depth: 0` workflow change fixed CI's inability to read historical source. The

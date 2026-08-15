@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-15 active Gate 1 handoff:** Claude returned **REJECT** on exact `7f4d8de` after a
+> corrected 43-mutation audit killed 34 and left nine survivors. Codex accepted the on-path source-
+> coverage, closure, boundary-rederivation and semantic-oracle findings and repaired them at
+> `41f6fff`. The proof now covers 43 semantic elements with seven exact waivers and recursively
+> checks the candidate seam; both Python 3.11 and 3.14 reproduce the same element and waiver
+> digests. The full local gate passes 3,503 tests plus lint, typing, public/documentation and
+> generated-registry checks. Source bundle:
+> `4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+>
+> Codex now publishes the repair and obtains one exact-head CI result. Claude then performs a
+> read-only delta re-audit; it must not edit, open a ROM/private prior, execute a case, query the
+> teacher, fit, predict or open sealed Red/Crystal. Only an explicit approval may hand the lane
+> back to Codex for one private Route 11 prior. Antigravity remains idle until the concrete 8+6
+> question catalog needs a transfer/product audit. Counters remain priors 0, menus 0, outcomes
+> 0/14, fits 0, controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
+
 > **2026-08-15 active role handoff and next-gate sequence:** The canonical current assignments are
 > now [docs/current-agent-handoffs.md](docs/current-agent-handoffs.md). Codex is the workhorse,
 > integrator, sole default editor and GitHub pusher. Claude is the read-only forensic auditor for

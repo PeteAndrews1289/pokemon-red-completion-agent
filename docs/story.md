@@ -7,6 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the proof follows the live call path
+
+Passing CI was not the finish line. Claude changed 43 parts of the source proof and killed 34; nine
+survived. More importantly, two changed candidate projectors and their new unlabeled-menu helpers
+were running underneath Route 11 without appearing in the attestation. A venue constructor and a
+grinding-area identity could also change while the old result still composed.
+
+Exact `41f6fff` makes the proof follow the code instead of a hand-picked sketch of it. Forty-three
+semantic pieces are bound, seven exact historical changes are explained, and the candidate helper
+graph is checked for undeclared project code. The last boundary now rebuilds every aggregate digest
+it receives. Python 3.11 and 3.14 agree; 3,503 tests pass.
+
+The counter remains **0/14** because this was still maintenance, not learning. GitHub and Claude
+must approve the immutable repair before even one private Route 11 prior exists.
+
 ## Current checkpoint: the same proof on two Pythons
 
 The approved full-history CI repair let GitHub read the historical source—and immediately exposed a

@@ -11,29 +11,56 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Role ownership and exact handoffs are frozen in
 [current-agent-handoffs.md](current-agent-handoffs.md). The next work is deliberately serial:
 
-1. Publish the approved CI checkout-history repair, cross-Python attestation repair and current
-   documentation, then require a green exact-head run.
-2. Claude attacks the immutable Route 11 source qualification. No ROM, private prior or outcome is
-   opened. Any surviving provenance/contract mutation returns the lane to Codex.
-3. After approval only, Codex composes one private Route 11 prior and publishes a path-free summary.
+1. **Complete:** publish the checkout-history and cross-Python repairs; exact-head CI is green.
+2. **Complete, rejected:** Claude attacked exact `7f4d8de`, killed 34/43 mutations and found on-path
+   source omissions, missing closure, trusted attestation fields and nine test distinctions.
+3. **Active:** publish Codex's exact `41f6fff` remediation, require green exact-head CI and send the
+   immutable delta back to Claude. Any surviving load-bearing mutation returns the lane to Codex.
+4. After approval only, Codex composes one private Route 11 prior and publishes a path-free summary.
    Priors may become one; every learning counter remains zero.
-4. Codex searches existing non-sealed states read-only for real PP diversity. If it is absent,
+5. Codex searches existing non-sealed states read-only for real PP diversity. If it is absent,
    freeze and review a bounded context-materialization plan before any controller input.
-5. Freeze exactly 8 train and 6 untouched development questions. Claude audits binding,
+6. Freeze exactly 8 train and 6 untouched development questions. Claude audits binding,
    independence, diversity and power. Antigravity audits whether the menus contain genuine choices,
    serve the living-Pokédex product and have a Crystal falsifier.
-6. Execute each approved identity once with immediate durable private retention. Stop at the first
+7. Execute each approved identity once with immediate durable private retention. Stop at the first
    binding/accounting failure and never replace an exposed identity.
-7. Fit once on eight train outcomes and compare once on six development outcomes. This is a
+8. Fit once on eight train outcomes and compare once on six development outcomes. This is a
    descriptive pipeline result and grants zero authority. If development is underpowered or
    choice-equivalent, expand genuine decisions rather than tuning to six rows.
-8. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
+9. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
    short hierarchical episodes and the living-Pokédex dependency planner.
 
 This bridge has one maintenance time box for CI/source qualification and one experimental time box
 for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine alternatives, the
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
+
+## Current checkpoint: prove the whole live seam, not selected functions
+
+Claude's audit of exact `7f4d8de` rejected the first portable proof despite green CI. The central
+failure was scope: `run_red_team_balancing` called changed candidate projectors whose source was not
+attested. Mutations to `TrainingVenue.__post_init__` and `GrindingArea.identity` also survived, and
+the operational boundary trusted two supplied aggregate digests. The corrected audit killed 34 of
+43 mutations; the nine survivors defined the repair rather than authorizing composition.
+
+Exact `41f6fff` expands the attestation from 19 selected elements to 43 semantic elements and seven
+exact waivers. Whole-class venue and grinding-area coverage closes implicit constructor/property
+behavior. The six candidate entry points, their recursively reachable same-module helpers,
+candidate/domain classes and three external policy functions are independently fingerprinted. A
+loaded closure check stops any undeclared project dependency. The contract boundary reconstructs
+current, unchanged and waiver-allowlist digests rather than trusting the attestation object.
+
+Direct tests now distinguish every previously surviving semantic case. Python 3.11 and 3.14 agree
+on element digest `f2cb0aa8bd469c38b24b97f1139208601c96d1011fe28dcf6898abba06c330c5`
+and waiver digest `5558e7ae6d70bb50fbd63d3397c3f378c9b24683c286a71c4962c6ddf131c65d`.
+The local tree passes 3,503 tests, Ruff, mypy over 223 source files, public/documentation checks and
+all generated registries. Executable bundle:
+`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+
+Next gate: publish, exact-head CI, then Claude's read-only delta mutation audit. Composition remains
+closed. Priors 0, menus 0, outcomes 0/14, fits 0, controller/teacher 0, sealed Red 0, Crystal 0,
+replay 0 and authority 0.
 
 ## Current checkpoint: make historical evidence survive source time and Python time
 

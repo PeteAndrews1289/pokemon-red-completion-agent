@@ -4,14 +4,18 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **The Route 11 source proof is now portable across CI and local Python (August 15, 2026); training
-> remains 0/14.** The approved full-history checkout is published, and source `f2ecc79` replaces
-> interpreter-dependent `ast.dump` fingerprints with a canonical typed AST representation. The same
-> golden digest was reproduced on Python 3.11 and 3.14; the complete local gate passes 3,489 tests,
-> Ruff, mypy over 223 files and every generated registry. Exact-head GitHub CI and Claude's mutation
-> re-audit remain required before the first private Route 11 prior is composed. No ROM, outcome,
-> fit, controller, teacher, sealed Red, Crystal or authority advanced. Source bundle:
-> `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
+> **The Route 11 proof now closes over its live candidate seam (August 15, 2026); training remains
+> 0/14.** Claude's first audit of the portable proof killed 34 of 43 mutations but correctly rejected
+> it: two on-path candidate projectors were outside the attestation, helper closure was not proved,
+> and two supplied attestation digests were trusted at the operational boundary. Exact source
+> `41f6fff` binds 43 semantic elements, replaces partial venue-method coverage with the complete
+> `TrainingVenue` and `GrindingArea` contracts, permits exactly seven reviewed deltas, checks the
+> recursively reachable candidate helpers, and independently reconstructs all three attestation
+> projections. Python 3.11 and 3.14 reproduce identical element and waiver digests. The complete
+> local gate passes 3,503 tests, Ruff, mypy over 223 files and every generated registry. Exact-head
+> GitHub CI and Claude's delta mutation audit remain required before one private Route 11 prior may
+> be composed. No ROM, outcome, fit, controller, teacher, sealed Red, Crystal or authority advanced.
+> Source bundle: `4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
 
 > **Prospective party questions and outcomes are now one authenticated object (August 15, 2026);
 > training remains 0/14.** Exact source `85ae878` passed 3,432 non-integration tests, Ruff, mypy

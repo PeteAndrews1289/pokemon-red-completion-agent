@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the helper behind the helper mattered
+
+The cross-Python source proof passed CI, but Claude still rejected it. Its corrected mutation
+battery killed 34 of 43 changes and found that the proof named selected functions while the live
+Route 11 path called through changed candidate projectors, new choice-set helpers and implicit class
+behavior outside that list. A forged unchanged-elements or waiver digest could also cross the last
+boundary. The hashes were portable; the coverage claim was still too broad.
+
+Exact `41f6fff` replaces that partial list with 43 semantic elements and seven exact waivers. The
+whole venue and grinding-area contracts are bound. Candidate projectors, binders, their local call
+closure and the external team-policy functions they invoke are all named independently. If a new
+project helper appears without coverage, composition stops. The final boundary reconstructs all
+three aggregate identities rather than trusting the object handed to it.
+
+The nine survivors became nine direct lessons: each learning-eligibility flag must fail alone; the
+stateless check must actually read the walker; list and tuple AST fields cannot collapse; non-empty
+generic type parameters remain semantic; unknown scalar values fail closed; and redundant guards
+need a combined falsifier. Python 3.11 and 3.14 now agree on the expanded proof. The repository
+passes 3,503 tests and every static/registry gate, with source bundle `4db4c1ee…`.
+
+Nothing played Pokémon. The board is still **prior 0 · train 0/8 · development 0/6 · authority
+0**. That is the honest cost of refusing to let a useful old result quietly inherit meaning from
+unreviewed new code. One exact-head CI run and Claude's delta audit remain before composition.
+
 ## August 15: the proof had to survive a different Python
 
 The first CI failure was mundane but necessary: GitHub's shallow checkout could not see the old
