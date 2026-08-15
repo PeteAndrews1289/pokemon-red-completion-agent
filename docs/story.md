@@ -7,6 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one honest prior, no pretend training
+
+Claude's second attack finally approved the exact source for one narrow use. Codex composed the
+Route 11 evidence once and kept the private registry off Git. The
+[public summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json) says exactly what
+happened: one prior accepted, one stale Cave sibling rejected, and zero game reads, actions,
+teacher queries or outcomes.
+
+So the scoreboard is now **prior 1 · train 0/8 · development 0/6 · authority 0**. That small change
+matters because it is the first reusable price signal for a future venue choice, not another route
+replay. Claude also left three useful tripwires: bind committed constants, make the generic-syntax
+test differ in only one field, and prove the attestation itself runs its closure guard. Those are
+the last source-proof repairs before the project searches for depleted-PP lessons and freezes the
+first fourteen real questions.
+
 ## Current checkpoint: the proof follows the live call path
 
 Passing CI was not the finish line. Claude changed 43 parts of the source proof and killed 34; nine

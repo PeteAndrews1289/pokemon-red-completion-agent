@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the first prior is real—and deliberately small
+
+The repaired proof finally survived the adversarial handoff. On the exact CI-green head, Claude
+recomputed every historical/current waiver under two Python versions and attacked the source seam
+47 ways. Forty-two valid mutations died. The remaining cases were measured redundancy, a weak test
+around a correct implementation, and a forward-looking constant-coverage gap with no live drift in
+this observation. That was enough for a narrow approval: reuse one Route 11 result, once.
+
+The composer turned the two authenticated V2 receipts into a one-entry private venue registry and
+a [path-free public summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json). It
+also rejected the tempting Cave comparison because its traversal cost was measured before the
+walker repair. No emulator started, no model chose anything and no teacher supplied a label.
+
+The board has finally moved, but only in the column it earned: **prior 1 · train 0/8 · development
+0/6 · authority 0**. Before fourteen questions can even be frozen, the proof must cover committed
+module-level constants, the generic-syntax test must isolate what it claims to test, and the
+attestation closure call must be independently distinguishable. The next meaningful uncertainty is
+not whether Route 11 works; it is whether existing non-sealed states contain the PP diversity
+needed to ask the model genuine resource-sensitive questions.
+
 ## August 15: the helper behind the helper mattered
 
 The cross-Python source proof passed CI, but Claude still rejected it. Its corrected mutation

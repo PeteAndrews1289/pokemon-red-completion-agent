@@ -1,5 +1,25 @@
 # Current audit — 2026-08-15
 
+## Claude approval and one-prior composition
+
+Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` and CI run `31896779190` were immutable and green.
+Claude reproduced the source qualification under Python 3.11.15 and 3.14.3: 43 elements, seven
+exact waivers, identical aggregate digests, 7/7 independently recomputed historical/current waiver
+pairs and 42/47 valid mutations killed. The prior blockers—on-path projector coverage, whole-class
+venue/grinding semantics and aggregate-field rederivation—were closed.
+
+Codex accepted Claude's **APPROVE** verdict at its narrow boundary and composed exactly one private
+Route 11 prior. Its registry file digest is
+`102fc95256673d5b9696a152928b0edcf3d2480b6519102fadd62d19ddc2a618`; the tracked
+[public summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json) is path-free. The
+composition accepted one venue observation, rejected the stale Cave sibling and made zero ROM
+reads, emulator starts, controller actions, teacher queries or outcomes.
+
+Disposition: prior composition complete. Claude's H2/M2/L2 forward conditions are accepted before
+catalog reuse: attest module-level `Assign`/`AnnAssign` semantics, repair the `type_params` test to
+minimal pairs and pin the closure call from `attest` independently. Priors 1; menus 0, outcomes
+0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
+
 ## Route 11 closure rejection and remediation
 
 Exact head `7f4d8de` passed GitHub CI, then Claude performed the required read-only audit under

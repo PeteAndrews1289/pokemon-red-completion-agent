@@ -8,6 +8,20 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): one venue prior, zero learning outcomes
+
+Exact head `3a24a2e` passed CI run `31896779190`, and Claude's immutable cross-Python delta audit
+returned **APPROVE** for exactly one private Route 11 prior. Codex composed it once from the two
+authenticated V2 receipts. The
+[path-free summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json) records one
+accepted venue, one rejected stale Cave sibling, and zero ROM reads, emulator starts, controller
+actions, teacher queries or outcomes.
+
+Priors are now 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0. Before
+the source mechanism is reused for the 8+6 catalog, close module-level assignment coverage, isolate
+the PEP 695 semantic tests and independently pin the attestation closure call. Then search already-
+open non-sealed states for depleted PP or freeze a bounded materialization plan. No execution yet.
+
 ## Current checkpoint (2026-08-15): live source closure repaired; re-approval pending
 
 Claude's exact-`7f4d8de` audit killed 34 of 43 mutations and rejected source qualification. The

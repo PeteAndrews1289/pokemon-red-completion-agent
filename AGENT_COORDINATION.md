@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-15 first-prior checkpoint:** Exact head `3a24a2e` passed CI run `31896779190` and
+> Claude's immutable Python 3.11/3.14 delta audit returned **APPROVE** for one private Route 11
+> prior only. Codex composed it once from the authenticated V2 receipts. The private registry has
+> one entry; only the
+> [path-free summary](docs/evidence/red-route-11-venue-prior-composition-2026-08-15.json) is
+> tracked. The action used zero ROM reads, emulator starts, controller actions, teacher queries or
+> outcomes and granted no authority.
+>
+> Claude's nonblocking forward findings are now Codex's active maintenance lane before catalog
+> reuse: module-level assignments must enter source qualification, the PEP 695 test must use
+> minimal pairs, and the attestation's closure call needs an independent oracle. Then Codex may
+> inventory already-open non-sealed states for real PP diversity. Antigravity remains idle until
+> the concrete 8+6 question catalog exists. Counters: priors 1, menus 0, outcomes 0/14, fits 0,
+> controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
+
 > **2026-08-15 active Gate 1 handoff:** Claude returned **REJECT** on exact `7f4d8de` after a
 > corrected 43-mutation audit killed 34 and left nine survivors. Codex accepted the on-path source-
 > coverage, closure, boundary-rederivation and semantic-oracle findings and repaired them at

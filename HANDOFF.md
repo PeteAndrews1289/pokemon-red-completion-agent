@@ -17,6 +17,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First frozen venue prior composed; catalog qualification is active — 2026-08-15
+
+Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` passed CI run `31896779190` with
+executable bundle `4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`.
+Claude then audited that immutable head under Python 3.11 and 3.14, independently reproduced all
+43 element and seven waiver identities, and killed 42 of 47 valid mutations. The five non-kills
+were either proved redundancy, one vacuous test around a correct implementation, one committed-
+constant coverage class with no live drift at this head, or one inconclusive import-time probe.
+Claude returned **APPROVE** for exactly one private Route 11 prior and nothing executable.
+
+Codex composed that prior once from the two authenticated V2 receipts. The private registry has
+one entry and file digest `102fc95256673d5b9696a152928b0edcf3d2480b6519102fadd62d19ddc2a618`.
+Only the [path-free composition summary](docs/evidence/red-route-11-venue-prior-composition-2026-08-15.json)
+is tracked. Composition opened no ROM, emulator, context, outcome, teacher, sealed Red or Crystal
+case and granted no authority. Honest counters are now priors 1, menus 0, outcomes 0/14, fits 0,
+controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
+
+Claude's three forward conditions are mandatory before the mechanism supports the 8+6 catalog:
+bind module-level assignments into source qualification; replace the generic-parameter test with
+minimal pairs that differ only in `type_params`; and prove the attestation invokes its closure
+guard independently. After that repair, inventory existing non-sealed states for real PP
+diversity. If no depleted-PP state already exists, freeze and review a bounded materialization plan
+before any controller input. Do not compose another prior or execute a question.
+
 ## Route 11 source closure repaired after Claude rejection — 2026-08-15
 
 Claude audited exact head `7f4d8de` after its CI run passed. Its corrected two-runtime mutation

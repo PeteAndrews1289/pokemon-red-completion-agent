@@ -14,11 +14,12 @@ Role ownership and exact handoffs are frozen in
 1. **Complete:** publish the checkout-history and cross-Python repairs; exact-head CI is green.
 2. **Complete, rejected:** Claude attacked exact `7f4d8de`, killed 34/43 mutations and found on-path
    source omissions, missing closure, trusted attestation fields and nine test distinctions.
-3. **Active:** publish Codex's exact `41f6fff` remediation, require green exact-head CI and send the
-   immutable delta back to Claude. Any surviving load-bearing mutation returns the lane to Codex.
-4. After approval only, Codex composes one private Route 11 prior and publishes a path-free summary.
-   Priors may become one; every learning counter remains zero.
-5. Codex searches existing non-sealed states read-only for real PP diversity. If it is absent,
+3. **Complete:** exact head `3a24a2e` passed CI and Claude's immutable delta audit returned
+   **APPROVE** for one private prior only.
+4. **Complete:** Codex composed one private Route 11 prior and published its path-free summary.
+   Priors are now one; every learning counter remains zero.
+5. **Active:** close Claude's forward source-qualification conditions, then search existing
+   non-sealed states read-only for real PP diversity. If it is absent,
    freeze and review a bounded context-materialization plan before any controller input.
 6. Freeze exactly 8 train and 6 untouched development questions. Claude audits binding,
    independence, diversity and power. Antigravity audits whether the menus contain genuine choices,
@@ -35,6 +36,24 @@ This bridge has one maintenance time box for CI/source qualification and one exp
 for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine alternatives, the
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
+
+## Current checkpoint: the first prior exists, but no question has run
+
+Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` passed CI run `31896779190`.
+Claude's Python 3.11/3.14 delta audit reproduced the 43-element/seven-waiver proof and killed 42 of
+47 valid mutations. It approved one private Route 11 prior because the remaining source-coverage
+region had no live drift affecting this observation. Codex then composed that prior once from the
+two authenticated V2 receipts and published the
+[path-free summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json).
+
+The registry contains one accepted venue observation and rejects the stale Cave sibling. The
+composition itself made zero ROM reads, emulator starts, controller actions, teacher queries or
+outcomes. Priors are 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
+
+Before source qualification can be reused for the 8+6 catalog, bind module-level assignments into
+the attested rows, replace the nonempty-`type_params` test with isolated semantic pairs, and pin
+the attestation's independent closure call. Then inspect already-open non-sealed states for real PP
+diversity. No second prior, candidate execution or context materialization is authorized yet.
 
 ## Current checkpoint: prove the whole live seam, not selected functions
 

@@ -3,6 +3,27 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Route 11 delta re-audit — approved narrowly and composed 2026-08-15
+
+Claude audited exact CI-green head `3a24a2e` under Python 3.11 and 3.14. It independently
+recomputed all seven waiver pairs, reproduced the aggregate digests and killed 42 of 47 valid
+mutations. The earlier live blockers were closed. One committed `MINIMUM_FIGHTABLE_SHARE` mutation
+proved that module-level assignments were structurally outside the element mechanism; a PEP 695
+test was vacuous because its two functions differed in annotations and return type as well as
+`type_params`; and the closure call inside `attest` was not independently pinned. Claude measured
+no live Route 11-affecting drift in either uncovered region and proved the closure redundancy with
+a combined falsifier.
+
+Decision: accept **APPROVE** only for one private Route 11 prior. Codex composed it once from the
+authenticated V2 receipts and published the
+[path-free summary](evidence/red-route-11-venue-prior-composition-2026-08-15.json). No ROM,
+controller, teacher, outcome, sealed Red or Crystal case was opened. Priors advanced 0→1; every
+learning and authority counter stayed zero.
+
+Disposition: accept H2/M2/L2 as mandatory conditions before catalog reuse. Codex owns module-level
+assignment attestation, isolated type-parameter oracles and an independent attestation-closure
+test. No second prior or question execution is authorized by this verdict.
+
 ## Route 11 live-source closure — rejected and remediated 2026-08-15
 
 Claude audited exact `7f4d8de` only after green CI. Its first test-tier harness imported the target

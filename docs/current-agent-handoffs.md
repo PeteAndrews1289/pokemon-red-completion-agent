@@ -15,7 +15,7 @@ emergency safety authority; it is not the product.
 Current honest state:
 
 - completion-aware party outcomes: 0/14;
-- frozen current venue priors: 0;
+- frozen current venue priors: 1;
 - concrete Red party menus: 0;
 - completion-aware party fits: 0;
 - model authority granted by this lane: 0;
@@ -23,15 +23,13 @@ Current honest state:
 - Crystal contexts opened by this lane: 0;
 - full Red replays authorized: 0.
 
-The history and cross-Python repairs passed exact-head CI at `7f4d8de`, but Claude's corrected
-43-mutation audit returned **REJECT**: 34 mutations died and nine exposed incomplete live-source
-coverage, missing helper closure, trusted aggregate attestation fields and semantic-oracle gaps.
-Codex repaired every accepted finding at exact `41f6fff`. The proof now covers 43 semantic elements
-with seven exact waivers, checks the recursively reachable candidate seam and reconstructs all
-three aggregate identities at the operational boundary. Python 3.11 and 3.14 produce identical
-element and waiver digests; 3,503 tests and every local quality gate pass. Source bundle:
-`4db4c1eefb97eaf0b740857aa81e2fd3292b82693af54877f6e9711b3e5913aa`. This is not approval: exact-
-head CI and Claude's read-only delta audit remain mandatory.
+Exact head `3a24a2e` passed CI run `31896779190`. Claude's immutable Python 3.11/3.14 delta audit
+reproduced all 43 element and seven waiver identities, killed 42 of 47 valid mutations and returned
+**APPROVE** for one private Route 11 prior only. Codex composed it once from the two authenticated
+V2 receipts; its path-free summary is tracked and its one-entry registry remains private. No ROM,
+controller, teacher or outcome ran. Claude's forward conditions—module-level assignment coverage,
+isolated type-parameter tests and an independent attestation-closure oracle—must close before the
+source mechanism is reused for the 8+6 catalog.
 
 ## Role 1: Codex — implementation and integration owner
 
@@ -52,13 +50,11 @@ authority. If they disagree, Codex runs the cheapest discriminating test and rec
 
 Current Codex assignment:
 
-1. Publish exact `41f6fff` plus synchronized documentation and obtain one green exact-head run. Do
-   not repeatedly rerun a known failure.
-2. Freeze that exact head and dispatch Claude's narrow delta re-audit against its nine survivors and
-   the accepted blocker/high/medium findings.
-3. If and only if Claude now approves, compose the one private Route 11 prior from authenticated V2
-   receipts. Publish only the path-free summary; no ROM or controller is involved.
-4. Inventory existing non-sealed states for genuine PP diversity without executing them. If the
+1. **Complete:** publish the source repair and obtain one green exact-head run.
+2. **Complete:** freeze the exact head and obtain Claude's narrow delta approval.
+3. **Complete:** compose the one private Route 11 prior and publish only its path-free summary.
+4. Close Claude's three source-qualification conditions, then inventory existing non-sealed states
+   for genuine PP diversity without executing them. If the
    8+6 gate still cannot pass, write a bounded context-materialization plan before pressing a
    controller input.
 5. Materialize and freeze exactly 8 train and 6 untouched development **questions**, not outcomes.
