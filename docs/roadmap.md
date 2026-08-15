@@ -8,6 +8,19 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): historical Route 11 evidence is machine-bound
+
+Claude rejected the initial concrete prior composer despite correct ratios because its source
+history, operating compatibility, stale sibling and stateless-walker claims were not independently
+proved. Exact source `0d89d85` recomputes both Git bundles, compares 19 operational AST elements,
+permits exactly three reviewed deltas, binds the result into the evidence and derives the rejected
+Cave sibling from its actual trial row. The local tree passes 3,488 tests, Ruff, mypy over 223 files
+and all generated registries; source bundle `419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`.
+
+Next gate: exact-commit GitHub CI and Claude mutation re-audit. Only after approval may the private
+Route 11 registry be composed. That advances priors from 0 to 1, not outcomes or authority. Then
+solve depleted-PP diversity, freeze the authentic 8+6 catalog, review it, and only then execute.
+
 ## Current checkpoint (2026-08-15): causal party masks are frozen; the duplicate architecture gate is removed
 
 Exact source `587fb18` passed 3,435 tests, Ruff, mypy over 222 source files and all generated-

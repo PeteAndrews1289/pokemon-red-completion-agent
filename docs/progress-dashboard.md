@@ -11,6 +11,13 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
+The current publication candidate `0d89d85` repairs the historical Route 11 venue-prior gate. The
+dashboard must not count that prior yet. Its source-compatibility attestation compares 19
+operational elements across the observed and current commits and permits exactly three reviewed
+waivers; GitHub CI and Claude re-approval are still pending. Therefore the current readiness view
+remains **venue priors 0 · train 0/8 · development 0/6 · fit false · authority zero**. A future
+approved composition may change only the first value to one; it is not a training outcome.
+
 Exact source `587fb18` adds one new readiness fact without changing a progress counter: every
 masked party candidate now has a typed, identity-free cause, and the cause vector is frozen with
 the prospective menu. A missing compatible venue prior appears as

@@ -3,6 +3,26 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Route 11 venue-prior composer — rejected and remediated 2026-08-15
+
+Claude rejected the initial composer on five grounds: historical Git provenance was shape-checked
+rather than recomputed; the old observation inherited a current contract without a compatibility
+proof; the stale sibling count was hardcoded; statelessness was inferred indirectly; and seven of
+nine source mutations survived. Claude separately verified that the receipts, arithmetic and actual
+Route 11 behavior were sound.
+
+Decision: accept the rejection in full. Exact source `0d89d85` introduces a typed per-element
+historical/current compatibility attestation with exactly three reviewed waivers, binds the
+attestation into the operational contract and public evidence, positively fingerprints the
+stateless walker, includes every real recovery module, pins both result files, and derives the Cave
+rejection from trial 1. Independent golden and drift tests now exercise every previously surviving
+contract ingredient. The full local gate passes 3,488 tests plus lint, typing and generated
+registries.
+
+Disposition remains **pending re-review**. GitHub CI and Claude must attack the immutable published
+commit before private prior materialization. No candidate execution, fit, prediction, sealed case,
+Crystal context, replay or authority is authorized by this repair.
+
 ## Prospective party outcome join — reviewed and hardened 2026-08-15
 
 Codex first implemented the generic prospective outcome digest and typed party join at exact

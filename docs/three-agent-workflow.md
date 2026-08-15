@@ -4,6 +4,10 @@ This project benefits from independent criticism, but three agents editing the s
 same time would create conflicts and unclear ownership. The default arrangement is one implementer
 and two read-only reviewers.
 
+The durable role definitions live here. The exact current assignments, gate order, deliverables and
+stop conditions live in [current-agent-handoffs.md](current-agent-handoffs.md). Read both before
+dispatching work; a dated audit does not silently reactivate an older assignment.
+
 ## Roles
 
 ### Codex — implementation owner
@@ -14,6 +18,9 @@ and two read-only reviewers.
   [AGENT_COORDINATION.md](../AGENT_COORDINATION.md), and [HANDOFF.md](../HANDOFF.md);
 - turns review findings into accepted, rejected, or deferred decisions with reasons;
 - never treats reviewer agreement as a substitute for measured evidence.
+
+Codex is the workhorse, integrator and sole default publisher. It may disagree with either reviewer,
+but must resolve material disagreement with evidence and record the adjudication.
 
 ### Claude — forensic and experimental auditor
 
@@ -27,6 +34,8 @@ Primary emphasis:
 - failure evidence sufficient to reproduce a conclusion.
 
 Claude is read-only by default. It returns an audit memo rather than changing source.
+Claude should prefer an immutable exact-commit mutation or evidence audit over broad architecture
+redesign. It may recommend rejection or a cheaper experiment; it does not grant model authority.
 
 ### Antigravity — architecture and generalization challenger
 
@@ -42,6 +51,9 @@ Primary emphasis:
 
 Antigravity is read-only by default. It returns an architecture/red-team memo rather than changing
 source.
+Antigravity should prefer mission alignment, transfer falsifiers and capability prioritization over
+repeating Claude's byte-level provenance work. It is explicitly expected to recommend deleting or
+stopping low-value lanes.
 
 ## Source of truth and write safety
 
@@ -108,6 +120,7 @@ Read completely, in order:
 4. docs/three-agent-workflow.md
 5. AGENT_COORDINATION.md
 6. HANDOFF.md (newest checkpoint first; use older sections only as history)
+7. docs/current-agent-handoffs.md (use only the Claude assignment)
 
 Work read-only. Do not edit code, run a ROM, open sealed or counted contexts, create predictions,
 push, or mutate artifacts. Audit the exact current commit and the model-first roadmap.
@@ -133,6 +146,7 @@ Read completely, in order:
 4. docs/three-agent-workflow.md
 5. AGENT_COORDINATION.md
 6. HANDOFF.md (newest checkpoint first; use older sections only as history)
+7. docs/current-agent-handoffs.md (use only the Antigravity assignment)
 
 Work read-only. Do not edit code, run a ROM, open sealed or counted contexts, create predictions,
 push, or mutate artifacts. Red-team the exact current architecture and the model-first roadmap.

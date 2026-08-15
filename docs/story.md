@@ -7,6 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: evidence cannot time-travel
+
+Route 11 produced one real, useful result. The first composer could calculate it correctly but did
+not prove that the old run and the current executor still meant the same thing. Claude found that a
+fake historical commit could pass, a stale Cave sibling was counted by hand, and most source
+mutations were invisible to the tests.
+
+Exact `0d89d85` turns that informal claim into a comparison of 19 code elements across two real Git
+commits. Sixteen must be identical. Three exact, reviewed changes have waivers. A fourth change—or
+a waiver that no longer fires—stops the process. The Route 11 walker is positively identified as
+stateless, and the discarded Cave row has to prove its own staleness.
+
+The local gate is green at 3,488 tests. The learning board remains **0/14**, because a stronger
+receipt is still not a new outcome. GitHub CI and Claude's re-audit remain ahead of even the first
+private prior.
+
 ## Current checkpoint: one missing explanation, not five missing systems
 
 The outside review asked the right product question and initially produced the wrong map of the

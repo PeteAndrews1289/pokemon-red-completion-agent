@@ -1,5 +1,40 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: three agents, one keyboard, two kinds of doubt
+
+The project had already used three agents, but their jobs could blur together. The new handoff makes
+the division deliberate. Codex is the workhorse: it writes, tests, integrates and publishes. Claude
+tries to prove that the evidence is lying—wrong commit, decorative test, contaminated partition,
+underpowered conclusion. Antigravity asks whether perfectly correct work is still the wrong work—too
+Red-specific, too expensive, or disconnected from transfer and the living Pokédex.
+
+They do not vote, and they do not edit the same checkout. Codex can reject either review, but only
+with a cheaper discriminating test and a written reason. The immediate relay is equally concrete:
+green CI hands source to Claude; Claude approval hands one prior back to Codex; a frozen 8+6 catalog
+goes to both reviewers; audited outcomes permit one descriptive fit. That fit still grants zero
+authority. The division is meant to create productive disagreement without creating three competing
+codebases.
+
+## August 15: a correct number can still have the wrong history
+
+The first Route 11 venue prior looked ready. Its battle, recovery and experience arithmetic matched
+the retained run. Claude rejected it anyway—and correctly—because the program could attach those
+numbers to a historical commit without actually reading that commit. It could also describe the
+old run using today's operating contract, count the rejected Cave alternative with a literal, and
+call a walker stateless merely because it lacked a factory.
+
+The repair treats source history as data. Commit `0d89d85` reads the old and current Python bodies
+from Git, compares the 19 pieces that can affect the observation, and permits only three named,
+hashed changes shown to preserve Route 11 meaning. Anything else stops composition. The walker is
+identified positively, every operational digest has an independent oracle, and the discarded Cave
+trial must prove why it is stale before the count can become one.
+
+That distinction is the project in miniature: passing tests and plausible numbers are not the same
+as evidence. The repaired tree passes 3,488 tests, but the dashboard still says **0/8 train · 0/6
+development · prior registry 0 · authority 0**. GitHub and Claude still get a vote before the one
+historical prior is materialized. Only then can the project move to the actual curriculum gap:
+depleted-PP contexts and fourteen prospectively frozen Red decisions.
+
 ## August 15: the audit saved us from rebuilding the project
 
 Antigravity's question was exactly the right one: can the future agent tell the difference between

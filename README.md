@@ -4,6 +4,14 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Historical Route 11 evidence is under exact-commit requalification (August 15, 2026); training
+> remains 0/14.** Source `0d89d85` replaces a rejected prior composer with a machine-bound comparison
+> of 19 operational elements across the observed and current Git commits, exactly three reviewed
+> compatibility waivers, a positive stateless-walker proof and measured rejection of the stale Cave
+> sibling. The local gate passes 3,488 tests, Ruff, mypy over 223 files and every generated registry.
+> GitHub CI and Claude re-approval remain required before the first private venue prior is composed.
+> No outcome, fit, controller, teacher, sealed Red, Crystal or authority advanced.
+
 > **Prospective party questions and outcomes are now one authenticated object (August 15, 2026);
 > training remains 0/14.** Exact source `85ae878` passed 3,432 non-integration tests, Ruff, mypy
 > over 222 source files, privacy/documentation checks and every generated-registry gate. A party

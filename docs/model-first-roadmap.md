@@ -6,6 +6,53 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Immediate execution bridge: from zero outcomes to the first honest fit
+
+Role ownership and exact handoffs are frozen in
+[current-agent-handoffs.md](current-agent-handoffs.md). The next work is deliberately serial:
+
+1. After explicit owner approval, make the one CI checkout-history repair, publish the current
+   documentation and require a green exact-head run.
+2. Claude attacks the immutable Route 11 source qualification. No ROM, private prior or outcome is
+   opened. Any surviving provenance/contract mutation returns the lane to Codex.
+3. After approval only, Codex composes one private Route 11 prior and publishes a path-free summary.
+   Priors may become one; every learning counter remains zero.
+4. Codex searches existing non-sealed states read-only for real PP diversity. If it is absent,
+   freeze and review a bounded context-materialization plan before any controller input.
+5. Freeze exactly 8 train and 6 untouched development questions. Claude audits binding,
+   independence, diversity and power. Antigravity audits whether the menus contain genuine choices,
+   serve the living-Pokédex product and have a Crystal falsifier.
+6. Execute each approved identity once with immediate durable private retention. Stop at the first
+   binding/accounting failure and never replace an exposed identity.
+7. Fit once on eight train outcomes and compare once on six development outcomes. This is a
+   descriptive pipeline result and grants zero authority. If development is underpowered or
+   choice-equivalent, expand genuine decisions rather than tuning to six rows.
+8. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
+   short hierarchical episodes and the living-Pokédex dependency planner.
+
+This bridge has one maintenance time box for CI/source qualification and one experimental time box
+for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine alternatives, the
+result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
+sequence.
+
+## Current checkpoint: make historical evidence survive source time
+
+Claude rejected the first Route 11 prior composer because it could correctly divide the observed
+counts while still lying about which code produced them. Exact source `0d89d85` closes that class of
+error. It reads the historical `00499bc` source directly from Git, compares the 19 operational
+elements with the current commit, and permits exactly three reviewed semantic-preserving deltas.
+The current runtime, stateless Route 11 walker, policy, recovery, timing and accounting are all bound
+into the evidence. The stale Cave sibling is now validated from its own trial row rather than
+represented by a hardcoded count.
+
+Local qualification is green at 3,488 tests, Ruff, mypy over 223 source files and all generated
+registries. The exact executable bundle is `419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`.
+This checkpoint is not approved evidence yet: GitHub CI and Claude's adversarial re-audit of the
+published commit remain mandatory. If approved, compose exactly one private Route 11 prior. Then
+locate or prospectively create depleted-PP non-sealed contexts and freeze the genuine 8-train /
+6-development input catalog for review. Outcomes remain 0/14; no controller, teacher, fit,
+prediction, sealed Red, Crystal, replay or authority is open.
+
 ## Current checkpoint: close the real constraint gap, then build the curriculum
 
 Exact source `587fb18` passed 3,435 tests, Ruff, mypy across 222 source files and every generated-

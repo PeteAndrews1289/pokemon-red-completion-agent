@@ -1,5 +1,39 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: one keyboard, two red teams
+
+Put **CODEX** at the keyboard with three cards: **BUILD · INTEGRATE · PUBLISH**. Place Claude to the
+left with a magnifying glass: **IS THE EVIDENCE TRUE?** Place Antigravity to the right with a map
+from Red to Crystal: **IS THIS THE RIGHT THING TO BUILD?** Draw no voting buttons. Instead, route
+both findings back through one box: **CHEAPEST DISCRIMINATING TEST**.
+
+Animate the relay: **GREEN CI → CLAUDE SOURCE AUDIT → ONE ROUTE 11 PRIOR → FREEZE 8+6 QUESTIONS →
+CLAUDE INTEGRITY AUDIT + ANTIGRAVITY TRANSFER AUDIT → ONE-SHOT OUTCOMES → DESCRIPTIVE FIT**. Keep
+the final badge grey: **AUTHORITY ZERO**. Narration: **“Three agents are useful only when they are
+allowed to doubt different things—and only one of them owns the keyboard.”**
+
+## August 15 scene: the number was right; the timeline was not proved
+
+Open on a green calculation card: **108 BATTLES · 10 RECOVERIES · 1 EVOLUTION**. Then slide its
+source label between two commits—`00499bc` and **CURRENT**—without changing the number. Stamp the
+card **REJECTED: SOURCE TIME TRAVEL**.
+
+Show Claude's five red findings: **HISTORICAL BUNDLE NOT READ · OLD RESULT/CURRENT CONTRACT ·
+HARDCODED STALE SIBLING · STATELESS BY ABSENCE · 7/9 MUTATIONS SURVIVED**. Do not frame this as a
+failed run; the run and arithmetic were genuine. The failure was the proof that allowed the run to
+be reused.
+
+Replace the loose source label with 19 anonymous code tiles read from both commits. Keep 16 locked
+and open exactly three signed waiver cards: **WALKER FACTORY ADDED · WALKER LOOKUP/TELEMETRY ·
+DEFAULT-ZERO COUNTERS**. Make a fourth unlisted change and shatter the attestation. Then parse the
+second trial and grey out **CAVE: STALE OPERATING SOURCE**, rather than incrementing a literal.
+
+End on **0d89d85 · 3,488 TESTS · SOURCE BUNDLE 419a1288…** with two gates still closed:
+**GITHUB CI** and **CLAUDE RE-AUDIT**. Keep the experiment board honest:
+**PRIORS 0 · TRAIN 0/8 · DEVELOPMENT 0/6 · FIT FALSE · AUTHORITY ZERO**. Narration:
+**“The calculation did not change. What changed was our ability to prove whose calculation it
+was.”**
+
 ## August 15 scene: five red flags, one real hole
 
 Open on five review cards stamped **MISSING?**:

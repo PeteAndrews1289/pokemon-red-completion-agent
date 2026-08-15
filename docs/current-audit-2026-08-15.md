@@ -1,5 +1,46 @@
 # Current audit — 2026-08-15
 
+## Three-agent role and execution-plan audit
+
+The current work no longer treats Codex, Claude and Antigravity as interchangeable assistants.
+[The active handoff](current-agent-handoffs.md) assigns one source owner and two non-overlapping
+falsification lanes. Codex implements, integrates, validates, publishes and adjudicates. Claude
+attacks provenance, mutation resistance, leakage, statistics and claim boundaries on immutable
+commits. Antigravity attacks mission value, sample efficiency, title neutrality, transfer and
+living-Pokédex coverage. Reviewers remain read-only by default; consensus does not grant authority.
+
+The operational bridge is now explicit: CI repair and green head; Claude requalification; one
+private Route 11 prior; PP-diversity search or a separately reviewed materialization plan; 8+6
+question freeze; dual catalog review; one-shot outcome collection; one descriptive fit; then
+expansion toward the 120-pair party gate and a Crystal falsifier. The first fit cannot promote
+authority. Every phase records a capability, authority boundary, transfer test, cheapest falsifier,
+time box and stop condition. This is coordination maintenance for a named learned experiment, not
+another development subsystem.
+
+## Historical Route 11 evidence compatibility repair
+
+Claude returned **REJECT** on the first concrete venue-prior composer. The measured Route 11 trial
+and its ratios were truthful, but five surrounding claims were not sufficiently proved: the
+historical source and bundle could be forged; an observation from `00499bc` was assigned a current
+operational contract; the stale Cave sibling count was a literal; statelessness was inferred from a
+missing factory; and seven of nine operational mutations survived the focused suite.
+
+Exact source `0d89d85edbe19ff639f5983123759787c87292e7` implements the remediation. A typed
+source-compatibility attestation now reconstructs the historical and current executable bundles,
+extracts 19 exact AST elements from each commit, compares the loaded runtime to the current commit,
+and fires exactly three committed waivers. Those waivers cover only `fresh_walk_to_grass`,
+`run_red_team_balancing`, and the default-zero additions to `TeamTrainingExecutionSummary`. A stale
+or extra waiver fails. The operational contract has independent golden coverage for policy,
+encounter execution, recovery, battle timing, accounting, measured evidence and walker identity.
+Trial 1 is parsed as a stale Cave observation and must satisfy its own objective, battle, faint,
+evolution, transition and accounting facts before it can be rejected.
+
+Local results: 3,488 passed, three skipped, one expected failure; Ruff clean; mypy clean across 223
+source files; collection, goal-manager and strategic registries reproduce exactly. Committed source
+bundle: `419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`.
+This is a remediation candidate, not an approval. GitHub CI and Claude's exact-commit mutation
+re-audit remain open. No registry has been materialized and every protected counter remains zero.
+
 ## Completion-constraint adjudication and causal-mask update
 
 Exact source `587fb18` upgrades the prospective party binding/catalog to v5 and its menu document

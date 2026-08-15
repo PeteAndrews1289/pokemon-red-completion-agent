@@ -1,5 +1,26 @@
 # Three-agent coordination
 
+> **2026-08-15 active role handoff and next-gate sequence:** The canonical current assignments are
+> now [docs/current-agent-handoffs.md](docs/current-agent-handoffs.md). Codex is the workhorse,
+> integrator, sole default editor and GitHub pusher. Claude is the read-only forensic auditor for
+> provenance, mutation distinguishability, leakage, statistics and claim boundaries. Antigravity is
+> the read-only architecture and transfer challenger for learned authority, sample efficiency,
+> cross-game representation and living-Pokédex capability coverage. Codex may disagree with either;
+> material disagreements are resolved with the cheapest discriminating test, not a vote.
+>
+> Immediate sequence: obtain explicit owner approval for the single CI history fix; publish and get
+> a green exact head; Claude re-audits the Route 11 source qualification; Codex composes one private
+> prior only after approval; Codex freezes the 8+6 question catalog; Claude audits integrity/power;
+> Antigravity audits genuine choice quality and transfer value; only then may outcomes execute. A
+> first 8+6 fit is descriptive and grants zero authority. The 120-episode Milestone 4 gate, early
+> Crystal development falsifier, hierarchical integration and living-Pokédex planner remain later
+> gates. No full run is authorized.
+>
+> Current source candidate `0d89d85` is locally green but GitHub CI failed because shallow checkout
+> omitted historical commit `00499bc`. The proposed `fetch-depth: 0` workflow repair remains
+> unimplemented pending explicit approval. Counters remain priors 0, menus 0, outcomes 0/14, fits 0,
+> sealed/Crystal 0, replay 0 and authority 0.
+
 > **2026-08-15 completion-constraint adjudication — highest active checkpoint:** Exact source
 > `587fb18` passed 3,435 tests, Ruff, mypy over 222 source files and all generated-registry checks.
 > Every masked party candidate now carries a typed causal reason aligned one-for-one with its

@@ -17,6 +17,58 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Three-agent operating assignments and execution bridge frozen — 2026-08-15
+
+Read [docs/current-agent-handoffs.md](docs/current-agent-handoffs.md) before dispatching another
+agent. Codex is the implementation workhorse, integrator and sole default publisher. Claude owns
+read-only forensic review of provenance, mutations, leakage, statistics and claim boundaries.
+Antigravity owns read-only architecture review of learned authority, transfer, sample efficiency
+and living-Pokédex capability coverage. Reviewers advise; Codex adjudicates with evidence and may
+disagree. Neither reviewer edits the active worktree or opens a protected context.
+
+The immediate handoff chain is explicit: one approved CI history repair and green exact head;
+Claude source requalification; one private Route 11 prior; read-only PP search or a separately
+reviewed bounded context-materialization plan; exact 8+6 **question** freeze; Claude catalog
+integrity/power audit; Antigravity choice-quality/transfer audit; one-shot outcomes; then one
+descriptive fit. The first fit grants zero authority. Expansion toward the 120-pair party gate,
+Crystal transfer and hierarchical/living-Pokédex work follows measured results, not optimism.
+
+The mission check classifies the role/document work as one-checkpoint maintenance that unblocks the
+named party experiment. Its transfer requirement is a Crystal falsifier for every Red learner
+phase. Its cheapest falsifier is a reviewer showing that a gate passes without the claimed
+behavior. Its stop condition is duplicate/conflicting coordination prose rather than clearer
+ownership. No full replay is authorized.
+
+## Historical Route 11 prior repair published; independent re-approval is pending — 2026-08-15
+
+Claude rejected the first Route 11 venue-prior composer even though its arithmetic was correct. The
+rejection was substantive: the composer shape-checked a historical source claim instead of reading
+that commit; stamped a current operating contract onto an older observation; hardcoded one rejected
+Cave sibling; asserted statelessness from the absence of a factory; and let seven of nine load-bearing
+contract mutations survive. Do not use or reconstruct that rejected composer.
+
+Exact source `0d89d85edbe19ff639f5983123759787c87292e7` replaces those claims with a machine-bound
+compatibility attestation. It recomputes the historical bundle at `00499bc`, reads each qualified
+operational element from both commits, and accepts exactly three reviewed AST deltas: the added
+Route 11 walker factory, the walker lookup/telemetry change in `run_red_team_balancing`, and the
+default-zero traversal counters on `TeamTrainingExecutionSummary`. Any missing, stale or additional
+waiver fails. The resulting operational contract positively fingerprints the stateless Route 11
+walker and independently binds policy, encounter execution, recovery, battle timing and accounting.
+Trial 1 is now parsed and rejected as the stale Cave sibling rather than counted by a literal.
+
+The committed executable bundle is
+`419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`. The publication tree passed
+3,488 tests, three intentional skips, one expected failure, Ruff, whole-source mypy over 223 files
+and all three generated-registry checks. GitHub CI and Claude's exact-commit adversarial re-audit
+remain gates. Until both pass, do not materialize the registry. Even after they pass, composition
+creates one frozen prior and zero learner outcomes; it does not authorize a controller, teacher,
+fit, prediction, sealed Red, Crystal or replay.
+
+Honest counters remain Red menus 0, frozen venue priors 0, outcomes 0/14, completion-aware fits 0,
+controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0. Next: obtain exact-commit
+approval, compose the one private Route 11 prior from the two authenticated V2 receipts, then solve
+the still-real depleted-PP and 8+6 catalog constraints before executing any candidate.
+
 ## Completion-constraint audit corrected; party masks now explain themselves — 2026-08-15
 
 Exact source `587fb18` passed 3,435 tests, three intentional integration skips, one expected
