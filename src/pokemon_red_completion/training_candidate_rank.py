@@ -223,6 +223,45 @@ def project_trainee_candidates(
     from the feature vector.
     """
 
+    projected = project_trainee_choice_set(
+        party,
+        policy,
+        areas,
+        active_conditions=active_conditions,
+    )
+    if projected is None:
+        return None
+    eligible, observation = projected
+    weakest_level = min(member.level for member in eligible)
+    weakest = tuple(member for member in eligible if member.level == weakest_level)
+    if len(weakest) > 1:
+        leads = tuple(member for member in weakest if member.slot == 1)
+        if len(leads) != 1:
+            # The teacher would break this tie by an unobserved party-position
+            # identity. It is not valid candidate-ranking supervision.
+            return None
+        selected = leads[0]
+    else:
+        selected = weakest[0]
+    selected_index = eligible.index(selected)
+    return selected, selected_index, observation
+
+
+def project_trainee_choice_set(
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+    *,
+    active_conditions: tuple[str, ...] = (),
+) -> tuple[tuple[PartyMemberObservation, ...], TrainingCandidateSet] | None:
+    """Project the complete trainee menu without inventing a teacher label.
+
+    Outcome collection needs the genuine counterfactual menu even when the
+    deterministic teacher would break a tie using hidden party position.  The
+    returned members are execution-private bindings; only the identity-free
+    candidate set belongs in learner data.
+    """
+
     eligible = _eligible_trainees(
         party,
         policy,
@@ -245,20 +284,7 @@ def project_trainee_candidates(
         )
         for index, member in enumerate(eligible)
     )
-    observation = TrainingCandidateSet(TrainingChoiceKind.TRAINEE, candidates)
-    weakest_level = min(member.level for member in eligible)
-    weakest = tuple(member for member in eligible if member.level == weakest_level)
-    if len(weakest) > 1:
-        leads = tuple(member for member in weakest if member.slot == 1)
-        if len(leads) != 1:
-            # The teacher would break this tie by an unobserved party-position
-            # identity. It is not valid candidate-ranking supervision.
-            return None
-        selected = leads[0]
-    else:
-        selected = weakest[0]
-    selected_index = eligible.index(selected)
-    return selected, selected_index, observation
+    return eligible, TrainingCandidateSet(TrainingChoiceKind.TRAINEE, candidates)
 
 
 def project_venue_candidates(
@@ -271,6 +297,39 @@ def project_venue_candidates(
     active_conditions: tuple[str, ...] = (),
 ) -> tuple[GrindingArea, int, TrainingCandidateSet] | None:
     """Project every safe venue and label the teacher's efficiency choice."""
+
+    projected = project_venue_choice_set(
+        party,
+        trainee,
+        policy,
+        areas,
+        require_healer=require_healer,
+        active_conditions=active_conditions,
+    )
+    if projected is None:
+        return None
+    eligible, observation = projected
+    best_minimum = max(area.minimum_encounter_level for area in eligible)
+    best = tuple(area for area in eligible if area.minimum_encounter_level == best_minimum)
+    if len(best) != 1:
+        # The current teacher breaks this tie by area identity, which is
+        # intentionally absent from the portable observation.
+        return None
+    selected = best[0]
+    selected_index = eligible.index(selected)
+    return selected, selected_index, observation
+
+
+def project_venue_choice_set(
+    party: PartyObservation,
+    trainee: PartyMemberObservation,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+    *,
+    require_healer: bool = True,
+    active_conditions: tuple[str, ...] = (),
+) -> tuple[tuple[GrindingArea, ...], TrainingCandidateSet] | None:
+    """Project the complete viable-venue menu without a teacher selection."""
 
     eligible = _eligible_venues(
         trainee,
@@ -295,16 +354,7 @@ def project_venue_candidates(
         )
         for index, area in enumerate(eligible)
     )
-    observation = TrainingCandidateSet(TrainingChoiceKind.VENUE, candidates)
-    best_minimum = max(area.minimum_encounter_level for area in eligible)
-    best = tuple(area for area in eligible if area.minimum_encounter_level == best_minimum)
-    if len(best) != 1:
-        # The current teacher breaks this tie by area identity, which is
-        # intentionally absent from the portable observation.
-        return None
-    selected = best[0]
-    selected_index = eligible.index(selected)
-    return selected, selected_index, observation
+    return eligible, TrainingCandidateSet(TrainingChoiceKind.VENUE, candidates)
 
 
 def bind_trainee_candidate(
