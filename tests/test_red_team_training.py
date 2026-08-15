@@ -17,6 +17,7 @@ is where nearly all the cost has been.
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 
 import pytest
 
@@ -68,7 +69,7 @@ from pokemon_red_completion.training_candidate_rank import (
     TrainingChoiceKind,
 )
 from pokemon_red_completion.training_control import TrainingControlAction, TrainingControlDecision
-from pokemon_red_completion.training_venue import TrainingVenue
+from pokemon_red_completion.training_venue import TrainingVenue, WarpSafeVenueWalker
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
@@ -475,6 +476,12 @@ def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
         "cleanup_trips": 1,
         "faints": 0,
         "rotations_executed": 1,
+        "traversal_instrumented_walkers": 0,
+        "traversal_movement_attempts": 0,
+        "traversal_successful_steps": 0,
+        "traversal_blocked_attempts": 0,
+        "traversal_excluded_transition_skips": 0,
+        "traversal_no_progress_cycles": 0,
     }
 
 
@@ -487,6 +494,22 @@ def test_execution_summary_rejects_an_incomplete_healing_phase_breakdown() -> No
             required_recovery_trips=0,
             optional_recovery_trips=0,
             cleanup_trips=0,
+        )
+
+
+def test_execution_summary_rejects_incomplete_traversal_attempts() -> None:
+    with pytest.raises(ValueError, match="traversal attempts are incomplete"):
+        TeamTrainingExecutionSummary(
+            progress=TeamTrainingProgress(),
+            rotations_executed=0,
+            venue_transition_trips=0,
+            required_recovery_trips=0,
+            optional_recovery_trips=0,
+            cleanup_trips=0,
+            traversal_instrumented_walkers=1,
+            traversal_movement_attempts=2,
+            traversal_successful_steps=1,
+            traversal_blocked_attempts=0,
         )
 
 
@@ -631,6 +654,140 @@ def test_model_selected_optional_heal_executes_and_pays_its_budget(
 
     assert chose_optional_heal
     assert calls == {"heal": 1, "walk": 1}
+
+
+def test_balancer_uses_one_fresh_venue_walker_per_run(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A candidate clone cannot inherit pacing direction from an earlier clone."""
+
+    memory = FakeMemory()
+    memory.set_party(
+        [(species, 54 if index == 1 else 55) for index, species in enumerate(FINAL_FORM_ROSTER)]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    calls = {"factory": 0, "fresh": 0, "legacy": 0}
+
+    def legacy(*_args: object) -> int:
+        calls["legacy"] += 1
+        return 1
+
+    def factory() -> Callable[[object, object, object], int]:
+        calls["factory"] += 1
+
+        def fresh(*_args: object) -> int:
+            calls["fresh"] += 1
+            return 1
+
+        return fresh
+
+    venue = TrainingVenue(
+        band=GrindingArea(
+            "run-local-walker",
+            45,
+            55,
+            rare_maximum_encounter_level=55,
+            measured_samples=100,
+        ),
+        map_id=TRAINING_MAP,
+        walk_to_grass=legacy,
+        heal_and_return=lambda *_args: None,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+        walk_to_grass_factory=factory,
+    )
+
+    with pytest.raises(RuntimeError, match="step budget exhausted"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                max_steps=1,
+            ),
+            venues=[venue],
+        )
+
+    assert calls == {"factory": 1, "fresh": 1, "legacy": 0}
+
+
+def test_balancer_retains_identity_free_traversal_reliability_counters(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(species, 54 if index == 1 else 55) for index, species in enumerate(FINAL_FORM_ROSTER)]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    summaries: list[TeamTrainingExecutionSummary] = []
+
+    class CompletingWalker(WarpSafeVenueWalker):
+        def __call__(self, actions: object, reader: object, emulator: object) -> int:
+            del actions, reader
+            assert isinstance(emulator, FakeMemory)
+            self.movement_attempts += 2
+            self.successful_steps += 1
+            self.blocked_attempts += 1
+            self.excluded_transition_skips += 1
+            next(
+                member for member in emulator.party if member.species == DUGTRIO_SPECIES_ID
+            ).level = 55
+            return 1
+
+    walker = CompletingWalker(
+        expected_map_id=TRAINING_MAP,
+        excluded_coordinates=frozenset({(4, 4)}),
+    )
+    venue = TrainingVenue(
+        band=GrindingArea(
+            "instrumented-venue",
+            45,
+            55,
+            rare_maximum_encounter_level=55,
+            measured_samples=100,
+        ),
+        map_id=TRAINING_MAP,
+        walk_to_grass=lambda *_args: 1,
+        heal_and_return=lambda *_args: None,
+        is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+        move_slot=lambda _raw: 1,
+        walk_to_grass_factory=lambda: walker,
+    )
+
+    report, battles, _heals = run(
+        memory,
+        FakeReader([state()]),
+        policy=BalancedTeamPolicy(
+            minimum_level=55,
+            maximum_level_spread=40,
+            required_size=6,
+        ),
+        venues=[venue],
+        execution_summary_sink=summaries.append,
+    )
+
+    assert report is not None and report.passed
+    assert battles == 0
+    assert len(summaries) == 1
+    assert summaries[0].public_dict() == {
+        "battles_completed": 0,
+        "steps_taken": 1,
+        "healing_trips": 1,
+        "venue_transition_trips": 0,
+        "required_recovery_trips": 0,
+        "optional_recovery_trips": 0,
+        "cleanup_trips": 1,
+        "faints": 0,
+        "rotations_executed": 3,
+        "traversal_instrumented_walkers": 1,
+        "traversal_movement_attempts": 2,
+        "traversal_successful_steps": 1,
+        "traversal_blocked_attempts": 1,
+        "traversal_excluded_transition_skips": 1,
+        "traversal_no_progress_cycles": 0,
+    }
 
 
 def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:

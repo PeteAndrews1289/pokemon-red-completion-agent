@@ -104,7 +104,7 @@ from pokemon_red_completion.training_control import (
     TrainingControlAction,
     TrainingControlDecision,
 )
-from pokemon_red_completion.training_venue import TrainingVenue
+from pokemon_red_completion.training_venue import TrainingVenue, WarpSafeVenueWalker
 
 BLAINE_CHECKPOINT_COUNT = 9
 MANSION_SECRET_KEY_CHECKPOINT_COUNT = 4
@@ -2695,41 +2695,21 @@ def _training_dig_to_vermilion(
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
 
-#: Which way the cave pacing is currently headed, reversed on every wall.
-_CAVE_PACING = {"direction": "left"}
+#: Cartridge-derived automatic exits, represented in live ``(x, y)`` order.
+#: The Route 11 arrival is itself ``(5, 5)``. A horizontal bounce walked left,
+#: hit the wall, reversed, and stepped straight back onto this trigger, causing
+#: 39 bounded re-entries in the first measured Cave outcome.
+DIGLETTS_CAVE_EXIT_COORDINATES = frozenset({(5, 5), (37, 31)})
 
 
-def _digletts_cave_walk_to_grass(
-    actions: CountingExecutor,
-    reader: PokemonRedStateReader,
-    emulator: EmulatorState,
-) -> int:
-    """Pace the tunnel, turning round at each wall.
+def _new_digletts_cave_walker() -> WarpSafeVenueWalker:
+    """Build one run-local, warp-safe Cave encounter walker."""
 
-    The whole cave is an encounter zone, so any real step will do -- but only a
-    real step counts. Walking one fixed direction chosen by x walks into a wall
-    and stays there, and a blocked press is not a step, so the encounter check
-    never runs. Measured from a captured state: 250 walks produced one
-    encounter and no level gain, because after about eight tiles west the
-    remaining two hundred presses were all against rock.
-
-    Bouncing is what surge's own Diglett search does for the same cave. The
-    direction is kept between calls and reversed whenever the player did not
-    actually move.
-    """
-
-    before = reader.read()
-    if before.player_x is None:
-        return 0
-    direction = _CAVE_PACING["direction"]
-    _pulse(actions, MacroActionKind.MOVE, direction, 120)
-    after = reader.read()
-    if after.battle_state:
-        return 1
-    if (after.player_x, after.player_y) == (before.player_x, before.player_y):
-        _CAVE_PACING["direction"] = "right" if direction == "left" else "left"
-        return 0
-    return 1
+    return WarpSafeVenueWalker(
+        expected_map_id=int(MapId.DIGLETTS_CAVE),
+        excluded_coordinates=DIGLETTS_CAVE_EXIT_COORDINATES,
+        move_wait_frames=120,
+    )
 
 
 def _route_11_heal_and_return(
@@ -2907,11 +2887,12 @@ def _digletts_cave_training_venue() -> TrainingVenue:
     return TrainingVenue(
         band=band,
         map_id=int(MapId.DIGLETTS_CAVE),
-        walk_to_grass=_digletts_cave_walk_to_grass,
+        walk_to_grass=_new_digletts_cave_walker(),
         heal_and_return=_digletts_cave_heal_and_return,
         is_in_center=lambda r: r.map_id == MapId.VERMILION_POKECENTER,
         move_slot=_team_training_move_slot,
         move_guard=_team_training_move_guard,
+        walk_to_grass_factory=_new_digletts_cave_walker,
     )
 
 

@@ -22,6 +22,7 @@ from pokemon_red_completion.blaine import (
     BLAINE_TM21_SALE_VALUE,
     BLAINE_TO_GYM_EXIT,
     CENTER_TO_MANSION,
+    DIGLETTS_CAVE_EXIT_COORDINATES,
     DIGLETTS_CAVE_TRAINING_VENUE,
     GYM_GATE_EVENTS,
     GYM_QUIZ_ROUTES,
@@ -172,6 +173,11 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert ROUTE_11_TRAINING_VENUE.band.area_id == "route_11"
     assert ROUTE_11_TRAINING_VENUE.map_id == int(MapId.ROUTE_11)
     assert ROUTE_11_TRAINING_VENUE.battle_timing.max_sleep_reapplications == 4
+    assert frozenset({(5, 5), (37, 31)}) == DIGLETTS_CAVE_EXIT_COORDINATES
+    assert (
+        DIGLETTS_CAVE_TRAINING_VENUE.fresh_walk_to_grass()
+        is not DIGLETTS_CAVE_TRAINING_VENUE.fresh_walk_to_grass()
+    )
     assert MANSION_MAX_CONSECUTIVE_FLEES == 32
     assert frozenset({0x76, 0x88, 0xA3}) == MANSION_ESCORT_ENEMY_SPECIES
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES

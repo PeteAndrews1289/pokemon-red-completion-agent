@@ -64,7 +64,11 @@ from pokemon_red_completion.training_control import (
     TrainingControlPhase,
     project_training_control_observation,
 )
-from pokemon_red_completion.training_venue import TrainingVenue, venue_for_map
+from pokemon_red_completion.training_venue import (
+    TrainingVenue,
+    WarpSafeVenueWalker,
+    venue_for_map,
+)
 
 
 class EmulatorState(Protocol):
@@ -196,6 +200,12 @@ class TeamTrainingExecutionSummary:
     required_recovery_trips: int
     optional_recovery_trips: int
     cleanup_trips: int
+    traversal_instrumented_walkers: int = 0
+    traversal_movement_attempts: int = 0
+    traversal_successful_steps: int = 0
+    traversal_blocked_attempts: int = 0
+    traversal_excluded_transition_skips: int = 0
+    traversal_no_progress_cycles: int = 0
 
     def __post_init__(self) -> None:
         if not isinstance(self.progress, TeamTrainingProgress):
@@ -212,6 +222,21 @@ class TeamTrainingExecutionSummary:
             raise ValueError("training execution healing-trip phases are invalid")
         if sum(phase_trips) != self.progress.healing_trips:
             raise ValueError("training execution healing-trip phases are incomplete")
+        traversal_counts = (
+            self.traversal_instrumented_walkers,
+            self.traversal_movement_attempts,
+            self.traversal_successful_steps,
+            self.traversal_blocked_attempts,
+            self.traversal_excluded_transition_skips,
+            self.traversal_no_progress_cycles,
+        )
+        if any(type(value) is not int or value < 0 for value in traversal_counts):  # noqa: E721
+            raise ValueError("training execution traversal counters are invalid")
+        if (
+            self.traversal_successful_steps + self.traversal_blocked_attempts
+            != self.traversal_movement_attempts
+        ):
+            raise ValueError("training execution traversal attempts are incomplete")
 
     def public_dict(self) -> dict[str, int]:
         return {
@@ -224,6 +249,12 @@ class TeamTrainingExecutionSummary:
             "cleanup_trips": self.cleanup_trips,
             "faints": self.progress.faints,
             "rotations_executed": self.rotations_executed,
+            "traversal_instrumented_walkers": self.traversal_instrumented_walkers,
+            "traversal_movement_attempts": self.traversal_movement_attempts,
+            "traversal_successful_steps": self.traversal_successful_steps,
+            "traversal_blocked_attempts": self.traversal_blocked_attempts,
+            "traversal_excluded_transition_skips": self.traversal_excluded_transition_skips,
+            "traversal_no_progress_cycles": self.traversal_no_progress_cycles,
         }
 
 
@@ -978,6 +1009,7 @@ def run_red_team_balancing(
     # the venue. Starting from wherever we are standing keeps that honest;
     # falling back to the first venue keeps it total.
     current_venue: TrainingVenue = venue_for_map(venues, reader.read().map_id or -1) or venues[0]
+    venue_walkers = {venue.band.identity: venue.fresh_walk_to_grass() for venue in venues}
 
     while True:
         party = party_reader.read()
@@ -1472,7 +1504,7 @@ def run_red_team_balancing(
             TrainingControlAction.SEEK,
             "safe encounter-seeking boundary",
         )
-        steps += current_venue.walk_to_grass(actions, reader, emulator)
+        steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
     if current_venue.is_in_map(reader.read()):
         restore_core_and_count()
@@ -1484,6 +1516,10 @@ def run_red_team_balancing(
         summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
     )
     if execution_summary_sink is not None:
+        instrumented_walkers = tuple(
+            walker for walker in venue_walkers.values() if isinstance(walker, WarpSafeVenueWalker)
+        )
+        traversal_summaries = tuple(walker.public_summary() for walker in instrumented_walkers)
         execution_summary_sink(
             TeamTrainingExecutionSummary(
                 progress=TeamTrainingProgress(
@@ -1497,6 +1533,22 @@ def run_red_team_balancing(
                 required_recovery_trips=required_recovery_trips,
                 optional_recovery_trips=optional_recovery_trips,
                 cleanup_trips=cleanup_trips,
+                traversal_instrumented_walkers=len(instrumented_walkers),
+                traversal_movement_attempts=sum(
+                    summary["movement_attempts"] for summary in traversal_summaries
+                ),
+                traversal_successful_steps=sum(
+                    summary["successful_steps"] for summary in traversal_summaries
+                ),
+                traversal_blocked_attempts=sum(
+                    summary["blocked_attempts"] for summary in traversal_summaries
+                ),
+                traversal_excluded_transition_skips=sum(
+                    summary["excluded_transition_skips"] for summary in traversal_summaries
+                ),
+                traversal_no_progress_cycles=sum(
+                    summary["no_progress_cycles"] for summary in traversal_summaries
+                ),
             )
         )
     return report, battles, healing_trips
