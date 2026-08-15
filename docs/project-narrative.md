@@ -1,5 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the first navigation lesson reached the game
+
+The next experiment held the destination still and changed only the route. From one authenticated
+Cerulean state, the system planned a 14-step shortest path and a 16-step strict detour to the same
+Gym entrance before either clone moved. Candidate order came from the state digest; the learner saw
+portable route features, not coordinates or arrow sequences.
+
+Exact source passed GitHub first. Both one-shot clones then arrived without a replan or interruption.
+The shortest route used 14 movement requests and 516 frames; the detour used 16 and 564. The
+prospectively frozen outcome rule selected the shorter route, producing the first real navigation
+preference through the same learner boundary as battle.
+
+That is evidence plumbing, not a navigation model. One easy route does not prove obstacle handling,
+recovery, cross-map generalization or transfer to another Pokémon game, so no authority changed.
+The important result is narrower: game-grounded navigation can now become training data without
+turning a destination, coordinate or button sequence into the label. Party development is the last
+of the first three outcome families still missing a real cartridge result.
+
 ## August 14: training finally ran—and the scoreboard was too easy
 
 The repaired curve ran once against exact-commit source. Eight authenticated battle states produced

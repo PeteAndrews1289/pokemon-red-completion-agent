@@ -1,8 +1,8 @@
 # Current audit — 2026-08-14
 
-## Same-terminal navigation probe: prospectively frozen, not yet executed
+## Same-terminal navigation result: both arrived; the shorter route won
 
-The next step is intentionally smaller than a navigation training campaign. One authenticated,
+The experiment stayed intentionally smaller than a navigation training campaign. One authenticated,
 non-sealed scenario-001 Cerulean state produces two cartridge-derived routes to the exact same Gym
 entrance: the shortest route is cost 15 / 14 steps; the cheapest strictly longer detour is cost 17 /
 16 steps. The detour is created by excluding one intermediate walk coordinate only during
@@ -10,13 +10,20 @@ planning, then executing the resulting valid route in the unchanged world. This 
 semantic error of comparing Help Bill and Misty—different objectives whose route length cannot be
 treated as objective value.
 
-The [prospective plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json) freezes route
+The [prospective plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json) froze route
 construction, state-digest candidate ordering, the arrival/efficiency objective, identical reloads,
 one execution per candidate, immediate private retention, and no retries after outcomes. The shared
 model input contains semantic tags and route metrics but no destination reference, coordinate, or
-movement action. The result is allowed to validate or falsify the navigation outcome adapter only;
-it cannot fit a model or promote authority. Teacher, sealed Red, Crystal and full-replay counters
-remain zero. Publication and exact-commit CI are required before the one-shot execution.
+movement action. Exact source `c37504d` passed CI run `31855189665`, then the runner executed once.
+Both clones arrived without replans or interruptions. The detour consumed 16 movement requests and
+564 frames; the shortest route consumed 14 and 516. Candidate 1 was therefore the sole best outcome.
+
+The [path-free result](evidence/red-local-navigation-outcome-result-2026-08-14.json) validates one
+real navigation outcome and its candidate binding. It does not fit a model, demonstrate navigation
+generalization, or promote authority. Teacher, sealed Red, Crystal and full-replay counters remain
+zero. The next falsifier is one bounded real party-development outcome; after that, navigation must
+expand prospectively across independent lineages, blockers and recovery rather than rehearse this
+easy route.
 
 ## V2 curve result: the pipeline trained; the catalog could not measure improvement
 
@@ -35,8 +42,8 @@ maximum utility, while 26/32 total branches fainted the opponent. The curve was 
 one-turn wins.
 
 The correct decision is no promotion and no larger sample from the same distribution. The real
-training/evidence pipeline is validated, but battle improvement remains unproven. Build one real
-navigation outcome and one real party-development outcome next. Then prospectively freeze harder
+training/evidence pipeline is validated, but battle improvement remains unproven. The first real
+navigation outcome is now complete; build one real party-development outcome next. Then prospectively freeze harder
 level-matched, non-OHKO battle states with health, status, matchup and resource tradeoffs. The exact
 result is [path-free](evidence/red-battle-learning-curve-v2-result-2026-08-14.json), and the updated
 dashboard makes the ceiling visible rather than presenting 4/4 as a promotion result.

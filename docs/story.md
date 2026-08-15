@@ -26,6 +26,20 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: the same destination, two different journeys
+
+Navigation got its first real lesson without teaching a route script. The experiment restored the
+same Cerulean moment twice and sent each clone to the same Gym entrance. One candidate followed the
+14-step shortest route; the other took a prospectively constructed 16-step detour. Both routes were
+planned before either result existed, and neither destination identity nor arrow sequence entered
+the learner's features.
+
+Both arrived cleanly. The shorter route needed 14 movement requests and 516 frames, while the
+detour needed 16 and 564. That made the result useful as one outcome-derived preference—but not as
+proof of learned navigation. No model was fit and no authority changed. The honest headline is
+that navigation can now produce the same kind of grounded report card as battle. Party development
+is next; blockers, recovery and transfer remain later exams.
+
 ## Current checkpoint: a perfect score can still be a failed experiment
 
 The second curve attempt did what the first could not: it completed. Eight authenticated states

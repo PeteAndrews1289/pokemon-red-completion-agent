@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 navigation-outcome scene: same door, different route
+
+Open on one Cerulean frame splitting into two identical clones. Draw both routes to the **SAME GYM
+ENTRANCE** before either clone moves: **SHORTEST · 14 STEPS** and **DETOUR · 16 STEPS**. Keep
+**COORDINATES HIDDEN · ARROW LABELS 0 · TEACHER 0** beside the learner input.
+
+Run both result cards: **ARRIVED · 14 REQUESTS · 516 FRAMES** and
+**ARRIVED · 16 REQUESTS · 564 FRAMES**. Stamp the first **OUTCOME PREFERRED**, then immediately add
+**ONE EXAMPLE · MODEL NOT FIT · AUTHORITY ZERO**. The narration: **“For the first time, navigation
+produced a lesson from what happened in the game—not from copying the route that got there.”** End
+on **PARTY DEVELOPMENT NEXT**, with blockers, recovery and Crystal still locked as later exams.
+
 ## August 14 curve-result scene: 4/4 is not always good news
 
 Open with the repaired journal filling correctly: **32 OUTCOMES · 8 CONTEXTS · 3 MODELS · ZERO

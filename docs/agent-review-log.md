@@ -3,7 +3,7 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
-## Same-terminal navigation plan — 2026-08-14
+## Same-terminal navigation result — 2026-08-14
 
 Codex's post-curve audit rejected using the existing Help-Bill-versus-Misty scenario as a local
 navigation outcome: the two candidates have different strategic value, so arrival efficiency could
@@ -11,11 +11,13 @@ silently label the shorter objective as the better goal. The replacement holds t
 One authenticated Cerulean root produces a shortest route and a strictly longer detour to the same
 Gym entrance; both are planned before execution and ordered from the state digest.
 
-Decision: freeze the two-route one-shot probe, publish it, require exact-commit CI, then execute
-each clone once with immediate private retention. It is a plumbing falsifier, not a training or
-promotion experiment. Independent Claude and Antigravity review is pending; neither approval nor
-external execution is claimed. Review packet:
-[`red-local-navigation-outcome-plan-2026-08-14.json`](evidence/red-local-navigation-outcome-plan-2026-08-14.json).
+Decision: after exact commit `c37504d` and CI run `31855189665` passed, execute each clone once with
+immediate private retention. Both arrived; the detour used 16 movement requests / 564 frames and
+the shortest route used 14 / 516, so the frozen outcome selected the shortest candidate. Accept the
+real navigation outcome boundary, reject any competence or authority claim, and move to one bounded
+party-development outcome. Independent Claude and Antigravity review is pending; neither approval
+nor external execution is claimed. Review packet:
+[`red-local-navigation-outcome-result-2026-08-14.json`](evidence/red-local-navigation-outcome-result-2026-08-14.json).
 
 ## First 1/2/4 battle curve — 2026-08-14
 

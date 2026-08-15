@@ -1,0 +1,97 @@
+{
+  "schema": "pokemon-red-local-navigation-outcome-evidence-v1",
+  "status": "complete_no_model_authority",
+  "experiment_id": "red-local-navigation-same-terminal-v1",
+  "source": {
+    "git_commit": "c37504d2636704572daf29f68a9897d3bedbc9fa",
+    "exact_commit_ci_run": 31855189665,
+    "exact_commit_ci_conclusion": "success",
+    "source_bundle_sha256": "99c87a86d670bfbd9f0e5d835751e4e95ea2d118c64f8a512018ff6dcc181a8c"
+  },
+  "prospective_bindings": {
+    "public_plan_sha256": "2924ed40a3af264371d0e4d71e43e7bc8366833a5c95b235b8852eb10b103442",
+    "source_assignment_id": "aacd01c0b9543a957fb626d17f064b9e1345cd15f1648ec43a05dfb4744a6848",
+    "ordered_policy_input_sha256": "f22bacb08d3ef0aa80e41b4484106342f990ac3686038ed6c6bed4e0621e726f",
+    "public_catalog_sha256": "6cb8cd844e8a836b81cd6b5803fae7d4d03a1ccbf0ccd081e79dfe93c728b9fc",
+    "candidate_count": 2,
+    "runner_executions": 1,
+    "candidate_retries": 0,
+    "candidate_substitutions": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "84d64e2463f5e14b132948616a57991c1f0d423822aba2feeda9d8c48a6128c8",
+    "capture_envelope_sha256": "ca38931ac16936240dd1ce719c08f8904593aebed5654e411502e0bb0d33ee30",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+  "outcome_collection": {
+    "objective_id": "navigation.route.arrival-efficiency.v1",
+    "objective_sha256": "941e185ead2a4fc8dda89d7c413c818d80fe86c1322504270c6cdc95d5888473",
+    "decision_id": "e7388b5703f705ba15d988870dcf09d4d1636f95e0fd5289737efc6ff142a563",
+    "candidate_outcomes": 2,
+    "fully_measured": true,
+    "learner_update_eligible": true,
+    "best_candidate_indices": [1],
+    "target_distribution": [0.0, 1.0],
+    "trials": [
+      {
+        "candidate_index": 0,
+        "route_kind": "strictly_costlier_detour",
+        "route_cost": 17,
+        "planned_steps": 16,
+        "status": "succeeded",
+        "terminal_reached": true,
+        "acknowledged_steps": 16,
+        "movement_requests": 16,
+        "controller_actions": 17,
+        "frames_executed": 564,
+        "replans": 0,
+        "interruptions": 0
+      },
+      {
+        "candidate_index": 1,
+        "route_kind": "shortest_route",
+        "route_cost": 15,
+        "planned_steps": 14,
+        "status": "succeeded",
+        "terminal_reached": true,
+        "acknowledged_steps": 14,
+        "movement_requests": 14,
+        "controller_actions": 15,
+        "frames_executed": 516,
+        "replans": 0,
+        "interruptions": 0
+      }
+    ]
+  },
+  "artifact": {
+    "artifact_id": "red-local-nav-outcome-c37504d26367-84d64e2463f5",
+    "manifest_sha256": "f1899071c0d7e9bce810187b69381d5dced8a4f5279665f6096a739b850527a6",
+    "status": "complete",
+    "total_records": 4,
+    "total_bytes": 9488,
+    "catalog_stream_sha256": "f9b41524873f462368f7afdc45269e849ada67a326a1acd0415dacefbfe2d012",
+    "trial_stream_sha256": "5a5e41efc8fdd517fc2874679d750d6e02125141b6786d6764a0c4d5d89523ec",
+    "outcome_stream_sha256": "31780c48ec3f6a5e542ab84a7ec1a2edaa36bc9ba9e5521bf418d57cbd7800c5"
+  },
+  "decision": {
+    "real_navigation_outcome_boundary_validated": true,
+    "same_destination_comparison_validated": true,
+    "model_fit": false,
+    "navigation_generalization_demonstrated": false,
+    "authority_promoted": false,
+    "reason": "Both independently restored routes reached the exact same terminal. With terminal success and route progress equal, the prospectively ordered efficiency objective preferred the 14-request shortest route over the 16-request detour.",
+    "limit": "This is one easy same-destination route pair from one Red lineage. It validates outcome collection and ordering, not learned navigation competence across blockers, maps or games.",
+    "next": "Build one bounded real party-development outcome, then prospectively expand navigation across independent lineages, blockers and recovery contexts before any unseen promotion gate."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

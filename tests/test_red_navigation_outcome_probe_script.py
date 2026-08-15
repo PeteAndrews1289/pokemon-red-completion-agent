@@ -36,6 +36,12 @@ PLAN_PATH = (
     / "evidence"
     / "red-local-navigation-outcome-plan-2026-08-14.json"
 )
+RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-local-navigation-outcome-result-2026-08-14.json"
+)
 
 
 def _route_pair() -> SameDestinationRoutePair:
@@ -98,6 +104,43 @@ def test_public_plan_freezes_one_same_terminal_non_authority_probe() -> None:
     assert payload["execution"]["execute_each_candidate_exactly_once"] is True
     assert payload["interpretation"]["model_fit"] is False
     assert payload["interpretation"]["authority_promotion"] is False
+    assert set(payload["protected_access"].values()) == {0}
+    assert payload["private_path_fields"] == 0
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_public_result_reports_the_one_shot_pair_without_overclaiming() -> None:
+    payload = json.loads(RESULT_PATH.read_text(encoding="ascii"))
+    encoded = RESULT_PATH.read_text(encoding="ascii")
+
+    assert payload["status"] == "complete_no_model_authority"
+    assert payload["source"] == {
+        "git_commit": "c37504d2636704572daf29f68a9897d3bedbc9fa",
+        "exact_commit_ci_run": 31855189665,
+        "exact_commit_ci_conclusion": "success",
+        "source_bundle_sha256": (
+            "99c87a86d670bfbd9f0e5d835751e4e95ea2d118c64f8a512018ff6dcc181a8c"
+        ),
+    }
+    assert payload["prospective_bindings"]["runner_executions"] == 1
+    assert payload["prospective_bindings"]["candidate_retries"] == 0
+    assert payload["prospective_bindings"]["candidate_substitutions"] == 0
+    trials = payload["outcome_collection"]["trials"]
+    assert [trial["candidate_index"] for trial in trials] == [0, 1]
+    assert [trial["status"] for trial in trials] == ["succeeded", "succeeded"]
+    assert [trial["terminal_reached"] for trial in trials] == [True, True]
+    assert [trial["movement_requests"] for trial in trials] == [16, 14]
+    assert [trial["controller_actions"] for trial in trials] == [17, 15]
+    assert [trial["frames_executed"] for trial in trials] == [564, 516]
+    assert [trial["replans"] for trial in trials] == [0, 0]
+    assert [trial["interruptions"] for trial in trials] == [0, 0]
+    assert payload["outcome_collection"]["best_candidate_indices"] == [1]
+    assert payload["outcome_collection"]["fully_measured"] is True
+    assert payload["outcome_collection"]["learner_update_eligible"] is True
+    assert payload["decision"]["model_fit"] is False
+    assert payload["decision"]["navigation_generalization_demonstrated"] is False
+    assert payload["decision"]["authority_promoted"] is False
     assert set(payload["protected_access"].values()) == {0}
     assert payload["private_path_fields"] == 0
     assert "/Users/" not in encoded

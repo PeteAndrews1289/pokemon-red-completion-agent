@@ -27,16 +27,15 @@ the same maximum selected utility: 0 paired update wins, 0 prior wins and 4 equi
 every point. Three development contexts were completely flat and 26/32 branches were one-turn
 knockouts. The pipeline passed; improvement did not become measurable, so authority remains zero.
 
-The first navigation outcome is now prospectively frozen but unexecuted. It compares a 14-step
-shortest route with a 16-step strictly costlier detour from one authenticated Cerulean state to the
-exact same Gym entrance. Both plans precede either candidate outcome; each candidate reloads the
-same bytes and runs once. The [path-free plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json)
-fits no model and grants no authority. Publish it, pass exact-commit CI, execute it once, then
-produce one real party-development outcome before any battle catalog widens. After that, freeze
-fresh level-matched, non-OHKO battle contexts with meaningful health, status, matchup and resource
-tradeoffs. Do not scale the easy Mansion distribution, promote a curve candidate, open the
-200-battle unseen gate early, expand into a full Red replay, or use Crystal as additional training
-data.
+The first navigation outcome is complete. Exact source `c37504d` passed CI before the frozen
+14-step shortest route and 16-step strict detour ran once from identical authenticated Cerulean
+bytes to the same Gym entrance. Both arrived without replans or interruptions; the shorter route
+used 14 movement requests / 516 frames versus 16 / 564, and the prospective objective produced one
+teacher-free learner-eligible preference. The [path-free result](evidence/red-local-navigation-outcome-result-2026-08-14.json)
+fits no model and grants no authority. Produce one real party-development outcome next. After that,
+freeze fresh level-matched, non-OHKO battle contexts and independent navigation contexts with
+blockers and recovery. Do not scale the easy Mansion distribution, promote a curve candidate, open
+an unseen gate early, expand into a full Red replay, or use Crystal as additional training data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the

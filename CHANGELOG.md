@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Completed the first real same-destination navigation outcome only after exact source `c37504d`
+  passed CI. Both identical-state clones arrived without replans or interruptions; the frozen
+  objective preferred the 14-request / 516-frame shortest route over the 16-request / 564-frame
+  detour. Published path-free evidence, fit no model and promoted no authority.
 - Froze the first real navigation outcome experiment: two prospectively ordered plans from one
   authenticated non-sealed Cerulean state to the exact same Gym entrance, with a 14-step shortest
   route and a 16-step strict detour. Each clone reloads identical bytes and executes once after

@@ -4,6 +4,16 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **First real navigation outcome (August 14, 2026): complete, no authority claim.** Exact source
+> `c37504d` passed GitHub CI before a frozen same-destination pair ran once from identical Red
+> bytes. Both routes reached the Cerulean Gym entrance without a replan or interruption. The
+> prospectively shorter candidate needed 14 movement requests and 516 frames; the strict detour
+> needed 16 and 564. The shared outcome contract therefore produced one valid, teacher-free
+> preference example while hiding coordinates and arrow sequences from the learner. This validates
+> real navigation measurement—not navigation generalization or a playable model. See the
+> [path-free result](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json). Next: one
+> bounded real party-development outcome.
+
 > **First Red learning curve (August 14, 2026): training works; improvement remains unproven.**
 > Exact source `e6fae7f` passed 3,310 local tests and GitHub CI before the frozen 4-train/4-
 > development catalog ran once. It retained 32 selected-turn outcomes and trained three distinct
@@ -13,15 +23,9 @@
 > equally best, and 26/32 branches were one-turn knockouts. This validates the real training and
 > evidence pipeline, not battle generalization or authority. See the
 > [path-free curve result](docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json) and
-> [dashboard guide](docs/progress-dashboard.md). Next: one real navigation outcome and one real
-> party-development outcome, then prospectively chosen level-matched, non-OHKO battle contexts.
-
-> **Next executable experiment (prospective): same destination, different route.** The first real
-> navigation outcome probe is frozen against one authenticated, non-sealed Cerulean state. It plans
-> a 14-step shortest route and a 16-step strictly costlier detour to the exact same Gym entrance,
-> orders them from the state digest, reloads identical bytes before each one-shot execution, and
-> ranks only verified arrival and efficiency. It fits no model and grants no authority. See the
-> [prospective path-free plan](docs/evidence/red-local-navigation-outcome-plan-2026-08-14.json).
+> [dashboard guide](docs/progress-dashboard.md). Navigation has now crossed the same real-outcome
+> boundary; party development is next, followed by prospectively chosen level-matched, non-OHKO
+> battle contexts.
 
 > **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
 > authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly
