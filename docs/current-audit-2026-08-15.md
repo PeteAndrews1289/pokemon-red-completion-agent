@@ -1,5 +1,27 @@
 # Current audit — 2026-08-15
 
+## Construction checkpoint update
+
+Exact source `4b4e267dea06599c2f17a6b2570bc9091440bc33` implements the missing
+title-neutral menu adapter and venue-evidence registry. It passed 3,415 non-integration tests, three
+integration deselections, one expected failure, Ruff, mypy across 222 source files and every
+privacy/documentation/generated-registry gate.
+
+This closes the code-shape part of risks 1 and 2 below, not their concrete-data part. The reusable
+adapter binds every private fact that can affect projection into one semantic snapshot. Trainee
+comparisons hold one evidence-backed venue fixed; venue comparisons become unavailable when their
+prior is missing or bound to an obsolete operating contract. Prospective rows now authenticate the
+snapshot and registry as well as the menu. Root/state overlap with prior-support evidence and
+cross-snapshot menu reuse are rejected.
+
+No Red menu has been materialized and the frozen registry has zero entries. The Route 11 V2 receipt
+is a candidate for one typed prior. The old Cave outcome used the pre-repair traversal behavior, and
+the post-repair Cave qualification did not measure full training yield/recovery, so Cave cannot yet
+be represented as a current complete prior. PP remains high-only. Outcomes remain 0/14; no fit,
+teacher query, sealed access, Crystal context, replay or authority occurred. External audit of exact
+`4b4e267` is the next gate. See the
+[path-free source qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 ## Outcome
 
 The repository now has a provenance-bound, inventory-backed party-learning boundary aligned with
@@ -72,9 +94,11 @@ the later 54-context Crystal initialization comparison.
 
 ## Risks still open
 
-1. The title-neutral adapter does not yet project the private Red snapshot into a frozen v2
-   candidate menu; inventory readiness is only a diagnostic estimate.
-2. The venue-prior registry is not frozen. Every available venue must be supported by evidence that
+1. The generic title-neutral projection contract is implemented, but no concrete private Red
+   snapshot has yet been projected into a frozen v2 candidate menu; inventory readiness remains a
+   diagnostic estimate.
+2. The venue-prior registry type is implemented but its concrete registry is not frozen. Every
+   available venue must be supported by evidence that
    predates its candidate outcome, and the current trial may never describe its own input.
 3. No PP-depleted context exists in the current 81-state pool. Search already-authenticated,
    non-sealed captures first; if none qualify, preregister a separate bounded materialization step
@@ -95,10 +119,11 @@ the later 54-context Crystal initialization comparison.
 1. Preserve Claude's narrow approval and the closed PP-calibration finding. Run a final serialized
    recheck on a clean exact commit; use Antigravity as an independent second reviewer for the final
    frozen catalog, not as automatic authority.
-2. Implement the title-neutral candidate adapter without controller input. It must produce private
+2. External-audit the exact title-neutral adapter, then use it read-only to materialize private Red
    bindings plus identity-free trainee/venue menus whose exact feature and availability hashes match
    the prospective catalog.
-3. Build and freeze the venue-prior registry from evidence that predates every outcome.
+3. Compose and freeze the venue-prior registry from evidence that predates every outcome. Begin
+   with Route 11 only; keep Cave unavailable until post-repair evidence measures the full contract.
 4. Inventory already-authenticated non-sealed PP-depleted contexts. If the archive has none, freeze
    a bounded PP-context materialization plan with no learner outcome or teacher target.
 5. Select the smallest exact 8-train/6-development catalog that genuinely passes every partition

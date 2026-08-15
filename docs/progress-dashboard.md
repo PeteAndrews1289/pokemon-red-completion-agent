@@ -66,12 +66,16 @@ python scripts/run_party_development_readiness_dashboard.py --no-browser
 
 Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, the 81-checkpoint
 read-only pool and the exact current gate: 0/8 train outcomes, 0/6 untouched development outcomes,
-catalog unfrozen, candidate adapter absent, venue-prior registry absent, completion-aware fit false
-and authority zero. Its event list shows the observed per-partition semantic bins without exposing
+catalog unfrozen, concrete Red menus absent, frozen venue-prior entries absent, completion-aware fit
+false and authority zero. The reusable title-neutral menu/evidence contracts are implemented at
+exact source `4b4e267`; the page distinguishes that code boundary from real Red bindings. Its event
+list shows the observed per-partition semantic bins without exposing
 checkpoint, species, map, slot or private-path identities. The underlying receipts are the
 [prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
 [checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
-[readiness snapshot](evidence/party-development-v2-readiness-2026-08-15.json).
+[readiness snapshot](evidence/party-development-v2-readiness-2026-08-15.json). The newer
+[input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json)
+records why implementation readiness does not advance the 0/14 outcome counter.
 
 Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
 after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,

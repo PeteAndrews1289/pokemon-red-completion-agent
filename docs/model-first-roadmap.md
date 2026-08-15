@@ -6,6 +6,26 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: bind real Red menus without manufacturing evidence
+
+Exact source `4b4e267` closes the reusable implementation gap named by the prior checkpoint. The
+title-neutral adapter authenticates one complete private semantic snapshot, projects learner-safe
+trainee or venue menus, keeps execution bindings private and freezes snapshot/registry/menu/source
+identity before any outcome. Trainee alternatives are compared under one shared venue and one
+repeated frozen prior; venue alternatives are unavailable without compatible pre-existing
+evidence. A changed operating contract, prior-support overlap or menu from another snapshot fails
+closed. The source passed 3,415 non-integration tests plus every local quality/privacy gate.
+
+This checkpoint does not make the dashboard nonzero. Concrete Red menus remain 0, the venue-prior
+registry has 0 entries, prospective outcomes are 0/14, model fit is false and authority is zero.
+The cheapest next falsifiers are read-only: Claude attacks binding/leakage/test distinguishability;
+Antigravity attacks Red-specific representation. Then compose one Route 11 prior under a typed
+measurement and operational contract. Do not claim a current Cave prior: the V2 cost predates the
+walker repair and the independent post-repair qualification lacks complete training economics.
+Search authenticated non-sealed states for depleted PP; if none qualify, prospectively freeze one
+bounded materialization that creates no learner label. Only then construct and review the exact 8+6
+catalog. See the [source qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 ## Current checkpoint: construct the prospective completion-aware party catalog
 
 Exact source `7190be6` passed 3,394 non-integration tests, three integration deselections, one
@@ -41,11 +61,13 @@ evolution-route bins.
 
 The [readiness receipt](evidence/party-development-v2-readiness-2026-08-15.json) and port-8767
 dashboard report the honest boundary: historical prior bound, 81 checkpoints inventoried,
-prospective outcomes **0/14**, catalog unfrozen, adapter absent, venue-prior registry absent,
-completion-aware model fit false and authority zero. Claude approved the `7190be6` boundary and
-identified PP calibration as one S3 pre-collection condition; `f1cb3a4` closes it. The
-next implementation slice is limited to the title-neutral candidate adapter, frozen venue-prior
-registry and discovery of already-authenticated PP-depleted contexts. If none exist, freeze a
+prospective outcomes **0/14**, catalog unfrozen, concrete Red adapter binding absent, concrete
+venue-prior registry absent, completion-aware model fit false and authority zero. Claude approved
+the `7190be6` boundary and identified PP calibration as one S3 pre-collection condition;
+`f1cb3a4` closes it. The
+next implementation slice was the title-neutral candidate adapter and venue-prior registry types;
+exact `4b4e267` completes that reusable code boundary. The remaining slice is concrete prior
+composition and discovery of already-authenticated PP-depleted contexts. If none exist, freeze a
 separate bounded PP-context materialization plan before selecting the exact prospective 8/6
 catalog. Follow with independent review. Do not execute a candidate outcome, fit a model, open
 sealed Red or Crystal, or replay the game during construction.

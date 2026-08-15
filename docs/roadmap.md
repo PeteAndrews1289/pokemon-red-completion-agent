@@ -8,6 +8,19 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): title-neutral inputs are source-qualified
+
+Exact source `4b4e267` passed 3,415 tests and every local quality/privacy gate. It binds a complete
+semantic snapshot, private candidate bindings, one shared venue for trainee comparisons, compatible
+per-venue priors for venue comparisons, and exact snapshot/registry/source identities into the
+prospective catalog. Stale evidence, prior-support reuse and cross-snapshot menus fail closed.
+
+The next gate remains pre-data: Claude and Antigravity review; compose a typed Route 11 prior;
+leave Cave unavailable until post-repair evidence covers full training cost; locate or boundedly
+materialize depleted-PP contexts; then freeze a genuine 8-train/6-development catalog. Concrete
+menus, priors, outcomes, fit, Crystal and authority remain zero. See the
+[path-free qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 ## Current checkpoint (2026-08-15): the party learner now matches the completion goal
 
 Source `42196d4` / CI `31863588955` freezes a separate completion-aware v2 representation and

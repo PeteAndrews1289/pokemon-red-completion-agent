@@ -4,6 +4,16 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Title-neutral party input boundary qualified (August 15, 2026); concrete training remains
+> 0/14.** Exact source `4b4e267` passed 3,415 tests and every local quality/privacy gate. A semantic
+> snapshot now binds the complete private party/collection/evolution/role context, one shared venue
+> for trainee choices, compatible frozen evidence for venue choices, source identity and prior
+> independence before a result can join. Title, map, species, move, slot and button identity stay
+> outside the learner. This is construction, not model training: concrete Red menus 0, frozen
+> venue-prior entries 0, outcomes 0/14, fit 0 and authority 0. The next gate is independent review,
+> one honest compatible venue prior, depleted-PP context discovery and the exact 8+6 catalog—not a
+> full replay. See the [path-free source qualification](docs/evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 > **Party-learning prior bound and open curriculum inventoried (August 15, 2026); real outcome
 > training is 0/14.** Exact source `7190be6` passed 3,394 local tests plus lint, typing, privacy,
 > documentation and generated-registry gates. The exact historical scorer and all three lineages

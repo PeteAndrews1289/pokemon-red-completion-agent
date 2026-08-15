@@ -17,6 +17,38 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Title-neutral party inputs are bound; the concrete Red catalog is still closed — 2026-08-15
+
+Exact implementation source `4b4e267dea06599c2f17a6b2570bc9091440bc33` passed 3,415
+non-integration tests, three integration deselections, one expected failure, Ruff, whole-source
+mypy across 222 files, public-artifact, documentation and all generated-registry gates. It adds the
+reusable boundary that the inventory checkpoint deliberately lacked; it does **not** collect an
+outcome.
+
+One semantic snapshot now binds the exact private root/state, partition, source, party, training
+policy, active conditions, completion counts, member evolution/retention/role facts, venue bands,
+operational contracts and frozen venue-evidence registry. The learner receives only the existing
+66 title-neutral features. A trainee comparison must keep one evidence-backed venue fixed and
+repeat that one prior across every candidate; a venue comparison derives each candidate's
+availability from its own compatible prior. A stale operational contract makes a venue unavailable.
+Menus from another snapshot, prior-support roots/states reused as outcomes, changed availability,
+changed features, changed source or changed registry identity fail before an outcome can join.
+
+The concrete boundary remains intentionally empty: Red candidate menus 0, frozen venue-prior
+entries 0, prospective outcomes 0/14, completion-aware fits 0 and authority 0. Existing Route 11 V2
+evidence may support one prior only after a typed measurement/operational contract is composed.
+The historical Cave V2 cost predates the traversal repair and is stale; the independent repaired-
+Cave qualification measured walking safety but not the complete yield/recovery contract. Do not
+turn those two different receipts into a fictional two-venue registry.
+
+Next: have Claude audit exact `4b4e267` read-only; then have Antigravity challenge portability.
+After adjudication, compose the smallest path-free Route 11 prior, leave unsupported venues
+unavailable, inspect already-authenticated non-sealed captures for genuinely depleted PP and freeze
+a bounded materialization plan only if none exist. Construct the 8-train/6-development catalog only
+when real menus pass every diversity gate. Do not execute a candidate, fit, open sealed Red or
+Crystal, or replay the game during this construction phase. Review the
+[path-free qualification](docs/evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 ## Prior bound and checkpoint pool inventoried; prospective catalog remains closed — 2026-08-15
 
 Exact source `7190be6b979e51534f033b5ac9c1782093de996d` passed 3,394

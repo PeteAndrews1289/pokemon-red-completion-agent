@@ -7,6 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: every trainee now shares the same ground
+
+The previous checkpoint could count promising states, but it could still ask an unfair question:
+compare several trainees without proving they would train in the same place. The new adapter makes
+the venue part of the question. Every trainee card shares one fixed, evidence-backed venue; every
+venue card disappears unless its evidence matches the controller that would actually run it.
+
+The whole private situation—party, evolution and living-collection needs, roles, source, starting
+state and evidence registry—is sealed into one digest before the outcome. A menu projected from a
+different state cannot be substituted later. Neither can the state that created a prior return as
+the learner example it helps judge.
+
+This makes the next missing evidence sharper. Route 11 may have a usable historical measurement.
+The Cave does not: its old timing belongs to the buggy walker, while its repaired qualification
+measured safety rather than training economics. So the dashboard still says **0 of 14**. The
+machinery is ready to phrase an honest lesson; the lessons themselves have not run.
+
 ## Current checkpoint: zero percent became the honest number
 
 The old dashboard could make motion look like learning. This one opens with a less exciting and
@@ -28,9 +45,10 @@ identities remain private. The missing PP lesson is now visible instead of being
 Now every future lesson has to be declared before it happens. A catalog row binds the exact source,
 starting bytes, choice kind, goal, candidate menu, availability and venue evidence. A result cannot
 quietly change its question, reuse the old teacher's evidence or count several nearly identical
-saves as diversity. The next work is to build the adapter and venue-prior registry, locate an
-already-authenticated depleted-PP context—or prospectively create one without calling it an
-outcome—then freeze the exact 8 training and 6 untouched development decisions for review.
+saves as diversity. The adapter and venue-prior registry contract now exist. The next work is to
+compose only compatible evidence, locate an already-authenticated depleted-PP context—or
+prospectively create one without calling it an outcome—then freeze the exact 8 training and 6
+untouched development decisions for review.
 
 This party lane is part of the living-Pokédex story, not a detour from it. A collector has to know
 which form must be retained, which member still needs to evolve, which role is missing and how to

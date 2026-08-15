@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the question and its evidence were frozen together
+
+The inventory said which checkpoint states might be useful, but it still did not provide a safe
+way to turn one into a model question. Exact source `4b4e267` adds that missing boundary without
+opening the game.
+
+Every projected menu now begins with one authenticated semantic snapshot: party condition,
+completion and living-collection pressure, evolution/role facts, training policy, available venue
+bands, source and frozen evidence. Private member and venue bindings travel beside the learner row,
+never inside it. A “which member?” question keeps the same venue fixed for every answer. A “which
+venue?” question is unavailable unless every usable answer has evidence measured under the current
+operating contract. The eventual outcome cannot quietly choose its own favorable prior.
+
+This found another useful boundary in the historical evidence. Route 11 may support one prior after
+its measurements are typed. The old Cave outcome cannot support a current operating-cost claim
+because the walker was later repaired; the repaired Cave qualification proved safe movement but did
+not measure complete training yield and recovery. Calling those a matched pair would make the
+dataset look ready sooner and make its conclusion false.
+
+The dashboard therefore stays at 0/14. The code can now bind the right question, but no concrete
+Red menu or prior registry has been frozen. External review, a minimal compatible prior, depleted-
+PP context discovery and the real 8+6 catalog come before outcomes. The milestone is not “the model
+trained”; it is “the result can no longer rewrite the question that trained it.”
+
 ## August 15: the curriculum became inspectable before it became expensive
 
 The completion-aware representation solved only half the problem. It still needed a provable

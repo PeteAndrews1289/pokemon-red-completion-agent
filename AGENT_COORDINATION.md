@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-15 title-neutral input contract — highest active checkpoint:** Exact source `4b4e267`
+> passed 3,415 non-integration tests, three integration deselections, one expected failure and all
+> quality/privacy/generated-registry gates. It binds each prospective learner menu to one complete
+> semantic snapshot and venue-evidence registry. Trainee candidates share one fixed venue/prior;
+> venue candidates are unavailable without compatible evidence; prior-support overlap, cross-state
+> menu reuse and changed features/source/registry fail closed. Public artifacts expose digests and
+> counts, never private venue/support identity.
+>
+> This is **not** Red training. Concrete Red menus 0, frozen venue-prior entries 0, outcomes 0/14,
+> fit 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0. Route 11 may support one typed
+> prior; historical Cave cost is stale after the traversal repair, while the repaired live Cave
+> receipt lacks the full yield/recovery measurement. Do not merge them into a two-venue claim.
+> Claude now reviews exact `4b4e267` read-only; Antigravity follows as the portability challenger.
+> Codex remains the only editor. Neither reviewer may execute a case or authorize evidence by
+> preference. Review packet:
+> `docs/evidence/party-development-title-neutral-input-contract-2026-08-15.json`.
+
 > **2026-08-15 authenticated prior + read-only inventory — highest active checkpoint:** Exact
 > source `7190be6` passed 3,394 local tests and all local quality/privacy gates. The exact v1 model,
 > its public offline receipt, two train lineages and one already-open validation lineage are now a

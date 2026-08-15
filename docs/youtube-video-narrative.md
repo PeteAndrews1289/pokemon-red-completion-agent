@@ -1,5 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: make every trainee stand on the same ground
+
+Begin with three anonymous trainee cards and ask **WHICH ONE SHOULD TRAIN?** Put a different map
+behind each, then stop the animation and stamp it **INVALID COMPARISON**. Replace the backgrounds
+with one shared venue card: **ONE OPERATING CONTRACT · ONE FROZEN PRIOR · REPEATED ACROSS EVERY
+CANDIDATE**. Narration: **“A model cannot learn which Pokémon needs training if each answer quietly
+gets a different training ground.”**
+
+Then reverse the question: hold one anonymous trainee fixed and fan out venue cards. Grey out any
+card with **NO PRIOR** or **OLD CONTROLLER CONTRACT**. Slide the complete private snapshot into a
+sealed hash—root, state, party, evolution, living retention, roles, source and evidence registry—
+while the learner side retains **NO TITLE · MAP · SPECIES · MOVE · SLOT · BUTTONS**. Attempt to swap
+in a menu from another snapshot and stamp it **REJECTED BEFORE OUTCOME**.
+
+End on the dashboard, unchanged at **0/14**. Add two evidence cards: **ROUTE 11 · POSSIBLE PRIOR
+AFTER TYPED COMPOSITION** and **CAVE · OLD COST STALE / NEW SAFETY INCOMPLETE**. Final caption:
+**CODE CONTRACT READY · RED MENUS 0 · FROZEN PRIORS 0 · FIT 0 · AUTHORITY 0**. This scene explains
+why stronger infrastructure is progress without pretending that model training has started.
+
 ## August 15 scene: a progress bar that refuses to lie
 
 Open on the old local dashboard, then slide in a second page on **PORT 8767**. Its largest counter

@@ -3,6 +3,22 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Title-neutral party input contract — review dispatched 2026-08-15
+
+Codex implemented exact source `4b4e267`: one semantic snapshot binds all private projection facts;
+trainee comparisons share one evidence-backed venue; venue comparisons require compatible frozen
+priors; and prospective catalog rows authenticate snapshot, registry, source and menu identity.
+The full local gate passed 3,415 tests. No concrete Red menu, outcome, fit or protected access
+occurred.
+
+Decision pending: Claude will audit binding completeness, leakage, evidence circularity and test
+distinguishability on the immutable commit. Antigravity will then challenge transfer assumptions and
+whether the design is the cheapest route to living-Pokédex competence. Until both findings are
+adjudicated, do not freeze the 8+6 catalog or execute an outcome. The old Cave cost is explicitly
+stale after the walker repair; the post-repair Cave safety receipt is not a complete cost prior.
+Review packet:
+[`party-development-title-neutral-input-contract-2026-08-15.json`](evidence/party-development-title-neutral-input-contract-2026-08-15.json).
+
 ## Authenticated prior, checkpoint inventory and readiness boundary — 2026-08-15
 
 Codex bound the exact v1 model plus its two train and one already-open validation lineages into the

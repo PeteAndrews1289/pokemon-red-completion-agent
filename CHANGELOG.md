@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Added the title-neutral party semantic adapter and a strict source-bound venue-prior registry.
+  Prospective trainee menus now freeze one shared venue/evidence record; venue menus derive
+  availability from compatible pre-existing evidence; and semantic snapshot, registry, source,
+  root/state and operational-contract identities are bound before outcomes. Cross-snapshot reuse,
+  stale priors and prior-support overlap fail closed.
+- Bumped the previously unused prospective party catalog boundary to v2 so every row authenticates
+  its semantic snapshot and venue registry. Updated the readiness dashboard to distinguish a
+  completed reusable contract from the still-empty Red binding: concrete menus 0, frozen prior
+  entries 0, outcomes 0/14, fit 0 and authority 0.
+
 - Authenticated the exact v1 party ranker, its public offline receipt and every historical
   train/evaluation lineage into the completion-aware v2 prior. Added fail-closed prior/outcome
   overlap guards, canonical lineage ordering and typed round trips; initialized the wider private
