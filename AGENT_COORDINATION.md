@@ -1,5 +1,28 @@
 # Three-agent coordination
 
+> **2026-08-15 prospective party join hardening — highest active checkpoint:** Exact source
+> `85ae878` passed 3,432 non-integration tests, three integration deselections, one expected
+> failure, Ruff, whole-source mypy over 222 files and every privacy/documentation/registry gate.
+> The generic outcome carries an optional prospective-binding digest; the party binding freezes the
+> ordered feature contract, objective, source, semantic snapshot, candidate features/availability
+> and shared/per-venue evidence. The adapter requires the typed binding, stamps it and immediately
+> revalidates the join.
+>
+> Claude owns mutation distinguishability only. Its exact-`75edcb1` audit found an untested typed
+> mismatch, objective-digest oracle, moving feature-name oracle and masked-candidate fixture gap.
+> Codex closed all four at `85ae878`; Claude's narrow recheck returned **APPROVE** for
+> materialization only. Its one new S4 test gap—a live-constant comparison could replace the frozen
+> vocabulary comparison—now has the discriminating 3,433rd test. Antigravity owns product
+> portability. It approved the binding but found missing storage, resources/currency,
+> version/external-block, item-feasibility and typed mask-cause semantics. Codex accepts those as a
+> pre-catalog source gate. Codex remains the sole tracked-file editor and GitHub pusher.
+>
+> Nothing here authorizes execution. Concrete menus 0, priors 0, outcomes 0/14, model fit 0,
+> controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0. The next lane may only
+> implement the portable completion-constraint contract, then compose compatible path-free evidence
+> and materialize/freeze the 8+6 input catalog. Review packet:
+> `docs/evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json`.
+
 > **2026-08-15 title-neutral input contract — highest active checkpoint:** Exact source `4b4e267`
 > passed 3,415 non-integration tests, three integration deselections, one expected failure and all
 > quality/privacy/generated-registry gates. It binds each prospective learner menu to one complete

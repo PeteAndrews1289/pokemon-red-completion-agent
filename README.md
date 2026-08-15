@@ -4,6 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Prospective party questions and outcomes are now one authenticated object (August 15, 2026);
+> training remains 0/14.** Exact source `85ae878` passed 3,432 non-integration tests, Ruff, mypy
+> over 222 source files, privacy/documentation checks and every generated-registry gate. A party
+> outcome now carries the digest of the exact prospectively frozen question. That question commits
+> the ordered feature schema, completion objective, candidate features and availability, source,
+> semantic snapshot, and shared/per-venue evidence. A typed mismatch fails at the adapter boundary,
+> including unavailable candidates. Claude's mutation audit of the first join found four semantic
+> oracle gaps; `85ae878` closes all four, and a 3,433rd publication-tree test pins its frozen
+> feature vocabulary. Antigravity approved the binding but found the portable completion context
+> still lacks storage, capture-resource/currency, version/external-block, item-feasibility and typed
+> mask-cause semantics. Concrete Red menus, frozen priors, outcomes, model fit and authority are
+> still zero. Those portable constraint contracts now precede the reviewed 8+6 catalog—not
+> execution or another replay.
+> See the [path-free join-hardening receipt](docs/evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
 > **Title-neutral party input boundary qualified (August 15, 2026); concrete training remains
 > 0/14.** Exact source `4b4e267` passed 3,415 tests and every local quality/privacy gate. A semantic
 > snapshot now binds the complete private party/collection/evolution/role context, one shared venue

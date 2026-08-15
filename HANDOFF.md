@@ -17,6 +17,47 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Prospective party question/outcome seam hardened; catalog execution remains closed — 2026-08-15
+
+Exact source `85ae8786412846667b9082dc6f1b344e580cef4d` passed 3,432
+non-integration tests, three integration deselections, one expected failure, Ruff, whole-source
+mypy across 222 files, public-artifact, documentation and all generated-registry gates. Its source
+bundle is `76c43d93b68596efffffb753e979c42fec2cf2d0b1046db2f941f34cd5313da1`.
+
+The generic outcome row now optionally carries a prospective-binding digest while preserving the
+historical unbound v1 serialization. A bound row uses v2. The party binding itself freezes the
+ordered 66-feature contract, completion objective, source/bundle, semantic snapshot, candidate
+features and availability, and the shared/per-venue evidence identities. The adapter accepts only
+the typed party binding, stamps its digest on the outcome and immediately revalidates the complete
+join. An unavailable candidate remains unavailable and unexecuted rather than being rewritten into
+a convenient all-available menu.
+
+Claude attacked the first join at exact `75edcb1` and found four real semantic-oracle gaps: the
+immediate well-typed mismatch check, direct objective-digest sensitivity, a feature-name oracle
+that moved with a live constant, and the absence of a masked-candidate fixture. Exact `85ae878`
+closes them by freezing the feature-name digest, binding candidate availability directly and adding
+independent objective, feature, availability, venue-evidence and typed-mismatch tests. Claude's
+exact recheck returned **APPROVE** for materialization only and found one non-gating S4 oracle: a
+reversion from the frozen vocabulary to the live module constant was not uniquely distinguishable.
+The publication tree adds that exact test, bringing the full suite to 3,433 passes.
+
+Antigravity returned **APPROVE** on the exact binding delta and found no title-specific identity in
+the learner boundary, but rejected immediate catalog materialization at the product boundary. The
+portable completion context does not yet expose storage/active-box pressure, capture supplies and
+currency, version or external acquisition blocks, item-evolution feasibility, or typed reasons for
+masked choices. Codex accepts the finding without flattening all five concerns into one party
+ranker: storage/resources/version belong to the completion hierarchy; item feasibility and typed
+mask causes also bind the party question.
+
+The honest counters remain unchanged: Red menus 0, frozen venue priors 0, outcomes 0/14,
+completion-aware fits 0, controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0.
+The next authorized work is source-only construction: implement and qualify that title-neutral
+completion-constraint contract. Then compose compatible venue evidence, locate or prospectively
+create missing PP-depleted non-sealed contexts, and materialize/freeze the exact
+8-train/6-development input catalog for another review. Do **not** execute any candidate, fit,
+predict, open sealed Red or Crystal, or promote authority. Review the
+[join-hardening receipt](docs/evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
 ## Title-neutral party inputs are bound; the concrete Red catalog is still closed — 2026-08-15
 
 Exact implementation source `4b4e267dea06599c2f17a6b2570bc9091440bc33` passed 3,415

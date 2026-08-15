@@ -8,6 +8,25 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): the prospective question survives the outcome join
+
+Exact source `85ae878` passed 3,432 tests and all local quality/privacy/generated-registry gates.
+Each future party outcome now authenticates the exact preregistered feature schema, completion
+objective, candidate rows and availability, semantic snapshot, source and venue/prior evidence.
+The adapter rejects a typed mismatch and keeps unavailable candidates unavailable. Claude's
+mutation findings on the first join are all closed, including a follow-up test pinning the frozen
+feature vocabulary. Antigravity approved the hardened exact source but found that the surrounding
+portable completion context still cannot explain storage, capture resources/currency,
+version/external blocks, item-evolution feasibility or mask causes.
+
+The next roadmap item is intentionally not “run training.” First implement those constraints at the
+proper hierarchy boundary: storage/resources/version in completion planning; item feasibility and
+typed mask causes in the party question. Then compose path-free venue evidence, locate or
+prospectively create PP-depleted non-sealed contexts, and materialize/freeze the exact
+8-train/6-development catalog. Audit that concrete catalog before any candidate executes. Menus,
+priors, outcomes, fit, Crystal and authority remain zero. See the
+[join-hardening receipt](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
 ## Current checkpoint (2026-08-15): title-neutral inputs are source-qualified
 
 Exact source `4b4e267` passed 3,415 tests and every local quality/privacy gate. It binds a complete

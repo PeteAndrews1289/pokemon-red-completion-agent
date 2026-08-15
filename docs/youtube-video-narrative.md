@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: make the answer present its receipt
+
+Open with a frozen three-card party menu entering a safe marked **QUESTION**. The safe locks six
+plates in sequence: **FEATURE ORDER · OBJECTIVE · CANDIDATE VALUES · AVAILABILITY · START STATE ·
+VENUE EVIDENCE**. A result card returns from the emulator and tries to enter without the safe's
+fingerprint. Stamp it **REJECTED: WRONG QUESTION**.
+
+Cut to a mutation board. Remove **IMMEDIATE JOIN CHECK**, **OBJECTIVE DIGEST**, **FROZEN FEATURE
+NAMES** and **MASKED CANDIDATE TEST** one at a time; show Claude's audit turning each row red. Then
+replace the first implementation with **85ae878 · 3,432 TESTS · ALL FOUR CLOSED**. Grey out one
+candidate and show it travel through the entire pipeline as **UNAVAILABLE · NOT EXECUTED**, never
+silently becoming available. Add the follow-up card **TEST 3,433 · FROZEN VOCABULARY, NOT LIVE
+CONSTANT**.
+
+Then ask **WHY UNAVAILABLE?** Fan out five constraint cards: **BOX FULL · NO CAPTURE SUPPLIES /
+MONEY · VERSION/EXTERNAL BLOCK · EVOLUTION ITEM MISSING · PUZZLE/RESOURCE PREREQUISITE**. Show the
+current pipeline answer **MASKED** and stamp it **INSUFFICIENT FOR A LIVING POKÉDEX**. Split the
+repair across two lanes: **COMPLETION HIERARCHY: STORAGE/RESOURCES/VERSION** and **PARTY QUESTION:
+ITEM FEASIBILITY/MASK CAUSE**.
+
+Return to the readiness dashboard. Keep the large counter at **TRAIN 0/8 · DEVELOPMENT 0/6** and
+add **QUESTION/OUTCOME SEAM: AUTHENTICATED** underneath. Final narration: **“We did not train the
+model today. We made it impossible for tomorrow's results to pretend they answered a question we
+never asked.”** End card: **NEXT · EXPLAIN COLLECTION CONSTRAINTS · FREEZE THE REAL 8+6 RED
+CURRICULUM · REVIEW · THEN EXECUTE**.
+
 ## August 15 scene: make every trainee stand on the same ground
 
 Begin with three anonymous trainee cards and ask **WHICH ONE SHOULD TRAIN?** Put a different map

@@ -1,0 +1,81 @@
+{
+  "schema": "pokemon-party-development-prospective-outcome-join-hardening-evidence-v1",
+  "date": "2026-08-15",
+  "status": "source_qualified_catalog_unfrozen",
+  "source": {
+    "prospective_join_commit": "75edcb10115619c579e958bd8390b64d8a65f36c",
+    "mutation_hardening_commit": "85ae8786412846667b9082dc6f1b344e580cef4d",
+    "source_bundle_sha256": "76c43d93b68596efffffb753e979c42fec2cf2d0b1046db2f941f34cd5313da1",
+    "non_integration_tests_passed": 3432,
+    "publication_tree_non_integration_tests_passed": 3433,
+    "integration_tests_deselected": 3,
+    "expected_failures": 1,
+    "typed_source_files": 222,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "generated_registries_match": true
+  },
+  "implemented_contract": {
+    "generic_outcome_supports_optional_prospective_binding": true,
+    "unbound_outcome_serialization_remains_v1": true,
+    "bound_outcome_serialization_is_v2": true,
+    "party_binding_schema": "pokemon.core.party-development-prospective-binding.v4",
+    "ordered_feature_schema_frozen": true,
+    "outcome_objective_frozen": true,
+    "candidate_features_frozen": true,
+    "candidate_availability_frozen": true,
+    "shared_and_per_venue_prior_evidence_frozen": true,
+    "adapter_requires_typed_prospective_binding": true,
+    "adapter_stamps_binding_digest_on_outcome": true,
+    "adapter_immediately_rejects_well_typed_mismatch": true,
+    "unavailable_candidates_remain_unexecuted_and_unavailable": true,
+    "title_map_species_move_slot_and_button_identity_in_learner_features": false
+  },
+  "adversarial_review": {
+    "claude_initial_commit": "75edcb10115619c579e958bd8390b64d8a65f36c",
+    "claude_verdict": "approve_with_conditions_for_materialization_only",
+    "claude_findings": [
+      "the immediate prospective join guard lacked a well-typed mismatch oracle",
+      "the objective contribution to the binding digest lacked a direct oracle",
+      "ordered feature names were compared to a live constant rather than a frozen binding value",
+      "no focused fixture carried an unavailable candidate through the join"
+    ],
+    "claude_findings_closed_by_mutation_hardening_commit": true,
+    "claude_exact_hardened_commit_verdict": "approve_for_materialization_only",
+    "claude_non_gating_follow_up": "A regression from the frozen feature-name digest back to the live module constant survived because both sides used one in-process vocabulary.",
+    "claude_follow_up_closed_in_publication_tree": true,
+    "antigravity_exact_commit": "85ae8786412846667b9082dc6f1b344e580cef4d",
+    "antigravity_binding_verdict": "approve",
+    "antigravity_product_findings": [
+      "storage and active-box capacity are absent from the portable completion context",
+      "capture consumables and currency constraints are absent",
+      "version-exclusive and externally blocked acquisition states are absent",
+      "item-evolution feasibility is not represented",
+      "masked candidates do not carry a typed causal constraint for the hierarchy to resolve"
+    ],
+    "codex_adjudication": "Accept as a pre-catalog architecture gate. Put storage, resource, version and external-block state in the portable completion hierarchy; add item-evolution feasibility and typed mask causes at the party boundary. Do not flatten every planner variable into the party ranker."
+  },
+  "remaining_gate": {
+    "concrete_red_candidate_menus": 0,
+    "frozen_venue_prior_entries": 0,
+    "prospective_catalog_frozen": false,
+    "train_outcomes_collected": 0,
+    "train_outcomes_required": 8,
+    "development_outcomes_collected": 0,
+    "development_outcomes_required": 6,
+    "completion_aware_model_fit": false,
+    "authority_promoted": false
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "candidate_outcomes_executed": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "next_authorized_step": "Implement and source-qualify a title-neutral completion-constraint contract covering storage, capture resources and currency, version or external acquisition blocks, item-evolution feasibility and typed candidate mask causes. Then compose compatible venue evidence and materialize plus freeze the exact 8-train and 6-development input catalog for review. Do not execute a candidate.",
+  "claim_boundary": "This qualifies the prospective question-to-outcome identity seam and its synthetic semantic oracles. It is not a concrete Red catalog, an outcome campaign, a model fit, learned gameplay, cross-game transfer, living-Pokedex completion, or authority."
+}

@@ -5,6 +5,7 @@ from dataclasses import replace
 
 import pytest
 
+import pokemon_red_completion.party_development_catalog as party_development_catalog_module
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
@@ -584,3 +585,21 @@ def test_prospective_join_distinguishes_a_masked_candidate() -> None:
     )
     with pytest.raises(PartyDevelopmentCatalogError, match="prospective availability"):
         prospective.require_exact_examples((unmasked,))
+
+
+def test_prospective_join_uses_the_frozen_feature_vocabulary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    examples, prospective = _bound_campaign((_ready_catalog()[0],))
+    changed_names = list(examples[0].feature_names)
+    changed_names[0], changed_names[1] = changed_names[1], changed_names[0]
+    changed_feature_names = tuple(changed_names)
+    monkeypatch.setattr(
+        party_development_catalog_module,
+        "PARTY_DEVELOPMENT_FEATURE_NAMES",
+        changed_feature_names,
+    )
+    changed = replace(examples[0], feature_names=changed_feature_names)
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="prospective feature contract"):
+        prospective.require_exact_examples((changed,))

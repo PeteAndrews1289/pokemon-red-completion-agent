@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Bound each prospective party-development outcome to the exact preregistered question through an
+  optional generic outcome digest and a typed party binding. The binding now freezes ordered
+  feature names, the completion objective, candidate features and availability, source identity,
+  semantic snapshot, and shared/per-venue evidence before a result can join.
+- Closed Claude's four semantic-oracle gaps with direct digest-sensitivity tests, a well-typed
+  mismatch rejection, a frozen feature-name digest and a masked-candidate end-to-end fixture.
+  Historical unbound outcomes retain v1 serialization; bound outcomes use v2. No candidate ran,
+  no model was fit and authority remains zero.
+- Added Claude's follow-up oracle that distinguishes the frozen feature vocabulary from a live
+  module constant. Recorded Antigravity's product-level constraint finding: storage, capture
+  resources/currency, version or external blocks, item-evolution feasibility and typed mask causes
+  must be represented at the appropriate hierarchy boundary before the concrete 8+6 catalog.
+
 - Added the title-neutral party semantic adapter and a strict source-bound venue-prior registry.
   Prospective trainee menus now freeze one shared venue/evidence record; venue menus derive
   availability from compatible pre-existing evidence; and semantic snapshot, registry, source,

@@ -1,5 +1,39 @@
 # Current audit — 2026-08-15
 
+## Prospective outcome-join hardening update
+
+Exact source `85ae8786412846667b9082dc6f1b344e580cef4d` closes the last known
+question-to-result mutation gap. It passed 3,432 non-integration tests, three integration
+deselections, one expected failure, Ruff, mypy across 222 source files, public-artifact,
+documentation and all generated-registry gates. The final source-bundle digest is
+`76c43d93b68596efffffb753e979c42fec2cf2d0b1046db2f941f34cd5313da1`.
+
+The generic outcome contract now supports an optional prospective-binding digest without changing
+historical v1 rows. A bound row is v2. For party development, that digest commits the exact ordered
+feature contract, completion objective, candidate feature rows and availability mask, source,
+semantic snapshot, and shared/per-venue evidence. The adapter requires the typed binding, preserves
+masked candidates and rejects a well-typed mismatch immediately.
+
+Claude's audit of the first join (`75edcb1`) found four gaps in test distinguishability rather than
+a known production bypass. The final commit adds independent oracles for the immediate join guard,
+objective contribution, frozen feature-name contract and unavailable-candidate path, plus direct
+sensitivity checks for candidate rows and both shared and venue-specific evidence. Its exact
+recheck approved materialization and found one S4 oracle gap; a 3,433rd publication-tree test now
+distinguishes the frozen vocabulary from a live constant.
+
+Antigravity approved the hardened binding but found a separate product blocker: the portable
+completion context lacks storage/box pressure, capture resources and currency, version or external
+blocks, item-evolution feasibility and causal reasons for masked candidates. Codex accepts that as
+a pre-catalog gate, split by hierarchy rather than copied wholesale into the party ranker. The
+exact review disposition is in
+the [join-hardening receipt](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
+The finding does not advance the experiment counter. Concrete Red menus and venue priors remain
+zero; outcomes remain 0/14; no controller, teacher, fit, prediction, sealed Red, Crystal, replay or
+authority occurred. The next bounded step is to source-qualify the portable completion-constraint
+contract. Only after that, compatible evidence and PP-diverse non-sealed contexts exist may the
+exact 8+6 inputs be materialized and frozen. Execution remains closed.
+
 ## Construction checkpoint update
 
 Exact source `4b4e267dea06599c2f17a6b2570bc9091440bc33` implements the missing

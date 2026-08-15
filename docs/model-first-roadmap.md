@@ -6,6 +6,34 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: freeze the Red curriculum, not its answers
+
+Exact source `85ae878` completes the prospective question-to-outcome seam and passes 3,432 tests
+plus every local quality/privacy/registry gate. A generic bound outcome keeps the digest of the
+question it answered. The party binding freezes ordered feature names, the completion objective,
+candidate features and availability, semantic snapshot, source and shared/per-venue evidence. The
+adapter accepts only that typed binding, stamps the outcome and immediately checks the full join.
+
+Claude's mutation audit of the first implementation found four semantic-oracle gaps. The hardened
+commit freezes the feature-name contract, makes availability part of the menu identity and adds
+independent tests for the immediate guard, objective, candidate rows, masked candidates and both
+evidence layers. Its recheck approved materialization; the publication tree also pins the frozen
+vocabulary against a live-constant regression.
+
+Antigravity approved the binding but rejected immediate materialization on product grounds. The
+portable completion context cannot yet express box/storage pressure, capture supplies or currency,
+version/external acquisition blocks, item-evolution feasibility, or the causal reason behind a
+masked choice. Codex accepts the constraint gap but keeps ownership coherent: the completion
+hierarchy receives storage/resource/version state, while the party boundary receives item
+feasibility and typed mask causes. Review evidence is
+[path-free](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
+The next work is a source-only portable completion-constraint contract and its synthetic falsifiers.
+Then compose compatible Route 11 evidence, keep unsupported venues masked with typed causes, find
+or boundedly create real PP-depleted non-sealed contexts, and materialize/freeze exactly 8 train
+and 6 development menus. Review those inputs before execution. The counter is still 0/14; no fit,
+sealed case, Crystal context, replay or authority is authorized.
+
 ## Current checkpoint: bind real Red menus without manufacturing evidence
 
 Exact source `4b4e267` closes the reusable implementation gap named by the prior checkpoint. The

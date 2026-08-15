@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the answer can no longer rewrite the question
+
+The title-neutral adapter could freeze a party question, but one final seam still mattered: proving
+that the outcome row really answered that exact frozen question. Exact source `75edcb1` added a
+generic prospective-binding digest to the shared outcome contract and required party outcomes to
+carry it. Historical unbound rows remained byte-for-byte v1; only bound rows became v2.
+
+Claude attacked the seam with mutations instead of trusting the green suite. The production checks
+were present, but four meanings were not independently defended: the immediate typed join, the
+objective's contribution to identity, ordered feature names frozen at preregistration, and an
+unavailable candidate surviving the entire path. Exact `85ae878` closed each gap. The final binding
+now commits the feature contract, completion objective, candidate features and availability,
+semantic snapshot, source and both shared and venue-specific evidence. A future run can fail or be
+censored, but it cannot quietly answer an easier menu than the one the project published first.
+
+That source passed 3,432 tests. Claude's recheck found one last test-only distinction—frozen feature
+names versus a live constant—and the publication tree added a 3,433rd oracle. Antigravity then
+looked beyond the join and found the more important product gap: a living-Pokédex agent must reason
+about box space, capture supplies and currency, cartridge/external availability, evolutionary-item
+feasibility and the cause of a masked choice. The binding was portable; the surrounding completion
+context was incomplete.
+
+The dashboard did not move. There are still zero concrete Red menus, zero frozen venue priors, zero
+of fourteen completion-aware outcomes and no model fit. The next visible progress is now a portable
+constraint contract at the correct hierarchy boundaries, followed by the exact 8+6 input catalog.
+That prevents a week of fast emulation from producing scientifically clean data for an agent that
+still cannot understand why its Pokédex plan is blocked.
+
 ## August 15: the question and its evidence were frozen together
 
 The inventory said which checkpoint states might be useful, but it still did not provide a safe

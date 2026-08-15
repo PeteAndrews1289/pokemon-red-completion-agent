@@ -3,6 +3,37 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Prospective party outcome join — reviewed and hardened 2026-08-15
+
+Codex first implemented the generic prospective outcome digest and typed party join at exact
+`75edcb1`. Claude's bounded mutation audit approved the architecture conditionally but found four
+test-distinguishability gaps: deleting the immediate typed join check survived; objective inclusion
+in the binding document had no direct oracle; ordered feature names were checked against a live
+constant; and no fixture drove an unavailable candidate through adaptation.
+
+Decision: accept every finding. Exact `85ae878` freezes the feature-name digest, includes
+availability directly in the menu identity, preserves the prospective availability mask through
+adaptation and adds independent semantic tests for the typed mismatch, objective, candidate rows,
+shared evidence and per-venue evidence. The full gate passed 3,432 tests plus lint, typing, privacy,
+documentation and generated registries. Claude's exact recheck returned **APPROVE** for
+materialization only. It found one S4 test gap: reverting the check from the frozen feature digest
+to the live module constant survived. Codex accepted it and added the exact discriminating test;
+the publication tree passes 3,433 tests.
+
+Antigravity independently returned **APPROVE** for the digest boundary and found it title-neutral,
+then rejected immediate catalog materialization because the surrounding completion context lacks
+storage/active-box capacity, capture supplies/currency, version or external blocks,
+item-evolution feasibility and typed causal mask reasons. Codex accepts the finding as a
+pre-catalog architecture gate, with one correction to placement: storage/resources/version belong
+to the completion hierarchy; item feasibility and typed mask causes additionally bind the party
+question. They should not all become undifferentiated party-ranking features.
+
+Authorization remains narrow: implement and source-qualify the portable completion-constraint
+contract, then compose compatible path-free evidence and materialize/freeze the concrete Red 8+6
+inputs for review. Do not execute outcomes, fit or predict, open sealed Red or Crystal, replay the
+game or promote authority. Review packet:
+[`party-development-prospective-outcome-join-hardening-2026-08-15.json`](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
+
 ## Title-neutral party input contract — review dispatched 2026-08-15
 
 Codex implemented exact source `4b4e267`: one semantic snapshot binds all private projection facts;

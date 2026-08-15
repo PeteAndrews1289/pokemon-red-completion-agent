@@ -7,6 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the result must show its question
+
+Imagine preregistering a test, running it, and then discovering that the answer sheet never named
+which version of the test it answered. The party curriculum had almost reached that boundary. The
+new outcome row now carries the fingerprint of its exact question: feature order, objective,
+candidate menu, availability, starting situation and the evidence used to price each venue.
+
+Claude tried removing those commitments one by one. Four removals exposed places where the test
+suite could have stayed green even though a meaning changed. The hardened source froze those
+meanings independently, including a real unavailable candidate that remains unexecuted all the way
+through the adapter. A final 3,433rd test distinguishes the frozen vocabulary from a live constant.
+
+Antigravity approved that seam as title-neutral, then asked the question the binding could not:
+*why* is a choice unavailable? A full box, no Poké Balls, no money, a version exclusive, a missing
+evolution item and an unsolved prerequisite require different recovery goals. Those constraints now
+become the next source boundary before the real catalog is frozen.
+
+The progress number is still **0 of 14**. That is deliberate. The project can now build the first
+Red curriculum knowing that an outcome cannot rewrite the question after seeing the game. The next
+checkpoint is a portable explanation of collection blocks, then the reviewed list of eight training
+and six untouched development decisions—not a claim that a model is already learning to complete
+Pokémon.
+
 ## Current checkpoint: every trainee now shares the same ground
 
 The previous checkpoint could count promising states, but it could still ask an unfair question:
