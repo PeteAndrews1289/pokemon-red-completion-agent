@@ -115,7 +115,7 @@ RED_ROUTE_11_SOURCE_COMPATIBILITY_ATTESTATION_ID = (
     "red-route-11-00499bc-runtime-compatibility-v1"
 )
 RED_ROUTE_11_STATELESS_WALKER_AST_SHA256 = (
-    "81114035b002599e10a5d37b9e34629ba4743856734b0b6cc41794fc7035069e"
+    "8ae1a58bc11bd7801ba229fae4afbcb292d9e34c484d42b97e32694116b45522"
 )
 
 RED_PARTY_DEVELOPMENT_OUTCOME_POLICY = replace(
@@ -278,27 +278,27 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
         element_id="training-venue.fresh-walk-to-grass",
         observed_ast_sha256=None,
         current_ast_sha256=(
-            "ba997c1339d7b222f956df3740af249ba9732987c31baef4aaf2093c3420dd64"
+            "ea0337ba37dbd8cb6b6a09ce3bfbe5aa5fcb80fbcfc092382912afbec2932ed7"
         ),
         justification_id="added-factory-preserves-stateless-route-11-callable",
     ),
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
         observed_ast_sha256=(
-            "824b81ab086b273d7547ea3c957b49e91145c1e6e320bc5c4d5f330b1769c1a1"
+            "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "0c192ed5daa6c601384f6f532625e5e791d0fe9401a28b08ee4edbd0e3ef59fe"
+            "89e64e23aae9f3fe2deac0853b806beef10631c8addc5e9b2dd6470306a573d7"
         ),
         justification_id="run-local-walker-and-zero-telemetry-are-route-11-inert",
     ),
     _SourceCompatibilityWaiver(
         element_id="red.team-training-execution-summary",
         observed_ast_sha256=(
-            "e858d8bd66f87f304deb1dc49d84f80fec9e17e2309a8479b0b8ce21d42bd47e"
+            "307da86ffe4ac2a7baa7c6ce6873c53db731a128f5c852a28368fa8d9079ca58"
         ),
         current_ast_sha256=(
-            "a2d8b173a94eafd6f21161a83004a784ebc02e167fd552f2d95610d985a2bd37"
+            "60cffd1eef84b93634b484349ee23900ff36a1a467d1cdc8a52d2034ec6c2e3c"
         ),
         justification_id="default-zero-traversal-counters-preserve-historical-summary",
     ),
@@ -1127,9 +1127,64 @@ def _loaded_element_ast_sha256(
 def _ast_node_sha256(node: ast.AST, *, qualname: str) -> str:
     return canonical_sha256(
         {
+            "schema": "pokemon.red.semantic-python-ast.v1",
             "qualname": qualname,
-            "ast": ast.dump(node, include_attributes=False),
+            "ast": _canonical_ast_value(node),
         }
+    )
+
+
+def _canonical_ast_value(value: object) -> object:
+    """Encode semantic AST fields independently of ``ast.dump`` versions."""
+
+    if isinstance(value, ast.AST):
+        fields: list[dict[str, object]] = []
+        for name, child in ast.iter_fields(value):
+            # ``type_params`` was added in Python 3.12. Empty values carry no
+            # source semantics and must not make identical Python 3.11 source
+            # hash differently on a newer interpreter.
+            if name == "type_params" and child == []:
+                continue
+            fields.append(
+                {
+                    "name": name,
+                    "value": _canonical_ast_value(child),
+                }
+            )
+        return {
+            "node": type(value).__name__,
+            "fields": fields,
+        }
+    if isinstance(value, list):
+        return {
+            "sequence": [_canonical_ast_value(item) for item in value],
+        }
+    if isinstance(value, tuple):
+        return {
+            "tuple": [_canonical_ast_value(item) for item in value],
+        }
+    if value is None:
+        return {"scalar": "none"}
+    if isinstance(value, bool):
+        return {"scalar": "bool", "value": value}
+    if isinstance(value, int):
+        return {"scalar": "int", "value": str(value)}
+    if isinstance(value, float):
+        return {"scalar": "float", "value": value.hex()}
+    if isinstance(value, complex):
+        return {
+            "scalar": "complex",
+            "real": value.real.hex(),
+            "imag": value.imag.hex(),
+        }
+    if isinstance(value, str):
+        return {"scalar": "str", "value": value}
+    if isinstance(value, bytes):
+        return {"scalar": "bytes", "value": value.hex()}
+    if value is Ellipsis:
+        return {"scalar": "ellipsis"}
+    raise RedPartyDevelopmentVenuePriorError(
+        "operational AST contains an unsupported semantic value"
     )
 
 

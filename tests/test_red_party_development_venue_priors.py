@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import copy
 import hashlib
 import json
@@ -281,14 +282,26 @@ def test_source_compatibility_recomputes_exact_bundles_and_three_waivers() -> No
         "training-venue.fresh-walk-to-grass",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "5731efecb1ae36800b4e98dcbfc980af587f7960e28a6f2535478ec7f5b283e9"
+        "5565b3432a3586cf634d68a2654d64f693f89561464e9baeaa7fde1088fe6eae"
     )
     assert attestation.current_elements_sha256 == (
-        "e5f9319505ee1fbecff6d0149cfae6c9939bd8efe88d04e630a40b225dab6eb2"
+        "ada5dd6f3cc4a014cec15f177522be0e8b5ed392e3f9a8d6fb61275a23dead26"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "d0dcd598ad4b5c434ea9b3ff3cd686226501aa00752520b908dd32019866b01b"
+        "7db25bcca8d4b2821a7d5364637436e6977fd5f09bba316d773bc07ce137f756"
     )
+
+
+def test_operational_ast_digest_is_stable_across_supported_python_versions() -> None:
+    node = ast.parse(
+        "def sample(value: int = 1) -> int:\n"
+        "    return value + 2\n"
+    ).body[0]
+
+    assert venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        node,
+        qualname="sample",
+    ) == "330afe6782e585ceb4d602d6654107636e260596646bf143e5ea99ee13ce931c"
 
 
 def test_source_compatibility_rejects_a_false_current_bundle_claim() -> None:
@@ -442,7 +455,7 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "d8ee44e07f28f8b5d7190639af14a1142da6657d8ca7e3d803fe578c73e41c98"
+        "46c38d313f7dc467e35a22292245f3860e0ffeb7c711f40d6c52aa8c51ee2886"
     )
     assert contract.recovery_execution_sha256 == (
         "5c7d34e09f1e0b363661d4f09ff47e0d9e3437e3a7958b82ecba9e23d05982bd"
