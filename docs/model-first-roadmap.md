@@ -35,7 +35,7 @@ teacher-free learner-eligible preference. The [path-free result](evidence/red-lo
 fits no model and grants no authority.
 
 The first real party-development outcome is now prospectively frozen. One authenticated
-post-Mansion lineage supplies the same level-22 trainee and two safe venue candidates. Each clone
+Cinnabar evolution-training lineage supplies the same level-22 trainee and two safe venue candidates. Each clone
 runs to the same first verified evolution under a 45% retreat threshold with optional healing
 disabled. Exact target experience, battles, steps, Center trips, rotations and frames determine the
 outcome; escort experience cannot masquerade as trainee progress. The

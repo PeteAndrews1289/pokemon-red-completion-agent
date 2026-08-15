@@ -5,7 +5,7 @@
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
 > **Next executable experiment: same trainee, two training venues.** One authenticated, non-sealed
-> post-Mansion state supplies a healthy six-member party and a level-22 trainee with two safe venue
+> Cinnabar evolution-training state supplies a healthy six-member party and a level-22 trainee with two safe venue
 > choices. Each identical-state clone trains that same member until its first verified evolution,
 > using either the higher or lower encounter band. Recovery is mandatory only at 45% HP, status, or
 > PP safety boundaries; optional per-battle healing is disabled. Exact target experience, battles,

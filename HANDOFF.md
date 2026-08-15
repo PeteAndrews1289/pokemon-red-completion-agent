@@ -22,11 +22,20 @@ an invalid task.
 Navigation result commit `09f066f` and GitHub CI run `31855839337` are green. The next one-shot
 experiment is frozen in
 [`docs/evidence/red-party-development-outcome-plan-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
-It restores the authenticated, non-sealed post-Mansion Cinnabar state twice. The same healthy
+It restores the authenticated, non-sealed Cinnabar evolution-training state twice. The same healthy
 level-22 trainee must reach its first verified level-triggered evolution from each clone. The two
 candidate venues are represented only by portable encounter-band and party features and ordered
-from the state digest; private execution binds candidate 0 to the higher 15–21 band and candidate 1
-to the lower 9–15 band.
+from the state digest; private execution binds candidate 0 to the lower 9–15 band and candidate 1
+to the higher 15–21 band.
+
+The first read-only preflight against exact source `256923f` stopped before controller creation:
+the originally frozen rehearsal capture was actually inside Pokémon Mansion even though the plan
+called it a Cinnabar Center boundary. No candidate ran and no one-shot allowance was consumed. The
+replacement is canonical goal-manager train slot `red-goal-v1-028-evolve_species-train-01`: an
+authenticated, non-sealed, input-ready nurse boundary at `(3,3)` with the identical full-health
+six-member party and level-22 trainee. The runtime now guards both the Center map and nurse
+coordinate. This amendment requires a fresh published commit and exact-commit CI before preflight
+or execution; commit `256923f` is historical implementation evidence, not executable authority.
 
 This is deliberately a fair development comparison rather than another whole-team grind. The
 executor uses a 45% HP retreat threshold, keeps five qualified escort PP in reserve, never selects

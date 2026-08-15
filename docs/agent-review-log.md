@@ -17,6 +17,15 @@ retention. Accept no model or authority claim from this pair. Independent Claude
 review is pending and not implied. Review packet:
 [`red-party-development-outcome-plan-2026-08-14.json`](evidence/red-party-development-outcome-plan-2026-08-14.json).
 
+The exact-commit read-only preflight then falsified one plan claim before any controller input: the
+selected rehearsal state was inside Pokémon Mansion, not the Cinnabar Center. Codex rejected a mere
+label change because travel assumes a specific Center nurse boundary. It rebound the plan to the
+already-canonical, non-sealed `evolve_species` train slot whose state is input-ready at the nurse,
+has the identical full-health party and trainee, and is explicitly assigned to the train partition.
+The state digest consequently orders the lower band first and the higher band second. Decision:
+consume no attempt, strengthen the runtime coordinate guard, republish, and require fresh exact-
+commit CI before another preflight.
+
 ## Same-terminal navigation result — 2026-08-14
 
 Codex's post-curve audit rejected using the existing Help-Bill-versus-Misty scenario as a local

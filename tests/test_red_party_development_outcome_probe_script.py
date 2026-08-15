@@ -7,7 +7,10 @@ from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.party import (
     MoveObservation,
     PartyMemberObservation,
@@ -135,6 +138,36 @@ class _Emulator:
 
     def load_state(self, path: Path) -> None:
         assert path.name == "capture.state"
+
+
+def test_stable_party_requires_the_exact_center_nurse_boundary(monkeypatch) -> None:
+    raw = SimpleNamespace(
+        game_started=True,
+        map_id=MapId.CINNABAR_POKECENTER,
+        player_x=3,
+        player_y=3,
+        battle_state=0,
+    )
+    reader = SimpleNamespace(
+        read=lambda: raw,
+        read_input_readiness=lambda: SimpleNamespace(ready=True),
+    )
+    party = _party()
+    monkeypatch.setitem(SCRIPT_GLOBALS, "PokemonRedStateReader", lambda emulator: reader)
+    monkeypatch.setitem(
+        SCRIPT_GLOBALS,
+        "PokemonRedPartyReader",
+        lambda emulator: SimpleNamespace(read=lambda: party),
+    )
+
+    observed_reader, observed_party = SCRIPT["_stable_party"](_Emulator())
+
+    assert observed_reader is reader
+    assert observed_party is party
+
+    raw.player_x = 4
+    with pytest.raises(SCRIPT_GLOBALS["RedPartyDevelopmentRunError"], match="nurse boundary"):
+        SCRIPT["_stable_party"](_Emulator())
 
 
 def test_runner_opens_catalog_before_two_one_shot_trials(

@@ -84,7 +84,7 @@ from pokemon_red_completion.training_candidate_rank import (  # noqa: E402
 PLAN_PATH = (
     PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-2026-08-14.json"
 )
-SOURCE_CHECKPOINT_ID = "red-goal-rehearsal-mansion-001"
+SOURCE_CHECKPOINT_ID = "red-goal-v1-028-evolve_species-train-01"
 NATURAL_VENUES = (
     ROUTE_11_TRAINING_VENUE,
     DIGLETTS_CAVE_TRAINING_VENUE,
@@ -160,11 +160,12 @@ def _stable_party(
     if (
         not raw.game_started
         or raw.map_id != MapId.CINNABAR_POKECENTER
+        or (raw.player_x, raw.player_y) != (3, 3)
         or raw.battle_state != 0
         or not reader.read_input_readiness().ready
     ):
         raise RedPartyDevelopmentRunError(
-            "party capture is not the frozen ready Cinnabar Center boundary"
+            "party capture is not the frozen ready Cinnabar Center nurse boundary"
         )
     party = PokemonRedPartyReader(emulator).read()
     if party.size != 6 or party.fainted_count:

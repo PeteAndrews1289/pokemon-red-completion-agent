@@ -8,7 +8,7 @@ every battle into another Center trip. The first party-development experiment as
 transferable question instead: for the same trainee and the same evolution goal, which safe
 encounter band produces the better outcome?
 
-Two clones will start from identical post-Mansion bytes. Candidate order comes from the state
+Two clones will start from identical authenticated Cinnabar evolution-training bytes. Candidate order comes from the state
 digest, and the learner sees only party and encounter-band semantics. The executor lowers the
 mandatory retreat threshold to 45%, disables optional healing, keeps a qualified PP reserve and
 still permits no faints. Every battle, encounter step, Center trip, rotation, frame and point of

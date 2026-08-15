@@ -2,8 +2,9 @@
 
 > **2026-08-14 party-development plan — highest active checkpoint:** Navigation result commit
 > `09f066f` and CI run `31855839337` are green. The next source freezes one real same-trainee,
-> same-evolution venue comparison from an authenticated non-sealed post-Mansion state. Candidate 0
-> is the higher 15–21 encounter band and candidate 1 the lower 9–15 band after state-digest ordering.
+> same-evolution venue comparison from an authenticated non-sealed Cinnabar evolution-training
+> state. Candidate 0 is the lower 9–15 encounter band and candidate 1 the higher 15–21 band after
+> state-digest ordering.
 > Each clone reloads identical bytes and runs exactly once to the first verified level-triggered
 > evolution. The learner sees portable party/venue features, not species, slot, area or actions.
 >
@@ -14,6 +15,13 @@
 > eligibility/order, same-start and same-stop enforcement, counter integrity, evolution binding,
 > one-shot durability and path-free output. Do not request a teacher, sealed Red, Crystal or a full
 > replay. External Claude and Antigravity review is pending, not implied.
+>
+> Exact source `256923f` and CI run `31856593747` passed, but its read-only preflight stopped before
+> controller creation because the originally frozen rehearsal bytes were in Pokémon Mansion while
+> the plan claimed a Center boundary. No one-shot trial ran. The amended root is canonical train
+> slot `red-goal-v1-028-evolve_species-train-01`, input-ready at the Cinnabar nurse with the same
+> full-health party and trainee. Runtime now guards map plus `(3,3)`. Fresh publication and exact-
+> commit CI are mandatory before execution.
 
 > **2026-08-14 same-terminal navigation result — highest active checkpoint:** Exact source
 > `c37504d` and CI run `31855189665` passed before the first real navigation outcome executed. One authenticated,

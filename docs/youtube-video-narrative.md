@@ -6,7 +6,8 @@ Open on the old recovery threshold: **RETREAT AT 90% HP**, followed by a rapid l
 **BATTLE → CENTER → BATTLE → CENTER**. Replace it with the prospective bounded question:
 **SAME TRAINEE · SAME EVOLUTION · TWO SAFE VENUES**.
 
-Split identical post-Mansion bytes into **HIGHER BAND 15–21** and **LOWER BAND 9–15**. Keep the
+Split identical authenticated Cinnabar evolution-training bytes into **LOWER BAND 9–15** and
+**HIGHER BAND 15–21**. Keep the
 learner side labelled **NO SPECIES · NO SLOT · NO AREA NAME · NO BUTTONS**. Put the new safety rule
 under both clones: **MANDATORY RECOVERY AT 45% / STATUS / PP · OPTIONAL HEAL OFF · FAINTS 0**.
 

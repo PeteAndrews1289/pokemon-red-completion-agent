@@ -3,9 +3,9 @@
 ## Party-development falsifier: same evolution, two venues, no optional healing
 
 The last missing real adapter from the initial three-family boundary now has a prospective plan.
-An authenticated, non-sealed post-Mansion state contains a healthy six-member party and a level-22
-trainee eligible for two measured encounter bands. The state digest puts the higher 15–21 band at
-candidate 0 and the lower 9–15 band at candidate 1. Each clone must evolve the same trainee at the
+An authenticated, non-sealed Cinnabar evolution-training state contains a healthy six-member party
+and a level-22 trainee eligible for two measured encounter bands. The state digest puts the lower
+9–15 band at candidate 0 and the higher 15–21 band at candidate 1. Each clone must evolve the same trainee at the
 same level-triggered boundary; species, slot, venue name and controller actions remain private
 execution bindings rather than model features.
 
