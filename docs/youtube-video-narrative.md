@@ -3,19 +3,30 @@
 ## August 14 party-outcome scene: stop healing after every battle
 
 Open on the old recovery threshold: **RETREAT AT 90% HP**, followed by a rapid loop of
-**BATTLE → CENTER → BATTLE → CENTER**. Replace it with the prospective bounded question:
+**BATTLE → CENTER → BATTLE → CENTER**. Replace it with the bounded question:
 **SAME TRAINEE · SAME EVOLUTION · TWO SAFE VENUES**.
 
 Split identical authenticated Cinnabar evolution-training bytes into **LOWER BAND 9–15** and
-**HIGHER BAND 15–21**. Keep the
-learner side labelled **NO SPECIES · NO SLOT · NO AREA NAME · NO BUTTONS**. Put the new safety rule
+**HIGHER BAND 15–21**. Keep the learner side labelled
+**NO SPECIES · NO SLOT · NO AREA NAME · NO BUTTONS**. Put the new safety rule
 under both clones: **MANDATORY RECOVERY AT 45% / STATUS / PP · OPTIONAL HEAL OFF · FAINTS 0**.
 
-As footage eventually runs, fill only measured counters: trainee XP, total XP, battles, steps,
-Center visits, rotations and frames. The narration before a result is: **“The escort can keep the
-trainee safe, but its experience cannot win the trainee's lesson.”** End the prospective scene on
-**ONE ATTEMPT EACH · MODEL NOT FIT · AUTHORITY ZERO**; replace it with the authenticated result only
-after exact-commit CI and the one-shot run.
+Before the race, flash the preflight stop: **WRONG MAP · ZERO INPUT · ATTEMPT PRESERVED**, then the
+corrected source and green CI. Run the result cards:
+**LOWER: 103 BATTLES · 1,338,952 FRAMES · 5.169 XP/1K** and
+**HIGHER: 68 BATTLES · 1,185,669 FRAMES · 5.857 XP/1K**. Stamp the higher band
+**OUTCOME PREFERRED**.
+
+Then reveal the complication instead of cutting around it: **CENTER CALLS 13 vs 42 · POLICY 40**.
+Show three labels—**RECOVERY? · VENUE POSITIONING? · CLEANUP?**—flowing into one aggregate counter.
+Cross out the tempting **40 + SETUP + CLEANUP** explanation because the journal cannot prove it.
+The narration: **“The faster run was real. The training label was not trustworthy.”** End on
+**BOTH EVOLVED · FAINTS 0 · TARGET REJECTED · MODEL NOT FIT · AUTHORITY ZERO**.
+
+For the repair card, do not erase the failed result. Move to **FRESH PREASSIGNED CONTEXT · NEW V2
+IDENTITY**, then split the single counter into **VENUE TRANSITION · REQUIRED RECOVERY · OPTIONAL
+RECOVERY · CLEANUP**. Put one bracket around the first three: **SHARED HARD LIMIT 50**. Keep the
+last card prospective until the exact commit is green and both fresh clones finish once.
 
 ## August 14 navigation-outcome scene: same door, different route
 
@@ -27,7 +38,7 @@ Run both result cards: **ARRIVED · 14 REQUESTS · 516 FRAMES** and
 **ARRIVED · 16 REQUESTS · 564 FRAMES**. Stamp the first **OUTCOME PREFERRED**, then immediately add
 **ONE EXAMPLE · MODEL NOT FIT · AUTHORITY ZERO**. The narration: **“For the first time, navigation
 produced a lesson from what happened in the game—not from copying the route that got there.”** End
-on **PARTY DEVELOPMENT NEXT**, with blockers, recovery and Crystal still locked as later exams.
+on **PARTY ACCOUNTING REPAIR NEXT**, with blockers, recovery and Crystal still locked as later exams.
 
 ## August 14 curve-result scene: 4/4 is not always good news
 

@@ -82,9 +82,9 @@ from pokemon_red_completion.training_candidate_rank import (  # noqa: E402
 )
 
 PLAN_PATH = (
-    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-2026-08-14.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-v2-2026-08-14.json"
 )
-SOURCE_CHECKPOINT_ID = "red-goal-v1-028-evolve_species-train-01"
+SOURCE_CHECKPOINT_ID = "red-goal-v1-029-evolve_species-train-02"
 NATURAL_VENUES = (
     ROUTE_11_TRAINING_VENUE,
     DIGLETTS_CAVE_TRAINING_VENUE,
@@ -95,7 +95,7 @@ OUTCOME_POLICY = replace(
     reserve_total_pp=2,
     max_battles=200,
     max_steps=20_000,
-    max_healing_trips=40,
+    max_healing_trips=50,
     max_faints=0,
 )
 
@@ -135,7 +135,7 @@ def _load_plan() -> tuple[dict[str, object], str]:
     if not isinstance(value, dict):
         raise RedPartyDevelopmentRunError("party plan is not an object")
     if (
-        value.get("schema") != "pokemon-red-party-development-outcome-plan-v1"
+        value.get("schema") != "pokemon-red-party-development-outcome-plan-v2"
         or value.get("status") != "prospective_unexecuted"
         or value.get("experiment_id") != RED_PARTY_DEVELOPMENT_SCENARIO_ID
     ):
@@ -149,6 +149,26 @@ def _load_plan() -> tuple[dict[str, object], str]:
     construction = _mapping(value, "candidate_construction")
     if construction.get("candidate_order_rule") != RED_PARTY_DEVELOPMENT_ORDER_RULE:
         raise RedPartyDevelopmentRunError("party candidate order rule drifted")
+    training_policy = _mapping(value, "training_policy")
+    if (
+        training_policy.get("retreat_hp_ratio") != OUTCOME_POLICY.retreat_hp_ratio
+        or training_policy.get("reserve_total_pp") != OUTCOME_POLICY.reserve_total_pp
+        or training_policy.get("minimum_direct_level_advantage")
+        != OUTCOME_POLICY.minimum_direct_level_advantage
+        or training_policy.get("safe_escort_level") != OUTCOME_POLICY.safe_lead_level
+        or training_policy.get("maximum_battles") != OUTCOME_POLICY.max_battles
+        or training_policy.get("maximum_steps") != OUTCOME_POLICY.max_steps
+        or training_policy.get("max_healing_trips_runtime_value")
+        != OUTCOME_POLICY.max_healing_trips
+        or training_policy.get("maximum_budgeted_center_calls") != OUTCOME_POLICY.max_healing_trips
+        or training_policy.get("budgeted_center_call_phases")
+        != ["venue_transition", "required_recovery", "optional_recovery"]
+        or training_policy.get("final_cleanup_outside_budget_but_counted") is not True
+        or training_policy.get("required_final_cleanup_calls") != 1
+        or training_policy.get("maximum_faints") != OUTCOME_POLICY.max_faints
+        or training_policy.get("optional_heal_selected_by_executor") is not False
+    ):
+        raise RedPartyDevelopmentRunError("party Center-call policy differs from its plan")
     return value, hashlib.sha256(payload).hexdigest()
 
 
@@ -292,6 +312,19 @@ def _execute_candidate(
                 "party execution did not retain one exact bounded summary"
             )
         summary = summaries[0]
+        budgeted_center_calls = (
+            summary.venue_transition_trips
+            + summary.required_recovery_trips
+            + summary.optional_recovery_trips
+        )
+        if (
+            budgeted_center_calls > OUTCOME_POLICY.max_healing_trips
+            or summary.cleanup_trips != 1
+            or summary.optional_recovery_trips != 0
+        ):
+            raise RedPartyDevelopmentRunError(
+                "party execution violated its phase-separated Center-call contract"
+            )
         after_party = PokemonRedPartyReader(emulator).read()
         after_target = after_party.member_in_slot(question.target_slot)
         if (
@@ -325,7 +358,10 @@ def _execute_candidate(
                 _target_experience(after_party, question.target_slot)
                 - _target_experience(before_party, question.target_slot)
             ),
-            "execution": summary.public_dict(),
+            "execution": {
+                **summary.public_dict(),
+                "budgeted_center_calls": budgeted_center_calls,
+            },
             "frames_executed": frames_executed,
             "controller_actions": controller.actions_executed,
             "venue_decisions": venue_decisions,
@@ -394,7 +430,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     _require_materialized_question(plan, question, party)
     catalog = question.public_catalog()
     preflight = {
-        "schema": "pokemon-red-party-development-outcome-preflight-v1",
+        "schema": "pokemon-red-party-development-outcome-preflight-v2",
         "status": "ready",
         "source_commit": source.git_commit,
         "source_bundle_sha256": registry.execution.source_bundle_sha256,
@@ -420,6 +456,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         kind="party_development_outcome_probe",
     )
     trials: list[PartyDevelopmentOutcomeTrial] = []
+    retained_trials: list[dict[str, object]] = []
     with writer:
         writer.append(
             "catalog",
@@ -450,6 +487,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             )
             writer.append("trials", retained)
             trials.append(trial)
+            retained_trials.append(retained)
         example = adapt_party_development_outcomes(
             question.candidate_set,
             tuple(trials),
@@ -474,26 +512,70 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise RedPartyDevelopmentRunError("party envelope changed during execution")
     if rom_adjacent_artifacts(rom_path) != adjacent_before:
         raise RedPartyDevelopmentRunError("party execution created a ROM-adjacent artifact")
-    trial_summaries = [
-        {
-            "candidate_index": trial.candidate_index,
-            "target_experience_gained": (
-                _target_experience(trial.after_party, trial.target_slot)
-                - _target_experience(trial.before_party, trial.target_slot)
-            ),
-            "battles_completed": trial.progress_after.battles_completed,
-            "steps_taken": trial.progress_after.steps_taken,
-            "healing_trips": trial.progress_after.healing_trips,
-            "faints": trial.progress_after.faints,
-            "rotations_executed": trial.rotations_executed,
-            "frames_executed": trial.frames_executed,
-            "evolution_completed": trial.evolution_completed,
-        }
-        for trial in trials
-    ]
+    trial_summaries: list[dict[str, object]] = []
+    for trial, retained in zip(trials, retained_trials, strict=True):
+        execution = retained.get("execution")
+        if not isinstance(execution, dict):
+            raise RedPartyDevelopmentRunError(
+                "party trial lacks phase-separated execution evidence"
+            )
+        phase_counts: dict[str, int] = {}
+        for key in (
+            "venue_transition_trips",
+            "required_recovery_trips",
+            "optional_recovery_trips",
+            "cleanup_trips",
+        ):
+            value = execution.get(key)
+            if type(value) is not int or value < 0:  # noqa: E721
+                raise RedPartyDevelopmentRunError(
+                    "party trial has invalid phase-separated execution evidence"
+                )
+            phase_counts[key] = value
+        budgeted_center_calls = execution.get("budgeted_center_calls")
+        expected_budgeted_center_calls = sum(
+            phase_counts[key]
+            for key in (
+                "venue_transition_trips",
+                "required_recovery_trips",
+                "optional_recovery_trips",
+            )
+        )
+        if (
+            type(budgeted_center_calls) is not int  # noqa: E721
+            or budgeted_center_calls != expected_budgeted_center_calls
+            or expected_budgeted_center_calls > OUTCOME_POLICY.max_healing_trips
+            or phase_counts["cleanup_trips"] != 1
+            or expected_budgeted_center_calls + phase_counts["cleanup_trips"]
+            != trial.progress_after.healing_trips
+        ):
+            raise RedPartyDevelopmentRunError(
+                "party trial phase-separated execution evidence is inconsistent"
+            )
+        trial_summaries.append(
+            {
+                "candidate_index": trial.candidate_index,
+                "target_experience_gained": (
+                    _target_experience(trial.after_party, trial.target_slot)
+                    - _target_experience(trial.before_party, trial.target_slot)
+                ),
+                "battles_completed": trial.progress_after.battles_completed,
+                "steps_taken": trial.progress_after.steps_taken,
+                "healing_trips": trial.progress_after.healing_trips,
+                "venue_transition_trips": phase_counts["venue_transition_trips"],
+                "required_recovery_trips": phase_counts["required_recovery_trips"],
+                "optional_recovery_trips": phase_counts["optional_recovery_trips"],
+                "cleanup_trips": phase_counts["cleanup_trips"],
+                "budgeted_center_calls": budgeted_center_calls,
+                "faints": trial.progress_after.faints,
+                "rotations_executed": trial.rotations_executed,
+                "frames_executed": trial.frames_executed,
+                "evolution_completed": trial.evolution_completed,
+            }
+        )
     return {
         **preflight,
-        "schema": "pokemon-red-party-development-outcome-receipt-v1",
+        "schema": "pokemon-red-party-development-outcome-receipt-v2",
         "status": "complete",
         "exact_ci_run": args.exact_ci_run,
         "artifact": writer.summary.public_dict(),

@@ -17,42 +17,48 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## First real party-development outcome prospectively frozen — 2026-08-14
+## First real party-development outcome executed; target rejected — 2026-08-14
 
-Navigation result commit `09f066f` and GitHub CI run `31855839337` are green. The next one-shot
-experiment is frozen in
+The prospective plan is
 [`docs/evidence/red-party-development-outcome-plan-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
-It restores the authenticated, non-sealed Cinnabar evolution-training state twice. The same healthy
-level-22 trainee must reach its first verified level-triggered evolution from each clone. The two
-candidate venues are represented only by portable encounter-band and party features and ordered
-from the state digest; private execution binds candidate 0 to the lower 9–15 band and candidate 1
-to the higher 15–21 band.
+Its first read-only preflight against `256923f` stopped before controller creation because the
+selected rehearsal state was in Pokémon Mansion while the plan claimed a Center boundary. No
+attempt was consumed. Codex rebound it to canonical, non-sealed `evolve_species` train slot 028,
+added an exact Cinnabar nurse-coordinate guard, published `71f36bf`, and waited for GitHub CI run
+`31857086445` to pass. The corrected preflight then returned ready with teacher, sealed Red,
+Crystal and full-replay counters all zero.
 
-The first read-only preflight against exact source `256923f` stopped before controller creation:
-the originally frozen rehearsal capture was actually inside Pokémon Mansion even though the plan
-called it a Cinnabar Center boundary. No candidate ran and no one-shot allowance was consumed. The
-replacement is canonical goal-manager train slot `red-goal-v1-028-evolve_species-train-01`: an
-authenticated, non-sealed, input-ready nurse boundary at `(3,3)` with the identical full-health
-six-member party and level-22 trainee. The runtime now guards both the Center map and nurse
-coordinate. This amendment requires a fresh published commit and exact-commit CI before preflight
-or execution; commit `256923f` is historical implementation evidence, not executable authority.
+The two one-shot clones both evolved the same full-health level-22 trainee at level 26 with zero
+faints. Candidate 0, the lower 9–15 band, used 103 battles, 2,819 encounter steps, 244 rotations,
+33,565 controller actions and 1,338,952 frames for 6,921 target XP. Candidate 1, the higher 15–21
+band, used 68 battles, 1,046 steps, 153 rotations, 20,658 actions and 1,185,669 frames for 6,945
+target XP. Its target-XP rate was **5.857453 per 1,000 frames** versus **5.168968**, so the runner
+reported candidate 1 as its best outcome.
 
-This is deliberately a fair development comparison rather than another whole-team grind. The
-executor uses a 45% HP retreat threshold, keeps five qualified escort PP in reserve, never selects
-an optional heal, and counts mandatory recovery plus final safe cleanup. It records exact target
-experience, total party experience, battles, encounter steps, Center trips, rotations and frames.
-The escort may win battles after the trainee participates, but escort experience cannot satisfy
-target progress. Both clones must be planned before input, reload identical bytes and execute once;
-an unexpected failure stops and retains a failed partial instead of being retried.
+Post-result audit rejected that preference as training data. The higher band made 42 aggregate
+Center calls versus a configured 40-trip policy, but the journal retained no phase breakdown. The
+source mixes required recovery, optional recovery, venue positioning and final cleanup into one
+counter, and the venue-transition branch lacked a budget guard. Several decompositions are
+possible; none is proven. Do not repeat the post-hoc claim that 42 equals 40 recoveries plus two
+bookends.
 
-This experiment validates or falsifies the real party-development adapter only. It fits no model,
-promotes no authority and opens no teacher target, sealed Red case, Crystal context or full replay.
-Publish the source and pass exact-commit CI before its read-only preflight and one-shot execution.
-After the result, the first real outcome boundary will have survived battle, navigation and party
-development; then design independent, genuinely difficult curricula rather than scaling convenient
-examples.
+The complete private artifact has four records and manifest SHA-256
+`4b30f664f9a93c5838e71b7e4fcbaf78607c1004130ef163762e6230f4ef871d`. The public result is
+[`docs/evidence/red-party-development-outcome-result-2026-08-14.json`](docs/evidence/red-party-development-outcome-result-2026-08-14.json).
+It fits no model, enters no learner ledger, promotes no authority and demonstrates no cross-species
+or cross-game generalization. Retire this experiment identity without retry.
 
-## First real navigation outcome complete; party development next — 2026-08-14
+The corrective implementation now records venue-transition, required-recovery, optional-recovery
+and final-cleanup calls separately, verifies their sum against the aggregate, and guards every
+in-loop Center route. The fresh prospective contract is
+[`docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json).
+It binds the next already-preassigned non-sealed `evolve_species` train context, caps the three
+budgeted phases together at 50 calls and requires exactly one separately counted final cleanup.
+Publish this exact source, require exact-commit green CI, run a read-only preflight, then execute
+each fresh clone once. Until that happens there is still no accepted party learner example. Do not
+replay all of Red or open an unseen gate to manufacture sample size.
+
+## First real navigation outcome complete — 2026-08-14
 
 The battle-curve result is published at exact green commit `cccb0f3`; GitHub CI run `31854136053`
 passed. The live dashboard now shows all three 1/2/4-root points, the 4/4 development ceiling, 32
@@ -79,8 +85,9 @@ This is an adapter/plumbing result only: no model was fit and no navigation gene
 authority is claimed. Teacher targets, sealed Red access, Crystal access and full replays all stayed
 zero. The path-free result is
 [`docs/evidence/red-local-navigation-outcome-result-2026-08-14.json`](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json).
-Next build one bounded real party-development counterfactual. Do not turn this easy route into a
-route-specific hardening campaign, and do not replay the full game.
+The bounded party-development counterfactual described above executed but failed its post-result
+accounting audit. Do not turn this easy route into a route-specific hardening campaign, and do not
+replay the full game.
 
 ## V2 1/2/4 battle curve complete; authority held — 2026-08-14
 

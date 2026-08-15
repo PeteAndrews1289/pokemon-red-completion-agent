@@ -34,17 +34,29 @@ used 14 movement requests / 516 frames versus 16 / 564, and the prospective obje
 teacher-free learner-eligible preference. The [path-free result](evidence/red-local-navigation-outcome-result-2026-08-14.json)
 fits no model and grants no authority.
 
-The first real party-development outcome is now prospectively frozen. One authenticated
-Cinnabar evolution-training lineage supplies the same level-22 trainee and two safe venue candidates. Each clone
-runs to the same first verified evolution under a 45% retreat threshold with optional healing
-disabled. Exact target experience, battles, steps, Center trips, rotations and frames determine the
-outcome; escort experience cannot masquerade as trainee progress. The
-[path-free plan](evidence/red-party-development-outcome-plan-2026-08-14.json) permits one execution
-per candidate only after publication and exact-commit CI. It fits no model and grants no authority.
+The first real party-development outcome executed but did not survive its accounting audit. Exact
+source `71f36bf` passed CI before two
+identical-state clones evolved the same level-22 trainee at level 26 with zero faints. The higher
+15–21 encounter band needed 68 battles / 1,185,669 frames versus 103 / 1,338,952 in the lower 9–15
+band, raising target XP per 1,000 frames from 5.168968 to 5.857453. It also reported 42 aggregate
+Center calls against a configured 40-trip policy. Because the journal did not separate recovery,
+venue positioning and cleanup—and the venue-transition branch lacked a bound—the
+[path-free result](evidence/red-party-development-outcome-result-2026-08-14.json) rejects the
+preference as a learner target.
 
-After that result, freeze fresh level-matched, non-OHKO battle contexts and independent navigation contexts with
-blockers and recovery. Do not scale the easy Mansion distribution, promote a curve candidate, open
-an unseen gate early, expand into a full Red replay, or use Crystal as additional training data.
+Battle and navigation have survived the real-outcome boundary; party development is one fresh
+execution away from retesting it. The
+[prospective V2 contract](evidence/red-party-development-outcome-plan-v2-2026-08-14.json) now splits
+every Center call into venue-transition, required-recovery, optional-recovery and cleanup counters,
+guards the three in-loop phases under one 50-call bound, requires exactly one separately counted
+cleanup, and binds the next preassigned train context under a new identity. Exact-source CI and a
+read-only preflight must pass before either fresh clone runs. After that, freeze level-matched,
+non-OHKO battles; navigation contexts with blockers and recovery; and independent party contexts
+spanning trainee strength, health, PP, evolution distance and venue difficulty.
+Keep train and development lineages separate from creation, build learning curves only when each
+family has enough independent decisions to expose improvement, and leave the unseen promotion
+gates closed. Do not scale the easy Mansion distribution, promote a ceiling curve candidate, replay
+all of Red, or use Crystal as extra training data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the
@@ -90,11 +102,10 @@ Completed at exact source `51f76b5`:
 - one untouched-lineage comparison that correctly rejected the update after development fell from
   1/1 to 0/1.
 
-This satisfies the serial “close one loop before building two more adapters” rule. It does not
-satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion gate. Add only the
-minimum independent battle contexts needed for one learning curve, then build one thin real
-navigation and party-development outcome adapter before stratifying or scaling the battle data.
-Lower fit loss alone is no longer an acceptable progress measure.
+This satisfied the serial “close one loop before building two more adapters” rule. It did not
+satisfy Milestone 1's 200-episode family requirement or Milestone 3's promotion gate. The smallest
+battle curve and one thin real navigation and party-development outcome have now all completed.
+Lower fit loss alone remains an unacceptable progress measure.
 
 The shared interface checkpoint is complete in source: `scenario_outcomes.py` defines the
 title-neutral, censor-safe preference envelope, and `scenario_outcome_adapters.py` binds the
@@ -102,10 +113,11 @@ existing battle, strategic-navigation and party-development types without flatte
 fake universal record. The battle curve runner enforces exactly 4 train + 4 development captures,
 unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
 outcomes. V1 stopped honestly before fit; v2 completed and showed a development ceiling rather than
-an improvement. The navigation half is now frozen as a same-terminal two-route experiment. It
-remains incomplete until exact published source executes both clones once and produces a fully
-measured shared outcome example. The milestone then lacks the real party-development outcome before
-the battle curriculum is redesigned around harder decision boundaries.
+an improvement. The same-terminal navigation pair produced one valid shared example. The
+same-evolution party pair executed, but aggregate Center accounting could not prove its effort bound
+and the target was rejected. The three-family interface checkpoint remains open only for that
+corrected fresh execution and accounting verification; it still does not approach Milestone 1's
+sample-size or unseen-performance gates.
 
 ## Learning approach
 

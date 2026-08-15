@@ -32,11 +32,14 @@ SCRIPT = runpy.run_path(
     str(PROJECT_ROOT / "scripts" / "run_red_party_development_outcome_probe.py")
 )
 SCRIPT_GLOBALS = SCRIPT["_run"].__globals__
-PLAN_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-party-development-outcome-plan-2026-08-14.json"
+ACTIVE_PLAN_PATH = (
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-v2-2026-08-14.json"
+)
+HISTORICAL_PLAN_PATH = (
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-2026-08-14.json"
+)
+RESULT_PATH = (
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-2026-08-14.json"
 )
 
 
@@ -77,18 +80,102 @@ def _venue(name: str, minimum: int, maximum: int) -> TrainingVenue:
 
 
 def test_public_plan_freezes_one_bounded_non_authority_comparison() -> None:
-    payload = json.loads(PLAN_PATH.read_text(encoding="ascii"))
-    encoded = PLAN_PATH.read_text(encoding="ascii")
+    payload = json.loads(ACTIVE_PLAN_PATH.read_text(encoding="ascii"))
+    encoded = ACTIVE_PLAN_PATH.read_text(encoding="ascii")
 
+    assert payload["schema"] == "pokemon-red-party-development-outcome-plan-v2"
     assert payload["status"] == "prospective_unexecuted"
+    assert payload["experiment_id"] == "red-party-development-evolution-venue-v2"
+    assert payload["predecessor"]["status"] == "retired_without_training_target"
     assert payload["candidate_construction"]["candidate_count"] == 2
     assert payload["bounded_objective"]["same_trainee_required"] is True
     assert payload["bounded_objective"]["target_experience_measured_exactly"] is True
     assert payload["training_policy"]["retreat_hp_ratio"] == 0.45
+    assert payload["training_policy"]["max_healing_trips_runtime_value"] == 50
+    assert payload["training_policy"]["maximum_budgeted_center_calls"] == 50
+    assert payload["training_policy"]["budgeted_center_call_phases"] == [
+        "venue_transition",
+        "required_recovery",
+        "optional_recovery",
+    ]
+    assert payload["training_policy"]["required_final_cleanup_calls"] == 1
     assert payload["training_policy"]["optional_heal_selected_by_executor"] is False
     assert payload["execution"]["execute_each_candidate_exactly_once"] is True
     assert payload["interpretation"]["model_fit"] is False
     assert payload["interpretation"]["authority_promotion"] is False
+    assert set(payload["protected_access"].values()) == {0}
+    assert payload["private_path_fields"] == 0
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_runner_loads_the_exact_v2_plan_and_rejects_center_budget_drift(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload, digest = SCRIPT["_load_plan"]()
+
+    assert payload["experiment_id"] == "red-party-development-evolution-venue-v2"
+    assert digest == hashlib.sha256(ACTIVE_PLAN_PATH.read_bytes()).hexdigest()
+
+    drifted = json.loads(ACTIVE_PLAN_PATH.read_text(encoding="ascii"))
+    drifted["training_policy"]["maximum_budgeted_center_calls"] = 49
+    drifted_path = tmp_path / "drifted-plan.json"
+    drifted_path.write_text(json.dumps(drifted), encoding="ascii")
+    monkeypatch.setitem(SCRIPT_GLOBALS, "PLAN_PATH", drifted_path)
+
+    with pytest.raises(
+        SCRIPT_GLOBALS["RedPartyDevelopmentRunError"],
+        match="Center-call policy differs",
+    ):
+        SCRIPT["_load_plan"]()
+
+
+def test_public_result_reproduces_trials_but_rejects_ambiguous_recovery() -> None:
+    payload = json.loads(RESULT_PATH.read_text(encoding="ascii"))
+    encoded = RESULT_PATH.read_text(encoding="ascii")
+    collection = payload["outcome_collection"]
+    recovery = payload["recovery_accounting"]
+    trials = collection["trials"]
+
+    assert payload["status"] == "complete_rejected_accounting_ambiguity"
+    assert (
+        payload["prospective_bindings"]["public_plan_sha256"]
+        == hashlib.sha256(HISTORICAL_PLAN_PATH.read_bytes()).hexdigest()
+    )
+    assert payload["source"]["exact_commit_ci_conclusion"] == "success"
+    assert collection["candidate_outcomes"] == 2
+    assert collection["runner_reported_fully_measured"] is True
+    assert collection["runner_reported_learner_update_eligible"] is True
+    assert collection["publication_learner_update_eligible"] is False
+    assert collection["runner_best_candidate_indices"] == [1]
+    assert collection["runner_target_distribution"] == [0.0, 1.0]
+    assert [trial["candidate_index"] for trial in trials] == [0, 1]
+    assert all(trial["evolution_completed"] for trial in trials)
+    assert all(trial["initial_target_level"] == 22 for trial in trials)
+    assert all(trial["final_target_level"] == 26 for trial in trials)
+    assert all(trial["faints"] == 0 for trial in trials)
+    for trial in trials:
+        assert trial["target_experience_per_1000_frames"] == pytest.approx(
+            trial["target_experience_gained"] * 1_000 / trial["frames_executed"],
+            abs=0.000001,
+        )
+        assert trial["total_experience_per_1000_frames"] == pytest.approx(
+            trial["total_experience_gained"] * 1_000 / trial["frames_executed"],
+            abs=0.000001,
+        )
+    assert (
+        trials[1]["target_experience_per_1000_frames"]
+        > trials[0]["target_experience_per_1000_frames"]
+    )
+    assert recovery["configured_max_healing_trips"] == 40
+    assert recovery["observed_total_counted_center_routes"] == [13, 42]
+    assert recovery["phase_breakdown_retained"] is False
+    assert recovery["policy_conformance_proven"] is False
+    assert recovery["training_target_rejected"] is True
+    assert payload["decision"]["training_target_accepted"] is False
+    assert payload["decision"]["model_fit"] is False
+    assert payload["decision"]["authority_promoted"] is False
     assert set(payload["protected_access"].values()) == {0}
     assert payload["private_path_fields"] == 0
     assert "/Users/" not in encoded
@@ -268,7 +355,16 @@ def test_runner_opens_catalog_before_two_one_shot_trials(
             rotations_executed=10 + index,
             evolution_completed=True,
         )
-        return trial, {"candidate_index": index}
+        return trial, {
+            "candidate_index": index,
+            "execution": {
+                "venue_transition_trips": 1,
+                "required_recovery_trips": 0,
+                "optional_recovery_trips": 0,
+                "cleanup_trips": 1,
+                "budgeted_center_calls": 1,
+            },
+        }
 
     monkeypatch.setitem(SCRIPT_GLOBALS, "detect_source_identity", lambda *a, **k: source)
     monkeypatch.setitem(SCRIPT_GLOBALS, "require_clean_source", lambda value: None)
@@ -315,6 +411,11 @@ def test_runner_opens_catalog_before_two_one_shot_trials(
     assert result["status"] == "complete"
     assert result["fully_measured"] is True
     assert result["learner_update_eligible"] is True
+    assert result["trials"][0]["venue_transition_trips"] == 1
+    assert result["trials"][0]["required_recovery_trips"] == 0
+    assert result["trials"][0]["optional_recovery_trips"] == 0
+    assert result["trials"][0]["cleanup_trips"] == 1
+    assert result["trials"][0]["budgeted_center_calls"] == 1
     assert result["model_fit"] is False
     assert result["authority_promoted"] is False
     assert result["teacher_queries"] == 0

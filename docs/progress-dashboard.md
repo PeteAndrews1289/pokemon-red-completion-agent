@@ -23,6 +23,13 @@ all updates were 4/4, three development contexts were completely flat, and 26/32
 one-turn knockouts. It must not turn a descriptive eight-context curve into the 200-battle
 promotion gate.
 
+The first party-development result now has its own completed-experiment failure view. It shows both
+same-trainee trials, exact target-XP rates, battles, encounter steps, controller actions, frames,
+rotations and Center-route accounting. It makes the key tradeoff visible: the higher encounter band
+finished 11.4% faster but reported 42 aggregate Center calls against a configured 40-trip policy.
+Because phase accounting was absent, the page labels the target rejected, with no learner example,
+fitted party model or authority.
+
 ## What it shows
 
 - the rendered game frame, run state, current stage, progress, actions, frames and emulation speed;
@@ -64,6 +71,26 @@ The capture is accepted only when its manifest digest appears in the tracked v2 
 view-only and remains open until `Ctrl-C`. Learned-stack rows wrap at ordinary desktop widths and
 label all three candidates and frozen-prior scores explicitly so a ceiling cannot be mistaken for
 improvement.
+
+## Show the party-development outcome
+
+The party view uses only the tracked, path-free result by default. Optionally pass the exact
+authenticated source state and private Red cartridge to display the starting Cinnabar frame. The
+state and ROM must match the published SHA-256 bindings; loading the frame sends no controller
+input and saves nothing.
+
+```sh
+source .venv/bin/activate
+python scripts/run_party_outcome_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --state /private/path/to/authenticated-evolution-training.state
+```
+
+Use `--no-browser` when the existing browser tab already points at
+`http://127.0.0.1:8765/`. The headline result is 68 battles / 1,185,669 frames in the higher band
+versus 103 / 1,338,952 in the lower band, with both trainees evolving at level 26 and zero faints.
+This display is a completed execution and rejected-target report, not a new run or a model-training
+claim.
 
 ## Historical Red full-run harness — not currently authorized
 

@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Rejected the first party-development preference after its aggregate Center counter could not
+  prove the frozen effort bound. Added phase-separated venue-transition, required-recovery,
+  optional-recovery and cleanup evidence; guarded every in-loop Center route; froze a fresh V2
+  context and identity; and kept the ambiguous V1 result outside all learner inputs.
+- Executed the first real party-development counterfactual after exact source `71f36bf` passed CI.
+  Both clones evolved the same trainee at level 26 with zero faints; the higher encounter band
+  saved 153,283 frames, but its 42 aggregate Center calls could not prove conformance to the
+  configured 40-trip policy. Published the rejected target and a view-only failure dashboard; no
+  model, learner example or authority was promoted.
 - Froze the first real party-development outcome: two identical-state clones train the same
   level-22 member to its first verified evolution in different safe encounter bands. Added exact
   battle, step, Center-trip and rotation retention; a 45% mandatory-recovery threshold; no optional

@@ -1,27 +1,29 @@
 # Three-agent coordination
 
-> **2026-08-14 party-development plan — highest active checkpoint:** Navigation result commit
-> `09f066f` and CI run `31855839337` are green. The next source freezes one real same-trainee,
-> same-evolution venue comparison from an authenticated non-sealed Cinnabar evolution-training
-> state. Candidate 0 is the lower 9–15 encounter band and candidate 1 the higher 15–21 band after
-> state-digest ordering.
-> Each clone reloads identical bytes and runs exactly once to the first verified level-triggered
-> evolution. The learner sees portable party/venue features, not species, slot, area or actions.
+> **2026-08-14 party-development result — highest active checkpoint:** The first preflight stopped
+> exact source `256923f` before controller creation because its frozen bytes were in Pokémon
+> Mansion while the plan claimed a Cinnabar Center boundary. No attempt ran. Codex rebound the plan
+> to canonical non-sealed `evolve_species` train slot 028, added an exact nurse-coordinate guard,
+> published `71f36bf`, and waited for CI run `31857086445` to pass.
 >
-> Recovery is mandatory only at 45% HP, status or PP boundaries; optional healing is disabled and
-> all mandatory/final Center trips stay in the outcome. Exact trainee experience, total experience,
-> battles, steps, rotations, faints and frames are retained. Escort experience is not target
-> progress. This probe fits no model and grants no authority. Reviewers should attack candidate
-> eligibility/order, same-start and same-stop enforcement, counter integrity, evolution binding,
-> one-shot durability and path-free output. Do not request a teacher, sealed Red, Crystal or a full
-> replay. External Claude and Antigravity review is pending, not implied.
+> Both one-shot clones then evolved the same level-22 trainee at level 26 with zero faints. The
+> lower 9–15 band used 103 battles / 1,338,952 frames / 5.168968 target XP per 1,000 frames. The
+> higher 15–21 band used 68 / 1,185,669 / 5.857453 and was the runner's selected outcome. Counted
+> Center calls were 13 versus 42 against a configured 40-trip policy. The journal retained no phase
+> breakdown, and venue-transition calls lacked a bound, so no recovery/setup/cleanup decomposition
+> is proven.
 >
-> Exact source `256923f` and CI run `31856593747` passed, but its read-only preflight stopped before
-> controller creation because the originally frozen rehearsal bytes were in Pokémon Mansion while
-> the plan claimed a Center boundary. No one-shot trial ran. The amended root is canonical train
-> slot `red-goal-v1-028-evolve_species-train-01`, input-ready at the Cinnabar nurse with the same
-> full-health party and trainee. Runtime now guards map plus `(3,3)`. Fresh publication and exact-
-> commit CI are mandatory before execution.
+> Codex rejected the preference as training data and retired the identity without retry. There is
+> no fitted model or authority; teacher, sealed Red, Crystal and full-replay counters are zero.
+> Reviewers should attack the path-free
+> `docs/evidence/red-party-development-outcome-result-2026-08-14.json`, especially the recovery
+> ambiguity, candidate binding, rates, artifact digests and rejection. Codex has now implemented
+> phase-separated venue-transition, required-recovery, optional-recovery and cleanup counters; all
+> in-loop calls share a hard 50-call budget and cleanup must occur exactly once. The fresh
+> preassigned train context and new identity are frozen in
+> `docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json`. It remains unexecuted
+> until exact-source publication, green CI and a read-only preflight. External Claude and
+> Antigravity review is pending.
 
 > **2026-08-14 same-terminal navigation result — highest active checkpoint:** Exact source
 > `c37504d` and CI run `31855189665` passed before the first real navigation outcome executed. One authenticated,

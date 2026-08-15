@@ -58,7 +58,11 @@ from pokemon_red_completion.red_team_training import (
     run_red_team_balancing,
     switch_active_battler,
 )
-from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
+from pokemon_red_completion.team_training import (
+    BalancedTeamPolicy,
+    GrindingArea,
+    TeamTrainingProgress,
+)
 from pokemon_red_completion.training_candidate_rank import (
     TrainingCandidateDecision,
     TrainingChoiceKind,
@@ -465,9 +469,56 @@ def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
         "battles_completed": 0,
         "steps_taken": 0,
         "healing_trips": 1,
+        "venue_transition_trips": 0,
+        "required_recovery_trips": 0,
+        "optional_recovery_trips": 0,
+        "cleanup_trips": 1,
         "faints": 0,
         "rotations_executed": 1,
     }
+
+
+def test_execution_summary_rejects_an_incomplete_healing_phase_breakdown() -> None:
+    with pytest.raises(ValueError, match="phases are incomplete"):
+        TeamTrainingExecutionSummary(
+            progress=TeamTrainingProgress(healing_trips=1),
+            rotations_executed=0,
+            venue_transition_trips=0,
+            required_recovery_trips=0,
+            optional_recovery_trips=0,
+            cleanup_trips=0,
+        )
+
+
+def test_venue_transition_cannot_bypass_the_healing_budget(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 48),
+            (DUX_SPECIES_ID, 20),
+            (DIGLETT_SPECIES_ID, 22),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+
+    with pytest.raises(RuntimeError, match="venue-transition budget"):
+        run(
+            memory,
+            FakeReader([state(map_id=CENTER_MAP, player_x=3, player_y=3)]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                minimum_direct_level_advantage=5,
+                max_healing_trips=0,
+            ),
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+        )
 
 
 def test_a_finished_team_emits_stop_supervision_before_cleanup() -> None:
@@ -538,9 +589,7 @@ def test_model_selected_optional_heal_executes_and_pays_its_budget(
         return 1
 
     monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
-    band = GrindingArea(
-        "test_area", 45, 55, rare_maximum_encounter_level=55, measured_samples=100
-    )
+    band = GrindingArea("test_area", 45, 55, rare_maximum_encounter_level=55, measured_samples=100)
     venue = TrainingVenue(
         band=band,
         map_id=TRAINING_MAP,
@@ -590,11 +639,7 @@ def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:
         [
             (
                 species,
-                20
-                if species == DUX_SPECIES_ID
-                else 40
-                if species == BLASTOISE_SPECIES_ID
-                else 30,
+                20 if species == DUX_SPECIES_ID else 40 if species == BLASTOISE_SPECIES_ID else 30,
             )
             for species in FINAL_FORM_ROSTER
         ]
@@ -637,11 +682,7 @@ def test_candidate_authority_executes_an_alternate_trainee_binding(
         [
             (
                 species,
-                20
-                if species == DUX_SPECIES_ID
-                else 40
-                if species == BLASTOISE_SPECIES_ID
-                else 30,
+                20 if species == DUX_SPECIES_ID else 40 if species == BLASTOISE_SPECIES_ID else 30,
             )
             for species in FINAL_FORM_ROSTER
         ]
@@ -830,11 +871,7 @@ def test_candidate_authority_executes_an_alternate_venue_binding(
         [
             (
                 species,
-                20
-                if species == DUX_SPECIES_ID
-                else 40
-                if species == BLASTOISE_SPECIES_ID
-                else 30,
+                20 if species == DUX_SPECIES_ID else 40 if species == BLASTOISE_SPECIES_ID else 30,
             )
             for species in FINAL_FORM_ROSTER
         ]
@@ -892,11 +929,7 @@ def test_candidate_authority_fails_closed_on_an_invalid_index(selected: object) 
         [
             (
                 species,
-                20
-                if species == DUX_SPECIES_ID
-                else 40
-                if species == BLASTOISE_SPECIES_ID
-                else 30,
+                20 if species == DUX_SPECIES_ID else 40 if species == BLASTOISE_SPECIES_ID else 30,
             )
             for species in FINAL_FORM_ROSTER
         ]
@@ -1009,9 +1042,7 @@ def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion
         [(DIGLETT_SPECIES_ID, 20), (BLASTOISE_SPECIES_ID, ESCORT_LEVEL_CAP - 5)]
         + [(DUGTRIO_SPECIES_ID, 25) for _ in range(4)]
     )
-    reader = FakeReader(
-        [state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]
-    )
+    reader = FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)])
 
     monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
 

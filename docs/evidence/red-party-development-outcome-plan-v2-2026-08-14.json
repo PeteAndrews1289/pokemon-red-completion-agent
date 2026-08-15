@@ -1,0 +1,121 @@
+{
+  "schema": "pokemon-red-party-development-outcome-plan-v2",
+  "status": "prospective_unexecuted",
+  "experiment_id": "red-party-development-evolution-venue-v2",
+  "purpose": "Validate the first learner-eligible title-neutral party-development outcome with phase-separated Center accounting and a bound on every in-loop Center call.",
+  "predecessor": {
+    "experiment_id": "red-party-development-evolution-venue-v1",
+    "status": "retired_without_training_target",
+    "reason": "The completed v1 journal retained only aggregate Center calls and could not prove conformance to its configured effort bound."
+  },
+  "scope": {
+    "title": "pokemon_red",
+    "scenario_family": "party_development",
+    "decision_kind": "evolution_venue",
+    "source_context": "next_preassigned_cinnabar_evolution_train_boundary",
+    "full_game_replays": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "24b848eeb9d0d7b13d2edb96105cdbe58fde6c3212889a24eaaf210463141e3d",
+    "capture_envelope_sha256": "9a4e26a3710fafb78417c33decb01b90583524a151c0feceb3b3d84bc940c660",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "checkpoint_id": "red-goal-v1-029-evolve_species-train-02",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+  "bounded_objective": {
+    "initial_target_slot": 3,
+    "initial_target_level": 22,
+    "stop_condition": "first_verified_level_triggered_evolution",
+    "expected_evolution_level": 26,
+    "same_trainee_required": true,
+    "target_experience_measured_exactly": true,
+    "evolution_verified_from_party_memory": true,
+    "overlevelled_escort_experience_is_not_target_progress": true
+  },
+  "candidate_construction": {
+    "candidate_count": 2,
+    "choice_kind": "venue",
+    "candidate_order_rule": "state-sha256-high-bit-reverse-v1",
+    "ordered_policy_input_sha256": "6fc3292ad8eca4eeba757991e47e1eb276c1195f424be44909f8ef461e8264e6",
+    "ordered_minimum_encounter_levels": [9, 15],
+    "ordered_maximum_encounter_levels": [15, 21],
+    "same_start_required": true,
+    "same_trainee_required": true,
+    "same_stop_condition_required": true,
+    "venue_identity_exposed_to_model": false,
+    "species_identity_exposed_to_model": false,
+    "party_slot_exposed_to_model": false,
+    "controller_actions_exposed_to_model": false
+  },
+  "training_policy": {
+    "retreat_hp_ratio": 0.45,
+    "reserve_total_pp": 2,
+    "species_specific_escort_pp_reserve": 5,
+    "minimum_direct_level_advantage": 5,
+    "safe_escort_level": 42,
+    "maximum_battles": 200,
+    "maximum_steps": 20000,
+    "max_healing_trips_runtime_value": 50,
+    "budgeted_center_call_phases": [
+      "venue_transition",
+      "required_recovery",
+      "optional_recovery"
+    ],
+    "maximum_budgeted_center_calls": 50,
+    "final_cleanup_outside_budget_but_counted": true,
+    "required_final_cleanup_calls": 1,
+    "maximum_faints": 0,
+    "optional_heal_selected_by_executor": false,
+    "mandatory_heal_only_when_health_status_or_pp_is_unsafe": true
+  },
+  "outcome_objective": {
+    "objective_id": "party-development.progress-efficiency.v1",
+    "objective_sha256": "b6544effa3c1849b4e03111a18b47f4435c9150e0b534a7501fbac70143dcbb6",
+    "ordered_criteria": [
+      "maximize_no_blackout",
+      "maximize_objective_progress",
+      "maximize_evolution_completed",
+      "maximize_target_experience_per_1000_frames",
+      "maximize_target_experience_gained",
+      "maximize_total_experience_per_1000_frames",
+      "maximize_battles_per_center_visit",
+      "minimize_faints",
+      "minimize_frames"
+    ],
+    "teacher_choice_is_target": false,
+    "ties_remain_equivalent": true
+  },
+  "execution": {
+    "exact_published_source_required": true,
+    "exact_commit_ci_success_required_before_execution": true,
+    "materialize_both_candidates_before_first_controller_input": true,
+    "open_private_artifact_before_first_candidate": true,
+    "reload_identical_state_before_each_candidate": true,
+    "execute_each_candidate_exactly_once": true,
+    "candidate_substitution_after_observation": false,
+    "candidate_retry_after_observation": false,
+    "append_each_complete_trial_immediately": true,
+    "unexpected_failure_stops_and_retains_partial_artifact": true,
+    "phase_separated_center_counters_required": true,
+    "center_phase_sum_must_equal_total": true,
+    "budgeted_center_calls_must_not_exceed_50": true,
+    "exactly_one_cleanup_call_required": true
+  },
+  "interpretation": {
+    "model_fit": false,
+    "authority_promotion": false,
+    "success_claim": "two complete cloned outcomes with exact Center phases produce one valid party-development preference example",
+    "failure_claim": "a failed candidate or accounting mismatch remains immutable failure evidence and is not rerun",
+    "next_if_complete": "expand to independently preassigned party contexts and the harder battle/navigation curricula before any unseen promotion gate"
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

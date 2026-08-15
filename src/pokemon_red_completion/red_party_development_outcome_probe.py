@@ -19,7 +19,7 @@ from pokemon_red_completion.training_candidate_rank import (
 )
 from pokemon_red_completion.training_venue import TrainingVenue
 
-RED_PARTY_DEVELOPMENT_SCENARIO_ID = "red-party-development-evolution-venue-v1"
+RED_PARTY_DEVELOPMENT_SCENARIO_ID = "red-party-development-evolution-venue-v2"
 RED_PARTY_DEVELOPMENT_ORDER_RULE = "state-sha256-high-bit-reverse-v1"
 
 
@@ -55,9 +55,8 @@ class BoundedEvolutionVenueQuestion:
             or self.source_species_id == self.final_species_id
         ):
             raise RedPartyDevelopmentProbeError("party probe evolution binding is invalid")
-        if (
-            len(self.initial_state_sha256) != 64
-            or any(character not in "0123456789abcdef" for character in self.initial_state_sha256)
+        if len(self.initial_state_sha256) != 64 or any(
+            character not in "0123456789abcdef" for character in self.initial_state_sha256
         ):
             raise RedPartyDevelopmentProbeError("party probe state digest is invalid")
 
@@ -98,9 +97,8 @@ def build_bounded_evolution_venue_question(
 ) -> BoundedEvolutionVenueQuestion:
     """Build and digest-order two safe venue candidates for one trainee."""
 
-    if (
-        len(initial_state_sha256) != 64
-        or any(character not in "0123456789abcdef" for character in initial_state_sha256)
+    if len(initial_state_sha256) != 64 or any(
+        character not in "0123456789abcdef" for character in initial_state_sha256
     ):
         raise RedPartyDevelopmentProbeError("party probe state digest is invalid")
     trainee = next(

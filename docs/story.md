@@ -26,18 +26,27 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
-## Current checkpoint: party training gets a fair comparison
+## Current checkpoint: party training refused its first apparent lesson
 
-The next lesson starts the same trainee twice and asks it to reach the same evolution in two safe
+The lesson started the same trainee twice and asked it to reach the same evolution in two safe
 encounter bands. That sounds modest, and that is exactly why it can teach something. The earlier
 whole-team grind mixed thousands of battles with travel, healing and changing trainees; a success
 could not say which choice helped.
 
-This time every battle, step, Center visit, rotation, frame and point of trainee experience will be
-counted. Optional healing is disabled, mandatory retreat waits for a real 45% HP, status or PP
-safety boundary, and the overlevelled escort's experience cannot stand in for the trainee's. Both
-clones get one attempt after the exact source passes CI. The result will be one grounded party
-preference, not a trained policy or permission to control the game.
+This time every battle, step, Center visit, rotation, frame and point of trainee experience was
+counted. Both clones evolved from level 22 to 26 without a faint. The higher encounter band needed
+68 battles and 1,185,669 frames, beating the lower band's 103 and 1,338,952. Then the report showed
+42 aggregate Center calls against a configured 40-trip policy.
+
+The tempting explanation was “40 recoveries plus setup and cleanup.” The journal could not prove
+that: recovery, venue positioning and cleanup shared one counter, and one transition branch was not
+bounded. So the faster result was preserved but rejected as training data. Its value is the stop—a
+false lesson was caught after minutes, before a model learned it or a multi-day route repeated it.
+
+The next attempt is not a rewrite of that result. A fresh preassigned moment gets a new identity,
+four separate Center-call counters, one shared in-loop budget and an exactly counted cleanup. The
+old faster run stays rejected; only the new pair can earn a training label after its own green
+source and audit.
 
 ## Current checkpoint: the same destination, two different journeys
 
@@ -51,7 +60,8 @@ Both arrived cleanly. The shorter route needed 14 movement requests and 516 fram
 detour needed 16 and 564. That made the result useful as one outcome-derived preference—but not as
 proof of learned navigation. No model was fit and no authority changed. The honest headline is
 that navigation can now produce the same kind of grounded report card as battle. Party development
-is next; blockers, recovery and transfer remain later exams.
+reached the cartridge but failed its first accounting audit; that narrow repair comes before
+blockers, independent contexts and transfer.
 
 ## Current checkpoint: a perfect score can still be a failed experiment
 

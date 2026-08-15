@@ -4,15 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Next executable experiment: same trainee, two training venues.** One authenticated, non-sealed
-> Cinnabar evolution-training state supplies a healthy six-member party and a level-22 trainee with two safe venue
-> choices. Each identical-state clone trains that same member until its first verified evolution,
-> using either the higher or lower encounter band. Recovery is mandatory only at 45% HP, status, or
-> PP safety boundaries; optional per-battle healing is disabled. Exact target experience, battles,
-> steps, Center trips, rotations and frames feed the shared party-development outcome. The
-> overlevelled escort can keep the trainee safe but its experience does not count as target progress.
-> This one-shot probe fits no model and grants no authority. See the
-> [prospective path-free plan](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
+> **First real party-development outcome (August 14, 2026): executed, training target rejected.** Exact
+> source `71f36bf` passed GitHub CI before two identical-state clones evolved the same trainee from
+> level 22 to 26 with zero faints. The higher 15–21 encounter band needed 68 battles, 1,046 steps,
+> 20,658 controller actions and 1,185,669 frames; the lower 9–15 band needed 103, 2,819, 33,565 and
+> 1,338,952. The runner preferred the higher band's **5.857 vs 5.169 target XP per 1,000 frames**,
+> but it also reported 42 aggregate Center routes against a configured 40-trip policy. Because the
+> journal did not separate recovery, venue-positioning and cleanup calls—and one transition branch
+> lacked a bound—that preference is descriptive only and cannot enter training. See the
+> [path-free result](docs/evidence/red-party-development-outcome-result-2026-08-14.json) and
+> [dashboard guide](docs/progress-dashboard.md).
+> The corrective [V2 plan](docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json)
+> uses the next preassigned train context, records venue-transition, required-recovery,
+> optional-recovery and cleanup calls separately, bounds every in-loop call to a shared maximum of
+> 50, and requires exactly one separately counted cleanup. It remains prospective until its exact
+> published commit passes CI and both fresh clones execute once; it is not yet a learner example.
 
 > **First real navigation outcome (August 14, 2026): complete, no authority claim.** Exact source
 > `c37504d` passed GitHub CI before a frozen same-destination pair ran once from identical Red
@@ -21,8 +27,8 @@
 > needed 16 and 564. The shared outcome contract therefore produced one valid, teacher-free
 > preference example while hiding coordinates and arrow sequences from the learner. This validates
 > real navigation measurement—not navigation generalization or a playable model. See the
-> [path-free result](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json). Next: one
-> bounded real party-development outcome.
+> [path-free result](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json). Party
+> development has reached the cartridge but still needs a corrected independent outcome.
 
 > **First Red learning curve (August 14, 2026): training works; improvement remains unproven.**
 > Exact source `e6fae7f` passed 3,310 local tests and GitHub CI before the frozen 4-train/4-
@@ -33,9 +39,10 @@
 > equally best, and 26/32 branches were one-turn knockouts. This validates the real training and
 > evidence pipeline, not battle generalization or authority. See the
 > [path-free curve result](docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json) and
-> [dashboard guide](docs/progress-dashboard.md). Navigation has now crossed the same real-outcome
-> boundary; party development is next, followed by prospectively chosen level-matched, non-OHKO
-> battle contexts.
+> [dashboard guide](docs/progress-dashboard.md). Navigation crossed the same real-outcome boundary;
+> party development exposed an accounting defect before its preference could become training data.
+> Next comes a corrected independent party outcome and a deliberately harder short-scenario
+> curriculum—not another full Red replay.
 
 > **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
 > authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly

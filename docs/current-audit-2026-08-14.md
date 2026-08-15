@@ -1,25 +1,36 @@
 # Current audit — 2026-08-14
 
-## Party-development falsifier: same evolution, two venues, no optional healing
+## Party-development result: execution completed, accounting rejected the target
 
-The last missing real adapter from the initial three-family boundary now has a prospective plan.
-An authenticated, non-sealed Cinnabar evolution-training state contains a healthy six-member party
-and a level-22 trainee eligible for two measured encounter bands. The state digest puts the lower
-9–15 band at candidate 0 and the higher 15–21 band at candidate 1. Each clone must evolve the same trainee at the
-same level-triggered boundary; species, slot, venue name and controller actions remain private
-execution bindings rather than model features.
+The preflight first did its job. Exact source `256923f` was green, but its selected capture was in
+Pokémon Mansion while the prospective plan required a Cinnabar Center boundary. It stopped before
+controller construction, consumed no candidate, and led to an exact nurse-coordinate guard plus a
+canonical non-sealed `evolve_species` train root. Corrected source `71f36bf` passed GitHub CI run
+`31857086445`; the second read-only preflight was ready with every protected-access counter at zero.
 
-The runtime also closes an observability gap in the old whole-team loop: it can now retain exact
-battles, encounter steps, Center trips and party rotations instead of reconstructing them after the
-fact. This probe replaces the route's 90% retreat threshold with 45%, disables optional healing and
-still enforces zero faints plus qualified PP reserves. Mandatory recovery and final cleanup remain
-counted, so efficiency cannot improve on paper by hiding Center visits. Exact experience must reach
-the bound trainee; the escort's gains are secondary total-party evidence only.
+Both one-shot clones then evolved the same healthy trainee from level 22 to 26 with zero faints.
+The lower 9–15 encounter band took 103 battles, 2,819 encounter steps, 244 rotations, 33,565
+controller actions and 1,338,952 frames for 6,921 target XP. The higher 15–21 band took 68 battles,
+1,046 steps, 153 rotations, 20,658 actions and 1,185,669 frames for 6,945 target XP. The frozen
+objective therefore preferred the higher band: 5.857453 target XP per 1,000 frames versus 5.168968.
 
-The [path-free plan](evidence/red-party-development-outcome-plan-2026-08-14.json) authorizes no
-execution until its source is published and exact CI succeeds. Each candidate then runs once from
-identical bytes with immediate private retention. The result can validate one party-development
-outcome, not a model, training-policy generalization or authority.
+The counter that initially looked suspicious could not be explained from retained evidence. Total
+counted Center calls were 13 versus 42 against a configured 40-trip policy, but one aggregate mixed
+required recovery, optional recovery, venue positioning and final cleanup. The venue-transition
+branch also lacked a budget guard. A 40+2 decomposition is plausible but not proven, so post-hoc
+relabeling was rejected.
+
+The [path-free result](evidence/red-party-development-outcome-result-2026-08-14.json) preserves real
+descriptive execution but rejects the preference as a learner example. It fits no model and proves
+no cross-species, cross-context or cross-game party policy.
+
+The repair is now source-complete and prospectively frozen in the
+[V2 plan](evidence/red-party-development-outcome-plan-v2-2026-08-14.json). Runtime evidence separates
+venue-transition, required-recovery, optional-recovery and final-cleanup calls, verifies their sum,
+and bounds all in-loop calls together at 50. V2 uses the next preassigned non-sealed train context
+and requires exactly one cleanup outside that budget but inside the retained total. It remains
+unexecuted pending exact-source publication, green CI and read-only preflight. Do not retry V1 or
+replay all of Red.
 
 ## Same-terminal navigation result: both arrived; the shorter route won
 
@@ -42,7 +53,7 @@ Both clones arrived without replans or interruptions. The detour consumed 16 mov
 The [path-free result](evidence/red-local-navigation-outcome-result-2026-08-14.json) validates one
 real navigation outcome and its candidate binding. It does not fit a model, demonstrate navigation
 generalization, or promote authority. Teacher, sealed Red, Crystal and full-replay counters remain
-zero. The next falsifier is one bounded real party-development outcome; after that, navigation must
+zero. The party-development falsifier executed but did not validate a target; navigation must next
 expand prospectively across independent lineages, blockers and recovery rather than rehearse this
 easy route.
 
@@ -63,8 +74,9 @@ maximum utility, while 26/32 total branches fainted the opponent. The curve was 
 one-turn wins.
 
 The correct decision is no promotion and no larger sample from the same distribution. The real
-training/evidence pipeline is validated, but battle improvement remains unproven. The first real
-navigation outcome is now complete; build one real party-development outcome next. Then prospectively freeze harder
+training/evidence pipeline is validated, but battle improvement remains unproven. Navigation has
+produced one valid real outcome; party development produced a rejected accounting result. After
+its narrow repair, prospectively freeze harder
 level-matched, non-OHKO battle states with health, status, matchup and resource tradeoffs. The exact
 result is [path-free](evidence/red-battle-learning-curve-v2-result-2026-08-14.json), and the updated
 dashboard makes the ceiling visible rather than presenting 4/4 as a promotion result.
@@ -115,8 +127,8 @@ Flat outcomes stay in place; failed or interrupted collection stops before fitti
 development roots score every point. It is descriptive and cannot promote authority. The runner
 opened Red only after publication and CI. It stopped before fit as described above. V2 retains the
 same sample size with a corrected selected-turn objective, fresh development roots and durable
-per-candidate evidence. Next is publication/CI, one v2 execution, then one real navigation and one
-real party-development outcome before battle scaling.
+per-candidate evidence. That v2 execution and the first real navigation and party-development
+outcomes are now complete; independent hard curriculum coverage is the active work.
 
 ## First real outcome-learning result
 

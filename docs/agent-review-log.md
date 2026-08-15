@@ -3,7 +3,7 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
-## First real party-development plan — 2026-08-14
+## First real party-development plan and result — 2026-08-14
 
 Codex selected a same-goal venue counterfactual instead of comparing different trainees or replaying
 the whole balancing block. Two identical-state clones must evolve the same member, with one bound
@@ -25,6 +25,24 @@ has the identical full-health party and trainee, and is explicitly assigned to t
 The state digest consequently orders the lower band first and the higher band second. Decision:
 consume no attempt, strengthen the runtime coordinate guard, republish, and require fresh exact-
 commit CI before another preflight.
+
+Corrected commit `71f36bf` passed CI run `31857086445`, its preflight returned ready, and both
+one-shot clones completed. The lower band evolved in 103 battles / 1,338,952 frames; the higher
+band evolved in 68 / 1,185,669, so the runner's target-XP-rate criterion selected the higher band.
+Post-result audit challenged its 42 aggregate Center calls against the configured 40-trip bound.
+The journal retained no phase breakdown, and source left venue-transition calls outside the guard;
+40 recoveries plus two bookends is only one possible explanation. Decision: preserve descriptive
+execution, reject the learner target, retire the identity without retry, and repair phase counters
+plus every in-loop bound before a fresh preassigned context. Independent Claude and Antigravity
+review of the result remains pending. Review packet:
+[`red-party-development-outcome-result-2026-08-14.json`](evidence/red-party-development-outcome-result-2026-08-14.json).
+
+Codex's corrective V2 contract uses the next preassigned train context rather than rerunning either
+observed V1 candidate. It records venue-transition, required-recovery, optional-recovery and cleanup
+separately; proves their sum; caps the three in-loop phases together at 50; and requires one cleanup.
+Decision: publish the [V2 plan](evidence/red-party-development-outcome-plan-v2-2026-08-14.json),
+require exact-commit green CI and read-only preflight, then execute each fresh candidate once.
+Independent review remains pending and is not approval.
 
 ## Same-terminal navigation result — 2026-08-14
 

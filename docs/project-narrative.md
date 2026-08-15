@@ -1,21 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 14: party training became a controlled question
+## August 14: party training became a controlled question—and answered it
 
 The old balancing block mixed too many things: trainee selection, travel, battles, evolution,
 recovery and thousands of repetitions. It also retreated at 90% health, which could turn nearly
-every battle into another Center trip. The first party-development experiment asks one smaller,
+every battle into another Center trip. The first party-development experiment asked one smaller,
 transferable question instead: for the same trainee and the same evolution goal, which safe
 encounter band produces the better outcome?
 
-Two clones will start from identical authenticated Cinnabar evolution-training bytes. Candidate order comes from the state
-digest, and the learner sees only party and encounter-band semantics. The executor lowers the
-mandatory retreat threshold to 45%, disables optional healing, keeps a qualified PP reserve and
-still permits no faints. Every battle, encounter step, Center trip, rotation, frame and point of
-experience is counted; only experience earned by the bound trainee satisfies target progress.
+The first preflight caught a mislabeled source before the controller existed: the bytes were inside
+Pokémon Mansion, not at the Center boundary the travel code required. A canonical evolution-training
+state replaced it, the exact nurse coordinate became a guard, and the amended commit passed GitHub.
+Only then did two identical clones run once under a 45% retreat threshold, disabled optional
+healing, qualified PP reserves and a zero-faint rule.
 
-The source must pass GitHub before either clone moves, and each candidate gets one attempt. This is
-not yet a learned party policy. It is the fair, outcome-grounded lesson that such a policy will need.
+Both trainees evolved from level 22 to 26. The lower encounter band needed 103 battles and
+1,338,952 frames; the higher band needed 68 and 1,185,669. The runner preferred the higher target-
+experience rate—then the audit refused to turn that preference into a lesson. Its 42 aggregate
+Center calls exceeded the configured 40-trip number, and the journal could not separate recovery,
+venue positioning and cleanup. The code also left venue transitions outside the guard.
+
+So this is not yet a learned party policy or even an accepted training example. It is a short,
+useful failure: real outcomes completed, an apparently attractive result failed its accounting
+contract, and the project can repair the counter before spending days or training on a false label.
+
+The replacement does not reinterpret the old journal. It starts from the next preassigned train
+context under a new experiment identity, gives venue travel, mandatory recovery, optional recovery
+and cleanup their own counters, and places every in-loop Center call under one finite budget. Only
+an exact green commit and two fresh one-shot outcomes can turn that prospective repair into a
+lesson.
 
 ## August 14: the first navigation lesson reached the game
 
@@ -32,8 +45,8 @@ preference through the same learner boundary as battle.
 That is evidence plumbing, not a navigation model. One easy route does not prove obstacle handling,
 recovery, cross-map generalization or transfer to another Pokémon game, so no authority changed.
 The important result is narrower: game-grounded navigation can now become training data without
-turning a destination, coordinate or button sequence into the label. Party development is the last
-of the first three outcome families still missing a real cartridge result.
+turning a destination, coordinate or button sequence into the label. Party development reached the
+same seam but exposed an accounting defect before its preference entered training.
 
 ## August 14: training finally ran—and the scoreboard was too easy
 
@@ -49,10 +62,11 @@ opponent in one turn. A perfect score here meant “the question was easy,” no
 play Pokémon.”
 
 So the curve produced a useful rejection rather than a victory graphic. The training pipeline is
-real; battle improvement is not yet demonstrated. Authority stays at zero. The next chapter leaves
-the easy battle loop long enough to prove real navigation and party-development outcomes, then
+real; battle improvement is not yet demonstrated. Authority stays at zero. The next chapter left
+the easy battle loop long enough to prove real navigation and test party development. Navigation
+passed; party accounting rejected its first target. The project repairs that narrow seam, then
 returns to prospectively frozen battles where health, status, matchups and resources create actual
-choices.
+choices alongside independent blocker-navigation and party contexts.
 
 ## August 14: the first curve stopped on a real game mechanic
 
@@ -92,9 +106,10 @@ target.
 The first curve is now prospective and executable: four ordered train contexts, four untouched
 development contexts, and 1/2/4 last-layer fits restarted from the same prior. The runner rejects
 duplicate lineages, states, observations and manifests; retains flat prefixes as no-update points;
-and reports paired selected utility on the same development roots. This is deliberately descriptive
-and grants no authority. It will run only after its source is published and green, and it cannot be
-expanded until one real navigation and one real party-development outcome survive the same seam.
+and reports paired selected utility on the same development roots. This was deliberately descriptive
+and granted no authority. It ran only after its source was published and green. Navigation later
+survived the same seam; party development reached it but rejected its first target on accounting,
+so that narrow repair remains before broad curriculum expansion.
 
 ## August 14: the first outcome lesson failed—and that was the result
 

@@ -192,18 +192,36 @@ class TeamTrainingExecutionSummary:
 
     progress: TeamTrainingProgress
     rotations_executed: int
+    venue_transition_trips: int
+    required_recovery_trips: int
+    optional_recovery_trips: int
+    cleanup_trips: int
 
     def __post_init__(self) -> None:
         if not isinstance(self.progress, TeamTrainingProgress):
             raise TypeError("training execution progress is invalid")
         if type(self.rotations_executed) is not int or self.rotations_executed < 0:  # noqa: E721
             raise ValueError("training execution rotations are invalid")
+        phase_trips = (
+            self.venue_transition_trips,
+            self.required_recovery_trips,
+            self.optional_recovery_trips,
+            self.cleanup_trips,
+        )
+        if any(type(value) is not int or value < 0 for value in phase_trips):  # noqa: E721
+            raise ValueError("training execution healing-trip phases are invalid")
+        if sum(phase_trips) != self.progress.healing_trips:
+            raise ValueError("training execution healing-trip phases are incomplete")
 
     def public_dict(self) -> dict[str, int]:
         return {
             "battles_completed": self.progress.battles_completed,
             "steps_taken": self.progress.steps_taken,
             "healing_trips": self.progress.healing_trips,
+            "venue_transition_trips": self.venue_transition_trips,
+            "required_recovery_trips": self.required_recovery_trips,
+            "optional_recovery_trips": self.optional_recovery_trips,
+            "cleanup_trips": self.cleanup_trips,
             "faints": self.progress.faints,
             "rotations_executed": self.rotations_executed,
         }
@@ -766,6 +784,10 @@ def run_red_team_balancing(
     battles = 0
     steps = 0
     healing_trips = 0
+    venue_transition_trips = 0
+    required_recovery_trips = 0
+    optional_recovery_trips = 0
+    cleanup_trips = 0
     rotations_executed = 0
     consecutive_flees = 0
     # celadon._flee appends its evidence to run.wilds, so this has to be a real
@@ -1350,7 +1372,7 @@ def run_red_team_balancing(
 
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
             if healing_trips >= policy.max_healing_trips:
-                break
+                raise RuntimeError("team training exhausted the required-recovery budget")
             selected = emit_decision(
                 TrainingControlAction.HEAL,
                 decision.reason
@@ -1370,9 +1392,12 @@ def run_red_team_balancing(
             restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
+            required_recovery_trips += 1
             continue
 
         if not current_venue.is_in_map(raw):
+            if healing_trips >= policy.max_healing_trips:
+                raise RuntimeError("team training exhausted the venue-transition budget")
             selected = emit_decision(
                 TrainingControlAction.SEEK,
                 "travel to the selected training venue",
@@ -1390,6 +1415,7 @@ def run_red_team_balancing(
             restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
+            venue_transition_trips += 1
             continue
         trainee = (
             trainee
@@ -1439,6 +1465,7 @@ def run_red_team_balancing(
             restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
+            optional_recovery_trips += 1
             continue
         require_overworld_action(
             selected,
@@ -1451,6 +1478,7 @@ def run_red_team_balancing(
         restore_core_and_count()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1
+        cleanup_trips += 1
     restore_core_and_count()
     report = (
         summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
@@ -1465,6 +1493,10 @@ def run_red_team_balancing(
                     faints=party_reader.read().fainted_count,
                 ),
                 rotations_executed=rotations_executed,
+                venue_transition_trips=venue_transition_trips,
+                required_recovery_trips=required_recovery_trips,
+                optional_recovery_trips=optional_recovery_trips,
+                cleanup_trips=cleanup_trips,
             )
         )
     return report, battles, healing_trips
