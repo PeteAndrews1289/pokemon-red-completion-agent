@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the proof had to survive a different Python
+
+The first CI failure was mundane but necessary: GitHub's shallow checkout could not see the old
+commit the proof claimed to authenticate. Once the approved full-history checkout fixed that, all
+33 source-qualification tests failed for a subtler reason. Python 3.11 and Python 3.14 print the
+same syntax tree differently. The program had accidentally treated an interpreter's formatting as
+part of Pokémon evidence.
+
+Source `f2ecc79` now turns the syntax tree into its own typed, version-neutral document before
+hashing it. Empty fields added by a newer Python are normalized; actual semantic fields are not.
+One golden digest was reproduced under both interpreters, and the complete tree passed 3,489 tests,
+lint, typing and every registry check. The source bundle is now `c158aaff…`.
+
+Nothing played the game during this repair. That is why the dashboard still reads **prior 0 ·
+train 0/8 · development 0/6 · authority 0**. The lesson is useful beyond this one test: provenance
+must identify the program's meaning, not the incidental version of the tool that described it.
+Exact-head CI and Claude's mutation audit are the last gates before composing the first private
+Route 11 prior.
+
 ## August 15: three agents, one keyboard, two kinds of doubt
 
 The project had already used three agents, but their jobs could blur together. The new handoff makes

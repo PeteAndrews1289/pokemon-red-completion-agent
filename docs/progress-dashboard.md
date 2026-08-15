@@ -11,10 +11,11 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
-The current publication candidate `0d89d85` repairs the historical Route 11 venue-prior gate. The
-dashboard must not count that prior yet. Its source-compatibility attestation compares 19
-operational elements across the observed and current commits and permits exactly three reviewed
-waivers; GitHub CI and Claude re-approval are still pending. Therefore the current readiness view
+The current source checkpoint `f2ecc79` repairs the historical Route 11 venue-prior gate and makes
+its AST evidence identical on Python 3.11 and 3.14. The dashboard must not count that prior yet.
+Its source-compatibility attestation compares 19 operational elements across the observed and
+current commits and permits exactly three reviewed waivers; exact-head GitHub CI and Claude
+re-approval are still pending. Therefore the current readiness view
 remains **venue priors 0 · train 0/8 · development 0/6 · fit false · authority zero**. A future
 approved composition may change only the first value to one; it is not a training outcome.
 

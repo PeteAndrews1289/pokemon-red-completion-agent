@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: one meaning, two Pythons
+
+Show the first CI gate opening after **FULL GIT HISTORY** is enabled. Behind it, 33 source checks
+turn red. Split the screen: **PYTHON 3.11** and **PYTHON 3.14** render the same little program into
+different syntax-tree text. Narration: **“The game had not changed. Our fingerprint had confused a
+tool's formatting with the meaning of the code.”**
+
+Replace the loose text with a typed tree: node kind, named fields, tagged values. Grey out only an
+empty `type_params` branch added by newer Python, then alter a real field and show the proof fail
+closed. End on **f2ecc79 · SAME GOLDEN ON 3.11 + 3.14 · 3,489 TESTS · BUNDLE c158aaff…**. Keep the
+training board unchanged: **PRIOR 0 · OUTCOMES 0/14 · AUTHORITY ZERO**. The next two doors read
+**EXACT-HEAD CI** and **CLAUDE MUTATION AUDIT**.
+
 ## August 15 scene: one keyboard, two red teams
 
 Put **CODEX** at the keyboard with three cards: **BUILD · INTEGRATE · PUBLISH**. Place Claude to the

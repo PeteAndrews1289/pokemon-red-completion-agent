@@ -8,17 +8,21 @@
 > cross-game representation and living-Pokédex capability coverage. Codex may disagree with either;
 > material disagreements are resolved with the cheapest discriminating test, not a vote.
 >
-> Immediate sequence: obtain explicit owner approval for the single CI history fix; publish and get
-> a green exact head; Claude re-audits the Route 11 source qualification; Codex composes one private
+> Immediate sequence: publish the approved CI/source portability repair and get a green exact head;
+> Claude re-audits the Route 11 source qualification; Codex composes one private
 > prior only after approval; Codex freezes the 8+6 question catalog; Claude audits integrity/power;
 > Antigravity audits genuine choice quality and transfer value; only then may outcomes execute. A
 > first 8+6 fit is descriptive and grants zero authority. The 120-episode Milestone 4 gate, early
 > Crystal development falsifier, hierarchical integration and living-Pokédex planner remain later
 > gates. No full run is authorized.
 >
-> Current source candidate `0d89d85` is locally green but GitHub CI failed because shallow checkout
-> omitted historical commit `00499bc`. The proposed `fetch-depth: 0` workflow repair remains
-> unimplemented pending explicit approval. Counters remain priors 0, menus 0, outcomes 0/14, fits 0,
+> The owner-approved full-history checkout is published at `f1bb629`. It exposed interpreter-
+> dependent `ast.dump` hashes between Python 3.11 and 3.14; source `f2ecc79` replaces them with a
+> canonical typed AST document while ignoring only empty version-added `type_params`. Its digest is
+> identical on both interpreters, and the full local gate passes 3,489 tests plus lint, typing and
+> registry checks. Source bundle:
+> `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`. Exact-head CI and Claude's
+> re-audit remain mandatory. Counters remain priors 0, menus 0, outcomes 0/14, fits 0,
 > sealed/Crystal 0, replay 0 and authority 0.
 
 > **2026-08-15 completion-constraint adjudication — highest active checkpoint:** Exact source

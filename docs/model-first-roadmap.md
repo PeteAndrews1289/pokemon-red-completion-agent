@@ -11,8 +11,8 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Role ownership and exact handoffs are frozen in
 [current-agent-handoffs.md](current-agent-handoffs.md). The next work is deliberately serial:
 
-1. After explicit owner approval, make the one CI checkout-history repair, publish the current
-   documentation and require a green exact-head run.
+1. Publish the approved CI checkout-history repair, cross-Python attestation repair and current
+   documentation, then require a green exact-head run.
 2. Claude attacks the immutable Route 11 source qualification. No ROM, private prior or outcome is
    opened. Any surviving provenance/contract mutation returns the lane to Codex.
 3. After approval only, Codex composes one private Route 11 prior and publishes a path-free summary.
@@ -35,18 +35,25 @@ for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine 
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
 
-## Current checkpoint: make historical evidence survive source time
+## Current checkpoint: make historical evidence survive source time and Python time
 
 Claude rejected the first Route 11 prior composer because it could correctly divide the observed
-counts while still lying about which code produced them. Exact source `0d89d85` closes that class of
-error. It reads the historical `00499bc` source directly from Git, compares the 19 operational
-elements with the current commit, and permits exactly three reviewed semantic-preserving deltas.
+counts while still lying about which code produced them. Source `0d89d85` closed that class of
+error by reading historical `00499bc` directly, comparing 19 operational elements and permitting
+exactly three reviewed semantic-preserving deltas. The approved full-history checkout at `f1bb629`
+then made CI capable of performing the comparison and exposed a second defect: `ast.dump` is not a
+stable serialization between Python 3.11 and 3.14.
+
+Source `f2ecc7961c811d57d5572366dd7ec8a879e3c502` now commits a canonical, typed recursive AST
+document. It ignores only empty `type_params` added by newer Python versions and fails closed on
+unknown scalar types; semantic fields remain bound.
 The current runtime, stateless Route 11 walker, policy, recovery, timing and accounting are all bound
 into the evidence. The stale Cave sibling is now validated from its own trial row rather than
 represented by a hardcoded count.
 
-Local qualification is green at 3,488 tests, Ruff, mypy over 223 source files and all generated
-registries. The exact executable bundle is `419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`.
+The canonical golden matches on Python 3.11 and 3.14. Local qualification is green at 3,489 tests,
+Ruff, mypy over 223 source files and all generated registries. The exact executable bundle is
+`c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
 This checkpoint is not approved evidence yet: GitHub CI and Claude's adversarial re-audit of the
 published commit remain mandatory. If approved, compose exactly one private Route 11 prior. Then
 locate or prospectively create depleted-PP non-sealed contexts and freeze the genuine 8-train /

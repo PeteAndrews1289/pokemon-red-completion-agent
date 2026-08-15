@@ -1,5 +1,26 @@
 # Current audit — 2026-08-15
 
+## CI portability audit and repair
+
+The approved `fetch-depth: 0` workflow change fixed CI's inability to read historical source. The
+next exact run reached that source and failed 33 qualification tests because Python 3.11 and 3.14
+produce different `ast.dump` text for the same semantics. This was an interpreter portability
+defect in the attestation, not evidence that Route 11 behavior, the teacher or a model had run.
+
+Source `f2ecc7961c811d57d5572366dd7ec8a879e3c502` replaces `ast.dump` hashing with a schema-tagged,
+typed recursive AST document. Every semantic field is committed; only empty `type_params` fields
+introduced by newer Python are omitted, and unknown scalar types fail closed. Exact waiver hashes,
+walker identity, attestation aggregates, registry goldens and encounter-execution goldens were
+regenerated. Source bundle:
+`c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
+
+The same canonical golden was reproduced under Python 3.11 and Python 3.14. Python 3.11 passed 36
+focused tests; Python 3.14 passed 85 focused tests. The full tree passed 3,489 tests, three skips,
+one expected failure, Ruff, mypy across 223 files and every registry check. The remaining gate is
+one exact publication-head CI run followed by Claude's adversarial source audit. Protected counters
+remain unchanged: priors 0, menus 0, outcomes 0/14, fits 0, controller/teacher 0, sealed/Crystal 0,
+replay 0 and authority 0.
+
 ## Three-agent role and execution-plan audit
 
 The current work no longer treats Codex, Claude and Antigravity as interchangeable assistants.

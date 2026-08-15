@@ -7,6 +7,17 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the same proof on two Pythons
+
+The approved full-history CI repair let GitHub read the historical source—and immediately exposed a
+better bug. Python 3.11 and Python 3.14 describe identical syntax trees with different text, so 33
+source checks failed even though no Pokémon behavior had changed.
+
+Exact `f2ecc79` replaces that accidental formatting dependency with a typed, version-neutral syntax
+tree fingerprint. The same golden now matches on both Python versions, and the full local gate
+passes 3,489 tests. The board remains **0/14**: no game, teacher or model ran. One green exact-head
+CI run and Claude's mutation attack still stand between source and the first Route 11 prior.
+
 ## Current checkpoint: evidence cannot time-travel
 
 Route 11 produced one real, useful result. The first composer could calculate it correctly but did

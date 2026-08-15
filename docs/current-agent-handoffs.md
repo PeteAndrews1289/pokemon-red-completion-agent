@@ -23,12 +23,13 @@ Current honest state:
 - Crystal contexts opened by this lane: 0;
 - full Red replays authorized: 0.
 
-Published source candidate `0d89d85edbe19ff639f5983123759787c87292e7` has local validation but
-failed GitHub CI because the default shallow checkout cannot read historical commit `00499bc`.
-The proposed workflow repair is `actions/checkout` with `fetch-depth: 0`; it remains unimplemented
-until the owner explicitly approves the CI edit. No reviewer should treat `0d89d85` as qualified
-until a successor head passes CI and preserves source bundle
-`419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117`.
+The owner-approved full-history checkout is published at `f1bb629`. The first run then exposed a
+separate Python 3.11/3.14 `ast.dump` portability defect. Source checkpoint
+`f2ecc7961c811d57d5572366dd7ec8a879e3c502` fixes it with a canonical typed AST document and
+preserves source bundle `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
+The canonical digest matches on both interpreters and the complete local gate passes 3,489 tests,
+but no reviewer should treat the successor publication head as qualified until exact-head CI is
+green and Claude attacks it.
 
 ## Role 1: Codex — implementation and integration owner
 
@@ -49,8 +50,8 @@ authority. If they disagree, Codex runs the cheapest discriminating test and rec
 
 Current Codex assignment:
 
-1. After explicit approval, repair CI history availability with one workflow change, publish the
-   current documentation, and obtain one green exact-head run. Do not repeatedly rerun a known
+1. Publish the already-approved CI history repair plus the cross-Python attestation repair and
+   current documentation, then obtain one green exact-head run. Do not repeatedly rerun a known
    failure.
 2. Freeze that exact head and dispatch Claude's source-qualification re-audit.
 3. If and only if Claude approves, compose the one private Route 11 prior from authenticated V2
@@ -94,7 +95,7 @@ Claude owns review of:
   separate decisions.
 
 Claude's next assignment is deliberately narrow. After green CI, audit the exact successor of
-`0d89d85` without opening a ROM, private registry or outcome. Re-run or improve the prior mutation
+`f2ecc79` without opening a ROM, private registry or outcome. Re-run or improve the prior mutation
 battery, especially:
 
 1. fake historical commit or bundle;
@@ -106,6 +107,10 @@ battery, especially:
 7. omission of recovery modules;
 8. removal of measured-sample or measured-evidence guards; and
 9. removal or replacement of walker identity.
+
+Also verify on Python 3.11 and 3.14 that the canonical AST digest is identical, that only empty
+version-added `type_params` are ignored, and that deleting or changing a semantic AST field cannot
+survive.
 
 Claude must return: exact commit reviewed, tests/mutations run, survivors, findings by severity,
 verdict, cheapest falsifier for each blocker, and the narrowest action authorized. An approval may

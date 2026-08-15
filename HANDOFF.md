@@ -17,6 +17,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Cross-Python provenance repair complete; exact-head CI is the remaining gate — 2026-08-15
+
+The approved `fetch-depth: 0` workflow repair is published at `f1bb629`, so CI can now read the
+historical `00499bc` source it must authenticate. That repair exposed a second, independent defect:
+the first operational digests used `ast.dump`, whose output differs between CI's Python 3.11 and
+local Python 3.14 even when the program means the same thing. The 33 CI failures were source-
+attestation failures, not emulator, teacher or model failures.
+
+Source checkpoint `f2ecc7961c811d57d5572366dd7ec8a879e3c502` replaces that interpreter-specific
+serialization with a version-neutral, typed recursive AST document. It ignores only the empty
+`type_params` field introduced by newer Python; all semantic fields remain committed and unknown
+scalar types fail closed. The reviewed Route 11 waivers, positive walker identity, registry
+goldens and aggregate attestations were regenerated from that canonical representation. The exact
+source bundle is `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
+
+The canonical golden was reproduced independently on Python 3.11 and 3.14. Python 3.11 passed the
+36 focused qualification tests; Python 3.14 passed 85 focused tests. The complete local gate passed
+3,489 tests, three intentional skips and one expected failure, plus Ruff, mypy across 223 source
+files and all three generated-registry checks. The next action is one publication push and one
+exact-head CI run—no repeated rerun on a known failure. Only a green head may go to Claude for the
+source mutation audit. No ROM, prior, menu, outcome, controller, teacher, sealed case, Crystal
+context or replay was opened; all protected counters remain zero.
+
 ## Three-agent operating assignments and execution bridge frozen — 2026-08-15
 
 Read [docs/current-agent-handoffs.md](docs/current-agent-handoffs.md) before dispatching another

@@ -3,6 +3,23 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Route 11 CI portability defect — repaired, re-review pending 2026-08-15
+
+The owner approved full-history checkout and it was published at `f1bb629`. CI could then read
+historical commit `00499bc`, closing the first infrastructure failure, but 33 qualification tests
+reported current-source drift. Codex reproduced the cause across Python 3.11 and 3.14: `ast.dump`
+text is interpreter-version-dependent even when the AST means the same thing.
+
+Decision: repair the semantic fingerprint rather than pin CI to the local interpreter. Exact source
+`f2ecc7961c811d57d5572366dd7ec8a879e3c502` uses a typed recursive document, ignores only empty
+version-added `type_params`, and fails closed on unknown scalar types. The same golden digest now
+matches on both interpreters. The full local gate passes 3,489 tests plus lint, typing and registry
+checks; source bundle `c158aaffa4906ebb77263644f421947aac3e5c1c096aae36c10b8b1be7d9c2cf`.
+
+Disposition remains **pending exact-head CI and Claude re-review**. Claude must add cross-version
+semantic-field mutations to the existing nine-case provenance battery. This repair authorizes no
+private composition or execution.
+
 ## Route 11 venue-prior composer — rejected and remediated 2026-08-15
 
 Claude rejected the initial composer on five grounds: historical Git provenance was shape-checked
