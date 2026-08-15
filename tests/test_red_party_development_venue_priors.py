@@ -299,7 +299,7 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_seven_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_nine_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == (
@@ -313,18 +313,20 @@ def test_source_compatibility_recomputes_exact_bundles_and_seven_waivers() -> No
         "core.project-trainee-choice-set",
         "core.project-venue-candidates",
         "core.project-venue-choice-set",
+        "module-assignments.blaine",
+        "module-assignments.training-venue",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
         "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "cb9299da242d8516e0184f0a3579798dc5d5242bb8a459c3a2f5f2d7e2beebdc"
+        "5cc67d3b970b7d3da3acbd7a9916aefa54ad3ed56149a152871341ff3dc36fe8"
     )
     assert attestation.current_elements_sha256 == (
-        "f2cb0aa8bd469c38b24b97f1139208601c96d1011fe28dcf6898abba06c330c5"
+        "5237cf04bf0769aff8c73e8117cc6e6d133d882023df60e668537b57713bd2dc"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "5558e7ae6d70bb50fbd63d3397c3f378c9b24683c286a71c4962c6ddf131c65d"
+        "1bafdcefd1859f133efa2a3b2fb8f0d06e5973abe60e323030cd8889a74b28f0"
     )
 
 
@@ -338,6 +340,25 @@ def test_source_compatibility_covers_whole_venue_and_grinding_area_classes() -> 
     assert elements["core.grinding-area"] == "GrindingArea"
     assert "training-venue.fresh-walk-to-grass" not in elements
     assert "training-venue.is-in-map" not in elements
+
+
+def test_source_compatibility_covers_all_element_module_assignments() -> None:
+    module_paths = {
+        spec.relative_path
+        for spec in venue_prior_module._ROUTE_11_SOURCE_ELEMENTS  # noqa: SLF001
+        if spec.kind == "module_assignments"
+    }
+
+    assert module_paths == {
+        "src/pokemon_red_completion/battle_runtime.py",
+        "src/pokemon_red_completion/blaine.py",
+        "src/pokemon_red_completion/celadon.py",
+        "src/pokemon_red_completion/party.py",
+        "src/pokemon_red_completion/red_team_training.py",
+        "src/pokemon_red_completion/team_training.py",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "src/pokemon_red_completion/training_venue.py",
+    }
 
 
 def test_source_compatibility_rejects_an_uncovered_candidate_helper(
@@ -359,6 +380,35 @@ def test_source_compatibility_rejects_an_uncovered_candidate_helper(
         match="untracked project code",
     ):
         venue_prior_module._require_route_11_source_closure()  # noqa: SLF001
+
+
+def test_attestation_invokes_source_closure_independently(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    attestation = _source_compatibility()
+
+    def reject_closure() -> None:
+        raise RedPartyDevelopmentVenuePriorError(
+            "independent attestation closure sentinel"
+        )
+
+    monkeypatch.setattr(
+        venue_prior_module,
+        "_require_route_11_source_closure",
+        reject_closure,
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="independent attestation closure sentinel",
+    ):
+        attest_red_route_11_source_compatibility(
+            PROJECT_ROOT,
+            current_commit=attestation.current_commit,
+            current_source_bundle_sha256=(
+                attestation.current_source_bundle_sha256
+            ),
+        )
 
 
 def test_operational_ast_digest_is_stable_across_supported_python_versions() -> None:
@@ -392,15 +442,44 @@ def test_operational_ast_rejects_an_unsupported_scalar() -> None:
     reason="PEP 695 type-parameter syntax requires Python 3.12+",
 )
 def test_operational_ast_retains_nonempty_type_parameters() -> None:
-    generic = ast.parse("def sample[T](value: T) -> T:\n    return value\n").body[0]
+    generic = ast.parse("def sample[T](value):\n    return value\n").body[0]
     plain = ast.parse("def sample(value):\n    return value\n").body[0]
+    renamed = ast.parse("def sample[S](value):\n    return value\n").body[0]
+    widened = ast.parse("def sample[T, U](value):\n    return value\n").body[0]
 
-    assert venue_prior_module._ast_node_sha256(  # noqa: SLF001
+    generic_digest = venue_prior_module._ast_node_sha256(  # noqa: SLF001
         generic,
         qualname="sample",
-    ) != venue_prior_module._ast_node_sha256(  # noqa: SLF001
+    )
+    assert generic_digest != venue_prior_module._ast_node_sha256(  # noqa: SLF001
         plain,
         qualname="sample",
+    )
+    assert generic_digest != venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        renamed,
+        qualname="sample",
+    )
+    assert generic_digest != venue_prior_module._ast_node_sha256(  # noqa: SLF001
+        widened,
+        qualname="sample",
+    )
+
+
+@pytest.mark.parametrize(
+    ("baseline", "changed"),
+    (
+        (b"VALUE = 1\n", b"VALUE = 2\n"),
+        (b"VALUE: int = 1\n", b"VALUE: int = 2\n"),
+    ),
+)
+def test_module_assignment_digest_retains_assign_and_annassign_values(
+    baseline: bytes,
+    changed: bytes,
+) -> None:
+    assert venue_prior_module._module_assignments_ast_sha256(  # noqa: SLF001
+        baseline
+    ) != venue_prior_module._module_assignments_ast_sha256(  # noqa: SLF001
+        changed
     )
 
 
@@ -538,6 +617,78 @@ def test_source_compatibility_rejects_unlisted_historical_element_drift(
             current_source_bundle_sha256=(
                 attestation.current_source_bundle_sha256
             ),
+        )
+
+
+def test_source_compatibility_rejects_committed_module_constant_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    attestation = _source_compatibility()
+    original_blob = venue_prior_module.committed_executable_source_blob
+    fake_current_bundle = "f" * 64
+
+    def changed_blob(
+        repository_root: str | Path,
+        *,
+        revision: str,
+        relative_path: str,
+    ) -> bytes:
+        payload = original_blob(
+            repository_root,
+            revision=revision,
+            relative_path=relative_path,
+        )
+        if (
+            revision == attestation.current_commit
+            and relative_path.endswith("/team_training.py")
+        ):
+            changed = payload.replace(
+                b"MINIMUM_FIGHTABLE_SHARE = 0.25",
+                b"MINIMUM_FIGHTABLE_SHARE = 0.05",
+                1,
+            )
+            assert changed != payload
+            return changed
+        return payload
+
+    def changed_bundle(
+        _repository_root: str | Path,
+        *,
+        revision: str,
+    ) -> str:
+        if revision == attestation.observed_commit:
+            return attestation.observed_source_bundle_sha256
+        if revision == attestation.current_commit:
+            return fake_current_bundle
+        raise AssertionError(f"unexpected revision: {revision}")
+
+    monkeypatch.setattr(
+        venue_prior_module,
+        "committed_executable_source_blob",
+        changed_blob,
+    )
+    monkeypatch.setattr(
+        venue_prior_module,
+        "committed_source_bundle_sha256",
+        changed_bundle,
+    )
+    monkeypatch.setattr(
+        venue_prior_module,
+        "_loaded_source_element_rows",
+        lambda: venue_prior_module._committed_source_element_rows(  # noqa: SLF001
+            PROJECT_ROOT,
+            revision=attestation.current_commit,
+        ),
+    )
+
+    with pytest.raises(
+        RedPartyDevelopmentVenuePriorError,
+        match="unreviewed Route 11 source drift: module-assignments.team-training",
+    ):
+        attest_red_route_11_source_compatibility(
+            PROJECT_ROOT,
+            current_commit=attestation.current_commit,
+            current_source_bundle_sha256=fake_current_bundle,
         )
 
 

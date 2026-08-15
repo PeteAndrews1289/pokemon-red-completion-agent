@@ -21,11 +21,12 @@ from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import cast
+from typing import Literal, cast
 
 import pokemon_red_completion.battle_runtime as battle_runtime_module
 import pokemon_red_completion.blaine as blaine_module
 import pokemon_red_completion.celadon as celadon_module
+import pokemon_red_completion.party as party_module
 import pokemon_red_completion.red_team_training as red_team_training_module
 import pokemon_red_completion.team_training as team_training_module
 import pokemon_red_completion.training_candidate_rank as training_candidate_rank_module
@@ -167,7 +168,8 @@ class _SourceElement:
     element_id: str
     relative_path: str
     qualname: str
-    current_object: Callable[..., object] | type[object]
+    current_object: Callable[..., object] | type[object] | ModuleType
+    kind: Literal["definition", "module_assignments"] = "definition"
 
 
 @dataclass(frozen=True, slots=True)
@@ -445,6 +447,62 @@ _ROUTE_11_SOURCE_ELEMENTS = (
         "TeamTrainingProgress",
         TeamTrainingProgress,
     ),
+    _SourceElement(
+        "module-assignments.battle-runtime",
+        "src/pokemon_red_completion/battle_runtime.py",
+        "<module assignments>",
+        battle_runtime_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.blaine",
+        "src/pokemon_red_completion/blaine.py",
+        "<module assignments>",
+        blaine_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.celadon",
+        "src/pokemon_red_completion/celadon.py",
+        "<module assignments>",
+        celadon_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.party",
+        "src/pokemon_red_completion/party.py",
+        "<module assignments>",
+        party_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.red-team-training",
+        "src/pokemon_red_completion/red_team_training.py",
+        "<module assignments>",
+        red_team_training_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.team-training",
+        "src/pokemon_red_completion/team_training.py",
+        "<module assignments>",
+        team_training_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.training-candidate-rank",
+        "src/pokemon_red_completion/training_candidate_rank.py",
+        "<module assignments>",
+        training_candidate_rank_module,
+        "module_assignments",
+    ),
+    _SourceElement(
+        "module-assignments.training-venue",
+        "src/pokemon_red_completion/training_venue.py",
+        "<module assignments>",
+        training_venue_module,
+        "module_assignments",
+    ),
 )
 
 _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
@@ -513,6 +571,26 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "60cffd1eef84b93634b484349ee23900ff36a1a467d1cdc8a52d2034ec6c2e3c"
         ),
         justification_id="default-zero-traversal-counters-preserve-historical-summary",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="module-assignments.blaine",
+        observed_ast_sha256=(
+            "94b42d7891d670ee5a2f834c2dc77c6aa27976eba19884123c49be0206866753"
+        ),
+        current_ast_sha256=(
+            "5e40386a31d3b213abe997da1e652ed4f7b6f5ee1843b3a6eedef4ca6d7a9e32"
+        ),
+        justification_id="cave-only-pacing-and-exit-constants-do-not-affect-route-11",
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="module-assignments.training-venue",
+        observed_ast_sha256=(
+            "21d3c856685f92c828a195e8963a23a991e307d9a4c5ad7ae3ffbccf70e2f399"
+        ),
+        current_ast_sha256=(
+            "cfaa9dddb67d10cb39a06c41a003216d8b378f4a1c65ba13cd5af8ed011b13d2"
+        ),
+        justification_id="walker-type-and-direction-constants-preserve-route-11",
     ),
 )
 
@@ -1290,7 +1368,11 @@ def _committed_source_element_rows(
         rows.append(
             _source_element_row(
                 spec,
-                _committed_element_ast_sha256(blob, qualname=spec.qualname),
+                _committed_element_ast_sha256(
+                    blob,
+                    qualname=spec.qualname,
+                    kind=spec.kind,
+                ),
             )
         )
     return tuple(rows)
@@ -1303,6 +1385,7 @@ def _loaded_source_element_rows() -> tuple[dict[str, object], ...]:
             _loaded_element_ast_sha256(
                 spec.current_object,
                 qualname=spec.qualname,
+                kind=spec.kind,
             ),
         )
         for spec in _ROUTE_11_SOURCE_ELEMENTS
@@ -1445,7 +1528,14 @@ def _committed_element_ast_sha256(
     source: bytes,
     *,
     qualname: str,
+    kind: Literal["definition", "module_assignments"] = "definition",
 ) -> str | None:
+    if kind == "module_assignments":
+        return _module_assignments_ast_sha256(source)
+    if kind != "definition":
+        raise RedPartyDevelopmentVenuePriorError(
+            "committed operational source kind is invalid"
+        )
     try:
         document = source.decode("utf-8")
         tree = ast.parse(document)
@@ -1479,10 +1569,27 @@ def _committed_element_ast_sha256(
 
 
 def _loaded_element_ast_sha256(
-    value: Callable[..., object] | type[object],
+    value: Callable[..., object] | type[object] | ModuleType,
     *,
     qualname: str,
+    kind: Literal["definition", "module_assignments"] = "definition",
 ) -> str:
+    if kind == "module_assignments":
+        if not isinstance(value, ModuleType):
+            raise RedPartyDevelopmentVenuePriorError(
+                "loaded module-assignment source is invalid"
+            )
+        try:
+            module_source = inspect.getsource(value).encode("utf-8")
+        except (OSError, TypeError) as error:
+            raise RedPartyDevelopmentVenuePriorError(
+                "loaded module-assignment source is unavailable"
+            ) from error
+        return _module_assignments_ast_sha256(module_source)
+    if kind != "definition":
+        raise RedPartyDevelopmentVenuePriorError(
+            "loaded operational source kind is invalid"
+        )
     try:
         source = textwrap.dedent(inspect.getsource(value))
         tree = ast.parse(source)
@@ -1502,6 +1609,35 @@ def _loaded_element_ast_sha256(
             "loaded operational source element differs"
         )
     return _ast_node_sha256(matches[0], qualname=qualname)
+
+
+def _module_assignments_ast_sha256(source: bytes) -> str:
+    """Bind every top-level assignment in one execution-bearing module."""
+
+    try:
+        document = source.decode("utf-8")
+        tree = ast.parse(document)
+    except (UnicodeDecodeError, SyntaxError) as error:
+        raise RedPartyDevelopmentVenuePriorError(
+            "module-assignment source is not parseable Python"
+        ) from error
+    assignments = [
+        node
+        for node in tree.body
+        if isinstance(node, (ast.Assign, ast.AnnAssign))
+    ]
+    if not assignments:
+        raise RedPartyDevelopmentVenuePriorError(
+            "execution-bearing module has no assignments"
+        )
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.semantic-python-module-assignments.v1",
+            "assignments": [
+                _canonical_ast_value(node) for node in assignments
+            ],
+        }
+    )
 
 
 def _ast_node_sha256(node: ast.AST, *, qualname: str) -> str:
