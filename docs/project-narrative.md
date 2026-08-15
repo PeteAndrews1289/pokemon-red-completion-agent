@@ -1,5 +1,41 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the curriculum became inspectable before it became expensive
+
+The completion-aware representation solved only half the problem. It still needed a provable
+starting point and enough independent decisions to measure change. Commit `7190be6` closed that
+gap without executing a candidate.
+
+The exact historical team model is now bound by both file and canonical digests to the public
+offline receipt that established it. Its two train lineages and one already-open validation lineage
+travel inside the typed v2 model. Training or development examples that reuse any of those roots or
+states fail before fitting, as do future attempts to consume a party-outcome identity twice. The
+wider private model preserves every v1 score and initializes all new completion weights at zero.
+
+A separate read-only inventory then treated the open Red checkpoint collection as a curriculum
+pool. It authenticated 81 states—54 train and 27 development—without controller input, teacher
+queries, outcomes or save writes. Claude challenged the PP calibration: dividing by the four-byte
+ceiling grouped typical full movesets with exhausted ones. The corrected Gen I capacity calculation
+leaves 30 versus 14 distinct semantic contexts and 48 versus 24 apparently multi-candidate-ready
+contexts, but shows only high PP in both partitions. Health, evolution and all four completion-goal
+pressures still vary; the current pool cannot pass the two-PP-bin gate. That is exactly the kind of
+limitation the inventory was meant to expose before an outcome becomes expensive.
+
+The prospective catalog is the new firewall. It commits the source bundle, partition, root/state,
+decision kind, goal, candidate feature rows, availability mask and venue priors before an outcome
+can join. Fit readiness is calculated per partition and from semantic menus, so duplicate saves,
+permutations and small continuous-value changes cannot manufacture the 8-train/6-development gate.
+The readiness dashboard therefore says 0/14 and “model fitting has not begun,” even though a strong
+historical prior is visible beside it.
+
+The next bounded engineering slice is adapter + venue-prior registry + discovery of an authenticated
+depleted-PP context, followed by the exact catalog and Claude/Antigravity review. If the archive has
+no such state, a separate prospective materialization step must create one without becoming a
+learner outcome. No candidate outcome, fit, sealed Red case or Crystal context belongs in that
+slice. Living-Pokédex collection remains the product constraint: evolution and retained-living
+needs shape the party curriculum now, and executable collection expansion resumes after the
+Milestone 3 unseen battle gate.
+
 ## August 15: the model finally received the problem we actually care about
 
 The old team ranker was excellent at reproducing a narrow teacher rule: choose the weakest eligible

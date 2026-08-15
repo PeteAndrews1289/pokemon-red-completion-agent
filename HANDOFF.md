@@ -17,6 +17,53 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Prior bound and checkpoint pool inventoried; prospective catalog remains closed — 2026-08-15
+
+Exact source `7190be6b979e51534f033b5ac9c1782093de996d` passed 3,394
+non-integration tests with three integration deselections and one expected failure, plus Ruff,
+whole-source mypy across 220 files, public-artifact, documentation and generated-registry gates.
+The historical v1 model is now authenticated by both file and canonical digest, its public offline
+receipt is authenticated, and its two train lineages plus one already-open validation lineage are
+embedded in the typed v2 prior. Any new train or development outcome that overlaps a prior root or
+state fails before fitting. The private v2 initialization preserves every v1 score, leaves all 39
+completion-aware feature weights at zero and contains zero outcome updates.
+
+A read-only inventory inspected all 81 open Red goal-manager checkpoints without a controller or
+teacher: 54 train / 27 development, 30 / 14 distinct semantic contexts and 48 / 24 contexts that
+appear able to support more than one trainee candidate. Both partitions contain multiple health
+bins, level/no-evolution routes and all four goal pressures. After Claude challenged the original
+PP denominator, exact source `f1cb3a4` normalized each member against its own Gen I moveset capacity
+and PP Ups. The corrected inventory puts **every checkpoint in the high PP bin** in both partitions,
+so this pool alone cannot satisfy the two-PP-bin fit gate. The private inventory retains the exact
+identity-free member facts; the tracked receipts expose only counts, bins and digests. This is a
+candidate pool, not a frozen catalog and not training data. The corrected publication tree passed
+3,398 non-integration tests, three deselections, one expected failure and every local quality gate.
+
+Prospective catalog rows now bind source commit/bundle, partition, root/state, decision kind, goal,
+exact candidate feature and availability hashes, and every venue-prior evidence record before an
+outcome can join. Duplicate identities, mutated menus, all-false availability, missing venue
+evidence, semantic near-duplicate gaming and prior overlap fail closed. The first descriptive fit
+still requires **8 train + 6 untouched development outcomes** with per-partition choice, goal,
+health, PP, evolution-route and semantic-menu diversity. Current progress is **0/14**.
+
+The separate view-only readiness dashboard uses the tracked
+[readiness receipt](docs/evidence/party-development-v2-readiness-2026-08-15.json) and port `8767`.
+It explicitly says the only fitted component is the historical teacher-derived prior; completion-
+aware fitting has not begun. Protected counters remain controller 0, teacher 0, sealed Red 0,
+Crystal 0, full replay 0 and authority 0. Review the
+[prior receipt](docs/evidence/party-development-v2-prior-initialization-2026-08-15.json) and
+[inventory receipt](docs/evidence/party-development-v2-checkpoint-inventory-2026-08-15.json).
+
+Claude's bounded read-only audit of exact `7190be6` returned **APPROVE** for publication and
+adapter/venue-prior/catalog construction only. Its one S3 finding was the PP calibration defect
+above; `f1cb3a4` closes it and exposes the real missing-diversity condition instead of preserving a
+convenient count. Next implement the title-neutral candidate adapter and prospectively frozen
+venue-prior registry, then locate already-authenticated PP-depleted non-sealed contexts or freeze a
+separate bounded materialization plan before constructing the exact 8/6 catalog. Do **not** execute
+a candidate, fit the model, open sealed Red or Crystal, or replay the game during construction.
+Living-Pokédex requirements constrain the adapter and menus now; executable capture/storage/trade
+expansion resumes after the Milestone 3 unseen battle gate, rather than being forgotten.
+
 ## Completion-aware party learner source is qualified; data collection has not started — 2026-08-15
 
 Exact source `42196d462c32cb9c244938017b527a8672a5ab1d` passed 3,373 local

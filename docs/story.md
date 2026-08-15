@@ -7,6 +7,36 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: zero percent became the honest number
+
+The old dashboard could make motion look like learning. This one opens with a less exciting and
+more useful fact: **0 of 14 completion-aware outcomes collected**.
+
+That zero now has structure behind it. The original 99.9%-accurate team scorer is authenticated as
+a prior rather than passed around as an unnamed file. The two runs that trained it and the one run
+that evaluated it are permanently fenced off from the new curriculum. Its knowledge enters the
+wider model exactly—same scores, with every new completion feature at zero weight—so future change
+can be attributed to measured outcomes rather than an initialization accident.
+
+The game did get opened, but only as a library: 81 existing non-sealed checkpoints were read without
+pressing a button or asking the teacher. They contain variety in health, evolution routes and
+completion goals. Claude noticed that their supposed PP diversity came from dividing every moveset
+by a theoretical storage ceiling. After normalization against each member's real move capacity,
+all 81 are high-PP. The public record keeps only counts and bins; member, map, species, slot and file
+identities remain private. The missing PP lesson is now visible instead of being wished away.
+
+Now every future lesson has to be declared before it happens. A catalog row binds the exact source,
+starting bytes, choice kind, goal, candidate menu, availability and venue evidence. A result cannot
+quietly change its question, reuse the old teacher's evidence or count several nearly identical
+saves as diversity. The next work is to build the adapter and venue-prior registry, locate an
+already-authenticated depleted-PP context—or prospectively create one without calling it an
+outcome—then freeze the exact 8 training and 6 untouched development decisions for review.
+
+This party lane is part of the living-Pokédex story, not a detour from it. A collector has to know
+which form must be retained, which member still needs to evolve, which role is missing and how to
+train without wasting days at the Center. Executable capture, storage and trade work resumes after
+the Milestone 3 unseen battle gate; those requirements are already shaping every party decision now.
+
 ## Current checkpoint: stop teaching the wrong question
 
 The first team model had a spectacular number: roughly 99.9% held-out accuracy. It had learned what

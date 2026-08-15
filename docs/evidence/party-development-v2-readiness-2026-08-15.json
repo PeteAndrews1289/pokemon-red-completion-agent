@@ -1,0 +1,107 @@
+{
+  "schema": "pokemon-party-development-v2-readiness-evidence-v1",
+  "date": "2026-08-15",
+  "status": "prior_bound_inventory_complete_catalog_unfrozen",
+  "source": {
+    "commit": "f1cb3a4cccd1fa36350fd59e331bc34585ede0f4",
+    "source_bundle_sha256": "94a04d6fc814a4e8203ee43a6d03647e5e7d4ed11be36275531bb8a6bd10b695",
+    "local_non_integration_tests_passed": 3398,
+    "local_integration_tests_deselected": 3,
+    "local_expected_failures": 1,
+    "quality_gate_passed": true
+  },
+  "prior": {
+    "bound": true,
+    "v1_model_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+    "v2_initial_model_canonical_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+    "train_examples": 13709,
+    "validation_examples": 7030,
+    "validation_correct": 7023,
+    "shape_baseline_correct": 6725,
+    "independent_validation_lineages": 1,
+    "outcome_updates": 0
+  },
+  "checkpoint_inventory": {
+    "checkpoint_count": 81,
+    "partition_counts": {
+      "development": 27,
+      "train": 54
+    },
+    "unique_semantic_contexts": {
+      "development": 14,
+      "train": 30
+    },
+    "ready_multi_candidate_contexts": {
+      "development": 24,
+      "train": 48
+    },
+    "hp_bins": {
+      "development": [
+        "high",
+        "low",
+        "middle"
+      ],
+      "train": [
+        "high",
+        "low",
+        "middle"
+      ]
+    },
+    "pp_bins": {
+      "development": [
+        "high"
+      ],
+      "train": [
+        "high"
+      ]
+    },
+    "evolution_routes": {
+      "development": [
+        "level",
+        "none"
+      ],
+      "train": [
+        "level",
+        "none"
+      ]
+    },
+    "goal_hints": {
+      "development": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ],
+      "train": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ]
+    }
+  },
+  "first_fit_gate": {
+    "minimum_train_outcomes": 8,
+    "minimum_development_outcomes": 6,
+    "collected_train_outcomes": 0,
+    "collected_development_outcomes": 0,
+    "prospective_catalog_frozen": false,
+    "candidate_adapter_ready": false,
+    "venue_prior_registry_frozen": false,
+    "model_fit": false,
+    "authority_promoted": false
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "claim_boundary": {
+    "historical_prior_only": true,
+    "completion_aware_training_started": false,
+    "pp_diversity_gate_satisfied": false,
+    "next": "Construct and externally review the adapter and venue priors, locate or prospectively materialize PP-depleted non-sealed contexts, and freeze the exact catalog before collecting any outcome."
+  }
+}

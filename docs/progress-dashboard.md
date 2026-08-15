@@ -53,6 +53,31 @@ dashboard must continue to show V2 under its original source rather than retroac
 the 39 transitions. Future party outcomes will carry movement attempts, successful steps, blocked
 attempts, excluded-transition skips and no-progress cycles in their own summaries.
 
+## Show the completion-aware party-learning readiness gate
+
+This is the current page. It is deliberately separate from the historical dashboard on port 8765
+and uses only the tracked, path-free readiness receipt. It does not load a ROM or private state,
+query a teacher, make a prediction, execute a candidate, fit a model or expose a controller.
+
+```sh
+source .venv/bin/activate
+python scripts/run_party_development_readiness_dashboard.py --no-browser
+```
+
+Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, the 81-checkpoint
+read-only pool and the exact current gate: 0/8 train outcomes, 0/6 untouched development outcomes,
+catalog unfrozen, candidate adapter absent, venue-prior registry absent, completion-aware fit false
+and authority zero. Its event list shows the observed per-partition semantic bins without exposing
+checkpoint, species, map, slot or private-path identities. The underlying receipts are the
+[prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
+[checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
+[readiness snapshot](evidence/party-development-v2-readiness-2026-08-15.json).
+
+Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
+after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,
+Crystal, full-replay and authority counters remain independent; none may move merely because a
+training fit completed.
+
 ## What it shows
 
 - the rendered game frame, run state, current stage, progress, actions, frames and emulation speed;

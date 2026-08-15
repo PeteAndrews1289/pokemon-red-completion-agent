@@ -1,5 +1,35 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: a progress bar that refuses to lie
+
+Open on the old local dashboard, then slide in a second page on **PORT 8767**. Its largest counter
+reads **COMPLETION-AWARE OUTCOMES 0/14**. Beside it show **HISTORICAL PRIOR: 13,709 TRAIN · 7,023/
+7,030 VALIDATION**. Narration: **“There is a trained model here. It just has not yet been trained on
+the completion question.”**
+
+Animate three sealed cards entering the v2 model:
+**2 HISTORICAL TRAIN LINEAGES · 1 ALREADY-OPEN VALIDATION LINEAGE**. Lock them with
+**ROOT + STATE REUSE REJECTED**. Slide the 27 old features into the 66-feature model and freeze the
+new side at **WEIGHTS = 0**. Put **AUTHENTICATED PRIOR, NOT NEW TRAINING** across the frame.
+
+Next, turn the checkpoint archive into an overhead catalog:
+**81 READ-ONLY STATES · 54 TRAIN · 27 DEVELOPMENT · 30/14 SEMANTIC CONTEXTS · 48/24 APPARENT
+MULTI-CANDIDATE CONTEXTS**. Keep a prominent red line underneath:
+**CONTROLLER 0 · TEACHER 0 · OUTCOMES 0 · SEALED RED 0 · CRYSTAL 0**. Blur every member card and
+label the public view **COUNTS/BINS ONLY · NO MAP/SPECIES/SLOT/PATH**. Flash the first PP card
+**LOW + MIDDLE**, then let the reviewer cross out **÷ 256** and replace it with
+**CURRENT PP ÷ THIS MOVESET'S REAL MAX**. Every card changes to **HIGH**. Stamp the gate
+**PP DIVERSITY: NOT MET**. Narration: **“Fixing the measurement made the dataset look worse—and the
+project more trustworthy.”**
+
+End by assembling one empty prospective catalog row:
+**SOURCE · ROOT/STATE · PARTITION · GOAL · MENU HASH · AVAILABILITY HASH · VENUE-PRIOR EVIDENCE**.
+Try to drag in a duplicated save, a changed menu and a venue without prior evidence; stamp each
+**REJECTED BEFORE EXECUTION**. Final card:
+**NEXT: ADAPTER → VENUE PRIORS → FIND/CREATE BOUNDED LOW-PP CONTEXTS → FREEZE 8+6 → REVIEW**.
+Narration: **“The fastest way to waste another week was to call a good checkpoint pool a dataset.
+So the dashboard stays at zero until every lesson has been declared before the game grades it.”**
+
 ## August 15 scene: 99.9% accurate at the wrong job
 
 Open on the impressive old card: **TEAM RANKER · 99.9% VALIDATION**. Then put its entire vocabulary

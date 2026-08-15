@@ -1,0 +1,119 @@
+{
+  "schema": "pokemon-party-development-v2-checkpoint-inventory-evidence-v1",
+  "date": "2026-08-15",
+  "status": "read_only_inventory_complete_catalog_not_frozen",
+  "source": {
+    "commit": "f1cb3a4cccd1fa36350fd59e331bc34585ede0f4",
+    "branch": "agent/balanced-team-curriculum",
+    "source_bundle_sha256": "94a04d6fc814a4e8203ee43a6d03647e5e7d4ed11be36275531bb8a6bd10b695",
+    "supported_rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "local_non_integration_tests_passed": 3398,
+    "local_integration_tests_deselected": 3,
+    "local_expected_failures": 1,
+    "ruff_passed": true,
+    "mypy_source_files_passed": 220,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "generated_registry_checks_passed": true
+  },
+  "inventory": {
+    "inventory_file_sha256": "9c665db0892729d4327739b6dae46b9ed5c8e808567a33dee7ab1de8faccf881",
+    "canonical_inventory_sha256": "b8c10704f2307e24ecff5af565a2ff8f97bde20aec78f34a15640649bcef4c94",
+    "summary_file_sha256": "ee516a203c78e8a12af233bdcc3b970091e17c1b4d882f5a5b4891eceab975fc",
+    "checkpoint_count": 81,
+    "partition_counts": {
+      "development": 27,
+      "train": 54
+    },
+    "unique_semantic_contexts": {
+      "development": 14,
+      "train": 30
+    },
+    "ready_multi_candidate_contexts": {
+      "development": 24,
+      "train": 48
+    },
+    "hp_bins": {
+      "development": [
+        "high",
+        "low",
+        "middle"
+      ],
+      "train": [
+        "high",
+        "low",
+        "middle"
+      ]
+    },
+    "pp_bins": {
+      "development": [
+        "high"
+      ],
+      "train": [
+        "high"
+      ]
+    },
+    "evolution_routes": {
+      "development": [
+        "level",
+        "none"
+      ],
+      "train": [
+        "level",
+        "none"
+      ]
+    },
+    "goal_hints": {
+      "development": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ],
+      "train": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ]
+    },
+    "inspection_mode": "read_only_no_controller_no_teacher",
+    "diagnostic_only": true,
+    "private_inventory_tracked": false,
+    "private_summary_tracked": false,
+    "member_feature_values_public": false,
+    "map_identity_public": false,
+    "species_identity_public": false,
+    "party_slot_identity_public": false,
+    "private_path_fields": 0
+  },
+  "pp_calibration": {
+    "normalization": "remaining PP divided by the observed moveset's own Gen I maximum, including packed PP Up count",
+    "pp_up_bonus": "one fifth of base PP per PP Up with each increment capped at seven",
+    "previous_global_256_denominator_retired": true,
+    "result": "all 81 open checkpoints are in the high PP bin in both partitions",
+    "gate_consequence": "this pool alone cannot satisfy the required two PP bins per partition"
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "outcomes_collected": 0,
+    "model_updates": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "authority_promoted": false
+  },
+  "claim_boundary": {
+    "supported": "The open Red checkpoint pool contains substantial health, evolution, goal and candidate-count variety, but corrected PP calibration proves that this pool alone cannot satisfy the first-fit diversity gate.",
+    "not_supported": [
+      "every checkpoint can produce a valid counterfactual menu",
+      "the prospective 8 train and 6 development catalog is frozen",
+      "PP diversity exists in either partition",
+      "venue outcome priors are complete",
+      "any completion-aware outcome has been executed",
+      "model fitting or authority has begun"
+    ]
+  },
+  "next": "Build the title-neutral candidate adapter and frozen venue-prior registry, then inventory already-authenticated non-sealed PP-depleted contexts or preregister a bounded PP-context materialization step before selecting the exact 8 train and 6 untouched development menus."
+}

@@ -3,6 +3,33 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Authenticated prior, checkpoint inventory and readiness boundary — 2026-08-15
+
+Codex bound the exact v1 model plus its two train and one already-open validation lineages into the
+typed completion-aware prior. It also inventoried all 81 open Red goal-manager checkpoints without
+controller or teacher access and added prospective source/root/state/menu/availability/venue-
+evidence bindings. The fit gate now evaluates semantic diversity independently in train and
+development, so copied saves or continuous-value variants of one menu cannot satisfy the 8/6 count.
+
+Claude returned **APPROVE**, narrowly, for documentation and adapter/venue-prior/catalog
+construction. Prior provenance, prospective mutation/duplicate resistance, per-partition 8/6
+diversity and dashboard invariants were clean. Its one S3 finding was real: inventory PP divided
+by 256, making fresh ordinary movesets and depleted movesets share a misleading bin. Codex accepted
+the finding. Exact fix `f1cb3a4` reconstructs each moveset's Gen I maximum from base PP and packed
+PP Ups; the rerun now shows only `high` PP in both partitions and therefore a correctly failing PP
+diversity gate.
+
+Decision: accept `7190be6` plus the narrow `f1cb3a4` correction at the construction boundary only.
+The tracked dashboard/evidence reports 0/14 outcomes, no completion-aware fit and no authority.
+Run the final Claude recheck only after the tracked tree is clean; do not edit concurrently.
+Antigravity remains the independent second-review lane for the exact adapter, venue priors and
+prospective catalog once they exist. No reviewer authorized outcome execution, fitting, sealed Red,
+Crystal or authority from this checkpoint. Review packets:
+
+- [`party-development-v2-prior-initialization-2026-08-15.json`](evidence/party-development-v2-prior-initialization-2026-08-15.json)
+- [`party-development-v2-checkpoint-inventory-2026-08-15.json`](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json)
+- [`party-development-v2-readiness-2026-08-15.json`](evidence/party-development-v2-readiness-2026-08-15.json)
+
 ## Completion-aware party learner source qualification — 2026-08-15
 
 Codex replaced the too-narrow “weakest member / highest safe band” learning boundary with a separate

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Authenticated the exact v1 party ranker, its public offline receipt and every historical
+  train/evaluation lineage into the completion-aware v2 prior. Added fail-closed prior/outcome
+  overlap guards, canonical lineage ordering and typed round trips; initialized the wider private
+  model with identical v1 scores, zero new-feature weights and zero outcome updates.
+- Inventoried 81 open Red checkpoints read-only and path-free, exposing only partition/diversity
+  counts while retaining member facts privately. Added prospective source/root/state/menu/
+  availability/venue-evidence bindings, per-partition 8/6 semantic diversity gates and an honest
+  port-8767 dashboard showing 0/14 outcomes, no completion-aware fit and zero authority.
+- Closed Claude's S3 PP-calibration finding by replacing a theoretical 256-point denominator with
+  each observed moveset's real Gen I maximum, including PP Up counts and the cartridge's capped
+  bonus rule. The corrected 81-state inventory contains only high-PP contexts, so the dashboard now
+  exposes a genuine missing-diversity gate instead of certifying two misleading bins.
 - Qualified a separate completion-aware party-development v2 representation and outcome learner at
   exact commit `42196d4` / CI `31863588955`. Preserved exact v1 initialization, added living-
   collection/evolution/role/survival/venue semantics, soft outcome targets, consumed-root guards,

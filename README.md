@@ -4,6 +4,22 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Party-learning prior bound and open curriculum inventoried (August 15, 2026); real outcome
+> training is 0/14.** Exact source `7190be6` passed 3,394 local tests plus lint, typing, privacy,
+> documentation and generated-registry gates. The exact historical scorer and all three lineages
+> that established/evaluated it are now authenticated inside the completion-aware v2 model, so
+> prior overlap and outcome reuse fail closed. A read-only pass found 81 open Red checkpoints—54
+> train and 27 development—with health, evolution and goal variety. Claude caught that PP had been
+> divided by a theoretical byte ceiling; commit `f1cb3a4` now uses each moveset's actual Gen I
+> capacity and reveals that all 81 states are high-PP. None was executed, and this pool alone cannot
+> pass the two-PP-bin gate. The corrected tree passes 3,398 local tests plus all quality/privacy
+> gates. Catalog rows must now freeze every root/state, menu, availability mask
+> and venue prior before any outcome can join. The separate [readiness dashboard](docs/progress-dashboard.md)
+> honestly shows prior-only status, 0/14 outcomes, no fit and no authority. See the
+> [prior](docs/evidence/party-development-v2-prior-initialization-2026-08-15.json),
+> [inventory](docs/evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
+> [readiness](docs/evidence/party-development-v2-readiness-2026-08-15.json) receipts.
+
 > **Completion-aware party learner source qualified (August 15, 2026); outcome collection has not
 > started.** Exact source `42196d4` passed 3,373 local tests and GitHub CI run `31863588955`. The
 > historical v1 teacher ranker remains frozen; a separate v2 head now represents balance,

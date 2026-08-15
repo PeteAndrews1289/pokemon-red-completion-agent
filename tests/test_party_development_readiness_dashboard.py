@@ -134,6 +134,24 @@ def test_readiness_dashboard_script_uses_a_separate_local_port() -> None:
     parser = SCRIPT["_parser"]()
     args = parser.parse_args(["--no-browser", "--duration-seconds", "1"])
 
-    assert args.port == 8766
+    assert args.port == 8767
     assert args.no_browser is True
     assert args.duration_seconds == 1
+
+
+def test_tracked_readiness_evidence_loads_into_honest_snapshot() -> None:
+    evidence = SCRIPT["_load_evidence"]()
+    document = party_development_readiness_dashboard_snapshot(evidence).public_dict()
+
+    assert evidence["status"] == PARTY_DEVELOPMENT_READINESS_STATUS
+    assert document["run_status"] == "waiting"
+    assert document["actions"] == 0
+    assert document["experiment"]["adaptation"] == {  # type: ignore[index]
+        "completed": 0,
+        "total": 14,
+    }
+    assert document["model"]["teacher_queries"] == 0  # type: ignore[index]
+    encoded = json.dumps(document, sort_keys=True)
+    assert "model fitting has not begun" in encoded
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded

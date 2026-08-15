@@ -29,7 +29,9 @@ EVIDENCE_PATH = (
     / "evidence"
     / "party-development-v2-readiness-2026-08-15.json"
 )
-DEFAULT_READINESS_PORT = DASHBOARD_DEFAULT_PORT + 1
+# Keep the readiness view separate from both the historical Pokémon dashboard
+# (8765) and an existing local dashboard already using 8766 on the owner host.
+DEFAULT_READINESS_PORT = DASHBOARD_DEFAULT_PORT + 2
 
 
 def _parser() -> argparse.ArgumentParser:

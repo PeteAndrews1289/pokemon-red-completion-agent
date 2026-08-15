@@ -1,40 +1,59 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-14. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-15. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
-## Current checkpoint: freeze the completion-aware party curriculum before collecting it
+## Current checkpoint: construct the prospective completion-aware party catalog
 
-Exact source `42196d4` passed 3,373 local tests, whole-source typing/lint gates and GitHub CI run
-`31863588955`. It does not mutate the historical teacher-imitation experiment. Instead it adds a
-versioned 66-feature party-development schema whose first 27 values are the exact v1 prefix and
-whose remaining values express the goal the project has always needed: team balance, evolution
-distance/method, living collection and retention risk, role completion, emergency escort,
-survival margin, and prospectively frozen venue reliability, yield, matchup, travel and recovery
-cost.
+Exact source `7190be6` passed 3,394 non-integration tests, three integration deselections, one
+expected failure, Ruff, whole-source mypy over 220 files, privacy, documentation and generated-
+registry gates. It completes two prerequisites without collecting an outcome.
 
-The outcome learner starts from an exact score-preserving v1 embedding, zeroes every new input
-weight, and can update only from complete measured candidate menus. It accepts partial ties as soft
-targets, refuses censored evidence, persists consumed train roots/states and compares prior versus
-update on each identical untouched development decision. A paired exact test uses discordant
-correctness pairs; development is never fit.
+First, the exact historical 27-feature v1 scorer is no longer an informal starting point. Its file
+and canonical digests, authenticated offline receipt, two train roots and one already-open
+validation root are embedded in the typed 66-feature v2 prior. Initialization preserves every v1
+score and leaves every completion-aware weight at zero. New train and development examples are
+rejected if either root or state overlaps that evidence; consumed outcome identities remain
+permanently rejected after later updates. See the
+[prior receipt](evidence/party-development-v2-prior-initialization-2026-08-15.json).
 
-Before a descriptive first fit, require 8 independent learner-eligible train preferences and 6
-untouched development preferences, two completion goals per partition, trainee and venue choices
-in each, at least one three-way menu, two health/PP/evolution-route bins, and complete frozen prior
-evidence for all venue candidates. This threshold prevents another binary near-duplicate campaign;
-it is not promotion. The 120 paired unseen Red episodes and 54-context Crystal comparison below
-remain unchanged.
+Second, a read-only inventory inspected all 81 open Red goal-manager checkpoints without a
+controller, teacher or outcome: 54 train / 27 development and 48 / 24 apparently multi-candidate-
+ready contexts. Claude then found that PP had been normalized
+against a theoretical four-byte ceiling. Exact fix `f1cb3a4` uses each observed moveset's actual
+Gen I maximum, including packed PP Ups; the corrected counts are 30 / 14 semantic contexts and
+**high PP only in both partitions**. Health, level/no-evolution routes and all four goal pressures
+still vary, but this pool cannot satisfy the two-PP-bin gate. Those counts show that a short
+curriculum may be possible; they do not prove a valid menu exists. The corrected publication tree
+passes 3,398 non-integration tests and every local quality/privacy gate. See the
+[inventory receipt](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json).
 
-No live v2 catalog exists yet. Do not fit synthetic examples, reinterpret the old V2 comparison,
-consume the remaining Cinnabar roots merely to reach a count, open Crystal, or run all of Red. Bind
-the authenticated historical prior, inventory non-sealed checkpoints without candidate execution,
-freeze semantic diversity and partition assignments, obtain external review, then publish the exact
-prospective live plan. See the
-[source qualification](evidence/party-development-completion-v2-source-qualification-2026-08-15.json).
+The catalog contract now prospectively binds source commit and bundle, partition, root/state,
+decision kind, completion goal, exact candidate feature and availability hashes, and frozen venue
+evidence. Duplicate or mutated outcomes cannot join. All-false availability, missing venue priors,
+prior overlap, reused identity and semantically repeated menus fail closed. Fit readiness is checked
+separately in **both** partitions: at least 8 train and 6 untouched development outcomes, trainee
+and venue choices, at least two completion goals, a three-way menu, and multiple health, PP and
+evolution-route bins.
+
+The [readiness receipt](evidence/party-development-v2-readiness-2026-08-15.json) and port-8767
+dashboard report the honest boundary: historical prior bound, 81 checkpoints inventoried,
+prospective outcomes **0/14**, catalog unfrozen, adapter absent, venue-prior registry absent,
+completion-aware model fit false and authority zero. Claude approved the `7190be6` boundary and
+identified PP calibration as one S3 pre-collection condition; `f1cb3a4` closes it. The
+next implementation slice is limited to the title-neutral candidate adapter, frozen venue-prior
+registry and discovery of already-authenticated PP-depleted contexts. If none exist, freeze a
+separate bounded PP-context materialization plan before selecting the exact prospective 8/6
+catalog. Follow with independent review. Do not execute a candidate outcome, fit a model, open
+sealed Red or Crystal, or replay the game during construction.
+
+Living-Pokédex work is deliberately constrained, not forgotten. Registration, retained-living,
+evolution and role needs already shape this party representation and every future menu. Executable
+capture, storage and trade expansion resumes after the Milestone 3 unseen battle gate; the current
+party lane is prerequisite infrastructure for evolving and retaining that collection efficiently.
 
 ## Current checkpoint: traversal is live-qualified; widen the party curriculum
 

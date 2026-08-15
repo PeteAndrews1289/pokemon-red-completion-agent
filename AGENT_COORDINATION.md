@@ -1,5 +1,32 @@
 # Three-agent coordination
 
+> **2026-08-15 authenticated prior + read-only inventory — highest active checkpoint:** Exact
+> source `7190be6` passed 3,394 local tests and all local quality/privacy gates. The exact v1 model,
+> its public offline receipt, two train lineages and one already-open validation lineage are now a
+> typed v2 prior. Prior-root/state overlap, outcome-root/state reuse and noncanonical lineage
+> ordering fail closed. The private completion-aware initialization has zero outcome updates and
+> zero new-feature weight.
+>
+> Read-only inventory covered 81 open Red checkpoints: 54 train / 27 development, 30 / 14 unique
+> semantic contexts and 48 / 24 multi-candidate-ready contexts. It made zero controller actions,
+> teacher queries, outcomes, model updates, sealed/Crystal accesses or replays. Tracked evidence is
+> path-free; private member values remain private. Claude found that the original global PP
+> denominator overstated variety. Exact fix `f1cb3a4` now uses each moveset's real Gen I maximum;
+> every inventoried state is high-PP in both partitions, so the pool cannot yet pass the PP gate.
+> The corrected tree passes 3,398 local tests and every local quality/privacy gate. The honest
+> dashboard reports **0/14 outcomes**,
+> catalog unfrozen, adapter absent, venue-prior registry absent, model fit false and authority zero.
+>
+> Claude returned **APPROVE** for publication and construction of the title-neutral adapter,
+> venue-prior registry and prospective catalog, with the PP calibration as one S3 pre-collection
+> condition. The source fix is complete; a narrow final recheck follows only after the tracked tree
+> is clean. Claude did not authorize outcome execution, fitting, sealed Red, Crystal or authority.
+> Antigravity remains
+> an independent second review lane for the eventual exact catalog. Review packets:
+> `docs/evidence/party-development-v2-prior-initialization-2026-08-15.json`,
+> `docs/evidence/party-development-v2-checkpoint-inventory-2026-08-15.json` and
+> `docs/evidence/party-development-v2-readiness-2026-08-15.json`.
+
 > **2026-08-15 completion-aware party learner — highest active checkpoint:** Exact source
 > `42196d4` passed 3,373 local tests and CI run `31863588955`. The new v2 contract preserves the
 > v1 scorer as an exact initialization while adding living-collection, evolution, role, survival,
