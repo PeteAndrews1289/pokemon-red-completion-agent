@@ -19,6 +19,7 @@ from pokemon_red_completion.collection_protocol import (
     SCHEDULE_DRY_RUN_SEED,
     CollectionProtocolError,
     collection_document_sha256,
+    committed_executable_source_blob,
     committed_source_bundle_sha256,
     load_committed_collection_registry,
     parse_collection_registry,
@@ -140,11 +141,11 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "b5120e1f4fffa9d1af8611e052a7f9666a57bf8b6fac59c61faf9e537f542125"
+        == "7d3308db00aa518c2a89ebb902ec772cf68dfad5b60ef32ca212669d241daf7e"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "8f474e2fee84038face3b51ddd642252b5c7ad98e84c12522aeaac7201cb7fc2"
+        == "419a12882defaa678dc9f5a876f9cd43985e6d79784b917b91022145e30cf117"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -156,9 +157,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "207e2b392b408702395dce35996c9c599010a329b68c3ed59931cf471de10ee4"
+        == "1411408718a74fb5417d7f2daabcb11a8ba0a05ad472f2d8aa6b8f5307fe12db"
     )
-    assert first.assignment_id == "6de597f2e1d3bdfe722b12a14480746fd890ce1f8d4c4c40c139d8e78da39031"
+    assert first.assignment_id == "3f81fb704cc68635ebb0bb8e0a00c70bf2ef370d7c447585d24d6cd56473b8a7"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
@@ -448,6 +449,44 @@ def test_committed_loader_reads_head_not_a_modified_working_file(
     assert registry.registry_sha256 == hashlib.sha256(REGISTRY_PATH.read_bytes()).hexdigest()
     assert registry.partition_counts == {"test": 5, "train": 5, "validation": 2}
     assert committed_source_bundle_sha256(repository) == working_source_bundle_sha256(PROJECT_ROOT)
+
+
+def test_committed_source_blob_reads_exact_commit_not_working_copy(
+    tmp_path: Path,
+) -> None:
+    repository = _committed_repository(tmp_path)
+    relative_path = "src/pokemon_red_completion/team_training.py"
+    expected = (repository / relative_path).read_bytes()
+    (repository / relative_path).write_bytes(b"working tree tampering\n")
+
+    assert committed_executable_source_blob(
+        repository,
+        revision="HEAD",
+        relative_path=relative_path,
+    ) == expected
+
+
+@pytest.mark.parametrize(
+    "relative_path",
+    (
+        "pyproject.toml",
+        "src/pokemon_red_completion/../secrets.py",
+        "docs/readme.py",
+        "/src/pokemon_red_completion/team_training.py",
+    ),
+)
+def test_committed_source_blob_rejects_paths_outside_the_package(
+    tmp_path: Path,
+    relative_path: str,
+) -> None:
+    repository = _committed_repository(tmp_path)
+
+    with pytest.raises(CollectionProtocolError, match="source path is invalid"):
+        committed_executable_source_blob(
+            repository,
+            revision="HEAD",
+            relative_path=relative_path,
+        )
 
 
 def test_committed_loader_rejects_a_valid_but_different_registry_digest(

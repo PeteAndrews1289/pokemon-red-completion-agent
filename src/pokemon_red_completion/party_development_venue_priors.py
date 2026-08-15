@@ -27,6 +27,15 @@ PARTY_DEVELOPMENT_VENUE_PRIOR_EVIDENCE_SCHEMA = (
 PARTY_DEVELOPMENT_VENUE_PRIOR_REGISTRY_SCHEMA = (
     "pokemon.core.party-development-venue-prior-registry.v1"
 )
+PARTY_DEVELOPMENT_VENUE_MEASUREMENT_CONTRACT_SCHEMA = (
+    "pokemon.core.party-development-venue-measurement-contract.v1"
+)
+PARTY_DEVELOPMENT_VENUE_OPERATIONAL_CONTRACT_SCHEMA = (
+    "pokemon.core.party-development-venue-operational-contract.v1"
+)
+PARTY_DEVELOPMENT_VENUE_SOURCE_COMPATIBILITY_SCHEMA = (
+    "pokemon.core.party-development-venue-source-compatibility.v1"
+)
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -79,6 +88,248 @@ class VenuePriorUnitRatio:
 
 
 @dataclass(frozen=True, slots=True)
+class VenuePriorMeasurementContract:
+    """One portable, fixed interpretation of independent venue observations."""
+
+    contract_id: str = "party-development-progress-safety-cost-v1"
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.contract_id, str) or _SAFE_ID.fullmatch(self.contract_id) is None:
+            raise PartyDevelopmentVenuePriorError(
+                "venue measurement contract id is invalid"
+            )
+
+    @property
+    def measurement_contract_sha256(self) -> str:
+        return canonical_sha256(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": PARTY_DEVELOPMENT_VENUE_MEASUREMENT_CONTRACT_SCHEMA,
+            "contract_id": self.contract_id,
+            "reliability": "completed_objectives/attempted_observations",
+            "expected_yield": "sum(progress_units_gained)/sum(progress_units_required)",
+            "matchup_safety": "completed_battles/(completed_battles+faints)",
+            "travel_cost": (
+                "venue_transition_trips/(completed_battles+venue_transition_trips)"
+            ),
+            "recovery_cost": (
+                "in_loop_recovery_trips/(completed_battles+in_loop_recovery_trips)"
+            ),
+            "cleanup_is_a_recurring_recovery_cost": False,
+            "zero_denominator_rule": "represent_zero_as_0_over_1",
+            "private_path_fields": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class VenuePriorSourceCompatibilityAttestation:
+    """Machine-bound proof that historical observations fit a current runtime."""
+
+    attestation_id: str
+    observed_commit: str
+    observed_source_bundle_sha256: str
+    current_commit: str
+    current_source_bundle_sha256: str
+    unchanged_elements_sha256: str
+    current_elements_sha256: str
+    waived_elements: tuple[str, ...]
+    waiver_allowlist_sha256: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.attestation_id, str)
+            or _SAFE_ID.fullmatch(self.attestation_id) is None
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue source-compatibility attestation id is invalid"
+            )
+        for value, subject in (
+            (self.observed_commit, "observed commit"),
+            (self.current_commit, "current commit"),
+        ):
+            if not isinstance(value, str) or _GIT_OID.fullmatch(value) is None:
+                raise PartyDevelopmentVenuePriorError(
+                    f"venue source-compatibility {subject} is invalid"
+                )
+        if self.observed_commit == self.current_commit:
+            raise PartyDevelopmentVenuePriorError(
+                "historical venue compatibility needs distinct source commits"
+            )
+        for value, subject in (
+            (self.observed_source_bundle_sha256, "observed source bundle"),
+            (self.current_source_bundle_sha256, "current source bundle"),
+            (self.unchanged_elements_sha256, "unchanged elements"),
+            (self.current_elements_sha256, "current elements"),
+            (self.waiver_allowlist_sha256, "waiver allowlist"),
+        ):
+            _require_digest(value, subject=f"source-compatibility {subject}")
+        if (
+            not isinstance(self.waived_elements, tuple)
+            or not self.waived_elements
+            or any(
+                not isinstance(value, str) or _SAFE_ID.fullmatch(value) is None
+                for value in self.waived_elements
+            )
+            or self.waived_elements != tuple(sorted(set(self.waived_elements)))
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue source-compatibility waivers are invalid"
+            )
+
+    @property
+    def source_compatibility_sha256(self) -> str:
+        return canonical_sha256(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": PARTY_DEVELOPMENT_VENUE_SOURCE_COMPATIBILITY_SCHEMA,
+            "attestation_id": self.attestation_id,
+            "observed_commit": self.observed_commit,
+            "observed_source_bundle_sha256": (
+                self.observed_source_bundle_sha256
+            ),
+            "current_commit": self.current_commit,
+            "current_source_bundle_sha256": self.current_source_bundle_sha256,
+            "unchanged_elements_sha256": self.unchanged_elements_sha256,
+            "current_elements_sha256": self.current_elements_sha256,
+            "waived_elements": list(self.waived_elements),
+            "waiver_allowlist_sha256": self.waiver_allowlist_sha256,
+            "private_path_fields": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class VenuePriorOperationalContract:
+    """Digests of every operating layer whose drift invalidates a venue prior."""
+
+    contract_id: str
+    policy_sha256: str
+    encounter_execution_sha256: str
+    recovery_execution_sha256: str
+    battle_timing_sha256: str
+    accounting_sha256: str
+    source_compatibility_sha256: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.contract_id, str) or _SAFE_ID.fullmatch(self.contract_id) is None:
+            raise PartyDevelopmentVenuePriorError(
+                "venue operational contract id is invalid"
+            )
+        for value, subject in (
+            (self.policy_sha256, "policy"),
+            (self.encounter_execution_sha256, "encounter execution"),
+            (self.recovery_execution_sha256, "recovery execution"),
+            (self.battle_timing_sha256, "battle timing"),
+            (self.accounting_sha256, "accounting"),
+            (self.source_compatibility_sha256, "source compatibility"),
+        ):
+            _require_digest(value, subject=f"operational {subject}")
+
+    @property
+    def operational_contract_sha256(self) -> str:
+        return canonical_sha256(self.public_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": PARTY_DEVELOPMENT_VENUE_OPERATIONAL_CONTRACT_SCHEMA,
+            "contract_id": self.contract_id,
+            "policy_sha256": self.policy_sha256,
+            "encounter_execution_sha256": self.encounter_execution_sha256,
+            "recovery_execution_sha256": self.recovery_execution_sha256,
+            "battle_timing_sha256": self.battle_timing_sha256,
+            "accounting_sha256": self.accounting_sha256,
+            "source_compatibility_sha256": self.source_compatibility_sha256,
+            "private_path_fields": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class VenuePriorObservation:
+    """One source-bound trial reduced to portable progress and operating counts."""
+
+    root_lineage_id: str
+    initial_state_sha256: str
+    outcome_receipt_sha256: tuple[str, ...]
+    objective_completed: bool
+    progress_units_gained: int
+    progress_units_required: int
+    battles_completed: int
+    faints: int
+    venue_transition_trips: int
+    required_recovery_trips: int
+    optional_recovery_trips: int
+    cleanup_trips: int
+    total_counted_center_routes: int
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.root_lineage_id, str)
+            or _SAFE_ID.fullmatch(self.root_lineage_id) is None
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation root lineage is invalid"
+            )
+        _require_digest(self.initial_state_sha256, subject="venue observation state")
+        receipts = self.outcome_receipt_sha256
+        if (
+            not isinstance(receipts, tuple)
+            or not receipts
+            or any(
+                not isinstance(value, str) or _SHA256.fullmatch(value) is None
+                for value in receipts
+            )
+            or receipts != tuple(sorted(set(receipts)))
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation receipt digests are invalid"
+            )
+        if not isinstance(self.objective_completed, bool):
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation completion flag is invalid"
+            )
+        if (
+            type(self.progress_units_gained) is not int  # noqa: E721
+            or type(self.progress_units_required) is not int  # noqa: E721
+            or self.progress_units_required <= 0
+            or not 0 <= self.progress_units_gained <= self.progress_units_required
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation progress units are invalid"
+            )
+        if self.objective_completed and (
+            self.progress_units_gained != self.progress_units_required
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "a completed venue observation must deliver its bounded progress"
+            )
+        counts = (
+            self.battles_completed,
+            self.faints,
+            self.venue_transition_trips,
+            self.required_recovery_trips,
+            self.optional_recovery_trips,
+            self.cleanup_trips,
+            self.total_counted_center_routes,
+        )
+        if any(type(value) is not int or value < 0 for value in counts):  # noqa: E721
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation operating counts are invalid"
+            )
+        if self.total_counted_center_routes != sum(
+            (
+                self.venue_transition_trips,
+                self.required_recovery_trips,
+                self.optional_recovery_trips,
+                self.cleanup_trips,
+            )
+        ):
+            raise PartyDevelopmentVenuePriorError(
+                "venue observation Center-route accounting is incomplete"
+            )
+
+
+@dataclass(frozen=True, slots=True)
 class VenuePriorEvidence:
     """Independent measurements for one exact private venue definition."""
 
@@ -88,6 +339,7 @@ class VenuePriorEvidence:
     source_bundle_sha256: str
     measurement_contract_sha256: str
     operational_contract_sha256: str
+    source_compatibility_sha256: str
     support_root_lineage_ids: tuple[str, ...]
     support_state_sha256: tuple[str, ...]
     outcome_receipt_sha256: tuple[str, ...]
@@ -117,6 +369,10 @@ class VenuePriorEvidence:
         _require_digest(
             self.operational_contract_sha256,
             subject="operational contract",
+        )
+        _require_digest(
+            self.source_compatibility_sha256,
+            subject="source compatibility",
         )
         roots = self.support_root_lineage_ids
         states = self.support_state_sha256
@@ -192,6 +448,7 @@ class VenuePriorEvidence:
             "source_bundle_sha256": self.source_bundle_sha256,
             "measurement_contract_sha256": self.measurement_contract_sha256,
             "operational_contract_sha256": self.operational_contract_sha256,
+            "source_compatibility_sha256": self.source_compatibility_sha256,
             "support_root_lineage_ids": list(self.support_root_lineage_ids),
             "support_state_sha256": list(self.support_state_sha256),
             "outcome_receipt_sha256": list(self.outcome_receipt_sha256),
@@ -220,6 +477,7 @@ class VenuePriorEvidence:
             "source_bundle_sha256": self.source_bundle_sha256,
             "measurement_contract_sha256": self.measurement_contract_sha256,
             "operational_contract_sha256": self.operational_contract_sha256,
+            "source_compatibility_sha256": self.source_compatibility_sha256,
             "support_count": self.support_count,
             "outcome_receipt_count": len(self.outcome_receipt_sha256),
             "private_venue_identity_public": False,
@@ -239,6 +497,7 @@ class VenuePriorEvidence:
             "schema",
             "source_bundle_sha256",
             "source_commit",
+            "source_compatibility_sha256",
             "support_root_lineage_ids",
             "support_state_sha256",
             "venue",
@@ -268,6 +527,9 @@ class VenuePriorEvidence:
             operational_contract_sha256=value[  # type: ignore[arg-type]
                 "operational_contract_sha256"
             ],
+            source_compatibility_sha256=value[  # type: ignore[arg-type]
+                "source_compatibility_sha256"
+            ],
             support_root_lineage_ids=_string_tuple(
                 value["support_root_lineage_ids"], subject="support roots"
             ),
@@ -288,6 +550,118 @@ class VenuePriorEvidence:
         if value["evidence_sha256"] != result.evidence_sha256:
             raise PartyDevelopmentVenuePriorError("venue-prior evidence digest differs")
         return result
+
+
+def compose_venue_prior_evidence(
+    *,
+    evidence_id: str,
+    venue: GrindingArea,
+    source_commit: str,
+    source_bundle_sha256: str,
+    measurement_contract: VenuePriorMeasurementContract,
+    operational_contract: VenuePriorOperationalContract,
+    source_compatibility: VenuePriorSourceCompatibilityAttestation,
+    observations: tuple[VenuePriorObservation, ...],
+) -> VenuePriorEvidence:
+    """Aggregate immutable independent observations without inventing unit values."""
+
+    if not isinstance(measurement_contract, VenuePriorMeasurementContract):
+        raise TypeError("measurement_contract must be a VenuePriorMeasurementContract")
+    if not isinstance(operational_contract, VenuePriorOperationalContract):
+        raise TypeError("operational_contract must be a VenuePriorOperationalContract")
+    if not isinstance(
+        source_compatibility, VenuePriorSourceCompatibilityAttestation
+    ):
+        raise TypeError(
+            "source_compatibility must be a "
+            "VenuePriorSourceCompatibilityAttestation"
+        )
+    if (
+        source_commit != source_compatibility.observed_commit
+        or source_bundle_sha256
+        != source_compatibility.observed_source_bundle_sha256
+        or operational_contract.source_compatibility_sha256
+        != source_compatibility.source_compatibility_sha256
+    ):
+        raise PartyDevelopmentVenuePriorError(
+            "venue evidence source compatibility differs from its contracts"
+        )
+    if (
+        not isinstance(observations, tuple)
+        or not observations
+        or any(not isinstance(item, VenuePriorObservation) for item in observations)
+    ):
+        raise PartyDevelopmentVenuePriorError(
+            "venue evidence needs typed independent observations"
+        )
+    ordered = tuple(
+        sorted(
+            observations,
+            key=lambda item: (item.root_lineage_id, item.initial_state_sha256),
+        )
+    )
+    pairs = tuple(
+        (item.root_lineage_id, item.initial_state_sha256) for item in ordered
+    )
+    if len(pairs) != len(set(pairs)):
+        raise PartyDevelopmentVenuePriorError(
+            "venue evidence repeats an observation root and state"
+        )
+    roots = tuple(item.root_lineage_id for item in ordered)
+    states = tuple(item.initial_state_sha256 for item in ordered)
+    if len(roots) != len(set(roots)) or len(states) != len(set(states)):
+        raise PartyDevelopmentVenuePriorError(
+            "venue evidence observations must use independent roots and states"
+        )
+
+    completed = sum(item.objective_completed for item in ordered)
+    progress_gained = sum(item.progress_units_gained for item in ordered)
+    progress_required = sum(item.progress_units_required for item in ordered)
+    battles = sum(item.battles_completed for item in ordered)
+    faints = sum(item.faints for item in ordered)
+    travel = sum(item.venue_transition_trips for item in ordered)
+    recovery = sum(
+        item.required_recovery_trips + item.optional_recovery_trips
+        for item in ordered
+    )
+    receipts = tuple(
+        sorted(
+            {
+                digest
+                for item in ordered
+                for digest in item.outcome_receipt_sha256
+            }
+        )
+    )
+
+    return VenuePriorEvidence(
+        evidence_id=evidence_id,
+        venue=venue,
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        measurement_contract_sha256=(
+            measurement_contract.measurement_contract_sha256
+        ),
+        operational_contract_sha256=(
+            operational_contract.operational_contract_sha256
+        ),
+        source_compatibility_sha256=(
+            source_compatibility.source_compatibility_sha256
+        ),
+        support_root_lineage_ids=roots,
+        support_state_sha256=states,
+        outcome_receipt_sha256=receipts,
+        reliability=VenuePriorUnitRatio(completed, len(ordered)),
+        expected_yield=VenuePriorUnitRatio(progress_gained, progress_required),
+        matchup_safety=_cost_or_safety_ratio(battles, faints),
+        travel_cost=_cost_or_safety_ratio(travel, battles),
+        recovery_cost=_cost_or_safety_ratio(recovery, battles),
+    )
+
+
+def _cost_or_safety_ratio(numerator: int, complement: int) -> VenuePriorUnitRatio:
+    denominator = numerator + complement
+    return VenuePriorUnitRatio(numerator, denominator if denominator > 0 else 1)
 
 
 @dataclass(frozen=True, slots=True)
@@ -412,6 +786,9 @@ class PartyDevelopmentVenuePriorRegistry:
             "operational_contract_sha256": [
                 item.operational_contract_sha256 for item in self.entries
             ],
+            "source_compatibility_sha256": [
+                item.source_compatibility_sha256 for item in self.entries
+            ],
             "support_count": sum(item.support_count for item in self.entries),
             "measurement_contract_sha256": (
                 self.entries[0].measurement_contract_sha256 if self.entries else None
@@ -502,10 +879,18 @@ def _require_digest(value: object, *, subject: str) -> None:
 
 
 __all__ = [
+    "PARTY_DEVELOPMENT_VENUE_MEASUREMENT_CONTRACT_SCHEMA",
+    "PARTY_DEVELOPMENT_VENUE_OPERATIONAL_CONTRACT_SCHEMA",
+    "PARTY_DEVELOPMENT_VENUE_SOURCE_COMPATIBILITY_SCHEMA",
     "PARTY_DEVELOPMENT_VENUE_PRIOR_EVIDENCE_SCHEMA",
     "PARTY_DEVELOPMENT_VENUE_PRIOR_REGISTRY_SCHEMA",
     "PartyDevelopmentVenuePriorError",
     "PartyDevelopmentVenuePriorRegistry",
     "VenuePriorEvidence",
+    "VenuePriorMeasurementContract",
+    "VenuePriorObservation",
+    "VenuePriorOperationalContract",
+    "VenuePriorSourceCompatibilityAttestation",
     "VenuePriorUnitRatio",
+    "compose_venue_prior_evidence",
 ]

@@ -65,6 +65,7 @@ def _evidence(
         source_bundle_sha256="b" * 64,
         measurement_contract_sha256="0" * 64,
         operational_contract_sha256="6" * 64,
+        source_compatibility_sha256="5" * 64,
         support_root_lineage_ids=(root,),
         support_state_sha256=(digest_character * 64,),
         outcome_receipt_sha256=(("f" if digest_character != "f" else "e") * 64,),

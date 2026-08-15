@@ -7,7 +7,6 @@ import argparse
 import hashlib
 import json
 import sys
-from dataclasses import replace
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -20,7 +19,6 @@ from pokemon_red_completion.blaine import (  # noqa: E402
     MANSION_ESCORT_ENEMY_SPECIES,
     MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
     MANSION_MAX_CONSECUTIVE_FLEES,
-    MANSION_TEAM_POLICY,
     MANSION_TRAINING_FLEE_TIMING,
     MANSION_VOLATILE_ENEMY_SPECIES,
     ROUTE_11_TRAINING_VENUE,
@@ -61,6 +59,9 @@ from pokemon_red_completion.red_party_development_outcome_probe import (  # noqa
     BoundedEvolutionVenueQuestion,
     build_bounded_evolution_venue_question,
 )
+from pokemon_red_completion.red_party_development_venue_priors import (  # noqa: E402
+    RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
+)
 from pokemon_red_completion.red_team_training import (  # noqa: E402
     TeamTrainingExecutionSummary,
     run_red_team_balancing,
@@ -89,15 +90,7 @@ NATURAL_VENUES = (
     ROUTE_11_TRAINING_VENUE,
     DIGLETTS_CAVE_TRAINING_VENUE,
 )
-OUTCOME_POLICY = replace(
-    MANSION_TEAM_POLICY,
-    retreat_hp_ratio=0.45,
-    reserve_total_pp=2,
-    max_battles=200,
-    max_steps=20_000,
-    max_healing_trips=50,
-    max_faints=0,
-)
+OUTCOME_POLICY = RED_PARTY_DEVELOPMENT_OUTCOME_POLICY
 
 
 class RedPartyDevelopmentRunError(RuntimeError):

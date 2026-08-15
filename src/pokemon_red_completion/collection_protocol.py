@@ -559,6 +559,35 @@ def committed_source_bundle_sha256(
     return _source_bundle_digest(entries)
 
 
+def committed_executable_source_blob(
+    repository_root: str | Path,
+    *,
+    revision: str,
+    relative_path: str,
+) -> bytes:
+    """Read one exact committed executable source file under the package root."""
+
+    if (
+        not isinstance(relative_path, str)
+        or not relative_path.startswith("src/pokemon_red_completion/")
+        or not relative_path.endswith(".py")
+        or "\\" in relative_path
+        or any(part in {"", ".", ".."} for part in relative_path.split("/"))
+    ):
+        raise CollectionProtocolError(
+            "committed executable source path is invalid"
+        )
+    root = Path(repository_root)
+    commit = _resolve_commit(root, revision=revision)
+    return _read_committed_blob(
+        root,
+        commit,
+        relative_path,
+        subject="committed executable source blob",
+        maximum_bytes=_MAX_SOURCE_BLOB_BYTES,
+    )
+
+
 def working_source_bundle_sha256(repository_root: str | Path) -> str:
     """Hash the prospective executable bundle before its publication commit."""
 
