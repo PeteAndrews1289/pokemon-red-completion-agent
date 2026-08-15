@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-14 party-development plan — highest active checkpoint:** Navigation result commit
+> `09f066f` and CI run `31855839337` are green. The next source freezes one real same-trainee,
+> same-evolution venue comparison from an authenticated non-sealed post-Mansion state. Candidate 0
+> is the higher 15–21 encounter band and candidate 1 the lower 9–15 band after state-digest ordering.
+> Each clone reloads identical bytes and runs exactly once to the first verified level-triggered
+> evolution. The learner sees portable party/venue features, not species, slot, area or actions.
+>
+> Recovery is mandatory only at 45% HP, status or PP boundaries; optional healing is disabled and
+> all mandatory/final Center trips stay in the outcome. Exact trainee experience, total experience,
+> battles, steps, rotations, faints and frames are retained. Escort experience is not target
+> progress. This probe fits no model and grants no authority. Reviewers should attack candidate
+> eligibility/order, same-start and same-stop enforcement, counter integrity, evolution binding,
+> one-shot durability and path-free output. Do not request a teacher, sealed Red, Crystal or a full
+> replay. External Claude and Antigravity review is pending, not implied.
+
 > **2026-08-14 same-terminal navigation result — highest active checkpoint:** Exact source
 > `c37504d` and CI run `31855189665` passed before the first real navigation outcome executed. One authenticated,
 > non-sealed Cerulean root yields a 14-step shortest route and a 16-step strictly costlier detour to

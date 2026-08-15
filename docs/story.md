@@ -26,6 +26,19 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: party training gets a fair comparison
+
+The next lesson starts the same trainee twice and asks it to reach the same evolution in two safe
+encounter bands. That sounds modest, and that is exactly why it can teach something. The earlier
+whole-team grind mixed thousands of battles with travel, healing and changing trainees; a success
+could not say which choice helped.
+
+This time every battle, step, Center visit, rotation, frame and point of trainee experience will be
+counted. Optional healing is disabled, mandatory retreat waits for a real 45% HP, status or PP
+safety boundary, and the overlevelled escort's experience cannot stand in for the trainee's. Both
+clones get one attempt after the exact source passes CI. The result will be one grounded party
+preference, not a trained policy or permission to control the game.
+
 ## Current checkpoint: the same destination, two different journeys
 
 Navigation got its first real lesson without teaching a route script. The experiment restored the

@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: party training became a controlled question
+
+The old balancing block mixed too many things: trainee selection, travel, battles, evolution,
+recovery and thousands of repetitions. It also retreated at 90% health, which could turn nearly
+every battle into another Center trip. The first party-development experiment asks one smaller,
+transferable question instead: for the same trainee and the same evolution goal, which safe
+encounter band produces the better outcome?
+
+Two clones will start from identical post-Mansion bytes. Candidate order comes from the state
+digest, and the learner sees only party and encounter-band semantics. The executor lowers the
+mandatory retreat threshold to 45%, disables optional healing, keeps a qualified PP reserve and
+still permits no faints. Every battle, encounter step, Center trip, rotation, frame and point of
+experience is counted; only experience earned by the bound trainee satisfies target progress.
+
+The source must pass GitHub before either clone moves, and each candidate gets one attempt. This is
+not yet a learned party policy. It is the fair, outcome-grounded lesson that such a policy will need.
+
 ## August 14: the first navigation lesson reached the game
 
 The next experiment held the destination still and changed only the route. From one authenticated

@@ -17,6 +17,32 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First real party-development outcome prospectively frozen — 2026-08-14
+
+Navigation result commit `09f066f` and GitHub CI run `31855839337` are green. The next one-shot
+experiment is frozen in
+[`docs/evidence/red-party-development-outcome-plan-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
+It restores the authenticated, non-sealed post-Mansion Cinnabar state twice. The same healthy
+level-22 trainee must reach its first verified level-triggered evolution from each clone. The two
+candidate venues are represented only by portable encounter-band and party features and ordered
+from the state digest; private execution binds candidate 0 to the higher 15–21 band and candidate 1
+to the lower 9–15 band.
+
+This is deliberately a fair development comparison rather than another whole-team grind. The
+executor uses a 45% HP retreat threshold, keeps five qualified escort PP in reserve, never selects
+an optional heal, and counts mandatory recovery plus final safe cleanup. It records exact target
+experience, total party experience, battles, encounter steps, Center trips, rotations and frames.
+The escort may win battles after the trainee participates, but escort experience cannot satisfy
+target progress. Both clones must be planned before input, reload identical bytes and execute once;
+an unexpected failure stops and retains a failed partial instead of being retried.
+
+This experiment validates or falsifies the real party-development adapter only. It fits no model,
+promotes no authority and opens no teacher target, sealed Red case, Crystal context or full replay.
+Publish the source and pass exact-commit CI before its read-only preflight and one-shot execution.
+After the result, the first real outcome boundary will have survived battle, navigation and party
+development; then design independent, genuinely difficult curricula rather than scaling convenient
+examples.
+
 ## First real navigation outcome complete; party development next — 2026-08-14
 
 The battle-curve result is published at exact green commit `cccb0f3`; GitHub CI run `31854136053`

@@ -4,6 +4,16 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Next executable experiment: same trainee, two training venues.** One authenticated, non-sealed
+> post-Mansion state supplies a healthy six-member party and a level-22 trainee with two safe venue
+> choices. Each identical-state clone trains that same member until its first verified evolution,
+> using either the higher or lower encounter band. Recovery is mandatory only at 45% HP, status, or
+> PP safety boundaries; optional per-battle healing is disabled. Exact target experience, battles,
+> steps, Center trips, rotations and frames feed the shared party-development outcome. The
+> overlevelled escort can keep the trainee safe but its experience does not count as target progress.
+> This one-shot probe fits no model and grants no authority. See the
+> [prospective path-free plan](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
+
 > **First real navigation outcome (August 14, 2026): complete, no authority claim.** Exact source
 > `c37504d` passed GitHub CI before a frozen same-destination pair ran once from identical Red
 > bytes. Both routes reached the Cerulean Gym entrance without a replan or interruption. The

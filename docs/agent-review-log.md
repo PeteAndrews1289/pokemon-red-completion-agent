@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## First real party-development plan — 2026-08-14
+
+Codex selected a same-goal venue counterfactual instead of comparing different trainees or replaying
+the whole balancing block. Two identical-state clones must evolve the same member, with one bound
+to a higher encounter band and one to a lower band. The frozen objective observes exact trainee and
+total-party experience, battles, Center visits, rotations, faints and frames. A 45% safety threshold
+and disabled optional healing directly test a more efficient recovery schedule while retaining the
+zero-faint rule.
+
+Decision: publish and require exact-commit CI, then run each candidate once with immediate private
+retention. Accept no model or authority claim from this pair. Independent Claude and Antigravity
+review is pending and not implied. Review packet:
+[`red-party-development-outcome-plan-2026-08-14.json`](evidence/red-party-development-outcome-plan-2026-08-14.json).
+
 ## Same-terminal navigation result — 2026-08-14
 
 Codex's post-curve audit rejected using the existing Help-Bill-versus-Misty scenario as a local

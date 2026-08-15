@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Froze the first real party-development outcome: two identical-state clones train the same
+  level-22 member to its first verified evolution in different safe encounter bands. Added exact
+  battle, step, Center-trip and rotation retention; a 45% mandatory-recovery threshold; no optional
+  healing; exact target-experience attribution; one-shot private durability; and no model or
+  authority claim.
 - Completed the first real same-destination navigation outcome only after exact source `c37504d`
   passed CI. Both identical-state clones arrived without replans or interruptions; the frozen
   objective preferred the 14-request / 516-frame shortest route over the 16-request / 564-frame

@@ -1,0 +1,105 @@
+{
+  "schema": "pokemon-red-party-development-outcome-plan-v1",
+  "status": "prospective_unexecuted",
+  "experiment_id": "red-party-development-evolution-venue-v1",
+  "purpose": "Validate the first real title-neutral party-development outcome by comparing two independently executed training venues for the same trainee and the same first-evolution stop condition.",
+  "scope": {
+    "title": "pokemon_red",
+    "scenario_family": "party_development",
+    "decision_kind": "evolution_venue",
+    "source_context": "authenticated_post_mansion_cinnabar_boundary",
+    "full_game_replays": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "ddcdacbb470e11657e43f71115178a0722388a97307181d76cb53298e9f08c69",
+    "capture_envelope_sha256": "9985ad5a56899de65ed30c68d14b1afa325f73f618b12cce6f41b9fe5823b091",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "checkpoint_id": "red-goal-rehearsal-mansion-001",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+  "bounded_objective": {
+    "initial_target_slot": 3,
+    "initial_target_level": 22,
+    "stop_condition": "first_verified_level_triggered_evolution",
+    "expected_evolution_level": 26,
+    "same_trainee_required": true,
+    "target_experience_measured_exactly": true,
+    "evolution_verified_from_party_memory": true,
+    "overlevelled_escort_experience_is_not_target_progress": true
+  },
+  "candidate_construction": {
+    "candidate_count": 2,
+    "choice_kind": "venue",
+    "candidate_order_rule": "state-sha256-high-bit-reverse-v1",
+    "ordered_policy_input_sha256": "9207ee458bb76a34f455115f5ed77bf49e419891a0dbf7581c7fee39a441a71d",
+    "ordered_minimum_encounter_levels": [15, 9],
+    "ordered_maximum_encounter_levels": [21, 15],
+    "same_start_required": true,
+    "same_trainee_required": true,
+    "same_stop_condition_required": true,
+    "venue_identity_exposed_to_model": false,
+    "species_identity_exposed_to_model": false,
+    "party_slot_exposed_to_model": false,
+    "controller_actions_exposed_to_model": false
+  },
+  "training_policy": {
+    "retreat_hp_ratio": 0.45,
+    "reserve_total_pp": 2,
+    "species_specific_escort_pp_reserve": 5,
+    "minimum_direct_level_advantage": 5,
+    "safe_escort_level": 42,
+    "maximum_battles": 200,
+    "maximum_steps": 20000,
+    "maximum_healing_trips": 40,
+    "maximum_faints": 0,
+    "optional_heal_selected_by_executor": false,
+    "mandatory_heal_only_when_health_status_or_pp_is_unsafe": true,
+    "final_safe_cleanup_is_counted": true
+  },
+  "outcome_objective": {
+    "objective_id": "party-development.progress-efficiency.v1",
+    "objective_sha256": "b6544effa3c1849b4e03111a18b47f4435c9150e0b534a7501fbac70143dcbb6",
+    "ordered_criteria": [
+      "maximize_no_blackout",
+      "maximize_objective_progress",
+      "maximize_evolution_completed",
+      "maximize_target_experience_per_1000_frames",
+      "maximize_target_experience_gained",
+      "maximize_total_experience_per_1000_frames",
+      "maximize_battles_per_center_visit",
+      "minimize_faints",
+      "minimize_frames"
+    ],
+    "teacher_choice_is_target": false,
+    "ties_remain_equivalent": true
+  },
+  "execution": {
+    "exact_published_source_required": true,
+    "exact_commit_ci_success_required_before_execution": true,
+    "materialize_both_candidates_before_first_controller_input": true,
+    "open_private_artifact_before_first_candidate": true,
+    "reload_identical_state_before_each_candidate": true,
+    "execute_each_candidate_exactly_once": true,
+    "candidate_substitution_after_observation": false,
+    "candidate_retry_after_observation": false,
+    "append_each_complete_trial_immediately": true,
+    "unexpected_failure_stops_and_retains_partial_artifact": true
+  },
+  "interpretation": {
+    "model_fit": false,
+    "authority_promotion": false,
+    "success_claim": "two complete cloned outcomes produce one valid party-development preference example",
+    "failure_claim": "a failed candidate remains an immutable failed partial and is not rerun",
+    "next_if_complete": "design independent party contexts, harder battle choices and navigation blockers before any unseen promotion gate"
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

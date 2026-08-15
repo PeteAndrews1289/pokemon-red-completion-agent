@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 party-outcome scene: stop healing after every battle
+
+Open on the old recovery threshold: **RETREAT AT 90% HP**, followed by a rapid loop of
+**BATTLE → CENTER → BATTLE → CENTER**. Replace it with the prospective bounded question:
+**SAME TRAINEE · SAME EVOLUTION · TWO SAFE VENUES**.
+
+Split identical post-Mansion bytes into **HIGHER BAND 15–21** and **LOWER BAND 9–15**. Keep the
+learner side labelled **NO SPECIES · NO SLOT · NO AREA NAME · NO BUTTONS**. Put the new safety rule
+under both clones: **MANDATORY RECOVERY AT 45% / STATUS / PP · OPTIONAL HEAL OFF · FAINTS 0**.
+
+As footage eventually runs, fill only measured counters: trainee XP, total XP, battles, steps,
+Center visits, rotations and frames. The narration before a result is: **“The escort can keep the
+trainee safe, but its experience cannot win the trainee's lesson.”** End the prospective scene on
+**ONE ATTEMPT EACH · MODEL NOT FIT · AUTHORITY ZERO**; replace it with the authenticated result only
+after exact-commit CI and the one-shot run.
+
 ## August 14 navigation-outcome scene: same door, different route
 
 Open on one Cerulean frame splitting into two identical clones. Draw both routes to the **SAME GYM

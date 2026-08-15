@@ -32,8 +32,17 @@ The first navigation outcome is complete. Exact source `c37504d` passed CI befor
 bytes to the same Gym entrance. Both arrived without replans or interruptions; the shorter route
 used 14 movement requests / 516 frames versus 16 / 564, and the prospective objective produced one
 teacher-free learner-eligible preference. The [path-free result](evidence/red-local-navigation-outcome-result-2026-08-14.json)
-fits no model and grants no authority. Produce one real party-development outcome next. After that,
-freeze fresh level-matched, non-OHKO battle contexts and independent navigation contexts with
+fits no model and grants no authority.
+
+The first real party-development outcome is now prospectively frozen. One authenticated
+post-Mansion lineage supplies the same level-22 trainee and two safe venue candidates. Each clone
+runs to the same first verified evolution under a 45% retreat threshold with optional healing
+disabled. Exact target experience, battles, steps, Center trips, rotations and frames determine the
+outcome; escort experience cannot masquerade as trainee progress. The
+[path-free plan](evidence/red-party-development-outcome-plan-2026-08-14.json) permits one execution
+per candidate only after publication and exact-commit CI. It fits no model and grants no authority.
+
+After that result, freeze fresh level-matched, non-OHKO battle contexts and independent navigation contexts with
 blockers and recovery. Do not scale the easy Mansion distribution, promote a curve candidate, open
 an unseen gate early, expand into a full Red replay, or use Crystal as additional training data.
 

@@ -1,5 +1,26 @@
 # Current audit — 2026-08-14
 
+## Party-development falsifier: same evolution, two venues, no optional healing
+
+The last missing real adapter from the initial three-family boundary now has a prospective plan.
+An authenticated, non-sealed post-Mansion state contains a healthy six-member party and a level-22
+trainee eligible for two measured encounter bands. The state digest puts the higher 15–21 band at
+candidate 0 and the lower 9–15 band at candidate 1. Each clone must evolve the same trainee at the
+same level-triggered boundary; species, slot, venue name and controller actions remain private
+execution bindings rather than model features.
+
+The runtime also closes an observability gap in the old whole-team loop: it can now retain exact
+battles, encounter steps, Center trips and party rotations instead of reconstructing them after the
+fact. This probe replaces the route's 90% retreat threshold with 45%, disables optional healing and
+still enforces zero faints plus qualified PP reserves. Mandatory recovery and final cleanup remain
+counted, so efficiency cannot improve on paper by hiding Center visits. Exact experience must reach
+the bound trainee; the escort's gains are secondary total-party evidence only.
+
+The [path-free plan](evidence/red-party-development-outcome-plan-2026-08-14.json) authorizes no
+execution until its source is published and exact CI succeeds. Each candidate then runs once from
+identical bytes with immediate private retention. The result can validate one party-development
+outcome, not a model, training-policy generalization or authority.
+
 ## Same-terminal navigation result: both arrived; the shorter route won
 
 The experiment stayed intentionally smaller than a navigation training campaign. One authenticated,

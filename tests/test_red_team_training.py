@@ -54,6 +54,7 @@ from pokemon_red_completion.red_party import (
 from pokemon_red_completion.red_team_training import (
     ESCORT_LEVEL_CAP,
     VENUE_MISMATCH_FLEES,
+    TeamTrainingExecutionSummary,
     run_red_team_balancing,
     switch_active_battler,
 )
@@ -446,6 +447,27 @@ def test_a_finished_team_runs_the_loop_to_its_exit() -> None:
     assert memory.party[0].species == BLASTOISE_SPECIES_ID
     assert memory.party[1].species == DUX_SPECIES_ID
     assert memory.party[2].species == DUGTRIO_SPECIES_ID
+
+
+def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
+    memory = FakeMemory()
+    memory.set_party([(species, 60) for species in FINAL_FORM_ROSTER])
+    summaries: list[TeamTrainingExecutionSummary] = []
+
+    run(
+        memory,
+        FakeReader([state()]),
+        execution_summary_sink=summaries.append,
+    )
+
+    assert len(summaries) == 1
+    assert summaries[0].public_dict() == {
+        "battles_completed": 0,
+        "steps_taken": 0,
+        "healing_trips": 1,
+        "faints": 0,
+        "rotations_executed": 1,
+    }
 
 
 def test_a_finished_team_emits_stop_supervision_before_cleanup() -> None:

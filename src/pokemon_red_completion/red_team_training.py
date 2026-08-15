@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -183,6 +184,29 @@ class _PauseForTeamTrainingRecovery(BattleControlRequest):
 
 class CountingExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
+
+
+@dataclass(frozen=True, slots=True)
+class TeamTrainingExecutionSummary:
+    """Exact bounded counters retained for outcome-learning adapters."""
+
+    progress: TeamTrainingProgress
+    rotations_executed: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.progress, TeamTrainingProgress):
+            raise TypeError("training execution progress is invalid")
+        if type(self.rotations_executed) is not int or self.rotations_executed < 0:  # noqa: E721
+            raise ValueError("training execution rotations are invalid")
+
+    def public_dict(self) -> dict[str, int]:
+        return {
+            "battles_completed": self.progress.battles_completed,
+            "steps_taken": self.progress.steps_taken,
+            "healing_trips": self.progress.healing_trips,
+            "faints": self.progress.faints,
+            "rotations_executed": self.rotations_executed,
+        }
 
 
 def pulse(
@@ -724,6 +748,7 @@ def run_red_team_balancing(
     candidate_decision_sink: Callable[[TrainingCandidateDecision], None] | None = None,
     candidate_decision_authority: Callable[[TrainingCandidateDecision], int] | None = None,
     decision_authority: Callable[[TrainingControlDecision], TrainingControlAction] | None = None,
+    execution_summary_sink: Callable[[TeamTrainingExecutionSummary], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
     venues: Sequence[TrainingVenue],
@@ -741,6 +766,7 @@ def run_red_team_balancing(
     battles = 0
     steps = 0
     healing_trips = 0
+    rotations_executed = 0
     consecutive_flees = 0
     # celadon._flee appends its evidence to run.wilds, so this has to be a real
     # run state. It was left as None, which raised on the first flee -- and the
@@ -888,6 +914,36 @@ def run_red_team_balancing(
                 f"training-control referee rejected {selected.value} at {reason}; "
                 f"{required.value} was required"
             )
+
+    def switch_and_count(*, target_index: int, label: str) -> bool:
+        nonlocal rotations_executed
+        switched = switch_active_battler(
+            actions,
+            reader,
+            emulator,
+            target_index=target_index,
+            label=label,
+        )
+        if switched:
+            rotations_executed += 1
+        return switched
+
+    def restore_core_and_count() -> None:
+        nonlocal rotations_executed
+        observed = list(party_reader.read().species_ids())
+        ground_member = DUGTRIO_SPECIES_ID if DUGTRIO_SPECIES_ID in observed else 0x3B
+        for target_index, species_id in enumerate(
+            (BLASTOISE_SPECIES_ID, DUX_SPECIES_ID, ground_member)
+        ):
+            if observed[target_index] == species_id:
+                continue
+            source_index = observed.index(species_id)
+            observed[target_index], observed[source_index] = (
+                observed[source_index],
+                observed[target_index],
+            )
+            rotations_executed += 1
+        restore_training_core_order(actions, reader, emulator, hideout_timing)
 
     optional_overworld_choices = (
         TrainingControlAction.SEEK,
@@ -1104,10 +1160,7 @@ def run_red_team_balancing(
             if raw.enemy_species_id in volatile_enemy_species:
                 if escort_unsafe:
                     raise RuntimeError("A volatile matchup began without a safe escape escort.")
-                if not switch_active_battler(
-                    actions,
-                    reader,
-                    emulator,
+                if not switch_and_count(
                     target_index=escort.slot - 1,
                     label="Blastoise volatile escape escort",
                 ):
@@ -1134,10 +1187,7 @@ def run_red_team_balancing(
             if raw.enemy_species_id in escort_enemy_species:
                 if escort_unsafe:
                     raise RuntimeError("An excluded matchup began without a safe escape escort.")
-                if not switch_active_battler(
-                    actions,
-                    reader,
-                    emulator,
+                if not switch_and_count(
                     target_index=escort.slot - 1,
                     label="Blastoise escape escort",
                 ):
@@ -1173,10 +1223,7 @@ def run_red_team_balancing(
             )
 
             if not trainee_fights and escort.level >= ESCORT_LEVEL_CAP:
-                if not switch_active_battler(
-                    actions,
-                    reader,
-                    emulator,
+                if not switch_and_count(
                     target_index=escort.slot - 1,
                     label="Blastoise capped escort flee",
                 ):
@@ -1223,10 +1270,7 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "unsafe-matchup escape")
                 record_flee("unsafe matchup")
                 continue
-            if not trainee_fights and not switch_active_battler(
-                actions,
-                reader,
-                emulator,
+            if not trainee_fights and not switch_and_count(
                 target_index=escort.slot - 1,
                 label="Blastoise escort",
             ):
@@ -1274,10 +1318,7 @@ def run_red_team_balancing(
                         raise RuntimeError(
                             "Training attacks were exhausted without a safe escape escort."
                         ) from error
-                    if not switch_active_battler(
-                        actions,
-                        reader,
-                        emulator,
+                    if not switch_and_count(
                         target_index=escort.slot - 1,
                         label="Blastoise PP-exhaustion escape escort",
                     ):
@@ -1326,7 +1367,7 @@ def run_red_team_balancing(
                 TrainingControlAction.HEAL,
                 "required recovery boundary",
             )
-            restore_training_core_order(actions, reader, emulator, hideout_timing)
+            restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
@@ -1346,7 +1387,7 @@ def run_red_team_balancing(
                 TrainingControlAction.SEEK,
                 "venue-travel boundary",
             )
-            restore_training_core_order(actions, reader, emulator, hideout_timing)
+            restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
@@ -1381,6 +1422,7 @@ def run_red_team_balancing(
                 label=f"place trainee slot {trainee.slot} in front",
                 hideout_timing=hideout_timing,
             )
+            rotations_executed += 1
             continue
         selected = emit_decision(
             TrainingControlAction.SEEK,
@@ -1394,7 +1436,7 @@ def run_red_team_balancing(
         if selected is TrainingControlAction.HEAL:
             if healing_trips >= policy.max_healing_trips:
                 raise RuntimeError("training-control authority exhausted the healing budget")
-            restore_training_core_order(actions, reader, emulator, hideout_timing)
+            restore_core_and_count()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             continue
@@ -1406,11 +1448,23 @@ def run_red_team_balancing(
         steps += current_venue.walk_to_grass(actions, reader, emulator)
 
     if current_venue.is_in_map(reader.read()):
-        restore_training_core_order(actions, reader, emulator, hideout_timing)
+        restore_core_and_count()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1
-    restore_training_core_order(actions, reader, emulator, hideout_timing)
+    restore_core_and_count()
     report = (
         summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
     )
+    if execution_summary_sink is not None:
+        execution_summary_sink(
+            TeamTrainingExecutionSummary(
+                progress=TeamTrainingProgress(
+                    battles_completed=battles,
+                    steps_taken=steps,
+                    healing_trips=healing_trips,
+                    faints=party_reader.read().fainted_count,
+                ),
+                rotations_executed=rotations_executed,
+            )
+        )
     return report, battles, healing_trips
