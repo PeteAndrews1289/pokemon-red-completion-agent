@@ -36,12 +36,13 @@ budgeted Center calls, one cleanup each and the higher band's 39 venue transitio
 states the limit: this is one source-bound example under the current executor, with no fitted party
 model, generalization result or authority.
 
-The subsequent traversal repair does not rewrite that completed page. Its current status is
-source/test qualified and live pending: exact commit `51f0912` passed CI, but no repaired cartridge
-trial has run. A future independent live party outcome will add movement attempts, successful
-steps, blocked attempts, excluded-transition skips and no-progress cycles to the public summary.
-Until then, the dashboard must continue to show the V2 execution under its original source and must
-not imply that the 39 transitions have already disappeared in game.
+The subsequent traversal repair does not rewrite that completed page. Exact commit `51f0912`
+qualified the source; independent live commit `66ed6ee` then recovered a damaged party and made 12
+successful Cave steps in 14 attempts with two blocks, one excluded-transition skip and zero map
+departures or battle commands. That separate qualification creates no party preference, so the
+dashboard must continue to show V2 under its original source rather than retroactively replacing
+the 39 transitions. Future party outcomes will carry movement attempts, successful steps, blocked
+attempts, excluded-transition skips and no-progress cycles in their own summaries.
 
 ## What it shows
 

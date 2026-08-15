@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Completed the independent live Cave qualification after exact CI and read-only preflight. The
+  damaged party recovered; the walker completed 12 successful steps in 14 attempts with one
+  excluded-transition skip and zero departures; and the run sent zero battle commands. Published
+  the infrastructure-only result without rerunning V2, adding a learner label or promoting
+  authority.
 - Froze the first independent live qualification for the repaired Cave walker: train slot 030 must
   recover its damaged party, enter once, make 2–12 successful steps with an explicit transition
   skip and send zero battle commands. Added one-shot provenance/private-retention guards and seven

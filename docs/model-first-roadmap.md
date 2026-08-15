@@ -6,7 +6,7 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
-## Current checkpoint: qualify the repaired traversal on a fresh live context
+## Current checkpoint: traversal is live-qualified; widen the party curriculum
 
 The 39 Cave transitions in the accepted V2 party result now have a causal explanation. The old
 global pacing helper stepped off an automatic exit, hit terrain, then reversed across the exit.
@@ -16,14 +16,18 @@ telemetry is identity-free. The negative control reproduces the old departure, t
 corridor completes 12 steps with zero departures, 3,344 tests pass, and exact CI run `31860628652`
 is green. See the [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
 
-This closes the source/test seam, not the live seam. Do not rerun V2 or reinterpret its accepted
-target. The [prospective live plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
-binds independent non-sealed train slot 030, exact recovery from a damaged party, one Cave entry,
-2–12 successful steps, at least one excluded-transition skip and zero battle commands. After its
-exact commit passes CI and read-only preflight, consume that identity once. If its identity-free
-counters are sane and all guards hold, add independent party outcomes across trainee strength,
-health, PP, evolution distance and venue difficulty. Only then fit the first party head with
-separate train/development lineages and an untouched gate capable of measuring improvement.
+The [prospective live plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
+then bound independent train slot 030, exact recovery from a damaged party, one Cave entry, 2–12
+successful steps, at least one excluded-transition skip and zero battle commands. Exact source
+`66ed6ee` passed 3,351 tests and CI run `31861829598`; preflight was ready; and the one-shot
+[live result](evidence/red-cave-traversal-live-qualification-result-2026-08-14.json) reached all 12
+steps in 14 attempts with two blocks, one exclusion, zero no-progress cycles and zero departures.
+It sent no battle command and created no target.
+
+The live seam is now qualified on one independent root. Do not replay it or reinterpret V2. Next
+freeze independent party outcomes across trainee strength, health, PP, evolution distance and
+venue difficulty, with train/development lineages separated before collection. Only fit the first
+party head when the untouched development gate is large and diverse enough to measure improvement.
 
 The first real battle adapter is closed end to end. Two authenticated non-sealed lineages produced
 eight equal-timing move outcomes, a prior-preserving learner update and an untouched-lineage

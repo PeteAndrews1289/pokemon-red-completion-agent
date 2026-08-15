@@ -4,6 +4,16 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Independent Cave traversal qualification passed live (August 14, 2026).** Exact commit
+> `66ed6ee` passed 3,351 local tests and GitHub CI run `31861829598`; read-only preflight then
+> authenticated independent non-sealed train slot 030. Its two damaged and two statused members
+> recovered fully, the controller entered on the declared Cave transition and completed the frozen
+> 12-step ceiling in 14 movement attempts with two blocks, one excluded-transition skip, zero
+> no-progress cycles and zero map departures. It sent zero battle commands in 29,098 frames. This
+> qualifies one execution seam, not a party label or model: V2 stayed untouched, no target was
+> added, and authority remains zero. See the
+> [path-free result](docs/evidence/red-cave-traversal-live-qualification-result-2026-08-14.json).
+
 > **Cave traversal defect repaired in source; independent live qualification remains (August 14,
 > 2026).** The accepted V2 result's 39 higher-band venue transitions are now causally explained:
 > the old pacing helper stepped away from an automatic Cave exit, hit a wall, then reversed across
@@ -12,10 +22,8 @@
 > counters. The negative control reproduces the old departure; the repaired corridor completes 12
 > steps with zero departures; 3,344 tests and GitHub CI run `31860628652` pass. This is a qualified
 > implementation, not a new cartridge outcome. V2 was not rerun, no target or model was added, and
-> authority remains zero. A fresh prospective qualification now binds independent train slot 030:
-> recover its damaged party, enter once, exercise at least two successful steps and one excluded
-> transition, stop after 12 steps or a later natural encounter, and send zero battle commands. It
-> cannot run before its exact commit passes CI and read-only preflight. See the
+> authority remains zero. The subsequent qualification recorded above bound independent train slot
+> 030, required exact CI and preflight, and passed without becoming a learner example. See the
 > [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json)
 > and [live plan](docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json).
 

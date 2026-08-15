@@ -26,6 +26,19 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: twelve steps replaced thirty-nine re-entries
+
+The game finally graded the repaired walker from a different training moment. That party started
+damaged and statused, recovered fully, and entered the Cave on the same kind of automatic exit that
+had trapped the old controller. The new walker made twelve successful steps in fourteen attempts.
+Two attempts met walls; one prospective step back onto the exit was deliberately skipped. The map
+never changed.
+
+This took 29,098 frames, no battle command and no retry. It also produced no model lesson—the check
+was an admission test for the machinery that will collect those lessons. The next chapter can now
+vary trainees, health, PP, evolution distance and venue difficulty without knowingly baking the old
+entrance loop into every outcome.
+
 ## Current checkpoint: the cave stopped being mysterious
 
 Thirty-nine trips back into the same training venue looked at first like a noisy cost of using the
@@ -44,11 +57,10 @@ not replayed, its accepted lesson was not rewritten, no model was trained and no
 The next grade comes from a new independent non-sealed moment with a new identity. This is how the
 project moves faster now: make bugs small before making experiments large.
 
-That grade is frozen before it runs. A damaged party from the next training lineage must be healed,
-enter the Cave once, take between two and twelve successful steps, and visibly skip the exit it
-arrived on. If a battle begins after the seam is exercised, the test stops without choosing a move.
-If it begins too early or the map changes, the one attempt fails. There is no model label hiding in
-this check; it is simply the admission ticket for collecting the next real party lessons.
+That grade was frozen before it ran: recover, enter once, take between two and twelve successful
+steps, visibly skip the arrival exit and choose no battle move. The newer checkpoint above records
+its one clean pass. There is no model label hiding in it; it is the admission ticket for collecting
+the next real party lessons.
 
 ## Current checkpoint: the accounting repair found the hidden cost
 

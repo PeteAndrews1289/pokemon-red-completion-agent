@@ -1,5 +1,24 @@
 # Current audit — 2026-08-14
 
+## Cave traversal passed its independent live qualification
+
+Exact source `66ed6eef1e72c34fac2079f5db3671c51041eccd` passed 3,351 local tests and
+GitHub CI run `31861829598`. Read-only preflight authenticated the source bundle, plan, cartridge
+and independent train slot 030 before any controller existed. Its six-member party began with two
+damaged and two statused members; protected-access counters were all zero.
+
+The one-shot run fully recovered that party, entered on the declared Cave transition and reached
+the 12-successful-step ceiling. It needed 14 movement attempts, including two blocks and one
+excluded-transition skip, with no no-progress cycle or map departure. Total execution was 298
+controller actions / 29,098 frames; no battle began, no battle command was sent and no state was
+saved.
+
+The [path-free result](evidence/red-cave-traversal-live-qualification-result-2026-08-14.json)
+qualifies one infrastructure seam. It is not a learner target, fitted party model, unseen score,
+cross-context result or transfer result. V2 remains unchanged. Next widen party development across
+prospectively separate train/development roots and meaningful health, PP, strength, evolution and
+venue differences before fitting.
+
 ## Cave traversal: cause reproduced, repair qualified in source, live result pending
 
 The V2 result's 39 Cave transitions were not treated as noise or used to rerun the same experiment.
@@ -19,10 +38,9 @@ The [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.
 reports no live execution under the new source. V2 remains one accepted source-bound target, was
 not retried and is not retroactively deconfounded. No target, fitted model, generalization result
 or authority was added. The
-[live qualification plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json) now
-freezes independent train slot 030 and a 2–12-step, zero-battle-command check after exact recovery
-and Cave entry. Its code and plan must be published and pass exact CI plus read-only preflight
-before the one-shot identity runs. Sealed Red, Crystal, the teacher and full replay remain closed.
+[live qualification plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
+subsequently passed once as recorded in the newer checkpoint above. Sealed Red, Crystal, the
+teacher and full replay remained closed.
 
 ## Corrected party-development result: one accepted target, no party model
 

@@ -27,16 +27,16 @@ This validates outcome accounting, not a party model or intrinsic band preferenc
 
 The traversal cause and source repair are now complete at exact commit `51f0912` / CI run
 `31860628652`. A negative control reproduces the old Cave departure; a fresh per-run walker avoids
-adapter-owned exits, fails closed on map drift and exposes identity-free reliability counters. It
-has not yet run live. The new
-[prospective qualification](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
-binds independent train slot 030, one recovery/entry, 2–12 successful steps, at least one excluded
-transition and zero battle commands. Publish, pass exact CI and preflight, then consume it once
-before collecting party contexts varying trainee strength, health, PP, evolution distance and
-venue difficulty. Continue level-matched non-OHKO battles and navigation with blockers and
-recovery. Keep train/development/unseen lineages separated prospectively. Do not rerun V2, replay
-all of Red, scale convenient Mansion encounters, open a sealed gate for tuning, or use Crystal as
-additional training data. See the active
+adapter-owned exits, fails closed on map drift and exposes identity-free reliability counters. The
+[independent live qualification](evidence/red-cave-traversal-live-qualification-result-2026-08-14.json)
+then recovered train slot 030 and completed 12 steps in 14 attempts with one excluded transition
+and zero departures or battle commands. This adds no learner target.
+
+Now collect party contexts varying trainee strength, health, PP, evolution distance and venue
+difficulty, with train/development roots separated before outcomes. Continue level-matched
+non-OHKO battles and navigation with blockers and recovery. Keep unseen lineages closed. Do not
+rerun the qualification or V2, replay all of Red, scale convenient Mansion encounters, open a
+sealed gate for tuning, or use Crystal as additional training data. See the active
 [model-first roadmap](model-first-roadmap.md), the
 [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json), and preserve the
 [rejected V1 result](evidence/red-party-development-outcome-result-2026-08-14.json) unchanged.

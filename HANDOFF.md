@@ -17,6 +17,27 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Independent live Cave qualification passed; party curriculum can widen — 2026-08-14
+
+Exact prospective source `66ed6eef1e72c34fac2079f5db3671c51041eccd` passed 3,351 local tests
+and GitHub CI run `31861829598`. A separate read-only preflight authenticated the plan, source
+bundle, cartridge and independent non-sealed train slot 030 with two damaged and two statused party
+members. Every protected-access counter remained zero. Only then did the one-shot identity run.
+
+Recovery completed. The controller entered on the declared Cave transition and reached the
+prospective 12-successful-step ceiling in 14 movement attempts: two blocked attempts, one explicit
+excluded-transition skip, zero no-progress cycles and zero map departures. It used 298 controller
+actions / 29,098 frames, began no battle, sent zero battle commands and saved no state. The private
+artifact has two records / 1,241 bytes and manifest SHA-256
+`f81b0bcd3e5c663407905090646a732efccffefd7fa2e3f025909da2172f6bd1`.
+
+This qualifies the repaired traversal on one independent live Red root. It does not add a party
+preference, fit a model, demonstrate cross-context competence or promote authority. V2 was neither
+rerun nor reinterpreted. Next freeze multiple independent party-development train and development
+contexts spanning trainee strength, health, PP, evolution distance and venue difficulty; only fit
+when an untouched gate can measure improvement. Review the
+[path-free result](docs/evidence/red-cave-traversal-live-qualification-result-2026-08-14.json).
+
 ## Cave traversal defect repaired in source; live qualification pending — 2026-08-14
 
 The accepted V2 party result remains historical and unchanged. Its 39 higher-band venue transitions
@@ -41,12 +62,9 @@ Ruff, mypy, artifact, documentation and generated-registry checks passed; GitHub
 This is source-and-test qualification only. No repaired live emulator trial has run, the accepted
 V2 identity was not retried, no learner target was added, no model was fit and no authority moved.
 The [prospective live plan](docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
-now binds independent non-sealed train slot 030, whose six-member party begins with two damaged and
-two statused members. One route/recovery call must fully restore it, enter on the declared Cave
-transition and produce at least two successful steps plus one excluded-transition skip. The run
-stops after 12 steps or a natural encounter after step two, sends no battle command, saves no state
-and creates no learner target. Publish the exact source, require green CI and read-only preflight,
-then consume the identity once. Do not reopen V2, a sealed Red case, Crystal or a full replay.
+bound independent non-sealed train slot 030, exact recovery, 2–12 successful steps, one excluded
+transition and zero battle commands. The newer checkpoint above records its one completed attempt.
+Do not reopen that identity, V2, a sealed Red case, Crystal or a full replay.
 Review the [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
 
 ## Corrected party-development outcome accepted one target; model remains absent — 2026-08-14

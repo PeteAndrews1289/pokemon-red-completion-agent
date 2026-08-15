@@ -1,5 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the repaired walker met the game
+
+The grade ran only after its exact commit passed 3,351 tests and GitHub CI, then a separate
+read-only preflight authenticated the new training root. The party began with two damaged and two
+statused members. One recovery restored all six before the controller entered on the exact Cave
+transition that had caused the old reversal loop.
+
+The repaired walker made all twelve permitted successful steps. Fourteen movement attempts included
+two honest blocks and one explicit decision not to cross the arrival transition. It never stalled,
+never left the map, never entered a battle and therefore sent no battle command. The entire grade
+used 29,098 frames instead of another million-frame evolution race.
+
+That result promotes infrastructure, not authority. It creates no preference label and trains no
+model. Its value is that future party outcomes no longer need to price a known entrance loop into
+their venue choice. The next experiment widens the real curriculum across independent trainee,
+health, PP, evolution-distance and venue conditions, with development roots frozen before fitting.
+
 ## August 14: thirty-nine Cave trips became one reproducible bug
 
 The repaired counter had done its job: it made the higher band's thirty-nine venue transitions
@@ -21,12 +38,11 @@ prospective identity. The distinction is the project's central habit now: explai
 the smallest decisive experiment, then spend cartridge evidence only on a question the code is
 ready to answer.
 
-That next question is now preregistered. A different non-sealed training lineage begins at a Center
-with two damaged and two statused party members. The qualification must restore them, enter the
+That next question was preregistered. A different non-sealed training lineage began at a Center
+with two damaged and two statused party members. The qualification had to restore them, enter the
 Cave once, make at least two successful steps while explicitly avoiding the arrival transition,
 and stop after twelve steps or a later natural encounter without selecting a battle command. It
-cannot create a learner target. This is the smallest live grade that can turn the repair from a
-tested explanation into trustworthy infrastructure for the next party curriculum.
+could not create a learner target. The newer checkpoint above records the completed grade.
 
 ## August 14: the repaired counter changed the answer
 

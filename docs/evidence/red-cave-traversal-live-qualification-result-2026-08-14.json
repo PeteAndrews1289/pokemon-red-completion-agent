@@ -1,0 +1,77 @@
+{
+  "schema": "pokemon-red-cave-traversal-live-qualification-evidence-v1",
+  "status": "complete_live_qualified",
+  "experiment_id": "red-cave-traversal-live-qualification-v1",
+  "prospective_bindings": {
+    "public_plan_sha256": "49c2af3d02432d64909420b2d586e9b801b7c40cad77bf24167d0b91ada63e5d",
+    "runner_executions": 1,
+    "candidate_count": 1,
+    "retries": 0,
+    "substitutions": 0
+  },
+  "source": {
+    "git_commit": "66ed6eef1e72c34fac2079f5db3671c51041eccd",
+    "exact_commit_ci_run": 31861829598,
+    "exact_commit_ci_conclusion": "success",
+    "source_bundle_sha256": "fd74801d8dc2a01c407dbe8e9ba6bf539be4742f8865f195fd96a0d38dfc4d4e"
+  },
+  "authenticated_root": {
+    "state_sha256": "6af97317599bc22b8ccaa9c052db588ff80a0b4b5df8b16b75322bbb7cba0d95",
+    "capture_envelope_sha256": "42b12865ab549e57da1c95e4b10dca792f79a34324bfdf18ea1b7644bcd7c087",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "checkpoint_id": "red-goal-v1-030-evolve_species-train-03",
+    "partition": "train",
+    "independent_from_v2_root": true,
+    "sealed_test": false,
+    "crystal": false,
+    "initial_party_size": 6,
+    "initial_fainted_members": 0,
+    "initial_damaged_members": 2,
+    "initial_statused_members": 2
+  },
+  "qualification": {
+    "recovery_completed": true,
+    "entered_on_declared_transition": true,
+    "terminal_reason": "step_ceiling",
+    "battle_started": false,
+    "movement_attempts": 14,
+    "successful_steps": 12,
+    "blocked_attempts": 2,
+    "excluded_transition_skips": 1,
+    "no_progress_cycles": 0,
+    "map_departures": 0,
+    "controller_actions": 298,
+    "frames_executed": 29098,
+    "battle_commands_executed": 0,
+    "state_saved": false
+  },
+  "artifact": {
+    "artifact_id": "red-cave-traversal-66ed6eef1e72-6af97317599b",
+    "manifest_sha256": "f81b0bcd3e5c663407905090646a732efccffefd7fa2e3f025909da2172f6bd1",
+    "status": "complete",
+    "total_records": 2,
+    "total_bytes": 1241,
+    "catalog_stream_sha256": "a0445cdfc2ab291f9295bcd0016cd7fd309e4f571653ba5dd291e53ef04c0fd3",
+    "qualification_stream_sha256": "e1184b5afde7d6c1cd802c736caf99cecbb362792ee45cd96519a98078c6fb9a"
+  },
+  "decision": {
+    "repair_live_qualified": true,
+    "v2_result_retried": false,
+    "v2_result_reinterpreted": false,
+    "training_example_added": false,
+    "model_fit": false,
+    "party_policy_generalization_demonstrated": false,
+    "authority_promoted": false,
+    "claim": "One independent non-sealed train lineage fully recovered, entered the Cave once and completed the prospectively bounded reversal-seam qualification with 12 successful steps, one excluded-transition skip and zero map departures.",
+    "limit": "This validates the repaired traversal infrastructure on one live Red root. It is not a party-development preference, a fitted model, an unseen result, cross-context competence or cross-game transfer.",
+    "next": "Freeze multiple independent party-development train and development contexts spanning trainee health, PP, strength, evolution distance and venue difficulty; collect outcome labels without rerunning V2; then fit a party head only when an untouched development gate can measure improvement."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

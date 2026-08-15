@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-14 independent live Cave qualification — highest active checkpoint:** Exact source
+> `66ed6ee` passed 3,351 local tests and CI run `31861829598`; read-only preflight was ready; and
+> independent train slot 030 ran once. Its damaged/statused party recovered, entered on the
+> declared transition and completed 12 successful steps in 14 movement attempts with two blocks,
+> one excluded-transition skip, zero no-progress cycles and zero map departures. It used 298
+> controller actions / 29,098 frames and sent zero battle commands.
+>
+> No learner target or model was added, V2 was not retried, and authority remains zero. Review
+> `docs/evidence/red-cave-traversal-live-qualification-result-2026-08-14.json`; attack the exact
+> source/CI/plan/artifact bindings, independence claim, movement arithmetic, recovery proof,
+> absence of battle action and the narrow infrastructure-only conclusion. Next work is a
+> multi-context party train/development curriculum, not another traversal replay. Claude and
+> Antigravity review is pending.
+
 > **2026-08-14 Cave traversal repair — highest active checkpoint:** Exact commit `51f0912` passed
 > 3,344 local tests and CI run `31860628652`. The audit causally reproduces the accepted V2 result's
 > 39 Cave transitions: the old helper moved off an automatic exit, hit a wall, then reversed across
@@ -12,12 +26,10 @@
 > authority remains zero. Review
 > `docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json`; attack the causal trace,
 > independence of the regression fixture, per-run state isolation, fail-closed guards, counter
-> arithmetic and the claim boundary. The prospective next step is now frozen in
+> arithmetic and the claim boundary. The prospective next step was frozen in
 > `docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json`: independent train
 > slot 030, one recovery/entry, 2–12 successful steps, at least one excluded-transition skip, zero
-> battle commands, one attempt, no label. Attack whether that is the smallest live falsifier and
-> whether any early encounter or map departure fails honestly. Claude and Antigravity review is
-> pending.
+> battle commands, one attempt, no label. The newer checkpoint records its pass; do not replay it.
 
 > **2026-08-14 corrected party-development result — highest active checkpoint:** Exact source
 > `00499bc` passed CI run `31858937755`; the V2 preflight was ready; and both fresh one-shot clones

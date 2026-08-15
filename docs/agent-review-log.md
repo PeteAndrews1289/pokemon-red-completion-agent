@@ -3,6 +3,20 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Independent live Cave qualification — 2026-08-14
+
+Exact source `66ed6ee` passed 3,351 tests and CI run `31861829598`; read-only preflight
+authenticated independent train slot 030; and the one-shot attempt completed. Its two damaged and
+two statused members recovered fully. The controller then entered on the declared transition and
+completed 12 successful steps in 14 movement attempts with two blocks, one excluded-transition
+skip, zero no-progress cycles and zero departures. It sent no battle command.
+
+Decision: accept the repair at the one-root live infrastructure boundary. Add no learner target,
+fit no model and promote no authority. Do not replay this identity or V2. Next freeze a diverse,
+prospectively separated party train/development curriculum and require an untouched gate before
+fitting. Independent Claude and Antigravity review is pending. Review packet:
+[`red-cave-traversal-live-qualification-result-2026-08-14.json`](evidence/red-cave-traversal-live-qualification-result-2026-08-14.json).
+
 ## Cave traversal causal repair — 2026-08-14
 
 Codex audited the 39 higher-band venue transitions in the accepted V2 party result without
@@ -14,10 +28,9 @@ zero departures.
 Decision: accept commit `51f0912` / CI run `31860628652` at the source-and-test boundary only. The
 generic walker is per-run, adapter-censored, map-drift-fail-closed and no-progress-bounded, with
 identity-free counters aggregated into party results. Do not rewrite or retry V2, add a learner
-target, fit a model or promote authority. The fresh live plan now binds independent train slot 030
+target, fit a model or promote authority. The fresh live plan bound independent train slot 030
 to one recovery/entry and a 2–12-step traversal, requires an excluded-transition skip, sends zero
-battle commands and creates no label. Publish and pass exact CI plus preflight before consuming it
-once. Independent Claude and Antigravity review is pending and is not implied. Review packets:
+battle commands and creates no label. The newer checkpoint records its one pass. Review packets:
 [`red-cave-traversal-reliability-repair-2026-08-14.json`](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
 [`red-cave-traversal-live-qualification-plan-2026-08-14.json`](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json).
 

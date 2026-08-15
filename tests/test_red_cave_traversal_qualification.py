@@ -33,6 +33,12 @@ PLAN_PATH = (
     / "evidence"
     / "red-cave-traversal-live-qualification-plan-2026-08-14.json"
 )
+RESULT_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-cave-traversal-live-qualification-result-2026-08-14.json"
+)
 SCRIPT = runpy.run_path(str(PROJECT_ROOT / "scripts" / "run_red_cave_traversal_qualification.py"))
 SCRIPT_GLOBALS = SCRIPT["_run"].__globals__
 
@@ -233,6 +239,40 @@ def test_runner_loads_the_exact_plan_and_rejects_policy_drift(
         match="policy differs",
     ):
         SCRIPT["_load_plan"]()
+
+
+def test_public_result_reports_only_the_one_live_qualification() -> None:
+    payload = json.loads(RESULT_PATH.read_text(encoding="ascii"))
+    encoded = RESULT_PATH.read_text(encoding="ascii")
+    result = payload["qualification"]
+
+    assert payload["status"] == "complete_live_qualified"
+    assert (
+        payload["prospective_bindings"]["public_plan_sha256"]
+        == hashlib.sha256(PLAN_PATH.read_bytes()).hexdigest()
+    )
+    assert payload["prospective_bindings"]["runner_executions"] == 1
+    assert payload["prospective_bindings"]["retries"] == 0
+    assert payload["source"]["git_commit"] == "66ed6eef1e72c34fac2079f5db3671c51041eccd"
+    assert payload["source"]["exact_commit_ci_run"] == 31861829598
+    assert payload["source"]["exact_commit_ci_conclusion"] == "success"
+    assert result["recovery_completed"] is True
+    assert result["entered_on_declared_transition"] is True
+    assert result["movement_attempts"] == 14
+    assert result["successful_steps"] == 12
+    assert result["blocked_attempts"] == 2
+    assert result["excluded_transition_skips"] == 1
+    assert result["no_progress_cycles"] == 0
+    assert result["map_departures"] == 0
+    assert result["battle_commands_executed"] == 0
+    assert payload["decision"]["repair_live_qualified"] is True
+    assert payload["decision"]["training_example_added"] is False
+    assert payload["decision"]["model_fit"] is False
+    assert payload["decision"]["authority_promoted"] is False
+    assert set(payload["protected_access"].values()) == {0}
+    assert payload["private_path_fields"] == 0
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
 
 
 class _Writer:

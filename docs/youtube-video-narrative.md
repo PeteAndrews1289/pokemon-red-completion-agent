@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 live traversal scene: twelve steps, no return trip
+
+Turn the previous **PLAN** card over only after showing **EXACT COMMIT GREEN · PREFLIGHT READY**.
+Run the counters: **DAMAGED 2 · STATUSED 2 → FULL RECOVERY**, then
+**14 ATTEMPTS · 12 STEPS · 2 BLOCKS · 1 EXIT SKIP · 0 DEPARTURES**. Add
+**29,098 FRAMES · BATTLE COMMANDS 0**.
+
+Stamp the engineering card **LIVE QUALIFIED**, then keep the research card separate:
+**TRAINING LABELS +0 · MODEL NOT FIT · AUTHORITY ZERO**. Narration: **“The fix survived the game,
+so the next party lessons can measure training choices instead of a known entrance loop.”** End on
+**INDEPENDENT PARTY TRAIN/DEVELOPMENT CONTEXTS NEXT**, not a replay button.
+
 ## August 14 traversal scene: explain thirty-nine trips with three moves
 
 Start on the V2 counter: **HIGHER BAND · 39 VENUE TRANSITIONS**. Freeze the million-frame footage
@@ -17,8 +29,8 @@ Narration: **“We fixed the bug without rerunning the race, but a passing simul
 Pokémon result.”** Leave the final cards onscreen:
 **V2 UNCHANGED · MODEL NOT FIT · AUTHORITY ZERO · FRESH INDEPENDENT CONTEXT NEXT**. Then reveal
 the preregistered grade: **DAMAGED PARTY → FULL RECOVERY → ONE CAVE ENTRY → 2–12 STEPS → EXIT SKIP
-REQUIRED → ZERO BATTLE COMMANDS**. Keep it labelled **PLAN**, not **RESULT**, until exact CI,
-read-only preflight and the one-shot execution complete.
+REQUIRED → ZERO BATTLE COMMANDS**. It remained labelled **PLAN** until exact CI and preflight; the
+newer scene above now carries the one-shot result.
 
 ## August 14 V2 party scene: the faster venue was not the higher-level venue
 
