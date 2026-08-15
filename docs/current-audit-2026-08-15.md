@@ -15,10 +15,17 @@ Route 11 prior. Its registry file digest is
 composition accepted one venue observation, rejected the stale Cave sibling and made zero ROM
 reads, emulator starts, controller actions, teacher queries or outcomes.
 
-Disposition: prior composition complete. Claude's H2/M2/L2 forward conditions are accepted before
-catalog reuse: attest module-level `Assign`/`AnnAssign` semantics, repair the `type_params` test to
-minimal pairs and pin the closure call from `attest` independently. Priors 1; menus 0, outcomes
-0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
+Disposition: prior composition complete. Claude's H2/M2/L2 forward conditions were accepted and
+are closed locally at exact source `16ed83d`. Eight module-assignment elements cover all
+execution-bearing modules; a simulated committed `MINIMUM_FIGHTABLE_SHARE` mutation fails after
+loaded/current agreement; PEP 695 minimal pairs isolate only `type_params`; and a sentinel pins the
+closure call from `attest` independently. Python 3.14 passes 55 focused tests and Python 3.11 passes
+54 with one expected skip. The full gate passes 3,508 tests, three deselections, one expected
+failure, Ruff, mypy over 223 files, public/docs and four generated registries. Source bundle:
+`ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`.
+
+Publication, exact-head CI and Claude's narrow immutable-delta recheck remain mandatory before
+catalog reuse. Priors 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
 
 ## Route 11 closure rejection and remediation
 

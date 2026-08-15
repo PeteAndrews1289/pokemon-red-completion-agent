@@ -34,10 +34,18 @@ is tracked. Composition opened no ROM, emulator, context, outcome, teacher, seal
 case and granted no authority. Honest counters are now priors 1, menus 0, outcomes 0/14, fits 0,
 controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
 
-Claude's three forward conditions are mandatory before the mechanism supports the 8+6 catalog:
-bind module-level assignments into source qualification; replace the generic-parameter test with
-minimal pairs that differ only in `type_params`; and prove the attestation invokes its closure
-guard independently. After that repair, inventory existing non-sealed states for real PP
+Exact source `16ed83d` closes Claude's three forward conditions locally. Eight module-level source
+elements now bind every top-level `Assign` and `AnnAssign` across the execution-bearing modules;
+the committed `MINIMUM_FIGHTABLE_SHARE = 0.05` falsifier is rejected even when the simulated
+committed bundle and loaded rows agree. PEP 695 minimal pairs differ only by no type parameter,
+parameter name or parameter count. A sentinel proves `attest` invokes its closure guard before any
+contract call can provide redundancy. Python 3.14 passes 55 focused tests; Python 3.11 passes 54
+with the one expected syntax skip. The full ROM-free gate passes 3,508 tests, three deselections and
+one expected failure, plus Ruff, mypy over 223 files, privacy, docs and all generated registries.
+Source bundle: `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`.
+
+Next: publish this exact repair, require one green exact-head CI run, and give Claude only the
+immutable H2/M2/L2 delta. After approval, inventory existing non-sealed states for real PP
 diversity. If no depleted-PP state already exists, freeze and review a bounded materialization plan
 before any controller input. Do not compose another prior or execute a question.
 

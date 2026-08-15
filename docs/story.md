@@ -22,6 +22,12 @@ test differ in only one field, and prove the attestation itself runs its closure
 the last source-proof repairs before the project searches for depleted-PP lessons and freezes the
 first fourteen real questions.
 
+Exact source `16ed83d` has now wired those tripwires. Eight module fingerprints cover every
+top-level assignment, the exact threshold mutation Claude used now fails, and the two small test
+oracles distinguish generic parameters and the attestation closure call directly. Python 3.11 and
+3.14 agree; 3,508 ROM-free tests pass. That is still source maintenance, not training. The next
+doors are one exact-head CI run and Claude's narrow recheck, followed by the PP-diversity inventory.
+
 ## Current checkpoint: the proof follows the live call path
 
 Passing CI was not the finish line. Claude changed 43 parts of the source proof and killed 34; nine

@@ -8,12 +8,14 @@
 > tracked. The action used zero ROM reads, emulator starts, controller actions, teacher queries or
 > outcomes and granted no authority.
 >
-> Claude's nonblocking forward findings are now Codex's active maintenance lane before catalog
-> reuse: module-level assignments must enter source qualification, the PEP 695 test must use
-> minimal pairs, and the attestation's closure call needs an independent oracle. Then Codex may
-> inventory already-open non-sealed states for real PP diversity. Antigravity remains idle until
-> the concrete 8+6 question catalog exists. Counters: priors 1, menus 0, outcomes 0/14, fits 0,
-> controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
+> Exact source `16ed83d` closes those three forward findings locally. Eight module-assignment
+> elements cover the execution-bearing modules; the committed-threshold falsifier is killed;
+> PEP 695 minimal pairs isolate `type_params`; and `attest` has an independent closure-call oracle.
+> The full tree passes 3,508 ROM-free tests plus every static/privacy/registry gate; source bundle
+> `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`. Codex now publishes once,
+> obtains exact-head CI and sends only this immutable delta to Claude. Antigravity remains idle
+> until the concrete 8+6 question catalog exists. Counters: priors 1, menus 0, outcomes 0/14, fits
+> 0, controller/teacher 0, sealed/Crystal 0, replay 0 and authority 0.
 
 > **2026-08-15 active Gate 1 handoff:** Claude returned **REJECT** on exact `7f4d8de` after a
 > corrected 43-mutation audit killed 34 and left nine survivors. Codex accepted the on-path source-

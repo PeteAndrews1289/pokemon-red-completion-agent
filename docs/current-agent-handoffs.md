@@ -27,9 +27,11 @@ Exact head `3a24a2e` passed CI run `31896779190`. Claude's immutable Python 3.11
 reproduced all 43 element and seven waiver identities, killed 42 of 47 valid mutations and returned
 **APPROVE** for one private Route 11 prior only. Codex composed it once from the two authenticated
 V2 receipts; its path-free summary is tracked and its one-entry registry remains private. No ROM,
-controller, teacher or outcome ran. Claude's forward conditions—module-level assignment coverage,
-isolated type-parameter tests and an independent attestation-closure oracle—must close before the
-source mechanism is reused for the 8+6 catalog.
+controller, teacher or outcome ran. Exact source `16ed83d` closes Claude's forward conditions
+locally with eight module-assignment elements, isolated type-parameter tests and an independent
+attestation-closure oracle. It passes 3,508 ROM-free tests and every local quality gate; source
+bundle `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`. Publication, exact-head
+CI and Claude's immutable three-finding recheck remain ahead of catalog reuse.
 
 ## Role 1: Codex — implementation and integration owner
 
@@ -53,8 +55,9 @@ Current Codex assignment:
 1. **Complete:** publish the source repair and obtain one green exact-head run.
 2. **Complete:** freeze the exact head and obtain Claude's narrow delta approval.
 3. **Complete:** compose the one private Route 11 prior and publish only its path-free summary.
-4. Close Claude's three source-qualification conditions, then inventory existing non-sealed states
-   for genuine PP diversity without executing them. If the
+4. **Active:** publish the locally closed source-qualification conditions, obtain exact-head CI and
+   Claude's narrow recheck; then inventory existing non-sealed states for genuine PP diversity
+   without executing them. If the
    8+6 gate still cannot pass, write a bounded context-materialization plan before pressing a
    controller input.
 5. Materialize and freeze exactly 8 train and 6 untouched development **questions**, not outcomes.
@@ -92,20 +95,18 @@ Claude owns review of:
 - exact claim boundaries: source qualification, input freeze, execution, fit and authority are
   separate decisions.
 
-Claude's next assignment is deliberately narrow. After green CI, audit the immutable successor of
-`41f6fff` without opening a ROM, private registry or outcome. Re-run the corrected battery and
-attack the remediation directly: remove either changed projector or either new choice-set helper;
-mutate `TrainingVenue.__post_init__`, `GrindingArea.identity` or a reachable candidate helper;
-fabricate each of current/unchanged/waiver aggregate identities separately; bypass the loaded
-walker read; remove each learning-eligibility guard; collapse list/tuple AST tags; ignore non-empty
-type parameters; and accept an unsupported scalar. Verify Python 3.11/3.14 identity again. A
-surviving mutation is acceptable only with a proved independent redundant guard and an exact
-combined falsifier.
+Claude's next assignment is deliberately narrow. After green CI, audit the immutable published
+successor containing source `16ed83d` without opening a ROM, private registry, menu or outcome.
+Attack only H2/M2/L2: remove any module-assignment source element; omit `Assign` or `AnnAssign`;
+mutate a committed load-bearing constant while making loaded and committed rows agree; broaden the
+empty-`type_params` exemption; and remove the closure call from `attest`. Verify all eight module
+paths, both historical module waivers, aggregate identities and Python 3.11/3.14 parity. A survivor
+is acceptable only with a proved independent guard and exact combined falsifier.
 
 Claude must return: exact commit reviewed, tests/mutations run, survivors, findings by severity,
-verdict, cheapest falsifier for each blocker, and the narrowest action authorized. An approval may
-authorize private Route 11 prior composition only. It may not authorize outcome execution, fitting,
-sealed Red, Crystal, a full replay or model authority.
+verdict, cheapest falsifier for each blocker, and the narrowest action authorized. Approval closes
+source reuse for the forthcoming question catalog; it does not authorize a second prior, menu or
+outcome execution, fitting, sealed Red, Crystal, a full replay or model authority.
 
 Claude's later assignment is the frozen 8+6 catalog audit. Attack question/result binding,
 independent roots, prior-support overlap, PP/health/evolution/goal diversity, candidate width,

@@ -11,15 +11,18 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
-The current source checkpoint `41f6fff` repairs the historical Route 11 venue-prior gate after
-Claude rejected exact `7f4d8de`. The corrected audit killed 34/43 mutations and exposed missing
-on-path candidate functions, missing helper closure and trusted attestation fields. The remediation
-now compares 43 semantic elements with seven exact waivers, checks the recursively reachable
-candidate seam and re-derives every aggregate identity. Python 3.11 and 3.14 agree on the result;
-3,503 tests and every local quality gate pass. The dashboard must not count the prior yet: exact-
-head CI and Claude's delta re-approval remain pending. Therefore the current readiness view remains
-**venue priors 0 · train 0/8 · development 0/6 · fit false · authority zero**. A future approved
-composition may change only the first value to one; it is not a training outcome.
+Exact head `3a24a2e` passed CI and Claude's delta audit approved one private Route 11 prior. That
+prior now exists, so the honest readiness view is **venue priors 1 · train 0/8 · development 0/6 ·
+fit false · authority zero**. Its path-free summary records zero ROM reads, controller actions,
+teacher queries and outcomes. The Cave sibling remains unavailable because its cost evidence is
+stale, not because the route is impossible.
+
+Exact source `16ed83d` closes the audit's three forward conditions locally. The proof now has 51
+source elements and nine exact waivers, including eight module-assignment fingerprints; isolated
+generic-parameter and closure-call tests kill the two test gaps. Python 3.11 and 3.14 agree, 3,508
+ROM-free tests pass, and source bundle `ce43f6d…` reproduces across all registries. The dashboard
+must show this as **source qualification pending CI/re-review**, not as training progress. The next
+data-facing step is a read-only PP-diversity inventory after that gate.
 
 Exact source `587fb18` adds one new readiness fact without changing a progress counter: every
 masked party candidate now has a typed, identity-free cause, and the cause vector is frozen with

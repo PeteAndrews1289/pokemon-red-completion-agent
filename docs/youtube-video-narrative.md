@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: the board finally moves by one
+
+Open on Claude's final audit card: **42 / 47 VALID MUTATIONS KILLED · APPROVE ONE PRIOR ONLY**.
+Slide the two authenticated V2 receipts into a sealed composer. One anonymous venue-prior card
+comes out; a second card marked **CAVE · STALE WALKER ECONOMICS** drops into a rejection tray.
+Overlay the counters: **ROM 0 · CONTROLLER 0 · TEACHER 0 · OUTCOMES 0**. Then move only one tile on
+the experiment board: **PRIOR 0 → 1**. Keep **TRAIN 0/8 · DEVELOPMENT 0/6 · AUTHORITY 0** frozen.
+
+Now let Claude change `MINIMUM_FIGHTABLE_SHARE` while the old function body stays unchanged; show
+the old proof miss it. Replace the 43-tile view with **51 SOURCE ELEMENTS**, including eight module-
+assignment fingerprints. Run the same mutation and turn the gate red. Put two tiny programs side by
+side whose only difference is `[T]`, `[S]`, or no generic parameter, then light the closure sentinel
+inside `attest`. End on **16ed83d · PYTHON 3.11 = 3.14 · 3,508 TESTS · BUNDLE ce43f6d…**.
+
+Narration: **“The first number on the training board came from old evidence we could finally trust.
+The model still has not made a choice. Next we need states where resource pressure makes the choice
+real.”** Final doors: **EXACT-HEAD CI → CLAUDE NARROW RECHECK → PP-DIVERSITY INVENTORY**.
+
 ## August 15 scene: follow the arrows all the way down
 
 Start on a green CI badge, then place **34 KILLED / 43 MUTATIONS** beside it and stamp the source

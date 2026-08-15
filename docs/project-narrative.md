@@ -20,6 +20,14 @@ attestation closure call must be independently distinguishable. The next meaning
 not whether Route 11 works; it is whether existing non-sealed states contain the PP diversity
 needed to ask the model genuine resource-sensitive questions.
 
+Exact source `16ed83d` closes all three tripwires locally. Instead of naming one suspect threshold,
+it fingerprints every top-level assignment across the eight execution modules. A fake committed
+change to the trainable-encounter-share threshold now stops the proof even when the simulated
+loaded code agrees. The generic tests compare programs whose only difference is their type
+parameter, and the attestation has its own closure-call alarm. Both Python versions agree; 3,508
+ROM-free tests pass. The repair still advances no learning counter. It now goes through one CI run
+and one narrow Claude attack before the project inventories PP-diverse states.
+
 ## August 15: the helper behind the helper mattered
 
 The cross-Python source proof passed CI, but Claude still rejected it. Its corrected mutation

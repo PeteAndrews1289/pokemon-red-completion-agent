@@ -17,10 +17,12 @@ authenticated V2 receipts. The
 accepted venue, one rejected stale Cave sibling, and zero ROM reads, emulator starts, controller
 actions, teacher queries or outcomes.
 
-Priors are now 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0. Before
-the source mechanism is reused for the 8+6 catalog, close module-level assignment coverage, isolate
-the PEP 695 semantic tests and independently pin the attestation closure call. Then search already-
-open non-sealed states for depleted PP or freeze a bounded materialization plan. No execution yet.
+Priors are now 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0. Exact
+source `16ed83d` closes the three remaining source conditions locally: eight module-assignment
+digests, isolated PEP 695 semantic pairs and an independent attestation closure oracle. It passes
+3,508 ROM-free tests and every local quality gate; source bundle `ce43f6d…`. Publish, require one
+green exact-head run and obtain Claude's narrow recheck. Then search already-open non-sealed states
+for depleted PP or freeze a bounded materialization plan. No execution yet.
 
 ## Current checkpoint (2026-08-15): live source closure repaired; re-approval pending
 

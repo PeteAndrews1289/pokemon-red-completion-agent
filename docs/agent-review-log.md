@@ -20,9 +20,13 @@ authenticated V2 receipts and published the
 controller, teacher, outcome, sealed Red or Crystal case was opened. Priors advanced 0→1; every
 learning and authority counter stayed zero.
 
-Disposition: accept H2/M2/L2 as mandatory conditions before catalog reuse. Codex owns module-level
-assignment attestation, isolated type-parameter oracles and an independent attestation-closure
-test. No second prior or question execution is authorized by this verdict.
+Disposition: accept H2/M2/L2 as mandatory conditions before catalog reuse. Exact source `16ed83d`
+closes them locally with eight module-assignment elements, isolated type-parameter oracles and an
+independent attestation-closure test. The committed-threshold falsifier is now rejected; both
+Python runtimes pass the focused gate; and 3,508 ROM-free tests plus every static/privacy/registry
+gate pass. Source bundle: `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`.
+Publication, exact-head CI and Claude's narrow delta recheck are pending. No second prior or
+question execution is authorized by this verdict.
 
 ## Route 11 live-source closure — rejected and remediated 2026-08-15
 

@@ -50,10 +50,18 @@ The registry contains one accepted venue observation and rejects the stale Cave 
 composition itself made zero ROM reads, emulator starts, controller actions, teacher queries or
 outcomes. Priors are 1; menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
 
-Before source qualification can be reused for the 8+6 catalog, bind module-level assignments into
-the attested rows, replace the nonempty-`type_params` test with isolated semantic pairs, and pin
-the attestation's independent closure call. Then inspect already-open non-sealed states for real PP
-diversity. No second prior, candidate execution or context materialization is authorized yet.
+Exact source `16ed83d` closes those three conditions locally. Eight new source elements bind every
+top-level assignment in the execution-bearing modules; a simulated committed change to
+`MINIMUM_FIGHTABLE_SHARE` now fails as unreviewed drift. Type-parameter minimal pairs isolate only
+the generic field, and an independent sentinel pins the closure call from `attest`. Python 3.14
+passes 55 focused tests; Python 3.11 passes 54 plus one expected syntax skip. The full tree passes
+3,508 ROM-free tests, Ruff, mypy over 223 files, privacy, docs and all generated registries. Source
+bundle: `ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4`.
+
+Publish, obtain one exact-head green CI run and request Claude's immutable three-finding recheck.
+Only then inspect already-open non-sealed states for real PP diversity. No second prior, candidate
+execution or context materialization is authorized yet. See the
+[path-free qualification](evidence/route-11-module-assignment-qualification-2026-08-15.json).
 
 ## Current checkpoint: prove the whole live seam, not selected functions
 
