@@ -17,11 +17,13 @@ corridor completes 12 steps with zero departures, 3,344 tests pass, and exact CI
 is green. See the [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
 
 This closes the source/test seam, not the live seam. Do not rerun V2 or reinterpret its accepted
-target. Freeze a new independent non-sealed party context and prospective identity, pass exact-
-commit CI and read-only preflight, then run one bounded live traversal qualification. If its
-identity-free counters are sane and all guards hold, add independent party outcomes across trainee
-strength, health, PP, evolution distance and venue difficulty. Only then fit the first party head
-with separate train/development lineages and an untouched gate capable of measuring improvement.
+target. The [prospective live plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
+binds independent non-sealed train slot 030, exact recovery from a damaged party, one Cave entry,
+2–12 successful steps, at least one excluded-transition skip and zero battle commands. After its
+exact commit passes CI and read-only preflight, consume that identity once. If its identity-free
+counters are sane and all guards hold, add independent party outcomes across trainee strength,
+health, PP, evolution distance and venue difficulty. Only then fit the first party head with
+separate train/development lineages and an untouched gate capable of measuring improvement.
 
 The first real battle adapter is closed end to end. Two authenticated non-sealed lineages produced
 eight equal-timing move outcomes, a prior-preserving learner update and an untouched-lineage

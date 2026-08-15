@@ -44,6 +44,12 @@ not replayed, its accepted lesson was not rewritten, no model was trained and no
 The next grade comes from a new independent non-sealed moment with a new identity. This is how the
 project moves faster now: make bugs small before making experiments large.
 
+That grade is frozen before it runs. A damaged party from the next training lineage must be healed,
+enter the Cave once, take between two and twelve successful steps, and visibly skip the exit it
+arrived on. If a battle begins after the seam is exercised, the test stops without choosing a move.
+If it begins too early or the map changes, the one attempt fails. There is no model label hiding in
+this check; it is simply the admission ticket for collecting the next real party lessons.
+
 ## Current checkpoint: the accounting repair found the hidden cost
 
 The fresh comparison did not repeat the rejected run. It used a new preassigned moment, a new

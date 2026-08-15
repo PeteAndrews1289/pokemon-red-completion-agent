@@ -14,10 +14,12 @@ zero departures.
 Decision: accept commit `51f0912` / CI run `31860628652` at the source-and-test boundary only. The
 generic walker is per-run, adapter-censored, map-drift-fail-closed and no-progress-bounded, with
 identity-free counters aggregated into party results. Do not rewrite or retry V2, add a learner
-target, fit a model or promote authority. Freeze a fresh independent non-sealed context under a new
-prospective identity for the first live qualification. Independent Claude and Antigravity review
-is pending and is not implied. Review packet:
+target, fit a model or promote authority. The fresh live plan now binds independent train slot 030
+to one recovery/entry and a 2–12-step traversal, requires an excluded-transition skip, sends zero
+battle commands and creates no label. Publish and pass exact CI plus preflight before consuming it
+once. Independent Claude and Antigravity review is pending and is not implied. Review packets:
 [`red-cave-traversal-reliability-repair-2026-08-14.json`](evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+[`red-cave-traversal-live-qualification-plan-2026-08-14.json`](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json).
 
 ## First real party-development plan and result — 2026-08-14
 

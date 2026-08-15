@@ -40,10 +40,14 @@ Ruff, mypy, artifact, documentation and generated-registry checks passed; GitHub
 
 This is source-and-test qualification only. No repaired live emulator trial has run, the accepted
 V2 identity was not retried, no learner target was added, no model was fit and no authority moved.
-The next authorized step is a new prospective plan and identity using a fresh independent
-non-sealed party context, followed by read-only preflight and one bounded live traversal
-qualification. Do not reopen V2, a sealed Red case, Crystal or a full replay. Review the
-[path-free evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+The [prospective live plan](docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json)
+now binds independent non-sealed train slot 030, whose six-member party begins with two damaged and
+two statused members. One route/recovery call must fully restore it, enter on the declared Cave
+transition and produce at least two successful steps plus one excluded-transition skip. The run
+stops after 12 steps or a natural encounter after step two, sends no battle command, saves no state
+and creates no learner target. Publish the exact source, require green CI and read-only preflight,
+then consume the identity once. Do not reopen V2, a sealed Red case, Crystal or a full replay.
+Review the [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
 
 ## Corrected party-development outcome accepted one target; model remains absent — 2026-08-14
 

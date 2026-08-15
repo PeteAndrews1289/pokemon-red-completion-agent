@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Froze the first independent live qualification for the repaired Cave walker: train slot 030 must
+  recover its damaged party, enter once, make 2–12 successful steps with an explicit transition
+  skip and send zero battle commands. Added one-shot provenance/private-retention guards and seven
+  tests without collecting a learner target, fitting a model or opening protected contexts.
 - Causally reproduced the accepted V2 result's 39 Cave transitions and replaced global horizontal
   pacing with a fresh per-run warp-safe walker. Adapter-owned transition exclusions, map-drift
   failure, bounded no-progress handling and identity-free traversal counters passed 3,344 tests

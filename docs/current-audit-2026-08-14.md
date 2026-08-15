@@ -18,9 +18,11 @@ zero departures. The full non-integration suite passed 3,344 tests; exact GitHub
 The [repair evidence](evidence/red-cave-traversal-reliability-repair-2026-08-14.json) deliberately
 reports no live execution under the new source. V2 remains one accepted source-bound target, was
 not retried and is not retroactively deconfounded. No target, fitted model, generalization result
-or authority was added. Next freeze a new independent non-sealed party context under a new
-identity, qualify the source and preflight, then execute one bounded traversal check before more
-party data. Sealed Red, Crystal, the teacher and full replay remain closed.
+or authority was added. The
+[live qualification plan](evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json) now
+freezes independent train slot 030 and a 2–12-step, zero-battle-command check after exact recovery
+and Cave entry. Its code and plan must be published and pass exact CI plus read-only preflight
+before the one-shot identity runs. Sealed Red, Crystal, the teacher and full replay remain closed.
 
 ## Corrected party-development result: one accepted target, no party model
 

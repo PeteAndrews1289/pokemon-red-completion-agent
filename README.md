@@ -12,8 +12,12 @@
 > counters. The negative control reproduces the old departure; the repaired corridor completes 12
 > steps with zero departures; 3,344 tests and GitHub CI run `31860628652` pass. This is a qualified
 > implementation, not a new cartridge outcome. V2 was not rerun, no target or model was added, and
-> authority remains zero. See the
-> [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json).
+> authority remains zero. A fresh prospective qualification now binds independent train slot 030:
+> recover its damaged party, enter once, exercise at least two successful steps and one excluded
+> transition, stop after 12 steps or a later natural encounter, and send zero battle commands. It
+> cannot run before its exact commit passes CI and read-only preflight. See the
+> [path-free repair evidence](docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json)
+> and [live plan](docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json).
 
 > **Corrected party-development outcome (August 14, 2026): one target accepted, no model fit.**
 > Exact source `00499bc` passed GitHub CI run `31858937755` before two fresh identical-state clones

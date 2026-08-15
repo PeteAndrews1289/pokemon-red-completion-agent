@@ -15,7 +15,10 @@ Split the screen. Left: **OLD GLOBAL PACING STATE** and the clone leaving the ma
 End with the evidence ladder: **3,344 TESTS → EXACT CI GREEN → LIVE QUALIFICATION STILL LOCKED**.
 Narration: **“We fixed the bug without rerunning the race, but a passing simulation is not a new
 Pokémon result.”** Leave the final cards onscreen:
-**V2 UNCHANGED · MODEL NOT FIT · AUTHORITY ZERO · FRESH INDEPENDENT CONTEXT NEXT**.
+**V2 UNCHANGED · MODEL NOT FIT · AUTHORITY ZERO · FRESH INDEPENDENT CONTEXT NEXT**. Then reveal
+the preregistered grade: **DAMAGED PARTY → FULL RECOVERY → ONE CAVE ENTRY → 2–12 STEPS → EXIT SKIP
+REQUIRED → ZERO BATTLE COMMANDS**. Keep it labelled **PLAN**, not **RESULT**, until exact CI,
+read-only preflight and the one-shot execution complete.
 
 ## August 14 V2 party scene: the faster venue was not the higher-level venue
 

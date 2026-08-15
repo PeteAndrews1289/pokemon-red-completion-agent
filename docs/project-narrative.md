@@ -21,6 +21,13 @@ prospective identity. The distinction is the project's central habit now: explai
 the smallest decisive experiment, then spend cartridge evidence only on a question the code is
 ready to answer.
 
+That next question is now preregistered. A different non-sealed training lineage begins at a Center
+with two damaged and two statused party members. The qualification must restore them, enter the
+Cave once, make at least two successful steps while explicitly avoiding the arrival transition,
+and stop after twelve steps or a later natural encounter without selecting a battle command. It
+cannot create a learner target. This is the smallest live grade that can turn the repair from a
+tested explanation into trustworthy infrastructure for the next party curriculum.
+
 ## August 14: the repaired counter changed the answer
 
 The replacement ran only after its exact commit passed GitHub and a fresh preassigned train state

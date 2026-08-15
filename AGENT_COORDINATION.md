@@ -12,8 +12,12 @@
 > authority remains zero. Review
 > `docs/evidence/red-cave-traversal-reliability-repair-2026-08-14.json`; attack the causal trace,
 > independence of the regression fixture, per-run state isolation, fail-closed guards, counter
-> arithmetic and the claim boundary. The next live work must use a fresh independent non-sealed
-> context and new prospective identity. Claude and Antigravity review is pending.
+> arithmetic and the claim boundary. The prospective next step is now frozen in
+> `docs/evidence/red-cave-traversal-live-qualification-plan-2026-08-14.json`: independent train
+> slot 030, one recovery/entry, 2–12 successful steps, at least one excluded-transition skip, zero
+> battle commands, one attempt, no label. Attack whether that is the smallest live falsifier and
+> whether any early encounter or map departure fails honestly. Claude and Antigravity review is
+> pending.
 
 > **2026-08-14 corrected party-development result — highest active checkpoint:** Exact source
 > `00499bc` passed CI run `31858937755`; the V2 preflight was ready; and both fresh one-shot clones
