@@ -5,6 +5,9 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass
 
+from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentProspectiveCatalog,
+)
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
@@ -30,7 +33,9 @@ class PartyDevelopmentReadinessPolicy:
     minimum_candidate_count_observed: int = 3
     minimum_health_bins: int = 2
     minimum_pp_bins: int = 2
+    minimum_survival_bins: int = 2
     minimum_evolution_route_kinds: int = 2
+    minimum_semantic_menus_per_partition: int = 3
     require_both_choice_kinds: bool = True
     require_complete_venue_priors: bool = True
 
@@ -42,7 +47,9 @@ class PartyDevelopmentReadinessPolicy:
             "minimum_candidate_count_observed",
             "minimum_health_bins",
             "minimum_pp_bins",
+            "minimum_survival_bins",
             "minimum_evolution_route_kinds",
+            "minimum_semantic_menus_per_partition",
         ):
             value = getattr(self, name)
             if type(value) is not int or value < 1:  # noqa: E721
@@ -59,7 +66,11 @@ class PartyDevelopmentReadinessPolicy:
             "minimum_candidate_count_observed": self.minimum_candidate_count_observed,
             "minimum_health_bins": self.minimum_health_bins,
             "minimum_pp_bins": self.minimum_pp_bins,
+            "minimum_survival_bins": self.minimum_survival_bins,
             "minimum_evolution_route_kinds": self.minimum_evolution_route_kinds,
+            "minimum_semantic_menus_per_partition": (
+                self.minimum_semantic_menus_per_partition
+            ),
             "require_both_choice_kinds": self.require_both_choice_kinds,
             "require_complete_venue_priors": self.require_complete_venue_priors,
         }
@@ -80,6 +91,12 @@ class PartyDevelopmentOutcomeCatalogAudit:
     goal_partition_counts: tuple[tuple[str, int], ...]
     choice_kind_partition_counts: tuple[tuple[str, int], ...]
     candidate_count_counts: tuple[tuple[int, int], ...]
+    partition_candidate_widths: tuple[tuple[str, tuple[int, ...]], ...]
+    partition_health_bins: tuple[tuple[str, tuple[str, ...]], ...]
+    partition_pp_bins: tuple[tuple[str, tuple[str, ...]], ...]
+    partition_survival_bins: tuple[tuple[str, tuple[str, ...]], ...]
+    partition_evolution_route_kinds: tuple[tuple[str, tuple[str, ...]], ...]
+    partition_semantic_menu_counts: tuple[tuple[str, int], ...]
     health_bins: tuple[str, ...]
     pp_bins: tuple[str, ...]
     survival_bins: tuple[str, ...]
@@ -88,6 +105,8 @@ class PartyDevelopmentOutcomeCatalogAudit:
     venue_examples: int
     venue_examples_with_complete_priors: int
     unique_candidate_menus: int
+    prospective_catalog_sha256: str
+    prospective_binding_count: int
     policy: PartyDevelopmentReadinessPolicy
     initial_fit_ready: bool
     reasons: tuple[str, ...]
@@ -107,6 +126,27 @@ class PartyDevelopmentOutcomeCatalogAudit:
             "candidate_count_counts": {
                 str(count): examples for count, examples in self.candidate_count_counts
             },
+            "partition_candidate_widths": {
+                partition: list(widths)
+                for partition, widths in self.partition_candidate_widths
+            },
+            "partition_health_bins": {
+                partition: list(bins) for partition, bins in self.partition_health_bins
+            },
+            "partition_pp_bins": {
+                partition: list(bins) for partition, bins in self.partition_pp_bins
+            },
+            "partition_survival_bins": {
+                partition: list(bins)
+                for partition, bins in self.partition_survival_bins
+            },
+            "partition_evolution_route_kinds": {
+                partition: list(kinds)
+                for partition, kinds in self.partition_evolution_route_kinds
+            },
+            "partition_semantic_menu_counts": dict(
+                self.partition_semantic_menu_counts
+            ),
             "health_bins": list(self.health_bins),
             "pp_bins": list(self.pp_bins),
             "survival_bins": list(self.survival_bins),
@@ -117,6 +157,8 @@ class PartyDevelopmentOutcomeCatalogAudit:
                 self.venue_examples_with_complete_priors
             ),
             "unique_candidate_menus": self.unique_candidate_menus,
+            "prospective_catalog_sha256": self.prospective_catalog_sha256,
+            "prospective_binding_count": self.prospective_binding_count,
             "policy": self.policy.public_dict(),
             "initial_fit_ready": self.initial_fit_ready,
             "reasons": list(self.reasons),
@@ -133,6 +175,7 @@ class PartyDevelopmentOutcomeCatalogAudit:
 def audit_party_development_outcome_catalog(
     examples: tuple[ScenarioOutcomeExample, ...],
     *,
+    prospective_catalog: PartyDevelopmentProspectiveCatalog,
     policy: PartyDevelopmentReadinessPolicy = DEFAULT_PARTY_DEVELOPMENT_READINESS_POLICY,
 ) -> PartyDevelopmentOutcomeCatalogAudit:
     """Validate isolation and measure whether a first outcome fit is informative."""
@@ -141,6 +184,10 @@ def audit_party_development_outcome_catalog(
         raise ScenarioOutcomeError("party-development outcome catalog cannot be empty")
     if not isinstance(policy, PartyDevelopmentReadinessPolicy):
         raise TypeError("policy must be a PartyDevelopmentReadinessPolicy")
+    if not isinstance(prospective_catalog, PartyDevelopmentProspectiveCatalog):
+        raise TypeError(
+            "prospective_catalog must be a PartyDevelopmentProspectiveCatalog"
+        )
     for example in examples:
         if not isinstance(example, ScenarioOutcomeExample):
             raise ScenarioOutcomeError("party-development catalog example is invalid")
@@ -154,12 +201,22 @@ def audit_party_development_outcome_catalog(
                 "party-development catalog feature schema is incompatible"
             )
     ScenarioOutcomeCatalog(examples)
+    prospective_catalog.require_exact_examples(examples)
+    prospective_by_scenario = {
+        item.scenario_id: item for item in prospective_catalog.bindings
+    }
 
     partition_counts: Counter[str] = Counter()
     eligible_counts: Counter[str] = Counter()
     goal_counts: Counter[str] = Counter()
     kind_counts: Counter[str] = Counter()
     candidate_counts: Counter[int] = Counter()
+    candidate_widths_by_partition: dict[str, set[int]] = {}
+    health_by_partition: dict[str, set[str]] = {}
+    pp_by_partition: dict[str, set[str]] = {}
+    survival_by_partition: dict[str, set[str]] = {}
+    route_by_partition: dict[str, set[str]] = {}
+    semantic_menus_by_partition: dict[str, set[tuple[object, ...]]] = {}
     health_bins: set[str] = set()
     pp_bins: set[str] = set()
     survival_bins: set[str] = set()
@@ -177,11 +234,24 @@ def audit_party_development_outcome_catalog(
         goal_counts[f"{partition}:{goal.value}"] += 1
         kind_counts[f"{partition}:{kind.value}"] += 1
         candidate_counts[len(example.available_candidate_indices)] += 1
+        candidate_widths_by_partition.setdefault(partition, set()).add(
+            len(example.available_candidate_indices)
+        )
+        health_partition = health_by_partition.setdefault(partition, set())
+        pp_partition = pp_by_partition.setdefault(partition, set())
+        survival_partition = survival_by_partition.setdefault(partition, set())
+        route_partition = route_by_partition.setdefault(partition, set())
+        semantic_menus_by_partition.setdefault(partition, set()).add(
+            _semantic_menu_signature(example, goal=goal, kind=kind)
+        )
         unique_menus.add(tuple(item.features for item in example.candidates))
         if kind is TrainingChoiceKind.VENUE:
             venue_examples += 1
+            binding = prospective_by_scenario[example.scenario_id]
             if all(
                 candidate.features[_feature_index("venue.prior_available")] == 1.0
+                and binding.venue_prior_evidence_sha256[candidate.candidate_index]
+                is not None
                 for candidate in example.candidates
                 if candidate.available
             ):
@@ -190,16 +260,20 @@ def audit_party_development_outcome_catalog(
             if not candidate.available:
                 continue
             features = candidate.features
-            health_bins.add(
-                _unit_bin(features[_feature_index("candidate.hp_ratio")])
+            health_bin = _unit_bin(features[_feature_index("candidate.hp_ratio")])
+            pp_bin = _unit_bin(features[_feature_index("candidate.attack_pp")])
+            survival_bin = _signed_bin(
+                features[_feature_index("candidate.projected_survival_margin")]
             )
-            pp_bins.add(_unit_bin(features[_feature_index("candidate.attack_pp")]))
-            survival_bins.add(
-                _signed_bin(
-                    features[_feature_index("candidate.projected_survival_margin")]
-                )
-            )
-            route_kinds.add(_evolution_route(features).value)
+            route_kind = _evolution_route(features).value
+            health_bins.add(health_bin)
+            pp_bins.add(pp_bin)
+            survival_bins.add(survival_bin)
+            route_kinds.add(route_kind)
+            health_partition.add(health_bin)
+            pp_partition.add(pp_bin)
+            survival_partition.add(survival_bin)
+            route_partition.add(route_kind)
             prior_candidates += int(
                 features[_feature_index("venue.prior_available")] == 1.0
             )
@@ -227,14 +301,33 @@ def audit_party_development_outcome_catalog(
             }
             if kinds != {item.value for item in TrainingChoiceKind}:
                 reasons.add(f"missing_{partition.value}_choice_kind")
-    if max(candidate_counts, default=0) < policy.minimum_candidate_count_observed:
-        reasons.add("candidate_menus_never_reach_required_width")
-    if len(health_bins) < policy.minimum_health_bins:
-        reasons.add("insufficient_health_diversity")
-    if len(pp_bins) < policy.minimum_pp_bins:
-        reasons.add("insufficient_pp_diversity")
-    if len(route_kinds) < policy.minimum_evolution_route_kinds:
-        reasons.add("insufficient_evolution_route_diversity")
+        partition_name = partition.value
+        if (
+            max(candidate_widths_by_partition.get(partition_name, set()), default=0)
+            < policy.minimum_candidate_count_observed
+        ):
+            reasons.add(
+                f"{partition_name}_candidate_menus_never_reach_required_width"
+            )
+        if len(health_by_partition.get(partition_name, set())) < policy.minimum_health_bins:
+            reasons.add(f"insufficient_{partition_name}_health_diversity")
+        if len(pp_by_partition.get(partition_name, set())) < policy.minimum_pp_bins:
+            reasons.add(f"insufficient_{partition_name}_pp_diversity")
+        if (
+            len(survival_by_partition.get(partition_name, set()))
+            < policy.minimum_survival_bins
+        ):
+            reasons.add(f"insufficient_{partition_name}_survival_diversity")
+        if (
+            len(route_by_partition.get(partition_name, set()))
+            < policy.minimum_evolution_route_kinds
+        ):
+            reasons.add(f"insufficient_{partition_name}_evolution_route_diversity")
+        if (
+            len(semantic_menus_by_partition.get(partition_name, set()))
+            < policy.minimum_semantic_menus_per_partition
+        ):
+            reasons.add(f"insufficient_{partition_name}_semantic_menu_diversity")
     if (
         policy.require_complete_venue_priors
         and venue_examples_with_complete_priors != venue_examples
@@ -252,6 +345,30 @@ def audit_party_development_outcome_catalog(
         goal_partition_counts=tuple(sorted(goal_counts.items())),
         choice_kind_partition_counts=tuple(sorted(kind_counts.items())),
         candidate_count_counts=tuple(sorted(candidate_counts.items())),
+        partition_candidate_widths=tuple(
+            (partition, tuple(sorted(widths)))
+            for partition, widths in sorted(candidate_widths_by_partition.items())
+        ),
+        partition_health_bins=tuple(
+            (partition, tuple(sorted(bins)))
+            for partition, bins in sorted(health_by_partition.items())
+        ),
+        partition_pp_bins=tuple(
+            (partition, tuple(sorted(bins)))
+            for partition, bins in sorted(pp_by_partition.items())
+        ),
+        partition_survival_bins=tuple(
+            (partition, tuple(sorted(bins)))
+            for partition, bins in sorted(survival_by_partition.items())
+        ),
+        partition_evolution_route_kinds=tuple(
+            (partition, tuple(sorted(kinds)))
+            for partition, kinds in sorted(route_by_partition.items())
+        ),
+        partition_semantic_menu_counts=tuple(
+            (partition, len(menus))
+            for partition, menus in sorted(semantic_menus_by_partition.items())
+        ),
         health_bins=tuple(sorted(health_bins)),
         pp_bins=tuple(sorted(pp_bins)),
         survival_bins=tuple(sorted(survival_bins)),
@@ -260,6 +377,8 @@ def audit_party_development_outcome_catalog(
         venue_examples=venue_examples,
         venue_examples_with_complete_priors=venue_examples_with_complete_priors,
         unique_candidate_menus=len(unique_menus),
+        prospective_catalog_sha256=prospective_catalog.catalog_sha256,
+        prospective_binding_count=len(prospective_catalog.bindings),
         policy=policy,
         initial_fit_ready=not reasons,
         reasons=tuple(sorted(reasons)),
@@ -324,6 +443,47 @@ def _evolution_route(features: tuple[float, ...]) -> EvolutionRouteKind:
 
 def _feature_index(name: str) -> int:
     return PARTY_DEVELOPMENT_FEATURE_NAMES.index(name)
+
+
+def _semantic_menu_signature(
+    example: ScenarioOutcomeExample,
+    *,
+    goal: PartyDevelopmentGoal,
+    kind: TrainingChoiceKind,
+) -> tuple[object, ...]:
+    candidate_signatures = []
+    for candidate in example.candidates:
+        if not candidate.available:
+            continue
+        features = candidate.features
+        candidate_signatures.append(
+            (
+                _unit_bin(features[_feature_index("candidate.hp_ratio")]),
+                _unit_bin(features[_feature_index("candidate.attack_pp")]),
+                _signed_bin(
+                    features[
+                        _feature_index("candidate.projected_survival_margin")
+                    ]
+                ),
+                _evolution_route(features).value,
+                *(features[_feature_index(name)] for name in (
+                    "candidate.evolution_required",
+                    "candidate.registration_needed",
+                    "candidate.living_target_needed",
+                    "candidate.living_retention_risk",
+                    "candidate.role_needed",
+                    "candidate.role_complete",
+                    "candidate.emergency_escort_required",
+                    "venue.prior_available",
+                )),
+            )
+        )
+    return (
+        goal.value,
+        kind.value,
+        len(candidate_signatures),
+        tuple(sorted(candidate_signatures)),
+    )
 
 
 def _unit_bin(value: float) -> str:

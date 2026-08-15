@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -9,7 +10,9 @@ import pytest
 from pokemon_red_completion.party_development_outcome_learning import (
     PartyDevelopmentOutcomeLearningError,
     PartyDevelopmentPairedEvaluation,
+    PartyDevelopmentTeacherPrior,
     adapt_party_development_model_from_outcomes,
+    bind_teacher_prior_from_offline_evidence,
     canonical_party_development_outcome_model_sha256,
     evaluate_party_development_outcomes,
     initialize_from_teacher_model,
@@ -36,7 +39,10 @@ from pokemon_red_completion.scenario_outcomes import (
     OutcomeEvidenceStatus,
     ScenarioOutcomeExample,
 )
-from pokemon_red_completion.training_candidate_model import TrainingCandidateMLP
+from pokemon_red_completion.training_candidate_model import (
+    TrainingCandidateMLP,
+    canonical_training_candidate_model_sha256,
+)
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
     TrainingCandidate,
@@ -56,6 +62,26 @@ def _teacher_model() -> TrainingCandidateMLP:
         feature_mean=np.zeros(width, dtype=np.float64),
         feature_scale=np.ones(width, dtype=np.float64),
         training_seed=20260814,
+    )
+
+
+def _teacher_prior(teacher: TrainingCandidateMLP) -> PartyDevelopmentTeacherPrior:
+    return PartyDevelopmentTeacherPrior(
+        model_file_sha256="d" * 64,
+        model_canonical_sha256=canonical_training_candidate_model_sha256(teacher),
+        offline_evidence_sha256="e" * 64,
+        training_root_lineage_ids=("teacher-prior-train",),
+        training_state_sha256=("8" * 64,),
+        evaluation_root_lineage_ids=("teacher-prior-evaluation",),
+        evaluation_state_sha256=("9" * 64,),
+    )
+
+
+def _initialized_model():
+    teacher = _teacher_model()
+    return initialize_from_teacher_model(
+        teacher,
+        teacher_prior=_teacher_prior(teacher),
     )
 
 
@@ -161,7 +187,10 @@ def test_teacher_initialization_is_exact_on_the_frozen_v1_feature_prefix() -> No
     teacher = _teacher_model()
     base = _v1_candidates()
     v2 = _v2_candidates()
-    initialized = initialize_from_teacher_model(teacher)
+    initialized = initialize_from_teacher_model(
+        teacher,
+        teacher_prior=_teacher_prior(teacher),
+    )
 
     assert initialized.training_target == "teacher_initialization"
     assert initialized.outcome_training_examples == 0
@@ -172,10 +201,102 @@ def test_teacher_initialization_is_exact_on_the_frozen_v1_feature_prefix() -> No
     assert np.count_nonzero(
         initialized.weights1[len(TRAINING_CANDIDATE_FEATURE_NAMES) :]
     ) == 0
+    assert initialized.teacher_prior.training_root_lineage_ids == (
+        "teacher-prior-train",
+    )
+    assert initialized.teacher_prior.evaluation_root_lineage_ids == (
+        "teacher-prior-evaluation",
+    )
+
+
+def test_teacher_initialization_rejects_a_model_outside_bound_provenance() -> None:
+    teacher = _teacher_model()
+    mismatched = PartyDevelopmentTeacherPrior(
+        model_file_sha256="d" * 64,
+        model_canonical_sha256="f" * 64,
+        offline_evidence_sha256="e" * 64,
+        training_root_lineage_ids=("teacher-prior-train",),
+        training_state_sha256=("8" * 64,),
+        evaluation_root_lineage_ids=("teacher-prior-evaluation",),
+        evaluation_state_sha256=("9" * 64,),
+    )
+
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="authenticated"):
+        initialize_from_teacher_model(teacher, teacher_prior=mismatched)
+
+
+def test_teacher_prior_requires_canonical_lineage_pairs() -> None:
+    teacher = _teacher_model()
+
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="canonical order"):
+        PartyDevelopmentTeacherPrior(
+            model_file_sha256="d" * 64,
+            model_canonical_sha256=canonical_training_candidate_model_sha256(teacher),
+            offline_evidence_sha256="e" * 64,
+            training_root_lineage_ids=("teacher-train-b", "teacher-train-a"),
+            training_state_sha256=("2" * 64, "1" * 64),
+            evaluation_root_lineage_ids=("teacher-evaluation",),
+            evaluation_state_sha256=("3" * 64,),
+        )
+
+
+def test_historical_offline_receipt_binds_train_and_opened_validation_roots() -> None:
+    teacher = _teacher_model()
+    document = {
+        "schema": "pokemon-training-candidate-offline-receipt-v1",
+        "status": "offline_candidate_eligible",
+        "candidate_model_file_sha256": "d" * 64,
+        "candidate_model_canonical_sha256": canonical_training_candidate_model_sha256(
+            teacher
+        ),
+        "lineages": [
+            {
+                "lineage_id": "teacher-train-b",
+                "partition": "train",
+                "root_sha256": "2" * 64,
+            },
+            {
+                "lineage_id": "teacher-validation",
+                "partition": "validation",
+                "root_sha256": "3" * 64,
+            },
+            {
+                "lineage_id": "teacher-train-a",
+                "partition": "train",
+                "root_sha256": "1" * 64,
+            },
+        ],
+        "offline_candidate_eligible": True,
+        "private_artifacts_tracked": False,
+    }
+    payload = json.dumps(document).encode("ascii")
+    digest = hashlib.sha256(payload).hexdigest()
+
+    prior = bind_teacher_prior_from_offline_evidence(
+        teacher,
+        model_file_sha256="d" * 64,
+        evidence_payload=payload,
+        expected_evidence_sha256=digest,
+    )
+
+    assert prior.training_root_lineage_ids == (
+        "teacher-train-a",
+        "teacher-train-b",
+    )
+    assert prior.training_state_sha256 == ("1" * 64, "2" * 64)
+    assert prior.evaluation_root_lineage_ids == ("teacher-validation",)
+    assert prior.evaluation_state_sha256 == ("3" * 64,)
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="authentication"):
+        bind_teacher_prior_from_offline_evidence(
+            teacher,
+            model_file_sha256="d" * 64,
+            evidence_payload=payload,
+            expected_evidence_sha256="f" * 64,
+        )
 
 
 def test_outcome_update_learns_new_completion_semantics_and_soft_targets() -> None:
-    base = initialize_from_teacher_model(_teacher_model())
+    base = _initialized_model()
     training = (
         _example(
             scenario="train-a",
@@ -225,7 +346,7 @@ def test_outcome_update_learns_new_completion_semantics_and_soft_targets() -> No
 
 
 def test_learning_cycle_uses_untouched_development_roots_and_beats_its_prior() -> None:
-    base = initialize_from_teacher_model(_teacher_model())
+    base = _initialized_model()
     training = (
         _example(
             scenario="cycle-train-a",
@@ -275,7 +396,7 @@ def test_learning_cycle_uses_untouched_development_roots_and_beats_its_prior() -
 
 
 def test_censored_evidence_and_partition_overlap_fail_closed() -> None:
-    base = initialize_from_teacher_model(_teacher_model())
+    base = _initialized_model()
     censored = _example(
         scenario="censored-train",
         root="censored-root",
@@ -309,8 +430,39 @@ def test_censored_evidence_and_partition_overlap_fail_closed() -> None:
         )
 
 
+def test_teacher_prior_roots_cannot_reappear_in_outcome_training_or_development() -> None:
+    base = _initialized_model()
+    reused_train_root = _example(
+        scenario="prior-overlap-train",
+        root="teacher-prior-train",
+        digest_character="4",
+        partition=ScenarioPartition.TRAIN,
+        winner_index=0,
+    )
+    reused_evaluation_state = _example(
+        scenario="prior-overlap-development",
+        root="fresh-development-root",
+        digest_character="9",
+        partition=ScenarioPartition.DEVELOPMENT,
+        winner_index=1,
+    )
+
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="teacher-prior"):
+        adapt_party_development_model_from_outcomes(base, (reused_train_root,))
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="teacher-prior"):
+        evaluate_party_development_outcomes(base, (reused_evaluation_state,))
+
+    with pytest.raises(PartyDevelopmentOutcomeLearningError, match="teacher-prior"):
+        replace(
+            base,
+            outcome_training_examples=1,
+            outcome_training_root_lineage_ids=("teacher-prior-train",),
+            outcome_training_state_sha256=("4" * 64,),
+        )
+
+
 def test_model_round_trip_is_authenticated(tmp_path) -> None:
-    model = initialize_from_teacher_model(_teacher_model())
+    model = _initialized_model()
     path = tmp_path / "party-development-v2.json"
     payload = json.dumps(model.to_dict(), sort_keys=True, separators=(",", ":")).encode(
         "ascii"
@@ -329,7 +481,7 @@ def test_model_round_trip_is_authenticated(tmp_path) -> None:
 
 
 def test_evaluation_refuses_training_examples() -> None:
-    model = initialize_from_teacher_model(_teacher_model())
+    model = _initialized_model()
     training = _example(
         scenario="wrong-eval-partition",
         root="wrong-eval-root",
