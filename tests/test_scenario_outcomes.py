@@ -239,6 +239,7 @@ def test_navigation_adapter_prefers_verified_arrival_over_a_shorter_failed_route
                     movement_requests=12,
                     acknowledged_steps=10,
                 ),
+                frames_executed=480,
             ),
             NavigationOutcomeTrial(
                 _navigation_decision(1),
@@ -261,6 +262,7 @@ def test_navigation_adapter_prefers_verified_arrival_over_a_shorter_failed_route
     assert shared.learner_update_eligible
     assert shared.outcomes[0] is not None
     assert shared.outcomes[0].evidence_sha256 is not None
+    assert shared.outcomes[0].frames_executed == 480
 
 
 def test_navigation_adapter_rejects_a_relabelled_decision_outcome_binding() -> None:

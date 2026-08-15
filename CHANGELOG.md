@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Froze the first real navigation outcome experiment: two prospectively ordered plans from one
+  authenticated non-sealed Cerulean state to the exact same Gym entrance, with a 14-step shortest
+  route and a 16-step strict detour. Each clone reloads identical bytes and executes once after
+  green exact-commit CI; typed outcomes persist immediately, movement labels remain private, and
+  the probe fits no model or authority.
+- Added deterministic same-destination route-pair construction, identity-free question binding,
+  navigation frame retention, guarded one-shot private execution, and ROM-free tests for ordering,
+  provenance, durability and route equivalence.
 - Completed the exact-commit v2 Red 1/2/4 battle curve: 32 durable candidate outcomes, eight
   independent contexts and three real last-layer candidates with zero teacher targets. All fits
   lowered loss, but prior and updates were all 4/4 on a ceiling development set; no authority was

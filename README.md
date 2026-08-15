@@ -16,6 +16,13 @@
 > [dashboard guide](docs/progress-dashboard.md). Next: one real navigation outcome and one real
 > party-development outcome, then prospectively chosen level-matched, non-OHKO battle contexts.
 
+> **Next executable experiment (prospective): same destination, different route.** The first real
+> navigation outcome probe is frozen against one authenticated, non-sealed Cerulean state. It plans
+> a 14-step shortest route and a 16-step strictly costlier detour to the exact same Gym entrance,
+> orders them from the state digest, reloads identical bytes before each one-shot execution, and
+> ranks only verified arrival and efficiency. It fits no model and grants no authority. See the
+> [prospective path-free plan](docs/evidence/red-local-navigation-outcome-plan-2026-08-14.json).
+
 > **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
 > authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly
 > 2,048 pre-attack frames per counterfactual, zero teacher queries and no full replay. A

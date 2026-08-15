@@ -103,12 +103,18 @@ class NavigationOutcomeTrial:
 
     decision: StrategicNavigationDecision
     outcome: StrategicNavigationOutcome
+    frames_executed: int | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.decision, StrategicNavigationDecision):
             raise ScenarioOutcomeError("navigation trial decision is invalid")
         if not isinstance(self.outcome, StrategicNavigationOutcome):
             raise ScenarioOutcomeError("navigation trial outcome is invalid")
+        if self.frames_executed is not None and (
+            type(self.frames_executed) is not int  # noqa: E721
+            or self.frames_executed < 0
+        ):
+            raise ScenarioOutcomeError("navigation trial frame count is invalid")
         try:
             StrategicNavigationRecord(self.decision, self.outcome)
         except StrategicNavigationError as error:
@@ -296,6 +302,7 @@ def adapt_navigation_outcomes(
                 CandidateOutcome(
                     status=OutcomeEvidenceStatus.CENSORED,
                     actions_executed=actions,
+                    frames_executed=trial.frames_executed,
                     evidence_sha256=evidence_sha256,
                 )
             )
@@ -325,6 +332,7 @@ def adapt_navigation_outcomes(
                     float(outcome.movement_requests),
                 ),
                 actions_executed=actions,
+                frames_executed=trial.frames_executed,
                 evidence_sha256=evidence_sha256,
             )
         )

@@ -443,6 +443,116 @@ def test_skill_relocation_preserves_the_exact_declared_coordinate(
     assert calls == [(6, (3, 3))]
 
 
+def test_same_destination_pair_selects_the_cheapest_strict_detour(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    macro = MacroGraph({1: ()})
+    shortest_graph = LocalGraph(
+        {
+            (0, 0): (LocalEdge((0, 1), "right"),),
+            (0, 1): (
+                LocalEdge((0, 0), "left"),
+                LocalEdge((0, 2), "right"),
+            ),
+            (0, 2): (LocalEdge((0, 1), "left"),),
+        }
+    )
+    detour_graph = LocalGraph(
+        {
+            (0, 0): (LocalEdge((1, 0), "down"),),
+            (1, 0): (
+                LocalEdge((0, 0), "up"),
+                LocalEdge((1, 1), "right"),
+            ),
+            (1, 1): (
+                LocalEdge((1, 0), "left"),
+                LocalEdge((1, 2), "right"),
+            ),
+            (1, 2): (
+                LocalEdge((1, 1), "left"),
+                LocalEdge((0, 2), "up"),
+            ),
+            (0, 2): (LocalEdge((1, 2), "down"),),
+        }
+    )
+    shortest = plan_route(
+        macro,
+        {1: shortest_graph},
+        1,
+        (0, 0),
+        1,
+        goal_at=(0, 2),
+    )
+    detour = plan_route(
+        macro,
+        {1: detour_graph},
+        1,
+        (0, 0),
+        1,
+        goal_at=(0, 2),
+    )
+    calls: list[dict[int, frozenset[tuple[int, int]]] | None] = []
+
+    def plan(
+        _self: object,
+        _start: TraversalSnapshot,
+        _goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+        blocked: dict[int, frozenset[tuple[int, int]]] | None = None,
+    ) -> RoutePlan:
+        assert goal_at == (0, 2)
+        calls.append(blocked)
+        if blocked is None:
+            return shortest
+        if (0, 1) in blocked[1]:
+            return detour
+        raise RoutePlanningError("fixture has no other detour")
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "_plan_candidate", plan)
+    start = TraversalSnapshot(
+        map_id=1,
+        at=(0, 0),
+        ready=True,
+        occupied=frozenset({(3, 3)}),
+    )
+
+    pair = world.plan_same_destination_pair(start, 1, goal_at=(0, 2))
+
+    assert pair.shortest is shortest
+    assert pair.detour is detour
+    assert pair.excluded_step_ordinal == 1
+    assert pair.excluded_map == 1
+    assert pair.excluded_at == (0, 1)
+    assert calls[1] == {1: frozenset({(3, 3), (0, 1)})}
+
+
+def test_same_destination_pair_rejects_an_equal_cost_alternative(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = object.__new__(StrategicScenarioRouteWorld)
+    graph = LocalGraph(
+        {
+            (0, 0): (LocalEdge((0, 1), "right"),),
+            (0, 1): (LocalEdge((0, 0), "left"),),
+        }
+    )
+    plan = plan_route(MacroGraph({1: ()}), {1: graph}, 1, (0, 0), 1, goal_at=(0, 1))
+    monkeypatch.setattr(
+        StrategicScenarioRouteWorld,
+        "_plan_candidate",
+        lambda *args, **kwargs: plan,
+    )
+
+    with pytest.raises(RoutePlanningError, match="strictly costlier"):
+        world.plan_same_destination_pair(
+            TraversalSnapshot(map_id=1, at=(0, 0), ready=True),
+            1,
+            goal_at=(0, 1),
+        )
+
+
 def test_unrelated_warp_is_an_endpoint_not_a_local_shortcut() -> None:
     graph = LocalGraph(
         {

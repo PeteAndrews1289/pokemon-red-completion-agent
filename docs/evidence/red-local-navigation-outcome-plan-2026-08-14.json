@@ -1,0 +1,87 @@
+{
+  "schema": "pokemon-red-local-navigation-outcome-plan-v1",
+  "status": "prospective_unexecuted",
+  "experiment_id": "red-local-navigation-same-terminal-v1",
+  "purpose": "Validate the first real title-neutral navigation outcome boundary by comparing two independently executed routes from one authenticated Red state to the exact same terminal.",
+  "scope": {
+    "title": "pokemon_red",
+    "scenario_family": "navigation",
+    "decision_kind": "same_destination_route",
+    "source_context": "strategic-scenario-v2-001-shared-clear",
+    "target_semantics": [
+      "challenge",
+      "overworld",
+      "transit"
+    ],
+    "full_game_replays": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "84d64e2463f5e14b132948616a57991c1f0d423822aba2feeda9d8c48a6128c8",
+    "capture_envelope_sha256": "ca38931ac16936240dd1ce719c08f8904593aebed5654e411502e0bb0d33ee30",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+  "candidate_construction": {
+    "candidate_count": 2,
+    "same_start_required": true,
+    "same_terminal_required": true,
+    "shortest_route": {
+      "route_cost": 15,
+      "route_steps": 14
+    },
+    "detour_route": {
+      "route_cost": 17,
+      "route_steps": 16,
+      "construction": "cheapest_strictly_costlier_route_created_by_excluding_one_shortest_route_walk_coordinate",
+      "excluded_shortest_step_ordinal": 5
+    },
+    "candidate_order_rule": "state-sha256-high-bit-detour-first-v1",
+    "expected_shortest_candidate_index": 1,
+    "movement_actions_exposed_to_model": false,
+    "destination_identity_exposed_to_model": false
+  },
+  "outcome_objective": {
+    "objective_id": "navigation.route.arrival-efficiency.v1",
+    "objective_sha256": "941e185ead2a4fc8dda89d7c413c818d80fe86c1322504270c6cdc95d5888473",
+    "ordered_criteria": [
+      "maximize_terminal_reached",
+      "maximize_route_progress",
+      "maximize_request_efficiency",
+      "minimize_replans",
+      "minimize_interruptions",
+      "minimize_movement_requests"
+    ],
+    "teacher_choice_is_target": false,
+    "ties_remain_equivalent": true
+  },
+  "execution": {
+    "exact_published_source_required": true,
+    "exact_commit_ci_success_required_before_execution": true,
+    "plan_both_candidates_before_first_controller_input": true,
+    "open_private_artifact_before_first_candidate": true,
+    "reload_identical_state_before_each_candidate": true,
+    "execute_each_candidate_exactly_once": true,
+    "candidate_substitution_after_observation": false,
+    "candidate_retry_after_observation": false,
+    "append_each_typed_outcome_immediately": true,
+    "typed_route_failure_is_retained_and_other_clone_continues": true,
+    "unexpected_failure_stops_and_retains_partial_artifact": true
+  },
+  "interpretation": {
+    "model_fit": false,
+    "authority_promotion": false,
+    "success_claim": "two complete cloned outcomes produce one valid preference example",
+    "failure_claim": "a typed partial route remains negative outcome evidence, not a reason to rerun",
+    "next_if_complete": "build one bounded party-development outcome and then expand navigation across blockers and recovery contexts"
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

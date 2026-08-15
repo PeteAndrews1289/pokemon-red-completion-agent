@@ -1,5 +1,23 @@
 # Current audit — 2026-08-14
 
+## Same-terminal navigation probe: prospectively frozen, not yet executed
+
+The next step is intentionally smaller than a navigation training campaign. One authenticated,
+non-sealed scenario-001 Cerulean state produces two cartridge-derived routes to the exact same Gym
+entrance: the shortest route is cost 15 / 14 steps; the cheapest strictly longer detour is cost 17 /
+16 steps. The detour is created by excluding one intermediate walk coordinate only during
+planning, then executing the resulting valid route in the unchanged world. This avoids the earlier
+semantic error of comparing Help Bill and Misty—different objectives whose route length cannot be
+treated as objective value.
+
+The [prospective plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json) freezes route
+construction, state-digest candidate ordering, the arrival/efficiency objective, identical reloads,
+one execution per candidate, immediate private retention, and no retries after outcomes. The shared
+model input contains semantic tags and route metrics but no destination reference, coordinate, or
+movement action. The result is allowed to validate or falsify the navigation outcome adapter only;
+it cannot fit a model or promote authority. Teacher, sealed Red, Crystal and full-replay counters
+remain zero. Publication and exact-commit CI are required before the one-shot execution.
+
 ## V2 curve result: the pipeline trained; the catalog could not measure improvement
 
 Exact source `e6fae7f` passed 3,310 local tests and GitHub CI run `31852867031` before any v2

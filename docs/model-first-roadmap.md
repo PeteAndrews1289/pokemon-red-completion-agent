@@ -27,11 +27,16 @@ the same maximum selected utility: 0 paired update wins, 0 prior wins and 4 equi
 every point. Three development contexts were completely flat and 26/32 branches were one-turn
 knockouts. The pipeline passed; improvement did not become measurable, so authority remains zero.
 
-Next produce one real navigation and one real party-development outcome before any battle catalog
-widens. Then freeze fresh level-matched, non-OHKO battle contexts with meaningful health, status,
-matchup and resource tradeoffs. Do not scale the easy Mansion distribution, promote a curve
-candidate, open the 200-battle unseen gate early, expand into a full Red replay, or use Crystal as
-additional training data.
+The first navigation outcome is now prospectively frozen but unexecuted. It compares a 14-step
+shortest route with a 16-step strictly costlier detour from one authenticated Cerulean state to the
+exact same Gym entrance. Both plans precede either candidate outcome; each candidate reloads the
+same bytes and runs once. The [path-free plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json)
+fits no model and grants no authority. Publish it, pass exact-commit CI, execute it once, then
+produce one real party-development outcome before any battle catalog widens. After that, freeze
+fresh level-matched, non-OHKO battle contexts with meaningful health, status, matchup and resource
+tradeoffs. Do not scale the easy Mansion distribution, promote a curve candidate, open the
+200-battle unseen gate early, expand into a full Red replay, or use Crystal as additional training
+data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the
@@ -89,8 +94,10 @@ existing battle, strategic-navigation and party-development types without flatte
 fake universal record. The battle curve runner enforces exactly 4 train + 4 development captures,
 unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
 outcomes. V1 stopped honestly before fit; v2 completed and showed a development ceiling rather than
-an improvement. The milestone now lacks only real snapshot-backed navigation and party-development
-outcomes before the battle curriculum is redesigned around harder decision boundaries.
+an improvement. The navigation half is now frozen as a same-terminal two-route experiment. It
+remains incomplete until exact published source executes both clones once and produces a fully
+measured shared outcome example. The milestone then lacks the real party-development outcome before
+the battle curriculum is redesigned around harder decision boundaries.
 
 ## Learning approach
 
@@ -189,6 +196,13 @@ Learned authority gained: none directly; this unlocks every later authority tran
 ## Milestone 2 — closed-loop local navigation
 
 Purpose: replace fixed direction strings and wall retries with reusable movement competence.
+
+Current entry probe: the prospective
+[same-terminal Red plan](evidence/red-local-navigation-outcome-plan-2026-08-14.json) exercises the
+already closed-loop executor and the shared outcome adapter without conflating route quality with
+strategic objective value. A shortest route and a strictly longer detour end on the same tile. This
+one pair validates the real evidence boundary only; it does not satisfy the randomized arrival,
+displacement, collision, overhead, or Crystal gates below.
 
 Architecture:
 

@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-14 same-terminal navigation plan — highest active checkpoint:** Battle-curve
+> publication commit `cccb0f3` and CI run `31854136053` are green; the dashboard is updated. The
+> next source change prospectively freezes the first real navigation outcome. One authenticated,
+> non-sealed Cerulean root yields a 14-step shortest route and a 16-step strictly costlier detour to
+> the same Gym entrance. Both routes are planned before either outcome, candidate order is
+> state-digest-bound, each clone reloads identical bytes and runs once, and each typed result is
+> appended immediately. The model sees no destination identity, coordinate, or arrow sequence.
+>
+> This probe fits no model and grants no authority. Reviewers should attack route-pair construction,
+> identical-start enforcement, one-shot durability, decision/outcome binding, and path-free output.
+> Do not request a teacher, sealed Red, Crystal, a full replay, or strategic Help-Bill-versus-Misty
+> execution: comparing different objectives would teach route length as goal value. External Claude
+> and Antigravity review remains pending and is not implied.
+
 > **2026-08-14 v2 curve result — highest active checkpoint:** Exact source `e6fae7f` passed 3,310
 > local tests and CI run `31852867031`; the frozen 4-train/4-development catalog then executed once.
 > It retained 32 candidate outcomes, eight collections, three 1/2/4-root model candidates and one
