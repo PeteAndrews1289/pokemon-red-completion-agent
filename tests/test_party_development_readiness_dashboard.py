@@ -105,6 +105,8 @@ def test_readiness_dashboard_reports_zero_outcome_training_honestly() -> None:
     assert components[1]["train_examples"] == 0
     encoded = json.dumps(document, sort_keys=True)
     assert "model fitting has not begun" in encoded
+    assert "Title-neutral menu/venue-evidence contracts implemented" in encoded
+    assert "concrete Red menus 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

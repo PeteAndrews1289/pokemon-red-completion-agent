@@ -1,0 +1,288 @@
+from __future__ import annotations
+
+import json
+from dataclasses import replace
+
+import pytest
+
+from pokemon_red_completion.party import (
+    MoveObservation,
+    PartyMemberObservation,
+    PartyObservation,
+)
+from pokemon_red_completion.party_development_adapter import (
+    PartyDevelopmentAdapterError,
+    PartyDevelopmentMemberProfile,
+    PartyDevelopmentSemanticSnapshot,
+)
+from pokemon_red_completion.party_development_rank import (
+    PARTY_DEVELOPMENT_FEATURE_NAMES,
+    EvolutionRouteKind,
+    EvolutionSemantics,
+    PartyDevelopmentGoal,
+)
+from pokemon_red_completion.party_development_venue_priors import (
+    PartyDevelopmentVenuePriorError,
+    PartyDevelopmentVenuePriorRegistry,
+    VenuePriorEvidence,
+    VenuePriorUnitRatio,
+)
+from pokemon_red_completion.scenario_lab import ScenarioPartition
+from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
+from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
+
+
+def _member(slot: int, species: int, level: int) -> PartyMemberObservation:
+    return PartyMemberObservation(
+        slot=slot,
+        species_id=species,
+        level=level,
+        hp=80,
+        max_hp=100,
+        moves=(MoveObservation(species + 100, 20, 25),),
+        experience=1_000 + species,
+    )
+
+
+def _areas() -> tuple[GrindingArea, ...]:
+    return (
+        GrindingArea("private-route-a", 12, 18, measured_samples=50),
+        GrindingArea("private-cave-b", 18, 24, measured_samples=50),
+        GrindingArea("private-tower-c", 20, 26, measured_samples=50),
+    )
+
+
+def _evidence(
+    venue: GrindingArea, *, evidence_id: str, root: str, digest_character: str
+) -> VenuePriorEvidence:
+    return VenuePriorEvidence(
+        evidence_id=evidence_id,
+        venue=venue,
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+        measurement_contract_sha256="0" * 64,
+        operational_contract_sha256="6" * 64,
+        support_root_lineage_ids=(root,),
+        support_state_sha256=(digest_character * 64,),
+        outcome_receipt_sha256=(("f" if digest_character != "f" else "e") * 64,),
+        reliability=VenuePriorUnitRatio(9, 10),
+        expected_yield=VenuePriorUnitRatio(3, 4),
+        matchup_safety=VenuePriorUnitRatio(19, 20),
+        travel_cost=VenuePriorUnitRatio(1, 4),
+        recovery_cost=VenuePriorUnitRatio(1, 5),
+    )
+
+
+def _snapshot(
+    goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION,
+    *,
+    partition: ScenarioPartition = ScenarioPartition.TRAIN,
+    root_lineage_id: str = "fresh-root",
+    initial_state_sha256: str = "9" * 64,
+) -> PartyDevelopmentSemanticSnapshot:
+    party = PartyObservation(
+        members=(
+            _member(1, 11, 30),
+            _member(2, 22, 24),
+            _member(3, 33, 22),
+        )
+    )
+    areas = _areas()
+    profiles = (
+        PartyDevelopmentMemberProfile(
+            member=party.members[0],
+            evolution=EvolutionSemantics(False, 0, EvolutionRouteKind.NONE),
+            role_complete=True,
+            projected_survival_by_venue=(0.9, 0.7, 0.5),
+        ),
+        PartyDevelopmentMemberProfile(
+            member=party.members[1],
+            evolution=EvolutionSemantics(
+                True,
+                2,
+                EvolutionRouteKind.LEVEL,
+                levels_to_next=4,
+            ),
+            registration_needed=True,
+            living_target_needed=True,
+            emergency_escort_required=True,
+            projected_survival_by_venue=(0.8, 0.55, 0.25),
+        ),
+        PartyDevelopmentMemberProfile(
+            member=party.members[2],
+            evolution=EvolutionSemantics(
+                True,
+                1,
+                EvolutionRouteKind.ITEM,
+                feasible_now=True,
+            ),
+            role_needed=True,
+            projected_survival_by_venue=(0.75, 0.45, 0.1),
+        ),
+    )
+    registry = PartyDevelopmentVenuePriorRegistry.freeze(
+        source_commit="1" * 40,
+        source_bundle_sha256="2" * 64,
+        entries=(
+            _evidence(
+                areas[0],
+                evidence_id="prior-a",
+                root="prior-root-a",
+                digest_character="c",
+            ),
+            _evidence(
+                areas[1],
+                evidence_id="prior-b",
+                root="prior-root-b",
+                digest_character="d",
+            ),
+        ),
+    )
+    return PartyDevelopmentSemanticSnapshot(
+        root_lineage_id=root_lineage_id,
+        initial_state_sha256=initial_state_sha256,
+        partition=partition,
+        source_commit="3" * 40,
+        source_bundle_sha256="4" * 64,
+        party=party,
+        policy=BalancedTeamPolicy(minimum_level=50, required_size=3),
+        areas=areas,
+        goal=goal,
+        member_profiles=profiles,
+        venue_prior_registry=registry,
+        venue_operational_contract_sha256=("6" * 64,) * len(areas),
+        registration_owned_count=80,
+        registration_target_count=124,
+        living_unique_count=70,
+        living_target_count=108,
+        role_coverage_count=2,
+        role_target_count=3,
+    )
+
+
+def _feature(candidate: object, name: str) -> float:
+    features = candidate.features  # type: ignore[attr-defined]
+    return features[PARTY_DEVELOPMENT_FEATURE_NAMES.index(name)]
+
+
+def test_trainee_adapter_binds_one_shared_prior_without_identity_leakage() -> None:
+    snapshot = _snapshot()
+    menu = snapshot.trainee_menu(snapshot.areas[0])
+
+    assert menu is not None
+    assert menu.candidate_set.kind is TrainingChoiceKind.TRAINEE
+    assert len(menu.bindings) == 3
+    assert menu.shared_venue_prior is not None
+    assert menu.shared_venue_prior.available
+    assert all(prior == menu.shared_venue_prior for prior in menu.venue_priors)
+    assert all(menu.candidate_available)
+    assert _feature(menu.candidate_set.candidates[1], "venue.prior_available") == 1.0
+    assert _feature(menu.candidate_set.candidates[1], "context.goal.evolution") == 1.0
+    assert _feature(menu.candidate_set.candidates[1], "candidate.evolution_required") == 1.0
+    assert (
+        _feature(
+            menu.candidate_set.candidates[1],
+            "candidate.projected_survival_margin",
+        )
+        == 0.8
+    )
+    encoded = json.dumps(menu.candidate_set.public_dict(), sort_keys=True)
+    assert "private-route-a" not in encoded
+    assert "private-cave-b" not in encoded
+    assert "private-tower-c" not in encoded
+    assert '"species_id"' not in encoded
+
+    binding = snapshot.freeze_binding(
+        menu,
+        scenario_id="party-train-001",
+    )
+    assert binding.shared_venue_prior_evidence_sha256 is not None
+    assert binding.venue_prior_evidence_sha256 == (None, None, None)
+    assert binding.venue_prior_registry_sha256 == snapshot.venue_prior_registry.registry_sha256
+
+
+def test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes() -> None:
+    snapshot = _snapshot(
+        partition=ScenarioPartition.DEVELOPMENT,
+        root_lineage_id="fresh-venue-root",
+        initial_state_sha256="8" * 64,
+    )
+    menu = snapshot.venue_menu(snapshot.party.members[1])
+
+    assert menu is not None
+    assert menu.candidate_set.kind is TrainingChoiceKind.VENUE
+    assert len(menu.bindings) == 3
+    assert menu.candidate_available == (True, True, False)
+    assert tuple(prior.available for prior in menu.venue_priors) == (
+        True,
+        True,
+        False,
+    )
+    assert _feature(menu.candidate_set.candidates[0], "venue.prior_available") == 1.0
+    assert _feature(menu.candidate_set.candidates[2], "venue.prior_available") == 0.0
+
+    binding = snapshot.freeze_binding(
+        menu,
+        scenario_id="party-venue-001",
+    )
+    assert binding.shared_venue_prior_evidence_sha256 is None
+    assert binding.venue_prior_evidence_sha256[0] is not None
+    assert binding.venue_prior_evidence_sha256[1] is not None
+    assert binding.venue_prior_evidence_sha256[2] is None
+    assert binding.candidate_available == (True, True, False)
+
+
+def test_shared_venue_without_prior_cannot_become_a_trainee_outcome_menu() -> None:
+    snapshot = _snapshot()
+
+    with pytest.raises(PartyDevelopmentAdapterError, match="lacks frozen"):
+        snapshot.trainee_menu(snapshot.areas[2])
+
+
+def test_adapter_rejects_goal_permutations_that_cannot_reduce_pressure() -> None:
+    snapshot = _snapshot(PartyDevelopmentGoal.ROLE_COVERAGE)
+
+    with pytest.raises(PartyDevelopmentAdapterError, match="cannot reduce"):
+        snapshot.venue_menu(snapshot.party.members[1])
+
+
+def test_profiles_must_match_the_exact_observed_party_and_venue_width() -> None:
+    snapshot = _snapshot()
+    changed_profile = replace(
+        snapshot.member_profiles[0],
+        member=replace(snapshot.party.members[0], hp=79),
+    )
+
+    with pytest.raises(PartyDevelopmentAdapterError, match="align exactly"):
+        replace(
+            snapshot,
+            member_profiles=(changed_profile, *snapshot.member_profiles[1:]),
+        )
+
+
+def test_prior_support_cannot_be_reused_as_a_candidate_scenario() -> None:
+    snapshot = _snapshot(
+        root_lineage_id="prior-root-a",
+        initial_state_sha256="7" * 64,
+    )
+    menu = snapshot.trainee_menu(snapshot.areas[0])
+    assert menu is not None
+
+    with pytest.raises(PartyDevelopmentVenuePriorError, match="root already supports"):
+        snapshot.freeze_binding(
+            menu,
+            scenario_id="party-train-overlap",
+        )
+
+
+def test_menu_cannot_be_rebound_to_a_different_semantic_snapshot() -> None:
+    first = _snapshot()
+    menu = first.trainee_menu(first.areas[0])
+    assert menu is not None
+    second = _snapshot(
+        root_lineage_id="other-root",
+        initial_state_sha256="8" * 64,
+    )
+
+    with pytest.raises(PartyDevelopmentAdapterError, match="different semantic"):
+        second.freeze_binding(menu, scenario_id="wrong-snapshot")

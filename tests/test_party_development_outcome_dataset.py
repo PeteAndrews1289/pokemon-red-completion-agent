@@ -63,28 +63,21 @@ def _example(
     outcomes = []
     for candidate_index in range(3):
         features = [0.0] * len(PARTY_DEVELOPMENT_FEATURE_NAMES)
-        features[_feature_index("choice.trainee")] = float(
-            kind is TrainingChoiceKind.TRAINEE
-        )
+        features[_feature_index("choice.trainee")] = float(kind is TrainingChoiceKind.TRAINEE)
         features[_feature_index(f"context.goal.{goal.value}")] = 1.0
         features[_feature_index("candidate.hp_ratio")] = health
         features[_feature_index("candidate.attack_pp")] = pp
         features[_feature_index("candidate.projected_survival_margin")] = (
             -0.5 if health < 0.5 else 0.5
         )
-        features[
-            _feature_index(f"candidate.evolution_method.{route.value}")
-        ] = 1.0
-        features[_feature_index("venue.prior_available")] = float(
-            kind is TrainingChoiceKind.VENUE
-        )
-        if kind is TrainingChoiceKind.VENUE:
-            features[_feature_index("venue.prior_reliability")] = 0.75
-            features[_feature_index("venue.prior_expected_yield")] = 0.5
-            features[_feature_index("venue.prior_matchup_safety")] = 0.625
-            features[_feature_index("venue.prior_travel_cost")] = 0.25
-            features[_feature_index("venue.prior_recovery_cost")] = 0.125
-            features[_feature_index("venue.prior_support")] = 1 / 64
+        features[_feature_index(f"candidate.evolution_method.{route.value}")] = 1.0
+        features[_feature_index("venue.prior_available")] = 1.0
+        features[_feature_index("venue.prior_reliability")] = 0.75
+        features[_feature_index("venue.prior_expected_yield")] = 0.5
+        features[_feature_index("venue.prior_matchup_safety")] = 0.625
+        features[_feature_index("venue.prior_travel_cost")] = 0.25
+        features[_feature_index("venue.prior_recovery_cost")] = 0.125
+        features[_feature_index("venue.prior_support")] = 1 / 64
         candidates.append(OutcomeCandidate(candidate_index, tuple(features)))
         outcomes.append(_outcome(candidate_index == index % 3))
     prefix = "train" if partition is ScenarioPartition.TRAIN else "development"
@@ -114,18 +107,10 @@ def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
                     if index % 2 == 0
                     else PartyDevelopmentGoal.COLLECTION
                 ),
-                kind=(
-                    TrainingChoiceKind.TRAINEE
-                    if index % 2 == 0
-                    else TrainingChoiceKind.VENUE
-                ),
+                kind=(TrainingChoiceKind.TRAINEE if index % 2 == 0 else TrainingChoiceKind.VENUE),
                 health=0.1 if index < 4 else 0.9,
                 pp=0.2 if index < 4 else 0.8,
-                route=(
-                    EvolutionRouteKind.LEVEL
-                    if index < 4
-                    else EvolutionRouteKind.NONE
-                ),
+                route=(EvolutionRouteKind.LEVEL if index < 4 else EvolutionRouteKind.NONE),
             )
         )
     for index in range(8, 14):
@@ -138,18 +123,10 @@ def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
                     if index % 2 == 0
                     else PartyDevelopmentGoal.COLLECTION
                 ),
-                kind=(
-                    TrainingChoiceKind.TRAINEE
-                    if index % 2 == 0
-                    else TrainingChoiceKind.VENUE
-                ),
+                kind=(TrainingChoiceKind.TRAINEE if index % 2 == 0 else TrainingChoiceKind.VENUE),
                 health=0.1 if index < 11 else 0.9,
                 pp=0.2 if index < 11 else 0.8,
-                route=(
-                    EvolutionRouteKind.LEVEL
-                    if index < 11
-                    else EvolutionRouteKind.NONE
-                ),
+                route=(EvolutionRouteKind.LEVEL if index < 11 else EvolutionRouteKind.NONE),
             )
         )
     return tuple(examples)
@@ -162,17 +139,13 @@ def _prospective_catalog(
     for example in examples:
         kind = (
             TrainingChoiceKind.TRAINEE
-            if example.candidates[0].features[_feature_index("choice.trainee")]
-            == 1.0
+            if example.candidates[0].features[_feature_index("choice.trainee")] == 1.0
             else TrainingChoiceKind.VENUE
         )
         goal = next(
             goal
             for goal in PartyDevelopmentGoal
-            if example.candidates[0].features[
-                _feature_index(f"context.goal.{goal.value}")
-            ]
-            == 1.0
+            if example.candidates[0].features[_feature_index(f"context.goal.{goal.value}")] == 1.0
         )
         candidate_set = PartyDevelopmentCandidateSet(
             kind=kind,
@@ -182,21 +155,36 @@ def _prospective_catalog(
                 for item in example.candidates
             ),
         )
-        priors = tuple(
-            VenueOperationalPrior(
-                available=True,
-                reliability=0.75,
-                expected_yield=0.5,
-                matchup_safety=0.625,
-                travel_cost=0.25,
-                recovery_cost=0.125,
-                support_count=1,
-                evidence_sha256="abcdef"[item.candidate_index] * 64,
-                frozen_before_scenario=True,
+        shared_prior = VenueOperationalPrior(
+            available=True,
+            reliability=0.75,
+            expected_yield=0.5,
+            matchup_safety=0.625,
+            travel_cost=0.25,
+            recovery_cost=0.125,
+            support_count=1,
+            evidence_sha256="9" * 64,
+            frozen_before_scenario=True,
+        )
+        priors = (
+            tuple(shared_prior for _ in example.candidates)
+            if kind is TrainingChoiceKind.TRAINEE
+            else tuple(
+                VenueOperationalPrior(
+                    available=True,
+                    reliability=0.75,
+                    expected_yield=0.5,
+                    matchup_safety=0.625,
+                    travel_cost=0.25,
+                    recovery_cost=0.125,
+                    support_count=1,
+                    evidence_sha256="abcdef"[item.candidate_index] * 64,
+                    frozen_before_scenario=True,
+                )
+                if item.features[_feature_index("venue.prior_available")] == 1.0
+                else VenueOperationalPrior()
+                for item in example.candidates
             )
-            if item.features[_feature_index("venue.prior_available")] == 1.0
-            else VenueOperationalPrior()
-            for item in example.candidates
         )
         bindings.append(
             PartyDevelopmentProspectiveBinding.build(
@@ -206,11 +194,12 @@ def _prospective_catalog(
                 partition=example.partition,
                 source_commit="a" * 40,
                 source_bundle_sha256="b" * 64,
+                semantic_snapshot_sha256=example.initial_state_sha256,
                 candidate_set=candidate_set,
                 venue_priors=priors,
-                candidate_available=tuple(
-                    item.available for item in example.candidates
-                ),
+                venue_prior_registry_sha256="c" * 64,
+                shared_venue_prior=(shared_prior if kind is TrainingChoiceKind.TRAINEE else None),
+                candidate_available=tuple(item.available for item in example.candidates),
             )
         )
     return PartyDevelopmentProspectiveCatalog.freeze(tuple(bindings))
@@ -323,11 +312,7 @@ def test_global_variety_cannot_hide_a_semantically_thin_development_partition() 
                     if index % 2 == 0
                     else PartyDevelopmentGoal.COLLECTION
                 ),
-                kind=(
-                    TrainingChoiceKind.TRAINEE
-                    if index % 2 == 0
-                    else TrainingChoiceKind.VENUE
-                ),
+                kind=(TrainingChoiceKind.TRAINEE if index % 2 == 0 else TrainingChoiceKind.VENUE),
                 health=0.9,
                 pp=0.8,
                 route=EvolutionRouteKind.NONE,
@@ -378,7 +363,18 @@ def test_prospective_catalog_rejects_invalid_availability_before_hashing() -> No
             for item in example.candidates
         ),
     )
-    priors = tuple(VenueOperationalPrior() for _ in example.candidates)
+    shared_prior = VenueOperationalPrior(
+        available=True,
+        reliability=0.75,
+        expected_yield=0.5,
+        matchup_safety=0.625,
+        travel_cost=0.25,
+        recovery_cost=0.125,
+        support_count=1,
+        evidence_sha256="9" * 64,
+        frozen_before_scenario=True,
+    )
+    priors = tuple(shared_prior for _ in example.candidates)
 
     with pytest.raises(PartyDevelopmentCatalogError, match="availability"):
         PartyDevelopmentProspectiveBinding.build(
@@ -388,9 +384,51 @@ def test_prospective_catalog_rejects_invalid_availability_before_hashing() -> No
             partition=ScenarioPartition.TRAIN,
             source_commit="a" * 40,
             source_bundle_sha256="b" * 64,
+            semantic_snapshot_sha256="e" * 64,
             candidate_set=candidate_set,
             venue_priors=priors,
+            venue_prior_registry_sha256="c" * 64,
+            shared_venue_prior=shared_prior,
             candidate_available=(False,) * len(example.candidates),
+        )
+
+
+def test_trainee_catalog_binds_the_shared_training_venue_before_outcomes() -> None:
+    example = _ready_catalog()[0]
+    candidate_set = PartyDevelopmentCandidateSet(
+        kind=TrainingChoiceKind.TRAINEE,
+        goal=PartyDevelopmentGoal.EVOLUTION,
+        candidates=tuple(
+            PartyDevelopmentCandidate(item.candidate_index, item.features)
+            for item in example.candidates
+        ),
+    )
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="shared venue"):
+        PartyDevelopmentProspectiveBinding.build(
+            scenario_id=example.scenario_id,
+            root_lineage_id=example.root_lineage_id,
+            initial_state_sha256=example.initial_state_sha256,
+            partition=example.partition,
+            source_commit="a" * 40,
+            source_bundle_sha256="b" * 64,
+            semantic_snapshot_sha256="e" * 64,
+            candidate_set=candidate_set,
+            venue_priors=tuple(
+                VenueOperationalPrior(
+                    available=True,
+                    reliability=0.75,
+                    expected_yield=0.5,
+                    matchup_safety=0.625,
+                    travel_cost=0.25,
+                    recovery_cost=0.125,
+                    support_count=1,
+                    evidence_sha256="9" * 64,
+                    frozen_before_scenario=True,
+                )
+                for _ in candidate_set.candidates
+            ),
+            venue_prior_registry_sha256="c" * 64,
         )
 
 

@@ -27,9 +27,7 @@ from pokemon_red_completion.training_candidate_rank import (
     TrainingChoiceKind,
 )
 
-PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID = (
-    "pokemon.core.party-development.completion-candidate.v2"
-)
+PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID = "pokemon.core.party-development.completion-candidate.v2"
 MAX_EVOLUTION_STAGES = 4
 MAX_PRIOR_SUPPORT = 64
 
@@ -197,9 +195,7 @@ class EvolutionSemantics:
                 "a completed evolution path cannot carry a remaining requirement"
             )
         if self.levels_to_next is not None and self.route_kind is not EvolutionRouteKind.LEVEL:
-            raise PartyDevelopmentFeatureError(
-                "only a level evolution can carry a level distance"
-            )
+            raise PartyDevelopmentFeatureError("only a level evolution can carry a level distance")
 
 
 @dataclass(frozen=True, slots=True)
@@ -227,9 +223,7 @@ class CandidateCompletionSemantics:
             "emergency_escort_required",
         ):
             if not isinstance(getattr(self, name), bool):
-                raise PartyDevelopmentFeatureError(
-                    f"{name.replace('_', ' ')} must be boolean"
-                )
+                raise PartyDevelopmentFeatureError(f"{name.replace('_', ' ')} must be boolean")
         if self.role_needed and self.role_complete:
             raise PartyDevelopmentFeatureError(
                 "a candidate role cannot be both missing and complete"
@@ -288,11 +282,7 @@ class VenueOperationalPrior:
             and _SHA256.fullmatch(self.evidence_sha256) is not None
         )
         if self.available:
-            if (
-                not self.frozen_before_scenario
-                or self.support_count < 1
-                or not digest_valid
-            ):
+            if not self.frozen_before_scenario or self.support_count < 1 or not digest_valid:
                 raise PartyDevelopmentFeatureError(
                     "an available venue prior needs frozen independent evidence"
                 )
@@ -328,19 +318,13 @@ class PartyDevelopmentCandidate:
         if type(self.candidate_index) is not int or self.candidate_index < 0:  # noqa: E721
             raise PartyDevelopmentFeatureError("party-development candidate index is invalid")
         if self.feature_schema_id != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID:
-            raise PartyDevelopmentFeatureError(
-                "party-development feature schema is unsupported"
-            )
+            raise PartyDevelopmentFeatureError("party-development feature schema is unsupported")
         if len(self.features) != len(PARTY_DEVELOPMENT_FEATURE_NAMES):
             raise PartyDevelopmentFeatureError(
                 "party-development candidate feature width is invalid"
             )
         vector = np.asarray(self.features, dtype=np.float64)
-        if (
-            not np.all(np.isfinite(vector))
-            or np.any(vector < -1.0)
-            or np.any(vector > 1.0)
-        ):
+        if not np.all(np.isfinite(vector)) or np.any(vector < -1.0) or np.any(vector > 1.0):
             raise PartyDevelopmentFeatureError(
                 "party-development candidate features must be normalized"
             )
@@ -352,9 +336,7 @@ class PartyDevelopmentCandidate:
         return {
             "candidate_index": self.candidate_index,
             "feature_schema_id": self.feature_schema_id,
-            "features": dict(
-                zip(PARTY_DEVELOPMENT_FEATURE_NAMES, self.features, strict=True)
-            ),
+            "features": dict(zip(PARTY_DEVELOPMENT_FEATURE_NAMES, self.features, strict=True)),
         }
 
 
@@ -371,9 +353,9 @@ class PartyDevelopmentCandidateSet:
             raise PartyDevelopmentFeatureError("party-development choice kind is invalid")
         if not isinstance(self.goal, PartyDevelopmentGoal):
             raise PartyDevelopmentFeatureError("party-development goal is invalid")
-        if not self.candidates or tuple(
-            item.candidate_index for item in self.candidates
-        ) != tuple(range(len(self.candidates))):
+        if not self.candidates or tuple(item.candidate_index for item in self.candidates) != tuple(
+            range(len(self.candidates))
+        ):
             raise PartyDevelopmentFeatureError(
                 "party-development candidate indexes must be contiguous"
             )
@@ -383,16 +365,12 @@ class PartyDevelopmentCandidateSet:
             raise PartyDevelopmentFeatureError(
                 "party-development features contradict the choice kind"
             )
-        goal_index = PARTY_DEVELOPMENT_FEATURE_NAMES.index(
-            f"context.goal.{self.goal.value}"
-        )
+        goal_index = PARTY_DEVELOPMENT_FEATURE_NAMES.index(f"context.goal.{self.goal.value}")
         if any(
             item.features[goal_index] != 1.0
             or sum(
                 item.features[
-                    PARTY_DEVELOPMENT_FEATURE_NAMES.index(
-                        f"context.goal.{candidate_goal.value}"
-                    )
+                    PARTY_DEVELOPMENT_FEATURE_NAMES.index(f"context.goal.{candidate_goal.value}")
                 ]
                 == 1.0
                 for candidate_goal in PartyDevelopmentGoal
@@ -400,9 +378,7 @@ class PartyDevelopmentCandidateSet:
             != 1
             or any(
                 item.features[
-                    PARTY_DEVELOPMENT_FEATURE_NAMES.index(
-                        f"context.goal.{candidate_goal.value}"
-                    )
+                    PARTY_DEVELOPMENT_FEATURE_NAMES.index(f"context.goal.{candidate_goal.value}")
                 ]
                 not in (0.0, 1.0)
                 for candidate_goal in PartyDevelopmentGoal
@@ -440,9 +416,7 @@ def augment_training_candidate_set(
         or len(semantics) != len(base.candidates)
         or any(not isinstance(item, CandidateCompletionSemantics) for item in semantics)
     ):
-        raise PartyDevelopmentFeatureError(
-            "completion semantics must match the candidate menu"
-        )
+        raise PartyDevelopmentFeatureError("completion semantics must match the candidate menu")
     if venue_priors is None:
         priors = tuple(VenueOperationalPrior() for _ in base.candidates)
     else:
@@ -453,9 +427,13 @@ def augment_training_candidate_set(
         or any(not isinstance(item, VenueOperationalPrior) for item in priors)
     ):
         raise PartyDevelopmentFeatureError("venue priors must match the candidate menu")
-    if base.kind is TrainingChoiceKind.TRAINEE and any(item.available for item in priors):
+    if (
+        base.kind is TrainingChoiceKind.TRAINEE
+        and any(item.available for item in priors)
+        and (not all(item.available for item in priors) or len(set(priors)) != 1)
+    ):
         raise PartyDevelopmentFeatureError(
-            "trainee candidates cannot carry candidate-specific venue priors"
+            "trainee candidates may carry only one repeated shared venue prior"
         )
 
     candidates = tuple(

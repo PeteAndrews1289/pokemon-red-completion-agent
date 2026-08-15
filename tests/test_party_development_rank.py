@@ -143,9 +143,7 @@ def test_v2_preserves_the_frozen_v1_prefix_and_adds_completion_semantics() -> No
     )
     for old, new in zip(base.candidates, result.candidates, strict=True):
         assert new.features[: len(old.features)] == old.features
-    first = dict(
-        zip(PARTY_DEVELOPMENT_FEATURE_NAMES, result.candidates[0].features, strict=True)
-    )
+    first = dict(zip(PARTY_DEVELOPMENT_FEATURE_NAMES, result.candidates[0].features, strict=True))
     assert first["context.goal.evolution"] == 1.0
     assert first["candidate.evolution_required"] == 1.0
     assert first["candidate.registration_needed"] == 1.0
@@ -188,9 +186,7 @@ def test_v2_projection_is_equivariant_when_candidates_and_bindings_are_permuted(
             frozen_before_scenario=True,
         ),
     )
-    forward = augment_training_candidate_set(
-        base, _context(), semantics, venue_priors=priors
-    )
+    forward = augment_training_candidate_set(base, _context(), semantics, venue_priors=priors)
     reversed_base = TrainingCandidateSet(
         TrainingChoiceKind.VENUE,
         tuple(
@@ -243,6 +239,52 @@ def test_venue_prior_digest_is_required_but_never_enters_public_features() -> No
     assert digest not in encoded
     assert "private-route-a" not in encoded
     assert "private-cave-b" not in encoded
+
+
+def test_trainee_menu_may_repeat_one_shared_venue_prior_but_not_mix_priors() -> None:
+    projected = project_trainee_choice_set(
+        _party(),
+        BalancedTeamPolicy(minimum_level=50, required_size=3),
+        (_areas()[0],),
+    )
+    assert projected is not None
+    shared = VenueOperationalPrior(
+        available=True,
+        reliability=0.75,
+        expected_yield=0.5,
+        matchup_safety=0.8,
+        travel_cost=0.25,
+        recovery_cost=0.125,
+        support_count=5,
+        evidence_sha256="d" * 64,
+        frozen_before_scenario=True,
+    )
+    result = augment_training_candidate_set(
+        projected[1],
+        _context(),
+        _semantics(3),
+        venue_priors=(shared, shared, shared),
+    )
+
+    assert all(
+        dict(zip(PARTY_DEVELOPMENT_FEATURE_NAMES, item.features, strict=True))[
+            "venue.prior_available"
+        ]
+        == 1.0
+        for item in result.candidates
+    )
+
+    with pytest.raises(PartyDevelopmentFeatureError, match="one repeated shared"):
+        augment_training_candidate_set(
+            projected[1],
+            _context(),
+            _semantics(3),
+            venue_priors=(
+                shared,
+                replace(shared, evidence_sha256="e" * 64),
+                shared,
+            ),
+        )
 
 
 def test_unfrozen_or_impossible_semantics_fail_closed() -> None:

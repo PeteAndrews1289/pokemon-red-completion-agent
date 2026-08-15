@@ -26,10 +26,10 @@ from pokemon_red_completion.scenario_outcomes import ScenarioOutcomeExample
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA = (
-    "pokemon.core.party-development-prospective-catalog.v1"
+    "pokemon.core.party-development-prospective-catalog.v2"
 )
 PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA = (
-    "pokemon.core.party-development-prospective-binding.v1"
+    "pokemon.core.party-development-prospective-binding.v2"
 )
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -51,11 +51,14 @@ class PartyDevelopmentProspectiveBinding:
     partition: ScenarioPartition
     source_commit: str
     source_bundle_sha256: str
+    semantic_snapshot_sha256: str
+    venue_prior_registry_sha256: str
     kind: TrainingChoiceKind
     goal: PartyDevelopmentGoal
     candidate_feature_sha256: tuple[str, ...]
     candidate_available: tuple[bool, ...]
     venue_prior_evidence_sha256: tuple[str | None, ...]
+    shared_venue_prior_evidence_sha256: str | None
     candidate_menu_sha256: str
     binding_sha256: str
     feature_schema_id: str = PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
@@ -72,20 +75,21 @@ class PartyDevelopmentProspectiveBinding:
         for value, subject in (
             (self.initial_state_sha256, "initial state"),
             (self.source_bundle_sha256, "source bundle"),
+            (self.semantic_snapshot_sha256, "semantic snapshot"),
+            (self.venue_prior_registry_sha256, "venue-prior registry"),
             (self.candidate_menu_sha256, "candidate menu"),
             (self.binding_sha256, "binding"),
         ):
             _require_digest(value, subject=subject)
-        if not isinstance(self.source_commit, str) or _GIT_OID.fullmatch(
-            self.source_commit
-        ) is None:
+        if (
+            not isinstance(self.source_commit, str)
+            or _GIT_OID.fullmatch(self.source_commit) is None
+        ):
             raise PartyDevelopmentCatalogError(
                 "party-development prospective source commit is invalid"
             )
         if not isinstance(self.partition, ScenarioPartition):
-            raise PartyDevelopmentCatalogError(
-                "party-development prospective partition is invalid"
-            )
+            raise PartyDevelopmentCatalogError("party-development prospective partition is invalid")
         if not isinstance(self.kind, TrainingChoiceKind) or not isinstance(
             self.goal, PartyDevelopmentGoal
         ):
@@ -116,13 +120,25 @@ class PartyDevelopmentProspectiveBinding:
             raise PartyDevelopmentCatalogError(
                 "party-development prospective candidate bindings are invalid"
             )
-        if self.kind is TrainingChoiceKind.TRAINEE and any(
-            value is not None for value in self.venue_prior_evidence_sha256
-        ):
-            raise PartyDevelopmentCatalogError(
-                "trainee candidates cannot bind candidate-specific venue evidence"
+        if self.shared_venue_prior_evidence_sha256 is not None:
+            _require_digest(
+                self.shared_venue_prior_evidence_sha256,
+                subject="shared venue evidence",
             )
-        if self.kind is TrainingChoiceKind.VENUE and any(
+        if self.kind is TrainingChoiceKind.TRAINEE:
+            if any(value is not None for value in self.venue_prior_evidence_sha256):
+                raise PartyDevelopmentCatalogError(
+                    "trainee candidates cannot bind candidate-specific venue evidence"
+                )
+            if self.shared_venue_prior_evidence_sha256 is None:
+                raise PartyDevelopmentCatalogError(
+                    "trainee candidates need prospective shared-venue evidence"
+                )
+        elif self.shared_venue_prior_evidence_sha256 is not None:
+            raise PartyDevelopmentCatalogError(
+                "venue candidates cannot also bind shared-venue evidence"
+            )
+        elif any(
             available and evidence is None
             for available, evidence in zip(
                 self.candidate_available,
@@ -152,8 +168,11 @@ class PartyDevelopmentProspectiveBinding:
         partition: ScenarioPartition,
         source_commit: str,
         source_bundle_sha256: str,
+        semantic_snapshot_sha256: str,
         candidate_set: PartyDevelopmentCandidateSet,
         venue_priors: tuple[VenueOperationalPrior, ...],
+        venue_prior_registry_sha256: str,
+        shared_venue_prior: VenueOperationalPrior | None = None,
         candidate_available: tuple[bool, ...] | None = None,
     ) -> PartyDevelopmentProspectiveBinding:
         if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
@@ -177,10 +196,33 @@ class PartyDevelopmentProspectiveBinding:
             or any(not isinstance(value, bool) for value in available)
             or sum(available) < 2
         ):
-            raise PartyDevelopmentCatalogError(
-                "prospective candidate availability is invalid"
-            )
+            raise PartyDevelopmentCatalogError("prospective candidate availability is invalid")
         _require_priors_match_features(candidate_set, venue_priors)
+        if shared_venue_prior is not None and not isinstance(
+            shared_venue_prior, VenueOperationalPrior
+        ):
+            raise PartyDevelopmentCatalogError(
+                "shared venue prior must be typed prospective evidence"
+            )
+        if candidate_set.kind is TrainingChoiceKind.TRAINEE:
+            if shared_venue_prior is None or not shared_venue_prior.available:
+                raise PartyDevelopmentCatalogError(
+                    "trainee candidates need a frozen available shared venue prior"
+                )
+            if any(prior != shared_venue_prior for prior in venue_priors):
+                raise PartyDevelopmentCatalogError(
+                    "trainee candidate features must repeat the shared venue prior"
+                )
+        elif shared_venue_prior is not None:
+            raise PartyDevelopmentCatalogError("venue candidates cannot carry a shared venue prior")
+        _require_digest(
+            venue_prior_registry_sha256,
+            subject="venue-prior registry",
+        )
+        _require_digest(
+            semantic_snapshot_sha256,
+            subject="semantic snapshot",
+        )
         feature_digests = tuple(
             _candidate_feature_sha256(
                 index=item.candidate_index,
@@ -189,14 +231,20 @@ class PartyDevelopmentProspectiveBinding:
             )
             for item in candidate_set.candidates
         )
-        evidence = tuple(
-            item.evidence_sha256 if item.available else None for item in venue_priors
+        evidence = (
+            tuple(None for _ in venue_priors)
+            if candidate_set.kind is TrainingChoiceKind.TRAINEE
+            else tuple(item.evidence_sha256 if item.available else None for item in venue_priors)
+        )
+        shared_evidence = (
+            shared_venue_prior.evidence_sha256 if shared_venue_prior is not None else None
         )
         menu_document = _menu_document(
             kind=candidate_set.kind,
             goal=candidate_set.goal,
             candidate_feature_sha256=feature_digests,
             venue_prior_evidence_sha256=evidence,
+            shared_venue_prior_evidence_sha256=shared_evidence,
         )
         menu_sha256 = canonical_sha256(menu_document)
         binding_document = _binding_document(
@@ -206,6 +254,8 @@ class PartyDevelopmentProspectiveBinding:
             partition=partition,
             source_commit=source_commit,
             source_bundle_sha256=source_bundle_sha256,
+            semantic_snapshot_sha256=semantic_snapshot_sha256,
+            venue_prior_registry_sha256=venue_prior_registry_sha256,
             candidate_menu_sha256=menu_sha256,
         )
         return cls(
@@ -215,11 +265,14 @@ class PartyDevelopmentProspectiveBinding:
             partition=partition,
             source_commit=source_commit,
             source_bundle_sha256=source_bundle_sha256,
+            semantic_snapshot_sha256=semantic_snapshot_sha256,
+            venue_prior_registry_sha256=venue_prior_registry_sha256,
             kind=candidate_set.kind,
             goal=candidate_set.goal,
             candidate_feature_sha256=feature_digests,
             candidate_available=available,
             venue_prior_evidence_sha256=evidence,
+            shared_venue_prior_evidence_sha256=shared_evidence,
             candidate_menu_sha256=menu_sha256,
             binding_sha256=canonical_sha256(binding_document),
         )
@@ -264,6 +317,7 @@ class PartyDevelopmentProspectiveBinding:
             goal=self.goal,
             candidate_feature_sha256=self.candidate_feature_sha256,
             venue_prior_evidence_sha256=self.venue_prior_evidence_sha256,
+            shared_venue_prior_evidence_sha256=(self.shared_venue_prior_evidence_sha256),
         )
 
     def _binding_document(self) -> dict[str, object]:
@@ -274,6 +328,8 @@ class PartyDevelopmentProspectiveBinding:
             partition=self.partition,
             source_commit=self.source_commit,
             source_bundle_sha256=self.source_bundle_sha256,
+            semantic_snapshot_sha256=self.semantic_snapshot_sha256,
+            venue_prior_registry_sha256=self.venue_prior_registry_sha256,
             candidate_menu_sha256=self.candidate_menu_sha256,
         )
 
@@ -287,9 +343,8 @@ class PartyDevelopmentProspectiveBinding:
             "candidate_count": len(self.candidate_feature_sha256),
             "available_candidate_count": sum(self.candidate_available),
             "candidate_feature_sha256": list(self.candidate_feature_sha256),
-            "venue_prior_evidence_sha256": list(
-                self.venue_prior_evidence_sha256
-            ),
+            "venue_prior_evidence_sha256": list(self.venue_prior_evidence_sha256),
+            "shared_venue_prior_evidence_sha256": (self.shared_venue_prior_evidence_sha256),
             "private_path_fields": 0,
         }
 
@@ -306,8 +361,7 @@ class PartyDevelopmentProspectiveCatalog:
             not isinstance(self.bindings, tuple)
             or not self.bindings
             or any(
-                not isinstance(item, PartyDevelopmentProspectiveBinding)
-                for item in self.bindings
+                not isinstance(item, PartyDevelopmentProspectiveBinding) for item in self.bindings
             )
         ):
             raise PartyDevelopmentCatalogError(
@@ -323,6 +377,7 @@ class PartyDevelopmentProspectiveCatalog:
             ("scenario_id", "scenario"),
             ("root_lineage_id", "root lineage"),
             ("initial_state_sha256", "initial state"),
+            ("semantic_snapshot_sha256", "semantic snapshot"),
         ):
             values = tuple(getattr(item, attribute) for item in self.bindings)
             if len(values) != len(set(values)):
@@ -335,6 +390,11 @@ class PartyDevelopmentProspectiveCatalog:
         if len(source_identities) != 1:
             raise PartyDevelopmentCatalogError(
                 "party-development prospective catalog crosses source identities"
+            )
+        registry_identities = {item.venue_prior_registry_sha256 for item in self.bindings}
+        if len(registry_identities) != 1:
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective catalog crosses venue-prior registries"
             )
         _require_digest(self.catalog_sha256, subject="prospective catalog")
         if self.catalog_sha256 != canonical_sha256(self._catalog_document()):
@@ -353,9 +413,7 @@ class PartyDevelopmentProspectiveCatalog:
         }
         return cls(bindings=ordered, catalog_sha256=canonical_sha256(document))
 
-    def require_exact_examples(
-        self, examples: tuple[ScenarioOutcomeExample, ...]
-    ) -> None:
+    def require_exact_examples(self, examples: tuple[ScenarioOutcomeExample, ...]) -> None:
         if not isinstance(examples, tuple):
             raise TypeError("examples must be an immutable tuple")
         by_scenario = {item.scenario_id: item for item in examples}
@@ -379,20 +437,20 @@ class PartyDevelopmentProspectiveCatalog:
     def public_dict(self) -> dict[str, object]:
         partitions: dict[str, int] = {}
         for item in self.bindings:
-            partitions[item.partition.value] = (
-                partitions.get(item.partition.value, 0) + 1
-            )
+            partitions[item.partition.value] = partitions.get(item.partition.value, 0) + 1
         return {
             "schema": PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA,
             "catalog_sha256": self.catalog_sha256,
             "binding_count": len(self.bindings),
             "partition_counts": dict(sorted(partitions.items())),
             "binding_sha256": [item.binding_sha256 for item in self.bindings],
+            "venue_prior_registry_sha256": self.bindings[0].venue_prior_registry_sha256,
             "venue_prior_evidence_count": sum(
                 value is not None
                 for item in self.bindings
                 for value in item.venue_prior_evidence_sha256
-            ),
+            )
+            + sum(item.shared_venue_prior_evidence_sha256 is not None for item in self.bindings),
             "candidate_feature_values_public": False,
             "private_path_fields": 0,
             "outcomes_opened": 0,
@@ -401,9 +459,7 @@ class PartyDevelopmentProspectiveCatalog:
         }
 
 
-def _candidate_feature_sha256(
-    *, index: int, features: tuple[float, ...], available: bool
-) -> str:
+def _candidate_feature_sha256(*, index: int, features: tuple[float, ...], available: bool) -> str:
     return canonical_sha256(
         {
             "candidate_index": index,
@@ -465,14 +521,16 @@ def _menu_document(
     goal: PartyDevelopmentGoal,
     candidate_feature_sha256: tuple[str, ...],
     venue_prior_evidence_sha256: tuple[str | None, ...],
+    shared_venue_prior_evidence_sha256: str | None,
 ) -> dict[str, object]:
     return {
-        "schema": "pokemon.core.party-development-prospective-menu.v1",
+        "schema": "pokemon.core.party-development-prospective-menu.v2",
         "kind": kind.value,
         "goal": goal.value,
         "feature_schema_id": PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
         "candidate_feature_sha256": list(candidate_feature_sha256),
         "venue_prior_evidence_sha256": list(venue_prior_evidence_sha256),
+        "shared_venue_prior_evidence_sha256": (shared_venue_prior_evidence_sha256),
     }
 
 
@@ -484,6 +542,8 @@ def _binding_document(
     partition: ScenarioPartition,
     source_commit: str,
     source_bundle_sha256: str,
+    semantic_snapshot_sha256: str,
+    venue_prior_registry_sha256: str,
     candidate_menu_sha256: str,
 ) -> dict[str, object]:
     return {
@@ -494,6 +554,8 @@ def _binding_document(
         "partition": partition.value,
         "source_commit": source_commit,
         "source_bundle_sha256": source_bundle_sha256,
+        "semantic_snapshot_sha256": semantic_snapshot_sha256,
+        "venue_prior_registry_sha256": venue_prior_registry_sha256,
         "candidate_menu_sha256": candidate_menu_sha256,
     }
 

@@ -219,11 +219,15 @@ def party_development_readiness_dashboard_snapshot(
                 f"First descriptive fit requires {required_train} train + "
                 f"{required_development} untouched development outcomes"
             ),
-            "Prospective candidate menus 0 · venue-prior registry 0 · model updates 0",
+            (
+                "Title-neutral menu/venue-evidence contracts implemented · concrete Red menus 0 "
+                "· frozen venue-prior entries 0"
+            ),
+            "Prospective outcomes 0 · completion-aware model updates 0",
             "Teacher 0 · sealed Red 0 · Crystal 0 · full-game replays 0 · authority zero",
             (
-                "Next: build the title-neutral adapter and venue priors, freeze all menus, "
-                "review, then collect each outcome once"
+                "Next: bind authenticated Red snapshots, freeze compatible prior evidence, "
+                "find depleted-PP contexts, then review the exact 8+6 catalog"
             ),
         ),
     )
