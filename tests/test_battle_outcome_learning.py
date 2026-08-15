@@ -186,16 +186,24 @@ def test_evaluation_rejects_train_examples_and_does_not_change_model() -> None:
     assert model.to_json() == original
 
 
-def test_suppressed_move_cannot_become_a_target() -> None:
-    suppressed = replace(_outcome(0.2), move_executed=False)
-    with pytest.raises(BattleOutcomeLearningError, match="did not execute"):
-        BattleOutcomeExample(
-            root_lineage_id="train-root",
-            initial_state_sha256=_digest("d"),
-            partition=ScenarioPartition.TRAIN,
-            features=_features(),
-            outcomes=(suppressed, _outcome(0.8), None),
-        )
+def test_mechanically_suppressed_choice_retains_its_observed_action_value() -> None:
+    suppressed = replace(
+        _outcome(0.0),
+        move_executed=False,
+        player_damage_fraction=0.25,
+    )
+    example = BattleOutcomeExample(
+        root_lineage_id="train-root",
+        initial_state_sha256=_digest("d"),
+        partition=ScenarioPartition.TRAIN,
+        features=_features(),
+        outcomes=(suppressed, _outcome(0.8), None),
+    )
+
+    assert suppressed.learner_update_eligible
+    assert suppressed.utility == -0.25
+    assert example.best_candidate_indices == (1,)
+    assert example.target_distribution.tolist() == [0.0, 1.0, 0.0]
 
 
 

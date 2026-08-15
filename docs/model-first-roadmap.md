@@ -12,22 +12,23 @@ development result. The update regressed development from 1/1 to 0/1 and remains
 shadow-only evidence. This proves plumbing, not competence. See
 [the exact result](evidence/red-battle-outcome-learning-cycle-2026-08-14.json).
 
-The shared outcome boundary and the smallest initial battle-curve design are now implemented but
-not yet executed. Battle keeps its move features and health/terminal utility; navigation keeps its
-destination features and arrival/efficiency verifier; party development keeps its trainee/venue
-features and experience/heal/safety verifier. The learner-facing envelope sees only candidate
-vectors plus an outcome-derived preference, preserves censored cases, and rejects a result bound to
-the wrong decision or candidate. This passed ROM-free conformance across all three real domain
-types; it is interface evidence, not a real navigation or party outcome.
+The shared outcome boundary is implemented across battle, navigation and party development. The
+first 4-train/4-development curve attempt reached real Red and stopped before fitting: a selected
+development turn was mechanically suppressed, and the v1 objective incorrectly treated that as
+missing evidence. The runner also opened its artifact too late to retain the failed candidate. The
+path-free [v1 attempt receipt](evidence/red-battle-learning-curve-v1-attempt-2026-08-14.json)
+records zero fit, zero model and zero authority.
 
-The frozen next experiment uses four prospectively ordered train roots, four untouched development
-roots and from-prior prefixes of 1, 2 and 4. It is descriptive, retains flat prefixes as typed
-no-update points, forbids replacement after an encounter or outcome is seen, and grants no
-authority. See the [prospective plan](evidence/red-battle-learning-curve-plan-2026-08-14.json).
-Publish the runner, materialize exactly those eight non-sealed contexts, and execute it once. Then
-produce one thin real navigation outcome and one thin real party-development outcome before the
-battle catalog widens or stratifies. Do not promote the one-state candidate, open the 200-battle
-unseen gate early, expand into a full Red replay, or use Crystal as additional training data.
+The prospective [v2 plan](evidence/red-battle-learning-curve-plan-v2-2026-08-14.json) keeps the same
+small 1/2/4 curve but learns the action value of a **selected turn**. Cartridge suppression remains
+a diagnostic flag; its observed health and terminal result is still a consequence of the choice.
+Only failure to prove the selected-turn controller boundary is censored and fatal. Every candidate
+record is now persisted before the next trial. The four train roots may be reused, but all exposed
+v1 development roots are retired; four fresh development roots were frozen privately before any
+encounter or outcome. Publish v2, pass exact-commit CI, materialize against that commit, and execute
+once. Then produce one real navigation and one real party-development outcome before the battle
+catalog widens. Do not promote either earlier candidate, open the 200-battle unseen gate early,
+expand into a full Red replay, or use Crystal as additional training data.
 
 Living-Pokédex rollout work is deliberately deferred, not forgotten. Acquisition requirements stay
 in the representation and adapter design now; executable collection expansion resumes after the
@@ -79,13 +80,13 @@ minimum independent battle contexts needed for one learning curve, then build on
 navigation and party-development outcome adapter before stratifying or scaling the battle data.
 Lower fit loss alone is no longer an acceptable progress measure.
 
-The next interface checkpoint is also complete in source: `scenario_outcomes.py` defines the
+The shared interface checkpoint is complete in source: `scenario_outcomes.py` defines the
 title-neutral, censor-safe preference envelope, and `scenario_outcome_adapters.py` binds the
 existing battle, strategic-navigation and party-development types without flattening them into a
 fake universal record. The battle curve runner enforces exactly 4 train + 4 development captures,
 unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
-outcomes. It has not yet opened a cartridge. The milestone still lacks the curve result and real
-snapshot-backed navigation and party-development outcomes.
+outcomes. V1 stopped honestly before fit; v2 is the first eligible curve attempt. The milestone
+still lacks a curve result and real snapshot-backed navigation and party-development outcomes.
 
 ## Learning approach
 

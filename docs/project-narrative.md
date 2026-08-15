@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the first curve stopped on a real game mechanic
+
+Commit `124867b` passed 3,307 local tests and exact GitHub CI before eight preassigned non-sealed
+roots were touched. Every root materialized its first qualified Mansion encounter, all eight source
+states/captures/observations were unique, and every context exposed four supported moves. Capture
+made no move choice and queried no teacher.
+
+The curve still stopped before fitting. A selected development turn was mechanically suppressed by
+the cartridge, and v1 equated “PP did not decrement” with “no learner outcome exists.” That is too
+narrow for action-value learning. A policy chooses under uncertainty; sleep, paralysis, Disable,
+trapping and a faster opponent's terminal move are consequences of that choice even when the move
+never executes. V2 keeps `move_executed` visible but orders candidates by the observed selected-turn
+health and terminal result. Failure to prove the controller boundary remains fatal.
+
+The stop also falsified the persistence design. The writer started after all eight collections, so
+the failed candidate was not durable. V2 opens the private artifact first and appends each candidate
+before continuing; any later exception leaves a typed failed partial. No v1 model, evaluation or
+authority exists. Its exposed development roots are retired, four fresh validation roots were
+privately frozen before any encounter, and the v2 plan remains a descriptive 1/2/4 curve rather
+than a promotion gate.
+
 ## August 14: the shared abstraction got smaller, not larger
 
 The post-result audit asked a useful falsifier: could a navigation outcome and a party-development

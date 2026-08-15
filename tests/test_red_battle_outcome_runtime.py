@@ -91,6 +91,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     capture = open_battle_scenario_capture(state_path, manifest_path)
     loaded: list[bytes] = []
     selected_slots: list[int] = []
+    retained: list[tuple[int, BattleTurnOutcome]] = []
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_battle_outcome_runtime._prepare_loaded_boundary",
@@ -138,10 +139,18 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     collection = collect_red_battle_outcome_example(
         capture,
         session_factory=lambda: Session(loaded),
+        outcome_sink=lambda candidate_index, result: retained.append(
+            (candidate_index, result)
+        ),
     )
 
     assert loaded == [state, state, state]
     assert selected_slots == [1, 3]
+    assert [candidate_index for candidate_index, _ in retained] == [0, 2]
+    assert tuple(result for _, result in retained) == (
+        collection.outcomes[0],
+        collection.outcomes[2],
+    )
     assert collection.outcomes[1] is None
     assert collection.example.best_candidate_indices == (2,)
     assert collection.public_dict()["teacher_queries"] == 0

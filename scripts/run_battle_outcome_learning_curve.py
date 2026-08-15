@@ -14,6 +14,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker  # noqa: E402
 from pokemon_red_completion.battle_outcome_learning import (  # noqa: E402
+    BattleTurnOutcome,
     run_battle_outcome_learning_curve,
 )
 from pokemon_red_completion.battle_scenario_capture import (  # noqa: E402
@@ -100,80 +101,121 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     def session_factory():  # type: ignore[no-untyped-def]
         return PyBoyAdapter(rom_path)
 
-    train_collections = tuple(
-        collect_red_battle_outcome_example(
-            capture,
-            session_factory=session_factory,
-        )
-        for capture in train_captures
-    )
-    development_collections = tuple(
-        collect_red_battle_outcome_example(
-            capture,
-            session_factory=session_factory,
-        )
-        for capture in development_captures
-    )
-    _require_complete_collections((*train_collections, *development_collections))
-    curve = run_battle_outcome_learning_curve(
-        base_model,
-        training_examples=tuple(item.example for item in train_collections),
-        development_examples=tuple(item.example for item in development_collections),
-        training_sizes=TRAINING_SIZES,
-        epochs=100,
-        learning_rate=0.01,
-        prior_l2=0.1,
-    )
-
     private_root = open_private_root(
         args.private_root,
         repository_root=PROJECT_ROOT,
     )
+    artifact_id = f"red-battle-learning-curve-{uuid.uuid4().hex}"
     writer = private_root.begin_artifact(
-        f"red-battle-learning-curve-{uuid.uuid4().hex}",
+        artifact_id,
         kind="battle_outcome_learning_curve",
     )
-    with writer:
-        for split, collections in (
-            (ScenarioPartition.TRAIN, train_collections),
-            (ScenarioPartition.DEVELOPMENT, development_collections),
-        ):
-            for catalog_index, collection in enumerate(collections):
+    train_collections: list[RedBattleOutcomeCollection] = []
+    development_collections: list[RedBattleOutcomeCollection] = []
+
+    def collect_partition(
+        partition_captures: tuple[BattleScenarioCapture, ...],
+        *,
+        split: ScenarioPartition,
+        destination: list[RedBattleOutcomeCollection],
+    ) -> None:
+        for catalog_index, capture in enumerate(partition_captures):
+
+            def retain_candidate(
+                candidate_index: int,
+                outcome: BattleTurnOutcome,
+                *,
+                retained_catalog_index: int = catalog_index,
+                retained_capture_id: str = capture.manifest.capture_id,
+            ) -> None:
                 writer.append(
-                    "outcomes",
+                    "candidate_outcomes",
                     {
-                        "record_type": "battle_outcome_collection",
+                        "record_type": "battle_candidate_outcome",
                         "split": split.value,
-                        "catalog_index": catalog_index,
-                        "collection": collection.public_dict(),
+                        "catalog_index": retained_catalog_index,
+                        "capture_id": retained_capture_id,
+                        "candidate_index": candidate_index,
+                        "outcome": outcome.public_dict(),
+                        "teacher_queries": 0,
+                        "teacher_choice_targets": 0,
                     },
                 )
-        for point in curve.points:
-            if point.update is None:
-                continue
+
+            collection = collect_red_battle_outcome_example(
+                capture,
+                session_factory=session_factory,
+                outcome_sink=retain_candidate,
+            )
             writer.append(
-                "models",
+                "outcomes",
                 {
-                    "record_type": "battle_learning_curve_model",
-                    "training_size": point.training_size,
-                    "model": point.update.model.to_dict(),
-                    "model_sha256": point.update.report.updated_model_sha256,
-                    "source": source.public_dict(),
-                    "authority": "shadow_only",
+                    "record_type": "battle_outcome_collection",
+                    "split": split.value,
+                    "catalog_index": catalog_index,
+                    "collection": collection.public_dict(),
                 },
             )
-        writer.append(
-            "evaluation",
-            {
-                "record_type": "battle_outcome_learning_curve",
-                "curve": curve.public_dict(),
-                "claim": "descriptive_initial_curve_only",
-                "promotion_gate_passed": False,
-                "reason_promotion_false": "independent_unseen_gate_not_run",
-            },
-        )
+            destination.append(collection)
+
+    try:
+        with writer:
+            collect_partition(
+                train_captures,
+                split=ScenarioPartition.TRAIN,
+                destination=train_collections,
+            )
+            collect_partition(
+                development_captures,
+                split=ScenarioPartition.DEVELOPMENT,
+                destination=development_collections,
+            )
+            _require_complete_collections(
+                (*train_collections, *development_collections)
+            )
+            curve = run_battle_outcome_learning_curve(
+                base_model,
+                training_examples=tuple(item.example for item in train_collections),
+                development_examples=tuple(
+                    item.example for item in development_collections
+                ),
+                training_sizes=TRAINING_SIZES,
+                epochs=100,
+                learning_rate=0.01,
+                prior_l2=0.1,
+            )
+            for point in curve.points:
+                if point.update is None:
+                    continue
+                writer.append(
+                    "models",
+                    {
+                        "record_type": "battle_learning_curve_model",
+                        "training_size": point.training_size,
+                        "model": point.update.model.to_dict(),
+                        "model_sha256": point.update.report.updated_model_sha256,
+                        "source": source.public_dict(),
+                        "authority": "shadow_only",
+                    },
+                )
+            writer.append(
+                "evaluation",
+                {
+                    "record_type": "battle_outcome_learning_curve",
+                    "curve": curve.public_dict(),
+                    "claim": "descriptive_initial_curve_only",
+                    "promotion_gate_passed": False,
+                    "reason_promotion_false": "independent_unseen_gate_not_run",
+                },
+            )
+    except Exception as error:
+        raise BattleOutcomeCurveError(
+            "battle outcome curve stopped before fit or publication; "
+            f"retained private artifact {artifact_id}; "
+            f"failure type {type(error).__name__}"
+        ) from error
     return {
-        "schema": "pokemon-red-battle-outcome-learning-curve-receipt-v1",
+        "schema": "pokemon-red-battle-outcome-learning-curve-receipt-v2",
         "status": "ok",
         "artifact": writer.summary.public_dict(),
         "objective_id": BATTLE_TURN_OBJECTIVE.objective_id,

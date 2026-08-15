@@ -34,7 +34,14 @@ class BattleOutcomeLearningError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class BattleTurnOutcome:
-    """Title-neutral health and terminal effects of one verified move turn."""
+    """Title-neutral health and terminal effects of one selected move turn.
+
+    ``move_executed`` remains diagnostic.  A policy choice can be mechanically
+    suppressed by the cartridge after the controller has proved the selected
+    turn boundary (sleep, paralysis, Disable, trapping, or an opponent's
+    terminal move).  That is still an observed consequence of choosing the
+    candidate, not a teacher label or a controller failure.
+    """
 
     move_executed: bool
     opponent_damage_fraction: float
@@ -73,16 +80,14 @@ class BattleTurnOutcome:
 
     @property
     def learner_update_eligible(self) -> bool:
-        """Only a cursor- and PP-proven move can become an outcome target."""
+        """A returned turn is selection-proven even when the move is suppressed."""
 
-        return self.move_executed
+        return True
 
     @property
     def utility(self) -> float:
         """Fixed health/terminal utility; controller timing is diagnostic only."""
 
-        if not self.learner_update_eligible:
-            raise BattleOutcomeLearningError("a suppressed move has no learner utility")
         return (
             2.0 * float(self.opponent_fainted)
             - 2.0 * float(self.player_fainted)
@@ -92,7 +97,7 @@ class BattleTurnOutcome:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.core.battle.turn-outcome.v1",
+            "schema": "pokemon.core.battle.selected-turn-outcome.v2",
             "move_executed": self.move_executed,
             "opponent_damage_fraction": self.opponent_damage_fraction,
             "player_damage_fraction": self.player_damage_fraction,
@@ -102,7 +107,7 @@ class BattleTurnOutcome:
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
             "pre_attack_frames": self.pre_attack_frames,
-            "utility": self.utility if self.learner_update_eligible else None,
+            "utility": self.utility,
         }
 
 
@@ -146,10 +151,7 @@ class BattleOutcomeExample:
                 raise BattleOutcomeLearningError(
                     f"unusable candidate {index} cannot carry an outcome"
                 )
-            if outcome is not None and not outcome.learner_update_eligible:
-                raise BattleOutcomeLearningError(
-                    f"candidate {index} did not execute and cannot train the learner"
-                )
+
     @property
     def best_candidate_indices(self) -> tuple[int, ...]:
         utilities = tuple(

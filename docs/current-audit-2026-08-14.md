@@ -1,5 +1,27 @@
 # Current audit — 2026-08-14
 
+## First 4+4 curve attempt: useful stop, no training claim
+
+Commit `124867b` passed 3,307 local tests and exact GitHub CI. Eight preassigned non-sealed roots
+materialized successfully with distinct source states, capture states and semantic observations;
+each exposed four supported moves, with zero teacher queries or move choices during capture.
+
+The curve stopped before fitting when a development turn was mechanically suppressed after the
+policy selected a candidate. This was not a controller ambiguity: the runtime had semantic evidence
+that the selected move did not spend PP because of cartridge mechanics. V1 nevertheless rejected
+the outcome. No development score, candidate model or authority resulted. The runner also failed
+its retention promise because it created the private artifact only after every collection; the
+failed result survived only as a sanitized failure receipt.
+
+V2 makes the smallest general correction. It learns selected-turn action value, so a suppressed
+move retains the observed health and terminal consequence while `move_executed` remains diagnostic.
+An unproven controller boundary still stops. The writer now opens before the first candidate and
+persists each result immediately, so a later exception leaves a durable failed partial. Four v1
+train roots remain eligible training data; every exposed v1 development root is retired, and four
+fresh development roots were frozen and hashed before any encounter or outcome. The exact public
+records are [the v1 stop](evidence/red-battle-learning-curve-v1-attempt-2026-08-14.json) and
+[the prospective v2 plan](evidence/red-battle-learning-curve-plan-v2-2026-08-14.json).
+
 ## Shared outcome contract and first learning-curve design
 
 The battle-only record failed the cheapest three-family falsifier: it required PP, move damage and
@@ -17,13 +39,15 @@ overlevelled escort cannot make a bad trainee choice look productive by taking t
 itself. Battle maps to exactly the same winners as the existing utility. No teacher label enters
 any target.
 
-The first executable learning curve is frozen prospectively at 4 train + 4 development roots and
+The original executable learning curve was frozen prospectively at 4 train + 4 development roots and
 1/2/4 from-prior fits. All eight roots, capture states and semantic observations must be unique;
 new capture-manifest v2 binds each source-state digest rather than trusting a lineage name alone.
 Flat outcomes stay in place; failed or interrupted collection stops before fitting; the same four
 development roots score every point. It is descriptive and cannot promote authority. The runner
-has not yet opened Red. Next is publication/CI, one execution of that exact catalog, then one real
-navigation and one real party-development outcome before battle scaling.
+opened Red only after publication and CI. It stopped before fit as described above. V2 retains the
+same sample size with a corrected selected-turn objective, fresh development roots and durable
+per-candidate evidence. Next is publication/CI, one v2 execution, then one real navigation and one
+real party-development outcome before battle scaling.
 
 ## First real outcome-learning result
 

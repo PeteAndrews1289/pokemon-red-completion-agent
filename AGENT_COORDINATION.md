@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-14 v1 curve stop / v2 selected-turn checkpoint — highest active checkpoint:** Exact
+> commit `124867b` passed 3,307 local tests and CI run `31851435427`. Eight preassigned non-sealed
+> captures materialized with unique roots/states/observations and four supported moves each. The
+> first curve stopped before fit when one development choice was cartridge-suppressed. No model,
+> score or authority resulted. The stop also proved the writer opened too late to retain the failed
+> candidate.
+>
+> V2 treats suppression after a policy choice as an observed selected-turn action value, not as a
+> teacher label; an unproven controller boundary still stops. The private writer now starts before
+> execution and appends every candidate immediately. Reuse only the four training roots. Retire all
+> four exposed v1 development roots; a fresh four-root development assignment is already privately
+> hashed before any encounter or outcome. Next publish, pass CI, materialize against that exact
+> commit and run v2 once. Teacher, sealed Red, Crystal and full replay remain zero. Then build real
+> navigation and party outcome snapshots before scaling battle data.
+
 > **2026-08-14 shared-outcome/curve checkpoint — pending publication:** A title-neutral,
 > censor-safe preference envelope now accepts the existing battle, strategic-navigation and
 > party-development domain types without sharing their raw schemas. Navigation trials carry the

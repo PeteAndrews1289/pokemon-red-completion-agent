@@ -14,8 +14,11 @@
 The dashboard is the human view of a run. It combines the live emulator screen with the evidence
 needed to understand what the agent is doing and how far the experiment has progressed.
 
-The next bounded result is not live yet. Its prospective contract is four Red train captures, four
-untouched development captures and 1/2/4 updates from the same prior. When executed, the dashboard
+The v1 bounded curve stopped before fitting when one selected development turn was mechanically
+suppressed; no model or evaluation should appear. Its path-free receipt must be shown as a failed
+harness attempt, including the discovered per-candidate retention gap. The replacement v2 contract
+uses four Red train captures, four fresh untouched development captures and 1/2/4 updates from the
+same prior. When executed, the dashboard
 must show each point's exact correct/total result, selected utility, paired prior wins/update wins/
 ties, flat no-update points, the shared development denominator, and zero authority. It must not
 turn a descriptive eight-context curve into the 200-battle promotion gate.

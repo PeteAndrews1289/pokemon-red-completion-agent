@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
+from pokemon_red_completion.battle_outcome_learning import BattleTurnOutcome
 from pokemon_red_completion.battle_semantics import FEATURE_NAMES, FEATURE_SCHEMA_ID
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
@@ -27,6 +28,20 @@ def _model() -> MaskedMLPMoveRanker:
         output_weights=np.asarray((0.25, -0.5), dtype=np.float64),
         output_bias=0.0,
         training_seed=7,
+    )
+
+
+def _outcome(damage: float = 0.5) -> BattleTurnOutcome:
+    return BattleTurnOutcome(
+        move_executed=True,
+        opponent_damage_fraction=damage,
+        player_damage_fraction=0.0,
+        opponent_fainted=False,
+        player_fainted=False,
+        battle_exited=False,
+        actions_executed=2,
+        frames_executed=2_200,
+        pre_attack_frames=2_048,
     )
 
 
@@ -102,7 +117,7 @@ def test_curve_script_collects_exact_frozen_catalog_and_writes_each_prefix(
                 usable_mask=np.asarray((True, True)),
                 learner_update_eligible=True,
             ),
-            outcomes=(object(), object()),
+            outcomes=(_outcome(0.25), _outcome(0.75)),
             public_dict=lambda capture_id=capture.manifest.capture_id: {
                 "capture_id": capture_id
             },
@@ -137,11 +152,13 @@ def test_curve_script_collects_exact_frozen_catalog_and_writes_each_prefix(
     monkeypatch.setitem(SCRIPT_GLOBALS, "open_battle_scenario_capture", open_capture)
     monkeypatch.setitem(SCRIPT_GLOBALS, "load_battle_model_artifact", lambda path: model)
     monkeypatch.setitem(SCRIPT_GLOBALS, "resolve_rom_path", lambda path: Path("red.gb"))
-    monkeypatch.setitem(
-        SCRIPT_GLOBALS,
-        "collect_red_battle_outcome_example",
-        lambda capture, **kwargs: collections[capture.manifest.capture_id],
-    )
+    def collect(capture, **kwargs):  # type: ignore[no-untyped-def]
+        collection = collections[capture.manifest.capture_id]
+        for candidate_index, outcome in enumerate(collection.outcomes):
+            kwargs["outcome_sink"](candidate_index, outcome)
+        return collection
+
+    monkeypatch.setitem(SCRIPT_GLOBALS, "collect_red_battle_outcome_example", collect)
     monkeypatch.setitem(
         SCRIPT_GLOBALS,
         "run_battle_outcome_learning_curve",
@@ -170,9 +187,83 @@ def test_curve_script_collects_exact_frozen_catalog_and_writes_each_prefix(
         f"capture-{index}" for index in range(4, 8)
     ]
     assert receipt["authority_promoted"] is False
+    assert [stream for stream, _ in store.writer.records].count(
+        "candidate_outcomes"
+    ) == 16
     assert [stream for stream, _ in store.writer.records].count("outcomes") == 8
     assert [stream for stream, _ in store.writer.records].count("models") == 3
     assert [stream for stream, _ in store.writer.records].count("evaluation") == 1
+
+
+def test_curve_script_retains_candidate_evidence_before_a_collection_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    commit = "a" * 40
+    source = SimpleNamespace(
+        git_commit=commit,
+        public_dict=lambda: {"git_commit": commit},
+    )
+    captures = tuple(
+        _capture(
+            index,
+            partition=(
+                ScenarioPartition.TRAIN
+                if index < 4
+                else ScenarioPartition.DEVELOPMENT
+            ),
+            commit=commit,
+        )
+        for index in range(8)
+    )
+    store = Store()
+    fit_called = False
+
+    monkeypatch.setitem(SCRIPT_GLOBALS, "detect_source_identity", lambda *args, **kwargs: source)
+    monkeypatch.setitem(SCRIPT_GLOBALS, "require_clean_source", lambda value: None)
+    monkeypatch.setitem(SCRIPT_GLOBALS, "require_published_source", lambda *args: None)
+    monkeypatch.setitem(
+        SCRIPT_GLOBALS,
+        "open_battle_scenario_capture",
+        lambda state, manifest: captures[int(state.stem.split("-")[-1])],
+    )
+    monkeypatch.setitem(SCRIPT_GLOBALS, "load_battle_model_artifact", lambda path: _model())
+    monkeypatch.setitem(SCRIPT_GLOBALS, "resolve_rom_path", lambda path: Path("red.gb"))
+    monkeypatch.setitem(SCRIPT_GLOBALS, "open_private_root", lambda *args, **kwargs: store)
+
+    def collect(capture, **kwargs):  # type: ignore[no-untyped-def]
+        kwargs["outcome_sink"](0, _outcome())
+        raise RuntimeError(f"stopped-{capture.manifest.capture_id}")
+
+    def fit(*args, **kwargs):  # type: ignore[no-untyped-def]
+        nonlocal fit_called
+        fit_called = True
+
+    monkeypatch.setitem(SCRIPT_GLOBALS, "collect_red_battle_outcome_example", collect)
+    monkeypatch.setitem(SCRIPT_GLOBALS, "run_battle_outcome_learning_curve", fit)
+
+    args = SimpleNamespace(
+        rom=None,
+        private_root=Path("private"),
+        base_model=Path("base-model.jsonl"),
+        train_capture=[
+            [Path(f"capture-{index}.state"), Path(f"capture-{index}.json")]
+            for index in range(4)
+        ],
+        development_capture=[
+            [Path(f"capture-{index}.state"), Path(f"capture-{index}.json")]
+            for index in range(4, 8)
+        ],
+    )
+
+    with pytest.raises(
+        SCRIPT["BattleOutcomeCurveError"],
+        match="retained private artifact red-battle-learning-curve-",
+    ):
+        SCRIPT["_run"](args)
+
+    assert not fit_called
+    assert store.writer.records[0][0] == "candidate_outcomes"
+    assert store.writer.records[0][1]["capture_id"] == "capture-0"
 
 
 def test_curve_catalog_rejects_duplicate_roots_before_any_collection() -> None:

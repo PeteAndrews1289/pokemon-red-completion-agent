@@ -48,7 +48,7 @@ from pokemon_red_completion.training_candidate_rank import (
 )
 
 BATTLE_TURN_OBJECTIVE = OutcomeObjective(
-    objective_id="battle.turn.health-terminal-utility.v1",
+    objective_id="battle.selected-turn.health-terminal-utility.v2",
     family=ScenarioFamily.BATTLE,
     criteria=(
         OutcomeCriterion(

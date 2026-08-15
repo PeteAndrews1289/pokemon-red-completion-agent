@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 curve-stop scene: the choice happened, the move did not
+
+Start with **8 ROOTS / 8 UNIQUE CAPTURES / 4 MOVES EACH / CI GREEN**. Let the first candidate cards
+fan out, then freeze on **DEVELOPMENT CANDIDATE 0 · MOVE EXECUTED: FALSE**. Do not show a model
+graph—stamp **STOPPED BEFORE FIT · MODEL WRITTEN: NO · AUTHORITY: ZERO**.
+
+Put the mistaken equation on screen: **NO PP DECREMENT = NO OUTCOME**. Break it apart with the real
+mechanics: **SLEEP · PARALYSIS · DISABLE · TRAPPING · SELFDESTRUCT**. Replace it with
+**POLICY CHOSE → CARTRIDGE RESPONDED → HEALTH/TERMINAL ACTION VALUE**. Keep `move_executed` as a
+diagnostic light rather than an eligibility gate. The line is: **“A Pokémon policy has to learn what
+happens after its choice, including the turns when the game refuses to carry that choice out.”**
+
+Then show the second failure: eight result cards floating above an unopened journal. Reorder the
+animation to **OPEN ARTIFACT → APPEND CANDIDATE → NEXT TRIAL** and label exceptions
+**FAILED PARTIAL RETAINED**. Retire the four exposed development roots, reveal four fresh locked
+cards, and end on **V2: SAME 1→2→4 CURVE / FRESH DEV / ZERO TEACHER / ZERO SEALED / ZERO CRYSTAL**.
+
 ## August 14 shared-boundary scene: stop calling battle fields universal
 
 Put three cards on screen: **BATTLE: DAMAGE / FAINT / PP**, **NAVIGATION: ARRIVAL / COLLISIONS /

@@ -170,7 +170,7 @@ def test_red_terminal_wild_outcome_distinguishes_opponent_and_player_faint() -> 
     assert tied_faints.opponent_fainted
 
 
-def test_red_suppressed_move_is_observed_but_not_learnable() -> None:
+def test_red_suppressed_move_retains_the_selected_turn_outcome() -> None:
     suppressed = replace(_raw(), enemy_hp=60, active_party_hp=110)
 
     outcome = project_red_battle_turn_outcome(
@@ -178,7 +178,26 @@ def test_red_suppressed_move_is_observed_but_not_learnable() -> None:
     )
 
     assert not outcome.move_executed
-    assert not outcome.learner_update_eligible
+    assert outcome.learner_update_eligible
+    assert outcome.utility == -10 / 150
+
+
+def test_red_suppressed_move_retains_opponent_terminal_value() -> None:
+    self_destructed = replace(
+        _raw(),
+        battle_state=0,
+        enemy_hp=0,
+        active_party_hp=80,
+    )
+
+    outcome = project_red_battle_turn_outcome(
+        _execution(self_destructed, move_executed=False)
+    )
+
+    assert not outcome.move_executed
+    assert outcome.opponent_fainted
+    assert outcome.battle_exited
+    assert outcome.utility > 0
 
 
 def test_red_terminal_exit_with_living_opponent_is_not_scored_as_a_faint() -> None:

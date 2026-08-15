@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-red-battle-learning-curve-attempt-receipt-v1",
+  "experiment_id": "red-battle-learning-curve-v1",
+  "attempt": 1,
+  "status": "stopped_before_fit",
+  "source_commit": "124867b6b0c28ee531dfd284645ad5e2ab33ce2f",
+  "catalog": {
+    "train_contexts": 4,
+    "development_contexts": 4,
+    "unique_root_lineages": 8,
+    "unique_root_state_sha256": 8,
+    "unique_capture_state_sha256": 8,
+    "unique_initial_observation_sha256": 8,
+    "all_captures_materialized": true,
+    "all_captures_exposed_four_supported_candidates": true
+  },
+  "outcome_objective": {
+    "objective_id": "battle.turn.health-terminal-utility.v1",
+    "objective_sha256": "221f1fb63a02a6a015987e643b129fcfc2cb11297fc70b7e070ed7df3a346984",
+    "suppressed_selected_turn_policy": "reject_entire_context"
+  },
+  "stop": {
+    "failure_type": "BattleOutcomeLearningError",
+    "failure_code": "development_candidate_selection_proven_but_move_suppressed",
+    "fit_started": false,
+    "development_evaluation_started": false,
+    "model_written": false,
+    "authority_promoted": false,
+    "catalog_repartitioned": false,
+    "catalog_context_replaced": false
+  },
+  "audit_finding": {
+    "candidate_outcomes_durably_retained_before_failure": false,
+    "reason": "The artifact writer opened only after every collection had been constructed.",
+    "required_change": "Open the private artifact before execution and append each candidate result immediately.",
+    "development_catalog_reusable_for_future_evaluation": false
+  },
+  "claim": "failed_harness_attempt_only",
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

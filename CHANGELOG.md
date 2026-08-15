@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Ran the first prospective 4-train/4-development Red curve attempt only after commit `124867b`
+  passed exact CI. All captures qualified, but a cartridge-suppressed development turn stopped the
+  experiment before fitting; no model, evaluation or authority was produced.
+- Reframed battle reward as selected-turn action value: sleep, paralysis, Disable, trapping or an
+  opponent terminal move can suppress PP expenditure without erasing the consequence of choosing
+  that candidate. Controller ambiguity still fails closed and teacher choices remain absent.
+- Moved private artifact creation ahead of collection and persist every candidate outcome before
+  the next trial, so a later failure retains evidence. Froze a v2 1/2/4 plan that reuses only train
+  roots and evaluates on four fresh, preassigned development roots.
 - Added a title-neutral, censor-safe scenario-outcome contract plus thin adapters for the existing
   battle, strategic-navigation and party-development domain types. Each family keeps its own
   feature schema and verifier measurements; wrong candidate bindings, incomplete evidence and

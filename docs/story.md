@@ -26,6 +26,29 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: choosing a move still matters when the move never happens
+
+The first eight-battle curve reached the cartridge only after its exact source passed GitHub. All
+eight assigned roots produced distinct battle captures, and all four moves were available in every
+one. Then the run stopped before training.
+
+One development choice had been real, but the move was suppressed by Pokémon's own mechanics
+before it spent PP. The old target code threw the entire result away. That revealed a subtle but
+important mistake: the model's job is to choose an action, not to guarantee that the game lets the
+action execute. Sleep, paralysis, Disable, trapping, recoil and Selfdestruct are part of the world.
+The damage and terminal state after choosing a move are still its observed action value. They are
+not a teacher label, and they should not disappear because `move_executed` is false.
+
+The failed attempt trained nothing and promoted nothing. It also caught an evidence bug: the runner
+did not open its private journal until after every battle had been measured, so the candidate that
+stopped the run was not durably recorded. The next version writes each branch before trying the
+next. The four exposed development battles are retired, four fresh ones were frozen before anyone
+looked at an encounter, and the same tiny curve will be tried again before the project scales.
+
+That is the research loop this project needed: the game contradicted the experiment, the result was
+kept as a failure, and the abstraction became more like the thing a Pokémon player actually has to
+learn.
+
 ## Current checkpoint: three different lessons, one honest report card
 
 The first battle lesson exposed the next architectural trap. Its record called itself

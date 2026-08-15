@@ -17,6 +17,38 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First curve attempt stopped; selected-turn v2 frozen — 2026-08-14
+
+Exact source `124867b` passed 3,307 local tests and GitHub CI run `31851435427`. Eight prospectively
+assigned non-sealed roots then materialized on their first qualified Mansion encounter. Root bytes,
+capture bytes and semantic observations were all distinct; all eight contexts exposed four
+supported moves; materialization made zero move choices and asked the teacher nothing.
+
+The v1 curve correctly stopped before fitting when a development candidate's selected turn was
+mechanically suppressed by the cartridge. No model or evaluation was written and no authority
+changed. The stop exposed two different issues. First, the old objective confused “the chosen move
+did not spend PP” with “the policy choice has no outcome.” Sleep, paralysis, Disable, trapping, or a
+faster opponent's terminal move are real consequences after choosing a candidate. V2 therefore
+keeps `move_executed` as diagnostic evidence but scores the selected turn's cartridge-observed
+health and terminal result. A controller that cannot prove the selected-turn boundary still raises
+and stops. This is action-value learning, not a teacher-imitation target.
+
+Second, the v1 runner opened its private artifact only after constructing every collection, so the
+failed candidate evidence was not durable. V2 opens the artifact before the first candidate and
+appends every candidate outcome immediately; an exception retains a typed failed partial and stops
+before fitting. The failed attempt is recorded in
+[`docs/evidence/red-battle-learning-curve-v1-attempt-2026-08-14.json`](docs/evidence/red-battle-learning-curve-v1-attempt-2026-08-14.json),
+and the replacement prospective contract is
+[`docs/evidence/red-battle-learning-curve-plan-v2-2026-08-14.json`](docs/evidence/red-battle-learning-curve-plan-v2-2026-08-14.json).
+
+The four v1 train roots remain training data. All four exposed v1 development roots are retired
+from future evaluation. Four fresh, previously unused validation roots were selected and privately
+hashed before any emulator action, encounter, menu or outcome. Next publish the v2 source, require
+green exact-commit CI, rematerialize the four train and four fresh development captures against
+that commit, and run once. Red sealed test, Crystal, teacher and full-game replay counters remain
+zero. After the curve, build real navigation and party-development outcome snapshots before battle
+data scales.
+
 ## Shared outcome boundary and frozen first curve — 2026-08-14
 
 The next source checkpoint is prospective and cartridge-free. A new title-neutral outcome envelope

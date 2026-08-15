@@ -141,7 +141,11 @@ def project_red_battle_turn_outcome(
     else:
         player_damage = max(0, before_player_hp - after.battler_hp) / before_player_max
 
-    opponent_fainted = bool(move_executed and after.enemy_hp == 0)
+    # This is an action-value outcome rather than causal damage attribution.
+    # If a faster opponent faints from recoil or Selfdestruct before the
+    # selected move spends PP, the terminal cartridge state is still the
+    # consequence observed after choosing that candidate.
+    opponent_fainted = after.enemy_hp == 0
     if opponent_fainted:
         opponent_damage = before_enemy_hp / before_enemy_max
     elif after.enemy_hp is None:

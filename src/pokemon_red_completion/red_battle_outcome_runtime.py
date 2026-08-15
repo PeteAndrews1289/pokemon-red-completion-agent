@@ -43,6 +43,7 @@ class RedBattleScenarioSession(Protocol):
 
 
 SessionFactory = Callable[[], AbstractContextManager[RedBattleScenarioSession]]
+OutcomeSink = Callable[[int, BattleTurnOutcome], None]
 COUNTERFACTUAL_PRE_ATTACK_FRAMES = 2_048
 
 
@@ -90,6 +91,7 @@ def collect_red_battle_outcome_example(
     *,
     session_factory: SessionFactory,
     controller_timing: ControllerTiming | None = None,
+    outcome_sink: OutcomeSink | None = None,
 ) -> RedBattleOutcomeCollection:
     """Replay every supported move from identical authenticated state bytes."""
 
@@ -97,6 +99,8 @@ def collect_red_battle_outcome_example(
         raise TypeError("capture must come from the verified battle opener")
     if not callable(session_factory):
         raise TypeError("session_factory must be callable")
+    if outcome_sink is not None and not callable(outcome_sink):
+        raise TypeError("outcome_sink must be callable or None")
     timing = controller_timing or DEFAULT_NEW_GAME_TIMING.controller_timing()
     prepared = _prepare_exact_boundary(capture, session_factory=session_factory)
     outcomes: list[BattleTurnOutcome | None] = []
@@ -122,7 +126,10 @@ def collect_red_battle_outcome_example(
                 minimum_pre_attack_frames=COUNTERFACTUAL_PRE_ATTACK_FRAMES,
                 label="authenticated Red battle counterfactual",
             )
-            outcomes.append(project_red_battle_turn_outcome(execution))
+            outcome = project_red_battle_turn_outcome(execution)
+            outcomes.append(outcome)
+            if outcome_sink is not None:
+                outcome_sink(candidate_index, outcome)
 
     measured = tuple(outcomes)
     _shared_pre_attack_frames(measured)
