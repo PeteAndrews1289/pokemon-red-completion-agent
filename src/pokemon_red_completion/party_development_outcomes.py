@@ -12,6 +12,7 @@ from dataclasses import dataclass
 
 from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
 from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
 )
 from pokemon_red_completion.party_development_rank import (
@@ -189,6 +190,10 @@ def adapt_party_development_outcomes_v2(
         raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
     if not isinstance(prospective_binding, PartyDevelopmentProspectiveBinding):
         raise TypeError("prospective_binding must be a PartyDevelopmentProspectiveBinding")
+    if len(prospective_binding.candidate_available) != len(candidate_set.candidates):
+        raise PartyDevelopmentCatalogError(
+            "party-development outcome differs from its prospective candidate menu"
+        )
     if not isinstance(trials, tuple) or any(
         not isinstance(item, PartyDevelopmentOutcomeTrialV2) for item in trials
     ):
@@ -207,7 +212,11 @@ def adapt_party_development_outcomes_v2(
     _require_shared_start(candidate_set, trials)
 
     candidates = tuple(
-        OutcomeCandidate(item.candidate_index, item.features, True)
+        OutcomeCandidate(
+            item.candidate_index,
+            item.features,
+            prospective_binding.candidate_available[item.candidate_index],
+        )
         for item in candidate_set.candidates
     )
     outcomes: list[CandidateOutcome | None] = []

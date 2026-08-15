@@ -10,6 +10,7 @@ from pokemon_red_completion.party import (
     PartyObservation,
 )
 from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
 )
 from pokemon_red_completion.party_development_outcomes import (
@@ -65,11 +66,20 @@ def _after_party(gain: int) -> PartyObservation:
     return PartyObservation(members=(replace(first, experience=first.experience + gain), second))
 
 
-def _candidate_set(goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION):
+def _candidate_set(
+    goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION,
+    *,
+    candidate_count: int = 2,
+):
     party = _before_party()
-    areas = (
-        GrindingArea("private-low-band", 12, 18, measured_samples=100),
-        GrindingArea("private-high-band", 18, 24, measured_samples=100),
+    areas = tuple(
+        GrindingArea(
+            f"private-band-{index}",
+            12 + 6 * index,
+            18 + 6 * index,
+            measured_samples=100,
+        )
+        for index in range(candidate_count)
     )
     projected = project_venue_choice_set(
         party,
@@ -105,12 +115,17 @@ def _candidate_set(goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION):
         exhausted_count=0,
         fainted_count=0,
     )
+    projected_count = len(projected[1].candidates)
+    assert projected_count == candidate_count
     return augment_training_candidate_set(
-        projected[1], context, (semantics, semantics), venue_priors=_venue_priors()
+        projected[1],
+        context,
+        tuple(semantics for _ in range(projected_count)),
+        venue_priors=_venue_priors(projected_count),
     )
 
 
-def _venue_priors() -> tuple[VenueOperationalPrior, ...]:
+def _venue_priors(count: int = 2) -> tuple[VenueOperationalPrior, ...]:
     return tuple(
         VenueOperationalPrior(
             available=True,
@@ -123,7 +138,7 @@ def _venue_priors() -> tuple[VenueOperationalPrior, ...]:
             evidence_sha256=str(index + 1) * 64,
             frozen_before_scenario=True,
         )
-        for index in range(2)
+        for index in range(count)
     )
 
 
@@ -133,6 +148,7 @@ def _binding(
     scenario_id: str,
     root_lineage_id: str,
     initial_state_sha256: str,
+    candidate_available: tuple[bool, ...] | None = None,
 ) -> PartyDevelopmentProspectiveBinding:
     return PartyDevelopmentProspectiveBinding.build(
         scenario_id=scenario_id,
@@ -143,9 +159,10 @@ def _binding(
         source_bundle_sha256="2" * 64,
         semantic_snapshot_sha256="3" * 64,
         candidate_set=candidate_set,
-        venue_priors=_venue_priors(),
+        venue_priors=_venue_priors(len(candidate_set.candidates)),
         venue_prior_registry_sha256="4" * 64,
         outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
+        candidate_available=candidate_available,
     )
 
 
@@ -350,3 +367,63 @@ def test_v2_outcome_requires_a_typed_prospective_binding() -> None:
             partition=ScenarioPartition.TRAIN,
             prospective_binding="not-a-binding",  # type: ignore[arg-type]
         )
+
+
+def test_v2_adapter_rejects_a_well_typed_mismatched_binding_immediately() -> None:
+    candidates = _candidate_set()
+    binding = _binding(
+        candidates,
+        scenario_id="frozen-scenario",
+        root_lineage_id="frozen-root",
+        initial_state_sha256="d" * 64,
+    )
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="prospective identity"):
+        adapt_party_development_outcomes_v2(
+            candidates,
+            (),
+            scenario_id="different-scenario",
+            root_lineage_id="frozen-root",
+            initial_state_sha256="d" * 64,
+            partition=ScenarioPartition.TRAIN,
+            prospective_binding=binding,
+        )
+
+
+def test_v2_adapter_preserves_a_prospectively_masked_candidate() -> None:
+    candidates = _candidate_set(candidate_count=3)
+    binding = _binding(
+        candidates,
+        scenario_id="masked-candidate",
+        root_lineage_id="masked-root",
+        initial_state_sha256="e" * 64,
+        candidate_available=(True, True, False),
+    )
+    result = adapt_party_development_outcomes_v2(
+        candidates,
+        (
+            _trial(
+                candidates,
+                0,
+                gain=100,
+                frames=1_000,
+                completion_after=_completion(level_deficit=24),
+            ),
+            _trial(
+                candidates,
+                1,
+                gain=50,
+                frames=1_500,
+                completion_after=_completion(level_deficit=24),
+            ),
+        ),
+        scenario_id="masked-candidate",
+        root_lineage_id="masked-root",
+        initial_state_sha256="e" * 64,
+        partition=ScenarioPartition.TRAIN,
+        prospective_binding=binding,
+    )
+
+    assert result.available_candidate_indices == (0, 1)
+    assert result.outcomes[2] is None
+    assert result.fully_measured

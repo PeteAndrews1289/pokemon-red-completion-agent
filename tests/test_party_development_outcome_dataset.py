@@ -516,3 +516,71 @@ def test_outcome_cannot_join_to_a_different_prospective_context(
         match="re-attest its prospective binding",
     ):
         drifted.require_exact_examples(bound)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ("objective", "feature_names", "candidate_features", "shared_evidence"),
+)
+def test_prospective_digests_commit_every_transitive_menu_dimension(
+    mutation: str,
+) -> None:
+    binding = _prospective_catalog((_ready_catalog()[0],)).bindings[0]
+    if mutation == "objective":
+        changed = {"outcome_objective_sha256": "d" * 64}
+        message = "binding digest differs"
+    elif mutation == "feature_names":
+        changed = {"feature_names_sha256": "e" * 64}
+        message = "binding digest differs"
+    elif mutation == "candidate_features":
+        changed = {
+            "candidate_feature_sha256": (
+                "f" * 64,
+                *binding.candidate_feature_sha256[1:],
+            )
+        }
+        message = "candidate menu digest differs"
+    else:
+        changed = {"shared_venue_prior_evidence_sha256": "1" * 64}
+        message = "candidate menu digest differs"
+
+    with pytest.raises(PartyDevelopmentCatalogError, match=message):
+        replace(binding, **changed)
+
+
+def test_prospective_menu_digest_commits_candidate_availability_directly() -> None:
+    binding = _prospective_catalog((_ready_catalog()[0],)).bindings[0]
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="candidate menu digest differs"):
+        replace(binding, candidate_available=(True, True, False))
+
+
+def test_prospective_menu_digest_commits_candidate_specific_venue_evidence() -> None:
+    binding = _prospective_catalog((_ready_catalog()[1],)).bindings[0]
+    evidence = list(binding.venue_prior_evidence_sha256)
+    evidence[0] = "2" * 64
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="candidate menu digest differs"):
+        replace(binding, venue_prior_evidence_sha256=tuple(evidence))
+
+
+def test_prospective_join_distinguishes_a_masked_candidate() -> None:
+    raw = _ready_catalog()[0]
+    masked_candidate = replace(raw.candidates[2], available=False)
+    masked = replace(
+        raw,
+        candidates=(*raw.candidates[:2], masked_candidate),
+        outcomes=(*raw.outcomes[:2], None),
+    )
+    examples, prospective = _bound_campaign((masked,))
+
+    prospective.require_exact_examples(examples)
+    unmasked = replace(
+        examples[0],
+        candidates=(
+            *examples[0].candidates[:2],
+            replace(examples[0].candidates[2], available=True),
+        ),
+    )
+    with pytest.raises(PartyDevelopmentCatalogError, match="prospective availability"):
+        prospective.require_exact_examples((unmasked,))

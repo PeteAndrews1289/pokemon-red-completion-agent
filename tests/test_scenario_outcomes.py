@@ -65,10 +65,7 @@ def _digest(character: str) -> str:
 
 
 def _battle_example() -> BattleOutcomeExample:
-    vectors = tuple(
-        tuple([value] + [0.0] * (len(FEATURE_NAMES) - 1))
-        for value in (-0.8, 0.8, 0.0)
-    )
+    vectors = tuple(tuple([value] + [0.0] * (len(FEATURE_NAMES) - 1)) for value in (-0.8, 0.8, 0.0))
     features = BattleFeatureBatch(
         feature_names=FEATURE_NAMES,
         candidate_vectors=vectors,
@@ -155,18 +152,12 @@ def _navigation_outcome(
     return StrategicNavigationOutcome(
         decision_id=decision.decision_id,
         selected_destination_ref=decision.selected_destination_ref,
-        status=(
-            NavigationOutcomeStatus.SUCCEEDED
-            if succeeded
-            else NavigationOutcomeStatus.FAILED
-        ),
+        status=(NavigationOutcomeStatus.SUCCEEDED if succeeded else NavigationOutcomeStatus.FAILED),
         terminal_reached=succeeded,
         movement_requests=movement_requests,
         acknowledged_steps=acknowledged_steps,
         wait_actions=0,
-        failure_reason=(
-            None if succeeded else NavigationFailureReason.WORLD_STATE_DIVERGED
-        ),
+        failure_reason=(None if succeeded else NavigationFailureReason.WORLD_STATE_DIVERGED),
     )
 
 
@@ -225,6 +216,8 @@ def test_battle_adapter_preserves_existing_outcome_preference_without_teacher_la
     assert shared.target_distribution.tolist() == [0.0, 1.0, 0.0]
     assert shared.public_dict()["teacher_choice_targets"] == 0
     assert shared.public_dict()["candidate_feature_values_public"] is False
+    assert shared.public_dict()["schema"] == "pokemon.core.scenario-outcome-example.v1"
+    assert "prospective_binding_sha256" not in shared.public_dict()
 
 
 def test_navigation_adapter_prefers_verified_arrival_over_a_shorter_failed_route() -> None:
