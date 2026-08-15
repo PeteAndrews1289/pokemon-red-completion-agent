@@ -11,6 +11,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
+from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentProspectiveBinding,
+)
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
@@ -97,9 +100,7 @@ class PartyCompletionSnapshot:
         for name in ("evolution_steps_remaining", "level_floor_deficit"):
             value = getattr(self, name)
             if type(value) is not int or value < 0:  # noqa: E721
-                raise ScenarioOutcomeError(
-                    f"party completion {name.replace('_', ' ')} is invalid"
-                )
+                raise ScenarioOutcomeError(f"party completion {name.replace('_', ' ')} is invalid")
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -139,9 +140,7 @@ class PartyDevelopmentOutcomeTrialV2:
         if not isinstance(self.before_party, PartyObservation) or not isinstance(
             self.after_party, PartyObservation
         ):
-            raise ScenarioOutcomeError(
-                "v2 party outcome needs typed before/after observations"
-            )
+            raise ScenarioOutcomeError("v2 party outcome needs typed before/after observations")
         if not isinstance(self.progress_before, TeamTrainingProgress) or not isinstance(
             self.progress_after, TeamTrainingProgress
         ):
@@ -155,17 +154,13 @@ class PartyDevelopmentOutcomeTrialV2:
             raise ScenarioOutcomeError("v2 party outcome frame count is invalid")
         if type(self.rotations_executed) is not int or self.rotations_executed < 0:  # noqa: E721
             raise ScenarioOutcomeError("v2 party outcome rotation count is invalid")
-        if not isinstance(self.evolution_completed, bool) or not isinstance(
-            self.censored, bool
-        ):
+        if not isinstance(self.evolution_completed, bool) or not isinstance(self.censored, bool):
             raise ScenarioOutcomeError("v2 party outcome flags must be boolean")
         for name in ("battles_completed", "steps_taken", "healing_trips", "faints"):
             if getattr(self.progress_after, name) < getattr(self.progress_before, name):
                 raise ScenarioOutcomeError("v2 party outcome progress moved backwards")
         if not self.censored and self.frames_executed < 1:
-            raise ScenarioOutcomeError(
-                "a measured v2 party outcome needs positive execution time"
-            )
+            raise ScenarioOutcomeError("a measured v2 party outcome needs positive execution time")
         if self.before_party.member_in_slot(self.target_slot) is None or (
             self.after_party.member_in_slot(self.target_slot) is None
         ):
@@ -186,11 +181,14 @@ def adapt_party_development_outcomes_v2(
     root_lineage_id: str,
     initial_state_sha256: str,
     partition: ScenarioPartition,
+    prospective_binding: PartyDevelopmentProspectiveBinding,
 ) -> ScenarioOutcomeExample:
     """Join cloned v2 candidate executions to completion-aware preferences."""
 
     if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
         raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
+    if not isinstance(prospective_binding, PartyDevelopmentProspectiveBinding):
+        raise TypeError("prospective_binding must be a PartyDevelopmentProspectiveBinding")
     if not isinstance(trials, tuple) or any(
         not isinstance(item, PartyDevelopmentOutcomeTrialV2) for item in trials
     ):
@@ -201,10 +199,7 @@ def adapt_party_development_outcomes_v2(
             raise ScenarioOutcomeError("v2 party trial candidate is outside its menu")
         if bound_trial.candidate_index in by_candidate:
             raise ScenarioOutcomeError("v2 party trials repeat a candidate")
-        if (
-            bound_trial.candidate
-            != candidate_set.candidates[bound_trial.candidate_index]
-        ):
+        if bound_trial.candidate != candidate_set.candidates[bound_trial.candidate_index]:
             raise ScenarioOutcomeError(
                 "v2 party trial differs from its identity-free candidate set"
             )
@@ -241,7 +236,7 @@ def adapt_party_development_outcomes_v2(
                 evidence_sha256=evidence_sha256,
             )
         )
-    return ScenarioOutcomeExample(
+    example = ScenarioOutcomeExample(
         scenario_id=scenario_id,
         root_lineage_id=root_lineage_id,
         initial_state_sha256=initial_state_sha256,
@@ -251,7 +246,10 @@ def adapt_party_development_outcomes_v2(
         feature_names=PARTY_DEVELOPMENT_FEATURE_NAMES,
         candidates=candidates,
         outcomes=tuple(outcomes),
+        prospective_binding_sha256=prospective_binding.binding_sha256,
     )
+    prospective_binding.require_matches(example)
+    return example
 
 
 def _require_shared_start(
@@ -267,20 +265,14 @@ def _require_shared_start(
         or trial.completion_before != first.completion_before
         for trial in trials[1:]
     ):
-        raise ScenarioOutcomeError(
-            "v2 party counterfactuals do not share one starting observation"
-        )
+        raise ScenarioOutcomeError("v2 party counterfactuals do not share one starting observation")
     target_slots = tuple(trial.target_slot for trial in trials)
     if candidate_set.kind is TrainingChoiceKind.VENUE and len(set(target_slots)) != 1:
-        raise ScenarioOutcomeError(
-            "v2 venue counterfactuals do not share one trainee binding"
-        )
+        raise ScenarioOutcomeError("v2 venue counterfactuals do not share one trainee binding")
     if candidate_set.kind is TrainingChoiceKind.TRAINEE and len(target_slots) != len(
         set(target_slots)
     ):
-        raise ScenarioOutcomeError(
-            "v2 trainee counterfactuals repeat a target-party binding"
-        )
+        raise ScenarioOutcomeError("v2 trainee counterfactuals repeat a target-party binding")
 
 
 def _criterion_values(
@@ -292,9 +284,7 @@ def _criterion_values(
     registration_gain = after.registered_target_count - before.registered_target_count
     living_gain = after.living_target_count - before.living_target_count
     role_gain = after.role_coverage_count - before.role_coverage_count
-    evolution_reduction = (
-        before.evolution_steps_remaining - after.evolution_steps_remaining
-    )
+    evolution_reduction = before.evolution_steps_remaining - after.evolution_steps_remaining
     level_reduction = before.level_floor_deficit - after.level_floor_deficit
     no_regression = (
         registration_gain >= 0
@@ -306,18 +296,13 @@ def _criterion_values(
     primary_progress = {
         PartyDevelopmentGoal.BALANCE: max(0, level_reduction),
         PartyDevelopmentGoal.EVOLUTION: max(0, evolution_reduction),
-        PartyDevelopmentGoal.COLLECTION: max(0, registration_gain)
-        + max(0, living_gain),
+        PartyDevelopmentGoal.COLLECTION: max(0, registration_gain) + max(0, living_gain),
         PartyDevelopmentGoal.ROLE_COVERAGE: max(0, role_gain),
     }[goal]
     target_experience = _target_experience_gained(trial)
     total_experience = _experience_gained(trial.before_party, trial.after_party)
-    battles = (
-        trial.progress_after.battles_completed - trial.progress_before.battles_completed
-    )
-    center_visits = (
-        trial.progress_after.healing_trips - trial.progress_before.healing_trips
-    )
+    battles = trial.progress_after.battles_completed - trial.progress_before.battles_completed
+    center_visits = trial.progress_after.healing_trips - trial.progress_before.healing_trips
     faints = trial.progress_after.faints - trial.progress_before.faints
     return (
         float(not trial.after_party.is_wiped_out),

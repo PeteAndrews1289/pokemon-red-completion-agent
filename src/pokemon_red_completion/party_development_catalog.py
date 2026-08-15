@@ -26,10 +26,10 @@ from pokemon_red_completion.scenario_outcomes import ScenarioOutcomeExample
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA = (
-    "pokemon.core.party-development-prospective-catalog.v2"
+    "pokemon.core.party-development-prospective-catalog.v3"
 )
 PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA = (
-    "pokemon.core.party-development-prospective-binding.v2"
+    "pokemon.core.party-development-prospective-binding.v3"
 )
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -53,6 +53,7 @@ class PartyDevelopmentProspectiveBinding:
     source_bundle_sha256: str
     semantic_snapshot_sha256: str
     venue_prior_registry_sha256: str
+    outcome_objective_sha256: str
     kind: TrainingChoiceKind
     goal: PartyDevelopmentGoal
     candidate_feature_sha256: tuple[str, ...]
@@ -77,6 +78,7 @@ class PartyDevelopmentProspectiveBinding:
             (self.source_bundle_sha256, "source bundle"),
             (self.semantic_snapshot_sha256, "semantic snapshot"),
             (self.venue_prior_registry_sha256, "venue-prior registry"),
+            (self.outcome_objective_sha256, "outcome objective"),
             (self.candidate_menu_sha256, "candidate menu"),
             (self.binding_sha256, "binding"),
         ):
@@ -172,6 +174,7 @@ class PartyDevelopmentProspectiveBinding:
         candidate_set: PartyDevelopmentCandidateSet,
         venue_priors: tuple[VenueOperationalPrior, ...],
         venue_prior_registry_sha256: str,
+        outcome_objective_sha256: str,
         shared_venue_prior: VenueOperationalPrior | None = None,
         candidate_available: tuple[bool, ...] | None = None,
     ) -> PartyDevelopmentProspectiveBinding:
@@ -223,6 +226,10 @@ class PartyDevelopmentProspectiveBinding:
             semantic_snapshot_sha256,
             subject="semantic snapshot",
         )
+        _require_digest(
+            outcome_objective_sha256,
+            subject="outcome objective",
+        )
         feature_digests = tuple(
             _candidate_feature_sha256(
                 index=item.candidate_index,
@@ -256,6 +263,7 @@ class PartyDevelopmentProspectiveBinding:
             source_bundle_sha256=source_bundle_sha256,
             semantic_snapshot_sha256=semantic_snapshot_sha256,
             venue_prior_registry_sha256=venue_prior_registry_sha256,
+            outcome_objective_sha256=outcome_objective_sha256,
             candidate_menu_sha256=menu_sha256,
         )
         return cls(
@@ -267,6 +275,7 @@ class PartyDevelopmentProspectiveBinding:
             source_bundle_sha256=source_bundle_sha256,
             semantic_snapshot_sha256=semantic_snapshot_sha256,
             venue_prior_registry_sha256=venue_prior_registry_sha256,
+            outcome_objective_sha256=outcome_objective_sha256,
             kind=candidate_set.kind,
             goal=candidate_set.goal,
             candidate_feature_sha256=feature_digests,
@@ -297,6 +306,18 @@ class PartyDevelopmentProspectiveBinding:
         if identity != expected:
             raise PartyDevelopmentCatalogError(
                 "party-development outcome differs from its prospective identity"
+            )
+        if example.feature_names != PARTY_DEVELOPMENT_FEATURE_NAMES:
+            raise PartyDevelopmentCatalogError(
+                "party-development outcome differs from its prospective feature contract"
+            )
+        if example.objective.objective_sha256 != self.outcome_objective_sha256:
+            raise PartyDevelopmentCatalogError(
+                "party-development outcome differs from its prospective objective"
+            )
+        if example.prospective_binding_sha256 != self.binding_sha256:
+            raise PartyDevelopmentCatalogError(
+                "party-development outcome does not re-attest its prospective binding"
             )
         observed = tuple(
             _candidate_feature_sha256(
@@ -330,6 +351,7 @@ class PartyDevelopmentProspectiveBinding:
             source_bundle_sha256=self.source_bundle_sha256,
             semantic_snapshot_sha256=self.semantic_snapshot_sha256,
             venue_prior_registry_sha256=self.venue_prior_registry_sha256,
+            outcome_objective_sha256=self.outcome_objective_sha256,
             candidate_menu_sha256=self.candidate_menu_sha256,
         )
 
@@ -544,6 +566,7 @@ def _binding_document(
     source_bundle_sha256: str,
     semantic_snapshot_sha256: str,
     venue_prior_registry_sha256: str,
+    outcome_objective_sha256: str,
     candidate_menu_sha256: str,
 ) -> dict[str, object]:
     return {
@@ -556,6 +579,7 @@ def _binding_document(
         "source_bundle_sha256": source_bundle_sha256,
         "semantic_snapshot_sha256": semantic_snapshot_sha256,
         "venue_prior_registry_sha256": venue_prior_registry_sha256,
+        "outcome_objective_sha256": outcome_objective_sha256,
         "candidate_menu_sha256": candidate_menu_sha256,
     }
 

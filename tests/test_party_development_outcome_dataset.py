@@ -134,6 +134,11 @@ def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
 
 def _prospective_catalog(
     examples: tuple[ScenarioOutcomeExample, ...],
+    *,
+    semantic_snapshot_sha256: str | None = None,
+    venue_prior_registry_sha256: str = "c" * 64,
+    source_commit: str = "a" * 40,
+    source_bundle_sha256: str = "b" * 64,
 ) -> PartyDevelopmentProspectiveCatalog:
     bindings = []
     for example in examples:
@@ -192,12 +197,13 @@ def _prospective_catalog(
                 root_lineage_id=example.root_lineage_id,
                 initial_state_sha256=example.initial_state_sha256,
                 partition=example.partition,
-                source_commit="a" * 40,
-                source_bundle_sha256="b" * 64,
-                semantic_snapshot_sha256=example.initial_state_sha256,
+                source_commit=source_commit,
+                source_bundle_sha256=source_bundle_sha256,
+                semantic_snapshot_sha256=(semantic_snapshot_sha256 or example.initial_state_sha256),
                 candidate_set=candidate_set,
                 venue_priors=priors,
-                venue_prior_registry_sha256="c" * 64,
+                venue_prior_registry_sha256=venue_prior_registry_sha256,
+                outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
                 shared_venue_prior=(shared_prior if kind is TrainingChoiceKind.TRAINEE else None),
                 candidate_available=tuple(item.available for item in example.candidates),
             )
@@ -205,11 +211,26 @@ def _prospective_catalog(
     return PartyDevelopmentProspectiveCatalog.freeze(tuple(bindings))
 
 
+def _bound_campaign(
+    examples: tuple[ScenarioOutcomeExample, ...],
+) -> tuple[tuple[ScenarioOutcomeExample, ...], PartyDevelopmentProspectiveCatalog]:
+    prospective = _prospective_catalog(examples)
+    by_scenario = {item.scenario_id: item for item in prospective.bindings}
+    bound = tuple(
+        replace(
+            example,
+            prospective_binding_sha256=by_scenario[example.scenario_id].binding_sha256,
+        )
+        for example in examples
+    )
+    return bound, prospective
+
+
 def test_diverse_isolated_catalog_reaches_only_the_initial_fit_gate() -> None:
-    examples = _ready_catalog()
+    examples, prospective = _bound_campaign(_ready_catalog())
     audit = audit_party_development_outcome_catalog(
         examples,
-        prospective_catalog=_prospective_catalog(examples),
+        prospective_catalog=prospective,
     )
 
     assert audit.initial_fit_ready
@@ -228,10 +249,10 @@ def test_diverse_isolated_catalog_reaches_only_the_initial_fit_gate() -> None:
 
 
 def test_small_semantically_thin_catalog_reports_every_missing_gate() -> None:
-    examples = (_ready_catalog()[0],)
+    examples, prospective = _bound_campaign((_ready_catalog()[0],))
     audit = audit_party_development_outcome_catalog(
         examples,
-        prospective_catalog=_prospective_catalog(examples),
+        prospective_catalog=prospective,
     )
 
     assert not audit.initial_fit_ready
@@ -318,11 +339,11 @@ def test_global_variety_cannot_hide_a_semantically_thin_development_partition() 
                 route=EvolutionRouteKind.NONE,
             )
         )
-    frozen = tuple(examples)
+    frozen, prospective = _bound_campaign(tuple(examples))
 
     audit = audit_party_development_outcome_catalog(
         frozen,
-        prospective_catalog=_prospective_catalog(frozen),
+        prospective_catalog=prospective,
     )
 
     assert not audit.initial_fit_ready
@@ -333,8 +354,7 @@ def test_global_variety_cannot_hide_a_semantically_thin_development_partition() 
 
 
 def test_outcomes_must_match_the_exact_prospectively_frozen_candidate_menu() -> None:
-    examples = _ready_catalog()
-    prospective = _prospective_catalog(examples)
+    examples, prospective = _bound_campaign(_ready_catalog())
     first = examples[0]
     candidate = first.candidates[0]
     features = list(candidate.features)
@@ -388,6 +408,7 @@ def test_prospective_catalog_rejects_invalid_availability_before_hashing() -> No
             candidate_set=candidate_set,
             venue_priors=priors,
             venue_prior_registry_sha256="c" * 64,
+            outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
             shared_venue_prior=shared_prior,
             candidate_available=(False,) * len(example.candidates),
         )
@@ -429,6 +450,7 @@ def test_trainee_catalog_binds_the_shared_training_venue_before_outcomes() -> No
                 for _ in candidate_set.candidates
             ),
             venue_prior_registry_sha256="c" * 64,
+            outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
         )
 
 
@@ -438,3 +460,59 @@ def test_prospective_catalog_rejects_duplicate_outcome_rows() -> None:
 
     with pytest.raises(PartyDevelopmentCatalogError, match="exactly"):
         prospective.require_exact_examples((examples[0], *examples))
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    (
+        ("objective", "prospective objective"),
+        ("feature_names", "prospective feature contract"),
+        ("prospective_binding", "re-attest its prospective binding"),
+    ),
+)
+def test_prospective_join_rejects_every_outcome_contract_drift(
+    mutation: str,
+    message: str,
+) -> None:
+    examples, prospective = _bound_campaign((_ready_catalog()[0],))
+    example = examples[0]
+    if mutation == "objective":
+        changed = replace(
+            example,
+            objective=replace(
+                PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
+                objective_id="party-development.mutated-objective.v1",
+            ),
+        )
+    elif mutation == "feature_names":
+        names = list(example.feature_names)
+        names[0], names[1] = names[1], names[0]
+        changed = replace(example, feature_names=tuple(names))
+    else:
+        changed = replace(example, prospective_binding_sha256="f" * 64)
+
+    with pytest.raises(PartyDevelopmentCatalogError, match=message):
+        prospective.require_exact_examples((changed,))
+
+
+@pytest.mark.parametrize(
+    "catalog_kwargs",
+    (
+        {"semantic_snapshot_sha256": "d" * 64},
+        {"venue_prior_registry_sha256": "e" * 64},
+        {"source_commit": "f" * 40},
+        {"source_bundle_sha256": "1" * 64},
+    ),
+)
+def test_outcome_cannot_join_to_a_different_prospective_context(
+    catalog_kwargs: dict[str, str],
+) -> None:
+    raw = (_ready_catalog()[0],)
+    bound, _ = _bound_campaign(raw)
+    drifted = _prospective_catalog(raw, **catalog_kwargs)
+
+    with pytest.raises(
+        PartyDevelopmentCatalogError,
+        match="re-attest its prospective binding",
+    ):
+        drifted.require_exact_examples(bound)

@@ -27,6 +27,9 @@ from pokemon_red_completion.party import (
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
 )
+from pokemon_red_completion.party_development_outcomes import (
+    PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
+)
 from pokemon_red_completion.party_development_rank import (
     CandidateCompletionSemantics,
     EvolutionSemantics,
@@ -498,6 +501,7 @@ class PartyDevelopmentSemanticSnapshot:
             venue_priors=menu.venue_priors,
             shared_venue_prior=menu.shared_venue_prior,
             venue_prior_registry_sha256=self.venue_prior_registry.registry_sha256,
+            outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
             candidate_available=menu.candidate_available,
         )
 

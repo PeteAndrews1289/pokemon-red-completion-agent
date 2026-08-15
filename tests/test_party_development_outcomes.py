@@ -9,7 +9,11 @@ from pokemon_red_completion.party import (
     PartyMemberObservation,
     PartyObservation,
 )
+from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentProspectiveBinding,
+)
 from pokemon_red_completion.party_development_outcomes import (
+    PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
     PartyCompletionSnapshot,
     PartyDevelopmentOutcomeTrialV2,
     adapt_party_development_outcomes_v2,
@@ -58,9 +62,7 @@ def _after_party(gain: int) -> PartyObservation:
     before = _before_party()
     first, second = before.members
     assert first.experience is not None
-    return PartyObservation(
-        members=(replace(first, experience=first.experience + gain), second)
-    )
+    return PartyObservation(members=(replace(first, experience=first.experience + gain), second))
 
 
 def _candidate_set(goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION):
@@ -103,7 +105,13 @@ def _candidate_set(goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION):
         exhausted_count=0,
         fainted_count=0,
     )
-    priors = tuple(
+    return augment_training_candidate_set(
+        projected[1], context, (semantics, semantics), venue_priors=_venue_priors()
+    )
+
+
+def _venue_priors() -> tuple[VenueOperationalPrior, ...]:
+    return tuple(
         VenueOperationalPrior(
             available=True,
             reliability=0.9 - index * 0.1,
@@ -117,8 +125,27 @@ def _candidate_set(goal: PartyDevelopmentGoal = PartyDevelopmentGoal.EVOLUTION):
         )
         for index in range(2)
     )
-    return augment_training_candidate_set(
-        projected[1], context, (semantics, semantics), venue_priors=priors
+
+
+def _binding(
+    candidate_set,
+    *,
+    scenario_id: str,
+    root_lineage_id: str,
+    initial_state_sha256: str,
+) -> PartyDevelopmentProspectiveBinding:
+    return PartyDevelopmentProspectiveBinding.build(
+        scenario_id=scenario_id,
+        root_lineage_id=root_lineage_id,
+        initial_state_sha256=initial_state_sha256,
+        partition=ScenarioPartition.TRAIN,
+        source_commit="1" * 40,
+        source_bundle_sha256="2" * 64,
+        semantic_snapshot_sha256="3" * 64,
+        candidate_set=candidate_set,
+        venue_priors=_venue_priors(),
+        venue_prior_registry_sha256="4" * 64,
+        outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
     )
 
 
@@ -169,6 +196,12 @@ def _trial(
 
 def test_completion_objective_prefers_evolution_progress_over_raw_xp_rate() -> None:
     candidates = _candidate_set()
+    binding = _binding(
+        candidates,
+        scenario_id="completion-evolution",
+        root_lineage_id="completion-root-a",
+        initial_state_sha256="a" * 64,
+    )
     result = adapt_party_development_outcomes_v2(
         candidates,
         (
@@ -198,16 +231,25 @@ def test_completion_objective_prefers_evolution_progress_over_raw_xp_rate() -> N
         root_lineage_id="completion-root-a",
         initial_state_sha256="a" * 64,
         partition=ScenarioPartition.TRAIN,
+        prospective_binding=binding,
     )
 
     assert result.best_candidate_indices == (1,)
     assert result.target_distribution.tolist() == [0.0, 1.0]
     assert result.learner_update_eligible
     assert result.public_dict()["teacher_choice_targets"] == 0
+    assert result.public_dict()["schema"] == "pokemon.core.scenario-outcome-example.v2"
+    assert result.prospective_binding_sha256 == binding.binding_sha256
 
 
 def test_living_collection_regression_loses_before_efficiency_is_considered() -> None:
     candidates = _candidate_set()
+    binding = _binding(
+        candidates,
+        scenario_id="living-retention",
+        root_lineage_id="completion-root-b",
+        initial_state_sha256="b" * 64,
+    )
     safe = _trial(
         candidates,
         0,
@@ -231,6 +273,7 @@ def test_living_collection_regression_loses_before_efficiency_is_considered() ->
         root_lineage_id="completion-root-b",
         initial_state_sha256="b" * 64,
         partition=ScenarioPartition.TRAIN,
+        prospective_binding=binding,
     )
 
     assert result.best_candidate_indices == (0,)
@@ -240,6 +283,12 @@ def test_living_collection_regression_loses_before_efficiency_is_considered() ->
 
 def test_censored_v2_trial_never_becomes_a_training_target() -> None:
     candidates = _candidate_set()
+    binding = _binding(
+        candidates,
+        scenario_id="censored-completion",
+        root_lineage_id="completion-root-c",
+        initial_state_sha256="c" * 64,
+    )
     result = adapt_party_development_outcomes_v2(
         candidates,
         (
@@ -263,6 +312,7 @@ def test_censored_v2_trial_never_becomes_a_training_target() -> None:
         root_lineage_id="completion-root-c",
         initial_state_sha256="c" * 64,
         partition=ScenarioPartition.TRAIN,
+        prospective_binding=binding,
     )
 
     assert not result.fully_measured
@@ -285,4 +335,18 @@ def test_completion_targets_cannot_change_inside_a_trial() -> None:
             completion_before=before,
             completion_after=after,
             frames_executed=1_000,
+        )
+
+
+def test_v2_outcome_requires_a_typed_prospective_binding() -> None:
+    candidates = _candidate_set()
+    with pytest.raises(TypeError, match="prospective_binding"):
+        adapt_party_development_outcomes_v2(
+            candidates,
+            (),
+            scenario_id="invalid-binding",
+            root_lineage_id="invalid-binding-root",
+            initial_state_sha256="a" * 64,
+            partition=ScenarioPartition.TRAIN,
+            prospective_binding="not-a-binding",  # type: ignore[arg-type]
         )

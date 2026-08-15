@@ -199,18 +199,25 @@ class ScenarioOutcomeExample:
     feature_names: tuple[str, ...]
     candidates: tuple[OutcomeCandidate, ...]
     outcomes: tuple[CandidateOutcome | None, ...]
+    prospective_binding_sha256: str | None = None
 
     def __post_init__(self) -> None:
         _safe_id(self.scenario_id, subject="outcome scenario")
         _safe_id(self.root_lineage_id, subject="outcome root lineage")
-        if not isinstance(self.initial_state_sha256, str) or _SHA256.fullmatch(
-            self.initial_state_sha256
-        ) is None:
+        if (
+            not isinstance(self.initial_state_sha256, str)
+            or _SHA256.fullmatch(self.initial_state_sha256) is None
+        ):
             raise ScenarioOutcomeError("outcome initial-state digest is invalid")
         if not isinstance(self.partition, ScenarioPartition):
             raise ScenarioOutcomeError("outcome partition is invalid")
         if not isinstance(self.objective, OutcomeObjective):
             raise ScenarioOutcomeError("outcome objective is invalid")
+        if self.prospective_binding_sha256 is not None and (
+            not isinstance(self.prospective_binding_sha256, str)
+            or _SHA256.fullmatch(self.prospective_binding_sha256) is None
+        ):
+            raise ScenarioOutcomeError("outcome prospective-binding digest is invalid")
         _safe_id(self.feature_schema_id, subject="outcome feature schema")
         if (
             not isinstance(self.feature_names, tuple)
@@ -232,9 +239,7 @@ class ScenarioOutcomeExample:
             raise ScenarioOutcomeError("outcome candidate indexes must be contiguous")
         if any(len(item.features) != len(self.feature_names) for item in self.candidates):
             raise ScenarioOutcomeError("outcome candidate feature width differs from its schema")
-        if not isinstance(self.outcomes, tuple) or len(self.outcomes) != len(
-            self.candidates
-        ):
+        if not isinstance(self.outcomes, tuple) or len(self.outcomes) != len(self.candidates):
             raise ScenarioOutcomeError("candidate outcomes do not match the candidate menu")
         available = 0
         for candidate, outcome in zip(self.candidates, self.outcomes, strict=True):
@@ -242,9 +247,11 @@ class ScenarioOutcomeExample:
                 available += 1
                 if outcome is not None and not isinstance(outcome, CandidateOutcome):
                     raise ScenarioOutcomeError("available candidate outcome is invalid")
-                if outcome is not None and outcome.measured and len(
-                    outcome.criterion_values
-                ) != len(self.objective.criteria):
+                if (
+                    outcome is not None
+                    and outcome.measured
+                    and len(outcome.criterion_values) != len(self.objective.criteria)
+                ):
                     raise ScenarioOutcomeError(
                         "measured candidate outcome differs from its objective"
                     )
@@ -314,8 +321,12 @@ class ScenarioOutcomeExample:
             for candidate, outcome in zip(self.candidates, self.outcomes, strict=True)
             if candidate.available
         )
-        return {
-            "schema": "pokemon.core.scenario-outcome-example.v1",
+        document: dict[str, object] = {
+            "schema": (
+                "pokemon.core.scenario-outcome-example.v2"
+                if self.prospective_binding_sha256 is not None
+                else "pokemon.core.scenario-outcome-example.v1"
+            ),
             "scenario_id": self.scenario_id,
             "root_lineage_id": self.root_lineage_id,
             "initial_state_sha256": self.initial_state_sha256,
@@ -334,6 +345,9 @@ class ScenarioOutcomeExample:
             "teacher_choice_targets": 0,
             "private_path_fields": 0,
         }
+        if self.prospective_binding_sha256 is not None:
+            document["prospective_binding_sha256"] = self.prospective_binding_sha256
+        return document
 
 
 @dataclass(frozen=True, slots=True)
@@ -382,9 +396,7 @@ class ScenarioOutcomeCatalog:
             raise ScenarioOutcomeError("required outcome families are invalid")
         missing = tuple(item.value for item in required if item not in self.families)
         if missing:
-            raise ScenarioOutcomeError(
-                f"outcome catalog is missing family {missing[0]}"
-            )
+            raise ScenarioOutcomeError(f"outcome catalog is missing family {missing[0]}")
 
     def public_dict(self) -> dict[str, object]:
         counts = Counter((item.partition.value, item.family.value) for item in self.examples)
