@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: five red flags, one real hole
+
+Open on five review cards stamped **MISSING?**:
+**BOXES · SUPPLIES/MONEY · VERSIONS/TRADES · EVOLUTION ITEM · MASK CAUSE**. Instead of immediately
+building five systems, put the repository under an X-ray. Light up the existing layers one by one:
+**GOAL PRESSURES + ALL BOXES**, **NORMALIZED ECONOMY + VERIFIED SHOP COST**, **CAMPAIGN VESSELS +
+TRADE LINKS + CONSOLIDATION**, **EVOLUTION METHOD + FEASIBLE NOW**. Stamp the first four
+**ALREADY HERE · CORRECT LAYER**.
+
+Leave **MASK CAUSE** red. Show three anonymous venue cards; grey out the third and attach
+**INSUFFICIENT VENUE EVIDENCE**. Lock the ordered reason vector into the same safe as candidate
+availability. Swap the cause to **MISSING RESOURCE** after freeze and make the binding shatter.
+Overlay **587fb18 · 3,435 TESTS · MENU V4 · BINDING/CATALOG V5**.
+
+Narration: **“The review was valuable because it forced us to look. The audit was valuable because
+it stopped us rebuilding four systems we already had.”** Return to the readiness view with
+**TRAIN 0/8 · DEVELOPMENT 0/6 · FIT FALSE · AUTHORITY ZERO**. Show Claude removing the three
+agreement guards together and the semantic test failing; stamp **NO CAUSE-DRIFT CHANNEL · APPROVE
+INPUT FREEZE ONLY**. End card:
+**NEXT · COMPATIBLE VENUE EVIDENCE → DEPLETED-PP CONTEXTS → FREEZE
+8+6 INPUTS**. Keep **NO OUTCOME EXECUTION** across the bottom.
+
 ## August 15 scene: make the answer present its receipt
 
 Open with a frozen three-card party menu entering a safe marked **QUESTION**. The safe locks six
@@ -15,15 +37,14 @@ silently becoming available. Add the follow-up card **TEST 3,433 · FROZEN VOCAB
 CONSTANT**.
 
 Then ask **WHY UNAVAILABLE?** Fan out five constraint cards: **BOX FULL · NO CAPTURE SUPPLIES /
-MONEY · VERSION/EXTERNAL BLOCK · EVOLUTION ITEM MISSING · PUZZLE/RESOURCE PREREQUISITE**. Show the
-current pipeline answer **MASKED** and stamp it **INSUFFICIENT FOR A LIVING POKÉDEX**. Split the
-repair across two lanes: **COMPLETION HIERARCHY: STORAGE/RESOURCES/VERSION** and **PARTY QUESTION:
-ITEM FEASIBILITY/MASK CAUSE**.
+MONEY · VERSION/EXTERNAL BLOCK · EVOLUTION ITEM MISSING · PUZZLE/RESOURCE PREREQUISITE**. Mark this
+as the question that triggered the newer source audit above; do not repeat the original visual claim
+that all five systems were missing.
 
 Return to the readiness dashboard. Keep the large counter at **TRAIN 0/8 · DEVELOPMENT 0/6** and
 add **QUESTION/OUTCOME SEAM: AUTHENTICATED** underneath. Final narration: **“We did not train the
 model today. We made it impossible for tomorrow's results to pretend they answered a question we
-never asked.”** End card: **NEXT · EXPLAIN COLLECTION CONSTRAINTS · FREEZE THE REAL 8+6 RED
+never asked.”** End card: **NEXT · FREEZE THE REAL 8+6 RED
 CURRICULUM · REVIEW · THEN EXECUTE**.
 
 ## August 15 scene: make every trainee stand on the same ground

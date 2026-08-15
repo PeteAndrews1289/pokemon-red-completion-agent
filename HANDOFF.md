@@ -17,6 +17,56 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Completion-constraint audit corrected; party masks now explain themselves — 2026-08-15
+
+Exact source `587fb18` passed 3,435 tests, three intentional integration skips, one expected
+failure, Ruff, whole-source mypy over 222 files and every generated-registry check. Prospective
+party bindings/catalogs are now v5 and their menu document is v4. Every visible unavailable
+candidate must carry one typed, title-neutral causal reason; every available candidate must carry
+`None`. A venue lacking compatible frozen operating evidence is explicitly
+`insufficient_venue_evidence`. The ordered reason vector is part of the frozen menu digest, so a
+later result cannot change why a choice was masked while reusing the original binding identity.
+
+Claude's exact-commit audit independently verified the source delta and ran 59 focused tests plus
+a temporary-copy mutation battery. Omitting the cause from the menu digest, defaulting an
+unexplained mask, changing the Red adapter's cause and dropping the cause all failed semantic
+tests. The individual availability/reason guards could each be removed only because two redundant
+guards remained; removing all three together failed. Claude found no reason-drift channel and
+returned **APPROVE** for source qualification and 8+6 input materialization/freeze only. Its
+condition is binding: every real masked candidate must be verified as missing compatible venue
+evidence. If another cause is needed, add its producer instead of mislabelling the candidate.
+
+This checkpoint also corrects the prior Antigravity adjudication. Its five requirements were good
+product questions, but four were not absent from the repository: the portable goal manager and Red
+adapter already expose resource/storage pressure and typed unavailable reasons; collection and PC
+storage cover all boxes and active capture capacity; normalized resource economics plus live Red
+shop skills account for affordability and raw money privately; campaign/Pokédex contracts model
+versions, trade links, external exclusions and consolidation, although autonomous multi-save
+runtime integration remains thin; and the 66-feature party projection
+already includes evolution route plus `evolution_feasible_now`, including item evolution. The real
+missing seam was the causal reason on a party mask, and `587fb18` closes it without duplicating
+those systems or changing the frozen goal-manager vocabulary.
+
+This does **not** claim autonomous multi-save living-Pokédex execution. Acquisition scheduling,
+cross-save consolidation and later-generation mechanics remain product work at their existing
+hierarchy levels. They do not need to be flattened into this first Red party-ranking question
+before its input catalog can be frozen.
+
+The mission check classifies this as bounded maintenance for a named learned experiment: it adds a
+transferable explanation of masked party choices; model authority remains unchanged until outcomes
+exist; the cross-title falsifier is that title adapters must emit the same identity-free reason
+vocabulary; the cheapest source falsifiers are an unexplained mask and a post-freeze reason swap;
+the time box was one source checkpoint; and the stop condition was discovering that another
+completion subsystem would merely duplicate existing code.
+
+Honest counters remain Red menus 0, frozen venue priors 0, outcomes 0/14, completion-aware fits 0,
+controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0. Next: compose the
+smallest compatible Route 11 prior; keep unsupported venues visibly
+masked with causes; locate or prospectively create the missing depleted-PP contexts; then
+materialize and freeze the exact 8-train/6-development input catalog for review. Do not execute a
+candidate, fit, predict, open sealed Red/Crystal or promote authority from this checkpoint.
+Review the [causal-mask qualification receipt](docs/evidence/party-development-causal-reason-qualification-2026-08-15.json).
+
 ## Prospective party question/outcome seam hardened; catalog execution remains closed — 2026-08-15
 
 Exact source `85ae8786412846667b9082dc6f1b344e580cef4d` passed 3,432
@@ -42,18 +92,15 @@ reversion from the frozen vocabulary to the live module constant was not uniquel
 The publication tree adds that exact test, bringing the full suite to 3,433 passes.
 
 Antigravity returned **APPROVE** on the exact binding delta and found no title-specific identity in
-the learner boundary, but rejected immediate catalog materialization at the product boundary. The
-portable completion context does not yet expose storage/active-box pressure, capture supplies and
-currency, version or external acquisition blocks, item-evolution feasibility, or typed reasons for
-masked choices. Codex accepts the finding without flattening all five concerns into one party
-ranker: storage/resources/version belong to the completion hierarchy; item feasibility and typed
-mask causes also bind the party question.
+the learner boundary, then flagged storage, resources/currency, version or external acquisition
+blocks, item-evolution feasibility and typed mask causes. The newer checkpoint above supersedes the
+initial conclusion that all five were absent: four already existed at their proper hierarchy
+levels, while exact `587fb18` closes the genuine party-mask cause gap.
 
 The honest counters remain unchanged: Red menus 0, frozen venue priors 0, outcomes 0/14,
 completion-aware fits 0, controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0.
-The next authorized work is source-only construction: implement and qualify that title-neutral
-completion-constraint contract. Then compose compatible venue evidence, locate or prospectively
-create missing PP-depleted non-sealed contexts, and materialize/freeze the exact
+The next authorized work is compatible venue evidence, locating or prospectively creating missing
+PP-depleted non-sealed contexts, and materializing/freezing the exact
 8-train/6-development input catalog for another review. Do **not** execute any candidate, fit,
 predict, open sealed Red or Crystal, or promote authority. Review the
 [join-hardening receipt](docs/evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).

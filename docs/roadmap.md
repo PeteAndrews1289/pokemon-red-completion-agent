@@ -8,6 +8,31 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-15): causal party masks are frozen; the duplicate architecture gate is removed
+
+Exact source `587fb18` passed 3,435 tests, Ruff, mypy over 222 source files and all generated-
+registry checks. Every masked party candidate now carries one typed identity-free causal reason;
+every available candidate carries none. The reason vector is committed into prospective
+binding/catalog v5 and menu v4, so availability and explanation cannot drift after freeze. Missing
+compatible venue evidence is represented as `insufficient_venue_evidence`.
+
+The follow-up source audit corrected the prior product finding. Storage/capture capacity,
+resources/currency, version/trade/external blockers and item-evolution feasibility were already
+implemented at their proper goal, collection, campaign and party layers. Only the party-level mask
+cause was absent. Do not build a second completion-context subsystem or flatten campaign variables
+into the party ranker.
+
+Claude's exact-commit mutation review approved source qualification and 8+6 input
+materialization/freeze. It found no causal-reason drift and proved the individually surviving
+availability/reason guards were redundant by removing all three together. Before freeze, every
+real mask must be confirmed as missing compatible venue evidence; any other cause needs a real
+producer. See the
+[qualification receipt](evidence/party-development-causal-reason-qualification-2026-08-15.json).
+
+The next gate is compatible Route 11 prior composition, depleted-PP context
+discovery or prospectively bounded materialization, then exact 8+6 input-catalog freeze and review.
+No outcome, fit, sealed Red/Crystal access, replay or authority is authorized.
+
 ## Current checkpoint (2026-08-15): the prospective question survives the outcome join
 
 Exact source `85ae878` passed 3,432 tests and all local quality/privacy/generated-registry gates.
@@ -15,13 +40,12 @@ Each future party outcome now authenticates the exact preregistered feature sche
 objective, candidate rows and availability, semantic snapshot, source and venue/prior evidence.
 The adapter rejects a typed mismatch and keeps unavailable candidates unavailable. Claude's
 mutation findings on the first join are all closed, including a follow-up test pinning the frozen
-feature vocabulary. Antigravity approved the hardened exact source but found that the surrounding
-portable completion context still cannot explain storage, capture resources/currency,
-version/external blocks, item-evolution feasibility or mask causes.
+feature vocabulary. Antigravity approved the hardened exact source and raised five surrounding
+completion concerns. The newer checkpoint above supersedes the initial claim that all five were
+absent.
 
-The next roadmap item is intentionally not “run training.” First implement those constraints at the
-proper hierarchy boundary: storage/resources/version in completion planning; item feasibility and
-typed mask causes in the party question. Then compose path-free venue evidence, locate or
+The next roadmap item is intentionally not “run training.” Exact `587fb18` closes the one missing
+party input while preserving the already-implemented hierarchy. Now compose path-free venue evidence, locate or
 prospectively create PP-depleted non-sealed contexts, and materialize/freeze the exact
 8-train/6-development catalog. Audit that concrete catalog before any candidate executes. Menus,
 priors, outcomes, fit, Crystal and authority remain zero. See the
@@ -34,7 +58,7 @@ semantic snapshot, private candidate bindings, one shared venue for trainee comp
 per-venue priors for venue comparisons, and exact snapshot/registry/source identities into the
 prospective catalog. Stale evidence, prior-support reuse and cross-snapshot menus fail closed.
 
-The next gate remains pre-data: Claude and Antigravity review; compose a typed Route 11 prior;
+The next gate remains pre-data: compose a typed Route 11 prior;
 leave Cave unavailable until post-repair evidence covers full training cost; locate or boundedly
 materialize depleted-PP contexts; then freeze a genuine 8-train/6-development catalog. Concrete
 menus, priors, outcomes, fit, Crystal and authority remain zero. See the

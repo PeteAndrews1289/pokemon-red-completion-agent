@@ -11,6 +11,27 @@
 > Future private failure records preserve exact path-free text and replace path tokens inside
 > otherwise useful messages instead of discarding the entire diagnostic.
 
+Exact source `587fb18` adds one new readiness fact without changing a progress counter: every
+masked party candidate now has a typed, identity-free cause, and the cause vector is frozen with
+the prospective menu. A missing compatible venue prior appears as
+`insufficient_venue_evidence`; changing that explanation invalidates the binding. The page may show
+cause counts once a concrete catalog exists, but it must remain **0/8 train, 0/6 development, fit
+false, authority zero** today.
+
+Claude's exact-commit mutation audit approved source qualification and input
+materialization/freeze. The reason commitment had no drift channel; agreement checks that survived
+alone were redundant and failed when removed together. The dashboard must reject catalog freeze if
+any real mask is labelled `insufficient_venue_evidence` for a different causal constraint. The
+[qualification receipt](evidence/party-development-causal-reason-qualification-2026-08-15.json)
+advances no experiment counter.
+
+The source audit also removed a misleading dashboard prerequisite. Storage/capture capacity,
+resource pressure and money-aware renewal, version/trade/external reach, and item-evolution
+feasibility already exist at their correct hierarchy levels. The dashboard should link those
+existing goal/campaign views rather than wait for a duplicate “completion context” object. Later
+autonomous multi-save execution remains open product work; it is not a license to call this party
+model trained.
+
 The next dashboard revision is now specified by the completion-aware party v2 source checkpoint.
 It must not show a fictional “training percent” before data exists. Its pre-fit view should show:
 eligible train/development preferences against the 8/6 minimum; goal and trainee/venue coverage;
@@ -28,10 +49,9 @@ not what it may count. Any future party outcome must carry the digest of its fro
 objective, candidate menu/availability and evidence. Until concrete Red menus and priors are frozen
 and executed, the page must remain **0/8 train, 0/6 development, fit false, authority zero**. The
 [join-hardening receipt](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
-is a source checkpoint, not a training event. Before the page may count a real catalog, the portable
-completion context must also expose storage pressure, capture resources/currency,
-version/external blocks, item-evolution feasibility and typed mask causes at their proper hierarchy
-boundaries.
+is a source checkpoint, not a training event. Exact `587fb18` closes the genuine typed mask-cause
+gap after the source audit confirmed the other four constraints already exist at their proper
+hierarchy boundaries.
 
 The v1 bounded curve stopped before fitting when one selected development turn was mechanically
 suppressed; no model or evaluation exists for that attempt. V2 completed from four train captures
@@ -81,13 +101,15 @@ false and authority zero. The reusable title-neutral menu/evidence contracts are
 exact source `4b4e267`; the page distinguishes that code boundary from real Red bindings. Its event
 list shows the observed per-partition semantic bins without exposing checkpoint, species, map,
 slot or private-path identities. Exact source `85ae878` additionally binds every future result
-back to its prospective question; this still does not advance the outcome counter. The underlying
+back to its prospective question, while `587fb18` freezes the causal reason for every mask; neither
+advances the outcome counter. The underlying
 receipts are the
 [prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
 [checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
 [readiness snapshot](evidence/party-development-v2-readiness-2026-08-15.json). The newer
-[input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json)
-and [join-hardening qualification](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
+[input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json),
+[join-hardening qualification](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
+and [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json)
 record why implementation readiness does not advance the 0/14 outcome counter.
 
 Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only

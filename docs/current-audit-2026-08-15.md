@@ -1,5 +1,50 @@
 # Current audit — 2026-08-15
 
+## Completion-constraint adjudication and causal-mask update
+
+Exact source `587fb18` upgrades the prospective party binding/catalog to v5 and its menu document
+to v4. A candidate's availability and unavailable reason must align exactly: available means no
+reason; unavailable means one typed, title-neutral cause. The adapter emits
+`insufficient_venue_evidence` for a viable venue without compatible frozen prior evidence. The
+ordered cause vector is public only as portable vocabulary and is committed into the menu digest;
+changing it after freeze invalidates the binding.
+
+Claude independently verified exact source `587fb18` and passed 59 focused tests in a temporary
+copy. Mutations that removed the cause from the menu digest, invented a default cause, changed the
+adapter's cause or emitted no cause were killed by semantic tests. The three agreement guards were
+mutually redundant rather than decorative: each survived alone, but removing all three together
+failed. No causal-reason drift channel was found. Claude returned **APPROVE** for source
+qualification and input materialization/freeze only, conditioned on verifying every real mask as
+`insufficient_venue_evidence` or adding the missing producer before freeze.
+
+The full gate passed: 3,435 tests, three intentional integration skips, one expected failure, Ruff,
+mypy over 222 source files and all generated registries. Source bundle:
+`8f474e2fee84038face3b51ddd642252b5c7ad98e84c12522aeaac7201cb7fc2`.
+
+The source audit also changed the disposition of Antigravity's product review. The requirements
+were valid, but four were already implemented:
+
+- `GoalSituation`, `GoalStateEvidence`, `PokemonRedGoalStateAdapter` and goal offers expose
+  resource/storage pressure and typed causal availability;
+- collection observation and the Red PC specialist cover party, all boxes, active-box capacity,
+  deposit/withdraw/switch work, capture stock and immediate capture slots;
+- `ResourceEconomyState` normalizes reserve renewal/affordability while live Red resupply skills
+  privately check `player_money` and exact cost;
+- campaign/Pokédex contracts model version exclusions, explicit trade links, externally unreachable
+  species and consolidation; and
+- `EvolutionSemantics.feasible_now` is already a party-model feature for level, item, trade and
+  conditional evolution routes.
+
+The genuine missing seam was explaining a masked party candidate. Exact `587fb18` closes it. A new
+completion-context subsystem would duplicate working layers without increasing learned authority.
+Autonomous cross-save acquisition and consolidation remain later product work; they are not evidence
+that the 8+6 party-input catalog must be blocked.
+
+No experiment counter advances: concrete menus 0, priors 0, outcomes 0/14, fit false, controller
+and teacher 0, sealed Red and Crystal 0, replay 0, authority 0. Next: compatible prior composition,
+depleted-PP context discovery/materialization, and exact 8+6 input freeze. Execution remains
+closed. See the [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json).
+
 ## Prospective outcome-join hardening update
 
 Exact source `85ae8786412846667b9082dc6f1b344e580cef4d` closes the last known
@@ -21,17 +66,15 @@ sensitivity checks for candidate rows and both shared and venue-specific evidenc
 recheck approved materialization and found one S4 oracle gap; a 3,433rd publication-tree test now
 distinguishes the frozen vocabulary from a live constant.
 
-Antigravity approved the hardened binding but found a separate product blocker: the portable
-completion context lacks storage/box pressure, capture resources and currency, version or external
-blocks, item-evolution feasibility and causal reasons for masked candidates. Codex accepts that as
-a pre-catalog gate, split by hierarchy rather than copied wholesale into the party ranker. The
-exact review disposition is in
+Antigravity approved the hardened binding and raised five product constraints. The newer audit
+above records the corrected disposition: four already existed at the proper hierarchy levels, and
+exact `587fb18` closes the genuine causal-mask gap. The original review is preserved in
 the [join-hardening receipt](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
 
 The finding does not advance the experiment counter. Concrete Red menus and venue priors remain
 zero; outcomes remain 0/14; no controller, teacher, fit, prediction, sealed Red, Crystal, replay or
-authority occurred. The next bounded step is to source-qualify the portable completion-constraint
-contract. Only after that, compatible evidence and PP-diverse non-sealed contexts exist may the
+authority occurred. The next bounded step is compatible evidence and PP-
+diverse non-sealed context discovery. Only after those exist may the
 exact 8+6 inputs be materialized and frozen. Execution remains closed.
 
 ## Construction checkpoint update

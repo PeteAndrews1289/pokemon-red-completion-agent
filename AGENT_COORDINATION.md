@@ -1,5 +1,31 @@
 # Three-agent coordination
 
+> **2026-08-15 completion-constraint adjudication — highest active checkpoint:** Exact source
+> `587fb18` passed 3,435 tests, Ruff, mypy over 222 source files and all generated-registry checks.
+> Every masked party candidate now carries a typed causal reason aligned one-for-one with its
+> availability; the reason vector is frozen in prospective binding/catalog v5 and menu v4. The
+> Red adapter currently emits `insufficient_venue_evidence` when a compatible frozen venue prior
+> is absent. No private venue, title, species, map, slot or path identity is added.
+>
+> Codex's source audit found Antigravity's requirements were mostly already implemented at the
+> correct hierarchy: goal/resource/storage pressures and reasons, all-box collection/storage,
+> normalized economy plus live money checks, campaign version/trade/consolidation, and item-
+> evolution feasibility. The true missing party seam was causal mask identity. Do not build a
+> duplicate completion-context subsystem. Later autonomous multi-save living-Pokédex orchestration
+> remains real product work, but it does not block freezing this Red party-input catalog.
+>
+> Claude completed a read-only exact-commit mutation review of `a1c7179..587fb18`: 59 focused
+> tests passed, the causal reason was proven digest-bound, no drift channel was found, and the
+> redundant agreement guards failed when removed together. It returned **APPROVE** for source
+> qualification and 8+6 input materialization/freeze only. Every real mask must first be confirmed
+> as `insufficient_venue_evidence`; a different constraint needs a real producer. Antigravity's
+> prior product review remains evidence, not automatic authority. Codex remains sole editor/pusher.
+> Counters remain menus 0, priors 0, outcomes 0/14, fit 0, controller/teacher 0, sealed/Crystal 0,
+> replay 0 and authority 0. Next only: compatible prior composition, depleted-PP context
+> discovery/materialization, then exact 8+6 catalog materialization and freeze. No execution.
+> Review packet:
+> `docs/evidence/party-development-causal-reason-qualification-2026-08-15.json`.
+
 > **2026-08-15 prospective party join hardening — highest active checkpoint:** Exact source
 > `85ae878` passed 3,432 non-integration tests, three integration deselections, one expected
 > failure, Ruff, whole-source mypy over 222 files and every privacy/documentation/registry gate.
@@ -13,14 +39,15 @@
 > Codex closed all four at `85ae878`; Claude's narrow recheck returned **APPROVE** for
 > materialization only. Its one new S4 test gap—a live-constant comparison could replace the frozen
 > vocabulary comparison—now has the discriminating 3,433rd test. Antigravity owns product
-> portability. It approved the binding but found missing storage, resources/currency,
-> version/external-block, item-feasibility and typed mask-cause semantics. Codex accepts those as a
-> pre-catalog source gate. Codex remains the sole tracked-file editor and GitHub pusher.
+> portability. It approved the binding and raised five constraint requirements. The newer
+> checkpoint above records the source-level adjudication: four were already implemented elsewhere;
+> the genuine typed mask-cause gap is now closed. Codex remains the sole tracked-file editor and
+> GitHub pusher.
 >
 > Nothing here authorizes execution. Concrete menus 0, priors 0, outcomes 0/14, model fit 0,
 > controller 0, teacher 0, sealed Red 0, Crystal 0, replay 0 and authority 0. The next lane may only
-> implement the portable completion-constraint contract, then compose compatible path-free evidence
-> and materialize/freeze the 8+6 input catalog. Review packet:
+> compose compatible path-free evidence and materialize/freeze the 8+6 input catalog after external
+> review. Review packet:
 > `docs/evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json`.
 
 > **2026-08-15 title-neutral input contract — highest active checkpoint:** Exact source `4b4e267`

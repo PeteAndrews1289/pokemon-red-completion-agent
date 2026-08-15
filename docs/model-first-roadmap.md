@@ -6,6 +6,41 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: close the real constraint gap, then build the curriculum
+
+Exact source `587fb18` passed 3,435 tests, Ruff, mypy across 222 source files and every generated-
+registry check. It upgrades prospective party bindings/catalogs to v5 and their menu document to
+v4. Available candidates must carry no unavailable reason; masked candidates must carry exactly
+one typed, title-neutral cause. That ordered cause vector is frozen into the menu digest. The
+current Red adapter reports `insufficient_venue_evidence` when a compatible frozen venue prior is
+absent, and a post-freeze cause substitution invalidates the binding.
+
+The preceding Antigravity finding was directionally valuable but factually too broad. Storage and
+resource pressure already enter the portable goal-manager question; the Red adapter measures all
+boxes, immediate capture capacity, capture/recovery stock and privately checked money; the shared
+resource-economy contract expresses affordability and renewal options; campaign/Pokédex planning
+already models version exclusives, trade links, external exclusions and consolidation; and the
+party learner already has evolution method plus `evolution_feasible_now`, including items. Those
+capabilities belong at their existing hierarchy levels. Copying them into a new party-context
+object would add code without adding learned authority.
+
+The actual missing input was the causal party-mask reason. That gap is now closed in source. Later
+autonomous acquisition, multi-save orchestration and full living-Pokédex execution remain required
+product capabilities, but they do not block freezing a Red party-ranking curriculum.
+
+Claude's exact-commit mutation audit approved this checkpoint for input materialization/freeze.
+It found no cause-drift channel and confirmed that the individually surviving checks were
+redundant: removing all three agreement guards together failed. The condition is that every real
+mask must be verified as `insufficient_venue_evidence`; another cause requires a real producer
+before freeze. See the
+[path-free qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json).
+
+Next, compose only compatible Route 11 evidence; keep every
+unsupported venue masked with its cause; find or prospectively create depleted-PP non-sealed
+contexts; then materialize and freeze the exact 8 train / 6 development **inputs**. Review the
+concrete catalog before any execution. Outcomes remain 0/14; fit, prediction, sealed Red, Crystal,
+replay and authority remain closed.
+
 ## Current checkpoint: freeze the Red curriculum, not its answers
 
 Exact source `85ae878` completes the prospective question-to-outcome seam and passes 3,432 tests
@@ -20,17 +55,14 @@ independent tests for the immediate guard, objective, candidate rows, masked can
 evidence layers. Its recheck approved materialization; the publication tree also pins the frozen
 vocabulary against a live-constant regression.
 
-Antigravity approved the binding but rejected immediate materialization on product grounds. The
-portable completion context cannot yet express box/storage pressure, capture supplies or currency,
-version/external acquisition blocks, item-evolution feasibility, or the causal reason behind a
-masked choice. Codex accepts the constraint gap but keeps ownership coherent: the completion
-hierarchy receives storage/resource/version state, while the party boundary receives item
-feasibility and typed mask causes. Review evidence is
+Antigravity approved the binding and raised five product constraints. The newer checkpoint above
+records the source audit that followed: four already existed at their proper hierarchy boundaries,
+and exact `587fb18` closes the genuine causal-mask gap. Review evidence for the original finding is
 [path-free](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json).
 
-The next work is a source-only portable completion-constraint contract and its synthetic falsifiers.
-Then compose compatible Route 11 evidence, keep unsupported venues masked with typed causes, find
-or boundedly create real PP-depleted non-sealed contexts, and materialize/freeze exactly 8 train
+The next work is compatible Route 11 evidence, unsupported venues visibly
+masked with typed causes, discovery or bounded creation of real PP-depleted non-sealed contexts,
+and materialization/freezing of exactly 8 train
 and 6 development menus. Review those inputs before execution. The counter is still 0/14; no fit,
 sealed case, Crystal context, replay or authority is authorized.
 

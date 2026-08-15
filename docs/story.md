@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one missing explanation, not five missing systems
+
+The outside review asked the right product question and initially produced the wrong map of the
+codebase. A full-Pokédex agent must understand boxes, supplies, money, versions, trades and
+evolution items. Those systems were not future sketches: storage, resource pressure, money-aware
+resupply, campaign reach, trade links and item-evolution feasibility were already present at their
+proper planning layers.
+
+What was actually missing was smaller and sharper. A party venue could be greyed out without saying
+why. Exact `587fb18` now requires every grey card to carry one portable cause, and freezes that cause
+beside the availability mask. The current cause is honest: **insufficient venue evidence**. It does
+not pretend the route is impossible; it says the project has not yet earned the measurements needed
+to use that answer as a training candidate.
+
+That distinction saved the project from building a second completion planner under a different
+name. The gate is green at 3,435 tests, but the learning counter remains **0 of 14**. Claude's
+exact-commit mutation audit found no cause-drift channel and approved freezing the inputs, provided
+every real mask is verified as missing venue evidence or receives a real producer. Next comes
+compatible evidence, depleted-PP lessons and the reviewed
+8+6 Red curriculum. Full multi-save Pokédex execution remains the destination, not a reason to pack
+every campaign variable into one party-ranking question.
+
 ## Current checkpoint: the result must show its question
 
 Imagine preregistering a test, running it, and then discovering that the answer sheet never named
@@ -21,12 +43,13 @@ through the adapter. A final 3,433rd test distinguishes the frozen vocabulary fr
 
 Antigravity approved that seam as title-neutral, then asked the question the binding could not:
 *why* is a choice unavailable? A full box, no Poké Balls, no money, a version exclusive, a missing
-evolution item and an unsolved prerequisite require different recovery goals. Those constraints now
-become the next source boundary before the real catalog is frozen.
+evolution item and an unsolved prerequisite require different recovery goals. The newer checkpoint
+above records which layers already answered those questions and the exact repair to the one missing
+party-menu explanation.
 
 The progress number is still **0 of 14**. That is deliberate. The project can now build the first
 Red curriculum knowing that an outcome cannot rewrite the question after seeing the game. The next
-checkpoint is a portable explanation of collection blocks, then the reviewed list of eight training
+checkpoint is the reviewed list of eight training
 and six untouched development decisions—not a claim that a model is already learning to complete
 Pokémon.
 

@@ -1,5 +1,38 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the audit saved us from rebuilding the project
+
+Antigravity's question was exactly the right one: can the future agent tell the difference between
+a full box, an empty bag, a version-exclusive target, a missing evolution item and evidence that
+simply has not been measured yet? The first answer was too pessimistic. A source-level audit found
+that most of this architecture already existed—and that declaring it absent would have sent the
+project into another long detour.
+
+The shared goal manager already turns resources and storage into title-neutral pressures and keeps
+typed reasons beside unavailable goals. Red's adapter counts capture/recovery stock, active party
+space and every PC box; its bounded shop skills privately verify money and exact cost. The resource
+economy contract describes purchase, earning, selling and finding without exposing raw currency.
+Campaign planning already knows versions, concurrent saves, explicit trade links, unreachable
+species and which specimens must be consolidated. The party model already carries evolution method
+and whether that evolution is feasible now, including item evolution.
+
+One seam really was absent: the party menu said a venue was unavailable without preserving why.
+Exact `587fb18` gives every masked candidate a typed cause and freezes the entire cause vector into
+the prospective question. Available choices carry no reason. A venue without compatible historical
+evidence carries `insufficient_venue_evidence`. Change that explanation after freeze and the binding
+no longer matches.
+
+The distinction matters for the story as much as the code. We did not add another grand planner;
+we found the planner layers already built, repaired the one missing join, and moved on. The full
+gate reached 3,435 passing tests with the model-training counter still at **0 of 14**. Claude then
+attacked the exact commit with a temporary-copy mutation battery. It found no cause-drift channel:
+the checks that survived individually were redundant, and removing all three together failed. The
+review approved freezing the input catalog, with one honest constraint—every real mask must be
+verified as missing venue evidence or receive a real producer. Next comes real venue evidence,
+depleted-PP contexts and the frozen
+8+6 Red curriculum—not another week spent reimplementing storage and version logic under a new
+name.
+
 ## August 15: the answer can no longer rewrite the question
 
 The title-neutral adapter could freeze a party question, but one final seam still mattered: proving
@@ -17,16 +50,16 @@ censored, but it cannot quietly answer an easier menu than the one the project p
 
 That source passed 3,432 tests. Claude's recheck found one last test-only distinction—frozen feature
 names versus a live constant—and the publication tree added a 3,433rd oracle. Antigravity then
-looked beyond the join and found the more important product gap: a living-Pokédex agent must reason
-about box space, capture supplies and currency, cartridge/external availability, evolutionary-item
-feasibility and the cause of a masked choice. The binding was portable; the surrounding completion
-context was incomplete.
+looked beyond the join and challenged box space, capture supplies and currency,
+cartridge/external availability, evolutionary-item feasibility and the cause of a masked choice.
+The newer checkpoint above records the source audit: four concerns were already implemented at the
+right layers, and only the causal party-mask seam needed repair.
 
 The dashboard did not move. There are still zero concrete Red menus, zero frozen venue priors, zero
-of fourteen completion-aware outcomes and no model fit. The next visible progress is now a portable
-constraint contract at the correct hierarchy boundaries, followed by the exact 8+6 input catalog.
-That prevents a week of fast emulation from producing scientifically clean data for an agent that
-still cannot understand why its Pokédex plan is blocked.
+of fourteen completion-aware outcomes and no model fit. The next visible progress is compatible
+evidence and the exact 8+6 input catalog. That prevents a week of fast
+emulation from producing scientifically clean data for an agent whose masked choices were not
+causally auditable.
 
 ## August 15: the question and its evidence were frozen together
 
