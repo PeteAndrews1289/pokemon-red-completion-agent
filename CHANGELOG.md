@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Completed the fresh V2 party comparison after exact commit `00499bc` passed CI. Both clones
+  evolved safely; phase accounting reconciled at 10/50 and 40/50 budgeted Center calls plus one
+  cleanup each; and the lower band produced one accepted source-bound target at 6.664 versus 5.977
+  target XP per 1,000 frames. Published the 39 higher-band venue transitions as a traversal-
+  reliability limitation, fit no model and promoted no authority.
 - Rejected the first party-development preference after its aggregate Center counter could not
   prove the frozen effort bound. Added phase-separated venue-transition, required-recovery,
   optional-recovery and cleanup evidence; guarded every in-loop Center route; froze a fresh V2

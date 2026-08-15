@@ -44,15 +44,17 @@ venue positioning and cleanupâ€”and the venue-transition branch lacked a boundâ€
 [path-free result](evidence/red-party-development-outcome-result-2026-08-14.json) rejects the
 preference as a learner target.
 
-Battle and navigation have survived the real-outcome boundary; party development is one fresh
-execution away from retesting it. The
-[prospective V2 contract](evidence/red-party-development-outcome-plan-v2-2026-08-14.json) now splits
-every Center call into venue-transition, required-recovery, optional-recovery and cleanup counters,
-guards the three in-loop phases under one 50-call bound, requires exactly one separately counted
-cleanup, and binds the next preassigned train context under a new identity. Exact-source CI and a
-read-only preflight must pass before either fresh clone runs. After that, freeze level-matched,
-non-OHKO battles; navigation contexts with blockers and recovery; and independent party contexts
-spanning trainee strength, health, PP, evolution distance and venue difficulty.
+Battle, navigation and party development have now survived one real-outcome boundary each. The
+[V2 party result](evidence/red-party-development-outcome-result-v2-2026-08-14.json) ran only after
+exact-source CI and read-only preflight. Both fresh clones evolved safely; four Center-call phases
+reconciled; budgeted calls were 10/50 and 40/50; and candidate 0 became one accepted train target.
+It used 108,324 fewer frames than candidate 1, whose cost included 39 bounded Cave re-entries.
+
+That is not permission to fit a party model from one confounded context. Keep the example bound to
+its exact executor source, diagnose and represent or repair venue traversal reliability, then
+freeze level-matched non-OHKO battles; navigation contexts with blockers and recovery; and
+independent party contexts spanning trainee strength, health, PP, evolution distance and venue
+difficulty.
 Keep train and development lineages separate from creation, build learning curves only when each
 family has enough independent decisions to expose improvement, and leave the unseen promotion
 gates closed. Do not scale the easy Mansion distribution, promote a ceiling curve candidate, replay
@@ -114,10 +116,9 @@ fake universal record. The battle curve runner enforces exactly 4 train + 4 deve
 unique roots/states/observations, the 1/2/4 prospective order and complete equal-timing candidate
 outcomes. V1 stopped honestly before fit; v2 completed and showed a development ceiling rather than
 an improvement. The same-terminal navigation pair produced one valid shared example. The
-same-evolution party pair executed, but aggregate Center accounting could not prove its effort bound
-and the target was rejected. The three-family interface checkpoint remains open only for that
-corrected fresh execution and accounting verification; it still does not approach Milestone 1's
-sample-size or unseen-performance gates.
+same-evolution V1 pair executed but its target was rejected; the fresh V2 pair then closed phase
+accounting and produced one accepted source-bound example. The three-family interface checkpoint is
+complete. It still does not approach Milestone 1's sample-size or unseen-performance gates.
 
 ## Learning approach
 

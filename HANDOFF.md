@@ -17,9 +17,36 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Corrected party-development outcome accepted one target; model remains absent — 2026-08-14
+
+Exact commit `00499bc68b099ffcd0125a6777bc3b836a84ff0b` passed GitHub CI run
+`31858937755`. The V2 read-only preflight then returned ready for the next preassigned non-sealed
+`evolve_species` train root with teacher, sealed Red, Crystal and full-replay counters all zero.
+Both frozen candidates executed once; neither was retried or substituted.
+
+Both clones evolved the same level-22 trainee at level 26 with zero faints. Candidate 0, the lower
+9–15 band, used 108 battles, 1,961 encounter steps, 195 rotations, 26,468 controller actions and
+1,050,047 frames for 6,998 target XP. Candidate 1, the higher 15–21 band, used 69 battles, 1,036
+steps, 154 rotations, 20,505 actions and 1,158,371 frames for 6,924 target XP. The exact objective
+accepted candidate 0: **6.664464 target XP per 1,000 frames** versus **5.977360**.
+
+The accounting repair did its job. Candidate 0 made 10 required-recovery calls and one cleanup.
+Candidate 1 made 39 venue-transition calls, one required-recovery call and one cleanup. Optional
+recovery was zero; phase sums equal totals; budgeted calls were 10/50 and 40/50; cleanup was exactly
+one per trial. This is one valid source-bound train example, but the 39 Cave transitions mean the
+label includes current traversal reliability. Do not describe it as intrinsic lower-band
+superiority, a party model, cross-context competence or transfer.
+
+The private artifact has four records / 7,208 bytes and manifest SHA-256
+`c6d7081b1653b4092529494665f7216da4bd5e5bc6ddbb27dcdaaa4e201e054c`. The path-free result is
+[`docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json`](docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json).
+Next keep this example bound to its exact source, diagnose and represent or repair Cave traversal
+reliability before fitting a party head, and collect independent party contexts alongside harder
+battle and blocker-navigation contexts. No unseen gate or full Red replay is authorized.
+
 ## First real party-development outcome executed; target rejected — 2026-08-14
 
-The prospective plan is
+The historical V1 plan is
 [`docs/evidence/red-party-development-outcome-plan-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-2026-08-14.json).
 Its first read-only preflight against `256923f` stopped before controller creation because the
 selected rehearsal state was in Pokémon Mansion while the plan claimed a Center boundary. No
@@ -48,15 +75,14 @@ The complete private artifact has four records and manifest SHA-256
 It fits no model, enters no learner ledger, promotes no authority and demonstrates no cross-species
 or cross-game generalization. Retire this experiment identity without retry.
 
-The corrective implementation now records venue-transition, required-recovery, optional-recovery
+The corrective implementation records venue-transition, required-recovery, optional-recovery
 and final-cleanup calls separately, verifies their sum against the aggregate, and guards every
-in-loop Center route. The fresh prospective contract is
+in-loop Center route. The V2 prospective contract was
 [`docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json`](docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json).
 It binds the next already-preassigned non-sealed `evolve_species` train context, caps the three
 budgeted phases together at 50 calls and requires exactly one separately counted final cleanup.
-Publish this exact source, require exact-commit green CI, run a read-only preflight, then execute
-each fresh clone once. Until that happens there is still no accepted party learner example. Do not
-replay all of Red or open an unseen gate to manufacture sample size.
+That prospective instruction was consumed exactly once by the accepted V2 result above. V1 remains
+rejected; do not replay it, all of Red, or an unseen gate to manufacture sample size.
 
 ## First real navigation outcome complete — 2026-08-14
 
@@ -86,8 +112,8 @@ authority is claimed. Teacher targets, sealed Red access, Crystal access and ful
 zero. The path-free result is
 [`docs/evidence/red-local-navigation-outcome-result-2026-08-14.json`](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json).
 The bounded party-development counterfactual described above executed but failed its post-result
-accounting audit. Do not turn this easy route into a route-specific hardening campaign, and do not
-replay the full game.
+accounting audit; the later fresh V2 result closed that accounting seam. Do not turn this easy route
+into a route-specific hardening campaign, and do not replay the full game.
 
 ## V2 1/2/4 battle curve complete; authority held — 2026-08-14
 

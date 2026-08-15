@@ -8,7 +8,7 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
-## Current checkpoint (2026-08-14): party accounting repair before three-family closure
+## Current checkpoint (2026-08-14): three outcome families reached; widen genuine decision coverage
 
 The battle, navigation and party-development adapters have each reached real cartridge execution
 through the title-neutral shared contract. Battle's 1/2/4 curve proved fitting but hit a 4/4
@@ -18,17 +18,20 @@ band evolved the level-22 trainee in 68 battles / 1,185,669 frames versus 103 / 
 faints. Its 42 aggregate Center calls could not prove the configured 40-trip bound, so the apparent
 preference was rejected as training data. None of these results grants authority.
 
-The narrow repair is implemented and prospectively frozen in the
-[V2 party plan](evidence/red-party-development-outcome-plan-v2-2026-08-14.json): four phase counters,
-a shared hard bound on every in-loop Center call, exactly one separately counted cleanup and the
-next preassigned train context under a new identity. It still requires exact-source publication,
-green CI, a read-only preflight and one execution per fresh clone before it can produce a learner
-example. Then resume independent curriculum coverage: level-matched non-OHKO battles, navigation
-with blockers and recovery, and party contexts varying trainee strength, health, PP, evolution
-distance and venue difficulty. Keep train/development/unseen lineages separated prospectively. Do
-not replay all of Red, scale convenient Mansion encounters, open a sealed gate for tuning, or use
-Crystal as additional training data. See the active [model-first roadmap](model-first-roadmap.md)
-and the [rejected V1 party result](evidence/red-party-development-outcome-result-2026-08-14.json).
+The narrow repair completed under exact green source. Its
+[V2 result](evidence/red-party-development-outcome-result-v2-2026-08-14.json) accepted one
+source-bound party target after both fresh clones evolved safely and every Center-call phase
+reconciled. Lower used 10 required recoveries + cleanup; higher used 39 venue transitions + one
+recovery + cleanup. The lower band finished 108,324 frames sooner despite needing 39 more battles.
+This validates outcome accounting, not a party model or intrinsic band preference.
+
+Resume independent curriculum coverage: first diagnose and represent or repair venue traversal
+reliability, then collect party contexts varying trainee strength, health, PP, evolution distance
+and venue difficulty; level-matched non-OHKO battles; and navigation with blockers and recovery.
+Keep train/development/unseen lineages separated prospectively. Do not replay all of Red, scale
+convenient Mansion encounters, open a sealed gate for tuning, or use Crystal as additional training
+data. See the active [model-first roadmap](model-first-roadmap.md) and preserve the
+[rejected V1 result](evidence/red-party-development-outcome-result-2026-08-14.json) unchanged.
 
 ## Superseded checkpoint (2026-08-14): prove one real learning loop, then finish three families
 

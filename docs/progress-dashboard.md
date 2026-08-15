@@ -23,12 +23,18 @@ all updates were 4/4, three development contexts were completely flat, and 26/32
 one-turn knockouts. It must not turn a descriptive eight-context curve into the 200-battle
 promotion gate.
 
-The first party-development result now has its own completed-experiment failure view. It shows both
+The first party-development result has its own completed-experiment failure view. It shows both
 same-trainee trials, exact target-XP rates, battles, encounter steps, controller actions, frames,
 rotations and Center-route accounting. It makes the key tradeoff visible: the higher encounter band
 finished 11.4% faster but reported 42 aggregate Center calls against a configured 40-trip policy.
 Because phase accounting was absent, the page labels the target rejected, with no learner example,
 fitted party model or authority.
+
+The default party page now shows the corrected V2 result. Both fresh clones evolved safely and the
+phase counters close exactly. It reports the accepted lower-band target, 10/50 versus 40/50
+budgeted Center calls, one cleanup each and the higher band's 39 venue transitions. The page also
+states the limit: this is one source-bound example under the current executor, with no fitted party
+model, generalization result or authority.
 
 ## What it shows
 
@@ -87,10 +93,10 @@ python scripts/run_party_outcome_dashboard.py \
 ```
 
 Use `--no-browser` when the existing browser tab already points at
-`http://127.0.0.1:8765/`. The headline result is 68 battles / 1,185,669 frames in the higher band
-versus 103 / 1,338,952 in the lower band, with both trainees evolving at level 26 and zero faints.
-This display is a completed execution and rejected-target report, not a new run or a model-training
-claim.
+`http://127.0.0.1:8765/`. The headline result is 108 battles / 1,050,047 frames in the lower band
+versus 69 / 1,158,371 in the higher band, with both trainees evolving at level 26 and zero faints.
+It displays one accepted learner target plus the 39-transition caveat—not a fitted model, a
+generalization result or a new run.
 
 ## Historical Red full-run harness — not currently authorized
 

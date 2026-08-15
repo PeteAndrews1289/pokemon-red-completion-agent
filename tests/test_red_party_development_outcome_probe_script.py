@@ -41,6 +41,9 @@ HISTORICAL_PLAN_PATH = (
 RESULT_PATH = (
     PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-2026-08-14.json"
 )
+RESULT_PATH_V2 = (
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-v2-2026-08-14.json"
+)
 
 
 def _member(slot: int, species_id: int, level: int, experience: int) -> PartyMemberObservation:
@@ -174,6 +177,65 @@ def test_public_result_reproduces_trials_but_rejects_ambiguous_recovery() -> Non
     assert recovery["policy_conformance_proven"] is False
     assert recovery["training_target_rejected"] is True
     assert payload["decision"]["training_target_accepted"] is False
+    assert payload["decision"]["model_fit"] is False
+    assert payload["decision"]["authority_promoted"] is False
+    assert set(payload["protected_access"].values()) == {0}
+    assert payload["private_path_fields"] == 0
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_public_v2_result_accepts_only_the_phase_reconciled_target() -> None:
+    payload = json.loads(RESULT_PATH_V2.read_text(encoding="ascii"))
+    encoded = RESULT_PATH_V2.read_text(encoding="ascii")
+    collection = payload["outcome_collection"]
+    accounting = payload["center_call_accounting"]
+    representation = payload["representation_audit"]
+    trials = collection["trials"]
+
+    assert payload["status"] == "complete_learner_target_accepted"
+    assert (
+        payload["prospective_bindings"]["public_plan_sha256"]
+        == hashlib.sha256(ACTIVE_PLAN_PATH.read_bytes()).hexdigest()
+    )
+    assert payload["source"]["git_commit"] == "00499bc68b099ffcd0125a6777bc3b836a84ff0b"
+    assert payload["source"]["exact_commit_ci_run"] == 31858937755
+    assert payload["source"]["exact_commit_ci_conclusion"] == "success"
+    assert collection["candidate_outcomes"] == 2
+    assert collection["fully_measured"] is True
+    assert collection["learner_update_eligible"] is True
+    assert collection["best_candidate_indices"] == [0]
+    assert collection["target_distribution"] == [1.0, 0.0]
+    assert [trial["candidate_index"] for trial in trials] == [0, 1]
+    assert all(trial["evolution_completed"] for trial in trials)
+    assert all(trial["initial_target_level"] == 22 for trial in trials)
+    assert all(trial["final_target_level"] == 26 for trial in trials)
+    assert all(trial["faints"] == 0 for trial in trials)
+    for trial in trials:
+        assert trial["target_experience_per_1000_frames"] == pytest.approx(
+            trial["target_experience_gained"] * 1_000 / trial["frames_executed"],
+            abs=0.000001,
+        )
+        budgeted = (
+            trial["venue_transition_trips"]
+            + trial["required_recovery_trips"]
+            + trial["optional_recovery_trips"]
+        )
+        assert budgeted == trial["budgeted_center_calls"]
+        assert budgeted <= accounting["configured_maximum_budgeted_center_calls"]
+        assert trial["cleanup_trips"] == 1
+        assert budgeted + trial["cleanup_trips"] == trial["total_counted_center_routes"]
+    assert (
+        trials[0]["target_experience_per_1000_frames"]
+        > trials[1]["target_experience_per_1000_frames"]
+    )
+    assert accounting["observed_budgeted_center_calls"] == [10, 40]
+    assert accounting["observed_cleanup_calls"] == [1, 1]
+    assert accounting["phase_sum_equals_total_for_every_trial"] is True
+    assert accounting["budget_conformance_proven"] is True
+    assert representation["higher_band_venue_transition_trips"] == 39
+    assert representation["intrinsic_lower_band_superiority_demonstrated"] is False
+    assert payload["decision"]["training_target_accepted"] is True
     assert payload["decision"]["model_fit"] is False
     assert payload["decision"]["authority_promoted"] is False
     assert set(payload["protected_access"].values()) == {0}

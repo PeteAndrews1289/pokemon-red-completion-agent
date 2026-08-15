@@ -4,6 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Corrected party-development outcome (August 14, 2026): one target accepted, no model fit.**
+> Exact source `00499bc` passed GitHub CI run `31858937755` before two fresh identical-state clones
+> evolved the same level-22 trainee at level 26 with zero faints. The lower 9–15 band used 108
+> battles and 1,050,047 frames; the higher 15–21 band used 69 and 1,158,371. Phase accounting
+> reconciled exactly: lower used 10 required recoveries + 1 cleanup; higher used 39 venue
+> transitions + 1 required recovery + 1 cleanup, all inside the frozen 50-call in-loop bound. The
+> outcome accepted candidate 0 at **6.664 vs 5.977 target XP per 1,000 frames**. This is one
+> source-bound learner example, not proof that lower bands are intrinsically better: the 39 Cave
+> transitions expose current executor cost that must be represented or repaired before party-model
+> fitting. Model, generalization and authority remain zero. See the
+> [V2 result](docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json) and
+> [dashboard guide](docs/progress-dashboard.md).
+
 > **First real party-development outcome (August 14, 2026): executed, training target rejected.** Exact
 > source `71f36bf` passed GitHub CI before two identical-state clones evolved the same trainee from
 > level 22 to 26 with zero faints. The higher 15–21 encounter band needed 68 battles, 1,046 steps,
@@ -17,8 +30,8 @@
 > The corrective [V2 plan](docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json)
 > uses the next preassigned train context, records venue-transition, required-recovery,
 > optional-recovery and cleanup calls separately, bounds every in-loop call to a shared maximum of
-> 50, and requires exactly one separately counted cleanup. It remains prospective until its exact
-> published commit passes CI and both fresh clones execute once; it is not yet a learner example.
+> 50, and requires exactly one separately counted cleanup. That plan was consumed exactly once by
+> the accepted V2 result above; this V1 result remains rejected.
 
 > **First real navigation outcome (August 14, 2026): complete, no authority claim.** Exact source
 > `c37504d` passed GitHub CI before a frozen same-destination pair ran once from identical Red
@@ -28,7 +41,7 @@
 > preference example while hiding coordinates and arrow sequences from the learner. This validates
 > real navigation measurement—not navigation generalization or a playable model. See the
 > [path-free result](docs/evidence/red-local-navigation-outcome-result-2026-08-14.json). Party
-> development has reached the cartridge but still needs a corrected independent outcome.
+> development later produced the corrected source-bound V2 outcome above.
 
 > **First Red learning curve (August 14, 2026): training works; improvement remains unproven.**
 > Exact source `e6fae7f` passed 3,310 local tests and GitHub CI before the frozen 4-train/4-
@@ -41,8 +54,8 @@
 > [path-free curve result](docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json) and
 > [dashboard guide](docs/progress-dashboard.md). Navigation crossed the same real-outcome boundary;
 > party development exposed an accounting defect before its preference could become training data.
-> Next comes a corrected independent party outcome and a deliberately harder short-scenario
-> curriculum—not another full Red replay.
+> The corrected V2 party result above closed that seam; next comes a deliberately harder,
+> independent short-scenario curriculum—not another full Red replay.
 
 > **First real outcome-learning cycle (August 14, 2026): complete, candidate rejected.** Two
 > authenticated non-sealed Red lineages produced eight controller-proven move outcomes with exactly

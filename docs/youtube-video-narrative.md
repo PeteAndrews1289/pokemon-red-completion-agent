@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 14 V2 party scene: the faster venue was not the higher-level venue
+
+Keep the rejected V1 card visible in the corner; do not rewrite it. Open two fresh clones under
+**EXACT COMMIT GREEN · ZERO TEACHER · ZERO SEALED · ZERO CRYSTAL**. Run the obvious scoreboard
+first: **LOWER 108 BATTLES** versus **HIGHER 69 BATTLES**. Let the audience expect the higher band
+to win.
+
+Then reveal time: **LOWER 1,050,047 FRAMES · HIGHER 1,158,371 FRAMES**. Split Center accounting
+into four lanes. Lower: **0 TRANSITIONS · 10 RECOVERIES · 0 OPTIONAL · 1 CLEANUP**. Higher:
+**39 TRANSITIONS · 1 RECOVERY · 0 OPTIONAL · 1 CLEANUP**. Put the shared bracket over the in-loop
+lanes: **10/50 · 40/50 · CONTRACT PASSED**.
+
+Stamp the lower card **ONE SOURCE-BOUND TARGET ACCEPTED**, then immediately add
+**MODEL NOT FIT · GENERALIZATION ZERO · AUTHORITY ZERO**. Narration: **“The higher-level cave won
+the battle count and lost the clock. The model did not discover that weaker Pokémon are better; the
+experiment discovered that navigation reliability is part of training efficiency.”** End on
+**REPRESENT OR REPAIR CAVE TRAVERSAL → INDEPENDENT PARTY CONTEXTS → THEN FIT**.
+
 ## August 14 party-outcome scene: stop healing after every battle
 
 Open on the old recovery threshold: **RETREAT AT 90% HP**, followed by a rapid loop of

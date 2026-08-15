@@ -18,6 +18,7 @@ def test_party_dashboard_source_frame_is_optional() -> None:
     evidence = SCRIPT["_load_evidence"]()
     state = DashboardState(party_development_dashboard_snapshot(evidence))
 
+    assert evidence["schema"] == "pokemon-red-party-development-outcome-evidence-v2"
     assert (
         SCRIPT["_publish_authenticated_source_frame"](
             state,

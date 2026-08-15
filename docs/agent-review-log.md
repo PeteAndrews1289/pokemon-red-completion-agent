@@ -44,6 +44,16 @@ Decision: publish the [V2 plan](evidence/red-party-development-outcome-plan-v2-2
 require exact-commit green CI and read-only preflight, then execute each fresh candidate once.
 Independent review remains pending and is not approval.
 
+Exact commit `00499bc` passed CI run `31858937755`; V2 preflight was ready; and both candidates
+completed once. Lower band used 108 battles / 1,050,047 frames with 10 required recoveries + one
+cleanup. Higher band used 69 / 1,158,371 with 39 venue transitions + one required recovery + one
+cleanup. Phase sums close, optional recovery is zero and budgeted calls remain 10/50 and 40/50.
+Decision: accept candidate 0 as one source-bound learner target at 6.664464 versus 5.977360 target
+XP per 1,000 frames; fit no model; grant no authority; and reject intrinsic band or transfer claims.
+The 39 Cave transitions must be attacked as a representation/executor issue before party fitting.
+V2 review packet:
+[`red-party-development-outcome-result-v2-2026-08-14.json`](evidence/red-party-development-outcome-result-v2-2026-08-14.json).
+
 ## Same-terminal navigation result — 2026-08-14
 
 Codex's post-curve audit rejected using the existing Help-Bill-versus-Misty scenario as a local

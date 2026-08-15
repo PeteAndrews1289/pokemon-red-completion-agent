@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Show the first real Red party-development result in the view-only dashboard."""
+"""Show the latest real Red party-development result in the view-only dashboard."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ from pokemon_red_completion.red_party_development_dashboard import (  # noqa: E4
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 
 EVIDENCE_PATH = (
-    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-2026-08-14.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-v2-2026-08-14.json"
 )
 
 
@@ -103,7 +103,7 @@ def main(argv: list[str] | None = None) -> int:
         print(
             json.dumps(
                 {
-                    "schema": "pokemon-red-party-development-dashboard-v1",
+                    "schema": "pokemon-red-party-development-dashboard-v2",
                     "url": dashboard.url,
                     "view_only": True,
                     "authenticated_source_frame": frame_ready,

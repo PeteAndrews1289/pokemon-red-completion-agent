@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 14: the repaired counter changed the answer
+
+The replacement ran only after its exact commit passed GitHub and a fresh preassigned train state
+passed read-only authentication. This time the journal could explain every Center visit. The lower
+band made ten required recoveries and one cleanup. The higher band made one recovery, one cleanup—
+and thirty-nine venue transitions. Both trainees evolved without fainting, but those repeated Cave
+re-entries made the apparently stronger band 108,324 frames slower.
+
+So the lower band became one accepted outcome target at 6.664 target XP per thousand frames versus
+5.977. The qualification matters as much as the result: the target describes this exact controller,
+whose Cave traversal is still costly. It does not establish that weaker wild Pokémon are better,
+and one example cannot become a party policy. The next lesson must expose or repair traversal
+reliability and vary the party context before any model is fit.
+
 ## August 14: party training became a controlled question—and answered it
 
 The old balancing block mixed too many things: trainee selection, travel, battles, evolution,
@@ -24,11 +38,11 @@ So this is not yet a learned party policy or even an accepted training example. 
 useful failure: real outcomes completed, an apparently attractive result failed its accounting
 contract, and the project can repair the counter before spending days or training on a false label.
 
-The replacement does not reinterpret the old journal. It starts from the next preassigned train
-context under a new experiment identity, gives venue travel, mandatory recovery, optional recovery
-and cleanup their own counters, and places every in-loop Center call under one finite budget. Only
-an exact green commit and two fresh one-shot outcomes can turn that prospective repair into a
-lesson.
+The replacement did not reinterpret the old journal. It started from the next preassigned train
+context under a new experiment identity, gave venue travel, mandatory recovery, optional recovery
+and cleanup their own counters, and placed every in-loop Center call under one finite budget. An
+exact green commit and two fresh one-shot outcomes then turned that prospective repair into the
+qualified lesson recorded above.
 
 ## August 14: the first navigation lesson reached the game
 
@@ -64,9 +78,9 @@ play Pokémon.”
 So the curve produced a useful rejection rather than a victory graphic. The training pipeline is
 real; battle improvement is not yet demonstrated. Authority stays at zero. The next chapter left
 the easy battle loop long enough to prove real navigation and test party development. Navigation
-passed; party accounting rejected its first target. The project repairs that narrow seam, then
-returns to prospectively frozen battles where health, status, matchups and resources create actual
-choices alongside independent blocker-navigation and party contexts.
+passed; party accounting rejected its first target, and V2 then repaired that narrow seam. The
+project now returns to prospectively frozen battles where health, status, matchups and resources
+create actual choices alongside independent blocker-navigation and party contexts.
 
 ## August 14: the first curve stopped on a real game mechanic
 
@@ -103,13 +117,13 @@ party trial must carry the exact identity-free trainee or venue candidate. Negat
 both and prove the join fails. Battle winners are unchanged, and no teacher selection becomes a
 target.
 
-The first curve is now prospective and executable: four ordered train contexts, four untouched
-development contexts, and 1/2/4 last-layer fits restarted from the same prior. The runner rejects
-duplicate lineages, states, observations and manifests; retains flat prefixes as no-update points;
-and reports paired selected utility on the same development roots. This was deliberately descriptive
-and granted no authority. It ran only after its source was published and green. Navigation later
+The first curve was prospectively frozen and executable: four ordered train contexts, four
+untouched development contexts, and 1/2/4 last-layer fits restarted from the same prior. The runner
+rejects duplicate lineages, states, observations and manifests; retains flat prefixes as no-update
+points; and reports paired selected utility on the same development roots. This was deliberately
+descriptive and granted no authority. It ran only after its source was published and green. Navigation later
 survived the same seam; party development reached it but rejected its first target on accounting,
-so that narrow repair remains before broad curriculum expansion.
+and the fresh V2 pair later closed that narrow repair before broad curriculum expansion.
 
 ## August 14: the first outcome lesson failed—and that was the result
 

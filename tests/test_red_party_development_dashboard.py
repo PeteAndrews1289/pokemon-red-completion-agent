@@ -15,10 +15,19 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULT_PATH = (
     PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-2026-08-14.json"
 )
+RESULT_PATH_V2 = (
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-v2-2026-08-14.json"
+)
 
 
 def _evidence() -> dict[str, object]:
     value = json.loads(RESULT_PATH.read_text(encoding="ascii"))
+    assert isinstance(value, dict)
+    return value
+
+
+def _evidence_v2() -> dict[str, object]:
+    value = json.loads(RESULT_PATH_V2.read_text(encoding="ascii"))
     assert isinstance(value, dict)
     return value
 
@@ -60,6 +69,52 @@ def test_party_outcome_dashboard_rejects_recovery_or_authority_overclaims() -> N
     decision = overclaim["decision"]
     assert isinstance(decision, dict)
     decision["authority_promoted"] = True
+
+    with pytest.raises(ProgressDashboardError, match="overclaims"):
+        party_development_dashboard_snapshot(overclaim)
+
+
+def test_party_outcome_dashboard_shows_the_accepted_v2_target_and_its_limit() -> None:
+    snapshot = party_development_dashboard_snapshot(_evidence_v2())
+    public = snapshot.public_dict()
+
+    assert public["run_status"] == "passed"
+    assert public["stage_progress"] == 1.0
+    assert public["frame_count"] == 2_208_418
+    assert public["actions"] == 46_973
+    assert public["model"]["mode"] == "shadow"
+    assert public["model"]["choice"] == "Candidate 0 · lower encounter band 9–15"
+    assert public["model"]["teacher_queries"] == 0
+    assert public["experiment"]["zero_shot"] == {"completed": 2, "total": 2}
+    assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}
+    assert public["learning_components"] == []
+    events = "\n".join(public["events"])
+    assert "108 battles" in events
+    assert "69 battles" in events
+    assert "39 venue transitions" in events
+    assert "budgeted Center calls 10/50 and 40/50" in events
+    assert "not evidence that lower encounter bands are intrinsically superior" in events
+    assert "no fitted party model" in events
+    assert public["private_path_fields"] == 0
+    assert public["controller_endpoints"] == 0
+
+
+def test_party_outcome_dashboard_rejects_v2_phase_or_generalization_overclaims() -> None:
+    invalid_phase = deepcopy(_evidence_v2())
+    collection = invalid_phase["outcome_collection"]
+    assert isinstance(collection, dict)
+    trials = collection["trials"]
+    assert isinstance(trials, list)
+    assert isinstance(trials[1], dict)
+    trials[1]["venue_transition_trips"] = 38
+
+    with pytest.raises(ProgressDashboardError, match="phase accounting"):
+        party_development_dashboard_snapshot(invalid_phase)
+
+    overclaim = deepcopy(_evidence_v2())
+    representation = overclaim["representation_audit"]
+    assert isinstance(representation, dict)
+    representation["intrinsic_lower_band_superiority_demonstrated"] = True
 
     with pytest.raises(ProgressDashboardError, match="overclaims"):
         party_development_dashboard_snapshot(overclaim)

@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-14 party-development result — highest active checkpoint:** The first preflight stopped
+> **2026-08-14 corrected party-development result — highest active checkpoint:** Exact source
+> `00499bc` passed CI run `31858937755`; the V2 preflight was ready; and both fresh one-shot clones
+> evolved the same level-22 trainee at level 26 with zero faints. Lower band: 108 battles /
+> 1,050,047 frames / 6.664464 target XP per 1,000 frames. Higher band: 69 / 1,158,371 / 5.977360.
+> The shared objective accepted the lower band as one source-bound train target.
+>
+> Phase accounting closes exactly. Lower used 10 required recoveries + 1 cleanup. Higher used 39
+> venue transitions + 1 required recovery + 1 cleanup. Budgeted calls were 10/50 and 40/50;
+> optional recovery stayed zero. The 39 Cave transitions are a current-executor reliability signal,
+> not evidence that lower bands are intrinsically superior. No model was fit and no authority or
+> generalization claim exists. Review
+> `docs/evidence/red-party-development-outcome-result-v2-2026-08-14.json`; attack phase arithmetic,
+> candidate binding, source/CI/artifact hashes, the accepted-target boundary and the traversal
+> caveat. Claude and Antigravity review is pending.
+
+> **2026-08-14 rejected V1 party-development result — historical checkpoint:** The first preflight stopped
 > exact source `256923f` before controller creation because its frozen bytes were in Pokémon
 > Mansion while the plan claimed a Cinnabar Center boundary. No attempt ran. Codex rebound the plan
 > to canonical non-sealed `evolve_species` train slot 028, added an exact nurse-coordinate guard,
@@ -20,28 +35,28 @@
 > ambiguity, candidate binding, rates, artifact digests and rejection. Codex has now implemented
 > phase-separated venue-transition, required-recovery, optional-recovery and cleanup counters; all
 > in-loop calls share a hard 50-call budget and cleanup must occur exactly once. The fresh
-> preassigned train context and new identity are frozen in
-> `docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json`. It remains unexecuted
-> until exact-source publication, green CI and a read-only preflight. External Claude and
-> Antigravity review is pending.
+> preassigned train context and new identity were frozen in
+> `docs/evidence/red-party-development-outcome-plan-v2-2026-08-14.json`; the accepted V2 checkpoint
+> above consumed them exactly once. External Claude and Antigravity review is pending.
 
-> **2026-08-14 same-terminal navigation result — highest active checkpoint:** Exact source
-> `c37504d` and CI run `31855189665` passed before the first real navigation outcome executed. One authenticated,
-> non-sealed Cerulean root yields a 14-step shortest route and a 16-step strictly costlier detour to
+> **2026-08-14 same-terminal navigation result — historical checkpoint:** Exact source
+> `c37504d` and CI run `31855189665` passed before the first real navigation outcome executed. One
+> authenticated, non-sealed Cerulean root yields a 14-step shortest route and a 16-step strictly costlier detour to
 > the same Gym entrance. Both routes are planned before either outcome, candidate order is
 > state-digest-bound, each clone reloaded identical bytes and ran once, and each typed result was
 > appended immediately. Both arrived without a replan or interruption: shortest 14 requests / 516
 > frames, detour 16 / 564. The model saw no destination identity, coordinate, or arrow sequence.
 >
-> This result fits no model and grants no authority. Next Codex work is one bounded real
-> party-development outcome. Reviewers should attack route-pair construction, identical-start
-> enforcement, one-shot durability, decision/outcome binding, outcome ordering and path-free output.
+> This result fits no model and grants no authority. The bounded real party-development outcome
+> followed and is recorded in the newest checkpoint above. Reviewers should attack route-pair
+> construction, identical-start enforcement, one-shot durability, decision/outcome binding,
+> outcome ordering and path-free output.
 > Do not request a teacher, sealed Red, Crystal, a full replay, or strategic Help-Bill-versus-Misty
 > execution: comparing different objectives would teach route length as goal value. External Claude
 > and Antigravity review remains pending and is not implied. Review
 > `docs/evidence/red-local-navigation-outcome-result-2026-08-14.json`.
 
-> **2026-08-14 v2 curve result — highest active checkpoint:** Exact source `e6fae7f` passed 3,310
+> **2026-08-14 v2 curve result — historical checkpoint:** Exact source `e6fae7f` passed 3,310
 > local tests and CI run `31852867031`; the frozen 4-train/4-development catalog then executed once.
 > It retained 32 candidate outcomes, eight collections, three 1/2/4-root model candidates and one
 > evaluation. Every update lowered fit loss, but the prior was already 4/4 at utility 3.0 and every
@@ -51,8 +66,8 @@
 >
 > Reviewers should attack the path-free
 > `docs/evidence/red-battle-learning-curve-v2-result-2026-08-14.json`, the curve dashboard projection,
-> and the conclusion that this distribution is too easy. Next Codex work is one real navigation
-> outcome and one real party-development outcome. Only after both should a fresh battle curriculum
+> and the conclusion that this distribution is too easy. Real navigation and party-development
+> outcomes subsequently crossed this boundary. A fresh battle curriculum can now
 > target level-matched, non-OHKO decisions. Do not reuse these development roots as unseen evidence,
 > scale Mansion encounters, open sealed Red, touch Crystal, or start a full replay. Teacher, sealed
 > Red, Crystal and full replay counters remain zero. Claude and Antigravity review is pending, not

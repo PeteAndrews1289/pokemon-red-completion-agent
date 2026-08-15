@@ -26,6 +26,21 @@ it takes. Ideally 100% completion of each game along the way.
 That target was not chosen for ambition. It was chosen because it is the only one that forces the
 system to actually play.
 
+## Current checkpoint: the accounting repair found the hidden cost
+
+The fresh comparison did not repeat the rejected run. It used a new preassigned moment, a new
+identity and an exact green commit. Both clones evolved the trainee without a faint. The lower band
+needed more battles—108 against 69—but finished 108,324 frames sooner.
+
+Four counters explained the reversal. The lower route made ten required recoveries and one final
+cleanup. The higher route made one recovery, one cleanup and thirty-nine trips back into its Cave
+venue. All of them were bounded and all of them reconciled. That made the lower choice one honest
+training example for the controller that actually ran.
+
+It is still only one example. The lesson is not “fight weaker Pokémon.” It is “outcomes include the
+reliability of reaching and staying in the chosen place.” Until the system can represent or repair
+that hidden cost, fitting a party model would turn one navigation quirk into a universal rule.
+
 ## Current checkpoint: party training refused its first apparent lesson
 
 The lesson started the same trainee twice and asked it to reach the same evolution in two safe
@@ -45,8 +60,8 @@ false lesson was caught after minutes, before a model learned it or a multi-day 
 
 The next attempt is not a rewrite of that result. A fresh preassigned moment gets a new identity,
 four separate Center-call counters, one shared in-loop budget and an exactly counted cleanup. The
-old faster run stays rejected; only the new pair can earn a training label after its own green
-source and audit.
+old faster run stays rejected; the new pair described above earned one source-bound training label
+after its own green source and audit.
 
 ## Current checkpoint: the same destination, two different journeys
 
@@ -60,8 +75,8 @@ Both arrived cleanly. The shorter route needed 14 movement requests and 516 fram
 detour needed 16 and 564. That made the result useful as one outcome-derived preference—but not as
 proof of learned navigation. No model was fit and no authority changed. The honest headline is
 that navigation can now produce the same kind of grounded report card as battle. Party development
-reached the cartridge but failed its first accounting audit; that narrow repair comes before
-blockers, independent contexts and transfer.
+reached the cartridge but failed its first accounting audit; the fresh V2 result above later closed
+that narrow seam before blockers, independent contexts and transfer.
 
 ## Current checkpoint: a perfect score can still be a failed experiment
 

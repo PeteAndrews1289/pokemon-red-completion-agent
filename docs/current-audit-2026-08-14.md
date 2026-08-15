@@ -1,5 +1,25 @@
 # Current audit — 2026-08-14
 
+## Corrected party-development result: one accepted target, no party model
+
+Exact source `00499bc` passed GitHub CI run `31858937755`. Its read-only V2 preflight authenticated
+the next non-sealed train root, plan, source bundle and cartridge with every protected-access
+counter at zero. Both candidates then executed once from identical bytes and evolved the same
+level-22 trainee at level 26 with zero faints.
+
+The lower 9–15 band used 108 battles, 1,961 steps, 26,468 actions and 1,050,047 frames; the higher
+15–21 band used 69, 1,036, 20,505 and 1,158,371. Target-XP rates were 6.664464 versus 5.977360 per
+1,000 frames, so the frozen objective accepted the lower candidate. The repaired counter proves
+why this is not a simple encounter-level lesson: lower used 10 required recoveries and one cleanup,
+while higher used 39 venue transitions, one required recovery and one cleanup. Every phase sums to
+the total, optional recovery is zero, and budgeted calls are 10/50 and 40/50.
+
+The [V2 result](evidence/red-party-development-outcome-result-v2-2026-08-14.json) is one valid,
+source-bound train example. It fits no model and proves no intrinsic lower-band advantage,
+cross-context party policy or transfer. Before fitting, make traversal reliability observable or
+repair the Cave pacing/re-entry behavior, then collect independent party contexts. V1 remains
+rejected and was not rerun.
+
 ## Party-development result: execution completed, accounting rejected the target
 
 The preflight first did its job. Exact source `256923f` was green, but its selected capture was in
@@ -24,13 +44,13 @@ The [path-free result](evidence/red-party-development-outcome-result-2026-08-14.
 descriptive execution but rejects the preference as a learner example. It fits no model and proves
 no cross-species, cross-context or cross-game party policy.
 
-The repair is now source-complete and prospectively frozen in the
+The repair was frozen in the
 [V2 plan](evidence/red-party-development-outcome-plan-v2-2026-08-14.json). Runtime evidence separates
 venue-transition, required-recovery, optional-recovery and final-cleanup calls, verifies their sum,
-and bounds all in-loop calls together at 50. V2 uses the next preassigned non-sealed train context
-and requires exactly one cleanup outside that budget but inside the retained total. It remains
-unexecuted pending exact-source publication, green CI and read-only preflight. Do not retry V1 or
-replay all of Red.
+and bounds all in-loop calls together at 50. V2 used the next preassigned non-sealed train context
+and required exactly one cleanup outside that budget but inside the retained total. The plan is
+retained as the historical prospective contract; the accepted V2 result above consumed it exactly
+once. Do not retry V1 or replay all of Red.
 
 ## Same-terminal navigation result: both arrived; the shorter route won
 
@@ -55,7 +75,7 @@ real navigation outcome and its candidate binding. It does not fit a model, demo
 generalization, or promote authority. Teacher, sealed Red, Crystal and full-replay counters remain
 zero. The party-development falsifier executed but did not validate a target; navigation must next
 expand prospectively across independent lineages, blockers and recovery rather than rehearse this
-easy route.
+easy route. The later V2 party execution above independently closed party accounting.
 
 ## V2 curve result: the pipeline trained; the catalog could not measure improvement
 
@@ -75,11 +95,11 @@ one-turn wins.
 
 The correct decision is no promotion and no larger sample from the same distribution. The real
 training/evidence pipeline is validated, but battle improvement remains unproven. Navigation has
-produced one valid real outcome; party development produced a rejected accounting result. After
-its narrow repair, prospectively freeze harder
-level-matched, non-OHKO battle states with health, status, matchup and resource tradeoffs. The exact
-result is [path-free](evidence/red-battle-learning-curve-v2-result-2026-08-14.json), and the updated
-dashboard makes the ceiling visible rather than presenting 4/4 as a promotion result.
+produced one valid real outcome; party development first rejected an ambiguous target, then V2
+accepted one source-bound target after its narrow accounting repair. Next prospectively freeze
+harder level-matched, non-OHKO battle states with health, status, matchup and resource tradeoffs.
+The exact result is [path-free](evidence/red-battle-learning-curve-v2-result-2026-08-14.json), and
+the updated dashboard makes the ceiling visible rather than presenting 4/4 as a promotion result.
 
 ## First 4+4 curve attempt: useful stop, no training claim
 
