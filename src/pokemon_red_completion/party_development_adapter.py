@@ -26,6 +26,7 @@ from pokemon_red_completion.party import (
 )
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
+    PartyDevelopmentUnavailableReason,
 )
 from pokemon_red_completion.party_development_outcomes import (
     PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
@@ -141,6 +142,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
     semantic_snapshot_sha256: str
     bindings: tuple[_BindingT, ...]
     candidate_available: tuple[bool, ...]
+    candidate_unavailable_reasons: tuple[PartyDevelopmentUnavailableReason | None, ...]
     venue_priors: tuple[VenueOperationalPrior, ...]
     shared_venue: GrindingArea | None = None
     shared_venue_prior: VenueOperationalPrior | None = None
@@ -164,6 +166,13 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
             or not isinstance(self.candidate_available, tuple)
             or len(self.candidate_available) != count
             or any(not isinstance(value, bool) for value in self.candidate_available)
+            or not isinstance(self.candidate_unavailable_reasons, tuple)
+            or len(self.candidate_unavailable_reasons) != count
+            or any(
+                reason is not None
+                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                for reason in self.candidate_unavailable_reasons
+            )
             or not isinstance(self.venue_priors, tuple)
             or len(self.venue_priors) != count
             or any(not isinstance(value, VenueOperationalPrior) for value in self.venue_priors)
@@ -171,10 +180,22 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
             raise PartyDevelopmentAdapterError(
                 "private bindings, availability, and priors must align with candidates"
             )
+        if any(
+            available != (reason is None)
+            for available, reason in zip(
+                self.candidate_available,
+                self.candidate_unavailable_reasons,
+                strict=True,
+            )
+        ):
+            raise PartyDevelopmentAdapterError(
+                "candidate availability and unavailable reasons must agree"
+            )
         if self.candidate_set.kind is TrainingChoiceKind.TRAINEE:
             if (
                 any(not isinstance(value, PartyMemberObservation) for value in self.bindings)
                 or not all(self.candidate_available)
+                or any(reason is not None for reason in self.candidate_unavailable_reasons)
                 or not isinstance(self.shared_venue, GrindingArea)
                 or not isinstance(self.shared_venue_prior, VenueOperationalPrior)
                 or not self.shared_venue_prior.available
@@ -421,6 +442,7 @@ class PartyDevelopmentSemanticSnapshot:
             semantic_snapshot_sha256=self.semantic_snapshot_sha256,
             bindings=bindings,
             candidate_available=tuple(True for _ in bindings),
+            candidate_unavailable_reasons=tuple(None for _ in bindings),
             venue_priors=repeated_prior,
             shared_venue=shared_venue,
             shared_venue_prior=shared_prior,
@@ -467,6 +489,12 @@ class PartyDevelopmentSemanticSnapshot:
             semantic_snapshot_sha256=self.semantic_snapshot_sha256,
             bindings=bindings,
             candidate_available=tuple(item.available for item in priors),
+            candidate_unavailable_reasons=tuple(
+                None
+                if item.available
+                else PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                for item in priors
+            ),
             venue_priors=priors,
         )
 
@@ -503,6 +531,7 @@ class PartyDevelopmentSemanticSnapshot:
             venue_prior_registry_sha256=self.venue_prior_registry.registry_sha256,
             outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
             candidate_available=menu.candidate_available,
+            candidate_unavailable_reasons=menu.candidate_unavailable_reasons,
         )
 
     def _profile_for_member(self, member: PartyMemberObservation) -> PartyDevelopmentMemberProfile:

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from enum import StrEnum
 
 from pokemon_red_completion.party_development_rank import (
     MAX_PRIOR_SUPPORT,
@@ -26,10 +27,10 @@ from pokemon_red_completion.scenario_outcomes import ScenarioOutcomeExample
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA = (
-    "pokemon.core.party-development-prospective-catalog.v4"
+    "pokemon.core.party-development-prospective-catalog.v5"
 )
 PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA = (
-    "pokemon.core.party-development-prospective-binding.v4"
+    "pokemon.core.party-development-prospective-binding.v5"
 )
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -39,6 +40,18 @@ _GIT_OID = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})\Z")
 
 class PartyDevelopmentCatalogError(ValueError):
     """Raised when prospective evidence is missing, mutable, or mismatched."""
+
+
+class PartyDevelopmentUnavailableReason(StrEnum):
+    """Why a party candidate is visible but excluded from causal authority."""
+
+    EXTERNAL_DEPENDENCY = "external_dependency"
+    INSUFFICIENT_VENUE_EVIDENCE = "insufficient_venue_evidence"
+    MISSING_RESOURCE = "missing_resource"
+    STORAGE_BLOCKED = "storage_blocked"
+    STORY_GATE_CLOSED = "story_gate_closed"
+    TEMPORARILY_UNSAFE = "temporarily_unsafe"
+    WORLD_STATE_UNKNOWN = "world_state_unknown"
 
 
 @dataclass(frozen=True, slots=True)
@@ -59,6 +72,7 @@ class PartyDevelopmentProspectiveBinding:
     goal: PartyDevelopmentGoal
     candidate_feature_sha256: tuple[str, ...]
     candidate_available: tuple[bool, ...]
+    candidate_unavailable_reasons: tuple[PartyDevelopmentUnavailableReason | None, ...]
     venue_prior_evidence_sha256: tuple[str | None, ...]
     shared_venue_prior_evidence_sha256: str | None
     candidate_menu_sha256: str
@@ -108,12 +122,18 @@ class PartyDevelopmentProspectiveBinding:
         if (
             count < 2
             or len(self.candidate_available) != count
+            or len(self.candidate_unavailable_reasons) != count
             or len(self.venue_prior_evidence_sha256) != count
             or any(
                 not isinstance(value, str) or _SHA256.fullmatch(value) is None
                 for value in self.candidate_feature_sha256
             )
             or any(not isinstance(value, bool) for value in self.candidate_available)
+            or any(
+                reason is not None
+                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                for reason in self.candidate_unavailable_reasons
+            )
             or sum(self.candidate_available) < 2
             or any(
                 value is not None
@@ -123,6 +143,17 @@ class PartyDevelopmentProspectiveBinding:
         ):
             raise PartyDevelopmentCatalogError(
                 "party-development prospective candidate bindings are invalid"
+            )
+        if any(
+            available != (reason is None)
+            for available, reason in zip(
+                self.candidate_available,
+                self.candidate_unavailable_reasons,
+                strict=True,
+            )
+        ):
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective availability lacks an exact causal reason"
             )
         if self.shared_venue_prior_evidence_sha256 is not None:
             _require_digest(
@@ -179,6 +210,9 @@ class PartyDevelopmentProspectiveBinding:
         outcome_objective_sha256: str,
         shared_venue_prior: VenueOperationalPrior | None = None,
         candidate_available: tuple[bool, ...] | None = None,
+        candidate_unavailable_reasons: (
+            tuple[PartyDevelopmentUnavailableReason | None, ...] | None
+        ) = None,
     ) -> PartyDevelopmentProspectiveBinding:
         if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
             raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
@@ -202,6 +236,31 @@ class PartyDevelopmentProspectiveBinding:
             or sum(available) < 2
         ):
             raise PartyDevelopmentCatalogError("prospective candidate availability is invalid")
+        unavailable_reasons = (
+            candidate_unavailable_reasons
+            if candidate_unavailable_reasons is not None
+            else tuple(None for _ in available)
+        )
+        if (
+            not isinstance(unavailable_reasons, tuple)
+            or len(unavailable_reasons) != len(available)
+            or any(
+                reason is not None
+                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                for reason in unavailable_reasons
+            )
+            or any(
+                is_available != (reason is None)
+                for is_available, reason in zip(
+                    available,
+                    unavailable_reasons,
+                    strict=True,
+                )
+            )
+        ):
+            raise PartyDevelopmentCatalogError(
+                "prospective candidate availability lacks an exact causal reason"
+            )
         _require_priors_match_features(candidate_set, venue_priors)
         if shared_venue_prior is not None and not isinstance(
             shared_venue_prior, VenueOperationalPrior
@@ -254,6 +313,7 @@ class PartyDevelopmentProspectiveBinding:
             goal=candidate_set.goal,
             candidate_feature_sha256=feature_digests,
             candidate_available=available,
+            candidate_unavailable_reasons=unavailable_reasons,
             venue_prior_evidence_sha256=evidence,
             shared_venue_prior_evidence_sha256=shared_evidence,
         )
@@ -286,6 +346,7 @@ class PartyDevelopmentProspectiveBinding:
             goal=candidate_set.goal,
             candidate_feature_sha256=feature_digests,
             candidate_available=available,
+            candidate_unavailable_reasons=unavailable_reasons,
             venue_prior_evidence_sha256=evidence,
             shared_venue_prior_evidence_sha256=shared_evidence,
             candidate_menu_sha256=menu_sha256,
@@ -349,6 +410,7 @@ class PartyDevelopmentProspectiveBinding:
             goal=self.goal,
             candidate_feature_sha256=self.candidate_feature_sha256,
             candidate_available=self.candidate_available,
+            candidate_unavailable_reasons=self.candidate_unavailable_reasons,
             venue_prior_evidence_sha256=self.venue_prior_evidence_sha256,
             shared_venue_prior_evidence_sha256=(self.shared_venue_prior_evidence_sha256),
         )
@@ -377,6 +439,10 @@ class PartyDevelopmentProspectiveBinding:
             "feature_schema_id": self.feature_schema_id,
             "candidate_count": len(self.candidate_feature_sha256),
             "available_candidate_count": sum(self.candidate_available),
+            "candidate_unavailable_reasons": [
+                None if reason is None else reason.value
+                for reason in self.candidate_unavailable_reasons
+            ],
             "candidate_feature_sha256": list(self.candidate_feature_sha256),
             "venue_prior_evidence_sha256": list(self.venue_prior_evidence_sha256),
             "shared_venue_prior_evidence_sha256": (self.shared_venue_prior_evidence_sha256),
@@ -556,16 +622,21 @@ def _menu_document(
     goal: PartyDevelopmentGoal,
     candidate_feature_sha256: tuple[str, ...],
     candidate_available: tuple[bool, ...],
+    candidate_unavailable_reasons: tuple[PartyDevelopmentUnavailableReason | None, ...],
     venue_prior_evidence_sha256: tuple[str | None, ...],
     shared_venue_prior_evidence_sha256: str | None,
 ) -> dict[str, object]:
     return {
-        "schema": "pokemon.core.party-development-prospective-menu.v3",
+        "schema": "pokemon.core.party-development-prospective-menu.v4",
         "kind": kind.value,
         "goal": goal.value,
         "feature_schema_id": PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
         "candidate_feature_sha256": list(candidate_feature_sha256),
         "candidate_available": list(candidate_available),
+        "candidate_unavailable_reasons": [
+            None if reason is None else reason.value
+            for reason in candidate_unavailable_reasons
+        ],
         "venue_prior_evidence_sha256": list(venue_prior_evidence_sha256),
         "shared_venue_prior_evidence_sha256": (shared_venue_prior_evidence_sha256),
     }
@@ -623,4 +694,5 @@ __all__ = [
     "PartyDevelopmentCatalogError",
     "PartyDevelopmentProspectiveBinding",
     "PartyDevelopmentProspectiveCatalog",
+    "PartyDevelopmentUnavailableReason",
 ]

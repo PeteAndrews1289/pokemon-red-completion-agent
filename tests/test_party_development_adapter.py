@@ -15,6 +15,9 @@ from pokemon_red_completion.party_development_adapter import (
     PartyDevelopmentMemberProfile,
     PartyDevelopmentSemanticSnapshot,
 )
+from pokemon_red_completion.party_development_catalog import (
+    PartyDevelopmentUnavailableReason,
+)
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     EvolutionRouteKind,
@@ -176,6 +179,7 @@ def test_trainee_adapter_binds_one_shared_prior_without_identity_leakage() -> No
     assert menu.shared_venue_prior.available
     assert all(prior == menu.shared_venue_prior for prior in menu.venue_priors)
     assert all(menu.candidate_available)
+    assert menu.candidate_unavailable_reasons == (None, None, None)
     assert _feature(menu.candidate_set.candidates[1], "venue.prior_available") == 1.0
     assert _feature(menu.candidate_set.candidates[1], "context.goal.evolution") == 1.0
     assert _feature(menu.candidate_set.candidates[1], "candidate.evolution_required") == 1.0
@@ -213,6 +217,11 @@ def test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes() 
     assert menu.candidate_set.kind is TrainingChoiceKind.VENUE
     assert len(menu.bindings) == 3
     assert menu.candidate_available == (True, True, False)
+    assert menu.candidate_unavailable_reasons == (
+        None,
+        None,
+        PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE,
+    )
     assert tuple(prior.available for prior in menu.venue_priors) == (
         True,
         True,
@@ -230,6 +239,11 @@ def test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes() 
     assert binding.venue_prior_evidence_sha256[1] is not None
     assert binding.venue_prior_evidence_sha256[2] is None
     assert binding.candidate_available == (True, True, False)
+    assert binding.candidate_unavailable_reasons == (
+        None,
+        None,
+        PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE,
+    )
 
 
 def test_shared_venue_without_prior_cannot_become_a_trainee_outcome_menu() -> None:

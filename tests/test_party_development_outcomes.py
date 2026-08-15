@@ -12,6 +12,7 @@ from pokemon_red_completion.party import (
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
+    PartyDevelopmentUnavailableReason,
 )
 from pokemon_red_completion.party_development_outcomes import (
     PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
@@ -163,6 +164,16 @@ def _binding(
         venue_prior_registry_sha256="4" * 64,
         outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
         candidate_available=candidate_available,
+        candidate_unavailable_reasons=(
+            None
+            if candidate_available is None
+            else tuple(
+                None
+                if available
+                else PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                for available in candidate_available
+            )
+        ),
     )
 
 

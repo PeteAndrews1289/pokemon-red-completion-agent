@@ -10,6 +10,7 @@ from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
     PartyDevelopmentProspectiveCatalog,
+    PartyDevelopmentUnavailableReason,
 )
 from pokemon_red_completion.party_development_outcome_dataset import (
     audit_party_development_outcome_catalog,
@@ -207,6 +208,12 @@ def _prospective_catalog(
                 outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
                 shared_venue_prior=(shared_prior if kind is TrainingChoiceKind.TRAINEE else None),
                 candidate_available=tuple(item.available for item in example.candidates),
+                candidate_unavailable_reasons=tuple(
+                    None
+                    if item.available
+                    else PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                    for item in example.candidates
+                ),
             )
         )
     return PartyDevelopmentProspectiveCatalog.freeze(tuple(bindings))
@@ -553,7 +560,15 @@ def test_prospective_menu_digest_commits_candidate_availability_directly() -> No
     binding = _prospective_catalog((_ready_catalog()[0],)).bindings[0]
 
     with pytest.raises(PartyDevelopmentCatalogError, match="candidate menu digest differs"):
-        replace(binding, candidate_available=(True, True, False))
+        replace(
+            binding,
+            candidate_available=(True, True, False),
+            candidate_unavailable_reasons=(
+                None,
+                None,
+                PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE,
+            ),
+        )
 
 
 def test_prospective_menu_digest_commits_candidate_specific_venue_evidence() -> None:
@@ -585,6 +600,78 @@ def test_prospective_join_distinguishes_a_masked_candidate() -> None:
     )
     with pytest.raises(PartyDevelopmentCatalogError, match="prospective availability"):
         prospective.require_exact_examples((unmasked,))
+
+
+def test_prospective_menu_binds_the_causal_reason_for_a_masked_candidate() -> None:
+    raw = _ready_catalog()[0]
+    masked = replace(
+        raw,
+        candidates=(
+            *raw.candidates[:2],
+            replace(raw.candidates[2], available=False),
+        ),
+        outcomes=(*raw.outcomes[:2], None),
+    )
+    binding = _prospective_catalog((masked,)).bindings[0]
+
+    assert binding.candidate_unavailable_reasons == (
+        None,
+        None,
+        PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE,
+    )
+    with pytest.raises(PartyDevelopmentCatalogError, match="candidate menu digest differs"):
+        replace(
+            binding,
+            candidate_unavailable_reasons=(
+                None,
+                None,
+                PartyDevelopmentUnavailableReason.MISSING_RESOURCE,
+            ),
+        )
+
+
+def test_prospective_build_rejects_an_unexplained_mask_before_hashing() -> None:
+    example = _ready_catalog()[0]
+    prospective = _prospective_catalog((example,))
+    binding = prospective.bindings[0]
+    candidate_set = PartyDevelopmentCandidateSet(
+        kind=binding.kind,
+        goal=binding.goal,
+        candidates=tuple(
+            PartyDevelopmentCandidate(item.candidate_index, item.features)
+            for item in example.candidates
+        ),
+    )
+    shared_prior = VenueOperationalPrior(
+        available=True,
+        reliability=0.75,
+        expected_yield=0.5,
+        matchup_safety=0.625,
+        travel_cost=0.25,
+        recovery_cost=0.125,
+        support_count=1,
+        evidence_sha256="9" * 64,
+        frozen_before_scenario=True,
+    )
+
+    with pytest.raises(PartyDevelopmentCatalogError, match="causal reason"):
+        PartyDevelopmentProspectiveBinding.build(
+            scenario_id="unexplained-mask",
+            root_lineage_id="unexplained-root",
+            initial_state_sha256="f" * 64,
+            partition=ScenarioPartition.TRAIN,
+            source_commit="a" * 40,
+            source_bundle_sha256="b" * 64,
+            semantic_snapshot_sha256="e" * 64,
+            candidate_set=candidate_set,
+            venue_priors=tuple(shared_prior for _ in candidate_set.candidates),
+            venue_prior_registry_sha256="c" * 64,
+            outcome_objective_sha256=(
+                PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256
+            ),
+            shared_venue_prior=shared_prior,
+            candidate_available=(True, True, False),
+        )
 
 
 def test_prospective_join_uses_the_frozen_feature_vocabulary(
