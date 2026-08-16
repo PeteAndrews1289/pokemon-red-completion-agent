@@ -50,6 +50,25 @@ def test_cave_execution_rejects_nonpositive_ci_run(
         )
 
 
+@pytest.mark.parametrize(
+    "exact_ci_run",
+    [True, False, 1.0],
+    ids=["true", "false", "float"],
+)
+def test_cave_execution_requires_an_exact_integer_ci_run(
+    tmp_path: Path,
+    exact_ci_run: object,
+) -> None:
+    with pytest.raises(RuntimeError, match="CI run identity is invalid"):
+        SCRIPT["_run"](
+            argparse.Namespace(
+                execute=True,
+                private_root=tmp_path,
+                exact_ci_run=exact_ci_run,
+            )
+        )
+
+
 def test_cave_protected_input_guard_detects_byte_mutation(tmp_path: Path) -> None:
     protected = tmp_path / "protected.json"
     protected.write_bytes(b'{"value":1}\n')
