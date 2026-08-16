@@ -4,6 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Natural PP preparation is implemented but not authorized (August 16, 2026).** The first
+> completion-aware party curriculum needs one authentic middle-PP state in training and one in
+> untouched development. The new read-only planner binds those two sources to the frozen 8+6
+> reservations and two venue priors. Its one-partition runner can spend PP only through ordinary
+> bounded wild battles, protects unrelated party/collection/story state and creates no menu,
+> answer, outcome or model update.
+>
+> No controller input has been authorized for this bridge. The honest board remains **priors 2 ·
+> roots 14 · PP states 0/2 · frozen menus 0 · outcomes 0/14 · fit false · authority zero**. Publish
+> and pass exact-head CI, generate the exact plans read-only, then request one explicit
+> authorization per source. After both states exist, freeze and review the 8-train/6-development
+> menu catalog before collecting a single answer.
+
 > **Two venue priors are now frozen (August 16, 2026).** After Cave V2 succeeded once, a distinct
 > clean published head (`107e034`) passed exact GitHub CI run `31947146884`. A source-only bridge
 > proved all execution-bearing Cave files byte-identical to measured head `755fe53` and composed

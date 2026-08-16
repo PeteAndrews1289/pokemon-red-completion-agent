@@ -1,5 +1,17 @@
 # Pokémon Learning Observatory
 
+> **Current gate — PP PREPARATION SOURCE READY · EXECUTION UNAUTHORIZED:** The view-only readiness
+> page now reports **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP STATES 0/2 ·
+> FROZEN MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. It distinguishes the historical
+> 81-state high-PP inventory from the two missing authentic middle-PP contexts.
+>
+> The preparation contract uses ordinary bounded battles and hard per-source caps of 27 battles,
+> 10,000 encounter steps, 250,000 controller actions and 5,000,000 frames. It permits no healing,
+> switching, capture, memory edit, teacher/model query or learner outcome, and it reloads the output
+> save before publication. These are prospective safety facts, not run progress. Next rail:
+> **PUBLISH → EXACT-HEAD CI → FREEZE TWO PRIVATE READ-ONLY PLANS → OWNER AUTHORIZATION PER SOURCE →
+> MATERIALIZE 2 ONCE → RE-INVENTORY → FREEZE 8+6 MENUS**.
+
 > **Current gate — TWO PRIORS FROZEN · PP PREPARATION NEXT:** Published source `107e034` passed
 > exact CI run `31947146884`. A source-only composer proved the measured Cave runtime byte-identical
 > and added exactly one Cave prior beside Route 11. Display **PRIORS 2 · RESERVED ROOTS 14 · MENUS
@@ -186,17 +198,14 @@ python scripts/run_party_development_readiness_dashboard.py --no-browser
 
 Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, the 81-checkpoint
 read-only pool and the exact current gate: 0/8 train outcomes, 0/6 untouched development outcomes,
-catalog unfrozen, concrete Red menus absent, frozen venue-prior entries absent, completion-aware fit
-false and authority zero. The reusable title-neutral menu/evidence contracts are implemented at
-exact source `4b4e267`; the page distinguishes that code boundary from real Red bindings. Its event
-list shows the observed per-partition semantic bins without exposing checkpoint, species, map,
-slot or private-path identities. Exact source `85ae878` additionally binds every future result
-back to its prospective question, while `587fb18` freezes the causal reason for every mask; neither
-advances the outcome counter. The underlying
-receipts are the
+catalog unfrozen, concrete Red menus absent, two compatible venue priors frozen, natural PP states
+0/2, completion-aware fit false and authority zero. Its event list shows the reserved 8+6 split,
+the two missing resource states, the exact per-source execution caps and the prohibited operations
+without exposing checkpoint, species, map, slot or private-path identities. The underlying receipts
+are the
 [prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
 [checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
-[readiness snapshot](evidence/party-development-v2-readiness-2026-08-15.json). The newer
+[current readiness snapshot](evidence/party-development-v2-readiness-2026-08-16.json). The earlier
 [input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json),
 [join-hardening qualification](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
 and [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json)

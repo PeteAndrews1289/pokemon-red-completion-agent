@@ -68,8 +68,6 @@ from pokemon_red_completion.training_candidate_rank import (  # noqa: E402
     TrainingChoiceKind,
 )
 
-_SHA256_LENGTH = 64
-
 
 class RedPartyDevelopmentPreflightRunError(RuntimeError):
     """Raised before a private question can be inspected ambiguously."""
@@ -81,11 +79,6 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--reservation-plan-file-sha256", required=True)
     parser.add_argument("--venue-prior-registry", type=Path, required=True)
     parser.add_argument("--venue-prior-registry-file-sha256", required=True)
-    parser.add_argument(
-        "--second-venue-operational-contract-sha256",
-        required=True,
-        help="prospectively reviewed contract for the still-unmeasured second venue",
-    )
     parser.add_argument("--catalog-root", type=Path, required=True)
     parser.add_argument("--context-catalog", type=Path, required=True)
     parser.add_argument("--context-catalog-file-sha256", required=True)
@@ -111,15 +104,6 @@ def _load_json(
     if not isinstance(value, Mapping):
         raise RedPartyDevelopmentPreflightRunError(f"{subject} document is invalid")
     return value
-
-
-def _require_digest(value: str, *, subject: str) -> None:
-    if (
-        not isinstance(value, str)
-        or len(value) != _SHA256_LENGTH
-        or any(character not in "0123456789abcdef" for character in value)
-    ):
-        raise RedPartyDevelopmentPreflightRunError(f"{subject} digest is invalid")
 
 
 def _require_external(path: Path, *, subject: str) -> Path:
@@ -196,22 +180,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise RedPartyDevelopmentPreflightRunError(
             "reservation plan and venue-prior registry differ"
         )
-    _require_digest(
-        args.second_venue_operational_contract_sha256,
-        subject="second venue operational contract",
-    )
-
     route_area = ROUTE_11_TRAINING_VENUE.band
     cave_area = DIGLETTS_CAVE_TRAINING_VENUE.band
     route_evidence = venue_registry.evidence_for(route_area)
-    if route_evidence is None:
+    cave_evidence = venue_registry.evidence_for(cave_area)
+    if route_evidence is None or cave_evidence is None:
         raise RedPartyDevelopmentPreflightRunError(
-            "reservation registry lacks the qualified shared-venue prior"
+            "reservation registry lacks one of the two qualified venue priors"
         )
     areas = (route_area, cave_area)
     operational_contracts = (
         route_evidence.operational_contract_sha256,
-        args.second_venue_operational_contract_sha256,
+        cave_evidence.operational_contract_sha256,
     )
 
     rom_path = resolve_rom_path(args.rom)

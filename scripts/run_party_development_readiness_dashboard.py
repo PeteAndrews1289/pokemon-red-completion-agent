@@ -27,7 +27,7 @@ EVIDENCE_PATH = (
     PROJECT_ROOT
     / "docs"
     / "evidence"
-    / "party-development-v2-readiness-2026-08-15.json"
+    / "party-development-v2-readiness-2026-08-16.json"
 )
 # Keep the readiness view separate from both the historical Pokémon dashboard
 # (8765) and an existing local dashboard already using 8766 on the owner host.
@@ -66,6 +66,10 @@ def main(argv: list[str] | None = None) -> int:
                     "schema": "pokemon-party-development-v2-readiness-dashboard-v1",
                     "url": dashboard.url,
                     "view_only": True,
+                    "venue_priors": 2,
+                    "reserved_roots": "8 train / 6 development",
+                    "pp_materializations": "0/2",
+                    "frozen_menus": 0,
                     "outcome_collection_progress": "0/14",
                     "model_fit": False,
                     "teacher_queries": 0,

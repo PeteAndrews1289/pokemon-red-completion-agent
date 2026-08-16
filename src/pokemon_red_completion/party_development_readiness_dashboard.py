@@ -14,10 +14,10 @@ from pokemon_red_completion.progress_dashboard import (
 )
 
 PARTY_DEVELOPMENT_READINESS_EVIDENCE_SCHEMA = (
-    "pokemon-party-development-v2-readiness-evidence-v1"
+    "pokemon-party-development-v2-readiness-evidence-v2"
 )
 PARTY_DEVELOPMENT_READINESS_STATUS = (
-    "prior_bound_inventory_complete_catalog_unfrozen"
+    "two_venue_priors_pp_preparation_ready_catalog_unfrozen"
 )
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -40,14 +40,17 @@ def party_development_readiness_dashboard_snapshot(
 
     prior = _mapping(evidence, "prior")
     inventory = _mapping(evidence, "checkpoint_inventory")
+    reservation = _mapping(evidence, "reservation")
+    venue_priors = _mapping(evidence, "venue_priors")
+    pp_preparation = _mapping(evidence, "pp_preparation")
     first_fit = _mapping(evidence, "first_fit_gate")
     protected = _mapping(evidence, "protected_access")
     if prior.get("bound") is not True:
         raise ProgressDashboardError("party-development historical prior is not bound")
     if (
         first_fit.get("prospective_catalog_frozen") is not False
-        or first_fit.get("candidate_adapter_ready") is not False
-        or first_fit.get("venue_prior_registry_frozen") is not False
+        or first_fit.get("candidate_adapter_ready") is not True
+        or first_fit.get("venue_prior_registry_frozen") is not True
         or first_fit.get("model_fit") is not False
         or first_fit.get("authority_promoted") is not False
     ):
@@ -106,6 +109,50 @@ def party_development_readiness_dashboard_snapshot(
         )
     total_required = required_train + required_development
 
+    reserved_train, reserved_development = _partition_counts(
+        reservation, "reserved_roots"
+    )
+    prepared_train, prepared_development = _partition_counts(
+        pp_preparation, "materialized_sources"
+    )
+    pp_train, pp_development = _partition_counts(
+        pp_preparation, "reserved_sources"
+    )
+    if (
+        reserved_train != required_train
+        or reserved_development != required_development
+        or _count(reservation, "frozen_menus") != 0
+        or _count(reservation, "direct_roots_preflighted") != 12
+        or _count(venue_priors, "entries") != 2
+        or venue_priors.get("frozen") is not True
+        or pp_train != 1
+        or pp_development != 1
+        or prepared_train != 0
+        or prepared_development != 0
+        or pp_preparation.get("contract_qualified") is not True
+        or pp_preparation.get("controller_authorization_granted") is not False
+        or pp_preparation.get("ordinary_battle_consumption") is not True
+        or pp_preparation.get("healing_allowed") is not False
+        or pp_preparation.get("party_switching_allowed") is not False
+        or pp_preparation.get("memory_edit_allowed") is not False
+        or pp_preparation.get("teacher_or_model_allowed") is not False
+    ):
+        raise ProgressDashboardError(
+            "party-development PP preparation gate is inconsistent"
+        )
+    maximum_battles = _positive_count(
+        pp_preparation, "maximum_completed_battles_per_source"
+    )
+    maximum_steps = _positive_count(
+        pp_preparation, "maximum_encounter_steps_per_source"
+    )
+    maximum_actions = _positive_count(
+        pp_preparation, "maximum_controller_actions_per_source"
+    )
+    maximum_frames = _positive_count(
+        pp_preparation, "maximum_frames_per_source"
+    )
+
     prior_train_examples = _positive_count(prior, "train_examples")
     prior_validation_examples = _positive_count(prior, "validation_examples")
     prior_validation_correct = _count(prior, "validation_correct")
@@ -137,11 +184,12 @@ def party_development_readiness_dashboard_snapshot(
         run_status="waiting",
         stage="Completion-aware party learner · pre-collection gate",
         message=(
-            f"The historical scorer is bound and {checkpoint_count} open checkpoints are "
-            f"inventoried. Outcome collection is 0/{total_required}; model fitting has not begun."
+            f"Two venue priors and {reserved_train + reserved_development} source roots are "
+            f"reserved. Two natural middle-PP states remain unmaterialized; outcome collection "
+            f"is 0/{total_required} and model fitting has not begun."
         ),
         stage_progress=0.0,
-        location="Open Red checkpoint pool · read-only inventory",
+        location="Natural PP preparation gate · controller authorization absent",
         collection_target=124,
         model=DashboardModelState(
             mode="waiting",
@@ -204,6 +252,15 @@ def party_development_readiness_dashboard_snapshot(
                 f"checkpoints; controller actions 0"
             ),
             (
+                f"Reserved curriculum roots: {reserved_train} train / "
+                f"{reserved_development} development · frozen menus 0"
+            ),
+            "Compatible venue priors 2/2 · Route 11 and Cave evidence frozen",
+            (
+                "Natural middle-PP preparations 0/2 · one train and one development "
+                "source · authorization absent"
+            ),
+            (
                 f"Distinct semantic contexts: {train_semantics} train / "
                 f"{development_semantics} development"
             ),
@@ -220,14 +277,22 @@ def party_development_readiness_dashboard_snapshot(
                 f"{required_development} untouched development outcomes"
             ),
             (
-                "Title-neutral menu/venue-evidence contracts implemented · concrete Red menus 0 "
-                "· frozen venue-prior entries 0"
+                "Title-neutral candidate adapter ready · direct roots preflighted 12/14 · "
+                "concrete frozen Red menus 0"
+            ),
+            (
+                f"Per-source hard bounds · battles {maximum_battles} · encounter steps "
+                f"{maximum_steps} · controller actions {maximum_actions} · frames {maximum_frames}"
+            ),
+            (
+                "Preparation policy · ordinary battles only · no healing, switching, capture, "
+                "memory edit, teacher, model or learner outcome"
             ),
             "Prospective outcomes 0 · completion-aware model updates 0",
             "Teacher 0 · sealed Red 0 · Crystal 0 · full-game replays 0 · authority zero",
             (
-                "Next: bind authenticated Red snapshots, freeze compatible prior evidence, "
-                "find depleted-PP contexts, then review the exact 8+6 catalog"
+                "Next: publish and pass exact-head CI, freeze both private read-only plans, "
+                "request one authorization per source, then review the exact 8+6 catalog"
             ),
         ),
     )

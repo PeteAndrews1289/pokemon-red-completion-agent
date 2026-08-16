@@ -118,3 +118,5 @@ def test_preflight_script_has_read_only_emulator_surface_and_no_answer_actor() -
     assert "catalog_entry.authenticated_root_lineage_id" in source
     assert "canonical_root_bindings_resolved" in source
     assert "candidate_menus_durably_frozen" in source
+    assert "second-venue-operational-contract-sha256" not in source
+    assert "cave_evidence.operational_contract_sha256" in source

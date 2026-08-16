@@ -53,6 +53,9 @@ PARTY_DEVELOPMENT_QUESTION_RESERVATION_PLAN_SCHEMA = (
 PARTY_DEVELOPMENT_QUESTION_RESERVATION_SUMMARY_SCHEMA = (
     "pokemon.core.party-development-question-reservation-summary.v1"
 )
+PARTY_DEVELOPMENT_QUESTION_RESERVATION_REFRESH_SCHEMA = (
+    "pokemon.core.party-development-question-reservation-refresh.v1"
+)
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
@@ -767,10 +770,158 @@ class PartyDevelopmentQuestionReservationPlan:
 
 
 @dataclass(frozen=True, slots=True)
+class PartyDevelopmentQuestionReservationRefresh:
+    """One zero-execution replacement of an unsafe prospective source.
+
+    The first reservation plan was frozen before the live preparation contract
+    had a source-readiness check. Refreshing is permitted only while every
+    candidate, outcome, controller, teacher, model and protected-access counter
+    is still zero. Direct questions and the semantic assignment of every
+    scenario remain unchanged; only an unsafe, unexecuted PP source may move to
+    another open root in the same partition.
+    """
+
+    previous_plan_sha256: str
+    plan: PartyDevelopmentQuestionReservationPlan
+    retained_reservation_count: int
+    replaced_pp_preparation_count: int
+    previous_venue_prior_registry_sha256: str
+    previous_venue_prior_count: int
+    venue_prior_entries_added: int
+
+    def __post_init__(self) -> None:
+        for value, subject in (
+            (self.previous_plan_sha256, "previous plan"),
+            (
+                self.previous_venue_prior_registry_sha256,
+                "previous venue registry",
+            ),
+        ):
+            if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+                raise PartyDevelopmentQuestionReservationError(
+                    f"party question refresh {subject} digest is invalid"
+                )
+        counts = (
+            self.retained_reservation_count,
+            self.replaced_pp_preparation_count,
+            self.previous_venue_prior_count,
+            self.venue_prior_entries_added,
+        )
+        if any(type(value) is not int or value < 0 for value in counts):  # noqa: E721
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh counts are invalid"
+            )
+        if not isinstance(self.plan, PartyDevelopmentQuestionReservationPlan):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh plan is invalid"
+            )
+        if (
+            self.retained_reservation_count
+            + self.replaced_pp_preparation_count
+            != len(self.plan.reservations)
+            or self.replaced_pp_preparation_count != 1
+            or self.retained_reservation_count
+            != len(self.plan.reservations) - 1
+            or self.venue_prior_entries_added != 1
+            or self.plan.venue_prior_count
+            != self.previous_venue_prior_count + self.venue_prior_entries_added
+        ):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh accounting is incomplete"
+            )
+
+    def public_summary(self) -> dict[str, object]:
+        """Return the exact path-free boundary of the refreshed private plan."""
+
+        return {
+            "schema": PARTY_DEVELOPMENT_QUESTION_RESERVATION_REFRESH_SCHEMA,
+            "status": "unsafe_unexecuted_sources_retired_before_materialization",
+            "previous_plan_sha256": self.previous_plan_sha256,
+            "current_plan": self.plan.public_summary(),
+            "previous_venue_prior_registry_sha256": (
+                self.previous_venue_prior_registry_sha256
+            ),
+            "previous_venue_prior_count": self.previous_venue_prior_count,
+            "venue_prior_entries_added": self.venue_prior_entries_added,
+            "retained_reservation_count": self.retained_reservation_count,
+            "replaced_pp_preparation_count": (
+                self.replaced_pp_preparation_count
+            ),
+            "replacement_reason_counts": {
+                "preexisting_status_or_non_high_health": (
+                    self.replaced_pp_preparation_count
+                )
+            },
+            "scenario_semantics_changed": 0,
+            "direct_question_sources_changed": 0,
+            "previous_plan_materializations": 0,
+            "previous_plan_candidate_menus_frozen": 0,
+            "previous_plan_outcomes_opened": 0,
+            "rom_reads": 0,
+            "emulator_starts": 0,
+            "controller_actions": 0,
+            "teacher_queries": 0,
+            "model_predictions": 0,
+            "model_updates": 0,
+            "sealed_test_cases_opened": 0,
+            "crystal_cases_opened": 0,
+            "authority_promoted": False,
+            "source_checkpoint_identity_public": False,
+            "candidate_feature_values_public": False,
+            "private_path_fields": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class _ReservationTemplate:
     kind: TrainingChoiceKind
     goal: PartyDevelopmentGoal
     preparation: PartyDevelopmentContextPreparation
+
+
+def pp_materialization_source_ready(
+    entry: PartyDevelopmentInventoryEntry,
+) -> bool:
+    """Whether a source can enter the no-heal, zero-faint PP preparation.
+
+    This is deliberately stricter than ordinary question eligibility. Damaged
+    and status-bearing states are useful learner contexts, but they are unsafe
+    *sources* for a preparation whose only intended party changes are natural
+    battle damage, experience and PP consumption. Requiring every member to be
+    healthy, high-HP and high-PP prevents the materializer from laundering a
+    pre-existing abort condition into a successful output.
+    """
+
+    if not isinstance(entry, PartyDevelopmentInventoryEntry):
+        raise TypeError("entry must be a PartyDevelopmentInventoryEntry")
+    return (
+        entry.controls_ready
+        and not entry.battle_active
+        and sum(member.trainable for member in entry.members) >= 2
+        and all(
+            not member.status_present
+            and member.hp_bin == "high"
+            and member.pp_bin == "high"
+            for member in entry.members
+        )
+    )
+
+
+def _pp_materialization_source_health_only_unsafe(
+    entry: PartyDevelopmentInventoryEntry,
+) -> bool:
+    """Whether health/status is the sole reason an old PP source is unsafe."""
+
+    return (
+        entry.controls_ready
+        and not entry.battle_active
+        and sum(member.trainable for member in entry.members) >= 2
+        and all(member.pp_bin == "high" for member in entry.members)
+        and any(
+            member.status_present or member.hp_bin != "high"
+            for member in entry.members
+        )
+    )
 
 
 def reserve_party_development_questions(
@@ -853,6 +1004,186 @@ def reserve_party_development_questions(
     )
 
 
+def refresh_party_development_question_reservations(
+    inventory: PartyDevelopmentCheckpointInventory,
+    *,
+    teacher_prior: PartyDevelopmentTeacherPrior,
+    previous_plan: PartyDevelopmentQuestionReservationPlan,
+    previous_venue_prior_registry: PartyDevelopmentVenuePriorRegistry,
+    venue_prior_registry: PartyDevelopmentVenuePriorRegistry,
+) -> PartyDevelopmentQuestionReservationRefresh:
+    """Refresh the zero-execution plan after one prior and source-safety change.
+
+    The operation is intentionally not a general reselection API. It accepts
+    only an append-only venue registry, preserves every scenario's goal/kind/
+    partition/preparation assignment, preserves every direct source, and moves
+    a PP source only when the old inventory row violates the new no-heal source
+    readiness predicate. Any other difference fails closed.
+    """
+
+    for value, expected, subject in (
+        (inventory, PartyDevelopmentCheckpointInventory, "inventory"),
+        (teacher_prior, PartyDevelopmentTeacherPrior, "teacher prior"),
+        (
+            previous_plan,
+            PartyDevelopmentQuestionReservationPlan,
+            "previous plan",
+        ),
+        (
+            previous_venue_prior_registry,
+            PartyDevelopmentVenuePriorRegistry,
+            "previous venue registry",
+        ),
+        (
+            venue_prior_registry,
+            PartyDevelopmentVenuePriorRegistry,
+            "venue registry",
+        ),
+    ):
+        if not isinstance(value, expected):
+            raise TypeError(f"{subject} has the wrong type")
+
+    if (
+        previous_plan.inventory_sha256 != inventory.inventory_sha256
+        or previous_plan.teacher_prior_sha256
+        != canonical_sha256(teacher_prior.to_dict())
+        or previous_plan.venue_prior_registry_sha256
+        != previous_venue_prior_registry.registry_sha256
+        or previous_plan.venue_prior_count
+        != len(previous_venue_prior_registry.entries)
+    ):
+        raise PartyDevelopmentQuestionReservationError(
+            "previous party question plan does not bind the refresh inputs"
+        )
+
+    previous_evidence = {
+        item.evidence_sha256: item for item in previous_venue_prior_registry.entries
+    }
+    current_evidence = {
+        item.evidence_sha256: item for item in venue_prior_registry.entries
+    }
+    added_evidence = set(current_evidence) - set(previous_evidence)
+    if (
+        not set(previous_evidence) < set(current_evidence)
+        or any(
+            current_evidence[digest] != evidence
+            for digest, evidence in previous_evidence.items()
+        )
+        or len(added_evidence) != 1
+    ):
+        raise PartyDevelopmentQuestionReservationError(
+            "party question refresh requires exactly one append-only venue prior"
+        )
+
+    plan = reserve_party_development_questions(
+        inventory,
+        teacher_prior=teacher_prior,
+        venue_prior_registry=venue_prior_registry,
+        policy=previous_plan.policy,
+    )
+    previous_by_scenario = {
+        item.scenario_id: item for item in previous_plan.reservations
+    }
+    current_by_scenario = {item.scenario_id: item for item in plan.reservations}
+    if set(previous_by_scenario) != set(current_by_scenario):
+        raise PartyDevelopmentQuestionReservationError(
+            "party question refresh changed the scenario set"
+        )
+    inventory_by_checkpoint = {
+        item.checkpoint_id: item for item in inventory.entries
+    }
+    retained = 0
+    replaced = 0
+    for scenario_id in sorted(previous_by_scenario):
+        previous = previous_by_scenario[scenario_id]
+        current = current_by_scenario[scenario_id]
+        previous_contract = (
+            previous.scenario_id,
+            previous.partition,
+            previous.kind,
+            previous.goal,
+            previous.preparation,
+            previous.target_pp_bin,
+        )
+        current_contract = (
+            current.scenario_id,
+            current.partition,
+            current.kind,
+            current.goal,
+            current.preparation,
+            current.target_pp_bin,
+        )
+        if previous_contract != current_contract:
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh changed scenario semantics"
+            )
+        try:
+            previous_entry = inventory_by_checkpoint[
+                previous.source_checkpoint_id
+            ]
+            current_entry = inventory_by_checkpoint[current.source_checkpoint_id]
+        except KeyError as error:
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh source is absent from the inventory"
+            ) from error
+        for reservation, entry in (
+            (previous, previous_entry),
+            (current, current_entry),
+        ):
+            if (
+                reservation.source_state_sha256 != entry.state_sha256
+                or reservation.source_envelope_sha256 != entry.envelope_sha256
+                or reservation.source_semantic_signature_sha256
+                != entry.semantic_signature_sha256
+            ):
+                raise PartyDevelopmentQuestionReservationError(
+                    "party question refresh source differs from the inventory"
+                )
+        if previous.source_checkpoint_id == current.source_checkpoint_id:
+            retained += 1
+            if (
+                current.preparation
+                is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+                and not pp_materialization_source_ready(current_entry)
+            ):
+                raise PartyDevelopmentQuestionReservationError(
+                    "party question refresh retained an unsafe PP source"
+                )
+            continue
+        if (
+            current.preparation
+            is not PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+        ):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh changed a direct question source"
+            )
+        if pp_materialization_source_ready(previous_entry):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh replaced a safe PP source"
+            )
+        if not _pp_materialization_source_health_only_unsafe(previous_entry):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh cannot attribute the retired source to health"
+            )
+        if not pp_materialization_source_ready(current_entry):
+            raise PartyDevelopmentQuestionReservationError(
+                "party question refresh selected an unsafe PP source"
+            )
+        replaced += 1
+
+    return PartyDevelopmentQuestionReservationRefresh(
+        previous_plan_sha256=previous_plan.plan_sha256,
+        plan=plan,
+        retained_reservation_count=retained,
+        replaced_pp_preparation_count=replaced,
+        previous_venue_prior_registry_sha256=(
+            previous_venue_prior_registry.registry_sha256
+        ),
+        previous_venue_prior_count=len(previous_venue_prior_registry.entries),
+        venue_prior_entries_added=len(added_evidence),
+    )
+
+
 def _reservation_templates(count: int) -> tuple[_ReservationTemplate, ...]:
     goals = tuple(PartyDevelopmentGoal)
     kinds = tuple(TrainingChoiceKind)
@@ -888,10 +1219,7 @@ def _select_entries(
             and (
                 template.preparation
                 is not PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
-                or {
-                    member.pp_bin for member in item.members
-                }
-                == {"high"}
+                or pp_materialization_source_ready(item)
             )
         )
         if not candidates:
@@ -973,6 +1301,7 @@ def _reservation_from_entry(
 
 __all__ = [
     "PARTY_DEVELOPMENT_QUESTION_RESERVATION_PLAN_SCHEMA",
+    "PARTY_DEVELOPMENT_QUESTION_RESERVATION_REFRESH_SCHEMA",
     "PARTY_DEVELOPMENT_QUESTION_RESERVATION_SCHEMA",
     "PARTY_DEVELOPMENT_QUESTION_RESERVATION_SUMMARY_SCHEMA",
     "PP_CONTEXT_MATERIALIZATION_PROTOCOL",
@@ -981,5 +1310,8 @@ __all__ = [
     "PartyDevelopmentQuestionReservation",
     "PartyDevelopmentQuestionReservationError",
     "PartyDevelopmentQuestionReservationPlan",
+    "PartyDevelopmentQuestionReservationRefresh",
+    "pp_materialization_source_ready",
+    "refresh_party_development_question_reservations",
     "reserve_party_development_questions",
 ]

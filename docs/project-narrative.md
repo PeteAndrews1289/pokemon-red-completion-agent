@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the missing resource-pressure lesson became an auditable protocol
+
+The two-venue registry solved only half of the first curriculum gap. Every eligible checkpoint was
+still a high-PP state, so a model could not learn whether a partially depleted move set should
+change the trainee or venue ranking. The new bridge creates exactly two authentic resource-pressure
+contexts—one training source and one untouched development source—without manufacturing PP values
+or asking the teacher for an answer.
+
+The protocol separates preparation from learning. It may refresh only the one reservation whose
+recorded health/status is unsafe, preserving the other thirteen. It spends PP through ordinary
+bounded wild battles, protects unrelated party, collection and story state, and independently
+reloads the saved output before accepting it. Healing, switching, capture, memory edits, model
+predictions, teacher queries, candidate menus and learner outcomes are all forbidden.
+
+This is the practical lesson from the earlier delays: preparation code should be as strict as the
+claim it supports, but it should not masquerade as the model experiment. The board stays **two
+priors · fourteen reserved roots · PP states 0/2 · menus 0 · outcomes 0 · authority 0** until the
+source is published, exact CI passes, the private plans are frozen and the owner authorizes each
+single-use run. Only then can the project freeze the first 8+6 resource-aware question catalog.
+
 ## August 16: one measurement became a second independent prior
 
 The Cave run did not need—or receive—a sequel. A different published head, `107e034`, passed its

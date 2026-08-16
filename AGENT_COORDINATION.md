@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-16 natural-PP implementation checkpoint — highest active checkpoint:** Codex has
+> implemented the exact two-source preparation seam without executing it. The refresh may replace
+> only the one health/status-invalid development reservation and must retain the other thirteen.
+> Read-only preflight authenticates the refreshed reservations, two-prior registry, catalog,
+> cartridge and source states. The live runner is partition-specific, one-shot after controller
+> input, hard bounded, forbids healing/switching/capture/teacher/model/outcome access and reloads
+> the prepared state before committing its envelope.
+>
+> Honest counters remain priors 2, reserved roots 8 train / 6 development, prepared PP states 0/2,
+> frozen menus 0, outcomes 0/14, fit 0 and authority 0. Codex must publish, obtain exact-head green
+> CI and generate the private plans read-only, then stop for owner authorization. Claude's next
+> useful review is the immutable source plus path-free plan projection. Antigravity remains
+> deferred until the exact 8+6 catalog exists; it gets a bounded transfer/product challenge, not
+> an implementation or provenance lane.
+
 > **2026-08-16 Cave prior composed — highest active checkpoint:** Source-only composition ran from
 > published `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3` after exact-head CI run `31947146884`
 > passed. It proved all 21 execution-bearing files byte-identical to measured head `755fe53`, then

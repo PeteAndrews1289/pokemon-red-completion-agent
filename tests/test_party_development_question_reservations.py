@@ -6,6 +6,7 @@ from dataclasses import replace
 
 import pytest
 
+import pokemon_red_completion.party_development_question_reservations as reservation_module
 from pokemon_red_completion.party_development_exclusion_audit import (
     PartyDevelopmentExclusionAuditError,
     audit_party_development_exclusions,
@@ -21,8 +22,11 @@ from pokemon_red_completion.party_development_outcome_learning import (
 from pokemon_red_completion.party_development_question_reservations import (
     PP_CONTEXT_MATERIALIZATION_PROTOCOL,
     PartyDevelopmentContextPreparation,
+    PartyDevelopmentQuestionReservation,
     PartyDevelopmentQuestionReservationError,
     PartyDevelopmentQuestionReservationPlan,
+    pp_materialization_source_ready,
+    refresh_party_development_question_reservations,
     reserve_party_development_questions,
 )
 from pokemon_red_completion.party_development_rank import (
@@ -33,6 +37,16 @@ from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
     VenuePriorEvidence,
     VenuePriorUnitRatio,
+)
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_party_development_pp_materialization import (
+    RED_PP_MATERIALIZATION_EXECUTION_CONTRACT,
+    RedPartyDevelopmentPpMaterializationError,
+    RedPartyDevelopmentPpMaterializationPlan,
+    RedPpMaterializationBounds,
+    RedPpMaterializationSource,
+    RedPpStartAdapter,
+    freeze_red_party_development_pp_materialization_plan,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.team_training import GrindingArea
@@ -168,6 +182,34 @@ def _venue_registry() -> PartyDevelopmentVenuePriorRegistry:
         source_commit="6" * 40,
         source_bundle_sha256="7" * 64,
         entries=(evidence,),
+    )
+
+
+def _two_venue_registry() -> PartyDevelopmentVenuePriorRegistry:
+    previous = _venue_registry()
+    second = VenuePriorEvidence(
+        evidence_id="venue-prior-b",
+        venue=GrindingArea("private-cave", 15, 21, measured_samples=30),
+        source_commit="8" * 40,
+        source_bundle_sha256="9" * 64,
+        measurement_contract_sha256=(
+            previous.entries[0].measurement_contract_sha256
+        ),
+        operational_contract_sha256="a" * 64,
+        source_compatibility_sha256="b" * 64,
+        support_root_lineage_ids=("venue-support-root-b",),
+        support_state_sha256=("c" * 64,),
+        outcome_receipt_sha256=("d" * 64,),
+        reliability=VenuePriorUnitRatio(1, 1),
+        expected_yield=VenuePriorUnitRatio(1, 1),
+        matchup_safety=VenuePriorUnitRatio(1, 1),
+        travel_cost=VenuePriorUnitRatio(1, 10),
+        recovery_cost=VenuePriorUnitRatio(1, 10),
+    )
+    return PartyDevelopmentVenuePriorRegistry.freeze(
+        source_commit="e" * 40,
+        source_bundle_sha256="f" * 64,
+        entries=(*previous.entries, second),
     )
 
 
@@ -316,6 +358,352 @@ def test_materialization_protocol_forbids_labels_predictions_and_memory_edits() 
     )
     assert PP_CONTEXT_MATERIALIZATION_PROTOCOL["replacement_policy"] == (
         "never_replace_an_exposed_or_failed_identity"
+    )
+
+
+def test_pp_materialization_sources_start_healthy_high_hp_and_high_pp() -> None:
+    inventory = _inventory()
+    entries = {item.checkpoint_id: item for item in inventory.entries}
+    plan = _plan()
+
+    prepared = tuple(
+        entries[item.source_checkpoint_id]
+        for item in plan.reservations
+        if item.preparation
+        is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+    )
+
+    assert len(prepared) == 2
+    assert all(pp_materialization_source_ready(item) for item in prepared)
+    unsafe = replace(
+        prepared[0],
+        members=tuple(
+            sorted(
+                (
+                    replace(prepared[0].members[0], status_present=True),
+                    *prepared[0].members[1:],
+                ),
+                key=lambda item: item.semantic_tuple(),
+            )
+        ),
+    )
+    assert pp_materialization_source_ready(unsafe) is False
+    assert reservation_module._pp_materialization_source_health_only_unsafe(
+        unsafe
+    )
+    pp_unsafe = replace(
+        prepared[0],
+        members=tuple(
+            sorted(
+                (
+                    replace(prepared[0].members[0], pp_bin="middle"),
+                    *prepared[0].members[1:],
+                ),
+                key=lambda item: item.semantic_tuple(),
+            )
+        ),
+    )
+    assert not reservation_module._pp_materialization_source_health_only_unsafe(
+        pp_unsafe
+    )
+
+
+def test_refresh_retires_only_the_unsafe_unexecuted_pp_source() -> None:
+    original_inventory = _inventory()
+    previous_plan = _plan()
+    prepared = next(
+        item
+        for item in previous_plan.reservations
+        if item.partition is ScenarioPartition.DEVELOPMENT
+        and item.preparation
+        is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+    )
+    entries = []
+    for entry in original_inventory.entries:
+        if entry.checkpoint_id != prepared.source_checkpoint_id:
+            entries.append(entry)
+            continue
+        entries.append(
+            replace(
+                entry,
+                members=tuple(
+                    sorted(
+                        (
+                            replace(entry.members[0], status_present=True),
+                            *entry.members[1:],
+                        ),
+                        key=lambda item: item.semantic_tuple(),
+                    )
+                ),
+            )
+        )
+    inventory = PartyDevelopmentCheckpointInventory(tuple(entries))
+    unsafe_entry = next(
+        item
+        for item in inventory.entries
+        if item.checkpoint_id == prepared.source_checkpoint_id
+    )
+    previous_plan = replace(
+        previous_plan,
+        inventory_sha256=inventory.inventory_sha256,
+        reservations=tuple(
+            replace(
+                item,
+                source_semantic_signature_sha256=(
+                    unsafe_entry.semantic_signature_sha256
+                ),
+            )
+            if item.scenario_id == prepared.scenario_id
+            else item
+            for item in previous_plan.reservations
+        ),
+    )
+
+    refresh = refresh_party_development_question_reservations(
+        inventory,
+        teacher_prior=_teacher_prior(),
+        previous_plan=previous_plan,
+        previous_venue_prior_registry=_venue_registry(),
+        venue_prior_registry=_two_venue_registry(),
+    )
+
+    assert refresh.retained_reservation_count == 13
+    assert refresh.replaced_pp_preparation_count == 1
+    assert refresh.plan.venue_prior_count == 2
+    assert "second_compatible_venue_prior_missing" not in (
+        refresh.plan.unresolved_blockers
+    )
+    before = {
+        item.scenario_id: item for item in previous_plan.reservations
+    }
+    after = {item.scenario_id: item for item in refresh.plan.reservations}
+    changed = tuple(
+        scenario_id
+        for scenario_id in sorted(before)
+        if before[scenario_id].source_checkpoint_id
+        != after[scenario_id].source_checkpoint_id
+    )
+    assert changed == (prepared.scenario_id,)
+    assert pp_materialization_source_ready(
+        next(
+            item
+            for item in inventory.entries
+            if item.checkpoint_id == after[prepared.scenario_id].source_checkpoint_id
+        )
+    )
+    encoded = json.dumps(refresh.public_summary(), sort_keys=True)
+    assert prepared.source_checkpoint_id not in encoded
+    assert "question-development" not in encoded
+    assert "/Users/" not in encoded
+
+
+def test_refresh_rejects_a_non_append_only_venue_registry() -> None:
+    with pytest.raises(
+        PartyDevelopmentQuestionReservationError,
+        match="append-only venue prior",
+    ):
+        refresh_party_development_question_reservations(
+            _inventory(),
+            teacher_prior=_teacher_prior(),
+            previous_plan=_plan(),
+            previous_venue_prior_registry=_venue_registry(),
+            venue_prior_registry=PartyDevelopmentVenuePriorRegistry.freeze(
+                source_commit="e" * 40,
+                source_bundle_sha256="f" * 64,
+                entries=(_two_venue_registry().entries[1],),
+            ),
+        )
+
+
+def _pp_materialization_source(
+    reservation: PartyDevelopmentQuestionReservation,
+    *,
+    start_adapter: RedPpStartAdapter,
+    output_capture_id: str,
+) -> RedPpMaterializationSource:
+    possible_species = (5, 48, 108)
+    return RedPpMaterializationSource(
+        scenario_id=reservation.scenario_id,
+        partition=reservation.partition,
+        source_checkpoint_id=reservation.source_checkpoint_id,
+        source_state_sha256=reservation.source_state_sha256,
+        source_envelope_sha256=reservation.source_envelope_sha256,
+        source_semantic_signature_sha256=(
+            reservation.source_semantic_signature_sha256
+        ),
+        source_root_lineage_id=f"root-{reservation.scenario_id}",
+        source_boundary_sha256=_digest(
+            f"boundary:{reservation.scenario_id}"
+        ),
+        protected_state_sha256=_digest(
+            f"protected:{reservation.scenario_id}"
+        ),
+        start_adapter=start_adapter,
+        target_party_slot=1,
+        target_species_id=28,
+        target_level=50,
+        target_hp=100,
+        target_max_hp=100,
+        target_move_ids=(44, 39, 58, 57),
+        target_initial_packed_pp=(25, 30, 10, 15),
+        safe_move_slots=(1, 3, 4),
+        current_total_pp=80,
+        maximum_total_pp=80,
+        middle_pp_ceiling=53,
+        minimum_pp_consumption=27,
+        safe_current_pp=50,
+        target_has_evolution_route=False,
+        venue_map_id=22,
+        venue_binding_sha256="a" * 64,
+        venue_maximum_wild_level=17,
+        possible_wild_species_ids=possible_species,
+        possible_wild_species_sha256=canonical_sha256(
+            list(possible_species)
+        ),
+        all_possible_wild_species_seen=True,
+        output_capture_id=output_capture_id,
+    )
+
+
+def _pp_materialization_plan() -> RedPartyDevelopmentPpMaterializationPlan:
+    reservation_plan = reserve_party_development_questions(
+        _inventory(),
+        teacher_prior=_teacher_prior(),
+        venue_prior_registry=_two_venue_registry(),
+    )
+    pp_reservations = tuple(
+        item
+        for item in reservation_plan.reservations
+        if item.preparation
+        is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+    )
+    adapters = {
+        ScenarioPartition.TRAIN: (
+            RedPpStartAdapter.CINNABAR_MART_CLERK_TO_ROUTE_11
+        ),
+        ScenarioPartition.DEVELOPMENT: (
+            RedPpStartAdapter.CINNABAR_CENTER_PC_TO_ROUTE_11
+        ),
+    }
+    sources = tuple(
+        _pp_materialization_source(
+            item,
+            start_adapter=adapters[item.partition],
+            output_capture_id=f"pp-output-{item.partition.value}",
+        )
+        for item in pp_reservations
+    )
+    return freeze_red_party_development_pp_materialization_plan(
+        reservation_plan,
+        sources=sources,
+        source_commit="1" * 40,
+        source_bundle_sha256="2" * 64,
+        rom_sha256="3" * 64,
+        inventory_file_sha256="4" * 64,
+        reservation_plan_file_sha256="5" * 64,
+        venue_prior_registry_file_sha256="6" * 64,
+        context_catalog_sha256="7" * 64,
+        context_catalog_file_sha256="8" * 64,
+    )
+
+
+def test_pp_materialization_plan_is_two_partition_path_free_and_round_trips() -> None:
+    plan = _pp_materialization_plan()
+    summary = plan.public_summary()
+
+    assert summary["preparations_planned"] == 2
+    assert summary["partition_counts"] == {"development": 1, "train": 1}
+    assert summary["source_pp_bin"] == "high"
+    assert summary["target_pp_bin"] == "middle"
+    assert summary["safe_move_capacity_sufficient"] == 2
+    assert summary["wild_species_seen_coverage_complete"] == 2
+    assert summary["execution_authorized"] is False
+    assert summary["controller_actions"] == 0
+    encoded = json.dumps(summary, sort_keys=True)
+    assert "pp-output" not in encoded
+    assert "cinnabar" not in encoded.lower()
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+    assert (
+        RedPartyDevelopmentPpMaterializationPlan.from_private_dict(
+            plan.private_dict()
+        )
+        == plan
+    )
+
+
+def test_pp_materialization_plan_rejects_bad_depletion_arithmetic() -> None:
+    plan = _pp_materialization_plan()
+    source = plan.entries[0]
+
+    with pytest.raises(
+        RedPartyDevelopmentPpMaterializationError,
+        match="depletion arithmetic",
+    ):
+        replace(source, middle_pp_ceiling=54)
+
+
+def test_pp_materialization_source_rederives_its_safe_slots_and_capacity() -> None:
+    source = _pp_materialization_plan().entries[0]
+
+    with pytest.raises(
+        RedPartyDevelopmentPpMaterializationError,
+        match="safe move slots",
+    ):
+        replace(source, safe_move_slots=(1, 4))
+    with pytest.raises(
+        RedPartyDevelopmentPpMaterializationError,
+        match="depletion arithmetic",
+    ):
+        replace(source, safe_current_pp=49)
+
+
+def test_pp_materialization_plan_rejects_mutable_bounds_or_adapter_collapse() -> None:
+    plan = _pp_materialization_plan()
+
+    with pytest.raises(
+        RedPartyDevelopmentPpMaterializationError,
+        match="plan contract",
+    ):
+        replace(
+            plan,
+            bounds=RedPpMaterializationBounds(maximum_completed_battles=28),
+        )
+    collapsed = tuple(
+        replace(
+            item,
+            start_adapter=(
+                RedPpStartAdapter.CINNABAR_CENTER_PC_TO_ROUTE_11
+            ),
+        )
+        for item in plan.entries
+    )
+    with pytest.raises(
+        RedPartyDevelopmentPpMaterializationError,
+        match="frozen execution bounds",
+    ):
+        replace(plan, entries=collapsed)
+
+
+def test_pp_materialization_contract_forbids_learning_healing_and_retry() -> None:
+    forbidden_operations = RED_PP_MATERIALIZATION_EXECUTION_CONTRACT[
+        "forbidden_operations"
+    ]
+    assert isinstance(forbidden_operations, list)
+    forbidden = set(forbidden_operations)
+
+    assert {
+        "healing",
+        "learner_candidate_construction",
+        "learner_outcome_measurement",
+        "model_prediction",
+        "teacher_query",
+    } <= forbidden
+    assert (
+        RED_PP_MATERIALIZATION_EXECUTION_CONTRACT[
+            "retry_after_any_controller_input"
+        ]
+        is False
     )
 
 

@@ -6,6 +6,32 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: the PP bridge exists; publication and authorization are separate gates
+
+The project now has an implementation for the two missing natural middle-PP contexts. It does not
+edit emulator memory or ask a teacher/model for an action. A deterministic read-only refresh may
+retire only the one unhealthy development reservation, while preserving the other thirteen, then
+freeze exactly one train and one development preparation against the two-prior registry. The live
+runner consumes PP through ordinary safe wild battles and protects every unrelated state surface.
+
+The order from here is deliberately short:
+
+1. Publish the implementation and require a green exact-head CI run.
+2. Generate and authenticate the refreshed 8+6 reservation plus two-entry PP plan with zero
+   controller actions.
+3. Have Claude attack the immutable boundary and path-free projection; adjudicate findings with
+   the smallest discriminating test.
+4. Ask the owner to authorize the train and development preparations explicitly. Execute each at
+   most once and never replace an exposed identity.
+5. Re-inventory both prepared states and freeze exactly fourteen candidate menus. Only then send
+   the concrete catalog to Claude and the bounded transfer packet to Antigravity.
+6. Collect the eight train and six untouched development outcomes under a separate authorization,
+   fit once and report the descriptive result with authority still zero.
+
+There are still **zero completion-aware outcomes and zero trained completion-aware fits**. The
+prepared-state runner is infrastructure for authentic resource-pressure examples; it is not a
+teacher demonstration, policy rollout or training episode.
+
 ## Current checkpoint: two venue priors are frozen; prepare PP diversity before answers
 
 The one accepted Cave measurement has crossed the source-only bridge. Published head `107e034`

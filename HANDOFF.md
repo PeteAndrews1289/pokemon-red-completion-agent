@@ -17,6 +17,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Natural PP preparation is source-qualified, not executed — 2026-08-16
+
+The bridge from fourteen reserved roots to fourteen real questions is now implemented. A
+zero-controller refresh may replace exactly one unusable development source, and only when its
+recorded health or status makes natural preparation unsafe. The other thirteen reservations must
+remain identical. A separate read-only preflight authenticates the refreshed 8+6 plan, both frozen
+venue priors, the historical catalog, the cartridge and exactly one train plus one development
+source before it can freeze a two-entry natural-PP plan.
+
+The execution runner remains locked behind `--execute`, a fresh positive exact-CI identity and one
+explicit partition at a time. Each entry is single-use after any controller input. It consumes
+ordinary move PP in declared wild battles, never heals or switches, and stops in the Gen I middle
+band. The packed PP decoder accounts for PP Ups. Party/box/Pokédex/story state and every non-target
+experience value are protected; the output save is independently reloaded and authenticated before
+its envelope can commit. Hard per-source bounds are 27 completed battles, 10,000 encounter steps,
+250,000 controller actions and 5,000,000 frames.
+
+This source creates no learner question, answer or outcome. Current counters remain **priors 2 ·
+reserved roots 8 train / 6 development · PP states 0/2 · frozen menus 0 · outcomes 0/14 · fits 0 ·
+authority 0 · sealed Red 0 · Crystal 0 · replay 0**. The next order is publication, exact-head CI,
+private read-only plan generation and review. Stop and ask the owner for separate authorization
+before either partition receives controller input. After both succeed once, re-inventory and
+freeze the exact 8+6 menu catalog before opening a teacher answer.
+
 ## Two venue priors now exist; no second live run occurred — 2026-08-16
 
 The accepted Cave measurement has been composed exactly once beside Route 11. Composition ran

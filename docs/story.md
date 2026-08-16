@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: building the missing lesson without teaching the answer
+
+The model needs to see that a good training decision changes when move resources are partly spent.
+The 81 safe Red snapshots had plenty of party and health variety but every one still had high PP.
+Rather than fake a middle value in memory, the new bridge prepares two ordinary game states: one
+for training and one kept untouched for development evaluation.
+
+The distinction is unusually important. The preparation runner is not the teacher. It never ranks
+a Pokémon or a venue, never opens an answer and never creates a learner outcome. It takes one
+already-reserved healthy source, spends PP in normal wild battles and stops in the middle band. It
+cannot heal, switch, capture or silently borrow experience for the rest of the party. The saved
+game is reloaded and checked independently before it can be called a valid snapshot.
+
+The board therefore has not pretended to move: **two priors · fourteen reserved roots · zero of two
+prepared PP states · zero frozen menus · zero outcomes · zero authority**. Source publication,
+exact CI and a read-only private plan come next. Then the owner gets the key for each single-use
+preparation. Only after those two states exist can the first fourteen real resource-aware questions
+be frozen and reviewed.
+
 ## Current checkpoint: two facts can finally support a real choice
 
 The game did not run again. Published source `107e034` passed CI, then a source-only bridge proved

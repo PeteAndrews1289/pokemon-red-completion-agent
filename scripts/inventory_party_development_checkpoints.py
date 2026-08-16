@@ -31,10 +31,6 @@ from pokemon_red_completion.party_development_rank import (  # noqa: E402
     EvolutionRouteKind,
     PartyDevelopmentGoal,
 )
-from pokemon_red_completion.red_battle_catalog import (  # noqa: E402
-    PokemonRedBattleCatalog,
-    pokemon_red_move_ref,
-)
 from pokemon_red_completion.red_collection import (  # noqa: E402
     RED_SOLO_COLLECTION_CONTRACT,
     red_collection_observation,
@@ -42,12 +38,15 @@ from pokemon_red_completion.red_collection import (  # noqa: E402
     red_species_number,
 )
 from pokemon_red_completion.red_party import (  # noqa: E402
-    PP_VALUE_MASK,
     RED_BALANCED_ROSTER,
     PokemonRedPartyReader,
 )
 from pokemon_red_completion.red_party_development_adapter import (  # noqa: E402
     RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY,
+)
+from pokemon_red_completion.red_party_pp import (  # noqa: E402
+    RedPartyPpError,
+    decode_red_party_pp,
 )
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
@@ -55,11 +54,6 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
 class PartyDevelopmentInventoryRunError(RuntimeError):
     """Raised before an inventory can silently omit or execute a checkpoint."""
-
-
-_BATTLE_CATALOG = PokemonRedBattleCatalog()
-_PP_UP_COUNT_SHIFT = 6
-_PP_UP_BONUS_CAP = 7
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -92,42 +86,13 @@ def _pp_ratio(
     exhausted and would make the inventory's diversity gate misleading.
     """
 
-    if (
-        not isinstance(move_ids, tuple)
-        or not isinstance(packed_pp, tuple)
-        or len(move_ids) != len(packed_pp)
-        or len(move_ids) != 4
-        or any(type(value) is not int or not 0 <= value <= 0xFF for value in move_ids)
-        or any(type(value) is not int or not 0 <= value <= 0xFF for value in packed_pp)
-    ):
-        raise PartyDevelopmentInventoryRunError(
-            "checkpoint move and PP vectors are invalid"
+    try:
+        return decode_red_party_pp(move_ids, packed_pp).ratio
+    except RedPartyPpError as error:
+        message = str(error).replace("Red move", "checkpoint move").replace(
+            "empty Red move", "empty checkpoint move"
         )
-    current_total = 0
-    maximum_total = 0
-    for move_id, packed_value in zip(move_ids, packed_pp, strict=True):
-        if move_id == 0:
-            if packed_value & PP_VALUE_MASK:
-                raise PartyDevelopmentInventoryRunError(
-                    "empty checkpoint move carries current PP"
-                )
-            continue
-        mechanics = _BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move_id))
-        pp_up_count = packed_value >> _PP_UP_COUNT_SHIFT
-        maximum_pp = mechanics.max_pp + pp_up_count * min(
-            mechanics.max_pp // 5,
-            _PP_UP_BONUS_CAP,
-        )
-        current_pp = packed_value & PP_VALUE_MASK
-        if current_pp > maximum_pp:
-            raise PartyDevelopmentInventoryRunError(
-                "checkpoint move reports PP above its own maximum"
-            )
-        current_total += current_pp
-        maximum_total += maximum_pp
-    if maximum_total == 0:
-        return 0.0
-    return current_total / maximum_total
+        raise PartyDevelopmentInventoryRunError(message) from error
 
 
 def _pp_bin(move_ids: tuple[int, ...], packed_pp: tuple[int, ...]) -> str:

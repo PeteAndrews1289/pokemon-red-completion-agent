@@ -5,6 +5,24 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: PP preparation source is ready; controller authority is not
+
+Codex owns the new source-qualified bridge. It refreshes exactly one unsafe development
+reservation without changing the other thirteen, freezes one train and one development natural-PP
+preparation read-only, and exposes a one-partition runner that cannot retry after controller input.
+The runner protects unrelated experience, party, box, Pokédex and story state; forbids healing,
+switching, capture, teacher/model calls and learner outcomes; and independently reloads the saved
+state before publication.
+
+Codex's immediate assignment is to publish the complete implementation and documentation, obtain
+green exact-head CI, generate the two private plans read-only and stop. No controller action is
+authorized by this handoff. Claude then attacks the immutable contract and path-free plan facts.
+Antigravity remains idle until the fourteen concrete menus exist, when it receives only the small
+Red-to-Crystal transfer/product packet described below.
+
+Current honest state: priors 2; reserved roots 8 train / 6 development; natural PP states 0/2;
+frozen menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; full replay 0.
+
 ## Current override: two-prior composition complete; PP preparation is the next live boundary
 
 Codex published exact head `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3`; GitHub CI run

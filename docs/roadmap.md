@@ -8,6 +8,19 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): PP preparation implemented, execution still closed
+
+The active model-first roadmap now has the exact bridge for its two missing natural middle-PP
+contexts. Read-only tooling can refresh only the one health/status-invalid development reservation,
+authenticate the retained 8+6 roots against both venue priors and freeze one train plus one
+development preparation. The partition-specific runner is bounded, single-use after input and
+cannot heal, switch, capture, edit memory, ask a teacher/model or create a learner outcome.
+
+Next: publish and pass exact-head CI; generate the two private plans read-only; obtain independent
+review and separate owner authorization; materialize each once; re-inventory; then freeze and
+review the exact fourteen menus. Counters remain priors 2, PP states 0/2, menus 0, outcomes 0/14,
+fits 0 and authority 0. No full replay or Crystal case is part of this gate.
+
 ## Current checkpoint (2026-08-15): exact roots reserved, catalog still closed
 
 Exact head `3ee15fd` passed CI run `31900603291`, and Claude killed 28/28 targeted H2/M2/L2
