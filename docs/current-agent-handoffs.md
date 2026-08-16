@@ -34,8 +34,8 @@ Claude's corrected final audit rejected live execution because four existing run
 behavioral tests. Codex has now added those tests, durably synced the typed one-shot claim before
 emulator input, moved final isolation checks inside the artifact transaction and required the
 artifact root to contain every authenticated protected input. Focused coverage is 77/77 and the
-full 3,560-test ROM-free gate is green; publication, exact-head CI and Claude delta review remain.
-No counter advanced.
+full 3,560-test ROM-free gate is green. Exact source `41dd817` passed GitHub CI run `31919075770`;
+Claude's delta review is the only remaining live-measurement gate. No counter advanced.
 
 Claude's latest audit found that the original planner called checkpoint IDs “roots.” Codex
 accepted the finding and resolved all 81 checkpoints through the frozen historical context catalog
@@ -50,7 +50,8 @@ The complete local candidate passes 3,550 non-integration tests plus every stati
 documentation and generated-registry gate; source bundle `d4c7953a…`.
 Exact `9476b97` passed CI run `31916187077`, and both path-free read-only receipts reproduced from
 that commit. Claude rejected live execution on test distinguishability; the hardened successor is
-now being qualified. Antigravity remains idle.
+exact source `41dd817`, which passed CI run `31919075770` and now awaits Claude's narrow delta
+review. Antigravity remains idle.
 
 Exact head `3ee15fd` passed CI run `31900603291`. Claude's H2/M2/L2 recheck killed 28/28 valid
 mutations and approved read-only inventory plus prospective construction. The repeated 81-state

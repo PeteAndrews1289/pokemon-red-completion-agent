@@ -7,7 +7,8 @@
 > ROM sidecars; then fixed a separate production durability gap by syncing the typed one-shot claim
 > before emulator input and keeping isolation checks inside the failed/complete transaction.
 > Execution is now bound to the private root containing all authenticated inputs. No live run has
-> occurred. Claude receives the immutable delta after exact-head CI.
+> occurred. Exact source `41dd817` passed CI run `31919075770`; Claude now receives that immutable
+> delta.
 >
 > Antigravity remains out of this integrity gate. When the 8+6 menu catalog is frozen, Codex will
 > give 3.1 Pro a compact, public-safe challenge packet instead of the full repository and request at

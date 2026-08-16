@@ -276,7 +276,9 @@ and ROM-sidecar exclusion. It also closes a power-loss hole by syncing the typed
 exclusive partial claim before any caller can send emulator input, keeps post-run isolation checks
 inside the artifact transaction and binds the execution root to every authenticated protected
 input. The live measurement is still zero. Full ROM-free qualification, exact-head CI and Claude's
-narrow re-audit precede the one allowed Cave execution.
+narrow re-audit precede the one allowed Cave execution. Exact source `41dd817` now passes the first
+two gates under local 3,560-test qualification and GitHub CI run `31919075770`; only the independent
+delta verdict remains.
 
 This work remains on the shortest path to a learned party choice: one compatible Cave cost prior
 unmasks five already-observed two-way venue menus. It is not a replay, label or learned outcome. If

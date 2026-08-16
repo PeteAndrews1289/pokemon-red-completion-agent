@@ -12,7 +12,8 @@
 > partial claim before returning to emulator code, retain that claim on sync failure, and run final
 > isolation checks before a result can publish as complete. Execution is additionally bound to the
 > initialized private root that contains every authenticated input. The live Cave measurement has
-> not run; all learning counters remain unchanged pending exact-head CI and Claude's narrow recheck.
+> not run. Exact source `41dd817` passed GitHub CI run `31919075770`; all learning counters remain
+> unchanged pending Claude's narrow recheck.
 
 > **Reservation identity correction (August 15, 2026):** Claude found that the original planner's
 > “root” check compared checkpoint IDs with canonical root-lineage IDs. A new read-only audit

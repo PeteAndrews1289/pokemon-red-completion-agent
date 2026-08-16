@@ -25,9 +25,10 @@ a violation produces a failed artifact rather than a complete-looking result.
 Focused durability and runner coverage is 77/77 green. The full local gate passes 3,560 tests,
 three intentional deselections and one expected failure, plus Ruff, whole-source mypy, privacy,
 documentation and all four generated registries. Regenerated execution registries bind source
-bundle `beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Disposition:
-**implementation hardened; live execution still rejected pending publication, exact-head CI and
-Claude delta re-audit**. Protected counters remain unchanged.
+bundle `beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Exact source
+`41dd817b62b117f22f3034a78f7cc41997459810` passed GitHub CI run `31919075770`. Disposition:
+**source qualified; live execution still rejected pending Claude's delta re-audit**. Protected
+counters remain unchanged.
 
 ## Reservation identifier adjudication
 

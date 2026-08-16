@@ -38,10 +38,11 @@ satisfies that rule while an accidental alternate artifact root does not.
 Focused durability/isolation coverage is 77/77 green. The full local gate passes 3,560
 non-integration tests, three intentional deselections and one expected failure, plus Ruff, mypy
 over 227 source files, privacy/docs and all four generated registries. Executable source bundle is
-`beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Do not execute Cave from
-this working tree. Required sequence: exact source commit and CI, Claude's narrow delta re-audit,
-then exactly one live measurement only if approval returns. Counters remain priors 1, reservations
-14, durable menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
+`beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Exact source
+`41dd817b62b117f22f3034a78f7cc41997459810` passed GitHub CI run `31919075770`. Do not execute
+Cave yet. Required sequence: Claude's narrow delta re-audit, then exactly one live measurement only
+if approval returns. Counters remain priors 1, reservations 14, durable menus 0, outcomes 0/14,
+fits 0, sealed/Crystal 0, replay 0 and authority 0.
 
 ## Reservation namespace audited; state exclusion carries the current proof — 2026-08-15
 
