@@ -8,6 +8,22 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): authenticate CI evidence, then rebuild the one-shot plan
+
+The private v2 natural-PP plan is superseded without execution. Its runner accepted and recorded a
+positive CI run number but did not prove that the named run was the successful pull-request `CI`
+run for the exact source. The successor authenticates that evidence before output claim or
+controller entry and behaviorally distinguishes every frozen source/input/output binding. Focused
+coverage is 106/106; 53/53 targeted mutations are killed across CI fields, private bindings, hard
+bounds, reload checks, Gen I PP arithmetic and durable protected-state fields.
+
+Next: publish the successor; require one green exact-head CI run; regenerate the private plan as
+v3 at that clean head; rerun train and development preflights without `--execute`; obtain an
+independent authorization-level audit; then ask the owner for exactly one partition-specific
+execution. The other partition still requires its own later authorization. Only two accepted
+preparations unlock read-only re-inventory and the exact 8+6 menu freeze. Current counters remain
+priors 2, PP states 0/2, menus 0, outcomes 0/14, fits 0 and authority 0.
+
 ## Current checkpoint (2026-08-16): PP preparation implemented, execution still closed
 
 The active model-first roadmap now has the exact bridge for its two missing natural middle-PP

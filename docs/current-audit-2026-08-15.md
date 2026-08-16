@@ -1,5 +1,32 @@
 # Current audit — 2026-08-15
 
+## August 16 addendum: PP execution plan superseded before controller input
+
+The authorization review of published head `e6b6fa9` / CI run `31953914999` found one stop-ship
+gap: `--exact-ci-run` was validated only as a positive integer. The runner recorded that number but
+did not independently bind it to the exact repository, head, workflow, event and successful
+completion. No controller action had occurred, so the correct disposition is to supersede the
+private v2 plan rather than consume or repair it in place.
+
+The successor adds fail-closed GitHub Actions authentication before any output claim. The returned
+run must match the requested database ID and repository URL, exact 40-character source commit,
+`CI` workflow, `pull_request` event, completed status, successful conclusion and positive integer
+attempt. It also extracts behavioral seams for every plan/input/catalog/cartridge/source-lineage
+binding, exact output identity, private-root containment, pre-action battle/step capacity and all
+four post-execution counters. Reload authentication now proves terminal map, readiness, party
+safety, receipt totals, middle-band limits and unchanged output bytes.
+
+The focused suite passes 106/106. A fresh temporary-copy mutation audit kills 53/53 probes with no
+survivor or invalid probe: nine CI fields, every frozen private binding, output/root boundaries,
+action/frame/battle/step/runtime bounds, reload map and byte integrity, Gen I PP-Up/mask/middle-
+ceiling arithmetic, and representative durable party/Pokédex/progression fields. This repair used
+no ROM execution, controller, teacher, learner outcome, model, sealed case or Crystal context.
+
+Disposition: **accept the tracked-source hardening; reject the old v2 execution plan**. Publish the
+successor and require exact-head green CI. Then build a new private v3 plan, run both partitions in
+read-only preflight mode, and submit that immutable boundary for independent review. Counters stay
+priors 2, reserved roots 8+6, natural PP states 0/2, menus 0, outcomes 0/14, fits 0 and authority 0.
+
 ## August 16 addendum: two-prior composition accepted
 
 The publication/composition head is `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3`; exact-head CI

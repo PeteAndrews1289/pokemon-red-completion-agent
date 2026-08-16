@@ -1,5 +1,18 @@
 # Pokémon Learning Observatory
 
+> **Current gate — CI ATTESTATION HARDENED · V2 PLAN SUPERSEDED · EXECUTION UNAUTHORIZED:** Review
+> found that the old runner recorded a positive CI number without independently proving it was the
+> successful `CI` pull-request run for the exact source. This was caught before controller input;
+> the private v2 plan must not run. The successor authenticates run ID, repository URL, exact head,
+> workflow, event, completed/success status and attempt before claiming an output. Focused checks
+> are **106/106** and the targeted mutation gate is **53/53 KILLED**.
+>
+> Display **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP STATES 0/2 · FROZEN
+> MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. Repair counters are **CONTROLLER 0 ·
+> TEACHER 0 · MODEL 0 · OUTCOMES 0 · SEALED 0 · CRYSTAL 0**. Next rail: **PUBLISH SUCCESSOR →
+> GREEN EXACT-HEAD CI → REGENERATE PRIVATE V3 PLAN → READ-ONLY PREFLIGHT BOTH PARTITIONS →
+> INDEPENDENT AUDIT → OWNER AUTHORIZATION FOR ONE PARTITION**.
+
 > **Current gate — PP PREPARATION SOURCE READY · EXECUTION UNAUTHORIZED:** The view-only readiness
 > page now reports **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP STATES 0/2 ·
 > FROZEN MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. It distinguishes the historical

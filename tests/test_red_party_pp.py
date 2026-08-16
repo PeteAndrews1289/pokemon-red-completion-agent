@@ -23,12 +23,49 @@ def test_red_party_pp_uses_actual_capacity_and_exact_middle_ceiling() -> None:
     assert natural_pp_depletion_slots(state) == (1, 3, 4)
 
 
+def test_red_party_pp_middle_ceiling_excludes_the_exact_67_percent_boundary() -> None:
+    state = decode_red_party_pp(
+        (2, 2, 2, 2),
+        (25, 25, 25, 25),
+    )
+
+    assert state.maximum_total == 100
+    assert state.middle_pp_ceiling == 66
+    assert state.minimum_consumption_to_middle == 34
+
+
 def test_red_party_pp_decodes_pp_ups_without_a_global_ceiling() -> None:
     state = decode_red_party_pp((45, 0, 0, 0), (0xFD, 0, 0, 0))
 
     assert state.moves[0].current_pp == 61
     assert state.moves[0].maximum_pp == 61
     assert state.ratio == 1.0
+
+
+@pytest.mark.parametrize(
+    ("move_id", "expected_maximum"),
+    (
+        (12, 8),
+        (3, 16),
+        (4, 24),
+        (5, 32),
+        (2, 40),
+        (11, 48),
+        (1, 56),
+        (45, 61),
+    ),
+)
+def test_red_party_pp_matches_every_gen_i_base_pp_band_after_three_pp_ups(
+    move_id: int,
+    expected_maximum: int,
+) -> None:
+    packed = (3 << 6) | expected_maximum
+
+    state = decode_red_party_pp((move_id, 0, 0, 0), (packed, 0, 0, 0))
+
+    assert state.moves[0].current_pp == expected_maximum
+    assert state.moves[0].maximum_pp == expected_maximum
+    assert state.maximum_total == expected_maximum
 
 
 @pytest.mark.parametrize(

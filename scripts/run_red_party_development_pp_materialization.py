@@ -8,10 +8,12 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from collections.abc import Callable, Mapping
 from contextlib import suppress
 from pathlib import Path
+from typing import cast
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -42,6 +44,7 @@ from pokemon_red_completion.executor import (  # noqa: E402
     FrameSafeExecutor,
 )
 from pokemon_red_completion.goal_manager_context_catalog import (  # noqa: E402
+    GoalManagerContextCapture,
     open_goal_manager_context_capture,
     parse_goal_manager_context_catalog,
 )
@@ -55,6 +58,7 @@ from pokemon_red_completion.observation import (  # noqa: E402
 )
 from pokemon_red_completion.party_development_inventory import (  # noqa: E402
     PartyDevelopmentCheckpointInventory,
+    PartyDevelopmentInventoryEntry,
 )
 from pokemon_red_completion.party_development_question_reservations import (  # noqa: E402
     PartyDevelopmentQuestionReservationPlan,
@@ -94,6 +98,9 @@ from pokemon_red_completion.surge import VERMILION_PC_TO_NURSE  # noqa: E402
 
 _MAX_JSON_BYTES = 4 * 1024 * 1024
 _OUTPUT_STATE_CLAIM = b"pokemon-red-party-pp-materialization-attempt-claim-v1\n"
+_GITHUB_REPOSITORY = "PeteAndrews1289/pokemon-red-completion-agent"
+_CI_WORKFLOW_NAME = "CI"
+_CI_RUN_JSON_FIELDS = "attempt,conclusion,databaseId,event,headSha,status,url,workflowName"
 _PRIVATE_PATH_TOKEN = re.compile(
     r"(?i)(?:file:(?://)?[^\s'\"]+|(?<![\w])~(?:[/\\][^\s'\"]*)?"
     r"|(?<![\w])(?:\.{1,2}[/\\][^\s'\"]+"
@@ -139,9 +146,7 @@ class _HardBoundedCountingExecutor(CountingExecutor):
         )
         if (
             self.actions_executed >= self._maximum_actions
-            or self._emulator.frame_count
-            - self._start_frame
-            + predicted_frames
+            or self._emulator.frame_count - self._start_frame + predicted_frames
             > self._maximum_frames
         ):
             raise RedPartyPpMaterializationRunError(
@@ -150,8 +155,7 @@ class _HardBoundedCountingExecutor(CountingExecutor):
         result = super().execute(action)
         if (
             self.actions_executed > self._maximum_actions
-            or self._emulator.frame_count - self._start_frame
-            > self._maximum_frames
+            or self._emulator.frame_count - self._start_frame > self._maximum_frames
         ):  # pragma: no cover - exact FrameSafeExecutor accounting owns this
             raise AssertionError("PP executor crossed a prechecked hard bound")
         return result
@@ -208,15 +212,11 @@ def _load_json(
         or len(payload) > _MAX_JSON_BYTES
         or hashlib.sha256(payload).hexdigest() != expected_sha256
     ):
-        raise RedPartyPpMaterializationRunError(
-            f"{subject} file digest or size differs"
-        )
+        raise RedPartyPpMaterializationRunError(f"{subject} file digest or size differs")
     try:
         value = json.loads(payload.decode("ascii"))
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise RedPartyPpMaterializationRunError(
-            f"{subject} is not valid ASCII JSON"
-        ) from error
+        raise RedPartyPpMaterializationRunError(f"{subject} is not valid ASCII JSON") from error
     if not isinstance(value, Mapping):
         raise RedPartyPpMaterializationRunError(f"{subject} document is invalid")
     return value
@@ -246,6 +246,72 @@ def _validate_execution_request(
     return private_root, out_state, exact_ci_run
 
 
+def _require_exact_green_ci_run(
+    exact_ci_run: int,
+    *,
+    source_commit: str,
+) -> Mapping[str, object]:
+    """Authenticate the owner-named Actions run before any attempt is claimed."""
+
+    if (
+        type(exact_ci_run) is not int  # noqa: E721
+        or exact_ci_run <= 0
+        or not isinstance(source_commit, str)
+        or re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
+    ):
+        raise RedPartyPpMaterializationRunError("PP execution CI binding is invalid")
+    command = (
+        "gh",
+        "run",
+        "view",
+        str(exact_ci_run),
+        "--repo",
+        _GITHUB_REPOSITORY,
+        "--json",
+        _CI_RUN_JSON_FIELDS,
+    )
+    environment = {**os.environ, "GH_PROMPT_DISABLED": "1"}
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=PROJECT_ROOT,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise RedPartyPpMaterializationRunError(
+            "PP execution could not authenticate its exact CI run"
+        ) from error
+    if completed.returncode != 0:
+        raise RedPartyPpMaterializationRunError(
+            "PP execution could not authenticate its exact CI run"
+        )
+    try:
+        document = json.loads(completed.stdout)
+    except json.JSONDecodeError as error:
+        raise RedPartyPpMaterializationRunError("PP execution CI evidence is invalid") from error
+    expected_url = f"https://github.com/{_GITHUB_REPOSITORY}/actions/runs/{exact_ci_run}"
+    if (
+        not isinstance(document, Mapping)
+        or document.get("databaseId") != exact_ci_run
+        or document.get("headSha") != source_commit
+        or document.get("status") != "completed"
+        or document.get("conclusion") != "success"
+        or document.get("workflowName") != _CI_WORKFLOW_NAME
+        or document.get("event") != "pull_request"
+        or document.get("url") != expected_url
+        or type(document.get("attempt")) is not int  # noqa: E721
+        or cast(int, document["attempt"]) <= 0
+    ):
+        raise RedPartyPpMaterializationRunError(
+            "PP execution CI run is not the exact successful source-bound run"
+        )
+    return document
+
+
 def _require_designated_private_root(
     private_root: Path,
     *,
@@ -273,9 +339,27 @@ def _require_output_boundary(output_state: Path) -> None:
             "PP output parent must already be a writable private directory"
         )
     if output_state.is_symlink():
+        raise RedPartyPpMaterializationRunError("PP output state cannot be a symbolic link")
+
+
+def _require_fresh_output_identity(
+    output_state: Path,
+    entry: RedPpMaterializationSource,
+) -> Path:
+    """Bind one unoccupied owner-only output pair to the selected plan entry."""
+
+    output_envelope = Path(f"{output_state}.json")
+    if (
+        output_state.name != f"{entry.output_capture_id}.state"
+        or output_state.exists()
+        or output_envelope.exists()
+        or output_envelope.is_symlink()
+    ):
         raise RedPartyPpMaterializationRunError(
-            "PP output state cannot be a symbolic link"
+            "PP output identity is occupied or differs from the frozen plan"
         )
+    _require_output_boundary(output_state)
+    return output_envelope
 
 
 def _require_protected_files_unchanged(
@@ -283,8 +367,7 @@ def _require_protected_files_unchanged(
 ) -> None:
     try:
         observed = {
-            path: hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in expected_digests
+            path: hashlib.sha256(path.read_bytes()).hexdigest() for path in expected_digests
         }
     except OSError:
         raise RedPartyPpMaterializationRunError(
@@ -303,9 +386,7 @@ def _require_rom_adjacent_unchanged(
     operation: str,
 ) -> None:
     if rom_adjacent_artifacts(rom_path) != expected:
-        raise RedPartyPpMaterializationRunError(
-            f"PP {operation} created a ROM-adjacent artifact"
-        )
+        raise RedPartyPpMaterializationRunError(f"PP {operation} created a ROM-adjacent artifact")
 
 
 def _source_paths(
@@ -321,6 +402,36 @@ def _source_paths(
     return state, envelope
 
 
+def _require_source_capture_bindings(
+    *,
+    capture: GoalManagerContextCapture,
+    entry: RedPpMaterializationSource,
+    root_lineage_id: str,
+    reservation_plan: PartyDevelopmentQuestionReservationPlan,
+    inventory_entry: PartyDevelopmentInventoryEntry,
+) -> None:
+    """Authenticate the selected source against lineage, exclusions and inventory."""
+
+    if (
+        capture.capture_id != entry.source_checkpoint_id
+        or capture.state_sha256 != entry.source_state_sha256
+        or capture.envelope_sha256 != entry.source_envelope_sha256
+        or root_lineage_id != entry.source_root_lineage_id
+        or root_lineage_id in reservation_plan.excluded_root_lineage_ids
+        or entry.source_state_sha256 in reservation_plan.excluded_state_sha256
+    ):
+        raise RedPartyPpMaterializationRunError("PP source capture differs from its frozen lineage")
+    if (
+        inventory_entry.checkpoint_id != entry.source_checkpoint_id
+        or inventory_entry.state_sha256 != entry.source_state_sha256
+        or inventory_entry.envelope_sha256 != entry.source_envelope_sha256
+        or inventory_entry.semantic_signature_sha256 != entry.source_semantic_signature_sha256
+    ):
+        raise RedPartyPpMaterializationRunError(
+            "PP source differs from the authenticated inventory"
+        )
+
+
 def _selected_entry(
     plan: RedPartyDevelopmentPpMaterializationPlan,
     partition: ScenarioPartition,
@@ -333,11 +444,58 @@ def _selected_entry(
     return matches[0]
 
 
+def _require_execution_input_bindings(
+    *,
+    plan: RedPartyDevelopmentPpMaterializationPlan,
+    reservation_plan: PartyDevelopmentQuestionReservationPlan,
+    inventory: PartyDevelopmentCheckpointInventory,
+    registry: PartyDevelopmentVenuePriorRegistry,
+    source_commit: str,
+    source_bundle_sha256: str,
+    reservation_plan_file_sha256: str,
+    checkpoint_inventory_file_sha256: str,
+    venue_prior_registry_file_sha256: str,
+) -> None:
+    """Require every parsed private input to match the frozen execution plan."""
+
+    if (
+        source_commit != plan.source_commit
+        or source_bundle_sha256 != plan.source_bundle_sha256
+        or reservation_plan.plan_sha256 != plan.reservation_plan_sha256
+        or reservation_plan_file_sha256 != plan.reservation_plan_file_sha256
+        or inventory.inventory_sha256 != plan.inventory_sha256
+        or checkpoint_inventory_file_sha256 != plan.inventory_file_sha256
+        or registry.registry_sha256 != plan.venue_prior_registry_sha256
+        or venue_prior_registry_file_sha256 != plan.venue_prior_registry_file_sha256
+        or len(registry.entries) != plan.venue_prior_count
+    ):
+        raise RedPartyPpMaterializationRunError("PP execution inputs differ from the frozen plan")
+
+
+def _require_context_catalog_binding(
+    *,
+    observed_catalog_sha256: str,
+    context_catalog_file_sha256: str,
+    plan: RedPartyDevelopmentPpMaterializationPlan,
+) -> None:
+    if (
+        observed_catalog_sha256 != plan.context_catalog_sha256
+        or context_catalog_file_sha256 != plan.context_catalog_file_sha256
+    ):
+        raise RedPartyPpMaterializationRunError("PP context catalog differs from the frozen plan")
+
+
+def _require_rom_binding(
+    *,
+    observed_rom_sha256: str,
+    plan: RedPartyDevelopmentPpMaterializationPlan,
+) -> None:
+    if observed_rom_sha256 != plan.rom_sha256:
+        raise RedPartyPpMaterializationRunError("PP execution ROM differs from the frozen plan")
+
+
 def _party_experience(emulator: PyBoyAdapter, *, subject: str) -> tuple[int, ...]:
-    observed = tuple(
-        member.experience
-        for member in PokemonRedPartyReader(emulator).read().members
-    )
+    observed = tuple(member.experience for member in PokemonRedPartyReader(emulator).read().members)
     if any(value is None for value in observed):
         raise RedPartyPpMaterializationRunError(
             f"PP {subject} lacks complete party-experience evidence"
@@ -394,19 +552,14 @@ def _observe_and_authenticate_source(
         or tuple(moves[index]) != entry.target_move_ids
         or tuple(pp[index]) != entry.target_initial_packed_pp
     ):
-        raise RedPartyPpMaterializationRunError(
-            "PP execution target differs from its private plan"
-        )
+        raise RedPartyPpMaterializationRunError("PP execution target differs from its private plan")
     pp_state = decode_red_party_pp(tuple(moves[index]), tuple(pp[index]))
     if (
         pp_state.current_total != entry.current_total_pp
         or pp_state.maximum_total != entry.maximum_total_pp
-        or pp_state.minimum_consumption_to_middle
-        != entry.minimum_pp_consumption
+        or pp_state.minimum_consumption_to_middle != entry.minimum_pp_consumption
     ):
-        raise RedPartyPpMaterializationRunError(
-            "PP execution source resource arithmetic drifted"
-        )
+        raise RedPartyPpMaterializationRunError("PP execution source resource arithmetic drifted")
     return reader, raw, entry.protected_state_sha256
 
 
@@ -447,8 +600,32 @@ def _require_runtime_bounds(
         or battles_completed > bounds.maximum_completed_battles
         or encounter_steps > bounds.maximum_encounter_steps
     ):
+        raise RedPartyPpMaterializationRunError("PP preparation exhausted a frozen execution bound")
+
+
+def _require_next_battle_capacity(
+    *,
+    battles_completed: int,
+    maximum_completed_battles: int,
+) -> None:
+    """Reject a newly entered battle before it can cross the completed cap."""
+
+    if battles_completed >= maximum_completed_battles:
         raise RedPartyPpMaterializationRunError(
-            "PP preparation exhausted a frozen execution bound"
+            "PP preparation refused a battle beyond its frozen bound"
+        )
+
+
+def _require_next_encounter_step_capacity(
+    *,
+    encounter_steps: int,
+    maximum_encounter_steps: int,
+) -> None:
+    """Reject the next encounter step before it can cross the step cap."""
+
+    if encounter_steps >= maximum_encounter_steps:
+        raise RedPartyPpMaterializationRunError(
+            "PP preparation refused a step beyond its frozen bound"
         )
 
 
@@ -530,9 +707,7 @@ def _current_target_pp(
     pp = raw.party_pp or ()
     index = entry.target_party_slot - 1
     if len(moves) <= index or len(pp) <= index:
-        raise RedPartyPpMaterializationRunError(
-            "PP preparation lost target move evidence"
-        )
+        raise RedPartyPpMaterializationRunError("PP preparation lost target move evidence")
     state = decode_red_party_pp(tuple(moves[index]), tuple(pp[index]))
     return state.current_total, state.maximum_total
 
@@ -594,10 +769,10 @@ def _execute_preparation(
                 encounter_steps=encounter_steps,
             )
             if raw.battle_state:
-                if battles_completed >= plan.bounds.maximum_completed_battles:
-                    raise RedPartyPpMaterializationRunError(
-                        "PP preparation refused a battle beyond its frozen bound"
-                    )
+                _require_next_battle_capacity(
+                    battles_completed=battles_completed,
+                    maximum_completed_battles=(plan.bounds.maximum_completed_battles),
+                )
                 if (
                     raw.enemy_species_id not in entry.possible_wild_species_ids
                     or raw.enemy_level is None
@@ -610,17 +785,13 @@ def _execute_preparation(
                 def choose_safe_move(policy_state: RawGameState) -> int:
                     if (
                         policy_state.active_party_index != 0
-                        or policy_state.active_party_species_id
-                        != entry.target_species_id
-                        or (policy_state.battler_level or 0)
-                        > entry.target_level + 1
-                        or policy_state.battler_moves
-                        != entry.target_move_ids
+                        or policy_state.active_party_species_id != entry.target_species_id
+                        or (policy_state.battler_level or 0) > entry.target_level + 1
+                        or policy_state.battler_moves != entry.target_move_ids
                         or (policy_state.battler_status or 0) != 0
                         or (policy_state.battler_hp or 0) <= 0
                         or (policy_state.battler_max_hp or 0) <= 0
-                        or (policy_state.battler_hp or 0) * 2
-                        <= (policy_state.battler_max_hp or 1)
+                        or (policy_state.battler_hp or 0) * 2 <= (policy_state.battler_max_hp or 1)
                     ):
                         raise RedPartyPpMaterializationRunError(
                             "PP preparation target crossed its per-turn safety boundary"
@@ -683,10 +854,10 @@ def _execute_preparation(
                 raise RedPartyPpMaterializationRunError(
                     "PP preparation left its frozen encounter venue"
                 )
-            if encounter_steps >= plan.bounds.maximum_encounter_steps:
-                raise RedPartyPpMaterializationRunError(
-                    "PP preparation refused a step beyond its frozen bound"
-                )
+            _require_next_encounter_step_capacity(
+                encounter_steps=encounter_steps,
+                maximum_encounter_steps=plan.bounds.maximum_encounter_steps,
+            )
             encounter_steps += walker(actions, reader, emulator)
 
         terminal = _require_protected_state(
@@ -712,8 +883,7 @@ def _execute_preparation(
             or final_maximum != entry.maximum_total_pp
             or final_total > entry.middle_pp_ceiling
             or final_total * 100 < final_maximum * 34
-            or entry.current_total_pp - final_total
-            < entry.minimum_pp_consumption
+            or entry.current_total_pp - final_total < entry.minimum_pp_consumption
             or battles_completed < 1
         ):
             raise RedPartyPpMaterializationRunError(
@@ -773,12 +943,9 @@ def _authenticate_materialized_output(
     expected_state_sha256 = terminal.get("output_state_sha256")
     if (
         not isinstance(expected_state_sha256, str)
-        or hashlib.sha256(output_state.read_bytes()).hexdigest()
-        != expected_state_sha256
+        or hashlib.sha256(output_state.read_bytes()).hexdigest() != expected_state_sha256
     ):
-        raise RedPartyPpMaterializationRunError(
-            "PP output state changed before authentication"
-        )
+        raise RedPartyPpMaterializationRunError("PP output state changed before authentication")
     with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
         emulator.load_state(output_state)
         reader = PokemonRedStateReader(emulator)
@@ -870,9 +1037,7 @@ def _private_failure_record(error: BaseException) -> dict[str, object]:
         "exception_message": retained,
         "exception_message_retained_exactly": retained == message,
         "exception_message_redacted": retained != message,
-        "exception_message_sha256": hashlib.sha256(
-            message.encode("utf-8")
-        ).hexdigest(),
+        "exception_message_sha256": hashlib.sha256(message.encode("utf-8")).hexdigest(),
         "private_path_fields": 0,
     }
 
@@ -885,9 +1050,7 @@ def _execute_with_retention(
     ],
 ) -> dict[str, object]:
     try:
-        terminal = execute(
-            lambda record: writer.append("progress", record, durable=True)
-        )
+        terminal = execute(lambda record: writer.append("progress", record, durable=True))
     except (Exception, KeyboardInterrupt, SystemExit) as error:
         with suppress(Exception):
             writer.append(
@@ -915,18 +1078,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     source_bundle_sha256 = working_source_bundle_sha256(PROJECT_ROOT)
 
     plan_path = _require_external(args.plan, subject="PP materialization plan")
-    reservation_plan_path = _require_external(
-        args.reservation_plan, subject="reservation plan"
-    )
-    inventory_path = _require_external(
-        args.checkpoint_inventory, subject="checkpoint inventory"
-    )
-    registry_path = _require_external(
-        args.venue_prior_registry, subject="venue-prior registry"
-    )
-    catalog_root = _require_external(
-        args.catalog_root, subject="context catalog root"
-    )
+    reservation_plan_path = _require_external(args.reservation_plan, subject="reservation plan")
+    inventory_path = _require_external(args.checkpoint_inventory, subject="checkpoint inventory")
+    registry_path = _require_external(args.venue_prior_registry, subject="venue-prior registry")
+    catalog_root = _require_external(args.catalog_root, subject="context catalog root")
     context_catalog_path = _require_external(
         args.context_catalog, subject="historical context catalog"
     )
@@ -958,22 +1113,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             subject="venue-prior registry",
         )
     )
-    if (
-        source.git_commit != plan.source_commit
-        or source_bundle_sha256 != plan.source_bundle_sha256
-        or reservation_plan.plan_sha256 != plan.reservation_plan_sha256
-        or args.reservation_plan_file_sha256
-        != plan.reservation_plan_file_sha256
-        or inventory.inventory_sha256 != plan.inventory_sha256
-        or args.checkpoint_inventory_file_sha256 != plan.inventory_file_sha256
-        or registry.registry_sha256 != plan.venue_prior_registry_sha256
-        or args.venue_prior_registry_file_sha256
-        != plan.venue_prior_registry_file_sha256
-        or len(registry.entries) != plan.venue_prior_count
-    ):
-        raise RedPartyPpMaterializationRunError(
-            "PP execution inputs differ from the frozen plan"
-        )
+    _require_execution_input_bindings(
+        plan=plan,
+        reservation_plan=reservation_plan,
+        inventory=inventory,
+        registry=registry,
+        source_commit=source.git_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        reservation_plan_file_sha256=args.reservation_plan_file_sha256,
+        checkpoint_inventory_file_sha256=(args.checkpoint_inventory_file_sha256),
+        venue_prior_registry_file_sha256=(args.venue_prior_registry_file_sha256),
+    )
     partition = ScenarioPartition(args.partition)
     entry = _selected_entry(plan, partition)
 
@@ -984,9 +1134,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
     context_catalog_source_commit = context_catalog_document.get("source_commit")
     if not isinstance(context_catalog_source_commit, str):
-        raise RedPartyPpMaterializationRunError(
-            "historical context catalog source is invalid"
-        )
+        raise RedPartyPpMaterializationRunError("historical context catalog source is invalid")
     historical_registry = load_committed_goal_manager_registry_at_revision(
         PROJECT_ROOT,
         context_catalog_source_commit,
@@ -995,13 +1143,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         context_catalog_path.read_bytes(),
         historical_registry,
     )
-    if (
-        context_catalog.catalog_sha256 != plan.context_catalog_sha256
-        or args.context_catalog_file_sha256 != plan.context_catalog_file_sha256
-    ):
-        raise RedPartyPpMaterializationRunError(
-            "PP context catalog differs from the frozen plan"
-        )
+    _require_context_catalog_binding(
+        observed_catalog_sha256=context_catalog.catalog_sha256,
+        context_catalog_file_sha256=args.context_catalog_file_sha256,
+        plan=plan,
+    )
 
     state_path, envelope_path = _source_paths(catalog_root, entry)
     capture = open_goal_manager_context_capture(state_path, envelope_path)
@@ -1012,39 +1158,26 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         state_sha256=entry.source_state_sha256,
         envelope_sha256=entry.source_envelope_sha256,
     )
-    if (
-        capture.capture_id != entry.source_checkpoint_id
-        or capture.state_sha256 != entry.source_state_sha256
-        or capture.envelope_sha256 != entry.source_envelope_sha256
-        or root_lineage_id != entry.source_root_lineage_id
-        or root_lineage_id in reservation_plan.excluded_root_lineage_ids
-        or entry.source_state_sha256
-        in reservation_plan.excluded_state_sha256
-    ):
-        raise RedPartyPpMaterializationRunError(
-            "PP source capture differs from its frozen lineage"
-        )
     inventory_entries = tuple(
-        item
-        for item in inventory.entries
-        if item.checkpoint_id == entry.source_checkpoint_id
+        item for item in inventory.entries if item.checkpoint_id == entry.source_checkpoint_id
     )
-    if (
-        len(inventory_entries) != 1
-        or inventory_entries[0].state_sha256 != entry.source_state_sha256
-        or inventory_entries[0].envelope_sha256 != entry.source_envelope_sha256
-        or inventory_entries[0].semantic_signature_sha256
-        != entry.source_semantic_signature_sha256
-    ):
+    if len(inventory_entries) != 1:
         raise RedPartyPpMaterializationRunError(
             "PP source differs from the authenticated inventory"
         )
+    _require_source_capture_bindings(
+        capture=capture,
+        entry=entry,
+        root_lineage_id=root_lineage_id,
+        reservation_plan=reservation_plan,
+        inventory_entry=inventory_entries[0],
+    )
 
     rom_path = resolve_rom_path(args.rom)
-    if verify_rom(rom_path).sha256 != plan.rom_sha256:
-        raise RedPartyPpMaterializationRunError(
-            "PP execution ROM differs from the frozen plan"
-        )
+    _require_rom_binding(
+        observed_rom_sha256=verify_rom(rom_path).sha256,
+        plan=plan,
+    )
     adjacent_before = rom_adjacent_artifacts(rom_path)
     private_input_paths = (
         plan_path,
@@ -1100,20 +1233,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         return preflight
 
     requested_root, requested_output_state, exact_ci_run = execution_request
+    authenticated_ci_run = _require_exact_green_ci_run(
+        exact_ci_run,
+        source_commit=source.git_commit,
+    )
     output_state = _require_external(
         requested_output_state,
         subject="prepared output state",
     )
-    output_envelope = Path(f"{output_state}.json")
-    if (
-        output_state.name != f"{entry.output_capture_id}.state"
-        or output_state.exists()
-        or output_envelope.exists()
-    ):
-        raise RedPartyPpMaterializationRunError(
-            "PP output identity is occupied or differs from the frozen plan"
-        )
-    _require_output_boundary(output_state)
+    output_envelope = _require_fresh_output_identity(output_state, entry)
     designated_root = _require_designated_private_root(
         requested_root,
         protected_inputs=private_input_paths,
@@ -1137,6 +1265,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "source_commit": source.git_commit,
                 "source_bundle_sha256": source_bundle_sha256,
                 "exact_ci_run": exact_ci_run,
+                "exact_ci_run_attempt": authenticated_ci_run["attempt"],
+                "exact_ci_workflow": authenticated_ci_run["workflowName"],
+                "exact_ci_head_sha": authenticated_ci_run["headSha"],
                 "private_plan_sha256": plan.plan_sha256,
                 "private_plan_file_sha256": args.plan_file_sha256,
                 "partition": partition.value,
@@ -1175,10 +1306,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         def execute_and_validate(
             progress_sink: Callable[[Mapping[str, object]], None],
         ) -> dict[str, object]:
-            if (
-                hashlib.sha256(output_state.read_bytes()).hexdigest()
-                != output_claim_sha256
-            ):
+            if hashlib.sha256(output_state.read_bytes()).hexdigest() != output_claim_sha256:
                 raise RedPartyPpMaterializationRunError(
                     "PP output attempt claim changed before controller entry"
                 )
@@ -1230,6 +1358,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "schema": "pokemon.red.party-development-pp-materialization-result.v1",
         "status": "complete_context_prepared",
         "exact_ci_run": exact_ci_run,
+        "exact_ci_run_attempt": authenticated_ci_run["attempt"],
+        "exact_ci_authenticated": True,
         "artifact": writer.summary.public_dict(),
         "materializations_completed": 1,
         "controller_actions": terminal["controller_actions"],

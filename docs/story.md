@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the CI number had to prove what it claimed
+
+The two missing PP lessons were ready for review, but the final lock turned out to be painted on.
+The runner required a positive GitHub Actions number and wrote it into the journal; it never asked
+GitHub whether that number was really the successful CI run for the exact code about to control the
+game.
+
+That distinction was caught before a single button press. The old private plan is superseded, not
+quietly blessed. The replacement lock checks the exact repository, source commit, workflow, event,
+completion, success and attempt before it can claim the one-shot output. It also now has behavioral
+alarms for every frozen input, every hard counter, the terminal reload and the durable parts of the
+party and Pokédex. Fifty-three deliberate breakages all tripped an alarm.
+
+The scoreboard therefore stays honest: **two priors · fourteen reserved roots · zero of two PP
+states · zero menus · zero outcomes · zero authority**. The next work is not another long game run.
+It is publish, pass exact-head CI, rebuild a clean private v3 plan, preflight both partitions
+without input and let an independent reviewer attack the immutable boundary. Only then does the
+owner receive one key for one PP preparation.
+
 ## Current checkpoint: building the missing lesson without teaching the answer
 
 The model needs to see that a good training decision changes when move resources are partly spent.

@@ -5,6 +5,25 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: rebuild PP authorization evidence at a published successor
+
+Codex found that the v2 PP runner recorded a user-supplied positive CI run number without
+authenticating it as the successful exact-head `CI` pull-request run. This is stop-ship but was
+caught before any controller input. The private v2 plan is superseded and neither partition may
+execute from it. Codex has implemented exact CI attestation plus behavioral binding, threshold,
+reload and protected-state tests. Its focused gate is 106/106 and 53/53 targeted mutations die.
+
+Codex's next bounded assignment is publication, exact-head green CI and generation of a new
+private v3 two-entry plan at that clean source. It then runs only read-only preflights for train and
+development and gives Claude an immutable authorization packet. Claude attacks provenance,
+one-shot isolation, source independence and counter/receipt sufficiency; it does not edit or run
+the controller. Antigravity remains idle until the exact 8+6 learner-menu catalog exists, when its
+smaller transfer challenge becomes useful.
+
+No handoff authorizes controller input. After a clean v3 audit, Codex must ask the owner for one
+exact partition at a time. Current state: priors 2; roots 8 train / 6 development; natural PP states
+0/2; menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; replay 0.
+
 ## Current override: PP preparation source is ready; controller authority is not
 
 Codex owns the new source-qualified bridge. It refreshes exactly one unsafe development

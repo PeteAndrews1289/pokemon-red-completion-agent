@@ -114,17 +114,27 @@ def test_pp_protected_digest_allows_only_target_battle_progress() -> None:
 @pytest.mark.parametrize(
     "mutation",
     (
+        "badges",
         "bag",
+        "bag_ids",
         "money",
         "events",
         "target_species",
         "target_status",
         "target_moves",
+        "non_target_species",
+        "non_target_level",
         "non_target_hp",
+        "non_target_max_hp",
+        "non_target_status",
+        "non_target_moves",
         "non_target_pp",
         "non_target_experience",
         "pokedex",
+        "pokedex_owned",
         "boxes",
+        "current_box",
+        "storage_initialized",
     ),
 )
 def test_pp_protected_digest_distinguishes_every_forbidden_change(
@@ -136,8 +146,12 @@ def test_pp_protected_digest_distinguishes_every_forbidden_change(
     experience = (121_062, 8_858, 10_666, 33_750, 15_625, 27_000)
     expected = _digest(raw, pokedex=pokedex, boxes=boxes, experience=experience)
 
-    if mutation == "bag":
+    if mutation == "badges":
+        raw = replace(raw, badge_bits=0xFE)
+    elif mutation == "bag":
         raw = replace(raw, bag_items=((1, 3), (2, 1)))
+    elif mutation == "bag_ids":
+        raw = replace(raw, bag_item_ids=(1, 3))
     elif mutation == "money":
         raw = replace(raw, player_money=123_457)
     elif mutation == "events":
@@ -151,8 +165,35 @@ def test_pp_protected_digest_distinguishes_every_forbidden_change(
             raw,
             party_moves=((45, 39, 58, 57), *(raw.party_moves or ())[1:]),
         )
+    elif mutation == "non_target_species":
+        raw = replace(
+            raw,
+            party_species_ids=(
+                (raw.party_species_ids or ())[0],
+                60,
+                *(raw.party_species_ids or ())[2:],
+            ),
+        )
+    elif mutation == "non_target_level":
+        raw = replace(
+            raw,
+            party_levels=((raw.party_levels or ())[0], 31, *(raw.party_levels or ())[2:]),
+        )
     elif mutation == "non_target_hp":
         raw = replace(raw, party_hp=((raw.party_hp or ())[0], 89, *(raw.party_hp or ())[2:]))
+    elif mutation == "non_target_max_hp":
+        raw = replace(
+            raw,
+            party_max_hp=((raw.party_max_hp or ())[0], 91, *(raw.party_max_hp or ())[2:]),
+        )
+    elif mutation == "non_target_status":
+        raw = replace(
+            raw,
+            party_status=((raw.party_status or ())[0], 8, *(raw.party_status or ())[2:]),
+        )
+    elif mutation == "non_target_moves":
+        rows = raw.party_moves or ()
+        raw = replace(raw, party_moves=(rows[0], (2, 2, 3, 4), *rows[2:]))
     elif mutation == "non_target_pp":
         rows = raw.party_pp or ()
         raw = replace(raw, party_pp=(rows[0], (9, 10, 10, 10), *rows[2:]))
@@ -163,19 +204,31 @@ def test_pp_protected_digest_distinguishes_every_forbidden_change(
             owned_species=pokedex.owned_species,
             seen_species=pokedex.seen_species | {25},
         )
+    elif mutation == "pokedex_owned":
+        pokedex = RedPokedexState(
+            owned_species=pokedex.owned_species | {21},
+            seen_species=pokedex.seen_species,
+        )
     elif mutation == "boxes":
         box_rows = list(boxes.boxes)
         box_rows[0] = RedCurrentBoxState(0, (28, 59), (50, 20))
         boxes = replace(boxes, boxes=tuple(box_rows))
+    elif mutation == "current_box":
+        boxes = replace(boxes, current_box_index=1)
+    elif mutation == "storage_initialized":
+        boxes = replace(boxes, storage_initialized=False)
     else:  # pragma: no cover - parametrization owns this branch
         raise AssertionError(mutation)
 
-    assert _digest(
-        raw,
-        pokedex=pokedex,
-        boxes=boxes,
-        experience=experience,
-    ) != expected
+    assert (
+        _digest(
+            raw,
+            pokedex=pokedex,
+            boxes=boxes,
+            experience=experience,
+        )
+        != expected
+    )
 
 
 def test_pp_protected_digest_requires_complete_experience_evidence() -> None:
@@ -188,17 +241,7 @@ def test_pp_protected_digest_requires_complete_experience_evidence() -> None:
 
 def test_pp_materialization_bounds_and_source_requirements_are_frozen() -> None:
     assert RED_PP_MATERIALIZATION_BOUNDS.maximum_completed_battles == 27
-    source_requirements = RED_PP_MATERIALIZATION_EXECUTION_CONTRACT[
-        "source_requirements"
-    ]
+    source_requirements = RED_PP_MATERIALIZATION_EXECUTION_CONTRACT["source_requirements"]
     assert isinstance(source_requirements, list)
-    assert (
-        "experience_sharing_item_absent"
-        in source_requirements
-    )
-    assert (
-        RED_PP_MATERIALIZATION_EXECUTION_CONTRACT[
-            "retry_after_any_controller_input"
-        ]
-        is False
-    )
+    assert "experience_sharing_item_absent" in source_requirements
+    assert RED_PP_MATERIALIZATION_EXECUTION_CONTRACT["retry_after_any_controller_input"] is False

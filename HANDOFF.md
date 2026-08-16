@@ -17,6 +17,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## PP preparation CI attestation repaired before execution — 2026-08-16
+
+The first immutable review of the two natural-PP preparations found a stop-ship provenance gap
+before either source received controller input. The runner required a positive `--exact-ci-run`
+number and recorded it, but it did not authenticate that GitHub Actions run as the successful CI
+run for the exact published source. The private v2 preparation plan is therefore **superseded and
+must not execute**, even though its source qualification and both read-only preflights passed.
+
+The successor runner fails closed before claiming its one-shot output unless `gh` returns the exact
+run ID, repository URL, source commit, completed/success status, `CI` workflow, pull-request event
+and positive attempt number. Every frozen source, reservation, inventory, registry, catalog,
+cartridge, lineage, exclusion and output identity now has a behavioral oracle. Exact hard bounds
+are tested at and across their thresholds, the output bytes are rechecked after reload, and a
+dangling output-envelope link is rejected before controller entry. The focused gate is 106/106;
+an independent temporary-copy mutation pass kills 53/53 authorization, arithmetic and protected-
+state mutations.
+
+No game, teacher, learner, model, sealed case or Crystal context opened during this repair. Honest
+counters remain **priors 2 · reserved roots 8 train / 6 development · natural PP states 0/2 ·
+frozen menus 0 · outcomes 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
+Next publish this successor, require green exact-head CI, regenerate a private v3 plan at that clean
+head, rerun both read-only partition preflights and obtain an independent audit. Only then may the
+owner separately authorize one train or one development preparation.
+
 ## Natural PP preparation is source-qualified, not executed — 2026-08-16
 
 The bridge from fourteen reserved roots to fourteen real questions is now implemented. A
