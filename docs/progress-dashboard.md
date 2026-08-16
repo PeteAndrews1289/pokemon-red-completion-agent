@@ -1,5 +1,18 @@
 # Pokémon Learning Observatory
 
+> **Current gate — TWO PRIORS FROZEN · PP PREPARATION NEXT:** Published source `107e034` passed
+> exact CI run `31947146884`. A source-only composer proved the measured Cave runtime byte-identical
+> and added exactly one Cave prior beside Route 11. Display **PRIORS 2 · RESERVED ROOTS 14 · MENUS
+> 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. Link the
+> [path-free composition receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json),
+> registry SHA `4379309d…`, receipt SHA `015d2d25…`.
+>
+> Composition counters must read **ROM READS 0 · EMULATOR STARTS 0 · CONTROLLER 0 · TEACHER 0 ·
+> MODEL 0 · OUTCOMES 0 · SEALED 0 · CRYSTAL 0**. Keep V1 and V2 marked consumed with no retry.
+> The next rail is **AUDIT TWO NATURAL MIDDLE-PP CONTRACTS → NEW OWNER AUTHORIZATION → MATERIALIZE
+> TRAIN PP ONCE + DEVELOPMENT PP ONCE → READ-ONLY RE-INVENTORY → FREEZE 8+6 MENUS**. Do not show
+> PP preparation, a prior, or a frozen input as a learned outcome.
+
 > **Current gate — V2 ACCEPTED ONCE · NO RETRY:** Published source `755fe53` under green CI run
 > `31926299036` completed the one authorized Cave measurement. Display **4/4 PROGRESS · 67 BATTLES
 > · 4,319 STEPS · 1,853,750 FRAMES · 58,829 CONTROLLER ACTIONS · 0 FAINTS · 0 OPTIONAL RECOVERIES

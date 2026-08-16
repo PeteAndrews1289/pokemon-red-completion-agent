@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-16 Cave prior composed — highest active checkpoint:** Source-only composition ran from
+> published `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3` after exact-head CI run `31947146884`
+> passed. It proved all 21 execution-bearing files byte-identical to measured head `755fe53`, then
+> added exactly one accepted Cave entry beside the existing Route 11 entry. The resulting private
+> registry has two priors, registry SHA `4379309d…` and file SHA `da32ef5b…`. The
+> [path-free composition receipt](docs/evidence/red-cave-venue-prior-composition-v2-2026-08-16.json)
+> is byte-identical to the private public projection (SHA `015d2d25…`). Composition used zero ROM
+> reads, emulator starts, controller actions, teacher queries, model calls, outcomes, sealed cases
+> and Crystal contexts. V1 and V2 remain permanently consumed; neither may be replayed.
+>
+> Honest counters are now priors 2, reserved roots 8 train / 6 development, frozen menus 0,
+> outcomes 0/14, fit 0, authority 0, sealed Red 0, Crystal 0 and full replay 0. Codex's next lane is
+> to prepare and audit the two prospectively bounded natural middle-PP materializations, then seek
+> separate owner authority before either receives controller input. After those states exist,
+> Codex can re-inventory and freeze the exact 8+6 input catalog without opening an answer. Claude
+> should attack this immutable two-prior receipt and the eventual catalog. Antigravity remains
+> deferred until the concrete catalog can support a bounded transfer/product challenge.
+
 > **2026-08-16 accepted Cave V2 measurement — highest active checkpoint:** The owner authorized
 > exactly one execution from published `755fe53d127c764f4213c2335cdbd5c9cb136dda` under green CI
 > `31926299036`. Read-only preflight passed with zero actions. The one live run is now consumed and

@@ -6,6 +6,34 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: two venue priors are frozen; prepare PP diversity before answers
+
+The one accepted Cave measurement has crossed the source-only bridge. Published head `107e034`
+passed exact CI run `31947146884`; the composer proved all 21 execution-bearing files byte-identical
+to measured head `755fe53` and added one Cave entry beside Route 11. The resulting two-entry
+registry is `4379309d…`; the
+[path-free composition receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json) is
+`015d2d25…`. No game, teacher, model, outcome, sealed case or Crystal context opened during this
+step.
+
+The active sequence is now:
+
+1. Freeze and independently audit the exact contracts for the two preregistered natural middle-PP
+   preparations—one train root and one development root.
+2. Seek separate owner authorization, because each preparation consumes controller input and the
+   Cave authorization covered only the already-consumed V2 run.
+3. Materialize each state once under ordinary battle PP consumption, with no memory edit, heal,
+   teacher query, prediction, label, outcome, sealed access or identity replacement.
+4. Re-inventory the fresh states read-only and freeze exactly 8 train plus 6 development candidate
+   menus against the two-prior registry.
+5. Give the immutable catalog to Claude for evidence/join attack and a compact public-safe slice to
+   Antigravity for at most three transfer/product falsifiers. Do not execute an answer yet.
+
+Only after those gates may the project separately authorize collection of the 14 outcomes and fit
+the first descriptive completion-aware party model. Honest counters today are **priors 2 · menus 0
+· outcomes 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**. V1 and V2 are
+permanently consumed.
+
 ## Immediate execution bridge: from zero outcomes to the first honest fit
 
 Role ownership and exact handoffs are frozen in

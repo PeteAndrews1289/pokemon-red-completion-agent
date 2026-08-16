@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: one measurement became a second independent prior
+
+The Cave run did not need—or receive—a sequel. A different published head, `107e034`, passed its
+own GitHub CI run `31947146884` and kept the emulator closed. The composer compared 21
+execution-bearing files byte-for-byte with the code that produced the accepted measurement. Only
+after that proof did it place one Cave entry beside the existing Route 11 entry.
+
+The result is the first honest two-venue operating registry in this curriculum: registry SHA
+`4379309d…`, two support roots, two evidence records and still zero learner outcomes. The
+[path-free composition receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json)
+records zero ROM reads, emulator starts, controller actions, teacher queries, model calls, sealed
+tests and Crystal contexts. The private registry remains off GitHub.
+
+That changes what the future model can be asked without pretending it has already learned. Five
+venue comparisons that lacked a second measured option can now become real menus, but the catalog
+still needs two naturally depleted-PP states. Those preparations require their own authorization;
+the single Cave key cannot be stretched into permission for more play. The board is therefore
+**two priors · fourteen reserved roots · zero frozen menus · zero outcomes · zero authority**.
+Next comes PP-contract review, two bounded preparations, and the exact 8+6 input freeze—then, and
+only then, answers and the first descriptive completion-aware party fit.
+
 ## August 16: the missing fact was measured once
 
 The final lock opened exactly once. From published source `755fe53` and green CI run

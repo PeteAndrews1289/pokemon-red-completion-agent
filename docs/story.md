@@ -7,6 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: two facts can finally support a real choice
+
+The game did not run again. Published source `107e034` passed CI, then a source-only bridge proved
+that every execution-bearing Cave file still matched the code behind the accepted measurement. It
+placed that fact beside Route 11 and sealed a two-entry registry: **PRIORS 2 · REGISTRY 4379309d…**.
+
+The restraint is part of the story. Composition used **zero ROM reads, zero emulator starts, zero
+controller actions, zero teacher/model calls and zero outcomes**. The public
+[receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json) exposes the proof while the
+private venue identities stay private. V1 and V2 remain locked forever.
+
+The board now reads **two priors · fourteen reserved roots · zero frozen menus · zero outcomes ·
+zero authority**. Before the first model lesson, two reserved states must acquire ordinary
+middle-PP pressure in bounded, separately authorized preparations. Then the project can freeze the
+eight training and six development questions and ask its reviewers to attack the real catalog—not
+another sketch of one.
+
 ## Current checkpoint: the one-shot run worked—and still was not training
 
 The owner turned the Cave key once. The preflight stayed dark—zero controller input—until every

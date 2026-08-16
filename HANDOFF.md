@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-15 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-16 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -16,6 +16,32 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 `NORTH_STAR.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
+
+## Two venue priors now exist; no second live run occurred — 2026-08-16
+
+The accepted Cave measurement has been composed exactly once beside Route 11. Composition ran
+from clean published head `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3` only after exact-head
+GitHub CI run `31947146884` passed. Its compatibility proof compared 21 execution-bearing files
+byte-for-byte with measured head `755fe53`; their aggregate identity was unchanged. The only
+post-measurement source additions were the result/composition bridge itself.
+
+The private registry now contains exactly two venue priors. Registry SHA is
+`4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb`; private file SHA is
+`da32ef5ba736348a5abc3c93c6c9a3c9217cc958b2905b65cd11c45347a42bfc`. Its exact path-free
+projection is the
+[composition receipt](docs/evidence/red-cave-venue-prior-composition-v2-2026-08-16.json), SHA
+`015d2d256d8722d8f874f1219235c2f8ff35b3e401e645e99cf8990cda79d0d6`. The bridge opened no ROM
+or emulator and performed zero controller actions, teacher queries, predictions, updates,
+outcomes, sealed accesses or Crystal accesses. It created a prior, not a training example.
+
+Current counters: priors 2; reserved roots 8 train / 6 development; frozen menus 0; outcomes 0/14;
+fit 0; authority 0; sealed Red 0; Crystal 0; replay 0. V1 and V2 are both consumed forever. The
+next controller-bearing work is not covered by the Cave authorization. First prepare and audit the
+two already-preregistered natural middle-PP materializations. Ask the owner for separate explicit
+authority before executing either. Then re-inventory the fresh states and freeze the exact 8+6
+input catalog without querying the teacher or collecting an outcome. Claude audits evidence and
+catalog integrity; Antigravity receives its narrow product/transfer challenge only after the real
+catalog exists.
 
 ## Cave V2 succeeded once; publish and compose without replay — 2026-08-16
 

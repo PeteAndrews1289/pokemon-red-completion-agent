@@ -4,6 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Two venue priors are now frozen (August 16, 2026).** After Cave V2 succeeded once, a distinct
+> clean published head (`107e034`) passed exact GitHub CI run `31947146884`. A source-only bridge
+> proved all execution-bearing Cave files byte-identical to measured head `755fe53` and composed
+> exactly one Cave prior beside Route 11. The resulting two-entry registry is bound by SHA
+> `4379309d…`; its
+> [path-free receipt](docs/evidence/red-cave-venue-prior-composition-v2-2026-08-16.json) is SHA
+> `015d2d25…`.
+>
+> Composition used no ROM, emulator, controller, teacher, model, learner outcome, sealed case or
+> Crystal context. Honest board: **priors 2 · reserved roots 14 · frozen menus 0 · outcomes 0/14 ·
+> fit false · authority zero**. V1 and V2 are permanently consumed. Next, prepare and independently
+> audit the two natural middle-PP state materializations; they need separate owner authorization
+> before controller input. Then freeze the exact 8-train/6-development input catalog before any
+> answer or fit is opened.
+
 > **Cave V2 succeeded exactly once (August 16, 2026).** The owner authorized one execution from
 > published `755fe53d127c764f4213c2335cdbd5c9cb136dda` under green CI run `31926299036`. A
 > zero-action preflight passed first. The consumed live run then reached 4/4 progress in 67 battles,

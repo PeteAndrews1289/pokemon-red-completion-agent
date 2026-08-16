@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: turn two measurements into an honest menu
+
+Keep the emulator screen black. Show **SOURCE 107e034 · CI 31947146884 GREEN**, then animate 21
+runtime files lining up byte-for-byte with measured source `755fe53`. Feed the Route 11 card and
+the accepted Cave card into a source-only composer. Output **PRIORS 2 · REGISTRY 4379309d…**.
+
+Run the safety strip across the bottom: **ROM READS 0 · EMULATOR STARTS 0 · CONTROLLER 0 · TEACHER
+0 · MODEL 0 · OUTCOMES 0 · SEALED 0 · CRYSTAL 0**. Put the private registry on the T7 and only its
+path-free receipt on GitHub. Narration: **“Evidence became a choice without pretending the choice
+had already been learned.”**
+
+End on fourteen face-down question cards. Light five formerly blocked venue cards, but do not flip
+them. Put two other cards behind **NATURAL MIDDLE PP · SEPARATE AUTHORIZATION**. Final board:
+**PRIORS 2 · MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY 0**. Next-arrow sequence:
+**AUDIT PP CONTRACTS → MATERIALIZE TWO STATES → FREEZE 8+6 → REVIEW → COLLECT ANSWERS**.
+
 ## August 16 scene: run once, measure honestly, close the switch
 
 Open on the final authorization lock: **SOURCE 755fe53 · CI 31926299036 GREEN · ONE EXECUTION**.

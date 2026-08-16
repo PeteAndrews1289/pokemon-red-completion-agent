@@ -40,6 +40,12 @@ RESULT_PATH = (
     / "evidence"
     / "red-cave-venue-measurement-result-v2-2026-08-16.json"
 )
+COMPOSITION_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-cave-venue-prior-composition-v2-2026-08-16.json"
+)
 
 
 def _receipts() -> tuple[dict[str, object], dict[str, object]]:
@@ -300,3 +306,46 @@ def test_working_critical_runtime_files_match_the_measured_commit() -> None:
         assert hashlib.sha256((PROJECT_ROOT / path).read_bytes()).hexdigest() == row[
             "sha256"
         ]
+
+
+def test_tracked_composition_receipt_is_exact_path_free_and_non_executing() -> None:
+    payload = COMPOSITION_PATH.read_bytes()
+    receipt = json.loads(payload.decode("ascii"))
+
+    assert hashlib.sha256(payload).hexdigest() == (
+        "015d2d256d8722d8f874f1219235c2f8ff35b3e401e645e99cf8990cda79d0d6"
+    )
+    assert receipt["status"] == "source_only_prior_composed"
+    assert receipt["previous_venue_prior_count"] == 1
+    assert receipt["venue_prior_entries_added"] == 1
+    assert receipt["resulting_venue_prior_count"] == 2
+    assert receipt["registry"]["entry_count"] == 2
+    assert receipt["registry"]["registry_sha256"] == (
+        "4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb"
+    )
+    assert receipt["private_registry_file_sha256"] == (
+        "da32ef5ba736348a5abc3c93c6c9a3c9217cc958b2905b65cd11c45347a42bfc"
+    )
+    assert receipt["source_compatibility"]["current_commit"] == (
+        "107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3"
+    )
+    for counter in (
+        "composition_rom_reads",
+        "composition_emulator_starts",
+        "composition_controller_actions",
+        "teacher_queries",
+        "model_predictions",
+        "model_updates",
+        "outcomes_executed",
+        "sealed_test_cases_opened",
+        "crystal_contexts_opened",
+        "training_examples_created",
+    ):
+        assert receipt[counter] == 0
+    assert receipt["authority_promoted"] is False
+    assert receipt["private_path_fields"] == 0
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+    assert "PokemonRoms" not in encoded
+    assert "species_id" not in encoded

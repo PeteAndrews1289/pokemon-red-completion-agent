@@ -1,5 +1,28 @@
 # Current audit — 2026-08-15
 
+## August 16 addendum: two-prior composition accepted
+
+The publication/composition head is `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3`; exact-head CI
+run `31947146884` passed. From that clean published source, the source-only composer verified the
+public Cave plan/result hashes, the existing Route 11 registry file hash, all result arithmetic and
+byte identity for 21 execution-bearing files against measured head `755fe53`. Its only permitted
+source delta was the publication/composition bridge.
+
+Composition added exactly one Cave prior. The resulting registry contains two entries, has registry
+SHA `4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb` and private file SHA
+`da32ef5ba736348a5abc3c93c6c9a3c9217cc958b2905b65cd11c45347a42bfc`. The tracked
+[path-free composition receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json) is
+byte-identical to the private public projection, SHA
+`015d2d256d8722d8f874f1219235c2f8ff35b3e401e645e99cf8990cda79d0d6`.
+
+Safety accounting is exact: composition ROM reads 0, emulator starts 0, controller actions 0,
+teacher queries 0, model predictions/updates 0, outcomes 0, sealed Red 0 and Crystal 0. This is one
+new prior, not a label or training example. Disposition: **accept the source-only composition**.
+Priors advance from 1 to 2; every learning counter remains unchanged. Next prepare and independently
+audit the two preregistered natural middle-PP materialization contracts. Because those require
+controller input, seek separate owner authorization before execution. Only then re-inventory and
+freeze the exact 8+6 input catalog.
+
 ## August 16 addendum: V2 accepted exactly once
 
 The owner authorized exactly one Cave V2 execution from published head `755fe53` under green CI

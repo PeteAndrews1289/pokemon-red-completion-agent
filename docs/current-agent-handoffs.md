@@ -5,6 +5,27 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: two-prior composition complete; PP preparation is the next live boundary
+
+Codex published exact head `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3`; GitHub CI run
+`31947146884` passed that head. The source-only bridge then proved the 21 execution-bearing Cave
+files byte-identical to measured head `755fe53` and composed exactly one Cave prior beside Route
+11. Registry SHA is `4379309d…`; private file SHA is `da32ef5b…`; the exact
+[path-free projection](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json) is SHA
+`015d2d25…`. No ROM, emulator, controller, teacher, model, outcome, sealed case or Crystal context
+opened during composition. V1 and V2 remain consumed and non-retryable.
+
+Codex owns preparation of the two preregistered natural middle-PP materializations and the later
+read-only 8+6 freeze. The Cave authorization does not cover those controller-bearing preparations;
+Codex must freeze and audit their exact contracts, then request separate owner authority. Claude's
+next useful assignment is to attack the immutable two-prior receipt and, once produced, the exact
+catalog and join identities. Antigravity remains idle until the catalog exists; then it receives a
+small public-safe packet and may return at most three falsifiable Red-to-Crystal product claims.
+
+Current honest state: priors 2; reserved roots 8 train / 6 development; accepted Cave measurements
+1; consumed failed Cave measurements 1; frozen menus 0; outcomes 0/14; fits 0; authority 0; sealed
+Red 0; Crystal 0; full replay 0.
+
 ## Current override: V2 succeeded once; source-only composition is next
 
 The owner authorized one Red Cave V2 execution from exact published head `755fe53` under green CI
