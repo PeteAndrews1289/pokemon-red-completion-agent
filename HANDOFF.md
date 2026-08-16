@@ -17,6 +17,31 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Train natural-PP preparation succeeded once; development remains gated — 2026-08-16
+
+The owner authorized exactly one train execution from source
+`27e966b9230f254619d735cb3721eff202314089`, green CI run `31962598106` attempt 1 and private v4
+plan file SHA `b9d1eeef…`. The exact clean source passed a final zero-controller preflight, then the
+single run completed in 27 battles, 285 encounter steps, 1,301 controller actions and 109,525
+frames. Target PP moved naturally from 80/80 to 53/80. The output state and envelope both match the
+durable terminal record and passed an independent emulator reload.
+
+The immutable private artifact contains one plan, one output claim, 27 monotonic progress records
+and one terminal record. Every stream matches its manifest digest. There were zero faints, new
+statuses, heals, switches, captures, storage accesses, candidate menus, learner outcomes, teacher
+queries, predictions or model updates. All protected inputs and the ROM remained byte-identical.
+The train identity is consumed and must never retry. Development was explicitly not authorized; no
+development artifact exists.
+
+The
+[path-free result](docs/evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
+is the only public projection. Honest counters are now **priors 2 · reserved roots 8 train / 6
+development · natural PP states 1/2 · frozen menus 0 · outcomes 0/14 · fits 0 · authority 0 · sealed
+Red 0 · Crystal 0 · replay 0**. Next request a separately bound development authorization. Only if
+that state succeeds once may Codex re-inventory both states and freeze the exact 8+6 menus. Claude
+then attacks catalog integrity; Antigravity receives only the bounded transfer packet. Outcome
+collection and the first fit require later, separate authority.
+
 ## PP v4 is frozen and independently approved to ask for one partition — 2026-08-16
 
 Executable source `27e966b9230f254619d735cb3721eff202314089` is published and exact GitHub

@@ -263,6 +263,12 @@ v4 runner remains deliberately headless, so its game-frame pane stays blank; add
 that exact runner would change its audited bytes. Later model-training runners can bind the existing
 frame-observer interface prospectively and show the game without retroactively changing v4.
 
+The separately authorized train preparation has now completed once. Its
+[path-free result](evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
+records 27 battles, 53/80 final PP and zero learner/model access. The dashboard reports PP states
+1/2 and points to the still-separate development authorization; it does not infer permission from
+the completed train receipt.
+
 Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
 after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,
 Crystal, full-replay and authority counters remain independent; none may move merely because a

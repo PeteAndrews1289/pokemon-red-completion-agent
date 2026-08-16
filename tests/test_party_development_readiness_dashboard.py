@@ -276,7 +276,12 @@ def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:
     assert passed["run_status"] == "passed"
     assert passed["stage_progress"] == 1.0
     assert "zero learner outcomes" in passed["message"]
-    encoded = json.dumps(passed, sort_keys=True)
+    encoded = json.dumps(passed, sort_keys=True, ensure_ascii=False)
+    assert "Natural middle-PP preparations 1/2" in encoded
+    assert "development authorization absent" in encoded
+    assert "separately authorize development once" in encoded
+    assert "Natural middle-PP preparations 0/2" not in encoded
+    assert "exact owner authorization for train once" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

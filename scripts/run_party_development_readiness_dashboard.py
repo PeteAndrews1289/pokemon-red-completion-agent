@@ -360,6 +360,27 @@ def _live_snapshot(
             )
         ):
             raise ProgressDashboardError("dashboard PP terminal state is inconsistent")
+        retained_events = tuple(
+            event
+            for event in base.events
+            if not event.startswith("Natural middle-PP preparations")
+            and not event.startswith("Next:")
+        )
+        if partition == "train":
+            preparation_event = (
+                "Natural middle-PP preparations 1/2 · train complete · "
+                "development authorization absent"
+            )
+            next_event = (
+                "Next: separately authorize development once; if accepted, re-inventory both "
+                "states and freeze the 8+6 menus"
+            )
+        else:
+            preparation_event = "Development middle-PP preparation complete · separately audited"
+            next_event = (
+                "Next: reconcile both accepted preparation receipts before claiming 2/2 or "
+                "freezing the 8+6 menus"
+            )
         return replace(
             base,
             run_status="passed",
@@ -374,7 +395,9 @@ def _live_snapshot(
             events=(
                 f"{label} PP state complete · battles {battles} · steps {encounter_steps} · "
                 f"actions {actions} · frames {frames}",
-                *base.events[:23],
+                preparation_event,
+                *retained_events[:21],
+                next_event,
             ),
         )
     if status != "running":
@@ -406,7 +429,22 @@ def main(argv: list[str] | None = None) -> int:
     v4_evidence = _load_v4_evidence()
     base_snapshot = _current_snapshot(evidence, v4_evidence)
     monitor_root = _require_monitor_root(args.private_artifact_root)
-    state = DashboardState(base_snapshot)
+    initial_live_record: tuple[str, dict[str, object] | None] | None = None
+    initial_snapshot = base_snapshot
+    if monitor_root is not None:
+        initial_live_record = _live_artifact_record(monitor_root, args.partition)
+        initial_snapshot = _live_snapshot(
+            base_snapshot,
+            partition=args.partition,
+            status=initial_live_record[0],
+            record=initial_live_record[1],
+        )
+    completed_train = (
+        args.partition == "train"
+        and initial_live_record is not None
+        and initial_live_record[0] == "passed"
+    )
+    state = DashboardState(initial_snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
             json.dumps(
@@ -416,17 +454,17 @@ def main(argv: list[str] | None = None) -> int:
                     "view_only": True,
                     "venue_priors": 2,
                     "reserved_roots": "8 train / 6 development",
-                    "pp_materializations": "0/2",
+                    "pp_materializations": "1/2" if completed_train else "0/2",
                     "read_only_preflights": "2/2",
                     "independent_audit": "approve_to_request_one_partition",
-                    "authorization_pending": "train",
+                    "authorization_pending": "development" if completed_train else "train",
                     "maximum_completed_battles": 32,
                     "minimum_battle_headroom": 5,
                     "frozen_menus": 0,
                     "outcome_collection_progress": "0/14",
                     "model_fit": False,
                     "teacher_queries": 0,
-                    "controller_actions": 0,
+                    "controller_actions": initial_snapshot.actions,
                     "sealed_red_cases_opened": 0,
                     "crystal_cases_opened": 0,
                     "authority_promoted": False,
@@ -440,7 +478,7 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_browser:
             webbrowser.open(dashboard.url)
         started = time.monotonic()
-        previous_live_record: tuple[str, dict[str, object] | None] | None = None
+        previous_live_record = initial_live_record
         try:
             while args.duration_seconds == 0 or time.monotonic() - started < args.duration_seconds:
                 if monitor_root is not None:

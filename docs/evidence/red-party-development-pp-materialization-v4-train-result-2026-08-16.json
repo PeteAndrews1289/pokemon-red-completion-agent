@@ -1,0 +1,92 @@
+{
+  "acceptance": {
+    "all_frozen_conditions_met": true,
+    "authenticated_source_root": true,
+    "authenticated_source_state": true,
+    "maximum_completed_battles": 32,
+    "minimum_battle_headroom": 5,
+    "output_reload_authenticated": true,
+    "protected_inputs_unchanged": true,
+    "rom_adjacent_artifacts_unchanged": true,
+    "safe_move_capacity_sufficient": true,
+    "wild_species_seen_coverage_complete": true
+  },
+  "artifact": {
+    "artifact_id": "red-party-pp-materialization-v1-train",
+    "kind": "party_development_pp_materialization",
+    "manifest_sha256": "e0d21dc81199b2a93988768465dde003fb92319e13a9cda08ce64f5b957cc35c",
+    "output_claim_stream_sha256": "bb466e77b6f46037fe3eb80560aa95ff42a0d763c4908f4f9379c53c5f73ded3",
+    "plan_stream_sha256": "568ce941f959b3c8ceca63f114216fd8c244604d39b74dbbb60deec18be47eb7",
+    "progress_stream_sha256": "5e3af662fd29c41529c30bca2d4445247e89844327a0ff818addccf72fa31c38",
+    "status": "complete",
+    "stream_records": {
+      "output_claim": 1,
+      "plan": 1,
+      "progress": 27,
+      "terminal": 1
+    },
+    "terminal_stream_sha256": "24eddcd34bc15f80a8b02be9f1cc660572865286a4f3da959b65deb8c350e8e1",
+    "total_bytes": 10861,
+    "total_records": 30
+  },
+  "authorization": {
+    "authorized_executions": 1,
+    "authorized_partition": "train",
+    "controller_input_occurred": true,
+    "development_authorized": false,
+    "execution_count": 1,
+    "retry_after_controller_input": false,
+    "terminal_identity_consumed": true
+  },
+  "execution_identity": {
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success",
+    "exact_ci_run": 31962598106,
+    "private_plan_file_sha256": "b9d1eeeff906f4fe55e1907aa15c158d8de11c989a2506f71e548e0a97207265",
+    "private_plan_sha256": "2ae07f3a89503bf96191e6a18bc06685be5bb633d5ed2b3e1494cf0b2cc24710",
+    "runner_source_sha256": "ab943397f8d274e1db6a6ae2cb3e884164fc206fad89bc900bf0a79450bf2357",
+    "source_bundle_sha256": "5c0a7c4332b983d1b2e79f0ddcf25854e9379839f511f4f7aaee5098013c9859",
+    "source_commit": "27e966b9230f254619d735cb3721eff202314089"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "candidate_menu_created": false,
+    "development_preparation_remaining": true,
+    "learner_outcome_created": false,
+    "model_fit": false,
+    "next": "Obtain separate exact owner authority for the development preparation. If it succeeds once, re-inventory both states, freeze and independently review the 8-train/6-development menus, then separately authorize outcome collection before the first descriptive fit.",
+    "training_example_created": false
+  },
+  "preparation": {
+    "battles_completed": 27,
+    "controller_actions": 1301,
+    "encounter_steps": 285,
+    "final_pp_bin": "middle",
+    "final_total_pp": 53,
+    "frames_executed": 109525,
+    "initial_total_pp": 80,
+    "maximum_total_pp": 80,
+    "partition": "train",
+    "pp_consumed": 27
+  },
+  "private_path_fields": 0,
+  "protected_access": {
+    "candidate_menus_constructed": 0,
+    "captures": 0,
+    "crystal_cases_opened": 0,
+    "faints": 0,
+    "full_game_replays": 0,
+    "heals": 0,
+    "learner_outcomes_opened": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "new_persistent_statuses": 0,
+    "party_switches": 0,
+    "sealed_red_cases_opened": 0,
+    "storage_accesses": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-16",
+  "schema": "pokemon.red.party-development-pp-materialization-v4-train-result.v1",
+  "status": "complete_context_prepared"
+}

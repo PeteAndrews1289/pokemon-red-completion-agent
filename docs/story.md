@@ -7,6 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the first key turned once
+
+The owner authorized the training key—not development, not a retry, and not model training. The
+program rechecked the published source, exact CI attempt, private plan, cartridge, Route 11 evidence
+and saved-game lineage before it pressed anything. Then the headless emulator moved from Cinnabar
+to Route 11 and fought ordinary wild battles until the target's PP crossed into the preregistered
+middle band.
+
+The run stopped after **27 battles · 285 encounter steps · 1,301 actions · 109,525 frames**. PP fell
+one point per battle, from **80/80 to 53/80**. No Pokémon fainted; nothing healed, switched, evolved,
+was captured or entered storage. The teacher and model were never asked a question. The saved game
+was reopened in a second emulator check before the result was accepted. Every one of the 27 progress
+receipts and the final receipt matches the immutable manifest.
+
+That makes the scoreboard move for the right reason: **two priors · fourteen roots · one of two PP
+states · zero menus · zero outcomes · zero authority**. This is still not the learning scene. It is
+the first authentic resource-pressure state the learning scene needs. Development retains its own
+key; after it succeeds, the project can finally freeze fourteen real questions, collect eight
+training outcomes, hold six apart for evaluation and perform the first honest completion-aware fit.
+
 ## Current checkpoint: the key is cut, but it still belongs to the owner
 
 V4 now has an immutable identity: published source `27e966b`, green CI run `31962598106` attempt

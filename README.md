@@ -4,32 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **PP v4 is frozen and independently approved to ask for one run (August 16, 2026).** Exact
-> executable source `27e966b9230f254619d735cb3721eff202314089` passed GitHub CI run
-> `31962598106`, attempt 1. A new private v4 plan binds package source, exact runner bytes, exact CI
-> attempt and a runtime Route 11 cartridge/prior reconstruction; its 32-battle cap leaves five
-> battles beyond the 27-PP worst case. Both train and development pass read-only preflight.
+> **The train middle-PP preparation succeeded exactly once (August 16, 2026).** The owner authorized
+> train only from executable source `27e966b9230f254619d735cb3721eff202314089`, exact green CI run
+> `31962598106` attempt 1 and private v4 plan file SHA `b9d1eeef…`. The run stopped at the first
+> accepted middle-PP state after 27 battles, 285 encounter steps, 1,301 controller actions and
+> 109,525 frames. PP moved naturally from 80/80 to 53/80. There were zero faints, heals, switches,
+> captures, teacher queries, learner outcomes, predictions or model updates.
 >
-> Honest board: **priors 2 · roots 14 · PP states 0/2 · menus 0 · outcomes 0/14 · fit false ·
-> authority zero**. Claude recomputed the packet, passed 208 focused tests and approved asking for
-> exactly one named partition; its one medium test-wiring gap is closed in the follow-up test-only
-> checkpoint without changing the frozen runner. See the
-> [path-free receipt](docs/evidence/red-party-development-pp-materialization-v4-preflight-2026-08-16.json).
-> No teacher, model, sealed Red, Crystal or replay access occurred. Next: request **train only**
-> against the exact head, run, attempt and plan-file digest. Development needs separate authority.
-
-> **Natural PP preparation is implemented but not authorized (August 16, 2026).** The first
-> completion-aware party curriculum needs one authentic middle-PP state in training and one in
-> untouched development. The new read-only planner binds those two sources to the frozen 8+6
-> reservations and two venue priors. Its one-partition runner can spend PP only through ordinary
-> bounded wild battles, protects unrelated party/collection/story state and creates no menu,
-> answer, outcome or model update.
->
-> No controller input has been authorized for this bridge. The honest board remains **priors 2 ·
-> roots 14 · PP states 0/2 · frozen menus 0 · outcomes 0/14 · fit false · authority zero**.
-> Publication, exact-head CI and both read-only preflights are complete. After independent review,
-> request one explicit authorization per source. Once both states exist, freeze and review the
-> 8-train/6-development menu catalog before collecting a single answer.
+> The [path-free result](docs/evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
+> binds the immutable execution and retained stream hashes without exposing a private path or game
+> identity. Honest board: **priors 2 · roots 14 · PP states 1/2 · menus 0 · outcomes 0/14 · fits 0 ·
+> authority zero**. Train is consumed and cannot retry. Development was not authorized and retains
+> its separate gate. If development succeeds once, re-inventory both states, freeze and review the
+> exact 8+6 menus, then separately authorize outcomes before the first descriptive fit.
 
 > **Two venue priors are now frozen (August 16, 2026).** After Cave V2 succeeded once, a distinct
 > clean published head (`107e034`) passed exact GitHub CI run `31947146884`. A source-only bridge

@@ -5,6 +5,21 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: train preparation passed; development remains a separate owner gate
+
+Codex executed the one owner-authorized train identity from exact source `27e966b`, CI run
+`31962598106` attempt 1 and v4 plan file SHA `b9d1eeef…`. It completed once after 27 battles and
+produced an authenticated middle-PP state with no teacher, model, learner outcome or authority.
+The identity is consumed and cannot retry. Development was not authorized and remains unopened.
+
+Codex owns the next bounded sequence: publish the path-free result, request separately bound
+development authority, then re-inventory both accepted states and freeze the exact 8+6 menus.
+Claude's next useful job begins only after that immutable catalog exists: attack joins, exclusions,
+menu identity and evidence sufficiency without executing an answer. Antigravity remains a bounded
+transfer challenger and receives a public-safe catalog slice with at most three falsifiers. Neither
+reviewer authorizes controller input. Current state: PP states 1/2; menus 0; outcomes 0/14; fits 0;
+authority 0; sealed Red 0; Crystal 0; replay 0.
+
 ## Current override: v4 approved to ask; authorize train and development separately
 
 Published execution source `27e966b9230f254619d735cb3721eff202314089` passed exact CI run

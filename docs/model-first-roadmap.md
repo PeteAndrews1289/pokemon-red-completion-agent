@@ -6,14 +6,14 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
-## Current checkpoint: v4 passed; train authorization is the active gate
+## Current checkpoint: train preparation passed; development authorization is the active gate
 
 V1, v2 and v3 preparation plans are retired and cannot authorize input. The local v4 candidate
 binds the exact runner bytes, exact CI retry attempt and a runtime cartridge/prior reconstruction;
 it has a 32-battle cap for a 27-PP requirement and behaviorally testable live safety predicates.
-Focused tests are 193/193 and 67/67 corrected mutation probes die. This remains maintenance in
-service of one named experiment: creating two authentic middle-PP contexts for the first
-completion-aware party ranker.
+Focused tests are 193/193 and 67/67 corrected mutation probes die. The owner authorized train only.
+That identity completed once in 27 battles, naturally moved PP from 80/80 to 53/80 and passed its
+independent saved-state reload. It is consumed and cannot retry. Development remains unopened.
 
 The active sequence is:
 
@@ -21,15 +21,19 @@ The active sequence is:
 2. **Complete:** private v4 was generated and both partitions pass without `--execute`.
 3. **Complete:** Claude returned **APPROVE**; the one medium call-wiring test gap is repaired without
    changing the frozen runner.
-4. **Active:** ask the owner for train/head/run/attempt/plan-file authorization and execute it at
-   most once. Repeat the authority gate separately for development.
-5. Re-inventory the two accepted states and freeze the exact 8+6 identity-free menus.
-6. Separately authorize eight train outcomes, keep six development outcomes untouched, fit once and
-   report descriptive generalization with authority still zero.
-7. Only after that Red gate exists, use the shared representation in Crystal for a genuine transfer
+4. **Complete:** the exact train identity ran once and accepted one natural middle-PP state after
+   27 battles, 285 encounter steps, 1,301 actions and 109,525 frames. It opened no learner outcome.
+5. **Active:** obtain separate exact authority for development and execute it at most once.
+6. Re-inventory the two accepted states and freeze the exact 8+6 identity-free menus.
+7. Give the immutable catalog to Claude for join/evidence attack and Antigravity for its bounded
+   transfer falsifiers; do not open an answer during review.
+8. Separately authorize eight train outcomes and six untouched development outcomes, fit once on
+   train, and report descriptive development generalization with authority still zero.
+9. Only after that Red gate exists, use the shared representation in Crystal for a genuine transfer
    test; do not write a second fixed Crystal playthrough as a substitute.
 
-There are still zero new outcomes, zero fits and zero authority. The reusable capability unlocked
+Honest counters are **priors 2 · roots 14 · natural PP states 1/2 · menus 0 · outcomes 0/14 · fits
+0 · authority 0**. There are still zero new outcomes, zero fits and zero authority. The reusable capability unlocked
 by this lane is resource-aware party/venue ranking; the transfer target is the same choice contract
 under unseen Red roots and then Crystal's title adapter.
 

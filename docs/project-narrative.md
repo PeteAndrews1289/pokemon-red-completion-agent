@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the first authentic resource-pressure state was accepted
+
+The owner authorized train only from the frozen v4 packet. Codex returned to exact published
+source `27e966b`, authenticated CI run `31962598106` attempt one and repeated the entire read-only
+boundary before allowing controller input. The one-shot run then crossed from Cinnabar to Route 11
+and spent PP through ordinary wild battles. It stopped at the first accepted middle-PP state: 27
+battles, 285 encounter steps, 1,301 actions and 109,525 frames, with PP moving from 80/80 to 53/80.
+
+The state survived an independent emulator reload. The retained artifact contains one output claim,
+27 sequential progress receipts and one terminal receipt; every file matches its manifest. There
+were no faints, statuses, heals, switches, captures, storage operations, candidate menus, learner
+outcomes, teacher queries, predictions or updates. The train identity is consumed, while the
+development identity remains unopened and separately gated.
+
+This is the distinction the project spent months learning to enforce: authentic game work can be
+necessary for learning without itself being learning. The board is now **two priors · fourteen
+roots · PP states 1/2 · menus 0 · outcomes 0/14 · fits 0 · authority 0**. One development
+preparation, a read-only 8+6 menu freeze, independent catalog review and separately authorized
+outcome collection remain before the first completion-aware fit.
+
 ## August 16: v4 reached the owner-authorization line
 
 The hardened source was published at `27e966b9230f254619d735cb3721eff202314089` and passed exact
