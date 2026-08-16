@@ -21,8 +21,9 @@ result and retain a useful path-redacted error if judgment fails.
 
 V2 uses a different open checkpoint and proves its state, lineage and semantics against the frozen
 81-state inventory. It has an unused artifact identity, but it is not authorized or executed.
-The next sequence is deliberately bounded: full gates and registries, immutable publication,
-exact-head CI, Claude's semantic/durability attack, then fresh authorization. Antigravity will not
+The repaired executable source now passes 3,568 tests plus every static, privacy and generated-
+registry gate. The remaining sequence is deliberately bounded: immutable publication, exact-head
+CI, Claude's semantic/durability attack, then fresh authorization. Antigravity will not
 duplicate that forensic work. Its better role begins with the concrete 8+6 catalog, where it can
 challenge three high-leverage Red-to-Crystal assumptions and identify the cheapest transfer tests
 and work to delete.

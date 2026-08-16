@@ -8,7 +8,7 @@
 >
 > V2 is **PROSPECTIVE · DISTINCT ROOT · NOT EXECUTED**. Its root semantics are bound through the
 > 81-entry inventory, and its artifact namespace is unused. Show its gates separately: focused
-> behavior green; full suite/registries pending; publication pending; exact CI pending; Claude
+> behavior green; full suite/registries green (3,568 passing); publication pending; exact CI pending; Claude
 > audit pending; authorization pending. Honest scoreboard: **venue priors 1 · roots 14 · menus 0 ·
 > outcomes 0/14 · accepted Cave measurements 0 · failed consumed attempts 1 · fit false · authority
 > zero**. Never roll a failed attempt into a percentage-complete training bar.

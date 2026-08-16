@@ -14,8 +14,9 @@ implemented the title-neutral rule that forced destinations are not ranking deci
 real multi-venue choices, and added terminal-attempt plus path-redacted failure retention.
 
 The prospective V2 plan binds a distinct checkpoint through the frozen 81-entry inventory and an
-unused artifact ID. V2 has not run. Codex's current assignment is to complete full gates,
-registries, publication and exact CI, then give Claude an immutable audit packet focused on this
+unused artifact ID. V2 has not run. The full local gate and registries are green at executable
+source `c024660` / bundle `7720728f…`. Codex's current assignment is publication and exact CI,
+then give Claude an immutable audit packet focused on this
 semantic seam, fresh-root independence and failure durability. A new live attempt requires that
 audit plus fresh one-shot authorization.
 

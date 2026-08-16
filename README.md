@@ -16,8 +16,9 @@
 > a path-redacted reason before aborting. A
 > [prospective V2 plan](docs/evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) binds a
 > distinct open train root to its frozen 81-state inventory semantics and an unused artifact ID.
-> It still requires full local qualification, publication, exact-head CI, Claude review and fresh
-> one-shot authorization. Honest board: **priors 1 · roots 14 · frozen menus 0 · outcomes 0/14 ·
+> Executable source `c024660` / bundle `7720728f…` passes the complete local qualification;
+> publication, exact-head CI, Claude review and fresh one-shot authorization remain. Honest board:
+> **priors 1 · roots 14 · frozen menus 0 · outcomes 0/14 ·
 > accepted Cave measurements 0 · consumed failed attempts 1 · fit false · authority zero**.
 
 > **Historical pre-V1 qualification checkpoint (August 15, 2026).** Claude's corrected

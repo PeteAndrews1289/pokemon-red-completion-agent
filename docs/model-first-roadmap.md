@@ -67,8 +67,9 @@ counters before acceptance; failures retain a path-redacted message and digest.
 
 The [V2 plan](evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) selects a different
 train root and binds its state, envelope, capture-time lineage and semantic signature through the
-81-entry read-only inventory. The V2 artifact namespace is unused. It remains prospective: focused
-behavior passes, but full registries/gates, publication, exact CI and Claude's semantic/durability
+81-entry read-only inventory. The V2 artifact namespace is unused. It remains prospective.
+Executable source `c024660` / bundle `7720728f…` passes 3,568 non-integration tests and every
+static, public/privacy and registry gate; publication, exact CI and Claude's semantic/durability
 audit still precede any authorization. Antigravity remains outside this evidence gate. Once the
 8+6 catalog is frozen, it receives only a bounded public-safe transfer challenge and returns at
 most three falsifiable Red-to-Crystal product claims.

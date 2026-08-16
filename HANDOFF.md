@@ -39,9 +39,11 @@ cost and candidate counters before acceptance, plus a path-redacted error record
 [prospective V2 plan](docs/evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) binds a
 different open train checkpoint and authenticates its semantic fingerprint through the frozen
 81-entry checkpoint inventory. Its artifact namespace is unused. V2 has **not** run and is not yet
-authorized: regenerate registries, pass the full local gate, publish one immutable source, obtain
-exact-head CI and Claude's narrow semantic/durability audit, then seek authorization for exactly
-one execution.
+authorized. Executable source commit `c024660` and bundle `7720728f…` pass 3,568
+non-integration tests, three intentional deselections, one expected failure, Ruff, mypy over 227
+source files, public/privacy documentation checks and all four registry checks. Publish the current
+successor head, obtain exact-head CI and Claude's narrow semantic/durability audit, then seek
+authorization for exactly one execution.
 
 Honest counters: priors 1; reserved roots 14; durable menus 0; outcomes 0/14; fits 0; accepted Cave
 measurements 0; consumed failed Cave attempts 1; sealed/Crystal 0; replay 0; authority 0.

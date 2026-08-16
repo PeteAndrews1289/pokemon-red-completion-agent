@@ -19,15 +19,18 @@ Adjudication: suppress only singleton venue emissions at the shared training sea
 trainee menus and multi-venue rankings. Behavioral tests now distinguish the single-venue targeted
 evolution path and the two-venue authority path. The runner now writes terminal attempt evidence
 before objective/budget validation and appends a path-redacted exception record before its writer
-aborts. Focused Cave/training coverage is 57/57 green; the full gate and registries are pending.
+aborts. Focused Cave/training coverage is 57/57 green. The final local gate passes 3,568
+non-integration tests, three intentional deselections and one expected failure, plus Ruff, mypy
+over 227 source files, public/privacy documentation and all four generated registries. Executable
+source commit is `c024660`; source bundle is `7720728f…`.
 
 V2 uses checkpoint 031 rather than consumed checkpoint 028. Its 81-entry checkpoint inventory
 authenticates a distinct state, envelope, lineage and semantic signature; the private V2 artifact
 identity is absent. The
 [prospective V2 plan](evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) is not an
-authorization. Required gates remain: full local suite and generated registries, immutable commit,
-exact-head CI, narrow Claude mutation/meaning audit, then a fresh one-shot authorization. No live
-V2 preflight or execution has occurred from this candidate.
+authorization. Required gates remaining are publication, exact-head CI, narrow Claude
+mutation/meaning audit, then a fresh one-shot authorization. No live V2 preflight or execution has
+occurred from this candidate.
 
 Antigravity is deferred by design. It is not the right reviewer for artifact provenance. After a
 real 8+6 catalog exists, its bounded task is to attack no more than three cross-title assumptions
