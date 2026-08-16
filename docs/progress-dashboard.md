@@ -246,6 +246,23 @@ are the
 and [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json)
 record why implementation readiness does not advance the 0/14 outcome counter.
 
+For an explicitly authorized natural-PP preparation, restart the same view with its private
+artifact root and named partition:
+
+```sh
+python scripts/run_party_development_readiness_dashboard.py \
+  --no-browser \
+  --private-artifact-root /private/artifact/root \
+  --partition train
+```
+
+This monitor is outside the frozen runner. It reads only the runner's path-free durable progress,
+terminal or failure stream and displays battles, total PP, encounter steps, controller actions,
+frames and fail-closed status. It has no ROM, state, teacher, model or controller access. The first
+v4 runner remains deliberately headless, so its game-frame pane stays blank; adding live frames to
+that exact runner would change its audited bytes. Later model-training runners can bind the existing
+frame-observer interface prospectively and show the game without retroactively changing v4.
+
 Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
 after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,
 Crystal, full-replay and authority counters remain independent; none may move merely because a

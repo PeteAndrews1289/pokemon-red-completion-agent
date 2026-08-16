@@ -127,7 +127,7 @@ def test_readiness_dashboard_reports_zero_outcome_training_honestly() -> None:
     assert isinstance(components, list)
     assert components[0]["train_examples"] == 13_709
     assert components[1]["train_examples"] == 0
-    encoded = json.dumps(document, sort_keys=True)
+    encoded = json.dumps(document, sort_keys=True, ensure_ascii=False)
     assert "model fitting has not begun" in encoded
     assert "Compatible venue priors 2/2" in encoded
     assert "Natural middle-PP preparations 0/2" in encoded
@@ -165,8 +165,11 @@ def test_readiness_dashboard_script_uses_a_separate_local_port() -> None:
     assert args.port == 8767
     assert args.no_browser is True
     assert args.duration_seconds == 1
-    assert SCRIPT["EVIDENCE_PATH"].name == (
-        "party-development-v2-readiness-2026-08-16.json"
+    assert args.private_artifact_root is None
+    assert args.partition == "train"
+    assert SCRIPT["EVIDENCE_PATH"].name == ("party-development-v2-readiness-2026-08-16.json")
+    assert SCRIPT["V4_EVIDENCE_PATH"].name == (
+        "red-party-development-pp-materialization-v4-preflight-2026-08-16.json"
     )
 
 
@@ -186,3 +189,165 @@ def test_tracked_readiness_evidence_loads_into_honest_snapshot() -> None:
     assert "model fitting has not begun" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_current_dashboard_projects_the_verified_v4_authorization_gate() -> None:
+    document = SCRIPT["_current_snapshot"](
+        SCRIPT["_load_evidence"](),
+        SCRIPT["_load_v4_evidence"](),
+    ).public_dict()
+
+    assert document["run_status"] == "waiting"
+    assert document["actions"] == 0
+    assert document["location"] == ("Natural PP preparation gate · train authorization pending")
+    encoded = json.dumps(document, sort_keys=True, ensure_ascii=False)
+    assert "Read-only preflights 2/2" in encoded
+    assert "Claude APPROVE to ask" in encoded
+    assert "battles 32 · minimum headroom 5" in encoded
+    assert "exact owner authorization for train once" in encoded
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_current_dashboard_rejects_a_false_v4_authorization_claim() -> None:
+    v4_evidence = deepcopy(SCRIPT["_load_v4_evidence"]())
+    authorization = v4_evidence["authorization"]
+    assert isinstance(authorization, dict)
+    authorization["granted"] = True
+
+    with pytest.raises(ProgressDashboardError, match="inconsistent"):
+        SCRIPT["_current_snapshot"](_evidence(), v4_evidence)
+
+
+def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:
+    base = SCRIPT["_current_snapshot"](
+        SCRIPT["_load_evidence"](),
+        SCRIPT["_load_v4_evidence"](),
+    )
+    progress = {
+        "record_type": "party_development_pp_materialization_progress",
+        "schema_version": 1,
+        "battles_completed": 4,
+        "encounter_steps": 18,
+        "current_total_pp": 71,
+        "maximum_total_pp": 80,
+        "controller_actions": 240,
+        "frames_executed": 12_000,
+        "candidate_menus_constructed": 0,
+        "learner_outcomes_opened": 0,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+    }
+
+    running = SCRIPT["_live_snapshot"](
+        base,
+        partition="train",
+        status="running",
+        record=progress,
+    ).public_dict()
+    assert running["run_status"] == "running"
+    assert running["stage_progress"] == 4 / 32
+    assert running["actions"] == 240
+    assert running["frame_count"] == 12_000
+    assert "71/80 total PP" in running["message"]
+
+    terminal = {
+        **progress,
+        "record_type": "party_development_pp_materialization_terminal",
+        "final_total_pp": 52,
+        "battles_completed": 11,
+        "partition": "train",
+        "final_pp_bin": "middle",
+        "faints": 0,
+        "new_persistent_statuses": 0,
+        "heals": 0,
+        "party_switches": 0,
+        "captures": 0,
+        "storage_accesses": 0,
+        "model_updates": 0,
+    }
+    terminal.pop("current_total_pp")
+    passed = SCRIPT["_live_snapshot"](
+        base,
+        partition="train",
+        status="passed",
+        record=terminal,
+    ).public_dict()
+    assert passed["run_status"] == "passed"
+    assert passed["stage_progress"] == 1.0
+    assert "zero learner outcomes" in passed["message"]
+    encoded = json.dumps(passed, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_live_dashboard_reads_only_complete_path_free_records(tmp_path: Path) -> None:
+    (tmp_path / ".pokemon-red-completion-private-root.json").write_text(
+        '{"format":"pokemon-red-completion-private-root","schema_version":1}\n',
+        encoding="ascii",
+    )
+    artifact = tmp_path / "red-party-pp-materialization-v1-train.partial"
+    artifact.mkdir()
+    progress = {
+        "record_type": "party_development_pp_materialization_progress",
+        "schema_version": 1,
+        "battles_completed": 1,
+        "encounter_steps": 3,
+        "current_total_pp": 78,
+        "maximum_total_pp": 80,
+        "controller_actions": 40,
+        "frames_executed": 2_000,
+        "candidate_menus_constructed": 0,
+        "learner_outcomes_opened": 0,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+    }
+    (artifact / "progress.jsonl").write_text(
+        json.dumps(progress, sort_keys=True) + "\n",
+        encoding="ascii",
+    )
+
+    root = SCRIPT["_require_monitor_root"](tmp_path)
+    assert root == tmp_path
+    status, record = SCRIPT["_live_artifact_record"](root, "train")
+    assert status == "running"
+    assert record == progress
+
+
+def test_live_dashboard_rejects_progress_beyond_the_frozen_cap() -> None:
+    base = SCRIPT["_current_snapshot"](
+        SCRIPT["_load_evidence"](),
+        SCRIPT["_load_v4_evidence"](),
+    )
+    progress = {
+        "record_type": "party_development_pp_materialization_progress",
+        "schema_version": 1,
+        "battles_completed": 33,
+        "encounter_steps": 0,
+        "current_total_pp": 50,
+        "maximum_total_pp": 80,
+        "controller_actions": 0,
+        "frames_executed": 0,
+        "candidate_menus_constructed": 0,
+        "learner_outcomes_opened": 0,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+    }
+
+    with pytest.raises(ProgressDashboardError, match="exceeds"):
+        SCRIPT["_live_snapshot"](
+            base,
+            partition="train",
+            status="running",
+            record=progress,
+        )
+
+    progress["battles_completed"] = 1
+    progress["learner_outcomes_opened"] = 1
+    with pytest.raises(ProgressDashboardError, match="prohibited"):
+        SCRIPT["_live_snapshot"](
+            base,
+            partition="train",
+            status="running",
+            record=progress,
+        )

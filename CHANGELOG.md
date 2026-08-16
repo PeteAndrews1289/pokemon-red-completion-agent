@@ -9,6 +9,9 @@
 - Recorded Claude's independent **APPROVE** verdict after 208 focused tests and 68 valid mutation
   probes. Added the missing exact call-count/order assertion for the already-correct output-claim
   byte recheck without changing the audited runner or private packet.
+- Updated the loopback-only party dashboard to the verified v4 gate and added an optional external
+  monitor for path-free battle, PP, action, frame, terminal and fail-closed progress. The observer
+  does not alter the frozen headless runner or gain ROM/controller access.
 
 - Superseded the unexecuted natural-PP v3 plan and added a v4 boundary that binds exact runner
   bytes, exact GitHub CI attempt and a live cartridge/prior reconstruction before controller entry.

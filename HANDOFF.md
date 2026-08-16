@@ -45,6 +45,12 @@ authority 0 · sealed Red 0 · Crystal 0 · replay 0**. Ask the owner for **trai
 exact partition, source head, CI run, CI attempt and plan-file digest. Do not execute development
 under the same approval and do not retry train after any controller input.
 
+The readiness dashboard on port 8767 now shows this exact v4 state. When started with a private
+artifact root and partition, it tails only path-free durable progress and reports battles, PP,
+steps, actions, frames and terminal/failure state. It is external to the runner and has no control
+endpoint. The audited v4 runner is headless, so the game pane remains blank for these two
+preparations; do not change the runner merely to populate it.
+
 ## PP preparation v4 candidate closes the live semantic gaps — 2026-08-16
 
 The private v3 plan was never executed and is now superseded. Claude's authorization audit correctly
