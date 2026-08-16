@@ -397,17 +397,23 @@ def _execute_with_retention(
         dict[str, object],
     ],
 ) -> dict[str, object]:
-    """Retain the last observable attempt and sanitized failure before aborting."""
+    """Durably retain a terminal attempt and any later execution failure."""
 
     try:
-        measurement = execute(lambda record: writer.append("attempt", record))
+        measurement = execute(
+            lambda record: writer.append("attempt", record, durable=True)
+        )
     except (Exception, KeyboardInterrupt, SystemExit) as error:
         # The original execution error remains authoritative if diagnostic
         # retention itself encounters an I/O or validation failure.
         with suppress(Exception):
-            writer.append("failure", _private_failure_record(error))
+            writer.append(
+                "failure",
+                _private_failure_record(error),
+                durable=True,
+            )
         raise
-    writer.append("measurement", measurement)
+    writer.append("measurement", measurement, durable=True)
     return measurement
 
 
@@ -794,6 +800,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "model_predictions": 0,
                 "learner_outcomes_opened": 0,
             },
+            durable=True,
         )
         def execute_and_validate(
             attempt_sink: Callable[[Mapping[str, object]], None],

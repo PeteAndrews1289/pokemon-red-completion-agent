@@ -81,8 +81,12 @@ def test_cave_measurement_plan_is_single_venue_and_not_a_training_example() -> N
     assert independence["support_semantics_authenticated"] is True
     execution = plan["execution"]
     assert isinstance(execution, dict)
-    assert execution["terminal_attempt_recorded_before_acceptance"] is True
-    assert execution["path_free_failure_recorded_before_abort"] is True
+    assert execution["plan_record_durable_before_controller_entry"] is True
+    assert execution["terminal_attempt_durable_after_controller_return"] is True
+    assert execution["terminal_attempt_durable_before_acceptance"] is True
+    assert execution["path_free_failure_durable_before_execution_abort"] is True
+    assert execution["mid_controller_power_loss_can_end_with_plan_only"] is True
+    assert execution["plan_or_finalization_io_failure_is_not_an_execution_abort"] is True
 
 
 def test_cave_measurement_plan_rejects_a_semantic_mutation(tmp_path: Path) -> None:

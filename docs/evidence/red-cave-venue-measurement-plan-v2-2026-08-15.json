@@ -47,12 +47,16 @@
     "model_predictions": 0,
     "model_updates": 0,
     "one_fixed_venue_only": true,
-    "path_free_failure_recorded_before_abort": true,
+    "mid_controller_power_loss_can_end_with_plan_only": true,
+    "path_free_failure_durable_before_execution_abort": true,
+    "plan_or_finalization_io_failure_is_not_an_execution_abort": true,
+    "plan_record_durable_before_controller_entry": true,
     "private_artifact_opened_before_first_controller_input": true,
     "retry_after_any_controller_input": false,
     "sealed_red_cases_opened": 0,
     "teacher_queries": 0,
-    "terminal_attempt_recorded_before_acceptance": true
+    "terminal_attempt_durable_after_controller_return": true,
+    "terminal_attempt_durable_before_acceptance": true
   },
   "independence": {
     "checkpoint_inventory_entry_count": 81,

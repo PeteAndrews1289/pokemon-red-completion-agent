@@ -558,11 +558,11 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "c8fa953a9c77d527fec474aaeb5c3d8d131285c19c2afd196f780af4e26abdc0"
+            "f4b4e5cf19609968c6c0d7d522bd3915adea1def1e4f922e050aa99bc016f605"
         ),
         justification_id=(
-            "run-local-walker-zero-telemetry-and-singleton-menu-suppression-"
-            "preserve-route-11-measurement"
+            "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
+            "suppression-preserve-route-11-measurement"
         ),
     ),
     _SourceCompatibilityWaiver(

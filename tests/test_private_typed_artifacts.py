@@ -494,6 +494,105 @@ def test_begin_typed_artifact_durably_claims_the_partial_before_return(
     writer.abort("test_cleanup")
 
 
+def test_typed_artifact_durable_append_syncs_record_before_return(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, store = _make_store(tmp_path)
+    writer = store.begin_artifact("durable-record", kind="evaluation")
+    partial = root / "durable-record.partial"
+    synchronized_descriptors: list[int] = []
+    synchronized_directories: list[Path] = []
+    monkeypatch.setattr(
+        private_artifacts_module.os,
+        "fsync",
+        lambda descriptor: synchronized_descriptors.append(descriptor),
+    )
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        lambda path: synchronized_directories.append(path),
+    )
+
+    writer.append("attempt", {"candidate_decisions": 0}, durable=True)
+
+    assert len(synchronized_descriptors) == 1
+    assert synchronized_directories == [partial]
+    assert (partial / "attempt.jsonl").read_bytes() == b'{"candidate_decisions":0}\n'
+    writer.abort("test_cleanup")
+
+
+def test_typed_artifact_regular_append_does_not_force_a_sync(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _, store = _make_store(tmp_path)
+    writer = store.begin_artifact("buffered-record", kind="evaluation")
+    synchronized_descriptors: list[int] = []
+    synchronized_directories: list[Path] = []
+    monkeypatch.setattr(
+        private_artifacts_module.os,
+        "fsync",
+        lambda descriptor: synchronized_descriptors.append(descriptor),
+    )
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        lambda path: synchronized_directories.append(path),
+    )
+
+    writer.append("attempt", {"candidate_decisions": 0})
+
+    assert synchronized_descriptors == []
+    assert synchronized_directories == []
+    writer.abort("test_cleanup")
+
+
+@pytest.mark.parametrize("failure_layer", ["file", "directory"])
+def test_typed_artifact_durable_append_sync_failure_is_path_free(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    failure_layer: str,
+) -> None:
+    root, store = _make_store(tmp_path)
+    writer = store.begin_artifact("failed-record-sync", kind="evaluation")
+    real_fsync = private_artifacts_module.os.fsync
+    real_directory_sync = private_artifacts_module._fsync_directory
+
+    if failure_layer == "file":
+        monkeypatch.setattr(
+            private_artifacts_module.os,
+            "fsync",
+            lambda _descriptor: (_ for _ in ()).throw(
+                OSError(f"cannot synchronize {root}")
+            ),
+        )
+    else:
+        monkeypatch.setattr(
+            private_artifacts_module,
+            "_fsync_directory",
+            lambda _path: (_ for _ in ()).throw(
+                PrivateArtifactError(f"cannot synchronize {root}")
+            ),
+        )
+
+    with pytest.raises(
+        PrivateArtifactError,
+        match="unable to synchronize a private artifact record",
+    ) as raised:
+        writer.append("attempt", {"candidate_decisions": 0}, durable=True)
+
+    assert str(tmp_path) not in str(raised.value)
+    assert raised.value.__cause__ is None
+    monkeypatch.setattr(private_artifacts_module.os, "fsync", real_fsync)
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        real_directory_sync,
+    )
+    writer.abort("test_cleanup")
+
+
 def test_begin_typed_artifact_sync_failure_retains_path_free_consumed_claim(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

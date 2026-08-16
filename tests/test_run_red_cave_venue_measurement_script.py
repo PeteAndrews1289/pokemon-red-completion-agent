@@ -199,9 +199,17 @@ def test_private_input_loader_requires_exact_bytes(tmp_path: Path) -> None:
 class _RecordingWriter:
     def __init__(self) -> None:
         self.records: list[tuple[str, Mapping[str, object]]] = []
+        self.durable: list[bool] = []
 
-    def append(self, stream: str, record: Mapping[str, object]) -> None:
+    def append(
+        self,
+        stream: str,
+        record: Mapping[str, object],
+        *,
+        durable: bool = False,
+    ) -> None:
         self.records.append((stream, record))
+        self.durable.append(durable)
 
 
 def test_cave_failure_retains_terminal_attempt_and_path_free_reason() -> None:
@@ -216,6 +224,7 @@ def test_cave_failure_retains_terminal_attempt_and_path_free_reason() -> None:
         SCRIPT["_execute_with_retention"](writer, fail)
 
     assert [stream for stream, _record in writer.records] == ["attempt", "failure"]
+    assert writer.durable == [True, True]
     failure = writer.records[1][1]
     assert failure["exception_type"] == "RuntimeError"
     assert failure["exception_message"] == "failed beside [private-path]"
@@ -237,6 +246,7 @@ def test_cave_success_retains_attempt_before_measurement() -> None:
         "attempt",
         "measurement",
     ]
+    assert writer.durable == [True, True]
 
 
 def test_cave_runner_opens_immutable_artifact_before_execution() -> None:
@@ -263,6 +273,42 @@ def test_cave_runner_opens_immutable_artifact_before_execution() -> None:
     )
 
     assert begin_line < execute_line
+
+
+def test_cave_runner_durably_records_the_plan_before_execution() -> None:
+    tree = ast.parse(SCRIPT_PATH.read_text(encoding="utf-8"))
+    run_function = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "_run"
+    )
+    plan_append = next(
+        node
+        for node in ast.walk(run_function)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "append"
+        and node.args
+        and isinstance(node.args[0], ast.Constant)
+        and node.args[0].value == "plan"
+    )
+    keywords = {item.arg: item.value for item in plan_append.keywords}
+
+    assert isinstance(keywords["durable"], ast.Constant)
+    assert keywords["durable"].value is True
+
+
+def test_cave_plan_records_the_power_loss_boundary_without_overclaiming() -> None:
+    from pokemon_red_completion.red_cave_venue_measurement import (
+        red_cave_venue_measurement_plan_document,
+    )
+
+    execution = red_cave_venue_measurement_plan_document()["execution"]
+    assert isinstance(execution, dict)
+    assert execution["plan_record_durable_before_controller_entry"] is True
+    assert execution["terminal_attempt_durable_after_controller_return"] is True
+    assert execution["mid_controller_power_loss_can_end_with_plan_only"] is True
+    assert "path_free_failure_recorded_before_abort" not in execution
 
 
 def test_cave_runner_has_one_fixed_venue_and_no_answer_authority() -> None:

@@ -923,6 +923,20 @@ def test_candidate_authority_agreement_is_behaviorally_a_no_op(
             is_in_center=lambda raw: raw.map_id == CENTER_MAP,
             move_slot=lambda _raw: 1,
         )
+        ineligible_venue = TrainingVenue(
+            band=GrindingArea(
+                "ineligible-agreement-venue",
+                50,
+                60,
+                rare_maximum_encounter_level=60,
+                measured_samples=100,
+            ),
+            map_id=TRAINING_MAP,
+            walk_to_grass=lambda *_args: 1,
+            heal_and_return=lambda *_args: None,
+            is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+            move_slot=lambda _raw: 1,
+        )
 
         def agree(decision: TrainingCandidateDecision) -> int:
             kinds.append(decision.observation.kind.value)
@@ -939,7 +953,7 @@ def test_candidate_authority_agreement_is_behaviorally_a_no_op(
                     max_steps=1,
                     max_healing_trips=1,
                 ),
-                venues=[venue],
+                venues=[venue, ineligible_venue],
                 candidate_decision_authority=agree if authority else None,
             )
         return memory.swaps, calls, kinds
@@ -1079,7 +1093,77 @@ def test_candidate_authority_executes_an_alternate_venue_binding(
     assert walks == {"lower": 1, "higher": 0}, memory.swaps
 
 
-def test_targeted_evolution_does_not_publish_a_singleton_venue_choice() -> None:
+def test_targeted_evolution_authority_executes_an_alternate_venue_binding(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 48),
+            (DUX_SPECIES_ID, 20),
+            (DIGLETT_SPECIES_ID, 22),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    transitions = {"lower": 0, "higher": 0}
+    decisions: list[TrainingCandidateDecision] = []
+
+    def venue(name: str, minimum: int, maximum: int, map_id: int) -> TrainingVenue:
+        def heal_and_return(*_args: object) -> None:
+            transitions[name] += 1
+
+        return TrainingVenue(
+            band=GrindingArea(
+                name,
+                minimum,
+                maximum,
+                rare_maximum_encounter_level=maximum,
+                measured_samples=100,
+            ),
+            map_id=map_id,
+            walk_to_grass=lambda *_args: 1,
+            heal_and_return=heal_and_return,
+            is_in_center=lambda raw: raw.map_id == CENTER_MAP,
+            move_slot=lambda _raw: 1,
+        )
+
+    def authority(decision: TrainingCandidateDecision) -> int:
+        decisions.append(decision)
+        assert decision.observation.kind is TrainingChoiceKind.VENUE
+        assert len(decision.observation.candidates) == 2
+        assert decision.selected_candidate_index == 1
+        return 0
+
+    with pytest.raises(RuntimeError, match="venue-transition budget"):
+        run(
+            memory,
+            FakeReader([state(map_id=int(MapId.PALLET_TOWN))]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                minimum_direct_level_advantage=5,
+                max_healing_trips=1,
+            ),
+            venues=[
+                venue("lower", 1, 10, CENTER_MAP),
+                venue("higher", 5, 12, TRAINING_MAP),
+            ],
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            candidate_decision_authority=authority,
+        )
+
+    assert decisions
+    assert transitions == {"lower": 1, "higher": 0}
+
+
+@pytest.mark.parametrize("include_ineligible_venue", [False, True])
+def test_targeted_evolution_does_not_publish_a_singleton_venue_choice(
+    include_ineligible_venue: bool,
+) -> None:
     memory = FakeMemory()
     memory.set_party(
         [
@@ -1092,6 +1176,29 @@ def test_targeted_evolution_does_not_publish_a_singleton_venue_choice() -> None:
         ]
     )
     candidate_decisions: list[TrainingCandidateDecision] = []
+    venues = [
+        _venue(
+            GrindingArea(
+                "eligible-evolution-venue",
+                1,
+                10,
+                rare_maximum_encounter_level=10,
+                measured_samples=100,
+            )
+        )
+    ]
+    if include_ineligible_venue:
+        venues.append(
+            _venue(
+                GrindingArea(
+                    "ineligible-evolution-venue",
+                    50,
+                    60,
+                    rare_maximum_encounter_level=60,
+                    measured_samples=100,
+                )
+            )
+        )
 
     with pytest.raises(RuntimeError, match="budget"):
         run(
@@ -1104,6 +1211,7 @@ def test_targeted_evolution_does_not_publish_a_singleton_venue_choice() -> None:
                 minimum_direct_level_advantage=5,
                 max_healing_trips=0,
             ),
+            venues=venues,
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             candidate_decision_sink=candidate_decisions.append,
         )

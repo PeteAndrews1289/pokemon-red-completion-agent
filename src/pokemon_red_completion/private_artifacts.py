@@ -1096,21 +1096,49 @@ class PrivateArtifactWriter:
                 raise
         return False
 
-    def append(self, stream: str, record: Mapping[str, object]) -> None:
-        """Append one path-free canonical JSON object to a named stream."""
+    def append(
+        self,
+        stream: str,
+        record: Mapping[str, object],
+        *,
+        durable: bool = False,
+    ) -> None:
+        """Append one path-free canonical JSON object to a named stream.
+
+        ``durable=True`` flushes and synchronizes the record before returning.
+        It is intended for sparse one-shot evidence where losing the last
+        observable attempt to a power failure is more costly than one fsync.
+        """
         self._require_active()
         _validate_stream_name(stream)
         payload = _canonical_record(record)
 
         target = self._streams.get(stream)
+        opened_stream = target is None
         if target is None:
             target = self._open_stream(stream)
             self._streams[stream] = target
         try:
             target.handle.write(payload)
+            target.records += 1
         except OSError:
             raise PrivateArtifactError("unable to write a private artifact record") from None
-        target.records += 1
+        if not durable:
+            return
+        try:
+            target.handle.flush()
+            os.fsync(target.handle.fileno())
+        except OSError:
+            raise PrivateArtifactError(
+                "unable to synchronize a private artifact record"
+            ) from None
+        if opened_stream:
+            try:
+                _fsync_directory(self._partial)
+            except PrivateArtifactError:
+                raise PrivateArtifactError(
+                    "unable to synchronize a private artifact record"
+                ) from None
 
     def complete(self) -> PrivateArtifactSummary:
         """Write the typed manifest last and atomically publish the artifact."""
