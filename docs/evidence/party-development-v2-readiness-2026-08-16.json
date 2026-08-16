@@ -129,6 +129,6 @@
     "completion_aware_training_started": false,
     "pp_diversity_gate_satisfied": false,
     "preparation_execution_authorized": false,
-    "next": "Publish and validate the PP-preparation source, freeze both exact private read-only plans, obtain one explicit authorization per source, materialize each once, then freeze and review the 8+6 menu catalog before collecting outcomes."
+    "next": "Independently review both frozen read-only plans, obtain one explicit authorization per source, materialize each once, then freeze and review the 8+6 menu catalog before collecting outcomes."
   }
 }

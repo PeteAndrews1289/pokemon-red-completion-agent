@@ -8,9 +8,9 @@
 > The preparation contract uses ordinary bounded battles and hard per-source caps of 27 battles,
 > 10,000 encounter steps, 250,000 controller actions and 5,000,000 frames. It permits no healing,
 > switching, capture, memory edit, teacher/model query or learner outcome, and it reloads the output
-> save before publication. These are prospective safety facts, not run progress. Next rail:
-> **PUBLISH → EXACT-HEAD CI → FREEZE TWO PRIVATE READ-ONLY PLANS → OWNER AUTHORIZATION PER SOURCE →
-> MATERIALIZE 2 ONCE → RE-INVENTORY → FREEZE 8+6 MENUS**.
+> save before publication. These are prospective safety facts, not run progress. Publication,
+> exact-head CI and both read-only preflights are complete. Next rail: **INDEPENDENT REVIEW → OWNER
+> AUTHORIZATION PER SOURCE → MATERIALIZE 2 ONCE → RE-INVENTORY → FREEZE 8+6 MENUS**.
 
 > **Current gate — TWO PRIORS FROZEN · PP PREPARATION NEXT:** Published source `107e034` passed
 > exact CI run `31947146884`. A source-only composer proved the measured Cave runtime byte-identical

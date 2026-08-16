@@ -16,9 +16,10 @@ predictions, teacher queries, candidate menus and learner outcomes are all forbi
 
 This is the practical lesson from the earlier delays: preparation code should be as strict as the
 claim it supports, but it should not masquerade as the model experiment. The board stays **two
-priors · fourteen reserved roots · PP states 0/2 · menus 0 · outcomes 0 · authority 0** until the
-source is published, exact CI passes, the private plans are frozen and the owner authorizes each
-single-use run. Only then can the project freeze the first 8+6 resource-aware question catalog.
+priors · fourteen reserved roots · PP states 0/2 · menus 0 · outcomes 0 · authority 0**. The source
+is published, exact CI is green and both private plans pass read-only preflight. Independent review
+and owner authorization still precede each single-use run. Only then can the project freeze the
+first 8+6 resource-aware question catalog.
 
 ## August 16: one measurement became a second independent prior
 

@@ -22,9 +22,9 @@ game is reloaded and checked independently before it can be called a valid snaps
 
 The board therefore has not pretended to move: **two priors · fourteen reserved roots · zero of two
 prepared PP states · zero frozen menus · zero outcomes · zero authority**. Source publication,
-exact CI and a read-only private plan come next. Then the owner gets the key for each single-use
-preparation. Only after those two states exist can the first fourteen real resource-aware questions
-be frozen and reviewed.
+exact CI and both read-only private preflights are complete. Independent review comes next; then the
+owner gets the key for each single-use preparation. Only after those two states exist can the first
+fourteen real resource-aware questions be frozen and reviewed.
 
 ## Current checkpoint: two facts can finally support a real choice
 

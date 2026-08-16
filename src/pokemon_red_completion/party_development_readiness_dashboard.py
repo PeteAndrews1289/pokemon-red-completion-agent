@@ -291,8 +291,8 @@ def party_development_readiness_dashboard_snapshot(
             "Prospective outcomes 0 · completion-aware model updates 0",
             "Teacher 0 · sealed Red 0 · Crystal 0 · full-game replays 0 · authority zero",
             (
-                "Next: publish and pass exact-head CI, freeze both private read-only plans, "
-                "request one authorization per source, then review the exact 8+6 catalog"
+                "Next: independent plan review, explicit authorization for each single-use "
+                "preparation, then read-only freeze and review of the exact 8+6 catalog"
             ),
         ),
     )

@@ -34,12 +34,13 @@ experience value are protected; the output save is independently reloaded and au
 its envelope can commit. Hard per-source bounds are 27 completed battles, 10,000 encounter steps,
 250,000 controller actions and 5,000,000 frames.
 
-This source creates no learner question, answer or outcome. Current counters remain **priors 2 ·
-reserved roots 8 train / 6 development · PP states 0/2 · frozen menus 0 · outcomes 0/14 · fits 0 ·
-authority 0 · sealed Red 0 · Crystal 0 · replay 0**. The next order is publication, exact-head CI,
-private read-only plan generation and review. Stop and ask the owner for separate authorization
-before either partition receives controller input. After both succeed once, re-inventory and
-freeze the exact 8+6 menu catalog before opening a teacher answer.
+This source creates no learner question, answer or outcome. Publication, exact-head CI, the
+one-source reservation refresh and both private read-only plan preflights are complete. Current
+counters remain **priors 2 · reserved roots 8 train / 6 development · PP states 0/2 · frozen menus
+0 · outcomes 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**. Next, independently
+review the plans and stop for separate owner authorization before either partition receives
+controller input. After both succeed once, re-inventory and freeze the exact 8+6 menu catalog
+before opening a teacher answer.
 
 ## Two venue priors now exist; no second live run occurred — 2026-08-16
 

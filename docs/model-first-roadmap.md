@@ -16,10 +16,10 @@ runner consumes PP through ordinary safe wild battles and protects every unrelat
 
 The order from here is deliberately short:
 
-1. Publish the implementation and require a green exact-head CI run.
-2. Generate and authenticate the refreshed 8+6 reservation plus two-entry PP plan with zero
-   controller actions.
-3. Have Claude attack the immutable boundary and path-free projection; adjudicate findings with
+1. **Complete:** publish the implementation and require a green exact-head CI run.
+2. **Complete, read-only:** generate and authenticate the refreshed 8+6 reservation plus two-entry
+   PP plan with zero controller actions.
+3. **Next:** have Claude attack the immutable boundary and path-free projection; adjudicate findings with
    the smallest discriminating test.
 4. Ask the owner to authorize the train and development preparations explicitly. Execute each at
    most once and never replace an exposed identity.

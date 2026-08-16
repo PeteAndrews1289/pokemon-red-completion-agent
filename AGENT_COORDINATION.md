@@ -9,9 +9,10 @@
 > the prepared state before committing its envelope.
 >
 > Honest counters remain priors 2, reserved roots 8 train / 6 development, prepared PP states 0/2,
-> frozen menus 0, outcomes 0/14, fit 0 and authority 0. Codex must publish, obtain exact-head green
-> CI and generate the private plans read-only, then stop for owner authorization. Claude's next
-> useful review is the immutable source plus path-free plan projection. Antigravity remains
+> frozen menus 0, outcomes 0/14, fit 0 and authority 0. Publication, exact-head CI, the one-source
+> refresh and both private read-only plan preflights are complete. Codex now stops for owner
+> authorization after independent review. Claude's next useful review is the immutable source plus
+> path-free plan projection. Antigravity remains
 > deferred until the exact 8+6 catalog exists; it gets a bounded transfer/product challenge, not
 > an implementation or provenance lane.
 

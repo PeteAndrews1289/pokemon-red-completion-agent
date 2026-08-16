@@ -14,11 +14,12 @@ The runner protects unrelated experience, party, box, Pokédex and story state; 
 switching, capture, teacher/model calls and learner outcomes; and independently reloads the saved
 state before publication.
 
-Codex's immediate assignment is to publish the complete implementation and documentation, obtain
-green exact-head CI, generate the two private plans read-only and stop. No controller action is
-authorized by this handoff. Claude then attacks the immutable contract and path-free plan facts.
-Antigravity remains idle until the fourteen concrete menus exist, when it receives only the small
-Red-to-Crystal transfer/product packet described below.
+Codex has published the implementation and documentation, obtained green exact-head CI, refreshed
+the one unsafe source without changing the other thirteen and preflighted both private plans
+read-only. It now stops. No controller action is authorized by this handoff. Claude next attacks
+the immutable contract and path-free plan facts. Antigravity remains idle until the fourteen
+concrete menus exist, when it receives only the small Red-to-Crystal transfer/product packet
+described below.
 
 Current honest state: priors 2; reserved roots 8 train / 6 development; natural PP states 0/2;
 frozen menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; full replay 0.
