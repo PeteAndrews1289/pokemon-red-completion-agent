@@ -7,6 +7,32 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the cards stayed face-down and still passed
+
+The project built a second program whose only job was to distrust the first. It was published,
+passed GitHub on its exact source, and then returned to every retained cartridge state without
+pressing a button. For each of the fourteen questions it proved the reservation, saved state,
+profile and original root still belonged together, then regenerated the entire feature menu and
+demanded an exact match.
+
+All fourteen passed. Together they contain 55 possible choices described by 66 title-neutral
+features; 49 features vary, and the questions form 12 distinct menu shapes. Two shapes recur across
+independent roots, which is precisely the kind of sameness a transferable representation should
+recognize. The two natural middle-PP states remain separated, one in train and one in development.
+
+Then the verifier was given two convincing lies. One catalog changed a feature and repaired its
+hashes. Another made two prepared questions claim the same artifact and repaired those hashes too.
+The first failed live reconstruction; the second failed lineage. Nineteen smaller boundary faults
+failed as well.
+
+The cards never turned over. The board now reads **two priors · fourteen verified inputs · zero
+outcomes · zero authority**. A final readiness check caught one more honest gap: fourteen cards
+contain 55 candidate choices, and every choice needs its own cloned run before a card has a valid
+answer. The old executable only handles a historical two-choice Cinnabar probe. The next key is
+therefore a crash-safe 55-trial collector, not permission to run an executable that does not yet
+exist. Once that collector is published and preflighted, fit only the eight training examples and
+let the untouched six decide whether the representation has earned a first look at Crystal.
+
 ## Current checkpoint: the questions are finally real
 
 The freezer was published, GitHub reproduced every check, and the project returned to the private

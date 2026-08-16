@@ -5,6 +5,39 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: input audit passed; implement the exact outcome campaign
+
+Codex's separate verifier is published at `e849e43` and passed exact CI run `31973374921` attempt
+1. The official read-only audit reconstructed all fourteen frozen reservation, capture, profile,
+root and feature-menu joins. The verified catalog remains 8 train / 6 untouched development with
+55 candidate rows, 66 columns, 49 nonconstant columns, 12 distinct menus and one prepared context
+per partition. Nineteen focused boundary mutations plus two fully re-hashed catalog forgeries were
+rejected. No answer, outcome, teacher, controller, prediction, fit, sealed Red or Crystal context
+opened.
+
+The final authorization-readiness check found that the existing runner is only a historical
+two-choice Cinnabar probe. The frozen catalog needs 14 complete examples, which means 55 cloned
+candidate trials. Codex therefore owns the missing collector before it owns an authorization
+packet. It must define one bounded and comparable execution dose, durably claim each candidate
+trial before input, preserve failures, censor interruptions, forbid retry of consumed identities,
+and allow a campaign to continue past unstarted trials after a power loss. Then it must publish,
+pass exact-head CI and complete a read-only 55-trial preflight before asking the owner.
+
+The later authorization packet must bind the private plan file, published collector source, exact
+CI run and attempt, frozen catalog file/semantic/prospective hashes, all 14 example identities, all
+55 trial identities and the non-retry/failure/censoring rules. After authorization Codex may
+collect once, fit only on the eight train examples and publish descriptive results for the six
+untouched development examples with authority still zero.
+
+Claude is now deferred until the immutable outcome artifact exists; then it audits joins,
+denominator, leakage, baseline arithmetic, uncertainty and claim strength read-only. Antigravity is
+deferred until Red development results exist; then it receives only a compact public-safe transfer
+packet and returns at most three falsifiable Crystal/generalization claims. Neither may execute,
+choose an answer, rerun a failure, tune the model or grant authority.
+
+Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · verified inputs 14/14 · trials
+0/55 · complete examples 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
+
 ## Current override: audit the official input catalog; do not open answers
 
 Codex published the catalog freezer at `065c68a`, passed exact CI run `31969641298` attempt 1, and

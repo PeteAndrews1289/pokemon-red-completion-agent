@@ -1,5 +1,32 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: verify the questions without turning over the cards
+
+Open on fourteen face-down cards split **8 TRAIN / 6 DEVELOPMENT**. Put the original freezer on
+one side and a separately published verifier on the other: **SOURCE e849e43 · CI 31973374921
+GREEN**. Let the verifier draw five lines from every card—**RESERVATION · CAPTURE · PROFILE · ROOT
+· FEATURE MENU**—until the counter reaches **14/14**.
+
+Zoom out to the data shape: **55 CANDIDATE ROWS · 66 FEATURES · 49 VARY · 12 DISTINCT MENUS**.
+Show the two repeated menu silhouettes attached to different roots so the audience can see the
+difference between transferable semantics and duplicated state. Keep one middle-PP card lit in
+each partition.
+
+Now forge two copies while keeping their hash lights green. Change one feature byte in the first;
+make both prepared cards claim the same artifact in the second. Stamp them **REJECTED BY LIVE
+RECONSTRUCTION** and **REJECTED BY LINEAGE JOIN**. Add the smaller board: **19/19 BOUNDARY PROBES
+REJECTED**.
+
+Never turn a card over. Keep the safety strip visible: **ANSWERS 0 · OUTCOMES 0 · CONTROLLER 0 ·
+TEACHER 0 · PREDICTIONS 0 · UPDATES 0 · SEALED RED 0 · CRYSTAL 0 · AUTHORITY 0**. Narration:
+**“We finally stopped polishing the teacher and proved the model's first questions were real.”**
+
+Then split the fourteen cards into their actual execution units: **55 CLONED CANDIDATE TRIALS**.
+Show the old executable accepting only two Cinnabar choices and stamp it **WRONG RUNNER FOR THIS
+CATALOG**. End on the corrected locked rail: **BUILD + ATTACK 55-TRIAL COLLECTOR → PUBLISH + GREEN
+CI → READ-ONLY PREFLIGHT → OWNER AUTHORIZES EXACT PLAN → FIT 8 TRAIN → REPORT 6 UNTOUCHED
+DEVELOPMENT → DECIDE WHETHER CRYSTAL IS EARNED**.
+
 ## August 16 scene: turn two measurements into an honest menu
 
 Keep the emulator screen black. Show **SOURCE 107e034 · CI 31947146884 GREEN**, then animate 21

@@ -1,0 +1,122 @@
+{
+  "acceptance": {
+    "all_candidate_menus_reconstructed": true,
+    "all_capture_envelope_joins_reconstructed": true,
+    "all_reservation_joins_reconstructed": true,
+    "all_root_lineages_reconstructed": true,
+    "all_source_profile_joins_reconstructed": true,
+    "committed_catalog_source_reproduced": true,
+    "input_files_unchanged": true,
+    "path_and_target_scan_clean": true,
+    "rom_adjacent_artifacts_unchanged": true
+  },
+  "audit_identity": {
+    "audit_script_sha256": "6bfebf27cf933fb792398393b067b81cca3b188eb0bb266870c04ed25f45617f",
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success",
+    "exact_ci_run": 31973374921,
+    "source_bundle_sha256": "f6a8361b419e1ebbbef856d90285110c27a211305348ba622b00818e8af22765",
+    "source_commit": "e849e4331e116254804f448ff4b91c20504becf7"
+  },
+  "catalog": {
+    "candidate_row_count": 55,
+    "candidate_width_partition_counts": {
+      "development:2": 3,
+      "development:5": 1,
+      "development:6": 2,
+      "train:2": 4,
+      "train:6": 4
+    },
+    "catalog_file_sha256": "2f412460b828588e8391eea63b832b985925f3443f0c682ad6ef45dc0603b979",
+    "catalog_sha256": "7f955e6a05a8f666dd2aef9cfad1401fd871b4c6d0c105667765faefe21b0ae4",
+    "choice_kind_partition_counts": {
+      "development:trainee": 3,
+      "development:venue": 3,
+      "train:trainee": 4,
+      "train:venue": 4
+    },
+    "distinct_candidate_menu_count": 12,
+    "feature_column_count": 66,
+    "goal_partition_counts": {
+      "development:balance": 2,
+      "development:collection": 1,
+      "development:evolution": 2,
+      "development:role_coverage": 1,
+      "train:balance": 2,
+      "train:collection": 2,
+      "train:evolution": 2,
+      "train:role_coverage": 2
+    },
+    "nonconstant_feature_column_count": 49,
+    "partition_counts": {
+      "development": 6,
+      "train": 8
+    },
+    "prepared_partition_counts": {
+      "development": 1,
+      "train": 1
+    },
+    "prospective_catalog_sha256": "b308c06369e09d1b8970205ea120ac5edf08226aaacbe1b8a8d30624b7f8dc6f",
+    "question_count": 14
+  },
+  "catalog_source": {
+    "source_bundle_sha256": "f6a8361b419e1ebbbef856d90285110c27a211305348ba622b00818e8af22765",
+    "source_commit": "065c68af79ef71c69764f22229192a819d2965f3"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "model_fit": false,
+    "next": "Request a new exact authorization to collect the eight train and six untouched development outcomes once. Fit only on train, report development performance against the preregistered baselines, and retain zero live authority.",
+    "outcome_collection_authorized": false,
+    "status": "input_integrity_verified_outcomes_closed"
+  },
+  "mutation_audit": {
+    "full_catalog_rehashed_forgery_probes": 2,
+    "full_catalog_rehashed_forgery_probes_rejected": 2,
+    "private_semantic_checks_executed": true,
+    "prepublication_source_and_ci_guards_stubbed_for_full_catalog_probes": true,
+    "targeted_rejection_probes": 21,
+    "targeted_rejection_probes_rejected": 21,
+    "unit_level_rejection_probes": 19,
+    "unit_level_rejection_probes_rejected": 19
+  },
+  "privacy": {
+    "candidate_feature_values_public": false,
+    "capture_identity_public": false,
+    "private_path_fields": 0,
+    "profile_identity_public": false
+  },
+  "protected_access": {
+    "answers_selected": 0,
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "reconstruction": {
+    "candidate_feature_menus": 14,
+    "capture_envelope_joins": 14,
+    "historical_checkpoint_count": 81,
+    "new_prepared_checkpoint_count": 2,
+    "re_inventory_checkpoint_count": 83,
+    "reservation_joins": 14,
+    "root_lineages": 14,
+    "source_profile_joins": 14,
+    "venue_prior_count": 2
+  },
+  "recorded_on": "2026-08-16",
+  "schema": "pokemon.red.party-development-frozen-input-catalog-v1-audit.v1",
+  "status": "input_integrity_verified_outcomes_closed",
+  "validation": {
+    "github_ci_tests_passed": true,
+    "local_non_integration_tests_deselected": 3,
+    "local_non_integration_tests_passed": 3817,
+    "local_non_integration_tests_xfailed": 1,
+    "mypy_source_files_passed": 231,
+    "public_documentation_registry_and_ruff_gates_passed": true
+  }
+}

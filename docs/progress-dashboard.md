@@ -1,5 +1,18 @@
 # Pokémon Learning Observatory
 
+> **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
+> SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE
+> ROWS · 66 FEATURES · 49 VARY · 12 DISTINCT MENUS**. Link the
+> [path-free audit receipt](evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json).
+>
+> Display the attack result as **BOUNDARY PROBES 19/19 REJECTED · RE-HASHED FORGERIES 2/2
+> REJECTED**. The safety strip remains **ANSWERS 0 · OUTCOMES 0/14 · CONTROLLER 0 · TEACHER 0 ·
+> PREDICTIONS 0 · UPDATES 0 · SEALED RED 0 · CRYSTAL 0 · AUTHORITY ZERO**. Also display
+> **REQUIRED 14 EXAMPLES / 55 CLONED TRIALS · COLLECTED 0/55**. The next rail is **BUILD + ATTACK
+> COLLECTOR → PUBLISH + GREEN CI → READ-ONLY 55-TRIAL PREFLIGHT → OWNER AUTHORIZES EXACT PLAN
+> → FIT 8 TRAIN ONCE → REPORT 6 UNTOUCHED DEVELOPMENT → DECIDE CRYSTAL GATE**. Do not show
+> input verification as model training or imply that authorization can precede the collector.
+
 > **Current gate — V4 VERIFIED · BOTH PREFLIGHTS READY · TRAIN AUTHORIZATION PENDING:** Display
 > **SOURCE 27e966b · CI 31962598106 ATTEMPT 1 GREEN · PLAN b9d1eeef… · CLAUDE APPROVE · PP STATES
 > 0/2 · CONTROLLER 0**. Both train and development authenticate in read-only mode; neither is

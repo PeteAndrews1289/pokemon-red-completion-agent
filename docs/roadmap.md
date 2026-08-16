@@ -8,6 +8,25 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): input audit passed; collector is the active build
+
+Separate verifier source `e849e43` passed exact CI run `31973374921` attempt 1 and reconstructed
+all 14 frozen reservation/state/profile/root/menu joins read-only. The verified shape is 8 train / 6
+development, 55 candidate rows, 66 features, 49 nonconstant columns and 12 distinct menus. Nineteen
+focused mutations and two fully re-hashed semantic forgeries were rejected. Protected inputs were
+unchanged and every answer, outcome, teacher, controller, model, sealed and Crystal counter stayed
+zero.
+
+The final readiness check found that no batch collector yet consumes this catalog. The old runner
+is one historical two-choice Cinnabar probe. Because a preference label needs every available
+candidate measured, the real campaign is 14 examples and 55 cloned candidate trials.
+
+Next: implement, attack, publish and read-only preflight that 55-trial collector. Only then request
+exact authorization bound to its immutable plan, published source and CI attempt. Fit only on train
+and report the untouched development partition against the frozen baselines with authority still
+zero. Counters are priors 2, PP states 2/2, menus 14, verified inputs 14/14, trials 0/55, complete
+examples 0/14, fits 0 and authority 0.
+
 ## Current checkpoint (2026-08-16): official 8+6 inputs frozen; outcomes closed
 
 Published source `065c68a` passed exact CI run `31969641298` attempt 1. Read-only re-inventory

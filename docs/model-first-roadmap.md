@@ -6,6 +6,54 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: input integrity verified; build the bounded outcome collector
+
+A separate fail-closed verifier was published at exact source `e849e43`, passed GitHub CI run
+`31973374921` attempt 1, and then audited the official frozen catalog without controller input or
+answer access. It reproduced the catalog freezer's historical source bundle and reconstructed all
+14 reservation, capture-envelope, source-profile, authenticated-root and feature-menu joins from
+the retained cartridge states. The result contains 55 candidate rows across 66 columns, 49
+nonconstant columns and 12 distinct menus. Both prepared contexts remain partition-independent.
+
+The attack set rejected 19 focused boundary mutations plus two fully re-hashed catalog forgeries:
+one changed a retained feature value while repairing every dependent catalog hash; the other
+collapsed the two preparation identities while repairing the catalog hash. The official audit
+then ran normally under exact source and CI attestation. Inputs and ROM-adjacent artifacts remained
+unchanged; all answer, outcome, controller, teacher, prediction, update, sealed Red, Crystal and
+authority counters remained zero. See the
+[path-free receipt](evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json).
+
+The readiness review also caught a consequential implementation gap before authorization: the
+repository's existing outcome probe is a historical two-candidate Cinnabar experiment. It cannot
+consume this catalog. A complete 14-question dataset requires **55 independent cloned candidate
+trials**, because every available candidate must be measured before one question can produce a
+preference target. Calling this merely an "8+6 run" concealed the actual execution unit and would
+have made the requested authorization ambiguous.
+
+The active sequence is now:
+
+1. **Complete:** freeze and independently reconstruct the exact 8-train/6-development inputs.
+2. **Active:** implement and attack a bounded collector for exactly 14 examples / 55 cloned
+   candidate trials. Each trial must be durably claimed before controller input, preserve failure,
+   censor interruption, and forbid retry without consuming unstarted trials after a power loss.
+3. Publish the collector, require exact-head green CI, run a read-only full-catalog preflight, and
+   freeze the path-free campaign identity and per-trial execution contract.
+4. Only then request one authorization bound to the exact plan file, published source, CI
+   run/attempt, frozen catalog SHA, 14 examples and 55 non-retryable candidate trials.
+5. Collect each trial once. No exposed question or candidate may be replaced or retried into
+   success.
+6. Fit exactly once on the eight train examples. Do not tune on the six development examples.
+7. Report descriptive development performance against the preregistered cost-only and simple
+   baselines, uncertainty and individual errors. Learned live authority remains zero.
+8. If the signal is informative, freeze the smallest Crystal adapter test of the same title-neutral
+   representation. Do not script another full game or begin living-Pokédex scale collection yet.
+
+Stop before step 4 unless the owner names the exact campaign identity. Stop after collection on
+any catalog mismatch, duplicate trial, partition crossover, changed protected input or missing
+terminal record. Honest counters are **priors 2 · roots 14 · PP states 2/2 · menus 14 · verified
+inputs 14/14 · required trials 55 · outcomes 0/55 (0/14 complete examples) · fits 0 ·
+authority 0**.
+
 ## Current checkpoint: fourteen inputs frozen; independent review before outcomes
 
 Exact published source `065c68a` passed GitHub CI run `31969641298` attempt 1. The official

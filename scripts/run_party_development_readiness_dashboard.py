@@ -45,9 +45,14 @@ CATALOG_EVIDENCE_PATH = (
     / "evidence"
     / "red-party-development-frozen-input-catalog-v1-result-2026-08-16.json"
 )
-CATALOG_EVIDENCE_SCHEMA = (
-    "pokemon.red.party-development-frozen-input-catalog-v1-result.v1"
+CATALOG_EVIDENCE_SCHEMA = "pokemon.red.party-development-frozen-input-catalog-v1-result.v1"
+CATALOG_AUDIT_EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json"
 )
+CATALOG_AUDIT_EVIDENCE_SCHEMA = "pokemon.red.party-development-frozen-input-catalog-v1-audit.v1"
 # Keep the readiness view separate from both the historical Pokémon dashboard
 # (8765) and an existing local dashboard already using 8766 on the owner host.
 DEFAULT_READINESS_PORT = DASHBOARD_DEFAULT_PORT + 2
@@ -85,6 +90,13 @@ def _load_catalog_evidence() -> dict[str, object]:
     value = json.loads(CATALOG_EVIDENCE_PATH.read_text(encoding="ascii"))
     if not isinstance(value, dict):
         raise ProgressDashboardError("frozen catalog evidence must be a JSON object")
+    return value
+
+
+def _load_catalog_audit_evidence() -> dict[str, object]:
+    value = json.loads(CATALOG_AUDIT_EVIDENCE_PATH.read_text(encoding="ascii"))
+    if not isinstance(value, dict):
+        raise ProgressDashboardError("frozen catalog audit evidence must be a JSON object")
     return value
 
 
@@ -300,9 +312,7 @@ def _record_count(record: Mapping[str, object], key: str) -> int:
 def _receipt_digest(source: Mapping[str, object], key: str) -> str:
     value = source.get(key)
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise ProgressDashboardError(
-            f"dashboard catalog {key.replace('_', ' ')} is invalid"
-        )
+        raise ProgressDashboardError(f"dashboard catalog {key.replace('_', ' ')} is invalid")
     return value
 
 
@@ -396,10 +406,7 @@ def _catalog_snapshot(
             "Choice coverage · train 4 trainee + 4 venue · development 3 + 3",
             "Available candidate widths · 2, 5 and 6 · every question has at least 2",
             "Natural middle-PP preparations 2/2 · historical captures 81 + prepared 2",
-            (
-                f"Catalog {catalog_sha256[:8]}… · prospective "
-                f"{prospective_sha256[:8]}…"
-            ),
+            (f"Catalog {catalog_sha256[:8]}… · prospective {prospective_sha256[:8]}…"),
             f"Published freezer {source_commit[:7]} · CI {ci_run} attempt {ci_attempt}",
             "Compatible venue priors 2/2 · both frozen before question construction",
             "Goal coverage · balance, collection, evolution and role coverage in both partitions",
@@ -412,6 +419,128 @@ def _catalog_snapshot(
             (
                 "Next: independent input-integrity review, then separately authorize 8+6 "
                 "outcomes and one train-only fit"
+            ),
+        ),
+    )
+
+
+def _audited_catalog_snapshot(
+    base: DashboardSnapshot,
+    evidence: Mapping[str, object],
+) -> DashboardSnapshot:
+    if (
+        evidence.get("schema") != CATALOG_AUDIT_EVIDENCE_SCHEMA
+        or evidence.get("status") != "input_integrity_verified_outcomes_closed"
+    ):
+        raise ProgressDashboardError("frozen catalog audit evidence is unsupported")
+    audit = _mapping(evidence, "audit_identity")
+    catalog = _mapping(evidence, "catalog")
+    reconstruction = _mapping(evidence, "reconstruction")
+    acceptance = _mapping(evidence, "acceptance")
+    mutations = _mapping(evidence, "mutation_audit")
+    interpretation = _mapping(evidence, "interpretation")
+    privacy = _mapping(evidence, "privacy")
+    protected = _mapping(evidence, "protected_access")
+    source_commit = audit.get("source_commit")
+    ci_run = audit.get("exact_ci_run")
+    ci_attempt = audit.get("exact_ci_attempt")
+    script_sha256 = audit.get("audit_script_sha256")
+    zero_keys = (
+        "answers_selected",
+        "controller_actions",
+        "crystal_cases_opened",
+        "model_predictions",
+        "model_updates",
+        "outcomes_opened",
+        "sealed_red_cases_opened",
+        "teacher_queries",
+    )
+    acceptance_keys = (
+        "all_candidate_menus_reconstructed",
+        "all_capture_envelope_joins_reconstructed",
+        "all_reservation_joins_reconstructed",
+        "all_root_lineages_reconstructed",
+        "all_source_profile_joins_reconstructed",
+        "committed_catalog_source_reproduced",
+        "input_files_unchanged",
+        "path_and_target_scan_clean",
+        "rom_adjacent_artifacts_unchanged",
+    )
+    if (
+        not isinstance(source_commit, str)
+        or _GIT_COMMIT.fullmatch(source_commit) is None
+        or type(ci_run) is not int  # noqa: E721
+        or ci_run <= 0
+        or type(ci_attempt) is not int  # noqa: E721
+        or ci_attempt <= 0
+        or audit.get("exact_ci_conclusion") != "success"
+        or not isinstance(script_sha256, str)
+        or _SHA256.fullmatch(script_sha256) is None
+        or catalog.get("question_count") != 14
+        or catalog.get("candidate_row_count") != 55
+        or catalog.get("feature_column_count") != 66
+        or catalog.get("nonconstant_feature_column_count") != 49
+        or catalog.get("distinct_candidate_menu_count") != 12
+        or catalog.get("partition_counts") != {"development": 6, "train": 8}
+        or catalog.get("prepared_partition_counts") != {"development": 1, "train": 1}
+        or any(
+            reconstruction.get(key) != 14
+            for key in (
+                "candidate_feature_menus",
+                "capture_envelope_joins",
+                "reservation_joins",
+                "root_lineages",
+                "source_profile_joins",
+            )
+        )
+        or reconstruction.get("historical_checkpoint_count") != 81
+        or reconstruction.get("new_prepared_checkpoint_count") != 2
+        or reconstruction.get("re_inventory_checkpoint_count") != 83
+        or any(acceptance.get(key) is not True for key in acceptance_keys)
+        or mutations.get("targeted_rejection_probes") != 21
+        or mutations.get("targeted_rejection_probes_rejected") != 21
+        or mutations.get("full_catalog_rehashed_forgery_probes") != 2
+        or mutations.get("full_catalog_rehashed_forgery_probes_rejected") != 2
+        or privacy.get("private_path_fields") != 0
+        or privacy.get("candidate_feature_values_public") is not False
+        or privacy.get("capture_identity_public") is not False
+        or privacy.get("profile_identity_public") is not False
+        or any(protected.get(key) != 0 for key in zero_keys)
+        or protected.get("authority_promoted") is not False
+        or interpretation.get("outcome_collection_authorized") is not False
+        or interpretation.get("model_fit") is not False
+        or interpretation.get("authority_promoted") is not False
+    ):
+        raise ProgressDashboardError("frozen catalog audit evidence is inconsistent")
+    catalog_sha256 = _receipt_digest(catalog, "catalog_sha256")
+    prospective_sha256 = _receipt_digest(catalog, "prospective_catalog_sha256")
+    return replace(
+        base,
+        run_status="waiting",
+        stage="Completion-aware party learner · bounded collector build",
+        stage_progress=1.0,
+        actions=0,
+        frame_count=0,
+        message=(
+            "All fourteen frozen Red questions independently reconstruct. They require 55 cloned "
+            "candidate trials; the catalog-wide collector is not yet published or authorized."
+        ),
+        location="Verified 8+6 inputs · 55-trial collector build",
+        events=(
+            "Input-integrity audit passed · all 14 reservation/state/profile/root/menu joins",
+            "Dataset shape · 55 candidate rows · 66 features · 49 varying · 12 distinct menus",
+            "Partition isolation · 8 train / 6 untouched development · prepared contexts 1 + 1",
+            "Attack set · 19/19 boundary probes rejected · 2/2 re-hashed forgeries rejected",
+            f"Catalog {catalog_sha256[:8]}… · prospective {prospective_sha256[:8]}…",
+            f"Published verifier {source_commit[:7]} · CI {ci_run} attempt {ci_attempt}",
+            f"Verifier script {script_sha256[:8]}… · protected inputs unchanged",
+            "Required outcome units · 14 complete examples · 55 cloned candidate trials",
+            "Answers 0/14 · trials 0/55 · complete examples 0/14 · teacher 0 · controller 0",
+            "Predictions 0 · model updates 0 · fits 0 · live authority zero",
+            "Sealed Red 0 · Crystal 0 · full-game replays 0",
+            (
+                "Next: build, attack, publish and read-only preflight the 55-trial collector; "
+                "only then request exact owner authorization"
             ),
         ),
     )
@@ -599,6 +728,7 @@ def main(argv: list[str] | None = None) -> int:
     evidence = _load_evidence()
     v4_evidence = _load_v4_evidence()
     catalog_evidence = _load_catalog_evidence()
+    catalog_audit_evidence = _load_catalog_audit_evidence()
     catalog_receipt = _mapping(catalog_evidence, "catalog")
     catalog_sha256 = _receipt_digest(catalog_receipt, "catalog_sha256")
     preparation_base = _current_snapshot(evidence, v4_evidence)
@@ -634,6 +764,10 @@ def main(argv: list[str] | None = None) -> int:
             train_prepared=completed_train,
         )
     initial_snapshot = _catalog_snapshot(initial_snapshot, catalog_evidence)
+    initial_snapshot = _audited_catalog_snapshot(
+        initial_snapshot,
+        catalog_audit_evidence,
+    )
     state = DashboardState(initial_snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
@@ -646,8 +780,9 @@ def main(argv: list[str] | None = None) -> int:
                     "reserved_roots": "8 train / 6 development",
                     "pp_materializations": "2/2",
                     "read_only_preflights": "2/2",
-                    "independent_audit": "catalog_integrity_review_pending",
-                    "authorization_pending": "outcomes_after_independent_review",
+                    "independent_audit": "catalog_input_integrity_verified",
+                    "collector": "required_14_examples_55_trials_not_yet_published",
+                    "authorization_pending": "after_collector_ci_and_read_only_preflight",
                     "maximum_completed_battles": 32,
                     "minimum_battle_headroom": 5,
                     "frozen_menus": 14,

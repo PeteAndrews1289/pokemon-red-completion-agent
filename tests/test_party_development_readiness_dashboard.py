@@ -174,6 +174,9 @@ def test_readiness_dashboard_script_uses_a_separate_local_port() -> None:
     assert SCRIPT["CATALOG_EVIDENCE_PATH"].name == (
         "red-party-development-frozen-input-catalog-v1-result-2026-08-16.json"
     )
+    assert SCRIPT["CATALOG_AUDIT_EVIDENCE_PATH"].name == (
+        "red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json"
+    )
 
 
 def test_tracked_readiness_evidence_loads_into_honest_snapshot() -> None:
@@ -235,9 +238,7 @@ def test_current_dashboard_projects_the_frozen_catalog_review_gate() -> None:
     assert document["stage_progress"] == 1.0
     assert document["actions"] == 0
     assert document["frame_count"] == 0
-    assert document["location"] == (
-        "Frozen 8+6 catalog · independent input review pending"
-    )
+    assert document["location"] == ("Frozen 8+6 catalog · independent input review pending")
     encoded = json.dumps(document, sort_keys=True, ensure_ascii=False)
     assert "14 questions · 8 train / 6 development" in encoded
     assert "Natural middle-PP preparations 2/2" in encoded
@@ -263,6 +264,51 @@ def test_current_dashboard_rejects_a_catalog_count_overclaim() -> None:
 
     with pytest.raises(ProgressDashboardError, match="inconsistent"):
         SCRIPT["_catalog_snapshot"](base, evidence)
+
+
+def test_current_dashboard_projects_the_verified_input_outcome_gate() -> None:
+    base = SCRIPT["_catalog_snapshot"](
+        SCRIPT["_current_snapshot"](
+            SCRIPT["_load_evidence"](),
+            SCRIPT["_load_v4_evidence"](),
+        ),
+        SCRIPT["_load_catalog_evidence"](),
+    )
+
+    document = SCRIPT["_audited_catalog_snapshot"](
+        base,
+        SCRIPT["_load_catalog_audit_evidence"](),
+    ).public_dict()
+
+    assert document["run_status"] == "waiting"
+    assert document["stage_progress"] == 1.0
+    assert document["actions"] == 0
+    assert document["frame_count"] == 0
+    assert document["location"] == ("Verified 8+6 inputs · 55-trial collector build")
+    encoded = json.dumps(document, sort_keys=True, ensure_ascii=False)
+    assert "All fourteen frozen Red questions independently reconstruct" in encoded
+    assert "55 candidate rows · 66 features · 49 varying · 12 distinct menus" in encoded
+    assert "19/19 boundary probes rejected · 2/2 re-hashed forgeries rejected" in encoded
+    assert "build, attack, publish and read-only preflight the 55-trial collector" in encoded
+    assert "trials 0/55" in encoded
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_current_dashboard_rejects_a_false_catalog_audit_claim() -> None:
+    evidence = deepcopy(SCRIPT["_load_catalog_audit_evidence"]())
+    protected = evidence["protected_access"]
+    assert isinstance(protected, dict)
+    protected["outcomes_opened"] = 1
+
+    with pytest.raises(ProgressDashboardError, match="inconsistent"):
+        SCRIPT["_audited_catalog_snapshot"](
+            SCRIPT["_current_snapshot"](
+                SCRIPT["_load_evidence"](),
+                SCRIPT["_load_v4_evidence"](),
+            ),
+            evidence,
+        )
 
 
 def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:

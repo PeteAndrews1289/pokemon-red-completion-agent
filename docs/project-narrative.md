@@ -1,5 +1,39 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: fourteen face-down questions survived reconstruction
+
+Freezing a dataset is not the same as proving it says what its label claims. A second published
+program, source `e849e43` under exact green CI run `31973374921`, started from the retained bytes
+and rebuilt every question without consulting an answer. It joined each reservation back to the
+historical inventory, reopened its state and profile, authenticated its original root, rebuilt the
+title-neutral snapshot and demanded the same candidate menu feature-for-feature.
+
+All fourteen survived. The result is still 8 train and 6 untouched development questions, but now
+the shape is independently visible: 55 candidate rows, 66 columns, 49 that actually vary, and 12
+distinct menus. The two repeated menus are the useful kind of repetition—equivalent title-neutral
+choices arising from separate roots and partitions—not duplicated state. One naturally depleted
+PP context remains in each partition.
+
+The attack mattered as much as the pass. Nineteen focused boundary mutations were rejected. Then
+two forged catalogs repaired their own dependent hashes: one silently changed a retained feature;
+the other made both prepared questions claim one artifact identity. Live reconstruction rejected
+the first, and the source/output lineage join rejected the second. The official audit then ran
+with its real clean-source and GitHub-CI guards, leaving every private input and cartridge-adjacent
+artifact unchanged.
+
+No card was turned over. Answers, outcomes, teacher calls, controller actions, predictions, model
+updates, sealed Red cases and Crystal cases all stayed at zero. The honest board is now **priors 2
+· roots 14 · PP states 2/2 · menus 14 · verified inputs 14/14 · trials 0/55 · complete examples
+0/14 · fits 0 · authority 0**.
+
+The last authorization-readiness pass then found that the existing executable only knows the old
+two-choice Cinnabar probe. These fourteen questions contain 55 available candidates, and every
+candidate needs a cloned, bounded measurement before its question can yield a preference label.
+The next scene is therefore building and attacking that crash-safe collector. Only after it is
+published, green and read-only preflighted does the project ask for one exact campaign
+authorization, fit once on train and issue a development report that cannot be tuned after the
+fact.
+
 ## August 16: the first completion-aware input catalog became immutable
 
 Catalog-freezer source `065c68a` passed exact GitHub CI run `31969641298` attempt one. The official

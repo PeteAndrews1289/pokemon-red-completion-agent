@@ -1,5 +1,25 @@
 # Three-agent coordination
 
+> **2026-08-16 frozen-input audit passed — highest active checkpoint:** Codex published the
+> fail-closed verifier at `e849e4331e116254804f448ff4b91c20504becf7`; exact CI run
+> `31973374921` attempt 1 passed. The official read-only audit reconstructed all 14
+> reservation/capture/profile/root/menu joins, 55 candidate rows, 66 features and both independent
+> preparations. Nineteen focused mutations and two fully re-hashed catalog forgeries were rejected.
+> All answer, outcome, controller, teacher, model, sealed Red, Crystal and authority counters remain
+> zero. The
+> [path-free receipt](docs/evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json)
+> is the only public projection.
+>
+> Codex remains sole implementer, outcome runner and publisher. Its next lane is to implement and
+> attack the missing 14-example / 55-candidate-trial collector, publish it, pass exact-head CI and
+> complete a read-only full-catalog preflight. Only then may it freeze an exact authorization
+> packet and request owner authority. After exact approval it may collect each trial once and fit
+> only on train. Claude's
+> next useful role is a read-only audit of the resulting path-free outcome artifact, leakage,
+> denominator and development statistics; it must not select or rerun outcomes. Antigravity receives
+> a compact public-safe transfer packet only after Red development results exist and returns at most
+> three Crystal/generalization falsifiers. Neither reviewer grants authority, and there is no vote.
+
 > **2026-08-16 PP v4 authorization packet — highest active checkpoint:** Executable source
 > `27e966b9230f254619d735cb3721eff202314089` passed exact CI run `31962598106`, attempt 1. Private
 > v4 file SHA `b9d1eeef…` / semantic SHA `2ae07f3a…` passes read-only preflight for both train and

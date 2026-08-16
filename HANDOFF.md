@@ -17,6 +17,46 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Frozen input integrity verified; build the missing outcome collector — 2026-08-16
+
+Codex published a separate fail-closed catalog verifier at
+`e849e4331e116254804f448ff4b91c20504becf7`. Exact GitHub CI run `31973374921`, attempt 1,
+passed that head. Only then did the verifier read the official frozen catalog and its retained
+inputs. It authenticated the clean current source, the historical freezer source bundle, both
+materialization manifests, the exact 81→83 inventory extension, the two-prior registry, the
+historical context catalog and the ROM. It then reopened every state without ticking the emulator
+or sending input and reconstructed all 14 reservation, capture-envelope, source-profile,
+authenticated-root and candidate-feature-menu joins.
+
+The reconstruction returned 8 train / 6 untouched development questions, 55 candidate rows, 66
+feature columns, 49 nonconstant columns, 12 distinct menus and one independently prepared context
+per partition. The duplicate menu count is two because two title-neutral menus legitimately recur
+across independent roots; roots, states, profiles and captures remain unique. The verifier protects
+all private inputs, manifests, the ROM and its own script bytes across the run. No answer field is
+accepted, and the script has no controller, executor, teacher or outcome-learning call surface.
+
+The focused attack set rejected 19 boundary mutations. Two additional full-catalog probes repaired
+all dependent catalog hashes before attack: a retained-feature substitution failed live menu
+reconstruction, and a collapsed preparation identity failed the source/output-lineage join. The
+official audit then passed normally, not with its publication or CI guards stubbed. The
+[path-free audit receipt](docs/evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json)
+binds the exact audit head, CI run, script SHA and aggregate result without publishing paths,
+capture identities, profiles or feature values.
+
+Honest counters are **priors 2 · roots 14 · PP states 2/2 · menus 14 · verified inputs 14/14 ·
+trials 0/55 · complete examples 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 ·
+replay 0**. No teacher ran, no
+answer was selected, no prediction was computed and no outcome was opened. The next allowed work is
+to publish this receipt/dashboard/handoff checkpoint and implement the missing catalog-wide
+collector. The old executable is only a historical two-choice Cinnabar probe. Producing 14 usable
+preference examples requires all 55 candidate counterfactuals to run from clones of their exact
+starts. Each trial must have a durable pre-input claim; failures remain evidence, interruptions are
+censored, and a consumed identity cannot retry. After the collector passes exact-head CI and a
+read-only full-catalog preflight, obtain owner authorization bound to its exact plan. Fit only on
+the eight train examples; the six development examples remain untouched evaluation. Any mismatch,
+duplicate trial, cross-partition identity, protected-input drift or incomplete terminal record
+stops the campaign.
+
 ## Official 8+6 input catalog frozen; outcomes remain closed — 2026-08-16
 
 Catalog-freezer source `065c68af79ef71c69764f22229192a819d2965f3` was published and passed

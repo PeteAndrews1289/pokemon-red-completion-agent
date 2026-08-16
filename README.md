@@ -4,6 +4,24 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **The frozen Red inputs now pass an independent reconstruction gate (August 16, 2026).** A
+> separate verifier was published at `e849e43`, passed exact GitHub CI run `31973374921` attempt 1,
+> and then reopened the frozen catalog read-only. It reconstructed all **14 reservation, capture,
+> profile, authenticated-root and 66-feature menu joins** from the original cartridge states. The
+> result remains 8 train / 6 untouched development, 55 candidate rows, 49 varying feature columns
+> and 12 distinct menus. Two fully re-hashed catalog forgeries and 19 focused boundary mutations
+> were rejected at their intended gates.
+>
+> The [path-free audit receipt](docs/evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json)
+> records the exact source, CI and reconstruction counts. Every protected byte and ROM-adjacent
+> artifact remained unchanged; answers, outcomes, controller actions, teacher calls, predictions,
+> updates, sealed Red cases and Crystal cases all remained zero. Honest board: **priors 2 · roots
+> 14 · PP states 2/2 · menus 14 · verified inputs 14/14 · trials 0/55 · complete examples
+> 0/14 · fits 0 · authority zero**. The readiness review found that the old executable is only a
+> historical two-choice probe. The next gate is therefore a bounded collector for all 55 cloned
+> candidate trials, followed by exact-head CI, read-only preflight and only then a new owner
+> authorization. The model may fit only on train and development remains untouched evaluation.
+
 > **The first completion-aware input catalog is frozen (August 16, 2026).** Published source
 > `065c68a` passed exact GitHub CI run `31969641298` attempt 1. From that source, a read-only
 > re-inventory reproduced all 81 historical captures and added exactly the two accepted natural-PP
