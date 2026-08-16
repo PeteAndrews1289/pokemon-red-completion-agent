@@ -8,6 +8,14 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): v4 is ready; ask for train once
+
+Published `27e966b` passed CI run `31962598106`, attempt 1. Private v4 (file `b9d1eeef…`, semantic
+`2ae07f3a…`) passes train and development read-only preflight. Claude independently verified every
+binding and returned **APPROVE** to request one partition; the only medium regression-test gap was
+closed without changing the audited runner. The active action is one exact **train** authorization.
+Development stays untouched and needs a second authorization after train is durably assessed.
+
 ## Current checkpoint (2026-08-16): publish the v4 semantic lock, then audit it
 
 V3 is retired unexecuted. The v4 candidate binds exact runner bytes, exact GitHub retry attempt,

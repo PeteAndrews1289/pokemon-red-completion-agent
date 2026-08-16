@@ -5,6 +5,20 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: v4 approved to ask; authorize train and development separately
+
+Published execution source `27e966b9230f254619d735cb3721eff202314089` passed exact CI run
+`31962598106`, attempt 1. Codex generated private v4 (file `b9d1eeef…`, semantic `2ae07f3a…`) and
+both partitions pass read-only preflight with all action/learning/protected-context counters zero.
+Claude independently verified the packet and returned **APPROVE** to request exactly one named
+partition. Its only medium finding was a missing call-count assertion for the correct claim-byte
+recheck; Codex closed that test gap without altering the immutable execution runner or packet.
+
+Codex owns the next action: request **train only** with exact partition, commit, CI run, CI attempt
+and plan-file SHA. After any controller input, that identity cannot retry. Development remains
+untouched and requires a separate owner message. Claude reviews the resulting path-free terminal
+receipt; Antigravity remains idle until the concrete 8+6 menus exist.
+
 ## Current override: v3 retired; publish and attack the v4 semantic boundary
 
 Codex accepted the useful parts of Claude's v3 audit and retired v3 without controller input. The

@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the key is cut, but it still belongs to the owner
+
+V4 now has an immutable identity: published source `27e966b`, green CI run `31962598106` attempt
+one, a separately hashed runner, and a private plan whose public projection exposes no party or
+checkpoint identity. Both the training and development preparations can authenticate themselves
+without pressing a button. That is the important boundary: the door was tested without being
+opened.
+
+Claude attacked the packet independently. It recomputed the hashes, forced every older plan to
+fail, ran 208 focused tests and tried 68 valid mutations. It found no high-severity defect and
+approved asking the owner for one partition. Its useful remaining complaint was about the alarm,
+not the lock: removing the final claim-byte recheck would not break a test. Codex added that alarm
+without changing the frozen runner.
+
+The scoreboard remains deliberately quiet: **two priors · fourteen reserved roots · zero prepared
+PP states · zero menus · zero outcomes · zero authority**. The next event is no longer another
+round of architecture. It is one explicit key turn for the training partition, with no retry after
+input; development keeps its own separate key.
+
 ## Current checkpoint: the lock now checks the world, not just its paperwork
 
 The third private plan looked ready on paper. Its files, roots and counters all matched. But the

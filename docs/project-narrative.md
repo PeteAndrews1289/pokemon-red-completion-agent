@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: v4 reached the owner-authorization line
+
+The hardened source was published at `27e966b9230f254619d735cb3721eff202314089` and passed exact
+GitHub CI run `31962598106`, attempt one. Only then did Codex generate the private v4 packet. Its
+two entries preserve the v3 curriculum identities while renewing the execution contract and venue
+binding; both train and development pass independently in read-only mode. No controller, teacher,
+model, outcome, sealed Red, Crystal or replay counter moved.
+
+Claude's independent audit recomputed the packet rather than trusting its labels. It passed 208
+focused tests, rejected v1 through v3 under v4 code and reported 68 valid mutation probes: 59
+killed, eight genuine survivors after one equivalent mutant was discarded, no high findings and
+one medium regression-test gap. The actual runner correctly rechecks the output claim before input;
+the missing protection was an assertion that this call remains wired. Codex added the exact
+call-count/order test without changing the audited runner bytes or packet.
+
+The result is narrow but real: the project may now ask its owner to authorize one named partition
+from one exact head, CI run, attempt and plan digest. Train comes first; development remains
+untouched. This is still preparation rather than learning, but it is the final prepared-state gate
+before the first completion-aware 8+6 menu can be frozen.
+
 ## August 16: the one-shot plan learned to re-derive its own premise
 
 The v3 authorization audit found that the preparation runner could authenticate every private file

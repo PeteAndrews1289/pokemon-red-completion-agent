@@ -1,5 +1,24 @@
 # Current audit — 2026-08-15
 
+## August 16 addendum: immutable v4 is ready for one exact owner authorization
+
+Exact source `27e966b9230f254619d735cb3721eff202314089` passed CI run `31962598106`, attempt
+1. The resulting private v4 packet has file SHA `b9d1eeef…`, semantic SHA `2ae07f3a…`, runner SHA
+`ab943397…` and path-free summary SHA `8fcde889…`. Train and development separately pass read-only
+preflight; neither sent controller input or opened a learner/protected context.
+
+Claude recomputed every digest, rejected all three superseded plans, passed 208 focused tests and
+returned **APPROVE** to ask for exactly one partition. Its mutation accounting was 68 valid probes,
+59 killed, eight genuine survivors and one discarded equivalent mutant. There were no high
+findings. The sole medium finding was a future-regression gap: deleting the correct pre-controller
+claim-byte recheck call did not fail tests. Codex added a direct one-call/order assertion. Because
+the audited runner bytes and private packet are unchanged, that test-only repair does not replace
+or broaden Claude's verdict.
+
+Disposition: request train only from the exact packet/head/run/attempt; do not infer authorization
+from this audit. Development remains a separate one-shot gate. Counters stay priors 2, PP states
+0/2, menus 0, outcomes 0/14, fit 0, authority 0, sealed Red 0, Crystal 0 and replay 0.
+
 ## August 16 addendum: v3 rejected; v4 binds semantics at controller entry
 
 Claude's v3 audit approved asking for a run but exposed four reasons not to do so yet: the runner

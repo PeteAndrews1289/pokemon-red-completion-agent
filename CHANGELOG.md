@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Published PP v4 at `27e966b`, passed exact CI run `31962598106` attempt 1, generated a new
+  immutable private packet and passed read-only preflight for both train and development with zero
+  controller/model/teacher/outcome access. Added a path-free public receipt; no materialization or
+  authority counter advanced.
+- Recorded Claude's independent **APPROVE** verdict after 208 focused tests and 68 valid mutation
+  probes. Added the missing exact call-count/order assertion for the already-correct output-claim
+  byte recheck without changing the audited runner or private packet.
+
 - Superseded the unexecuted natural-PP v3 plan and added a v4 boundary that binds exact runner
   bytes, exact GitHub CI attempt and a live cartridge/prior reconstruction before controller entry.
   Increased the 27-PP worst-case battle cap to 32 and split middle-bin, wild-encounter, safe-move,

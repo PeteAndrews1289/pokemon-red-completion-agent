@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-16 PP v4 authorization packet — highest active checkpoint:** Executable source
+> `27e966b9230f254619d735cb3721eff202314089` passed exact CI run `31962598106`, attempt 1. Private
+> v4 file SHA `b9d1eeef…` / semantic SHA `2ae07f3a…` passes read-only preflight for both train and
+> development with zero controller, teacher, model, outcome, sealed, Crystal or replay access.
+> Claude independently verified the bytes and returned **APPROVE** to ask for one named partition.
+> Its only medium finding was a missing call-count test for the present-and-correct output-claim
+> recheck; Codex added that test without modifying the frozen execution runner or packet.
+>
+> Codex now asks the owner for **train only**, bound to the exact source, run, attempt and plan-file
+> digest. Claude remains the authorization auditor; Antigravity remains deferred until real 8+6
+> menus exist. A reviewer verdict is not authority. Development needs a separate approval, and any
+> controller input consumes the named train identity without retry.
+
 > **2026-08-16 PP v4 hardening — highest active checkpoint:** V3 was superseded without controller
 > input after Claude identified missing runner-byte binding, no battle headroom, unexercised live
 > predicates and a semantically inert runtime venue registry. Codex's v4 candidate binds runner

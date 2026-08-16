@@ -6,7 +6,7 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
-## Current checkpoint: v4 is the last preparation gate before owner authority
+## Current checkpoint: v4 passed; train authorization is the active gate
 
 V1, v2 and v3 preparation plans are retired and cannot authorize input. The local v4 candidate
 binds the exact runner bytes, exact CI retry attempt and a runtime cartridge/prior reconstruction;
@@ -17,12 +17,12 @@ completion-aware party ranker.
 
 The active sequence is:
 
-1. **Complete locally:** the full gate passes 3,792. Publish and require green CI for the exact head
-   and attempt.
-2. Generate private v4 and run both partition preflights without `--execute`.
-3. Obtain Claude's narrow immutable-delta audit. Stop on a semantic survivor; do not replay Red.
-4. Ask the owner for exactly one partition/head/run/attempt authorization and execute it at most
-   once. Repeat the authority gate separately for the other partition.
+1. **Complete:** source `27e966b` passed exact CI run `31962598106`, attempt 1.
+2. **Complete:** private v4 was generated and both partitions pass without `--execute`.
+3. **Complete:** Claude returned **APPROVE**; the one medium call-wiring test gap is repaired without
+   changing the frozen runner.
+4. **Active:** ask the owner for train/head/run/attempt/plan-file authorization and execute it at
+   most once. Repeat the authority gate separately for development.
 5. Re-inventory the two accepted states and freeze the exact 8+6 identity-free menus.
 6. Separately authorize eight train outcomes, keep six development outcomes untouched, fit once and
    report descriptive generalization with authority still zero.

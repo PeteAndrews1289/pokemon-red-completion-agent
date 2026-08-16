@@ -1186,13 +1186,15 @@ def test_pp_runner_commits_the_capture_only_after_all_postconditions() -> None:
     for node in ast.walk(closure):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             call_lines.setdefault(node.func.id, []).append(node.lineno)
+    claim_recheck_lines = sorted(call_lines["_require_output_claim_unchanged"])
     protected_lines = sorted(call_lines["_require_protected_files_unchanged"])
     execute_line = min(call_lines["_execute_preparation"])
     authenticate_line = min(call_lines["_authenticate_materialized_output"])
     publish_line = min(call_lines["_publish_output_envelope"])
 
+    assert len(claim_recheck_lines) == 1
     assert len(protected_lines) == 2
-    assert execute_line < protected_lines[0] < authenticate_line
+    assert claim_recheck_lines[0] < execute_line < protected_lines[0] < authenticate_line
     assert authenticate_line < protected_lines[1] < publish_line
 
 

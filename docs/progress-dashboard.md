@@ -1,5 +1,15 @@
 # Pokémon Learning Observatory
 
+> **Current gate — V4 VERIFIED · BOTH PREFLIGHTS READY · TRAIN AUTHORIZATION PENDING:** Display
+> **SOURCE 27e966b · CI 31962598106 ATTEMPT 1 GREEN · PLAN b9d1eeef… · CLAUDE APPROVE · PP STATES
+> 0/2 · CONTROLLER 0**. Both train and development authenticate in read-only mode; neither is
+> authorized. Link the
+> [path-free v4 receipt](evidence/red-party-development-pp-materialization-v4-preflight-2026-08-16.json).
+>
+> The next rail is **OWNER AUTHORIZES TRAIN EXACTLY → TRAIN MATERIALIZES ONCE → READ-ONLY VERIFY →
+> SEPARATE DEVELOPMENT AUTHORIZATION**. Never display Claude's verdict as controller authority,
+> never reuse the approval for development, and never retry an identity after controller input.
+
 > **Current gate — V4 HARDENED LOCALLY · V3 SUPERSEDED · EXECUTION UNAUTHORIZED:** Display
 > **FOCUSED 193/193 · MUTATIONS 67/67 KILLED · FULL 3,792 PASS · MYPY 230 FILES · BATTLE CAP 32 · REQUIRED
 > HEADROOM 5 · CONTROLLER 0**. The private v4 contract separately binds package source and exact

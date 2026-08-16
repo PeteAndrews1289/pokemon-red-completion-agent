@@ -17,6 +17,34 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## PP v4 is frozen and independently approved to ask for one partition — 2026-08-16
+
+Executable source `27e966b9230f254619d735cb3721eff202314089` is published and exact GitHub
+CI run `31962598106`, attempt 1, passed. From that clean identity Codex generated one new private
+v4 two-entry plan (file SHA `b9d1eeef…`, semantic SHA `2ae07f3a…`) and a path-free summary (file
+SHA `8fcde889…`). The package bundle is `5c0a7c43…`; the separately bound runner is
+`ab943397…`. Train and development both returned `ready_authorization_required` in read-only mode
+with authenticated roots/states and sufficient safe-move/wild-coverage evidence. Together those
+operations sent **zero controller actions**, queried no teacher/model, created no outcome and
+opened no sealed Red, Crystal or replay context.
+
+The v3→v4 curriculum entries are identical except for the deliberately renewed venue binding;
+the cap and contract changed from 27 to 32 battles, the runner digest became load-bearing and the
+runtime now reconstructs Route 11 from cartridge plus registry evidence. Claude independently
+recomputed every packet digest, parsed the plan, rejected v1/v2/v3 under v4 code, passed 208 focused
+tests and returned **APPROVE** to ask for exactly one named partition. Its honest mutation report
+was 68 valid probes, 59 killed and eight genuine low/regression survivors after discarding one
+equivalent mutant. The only medium finding was that deleting the correct output-claim byte recheck
+would not fail the suite; the follow-up checkpoint adds an exact call-count/order assertion without
+changing the audited runner or packet.
+
+The [path-free preflight receipt](docs/evidence/red-party-development-pp-materialization-v4-preflight-2026-08-16.json)
+is descriptive evidence, not execution authority. Honest counters remain **priors 2 · reserved
+roots 8 train / 6 development · natural PP states 0/2 · frozen menus 0 · outcomes 0/14 · fits 0 ·
+authority 0 · sealed Red 0 · Crystal 0 · replay 0**. Ask the owner for **train first**, naming the
+exact partition, source head, CI run, CI attempt and plan-file digest. Do not execute development
+under the same approval and do not retry train after any controller input.
+
 ## PP preparation v4 candidate closes the live semantic gaps — 2026-08-16
 
 The private v3 plan was never executed and is now superseded. Claude's authorization audit correctly
