@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import stat
 import sys
 import time
@@ -38,11 +39,22 @@ V4_EVIDENCE_PATH = (
     / "red-party-development-pp-materialization-v4-preflight-2026-08-16.json"
 )
 V4_EVIDENCE_SCHEMA = "pokemon.red.party-development-pp-materialization-v4-preflight-evidence.v1"
+CATALOG_EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-party-development-frozen-input-catalog-v1-result-2026-08-16.json"
+)
+CATALOG_EVIDENCE_SCHEMA = (
+    "pokemon.red.party-development-frozen-input-catalog-v1-result.v1"
+)
 # Keep the readiness view separate from both the historical Pokémon dashboard
 # (8765) and an existing local dashboard already using 8766 on the owner host.
 DEFAULT_READINESS_PORT = DASHBOARD_DEFAULT_PORT + 2
 _LIVE_STREAM_MAX_BYTES = 1024 * 1024
 _LIVE_PARTITIONS = ("train", "development")
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -66,6 +78,13 @@ def _load_v4_evidence() -> dict[str, object]:
     value = json.loads(V4_EVIDENCE_PATH.read_text(encoding="ascii"))
     if not isinstance(value, dict):
         raise ProgressDashboardError("PP v4 preflight evidence must be a JSON object")
+    return value
+
+
+def _load_catalog_evidence() -> dict[str, object]:
+    value = json.loads(CATALOG_EVIDENCE_PATH.read_text(encoding="ascii"))
+    if not isinstance(value, dict):
+        raise ProgressDashboardError("frozen catalog evidence must be a JSON object")
     return value
 
 
@@ -278,6 +297,126 @@ def _record_count(record: Mapping[str, object], key: str) -> int:
     return value
 
 
+def _receipt_digest(source: Mapping[str, object], key: str) -> str:
+    value = source.get(key)
+    if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+        raise ProgressDashboardError(
+            f"dashboard catalog {key.replace('_', ' ')} is invalid"
+        )
+    return value
+
+
+def _catalog_snapshot(
+    base: DashboardSnapshot,
+    evidence: Mapping[str, object],
+) -> DashboardSnapshot:
+    if (
+        evidence.get("schema") != CATALOG_EVIDENCE_SCHEMA
+        or evidence.get("status") != "exact_inputs_frozen_outcomes_closed"
+        or evidence.get("private_path_fields") != 0
+    ):
+        raise ProgressDashboardError("frozen catalog evidence is unsupported")
+    catalog = _mapping(evidence, "catalog")
+    freeze = _mapping(evidence, "freeze_identity")
+    inputs = _mapping(evidence, "input_lineage")
+    interpretation = _mapping(evidence, "interpretation")
+    protected = _mapping(evidence, "protected_access")
+    partition_counts = _mapping(catalog, "partition_counts")
+    choice_counts = _mapping(catalog, "choice_kind_partition_counts")
+    width_counts = _mapping(catalog, "available_width_partition_counts")
+    source_commit = freeze.get("source_commit")
+    ci_run = freeze.get("exact_ci_run")
+    ci_attempt = freeze.get("exact_ci_attempt")
+    protected_keys = (
+        "answers_selected",
+        "controller_actions",
+        "crystal_cases_opened",
+        "model_predictions",
+        "model_updates",
+        "outcomes_opened",
+        "sealed_red_cases_opened",
+        "teacher_queries",
+    )
+    if (
+        catalog.get("question_count") != 14
+        or partition_counts != {"development": 6, "train": 8}
+        or choice_counts
+        != {
+            "development:trainee": 3,
+            "development:venue": 3,
+            "train:trainee": 4,
+            "train:venue": 4,
+        }
+        or width_counts
+        != {
+            "development:2": 3,
+            "development:5": 1,
+            "development:6": 2,
+            "train:2": 4,
+            "train:6": 4,
+        }
+        or catalog.get("prepared_context_count") != 2
+        or inputs.get("historical_checkpoint_count") != 81
+        or inputs.get("new_prepared_checkpoint_count") != 2
+        or inputs.get("re_inventory_checkpoint_count") != 83
+        or not isinstance(source_commit, str)
+        or _GIT_COMMIT.fullmatch(source_commit) is None
+        or type(ci_run) is not int  # noqa: E721
+        or ci_run <= 0
+        or type(ci_attempt) is not int  # noqa: E721
+        or ci_attempt <= 0
+        or freeze.get("exact_ci_conclusion") != "success"
+        or interpretation.get("candidate_menus_frozen") != 14
+        or interpretation.get("learner_outcomes_created") != 0
+        or interpretation.get("training_examples_created") != 0
+        or interpretation.get("model_fit") is not False
+        or interpretation.get("authority_promoted") is not False
+        or any(protected.get(key) != 0 for key in protected_keys)
+    ):
+        raise ProgressDashboardError("frozen catalog evidence is inconsistent")
+    catalog_sha256 = _receipt_digest(catalog, "catalog_sha256")
+    prospective_sha256 = _receipt_digest(catalog, "prospective_catalog_sha256")
+    _receipt_digest(catalog, "catalog_file_sha256")
+    _receipt_digest(catalog, "summary_file_sha256")
+    _receipt_digest(freeze, "source_bundle_sha256")
+    retained_events = tuple(
+        event
+        for event in base.events
+        if not event.startswith("Next:")
+        and not event.startswith("Natural middle-PP preparations")
+    )
+    return replace(
+        base,
+        run_status="waiting",
+        stage="Completion-aware party learner · frozen-input review gate",
+        stage_progress=1.0,
+        actions=0,
+        frame_count=0,
+        message=(
+            "Fourteen completion-aware Red questions are frozen: 8 train and 6 untouched "
+            "development. Outcomes remain 0/14 and model fitting has not begun."
+        ),
+        location="Frozen 8+6 catalog · independent input review pending",
+        events=(
+            "Official input catalog frozen · 14 questions · 8 train / 6 development",
+            "Choice coverage · train 4 trainee + 4 venue · development 3 + 3",
+            "Available candidate widths · 2, 5 and 6 · every question has at least 2",
+            "Natural middle-PP preparations 2/2 · historical captures 81 + prepared 2",
+            (
+                f"Catalog {catalog_sha256[:8]}… · prospective "
+                f"{prospective_sha256[:8]}…"
+            ),
+            f"Published freezer {source_commit[:7]} · CI {ci_run} attempt {ci_attempt}",
+            "Answers 0/14 · teacher queries 0 · predictions 0 · model updates 0",
+            *retained_events[:16],
+            (
+                "Next: independent input-integrity review, then separately authorize 8+6 "
+                "outcomes and one train-only fit"
+            ),
+        ),
+    )
+
+
 def _live_snapshot(
     base: DashboardSnapshot,
     *,
@@ -459,6 +598,9 @@ def main(argv: list[str] | None = None) -> int:
         raise ProgressDashboardError("dashboard duration must be non-negative")
     evidence = _load_evidence()
     v4_evidence = _load_v4_evidence()
+    catalog_evidence = _load_catalog_evidence()
+    catalog_receipt = _mapping(catalog_evidence, "catalog")
+    catalog_sha256 = _receipt_digest(catalog_receipt, "catalog_sha256")
     preparation_base = _current_snapshot(evidence, v4_evidence)
     monitor_root = _require_monitor_root(args.private_artifact_root)
     completed_train = False
@@ -491,6 +633,7 @@ def main(argv: list[str] | None = None) -> int:
             record=initial_live_record[1],
             train_prepared=completed_train,
         )
+    initial_snapshot = _catalog_snapshot(initial_snapshot, catalog_evidence)
     state = DashboardState(initial_snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
@@ -501,13 +644,14 @@ def main(argv: list[str] | None = None) -> int:
                     "view_only": True,
                     "venue_priors": 2,
                     "reserved_roots": "8 train / 6 development",
-                    "pp_materializations": "1/2" if completed_train else "0/2",
+                    "pp_materializations": "2/2",
                     "read_only_preflights": "2/2",
-                    "independent_audit": "approve_to_request_one_partition",
-                    "authorization_pending": "development" if completed_train else "train",
+                    "independent_audit": "catalog_integrity_review_pending",
+                    "authorization_pending": "outcomes_after_independent_review",
                     "maximum_completed_battles": 32,
                     "minimum_battle_headroom": 5,
-                    "frozen_menus": 0,
+                    "frozen_menus": 14,
+                    "catalog_sha256": catalog_sha256,
                     "outcome_collection_progress": "0/14",
                     "model_fit": False,
                     "teacher_queries": 0,
@@ -516,7 +660,7 @@ def main(argv: list[str] | None = None) -> int:
                     "crystal_cases_opened": 0,
                     "authority_promoted": False,
                     "private_path_fields": 0,
-                    "live_progress_monitor": monitor_root is not None,
+                    "live_progress_monitor": False,
                     "live_game_frame": False,
                 },
                 sort_keys=True,
@@ -525,22 +669,8 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_browser:
             webbrowser.open(dashboard.url)
         started = time.monotonic()
-        previous_live_record = initial_live_record
         try:
             while args.duration_seconds == 0 or time.monotonic() - started < args.duration_seconds:
-                if monitor_root is not None:
-                    live_record = _live_artifact_record(monitor_root, args.partition)
-                    if live_record != previous_live_record:
-                        state.publish(
-                            _live_snapshot(
-                                base_snapshot,
-                                partition=args.partition,
-                                status=live_record[0],
-                                record=live_record[1],
-                                train_prepared=completed_train,
-                            )
-                        )
-                        previous_live_record = live_record
                 time.sleep(0.25)
         except KeyboardInterrupt:
             pass

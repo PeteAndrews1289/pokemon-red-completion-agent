@@ -4,6 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **The first completion-aware input catalog is frozen (August 16, 2026).** Published source
+> `065c68a` passed exact GitHub CI run `31969641298` attempt 1. From that source, a read-only
+> re-inventory reproduced all 81 historical captures and added exactly the two accepted natural-PP
+> states. The official catalog contains **14 unanswered questions: 8 train / 6 untouched
+> development**, with teammate and venue choices in both partitions and 2–6 available candidates.
+>
+> The [path-free catalog receipt](docs/evidence/red-party-development-frozen-input-catalog-v1-result-2026-08-16.json)
+> binds the catalog, prospective projection, inventories, preparation journals, reservation,
+> cartridge context and two-prior registry. A typed reload and independent path/target scan pass.
+> Honest board: **priors 2 · roots 14 · PP states 2/2 · menus 14 · outcomes 0/14 · fits 0 ·
+> authority zero**. Next is independent input-integrity review. Opening answers, collecting
+> outcomes and fitting the first small model remain a later, separately authorized gate.
+
 > **Both natural-PP preparations are complete; the input catalog is next (August 16, 2026).** The
 > separately authorized development identity succeeded exactly once from the same frozen v4 source,
 > plan and CI attempt as train. It stopped at middle PP after 27 battles, 286 encounter steps, 1,339
@@ -15,9 +28,8 @@
 > binds the immutable artifact without exposing a private path or game identity. Both train and
 > development are consumed and cannot retry. Honest board: **priors 2 · roots 14 · PP states 2/2 ·
 > menus 0 · outcomes 0/14 · fits 0 · authority zero**. The catalog freezer has passed its focused
-> tests and a read-only private rehearsal; it must now be published, pass exact-head CI, and then
-> freeze the official path-free 8-train/6-development input catalog. No answer, teacher call or
-> model fit is part of that gate.
+> tests and a read-only private rehearsal; it was subsequently published, passed exact-head CI and
+> froze the official catalog recorded above. No answer, teacher call or model fit occurred.
 
 > **The train middle-PP preparation succeeded exactly once (August 16, 2026).** The owner authorized
 > train only from executable source `27e966b9230f254619d735cb3721eff202314089`, exact green CI run

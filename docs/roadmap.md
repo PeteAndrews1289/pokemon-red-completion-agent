@@ -8,6 +8,18 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): official 8+6 inputs frozen; outcomes closed
+
+Published source `065c68a` passed exact CI run `31969641298` attempt 1. Read-only re-inventory
+preserved the 81 historical captures and added exactly the two accepted PP states. The official
+catalog now binds 14 unanswered questions—8 train / 6 development, both choice kinds per partition,
+candidate widths 2–6—with file SHA `2f412460…` and semantic SHA `7f955e6a…`. Typed reload and
+path/target scans pass; every learning and authority counter is zero.
+
+Next: independent input-integrity audit, then separate owner authority for 8+6 outcome collection
+and one train-only fit. Do not open an answer during review. Counters are priors 2, PP states 2/2,
+menus 14, outcomes 0/14, fits 0 and authority 0.
+
 ## Current checkpoint (2026-08-16): both PP states passed; publish the input freezer
 
 Train and development each ran once under separate authorization from exact source `27e966b`, CI

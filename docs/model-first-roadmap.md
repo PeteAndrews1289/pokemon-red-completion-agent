@@ -6,6 +6,35 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: fourteen inputs frozen; independent review before outcomes
+
+Exact published source `065c68a` passed GitHub CI run `31969641298` attempt 1. The official
+read-only inventory preserved the historical 81 rows and added exactly the two accepted PP states.
+The resulting immutable catalog binds fourteen unique identity-free questions: 8 train / 6
+untouched development, both teammate and venue decisions in both partitions, all four completion
+goals, and 2–6 genuinely available candidates. Its file SHA is `2f412460…`, semantic SHA
+`7f955e6a…`, and identity-free prospective SHA `b308c063…`. Typed reload and path/target scans pass.
+
+The active sequence is now:
+
+1. **Complete:** freeze the exact published/CI-green input catalog with all answer and outcome
+   counters zero.
+2. **Active:** independently attack catalog joins, exclusions, retained feature bytes, partition
+   isolation and reconstruction. Reviewers may not execute an answer.
+3. Adjudicate only concrete findings with the smallest discriminating test; do not reopen prepared
+   identities or replace exposed questions.
+4. Ask the owner for a new, exact outcome-collection authorization covering eight train and six
+   untouched development questions.
+5. Collect outcomes once, fit once on train, and report descriptive development performance against
+   the preregistered baselines with authority still zero.
+6. If that gate is informative, adapt the same representation to Crystal. Grow the curriculum from
+   party/venue ranking toward story prerequisites, acquisition planning, evolution, trades and the
+   living-Pokédex ledger instead of scripting a second fixed playthrough.
+
+Honest counters are **priors 2 · roots 14 · PP states 2/2 · menus 14 · outcomes 0/14 · fits 0 ·
+authority 0**. This catalog is the first small completion-aware learning experiment, not a claim
+that the final cross-game agent already exists.
+
 ## Current checkpoint: both PP states passed; freeze inputs before opening answers
 
 Train and development each ran exactly once under separate owner authorization from source

@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the first completion-aware input catalog became immutable
+
+Catalog-freezer source `065c68a` passed exact GitHub CI run `31969641298` attempt one. The official
+read-only inventory then reproduced all 81 historical captures and added exactly the two accepted
+natural-PP states. From those authenticated inputs, the freezer produced fourteen unique questions:
+8 train and 6 untouched development, with both teammate and venue decisions represented in each
+partition and between two and six available candidates.
+
+The private file retains identity-free feature rows but no teacher answer or outcome. Its file SHA
+is `2f412460…`, semantic catalog SHA `7f955e6a…`, and prospective projection SHA `b308c063…`. A
+separate typed reload reproduced it byte-for-byte, while independent scans found no private path or
+choice-target field. Input and cartridge-adjacent hashes remained stable, and every control,
+prediction, outcome and authority counter stayed zero.
+
+This closes preparation without confusing it for training. The board is now **priors 2 · roots 14
+· PP states 2/2 · frozen menus 14 · outcomes 0/14 · fits 0 · authority 0**. The immutable questions
+must be attacked independently before a new owner authorization can open the 8+6 outcomes. Only
+then can the project fit once on train, measure untouched development generalization and decide
+whether the shared completion representation deserves a Crystal transfer test.
+
 ## August 16: both resource-pressure states exist; the input freezer is ready to publish
 
 The owner separately authorized development from the same exact v4 source, CI attempt and plan as

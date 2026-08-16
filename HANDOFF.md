@@ -17,6 +17,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Official 8+6 input catalog frozen; outcomes remain closed — 2026-08-16
+
+Catalog-freezer source `065c68af79ef71c69764f22229192a819d2965f3` was published and passed
+exact GitHub CI run `31969641298` attempt 1. From that clean identity, Codex repeated the read-only
+inventory. It preserved all 81 historical rows exactly and added only the two accepted prepared
+states, yielding file SHA `733326e3…` and semantic SHA `4e668c32…`. No controller input was sent.
+
+The official private input catalog then froze exactly fourteen unique questions: 8 train / 6
+development; 4/4 trainee/venue in train and 3/3 in development; all four completion goals in both
+partitions; available candidate widths 2, 5 and 6. It binds file SHA `2f412460…`, semantic catalog
+SHA `7f955e6a…` and prospective catalog SHA `b308c063…`. A separate typed reload reproduced the
+document byte-for-byte, verified every partition and candidate invariant, and found no private path
+or teacher/target/outcome field. All inputs and ROM-adjacent files remained unchanged.
+
+The
+[path-free receipt](docs/evidence/red-party-development-frozen-input-catalog-v1-result-2026-08-16.json)
+is the only public projection. Honest counters are **priors 2 · roots 14 · PP states 2/2 · frozen
+menus 14 · outcomes 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**. The next
+gate is independent input-integrity review only. Claude should attack joins, exclusion boundaries,
+feature retention and catalog reconstruction without opening an answer. Antigravity may receive a
+bounded public-safe transfer slice. Do not collect teacher choices/outcomes, fit, open sealed Red or
+Crystal, or replay. Those actions require new owner authority after review.
+
 ## Both natural-PP preparations succeeded; publish the catalog freezer — 2026-08-16
 
 The owner separately authorized exactly one development execution from source

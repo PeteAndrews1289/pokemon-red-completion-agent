@@ -7,6 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the questions are finally real
+
+The freezer was published, GitHub reproduced every check, and the project returned to the private
+states without pressing a button. It found the same 81 historical captures and exactly two new
+ones—the train and development PP states—then built **fourteen unanswered questions**. Eight belong
+to learning; six are held apart. Both halves ask which teammate should grow and where it should
+train. Some questions offer two choices, some five, and some the full six-member party.
+
+This is a quieter milestone than beating the Elite Four, but it is the first one that can support
+the model the project actually wants. Each row preserves numerical facts about balance, evolution,
+collection, roles, survivability, move resources and venue cost while omitting the checkpoint path,
+game identity, teacher answer and controller sequence. The whole file reloaded through its strict
+schema byte-for-byte. Its public projection passed a separate scan for paths and target fields.
+
+So the scoreboard moves once more: **two priors · fourteen roots · two PP states · fourteen menus ·
+zero outcomes · zero authority**. Nobody has peeked at an answer. Independent reviewers now get to
+attack the questions themselves. Only after that audit can the owner authorize the 8+6 outcome
+collection and the first small fit. That fit will not be “the Pokémon model”; it will be the first
+measurable completion-aware decision skill intended to transfer into Crystal and, eventually, a
+cross-game living-Pokédex planner.
+
 ## Current checkpoint: two keys, fourteen unanswered questions
 
 Development received its own key and turned once. From the same published source, green CI attempt

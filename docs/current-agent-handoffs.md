@@ -5,6 +5,26 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: audit the official input catalog; do not open answers
+
+Codex published the catalog freezer at `065c68a`, passed exact CI run `31969641298` attempt 1, and
+froze the official 14-question input catalog. It is exact 8 train / 6 untouched development, covers
+both trainee and venue choices in each partition, and offers 2–6 candidates. Typed reload,
+partition/count checks and path/target scans pass. No answer, outcome, teacher query, prediction,
+fit or authority was created.
+
+Codex remains the workhorse and adjudication owner. Its current job is to package the immutable,
+path-free audit evidence and repair only demonstrated catalog-integrity defects. Claude's role is
+now active: attack joins, exclusions, source/profile reconstruction, retained feature values and
+partition isolation without calculating or executing an answer. Antigravity's smaller role is to
+inspect a bounded public-safe slice for up to three representation assumptions likely to fail in
+Crystal. Neither agent authorizes outcomes, and Codex may disagree when a finding lacks a
+discriminating test.
+
+Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · outcomes 0/14 · fits 0 ·
+authority 0 · sealed Red 0 · Crystal 0 · replay 0**. After independent review, new owner authority
+is required before collecting the 8+6 outcomes or fitting once.
+
 ## Current override: publish and freeze the 8+6 input catalog
 
 Codex completed the separately authorized development preparation once. Together with the earlier
