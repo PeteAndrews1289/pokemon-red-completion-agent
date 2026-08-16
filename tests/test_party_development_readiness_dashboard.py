@@ -244,6 +244,9 @@ def test_current_dashboard_projects_the_frozen_catalog_review_gate() -> None:
     assert "Answers 0/14" in encoded
     assert "separately authorize 8+6 outcomes" in encoded
     assert "model fitting has not begun" in encoded
+    assert "frozen menus 0" not in encoded
+    assert "concrete frozen Red menus 0" not in encoded
+    assert "PP bins · train high" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

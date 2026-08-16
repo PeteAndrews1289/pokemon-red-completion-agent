@@ -379,12 +379,6 @@ def _catalog_snapshot(
     _receipt_digest(catalog, "catalog_file_sha256")
     _receipt_digest(catalog, "summary_file_sha256")
     _receipt_digest(freeze, "source_bundle_sha256")
-    retained_events = tuple(
-        event
-        for event in base.events
-        if not event.startswith("Next:")
-        and not event.startswith("Natural middle-PP preparations")
-    )
     return replace(
         base,
         run_status="waiting",
@@ -407,8 +401,14 @@ def _catalog_snapshot(
                 f"{prospective_sha256[:8]}…"
             ),
             f"Published freezer {source_commit[:7]} · CI {ci_run} attempt {ci_attempt}",
+            "Compatible venue priors 2/2 · both frozen before question construction",
+            "Goal coverage · balance, collection, evolution and role coverage in both partitions",
             "Answers 0/14 · teacher queries 0 · predictions 0 · model updates 0",
-            *retained_events[:16],
+            "Sealed Red 0 · Crystal 0 · full-game replays 0 · authority zero",
+            (
+                "Transfer target · validate the shared representation in Crystal before "
+                "expanding toward the cross-game living Pokédex"
+            ),
             (
                 "Next: independent input-integrity review, then separately authorize 8+6 "
                 "outcomes and one train-only fit"
