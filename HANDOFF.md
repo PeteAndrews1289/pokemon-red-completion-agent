@@ -17,6 +17,55 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Exact 14/55 outcome collector implemented; publication is the live gate — 2026-08-16
+
+Codex implemented the catalog-wide campaign that the prior readiness review proved was missing.
+The important distinction is unchanged: there are fourteen learner questions but fifty-five
+one-shot candidate executions. Every candidate reloads its question's exact state, binds one
+private trainee lineage and one frozen venue, then receives four completed wild battles under one
+deterministic safety policy. The executor cannot choose a different trainee or venue mid-dose.
+Automatic level evolution and party-slot changes retain the original specimen binding.
+
+The hard per-trial ceilings are 2,500 encounter steps, 100,000 controller actions, 1,500,000
+frames, four healing trips including cleanup, sixteen rotations and zero faints. A new Cinnabar
+Center adapter normalizes the authenticated PC-counter boundary to the already measured nurse
+boundary before Route 11/Cave travel; any unknown Center stance refuses before movement. This
+closed the only real-state reconstruction blocker without teaching a new route.
+
+Every assignment has an immutable digest and trial ID. The private artifact store synchronizes a
+claim before `_execute_trial` can send input. A caught runtime error writes an invalid terminal and
+stops. A process loss can leave a claim without a terminal; the next invocation converts it to a
+censored terminal and never reruns it. Terminal documents cross-check the exact claim, candidate,
+status, objective values, action/frame/battle/step/heal/rotation/faint counters and detailed
+evidence. Duplicate JSON keys, non-finite values, Boolean-as-zero substitutions, hidden fields,
+changed protected inputs and new ROM sidecars fail closed. The freezer writes a new 0600 plan
+exclusively and now rereads its protected inputs immediately before and after publication.
+
+The view-only dashboard at its usual local port can accept the later campaign plan and private
+artifact root. It then polls only immutable claim/terminal records and reports trial, question,
+partition, status, action, frame, battle, step, recovery and rotation totals. It never exposes
+species, venue values or paths and has no controller endpoint. `--watch` remains the separate live
+game window.
+
+Focused collector, trainer, route, result and dashboard coverage is 221/221, with lint and mypy
+green. A real read-only development rehearsal reopened all fourteen retained Red starts and rebuilt
+all fifty-five trainee/venue bindings: 8 train / 6 development, protected files unchanged, ROM
+sidecars unchanged and controller/teacher/model/outcome counters all zero. Because the working tree
+was not yet published, this is a falsifier result rather than official preflight evidence.
+
+The accepted Cave run remains historical evidence only at its measured source. This new fixed-dose
+runtime intentionally invalidates its former byte-identical-current-source attestation. Its frozen
+prior can reconstruct the catalog's old feature menu, but it authorizes and replaces none of the
+fifty-five newly required outcomes.
+
+The next operator sequence is strict: run the full local gate; regenerate source-bound registries;
+publish the exact tree; require its exact GitHub CI attempt to pass; freeze one new external plan;
+run the official read-only 14/55 preflight; let Claude attack that immutable packet; then ask the
+owner for exact campaign authorization. Do not execute a trial, fit a model, open sealed Red or
+Crystal, or replay the game before that authorization. After collection, fit train only and leave
+all six development questions untouched. Current board: **trials 0/55 · complete examples 0/14 ·
+fits 0 · authority 0**.
+
 ## Frozen input integrity verified; build the missing outcome collector — 2026-08-16
 
 Codex published a separate fail-closed catalog verifier at

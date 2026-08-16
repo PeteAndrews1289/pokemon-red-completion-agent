@@ -33,6 +33,7 @@ from pokemon_red_completion.party_development_adapter import (
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
 )
+from pokemon_red_completion.party_development_outcomes import PartyCompletionSnapshot
 from pokemon_red_completion.party_development_question_reservations import (
     PartyDevelopmentContextPreparation,
     PartyDevelopmentQuestionReservation,
@@ -383,6 +384,101 @@ def preflight_red_party_development_question(
     )
 
 
+def red_party_completion_snapshot(
+    observation: RedGoalObservation,
+    *,
+    evolutions: Mapping[int, tuple[Evolution, ...]],
+    policy: BalancedTeamPolicy,
+    collection_contract: CollectionContract = RED_SOLO_COLLECTION_CONTRACT,
+    roster: TeamRosterPlan = RED_BALANCED_ROSTER,
+    trade_available: bool = False,
+) -> PartyCompletionSnapshot:
+    """Project verifier counters at one stable Red execution boundary.
+
+    This is intentionally smaller than candidate construction: an outcome may
+    change HP, PP, party order, level, and species, but the verifier needs only
+    completion counts and remaining deficits.  Recomputing those facts from the
+    live post-dose observation avoids carrying the frozen candidate's answer
+    into its own outcome.
+    """
+
+    if not isinstance(observation, RedGoalObservation):
+        raise TypeError("observation must be a RedGoalObservation")
+    if not isinstance(policy, BalancedTeamPolicy):
+        raise TypeError("policy must be a BalancedTeamPolicy")
+    if not isinstance(collection_contract, CollectionContract):
+        raise TypeError("collection_contract must be a CollectionContract")
+    if not isinstance(roster, TeamRosterPlan):
+        raise TypeError("roster must be a TeamRosterPlan")
+    if not isinstance(trade_available, bool):
+        raise TypeError("trade_available must be boolean")
+    if (
+        not observation.raw.game_started
+        or observation.raw.battle_state != 0
+        or not observation.input_ready
+        or observation.raw.bag_items is None
+    ):
+        raise RedPartyDevelopmentAdapterError(
+            "Red party completion snapshot requires stable ready overworld control"
+        )
+    _require_party_matches_raw(observation)
+    _require_collection_matches_party(observation)
+    _require_evolution_graph(evolutions)
+
+    collection = observation.collection_observation
+    owned = set(collection.owned_species)
+    specimen_counts = Counter(item.species_ref for item in collection.specimens)
+    living_targets = set(collection_contract.resolved_living_target_species)
+    registration_targets = set(collection_contract.target_species)
+    missing_registration = {
+        red_species_number(item) for item in registration_targets - owned
+    }
+    missing_living = {
+        red_species_number(item)
+        for item in living_targets
+        if specimen_counts[item] == 0
+    }
+    roster_internal = set(roster.species_ids)
+    roster_national = {
+        red_internal_species_number(species_id) for species_id in roster_internal
+    }
+    present_national = {
+        red_internal_species_number(member.species_id)
+        for member in observation.party.members
+    }
+    missing_roles = roster_national - present_national
+    inventory = dict(observation.raw.bag_items)
+    evolution_steps = 0
+    for member in observation.party.members:
+        national = red_internal_species_number(member.species_id)
+        descendants = _descendant_distances(national, evolutions)
+        required_targets = (
+            missing_registration | missing_living | missing_roles
+        ) & set(descendants)
+        evolution_steps += _evolution_semantics(
+            member,
+            national_species=national,
+            evolutions=evolutions,
+            required_targets=required_targets,
+            inventory=inventory,
+            trade_available=trade_available,
+        ).stages_remaining
+    report = summarize_collection(collection_contract, collection)
+    return PartyCompletionSnapshot(
+        registered_target_count=report.pokedex_owned_count,
+        registration_target_total=report.target_count,
+        living_target_count=report.living_count,
+        living_target_total=report.living_target_count,
+        role_coverage_count=len(roster_internal & set(observation.party.species_ids())),
+        role_target_total=len(roster.slots),
+        evolution_steps_remaining=evolution_steps,
+        level_floor_deficit=sum(
+            max(0, policy.minimum_level - member.level)
+            for member in observation.party.members
+        ),
+    )
+
+
 def _member_profile(
     member: PartyMemberObservation,
     *,
@@ -695,4 +791,5 @@ __all__ = [
     "RedPartyDevelopmentQuestionPreflight",
     "build_red_party_development_snapshot",
     "preflight_red_party_development_question",
+    "red_party_completion_snapshot",
 ]

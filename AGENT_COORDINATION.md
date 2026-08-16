@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-16 collector implementation checkpoint — highest active checkpoint:** Codex has built
+> the exact 14-question / 55-trial completion-aware outcome campaign. Every candidate receives a
+> fixed four-battle clone dose; claims precede input; failures remain invalid; interruptions become
+> censored; consumed identities cannot retry. Focused coverage is 221/221, and a real development
+> read-only reconstruction covered all 14 questions and 55 private bindings with every action,
+> teacher, prediction and outcome counter at zero. The dashboard now follows the immutable ledger
+> without exposing private identities or controlling the game.
+>
+> Codex remains sole implementer and publisher. Its current lane is full qualification, registry
+> refresh, publication, exact-head CI, one external plan freeze and official read-only preflight.
+> It then stops for Claude's path-free authorization audit and the owner's exact authorization.
+> Claude may reject a concrete defect but may not execute or grant authority. Antigravity stays
+> idle until Red development results exist, then challenges at most three transfer assumptions.
+> Honest board: **trials 0/55 · complete examples 0/14 · fits 0 · authority 0**.
+
 > **2026-08-16 frozen-input audit passed — highest active checkpoint:** Codex published the
 > fail-closed verifier at `e849e4331e116254804f448ff4b91c20504becf7`; exact CI run
 > `31973374921` attempt 1 passed. The official read-only audit reconstructed all 14

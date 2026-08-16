@@ -1,17 +1,27 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import runpy
 from copy import deepcopy
 from pathlib import Path
 
 import pytest
+from test_party_development_outcome_campaign import _plan
+from test_party_development_outcome_results import _result
 
+from pokemon_red_completion.party_development_outcome_campaign import (
+    PartyDevelopmentOutcomeTrialClaim,
+)
+from pokemon_red_completion.party_development_outcome_results import (
+    build_party_development_trial_terminal,
+)
 from pokemon_red_completion.party_development_readiness_dashboard import (
     PARTY_DEVELOPMENT_READINESS_EVIDENCE_SCHEMA,
     PARTY_DEVELOPMENT_READINESS_STATUS,
     party_development_readiness_dashboard_snapshot,
 )
+from pokemon_red_completion.private_artifacts import initialize_private_root
 from pokemon_red_completion.progress_dashboard import ProgressDashboardError
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -167,6 +177,8 @@ def test_readiness_dashboard_script_uses_a_separate_local_port() -> None:
     assert args.duration_seconds == 1
     assert args.private_artifact_root is None
     assert args.partition == "train"
+    assert args.campaign_plan is None
+    assert args.campaign_plan_file_sha256 is None
     assert SCRIPT["EVIDENCE_PATH"].name == ("party-development-v2-readiness-2026-08-16.json")
     assert SCRIPT["V4_EVIDENCE_PATH"].name == (
         "red-party-development-pp-materialization-v4-preflight-2026-08-16.json"
@@ -177,6 +189,29 @@ def test_readiness_dashboard_script_uses_a_separate_local_port() -> None:
     assert SCRIPT["CATALOG_AUDIT_EVIDENCE_PATH"].name == (
         "red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json"
     )
+
+
+def test_campaign_dashboard_loads_only_the_exact_external_plan(tmp_path: Path) -> None:
+    plan = _plan()
+    path = tmp_path / "campaign.json"
+    payload = (
+        json.dumps(
+            plan.private_dict(),
+            allow_nan=False,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
+    path.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+
+    assert SCRIPT["_load_campaign_plan"](path, digest) == plan
+    with pytest.raises(ProgressDashboardError, match="bytes are invalid"):
+        SCRIPT["_load_campaign_plan"](path, "0" * 64)
+    with pytest.raises(ProgressDashboardError, match="supplied together"):
+        SCRIPT["_load_campaign_plan"](path, None)
 
 
 def test_tracked_readiness_evidence_loads_into_honest_snapshot() -> None:
@@ -309,6 +344,100 @@ def test_current_dashboard_rejects_a_false_catalog_audit_claim() -> None:
             ),
             evidence,
         )
+
+
+def _campaign_dashboard_base():
+    return SCRIPT["_audited_catalog_snapshot"](
+        SCRIPT["_catalog_snapshot"](
+            SCRIPT["_current_snapshot"](
+                SCRIPT["_load_evidence"](),
+                SCRIPT["_load_v4_evidence"](),
+            ),
+            SCRIPT["_load_catalog_evidence"](),
+        ),
+        SCRIPT["_load_catalog_audit_evidence"](),
+    )
+
+
+def _campaign_store(tmp_path: Path):
+    repository = tmp_path / "repository"
+    private = tmp_path / "private"
+    repository.mkdir()
+    private.mkdir()
+    return initialize_private_root(
+        private,
+        repository_root=repository,
+        allow_same_device=True,
+        git_worktree_probe=lambda _path: False,
+    )
+
+
+def test_campaign_dashboard_tracks_the_one_shot_trial_ledger(tmp_path: Path) -> None:
+    plan = _plan()
+    store = _campaign_store(tmp_path)
+    base = _campaign_dashboard_base()
+
+    waiting = SCRIPT["_campaign_snapshot"](base, plan, store).public_dict()
+    assert waiting["run_status"] == "waiting"
+    assert waiting["experiment"]["zero_shot"] == {  # type: ignore[index]
+        "completed": 0,
+        "total": 55,
+    }
+    assert waiting["experiment"]["adaptation"] == {  # type: ignore[index]
+        "completed": 0,
+        "total": 14,
+    }
+
+    first_assignment = plan.assignments[0]
+    first_claim = PartyDevelopmentOutcomeTrialClaim.build(plan, first_assignment)
+    store.publish_sealed_record(
+        f"{first_assignment.trial_id}-claim",
+        kind=SCRIPT["_CAMPAIGN_CLAIM_KIND"],
+        record=first_claim.private_dict(),
+    )
+    running = SCRIPT["_campaign_snapshot"](base, plan, store).public_dict()
+    assert running["run_status"] == "running"
+    assert "Trial 1/55" in running["location"]
+    assert "consumed" in json.dumps(running, ensure_ascii=False)
+
+    for ordinal in range(1, 7):
+        assignment = plan.assignments[ordinal - 1]
+        result, evidence = _result(ordinal)
+        claim = PartyDevelopmentOutcomeTrialClaim.build(plan, assignment)
+        if ordinal > 1:
+            store.publish_sealed_record(
+                f"{assignment.trial_id}-claim",
+                kind=SCRIPT["_CAMPAIGN_CLAIM_KIND"],
+                record=claim.private_dict(),
+            )
+        store.publish_sealed_record(
+            f"{assignment.trial_id}-terminal",
+            kind=SCRIPT["_CAMPAIGN_TERMINAL_KIND"],
+            record=build_party_development_trial_terminal(
+                result,
+                evidence=evidence,
+            ),
+        )
+
+    progressed = SCRIPT["_campaign_snapshot"](base, plan, store).public_dict()
+    assert progressed["run_status"] == "running"
+    assert progressed["stage_progress"] == 6 / 55
+    assert progressed["actions"] == 2_400
+    assert progressed["frame_count"] == 240_000
+    assert progressed["experiment"]["zero_shot"] == {  # type: ignore[index]
+        "completed": 6,
+        "total": 55,
+    }
+    assert progressed["experiment"]["adaptation"] == {  # type: ignore[index]
+        "completed": 1,
+        "total": 14,
+    }
+    encoded = json.dumps(progressed, sort_keys=True, ensure_ascii=False)
+    assert "measured 6 · invalid 0 · censored 0" in encoded
+    assert "Teacher 0 · predictions 0 · updates 0 · fits 0" in encoded
+    assert "No retry" in encoded
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
 
 
 def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:

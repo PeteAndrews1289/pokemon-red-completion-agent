@@ -55,6 +55,7 @@ from pokemon_red_completion.red_party import (
 from pokemon_red_completion.red_team_training import (
     ESCORT_LEVEL_CAP,
     VENUE_MISMATCH_FLEES,
+    FixedPartyTrainingDose,
     TeamTrainingExecutionSummary,
     run_red_team_balancing,
     switch_active_battler,
@@ -483,6 +484,150 @@ def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
         "traversal_excluded_transition_skips": 0,
         "traversal_no_progress_cycles": 0,
     }
+
+
+def test_fixed_party_training_dose_runs_exact_battles_without_reselecting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 50),
+            (DUX_SPECIES_ID, 20),
+            (DIGLETT_SPECIES_ID, 22),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    battles: list[str] = []
+    monkeypatch.setattr(
+        red_team_training,
+        "run_adaptive_wild_battle",
+        lambda *_args, **_kwargs: battles.append("complete"),
+    )
+    summaries: list[TeamTrainingExecutionSummary] = []
+    candidate_decisions: list[TrainingCandidateDecision] = []
+
+    report, completed, healing = run(
+        memory,
+        FakeReader(
+            [
+                state(
+                    battle_state=1,
+                    enemy_level=10,
+                    enemy_species_id=0x21,
+                )
+            ]
+        ),
+        policy=BalancedTeamPolicy(
+            minimum_level=60,
+            maximum_level_spread=50,
+            required_size=6,
+            max_battles=4,
+            max_steps=100,
+            max_healing_trips=3,
+            max_faints=0,
+        ),
+        fixed_dose=FixedPartyTrainingDose(
+            trainee_species_lineage=(BLASTOISE_SPECIES_ID,),
+            venue_identity=GrindingArea(
+                area_id="test_area",
+                minimum_encounter_level=1,
+                maximum_encounter_level=10,
+                rare_maximum_encounter_level=10,
+                measured_samples=100,
+            ).identity,
+            completed_battles=4,
+        ),
+        candidate_decision_sink=candidate_decisions.append,
+        execution_summary_sink=summaries.append,
+    )
+
+    assert report is not None and not report.passed
+    assert completed == 4
+    assert healing == 1
+    assert battles == ["complete"] * 4
+    assert candidate_decisions == []
+    assert memory.swaps == []
+    assert summaries[0].progress.battles_completed == 4
+    assert summaries[0].cleanup_trips == 1
+
+
+def test_fixed_party_training_dose_rejects_an_ambiguous_trainee_before_input() -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 50),
+            (DUGTRIO_SPECIES_ID, 20),
+            (DIGLETT_SPECIES_ID, 22),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    executor = FakeExecutor(memory)
+
+    with pytest.raises(RuntimeError, match="trainee is not uniquely bound"):
+        run_red_team_balancing(
+            executor,  # type: ignore[arg-type]
+            FakeReader([state()]),  # type: ignore[arg-type]
+            memory,  # type: ignore[arg-type]
+            **balancing_kwargs(
+                fixed_dose=FixedPartyTrainingDose(
+                    trainee_species_lineage=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+                    venue_identity=GrindingArea(
+                        area_id="test_area",
+                        minimum_encounter_level=1,
+                        maximum_encounter_level=10,
+                        rare_maximum_encounter_level=10,
+                        measured_samples=100,
+                    ).identity,
+                    completed_battles=4,
+                )
+            ),  # type: ignore[arg-type]
+        )
+
+    assert executor.actions_executed == 0
+
+
+def test_fixed_party_training_dose_rejects_a_nonexistent_venue_before_input() -> None:
+    memory = FakeMemory()
+    memory.set_party([(species, 50) for species in FINAL_FORM_ROSTER])
+    executor = FakeExecutor(memory)
+
+    with pytest.raises(RuntimeError, match="venue is not uniquely executable"):
+        run_red_team_balancing(
+            executor,  # type: ignore[arg-type]
+            FakeReader([state()]),  # type: ignore[arg-type]
+            memory,  # type: ignore[arg-type]
+            **balancing_kwargs(
+                fixed_dose=FixedPartyTrainingDose(
+                    trainee_species_lineage=(BLASTOISE_SPECIES_ID,),
+                    venue_identity=("not-a-real-venue", ()),
+                    completed_battles=4,
+                )
+            ),  # type: ignore[arg-type]
+        )
+
+    assert executor.actions_executed == 0
+
+
+@pytest.mark.parametrize(
+    "dose",
+    [
+        ((1, 1), ("venue", ()), 4),
+        ((0,), ("venue", ()), 4),
+        ((1,), ("", ()), 4),
+        ((1,), ("venue", ()), 0),
+    ],
+)
+def test_fixed_party_training_dose_rejects_invalid_bindings(
+    dose: tuple[tuple[int, ...], tuple[str, tuple[str, ...]], int],
+) -> None:
+    with pytest.raises(ValueError, match="fixed training dose"):
+        FixedPartyTrainingDose(*dose)
 
 
 def test_execution_summary_rejects_an_incomplete_healing_phase_breakdown() -> None:

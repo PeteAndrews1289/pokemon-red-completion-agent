@@ -183,6 +183,83 @@ def test_mansion_and_gym_routes_are_source_and_live_stable() -> None:
     assert frozenset({0x37, 0x8F}) == MANSION_VOLATILE_ENEMY_SPECIES
 
 
+def test_training_travel_normalizes_cinnabar_pc_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(True, MapId.CINNABAR_POKECENTER, 13, 4, 6, 0)
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    moves: list[tuple[tuple[str, ...], str]] = []
+
+    def move(_actions, active_reader, route, label, **_kwargs) -> None:
+        moves.append((tuple(route), label))
+        if label == "normalize Cinnabar PC boundary":
+            active_reader.raw = replace(active_reader.raw, player_x=3, player_y=3)
+        elif label == "exit Cinnabar Center":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.CINNABAR_ISLAND,
+                player_x=11,
+                player_y=12,
+            )
+
+    def fly(_actions, active_reader, _emulator) -> None:
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    monkeypatch.setattr(blaine_module, "_move", move)
+    monkeypatch.setattr(blaine_module, "_field_fly_to_vermilion_from_cinnabar", fly)
+
+    blaine_module._training_dig_to_vermilion(object(), reader, object())
+
+    assert moves == [
+        (blaine_module.VERMILION_PC_TO_NURSE, "normalize Cinnabar PC boundary"),
+        (("down",) * 5, "exit Cinnabar Center"),
+    ]
+    assert (reader.raw.map_id, reader.raw.player_x, reader.raw.player_y) == (
+        MapId.VERMILION_CITY,
+        11,
+        4,
+    )
+
+
+@pytest.mark.parametrize(
+    ("map_id", "position"),
+    [
+        (MapId.CINNABAR_POKECENTER, (4, 3)),
+        (MapId.SAFFRON_POKECENTER, (13, 4)),
+    ],
+)
+def test_training_travel_refuses_unknown_center_boundary_before_input(
+    monkeypatch: pytest.MonkeyPatch,
+    map_id: MapId,
+    position: tuple[int, int],
+) -> None:
+    class Reader:
+        def read(self) -> RawGameState:
+            return RawGameState(True, map_id, *position, 6, 0)
+
+    moves: list[object] = []
+    monkeypatch.setattr(
+        blaine_module,
+        "_move",
+        lambda *_args, **_kwargs: moves.append(object()),
+    )
+
+    with pytest.raises(BlaineChapterError, match="refused an unknown"):
+        blaine_module._training_dig_to_vermilion(object(), Reader(), object())
+
+    assert moves == []
+
+
 def test_mansion_only_runner_stops_before_training_and_blaine() -> None:
     tree = ast.parse(
         textwrap.dedent(inspect.getsource(blaine_module.run_mansion_secret_key_chapter))

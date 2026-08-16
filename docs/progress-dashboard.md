@@ -235,25 +235,29 @@ attempts, excluded-transition skips and no-progress cycles in their own summarie
 
 ## Show the completion-aware party-learning readiness gate
 
-This is the current page. It is deliberately separate from the historical dashboard on port 8765
-and uses only the tracked, path-free readiness receipt. It does not load a ROM or private state,
-query a teacher, make a prediction, execute a candidate, fit a model or expose a controller.
+This is the current page. It is deliberately separate from the historical dashboard on port 8765.
+Without campaign arguments it uses only tracked, path-free readiness, frozen-catalog and
+independent-audit receipts. It does not load a ROM or private state, query a teacher, make a
+prediction, execute a candidate, fit a model or expose a controller.
 
 ```sh
 source .venv/bin/activate
 python scripts/run_party_development_readiness_dashboard.py --no-browser
 ```
 
-Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, the 81-checkpoint
-read-only pool and the exact current gate: 0/8 train outcomes, 0/6 untouched development outcomes,
-catalog unfrozen, concrete Red menus absent, two compatible venue priors frozen, natural PP states
-0/2, completion-aware fit false and authority zero. Its event list shows the reserved 8+6 split,
-the two missing resource states, the exact per-source execution caps and the prohibited operations
+Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, both completed
+natural-PP preparations, the frozen 8-train/6-development catalog and its independent
+reconstruction audit. The current board is 14 verified questions, 55 required candidate trials,
+0/55 terminals, 0/14 complete menus, fit false and authority zero. Its event list shows menu shape,
+feature diversity, partition isolation, mutation/forgery rejection and prohibited operations
 without exposing checkpoint, species, map, slot or private-path identities. The underlying receipts
-are the
+include the
 [prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
 [checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
-[current readiness snapshot](evidence/party-development-v2-readiness-2026-08-16.json). The earlier
+[current readiness snapshot](evidence/party-development-v2-readiness-2026-08-16.json), plus the
+[frozen catalog](evidence/red-party-development-frozen-input-catalog-v1-result-2026-08-16.json) and
+[independent audit](evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json).
+The earlier
 [input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json),
 [join-hardening qualification](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
 and [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json)
@@ -283,10 +287,28 @@ records 27 battles, 53/80 final PP and zero learner/model access. The dashboard 
 the completed train receipt. In development-monitor mode it authenticates the path-free train
 terminal, resets the live action/frame counters to zero and waits at 50% for the independent gate.
 
-Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
-after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,
-Crystal, full-replay and authority counters remain independent; none may move merely because a
-training fit completed.
+After an exact campaign plan is frozen and separately authorized, start the same page with both the
+plan and immutable artifact ledger:
+
+```sh
+python scripts/run_party_development_readiness_dashboard.py \
+  --no-browser \
+  --campaign-plan /private/campaign-plan.json \
+  --campaign-plan-file-sha256 <exact-64-character-sha256> \
+  --private-artifact-root /private/artifact/root
+```
+
+This mode polls only sealed claims and terminals. It reports claimed, measured, invalid and
+censored trials; completed train/development menus; cumulative battles, steps, actions, frames,
+heals and rotations; the current consumed trial; exact per-trial bounds; and the no-retry rule.
+It never displays the private trainee or venue binding. The authorized campaign runner's
+`--watch` option supplies the separate live emulator window; the browser dashboard remains an
+observer and intentionally has no game-control endpoint.
+
+Future authenticated collection may advance only its 0/55 trial and 0/14 complete-menu counters.
+A fitted model may appear only after usable train menus are complete, and it may fit on train only.
+Sealed Red, Crystal, full-replay and authority counters remain independent; none may move merely
+because a training fit completed.
 
 ## What it shows
 

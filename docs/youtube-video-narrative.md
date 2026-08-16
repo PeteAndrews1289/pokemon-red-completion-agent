@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: fifty-five lanes, no reroll button
+
+Start with the fourteen face-down cards, then fan every candidate into its own lane until the board
+reads **14 QUESTIONS → 55 CLONED TRIALS**. Put the same four-battle token on every lane. Lock two
+labels before each start: **TRAINEE LINEAGE** and **VENUE**. When the Pokémon changes party slots or
+evolves, animate the lineage lock following it.
+
+Show the safety rail: **2,500 STEPS · 100,000 ACTIONS · 1,500,000 FRAMES · 4 HEALS · 16 ROTATIONS
+· 0 FAINTS**. Then stamp **DURABLE CLAIM** before the controller cable lights. Break one lane and
+stamp it **INVALID—NO RETRY**. Cut power on another and stamp it **CENSORED—NO RETRY**. Let the
+remaining untouched lanes stay available.
+
+Bring up the new dashboard with counters for **CLAIMS · TERMINALS · MEASURED · INVALID · CENSORED
+· COMPLETE MENUS · TRAIN 0/8 · DEVELOPMENT 0/6**. Put the live game in the neighboring emulator
+window and keep **VIEW ONLY** across the dashboard. Run the test montage: **221 FOCUSED GREEN**,
+then **REAL INPUT RECONSTRUCTION 14/14 · BINDINGS 55/55 · CONTROLLER 0**.
+
+End before gameplay. Keep the final locks visible: **PUBLISH → EXACT CI → FREEZE PLAN → READ-ONLY
+PREFLIGHT → CLAUDE ATTACK → OWNER AUTHORIZATION**. Narration: **“We built the machine that can
+create the first honest completion-aware lesson. We still refused to call the empty ledger
+training data.”** Final board: **OUTCOMES 0/55 · EXAMPLES 0/14 · FITS 0 · AUTHORITY 0**.
+
 ## August 16 scene: verify the questions without turning over the cards
 
 Open on fourteen face-down cards split **8 TRAIN / 6 DEVELOPMENT**. Put the original freezer on

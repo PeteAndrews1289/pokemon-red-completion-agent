@@ -8,6 +8,20 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): the exact collector exists; publication is next
+
+The catalog-wide collector now represents all fourteen frozen menus as 55 independent candidate
+trials. It fixes each trainee lineage and venue for four battles, bounds every resource, durably
+claims before input, retains invalid/censored terminals and forbids retries. The view-only dashboard
+can follow the ledger. Focused coverage passes 221 tests, and a working-source read-only pass
+reconstructed all 14/55 real bindings without controller, teacher, model or outcome access.
+
+Next: run the complete gate and regenerate source-bound registries; publish; require exact-head
+green CI; freeze one external plan; repeat the full read-only preflight under real publication/CI
+guards; then seek exact owner authorization. No tracked checkpoint authorizes execution. Fit only
+the eight train examples after collection and keep the six development examples untouched.
+Counters remain trials 0/55, complete examples 0/14, fits 0 and authority 0.
+
 ## Current checkpoint (2026-08-16): input audit passed; collector is the active build
 
 Separate verifier source `e849e43` passed exact CI run `31973374921` attempt 1 and reconstructed

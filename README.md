@@ -4,6 +4,27 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **The catalog-wide Red outcome collector now exists; no outcome has run (August 16, 2026).**
+> The new campaign expands the 14 frozen questions into their real execution denominator: **55
+> independent candidate trials**. Every candidate reloads the same frozen start, keeps its selected
+> trainee lineage and venue fixed, and receives the same four-completed-battle dose. Hard limits
+> independently cap encounter steps, controller actions, frames, healing trips, rotations and
+> faints.
+>
+> A trial identity is durably claimed before input. A runtime failure remains invalid, an
+> interrupted claim becomes censored, and neither can be retried into success. Terminal evidence
+> binds the exact plan, assignment, claim, counters and completion-aware objective values. The
+> view-only dashboard can now follow claimed, measured, invalid, censored and complete-menu counts
+> during a future authorized campaign while the emulator's watch window shows the game.
+>
+> The focused integration slice passes **221 tests**, lint and type checking. A development-only
+> read-only reconstruction against the real retained cartridge inputs rebuilt **14/14 questions
+> and 55/55 private trainee/venue bindings** with all protected files unchanged. It ticked no game,
+> sent no input and opened no answer. This is implementation qualification, not official execution
+> evidence: publication, exact-head green CI, a frozen private campaign plan and official read-only
+> preflight still precede owner authorization. Honest board: **trials 0/55 · complete examples
+> 0/14 · fits 0 · teacher 0 · model 0 · authority zero**.
+
 > **The frozen Red inputs now pass an independent reconstruction gate (August 16, 2026).** A
 > separate verifier was published at `e849e43`, passed exact GitHub CI run `31973374921` attempt 1,
 > and then reopened the frozen catalog read-only. It reconstructed all **14 reservation, capture,

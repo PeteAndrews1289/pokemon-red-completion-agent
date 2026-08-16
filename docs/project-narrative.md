@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: fourteen questions became fifty-five honest experiments
+
+The missing runner is no longer a sketch. The project now treats each of the fourteen frozen menus
+as a set of counterfactuals, not as one teacher answer. That expands the first completion-aware
+lesson into **55 independent cloned trials**. In each one, a single trainee lineage and a single
+venue are fixed before play, the cartridge receives four completed battles, and completion,
+experience, safety, recovery and cost are measured afterward.
+
+This is deliberately not imitation learning. The collector never asks the teacher which button to
+press and never lets a model steer the run. It uses deterministic mechanics to create comparable
+outcomes for high-level choices: which teammate should receive development, or which evidence-backed
+venue is the better place to do it. Later, a scorer can learn those rankings from train examples
+without learning Red's arrow sequence.
+
+The unglamorous details are what make the dataset believable. The claim is on disk before the first
+button. A crash consumes and censors that trial. A normal failure stays invalid. Neither can be
+rerolled. A Pokémon remains the same candidate if its party slot changes or it evolves. Unknown
+Pokémon Center stances stop before movement. The plan freezer rereads its source inputs; terminal
+records reject ambiguous JSON, disguised Booleans and contradictory re-hashed evidence.
+
+The same local dashboard that once showed only readiness can now follow the campaign ledger: claims,
+terminal states, complete menus, partitions, battles, steps, actions, frames, heals and rotations.
+The emulator watch window supplies the game view; the dashboard remains view-only.
+
+The focused slice passes 221 tests. More importantly, the actual retained Red inputs were reopened
+read-only and all **14 questions / 55 private bindings** reconstructed again without ticking the
+game. Nothing has been trained yet. Publication, exact CI, one frozen plan, official preflight,
+independent review and owner authorization remain between implementation and the first outcome.
+The board therefore stays honest: **trials 0/55 · complete examples 0/14 · fits 0 · authority 0**.
+
 ## August 16: fourteen face-down questions survived reconstruction
 
 Freezing a dataset is not the same as proving it says what its label claims. A second published

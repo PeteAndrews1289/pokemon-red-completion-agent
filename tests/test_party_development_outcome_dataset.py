@@ -65,10 +65,11 @@ def _example(
     health: float,
     pp: float,
     route: EvolutionRouteKind,
+    candidate_count: int = 3,
 ) -> ScenarioOutcomeExample:
     candidates = []
     outcomes = []
-    for candidate_index in range(3):
+    for candidate_index in range(candidate_count):
         features = [0.0] * len(PARTY_DEVELOPMENT_FEATURE_NAMES)
         features[_feature_index("choice.trainee")] = float(kind is TrainingChoiceKind.TRAINEE)
         features[_feature_index(f"context.goal.{goal.value}")] = 1.0
@@ -86,7 +87,7 @@ def _example(
         features[_feature_index("venue.prior_recovery_cost")] = 0.125
         features[_feature_index("venue.prior_support")] = 1 / 64
         candidates.append(OutcomeCandidate(candidate_index, tuple(features)))
-        outcomes.append(_outcome(candidate_index == index % 3))
+        outcomes.append(_outcome(candidate_index == index % candidate_count))
     prefix = "train" if partition is ScenarioPartition.TRAIN else "development"
     digest_character = "0123456789abcdef"[index]
     return ScenarioOutcomeExample(
@@ -102,7 +103,13 @@ def _example(
     )
 
 
-def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
+def _ready_catalog(
+    *,
+    candidate_widths: tuple[int, ...] | None = None,
+) -> tuple[ScenarioOutcomeExample, ...]:
+    widths = candidate_widths or (3,) * 14
+    if len(widths) != 14:
+        raise ValueError("candidate widths must cover all fourteen examples")
     examples = []
     for index in range(8):
         examples.append(
@@ -118,6 +125,7 @@ def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
                 health=0.1 if index < 4 else 0.9,
                 pp=0.2 if index < 4 else 0.8,
                 route=(EvolutionRouteKind.LEVEL if index < 4 else EvolutionRouteKind.NONE),
+                candidate_count=widths[index],
             )
         )
     for index in range(8, 14):
@@ -134,6 +142,7 @@ def _ready_catalog() -> tuple[ScenarioOutcomeExample, ...]:
                 health=0.1 if index < 11 else 0.9,
                 pp=0.2 if index < 11 else 0.8,
                 route=(EvolutionRouteKind.LEVEL if index < 11 else EvolutionRouteKind.NONE),
+                candidate_count=widths[index],
             )
         )
     return tuple(examples)
@@ -285,8 +294,11 @@ def test_identity_free_candidate_set_and_binding_round_trip_exactly() -> None:
     restored_binding.require_candidate_set(restored_candidates)
 
 
-def _frozen_input_catalog() -> PartyDevelopmentFrozenCatalog:
-    examples = _ready_catalog()
+def _frozen_input_catalog(
+    *,
+    candidate_widths: tuple[int, ...] | None = None,
+) -> PartyDevelopmentFrozenCatalog:
+    examples = _ready_catalog(candidate_widths=candidate_widths)
     prospective = _prospective_catalog(examples)
     bindings_by_scenario = {
         item.scenario_id: item for item in prospective.bindings

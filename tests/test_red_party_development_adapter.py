@@ -48,6 +48,7 @@ from pokemon_red_completion.red_party_development_adapter import (
     RedPartyDevelopmentQuestionPreflight,
     build_red_party_development_snapshot,
     preflight_red_party_development_question,
+    red_party_completion_snapshot,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
@@ -241,6 +242,32 @@ def test_red_curriculum_policy_matches_the_reserved_balance_semantics() -> None:
     assert RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY.maximum_level_spread == 5
     assert RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY.required_size == 6
     assert RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY.max_faints == 0
+
+
+def test_red_completion_snapshot_recomputes_collection_roles_evolution_and_deficit() -> None:
+    snapshot = red_party_completion_snapshot(
+        _observation(),
+        evolutions=_evolutions(),
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+    )
+
+    assert snapshot.registered_target_count == 3
+    assert snapshot.living_target_count == 3
+    assert snapshot.role_coverage_count == 2
+    assert snapshot.role_target_total == 6
+    assert snapshot.evolution_steps_remaining == 1
+    assert snapshot.level_floor_deficit == 16
+
+
+def test_red_completion_snapshot_requires_a_stable_boundary() -> None:
+    observation = _observation()
+
+    with pytest.raises(RedPartyDevelopmentAdapterError, match="stable ready"):
+        red_party_completion_snapshot(
+            replace(observation, raw=replace(observation.raw, battle_state=1)),
+            evolutions=_evolutions(),
+            policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        )
 
 
 def _snapshot(

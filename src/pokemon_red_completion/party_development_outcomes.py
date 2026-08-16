@@ -129,6 +129,7 @@ class PartyDevelopmentOutcomeTrialV2:
     completion_before: PartyCompletionSnapshot
     completion_after: PartyCompletionSnapshot
     frames_executed: int
+    after_target_slot: int | None = None
     rotations_executed: int = 0
     evolution_completed: bool = False
     censored: bool = False
@@ -138,6 +139,10 @@ class PartyDevelopmentOutcomeTrialV2:
             raise ScenarioOutcomeError("v2 party outcome candidate is invalid")
         if type(self.target_slot) is not int or self.target_slot < 1:  # noqa: E721
             raise ScenarioOutcomeError("v2 party outcome target slot is invalid")
+        if self.after_target_slot is not None and (
+            type(self.after_target_slot) is not int or self.after_target_slot < 1  # noqa: E721
+        ):
+            raise ScenarioOutcomeError("v2 party outcome after-target slot is invalid")
         if not isinstance(self.before_party, PartyObservation) or not isinstance(
             self.after_party, PartyObservation
         ):
@@ -162,9 +167,9 @@ class PartyDevelopmentOutcomeTrialV2:
                 raise ScenarioOutcomeError("v2 party outcome progress moved backwards")
         if not self.censored and self.frames_executed < 1:
             raise ScenarioOutcomeError("a measured v2 party outcome needs positive execution time")
-        if self.before_party.member_in_slot(self.target_slot) is None or (
-            self.after_party.member_in_slot(self.target_slot) is None
-        ):
+        before_target = self.before_party.member_in_slot(self.target_slot)
+        after_target = self.after_party.member_in_slot(self.resolved_after_target_slot)
+        if before_target is None or after_target is None:
             raise ScenarioOutcomeError(
                 "v2 party outcome target is absent from before/after evidence"
             )
@@ -172,6 +177,10 @@ class PartyDevelopmentOutcomeTrialV2:
     @property
     def candidate_index(self) -> int:
         return self.candidate.candidate_index
+
+    @property
+    def resolved_after_target_slot(self) -> int:
+        return self.target_slot if self.after_target_slot is None else self.after_target_slot
 
 
 def adapt_party_development_outcomes_v2(
@@ -352,7 +361,7 @@ def _total_experience(party: PartyObservation) -> int:
 
 def _target_experience_gained(trial: PartyDevelopmentOutcomeTrialV2) -> int:
     before = trial.before_party.member_in_slot(trial.target_slot)
-    after = trial.after_party.member_in_slot(trial.target_slot)
+    after = trial.after_party.member_in_slot(trial.resolved_after_target_slot)
     if before is None or after is None:  # pragma: no cover - dataclass invariant
         raise AssertionError("v2 party target binding disappeared")
     if before.experience is None or after.experience is None:
@@ -380,11 +389,12 @@ def _trial_evidence(trial: PartyDevelopmentOutcomeTrialV2) -> dict[str, object]:
         "target_binding_sha256": canonical_sha256(
             {
                 "before_slot": trial.target_slot,
+                "after_slot": trial.resolved_after_target_slot,
                 "before_member": _member_evidence(
                     trial.before_party.member_in_slot(trial.target_slot)
                 ),
                 "after_member": _member_evidence(
-                    trial.after_party.member_in_slot(trial.target_slot)
+                    trial.after_party.member_in_slot(trial.resolved_after_target_slot)
                 ),
             }
         ),

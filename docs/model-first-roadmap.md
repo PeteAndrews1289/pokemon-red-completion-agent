@@ -6,6 +6,57 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: collector implemented; publish, bind and preflight it
+
+The source now contains the missing 14-question / 55-trial outcome campaign. One question becomes
+usable only after every available candidate is measured from an independent clone of its exact
+frozen start. The dose is four completed wild battles with separate hard bounds of 2,500 encounter
+steps, 100,000 controller actions, 1,500,000 frames, four total healing trips, sixteen rotations
+and zero faints. The assigned trainee is tracked through party reordering and automatic level
+evolution; the assigned Route 11 or Cave venue cannot be reselected during the dose.
+
+The earlier Cave result remains historical evidence at its measured source. This fixed-dose lane
+changes execution-bearing files, so the old byte-identical-current-runtime attestation is now
+deliberately invalid for the new head. The frozen Cave prior may reconstruct the old feature menu,
+but it grants no current authority and cannot substitute for any of the new cloned outcomes.
+
+The one-shot boundary is explicit. A durable claim precedes controller input. A normal execution
+error publishes an invalid terminal and stops; a process interruption leaves a claim that is
+recovered as censored; neither identity can retry. Only identities never claimed may continue
+after recovery. Typed terminal evidence binds the campaign, assignment, claim, candidate, exact
+counters and completion-aware objective values. Ambiguous JSON, Boolean substitutes for numeric
+zeros, extra evidence fields, changed protected bytes and ROM sidecars all fail closed.
+
+The focused collector/dashboard slice passes 221 tests, lint and type checking. A working-source,
+read-only rehearsal over the real retained inputs reconstructed all 14 questions and all 55
+private trainee/venue bindings, with 8 train / 6 development, zero controller actions and no input
+or ROM-adjacent drift. That rehearsal deliberately bypassed the clean-published-source gate, so it
+qualifies implementation behavior but is not the official campaign preflight.
+
+The active sequence is now:
+
+1. **Complete locally:** implement, attack and dashboard the exact four-battle 14/55 collector.
+2. **Active:** publish the complete source and documentation; require green CI for that exact head.
+3. From that immutable head, freeze one external path-free campaign plan and repeat the 14/55
+   preflight with the real clean-source and exact-CI guards enabled.
+4. Give the exact source, plan summary and preflight to Claude for read-only authorization-level
+   attack. A reviewer may find a blocker but cannot authorize input.
+5. Ask the owner for one authorization naming the exact plan-file SHA, semantic plan SHA, source
+   commit, CI run/attempt, 14 questions, 55 non-retryable trials and four-battle dose.
+6. Collect once. The live dashboard observes the immutable claim/terminal ledger; the watched
+   emulator is presentation only. No teacher, model prediction or fit occurs during collection.
+7. If all train menus are usable, fit exactly once on the eight train examples. Preserve the six
+   development examples untouched and report descriptive paired comparisons against the frozen
+   baselines. Learned live authority remains zero.
+8. Only if that signal is informative, freeze the smallest Crystal test of the same representation
+   and continue toward story planning, acquisition, evolution, trades, storage and living-Pokédex
+   completion. Do not build a second scripted playthrough as a substitute for transfer.
+
+The source cannot truthfully pre-name the later private plan or CI identity; those are generated
+only after this exact tree is published and green. No controller execution is authorized by this
+checkpoint. Honest counters remain **priors 2 · roots 14 · PP states 2/2 · menus 14 · required
+trials 55 · outcomes 0/55 (0/14 complete examples) · fits 0 · authority 0**.
+
 ## Current checkpoint: input integrity verified; build the bounded outcome collector
 
 A separate fail-closed verifier was published at exact source `e849e43`, passed GitHub CI run

@@ -294,18 +294,31 @@ def test_composition_adds_exactly_one_cave_prior_without_a_training_example(
     assert "species_id" not in encoded
 
 
-def test_working_critical_runtime_files_match_the_measured_commit() -> None:
+def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> None:
     rows = cave_prior_module._committed_runtime_rows(
         PROJECT_ROOT,
         revision=RED_CAVE_MEASUREMENT_SOURCE_COMMIT,
     )
 
-    for row in rows:
-        path = row["path"]
-        assert isinstance(path, str)
-        assert hashlib.sha256((PROJECT_ROOT / path).read_bytes()).hexdigest() == row[
-            "sha256"
-        ]
+    drifted = tuple(
+        row["path"]
+        for row in rows
+        if isinstance(row["path"], str)
+        and hashlib.sha256((PROJECT_ROOT / row["path"]).read_bytes()).hexdigest()
+        != row["sha256"]
+    )
+
+    # The consumed Cave run remains valid historical evidence at its measured
+    # source.  Completion-aware fixed-dose execution intentionally changes the
+    # current runtime, so the old byte-identity attestation must no longer be
+    # treated as current-source authority.  Any further drift requires an
+    # explicit review here rather than silently inheriting the old result.
+    assert drifted == (
+        "src/pokemon_red_completion/blaine.py",
+        "src/pokemon_red_completion/executor.py",
+        "src/pokemon_red_completion/red_party_development_venue_priors.py",
+        "src/pokemon_red_completion/red_team_training.py",
+    )
 
 
 def test_tracked_composition_receipt_is_exact_path_free_and_non_executing() -> None:

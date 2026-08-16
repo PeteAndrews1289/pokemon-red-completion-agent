@@ -5,6 +5,38 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish and attack the implemented 14/55 collector
+
+Codex has completed the implementation lane for the first completion-aware outcome campaign. The
+collector expands fourteen frozen menus into fifty-five independently cloned candidate trials,
+holds each assigned trainee/venue fixed for four completed battles, claims before input, retains
+invalid failures, censors interrupted claims and forbids retry. Focused coverage is 221/221 and a
+development read-only pass reconstructed all 14/55 real bindings with zero protected execution.
+The live dashboard can observe the immutable campaign ledger without becoming an actor.
+
+The consumed Cave measurement is still valid historical evidence at its measured commit, but the
+new fixed-dose execution changes its critical runtime. Its former byte-identical-current-source
+attestation is intentionally invalid at this head; no reviewer should treat the frozen Cave prior
+as a replacement for a newly measured candidate outcome.
+
+Codex remains sole implementer and publisher. It owns the full gate, generated-registry refresh,
+commit/push, exact-head CI, private plan freeze and official read-only preflight. It must stop before
+controller input and request a new authorization naming the exact plan and denominator.
+
+Claude's next role begins only after the source is published, CI is green and the plan/preflight are
+immutable. Claude receives a path-free packet and attacks runner binding, claim-before-input order,
+55-trial accounting, failure/censor semantics, fixed-dose comparability, train/development
+separation and authorization wording. It is read-only and cannot execute, fit, replace a trial or
+grant authority. Codex should accept only findings supported by a discriminating test.
+
+Antigravity remains deferred until real Red development results exist. Then it receives a compact
+public-safe packet and may return at most three falsifiable assumptions about Crystal transfer and
+the longer living-Pokédex product. It does not duplicate Claude's provenance audit and receives no
+implementation lane.
+
+Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · trial contract 55 · trials 0/55
+· complete examples 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
+
 ## Current override: input audit passed; implement the exact outcome campaign
 
 Codex's separate verifier is published at `e849e43` and passed exact CI run `31973374921` attempt

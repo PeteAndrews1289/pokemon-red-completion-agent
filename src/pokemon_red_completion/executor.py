@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 
@@ -18,6 +18,74 @@ class ControllerPort(Protocol):
 
 class UnsupportedMacroActionError(ValueError):
     """Raised when a specialist requests an action without a qualified compiler."""
+
+
+class ControllerFrameBudgetError(RuntimeError):
+    """Raised before controller time can exceed a declared frame budget."""
+
+
+class FrameBudgetController:
+    """Transparent controller proxy that refuses the first over-budget tick.
+
+    Timing authority remains inside the executor layer even when a chapter
+    needs a campaign-specific hard frame ceiling.  Read-only emulator
+    attributes continue through the proxy so observation adapters can share
+    the same coherent state.
+    """
+
+    __slots__ = (
+        "_delegate",
+        "_error_message",
+        "_error_type",
+        "_maximum_frames",
+        "_start_frame",
+    )
+
+    def __init__(
+        self,
+        delegate: ControllerPort,
+        *,
+        maximum_frames: int,
+        error_type: type[RuntimeError] = ControllerFrameBudgetError,
+        error_message: str = "controller exhausted its hard frame budget",
+    ) -> None:
+        if type(maximum_frames) is not int or maximum_frames <= 0:  # noqa: E721
+            raise ValueError("maximum_frames must be a positive integer")
+        if not isinstance(error_type, type) or not issubclass(error_type, RuntimeError):
+            raise TypeError("error_type must be a RuntimeError class")
+        if not isinstance(error_message, str) or not error_message:
+            raise ValueError("error_message must be non-empty")
+        frame_count = getattr(delegate, "frame_count", None)
+        if type(frame_count) is not int or frame_count < 0:  # noqa: E721
+            raise TypeError("frame-budget controller needs an integer frame_count")
+        self._delegate = delegate
+        self._maximum_frames = maximum_frames
+        self._start_frame = frame_count
+        self._error_type = error_type
+        self._error_message = error_message
+
+    @property
+    def frame_count(self) -> int:
+        value = getattr(self._delegate, "frame_count", None)
+        if type(value) is not int or value < self._start_frame:  # noqa: E721
+            raise ControllerFrameBudgetError("controller frame_count is invalid")
+        return value
+
+    @property
+    def frames_executed(self) -> int:
+        return self.frame_count - self._start_frame
+
+    def tick(self, frames: int) -> None:
+        if (
+            type(frames) is not int  # noqa: E721
+            or frames < 0
+            or self.frames_executed + frames > self._maximum_frames
+        ):
+            raise self._error_type(self._error_message)
+        self._delegate.tick(frames)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
 
 
 @dataclass(frozen=True, slots=True)

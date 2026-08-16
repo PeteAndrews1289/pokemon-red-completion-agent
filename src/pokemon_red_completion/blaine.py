@@ -78,6 +78,7 @@ from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_ba
 from pokemon_red_completion.surge import (
     VERMILION_CENTER_TO_ROUTE_11,
     VERMILION_NURSE_TO_EXIT,
+    VERMILION_PC_TO_NURSE,
     VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
 )
 from pokemon_red_completion.team_training import (
@@ -2673,9 +2674,39 @@ def _training_dig_to_vermilion(
 ) -> None:
     raw = reader.read()
     if raw.map_id == MapId.CINNABAR_POKECENTER:
+        position = (raw.player_x, raw.player_y)
+        if position == (13, 4):
+            # Captured PC-boundary questions start at the counter, not at the
+            # nurse.  Cinnabar shares the Center layout for which this route was
+            # measured, and the goal-manager/PP materializers already use it to
+            # return to the stable nurse boundary.  Normalize before applying
+            # the historical five-step exit route.
+            _move(
+                actions,
+                reader,
+                VERMILION_PC_TO_NURSE,
+                "normalize Cinnabar PC boundary",
+            )
+            _require(
+                reader.read(),
+                MapId.CINNABAR_POKECENTER,
+                (3, 3),
+                "normalized Cinnabar nurse boundary",
+            )
+        elif position != (3, 3):
+            raise BlaineChapterError(
+                "Training travel refused an unknown Cinnabar Center boundary: "
+                f"{position!r}."
+            )
         _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
         raw = reader.read()
     elif raw.map_id == MapId.SAFFRON_POKECENTER:
+        position = (raw.player_x, raw.player_y)
+        if position != (3, 3):
+            raise BlaineChapterError(
+                "Training travel refused an unknown Saffron Center boundary: "
+                f"{position!r}."
+            )
         _move(actions, reader, ("down",) * 5, "exit Saffron Center")
         raw = reader.read()
 

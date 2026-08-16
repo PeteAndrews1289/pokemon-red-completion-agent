@@ -366,6 +366,78 @@ def test_completion_targets_cannot_change_inside_a_trial() -> None:
         )
 
 
+def test_v2_outcome_tracks_a_selected_specimen_across_party_reordering() -> None:
+    candidates = _candidate_set()
+    binding = _binding(
+        candidates,
+        scenario_id="reordered-target",
+        root_lineage_id="reordered-target-root",
+        initial_state_sha256="f" * 64,
+    )
+    before = _before_party()
+    original_first, original_second = before.members
+
+    def reordered_after(gain: int) -> PartyObservation:
+        assert original_second.experience is not None
+        return PartyObservation(
+            members=(
+                replace(
+                    original_second,
+                    slot=1,
+                    experience=original_second.experience + gain,
+                ),
+                replace(original_first, slot=2),
+            )
+        )
+
+    trials = tuple(
+        PartyDevelopmentOutcomeTrialV2(
+            candidate=candidates.candidates[index],
+            target_slot=2,
+            after_target_slot=1,
+            before_party=before,
+            after_party=reordered_after(gain),
+            progress_before=TeamTrainingProgress(),
+            progress_after=TeamTrainingProgress(battles_completed=2),
+            completion_before=_completion(),
+            completion_after=_completion(level_deficit=24),
+            frames_executed=1_000,
+        )
+        for index, gain in enumerate((100, 200))
+    )
+
+    result = adapt_party_development_outcomes_v2(
+        candidates,
+        trials,
+        scenario_id="reordered-target",
+        root_lineage_id="reordered-target-root",
+        initial_state_sha256="f" * 64,
+        partition=ScenarioPartition.TRAIN,
+        prospective_binding=binding,
+    )
+
+    assert result.fully_measured
+    assert result.best_candidate_indices == (1,)
+    assert result.outcomes[0] is not None
+    assert result.outcomes[0].criterion_values[10] == 100.0
+
+
+def test_v2_outcome_rejects_an_absent_reordered_target() -> None:
+    with pytest.raises(ScenarioOutcomeError, match="absent"):
+        PartyDevelopmentOutcomeTrialV2(
+            candidate=_candidate_set().candidates[0],
+            target_slot=1,
+            after_target_slot=3,
+            before_party=_before_party(),
+            after_party=_after_party(10),
+            progress_before=TeamTrainingProgress(),
+            progress_after=TeamTrainingProgress(battles_completed=1),
+            completion_before=_completion(),
+            completion_after=_completion(level_deficit=24),
+            frames_executed=1_000,
+        )
+
+
 def test_v2_outcome_requires_a_typed_prospective_binding() -> None:
     candidates = _candidate_set()
     with pytest.raises(TypeError, match="prospective_binding"):

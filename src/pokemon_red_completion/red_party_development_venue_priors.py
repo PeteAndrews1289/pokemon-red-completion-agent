@@ -558,11 +558,25 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "f4b4e5cf19609968c6c0d7d522bd3915adea1def1e4f922e050aa99bc016f605"
+            "c004a30906b0f936fcd93ceb6bb72f19cbe6664d942ba6ec2158456f11e0f71c"
         ),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
-            "suppression-preserve-route-11-measurement"
+            "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
+            "default"
+        ),
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="red.training-dig-to-vermilion",
+        observed_ast_sha256=(
+            "cb1bc40d3a08fce7f511936b5d017dfe3ab244d3ecffdc9cc59f69e84c08bc47"
+        ),
+        current_ast_sha256=(
+            "2396d9254005b718803e3ca3b282f603aa9574c683efd56e49e2c5e076702a23"
+        ),
+        justification_id=(
+            "cinnabar-pc-boundary-normalization-preserves-historical-nurse-"
+            "boundary-route"
         ),
     ),
     _SourceCompatibilityWaiver(

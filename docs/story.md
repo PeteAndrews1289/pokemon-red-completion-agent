@@ -7,6 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: every card now has its own one-shot lane
+
+The fourteen face-down cards have become fifty-five lanes. Each lane begins from a fresh copy of
+the same saved moment, locks one teammate and one training area, and runs exactly four completed
+battles. That makes the comparison about the choice—not about who got lucky enough to start with
+more health, a different route or a longer session.
+
+The lanes remember failure. Before the game receives a button, the lane writes its name to durable
+storage. If the process crashes, that lane is censored. If the mechanic fails, it is invalid. The
+project may continue with lanes it never started, but it can never replay a bad lane until it gets a
+prettier answer. A teammate also keeps its identity when it moves through the party or evolves.
+
+A view-only dashboard can now watch the ledger fill: **claims · measured · invalid · censored ·
+complete train menus · complete development menus · battles · steps · actions · frames · heals ·
+rotations**. The game itself remains visible in the separate emulator window. Neither display can
+control it.
+
+All 55 lanes were reconstructed against the real retained Red states without starting one. The
+score is still **zero outcomes and zero authority**. The next key is publication and green CI, then
+one frozen plan, one read-only preflight, an independent audit and an authorization that names the
+exact campaign. Only after that may the lanes run and produce the eight training examples whose
+model must face six untouched development examples before Crystal is earned.
+
 ## Current checkpoint: the cards stayed face-down and still passed
 
 The project built a second program whose only job was to distrust the first. It was published,

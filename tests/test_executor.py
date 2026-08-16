@@ -7,7 +7,9 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import (
+    ControllerFrameBudgetError,
     ControllerTiming,
+    FrameBudgetController,
     FrameSafeExecutor,
     UnsupportedMacroActionError,
 )
@@ -17,6 +19,8 @@ class RecordingController:
     def __init__(self, fail_tick: bool = False) -> None:
         self.events: list[tuple[str, str | int]] = []
         self.fail_tick = fail_tick
+        self.frame_count = 0
+        self.marker = "coherent-reader-state"
 
     def press(self, button: str) -> None:
         self.events.append(("press", button))
@@ -28,6 +32,7 @@ class RecordingController:
         self.events.append(("tick", frames))
         if self.fail_tick:
             raise RuntimeError("emulator failed")
+        self.frame_count += frames
 
 
 def test_executor_applies_declared_press_and_release_timing() -> None:
@@ -82,6 +87,19 @@ def test_invalid_direction_is_rejected_before_controller_input() -> None:
         FrameSafeExecutor(controller).execute(MacroAction(MacroActionKind.MOVE, "north"))
 
     assert controller.events == []
+
+
+def test_frame_budget_controller_refuses_before_overrun_and_delegates_reads() -> None:
+    controller = RecordingController()
+    bounded = FrameBudgetController(controller, maximum_frames=5)
+
+    bounded.tick(3)
+
+    assert bounded.frames_executed == 3
+    assert bounded.marker == "coherent-reader-state"
+    with pytest.raises(ControllerFrameBudgetError, match="frame budget"):
+        bounded.tick(3)
+    assert controller.events == [("tick", 3)]
 
 
 def test_only_emulator_and_executor_modules_call_controller_primitives() -> None:

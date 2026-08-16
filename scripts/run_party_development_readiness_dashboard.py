@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import stat
@@ -17,10 +18,24 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from pokemon_red_completion.party_development_outcome_campaign import (  # noqa: E402
+    RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT,
+    PartyDevelopmentOutcomeCampaignPlan,
+    PartyDevelopmentOutcomeTrialAssignment,
+    PartyDevelopmentOutcomeTrialClaim,
+)
+from pokemon_red_completion.party_development_outcome_results import (  # noqa: E402
+    PartyDevelopmentOutcomeTrialResult,
+    parse_party_development_trial_terminal,
+)
 from pokemon_red_completion.party_development_readiness_dashboard import (  # noqa: E402
     party_development_readiness_dashboard_snapshot,
 )
-from pokemon_red_completion.private_artifacts import PRIVATE_ROOT_SENTINEL  # noqa: E402
+from pokemon_red_completion.private_artifacts import (  # noqa: E402
+    PRIVATE_ROOT_SENTINEL,
+    PrivateArtifactRoot,
+    open_private_root,
+)
 from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     DASHBOARD_DEFAULT_PORT,
     DashboardSnapshot,
@@ -28,6 +43,8 @@ from pokemon_red_completion.progress_dashboard import (  # noqa: E402
     ProgressDashboardError,
     ProgressDashboardServer,
 )
+from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
+from pokemon_red_completion.scenario_outcomes import OutcomeEvidenceStatus  # noqa: E402
 
 EVIDENCE_PATH = (
     PROJECT_ROOT / "docs" / "evidence" / "party-development-v2-readiness-2026-08-16.json"
@@ -60,6 +77,9 @@ _LIVE_STREAM_MAX_BYTES = 1024 * 1024
 _LIVE_PARTITIONS = ("train", "development")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+_MAX_CAMPAIGN_PLAN_BYTES = 8 * 1024 * 1024
+_CAMPAIGN_CLAIM_KIND = "party_development_outcome_claim"
+_CAMPAIGN_TERMINAL_KIND = "party_development_outcome_terminal"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -69,6 +89,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--private-artifact-root", type=Path)
     parser.add_argument("--partition", choices=_LIVE_PARTITIONS, default="train")
+    parser.add_argument("--campaign-plan", type=Path)
+    parser.add_argument("--campaign-plan-file-sha256")
     return parser
 
 
@@ -105,6 +127,61 @@ def _mapping(source: Mapping[str, object], key: str) -> Mapping[str, object]:
     if not isinstance(value, Mapping):
         raise ProgressDashboardError(f"PP v4 {key.replace('_', ' ')} is invalid")
     return value
+
+
+def _unique_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON object key")
+        result[key] = value
+    return result
+
+
+def _reject_json_constant(value: str) -> object:
+    del value
+    raise ValueError("non-finite JSON number")
+
+
+def _load_campaign_plan(
+    path: Path | None,
+    expected_file_sha256: str | None,
+) -> PartyDevelopmentOutcomeCampaignPlan | None:
+    if path is None and expected_file_sha256 is None:
+        return None
+    if path is None or expected_file_sha256 is None:
+        raise ProgressDashboardError(
+            "dashboard campaign plan and file digest must be supplied together"
+        )
+    if (
+        not path.is_absolute()
+        or path.resolve().is_relative_to(PROJECT_ROOT.resolve())
+        or _SHA256.fullmatch(expected_file_sha256) is None
+    ):
+        raise ProgressDashboardError("dashboard campaign plan identity is invalid")
+    try:
+        metadata = path.lstat()
+        payload = path.read_bytes()
+    except OSError:
+        raise ProgressDashboardError("dashboard campaign plan is unavailable") from None
+    if (
+        not stat.S_ISREG(metadata.st_mode)
+        or stat.S_ISLNK(metadata.st_mode)
+        or not payload
+        or len(payload) > _MAX_CAMPAIGN_PLAN_BYTES
+        or hashlib.sha256(payload).hexdigest() != expected_file_sha256
+    ):
+        raise ProgressDashboardError("dashboard campaign plan bytes are invalid")
+    try:
+        value = json.loads(
+            payload.decode("ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+        plan = PartyDevelopmentOutcomeCampaignPlan.from_private_dict(value)
+    except (UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError):
+        raise ProgressDashboardError("dashboard campaign plan is invalid") from None
+    return plan
 
 
 def _current_snapshot(
@@ -546,6 +623,284 @@ def _audited_catalog_snapshot(
     )
 
 
+def _campaign_records(
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+    store: PrivateArtifactRoot | None,
+) -> tuple[
+    dict[str, PartyDevelopmentOutcomeTrialClaim],
+    dict[str, PartyDevelopmentOutcomeTrialResult],
+]:
+    claims: dict[str, PartyDevelopmentOutcomeTrialClaim] = {}
+    terminals: dict[str, PartyDevelopmentOutcomeTrialResult] = {}
+    if store is None:
+        return claims, terminals
+    for assignment in plan.assignments:
+        claim_record = store.find_sealed_record(
+            f"{assignment.trial_id}-claim",
+            expected_kind=_CAMPAIGN_CLAIM_KIND,
+        )
+        terminal_record = store.find_sealed_record(
+            f"{assignment.trial_id}-terminal",
+            expected_kind=_CAMPAIGN_TERMINAL_KIND,
+        )
+        claim: PartyDevelopmentOutcomeTrialClaim | None = None
+        if claim_record is not None:
+            claim = PartyDevelopmentOutcomeTrialClaim.from_private_dict(
+                claim_record.read()
+            )
+            if claim != PartyDevelopmentOutcomeTrialClaim.build(plan, assignment):
+                raise ProgressDashboardError(
+                    "dashboard campaign claim differs from its frozen assignment"
+                )
+            claims[assignment.assignment_sha256] = claim
+        if terminal_record is not None:
+            if claim is None:
+                raise ProgressDashboardError(
+                    "dashboard campaign terminal exists without its durable claim"
+                )
+            terminal = parse_party_development_trial_terminal(terminal_record.read())
+            terminal.require_within_plan(plan, assignment)
+            terminals[assignment.assignment_sha256] = terminal
+    return claims, terminals
+
+
+def _campaign_snapshot(
+    base: DashboardSnapshot,
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+    store: PrivateArtifactRoot | None,
+) -> DashboardSnapshot:
+    claims, terminals = _campaign_records(plan, store)
+    open_claims = set(claims) - set(terminals)
+    if len(open_claims) > 1:
+        raise ProgressDashboardError(
+            "dashboard campaign has more than one claimed nonterminal trial"
+        )
+    assignments_by_scenario: dict[
+        str, list[PartyDevelopmentOutcomeTrialAssignment]
+    ] = {}
+    for assignment in plan.assignments:
+        assignments_by_scenario.setdefault(assignment.scenario_id, []).append(
+            assignment
+        )
+    complete_scenarios: set[str] = set()
+    for scenario_id, assignments in assignments_by_scenario.items():
+        results = tuple(
+            terminals.get(assignment.assignment_sha256)
+            for assignment in assignments
+        )
+        if results and all(
+            result is not None and result.status is OutcomeEvidenceStatus.MEASURED
+            for result in results
+        ):
+            complete_scenarios.add(scenario_id)
+    train_complete = sum(
+        scenario_id in complete_scenarios
+        and assignments[0].partition is ScenarioPartition.TRAIN
+        for scenario_id, assignments in assignments_by_scenario.items()
+    )
+    development_complete = sum(
+        scenario_id in complete_scenarios
+        and assignments[0].partition is ScenarioPartition.DEVELOPMENT
+        for scenario_id, assignments in assignments_by_scenario.items()
+    )
+    question_claims = {
+        assignment.scenario_id
+        for assignment in plan.assignments
+        if assignment.assignment_sha256 in claims
+    }
+    measured = sum(
+        result.status is OutcomeEvidenceStatus.MEASURED
+        for result in terminals.values()
+    )
+    invalid = sum(
+        result.status is OutcomeEvidenceStatus.INVALID
+        for result in terminals.values()
+    )
+    censored = sum(
+        result.status is OutcomeEvidenceStatus.CENSORED
+        for result in terminals.values()
+    )
+    controller_actions = sum(
+        result.controller_actions or 0 for result in terminals.values()
+    )
+    frames = sum(result.frames_executed or 0 for result in terminals.values())
+    battles = sum(result.battles_completed or 0 for result in terminals.values())
+    encounter_steps = sum(
+        result.encounter_steps or 0 for result in terminals.values()
+    )
+    healing_trips = sum(result.healing_trips or 0 for result in terminals.values())
+    rotations = sum(
+        result.rotations_executed or 0 for result in terminals.values()
+    )
+    current = next(
+        (
+            assignment
+            for assignment in plan.assignments
+            if assignment.assignment_sha256 in open_claims
+        ),
+        None,
+    )
+    next_unclaimed = next(
+        (
+            assignment
+            for assignment in plan.assignments
+            if assignment.assignment_sha256 not in claims
+        ),
+        None,
+    )
+    claimed = len(claims)
+    terminal_count = len(terminals)
+    complete_examples = len(complete_scenarios)
+    if claimed == RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT:
+        run_status = (
+            "passed"
+            if measured == RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT
+            else "failed"
+        )
+    elif current is not None:
+        run_status = "running"
+    elif invalid or censored:
+        run_status = "paused"
+    elif claimed:
+        run_status = "running"
+    else:
+        run_status = "waiting"
+    if current is not None:
+        location = (
+            f"Trial {current.ordinal}/55 · {current.partition.value} "
+            f"{current.kind.value} candidate {current.candidate_index + 1}"
+        )
+        current_event = (
+            f"Current claim · trial {current.ordinal}/55 · {current.partition.value} "
+            f"{current.kind.value} · candidate row {current.candidate_index + 1} · consumed"
+        )
+    elif next_unclaimed is not None:
+        location = f"Next unclaimed trial {next_unclaimed.ordinal}/55 · exact plan loaded"
+        current_event = (
+            f"Next unclaimed · trial {next_unclaimed.ordinal}/55 · "
+            f"{next_unclaimed.partition.value} {next_unclaimed.kind.value}"
+        )
+    else:
+        location = "All 55 frozen trial identities terminal"
+        current_event = "All frozen trial identities are claimed and terminal"
+    if run_status == "passed":
+        message = (
+            "All 55 candidate trials are measured and all 14 question menus are complete. "
+            "The model is still unfitted and has no live authority."
+        )
+        next_event = (
+            "Next: fit once on 8 train examples, preserve 6 development examples untouched, "
+            "then report against frozen baselines"
+        )
+    elif run_status in {"failed", "paused"}:
+        message = (
+            f"Campaign retained {invalid} invalid and {censored} censored one-shot trials. "
+            "Consumed identities cannot retry; only untouched trials may continue."
+        )
+        next_event = (
+            "Next: preserve every failure/censor terminal; continue only untouched identities "
+            "under the exact frozen campaign"
+        )
+    elif run_status == "running":
+        message = (
+            f"Red outcome collection is active: {terminal_count}/55 terminals and "
+            f"{complete_examples}/14 complete menus. No teacher or model is choosing actions."
+        )
+        next_event = (
+            "Next: finish each candidate once; fit nothing until all usable train "
+            "menus are complete"
+        )
+    else:
+        message = (
+            "The exact 14-question / 55-trial campaign is loaded with zero claimed trials. "
+            "Controller execution still requires the separately named owner authorization."
+        )
+        next_event = (
+            "Next: exact owner authorization for this frozen plan; no trial may retry after input"
+        )
+    dose = plan.dose
+    return replace(
+        base,
+        run_status=run_status,
+        stage="Completion-aware party learner · 55-trial outcome campaign",
+        message=message,
+        frame_count=frames,
+        actions=controller_actions,
+        stage_progress=terminal_count / RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT,
+        location=location,
+        model=replace(
+            base.model,
+            mode="waiting",
+            candidate="Completion-aware party scorer v2 · outcomes not yet fitted",
+            choice="No teacher/model decisions · deterministic safety policy only",
+            decisions=0,
+            teacher_queries=0,
+            fallbacks=0,
+        ),
+        experiment=replace(
+            base.experiment,
+            phase="training",
+            zero_shot_completed=terminal_count,
+            zero_shot_total=RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT,
+            adaptation_completed=complete_examples,
+            adaptation_total=14,
+            sealed_completed=0,
+            sealed_total=1,
+            predictions_committed=False,
+            heading="Party outcome collection",
+            eyebrow="Red curriculum · one-shot cloned counterfactuals",
+            counter_labels=(
+                "Terminal candidate trials",
+                "Complete question menus",
+                "Authority promotions",
+            ),
+        ),
+        events=(
+            (
+                f"Frozen campaign · source {plan.source_commit[:7]} · CI {plan.exact_ci_run} "
+                f"attempt {plan.exact_ci_attempt} · plan {plan.plan_sha256[:8]}…"
+            ),
+            (
+                f"Trial ledger · claims {claimed}/55 · terminals {terminal_count}/55 · "
+                f"questions touched {len(question_claims)}/14"
+            ),
+            (
+                f"Terminal status · measured {measured} · invalid {invalid} · censored {censored}"
+            ),
+            (
+                f"Complete menus · train {train_complete}/8 · untouched development "
+                f"{development_complete}/6 · total {complete_examples}/14"
+            ),
+            current_event,
+            (
+                f"Measured work · battles {battles} · encounter steps {encounter_steps} · "
+                f"controller actions {controller_actions} · frames {frames}"
+            ),
+            (
+                f"Recovery/switch cost · healing trips {healing_trips} · rotations {rotations}"
+            ),
+            (
+                f"Per-trial dose · {dose.completed_battles} battles · steps "
+                f"≤{dose.maximum_encounter_steps} "
+                f"· actions ≤{dose.maximum_controller_actions} · frames ≤{dose.maximum_frames}"
+            ),
+            (
+                f"Safety bounds · heals ≤{dose.maximum_healing_trips} · rotations "
+                f"≤{dose.maximum_rotations} · faints {dose.maximum_faints}"
+            ),
+            "Clone rule · every candidate reloads the same frozen question start",
+            "No retry · failure remains invalid · interrupted claim becomes censored",
+            "Teacher 0 · predictions 0 · updates 0 · fits 0 · live authority zero",
+            "Sealed Red 0 · Crystal 0 · full-game replays 0",
+            (
+                "Product target · transferable planning toward complete games and living "
+                "Pokédexes, not memorized Red button paths"
+            ),
+            next_event,
+        ),
+    )
+
+
 def _live_snapshot(
     base: DashboardSnapshot,
     *,
@@ -733,10 +1088,19 @@ def main(argv: list[str] | None = None) -> int:
     catalog_sha256 = _receipt_digest(catalog_receipt, "catalog_sha256")
     preparation_base = _current_snapshot(evidence, v4_evidence)
     monitor_root = _require_monitor_root(args.private_artifact_root)
+    campaign_plan = _load_campaign_plan(
+        args.campaign_plan,
+        args.campaign_plan_file_sha256,
+    )
+    campaign_store = (
+        open_private_root(monitor_root, repository_root=PROJECT_ROOT)
+        if campaign_plan is not None and monitor_root is not None
+        else None
+    )
     completed_train = False
     train_live_record: tuple[str, dict[str, object] | None] | None = None
     base_snapshot = preparation_base
-    if monitor_root is not None:
+    if campaign_plan is None and monitor_root is not None:
         train_live_record = _live_artifact_record(monitor_root, "train")
         completed_train = train_live_record[0] == "passed"
         if args.partition == "development" and completed_train:
@@ -748,7 +1112,7 @@ def main(argv: list[str] | None = None) -> int:
             )
     initial_live_record: tuple[str, dict[str, object] | None] | None = None
     initial_snapshot = base_snapshot
-    if monitor_root is not None:
+    if campaign_plan is None and monitor_root is not None:
         initial_live_record = (
             train_live_record
             if args.partition == "train"
@@ -763,10 +1127,14 @@ def main(argv: list[str] | None = None) -> int:
             record=initial_live_record[1],
             train_prepared=completed_train,
         )
-    initial_snapshot = _catalog_snapshot(initial_snapshot, catalog_evidence)
-    initial_snapshot = _audited_catalog_snapshot(
-        initial_snapshot,
+    audited_snapshot = _audited_catalog_snapshot(
+        _catalog_snapshot(initial_snapshot, catalog_evidence),
         catalog_audit_evidence,
+    )
+    initial_snapshot = (
+        _campaign_snapshot(audited_snapshot, campaign_plan, campaign_store)
+        if campaign_plan is not None
+        else audited_snapshot
     )
     state = DashboardState(initial_snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
@@ -781,13 +1149,23 @@ def main(argv: list[str] | None = None) -> int:
                     "pp_materializations": "2/2",
                     "read_only_preflights": "2/2",
                     "independent_audit": "catalog_input_integrity_verified",
-                    "collector": "required_14_examples_55_trials_not_yet_published",
-                    "authorization_pending": "after_collector_ci_and_read_only_preflight",
+                    "collector": (
+                        "exact_14_example_55_trial_plan_loaded"
+                        if campaign_plan is not None
+                        else "implementation_qualification_in_progress"
+                    ),
+                    "authorization_pending": (
+                        "exact_frozen_campaign_plan"
+                        if campaign_plan is not None
+                        else "after_collector_ci_and_read_only_preflight"
+                    ),
                     "maximum_completed_battles": 32,
                     "minimum_battle_headroom": 5,
                     "frozen_menus": 14,
                     "catalog_sha256": catalog_sha256,
-                    "outcome_collection_progress": "0/14",
+                    "outcome_collection_progress": (
+                        f"{initial_snapshot.experiment.adaptation_completed}/14"
+                    ),
                     "model_fit": False,
                     "teacher_queries": 0,
                     "controller_actions": initial_snapshot.actions,
@@ -795,7 +1173,9 @@ def main(argv: list[str] | None = None) -> int:
                     "crystal_cases_opened": 0,
                     "authority_promoted": False,
                     "private_path_fields": 0,
-                    "live_progress_monitor": False,
+                    "live_progress_monitor": (
+                        campaign_plan is not None and campaign_store is not None
+                    ),
                     "live_game_frame": False,
                 },
                 sort_keys=True,
@@ -804,9 +1184,19 @@ def main(argv: list[str] | None = None) -> int:
         if not args.no_browser:
             webbrowser.open(dashboard.url)
         started = time.monotonic()
+        last_snapshot = initial_snapshot
         try:
             while args.duration_seconds == 0 or time.monotonic() - started < args.duration_seconds:
-                time.sleep(0.25)
+                if campaign_plan is not None and campaign_store is not None:
+                    refreshed = _campaign_snapshot(
+                        audited_snapshot,
+                        campaign_plan,
+                        campaign_store,
+                    )
+                    if refreshed != last_snapshot:
+                        state.publish(refreshed)
+                        last_snapshot = refreshed
+                time.sleep(0.5)
         except KeyboardInterrupt:
             pass
     return 0

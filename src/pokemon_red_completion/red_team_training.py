@@ -258,6 +258,48 @@ class TeamTrainingExecutionSummary:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class FixedPartyTrainingDose:
+    """Private binding for one short counterfactual training execution.
+
+    The candidate is identified by its complete evolution lineage rather than a
+    party slot: field switching changes slots, and an evolution can change the
+    species identity during the dose.  Exactly one current party member must
+    belong to the lineage at every decision boundary.
+    """
+
+    trainee_species_lineage: tuple[int, ...]
+    venue_identity: tuple[str, tuple[str, ...]]
+    completed_battles: int
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.trainee_species_lineage, tuple)
+            or not self.trainee_species_lineage
+            or len(self.trainee_species_lineage)
+            != len(set(self.trainee_species_lineage))
+            or any(
+                type(species_id) is not int or not 1 <= species_id <= 0xFF  # noqa: E721
+                for species_id in self.trainee_species_lineage
+            )
+        ):
+            raise ValueError("fixed training dose trainee lineage is invalid")
+        if (
+            not isinstance(self.venue_identity, tuple)
+            or len(self.venue_identity) != 2
+            or not isinstance(self.venue_identity[0], str)
+            or not self.venue_identity[0]
+            or not isinstance(self.venue_identity[1], tuple)
+            or any(
+                not isinstance(condition, str) or not condition
+                for condition in self.venue_identity[1]
+            )
+        ):
+            raise ValueError("fixed training dose venue identity is invalid")
+        if type(self.completed_battles) is not int or self.completed_battles <= 0:  # noqa: E721
+            raise ValueError("fixed training dose battle count is invalid")
+
+
 def pulse(
     actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180
 ) -> None:
@@ -803,6 +845,7 @@ def run_red_team_balancing(
     venues: Sequence[TrainingVenue],
     report_label: str,
     checkpoint_count: int,
+    fixed_dose: FixedPartyTrainingDose | None = None,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
     if not venues:
@@ -812,6 +855,25 @@ def run_red_team_balancing(
         )
     if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
         raise RuntimeError("Team training lacks its qualified Blastoise escort.")
+    if fixed_dose is not None and evolution_target is not None:
+        raise RuntimeError("Fixed party-training dose cannot also target one evolution.")
+    fixed_venue: TrainingVenue | None = None
+    if fixed_dose is not None:
+        matching_venues = tuple(
+            venue for venue in venues if venue.band.identity == fixed_dose.venue_identity
+        )
+        if len(matching_venues) != 1:
+            raise RuntimeError("Fixed party-training dose venue is not uniquely executable.")
+        fixed_venue = matching_venues[0]
+        matching_members = tuple(
+            member
+            for member in party_reader.read().members
+            if member.species_id in fixed_dose.trainee_species_lineage
+        )
+        if len(matching_members) != 1:
+            raise RuntimeError("Fixed party-training dose trainee is not uniquely bound.")
+        if fixed_dose.completed_battles > policy.max_battles:
+            raise RuntimeError("Fixed party-training dose exceeds the battle safety bound.")
     battles = 0
     steps = 0
     healing_trips = 0
@@ -998,6 +1060,28 @@ def run_red_team_balancing(
             rotations_executed += 1
         restore_training_core_order(actions, reader, emulator, hideout_timing)
 
+    def prepare_for_recovery() -> None:
+        # The deterministic teacher restores its historical core order before
+        # every trip. A counterfactual dose must instead retain the selected
+        # specimen as lead so party-slot churn cannot change which candidate is
+        # being measured. Field-move helpers discover their users from memory.
+        if fixed_dose is None:
+            restore_core_and_count()
+
+    def bound_trainee(party: PartyObservation) -> PartyMemberObservation:
+        if fixed_dose is None:  # pragma: no cover - caller guards this branch
+            raise AssertionError("fixed trainee requested outside a bounded dose")
+        matches = tuple(
+            member
+            for member in party.members
+            if member.species_id in fixed_dose.trainee_species_lineage
+        )
+        if len(matches) != 1:
+            raise RuntimeError(
+                "Fixed party-training dose lost its unique trainee lineage binding."
+            )
+        return matches[0]
+
     optional_overworld_choices = (
         TrainingControlAction.SEEK,
         TrainingControlAction.HEAL,
@@ -1020,7 +1104,28 @@ def run_red_team_balancing(
             faints=party.fainted_count,
         )
 
-        if evolution_target is None:
+        if fixed_dose is not None:
+            if battles == fixed_dose.completed_battles:
+                break
+            if battles > fixed_dose.completed_battles:
+                raise RuntimeError("Fixed party-training dose exceeded its battle endpoint.")
+            if steps >= policy.max_steps:
+                raise RuntimeError("Fixed party-training dose exhausted its step bound.")
+            trainee = bound_trainee(party)
+            assert fixed_venue is not None
+            current_venue = fixed_venue
+            if member_is_unsafe_for_team_training(trainee, policy):
+                directive = TeamTrainingDirective.RESTORE_TEAM
+            elif trainee.slot != 1:
+                directive = TeamTrainingDirective.SWITCH_TRAINEE
+            else:
+                directive = TeamTrainingDirective.TRAIN_MEMBER
+            decision = TeamTrainingDecision(
+                directive,
+                "execute the prospectively fixed party-development dose",
+                target_slot=trainee.slot,
+            )
+        elif evolution_target is None:
             decision = plan_team_training(party, policy, progress)
             trainee = None
             target_band = None
@@ -1421,7 +1526,7 @@ def run_red_team_balancing(
                 TrainingControlAction.HEAL,
                 "required recovery boundary",
             )
-            restore_core_and_count()
+            prepare_for_recovery()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             required_recovery_trips += 1
@@ -1444,7 +1549,7 @@ def run_red_team_balancing(
                 TrainingControlAction.SEEK,
                 "venue-travel boundary",
             )
-            restore_core_and_count()
+            prepare_for_recovery()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             venue_transition_trips += 1
@@ -1494,7 +1599,7 @@ def run_red_team_balancing(
         if selected is TrainingControlAction.HEAL:
             if healing_trips >= policy.max_healing_trips:
                 raise RuntimeError("training-control authority exhausted the healing budget")
-            restore_core_and_count()
+            prepare_for_recovery()
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             optional_recovery_trips += 1
@@ -1507,11 +1612,11 @@ def run_red_team_balancing(
         steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
     if current_venue.is_in_map(reader.read()):
-        restore_core_and_count()
+        prepare_for_recovery()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1
         cleanup_trips += 1
-    restore_core_and_count()
+    prepare_for_recovery()
     report = (
         summarize_team_readiness(party_reader.read(), policy) if evolution_target is None else None
     )
