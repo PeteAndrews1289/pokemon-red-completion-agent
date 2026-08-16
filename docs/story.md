@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one option is not a choice
+
+The covered Cave switch was finally opened. The run failed—and the failure exposed exactly the
+kind of false lesson this project is trying not to teach. The trainer handed the evidence recorder
+a menu with one destination. The recorder answered, correctly, “this experiment is not allowed to
+make a choice.” Both rules had tests. Nobody had tested the handshake.
+
+V1 is now a sealed failure, not a rehearsal to repeat. It produced no measurement and left no
+terminal counters, so the story does not claim that the evolution completed. The new rule is
+portable: when Red or Crystal offers only one viable action, record the situation but do not train
+a ranking model on a fake decision. Real two-way venue choices still survive.
+
+The next attempt has a new identity and a genuinely different, inventory-authenticated starting
+state. It will also write the final party and operating counters before deciding whether the result
+passes, so another failure remains diagnosable. But V2 is still behind the locks marked **FULL
+GATE · CI · CLAUDE · NEW AUTHORIZATION**.
+
+The board reads **one prior · fourteen reserved roots · zero frozen menus · zero outcomes · one
+consumed failed measurement · zero authority**. Antigravity stays away from the lock. Once the
+actual Red questions exist, it gets the job it is better suited for: try to break three assumptions
+about what should transfer to Crystal and say what experiment—or code deletion—would follow.
+
 ## Current checkpoint: the one-shot lock now survives a power loss
 
 The first final review briefly looked green, then Claude corrected it: four Cave runner safeguards

@@ -1,11 +1,26 @@
 # Pokémon Learning Observatory
 
-> **One-shot safety gate:** the prospective Cave measurement remains unexecuted. Its typed artifact
+> **Current Cave status:** V1 is **FAILED · CONSUMED · NOT RETRYABLE**. It retained one plan row
+> and no terminal/measurement row, so the dashboard must not infer completion or advance a prior.
+> The cause was a singleton venue presented as a strategic menu. The shared trainer now treats a
+> forced destination as a fact and emits venue decisions only for two or more viable destinations.
+> Future attempts retain terminal counters and a path-redacted error before aborting.
+>
+> V2 is **PROSPECTIVE · DISTINCT ROOT · NOT EXECUTED**. Its root semantics are bound through the
+> 81-entry inventory, and its artifact namespace is unused. Show its gates separately: focused
+> behavior green; full suite/registries pending; publication pending; exact CI pending; Claude
+> audit pending; authorization pending. Honest scoreboard: **venue priors 1 · roots 14 · menus 0 ·
+> outcomes 0/14 · accepted Cave measurements 0 · failed consumed attempts 1 · fit false · authority
+> zero**. Never roll a failed attempt into a percentage-complete training bar.
+
+> **Historical V1 safety gate:** before execution, the prospective Cave measurement remained
+> unexecuted. Its typed artifact
 > now durably claims the attempt before emulator input, binds execution to the private root holding
 > all authenticated inputs, and cannot publish complete until protected files and ROM sidecars are
 > unchanged. Exact source `41dd817` passed CI run `31919075770`; the readiness page may show this as
-> **measurement source awaiting independent re-audit** only. It must not advance priors, menus,
-> outcomes, fit or authority until the one-shot result is both executed and independently accepted.
+> **measurement source awaiting independent re-audit** only. V1 later failed; the current V2 status
+> is the block above. Neither version advances priors, menus, outcomes, fit or authority without an
+> independently accepted result.
 
 > **Reservation checkpoint:** the project now has 14 privately reserved source roots—8 train and
 > 6 development—but still has zero frozen candidate menus and zero outcomes. The reservation spans

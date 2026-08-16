@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: one option is not a decision
+
+Open on the authorized **RUN CAVE ONCE** switch. Let the emulator run, then stop on **FAILED
+CLOSED**. Show the private evidence tray: **PLAN 1 · TERMINAL 0 · MEASUREMENT 0**. Do not show a
+retry button.
+
+Split the screen. On the left, the trainer turns **ONE FIXED VENUE** into a one-card candidate
+menu. On the right, the measurement contract says **CANDIDATE DECISIONS MUST EQUAL ZERO**. Light
+both old unit tests green, then draw an untested cable between them and make it snap. Narration:
+**“Every box was green. The handshake was impossible.”**
+
+Replace the rule with **ONE VIABLE DESTINATION = FACT · TWO OR MORE = CHOICE**. Keep the existing
+two-venue learner menu lit. Add a private journal page that records **PARTY · BATTLES · STEPS ·
+HEALS · MOVEMENT · ACTIONS · CANDIDATE COUNT** before the acceptance stamp, followed by a
+path-redacted failure reason.
+
+Move V1 into a locked tray marked **CONSUMED FOREVER**. Bring in V2 with a different anonymous
+root, an **81-STATE INVENTORY BINDING**, and locks labeled **FULL GATE · CI · CLAUDE · NEW
+AUTHORIZATION**. End on **PRIOR 1 · ROOTS 14 · MENUS 0 · OUTCOMES 0/14 · FAILED ATTEMPTS 1 ·
+AUTHORITY 0**. Narration: **“The failure did not train the model. It taught the experiment what a
+decision actually is.”**
+
 ## August 15 scene: make the one-shot lock survive a blackout
 
 Start with the covered **RUN CAVE ONCE** switch. Show Claude's mutation board: **LINEAGE 8/8 ·

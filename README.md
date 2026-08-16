@@ -4,16 +4,32 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **The one-shot Cave gate is hardened but still closed (August 15, 2026).** Claude's corrected
+> **Cave V1 is retired; V2 is repaired but not executed (August 15, 2026).** The one authorized V1
+> attempt failed closed after the live trainer represented its single fixed venue as a one-item
+> candidate menu and the runner rejected that contradiction. It retained no measurement, outcome,
+> model call, fit, prior or authority. The
+> [path-free failure receipt](docs/evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json)
+> makes the consumed attempt explicit. V1 will never be retried.
+>
+> The shared trainer now emits venue decisions only when at least two destinations are viable;
+> real trainee and multi-venue choices remain intact. Future failures retain terminal counters and
+> a path-redacted reason before aborting. A
+> [prospective V2 plan](docs/evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) binds a
+> distinct open train root to its frozen 81-state inventory semantics and an unused artifact ID.
+> It still requires full local qualification, publication, exact-head CI, Claude review and fresh
+> one-shot authorization. Honest board: **priors 1 · roots 14 · frozen menus 0 · outcomes 0/14 ·
+> accepted Cave measurements 0 · consumed failed attempts 1 · fit false · authority zero**.
+
+> **Historical pre-V1 qualification checkpoint (August 15, 2026).** Claude's corrected
 > audit killed every lineage and artifact-identity mutation but found four live-run guards that
 > existing tests never exercised: execution authorization, positive CI identity, protected-input
 > immutability and ROM-sidecar exclusion. Direct behavioral tests now distinguish all four. Codex
 > also found and fixed a deeper power-loss defect: typed artifacts now durably sync their exclusive
 > partial claim before returning to emulator code, retain that claim on sync failure, and run final
 > isolation checks before a result can publish as complete. Execution is additionally bound to the
-> initialized private root that contains every authenticated input. The live Cave measurement has
-> not run. Exact source `41dd817` passed GitHub CI run `31919075770`; all learning counters remain
-> unchanged pending Claude's narrow recheck.
+> initialized private root that contains every authenticated input. At this checkpoint the Cave
+> measurement had not run. V1 later ran and failed as recorded above. Exact source `41dd817` passed
+> GitHub CI run `31919075770`; no learning counter advanced.
 
 > **Reservation identity correction (August 15, 2026):** Claude found that the original planner's
 > “root” check compared checkpoint IDs with canonical root-lineage IDs. A new read-only audit
@@ -25,7 +41,7 @@
 > for every prospective menu; neither checkpoint aliases nor regenerated current lineages are
 > treated as authoritative evidence.
 
-> **Current bridge to Red party training (August 15, 2026): the real menus now preflight, but no
+> **Historical pre-V1 bridge (August 15, 2026): the real menus preflighted, but no
 > training example exists yet.** A read-only Red adapter derives title-neutral completion,
 > evolution, living-retention, role, survival, health and PP features directly from each coherent
 > cartridge state. On the twelve reservations that need no preparation, it produced twelve genuine
@@ -35,11 +51,12 @@
 > frozen, no answer was selected and no outcome was opened.
 >
 > The missing venue evidence now has a separate
-> [prospective one-shot plan](docs/evidence/red-cave-venue-measurement-plan-2026-08-15.json).
+> [V1 prospective one-shot plan](docs/evidence/red-cave-venue-measurement-plan-2026-08-15.json).
 > It uses an unused open train root, one fixed Cave venue and the same bounded evolution
 > measurement contract as the existing Route 11 prior. It cannot construct a candidate menu,
 > query a teacher/model, fit, open a learner outcome, touch sealed Red/Crystal data or retry after
-> controller input. It has passed a real read-only preflight but has not executed. Honest board:
+> controller input. It had passed a real read-only preflight but had not yet executed at this
+> historical checkpoint. Honest board then:
 > **priors 1 · roots 14 · in-memory bindings 7 · frozen menus 0 · outcomes 0/14 · fit false ·
 > authority zero**. Next: publish this source, obtain exact-head CI and Claude review, then measure
 > Cave once, compose its prior, materialize two natural PP states and freeze the 8+6 catalog.

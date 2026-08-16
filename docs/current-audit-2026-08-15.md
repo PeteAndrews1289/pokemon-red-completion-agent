@@ -1,5 +1,38 @@
 # Current audit — 2026-08-15
 
+## Cave V1 failure and V2 remediation audit
+
+The authorized V1 measurement was executed exactly once from source `f85ea17`, source bundle
+`beae0f56…`, and green CI run `31919075770`. The private artifact finalized failed with reason
+`unhandled_exception`, one plan record, zero terminal-attempt records and zero measurement records.
+The [public failure receipt](evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json) binds
+the retained manifest and stream hashes without exposing a path. V1 is consumed; copying its inputs
+or changing the artifact root would be a prohibited retry.
+
+The defect is reproduced without controller input. With exactly one fixed venue,
+`project_venue_candidates` returned a one-candidate projection and the live sink retained it. The
+runner then rejected any nonempty candidate list under its no-choice contract. This means V1 was
+structurally incapable of acceptance. It does **not** prove whether the bounded evolution completed,
+because the old artifact had no pre-validation terminal record.
+
+Adjudication: suppress only singleton venue emissions at the shared training seam; preserve
+trainee menus and multi-venue rankings. Behavioral tests now distinguish the single-venue targeted
+evolution path and the two-venue authority path. The runner now writes terminal attempt evidence
+before objective/budget validation and appends a path-redacted exception record before its writer
+aborts. Focused Cave/training coverage is 57/57 green; the full gate and registries are pending.
+
+V2 uses checkpoint 031 rather than consumed checkpoint 028. Its 81-entry checkpoint inventory
+authenticates a distinct state, envelope, lineage and semantic signature; the private V2 artifact
+identity is absent. The
+[prospective V2 plan](evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) is not an
+authorization. Required gates remain: full local suite and generated registries, immutable commit,
+exact-head CI, narrow Claude mutation/meaning audit, then a fresh one-shot authorization. No live
+V2 preflight or execution has occurred from this candidate.
+
+Antigravity is deferred by design. It is not the right reviewer for artifact provenance. After a
+real 8+6 catalog exists, its bounded task is to attack no more than three cross-title assumptions
+and name the smallest Red/Crystal falsifier and any work the result would delete.
+
 ## Corrected one-shot audit and durability adjudication
 
 Claude's final audit of executable source `9476b97` corrected an initially favorable reading and

@@ -22,25 +22,25 @@ from pokemon_red_completion.party_development_venue_priors import (
 from pokemon_red_completion.provenance import canonical_sha256
 
 RED_CAVE_VENUE_MEASUREMENT_PLAN_SCHEMA = (
-    "pokemon.red.party-development-cave-venue-measurement-plan.v1"
+    "pokemon.red.party-development-cave-venue-measurement-plan.v2"
 )
 RED_CAVE_VENUE_MEASUREMENT_RESULT_SCHEMA = (
-    "pokemon.red.party-development-cave-venue-measurement-result.v1"
+    "pokemon.red.party-development-cave-venue-measurement-result.v2"
 )
-RED_CAVE_VENUE_MEASUREMENT_ID = "red-cave-venue-prior-measurement-v1"
-RED_CAVE_VENUE_MEASUREMENT_ARTIFACT_ID = "red-cave-venue-measurement-v1"
-RED_CAVE_SUPPORT_CHECKPOINT_ID = "red-goal-v1-028-evolve_species-train-01"
+RED_CAVE_VENUE_MEASUREMENT_ID = "red-cave-venue-prior-measurement-v2"
+RED_CAVE_VENUE_MEASUREMENT_ARTIFACT_ID = "red-cave-venue-measurement-v2"
+RED_CAVE_SUPPORT_CHECKPOINT_ID = "red-goal-v1-031-evolve_species-train-04"
 RED_CAVE_SUPPORT_STATE_SHA256 = (
-    "4348fd2bc9b20772f9607ea6242a53ed56656843c1a68c25671bc770ce484a64"
+    "e1eddd16453dbe9d7a1b3fe033266ec5b045bfae7362b2222dd6356aae0d70c4"
 )
 RED_CAVE_SUPPORT_ENVELOPE_SHA256 = (
-    "825e270d8974afabd5650b1dee618a975baeffa965124de3eff041d6dca8a4f3"
+    "ef9c2f46e811ac6511084f46d7cfb1bc8bcb19faad852398cf2b31e0123c0fdd"
 )
 RED_CAVE_SUPPORT_SEMANTIC_SHA256 = (
-    "319535d3e5f3af52b6a7eaa09959eb7a6455ff910ae58a1d8ba39b0933e24115"
+    "04256039a6a860591b9a82aee26874d38f4f339e5ef604f1fdd47da68864240d"
 )
 RED_CAVE_SUPPORT_ASSIGNMENT_ID = (
-    "b83b76f4fe14aaaadc8cb261d16456b30ebd1b9c85ef37e12e38f5bdd6553ef4"
+    "9f05ba52551fdd49736a7b05a328be7f5333bf2dbd2e1d1626361a98239bef45"
 )
 RED_CAVE_SUPPORT_ROOT_LINEAGE_ID = (
     f"red-goal-root-{RED_CAVE_SUPPORT_ASSIGNMENT_ID}"
@@ -53,6 +53,12 @@ RED_CAVE_CONTEXT_CATALOG_SOURCE_COMMIT = (
 )
 RED_CAVE_CONTEXT_CATALOG_REGISTRY_SHA256 = (
     "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc"
+)
+RED_CAVE_CHECKPOINT_INVENTORY_FILE_SHA256 = (
+    "9c665db0892729d4327739b6dae46b9ed5c8e808567a33dee7ab1de8faccf881"
+)
+RED_CAVE_CHECKPOINT_INVENTORY_SHA256 = (
+    "b8c10704f2307e24ecff5af565a2ff8f97bde20aec78f34a15640649bcef4c94"
 )
 RED_ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 RED_CAVE_TARGET_SLOT = 3
@@ -135,6 +141,12 @@ def red_cave_venue_measurement_plan_document() -> dict[str, object]:
             "historical_goal_manager_registry_sha256": (
                 RED_CAVE_CONTEXT_CATALOG_REGISTRY_SHA256
             ),
+            "checkpoint_inventory_file_sha256": (
+                RED_CAVE_CHECKPOINT_INVENTORY_FILE_SHA256
+            ),
+            "checkpoint_inventory_sha256": RED_CAVE_CHECKPOINT_INVENTORY_SHA256,
+            "checkpoint_inventory_entry_count": 81,
+            "support_semantics_authenticated": True,
             "reservation_plan_sha256": RED_CAVE_RESERVATION_PLAN_SHA256,
             "reservation_plan_file_sha256": (
                 RED_CAVE_RESERVATION_PLAN_FILE_SHA256
@@ -195,6 +207,8 @@ def red_cave_venue_measurement_plan_document() -> dict[str, object]:
             "sealed_red_cases_opened": 0,
             "crystal_cases_opened": 0,
             "full_game_replays": 0,
+            "terminal_attempt_recorded_before_acceptance": True,
+            "path_free_failure_recorded_before_abort": True,
         },
         "acceptance": {
             "objective_completed": True,
@@ -214,6 +228,7 @@ def red_cave_venue_measurement_plan_document() -> dict[str, object]:
             "model_fit": False,
             "authority_promotion": False,
             "training_example_created": False,
+            "predecessor_v1_status": "failed_consumed_not_reusable",
             "next_if_complete": (
                 "Publish the immutable result, attest execution-source compatibility "
                 "from a distinct commit, and compose exactly one Cave venue prior."
@@ -244,6 +259,8 @@ def load_red_cave_venue_measurement_plan(
 
 __all__ = [
     "RED_CAVE_FINAL_TARGET_LEVEL",
+    "RED_CAVE_CHECKPOINT_INVENTORY_FILE_SHA256",
+    "RED_CAVE_CHECKPOINT_INVENTORY_SHA256",
     "RED_CAVE_CONTEXT_CATALOG_FILE_SHA256",
     "RED_CAVE_CONTEXT_CATALOG_REGISTRY_SHA256",
     "RED_CAVE_CONTEXT_CATALOG_SOURCE_COMMIT",
@@ -254,6 +271,7 @@ __all__ = [
     "RED_CAVE_SUPPORT_ENVELOPE_SHA256",
     "RED_CAVE_SUPPORT_STATE_SHA256",
     "RED_CAVE_SUPPORT_ROOT_LINEAGE_ID",
+    "RED_CAVE_SUPPORT_SEMANTIC_SHA256",
     "RED_CAVE_TARGET_SLOT",
     "RED_CAVE_VENUE_MEASUREMENT_ARTIFACT_ID",
     "RED_CAVE_VENUE_MEASUREMENT_ID",

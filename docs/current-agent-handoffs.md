@@ -5,6 +5,26 @@ Status: active operating assignment as of 2026-08-15. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: V1 consumed, V2 qualification active
+
+The Cave V1 attempt ran once and failed closed at a semantic contradiction: a fixed one-venue
+measurement was emitted as a singleton candidate menu, then rejected for having any candidate
+decision. No measurement or learner outcome survived, and V1 is permanently retired. Codex has
+implemented the title-neutral rule that forced destinations are not ranking decisions, preserved
+real multi-venue choices, and added terminal-attempt plus path-redacted failure retention.
+
+The prospective V2 plan binds a distinct checkpoint through the frozen 81-entry inventory and an
+unused artifact ID. V2 has not run. Codex's current assignment is to complete full gates,
+registries, publication and exact CI, then give Claude an immutable audit packet focused on this
+semantic seam, fresh-root independence and failure durability. A new live attempt requires that
+audit plus fresh one-shot authorization.
+
+Antigravity remains useful, but not as Claude's peer on evidence integrity. Its next assignment is
+deferred until the exact 8+6 menu catalog exists: receive a small public-safe Red/Crystal packet,
+return no more than three falsifiable transfer/product claims, and for each name the missing shared
+observable, cheapest test, changed decision and code/work to delete. Codex remains the only editor
+and final adjudicator.
+
 ## Shared product statement
 
 Build a model-driven hierarchical agent that can finish Pokémon games and build a declared living
@@ -22,20 +42,21 @@ Current honest state:
 - model authority granted by this lane: 0;
 - sealed Red cases opened: 0;
 - Crystal contexts opened by this lane: 0;
-- full Red replays authorized: 0.
+- full Red replays authorized: 0;
+- consumed failed Cave measurements: 1;
+- accepted Cave measurements: 0.
 
 The concrete Red adapter has now inspected all fourteen reserved roots read-only. Two PP
 preparations remain pending; seven trainee questions validate in memory; five genuine two-way venue
 questions are blocked only by missing Cave evidence. These are preflight facts, not frozen menus.
-The one-shot Cave measurement plan has also passed a real read-only preflight and remains
-unexecuted.
+V1 later executed once and failed without a measurement; V2 now carries the distinct prospective
+root and remains unexecuted.
 
-Claude's corrected final audit rejected live execution because four existing runner guards lacked
-behavioral tests. Codex has now added those tests, durably synced the typed one-shot claim before
-emulator input, moved final isolation checks inside the artifact transaction and required the
-artifact root to contain every authenticated protected input. Focused coverage is 77/77 and the
-full 3,560-test ROM-free gate is green. Exact source `41dd817` passed GitHub CI run `31919075770`;
-Claude's delta review is the only remaining live-measurement gate. No counter advanced.
+Before V1, Claude's corrected audit exposed four untested runner guards. Codex added their
+behavioral tests, durably synced the typed one-shot claim and bound execution to the canonical
+private root. V1 then revealed the separate singleton-menu contradiction described above. The
+next Claude review is therefore a fresh V2 semantic/durability gate, not a continuation of the old
+approval.
 
 Claude's latest audit found that the original planner called checkpoint IDs “roots.” Codex
 accepted the finding and resolved all 81 checkpoints through the frozen historical context catalog
@@ -86,9 +107,10 @@ Current Codex assignment:
 4. **Complete:** source qualification, exact-head CI, Claude recheck and repeated read-only PP
    inventory.
 5. **Complete, read-only:** qualify the concrete Red adapter and preflight all direct reservations.
-6. **Active:** qualify and publish the hardened one-shot Cave boundary, obtain exact-head CI and
-   Claude's delta approval, execute it once if approved, then compose one compatible second venue
-   prior. Do not promote the stale Cave result.
+6. **V1 failed; V2 active:** preserve V1 as consumed failed evidence. Qualify and publish the V2
+   singleton-semantics and failure-retention repair, obtain exact-head CI and Claude's delta
+   approval, then request fresh authorization for exactly one execution. Do not reuse V1 or
+   promote any failed/stale Cave result.
 7. After review, materialize only the two reserved middle-PP contexts;
    re-inventory and freeze the exact 8 train / 6 development **questions**, not outcomes. Dispatch
    both reviewers on that immutable catalog.

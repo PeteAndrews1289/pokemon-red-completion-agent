@@ -1,14 +1,32 @@
 # Three-agent coordination
 
-> **2026-08-15 corrected Cave-gate rejection and hardening:** Claude's first displayed mutation
+> **2026-08-15 V1 failure and V2 recovery:** the authorized Cave V1 attempt was consumed once and
+> failed closed because the training loop emitted a one-item venue menu while the no-choice runner
+> correctly rejected every menu. No measurement or learning record survived. The
+> [path-free failure receipt](docs/evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json)
+> retires V1 permanently. Codex has repaired the shared semantics so singleton destinations are
+> facts, not choices, and added terminal-attempt plus redacted-failure retention. The
+> [V2 plan](docs/evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) uses a distinct
+> inventory-authenticated root and unused artifact ID. It remains prospective pending full gates,
+> publication, exact CI, Claude audit and new one-shot authorization.
+>
+> Agent weighting remains asymmetric. Claude attacks whether V2's no-choice semantics, fresh-root
+> binding and retained failure evidence support the claim. Codex implements, runs the discriminating
+> tests and adjudicates. Antigravity 3.1 Pro is not asked to audit provenance or vote on execution.
+> Its higher-value assignment begins only with a concrete frozen menu catalog: receive a compact,
+> public-safe Red/Crystal packet and return no more than three falsifiable transfer/product claims,
+> including what shared observable is missing and what work should be deleted. This uses its broad
+> comparative perspective without letting a weaker reviewer dilute the evidence gate.
+
+> **Historical pre-V1 Cave-gate rejection and hardening:** Claude's first displayed mutation
 > total was incomplete. Its final result killed every lineage and fixed-artifact mutation but left
 > four runner guards untested, so it correctly returned **REJECT** for live execution. Codex added
 > behavioral falsifiers for missing authorization, invalid CI identity, protected-input drift and
 > ROM sidecars; then fixed a separate production durability gap by syncing the typed one-shot claim
 > before emulator input and keeping isolation checks inside the failed/complete transaction.
-> Execution is now bound to the private root containing all authenticated inputs. No live run has
-> occurred. Exact source `41dd817` passed CI run `31919075770`; Claude now receives that immutable
-> delta.
+> Execution was then bound to the private root containing all authenticated inputs. No live run had
+> occurred at this checkpoint. Exact source `41dd817` passed CI run `31919075770`; V1 later ran and
+> failed as recorded in the current block above.
 >
 > Antigravity remains out of this integrity gate. When the 8+6 menu catalog is frozen, Codex will
 > give 3.1 Pro a compact, public-safe challenge packet instead of the full repository and request at

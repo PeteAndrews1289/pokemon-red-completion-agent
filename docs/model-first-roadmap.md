@@ -27,11 +27,14 @@ Role ownership and exact handoffs are frozen in
 7. **Complete, read-only:** adjudicate Claude's identifier-namespace finding. The old checkpoint
    alias comparison was not canonical-root evidence; exact state exclusion removed the one prior
    entry, and explicit registry resolution proves zero root/state overlap in the reserved 8+6.
-8. **Active:** publish and review the separately preregistered one-shot Cave measurement. It uses
-   one unreserved open train root and one fixed venue, creates no learner question/outcome and may
-   not retry after input. If approved, execute once, publish the result under a distinct commit and
-   compose exactly one Cave prior. Then naturally materialize the two middle-PP contexts under the
-   frozen no-label protocol, re-inventory and freeze the exact 8+6 menus.
+8. **V1 failed and retired; V2 active:** V1 was executed exactly once and failed because the shared
+   trainer emitted a singleton venue “choice” that the no-choice runner rejected. It created no
+   measurement or learning evidence and cannot be retried. The title-neutral singleton semantics
+   and failure retention are repaired. Qualify the prospective V2 plan on its distinct,
+   inventory-authenticated open root; publish, pass exact-head CI and Claude review, then seek new
+   authorization for exactly one V2 execution. Only an accepted V2 result may compose one Cave
+   prior. Then naturally materialize the two middle-PP contexts under the frozen no-label protocol,
+   re-inventory and freeze the exact 8+6 menus.
 9. Send that immutable catalog to Claude for integrity/power review and Antigravity for one bounded
    genuine-choice/transfer review. Execute each approved identity once with immediate durable
    private retention. Stop at the first binding/accounting failure and never replace an exposed
@@ -47,7 +50,30 @@ for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine 
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
 
-## Current checkpoint: the 8+6 roots are reserved; the questions are not frozen
+## Current checkpoint: one failed attempt exposed the missing semantic seam
+
+V1 is permanently consumed. Its immutable failed artifact retained one plan row and no terminal or
+measurement row; the
+[path-free receipt](evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json) therefore
+advances no evidence counter. The failure was deterministic: one fixed venue was projected and
+recorded as a one-item menu, while the runner's prospective contract required zero strategic
+choices. The test suite had checked both source fragments independently without executing the seam.
+
+The shared correction is the portable rule the eventual Red/Crystal agent needs: a forced action
+is an observation, not a ranking decision. Single-venue operation now emits no venue label; two or
+more viable venues still emit an identity-free choice, and trainee choice behavior is unchanged.
+Future Cave attempts write terminal party, movement, battle, recovery, controller and candidate
+counters before acceptance; failures retain a path-redacted message and digest.
+
+The [V2 plan](evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) selects a different
+train root and binds its state, envelope, capture-time lineage and semantic signature through the
+81-entry read-only inventory. The V2 artifact namespace is unused. It remains prospective: focused
+behavior passes, but full registries/gates, publication, exact CI and Claude's semantic/durability
+audit still precede any authorization. Antigravity remains outside this evidence gate. Once the
+8+6 catalog is frozen, it receives only a bounded public-safe transfer challenge and returns at
+most three falsifiable Red-to-Crystal product claims.
+
+## Historical pre-V1 checkpoint: the 8+6 roots were reserved; the questions were not frozen
 
 The concrete read-only bridge is now implemented. On the real private plan it accounted for all
 fourteen reservations without action: two PP preparations remained pending; twelve direct roots
@@ -66,13 +92,13 @@ carry canonical lineage directly; meanwhile the Red preflight resolves the captu
 from that historical catalog and binds it into every prospective menu. The alias comparison is
 not authority.
 
-The smallest second-venue measurement is prospectively frozen in
+The V1 second-venue measurement was prospectively frozen in
 [red-cave-venue-measurement-plan-2026-08-15.json](evidence/red-cave-venue-measurement-plan-2026-08-15.json).
 It binds one unused open train root, the same measurement contract as Route 11, a single fixed Cave
 venue, one bounded evolution and zero candidate decisions. The runner opens durable private
 evidence before its first input and prohibits retry, teacher/model calls, learner outcomes, sealed
-access and Crystal. A real read-only preflight passed; live execution is the next gated action after
-publication, CI and Claude review.
+access and Crystal. A real read-only preflight passed. V1 later executed and failed as recorded in
+the current checkpoint above; this historical plan must never be reused.
 
 Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`.
 Claude's narrow H2/M2/L2 recheck approved the 51-element/nine-waiver source proof after killing

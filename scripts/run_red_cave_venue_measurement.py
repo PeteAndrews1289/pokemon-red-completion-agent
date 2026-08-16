@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
+from contextlib import suppress
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -44,6 +46,9 @@ from pokemon_red_completion.goal_manager_protocol import (  # noqa: E402
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING  # noqa: E402
 from pokemon_red_completion.observation import MapId, PokemonRedStateReader  # noqa: E402
 from pokemon_red_completion.party import PartyObservation  # noqa: E402
+from pokemon_red_completion.party_development_inventory import (  # noqa: E402
+    PartyDevelopmentCheckpointInventory,
+)
 from pokemon_red_completion.party_development_question_reservations import (  # noqa: E402
     PartyDevelopmentQuestionReservationPlan,
 )
@@ -51,13 +56,18 @@ from pokemon_red_completion.party_development_venue_priors import (  # noqa: E40
     PartyDevelopmentVenuePriorRegistry,
     VenuePriorMeasurementContract,
 )
-from pokemon_red_completion.private_artifacts import open_private_root  # noqa: E402
+from pokemon_red_completion.private_artifacts import (  # noqa: E402
+    PrivateArtifactWriter,
+    open_private_root,
+)
 from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
     require_clean_source,
     require_published_source,
 )
 from pokemon_red_completion.red_cave_venue_measurement import (  # noqa: E402
+    RED_CAVE_CHECKPOINT_INVENTORY_FILE_SHA256,
+    RED_CAVE_CHECKPOINT_INVENTORY_SHA256,
     RED_CAVE_CONTEXT_CATALOG_FILE_SHA256,
     RED_CAVE_CONTEXT_CATALOG_REGISTRY_SHA256,
     RED_CAVE_CONTEXT_CATALOG_SOURCE_COMMIT,
@@ -70,6 +80,7 @@ from pokemon_red_completion.red_cave_venue_measurement import (  # noqa: E402
     RED_CAVE_SUPPORT_CHECKPOINT_ID,
     RED_CAVE_SUPPORT_ENVELOPE_SHA256,
     RED_CAVE_SUPPORT_ROOT_LINEAGE_ID,
+    RED_CAVE_SUPPORT_SEMANTIC_SHA256,
     RED_CAVE_SUPPORT_STATE_SHA256,
     RED_CAVE_TARGET_SLOT,
     RED_CAVE_VENUE_MEASUREMENT_ARTIFACT_ID,
@@ -101,7 +112,7 @@ DEFAULT_PLAN_PATH = (
     PROJECT_ROOT
     / "docs"
     / "evidence"
-    / "red-cave-venue-measurement-plan-2026-08-15.json"
+    / "red-cave-venue-measurement-plan-v2-2026-08-15.json"
 )
 
 
@@ -120,6 +131,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--venue-prior-registry-file-sha256", required=True)
     parser.add_argument("--context-catalog", type=Path, required=True)
     parser.add_argument("--context-catalog-file-sha256", required=True)
+    parser.add_argument("--checkpoint-inventory", type=Path, required=True)
+    parser.add_argument("--checkpoint-inventory-file-sha256", required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--private-root", type=Path, default=None)
     parser.add_argument("--exact-ci-run", type=int, default=None)
@@ -270,6 +283,36 @@ def _require_independent_support(
         )
 
 
+def _require_inventory_support(
+    inventory: PartyDevelopmentCheckpointInventory,
+) -> None:
+    matches = tuple(
+        entry
+        for entry in inventory.entries
+        if entry.checkpoint_id == RED_CAVE_SUPPORT_CHECKPOINT_ID
+    )
+    if inventory.inventory_sha256 != RED_CAVE_CHECKPOINT_INVENTORY_SHA256:
+        raise RedCaveVenueMeasurementRunError(
+            "Cave checkpoint inventory identity differs from the prospective plan"
+        )
+    if len(matches) != 1:
+        raise RedCaveVenueMeasurementRunError(
+            "Cave support is not unique in the authenticated checkpoint inventory"
+        )
+    entry = matches[0]
+    if (
+        entry.partition.value != "train"
+        or entry.state_sha256 != RED_CAVE_SUPPORT_STATE_SHA256
+        or entry.envelope_sha256 != RED_CAVE_SUPPORT_ENVELOPE_SHA256
+        or entry.semantic_signature_sha256 != RED_CAVE_SUPPORT_SEMANTIC_SHA256
+        or not entry.controls_ready
+        or entry.battle_active
+    ):
+        raise RedCaveVenueMeasurementRunError(
+            "Cave support semantics differ from the authenticated checkpoint inventory"
+        )
+
+
 def _stable_party(
     emulator: PyBoyAdapter,
 ) -> tuple[PokemonRedStateReader, PartyObservation]:
@@ -319,11 +362,61 @@ def _party_evidence(party: PartyObservation) -> dict[str, object]:
     }
 
 
+_PRIVATE_PATH_TOKEN = re.compile(
+    r"(?i)(?:file:(?://)?[^\s'\"]+|(?<![\w])~(?:[/\\][^\s'\"]*)?"
+    r"|(?<![\w])(?:\.{1,2}[/\\][^\s'\"]+"
+    r"|(?=[^\s'\"]*[a-z_.-])(?:[a-z0-9_.-]+[/\\])+[^\s'\"]+)"
+    r"|(?<![\w])/(?:[^\s'\"]+)|(?<![\w])[a-z]:[/\\][^\s'\"]+"
+    r"|\\\\[^\s'\"]+)"
+)
+
+
+def _path_free_exception_message(message: str) -> str:
+    return _PRIVATE_PATH_TOKEN.sub("[private-path]", message)
+
+
+def _private_failure_record(error: BaseException) -> dict[str, object]:
+    message = str(error)
+    retained_message = _path_free_exception_message(message)
+    return {
+        "record_type": "independent_cave_venue_measurement_failure",
+        "schema_version": 2,
+        "exception_type": type(error).__name__,
+        "exception_message": retained_message,
+        "exception_message_retained_exactly": retained_message == message,
+        "exception_message_redacted": retained_message != message,
+        "exception_message_sha256": hashlib.sha256(message.encode("utf-8")).hexdigest(),
+        "private_path_fields": 0,
+    }
+
+
+def _execute_with_retention(
+    writer: PrivateArtifactWriter,
+    execute: Callable[
+        [Callable[[Mapping[str, object]], None]],
+        dict[str, object],
+    ],
+) -> dict[str, object]:
+    """Retain the last observable attempt and sanitized failure before aborting."""
+
+    try:
+        measurement = execute(lambda record: writer.append("attempt", record))
+    except (Exception, KeyboardInterrupt, SystemExit) as error:
+        # The original execution error remains authoritative if diagnostic
+        # retention itself encounters an I/O or validation failure.
+        with suppress(Exception):
+            writer.append("failure", _private_failure_record(error))
+        raise
+    writer.append("measurement", measurement)
+    return measurement
+
+
 def _execute_measurement(
     *,
     rom_path: Path,
     state_path: Path,
     expected_party: PartyObservation,
+    attempt_sink: Callable[[Mapping[str, object]], None],
 ) -> dict[str, object]:
     summaries: list[TeamTrainingExecutionSummary] = []
     candidate_decisions: list[TrainingCandidateDecision] = []
@@ -372,13 +465,42 @@ def _execute_measurement(
         summary = summaries[0]
         after_party = PokemonRedPartyReader(emulator).read()
         after_target = after_party.member_in_slot(RED_CAVE_TARGET_SLOT)
+        attempt_sink(
+            {
+                "record_type": "independent_cave_venue_measurement_attempt",
+                "schema_version": 2,
+                "venue_binding_sha256": red_cave_venue_binding_sha256(),
+                "private_venue_binding": DIGLETTS_CAVE_TRAINING_VENUE.band.area_id,
+                "before_party": _party_evidence(before_party),
+                "after_party": _party_evidence(after_party),
+                "target_evolution_observed": (
+                    after_target is not None
+                    and after_target.species_id == DUGTRIO_SPECIES_ID
+                ),
+                "target_level_observed": (
+                    None if after_target is None else after_target.level
+                ),
+                "execution_summary": summary.public_dict(),
+                "frames_executed": frames_executed,
+                "controller_actions": controller.actions_executed,
+                "candidate_decisions": len(candidate_decisions),
+                "teacher_queries": 0,
+                "model_predictions": 0,
+                "model_updates": 0,
+                "learner_outcomes_opened": 0,
+                "private_path_fields": 0,
+            }
+        )
+        if candidate_decisions:
+            raise RedCaveVenueMeasurementRunError(
+                "Cave execution emitted a candidate decision for one fixed venue"
+            )
         if (
             after_target is None
             or after_target.species_id != DUGTRIO_SPECIES_ID
             or after_target.level != RED_CAVE_FINAL_TARGET_LEVEL
             or after_target.experience is None
             or after_party.fainted_count
-            or candidate_decisions
         ):
             raise RedCaveVenueMeasurementRunError(
                 "Cave execution did not meet its fixed no-choice evolution objective"
@@ -458,6 +580,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         != RED_CAVE_VENUE_PRIOR_REGISTRY_FILE_SHA256
         or args.context_catalog_file_sha256
         != RED_CAVE_CONTEXT_CATALOG_FILE_SHA256
+        or args.checkpoint_inventory_file_sha256
+        != RED_CAVE_CHECKPOINT_INVENTORY_FILE_SHA256
     ):
         raise RedCaveVenueMeasurementRunError(
             "private input arguments differ from the prospective plan"
@@ -488,6 +612,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         args.context_catalog,
         subject="historical context catalog",
     )
+    checkpoint_inventory_path = _require_external(
+        args.checkpoint_inventory,
+        subject="checkpoint inventory",
+    )
     reservation_plan = PartyDevelopmentQuestionReservationPlan.from_private_dict(
         _load_private_json(
             reservation_plan_path,
@@ -507,6 +635,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         expected_sha256=args.context_catalog_file_sha256,
         subject="historical context catalog",
     )
+    checkpoint_inventory = PartyDevelopmentCheckpointInventory.from_private_dict(
+        _load_private_json(
+            checkpoint_inventory_path,
+            expected_sha256=args.checkpoint_inventory_file_sha256,
+            subject="checkpoint inventory",
+        )
+    )
+    _require_inventory_support(checkpoint_inventory)
     if (
         context_catalog_document.get("source_commit")
         != RED_CAVE_CONTEXT_CATALOG_SOURCE_COMMIT
@@ -557,6 +693,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             reservation_plan_path,
             venue_registry_path,
             context_catalog_path,
+            checkpoint_inventory_path,
         )
     }
     designated_private_root = (
@@ -604,6 +741,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "independent_of_reserved_questions": True,
         "independent_of_existing_priors": True,
         "historical_context_catalog_sha256": context_catalog.catalog_sha256,
+        "checkpoint_inventory_sha256": checkpoint_inventory.inventory_sha256,
+        "support_semantics_authenticated": True,
         "canonical_root_lineage_authenticated": True,
         "candidate_menus_constructed": 0,
         "controller_actions": 0,
@@ -656,21 +795,27 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "learner_outcomes_opened": 0,
             },
         )
-        measurement = _execute_measurement(
-            rom_path=rom_path,
-            state_path=state_path,
-            expected_party=party,
-        )
-        writer.append("measurement", measurement)
-        # These postconditions run before the writer can publish a complete
-        # artifact.  A violation therefore retains a consumed failed attempt,
-        # never a result that another process could mistake for valid evidence.
-        _require_protected_files_unchanged(protected_files)
-        _require_rom_adjacent_unchanged(
-            rom_path,
-            adjacent_before,
-            operation="measurement",
-        )
+        def execute_and_validate(
+            attempt_sink: Callable[[Mapping[str, object]], None],
+        ) -> dict[str, object]:
+            measurement = _execute_measurement(
+                rom_path=rom_path,
+                state_path=state_path,
+                expected_party=party,
+                attempt_sink=attempt_sink,
+            )
+            # These postconditions run before the writer can publish a complete
+            # artifact. A violation therefore retains a consumed failed attempt,
+            # never a result that another process could mistake for valid evidence.
+            _require_protected_files_unchanged(protected_files)
+            _require_rom_adjacent_unchanged(
+                rom_path,
+                adjacent_before,
+                operation="measurement",
+            )
+            return measurement
+
+        measurement = _execute_with_retention(writer, execute_and_validate)
 
     return {
         **preflight,

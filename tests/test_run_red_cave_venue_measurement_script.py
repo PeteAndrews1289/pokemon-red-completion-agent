@@ -4,7 +4,9 @@ import argparse
 import ast
 import hashlib
 import runpy
+from collections.abc import Mapping
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -116,6 +118,28 @@ def test_cave_execution_root_must_contain_all_protected_inputs(tmp_path: Path) -
         )
 
 
+def test_cave_inventory_binding_authenticates_the_fresh_support_semantics() -> None:
+    entry = SimpleNamespace(
+        checkpoint_id=SCRIPT["RED_CAVE_SUPPORT_CHECKPOINT_ID"],
+        partition=SimpleNamespace(value="train"),
+        state_sha256=SCRIPT["RED_CAVE_SUPPORT_STATE_SHA256"],
+        envelope_sha256=SCRIPT["RED_CAVE_SUPPORT_ENVELOPE_SHA256"],
+        semantic_signature_sha256=SCRIPT["RED_CAVE_SUPPORT_SEMANTIC_SHA256"],
+        controls_ready=True,
+        battle_active=False,
+    )
+    inventory = SimpleNamespace(
+        inventory_sha256=SCRIPT["RED_CAVE_CHECKPOINT_INVENTORY_SHA256"],
+        entries=(entry,),
+    )
+
+    SCRIPT["_require_inventory_support"](inventory)
+
+    entry.semantic_signature_sha256 = "0" * 64
+    with pytest.raises(RuntimeError, match="support semantics differ"):
+        SCRIPT["_require_inventory_support"](inventory)
+
+
 def test_cave_run_invokes_every_isolation_guard() -> None:
     source = SCRIPT_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -172,6 +196,49 @@ def test_private_input_loader_requires_exact_bytes(tmp_path: Path) -> None:
         )
 
 
+class _RecordingWriter:
+    def __init__(self) -> None:
+        self.records: list[tuple[str, Mapping[str, object]]] = []
+
+    def append(self, stream: str, record: Mapping[str, object]) -> None:
+        self.records.append((stream, record))
+
+
+def test_cave_failure_retains_terminal_attempt_and_path_free_reason() -> None:
+    writer = _RecordingWriter()
+
+    def fail(attempt_sink: object) -> dict[str, object]:
+        assert callable(attempt_sink)
+        attempt_sink({"candidate_decisions": 1, "private_path_fields": 0})
+        raise RuntimeError("failed beside /private/root/capture.state")
+
+    with pytest.raises(RuntimeError, match="failed beside"):
+        SCRIPT["_execute_with_retention"](writer, fail)
+
+    assert [stream for stream, _record in writer.records] == ["attempt", "failure"]
+    failure = writer.records[1][1]
+    assert failure["exception_type"] == "RuntimeError"
+    assert failure["exception_message"] == "failed beside [private-path]"
+    assert failure["exception_message_redacted"] is True
+    assert failure["private_path_fields"] == 0
+
+
+def test_cave_success_retains_attempt_before_measurement() -> None:
+    writer = _RecordingWriter()
+    measurement = {"objective_completed": True}
+
+    def succeed(attempt_sink: object) -> dict[str, object]:
+        assert callable(attempt_sink)
+        attempt_sink({"candidate_decisions": 0, "private_path_fields": 0})
+        return measurement
+
+    assert SCRIPT["_execute_with_retention"](writer, succeed) == measurement
+    assert [stream for stream, _record in writer.records] == [
+        "attempt",
+        "measurement",
+    ]
+
+
 def test_cave_runner_opens_immutable_artifact_before_execution() -> None:
     source = SCRIPT_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -223,7 +290,10 @@ def test_cave_runner_has_one_fixed_venue_and_no_answer_authority() -> None:
     assert "candidate_decision_authority" not in keywords
     assert "decision_authority" not in keywords
     assert "candidate_decision_sink" in keywords
-    assert "or candidate_decisions" in source
+    assert "if candidate_decisions:" in source
+    assert "attempt_sink" in {
+        argument.arg for argument in execute_function.args.kwonlyargs
+    }
 
 
 def test_cave_runner_preflight_returns_before_private_execution() -> None:
@@ -234,4 +304,6 @@ def test_cave_runner_preflight_returns_before_private_execution() -> None:
     assert '"learner_outcomes_opened": 0' in source
     assert "load_committed_goal_manager_registry_at_revision" in source
     assert "support_entry.authenticated_root_lineage_id" in source
+    assert "PartyDevelopmentCheckpointInventory.from_private_dict" in source
+    assert "_require_inventory_support(checkpoint_inventory)" in source
     assert '"root_lineage_id": RED_CAVE_SUPPORT_CHECKPOINT_ID' not in source

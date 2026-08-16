@@ -17,6 +17,40 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Cave V1 failed honestly; V2 repairs the semantic seam — 2026-08-15
+
+The authorized V1 Cave attempt ran exactly once from published source `f85ea17` under green CI
+run `31919075770` and failed closed. It produced only its private plan record: no measurement,
+learner outcome, model call, fit, prior or authority. The failed artifact and its hashes are
+preserved in the path-free
+[V1 failure receipt](docs/evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json).
+V1 is consumed permanently. Never rerun it, copy its inputs to manufacture another artifact
+namespace, or infer that its evolution completed; the old writer retained no terminal accounting.
+
+The cause was a contract contradiction, not bad emulator luck. `run_red_team_balancing` projected
+one fixed venue as a one-candidate “choice,” sent that record to the measurement runner, and the
+runner then rejected any candidate decision because a fixed measurement must ask no question.
+The old AST test asserted both sides existed but never exercised their interaction. A read-only,
+zero-controller probe on the actual support state confirmed the singleton projection.
+
+The repair is title-neutral: venue decisions now exist only when at least two venues are viable;
+trainee choices and real multi-venue choices are unchanged. Future attempts retain terminal party,
+cost and candidate counters before acceptance, plus a path-redacted error record on failure. The
+[prospective V2 plan](docs/evidence/red-cave-venue-measurement-plan-v2-2026-08-15.json) binds a
+different open train checkpoint and authenticates its semantic fingerprint through the frozen
+81-entry checkpoint inventory. Its artifact namespace is unused. V2 has **not** run and is not yet
+authorized: regenerate registries, pass the full local gate, publish one immutable source, obtain
+exact-head CI and Claude's narrow semantic/durability audit, then seek authorization for exactly
+one execution.
+
+Honest counters: priors 1; reserved roots 14; durable menus 0; outcomes 0/14; fits 0; accepted Cave
+measurements 0; consumed failed Cave attempts 1; sealed/Crystal 0; replay 0; authority 0.
+Antigravity is intentionally not an evidence-gate reviewer. After V2 is accepted and the 8+6
+catalog is concrete, give it a small public-safe Red-to-Crystal challenge: at most three claims,
+each naming a cross-title counterexample, missing shared observable, cheapest falsifier, decision
+changed and work to delete. Claude remains the forensic gate; Codex remains sole editor and
+adjudicator.
+
 ## Cave one-shot boundary hardened after corrected audit rejection — 2026-08-15
 
 Claude's corrected audit of `9476b97` killed 8/8 lineage probes and 3/3 fixed-artifact probes, then

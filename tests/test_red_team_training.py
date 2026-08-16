@@ -819,10 +819,10 @@ def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:
     assert [decision.decision_index for decision in candidate_decisions] == list(
         range(len(candidate_decisions))
     )
-    assert [decision.observation.kind.value for decision in candidate_decisions[:2]] == [
-        "trainee",
-        "venue",
-    ]
+    assert candidate_decisions
+    assert {
+        decision.observation.kind.value for decision in candidate_decisions
+    } == {"trainee"}
     serialized = json.dumps(
         [decision.public_dict() for decision in candidate_decisions], sort_keys=True
     )
@@ -948,7 +948,7 @@ def test_candidate_authority_agreement_is_behaviorally_a_no_op(
     authority_swaps, authority_calls, authority_kinds = exercise(authority=True)
 
     assert teacher_kinds == []
-    assert authority_kinds[:2] == ["trainee", "venue"]
+    assert authority_kinds and set(authority_kinds) == {"trainee"}
     assert authority_swaps == teacher_swaps
     assert authority_calls == teacher_calls == {"walk": 1, "heal": 0}
 
@@ -1077,6 +1077,38 @@ def test_candidate_authority_executes_an_alternate_venue_binding(
         )
 
     assert walks == {"lower": 1, "higher": 0}, memory.swaps
+
+
+def test_targeted_evolution_does_not_publish_a_singleton_venue_choice() -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (BLASTOISE_SPECIES_ID, 48),
+            (DUX_SPECIES_ID, 20),
+            (DIGLETT_SPECIES_ID, 22),
+            (JOLTEON_SPECIES_ID, 30),
+            (SNORLAX_SPECIES_ID, 25),
+            (HITMONLEE_SPECIES_ID, 30),
+        ]
+    )
+    candidate_decisions: list[TrainingCandidateDecision] = []
+
+    with pytest.raises(RuntimeError, match="budget"):
+        run(
+            memory,
+            FakeReader([state(map_id=CENTER_MAP, player_x=3, player_y=3)]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55,
+                maximum_level_spread=40,
+                required_size=6,
+                minimum_direct_level_advantage=5,
+                max_healing_trips=0,
+            ),
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            candidate_decision_sink=candidate_decisions.append,
+        )
+
+    assert candidate_decisions == []
 
 
 @pytest.mark.parametrize("selected", [True, -1, 99])

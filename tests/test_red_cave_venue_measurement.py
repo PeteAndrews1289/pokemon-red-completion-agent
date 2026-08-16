@@ -19,7 +19,13 @@ PLAN_PATH = (
     PROJECT_ROOT
     / "docs"
     / "evidence"
-    / "red-cave-venue-measurement-plan-2026-08-15.json"
+    / "red-cave-venue-measurement-plan-v2-2026-08-15.json"
+)
+FAILURE_PATH = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "red-cave-venue-measurement-failed-v1-2026-08-15.json"
 )
 
 
@@ -68,6 +74,15 @@ def test_cave_measurement_plan_is_single_venue_and_not_a_training_example() -> N
     assert isinstance(interpretation, dict)
     assert interpretation["training_example_created"] is False
     assert interpretation["authority_promotion"] is False
+    assert interpretation["predecessor_v1_status"] == "failed_consumed_not_reusable"
+    independence = plan["independence"]
+    assert isinstance(independence, dict)
+    assert independence["checkpoint_inventory_entry_count"] == 81
+    assert independence["support_semantics_authenticated"] is True
+    execution = plan["execution"]
+    assert isinstance(execution, dict)
+    assert execution["terminal_attempt_recorded_before_acceptance"] is True
+    assert execution["path_free_failure_recorded_before_abort"] is True
 
 
 def test_cave_measurement_plan_rejects_a_semantic_mutation(tmp_path: Path) -> None:
@@ -80,3 +95,27 @@ def test_cave_measurement_plan_rejects_a_semantic_mutation(tmp_path: Path) -> No
 
     with pytest.raises(RedCaveVenueMeasurementError, match="differs"):
         load_red_cave_venue_measurement_plan(path)
+
+
+def test_v1_failure_receipt_is_path_free_and_cannot_claim_evidence() -> None:
+    receipt = json.loads(FAILURE_PATH.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "failed_consumed"
+    assert receipt["private_path_fields"] == 0
+    assert receipt["artifact"]["measurement_records"] == 0
+    assert receipt["artifact"]["terminal_attempt_records"] == 0
+    assert receipt["interpretation"] == {
+        "authority_promoted": False,
+        "learner_outcomes_opened": 0,
+        "measurement_accepted": False,
+        "model_fit": False,
+        "model_predictions": 0,
+        "retry_or_root_copy_allowed": False,
+        "teacher_queries": 0,
+        "training_example_created": False,
+        "v1_attempt_consumed": True,
+        "venue_prior_entries_added": 0,
+    }
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded

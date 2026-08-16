@@ -1072,27 +1072,28 @@ def run_red_team_balancing(
                             raise RuntimeError(
                                 "The authorized trainee has no executable training venue."
                             )
-                venue_projection = project_venue_candidates(
-                    party,
-                    policy,
-                    trainee,
-                    bands,
-                )
-                if venue_projection is not None:
-                    projected_area, selected_index, observation = venue_projection
-                    if projected_area == target_band:
-                        authorized_index = emit_candidate_decision(
-                            observation,
-                            selected_index,
-                            "highest-yield safe measured venue",
-                        )
-                        target_band = bind_venue_candidate(
-                            party,
-                            policy,
-                            trainee,
-                            bands,
-                            authorized_index,
-                        )
+                if len(bands) > 1:
+                    venue_projection = project_venue_candidates(
+                        party,
+                        policy,
+                        trainee,
+                        bands,
+                    )
+                    if venue_projection is not None:
+                        projected_area, selected_index, observation = venue_projection
+                        if projected_area == target_band:
+                            authorized_index = emit_candidate_decision(
+                                observation,
+                                selected_index,
+                                "highest-yield safe measured venue",
+                            )
+                            target_band = bind_venue_candidate(
+                                party,
+                                policy,
+                                trainee,
+                                bands,
+                                authorized_index,
+                            )
                 current_venue = next(v for v in venues if v.band == target_band)
                 if (
                     (trainee_selection_changed or decision.target_slot != trainee.slot)
@@ -1134,28 +1135,29 @@ def run_red_team_balancing(
             if target_band is None:
                 raise RuntimeError(f"No provided venue suits precursor at level {trainee.level}.")
             current_venue = next(v for v in venues if v.band == target_band)
-            venue_projection = project_venue_candidates(
-                party,
-                policy,
-                trainee,
-                bands,
-            )
-            if venue_projection is not None:
-                projected_area, selected_index, observation = venue_projection
-                if projected_area == target_band:
-                    authorized_index = emit_candidate_decision(
-                        observation,
-                        selected_index,
-                        "highest-yield safe measured evolution venue",
-                    )
-                    target_band = bind_venue_candidate(
-                        party,
-                        policy,
-                        trainee,
-                        bands,
-                        authorized_index,
-                    )
-                    current_venue = next(v for v in venues if v.band == target_band)
+            if len(bands) > 1:
+                venue_projection = project_venue_candidates(
+                    party,
+                    policy,
+                    trainee,
+                    bands,
+                )
+                if venue_projection is not None:
+                    projected_area, selected_index, observation = venue_projection
+                    if projected_area == target_band:
+                        authorized_index = emit_candidate_decision(
+                            observation,
+                            selected_index,
+                            "highest-yield safe measured evolution venue",
+                        )
+                        target_band = bind_venue_candidate(
+                            party,
+                            policy,
+                            trainee,
+                            bands,
+                            authorized_index,
+                        )
+                        current_venue = next(v for v in venues if v.band == target_band)
 
             if member_is_unsafe_for_team_training(trainee, policy):
                 directive = TeamTrainingDirective.RESTORE_TEAM

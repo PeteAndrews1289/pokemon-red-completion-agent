@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the test suite approved two contracts that contradicted each other
+
+The Cave measurement finally received its narrow authorization and ran once. It failed closed.
+That is the good part: it produced no result that could be mistaken for training evidence. The bad
+part is why. The trainer described one fixed venue as a one-item candidate menu. The runner, whose
+job was to measure rather than choose, correctly required zero candidate decisions. Each side had
+an apparently sensible test; no test ran the two sides together.
+
+The private artifact retained only its plan, not the terminal party or cost counters, so the
+project refuses to guess whether the evolution finished. V1 is permanently consumed. Its
+[path-free failure receipt](evidence/red-cave-venue-measurement-failed-v1-2026-08-15.json) advances
+no prior, outcome, fit or authority counter.
+
+The repair improves the future agent, not just this experiment. Across Red, Crystal and later
+games, a forced destination is not a decision worth learning. The shared trainer now emits a
+venue choice only when at least two viable destinations exist, while preserving genuine trainee
+and multi-venue choices. Future one-shot artifacts record terminal counters before they judge the
+result and retain a useful path-redacted error if judgment fails.
+
+V2 uses a different open checkpoint and proves its state, lineage and semantics against the frozen
+81-state inventory. It has an unused artifact identity, but it is not authorized or executed.
+The next sequence is deliberately bounded: full gates and registries, immutable publication,
+exact-head CI, Claude's semantic/durability attack, then fresh authorization. Antigravity will not
+duplicate that forensic work. Its better role begins with the concrete 8+6 catalog, where it can
+challenge three high-leverage Red-to-Crystal assumptions and identify the cheapest transfer tests
+and work to delete.
+
+The honest board is now **prior 1 · roots 14 · menus 0 · outcomes 0/14 · accepted Cave
+measurements 0 · consumed failed attempts 1 · authority 0**.
+
 ## August 15: the lock had to survive the power going out
 
 The Cave run was one review away from starting when Claude corrected its own audit. The lineage
