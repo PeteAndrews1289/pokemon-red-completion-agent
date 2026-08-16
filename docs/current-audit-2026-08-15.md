@@ -29,7 +29,10 @@ passes 55/55. The source bundle is
 registries regenerate exactly. The full gate passes 3,576 non-integration tests, three intentional
 deselections and one expected failure, Ruff, mypy over 227 files, privacy and documentation.
 Executable source `ff2ccfb` is published and exact-head CI run `31925553137` passed. Claude's
-narrow delta recheck remains before user authorization. V2 has not run. Evidence counters remain:
+narrow delta recheck returned **APPROVE** for requesting exactly one user-authorized V2 attempt.
+Claude's audit environment denied test execution, so it labeled its mutation analysis static;
+Codex's executed threshold probes and exact-head CI provide the runtime evidence. V2 has not run.
+Fresh explicit user authorization is the sole remaining gate. Evidence counters remain:
 priors 1, reserved roots 14, frozen menus 0, outcomes 0/14, failed consumed Cave attempts 1,
 accepted Cave measurements 0, fit 0 and authority 0. The
 [path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json)

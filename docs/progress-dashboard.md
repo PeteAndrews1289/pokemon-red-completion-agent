@@ -3,8 +3,9 @@
 > **Current V2 gate:** Claude's audit was conditional, and exact source `ff2ccfb` now resolves its
 > three live conditions: eligible menu cardinality, behavioral evolution-venue authority and
 > per-record durability. The dashboard should show **FOCUSED 92/92 · ROUTE 11 55/55 · FULL GATE
-> 3,576 GREEN · SOURCE ff2ccfb PUBLISHED · CI 31925553137 GREEN · CLAUDE DELTA PENDING ·
-> AUTHORIZATION PENDING**.
+> 3,576 GREEN · SOURCE ff2ccfb PUBLISHED · CI 31925553137 GREEN · CLAUDE APPROVE TO ASK USER ·
+> AUTHORIZATION PENDING**. Claude's verdict is not a run command. Fresh explicit user authorization
+> remains pending.
 > Do not show a training percentage. V2 is unexecuted; the board remains **priors 1 · roots 14 ·
 > menus 0 · outcomes 0/14 · failed attempts 1 · accepted Cave measurements 0 · fit false ·
 > authority zero**.

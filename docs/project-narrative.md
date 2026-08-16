@@ -23,8 +23,10 @@ attempt.
 
 This is executable source `ff2ccfb`, bundle `5d6ad452…`, with 92 focused semantic/durability,
 55 historical-compatibility and 3,576 full-suite tests passing. Exact-head CI run `31925553137` is
-green. It has not run V2 or trained a model. The remaining sequence is one narrow Claude recheck and fresh user
-authorization. Antigravity will enter later with a deliberately smaller job: challenge at most
+green. Claude's narrow recheck approved asking the user for one attempt, while openly noting that
+its detached environment allowed static inspection rather than executed mutations. Codex's local
+probes and CI supply that runtime evidence. It has not run V2 or trained a model. Fresh user
+authorization is the remaining gate. Antigravity will enter later with a deliberately smaller job: challenge at most
 three Red-to-Crystal assumptions after the real menu catalog exists, with a falsifier and deletion
 decision for each.
 

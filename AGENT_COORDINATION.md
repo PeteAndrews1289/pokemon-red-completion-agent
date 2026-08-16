@@ -9,8 +9,10 @@
 > controller execution may leave the durable plan alone. Focused gates are 92/92 and 55/55; source
 > bundle `5d6ad452…`. The complete local gate passes 3,576 tests plus every static, privacy,
 > documentation and registry check; exact-head GitHub CI run `31925553137` is green. V2 remains
-> unexecuted and unauthorized pending Claude's narrow delta recheck and fresh user authorization.
-> See the
+> unexecuted and unauthorized. Claude's narrow exact-source delta recheck returned **APPROVE** for
+> asking the user to authorize one attempt; its read-only environment could not execute mutations,
+> a limitation covered separately by Codex's executed probes and CI. Fresh explicit user
+> authorization is now the only live-run gate. See the
 > [path-free adjudication](docs/evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
 >
 > Antigravity's lower repository-reasoning weight is handled by narrowing its job, not by asking it

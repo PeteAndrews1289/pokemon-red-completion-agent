@@ -5,7 +5,7 @@ Status: active operating assignment as of 2026-08-15. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Claude conditions resolved locally; V2 still locked
+## Current override: reviewer gates passed; fresh user authorization required
 
 Claude's immutable audit of `346b2e5` / CI `31922419713` approved readiness only conditionally.
 Codex accepted its live findings. Executable source `ff2ccfb` now counts projected eligible
@@ -17,13 +17,16 @@ Plan/finalization I/O failures are not described as execution aborts. Focused ga
 
 The full local gate now passes 3,576 tests plus Ruff, mypy over 227 source files, public/privacy
 documentation and every generated registry. Executable source `ff2ccfb` is published and
-exact-head CI run `31925553137` is green. Codex's active assignment is: ask Claude for one narrow
-immutable recheck of only candidate cardinality, evolution behavior and durable append semantics,
-then return to the user for fresh one-shot
-authorization. V2 has not run. No teacher, prediction, outcome, fit, sealed case, Crystal context
-or authority has opened. The
+exact-head CI run `31925553137` is green. V2 has not run. No teacher, prediction, outcome, fit,
+sealed case, Crystal context or authority has opened. The
 [adjudication receipt](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json) is
 path-free.
+
+That narrow recheck is now complete. Claude returned **APPROVE** for asking the user to authorize
+one V2 execution. Its read-only environment could not execute mutation probes, so it declared that
+limitation; exact-head CI plus Codex's earlier executed threshold mutations carry the runtime
+evidence. Codex's current assignment is now only to request fresh explicit user authorization.
+Claude's verdict is not execution authority, and V2 must remain unopened until the user responds.
 
 Antigravity remains a later architecture challenger, not an implementation or evidence reviewer.
 When the concrete catalog exists, Codex will provide a small public-safe packet and accept at most

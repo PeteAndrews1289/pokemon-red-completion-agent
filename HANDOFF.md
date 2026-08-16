@@ -48,8 +48,17 @@ The full local gate passes 3,576 non-integration tests, three intentional desele
 expected failure, plus Ruff, mypy over 227 source files, privacy/documentation and all four
 registry checks. The executable source is published and exact-head CI run `31925553137` is green.
 V2 remains prospective and unauthorized: controller 0, teacher 0, predictions 0, outcomes 0/14,
-fit 0, sealed/Crystal 0 and authority 0. Next: request one narrow Claude delta recheck, then ask the
-user for fresh one-shot authorization. Do not run V2 from this handoff alone.
+fit 0, sealed/Crystal 0 and authority 0.
+
+Claude's narrow recheck of exact `ff2ccfb` returned **APPROVE** for asking the user to authorize
+exactly one V2 execution. It independently traced both candidate-cardinality branches, the
+alternate evolution-venue transition, the durable plan/attempt/failure/measurement ordering and
+the exact Route 11 waiver. Its detached environment denied test execution, so its mutation
+conclusions were static and explicitly relied on green CI; Codex had already executed the named
+threshold mutations locally. That limitation is recorded rather than hidden.
+
+The sole remaining gate is fresh explicit user authorization for exactly one V2 run. Claude's
+approval is permission to ask, not permission to execute. Do not run V2 from this handoff alone.
 
 Antigravity is not part of this evidence gate. Once the real 8+6 catalog is frozen, give it only a
 compact public-safe packet and at most three Red-to-Crystal claims, each with a counterexample,

@@ -9,7 +9,19 @@
     "live_v2_authorized": false,
     "live_v2_executed": false,
     "model_fit": false,
-    "next_gate": "publish repaired source, require exact-head CI, then request one narrow immutable delta re-audit"
+    "next_gate": "obtain fresh explicit user authorization for exactly one V2 execution"
+  },
+  "delta_reaudit": {
+    "codex_executed_falsifiers": [
+      "suppress targeted-evolution multiway emission",
+      "restore singleton emission in both venue branches"
+    ],
+    "exact_source_commit": "ff2ccfb7830ab5663226ffc295d6d37658cc81a3",
+    "reviewer": "claude",
+    "reviewer_executed_mutation_probes": false,
+    "reviewer_limitation": "the detached review environment permitted source inspection but denied test and mutation execution; exact-head CI and Codex's executed local probes supplied the runtime evidence",
+    "reviewer_scope": "eligible candidate cardinality, targeted-evolution behavioral authority, sparse record durability, and Route 11 waiver accounting",
+    "verdict": "approve_for_requesting_exactly_one_v2_user_authorization"
   },
   "findings": [
     {
@@ -57,5 +69,5 @@
   "learner_outcomes_opened": 0,
   "model_predictions": 0,
   "private_path_fields": 0,
-  "status": "conditions_resolved_published_and_ci_green_pending_delta_reaudit"
+  "status": "approved_to_request_fresh_user_authorization"
 }

@@ -62,7 +62,9 @@ evolution, and synchronizes the plan and every later sparse record before return
 claim a terminal observation during a mid-controller blackout. Focused gates pass 92/92 and 55/55;
 the complete local gate passes 3,576 tests plus every static/privacy/registry check. Publication
 and exact-head CI run `31925553137` are complete. A narrow Claude recheck and fresh authorization
-remain. V2 is still unexecuted.
+were the last two gates. Claude's recheck returned **APPROVE** for asking the user, with its
+read-only execution limitation recorded and covered by Codex's local probes plus CI. Fresh explicit
+user authorization remains. V2 is still unexecuted.
 
 V1 is permanently consumed. Its immutable failed artifact retained one plan row and no terminal or
 measurement row; the

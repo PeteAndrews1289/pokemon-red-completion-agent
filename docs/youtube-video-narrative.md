@@ -15,7 +15,8 @@ Finish on the evidence journal. Stamp **PLAN → SYNC → CONTROLLER**. After th
 stamp **TERMINAL → SYNC → ACCEPTANCE**. Cut power in the middle and leave only the plan visible,
 with the caption **HONEST LIMIT: NO RETURNED OBSERVATION TO SAVE**. End on **SOURCE ff2ccfb ·
 FULL 3,576 · FOCUSED 92/92 · ROUTE 11 55/55 · V2 NOT RUN · AUTHORITY 0**. Keep locks marked
-**CI 31925553137 GREEN · CLAUDE DELTA · USER AUTHORIZATION**.
+**CI 31925553137 GREEN · CLAUDE APPROVE TO ASK · USER AUTHORIZATION**. Make the final lock stay
+closed: the reviewer can approve the question, but only the owner can authorize the run.
 
 ## August 15 scene: one option is not a decision
 

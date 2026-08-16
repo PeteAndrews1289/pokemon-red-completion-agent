@@ -16,8 +16,10 @@
 >
 > Focused gates pass 92/92 and 55/55; the complete local gate passes 3,576 tests plus every
 > static/privacy/registry check; source bundle `5d6ad452…`. Publication and exact-head CI are
-> complete at source `ff2ccfb` / run `31925553137`. One narrow Claude delta recheck and fresh user
-> authorization still precede V2. The
+> complete at source `ff2ccfb` / run `31925553137`. Claude's narrow delta recheck returned
+> **APPROVE** for asking the user to authorize one attempt. Its environment was read-only, so
+> Codex's executed mutation probes and CI supply the runtime evidence. Fresh explicit user
+> authorization is the only remaining gate before V2. The
 > [path-free adjudication](docs/evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json)
 > advances no model counter. Honest board: **priors 1 · roots 14 · frozen menus 0 · outcomes 0/14 ·
 > accepted Cave measurements 0 · failed consumed attempts 1 · fit false · authority zero**.

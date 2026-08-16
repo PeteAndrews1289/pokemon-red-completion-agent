@@ -23,8 +23,9 @@ contain only the plan; the project now says so openly.
 
 The board has not moved: **one prior · fourteen reserved roots · zero frozen menus · zero outcomes
 · one consumed failed measurement · zero authority**. Source `ff2ccfb` passes the 3,576-test full
-local gate and GitHub CI run `31925553137`; it still needs Claude's narrow recheck before the owner
-can authorize V2. Antigravity waits for the
+local gate and GitHub CI run `31925553137`. Claude's narrow recheck now says **APPROVE TO ASK**—not
+**RUN**. The only remaining key is
+the owner's fresh one-shot authorization. Antigravity waits for the
 real catalog, where its smaller but useful job is to identify up to three Red assumptions that
 Crystal can cheaply disprove.
 

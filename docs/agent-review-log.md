@@ -24,8 +24,19 @@ Validation: direct mutations that suppress evolution authority or restore single
 `5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe` and all source-bound
 registries reproduce. The full local gate passes 3,576 tests plus every static, privacy,
 documentation and registry check; exact-head CI run `31925553137` is green. Disposition: **pending
-one narrow Claude delta recheck**. This verdict does not authorize V2. See the
+one narrow Claude delta recheck**. This verdict did not authorize V2. See the
 [path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
+
+Delta recheck: Claude inspected exact `ff2ccfb` in a detached, read-only workspace and returned
+**APPROVE** for asking the user to authorize exactly one V2 execution. It confirmed that both
+branches gate on projected eligible candidates; the evolution test observes the authorized
+alternate transition; sparse records are synchronized at their honest lifecycle boundaries; and
+the Route 11 waiver fires by exact identity. Its environment denied test/mutation execution, so
+the memo labels those falsifiers static and relies on exact-head CI. Codex independently executed
+the impossible-evolution-threshold and restored-singleton mutations locally before publication.
+
+Final disposition: **approved to request fresh user authorization**. No reviewer approval is a
+live-run command; V2 remains unexecuted until the user explicitly authorizes exactly one attempt.
 
 Antigravity is not assigned this integrity gate. Its next review starts only after the real 8+6
 catalog exists and is capped at three falsifiable product/transfer claims; it has no implementation
