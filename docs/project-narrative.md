@@ -1,5 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the missing fact was measured once
+
+The final lock opened exactly once. From published source `755fe53` and green CI run
+`31926299036`, the read-only preflight first proved that the root, cartridge, private inputs and
+unused artifact identity still matched the reviewed plan. Then the controller ran.
+
+This time the semantic repair held. A fixed Cave was treated as an operating fact, not a fake
+choice. The target gained all four required levels and evolved after 67 battles. The run took
+4,319 successful steps, 1,853,750 frames and 58,829 controller actions, with no faint, no optional
+recovery and no candidate decision. Its costs reconcile: eight budgeted Center calls, one final
+cleanup, and 4,413 movement attempts split into 4,319 successes and 94 blocks.
+
+More important than the green result is what did *not* happen. No teacher answered a question. No
+model predicted or updated. No learner outcome, sealed Red case or Crystal context opened. The
+artifact retained one plan, one terminal attempt and one measurement, and V2 is now consumed
+forever. The [public receipt](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) says
+only what can be audited without revealing the private party, species, venue label or filesystem.
+
+That keeps the narrative honest: this was not training; it supplied the second independent venue
+fact needed to construct real venue choices. The next bridge runs no game at all. It compares the
+execution-bearing source byte-for-byte with the measured commit and, from a distinct published
+head, adds exactly one Cave prior beside Route 11. Only then can the project materialize the two
+middle-PP states, freeze eight training and six development questions, and finally collect the
+first completion-aware party curriculum.
+
 ## August 15: count the choices the learner can actually make
 
 Claude's final gate did not reject the architecture, but it found that the experiment still asked

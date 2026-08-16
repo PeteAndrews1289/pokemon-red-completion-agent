@@ -4,6 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Cave V2 succeeded exactly once (August 16, 2026).** The owner authorized one execution from
+> published `755fe53d127c764f4213c2335cdbd5c9cb136dda` under green CI run `31926299036`. A
+> zero-action preflight passed first. The consumed live run then reached 4/4 progress in 67 battles,
+> 4,319 steps, 1,853,750 frames and 58,829 controller actions, with zero faints, zero optional
+> recoveries and zero candidate decisions. The private artifact contains one plan, one terminal
+> attempt and one accepted measurement. It will not be retried.
+>
+> The [path-free result](docs/evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) binds
+> the exact source, CI, plan, manifest and stream digests without publishing private path, party,
+> species or venue identity. This is operating evidence, not model training: priors remain 1 until
+> the source-only two-prior composition is written; roots 14, menus 0, outcomes 0/14, fit false and
+> authority zero. The active next step is to publish the distinct composition source, pass exact
+> CI, prove the measured runtime byte-identical and add exactly one Cave prior without opening a ROM
+> or emulator.
+
 > **V2 conditional-audit repairs are frozen in source, not executed (August 15, 2026).** Claude's
 > audit of exact `346b2e5` approved readiness only conditionally. It found that the trainer counted
 > supplied venues instead of learner-eligible choices, that targeted evolution lacked a behavioral

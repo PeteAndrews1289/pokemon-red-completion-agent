@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the one-shot run worked—and still was not training
+
+The owner turned the Cave key once. The preflight stayed dark—zero controller input—until every
+source, CI, cartridge and private-input seal matched. Then V2 ran from `755fe53` and finished the
+four-level evolution objective in 67 battles.
+
+The scoreboard is concrete: **4,319 steps · 1,853,750 frames · 58,829 controller actions · zero
+faints · zero optional recoveries · zero candidate decisions**. The evidence tray now reads
+**PLAN 1 · TERMINAL 1 · MEASUREMENT 1**. There is no retry button.
+
+But the model did not learn from this run. That distinction is the point. A fixed venue generated
+an independent operating fact—progress, safety and cost—not an answer to a ranking question. The
+teacher, model, learner, sealed Red and Crystal counters all stayed at zero. The board now reads
+**one accepted Cave measurement · one existing prior · fourteen reserved roots · zero frozen menus
+· zero outcomes · zero authority**.
+
+Next, the game window stays closed. A separate published commit must prove the measured runtime is
+byte-for-byte unchanged and add one Cave prior beside Route 11. Then the fourteen reserved cards
+can become real anonymous questions, including two naturally depleted-PP states. That is the next
+moment when the project moves toward a model that can manage a living Pokédex rather than merely
+replaying Red.
+
 ## Current checkpoint: two supplied paths can still mean one real choice
 
 Claude found the last version was looking at the number of venue records supplied to the trainer,

@@ -1,9 +1,36 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-15. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-16. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: V2 succeeded once; source-only composition is next
+
+The owner authorized one Red Cave V2 execution from exact published head `755fe53` under green CI
+run `31926299036`. The read-only preflight passed first. The single live run then completed 4/4
+progress in 67 battles, 4,319 steps, 1,853,750 frames and 58,829 controller actions, with zero
+faints, zero optional recoveries and zero candidate decisions. Its Center and traversal arithmetic
+reconcile exactly, and the private artifact finalized with one plan, one terminal attempt and one
+measurement. V2 is consumed and must never be run again. The
+[path-free result receipt](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) is the
+only public projection.
+
+Codex now owns publication and execution of the source-only composition bridge. The bridge must
+prove every execution-bearing file is byte-identical to the measured head, accept only the two new
+publication/composition source files in the delta, validate all prospective arithmetic and append
+exactly one Cave entry beside the existing Route 11 prior. It may run only from a distinct clean,
+published, exact-CI-green source and must use no ROM, emulator, controller, teacher, model, learner
+outcome, sealed case or Crystal context.
+
+Claude's next assignment begins after that immutable composition receipt exists: attack the source
+compatibility proof, two-entry registry arithmetic and the exact 8+6 freeze. Antigravity remains
+idle until the concrete menu catalog exists; it then gets at most three falsifiable transfer or
+product claims, not an implementation lane or evidence vote.
+
+Current honest state: priors 1 pending composition; reserved roots 8 train / 6 development;
+accepted Cave measurements 1; consumed failed Cave measurements 1; frozen menus 0; outcomes 0/14;
+fits 0; model authority 0; sealed Red 0; Crystal 0; full replay 0.
 
 ## Current override: reviewer gates passed; fresh user authorization required
 

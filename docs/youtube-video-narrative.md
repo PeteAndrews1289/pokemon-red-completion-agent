@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: run once, measure honestly, close the switch
+
+Open on the final authorization lock: **SOURCE 755fe53 · CI 31926299036 GREEN · ONE EXECUTION**.
+Run a silent preflight and keep every activity counter at zero. Then turn the key once and remove
+it from the console.
+
+Let the dashboard climb to **4/4 PROGRESS**. Cut between **67 BATTLES**, **4,319 STEPS**,
+**1,853,750 FRAMES** and **58,829 CONTROLLER ACTIONS**. Keep the safety strip green: **0 FAINTS ·
+0 OPTIONAL RECOVERIES · 0 CANDIDATE DECISIONS**. Animate the two reconciliation equations:
+**1 TRANSITION + 7 REQUIRED + 0 OPTIONAL = 8 BUDGETED; +1 CLEANUP = 9**, and **4,319 SUCCESS + 94
+BLOCKED = 4,413 ATTEMPTS**.
+
+Seal the evidence tray as **PLAN 1 · TERMINAL 1 · MEASUREMENT 1 · COMPLETE**. Put V2 in a vault
+marked **CONSUMED—NO RETRY**. Then pull the camera back and leave the model-training meter at zero.
+Narration: **“The run succeeded, but it did not teach a choice. It measured the missing fact that
+makes a future choice honest.”**
+
+End with the emulator screen turning off and a source-only conveyor lighting up: **BYTE-IDENTICAL
+RUNTIME → ADD ONE CAVE PRIOR → NATURAL MIDDLE PP → FREEZE 8 TRAIN + 6 DEVELOPMENT**. Final board:
+**PRIORS 1 PENDING COMPOSITION · ACCEPTED CAVE MEASUREMENTS 1 · MENUS 0 · OUTCOMES 0/14 ·
+AUTHORITY 0**.
+
 ## August 15 scene: two inputs are not always two choices
 
 Put two venue cards into the trainer. Stamp one **ELIGIBLE** and one **UNSAFE**, then show the old

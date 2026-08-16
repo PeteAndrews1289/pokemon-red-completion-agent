@@ -17,6 +17,38 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Cave V2 succeeded once; publish and compose without replay — 2026-08-16
+
+The owner authorized exactly one Red Cave V2 execution from published head
+`755fe53d127c764f4213c2335cdbd5c9cb136dda` under green CI run `31926299036`, with no retry
+after controller input. Codex revalidated the clean published checkout, exact CI binding, unused
+artifact identity, six protected inputs and Red ROM, then ran a read-only preflight. The preflight
+returned ready with zero controller, teacher, model, learner, sealed or Crystal access.
+
+The one live execution then completed and is consumed. It reached the exact 4/4 evolution target
+in 67 battles, 4,319 successful steps, 1,853,750 frames and 58,829 controller actions. It used one
+venue transition, seven required recoveries, zero optional recoveries and one cleanup; total
+budgeted Center calls were 8 of 50. There were zero faints and zero candidate decisions. Traversal
+accounting reconciles exactly: 4,413 attempts = 4,319 successful steps + 94 blocked attempts. The
+private artifact finalized complete with one plan, one durable terminal attempt and one accepted
+measurement. Do not execute V2 again for any reason.
+
+The immutable, path-free
+[V2 result receipt](docs/evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) binds the
+artifact manifest and all three stream digests, the exact source bundle, CI run and public plan.
+It exposes no private path, venue label, species identity or party state. This is one accepted
+operating measurement, not a model example: teacher 0, predictions 0, learner outcomes 0/14, fit 0,
+sealed/Crystal 0 and authority 0. Current counters are priors 1, reserved roots 14, frozen menus 0,
+accepted Cave measurements 1 and consumed failed Cave attempts 1.
+
+The only active bridge is source-only. New composition code compares every execution-bearing file
+byte-for-byte with `755fe53`, allows only the new publication/composition modules in the source
+delta, validates the receipt arithmetic, and can add exactly one Cave entry beside the frozen
+Route 11 entry. Publish that distinct source, pass exact-head CI, then run the composition once
+with no ROM or emulator. After its path-free receipt is committed, naturally materialize the two
+reserved middle-PP contexts and freeze the exact 8-train/6-development menu catalog. Do not open a
+teacher answer, learner outcome, sealed Red case, Crystal context or full replay first.
+
 ## Claude's V2 conditions are repaired; execution remains locked — 2026-08-15
 
 Claude's immutable audit of `346b2e5` / CI run `31922419713` returned **APPROVE WITH

@@ -1,5 +1,35 @@
 # Current audit — 2026-08-15
 
+## August 16 addendum: V2 accepted exactly once
+
+The owner authorized exactly one Cave V2 execution from published head `755fe53` under green CI
+run `31926299036`, with no retry after controller input. The final gate was rechecked from scratch:
+clean and published source, exact CI head, unused artifact identity, designated private root, six
+authenticated protected files and the Red cartridge digest. A read-only preflight passed with zero
+controller actions and zero protected access.
+
+The live execution ran once and completed. It gained all 4 required progress units, observed the
+declared evolution, completed 67 battles, took 4,319 successful steps and used 1,853,750 frames /
+58,829 controller actions. It recorded zero faints, zero optional recovery trips and zero candidate
+decisions. Center accounting is 1 venue transition + 7 required recoveries + 0 optional = 8
+budgeted calls, plus one cleanup = 9 total. Traversal accounting is 4,319 successes + 94 blocks =
+4,413 attempts. Every prospective ceiling passed. Protected inputs and ROM-adjacent files remained
+unchanged inside the artifact transaction.
+
+The artifact finalized complete with one plan, one terminal attempt and one measurement; its
+manifest and stream hashes are bound by the
+[path-free result receipt](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json). V2 is
+consumed and cannot be retried. The result creates no training example and grants no authority:
+teacher 0, model predictions/updates 0, learner outcomes 0/14, sealed Red 0 and Crystal 0.
+
+The follow-on code is deliberately source-only. Its compatibility proof compares 21 critical
+execution files byte-for-byte with the measured commit and rejects any post-measurement source
+change beyond the new result/composition modules. It validates the public receipt arithmetic and
+can freeze exactly one Cave prior beside the existing Route 11 entry. Focused tests currently pass
+35/35 with Ruff and mypy green. Disposition: publish this distinct source and obtain exact-head CI;
+then compose once without opening a ROM or emulator. Priors remain 1 until that composition is
+actually written.
+
 ## Conditional V2 audit adjudication
 
 Claude audited exact head `346b2e5d0bcb1aa1b55eac1ff839199a16f138cd` after green CI run

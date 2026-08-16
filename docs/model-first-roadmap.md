@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-15. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-16. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -27,34 +27,53 @@ Role ownership and exact handoffs are frozen in
 7. **Complete, read-only:** adjudicate Claude's identifier-namespace finding. The old checkpoint
    alias comparison was not canonical-root evidence; exact state exclusion removed the one prior
    entry, and explicit registry resolution proves zero root/state overlap in the reserved 8+6.
-8. **V1 failed and retired; V2 active:** V1 was executed exactly once and failed because the shared
-   trainer emitted a singleton venue “choice” that the no-choice runner rejected. It created no
-   measurement or learning evidence and cannot be retried. Claude's conditional audit of
-   `346b2e5` found that eligible candidate cardinality and the evolution multiway branch needed
-   behavioral proof, and that record durability needed a narrower crash claim. Exact source
-   `ff2ccfb` resolves those conditions locally: menus gate on projected eligible candidates; the
-   evolution authority executes an alternate venue in a direct test; and sparse V2 records are
-   synchronized with an explicit mid-controller blackout limit. Finish the full gate, publish,
-   pass exact-head CI and obtain Claude's narrow delta recheck, then seek new authorization for
-   exactly one V2 execution. Only an accepted V2 result may compose one Cave prior. Then naturally
-   materialize the two middle-PP contexts under the frozen no-label protocol, re-inventory and
-   freeze the exact 8+6 menus.
-9. Send that immutable catalog to Claude for integrity/power review and Antigravity for one bounded
+8. **Complete:** V1 failed and retired; V2 ran exactly once from published `755fe53` / green CI
+   `31926299036` and passed every prospective condition. It delivered 4/4 progress in 67 battles,
+   4,319 steps and 1,853,750 frames with zero faints, zero optional recoveries and zero candidate
+   decisions. The complete private artifact and
+   [path-free receipt](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) are immutable.
+   V2 is consumed and cannot be retried. It created no training example.
+9. **Active:** publish the distinct result/composition source, pass exact-head CI, prove all 21
+   execution-bearing files byte-identical to `755fe53`, and compose exactly one Cave prior beside
+   Route 11 with no ROM, emulator or learning access. Then naturally materialize the two middle-PP
+   contexts, re-inventory and freeze the exact 8+6 menus.
+10. Send that immutable catalog to Claude for integrity/power review and Antigravity for one bounded
    genuine-choice/transfer review. Execute each approved identity once with immediate durable
    private retention. Stop at the first binding/accounting failure and never replace an exposed
    identity.
-10. Fit once on eight train outcomes and compare once on six development outcomes. This is a
+11. Fit once on eight train outcomes and compare once on six development outcomes. This is a
    descriptive pipeline result and grants zero authority. If development is underpowered or
    choice-equivalent, expand genuine decisions rather than tuning to six rows.
-11. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
+12. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
    short hierarchical episodes and the living-Pokédex dependency planner.
+
+Historical detail for step 8: V1 was executed exactly once and failed because the shared
+trainer emitted a singleton venue “choice” that the no-choice runner rejected. It created no
+measurement or learning evidence and cannot be retried. Claude's conditional audit of `346b2e5`
+found that eligible candidate cardinality and the evolution multiway branch needed behavioral
+proof, and that record durability needed a narrower crash claim. Exact source `ff2ccfb` resolves
+those conditions locally: menus gate on projected eligible candidates; the evolution authority
+executes an alternate venue in a direct test; and sparse V2 records are synchronized with an
+explicit mid-controller blackout limit. Those gates led to the accepted V2 result above.
 
 This bridge has one maintenance time box for CI/source qualification and one experimental time box
 for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine alternatives, the
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
 
-## Current checkpoint: one failed attempt exposed the missing semantic seam
+## Current checkpoint: the missing Cave fact is measured; compose it without replay
+
+V2 is complete, accepted and permanently consumed. The measurement passed every bound with exact
+accounting and did not construct a learner question. The active code now prepares a distinct-source
+composition that compares the measured runtime byte-for-byte and adds one Cave prior to the frozen
+Route 11 registry. Until that source is published, green and executed once, the honest counters
+remain priors 1, menus 0, outcomes 0/14, fits 0 and authority 0.
+
+After composition, the next model-facing work is not another venue run. It is the two frozen
+natural middle-PP preparations, exact 8+6 menu materialization, independent review and one bounded
+8-train/6-development outcome cycle. No full Red replay or Crystal case belongs before that gate.
+
+## Historical checkpoint: one failed attempt exposed the missing semantic seam
 
 The latest conditional-audit repair is source `ff2ccfb` / bundle `5d6ad452…`. It distinguishes
 supplied venues from learner-eligible choices, adds the missing behavioral oracle for targeted

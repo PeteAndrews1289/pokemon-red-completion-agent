@@ -1,5 +1,24 @@
 # Three-agent coordination
 
+> **2026-08-16 accepted Cave V2 measurement — highest active checkpoint:** The owner authorized
+> exactly one execution from published `755fe53d127c764f4213c2335cdbd5c9cb136dda` under green CI
+> `31926299036`. Read-only preflight passed with zero actions. The one live run is now consumed and
+> succeeded: 4/4 progress, 67 battles, 4,319 steps, 1,853,750 frames, 58,829 controller actions,
+> zero faints, zero optional recoveries, zero candidate decisions and exact movement/Center
+> arithmetic. The private artifact contains one durable plan, one terminal attempt and one
+> measurement. It must never be retried. The
+> [path-free result](docs/evidence/red-cave-venue-measurement-result-v2-2026-08-16.json) binds the
+> source, CI, plan, manifest and three stream digests without exposing party, species, venue or
+> filesystem identity.
+>
+> This did not train a model. Priors remain 1 until source-only composition; menus 0, outcomes
+> 0/14, fit 0, teacher/model 0, sealed/Crystal 0 and authority 0. Codex owns the next bridge: publish
+> the distinct result/composition source, pass exact-head CI, prove every execution-bearing file
+> byte-identical to the measured head and compose exactly one Cave prior beside Route 11 without a
+> ROM or emulator. Claude's next useful task is an immutable audit of that composition receipt and
+> the subsequently frozen 8+6 catalog. Antigravity remains deferred until the real catalog exists,
+> then receives only its bounded transfer/product falsification packet.
+
 > **2026-08-15 conditional-audit repair:** Claude audited exact `346b2e5` and returned
 > **APPROVE WITH CONDITIONS**. Codex accepted the missing evolution behavioral oracle, the
 > supplied-band/eligible-candidate mismatch and the durability/wording limits. Exact executable

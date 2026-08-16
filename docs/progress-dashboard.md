@@ -1,5 +1,21 @@
 # Pokémon Learning Observatory
 
+> **Current gate — V2 ACCEPTED ONCE · NO RETRY:** Published source `755fe53` under green CI run
+> `31926299036` completed the one authorized Cave measurement. Display **4/4 PROGRESS · 67 BATTLES
+> · 4,319 STEPS · 1,853,750 FRAMES · 58,829 CONTROLLER ACTIONS · 0 FAINTS · 0 OPTIONAL RECOVERIES
+> · 0 CANDIDATE DECISIONS**. Display Center accounting as **1 TRANSITION + 7 REQUIRED + 0 OPTIONAL
+> = 8 BUDGETED; +1 CLEANUP = 9 TOTAL** and traversal as **4,319 SUCCESS + 94 BLOCKED = 4,413
+> ATTEMPTS**. The artifact is complete with plan 1, attempt 1, measurement 1.
+>
+> Link the [path-free result](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json). The
+> board must still say **PRIORS 1 PENDING SOURCE-ONLY COMPOSITION · ROOTS 14 · MENUS 0 · OUTCOMES
+> 0/14 · ACCEPTED CAVE MEASUREMENTS 1 · FAILED CONSUMED ATTEMPTS 1 · FIT FALSE · AUTHORITY ZERO**.
+> Do not call this model training. Teacher/model/learner/sealed/Crystal counters remain zero.
+>
+> Next rail: **PUBLISH DISTINCT COMPOSITION SOURCE → EXACT CI → BYTE-IDENTICAL RUNTIME PROOF →
+> ADD EXACTLY ONE CAVE PRIOR → MATERIALIZE 2 MIDDLE-PP ROOTS → FREEZE 8+6 MENUS**. The composition
+> rail uses no ROM, emulator or controller.
+
 > **Current V2 gate:** Claude's audit was conditional, and exact source `ff2ccfb` now resolves its
 > three live conditions: eligible menu cardinality, behavioral evolution-venue authority and
 > per-record durability. The dashboard should show **FOCUSED 92/92 · ROUTE 11 55/55 · FULL GATE
