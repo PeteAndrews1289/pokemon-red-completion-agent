@@ -6,6 +6,38 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: both PP states passed; freeze inputs before opening answers
+
+Train and development each ran exactly once under separate owner authorization from source
+`27e966b`, CI run `31962598106` attempt 1 and private v4 plan-file SHA `b9d1eeef…`. Both stopped at
+the preregistered middle-PP boundary after 27 ordinary wild battles, retained valid protected state
+and passed independent reload. Both identities are consumed and may not retry.
+
+The missing bridge is now implemented locally. It re-inventories the accepted outputs, verifies the
+complete manifest/progress/terminal/state lineage, reconstructs the fourteen reserved semantic
+snapshots and serializes only identity-free feature rows. Focused tests and a read-only private
+rehearsal pass: 14 questions, 8 train / 6 development, both choice kinds in both partitions and
+candidate widths from 2 through 6. Because the rehearsal used unpublished working-tree source, it
+is evidence about implementation behavior—not an official frozen experiment.
+
+The active sequence is:
+
+1. **Complete:** both separately authorized natural-PP preparations succeeded and are consumed.
+2. **Complete locally:** implement and falsify the authenticated, path-free input-catalog freezer.
+3. **Active:** publish that source and require green CI for its exact head.
+4. Repeat the read-only 81→83 inventory and freeze the official 8-train/6-development catalog from
+   the published source; audit its hashes, joins, partitions, candidate diversity and path-free
+   projection.
+5. Give that immutable input catalog to independent reviewers. Do not open answers during review.
+6. Under a later, separate authorization, collect eight train outcomes and six untouched
+   development outcomes, fit once on train and report descriptive development generalization.
+7. Only after that Red gate, test the shared representation through the Crystal adapter and grow
+   from party development toward story completion and living-Pokédex planning.
+
+Honest counters are **priors 2 · roots 14 · natural PP states 2/2 · official menus 0 · outcomes
+0/14 · fits 0 · authority 0**. This remains a deliberately small first learner task inside the
+larger cross-game living-Pokédex system; it is not the final policy.
+
 ## Current checkpoint: train preparation passed; development authorization is the active gate
 
 V1, v2 and v3 preparation plans are retired and cannot authorize input. The local v4 candidate

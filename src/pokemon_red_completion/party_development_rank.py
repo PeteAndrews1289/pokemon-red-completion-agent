@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import math
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -396,6 +397,59 @@ class PartyDevelopmentCandidateSet:
             "goal": self.goal.value,
             "candidates": [item.public_dict() for item in self.candidates],
         }
+
+    @classmethod
+    def from_public_dict(cls, value: object) -> PartyDevelopmentCandidateSet:
+        """Restore an identity-free candidate menu without inventing feature order."""
+
+        expected = {"schema", "kind", "goal", "candidates"}
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != expected
+            or value["schema"] != "pokemon-party-development-candidate-set-v2"
+            or not isinstance(value["kind"], str)
+            or not isinstance(value["goal"], str)
+            or not isinstance(value["candidates"], list)
+        ):
+            raise PartyDevelopmentFeatureError(
+                "party-development candidate-set document is invalid"
+            )
+        candidates = []
+        for row in value["candidates"]:
+            if (
+                not isinstance(row, Mapping)
+                or set(row) != {"candidate_index", "feature_schema_id", "features"}
+                or row["feature_schema_id"] != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+                or type(row["candidate_index"]) is not int  # noqa: E721
+                or not isinstance(row["features"], Mapping)
+                or set(row["features"]) != set(PARTY_DEVELOPMENT_FEATURE_NAMES)
+                or any(
+                    isinstance(item, bool) or not isinstance(item, (int, float))
+                    for item in row["features"].values()
+                )
+            ):
+                raise PartyDevelopmentFeatureError(
+                    "party-development candidate document is invalid"
+                )
+            features = row["features"]
+            candidates.append(
+                PartyDevelopmentCandidate(
+                    candidate_index=row["candidate_index"],
+                    features=tuple(
+                        float(features[name]) for name in PARTY_DEVELOPMENT_FEATURE_NAMES
+                    ),
+                )
+            )
+        try:
+            return cls(
+                kind=TrainingChoiceKind(value["kind"]),
+                goal=PartyDevelopmentGoal(value["goal"]),
+                candidates=tuple(candidates),
+            )
+        except (TypeError, ValueError) as error:
+            raise PartyDevelopmentFeatureError(
+                "party-development candidate-set document is invalid"
+            ) from error
 
 
 def augment_training_candidate_set(

@@ -56,6 +56,13 @@ class PartyDevelopmentInventoryRunError(RuntimeError):
     """Raised before an inventory can silently omit or execute a checkpoint."""
 
 
+_CAPTURE_PATTERNS = (
+    "red-goal-v1-*.state",
+    "red-party-pp-v1-train-*.state",
+    "red-party-pp-v1-development-*.state",
+)
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--capture-root", type=Path, required=True)
@@ -66,6 +73,10 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def _partition(checkpoint_id: str) -> ScenarioPartition:
+    if checkpoint_id.startswith("red-party-pp-v1-train-"):
+        return ScenarioPartition.TRAIN
+    if checkpoint_id.startswith("red-party-pp-v1-development-"):
+        return ScenarioPartition.DEVELOPMENT
     if "-train-" in checkpoint_id:
         return ScenarioPartition.TRAIN
     if "-validation-" in checkpoint_id:
@@ -73,6 +84,23 @@ def _partition(checkpoint_id: str) -> ScenarioPartition:
     raise PartyDevelopmentInventoryRunError(
         "checkpoint identity has no open train/development partition"
     )
+
+
+def _capture_states(capture_root: Path) -> tuple[Path, ...]:
+    states = tuple(
+        sorted(
+            {
+                path
+                for pattern in _CAPTURE_PATTERNS
+                for path in capture_root.glob(pattern)
+            }
+        )
+    )
+    if not states:
+        raise PartyDevelopmentInventoryRunError(
+            "capture root contains no open goal-manager or prepared PP checkpoints"
+        )
+    return states
 
 
 def _pp_ratio(
@@ -126,15 +154,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     rom_path = resolve_rom_path(args.rom)
     fingerprint = verify_rom(rom_path)
     cartridge_evolutions = evolution_graph(rom_path.read_bytes())
-    states = tuple(sorted(args.capture_root.glob("red-goal-v1-*.state")))
-    if not states:
-        raise PartyDevelopmentInventoryRunError(
-            "capture root contains no open goal-manager checkpoints"
-        )
+    states = _capture_states(args.capture_root)
     expected_files = {
         path.with_suffix(".state.json") for path in states
     }
-    actual_envelopes = set(args.capture_root.glob("red-goal-v1-*.state.json"))
+    actual_envelopes = {
+        path
+        for pattern in _CAPTURE_PATTERNS
+        for path in args.capture_root.glob(f"{pattern}.json")
+    }
     if expected_files != actual_envelopes:
         raise PartyDevelopmentInventoryRunError(
             "capture root does not contain one envelope per checkpoint"

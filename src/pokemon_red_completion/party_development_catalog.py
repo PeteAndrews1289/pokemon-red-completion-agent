@@ -10,6 +10,7 @@ Later outcomes may join only to those exact bindings.
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -353,6 +354,99 @@ class PartyDevelopmentProspectiveBinding:
             binding_sha256=canonical_sha256(binding_document),
         )
 
+    @classmethod
+    def from_public_dict(cls, value: object) -> PartyDevelopmentProspectiveBinding:
+        """Restore one path-free binding while recomputing its menu and binding digests."""
+
+        expected = {
+            "available_candidate_count",
+            "binding_sha256",
+            "candidate_count",
+            "candidate_feature_sha256",
+            "candidate_menu_sha256",
+            "candidate_unavailable_reasons",
+            "feature_names_sha256",
+            "feature_schema_id",
+            "goal",
+            "initial_state_sha256",
+            "kind",
+            "outcome_objective_sha256",
+            "partition",
+            "private_path_fields",
+            "root_lineage_id",
+            "scenario_id",
+            "schema",
+            "semantic_snapshot_sha256",
+            "shared_venue_prior_evidence_sha256",
+            "source_bundle_sha256",
+            "source_commit",
+            "venue_prior_evidence_sha256",
+            "venue_prior_registry_sha256",
+        }
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != expected
+            or value["schema"] != PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA
+            or value["feature_schema_id"] != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+            or value["private_path_fields"] != 0
+        ):
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective binding document is invalid"
+            )
+        reasons = value["candidate_unavailable_reasons"]
+        feature_digests = value["candidate_feature_sha256"]
+        evidence_digests = value["venue_prior_evidence_sha256"]
+        if (
+            not isinstance(reasons, list)
+            or not isinstance(feature_digests, list)
+            or not isinstance(evidence_digests, list)
+            or any(item is not None and not isinstance(item, str) for item in reasons)
+            or any(not isinstance(item, str) for item in feature_digests)
+            or any(item is not None and not isinstance(item, str) for item in evidence_digests)
+            or type(value["candidate_count"]) is not int  # noqa: E721
+            or type(value["available_candidate_count"]) is not int  # noqa: E721
+            or value["candidate_count"] != len(reasons)
+            or value["candidate_count"] != len(feature_digests)
+            or value["candidate_count"] != len(evidence_digests)
+            or value["available_candidate_count"]
+            != sum(item is None for item in reasons)
+        ):
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective binding rows are invalid"
+            )
+        try:
+            unavailable_reasons = tuple(
+                None if item is None else PartyDevelopmentUnavailableReason(item)
+                for item in reasons
+            )
+            return cls(
+                scenario_id=value["scenario_id"],
+                root_lineage_id=value["root_lineage_id"],
+                initial_state_sha256=value["initial_state_sha256"],
+                partition=ScenarioPartition(value["partition"]),
+                source_commit=value["source_commit"],
+                source_bundle_sha256=value["source_bundle_sha256"],
+                semantic_snapshot_sha256=value["semantic_snapshot_sha256"],
+                venue_prior_registry_sha256=value["venue_prior_registry_sha256"],
+                outcome_objective_sha256=value["outcome_objective_sha256"],
+                feature_names_sha256=value["feature_names_sha256"],
+                kind=TrainingChoiceKind(value["kind"]),
+                goal=PartyDevelopmentGoal(value["goal"]),
+                candidate_feature_sha256=tuple(feature_digests),
+                candidate_available=tuple(item is None for item in unavailable_reasons),
+                candidate_unavailable_reasons=unavailable_reasons,
+                venue_prior_evidence_sha256=tuple(evidence_digests),
+                shared_venue_prior_evidence_sha256=(
+                    value["shared_venue_prior_evidence_sha256"]
+                ),
+                candidate_menu_sha256=value["candidate_menu_sha256"],
+                binding_sha256=value["binding_sha256"],
+            )
+        except (TypeError, ValueError) as error:
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective binding document is invalid"
+            ) from error
+
     def require_matches(self, example: ScenarioOutcomeExample) -> None:
         if not isinstance(example, ScenarioOutcomeExample):
             raise TypeError("example must be a ScenarioOutcomeExample")
@@ -402,6 +496,28 @@ class PartyDevelopmentProspectiveBinding:
         if observed != self.candidate_feature_sha256:
             raise PartyDevelopmentCatalogError(
                 "party-development outcome differs from its prospective candidate menu"
+            )
+
+    def require_candidate_set(self, candidate_set: PartyDevelopmentCandidateSet) -> None:
+        """Authenticate retained feature values against this already-frozen binding."""
+
+        if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
+            raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
+        if candidate_set.kind is not self.kind or candidate_set.goal is not self.goal:
+            raise PartyDevelopmentCatalogError(
+                "retained party-development candidate semantics differ"
+            )
+        observed = tuple(
+            _candidate_feature_sha256(
+                index=item.candidate_index,
+                features=item.features,
+                available=self.candidate_available[item.candidate_index],
+            )
+            for item in candidate_set.candidates
+        )
+        if observed != self.candidate_feature_sha256:
+            raise PartyDevelopmentCatalogError(
+                "retained party-development candidate features differ"
             )
 
     def _menu_document(self) -> dict[str, object]:

@@ -5,6 +5,26 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: publish and freeze the 8+6 input catalog
+
+Codex completed the separately authorized development preparation once. Together with the earlier
+train result, both natural middle-PP states now authenticate and both identities are consumed.
+Neither created a menu, learner outcome, teacher query, prediction, fit or authority. Codex has
+implemented the read-only catalog bridge and rehearsed it against the private inputs: exactly 14
+questions, 8 train / 6 development, both candidate kinds in each partition and widths 2–6.
+
+Codex remains the workhorse and provenance owner. Its next lane is to publish the bridge, require
+green exact-head CI, perform the official read-only inventory/catalog freeze and update the public
+path-free receipt. Claude's next useful role starts after that official catalog exists: attack
+capture joins, exclusions, menu reconstruction and evidence sufficiency without executing an
+answer. Antigravity should receive only a bounded public-safe transfer packet and try at most three
+Red-to-Crystal representation falsifiers. Findings are advisory; neither reviewer grants input or
+learning authority, and Codex should reject claims not supported by a discriminating test.
+
+Current state: **priors 2 · roots 14 · PP states 2/2 · official menus 0 · outcomes 0/14 · fits 0 ·
+authority 0 · sealed Red 0 · Crystal 0 · replay 0**. Outcome collection, teacher access and the
+first fit remain a separate owner gate after catalog review.
+
 ## Current override: train preparation passed; development remains a separate owner gate
 
 Codex executed the one owner-authorized train identity from exact source `27e966b`, CI run

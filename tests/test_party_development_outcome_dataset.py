@@ -12,6 +12,11 @@ from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveCatalog,
     PartyDevelopmentUnavailableReason,
 )
+from pokemon_red_completion.party_development_frozen_catalog import (
+    PartyDevelopmentFrozenCatalog,
+    PartyDevelopmentFrozenCatalogError,
+    PartyDevelopmentFrozenQuestion,
+)
 from pokemon_red_completion.party_development_outcome_dataset import (
     audit_party_development_outcome_catalog,
 )
@@ -254,6 +259,127 @@ def test_diverse_isolated_catalog_reaches_only_the_initial_fit_gate() -> None:
     assert public["inferential_claim"] is False
     assert public["authority_promoted"] is False
     assert "candidate.hp_ratio" not in json.dumps(public, sort_keys=True)
+
+
+def test_identity_free_candidate_set_and_binding_round_trip_exactly() -> None:
+    example = _ready_catalog()[0]
+    prospective = _prospective_catalog((example,))
+    candidate_set = PartyDevelopmentCandidateSet(
+        kind=prospective.bindings[0].kind,
+        goal=prospective.bindings[0].goal,
+        candidates=tuple(
+            PartyDevelopmentCandidate(item.candidate_index, item.features)
+            for item in example.candidates
+        ),
+    )
+
+    restored_candidates = PartyDevelopmentCandidateSet.from_public_dict(
+        candidate_set.public_dict()
+    )
+    restored_binding = PartyDevelopmentProspectiveBinding.from_public_dict(
+        prospective.bindings[0].public_dict()
+    )
+
+    assert restored_candidates == candidate_set
+    assert restored_binding == prospective.bindings[0]
+    restored_binding.require_candidate_set(restored_candidates)
+
+
+def _frozen_input_catalog() -> PartyDevelopmentFrozenCatalog:
+    examples = _ready_catalog()
+    prospective = _prospective_catalog(examples)
+    bindings_by_scenario = {
+        item.scenario_id: item for item in prospective.bindings
+    }
+    questions = []
+    for index, example in enumerate(examples):
+        binding = bindings_by_scenario[example.scenario_id]
+        candidate_set = PartyDevelopmentCandidateSet(
+            kind=binding.kind,
+            goal=binding.goal,
+            candidates=tuple(
+                PartyDevelopmentCandidate(item.candidate_index, item.features)
+                for item in example.candidates
+            ),
+        )
+        prepared = index in {7, 13}
+        profile_id = f"source-profile-{index:02d}"
+        questions.append(
+            PartyDevelopmentFrozenQuestion(
+                capture_id=(
+                    f"prepared-capture-{index:02d}" if prepared else profile_id
+                ),
+                capture_envelope_sha256=("123456789abcdef0"[index] * 64),
+                profile_id=profile_id,
+                profile_file_sha256=("23456789abcdef01"[index] * 64),
+                binding=binding,
+                candidate_set=candidate_set,
+                materialization_artifact_id=(
+                    f"prepared-artifact-{index:02d}" if prepared else None
+                ),
+                materialization_manifest_sha256=(
+                    ("3456789abcdef012"[index] * 64) if prepared else None
+                ),
+            )
+        )
+    return PartyDevelopmentFrozenCatalog.freeze(
+        tuple(questions),
+        reservation_plan_file_sha256="1" * 64,
+        reservation_plan_sha256="2" * 64,
+        inventory_file_sha256="3" * 64,
+        inventory_sha256="4" * 64,
+        pp_plan_file_sha256="5" * 64,
+        pp_plan_sha256="6" * 64,
+        context_catalog_file_sha256="7" * 64,
+        context_catalog_sha256="8" * 64,
+        venue_prior_registry_file_sha256="9" * 64,
+        venue_prior_registry_sha256="c" * 64,
+        rom_sha256="d" * 64,
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+    )
+
+
+def test_private_frozen_catalog_retains_features_without_opening_an_answer() -> None:
+    catalog = _frozen_input_catalog()
+    restored = PartyDevelopmentFrozenCatalog.from_private_dict(
+        catalog.private_dict()
+    )
+
+    assert restored == catalog
+    assert len(restored.questions) == 14
+    assert sum(
+        item.materialization_artifact_id is not None for item in restored.questions
+    ) == 2
+    assert restored.public_summary()["partition_counts"] == {
+        "development": 6,
+        "train": 8,
+    }
+    assert restored.public_summary()["outcomes_opened"] == 0
+    assert restored.public_summary()["candidate_feature_values_public"] is False
+
+
+def test_private_frozen_catalog_rejects_retained_feature_drift() -> None:
+    document = _frozen_input_catalog().private_dict()
+    questions = document["questions"]
+    assert isinstance(questions, list)
+    first = questions[0]
+    assert isinstance(first, dict)
+    candidate_set = first["candidate_set"]
+    assert isinstance(candidate_set, dict)
+    candidates = candidate_set["candidates"]
+    assert isinstance(candidates, list)
+    candidate = candidates[0]
+    assert isinstance(candidate, dict)
+    features = candidate["features"]
+    assert isinstance(features, dict)
+    features["candidate.hp_ratio"] += 0.01
+
+    with pytest.raises(
+        PartyDevelopmentFrozenCatalogError,
+        match="features differ",
+    ):
+        PartyDevelopmentFrozenCatalog.from_private_dict(document)
 
 
 def test_small_semantically_thin_catalog_reports_every_missing_gate() -> None:

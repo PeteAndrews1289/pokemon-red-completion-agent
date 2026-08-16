@@ -8,6 +8,19 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): both PP states passed; publish the input freezer
+
+Train and development each ran once under separate authorization from exact source `27e966b`, CI
+run `31962598106` attempt 1 and v4 plan-file SHA `b9d1eeef…`. Both reached middle PP naturally,
+passed independent reload and are consumed. The input-only catalog freezer now passes focused tests
+and a real private read-only rehearsal with 14 questions, 8 train / 6 development and candidate
+widths 2–6. That rehearsal is not official because its source was not yet published.
+
+Next: publish the freezer and require exact-head green CI; repeat read-only inventory; freeze and
+audit the official path-free catalog; then send it for independent input-integrity review. Do not
+open teacher answers or outcomes until a later, separate authorization. Counters are priors 2, PP
+states 2/2, official menus 0, outcomes 0/14, fits 0 and authority 0.
+
 ## Current checkpoint (2026-08-16): v4 is ready; ask for train once
 
 Published `27e966b` passed CI run `31962598106`, attempt 1. Private v4 (file `b9d1eeef…`, semantic

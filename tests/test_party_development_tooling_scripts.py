@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.scenario_lab import ScenarioPartition
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INITIALIZER_PATH = PROJECT_ROOT / "scripts" / "initialize_party_development_prior.py"
 INVENTORY_PATH = PROJECT_ROOT / "scripts" / "inventory_party_development_checkpoints.py"
@@ -53,6 +55,36 @@ def test_inventory_pp_bin_uses_each_movesets_actual_capacity() -> None:
 
 
 @pytest.mark.parametrize(
+    ("checkpoint_id", "partition"),
+    (
+        ("red-goal-v1-001-example-train-01", ScenarioPartition.TRAIN),
+        ("red-goal-v1-002-example-validation-01", ScenarioPartition.DEVELOPMENT),
+        ("red-party-pp-v1-train-01", ScenarioPartition.TRAIN),
+        ("red-party-pp-v1-development-01", ScenarioPartition.DEVELOPMENT),
+    ),
+)
+def test_inventory_assigns_prepared_pp_captures_to_their_open_partition(
+    checkpoint_id: str,
+    partition: ScenarioPartition,
+) -> None:
+    assert INVENTORY["_partition"](checkpoint_id) is partition  # type: ignore[operator]
+
+
+def test_inventory_scans_only_historical_and_prepared_pp_capture_names(
+    tmp_path: Path,
+) -> None:
+    expected = {
+        tmp_path / "red-goal-v1-001-example-train-01.state",
+        tmp_path / "red-party-pp-v1-train-01.state",
+        tmp_path / "red-party-pp-v1-development-01.state",
+    }
+    for path in (*expected, tmp_path / "unrelated.state"):
+        path.touch()
+
+    assert set(INVENTORY["_capture_states"](tmp_path)) == expected  # type: ignore[operator]
+
+
+@pytest.mark.parametrize(
     ("moves", "pp", "match"),
     (
         ((1, 2, 0), (35, 25, 0), "vectors are invalid"),
@@ -88,6 +120,8 @@ def test_inventory_script_has_no_controller_or_input_execution_surface() -> None
     assert called_attributes.isdisjoint(
         {"tick", "press", "hold", "release", "send_input", "execute"}
     )
-    assert 'glob("red-goal-v1-*.state")' in source
+    assert '"red-goal-v1-*.state"' in source
+    assert '"red-party-pp-v1-train-*.state"' in source
+    assert '"red-party-pp-v1-development-*.state"' in source
     assert "sealed" not in source.lower()
     assert "crystal" not in source.lower()

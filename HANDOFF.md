@@ -17,6 +17,34 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Both natural-PP preparations succeeded; publish the catalog freezer — 2026-08-16
+
+The owner separately authorized exactly one development execution from source
+`27e966b9230f254619d735cb3721eff202314089`, green CI run `31962598106` attempt 1 and private v4
+plan-file SHA `b9d1eeef…`. It completed once after 27 battles, 286 encounter steps, 1,339 actions
+and 114,241 frames, moving PP naturally from 80/80 to 53/80. Its output state and envelope match
+the terminal claim and passed an independent emulator reload. The immutable artifact has one plan,
+one output claim, 27 monotonic progress records and one terminal record. All streams match their
+manifest digests. There were zero faints, statuses, heals, switches, captures, storage accesses,
+candidate menus, outcomes, teacher queries, predictions or model updates. Development and train
+are now both consumed and must never retry.
+
+The
+[path-free development result](docs/evidence/red-party-development-pp-materialization-v4-development-result-2026-08-16.json)
+is the only public projection. Read-only re-inventory found the original 81 captures byte-identical
+and added exactly the two accepted PP states. The new catalog freezer authenticates both retained
+materialization journals, reconstructs each source profile, and emits identity-free feature rows
+without paths, answers or outcomes. A private rehearsal produced exactly fourteen input questions:
+8 train / 6 development, both choice kinds in each partition, with 2–6 available candidates. This
+rehearsal is a falsification check, not the official catalog.
+
+Codex's next bounded sequence is: commit and publish the freezer plus tests and receipt; require a
+green exact-head CI run; repeat the read-only inventory from the published head; then freeze and
+audit the official 8+6 input-only catalog. Do not run a teacher, calculate an answer or outcome,
+fit a model, open sealed Red/Crystal, or replay the game. Honest counters are **priors 2 · roots 14
+· natural PP states 2/2 · official frozen menus 0 · outcomes 0/14 · fits 0 · authority 0 · sealed
+Red 0 · Crystal 0 · replay 0**.
+
 ## Train natural-PP preparation succeeded once; development remains gated — 2026-08-16
 
 The owner authorized exactly one train execution from source

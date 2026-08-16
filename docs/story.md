@@ -7,6 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: two keys, fourteen unanswered questions
+
+Development received its own key and turned once. From the same published source, green CI attempt
+and frozen v4 plan as train, the second headless run fought 27 ordinary wild battles and stopped at
+the first accepted middle-PP state: **286 encounter steps · 1,339 actions · 114,241 frames**. PP
+moved from **80/80 to 53/80**. No Pokémon fainted; nothing healed, switched or was captured; the
+teacher and model remained silent. The saved game reopened cleanly, every retained record matched
+its manifest and the identity was consumed.
+
+The experiment finally has both authentic resource-pressure situations it was missing. A new
+read-only bridge can turn the original checkpoints plus those two states into fourteen unanswered
+questions—eight for learning and six held apart for development. In rehearsal the questions cover
+both “which teammate?” and “where should it train?” decisions, with between two and six genuine
+choices. The rows contain features, not checkpoint paths, Pokémon identities, answers or button
+sequences.
+
+That rehearsal is deliberately not called data. Its code was not yet a published, CI-green
+identity. The next milestone is to publish it and freeze the official input catalog before anyone
+opens an answer. The scoreboard is therefore honest: **two priors · fourteen roots · two of two PP
+states · zero official menus · zero outcomes · zero authority**. The project is now one provenance
+gate—not another playthrough—away from the dataset whose outcomes can support its first small
+completion-aware model.
+
 ## Current checkpoint: the first key turned once
 
 The owner authorized the training key—not development, not a retry, and not model training. The

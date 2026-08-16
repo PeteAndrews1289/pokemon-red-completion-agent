@@ -1,5 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: both resource-pressure states exist; the input freezer is ready to publish
+
+The owner separately authorized development from the same exact v4 source, CI attempt and plan as
+train. It ran once and stopped after 27 battles, 286 encounter steps, 1,339 controller actions and
+114,241 frames, moving PP from 80/80 to 53/80. The state passed an independent reload. Its plan,
+output claim, 27 progress records and terminal record reproduce their manifest exactly; all
+protected-state and learning counters are zero. Train and development are both consumed.
+
+Codex then closed the post-preparation gap without opening an answer. The inventory scanner now
+recognizes both prepared-state identities, and the freezer authenticates each execution journal,
+state envelope, source profile and reservation join before building identity-free feature rows. A
+read-only rehearsal over the real private data yielded exactly fourteen questions—8 train and 6
+development—with both party-member and venue choices represented in each partition and two to six
+available candidates per question. The rehearsal also proved the previous 81-capture inventory was
+unchanged and gained exactly the two accepted states.
+
+The distinction remains important: unpublished rehearsal output is not the official experimental
+catalog. The freezer must be committed, published and pass CI at its exact head; only then may the
+read-only 8+6 catalog be frozen and independently attacked. No teacher, answer, outcome or model
+fit is permitted in this stage. Honest board: **priors 2 · roots 14 · PP states 2/2 · official
+menus 0 · outcomes 0/14 · fits 0 · authority 0**.
+
 ## August 16: the first authentic resource-pressure state was accepted
 
 The owner authorized train only from the frozen v4 packet. Codex returned to exact published

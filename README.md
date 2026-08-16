@@ -4,6 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Both natural-PP preparations are complete; the input catalog is next (August 16, 2026).** The
+> separately authorized development identity succeeded exactly once from the same frozen v4 source,
+> plan and CI attempt as train. It stopped at middle PP after 27 battles, 286 encounter steps, 1,339
+> controller actions and 114,241 frames. PP moved from 80/80 to 53/80. There were zero faints,
+> heals, switches, captures, teacher queries, learner outcomes, predictions or model updates, and
+> the output passed an independent reload.
+>
+> The [path-free development result](docs/evidence/red-party-development-pp-materialization-v4-development-result-2026-08-16.json)
+> binds the immutable artifact without exposing a private path or game identity. Both train and
+> development are consumed and cannot retry. Honest board: **priors 2 · roots 14 · PP states 2/2 ·
+> menus 0 · outcomes 0/14 · fits 0 · authority zero**. The catalog freezer has passed its focused
+> tests and a read-only private rehearsal; it must now be published, pass exact-head CI, and then
+> freeze the official path-free 8-train/6-development input catalog. No answer, teacher call or
+> model fit is part of that gate.
+
 > **The train middle-PP preparation succeeded exactly once (August 16, 2026).** The owner authorized
 > train only from executable source `27e966b9230f254619d735cb3721eff202314089`, exact green CI run
 > `31962598106` attempt 1 and private v4 plan file SHA `b9d1eeef…`. The run stopped at the first
@@ -14,9 +29,8 @@
 > The [path-free result](docs/evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
 > binds the immutable execution and retained stream hashes without exposing a private path or game
 > identity. Honest board: **priors 2 · roots 14 · PP states 1/2 · menus 0 · outcomes 0/14 · fits 0 ·
-> authority zero**. Train is consumed and cannot retry. Development was not authorized and retains
-> its separate gate. If development succeeds once, re-inventory both states, freeze and review the
-> exact 8+6 menus, then separately authorize outcomes before the first descriptive fit.
+> authority zero** at that historical checkpoint. Train was consumed and could not retry;
+> development subsequently received its own authorization and succeeded as recorded above.
 
 > **Two venue priors are now frozen (August 16, 2026).** After Cave V2 succeeded once, a distinct
 > clean published head (`107e034`) passed exact GitHub CI run `31947146884`. A source-only bridge
