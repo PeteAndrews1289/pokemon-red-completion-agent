@@ -23,6 +23,8 @@ same historical catalog and freezes its capture-time canonical lineage into the 
 binding. No controller, teacher, model, outcome or authority counter advanced. A future
 reservation-schema revision should store that canonical lineage directly rather than preserving
 the legacy alias field.
+Exact source `9476b97` passed GitHub CI run `31916187077`; see the
+[path-free exclusion receipt](evidence/party-development-exclusion-effectiveness-2026-08-15.json).
 
 ## Concrete Red preflight and independent Cave measurement boundary
 
@@ -50,6 +52,8 @@ bounded level-22-to-26 evolution. An immutable private artifact must open before
 forbids retry. Candidate menus, teacher/model calls, learner outcomes, sealed data, Crystal and full
 replays are structurally excluded. A real read-only preflight authenticated the state, envelope,
 ROM, private plan, prior registry and ready party without mutation.
+That preflight was reproduced from CI-green `9476b97`; see the
+[path-free receipt](evidence/red-cave-venue-measurement-preflight-2026-08-15.json).
 
 Disposition: source candidate ready for publication and independent review; live measurement not
 authorized yet. Honest counters: priors 1; reservations 14; in-memory bindings 7; durable menus 0;

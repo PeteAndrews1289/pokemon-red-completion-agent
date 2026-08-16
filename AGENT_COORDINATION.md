@@ -10,6 +10,8 @@
 > evidence meaning. Antigravity remains idle until the frozen-menu product/transfer review.
 > The corrected local candidate passes 3,550 non-integration tests and every quality/provenance
 > gate; source bundle `d4c7953a…`.
+> Exact `9476b97` passed CI run `31916187077`; clean path-free lineage and Cave preflight receipts
+> now exist. Claude owns the next immutable execution-boundary review.
 
 > **2026-08-15 concrete-menu and Cave-plan checkpoint:** Codex implemented the read-only Red
 > semantic adapter and exercised it against all fourteen private reservations. Two PP-preparation

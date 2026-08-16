@@ -41,6 +41,8 @@ regenerated current assignment. Future reservation-schema work should make that 
 at rest.
 The complete local candidate passes 3,550 non-integration tests plus every static, privacy,
 documentation and generated-registry gate; source bundle `d4c7953a…`.
+Exact `9476b97` passed CI run `31916187077`, and both path-free read-only receipts reproduced from
+that commit. Claude now receives this immutable source; Antigravity remains idle.
 
 Exact head `3ee15fd` passed CI run `31900603291`. Claude's H2/M2/L2 recheck killed 28/28 valid
 mutations and approved read-only inventory plus prospective construction. The repeated 81-state

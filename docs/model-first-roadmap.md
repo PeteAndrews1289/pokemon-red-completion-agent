@@ -90,8 +90,9 @@ source. Exact checkpoint identities remain private.
 
 The implementation checkpoint passes 3,550 non-integration tests, Ruff, mypy over 227 source files,
 privacy/documentation checks and every generated-registry check. Working source bundle:
-`d4c7953a…`. Publication and one
-exact-head CI run remain before independent review.
+`d4c7953a…`. Exact `9476b97` has now passed GitHub CI run
+`31916187077`; the path-free lineage and Cave preflight receipts reproduce cleanly. Claude's
+immutable review is the remaining live-execution gate.
 
 One root in each partition is preregistered for natural PP depletion. The frozen protocol permits
 only ordinary battle damage, experience and PP consumption; it forbids memory edits, healing before

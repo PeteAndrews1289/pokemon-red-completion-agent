@@ -39,6 +39,9 @@ the legacy alias comparison is diagnostic only. This correction does not authori
 The complete local gate passes 3,550 non-integration tests, with three intentional deselections and
 one expected failure, plus Ruff, mypy over 227 source files, privacy/docs and all four generated
 registries. Working source bundle: `d4c7953af2cada31f1fd4cf45d14939d42d270383d36efa8793aa5389a16439f`.
+Exact source `9476b974a3e702b0c58a073a8c2afb6638ea9f51` passed GitHub CI run
+`31916187077`; the [path-free exclusion receipt](docs/evidence/party-development-exclusion-effectiveness-2026-08-15.json)
+was then reproduced from that clean published commit.
 
 ## Real Red menus preflighted; independent Cave measurement is next — 2026-08-15
 
@@ -67,8 +70,11 @@ teacher/prior support. The runner authenticates the private 8+6 plan and one-ent
 opens an immutable private artifact before input, fixes exactly one Cave venue, and measures one
 bounded level-22-to-26 evolution. Its support checkpoint is likewise bound to the capture-time
 assignment/root through the historical catalog. It creates no candidate menu or training outcome
-and permits no retry after input. Its read-only real preflight passed; execution remains closed until this exact
-source is published, CI-green and independently reviewed.
+and permits no retry after input. Its read-only real preflight passed; execution remains closed
+until this exact source is published, CI-green and independently reviewed. The source and CI gates
+are now met; the
+[path-free preflight receipt](docs/evidence/red-cave-venue-measurement-preflight-2026-08-15.json)
+records zero actions. Claude review remains the execution gate.
 
 Immediate sequence: publish and obtain exact-head CI; have Claude attack the adapter/menu binding
 and the one-shot Cave boundary separately; execute Cave once only if approved; publish the immutable

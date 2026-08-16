@@ -34,6 +34,10 @@
 > Cave once, compose its prior, materialize two natural PP states and freeze the 8+6 catalog.
 > The local candidate passes 3,550 non-integration tests, Ruff, mypy over 227 source files,
 > privacy/documentation checks and all four generated registries; source bundle `d4c7953a…`.
+> Exact commit `9476b97` passed GitHub CI run `31916187077`; its
+> [lineage audit](docs/evidence/party-development-exclusion-effectiveness-2026-08-15.json) and
+> [Cave preflight](docs/evidence/red-cave-venue-measurement-preflight-2026-08-15.json) were then
+> reproduced cleanly with zero actions.
 
 > **Current model-training gate (August 15, 2026): 14 source roots reserved; zero menus and zero
 > outcomes.** Exact head `3ee15fd` passed GitHub CI run `31900603291`, and Claude's final source
