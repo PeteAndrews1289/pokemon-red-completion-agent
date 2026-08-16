@@ -17,6 +17,32 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Cave one-shot boundary hardened after corrected audit rejection — 2026-08-15
+
+Claude's corrected audit of `9476b97` killed 8/8 lineage probes and 3/3 fixed-artifact probes, then
+withdrew live approval because four runner mutations survived: execution without the private-root
+and CI identities, nonpositive CI identity, protected-input mutation and a ROM-adjacent preflight
+write. The guards existed, but the runner tests never invoked their behavior. Codex accepted the
+rejection and added direct falsifiers plus an AST call-site oracle.
+
+Codex independently found one production defect outside Claude's requested test delta. Unlike
+episode writers, typed private artifacts did not sync their newly created partial namespace before
+returning. A power loss after the first emulator input could therefore lose the durable evidence
+that the one-shot identity had been consumed. Typed writers now sync the partial and its parent
+before returning, retain the visible partial if either sync fails, and expose no private location.
+The Cave runner also performs protected-file and ROM-sidecar checks inside the writer transaction,
+so a violation seals a failed attempt instead of publishing a complete-looking result. Finally,
+the execution root must contain all five authenticated protected inputs; the existing T7 base root
+satisfies that rule while an accidental alternate artifact root does not.
+
+Focused durability/isolation coverage is 77/77 green. The full local gate passes 3,560
+non-integration tests, three intentional deselections and one expected failure, plus Ruff, mypy
+over 227 source files, privacy/docs and all four generated registries. Executable source bundle is
+`beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Do not execute Cave from
+this working tree. Required sequence: exact source commit and CI, Claude's narrow delta re-audit,
+then exactly one live measurement only if approval returns. Counters remain priors 1, reservations
+14, durable menus 0, outcomes 0/14, fits 0, sealed/Crystal 0, replay 0 and authority 0.
+
 ## Reservation namespace audited; state exclusion carries the current proof — 2026-08-15
 
 Claude correctly found that the first reservation planner compared goal-manager `checkpoint_id`

@@ -55,6 +55,14 @@ Antigravity should prefer mission alignment, transfer falsifiers and capability 
 repeating Claude's byte-level provenance work. It is explicitly expected to recommend deleting or
 stopping low-value lanes.
 
+Current Antigravity access is deliberately weighted below Codex and Claude for repository-scale
+reasoning. Do not compensate by requesting a second full audit. Once a concrete catalog is frozen,
+Codex prepares a compact public-safe challenge packet: North Star, learner schema, aggregate menu
+coverage, declared metrics, exact transfer questions and no private identities. Antigravity returns
+at most three claims, each with a cross-title counterexample, missing shared observable, smallest
+Red/Crystal falsifier, decision impact and work to delete. Claude audits evidence; Codex adjudicates
+and implements. There is no three-agent vote.
+
 ## Source of truth and write safety
 
 - Codex's active branch is the only branch pushed by default.

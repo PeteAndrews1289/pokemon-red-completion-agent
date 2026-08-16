@@ -474,6 +474,59 @@ def test_typed_artifact_revalidates_root_and_syncs_publication(
     assert not (root / "must-not-start.partial").exists()
 
 
+def test_begin_typed_artifact_durably_claims_the_partial_before_return(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, store = _make_store(tmp_path)
+    synchronized: list[Path] = []
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        lambda path: synchronized.append(path),
+    )
+
+    writer = store.begin_artifact("durable-model-claim", kind="battle_model")
+
+    partial = root / "durable-model-claim.partial"
+    assert partial.is_dir()
+    assert synchronized == [partial, root]
+    writer.abort("test_cleanup")
+
+
+def test_begin_typed_artifact_sync_failure_retains_path_free_consumed_claim(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, store = _make_store(tmp_path)
+    partial = root / "failed-durable-model-claim.partial"
+    synchronized: list[Path] = []
+
+    def fail_parent_sync(path: Path) -> None:
+        synchronized.append(path)
+        if path == root:
+            raise PrivateArtifactError(f"cannot synchronize private location {path}")
+
+    monkeypatch.setattr(
+        private_artifacts_module,
+        "_fsync_directory",
+        fail_parent_sync,
+    )
+
+    with pytest.raises(
+        PrivateArtifactError,
+        match="unable to durably claim the private artifact",
+    ) as raised:
+        store.begin_artifact("failed-durable-model-claim", kind="battle_model")
+
+    assert synchronized == [partial, root]
+    assert partial.is_dir()
+    assert str(tmp_path) not in str(raised.value)
+    assert raised.value.__cause__ is None
+    with pytest.raises(PrivateArtifactError, match="refusing to overwrite"):
+        store.begin_artifact("failed-durable-model-claim", kind="battle_model")
+
+
 def test_typed_artifact_summary_requires_finalization_and_repr_is_path_free(
     tmp_path: Path,
 ) -> None:

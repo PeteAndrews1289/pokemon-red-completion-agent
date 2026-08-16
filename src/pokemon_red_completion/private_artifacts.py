@@ -443,6 +443,17 @@ class PrivateArtifactRoot:
         except OSError:
             raise PrivateArtifactError("unable to create the private partial artifact") from None
 
+        try:
+            # A typed artifact may guard a one-shot measurement just as an
+            # episode does.  Persist the exclusive partial namespace before
+            # returning control to code that can send emulator input.
+            _fsync_directory(partial)
+            _fsync_directory(self._root)
+        except PrivateArtifactError:
+            # Retain the visible partial so a restart treats the attempt as
+            # consumed.  Do not expose the private location in the error.
+            raise PrivateArtifactError("unable to durably claim the private artifact") from None
+
         return PrivateArtifactWriter(
             _validation_token=_WRITER_VALIDATION_TOKEN,
             artifact_id=artifact_id,

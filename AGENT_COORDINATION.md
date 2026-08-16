@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-15 corrected Cave-gate rejection and hardening:** Claude's first displayed mutation
+> total was incomplete. Its final result killed every lineage and fixed-artifact mutation but left
+> four runner guards untested, so it correctly returned **REJECT** for live execution. Codex added
+> behavioral falsifiers for missing authorization, invalid CI identity, protected-input drift and
+> ROM sidecars; then fixed a separate production durability gap by syncing the typed one-shot claim
+> before emulator input and keeping isolation checks inside the failed/complete transaction.
+> Execution is now bound to the private root containing all authenticated inputs. No live run has
+> occurred. Claude receives the immutable delta after exact-head CI.
+>
+> Antigravity remains out of this integrity gate. When the 8+6 menu catalog is frozen, Codex will
+> give 3.1 Pro a compact, public-safe challenge packet instead of the full repository and request at
+> most three claims. Each claim must name a concrete cross-title counterexample, the missing shared
+> observable, the smallest Red/Crystal falsifier, the decision that would change if true and work
+> that should be deleted. Claude continues to own evidence integrity; Codex implements and
+> adjudicates. Antigravity neither votes nor vetoes.
+
 > **2026-08-15 reservation-identity correction:** Claude found a real namespace mistake: the
 > original planner compared checkpoint IDs with prior root-lineage IDs. Codex's explicit registry
 > audit uses the frozen historical catalog and its source-matched registry; it found canonical-root

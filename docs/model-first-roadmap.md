@@ -267,6 +267,22 @@ catalog. See the [source qualification](evidence/party-development-title-neutral
 
 ## Current checkpoint: construct the prospective completion-aware party catalog
 
+### Immediate gate: harden and qualify the one-shot Cave fact
+
+Claude's corrected audit of source `9476b97` killed all lineage and fixed-artifact mutations but
+rejected execution because four live runner guards were not behaviorally distinguishable. The
+hardened successor directly tests authorization, positive CI identity, protected-input immutability
+and ROM-sidecar exclusion. It also closes a power-loss hole by syncing the typed artifact's
+exclusive partial claim before any caller can send emulator input, keeps post-run isolation checks
+inside the artifact transaction and binds the execution root to every authenticated protected
+input. The live measurement is still zero. Full ROM-free qualification, exact-head CI and Claude's
+narrow re-audit precede the one allowed Cave execution.
+
+This work remains on the shortest path to a learned party choice: one compatible Cave cost prior
+unmasks five already-observed two-way venue menus. It is not a replay, label or learned outcome. If
+the hardened source fails one more identical gate, stop and redesign the measurement rather than
+adding another wrapper.
+
 Exact source `7190be6` passed 3,394 non-integration tests, three integration deselections, one
 expected failure, Ruff, whole-source mypy over 220 files, privacy, documentation and generated-
 registry gates. It completes two prerequisites without collecting an outcome.

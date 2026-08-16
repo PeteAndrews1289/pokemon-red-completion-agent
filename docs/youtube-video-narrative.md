@@ -1,5 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: make the one-shot lock survive a blackout
+
+Start with the covered **RUN CAVE ONCE** switch. Show Claude's mutation board: **LINEAGE 8/8 ·
+ARTIFACT ID 3/3 · RUNNER GUARDS 4 SURVIVED**. Cross out the premature approval and replace it with
+**REJECT**. Animate four red alarms: **NO PRIVATE ROOT · INVALID CI · INPUT CHANGED · ROM SIDECAR**.
+Then make each alarm trip a real test.
+
+Cut power immediately after a private folder appears. In the old version, let the claim flicker;
+in the repaired version, show **SYNC CLAIM → SYNC PARENT → EMULATOR INPUT**. If either sync fails,
+leave a locked **CONSUMED PARTIAL** behind. Put the input and sidecar checks inside the artifact
+door so a violation exits through **FAILED**, never **COMPLETE**.
+
+End with **77/77 FOCUSED · LIVE INPUT 0 · MENUS 0 · OUTCOMES 0/14 · AUTHORITY 0**. Narration:
+**“The model did not get smarter in this scene. The one experiment that will feed it can no longer
+forget that it happened.”**
+
 ## August 15 scene: two labels that looked identical
 
 Show one card stamped **CHECKPOINT ID** and another stamped **ROOT LINEAGE ID**. In the unit-test

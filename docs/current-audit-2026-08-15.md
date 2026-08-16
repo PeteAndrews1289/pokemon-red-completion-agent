@@ -1,5 +1,34 @@
 # Current audit — 2026-08-15
 
+## Corrected one-shot audit and durability adjudication
+
+Claude's final audit of executable source `9476b97` corrected an initially favorable reading and
+returned **REJECT** for the live Cave measurement. Its lineage layer killed 8/8 mutations and its
+fixed artifact-identity layer killed 3/3. Four mutations survived in the runner because existing
+tests inspected source shape but never exercised `_run`: dropping the private-root/CI requirement,
+accepting a nonpositive CI identity, skipping protected-input revalidation and permitting a
+ROM-adjacent preflight artifact.
+
+Codex accepted all four test-distinguishability findings. The new tests call the early execution
+boundary directly, mutate a protected file, create an emulator sidecar and prove `_run` retains all
+guard calls. A separate root-containment test rejects an artifact root that does not contain every
+authenticated protected input.
+
+Codex also found a higher-severity production gap that was not in Claude's requested patch. The
+typed private writer created an exclusive partial directory but, unlike the episode writer, did not
+sync the directory and parent before returning to an emulator caller. After a power loss the
+one-shot claim could therefore be missing even though input had started. The typed writer now
+persists that claim before returning and retains a path-free, non-retryable partial on sync failure.
+Post-execution protected-input and ROM-sidecar checks now execute inside the writer transaction, so
+a violation produces a failed artifact rather than a complete-looking result.
+
+Focused durability and runner coverage is 77/77 green. The full local gate passes 3,560 tests,
+three intentional deselections and one expected failure, plus Ruff, whole-source mypy, privacy,
+documentation and all four generated registries. Regenerated execution registries bind source
+bundle `beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11`. Disposition:
+**implementation hardened; live execution still rejected pending publication, exact-head CI and
+Claude delta re-audit**. Protected counters remain unchanged.
+
 ## Reservation identifier adjudication
 
 Claude's immutable reservation audit found one medium-severity claim defect: the planner compared

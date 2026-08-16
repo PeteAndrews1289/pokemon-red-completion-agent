@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the lock had to survive the power going out
+
+The Cave run was one review away from starting when Claude corrected its own audit. The lineage
+proof was strong and the fixed artifact identity was strong, but four safety checks had never been
+made to fail in a test. Removing the private-root requirement, accepting an invalid CI number,
+changing a protected capture or creating an emulator sidecar could all survive the old test suite.
+The code said “stop”; the tests had never proved it.
+
+While adding those falsifiers, Codex found the more physical version of the same problem. The
+private writer made a directory to claim the one-shot identity, but did not force that claim to
+storage before handing control to the emulator. A sudden power loss—the project has experienced
+one before—could erase the evidence that the attempt had begun. The writer now syncs both the claim
+and its parent first. If syncing fails, the visible partial remains and the identity cannot be
+retried. Final input and sidecar checks happen before the artifact can wear a “complete” label.
+
+The focused board reads **77 TESTS · DURABLE CLAIM · FAILED-ON-DRIFT · LIVE RUN STILL LOCKED**.
+No model learned from this work, but it protects the single fact needed to unmask five real venue
+questions. The next proof is deliberately short: one full local gate, one immutable commit, one CI
+run and one narrow Claude recheck. Only then may Cave run once.
+
 ## August 15: the right state, under the wrong name
 
 Claude found a subtle defect before the first question ran. The reservation code called a

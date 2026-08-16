@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the one-shot lock now survives a power loss
+
+The first final review briefly looked green, then Claude corrected it: four Cave runner safeguards
+had never been exercised by a behavioral test. Codex added the missing alarms and found an even
+more concrete flaw. The private one-shot folder existed in memory, but its creation was not forced
+to storage before the emulator could receive input. A blackout could make a consumed attempt look
+unused.
+
+The claim is now synced before play begins. A sync failure leaves a non-retryable partial, and any
+changed input or emulator sidecar turns the attempt into failed evidence before it can publish as
+complete. All 77 focused checks pass. Cave has still not run, and the board stays **one prior ·
+fourteen reserved roots · zero menus · zero outcomes · zero authority** until a published CI-green
+commit survives Claude's narrow recheck.
+
 ## Current checkpoint: the seats are reserved, but the exam is still blank
 
 The read-only search looked at the same 81 safe Red states again and got the same inconvenient

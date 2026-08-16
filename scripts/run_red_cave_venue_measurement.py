@@ -140,6 +140,66 @@ def _require_external(path: Path, *, subject: str) -> Path:
     return resolved
 
 
+def _validate_execution_request(
+    *,
+    execute: bool,
+    private_root: Path | None,
+    exact_ci_run: int | None,
+) -> tuple[Path, int] | None:
+    if exact_ci_run is not None and (
+        type(exact_ci_run) is not int or exact_ci_run <= 0  # noqa: E721
+    ):
+        raise RedCaveVenueMeasurementRunError("exact CI run identity is invalid")
+    if not execute:
+        return None
+    if private_root is None or exact_ci_run is None:
+        raise RedCaveVenueMeasurementRunError(
+            "execution requires a private root and exact green CI run identity"
+        )
+    return private_root, exact_ci_run
+
+
+def _require_designated_private_root(
+    private_root: Path,
+    *,
+    protected_inputs: tuple[Path, ...],
+) -> Path:
+    resolved_root = _require_external(private_root, subject="artifact root")
+    if not all(path.resolve().is_relative_to(resolved_root) for path in protected_inputs):
+        raise RedCaveVenueMeasurementRunError(
+            "execution root does not contain every authenticated protected input"
+        )
+    return resolved_root
+
+
+def _require_protected_files_unchanged(expected_digests: Mapping[Path, str]) -> None:
+    try:
+        observed = {
+            path: hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in expected_digests
+        }
+    except OSError:
+        raise RedCaveVenueMeasurementRunError(
+            "Cave measurement could not revalidate every protected input"
+        ) from None
+    if observed != expected_digests:
+        raise RedCaveVenueMeasurementRunError(
+            "Cave measurement changed a protected input"
+        )
+
+
+def _require_rom_adjacent_unchanged(
+    rom_path: Path,
+    expected: tuple[tuple[bool, str | None], ...],
+    *,
+    operation: str,
+) -> None:
+    if rom_adjacent_artifacts(rom_path) != expected:
+        raise RedCaveVenueMeasurementRunError(
+            f"Cave {operation} created a ROM-adjacent artifact"
+        )
+
+
 def _load_private_json(
     path: Path,
     *,
@@ -386,14 +446,11 @@ def _execute_measurement(
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    if args.execute and (args.private_root is None or args.exact_ci_run is None):
-        raise RedCaveVenueMeasurementRunError(
-            "execution requires a private root and exact green CI run identity"
-        )
-    if args.exact_ci_run is not None and (
-        type(args.exact_ci_run) is not int or args.exact_ci_run <= 0  # noqa: E721
-    ):
-        raise RedCaveVenueMeasurementRunError("exact CI run identity is invalid")
+    execution_request = _validate_execution_request(
+        execute=args.execute,
+        private_root=args.private_root,
+        exact_ci_run=args.exact_ci_run,
+    )
     if (
         args.reservation_plan_file_sha256
         != RED_CAVE_RESERVATION_PLAN_FILE_SHA256
@@ -502,6 +559,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             context_catalog_path,
         )
     }
+    designated_private_root = (
+        None
+        if execution_request is None
+        else _require_designated_private_root(
+            execution_request[0],
+            protected_inputs=tuple(protected_files),
+        )
+    )
     if (
         protected_files[state_path] != RED_CAVE_SUPPORT_STATE_SHA256
         or protected_files[envelope_path] != RED_CAVE_SUPPORT_ENVELOPE_SHA256
@@ -554,13 +619,20 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "private_path_fields": 0,
     }
     if not args.execute:
-        if rom_adjacent_artifacts(rom_path) != adjacent_before:
-            raise RedCaveVenueMeasurementRunError(
-                "Cave preflight created a ROM-adjacent artifact"
-            )
+        _require_rom_adjacent_unchanged(
+            rom_path,
+            adjacent_before,
+            operation="preflight",
+        )
         return preflight
 
-    private_root = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
+    if execution_request is None or designated_private_root is None:  # pragma: no cover
+        raise AssertionError("validated Cave execution request disappeared")
+    _requested_private_root, exact_ci_run = execution_request
+    private_root = open_private_root(
+        designated_private_root,
+        repository_root=PROJECT_ROOT,
+    )
     writer = private_root.begin_artifact(
         RED_CAVE_VENUE_MEASUREMENT_ARTIFACT_ID,
         kind="party_development_venue_measurement",
@@ -572,7 +644,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "record_type": "independent_cave_venue_measurement_plan",
                 "source": source.public_dict(),
                 "source_bundle_sha256": source_bundle_sha256,
-                "exact_ci_run": args.exact_ci_run,
+                "exact_ci_run": exact_ci_run,
                 "public_plan_file_sha256": plan_file_sha256,
                 "reservation_plan_sha256": reservation_plan.plan_sha256,
                 "venue_prior_registry_sha256": venue_registry.registry_sha256,
@@ -590,24 +662,21 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             expected_party=party,
         )
         writer.append("measurement", measurement)
-
-    if {
-        path: hashlib.sha256(path.read_bytes()).hexdigest()
-        for path in protected_files
-    } != protected_files:
-        raise RedCaveVenueMeasurementRunError(
-            "Cave measurement changed a protected input"
-        )
-    if rom_adjacent_artifacts(rom_path) != adjacent_before:
-        raise RedCaveVenueMeasurementRunError(
-            "Cave measurement created a ROM-adjacent artifact"
+        # These postconditions run before the writer can publish a complete
+        # artifact.  A violation therefore retains a consumed failed attempt,
+        # never a result that another process could mistake for valid evidence.
+        _require_protected_files_unchanged(protected_files)
+        _require_rom_adjacent_unchanged(
+            rom_path,
+            adjacent_before,
+            operation="measurement",
         )
 
     return {
         **preflight,
         "schema": RED_CAVE_VENUE_MEASUREMENT_RESULT_SCHEMA,
         "status": "complete",
-        "exact_ci_run": args.exact_ci_run,
+        "exact_ci_run": exact_ci_run,
         "artifact": writer.summary.public_dict(),
         "measurement": {
             key: measurement[key]

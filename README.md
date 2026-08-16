@@ -4,6 +4,16 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **The one-shot Cave gate is hardened but still closed (August 15, 2026).** Claude's corrected
+> audit killed every lineage and artifact-identity mutation but found four live-run guards that
+> existing tests never exercised: execution authorization, positive CI identity, protected-input
+> immutability and ROM-sidecar exclusion. Direct behavioral tests now distinguish all four. Codex
+> also found and fixed a deeper power-loss defect: typed artifacts now durably sync their exclusive
+> partial claim before returning to emulator code, retain that claim on sync failure, and run final
+> isolation checks before a result can publish as complete. Execution is additionally bound to the
+> initialized private root that contains every authenticated input. The live Cave measurement has
+> not run; all learning counters remain unchanged pending exact-head CI and Claude's narrow recheck.
+
 > **Reservation identity correction (August 15, 2026):** Claude found that the original planner's
 > “root” check compared checkpoint IDs with canonical root-lineage IDs. A new read-only audit
 > resolved all 81 checkpoints through the frozen historical catalog and its source-matched

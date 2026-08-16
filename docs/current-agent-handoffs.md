@@ -30,6 +30,13 @@ questions are blocked only by missing Cave evidence. These are preflight facts, 
 The one-shot Cave measurement plan has also passed a real read-only preflight and remains
 unexecuted.
 
+Claude's corrected final audit rejected live execution because four existing runner guards lacked
+behavioral tests. Codex has now added those tests, durably synced the typed one-shot claim before
+emulator input, moved final isolation checks inside the artifact transaction and required the
+artifact root to contain every authenticated protected input. Focused coverage is 77/77 and the
+full 3,560-test ROM-free gate is green; publication, exact-head CI and Claude delta review remain.
+No counter advanced.
+
 Claude's latest audit found that the original planner called checkpoint IDs “roots.” Codex
 accepted the finding and resolved all 81 checkpoints through the frozen historical context catalog
 and its source-matched registry. Canonical root matches are zero in both open partitions; the
@@ -42,7 +49,8 @@ at rest.
 The complete local candidate passes 3,550 non-integration tests plus every static, privacy,
 documentation and generated-registry gate; source bundle `d4c7953a…`.
 Exact `9476b97` passed CI run `31916187077`, and both path-free read-only receipts reproduced from
-that commit. Claude now receives this immutable source; Antigravity remains idle.
+that commit. Claude rejected live execution on test distinguishability; the hardened successor is
+now being qualified. Antigravity remains idle.
 
 Exact head `3ee15fd` passed CI run `31900603291`. Claude's H2/M2/L2 recheck killed 28/28 valid
 mutations and approved read-only inventory plus prospective construction. The repeated 81-state
@@ -77,8 +85,9 @@ Current Codex assignment:
 4. **Complete:** source qualification, exact-head CI, Claude recheck and repeated read-only PP
    inventory.
 5. **Complete, read-only:** qualify the concrete Red adapter and preflight all direct reservations.
-6. **Active:** publish and review the one-shot Cave measurement, execute it once if approved, then
-   compose one compatible second venue prior. Do not promote the stale Cave result.
+6. **Active:** qualify and publish the hardened one-shot Cave boundary, obtain exact-head CI and
+   Claude's delta approval, execute it once if approved, then compose one compatible second venue
+   prior. Do not promote the stale Cave result.
 7. After review, materialize only the two reserved middle-PP contexts;
    re-inventory and freeze the exact 8 train / 6 development **questions**, not outcomes. Dispatch
    both reviewers on that immutable catalog.
@@ -167,10 +176,13 @@ becomes work without a concrete falsifier. Challenge:
    goal control or living-Pokédex planning; and
 7. which planned work should be deleted because it cannot increase learned authority.
 
-Antigravity must return: exact commit/catalog reviewed, mission-alignment verdict, Red-specific
-assumptions, cheapest cross-title falsifiers, a prioritized capability gap list, stop conditions,
-and the narrowest next product slice. It should not duplicate Claude's byte-level provenance audit
-unless a source defect changes the architecture conclusion.
+Antigravity receives a compact public-safe packet containing only the frozen menu schema, aggregate
+catalog coverage, declared metrics, North Star constraints and exact review questions—not a broad
+request to synthesize the repository. It may return at most three claims. Each claim must include a
+concrete cross-title counterexample, the missing shared observable, the smallest Red/Crystal
+falsifier, the product decision that changes if the claim is true and planned work that should be
+deleted. It should not duplicate Claude's byte-level provenance audit unless a source defect
+changes the architecture conclusion.
 
 Do not send Antigravity the Cave runner before execution merely to obtain a third approval. Its
 comparative advantage begins when real menus can be assessed for product value and transfer. At

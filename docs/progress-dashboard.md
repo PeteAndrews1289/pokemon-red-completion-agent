@@ -1,5 +1,12 @@
 # Pokémon Learning Observatory
 
+> **One-shot safety gate:** the prospective Cave measurement remains unexecuted. Its typed artifact
+> now durably claims the attempt before emulator input, binds execution to the private root holding
+> all authenticated inputs, and cannot publish complete until protected files and ROM sidecars are
+> unchanged. The readiness page may show this as **measurement source under requalification** only;
+> it must not advance priors, menus, outcomes, fit or authority until the one-shot result is both
+> executed and independently accepted.
+
 > **Reservation checkpoint:** the project now has 14 privately reserved source roots—8 train and
 > 6 development—but still has zero frozen candidate menus and zero outcomes. The reservation spans
 > both trainee/venue choices, all four completion goals, three health bins and two evolution-route
