@@ -1,5 +1,19 @@
 # Pokémon Learning Observatory
 
+> **Current V2 gate:** Claude's audit was conditional, and exact source `ff2ccfb` now resolves its
+> three live conditions: eligible menu cardinality, behavioral evolution-venue authority and
+> per-record durability. The dashboard should show **FOCUSED 92/92 · ROUTE 11 55/55 · FULL GATE
+> 3,576 GREEN · SOURCE ff2ccfb PUBLISHED · CI 31925553137 GREEN · CLAUDE DELTA PENDING ·
+> AUTHORIZATION PENDING**.
+> Do not show a training percentage. V2 is unexecuted; the board remains **priors 1 · roots 14 ·
+> menus 0 · outcomes 0/14 · failed attempts 1 · accepted Cave measurements 0 · fit false ·
+> authority zero**.
+>
+> Crash status must be displayed precisely: **PLAN DURABLE BEFORE CONTROLLER**; **TERMINAL DURABLE
+> AFTER CONTROLLER RETURNS**; **MID-CONTROLLER BLACKOUT MAY LEAVE PLAN ONLY**. This is stronger
+> evidence retention without pretending a power loss can preserve an observation the runner never
+> received. See the [path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
+
 > **Current Cave status:** V1 is **FAILED · CONSUMED · NOT RETRYABLE**. It retained one plan row
 > and no terminal/measurement row, so the dashboard must not infer completion or advance a prior.
 > The cause was a singleton venue presented as a strategic menu. The shared trainer now treats a

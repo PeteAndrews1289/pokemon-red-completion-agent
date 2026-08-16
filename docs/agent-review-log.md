@@ -3,6 +3,34 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Cave V2 conditional authorization audit — conditions resolved locally 2026-08-15
+
+Claude audited exact head `346b2e5d0bcb1aa1b55eac1ff839199a16f138cd` after CI run
+`31922419713` and returned **APPROVE WITH CONDITIONS** for preflight/one-shot readiness. Its
+mutation harness killed the retained-attempt, retained-failure, trainee-projection and
+non-evolution multiway mutations behaviorally. The evolution multiway mutation had only
+source-shape failures. Claude also found that two supplied venue bands with only one eligible
+candidate could still emit a singleton menu, and narrowed the power-loss and “every abort” claims.
+
+Decision: accept all live findings. Exact executable source `ff2ccfb` gates both branches on the
+projected learner menu, adds a behavioral alternate-venue evolution test, and synchronizes the V2
+plan plus every terminal record that returns to the runner. The public plan now says a hard power
+loss during controller execution can leave the durable plan alone and distinguishes execution
+aborts from plan/finalization I/O failures. The historical V1 prospective plan is preserved as
+immutable evidence; the failure receipt and active documents are its authoritative tombstone.
+
+Validation: direct mutations that suppress evolution authority or restore singleton emission fail;
+92 focused semantic/durability and 55 historical Route 11 compatibility tests pass. Source bundle
+`5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe` and all source-bound
+registries reproduce. The full local gate passes 3,576 tests plus every static, privacy,
+documentation and registry check; exact-head CI run `31925553137` is green. Disposition: **pending
+one narrow Claude delta recheck**. This verdict does not authorize V2. See the
+[path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
+
+Antigravity is not assigned this integrity gate. Its next review starts only after the real 8+6
+catalog exists and is capped at three falsifiable product/transfer claims; it has no implementation
+or evidence-signoff role.
+
 ## Route 11 delta re-audit — approved narrowly and composed 2026-08-15
 
 Claude audited exact CI-green head `3a24a2e` under Python 3.11 and 3.14. It independently

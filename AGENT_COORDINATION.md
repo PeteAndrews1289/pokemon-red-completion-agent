@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-15 conditional-audit repair:** Claude audited exact `346b2e5` and returned
+> **APPROVE WITH CONDITIONS**. Codex accepted the missing evolution behavioral oracle, the
+> supplied-band/eligible-candidate mismatch and the durability/wording limits. Exact executable
+> source `ff2ccfb` now gates on the projected learner menu, behaviorally executes an authorized
+> alternate evolution venue, and durably synchronizes the plan, returned terminal attempt,
+> execution failure and accepted measurement. Its public contract states that a blackout during
+> controller execution may leave the durable plan alone. Focused gates are 92/92 and 55/55; source
+> bundle `5d6ad452…`. The complete local gate passes 3,576 tests plus every static, privacy,
+> documentation and registry check; exact-head GitHub CI run `31925553137` is green. V2 remains
+> unexecuted and unauthorized pending Claude's narrow delta recheck and fresh user authorization.
+> See the
+> [path-free adjudication](docs/evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
+>
+> Antigravity's lower repository-reasoning weight is handled by narrowing its job, not by asking it
+> to duplicate Claude. It receives no implementation lane and no evidence veto. After a real 8+6
+> catalog exists, it gets a compact public-safe transfer packet and may return at most three
+> falsifiable Red-to-Crystal product claims with explicit work to delete.
+
 > **2026-08-15 V1 failure and V2 recovery:** the authorized Cave V1 attempt was consumed once and
 > failed closed because the training loop emitted a one-item venue menu while the no-choice runner
 > correctly rejected every menu. No measurement or learning record survived. The

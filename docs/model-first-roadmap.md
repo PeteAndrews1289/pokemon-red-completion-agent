@@ -29,12 +29,16 @@ Role ownership and exact handoffs are frozen in
    entry, and explicit registry resolution proves zero root/state overlap in the reserved 8+6.
 8. **V1 failed and retired; V2 active:** V1 was executed exactly once and failed because the shared
    trainer emitted a singleton venue “choice” that the no-choice runner rejected. It created no
-   measurement or learning evidence and cannot be retried. The title-neutral singleton semantics
-   and failure retention are repaired. Qualify the prospective V2 plan on its distinct,
-   inventory-authenticated open root; publish, pass exact-head CI and Claude review, then seek new
-   authorization for exactly one V2 execution. Only an accepted V2 result may compose one Cave
-   prior. Then naturally materialize the two middle-PP contexts under the frozen no-label protocol,
-   re-inventory and freeze the exact 8+6 menus.
+   measurement or learning evidence and cannot be retried. Claude's conditional audit of
+   `346b2e5` found that eligible candidate cardinality and the evolution multiway branch needed
+   behavioral proof, and that record durability needed a narrower crash claim. Exact source
+   `ff2ccfb` resolves those conditions locally: menus gate on projected eligible candidates; the
+   evolution authority executes an alternate venue in a direct test; and sparse V2 records are
+   synchronized with an explicit mid-controller blackout limit. Finish the full gate, publish,
+   pass exact-head CI and obtain Claude's narrow delta recheck, then seek new authorization for
+   exactly one V2 execution. Only an accepted V2 result may compose one Cave prior. Then naturally
+   materialize the two middle-PP contexts under the frozen no-label protocol, re-inventory and
+   freeze the exact 8+6 menus.
 9. Send that immutable catalog to Claude for integrity/power review and Antigravity for one bounded
    genuine-choice/transfer review. Execute each approved identity once with immediate durable
    private retention. Stop at the first binding/accounting failure and never replace an exposed
@@ -51,6 +55,14 @@ result joins incorrectly, or Red gains come from overlevelling. No full replay i
 sequence.
 
 ## Current checkpoint: one failed attempt exposed the missing semantic seam
+
+The latest conditional-audit repair is source `ff2ccfb` / bundle `5d6ad452…`. It distinguishes
+supplied venues from learner-eligible choices, adds the missing behavioral oracle for targeted
+evolution, and synchronizes the plan and every later sparse record before returning. It does not
+claim a terminal observation during a mid-controller blackout. Focused gates pass 92/92 and 55/55;
+the complete local gate passes 3,576 tests plus every static/privacy/registry check. Publication
+and exact-head CI run `31925553137` are complete. A narrow Claude recheck and fresh authorization
+remain. V2 is still unexecuted.
 
 V1 is permanently consumed. Its immutable failed artifact retained one plan row and no terminal or
 measurement row; the

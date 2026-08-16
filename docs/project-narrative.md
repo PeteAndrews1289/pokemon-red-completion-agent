@@ -1,5 +1,33 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: count the choices the learner can actually make
+
+Claude's final gate did not reject the architecture, but it found that the experiment still asked
+the wrong counting question. Two venues could be supplied while only one was safe for the current
+trainee. The old guard saw “two” and published a one-card learner menu. The targeted-evolution
+branch had an even quieter weakness: removing its two-way venue decision broke source-shape tests,
+but no behavioral test noticed that authority had disappeared.
+
+The repair moves the rule to the real boundary. Red first builds the identity-free learner menu,
+then emits a decision only if that projected menu has more than one eligible candidate. A new test
+lets authority reject the teacher's evolution venue and proves the other route is the one actually
+executed. Mutations that erase that choice or restore singleton menus now fail because behavior
+changes, not because a line of source looks different.
+
+The audit also made the blackout story more honest. The plan is synchronized before the
+controller starts. Once the controller returns, the terminal party and counters are synchronized
+before acceptance; ordinary execution failures and accepted measurements are synchronized too.
+But if power vanishes in the middle of the controller, the recorder may have only the plan. The
+public V2 contract says exactly that instead of calling every possible failure a retained terminal
+attempt.
+
+This is executable source `ff2ccfb`, bundle `5d6ad452…`, with 92 focused semantic/durability,
+55 historical-compatibility and 3,576 full-suite tests passing. Exact-head CI run `31925553137` is
+green. It has not run V2 or trained a model. The remaining sequence is one narrow Claude recheck and fresh user
+authorization. Antigravity will enter later with a deliberately smaller job: challenge at most
+three Red-to-Crystal assumptions after the real menu catalog exists, with a falsifier and deletion
+decision for each.
+
 ## August 15: the test suite approved two contracts that contradicted each other
 
 The Cave measurement finally received its narrow authorization and ran once. It failed closed.

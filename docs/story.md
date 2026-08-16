@@ -7,6 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: two supplied paths can still mean one real choice
+
+Claude found the last version was looking at the number of venue records supplied to the trainer,
+not the number the learner was actually allowed to choose. If one of two venues was unsafe, the
+model still received a one-card “choice.” And in the evolution path, a mutation could erase a real
+two-way decision without any behavioral test catching it.
+
+The trainer now builds the learner's anonymous menu first and asks a question only when more than
+one eligible card survives. A new test lets the decision authority pick the non-teacher evolution
+venue and watches that route—not the preferred one—execute. The evidence journal is sharper too:
+its plan is forced to storage before play, and a returned terminal observation is forced to storage
+before judgment. If the machine loses power while the controller is still running, the journal may
+contain only the plan; the project now says so openly.
+
+The board has not moved: **one prior · fourteen reserved roots · zero frozen menus · zero outcomes
+· one consumed failed measurement · zero authority**. Source `ff2ccfb` passes the 3,576-test full
+local gate and GitHub CI run `31925553137`; it still needs Claude's narrow recheck before the owner
+can authorize V2. Antigravity waits for the
+real catalog, where its smaller but useful job is to identify up to three Red assumptions that
+Crystal can cheaply disprove.
+
 ## Current checkpoint: one option is not a choice
 
 The covered Cave switch was finally opened. The run failed—and the failure exposed exactly the

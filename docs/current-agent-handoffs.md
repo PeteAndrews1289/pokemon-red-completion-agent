@@ -5,7 +5,32 @@ Status: active operating assignment as of 2026-08-15. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: V1 consumed, V2 qualification active
+## Current override: Claude conditions resolved locally; V2 still locked
+
+Claude's immutable audit of `346b2e5` / CI `31922419713` approved readiness only conditionally.
+Codex accepted its live findings. Executable source `ff2ccfb` now counts projected eligible
+candidates rather than supplied venue bands, has a behavioral targeted-evolution authority test,
+and synchronizes every sparse V2 record that returns to the runner. The exact remaining power-loss
+boundary is public: a blackout during controller execution may leave only the already-durable plan.
+Plan/finalization I/O failures are not described as execution aborts. Focused gates pass 92/92 and
+55/55; executable bundle `5d6ad452…`.
+
+The full local gate now passes 3,576 tests plus Ruff, mypy over 227 source files, public/privacy
+documentation and every generated registry. Executable source `ff2ccfb` is published and
+exact-head CI run `31925553137` is green. Codex's active assignment is: ask Claude for one narrow
+immutable recheck of only candidate cardinality, evolution behavior and durable append semantics,
+then return to the user for fresh one-shot
+authorization. V2 has not run. No teacher, prediction, outcome, fit, sealed case, Crystal context
+or authority has opened. The
+[adjudication receipt](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json) is
+path-free.
+
+Antigravity remains a later architecture challenger, not an implementation or evidence reviewer.
+When the concrete catalog exists, Codex will provide a small public-safe packet and accept at most
+three claims carrying a cross-title counterexample, missing observable, cheapest falsifier,
+decision impact and deletion recommendation.
+
+## Historical override: V1 consumed, V2 qualification began
 
 The Cave V1 attempt ran once and failed closed at a semantic contradiction: a fixed one-venue
 measurement was emitted as a singleton candidate menu, then rejected for having any candidate

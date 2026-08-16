@@ -4,6 +4,26 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **V2 conditional-audit repairs are frozen in source, not executed (August 15, 2026).** Claude's
+> audit of exact `346b2e5` approved readiness only conditionally. It found that the trainer counted
+> supplied venues instead of learner-eligible choices, that targeted evolution lacked a behavioral
+> multi-venue oracle, and that sparse one-shot records were not individually synchronized.
+> Executable source `ff2ccfb` resolves all three: a venue menu exists only for more than one
+> projected eligible candidate; an authority test proves an alternate evolution venue executes;
+> and the V2 plan, returned terminal attempt, execution failure and accepted measurement use
+> durable appends. The contract explicitly admits that a hard power loss during controller
+> execution can leave the durable plan without a terminal attempt.
+>
+> Focused gates pass 92/92 and 55/55; the complete local gate passes 3,576 tests plus every
+> static/privacy/registry check; source bundle `5d6ad452…`. Publication and exact-head CI are
+> complete at source `ff2ccfb` / run `31925553137`. One narrow Claude delta recheck and fresh user
+> authorization still precede V2. The
+> [path-free adjudication](docs/evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json)
+> advances no model counter. Honest board: **priors 1 · roots 14 · frozen menus 0 · outcomes 0/14 ·
+> accepted Cave measurements 0 · failed consumed attempts 1 · fit false · authority zero**.
+> Antigravity is reserved for a bounded three-claim Red-to-Crystal challenge after the real catalog
+> exists; it does not implement or approve this evidence gate.
+
 > **Cave V1 is retired; V2 is repaired but not executed (August 15, 2026).** The one authorized V1
 > attempt failed closed after the live trainer represented its single fixed venue as a one-item
 > candidate menu and the runner rejected that contradiction. It retained no measurement, outcome,

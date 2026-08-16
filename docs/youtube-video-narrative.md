@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: two inputs are not always two choices
+
+Put two venue cards into the trainer. Stamp one **ELIGIBLE** and one **UNSAFE**, then show the old
+counter reading **2** while the learner screen contains only one card. Replace the counter with the
+projected learner menu and make the decision light turn off: **ONE ELIGIBLE = FACT**.
+
+Next, show two eligible evolution venues. Let the teacher point right and the model-authority point
+left. Animate only the left transition. Flip a mutation switch marked **DELETE EVOLUTION CHOICE**
+and make the behavioral test fail. Narration: **“We stopped testing whether the line existed and
+started testing whether the model's choice changed the game.”**
+
+Finish on the evidence journal. Stamp **PLAN → SYNC → CONTROLLER**. After the controller returns,
+stamp **TERMINAL → SYNC → ACCEPTANCE**. Cut power in the middle and leave only the plan visible,
+with the caption **HONEST LIMIT: NO RETURNED OBSERVATION TO SAVE**. End on **SOURCE ff2ccfb ·
+FULL 3,576 · FOCUSED 92/92 · ROUTE 11 55/55 · V2 NOT RUN · AUTHORITY 0**. Keep locks marked
+**CI 31925553137 GREEN · CLAUDE DELTA · USER AUTHORIZATION**.
+
 ## August 15 scene: one option is not a decision
 
 Open on the authorized **RUN CAVE ONCE** switch. Let the emulator run, then stop on **FAILED

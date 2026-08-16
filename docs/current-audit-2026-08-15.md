@@ -1,5 +1,43 @@
 # Current audit — 2026-08-15
 
+## Conditional V2 audit adjudication
+
+Claude audited exact head `346b2e5d0bcb1aa1b55eac1ff839199a16f138cd` after green CI run
+`31922419713` and returned **APPROVE WITH CONDITIONS** for preflight/one-shot readiness. The design
+remained honest—labels are identity-free candidate rankings, failed executions are not imitation
+targets, and interrupted outcomes stay censored—but two test gaps mattered. The evolution branch
+could stop publishing its two-way venue decision without a behavioral failure, and both venue
+branches used the number of supplied bands rather than the number of eligible learner candidates.
+
+Codex accepted both. Exact executable source `ff2ccfb7830ab5663226ffc295d6d37658cc81a3`
+projects the menu first and emits only for more than one eligible candidate. Its new evolution test
+lets authority choose the non-teacher venue and observes only that venue's transition. Separate
+singleton cases cover one supplied/eligible venue and two supplied/one eligible. Direct mutations
+that suppress the evolution decision or restore singleton emission now fail behaviorally.
+
+Claude also correctly limited the crash claim. Typed artifact finalization was durable, but
+individual sparse records were not synchronized before returning. V2 now uses durable appends for
+the plan, terminal attempt, execution failure and accepted measurement. The public contract makes
+the boundary falsifiable: plan precedes controller entry; terminal attempt exists only after the
+controller returns; a hard power loss mid-controller may therefore leave the durable plan alone;
+and plan/finalization I/O errors are not called execution aborts. File- and directory-sync failures
+are path-free and tested.
+
+Focused semantic/durability coverage passes 92/92; the historical Route 11 compatibility layer
+passes 55/55. The source bundle is
+`5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe` and all source-bound
+registries regenerate exactly. The full gate passes 3,576 non-integration tests, three intentional
+deselections and one expected failure, Ruff, mypy over 227 files, privacy and documentation.
+Executable source `ff2ccfb` is published and exact-head CI run `31925553137` passed. Claude's
+narrow delta recheck remains before user authorization. V2 has not run. Evidence counters remain:
+priors 1, reserved roots 14, frozen menus 0, outcomes 0/14, failed consumed Cave attempts 1,
+accepted Cave measurements 0, fit 0 and authority 0. The
+[path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json)
+contains no private identity.
+
+Antigravity is deliberately deferred. Its eventual packet is bounded to three product/transfer
+claims and cannot approve provenance or execution.
+
 ## Cave V1 failure and V2 remediation audit
 
 The authorized V1 measurement was executed exactly once from source `f85ea17`, source bundle

@@ -17,6 +17,45 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Claude's V2 conditions are repaired; execution remains locked — 2026-08-15
+
+Claude's immutable audit of `346b2e5` / CI run `31922419713` returned **APPROVE WITH
+CONDITIONS**, not live-run permission. It found two substantive oracle gaps: the targeted-evolution
+two-venue branch had no behavioral falsifier, and the menu gate counted supplied bands instead of
+the eligible candidates actually shown to the learner. It also correctly narrowed the durability
+claim: finalization was durable, but sparse records were buffered, and a hard power loss during the
+controller could leave no terminal attempt. The
+[path-free adjudication](docs/evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json)
+records every finding and decision.
+
+Executable source `ff2ccfb7830ab5663226ffc295d6d37658cc81a3` fixes the live semantics. Both
+training branches project first and emit a venue decision only when the projected learner menu has
+more than one eligible candidate. A real evolution authority test selects the non-teacher venue
+and proves only that transition executes; singleton tests cover both one supplied venue and two
+supplied/one eligible. Mutation probes now kill suppressed evolution choice and restored singleton
+emission behaviorally.
+
+Typed one-shot streams now support an explicit durable append. V2 synchronizes its plan before
+controller entry; after the controller returns, it synchronizes the terminal attempt before any
+acceptance check; execution exceptions and accepted measurements are likewise synchronized. The
+contract explicitly admits the remaining boundary: a machine power loss mid-controller can retain
+only the durable plan, and plan/finalization I/O errors are not mislabeled execution aborts. This is
+crash-auditable, not a promise to recover an observation that never returned to the recorder.
+
+The executable bundle is `5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe`.
+Focused semantic/durability coverage is 92/92 and Route 11 source-compatibility coverage is 55/55.
+The full local gate passes 3,576 non-integration tests, three intentional deselections and one
+expected failure, plus Ruff, mypy over 227 source files, privacy/documentation and all four
+registry checks. The executable source is published and exact-head CI run `31925553137` is green.
+V2 remains prospective and unauthorized: controller 0, teacher 0, predictions 0, outcomes 0/14,
+fit 0, sealed/Crystal 0 and authority 0. Next: request one narrow Claude delta recheck, then ask the
+user for fresh one-shot authorization. Do not run V2 from this handoff alone.
+
+Antigravity is not part of this evidence gate. Once the real 8+6 catalog is frozen, give it only a
+compact public-safe packet and at most three Red-to-Crystal claims, each with a counterexample,
+missing shared observable, cheapest falsifier, changed decision and work to delete. Claude audits
+evidence; Codex owns implementation and adjudication. There is no three-agent vote.
+
 ## Cave V1 failed honestly; V2 repairs the semantic seam — 2026-08-15
 
 The authorized V1 Cave attempt ran exactly once from published source `f85ea17` under green CI
