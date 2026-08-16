@@ -1,5 +1,62 @@
 # Current audit — 2026-08-15
 
+## Reservation identifier adjudication
+
+Claude's immutable reservation audit found one medium-severity claim defect: the planner compared
+inventory checkpoint IDs directly with prior root-lineage IDs, and its unit fixture used the same
+string in both roles. Codex accepted the finding and resolved every private inventory checkpoint
+through the frozen historical context catalog and the exact registry at that catalog's source
+commit. The resulting path-free counts are:
+
+| Partition | Inventory | Canonical-root matches | Legacy checkpoint-alias matches | Exact-state matches | Canonical-root or state |
+|---|---:|---:|---:|---:|---:|
+| development | 27 | 0 | 0 | 0 | 0 |
+| train | 54 | 0 | 1 | 1 | 1 |
+
+The alias and state match identify the same already-excluded venue-support entry. None of the
+fourteen reservations overlaps prior evidence by resolved canonical root or exact state. The
+reservation remains valid because the independent state-digest backstop did the real exclusion;
+the old claim that checkpoint identity itself proved root-lineage exclusion was false. New code
+now reports these effects separately, requires a complete unique checkpoint-to-root mapping and
+keeps paths and identities private. The Red preflight also resolves every reservation through the
+same historical catalog and freezes its capture-time canonical lineage into the prospective
+binding. No controller, teacher, model, outcome or authority counter advanced. A future
+reservation-schema revision should store that canonical lineage directly rather than preserving
+the legacy alias field.
+
+## Concrete Red preflight and independent Cave measurement boundary
+
+Codex implemented the missing Red-to-shared party adapter and tested it against the real private
+8+6 reservation plan without controller input. It derives evolution reachability from the
+cartridge, registered/living needs from the coherent all-storage census, living-retention risk from
+specimen multiplicity, role pressure from the declared roster, and health/PP/survival from the live
+party and measured venues. The learner receives only normalized title-neutral rows and digests.
+The balance contract is now consistent across inventory and projection: level floor 60, maximum
+spread 5, party size 6, zero faints.
+
+Real result: 14 reservations accounted for; 12 direct questions inspected; 2 natural-middle-PP
+preparations pending; 7 bindings validated in memory. All five venue reservations produced exactly
+two candidates, with one unavailable solely as `insufficient_venue_evidence`; none collapsed to a
+forced one-candidate question. Snapshot/menu digests change when semantic input changes, raw and
+semantic party drift fails closed, and the preflight rejects a same-shape binding built from
+different candidate features. Durable catalog writes, actions, labels, predictions, outcomes,
+sealed Red, Crystal and authority all remained zero.
+
+The missing Cave evidence is now separated from learner questions by the
+[prospective measurement plan](evidence/red-cave-venue-measurement-plan-2026-08-15.json). Its open
+train support root is absent from all fourteen reservations and all teacher/venue-prior support. It
+uses the same progress/safety/cost measurement contract as Route 11, exactly one fixed venue and one
+bounded level-22-to-26 evolution. An immutable private artifact must open before input; any input
+forbids retry. Candidate menus, teacher/model calls, learner outcomes, sealed data, Crystal and full
+replays are structurally excluded. A real read-only preflight authenticated the state, envelope,
+ROM, private plan, prior registry and ready party without mutation.
+
+Disposition: source candidate ready for publication and independent review; live measurement not
+authorized yet. Honest counters: priors 1; reservations 14; in-memory bindings 7; durable menus 0;
+outcomes 0/14; fits 0; authority 0. Next: exact-head CI, Claude's adapter and one-shot boundary
+audit, one Cave execution if approved, distinct-commit compatibility/composition, then the two PP
+materializations and exact 8+6 freeze.
+
 ## Question-root reservation and PP-materialization boundary
 
 Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`.
@@ -17,9 +74,10 @@ meet the exact readiness-shaped source constraints. The real private plan reserv
 three health bins, two evolution-route kinds and eight/six distinct semantic signatures. Plan
 digest: `9097f73eecaf0e38949fb6e76b0cc7a3c8bafa50c353b60a87f77e5519f4e30d`.
 
-The local gate passes 3,523 non-integration tests, three intentional deselections and one expected
-failure, Ruff, mypy over 224 source files and all four generated-registry checks. Working source
-bundle: `855327f1de2ee40a71c202678e76da028b248c582ae31aa7dc86a10f65d32ddf`.
+The local gate passes 3,550 non-integration tests, three intentional deselections and one expected
+failure, Ruff, mypy over 227 source files, privacy/documentation checks and all four generated-
+registry checks. Working source bundle:
+`d4c7953af2cada31f1fd4cf45d14939d42d270383d36efa8793aa5389a16439f`.
 
 The PP protocol digest is
 `fcc0d4ae4260dee271bc4affe7af1187031d7382c8a4ff5568e7ba569c1cee87`. Exactly one source in each

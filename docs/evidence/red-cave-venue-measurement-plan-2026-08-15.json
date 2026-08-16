@@ -1,0 +1,96 @@
+{
+  "schema": "pokemon.red.party-development-cave-venue-measurement-plan.v1",
+  "status": "prospective_unexecuted",
+  "measurement_id": "red-cave-venue-prior-measurement-v1",
+  "purpose": "Measure one independently reserved Cave venue under the same bounded evolution objective used by the existing Route 11 prior, without creating or answering a learner question.",
+    "authenticated_root": {
+        "checkpoint_id": "red-goal-v1-028-evolve_species-train-01",
+        "assignment_id": "b83b76f4fe14aaaadc8cb261d16456b30ebd1b9c85ef37e12e38f5bdd6553ef4",
+        "root_lineage_id": "red-goal-root-b83b76f4fe14aaaadc8cb261d16456b30ebd1b9c85ef37e12e38f5bdd6553ef4",
+    "state_sha256": "4348fd2bc9b20772f9607ea6242a53ed56656843c1a68c25671bc770ce484a64",
+    "capture_envelope_sha256": "825e270d8974afabd5650b1dee618a975baeffa965124de3eff041d6dca8a4f3",
+    "semantic_signature_sha256": "319535d3e5f3af52b6a7eaa09959eb7a6455ff910ae58a1d8ba39b0933e24115",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+    "independence": {
+        "historical_context_catalog_file_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+        "historical_context_catalog_source_commit": "4207981a3c7b7dfbfa47f0a7add6975068bcfc50",
+        "historical_goal_manager_registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+    "reservation_plan_sha256": "9097f73eecaf0e38949fb6e76b0cc7a3c8bafa50c353b60a87f77e5519f4e30d",
+    "reservation_plan_file_sha256": "bb7f32b320499239d0582e2deebcb12759fa388eb6289b62bdb839ab083554e8",
+    "venue_prior_registry_sha256": "d7f45da14d203705c56cf0c1097d9f7b2e0c6f2c712a2bab8a6ffee0327f7a45",
+    "venue_prior_registry_file_sha256": "102fc95256673d5b9696a152928b0edcf3d2480b6519102fadd62d19ddc2a618",
+    "existing_venue_prior_count": 1,
+    "reserved_question_count": 14,
+    "support_root_is_not_a_reserved_question": true,
+    "support_state_is_not_a_reserved_question": true,
+    "support_root_is_not_prior_support": true,
+    "support_state_is_not_prior_support": true
+  },
+  "bounded_objective": {
+    "initial_target_slot": 3,
+    "initial_target_level": 22,
+    "final_target_level": 26,
+    "progress_units_required": 4,
+    "stop_condition": "first_verified_level_triggered_evolution",
+    "same_trainee_required": true,
+    "target_experience_measured_exactly": true,
+    "evolution_verified_from_party_memory": true,
+    "overlevelled_escort_experience_is_not_target_progress": true
+  },
+  "venue": {
+    "venue_binding_sha256": "e486eb4a7d9c0f84908d7b94df00a9af19ee84da33c163f9e56ffc701ac8a326",
+    "single_fixed_venue": true,
+    "candidate_menu_constructed": false,
+    "venue_identity_exposed_to_model": false,
+    "species_identity_exposed_to_model": false,
+    "party_slot_exposed_to_model": false
+  },
+  "measurement_contract": {
+    "measurement_contract_sha256": "64823bc335f4d4e8f7028103e3a6dd0e5fcd493ae5885f35dc552262b96af2ec",
+    "existing_route_prior_operational_contract_sha256": "b25e5994d2830d628aefc3a119aa7cfdf7c463294e9848542b8fa35e439ae33a",
+    "same_measurement_contract_as_existing_prior": true,
+    "source_compatibility_attested_after_measurement": true,
+    "venue_prior_composed_after_measurement": true
+  },
+  "execution": {
+    "exact_published_source_required": true,
+    "exact_commit_ci_success_required_before_execution": true,
+    "private_artifact_opened_before_first_controller_input": true,
+    "execute_exactly_once": true,
+    "retry_after_any_controller_input": false,
+    "one_fixed_venue_only": true,
+    "candidate_menu_constructed": false,
+    "teacher_queries": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "learner_outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "acceptance": {
+    "objective_completed": true,
+    "progress_units_gained": 4,
+    "faints": 0,
+    "maximum_battles": 200,
+    "maximum_steps": 20000,
+    "maximum_budgeted_center_calls": 50,
+    "required_cleanup_calls": 1,
+    "optional_recovery_calls": 0,
+    "candidate_decisions": 0,
+    "source_state_unchanged": true,
+    "source_envelope_unchanged": true,
+    "rom_adjacent_artifacts_unchanged": true
+  },
+  "interpretation": {
+    "model_fit": false,
+    "authority_promotion": false,
+    "training_example_created": false,
+    "next_if_complete": "Publish the immutable result, attest execution-source compatibility from a distinct commit, and compose exactly one Cave venue prior."
+  },
+  "private_path_fields": 0
+}

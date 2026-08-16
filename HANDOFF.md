@@ -17,6 +17,67 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Reservation namespace audited; state exclusion carries the current proof — 2026-08-15
+
+Claude correctly found that the first reservation planner compared goal-manager `checkpoint_id`
+values to prior `root_lineage_id` values. Those are different namespaces; a unit-test fixture had
+made them equal and concealed the distinction. Codex resolved every one of the 81 private
+checkpoint IDs through the frozen historical context catalog and its source-matched goal-manager
+registry, then measured the filters separately.
+Canonical-root matches were 0/27 development and 0/54 train. The legacy checkpoint-alias test
+matched one train entry, while the independent exact-state test matched that same one entry.
+
+The current 8+6 reservation is still prior-independent: none of its fourteen canonical roots or
+state digests overlaps prior evidence. A new read-only, path-free audit fails closed without a
+complete one-to-one checkpoint-to-root mapping and reports each filter independently; it opens no
+controller, teacher, model or outcome surface. The Red preflight now resolves each reserved
+checkpoint through that authenticated historical catalog and places its capture-time canonical
+lineage—not the checkpoint alias or a regenerated current lineage—inside every prospective
+binding. Do not describe checkpoint IDs as root lineages.
+Future inventory/reservation schema revisions must carry or explicitly resolve canonical lineage;
+the legacy alias comparison is diagnostic only. This correction does not authorize the Cave run.
+The complete local gate passes 3,550 non-integration tests, with three intentional deselections and
+one expected failure, plus Ruff, mypy over 227 source files, privacy/docs and all four generated
+registries. Working source bundle: `d4c7953af2cada31f1fd4cf45d14939d42d270383d36efa8793aa5389a16439f`.
+
+## Real Red menus preflighted; independent Cave measurement is next — 2026-08-15
+
+The previously missing Red title adapter now exists in
+`red_party_development_adapter.py`. It projects one coherent Red observation into the shared
+completion-aware party schema without passing species, party-slot, map, route or path identity to
+the learner. Cartridge evolution data supplies evolution reachability; the live collection census
+supplies registered/living needs and retention risk; the declared roster supplies role pressure;
+and the exact party/venue state supplies health, PP and survival semantics. The curriculum policy
+is explicitly level 60, maximum spread 5, full party 6 and zero faints. The inventory now uses that
+same policy, closing the old exact-spread mismatch.
+
+A real read-only pass authenticated all fourteen private reservations. The two natural-middle-PP
+preparations correctly remained pending. The other twelve produced genuine multi-candidate menus:
+seven trainee menus could already be bound in memory, and five venue menus each exposed exactly
+two viable destinations but only one available prior. Every unavailable venue carried only
+`insufficient_venue_evidence`. Nothing was written: durable menus 0, outcomes 0/14, actions 0,
+teacher/model calls 0, sealed/Crystal 0 and authority 0. A semantic state mutation changes both the
+snapshot and menu identity, and preflight now rejects even a same-shape binding recomputed from
+different feature values.
+
+The smallest missing-evidence experiment is now prospectively specified in
+[the Cave measurement plan](docs/evidence/red-cave-venue-measurement-plan-2026-08-15.json). It uses
+open train root `red-goal-v1-028-evolve_species-train-01`, which is neither a reserved question nor
+teacher/prior support. The runner authenticates the private 8+6 plan and one-entry prior registry,
+opens an immutable private artifact before input, fixes exactly one Cave venue, and measures one
+bounded level-22-to-26 evolution. Its support checkpoint is likewise bound to the capture-time
+assignment/root through the historical catalog. It creates no candidate menu or training outcome
+and permits no retry after input. Its read-only real preflight passed; execution remains closed until this exact
+source is published, CI-green and independently reviewed.
+
+Immediate sequence: publish and obtain exact-head CI; have Claude attack the adapter/menu binding
+and the one-shot Cave boundary separately; execute Cave once only if approved; publish the immutable
+result under a distinct commit and compose exactly one compatible Cave prior; materialize the two
+PP states; then freeze all 8+6 questions. Antigravity is intentionally idle until that concrete
+catalog exists. Give it a bounded product/transfer rubric, not equal authorship or veto power.
+Claude remains the higher-stakes evidence auditor; Codex remains sole editor, integrator and final
+adjudicator.
+
 ## Exact 8+6 source roots reserved; no candidate menu or outcome opened — 2026-08-15
 
 Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`, and Claude's

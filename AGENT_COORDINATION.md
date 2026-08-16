@@ -1,5 +1,36 @@
 # Three-agent coordination
 
+> **2026-08-15 reservation-identity correction:** Claude found a real namespace mistake: the
+> original planner compared checkpoint IDs with prior root-lineage IDs. Codex's explicit registry
+> audit uses the frozen historical catalog and its source-matched registry; it found canonical-root
+> matches 0/27 development and 0/54 train, while the legacy alias and exact
+> state filters both matched the same single train prior. All 8+6 reservations remain disjoint by
+> resolved root and state. The old alias is diagnostic, not authority; future schemas must carry
+> capture-time canonical lineage. Claude's role here was valuable precisely because it attacked
+> evidence meaning. Antigravity remains idle until the frozen-menu product/transfer review.
+> The corrected local candidate passes 3,550 non-integration tests and every quality/provenance
+> gate; source bundle `d4c7953a…`.
+
+> **2026-08-15 concrete-menu and Cave-plan checkpoint:** Codex implemented the read-only Red
+> semantic adapter and exercised it against all fourteen private reservations. Two PP-preparation
+> roots remain pending. The other twelve produce genuine menus: seven trainee bindings validate in
+> memory; five two-way venue menus are blocked only by the missing Cave prior. Durable menus remain
+> 0 and outcomes 0/14. The adapter binds cartridge evolution, full collection/living retention,
+> party roles, health/PP and venue survival while withholding title identity from learner rows.
+>
+> The separate [Cave plan](docs/evidence/red-cave-venue-measurement-plan-2026-08-15.json) uses one
+> unreserved, non-prior open train root and exactly one fixed venue. It creates no question, label,
+> prediction or learner outcome and cannot retry after controller input. Its real read-only
+> preflight is ready; live execution still requires publication, exact-head CI and Claude's narrow
+> approval. Codex then measures once, composes once under a distinct source commit, materializes two
+> PP states and freezes 8+6 menus.
+>
+> Agent weighting is deliberate, not democratic. Codex is sole implementer/adjudicator. Claude is
+> the primary forensic and experiment-integrity gate. Antigravity is used only after a concrete
+> frozen catalog exists, with a bounded rubric for genuine choice, Red leakage, living-Pokédex
+> value, PP naturalness, the cheapest Crystal falsifier and work that should be deleted. It does not
+> co-author source, duplicate Claude's provenance audit or create new gates without a falsifier.
+
 > **2026-08-15 exact-root reservation checkpoint:** Exact head `3ee15fd` passed CI run
 > `31900603291`; Claude's H2/M2/L2 recheck killed 28/28 valid mutations and approved read-only
 > inventory plus prospective construction. Codex reproduced the high-PP-only 81-state inventory

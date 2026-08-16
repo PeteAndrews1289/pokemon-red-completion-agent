@@ -172,6 +172,24 @@ def test_context_catalog_freezes_all_slots_without_private_paths() -> None:
     assert "/" not in encoded
     assert "Users" not in encoded
     assignment = registry.assignment(registry.slots[0].slot_id)
+    assert catalog.entries[0].root_lineage_id == assignment.root_lineage_id
+    assert catalog.entries[0].root_lineage_id != catalog.entries[0].slot_id
+    assert (
+        catalog.entries[0].authenticated_root_lineage_id(
+            slot_id=catalog.entries[0].slot_id,
+            capture_id=catalog.entries[0].capture_id,
+            state_sha256=catalog.entries[0].state_sha256,
+            envelope_sha256=catalog.entries[0].envelope_sha256,
+        )
+        == assignment.root_lineage_id
+    )
+    with pytest.raises(GoalManagerContextCatalogError, match="capture identity"):
+        catalog.entries[0].authenticated_root_lineage_id(
+            slot_id=catalog.entries[0].slot_id,
+            capture_id=catalog.entries[0].capture_id,
+            state_sha256="0" * 64,
+            envelope_sha256=catalog.entries[0].envelope_sha256,
+        )
     metadata = goal_manager_catalog_episode_metadata(assignment, catalog)
     goal = metadata["goal_manager"]
     assert isinstance(goal, dict)

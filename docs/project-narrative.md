@@ -1,5 +1,49 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 15: the right state, under the wrong name
+
+Claude found a subtle defect before the first question ran. The reservation code called a
+goal-manager checkpoint ID a root lineage, and the test fixture used the same convenient string
+for both. The state-fingerprint safety net had still removed the one prior-contaminated train
+entry, but the documentation credited the wrong guard.
+
+Codex resolved all 81 checkpoints through the frozen historical catalog and the exact registry
+that created it, then counted each mechanism separately. Canonical roots removed zero entries.
+The legacy alias and exact state fingerprint both pointed to the same one prior. Most importantly,
+none of the fourteen reserved questions
+overlapped prior evidence by its actual root or state. The plan survives; the claim was corrected.
+The lesson is larger than one field name: an agent cannot learn honestly if provenance identities
+are allowed to become interchangeable merely because a test fixture made them look alike.
+The corrected seam now passes 3,550 tests and authenticates the original catalog at the commit that
+created it, so later source changes cannot silently rename an old capture.
+
+## August 15: twelve real questions and one deliberately answerless run
+
+The reservation board finally met the cartridge. The Red adapter opened each already-authenticated
+state read-only and translated it into the shared language: who still needs levels, who can evolve,
+which evolution preserves or consumes the only living specimen, which role is missing, how health
+and PP constrain the choice, and which measured venue is survivable. Species names, map names,
+party slots and routes stayed behind the adapter.
+
+The result was both encouraging and precise. Two of fourteen cards still need their promised
+middle-PP states. The other twelve are real questions. Seven trainee questions already have
+multiple evidence-backed answers. Five venue questions each contain two genuine destinations—but
+only Route 11 has trustworthy operating evidence, so Cave remains visibly masked as
+`insufficient_venue_evidence`. The system did not turn that missing fact into a bad answer or a
+training label. It stopped.
+
+That made the next experiment unusually clean. An unused open Red root is assigned to one fixed
+Cave run: evolve the same level-22 trainee at the first valid level-26 boundary, record progress,
+safety, travel and recovery, and ask no strategic question at all. The private journal opens before
+the first button; once a button is pressed, the identity can never be retried. A read-only rehearsal
+proved the root and contracts line up. The run itself still waits for publication, CI and forensic
+review.
+
+The scoreboard therefore reads **prior 1 · roots 14 · in-memory bindings 7 · frozen menus 0 ·
+outcomes 0/14 · authority 0**. That may look conservative, but it is the first point where the
+shortest path to training is also the honest one: measure Cave once, create two natural PP states,
+freeze the questions, then let the model learn from outcomes rather than from our route script.
+
 ## August 15: fourteen places to ask—not fourteen answers
 
 The second inventory did not discover the missing lesson. It proved the first one was accurate:

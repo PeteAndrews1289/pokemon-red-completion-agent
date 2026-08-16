@@ -247,6 +247,35 @@ def test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes() 
     )
 
 
+def test_venue_context_selects_unique_weakest_goal_relevant_trainee() -> None:
+    snapshot = _snapshot()
+
+    selected = snapshot.unique_weakest_goal_relevant_venue_trainee()
+
+    assert selected == snapshot.party.members[2]
+
+
+def test_venue_context_refuses_a_hidden_identity_tie_break() -> None:
+    snapshot = _snapshot()
+    tied_member = replace(snapshot.party.members[1], level=22)
+    tied_party = replace(
+        snapshot.party,
+        members=(snapshot.party.members[0], tied_member, snapshot.party.members[2]),
+    )
+    tied_profiles = (
+        snapshot.member_profiles[0],
+        replace(snapshot.member_profiles[1], member=tied_member),
+        snapshot.member_profiles[2],
+    )
+    tied = replace(snapshot, party=tied_party, member_profiles=tied_profiles)
+
+    with pytest.raises(
+        PartyDevelopmentAdapterError,
+        match="not semantically unique",
+    ):
+        tied.unique_weakest_goal_relevant_venue_trainee()
+
+
 def test_shared_venue_without_prior_cannot_become_a_trainee_outcome_menu() -> None:
     snapshot = _snapshot()
 

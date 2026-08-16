@@ -6,6 +6,10 @@ from dataclasses import replace
 
 import pytest
 
+from pokemon_red_completion.party_development_exclusion_audit import (
+    PartyDevelopmentExclusionAuditError,
+    audit_party_development_exclusions,
+)
 from pokemon_red_completion.party_development_inventory import (
     PartyDevelopmentCheckpointInventory,
     PartyDevelopmentInventoryEntry,
@@ -313,3 +317,84 @@ def test_materialization_protocol_forbids_labels_predictions_and_memory_edits() 
     assert PP_CONTEXT_MATERIALIZATION_PROTOCOL["replacement_policy"] == (
         "never_replace_an_exposed_or_failed_identity"
     )
+
+
+def test_exclusion_audit_separates_canonical_roots_legacy_aliases_and_states() -> None:
+    inventory = _inventory()
+    plan = _plan()
+    roots = {
+        item.checkpoint_id: f"canonical-root-{index:02d}"
+        for index, item in enumerate(inventory.entries)
+    }
+
+    audit = audit_party_development_exclusions(
+        inventory,
+        plan,
+        root_lineage_by_checkpoint_id=roots,
+    )
+    counts = {
+        partition.value: partition_counts
+        for partition, partition_counts in audit.partition_counts
+    }
+
+    assert counts["development"].public_dict() == {
+        "inventory_count": 8,
+        "canonical_root_match_count": 0,
+        "legacy_checkpoint_alias_match_count": 0,
+        "state_digest_match_count": 0,
+        "canonical_root_or_state_match_count": 0,
+    }
+    assert counts["train"].public_dict() == {
+        "inventory_count": 11,
+        "canonical_root_match_count": 0,
+        "legacy_checkpoint_alias_match_count": 1,
+        "state_digest_match_count": 1,
+        "canonical_root_or_state_match_count": 1,
+    }
+    assert audit.reserved_root_overlap_count == 0
+    assert audit.reserved_state_overlap_count == 0
+    assert audit.public_dict()["checkpoint_id_is_root_lineage_id"] is False
+    assert "venue-support-root" not in json.dumps(audit.public_dict())
+
+
+def test_exclusion_audit_rejects_reserved_prior_overlap() -> None:
+    inventory = _inventory()
+    plan = _plan()
+    reserved_checkpoint = plan.reservations[0].source_checkpoint_id
+    roots = {
+        item.checkpoint_id: (
+            "venue-support-root"
+            if item.checkpoint_id == reserved_checkpoint
+            else f"canonical-root-{index:02d}"
+        )
+        for index, item in enumerate(inventory.entries)
+    }
+
+    with pytest.raises(
+        PartyDevelopmentExclusionAuditError,
+        match="overlap prior evidence",
+    ):
+        audit_party_development_exclusions(
+            inventory,
+            plan,
+            root_lineage_by_checkpoint_id=roots,
+        )
+
+
+def test_exclusion_audit_requires_an_exact_unique_root_mapping() -> None:
+    inventory = _inventory()
+    plan = _plan()
+    incomplete_roots = {
+        item.checkpoint_id: f"canonical-root-{index:02d}"
+        for index, item in enumerate(inventory.entries[:-1])
+    }
+
+    with pytest.raises(
+        PartyDevelopmentExclusionAuditError,
+        match="one explicit unique root",
+    ):
+        audit_party_development_exclusions(
+            inventory,
+            plan,
+            root_lineage_by_checkpoint_id=incomplete_roots,
+        )

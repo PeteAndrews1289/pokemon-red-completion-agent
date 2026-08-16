@@ -1,5 +1,39 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 15 scene: two labels that looked identical
+
+Show one card stamped **CHECKPOINT ID** and another stamped **ROOT LINEAGE ID**. In the unit-test
+scene, give both the same text and let the exclusion light turn green. Then swap in the real
+goal-manager registry: the strings separate. Put up the path-free audit board:
+**DEVELOPMENT 27 · ROOT 0 · STATE 0** and **TRAIN 54 · ROOT 0 · LEGACY ALIAS 1 · STATE 1**.
+
+Trace the alias and state lights to the same already-excluded prior, then show all fourteen
+reserved cards clear both the resolved-root and state checks. Narration: **“The questions were
+still clean, but not for the reason we had claimed. The state fingerprint saved the experiment;
+the audit saved the story.”** Keep the Cave switch locked: this correction advances no action,
+menu, outcome or authority counter. End on **CAPTURE-TIME CATALOG · 3,550 TESTS · BUNDLE
+d4c7953a…**.
+
+## August 15 scene: the questions appear before the answers
+
+Bring back the **8 TRAIN + 6 DEVELOPMENT** board. Open twelve cards and animate their anonymous
+feature rows: **LEVEL PRESSURE · EVOLUTION · LIVING RETENTION · ROLE GAP · HP · PP · SURVIVAL**.
+Keep two cards locked behind **NATURAL MIDDLE PP**. Then show the count: **12 REAL MENUS · 7 READY
+IN MEMORY · 0 FROZEN**.
+
+Zoom into five venue cards. Each visibly has two destinations. Light Route 11 green and leave Cave
+grey with the exact caption **INSUFFICIENT VENUE EVIDENCE**—not **BAD VENUE**. Narration:
+**“The model had two real options. We were missing a fact required to ask the question honestly.”**
+
+Cut to a separate rail with one card only: **OPEN TRAIN ROOT → FIXED CAVE → EVOLVE 22 TO 26 →
+RECORD PROGRESS/SAFETY/COST**. Cross out **CANDIDATE MENU · TEACHER · MODEL · TRAINING LABEL ·
+RETRY**. Show the private journal lock closing before the first controller input. Then stop at a
+green **READ-ONLY PREFLIGHT** light with the live-run switch still covered by **CI + CLAUDE**.
+
+End on **PRIOR 1 · ROOTS 14 · IN-MEMORY BINDINGS 7 · FROZEN MENUS 0 · OUTCOMES 0/14 · AUTHORITY
+0**. Narration: **“This run will not teach the model which venue to choose. It will supply the one
+missing fact that lets the model face that choice.”**
+
 ## August 15 scene: fourteen empty question cards
 
 Open on **81 AUTHENTICATED STATES**. Sort them into colorful stacks for health, evolution and

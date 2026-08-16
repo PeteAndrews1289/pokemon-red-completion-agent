@@ -4,6 +4,37 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Reservation identity correction (August 15, 2026):** Claude found that the original planner's
+> “root” check compared checkpoint IDs with canonical root-lineage IDs. A new read-only audit
+> resolved all 81 checkpoints through the frozen historical catalog and its source-matched
+> registry: canonical-root matches were zero;
+> the legacy alias and the independent state-digest filter both found the same one train prior.
+> None of the reserved 8+6 canonical roots or states overlaps prior evidence, so the current plan
+> remains independent. The Red adapter now resolves and binds each capture-time canonical lineage
+> for every prospective menu; neither checkpoint aliases nor regenerated current lineages are
+> treated as authoritative evidence.
+
+> **Current bridge to Red party training (August 15, 2026): the real menus now preflight, but no
+> training example exists yet.** A read-only Red adapter derives title-neutral completion,
+> evolution, living-retention, role, survival, health and PP features directly from each coherent
+> cartridge state. On the twelve reservations that need no preparation, it produced twelve genuine
+> menus: seven trainee questions already have at least two evidence-backed choices, while all five
+> venue questions are genuine two-way Route 11/Cave choices blocked only by the deliberately absent
+> Cave prior. The two preregistered middle-PP reservations remain pending. No menu was durably
+> frozen, no answer was selected and no outcome was opened.
+>
+> The missing venue evidence now has a separate
+> [prospective one-shot plan](docs/evidence/red-cave-venue-measurement-plan-2026-08-15.json).
+> It uses an unused open train root, one fixed Cave venue and the same bounded evolution
+> measurement contract as the existing Route 11 prior. It cannot construct a candidate menu,
+> query a teacher/model, fit, open a learner outcome, touch sealed Red/Crystal data or retry after
+> controller input. It has passed a real read-only preflight but has not executed. Honest board:
+> **priors 1 · roots 14 · in-memory bindings 7 · frozen menus 0 · outcomes 0/14 · fit false ·
+> authority zero**. Next: publish this source, obtain exact-head CI and Claude review, then measure
+> Cave once, compose its prior, materialize two natural PP states and freeze the 8+6 catalog.
+> The local candidate passes 3,550 non-integration tests, Ruff, mypy over 227 source files,
+> privacy/documentation checks and all four generated registries; source bundle `d4c7953a…`.
+
 > **Current model-training gate (August 15, 2026): 14 source roots reserved; zero menus and zero
 > outcomes.** Exact head `3ee15fd` passed GitHub CI run `31900603291`, and Claude's final source
 > recheck killed 28/28 targeted mutations. A repeated read-only inventory authenticated 81

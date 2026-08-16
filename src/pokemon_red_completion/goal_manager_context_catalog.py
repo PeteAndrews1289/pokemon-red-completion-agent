@@ -102,6 +102,33 @@ class GoalManagerContextCatalogEntry:
     available_goal_kinds: tuple[GoalKind, ...]
     context_id: str
 
+    @property
+    def root_lineage_id(self) -> str:
+        """Return the canonical lineage frozen by the historical assignment."""
+
+        return f"red-goal-root-{self.assignment_id}"
+
+    def authenticated_root_lineage_id(
+        self,
+        *,
+        slot_id: str,
+        capture_id: str,
+        state_sha256: str,
+        envelope_sha256: str,
+    ) -> str:
+        """Resolve lineage only for the exact capture bytes represented here."""
+
+        if (
+            self.slot_id != slot_id
+            or self.capture_id != capture_id
+            or self.state_sha256 != state_sha256
+            or self.envelope_sha256 != envelope_sha256
+        ):
+            raise GoalManagerContextCatalogError(
+                "context catalog entry differs from the requested capture identity"
+            )
+        return self.root_lineage_id
+
     def __post_init__(self) -> None:
         for value, subject in (
             (self.slot_id, "slot identity"),

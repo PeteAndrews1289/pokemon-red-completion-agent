@@ -498,6 +498,43 @@ class PartyDevelopmentSemanticSnapshot:
             venue_priors=priors,
         )
 
+    def unique_weakest_goal_relevant_venue_trainee(
+        self,
+    ) -> PartyMemberObservation:
+        """Choose a venue-question context without teaching the venue answer.
+
+        A venue question needs one fixed trainee before its candidate venues can
+        be compared.  The context rule uses only portable semantics: the member
+        must still need training, must reduce the declared completion pressure,
+        and must have at least two viable venue candidates.  The weakest such
+        member is selected.  A level tie fails closed because breaking it by
+        party slot or species would smuggle private title identity into
+        curriculum construction.
+        """
+
+        eligible: list[PartyMemberObservation] = []
+        for profile in self.member_profiles:
+            if (
+                not member_needs_training(profile.member, self.policy)
+                or not profile.member.is_trainable
+                or not self._profile_can_serve_goal(profile)
+            ):
+                continue
+            menu = self.venue_menu(profile.member)
+            if menu is not None and len(menu.bindings) >= 2:
+                eligible.append(profile.member)
+        if not eligible:
+            raise PartyDevelopmentAdapterError(
+                "venue context has no goal-relevant trainee with two viable venues"
+            )
+        weakest_level = min(member.level for member in eligible)
+        weakest = tuple(member for member in eligible if member.level == weakest_level)
+        if len(weakest) != 1:
+            raise PartyDevelopmentAdapterError(
+                "venue context weakest goal-relevant trainee is not semantically unique"
+            )
+        return weakest[0]
+
     def freeze_binding(
         self,
         menu: (
@@ -581,6 +618,14 @@ class PartyDevelopmentSemanticSnapshot:
     ) -> None:
         if not profiles:
             raise PartyDevelopmentAdapterError("party-development menu has no candidate profiles")
+        if not any(self._profile_can_serve_goal(item) for item in profiles):
+            raise PartyDevelopmentAdapterError(
+                "candidate menu cannot reduce its declared completion pressure"
+            )
+
+    def _profile_can_serve_goal(
+        self, profile: PartyDevelopmentMemberProfile
+    ) -> bool:
         useful = {
             PartyDevelopmentGoal.BALANCE: lambda item: member_needs_training(
                 item.member, self.policy
@@ -591,10 +636,7 @@ class PartyDevelopmentSemanticSnapshot:
             ),
             PartyDevelopmentGoal.ROLE_COVERAGE: lambda item: item.role_needed,
         }[self.goal]
-        if not any(useful(item) for item in profiles):
-            raise PartyDevelopmentAdapterError(
-                "candidate menu cannot reduce its declared completion pressure"
-            )
+        return useful(profile)
 
 
 __all__ = [

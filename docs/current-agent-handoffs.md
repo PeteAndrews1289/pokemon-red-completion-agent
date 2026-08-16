@@ -24,6 +24,24 @@ Current honest state:
 - Crystal contexts opened by this lane: 0;
 - full Red replays authorized: 0.
 
+The concrete Red adapter has now inspected all fourteen reserved roots read-only. Two PP
+preparations remain pending; seven trainee questions validate in memory; five genuine two-way venue
+questions are blocked only by missing Cave evidence. These are preflight facts, not frozen menus.
+The one-shot Cave measurement plan has also passed a real read-only preflight and remains
+unexecuted.
+
+Claude's latest audit found that the original planner called checkpoint IDs “roots.” Codex
+accepted the finding and resolved all 81 checkpoints through the frozen historical context catalog
+and its source-matched registry. Canonical root matches are zero in both open partitions; the
+legacy alias and independent state digest both exclude the same one train prior; and none of the
+8+6 reservations overlaps by canonical root or state. The current plan remains valid, but only the
+state filter carried that historical exclusion.
+The Red preflight now resolves and binds the true capture-time lineage for each menu rather than a
+regenerated current assignment. Future reservation-schema work should make that lineage explicit
+at rest.
+The complete local candidate passes 3,550 non-integration tests plus every static, privacy,
+documentation and generated-registry gate; source bundle `d4c7953a…`.
+
 Exact head `3ee15fd` passed CI run `31900603291`. Claude's H2/M2/L2 recheck killed 28/28 valid
 mutations and approved read-only inventory plus prospective construction. The repeated 81-state
 inventory again found high PP only. Codex has now reserved exact independent 8+6 source roots under
@@ -56,14 +74,15 @@ Current Codex assignment:
 3. **Complete:** compose the one private Route 11 prior and publish only its path-free summary.
 4. **Complete:** source qualification, exact-head CI, Claude recheck and repeated read-only PP
    inventory.
-5. **Active:** qualify the read-only concrete Red binding/preflight adapter. Separately design and
-   review the smallest second-compatible-venue measurement; do not promote the stale Cave result.
-6. After review, materialize only the two reserved middle-PP contexts and one second venue prior;
+5. **Complete, read-only:** qualify the concrete Red adapter and preflight all direct reservations.
+6. **Active:** publish and review the one-shot Cave measurement, execute it once if approved, then
+   compose one compatible second venue prior. Do not promote the stale Cave result.
+7. After review, materialize only the two reserved middle-PP contexts;
    re-inventory and freeze the exact 8 train / 6 development **questions**, not outcomes. Dispatch
    both reviewers on that immutable catalog.
-7. Execute only after both relevant findings are adjudicated. Stop on the first binding,
+8. Execute only after both relevant findings are adjudicated. Stop on the first binding,
    accounting or durability failure; retain it and do not replace the identity.
-8. Fit one descriptive v2 update from the eight train outcomes and evaluate the six development
+9. Fit one descriptive v2 update from the eight train outcomes and evaluate the six development
    outcomes. Keep authority at zero. Expand decision coverage if the result is underpowered or
    choice-equivalent; do not tune until a tiny development set looks favorable.
 
@@ -94,12 +113,12 @@ Claude owns review of:
 - exact claim boundaries: source qualification, input freeze, execution, fit and authority are
   separate decisions.
 
-Claude's next assignment is the immutable reservation/preparation audit after publication. Verify
+Claude's next assignment is the immutable adapter/Cave-boundary audit after publication. Verify
 the 8+6 selection is deterministic, excludes every teacher/venue support root and state, preserves
-the development partition, and cannot turn a planned PP bin into observed diversity. Attack the
-private-plan loader, closed counters, protocol digest and public/private boundary. Review the
-proposed second-venue measurement separately; approval of reservations must not authorize its
-controller actions.
+the development partition, and cannot turn a planned PP bin into observed diversity. Recheck the
+new path-free namespace audit and its explicit registry resolution. Review the proposed
+second-venue measurement separately; approval of reservations must not authorize its controller
+actions.
 
 Claude's later assignment is the frozen 8+6 catalog audit. Attack question/result binding,
 independent roots, prior-support overlap, PP/health/evolution/goal diversity, candidate width,
@@ -131,8 +150,10 @@ Antigravity owns review of:
   blockers, legendary/puzzle prerequisites and cross-save consolidation;
 - early transfer falsifiers and when a lane should be stopped rather than expanded.
 
-Antigravity's next assignment begins after the one Route 11 prior is approved and the prospective
-8+6 question catalog exists. Challenge:
+Antigravity's next assignment begins only after the prospective 8+6 question catalog exists. Its
+3.1 Pro output is treated as a bounded product critique rather than peer authority: Claude remains
+the higher-stakes integrity auditor, Codex remains final adjudicator, and no Antigravity suggestion
+becomes work without a concrete falsifier. Challenge:
 
 1. whether the catalog contains real choices rather than one available answer plus masks;
 2. whether one Route 11 prior biases every lesson into a Red-specific venue shortcut;
@@ -148,6 +169,12 @@ Antigravity must return: exact commit/catalog reviewed, mission-alignment verdic
 assumptions, cheapest cross-title falsifiers, a prioritized capability gap list, stop conditions,
 and the narrowest next product slice. It should not duplicate Claude's byte-level provenance audit
 unless a source defect changes the architecture conclusion.
+
+Do not send Antigravity the Cave runner before execution merely to obtain a third approval. Its
+comparative advantage begins when real menus can be assessed for product value and transfer. At
+that point use one fixed six-question rubric: genuine alternatives, Red-specific assumptions,
+living-Pokédex value, depleted-PP naturalness, cheapest Crystal falsifier, and planned work that
+should be deleted.
 
 Antigravity's later assignment is the pre-Crystal transfer review. It must challenge whether the
 frozen Red model, zero-initialized control, shared feature contract and thin Crystal adapter create

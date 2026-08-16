@@ -46,6 +46,9 @@ from pokemon_red_completion.red_party import (  # noqa: E402
     RED_BALANCED_ROSTER,
     PokemonRedPartyReader,
 )
+from pokemon_red_completion.red_party_development_adapter import (  # noqa: E402
+    RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY,
+)
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom  # noqa: E402
 from pokemon_red_completion.scenario_lab import ScenarioPartition  # noqa: E402
 
@@ -264,7 +267,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         owned_target_count = len(pokedex.owned_species & registration_targets)
         living_target_count = len(living_numbers & living_targets)
         goal_hints = []
-        if max(party.levels) - min(party.levels) >= 5 or min(party.levels) < 60:
+        if (
+            max(party.levels) - min(party.levels)
+            > RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY.maximum_level_spread
+            or min(party.levels)
+            < RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY.minimum_level
+        ):
             goal_hints.append(PartyDevelopmentGoal.BALANCE)
         if any(
             member.registration_target_needed or member.living_target_needed

@@ -20,19 +20,26 @@ Role ownership and exact handoffs are frozen in
    Priors are now one; every learning counter remains zero.
 5. **Complete:** Claude approved the forward source conditions. The repeated read-only inventory
    found 81 eligible non-sealed states but high PP only in both partitions.
-6. **Active:** fourteen independent source roots are now reserved—8 train and 6 untouched
-   development—with both decision kinds, all four completion goals, three health bins and two
-   evolution-route types. The reservation is not a candidate catalog. Qualify the concrete Red
-   binding adapter, obtain a second compatible venue prior under a separate reviewed measurement,
-   and naturally materialize the two preregistered middle-PP contexts under the frozen no-label
-   protocol. Re-inventory, freeze the exact menus, then send the immutable catalog to Claude for
-   integrity/power review and Antigravity for genuine-choice/transfer review.
-7. Execute each approved identity once with immediate durable private retention. Stop at the first
-   binding/accounting failure and never replace an exposed identity.
-8. Fit once on eight train outcomes and compare once on six development outcomes. This is a
+6. **Complete, read-only:** fourteen independent source roots are reserved—8 train and 6 untouched
+   development—and the concrete Red adapter has inspected them. Two PP preparations remain pending;
+   the other twelve are genuine menus. Seven trainee bindings validate in memory. Five two-way
+   venue menus are blocked only by missing Cave evidence. No menu is durably frozen.
+7. **Complete, read-only:** adjudicate Claude's identifier-namespace finding. The old checkpoint
+   alias comparison was not canonical-root evidence; exact state exclusion removed the one prior
+   entry, and explicit registry resolution proves zero root/state overlap in the reserved 8+6.
+8. **Active:** publish and review the separately preregistered one-shot Cave measurement. It uses
+   one unreserved open train root and one fixed venue, creates no learner question/outcome and may
+   not retry after input. If approved, execute once, publish the result under a distinct commit and
+   compose exactly one Cave prior. Then naturally materialize the two middle-PP contexts under the
+   frozen no-label protocol, re-inventory and freeze the exact 8+6 menus.
+9. Send that immutable catalog to Claude for integrity/power review and Antigravity for one bounded
+   genuine-choice/transfer review. Execute each approved identity once with immediate durable
+   private retention. Stop at the first binding/accounting failure and never replace an exposed
+   identity.
+10. Fit once on eight train outcomes and compare once on six development outcomes. This is a
    descriptive pipeline result and grants zero authority. If development is underpowered or
    choice-equivalent, expand genuine decisions rather than tuning to six rows.
-9. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
+11. Only then scale toward Milestone 4's 120 paired Red gate, an early Crystal development probe,
    short hierarchical episodes and the living-Pokédex dependency planner.
 
 This bridge has one maintenance time box for CI/source qualification and one experimental time box
@@ -41,6 +48,31 @@ result joins incorrectly, or Red gains come from overlevelling. No full replay i
 sequence.
 
 ## Current checkpoint: the 8+6 roots are reserved; the questions are not frozen
+
+The concrete read-only bridge is now implemented. On the real private plan it accounted for all
+fourteen reservations without action: two PP preparations remained pending; twelve direct roots
+produced genuine menus; seven bindings had at least two evidence-backed candidates; and five
+two-candidate venue questions were unavailable only because Cave has no compatible prior. Candidate
+menus durably frozen remain zero. A full binding recomputation now prevents a same-width,
+same-availability but semantically different menu from crossing preflight.
+
+The reservation's exclusion proof has also been corrected. Checkpoint IDs and canonical root
+lineages are distinct. Resolution through the frozen historical catalog and its source-matched
+registry found zero canonical-root matches in the
+27 development and 54 train inventory entries; the legacy alias and independent state digest each
+matched the same one train prior. The exact state filter therefore preserved the current plan, and
+all fourteen reserved canonical roots/states are disjoint from prior evidence. Future schemas must
+carry canonical lineage directly; meanwhile the Red preflight resolves the capture-time lineage
+from that historical catalog and binds it into every prospective menu. The alias comparison is
+not authority.
+
+The smallest second-venue measurement is prospectively frozen in
+[red-cave-venue-measurement-plan-2026-08-15.json](evidence/red-cave-venue-measurement-plan-2026-08-15.json).
+It binds one unused open train root, the same measurement contract as Route 11, a single fixed Cave
+venue, one bounded evolution and zero candidate decisions. The runner opens durable private
+evidence before its first input and prohibits retry, teacher/model calls, learner outcomes, sealed
+access and Crystal. A real read-only preflight passed; live execution is the next gated action after
+publication, CI and Claude review.
 
 Exact head `3ee15fd60df5c64fbf22695f4589a9b799efbe70` passed CI run `31900603291`.
 Claude's narrow H2/M2/L2 recheck approved the 51-element/nine-waiver source proof after killing
@@ -56,8 +88,9 @@ train and 3/3 development trainee/venue assignments, all four product goals, thr
 level/no-evolution coverage, eight/six distinct source semantics and six trainable members per
 source. Exact checkpoint identities remain private.
 
-The implementation checkpoint passes 3,523 non-integration tests, Ruff, mypy over 224 source files
-and every generated-registry check. Working source bundle: `855327f1…`. Publication and one
+The implementation checkpoint passes 3,550 non-integration tests, Ruff, mypy over 227 source files,
+privacy/documentation checks and every generated-registry check. Working source bundle:
+`d4c7953a…`. Publication and one
 exact-head CI run remain before independent review.
 
 One root in each partition is preregistered for natural PP depletion. The frozen protocol permits
