@@ -15,7 +15,9 @@ from pokemon_red_completion.red_party_development_pp_materialization import (
     RED_PP_MATERIALIZATION_EXECUTION_CONTRACT,
     RedPartyDevelopmentPpMaterializationError,
     red_pp_protected_state_sha256,
+    red_pp_venue_binding_sha256,
 )
+from pokemon_red_completion.team_training import GrindingArea
 
 
 def _raw() -> RawGameState:
@@ -240,8 +242,85 @@ def test_pp_protected_digest_requires_complete_experience_evidence() -> None:
 
 
 def test_pp_materialization_bounds_and_source_requirements_are_frozen() -> None:
-    assert RED_PP_MATERIALIZATION_BOUNDS.maximum_completed_battles == 27
+    assert RED_PP_MATERIALIZATION_BOUNDS.maximum_completed_battles == 32
     source_requirements = RED_PP_MATERIALIZATION_EXECUTION_CONTRACT["source_requirements"]
     assert isinstance(source_requirements, list)
     assert "experience_sharing_item_absent" in source_requirements
     assert RED_PP_MATERIALIZATION_EXECUTION_CONTRACT["retry_after_any_controller_input"] is False
+    assert (
+        RED_PP_MATERIALIZATION_EXECUTION_CONTRACT[
+            "minimum_battle_headroom_after_worst_case_one_pp_per_battle"
+        ]
+        == 5
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "area_id",
+        "conditions",
+        "minimum_level",
+        "maximum_level",
+        "rare_level",
+        "nearby_healer",
+        "samples",
+        "map_id",
+        "prior_evidence",
+        "operational_contract",
+        "wild_species",
+        "wild_level",
+    ),
+)
+def test_pp_venue_binding_distinguishes_every_semantic_input(
+    mutation: str,
+) -> None:
+    area = GrindingArea(
+        "route-a",
+        14,
+        17,
+        has_nearby_healer=True,
+        rare_maximum_encounter_level=20,
+        measured_samples=30,
+        conditions=("day",),
+    )
+    arguments: dict[str, object] = {
+        "map_id": 22,
+        "venue_prior_evidence_sha256": "a" * 64,
+        "operational_contract_sha256": "b" * 64,
+        "wild_species_ids": (21, 23),
+        "maximum_wild_level": 17,
+    }
+    expected = red_pp_venue_binding_sha256(area, **arguments)  # type: ignore[arg-type]
+
+    if mutation == "area_id":
+        area = replace(area, area_id="route-b")
+    elif mutation == "conditions":
+        area = replace(area, conditions=("night",))
+    elif mutation == "minimum_level":
+        area = replace(area, minimum_encounter_level=13)
+    elif mutation == "maximum_level":
+        area = replace(area, maximum_encounter_level=18)
+    elif mutation == "rare_level":
+        area = replace(area, rare_maximum_encounter_level=21)
+    elif mutation == "nearby_healer":
+        area = replace(area, has_nearby_healer=False)
+    elif mutation == "samples":
+        area = replace(area, measured_samples=31)
+    elif mutation == "map_id":
+        arguments["map_id"] = 23
+    elif mutation == "prior_evidence":
+        arguments["venue_prior_evidence_sha256"] = "c" * 64
+    elif mutation == "operational_contract":
+        arguments["operational_contract_sha256"] = "d" * 64
+    elif mutation == "wild_species":
+        arguments["wild_species_ids"] = (21, 24)
+    elif mutation == "wild_level":
+        arguments["maximum_wild_level"] = 18
+    else:  # pragma: no cover - parametrization owns this branch
+        raise AssertionError(mutation)
+
+    assert (
+        red_pp_venue_binding_sha256(area, **arguments)  # type: ignore[arg-type]
+        != expected
+    )

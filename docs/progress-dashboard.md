@@ -1,5 +1,17 @@
 # Pokémon Learning Observatory
 
+> **Current gate — V4 HARDENED LOCALLY · V3 SUPERSEDED · EXECUTION UNAUTHORIZED:** Display
+> **FOCUSED 193/193 · MUTATIONS 67/67 KILLED · FULL 3,792 PASS · MYPY 230 FILES · BATTLE CAP 32 · REQUIRED
+> HEADROOM 5 · CONTROLLER 0**. The private v4 contract separately binds package source and exact
+> runner bytes, authenticates GitHub run plus retry attempt, and re-derives the Route 11
+> cartridge/prior join before claiming a one-shot output.
+>
+> Display the honest board as **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP
+> STATES 0/2 · FROZEN MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO · SEALED RED 0 ·
+> CRYSTAL 0 · REPLAY 0**. Next rail: **PUBLISH → EXACT-HEAD CI → PRIVATE V4 PLAN →
+> READ-ONLY TRAIN + DEVELOPMENT PREFLIGHTS → CLAUDE DELTA AUDIT → FRESH OWNER AUTHORIZATION FOR
+> ONE PARTITION**. Never display a v1/v2/v3 plan as runnable.
+
 > **Current gate — CI ATTESTATION HARDENED · V2 PLAN SUPERSEDED · EXECUTION UNAUTHORIZED:** Review
 > found that the old runner recorded a positive CI number without independently proving it was the
 > successful `CI` pull-request run for the exact source. This was caught before controller input;

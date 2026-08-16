@@ -5,6 +5,29 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: v3 retired; publish and attack the v4 semantic boundary
+
+Codex accepted the useful parts of Claude's v3 audit and retired v3 without controller input. The
+v4 candidate separately binds the package bundle and exact runner bytes, names the exact GitHub CI
+attempt, re-derives the Route 11 encounter table from the ROM at runtime, joins it to the exact
+two-prior evidence and gives the 27-PP requirement a 32-battle cap. Every live middle-bin,
+encounter, safe-move, field-control and terminal predicate is behaviorally testable and explicitly
+wired into the emulator loop. Focused tests pass 193/193; a corrected mutation audit kills 67/67;
+the complete local gate passes 3,792.
+
+Codex remains the implementation and adjudication owner. Its bounded next lane is publication,
+exact-head CI, private v4 generation and read-only preflight of both partitions. Claude
+then attacks only the immutable v4 delta: runner-byte binding, cartridge/prior re-derivation,
+five-battle headroom, live-helper wiring and exact CI attempt. It must not run the controller or
+reinterpret an old plan. Antigravity remains deferred until the actual 8+6 learner menus exist; its
+comparative strength is useful for a small Red-to-Crystal transfer challenge, not this one-shot
+provenance gate.
+
+No handoff authorizes controller input. State remains priors 2; roots 8 train / 6 development;
+natural PP states 0/2; menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; replay
+0. After Claude's audit, Codex must still ask the owner for one exact partition, source head, CI run
+and CI attempt at a time.
+
 ## Current override: rebuild PP authorization evidence at a published successor
 
 Codex found that the v2 PP runner recorded a user-supplied positive CI run number without

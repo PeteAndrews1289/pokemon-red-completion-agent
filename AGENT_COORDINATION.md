@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-16 PP v4 hardening — highest active checkpoint:** V3 was superseded without controller
+> input after Claude identified missing runner-byte binding, no battle headroom, unexercised live
+> predicates and a semantically inert runtime venue registry. Codex's v4 candidate binds runner
+> bytes, exact CI attempt and cartridge-derived Route 11 evidence, raises the battle cap to 32 and
+> exposes the live safety gates to behavioral tests. Focused coverage is 193/193; corrected mutation
+> coverage is 67/67 killed; the complete local gate passes 3,792. No learning or execution counter
+> advanced.
+>
+> Codex owns publication, exact-head CI, private v4 generation and adjudication. Claude
+> receives only the immutable v4 delta and may approve/reject readiness to ask; it must not execute.
+> Antigravity remains idle until the 8+6 catalog exists, then receives a bounded transfer/product
+> falsification packet. No reviewer verdict substitutes for fresh owner authorization naming one
+> partition, source head, CI run and CI attempt.
+
 > **2026-08-16 natural-PP implementation checkpoint — highest active checkpoint:** Codex has
 > implemented the exact two-source preparation seam without executing it. The refresh may replace
 > only the one health/status-invalid development reservation and must retain the other thirteen.

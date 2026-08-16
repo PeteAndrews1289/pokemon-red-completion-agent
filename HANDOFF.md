@@ -17,6 +17,44 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## PP preparation v4 candidate closes the live semantic gaps — 2026-08-16
+
+The private v3 plan was never executed and is now superseded. Claude's authorization audit correctly
+separated code quality from experimental readiness: the exact runner file was not in the package
+source bundle, the 27-battle cap had no tail headroom, the two-prior registry was authenticated but
+not re-derived at the live cartridge boundary, and several safety predicates existed only inside the
+emulator loop. An apparent wild-species chained-comparison defect was rechecked against published
+HEAD and did **not** exist—it came from inspecting a temporary mutation—but a direct regression test
+now pins that digest anyway.
+
+The local v4 candidate binds the runner's own byte digest in the private plan, requires both an exact
+CI run and exact retry attempt, re-derives Route 11 species and maximum level from the authenticated
+ROM, joins that table to the exact prior evidence, and rejects any plan/runtime mismatch. The battle
+cap is 32, leaving five battles beyond the 27-PP worst-case requirement. Middle-bin, encounter,
+per-turn move, field-control, protected-state and terminal-acceptance predicates are now separate
+behavioral seams wired back into the live loop. Runner JSON, private-root, inventory-row, output-link,
+claim-byte and interrupt guards also have direct tests.
+
+Focused coverage is **193/193** and the corrected temporary-copy mutation audit kills **67/67**
+probes. The complete local gate passes **3,792**, with three intentional integration deselections
+and one expected failure; Ruff, mypy over 230 files, public/privacy, documentation and all four
+source-bound registries are green. No controller, teacher, learner outcome, model, sealed case, Crystal context
+or replay opened. Honest counters remain **priors 2 · reserved roots 8 train / 6 development ·
+natural PP states 0/2 · frozen menus 0 · outcomes 0/14 · fits 0 · authority 0 · sealed Red 0 ·
+Crystal 0 · replay 0**.
+
+Mission check: this maintenance unblocks an authentic resource-pressure decision; it grants no
+authority itself. The next learned authority is the identity-free trainee/venue choice over the
+frozen 8+6 catalog, evaluated on untouched development roots and later through the Crystal adapter.
+The cheapest falsifier is one bounded prepared state whose cartridge/prior binding or middle-PP
+acceptance fails. This session stops at a published, CI-green, independently audited private v4
+plan; any surviving mutation, binding mismatch or controller request without exact owner authority
+ends the lane without another replay.
+
+Next: publish this candidate, require green exact-head CI, generate a
+new private v4 plan at that clean source, run train and development preflights read-only, and give
+Claude the immutable delta. Do not execute either partition from this handoff alone.
+
 ## PP preparation CI attestation repaired before execution — 2026-08-16
 
 The first immutable review of the two natural-PP preparations found a stop-ship provenance gap

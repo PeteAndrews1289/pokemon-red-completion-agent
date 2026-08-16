@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the one-shot plan learned to re-derive its own premise
+
+The v3 authorization audit found that the preparation runner could authenticate every private file
+and still fail to reconstruct the central semantic claim at runtime. Route 11's measured prior was
+parsed, but the exact cartridge species/level table was not joined back to it before controller
+entry. The runner script also sat outside the package bundle, and the 27-battle cap left no margin
+over the exact 27-PP worst case. V3 was superseded without input.
+
+V4 closes those boundaries. Its plan carries the exact runner-file digest; execution names both CI
+run and retry attempt; the live runner re-parses Route 11 from the authenticated ROM and recomputes
+the binding to the exact prior evidence. The cap is now 32 battles. Each middle-bin, encounter,
+safe-move, field-control, protected-state and terminal predicate is independently testable and
+wired back into the live loop.
+
+The mutation process is part of the evidence: the first pass reported 47 kills, three real
+survivors and four ambiguous probes. New tests distinguished those cases; the corrected total is
+67/67 killed after the emulator's real `None` value for “no disabled move” and all twelve fields in
+the shared venue binding were added to the baseline. No score was rounded up. The apparent
+wild-species comparison defect was also traced
+to a temporary mutation rather than clean source, then pinned with a direct regression test.
+
+The complete local gate passes 3,792 tests and every static, privacy, documentation and registry
+check. This remains pre-training infrastructure. Counters are unchanged at two priors, fourteen reserved
+roots, zero prepared PP states, zero menus, zero outcomes and zero authority. The next bounded step
+is publication, exact CI, private v4 read-only preflight and independent review—not another Red
+replay and not a claim that the model has learned.
+
 ## August 16: the missing resource-pressure lesson became an auditable protocol
 
 The two-venue registry solved only half of the first curriculum gap. Every eligible checkpoint was

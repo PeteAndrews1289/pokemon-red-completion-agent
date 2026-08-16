@@ -6,6 +6,33 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: v4 is the last preparation gate before owner authority
+
+V1, v2 and v3 preparation plans are retired and cannot authorize input. The local v4 candidate
+binds the exact runner bytes, exact CI retry attempt and a runtime cartridge/prior reconstruction;
+it has a 32-battle cap for a 27-PP requirement and behaviorally testable live safety predicates.
+Focused tests are 193/193 and 67/67 corrected mutation probes die. This remains maintenance in
+service of one named experiment: creating two authentic middle-PP contexts for the first
+completion-aware party ranker.
+
+The active sequence is:
+
+1. **Complete locally:** the full gate passes 3,792. Publish and require green CI for the exact head
+   and attempt.
+2. Generate private v4 and run both partition preflights without `--execute`.
+3. Obtain Claude's narrow immutable-delta audit. Stop on a semantic survivor; do not replay Red.
+4. Ask the owner for exactly one partition/head/run/attempt authorization and execute it at most
+   once. Repeat the authority gate separately for the other partition.
+5. Re-inventory the two accepted states and freeze the exact 8+6 identity-free menus.
+6. Separately authorize eight train outcomes, keep six development outcomes untouched, fit once and
+   report descriptive generalization with authority still zero.
+7. Only after that Red gate exists, use the shared representation in Crystal for a genuine transfer
+   test; do not write a second fixed Crystal playthrough as a substitute.
+
+There are still zero new outcomes, zero fits and zero authority. The reusable capability unlocked
+by this lane is resource-aware party/venue ranking; the transfer target is the same choice contract
+under unseen Red roots and then Crystal's title adapter.
+
 ## Current checkpoint: the PP bridge exists; publication and authorization are separate gates
 
 The project now has an implementation for the two missing natural middle-PP contexts. It does not

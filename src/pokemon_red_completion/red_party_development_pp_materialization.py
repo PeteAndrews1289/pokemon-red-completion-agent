@@ -32,15 +32,16 @@ from pokemon_red_completion.red_party_pp import (
     natural_pp_depletion_slots,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
+from pokemon_red_completion.team_training import GrindingArea
 
 RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_SOURCE_SCHEMA = (
     "pokemon.red.party-development-pp-materialization-source.v1"
 )
 RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_PLAN_SCHEMA = (
-    "pokemon.red.party-development-pp-materialization-plan.v1"
+    "pokemon.red.party-development-pp-materialization-plan.v2"
 )
 RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_SUMMARY_SCHEMA = (
-    "pokemon.red.party-development-pp-materialization-summary.v1"
+    "pokemon.red.party-development-pp-materialization-summary.v2"
 )
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -63,7 +64,7 @@ class RedPpStartAdapter(StrEnum):
 class RedPpMaterializationBounds:
     """Independent hard limits for one preparation attempt."""
 
-    maximum_completed_battles: int = 27
+    maximum_completed_battles: int = 32
     maximum_encounter_steps: int = 10_000
     maximum_controller_actions: int = 250_000
     maximum_frames: int = 5_000_000
@@ -78,15 +79,13 @@ class RedPpMaterializationBounds:
             )
 
     def public_dict(self) -> dict[str, int]:
-        return {
-            name: cast(int, getattr(self, name))
-            for name in self.__dataclass_fields__
-        }
+        return {name: cast(int, getattr(self, name)) for name in self.__dataclass_fields__}
 
 
 RED_PP_MATERIALIZATION_BOUNDS = RedPpMaterializationBounds()
+RED_PP_MATERIALIZATION_MINIMUM_BATTLE_HEADROOM = 5
 RED_PP_MATERIALIZATION_EXECUTION_CONTRACT = {
-    "schema": "pokemon.red.party-development-pp-materialization-execution.v1",
+    "schema": "pokemon.red.party-development-pp-materialization-execution.v2",
     "purpose": "naturally_create_one_middle_pp_context_per_open_partition",
     "source": "two_reserved_authenticated_non_sealed_red_checkpoints",
     "shared_venue": "one_cartridge_verified_low_risk_wild_encounter_area",
@@ -160,12 +159,67 @@ RED_PP_MATERIALIZATION_EXECUTION_CONTRACT = {
     ),
     "authorization": "fresh_explicit_controller_authorization_per_unconsumed_entry",
     "retry_after_any_controller_input": False,
+    "minimum_battle_headroom_after_worst_case_one_pp_per_battle": (
+        RED_PP_MATERIALIZATION_MINIMUM_BATTLE_HEADROOM
+    ),
     "result_semantics": "context_preparation_only_not_a_question_label_or_outcome",
     "bounds": RED_PP_MATERIALIZATION_BOUNDS.public_dict(),
 }
 RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256 = canonical_sha256(
     RED_PP_MATERIALIZATION_EXECUTION_CONTRACT
 )
+
+
+def red_pp_venue_binding_sha256(
+    area: GrindingArea,
+    *,
+    map_id: int,
+    venue_prior_evidence_sha256: str,
+    operational_contract_sha256: str,
+    wild_species_ids: tuple[int, ...],
+    maximum_wild_level: int,
+) -> str:
+    """Bind the measured prior and exact cartridge encounter table together."""
+
+    if not isinstance(area, GrindingArea):
+        raise TypeError("area must be a GrindingArea")
+    if (
+        type(map_id) is not int  # noqa: E721
+        or not 0 <= map_id <= 0xFF
+        or type(maximum_wild_level) is not int  # noqa: E721
+        or not 1 <= maximum_wild_level <= 100
+        or not isinstance(venue_prior_evidence_sha256, str)
+        or _SHA256.fullmatch(venue_prior_evidence_sha256) is None
+        or not isinstance(operational_contract_sha256, str)
+        or _SHA256.fullmatch(operational_contract_sha256) is None
+        or not isinstance(wild_species_ids, tuple)
+        or not wild_species_ids
+        or wild_species_ids != tuple(sorted(set(wild_species_ids)))
+        or any(
+            type(species_id) is not int or not 1 <= species_id <= 0xFF  # noqa: E721
+            for species_id in wild_species_ids
+        )
+    ):
+        raise RedPartyDevelopmentPpMaterializationError(
+            "PP materialization venue-binding evidence is invalid"
+        )
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.party-development-pp-venue-binding.v2",
+            "area_id": area.area_id,
+            "conditions": list(area.conditions),
+            "minimum_encounter_level": area.minimum_encounter_level,
+            "maximum_encounter_level": area.maximum_encounter_level,
+            "rare_maximum_encounter_level": area.rare_maximum_encounter_level,
+            "has_nearby_healer": area.has_nearby_healer,
+            "measured_samples": area.measured_samples,
+            "map_id": map_id,
+            "venue_prior_evidence_sha256": venue_prior_evidence_sha256,
+            "operational_contract_sha256": operational_contract_sha256,
+            "wild_species_sha256": canonical_sha256(list(wild_species_ids)),
+            "maximum_wild_level": maximum_wild_level,
+        }
+    )
 
 
 def red_pp_source_boundary_sha256(
@@ -245,9 +299,7 @@ def red_pp_protected_state_sha256(
             for value in party_experience
         )
     ):
-        raise RedPartyDevelopmentPpMaterializationError(
-            "PP materialization party vectors disagree"
-        )
+        raise RedPartyDevelopmentPpMaterializationError("PP materialization party vectors disagree")
     target_index = target_party_slot - 1
     non_target = [
         {
@@ -270,9 +322,7 @@ def red_pp_protected_state_sha256(
             "badge_bits": raw.badge_bits,
             "bag_item_ids": list(raw.bag_item_ids or ()),
             "bag_items": [list(item) for item in (raw.bag_items or ())],
-            "event_flags_hex": (
-                raw.event_flags.hex() if raw.event_flags is not None else None
-            ),
+            "event_flags_hex": (raw.event_flags.hex() if raw.event_flags is not None else None),
             "money": raw.player_money,
             "party_count": raw.party_count,
             "party_species_ids": list(species),
@@ -413,8 +463,7 @@ class RedPpMaterializationSource:
             ) from error
         expected_safe_slots = natural_pp_depletion_slots(decoded_pp)
         expected_safe_pp = sum(
-            decoded_pp.moves[slot - 1].current_pp
-            for slot in expected_safe_slots
+            decoded_pp.moves[slot - 1].current_pp for slot in expected_safe_slots
         )
         if (
             not isinstance(self.safe_move_slots, tuple)
@@ -434,8 +483,7 @@ class RedPpMaterializationSource:
             or self.current_total_pp > self.maximum_total_pp
             or self.current_total_pp * 100 < self.maximum_total_pp * 67
             or self.middle_pp_ceiling != expected_middle
-            or self.minimum_pp_consumption
-            != self.current_total_pp - self.middle_pp_ceiling
+            or self.minimum_pp_consumption != self.current_total_pp - self.middle_pp_ceiling
             or self.safe_current_pp < self.minimum_pp_consumption
         ):
             raise RedPartyDevelopmentPpMaterializationError(
@@ -460,8 +508,7 @@ class RedPpMaterializationSource:
         if (
             not isinstance(self.possible_wild_species_ids, tuple)
             or not self.possible_wild_species_ids
-            or self.possible_wild_species_ids
-            != tuple(sorted(set(self.possible_wild_species_ids)))
+            or self.possible_wild_species_ids != tuple(sorted(set(self.possible_wild_species_ids)))
             or any(
                 type(value) is not int or not 1 <= value <= 0xFF  # noqa: E721
                 for value in self.possible_wild_species_ids
@@ -482,9 +529,7 @@ class RedPpMaterializationSource:
             "source_checkpoint_id": self.source_checkpoint_id,
             "source_state_sha256": self.source_state_sha256,
             "source_envelope_sha256": self.source_envelope_sha256,
-            "source_semantic_signature_sha256": (
-                self.source_semantic_signature_sha256
-            ),
+            "source_semantic_signature_sha256": (self.source_semantic_signature_sha256),
             "source_root_lineage_id": self.source_root_lineage_id,
             "source_boundary_sha256": self.source_boundary_sha256,
             "protected_state_sha256": self.protected_state_sha256,
@@ -508,9 +553,7 @@ class RedPpMaterializationSource:
             "venue_maximum_wild_level": self.venue_maximum_wild_level,
             "possible_wild_species_ids": list(self.possible_wild_species_ids),
             "possible_wild_species_sha256": self.possible_wild_species_sha256,
-            "all_possible_wild_species_seen": (
-                self.all_possible_wild_species_seen
-            ),
+            "all_possible_wild_species_seen": (self.all_possible_wild_species_seen),
             "output_capture_id": self.output_capture_id,
         }
 
@@ -523,8 +566,7 @@ class RedPpMaterializationSource:
         expected = set(cls._field_names()) | {"schema"}
         if (
             set(value) != expected
-            or value.get("schema")
-            != RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_SOURCE_SCHEMA
+            or value.get("schema") != RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_SOURCE_SCHEMA
         ):
             raise RedPartyDevelopmentPpMaterializationError(
                 "PP materialization source document is invalid"
@@ -548,9 +590,7 @@ class RedPpMaterializationSource:
                 target_level=cast(int, value["target_level"]),
                 target_hp=cast(int, value["target_hp"]),
                 target_max_hp=cast(int, value["target_max_hp"]),
-                target_move_ids=cast(
-                    tuple[int, int, int, int], tuple(value["target_move_ids"])
-                ),
+                target_move_ids=cast(tuple[int, int, int, int], tuple(value["target_move_ids"])),
                 target_initial_packed_pp=cast(
                     tuple[int, int, int, int],
                     tuple(value["target_initial_packed_pp"]),
@@ -561,23 +601,15 @@ class RedPpMaterializationSource:
                 middle_pp_ceiling=cast(int, value["middle_pp_ceiling"]),
                 minimum_pp_consumption=cast(int, value["minimum_pp_consumption"]),
                 safe_current_pp=cast(int, value["safe_current_pp"]),
-                target_has_evolution_route=cast(
-                    bool, value["target_has_evolution_route"]
-                ),
+                target_has_evolution_route=cast(bool, value["target_has_evolution_route"]),
                 venue_map_id=cast(int, value["venue_map_id"]),
                 venue_binding_sha256=cast(str, value["venue_binding_sha256"]),
-                venue_maximum_wild_level=cast(
-                    int, value["venue_maximum_wild_level"]
-                ),
+                venue_maximum_wild_level=cast(int, value["venue_maximum_wild_level"]),
                 possible_wild_species_ids=tuple(
                     cast(list[int], value["possible_wild_species_ids"])
                 ),
-                possible_wild_species_sha256=cast(
-                    str, value["possible_wild_species_sha256"]
-                ),
-                all_possible_wild_species_seen=cast(
-                    bool, value["all_possible_wild_species_seen"]
-                ),
+                possible_wild_species_sha256=cast(str, value["possible_wild_species_sha256"]),
+                all_possible_wild_species_seen=cast(bool, value["all_possible_wild_species_seen"]),
                 output_capture_id=cast(str, value["output_capture_id"]),
             )
         except (KeyError, TypeError, ValueError) as error:
@@ -628,6 +660,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
 
     source_commit: str
     source_bundle_sha256: str
+    runner_source_sha256: str
     rom_sha256: str
     inventory_sha256: str
     inventory_file_sha256: str
@@ -640,19 +673,16 @@ class RedPartyDevelopmentPpMaterializationPlan:
     context_catalog_file_sha256: str
     entries: tuple[RedPpMaterializationSource, ...]
     bounds: RedPpMaterializationBounds = RED_PP_MATERIALIZATION_BOUNDS
-    execution_contract_sha256: str = (
-        RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256
-    )
+    execution_contract_sha256: str = RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256
 
     def __post_init__(self) -> None:
-        if not isinstance(self.source_commit, str) or _COMMIT.fullmatch(
-            self.source_commit
-        ) is None:
+        if not isinstance(self.source_commit, str) or _COMMIT.fullmatch(self.source_commit) is None:
             raise RedPartyDevelopmentPpMaterializationError(
                 "PP materialization source commit is invalid"
             )
         for value, subject in (
             (self.source_bundle_sha256, "source bundle"),
+            (self.runner_source_sha256, "runner source"),
             (self.rom_sha256, "ROM"),
             (self.inventory_sha256, "inventory"),
             (self.inventory_file_sha256, "inventory file"),
@@ -673,8 +703,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
             or self.venue_prior_count != 2
             or not isinstance(self.bounds, RedPpMaterializationBounds)
             or self.bounds != RED_PP_MATERIALIZATION_BOUNDS
-            or self.execution_contract_sha256
-            != RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256
+            or self.execution_contract_sha256 != RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256
         ):
             raise RedPartyDevelopmentPpMaterializationError(
                 "PP materialization plan contract is invalid"
@@ -682,8 +711,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
         if (
             not isinstance(self.entries, tuple)
             or len(self.entries) != 2
-            or self.entries
-            != tuple(sorted(self.entries, key=lambda item: item.scenario_id))
+            or self.entries != tuple(sorted(self.entries, key=lambda item: item.scenario_id))
             or {item.partition for item in self.entries}
             != {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}
         ):
@@ -712,7 +740,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
             or len({item.venue_maximum_wild_level for item in self.entries}) != 1
             or len({item.possible_wild_species_ids for item in self.entries}) != 1
             or any(
-                item.minimum_pp_consumption
+                item.minimum_pp_consumption + RED_PP_MATERIALIZATION_MINIMUM_BATTLE_HEADROOM
                 > self.bounds.maximum_completed_battles
                 for item in self.entries
             )
@@ -731,15 +759,14 @@ class RedPartyDevelopmentPpMaterializationPlan:
             "status": "prospective_unexecuted_authorization_required",
             "source_commit": self.source_commit,
             "source_bundle_sha256": self.source_bundle_sha256,
+            "runner_source_sha256": self.runner_source_sha256,
             "rom_sha256": self.rom_sha256,
             "inventory_sha256": self.inventory_sha256,
             "inventory_file_sha256": self.inventory_file_sha256,
             "reservation_plan_sha256": self.reservation_plan_sha256,
             "reservation_plan_file_sha256": self.reservation_plan_file_sha256,
             "venue_prior_registry_sha256": self.venue_prior_registry_sha256,
-            "venue_prior_registry_file_sha256": (
-                self.venue_prior_registry_file_sha256
-            ),
+            "venue_prior_registry_file_sha256": (self.venue_prior_registry_file_sha256),
             "venue_prior_count": self.venue_prior_count,
             "context_catalog_sha256": self.context_catalog_sha256,
             "context_catalog_file_sha256": self.context_catalog_file_sha256,
@@ -772,6 +799,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
             "status": "read_only_preflight_complete_controller_authorization_required",
             "source_commit": self.source_commit,
             "source_bundle_sha256": self.source_bundle_sha256,
+            "runner_source_sha256": self.runner_source_sha256,
             "rom_sha256": self.rom_sha256,
             "inventory_sha256": self.inventory_sha256,
             "reservation_plan_sha256": self.reservation_plan_sha256,
@@ -786,21 +814,16 @@ class RedPartyDevelopmentPpMaterializationPlan:
             "unique_authenticated_roots": len(
                 {item.source_root_lineage_id for item in self.entries}
             ),
-            "unique_source_states": len(
-                {item.source_state_sha256 for item in self.entries}
-            ),
+            "unique_source_states": len({item.source_state_sha256 for item in self.entries}),
             "source_pp_bin": "high",
             "target_pp_bin": "middle",
             "safe_move_capacity_sufficient": sum(
-                item.safe_current_pp >= item.minimum_pp_consumption
-                for item in self.entries
+                item.safe_current_pp >= item.minimum_pp_consumption for item in self.entries
             ),
             "wild_species_seen_coverage_complete": sum(
                 item.all_possible_wild_species_seen for item in self.entries
             ),
-            "source_start_adapters_frozen": len(
-                {item.start_adapter for item in self.entries}
-            ),
+            "source_start_adapters_frozen": len({item.start_adapter for item in self.entries}),
             "execution_authorized": False,
             "materializations_completed": 0,
             "candidate_menus_frozen": 0,
@@ -822,9 +845,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
         }
 
     @classmethod
-    def from_private_dict(
-        cls, value: object
-    ) -> RedPartyDevelopmentPpMaterializationPlan:
+    def from_private_dict(cls, value: object) -> RedPartyDevelopmentPpMaterializationPlan:
         if not isinstance(value, Mapping):
             raise RedPartyDevelopmentPpMaterializationError(
                 "PP materialization plan document is invalid"
@@ -853,6 +874,7 @@ class RedPartyDevelopmentPpMaterializationPlan:
             "reservation_plan_file_sha256",
             "reservation_plan_sha256",
             "rom_sha256",
+            "runner_source_sha256",
             "schema",
             "sealed_red_cases_opened",
             "source_bundle_sha256",
@@ -877,12 +899,9 @@ class RedPartyDevelopmentPpMaterializationPlan:
         )
         if (
             set(value) != expected
-            or value.get("schema")
-            != RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_PLAN_SCHEMA
-            or value.get("status")
-            != "prospective_unexecuted_authorization_required"
-            or value.get("execution_contract")
-            != RED_PP_MATERIALIZATION_EXECUTION_CONTRACT
+            or value.get("schema") != RED_PARTY_DEVELOPMENT_PP_MATERIALIZATION_PLAN_SCHEMA
+            or value.get("status") != "prospective_unexecuted_authorization_required"
+            or value.get("execution_contract") != RED_PP_MATERIALIZATION_EXECUTION_CONTRACT
             or value.get("execution_authorized") is not False
             or value.get("authority_promoted") is not False
             or value.get("private_path_fields") != 0
@@ -901,47 +920,27 @@ class RedPartyDevelopmentPpMaterializationPlan:
             result = cls(
                 source_commit=cast(str, value["source_commit"]),
                 source_bundle_sha256=cast(str, value["source_bundle_sha256"]),
+                runner_source_sha256=cast(str, value["runner_source_sha256"]),
                 rom_sha256=cast(str, value["rom_sha256"]),
                 inventory_sha256=cast(str, value["inventory_sha256"]),
                 inventory_file_sha256=cast(str, value["inventory_file_sha256"]),
-                reservation_plan_sha256=cast(
-                    str, value["reservation_plan_sha256"]
-                ),
-                reservation_plan_file_sha256=cast(
-                    str, value["reservation_plan_file_sha256"]
-                ),
-                venue_prior_registry_sha256=cast(
-                    str, value["venue_prior_registry_sha256"]
-                ),
+                reservation_plan_sha256=cast(str, value["reservation_plan_sha256"]),
+                reservation_plan_file_sha256=cast(str, value["reservation_plan_file_sha256"]),
+                venue_prior_registry_sha256=cast(str, value["venue_prior_registry_sha256"]),
                 venue_prior_registry_file_sha256=cast(
                     str, value["venue_prior_registry_file_sha256"]
                 ),
                 venue_prior_count=cast(int, value["venue_prior_count"]),
-                context_catalog_sha256=cast(
-                    str, value["context_catalog_sha256"]
-                ),
-                context_catalog_file_sha256=cast(
-                    str, value["context_catalog_file_sha256"]
-                ),
-                entries=tuple(
-                    RedPpMaterializationSource.from_private_dict(item)
-                    for item in rows
-                ),
+                context_catalog_sha256=cast(str, value["context_catalog_sha256"]),
+                context_catalog_file_sha256=cast(str, value["context_catalog_file_sha256"]),
+                entries=tuple(RedPpMaterializationSource.from_private_dict(item) for item in rows),
                 bounds=RedPpMaterializationBounds(
-                    maximum_completed_battles=cast(
-                        int, bounds["maximum_completed_battles"]
-                    ),
-                    maximum_encounter_steps=cast(
-                        int, bounds["maximum_encounter_steps"]
-                    ),
-                    maximum_controller_actions=cast(
-                        int, bounds["maximum_controller_actions"]
-                    ),
+                    maximum_completed_battles=cast(int, bounds["maximum_completed_battles"]),
+                    maximum_encounter_steps=cast(int, bounds["maximum_encounter_steps"]),
+                    maximum_controller_actions=cast(int, bounds["maximum_controller_actions"]),
                     maximum_frames=cast(int, bounds["maximum_frames"]),
                 ),
-                execution_contract_sha256=cast(
-                    str, value["execution_contract_sha256"]
-                ),
+                execution_contract_sha256=cast(str, value["execution_contract_sha256"]),
             )
         except (KeyError, TypeError, ValueError) as error:
             raise RedPartyDevelopmentPpMaterializationError(
@@ -960,6 +959,7 @@ def freeze_red_party_development_pp_materialization_plan(
     sources: tuple[RedPpMaterializationSource, ...],
     source_commit: str,
     source_bundle_sha256: str,
+    runner_source_sha256: str,
     rom_sha256: str,
     inventory_file_sha256: str,
     reservation_plan_file_sha256: str,
@@ -978,16 +978,13 @@ def freeze_red_party_development_pp_materialization_plan(
     reservations = tuple(
         item
         for item in reservation_plan.reservations
-        if item.preparation
-        is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
+        if item.preparation is PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
     )
     if len(reservations) != 2:
         raise RedPartyDevelopmentPpMaterializationError(
             "PP materialization requires exactly two reserved preparations"
         )
-    reservations_by_scenario = {
-        item.scenario_id: item for item in reservations
-    }
+    reservations_by_scenario = {item.scenario_id: item for item in reservations}
     if set(reservations_by_scenario) != {item.scenario_id for item in sources}:
         raise RedPartyDevelopmentPpMaterializationError(
             "PP materialization sources differ from the reserved scenarios"
@@ -998,8 +995,7 @@ def freeze_red_party_development_pp_materialization_plan(
             source.partition is not reservation.partition
             or source.source_checkpoint_id != reservation.source_checkpoint_id
             or source.source_state_sha256 != reservation.source_state_sha256
-            or source.source_envelope_sha256
-            != reservation.source_envelope_sha256
+            or source.source_envelope_sha256 != reservation.source_envelope_sha256
             or source.source_semantic_signature_sha256
             != reservation.source_semantic_signature_sha256
             or reservation.target_pp_bin != "middle"
@@ -1010,6 +1006,7 @@ def freeze_red_party_development_pp_materialization_plan(
     return RedPartyDevelopmentPpMaterializationPlan(
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
+        runner_source_sha256=runner_source_sha256,
         rom_sha256=rom_sha256,
         inventory_sha256=reservation_plan.inventory_sha256,
         inventory_file_sha256=inventory_file_sha256,
@@ -1031,6 +1028,7 @@ __all__ = [
     "RED_PP_MATERIALIZATION_BOUNDS",
     "RED_PP_MATERIALIZATION_EXECUTION_CONTRACT",
     "RED_PP_MATERIALIZATION_EXECUTION_CONTRACT_SHA256",
+    "RED_PP_MATERIALIZATION_MINIMUM_BATTLE_HEADROOM",
     "RedPartyDevelopmentPpMaterializationError",
     "RedPartyDevelopmentPpMaterializationPlan",
     "RedPpMaterializationBounds",
@@ -1039,4 +1037,5 @@ __all__ = [
     "freeze_red_party_development_pp_materialization_plan",
     "red_pp_protected_state_sha256",
     "red_pp_source_boundary_sha256",
+    "red_pp_venue_binding_sha256",
 ]

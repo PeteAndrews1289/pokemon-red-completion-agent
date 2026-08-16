@@ -7,6 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the lock now checks the world, not just its paperwork
+
+The third private plan looked ready on paper. Its files, roots and counters all matched. But the
+last audit asked a better question: when the controller is about to move, does the running program
+reconstruct the reason Route 11 is safe—or merely trust that an earlier file once said so?
+
+V3 was retired before a button press. V4 now reads the authenticated cartridge's Route 11 encounter
+table, derives the species and level ceiling again, joins them to the exact two-prior evidence and
+compares the result with the frozen plan. It binds the runner's own bytes as well as the package,
+names the precise GitHub retry attempt, and gives a 27-PP worst case five extra battles of room. The
+live rules that used to hide inside one long loop—middle PP, valid encounter, healthy lead, enabled
+safe move, returned field control and terminal safety—can each be attacked directly.
+
+The first attack was allowed to be embarrassing: three mutations survived and four probes were too
+ambiguous to count. Then a live-state check caught Red's real `None` value for “no disabled move.”
+The tests were strengthened, not the score reworded. The corrected audit kills all 67 deliberate
+faults, including every field in the shared cartridge/prior binding. The apparent wild-species
+comparison bug also disappeared when checked
+against clean HEAD; it had been read while a mutation was installed. A permanent test now makes that
+kind of confusion less likely.
+
+The scoreboard still refuses drama: **two priors · fourteen reserved roots · zero of two prepared
+PP states · zero menus · zero outcomes · zero authority**. This work did not teach the model. It
+made the door to the first honest resource-pressure lesson safe enough to publish, pass exact CI,
+freeze as v4 and hand to an independent reviewer. Only the owner can turn the next key, once, for
+one named partition.
+
 ## Current checkpoint: the CI number had to prove what it claimed
 
 The two missing PP lessons were ready for review, but the final lock turned out to be painted on.

@@ -13,11 +13,7 @@ from pokemon_red_completion.red_party_development_pp_materialization import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SCRIPT_PATH = (
-    PROJECT_ROOT
-    / "scripts"
-    / "preflight_red_party_development_pp_materializations.py"
-)
+SCRIPT_PATH = PROJECT_ROOT / "scripts" / "preflight_red_party_development_pp_materializations.py"
 SCRIPT = runpy.run_path(str(SCRIPT_PATH))
 
 
@@ -98,9 +94,7 @@ def test_pp_preflight_has_no_controller_teacher_or_write_state_surface() -> None
     source = SCRIPT_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
     imported_modules = {
-        node.module or ""
-        for node in ast.walk(tree)
-        if isinstance(node, ast.ImportFrom)
+        node.module or "" for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)
     } | {
         alias.name
         for node in ast.walk(tree)

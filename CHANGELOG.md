@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Superseded the unexecuted natural-PP v3 plan and added a v4 boundary that binds exact runner
+  bytes, exact GitHub CI attempt and a live cartridge/prior reconstruction before controller entry.
+  Increased the 27-PP worst-case battle cap to 32 and split middle-bin, wild-encounter, safe-move,
+  field-control, protected-state and terminal acceptance into behaviorally tested helpers.
+- Added direct runner JSON/path/inventory/output-claim/interrupt tests. The corrected mutation audit
+  kills 67/67 probes after explicitly repairing three survivors, four ambiguous probes, the
+  emulator's `None` representation for an enabled move set and every field in the shared
+  cartridge/prior binding. No
+  controller, teacher, learner outcome, model, sealed Red, Crystal or replay counter advanced.
+
 - Bound each prospective party-development outcome to the exact preregistered question through an
   optional generic outcome digest and a typed party binding. The binding now freezes ordered
   feature names, the completion objective, candidate features and availability, source identity,

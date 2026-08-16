@@ -4,6 +4,19 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **PP v4 is hardened locally but not executable yet (August 16, 2026).** V3 was retired without
+> controller input. V4 separately binds exact runner bytes, package source, GitHub CI run plus retry
+> attempt, and a runtime reconstruction of Route 11 from the authenticated cartridge and two-prior
+> registry. Its 32-battle cap leaves five battles beyond the 27-PP worst case. Focused tests pass
+> 193/193 and the corrected mutation audit kills 67/67 probes. The complete local gate passes
+> 3,792 tests plus every static, privacy, documentation and source-bound registry check.
+>
+> Honest board: **priors 2 · roots 14 · PP states 0/2 · menus 0 · outcomes 0/14 · fit false ·
+> authority zero**. No teacher, model, sealed Red, Crystal or replay access occurred. Next: publish,
+> require exact-head CI, generate and read-only preflight private v4, then
+> obtain a narrow independent audit. A fresh owner authorization must name one exact partition,
+> head, CI run and attempt before any input.
+
 > **Natural PP preparation is implemented but not authorized (August 16, 2026).** The first
 > completion-aware party curriculum needs one authentic middle-PP state in training and one in
 > untouched development. The new read-only planner binds those two sources to the frozen 8+6

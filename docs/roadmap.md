@@ -8,6 +8,32 @@
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its
 > repeated full-route execution order is superseded and may not authorize another Red replay.
 
+## Current checkpoint (2026-08-16): publish the v4 semantic lock, then audit it
+
+V3 is retired unexecuted. The v4 candidate binds exact runner bytes, exact GitHub retry attempt,
+cartridge-derived Route 11 species/level evidence and the two-prior registry into one pre-controller
+gate. It raises the battle cap from 27 to 32 for five battles of headroom and extracts the live PP,
+encounter, move, field-control, protected-state and terminal predicates into behavioral seams.
+Focused coverage is 193/193 and the corrected mutation result is 67/67 killed.
+
+The shortest forward sequence is:
+
+1. **Local gates complete:** public/docs/registry/static checks and 3,792 tests pass. Publish the v4
+   source.
+2. Require successful pull-request `CI` for the exact published head and exact attempt.
+3. Generate one new private v4 two-entry plan; run train and development only in read-only
+   preflight mode.
+4. Give Claude the immutable delta and adjudicate only a discriminating failure. Do not broaden
+   this into another full-route audit.
+5. Ask the owner for one exact partition/head/run/attempt authorization. A second partition requires
+   a second authorization; any controller input consumes that identity without retry.
+6. After two accepted preparations, re-inventory read-only and freeze the exact 8+6 menus. Only
+   those real questions open the separate outcome-collection and first-fit gates.
+
+Current counters remain priors 2, PP states 0/2, menus 0, outcomes 0/14, fits 0, authority 0,
+sealed Red 0, Crystal 0 and replay 0. This lane is maintenance only because it directly unlocks the
+first resource-pressure learner choices; it grants no learned authority by itself.
+
 ## Current checkpoint (2026-08-16): authenticate CI evidence, then rebuild the one-shot plan
 
 The private v2 natural-PP plan is superseded without execution. Its runner accepted and recorded a

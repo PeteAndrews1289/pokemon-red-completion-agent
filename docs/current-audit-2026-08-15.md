@@ -1,5 +1,37 @@
 # Current audit — 2026-08-15
 
+## August 16 addendum: v3 rejected; v4 binds semantics at controller entry
+
+Claude's v3 audit approved asking for a run but exposed four reasons not to do so yet: the runner
+script was outside the package source-bundle digest, the 27-battle cap exactly equaled worst-case PP
+consumption, the live loop's safety predicates lacked behavioral mutation pressure, and the parsed
+two-prior registry did not participate in a runtime semantic join. Codex adjudication supersedes v3
+before input. The reported wild-species chained comparison was a mutation-harness observation, not
+published source; HEAD already used the correct direct comparison, now covered explicitly.
+
+V4 adds a runner-file digest to the private plan, exact CI retry-attempt authentication, a 32-battle
+cap with five battles of headroom, and cartridge-time re-derivation of Route 11 species and maximum
+level. The runner recomputes the venue binding from that table plus the exact registry evidence and
+operational contract. It rejects map, species, level or digest drift before any output attempt is
+claimed. JSON loading, private path containment, exact inventory selection, state/envelope link
+occupancy, claim-byte revalidation and `KeyboardInterrupt` propagation are independently exercised.
+
+The execution loop now calls testable helpers for the exact 67%/34% PP thresholds, declared wild
+encounter, active lead/moves/status/HP/disabled-slot/PP safety, ready field control, protected-state
+digest and complete terminal acceptance. Focused tests pass **193/193**. The first mutation pass
+honestly found three survivors and four ambiguous replacements; new distinctions killed all seven.
+The corrected result is **67/67 killed, zero survivors, zero invalid probes** after also pinning
+Red's `None` representation for “no disabled move” and all twelve semantic venue-binding fields.
+Mypy is green over 230 source files and all four source-bound registries reproduce after
+regeneration. The complete local gate passes **3,792**, with three intentional integration
+deselections and one expected failure; public/privacy and documentation checks are also green.
+
+Disposition: **accept the local v4 hardening; reject v1, v2 and v3 plan execution**. No controller,
+teacher, learner outcome, model, sealed Red, Crystal or replay access occurred. Counters remain
+priors 2, roots 8+6, PP states 0/2, menus 0, outcomes 0/14, fit 0 and authority 0. Publish, require
+exact-head CI, generate v4 privately, preflight both partitions read-only and
+obtain a narrow independent delta audit before requesting one exact owner authorization.
+
 ## August 16 addendum: PP execution plan superseded before controller input
 
 The authorization review of published head `e6b6fa9` / CI run `31953914999` found one stop-ship
