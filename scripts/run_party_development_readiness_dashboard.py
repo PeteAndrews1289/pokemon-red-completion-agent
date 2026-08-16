@@ -284,6 +284,7 @@ def _live_snapshot(
     partition: str,
     status: str,
     record: Mapping[str, object] | None,
+    train_prepared: bool = False,
 ) -> DashboardSnapshot:
     label = partition.title()
     if status == "waiting":
@@ -375,11 +376,18 @@ def _live_snapshot(
                 "Next: separately authorize development once; if accepted, re-inventory both "
                 "states and freeze the 8+6 menus"
             )
-        else:
-            preparation_event = "Development middle-PP preparation complete · separately audited"
+        elif train_prepared:
+            preparation_event = (
+                "Natural middle-PP preparations 2/2 · train and development complete"
+            )
             next_event = (
-                "Next: reconcile both accepted preparation receipts before claiming 2/2 or "
-                "freezing the 8+6 menus"
+                "Next: re-inventory both accepted states and freeze the exact 8+6 menus before "
+                "opening any outcome"
+            )
+        else:
+            preparation_event = "Development middle-PP preparation complete · train not reconciled"
+            next_event = (
+                "Next: reconcile the train receipt before claiming 2/2 or freezing the 8+6 menus"
             )
         return replace(
             base,
@@ -421,29 +429,68 @@ def _live_snapshot(
     )
 
 
+def _development_gate_snapshot(
+    base: DashboardSnapshot,
+    train_terminal: Mapping[str, object],
+) -> DashboardSnapshot:
+    accepted_train = _live_snapshot(
+        base,
+        partition="train",
+        status="passed",
+        record=train_terminal,
+    )
+    return replace(
+        accepted_train,
+        run_status="waiting",
+        stage_progress=0.5,
+        actions=0,
+        frame_count=0,
+        message=(
+            "Train's natural middle-PP state is accepted. Development passes read-only "
+            "preflight and requires its own exact owner authorization."
+        ),
+        location="Natural PP preparation gate · development authorization pending",
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     if args.duration_seconds < 0:
         raise ProgressDashboardError("dashboard duration must be non-negative")
     evidence = _load_evidence()
     v4_evidence = _load_v4_evidence()
-    base_snapshot = _current_snapshot(evidence, v4_evidence)
+    preparation_base = _current_snapshot(evidence, v4_evidence)
     monitor_root = _require_monitor_root(args.private_artifact_root)
+    completed_train = False
+    train_live_record: tuple[str, dict[str, object] | None] | None = None
+    base_snapshot = preparation_base
+    if monitor_root is not None:
+        train_live_record = _live_artifact_record(monitor_root, "train")
+        completed_train = train_live_record[0] == "passed"
+        if args.partition == "development" and completed_train:
+            if train_live_record[1] is None:  # pragma: no cover - live reader owns this invariant
+                raise ProgressDashboardError("dashboard train terminal is missing")
+            base_snapshot = _development_gate_snapshot(
+                preparation_base,
+                train_live_record[1],
+            )
     initial_live_record: tuple[str, dict[str, object] | None] | None = None
     initial_snapshot = base_snapshot
     if monitor_root is not None:
-        initial_live_record = _live_artifact_record(monitor_root, args.partition)
+        initial_live_record = (
+            train_live_record
+            if args.partition == "train"
+            else _live_artifact_record(monitor_root, args.partition)
+        )
+        if initial_live_record is None:  # pragma: no cover - branch above always assigns it
+            raise AssertionError("dashboard live record disappeared")
         initial_snapshot = _live_snapshot(
             base_snapshot,
             partition=args.partition,
             status=initial_live_record[0],
             record=initial_live_record[1],
+            train_prepared=completed_train,
         )
-    completed_train = (
-        args.partition == "train"
-        and initial_live_record is not None
-        and initial_live_record[0] == "passed"
-    )
     state = DashboardState(initial_snapshot)
     with ProgressDashboardServer(state, port=args.port) as dashboard:
         print(
@@ -490,6 +537,7 @@ def main(argv: list[str] | None = None) -> int:
                                 partition=args.partition,
                                 status=live_record[0],
                                 record=live_record[1],
+                                train_prepared=completed_train,
                             )
                         )
                         previous_live_record = live_record

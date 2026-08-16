@@ -33,6 +33,10 @@ queries, predictions or model updates. All protected inputs and the ROM remained
 The train identity is consumed and must never retry. Development was explicitly not authorized; no
 development artifact exists.
 
+The view-only dashboard on port 8767 is now pointed at development. It authenticates the completed
+train terminal, shows PP states 1/2 and waits at zero current actions/frames; it cannot infer or send
+development authority.
+
 The
 [path-free result](docs/evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
 is the only public projection. Honest counters are now **priors 2 · reserved roots 8 train / 6

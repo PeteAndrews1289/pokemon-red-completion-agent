@@ -253,7 +253,7 @@ artifact root and named partition:
 python scripts/run_party_development_readiness_dashboard.py \
   --no-browser \
   --private-artifact-root /private/artifact/root \
-  --partition train
+  --partition development
 ```
 
 This monitor is outside the frozen runner. It reads only the runner's path-free durable progress,
@@ -267,7 +267,8 @@ The separately authorized train preparation has now completed once. Its
 [path-free result](evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
 records 27 battles, 53/80 final PP and zero learner/model access. The dashboard reports PP states
 1/2 and points to the still-separate development authorization; it does not infer permission from
-the completed train receipt.
+the completed train receipt. In development-monitor mode it authenticates the path-free train
+terminal, resets the live action/frame counters to zero and waits at 50% for the independent gate.
 
 Future authenticated collection may advance only its 0/14 counter. A fitted model may appear only
 after the entire prospective catalog passes the 8/6 and semantic-diversity gate. Sealed Red,

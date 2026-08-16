@@ -285,6 +285,34 @@ def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 
+    development_gate = SCRIPT["_development_gate_snapshot"](base, terminal).public_dict()
+    assert development_gate["run_status"] == "waiting"
+    assert development_gate["stage_progress"] == 0.5
+    assert development_gate["actions"] == 0
+    assert development_gate["frame_count"] == 0
+    assert development_gate["location"] == (
+        "Natural PP preparation gate · development authorization pending"
+    )
+    development_gate_text = json.dumps(
+        development_gate,
+        sort_keys=True,
+        ensure_ascii=False,
+    )
+    assert "Train's natural middle-PP state is accepted" in development_gate_text
+    assert "Natural middle-PP preparations 1/2" in development_gate_text
+
+    development_terminal = {**terminal, "partition": "development"}
+    completed = SCRIPT["_live_snapshot"](
+        SCRIPT["_development_gate_snapshot"](base, terminal),
+        partition="development",
+        status="passed",
+        record=development_terminal,
+        train_prepared=True,
+    ).public_dict()
+    completed_text = json.dumps(completed, sort_keys=True, ensure_ascii=False)
+    assert "Natural middle-PP preparations 2/2" in completed_text
+    assert "freeze the exact 8+6 menus" in completed_text
+
 
 def test_live_dashboard_reads_only_complete_path_free_records(tmp_path: Path) -> None:
     (tmp_path / ".pokemon-red-completion-private-root.json").write_text(

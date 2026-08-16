@@ -6,7 +6,8 @@
   accepted a 53/80 middle-PP state after 27 ordinary battles with zero learner/model access, and
   published a path-free result receipt. Development remains separately gated.
 - Updated the dashboard, roadmap, handoffs and project story to show PP states 1/2 and the exact
-  remaining bridge to the first completion-aware fit.
+  remaining bridge to the first completion-aware fit. Development-monitor mode authenticates the
+  completed train receipt and waits at zero current actions without inferring authority.
 - Published PP v4 at `27e966b`, passed exact CI run `31962598106` attempt 1, generated a new
   immutable private packet and passed read-only preflight for both train and development with zero
   controller/model/teacher/outcome access. Added a path-free public receipt; no materialization or
