@@ -18,6 +18,48 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First switch-assisted outcome model fit; scale independent evidence next — 2026-08-17
+
+The fresh switch-assisted pilot and first model fit are complete. Published collection source
+`8c45bd112d037cf3f0ec8bbcbba5b1ee72077a7a` had green CI run `32002135258` attempt 1. Its frozen
+plan SHA is `476d3e9e9df2b75e6d6e231d70f40f5571f69a2ae91590e064eb7b311f20652d`. The one allowed
+execution measured all **48/48 candidate trials** and produced **8/8 train plus 4/4 development
+learner-eligible questions**, with zero invalids. It used 33,638 controller actions and 2,911,184
+frames. It did not query a teacher, predict with a model, open sealed Red or Crystal, or start a
+full replay. Never rerun that exact plan.
+
+Codex then published the fail-closed offline fitter at
+`eb3d5372a792140f79ce0c37f7b1c654837fdd77`; exact CI run `32031773663` attempt 1 passed. The fitter
+authenticated every stream, reconstructed the same private menus and trial assignments from the
+bound cartridge inputs, durably froze the default hyperparameters before comparison, updated on
+train only, and evaluated the base and updated scorers once on untouched development. Fit identity
+is `18d9ba5aa323c9448ba1750919bac24198f090c228f4a30223b875c1384a120f`. The immutable private model
+artifact manifest is `961597323a8e0af507dd7edd835228a9b781370f1ad04ffd097483e5cd60fa5a`; the model file digest is
+`3a4a75491eab12cdfc0a77451cdaaac7c619620aa8b8c6669791f19f1aac6c7d`, and its canonical model
+digest is `6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b`.
+
+The result is positive but deliberately small. Training loss moved **8.703 → 0.141**. On four
+untouched questions, accuracy moved **1/4 → 4/4**, cross-entropy **17.377 → 0.365**, and mean winner
+probability **0.250 → 0.711**. Three discordant correctness pairs favored the update, none favored
+the base, and the exact two-sided p-value is 0.25. Three winner probabilities improved and one
+regressed. This earns a development scale-up, not an inferential claim or live authority.
+
+The active board is now **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 ·
+authority 0 · transfer 0**. Reach the scale total by collecting 24 additional train and 12
+additional development questions under the same intervention. The current unused inventory has
+only 10 train and 8 development roots, so at least 14 new train roots and 4 new development roots
+must be authenticated without weakening independence or diversity. Start with an action-free
+inventory expansion and 24+12 rehearsal. Stop if that requires fixed-route knowledge, identity
+leakage, overleveling, teacher labels, stale direct-combat priors, consumed-root reuse, or weaker
+candidate menus. Crystal, sealed Red, live authority, and full replay remain prohibited.
+
+The tracked public checkpoint is the
+[initial-fit receipt](docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json). The
+model artifact remains private and outside Git. User standing approval covers routine non-sealed
+development collection, offline fitting, evaluation, documentation, CI, and publication; do not
+reintroduce ceremonial approval waits. Destructive actions, sealed one-shot access, purchases or
+credentials, and material scope expansion still require explicit confirmation.
+
 ## Switch-assisted 8+4 pilot is action-free ready; publish before execution — 2026-08-17
 
 The current development protocol is no longer the direct-trainee intervention used by either

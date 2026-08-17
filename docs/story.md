@@ -7,6 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the first model finally learned from outcomes
+
+The repaired board did not turn red this time. Forty-eight cloned candidate trials completed, so
+eight training questions and four untouched questions became real lessons. No teacher told the
+model which Pokémon or venue to prefer. Each label came from what actually happened after the same
+small battle dose.
+
+The old scorer faced the four unseen questions and got one right. The newly trained scorer got all
+four. It became dramatically less surprised by the winning outcomes: cross-entropy fell from
+17.377 to 0.365, and its average confidence in the best result rose from 25% to 71%. For the first
+time, this project can point to a completion-aware model update and an unseen improvement instead
+of another green preflight.
+
+But four questions are a spark, not a finished player. The exact paired test is still p=0.25, one
+confidence estimate regressed, and the model has no live authority. It has not touched Crystal,
+solved a full route, or caught a Pokédex. What it earned is the next honest experiment: scale to
+32 train and 16 development questions without leaking identity or sneaking the old teacher back
+in.
+
+The scoreboard is now **8/32 TRAIN · 4/16 DEVELOPMENT · 1/2 FITS · 1/2 UNSEEN COMPARISONS ·
+AUTHORITY ZERO**. That is modest. It is also the clearest learning progress the project has made.
+
+---
+
 ## Current checkpoint: participation, not punishment
 
 The next pilot failed in a way any Pokémon player would recognize. Weak team members were being

@@ -1,0 +1,161 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the four-question development result is a statistically powered benchmark",
+      "party-development authority is ready for live promotion",
+      "the scorer transfers to Crystal",
+      "the agent can complete Red autonomously",
+      "the agent can build a living Pokedex autonomously"
+    ],
+    "supported": "One completion-aware party-development scorer was fit once on eight authenticated switch-assisted Red train questions and compared once on four untouched development questions. The updated scorer improved every preregistered aggregate development metric, but the sample is descriptive and live authority remains zero."
+  },
+  "decision": {
+    "current_total": {
+      "development_questions": 4,
+      "model_fits": 1,
+      "train_questions": 8,
+      "unseen_comparisons": 1
+    },
+    "next_total_gate": {
+      "development_questions": 16,
+      "model_fits": 2,
+      "train_questions": 32,
+      "unseen_comparisons": 2
+    },
+    "next_work": "Expand the authenticated non-sealed Red context inventory enough to collect 24 additional train questions and 12 additional development questions under the same switch-assisted identity-free intervention. Fit on train only and compare once on untouched development before any benchmark, live authority, or Crystal execution.",
+    "result": "The descriptive initial fit earned a scale-up. It did not earn model authority or a transfer claim.",
+    "why": "Accuracy improved from one of four to four of four, cross-entropy fell sharply, and three discordant correctness pairs favored the updated scorer. Four questions cannot support an inferential claim, and one of four winner-probability estimates regressed, so the cheapest honest next step is broader independent-root development evidence."
+  },
+  "fit": {
+    "base_model": {
+      "canonical_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+      "file_sha256": "575b77d1f6448248c947fed0bf82296210d560df0dca8989505ffc5516507d06",
+      "outcome_training_examples": 0,
+      "role": "Frozen teacher-initialized completion-aware prior"
+    },
+    "development": {
+      "base": {
+        "accuracy": 0.25,
+        "correct_preferences": 1,
+        "cross_entropy": 17.376972519072247,
+        "mean_winner_probability": 0.24998688671151933
+      },
+      "descriptive_initial_curve": true,
+      "examples": 4,
+      "inferential_claim": false,
+      "paired": {
+        "base_wins": 0,
+        "correctness_ties": 1,
+        "discordant_pairs": 3,
+        "mean_winner_probability_delta": 0.46108206641571775,
+        "two_sided_exact_p": 0.25,
+        "updated_wins": 3,
+        "winner_probability_improvements": 3,
+        "winner_probability_regressions": 1,
+        "winner_probability_ties": 0
+      },
+      "updated": {
+        "accuracy": 1.0,
+        "correct_preferences": 4,
+        "cross_entropy": 0.36475046876277784,
+        "mean_winner_probability": 0.7110689531272372
+      }
+    },
+    "fit_identity_sha256": "18d9ba5aa323c9448ba1750919bac24198f090c228f4a30223b875c1384a120f",
+    "hyperparameters": {
+      "epochs": 200,
+      "learning_rate": 0.01,
+      "prior_l2": 0.1,
+      "tuned_on_development": false
+    },
+    "model_artifact": {
+      "learning_stream_sha256": "0ab124e61789f291451a92348298f0144e821fb64e81d0c84d60187baf1f085b",
+      "manifest_sha256": "961597323a8e0af507dd7edd835228a9b781370f1ad04ffd097483e5cd60fa5a",
+      "preregistration_stream_sha256": "1d98bc91bab58d0a89f3a89d9fb5580076cc8a49e1280df5e387b8317f3ebbd8",
+      "private_artifact_tracked": false,
+      "status": "complete"
+    },
+    "source": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run": 32031773663,
+      "commit": "eb3d5372a792140f79ce0c37f7b1c654837fdd77"
+    },
+    "training": {
+      "examples": 8,
+      "loss_after": 0.14073435236043635,
+      "loss_before": 8.703110992805104,
+      "tied_targets": 0
+    },
+    "updated_model": {
+      "canonical_sha256": "6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b",
+      "file_sha256": "3a4a75491eab12cdfc0a77451cdaaac7c619620aa8b8c6669791f19f1aac6c7d",
+      "outcome_training_examples": 8,
+      "training_target": "verified_outcome_preference"
+    }
+  },
+  "pilot": {
+    "audit": {
+      "candidate_width_counts": {
+        "2": 6,
+        "6": 6
+      },
+      "choice_kinds_in_both_partitions": true,
+      "completion_goals_in_both_partitions": 4,
+      "initial_fit_ready": true,
+      "learner_update_eligible_questions": 12,
+      "unique_semantic_menus": 12
+    },
+    "candidate_trials": 48,
+    "controller_actions": 33638,
+    "frames": 2911184,
+    "invalid_trials": 0,
+    "manifest_sha256": "93f19dc2ac24bc33fda37137ed7276ef2781c9d5a61097a8b23c548baf4e48c6",
+    "measured_trials": 48,
+    "plan_sha256": "476d3e9e9df2b75e6d6e231d70f40f5571f69a2ae91590e064eb7b311f20652d",
+    "prospective_catalog_sha256": "09fbfdba65e823e293e639398efdefc68433fc91243c014760cb24c9faa8a06f",
+    "questions": {
+      "development": 4,
+      "train": 8
+    },
+    "source": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run": 32002135258,
+      "commit": "8c45bd112d037cf3f0ec8bbcbba5b1ee72077a7a",
+      "source_bundle_sha256": "667eb123ec8f5fb5eac3e8c6c5f56db03e16e873ed72536462f203f21ffec326"
+    },
+    "status": "complete"
+  },
+  "protected_access": {
+    "authority_promotions": 0,
+    "consumed_plan_retries": 0,
+    "crystal_cases_opened": 0,
+    "development_used_for_tuning": false,
+    "full_game_replays": 0,
+    "model_fits": 1,
+    "model_updates": 1,
+    "sealed_red_cases_opened": 0,
+    "teacher_choice_targets": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons": 1
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.repeatable-party-outcome-initial-fit.v1",
+  "status": "descriptive_initial_fit_complete",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "verification": {
+    "documentation_check_passed": true,
+    "expected_failures": 1,
+    "integration_tests_deselected": 3,
+    "mypy_source_files": 236,
+    "mypy_passed": true,
+    "non_integration_tests_passed": 3965,
+    "product_focus_check_passed_before_counter_advance": true,
+    "public_artifact_check_passed": true,
+    "ruff_passed": true
+  }
+}

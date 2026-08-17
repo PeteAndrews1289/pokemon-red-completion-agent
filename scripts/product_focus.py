@@ -340,7 +340,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
     lines.extend(
         [
             "",
-            "Each counter stays zero until tracked, path-free evidence supports it.",
+            "Each counter changes only when tracked, path-free evidence supports it.",
             (
                 "Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not "
                 "learning"

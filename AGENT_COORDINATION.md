@@ -1,6 +1,29 @@
 # Three-agent coordination
 
-> **2026-08-17 switch-assisted checkpoint — highest active checkpoint:** Codex implemented the
+> **2026-08-17 initial-fit checkpoint — highest active checkpoint:** The switch-assisted pilot
+> completed 48/48 trials and yielded 8 train plus 4 untouched development questions with zero
+> invalids. One published, green, fail-closed fitter updated the completion-aware scorer on train
+> only and compared it once on development. Accuracy moved 1/4 → 4/4, cross-entropy 17.377 → 0.365,
+> and mean winner probability 0.250 → 0.711. The exact paired p-value is 0.25; this is descriptive
+> evidence and grants zero live authority.
+>
+> The active counters are **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 ·
+> authority 0 · transfer 0**. Codex owns expansion of the authenticated non-sealed Red inventory,
+> an action-free 24-train/12-development scale-up rehearsal, collection if the rehearsal passes,
+> one train-only update and one untouched comparison. The exact 8+4 plan is consumed and must not
+> retry. Sealed Red, Crystal execution, full replay, route hardening and live promotion remain
+> prohibited. Standing owner approval covers routine development collection, offline fitting,
+> evaluation, documentation, CI and publication; Codex must not wait for ceremonial per-step
+> approval.
+>
+> Claude should next audit the scale-up design or a publishable promotion claim, especially
+> independence, leakage and the small-sample interpretation. Antigravity should challenge no more
+> than three cross-game representation assumptions once a concrete Crystal development protocol
+> exists. Neither reviewer edits this worktree or blocks routine development. The tracked
+> [initial-fit receipt](docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json) is the
+> public result; the model remains in immutable private storage.
+
+> **2026-08-17 switch-assisted preflight checkpoint — historical:** Codex implemented the
 > portable execution repair and completed a zero-action rehearsal for a fresh 8-train / 4-
 > development plan with 48 candidate trials. The selected trainee participates while a qualified
 > escort may finish the fixed dose. Field Dig now checks the current cartridge tileset, old
@@ -26,25 +49,24 @@
 
 > **Active product focus — authoritative current checkpoint:** Read
 > [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) before the accumulated history below. Exactly
-> one development lane is active: repeatable completion-aware party outcome learning. Its decision
-> gate is one complete switch-assisted pilot with 8 train questions and 4 untouched development
-> questions, followed by one train-only fit and one unseen baseline comparison. The honest current
-> counters are **0 train / 0 development / 0 fits / 0 comparisons / 0 authority** because all older
-> outcomes used direct combat and answer a different causal question. They remain historical
-> falsifier evidence. The 14/55 one-shot campaign is also preserved but retired as the development
-> leading edge; consumed identities remain non-retryable.
+> one development lane is active: repeatable completion-aware party outcome learning. The initial
+> switch-assisted gate completed with 8 train questions, 4 untouched development questions, one
+> train-only fit and one unseen comparison. The honest current counters are **train 8/32 ·
+> development 4/16 · fits 1/2 · comparisons 1/2 · authority 0**. Older direct-combat outcomes
+> remain historical falsifiers and are excluded. The 14/55 one-shot campaign is also preserved but
+> retired as the development leading edge; consumed identities remain non-retryable.
 >
 > Codex owns the repeatable scenario generator, outcome collection, fitting, evaluation, tracked
-> counters, documentation, and publication. The prospective repair and action-free plan are ready;
-> Codex now owns publication, exact green CI, exact plan regeneration, one authorization request,
-> and the 8+4 pilot before any fit or scale-up. Claude reviews only when a benchmark or sealed claim
-> is frozen, or when statistics/leakage would change a promotion decision. Antigravity challenges
-> architecture and Crystal transfer at milestone decisions with no more than three falsifiers.
-> Routine development does not wait for either reviewer. Sealed Red, Crystal execution, full replay,
-> teacher-route hardening, map-specific rescue patches, premature 185-trial scale-up, and
+> counters, documentation, and publication. Codex now owns independent-root inventory expansion,
+> an action-free 24+12 scale rehearsal, routine collection under standing development approval,
+> one train-only update and one untouched comparison. Claude reviews only when a benchmark or
+> sealed claim is frozen, or when statistics/leakage would change a promotion decision.
+> Antigravity challenges architecture and Crystal transfer at milestone decisions with no more than
+> three falsifiers. Routine development does not wait for either reviewer. Sealed Red, Crystal
+> execution, full replay, teacher-route hardening, map-specific rescue patches, live promotion, and
 > consumed-trial retry are closed. Every session ends by updating the evidence-bound reorientation
-> in the active product state. Time box: two sessions / sixteen hours; stop on an incomplete pilot,
-> no diverse scenarios, stale-intervention leakage, or no unseen gain.
+> in the active product state. Time box: two sessions / sixteen hours; stop if scale requires weak
+> independence, diminished candidate diversity, stale-intervention leakage, or loses unseen gain.
 
 > **2026-08-16 V1 failure / V2 successor checkpoint — highest active checkpoint:** The exact
 > authorized V1 outcome campaign consumed one development trial and stopped before controller

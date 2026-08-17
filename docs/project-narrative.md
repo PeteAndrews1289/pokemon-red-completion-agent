@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the first real completion-aware model learned something
+
+The repaired switch-assisted lesson finally ran cleanly. Twelve independent Red moments split into
+eight train and four untouched development questions. Their candidate menus expanded into forty-
+eight cloned trials. All forty-eight measured; none became invalid. Every selected Pokémon
+participated, a qualified teammate could finish, and no old direct-combat label or teacher choice
+entered the dataset.
+
+Then the project did the thing it had spent days preparing to do: it trained a model. The fitter
+rebuilt every private menu from authenticated cartridge inputs, checked every assignment and
+outcome digest, froze its update settings, and learned from the eight train questions only.
+Training loss fell from 8.703 to 0.141.
+
+The four face-down development questions were opened once for a paired comparison. The old scorer
+picked one correctly. The outcome-trained scorer picked all four. Its cross-entropy fell from
+17.377 to 0.365, and the probability it placed on the best measured result rose from 0.250 to
+0.711. Three choices flipped in the new model's favor, none flipped toward the old one. One
+probability estimate still moved the wrong way.
+
+That last detail matters. Four questions cannot carry the story the project ultimately wants to
+tell. A perfect four has an exact paired p-value of 0.25 here, not scientific certainty. So the
+model earned more independent data, not control of the game. The board now reads **8/32 train ·
+4/16 development · 1/2 fits · 1/2 unseen comparisons · authority 0 · transfer 0**.
+
+The next work is deliberately boring in the useful way: broaden the non-sealed inventory without
+weakening the identity-free representation, collect twenty-four more train and twelve more
+development questions, and ask whether the signal survives. Red remains the curriculum. The
+living Pokédex across games remains the product.
+
 ## August 17: the model stopped asking weak Pokémon to prove they were already strong
 
 The second fast-loop attempt exposed a subtler version of the same mismatch. Seven trials began in

@@ -1,5 +1,31 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: the first learning curve moves
+
+Open on the 48-lane switch-assisted board. Let every lane turn green, then collapse them into
+**8 TRAIN QUESTIONS** and **4 FACE-DOWN DEVELOPMENT QUESTIONS**. Keep the safety strip visible:
+**INVALID 0 · TEACHER 0 · SEALED 0 · CRYSTAL 0 · FULL REPLAY 0**.
+
+Show the fitter authenticating each stream and reconstructing the candidate menus without revealing
+species, slots, maps or private paths. Lock the development cards behind glass. Put the frozen
+settings on screen—**200 EPOCHS · LR 0.01 · PRIOR ANCHOR 0.1 · TRAIN ONLY**—then animate training
+loss falling **8.703 → 0.141**.
+
+Now turn over the four development cards exactly once. Split the scoreboard:
+
+- **FROZEN BASE: 1/4 · CROSS-ENTROPY 17.377 · WINNER PROBABILITY 0.250**
+- **OUTCOME MODEL: 4/4 · CROSS-ENTROPY 0.365 · WINNER PROBABILITY 0.711**
+
+Light three arrows toward the new model, zero toward the base, and one small amber warning:
+**ONE PROBABILITY REGRESSION · EXACT p=0.25 · DESCRIPTIVE ONLY**. Do not show a promotion animation.
+Keep **LIVE AUTHORITY 0** fixed.
+
+End by zooming out from **8/32 TRAIN · 4/16 DEVELOPMENT · 1/2 FITS · 1/2 COMPARISONS** to the living-
+Pokédex product. Narration: **“The first model learned something. Four questions are not enough to
+trust it with the game, so it earned more diverse evidence—not another scripted walkthrough.”**
+Next-scene card: **ADD INDEPENDENT ROOTS → COLLECT 24+12 → TEST AGAIN → ONLY THEN FREEZE A BENCHMARK
+AND CRYSTAL PROBE**.
+
 ## August 17 scene: let the trainee tag in, then let the team play
 
 Open on a low-level Pokémon facing an obviously unsuitable wild battle. Put the old rule over it:

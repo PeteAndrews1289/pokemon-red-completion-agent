@@ -62,6 +62,14 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         for label, _, minimum in outputs
         if label.startswith("Outcome Question")
     )
+    model_fit_total = next(
+        minimum for label, _, minimum in outputs if label.startswith("Model Fit")
+    )
+    unseen_comparison_total = next(
+        minimum
+        for label, _, minimum in outputs
+        if label.startswith("Unseen Comparison")
+    )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
         value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
@@ -73,8 +81,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Switch-assisted 8+4 is action-free ready; outcomes, model fit, authority, "
-            "and transfer remain zero until the exact pilot runs."
+            "The first switch-assisted outcome model improved on four untouched Red "
+            "questions; scale independent evidence before authority or transfer."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
@@ -96,9 +104,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             zero_shot_completed=train_outcomes + development_outcomes,
             zero_shot_total=outcome_question_total,
             adaptation_completed=fits,
-            adaptation_total=1,
+            adaptation_total=model_fit_total,
             sealed_completed=unseen,
-            sealed_total=1,
+            sealed_total=unseen_comparison_total,
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
@@ -111,8 +119,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         events=(
             f"Product · {_text(product, 'goal')}",
             f"Capability · {_text(lane, 'capability')}",
-            f"Authority now · {_text(authority, 'current')}",
-            f"Authority target · {_text(authority, 'target')}",
+            _event("Authority now", _text(authority, "current")),
+            _event("Authority target", _text(authority, "target")),
             output_event,
             f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
@@ -134,7 +142,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"Stop 2 · {stop_conditions[1]}",
             _event("Next decision", _text(lane, "next_decision")),
             "Legacy one-shot party campaign · evidence preserved · development lane retired",
-            "Controller 0 · teacher 0 · sealed Red 0 · Crystal 0 · full replay 0",
+            "Current session controller 0 · teacher 0 · sealed Red 0 · Crystal 0 · full replay 0",
         ),
     )
 

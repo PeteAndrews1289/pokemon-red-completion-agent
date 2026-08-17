@@ -6,35 +6,40 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: publish the switch-assisted 8+4 gate, then fit once
+## Current override: scale the first outcome-trained scorer on independent roots
 
-Codex has implemented the prospective repair and rehearsed a fresh root-disjoint plan without
-controller input. The selected member participates while a qualified escort can complete the fixed
-battle dose; candidate eligibility is explicitly a curriculum-venue relevance claim, not a direct-
-combat claim. Field Dig now requires a legal current cartridge tileset. All seven venue-performance
-features calibrated under the old direct-combat protocol are masked to zero and a new protocol-
-specific contract states they are not reused. The v7 writer retains strict v6 readers.
+Codex completed the fresh switch-assisted pilot once: **48/48 trials measured, 8/8 train questions
+eligible, 4/4 untouched development questions eligible, zero invalids**. The exact consumed plan
+must not retry. The pilot used no teacher label, model prediction, sealed Red case, Crystal case or
+full replay. Its selected member participates while a qualified escort may finish, and all stale
+direct-combat venue-performance features remain masked.
 
-The action-free plan contains **8 train questions, 4 untouched development questions and 48
-candidate trials**, with both choice kinds, all four completion goals, and candidate widths two and
-six. It is evidence that the input boundary is ready—not a measured learning output. The new
-protocol's counters are **0/8 train · 0/4 development · fits 0/1 · unseen comparisons 0/1 ·
-authority 0**. Direct-combat pilot outcomes remain historical and incompatible with this fit.
+Codex also published the authenticated offline fitter and ran it once after exact green CI. It
+reconstructed every menu and assignment from the bound inputs, froze 200 epochs / 0.01 learning
+rate / 0.1 prior anchoring before development comparison, fit on train only and compared once on
+development. Training loss moved **8.703 → 0.141**. Development accuracy moved **1/4 → 4/4**,
+cross-entropy **17.377 → 0.365**, and mean winner probability **0.250 → 0.711**. The paired result
+has three update wins, zero base wins and p=0.25; one winner-probability estimate regressed. This is
+descriptive scale-up evidence, not a promotion claim.
 
-Codex now owns the full local gate, publication, exact-head CI, action-free plan regeneration and
-the exact authorization request. It must stop before controller input. If all twelve questions are
-complete after the authorized pilot, Codex should fit once on the eight train questions and compare
-once on the four untouched development questions. That is the next decision. A 32+16 collection is
-only the later statistical scale milestone.
+Codex now owns the next bounded lane: expand the authenticated non-sealed Red inventory and form an
+action-free plan for **24 additional train plus 12 additional development questions**, bringing the
+totals to 32/16. Ten unused train roots and eight unused development roots already exist, so at
+least fourteen new train and four new development roots are required. Do not weaken root
+independence, candidate diversity, the switch-assisted intervention, or the identity-free feature
+contract to meet the count. Standing owner approval covers routine development collection,
+offline fitting, evaluation, documentation, CI and publication; do not pause for ceremonial
+authorization. Sealed, destructive or materially expanded actions remain separately gated.
 
-Claude and Antigravity CLI reviews were attempted and returned no verdict before timeout. Claude
-should next review a concrete fit/comparison for leakage, intervention consistency and claim
-strength. Antigravity should wait for the resulting Crystal transfer decision and return at most
-three falsifiable assumptions plus work to delete. Neither is a gate for routine development, and
-their desktop applications need not remain open. See the
-[path-free receipt](evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json) and
-[current audit](current-audit-2026-08-17.md). Local qualification is **3,961 passed · 3 skipped · 1
-expected xfail**, plus lint, whole-source typing, docs, privacy, focus, and registries.
+The scorecard is **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 · authority
+0 · transfer 0**. Claude's next useful review is the action-free scale design or a later promotion
+claim, with emphasis on independence, leakage and statistical interpretation. Antigravity waits
+for a concrete title-neutral Crystal development protocol and then challenges at most three
+transfer assumptions plus work to delete. Neither blocks routine work, and their desktop apps may
+remain closed. See the
+[path-free fit receipt](evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json) and
+[current audit](current-audit-2026-08-17.md). Local pre-fit qualification was **3,965 passed · 3
+integration deselected · 1 expected xfail**, plus lint, typing, docs, privacy and focus.
 
 ## Superseded August 16 override: one execution-eligibility repair, then a fresh 8+4 pilot
 

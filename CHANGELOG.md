@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Completed the fresh switch-assisted party-development pilot with 48/48 measured candidate trials,
+  8/8 train and 4/4 untouched development questions eligible, and zero invalids. Added and
+  published a fail-closed offline fitter that authenticates every stream, reconstructs the exact
+  identity-free menus, freezes hyperparameters before comparison, fits on train only, and writes an
+  immutable private model artifact. The first verified-outcome update reduced training loss from
+  8.703 to 0.141; on four untouched questions it improved accuracy from 1/4 to 4/4,
+  cross-entropy from 17.377 to 0.365, and mean winner probability from 0.250 to 0.711. This is a
+  descriptive scale-up signal with p=0.25, not live authority. Advanced the honest counters to
+  train 8/32, development 4/16, fits 1/2 and unseen comparisons 1/2; Crystal, sealed Red, full
+  replay and authority remain zero.
 - Replaced the repeatable party lane's direct-trainee battle assumption with a protocol-bound
   switch-assisted fixed dose: the selected member participates and a qualified escort may finish.
   Field Dig now checks the live cartridge tileset as well as its return anchor. Seven venue-

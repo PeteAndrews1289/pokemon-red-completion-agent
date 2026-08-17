@@ -5,10 +5,13 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The active scorecard is **TRAIN OUTCOME QUESTIONS 0/32 · DEVELOPMENT OUTCOME QUESTIONS 0/16 ·
-> MODEL FITS 0/1 · UNSEEN COMPARISONS 0/1 · AUTHORITY 0 · TRANSFER 0**. The one-shot 14/55
-> campaign is preserved but retired as the development leading edge. Inputs, preflights, CI passes,
-> teacher runs, and frozen artifacts never advance these counters.
+> The active scorecard is **TRAIN OUTCOME QUESTIONS 8/32 · DEVELOPMENT OUTCOME QUESTIONS 4/16 ·
+> MODEL FITS 1/2 · UNSEEN COMPARISONS 1/2 · AUTHORITY 0 · TRANSFER 0**. The first switch-assisted
+> outcome model improved from 1/4 to 4/4 on untouched development questions, but the sample is
+> descriptive and live authority remains zero. The one-shot 14/55 campaign is preserved but
+> retired as the development leading edge. Inputs, preflights, CI passes, teacher runs, and frozen
+> artifacts never advance these counters. See the
+> [initial-fit receipt](evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json).
 
 > **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
 > SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE

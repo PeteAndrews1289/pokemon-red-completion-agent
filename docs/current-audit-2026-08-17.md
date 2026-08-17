@@ -2,111 +2,113 @@
 
 ## Executive result
 
-The repeatable party-development lane is ready for publication and one exact switch-assisted pilot.
-It is not yet training evidence. The action-free rehearsal produced a diverse 8-train / 4-
-development plan with 48 candidate trials and zero controller, teacher, model, sealed Red, Crystal,
-or replay access. The complete local gate passes **3,961 tests**, with 3 integration tests skipped
-and 1 expected failure; all 236 source files type-check, Ruff passes, and documentation, privacy,
-product-focus, and generated-registry checks are green.
+The project has now performed its first genuine completion-aware Red model training. A fresh
+switch-assisted pilot measured all **48/48 candidate trials**, producing **8 train and 4 untouched
+development questions** with zero invalids. One separately published offline fitter updated the
+model on train only and compared the frozen base and updated scorers once on development.
 
-The first model no longer waits for 32 train and 16 development questions. A complete 8+4 pilot is
-the immediate learning gate. It permits one train-only fit and one untouched development comparison.
-The larger 32+16 set is a later statistical scale milestone only if that first comparison earns it.
+The result is directionally strong: development accuracy moved **1/4 → 4/4**, cross-entropy
+**17.377 → 0.365**, and mean probability on the best measured outcome **0.250 → 0.711**. Three
+discordant correctness pairs favored the update and none favored the base. Training loss moved
+**8.703 → 0.141**. The development sample is only four questions, its exact two-sided paired
+p-value is 0.25, and one winner-probability estimate regressed. This earns a larger development
+experiment, not a benchmark claim or live authority.
 
-## What was wrong
+Honest board: **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 · live authority
+0 · transfer 0**.
 
-The predecessor pilot ran 36 candidate trials. Twenty-three measured, thirteen were invalid, and
-only four complete questions survived. Seven failures came from claiming field Dig was usable in a
-Mart because a valid return anchor had been confused with a legal current location. Six came from
-requiring the selected trainee to fight directly until the long-form retreat rule ended the trial.
+## What actually ran
 
-Those failures were not random bad luck. They showed that the prospective intervention and the
-executor were still answering different questions.
+The consumed pilot used published source
+`8c45bd112d037cf3f0ec8bbcbba5b1ee72077a7a`, green GitHub CI run `32002135258` attempt 1, and
+plan SHA `476d3e9e9df2b75e6d6e231d70f40f5571f69a2ae91590e064eb7b311f20652d`. It used 33,638
+controller actions and 2,911,184 frames. Candidate widths were two and six; both partitions
+contained trainee and venue choices, all four completion goals, both health and PP bands, positive
+and negative survival margins, and level/no-evolution routes. It opened no teacher label, model,
+sealed Red case, Crystal case, or full replay. That exact plan must not retry.
 
-## What changed
+The fitter was published separately at
+`eb3d5372a792140f79ce0c37f7b1c654837fdd77`; GitHub CI run `32031773663` attempt 1 passed. Before
+reading outcomes it authenticated the pilot manifest and every stream, reconstructed the same 12
+private menus and 48 assignments from bound cartridge inputs, verified the recorded prospective
+audit, and required the untouched teacher-initialized base model. The fit identity, dataset
+digests, split, source and defaults—200 epochs, learning rate 0.01, prior anchoring 0.1—were durably
+recorded before the development comparison.
 
-1. **Transition legality is complete.** The Red guard receives the current cartridge tileset as
-   well as the last healing anchor. Field Dig is available only on the cartridge-derived set of
-   legal tilesets; the Mart case is rejected prospectively.
-2. **Battle credit is switch-assisted.** The selected member participates, while the uniquely
-   qualified Blastoise escort may finish the fixed battle dose. Candidate eligibility is explicitly
-   “curriculum venue-band relevant,” not a claim that the trainee can solo.
-3. **Stale priors cannot leak.** Route and Cave yield, safety, travel, recovery, reliability, and
-   support features were calibrated under direct combat. All seven are zero-masked under the new
-   protocol, cannot gate execution, and carry no old evidence digest. Each derived venue contract
-   binds the predecessor identity while stating that calibrated performance values are not reused.
-4. **The intervention is authenticated.** The semantic snapshot binds
-   `switch-assisted-fixed-dose-v1`. Prospective bindings and catalogs write v7, and strict v6 readers
-   preserve historical artifacts without silently upgrading their meaning.
-5. **Capability rejection is visible and private.** Entire roots blocked on transition, battle, or
-   recovery are summarized as identity-free counts. Private roots, game identities, species, slots,
-   and paths do not appear in the tracked receipt.
-6. **The dashboard cannot overclaim the reset.** It now shows 0/8, 0/4, 0 fits, 0 comparisons, and
-   zero authority. Its denominator is derived from the active outputs, and long reorientation text
-   is safely bounded.
+The immutable private output has manifest SHA
+`961597323a8e0af507dd7edd835228a9b781370f1ad04ffd097483e5cd60fa5a`. The updated model file SHA
+is `3a4a75491eab12cdfc0a77451cdaaac7c619620aa8b8c6669791f19f1aac6c7d`; its canonical model SHA
+is `6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b`. A typed reload confirmed
+eight verified-outcome training examples. The private model stays outside Git.
 
-## Causal and statistical boundary
+## Why the evidence is valid
 
-The historical direct-combat outcomes remain useful evidence about what failed, but they cannot be
-pooled with switch-assisted outcomes. The model would otherwise receive labels from two different
-interventions without an intervention feature. The active switch-assisted counter therefore starts
-at zero.
+1. **One intervention.** Every new label came from `switch-assisted-fixed-dose-v1`. Historical
+   direct-combat outcomes were excluded rather than pooled.
+2. **Train/development separation.** The model update consumed only eight train roots. The four
+   development roots were used once for base-versus-update comparison and never for tuning.
+3. **Identity-free learner rows.** Candidate features contain completion, party, evolution,
+   resource and risk semantics—not species, slot, map, path or private filesystem identity.
+4. **Exact assignment reconstruction.** Every retained outcome had to match the independently
+   rebuilt scenario, binding, candidate feature digest, assignment and evidence digest.
+5. **No teacher labels.** Targets came from prospectively ordered measured outcomes. Teacher query
+   and teacher-choice-target counters stayed zero.
+6. **No silent authority.** The model artifact says `verified_outcome_preference`, but the goal
+   manager and executor have not granted it live control. Authority remains zero.
 
-Eight train and four development questions are deliberately a small descriptive pilot, not a claim
-of broad statistical power. Its purpose is the cheapest falsifier: prove that the representation can
-produce complete menus, fit once, and show any directional unseen signal. A positive result justifies
-collecting toward 32+16; a negative or incomplete result stops the lane before a larger campaign.
+## What the result does and does not mean
 
-## Rehearsal evidence
+The updated scorer correctly ranked all four small development menus, where its teacher-derived
+base ranked only one. This is the first evidence that the v2 completion-aware features contain a
+learnable signal beyond the old prior. It is also the first time the active lane's model-fit and
+unseen-comparison counters can honestly advance.
 
-The action-free rehearsal found:
-
-- 8 train and 4 untouched development questions;
-- 48 candidate trials;
-- both trainee and venue choices;
-- all four completion goals;
-- candidate widths of two and six;
-- 18 eligible unused roots remaining after exclusions; and
-- identity-free rejections for all-transition-blocked, all-battle-blocked, and missing-escort roots.
-
-The working-tree plan digest and source bundle are retained in the
-[path-free receipt](evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json), but they
-are not execution authority. Publication changes the exact source identity, so the plan must be
-regenerated after the committed head passes CI.
-
-## Reviewer status
-
-Claude and Antigravity command-line audits were both attempted. Neither returned a verdict before
-timeout. No approval is claimed, and routine development does not wait on an unavailable reviewer.
-Claude's next high-value role is a narrow audit of a concrete fit/comparison for intervention
-consistency, leakage, statistics, and claim strength. Antigravity's next role begins only when the
-Red comparison creates a genuine Crystal architecture decision; it should return no more than three
-falsifiable transfer claims and explicit work to delete.
-
-Their desktop applications are not required for command-line access and may remain closed.
+Four questions cannot estimate broad reliability. The paired correctness test has only three
+discordant pairs, so even a clean 3–0 result gives p=0.25. The 4/4 result can also hide a brittle
+feature shortcut that a broader set of party states would expose. No claim about long-horizon
+training efficiency, evolution completion, living-Pokedex planning, Red story completion, or
+Crystal transfer follows from a one-battle local ranking dose.
 
 ## Remaining risks
 
-- Switch assistance is code- and rehearsal-qualified, not yet live-qualified across all 48 trials.
-- The first pilot has only twelve questions and cannot support a strong generalization claim.
-- Masking stale venue priors is correct but temporarily removes performance information; later
-  switch-assisted measurements must rebuild that signal prospectively.
-- A one-battle development dose measures a local decision, not long-horizon party development or
-  living-Pokedex completion.
-- No completion-aware model, live learned authority, sealed Red result, Crystal transfer result, or
-  multi-game collection policy exists yet.
+- **Coverage is the bottleneck.** The current unused inventory contains ten train and eight
+  development roots. Reaching 32/16 total requires at least fourteen additional train and four
+  additional development roots.
+- **The scale dataset must stay independent.** Timing permutations of the same state are useful
+  robustness probes but do not replace independent root lineages for the main count.
+- **One probability regressed.** Correct top-1 choices improved, but the update reduced winner
+  probability on one of four menus. The larger comparison must retain per-menu paired diagnostics.
+- **Venue-performance features are intentionally blank.** Direct-combat priors remain invalid for
+  switch assistance. New yield, safety and recovery evidence must be measured under the new
+  intervention before those features return.
+- **The dose is local.** One completed battle tests a causal preference cheaply; it does not prove
+  efficient multi-battle rotation, evolution scheduling, storage use or collection progress.
+- **The scorer is offline.** A later benchmark must precede any shadow-to-live promotion, and a
+  separate title-neutral protocol must precede Crystal execution.
 
 ## Exact next gate
 
-1. Commit and publish this source.
-2. Require exact-head green GitHub CI.
-3. Regenerate the action-free 8+4 plan from that exact head and retain its new plan digest.
-4. Ask the owner for one authorization naming the exact plan, source, CI run, and no-retry boundary.
-5. Execute only that pilot. Stop before fitting if any question is incomplete.
-6. If all twelve complete, fit once on the eight train questions and compare once on the four
-   untouched development questions with live authority still zero.
-7. Decide from that result whether 32+16 collection is warranted. Crystal stays closed until an
-   honest Red unseen result creates a transfer question.
+1. Add at least fourteen authenticated train roots and four authenticated development roots to the
+   non-sealed Red inventory; retain the ten/eight existing unused roots.
+2. Generate an action-free plan for 24 additional train and 12 additional development questions.
+3. Audit root/state disjointness, both choice kinds, completion-goal coverage, candidate widths,
+   semantic diversity, capability feasibility, intervention identity, and private-data leakage.
+4. Stop if the count can be met only by reusing consumed roots, weakening menus, overleveling,
+   teacher labels, fixed-route knowledge, stale priors, or game-identity features.
+5. Under standing routine-development approval, collect once the rehearsal passes. Retain every
+   failure; do not rerun the consumed 8+4 plan.
+6. Update on train only and compare once on untouched development. Do not tune after seeing the
+   development result.
+7. If the larger comparison preserves gain, freeze a benchmark promotion design and a separate
+   Crystal development transfer protocol. Otherwise revise the representation before more data.
 
-No step in this audit authorizes controller input, model fitting, sealed Red evaluation, Crystal
-execution, a full-game replay, or retry of a consumed one-shot identity.
+Sealed Red, Crystal execution, live party-development authority and full-game replay remain
+prohibited. Standing approval removes routine development approval waits; it does not authorize
+destructive operations, protected one-shot access, purchases or credentials, or material scope
+expansion.
+
+The path-free public result is the
+[initial-fit receipt](evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json). Local
+qualification before the fit passed **3,965 non-integration tests**, with 3 integration tests
+deselected and 1 expected xfail, plus Ruff, mypy across 236 source files, documentation, privacy and
+product-focus checks.
