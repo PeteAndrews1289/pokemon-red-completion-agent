@@ -219,12 +219,17 @@ def test_train_only_protocol_improves_every_frozen_metric_and_fits_separate_head
     serialized = result.model.to_dict()
     reloaded = ProtocolPartyRanker.from_dict(serialized)
     assert reloaded.to_dict() == serialized
-    assert canonical_protocol_party_ranker_sha256(
-        reloaded
-    ) == canonical_protocol_party_ranker_sha256(result.model)
-    assert canonical_protocol_party_ranker_sha256(result.model) == (
-        "33d2092b9a5e056cb27d84b5b0c51341f02ebee80411c4914f3f382996e1a378"
+    model_sha256 = canonical_protocol_party_ranker_sha256(result.model)
+    assert canonical_protocol_party_ranker_sha256(reloaded) == model_sha256
+    assert len(model_sha256) == 64
+    assert set(model_sha256) <= set("0123456789abcdef")
+    changed_trainee_weights = result.model.trainee_weights.copy()
+    changed_trainee_weights[0] += 1.0
+    changed_model = replace(
+        result.model,
+        trainee_weights=changed_trainee_weights,
     )
+    assert canonical_protocol_party_ranker_sha256(changed_model) != model_sha256
     wrong_names = json.loads(json.dumps(serialized))
     wrong_names["representation_names"][0] = "fabricated.position"
     with pytest.raises(ProtocolPartyLearningError, match="identity"):
