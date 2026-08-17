@@ -14,16 +14,16 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "The project now has one outcome-trained completion-aware shadow scorer, but live party-development authority remains zero until a later benchmark promotion gate.",
-        "blocker": "The initial comparison has only four development questions and is descriptive. The current unused inventory has ten train roots and eight development roots, so reaching 32 train and 16 development questions total requires at least fourteen additional train roots and four additional development roots without weakening independence or candidate diversity.",
+        "blocker": "The initial comparison has only four development questions and is descriptive. After excluding every consumed pilot, the current pool has only two unused train roots and four unused development roots. Reaching 32 train and 16 development questions total therefore requires at least twenty-two new train roots and eight new development roots without weakening independence or candidate diversity.",
         "decision": "The updated scorer improved from one of four to four of four correct development choices, reduced cross-entropy from 17.377 to 0.365, and improved three discordant correctness pairs with none favoring the base model. This earns a scale-up to 32 train and 16 development questions total, not live authority, a benchmark claim, or Crystal execution.",
         "evidence": {
           "kind": "unseen_comparison",
           "path": "docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json",
-          "sha256": "441ebb61ecf81e8b834f2e6addcc3653bdfc376e61e6eda2339ce52bd0a29d1f"
+          "sha256": "79228a80b0c77a8a9210d01103870895f18cfb64c14e370b0ed09d1381c137a5"
         },
         "learning_output": "Eight train and four untouched development questions were fully measured under one switch-assisted intervention. One train-only fit reduced loss from 8.703 to 0.141; the updated scorer improved development accuracy from 25% to 100% and mean winner probability from 0.250 to 0.711.",
         "next_falsifier": "An action-free reconstruction must produce 24 additional train and 12 additional development questions from independent authenticated roots under the same feature and intervention contract, without reusing consumed roots or opening protected data.",
-        "next_session_goal": "Expand the non-sealed Red context inventory by at least fourteen train roots and four development roots, generate an action-free 24-plus-12 scale-up plan, audit its diversity and leakage boundary, then collect only if the rehearsal passes.",
+        "next_session_goal": "Expand the non-sealed Red context inventory by at least twenty-two train roots and eight development roots, generate an action-free 24-plus-12 scale-up plan, audit its diversity and leakage boundary, then collect only if the rehearsal passes.",
         "product_alignment": "The first verified-outcome scorer learns portable trainee and venue preferences from completion, party, resource, evolution, and risk state. Scaling independent outcome evidence tests a reusable party-development skill needed for story progression and living-Pokedex evolution across titles.",
         "session_id": "2026-08-17-initial-fit-v1",
         "status": "closed",
@@ -65,7 +65,7 @@
           {
             "kind": "unseen_comparison",
             "path": "docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json",
-            "sha256": "441ebb61ecf81e8b834f2e6addcc3653bdfc376e61e6eda2339ce52bd0a29d1f"
+            "sha256": "79228a80b0c77a8a9210d01103870895f18cfb64c14e370b0ed09d1381c137a5"
           }
         ],
         "model_fits": 1,

@@ -35,8 +35,9 @@ authority 0 · Crystal 0**.
 
 The next sequence scales only what produced learning:
 
-1. Expand the authenticated non-sealed Red context inventory. Ten unused train roots and eight
-   unused development roots already exist; add at least fourteen train and four development roots.
+1. Expand the authenticated non-sealed Red context inventory. After every consumed pilot is
+   excluded, two unused train roots and four unused development roots remain; add at least twenty-
+   two train and eight development roots.
 2. Reconstruct an action-free plan for **24 additional train plus 12 additional development
    questions** under the same identity-free feature and switch-assisted intervention contract.
 3. Reject the plan if it reuses a consumed root, loses both choice kinds or completion goals,

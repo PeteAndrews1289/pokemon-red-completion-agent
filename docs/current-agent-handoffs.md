@@ -24,9 +24,10 @@ descriptive scale-up evidence, not a promotion claim.
 
 Codex now owns the next bounded lane: expand the authenticated non-sealed Red inventory and form an
 action-free plan for **24 additional train plus 12 additional development questions**, bringing the
-totals to 32/16. Ten unused train roots and eight unused development roots already exist, so at
-least fourteen new train and four new development roots are required. Do not weaken root
-independence, candidate diversity, the switch-assisted intervention, or the identity-free feature
+totals to 32/16. After every consumed pilot is excluded, only two unused train roots and four unused
+development roots remain, so at least twenty-two new train and eight new development roots are
+required. Do not weaken root independence, candidate diversity, the switch-assisted intervention,
+or the identity-free feature
 contract to meet the count. Standing owner approval covers routine development collection,
 offline fitting, evaluation, documentation, CI and publication; do not pause for ceremonial
 authorization. Sealed, destructive or materially expanded actions remain separately gated.

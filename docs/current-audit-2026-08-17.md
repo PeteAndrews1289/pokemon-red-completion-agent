@@ -71,9 +71,9 @@ Crystal transfer follows from a one-battle local ranking dose.
 
 ## Remaining risks
 
-- **Coverage is the bottleneck.** The current unused inventory contains ten train and eight
-  development roots. Reaching 32/16 total requires at least fourteen additional train and four
-  additional development roots.
+- **Coverage is the bottleneck.** After every consumed pilot is excluded, the current pool contains
+  two unused train and four unused development roots. Reaching 32/16 total requires at least
+  twenty-two new train and eight new development roots.
 - **The scale dataset must stay independent.** Timing permutations of the same state are useful
   robustness probes but do not replace independent root lineages for the main count.
 - **One probability regressed.** Correct top-1 choices improved, but the update reduced winner
@@ -88,8 +88,8 @@ Crystal transfer follows from a one-battle local ranking dose.
 
 ## Exact next gate
 
-1. Add at least fourteen authenticated train roots and four authenticated development roots to the
-   non-sealed Red inventory; retain the ten/eight existing unused roots.
+1. Add at least twenty-two authenticated train roots and eight authenticated development roots to
+   the non-sealed Red inventory; retain the two/four existing unused roots.
 2. Generate an action-free plan for 24 additional train and 12 additional development questions.
 3. Audit root/state disjointness, both choice kinds, completion-goal coverage, candidate widths,
    semantic diversity, capability feasibility, intervention identity, and private-data leakage.

@@ -128,6 +128,32 @@
     },
     "status": "complete"
   },
+  "post_consumption_pool_audit": {
+    "candidate_options": 48,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "excluded_completed_pilots": 3,
+    "full_game_replays": 0,
+    "model_predictions": 0,
+    "rejection_root_counts": {
+      "all_battle_capabilities_blocked": 16,
+      "all_transition_capabilities_blocked": 8,
+      "qualified_escape_escort_unavailable": 4
+    },
+    "remaining_independent_roots": {
+      "development": 4,
+      "train": 2
+    },
+    "sealed_red_cases_opened": 0,
+    "source": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run": 32033224693,
+      "commit": "2534301a549f33b451981af33dd5c353f84c90c2"
+    },
+    "status": "action_free_reconstruction_complete",
+    "teacher_queries": 0
+  },
   "protected_access": {
     "authority_promotions": 0,
     "consumed_plan_retries": 0,

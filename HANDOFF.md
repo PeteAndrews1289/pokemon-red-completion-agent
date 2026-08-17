@@ -47,8 +47,9 @@ regressed. This earns a development scale-up, not an inferential claim or live a
 The active board is now **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 ·
 authority 0 · transfer 0**. Reach the scale total by collecting 24 additional train and 12
 additional development questions under the same intervention. The current unused inventory has
-only 10 train and 8 development roots, so at least 14 new train roots and 4 new development roots
-must be authenticated without weakening independence or diversity. Start with an action-free
+only 2 train and 4 development roots after all consumed pilots are excluded, so at least 22 new
+train roots and 8 new development roots must be authenticated without weakening independence or
+diversity. Start with an action-free
 inventory expansion and 24+12 rehearsal. Stop if that requires fixed-route knowledge, identity
 leakage, overleveling, teacher labels, stale direct-combat priors, consumed-root reuse, or weaker
 candidate menus. Crystal, sealed Red, live authority, and full replay remain prohibited.
