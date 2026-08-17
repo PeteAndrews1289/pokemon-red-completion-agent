@@ -1,0 +1,109 @@
+{
+  "active_lane": "fresh-goal-manager-composition-design-v1",
+  "admission": {
+    "initial_available_goal_minimum": 2,
+    "initial_menu_must_include": [
+      "acquire_species"
+    ],
+    "initial_menu_must_include_one_of": [
+      "manage_storage",
+      "resupply"
+    ],
+    "model_guided_root_search": false,
+    "prediction_before_root_freeze": false,
+    "prior_goal_manager_contexts_excluded": 81,
+    "prior_root_lineages_excluded": true,
+    "root_partition": "fresh_nonsealed_red_development",
+    "sealed_capture_allowed": false,
+    "selection_basis": "title-neutral semantic admission only"
+  },
+  "authority": {
+    "confidence_floor": 0.8,
+    "goal_selection": "frozen_promoted_red_goal_manager_only",
+    "low_level_execution": "existing_independently_verified_skills_only",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "party_development_authority": false,
+    "teacher_fallback_allowed": false,
+    "teacher_queries_allowed": false
+  },
+  "bounds": {
+    "controller_input_consumes_exact_root": true,
+    "decisions": 3,
+    "maximum_actions_per_decision": 6000,
+    "maximum_episode_actions": 18000,
+    "maximum_episode_frames": 1800000,
+    "maximum_frames_per_decision": 600000,
+    "retry_same_root_after_controller_input": false,
+    "stop_on_first_failed_decision": true
+  },
+  "counter_treatment_before_execution": {
+    "authority_promotions_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "episode_loop": [
+    "observe title-neutral semantic state and living-collection ledger",
+    "enumerate all nine goal kinds and hard-mask unavailable bindings",
+    "require at least two genuinely executable candidates",
+    "select once with the frozen learned goal manager at confidence at least 0.80",
+    "durably record the decision before controller input",
+    "execute only the selected existing bounded skill",
+    "independently verify and durably pair exactly one outcome",
+    "reobserve state and rebuild the next menu"
+  ],
+  "execution_prerequisites": {
+    "authenticated_exact_model_loader": true,
+    "authenticated_existing_skill_bindings": true,
+    "durable_composition_terminal_before_result_claim": true,
+    "fail_before_action_when_decision_write_is_not_durable": true,
+    "fixed_account_root_consumption_ledger": true,
+    "hard_action_and_frame_limiters": true,
+    "independent_action_and_frame_accounting": true,
+    "protected_source_access_attestation": true,
+    "root_safe_runner_required": true
+  },
+  "implementation_status": "contract_and_core_orchestration_frozen_root_claim_runner_not_implemented_no_execution",
+  "pass_rule": {
+    "all_outcomes_independently_verified_success": true,
+    "available_menu_changes_minimum": 1,
+    "available_goal_minimum_each_decision": 2,
+    "collection_never_regresses": true,
+    "decisions_and_outcomes_durably_paired": 3,
+    "fixed_dispatches": 0,
+    "minimum_model_confidence": 0.8,
+    "policy_context_changes_between_decisions": 2,
+    "completion_contract_digest_constant": true,
+    "required_retained_specimens_acquired_minimum": 1,
+    "remaining_required_specimen_digest": "dynamic_only_after_verified_acquisition_or_evolution",
+    "specimen_ledger_digest_before_and_after_required": true,
+    "selected_goal_kinds_distinct": 3,
+    "selected_goal_kinds_must_include": [
+      "acquire_species"
+    ],
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "undeclared_living_specimens_lost": 0
+  },
+  "post_pass_boundary": "A pass supports only the design of a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer. It grants no party authority, Crystal authority, sealed authority, or full-game claim.",
+  "prohibited": [
+    "crystal_execution",
+    "development_outcome_reuse",
+    "expected_goal_or_route_input",
+    "full_game_replay",
+    "model_adaptation",
+    "model_fit",
+    "new_party_mechanic",
+    "route_patch_for_selected_root",
+    "sealed_red_evaluation",
+    "teacher_choice_or_fallback"
+  ],
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.fresh-goal-manager-composition-design.v1",
+  "root_admission_boundary": "Action-free admission can certify only freshness, nonsealed Red identity, initial state integrity, and the initial complete executable menu. Later menus, three distinct selections, acquisition, and replanning remain execution-time falsifiers.",
+  "stop_rule": "Fail and durably retain the first result on low confidence, a singleton menu, fixed dispatch, binding or verifier failure, missing durable join, repeated goal selection, absent required-specimen acquisition, collection regression or undeclared specimen loss, unchanged policy context, no menu change, bound exhaustion, or protected access. Do not retry the same root or patch it into compliance.",
+  "title_role": "Red curriculum composition; not a transfer, promotion, sealed, or completion test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

@@ -1,0 +1,273 @@
+{
+  "active_lane": "protocol-party-representation-collision-audit-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "a replacement party representation has been identified",
+      "a party model has been fit or evaluated",
+      "development outcomes have been opened",
+      "the goal manager has passed a fresh composition episode",
+      "the representation transfers to Crystal",
+      "the agent can complete Red or a living Pokedex"
+    ],
+    "supported": "The consumed v2 train evidence contains outcome-conflicting relationships with exactly identical raw title-neutral candidate contrasts. This cannot distinguish missing semantic context from outcome instability, but either explanation makes the current static party-scorer contract unfit for same-evidence rescue."
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "execution": {
+    "authenticated_reconstruction_attempts": 2,
+    "development_outcome_payloads_decoded": 0,
+    "development_metrics_computed": 0,
+    "evaluation_metrics_computed": 0,
+    "fitted_model_predictions": 0,
+    "first_attempt": "stopped_at_consumed_identity_guard_before_training_outcome_decode",
+    "frozen_prior_forward_scores_used": true,
+    "game_executions": 0,
+    "model_fits": 0,
+    "new_claims_written": 0,
+    "optimizer_steps": 0,
+    "postmortem_reports_completed": 1,
+    "preference_predictions_committed": 0,
+    "private_path_fields": 0,
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "input_bindings": {
+    "consumed_artifact_manifest_sha256": "32f29a1de9612567642f99d15d2bae4b0ee2ee4ff1ff7dcf0bdb598ca2c32edf",
+    "consumed_artifact_records": 3,
+    "consumed_claim_marker_sha256": "3f4b79c64d8225a7176aad9695a9ecbfdcfd325d0f75eebc48b00de81077d4ab",
+    "consumed_gate_identity_sha256": "7a148a5d0f5b7bd1eebb4a8059ac92185c4281e36b2b5e0dea94352f08b986a3",
+    "consumed_gate_result_receipt_sha256": "0511c5ef31234d3f3d43a73d88633736cbc54a6c7b276653e7d77fe6259c927c",
+    "postmortem_source_sha256": "be98d689a7a396bf1941f34f6b5e39fbe5060a2cca59cce53d6947ee46d200e0",
+    "training_question_set_sha256": "b1949d0b2e0c429bc7c2b8389050499ac336b0c2f62dade7565e0471d28986fe",
+    "training_questions": 22
+  },
+  "recorded_on": "2026-08-17",
+  "result": {
+    "action_summary": {
+      "trainee": {
+        "contradictory_relationships": 25,
+        "full_column_normalized_rank": 14,
+        "leave_one_root_out_ranks": [
+          13,
+          14,
+          14,
+          12,
+          12,
+          14,
+          13,
+          12,
+          13,
+          14,
+          13,
+          14,
+          12
+        ],
+        "pairwise_rows": 39,
+        "zero_portable_columns": [
+          "portable.goal_alignment",
+          "portable.venue_quality",
+          "portable.venue_safety",
+          "portable.venue_cost",
+          "portable.goal_balance.venue_quality",
+          "portable.goal_balance.venue_safety",
+          "portable.goal_balance.venue_cost",
+          "portable.goal_evolution.venue_quality",
+          "portable.goal_evolution.venue_safety",
+          "portable.goal_evolution.venue_cost",
+          "portable.goal_collection.venue_quality",
+          "portable.goal_collection.venue_safety",
+          "portable.goal_collection.venue_cost",
+          "portable.goal_role_coverage.venue_quality",
+          "portable.goal_role_coverage.venue_safety",
+          "portable.goal_role_coverage.venue_cost"
+        ]
+      },
+      "venue": {
+        "contradictory_relationships": 3,
+        "full_column_normalized_rank": 4,
+        "leave_one_root_out_ranks": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "pairwise_rows": 9,
+        "zero_portable_columns": [
+          "portable.goal_alignment",
+          "portable.venue_cost",
+          "portable.goal_balance.venue_quality",
+          "portable.goal_balance.venue_safety",
+          "portable.goal_balance.venue_cost",
+          "portable.goal_evolution.venue_cost",
+          "portable.goal_collection.venue_cost",
+          "portable.goal_role_coverage.venue_cost"
+        ]
+      }
+    },
+    "classification_cluster_counts": {
+      "frozen_projection_compression": 0,
+      "raw_semantics_aliased_or_outcome_instability": 6,
+      "tolerance_only_projected_near_collision": 0
+    },
+    "collision_cluster_count": 6,
+    "collision_clusters": [
+      {
+        "action": "venue",
+        "cluster_ordinal": 1,
+        "conflicting_relationships": 2,
+        "distinct_roots": 3,
+        "goal_row_counts": {
+          "collection": 3
+        },
+        "menus_affected": 3,
+        "row_count": 3,
+        "target_row_counts": {
+          "loss": 1,
+          "win": 2
+        }
+      },
+      {
+        "action": "trainee",
+        "cluster_ordinal": 2,
+        "conflicting_relationships": 5,
+        "distinct_roots": 3,
+        "goal_row_counts": {
+          "balance": 6
+        },
+        "menus_affected": 3,
+        "row_count": 6,
+        "target_row_counts": {
+          "loss": 1,
+          "win": 5
+        }
+      },
+      {
+        "action": "trainee",
+        "cluster_ordinal": 3,
+        "conflicting_relationships": 1,
+        "distinct_roots": 1,
+        "goal_row_counts": {
+          "balance": 2
+        },
+        "menus_affected": 1,
+        "row_count": 2,
+        "target_row_counts": {
+          "loss": 1,
+          "win": 1
+        }
+      },
+      {
+        "action": "trainee",
+        "cluster_ordinal": 4,
+        "conflicting_relationships": 1,
+        "distinct_roots": 1,
+        "goal_row_counts": {
+          "balance": 2
+        },
+        "menus_affected": 1,
+        "row_count": 2,
+        "target_row_counts": {
+          "loss": 1,
+          "win": 1
+        }
+      },
+      {
+        "action": "trainee",
+        "cluster_ordinal": 5,
+        "conflicting_relationships": 18,
+        "distinct_roots": 9,
+        "goal_row_counts": {
+          "balance": 9
+        },
+        "menus_affected": 9,
+        "row_count": 9,
+        "target_row_counts": {
+          "loss": 6,
+          "win": 3
+        }
+      },
+      {
+        "action": "venue",
+        "cluster_ordinal": 6,
+        "conflicting_relationships": 1,
+        "distinct_roots": 2,
+        "goal_row_counts": {
+          "role_coverage": 2
+        },
+        "menus_affected": 2,
+        "row_count": 2,
+        "target_row_counts": {
+          "loss": 1,
+          "win": 1
+        }
+      }
+    ],
+    "contradictory_pairwise_relationships": 28,
+    "exact_raw_semantic_conflicting_relationships": 28,
+    "exact_projected_conflicting_relationships": 28,
+    "full_column_normalized_singular_values": {
+      "trainee": [
+        3.8560657962655265,
+        2.056395096637849,
+        0.678330001887791,
+        0.6017794593789176,
+        0.2297747856156076,
+        0.13035840373851387,
+        0.09774787531089395,
+        0.017472395562907292,
+        0.006961245082697244,
+        0.004868945597918821,
+        0.0018640716718051663,
+        0.0005079527393755217,
+        0.00026287947701304575,
+        0.00008654395587703753
+      ],
+      "venue": [
+        4.880677681916834,
+        1.4360465373224747,
+        1.4142135623730947,
+        0.34169534366602206
+      ]
+    },
+    "maximum_conflicting_projected_distance": 0.0,
+    "maximum_conflicting_raw_semantic_distance": 0.0,
+    "status": "complete_no_optimizer",
+    "venue_menu_ranges": {
+      "candidate_count_each": 2,
+      "goal_menu_counts": {
+        "collection": 3,
+        "evolution": 3,
+        "role_coverage": 3
+      },
+      "identical_across_all_nine_menus": {
+        "cost": 0.0,
+        "quality": 0.13333333333333336,
+        "safety": 0.2222222222222222
+      }
+    }
+  },
+  "source_verification": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run": 32072706947,
+    "commit": "1395e446b9b2188c656e6bafbb910322e725777b"
+  },
+  "status": "collision_postmortem_complete_party_v2_retired",
+  "title_role": "Red curriculum diagnosis; not a model result, authority test, or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

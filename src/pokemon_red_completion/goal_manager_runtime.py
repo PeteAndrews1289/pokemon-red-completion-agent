@@ -1,9 +1,10 @@
 """Causal execution boundary for portable high-level goal choices.
 
 The model chooses only a semantic candidate index.  This module rebinds that
-index to one adapter-private bounded skill, durably records the decision before
-the skill can act, and lets a separate verifier determine the outcome.  The
-executor cannot manufacture its own successful label.
+index to one adapter-private bounded skill, records the decision before the
+skill can act, and lets a separate verifier determine the outcome.  Callers
+that require fail-closed durability must enable the durable-decision guard.
+The executor cannot manufacture its own successful label.
 """
 
 from __future__ import annotations
@@ -175,6 +176,7 @@ class CompletionFirstGoalTeacher:
 
 GoalExecutor = Callable[[], GoalExecutionReport]
 GoalVerifier = Callable[[GoalExecutionReport], GoalVerification]
+GoalSelectionGuard = Callable[[BoundGoalSelection], None]
 
 
 @dataclass(frozen=True, slots=True)
@@ -295,6 +297,8 @@ def execute_goal_manager_decision(
     binding_set: GoalBindingSet,
     authority: GoalDecisionAuthority,
     trajectory: GoalManagerTrajectoryObserver,
+    require_durable_decision: bool = False,
+    selection_guard: GoalSelectionGuard | None = None,
 ) -> GoalManagerExecutionResult:
     """Choose, record, execute and independently verify exactly one goal."""
 
@@ -304,6 +308,10 @@ def execute_goal_manager_decision(
         raise TypeError("binding_set must be a GoalBindingSet")
     if not isinstance(trajectory, GoalManagerTrajectoryObserver):
         raise TypeError("trajectory must be a GoalManagerTrajectoryObserver")
+    if type(require_durable_decision) is not bool:  # noqa: E721
+        raise TypeError("require_durable_decision must be a bool")
+    if selection_guard is not None and not callable(selection_guard):
+        raise TypeError("selection_guard must be callable")
     question = trajectory.ordered_question(situation, binding_set.opportunities)
     selected = authority.select(question)
     if isinstance(selected, BoundGoalSelection):
@@ -321,9 +329,17 @@ def execute_goal_manager_decision(
         bound = bind_goal_selection(question, selected_index)
     except GoalManagerError as error:
         raise GoalManagerRuntimeError(str(error)) from error
+    if selection_guard is not None:
+        selection_guard(bound)
     binding = binding_set.require(bound.binding_ref)
     pending = trajectory.record_selection(question, selected_index)
     decision_recorded = trajectory.pending_was_recorded
+    if require_durable_decision and not decision_recorded:
+        trajectory.abandon_unrecorded_selection(pending)
+        trajectory.require_settled()
+        raise GoalManagerRuntimeError(
+            "goal decision was not durably recorded before execution"
+        )
     execution: GoalExecutionReport | None = None
     try:
         execution = binding.execute()

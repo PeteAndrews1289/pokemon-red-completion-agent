@@ -323,9 +323,9 @@ class GoalManagerTrajectoryObserver:
             )
         _validate_outcome(status, failure_reason)
         decision_was_recorded = self._pending_was_recorded
-        self._pending = None
-        self._pending_was_recorded = False
         if not decision_was_recorded:
+            self._pending = None
+            self._pending_was_recorded = False
             return False
         try:
             self.sink.record_event(
@@ -340,7 +340,26 @@ class GoalManagerTrajectoryObserver:
         except Exception:
             self.recorder.note_instrumentation_failure()
             return False
+        self._pending = None
+        self._pending_was_recorded = False
         return True
+
+    def abandon_unrecorded_selection(
+        self,
+        pending: PendingGoalManagerDecision,
+    ) -> None:
+        """Settle a choice whose decision write failed before any skill could act."""
+
+        if self._pending is None or pending != self._pending:
+            raise GoalManagerTrajectoryError(
+                "unrecorded goal-manager selection does not match the pending decision"
+            )
+        if self._pending_was_recorded:
+            raise GoalManagerTrajectoryError(
+                "a durably recorded goal-manager selection cannot be abandoned"
+            )
+        self._pending = None
+        self._pending_was_recorded = False
 
     def require_settled(self) -> None:
         if self._pending is not None:

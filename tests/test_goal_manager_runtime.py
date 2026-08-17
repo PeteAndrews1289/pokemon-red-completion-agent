@@ -17,10 +17,14 @@ from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
     GoalExecutionReport,
+    GoalManagerRuntimeError,
     GoalVerification,
     execute_goal_manager_decision,
 )
-from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectoryObserver
+from pokemon_red_completion.goal_manager_trajectory import (
+    GoalManagerTrajectoryError,
+    GoalManagerTrajectoryObserver,
+)
 from pokemon_red_completion.trajectory import (
     InMemoryTrajectorySink,
     RecordingExecutor,
@@ -194,6 +198,87 @@ def test_runtime_records_a_failure_if_the_bound_executor_raises() -> None:
         "status": "failed",
     }
     assert "implementation detail" not in json.dumps(sink.events[0].to_dict())
+
+
+def test_required_durable_decision_stops_before_controller_input(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trajectory, sink = _trajectory()
+    acted = False
+
+    def execute() -> GoalExecutionReport:
+        nonlocal acted
+        acted = True
+        return GoalExecutionReport(1, 1, {})
+
+    monkeypatch.setattr(
+        RecordingExecutor,
+        "record_standalone_decision",
+        lambda _self, _decision: False,
+    )
+    selected = _binding(
+        GoalKind.ADVANCE_STORY,
+        execute=execute,
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+    other = _binding(
+        GoalKind.RESTORE_TEAM,
+        execute=lambda: GoalExecutionReport(0, 0, {}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+
+    with pytest.raises(GoalManagerRuntimeError, match="not durably recorded"):
+        execute_goal_manager_decision(
+            situation=_situation(),
+            binding_set=GoalBindingSet(
+                (selected.opportunity, other.opportunity),
+                (selected, other),
+            ),
+            authority=_SelectKind(GoalKind.ADVANCE_STORY),
+            trajectory=trajectory,
+            require_durable_decision=True,
+        )
+
+    assert acted is False
+    assert trajectory.pending_decision is None
+    assert not sink.decisions
+    assert not sink.events
+
+
+def test_failed_outcome_write_remains_unsettled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trajectory, sink = _trajectory()
+
+    def reject_event(_self: InMemoryTrajectorySink, _event: object) -> None:
+        raise OSError("simulated durable outcome failure")
+
+    monkeypatch.setattr(InMemoryTrajectorySink, "record_event", reject_event)
+    selected = _binding(
+        GoalKind.ADVANCE_STORY,
+        execute=lambda: GoalExecutionReport(1, 1, {}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+    other = _binding(
+        GoalKind.RESTORE_TEAM,
+        execute=lambda: GoalExecutionReport(0, 0, {}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+
+    with pytest.raises(GoalManagerTrajectoryError, match="no consumed outcome"):
+        execute_goal_manager_decision(
+            situation=_situation(),
+            binding_set=GoalBindingSet(
+                (selected.opportunity, other.opportunity),
+                (selected, other),
+            ),
+            authority=_SelectKind(GoalKind.ADVANCE_STORY),
+            trajectory=trajectory,
+        )
+
+    assert trajectory.pending_decision is not None
+    assert len(sink.decisions) == 1
+    assert not sink.events
 
 
 def test_completion_first_teacher_changes_choice_with_same_menu() -> None:
