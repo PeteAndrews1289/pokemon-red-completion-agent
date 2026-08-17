@@ -558,12 +558,25 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
         ),
         current_ast_sha256=(
-            "c004a30906b0f936fcd93ceb6bb72f19cbe6664d942ba6ec2158456f11e0f71c"
+            "22f28939bc52e61373cc6ea551c66857c46524898280402f255dad1a6b58d299"
         ),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
-            "default"
+            "default-and-unused-live-guard-fallback-plus-ten-of-fifty-heals-"
+            "preserve-measured-path"
+        ),
+    ),
+    _SourceCompatibilityWaiver(
+        element_id="red.route-11-heal-and-return",
+        observed_ast_sha256=(
+            "5f96285852f9ed925330be02c109b0a8f57d0c9756962df1c84963c7df586299"
+        ),
+        current_ast_sha256=(
+            "ef05d302d3d38aa43ae8949bf78ba882d130c40ae8271ea9a3fe002416e834c5"
+        ),
+        justification_id=(
+            "optional-ground-transition-is-unset-on-historical-route-11-path"
         ),
     ),
     _SourceCompatibilityWaiver(
@@ -572,11 +585,11 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "cb1bc40d3a08fce7f511936b5d017dfe3ab244d3ecffdc9cc59f69e84c08bc47"
         ),
         current_ast_sha256=(
-            "a336a07ca62c922f769c9a40c8384f19490aa0014d12ec97bd6e4815f1ded4c1"
+            "cc56ace445c78eb815661afadf1fe9ac19d034d6fcb7b1a6c8cc0f95b63f4552"
         ),
         justification_id=(
             "additional-fly-boundary-normalization-preserves-historical-route-"
-            "11-and-cinnabar-nurse-paths"
+            "11-and-cinnabar-nurse-paths-and-celadon-only-branch-is-unreached"
         ),
     ),
     _SourceCompatibilityWaiver(

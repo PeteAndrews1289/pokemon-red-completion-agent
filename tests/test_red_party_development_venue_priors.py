@@ -299,7 +299,7 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_ten_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_eleven_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == (
@@ -315,19 +315,20 @@ def test_source_compatibility_recomputes_exact_bundles_and_ten_waivers() -> None
         "core.project-venue-choice-set",
         "module-assignments.blaine",
         "module-assignments.training-venue",
+        "red.route-11-heal-and-return",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
         "red.training-dig-to-vermilion",
         "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "62c927593fcc27c9dbb874ea38c4d20d4fcc894fd1ea2106ef97b3cf94707ab6"
+        "c08ea57383e25da4f17a69ff2c4ae1e8662c4a1af0a19c454250fa30b11b0774"
     )
     assert attestation.current_elements_sha256 == (
-        "207c5794759db5e157ce976e8ebf8b72931fe6faa7da5284182bb847d03a08f2"
+        "c9ab96cef0402386953f0bb8d74b9703ed8cb93523545a317b9f27cc2e7459fb"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "c298f591ad9c05816c7521b8ab843b5141c1e2f7c6c419e4b117f635e28e7c14"
+        "2059993a8dea16ddca3e34ec94a018b920d85bff322c9f83122d680655ce2c50"
     )
 
 
@@ -783,16 +784,16 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "cf2c6be5946cf560051c8bde8ddeff0a1fb2d726e65e1557b05731ca16481b70"
+        "a340330c60c5fb429824f858d56d1bf1abca0f110a8bdfdabb556ccd4ac1be32"
     )
     assert contract.recovery_execution_sha256 == (
-        "de48457fea07d7f8fefec683d0f48bc3679cfb3f10959b9834791f46e2504740"
+        "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
     assert contract.battle_timing_sha256 == (
-        "c02aecda4093bf3f49a029dd9ce1823aa4163d5ef7f8b7addfa7ef186f7cba79"
+        "aa79953c3cc4fde7e630462b444d48d4138d23df7d44603f1dada14e505549ff"
     )
     assert contract.accounting_sha256 == (
-        "b0d9aac12951e68958cf086c4602d277a7775e2676506e24d062dd28fe1bf874"
+        "3c984a75f571e722ad484ab66bbe7ad5ac13df1aa537629bfdc115045c5a3406"
     )
 
 
