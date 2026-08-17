@@ -1,5 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: lane one stays red
+
+Open on the **14 QUESTIONS → 55 LANES** board from the prior scene. Light the exact authorization
+locks, then let lane 1 publish **CLAIMED**. Keep the controller cable dark. The observer asks for
+all PC boxes; draw the frame-budget proxy between it and cartridge RAM, then make the runtime
+capability check disappear behind the proxy. Stamp the lane **INVALID BEFORE INPUT—NO RETRY**.
+
+Do not reset the board. Leave lane 1 red and shift the counter to **1 TERMINAL / 0 MEASURED / 54
+UNTOUCHED**. Show **TRAIN 32/32 UNTOUCHED** and **DEVELOPMENT 22/23 UNTOUCHED**. Narration:
+**“A one-shot experiment only means something if a software bug is not allowed to reroll the
+sample.”**
+
+Now split the repaired connection into two labeled cables: **RAW READ-ONLY OBSERVATION** and
+**FRAME-BOUNDED CONTROLLER**. Run the preflight through the same connector and hold **CONTROLLER
+FRAMES 0** on screen. Wrap the old red lane in an immutable V1 envelope; feed that envelope into a
+V2 plan that still shows all 55 identities but unlocks only 54. Try to claim lane 1 again and show
+the constructor reject it.
+
+End on the new gates: **FULL TEST → PUBLISH → EXACT CI → FREEZE V2 → ZERO-INPUT PREFLIGHT → CLAUDE
+ATTACK → NEW OWNER AUTHORIZATION**. Final board: **MEASURED 0 · INVALID 1 · FITS 0 · AUTHORITY 0**.
+This scene should make the apparent setback part of the central story: the project values evidence
+that can embarrass it more than a perfect progress bar.
+
 ## August 16 scene: fifty-five lanes, no reroll button
 
 Start with the fourteen face-down cards, then fan every candidate into its own lane until the board

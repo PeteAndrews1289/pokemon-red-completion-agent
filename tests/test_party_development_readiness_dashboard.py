@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 from test_party_development_outcome_campaign import _plan
+from test_party_development_outcome_lineage import _publish_invalid, _successor
 from test_party_development_outcome_results import _result
 
 from pokemon_red_completion.party_development_outcome_campaign import (
@@ -438,6 +439,33 @@ def test_campaign_dashboard_tracks_the_one_shot_trial_ledger(tmp_path: Path) -> 
     assert "No retry" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_campaign_dashboard_projects_successor_tombstone_without_retry(
+    tmp_path: Path,
+) -> None:
+    predecessor = _plan()
+    store = _campaign_store(tmp_path)
+    _publish_invalid(store, predecessor, predecessor.assignments[0])
+    successor = _successor(predecessor, store)
+
+    snapshot = SCRIPT["_campaign_snapshot"](
+        _campaign_dashboard_base(),
+        successor,
+        store,
+    ).public_dict()
+
+    assert snapshot["run_status"] == "waiting"
+    assert "Next unclaimed trial 2/55" in snapshot["location"]
+    assert snapshot["stage_progress"] == 1 / 55
+    assert snapshot["experiment"]["zero_shot"] == {  # type: ignore[index]
+        "completed": 1,
+        "total": 55,
+    }
+    encoded = json.dumps(snapshot, sort_keys=True, ensure_ascii=False)
+    assert "preserves 1 consumed trial" in encoded
+    assert "54 untouched identities" in encoded
+    assert "invalid 1" in encoded
 
 
 def test_live_dashboard_projects_path_free_progress_and_terminal() -> None:

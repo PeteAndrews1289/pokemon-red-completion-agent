@@ -371,6 +371,40 @@ class PartyDevelopmentOutcomeTrialResult:
                 "measured party-development result exceeds or misses its fixed dose"
             )
 
+    def require_within_campaign_lineage(
+        self,
+        plan: PartyDevelopmentOutcomeCampaignPlan,
+        assignment: PartyDevelopmentOutcomeTrialAssignment,
+    ) -> None:
+        """Accept a current result or one exactly bound inherited terminal."""
+
+        if self.campaign_plan_sha256 == plan.plan_sha256:
+            self.require_within_plan(plan, assignment)
+            return
+        inherited = next(
+            (
+                item
+                for item in plan.inherited_terminals
+                if item.assignment_sha256 == assignment.assignment_sha256
+            ),
+            None,
+        )
+        if (
+            inherited is None
+            or assignment not in plan.assignments
+            or inherited.origin_campaign_plan_sha256
+            != self.campaign_plan_sha256
+            or inherited.trial_id != self.trial_id
+            or inherited.assignment_sha256 != self.assignment_sha256
+            or inherited.candidate_index != self.candidate_index
+            or inherited.status is not self.status
+            or inherited.claim_sha256 != self.claim_sha256
+            or inherited.result_sha256 != self.result_sha256
+        ):
+            raise PartyDevelopmentOutcomeResultError(
+                "party-development outcome result is outside its campaign lineage"
+            )
+
     def candidate_outcome(self) -> CandidateOutcome:
         return CandidateOutcome(
             status=self.status,
@@ -585,7 +619,7 @@ def assemble_party_development_outcome_examples(
             raise PartyDevelopmentOutcomeResultError(
                 "party-development result is outside the campaign"
             )
-        result.require_within_plan(plan, assignment)
+        result.require_within_campaign_lineage(plan, assignment)
         if result.assignment_sha256 in by_assignment:
             raise PartyDevelopmentOutcomeResultError(
                 "party-development results repeat an assignment"

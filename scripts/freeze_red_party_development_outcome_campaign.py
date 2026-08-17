@@ -25,7 +25,17 @@ from pokemon_red_completion.party_development_frozen_catalog import (  # noqa: E
 )
 from pokemon_red_completion.party_development_outcome_campaign import (  # noqa: E402
     RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT,
+    PartyDevelopmentOutcomeCampaignPlan,
+    PartyDevelopmentOutcomeCampaignPredecessor,
+    PartyDevelopmentOutcomeInheritedTerminal,
     freeze_party_development_outcome_campaign,
+)
+from pokemon_red_completion.party_development_outcome_lineage import (  # noqa: E402
+    inspect_predecessor_campaign,
+)
+from pokemon_red_completion.private_artifacts import (  # noqa: E402
+    PrivateArtifactRoot,
+    open_private_root,
 )
 from pokemon_red_completion.provenance import (  # noqa: E402
     canonical_sha256,
@@ -76,6 +86,12 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--frozen-catalog-file-sha256", required=True)
     parser.add_argument("--input-audit-receipt", type=Path, required=True)
     parser.add_argument("--input-audit-receipt-file-sha256", required=True)
+    parser.add_argument("--predecessor-campaign-plan", type=Path, default=None)
+    parser.add_argument(
+        "--predecessor-campaign-plan-file-sha256",
+        default=None,
+    )
+    parser.add_argument("--private-artifact-root", type=Path, default=None)
     parser.add_argument("--exact-ci-run", type=int, required=True)
     parser.add_argument("--exact-ci-attempt", type=int, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -345,6 +361,81 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         catalog=catalog,
         catalog_file_sha256=args.frozen_catalog_file_sha256,
     )
+    predecessor_requested = any(
+        value is not None
+        for value in (
+            args.predecessor_campaign_plan,
+            args.predecessor_campaign_plan_file_sha256,
+            args.private_artifact_root,
+        )
+    )
+    predecessor_plan: PartyDevelopmentOutcomeCampaignPlan | None = None
+    predecessor: PartyDevelopmentOutcomeCampaignPredecessor | None = None
+    inherited_terminals: tuple[PartyDevelopmentOutcomeInheritedTerminal, ...] = ()
+    predecessor_path: Path | None = None
+    lineage_store: PrivateArtifactRoot | None = None
+    if predecessor_requested:
+        if (
+            not isinstance(args.predecessor_campaign_plan, Path)
+            or not isinstance(
+                args.predecessor_campaign_plan_file_sha256, str
+            )
+            or re.fullmatch(
+                r"[0-9a-f]{64}",
+                args.predecessor_campaign_plan_file_sha256,
+            )
+            is None
+            or not isinstance(args.private_artifact_root, Path)
+        ):
+            raise RedPartyDevelopmentOutcomeFreezeError(
+                "successor freeze needs the exact predecessor plan and private root"
+            )
+        predecessor_path = _require_external(
+            args.predecessor_campaign_plan,
+            subject="predecessor campaign plan",
+        )
+        predecessor_document, _ = _load_private_json(
+            predecessor_path,
+            expected_sha256=args.predecessor_campaign_plan_file_sha256,
+            subject="predecessor campaign plan",
+        )
+        predecessor_plan = PartyDevelopmentOutcomeCampaignPlan.from_private_dict(
+            predecessor_document
+        )
+        if (
+            predecessor_plan.frozen_catalog_file_sha256
+            != args.frozen_catalog_file_sha256
+            or predecessor_plan.frozen_catalog_sha256 != catalog.catalog_sha256
+            or predecessor_plan.prospective_catalog_sha256
+            != catalog.prospective_catalog_sha256
+            or predecessor_plan.frozen_catalog_source_commit
+            != catalog.source_commit
+            or predecessor_plan.frozen_catalog_source_bundle_sha256
+            != catalog.source_bundle_sha256
+            or predecessor_plan.rom_sha256 != catalog.rom_sha256
+            or predecessor_plan.input_audit_receipt_file_sha256
+            != args.input_audit_receipt_file_sha256
+            or predecessor_plan.input_audit_result_sha256
+            != canonical_sha256(audit_document)
+        ):
+            raise RedPartyDevelopmentOutcomeFreezeError(
+                "successor predecessor differs from the frozen catalog"
+            )
+        private_root_path = _require_external(
+            args.private_artifact_root,
+            subject="private artifact root",
+        )
+        lineage_store = open_private_root(
+            private_root_path,
+            repository_root=PROJECT_ROOT,
+        )
+        predecessor, inherited_terminals = inspect_predecessor_campaign(
+            predecessor_plan,
+            predecessor_plan_file_sha256=(
+                args.predecessor_campaign_plan_file_sha256
+            ),
+            store=lineage_store,
+        )
     runner_sha256 = hashlib.sha256(_RUNNER.read_bytes()).hexdigest()
     plan = freeze_party_development_outcome_campaign(
         catalog,
@@ -356,6 +447,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         frozen_catalog_file_sha256=args.frozen_catalog_file_sha256,
         input_audit_receipt_file_sha256=args.input_audit_receipt_file_sha256,
         input_audit_result_sha256=canonical_sha256(audit_document),
+        predecessor=predecessor,
+        inherited_terminals=inherited_terminals,
     )
     payload = (
         json.dumps(
@@ -372,9 +465,29 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         args.frozen_catalog_file_sha256,
         args.input_audit_receipt.resolve(): args.input_audit_receipt_file_sha256,
     }
+    if predecessor_path is not None:
+        protected_files[predecessor_path] = (
+            args.predecessor_campaign_plan_file_sha256
+        )
     _require_protected_inputs_unchanged(protected_files)
     _write_exclusive(args.output, payload)
     _require_protected_inputs_unchanged(protected_files)
+    if predecessor_plan is not None:
+        assert lineage_store is not None
+        observed_predecessor, observed_terminals = inspect_predecessor_campaign(
+            predecessor_plan,
+            predecessor_plan_file_sha256=(
+                args.predecessor_campaign_plan_file_sha256
+            ),
+            store=lineage_store,
+        )
+        if (
+            observed_predecessor != predecessor
+            or observed_terminals != inherited_terminals
+        ):
+            raise RedPartyDevelopmentOutcomeFreezeError(
+                "successor lineage changed while its plan was frozen"
+            )
     # Retain the bytes used for typed parsing as part of the same consistency
     # assertion; this also makes a future loader refactor fail closed.
     if (

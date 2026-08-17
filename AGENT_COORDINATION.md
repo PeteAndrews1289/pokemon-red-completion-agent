@@ -1,5 +1,21 @@
 # Three-agent coordination
 
+> **2026-08-16 V1 failure / V2 successor checkpoint — highest active checkpoint:** The exact
+> authorized V1 outcome campaign consumed one development trial and stopped before controller
+> construction because its frame-budget proxy hid the read-only cartridge-RAM protocol required
+> by full-box observation. The immutable invalid terminal remains; trial 1 cannot retry; no later
+> identity was claimed. All 32 train trials and 22 of 23 development trials remain untouched.
+>
+> Codex owns the bounded repair and publication. Observation now keeps the raw read-only emulator
+> port while only input receives the frame budget. A generic successor binds every predecessor
+> claim/terminal digest and makes inherited assignments unclaimable. Codex must pass the full gate,
+> publish, obtain exact-head CI, freeze V2 externally and complete a zero-input preflight. Claude's
+> next role is a narrow read-only attack on port separation, predecessor completeness, record-ID
+> isolation and the 1+54 denominator before the owner is asked for fresh exact authority.
+> Antigravity remains deferred until measured development evidence exists. No reviewer may execute,
+> replace the lost menu or grant authority. Honest board: **measured 0 · invalid 1 · remaining 54
+> (train 32, development 22) · fits 0 · authority 0**.
+
 > **2026-08-16 collector implementation checkpoint — highest active checkpoint:** Codex has built
 > the exact 14-question / 55-trial completion-aware outcome campaign. Every candidate receives a
 > fixed four-battle clone dose; claims precede input; failures remain invalid; interruptions become

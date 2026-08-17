@@ -6,6 +6,54 @@ to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 
+## Current checkpoint: one V1 tombstone; publish and authorize the 54-trial successor
+
+The first authorized outcome campaign stopped correctly on its first candidate. Its exact V1 plan
+was file SHA `e8647ac8…`, semantic SHA `8742a06e…`, source `4415667` and CI run `31978843670`
+attempt 1. One development trial was durably claimed, initial completion-aware observation failed
+before controller construction, one invalid terminal was retained, and the runner stopped without
+claiming trial 2. The consumed identity cannot retry. All 32 train trials remain untouched; 22 of
+23 development trials remain untouched. See the
+[path-free failure receipt](evidence/red-party-development-outcome-campaign-v1-failure-2026-08-16.json).
+
+The state was valid. The frame-budget proxy hid the cartridge-RAM capability required for all-box
+observation from a runtime protocol check. The bounded repair separates ports: semantic and party
+observation retain the raw emulator's complete read-only surface, while only the executor receives
+the frame-budget controller. The same port constructor now runs in the official read-only
+preflight and must advance zero controller frames.
+
+Recovery is a new prospectively frozen campaign, never a rewrite of V1. The successor contract:
+
+1. binds the exact predecessor plan file and semantic digest;
+2. reconstructs every consumed claim/terminal from immutable sealed-record and manifest digests;
+3. keeps all fourteen questions and all fifty-five assignments in the denominator;
+4. makes inherited assignments structurally unclaimable;
+5. gives untouched trials a successor-plan-specific record namespace; and
+6. requires fresh exact owner authorization for only the remaining identities.
+
+The active sequence is:
+
+1. **Complete locally:** repair the observation/control boundary, generic successor lineage,
+   dashboard projection and ROM-free falsifiers. The full gate passes 3,924 tests, with three
+   integration tests deselected and one expected xfail.
+2. **Active:** run the complete gate, publish the repair and require exact-head green CI.
+3. Freeze one external V2 successor from the immutable V1 plan, claim and invalid terminal. It must
+   report 1 inherited invalid, 54 remaining, 32 train and 22 development.
+4. Run read-only 14-question / 55-binding preflight under the exact V2 source and CI. It must reopen
+   the full all-box semantic observation through the execution port constructor with zero input.
+5. Give Claude the path-free plan/preflight/failure packet for a narrow authorization audit.
+6. Ask the owner for one new authorization naming V2's plan-file SHA, semantic SHA, source, CI
+   run/attempt, one inherited nonretryable tombstone and 54 remaining one-shot trials.
+7. Collect only those 54. If all train menus measure, fit once on the eight train examples. Report
+   at most five complete development menus; never replace the lost menu.
+8. Only after the train-only fit and descriptive development result should the same representation
+   receive its smallest Crystal transfer test. Learned live authority remains zero until that gate.
+
+Stop if trial 1 can be claimed, an inherited record digest can be changed, V1 can run under the new
+source, preflight advances a controller frame, or the successor lacks exact source/CI/plan binding.
+Honest counters are **outcomes 0 measured / 1 invalid / 55 total · train usable potential 8/8 ·
+development usable potential 5/6 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
+
 ## Current checkpoint: collector implemented; publish, bind and preflight it
 
 The source now contains the missing 14-question / 55-trial outcome campaign. One question becomes

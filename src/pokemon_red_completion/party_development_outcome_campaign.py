@@ -29,10 +29,14 @@ from pokemon_red_completion.party_development_outcomes import (
 from pokemon_red_completion.party_development_rank import PartyDevelopmentGoal
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
+from pokemon_red_completion.scenario_outcomes import OutcomeEvidenceStatus
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 RED_PARTY_DEVELOPMENT_OUTCOME_CAMPAIGN_SCHEMA = (
     "pokemon.red.party-development-outcome-campaign-plan.v1"
+)
+RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CAMPAIGN_SCHEMA = (
+    "pokemon.red.party-development-outcome-campaign-plan.v2"
 )
 RED_PARTY_DEVELOPMENT_OUTCOME_ASSIGNMENT_SCHEMA = (
     "pokemon.red.party-development-outcome-trial-assignment.v1"
@@ -43,11 +47,18 @@ RED_PARTY_DEVELOPMENT_OUTCOME_CAMPAIGN_SUMMARY_SCHEMA = (
 RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_CLAIM_SCHEMA = (
     "pokemon.red.party-development-outcome-trial-claim.v1"
 )
+RED_PARTY_DEVELOPMENT_OUTCOME_PREDECESSOR_SCHEMA = (
+    "pokemon.red.party-development-outcome-predecessor.v1"
+)
+RED_PARTY_DEVELOPMENT_OUTCOME_INHERITED_TERMINAL_SCHEMA = (
+    "pokemon.red.party-development-outcome-inherited-terminal.v1"
+)
 
 RED_PARTY_DEVELOPMENT_OUTCOME_QUESTION_COUNT = 14
 RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT = 55
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
+_SAFE_RECORD_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,79}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
@@ -168,6 +179,24 @@ RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT = {
 }
 RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT_SHA256 = canonical_sha256(
     RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT
+)
+
+RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT = {
+    "schema": "pokemon.red.party-development-outcome-successor-contract.v1",
+    "purpose": "continue_only_candidate_trials_never_claimed_by_the_lineage",
+    "predecessor_rule": "bind_the_exact_immediate_predecessor_plan_file_and_semantic_digest",
+    "inheritance_rule": (
+        "bind_every_predecessor_claim_and_terminal_by_typed_identity_and_sealed_record_digest"
+    ),
+    "execution_rule": "inherited_assignments_are_never_claimable_or_executable",
+    "measurement_rule": "measured_predecessor_terminals_remain_original_evidence",
+    "failure_rule": "invalid_or_censored_predecessor_terminals_remain_unusable_tombstones",
+    "denominator_rule": "retain_all_fourteen_questions_and_all_fifty_five_assignments",
+    "authorization_rule": "a_successor_requires_a_new_exact_owner_authorization",
+    "retry_after_inheritance": False,
+}
+RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT_SHA256 = canonical_sha256(
+    RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT
 )
 
 
@@ -360,8 +389,318 @@ class PartyDevelopmentOutcomeTrialAssignment:
 
 
 @dataclass(frozen=True, slots=True)
+class PartyDevelopmentOutcomeCampaignPredecessor:
+    """Exact immediate campaign whose consumed trials a successor inherits."""
+
+    plan_file_sha256: str
+    plan_sha256: str
+    source_commit: str
+    source_bundle_sha256: str
+    exact_ci_run: int
+    exact_ci_attempt: int
+    predecessor_sha256: str
+
+    def __post_init__(self) -> None:
+        for value, subject in (
+            (self.plan_file_sha256, "predecessor plan file"),
+            (self.plan_sha256, "predecessor plan"),
+            (self.source_bundle_sha256, "predecessor source bundle"),
+            (self.predecessor_sha256, "predecessor"),
+        ):
+            _require_digest(value, subject=subject)
+        if (
+            not isinstance(self.source_commit, str)
+            or _COMMIT.fullmatch(self.source_commit) is None
+            or type(self.exact_ci_run) is not int  # noqa: E721
+            or self.exact_ci_run <= 0
+            or type(self.exact_ci_attempt) is not int  # noqa: E721
+            or self.exact_ci_attempt <= 0
+            or self.predecessor_sha256 != canonical_sha256(self._document())
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome predecessor differs"
+            )
+
+    @classmethod
+    def build(
+        cls,
+        plan: PartyDevelopmentOutcomeCampaignPlan,
+        *,
+        plan_file_sha256: str,
+    ) -> PartyDevelopmentOutcomeCampaignPredecessor:
+        if not isinstance(plan, PartyDevelopmentOutcomeCampaignPlan):
+            raise TypeError("plan must be a PartyDevelopmentOutcomeCampaignPlan")
+        document = _predecessor_document(
+            plan_file_sha256=plan_file_sha256,
+            plan_sha256=plan.plan_sha256,
+            source_commit=plan.source_commit,
+            source_bundle_sha256=plan.source_bundle_sha256,
+            exact_ci_run=plan.exact_ci_run,
+            exact_ci_attempt=plan.exact_ci_attempt,
+        )
+        return cls(
+            plan_file_sha256=plan_file_sha256,
+            plan_sha256=plan.plan_sha256,
+            source_commit=plan.source_commit,
+            source_bundle_sha256=plan.source_bundle_sha256,
+            exact_ci_run=plan.exact_ci_run,
+            exact_ci_attempt=plan.exact_ci_attempt,
+            predecessor_sha256=canonical_sha256(document),
+        )
+
+    def _document(self) -> dict[str, object]:
+        return _predecessor_document(
+            plan_file_sha256=self.plan_file_sha256,
+            plan_sha256=self.plan_sha256,
+            source_commit=self.source_commit,
+            source_bundle_sha256=self.source_bundle_sha256,
+            exact_ci_run=self.exact_ci_run,
+            exact_ci_attempt=self.exact_ci_attempt,
+        )
+
+    def private_dict(self) -> dict[str, object]:
+        return {**self._document(), "predecessor_sha256": self.predecessor_sha256}
+
+    @classmethod
+    def from_private_dict(
+        cls, value: object
+    ) -> PartyDevelopmentOutcomeCampaignPredecessor:
+        expected = {
+            "exact_ci_attempt",
+            "exact_ci_run",
+            "plan_file_sha256",
+            "plan_sha256",
+            "predecessor_sha256",
+            "schema",
+            "source_bundle_sha256",
+            "source_commit",
+        }
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != expected
+            or value.get("schema")
+            != RED_PARTY_DEVELOPMENT_OUTCOME_PREDECESSOR_SCHEMA
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome predecessor document is invalid"
+            )
+        try:
+            return cls(
+                plan_file_sha256=cast(str, value["plan_file_sha256"]),
+                plan_sha256=cast(str, value["plan_sha256"]),
+                source_commit=cast(str, value["source_commit"]),
+                source_bundle_sha256=cast(str, value["source_bundle_sha256"]),
+                exact_ci_run=cast(int, value["exact_ci_run"]),
+                exact_ci_attempt=cast(int, value["exact_ci_attempt"]),
+                predecessor_sha256=cast(str, value["predecessor_sha256"]),
+            )
+        except PartyDevelopmentOutcomeCampaignError:
+            raise
+        except (KeyError, TypeError, ValueError) as error:
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome predecessor document is invalid"
+            ) from error
+
+
+@dataclass(frozen=True, slots=True)
+class PartyDevelopmentOutcomeInheritedTerminal:
+    """One immutable predecessor result that a successor may never execute."""
+
+    origin_campaign_plan_sha256: str
+    trial_id: str
+    assignment_sha256: str
+    candidate_index: int
+    status: OutcomeEvidenceStatus
+    claim_sha256: str
+    result_sha256: str
+    terminal_sha256: str
+    claim_record_id: str
+    claim_record_sha256: str
+    claim_manifest_sha256: str
+    terminal_record_id: str
+    terminal_record_sha256: str
+    terminal_manifest_sha256: str
+    inherited_terminal_sha256: str
+
+    def __post_init__(self) -> None:
+        for value, subject in (
+            (self.origin_campaign_plan_sha256, "origin campaign plan"),
+            (self.assignment_sha256, "inherited assignment"),
+            (self.claim_sha256, "inherited claim"),
+            (self.result_sha256, "inherited result"),
+            (self.terminal_sha256, "inherited terminal"),
+            (self.claim_record_sha256, "inherited claim record"),
+            (self.claim_manifest_sha256, "inherited claim manifest"),
+            (self.terminal_record_sha256, "inherited terminal record"),
+            (self.terminal_manifest_sha256, "inherited terminal manifest"),
+            (self.inherited_terminal_sha256, "inherited-terminal binding"),
+        ):
+            _require_digest(value, subject=subject)
+        if (
+            not isinstance(self.trial_id, str)
+            or _SAFE_ID.fullmatch(self.trial_id) is None
+            or any(
+                not isinstance(record_id, str)
+                or _SAFE_RECORD_ID.fullmatch(record_id) is None
+                for record_id in (self.claim_record_id, self.terminal_record_id)
+            )
+            or type(self.candidate_index) is not int  # noqa: E721
+            or self.candidate_index < 0
+            or not isinstance(self.status, OutcomeEvidenceStatus)
+            or self.inherited_terminal_sha256
+            != canonical_sha256(self._document())
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development inherited terminal differs"
+            )
+
+    @classmethod
+    def build(
+        cls,
+        *,
+        origin_campaign_plan_sha256: str,
+        trial_id: str,
+        assignment_sha256: str,
+        candidate_index: int,
+        status: OutcomeEvidenceStatus,
+        claim_sha256: str,
+        result_sha256: str,
+        terminal_sha256: str,
+        claim_record_id: str,
+        claim_record_sha256: str,
+        claim_manifest_sha256: str,
+        terminal_record_id: str,
+        terminal_record_sha256: str,
+        terminal_manifest_sha256: str,
+    ) -> PartyDevelopmentOutcomeInheritedTerminal:
+        document = _inherited_terminal_document(
+            origin_campaign_plan_sha256=origin_campaign_plan_sha256,
+            trial_id=trial_id,
+            assignment_sha256=assignment_sha256,
+            candidate_index=candidate_index,
+            status=status,
+            claim_sha256=claim_sha256,
+            result_sha256=result_sha256,
+            terminal_sha256=terminal_sha256,
+            claim_record_id=claim_record_id,
+            claim_record_sha256=claim_record_sha256,
+            claim_manifest_sha256=claim_manifest_sha256,
+            terminal_record_id=terminal_record_id,
+            terminal_record_sha256=terminal_record_sha256,
+            terminal_manifest_sha256=terminal_manifest_sha256,
+        )
+        return cls(
+            origin_campaign_plan_sha256=origin_campaign_plan_sha256,
+            trial_id=trial_id,
+            assignment_sha256=assignment_sha256,
+            candidate_index=candidate_index,
+            status=status,
+            claim_sha256=claim_sha256,
+            result_sha256=result_sha256,
+            terminal_sha256=terminal_sha256,
+            claim_record_id=claim_record_id,
+            claim_record_sha256=claim_record_sha256,
+            claim_manifest_sha256=claim_manifest_sha256,
+            terminal_record_id=terminal_record_id,
+            terminal_record_sha256=terminal_record_sha256,
+            terminal_manifest_sha256=terminal_manifest_sha256,
+            inherited_terminal_sha256=canonical_sha256(document),
+        )
+
+    def _document(self) -> dict[str, object]:
+        return _inherited_terminal_document(
+            origin_campaign_plan_sha256=self.origin_campaign_plan_sha256,
+            trial_id=self.trial_id,
+            assignment_sha256=self.assignment_sha256,
+            candidate_index=self.candidate_index,
+            status=self.status,
+            claim_sha256=self.claim_sha256,
+            result_sha256=self.result_sha256,
+            terminal_sha256=self.terminal_sha256,
+            claim_record_id=self.claim_record_id,
+            claim_record_sha256=self.claim_record_sha256,
+            claim_manifest_sha256=self.claim_manifest_sha256,
+            terminal_record_id=self.terminal_record_id,
+            terminal_record_sha256=self.terminal_record_sha256,
+            terminal_manifest_sha256=self.terminal_manifest_sha256,
+        )
+
+    def private_dict(self) -> dict[str, object]:
+        return {
+            **self._document(),
+            "inherited_terminal_sha256": self.inherited_terminal_sha256,
+        }
+
+    @classmethod
+    def from_private_dict(
+        cls, value: object
+    ) -> PartyDevelopmentOutcomeInheritedTerminal:
+        expected = {
+            "assignment_sha256",
+            "candidate_index",
+            "claim_manifest_sha256",
+            "claim_record_id",
+            "claim_record_sha256",
+            "claim_sha256",
+            "inherited_terminal_sha256",
+            "origin_campaign_plan_sha256",
+            "result_sha256",
+            "schema",
+            "status",
+            "terminal_manifest_sha256",
+            "terminal_record_id",
+            "terminal_record_sha256",
+            "terminal_sha256",
+            "trial_id",
+        }
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != expected
+            or value.get("schema")
+            != RED_PARTY_DEVELOPMENT_OUTCOME_INHERITED_TERMINAL_SCHEMA
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development inherited-terminal document is invalid"
+            )
+        try:
+            return cls(
+                origin_campaign_plan_sha256=cast(
+                    str, value["origin_campaign_plan_sha256"]
+                ),
+                trial_id=cast(str, value["trial_id"]),
+                assignment_sha256=cast(str, value["assignment_sha256"]),
+                candidate_index=cast(int, value["candidate_index"]),
+                status=OutcomeEvidenceStatus(cast(str, value["status"])),
+                claim_sha256=cast(str, value["claim_sha256"]),
+                result_sha256=cast(str, value["result_sha256"]),
+                terminal_sha256=cast(str, value["terminal_sha256"]),
+                claim_record_id=cast(str, value["claim_record_id"]),
+                claim_record_sha256=cast(str, value["claim_record_sha256"]),
+                claim_manifest_sha256=cast(
+                    str, value["claim_manifest_sha256"]
+                ),
+                terminal_record_id=cast(str, value["terminal_record_id"]),
+                terminal_record_sha256=cast(
+                    str, value["terminal_record_sha256"]
+                ),
+                terminal_manifest_sha256=cast(
+                    str, value["terminal_manifest_sha256"]
+                ),
+                inherited_terminal_sha256=cast(
+                    str, value["inherited_terminal_sha256"]
+                ),
+            )
+        except PartyDevelopmentOutcomeCampaignError:
+            raise
+        except (KeyError, TypeError, ValueError) as error:
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development inherited-terminal document is invalid"
+            ) from error
+
+
+@dataclass(frozen=True, slots=True)
 class PartyDevelopmentOutcomeCampaignPlan:
-    """Exact 14-question / 55-trial plan, still unauthorized and unopened."""
+    """Exact 14-question / 55-trial plan with optional consumed lineage."""
 
     source_commit: str
     source_bundle_sha256: str
@@ -377,6 +716,8 @@ class PartyDevelopmentOutcomeCampaignPlan:
     input_audit_receipt_file_sha256: str
     input_audit_result_sha256: str
     assignments: tuple[PartyDevelopmentOutcomeTrialAssignment, ...]
+    predecessor: PartyDevelopmentOutcomeCampaignPredecessor | None = None
+    inherited_terminals: tuple[PartyDevelopmentOutcomeInheritedTerminal, ...] = ()
     dose: PartyDevelopmentOutcomeDose = RED_PARTY_DEVELOPMENT_OUTCOME_DOSE
     execution_contract_sha256: str = (
         RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT_SHA256
@@ -499,13 +840,94 @@ class PartyDevelopmentOutcomeCampaignPlan:
                 raise PartyDevelopmentOutcomeCampaignError(
                     "party-development outcome partition lacks a choice kind"
                 )
+        if self.predecessor is None:
+            if self.inherited_terminals:
+                raise PartyDevelopmentOutcomeCampaignError(
+                    "party-development outcome campaign inherits without a predecessor"
+                )
+            return
+        if (
+            not isinstance(
+                self.predecessor, PartyDevelopmentOutcomeCampaignPredecessor
+            )
+            or not isinstance(self.inherited_terminals, tuple)
+            or not self.inherited_terminals
+            or len(self.inherited_terminals) >= len(self.assignments)
+            or any(
+                not isinstance(item, PartyDevelopmentOutcomeInheritedTerminal)
+                for item in self.inherited_terminals
+            )
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome successor lineage is invalid"
+            )
+        assignment_by_digest = {
+            item.assignment_sha256: item for item in self.assignments
+        }
+        inherited_assignments: set[str] = set()
+        inherited_records: set[str] = set()
+        for inherited in self.inherited_terminals:
+            inherited_assignment = assignment_by_digest.get(
+                inherited.assignment_sha256
+            )
+            if (
+                inherited_assignment is None
+                or inherited.assignment_sha256 in inherited_assignments
+                or inherited.trial_id != inherited_assignment.trial_id
+                or inherited.candidate_index
+                != inherited_assignment.candidate_index
+                or inherited.claim_record_id in inherited_records
+                or inherited.terminal_record_id in inherited_records
+                or inherited.claim_record_id == inherited.terminal_record_id
+            ):
+                raise PartyDevelopmentOutcomeCampaignError(
+                    "party-development outcome successor repeats or crosses an inherited trial"
+                )
+            inherited_assignments.add(inherited.assignment_sha256)
+            inherited_records.update(
+                (inherited.claim_record_id, inherited.terminal_record_id)
+            )
+
+    @property
+    def is_successor(self) -> bool:
+        return self.predecessor is not None
+
+    @property
+    def inherited_assignment_sha256(self) -> frozenset[str]:
+        return frozenset(item.assignment_sha256 for item in self.inherited_terminals)
+
+    @property
+    def active_assignments(self) -> tuple[PartyDevelopmentOutcomeTrialAssignment, ...]:
+        inherited = self.inherited_assignment_sha256
+        return tuple(
+            item for item in self.assignments if item.assignment_sha256 not in inherited
+        )
+
+    @property
+    def inherited_complete_examples(self) -> int:
+        inherited_status = {
+            item.assignment_sha256: item.status for item in self.inherited_terminals
+        }
+        by_scenario: dict[str, list[PartyDevelopmentOutcomeTrialAssignment]] = (
+            defaultdict(list)
+        )
+        for assignment in self.assignments:
+            by_scenario[assignment.scenario_id].append(assignment)
+        return sum(
+            all(
+                inherited_status.get(assignment.assignment_sha256)
+                is OutcomeEvidenceStatus.MEASURED
+                for assignment in assignments
+            )
+            for assignments in by_scenario.values()
+        )
 
     @property
     def plan_sha256(self) -> str:
         return canonical_sha256(self._document())
 
     def _document(self) -> dict[str, object]:
-        return {
+        document: dict[str, object] = {
             "schema": RED_PARTY_DEVELOPMENT_OUTCOME_CAMPAIGN_SCHEMA,
             "status": "prospective_unexecuted_authorization_required",
             "source_commit": self.source_commit,
@@ -547,6 +969,33 @@ class PartyDevelopmentOutcomeCampaignPlan:
             "authority_promoted": False,
             "private_path_fields": 0,
         }
+        if not self.is_successor:
+            return document
+        assert self.predecessor is not None
+        statuses = Counter(item.status for item in self.inherited_terminals)
+        document.update(
+            {
+                "schema": RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CAMPAIGN_SCHEMA,
+                "status": "prospective_successor_unexecuted_authorization_required",
+                "predecessor": self.predecessor.private_dict(),
+                "successor_contract": deepcopy(
+                    RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT
+                ),
+                "successor_contract_sha256": (
+                    RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT_SHA256
+                ),
+                "inherited_terminals": [
+                    item.private_dict() for item in self.inherited_terminals
+                ],
+                "trial_claims": len(self.inherited_terminals),
+                "measured_trials": statuses[OutcomeEvidenceStatus.MEASURED],
+                "invalid_trials": statuses[OutcomeEvidenceStatus.INVALID],
+                "censored_trials": statuses[OutcomeEvidenceStatus.CENSORED],
+                "complete_examples": self.inherited_complete_examples,
+                "remaining_candidate_trials": len(self.active_assignments),
+            }
+        )
+        return document
 
     def private_dict(self) -> dict[str, object]:
         return {**self._document(), "plan_sha256": self.plan_sha256}
@@ -555,6 +1004,12 @@ class PartyDevelopmentOutcomeCampaignPlan:
     def from_private_dict(
         cls, value: object
     ) -> PartyDevelopmentOutcomeCampaignPlan:
+        if (
+            isinstance(value, Mapping)
+            and value.get("schema")
+            == RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CAMPAIGN_SCHEMA
+        ):
+            return cls._from_successor_private_dict(value)
         expected = {
             "assignments",
             "authority_promoted",
@@ -699,6 +1154,162 @@ class PartyDevelopmentOutcomeCampaignPlan:
             )
         return result
 
+    @classmethod
+    def _from_successor_private_dict(
+        cls, value: Mapping[str, object]
+    ) -> PartyDevelopmentOutcomeCampaignPlan:
+        expected = {
+            "assignments",
+            "authority_promoted",
+            "censored_trials",
+            "complete_examples",
+            "crystal_cases_opened",
+            "dose",
+            "exact_ci_attempt",
+            "exact_ci_run",
+            "execution_authorized",
+            "execution_contract",
+            "execution_contract_sha256",
+            "frozen_catalog_file_sha256",
+            "frozen_catalog_sha256",
+            "frozen_catalog_source_bundle_sha256",
+            "frozen_catalog_source_commit",
+            "full_game_replays",
+            "inherited_terminals",
+            "input_audit_receipt_file_sha256",
+            "input_audit_result_sha256",
+            "invalid_trials",
+            "measured_trials",
+            "model_fits",
+            "model_predictions",
+            "model_updates",
+            "plan_sha256",
+            "predecessor",
+            "private_path_fields",
+            "prospective_catalog_sha256",
+            "remaining_candidate_trials",
+            "rom_sha256",
+            "runner_source_sha256",
+            "schema",
+            "sealed_red_cases_opened",
+            "source_bundle_sha256",
+            "source_commit",
+            "status",
+            "successor_contract",
+            "successor_contract_sha256",
+            "teacher_queries",
+            "trial_claims",
+        }
+        dose = value.get("dose")
+        counter_fields = (
+            "censored_trials",
+            "complete_examples",
+            "crystal_cases_opened",
+            "full_game_replays",
+            "invalid_trials",
+            "measured_trials",
+            "model_fits",
+            "model_predictions",
+            "model_updates",
+            "private_path_fields",
+            "remaining_candidate_trials",
+            "sealed_red_cases_opened",
+            "teacher_queries",
+            "trial_claims",
+        )
+        if (
+            set(value) != expected
+            or value.get("status")
+            != "prospective_successor_unexecuted_authorization_required"
+            or value.get("execution_contract")
+            != RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT
+            or value.get("successor_contract")
+            != RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT
+            or value.get("successor_contract_sha256")
+            != RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT_SHA256
+            or value.get("execution_authorized") is not False
+            or value.get("authority_promoted") is not False
+            or any(type(value.get(name)) is not int for name in counter_fields)  # noqa: E721
+            or not isinstance(value.get("assignments"), list)
+            or not isinstance(value.get("inherited_terminals"), list)
+            or not isinstance(value.get("predecessor"), Mapping)
+            or not isinstance(dose, Mapping)
+            or set(dose) != set(RED_PARTY_DEVELOPMENT_OUTCOME_DOSE.public_dict())
+            or dose.get("schema")
+            != "pokemon.core.party-development-outcome-dose.v1"
+        ):
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome successor document is invalid"
+            )
+        try:
+            result = cls(
+                source_commit=cast(str, value["source_commit"]),
+                source_bundle_sha256=cast(str, value["source_bundle_sha256"]),
+                runner_source_sha256=cast(str, value["runner_source_sha256"]),
+                exact_ci_run=cast(int, value["exact_ci_run"]),
+                exact_ci_attempt=cast(int, value["exact_ci_attempt"]),
+                frozen_catalog_file_sha256=cast(
+                    str, value["frozen_catalog_file_sha256"]
+                ),
+                frozen_catalog_sha256=cast(str, value["frozen_catalog_sha256"]),
+                prospective_catalog_sha256=cast(
+                    str, value["prospective_catalog_sha256"]
+                ),
+                frozen_catalog_source_commit=cast(
+                    str, value["frozen_catalog_source_commit"]
+                ),
+                frozen_catalog_source_bundle_sha256=cast(
+                    str, value["frozen_catalog_source_bundle_sha256"]
+                ),
+                rom_sha256=cast(str, value["rom_sha256"]),
+                input_audit_receipt_file_sha256=cast(
+                    str, value["input_audit_receipt_file_sha256"]
+                ),
+                input_audit_result_sha256=cast(
+                    str, value["input_audit_result_sha256"]
+                ),
+                assignments=tuple(
+                    PartyDevelopmentOutcomeTrialAssignment.from_private_dict(item)
+                    for item in cast(list[object], value["assignments"])
+                ),
+                predecessor=PartyDevelopmentOutcomeCampaignPredecessor.from_private_dict(
+                    value["predecessor"]
+                ),
+                inherited_terminals=tuple(
+                    PartyDevelopmentOutcomeInheritedTerminal.from_private_dict(item)
+                    for item in cast(list[object], value["inherited_terminals"])
+                ),
+                dose=PartyDevelopmentOutcomeDose(
+                    completed_battles=cast(int, dose["completed_battles"]),
+                    maximum_encounter_steps=cast(
+                        int, dose["maximum_encounter_steps"]
+                    ),
+                    maximum_controller_actions=cast(
+                        int, dose["maximum_controller_actions"]
+                    ),
+                    maximum_frames=cast(int, dose["maximum_frames"]),
+                    maximum_healing_trips=cast(
+                        int, dose["maximum_healing_trips"]
+                    ),
+                    maximum_rotations=cast(int, dose["maximum_rotations"]),
+                    maximum_faints=cast(int, dose["maximum_faints"]),
+                ),
+                execution_contract_sha256=cast(
+                    str, value["execution_contract_sha256"]
+                ),
+            )
+        except PartyDevelopmentOutcomeCampaignError:
+            raise
+        except (KeyError, TypeError, ValueError) as error:
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome successor document is invalid"
+            ) from error
+        if dict(value) != result.private_dict():
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome successor digest or counters differ"
+            )
+        return result
+
     def public_summary(self) -> dict[str, object]:
         scenarios: dict[str, PartyDevelopmentOutcomeTrialAssignment] = {}
         for item in self.assignments:
@@ -715,7 +1326,7 @@ class PartyDevelopmentOutcomeCampaignPlan:
             len([trial for trial in self.assignments if trial.scenario_id == scenario])
             for scenario in scenarios
         )
-        return {
+        summary: dict[str, object] = {
             "schema": RED_PARTY_DEVELOPMENT_OUTCOME_CAMPAIGN_SUMMARY_SCHEMA,
             "status": "collector_plan_frozen_controller_authorization_required",
             "source_commit": self.source_commit,
@@ -762,6 +1373,41 @@ class PartyDevelopmentOutcomeCampaignPlan:
             "candidate_feature_values_public": False,
             "private_path_fields": 0,
         }
+        if not self.is_successor:
+            return summary
+        assert self.predecessor is not None
+        statuses = Counter(item.status for item in self.inherited_terminals)
+        active_partitions = Counter(
+            item.partition.value for item in self.active_assignments
+        )
+        summary.update(
+            {
+                "status": "successor_plan_frozen_controller_authorization_required",
+                "predecessor_plan_file_sha256": (
+                    self.predecessor.plan_file_sha256
+                ),
+                "predecessor_plan_sha256": self.predecessor.plan_sha256,
+                "successor_contract_sha256": (
+                    RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT_SHA256
+                ),
+                "trial_claims": len(self.inherited_terminals),
+                "measured_trials": statuses[OutcomeEvidenceStatus.MEASURED],
+                "invalid_trials": statuses[OutcomeEvidenceStatus.INVALID],
+                "censored_trials": statuses[OutcomeEvidenceStatus.CENSORED],
+                "complete_examples": self.inherited_complete_examples,
+                "remaining_candidate_trials": len(self.active_assignments),
+                "remaining_trial_partition_counts": dict(
+                    sorted(active_partitions.items())
+                ),
+                "inherited_status_counts": {
+                    status.value: statuses[status]
+                    for status in OutcomeEvidenceStatus
+                    if statuses[status]
+                },
+                "inherited_trial_identity_values_public": False,
+            }
+        )
+        return summary
 
 
 @dataclass(frozen=True, slots=True)
@@ -819,6 +1465,10 @@ class PartyDevelopmentOutcomeTrialClaim:
         if assignment not in plan.assignments:
             raise PartyDevelopmentOutcomeCampaignError(
                 "party-development outcome claim assignment is outside its campaign"
+            )
+        if assignment.assignment_sha256 in plan.inherited_assignment_sha256:
+            raise PartyDevelopmentOutcomeCampaignError(
+                "party-development outcome assignment is already consumed by its lineage"
             )
         document = _claim_document(
             campaign_plan_sha256=plan.plan_sha256,
@@ -932,6 +1582,10 @@ def freeze_party_development_outcome_campaign(
     frozen_catalog_file_sha256: str,
     input_audit_receipt_file_sha256: str,
     input_audit_result_sha256: str,
+    predecessor: PartyDevelopmentOutcomeCampaignPredecessor | None = None,
+    inherited_terminals: tuple[
+        PartyDevelopmentOutcomeInheritedTerminal, ...
+    ] = (),
 ) -> PartyDevelopmentOutcomeCampaignPlan:
     """Enumerate every available candidate without choosing or executing one."""
 
@@ -981,7 +1635,89 @@ def freeze_party_development_outcome_campaign(
         input_audit_receipt_file_sha256=input_audit_receipt_file_sha256,
         input_audit_result_sha256=input_audit_result_sha256,
         assignments=tuple(assignments),
+        predecessor=predecessor,
+        inherited_terminals=inherited_terminals,
     )
+
+
+def party_development_outcome_record_ids(
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+    assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> tuple[str, str]:
+    """Return the immutable claim/terminal namespace for one plan assignment."""
+
+    if not isinstance(plan, PartyDevelopmentOutcomeCampaignPlan):
+        raise TypeError("plan must be a PartyDevelopmentOutcomeCampaignPlan")
+    if (
+        not isinstance(assignment, PartyDevelopmentOutcomeTrialAssignment)
+        or assignment not in plan.assignments
+    ):
+        raise PartyDevelopmentOutcomeCampaignError(
+            "party-development outcome record assignment is outside its campaign"
+        )
+    if not plan.is_successor:
+        return f"{assignment.trial_id}-claim", f"{assignment.trial_id}-terminal"
+    stem = (
+        f"red-party-outcome-v2-{plan.plan_sha256[:12]}-"
+        f"{assignment.assignment_sha256[:24]}"
+    )
+    return f"{stem}-claim", f"{stem}-terminal"
+
+
+def _predecessor_document(
+    *,
+    plan_file_sha256: str,
+    plan_sha256: str,
+    source_commit: str,
+    source_bundle_sha256: str,
+    exact_ci_run: int,
+    exact_ci_attempt: int,
+) -> dict[str, object]:
+    return {
+        "schema": RED_PARTY_DEVELOPMENT_OUTCOME_PREDECESSOR_SCHEMA,
+        "plan_file_sha256": plan_file_sha256,
+        "plan_sha256": plan_sha256,
+        "source_commit": source_commit,
+        "source_bundle_sha256": source_bundle_sha256,
+        "exact_ci_run": exact_ci_run,
+        "exact_ci_attempt": exact_ci_attempt,
+    }
+
+
+def _inherited_terminal_document(
+    *,
+    origin_campaign_plan_sha256: str,
+    trial_id: str,
+    assignment_sha256: str,
+    candidate_index: int,
+    status: OutcomeEvidenceStatus,
+    claim_sha256: str,
+    result_sha256: str,
+    terminal_sha256: str,
+    claim_record_id: str,
+    claim_record_sha256: str,
+    claim_manifest_sha256: str,
+    terminal_record_id: str,
+    terminal_record_sha256: str,
+    terminal_manifest_sha256: str,
+) -> dict[str, object]:
+    return {
+        "schema": RED_PARTY_DEVELOPMENT_OUTCOME_INHERITED_TERMINAL_SCHEMA,
+        "origin_campaign_plan_sha256": origin_campaign_plan_sha256,
+        "trial_id": trial_id,
+        "assignment_sha256": assignment_sha256,
+        "candidate_index": candidate_index,
+        "status": status.value,
+        "claim_sha256": claim_sha256,
+        "result_sha256": result_sha256,
+        "terminal_sha256": terminal_sha256,
+        "claim_record_id": claim_record_id,
+        "claim_record_sha256": claim_record_sha256,
+        "claim_manifest_sha256": claim_manifest_sha256,
+        "terminal_record_id": terminal_record_id,
+        "terminal_record_sha256": terminal_record_sha256,
+        "terminal_manifest_sha256": terminal_manifest_sha256,
+    }
 
 
 def _assignment_document(
@@ -1063,12 +1799,20 @@ __all__ = [
     "RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT",
     "RED_PARTY_DEVELOPMENT_OUTCOME_EXECUTION_CONTRACT_SHA256",
     "RED_PARTY_DEVELOPMENT_OUTCOME_QUESTION_COUNT",
+    "RED_PARTY_DEVELOPMENT_OUTCOME_INHERITED_TERMINAL_SCHEMA",
+    "RED_PARTY_DEVELOPMENT_OUTCOME_PREDECESSOR_SCHEMA",
+    "RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CAMPAIGN_SCHEMA",
+    "RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT",
+    "RED_PARTY_DEVELOPMENT_OUTCOME_SUCCESSOR_CONTRACT_SHA256",
     "RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_CLAIM_SCHEMA",
     "RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT",
     "PartyDevelopmentOutcomeCampaignError",
     "PartyDevelopmentOutcomeCampaignPlan",
+    "PartyDevelopmentOutcomeCampaignPredecessor",
     "PartyDevelopmentOutcomeDose",
+    "PartyDevelopmentOutcomeInheritedTerminal",
     "PartyDevelopmentOutcomeTrialAssignment",
     "PartyDevelopmentOutcomeTrialClaim",
     "freeze_party_development_outcome_campaign",
+    "party_development_outcome_record_ids",
 ]

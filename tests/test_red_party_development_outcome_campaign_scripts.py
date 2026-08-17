@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import inspect
 import json
 import runpy
 import stat
@@ -13,6 +14,7 @@ import pytest
 from test_party_development_outcome_campaign import _WIDTHS, _plan
 from test_party_development_outcome_dataset import _frozen_input_catalog
 
+from pokemon_red_completion.observation import ReadOnlyCartridgeRam
 from pokemon_red_completion.party_development_outcome_campaign import (
     PartyDevelopmentOutcomeTrialClaim,
 )
@@ -415,7 +417,7 @@ def test_claim_without_terminal_is_permanently_censored_before_resume(
     assignment = plan.assignments[0]
     claim = PartyDevelopmentOutcomeTrialClaim.build(plan, assignment)
     store.publish_sealed_record(
-        RUNNER["_claim_id"](assignment),
+        RUNNER["_claim_id"](plan, assignment),
         kind=RUNNER["_CLAIM_KIND"],
         record=claim.private_dict(),
     )
@@ -466,7 +468,7 @@ def test_complete_terminal_cannot_be_replaced_by_different_bytes(
         failure_code="execution_error",
     )
     terminal = build_party_development_trial_terminal(result, evidence=evidence)
-    terminal_id = RUNNER["_terminal_id"](assignment)
+    terminal_id = RUNNER["_terminal_id"](plan, assignment)
     store.publish_sealed_record(
         terminal_id,
         kind=RUNNER["_TERMINAL_KIND"],
@@ -486,9 +488,57 @@ def test_complete_terminal_cannot_be_replaced_by_different_bytes(
 def test_runner_source_orders_durable_claim_before_trial_execution() -> None:
     source = RUNNER_PATH.read_text(encoding="utf-8")
     collection = source.index("with store.collection_session(collection_id):")
-    loop = source.index("for assignment in plan.assignments:", collection)
+    loop = source.index("for assignment in plan.active_assignments:", collection)
     publish = source.index("store.publish_sealed_record(", loop)
     execute = source.index("result, evidence = _execute_trial(", loop)
 
     assert publish < execute
     assert "candidate_decision_authority" not in source
+
+
+class _CompleteReadPort:
+    def __init__(self) -> None:
+        self.frame_count = 0
+
+    def read_u8(self, _address: int) -> int:
+        return 0
+
+    def read_cartridge_ram_u8(self, _bank: int, _address: int) -> int:
+        return 0
+
+    def press(self, _button: str) -> None:
+        return None
+
+    def release(self, _button: str) -> None:
+        return None
+
+    def tick(self, frames: int) -> None:
+        self.frame_count += frames
+
+
+def test_trial_ports_keep_complete_observation_outside_controller_proxy() -> None:
+    emulator = _CompleteReadPort()
+
+    ports = RUNNER["_build_trial_execution_ports"](
+        emulator,
+        maximum_frames=10,
+    )
+
+    assert ports.observation_emulator is emulator
+    assert ports.reader._memory is emulator
+    assert ports.party_reader.memory is emulator
+    assert isinstance(ports.reader._memory, ReadOnlyCartridgeRam)
+    assert not isinstance(ports.controller, ReadOnlyCartridgeRam)
+    ports.controller.tick(6)
+    assert ports.controller.frames_executed == 6
+
+
+def test_preflight_and_execution_share_the_qualified_port_constructor() -> None:
+    execute_source = inspect.getsource(RUNNER["_execute_trial"])
+    preflight_source = inspect.getsource(RUNNER["_reconstruct_questions"])
+
+    for source in (execute_source, preflight_source):
+        assert "_build_trial_execution_ports(" in source
+        assert "PokemonRedStateReader(" not in source
+        assert "PokemonRedPartyReader(" not in source
+    assert "ports.controller.frames_executed != 0" in preflight_source

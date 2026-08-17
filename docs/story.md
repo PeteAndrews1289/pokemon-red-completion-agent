@@ -7,6 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the first red lane cannot be erased
+
+The campaign finally received permission to start. Lane one wrote its durable claim, loaded its
+frozen moment, and failed before the controller existed. The semantic observer needed to read every
+PC box; a frame-budget wrapper had hidden that read-only cartridge capability from Python's runtime
+check. No button reached the game, but the experiment had started, so the lane became invalid.
+
+It stays invalid. The project did not delete the record, call the no-input failure “unstarted,” or
+rerun it after the repair. The board now reads **one invalid · zero measured · fifty-four untouched**.
+Every training lane is still available. Development has lost one candidate menu and must eventually
+report at most five complete examples instead of quietly finding a replacement.
+
+The repair separates the two kinds of power the wrapper had blurred: observers retain complete
+read-only access; only the executor receives bounded control. The same connector now appears in the
+zero-input preflight. A successor plan wraps the old red lane in its exact immutable evidence,
+keeps all fifty-five identities visible, and unlocks only the untouched fifty-four under a fresh
+authorization.
+
+This is not training progress yet. It is the rule that makes later training evidence believable:
+even a software defect cannot reroll the sample.
+
 ## Current checkpoint: every card now has its own one-shot lane
 
 The fourteen face-down cards have become fifty-five lanes. Each lane begins from a fresh copy of

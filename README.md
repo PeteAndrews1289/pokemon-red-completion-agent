@@ -4,7 +4,21 @@
 > [NORTH_STAR.md](NORTH_STAR.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **The catalog-wide Red outcome collector now exists; no outcome has run (August 16, 2026).**
+> **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
+> exact authorized campaign durably claimed its first development trial, then full-box semantic
+> observation failed before the controller was constructed because the frame-budget proxy hid the
+> cartridge-RAM read capability. The runner wrote one immutable invalid terminal and stopped. No
+> later trial was claimed, no controller input occurred, and the consumed identity cannot retry.
+>
+> The local repair separates complete read-only observation from frame-bounded control and makes
+> the official preflight use the same port constructor. A generic successor binds every inherited
+> claim/terminal digest, keeps all 55 assignments visible and exposes only the 54 untouched trials
+> under a new exact authorization. All 32 train trials remain untouched; 22 of 23 development
+> trials remain. See the [path-free failure receipt](docs/evidence/red-party-development-outcome-campaign-v1-failure-2026-08-16.json).
+> Honest board: **measured 0 · invalid 1 · remaining 54 · complete examples 0/14 · fits 0 ·
+> authority zero**.
+
+> **The catalog-wide Red outcome collector was qualified before V1 execution (August 16, 2026).**
 > The new campaign expands the 14 frozen questions into their real execution denominator: **55
 > independent candidate trials**. Every candidate reloads the same frozen start, keeps its selected
 > trainee lineage and venue fixed, and receives the same four-completed-battle dose. Hard limits
@@ -22,7 +36,7 @@
 > and 55/55 private trainee/venue bindings** with all protected files unchanged. It ticked no game,
 > sent no input and opened no answer. This is implementation qualification, not official execution
 > evidence: publication, exact-head green CI, a frozen private campaign plan and official read-only
-> preflight still precede owner authorization. Honest board: **trials 0/55 · complete examples
+> preflight still preceded owner authorization. Honest board at qualification: **trials 0/55 · complete examples
 > 0/14 · fits 0 · teacher 0 · model 0 · authority zero**.
 
 > **The frozen Red inputs now pass an independent reconstruction gate (August 16, 2026).** A

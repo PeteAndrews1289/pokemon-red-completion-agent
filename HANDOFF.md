@@ -17,6 +17,48 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Outcome V1 failed before input; publish the non-retrying successor — 2026-08-16
+
+The owner authorized the exact 14-question / 55-candidate campaign from private plan-file SHA
+`e8647ac8…`, semantic plan SHA `8742a06e…`, executable `4415667` and green CI run
+`31978843670` attempt 1. The runner durably claimed trial 1, then failed during its first
+completion-aware observation before the action executor existed. No movement, battle or controller
+input occurred. The failure path wrote one immutable invalid terminal and stopped; no later trial
+was claimed. Trial 1 is permanently consumed and may never retry.
+
+The cause was a capability-boundary error, not state corruption: the frame-budget controller proxy
+was passed to the semantic reader, and Python's runtime cartridge-RAM protocol check could not see
+the proxy's dynamic forwarding. Full-box observation therefore refused. A read-only reproduction
+on the same retained state reached the same exception before controller construction. The
+[path-free failure receipt](docs/evidence/red-party-development-outcome-campaign-v1-failure-2026-08-16.json)
+binds the authorization and immutable record digests. Protected inputs and ROM-adjacent artifacts
+remain unchanged.
+
+The local repair gives the raw emulator's complete read-only surface to semantic and party readers
+while only the executor receives the frame-budget controller. The official 14-question preflight
+now uses this same port constructor and requires zero advanced controller frames, so it exercises
+the boundary that the old preflight missed. A generic V2 successor contract also binds the exact
+predecessor plan plus every inherited sealed claim/terminal. Inherited assignments cannot produce
+a new claim; new campaigns get plan-specific record namespaces; a later successor can carry both
+older and newly consumed terminals without rewriting them. The dashboard renders inherited
+tombstones separately from active failures and points to the first untouched ordinal.
+
+The complete local gate passes **3,924 non-integration tests, 3 deselected and 1 expected xfail**,
+plus Ruff, mypy, documentation, public-artifact and all source-bound registry checks.
+
+The denominator remains 14 questions / 55 candidate identities, but only 54 are executable:
+**1 inherited invalid · 0 measured · 32/32 train untouched · 22/23 development untouched · fits
+0 · authority 0**. The affected development menu cannot become usable, so the maximum is eight
+complete train menus and five complete development menus. This still preserves the entire training
+partition needed for the first fit; the lost development menu must be reported, never replaced.
+
+Next: complete the full local gate, publish the repair, require exact-head green CI, freeze one
+external successor plan from the immutable V1 records, and run the exact read-only 14/55 preflight.
+Then give Claude the path-free packet and ask the owner for a new authorization naming the
+successor file SHA, semantic SHA, source, CI attempt, one inherited tombstone and 54 remaining
+one-shot trials. Do not invoke the old V1 plan, retry trial 1, fit a model, open sealed Red or
+Crystal, or replay the game.
+
 ## Exact 14/55 outcome collector implemented; publication is the live gate — 2026-08-16
 
 Codex implemented the catalog-wide campaign that the prior readiness review proved was missing.

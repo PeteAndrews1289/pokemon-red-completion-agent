@@ -23,6 +23,10 @@ from pokemon_red_completion.party_development_outcome_campaign import (  # noqa:
     PartyDevelopmentOutcomeCampaignPlan,
     PartyDevelopmentOutcomeTrialAssignment,
     PartyDevelopmentOutcomeTrialClaim,
+    party_development_outcome_record_ids,
+)
+from pokemon_red_completion.party_development_outcome_lineage import (  # noqa: E402
+    open_inherited_campaign_results,
 )
 from pokemon_red_completion.party_development_outcome_results import (  # noqa: E402
     PartyDevelopmentOutcomeTrialResult,
@@ -634,13 +638,45 @@ def _campaign_records(
     terminals: dict[str, PartyDevelopmentOutcomeTrialResult] = {}
     if store is None:
         return claims, terminals
-    for assignment in plan.assignments:
+    inherited_results = open_inherited_campaign_results(plan, store=store)
+    inherited_by_assignment = {
+        item.assignment_sha256: item for item in inherited_results
+    }
+    for entry in plan.inherited_terminals:
         claim_record = store.find_sealed_record(
-            f"{assignment.trial_id}-claim",
+            entry.claim_record_id,
+            expected_kind=_CAMPAIGN_CLAIM_KIND,
+        )
+        if claim_record is None:
+            raise ProgressDashboardError(
+                "dashboard inherited claim is missing"
+            )
+        inherited_claim = PartyDevelopmentOutcomeTrialClaim.from_private_dict(
+            claim_record.read()
+        )
+        result = inherited_by_assignment.get(entry.assignment_sha256)
+        if (
+            result is None
+            or inherited_claim.campaign_plan_sha256
+            != entry.origin_campaign_plan_sha256
+            or inherited_claim.assignment_sha256 != entry.assignment_sha256
+            or inherited_claim.claim_sha256 != entry.claim_sha256
+        ):
+            raise ProgressDashboardError(
+                "dashboard inherited campaign record differs from its lineage"
+            )
+        claims[entry.assignment_sha256] = inherited_claim
+        terminals[entry.assignment_sha256] = result
+    for assignment in plan.active_assignments:
+        claim_id, terminal_id = party_development_outcome_record_ids(
+            plan, assignment
+        )
+        claim_record = store.find_sealed_record(
+            claim_id,
             expected_kind=_CAMPAIGN_CLAIM_KIND,
         )
         terminal_record = store.find_sealed_record(
-            f"{assignment.trial_id}-terminal",
+            terminal_id,
             expected_kind=_CAMPAIGN_TERMINAL_KIND,
         )
         claim: PartyDevelopmentOutcomeTrialClaim | None = None
@@ -751,6 +787,17 @@ def _campaign_snapshot(
     claimed = len(claims)
     terminal_count = len(terminals)
     complete_examples = len(complete_scenarios)
+    inherited_assignments = plan.inherited_assignment_sha256
+    active_claimed = sum(
+        assignment.assignment_sha256 in claims
+        for assignment in plan.active_assignments
+    )
+    active_unusable = any(
+        assignment_sha256 not in inherited_assignments
+        and result.status
+        in {OutcomeEvidenceStatus.INVALID, OutcomeEvidenceStatus.CENSORED}
+        for assignment_sha256, result in terminals.items()
+    )
     if claimed == RED_PARTY_DEVELOPMENT_OUTCOME_TRIAL_COUNT:
         run_status = (
             "passed"
@@ -759,9 +806,9 @@ def _campaign_snapshot(
         )
     elif current is not None:
         run_status = "running"
-    elif invalid or censored:
+    elif active_unusable:
         run_status = "paused"
-    elif claimed:
+    elif active_claimed:
         run_status = "running"
     else:
         run_status = "waiting"
@@ -812,9 +859,13 @@ def _campaign_snapshot(
         )
     else:
         message = (
-            "The exact 14-question / 55-trial campaign is loaded with zero claimed trials. "
-            "Controller execution still requires the separately named owner authorization."
-        )
+            (
+                f"The successor preserves {len(plan.inherited_terminals)} consumed trial and "
+                f"exposes only {len(plan.active_assignments)} untouched identities. "
+            )
+            if plan.is_successor
+            else "The exact 14-question / 55-trial campaign is loaded with zero claimed trials. "
+        ) + "Controller execution still requires the separately named owner authorization."
         next_event = (
             "Next: exact owner authorization for this frozen plan; no trial may retry after input"
         )

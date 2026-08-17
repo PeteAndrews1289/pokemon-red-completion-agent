@@ -1,5 +1,37 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the first lane failed before the first button—and stayed failed
+
+The first completion-aware campaign finally received exact authorization: fourteen frozen
+questions, fifty-five cloned candidate trials, four battles each, one chance per identity. Its
+very first durable claim exposed the boundary the read-only rehearsal had missed. Before an action
+executor was even constructed, the full completion observer asked for cartridge-backed box state.
+The frame-budget proxy forwarded ordinary reads dynamically, but Python's runtime protocol check
+could not see its cartridge-RAM method. Observation refused.
+
+That is a failure, not an anecdote. Trial 1 now has an immutable invalid terminal. It will never be
+rerun, relabeled or replaced by a friendlier development example. The game received zero inputs;
+trial 2 was never claimed; every train trial remains untouched. The honest board is **1 INVALID ·
+0 MEASURED · 54 UNTOUCHED**, with development's maximum usable menus reduced from six to five.
+
+The repair did two things. First, it made capabilities explicit: semantic and party observers keep
+the emulator's complete read-only port, while only the executor receives the frame-budget control
+port. The read-only campaign preflight now goes through that same constructor, so it tests the
+exact all-box boundary without advancing a controller frame.
+
+Second, it made failure portable across source changes. A V2 successor does not pretend V1 never
+happened. It binds the exact predecessor plan and every sealed claim/terminal record, retains all
+55 assignments in the denominator, makes inherited assignments structurally unclaimable, and
+gives the remaining 54 a new plan-specific namespace. If a later version consumes more trials,
+the next successor carries the complete chain without rewriting old evidence.
+
+This is the kind of work that looks like delay until the alternative is considered: training on a
+dataset whose failed counterfactual was silently rerolled. The project chose the smaller, harsher
+claim. The full train partition can still support the first fit after collection; development will
+be reported with one missing menu and wider uncertainty. Publication, exact CI, successor freeze,
+read-only preflight, independent attack and fresh owner authorization remain ahead. Model fits and
+learned authority are still zero.
+
 ## August 16: fourteen questions became fifty-five honest experiments
 
 The missing runner is no longer a sketch. The project now treats each of the fourteen frozen menus

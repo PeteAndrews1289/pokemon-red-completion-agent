@@ -63,6 +63,12 @@ from pokemon_red_completion.party_development_outcome_campaign import (  # noqa:
     PartyDevelopmentOutcomeCampaignPlan,
     PartyDevelopmentOutcomeTrialAssignment,
     PartyDevelopmentOutcomeTrialClaim,
+    party_development_outcome_record_ids,
+)
+from pokemon_red_completion.party_development_outcome_lineage import (  # noqa: E402
+    PARTY_DEVELOPMENT_OUTCOME_CLAIM_KIND,
+    PARTY_DEVELOPMENT_OUTCOME_TERMINAL_KIND,
+    validate_successor_campaign_lineage,
 )
 from pokemon_red_completion.party_development_outcome_results import (  # noqa: E402
     PARTY_DEVELOPMENT_OUTCOME_PRIVATE_EVIDENCE_SCHEMA,
@@ -138,8 +144,8 @@ _MAX_JSON_BYTES = 8 * 1024 * 1024
 _GITHUB_REPOSITORY = "PeteAndrews1289/pokemon-red-completion-agent"
 _CI_WORKFLOW_NAME = "CI"
 _CI_RUN_JSON_FIELDS = "attempt,conclusion,databaseId,event,headSha,status,url,workflowName"
-_CLAIM_KIND = "party_development_outcome_claim"
-_TERMINAL_KIND = "party_development_outcome_terminal"
+_CLAIM_KIND = PARTY_DEVELOPMENT_OUTCOME_CLAIM_KIND
+_TERMINAL_KIND = PARTY_DEVELOPMENT_OUTCOME_TERMINAL_KIND
 _COLLECTION_ID_PREFIX = "red-party-development-outcomes-v1"
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _AUDIT_ACCEPTANCE_KEYS = frozenset(
@@ -192,10 +198,41 @@ class _QuestionRuntime:
     trial_bindings: tuple[RedPartyDevelopmentTrialBinding, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class _TrialExecutionPorts:
+    """Keep complete read authority separate from bounded input authority."""
+
+    observation_emulator: PyBoyAdapter
+    controller: FrameBudgetEmulator
+    reader: PokemonRedStateReader
+    party_reader: PokemonRedPartyReader
+
+
+def _build_trial_execution_ports(
+    emulator: PyBoyAdapter,
+    *,
+    maximum_frames: int,
+) -> _TrialExecutionPorts:
+    return _TrialExecutionPorts(
+        observation_emulator=emulator,
+        controller=FrameBudgetEmulator(
+            emulator,
+            maximum_frames=maximum_frames,
+        ),
+        reader=PokemonRedStateReader(emulator),
+        party_reader=PokemonRedPartyReader(emulator),
+    )
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--campaign-plan", type=Path, required=True)
     parser.add_argument("--campaign-plan-file-sha256", required=True)
+    parser.add_argument("--predecessor-campaign-plan", type=Path, default=None)
+    parser.add_argument(
+        "--predecessor-campaign-plan-file-sha256",
+        default=None,
+    )
     parser.add_argument("--frozen-catalog", type=Path, required=True)
     parser.add_argument("--reservation-plan", type=Path, required=True)
     parser.add_argument("--venue-prior-registry", type=Path, required=True)
@@ -444,6 +481,22 @@ def _validate_execution_request(
 ) -> None:
     """Reject ambiguous or over-broad execution flags before protected reads."""
 
+    predecessor_path = getattr(args, "predecessor_campaign_plan", None)
+    predecessor_digest = getattr(
+        args, "predecessor_campaign_plan_file_sha256", None
+    )
+    predecessor_requested = (
+        predecessor_path is not None or predecessor_digest is not None
+    )
+    if predecessor_requested and (
+        not isinstance(predecessor_path, Path)
+        or not isinstance(predecessor_digest, str)
+        or _SHA256.fullmatch(predecessor_digest) is None
+        or args.private_artifact_root is None
+    ):
+        raise RedPartyDevelopmentOutcomeCampaignRunError(
+            "successor preflight needs the exact predecessor plan and private artifact root"
+        )
     if args.watch and not args.execute:
         raise RedPartyDevelopmentOutcomeCampaignRunError(
             "watch mode is presentation for an authorized execution only"
@@ -453,7 +506,7 @@ def _validate_execution_request(
             raise RedPartyDevelopmentOutcomeCampaignRunError(
                 "campaign authorization digest was supplied without execution"
             )
-        if args.private_artifact_root is not None:
+        if args.private_artifact_root is not None and not predecessor_requested:
             raise RedPartyDevelopmentOutcomeCampaignRunError(
                 "read-only preflight must not receive the private artifact root"
             )
@@ -470,6 +523,32 @@ def _validate_execution_request(
     if expected_plan_sha256 is not None and authorization != expected_plan_sha256:
         raise RedPartyDevelopmentOutcomeCampaignRunError(
             "campaign execution lacks the exact prospectively frozen authorization digest"
+        )
+
+
+def _validate_lineage_request(
+    args: argparse.Namespace,
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+) -> None:
+    predecessor_path = getattr(args, "predecessor_campaign_plan", None)
+    predecessor_digest = getattr(
+        args, "predecessor_campaign_plan_file_sha256", None
+    )
+    supplied = predecessor_path is not None or predecessor_digest is not None
+    if plan.is_successor:
+        if (
+            not supplied
+            or args.private_artifact_root is None
+            or plan.predecessor is None
+            or predecessor_digest != plan.predecessor.plan_file_sha256
+        ):
+            raise RedPartyDevelopmentOutcomeCampaignRunError(
+                "successor campaign lacks its exact predecessor lineage inputs"
+            )
+        return
+    if supplied:
+        raise RedPartyDevelopmentOutcomeCampaignRunError(
+            "original campaign must not receive successor lineage inputs"
         )
 
 
@@ -554,14 +633,22 @@ def _reconstruct_questions(
         profile = load_red_goal_context_profile(profile_path)
         with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
             emulator.load_state_bytes(capture.state_bytes)
-            reader = PokemonRedStateReader(emulator)
+            ports = _build_trial_execution_ports(
+                emulator,
+                maximum_frames=plan.dose.maximum_frames,
+            )
+            reader = ports.reader
             runtime = build_red_goal_context_runtime(
                 profile=profile,
                 capture=capture,
-                emulator=emulator,
+                emulator=ports.observation_emulator,
                 reader=reader,
             )
             observation = runtime.adapter.observe()
+            if ports.controller.frames_executed != 0:
+                raise RedPartyDevelopmentOutcomeCampaignRunError(
+                    "campaign read-only port preflight advanced controller frames"
+                )
         snapshot = build_red_party_development_snapshot(
             reservation,
             source_root_lineage_id=question.binding.root_lineage_id,
@@ -701,19 +788,24 @@ def _execute_trial(
         speed=2 if watch else None,
     ) as emulator:
         emulator.load_state_bytes(runtime.capture.state_bytes)
-        bounded_emulator = FrameBudgetEmulator(
+        ports = _build_trial_execution_ports(
             emulator,
             maximum_frames=dose.maximum_frames,
         )
-        reader = PokemonRedStateReader(bounded_emulator)
+        # Observation keeps the emulator's complete read-only capability,
+        # including banked cartridge RAM.  Only the executor receives the
+        # frame-budget controller proxy.  Passing that proxy to observation
+        # hid the all-box port from runtime structural checks and consumed the
+        # first campaign trial before input.
+        reader = ports.reader
         goal_runtime = build_red_goal_context_runtime(
             profile=runtime.profile,
             capture=runtime.capture,
-            emulator=bounded_emulator,
+            emulator=ports.observation_emulator,
             reader=reader,
         )
         before_observation = goal_runtime.adapter.observe()
-        before_party = PokemonRedPartyReader(bounded_emulator).read()
+        before_party = ports.party_reader.read()
         if (
             before_observation.party.species_ids() != before_party.species_ids()
             or tuple(member.level for member in before_observation.party.members)
@@ -729,7 +821,7 @@ def _execute_trial(
         )
         actions = BoundedActionExecutor(
             FrameSafeExecutor(
-                bounded_emulator,
+                ports.controller,
                 DEFAULT_NEW_GAME_TIMING.controller_timing(),
             ),
             maximum_actions=dose.maximum_controller_actions,
@@ -737,7 +829,7 @@ def _execute_trial(
         run_red_team_balancing(
             actions,
             reader,
-            bounded_emulator,
+            ports.observation_emulator,
             policy=policy,
             intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=MANSION_TRAINING_FLEE_TIMING,
@@ -759,7 +851,7 @@ def _execute_trial(
             )
         summary = summaries[0]
         after_observation = goal_runtime.adapter.observe()
-        after_party = PokemonRedPartyReader(bounded_emulator).read()
+        after_party = ports.party_reader.read()
         after_targets = tuple(
             member
             for member in after_party.members
@@ -787,7 +879,7 @@ def _execute_trial(
             progress_after=summary.progress,
             completion_before=before_completion,
             completion_after=after_completion,
-            frames_executed=bounded_emulator.frames_executed,
+            frames_executed=ports.controller.frames_executed,
             rotations_executed=summary.rotations_executed,
             evolution_completed=(after_target.species_id != binding.target_species_id),
         )
@@ -824,7 +916,7 @@ def _execute_trial(
             "execution": summary.public_dict(),
             "semantic_actions": outcome.actions_executed,
             "controller_actions": actions.actions_executed,
-            "frames_executed": bounded_emulator.frames_executed,
+            "frames_executed": ports.controller.frames_executed,
             "criterion_values": list(outcome.criterion_values),
             "evolution_completed": trial.evolution_completed,
             "outcome_evidence_sha256": outcome.evidence_sha256,
@@ -842,7 +934,7 @@ def _execute_trial(
             criterion_values=outcome.criterion_values,
             semantic_actions=outcome.actions_executed,
             controller_actions=actions.actions_executed,
-            frames_executed=bounded_emulator.frames_executed,
+            frames_executed=ports.controller.frames_executed,
             battles_completed=summary.progress.battles_completed,
             encounter_steps=summary.progress.steps_taken,
             healing_trips=summary.progress.healing_trips,
@@ -853,12 +945,18 @@ def _execute_trial(
     return result, evidence
 
 
-def _claim_id(assignment: PartyDevelopmentOutcomeTrialAssignment) -> str:
-    return f"{assignment.trial_id}-claim"
+def _claim_id(
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+    assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> str:
+    return party_development_outcome_record_ids(plan, assignment)[0]
 
 
-def _terminal_id(assignment: PartyDevelopmentOutcomeTrialAssignment) -> str:
-    return f"{assignment.trial_id}-terminal"
+def _terminal_id(
+    plan: PartyDevelopmentOutcomeCampaignPlan,
+    assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> str:
+    return party_development_outcome_record_ids(plan, assignment)[1]
 
 
 def _load_claim(
@@ -866,7 +964,9 @@ def _load_claim(
     plan: PartyDevelopmentOutcomeCampaignPlan,
     assignment: PartyDevelopmentOutcomeTrialAssignment,
 ) -> PartyDevelopmentOutcomeTrialClaim | None:
-    record = store.find_sealed_record(_claim_id(assignment), expected_kind=_CLAIM_KIND)
+    record = store.find_sealed_record(
+        _claim_id(plan, assignment), expected_kind=_CLAIM_KIND
+    )
     if record is None:
         return None
     claim = PartyDevelopmentOutcomeTrialClaim.from_private_dict(record.read())
@@ -884,7 +984,7 @@ def _load_terminal(
     assignment: PartyDevelopmentOutcomeTrialAssignment,
 ) -> PartyDevelopmentOutcomeTrialResult | None:
     record = store.find_sealed_record(
-        _terminal_id(assignment), expected_kind=_TERMINAL_KIND
+        _terminal_id(plan, assignment), expected_kind=_TERMINAL_KIND
     )
     if record is None:
         return None
@@ -925,7 +1025,7 @@ def _publish_censored_terminal(
     )
     terminal = build_party_development_trial_terminal(result, evidence=evidence)
     store.publish_sealed_record(
-        _terminal_id(assignment),
+        _terminal_id(plan, assignment),
         kind=_TERMINAL_KIND,
         record=terminal,
     )
@@ -965,7 +1065,7 @@ def _publish_invalid_terminal(
     )
     terminal = build_party_development_trial_terminal(result, evidence=evidence)
     store.publish_sealed_record(
-        _terminal_id(assignment),
+        _terminal_id(plan, assignment),
         kind=_TERMINAL_KIND,
         record=terminal,
     )
@@ -988,6 +1088,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         subject="campaign plan",
     )
     plan = PartyDevelopmentOutcomeCampaignPlan.from_private_dict(plan_document)
+    _validate_lineage_request(args, plan)
     if (
         plan.source_commit != source.git_commit
         or plan.source_bundle_sha256 != source_bundle
@@ -1002,6 +1103,40 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         source_commit=source.git_commit,
     )
     _validate_execution_request(args, expected_plan_sha256=plan.plan_sha256)
+
+    store: PrivateArtifactRoot | None = None
+    predecessor_plan: PartyDevelopmentOutcomeCampaignPlan | None = None
+    inherited_results: tuple[PartyDevelopmentOutcomeTrialResult, ...] = ()
+    predecessor_plan_path: Path | None = None
+    if plan.is_successor:
+        assert plan.predecessor is not None
+        assert args.predecessor_campaign_plan is not None
+        assert args.predecessor_campaign_plan_file_sha256 is not None
+        assert args.private_artifact_root is not None
+        predecessor_plan_path = _require_external(
+            args.predecessor_campaign_plan,
+            subject="predecessor campaign plan",
+        )
+        predecessor_document, _ = _load_private_json(
+            predecessor_plan_path,
+            expected_sha256=args.predecessor_campaign_plan_file_sha256,
+            subject="predecessor campaign plan",
+        )
+        predecessor_plan = PartyDevelopmentOutcomeCampaignPlan.from_private_dict(
+            predecessor_document
+        )
+        private_root_path = _require_external(
+            args.private_artifact_root, subject="private artifact root"
+        )
+        store = open_private_root(private_root_path, repository_root=PROJECT_ROOT)
+        inherited_results = validate_successor_campaign_lineage(
+            plan,
+            predecessor_plan,
+            predecessor_plan_file_sha256=(
+                args.predecessor_campaign_plan_file_sha256
+            ),
+            store=store,
+        )
 
     catalog_document, _catalog_payload = _load_private_json(
         args.frozen_catalog,
@@ -1070,6 +1205,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         args.input_audit_receipt.resolve(): plan.input_audit_receipt_file_sha256,
         rom_path: plan.rom_sha256,
     }
+    if predecessor_plan_path is not None:
+        assert plan.predecessor is not None
+        protected_files[predecessor_plan_path] = plan.predecessor.plan_file_sha256
     protected_files.update(question_files)
     if {
         path: hashlib.sha256(path.read_bytes()).hexdigest()
@@ -1097,9 +1235,18 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "prospective_catalog_sha256": catalog.prospective_catalog_sha256,
         "question_count": len(runtimes),
         "candidate_trial_count": sum(len(item.assignments) for item in runtimes),
+        "inherited_terminal_count": len(inherited_results),
+        "remaining_candidate_trial_count": len(plan.active_assignments),
+        "remaining_trial_partition_counts": dict(
+            sorted(Counter(item.partition.value for item in plan.active_assignments).items())
+        ),
+        "inherited_terminal_status_counts": dict(
+            sorted(Counter(item.status.value for item in plan.inherited_terminals).items())
+        ),
         "trial_bindings_reconstructed": sum(
             len(item.trial_bindings) for item in runtimes
         ),
+        "execution_observation_ports_verified": len(runtimes),
         "all_candidates_available": True,
         "input_files_unchanged": True,
         "rom_adjacent_artifacts_unchanged": True,
@@ -1123,20 +1270,39 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             rom_path=rom_path,
             rom_before=rom_before,
         )
+        if plan.is_successor:
+            assert plan.predecessor is not None
+            assert predecessor_plan is not None
+            assert store is not None
+            validate_successor_campaign_lineage(
+                plan,
+                predecessor_plan,
+                predecessor_plan_file_sha256=(
+                    plan.predecessor.plan_file_sha256
+                ),
+                store=store,
+            )
         return preflight
 
     assert args.private_artifact_root is not None
-    private_root_path = _require_external(
-        args.private_artifact_root, subject="private artifact root"
-    )
-    store = open_private_root(private_root_path, repository_root=PROJECT_ROOT)
+    if store is None:
+        private_root_path = _require_external(
+            args.private_artifact_root, subject="private artifact root"
+        )
+        store = open_private_root(private_root_path, repository_root=PROJECT_ROOT)
     collection_id = f"{_COLLECTION_ID_PREFIX}-{plan.plan_sha256[:16]}"
     evolutions = evolution_graph(rom_bytes)
-    results: list[PartyDevelopmentOutcomeTrialResult] = []
-    claims = 0
-    measured = 0
-    invalid = 0
-    censored = 0
+    results: list[PartyDevelopmentOutcomeTrialResult] = list(inherited_results)
+    claims = len(inherited_results)
+    measured = sum(
+        item.status is OutcomeEvidenceStatus.MEASURED for item in inherited_results
+    )
+    invalid = sum(
+        item.status is OutcomeEvidenceStatus.INVALID for item in inherited_results
+    )
+    censored = sum(
+        item.status is OutcomeEvidenceStatus.CENSORED for item in inherited_results
+    )
     runtime_by_scenario = {item.question.scenario_id: item for item in runtimes}
     binding_by_assignment = {
         binding.assignment.assignment_sha256: binding
@@ -1145,7 +1311,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     }
     try:
         with store.collection_session(collection_id):
-            for assignment in plan.assignments:
+            for assignment in plan.active_assignments:
                 claim = _load_claim(store, plan, assignment)
                 terminal = _load_terminal(store, plan, assignment)
                 if terminal is not None and claim is None:
@@ -1166,7 +1332,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
                 claim = PartyDevelopmentOutcomeTrialClaim.build(plan, assignment)
                 store.publish_sealed_record(
-                    _claim_id(assignment),
+                    _claim_id(plan, assignment),
                     kind=_CLAIM_KIND,
                     record=claim.private_dict(),
                 )
@@ -1188,7 +1354,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                         result, evidence=evidence
                     )
                     store.publish_sealed_record(
-                        _terminal_id(assignment),
+                        _terminal_id(plan, assignment),
                         kind=_TERMINAL_KIND,
                         record=terminal_document,
                     )
@@ -1212,6 +1378,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             rom_path=rom_path,
             rom_before=rom_before,
         )
+        if plan.is_successor:
+            assert plan.predecessor is not None
+            assert predecessor_plan is not None
+            validate_successor_campaign_lineage(
+                plan,
+                predecessor_plan,
+                predecessor_plan_file_sha256=(
+                    plan.predecessor.plan_file_sha256
+                ),
+                store=store,
+            )
 
     examples = assemble_party_development_outcome_examples(
         catalog,
