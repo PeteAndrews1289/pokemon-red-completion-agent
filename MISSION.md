@@ -5,7 +5,9 @@ below, it does not belong in this repository — however good it looks on its ow
 
 Then read [NORTH_STAR.md](NORTH_STAR.md). It turns this mission into mandatory task filters,
 time boxes, stop rules, and a full-run gate. Authority flows from mission to north star to the
-active model-first roadmap; no newer checkpoint can reverse that order.
+generated [active product state](ACTIVE_PRODUCT_STATE.md), then the model-first roadmap; no newer
+checkpoint can reverse that order. The active state is the compact answer to what work is allowed
+now and which measured learning output must result.
 
 ## The goal
 

@@ -5,6 +5,29 @@ dated roadmap and handoff checkpoints. Historical evidence remains valid; histor
 to harden or replay the full deterministic route do not.
 
 Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
+Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
+current lane; the accumulated checkpoints below are evidence history when they conflict with it.
+
+## Current checkpoint: repeatable party learning is the only active development lane
+
+The 14-question / 55-trial one-shot campaign exposed the wrong optimization target. Its immutable
+records remain evidence and consumed identities remain non-retryable, but it is retired as the
+development leading edge. Routine data generation must not inherit sealed-experiment provenance
+ceremony. The active lane now uses repeatable randomized, non-sealed scenarios to learn
+completion-aware trainee, venue, and fight/rotate/heal/stop choices.
+
+The first decision gate is explicit: **32 train outcome questions, 16 untouched development
+questions, one train-only model fit, and one unseen paired baseline comparison**. These are the only
+active learning counters; inputs, CI runs, preflights, teacher demonstrations, and frozen catalogs
+remain zero progress. The time box is two sessions / sixteen hours. Stop if diverse genuine choices
+cannot be generated, the fit cannot beat the frozen baseline unseen, or a gain depends on
+overleveling, teacher labels, identity leakage, or fixed-route knowledge.
+
+Development is repeatable and needs no per-case authorization. A later benchmark freezes a useful
+comparison under exact source/CI identity. Sealed Red, Crystal execution, full replays,
+teacher-route hardening, and retries of consumed trials are prohibited in the active lane. Claude
+reviews benchmark/sealed statistics and claims; Antigravity challenges transfer at milestone
+decisions; neither blocks routine development iteration.
 
 ## Current checkpoint: one V1 tombstone; publish and authorize the 54-trial successor
 

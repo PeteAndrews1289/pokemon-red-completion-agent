@@ -3,6 +3,11 @@
 > **Start with [HANDOFF.md](../HANDOFF.md).** This document is the long record: milestones, gates and
 > results accumulated over the project. The handoff is what a new agent needs to be oriented today.
 
+> **Current lane:** Read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). The only
+> active development lane is repeatable completion-aware party learning: 32 train questions, 16
+> untouched development questions, one fit, and one unseen comparison. The one-shot 14/55 campaign
+> remains evidence but is no longer the development leading edge.
+
 > **Active strategy moved on 2026-08-14.** The current roadmap is
 > [model-first-roadmap.md](model-first-roadmap.md), governed by
 > [NORTH_STAR.md](../NORTH_STAR.md). The material below is retained as historical evidence. Its

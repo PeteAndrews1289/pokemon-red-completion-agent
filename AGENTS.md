@@ -2,14 +2,19 @@
 
 Read [MISSION.md](MISSION.md) first — it states the product every change is judged against. Then
 read [NORTH_STAR.md](NORTH_STAR.md), whose anti-drift contract outranks every roadmap, handoff, and
-dated checkpoint. Read [docs/model-first-roadmap.md](docs/model-first-roadmap.md) for the active
-strategy and [AGENT_COORDINATION.md](AGENT_COORDINATION.md) for ownership and current work. A newer
-dated checkpoint may not override the mission or north star.
+dated checkpoint. Then read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the generated
+one-page answer for the single active lane, learning counters, time box, and forbidden work. Read
+[docs/model-first-roadmap.md](docs/model-first-roadmap.md) for the broader strategy and
+[AGENT_COORDINATION.md](AGENT_COORDINATION.md) for ownership. A newer dated checkpoint may not
+override the mission, north star, or active product state.
 
 Before implementation, add the six-part mission check from `NORTH_STAR.md` to the working plan:
 reusable capability, learned authority, transfer test, cheapest falsifier, time box, and stop
 condition. Do not start a full-game run unless every full-run gate in `NORTH_STAR.md` is recorded.
 The default development loop uses short authenticated scenarios; full runs are final exams.
+Run `python scripts/check_product_focus.py` before committing. It rejects multiple active lanes,
+learning work without measurable outputs, maintenance without a named unblock, weakened alarms,
+unsupported counters, and a stale generated active-state page.
 
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 

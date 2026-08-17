@@ -3,6 +3,31 @@
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 
+## Product-focus audit — accepted with bounded corrections 2026-08-16
+
+Claude's cross-project audit accepted the implementation integrity but rejected the experiment's
+ability to justify its cost. The original 8-train/6-development design was too small for its broad
+claim, the 14/55 one-shot campaign converted infrastructure failures into permanently lost
+examples, and routine development had inherited sealed-evaluation ceremony. Claude also found that
+the failure taxonomy was too coarse for efficient debugging. Decision: **accept** the strategic
+finding. Preserve every one-shot record, but retire that campaign as the development leading edge
+and move outcome generation into repeatable non-sealed scenarios. A future benchmark must be
+frozen only after development shows a signal worth measuring.
+
+Antigravity independently identified process overhead, slow feedback, and insufficient emphasis on
+learned authority and transfer. Decision: **accept** that critique. Its broader claim that storage,
+resource, acquisition, and version/trade capability were absent was contradicted by existing source
+and tests, so that part is **rejected** rather than used to build a duplicate subsystem. The true
+missing result is autonomous integration and outcome-trained authority, not another representation
+of already-modeled facts.
+
+Resulting action: install the machine-checked
+[active product state](../ACTIVE_PRODUCT_STATE.md), make repeatable completion-aware party learning
+the only active lane, require 32 train + 16 development questions, one fit and one unseen comparison,
+and reserve Claude/Antigravity for benchmark, sealed, transfer, or milestone decisions. The active
+time box is two sessions / sixteen hours; sealed Red, Crystal execution, full replay, teacher-route
+hardening, and consumed-trial retry remain closed.
+
 ## Cave V2 conditional authorization audit — conditions resolved locally 2026-08-15
 
 Claude audited exact head `346b2e5d0bcb1aa1b55eac1ff839199a16f138cd` after CI run

@@ -6,7 +6,8 @@ and two read-only reviewers.
 
 The durable role definitions live here. The exact current assignments, gate order, deliverables and
 stop conditions live in [current-agent-handoffs.md](current-agent-handoffs.md). Read both before
-dispatching work; a dated audit does not silently reactivate an older assignment.
+dispatching work, and read the generated [active product state](../ACTIVE_PRODUCT_STATE.md) before
+either. A dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
@@ -87,7 +88,8 @@ scratch inbox is intentionally not versioned.
 
 ## Review cadence
 
-Use reviews at decisions, not continuously:
+Use reviews at decisions, not continuously. Routine repeatable development proceeds under the
+active development contract and does not wait for an external audit:
 
 1. **Roadmap review:** both reviewers challenge this strategy before implementation begins.
 2. **Design review:** review the scenario schema, metrics, thresholds, partitions, and stop rules
@@ -95,6 +97,10 @@ Use reviews at decisions, not continuously:
 3. **Implementation audit:** inspect code and ROM-free tests before an expensive or sealed run.
 4. **Evidence audit:** inspect the path-free result and claims after the run.
 5. **Transfer review:** challenge Red-specific assumptions before opening any Crystal partition.
+
+Claude is not a standing preflight for every development run. Antigravity is not a second forensic
+auditor. The active product state names the rigor tier; only benchmark and sealed tiers inherit the
+corresponding review gates.
 
 Codex may continue low-risk implementation while a read-only review is pending, but it may not open
 a sealed context or start an expensive full run until relevant critical findings are resolved.
@@ -187,6 +193,8 @@ experiment, not by averaging opinions.
 
 After a meaningful job, Codex updates as applicable:
 
+- `configs/active-product-focus.json` and its generated `ACTIVE_PRODUCT_STATE.md` when the active
+  lane, evidence-backed counters, time box, or next decision changes;
 - `HANDOFF.md` with the newest factual checkpoint;
 - `AGENT_COORDINATION.md` with active ownership and next work;
 - `docs/model-first-roadmap.md` when strategy or gates change;

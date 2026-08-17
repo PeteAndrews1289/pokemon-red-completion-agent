@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the project installed a compass, not another checkpoint
+
+By August 16 the repository could prove almost everything about an experiment except that the
+experiment was teaching a model. It had immutable catalogs, source/CI bindings, one-shot claims,
+preflights, mutation attacks, and view-only dashboards. The active completion-aware lane still had
+**zero measured outcomes, zero fits, zero unseen comparisons, and zero authority**. The first
+failure at the start of a fifty-five-trial campaign made the tradeoff impossible to ignore.
+
+The campaign was not erased or rerolled. Its evidence stays immutable and its consumed identities
+stay consumed. What changed was its role: it is no longer the development loop. A repeatable,
+randomized scenario curriculum now owns the next decision—32 train questions, 16 untouched
+development questions, one fit, and one unseen baseline comparison within two sessions.
+
+That decision became code. One canonical JSON file drives a generated active-state page and a
+view-only dashboard. CI fails on a second active lane, a learning lane without real outputs, a
+maintenance task without an unblock, weakened anti-drift alarms, unsupported progress counters, or
+an attempt to open sealed Red, Crystal, a full replay, teacher-route hardening, or a consumed retry.
+The project can still be wrong, but it can no longer quietly spend another week calling
+infrastructure “training.”
+
+---
+
 ## Current checkpoint: the first red lane cannot be erased
 
 The campaign finally received permission to start. Lane one wrote its durable claim, loaded its

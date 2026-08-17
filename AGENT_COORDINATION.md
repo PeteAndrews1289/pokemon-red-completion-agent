@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **Active product focus — authoritative current checkpoint:** Read
+> [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) before the accumulated history below. Exactly
+> one development lane is active: repeatable completion-aware party outcome learning. Its decision
+> gate is 32 train questions, 16 untouched development questions, one train-only fit, and one unseen
+> baseline comparison. The 14/55 one-shot campaign is preserved but retired as the development
+> leading edge; consumed identities remain non-retryable.
+>
+> Codex owns the repeatable scenario generator, outcome collection, fitting, evaluation, tracked
+> counters, documentation, and publication. Claude reviews only when a benchmark or sealed claim is
+> frozen, or when statistics/leakage would change a promotion decision. Antigravity challenges
+> architecture and Crystal transfer at milestone decisions with no more than three falsifiers.
+> Routine development does not wait for either reviewer. Sealed Red, Crystal execution, full replay,
+> teacher-route hardening, and consumed-trial retry are closed. Time box: two sessions / sixteen
+> hours; stop on no diverse scenarios or no unseen gain.
+
 > **2026-08-16 V1 failure / V2 successor checkpoint — highest active checkpoint:** The exact
 > authorized V1 outcome campaign consumed one development trial and stopped before controller
 > construction because its frame-budget proxy hid the read-only cartridge-RAM protocol required
@@ -1334,6 +1349,7 @@ A capture is one starting point, not a substitute for a run. Iterate against it;
 ```bash
 .venv/bin/python scripts/check_public_artifacts.py
 .venv/bin/python scripts/check_docs.py
+.venv/bin/python scripts/check_product_focus.py
 .venv/bin/python scripts/regenerate_collection_registry.py --check
 .venv/bin/python scripts/regenerate_strategic_navigation_registry.py --check
 .venv/bin/python scripts/regenerate_strategic_navigation_scenario_registry.py --check

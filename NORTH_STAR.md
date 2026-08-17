@@ -21,9 +21,11 @@ When documents disagree, use this order:
 
 1. [MISSION.md](MISSION.md) — permanent product definition.
 2. This anti-drift contract — permanent operating rules.
-3. [docs/model-first-roadmap.md](docs/model-first-roadmap.md) — current development strategy.
-4. [AGENT_COORDINATION.md](AGENT_COORDINATION.md) — current ownership and active work.
-5. [HANDOFF.md](HANDOFF.md) and dated checkpoints — evidence and historical state.
+3. [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) — the one active lane, counters, time box,
+   stop conditions, rigor tier, and prohibited actions.
+4. [docs/model-first-roadmap.md](docs/model-first-roadmap.md) — broader development strategy.
+5. [AGENT_COORDINATION.md](AGENT_COORDINATION.md) — current ownership.
+6. [HANDOFF.md](HANDOFF.md) and dated checkpoints — evidence and historical state.
 
 A newer date does not overrule a higher-authority document. A checkpoint that asks for work
 contrary to the mission is stale by definition.
@@ -42,6 +44,10 @@ Before implementation, every active task must record:
 If learned authority and transfer both remain unchanged, classify the task as maintenance. Perform
 maintenance only when it unblocks an already-named learned experiment, and keep it to the smallest
 repair that does so.
+
+The tracked source for the active state is `configs/active-product-focus.json`. CI validates it and
+requires [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) to be its exact generated projection.
+Inputs, preflights, CI passes, and teacher runs never advance its learning counters.
 
 ## Default development loop
 

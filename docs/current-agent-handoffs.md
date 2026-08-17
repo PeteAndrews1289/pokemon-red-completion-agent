@@ -2,8 +2,35 @@
 
 Status: active operating assignment as of 2026-08-16. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
-[MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), or the
+[MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
+[active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
+
+## Current override: one repeatable learning lane, no standing review queue
+
+The machine-checked active lane is `repeatable-party-outcome-learning-v1`. Codex owns a repeatable,
+non-sealed Red scenario generator for completion-aware trainee, venue, and
+fight/rotate/heal/stop decisions. The next decision requires 32 measured train questions, 16
+untouched development questions, one train-only fit, and one unseen comparison against the frozen
+baseline. Live authority remains zero. The time box is two sessions / sixteen hours; stop on no
+diverse choices, no unseen gain, or any gain caused by overleveling, teacher labels, identity
+leakage, or fixed-route knowledge.
+
+The existing 14-question / 55-trial V1/V2 campaign is retired as the development leading edge.
+Its immutable records remain valid evidence, consumed identities cannot retry, and no private
+artifact is deleted or reinterpreted. It may inform a later benchmark design, but Codex must not
+spend the next session repairing or finishing it merely because it already exists.
+
+Codex is the sole implementation and publication owner. It updates the active counters only from
+tracked path-free evidence; inputs, preflights, CI, teacher runs, and frozen catalogs count as zero.
+Claude is deferred until Codex freezes a meaningful benchmark or sealed claim, when Claude audits
+statistics, leakage, evidence, and claim boundaries. Antigravity is deferred until a milestone
+architecture or Crystal transfer decision, when it returns no more than three falsifiable claims
+and explicit work to delete. Routine development does not wait for either reviewer.
+
+Sealed Red, Crystal execution, full-game replay, teacher-route hardening, and retry of consumed
+trials are prohibited. The view-only focus dashboard runs at port 8768. The canonical contract and
+all role details are [generated here](../ACTIVE_PRODUCT_STATE.md).
 
 ## Current override: publish and attack the implemented 14/55 collector
 

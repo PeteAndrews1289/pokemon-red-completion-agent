@@ -1,0 +1,152 @@
+{
+  "alarms": {
+    "maximum_consecutive_ci_only_repairs": 1,
+    "maximum_full_replays_during_active_lane": 0,
+    "maximum_sessions_without_measured_learning_output": 1,
+    "stop_on_repeated_fixed_route_patch": true,
+    "stop_on_unmeasured_teacher_label_copy": true
+  },
+  "lanes": [
+    {
+      "capability": "Choose trainee, venue, and fight, rotate, heal, or stop actions from completion, party, resource, and risk state.",
+      "cheapest_falsifier": "Run repeatable randomized Red scenarios from independent non-sealed roots; stop if candidate outcomes lack diversity or an unseen comparison cannot beat the frozen baseline.",
+      "id": "repeatable-party-outcome-learning-v1",
+      "kind": "learning",
+      "learned_authority": {
+        "current": "Completion-aware party choices remain fixed, teacher-authored, or offline-only; live authority is zero.",
+        "target": "Fit an outcome-trained shadow scorer that selects party-development choices on unseen Red scenarios; live authority stays zero until the benchmark gate."
+      },
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "outcome_question",
+          "minimum": 32,
+          "partition": "train"
+        },
+        {
+          "kind": "outcome_question",
+          "minimum": 16,
+          "partition": "development"
+        },
+        {
+          "kind": "model_fit",
+          "minimum": 1,
+          "partition": "train"
+        },
+        {
+          "kind": "unseen_comparison",
+          "minimum": 1,
+          "partition": "development"
+        }
+      ],
+      "name": "Repeatable completion-aware party outcome learning",
+      "next_decision": "Decide whether the completion-aware party scorer earns a larger Red benchmark or the representation must change.",
+      "progress": {
+        "authority_promotions": 0,
+        "evidence": [],
+        "model_fits": 0,
+        "outcome_questions": {
+          "development": 0,
+          "train": 0
+        },
+        "transfer_results": 0,
+        "unseen_comparisons": 0
+      },
+      "prohibited_actions": [
+        "consumed_trial_retry",
+        "crystal_execution",
+        "full_game_replay",
+        "sealed_red_evaluation",
+        "teacher_route_hardening"
+      ],
+      "rigor": "development",
+      "status": "active",
+      "stop_conditions": [
+        "No diverse multi-candidate scenario set exists after two sessions.",
+        "The fit cannot beat the frozen baseline on unseen Red scenarios.",
+        "Any apparent gain comes from overleveling, teacher labels, identity leakage, or fixed-route knowledge.",
+        "Infrastructure work exceeds the maintenance budget without unblocking a measured learning output."
+      ],
+      "time_box": {
+        "maximum_hours": 16,
+        "maximum_sessions": 2
+      },
+      "transfer_test": "Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization."
+    },
+    {
+      "id": "one-shot-party-outcome-campaign-v1-v2",
+      "kind": "learning",
+      "name": "One-shot 14-question party outcome campaign",
+      "preserve_evidence": true,
+      "reason": "Its provenance cost and non-retryable failures dominate the learning signal, so it is no longer the development leading edge.",
+      "retry_allowed": false,
+      "rigor": "benchmark",
+      "status": "retired"
+    }
+  ],
+  "product": {
+    "environment_role": "Red is the first curriculum and Crystal is the first transfer test; neither title is the product.",
+    "goal": "Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.",
+    "non_goals": [
+      "A perfect fixed Pokemon Red walkthrough.",
+      "An overleveled teacher replay that removes the decisions the model should learn.",
+      "Process, provenance, or CI evidence without measured learner outcomes.",
+      "A separate hand-scripted teacher for every game."
+    ],
+    "success_conditions": [
+      "Complete each title's story and supported mechanics under declared learned authority.",
+      "Acquire, retain, evolve, and trade every legitimately obtainable species required by the living collection contract.",
+      "Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.",
+      "Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability."
+    ]
+  },
+  "review_roles": {
+    "antigravity": "Challenge architecture and cross-game transfer at milestone decisions, with at most three falsifiable claims and explicit work to delete.",
+    "claude": "Audit frozen benchmark or sealed designs, statistics, leakage, and claims; routine development does not wait for a forensic review.",
+    "codex": "Own implementation, measurement, adjudication, documentation, publication, and the active-lane counter."
+  },
+  "rigor_policy": {
+    "benchmark": {
+      "exact_source_ci_binding": true,
+      "external_review": "before_execution",
+      "owner_authorization_per_case": false,
+      "purpose": "Freeze a meaningful comparison or authority gate after development has produced a signal.",
+      "repeatable": false
+    },
+    "development": {
+      "exact_source_ci_binding": false,
+      "external_review": "design_freeze_or_promotion_only",
+      "owner_authorization_per_case": false,
+      "purpose": "Generate diverse outcomes, fit models, falsify ideas, and iterate quickly on non-sealed scenarios.",
+      "repeatable": true
+    },
+    "sealed": {
+      "exact_source_ci_binding": true,
+      "external_review": "before_execution",
+      "owner_authorization_per_case": true,
+      "purpose": "Protect a one-shot claim whose result cannot be tuned, replaced, or retried.",
+      "repeatable": false
+    }
+  },
+  "schema": "pokemon.product-focus.v1",
+  "session_budget_percent": {
+    "data_and_scenarios": 60,
+    "maintenance_and_docs": 15,
+    "model_and_evaluation": 25
+  },
+  "status_report": {
+    "counter_source": "Tracked path-free evidence only; inputs, preflights, CI passes, and teacher runs do not advance learning counters.",
+    "required_fields": [
+      "product_goal",
+      "active_lane",
+      "learning_output",
+      "current_counters",
+      "authority_delta",
+      "transfer_result",
+      "blocker",
+      "next_decision",
+      "time_box",
+      "stop_condition"
+    ]
+  }
+}

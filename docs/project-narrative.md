@@ -1,5 +1,34 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: we stopped mistaking experiment ceremony for learning progress
+
+The project had reached a technically impressive but strategically dangerous state. Fourteen Red
+questions were frozen, fifty-five candidate trials were preregistered, every identity was bound to
+source and CI, and the first authorized campaign failed honestly before controller input. The
+engineering protected the claim. It did not produce a single measured completion-aware outcome,
+model fit, unseen comparison, authority promotion, or transfer result.
+
+That mismatch is now a checked product decision. The one-shot campaign is preserved—failures and
+consumed identities cannot be retried—but it is retired as the development leading edge. The new
+development loop is deliberately repeatable: randomized non-sealed scenarios, outcome collection,
+train-only fitting, and unseen comparison. Exact source/CI ceremony returns only when a useful
+signal is promoted into a benchmark; owner-authorized no-retry rules remain reserved for sealed
+claims.
+
+The repository now has one generated [active product state](../ACTIVE_PRODUCT_STATE.md). Its JSON
+source allows exactly one active lane and CI rejects a lane without capability, authority target,
+transfer test, cheapest falsifier, time box, stop conditions, measurable outputs, protected-action
+boundaries, and evidence-backed counters. It also rejects maintenance that cannot name the learning
+experiment it unblocks. The first scorecard is brutally simple: **32 train outcome questions · 16
+unseen development questions · 1 model fit · 1 unseen baseline comparison**. All four counters are
+zero.
+
+The change is not a retreat from rigor. It puts rigor where it buys information. Sixty percent of a
+session goes to data and scenarios, twenty-five percent to fitting and evaluation, and fifteen
+percent to maintenance and documentation. One session without a measured learning output is an
+alarm. The product remains a transferable player that completes games and builds a living Pokédex;
+Red is the curriculum and Crystal the first transfer test, not separate scripting projects.
+
 ## August 16: the first lane failed before the first button—and stayed failed
 
 The first completion-aware campaign finally received exact authorization: fourteen frozen

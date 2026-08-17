@@ -1,8 +1,14 @@
 # Pokémon Red Completion Agent
 
 > **Working on this repository?** Read [MISSION.md](MISSION.md),
-> [NORTH_STAR.md](NORTH_STAR.md), the
+> [NORTH_STAR.md](NORTH_STAR.md), the generated
+> [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
+
+> **Current product focus:** one repeatable development lane must produce 32 train outcome
+> questions, 16 unseen development questions, one fit, and one unseen baseline comparison. The
+> one-shot 14/55 campaign is preserved as evidence but retired as the development leading edge.
+> Run `python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port 8768.
 
 > **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
 > exact authorized campaign durably claimed its first development trial, then full-box semantic

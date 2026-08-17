@@ -7,15 +7,42 @@ what is wrong, what is unproven, and what this codebase has repeatedly fooled pe
 
 Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [NORTH_STAR.md](NORTH_STAR.md) (the mandatory anti-drift contract),
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) (the generated one-page active truth),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
 **How to read this document.** Dated checkpoint sections accumulate at the top, newest first, and
 supersede older handoff evidence when they disagree. They never supersede `MISSION.md`,
-`NORTH_STAR.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
+`NORTH_STAR.md`, `ACTIVE_PRODUCT_STATE.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
+
+## Focus guard installed; repeatable learning replaces the one-shot leading edge — 2026-08-16
+
+The compact current source is now [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), generated
+from `configs/active-product-focus.json` and checked in CI. It permits exactly one active lane and
+requires capability, authority delta, transfer test, cheapest falsifier, time box, stop conditions,
+measurable outputs, protected-action boundaries, honest evidence-backed counters, and a 60/25/15
+learning/model/maintenance allocation. A maintenance lane is invalid unless it names the learning
+experiment it unblocks.
+
+The active development lane is repeatable completion-aware party outcome learning: 32 train
+questions, 16 unseen development questions, one train-only fit, and one unseen comparison against
+the frozen baseline. Live authority stays zero. Sealed Red, Crystal execution, full replay,
+teacher-route hardening, and any retry of consumed one-shot trials are prohibited. The V1/V2 14/55
+campaign remains immutable historical evidence but is retired as the development leading edge.
+
+Routine development no longer inherits sealed-campaign ceremony. Development is repeatable and
+fast; exact source/CI binding and external review belong to benchmarks; sealed work additionally
+requires per-case owner authorization and no retry. The view-only focus dashboard runs at local
+port 8768 and shows only evidence-backed learning counters. Next: build the repeatable scenario
+generator and collect the first diverse outcomes within two sessions / sixteen hours. Stop if the
+scenarios are not diverse or the resulting model cannot beat the frozen baseline unseen.
+See the [current focus audit](docs/current-audit-2026-08-16.md) for the enforced failure modes and
+review-role adjudication. The complete ROM-free gate passes 3,939 tests, with three integration
+deselections and one expected xfail; lint, typing, privacy, documentation, focus, and generated
+registry checks are green.
 
 ## Outcome V1 failed before input; publish the non-retrying successor — 2026-08-16
 

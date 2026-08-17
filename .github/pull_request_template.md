@@ -2,6 +2,17 @@
 
 <!-- Describe the implementation and its completion or reliability impact. -->
 
+## Product mission check
+
+- **Reusable capability:**
+- **Learned authority:**
+- **Transfer test:**
+- **Cheapest falsifier:**
+- **Time box:**
+- **Stop condition:**
+
+<!-- Maintenance must name the active learning experiment it unblocks. -->
+
 ## Claim boundary
 
 <!-- State what this proves and what it does not prove. -->
@@ -10,6 +21,7 @@
 
 - [ ] `python scripts/check_public_artifacts.py`
 - [ ] `python scripts/check_docs.py`
+- [ ] `python scripts/check_product_focus.py`
 - [ ] `python scripts/regenerate_collection_registry.py --check`
 - [ ] `python scripts/regenerate_strategic_navigation_registry.py --check`
 - [ ] `python scripts/regenerate_strategic_navigation_scenario_registry.py --check`

@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: “We built the perfect experiment and forgot to learn”
+
+Open on the dashboard: **OUTCOMES 0 · FITS 0 · UNSEEN TESTS 0 · AUTHORITY 0**. Then pull back to a
+wall of green checks, immutable hashes, CI receipts, fifty-five frozen trials, and one honest
+failure. Voice-over: **“Every safeguard worked. The model still learned nothing.”**
+
+Show the project drawing a line through the one-shot campaign—not deleting it, but stamping it
+**EVIDENCE PRESERVED · DEVELOPMENT LANE RETIRED · NO RETRY**. Replace it with four large counters:
+**32 TRAIN QUESTIONS · 16 UNSEEN QUESTIONS · 1 FIT · 1 BASELINE COMPARISON**. All start at zero.
+
+Then show the new compass:
+
+- one active lane;
+- repeatable development, frozen benchmarks, sealed final exams;
+- 60% data/scenarios, 25% model/evaluation, 15% maintenance/docs;
+- one session without a learning result triggers a stop;
+- Red is a curriculum, Crystal is a transfer test, and the living Pokédex across games is the
+  product.
+
+The visual payoff is the focus dashboard at port 8768. It cannot control the emulator and cannot
+turn CI or preflights into progress. The numbers move only when tracked evidence says the model
+received outcomes, fit, generalized, gained authority, or transferred. Narration: **“The hardest
+bug was not in Pokémon. It was in what we chose to count.”**
+
 ## August 16 scene: lane one stays red
 
 Open on the **14 QUESTIONS → 55 LANES** board from the prior scene. Light the exact authorization
