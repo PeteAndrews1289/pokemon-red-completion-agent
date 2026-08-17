@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: both kinds is not the same as balanced
+
+Open on the scale board filling in without gameplay: **24 TRAIN ROOTS · 15 DEVELOPMENT ROOTS · 200
+OPTIONS · CONTROLLER 0**. Select 24+12 independent cards, then show the first training split as a
+deceptive green check: **TRAINEE 21 · VENUE 3 · “BOTH KINDS PRESENT.”** Zoom into the scoring rule.
+Six-member trainee menus cast longer shadows than two-venue menus, so “semantic coverage” has
+quietly become a vote for one action.
+
+Replace the selector with a V2 balance scale while leaving a sealed V1 reconstruction box intact.
+Animate the exact feasible result: **TRAIN 14 TRAINEE / 10 VENUE · DEVELOPMENT 6 / 6 · FOUR
+DEVELOPMENT GOALS × 3 · 36 UNIQUE ROOTS · 93 TRIALS**. Show nine cards advancing one blank frame
+through a gate labeled **NO INPUT · NO SEMANTIC CHANGE** and four cards remaining outside under
+**NO QUALIFIED ESCORT**.
+
+Keep the learning scoreboard frozen at **8/32 · 4/16 · FITS 1/2 · AUTHORITY 0**. Narration:
+**“Finding more data was not enough. The curriculum had to stop rewarding whichever menu happened
+to be wider. Only outcomes move the model counter; this board is permission to collect, not a
+claim that it learned.”** End on **PUBLISH → FREEZE CLEAN PLAN → COLLECT → FIT TRAIN ONLY → TURN
+OVER 12 ONCE**.
+
 ## August 17 scene: the first learning curve moves
 
 Open on the 48-lane switch-assisted board. Let every lane turn green, then collapse them into

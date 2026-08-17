@@ -74,6 +74,12 @@ from pokemon_red_completion.red_team_training import (
     _PauseForTeamTrainingRecovery,
     run_red_team_balancing,
 )
+from pokemon_red_completion.red_training_transitions import (
+    RED_CINNABAR_MART_TRAINING_BOUNDARY,
+    RED_INDIGO_LOBBY_TRAINING_BOUNDARY,
+    RED_TRAINING_FLY_CENTER_MAPS,
+    RED_TRAINING_FLY_OUTDOOR_MAPS,
+)
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.surge import (
     VERMILION_CENTER_TO_ROUTE_11,
@@ -2700,17 +2706,79 @@ def _training_dig_to_vermilion(
             )
         _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
         raw = reader.read()
-    elif raw.map_id == MapId.SAFFRON_POKECENTER:
+    elif raw.map_id in RED_TRAINING_FLY_CENTER_MAPS:
         position = (raw.player_x, raw.player_y)
         if position != (3, 3):
             raise BlaineChapterError(
-                "Training travel refused an unknown Saffron Center boundary: "
+                "Training travel refused an unknown source Center boundary: "
                 f"{position!r}."
             )
-        _move(actions, reader, ("down",) * 5, "exit Saffron Center")
+        label = (
+            "exit Saffron Center"
+            if raw.map_id == MapId.SAFFRON_POKECENTER
+            else "exit training source Center"
+        )
+        _move(actions, reader, ("down",) * 5, label)
+        raw = reader.read()
+    elif raw.map_id == MapId.CINNABAR_MART:
+        position = (raw.player_x, raw.player_y)
+        if position != RED_CINNABAR_MART_TRAINING_BOUNDARY:
+            raise BlaineChapterError(
+                "Training travel refused an unknown Cinnabar Mart boundary: "
+                f"{position!r}."
+            )
+        _move(
+            actions,
+            reader,
+            ("right", "down", "down")
+            + ("down",)
+            + ("left",) * 4
+            + ("up",) * 5,
+            "normalize Cinnabar Mart to Center",
+        )
+        _require(
+            reader.read(),
+            MapId.CINNABAR_POKECENTER,
+            (3, 3),
+            "normalized Cinnabar Mart nurse boundary",
+        )
+        _move(actions, reader, ("down",) * 5, "exit Cinnabar Center")
+        raw = reader.read()
+    elif raw.map_id == MapId.INDIGO_PLATEAU_LOBBY:
+        position = (raw.player_x, raw.player_y)
+        if position != RED_INDIGO_LOBBY_TRAINING_BOUNDARY:
+            raise BlaineChapterError(
+                "Training travel refused an unknown Indigo lobby boundary: "
+                f"{position!r}."
+            )
+        _move(
+            actions,
+            reader,
+            ("right", "down", "down") + ("right",) * 4 + ("down",) * 5,
+            "exit Indigo lobby for training",
+        )
+        _require(
+            reader.read(),
+            MapId.INDIGO_PLATEAU,
+            (9, 6),
+            "training Indigo field",
+        )
         raw = reader.read()
 
-    if raw.map_id not in (MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY):
+    if raw.map_id in RED_TRAINING_FLY_OUTDOOR_MAPS or raw.map_id == MapId.INDIGO_PLATEAU:
+        if raw.map_id == MapId.SAFFRON_CITY:
+            _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
+        elif raw.map_id == MapId.CINNABAR_ISLAND:
+            _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+        elif raw.map_id != MapId.VERMILION_CITY:
+            _fly_to_town(
+                actions,
+                reader,
+                emulator,
+                MapId.VERMILION_CITY,
+                "training source to Vermilion",
+            )
+    else:
         raw = _field_dig(
             actions,
             reader,
@@ -2718,10 +2786,10 @@ def _training_dig_to_vermilion(
             expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
         )
 
-    if raw.map_id == MapId.SAFFRON_CITY:
-        _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
-    elif raw.map_id == MapId.CINNABAR_ISLAND:
-        _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+        if raw.map_id == MapId.SAFFRON_CITY:
+            _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
+        elif raw.map_id == MapId.CINNABAR_ISLAND:
+            _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
 
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 

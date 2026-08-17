@@ -231,6 +231,151 @@ def test_training_travel_normalizes_cinnabar_pc_boundary(
     )
 
 
+def test_training_travel_flies_from_a_standard_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(True, MapId.CELADON_POKECENTER, 3, 3, 6, 0)
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    moves: list[tuple[tuple[str, ...], str]] = []
+    flights: list[MapId] = []
+
+    def move(_actions, active_reader, route, label, **_kwargs) -> None:
+        moves.append((tuple(route), label))
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.CELADON_CITY,
+            player_x=41,
+            player_y=9,
+        )
+
+    def fly(_actions, active_reader, _emulator, destination, _label) -> None:
+        flights.append(destination)
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    monkeypatch.setattr(blaine_module, "_move", move)
+    monkeypatch.setattr(blaine_module, "_fly_to_town", fly)
+    monkeypatch.setattr(
+        blaine_module,
+        "_field_dig",
+        lambda *_args, **_kwargs: pytest.fail("standard Center travel must not use Dig"),
+    )
+
+    blaine_module._training_dig_to_vermilion(object(), reader, object())
+
+    assert moves == [(('down',) * 5, "exit training source Center")]
+    assert flights == [MapId.VERMILION_CITY]
+
+
+def test_training_travel_exits_indigo_before_flying(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(True, MapId.INDIGO_PLATEAU_LOBBY, 2, 5, 6, 0)
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    moves: list[tuple[tuple[str, ...], str]] = []
+
+    def move(_actions, active_reader, route, label, **_kwargs) -> None:
+        moves.append((tuple(route), label))
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.INDIGO_PLATEAU,
+            player_x=9,
+            player_y=6,
+        )
+
+    def fly(_actions, active_reader, _emulator, _destination, _label) -> None:
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    monkeypatch.setattr(blaine_module, "_move", move)
+    monkeypatch.setattr(blaine_module, "_fly_to_town", fly)
+
+    blaine_module._training_dig_to_vermilion(object(), reader, object())
+
+    assert moves == [
+        (
+            ("right", "down", "down") + ("right",) * 4 + ("down",) * 5,
+            "exit Indigo lobby for training",
+        )
+    ]
+
+
+def test_training_travel_normalizes_cinnabar_mart_before_flying(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(True, MapId.CINNABAR_MART, 2, 5, 6, 0)
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    moves: list[tuple[tuple[str, ...], str]] = []
+
+    def move(_actions, active_reader, route, label, **_kwargs) -> None:
+        moves.append((tuple(route), label))
+        if label == "normalize Cinnabar Mart to Center":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.CINNABAR_POKECENTER,
+                player_x=3,
+                player_y=3,
+            )
+        elif label == "exit Cinnabar Center":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.CINNABAR_ISLAND,
+                player_x=11,
+                player_y=12,
+            )
+
+    def fly(_actions, active_reader, _emulator) -> None:
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    monkeypatch.setattr(blaine_module, "_move", move)
+    monkeypatch.setattr(
+        blaine_module,
+        "_field_fly_to_vermilion_from_cinnabar",
+        fly,
+    )
+
+    blaine_module._training_dig_to_vermilion(object(), reader, object())
+
+    assert moves == [
+        (
+            ("right", "down", "down")
+            + ("down",)
+            + ("left",) * 4
+            + ("up",) * 5,
+            "normalize Cinnabar Mart to Center",
+        ),
+        (("down",) * 5, "exit Cinnabar Center"),
+    ]
+
+
 @pytest.mark.parametrize(
     ("map_id", "position"),
     [

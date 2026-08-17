@@ -13,6 +13,15 @@
 > artifacts never advance these counters. See the
 > [initial-fit receipt](evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json).
 
+> **Action-free scale design ready:** 24 train plus 12 development questions now reconstruct from
+> 36 independent roots/states, expanding to 93 prospective trials. The balanced V2 selection is
+> train 14 trainee / 10 venue and development 6 / 6, with every development completion goal
+> represented three times. This design advances no learning counter: controller, teacher, model,
+> sealed Red, Crystal and replay access are all zero. Next rail: **PUBLISH → GREEN CI → FREEZE ONE
+> CLEAN-SOURCE PLAN → COLLECT UNDER STANDING DEVELOPMENT APPROVAL → FIT TRAIN ONLY → COMPARE 12
+> ONCE**. See the
+> [path-free design receipt](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
+
 > **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
 > SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE
 > ROWS · 66 FEATURES · 49 VARY · 12 DISTINCT MENUS**. Link the

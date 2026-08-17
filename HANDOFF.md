@@ -18,6 +18,38 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Action-free 24+12 scale design is ready; publish before collection — 2026-08-17
+
+The initial 8+4 model result still owns the learning counters, but the inventory blocker is gone.
+After excluding all three consumed repeatable pilots, the current adapter reconstructs **24 train
+roots and 15 development roots**. A deterministic V2 selector chooses **24 train plus 12
+development questions** from **36 unique roots and 36 unique states**, producing **93 prospective
+candidate trials**. The action-free rehearsal used zero controller, teacher, model, sealed Red,
+Crystal or full-replay access.
+
+This scale lesson is broader than the first fixed-assistance pilot. A selected member completes the
+battle when the ordinary safety policy says it can; otherwise it participates and a qualified
+escort finishes. Nine captured states become usable after exactly one no-input frame, accepted only
+when party, collection, story, inventory, money, map, position and battle state remain unchanged.
+Shared transition evidence now covers the authenticated Center, outdoor, Cinnabar Mart and Indigo
+boundaries used by the existing bounded executor. Four roots still fail closed because no qualified
+escort exists.
+
+The first selector technically covered both actions but chose 21 trainee questions and only three
+venue questions. Do not freeze that plan. The versioned balanced selector preserves byte-for-byte
+V1 reconstruction while the V2 design reaches the best feasible margins: **train 14 trainee / 10
+venue; development 6 / 6**. Development has exactly three questions for each completion goal.
+Train has fourteen balance roots and 3/4/3 collection/evolution/role roots, the globally best
+feasible goal margin in this inventory. The tracked
+[path-free design receipt](docs/evidence/repeatable-party-scale-design-v2-2026-08-17.json) advances
+no learning counter.
+
+Next: pass the complete local gate, publish, require green exact-head CI, create one new external
+frozen plan from the clean source, and collect the unsealed development campaign under standing
+owner approval. Never rerun the consumed 8+4 plan. Then update on train only and compare once on
+the twelve new development questions. Live authority, sealed Red, Crystal and full replay remain
+closed.
+
 ## First switch-assisted outcome model fit; scale independent evidence next — 2026-08-17
 
 The fresh switch-assisted pilot and first model fit are complete. Published collection source

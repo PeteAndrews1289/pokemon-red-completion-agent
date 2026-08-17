@@ -17,6 +17,23 @@ experiment, not a benchmark claim or live authority.
 Honest board: **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 · live authority
 0 · transfer 0**.
 
+## Scale-design update
+
+The inventory blocker described below has since been resolved action-free. After all three
+consumed repeatable pilots are excluded, the current implementation finds 24 train roots and 15
+development roots. Its V2 design selects 24+12 questions from 36 unique roots/states and produces
+93 candidate trials. Nine roots settle a captured control pulse with exactly one no-input frame;
+the prelude rejects any party, collection, story, bag, money, map, position or battle change.
+
+An initial V1 selection passed the old binary diversity checks while choosing 21 trainee and three
+venue questions in train. That is too imbalanced to spend controller time on. The versioned V2
+selector preserves V1 artifact reconstruction and instead solves the globally feasible margins:
+train 14 trainee / 10 venue, development 6 / 6, and three development questions for every
+completion goal. The rehearsal used zero controller, teacher, model, sealed Red, Crystal or replay
+access, so the honest learning board above does not move. The next gate is publication, green CI,
+one external clean-source plan and routine unsealed collection under standing approval. See the
+[path-free scale design](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
+
 ## What actually ran
 
 The consumed pilot used published source

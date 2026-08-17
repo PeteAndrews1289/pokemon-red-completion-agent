@@ -8,6 +8,21 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 
 ## Current override: scale the first outcome-trained scorer on independent roots
 
+The action-free scale design now passes. Codex recovered **24 train and 15 development roots**
+after every consumed pilot was excluded, then selected **24+12 questions / 93 candidate trials**
+from 36 unique roots and states. The versioned selector preserves historical V1 reconstruction and
+uses a globally feasible V2 margin: train is 14 trainee / 10 venue; development is 6 / 6 and has
+three questions for each completion goal. Nine roots use one semantically inert no-input settle
+frame; four roots remain rejected for an unavailable qualified escort. No learning counter moves
+until outcomes are collected. See the
+[path-free design receipt](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
+
+Codex should now publish this implementation, require exact-head green CI, freeze one clean-source
+external plan, collect under standing routine-development approval, fit on train only and compare
+once on the twelve new development questions. Claude may audit the resulting comparison before a
+benchmark claim; Antigravity remains deferred until a concrete Crystal protocol. Neither blocks
+routine collection or edits this worktree.
+
 Codex completed the fresh switch-assisted pilot once: **48/48 trials measured, 8/8 train questions
 eligible, 4/4 untouched development questions eligible, zero invalids**. The exact consumed plan
 must not retry. The pilot used no teacher label, model prediction, sealed Red case, Crystal case or

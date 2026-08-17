@@ -40,6 +40,15 @@ from pokemon_red_completion.team_training import GrindingArea
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 REPEATABLE_PARTY_SCENARIO_SCHEMA = "pokemon.core.repeatable-party-development-scenario-plan.v1"
+BALANCED_REPEATABLE_PARTY_SCENARIO_SCHEMA = (
+    "pokemon.core.repeatable-party-development-scenario-plan.v2"
+)
+SEMANTIC_GREEDY_SELECTION_PROTOCOL = "semantic-coverage-greedy-v1"
+BALANCED_KIND_GOAL_SELECTION_PROTOCOL = "balanced-kind-goal-coverage-v2"
+REPEATABLE_PARTY_SELECTION_PROTOCOLS = (
+    SEMANTIC_GREEDY_SELECTION_PROTOCOL,
+    BALANCED_KIND_GOAL_SELECTION_PROTOCOL,
+)
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _BindingT = TypeVar("_BindingT", PartyMemberObservation, GrindingArea)
@@ -236,10 +245,15 @@ class RepeatablePartyScenarioPlan:
 
     seed: int
     assignments: tuple[PartyDevelopmentScenarioAssignment, ...]
+    selection_protocol: str = SEMANTIC_GREEDY_SELECTION_PROTOCOL
 
     def __post_init__(self) -> None:
         if type(self.seed) is not int or not 0 <= self.seed < 2**63:  # noqa: E721
             raise RepeatablePartyScenarioError("repeatable party seed is invalid")
+        if self.selection_protocol not in REPEATABLE_PARTY_SELECTION_PROTOCOLS:
+            raise RepeatablePartyScenarioError(
+                "repeatable party selection protocol is invalid"
+            )
         if (
             not isinstance(self.assignments, tuple)
             or not self.assignments
@@ -277,8 +291,12 @@ class RepeatablePartyScenarioPlan:
             partition.value: sum(item.partition is partition for item in self.assignments)
             for partition in (ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT)
         }
-        return {
-            "schema": REPEATABLE_PARTY_SCENARIO_SCHEMA,
+        result: dict[str, object] = {
+            "schema": (
+                REPEATABLE_PARTY_SCENARIO_SCHEMA
+                if self.selection_protocol == SEMANTIC_GREEDY_SELECTION_PROTOCOL
+                else BALANCED_REPEATABLE_PARTY_SCENARIO_SCHEMA
+            ),
             "seed": self.seed,
             "assignments": [item.public_dict() for item in self.assignments],
             "partition_counts": counts,
@@ -290,6 +308,12 @@ class RepeatablePartyScenarioPlan:
             "sealed_test_cases_opened": 0,
             "private_path_fields": 0,
         }
+        # Preserve the byte-for-byte V1 plan representation so every consumed
+        # development artifact remains reconstructible. V2 is explicit because
+        # its balancing rule is part of the prospective experimental design.
+        if self.selection_protocol != SEMANTIC_GREEDY_SELECTION_PROTOCOL:
+            result["selection_protocol"] = self.selection_protocol
+        return result
 
 
 def select_repeatable_party_scenarios(
@@ -299,6 +323,7 @@ def select_repeatable_party_scenarios(
     development_count: int,
     seed: int,
     maximum_timing_offset_frames: int = 255,
+    selection_protocol: str = SEMANTIC_GREEDY_SELECTION_PROTOCOL,
 ) -> RepeatablePartyScenarioPlan:
     """Greedily cover portable semantics while keeping roots independent."""
 
@@ -310,6 +335,10 @@ def select_repeatable_party_scenarios(
         raise RepeatablePartyScenarioError("repeatable party scenario pool needs typed options")
     if type(seed) is not int or not 0 <= seed < 2**63:  # noqa: E721
         raise RepeatablePartyScenarioError("repeatable party seed is invalid")
+    if selection_protocol not in REPEATABLE_PARTY_SELECTION_PROTOCOLS:
+        raise RepeatablePartyScenarioError(
+            "repeatable party selection protocol is invalid"
+        )
     for value, subject in (
         (train_count, "train count"),
         (development_count, "development count"),
@@ -351,6 +380,7 @@ def select_repeatable_party_scenarios(
             partition_options,
             count=count,
             seed=_derived_seed(seed, partition.value),
+            selection_protocol=selection_protocol,
         )
         kinds = {item.candidate_set.kind for item in selected}
         goals = {item.candidate_set.goal for item in selected}
@@ -388,7 +418,11 @@ def select_repeatable_party_scenarios(
                 timing_offset_frames=timing_offset,
             )
         )
-    return RepeatablePartyScenarioPlan(seed=seed, assignments=tuple(assignments))
+    return RepeatablePartyScenarioPlan(
+        seed=seed,
+        assignments=tuple(assignments),
+        selection_protocol=selection_protocol,
+    )
 
 
 @overload
@@ -481,6 +515,7 @@ def _select_partition(
     *,
     count: int,
     seed: int,
+    selection_protocol: str,
 ) -> tuple[PartyDevelopmentScenarioOption, ...]:
     roots = {item.root_lineage_id for item in options}
     states = {item.initial_state_sha256 for item in options}
@@ -488,6 +523,8 @@ def _select_partition(
         raise RepeatablePartyScenarioError(
             "repeatable party partition has insufficient independent roots"
         )
+    if selection_protocol == BALANCED_KIND_GOAL_SELECTION_PROTOCOL:
+        return _select_balanced_partition(options, count=count, seed=seed)
     rng = random.Random(seed)
     tie_break = {item.option_id: rng.random() for item in options}
     remaining = list(options)
@@ -507,7 +544,9 @@ def _select_partition(
                 "repeatable party selection exhausted independent roots"
             )
 
-        def score(option: PartyDevelopmentScenarioOption) -> tuple[int, int, int, float]:
+        def score(
+            option: PartyDevelopmentScenarioOption,
+        ) -> tuple[int, int, int, float]:
             tokens = option.diversity_tokens
             kind_token = f"kind:{option.candidate_set.kind.value}"
             goal_token = f"goal:{option.candidate_set.goal.value}"
@@ -524,6 +563,180 @@ def _select_partition(
         used_states.add(choice.initial_state_sha256)
         coverage.update(choice.diversity_tokens)
         remaining.remove(choice)
+    return tuple(selected)
+
+
+def _select_balanced_partition(
+    options: tuple[PartyDevelopmentScenarioOption, ...],
+    *,
+    count: int,
+    seed: int,
+) -> tuple[PartyDevelopmentScenarioOption, ...]:
+    """Meet the most balanced feasible kind/goal margins before extra tokens.
+
+    A trainee menu can contribute six candidate-specific diversity tokens while
+    a venue menu contributes only two. V1 therefore met its binary coverage
+    check but selected 21 trainee questions and only three venue questions in a
+    24-root rehearsal. V2 treats the portable action and completion-goal margins
+    as design constraints, then uses semantic coverage only as a tie-breaker.
+    """
+
+    root_states: dict[str, set[str]] = {}
+    options_by_root: dict[str, list[PartyDevelopmentScenarioOption]] = {}
+    for option in options:
+        root_states.setdefault(option.root_lineage_id, set()).add(
+            option.initial_state_sha256
+        )
+        options_by_root.setdefault(option.root_lineage_id, []).append(option)
+    if any(len(states) != 1 for states in root_states.values()):
+        raise RepeatablePartyScenarioError(
+            "balanced repeatable selection requires one state per root"
+        )
+
+    kinds = tuple(TrainingChoiceKind)
+    goals = tuple(PartyDevelopmentGoal)
+    kind_index = {kind: index for index, kind in enumerate(kinds)}
+    goal_index = {goal: index for index, goal in enumerate(goals)}
+    ordered_roots = tuple(
+        sorted(
+            options_by_root,
+            key=lambda root: canonical_sha256(
+                {"seed": seed, "root_lineage_id": root}
+            ),
+        )
+    )
+
+    # State = selected count, first-kind count, and the first three goal
+    # counts. The second kind and fourth goal are implied by the total. Each
+    # path uses four bits per root: zero means skip, 1..8 identify a kind/goal
+    # pair. Keeping one maximum-richness path per margin makes the exact search
+    # compact while still finding the globally most balanced feasible margins.
+    state_paths: dict[tuple[int, int, int, int, int], tuple[int, int]] = {
+        (0, 0, 0, 0, 0): (0, 0)
+    }
+    for root_ordinal, root in enumerate(ordered_roots):
+        category_options: dict[
+            tuple[TrainingChoiceKind, PartyDevelopmentGoal],
+            tuple[PartyDevelopmentScenarioOption, ...],
+        ] = {}
+        for option in options_by_root[root]:
+            category = (option.candidate_set.kind, option.candidate_set.goal)
+            category_options.setdefault(category, ())
+            category_options[category] = (*category_options[category], option)
+        categories = tuple(
+            sorted(
+                category_options,
+                key=lambda item: (kind_index[item[0]], goal_index[item[1]]),
+            )
+        )
+        roots_remaining = len(ordered_roots) - root_ordinal - 1
+        next_paths: dict[tuple[int, int, int, int, int], tuple[int, int]] = {}
+
+        def retain(
+            state: tuple[int, int, int, int, int],
+            richness: int,
+            path: int,
+            target: dict[
+                tuple[int, int, int, int, int], tuple[int, int]
+            ] = next_paths,
+        ) -> None:
+            prior = target.get(state)
+            candidate = (richness, path)
+            if prior is None or richness > prior[0] or (
+                richness == prior[0] and path < prior[1]
+            ):
+                target[state] = candidate
+
+        for state, (richness, path) in state_paths.items():
+            selected_count, first_kind, goal_0, goal_1, goal_2 = state
+            if selected_count + roots_remaining >= count:
+                retain(state, richness, path)
+            if selected_count >= count:
+                continue
+            for kind, goal in categories:
+                next_state = (
+                    selected_count + 1,
+                    first_kind + int(kind is kinds[0]),
+                    goal_0 + int(goal is goals[0]),
+                    goal_1 + int(goal is goals[1]),
+                    goal_2 + int(goal is goals[2]),
+                )
+                code = 1 + kind_index[kind] * len(goals) + goal_index[goal]
+                category_richness = max(
+                    len(option.diversity_tokens)
+                    for option in category_options[(kind, goal)]
+                )
+                retain(
+                    next_state,
+                    richness + category_richness,
+                    path | (code << (4 * root_ordinal)),
+                )
+        state_paths = next_paths
+
+    finalists = tuple(
+        (state, richness, path)
+        for state, (richness, path) in state_paths.items()
+        if state[0] == count
+    )
+    if not finalists:
+        raise RepeatablePartyScenarioError(
+            "balanced repeatable selection cannot fill its independent roots"
+        )
+
+    def final_score(
+        item: tuple[tuple[int, int, int, int, int], int, int],
+    ) -> tuple[int, int, int, int, int]:
+        state, richness, path = item
+        _, first_kind, goal_0, goal_1, goal_2 = state
+        kind_counts = (first_kind, count - first_kind)
+        goal_counts = (
+            goal_0,
+            goal_1,
+            goal_2,
+            count - goal_0 - goal_1 - goal_2,
+        )
+        return (
+            max(kind_counts) - min(kind_counts),
+            sum(value * value for value in kind_counts),
+            max(goal_counts) - min(goal_counts),
+            sum(value * value for value in goal_counts),
+            -richness,
+        )
+
+    _state, _richness, selected_path = min(
+        finalists,
+        key=lambda item: (*final_score(item), item[2]),
+    )
+    coverage: set[str] = set()
+    selected: list[PartyDevelopmentScenarioOption] = []
+    rng = random.Random(seed)
+    tie_break = {item.option_id: rng.random() for item in options}
+    for root_ordinal, root in enumerate(ordered_roots):
+        code = (selected_path >> (4 * root_ordinal)) & 0xF
+        if code == 0:
+            continue
+        category_ordinal = code - 1
+        kind = kinds[category_ordinal // len(goals)]
+        goal = goals[category_ordinal % len(goals)]
+        candidates = tuple(
+            option
+            for option in options_by_root[root]
+            if option.candidate_set.kind is kind
+            and option.candidate_set.goal is goal
+        )
+        choice = max(
+            candidates,
+            key=lambda option: (
+                len(option.diversity_tokens - coverage),
+                tie_break[option.option_id],
+            ),
+        )
+        selected.append(choice)
+        coverage.update(choice.diversity_tokens)
+    if len(selected) != count:
+        raise RepeatablePartyScenarioError(
+            "balanced repeatable selection path is incomplete"
+        )
     return tuple(selected)
 
 
@@ -560,11 +773,15 @@ def _signed_bin(value: float) -> str:
 
 
 __all__ = [
+    "BALANCED_KIND_GOAL_SELECTION_PROTOCOL",
+    "BALANCED_REPEATABLE_PARTY_SCENARIO_SCHEMA",
     "PartyDevelopmentScenarioAssignment",
     "PartyDevelopmentScenarioOption",
     "REPEATABLE_PARTY_SCENARIO_SCHEMA",
+    "REPEATABLE_PARTY_SELECTION_PROTOCOLS",
     "RepeatablePartyScenarioError",
     "RepeatablePartyScenarioPlan",
+    "SEMANTIC_GREEDY_SELECTION_PROTOCOL",
     "permute_bound_party_development_menu",
     "select_repeatable_party_scenarios",
 ]

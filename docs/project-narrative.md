@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the next dataset stopped confusing coverage with balance
+
+The first model earned a larger experiment, and the action-free inventory finally found it:
+twenty-four new training moments, twelve untouched development moments and ninety-three candidate
+trials, all from independent roots. Nine captures needed one silent emulator frame to release a
+held input pulse; the frame was admitted only when the party, collection, story, bag, money,
+location and battle state stayed the same. No new full playthrough was needed.
+
+The first selection looked diverse on paper but hid a familiar modeling trap. It contained both
+action kinds, yet twenty-one of twenty-four training questions chose a Pokémon and only three chose
+a venue. Six-member trainee menus naturally emitted more diversity tokens than two-venue menus, so
+the selector optimized the measurement rather than the curriculum.
+
+The selection rule is now versioned. Historical V1 plans reconstruct byte for byte. V2 first finds
+the best globally feasible action and completion-goal margins, then uses extra semantic diversity
+as a tie-breaker. The real Red pool becomes fourteen trainee and ten venue questions in training,
+six and six in development, with each development completion goal represented three times.
+
+This still is not model progress. The board remains **8/32 train · 4/16 development · 1/2 fits ·
+1/2 comparisons · authority 0** until the cartridge produces outcomes. The next scene is clean:
+publish, freeze one unsealed development plan, collect under standing approval, fit on train and
+turn over the twelve new development questions once.
+
 ## August 17: the first real completion-aware model learned something
 
 The repaired switch-assisted lesson finally ran cleanly. Twelve independent Red moments split into

@@ -104,6 +104,8 @@ from pokemon_red_completion.party_development_rank import (  # noqa: E402
     VenuePriorFeatureMode,
 )
 from pokemon_red_completion.party_development_scenarios import (  # noqa: E402
+    BALANCED_KIND_GOAL_SELECTION_PROTOCOL,
+    REPEATABLE_PARTY_SELECTION_PROTOCOLS,
     PartyDevelopmentScenarioAssignment,
     PartyDevelopmentScenarioOption,
     RepeatablePartyScenarioPlan,
@@ -123,6 +125,7 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
 )
 from pokemon_red_completion.red_goal_context import (  # noqa: E402
+    RedGoalContextRuntime,
     build_red_goal_context_runtime,
 )
 from pokemon_red_completion.red_goal_context_profile import (  # noqa: E402
@@ -175,17 +178,45 @@ _TRAINING_VENUES = (
 _HP_PP_BIN_ORDER = ("empty", "low", "middle", "high")
 _DEVELOPMENT_LANE_ID = "repeatable-party-outcome-learning-v1"
 _BATTLE_CREDIT_PROTOCOL_ID = "switch-assisted-fixed-dose-v1"
+_HYBRID_BATTLE_CREDIT_PROTOCOL_ID = "direct-safe-else-switch-assisted-fixed-dose-v1"
+_BATTLE_CREDIT_PROTOCOL_IDS = (
+    _BATTLE_CREDIT_PROTOCOL_ID,
+    _HYBRID_BATTLE_CREDIT_PROTOCOL_ID,
+)
+_FROZEN_PLAN_SCHEMA = "pokemon.red.repeatable-party-development-frozen-plan.v1"
 
 
-def _battle_credit_protocol(completed_battles: int) -> dict[str, object]:
+def _battle_credit_protocol(
+    completed_battles: int,
+    *,
+    protocol_id: str = _BATTLE_CREDIT_PROTOCOL_ID,
+) -> dict[str, object]:
     """Describe the title-neutral intervention used by every candidate trial."""
 
     if type(completed_battles) is not int or completed_battles <= 0:  # noqa: E721
         raise RepeatablePartyOutcomeRunError(
             "repeatable development battle-credit dose must be positive"
         )
+    if protocol_id not in _BATTLE_CREDIT_PROTOCOL_IDS:
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development battle-credit protocol is unknown"
+        )
+    if protocol_id == _HYBRID_BATTLE_CREDIT_PROTOCOL_ID:
+        return {
+            "protocol_id": protocol_id,
+            "selected_member_participates": True,
+            "selected_member_completes_when_direct_safe": True,
+            "qualified_escort_completes_when_direct_unsafe": True,
+            "candidate_eligibility_scope": "executable_direct_or_assisted",
+            "candidate_eligibility_is_direct_combat_claim": False,
+            "venue_prior_feature_mode": VenuePriorFeatureMode.MASKED_UNCALIBRATED.value,
+            "completed_battles": completed_battles,
+            "control_settle_prelude": "at_most_one_no_input_frame",
+            "teacher_choices": 0,
+            "private_identity_fields": 0,
+        }
     return {
-        "protocol_id": _BATTLE_CREDIT_PROTOCOL_ID,
+        "protocol_id": protocol_id,
         "selected_member_participates": True,
         "qualified_escort_completes_battle": True,
         "candidate_eligibility_scope": "curriculum_venue_band_relevant",
@@ -222,6 +253,43 @@ def _switch_assisted_venue_contract_sha256(
     )
 
 
+def _outcome_venue_contract_sha256(
+    calibrated_contract_sha256: str,
+    *,
+    completed_battles: int,
+    protocol_id: str,
+) -> str:
+    """Bind a venue to one exact fixed-dose intervention."""
+
+    if protocol_id == _BATTLE_CREDIT_PROTOCOL_ID:
+        return _switch_assisted_venue_contract_sha256(
+            calibrated_contract_sha256,
+            completed_battles=completed_battles,
+        )
+    if (
+        not isinstance(calibrated_contract_sha256, str)
+        or len(calibrated_contract_sha256) != 64
+        or any(
+            character not in "0123456789abcdef"
+            for character in calibrated_contract_sha256
+        )
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development calibrated venue contract is invalid"
+        )
+    return canonical_sha256(
+        {
+            "schema": "pokemon.core.hybrid-party-venue-operational-contract.v1",
+            "calibrated_predecessor_contract_sha256": calibrated_contract_sha256,
+            "battle_credit_protocol": _battle_credit_protocol(
+                completed_battles,
+                protocol_id=protocol_id,
+            ),
+            "calibrated_performance_values_reused": False,
+        }
+    )
+
+
 def _switch_assisted_outcome_policy(
     dose: PartyDevelopmentOutcomeDose,
 ) -> BalancedTeamPolicy:
@@ -243,6 +311,36 @@ def _switch_assisted_outcome_policy(
     )
 
 
+def _hybrid_outcome_policy(
+    dose: PartyDevelopmentOutcomeDose,
+) -> BalancedTeamPolicy:
+    """Let a safe candidate fight; use the qualified escort otherwise."""
+
+    if not isinstance(dose, PartyDevelopmentOutcomeDose):
+        raise TypeError("dose must be a PartyDevelopmentOutcomeDose")
+    return replace(
+        RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
+        max_battles=dose.completed_battles,
+        max_steps=dose.maximum_encounter_steps,
+        max_healing_trips=dose.maximum_healing_trips - 1,
+        max_faints=dose.maximum_faints,
+    )
+
+
+def _outcome_policy(
+    dose: PartyDevelopmentOutcomeDose,
+    *,
+    protocol_id: str,
+) -> BalancedTeamPolicy:
+    if protocol_id == _BATTLE_CREDIT_PROTOCOL_ID:
+        return _switch_assisted_outcome_policy(dose)
+    if protocol_id == _HYBRID_BATTLE_CREDIT_PROTOCOL_ID:
+        return _hybrid_outcome_policy(dose)
+    raise RepeatablePartyOutcomeRunError(
+        "repeatable development battle-credit protocol is unknown"
+    )
+
+
 class RepeatablePartyOutcomeRunError(RuntimeError):
     """Raised when development evidence would cross a protected boundary."""
 
@@ -259,6 +357,7 @@ class _RedOptionRuntime:
     )
     venue_question_trainee: PartyMemberObservation | None
     profile_file_sha256: str
+    control_settle_frames: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -273,6 +372,7 @@ class _SelectedRuntime:
     )
     binding_question: PartyDevelopmentFrozenQuestion
     venue_question_trainee: PartyMemberObservation | None
+    control_settle_frames: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -309,11 +409,23 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--prior-reservation-plan", type=Path, required=True)
     parser.add_argument("--catalog-root", type=Path, required=True)
     parser.add_argument("--private-artifact-root", type=Path, default=None)
+    parser.add_argument("--out-plan", type=Path, default=None)
+    parser.add_argument("--frozen-plan", type=Path, default=None)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument("--train-count", type=int, default=8)
     parser.add_argument("--development-count", type=int, default=4)
     parser.add_argument("--seed", type=int, default=20260816)
     parser.add_argument("--completed-battles", type=int, default=1)
+    parser.add_argument(
+        "--battle-credit-protocol",
+        choices=_BATTLE_CREDIT_PROTOCOL_IDS,
+        default=_BATTLE_CREDIT_PROTOCOL_ID,
+    )
+    parser.add_argument(
+        "--scenario-selection-protocol",
+        choices=REPEATABLE_PARTY_SELECTION_PROTOCOLS,
+        default=REPEATABLE_PARTY_SELECTION_PROTOCOLS[0],
+    )
     parser.add_argument("--maximum-timing-offset-frames", type=int, default=255)
     parser.add_argument(
         "--exclude-root-lineage-id",
@@ -353,6 +465,79 @@ def _require_external(path: Path, *, subject: str) -> Path:
             f"repeatable development {subject} must remain outside the repository"
         )
     return resolved
+
+
+def _frozen_plan_document(receipt: Mapping[str, object]) -> dict[str, object]:
+    """Keep the complete controller-free gate in one private immutable file."""
+
+    rom = receipt.get("rom")
+    if not isinstance(rom, Mapping) or not isinstance(rom.get("sha256"), str):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development frozen plan lacks its ROM binding"
+        )
+    fields = (
+        "active_lane",
+        "battle_credit_protocol",
+        "candidate_trial_count",
+        "development_repeatable",
+        "excluded_development_artifact_count",
+        "excluded_development_artifact_root_count",
+        "excluded_development_plan_sha256",
+        "excluded_prior_root_count",
+        "excluded_total_unique_root_count",
+        "input_file_sha256",
+        "plan",
+        "plan_sha256",
+        "question_count",
+        "scenario_pool",
+        "selection_summary",
+        "scenario_selection_protocol",
+        "source_bundle_sha256",
+        "source_commit",
+    )
+    if any(field not in receipt for field in fields):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development frozen plan source is incomplete"
+        )
+    return {
+        "schema": _FROZEN_PLAN_SCHEMA,
+        **{field: receipt[field] for field in fields},
+        "rom_sha256": rom["sha256"],
+        "controller_actions": 0,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+        "model_fits": 0,
+        "sealed_red_cases_opened": 0,
+        "crystal_cases_opened": 0,
+        "full_game_replays": 0,
+        "private_path_fields": 0,
+    }
+
+
+def _write_frozen_plan(path: Path, document: Mapping[str, object]) -> str:
+    destination = _require_external(path, subject="frozen plan output")
+    if not destination.parent.is_dir() or destination.exists():
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development frozen plan needs a new external file"
+        )
+    payload = (
+        json.dumps(
+            document,
+            ensure_ascii=True,
+            indent=2,
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
+    try:
+        with destination.open("xb") as handle:
+            handle.write(payload)
+            handle.flush()
+    except OSError as error:
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development frozen plan could not be written"
+        ) from error
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _development_artifact_exclusion(
@@ -584,6 +769,42 @@ def _capability_root_rejection_code(
     return None
 
 
+def _settle_control_context(
+    runtime: RedGoalContextRuntime,
+    *,
+    emulator: PyBoyAdapter,
+    reader: PokemonRedStateReader,
+) -> int:
+    """Release one captured control pulse without issuing controller input."""
+
+    before = runtime.adapter.observe()
+    story_before = runtime.observer.observe()
+    if before.input_ready or before.raw.battle_state:
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable control prelude did not begin at its blocked overworld boundary"
+        )
+    emulator.tick(1)
+    after = runtime.adapter.observe()
+    story_after = runtime.observer.observe()
+    if (
+        not after.input_ready
+        or after.raw.battle_state
+        or before.raw.map_id != after.raw.map_id
+        or (before.raw.player_x, before.raw.player_y)
+        != (after.raw.player_x, after.raw.player_y)
+        or before.party != after.party
+        or before.collection_observation != after.collection_observation
+        or before.raw.bag_items != after.raw.bag_items
+        or before.raw.player_money != after.raw.player_money
+        or story_before != story_after
+        or emulator.pressed_buttons
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable control prelude changed protected state or failed to settle"
+        )
+    return 1
+
+
 def _build_option_pool(
     *,
     inventory: PartyDevelopmentCheckpointInventory,
@@ -596,6 +817,7 @@ def _build_option_pool(
     source_commit: str,
     source_bundle_sha256: str,
     completed_battles: int,
+    battle_credit_protocol_id: str = _BATTLE_CREDIT_PROTOCOL_ID,
 ) -> tuple[tuple[_RedOptionRuntime, ...], dict[str, int]]:
     try:
         context_document = json.loads(context_catalog_payload.decode("ascii"))
@@ -624,13 +846,15 @@ def _build_option_pool(
         )
     areas = (ROUTE_11_TRAINING_VENUE.band, DIGLETTS_CAVE_TRAINING_VENUE.band)
     contracts = (
-        _switch_assisted_venue_contract_sha256(
+        _outcome_venue_contract_sha256(
             route_evidence.operational_contract_sha256,
             completed_battles=completed_battles,
+            protocol_id=battle_credit_protocol_id,
         ),
-        _switch_assisted_venue_contract_sha256(
+        _outcome_venue_contract_sha256(
             cave_evidence.operational_contract_sha256,
             completed_battles=completed_battles,
+            protocol_id=battle_credit_protocol_id,
         ),
     )
     evolutions = evolution_graph(rom_path.read_bytes())
@@ -640,7 +864,10 @@ def _build_option_pool(
         if (
             entry.checkpoint_id.startswith("red-party-pp-v1-")
             or entry.state_sha256 in excluded_states
-            or not entry.controls_ready
+            or (
+                not entry.controls_ready
+                and battle_credit_protocol_id != _HYBRID_BATTLE_CREDIT_PROTOCOL_ID
+            )
             or entry.battle_active
             or sum(member.trainable for member in entry.members) < 2
         ):
@@ -669,13 +896,29 @@ def _build_option_pool(
                 emulator=emulator,
                 reader=reader,
             )
+            control_settle_frames = (
+                0
+                if entry.controls_ready
+                else _settle_control_context(
+                    runtime,
+                    emulator=emulator,
+                    reader=reader,
+                )
+            )
             observation = runtime.adapter.observe()
             last_blackout_map = reader.read_last_blackout_map()
             current_map_tileset = emulator.read_u8(RamAddress.CURRENT_MAP_TILESET)
         reject_entry = False
         for goal in entry.goal_hints:
             for kind in TrainingChoiceKind:
-                option_id = f"repeatable-option-{entry.checkpoint_id}-{kind.value}-{goal.value}"
+                option_prefix = (
+                    "repeatable-option"
+                    if battle_credit_protocol_id == _BATTLE_CREDIT_PROTOCOL_ID
+                    else f"repeatable-hybrid-option-settle{control_settle_frames}"
+                )
+                option_id = (
+                    f"{option_prefix}-{entry.checkpoint_id}-{kind.value}-{goal.value}"
+                )
                 reservation = _inventory_reservation(
                     entry,
                     option_id=option_id,
@@ -701,7 +944,9 @@ def _build_option_pool(
                         venue_prior_feature_mode=(
                             VenuePriorFeatureMode.MASKED_UNCALIBRATED
                         ),
-                        switch_assisted_battle_credit=True,
+                        switch_assisted_battle_credit=(
+                            battle_credit_protocol_id == _BATTLE_CREDIT_PROTOCOL_ID
+                        ),
                     )
                     capability_code = _capability_root_rejection_code(snapshot)
                     if capability_code is not None:
@@ -743,6 +988,7 @@ def _build_option_pool(
                         menu=menu,
                         venue_question_trainee=venue_trainee,
                         profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
+                        control_settle_frames=control_settle_frames,
                     )
                 )
             if reject_entry:
@@ -797,6 +1043,7 @@ def _selected_runtimes(
                 menu=permuted,
                 binding_question=question,
                 venue_question_trainee=runtime.venue_question_trainee,
+                control_settle_frames=runtime.control_settle_frames,
             )
         )
     return tuple(selected)
@@ -883,6 +1130,7 @@ def _require_randomization_preserves_question(
     last_blackout_map: int,
     current_map_tileset: int,
     completed_battles: int,
+    battle_credit_protocol_id: str,
 ) -> None:
     route_evidence = venue_registry.evidence_for(ROUTE_11_TRAINING_VENUE.band)
     cave_evidence = venue_registry.evidence_for(DIGLETTS_CAVE_TRAINING_VENUE.band)
@@ -899,13 +1147,15 @@ def _require_randomization_preserves_question(
         areas=(ROUTE_11_TRAINING_VENUE.band, DIGLETTS_CAVE_TRAINING_VENUE.band),
         venue_prior_registry=venue_registry,
         venue_operational_contract_sha256=(
-            _switch_assisted_venue_contract_sha256(
+            _outcome_venue_contract_sha256(
                 route_evidence.operational_contract_sha256,
                 completed_battles=completed_battles,
+                protocol_id=battle_credit_protocol_id,
             ),
-            _switch_assisted_venue_contract_sha256(
+            _outcome_venue_contract_sha256(
                 cave_evidence.operational_contract_sha256,
                 completed_battles=completed_battles,
+                protocol_id=battle_credit_protocol_id,
             ),
         ),
         source_commit=source_commit,
@@ -915,7 +1165,9 @@ def _require_randomization_preserves_question(
         last_blackout_map=last_blackout_map,
         current_map_tileset=current_map_tileset,
         venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
-        switch_assisted_battle_credit=True,
+        switch_assisted_battle_credit=(
+            battle_credit_protocol_id == _BATTLE_CREDIT_PROTOCOL_ID
+        ),
     )
     delayed_menu, delayed_trainee = _menu_for_snapshot(
         delayed,
@@ -947,15 +1199,25 @@ def _execute_trial(
     source_commit: str,
     source_bundle_sha256: str,
     watch: bool,
+    battle_credit_protocol_id: str,
 ) -> _TrialMeasurement:
     summaries: list[TeamTrainingExecutionSummary] = []
-    policy = _switch_assisted_outcome_policy(dose)
+    policy = _outcome_policy(
+        dose,
+        protocol_id=battle_credit_protocol_id,
+    )
     with PyBoyAdapter(
         rom_path,
         watch=watch,
         speed=2 if watch else None,
     ) as emulator:
         emulator.load_state_bytes(runtime.capture.state_bytes)
+        if runtime.control_settle_frames:
+            emulator.tick(runtime.control_settle_frames)
+            if not PokemonRedStateReader(emulator).read_input_readiness().ready:
+                raise RepeatablePartyOutcomeRunError(
+                    "repeatable control prelude did not replay to ready input"
+                )
         if runtime.assignment.timing_offset_frames:
             emulator.tick(runtime.assignment.timing_offset_frames)
         ports = _execution_ports(emulator, maximum_frames=dose.maximum_frames)
@@ -980,6 +1242,7 @@ def _execute_trial(
             last_blackout_map=last_blackout_map,
             current_map_tileset=current_map_tileset,
             completed_battles=dose.completed_battles,
+            battle_credit_protocol_id=battle_credit_protocol_id,
         )
         before_party = ports.party_reader.read()
         before_completion = red_party_completion_snapshot(
@@ -1176,11 +1439,41 @@ def _pool_summary(
                 ).items()
             )
         ),
+        "independent_root_kind_counts": dict(
+            sorted(
+                Counter(
+                    f"{partition}:{kind}"
+                    for partition, kind, _root in {
+                        (
+                            item.option.partition.value,
+                            item.option.candidate_set.kind.value,
+                            item.option.root_lineage_id,
+                        )
+                        for item in pool
+                    }
+                ).items()
+            )
+        ),
         "goal_counts": dict(
             sorted(
                 Counter(
                     f"{item.option.partition.value}:{item.option.candidate_set.goal.value}"
                     for item in pool
+                ).items()
+            )
+        ),
+        "independent_root_goal_counts": dict(
+            sorted(
+                Counter(
+                    f"{partition}:{goal}"
+                    for partition, goal, _root in {
+                        (
+                            item.option.partition.value,
+                            item.option.candidate_set.goal.value,
+                            item.option.root_lineage_id,
+                        )
+                        for item in pool
+                    }
                 ).items()
             )
         ),
@@ -1196,15 +1489,94 @@ def _pool_summary(
             )
         ),
         "capability_rejected_root_counts": dict(capability_rejected_root_counts),
+        "control_settle_root_count": len(
+            {
+                item.option.root_lineage_id
+                for item in pool
+                if item.control_settle_frames
+            }
+        ),
+        "maximum_control_settle_frames": max(
+            (item.control_settle_frames for item in pool),
+            default=0,
+        ),
         "candidate_feature_values_public": False,
         "private_path_fields": 0,
     }
 
 
+def _selection_summary(
+    selected: tuple[_SelectedRuntime, ...],
+) -> dict[str, object]:
+    """Describe experimental margins without publishing private identities."""
+
+    return {
+        "kind_counts": dict(
+            sorted(
+                Counter(
+                    f"{item.assignment.partition.value}:"
+                    f"{item.assignment.kind.value}"
+                    for item in selected
+                ).items()
+            )
+        ),
+        "goal_counts": dict(
+            sorted(
+                Counter(
+                    f"{item.assignment.partition.value}:"
+                    f"{item.assignment.goal.value}"
+                    for item in selected
+                ).items()
+            )
+        ),
+        "available_candidate_width_counts": dict(
+            sorted(
+                Counter(
+                    f"{item.assignment.partition.value}:"
+                    f"{sum(item.binding_question.binding.candidate_available)}"
+                    for item in selected
+                ).items()
+            )
+        ),
+        "control_settle_question_counts": dict(
+            sorted(
+                Counter(
+                    item.assignment.partition.value
+                    for item in selected
+                    if item.control_settle_frames
+                ).items()
+            )
+        ),
+        "private_identity_fields": 0,
+        "private_path_fields": 0,
+    }
+
+
 def _run(args: argparse.Namespace) -> dict[str, object]:
+    if args.out_plan is not None and (args.execute or args.frozen_plan is not None):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development writes a frozen plan separately from execution"
+        )
     if args.execute and args.private_artifact_root is None:
         raise RepeatablePartyOutcomeRunError(
             "repeatable development execution needs a private artifact root"
+        )
+    if (
+        args.execute
+        and args.battle_credit_protocol == _HYBRID_BATTLE_CREDIT_PROTOCOL_ID
+        and args.frozen_plan is None
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "hybrid repeatable development execution needs its frozen action-free plan"
+        )
+    if (
+        args.battle_credit_protocol == _HYBRID_BATTLE_CREDIT_PROTOCOL_ID
+        and (args.out_plan is not None or args.frozen_plan is not None or args.execute)
+        and args.scenario_selection_protocol
+        != BALANCED_KIND_GOAL_SELECTION_PROTOCOL
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "hybrid repeatable development freezes only a balanced V2 selection"
         )
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     if source.git_commit is None:
@@ -1275,6 +1647,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         source_commit=source.git_commit,
         source_bundle_sha256=source_bundle,
         completed_battles=args.completed_battles,
+        battle_credit_protocol_id=args.battle_credit_protocol,
     )
     plan = select_repeatable_party_scenarios(
         tuple(item.option for item in pool),
@@ -1282,6 +1655,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         development_count=args.development_count,
         seed=args.seed,
         maximum_timing_offset_frames=args.maximum_timing_offset_frames,
+        selection_protocol=args.scenario_selection_protocol,
     )
     selected = _selected_runtimes(plan, pool)
     assignments = _trial_assignments(selected)
@@ -1305,6 +1679,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             pool,
             capability_rejected_root_counts=capability_rejected_root_counts,
         ),
+        "selection_summary": _selection_summary(selected),
+        "scenario_selection_protocol": args.scenario_selection_protocol,
         "plan": plan.public_dict(),
         "plan_sha256": plan.plan_sha256,
         "question_count": len(selected),
@@ -1318,7 +1694,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             exclusion.plan_sha256 for exclusion in artifact_exclusions
         ),
         "development_repeatable": True,
-        "battle_credit_protocol": _battle_credit_protocol(args.completed_battles),
+        "battle_credit_protocol": _battle_credit_protocol(
+            args.completed_battles,
+            protocol_id=args.battle_credit_protocol,
+        ),
         "teacher_queries": 0,
         "teacher_choice_targets": 0,
         "model_predictions": 0,
@@ -1329,6 +1708,26 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "full_game_replays": 0,
         "private_path_fields": 0,
     }
+    frozen_document = _frozen_plan_document(base_receipt)
+    frozen_document_sha256 = canonical_sha256(frozen_document)
+    frozen_plan_file_sha256: str | None = None
+    if args.frozen_plan is not None:
+        loaded_frozen, frozen_plan_file_sha256 = _load_json(
+            _require_external(args.frozen_plan, subject="frozen plan"),
+            subject="frozen plan",
+        )
+        if loaded_frozen != frozen_document:
+            raise RepeatablePartyOutcomeRunError(
+                "repeatable development reconstruction differs from its frozen plan"
+            )
+    if args.out_plan is not None:
+        frozen_plan_file_sha256 = _write_frozen_plan(
+            args.out_plan,
+            frozen_document,
+        )
+    base_receipt["frozen_plan_document_sha256"] = frozen_document_sha256
+    if frozen_plan_file_sha256 is not None:
+        base_receipt["frozen_plan_file_sha256"] = frozen_plan_file_sha256
     if not args.execute:
         base_receipt.update(
             {
@@ -1376,8 +1775,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "rom_sha256": fingerprint.sha256,
                 "inputs": base_receipt["input_file_sha256"],
                 "development_repeatable": True,
-                "battle_credit_protocol": _battle_credit_protocol(dose.completed_battles),
+                "battle_credit_protocol": _battle_credit_protocol(
+                    dose.completed_battles,
+                    protocol_id=args.battle_credit_protocol,
+                ),
+                "scenario_selection_protocol": args.scenario_selection_protocol,
                 "sealed": False,
+                "frozen_plan_document_sha256": frozen_document_sha256,
+                "frozen_plan_file_sha256": frozen_plan_file_sha256,
             },
         )
         for runtime in selected:
@@ -1410,6 +1815,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                         source_commit=source.git_commit,
                         source_bundle_sha256=source_bundle,
                         watch=args.watch,
+                        battle_credit_protocol_id=args.battle_credit_protocol,
                     )
                     scenario_outcomes[trial_assignment.candidate_index] = measurement.outcome
                     measured_trials += 1

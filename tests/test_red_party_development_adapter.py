@@ -487,6 +487,76 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
     )
 
 
+def test_red_transition_guard_accepts_the_shared_fly_boundaries() -> None:
+    center = RawGameState(True, MapId.CELADON_POKECENTER, 3, 3, 6, 0)
+    outdoor = RawGameState(True, MapId.FUCHSIA_CITY, 19, 28, 6, 0)
+    mart = RawGameState(True, MapId.CINNABAR_MART, 2, 5, 6, 0)
+    indigo = RawGameState(True, MapId.INDIGO_PLATEAU_LOBBY, 2, 5, 6, 0)
+
+    assert red_vermilion_training_transition_available(center, 0, 6)
+    assert not red_vermilion_training_transition_available(
+        replace(center, player_x=4),
+        0,
+        6,
+    )
+    assert red_vermilion_training_transition_available(outdoor, 0, 0)
+    assert red_vermilion_training_transition_available(mart, 0, 2)
+    assert red_vermilion_training_transition_available(indigo, 0, 2)
+
+
+def test_direct_safe_recovery_does_not_require_attack_pp_from_unused_escort() -> None:
+    areas = _areas()
+    base = _observation()
+    raw = replace(
+        base.raw,
+        party_moves=((10, 91, 0, 0), (0, 0, 0, 0), (15, 19, 31, 0)),
+        party_pp=((5, 5, 0, 0), (0, 0, 0, 0), (5, 5, 5, 0)),
+    )
+    observation = replace(base, raw=raw, party=party_observation_from_raw(raw))
+
+    def no_op(*_args: object) -> None:
+        return None
+
+    venues = tuple(
+        TrainingVenue(
+            band=area,
+            map_id=100 + index,
+            walk_to_grass=lambda *_args: 1,
+            heal_and_return=no_op,
+            is_in_center=lambda _raw: False,
+            move_slot=lambda _raw: 1,
+        )
+        for index, area in enumerate(areas)
+    )
+    guards = (lambda *_args: True, lambda *_args: True)
+
+    hybrid = _execution_capability_matrix(
+        observation,
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        areas=areas,
+        training_venues=venues,
+        transition_guards=guards,
+        last_blackout_map=5,
+        current_map_tileset=17,
+        switch_assisted_battle_credit=False,
+    )
+    assisted = _execution_capability_matrix(
+        observation,
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        areas=areas,
+        training_venues=venues,
+        transition_guards=guards,
+        last_blackout_map=5,
+        current_map_tileset=17,
+        switch_assisted_battle_credit=True,
+    )
+
+    assert hybrid[0][0].available
+    assert assisted[0][0].unavailable_reason is (
+        PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE
+    )
+
+
 def test_red_preflight_freezes_identity_free_actionless_trainee_menu() -> None:
     observation = _observation()
     areas = _areas()

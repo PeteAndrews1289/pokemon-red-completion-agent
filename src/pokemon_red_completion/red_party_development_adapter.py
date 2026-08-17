@@ -24,7 +24,7 @@ from pokemon_red_completion.collection import (
     summarize_collection,
 )
 from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
 from pokemon_red_completion.party_development_adapter import (
     BoundPartyDevelopmentMenu,
@@ -67,6 +67,9 @@ from pokemon_red_completion.red_team_training import (
     TRAINING_MOVE_IDS,
     training_attack_pp_reserve,
 )
+from pokemon_red_completion.red_training_transitions import (
+    red_vermilion_training_transition_available,
+)
 from pokemon_red_completion.team_training import (
     MINIMUM_FIGHTABLE_SHARE,
     BalancedTeamPolicy,
@@ -107,50 +110,6 @@ class RedPartyDevelopmentExecutionCapabilityError(RedPartyDevelopmentAdapterErro
 
 
 RedPartyDevelopmentTransitionGuard = Callable[[RawGameState, int, int], bool | None]
-
-# Red's field-Dig implementation accepts exactly these cartridge tilesets.
-# The values are the revision-zero ids for FOREST, CEMETERY, INTERIOR, CAVERN,
-# and FACILITY.  A healing anchor says where Dig would land; it does not say
-# that Dig is legal on the current map.  Keeping the two facts separate is
-# load-bearing: a measured pilot began in the Cinnabar Mart (tileset 2), where
-# the old anchor-only check claimed travel was ready even though Dig cannot run.
-_RED_ESCAPE_WARP_TILESETS = frozenset({3, 15, 16, 17, 22})
-
-
-def red_vermilion_training_transition_available(
-    raw: RawGameState,
-    last_blackout_map: int,
-    current_map_tileset: int,
-) -> bool:
-    """Whether the existing Vermilion training navigator accepts this state.
-
-    This Red-private adapter mirrors already-implemented entry boundaries; it
-    adds no route and exposes only a title-neutral verdict. In-cave states must
-    still validate the live healing anchor because a recovery trip can require
-    Field Dig after the candidate has been selected.
-    """
-
-    if raw.battle_state or raw.map_id is None:
-        return False
-    position = (raw.player_x, raw.player_y)
-    if raw.map_id == MapId.ROUTE_11:
-        return True
-    if raw.map_id == MapId.VERMILION_POKECENTER:
-        return position in {(3, 3), (3, 7)}
-    if raw.map_id == MapId.CINNABAR_POKECENTER:
-        return position in {(3, 3), (13, 4)}
-    if raw.map_id == MapId.SAFFRON_POKECENTER:
-        return position == (3, 3)
-    if raw.map_id in {MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY}:
-        return True
-    if raw.map_id == MapId.VERMILION_CITY:
-        return position == (11, 4)
-    return current_map_tileset in _RED_ESCAPE_WARP_TILESETS and last_blackout_map in {
-        MapId.CINNABAR_ISLAND,
-        MapId.SAFFRON_CITY,
-        MapId.VERMILION_CITY,
-    }
-
 
 RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS: tuple[
     RedPartyDevelopmentTransitionGuard, ...
@@ -762,7 +721,8 @@ def _execution_capability_matrix(
                 if (
                     escort_recoverable
                     if switch_assisted_battle_credit
-                    else member_recoverable and escort_recoverable
+                    else member_recoverable
+                    and (direct_fight_ready or escort_recoverable)
                 )
                 else PartyDevelopmentCapabilityState.BLOCKED
             )

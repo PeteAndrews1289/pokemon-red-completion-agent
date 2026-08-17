@@ -8,6 +8,28 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: the independent 24+12 scale design exists
+
+The inventory-expansion falsifier passed without another full run. Excluding all three consumed
+repeatable pilots leaves 24 usable train roots and 15 usable development roots. The action-free V2
+design selects 24+12 questions from 36 unique roots/states and expands them into 93 candidate
+trials. Nine roots need exactly one no-input settle frame whose party, collection, story,
+inventory, money, map, position and battle semantics must remain identical. Four roots remain
+honestly unavailable because the qualified escort contract cannot be met.
+
+The V1 semantic-coverage selector is retained unchanged for historical reconstruction. It was too
+weak for scale: one rehearsal selected 21 trainee questions and three venue questions. The V2
+selector solves the globally feasible kind/goal margins before extra semantic tokens, yielding
+train 14/10 and development 6/6 trainee/venue; development covers every completion goal three
+times. The intervention lets a direct-safe member finish and otherwise uses the same fixed-dose
+participation/escort lesson. Stale direct-combat venue measurements remain masked.
+
+This is a design result, not a learning output. Publish and pass exact-head CI, freeze one external
+clean-source plan, collect the unsealed campaign under standing approval, then update on train only
+and compare once on the twelve new development questions. Stop on post-selection invalids,
+identity reuse, weakened diversity or an intervention mismatch. See the
+[path-free design receipt](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
+
 ## Current checkpoint: first verified-outcome scorer exists; scale independent evidence
 
 The switch-assisted 8+4 gate completed once. Every one of 48 candidate trials measured cleanly,

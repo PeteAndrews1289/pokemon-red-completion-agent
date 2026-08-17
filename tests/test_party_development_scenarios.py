@@ -23,6 +23,8 @@ from pokemon_red_completion.party_development_rank import (
     augment_training_candidate_set,
 )
 from pokemon_red_completion.party_development_scenarios import (
+    BALANCED_KIND_GOAL_SELECTION_PROTOCOL,
+    BALANCED_REPEATABLE_PARTY_SCENARIO_SCHEMA,
     PartyDevelopmentScenarioOption,
     RepeatablePartyScenarioError,
     permute_bound_party_development_menu,
@@ -226,6 +228,34 @@ def test_seed_changes_randomization_without_crossing_the_split() -> None:
     )
     assert all(item.partition is ScenarioPartition.TRAIN for item in first.assignments[:8])
     assert all(item.partition is ScenarioPartition.DEVELOPMENT for item in first.assignments[8:])
+
+
+def test_v2_selection_balances_action_kinds_and_completion_goals() -> None:
+    plan = select_repeatable_party_scenarios(
+        _pool(),
+        train_count=8,
+        development_count=4,
+        seed=20260816,
+        selection_protocol=BALANCED_KIND_GOAL_SELECTION_PROTOCOL,
+    )
+
+    assert plan.public_dict()["schema"] == BALANCED_REPEATABLE_PARTY_SCENARIO_SCHEMA
+    assert (
+        plan.public_dict()["selection_protocol"]
+        == BALANCED_KIND_GOAL_SELECTION_PROTOCOL
+    )
+    for partition in (ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT):
+        selected = tuple(
+            item for item in plan.assignments if item.partition is partition
+        )
+        kind_counts = [
+            sum(item.kind is kind for item in selected) for kind in TrainingChoiceKind
+        ]
+        goal_counts = [
+            sum(item.goal is goal for item in selected) for goal in PartyDevelopmentGoal
+        ]
+        assert max(kind_counts) - min(kind_counts) <= 1
+        assert max(goal_counts) - min(goal_counts) <= 1
 
 
 def test_selection_rejects_too_few_independent_roots() -> None:
