@@ -2,9 +2,11 @@
 
 ## August 17 scene: the missing squares on the board
 
-Open on the new source card: **778b7e0 · CI 32064328646/1 GREEN**. Keep the learning counters still
+Open on the new source card: **fa96c48 · CI 32069542599/1 GREEN · PREFLIGHT PASSED**. Add a clean
+receipt strip: **108 TERMINALS AUTHENTICATED · 22 TRAIN QUESTIONS · 12 DEVELOPMENT HEADERS ·
+DEVELOPMENT OUTCOMES 0 · FITS 0 · CONTROLLER 0 · ONE-SHOT IDENTITY UNUSED**. Keep the learning counters still
 at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0**. Say plainly:
-**“Green code is readiness. It is not learning.”**
+**“Green code and a clean preflight are readiness. They are not learning.”**
 
 Draw a two-column grid labeled **TRAINEE** and **VENUE**, with rows **BALANCE · COLLECTION ·
 EVOLUTION · ROLE COVERAGE**. Fill only these cells:
@@ -18,7 +20,7 @@ Leave every other square dark and stamp the board **ACTION AND GOAL CONFOUNDED**
 **“The model had two heads and four goals, but the data did not cross them. It had never learned
 which teammate should serve collection, evolution, or a missing role.”**
 
-Now show the deliberately short rail: **READ-ONLY PREFLIGHT → ONE TRAIN-ONLY SCREEN → REORIENT**.
+Now show the deliberately short rail: **PREFLIGHT PASSED → ONE TRAIN-ONLY SCREEN → REORIENT**.
 Split the exit. Red exit: **FAIL → CLOSE DESIGN → SAME-EVIDENCE COLLISION AUDIT**. Green exit:
 **PASS → FREEZE 12 NEW QUESTIONS, TWO PER TRAINEE/VENUE × COLLECTION/EVOLUTION/ROLE CELL**. Put a
 lock after both exits labeled **NO AUTHORITY · NO CRYSTAL · NO FULL REPLAY**.

@@ -9,9 +9,11 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ## Current checkpoint: the next result is small enough to say what it cannot prove
 
-The replacement model is no longer a sketch. It is published, tested on macOS and Linux, and
-waiting behind one read-only preflight. But the most useful part of the final review was not another
-green check. It was writing down the shape of the lesson.
+The replacement model is no longer a sketch. It is published, tested on macOS and Linux, and has
+passed its read-only preflight. That preflight authenticated 108 historical terminal records and
+the exact twenty-two-question training set without turning over a development answer, fitting a
+model, or consuming the one-shot identity. But the most useful part of the final review was not
+another green check. It was writing down the shape of the lesson.
 
 There are twenty-two training questions. Thirteen ask which teammate should train—and every one of
 those thirteen asks only about party balance. The other nine ask where to train: three for
@@ -28,8 +30,10 @@ in every cell. It does not buy the right to run that lesson yet.
 
 The scoreboard therefore has one remaining item for this decision: **30/30 TRAIN OUTCOMES · 15/15
 DEVELOPMENT OUTCOMES · 3/4 FITS · 3/3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**. Source
-`778b7e0` and CI run `32064328646` are readiness, not learning. The next scene is one preflight, one
-screen, and another reorientation—not another week of making the lock more elaborate.
+`fa96c48` and CI run `32069542599` are readiness, not learning. The preflight is complete and its
+[path-free receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json)
+advances no counter. The next scene is one screen and another reorientation—not another week of
+making the lock more elaborate.
 
 ---
 

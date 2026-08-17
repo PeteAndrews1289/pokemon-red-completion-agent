@@ -85,8 +85,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The frozen v2 architecture screen is published and CI-green. One label-free "
-            "preflight and one train-only screen are next; authority and transfer remain closed."
+            "The frozen v2 architecture screen is published, CI-green, and preflight-qualified. "
+            "One train-only screen is next; authority and transfer remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
@@ -94,7 +94,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         model=DashboardModelState(
             mode="waiting",
             candidate="Protocol-consistent trainee/venue ranker · frozen v2 screen",
-            choice="Preflight pending; no new fit or authority",
+            choice="Preflight passed; one-shot identity unused; no new fit or authority",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,

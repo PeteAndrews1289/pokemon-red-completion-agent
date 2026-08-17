@@ -6,12 +6,15 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: preflight and measure the already-frozen v2 screen once
+## Current override: measure the preflight-qualified v2 screen once
 
-Head `778b7e0` publishes the frozen learner/runner and passed CI run `32064328646`, attempt 1.
-Implementation and CI produced zero outcomes, fits, comparisons, promotions, or transfer results.
-Codex owns one read-only preflight and, if every check passes, one train-only execution followed by
-immediate reorientation.
+Head `fa96c48` publishes the frozen learner/runner and passed CI run `32069542599`, attempt 1. The
+official label-free preflight authenticated 108 terminal records, reconstructed exactly 22 train
+questions and 12 development headers, decoded no development outcome, fit no model, and left gate
+identity `7a148a5d…` unclaimed. Implementation, CI, and preflight produced zero outcomes, fits,
+comparisons, promotions, or transfer results. Codex owns one train-only execution followed by
+immediate reorientation. See the
+[path-free preflight receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json).
 
 The screen uses the zero-outcome prior and a confounded 22-question grid: 13 trainee:balance plus
 three venue questions for each of collection, evolution, and role coverage. A failure closes the

@@ -1,9 +1,11 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: the architecture screen is ready—and its blind spot is now explicit
+## August 17: the architecture screen passed preflight—and its blind spot is explicit
 
-Published head `778b7e0` passed CI run `32064328646`, attempt 1, with the frozen train-only v2
-learner and runner unchanged by the final portability fix. The design starts from the historical
+Published head `fa96c48` passed CI run `32069542599`, attempt 1. The official label-free preflight
+authenticated 108 historical terminals, reconstructed exactly twenty-two train questions and
+twelve development question headers, decoded no development outcome, fit no model, and left the
+semantic one-shot identity unused. The design starts from the historical
 zero-outcome prior, fits separate trainee and venue residual heads with fixed ridge 4.0 and
 menu-normalized pairwise targets, and evaluates deterministically by leaving out one train root at
 a time. It never decodes consumed development during selection. This checkpoint produced no fit,
@@ -16,13 +18,16 @@ crossed experiment, and the trainee decisions most directly tied to a living Pok
 The gate is therefore a screening falsifier of one representation, not an independent
 generalization result.
 
-One label-free preflight comes next. If it fails, no claim or fit occurs. If the representation or
-leave-one-root-out result fails, this design closes and the same evidence receives a collision and
+Exactly one preflight-qualified screen comes next. If the representation or leave-one-root-out
+result fails, this design closes and the same evidence receives a collision and
 fold-stability audit—no new collection first. A pass permits only freezing a fresh twelve-question
 Red 2×3 design with two independent roots in every trainee/venue ×
 collection/evolution/role cell. Only a later positive independent result could justify bounded Red
 party authority and then the first meaningful transfer question: does Red initialization beat zero
 initialization on the same contract in unseen Crystal contexts?
+
+The [path-free preflight receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json)
+records the zero-access boundary and unchanged counters.
 
 The lesson for the broader project is operational as well as statistical. This already-published
 gate uses unusually strict one-shot provenance to prevent adaptive reuse of fixed train evidence.

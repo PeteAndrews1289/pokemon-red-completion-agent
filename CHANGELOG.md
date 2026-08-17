@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Passed the official label-free preflight for the train-only v2 architecture screen from published
+  source `fa96c48` under green CI run `32069542599` attempt 1. It authenticated 108 historical
+  terminal records, reconstructed exactly 22 train questions and 12 development question headers,
+  decoded zero development outcomes, fit zero models, sent zero controller actions, and confirmed
+  semantic gate identity `7a148a5d…` remains unused in both one-shot ledgers. Recorded the
+  path-free preflight receipt without advancing any outcome, fit, comparison, authority, or
+  transfer counter. Exactly one frozen train-only execution is next.
 - Published the frozen protocol-consistent train-only v2 screen at `778b7e0`; GitHub CI run
   `32064328646` attempt 1 is green. The production learner and runner retain exact SHA-256 digests
   `7fb1783e…e3c` and `355127d8…026`; a test-only correction replaced a platform-specific trained

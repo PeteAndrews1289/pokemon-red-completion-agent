@@ -1,13 +1,16 @@
 # Three-agent coordination
 
-> **2026-08-17 train-only v2 screen — highest active checkpoint:** Codex published exact head
-> `778b7e0`; CI run `32064328646` attempt 1 is green. Implementation and CI changed no learning
-> counter. The screen uses the historical zero-outcome prior and only 22 scale-train questions.
+> **2026-08-17 train-only v2 preflight — highest active checkpoint:** Codex published exact head
+> `fa96c48`; CI run `32069542599` attempt 1 is green. The label-free preflight authenticated 108
+> terminal records and reconstructed 22 train questions plus 12 development headers while decoding
+> zero development outcomes, fitting zero models, and leaving the one-shot identity unused.
+> Implementation, CI, and preflight changed no learning counter. The screen uses the historical
+> zero-outcome prior and only 22 scale-train questions.
 > Its support is **13 trainee:balance** plus **3 venue questions for each of collection, evolution,
 > and role coverage**. Action and goal are confounded, and all mission-critical non-balance trainee
 > cells are absent.
 >
-> Codex owns one label-free preflight and, only if it passes, one frozen train-only execution.
+> Codex now owns exactly one preflight-qualified frozen train-only execution.
 > Failure closes the design and permits only a same-evidence representation-collision audit. Pass
 > permits freezing—but not executing—a 12-question Red trainee/venue × collection/evolution/role
 > design with two independent roots per cell. No pass grants shadow/live authority, Crystal access,
@@ -19,6 +22,8 @@
 > bounded cross-title challenge only after a fresh Red result creates a real transfer decision.
 > Neither reviewer executes private evidence or grants authority. Cumulative evidence remains
 > train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0.
+> The [path-free preflight receipt](docs/evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json)
+> records the zero-access boundary.
 
 > **2026-08-17 recovered-evidence fit — latest measured checkpoint:** The authenticated fitter used
 > only the 22 complete scale-train questions. Training loss fell **1.667 → 0.594**, but the base

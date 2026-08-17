@@ -1,13 +1,19 @@
 # Current audit — 2026-08-17
 
-## Reorientation result: GO for one screen, no broader claim
+## Reorientation result: preflight passed; GO for one screen, no broader claim
 
-Published head `778b7e054c980f8c0eea13c88ddd0f51c408d0ce` passed GitHub CI run
-`32064328646`, attempt 1. The v2 protocol learner and train-only runner are frozen; a later
-test-only portability commit changed neither production digest. No preflight, private-label read,
-model fit, development comparison, game action, authority change, or transfer test occurred.
+Published head `fa96c48e69c564e3d422bc6404b0f4850c869919` passed GitHub CI run
+`32069542599`, attempt 1. The v2 protocol learner and train-only runner are frozen at
+`7fb1783e…e3c` and `e782cdaa…373`. The official preflight authenticated 108 historical terminals,
+reconstructed exactly 22 train questions and 12 development question headers, decoded zero
+development outcomes, fit zero models, sent no controller action, and left semantic gate identity
+`7a148a5d…` available in both ledgers. No private-label read, model fit, development comparison,
+game action, authority change, or transfer test occurred. The
+[path-free receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json)
+records that boundary.
 
-Three independent reviews agree on **GO for exactly one offline screen**. Its marginal value is to
+Three independent reviews and the successful preflight agree on **GO for exactly one offline
+screen**. Its marginal value is to
 decide whether the already-fixed residual representation deserves any fresh evidence. It is not
 north-star evidence. The 22 roots contain 13 trainee:balance questions and three venue questions
 for each of collection, evolution, and role coverage. Action and goal are perfectly confounded;

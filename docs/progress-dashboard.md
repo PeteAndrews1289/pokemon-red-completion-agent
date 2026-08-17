@@ -7,8 +7,12 @@
 >
 > The active decision scorecard is **TRAIN OUTCOME QUESTIONS 30/30 · DEVELOPMENT OUTCOME
 > QUESTIONS 15/15 · MODEL FITS 3/4 · UNSEEN COMPARISONS 3/3 · AUTHORITY 0 · TRANSFER 0**.
-> Published head `778b7e0` and CI run `32064328646` attempt 1 are green, but implementation and CI
-> do not increment any counter. One label-free preflight and one frozen train-only screen are next.
+> Published head `fa96c48` and CI run `32069542599` attempt 1 are green. The label-free preflight
+> authenticated 108 terminals, reconstructed 22 train questions and 12 development headers,
+> decoded zero development outcomes, fit zero models, and left gate identity `7a148a5d…` unclaimed.
+> Implementation, CI, and preflight do not increment any counter. Exactly one frozen train-only
+> screen is next. See the
+> [path-free preflight receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json).
 >
 > The screen's support is **13 TRAINEE:BALANCE · 3 VENUE:COLLECTION · 3 VENUE:EVOLUTION · 3
 > VENUE:ROLE COVERAGE**. Display **ACTION/GOAL CONFOUNDED · NON-BALANCE TRAINEE CELLS ABSENT ·

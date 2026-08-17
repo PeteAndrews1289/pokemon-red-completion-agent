@@ -234,8 +234,8 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Preflight pending; no new fit or authority" in encoded
-    assert "One label-free preflight and one train-only screen are next" in encoded
+    assert "Preflight passed; one-shot identity unused; no new fit or authority" in encoded
+    assert "One train-only screen is next" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

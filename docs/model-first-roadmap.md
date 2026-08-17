@@ -10,8 +10,11 @@ current lane; the accumulated checkpoints below are evidence history when they c
 
 ## Current checkpoint: one frozen train-only screen, then reorient
 
-The protocol-consistent v2 learner and train-only runner are published at exact head `778b7e0` and
-green under CI run `32064328646`, attempt 1. Code and CI are not learning outputs: cumulative
+The protocol-consistent v2 learner and train-only runner are published at exact head `fa96c48` and
+green under CI run `32069542599`, attempt 1. The official label-free preflight authenticated 108
+terminal records, reconstructed exactly 22 train questions and 12 development question headers,
+decoded zero development outcomes, fit zero models, and left gate identity `7a148a5d…` unclaimed.
+Code, CI, and preflight are not learning outputs: cumulative
 evidence remains **30 train questions · 15 development questions · 3 fits · 3 comparisons ·
 authority 0 · transfer 0**. The latest measured result is still the rejected shared-model update
 below.
@@ -26,15 +29,17 @@ multi-goal trainee claim is available.
 
 The bounded sequence is:
 
-1. Run one label-free preflight. A failure sends no claim and fits no model.
-2. If every binding passes, run the exact frozen screen once and record its train-only result.
-3. Representation failure records zero fits and triggers a same-evidence collision/stability audit.
-4. Mixed or worse leave-one-root-out evidence rejects this design; do not redesign again first.
-5. A pass permits only freezing a fresh 12-question Red **design**: trainee/venue ×
+1. Run the exact preflight-qualified frozen screen once and record its train-only result.
+2. Representation failure records zero fits and triggers a same-evidence collision/stability audit.
+3. Mixed or worse leave-one-root-out evidence rejects this design; do not redesign again first.
+4. A pass permits only freezing a fresh 12-question Red **design**: trainee/venue ×
    collection/evolution/role, two independent roots per cell, compared later against both the
    zero-outcome prior and frozen eight-question baseline.
-6. Reorient immediately. No result here grants authority, executes development, opens Crystal, or
+5. Reorient immediately. No result here grants authority, executes development, opens Crystal, or
    justifies more provenance machinery, route work, quota collection, or a full replay.
+
+The [path-free preflight receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json)
+records the label-free boundary and unchanged counters.
 
 This is worth one attempt because the evidence and hypothesis already exist and the marginal cost
 is one offline screen. It is not permission for an open-ended party-model research program.

@@ -5,12 +5,16 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the train-only v2 screen is published, green, and
-> waiting on its label-free preflight.** Source `778b7e0` passed GitHub CI run `32064328646`,
-> attempt 1. The learner and runner use the historical **zero-outcome** prior, separate
+> **Current product focus (August 17, 2026): the train-only v2 screen passed its label-free
+> preflight and remains unclaimed.** Source `fa96c48` passed GitHub CI run `32069542599`, attempt
+> 1. Its preflight authenticated 108 historical terminal records, reconstructed exactly 22 train
+> questions and 12 development question headers, decoded zero development outcomes, fit zero
+> models, and left the semantic one-shot identity available. The learner and runner use the
+> historical **zero-outcome** prior, separate
 > trainee/venue residual heads, title-neutral feature groups, ridge 4.0, menu-normalized pairwise
-> targets, and deterministic leave-one-root-out evaluation. Implementation and CI added no model
-> fit, outcome, authority, or transfer result.
+> targets, and deterministic leave-one-root-out evaluation. Preflight, implementation, and CI
+> added no model fit, outcome, authority, or transfer result. See the
+> [path-free preflight receipt](docs/evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json).
 >
 > This is a screening falsifier, not evidence that the agent can play a game. Its 22-question grid
 > contains **13 trainee:balance** questions and **3 venue questions for each of collection,
@@ -20,8 +24,8 @@
 > roots in each trainee/venue × collection/evolution/role cell. It does not permit that slice to
 > execute, grant authority, open Crystal, or start another architecture sweep.
 >
-> Next: run one read-only preflight, then execute the frozen screen once only if every binding
-> passes. Reorient again immediately after the measured result. Do not copy this gate's unusually
+> Next: execute the now-qualified frozen screen exactly once, then reorient immediately after the
+> measured result. Do not copy this gate's unusually
 > strict one-shot machinery into routine development. The active scorecard is **train outcomes
 > 30/30 · development outcomes 15/15 · fits 3/4 · comparisons 3/3 · authority 0 · transfer 0**.
 >
