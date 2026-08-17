@@ -6,7 +6,49 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: diagnose v2 once, then design a fresh goal-manager episode
+## Current override: qualify the root-safe composition runner; do not execute it
+
+Published source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
+attempt 1. Its reviewed ROM-free design and core freeze the three-decision composition contract
+and fail-closed orchestration only. They admitted no fresh root, loaded no prediction, sent no
+controller input, and created no outcome. Counters remain **train 30 · development 15 · fits 3 ·
+comparisons 3 · authority 0 · transfer 0**. See the
+[path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+
+Codex owns only the maintenance lane
+`fresh-goal-manager-composition-execution-qualification-v1`: action-free fresh-root admission; an
+authenticated root-safe runner plus one-shot ledger; exact skill/protected-source attestation;
+hard action/frame limiters; and a durable composition terminal. Runner qualification—not gameplay—
+is next. Claude may audit source, claim, limiter, and terminal boundaries. Antigravity remains
+deferred until a fresh executed Red result creates a concrete transfer question. No agent may run
+the episode, patch a root or skill, reuse development, grant authority, or open sealed Red or
+Crystal.
+
+## Previous override: freeze the fresh goal-manager contract; do not execute it
+
+Source `1395e446` passed CI run `32072706947`, attempt 1. The completed read-only postmortem found
+six exact `raw_semantics_aliased_or_outcome_instability` clusters covering all 28 contradictory
+relationships: 25 trainee and three venue. It found no projection-compression or tolerance-only
+cluster and no isolated party-v2 repair. Venue cost range remained zero in all nine menus. No
+outcome, fit, comparison, authority, transfer, development decode, or game-action counter moved.
+The cumulative board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. See the
+[path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+
+Codex owns the design freeze for `fresh-goal-manager-composition-design-v1`, not its execution.
+The contract must select the initial fresh nonsealed Red root action-free and before predictions;
+contain exactly three decisions; expose at least two executable choices at each step; select three
+distinct goal kinds including `ACQUIRE_SPECIES`; retain that capture; reobserve and verify after
+every step and replan from the changed state; require confidence at least 0.80; use only existing
+skills; and allow no teacher or fallback. If any condition cannot be met together, stop and
+reorient instead of weakening it.
+
+Claude may audit the frozen decision contract and its no-execution boundary. Antigravity remains
+deferred until a fresh executed Red result creates a concrete architecture or transfer question.
+No agent may refit party v2, reuse development, execute this episode during the design session,
+grant authority, or open sealed Red or Crystal.
+
+## Previous override: diagnose v2 once, then design a fresh goal-manager episode
 
 Source `19f53e1` passed CI run `32070285183`, attempt 1. The consumed v2 gate stopped before fit:
 28 conflicting pairwise-row comparisons, venue-cost variation absent in all three observed goal

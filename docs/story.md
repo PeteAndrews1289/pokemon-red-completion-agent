@@ -7,7 +7,59 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the model stopped before it could fool us
+## Current checkpoint: the blueprint has a core, not a cartridge runner
+
+The three-decision composition design is no longer just prose. Exact source `c4d8c729` passed CI
+run `32076494276`, attempt 1, and publishes a reviewed ROM-free core that can enforce the learned
+choice, durable recording, independent verification, collection safety, and changed-state
+reobservation contract. The
+[path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json)
+makes the missing boundary just as explicit.
+
+No fresh root has been admitted. No prediction has been loaded. No controller input has been sent,
+and no outcome exists. The board therefore stays **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3
+COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**.
+
+The active maintenance lane, `fresh-goal-manager-composition-execution-qualification-v1`, has five
+gates between the core and gameplay: choose a fresh root without acting, build an authenticated
+root-safe runner with a one-shot ledger, attest the exact skills and protected sources, enforce
+hard action and frame limits, and durably retain the composition terminal. The next scene is
+runner qualification, not the three choices themselves. That keeps the project aimed at a
+transferable story-and-living-Pokédex agent without turning green infrastructure into a pretend
+learning result.
+
+---
+
+## Previous checkpoint: six clusters closed the party lane
+
+The promised postmortem got one pass and one answer. Across forty-eight pairwise rows, all
+twenty-eight contradictory relationships collapsed into six exact clusters. Twenty-five came from
+trainee choices and three from venue choices. None was created only by the frozen projection, and
+none was a numerical near-match. In every case, the allowed raw semantics were already identical
+while the measured preference disagreed.
+
+That leaves an honest ambiguity: the observation language may alias decisions that matter, or the
+outcomes may be unstable. This evidence cannot tell which. Venue cost was also flat in all nine
+menus, even though quality and safety still varied. So there is no clean feature patch, weaker
+tolerance, or same-data refit waiting behind the result. Party v2 is closed.
+
+The diagnostic ran no optimizer, opened no development answer, made no prediction, and touched no
+game. The board stays **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO ·
+TRANSFER ZERO**. Exact source `1395e446` and CI run `32072706947`, attempt 1, bind the
+[path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+
+The next scene is only a blueprint. Choose one fresh nonsealed Red starting point without acting
+and before asking for predictions, then freeze exactly three goal-manager decisions. Each must
+offer at least two actions the agent can really execute; the three selected goals must be different
+kinds; one must acquire and retain a species; and every step must be observed again and verified
+before the next choice is rebuilt from changed state and selected with at least 0.80 confidence.
+No teacher, fallback, new skill, or game execution enters this design session. The point is to
+return from an ambiguous offline score to a small test of hierarchical play without pretending the
+test has already happened.
+
+---
+
+## Previous checkpoint: the model stopped before it could fool us
 
 The frozen screen ran once and rejected its own language before fitting a model. Twenty-eight
 pairs of comparisons looked the same to the projected representation but carried different

@@ -1,5 +1,55 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the composition core is published; the runner is not qualified
+
+Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
+attempt 1. The reviewed ROM-free implementation freezes the fresh three-decision contract and its
+core orchestration: a learned high-level choice, durable recording before skill execution,
+independent outcome verification, collection nonregression, and reobservation from changed state.
+The [path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json)
+records what this source does and does not establish.
+
+It establishes no gameplay result. Fresh roots admitted, predictions loaded, controller inputs,
+and outcomes are all zero. The cumulative board remains thirty train questions, fifteen
+development questions, three fits, three comparisons, and zero authority or transfer.
+
+The active maintenance lane is
+`fresh-goal-manager-composition-execution-qualification-v1`. Before one episode may run, it must
+complete five gate groups: action-free fresh-root admission; an authenticated root-safe runner and
+one-shot ledger; exact skill/protected-source attestation; hard action/frame limiters; and a
+durable composition terminal. Runner qualification—not gameplay—is next. This is the smallest
+honest bridge from a ROM-free contract to a future multi-skill Red result that could eventually
+support a matched Crystal transfer design and the larger living-Pokédex mission.
+
+## August 17: the postmortem found ambiguity, not a projection repair
+
+Published source `1395e446` passed CI run `32072706947`, attempt 1. The bounded read-only
+postmortem revisited only the consumed gate's twenty-two train questions. Their thirty-nine
+trainee and nine venue pairwise rows contained twenty-eight contradictory relationships—twenty-five
+trainee and three venue—which collapsed into six exact clusters. Every cluster was classified
+`raw_semantics_aliased_or_outcome_instability`; none was projection compression or a
+tolerance-only near-collision. Trainee and venue normalized ranks were fourteen and four. Venue
+cost range was zero in all nine menus, while quality and safety retained nonzero range.
+
+The result narrows the claim without inventing a cause. Identical allowed raw semantics with
+conflicting outcomes may mean semantic aliasing or outcome instability, and this evidence cannot
+separate them. It does not identify a replacement feature set, support another fit, or reopen the
+conditional party slice. The diagnostic used no optimizer, decoded no development outcome,
+committed no prediction, executed no game action, and added no unseen comparison, authority, or
+transfer result. Cumulative counters remain thirty train questions, fifteen development questions,
+three fits, three comparisons, and zero authority or transfer. The
+[path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json) records
+that boundary.
+
+The project now leaves the party scorer and freezes a thinner hierarchical test. The design-only
+lane selects one fresh nonsealed Red root action-free and before predictions, then specifies
+exactly three decisions. Every step must expose at least two executable choices; the three selected
+goals must have distinct kinds; `ACQUIRE_SPECIES` must end in a retained capture; every step must
+be reobserved and verified before replanning from changed state; confidence must be at least 0.80;
+and only existing skills may run, with no teacher or fallback. This session executes nothing. A
+later learning lane must earn any Red result before a title-neutral Crystal transfer comparison
+can even be designed.
+
 ## August 17: the representation failed before the optimizer ran
 
 Published source `19f53e1` passed CI run `32070285183`, attempt 1, and consumed the frozen v2 gate

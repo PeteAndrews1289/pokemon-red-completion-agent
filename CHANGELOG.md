@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+- Published and reviewed the fresh goal-manager composition design and ROM-free core at
+  `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` under green CI run `32076494276` attempt 1. The
+  source freezes the three-decision contract and core fail-closed orchestration but admits no fresh
+  root, loads no prediction, sends no controller input, and creates no outcome. Reoriented to the
+  maintenance lane `fresh-goal-manager-composition-execution-qualification-v1`. Before gameplay,
+  it must qualify action-free fresh-root admission, an authenticated root-safe runner plus one-shot
+  ledger, exact skill/protected-source attestation, hard action/frame limiters, and a durable
+  composition terminal. The cumulative board remains train 30, development 15, fits 3,
+  comparisons 3, authority 0, and transfer 0.
+- Completed the bounded party-representation collision postmortem from source `1395e446` under
+  green CI run `32072706947` attempt 1. On the consumed gate's 22 train questions, 39 trainee and
+  9 venue pairwise rows produced 28 contradictory relationships—25 trainee and 3 venue—in six
+  exact `raw_semantics_aliased_or_outcome_instability` clusters. No projection-compression or
+  tolerance-only cluster appeared; venue cost range was zero in all nine menus. The diagnostic fit
+  no model, opened no development result, executed no game action, and advanced no learning,
+  authority, or transfer counter. Retired the party-v2 diagnostic lane and redirected to the
+  design-only `fresh-goal-manager-composition-design-v1` maintenance lane: freeze an
+  exactly-three-decision fresh Red contract with at least two executable choices per step, three
+  distinct selected kinds including `ACQUIRE_SPECIES` with retained capture, per-step
+  reobservation/verification and changed-state replanning, confidence at least 0.80, existing
+  skills only, and zero teacher/fallback. No episode executes in this session; cumulative counters
+  remain train 30, development 15, fits 3, comparisons 3, authority 0, and transfer 0.
 - Executed the frozen train-only v2 screen exactly once from source `19f53e1` under green CI run
   `32070285183` attempt 1. Its representation audit found 28 conflicting pairwise-row comparisons
   and no within-menu venue-cost variation in any observed goal slice, then stopped before fitting.

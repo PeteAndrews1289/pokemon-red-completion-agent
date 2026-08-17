@@ -5,14 +5,43 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The cumulative learning board is **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS
-> 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Source `19f53e1` and CI
+> **Current qualification rail:** Source `c4d8c729` and CI run `32076494276` attempt 1 are green.
+> The reviewed design and ROM-free core are published, with **ROOTS ADMITTED 0 · PREDICTIONS 0 ·
+> CONTROLLER 0 · OUTCOMES 0**. Link the
+> [path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+>
+> Display the active lane as **FRESH COMPOSITION EXECUTION QUALIFICATION · ACTION-FREE ROOT
+> ADMISSION → AUTHENTICATED ROOT-SAFE RUNNER + ONE-SHOT LEDGER → EXACT SKILL/PROTECTED-SOURCE
+> ATTESTATION → HARD ACTION/FRAME LIMITERS → DURABLE COMPOSITION TERMINAL**. Runner qualification—
+> not gameplay—is next. The cumulative board remains **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT
+> OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Do not
+> display episode progress, model decisions, controller activity, authority, or transfer.
+>
+> **Historical postmortem/design checkpoint:** Source `1395e446` and CI run `32072706947` attempt 1 are
+> green. The read-only postmortem reports **48 PAIRWISE ROWS · 28 CONTRADICTORY RELATIONSHIPS · 25
+> TRAINEE / 3 VENUE · 6 EXACT RAW-SEMANTIC-ALIAS/OUTCOME-INSTABILITY CLUSTERS · 0 PROJECTION · 0
+> TOLERANCE · VENUE COST RANGE 0 IN 9/9 MENUS**. It cannot distinguish semantic aliasing from
+> unstable outcomes and identifies no party-v2 repair. Link the
+> [path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+>
+> The cumulative board remains **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 ·
+> MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Display the active rail as
+> **DESIGN ONLY · FRESH NONSEALED ROOT SELECTED ACTION-FREE BEFORE PREDICTIONS → EXACTLY 3
+> DECISIONS → ≥2 EXECUTABLE CHOICES EACH → 3 DISTINCT SELECTED KINDS → ACQUIRE_SPECIES + RETAINED
+> CAPTURE → REOBSERVE + VERIFY EACH STEP → REPLAN FROM CHANGED STATE → CONFIDENCE ≥0.80 → EXISTING
+> SKILLS · TEACHER 0 · FALLBACK 0**. The lane is
+> `fresh-goal-manager-composition-design-v1`; show no game execution, fit, prediction, authority,
+> or transfer progress for this maintenance session.
+>
+> **Historical consumed-screen checkpoint:** The cumulative learning board was **TRAIN OUTCOME
+> QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 ·
+> AUTHORITY 0 · TRANSFER 0**. Source `19f53e1` and CI
 > run `32070285183` attempt 1 are green. The one-shot screen failed before fit with **28 conflicting
 > pairwise-row comparisons · VENUE COST VARIANCE 0/3 GOAL SLICES · EVALUATION NULL · MODEL NULL ·
 > GATE CONSUMED**. It decoded zero development outcomes and advances no counter. See the
 > [path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
 >
-> Display the next rail as **SAME-EVIDENCE COLLISION POSTMORTEM · NO OPTIMIZER · NO DEVELOPMENT ·
+> Its then-next rail was **SAME-EVIDENCE COLLISION POSTMORTEM · NO OPTIMIZER · NO DEVELOPMENT ·
 > RETIRE V2 → DESIGN ONE FRESH RED GOAL-MANAGER COMPOSITION EPISODE**. Do not show the old 3/4 fit
 > target, the conditional 12-question slice, a v2 rescue, authority, or Crystal access.
 >

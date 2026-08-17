@@ -18,7 +18,50 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Train-only v2 failed before fit; bounded collision postmortem next — 2026-08-17
+## Composition core published; qualify the runner before gameplay — 2026-08-17
+
+Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
+attempt 1. The reviewed ROM-free implementation freezes the three-decision composition contract,
+durable decision-before-skill boundary, independent verification, changed-state reobservation, and
+core budget reconciliation. It does not select a root or provide an authenticated cartridge
+runner. Fresh roots admitted, model predictions, controller inputs, and outcomes are all zero. See
+the [path-free core qualification](docs/evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+
+The active lane is the maintenance lane
+`fresh-goal-manager-composition-execution-qualification-v1`. Qualify exactly five remaining gate
+groups before any execution: **action-free fresh-root admission; an authenticated root-safe runner
+plus one-shot ledger; exact skill/protected-source attestation; hard action/frame limiters; and a
+durable composition terminal**. Runner qualification—not gameplay—is next. Do not treat the
+published core or green CI as a prediction, outcome, authority result, or transfer test. Counters
+remain **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+
+## Previous checkpoint: collision postmortem complete; freeze the goal-manager contract — 2026-08-17
+
+Exact source `1395e446b9b2188c656e6bafbb910322e725777b` passed CI run `32072706947`,
+attempt 1. The read-only no-optimizer postmortem reconstructed the consumed gate's 22 train
+questions as 39 trainee and 9 venue pairwise rows. It collapsed all 28 contradictory relationships
+into six exact `raw_semantics_aliased_or_outcome_instability` clusters: 25 relationships were
+trainee and three were venue. There were no projection-compression or tolerance-only clusters.
+The normalized ranks were trainee 14 and venue 4. Venue cost had range zero in all nine menus;
+quality and safety retained ranges of 0.133333 and 0.222222.
+
+That evidence does not choose between aliased raw semantics and unstable outcomes. It identifies
+no single projection defect and does not support another fit, a replacement feature ranking, or a
+v2 retry. The diagnostic opened no development outcome, fit no model, added no unseen comparison,
+ran no game action, and changed no authority or transfer result. The cumulative board remains
+**train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. See the
+[path-free postmortem](docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+
+The active lane is the design-only maintenance lane
+`fresh-goal-manager-composition-design-v1`. Freeze one thin exactly-three-decision contract; do
+not execute it this session. Select the initial fresh nonsealed Red root action-free and before any
+prediction. Require at least two executable choices at every step, three distinct selected goal
+kinds, `ACQUIRE_SPECIES` among them with a retained capture, reobservation and verification after
+every step, replanning from the resulting changed state, confidence at least 0.80, existing skills
+only, and zero teacher or fallback. Stop the design if those conditions cannot coexist without
+weakening the contract.
+
+## Previous checkpoint: train-only v2 failed before fit; bounded collision postmortem next — 2026-08-17
 
 Published source `19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c` passed CI run `32070285183`,
 attempt 1, and consumed semantic gate identity `7a148a5d…` exactly once. The representation audit

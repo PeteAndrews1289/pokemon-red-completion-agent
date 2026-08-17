@@ -27,6 +27,17 @@ from product_focus import (  # noqa: E402
 CHECKER = runpy.run_path(str(SCRIPTS / "check_product_focus.py"))
 CHECK_DOCS = runpy.run_path(str(SCRIPTS / "check_docs.py"))
 DASHBOARD = runpy.run_path(str(SCRIPTS / "run_product_focus_dashboard.py"))
+COMPOSITION_DESIGN = (
+    PROJECT_ROOT
+    / "docs/evidence/fresh-goal-manager-composition-design-v1-2026-08-17.json"
+)
+COLLISION_POSTMORTEM = (
+    PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
+)
+COMPOSITION_CORE_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json"
+)
 
 
 def _document() -> dict[str, object]:
@@ -48,9 +59,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "protocol-party-representation-collision-audit-v1"
+    assert state.active_lane["id"] == (
+        "fresh-goal-manager-composition-execution-qualification-v1"
+    )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 2
+    assert len(state.retired_lanes) == 4
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -59,6 +72,56 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_collision_result_and_next_composition_design_preserve_the_product_boundary() -> None:
+    collision = json.loads(COLLISION_POSTMORTEM.read_text(encoding="ascii"))
+    design = json.loads(COMPOSITION_DESIGN.read_text(encoding="ascii"))
+
+    result = collision["result"]
+    assert result["contradictory_pairwise_relationships"] == 28
+    assert result["exact_raw_semantic_conflicting_relationships"] == 28
+    assert result["exact_projected_conflicting_relationships"] == 28
+    assert result["classification_cluster_counts"] == {
+        "frozen_projection_compression": 0,
+        "raw_semantics_aliased_or_outcome_instability": 6,
+        "tolerance_only_projected_near_collision": 0,
+    }
+    assert collision["counter_treatment"] == {
+        "authority_promotions_added": 0,
+        "model_fits_added": 0,
+        "outcome_questions_added": 0,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0,
+    }
+
+    assert design["implementation_status"] == (
+        "contract_and_core_orchestration_frozen_root_claim_runner_not_implemented_no_execution"
+    )
+    assert design["bounds"]["decisions"] == 3
+    assert design["admission"]["prediction_before_root_freeze"] is False
+    assert design["pass_rule"]["available_goal_minimum_each_decision"] == 2
+    assert design["pass_rule"]["selected_goal_kinds_distinct"] == 3
+    assert design["pass_rule"]["selected_goal_kinds_must_include"] == [
+        "acquire_species"
+    ]
+    assert design["pass_rule"]["required_retained_specimens_acquired_minimum"] == 1
+    assert design["pass_rule"]["available_menu_changes_minimum"] == 1
+    assert design["execution_prerequisites"]["root_safe_runner_required"] is True
+    assert design["authority"]["teacher_fallback_allowed"] is False
+    assert design["authority"]["confidence_floor"] == 0.8
+
+    core = json.loads(COMPOSITION_CORE_QUALIFICATION.read_text(encoding="ascii"))
+    assert core["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32076494276,
+        "source_commit": "c4d8c7294a4c68ce0b9c506cf978a389c88a222f",
+    }
+    assert core["zero_effects"]["roots_admitted"] == 0
+    assert core["zero_effects"]["model_predictions"] == 0
+    assert core["zero_effects"]["controller_actions"] == 0
+    assert not any(core["remaining_execution_prerequisites"].values())
 
 
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
@@ -229,13 +292,15 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
+    assert "composition execution qualification" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Representation rejected pre-fit; same-evidence collision audit only" in encoded
-    assert "28 contradictory row pairs" in encoded
-    assert "gate consumed" in encoded
+    assert "Execution qualification pending" in encoded
+    assert "No Red root is admitted" in encoded
+    assert "one-shot ledger" in encoded
+    assert "runner not yet qualified" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

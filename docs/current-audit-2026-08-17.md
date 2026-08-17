@@ -1,6 +1,57 @@
 # Current audit — 2026-08-17
 
-## Reorientation result: v2 falsified before fit; redirect after one diagnostic
+## Reorientation result: design and core published; execution qualification remains
+
+Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
+attempt 1. Review confirms that the ROM-free composition core freezes the three-decision contract,
+requires a durable decision before a skill may act, independently verifies each outcome,
+reobserves changed semantic and collection state, and reconciles reported action/frame use with an
+independent meter. It is deliberately core-only. No fresh root was admitted, no prediction was
+loaded, no controller action occurred, and no outcome was created. The
+[path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json)
+records that boundary.
+
+The next lane is maintenance:
+`fresh-goal-manager-composition-execution-qualification-v1`. It must qualify five groups before
+gameplay: **action-free fresh-root admission; an authenticated root-safe runner plus one-shot
+ledger; exact skill/protected-source attestation; hard action/frame limiters; and a durable
+composition terminal**. The current independent meter checks totals after a skill returns; it is
+not the missing hard limiter. Runner qualification, not episode execution, is the next result.
+
+No outcome question, fit, unseen comparison, authority promotion, or transfer result was added.
+The cumulative board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. Any failed admission, attestation, claim, limiter, or terminal gate rejects the root
+or runner; it does not authorize a route, skill, or party patch.
+
+## Previous reorientation: collision audit complete; freeze one fresh three-decision contract
+
+Exact source `1395e446b9b2188c656e6bafbb910322e725777b` passed CI run `32072706947`,
+attempt 1. The bounded read-only postmortem reconstructed 22 train questions as 39 trainee and 9
+venue pairwise rows. It grouped all 28 contradictory relationships—25 trainee and 3 venue—into
+six exact `raw_semantics_aliased_or_outcome_instability` clusters. Projection-compression and
+tolerance-only cluster counts were both zero. Normalized rank was 14 for trainee and 4 for venue.
+Venue cost range was zero in 9/9 menus; quality and safety retained ranges of 0.133333 and
+0.222222.
+
+This is an ambiguity diagnosis, not a causal resolution: the allowed evidence cannot distinguish
+aliased raw semantics from unstable outcomes. It found no isolated projection defect, replacement
+feature, or reason to retry party v2. It used the historical frozen-prior forward scores only to
+reproduce the consumed audit, with zero optimizer steps, fits, predictions, development examples
+or metrics, game actions, new claims, authority, and transfer. The cumulative board remains
+**train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. The
+[path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json) records the
+boundary.
+
+The next lane is maintenance, not learning:
+`fresh-goal-manager-composition-design-v1`. Its sole output is a frozen exactly-three-decision
+contract. One initial fresh nonsealed Red root is selected action-free and before predictions.
+Every step must have at least two executable choices; the three selections must use distinct goal
+kinds; one must be `ACQUIRE_SPECIES` and end in a retained capture; every step must be reobserved
+and verified before replanning from changed state; confidence must be at least 0.80; and only
+existing skills may run, with no teacher or fallback. This session designs the episode and
+executes nothing. Failure to satisfy all conditions closes the design rather than weakening it.
+
+## Previous reorientation: v2 falsified before fit; redirect after one diagnostic
 
 Exact source `19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c` passed CI run `32070285183`,
 attempt 1, and consumed gate identity `7a148a5d…`. The screen's representation audit found 28

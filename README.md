@@ -5,7 +5,46 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the train-only v2 representation failed before fit
+> **Current product focus (August 17, 2026): the fresh composition design and ROM-free core are
+> published; execution qualification is next.** Exact source
+> `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed GitHub CI run `32076494276`, attempt 1.
+> The reviewed core freezes the three-decision contract and fail-closed orchestration, but it is
+> not a root-safe cartridge runner. No fresh root was admitted, no model prediction was loaded, no
+> controller input occurred, and no outcome was created. See the
+> [path-free core qualification](docs/evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+>
+> The active maintenance lane is
+> `fresh-goal-manager-composition-execution-qualification-v1`. Five gate groups remain before any
+> episode may run: **action-free fresh-root admission; an authenticated root-safe runner plus
+> one-shot ledger; exact skill/protected-source attestation; hard action/frame limiters; and a
+> durable composition terminal**. Runner qualification—not gameplay—is next. The cumulative board
+> remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+>
+> **Previous checkpoint (August 17, 2026): the collision postmortem is complete, party v2 is
+> closed, and the next lane is design only.** Exact source `1395e446` passed GitHub CI run
+> `32072706947`, attempt 1. The read-only diagnostic reused the consumed gate's 22 train questions
+> and 48 pairwise rows: 39 trainee and 9 venue. Its 28 contradictory relationships—25 trainee and
+> 3 venue—collapsed into six exact clusters, all classified
+> `raw_semantics_aliased_or_outcome_instability`. There were zero frozen-projection-compression
+> clusters and zero tolerance-only near-collision clusters. Venue cost had range zero in all nine
+> menus while quality and safety retained ranges of 0.133333 and 0.222222. The evidence therefore
+> cannot distinguish aliased raw semantics from unstable outcomes, and it identifies no isolated
+> projection defect to repair. See the
+> [path-free postmortem](docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+>
+> The report fit no model, opened no development outcome, committed no prediction, executed no
+> game action, and changed no authority or transfer result. The honest cumulative board remains
+> **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+>
+> The active maintenance lane, `fresh-goal-manager-composition-design-v1`, freezes—but does not
+> execute—a thin exactly-three-decision contract. Its initial fresh nonsealed Red root must be
+> selected action-free and before predictions. Every step must offer at least two executable
+> choices; the three selected goals must have three distinct kinds; `ACQUIRE_SPECIES` is required
+> and must end in a retained capture; every step is reobserved and verified so the next choice is
+> rebuilt from changed state; confidence must be at least 0.80; and the episode may use only
+> existing skills with zero teacher or fallback. No game execution occurs in this design session.
+>
+> **Previous checkpoint (August 17, 2026): the train-only v2 representation failed before fit
 > and is retired.** Source `19f53e1` passed GitHub CI run `32070285183`, attempt 1. The one-shot
 > screen found **28 conflicting pairwise-row comparisons** and no within-menu venue-cost variation
 > in the collection, evolution, or role-coverage slices. It stopped before optimization:
@@ -13,17 +52,16 @@
 > are zero, and gate identity `7a148a5d…` is consumed. See the
 > [path-free result](docs/evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
 >
-> This negative result does not show that party learning is impossible. It shows that this frozen
-> projection maps some differently preferred comparisons to indistinguishable vectors and cannot
-> learn venue cost from these menus. The conditional 12-question slice, any v2 rescue, and any
-> same-evidence fit/tolerance/feature sweep are closed.
+> This negative result did not show that party learning was impossible. At that checkpoint it
+> justified a bounded diagnostic, not a projection-only explanation. The completed postmortem
+> above found that the conflicting rows were already identical in the allowed raw semantics or
+> reflected outcome instability; it did not isolate projection compression. The conditional
+> 12-question slice, any v2 rescue, and any same-evidence fit/tolerance/feature sweep are closed.
 >
-> Next: one bounded no-optimizer postmortem will collapse the 28 relationships into collision
-> classes and locate the first layer where distinctions disappear: raw observation, frozen
-> projection, or numerical tolerance. Then the project redirects to the design of one fresh,
-> repeatable Red goal-manager micro-episode with three genuine heterogeneous choices, including a
-> living-Pokédex goal. The cumulative board remains **train outcomes 30 · development outcomes 15
-> · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+> The then-next step was the bounded no-optimizer postmortem now recorded above. It redirected the
+> project to the design of one fresh, repeatable Red goal-manager micro-episode. The cumulative
+> board at this checkpoint was **train outcomes 30 · development outcomes 15 · fits 3 ·
+> comparisons 3 · authority 0 · transfer 0**.
 >
 > **Previous measured result (August 17, 2026): the recovered-evidence fit failed; redesign the
 > learner without reusing development or collecting more Red outcomes.** The third fit trained

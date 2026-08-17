@@ -8,7 +8,65 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: explain the representation failure once, then redirect
+## Current checkpoint: qualify the composition runner; do not play yet
+
+Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
+attempt 1. The published, reviewed ROM-free design and core freeze the exact three-decision
+contract, durable decision-before-skill boundary, independent outcome verification, changed-state
+reobservation, collection nonregression, and budget reconciliation. They are not an authenticated
+root claimant or cartridge runner. Fresh-root admissions, predictions, controller inputs, and
+outcomes all remain zero. See the
+[path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+
+The active maintenance lane is
+`fresh-goal-manager-composition-execution-qualification-v1`. Its bounded sequence is:
+
+1. Admit one fresh nonsealed Red root action-free and before any prediction.
+2. Bind an authenticated root-safe runner to a one-shot consumption ledger.
+3. Attest the exact frozen model, existing skill bindings, verifiers, and protected sources.
+4. Put hard action and frame limiters around execution; post-return accounting alone is not enough.
+5. Require a durable success or failure composition terminal before any result claim.
+
+Runner qualification—not gameplay—is next. Failure of any gate rejects the root or runner without
+patching it into compliance. This maintenance work advances no learning counter: the board remains
+**30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer 0**. Only a later,
+separately reoriented learning lane may execute one frozen episode.
+
+## Previous checkpoint: freeze one thin goal-manager contract; do not execute it yet
+
+Exact source `1395e446` passed CI run `32072706947`, attempt 1. The completed read-only
+postmortem used only the consumed gate's 22 train questions and 48 pairwise rows: 39 trainee and 9
+venue. All 28 contradictory relationships—25 trainee and 3 venue—fell into six exact
+`raw_semantics_aliased_or_outcome_instability` clusters. There were no projection-compression or
+tolerance-only clusters. The normalized ranks remained trainee 14 and venue 4. Venue cost range
+was zero in all nine menus while quality and safety retained ranges of 0.133333 and 0.222222.
+
+The bounded diagnosis is complete. It cannot decide whether the identical raw semantics are
+aliased or the measured outcomes are unstable, and it found no single projection defect to repair.
+It fit no model, opened no development outcome, added no unseen comparison, executed no game
+action, and added no authority or transfer result. The cumulative board remains **30 train ·
+15 development · 3 fits · 3 comparisons · authority 0 · transfer 0**. Party v2, the conditional
+missing-cell slice, and all same-evidence rescue work remain closed. See the
+[path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+
+The active design-only maintenance sequence is:
+
+1. Select one initial fresh nonsealed Red root action-free and before any prediction.
+2. Freeze an exactly-three-decision goal-manager contract. At every step the observed state must
+   expose at least two executable choices, and the three selected goals must have three distinct
+   kinds.
+3. Require `ACQUIRE_SPECIES` as one selected kind and require its capture to remain retained.
+4. Reobserve and verify after every decision, then rebuild the next choice from changed state;
+   require confidence at least 0.80; permit only existing skills and zero teacher or fallback.
+5. Stop if the root cannot satisfy the whole contract without weakening a condition. Do not
+   execute the episode in this maintenance session.
+
+Only a later, separately reoriented learning lane may execute the frozen episode. A successful
+fresh Red composition result would be the prerequisite for designing a title-neutral
+Red-initialized versus zero-initialized Crystal development comparison; this design checkpoint
+itself grants no authority or transfer claim.
+
+## Previous checkpoint: explain the representation failure once, then redirect
 
 Exact source `19f53e1` passed CI run `32070285183`, attempt 1, and ran the frozen v2 screen once.
 The representation audit failed before fit: **28 conflicting pairwise-row comparisons**, plus no

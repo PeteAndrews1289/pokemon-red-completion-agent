@@ -99,22 +99,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The frozen v2 representation failed before fit: 28 contradictory row pairs, venue "
-            "cost variance absent in all three goal slices, evaluation null, and gate consumed."
+            "The reviewed three-decision composition core is published under green CI. No Red "
+            "root is admitted and no prediction, controller input, or episode outcome exists."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Protocol-consistent trainee/venue ranker v2 · retired",
-            choice="Representation rejected pre-fit; same-evidence collision audit only",
+            candidate="Promoted Red goal manager af29d7e7… · frozen confidence floor 0.80",
+            choice="Execution qualification pending · action-free root admission only",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="blocked",
+            phase="qualification",
             zero_shot_completed=train_outcomes + development_outcomes,
             zero_shot_total=outcome_question_total,
             adaptation_completed=fits,
@@ -156,8 +156,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"Stop 1 · {stop_conditions[0]}",
             f"Stop 2 · {stop_conditions[1]}",
             _event("Next decision", _text(lane, "next_decision")),
-            "Legacy one-shot party campaign · evidence preserved · development lane retired",
-            "Current session controller 0 · teacher 0 · sealed Red 0 · Crystal 0 · full replay 0",
+            (
+                "Qualification rail · fresh root → exact model + skills → one-shot ledger → hard "
+                "limits → durable terminal → separate execution decision"
+            ),
+            "Composition design + ROM-free core published · runner not yet qualified",
+            (
+                "Current session roots 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0 "
+                "· sealed Red 0 · Crystal 0 · full replay 0"
+            ),
         ),
     )
 

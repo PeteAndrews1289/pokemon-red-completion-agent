@@ -1,6 +1,46 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: the optimizer never gets a turn
+## August 17 scene: core published, runner gates still closed
+
+Open on **SOURCE c4d8c729 · CI 32076494276/1 GREEN · DESIGN + ROM-FREE CORE REVIEWED**. Put four
+large zeros underneath: **ROOTS ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 · OUTCOMES 0**. Hold the
+learning strip at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER
+0** and link the
+[path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+
+Now show five locked gates: **ACTION-FREE FRESH-ROOT ADMISSION → AUTHENTICATED ROOT-SAFE RUNNER +
+ONE-SHOT LEDGER → EXACT SKILL/PROTECTED-SOURCE ATTESTATION → HARD ACTION/FRAME LIMITERS → DURABLE
+COMPOSITION TERMINAL**. Narration: **“The three-choice core is real. The cartridge execution seam
+is not qualified yet.”** Label the rail
+`fresh-goal-manager-composition-execution-qualification-v1` and end on **RUNNER QUALIFICATION NEXT
+· GAMEPLAY NOT YET**. Do not animate a goal selection, capture, authority gain, or Crystal
+transfer.
+
+## Previous August 17 scene: six exact clusters, then back to the game
+
+Open on the completed diagnostic rail: **SOURCE 1395e446 · CI 32072706947/1 GREEN · READ ONLY ·
+22 TRAIN QUESTIONS · 48 PAIRWISE ROWS**. Collapse **28 CONTRADICTORY RELATIONSHIPS** into **6
+EXACT CLUSTERS**, then split the count: **25 TRAINEE · 3 VENUE**.
+
+Stamp every cluster **RAW SEMANTICS ALIASED OR OUTCOME INSTABILITY**. Beside it show **PROJECTION
+COMPRESSION 0 · TOLERANCE-ONLY 0 · VENUE COST RANGE 0 IN 9/9 MENUS**. Narration: **“The evidence
+could not tell whether the observation language hid a real distinction or the outcomes themselves
+were unstable. It did tell us there was no isolated projection bug to patch.”** Close the party
+rail with **V2 RETIRED · NO REFIT · NO FEATURE RANKING**.
+
+Hold the counters still: **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 ·
+TRANSFER 0**. Add **OPTIMIZER 0 · DEVELOPMENT DECODE 0 · PREDICTIONS 0 · GAME ACTIONS 0** and
+link the [path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+
+Then reveal a blueprint rather than gameplay: **FRESH NONSEALED ROOT, SELECTED ACTION-FREE BEFORE
+PREDICTIONS → EXACTLY 3 DECISIONS → ≥2 EXECUTABLE CHOICES EACH → 3 DISTINCT SELECTED KINDS →
+ACQUIRE_SPECIES + RETAINED CAPTURE → REOBSERVE + VERIFY EACH STEP → CONFIDENCE ≥0.80**. Lock the
+bottom edge with **REPLAN FROM CHANGED STATE · EXISTING SKILLS ONLY · TEACHER 0 · FALLBACK 0 ·
+EXECUTION THIS SESSION 0**.
+Narration: **“The next job is to design one small honest test of hierarchical play—not to pretend
+the test has already passed.”**
+
+## Previous August 17 scene: the optimizer never gets a turn
 
 Open on the completed rail: **PREFLIGHT PASSED → REPRESENTATION AUDIT**. Stop it there with a red
 card: **FAILED BEFORE FIT**. Put the exact source strip below it: **19f53e1 · CI 32070285183/1
