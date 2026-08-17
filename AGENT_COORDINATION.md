@@ -1,6 +1,26 @@
 # Three-agent coordination
 
-> **2026-08-17 recovered-evidence fit — highest active checkpoint:** The authenticated fitter used
+> **2026-08-17 train-only v2 screen — highest active checkpoint:** Codex published exact head
+> `778b7e0`; CI run `32064328646` attempt 1 is green. Implementation and CI changed no learning
+> counter. The screen uses the historical zero-outcome prior and only 22 scale-train questions.
+> Its support is **13 trainee:balance** plus **3 venue questions for each of collection, evolution,
+> and role coverage**. Action and goal are confounded, and all mission-critical non-balance trainee
+> cells are absent.
+>
+> Codex owns one label-free preflight and, only if it passes, one frozen train-only execution.
+> Failure closes the design and permits only a same-evidence representation-collision audit. Pass
+> permits freezing—but not executing—a 12-question Red trainee/venue × collection/evolution/role
+> design with two independent roots per cell. No pass grants shadow/live authority, Crystal access,
+> or another architecture sweep. The gate's fixed-account one-shot ledger is an anti-adaptive
+> exception and must not become routine development ceremony.
+>
+> Claude and the scientific reviewer have already returned GO for one screen while explicitly
+> classifying it as architecture selection, not generalization. Antigravity's useful next role is a
+> bounded cross-title challenge only after a fresh Red result creates a real transfer decision.
+> Neither reviewer executes private evidence or grants authority. Cumulative evidence remains
+> train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0.
+
+> **2026-08-17 recovered-evidence fit — latest measured checkpoint:** The authenticated fitter used
 > only the 22 complete scale-train questions. Training loss fell **1.667 → 0.594**, but the base
 > and update both scored **3/5** on the five newly completed development labels. Cross-entropy
 > worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all five

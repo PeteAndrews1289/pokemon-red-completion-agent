@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published the frozen protocol-consistent train-only v2 screen at `778b7e0`; GitHub CI run
+  `32064328646` attempt 1 is green. The production learner and runner retain exact SHA-256 digests
+  `7fb1783e…e3c` and `355127d8…026`; a test-only correction replaced a platform-specific trained
+  float fingerprint with portable round-trip and digest-sensitivity checks. Local qualification
+  passed 4,024 selected tests. No model, outcome, authority, or transfer counter advanced.
+- Reoriented the screen as architecture selection rather than generalization. Its 22 train
+  questions are 13 trainee:balance plus 3 venue questions for each of collection, evolution, and
+  role coverage, so action and goal are confounded and every non-balance trainee cell is absent.
+  Failure closes the design and triggers only a same-evidence collision/stability audit. Pass
+  permits freezing—but not executing—a fresh 12-question Red trainee/venue ×
+  collection/evolution/role design with two independent roots per cell. Updated the active
+  decision scorecard to 30/30 train outcomes, 15/15 development outcomes, 3/4 fits, and 3/3
+  comparisons while keeping authority and transfer at zero.
 - Completed the one-time recovered-evidence fit on 22 scale-train questions. Training loss fell
   from 1.667 to 0.594, but the baseline and update both scored 3/5 on the five newly completed
   development labels; cross-entropy worsened from 0.633 to 1.116, mean winner probability fell

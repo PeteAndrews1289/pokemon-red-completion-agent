@@ -6,7 +6,27 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: reject the shared update; test one train-only residual ranker
+## Current override: preflight and measure the already-frozen v2 screen once
+
+Head `778b7e0` publishes the frozen learner/runner and passed CI run `32064328646`, attempt 1.
+Implementation and CI produced zero outcomes, fits, comparisons, promotions, or transfer results.
+Codex owns one read-only preflight and, if every check passes, one train-only execution followed by
+immediate reorientation.
+
+The screen uses the zero-outcome prior and a confounded 22-question grid: 13 trainee:balance plus
+three venue questions for each of collection, evolution, and role coverage. A failure closes the
+design and permits only a same-evidence collision/stability audit. A pass permits freezing—but not
+executing—a 12-question Red action-by-goal design with two independent roots per cell. It grants no
+authority and does not open Crystal.
+
+Claude's completed role was adversarial safety/statistics review; its verdict is GO for exactly
+this screening claim, not promotion. Antigravity remains deferred until a fresh Red result can
+support a concrete cross-title falsifier. No reviewer executes or grants authority. The one-shot
+ledger is an anti-adaptive exception, not a template for routine development. Do not collect for
+the old 32/16 quota, repair routes, reuse consumed development, start another architecture sweep,
+open sealed Red/Crystal, or replay the game.
+
+## Previous override: reject the shared update; test one train-only residual ranker
 
 The joined fitter completed its single authorized comparison. It trained on the **22 complete
 scale-train questions**, reducing loss **1.667 → 0.594**. On the five newly completed development

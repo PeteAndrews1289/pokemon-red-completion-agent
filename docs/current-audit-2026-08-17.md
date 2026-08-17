@@ -1,6 +1,33 @@
 # Current audit — 2026-08-17
 
-## Executive result
+## Reorientation result: GO for one screen, no broader claim
+
+Published head `778b7e054c980f8c0eea13c88ddd0f51c408d0ce` passed GitHub CI run
+`32064328646`, attempt 1. The v2 protocol learner and train-only runner are frozen; a later
+test-only portability commit changed neither production digest. No preflight, private-label read,
+model fit, development comparison, game action, authority change, or transfer test occurred.
+
+Three independent reviews agree on **GO for exactly one offline screen**. Its marginal value is to
+decide whether the already-fixed residual representation deserves any fresh evidence. It is not
+north-star evidence. The 22 roots contain 13 trainee:balance questions and three venue questions
+for each of collection, evolution, and role coverage. Action and goal are perfectly confounded;
+trainee collection/evolution/role cells are absent, each venue-goal slice has only three roots, and
+the two 35-coefficient heads rely on strong ridge in a small sample.
+
+A failure rejects the design and allows only a representation-collision and fold-stability audit
+on the same evidence. A pass allows only the design freeze for a fresh 12-question Red 2×3 slice:
+trainee/venue × collection/evolution/role, two independent roots per cell. That later slice must be
+frozen before labels and compare the candidate against both the zero-outcome prior and the original
+eight-question baseline. Even a positive development result would be descriptive and grant no live
+authority.
+
+The next direct north-star evidence after a positive Red slice is a matched unseen Crystal test of
+Red initialization against zero initialization. Before then, capture, fight/rotate/heal/stop,
+navigation/recovery, storage, trades, puzzles, version coordination, and long-horizon planning all
+remain outside this gate. Do not copy its unusually strict one-shot provenance into routine
+development or let its 2,890-line sunk cost justify a second architecture sweep.
+
+## Latest measured result
 
 The authenticated recovered-evidence fitter completed once on all **22 complete scale-train
 questions**. Training loss fell **1.667 → 0.594**, but the existing baseline and update both

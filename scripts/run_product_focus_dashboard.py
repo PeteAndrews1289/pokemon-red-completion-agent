@@ -85,17 +85,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The last candidate was rejected after every fresh winner-probability "
-            "comparison regressed. The next gate redesigns the learner on the 22 "
-            "scale-train menus only; authority and transfer remain closed."
+            "The frozen v2 architecture screen is published and CI-green. One label-free "
+            "preflight and one train-only screen are next; authority and transfer remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Protocol-consistent trainee/venue ranker · design pending",
-            choice="Last candidate rejected; live authority remains zero",
+            candidate="Protocol-consistent trainee/venue ranker · frozen v2 screen",
+            choice="Preflight pending; no new fit or authority",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,

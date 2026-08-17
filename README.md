@@ -5,7 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the recovered-evidence fit failed; redesign the
+> **Current product focus (August 17, 2026): the train-only v2 screen is published, green, and
+> waiting on its label-free preflight.** Source `778b7e0` passed GitHub CI run `32064328646`,
+> attempt 1. The learner and runner use the historical **zero-outcome** prior, separate
+> trainee/venue residual heads, title-neutral feature groups, ridge 4.0, menu-normalized pairwise
+> targets, and deterministic leave-one-root-out evaluation. Implementation and CI added no model
+> fit, outcome, authority, or transfer result.
+>
+> This is a screening falsifier, not evidence that the agent can play a game. Its 22-question grid
+> contains **13 trainee:balance** questions and **3 venue questions for each of collection,
+> evolution, and role coverage**. Action and goal are therefore confounded, and trainee choices for
+> the three living-Pokédex goals are absent. Failure closes this design and triggers a same-evidence
+> collision audit. Pass permits only freezing a fresh 12-question Red design with two independent
+> roots in each trainee/venue × collection/evolution/role cell. It does not permit that slice to
+> execute, grant authority, open Crystal, or start another architecture sweep.
+>
+> Next: run one read-only preflight, then execute the frozen screen once only if every binding
+> passes. Reorient again immediately after the measured result. Do not copy this gate's unusually
+> strict one-shot machinery into routine development. The active scorecard is **train outcomes
+> 30/30 · development outcomes 15/15 · fits 3/4 · comparisons 3/3 · authority 0 · transfer 0**.
+>
+> **Previous measured result (August 17, 2026): the recovered-evidence fit failed; redesign the
 > learner without reusing development or collecting more Red outcomes.** The third fit trained
 > once on the 22 complete scale-train questions. Training loss fell **1.667 → 0.594**, but the
 > base and update both scored **3/5** on the five newly completed development labels.

@@ -18,6 +18,35 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Train-only v2 screen published; preflight before one measurement — 2026-08-17
+
+Published head `778b7e054c980f8c0eea13c88ddd0f51c408d0ce` passed CI run `32064328646`,
+attempt 1. It contains the frozen protocol-consistent residual ranker and its fail-closed train-only
+runner. The production learner SHA remains `7fb1783e…e3c`; the runner SHA remains
+`355127d8…026`. A CI-only test correction removed a false cross-platform floating-point fingerprint
+without changing either production file. The full local gate passed 4,024 selected tests and the
+hosted Linux gate passed.
+
+No private label, model fit, outcome, authority, or transfer counter moved. The next run starts
+from the historical **zero-outcome prior**, not the eight-question outcome baseline. It uses only
+22 complete scale-train questions, separate trainee and venue heads, fixed ridge 4.0, 64 bounded
+Newton steps, portable title-neutral groups, menu-normalized pairwise targets, and deterministic
+leave-one-root-out evaluation. Consumed development remains opaque.
+
+The support limitation is mandatory context: the grid is **13 trainee:balance + 3
+venue:collection + 3 venue:evolution + 3 venue:role_coverage**. Action and goal are perfectly
+confounded; no trainee collection, evolution, or role-coverage choice exists. A pass is therefore
+train-root architecture-selection evidence only. It grants no authority and permits only freezing
+the design of a fresh 12-question Red slice with two independent roots in each trainee/venue ×
+collection/evolution/role cell. It does not authorize that slice to execute.
+
+Next: provision and validate the fixed-account claim directory, run exactly one label-free
+preflight, then run the frozen screen once only if every binding passes. Representation failure
+writes no fit. Mixed or worse leave-one-root-out evidence rejects the design and leads only to a
+same-evidence collision/stability audit. A pass freezes the missing-cell slice design and triggers
+another reorientation. Do not collect merely to reach the old 32/16 targets, repair teacher routes,
+reuse development, open sealed Red or Crystal, run a full replay, or extend the one-shot ceremony.
+
 ## Recovered-evidence fit rejected; redesign on train only — 2026-08-17
 
 The authenticated joined fitter ran once on the 22 complete scale-train questions. Training loss

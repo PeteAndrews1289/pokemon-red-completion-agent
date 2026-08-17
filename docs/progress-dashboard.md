@@ -5,8 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The active scorecard is **TRAIN OUTCOME QUESTIONS 30/32 · DEVELOPMENT OUTCOME QUESTIONS 15/16 ·
-> MODEL FITS 3/2 · UNSEEN COMPARISONS 3/2 · AUTHORITY 0 · TRANSFER 0**. The third fit trained on
+> The active decision scorecard is **TRAIN OUTCOME QUESTIONS 30/30 · DEVELOPMENT OUTCOME
+> QUESTIONS 15/15 · MODEL FITS 3/4 · UNSEEN COMPARISONS 3/3 · AUTHORITY 0 · TRANSFER 0**.
+> Published head `778b7e0` and CI run `32064328646` attempt 1 are green, but implementation and CI
+> do not increment any counter. One label-free preflight and one frozen train-only screen are next.
+>
+> The screen's support is **13 TRAINEE:BALANCE · 3 VENUE:COLLECTION · 3 VENUE:EVOLUTION · 3
+> VENUE:ROLE COVERAGE**. Display **ACTION/GOAL CONFOUNDED · NON-BALANCE TRAINEE CELLS ABSENT ·
+> ARCHITECTURE SCREEN ONLY**. Failure closes the design. Pass permits only a frozen 12-question
+> missing-cell Red design; it does not execute development, grant authority, open Crystal, or
+> authorize another architecture sweep.
+>
+> The latest measured third fit trained on
 > 22 scale-train questions and reduced training loss **1.667 → 0.594**, but the base and update
 > both scored 3/5 on the five-label comparison.
 > Cross-entropy worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all

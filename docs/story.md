@@ -7,7 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the loss fell and every confidence estimate got worse
+## Current checkpoint: the next result is small enough to say what it cannot prove
+
+The replacement model is no longer a sketch. It is published, tested on macOS and Linux, and
+waiting behind one read-only preflight. But the most useful part of the final review was not another
+green check. It was writing down the shape of the lesson.
+
+There are twenty-two training questions. Thirteen ask which teammate should train—and every one of
+those thirteen asks only about party balance. The other nine ask where to train: three for
+collection, three for evolution, and three for role coverage. The two axes that sound independent
+on a dashboard are not independent here. Action and goal are perfectly confounded, and the model
+has never been asked which teammate best serves collection, evolution, or a missing team role.
+
+That makes the next experiment smaller and more honest. One frozen screen can tell us whether the
+new residual representation survives leave-one-root-out testing better than the zero-outcome prior.
+It cannot show that the model can play Pokémon, transfer to Crystal, or manage a living Pokédex. A
+failure ends this design. A pass buys only the right to freeze a twelve-question Red lesson that
+crosses trainee and venue against collection, evolution, and role coverage—two independent roots
+in every cell. It does not buy the right to run that lesson yet.
+
+The scoreboard therefore has one remaining item for this decision: **30/30 TRAIN OUTCOMES · 15/15
+DEVELOPMENT OUTCOMES · 3/4 FITS · 3/3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**. Source
+`778b7e0` and CI run `32064328646` are readiness, not learning. The next scene is one preflight, one
+screen, and another reorientation—not another week of making the lock more elaborate.
+
+---
+
+## Previous checkpoint: the loss fell and every confidence estimate got worse
 
 The recovered dataset finally got its promised test. The learner trained once on twenty-two
 complete scale-train questions, and its training loss fell from 1.667 to 0.594. On that number

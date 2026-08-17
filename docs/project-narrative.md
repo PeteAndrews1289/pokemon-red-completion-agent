@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the architecture screen is ready—and its blind spot is now explicit
+
+Published head `778b7e0` passed CI run `32064328646`, attempt 1, with the frozen train-only v2
+learner and runner unchanged by the final portability fix. The design starts from the historical
+zero-outcome prior, fits separate trainee and venue residual heads with fixed ridge 4.0 and
+menu-normalized pairwise targets, and evaluates deterministically by leaving out one train root at
+a time. It never decodes consumed development during selection. This checkpoint produced no fit,
+outcome, authority, or transfer result.
+
+The reorientation found the limitation that must govern every later claim. The 22-question train
+set is **13 trainee:balance + 3 venue:collection + 3 venue:evolution + 3 venue:role coverage**.
+Action and goal are perfectly confounded. Reporting both heads and goal slices does not create a
+crossed experiment, and the trainee decisions most directly tied to a living Pokédex are absent.
+The gate is therefore a screening falsifier of one representation, not an independent
+generalization result.
+
+One label-free preflight comes next. If it fails, no claim or fit occurs. If the representation or
+leave-one-root-out result fails, this design closes and the same evidence receives a collision and
+fold-stability audit—no new collection first. A pass permits only freezing a fresh twelve-question
+Red 2×3 design with two independent roots in every trainee/venue ×
+collection/evolution/role cell. Only a later positive independent result could justify bounded Red
+party authority and then the first meaningful transfer question: does Red initialization beat zero
+initialization on the same contract in unseen Crystal contexts?
+
+The lesson for the broader project is operational as well as statistical. This already-published
+gate uses unusually strict one-shot provenance to prevent adaptive reuse of fixed train evidence.
+That cost is accepted once; it is not a template for routine development. The active decision
+scorecard is now **30/30 train outcomes · 15/15 development outcomes · 3/4 fits · 3/3 comparisons
+· authority 0 · transfer 0**.
+
 ## August 17: lower training loss made all five confidence estimates worse
 
 The recovered evidence reached the model exactly once. The authenticated fitter used twenty-two
