@@ -8,6 +8,41 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: repair prospective executability, then rerun the small pilot
+
+The repeatable generator has produced the first genuine active-lane learning data. An 8-train / 4-
+development pilot selected twelve independent non-sealed roots and 53 candidate counterfactuals.
+Forty-four trials measured successfully; nine became invalid; seven complete menus can support a
+later learner update. The evidence-backed score is now **train outcomes 4/32 · development outcomes
+3/16 · model fits 0/1 · unseen comparisons 0/1 · authority 0 · Crystal 0**.
+
+The result passed the diversity falsifier but failed the execution-readiness falsifier. The invalid
+trials divide into unsupported generic return transitions (3), bounded no-win states (4), and
+required-recovery budget exhaustion (2). Because these constraints were absent from the
+prospective menu, the selector offered actions the executor could not reliably finish. The full
+32+16 preflight exists—48 unique roots and 185 candidate trials—but scaling it is stopped.
+
+The next sequence is deliberately smaller than another campaign:
+
+1. Express transition reachability, battle viability and recovery capacity as title-neutral
+   prospective action capabilities or typed unavailability reasons. Do not add a Red map-specific
+   route patch.
+2. Prove that permutations, timing offsets and availability masks remain equivariant, split-safe
+   and free of species, map, slot, path or teacher identity.
+3. Exclude every already counted pilot root and run a fresh 8-train / 4-development pilot.
+4. Require every selected candidate to measure, or to have been masked before selection for a
+   portable capability reason. Repeated post-selection invalids stop the lane for representation
+   review.
+5. If the pilot passes, collect only enough additional independent questions to reach 32 train and
+   16 development in total, fit once on train, and compare the frozen scorer and baseline on the
+   unseen development partition.
+6. Keep live authority at zero. Crystal remains closed until the Red unseen comparison creates a
+   real transfer question.
+
+The next session ends with the same machine-checked reorientation now shown in
+[ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md): product alignment, learning output,
+authority delta, transfer result, blocker, next decision, falsifier and stop condition.
+
 ## Current checkpoint: repeatable party learning is the only active development lane
 
 The 14-question / 55-trial one-shot campaign exposed the wrong optimization target. Its immutable

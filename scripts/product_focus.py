@@ -178,9 +178,7 @@ def validate_product_focus_document(
         raise ProductFocusError("product focus must contain exactly one active lane")
 
     _validate_rigor_policy(_mapping(document, "rigor_policy", subject="product focus"))
-    _validate_session_budget(
-        _mapping(document, "session_budget_percent", subject="product focus")
-    )
+    _validate_session_budget(_mapping(document, "session_budget_percent", subject="product focus"))
     _validate_alarms(_mapping(document, "alarms", subject="product focus"))
     _validate_status_report(_mapping(document, "status_report", subject="product focus"))
     _validate_review_roles(_mapping(document, "review_roles", subject="product focus"))
@@ -223,6 +221,26 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
     authority = _mapping(lane, "learned_authority", subject="active lane")
     time_box = _mapping(lane, "time_box", subject="active lane")
     progress = state.progress
+    reorientation = _mapping(
+        lane,
+        "latest_reorientation",
+        subject="active lane",
+    )
+    reorientation_evidence = _mapping(
+        reorientation,
+        "evidence",
+        subject="latest reorientation",
+    )
+    reorientation_evidence_kind = _text(
+        reorientation_evidence,
+        "kind",
+        subject="reorientation evidence",
+    ).replace("_", " ")
+    reorientation_evidence_path = _text(
+        reorientation_evidence,
+        "path",
+        subject="reorientation evidence",
+    )
     budgets = _mapping(
         state.document,
         "session_budget_percent",
@@ -264,8 +282,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
         "",
     ]
     lines.extend(
-        f"- {item}"
-        for item in _text_sequence(product, "success_conditions", subject="product")
+        f"- {item}" for item in _text_sequence(product, "success_conditions", subject="product")
     )
     lines.extend(
         [
@@ -274,9 +291,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             "",
         ]
     )
-    lines.extend(
-        f"- {item}" for item in _text_sequence(product, "non_goals", subject="product")
-    )
+    lines.extend(f"- {item}" for item in _text_sequence(product, "non_goals", subject="product"))
     lines.extend(
         [
             "",
@@ -320,18 +335,64 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
         ]
     )
     lines.extend(
-        f"| {label} | {current} | {minimum} |"
-        for label, current, minimum in focus_scorecard(state)
+        f"| {label} | {current} | {minimum} |" for label, current, minimum in focus_scorecard(state)
     )
     lines.extend(
         [
             "",
-            "The score is intentionally zero until tracked, path-free evidence supports a counter.",
+            "Each counter stays zero until tracked, path-free evidence supports it.",
             (
                 "Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not "
                 "learning"
             ),
             "outputs.",
+            "",
+            "### Latest session reorientation",
+            "",
+            (
+                f"**{_text(reorientation, 'session_id', subject='latest reorientation')}** · "
+                f"status **{_text(reorientation, 'status', subject='latest reorientation')}** · "
+                f"evidence [{reorientation_evidence_kind}]({reorientation_evidence_path})"
+            ),
+            "",
+            "| Check | Session conclusion |",
+            "| --- | --- |",
+            _table_row(
+                "Product alignment",
+                _text(reorientation, "product_alignment", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Learning output",
+                _text(reorientation, "learning_output", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Authority delta",
+                _text(reorientation, "authority_delta", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Transfer result",
+                _text(reorientation, "transfer_result", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Blocker",
+                _text(reorientation, "blocker", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Decision",
+                _text(reorientation, "decision", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Next session",
+                _text(reorientation, "next_session_goal", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Next falsifier",
+                _text(reorientation, "next_falsifier", subject="latest reorientation"),
+            ),
+            _table_row(
+                "Stop condition",
+                _text(reorientation, "stop_condition", subject="latest reorientation"),
+            ),
             "",
             "### Stop conditions",
             "",
@@ -444,9 +505,7 @@ def _validate_product(product: Mapping[str, object]) -> None:
     goal = _text(product, "goal", subject="product")
     lowered = goal.lower()
     if "living pokedex" not in lowered or "mainline games" not in lowered:
-        raise ProductFocusError(
-            "product goal must retain the cross-game living Pokedex objective"
-        )
+        raise ProductFocusError("product goal must retain the cross-game living Pokedex objective")
     if len(_text_sequence(product, "success_conditions", subject="product")) < 3:
         raise ProductFocusError("product success conditions are incomplete")
     if len(_text_sequence(product, "non_goals", subject="product")) < 3:
@@ -462,6 +521,7 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
             "cheapest_falsifier",
             "id",
             "kind",
+            "latest_reorientation",
             "learned_authority",
             "maintenance_unblocks",
             "measurable_outputs",
@@ -521,7 +581,12 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
     prohibited = set(_text_sequence(lane, "prohibited_actions", subject="active lane"))
     if rigor == "development" and not prohibited >= _REQUIRED_DEVELOPMENT_PROHIBITIONS:
         raise ProductFocusError("development lane is missing a protected-action prohibition")
-    _validate_progress(_mapping(lane, "progress", subject="active lane"))
+    progress = _mapping(lane, "progress", subject="active lane")
+    _validate_progress(progress)
+    _validate_latest_reorientation(
+        _mapping(lane, "latest_reorientation", subject="active lane"),
+        progress=progress,
+    )
 
 
 def _validate_retired_lane(lane: Mapping[str, object]) -> None:
@@ -616,15 +681,74 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
             raise ProductFocusError("progress evidence SHA-256 is invalid")
 
 
+def _validate_latest_reorientation(
+    reorientation: Mapping[str, object],
+    *,
+    progress: Mapping[str, object],
+) -> None:
+    _require_keys(
+        reorientation,
+        {
+            "authority_delta",
+            "blocker",
+            "decision",
+            "evidence",
+            "learning_output",
+            "next_falsifier",
+            "next_session_goal",
+            "product_alignment",
+            "session_id",
+            "status",
+            "stop_condition",
+            "transfer_result",
+        },
+        subject="latest reorientation",
+    )
+    _identifier(reorientation, "session_id", subject="latest reorientation")
+    if _text(reorientation, "status", subject="latest reorientation") not in {
+        "active",
+        "closed",
+    }:
+        raise ProductFocusError("latest reorientation status is unsupported")
+    for key in (
+        "authority_delta",
+        "blocker",
+        "decision",
+        "learning_output",
+        "next_falsifier",
+        "next_session_goal",
+        "product_alignment",
+        "stop_condition",
+        "transfer_result",
+    ):
+        _text(reorientation, key, subject="latest reorientation")
+    evidence = _mapping(reorientation, "evidence", subject="latest reorientation")
+    _require_keys(evidence, {"kind", "path", "sha256"}, subject="reorientation evidence")
+    progress_evidence = _sequence(
+        progress,
+        "evidence",
+        subject="active lane progress",
+    )
+    if not progress_evidence:
+        return
+    matching_progress_evidence = tuple(
+        _mapping_value(value, subject="progress evidence")
+        for value in progress_evidence
+        if value == evidence
+    )
+    if len(matching_progress_evidence) != 1:
+        raise ProductFocusError(
+            "latest reorientation must bind one current progress evidence entry"
+        )
+
+
 def _validate_progress_evidence(
     lane: Mapping[str, object],
     *,
     project_root: Path | None,
 ) -> None:
     progress = _mapping(lane, "progress", subject="active lane")
-    counts = (
-        _current_progress_counts(progress)
-    )
+    counts = _current_progress_counts(progress)
     evidence = tuple(
         _mapping_value(value, subject="progress evidence")
         for value in _sequence(progress, "evidence", subject="active lane progress")
@@ -720,11 +844,14 @@ def _validate_alarms(alarms: Mapping[str, object]) -> None:
         },
         subject="alarms",
     )
-    if _count(
-        alarms,
-        "maximum_sessions_without_measured_learning_output",
-        subject="alarms",
-    ) > 1:
+    if (
+        _count(
+            alarms,
+            "maximum_sessions_without_measured_learning_output",
+            subject="alarms",
+        )
+        > 1
+    ):
         raise ProductFocusError("learning-output alarm cannot exceed one session")
     if _count(alarms, "maximum_consecutive_ci_only_repairs", subject="alarms") > 1:
         raise ProductFocusError("CI-only repair alarm cannot exceed one repair")

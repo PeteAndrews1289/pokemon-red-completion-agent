@@ -6,6 +6,27 @@ Status: active operating assignment as of 2026-08-16. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: one execution-eligibility repair, then a fresh 8+4 pilot
+
+Codex completed the first repeatable development pilot. It produced 44 measured candidate outcomes
+across twelve independent menus, with four train and three development questions eligible for a
+later learner update. Nine candidate trials became invalid after selection: three generic return
+transition failures, four bounded no-win results, and two exhausted recovery budgets. Model fits,
+unseen comparisons, live authority and transfer remain zero.
+
+Codex owns the next bounded lane: make transition, battle and recovery executability prospective
+and title-neutral; exclude all previously counted roots; rerun a fresh 8-train / 4-development
+pilot; and stop if post-selection invalids repeat. It must not add a map-specific route patch or
+scale the preflighted 185-trial plan before this falsifier passes. After a clean pilot, Codex may
+collect only enough independent menus to reach 32/16 total, then fit once on train.
+
+Claude has no standing routine-development queue. Its next useful review is the first frozen model
+fit/unseen comparison or a concrete statistical/leakage dispute that could change promotion.
+Antigravity remains deferred until that Red comparison creates a real Crystal architecture choice;
+then it challenges at most three transfer assumptions and names work to delete. Neither reviewer
+blocks the repair or grants authority. The generated active state now holds the mandatory
+end-of-session reorientation for all three roles.
+
 ## Current override: one repeatable learning lane, no standing review queue
 
 The machine-checked active lane is `repeatable-party-outcome-learning-v1`. Codex owns a repeatable,

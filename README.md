@@ -7,6 +7,10 @@
 
 > **Current product focus:** one repeatable development lane must produce 32 train outcome
 > questions, 16 unseen development questions, one fit, and one unseen baseline comparison. The
+> first repeatable pilot advanced the evidence-backed counters to **4 train / 3 development** from
+> 44 measured candidate trials; fits, unseen comparisons, authority and transfer remain zero. Nine
+> post-selection invalids stopped scale-up. Next: make execution eligibility prospective and
+> title-neutral, then pass a fresh root-disjoint 8+4 pilot before collecting toward 32+16. The
 > one-shot 14/55 campaign is preserved as evidence but retired as the development leading edge.
 > Run `python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port 8768.
 

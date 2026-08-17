@@ -1,5 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 16 scene: the first dataset is small because the failures were informative
+
+Open on the new product-focus dashboard—not the emulator—with the counter moving from **0/48** to
+**7/48 MEASURED QUESTIONS**. Split the screen into **8 TRAIN ROOTS / 4 DEVELOPMENT ROOTS**, then
+fan each root into its cloned candidate lanes until the total reaches **53 TRIALS**. Keep the
+safety strip visible: **TEACHER 0 · MODEL FITS 0 · AUTHORITY 0 · CRYSTAL 0 · FULL REPLAY 0**.
+
+Let 44 lanes turn green. Seven complete menus rise into a tray marked **FUTURE LEARNER UPDATE**:
+four train, three development. Then leave nine lanes red and group them without showing private
+identities: **RETURN TRANSITION 3 · NO BOUNDED WIN 4 · RECOVERY BUDGET 2**.
+
+Now reveal the tempting next button: **SCALE TO 185 TRIALS**. Do not press it. Overlay the question,
+“Did the model choose badly, or did we offer an action the executor could never finish?” Replace
+the button with **MAKE EXECUTABILITY PROSPECTIVE → FRESH ROOT-DISJOINT 8+4 PILOT**.
+
+Narration: **“This was the first run that created training data. Its most valuable result was not
+seven labels; it was proving that the action menu still knew less than the executor. We stopped
+before multiplying that mistake.”** End on the living-Pokédex goal above the hierarchy: Red is the
+curriculum, Crystal is the first transfer test, and neither is the product.
+
 ## August 16 scene: “We built the perfect experiment and forgot to learn”
 
 Open on the dashboard: **OUTCOMES 0 · FITS 0 · UNSEEN TESTS 0 · AUTHORITY 0**. Then pull back to a

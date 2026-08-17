@@ -1,5 +1,32 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 16: the first fast loop finally produced data—and told us not to scale
+
+The replacement development loop did what the elaborate one-shot campaign could not: it quickly
+created real, completion-aware comparisons. Twelve independent Red moments became 53 cloned
+candidate trials. Forty-four reached measured outcomes, and seven whole menus—four train and three
+development—are now honest inputs to a future outcome-trained scorer. There were no teacher
+answers, model predictions, authority changes, sealed tests, Crystal runs or full-game replays.
+
+The result was useful precisely because it was imperfect. Nine candidates failed only after they
+had been offered: three could not satisfy the generic return transition, four could not secure a
+bounded win with their available battle resources, and two exhausted the recovery budget. A
+selector that cannot see those constraints prospectively is not yet choosing among executable
+actions. Expanding from 53 trials to the already-preflighted 185 would turn a discovered boundary
+into avoidable waste.
+
+So the project stopped scaling. The next change is not another Red route exception. It is a
+portable action contract that can say, before selection, whether a transition, battle dose and
+recovery plan are feasible—or mask the candidate with a typed reason. A fresh, root-disjoint 8+4
+pilot must then eliminate post-selection invalids before the project grows the dataset to 32+16,
+fits once, and asks whether the scorer beats the baseline unseen.
+
+This is the first point at which the active scoreboard is nonzero: **train questions 4/32 ·
+development questions 3/16 · fits 0 · unseen comparisons 0 · authority 0 · transfer 0**. It is
+small, but it is learning evidence rather than ceremony. The session reorientation is now part of
+the generated active state and dashboard, so the next work period begins from this result and the
+living-Pokédex product rather than from whichever failure log is most recent.
+
 ## August 16: we stopped mistaking experiment ceremony for learning progress
 
 The project had reached a technically impressive but strategically dangerous state. Fourteen Red
@@ -20,8 +47,8 @@ source allows exactly one active lane and CI rejects a lane without capability, 
 transfer test, cheapest falsifier, time box, stop conditions, measurable outputs, protected-action
 boundaries, and evidence-backed counters. It also rejects maintenance that cannot name the learning
 experiment it unblocks. The first scorecard is brutally simple: **32 train outcome questions · 16
-unseen development questions · 1 model fit · 1 unseen baseline comparison**. All four counters are
-zero.
+unseen development questions · 1 model fit · 1 unseen baseline comparison**. It began at zero; the
+first repeatable pilot later advanced the outcome counters to four train and three development.
 
 The change is not a retreat from rigor. It puts rigor where it buys information. Sixty percent of a
 session goes to data and scenarios, twenty-five percent to fitting and evaluation, and fifteen

@@ -7,6 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: seven lessons, nine reasons not to scale
+
+The new fast loop finally touched the cartridge for learning rather than route completion. Twelve
+independent moments opened into 53 cloned choices. Forty-four choices produced measured outcomes;
+seven entire menus were complete enough to teach from later. The board moved to **four train
+questions, three development questions, zero fits, zero authority**.
+
+Nine red lanes were more important than they looked. Some actions could not return from their
+training area, some could not win within their available battle resources, and some could not
+recover within budget. Those facts were visible to the executor only after the selector had
+already offered the action. Scaling would have repeated the mismatch 185 times.
+
+The project stopped. The next lesson is for the action space itself: know whether a transition,
+battle and recovery plan is feasible before asking a model to choose it. Then a fresh twelve-root
+pilot gets one chance to show the boundary is real and portable. Only after that do the counters
+grow to 32+16 and the first completion-aware scorer fit.
+
+---
+
 ## Current checkpoint: the project installed a compass, not another checkpoint
 
 By August 16 the repository could prove almost everything about an experiment except that the

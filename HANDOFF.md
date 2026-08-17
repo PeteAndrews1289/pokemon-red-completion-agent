@@ -18,6 +18,43 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## First repeatable pilot produced learner outcomes and blocked unsafe scaling — 2026-08-16
+
+The active development loop now exists. `party_development_scenarios.py` selects independent
+non-sealed roots with deterministic semantic coverage, candidate permutations and timing offsets;
+`run_repeatable_party_outcome_development.py` reconstructs the private Red bindings, clones every
+candidate start and records comparable outcomes without teacher choices, model predictions,
+sealed Red, Crystal or a full replay. A full 32-train / 16-development plan preflights from 48
+unique roots, but it has deliberately not run.
+
+The bounded 8-train / 4-development pilot did run. It opened 12 independent questions and 53
+candidate trials: **44 measured · 9 invalid · 7 complete learner-update-eligible questions**. The
+usable split is **train 4/32 · development 3/16 · fits 0/1 · unseen comparisons 0/1 · authority
+0 · transfer 0**. Both trainee and venue choices appear in both partitions; all four completion
+goals appear; candidate widths span two through six; health, survival and evolution semantics are
+diverse. The tracked path-free result is
+[the repeatable pilot receipt](docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json).
+
+The nine invalid trials are the next capability boundary, not permission to reroll individual
+answers: three unsupported generic return transitions, four bounded no-win conditions, and two
+exhausted required-recovery budgets. These failures arrived after candidate selection, so running
+the 185-trial full plan now would knowingly waste work and produce incomplete preference menus.
+Do not scale yet and do not add a location-specific exception. Make executability prospective in
+the title-neutral action contract—transition capability, battle viability and recovery budget—then
+run a **fresh, root-disjoint 8+4 pilot**. Every selected candidate must complete or be unavailable
+before selection for a portable reason. Only after that falsifier passes should the lane collect
+the remaining independent questions, fit once on train, and compare unseen development choices.
+
+The generated active product page and port-8768 dashboard now include a mandatory latest-session
+reorientation: product alignment, measured output, authority delta, transfer result, blocker,
+decision, next session, falsifier and stop condition, all bound to tracked evidence. This is the
+starting point for the next agent; older instructions to finish the one-shot campaign remain
+historical.
+
+Qualification is green: **3,945 non-integration tests passed, 3 integration tests were deselected,
+and 1 expected xfail remained**, with Ruff, whole-source mypy, public-artifact privacy,
+documentation, active-focus validation, and all generated registry checks passing.
+
 ## Focus guard installed; repeatable learning replaces the one-shot leading edge — 2026-08-16
 
 The compact current source is now [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), generated

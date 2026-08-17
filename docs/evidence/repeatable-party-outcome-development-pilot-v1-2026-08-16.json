@@ -1,0 +1,113 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the first completion-aware scorer has been fit",
+      "the scorer beats the frozen baseline on unseen Red questions",
+      "party-development authority has been promoted",
+      "the representation transfers to Crystal",
+      "the agent can autonomously complete a game or living Pokedex"
+    ],
+    "supported": "Independent repeatable Red roots can generate diverse completion-aware party menus and measured candidate outcomes without teacher targets. Seven questions were complete enough for a later learner update; invalid trials currently block safe scaling."
+  },
+  "decision": {
+    "next_falsifier": "Run a fresh repeatable 8-train plus 4-development pilot after generic prospective execution eligibility is added. Every selected candidate must either complete or be masked before selection for a title-neutral capability reason.",
+    "scale_full_gate_now": false,
+    "why": "Nine of 53 candidate trials became invalid only after selection. Scaling to the preflighted 32-train plus 16-development gate before fixing that boundary would spend controller work on menus that cannot become complete preference questions."
+  },
+  "diversity": {
+    "candidate_widths": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "choice_kinds_in_both_partitions": true,
+    "evolution_route_kinds": [
+      "level",
+      "none"
+    ],
+    "goals_in_development": [
+      "balance",
+      "collection",
+      "evolution",
+      "role_coverage"
+    ],
+    "goals_in_train": [
+      "balance",
+      "collection",
+      "evolution",
+      "role_coverage"
+    ],
+    "health_bins": [
+      "high",
+      "low",
+      "middle"
+    ],
+    "prospective_venue_priors_complete": true,
+    "survival_bins": [
+      "negative",
+      "positive"
+    ],
+    "unique_semantic_menus": 12
+  },
+  "execution": {
+    "candidate_trials": 53,
+    "completed_battles_per_trial": 1,
+    "controller_actions": 30828,
+    "frames_executed": 2880362,
+    "fully_measured_questions": 7,
+    "invalid_trial_classes": {
+      "bounded_no_win": 4,
+      "required_recovery_budget_exhausted": 2,
+      "unsupported_generic_return_transition": 3
+    },
+    "invalid_trials": 9,
+    "learner_update_eligible_questions": {
+      "development": 3,
+      "train": 4
+    },
+    "measured_trials": 44,
+    "questions": {
+      "development": 4,
+      "train": 8
+    }
+  },
+  "full_gate_preflight": {
+    "candidate_trials": 185,
+    "questions": {
+      "development": 16,
+      "train": 32
+    },
+    "unique_roots": 48
+  },
+  "private_artifact": {
+    "manifest_sha256": "13d132851d056958de6f42a204caa56301ae34c9ab54e9b929cd487b9f1c73bb",
+    "tracked": false
+  },
+  "protected_access": {
+    "authority_promotions": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_choice_targets": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons": 0
+  },
+  "provenance": {
+    "exact_source_published": false,
+    "plan_sha256": "49d7bb9a3c3131c6d51ce44494bb0711d5fd3912e788f32f4f4e5e5039983609",
+    "prospective_catalog_sha256": "9e2ac2064b9f4669bd6093aa38094596cb46832d9a9ab28b238e917b68058a3f",
+    "source_commit_ancestor": "9585ab59364334002d928a6467df011d07df18fd",
+    "working_source_bundle_sha256": "ed85001f8e2b1db1cf25bb4407f332c19abf1bb471b0e1b80370bcc00fb17034"
+  },
+  "recorded_on": "2026-08-16",
+  "schema": "pokemon.red.repeatable-party-outcome-development-pilot.v1",
+  "status": "informative_partial_success",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_paths": 0
+}

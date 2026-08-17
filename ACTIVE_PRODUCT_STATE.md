@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Decide whether the completion-aware party scorer earns a larger Red benchmark or the representation must change.
+- Next decision: Decide whether prospective execution eligibility is reliable enough to collect the full 32-train plus 16-development outcome set and fit the first scorer.
 
 ### Mandatory mission check
 
@@ -43,21 +43,37 @@ Not the product:
 | Authority now | Completion-aware party choices remain fixed, teacher-authored, or offline-only; live authority is zero. |
 | Authority target | Fit an outcome-trained shadow scorer that selects party-development choices on unseen Red scenarios; live authority stays zero until the benchmark gate. |
 | Transfer test | Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization. |
-| Cheapest falsifier | Run repeatable randomized Red scenarios from independent non-sealed roots; stop if candidate outcomes lack diversity or an unseen comparison cannot beat the frozen baseline. |
+| Cheapest falsifier | Rerun a fresh 8-train plus 4-development Red pilot after generic prospective execution eligibility is added; stop if any selected candidate becomes invalid after selection or if diversity collapses. |
 | Time box | 2 sessions / 16 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Outcome Question · train | 0 | 32 |
-| Outcome Question · development | 0 | 16 |
+| Outcome Question · train | 4 | 32 |
+| Outcome Question · development | 3 | 16 |
 | Model Fit · train | 0 | 1 |
 | Unseen Comparison · development | 0 | 1 |
 
-The score is intentionally zero until tracked, path-free evidence supports a counter.
+Each counter stays zero until tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
+
+### Latest session reorientation
+
+**2026-08-16-repeatable-party-pilot-v1** · status **closed** · evidence [outcome question](docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json)
+
+| Check | Session conclusion |
+| --- | --- |
+| Product alignment | The lane still teaches reusable party and resource decisions needed for story completion and living-Pokedex collection; Red remains curriculum, not the product. |
+| Learning output | Seven independent completion-aware preference questions are learner-update eligible: four train and three development, from 44 measured candidate outcomes. |
+| Authority delta | None. The outcome-trained scorer remains unfitted and live party-development authority remains zero. |
+| Transfer result | Not run. Crystal remains prohibited until Red produces an outcome-trained scorer and an unseen Red comparison. |
+| Blocker | Nine of 53 candidate trials became invalid after selection because generic venue transition, battle viability, or recovery constraints were not represented prospectively. |
+| Decision | Do not scale to the full 32-train plus 16-development gate yet. Repair the title-neutral execution-eligibility boundary, then rerun the bounded pilot. |
+| Next session | Make candidate executability a prospective title-neutral property without adding a map-specific route patch, then rerun the small pilot before scaling. |
+| Next falsifier | A fresh 8-train plus 4-development pilot must yield complete questions, or mask unavailable candidates before selection for portable capability reasons. |
+| Stop condition | Stop if the repair requires fixed-route knowledge, identity leakage, overleveling, or repeated post-selection invalid trials. |
 
 ### Stop conditions
 
@@ -121,4 +137,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **0**.
+Current evidence entries: **1**.

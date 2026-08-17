@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Added the repeatable completion-aware party scenario selector and Red development collector. The
+  first 8-train / 4-development pilot measured 44 of 53 candidate trials and produced seven usable
+  preference questions; nine post-selection invalids correctly stopped the preflighted 185-trial
+  scale-up. Recorded the path-free evidence and advanced only the honest counters to train 4/32 and
+  development 3/16; fits, unseen comparisons, authority and transfer remain zero. The complete
+  local gate passes 3,945 tests, with 3 integration deselections and 1 expected xfail.
+- Made end-of-session reorientation part of the machine-checked active product contract and
+  dashboard: product alignment, output, authority, transfer, blocker, decision, next falsifier and
+  stop condition must remain bound to tracked evidence.
 - Executed the separately authorized natural-PP train identity exactly once from frozen v4. It
   accepted a 53/80 middle-PP state after 27 ordinary battles with zero learner/model access, and
   published a path-free result receipt. Development remains separately gated.

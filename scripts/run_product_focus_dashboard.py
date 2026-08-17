@@ -47,6 +47,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     product = state.product
     progress = state.progress
     authority = _mapping(lane, "learned_authority")
+    reorientation = _mapping(lane, "latest_reorientation")
     outcomes = _mapping(progress, "outcome_questions")
     train_outcomes = _count(outcomes, "train")
     development_outcomes = _count(outcomes, "development")
@@ -55,9 +56,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     authority_promotions = _count(progress, "authority_promotions")
     transfer_results = _count(progress, "transfer_results")
     outputs = focus_scorecard(state)
-    output_event = " · ".join(
-        f"{label} {current}/{minimum}" for label, current, minimum in outputs
-    )
+    output_event = " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
         value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
@@ -69,8 +68,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Development is focused on repeatable party outcomes and the first honest fit. "
-            "No cartridge run is active; learning counters advance only from tracked evidence."
+            "Pilot: 7 eligible questions (4 train, 3 development); no fit or authority "
+            "promotion. The next run waits on prospective execution eligibility."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
@@ -110,6 +109,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"Authority now · {_text(authority, 'current')}",
             f"Authority target · {_text(authority, 'target')}",
             output_event,
+            f"Last session · {_text(reorientation, 'session_id')}",
+            _event("Reorientation", _text(reorientation, "decision")),
+            _event("Current blocker", _text(reorientation, "blocker")),
+            _event("Next session", _text(reorientation, "next_session_goal")),
+            _event("Next falsifier", _text(reorientation, "next_falsifier")),
             f"Authority promotions {authority_promotions} · transfer results {transfer_results}",
             f"Hard boundaries · {prohibited}",
             (
@@ -158,6 +162,14 @@ def _text_list(source: object, key: str) -> tuple[str, ...]:
     if not isinstance(value, list) or any(not isinstance(item, str) for item in value):
         raise ProgressDashboardError(f"product focus dashboard {key} is invalid")
     return tuple(value)
+
+
+def _event(label: str, value: str, *, maximum: int = 180) -> str:
+    event = f"{label} · {value}"
+    if len(event) <= maximum:
+        return event
+    prefix = event[: maximum - 3].rsplit(" ", 1)[0]
+    return f"{prefix}..."
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -1,5 +1,20 @@
 # Current audit — 2026-08-16
 
+## Pilot reorientation update
+
+The repeatable lane has now generated its first tracked learning output: 44 measured candidate
+trials yielded seven complete, learner-update-eligible questions—four train and three development.
+Nine other candidate trials became invalid after selection because transition, battle viability or
+recovery constraints were absent from the prospective menu. The full 32+16 plan preflights, but it
+must not scale until a fresh 8+4 pilot proves that candidates complete or are masked before
+selection for portable reasons. Fits, unseen comparisons, authority and transfer remain zero.
+
+The focus contract now requires and renders a latest-session reorientation bound to the current
+tracked evidence. The dashboard projects the same blocker, decision, next session and falsifier.
+Focused ROM-free coverage for the selector and focus contract is 21/21. Complete qualification is
+green: **3,945 passed, 3 integration tests deselected, and 1 expected xfail**, plus Ruff,
+whole-source mypy, privacy, documentation, active-focus validation, and every generated registry.
+
 ## Outcome
 
 The repository now has one machine-checked answer to “what work is active?” The editable source is
@@ -15,7 +30,8 @@ decision requires:
 - one train-only model fit; and
 - one unseen comparison against the frozen baseline.
 
-All four counters are zero. Completion-aware live authority and cross-title transfer remain zero.
+The outcome counters are now four train and three development. Model fits, unseen comparisons,
+completion-aware live authority and cross-title transfer remain zero.
 
 ## Why the lane changed
 
@@ -45,11 +61,11 @@ The checker fails when:
 - the pull-request mission check loses capability, authority, transfer, falsifier, time-box, or
   stop-condition fields.
 
-Focused ROM-free coverage contains 15 tests. The complete gate passes **3,939 tests, 3 deselected,
-and 1 expected xfail**, plus Ruff, whole-source mypy, privacy, documentation, the focus checker,
-and all generated registry checks. The focused suite also proves the schema accepts a later-title
-lane without requiring Red-specific identity. No ROM, emulator, private artifact, teacher,
-prediction, sealed case, Crystal context, or full replay was opened for this work.
+The original focus installation passed **3,939 tests, 3 deselected, and 1 expected xfail**, plus
+Ruff, whole-source mypy, privacy, documentation, the focus checker, and all generated registry
+checks. The present pilot change has 21 focused ROM-free selector/focus tests green and a complete
+gate of **3,945 passed, 3 deselected, and 1 expected xfail** after registry refresh. The focus suite
+also proves the schema accepts a later-title lane without requiring Red-specific identity.
 
 ## Operating policy
 
@@ -65,8 +81,8 @@ prediction, sealed case, Crystal context, or full replay was opened for this wor
 
 ## Next work and stop rule
 
-Build the repeatable randomized party scenario generator and collect genuine multi-candidate
-outcomes. Stop after two sessions / sixteen hours if diversity is not real, if the fitted scorer
-cannot beat the frozen baseline unseen, or if any gain depends on overleveling, teacher labels,
-identity leakage, or fixed-route knowledge. Do not open sealed Red, Crystal, a full replay, teacher
-route hardening, or a retry of any consumed one-shot identity.
+Make execution eligibility prospective and title-neutral, then run a fresh root-disjoint 8+4
+pilot. Stop if a candidate again becomes invalid only after selection, or if the repair requires
+fixed-route knowledge. Only a clean pilot permits collection toward 32/16 and the first train-only
+fit. Do not open sealed Red, Crystal, a full replay, teacher route hardening, or a retry of any
+consumed one-shot identity.

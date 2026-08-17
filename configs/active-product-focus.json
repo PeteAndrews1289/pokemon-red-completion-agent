@@ -9,9 +9,27 @@
   "lanes": [
     {
       "capability": "Choose trainee, venue, and fight, rotate, heal, or stop actions from completion, party, resource, and risk state.",
-      "cheapest_falsifier": "Run repeatable randomized Red scenarios from independent non-sealed roots; stop if candidate outcomes lack diversity or an unseen comparison cannot beat the frozen baseline.",
+      "cheapest_falsifier": "Rerun a fresh 8-train plus 4-development Red pilot after generic prospective execution eligibility is added; stop if any selected candidate becomes invalid after selection or if diversity collapses.",
       "id": "repeatable-party-outcome-learning-v1",
       "kind": "learning",
+      "latest_reorientation": {
+        "authority_delta": "None. The outcome-trained scorer remains unfitted and live party-development authority remains zero.",
+        "blocker": "Nine of 53 candidate trials became invalid after selection because generic venue transition, battle viability, or recovery constraints were not represented prospectively.",
+        "decision": "Do not scale to the full 32-train plus 16-development gate yet. Repair the title-neutral execution-eligibility boundary, then rerun the bounded pilot.",
+        "evidence": {
+          "kind": "outcome_question",
+          "path": "docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json",
+          "sha256": "de6b14e45ea7224e966793a491330c4e98db07fd76d28e2eaf43ed2c0f90baa8"
+        },
+        "learning_output": "Seven independent completion-aware preference questions are learner-update eligible: four train and three development, from 44 measured candidate outcomes.",
+        "next_falsifier": "A fresh 8-train plus 4-development pilot must yield complete questions, or mask unavailable candidates before selection for portable capability reasons.",
+        "next_session_goal": "Make candidate executability a prospective title-neutral property without adding a map-specific route patch, then rerun the small pilot before scaling.",
+        "product_alignment": "The lane still teaches reusable party and resource decisions needed for story completion and living-Pokedex collection; Red remains curriculum, not the product.",
+        "session_id": "2026-08-16-repeatable-party-pilot-v1",
+        "status": "closed",
+        "stop_condition": "Stop if the repair requires fixed-route knowledge, identity leakage, overleveling, or repeated post-selection invalid trials.",
+        "transfer_result": "Not run. Crystal remains prohibited until Red produces an outcome-trained scorer and an unseen Red comparison."
+      },
       "learned_authority": {
         "current": "Completion-aware party choices remain fixed, teacher-authored, or offline-only; live authority is zero.",
         "target": "Fit an outcome-trained shadow scorer that selects party-development choices on unseen Red scenarios; live authority stays zero until the benchmark gate."
@@ -40,14 +58,20 @@
         }
       ],
       "name": "Repeatable completion-aware party outcome learning",
-      "next_decision": "Decide whether the completion-aware party scorer earns a larger Red benchmark or the representation must change.",
+      "next_decision": "Decide whether prospective execution eligibility is reliable enough to collect the full 32-train plus 16-development outcome set and fit the first scorer.",
       "progress": {
         "authority_promotions": 0,
-        "evidence": [],
+        "evidence": [
+          {
+            "kind": "outcome_question",
+            "path": "docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json",
+            "sha256": "de6b14e45ea7224e966793a491330c4e98db07fd76d28e2eaf43ed2c0f90baa8"
+          }
+        ],
         "model_fits": 0,
         "outcome_questions": {
-          "development": 0,
-          "train": 0
+          "development": 3,
+          "train": 4
         },
         "transfer_results": 0,
         "unseen_comparisons": 0
