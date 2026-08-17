@@ -5,22 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The active scorecard is **TRAIN OUTCOME QUESTIONS 8/32 · DEVELOPMENT OUTCOME QUESTIONS 4/16 ·
-> MODEL FITS 1/2 · UNSEEN COMPARISONS 1/2 · AUTHORITY 0 · TRANSFER 0**. The first switch-assisted
-> outcome model improved from 1/4 to 4/4 on untouched development questions, but the sample is
-> descriptive and live authority remains zero. The one-shot 14/55 campaign is preserved but
-> retired as the development leading edge. Inputs, preflights, CI passes, teacher runs, and frozen
-> artifacts never advance these counters. See the
-> [initial-fit receipt](evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json).
+> The active scorecard is **TRAIN OUTCOME QUESTIONS 26/32 · DEVELOPMENT OUTCOME QUESTIONS 10/16 ·
+> MODEL FITS 2/2 · UNSEEN COMPARISONS 2/2 · AUTHORITY 0 · TRANSFER 0**. The 26-question candidate
+> tied the existing outcome model at 4/6 on new development questions and worsened aggregate
+> calibration, so the existing model remains the development baseline. Inputs, preflights, CI,
+> teacher runs and frozen artifacts never advance these counters. See the
+> [scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
 
-> **Action-free scale design ready:** 24 train plus 12 development questions now reconstruct from
-> 36 independent roots/states, expanding to 93 prospective trials. The balanced V2 selection is
-> train 14 trainee / 10 venue and development 6 / 6, with every development completion goal
-> represented three times. This design advances no learning counter: controller, teacher, model,
-> sealed Red, Crystal and replay access are all zero. Next rail: **PUBLISH → GREEN CI → FREEZE ONE
-> CLEAN-SOURCE PLAN → COLLECT UNDER STANDING DEVELOPMENT APPROVAL → FIT TRAIN ONLY → COMPARE 12
-> ONCE**. See the
-> [path-free design receipt](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
+> **Current recovery rail:** the scale run produced **78 measured + 15 invalid trials**, leaving six
+> train and six development questions censored. All three new collection-goal train questions are
+> in that missing set. Next rail: **TEST FOUR MECHANICAL FAILURES → REPAIR WITHOUT CHANGING MENUS →
+> FREEZE A 15-TRIAL SUCCESSOR → PROVE 78 MEASURED TRIALS ABSENT → COLLECT → FIT/SELECT ON TRAIN →
+> COMPARE ONLY THE NEW SIX**. Sealed Red, Crystal, replay and authority remain zero.
 
 > **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
 > SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE

@@ -81,8 +81,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The first switch-assisted outcome model improved on four untouched Red "
-            "questions; scale independent evidence before authority or transfer."
+            "The larger outcome candidate did not beat the baseline; recover censored "
+            "collection evidence before authority or transfer."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",

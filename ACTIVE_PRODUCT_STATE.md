@@ -33,27 +33,27 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After reaching 32 train and 16 untouched development questions total under the switch-assisted protocol, update on train only and decide whether the larger comparison justifies a frozen benchmark and the first title-neutral Crystal development probe.
+- Next decision: After recovering the six missing train and six still-unscored development questions, select the next model using train evidence only and compare once on the newly completed development slice before deciding on a benchmark or Crystal probe.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose trainee, venue, and fight, rotate, heal, or stop actions from completion, party, resource, and risk state. |
-| Authority now | One outcome-trained completion-aware scorer exists for offline shadow ranking; live party-development authority is zero. |
+| Authority now | One outcome-trained development baseline and one non-authoritative 26-question candidate exist for offline analysis; live party-development authority is zero. |
 | Authority target | Demonstrate the outcome-trained scorer on a 32-train plus 16-development Red scale-up, then freeze a benchmark promotion gate and a title-neutral Crystal transfer probe. |
 | Transfer test | Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization. |
-| Cheapest falsifier | Expand only the authenticated non-sealed Red context inventory needed to reach 32 train and 16 development questions total, then run one action-free 24-train plus 12-development plan rehearsal. Stop if independent roots, multi-candidate menus, completion-goal coverage, or the switch-assisted intervention cannot be preserved. |
+| Cheapest falsifier | Repair the four observed mechanical execution classes, freeze a successor that claims only the 15 invalid assignments, and recover six train plus six still-unscored development preferences without changing learner-visible semantics. |
 | Time box | 2 sessions / 16 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Outcome Question · train | 8 | 32 |
-| Outcome Question · development | 4 | 16 |
-| Model Fit · train | 1 | 2 |
-| Unseen Comparison · development | 1 | 2 |
+| Outcome Question · train | 26 | 32 |
+| Outcome Question · development | 10 | 16 |
+| Model Fit · train | 2 | 2 |
+| Unseen Comparison · development | 2 | 2 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -61,23 +61,23 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-17-initial-fit-v1** · status **closed** · evidence [unseen comparison](docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json)
+**2026-08-17-scale-fit-v2** · status **closed** · evidence [unseen comparison](docs/evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The first verified-outcome scorer learns portable trainee and venue preferences from completion, party, resource, evolution, and risk state. Scaling independent outcome evidence tests a reusable party-development skill needed for story progression and living-Pokedex evolution across titles. |
-| Learning output | Eight train and four untouched development questions were fully measured under one switch-assisted intervention. One train-only fit reduced loss from 8.703 to 0.141; the updated scorer improved development accuracy from 25% to 100% and mean winner probability from 0.250 to 0.711. |
-| Authority delta | The project now has one outcome-trained completion-aware shadow scorer, but live party-development authority remains zero until a later benchmark promotion gate. |
-| Transfer result | Not run. The Red-initialized scorer now exists, but Crystal remains prohibited until the larger Red development comparison and a frozen title-neutral Crystal development protocol are ready. |
-| Blocker | The initial comparison has only four development questions and is descriptive. After excluding every consumed pilot, the current pool has only two unused train roots and four unused development roots. Reaching 32 train and 16 development questions total therefore requires at least twenty-two new train roots and eight new development roots without weakening independence or candidate diversity. |
-| Decision | The updated scorer improved from one of four to four of four correct development choices, reduced cross-entropy from 17.377 to 0.365, and improved three discordant correctness pairs with none favoring the base model. This earns a scale-up to 32 train and 16 development questions total, not live authority, a benchmark claim, or Crystal execution. |
-| Next session | Expand the non-sealed Red context inventory by at least twenty-two train roots and eight development roots, generate an action-free 24-plus-12 scale-up plan, audit its diversity and leakage boundary, then collect only if the rehearsal passes. |
-| Next falsifier | An action-free reconstruction must produce 24 additional train and 12 additional development questions from independent authenticated roots under the same feature and intervention contract, without reusing consumed roots or opening protected data. |
-| Stop condition | Stop the scale-up if independent-root coverage requires identity leakage, fixed-route knowledge, overleveling, teacher labels, stale direct-combat priors, or weakened candidate diversity; redesign if the larger untouched comparison no longer favors the updated scorer. |
+| Product alignment | The campaign measured portable trainee and venue choices from completion, party, resource, evolution, and risk state. Its negative comparison and missing collection-goal targets directly identify what must improve before this skill can support living-Pokedex evolution across titles. |
+| Learning output | The scale campaign added 18 complete train and six untouched development questions, bringing cumulative evidence to 26 train and 10 development. Training loss fell from 1.663 to 0.533, but the new candidate tied the baseline at four of six correct while cross-entropy worsened from 0.667 to 0.728 and mean winner probability fell from 0.654 to 0.619. |
+| Authority delta | A second outcome-trained candidate now exists with 26 cumulative train questions, but it did not beat the existing eight-question outcome baseline. Live party-development authority remains zero. |
+| Transfer result | Not run. Crystal remains closed because the larger Red candidate did not improve and the scale curriculum is still missing six train and six development preferences. |
+| Blocker | Fifteen mechanical invalid trials censored six train and six development questions, including every new collection-goal train question. The 18-question sequential update tied the baseline at four of six correct and worsened aggregate calibration, so it cannot be promoted. |
+| Decision | Preserve the existing outcome-trained model as the development baseline and the 26-question update as a non-authoritative negative result. Repair only the four observed execution classes, recover only the 15 invalid assignments under a new frozen successor, then use train-only model selection before comparing once on the six newly completed development questions. |
+| Next session | Implement semantic tests and bounded recovery for the Celadon Dig destination, no-Fly transition, required-recovery budget, and conservative escort fallback; then action-free reconstruct a 15-trial successor before any new controller input. |
+| Next falsifier | A successor must authenticate and recover only the 15 invalid assignments, complete six train and six development preferences without changing the frozen menus, and leave the original 78 measured trials untouched. |
+| Stop condition | Do not promote, open sealed Red, or execute Crystal if the completed 32-train plus 16-development curriculum still fails on fresh development questions, or if recovery changes learner-visible semantics, replays measured trials, leaks identity, or copies teacher labels. |
 
 ### Stop conditions
 
-- The scale-up cannot produce 32 train and 16 development questions total from independent, diverse, multi-candidate roots.
+- The 15 invalid assignments cannot be recovered without replaying measured trials or changing learner-visible semantics.
 - The larger train-only update cannot beat the frozen baseline on untouched Red development scenarios.
 - Any apparent gain comes from overleveling, teacher labels, identity leakage, fixed-route knowledge, or stale direct-combat evidence.
 - Infrastructure work exceeds the maintenance budget without unblocking a measured learning output.
@@ -137,4 +137,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **1**.
+Current evidence entries: **2**.

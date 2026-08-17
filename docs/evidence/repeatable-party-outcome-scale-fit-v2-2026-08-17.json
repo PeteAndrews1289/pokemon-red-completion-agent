@@ -1,0 +1,169 @@
+{
+  "schema": "pokemon.red.repeatable-party-outcome-scale-fit.v2",
+  "date": "2026-08-17",
+  "status": "mixed_development_result_no_authority",
+  "mission": "Use Red as the first curriculum for a transferable Pokemon agent that can finish stories and build a retained living Pokedex across games.",
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "collection": {
+    "source": {
+      "commit": "a5ef3e538819418ded1bdd49e0e5e9f58961893b",
+      "ci_run": 32038893751,
+      "ci_attempt": 1,
+      "ci_conclusion": "success"
+    },
+    "plan": {
+      "semantic_sha256": "1681c5850a8e85e60d01b1f1395547ec4ad2e0538ade840f875501378d508ce6",
+      "frozen_document_sha256": "5bb1774f8fcb5e9459351df1cbd1087b1b4c9ea4449404254db3dbc8d7f8b3f5",
+      "frozen_file_sha256": "40f26f2cd31fff0610a723c1edbf1b428e75d5375e88be4f84870c135cad2199",
+      "selection_protocol": "balanced-kind-goal-coverage-v2",
+      "battle_credit_protocol": "direct-safe-else-switch-assisted-fixed-dose-v1",
+      "completed_battles_per_trial": 1,
+      "selected_train_questions": 24,
+      "selected_development_questions": 12,
+      "candidate_trials": 93
+    },
+    "artifact": {
+      "manifest_sha256": "472afd3909e4fd672da022ba18706d2d09e9f9c43013d39b3d658dc3f5d9483f",
+      "plan_stream_sha256": "c8bee219afb5d97ec60d872eeeaf0378e04730209c4a73cc5a3146e358f87b90",
+      "outcome_stream_sha256": "b5f08bc665da7bb165f2dfb2b8076cf6eefbef4410fde4b8a7091d328ffe3bf5",
+      "failure_stream_sha256": "305a9405b57f4e08d1e100e313272d4f84143464b8b02b2a299454ee9aa04d57",
+      "evaluation_stream_sha256": "f332bfbd6304acdc0b9835f357d116fee836bf137d45b8321a016f426fae6b59",
+      "private_artifact_tracked": false,
+      "status": "complete"
+    },
+    "result": {
+      "measured_trials": 78,
+      "invalid_trials": 15,
+      "complete_train_questions": 18,
+      "complete_development_questions": 6,
+      "censored_train_questions": 6,
+      "censored_development_questions": 6,
+      "controller_actions": 57373,
+      "frames_executed": 5134506,
+      "teacher_queries": 0,
+      "model_predictions": 0,
+      "model_updates": 0
+    },
+    "invalid_trial_categories": {
+      "field_recovery_destination_gap": 3,
+      "missing_fly_transition": 4,
+      "required_recovery_budget_exhausted": 2,
+      "venue_matchup_or_live_pp_exhaustion": 6
+    },
+    "retry_boundary": "The exact frozen plan is consumed and was not retried. Invalid trials remain censored evidence. A later development successor may claim only the failed assignments under a newly frozen, explicitly bound recovery protocol."
+  },
+  "fit": {
+    "source": {
+      "commit": "fba24e9bc410b497015dbfed3ad471f880adadbe",
+      "ci_run": 32040258728,
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "local_non_integration_tests_passed": 3977,
+      "local_integration_tests_deselected": 3,
+      "local_expected_failures": 1
+    },
+    "identity_sha256": "657583dba8882c65356cfbd92334209b63151d7aee50cbcc70a8e37667737c60",
+    "base_model": {
+      "file_sha256": "3a4a75491eab12cdfc0a77451cdaaac7c619620aa8b8c6669791f19f1aac6c7d",
+      "canonical_sha256": "6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b",
+      "outcome_training_examples": 8,
+      "training_protocol": "switch-assisted-fixed-dose-v1",
+      "role": "Existing outcome-trained development baseline"
+    },
+    "updated_model": {
+      "file_sha256": "f8e5436e6736ee42e4ef318910f46dfd918bcdfb98158d0480da30435279692e",
+      "canonical_sha256": "89c3ff00e8781afa7b0ab76469ea044e33137b0d0933e7d48354a7e55acf14d1",
+      "outcome_training_examples": 26,
+      "training_target": "verified_outcome_preference",
+      "selected_for_authority": false
+    },
+    "artifact": {
+      "manifest_sha256": "812bca85cfb0ffe6a091e5f3091e03f0506efc6c447eb5b60f1b2e0927311089",
+      "preregistration_stream_sha256": "6f4356e5b846bd64c69d99526db136b41d94b257665f06988cad9c85b8a35dd3",
+      "model_stream_sha256": "f8e5436e6736ee42e4ef318910f46dfd918bcdfb98158d0480da30435279692e",
+      "learning_stream_sha256": "56282c2642bb273e818b1f7a258ca3dcf1e06d3de2cec0514a01976033da8c8e",
+      "private_artifact_tracked": false,
+      "status": "complete"
+    },
+    "protocol": {
+      "sequential_update": true,
+      "cross_protocol_update": true,
+      "train_questions": 18,
+      "development_questions": 6,
+      "censored_questions_excluded_from_targets": 12,
+      "epochs": 200,
+      "learning_rate": 0.01,
+      "prior_l2": 0.1,
+      "development_used_for_tuning": false
+    },
+    "training": {
+      "loss_before": 1.6634214348969578,
+      "loss_after": 0.5328901652170692,
+      "tied_targets": 0
+    },
+    "development": {
+      "examples": 6,
+      "base": {
+        "correct_preferences": 4,
+        "accuracy": 0.6666666666666666,
+        "cross_entropy": 0.6674562945619692,
+        "mean_winner_probability": 0.6538530095590671
+      },
+      "updated": {
+        "correct_preferences": 4,
+        "accuracy": 0.6666666666666666,
+        "cross_entropy": 0.7284647825052325,
+        "mean_winner_probability": 0.6194153936495506
+      },
+      "paired": {
+        "updated_wins": 1,
+        "base_wins": 1,
+        "correctness_ties": 4,
+        "discordant_pairs": 2,
+        "two_sided_exact_p": 1.0,
+        "winner_probability_improvements": 2,
+        "winner_probability_regressions": 4,
+        "winner_probability_ties": 0,
+        "mean_winner_probability_delta": -0.034437615909516626
+      },
+      "direction": "mixed",
+      "inferential_claim": false
+    }
+  },
+  "learning_outputs": {
+    "additional_outcome_questions": {
+      "train": 18,
+      "development": 6
+    },
+    "cumulative_outcome_questions": {
+      "train": 26,
+      "development": 10
+    },
+    "cumulative_model_fits": 2,
+    "cumulative_unseen_development_comparisons": 2,
+    "live_authority_promotions": 0,
+    "transfer_results": 0
+  },
+  "decision": {
+    "result": "The larger candidate learned the new train preferences but did not beat the existing outcome-trained baseline on the six usable new development questions. The existing model remains the development baseline and the new model remains a preserved non-authoritative candidate.",
+    "next_work": "Repair only the four observed mechanical execution classes, freeze a successor that claims only the 15 invalid assignments, and recover six train plus six still-unscored development preferences. Use train-only model selection on the resulting 24-question scale set, then compare once on only the six newly completed development questions.",
+    "why": "The current comparison is mixed and cross-protocol, while every collection-goal train question in the scale campaign is among the censored set. Recovering those exact missing preferences is cheaper and more relevant to living-Pokedex transfer than adding more unrelated infrastructure or promoting a model that did not improve.",
+    "stop_condition": "Do not promote, open sealed Red, or execute Crystal if the completed 32-train plus 16-development curriculum still fails to improve on fresh development questions, if recovery changes learner-visible semantics, or if progress depends on identity leakage, teacher labels, or fixed-route memorization."
+  },
+  "protected_access": {
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "authority_promoted": false
+  },
+  "claim_boundary": {
+    "supported": "A second authenticated outcome fit brought the sequential candidate to 26 outcome-trained questions, and a one-time six-question development comparison found no accuracy gain and worse aggregate calibration.",
+    "not_supported": [
+      "the 26-question candidate is better than the existing outcome-trained model",
+      "the model has live party-development authority",
+      "the model can complete Red autonomously",
+      "the representation transfers to Crystal",
+      "the agent can complete a living Pokedex"
+    ]
+  }
+}

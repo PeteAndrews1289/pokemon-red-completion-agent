@@ -18,7 +18,44 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Action-free 24+12 scale design is ready; publish before collection — 2026-08-17
+## Scale campaign trained a larger candidate; baseline still wins — 2026-08-17
+
+The 24+12 balanced plan was frozen and executed exactly once from published source
+`a5ef3e538819418ded1bdd49e0e5e9f58961893b` under green CI run `32038893751` attempt 1. Its
+semantic plan SHA is `1681c5850a8e85e60d01b1f1395547ec4ad2e0538ade840f875501378d508ce6`.
+Of 93 candidate trials, 78 measured and 15 remained invalid. That produced **18 complete train and
+6 untouched development questions**; six questions in each partition stayed censored. The exact
+plan is consumed and must never retry.
+
+The invalids are mechanical, not model labels: three unsupported Field-Dig destinations, four
+missing-Fly transitions, two exhausted required-recovery budgets, and six venue/live-PP matchup
+failures. Every new collection-goal train question is in the censored set. Do not turn these
+failures into imitation targets or patch the immutable artifact. The permitted next collection is
+a newly frozen successor that claims only those 15 failed assignments and leaves the 78 measured
+trials untouched.
+
+Codex published the censored-evidence fitter at
+`fba24e9bc410b497015dbfed3ad471f880adadbe`; exact CI run `32040258728` attempt 1 passed. The
+fitter authenticated every stream and assignment, reconstructed all 36 menus, excluded incomplete
+questions, updated the existing eight-question outcome model on 18 train questions, and compared
+once on the six complete development questions. Fit identity is
+`657583dba8882c65356cfbd92334209b63151d7aee50cbcc70a8e37667737c60`.
+
+Training loss fell **1.663 → 0.533**, but the comparison was mixed. Base and update both scored
+**4/6**; cross-entropy worsened **0.667 → 0.728** and mean winner probability fell **0.654 →
+0.619**. One decision favored each model and four tied. Preserve the existing model as the
+development baseline; the 26-question candidate is evidence, not authority. The board is now
+**train 26/32 · development 10/16 · fits 2/2 · comparisons 2/2 · authority 0 · transfer 0**. See
+the [path-free result](docs/evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
+
+Next: repair only the four observed mechanical classes with semantic tests, action-free freeze a
+15-trial successor, recover six train plus six still-unscored development preferences, then use
+train-only model selection on the complete 24-question scale set. Compare once on only the six
+newly completed development questions. Sealed Red, Crystal, full replay and live authority remain
+closed. Standing approval covers this routine development sequence; do not wait for ceremonial
+authorization.
+
+## Superseded checkpoint: action-free 24+12 scale design — 2026-08-17
 
 The initial 8+4 model result still owns the learning counters, but the inventory blocker is gone.
 After excluding all three consumed repeatable pilots, the current adapter reconstructs **24 train

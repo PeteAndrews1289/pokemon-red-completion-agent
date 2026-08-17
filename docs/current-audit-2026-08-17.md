@@ -2,22 +2,48 @@
 
 ## Executive result
 
-The project has now performed its first genuine completion-aware Red model training. A fresh
-switch-assisted pilot measured all **48/48 candidate trials**, producing **8 train and 4 untouched
-development questions** with zero invalids. One separately published offline fitter updated the
-model on train only and compared the frozen base and updated scorers once on development.
+The balanced scale campaign and second outcome fit are complete. The campaign retained **78/93
+measured trials** and 15 mechanical invalids, producing **18 complete train and 6 untouched
+development questions**. Six questions in each partition remain censored; the exact plan is
+consumed and was not retried.
 
-The result is directionally strong: development accuracy moved **1/4 → 4/4**, cross-entropy
-**17.377 → 0.365**, and mean probability on the best measured outcome **0.250 → 0.711**. Three
-discordant correctness pairs favored the update and none favored the base. Training loss moved
-**8.703 → 0.141**. The development sample is only four questions, its exact two-sided paired
-p-value is 0.25, and one winner-probability estimate regressed. This earns a larger development
-experiment, not a benchmark claim or live authority.
+The sequential candidate learned the 18 train preferences—loss fell **1.663 → 0.533**—but did not
+beat the existing outcome baseline. Both models scored **4/6** on development; cross-entropy
+worsened **0.667 → 0.728**, mean winner probability fell **0.654 → 0.619**, one choice favored
+each model and four tied. This is a mixed negative result, not a promotion.
 
-Honest board: **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 · live authority
+Honest board: **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · live authority
 0 · transfer 0**.
 
-## Scale-design update
+The [path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json)
+authenticates the collection and fit. The existing eight-question outcome model remains the
+development baseline. The 26-question model is preserved privately as a non-authoritative
+candidate.
+
+## Scale campaign and fit
+
+Collection source `a5ef3e538819418ded1bdd49e0e5e9f58961893b` passed CI run `32038893751`
+attempt 1. The frozen 24+12 plan expanded to 93 candidate trials and executed once. It used 57,373
+controller actions and 5,134,506 frames, with no teacher query, model prediction, sealed Red case,
+Crystal case or full replay. The 15 invalids divide into three Field-Dig destination gaps, four
+missing-Fly transitions, two exhausted required-recovery budgets, and six venue/live-PP mismatch
+failures. They are censored, not negative preference labels.
+
+Fitter source `fba24e9bc410b497015dbfed3ad471f880adadbe` passed CI run `32040258728`
+attempt 1. It authenticated all four campaign streams, reconstructed every assignment, required
+the exact 78/15 denominator, and excluded all incomplete questions. The fit used the existing
+eight-question model as a sequential base, added 18 train questions, and compared once on six new
+development questions. Because the previous model used fixed switch assistance and the new
+campaign used direct-safe-or-assist execution, the receipt marks the update cross-protocol and
+makes no inferential claim.
+
+The next falsifier is not another broad inventory expansion. Repair only the four mechanical
+classes, freeze a successor that claims only the 15 failed assignments, and recover six train plus
+six still-unscored development preferences without changing menus or replaying measured trials.
+All three new collection-goal train questions are in this censored set, making the recovery directly
+relevant to the living-Pokédex product.
+
+## Superseded scale-design checkpoint
 
 The inventory blocker described below has since been resolved action-free. After all three
 consumed repeatable pilots are excluded, the current implementation finds 24 train roots and 15

@@ -1,5 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: the bigger model did not win
+
+Open on **93 TRIALS**. Split them into **78 MEASURED** and **15 INVALID**, then collapse the green
+lanes into **18 TRAIN** and **6 FACE-DOWN DEVELOPMENT** cards. Put six censored cards on each side
+under four labels: **DIG DESTINATION · NO FLY · RECOVERY BUDGET · VENUE/PP**. Keep **TEACHER 0 ·
+SEALED 0 · CRYSTAL 0 · AUTHORITY 0** visible.
+
+Animate cumulative outcome training growing **8 → 26 QUESTIONS** and loss falling **1.663 →
+0.533**. Then turn over the six development cards. Do not use triumphant music:
+
+- **EXISTING OUTCOME MODEL: 4/6 · CE 0.667 · WINNER P 0.654**
+- **LARGER CANDIDATE: 4/6 · CE 0.728 · WINNER P 0.619**
+
+Show **ONE WIN EACH · FOUR TIES** and stamp the larger candidate **PRESERVED, NOT PROMOTED**.
+Narration: **“This is what honest training looks like. The loss went down, but the model did not
+generalize better. More data under a shifted intervention was not automatically more knowledge.”**
+
+Zoom into the censored train cards and highlight all three collection-goal questions. End on the
+next rail: **REPAIR FOUR MECHANICS → REPLAY ONLY 15 FAILED ASSIGNMENTS → COMPLETE 6+6 → SELECT ON
+TRAIN → TURN OVER ONLY THE NEW SIX**. The living-Pokédex goal stays on screen so the recovery work
+is framed as restoring missing collection knowledge, not polishing a Red walkthrough.
+
 ## August 17 scene: both kinds is not the same as balanced
 
 Open on the scale board filling in without gameplay: **24 TRAIN ROOTS · 15 DEVELOPMENT ROOTS · 200

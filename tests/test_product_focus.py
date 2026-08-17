@@ -50,12 +50,12 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     )
     assert state.active_lane["id"] == "repeatable-party-outcome-learning-v1"
     assert len(state.retired_lanes) == 1
-    assert focus_progress_fraction(state) == 0.375
+    assert focus_progress_fraction(state) == 0.859375
     assert focus_scorecard(state) == (
-        ("Outcome Question · train", 8, 32),
-        ("Outcome Question · development", 4, 16),
-        ("Model Fit · train", 1, 2),
-        ("Unseen Comparison · development", 1, 2),
+        ("Outcome Question · train", 26, 32),
+        ("Outcome Question · development", 10, 16),
+        ("Model Fit · train", 2, 2),
+        ("Unseen Comparison · development", 2, 2),
     )
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
@@ -65,7 +65,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows[-1] == "Unseen Comparison · development: 1/2"
+    assert rows[-1] == "Unseen Comparison · development: 2/2"
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -228,14 +228,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 0.375
+    assert public["stage_progress"] == 0.859375
     assert public["actions"] == 0
-    assert public["experiment"]["zero_shot"] == {"completed": 12, "total": 48}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 1, "total": 2}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 2}  # type: ignore[index]
+    assert public["experiment"]["zero_shot"] == {"completed": 36, "total": 48}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 2, "total": 2}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow fit exists; live authority remains gated" in encoded
-    assert "reduced cross-entropy from 17.377 to 0.365" in encoded
+    assert "larger outcome candidate did not beat the baseline" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

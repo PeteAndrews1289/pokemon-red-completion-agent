@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: more training data did not automatically make a better model
+
+The balanced campaign finally left the planning board and ran. Ninety-three cloned candidate
+trials became seventy-eight measured outcomes and fifteen honest invalids. Eighteen new training
+questions and six face-down development questions were complete; six in each partition remained
+censored by recovery and battle-execution failures.
+
+The model really trained. Its cumulative outcome history grew from eight questions to twenty-six,
+and train loss fell from 1.663 to 0.533. Then the six new development cards turned over. The old
+outcome model and the larger candidate both chose four correctly. The larger model was less well
+calibrated: cross-entropy rose from 0.667 to 0.728, and average probability on the measured winner
+fell from 0.654 to 0.619.
+
+That is not a wasted result. It killed the convenient story that more examples under a slightly
+different battle-credit policy must help. It also exposed exactly where the missing living-Pokédex
+lesson sits: all three new collection-goal training questions are among the censored menus. The
+project preserved the old model as the baseline, the larger model as a negative candidate, and all
+fifteen failures as evidence.
+
+The next move is narrow. Repair four mechanical execution classes, rerun only the failed
+assignments under a new frozen successor, and recover six train plus six still-unscored development
+preferences. Model design then happens on train only; the six newly completed development cards
+stay face down for the next comparison. The board reads **26/32 train · 10/16 development · 2/2
+fits · 2/2 comparisons · authority 0 · transfer 0**. Red is still the curriculum; a model that can
+build a living Pokédex across games is still the product.
+
 ## August 17: the next dataset stopped confusing coverage with balance
 
 The first model earned a larger experiment, and the action-free inventory finally found it:

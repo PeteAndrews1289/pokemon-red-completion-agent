@@ -6,7 +6,34 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: scale the first outcome-trained scorer on independent roots
+## Current override: recover censored scale questions; do not promote the larger candidate
+
+Codex completed the balanced 24+12 campaign once. It retained **78/93 measured trials** and 15
+mechanical invalids, yielding **18 train plus 6 untouched development preferences**. The sequential
+fit now contains 26 cumulative outcome-trained questions, but it tied the existing baseline at
+4/6 correct and worsened cross-entropy from 0.667 to 0.728. The original eight-question outcome
+model remains the development baseline; the larger candidate has no authority.
+
+Codex owns the next bounded lane: repair the four mechanical classes, build an authenticated
+successor that claims only the 15 invalid assignments, and recover six train plus six still-
+unscored development questions. It must leave all 78 measured trials untouched and preserve the
+frozen menus, intervention, identity-free feature contract, and failure history. After recovery,
+model selection uses train evidence only; only the six newly completed development questions may
+serve as the next fresh comparison.
+
+Claude's next useful review is the action-free 15-trial successor or a later benchmark claim,
+especially the cross-protocol interpretation and fresh-development boundary. Antigravity remains
+deferred until a concrete title-neutral Crystal protocol; then it challenges no more than three
+transfer assumptions and names work to delete. Neither blocks routine development. Their desktop
+apps may stay closed because command-line access is sufficient when a review is actually queued.
+
+The board is **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · authority 0 ·
+transfer 0**. The exact 24+12 plan must never retry. Standing approval covers the new development
+successor, offline fitting, documentation, CI and publication; sealed Red, Crystal execution,
+destructive actions and material scope changes remain separately gated. See the
+[path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
+
+## Superseded override: scale the first outcome-trained scorer on independent roots
 
 The action-free scale design now passes. Codex recovered **24 train and 15 development roots**
 after every consumed pilot was excluded, then selected **24+12 questions / 93 candidate trials**

@@ -5,27 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the first verified-outcome model exists; scale the
-> evidence, not the route.** One switch-assisted Red pilot completed **48/48 candidate trials**
-> across **8 train and 4 untouched development questions** with no invalid trial, teacher label,
-> stale direct-combat prior, sealed case, Crystal case, or full replay. The selected trainee
-> participates while a qualified teammate may finish the fixed dose, so the lesson is portable
-> party rotation and resource-aware development rather than weak-Pokémon solo combat.
+> **Current product focus (August 17, 2026): the larger outcome model did not beat the baseline;
+> recover the missing collection curriculum.** The balanced Red scale campaign executed once:
+> **93 candidate trials → 78 measured + 15 invalid → 18 train + 6 untouched development
+> preferences**. Six questions in each partition remain censored. No invalid became a target, and
+> the exact frozen plan was not retried.
 >
-> The first genuine completion-aware scorer was then fit once on train only. Training loss fell
-> from **8.703 to 0.141**. On the four untouched questions, the frozen base scored **1/4** and the
-> updated model scored **4/4**; cross-entropy fell from **17.377 to 0.365**, and mean probability on
-> the best measured outcome rose from **0.250 to 0.711**. Three discordant correctness pairs favored
-> the update and none favored the base, but the exact paired p-value is **0.25** and one winner-
-> probability estimate regressed. This is promising descriptive evidence, not a benchmark.
+> The sequential candidate now contains **26 cumulative outcome-trained questions**, and its train
+> loss fell **1.663 → 0.533**. It did not improve on the six new development questions: both models
+> scored **4/6**, while cross-entropy worsened **0.667 → 0.728** and mean winner probability fell
+> **0.654 → 0.619**. One decision favored each model and four tied. The existing outcome model
+> remains the development baseline; neither model has live authority.
 >
-> Honest board: **train 8/32 · development 4/16 · fits 1/2 · unseen comparisons 1/2 · live
-> authority 0 · transfer 0**. Next, add enough independent non-sealed Red contexts to collect 24
-> more train and 12 more development questions under the same identity-free intervention. Only the
-> larger untouched comparison can justify a benchmark or Crystal development probe. See the
-> [path-free fit receipt](docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json).
+> Honest board: **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · live
+> authority 0 · transfer 0**. Next, repair four bounded execution classes and freeze a successor
+> that claims only the 15 failed assignments. Recovering six train and six still-unscored
+> development preferences restores the missing collection-goal evidence without replaying the 78
+> measured trials. See the
+> [path-free scale result](docs/evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
 > Run `.venv/bin/python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port
-> 8768. Local qualification before the fit was **3,965 passed · 3 integration deselected · 1
+> 8768. Local qualification before the fit was **3,977 passed · 3 integration deselected · 1
 > expected xfail**, plus lint, typing, docs, privacy, and product focus. The
 > [current audit](docs/current-audit-2026-08-17.md) records the scale decision and remaining risks.
 

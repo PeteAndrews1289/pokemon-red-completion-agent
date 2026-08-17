@@ -8,7 +8,40 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the independent 24+12 scale design exists
+## Current checkpoint: the larger candidate did not beat the baseline
+
+The balanced campaign executed once: **93 trials → 78 measured + 15 invalid → 18 train + 6 fresh
+development preferences**. This advances the cumulative board to **26/32 train · 10/16 development
+· 2/2 fits · 2/2 comparisons**, but not authority. All 15 invalids remain censored; the exact plan
+is consumed.
+
+The sequential update reduced train loss **1.663 → 0.533**. On six complete development questions,
+both models scored **4/6**. The update worsened cross-entropy **0.667 → 0.728** and mean winner
+probability **0.654 → 0.619**; one choice favored each model and four tied. This is a useful
+negative result. Preserve the existing outcome model as the development baseline and do not open a
+benchmark or Crystal.
+
+The shortest honest path to the missing curriculum is now:
+
+1. Add semantic tests for the four observed mechanical classes: Celadon Field-Dig recovery,
+   missing-Fly transition, required-recovery budget exhaustion, and conservative escort fallback.
+2. Repair only those mechanics. Do not change candidate menus, objective criteria, feature values,
+   timing assignments, or the fixed one-battle intervention.
+3. Freeze an action-free successor containing only the 15 invalid assignments. It must bind the
+   original manifest and prove the 78 measured trials are absent.
+4. Execute that repeatable development successor once, retaining any new invalids honestly.
+5. Join the successor only to the original censored slots. This should add six train and six still-
+   unscored development preferences, reaching the unique 32/16 curriculum total.
+6. Select hyperparameters or architecture using train evidence only. Fit from the existing baseline
+   on the complete 24-question scale train slice, then compare once on only the six newly completed
+   development questions.
+7. If that fresh comparison still fails, redesign the learner or intervention. Do not promote,
+   open sealed Red, or move to Crystal merely because the count is complete.
+
+The [path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json)
+records the collection, fit, negative comparison and claim boundary.
+
+## Historical checkpoint: the independent 24+12 scale design exists
 
 The inventory-expansion falsifier passed without another full run. Excluding all three consumed
 repeatable pilots leaves 24 usable train roots and 15 usable development roots. The action-free V2

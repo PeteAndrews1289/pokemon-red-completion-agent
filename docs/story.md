@@ -7,7 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first model finally learned from outcomes
+## Current checkpoint: the larger model did not generalize better
+
+The scale experiment ran: ninety-three candidate trials, seventy-eight measured outcomes, fifteen
+invalids, eighteen new train questions and six new unseen questions. The model's cumulative
+outcome training grew from eight questions to twenty-six, and its train loss fell from 1.663 to
+0.533.
+
+Then the new cards turned over. The existing outcome model got four of six right. So did the larger
+candidate. The larger candidate was less well calibrated: cross-entropy rose from 0.667 to 0.728,
+and average probability on the measured winner fell from 65.4% to 61.9%. One choice improved, one
+regressed and four tied. It trained; it did not earn promotion.
+
+The fifteen invalids point to the next useful work. Four bounded execution problems censored six
+train and six development questions, including every new collection-goal train menu. The project
+will repair those mechanics and rerun only the failed assignments under a new frozen successor.
+It will not reroll the seventy-eight measurements or call failures labels.
+
+The scoreboard is **26/32 TRAIN · 10/16 DEVELOPMENT · 2/2 FITS · 2/2 UNSEEN COMPARISONS ·
+AUTHORITY ZERO · TRANSFER ZERO**. The model that wins on train loss but not new decisions stays in
+the lab. The living-Pokédex goal stays in charge of what gets fixed next.
+
+---
+
+## Historical checkpoint: the first model finally learned from outcomes
 
 The repaired board did not turn red this time. Forty-eight cloned candidate trials completed, so
 eight training questions and four untouched questions became real lessons. No teacher told the
