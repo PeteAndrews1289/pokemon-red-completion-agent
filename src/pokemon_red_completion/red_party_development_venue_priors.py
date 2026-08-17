@@ -572,11 +572,11 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "cb1bc40d3a08fce7f511936b5d017dfe3ab244d3ecffdc9cc59f69e84c08bc47"
         ),
         current_ast_sha256=(
-            "2396d9254005b718803e3ca3b282f603aa9574c683efd56e49e2c5e076702a23"
+            "a336a07ca62c922f769c9a40c8384f19490aa0014d12ec97bd6e4815f1ded4c1"
         ),
         justification_id=(
-            "cinnabar-pc-boundary-normalization-preserves-historical-nurse-"
-            "boundary-route"
+            "additional-fly-boundary-normalization-preserves-historical-route-"
+            "11-and-cinnabar-nurse-paths"
         ),
     ),
     _SourceCompatibilityWaiver(
