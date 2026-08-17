@@ -396,6 +396,46 @@ def _terminal_map(
     return result
 
 
+def _assignment_semantic_document(
+    assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> dict[str, object]:
+    """Return candidate identity while excluding the source-bound binding lineage.
+
+    The recovery successor deliberately reconstructed the same questions and candidate
+    features under a newer source binding.  Predecessor terminals therefore retain their
+    original binding, assignment, and trial digests, while successor terminals use the
+    reconstructed binding.  Those three lineage fields may differ; every semantic field
+    must remain byte-for-byte equal.
+    """
+
+    document = assignment.private_dict()
+    for field in ("assignment_sha256", "binding_sha256", "trial_id"):
+        del document[field]
+    return document
+
+
+def _require_terminal_assignment_join(
+    *,
+    predecessor: Mapping[tuple[str, int], _RawTerminal],
+    successor: Mapping[tuple[str, int], _RawTerminal],
+    current: Mapping[tuple[str, int], PartyDevelopmentOutcomeTrialAssignment],
+) -> None:
+    """Bind old terminals semantically and recovery terminals exactly."""
+
+    for key, record in predecessor.items():
+        if _assignment_semantic_document(
+            record.assignment
+        ) != _assignment_semantic_document(current[key]):
+            raise ProtocolPartyTrainGateError(
+                "predecessor terminal candidate semantics differ from reconstruction"
+            )
+    for key, record in successor.items():
+        if record.assignment != current[key]:
+            raise ProtocolPartyTrainGateError(
+                "successor terminal assignment differs from reconstruction"
+            )
+
+
 def _question_set_sha256(selected: tuple[Any, ...]) -> str:
     return canonical_sha256(
         {
@@ -500,9 +540,11 @@ def _prepare_train_boundary(
         or set(successor_all) != set(predecessor_failure_map)
     ):
         raise ProtocolPartyTrainGateError("terminal assignment denominator differs")
-    for key, record in (*predecessor_all.items(), *successor_all.items()):
-        if record.assignment != current[key]:
-            raise ProtocolPartyTrainGateError("terminal assignment differs from reconstruction")
+    _require_terminal_assignment_join(
+        predecessor=predecessor_all,
+        successor=successor_all,
+        current=current,
+    )
 
     final_outcomes = {**predecessor_outcome_map, **successor_outcome_map}
     if len(final_outcomes) != len(predecessor_outcome_map) + len(successor_outcome_map):

@@ -76,7 +76,12 @@ def _readiness(*, output_root: object = object(), claim_registry: Path = Path("/
     )
 
 
-def _assignment(*, partition: ScenarioPartition) -> PartyDevelopmentOutcomeTrialAssignment:
+def _assignment(
+    *,
+    partition: ScenarioPartition,
+    binding_sha256: str = "2" * 64,
+    candidate_feature_sha256: str = "4" * 64,
+) -> PartyDevelopmentOutcomeTrialAssignment:
     return PartyDevelopmentOutcomeTrialAssignment.build(
         ordinal=1,
         scenario_id="protocol-test-scenario",
@@ -85,10 +90,10 @@ def _assignment(*, partition: ScenarioPartition) -> PartyDevelopmentOutcomeTrial
         partition=partition,
         kind=TrainingChoiceKind.TRAINEE,
         goal=PartyDevelopmentGoal.BALANCE,
-        binding_sha256="2" * 64,
+        binding_sha256=binding_sha256,
         candidate_index=0,
         candidate_sha256="3" * 64,
-        candidate_feature_sha256="4" * 64,
+        candidate_feature_sha256=candidate_feature_sha256,
     )
 
 
@@ -156,6 +161,71 @@ def test_assignment_header_parser_never_decodes_the_outcome_tail() -> None:
 
     assert terminal.assignment == assignment
     assert terminal.raw_line is raw
+
+
+def test_terminal_join_preserves_old_binding_but_rejects_semantic_drift() -> None:
+    predecessor_assignment = _assignment(partition=ScenarioPartition.TRAIN)
+    current_assignment = _assignment(
+        partition=ScenarioPartition.TRAIN,
+        binding_sha256="5" * 64,
+    )
+    key = (predecessor_assignment.scenario_id, predecessor_assignment.candidate_index)
+    predecessor_terminal = RUNNER["_RawTerminal"](
+        assignment=predecessor_assignment,
+        record_type="repeatable_party_candidate_outcome",
+        raw_line=b"predecessor\n",
+    )
+    current_terminal = RUNNER["_RawTerminal"](
+        assignment=current_assignment,
+        record_type="repeatable_party_candidate_outcome",
+        raw_line=b"successor\n",
+    )
+    differing = {
+        field
+        for field, value in predecessor_assignment.private_dict().items()
+        if value != current_assignment.private_dict()[field]
+    }
+    assert differing == {"assignment_sha256", "binding_sha256", "trial_id"}
+
+    RUNNER["_require_terminal_assignment_join"](
+        predecessor={key: predecessor_terminal},
+        successor={},
+        current={key: current_assignment},
+    )
+    RUNNER["_require_terminal_assignment_join"](
+        predecessor={},
+        successor={key: current_terminal},
+        current={key: current_assignment},
+    )
+
+    changed_semantics = _assignment(
+        partition=ScenarioPartition.TRAIN,
+        binding_sha256="5" * 64,
+        candidate_feature_sha256="6" * 64,
+    )
+    changed_terminal = RUNNER["_RawTerminal"](
+        assignment=changed_semantics,
+        record_type="repeatable_party_candidate_outcome",
+        raw_line=b"changed\n",
+    )
+    with pytest.raises(
+        RUNNER["ProtocolPartyTrainGateError"],
+        match="candidate semantics",
+    ):
+        RUNNER["_require_terminal_assignment_join"](
+            predecessor={key: changed_terminal},
+            successor={},
+            current={key: current_assignment},
+        )
+    with pytest.raises(
+        RUNNER["ProtocolPartyTrainGateError"],
+        match="successor terminal assignment",
+    ):
+        RUNNER["_require_terminal_assignment_join"](
+            predecessor={},
+            successor={key: predecessor_terminal},
+            current={key: current_assignment},
+        )
 
 
 def test_train_decoder_rejects_development_before_json_or_outcome_decode() -> None:
