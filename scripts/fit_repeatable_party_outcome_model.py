@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Fit one Red party-development model from one authenticated repeatable pilot.
+"""Fit one Red party-development model from one authenticated repeatable campaign.
 
-The pilot artifact contains outcomes but deliberately omits private candidate
+The campaign artifact contains outcomes but deliberately omits private candidate
 feature values.  This runner reconstructs the exact frozen menus from the
-authenticated cartridge inputs, checks every trial assignment and evidence
-digest, fits on train roots only, and compares the base and updated scorers once
-on untouched development roots.  It never opens sealed Red or Crystal data and
-never grants the fitted scorer live authority.
+authenticated cartridge inputs, checks every measured and invalid trial assignment
+and evidence digest, censors incomplete questions, fits on complete train roots only,
+and compares the base and updated scorers once on complete untouched development
+roots.  It never opens sealed Red or Crystal data and never grants the fitted scorer
+live authority.
 """
 
 from __future__ import annotations
@@ -51,6 +52,8 @@ from pokemon_red_completion.party_development_question_reservations import (  # 
     PartyDevelopmentQuestionReservationPlan,
 )
 from pokemon_red_completion.party_development_scenarios import (  # noqa: E402
+    REPEATABLE_PARTY_SELECTION_PROTOCOLS,
+    SEMANTIC_GREEDY_SELECTION_PROTOCOL,
     select_repeatable_party_scenarios,
 )
 from pokemon_red_completion.party_development_venue_priors import (  # noqa: E402
@@ -82,6 +85,8 @@ _selected_runtimes = _COLLECTION_RUNNER["_selected_runtimes"]
 _trial_assignments = _COLLECTION_RUNNER["_trial_assignments"]
 _assemble_examples = _COLLECTION_RUNNER["_assemble_examples"]
 _battle_credit_protocol = _COLLECTION_RUNNER["_battle_credit_protocol"]
+_BATTLE_CREDIT_PROTOCOL_IDS = _COLLECTION_RUNNER["_BATTLE_CREDIT_PROTOCOL_IDS"]
+_BATTLE_CREDIT_PROTOCOL_ID = _COLLECTION_RUNNER["_BATTLE_CREDIT_PROTOCOL_ID"]
 _development_artifact_exclusion = _COLLECTION_RUNNER[
     "_development_artifact_exclusion"
 ]
@@ -115,6 +120,7 @@ class _AuthenticatedPilot:
     manifest_sha256: str
     plan_record: Mapping[str, object]
     outcome_records: tuple[Mapping[str, object], ...]
+    failure_records: tuple[Mapping[str, object], ...]
     evaluation_record: Mapping[str, object]
 
 
@@ -126,6 +132,8 @@ class _ReconstructedDataset:
     source_commit: str
     source_bundle_sha256: str
     rom_sha256: str
+    measured_trials: int
+    invalid_trials: int
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -149,6 +157,57 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--expected-plan-sha256", required=True)
     parser.add_argument("--expected-collection-source", required=True)
     parser.add_argument("--expected-base-model-file-sha256", required=True)
+    parser.add_argument(
+        "--battle-credit-protocol",
+        choices=_BATTLE_CREDIT_PROTOCOL_IDS,
+        default=_BATTLE_CREDIT_PROTOCOL_ID,
+    )
+    parser.add_argument(
+        "--scenario-selection-protocol",
+        choices=REPEATABLE_PARTY_SELECTION_PROTOCOLS,
+        default=SEMANTIC_GREEDY_SELECTION_PROTOCOL,
+    )
+    parser.add_argument(
+        "--expected-selected-train-questions",
+        type=int,
+        default=_EXPECTED_TRAIN_QUESTIONS,
+    )
+    parser.add_argument(
+        "--expected-selected-development-questions",
+        type=int,
+        default=_EXPECTED_DEVELOPMENT_QUESTIONS,
+    )
+    parser.add_argument(
+        "--expected-candidate-trials",
+        type=int,
+        default=_EXPECTED_OUTCOME_TRIALS,
+    )
+    parser.add_argument(
+        "--expected-measured-trials",
+        type=int,
+        default=_EXPECTED_OUTCOME_TRIALS,
+    )
+    parser.add_argument("--expected-invalid-trials", type=int, default=0)
+    parser.add_argument(
+        "--expected-fit-train-questions",
+        type=int,
+        default=_EXPECTED_TRAIN_QUESTIONS,
+    )
+    parser.add_argument(
+        "--expected-comparison-development-questions",
+        type=int,
+        default=_EXPECTED_DEVELOPMENT_QUESTIONS,
+    )
+    parser.add_argument(
+        "--expected-base-outcome-training-examples",
+        type=int,
+        default=0,
+    )
+    parser.add_argument(
+        "--base-training-protocol",
+        choices=("none", *_BATTLE_CREDIT_PROTOCOL_IDS),
+        default="none",
+    )
     return parser
 
 
@@ -272,7 +331,25 @@ def _open_authenticated_pilot(
     artifact_path: Path,
     *,
     expected_manifest_sha256: str,
+    expected_measured_trials: int = _EXPECTED_OUTCOME_TRIALS,
+    expected_invalid_trials: int = 0,
 ) -> _AuthenticatedPilot:
+    if (
+        type(expected_measured_trials) is not int  # noqa: E721
+        or expected_measured_trials < 1
+        or type(expected_invalid_trials) is not int  # noqa: E721
+        or expected_invalid_trials < 0
+    ):
+        raise RepeatablePartyOutcomeFitError(
+            "development artifact trial expectations are invalid"
+        )
+    stream_records = {
+        "evaluation.jsonl": 1,
+        "outcomes.jsonl": expected_measured_trials,
+        "plan.jsonl": 1,
+    }
+    if expected_invalid_trials:
+        stream_records["failures.jsonl"] = expected_invalid_trials
     artifact = _require_external(artifact_path, subject="development artifact")
     try:
         artifact_metadata = artifact.lstat()
@@ -281,7 +358,7 @@ def _open_authenticated_pilot(
         raise RepeatablePartyOutcomeFitError("development artifact is unavailable") from error
     if not stat.S_ISDIR(artifact_metadata.st_mode):
         raise RepeatablePartyOutcomeFitError("development artifact is not a directory")
-    expected_entries = tuple(sorted((*_PILOT_STREAM_RECORDS, "manifest.json")))
+    expected_entries = tuple(sorted((*stream_records, "manifest.json")))
     if entries != expected_entries:
         raise RepeatablePartyOutcomeFitError("development artifact stream inventory differs")
 
@@ -345,11 +422,11 @@ def _open_authenticated_pilot(
         declared_sha256 = entry.get("sha256")
         if (
             not isinstance(filename, str)
-            or filename not in _PILOT_STREAM_RECORDS
+            or filename not in stream_records
             or type(size) is not int  # noqa: E721
             or size <= 0
             or type(records) is not int  # noqa: E721
-            or records != _PILOT_STREAM_RECORDS[filename]
+            or records != stream_records[filename]
             or _require_sha256(declared_sha256, subject="development stream")
             != declared_sha256
         ):
@@ -368,9 +445,9 @@ def _open_authenticated_pilot(
         declared_total_bytes += size
         declared_total_records += records
     if (
-        tuple(declared_names) != tuple(sorted(_PILOT_STREAM_RECORDS))
+        tuple(declared_names) != tuple(sorted(stream_records))
         or totals.get("bytes") != declared_total_bytes
-        or totals.get("files") != len(_PILOT_STREAM_RECORDS)
+        or totals.get("files") != len(stream_records)
         or totals.get("records") != declared_total_records
     ):
         raise RepeatablePartyOutcomeFitError("development artifact totals differ")
@@ -383,7 +460,16 @@ def _open_authenticated_pilot(
     outcomes = _decode_canonical_jsonl(
         file_payloads["outcomes.jsonl"],
         subject="development outcome stream",
-        expected_records=_EXPECTED_OUTCOME_TRIALS,
+        expected_records=expected_measured_trials,
+    )
+    failures = (
+        _decode_canonical_jsonl(
+            file_payloads["failures.jsonl"],
+            subject="development failure stream",
+            expected_records=expected_invalid_trials,
+        )
+        if expected_invalid_trials
+        else ()
     )
     (evaluation_record,) = _decode_canonical_jsonl(
         file_payloads["evaluation.jsonl"],
@@ -395,6 +481,7 @@ def _open_authenticated_pilot(
         manifest_sha256=manifest_sha256,
         plan_record=plan_record,
         outcome_records=outcomes,
+        failure_records=failures,
         evaluation_record=evaluation_record,
     )
 
@@ -423,9 +510,11 @@ def _require_plan_record(
     *,
     expected_plan_sha256: str,
     expected_collection_source: str,
+    expected_battle_credit_protocol: str = _BATTLE_CREDIT_PROTOCOL_ID,
+    expected_selection_protocol: str = SEMANTIC_GREEDY_SELECTION_PROTOCOL,
 ) -> tuple[Mapping[str, object], Mapping[str, object], PartyDevelopmentOutcomeDose]:
     record = pilot.plan_record
-    if set(record) != {
+    legacy_keys = {
         "battle_credit_protocol",
         "development_repeatable",
         "dose",
@@ -437,8 +526,44 @@ def _require_plan_record(
         "sealed",
         "source",
         "source_bundle_sha256",
-    }:
+    }
+    frozen_keys = {
+        "frozen_plan_document_sha256",
+        "frozen_plan_file_sha256",
+        "scenario_selection_protocol",
+    }
+    if set(record) not in (legacy_keys, legacy_keys | frozen_keys):
         raise RepeatablePartyOutcomeFitError("development plan record shape differs")
+    if set(record) == legacy_keys:
+        if (
+            expected_battle_credit_protocol != _BATTLE_CREDIT_PROTOCOL_ID
+            or expected_selection_protocol != SEMANTIC_GREEDY_SELECTION_PROTOCOL
+        ):
+            raise RepeatablePartyOutcomeFitError(
+                "legacy development plan cannot claim a newer protocol"
+            )
+    else:
+        frozen_file_sha256 = record.get("frozen_plan_file_sha256")
+        if (
+            record.get("scenario_selection_protocol")
+            != expected_selection_protocol
+            or _require_sha256(
+                record.get("frozen_plan_document_sha256"),
+                subject="frozen plan document",
+            )
+            != record.get("frozen_plan_document_sha256")
+            or (
+                frozen_file_sha256 is not None
+                and _require_sha256(
+                    frozen_file_sha256,
+                    subject="frozen plan file",
+                )
+                != frozen_file_sha256
+            )
+        ):
+            raise RepeatablePartyOutcomeFitError(
+                "development frozen-plan binding differs"
+            )
     plan = record.get("plan")
     inputs = record.get("inputs")
     source = record.get("source")
@@ -476,7 +601,10 @@ def _require_plan_record(
     if (
         dose.public_dict() != dose_value
         or record.get("battle_credit_protocol")
-        != _battle_credit_protocol(dose.completed_battles)
+        != _battle_credit_protocol(
+            dose.completed_battles,
+            protocol_id=expected_battle_credit_protocol,
+        )
         or dose.completed_battles != 1
     ):
         raise RepeatablePartyOutcomeFitError("development intervention binding differs")
@@ -492,15 +620,9 @@ def _candidate_outcome(
         "record_type"
     ) != "repeatable_party_candidate_outcome":
         raise RepeatablePartyOutcomeFitError("candidate outcome record shape differs")
-    assignment_value = record.get("assignment")
+    assignment = _record_assignment(record)
     evidence = record.get("evidence")
     outcome = record.get("outcome")
-    try:
-        assignment = PartyDevelopmentOutcomeTrialAssignment.from_private_dict(
-            assignment_value
-        )
-    except (TypeError, ValueError) as error:
-        raise RepeatablePartyOutcomeFitError("candidate assignment is invalid") from error
     if assignment != expected_assignment:
         raise RepeatablePartyOutcomeFitError("candidate assignment differs from reconstruction")
     if not isinstance(evidence, Mapping) or not isinstance(outcome, Mapping):
@@ -542,14 +664,102 @@ def _candidate_outcome(
     )
 
 
+def _record_assignment(
+    record: Mapping[str, object],
+) -> PartyDevelopmentOutcomeTrialAssignment:
+    try:
+        return PartyDevelopmentOutcomeTrialAssignment.from_private_dict(
+            record.get("assignment")
+        )
+    except (TypeError, ValueError) as error:
+        raise RepeatablePartyOutcomeFitError("candidate assignment is invalid") from error
+
+
+def _candidate_failure(
+    record: Mapping[str, object],
+    *,
+    expected_assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> CandidateOutcome:
+    if set(record) != {"assignment", "evidence", "record_type"} or record.get(
+        "record_type"
+    ) != "repeatable_party_candidate_failure":
+        raise RepeatablePartyOutcomeFitError("candidate failure record shape differs")
+    assignment = _record_assignment(record)
+    if assignment != expected_assignment:
+        raise RepeatablePartyOutcomeFitError("candidate assignment differs from reconstruction")
+    evidence = record.get("evidence")
+    if not isinstance(evidence, Mapping) or set(evidence) != {
+        "failure_message",
+        "failure_message_sha256",
+        "failure_type",
+        "model_predictions",
+        "model_updates",
+        "private_path_fields",
+        "retryable_development_evidence",
+        "schema",
+        "status",
+        "teacher_queries",
+    }:
+        raise RepeatablePartyOutcomeFitError("candidate failure evidence is invalid")
+    message = evidence.get("failure_message")
+    failure_type = evidence.get("failure_type")
+    evidence_sha256 = canonical_sha256(evidence)
+    if (
+        evidence.get("schema")
+        != "pokemon.red.repeatable-party-development-trial-failure.v1"
+        or evidence.get("status") != OutcomeEvidenceStatus.INVALID.value
+        or not isinstance(message, str)
+        or not message
+        or len(message.encode("utf-8")) > 16_384
+        or not isinstance(failure_type, str)
+        or not failure_type
+        or len(failure_type) > 128
+        or evidence.get("failure_message_sha256")
+        != hashlib.sha256(message.encode("utf-8")).hexdigest()
+        or evidence.get("retryable_development_evidence") is not True
+        or evidence.get("teacher_queries") != 0
+        or evidence.get("model_predictions") != 0
+        or evidence.get("model_updates") != 0
+        or evidence.get("private_path_fields") != 0
+    ):
+        raise RepeatablePartyOutcomeFitError("candidate failure evidence binding differs")
+    return CandidateOutcome(
+        OutcomeEvidenceStatus.INVALID,
+        evidence_sha256=evidence_sha256,
+    )
+
+
 def _reconstruct_dataset(
     args: argparse.Namespace,
     pilot: _AuthenticatedPilot,
 ) -> _ReconstructedDataset:
+    expected_counts = (
+        args.expected_selected_train_questions,
+        args.expected_selected_development_questions,
+        args.expected_candidate_trials,
+        args.expected_measured_trials,
+        args.expected_invalid_trials,
+        args.expected_fit_train_questions,
+        args.expected_comparison_development_questions,
+    )
+    if (
+        any(type(value) is not int or value < 0 for value in expected_counts)  # noqa: E721
+        or any(value == 0 for value in expected_counts[:4])
+        or any(value == 0 for value in expected_counts[5:])
+        or args.expected_measured_trials + args.expected_invalid_trials
+        != args.expected_candidate_trials
+        or args.expected_fit_train_questions
+        > args.expected_selected_train_questions
+        or args.expected_comparison_development_questions
+        > args.expected_selected_development_questions
+    ):
+        raise RepeatablePartyOutcomeFitError("fit evidence expectations are invalid")
     plan_document, inputs, dose = _require_plan_record(
         pilot,
         expected_plan_sha256=args.expected_plan_sha256,
         expected_collection_source=args.expected_collection_source,
+        expected_battle_credit_protocol=args.battle_credit_protocol,
+        expected_selection_protocol=args.scenario_selection_protocol,
     )
     expected_input_keys = {
         "context_catalog",
@@ -644,24 +854,28 @@ def _reconstruct_dataset(
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
         completed_battles=dose.completed_battles,
+        battle_credit_protocol_id=args.battle_credit_protocol,
     )
     partition_counts = plan_document.get("partition_counts")
     seed = plan_document.get("seed")
     if (
         partition_counts
         != {
-            ScenarioPartition.TRAIN.value: _EXPECTED_TRAIN_QUESTIONS,
-            ScenarioPartition.DEVELOPMENT.value: _EXPECTED_DEVELOPMENT_QUESTIONS,
+            ScenarioPartition.TRAIN.value: args.expected_selected_train_questions,
+            ScenarioPartition.DEVELOPMENT.value: (
+                args.expected_selected_development_questions
+            ),
         }
         or type(seed) is not int  # noqa: E721
     ):
         raise RepeatablePartyOutcomeFitError("pilot split differs from the initial-fit gate")
     plan = select_repeatable_party_scenarios(
         tuple(item.option for item in pool),
-        train_count=_EXPECTED_TRAIN_QUESTIONS,
-        development_count=_EXPECTED_DEVELOPMENT_QUESTIONS,
+        train_count=args.expected_selected_train_questions,
+        development_count=args.expected_selected_development_questions,
         seed=seed,
         maximum_timing_offset_frames=_MAXIMUM_TIMING_OFFSET_FRAMES,
+        selection_protocol=args.scenario_selection_protocol,
     )
     if (
         plan.plan_sha256 != args.expected_plan_sha256
@@ -677,15 +891,34 @@ def _reconstruct_dataset(
             runtime.binding_question.scenario_id
         ]
     )
-    if len(assignments) != _EXPECTED_OUTCOME_TRIALS:
+    if len(assignments) != args.expected_candidate_trials:
         raise RepeatablePartyOutcomeFitError("pilot trial denominator differs")
+    expected_by_trial_id = {assignment.trial_id: assignment for assignment in assignments}
+    if len(expected_by_trial_id) != len(assignments):
+        raise RepeatablePartyOutcomeFitError("pilot reconstruction repeats a trial identity")
     outcomes_by_scenario: dict[str, dict[int, CandidateOutcome]] = {}
-    for record, assignment in zip(pilot.outcome_records, assignments, strict=True):
-        outcome = _candidate_outcome(record, expected_assignment=assignment)
-        scenario = outcomes_by_scenario.setdefault(assignment.scenario_id, {})
-        if assignment.candidate_index in scenario:
-            raise RepeatablePartyOutcomeFitError("pilot repeats a candidate outcome")
-        scenario[assignment.candidate_index] = outcome
+    seen_trials: set[str] = set()
+    for records, decoder in (
+        (pilot.outcome_records, _candidate_outcome),
+        (pilot.failure_records, _candidate_failure),
+    ):
+        for record in records:
+            assignment = _record_assignment(record)
+            expected = expected_by_trial_id.get(assignment.trial_id)
+            if expected is None or assignment != expected:
+                raise RepeatablePartyOutcomeFitError(
+                    "pilot trial differs from reconstruction"
+                )
+            if assignment.trial_id in seen_trials:
+                raise RepeatablePartyOutcomeFitError("pilot repeats a candidate trial")
+            seen_trials.add(assignment.trial_id)
+            outcome = decoder(record, expected_assignment=expected)
+            scenario = outcomes_by_scenario.setdefault(assignment.scenario_id, {})
+            if assignment.candidate_index in scenario:
+                raise RepeatablePartyOutcomeFitError("pilot repeats a candidate outcome")
+            scenario[assignment.candidate_index] = outcome
+    if len(seen_trials) != len(assignments):
+        raise RepeatablePartyOutcomeFitError("pilot omits a candidate trial")
     examples = cast(
         tuple[ScenarioOutcomeExample, ...],
         _assemble_examples(selected, outcomes_by_scenario),
@@ -697,8 +930,10 @@ def _reconstruct_dataset(
         examples,
         prospective_catalog=prospective,
         policy=PartyDevelopmentReadinessPolicy(
-            minimum_train_examples=_EXPECTED_TRAIN_QUESTIONS,
-            minimum_development_examples=_EXPECTED_DEVELOPMENT_QUESTIONS,
+            minimum_train_examples=args.expected_selected_train_questions,
+            minimum_development_examples=(
+                args.expected_selected_development_questions
+            ),
             minimum_goals_per_partition=2,
             minimum_candidate_count_observed=3,
             minimum_health_bins=2,
@@ -717,8 +952,11 @@ def _reconstruct_dataset(
             "model_fit": False,
             "authority_promoted": False,
         }
-        or not audit.initial_fit_ready
-        or audit.learner_update_eligible_examples != len(examples)
+        or audit.learner_update_eligible_examples
+        != (
+            args.expected_fit_train_questions
+            + args.expected_comparison_development_questions
+        )
     ):
         raise RepeatablePartyOutcomeFitError("pilot evaluation differs from reconstruction")
     return _ReconstructedDataset(
@@ -728,6 +966,8 @@ def _reconstruct_dataset(
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
         rom_sha256=rom_sha256,
+        measured_trials=len(pilot.outcome_records),
+        invalid_trials=len(pilot.failure_records),
     )
 
 
@@ -816,6 +1056,8 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
     pilot = _open_authenticated_pilot(
         args.development_artifact,
         expected_manifest_sha256=args.expected_manifest_sha256,
+        expected_measured_trials=args.expected_measured_trials,
+        expected_invalid_trials=args.expected_invalid_trials,
     )
     dataset = _reconstruct_dataset(args, pilot)
     base_path = _require_external(args.base_model, subject="base model")
@@ -827,33 +1069,75 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
         base_path,
         expected_sha256=base_file_sha256,
     )
-    if base_model.outcome_training_examples != 0:
-        raise RepeatablePartyOutcomeFitError("initial fit requires the untouched teacher prior")
+    if (
+        type(args.expected_base_outcome_training_examples) is not int  # noqa: E721
+        or args.expected_base_outcome_training_examples < 0
+        or base_model.outcome_training_examples
+        != args.expected_base_outcome_training_examples
+        or (
+            args.expected_base_outcome_training_examples == 0
+            and args.base_training_protocol != "none"
+        )
+        or (
+            args.expected_base_outcome_training_examples > 0
+            and args.base_training_protocol == "none"
+        )
+    ):
+        raise RepeatablePartyOutcomeFitError(
+            "base model outcome-training provenance differs"
+        )
     base_model_sha256 = canonical_party_development_outcome_model_sha256(base_model)
     training = tuple(
         item
         for item in dataset.examples
         if item.partition is ScenarioPartition.TRAIN
+        and item.learner_update_eligible
     )
     development = tuple(
         item
         for item in dataset.examples
         if item.partition is ScenarioPartition.DEVELOPMENT
+        and item.learner_update_eligible
     )
     if (
-        len(training) != _EXPECTED_TRAIN_QUESTIONS
-        or len(development) != _EXPECTED_DEVELOPMENT_QUESTIONS
+        len(training) != args.expected_fit_train_questions
+        or len(development)
+        != args.expected_comparison_development_questions
         or not all(item.learner_update_eligible for item in (*training, *development))
     ):
         raise RepeatablePartyOutcomeFitError("authenticated examples do not satisfy the fit gate")
 
+    cross_protocol_update = (
+        args.base_training_protocol != "none"
+        and args.base_training_protocol != args.battle_credit_protocol
+    )
+
     fit_identity = canonical_sha256(
         {
-            "schema": "pokemon.red.repeatable-party-outcome-fit-identity.v1",
+            "schema": "pokemon.red.repeatable-party-outcome-fit-identity.v2",
             "pilot_manifest_sha256": pilot.manifest_sha256,
             "plan_sha256": dataset.plan_sha256,
             "base_model_file_sha256": base_file_sha256,
             "base_model_canonical_sha256": base_model_sha256,
+            "base_outcome_training_examples": (
+                base_model.outcome_training_examples
+            ),
+            "base_training_protocol": args.base_training_protocol,
+            "current_battle_credit_protocol": args.battle_credit_protocol,
+            "scenario_selection_protocol": args.scenario_selection_protocol,
+            "selected_questions": {
+                "train": args.expected_selected_train_questions,
+                "development": args.expected_selected_development_questions,
+            },
+            "usable_questions": {
+                "train": len(training),
+                "development": len(development),
+            },
+            "trials": {
+                "candidate": args.expected_candidate_trials,
+                "measured": dataset.measured_trials,
+                "invalid": dataset.invalid_trials,
+            },
             "hyperparameters": {
                 "epochs": _FIT_EPOCHS,
                 "learning_rate": _FIT_LEARNING_RATE,
@@ -870,7 +1154,7 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
     )
     writer = output_root.begin_artifact(artifact_id, kind=_MODEL_KIND)
     preregistration = {
-        "schema": "pokemon.red.repeatable-party-outcome-fit-preregistration.v1",
+        "schema": "pokemon.red.repeatable-party-outcome-fit-preregistration.v2",
         "fit_identity_sha256": fit_identity,
         "source": source.public_dict(),
         "pilot_manifest_sha256": pilot.manifest_sha256,
@@ -881,8 +1165,26 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
         "rom_sha256": dataset.rom_sha256,
         "base_model_file_sha256": base_file_sha256,
         "base_model_canonical_sha256": base_model_sha256,
+        "base_outcome_training_examples": base_model.outcome_training_examples,
+        "base_training_protocol": args.base_training_protocol,
+        "current_battle_credit_protocol": args.battle_credit_protocol,
+        "cross_protocol_sequential_update": cross_protocol_update,
+        "scenario_selection_protocol": args.scenario_selection_protocol,
+        "selected_train_questions": args.expected_selected_train_questions,
+        "selected_development_questions": (
+            args.expected_selected_development_questions
+        ),
         "train_questions": len(training),
         "development_questions": len(development),
+        "censored_train_questions": (
+            args.expected_selected_train_questions - len(training)
+        ),
+        "censored_development_questions": (
+            args.expected_selected_development_questions - len(development)
+        ),
+        "candidate_trials": args.expected_candidate_trials,
+        "measured_trials": dataset.measured_trials,
+        "invalid_trials": dataset.invalid_trials,
         "epochs": _FIT_EPOCHS,
         "learning_rate": _FIT_LEARNING_RATE,
         "prior_l2": _FIT_PRIOR_L2,
@@ -912,7 +1214,7 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
     model_payload = _canonical_line(cycle.update.model.to_dict())
     learning = _public_learning_summary(cycle)
     return {
-        "schema": "pokemon.red.repeatable-party-outcome-fit-receipt.v1",
+        "schema": "pokemon.red.repeatable-party-outcome-fit-receipt.v2",
         "status": "complete",
         "source": source.public_dict(),
         "fit_identity_sha256": fit_identity,
@@ -921,9 +1223,34 @@ def _fit(args: argparse.Namespace) -> dict[str, object]:
         "prospective_catalog_sha256": dataset.prospective_catalog_sha256,
         "base_model_file_sha256": base_file_sha256,
         "base_model_canonical_sha256": base_model_sha256,
+        "base_outcome_training_examples": base_model.outcome_training_examples,
+        "base_training_protocol": args.base_training_protocol,
+        "current_battle_credit_protocol": args.battle_credit_protocol,
+        "cross_protocol_sequential_update": cross_protocol_update,
+        "scenario_selection_protocol": args.scenario_selection_protocol,
+        "selected_questions": {
+            "train": args.expected_selected_train_questions,
+            "development": args.expected_selected_development_questions,
+        },
+        "usable_questions": {
+            "train": len(training),
+            "development": len(development),
+        },
+        "censored_questions": {
+            "train": args.expected_selected_train_questions - len(training),
+            "development": (
+                args.expected_selected_development_questions - len(development)
+            ),
+        },
+        "candidate_trials": args.expected_candidate_trials,
+        "measured_trials": dataset.measured_trials,
+        "invalid_trials": dataset.invalid_trials,
         "updated_model_file_sha256": hashlib.sha256(model_payload).hexdigest(),
         "updated_model_canonical_sha256": (
             canonical_party_development_outcome_model_sha256(cycle.update.model)
+        ),
+        "updated_outcome_training_examples": (
+            cycle.update.model.outcome_training_examples
         ),
         "model_artifact": writer.summary.public_dict(),
         "learning": learning,

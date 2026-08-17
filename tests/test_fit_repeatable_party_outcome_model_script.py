@@ -73,6 +73,46 @@ def _pilot_artifact(root: Path) -> tuple[Path, str]:
     return artifact, hashlib.sha256(manifest_payload).hexdigest()
 
 
+def _partial_pilot_artifact(root: Path) -> tuple[Path, str]:
+    artifact = root / "repeatable-party-development-partial-test"
+    artifact.mkdir(parents=True)
+    streams = {
+        "evaluation.jsonl": _canonical_line({"record_type": "evaluation"}),
+        "failures.jsonl": _canonical_line({"ordinal": 3}),
+        "outcomes.jsonl": b"".join(
+            _canonical_line({"ordinal": ordinal}) for ordinal in range(1, 3)
+        ),
+        "plan.jsonl": _canonical_line({"record_type": "plan"}),
+    }
+    files = []
+    for filename, payload in sorted(streams.items()):
+        (artifact / filename).write_bytes(payload)
+        files.append(
+            {
+                "bytes": len(payload),
+                "filename": filename,
+                "records": 2 if filename == "outcomes.jsonl" else 1,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        )
+    manifest = {
+        "artifact_id": artifact.name,
+        "files": files,
+        "format": "pokemon-red-completion-private-artifact-jsonl",
+        "kind": "repeatable_party_outcome_development",
+        "schema_version": 1,
+        "status": "complete",
+        "totals": {
+            "bytes": sum(len(payload) for payload in streams.values()),
+            "files": 4,
+            "records": 5,
+        },
+    }
+    manifest_payload = _canonical_line(manifest)
+    (artifact / "manifest.json").write_bytes(manifest_payload)
+    return artifact, hashlib.sha256(manifest_payload).hexdigest()
+
+
 def _assignment() -> PartyDevelopmentOutcomeTrialAssignment:
     return PartyDevelopmentOutcomeTrialAssignment.build(
         ordinal=1,
@@ -117,6 +157,29 @@ def _outcome_record(
     }
 
 
+def _failure_record(
+    assignment: PartyDevelopmentOutcomeTrialAssignment,
+) -> dict[str, object]:
+    message = "bounded recovery failed without a target"
+    evidence = {
+        "schema": "pokemon.red.repeatable-party-development-trial-failure.v1",
+        "status": "invalid",
+        "failure_type": "RuntimeError",
+        "failure_message": message,
+        "failure_message_sha256": hashlib.sha256(message.encode("utf-8")).hexdigest(),
+        "retryable_development_evidence": True,
+        "teacher_queries": 0,
+        "model_predictions": 0,
+        "model_updates": 0,
+        "private_path_fields": 0,
+    }
+    return {
+        "record_type": "repeatable_party_candidate_failure",
+        "assignment": assignment.private_dict(),
+        "evidence": evidence,
+    }
+
+
 def test_pilot_reader_authenticates_every_declared_stream(tmp_path: Path) -> None:
     artifact, manifest_sha256 = _pilot_artifact(tmp_path)
 
@@ -139,6 +202,32 @@ def test_pilot_reader_rejects_stream_tampering_and_extra_files(tmp_path: Path) -
         SCRIPT["_open_authenticated_pilot"](
             artifact,
             expected_manifest_sha256=manifest_sha256,
+        )
+
+
+def test_partial_pilot_reader_authenticates_censored_failure_stream(
+    tmp_path: Path,
+) -> None:
+    artifact, manifest_sha256 = _partial_pilot_artifact(tmp_path)
+
+    pilot = SCRIPT["_open_authenticated_pilot"](
+        artifact,
+        expected_manifest_sha256=manifest_sha256,
+        expected_measured_trials=2,
+        expected_invalid_trials=1,
+    )
+
+    assert len(pilot.outcome_records) == 2
+    assert len(pilot.failure_records) == 1
+
+    with (artifact / "failures.jsonl").open("ab") as output:
+        output.write(b" ")
+    with pytest.raises(RuntimeError, match="failed authentication"):
+        SCRIPT["_open_authenticated_pilot"](
+            artifact,
+            expected_manifest_sha256=manifest_sha256,
+            expected_measured_trials=2,
+            expected_invalid_trials=1,
         )
 
     artifact, manifest_sha256 = _pilot_artifact(tmp_path / "second")
@@ -171,6 +260,30 @@ def test_candidate_outcome_binds_assignment_evidence_and_protected_counters() ->
     changed_outcome["evidence_sha256"] = canonical_sha256(evidence)
     with pytest.raises(RuntimeError, match="evidence binding differs"):
         SCRIPT["_candidate_outcome"](
+            changed,
+            expected_assignment=assignment,
+        )
+
+
+def test_candidate_failure_is_authenticated_but_never_becomes_a_target() -> None:
+    assignment = _assignment()
+    record = _failure_record(assignment)
+
+    outcome = SCRIPT["_candidate_failure"](
+        record,
+        expected_assignment=assignment,
+    )
+
+    assert not outcome.measured
+    assert outcome.status.value == "invalid"
+    assert outcome.criterion_values == ()
+
+    changed = _failure_record(assignment)
+    evidence = changed["evidence"]
+    assert isinstance(evidence, dict)
+    evidence["model_predictions"] = 1
+    with pytest.raises(RuntimeError, match="failure evidence binding differs"):
+        SCRIPT["_candidate_failure"](
             changed,
             expected_assignment=assignment,
         )
