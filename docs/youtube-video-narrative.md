@@ -1,5 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: the optimizer never gets a turn
+
+Open on the completed rail: **PREFLIGHT PASSED → REPRESENTATION AUDIT**. Stop it there with a red
+card: **FAILED BEFORE FIT**. Put the exact source strip below it: **19f53e1 · CI 32070285183/1
+GREEN · GATE 7a148a5d… CONSUMED**.
+
+Split the failure into two panels:
+
+- **28 CONFLICTING PAIRWISE-ROW COMPARISONS**
+- **VENUE COST VARIANCE: 0/3 GOAL SLICES**
+
+Do not show an accuracy plot. Instead display **MODEL NULL · EVALUATION NULL · FITS ADDED 0 ·
+DEVELOPMENT OUTCOMES DECODED 0 · AUTHORITY 0 · CRYSTAL 0**. Narration: **“The model never failed
+the test. Its representation failed before there was a model to test.”** Explain that 28 counts
+conflicting row-pair relationships, not necessarily twenty-eight unique menus.
+
+Show one short diagnostic rail: **EXACT VS NEAR COLLISIONS → RAW VS PROJECTED CONTRASTS → SPECTRA
++ ZERO COLUMNS + PER-MENU RANGES → RETIRE V2**. Put a lock over every tempting detour:
+**NO REFIT · NO TOLERANCE TUNING · NO DEVELOPMENT · NO V3 ON THE SAME MENUS**.
+
+Then pull back from the spreadsheet to the game map. The next card is **ONE FRESH RED GOAL-MANAGER
+EPISODE · THREE GENUINE CHOICES · ONE LIVING-POKÉDEX GOAL · ONE CHANGED-STATE REPLAN**. Narration:
+**“The postmortem gets one scene. Then the project returns to whether the agent can make useful
+decisions in a game.”**
+
 ## August 17 scene: the missing squares on the board
 
 Open on the new source card: **fa96c48 · CI 32069542599/1 GREEN · PREFLIGHT PASSED**. Add a clean

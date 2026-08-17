@@ -5,20 +5,16 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The active decision scorecard is **TRAIN OUTCOME QUESTIONS 30/30 · DEVELOPMENT OUTCOME
-> QUESTIONS 15/15 · MODEL FITS 3/4 · UNSEEN COMPARISONS 3/3 · AUTHORITY 0 · TRANSFER 0**.
-> Published head `fa96c48` and CI run `32069542599` attempt 1 are green. The label-free preflight
-> authenticated 108 terminals, reconstructed 22 train questions and 12 development headers,
-> decoded zero development outcomes, fit zero models, and left gate identity `7a148a5d…` unclaimed.
-> Implementation, CI, and preflight do not increment any counter. Exactly one frozen train-only
-> screen is next. See the
-> [path-free preflight receipt](evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json).
+> The cumulative learning board is **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS
+> 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Source `19f53e1` and CI
+> run `32070285183` attempt 1 are green. The one-shot screen failed before fit with **28 conflicting
+> pairwise-row comparisons · VENUE COST VARIANCE 0/3 GOAL SLICES · EVALUATION NULL · MODEL NULL ·
+> GATE CONSUMED**. It decoded zero development outcomes and advances no counter. See the
+> [path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
 >
-> The screen's support is **13 TRAINEE:BALANCE · 3 VENUE:COLLECTION · 3 VENUE:EVOLUTION · 3
-> VENUE:ROLE COVERAGE**. Display **ACTION/GOAL CONFOUNDED · NON-BALANCE TRAINEE CELLS ABSENT ·
-> ARCHITECTURE SCREEN ONLY**. Failure closes the design. Pass permits only a frozen 12-question
-> missing-cell Red design; it does not execute development, grant authority, open Crystal, or
-> authorize another architecture sweep.
+> Display the next rail as **SAME-EVIDENCE COLLISION POSTMORTEM · NO OPTIMIZER · NO DEVELOPMENT ·
+> RETIRE V2 → DESIGN ONE FRESH RED GOAL-MANAGER COMPOSITION EPISODE**. Do not show the old 3/4 fit
+> target, the conditional 12-question slice, a v2 rescue, authority, or Crystal access.
 >
 > The latest measured third fit trained on
 > 22 scale-train questions and reduced training loss **1.667 → 0.594**, but the base and update

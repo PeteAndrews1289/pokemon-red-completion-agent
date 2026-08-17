@@ -18,6 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Train-only v2 failed before fit; bounded collision postmortem next — 2026-08-17
+
+Published source `19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c` passed CI run `32070285183`,
+attempt 1, and consumed semantic gate identity `7a148a5d…` exactly once. The representation audit
+found 28 conflicting pairwise-row comparisons. Its action ranks cleared the weak minimum screen,
+but venue cost had no within-menu variation in collection, evolution, or role coverage. The gate
+stopped before optimization: model and evaluation are null, model fits are zero, development
+outcome decoding is zero, and authority, Crystal, sealed Red, replay, controller, and teacher all
+remain zero. See the
+[path-free result](docs/evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+
+Retire v2. Do not retry it, tune its collision tolerance, delete the cost term and rerun, open
+development, fit v3 on the same menus, or freeze the conditional 12-question slice. The only
+permitted same-evidence work is one deterministic no-optimizer postmortem: exact versus near
+collision clusters, unique rows/menus/roots and targets, raw-versus-projected distinctions,
+singular spectra, zero columns, and per-menu quality/safety/cost ranges.
+
+After that bounded report, redirect to the design—not execution—of one fresh repeatable Red
+goal-manager micro-episode with three genuine heterogeneous choices, one acquisition/evolution/
+storage goal, an independently verified collection-ledger update, and a changed-state replan.
+That is the next north-star-facing experiment. Counters remain **train 30 · development 15 · fits
+3 · comparisons 3 · authority 0 · transfer 0**.
+
 ## Train-only v2 preflight passed; one frozen measurement next — 2026-08-17
 
 Published head `fa96c48e69c564e3d422bc6404b0f4850c869919` passed CI run `32069542599`,

@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Executed the frozen train-only v2 screen exactly once from source `19f53e1` under green CI run
+  `32070285183` attempt 1. Its representation audit found 28 conflicting pairwise-row comparisons
+  and no within-menu venue-cost variation in any observed goal slice, then stopped before fitting.
+  Evaluation and model identity are null; development decoding, new fits, comparisons, authority,
+  transfer, controller actions, teacher calls, sealed Red, Crystal, and replay all remain zero.
+  Consumed gate identity `7a148a5d…`, retired v2 and its conditional missing-cell slice, and
+  reoriented to one no-optimizer collision postmortem followed by a fresh Red goal-manager episode
+  design. Cumulative counters remain train 30, development 15, fits 3, comparisons 3, authority 0,
+  and transfer 0.
 - Passed the official label-free preflight for the train-only v2 architecture screen from published
   source `fa96c48` under green CI run `32069542599` attempt 1. It authenticated 108 historical
   terminal records, reconstructed exactly 22 train questions and 12 development question headers,

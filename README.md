@@ -5,29 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the train-only v2 screen passed its label-free
-> preflight and remains unclaimed.** Source `fa96c48` passed GitHub CI run `32069542599`, attempt
-> 1. Its preflight authenticated 108 historical terminal records, reconstructed exactly 22 train
-> questions and 12 development question headers, decoded zero development outcomes, fit zero
-> models, and left the semantic one-shot identity available. The learner and runner use the
-> historical **zero-outcome** prior, separate
-> trainee/venue residual heads, title-neutral feature groups, ridge 4.0, menu-normalized pairwise
-> targets, and deterministic leave-one-root-out evaluation. Preflight, implementation, and CI
-> added no model fit, outcome, authority, or transfer result. See the
-> [path-free preflight receipt](docs/evidence/protocol-consistent-party-train-gate-v2-preflight-2026-08-17.json).
+> **Current product focus (August 17, 2026): the train-only v2 representation failed before fit
+> and is retired.** Source `19f53e1` passed GitHub CI run `32070285183`, attempt 1. The one-shot
+> screen found **28 conflicting pairwise-row comparisons** and no within-menu venue-cost variation
+> in the collection, evolution, or role-coverage slices. It stopped before optimization:
+> evaluation and model identity are null, development outcomes decoded are zero, model fits added
+> are zero, and gate identity `7a148a5d…` is consumed. See the
+> [path-free result](docs/evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
 >
-> This is a screening falsifier, not evidence that the agent can play a game. Its 22-question grid
-> contains **13 trainee:balance** questions and **3 venue questions for each of collection,
-> evolution, and role coverage**. Action and goal are therefore confounded, and trainee choices for
-> the three living-Pokédex goals are absent. Failure closes this design and triggers a same-evidence
-> collision audit. Pass permits only freezing a fresh 12-question Red design with two independent
-> roots in each trainee/venue × collection/evolution/role cell. It does not permit that slice to
-> execute, grant authority, open Crystal, or start another architecture sweep.
+> This negative result does not show that party learning is impossible. It shows that this frozen
+> projection maps some differently preferred comparisons to indistinguishable vectors and cannot
+> learn venue cost from these menus. The conditional 12-question slice, any v2 rescue, and any
+> same-evidence fit/tolerance/feature sweep are closed.
 >
-> Next: execute the now-qualified frozen screen exactly once, then reorient immediately after the
-> measured result. Do not copy this gate's unusually
-> strict one-shot machinery into routine development. The active scorecard is **train outcomes
-> 30/30 · development outcomes 15/15 · fits 3/4 · comparisons 3/3 · authority 0 · transfer 0**.
+> Next: one bounded no-optimizer postmortem will collapse the 28 relationships into collision
+> classes and locate the first layer where distinctions disappear: raw observation, frozen
+> projection, or numerical tolerance. Then the project redirects to the design of one fresh,
+> repeatable Red goal-manager micro-episode with three genuine heterogeneous choices, including a
+> living-Pokédex goal. The cumulative board remains **train outcomes 30 · development outcomes 15
+> · fits 3 · comparisons 3 · authority 0 · transfer 0**.
 >
 > **Previous measured result (August 17, 2026): the recovered-evidence fit failed; redesign the
 > learner without reusing development or collecting more Red outcomes.** The third fit trained

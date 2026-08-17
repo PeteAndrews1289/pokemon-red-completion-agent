@@ -1,5 +1,35 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the representation failed before the optimizer ran
+
+Published source `19f53e1` passed CI run `32070285183`, attempt 1, and consumed the frozen v2 gate
+exactly once. The first computation after train-only decoding was the preregistered representation
+audit. It found 28 conflicting pairwise-row comparisons: projected contrasts that canonicalized to
+the same direction while their measured preferences disagreed. It also found no within-menu venue
+cost variation in collection, evolution, or role coverage. The gate stopped there.
+
+That ordering matters. No residual weights were fit, no leave-one-root-out metric was computed,
+and no model identity exists. Development outcome decoding stayed at zero. Authority, transfer,
+controller, teacher, sealed Red, Crystal, and replay stayed at zero. The result is a falsification
+of one frozen representation, not a performance result and not evidence that party learning itself
+is impossible. The cumulative counters remain 30 train questions, 15 development questions, three
+fits, three comparisons, and zero authority or transfer.
+
+The next analysis is deliberately smaller than another model. It will group the twenty-eight
+relationships into exact and tolerance-near collision classes, count the affected rows, menus,
+roots, targets and menu weight, and compare the allowed raw semantic contrasts with the frozen
+projection. Singular spectra, zero columns and per-menu ranges will show where distinctions first
+disappear. There will be no optimizer, prediction, feature ranking, threshold adjustment, or
+development access.
+
+V2 is retired regardless of the diagnosis. The conditional twelve-question party slice is closed.
+After the bounded report, the project redirects to a fresh repeatable Red goal-manager composition
+episode with three genuine heterogeneous choices, including one living-Pokédex goal and a
+changed-state replan. That restores the final product—not the offline party score—to the center of
+the roadmap. The
+[path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json)
+records the exact negative boundary.
+
 ## August 17: the architecture screen passed preflight—and its blind spot is explicit
 
 Published head `fa96c48` passed CI run `32069542599`, attempt 1. The official label-free preflight

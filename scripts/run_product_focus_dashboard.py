@@ -56,23 +56,37 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     authority_promotions = _count(progress, "authority_promotions")
     transfer_results = _count(progress, "transfer_results")
     outputs = focus_scorecard(state)
-    output_event = " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
-    outcome_question_total = sum(
-        minimum
-        for label, _, minimum in outputs
-        if label.startswith("Outcome Question")
+    output_event = (
+        " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
+        if outputs
+        else (
+            f"Cumulative learning · train outcomes {train_outcomes} · development outcomes "
+            f"{development_outcomes} · fits {fits} · comparisons {unseen}"
+        )
+    )
+    outcome_question_total = max(
+        train_outcomes + development_outcomes,
+        sum(
+            minimum
+            for label, _, minimum in outputs
+            if label.startswith("Outcome Question")
+        ),
     )
     model_fit_total = max(
-        fits,
-        next(minimum for label, _, minimum in outputs if label.startswith("Model Fit")),
+        (
+            fits,
+            *(minimum for label, _, minimum in outputs if label.startswith("Model Fit")),
+        )
     )
     unseen_comparison_total = max(
-        unseen,
-        next(
+        (
+            unseen,
+            *(
             minimum
             for label, _, minimum in outputs
             if label.startswith("Unseen Comparison")
-        ),
+            ),
+        )
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
@@ -85,22 +99,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The frozen v2 architecture screen is published, CI-green, and preflight-qualified. "
-            "One train-only screen is next; authority and transfer remain closed."
+            "The frozen v2 representation failed before fit: 28 contradictory row pairs, venue "
+            "cost variance absent in all three goal slices, evaluation null, and gate consumed."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Protocol-consistent trainee/venue ranker · frozen v2 screen",
-            choice="Preflight passed; one-shot identity unused; no new fit or authority",
+            candidate="Protocol-consistent trainee/venue ranker v2 · retired",
+            choice="Representation rejected pre-fit; same-evidence collision audit only",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="blocked",
             zero_shot_completed=train_outcomes + development_outcomes,
             zero_shot_total=outcome_question_total,
             adaptation_completed=fits,

@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-17 train-only v2 preflight — highest active checkpoint:** Codex published exact head
+> **2026-08-17 v2 representation failure — highest active checkpoint:** Exact source `19f53e1`
+> passed CI run `32070285183` attempt 1 and consumed gate identity `7a148a5d…`. The screen stopped
+> before fit after finding 28 conflicting pairwise-row comparisons and no venue-cost variation in
+> any observed goal slice. Model/evaluation are null; development decoding, controller, teacher,
+> authority, Crystal, sealed Red, and replay are zero. Counters remain train 30 · development 15 ·
+> fits 3 · comparisons 3 · authority 0 · transfer 0. See the
+> [path-free result](docs/evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+>
+> Codex owns one bounded no-optimizer collision postmortem and then the design of one fresh Red
+> goal-manager composition episode. Claude audits collision semantics and the no-refit boundary.
+> Antigravity's next useful role is a bounded architecture/transfer challenge after the fresh Red
+> episode has a concrete design. V2, its conditional missing-cell slice, same-evidence fitting,
+> development access, party authority, and Crystal are closed.
+
+> **2026-08-17 train-only v2 preflight — historical checkpoint:** Codex published exact head
 > `fa96c48`; CI run `32069542599` attempt 1 is green. The label-free preflight authenticated 108
 > terminal records and reconstructed 22 train questions plus 12 development headers while decoding
 > zero development outcomes, fitting zero models, and leaving the one-shot identity unused.

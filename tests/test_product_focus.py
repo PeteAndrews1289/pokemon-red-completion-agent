@@ -48,15 +48,14 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "repeatable-party-outcome-learning-v1"
-    assert len(state.retired_lanes) == 1
-    assert focus_progress_fraction(state) == 0.9375
-    assert focus_scorecard(state) == (
-        ("Outcome Question · train", 30, 30),
-        ("Outcome Question · development", 15, 15),
-        ("Model Fit · train", 3, 4),
-        ("Unseen Comparison · development", 3, 3),
-    )
+    assert state.active_lane["id"] == "protocol-party-representation-collision-audit-v1"
+    assert state.active_lane["kind"] == "maintenance"
+    assert len(state.retired_lanes) == 2
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == ()
+    assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
+    assert state.progress["model_fits"] == 3
+    assert state.progress["unseen_comparisons"] == 3
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -65,7 +64,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows[-1] == "Unseen Comparison · development: 3/3"
+    assert rows == ()
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -102,10 +101,11 @@ def test_focus_requires_exactly_one_active_lane() -> None:
 def test_learning_lane_requires_outcomes_fit_and_unseen_evaluation() -> None:
     document = _document()
     lane = _active(document)
-    outputs = lane["measurable_outputs"]
-    assert isinstance(outputs, list)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
     lane["measurable_outputs"] = [
-        item for item in outputs if isinstance(item, dict) and item.get("kind") != "model_fit"
+        {"kind": "outcome_question", "minimum": 1, "partition": "train"},
+        {"kind": "unseen_comparison", "minimum": 1, "partition": "development"},
     ]
 
     with pytest.raises(ProductFocusError, match="outcomes, a model fit and unseen"):
@@ -115,8 +115,7 @@ def test_learning_lane_requires_outcomes_fit_and_unseen_evaluation() -> None:
 def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
     document = _document()
     lane = _active(document)
-    lane["kind"] = "maintenance"
-    lane["measurable_outputs"] = []
+    lane["maintenance_unblocks"] = None
 
     with pytest.raises(ProductFocusError, match="must name the learning lane"):
         validate_product_focus_document(document)
@@ -228,14 +227,15 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 0.9375
+    assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 3, "total": 4}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Preflight passed; one-shot identity unused; no new fit or authority" in encoded
-    assert "One train-only screen is next" in encoded
+    assert "Representation rejected pre-fit; same-evidence collision audit only" in encoded
+    assert "28 contradictory row pairs" in encoded
+    assert "gate consumed" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

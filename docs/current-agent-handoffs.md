@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: measure the preflight-qualified v2 screen once
+## Current override: diagnose v2 once, then design a fresh goal-manager episode
+
+Source `19f53e1` passed CI run `32070285183`, attempt 1. The consumed v2 gate stopped before fit:
+28 conflicting pairwise-row comparisons, venue-cost variation absent in all three observed goal
+slices, null model and evaluation, zero development decoding, and zero authority/transfer delta.
+The [path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json)
+is the current evidence boundary.
+
+Codex owns one no-optimizer collision postmortem and the subsequent design of one fresh repeatable
+Red goal-manager composition episode. Claude's role is read-only semantic audit of exact versus
+near collisions, raw-versus-projected loss, and the no-refit boundary. Antigravity remains deferred
+until the fresh episode design creates a concrete architecture or transfer question. No agent may
+rescue v2, fit on these menus again, open development, freeze the old missing-cell slice, grant
+party authority, or execute Crystal.
+
+## Previous override: measure the preflight-qualified v2 screen once
 
 Head `fa96c48` publishes the frozen learner/runner and passed CI run `32069542599`, attempt 1. The
 official label-free preflight authenticated 108 terminal records, reconstructed exactly 22 train

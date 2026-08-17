@@ -1,6 +1,30 @@
 # Current audit — 2026-08-17
 
-## Reorientation result: preflight passed; GO for one screen, no broader claim
+## Reorientation result: v2 falsified before fit; redirect after one diagnostic
+
+Exact source `19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c` passed CI run `32070285183`,
+attempt 1, and consumed gate identity `7a148a5d…`. The screen's representation audit found 28
+conflicting canonical row-pair comparisons and no within-menu venue-cost variation for collection,
+evolution, or role coverage. The action ranks and observed-cell nonzero checks passed, but those
+are weak support tests rather than identifiability evidence. Evaluation and model identity are
+null because the optimizer never ran.
+
+This is a representation-sufficiency failure, not model-performance evidence and not proof that
+party learning is impossible. Development outcomes decoded, fits, comparisons, authority,
+transfer, game actions, teacher calls, Crystal, sealed Red, and full replay all remain zero for
+this screen. The cumulative board stays **train 30 · development 15 · fits 3 · comparisons 3 ·
+authority 0 · transfer 0**. See the
+[path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+
+The only justified postmortem is deterministic and no-optimizer: collapse the 28 relationships
+into exact and tolerance-near collision classes, count affected rows/menus/roots/targets, compare
+allowed raw semantic contrasts against the projection, and report spectra, zero columns, and
+per-menu interaction ranges. It may not fit, tune, open development, or propose a same-evidence
+v3 score. Afterward, retire the party design and specify one fresh repeatable Red goal-manager
+composition episode with three genuine choices, including a living-Pokédex goal. That is closer to
+the transferable game-playing mission than another party architecture sweep.
+
+## Previous reorientation: preflight passed; GO for one screen, no broader claim
 
 Published head `fa96c48e69c564e3d422bc6404b0f4850c869919` passed GitHub CI run
 `32069542599`, attempt 1. The v2 protocol learner and train-only runner are frozen at

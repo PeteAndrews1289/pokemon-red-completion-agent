@@ -8,7 +8,35 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: one frozen train-only screen, then reorient
+## Current checkpoint: explain the representation failure once, then redirect
+
+Exact source `19f53e1` passed CI run `32070285183`, attempt 1, and ran the frozen v2 screen once.
+The representation audit failed before fit: **28 conflicting pairwise-row comparisons**, plus no
+within-menu venue-cost variation in any of the three observed venue-goal slices. The action ranks
+cleared their weak minimum checks, but that does not identify a 35-coefficient head. Evaluation and
+model identity are null; no fit, comparison, outcome, authority, transfer, controller, teacher,
+sealed Red, Crystal, or replay counter advanced. Gate identity `7a148a5d…` is consumed. See the
+[path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+
+The bounded sequence is now:
+
+1. Run one train-only, no-optimizer postmortem on the same 22 menus. Group exact and tolerance-near
+   collision classes by action and goal; report rows, menus, roots, target histograms and affected
+   menu weight.
+2. Locate the first information loss: identical raw semantic contrasts indicate observation
+   aliasing or unstable outcomes; distinct raw contrasts collapsed by the projection indicate a
+   compression defect; tolerance-only matches indicate scaling.
+3. Report full-data and leave-one-root-out spectra, normalized ranks, zero columns, and per-menu
+   quality/safety/cost ranges. Do not fit, predict, tune, rank features, or open development.
+4. Retire v2 regardless. Do not run v3 on these menus or freeze the conditional missing-cell slice.
+5. Reorient to the design of one fresh repeatable Red goal-manager composition episode with three
+   genuine heterogeneous choices, including one acquisition/evolution/storage goal and one
+   changed-state replan. Do not execute it in this maintenance session.
+
+If no single defect emerges within one session, close the party-utility lane. The project moves
+toward fresh hierarchical gameplay evidence, not another offline architecture sweep.
+
+## Previous checkpoint: one frozen train-only screen, then reorient
 
 The protocol-consistent v2 learner and train-only runner are published at exact head `fa96c48` and
 green under CI run `32069542599`, attempt 1. The official label-free preflight authenticated 108

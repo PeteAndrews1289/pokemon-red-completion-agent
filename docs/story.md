@@ -7,7 +7,33 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the next result is small enough to say what it cannot prove
+## Current checkpoint: the model stopped before it could fool us
+
+The frozen screen ran once and rejected its own language before fitting a model. Twenty-eight
+pairs of comparisons looked the same to the projected representation but carried different
+measured preferences. Every venue-goal slice also lacked the within-menu cost contrast that the
+new cost interaction expected to learn. The rank checks passed; the meaning checks did not.
+
+So there is no accuracy chart. There is no leave-one-root-out result and no weaker candidate to
+promote. The optimizer never ran, the model identity is null, development answers stayed closed,
+and the one-shot identity is consumed. The cumulative board remains **30 TRAIN · 15 DEVELOPMENT ·
+3 FITS · 3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**.
+
+That failure is useful only if it stays bounded. One postmortem will collapse the twenty-eight
+relationships into unique collision classes and ask where information disappeared: was the raw
+observation already identical, did the frozen projection compress distinct states together, or
+did numerical scaling create a near-match? It will not fit another ranker or turn over another
+card.
+
+Then the camera moves back to the game. The next experiment will be one fresh, repeatable Red
+goal-manager episode with three genuine decisions, including a collection, evolution, or storage
+goal and a changed-state replan. That tests whether the existing hierarchy composes into useful
+play—closer to a transferable living-Pokédex agent than another round of offline party weights.
+See the [path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+
+---
+
+## Previous checkpoint: the next result was small enough to say what it could not prove
 
 The replacement model is no longer a sketch. It is published, tested on macOS and Linux, and has
 passed its read-only preflight. That preflight authenticated 108 historical terminal records and

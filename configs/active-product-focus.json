@@ -8,57 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Learn title-neutral trainee and venue utility from completion, party, resource, escort, feasibility, and cost state; fight, rotate, heal, and stop remain fixed-policy responsibilities.",
-      "cheapest_falsifier": "Using only the 22 complete scale-train menus and the historical zero-outcome prior, run the already-frozen v2 residual ranker once and require deterministic leave-one-root-out gains on every frozen metric without opening or reusing development labels.",
-      "id": "repeatable-party-outcome-learning-v1",
-      "kind": "learning",
+      "capability": "Diagnose where the frozen title-neutral party representation loses outcome-relevant distinctions before selecting a fresh product-aligned learning experiment.",
+      "cheapest_falsifier": "Using only the consumed 22-question train evidence, group exact and tolerance-near pairwise collisions by action and goal, classify whether distinctions disappear in raw semantics or the frozen projection, and report spectra, zero columns, per-menu ranges, roots and targets without fitting or tuning.",
+      "id": "protocol-party-representation-collision-audit-v1",
+      "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "The frozen v2 gate grants no authority from implementation, CI, preflight, representation checks, or a train-only pass. Learned party-development shadow and live authority both remain zero.",
-        "blocker": "The label-free preflight passed and the one-shot identity remains unused, but the redesigned learner still has no measured result. Its 22-question support grid perfectly confounds action with goal: 13 trainee questions are balance, while three collection, three evolution, and three role-coverage questions are venue choices. Trainee collection, evolution, and role-coverage cells are absent.",
-        "decision": "Execute the preflight-qualified v2 gate exactly once as a screening falsifier, not independent-generalization evidence. Failure closes the design and permits only a same-evidence collision audit. Pass permits freezing a fresh twelve-question Red design with two roots in each trainee/venue by collection/evolution/role cell; it does not permit execution, authority, Crystal, or another architecture sweep. The one-shot machinery is an anti-adaptive freeze, not routine development ceremony.",
+        "authority_delta": "The consumed v2 screen grants no authority. Party-development shadow and live authority remain zero; goal-manager authority does not expand from this result.",
+        "blocker": "The one-shot v2 representation failed before fit: 28 conflicting row-pair comparisons and no within-menu venue-cost variation in collection, evolution, or role coverage. Evaluation and model identity are null, the gate is consumed, and the proposed missing-cell slice is closed.",
+        "decision": "Retire v2. Run one bounded no-optimizer postmortem on the same train evidence to distinguish raw observation aliasing, projection compression, and numerical near-collisions. Do not rescue v2 or fit v3 on these menus. Then redirect to one fresh repeatable Red goal-manager micro-episode with three genuine heterogeneous choices, including a living-Pokedex goal, before designing any open Crystal transfer probe.",
         "evidence": {
           "kind": "unseen_comparison",
           "path": "docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json",
           "sha256": "88e371bde589f7bc50521f8cafd0f2b7c7b40b23207810e944a089480d0cd5de"
         },
-        "learning_output": "No new measured learning output. Source fa96c48e69c564e3d422bc6404b0f4850c869919 passed CI run 32069542599 attempt 1. A tracked label-free preflight authenticated 108 terminals and 22 train questions, reconstructed twelve development question headers, decoded no development outcome, fit no model, and left the one-shot identity unused. CI and preflight advance no counter; the latest measured result remains the rejected shared update.",
-        "next_falsifier": "Run exactly one deterministic leave-one-root-out train-only evaluation of the preflight-qualified frozen v2 design. Pass only if accuracy rises, cross-entropy falls, mean winner probability rises, paired wins exceed losses, and every reported action and goal slice is nonregressing; interpret those slices under the declared action-goal confounding.",
-        "next_session_goal": "Execute the exact frozen train-only gate once, record the measured result, and reorient immediately before any fresh data, development execution, integration, or transfer work.",
-        "product_alignment": "Trainee and venue utility are reusable subskills for party balance, evolution, living retention, and efficient collection, but this gate is only a cheap screen of one representation. It does not test capture, fight/rotate/heal/stop, navigation, recovery, storage, trades, puzzles, version coordination, long-horizon planning, or cross-title transfer.",
-        "session_id": "2026-08-17-protocol-train-gate-preflight-passed-v1",
+        "learning_output": "The consumed screen is a negative representation result but adds no counted output. Source 19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c passed CI run 32070285183 attempt 1; the audit found 28 contradictory row pairs and absent venue-cost variance, then stopped with zero fits, null evaluation, zero development decoding, and zero authority. Counters remain train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0.",
+        "next_falsifier": "Run one deterministic train-only no-optimizer postmortem tied to gate 7a148a5d: report exact versus near collision clusters, affected rows, menus and roots, target histograms, raw-versus-projected distinctions, singular spectra, zero columns and per-menu quality, safety and cost ranges.",
+        "next_session_goal": "Complete and publish the bounded collision postmortem, close v2 permanently, and freeze the minimal design for one fresh repeatable Red goal-manager micro-episode; do not execute the episode in this maintenance session.",
+        "product_alignment": "The postmortem prevents an aliased party scorer from entering a cross-game controller. The following fresh goal-manager episode will exercise multi-goal planning and one acquisition, evolution, or storage choice, which is closer to transferable story and living-Pokedex completion than another offline party sweep.",
+        "session_id": "2026-08-17-protocol-party-collision-audit-v1",
         "status": "active",
-        "stop_condition": "If representation checks fail, record no fit and audit collisions on the same evidence. If leave-one-root-out evidence is mixed or worse, reject this design. A pass still grants no authority and only permits freezing the fresh missing-cell slice design; do not collect to satisfy quotas, reuse consumed development, harden routes, open sealed Red or Crystal, or run a full replay.",
-        "transfer_result": "Not run. Crystal remains closed until this screen passes, a separately frozen fresh Red action-by-goal slice passes, and the same title-neutral contract can compare Red initialization with zero initialization on unseen Crystal development contexts."
+        "stop_condition": "Stop after one diagnostic report. Do not fit, tune, rank replacement features, reuse development, collect new outcomes, retry the consumed identity, freeze the old missing-cell slice, patch a route, open Crystal or sealed Red, or run a full replay. If no single compression defect emerges, close the party-utility lane rather than sweep architectures.",
+        "transfer_result": "Not run. Crystal remains closed. A later open transfer design requires a successful fresh Red goal-manager composition episode and a title-neutral contract that can compare Red initialization with zero initialization."
       },
       "learned_authority": {
-        "current": "One eight-question outcome-trained baseline and two rejected sequential updates exist. None has shadow or live authority; fight, rotate, heal, and stop remain fixed policy.",
-        "target": "Pass the train-only screening gate, then pass a separately frozen twelve-question Red development slice with two independent roots in each trainee/venue by collection/evolution/role cell before any bounded model-controlled party integration or Crystal probe."
+        "current": "The v2 party representation is rejected before fit; all party candidates remain without shadow or live authority. Existing goal-manager authority does not expand from this result.",
+        "target": "After the bounded diagnostic, pass one fresh repeatable Red goal-manager composition episode with three genuine heterogeneous choices, including one acquisition, evolution, or storage goal, before designing an open Crystal transfer probe."
       },
-      "maintenance_unblocks": null,
-      "measurable_outputs": [
-        {
-          "kind": "outcome_question",
-          "minimum": 30,
-          "partition": "train"
-        },
-        {
-          "kind": "outcome_question",
-          "minimum": 15,
-          "partition": "development"
-        },
-        {
-          "kind": "model_fit",
-          "minimum": 4,
-          "partition": "train"
-        },
-        {
-          "kind": "unseen_comparison",
-          "minimum": 3,
-          "partition": "development"
-        }
-      ],
-      "name": "Protocol-consistent title-neutral party utility learning",
-      "next_decision": "After one frozen leave-one-root-out train-only screen, either reject the design and audit representation collisions on the same evidence, or freeze only the design of a twelve-question Red action-by-goal development slice that fills the missing trainee cells.",
+      "maintenance_unblocks": "fresh-goal-manager-composition-learning-v1",
+      "measurable_outputs": [],
+      "name": "Bounded party-representation collision postmortem",
+      "next_decision": "Classify the frozen representation failure once, retire v2 permanently, and specify the smallest fresh repeatable Red goal-manager composition episode; do not open Crystal or execute a new party experiment.",
       "progress": {
         "authority_promotions": 0,
         "evidence": [
@@ -101,16 +80,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "The ranker cannot improve every frozen aggregate without regressing a reported action or goal slice; the train set confounds action and goal.",
-        "Consumed development labels are reused for architecture, feature, regularization, or threshold selection.",
-        "Any apparent gain comes from species, map, title, route, teacher, or fixed-walkthrough identity leakage.",
-        "Infrastructure exceeds the maintenance budget without unblocking measured learning, or the one-shot ceremony spreads into routine development."
+        "The postmortem attempts any optimizer, prediction, metric, feature ranking, tolerance tuning, development-label access, new outcome collection, or consumed-identity retry.",
+        "No single raw-observation, projection-compression, or numerical-scaling defect explains the collision clusters within one session.",
+        "Infrastructure exceeds the two-hour maintenance budget instead of producing one path-free diagnostic and a fresh goal-manager episode design."
       ],
       "time_box": {
         "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization."
+      "transfer_test": "After a fresh Red composition episode passes, compare Red-initialized and zero-initialized goal ranking under the same title-neutral contract in an open Crystal development probe."
+    },
+    {
+      "id": "repeatable-party-outcome-learning-v1",
+      "kind": "learning",
+      "name": "Protocol-consistent title-neutral party utility learning",
+      "preserve_evidence": true,
+      "reason": "Its frozen v2 representation produced 28 contradictory row-pair comparisons and lacked venue-cost contrast in every observed goal slice, so the consumed gate stopped before fit and the design is closed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "one-shot-party-outcome-campaign-v1-v2",
