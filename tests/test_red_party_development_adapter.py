@@ -341,8 +341,8 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
         ),
     )
     transition_guards = (
-        lambda _raw, anchor: anchor == 5,
-        lambda _raw, _anchor: False,
+        lambda _raw, anchor, _tileset: anchor == 5,
+        lambda _raw, _anchor, _tileset: False,
     )
     snapshot = build_red_party_development_snapshot(
         _reservation(),
@@ -358,17 +358,15 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
         training_venues=venues,
         transition_guards=transition_guards,
         last_blackout_map=5,
+        current_map_tileset=17,
+        switch_assisted_battle_credit=True,
     )
 
     menu = snapshot.trainee_menu(areas[0])
 
     assert menu is not None
-    assert menu.candidate_available == (True, True, False)
-    assert menu.candidate_unavailable_reasons == (
-        None,
-        None,
-        PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE,
-    )
+    assert menu.candidate_available == (True, True, True)
+    assert menu.candidate_unavailable_reasons == (None, None, None)
     assert all(
         profile.execution_capabilities_by_venue[1].unavailable_reason
         is PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE
@@ -384,8 +382,58 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
             training_venues=venues,
             transition_guards=transition_guards,
             last_blackout_map=5,
+            current_map_tileset=17,
         )
     assert caught.value.code == "packed_party_pp_unavailable"
+
+    one_attack_raw = replace(
+        raw,
+        party_moves=((10, 91, 0, 0), (57, 0, 0, 0), (15, 19, 31, 0)),
+        party_pp=((5, 5, 0, 0), (5, 0, 0, 0), (5, 5, 5, 0)),
+    )
+    one_attack = replace(
+        base_observation,
+        raw=one_attack_raw,
+        party=party_observation_from_raw(one_attack_raw),
+    )
+    capabilities = _execution_capability_matrix(
+        one_attack,
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        areas=areas,
+        training_venues=venues,
+        transition_guards=transition_guards,
+        last_blackout_map=5,
+        current_map_tileset=17,
+        switch_assisted_battle_credit=True,
+    )
+    assert all(
+        row[0].unavailable_reason
+        is PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE
+        for row in capabilities
+    )
+
+    fainted_escort_raw = replace(raw, party_hp=(50, 0, 70))
+    fainted_escort = replace(
+        base_observation,
+        raw=fainted_escort_raw,
+        party=party_observation_from_raw(fainted_escort_raw),
+    )
+    recovery_capabilities = _execution_capability_matrix(
+        fainted_escort,
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        areas=areas,
+        training_venues=venues,
+        transition_guards=transition_guards,
+        last_blackout_map=5,
+        current_map_tileset=17,
+        switch_assisted_battle_credit=True,
+    )
+    assert all(row[0].available for row in recovery_capabilities)
+    assert all(
+        row[1].unavailable_reason
+        is PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE
+        for row in recovery_capabilities
+    )
 
 
 def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
@@ -397,32 +445,45 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
     assert red_vermilion_training_transition_available(
         route,
         int(MapId.CELADON_CITY),
+        0,
     )
     assert red_vermilion_training_transition_available(
         known_center,
         int(MapId.CINNABAR_ISLAND),
+        6,
     )
     assert not red_vermilion_training_transition_available(
         wrong_center_boundary,
         int(MapId.CINNABAR_ISLAND),
+        6,
     )
     assert red_vermilion_training_transition_available(
         field_dig_source,
         int(MapId.SAFFRON_CITY),
+        22,
     )
     assert not red_vermilion_training_transition_available(
         field_dig_source,
         int(MapId.CELADON_CITY),
+        22,
     )
     cave_source = replace(field_dig_source, map_id=MapId.DIGLETTS_CAVE)
-    assert not red_vermilion_training_transition_available(cave_source, 0)
+    assert not red_vermilion_training_transition_available(cave_source, 0, 17)
     assert red_vermilion_training_transition_available(
         cave_source,
         int(MapId.VERMILION_CITY),
+        17,
+    )
+    mart_source = replace(field_dig_source, map_id=MapId.CINNABAR_MART)
+    assert not red_vermilion_training_transition_available(
+        mart_source,
+        int(MapId.CINNABAR_ISLAND),
+        2,
     )
     assert not red_vermilion_training_transition_available(
         replace(route, battle_state=1),
         int(MapId.VERMILION_CITY),
+        0,
     )
 
 

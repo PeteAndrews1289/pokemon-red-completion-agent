@@ -472,6 +472,7 @@ def _permute_bound_menu(
         venue_priors=tuple(menu.venue_priors[index] for index in candidate_order),
         shared_venue=menu.shared_venue,
         shared_venue_prior=menu.shared_venue_prior,
+        venue_prior_feature_mode=menu.venue_prior_feature_mode,
     )
 
 

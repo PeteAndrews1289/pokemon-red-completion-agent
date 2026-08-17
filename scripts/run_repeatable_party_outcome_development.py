@@ -55,13 +55,18 @@ from pokemon_red_completion.goal_manager_protocol import (  # noqa: E402
     load_committed_goal_manager_registry_at_revision,
 )
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING  # noqa: E402
-from pokemon_red_completion.observation import PokemonRedStateReader  # noqa: E402
+from pokemon_red_completion.observation import (  # noqa: E402
+    PokemonRedStateReader,
+    RamAddress,
+)
 from pokemon_red_completion.party import (  # noqa: E402
+    MAX_LEVEL,
     PartyMemberObservation,
     PartyObservation,
 )
 from pokemon_red_completion.party_development_adapter import (  # noqa: E402
     BoundPartyDevelopmentMenu,
+    PartyDevelopmentCapabilityState,
     PartyDevelopmentSemanticSnapshot,
 )
 from pokemon_red_completion.party_development_catalog import (  # noqa: E402
@@ -96,6 +101,7 @@ from pokemon_red_completion.party_development_rank import (  # noqa: E402
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     EvolutionRouteKind,
     PartyDevelopmentGoal,
+    VenuePriorFeatureMode,
 )
 from pokemon_red_completion.party_development_scenarios import (  # noqa: E402
     PartyDevelopmentScenarioAssignment,
@@ -154,6 +160,7 @@ from pokemon_red_completion.scenario_outcomes import (  # noqa: E402
     ScenarioOutcomeExample,
 )
 from pokemon_red_completion.team_training import (  # noqa: E402
+    BalancedTeamPolicy,
     GrindingArea,
     TeamTrainingProgress,
 )
@@ -167,6 +174,73 @@ _TRAINING_VENUES = (
 )
 _HP_PP_BIN_ORDER = ("empty", "low", "middle", "high")
 _DEVELOPMENT_LANE_ID = "repeatable-party-outcome-learning-v1"
+_BATTLE_CREDIT_PROTOCOL_ID = "switch-assisted-fixed-dose-v1"
+
+
+def _battle_credit_protocol(completed_battles: int) -> dict[str, object]:
+    """Describe the title-neutral intervention used by every candidate trial."""
+
+    if type(completed_battles) is not int or completed_battles <= 0:  # noqa: E721
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development battle-credit dose must be positive"
+        )
+    return {
+        "protocol_id": _BATTLE_CREDIT_PROTOCOL_ID,
+        "selected_member_participates": True,
+        "qualified_escort_completes_battle": True,
+        "candidate_eligibility_scope": "curriculum_venue_band_relevant",
+        "candidate_eligibility_is_direct_combat_claim": False,
+        "venue_prior_feature_mode": VenuePriorFeatureMode.MASKED_UNCALIBRATED.value,
+        "completed_battles": completed_battles,
+        "teacher_choices": 0,
+        "private_identity_fields": 0,
+    }
+
+
+def _switch_assisted_venue_contract_sha256(
+    calibrated_contract_sha256: str,
+    *,
+    completed_battles: int,
+) -> str:
+    """Bind a venue to the new intervention without reusing its old statistics."""
+
+    if (
+        not isinstance(calibrated_contract_sha256, str)
+        or len(calibrated_contract_sha256) != 64
+        or any(character not in "0123456789abcdef" for character in calibrated_contract_sha256)
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "repeatable development calibrated venue contract is invalid"
+        )
+    return canonical_sha256(
+        {
+            "schema": "pokemon.core.switch-assisted-venue-operational-contract.v1",
+            "calibrated_predecessor_contract_sha256": calibrated_contract_sha256,
+            "battle_credit_protocol": _battle_credit_protocol(completed_battles),
+            "calibrated_performance_values_reused": False,
+        }
+    )
+
+
+def _switch_assisted_outcome_policy(
+    dose: PartyDevelopmentOutcomeDose,
+) -> BalancedTeamPolicy:
+    """Bind the fixed dose to participation credit instead of direct combat."""
+
+    if not isinstance(dose, PartyDevelopmentOutcomeDose):
+        raise TypeError("dose must be a PartyDevelopmentOutcomeDose")
+    return replace(
+        RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
+        # No below-floor trainee can satisfy this direct-fight margin. The
+        # selected member still leads and participates; the qualified escort
+        # completes the battle after the switch.
+        safe_lead_level=None,
+        minimum_direct_level_advantage=MAX_LEVEL,
+        max_battles=dose.completed_battles,
+        max_steps=dose.maximum_encounter_steps,
+        max_healing_trips=dose.maximum_healing_trips - 1,
+        max_faints=dose.maximum_faints,
+    )
 
 
 class RepeatablePartyOutcomeRunError(RuntimeError):
@@ -491,6 +565,25 @@ def _menu_for_snapshot(
     return snapshot.venue_menu(trainee), trainee
 
 
+def _capability_root_rejection_code(
+    snapshot: PartyDevelopmentSemanticSnapshot,
+) -> str | None:
+    """Return one identity-free reason when no pair can satisfy an axis."""
+
+    capabilities = tuple(
+        capability
+        for profile in snapshot.member_profiles
+        for capability in profile.execution_capabilities_by_venue
+    )
+    for axis in ("transition", "battle", "recovery"):
+        if capabilities and all(
+            getattr(capability, axis) is PartyDevelopmentCapabilityState.BLOCKED
+            for capability in capabilities
+        ):
+            return f"all_{axis}_capabilities_blocked"
+    return None
+
+
 def _build_option_pool(
     *,
     inventory: PartyDevelopmentCheckpointInventory,
@@ -502,6 +595,7 @@ def _build_option_pool(
     excluded_states: frozenset[str],
     source_commit: str,
     source_bundle_sha256: str,
+    completed_battles: int,
 ) -> tuple[tuple[_RedOptionRuntime, ...], dict[str, int]]:
     try:
         context_document = json.loads(context_catalog_payload.decode("ascii"))
@@ -530,8 +624,14 @@ def _build_option_pool(
         )
     areas = (ROUTE_11_TRAINING_VENUE.band, DIGLETTS_CAVE_TRAINING_VENUE.band)
     contracts = (
-        route_evidence.operational_contract_sha256,
-        cave_evidence.operational_contract_sha256,
+        _switch_assisted_venue_contract_sha256(
+            route_evidence.operational_contract_sha256,
+            completed_battles=completed_battles,
+        ),
+        _switch_assisted_venue_contract_sha256(
+            cave_evidence.operational_contract_sha256,
+            completed_battles=completed_battles,
+        ),
     )
     evolutions = evolution_graph(rom_path.read_bytes())
     runtimes: list[_RedOptionRuntime] = []
@@ -571,6 +671,7 @@ def _build_option_pool(
             )
             observation = runtime.adapter.observe()
             last_blackout_map = reader.read_last_blackout_map()
+            current_map_tileset = emulator.read_u8(RamAddress.CURRENT_MAP_TILESET)
         reject_entry = False
         for goal in entry.goal_hints:
             for kind in TrainingChoiceKind:
@@ -596,7 +697,20 @@ def _build_option_pool(
                         training_venues=_TRAINING_VENUES,
                         transition_guards=RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS,
                         last_blackout_map=last_blackout_map,
+                        current_map_tileset=current_map_tileset,
+                        venue_prior_feature_mode=(
+                            VenuePriorFeatureMode.MASKED_UNCALIBRATED
+                        ),
+                        switch_assisted_battle_credit=True,
                     )
+                    capability_code = _capability_root_rejection_code(snapshot)
+                    if capability_code is not None:
+                        capability_rejected_roots.setdefault(
+                            capability_code,
+                            set(),
+                        ).add(root_lineage_id)
+                        reject_entry = True
+                        break
                     menu, venue_trainee = _menu_for_snapshot(snapshot, kind)
                 except RedPartyDevelopmentExecutionCapabilityError as error:
                     if error.code == "adapter_contract_misaligned":
@@ -767,6 +881,8 @@ def _require_randomization_preserves_question(
     source_commit: str,
     source_bundle_sha256: str,
     last_blackout_map: int,
+    current_map_tileset: int,
+    completed_battles: int,
 ) -> None:
     route_evidence = venue_registry.evidence_for(ROUTE_11_TRAINING_VENUE.band)
     cave_evidence = venue_registry.evidence_for(DIGLETTS_CAVE_TRAINING_VENUE.band)
@@ -783,14 +899,23 @@ def _require_randomization_preserves_question(
         areas=(ROUTE_11_TRAINING_VENUE.band, DIGLETTS_CAVE_TRAINING_VENUE.band),
         venue_prior_registry=venue_registry,
         venue_operational_contract_sha256=(
-            route_evidence.operational_contract_sha256,
-            cave_evidence.operational_contract_sha256,
+            _switch_assisted_venue_contract_sha256(
+                route_evidence.operational_contract_sha256,
+                completed_battles=completed_battles,
+            ),
+            _switch_assisted_venue_contract_sha256(
+                cave_evidence.operational_contract_sha256,
+                completed_battles=completed_battles,
+            ),
         ),
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
         training_venues=_TRAINING_VENUES,
         transition_guards=RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS,
         last_blackout_map=last_blackout_map,
+        current_map_tileset=current_map_tileset,
+        venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
+        switch_assisted_battle_credit=True,
     )
     delayed_menu, delayed_trainee = _menu_for_snapshot(
         delayed,
@@ -824,13 +949,7 @@ def _execute_trial(
     watch: bool,
 ) -> _TrialMeasurement:
     summaries: list[TeamTrainingExecutionSummary] = []
-    policy = replace(
-        RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
-        max_battles=dose.completed_battles,
-        max_steps=dose.maximum_encounter_steps,
-        max_healing_trips=dose.maximum_healing_trips - 1,
-        max_faints=dose.maximum_faints,
-    )
+    policy = _switch_assisted_outcome_policy(dose)
     with PyBoyAdapter(
         rom_path,
         watch=watch,
@@ -848,6 +967,9 @@ def _execute_trial(
         )
         before_observation = goal_runtime.adapter.observe()
         last_blackout_map = ports.reader.read_last_blackout_map()
+        current_map_tileset = ports.observation_emulator.read_u8(
+            RamAddress.CURRENT_MAP_TILESET
+        )
         _require_randomization_preserves_question(
             runtime,
             observation=before_observation,
@@ -856,6 +978,8 @@ def _execute_trial(
             source_commit=source_commit,
             source_bundle_sha256=source_bundle_sha256,
             last_blackout_map=last_blackout_map,
+            current_map_tileset=current_map_tileset,
+            completed_battles=dose.completed_battles,
         )
         before_party = ports.party_reader.read()
         before_completion = red_party_completion_snapshot(
@@ -1150,6 +1274,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         excluded_states=excluded_states,
         source_commit=source.git_commit,
         source_bundle_sha256=source_bundle,
+        completed_battles=args.completed_battles,
     )
     plan = select_repeatable_party_scenarios(
         tuple(item.option for item in pool),
@@ -1193,6 +1318,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             exclusion.plan_sha256 for exclusion in artifact_exclusions
         ),
         "development_repeatable": True,
+        "battle_credit_protocol": _battle_credit_protocol(args.completed_battles),
         "teacher_queries": 0,
         "teacher_choice_targets": 0,
         "model_predictions": 0,
@@ -1250,6 +1376,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "rom_sha256": fingerprint.sha256,
                 "inputs": base_receipt["input_file_sha256"],
                 "development_repeatable": True,
+                "battle_credit_protocol": _battle_credit_protocol(dose.completed_battles),
                 "sealed": False,
             },
         )
@@ -1333,6 +1460,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                     3,
                     args.development_count,
                 ),
+                require_complete_venue_priors=False,
             ),
         )
         writer.append(

@@ -1,5 +1,38 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: the model stopped asking weak Pokémon to prove they were already strong
+
+The second fast-loop attempt exposed a subtler version of the same mismatch. Seven trials began in
+a Mart that the old transition check mistook for a legal field-Dig location. Six more asked the
+selected trainee to win directly until a long-form retreat rule ended the trial. Twenty-three of
+thirty-six candidate trials measured, but only four complete menus survived. The run was useful as
+a falsifier and useless as permission to keep collecting.
+
+The repair changes the intervention rather than squeezing individual roots through more route
+exceptions. The chosen Pokémon still enters and participates, but a qualified teammate may switch
+in and finish the same fixed battle dose. That is the ordinary Pokémon experience the portable
+agent should learn: choose who needs development, rotate a party, manage recovery and use a
+workhorse without pretending every unevolved team member can solo. The eligibility claim is now
+explicitly “relevant to this training band,” not “direct fighter.”
+
+The project also refused an easy statistical mistake. Route and Cave yield, safety and cost values
+had been measured under direct combat. Switch assistance changes that intervention, so those seven
+performance features are now exact-zero masked and the new protocol states that the old calibrated
+values are not reused. Field Dig likewise checks the current cartridge tileset rather than inferring
+legality from its destination.
+
+The repaired action-free rehearsal found twelve fresh questions—eight train, four untouched
+development—and forty-eight candidate trials across teammate and venue choices and all four
+completion goals. Nothing acted, learned, predicted, opened Crystal or touched a sealed case. The
+new scoreboard therefore starts at **0/8 · 0/4 · 0 fits · 0 authority**. This reset is honesty, not
+lost work: direct-combat outcomes answer a different causal question.
+
+The next meaningful scene is finally model training. Once this source is published, exact CI is
+green and one exact plan is authorized, the pilot runs once. If all twelve menus complete, the
+first scorer fits immediately on eight and faces four unseen comparisons. Thirty-two plus sixteen
+is no longer a wall before the first model; it is the later scale decision if the small model earns
+more data.
+
 ## August 16: the first fast loop finally produced data—and told us not to scale
 
 The replacement development loop did what the elaborate one-shot campaign could not: it quickly

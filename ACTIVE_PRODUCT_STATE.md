@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Decide whether prospective execution eligibility is reliable enough to collect the full 32-train plus 16-development outcome set and fit the first scorer.
+- Next decision: After one complete 8-train plus 4-development switch-assisted pilot, fit one train-only scorer and decide from the untouched comparison whether the lane deserves a 32-train plus 16-development scale-up.
 
 ### Mandatory mission check
 
@@ -43,15 +43,15 @@ Not the product:
 | Authority now | Completion-aware party choices remain fixed, teacher-authored, or offline-only; live authority is zero. |
 | Authority target | Fit an outcome-trained shadow scorer that selects party-development choices on unseen Red scenarios; live authority stays zero until the benchmark gate. |
 | Transfer test | Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization. |
-| Cheapest falsifier | Rerun a fresh 8-train plus 4-development Red pilot after generic prospective execution eligibility is added; stop if any selected candidate becomes invalid after selection or if diversity collapses. |
+| Cheapest falsifier | Execute one fresh switch-assisted 8-train plus 4-development Red pilot from the exact published preflight; stop if any question is incomplete, if diversity collapses, or if the intervention still depends on direct trainee combat or stale venue-performance priors. |
 | Time box | 2 sessions / 16 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Outcome Question · train | 4 | 32 |
-| Outcome Question · development | 3 | 16 |
+| Outcome Question · train | 0 | 8 |
+| Outcome Question · development | 0 | 4 |
 | Model Fit · train | 0 | 1 |
 | Unseen Comparison · development | 0 | 1 |
 
@@ -61,25 +61,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-16-repeatable-party-pilot-v1** · status **closed** · evidence [outcome question](docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json)
+**2026-08-17-switch-assisted-preflight-v1** · status **closed** · evidence [preflight](docs/evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The lane still teaches reusable party and resource decisions needed for story completion and living-Pokedex collection; Red remains curriculum, not the product. |
-| Learning output | Seven independent completion-aware preference questions are learner-update eligible: four train and three development, from 44 measured candidate outcomes. |
+| Product alignment | Switch-assisted participation teaches portable party rotation, resource use and teammate or venue choice without requiring weak trainees to solo; those capabilities support story completion, evolution and living-Pokedex collection across titles. |
+| Learning output | No switch-assisted outcome question exists yet. Earlier direct-combat pilots remain historical falsifier evidence and do not advance the new protocol's counters. |
 | Authority delta | None. The outcome-trained scorer remains unfitted and live party-development authority remains zero. |
-| Transfer result | Not run. Crystal remains prohibited until Red produces an outcome-trained scorer and an unseen Red comparison. |
-| Blocker | Nine of 53 candidate trials became invalid after selection because generic venue transition, battle viability, or recovery constraints were not represented prospectively. |
-| Decision | Do not scale to the full 32-train plus 16-development gate yet. Repair the title-neutral execution-eligibility boundary, then rerun the bounded pilot. |
-| Next session | Make candidate executability a prospective title-neutral property without adding a map-specific route patch, then rerun the small pilot before scaling. |
-| Next falsifier | A fresh 8-train plus 4-development pilot must yield complete questions, or mask unavailable candidates before selection for portable capability reasons. |
-| Stop condition | Stop if the repair requires fixed-route knowledge, identity leakage, overleveling, or repeated post-selection invalid trials. |
+| Transfer result | Not run. Crystal remains prohibited until Red produces a switch-assisted outcome-trained scorer and an unseen Red comparison. |
+| Blocker | The switch-assisted implementation and action-free preflight are not yet published at an exact green head, and no controller execution is authorized. Historical direct-combat outcomes are incompatible with the new intervention and are excluded from its fit. |
+| Decision | Publish and verify the repair, regenerate the plan from the exact head, then run one 8-train plus 4-development switch-assisted pilot only after owner authorization. If all twelve questions are complete, fit immediately on train and compare once on untouched development before deciding whether to scale to 32 plus 16. |
+| Next session | Publish and pass exact-head CI, regenerate the action-free plan, obtain exact authorization, execute one pilot, and, only if it is complete, fit one train-only scorer and compare it once on untouched development. |
+| Next falsifier | The exact published 8-train plus 4-development plan must yield twelve complete, learner-eligible questions under the switch-assisted fixed-dose protocol with no teacher, identity leakage, stale venue prior, or post-selection invalid. |
+| Stop condition | Stop before fitting if any of the twelve questions is incomplete; stop the lane if apparent gain depends on fixed-route knowledge, identity leakage, overleveling, teacher labels, or old direct-combat priors. |
 
 ### Stop conditions
 
-- No diverse multi-candidate scenario set exists after two sessions.
+- The exact switch-assisted pilot cannot produce twelve complete, diverse multi-candidate questions.
 - The fit cannot beat the frozen baseline on unseen Red scenarios.
-- Any apparent gain comes from overleveling, teacher labels, identity leakage, or fixed-route knowledge.
+- Any apparent gain comes from overleveling, teacher labels, identity leakage, fixed-route knowledge, or stale direct-combat evidence.
 - Infrastructure work exceeds the maintenance budget without unblocking a measured learning output.
 
 ### Hard boundaries for this lane
@@ -137,4 +137,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **1**.
+Current evidence entries: **0**.

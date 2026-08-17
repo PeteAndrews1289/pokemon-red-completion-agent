@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Replaced the repeatable party lane's direct-trainee battle assumption with a protocol-bound
+  switch-assisted fixed dose: the selected member participates and a qualified escort may finish.
+  Field Dig now checks the live cartridge tileset as well as its return anchor. Seven venue-
+  performance features measured under the old intervention are masked to zero, per-venue contracts
+  explicitly forbid calibrated-value reuse, prospective catalogs/bindings write v7, and v6 history
+  remains readable. An action-free fresh rehearsal formed 8 train and 4 development questions / 48
+  candidate trials with zero protected access. The first fit now follows a complete 8+4 pilot;
+  32+16 is a later scale milestone, and old direct-combat outcomes are excluded from the new fit.
+  Complete local qualification passes 3,961 tests, with 3 integration skips and 1 expected xfail,
+  plus Ruff, whole-source mypy, documentation, privacy, product focus and generated registries.
 - Added the repeatable completion-aware party scenario selector and Red development collector. The
   first 8-train / 4-development pilot measured 44 of 53 candidate trials and produced seven usable
   preference questions; nine post-selection invalids correctly stopped the preflighted 185-trial

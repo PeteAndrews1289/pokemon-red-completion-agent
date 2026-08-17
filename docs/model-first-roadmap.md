@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-16. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-17. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,42 +8,56 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: repair prospective executability, then rerun the small pilot
+## Current checkpoint: switch-assisted 8+4 is ready to publish, then the first fit begins
 
-The repeatable generator has produced the first genuine active-lane learning data. An 8-train / 4-
-development pilot selected twelve independent non-sealed roots and 53 candidate counterfactuals.
-Forty-four trials measured successfully; nine became invalid; seven complete menus can support a
-later learner update. The evidence-backed score is now **train outcomes 4/32 · development outcomes
-3/16 · model fits 0/1 · unseen comparisons 0/1 · authority 0 · Crystal 0**.
+The prospective execution boundary is implemented. A selected trainee now participates in each
+fixed-dose battle while a qualified escort may finish it. This preserves the causal choice—who to
+develop and where—without making every low-level candidate prove it can solo the venue. The menu
+states that its eligibility is a curriculum-venue relevance claim, not a direct-combat claim.
 
-The result passed the diversity falsifier but failed the execution-readiness falsifier. The invalid
-trials divide into unsupported generic return transitions (3), bounded no-win states (4), and
-required-recovery budget exhaustion (2). Because these constraints were absent from the
-prospective menu, the selector offered actions the executor could not reliably finish. The full
-32+16 preflight exists—48 unique roots and 185 candidate trials—but scaling it is stopped.
+The repair also closes two mismatches exposed by the preceding pilot. Field Dig requires the
+current cartridge tileset to permit it; a healing anchor alone is insufficient. And venue yield,
+safety and cost values measured under direct combat are not treated as evidence for switch
+assistance: all seven prior features are masked to zero, their new per-venue contracts explicitly
+say calibrated values are not reused, and the execution protocol is part of the semantic binding.
+Prospective catalogs and bindings now write v7 while authenticated v6 artifacts remain readable.
 
-The next sequence is deliberately smaller than another campaign:
+An action-free rehearsal selected **8 train questions, 4 untouched development questions and 48
+candidate trials** from a fresh root-disjoint pool. It covers both choice kinds, all four completion
+goals, and candidate widths two and six. Root-level capability exclusions are reported only as
+identity-free counts. No controller, teacher, model, sealed Red, Crystal or full replay opened. See
+the [path-free receipt](evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json).
+Complete local qualification is green: **3,961 passed · 3 skipped · 1 expected xfail**, plus Ruff,
+whole-source mypy, documentation, privacy, product focus, and source-bound registries. The
+[current audit](current-audit-2026-08-17.md) records the remaining risks and exact gate.
 
-1. Express transition reachability, battle viability and recovery capacity as title-neutral
-   prospective action capabilities or typed unavailability reasons. Do not add a Red map-specific
-   route patch.
-2. Prove that permutations, timing offsets and availability masks remain equivariant, split-safe
-   and free of species, map, slot, path or teacher identity.
-3. Exclude every already counted pilot root and run a fresh 8-train / 4-development pilot.
-4. Require every selected candidate to measure, or to have been masked before selection for a
-   portable capability reason. Repeated post-selection invalids stop the lane for representation
-   review.
-5. If the pilot passes, collect only enough additional independent questions to reach 32 train and
-   16 development in total, fit once on train, and compare the frozen scorer and baseline on the
-   unseen development partition.
-6. Keep live authority at zero. Crystal remains closed until the Red unseen comparison creates a
-   real transfer question.
+Because this intervention differs from direct trainee combat, older outcomes must not be pooled
+with it. The honest switch-assisted score is **train outcomes 0/8 · development outcomes 0/4 ·
+model fits 0/1 · unseen comparisons 0/1 · authority 0 · Crystal 0**. The earlier pilots remain
+valuable falsifier history, not training rows for this model.
 
-The next session ends with the same machine-checked reorientation now shown in
-[ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md): product alignment, learning output,
-authority delta, transfer result, blocker, next decision, falsifier and stop condition.
+The next sequence is deliberately direct:
 
-## Current checkpoint: repeatable party learning is the only active development lane
+1. Complete the local gate, publish the source, and require exact-head green CI.
+2. Regenerate the action-free 8+4 plan from that committed head so its source bundle and plan
+   digest are exact. Do not reuse the working-tree rehearsal as execution authority.
+3. Request one owner authorization naming that plan, source and CI attempt. Stop before input until
+   it is granted.
+4. Execute exactly one fresh switch-assisted pilot. Every question must have all candidate outcomes
+   measured; any incomplete menu stops fitting and triggers representation review.
+5. If all twelve questions complete, fit one scorer on the eight train menus immediately and make
+   one frozen comparison on the four untouched development menus. Live authority remains zero.
+6. Use that observed result—not infrastructure momentum—to decide whether the statistical scale
+   milestone of 32 train / 16 development is worth collecting.
+7. Only an honest unseen Red gain creates the first Crystal transfer design. Crystal execution
+   remains closed until then.
+
+Every session ends with the machine-checked reorientation in
+[ACTIVE_PRODUCT_STATE.md](../ACTIVE_PRODUCT_STATE.md). The eight-plus-four gate is intentionally
+the shortest path to actual fitting; 32+16 is a scale target, not a prerequisite to discovering
+whether this representation learns anything.
+
+## Historical August 16 checkpoint: repeatable party learning became the active development lane
 
 The 14-question / 55-trial one-shot campaign exposed the wrong optimization target. Its immutable
 records remain evidence and consumed identities remain non-retryable, but it is retired as the
@@ -51,7 +65,7 @@ development leading edge. Routine data generation must not inherit sealed-experi
 ceremony. The active lane now uses repeatable randomized, non-sealed scenarios to learn
 completion-aware trainee, venue, and fight/rotate/heal/stop choices.
 
-The first decision gate is explicit: **32 train outcome questions, 16 untouched development
+At that checkpoint, the first decision gate was **32 train outcome questions, 16 untouched development
 questions, one train-only model fit, and one unseen paired baseline comparison**. These are the only
 active learning counters; inputs, CI runs, preflights, teacher demonstrations, and frozen catalogs
 remain zero progress. The time box is two sessions / sixteen hours. Stop if diverse genuine choices

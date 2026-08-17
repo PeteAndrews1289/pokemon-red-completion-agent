@@ -32,6 +32,7 @@ from pokemon_red_completion.party_development_rank import (
     PartyDevelopmentFeatureError,
     PartyDevelopmentGoal,
     VenueOperationalPrior,
+    VenuePriorFeatureMode,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.scenario_outcomes import (
@@ -292,6 +293,109 @@ def test_identity_free_candidate_set_and_binding_round_trip_exactly() -> None:
     assert restored_candidates == candidate_set
     assert restored_binding == prospective.bindings[0]
     restored_binding.require_candidate_set(restored_candidates)
+
+
+def test_uncalibrated_venue_features_round_trip_as_an_explicit_zero_mask() -> None:
+    example = _ready_catalog()[0]
+    prior_names = (
+        "venue.prior_available",
+        "venue.prior_reliability",
+        "venue.prior_expected_yield",
+        "venue.prior_matchup_safety",
+        "venue.prior_travel_cost",
+        "venue.prior_recovery_cost",
+        "venue.prior_support",
+    )
+    candidates = []
+    for item in example.candidates:
+        features = list(item.features)
+        for name in prior_names:
+            features[_feature_index(name)] = 0.0
+        candidates.append(PartyDevelopmentCandidate(item.candidate_index, tuple(features)))
+    candidate_set = PartyDevelopmentCandidateSet(
+        kind=TrainingChoiceKind.TRAINEE,
+        goal=PartyDevelopmentGoal.EVOLUTION,
+        candidates=tuple(candidates),
+    )
+    binding = PartyDevelopmentProspectiveBinding.build(
+        scenario_id=example.scenario_id,
+        root_lineage_id=example.root_lineage_id,
+        initial_state_sha256=example.initial_state_sha256,
+        partition=example.partition,
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+        semantic_snapshot_sha256="c" * 64,
+        candidate_set=candidate_set,
+        venue_priors=tuple(VenueOperationalPrior() for _ in candidates),
+        venue_prior_registry_sha256="d" * 64,
+        outcome_objective_sha256=(
+            PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256
+        ),
+        venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
+    )
+
+    restored = PartyDevelopmentProspectiveBinding.from_public_dict(
+        binding.public_dict()
+    )
+
+    assert restored == binding
+    assert restored.shared_venue_prior_evidence_sha256 is None
+    assert all(value is None for value in restored.venue_prior_evidence_sha256)
+    restored.require_candidate_set(candidate_set)
+
+
+def test_legacy_calibrated_binding_remains_readable_after_mode_versioning() -> None:
+    binding = _prospective_catalog((_ready_catalog()[0],)).bindings[0]
+    legacy_schema = party_development_catalog_module._LEGACY_PROSPECTIVE_BINDING_SCHEMA
+    menu_document = party_development_catalog_module._menu_document(
+        kind=binding.kind,
+        goal=binding.goal,
+        venue_prior_feature_mode=VenuePriorFeatureMode.CALIBRATED,
+        candidate_feature_sha256=binding.candidate_feature_sha256,
+        candidate_available=binding.candidate_available,
+        candidate_unavailable_reasons=binding.candidate_unavailable_reasons,
+        venue_prior_evidence_sha256=binding.venue_prior_evidence_sha256,
+        shared_venue_prior_evidence_sha256=(
+            binding.shared_venue_prior_evidence_sha256
+        ),
+        contract_schema=legacy_schema,
+    )
+    menu_sha256 = party_development_catalog_module.canonical_sha256(menu_document)
+    binding_document = party_development_catalog_module._binding_document(
+        scenario_id=binding.scenario_id,
+        root_lineage_id=binding.root_lineage_id,
+        initial_state_sha256=binding.initial_state_sha256,
+        partition=binding.partition,
+        source_commit=binding.source_commit,
+        source_bundle_sha256=binding.source_bundle_sha256,
+        semantic_snapshot_sha256=binding.semantic_snapshot_sha256,
+        venue_prior_registry_sha256=binding.venue_prior_registry_sha256,
+        outcome_objective_sha256=binding.outcome_objective_sha256,
+        feature_names_sha256=binding.feature_names_sha256,
+        candidate_menu_sha256=menu_sha256,
+        venue_prior_feature_mode=VenuePriorFeatureMode.CALIBRATED,
+        contract_schema=legacy_schema,
+    )
+    legacy = replace(
+        binding,
+        candidate_menu_sha256=menu_sha256,
+        binding_sha256=party_development_catalog_module.canonical_sha256(
+            binding_document
+        ),
+        contract_schema=legacy_schema,
+    )
+
+    public = legacy.public_dict()
+    restored = PartyDevelopmentProspectiveBinding.from_public_dict(public)
+
+    assert public["schema"] == legacy_schema
+    assert "venue_prior_feature_mode" not in public
+    assert restored == legacy
+    legacy_catalog = PartyDevelopmentProspectiveCatalog.freeze((restored,))
+    assert (
+        legacy_catalog.contract_schema
+        == party_development_catalog_module._LEGACY_PROSPECTIVE_CATALOG_SCHEMA
+    )
 
 
 def _frozen_input_catalog(

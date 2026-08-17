@@ -7,6 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: participation, not punishment
+
+The next pilot failed in a way any Pokémon player would recognize. Weak team members were being
+asked to win every training battle themselves. The automation was treating “this Pokémon should
+gain experience here” as “this Pokémon can already solo here.” Seven other lanes tried to use Dig
+from a Mart because the code knew where Dig would land but had forgotten to ask whether Dig was
+legal under the current roof.
+
+The lesson changed. A selected Pokémon now participates, then a qualified teammate can finish the
+battle. The agent is learning to rotate and develop a party—the behavior needed to evolve a living
+collection—not to punish every trainee until it becomes its own workhorse. The Mart mistake became
+a cartridge-tileset check, not a one-off coordinate patch.
+
+There was one more trap: old numbers saying which training area was fast or safe came from direct
+combat. They could not be quietly carried into a switch-assisted experiment. Those features are
+blanked, the intervention gets its own identity, and the model must earn new evidence.
+
+The rehearsal board now shows **8 TRAIN · 4 UNSEEN · 48 CANDIDATE TRIALS**, and the learning counter
+shows zero because no button was pressed. Once the exact source is published and authorized, a
+complete board leads straight to the first fit and unseen comparison. The larger 32+16 dataset is
+something the model must justify, not another toll booth before training begins.
+
+---
+
 ## Current checkpoint: seven lessons, nine reasons not to scale
 
 The new fast loop finally touched the cartridge for learning rather than route completion. Twelve

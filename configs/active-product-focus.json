@@ -9,26 +9,26 @@
   "lanes": [
     {
       "capability": "Choose trainee, venue, and fight, rotate, heal, or stop actions from completion, party, resource, and risk state.",
-      "cheapest_falsifier": "Rerun a fresh 8-train plus 4-development Red pilot after generic prospective execution eligibility is added; stop if any selected candidate becomes invalid after selection or if diversity collapses.",
+      "cheapest_falsifier": "Execute one fresh switch-assisted 8-train plus 4-development Red pilot from the exact published preflight; stop if any question is incomplete, if diversity collapses, or if the intervention still depends on direct trainee combat or stale venue-performance priors.",
       "id": "repeatable-party-outcome-learning-v1",
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "None. The outcome-trained scorer remains unfitted and live party-development authority remains zero.",
-        "blocker": "Nine of 53 candidate trials became invalid after selection because generic venue transition, battle viability, or recovery constraints were not represented prospectively.",
-        "decision": "Do not scale to the full 32-train plus 16-development gate yet. Repair the title-neutral execution-eligibility boundary, then rerun the bounded pilot.",
+        "blocker": "The switch-assisted implementation and action-free preflight are not yet published at an exact green head, and no controller execution is authorized. Historical direct-combat outcomes are incompatible with the new intervention and are excluded from its fit.",
+        "decision": "Publish and verify the repair, regenerate the plan from the exact head, then run one 8-train plus 4-development switch-assisted pilot only after owner authorization. If all twelve questions are complete, fit immediately on train and compare once on untouched development before deciding whether to scale to 32 plus 16.",
         "evidence": {
-          "kind": "outcome_question",
-          "path": "docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json",
-          "sha256": "de6b14e45ea7224e966793a491330c4e98db07fd76d28e2eaf43ed2c0f90baa8"
+          "kind": "preflight",
+          "path": "docs/evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json",
+          "sha256": "f1af4294a205aa096ef8372a32451c6f34479ae21a499103b5fefe465decf7e0"
         },
-        "learning_output": "Seven independent completion-aware preference questions are learner-update eligible: four train and three development, from 44 measured candidate outcomes.",
-        "next_falsifier": "A fresh 8-train plus 4-development pilot must yield complete questions, or mask unavailable candidates before selection for portable capability reasons.",
-        "next_session_goal": "Make candidate executability a prospective title-neutral property without adding a map-specific route patch, then rerun the small pilot before scaling.",
-        "product_alignment": "The lane still teaches reusable party and resource decisions needed for story completion and living-Pokedex collection; Red remains curriculum, not the product.",
-        "session_id": "2026-08-16-repeatable-party-pilot-v1",
+        "learning_output": "No switch-assisted outcome question exists yet. Earlier direct-combat pilots remain historical falsifier evidence and do not advance the new protocol's counters.",
+        "next_falsifier": "The exact published 8-train plus 4-development plan must yield twelve complete, learner-eligible questions under the switch-assisted fixed-dose protocol with no teacher, identity leakage, stale venue prior, or post-selection invalid.",
+        "next_session_goal": "Publish and pass exact-head CI, regenerate the action-free plan, obtain exact authorization, execute one pilot, and, only if it is complete, fit one train-only scorer and compare it once on untouched development.",
+        "product_alignment": "Switch-assisted participation teaches portable party rotation, resource use and teammate or venue choice without requiring weak trainees to solo; those capabilities support story completion, evolution and living-Pokedex collection across titles.",
+        "session_id": "2026-08-17-switch-assisted-preflight-v1",
         "status": "closed",
-        "stop_condition": "Stop if the repair requires fixed-route knowledge, identity leakage, overleveling, or repeated post-selection invalid trials.",
-        "transfer_result": "Not run. Crystal remains prohibited until Red produces an outcome-trained scorer and an unseen Red comparison."
+        "stop_condition": "Stop before fitting if any of the twelve questions is incomplete; stop the lane if apparent gain depends on fixed-route knowledge, identity leakage, overleveling, teacher labels, or old direct-combat priors.",
+        "transfer_result": "Not run. Crystal remains prohibited until Red produces a switch-assisted outcome-trained scorer and an unseen Red comparison."
       },
       "learned_authority": {
         "current": "Completion-aware party choices remain fixed, teacher-authored, or offline-only; live authority is zero.",
@@ -38,12 +38,12 @@
       "measurable_outputs": [
         {
           "kind": "outcome_question",
-          "minimum": 32,
+          "minimum": 8,
           "partition": "train"
         },
         {
           "kind": "outcome_question",
-          "minimum": 16,
+          "minimum": 4,
           "partition": "development"
         },
         {
@@ -58,20 +58,14 @@
         }
       ],
       "name": "Repeatable completion-aware party outcome learning",
-      "next_decision": "Decide whether prospective execution eligibility is reliable enough to collect the full 32-train plus 16-development outcome set and fit the first scorer.",
+      "next_decision": "After one complete 8-train plus 4-development switch-assisted pilot, fit one train-only scorer and decide from the untouched comparison whether the lane deserves a 32-train plus 16-development scale-up.",
       "progress": {
         "authority_promotions": 0,
-        "evidence": [
-          {
-            "kind": "outcome_question",
-            "path": "docs/evidence/repeatable-party-outcome-development-pilot-v1-2026-08-16.json",
-            "sha256": "de6b14e45ea7224e966793a491330c4e98db07fd76d28e2eaf43ed2c0f90baa8"
-          }
-        ],
+        "evidence": [],
         "model_fits": 0,
         "outcome_questions": {
-          "development": 3,
-          "train": 4
+          "development": 0,
+          "train": 0
         },
         "transfer_results": 0,
         "unseen_comparisons": 0
@@ -86,9 +80,9 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "No diverse multi-candidate scenario set exists after two sessions.",
+        "The exact switch-assisted pilot cannot produce twelve complete, diverse multi-candidate questions.",
         "The fit cannot beat the frozen baseline on unseen Red scenarios.",
-        "Any apparent gain comes from overleveling, teacher labels, identity leakage, or fixed-route knowledge.",
+        "Any apparent gain comes from overleveling, teacher labels, identity leakage, fixed-route knowledge, or stale direct-combat evidence.",
         "Infrastructure work exceeds the maintenance budget without unblocking a measured learning output."
       ],
       "time_box": {

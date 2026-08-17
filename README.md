@@ -5,14 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus:** one repeatable development lane must produce 32 train outcome
-> questions, 16 unseen development questions, one fit, and one unseen baseline comparison. The
-> first repeatable pilot advanced the evidence-backed counters to **4 train / 3 development** from
-> 44 measured candidate trials; fits, unseen comparisons, authority and transfer remain zero. Nine
-> post-selection invalids stopped scale-up. Next: make execution eligibility prospective and
-> title-neutral, then pass a fresh root-disjoint 8+4 pilot before collecting toward 32+16. The
-> one-shot 14/55 campaign is preserved as evidence but retired as the development leading edge.
-> Run `python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port 8768.
+> **Current product focus (August 17, 2026): publish one switch-assisted 8+4 pilot, then fit.** The
+> prospective transition, battle and recovery boundary is implemented. A selected trainee now
+> participates while a qualified teammate can finish the fixed battle dose; this teaches party
+> choice and rotation without requiring every weak or unevolved Pokémon to solo. Field Dig checks
+> the current cartridge tileset, and seven performance-prior features measured under the old
+> direct-combat intervention are explicitly masked instead of being reused as if comparable.
+>
+> An action-free rehearsal found **8 train questions, 4 untouched development questions and 48
+> candidate trials** across both choice kinds and all four completion goals. It sent zero input and
+> opened no teacher, model, sealed Red, Crystal or replay context. The switch-assisted counter is
+> therefore honestly **0/8 train · 0/4 development · fits 0/1 · unseen comparisons 0/1 · authority
+> 0**. Earlier direct-combat outcomes remain useful failure evidence but are not pooled into this
+> different intervention. Next: publish, pass exact-head CI, regenerate the plan, obtain one exact
+> owner authorization, and run the pilot. If all twelve questions complete, fit immediately and
+> compare on the four untouched development questions; **32+16 is the later scale milestone, not a
+> prerequisite to the first model.** See the
+> [path-free preflight receipt](docs/evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json).
+> Run `.venv/bin/python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port
+> 8768. Complete local qualification: **3,961 passed · 3 skipped · 1 expected xfail**, plus lint,
+> typing, docs, privacy, product focus, and generated registries. The
+> [current audit](docs/current-audit-2026-08-17.md) records the decision boundary and remaining risks.
 
 > **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
 > exact authorized campaign durably claimed its first development trial, then full-box semantic

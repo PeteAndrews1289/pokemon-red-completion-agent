@@ -1,5 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: let the trainee tag in, then let the team play
+
+Open on a low-level Pokémon facing an obviously unsuitable wild battle. Put the old rule over it:
+**SELECTED TRAINEE MUST WIN DIRECTLY**. Let the health bar fall until the lane turns red. Repeat six
+times, then cut to seven more lanes in a Mart trying to use Dig beneath a roof. Caption the two
+mistakes: **TRAINING RELEVANCE ≠ SOLO READINESS** and **DESTINATION EXISTS ≠ MOVE IS LEGAL HERE**.
+
+Replace the old battle rule with a simple animation: the trainee enters, participates, and switches
+to a qualified escort that completes the fixed dose. Keep the trainee and destination choice locked
+through the swap. Show the cartridge tileset flowing into the Dig check. Then place the old Route
+and Cave performance gauges behind frosted glass with **MEASURED UNDER A DIFFERENT INTERVENTION**;
+set their seven learner features to zero rather than letting stale confidence leak through.
+
+Build the new board: **8 TRAIN QUESTIONS · 4 UNSEEN QUESTIONS · 48 CANDIDATE TRIALS · BOTH CHOICE
+KINDS · FOUR COMPLETION GOALS**. Keep the safety strip at **INPUT 0 · TEACHER 0 · FITS 0 · SEALED
+RED 0 · CRYSTAL 0 · AUTHORITY 0**. Narration: **“This is the first honest starting line for the
+switch-assisted model. The older outcomes taught us what was broken, but they answered a different
+question, so they do not become its training data.”**
+
+End with the next sequence as four lights: **PUBLISH → EXACT GREEN CI → ONE AUTHORIZED 8+4 PILOT →
+FIT ON 8 / TEST ON 4**. Put **32+16** farther down the road under **SCALE ONLY IF THE FIRST MODEL
+LEARNS**. The visual point is that rigor now accelerates the first model instead of postponing it.
+
 ## August 16 scene: the first dataset is small because the failures were informative
 
 Open on the new product-focus dashboard—not the emulator—with the counter moving from **0/48** to

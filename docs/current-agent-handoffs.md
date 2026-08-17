@@ -1,12 +1,42 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-16. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-17. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: one execution-eligibility repair, then a fresh 8+4 pilot
+## Current override: publish the switch-assisted 8+4 gate, then fit once
+
+Codex has implemented the prospective repair and rehearsed a fresh root-disjoint plan without
+controller input. The selected member participates while a qualified escort can complete the fixed
+battle dose; candidate eligibility is explicitly a curriculum-venue relevance claim, not a direct-
+combat claim. Field Dig now requires a legal current cartridge tileset. All seven venue-performance
+features calibrated under the old direct-combat protocol are masked to zero and a new protocol-
+specific contract states they are not reused. The v7 writer retains strict v6 readers.
+
+The action-free plan contains **8 train questions, 4 untouched development questions and 48
+candidate trials**, with both choice kinds, all four completion goals, and candidate widths two and
+six. It is evidence that the input boundary is ready—not a measured learning output. The new
+protocol's counters are **0/8 train · 0/4 development · fits 0/1 · unseen comparisons 0/1 ·
+authority 0**. Direct-combat pilot outcomes remain historical and incompatible with this fit.
+
+Codex now owns the full local gate, publication, exact-head CI, action-free plan regeneration and
+the exact authorization request. It must stop before controller input. If all twelve questions are
+complete after the authorized pilot, Codex should fit once on the eight train questions and compare
+once on the four untouched development questions. That is the next decision. A 32+16 collection is
+only the later statistical scale milestone.
+
+Claude and Antigravity CLI reviews were attempted and returned no verdict before timeout. Claude
+should next review a concrete fit/comparison for leakage, intervention consistency and claim
+strength. Antigravity should wait for the resulting Crystal transfer decision and return at most
+three falsifiable assumptions plus work to delete. Neither is a gate for routine development, and
+their desktop applications need not remain open. See the
+[path-free receipt](evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json) and
+[current audit](current-audit-2026-08-17.md). Local qualification is **3,961 passed · 3 skipped · 1
+expected xfail**, plus lint, whole-source typing, docs, privacy, focus, and registries.
+
+## Superseded August 16 override: one execution-eligibility repair, then a fresh 8+4 pilot
 
 Codex completed the first repeatable development pilot. It produced 44 measured candidate outcomes
 across twelve independent menus, with four train and three development questions eligible for a
@@ -27,7 +57,7 @@ then it challenges at most three transfer assumptions and names work to delete. 
 blocks the repair or grants authority. The generated active state now holds the mandatory
 end-of-session reorientation for all three roles.
 
-## Current override: one repeatable learning lane, no standing review queue
+## Superseded August 16 override: one repeatable learning lane, no standing review queue
 
 The machine-checked active lane is `repeatable-party-outcome-learning-v1`. Codex owns a repeatable,
 non-sealed Red scenario generator for completion-aware trainee, venue, and

@@ -25,6 +25,7 @@ from pokemon_red_completion.party_development_rank import (
     EvolutionRouteKind,
     EvolutionSemantics,
     PartyDevelopmentGoal,
+    VenuePriorFeatureMode,
 )
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorError,
@@ -85,6 +86,7 @@ def _snapshot(
     partition: ScenarioPartition = ScenarioPartition.TRAIN,
     root_lineage_id: str = "fresh-root",
     initial_state_sha256: str = "9" * 64,
+    venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED,
 ) -> PartyDevelopmentSemanticSnapshot:
     party = PartyObservation(
         members=(
@@ -167,6 +169,7 @@ def _snapshot(
         living_target_count=108,
         role_coverage_count=2,
         role_target_count=3,
+        venue_prior_feature_mode=venue_prior_feature_mode,
     )
 
 
@@ -350,6 +353,47 @@ def test_shared_venue_without_prior_cannot_become_a_trainee_outcome_menu() -> No
 
     with pytest.raises(PartyDevelopmentAdapterError, match="lacks frozen"):
         snapshot.trainee_menu(snapshot.areas[2])
+
+
+def test_uncalibrated_protocol_masks_prior_features_without_gating_execution() -> None:
+    snapshot = _snapshot(
+        venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
+    )
+
+    trainee_menu = snapshot.trainee_menu(snapshot.areas[0])
+    venue_menu = snapshot.venue_menu(snapshot.party.members[1])
+
+    assert trainee_menu is not None
+    assert venue_menu is not None
+    assert trainee_menu.shared_venue_prior is None
+    assert all(not prior.available for prior in trainee_menu.venue_priors)
+    assert all(not prior.available for prior in venue_menu.venue_priors)
+    assert all(trainee_menu.candidate_available)
+    assert all(venue_menu.candidate_available)
+    assert all(
+        _feature(candidate, "venue.prior_available") == 0.0
+        for candidate in (
+            *trainee_menu.candidate_set.candidates,
+            *venue_menu.candidate_set.candidates,
+        )
+    )
+
+    trainee_binding = snapshot.freeze_binding(
+        trainee_menu,
+        scenario_id="masked-trainee-001",
+    )
+    venue_binding = snapshot.freeze_binding(
+        venue_menu,
+        scenario_id="masked-venue-001",
+    )
+    assert trainee_binding.venue_prior_feature_mode is VenuePriorFeatureMode.MASKED_UNCALIBRATED
+    assert venue_binding.venue_prior_feature_mode is VenuePriorFeatureMode.MASKED_UNCALIBRATED
+    assert trainee_binding.shared_venue_prior_evidence_sha256 is None
+    assert all(value is None for value in venue_binding.venue_prior_evidence_sha256)
+    assert (
+        trainee_binding.public_dict()["venue_prior_feature_mode"]
+        == "masked_uncalibrated"
+    )
 
 
 def test_adapter_rejects_goal_permutations_that_cannot_reduce_pressure() -> None:

@@ -58,6 +58,20 @@ class EvolutionRouteKind(StrEnum):
     CONDITION = "condition"
 
 
+class VenuePriorFeatureMode(StrEnum):
+    """Whether venue-performance covariates match the execution protocol.
+
+    A venue may be reachable and executable even when its historical yield,
+    safety, and cost observations were collected under a different battle
+    intervention.  Those values must be represented as unavailable rather
+    than silently reused.  This mode is frozen with each prospective menu so a
+    later fit cannot mistake a deliberate zero mask for missing bookkeeping.
+    """
+
+    CALIBRATED = "calibrated"
+    MASKED_UNCALIBRATED = "masked_uncalibrated"
+
+
 PARTY_DEVELOPMENT_FEATURE_NAMES = (
     *TRAINING_CANDIDATE_FEATURE_NAMES,
     *(f"context.goal.{goal.value}" for goal in PartyDevelopmentGoal),
@@ -562,6 +576,7 @@ __all__ = [
     "PartyDevelopmentContext",
     "PartyDevelopmentFeatureError",
     "PartyDevelopmentGoal",
+    "VenuePriorFeatureMode",
     "VenueOperationalPrior",
     "augment_training_candidate_set",
 ]

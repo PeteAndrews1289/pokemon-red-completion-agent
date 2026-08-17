@@ -44,6 +44,7 @@ from pokemon_red_completion.party_development_question_reservations import (
 from pokemon_red_completion.party_development_rank import (
     EvolutionRouteKind,
     EvolutionSemantics,
+    VenuePriorFeatureMode,
 )
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
@@ -105,12 +106,21 @@ class RedPartyDevelopmentExecutionCapabilityError(RedPartyDevelopmentAdapterErro
         self.code = code
 
 
-RedPartyDevelopmentTransitionGuard = Callable[[RawGameState, int], bool | None]
+RedPartyDevelopmentTransitionGuard = Callable[[RawGameState, int, int], bool | None]
+
+# Red's field-Dig implementation accepts exactly these cartridge tilesets.
+# The values are the revision-zero ids for FOREST, CEMETERY, INTERIOR, CAVERN,
+# and FACILITY.  A healing anchor says where Dig would land; it does not say
+# that Dig is legal on the current map.  Keeping the two facts separate is
+# load-bearing: a measured pilot began in the Cinnabar Mart (tileset 2), where
+# the old anchor-only check claimed travel was ready even though Dig cannot run.
+_RED_ESCAPE_WARP_TILESETS = frozenset({3, 15, 16, 17, 22})
 
 
 def red_vermilion_training_transition_available(
     raw: RawGameState,
     last_blackout_map: int,
+    current_map_tileset: int,
 ) -> bool:
     """Whether the existing Vermilion training navigator accepts this state.
 
@@ -135,7 +145,7 @@ def red_vermilion_training_transition_available(
         return True
     if raw.map_id == MapId.VERMILION_CITY:
         return position == (11, 4)
-    return last_blackout_map in {
+    return current_map_tileset in _RED_ESCAPE_WARP_TILESETS and last_blackout_map in {
         MapId.CINNABAR_ISLAND,
         MapId.SAFFRON_CITY,
         MapId.VERMILION_CITY,
@@ -263,6 +273,9 @@ def build_red_party_development_snapshot(
     training_venues: tuple[TrainingVenue, ...] | None = None,
     transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None = None,
     last_blackout_map: int | None = None,
+    current_map_tileset: int | None = None,
+    venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED,
+    switch_assisted_battle_credit: bool = False,
 ) -> PartyDevelopmentSemanticSnapshot:
     """Derive the shared snapshot from one coherent, action-free Red read."""
 
@@ -274,6 +287,10 @@ def build_red_party_development_snapshot(
         raise TypeError("policy must be a BalancedTeamPolicy")
     if not isinstance(venue_prior_registry, PartyDevelopmentVenuePriorRegistry):
         raise TypeError("venue_prior_registry must be a PartyDevelopmentVenuePriorRegistry")
+    if not isinstance(venue_prior_feature_mode, VenuePriorFeatureMode):
+        raise TypeError("venue_prior_feature_mode must be a VenuePriorFeatureMode")
+    if not isinstance(switch_assisted_battle_credit, bool):
+        raise TypeError("switch_assisted_battle_credit must be boolean")
     if not isinstance(collection_contract, CollectionContract):
         raise TypeError("collection_contract must be a CollectionContract")
     if not isinstance(roster, TeamRosterPlan):
@@ -330,6 +347,8 @@ def build_red_party_development_snapshot(
         training_venues=training_venues,
         transition_guards=transition_guards,
         last_blackout_map=last_blackout_map,
+        current_map_tileset=current_map_tileset,
+        switch_assisted_battle_credit=switch_assisted_battle_credit,
     )
 
     profiles = tuple(
@@ -373,6 +392,12 @@ def build_red_party_development_snapshot(
         role_coverage_count=len(roster_internal & set(observation.party.species_ids())),
         role_target_count=len(roster.slots),
         active_conditions=active_conditions,
+        venue_prior_feature_mode=venue_prior_feature_mode,
+        execution_protocol_id=(
+            "switch-assisted-fixed-dose-v1"
+            if switch_assisted_battle_credit
+            else "legacy-adaptive-v1"
+        ),
     )
 
 
@@ -397,6 +422,9 @@ def preflight_red_party_development_question(
     training_venues: tuple[TrainingVenue, ...] | None = None,
     transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None = None,
     last_blackout_map: int | None = None,
+    current_map_tileset: int | None = None,
+    venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED,
+    switch_assisted_battle_credit: bool = False,
 ) -> RedPartyDevelopmentQuestionPreflight:
     """Build one exact question without selecting an answer or acting."""
 
@@ -418,6 +446,9 @@ def preflight_red_party_development_question(
         training_venues=training_venues,
         transition_guards=transition_guards,
         last_blackout_map=last_blackout_map,
+        current_map_tileset=current_map_tileset,
+        venue_prior_feature_mode=venue_prior_feature_mode,
+        switch_assisted_battle_credit=switch_assisted_battle_credit,
     )
     menu: (
         BoundPartyDevelopmentMenu[PartyMemberObservation]
@@ -602,13 +633,15 @@ def _execution_capability_matrix(
     training_venues: tuple[TrainingVenue, ...] | None,
     transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None,
     last_blackout_map: int | None,
+    current_map_tileset: int | None,
+    switch_assisted_battle_credit: bool = False,
 ) -> tuple[tuple[PartyDevelopmentExecutionCapability, ...], ...]:
     """Derive dynamic Red facts, then discard every Red identity.
 
     Historical catalog reconstruction did not carry an execution-capability
-    contract, so callers that omit both optional inputs retain their exact
-    all-ready behavior. New outcome development must supply all three dynamic
-    inputs. Supplying only part of that contract fails closed rather than
+    contract, so callers that omit every optional input retain their exact
+    all-ready behavior. New outcome development must supply the complete dynamic
+    contract. Supplying only part of that contract fails closed rather than
     mixing prospective and legacy menus.
     """
 
@@ -616,6 +649,7 @@ def _execution_capability_matrix(
         training_venues is None
         and transition_guards is None
         and last_blackout_map is None
+        and current_map_tileset is None
     ):
         return tuple(
             tuple(PartyDevelopmentExecutionCapability.ready() for _ in areas)
@@ -629,6 +663,8 @@ def _execution_capability_matrix(
         or any(not callable(guard) for guard in transition_guards)
         or type(last_blackout_map) is not int  # noqa: E721
         or last_blackout_map < 0
+        or type(current_map_tileset) is not int  # noqa: E721
+        or not 0 <= current_map_tileset <= 0xFF
     ):
         raise RedPartyDevelopmentExecutionCapabilityError(
             "adapter_contract_misaligned",
@@ -657,6 +693,11 @@ def _execution_capability_matrix(
             "packed_party_pp_misaligned",
             "Red prospective execution PP differs from the party",
         ) from error
+    if not isinstance(switch_assisted_battle_credit, bool):
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "adapter_contract_misaligned",
+            "Red prospective battle-credit mode must be boolean",
+        )
     escorts = tuple(
         (index, member)
         for index, member in enumerate(observation.party.members)
@@ -681,14 +722,17 @@ def _execution_capability_matrix(
             member,
             decoded[member_index],
         )
-        member_recoverable = maximum_attack_pp > training_attack_pp_reserve(member, policy)
+        member_recoverable = maximum_attack_pp > training_attack_pp_reserve(
+            member,
+            policy,
+        )
         row = []
         for area, transition_guard in zip(
             areas,
             transition_guards,
             strict=True,
         ):
-            transition = transition_guard(raw, last_blackout_map)
+            transition = transition_guard(raw, last_blackout_map, current_map_tileset)
             if transition is not None and not isinstance(transition, bool):
                 raise RedPartyDevelopmentExecutionCapabilityError(
                     "transition_guard_invalid",
@@ -705,12 +749,21 @@ def _execution_capability_matrix(
             direct_fight_ready = member_fights_here and len(attack_slots) >= 2
             battle_state = (
                 PartyDevelopmentCapabilityState.READY
-                if direct_fight_ready or (not member_fights_here and escort_can_win)
+                if (
+                    escort_can_win
+                    if switch_assisted_battle_credit
+                    else direct_fight_ready
+                    or (not member_fights_here and escort_can_win)
+                )
                 else PartyDevelopmentCapabilityState.BLOCKED
             )
             recovery_state = (
                 PartyDevelopmentCapabilityState.READY
-                if member_recoverable and escort_recoverable
+                if (
+                    escort_recoverable
+                    if switch_assisted_battle_credit
+                    else member_recoverable and escort_recoverable
+                )
                 else PartyDevelopmentCapabilityState.BLOCKED
             )
             row.append(

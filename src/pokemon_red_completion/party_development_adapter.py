@@ -39,6 +39,7 @@ from pokemon_red_completion.party_development_rank import (
     PartyDevelopmentContext,
     PartyDevelopmentGoal,
     VenueOperationalPrior,
+    VenuePriorFeatureMode,
     augment_training_candidate_set,
 )
 from pokemon_red_completion.party_development_venue_priors import (
@@ -239,6 +240,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
     venue_priors: tuple[VenueOperationalPrior, ...]
     shared_venue: GrindingArea | None = None
     shared_venue_prior: VenueOperationalPrior | None = None
+    venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED
 
     def __post_init__(self) -> None:
         if not isinstance(self.candidate_set, PartyDevelopmentCandidateSet):
@@ -283,7 +285,43 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
             raise PartyDevelopmentAdapterError(
                 "candidate availability and unavailable reasons must agree"
             )
-        if self.candidate_set.kind is TrainingChoiceKind.TRAINEE:
+        if not isinstance(self.venue_prior_feature_mode, VenuePriorFeatureMode):
+            raise PartyDevelopmentAdapterError(
+                "venue-prior feature mode must be typed"
+            )
+        if self.venue_prior_feature_mode is VenuePriorFeatureMode.MASKED_UNCALIBRATED:
+            if (
+                any(prior.available for prior in self.venue_priors)
+                or self.shared_venue_prior is not None
+                or any(
+                    reason is PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                    for reason in self.candidate_unavailable_reasons
+                )
+                or (
+                    self.candidate_set.kind is TrainingChoiceKind.TRAINEE
+                    and (
+                        not isinstance(self.shared_venue, GrindingArea)
+                        or any(
+                            not isinstance(value, PartyMemberObservation)
+                            for value in self.bindings
+                        )
+                    )
+                )
+                or (
+                    self.candidate_set.kind is TrainingChoiceKind.VENUE
+                    and (
+                        self.shared_venue is not None
+                        or any(
+                            not isinstance(value, GrindingArea)
+                            for value in self.bindings
+                        )
+                    )
+                )
+            ):
+                raise PartyDevelopmentAdapterError(
+                    "masked venue priors must be absent and cannot gate execution"
+                )
+        elif self.candidate_set.kind is TrainingChoiceKind.TRAINEE:
             if (
                 any(not isinstance(value, PartyMemberObservation) for value in self.bindings)
                 or not isinstance(self.shared_venue, GrindingArea)
@@ -348,6 +386,8 @@ class PartyDevelopmentSemanticSnapshot:
     role_coverage_count: int
     role_target_count: int
     active_conditions: tuple[str, ...] = ()
+    venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED
+    execution_protocol_id: str = "legacy-adaptive-v1"
 
     def __post_init__(self) -> None:
         if (
@@ -448,6 +488,17 @@ class PartyDevelopmentSemanticSnapshot:
             raise PartyDevelopmentAdapterError(
                 "party-development active conditions must be sorted and unique"
             )
+        if not isinstance(self.venue_prior_feature_mode, VenuePriorFeatureMode):
+            raise PartyDevelopmentAdapterError(
+                "party-development venue-prior feature mode is invalid"
+            )
+        if (
+            not isinstance(self.execution_protocol_id, str)
+            or _SAFE_ID.fullmatch(self.execution_protocol_id) is None
+        ):
+            raise PartyDevelopmentAdapterError(
+                "party-development execution protocol identity is invalid"
+            )
         self._require_declared_goal_has_pressure()
 
     @property
@@ -476,6 +527,8 @@ class PartyDevelopmentSemanticSnapshot:
                 "role_coverage_count": self.role_coverage_count,
                 "role_target_count": self.role_target_count,
                 "active_conditions": list(self.active_conditions),
+                "venue_prior_feature_mode": self.venue_prior_feature_mode.value,
+                "execution_protocol_id": self.execution_protocol_id,
             }
         )
 
@@ -514,18 +567,21 @@ class PartyDevelopmentSemanticSnapshot:
     def trainee_menu(
         self, shared_venue: GrindingArea
     ) -> BoundPartyDevelopmentMenu[PartyMemberObservation] | None:
-        """Project trainees under one fixed, evidence-backed venue."""
+        """Project trainees under one fixed venue and explicit prior mode."""
 
         venue_index = self._venue_index(shared_venue)
         if not shared_venue.conditions_match(self.active_conditions):
             raise PartyDevelopmentAdapterError(
                 "shared trainee venue is inactive in the observed conditions"
             )
-        shared_prior = self.venue_prior_registry.prior_for(
+        calibrated_prior = self.venue_prior_registry.prior_for(
             shared_venue,
             operational_contract_sha256=self.venue_operational_contract_sha256[venue_index],
         )
-        if not shared_prior.available:
+        if (
+            self.venue_prior_feature_mode is VenuePriorFeatureMode.CALIBRATED
+            and not calibrated_prior.available
+        ):
             raise PartyDevelopmentAdapterError(
                 "shared trainee venue lacks frozen independent evidence"
             )
@@ -542,7 +598,13 @@ class PartyDevelopmentSemanticSnapshot:
         self._require_candidates_can_serve_goal(profiles)
         semantics = tuple(item.semantics_for_venue(venue_index) for item in profiles)
         capabilities = tuple(item.execution_capability_for_venue(venue_index) for item in profiles)
-        repeated_prior = tuple(shared_prior for _ in bindings)
+        shared_prior = (
+            calibrated_prior
+            if self.venue_prior_feature_mode is VenuePriorFeatureMode.CALIBRATED
+            else None
+        )
+        feature_prior = shared_prior or VenueOperationalPrior()
+        repeated_prior = tuple(feature_prior for _ in bindings)
         candidate_set = augment_training_candidate_set(
             base,
             self.context,
@@ -560,6 +622,7 @@ class PartyDevelopmentSemanticSnapshot:
             venue_priors=repeated_prior,
             shared_venue=shared_venue,
             shared_venue_prior=shared_prior,
+            venue_prior_feature_mode=self.venue_prior_feature_mode,
         )
 
     def venue_menu(
@@ -584,12 +647,18 @@ class PartyDevelopmentSemanticSnapshot:
             return None
         bindings, base = projected
         indexes = tuple(self._venue_index(item) for item in bindings)
-        priors = tuple(
-            self.venue_prior_registry.prior_for(
-                item,
-                operational_contract_sha256=(self.venue_operational_contract_sha256[index]),
+        priors = (
+            tuple(
+                self.venue_prior_registry.prior_for(
+                    item,
+                    operational_contract_sha256=(
+                        self.venue_operational_contract_sha256[index]
+                    ),
+                )
+                for item, index in zip(bindings, indexes, strict=True)
             )
-            for item, index in zip(bindings, indexes, strict=True)
+            if self.venue_prior_feature_mode is VenuePriorFeatureMode.CALIBRATED
+            else tuple(VenueOperationalPrior() for _ in bindings)
         )
         semantics = tuple(profile.semantics_for_venue(index) for index in indexes)
         capabilities = tuple(profile.execution_capability_for_venue(index) for index in indexes)
@@ -600,13 +669,21 @@ class PartyDevelopmentSemanticSnapshot:
             venue_priors=priors,
         )
         availability = tuple(
-            prior.available and capability.available
+            capability.available
+            and (
+                prior.available
+                or self.venue_prior_feature_mode
+                is VenuePriorFeatureMode.MASKED_UNCALIBRATED
+            )
             for prior, capability in zip(priors, capabilities, strict=True)
         )
         reasons = tuple(
             (
                 PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
-                if not prior.available
+                if (
+                    not prior.available
+                    and self.venue_prior_feature_mode is VenuePriorFeatureMode.CALIBRATED
+                )
                 else capability.unavailable_reason
             )
             for prior, capability in zip(priors, capabilities, strict=True)
@@ -620,6 +697,7 @@ class PartyDevelopmentSemanticSnapshot:
             candidate_available=availability,
             candidate_unavailable_reasons=reasons,
             venue_priors=priors,
+            venue_prior_feature_mode=self.venue_prior_feature_mode,
         )
 
     def unique_weakest_goal_relevant_venue_trainee(
@@ -689,6 +767,7 @@ class PartyDevelopmentSemanticSnapshot:
             candidate_set=menu.candidate_set,
             venue_priors=menu.venue_priors,
             shared_venue_prior=menu.shared_venue_prior,
+            venue_prior_feature_mode=menu.venue_prior_feature_mode,
             venue_prior_registry_sha256=self.venue_prior_registry.registry_sha256,
             outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
             candidate_available=menu.candidate_available,

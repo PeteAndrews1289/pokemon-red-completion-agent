@@ -5,9 +5,14 @@ import json
 import runpy
 from collections.abc import Mapping
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
+from pokemon_red_completion.party_development_adapter import (
+    PartyDevelopmentCapabilityState,
+    PartyDevelopmentExecutionCapability,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -165,3 +170,69 @@ def test_pool_summary_surfaces_capability_rejected_roots_without_identities() ->
 
     assert summary["capability_rejected_root_counts"] == {"packed_party_pp_unavailable": 3}
     assert "root_lineage_id" not in json.dumps(summary, sort_keys=True)
+
+
+def test_root_rejection_reports_an_all_blocked_axis_without_private_identity() -> None:
+    blocked_transition = PartyDevelopmentExecutionCapability(
+        PartyDevelopmentCapabilityState.BLOCKED,
+        PartyDevelopmentCapabilityState.READY,
+        PartyDevelopmentCapabilityState.READY,
+    )
+    snapshot = SimpleNamespace(
+        member_profiles=(
+            SimpleNamespace(
+                execution_capabilities_by_venue=(
+                    blocked_transition,
+                    blocked_transition,
+                )
+            ),
+        )
+    )
+
+    code = SCRIPT["_capability_root_rejection_code"](snapshot)
+
+    assert code == "all_transition_capabilities_blocked"
+    assert "root" not in code
+
+
+def test_repeatable_dose_binds_switch_assisted_battle_credit() -> None:
+    dose = SCRIPT["PartyDevelopmentOutcomeDose"](
+        completed_battles=2,
+        maximum_encounter_steps=1_200,
+        maximum_controller_actions=50_000,
+        maximum_frames=750_000,
+        maximum_healing_trips=3,
+        maximum_rotations=8,
+        maximum_faints=0,
+    )
+
+    protocol = SCRIPT["_battle_credit_protocol"](dose.completed_battles)
+    policy = SCRIPT["_switch_assisted_outcome_policy"](dose)
+
+    assert protocol == {
+        "protocol_id": "switch-assisted-fixed-dose-v1",
+        "selected_member_participates": True,
+        "qualified_escort_completes_battle": True,
+        "candidate_eligibility_scope": "curriculum_venue_band_relevant",
+        "candidate_eligibility_is_direct_combat_claim": False,
+        "venue_prior_feature_mode": "masked_uncalibrated",
+        "completed_battles": 2,
+        "teacher_choices": 0,
+        "private_identity_fields": 0,
+    }
+    assert policy.safe_lead_level is None
+    assert policy.minimum_direct_level_advantage == 100
+    assert policy.max_battles == 2
+    assert policy.max_healing_trips == 2
+
+    calibrated = "a" * 64
+    first = SCRIPT["_switch_assisted_venue_contract_sha256"](
+        calibrated,
+        completed_battles=2,
+    )
+    second = SCRIPT["_switch_assisted_venue_contract_sha256"](
+        calibrated,
+        completed_battles=2,
+    )
+    assert first == second
+    assert first != calibrated

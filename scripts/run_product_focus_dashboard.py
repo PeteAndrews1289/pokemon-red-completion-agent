@@ -57,6 +57,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     transfer_results = _count(progress, "transfer_results")
     outputs = focus_scorecard(state)
     output_event = " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
+    outcome_question_total = sum(
+        minimum
+        for label, _, minimum in outputs
+        if label.startswith("Outcome Question")
+    )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
         value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
@@ -68,8 +73,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Pilot: 7 eligible questions (4 train, 3 development); no fit or authority "
-            "promotion. The next run waits on prospective execution eligibility."
+            "Switch-assisted 8+4 is action-free ready; outcomes, model fit, authority, "
+            "and transfer remain zero until the exact pilot runs."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
@@ -89,7 +94,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         experiment=DashboardExperimentState(
             phase="training",
             zero_shot_completed=train_outcomes + development_outcomes,
-            zero_shot_total=48,
+            zero_shot_total=outcome_question_total,
             adaptation_completed=fits,
             adaptation_total=1,
             sealed_completed=unseen,
@@ -127,7 +132,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             f"Stop 1 · {stop_conditions[0]}",
             f"Stop 2 · {stop_conditions[1]}",
-            f"Next decision · {_text(lane, 'next_decision')}",
+            _event("Next decision", _text(lane, "next_decision")),
             "Legacy one-shot party campaign · evidence preserved · development lane retired",
             "Controller 0 · teacher 0 · sealed Red 0 · Crystal 0 · full replay 0",
         ),

@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-16 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-17 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -17,6 +17,47 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 `NORTH_STAR.md`, `ACTIVE_PRODUCT_STATE.md`, or the active model-first roadmap. Sections 1 through 10 below are durable
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
+
+## Switch-assisted 8+4 pilot is action-free ready; publish before execution — 2026-08-17
+
+The current development protocol is no longer the direct-trainee intervention used by either
+repeatable pilot on August 16. The selected member participates, then a qualified escort may finish
+the fixed battle dose. Prospective candidate eligibility means “relevant to this curriculum venue
+band,” not “can solo every encounter.” This is a reusable party-rotation lesson, not an overleveling
+shortcut: all candidates receive the same dose, teacher choices remain absent, and live authority
+stays zero.
+
+Two semantic leaks were closed before another run. First, field Dig now requires both a valid
+healing anchor and a cartridge-derived current tileset that permits the move; a Mart can no longer
+masquerade as a legal transition simply because Dig has somewhere to land. Second, Route 11 and
+Cave yield/safety/cost values measured under direct combat are not valid under switch assistance.
+The new menu binds a distinct protocol and venue contract, masks all seven old performance-prior
+features to exact zero, and states that no calibrated value is reused. Prospective catalog and
+binding schemas move to v7 while authenticated v6 history remains readable.
+
+The action-free rehearsal produced a fresh, root-disjoint **8 train / 4 development / 48 candidate
+trial** plan, spanning both choice kinds, all four completion goals, and candidate widths two and
+six. It exposed identity-free pool rejections rather than private roots and used zero controller,
+teacher, model, sealed Red, Crystal, or replay access. The tracked
+[path-free receipt](docs/evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json)
+is the public checkpoint.
+
+Do not pool older direct-combat outcomes with the new intervention. They remain historical
+falsifier evidence; the switch-assisted scoreboard starts at **train 0/8 · development 0/4 · model
+fits 0/1 · unseen comparisons 0/1 · authority 0**. The next gate is publication and exact-head
+green CI, then regeneration of the action-free plan from that exact source and one exact owner
+authorization. If the twelve questions all complete, fit once on train immediately and compare
+once on untouched development. Only that result decides whether the later statistical milestone of
+32 train / 16 development deserves collection.
+
+Claude and Antigravity command-line audits were attempted at this checkpoint; neither returned a
+verdict before timeout. This is neither approval nor a blocker. Codex owns the discriminating tests,
+publication, and final adjudication. The desktop applications may be closed; their command-line
+clients are independent. No execution, fitting, sealed Red, Crystal, or full replay is authorized
+by this section. Complete local qualification is green: **3,961 passed · 3 skipped integration
+tests · 1 expected xfail**, plus Ruff, mypy across 236 source files, documentation, privacy, product
+focus, and generated source-bound registries. See the
+[dated audit](docs/current-audit-2026-08-17.md).
 
 ## First repeatable pilot produced learner outcomes and blocked unsafe scaling — 2026-08-16
 
