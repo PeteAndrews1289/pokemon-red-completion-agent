@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: stop fixing the teacher and test the learner
+
+Return to the **15 INVALID** lanes from the scale experiment. Lock the original **78 MEASURED**
+lanes behind glass labeled **UNCLAIMABLE**, then let the recovery successor touch only the red
+lanes. Ten turn green. Five stay red. Collapse the whole immutable board into **88 MEASURED + 5
+INVALID = 93**, then into **22/24 TRAIN QUESTIONS + 11/12 DEVELOPMENT QUESTIONS**.
+
+Make the arithmetic explicit: **10 RECOVERED TRIALS → 9 COMPLETED QUESTIONS → +4 TRAIN / +5
+DEVELOPMENT**. Show the cumulative product board moving to **30/32 TRAIN · 15/16 DEVELOPMENT ·
+FITS 2 · COMPARISONS 2 · AUTHORITY 0 · TRANSFER 0**. Keep the five failures visible under three
+plain labels: **VENUE TOO WEAK · NO LEGAL REPLAN · RECOVERY BUDGET EXHAUSTED**. Do not animate a
+retry.
+
+Now split the eleven complete scale-development cards. Put six face up under **ALREADY SCORED** and
+five under **NEWLY COMPLETED LABELS**. Add a small but important caption: **PARTIAL OUTCOMES EXISTED
+BEFORE RECOVERY — NOT UNTOUCHED ROOTS**. Freeze the next rail before turning them over: **FIT ONE
+CANDIDATE ON 22 TRAIN → UPDATED WINS > BASE WINS · ACCURACY NOT DOWN · CROSS-ENTROPY DOWN · WINNER
+PROBABILITY UP → OTHERWISE REDESIGN**.
+
+Narration: **“Five failed trials remained, but fixing them was no longer the cheapest way to learn.
+We finally had enough evidence to ask whether the model itself was getting better. That question—not
+whether the teacher could reach 32 out of 32—became the next gate.”** End with **DESCRIPTIVE ONLY ·
+BEST POSSIBLE 5–0 EXACT p=0.0625 · CRYSTAL CLOSED · LIVE AUTHORITY ZERO**.
+
 ## August 17 scene: the bigger model did not win
 
 Open on **93 TRIALS**. Split them into **78 MEASURED** and **15 INVALID**, then collapse the green

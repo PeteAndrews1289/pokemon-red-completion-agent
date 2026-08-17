@@ -1,0 +1,149 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the recovered outcomes improve the existing model",
+      "the model has live party-development authority",
+      "the model can complete Red autonomously",
+      "the representation transfers to Crystal",
+      "the agent can complete a living Pokedex"
+    ],
+    "supported": "One immutable recovery successor authenticated the original 93-trial denominator, made the 78 previously measured assignments unclaimable, measured 10 of the 15 previously invalid trials, and increased the cumulative outcome-question board without fitting or evaluating a model."
+  },
+  "collection": {
+    "artifact": {
+      "evaluation_stream_sha256": "6773b18b5914e59b6d0d290d9f06dc280480093b61ec3e1100e3de48ce624824",
+      "failure_stream_sha256": "256a3bf9e17184300f982a2507e7bd6e85a1f46171ef2dea6e2b736d4ce910f2",
+      "manifest_sha256": "0975b651ab05980c51374e5ff32e50a130108d0a7e8ffd11d712dcc920770b6d",
+      "outcome_stream_sha256": "c3a2d128f61b620adbb29c05334a5185c0d704c0d93e77f0f6b24f86b16632e3",
+      "plan_stream_sha256": "b8857b86fcee5390fb99566c7fc6f5672a89c3ffc499767a8db42495bbe3d37f",
+      "private_artifact_tracked": false,
+      "status": "complete"
+    },
+    "plan": {
+      "battle_credit_protocol": "direct-safe-else-switch-assisted-fixed-dose-v1",
+      "candidate_trials": 15,
+      "completed_battles_per_trial": 1,
+      "current_reconstruction_plan_sha256": "6fe1f06b124d6681a65e6c5b125a574daef9fbccc5da9b4a0ff3bf3f02423256",
+      "frozen_document_sha256": "294e1a2ae72bacc4c8cf7bdd6f899c9d1c655c82f65765c339be13ee1f5ab690",
+      "frozen_file_sha256": "410d7e8b5f546af88e4eeb85fbc2947a753f9df6cf1fa53a8f715a609fb36056",
+      "predecessor_manifest_sha256": "472afd3909e4fd672da022ba18706d2d09e9f9c43013d39b3d658dc3f5d9483f",
+      "predecessor_plan_sha256": "1681c5850a8e85e60d01b1f1395547ec4ad2e0538ade840f875501378d508ce6",
+      "selection_protocol": "balanced-kind-goal-coverage-v2",
+      "semantic_reconstruction_sha256": "94f66bdaa0695f7dc145f6adf634cf86983d9c70a1eceec6dff64d07d76f5b21",
+      "successor_plan_sha256": "32959a21f783df6ee68998a970706617180b59a778dd06c109d72b65f69fc6a1"
+    },
+    "result": {
+      "controller_actions": 8181,
+      "frames_executed": 670671,
+      "inherited_measured_trials": 78,
+      "joined_invalid_trials": 5,
+      "joined_measured_trials": 88,
+      "original_denominator": 93,
+      "successor_invalid_trials": 5,
+      "successor_measured_trials": 10,
+      "teacher_choice_targets": 0,
+      "teacher_queries": 0
+    },
+    "source": {
+      "ci_attempt": 1,
+      "ci_conclusion": "success",
+      "ci_run": 32044167321,
+      "commit": "f17b7a16d791014195d9840339bd211b04931dfa",
+      "source_bundle_sha256": "2646dd2eeec28de4fc98cb0d263074abde5fe50a9499665dca5159be1fb5df6f"
+    }
+  },
+  "decision": {
+    "next_work": "Authenticate the joined lineage, fit once on all 22 complete scale-train questions from the existing eight-question baseline, and compare once on only the five newly completed development questions. Exclude the six development questions observed by the earlier scale comparison.",
+    "result": "The successor recovered four train and five development preferences. Three questions remain censored, but the 22-train and five-newly-completed-development split is sufficient for the cheapest planned learner falsifier.",
+    "stop_condition": "Retain the candidate for a later shadow design only if paired updated wins exceed base wins, accuracy does not decrease, cross-entropy decreases, and mean winner probability increases. Treat every mixed result as failure; do not collect another recovery campaign, promote authority, open sealed Red, or execute Crystal.",
+    "why": "Fitting now tests whether more diverse completion-aware outcomes improve the learner. Repairing the remaining local teacher failures before that comparison would spend another session without learned evidence and would not identify whether data or representation is the bottleneck."
+  },
+  "failures": {
+    "censored_development_questions": 1,
+    "censored_train_questions": 2,
+    "required_recovery_budget_exhausted_trials": 2,
+    "route_replanning_unavailable_trials": 2,
+    "venue_level_mismatch_trials": 1
+  },
+  "fit_gate": {
+    "base_fit_identity_sha256": "18d9ba5aa323c9448ba1750919bac24198f090c228f4a30223b875c1384a120f",
+    "base_model_artifact_manifest_sha256": "961597323a8e0af507dd7edd835228a9b781370f1ad04ffd097483e5cd60fa5a",
+    "base_model_canonical_sha256": "6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b",
+    "base_model_file_sha256": "3a4a75491eab12cdfc0a77451cdaaac7c619620aa8b8c6669791f19f1aac6c7d",
+    "base_model_outcome_training_examples": 8,
+    "base_pilot_manifest_sha256": "93f19dc2ac24bc33fda37137ed7276ef2781c9d5a61097a8b23c548baf4e48c6",
+    "base_pilot_plan_sha256": "476d3e9e9df2b75e6d6e231d70f40f5571f69a2ae91590e064eb7b311f20652d",
+    "base_pilot_source": "8c45bd112d037cf3f0ec8bbcbba5b1ee72077a7a",
+    "base_training_protocol": "switch-assisted-fixed-dose-v1",
+    "battle_credit_protocol": "direct-safe-else-switch-assisted-fixed-dose-v1",
+    "candidate_count": 1,
+    "candidate_selection": "sole_fixed_hyperparameter_update",
+    "claim_safe_preclaim_checks": [
+      "clean published fitter source",
+      "historical runner bytes and source bundle",
+      "all predecessor and successor stream bytes without outcome-label decoding",
+      "base model, base pilot, and prior comparison provenance",
+      "shared private root and unused comparison identity",
+      "ROM, catalogs, captures, exclusions, frozen plan, and exact plan reconstruction"
+    ],
+    "comparison_claim_sha256": "c2043782c4e22e1c57edacd87eaa4b6b5a0b06b3098e9d1e8dcd9e5a208a0cc1",
+    "descriptive_retention_rule": {
+      "accuracy_must_not_decrease": true,
+      "cross_entropy_must_decrease": true,
+      "mean_winner_probability_must_increase": true,
+      "mixed_result_is_failure": true,
+      "updated_paired_wins_must_exceed_base_wins": true
+    },
+    "excluded_previously_scored_development_questions": 6,
+    "historical_development_runner_sha256": "29c6e2c4cfcd39f8dc0fcbe22627ddf496565c25473aa82e5995ead6b7339cc8",
+    "historical_successor_runner_sha256": "7bceadcdd5c8d6c16a2b561fc0d3a0399c779570282f2b09ff74d8048634a666",
+    "hyperparameters": {
+      "epochs": 200,
+      "learning_rate": 0.01,
+      "prior_l2": 0.1
+    },
+    "joined_complete_questions": 33,
+    "joined_censored_questions": 3,
+    "joined_labels_may_decode_only_after_durable_comparison_claim": true,
+    "newly_completed_development_labels_are_untouched_roots": false,
+    "newly_completed_development_labels_previously_scored": false,
+    "newly_completed_development_questions": 5,
+    "previous_comparison_manifest_sha256": "812bca85cfb0ffe6a091e5f3091e03f0506efc6c447eb5b60f1b2e0927311089",
+    "previous_comparison_fit_identity_sha256": "657583dba8882c65356cfbd92334209b63151d7aee50cbcc70a8e37667737c60",
+    "published_readiness_preflight_complete": false,
+    "scenario_selection_protocol": "balanced-kind-goal-coverage-v2",
+    "small_sample_inferential_claim": false,
+    "status": "one_shot_fit_design_ready_pending_published_preflight",
+    "train_questions": 22
+  },
+  "learning_outputs": {
+    "additional_outcome_questions": {
+      "development": 5,
+      "train": 4
+    },
+    "cumulative_model_fits": 2,
+    "cumulative_outcome_questions": {
+      "development": 15,
+      "train": 30
+    },
+    "cumulative_transfer_results": 0,
+    "cumulative_unseen_development_comparisons": 2,
+    "live_authority_promotions": 0
+  },
+  "mission": "Use Red as the first curriculum for a transferable Pokemon agent that can finish stories and build a retained living Pokedex across games.",
+  "protected_access": {
+    "authority_promoted": false,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_cases_opened": 0
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.repeatable-party-outcome-recovery-successor.v1",
+  "status": "partial_recovery_complete_fit_design_ready",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

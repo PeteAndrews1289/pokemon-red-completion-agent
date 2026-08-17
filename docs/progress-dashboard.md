@@ -5,18 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> The active scorecard is **TRAIN OUTCOME QUESTIONS 26/32 · DEVELOPMENT OUTCOME QUESTIONS 10/16 ·
-> MODEL FITS 2/2 · UNSEEN COMPARISONS 2/2 · AUTHORITY 0 · TRANSFER 0**. The 26-question candidate
-> tied the existing outcome model at 4/6 on new development questions and worsened aggregate
-> calibration, so the existing model remains the development baseline. Inputs, preflights, CI,
-> teacher runs and frozen artifacts never advance these counters. See the
-> [scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
+> The active scorecard is **TRAIN OUTCOME QUESTIONS 30/32 · DEVELOPMENT OUTCOME QUESTIONS 15/16 ·
+> MODEL FITS 2/2 · UNSEEN COMPARISONS 2/2 · AUTHORITY 0 · TRANSFER 0**. The existing eight-question
+> outcome model remains the development baseline; the recovery added outcome evidence but fit no
+> model and granted no authority. Inputs, preflights, CI, teacher runs and frozen artifacts never
+> advance these counters. See the
+> [recovery result](evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
 
-> **Current recovery rail:** the scale run produced **78 measured + 15 invalid trials**, leaving six
-> train and six development questions censored. All three new collection-goal train questions are
-> in that missing set. Next rail: **TEST FOUR MECHANICAL FAILURES → REPAIR WITHOUT CHANGING MENUS →
-> FREEZE A 15-TRIAL SUCCESSOR → PROVE 78 MEASURED TRIALS ABSENT → COLLECT → FIT/SELECT ON TRAIN →
-> COMPARE ONLY THE NEW SIX**. Sealed Red, Crystal, replay and authority remain zero.
+> **Current learning rail:** the recovery successor measured 10 of 15 claims and retained five
+> invalids, producing **88 measured + 5 invalid trials** across the immutable denominator. The
+> joined scale set has **22 complete train + 11 complete development questions**; only five
+> development labels are newly completed and never scored because six were used by the earlier
+> comparison. Next rail: **PUBLISH JOINED FITTER → GREEN EXACT-HEAD CI → FIT 22 TRAIN ONCE →
+> COMPARE FIVE NEWLY COMPLETED LABELS ONCE → RETAIN FOR SHADOW MODE OR REDESIGN LEARNER**. Do not repair the remaining
+> teacher failures first. Sealed Red, Crystal, replay and authority remain zero.
 
 > **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
 > SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE

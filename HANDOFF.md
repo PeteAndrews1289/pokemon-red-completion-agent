@@ -18,7 +18,7 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Fifteen-trial recovery is implemented and lineage-safe — 2026-08-17
+## Fifteen-trial recovery executed; fit the learner next — 2026-08-17
 
 The four scale-campaign failure classes now have bounded semantic repairs. Field Dig accepts its
 observed Celadon landing and then flies to Vermilion. Saffron and Lavender no-Fly Center starts use
@@ -28,18 +28,28 @@ recovery trips, but cleanup cannot become an uncounted fourth trip. A direct fig
 live PP or Disable uses the qualified escort on the next encounter until a real heal changes the
 resource state.
 
-`run_repeatable_party_outcome_successor.py` authenticates the immutable 78-measured/15-invalid
+`run_repeatable_party_outcome_successor.py` authenticated the immutable 78-measured/15-invalid
 predecessor, reconstructs its 36 questions under the repaired executable, recovers the exact old
 candidate permutations from their frozen digests, retains every timing offset, and proves all 93
 identity-free candidate feature hashes unchanged. It inherits the 78 measured outcomes and claims
-only the 15 invalid slots. An action-free rehearsal passed with zero controller, teacher, model,
-sealed Red, Crystal or replay access. No successor has executed yet.
+only the 15 invalid slots. The successor then executed exactly once from published source
+`f17b7a16d791014195d9840339bd211b04931dfa` under green CI run `32044167321` attempt 1.
 
-Next: pass the complete local gate, publish the clean source, require exact-head green CI, freeze a
-new external successor from that revision and execute it once under standing development approval.
-Never rerun the consumed scale plan. If the successor completes, join only its claimed slots,
-select the next model on train evidence and compare once on the six newly completed development
-questions.
+Ten claims measured and five remained invalid. The joined fixed denominator is **88 measured + 5
+invalid**, producing **22/24 complete scale-train + 11/12 complete scale-development questions**.
+Ten recovered trials completed nine questions: four train and five development. Cumulative counters
+are **30/32 train · 15/16 development · 2/2 fits · 2/2 comparisons · authority 0 · transfer 0**.
+Recovery fit no model. Both the predecessor and successor plans are consumed and must never retry.
+
+Next: publish the joined fitter and require exact-head green CI. Starting from the eight-question
+outcome baseline, fit one fixed candidate on all 22 complete scale-train questions. Exclude the six
+scale-development questions scored previously and compare once on only the five newly completed
+labels. Those roots had partial outcomes before recovery, so do not call them untouched roots or an
+inferential benchmark. Retain for a later shadow design only if paired updated wins exceed base
+wins, accuracy does not decrease, cross-entropy decreases, and mean winner probability increases.
+Any mixed result stops collection and sends the project to learner redesign. Sealed Red, Crystal,
+full replay and live authority remain closed. See the
+[path-free recovery result](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
 
 ## Scale campaign trained a larger candidate; baseline still wins — 2026-08-17
 

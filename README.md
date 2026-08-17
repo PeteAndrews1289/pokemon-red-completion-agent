@@ -5,28 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the larger outcome model did not beat the baseline;
-> recover the missing collection curriculum.** The balanced Red scale campaign executed once:
-> **93 candidate trials → 78 measured + 15 invalid → 18 train + 6 untouched development
-> preferences**. Six questions in each partition remain censored. No invalid became a target, and
-> the exact frozen plan was not retried.
+> **Current product focus (August 17, 2026): recovery is complete; fit the learner instead of
+> repairing the teacher again.** The immutable recovery successor claimed only the balanced Red
+> campaign's 15 invalid assignments. It measured 10 and retained five as invalid, bringing the
+> fixed 93-trial denominator to **88 measured + 5 invalid** and completing **22/24 scale-train plus
+> 11/12 scale-development questions**. The original 78 measurements were structurally
+> unclaimable, and neither frozen plan may retry.
 >
-> The sequential candidate now contains **26 cumulative outcome-trained questions**, and its train
-> loss fell **1.663 → 0.533**. It did not improve on the six new development questions: both models
-> scored **4/6**, while cross-entropy worsened **0.667 → 0.728** and mean winner probability fell
-> **0.654 → 0.619**. One decision favored each model and four tied. The existing outcome model
-> remains the development baseline; neither model has live authority.
+> Honest board: **train 30/32 · development 15/16 · fits 2/2 · unseen comparisons 2/2 · live
+> authority 0 · transfer 0**. The existing eight-question outcome model remains the baseline; the
+> previously rejected 26-question candidate remains non-authoritative. Recovery fit no model and
+> granted no authority.
 >
-> Honest board: **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · live
-> authority 0 · transfer 0**. Next, repair four bounded execution classes and freeze a successor
-> that claims only the 15 failed assignments. Recovering six train and six still-unscored
-> development preferences restores the missing collection-goal evidence without replaying the 78
-> measured trials. See the
-> [path-free scale result](docs/evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
+> Next, one fail-closed offline runner authenticates the joined lineage, fits on all **22 complete
+> scale-train questions**, excludes six development questions already inspected by the prior
+> comparison, and compares once on only **five newly completed development questions**. It advances
+> only if paired wins favor the update, accuracy does not fall, cross-entropy falls, and winner
+> probability rises; any mixed result sends the learner to redesign before more collection.
+> See the
+> [path-free recovery result](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
 > Run `.venv/bin/python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port
-> 8768. Local qualification before the fit was **3,977 passed · 3 integration deselected · 1
-> expected xfail**, plus lint, typing, docs, privacy, and product focus. The
-> [current audit](docs/current-audit-2026-08-17.md) records the scale decision and remaining risks.
+> 8768. The [current audit](docs/current-audit-2026-08-17.md) records the recovery boundary and
+> remaining risks.
 
 > **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
 > exact authorized campaign durably claimed its first development trial, then full-box semantic

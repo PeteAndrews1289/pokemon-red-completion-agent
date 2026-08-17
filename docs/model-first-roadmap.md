@@ -8,7 +8,37 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the larger candidate did not beat the baseline
+## Current checkpoint: partial recovery is enough to test the learner
+
+The immutable recovery successor executed once and is consumed. It claimed only the 15 invalid
+assignments from the fixed 93-trial scale denominator, measured ten, and retained five as invalid.
+The joined scale evidence is therefore **88 measured + 5 invalid → 22/24 complete train + 11/12
+complete development questions**. Ten recovered trials completed nine questions: four train and
+five development. The cumulative board is **30/32 train · 15/16 development · 2/2 fits · 2/2
+comparisons · authority 0 · transfer 0**.
+
+The three still-censored questions are not the next bottleneck. The cheapest falsifier now uses the
+evidence already collected:
+
+1. Publish the fail-closed joined fitter and require green exact-head CI.
+2. Authenticate the predecessor's 78 measured plus 15 invalid terminals and the successor's exact
+   ten measured plus five invalid terminals. The successor may fill only the old censored slots.
+3. Start from the existing eight-question outcome baseline and fit one fixed candidate on all 22
+   complete joined scale-train questions. This produces 30 cumulative outcome-training examples.
+4. Exclude the six scale-development questions scored by the earlier comparison. Compare once on
+   only the five newly completed labels. Their roots had partial candidate outcomes before
+   recovery, so this is a never-scored label comparison, not an untouched-root benchmark.
+5. Retain the candidate for a separate goal-manager shadow design only if accuracy does not fall,
+   cross-entropy falls, mean winner probability rises, and more paired decisions favor the update
+   than the baseline. This five-question result is descriptive and cannot support an inferential
+   claim.
+6. If the result is mixed or worse, stop collection and redesign the learner. Do not repair the
+   remaining five trials, add roots to make the board say 32/16, open Crystal, or grant authority.
+
+The [path-free recovery result](evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json)
+records the fixed denominator, learning-output arithmetic and protected-access boundary.
+
+## Previous checkpoint: the larger candidate did not beat the baseline
 
 The balanced campaign executed once: **93 trials → 78 measured + 15 invalid → 18 train + 6 fresh
 development preferences**. This advances the cumulative board to **26/32 train · 10/16 development

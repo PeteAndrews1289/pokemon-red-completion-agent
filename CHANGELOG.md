@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Executed the immutable 15-trial scale-recovery successor once: ten trials measured and five
+  remained invalid, bringing the fixed denominator to 88/93 measured and completing 22/24
+  scale-train plus 11/12 scale-development questions. Advanced the cumulative evidence board to
+  train 30/32 and development 15/16 without fitting a model or granting authority. Added a
+  fail-closed joined-lineage fitter that keeps the 78 predecessor measurements immutable, trains
+  one fixed candidate on the 22 complete scale-train questions, excludes six previously scored
+  scale-development questions, and compares once on five newly completed labels. The comparison
+  is descriptive only; Crystal, sealed Red, full replay and live authority remain closed.
 - Completed the fresh switch-assisted party-development pilot with 48/48 measured candidate trials,
   8/8 train and 4/4 untouched development questions eligible, and zero invalids. Added and
   published a fail-closed offline fitter that authenticates every stream, reconstructs the exact

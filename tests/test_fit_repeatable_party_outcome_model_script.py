@@ -193,6 +193,25 @@ def test_pilot_reader_authenticates_every_declared_stream(tmp_path: Path) -> Non
     assert pilot.manifest_sha256 == manifest_sha256
 
 
+def test_pilot_reader_can_authenticate_an_explicit_successor_kind(
+    tmp_path: Path,
+) -> None:
+    artifact, _manifest_sha256 = _pilot_artifact(tmp_path)
+    manifest_path = artifact / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="ascii"))
+    manifest["kind"] = "repeatable_party_outcome_development_successor"
+    manifest_payload = _canonical_line(manifest)
+    manifest_path.write_bytes(manifest_payload)
+
+    pilot = SCRIPT["_open_authenticated_pilot"](
+        artifact,
+        expected_manifest_sha256=hashlib.sha256(manifest_payload).hexdigest(),
+        expected_kind="repeatable_party_outcome_development_successor",
+    )
+
+    assert pilot.artifact_id == artifact.name
+
+
 def test_pilot_reader_rejects_stream_tampering_and_extra_files(tmp_path: Path) -> None:
     artifact, manifest_sha256 = _pilot_artifact(tmp_path)
     with (artifact / "outcomes.jsonl").open("ab") as output:

@@ -81,8 +81,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The larger outcome candidate did not beat the baseline; recover censored "
-            "collection evidence before authority or transfer."
+            "Recovery completed 22 scale-train and 11 scale-development labels; "
+            "fit once on train and compare five newly completed labels before "
+            "authority or transfer."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",

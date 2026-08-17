@@ -333,6 +333,7 @@ def _open_authenticated_pilot(
     expected_manifest_sha256: str,
     expected_measured_trials: int = _EXPECTED_OUTCOME_TRIALS,
     expected_invalid_trials: int = 0,
+    expected_kind: str = _PILOT_KIND,
 ) -> _AuthenticatedPilot:
     if (
         type(expected_measured_trials) is not int  # noqa: E721
@@ -394,7 +395,7 @@ def _open_authenticated_pilot(
     if (
         manifest.get("format") != PRIVATE_JSON_ARTIFACT_FORMAT
         or manifest.get("schema_version") != PRIVATE_ARTIFACT_SCHEMA_VERSION
-        or manifest.get("kind") != _PILOT_KIND
+        or manifest.get("kind") != expected_kind
         or manifest.get("status") != "complete"
         or not isinstance(artifact_id, str)
         or artifact_id != artifact.name

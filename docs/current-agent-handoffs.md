@@ -6,32 +6,35 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: recover censored scale questions; do not promote the larger candidate
+## Current override: fit the recovered scale evidence; stop repairing the teacher
 
-Codex completed the balanced 24+12 campaign once. It retained **78/93 measured trials** and 15
-mechanical invalids, yielding **18 train plus 6 untouched development preferences**. The sequential
-fit now contains 26 cumulative outcome-trained questions, but it tied the existing baseline at
-4/6 correct and worsened cross-entropy from 0.667 to 0.728. The original eight-question outcome
-model remains the development baseline; the larger candidate has no authority.
+Codex completed the immutable 15-trial recovery successor once. It measured ten claims and retained
+five invalids, bringing the original 93-trial denominator to **88 measured plus 5 invalid**. The
+joined scale set now contains **22/24 complete train plus 11/12 complete development questions**;
+five of those development questions are newly completed and have never been scored. Cumulatively,
+the board is **30/32 train · 15/16 development · 2/2 fits · 2/2 comparisons · authority 0 ·
+transfer 0**. The original eight-question outcome model remains the development baseline; recovery
+fit no model and granted no authority.
 
-Codex owns the next bounded lane: repair the four mechanical classes, build an authenticated
-successor that claims only the 15 invalid assignments, and recover six train plus six still-
-unscored development questions. It must leave all 78 measured trials untouched and preserve the
-frozen menus, intervention, identity-free feature contract, and failure history. After recovery,
-model selection uses train evidence only; only the six newly completed development questions may
-serve as the next fresh comparison.
+Codex owns the next bounded lane: publish the joined-lineage fitter, require green exact-head CI,
+fit once on all 22 complete scale-train questions from the existing baseline, and compare once on
+only the five newly completed development questions. The six development questions observed by the
+earlier scale comparison are excluded. The fitter must authenticate all predecessor and successor
+streams, retain the five failures as censored, write only a private model artifact, and keep live
+authority at zero.
 
-Claude's next useful review is the action-free 15-trial successor or a later benchmark claim,
-especially the cross-protocol interpretation and fresh-development boundary. Antigravity remains
-deferred until a concrete title-neutral Crystal protocol; then it challenges no more than three
-transfer assumptions and names work to delete. Neither blocks routine development. Their desktop
-apps may stay closed because command-line access is sufficient when a review is actually queued.
+Claude reviews authentication, leakage, the cross-protocol interpretation and the new-label
+boundary. Antigravity challenges whether the result justifies goal-manager shadow integration and
+which Red-specific work should be deleted. Neither reviewer edits the worktree or blocks routine
+development. Crystal remains closed until a clear Red development gain earns a title-neutral
+transfer design.
 
-The board is **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · authority 0 ·
-transfer 0**. The exact 24+12 plan must never retry. Standing approval covers the new development
-successor, offline fitting, documentation, CI and publication; sealed Red, Crystal execution,
+If the candidate clearly improves, Codex prepares a separate shadow-mode goal-manager integration;
+it does not silently grant control. If the comparison is mixed or worse, preserve the result and
+redesign the learner before collecting more data. Neither consumed plan may retry. Standing
+approval covers this offline fit, documentation, CI and publication; sealed Red, Crystal execution,
 destructive actions and material scope changes remain separately gated. See the
-[path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json).
+[path-free recovery result](evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
 
 ## Superseded override: scale the first outcome-trained scorer on independent roots
 

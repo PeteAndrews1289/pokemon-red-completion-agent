@@ -2,12 +2,46 @@
 
 ## Executive result
 
-The bounded recovery implementation is now action-free ready. It fixes the four observed invalid
-classes without changing the one-battle intervention or learner-visible candidate rows, and a new
-successor runner authenticated the complete 93-trial predecessor denominator while making the 78
-measured assignments unclaimable. All 15 predecessor failures—and only those failures—are present
-in the successor claim set. No controller input has been sent, so the learning board below has not
-changed.
+The bounded recovery successor executed once and is consumed. It authenticated the complete
+93-trial predecessor denominator, made all 78 previously measured assignments unclaimable, and
+claimed only the 15 predecessor failures. Ten successor trials measured and five remained invalid.
+The fixed joined denominator is now **88 measured + 5 invalid**.
+
+Those ten trials completed nine questions: four train and five development. The joined scale set is
+**33/36 complete = 22/24 train + 11/12 development**. Across the initial independent 8+4 pilot and
+the scale lineage, the honest cumulative board is **train 30/32 · development 15/16 · fits 2/2 ·
+unseen comparisons 2/2 · live authority 0 · transfer 0**. Recovery fit no model and granted no
+authority.
+
+Five successor failures remain honest censored evidence. One trial rejected a venue whose encounter
+band was far below the party, two could not produce a legal replanned route, and two exhausted the
+declared required-recovery budget. They censor two train questions and one development question.
+The exact successor cannot retry, and another repair campaign is not justified before testing the
+learner.
+
+The next fit uses the existing eight-question outcome model as its base and all 22 complete joined
+scale-train questions, yielding 30 cumulative outcome-training examples. Six development questions
+were scored by the earlier scale comparison and are excluded. The next one-time comparison uses
+only five newly completed development labels. Their roots contained partial outcomes before
+recovery, so they are never-scored complete labels rather than untouched roots.
+
+The descriptive decision rule is frozen before comparison: retain the candidate for a later
+shadow-mode design only if updated paired wins exceed base wins, accuracy does not decrease,
+cross-entropy decreases, and mean winner probability increases. Any mixed result is failure. With
+five questions, even a 5–0 discordant result has two-sided exact p=0.0625; no inferential or
+promotion claim follows, and Crystal remains closed.
+
+The fitter's action-free preflight authenticates every artifact byte, the historical runner and
+package bundle, the base model and earlier comparison, the shared private root, the unused
+comparison identity, the ROM, catalogs, captures, exclusions and exact 36-question reconstruction.
+It may instantiate saved-state emulator contexts to prove reconstruction, but it sends no controller
+input, starts no candidate trial, decodes no joined outcome label and fits no model. The real fit
+repeats that gate before durably claiming the comparison; only then may it decode the joined labels.
+
+The [path-free recovery result](evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json)
+records the exact source, plan, streams, denominator, counters and protected-access boundary.
+
+## Previous scale campaign and negative fit
 
 The balanced scale campaign and second outcome fit are complete. The campaign retained **78/93
 measured trials** and 15 mechanical invalids, producing **18 complete train and 6 untouched
@@ -19,15 +53,15 @@ beat the existing outcome baseline. Both models scored **4/6** on development; c
 worsened **0.667 → 0.728**, mean winner probability fell **0.654 → 0.619**, one choice favored
 each model and four tied. This is a mixed negative result, not a promotion.
 
-Honest board: **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons 2/2 · live authority
-0 · transfer 0**.
+At that checkpoint the board was **train 26/32 · development 10/16 · fits 2/2 · unseen comparisons
+2/2 · live authority 0 · transfer 0**.
 
 The [path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json)
 authenticates the collection and fit. The existing eight-question outcome model remains the
 development baseline. The 26-question model is preserved privately as a non-authoritative
 candidate.
 
-## Scale campaign and fit
+### Scale campaign and fit
 
 Collection source `a5ef3e538819418ded1bdd49e0e5e9f58961893b` passed CI run `32038893751`
 attempt 1. The frozen 24+12 plan expanded to 93 candidate trials and executed once. It used 57,373

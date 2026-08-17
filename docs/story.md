@@ -7,7 +7,7 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the failures became a fifteen-trial recovery, not another campaign
+## Current checkpoint: ten failures became evidence; five stayed honest failures
 
 The ninety-three-trial experiment did not need to be repeated. Its seventy-eight measurements were
 already good evidence; only fifteen red lanes lacked outcomes. The repair therefore built a new
@@ -21,15 +21,26 @@ the promised three-heal ceiling stopped hiding a reserved fourth cleanup, and a 
 moves fail now hands the fight to the already-qualified escort instead of repeating the same doomed
 choice eight times.
 
-The first successor rehearsal pressed no button. It reconstructed all thirty-six questions,
-recovered their original candidate permutations and timing offsets, matched all ninety-three
-identity-free feature hashes, inherited seventy-eight measured slots and exposed exactly fifteen
-claims. The scoreboard has not moved yet. That is the point: lineage was proved before another
-frame was spent.
+The rehearsal pressed no button. It reconstructed all thirty-six questions, recovered their
+original candidate permutations and timing offsets, matched all ninety-three identity-free feature
+hashes, inherited seventy-eight measured slots and exposed exactly fifteen claims. Only after the
+source passed CI did that successor execute once.
+
+Ten claims produced measurements. Five remained invalid: one venue was plainly too weak for the
+party, two routes could not be replanned, and two trials exhausted the declared recovery budget.
+Nothing was relabeled as a loss, and nothing retried. The immutable denominator now reads
+**eighty-eight measured plus five invalid**, completing twenty-two of twenty-four scale-train
+questions and eleven of twelve scale-development questions.
+
+The cumulative scoreboard is **30/32 TRAIN · 15/16 DEVELOPMENT · 2/2 FITS · 2/2 UNSEEN
+COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**. The next step is no longer another teacher patch.
+The learner will fit once on the twenty-two complete scale-train questions and face only the five
+newly completed development questions that have never been scored. If it cannot improve there,
+the model changes before the teacher does.
 
 ---
 
-## Current checkpoint: the larger model did not generalize better
+## Previous checkpoint: the larger model did not generalize better
 
 The scale experiment ran: ninety-three candidate trials, seventy-eight measured outcomes, fifteen
 invalids, eighteen new train questions and six new unseen questions. The model's cumulative

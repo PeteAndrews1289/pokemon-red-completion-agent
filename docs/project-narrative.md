@@ -1,6 +1,6 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: fifteen failures became a lineage-safe successor
+## August 17: the recovery stopped where learning could begin
 
 The project did not answer a partially failed ninety-three-trial experiment by rerunning all
 ninety-three trials. It built a successor that authenticates the predecessor, inherits its
@@ -15,11 +15,22 @@ three-trip recovery ceiling now counts cleanup honestly. If live PP or Disable d
 fight, the next encounter uses the already-declared escort until a Center heal changes the state.
 
 The action-free rehearsal reconstructed thirty-six questions and a ninety-three-trial denominator,
-then exposed exactly fifteen claims. It used no controller, teacher, model prediction, sealed Red,
-Crystal or full replay. The board therefore remains **26/32 train · 10/16 development · 2/2 fits ·
-2/2 comparisons · authority 0 · transfer 0** until the clean published successor actually
-collects outcomes. This is the useful kind of rigor: protect evidence already earned while moving
-directly toward the missing living-Pokédex lessons.
+then exposed exactly fifteen claims. After publication and green CI, that successor executed once.
+Ten claims measured. Five remained honest failures: a venue-level mismatch, two unavailable route
+replans and two exhausted recovery budgets. Nothing retried and no invalid became a label.
+
+The fixed denominator now reads **eighty-eight measured plus five invalid**. That completes
+twenty-two scale-train and eleven scale-development questions. Ten recovered trials produced nine
+new preferences, moving the cumulative board to **30/32 train · 15/16 development · 2/2 fits ·
+2/2 comparisons · authority 0 · transfer 0**.
+
+The crucial decision is to stop repairing. The next candidate trains on the twenty-two complete
+scale-train questions and faces only five newly completed development labels; six previously scored
+scale-development questions stay excluded. Those five roots contained partial outcomes before
+recovery, so they are not sold as untouched benchmark roots. The result is descriptive: even five
+discordant wins would give a two-sided exact p-value of 0.0625. It earns shadow-design work only if
+paired wins favor the update, accuracy does not fall, cross-entropy falls and confidence in the
+measured winner rises. Otherwise the learner changes before the teacher does.
 
 ## August 17: more training data did not automatically make a better model
 

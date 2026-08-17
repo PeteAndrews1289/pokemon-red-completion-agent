@@ -1,19 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-17 scale-recovery checkpoint — highest active checkpoint:** Codex implemented the four
-> bounded mechanical repairs and a repeatable successor that authenticates the consumed 93-trial
-> scale campaign, inherits its 78 measured outcomes, and claims only its 15 invalid slots. The
-> action-free rehearsal reconstructed all 36 original questions, recovered their exact candidate
-> permutations and timing offsets, and matched every identity-free candidate feature digest. No
-> controller input occurred; counters remain **train 26/32 · development 10/16 · fits 2/2 ·
-> comparisons 2/2 · authority 0 · transfer 0**.
+> **2026-08-17 scale-recovery result — highest active checkpoint:** The authenticated successor
+> executed once and is consumed. Of the 15 previously invalid slots, ten measured and five stayed
+> invalid; the joined fixed denominator is **88 measured + 5 invalid**, with **22/24 complete
+> scale-train and 11/12 complete scale-development questions**. The predecessor's 78 measurements
+> were structurally unclaimable. Cumulative counters are **train 30/32 · development 15/16 · fits
+> 2/2 · comparisons 2/2 · authority 0 · transfer 0**.
 >
-> Codex owns full qualification, publication, exact-head CI, the external successor freeze, one
-> development execution under standing approval, the joined train-only model selection and one
-> comparison on only the six newly completed development questions. Claude may audit the concrete
-> joined result or a promotion design; Antigravity should wait for a real Crystal decision. Neither
-> reviewer edits, executes or blocks routine development. The consumed predecessor never retries,
-> and sealed Red, Crystal execution, full replay and live authority remain closed.
+> Codex now owns the authenticated joined fitter, exact-head publication, one 22-question
+> train-only update from the eight-question baseline, and one comparison on only the five newly
+> completed development questions. Six development questions observed previously are excluded.
+> Claude audits lineage and leakage; Antigravity challenges the next integration decision. Neither
+> reviewer edits, executes or blocks routine development. If the candidate does not clearly
+> improve, stop collection and redesign the learner. Both consumed plans remain non-retryable, and
+> sealed Red, Crystal execution, full replay and live authority remain closed. See the
+> [path-free recovery result](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
 
 > **2026-08-17 initial-fit checkpoint — highest active checkpoint:** The switch-assisted pilot
 > completed 48/48 trials and yielded 8 train plus 4 untouched development questions with zero
