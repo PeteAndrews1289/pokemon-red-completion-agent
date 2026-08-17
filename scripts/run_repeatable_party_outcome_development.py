@@ -34,6 +34,7 @@ from pokemon_red_completion.blaine import (  # noqa: E402
     MANSION_VOLATILE_ENEMY_SPECIES,
     ROUTE_11_TRAINING_VENUE,
     _flee,
+    red_training_venues_with_ground_transition,
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING  # noqa: E402
 from pokemon_red_completion.collection_protocol import (  # noqa: E402
@@ -306,7 +307,7 @@ def _switch_assisted_outcome_policy(
         minimum_direct_level_advantage=MAX_LEVEL,
         max_battles=dose.completed_battles,
         max_steps=dose.maximum_encounter_steps,
-        max_healing_trips=dose.maximum_healing_trips - 1,
+        max_healing_trips=dose.maximum_healing_trips,
         max_faints=dose.maximum_faints,
     )
 
@@ -322,7 +323,7 @@ def _hybrid_outcome_policy(
         RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
         max_battles=dose.completed_battles,
         max_steps=dose.maximum_encounter_steps,
-        max_healing_trips=dose.maximum_healing_trips - 1,
+        max_healing_trips=dose.maximum_healing_trips,
         max_faints=dose.maximum_faints,
     )
 
@@ -1206,6 +1207,9 @@ def _execute_trial(
         dose,
         protocol_id=battle_credit_protocol_id,
     )
+    execution_venues = red_training_venues_with_ground_transition(
+        rom_path.read_bytes(),
+    )
     with PyBoyAdapter(
         rom_path,
         watch=watch,
@@ -1271,7 +1275,7 @@ def _execute_trial(
             max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
             cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
             execution_summary_sink=summaries.append,
-            venues=_TRAINING_VENUES,
+            venues=execution_venues,
             report_label="repeatable completion-aware party development",
             checkpoint_count=1,
             fixed_dose=binding.fixed_dose,

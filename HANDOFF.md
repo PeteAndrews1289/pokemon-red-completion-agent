@@ -18,6 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Fifteen-trial recovery is implemented and lineage-safe — 2026-08-17
+
+The four scale-campaign failure classes now have bounded semantic repairs. Field Dig accepts its
+observed Celadon landing and then flies to Vermilion. Saffron and Lavender no-Fly Center starts use
+the cartridge-derived global/local router, observed story gates, trainer-sight avoidance and one
+explicit Cut instead of a new arrow script. The fixed dose may spend all three preregistered
+recovery trips, but cleanup cannot become an uncounted fourth trip. A direct fighter disproved by
+live PP or Disable uses the qualified escort on the next encounter until a real heal changes the
+resource state.
+
+`run_repeatable_party_outcome_successor.py` authenticates the immutable 78-measured/15-invalid
+predecessor, reconstructs its 36 questions under the repaired executable, recovers the exact old
+candidate permutations from their frozen digests, retains every timing offset, and proves all 93
+identity-free candidate feature hashes unchanged. It inherits the 78 measured outcomes and claims
+only the 15 invalid slots. An action-free rehearsal passed with zero controller, teacher, model,
+sealed Red, Crystal or replay access. No successor has executed yet.
+
+Next: pass the complete local gate, publish the clean source, require exact-head green CI, freeze a
+new external successor from that revision and execute it once under standing development approval.
+Never rerun the consumed scale plan. If the successor completes, join only its claimed slots,
+select the next model on train evidence and compare once on the six newly completed development
+questions.
+
 ## Scale campaign trained a larger candidate; baseline still wins — 2026-08-17
 
 The 24+12 balanced plan was frozen and executed exactly once from published source

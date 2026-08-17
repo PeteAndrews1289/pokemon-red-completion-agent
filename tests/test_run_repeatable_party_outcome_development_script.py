@@ -223,7 +223,7 @@ def test_repeatable_dose_binds_switch_assisted_battle_credit() -> None:
     assert policy.safe_lead_level is None
     assert policy.minimum_direct_level_advantage == 100
     assert policy.max_battles == 2
-    assert policy.max_healing_trips == 2
+    assert policy.max_healing_trips == 3
 
     calibrated = "a" * 64
     first = SCRIPT["_switch_assisted_venue_contract_sha256"](
@@ -263,7 +263,7 @@ def test_hybrid_dose_uses_direct_combat_before_switch_assistance() -> None:
     assert policy.safe_lead_level is not None
     assert policy.minimum_direct_level_advantage < 100
     assert policy.max_battles == 1
-    assert policy.max_healing_trips == 2
+    assert policy.max_healing_trips == 3
     assert SCRIPT["_outcome_venue_contract_sha256"](
         "a" * 64,
         completed_battles=1,

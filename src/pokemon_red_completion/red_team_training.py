@@ -883,6 +883,13 @@ def run_red_team_balancing(
     cleanup_trips = 0
     rotations_executed = 0
     consecutive_flees = 0
+    # A live move guard can disprove the aggregate PP forecast after an
+    # encounter begins (for example, because every qualified move is disabled
+    # or otherwise unusable).  Remember that evidence until a Center recovery
+    # changes the resource state, so the next encounter earns participation
+    # credit through the qualified escort instead of repeating the same failed
+    # direct-combat claim eight times.
+    direct_fight_suppressed_species: set[int] = set()
     # celadon._flee appends its evidence to run.wilds, so this has to be a real
     # run state. It was left as None, which raised on the first flee -- and the
     # escort cap flees by design, so the cap could never have run.
@@ -1373,12 +1380,15 @@ def run_red_team_balancing(
             if raw.enemy_level is not None:
                 observed_encounter_levels.append(raw.enemy_level)
 
-            trainee_fights = trainee_should_fight_directly(
-                trainee,
-                enemy_level=raw.enemy_level,
-                enemy_species=raw.enemy_species_id,
-                policy=policy,
-                participation_only=evolution_target is not None,
+            trainee_fights = (
+                trainee.species_id not in direct_fight_suppressed_species
+                and trainee_should_fight_directly(
+                    trainee,
+                    enemy_level=raw.enemy_level,
+                    enemy_species=raw.enemy_species_id,
+                    policy=policy,
+                    participation_only=evolution_target is not None,
+                )
             )
 
             if not trainee_fights and escort.level >= ESCORT_LEVEL_CAP:
@@ -1471,6 +1481,8 @@ def run_red_team_balancing(
             except BattleRuntimeError as error:
                 if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
                     raise
+                if trainee_fights:
+                    direct_fight_suppressed_species.add(trainee.species_id)
                 current = reader.read()
                 if current.active_party_index != escort.slot - 1:
                     if escort_unsafe:
@@ -1530,6 +1542,7 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             required_recovery_trips += 1
+            direct_fight_suppressed_species.clear()
             continue
 
         if not current_venue.is_in_map(raw):
@@ -1553,6 +1566,7 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             venue_transition_trips += 1
+            direct_fight_suppressed_species.clear()
             continue
         trainee = (
             trainee
@@ -1603,6 +1617,7 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             optional_recovery_trips += 1
+            direct_fight_suppressed_species.clear()
             continue
         require_overworld_action(
             selected,
@@ -1611,7 +1626,10 @@ def run_red_team_balancing(
         )
         steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
-    if current_venue.is_in_map(reader.read()):
+    if (
+        current_venue.is_in_map(reader.read())
+        and healing_trips < policy.max_healing_trips
+    ):
         prepare_for_recovery()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1

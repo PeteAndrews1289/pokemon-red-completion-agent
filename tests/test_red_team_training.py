@@ -555,6 +555,54 @@ def test_fixed_party_training_dose_runs_exact_battles_without_reselecting(
     assert summaries[0].cleanup_trips == 1
 
 
+def test_fixed_dose_does_not_exceed_its_recovery_budget_for_cleanup(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(BLASTOISE_SPECIES_ID, 50)]
+        + [(species, 30) for species in FINAL_FORM_ROSTER if species != BLASTOISE_SPECIES_ID]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    monkeypatch.setattr(
+        red_team_training,
+        "run_adaptive_wild_battle",
+        lambda *_args, **_kwargs: None,
+    )
+    summaries: list[TeamTrainingExecutionSummary] = []
+
+    _report, completed, healing = run(
+        memory,
+        FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]),
+        policy=BalancedTeamPolicy(
+            minimum_level=60,
+            maximum_level_spread=50,
+            required_size=6,
+            max_battles=1,
+            max_steps=100,
+            max_healing_trips=0,
+            max_faints=0,
+        ),
+        fixed_dose=FixedPartyTrainingDose(
+            trainee_species_lineage=(BLASTOISE_SPECIES_ID,),
+            venue_identity=GrindingArea(
+                area_id="test_area",
+                minimum_encounter_level=1,
+                maximum_encounter_level=10,
+                rare_maximum_encounter_level=10,
+                measured_samples=100,
+            ).identity,
+            completed_battles=1,
+        ),
+        execution_summary_sink=summaries.append,
+    )
+
+    assert completed == 1
+    assert healing == 0
+    assert summaries[0].cleanup_trips == 0
+    assert summaries[0].progress.healing_trips == 0
+
+
 def test_fixed_party_training_dose_rejects_an_ambiguous_trainee_before_input() -> None:
     memory = FakeMemory()
     memory.set_party(
@@ -1518,6 +1566,75 @@ def test_an_unrelated_battle_runtime_failure_is_not_misreported_as_pp_exhaustion
         run(memory, reader, venues=(training_venue,))
 
     assert observed_timing == [route_sleep_timing]
+
+
+def test_live_direct_failure_uses_the_escort_on_the_next_encounter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    memory = FakeMemory()
+    memory.set_party(
+        [(DIGLETT_SPECIES_ID, 22), (BLASTOISE_SPECIES_ID, 44)]
+        + [(DUGTRIO_SPECIES_ID, 30) for _ in range(4)]
+    )
+    reader = FakeReader(
+        [state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
+    switches: list[str] = []
+
+    def switch(*_args: object, **kwargs: object) -> bool:
+        switches.append(str(kwargs["label"]))
+        return True
+
+    monkeypatch.setattr(red_team_training, "switch_active_battler", switch)
+    battle_attempts = 0
+
+    def battle(*_args: object, **_kwargs: object) -> None:
+        nonlocal battle_attempts
+        battle_attempts += 1
+        if battle_attempts == 1:
+            try:
+                raise red_team_training._PauseForTeamTrainingRecovery
+            except red_team_training._PauseForTeamTrainingRecovery as cause:
+                raise BattleRuntimeError("live qualified moves unavailable") from cause
+
+    monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", battle)
+    flees: list[str] = []
+
+    _report, completed, _healing = run(
+        memory,
+        reader,
+        policy=BalancedTeamPolicy(
+            minimum_level=60,
+            maximum_level_spread=50,
+            required_size=6,
+            minimum_direct_level_advantage=5,
+            max_battles=1,
+            max_steps=100,
+            max_healing_trips=1,
+            max_faints=0,
+        ),
+        fixed_dose=FixedPartyTrainingDose(
+            trainee_species_lineage=(DIGLETT_SPECIES_ID,),
+            venue_identity=GrindingArea(
+                area_id="test_area",
+                minimum_encounter_level=1,
+                maximum_encounter_level=10,
+                rare_maximum_encounter_level=10,
+                measured_samples=100,
+            ).identity,
+            completed_battles=1,
+        ),
+        flee_func=lambda *_args: flees.append("flee"),
+    )
+
+    assert completed == 1
+    assert battle_attempts == 2
+    assert flees == ["flee"]
+    assert switches == [
+        "Blastoise PP-exhaustion escape escort",
+        "Blastoise escort",
+    ]
 
 
 def test_a_run_that_never_finds_a_battle_is_reported_as_unfinished() -> None:

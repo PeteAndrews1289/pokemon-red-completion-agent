@@ -21,7 +21,8 @@ probability **0.654 → 0.619**; one choice favored each model and four tied. Th
 negative result. Preserve the existing outcome model as the development baseline and do not open a
 benchmark or Crystal.
 
-The shortest honest path to the missing curriculum is now:
+The shortest honest path to the missing curriculum is now (steps 1–2 are implemented and passed
+their focused action-free tests; no successor controller input has occurred):
 
 1. Add semantic tests for the four observed mechanical classes: Celadon Field-Dig recovery,
    missing-Fly transition, required-recovery budget exhaustion, and conservative escort fallback.
@@ -37,6 +38,11 @@ The shortest honest path to the missing curriculum is now:
    development questions.
 7. If that fresh comparison still fails, redesign the learner or intervention. Do not promote,
    open sealed Red, or move to Crystal merely because the count is complete.
+
+The successor gate additionally reconstructs the predecessor rather than rerunning its randomizer.
+Source-bound option identities legitimately change after a repair, so the runner recovers each
+original candidate permutation from its frozen digest, retains the exact timing offset, compares
+all identity-free feature hashes, and makes the 78 measured assignments structurally unclaimable.
 
 The [path-free scale result](evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json)
 records the collection, fit, negative comparison and claim boundary.

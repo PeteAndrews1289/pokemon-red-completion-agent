@@ -2,6 +2,13 @@
 
 ## Executive result
 
+The bounded recovery implementation is now action-free ready. It fixes the four observed invalid
+classes without changing the one-battle intervention or learner-visible candidate rows, and a new
+successor runner authenticated the complete 93-trial predecessor denominator while making the 78
+measured assignments unclaimable. All 15 predecessor failures—and only those failures—are present
+in the successor claim set. No controller input has been sent, so the learning board below has not
+changed.
+
 The balanced scale campaign and second outcome fit are complete. The campaign retained **78/93
 measured trials** and 15 mechanical invalids, producing **18 complete train and 6 untouched
 development questions**. Six questions in each partition remain censored; the exact plan is
@@ -42,6 +49,12 @@ classes, freeze a successor that claims only the 15 failed assignments, and reco
 six still-unscored development preferences without changing menus or replaying measured trials.
 All three new collection-goal train questions are in this censored set, making the recovery directly
 relevant to the living-Pokédex product.
+
+That implementation now exists. The no-Fly cases use cartridge-composed routing from live state;
+Celadon is admitted as an observed Field-Dig landing; the recovery ceiling includes required trips
+and optional cleanup together; and a live PP/Disable failure suppresses only the disproved direct
+fight until healing, falling back to the already-declared escort intervention. The remaining gate
+is publication, exact-head CI, external freeze and one successor execution—not more route design.
 
 ## Superseded scale-design checkpoint
 

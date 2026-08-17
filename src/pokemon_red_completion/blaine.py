@@ -74,11 +74,15 @@ from pokemon_red_completion.red_team_training import (
     _PauseForTeamTrainingRecovery,
     run_red_team_balancing,
 )
+from pokemon_red_completion.red_training_ground_route import (
+    RedVermilionGroundTransition,
+)
 from pokemon_red_completion.red_training_transitions import (
     RED_CINNABAR_MART_TRAINING_BOUNDARY,
     RED_INDIGO_LOBBY_TRAINING_BOUNDARY,
     RED_TRAINING_FLY_CENTER_MAPS,
     RED_TRAINING_FLY_OUTDOOR_MAPS,
+    red_training_ground_transition_available,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _await_trainer_battle
 from pokemon_red_completion.surge import (
@@ -2783,13 +2787,26 @@ def _training_dig_to_vermilion(
             actions,
             reader,
             emulator,
-            expected_map=(MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY, MapId.VERMILION_CITY),
+            expected_map=(
+                MapId.CELADON_CITY,
+                MapId.CINNABAR_ISLAND,
+                MapId.SAFFRON_CITY,
+                MapId.VERMILION_CITY,
+            ),
         )
 
         if raw.map_id == MapId.SAFFRON_CITY:
             _field_fly_to_vermilion_from_saffron(actions, reader, emulator)
         elif raw.map_id == MapId.CINNABAR_ISLAND:
             _field_fly_to_vermilion_from_cinnabar(actions, reader, emulator)
+        elif raw.map_id == MapId.CELADON_CITY:
+            _fly_to_town(
+                actions,
+                reader,
+                emulator,
+                MapId.VERMILION_CITY,
+                "training Celadon Dig return to Vermilion",
+            )
 
     _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Dig return vermilion")
 
@@ -2815,6 +2832,8 @@ def _route_11_heal_and_return(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    *,
+    ground_transition: RedVermilionGroundTransition | None = None,
 ) -> None:
     raw = reader.read()
     if raw.map_id != MapId.VERMILION_POKECENTER:
@@ -2849,6 +2868,11 @@ def _route_11_heal_and_return(
                 "team training Vermilion Center return",
             )
             _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Center exterior")
+        elif (
+            ground_transition is not None
+            and red_training_ground_transition_available(raw)
+        ):
+            ground_transition(actions, reader, emulator)
         else:
             _training_dig_to_vermilion(actions, reader, emulator)
         _move(actions, reader, ("up",), "team training Vermilion Center entry")
@@ -2902,8 +2926,12 @@ def _digletts_cave_heal_and_return(
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    *,
+    route_11_recovery: Callable[
+        [CountingExecutor, PokemonRedStateReader, EmulatorState], None
+    ] = _route_11_heal_and_return,
 ) -> None:
-    _route_11_heal_and_return(actions, reader, emulator)
+    route_11_recovery(actions, reader, emulator)
 
     _move(actions, reader, ("right",) * 4, "Post-Spearow Diglett Cave approach")
     raw = reader.read()
@@ -2996,6 +3024,48 @@ def _digletts_cave_training_venue() -> TrainingVenue:
 
 
 DIGLETTS_CAVE_TRAINING_VENUE = _digletts_cave_training_venue()
+
+
+def red_training_venues_with_ground_transition(
+    rom: bytes,
+) -> tuple[TrainingVenue, TrainingVenue]:
+    """Bind the measured venues to one cartridge-derived no-Fly relocation.
+
+    The measured bands, candidate identities, walkers, move guards, and battle
+    timings remain unchanged.  Only the private execution callback gains the
+    authenticated ground-route fallback used when Fly is unavailable.
+    """
+
+    transition = RedVermilionGroundTransition.from_rom(rom)
+
+    def route_11_recovery(
+        actions: CountingExecutor,
+        reader: PokemonRedStateReader,
+        emulator: EmulatorState,
+    ) -> None:
+        _route_11_heal_and_return(
+            actions,
+            reader,
+            emulator,
+            ground_transition=transition,
+        )
+
+    def cave_recovery(
+        actions: CountingExecutor,
+        reader: PokemonRedStateReader,
+        emulator: EmulatorState,
+    ) -> None:
+        _digletts_cave_heal_and_return(
+            actions,
+            reader,
+            emulator,
+            route_11_recovery=route_11_recovery,
+        )
+
+    return (
+        replace(ROUTE_11_TRAINING_VENUE, heal_and_return=route_11_recovery),
+        replace(DIGLETTS_CAVE_TRAINING_VENUE, heal_and_return=cave_recovery),
+    )
 
 
 def _mansion_training_venue() -> TrainingVenue:

@@ -7,6 +7,28 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the failures became a fifteen-trial recovery, not another campaign
+
+The ninety-three-trial experiment did not need to be repeated. Its seventy-eight measurements were
+already good evidence; only fifteen red lanes lacked outcomes. The repair therefore built a new
+kind of successor: it can inherit measured results, but it is physically unable to claim those
+trials again.
+
+Two missing-Fly starts now walk through the cartridge's own map graph. Saffron leaves through its
+observed open guard house. Lavender follows a route enabled by the post-Bill passage and performs
+one explicit Cut. There is no new list of remembered arrows. Celadon became a valid Dig landing,
+the promised three-heal ceiling stopped hiding a reserved fourth cleanup, and a trainee whose live
+moves fail now hands the fight to the already-qualified escort instead of repeating the same doomed
+choice eight times.
+
+The first successor rehearsal pressed no button. It reconstructed all thirty-six questions,
+recovered their original candidate permutations and timing offsets, matched all ninety-three
+identity-free feature hashes, inherited seventy-eight measured slots and exposed exactly fifteen
+claims. The scoreboard has not moved yet. That is the point: lineage was proved before another
+frame was spent.
+
+---
+
 ## Current checkpoint: the larger model did not generalize better
 
 The scale experiment ran: ninety-three candidate trials, seventy-eight measured outcomes, fifteen

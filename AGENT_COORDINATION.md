@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-17 scale-recovery checkpoint — highest active checkpoint:** Codex implemented the four
+> bounded mechanical repairs and a repeatable successor that authenticates the consumed 93-trial
+> scale campaign, inherits its 78 measured outcomes, and claims only its 15 invalid slots. The
+> action-free rehearsal reconstructed all 36 original questions, recovered their exact candidate
+> permutations and timing offsets, and matched every identity-free candidate feature digest. No
+> controller input occurred; counters remain **train 26/32 · development 10/16 · fits 2/2 ·
+> comparisons 2/2 · authority 0 · transfer 0**.
+>
+> Codex owns full qualification, publication, exact-head CI, the external successor freeze, one
+> development execution under standing approval, the joined train-only model selection and one
+> comparison on only the six newly completed development questions. Claude may audit the concrete
+> joined result or a promotion design; Antigravity should wait for a real Crystal decision. Neither
+> reviewer edits, executes or blocks routine development. The consumed predecessor never retries,
+> and sealed Red, Crystal execution, full replay and live authority remain closed.
+
 > **2026-08-17 initial-fit checkpoint — highest active checkpoint:** The switch-assisted pilot
 > completed 48/48 trials and yielded 8 train plus 4 untouched development questions with zero
 > invalids. One published, green, fail-closed fitter updated the completion-aware scorer on train

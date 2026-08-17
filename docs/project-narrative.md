@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: fifteen failures became a lineage-safe successor
+
+The project did not answer a partially failed ninety-three-trial experiment by rerunning all
+ninety-three trials. It built a successor that authenticates the predecessor, inherits its
+seventy-eight measured outcomes and can claim only the fifteen invalid slots. The original
+candidate permutations are recovered from their frozen digests, every timing offset is retained,
+and all ninety-three identity-free feature hashes must match before execution becomes possible.
+
+The mechanical fixes are equally narrow. An observed Celadon Field-Dig landing can continue to
+Vermilion. Two parties without Fly can walk from Saffron or Lavender using cartridge-decoded maps,
+live story predicates, trainer-sight avoidance and an explicit Cut—not a new memorized route. The
+three-trip recovery ceiling now counts cleanup honestly. If live PP or Disable disproves a direct
+fight, the next encounter uses the already-declared escort until a Center heal changes the state.
+
+The action-free rehearsal reconstructed thirty-six questions and a ninety-three-trial denominator,
+then exposed exactly fifteen claims. It used no controller, teacher, model prediction, sealed Red,
+Crystal or full replay. The board therefore remains **26/32 train · 10/16 development · 2/2 fits ·
+2/2 comparisons · authority 0 · transfer 0** until the clean published successor actually
+collects outcomes. This is the useful kind of rigor: protect evidence already earned while moving
+directly toward the missing living-Pokédex lessons.
+
 ## August 17: more training data did not automatically make a better model
 
 The balanced campaign finally left the planning board and ran. Ninety-three cloned candidate

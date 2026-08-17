@@ -8,7 +8,14 @@ the live route does not implement.
 
 from __future__ import annotations
 
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.gen1_field_moves import DIG_MOVE_ID, FLY_MOVE_ID
+from pokemon_red_completion.gen1_story_routing import (
+    CERULEAN_ROBBED_HOUSE_OPEN,
+    SAFFRON_GUARDS_OPEN,
+    gen1_story_capabilities,
+)
+from pokemon_red_completion.gen1_traversal import CUT_CAPABILITY, cut_capabilities
+from pokemon_red_completion.observation import Badge, MapId, RawGameState
 
 # Red's field-Dig implementation accepts exactly these cartridge tilesets.
 RED_ESCAPE_WARP_TILESETS = frozenset({3, 15, 16, 17, 22})
@@ -48,6 +55,50 @@ RED_CINNABAR_MART_TRAINING_BOUNDARY = (2, 5)
 RED_INDIGO_LOBBY_TRAINING_BOUNDARY = (2, 5)
 
 
+def _living_move_holder(raw: RawGameState, move_id: int) -> bool:
+    hp = raw.party_hp or ()
+    moves = raw.party_moves or ()
+    return (
+        raw.party_count is not None
+        and raw.party_count == len(hp) == len(moves)
+        and any(
+            current_hp > 0 and move_id in known
+            for current_hp, known in zip(hp, moves, strict=True)
+        )
+    )
+
+
+def red_training_fly_available(raw: RawGameState) -> bool:
+    """Whether the live party can legally use Fly outside battle."""
+
+    return bool(int(raw.badge_bits or 0) & int(Badge.THUNDER)) and _living_move_holder(
+        raw,
+        FLY_MOVE_ID,
+    )
+
+
+def red_training_ground_transition_available(raw: RawGameState) -> bool:
+    """Whether a cartridge-composed ground route supports this exact boundary.
+
+    These are the two authenticated no-Fly starts recovered by the scale
+    campaign.  Saffron can leave through an opened guard house.  Lavender's
+    supported route crosses the observed post-Bill Cerulean passage and uses
+    one explicit Cut; neither route relies on a handwritten arrow sequence.
+    """
+
+    if (raw.player_x, raw.player_y) != (3, 3):
+        return False
+    story = gen1_story_capabilities(raw)
+    if raw.map_id == MapId.SAFFRON_POKECENTER:
+        return SAFFRON_GUARDS_OPEN in story
+    if raw.map_id == MapId.LAVENDER_POKECENTER:
+        return (
+            CERULEAN_ROBBED_HOUSE_OPEN in story
+            and CUT_CAPABILITY in cut_capabilities(raw)
+        )
+    return False
+
+
 def red_vermilion_training_transition_available(
     raw: RawGameState,
     last_blackout_map: int,
@@ -55,11 +106,10 @@ def red_vermilion_training_transition_available(
 ) -> bool:
     """Whether the bounded Red executor can reach the Vermilion venues.
 
-    A healing anchor and field-Dig legality remain separate facts.  The
-    explicit Fly boundaries are late-game, authenticated contexts whose party
-    already carries the field-move users required by the executor; the live
-    route still discovers those users from memory and fails closed if either
-    move is absent.
+    A healing anchor and field-move legality remain separate facts.  Air travel
+    requires the Thunder Badge and a living Fly holder.  The two authenticated
+    no-Fly Center boundaries are admitted only when their cartridge-composed
+    ground routes' observed story and Cut predicates are satisfied.
     """
 
     if raw.battle_state or raw.map_id is None:
@@ -70,20 +120,38 @@ def red_vermilion_training_transition_available(
     if raw.map_id == MapId.VERMILION_POKECENTER:
         return position in {(3, 3), (3, 7)}
     if raw.map_id == MapId.CINNABAR_POKECENTER:
-        return position in {(3, 3), (13, 4)}
+        return position in {(3, 3), (13, 4)} and red_training_fly_available(raw)
     if raw.map_id in RED_TRAINING_FLY_CENTER_MAPS:
-        return position == (3, 3)
+        return position == (3, 3) and (
+            red_training_fly_available(raw)
+            or red_training_ground_transition_available(raw)
+        )
     if raw.map_id in RED_TRAINING_FLY_OUTDOOR_MAPS:
-        return raw.map_id != MapId.VERMILION_CITY or position == (11, 4)
+        if raw.map_id == MapId.VERMILION_CITY:
+            return position == (11, 4)
+        return red_training_fly_available(raw)
     if raw.map_id == MapId.CINNABAR_MART:
-        return position == RED_CINNABAR_MART_TRAINING_BOUNDARY
+        return (
+            position == RED_CINNABAR_MART_TRAINING_BOUNDARY
+            and red_training_fly_available(raw)
+        )
     if raw.map_id == MapId.INDIGO_PLATEAU_LOBBY:
-        return position == RED_INDIGO_LOBBY_TRAINING_BOUNDARY
-    return current_map_tileset in RED_ESCAPE_WARP_TILESETS and last_blackout_map in {
+        return (
+            position == RED_INDIGO_LOBBY_TRAINING_BOUNDARY
+            and red_training_fly_available(raw)
+        )
+    if (
+        current_map_tileset not in RED_ESCAPE_WARP_TILESETS
+        or not _living_move_holder(raw, DIG_MOVE_ID)
+    ):
+        return False
+    if last_blackout_map == MapId.VERMILION_CITY:
+        return True
+    return last_blackout_map in {
+        MapId.CELADON_CITY,
         MapId.CINNABAR_ISLAND,
         MapId.SAFFRON_CITY,
-        MapId.VERMILION_CITY,
-    }
+    } and red_training_fly_available(raw)
 
 
 __all__ = [
@@ -92,5 +160,7 @@ __all__ = [
     "RED_INDIGO_LOBBY_TRAINING_BOUNDARY",
     "RED_TRAINING_FLY_CENTER_MAPS",
     "RED_TRAINING_FLY_OUTDOOR_MAPS",
+    "red_training_fly_available",
+    "red_training_ground_transition_available",
     "red_vermilion_training_transition_available",
 ]

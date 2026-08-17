@@ -276,6 +276,129 @@ def test_training_travel_flies_from_a_standard_center(
     assert flights == [MapId.VERMILION_CITY]
 
 
+def test_training_dig_accepts_celadon_and_flies_to_vermilion(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 27, 6, 0)
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    expected_destinations: list[tuple[MapId, ...]] = []
+    flights: list[tuple[MapId, str]] = []
+
+    def dig(_actions, active_reader, _emulator, *, expected_map):
+        expected_destinations.append(expected_map)
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.CELADON_CITY,
+            player_x=41,
+            player_y=10,
+        )
+        return active_reader.raw
+
+    def fly(_actions, active_reader, _emulator, destination, label) -> None:
+        flights.append((destination, label))
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    monkeypatch.setattr(blaine_module, "_field_dig", dig)
+    monkeypatch.setattr(blaine_module, "_fly_to_town", fly)
+
+    blaine_module._training_dig_to_vermilion(object(), reader, object())
+
+    assert expected_destinations == [
+        (
+            MapId.CELADON_CITY,
+            MapId.CINNABAR_ISLAND,
+            MapId.SAFFRON_CITY,
+            MapId.VERMILION_CITY,
+        )
+    ]
+    assert flights == [
+        (MapId.VERMILION_CITY, "training Celadon Dig return to Vermilion")
+    ]
+
+
+def test_route_11_recovery_uses_ground_route_at_supported_no_fly_center(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        raw = RawGameState(
+            True,
+            MapId.SAFFRON_POKECENTER,
+            3,
+            3,
+            1,
+            0,
+            status_flags_1=0x40,
+        )
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+    reader = Reader()
+    transitions: list[str] = []
+
+    def ground(_actions, active_reader, _emulator) -> None:
+        transitions.append("ground")
+        active_reader.raw = replace(
+            active_reader.raw,
+            map_id=MapId.VERMILION_CITY,
+            player_x=11,
+            player_y=4,
+        )
+
+    def move(_actions, active_reader, _route, label, **_kwargs) -> None:
+        if label == "team training Vermilion Center entry":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.VERMILION_POKECENTER,
+                player_x=3,
+                player_y=7,
+            )
+        elif label == "team training Vermilion nurse":
+            active_reader.raw = replace(active_reader.raw, player_x=3, player_y=3)
+        elif label == "team training Vermilion Center exit":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.VERMILION_CITY,
+                player_x=11,
+                player_y=4,
+            )
+        elif label == "team training Route 11 return":
+            active_reader.raw = replace(
+                active_reader.raw,
+                map_id=MapId.ROUTE_11,
+                player_x=8,
+                player_y=4,
+            )
+
+    monkeypatch.setattr(blaine_module, "_move", move)
+    monkeypatch.setattr(blaine_module, "_heal", lambda *_args: None)
+    monkeypatch.setattr(
+        blaine_module,
+        "_training_dig_to_vermilion",
+        lambda *_args: pytest.fail("supported no-Fly Center must use the ground route"),
+    )
+    monkeypatch.setattr(blaine_module, "_pulse", lambda *_args, **_kwargs: None)
+
+    blaine_module._route_11_heal_and_return(
+        object(),
+        reader,
+        object(),
+        ground_transition=ground,  # type: ignore[arg-type]
+    )
+
+    assert transitions == ["ground"]
+
+
 def test_training_travel_exits_indigo_before_flying(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

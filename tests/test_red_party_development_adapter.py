@@ -13,8 +13,16 @@ from pokemon_red_completion.collection import (
 )
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
+from pokemon_red_completion.gen1_field_moves import DIG_MOVE_ID, FLY_MOVE_ID
+from pokemon_red_completion.gen1_traversal import CUT_MOVE_ID
 from pokemon_red_completion.goal_manager_state import CompletionProgress, GoalStateEvidence
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import (
+    SAFFRON_GUARD_ACCESS_MASK,
+    Badge,
+    EventFlag,
+    MapId,
+    RawGameState,
+)
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
@@ -436,11 +444,42 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
     )
 
 
+def _with_field_moves(
+    raw: RawGameState,
+    *moves: int,
+    badges: Badge | int = 0,
+) -> RawGameState:
+    return replace(
+        raw,
+        party_count=1,
+        party_hp=(40,),
+        party_moves=((moves + (0,) * 4)[:4],),
+        badge_bits=int(badges),
+    )
+
+
+def _event_flags(*events: EventFlag) -> bytes:
+    payload = bytearray(max(int(event) for event in events) // 8 + 1)
+    for event in events:
+        byte, bit = divmod(int(event), 8)
+        payload[byte] |= 1 << bit
+    return bytes(payload)
+
+
 def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
     route = RawGameState(True, MapId.ROUTE_11, 8, 4, 6, 0)
-    known_center = RawGameState(True, MapId.CINNABAR_POKECENTER, 13, 4, 6, 0)
+    known_center = _with_field_moves(
+        RawGameState(True, MapId.CINNABAR_POKECENTER, 13, 4, 6, 0),
+        FLY_MOVE_ID,
+        badges=Badge.THUNDER,
+    )
     wrong_center_boundary = replace(known_center, player_x=4, player_y=3)
-    field_dig_source = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 27, 6, 0)
+    field_dig_source = _with_field_moves(
+        RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 27, 6, 0),
+        DIG_MOVE_ID,
+        FLY_MOVE_ID,
+        badges=Badge.THUNDER,
+    )
 
     assert red_vermilion_training_transition_available(
         route,
@@ -462,8 +501,13 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
         int(MapId.SAFFRON_CITY),
         22,
     )
-    assert not red_vermilion_training_transition_available(
+    assert red_vermilion_training_transition_available(
         field_dig_source,
+        int(MapId.CELADON_CITY),
+        22,
+    )
+    assert not red_vermilion_training_transition_available(
+        _with_field_moves(field_dig_source, DIG_MOVE_ID),
         int(MapId.CELADON_CITY),
         22,
     )
@@ -488,10 +532,13 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
 
 
 def test_red_transition_guard_accepts_the_shared_fly_boundaries() -> None:
-    center = RawGameState(True, MapId.CELADON_POKECENTER, 3, 3, 6, 0)
-    outdoor = RawGameState(True, MapId.FUCHSIA_CITY, 19, 28, 6, 0)
-    mart = RawGameState(True, MapId.CINNABAR_MART, 2, 5, 6, 0)
-    indigo = RawGameState(True, MapId.INDIGO_PLATEAU_LOBBY, 2, 5, 6, 0)
+    def fly(raw: RawGameState) -> RawGameState:
+        return _with_field_moves(raw, FLY_MOVE_ID, badges=Badge.THUNDER)
+
+    center = fly(RawGameState(True, MapId.CELADON_POKECENTER, 3, 3, 6, 0))
+    outdoor = fly(RawGameState(True, MapId.FUCHSIA_CITY, 19, 28, 6, 0))
+    mart = fly(RawGameState(True, MapId.CINNABAR_MART, 2, 5, 6, 0))
+    indigo = fly(RawGameState(True, MapId.INDIGO_PLATEAU_LOBBY, 2, 5, 6, 0))
 
     assert red_vermilion_training_transition_available(center, 0, 6)
     assert not red_vermilion_training_transition_available(
@@ -502,6 +549,50 @@ def test_red_transition_guard_accepts_the_shared_fly_boundaries() -> None:
     assert red_vermilion_training_transition_available(outdoor, 0, 0)
     assert red_vermilion_training_transition_available(mart, 0, 2)
     assert red_vermilion_training_transition_available(indigo, 0, 2)
+
+
+def test_red_transition_guard_accepts_only_authenticated_no_fly_ground_routes() -> None:
+    saffron = RawGameState(
+        True,
+        MapId.SAFFRON_POKECENTER,
+        3,
+        3,
+        1,
+        0,
+        party_hp=(40,),
+        party_moves=((DIG_MOVE_ID, 0, 0, 0),),
+        status_flags_1=SAFFRON_GUARD_ACCESS_MASK,
+    )
+    assert red_vermilion_training_transition_available(saffron, 0, 0)
+    assert not red_vermilion_training_transition_available(
+        replace(saffron, status_flags_1=0),
+        0,
+        0,
+    )
+
+    lavender = RawGameState(
+        True,
+        MapId.LAVENDER_POKECENTER,
+        3,
+        3,
+        1,
+        0,
+        badge_bits=int(Badge.CASCADE),
+        event_flags=_event_flags(EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING),
+        party_hp=(40,),
+        party_moves=((CUT_MOVE_ID, DIG_MOVE_ID, 0, 0),),
+    )
+    assert red_vermilion_training_transition_available(lavender, 0, 0)
+    assert not red_vermilion_training_transition_available(
+        replace(lavender, badge_bits=0),
+        0,
+        0,
+    )
+    assert not red_vermilion_training_transition_available(
+        replace(lavender, event_flags=bytes(len(lavender.event_flags or b""))),
+        0,
+        0,
+    )
 
 
 def test_direct_safe_recovery_does_not_require_attack_pp_from_unused_escort() -> None:
