@@ -18,6 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Recovered-evidence fit rejected; redesign on train only — 2026-08-17
+
+The authenticated joined fitter ran once on the 22 complete scale-train questions. Training loss
+fell **1.667 → 0.594**, but lower fit loss did not transfer to the five newly completed
+development labels. The existing baseline and update both chose **3/5** correctly;
+cross-entropy worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all
+five winner-probability comparisons regressed. The update is rejected. It received neither shadow
+nor live authority, and the consumed comparison must never run again.
+
+The honest cumulative board is now **30/32 train · 15/16 development · 3/2 fits · 3/2 unseen
+comparisons · authority 0 · transfer 0**. The joined scale record remains **88 measured + 5
+invalid = 93 trials** and **33/36 complete questions = 22/24 train + 11/12 development**. Do not
+repair the remaining failures, reuse any of the eleven consumed scale-development labels, collect
+new outcomes, open sealed Red, or touch Crystal.
+
+Next: use only the 22 scale-train questions to implement and evaluate one low-capacity residual
+ranker. It must have separate trainee and venue heads, title-neutral feature groups, fixed strong
+ridge regularization, a menu-normalized pairwise loss, and deterministic leave-one-root-out
+checks. Judge the aggregate plus both action heads and the collection/evolution slices from train
+evidence alone. Mixed or worse evidence stops this design and triggers a representation-collision
+audit; it does not reopen development or collection. See the
+[path-free negative-fit result](docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
+
 ## Fifteen-trial recovery executed; fit the learner next — 2026-08-17
 
 The four scale-campaign failure classes now have bounded semantic repairs. Field Dig accepts its

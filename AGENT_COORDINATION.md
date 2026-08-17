@@ -1,20 +1,22 @@
 # Three-agent coordination
 
-> **2026-08-17 scale-recovery result — highest active checkpoint:** The authenticated successor
-> executed once and is consumed. Of the 15 previously invalid slots, ten measured and five stayed
-> invalid; the joined fixed denominator is **88 measured + 5 invalid**, with **22/24 complete
-> scale-train and 11/12 complete scale-development questions**. The predecessor's 78 measurements
-> were structurally unclaimable. Cumulative counters are **train 30/32 · development 15/16 · fits
-> 2/2 · comparisons 2/2 · authority 0 · transfer 0**.
+> **2026-08-17 recovered-evidence fit — highest active checkpoint:** The authenticated fitter used
+> only the 22 complete scale-train questions. Training loss fell **1.667 → 0.594**, but the base
+> and update both scored **3/5** on the five newly completed development labels. Cross-entropy
+> worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all five
+> probabilities regressed. The update is rejected with no shadow or live authority. Cumulative
+> counters are **train 30/32 · development 15/16 · fits 3/2 · comparisons 3/2 · authority 0 ·
+> transfer 0**.
 >
-> Codex now owns the authenticated joined fitter, exact-head publication, one 22-question
-> train-only update from the eight-question baseline, and one comparison on only the five newly
-> completed development questions. Six development questions observed previously are excluded.
-> Claude audits lineage and leakage; Antigravity challenges the next integration decision. Neither
-> reviewer edits, executes or blocks routine development. If the candidate does not clearly
-> improve, stop collection and redesign the learner. Both consumed plans remain non-retryable, and
-> sealed Red, Crystal execution, full replay and live authority remain closed. See the
-> [path-free recovery result](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
+> Codex now owns one protocol-consistent train-only falsifier: a low-capacity residual ranker with
+> separate trainee and venue heads, title-neutral feature groups, fixed strong ridge
+> regularization, a menu-normalized pairwise loss, and deterministic leave-one-root-out checks on
+> only the 22 scale-train questions. Claude audits train-only leakage, the head split and slice
+> gates; Antigravity challenges title neutrality only after a concrete train result. Neither
+> reviewer edits, executes or blocks routine development. All scale-development labels are
+> consumed and forbidden for selection. Do not collect more outcomes, retry either plan, repair
+> the teacher, open sealed Red or Crystal, run full replay, or grant authority. See the
+> [path-free negative-fit result](docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
 
 > **2026-08-17 initial-fit checkpoint — highest active checkpoint:** The switch-assisted pilot
 > completed 48/48 trials and yielded 8 train plus 4 untouched development questions with zero

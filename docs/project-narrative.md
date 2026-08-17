@@ -1,5 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 17: lower training loss made all five confidence estimates worse
+
+The recovered evidence reached the model exactly once. The authenticated fitter used twenty-two
+complete scale-train questions and reduced training loss from 1.667 to 0.594. Then it opened only
+the five newly completed development labels. The existing baseline and update each chose three of
+five correctly, but the update's cross-entropy worsened from 0.633 to 1.116 and its mean
+probability on the measured winner fell from 0.657 to 0.441. All five probability comparisons
+regressed.
+
+That is an unambiguous rejection. The 30-question candidate remains evidence, not a shadow model
+or a controller. The board is **30/32 train · 15/16 development · 3/2 fits · 3/2 comparisons ·
+authority 0 · transfer 0**. The underlying scale record is still **88 measured + 5 invalid trials**
+and **33/36 complete joined questions**. The extra fit and comparison are a recorded failed
+falsifier, not permission to reuse any development label.
+
+The next lane changes the learner while freezing the data boundary. Only the twenty-two
+scale-train roots may be used. A low-capacity residual ranker separates trainee and venue heads,
+uses title-neutral feature groups, fixes strong ridge regularization, normalizes its pairwise loss
+by menu, and evaluates deterministically by leaving out one root at a time. Aggregate gains do not
+count if either action head or the collection/evolution slices regress. A mixed result leads to a
+representation-collision audit on the same evidence—not another collection campaign, another look
+at development, or a Crystal experiment.
+
 ## August 17: the recovery stopped where learning could begin
 
 The project did not answer a partially failed ninety-three-trial experiment by rerunning all

@@ -2,6 +2,32 @@
 
 ## Executive result
 
+The authenticated recovered-evidence fitter completed once on all **22 complete scale-train
+questions**. Training loss fell **1.667 → 0.594**, but the existing baseline and update both
+scored **3/5** on the five newly completed development labels. Cross-entropy worsened **0.633 →
+1.116**, mean winner probability fell **0.657 → 0.441**, and all five winner-probability
+comparisons regressed. The update is rejected and received neither shadow nor live authority.
+
+The honest cumulative board is **train 30/32 · development 15/16 · fits 3/2 · unseen comparisons
+3/2 · live authority 0 · transfer 0**. The immutable scale lineage remains **88 measured + 5
+invalid = 93 trials** and **33/36 complete joined questions = 22/24 train + 11/12 development**.
+The five-label comparison is consumed. None of the eleven scale-development labels may be reused
+for architecture selection, regularization, stopping, or a new evaluation claim.
+
+The next falsifier uses only the 22 scale-train questions: a low-capacity residual ranker with
+separate trainee and venue heads, title-neutral feature groups, fixed strong ridge regularization,
+a menu-normalized pairwise loss, and deterministic leave-one-root-out evaluation. Its frozen gate
+reports aggregate behavior, each action head, and collection/evolution slices. Every aggregate
+must improve and neither head nor slice may regress. Mixed or worse evidence closes the design and
+triggers a representation-collision audit on the same train evidence. It does not authorize new
+collection, consumed-development reuse, teacher repair, sealed Red, Crystal, full replay, shadow
+integration or live control.
+
+The [path-free negative-fit result](evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json)
+records the exact fit lineage, comparison metrics, counters and rejection decision.
+
+## Previous recovery and fit gate
+
 The bounded recovery successor executed once and is consumed. It authenticated the complete
 93-trial predecessor denominator, made all 78 previously measured assignments unclaimable, and
 claimed only the 15 predecessor failures. Ten successor trials measured and five remained invalid.

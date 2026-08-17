@@ -1,5 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 17 scene: lower loss, worse confidence on every card
+
+Open on **22 SCALE-TRAIN QUESTIONS** feeding one authenticated fit. Animate training loss falling
+**1.667 → 0.594**, then pause before celebrating. Turn over the five newly completed development
+cards exactly once and split the board:
+
+- **EXISTING BASELINE: 3/5 · CROSS-ENTROPY 0.633 · WINNER P 0.657**
+- **30-QUESTION UPDATE: 3/5 · CROSS-ENTROPY 1.116 · WINNER P 0.441**
+
+Draw five arrows toward the worse side and label them **5/5 PROBABILITY REGRESSIONS**. Stamp the
+candidate **REJECTED · NO SHADOW · NO LIVE AUTHORITY**. Move the cumulative strip to **30/32 TRAIN
+· 15/16 DEVELOPMENT · FITS 3/2 · COMPARISONS 3/2 · AUTHORITY 0 · TRANSFER 0**. Keep the evidence
+strip visible: **88 MEASURED + 5 INVALID = 93 · 33/36 JOINED QUESTIONS**.
+
+Narration: **“Training loss went down, but every confidence estimate on the held labels moved the
+wrong way. The honest result was not a weaker promotion. It was rejection.”** Lock all eleven
+scale-development cards behind **CONSUMED — DO NOT REUSE** and keep the collection switch off.
+
+End on the next train-only rail: **22 ROOTS ONLY → LOW-CAPACITY RESIDUAL RANKER → SEPARATE
+TRAINEE/VENUE HEADS → TITLE-NEUTRAL FEATURES → STRONG FIXED RIDGE → MENU-NORMALIZED PAIRWISE LOSS
+→ DETERMINISTIC LEAVE-ONE-ROOT-OUT**. Add three stop lights: **AGGREGATE · BOTH HEADS ·
+COLLECTION/EVOLUTION SLICES**. Any regression returns to representation analysis, not new outcomes,
+consumed development or Crystal.
+
 ## August 17 scene: stop fixing the teacher and test the learner
 
 Return to the **15 INVALID** lanes from the scale experiment. Lock the original **78 MEASURED**

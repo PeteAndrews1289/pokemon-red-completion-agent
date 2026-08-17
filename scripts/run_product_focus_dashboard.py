@@ -62,13 +62,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         for label, _, minimum in outputs
         if label.startswith("Outcome Question")
     )
-    model_fit_total = next(
-        minimum for label, _, minimum in outputs if label.startswith("Model Fit")
+    model_fit_total = max(
+        fits,
+        next(minimum for label, _, minimum in outputs if label.startswith("Model Fit")),
     )
-    unseen_comparison_total = next(
-        minimum
-        for label, _, minimum in outputs
-        if label.startswith("Unseen Comparison")
+    unseen_comparison_total = max(
+        unseen,
+        next(
+            minimum
+            for label, _, minimum in outputs
+            if label.startswith("Unseen Comparison")
+        ),
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
@@ -81,21 +85,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Recovery completed 22 scale-train and 11 scale-development labels; "
-            "fit once on train and compare five newly completed labels before "
-            "authority or transfer."
+            "The last candidate was rejected after every fresh winner-probability "
+            "comparison regressed. The next gate redesigns the learner on the 22 "
+            "scale-train menus only; authority and transfer remain closed."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
         collection_target=150,
         model=DashboardModelState(
-            mode="shadow" if fits else "waiting",
-            candidate="Completion-aware party scorer · outcome-trained target",
-            choice=(
-                "Shadow fit exists; live authority remains gated"
-                if fits
-                else "No active-lane model fit yet"
-            ),
+            mode="waiting",
+            candidate="Protocol-consistent trainee/venue ranker · design pending",
+            choice="Last candidate rejected; live authority remains zero",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -119,7 +119,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         ),
         events=(
             f"Product · {_text(product, 'goal')}",
-            f"Capability · {_text(lane, 'capability')}",
+            _event("Capability", _text(lane, "capability")),
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
@@ -136,7 +136,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"{_count(budgets, 'maintenance_and_docs')}%"
             ),
             (
-                f"Time box · {_count(time_box, 'maximum_sessions')} sessions / "
+                f"Time box · {_count(time_box, 'maximum_sessions')} "
+                f"{'session' if _count(time_box, 'maximum_sessions') == 1 else 'sessions'} / "
                 f"{_count(time_box, 'maximum_hours')} hours"
             ),
             f"Stop 1 · {stop_conditions[0]}",

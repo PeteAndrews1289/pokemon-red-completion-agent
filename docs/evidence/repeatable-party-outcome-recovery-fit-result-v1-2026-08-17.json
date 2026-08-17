@@ -1,0 +1,160 @@
+{
+  "artifact": {
+    "claim_stream_sha256": "e54dc548934a650f9d51db9aaf28787d8d61a2bc91615124c25f955de5ca1ef1",
+    "decision_stream_sha256": "78716220c7574360bee54b5f42e65c17b3345f6548aa33c63da276d95e2e2908",
+    "learning_stream_sha256": "e0a8e7a2dec4555a7ce1b71886989dff23bd0588c8fb4624324ba3e4b9461e7b",
+    "manifest_sha256": "1a24dc65332d3abf81ff89889501491574b119fb5af69db5fefede6e690999cd",
+    "model_stream_sha256": "873428b56146e0e20c2c42be7a36a974b1621e15f2e16fa8e8d84072e00c62cb",
+    "preregistration_stream_sha256": "d8c01619485152fd55492b68446c11bdc06a6490343205673a1645417d140c53",
+    "private_artifact_tracked": false,
+    "status": "complete"
+  },
+  "claim_boundary": {
+    "not_supported": [
+      "the 30-example candidate improves party-development generalization",
+      "the outcome learner is ready for goal-manager shadow integration",
+      "the model has live party-development authority",
+      "the representation transfers to Crystal",
+      "the agent can finish Red or build a living Pokedex"
+    ],
+    "supported": "One preregistered offline update fit on 22 authenticated scale-train questions and compared the frozen eight-example baseline with the resulting 30-example model on five newly completed, never-scored development labels. The candidate failed the descriptive retention rule and was rejected."
+  },
+  "comparison": {
+    "base": {
+      "accuracy": 0.6,
+      "correct_preferences": 3,
+      "cross_entropy": 0.6331187728270047,
+      "mean_winner_probability": 0.6569113101150543
+    },
+    "example_count": 5,
+    "inferential_claim": false,
+    "paired": {
+      "base_wins": 0,
+      "correctness_ties": 5,
+      "discordant_pairs": 0,
+      "mean_winner_probability_delta": -0.21548026879257728,
+      "two_sided_exact_p": 1.0,
+      "updated_wins": 0,
+      "winner_probability_improvements": 0,
+      "winner_probability_regressions": 5,
+      "winner_probability_ties": 0
+    },
+    "updated": {
+      "accuracy": 0.6,
+      "correct_preferences": 3,
+      "cross_entropy": 1.1158081135327904,
+      "mean_winner_probability": 0.4414310413224771
+    }
+  },
+  "composition": {
+    "newly_completed_development_goal": {
+      "balance": 1,
+      "collection": 1,
+      "evolution": 2,
+      "role_coverage": 1
+    },
+    "newly_completed_development_kind": {
+      "trainee": 3,
+      "venue": 2
+    },
+    "train_goal": {
+      "balance": 13,
+      "collection": 3,
+      "evolution": 3,
+      "role_coverage": 3
+    },
+    "train_kind": {
+      "trainee": 13,
+      "venue": 9
+    }
+  },
+  "data_boundary": {
+    "joined_censored_questions": 3,
+    "joined_complete_questions": 33,
+    "newly_completed_development_questions": 5,
+    "newly_completed_labels_are_untouched_roots": false,
+    "newly_completed_labels_previously_scored": false,
+    "previously_scored_development_questions_excluded": 6,
+    "train_questions": 22
+  },
+  "decision": {
+    "checks": {
+      "accuracy_did_not_decrease": true,
+      "cross_entropy_decreased": false,
+      "mean_winner_probability_increased": false,
+      "updated_paired_wins_exceeded_base_wins": false
+    },
+    "result": "reject_and_redesign_learner",
+    "retained_for_shadow_design": false,
+    "rule": {
+      "accuracy_must_not_decrease": true,
+      "cross_entropy_must_decrease": true,
+      "mean_winner_probability_must_increase": true,
+      "mixed_result_is_failure": true,
+      "updated_paired_wins_must_exceed_base_wins": true
+    },
+    "why": "The update preserved accuracy only by making the same five correctness decisions while assigning substantially less probability to every measured winner. Lower training loss did not generalize, so more teacher repair or more Red outcomes is not the cheapest next step."
+  },
+  "identities": {
+    "base_model_canonical_sha256": "6b6982e8a514754a44c58e6b70f2ef0d1a94d2225f02893d128971527e752b8b",
+    "comparison_claim_sha256": "c2043782c4e22e1c57edacd87eaa4b6b5a0b06b3098e9d1e8dcd9e5a208a0cc1",
+    "fit_identity_sha256": "9b368805c65d7b421c6aa6342ebf62cfcf6d2fe37b0f3b12b923e9295fa5df10",
+    "newly_completed_development_question_set_sha256": "f811171929cbaa93877ab5d881d93176e68b49d64720f764f41c0aabbf9b50ee",
+    "previously_scored_development_excluded_sha256": "e615cfbfee83d47c84d9cff0a007d891689ddc8a31f074df24a7fc2775e72f9b",
+    "training_question_set_sha256": "b1949d0b2e0c429bc7c2b8389050499ac336b0c2f62dade7565e0471d28986fe",
+    "updated_model_canonical_sha256": "b997d9b7ce3ae72f360dd514f4c81dbc8e5d206e3e5f0de04a6499bca17ff87e"
+  },
+  "learning_outputs": {
+    "cumulative_model_fits": 3,
+    "cumulative_outcome_questions": {
+      "development": 15,
+      "train": 30
+    },
+    "cumulative_transfer_results": 0,
+    "cumulative_unseen_development_comparisons": 3,
+    "live_authority_promotions": 0
+  },
+  "mission": "Use Red as the first curriculum for a transferable Pokemon agent that can finish stories and build a retained living Pokedex across games.",
+  "next_work": {
+    "do": "Redesign the title-neutral learner using only authenticated train evidence and grouped train-only falsification before choosing any new candidate or collecting any new outcome.",
+    "do_not": [
+      "retry this comparison identity",
+      "reuse the five development labels for model selection",
+      "repair the remaining teacher failures",
+      "collect roots merely to complete the 32/16 board",
+      "promote authority, open sealed Red, execute Crystal, or run a full replay"
+    ]
+  },
+  "protected_access": {
+    "authority_promoted": false,
+    "candidate_trials_started": 0,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 1,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.repeatable-party-outcome-recovery-fit-result.v1",
+  "source": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run": 32055243250,
+    "commit": "36177937eda80f32ce33c0550337ff13828a73c5"
+  },
+  "status": "candidate_rejected_learner_redesign_required",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "training": {
+    "base_outcome_training_examples": 8,
+    "epochs": 200,
+    "examples": 22,
+    "learning_rate": 0.01,
+    "loss_after": 0.5941294501899377,
+    "loss_before": 1.666511329848069,
+    "prior_l2": 0.1,
+    "updated_outcome_training_examples": 30
+  }
+}

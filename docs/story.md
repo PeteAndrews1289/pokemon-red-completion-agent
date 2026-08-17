@@ -7,7 +7,32 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: ten failures became evidence; five stayed honest failures
+## Current checkpoint: the loss fell and every confidence estimate got worse
+
+The recovered dataset finally got its promised test. The learner trained once on twenty-two
+complete scale-train questions, and its training loss fell from 1.667 to 0.594. On that number
+alone, the update looked successful.
+
+Then the five newly completed development labels turned over. The existing model and the update
+both chose three correctly. The update was much less calibrated: cross-entropy rose from 0.633 to
+1.116, average probability on the measured winner fell from 65.7% to 44.1%, and every one of the
+five confidence comparisons moved backward. The update was rejected. It did not enter shadow mode
+and it gained no control of the game.
+
+The scoreboard now reads **30/32 TRAIN · 15/16 DEVELOPMENT · 3/2 FITS · 3/2 UNSEEN COMPARISONS ·
+AUTHORITY ZERO · TRANSFER ZERO**. That over-target fit count is evidence of falsification, not a
+reason to keep turning over the same cards. All eleven scale-development labels are consumed.
+
+The next model must learn from the twenty-two scale-train roots alone. It will be a deliberately
+low-capacity residual ranker: separate trainee and venue heads, title-neutral feature groups,
+strong fixed ridge regularization, a pairwise objective normalized so wide menus do not dominate,
+and deterministic leave-one-root-out checks. If either action kind or the collection/evolution
+slices regress, the project studies representation collisions instead of collecting more outcomes
+or asking the consumed development set again.
+
+---
+
+## Previous checkpoint: ten failures became evidence; five stayed honest failures
 
 The ninety-three-trial experiment did not need to be repeated. Its seventy-eight measurements were
 already good evidence; only fifteen red lanes lacked outcomes. The repair therefore built a new

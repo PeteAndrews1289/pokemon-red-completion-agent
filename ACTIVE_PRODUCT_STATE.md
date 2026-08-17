@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Repeatable completion-aware party outcome learning** (`repeatable-party-outcome-learning-v1`)
+**Protocol-consistent title-neutral party utility learning** (`repeatable-party-outcome-learning-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: After one 22-question train-only fit and one five-question newly completed-label comparison, either retain the candidate for goal-manager shadow integration or stop collection and redesign the learner.
+- Next decision: After one leave-one-root-out train-only falsifier, either freeze a small balanced Red development slice or stop fitting and perform a representation-collision audit on the same evidence.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose trainee, venue, and fight, rotate, heal, or stop actions from completion, party, resource, and risk state. |
-| Authority now | One eight-question outcome-trained development baseline and one rejected 26-question candidate exist; the recovery adds data but no model or live authority. |
-| Authority target | Fit a candidate on 22 complete joined scale-train questions, pass the frozen descriptive rule on five newly completed, never-scored development labels, then evaluate its recommendations in goal-manager shadow mode before any authority or Crystal probe. |
+| Reusable capability | Learn title-neutral trainee and venue utility from completion, party, resource, escort, feasibility, and cost state; fight, rotate, heal, and stop remain fixed-policy responsibilities. |
+| Authority now | One eight-question outcome-trained baseline and two rejected sequential updates exist. None has shadow or live authority; fight, rotate, heal, and stop remain fixed policy. |
+| Authority target | Pass a train-only protocol-consistent utility-learning gate, then pass at most twelve separately frozen balanced Red development questions before any bounded model-controlled party integration or Crystal probe. |
 | Transfer test | Use the same identity-free state and action contract on an unseen Crystal development slice and compare Red initialization with zero initialization. |
-| Cheapest falsifier | Fit once on the 22 complete joined scale-train questions and compare the existing baseline with the frozen update on only the five newly completed, never-scored development questions. |
-| Time box | 1 sessions / 8 hours |
+| Cheapest falsifier | Using only the 22 complete scale-train menus, fit one low-capacity protocol-consistent residual ranker with separate trainee and venue heads, then require deterministic leave-one-root-out gains on every frozen metric without opening or reusing development labels. |
+| Time box | 1 sessions / 4 hours |
 
 ### Required learning outputs
 
@@ -52,8 +52,8 @@ Not the product:
 | --- | ---: | ---: |
 | Outcome Question · train | 30 | 32 |
 | Outcome Question · development | 15 | 16 |
-| Model Fit · train | 2 | 2 |
-| Unseen Comparison · development | 2 | 2 |
+| Model Fit · train | 3 | 2 |
+| Unseen Comparison · development | 3 | 2 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -61,25 +61,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-17-recovery-successor-v1** · status **active** · evidence [outcome question](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json)
+**2026-08-17-recovery-fit-negative-v1** · status **active** · evidence [unseen comparison](docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The recovered collection, evolution, balance and role-coverage choices are identity-free outcome evidence for deciding how to develop a party. That skill is required to evolve and retain a living Pokedex across titles, while the bounded comparison prevents Red teacher reliability from becoming the product. |
-| Learning output | The immutable recovery successor measured 10 of the 15 previously invalid candidate trials. This completed four additional train and five additional development questions, advancing cumulative evidence to 30/32 train and 15/16 development while retaining five invalid trials and three censored questions honestly. |
-| Authority delta | The recovery added nine measured outcome questions but fit no model and granted no authority. The eight-question outcome model remains the development baseline; live party-development authority remains zero. |
-| Transfer result | Not run. Crystal remains closed until the Red outcome representation produces a clear development gain and earns a title-neutral shadow-transfer design. |
-| Blocker | Five successor trials remain invalid, leaving two train and one development questions censored. They do not block the 22-train plus five-newly-completed-development learner falsifier; the remaining uncertainty is whether the larger, more diverse outcome set improves the model. |
-| Decision | Stop repairing teacher mechanics. Authenticate and fit one fixed candidate on the 22 complete joined scale-train questions, exclude all six previously scored development questions, and compare once on only the five newly completed labels. Retain for a later shadow design only if paired updated wins exceed base wins, accuracy does not decrease, cross-entropy decreases, and mean winner probability increases; every mixed result requires learner redesign before more data. |
-| Next session | Publish the fail-closed joined fitter, require green exact-head CI, execute one offline fit and newly completed-label comparison, then adjudicate the learner before any more collection or teacher work. |
-| Next falsifier | One published offline runner must authenticate the 88 measured plus five invalid joined denominator, train only on 22 complete scale-train questions, exclude six previously observed development questions, and compare once on five newly completed, never-scored development labels. |
-| Stop condition | Treat the candidate as failed if paired updated wins do not exceed base wins, accuracy falls, cross-entropy does not fall, mean winner probability does not rise, or the metrics are mixed. Preserve that result and do not run another recovery campaign, promote, open sealed Red, or execute Crystal. |
+| Product alignment | Separating portable trainee and venue utility from Red execution mechanics directly supports evolving and retaining a balanced living collection across titles. Train-only falsification prevents the project from buying another Red-specific dataset before the representation earns it. |
+| Learning output | One preregistered update fit on 22 train questions. Training loss fell 1.667 to 0.594, but development stayed 3/5 while cross-entropy worsened 0.633 to 1.116 and mean winner probability fell 0.657 to 0.441. All five probability comparisons regressed, so the candidate failed and was rejected. |
+| Authority delta | The 30-example candidate was rejected and gained no shadow or live authority. The original eight-question model remains only a frozen development baseline; learned party-development authority remains zero. |
+| Transfer result | Not run. Crystal remains closed until a protocol-consistent learner first passes train-only falsification and then a separately frozen fresh Red development slice. |
+| Blocker | The shared small-data MLP reduced training loss but made confidence worse on all five newly completed labels. The immediate bottleneck is the learner and protocol representation, not Red outcome volume or the five remaining mechanical failures. |
+| Decision | Close the shared-MLP update path. Build one low-capacity, protocol-consistent residual ranker with separate trainee and venue heads, title-neutral feature groups, strong fixed regularization, and menu-normalized pairwise targets. Select nothing on consumed development; use deterministic leave-one-root-out predictions over only the 22 scale-train roots. |
+| Next session | Implement and test the protocol-consistent trainee/venue residual ranker and its leakage-safe leave-one-root-out evaluator, run exactly one frozen train-only falsifier, then reorient before any new data or integration. |
+| Next falsifier | Run one deterministic leave-one-root-out train-only evaluation of the frozen low-capacity design. Pass only if accuracy rises, cross-entropy falls, mean winner probability rises, paired wins exceed losses, and neither action head nor the collection/evolution slice regresses. |
+| Stop condition | If the leave-one-root-out gate is mixed or worse, stop fitting and audit representation collisions on the same evidence. Do not collect new outcomes, reuse consumed development, repair teacher routes, promote, open sealed Red, or execute Crystal. |
 
 ### Stop conditions
 
-- The 22-question train-only update cannot pass the frozen descriptive rule on five newly completed, never-scored Red development labels.
-- Another recovery or teacher-repair campaign is proposed before the current learner result identifies missing data as the bottleneck.
-- Any apparent gain comes from overleveling, teacher labels, identity leakage, fixed-route knowledge, or stale direct-combat evidence.
+- The leave-one-root-out ranker cannot improve every frozen aggregate without regressing either action head or the collection/evolution slice.
+- Consumed development labels are reused for architecture, feature, regularization, or threshold selection.
+- Any apparent gain comes from species, map, title, route, teacher, or fixed-walkthrough identity leakage.
 - Infrastructure work exceeds the maintenance budget without unblocking a measured learning output.
 
 ### Hard boundaries for this lane
@@ -103,8 +103,8 @@ claims that justify their cost; they must not be copied into routine data genera
 
 ## Session allocation and alarms
 
-- **60%** data and scenarios
-- **25%** model and evaluation
+- **10%** data and scenarios
+- **75%** model and evaluation
 - **15%** maintenance and documentation
 
 Stop and reassess after **1** session without a measured learning output, after **1** consecutive CI-only repair, or before any full replay. Repeated fixed-route patches
@@ -137,4 +137,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **3**.
+Current evidence entries: **4**.

@@ -6,19 +6,21 @@
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
 > The active scorecard is **TRAIN OUTCOME QUESTIONS 30/32 · DEVELOPMENT OUTCOME QUESTIONS 15/16 ·
-> MODEL FITS 2/2 · UNSEEN COMPARISONS 2/2 · AUTHORITY 0 · TRANSFER 0**. The existing eight-question
-> outcome model remains the development baseline; the recovery added outcome evidence but fit no
-> model and granted no authority. Inputs, preflights, CI, teacher runs and frozen artifacts never
-> advance these counters. See the
-> [recovery result](evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
+> MODEL FITS 3/2 · UNSEEN COMPARISONS 3/2 · AUTHORITY 0 · TRANSFER 0**. The third fit trained on
+> 22 scale-train questions and reduced training loss **1.667 → 0.594**, but the base and update
+> both scored 3/5 on the five-label comparison.
+> Cross-entropy worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all
+> five probabilities regressed. The shared update is rejected with no shadow or live authority.
+> See the
+> [negative-fit result](evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
 
-> **Current learning rail:** the recovery successor measured 10 of 15 claims and retained five
-> invalids, producing **88 measured + 5 invalid trials** across the immutable denominator. The
-> joined scale set has **22 complete train + 11 complete development questions**; only five
-> development labels are newly completed and never scored because six were used by the earlier
-> comparison. Next rail: **PUBLISH JOINED FITTER → GREEN EXACT-HEAD CI → FIT 22 TRAIN ONCE →
-> COMPARE FIVE NEWLY COMPLETED LABELS ONCE → RETAIN FOR SHADOW MODE OR REDESIGN LEARNER**. Do not repair the remaining
-> teacher failures first. Sealed Red, Crystal, replay and authority remain zero.
+> **Current learning rail:** the immutable scale record remains **88 measured + 5 invalid = 93
+> trials** and **33/36 complete joined questions = 22/24 train + 11/12 development**. All
+> scale-development labels are now consumed. Next rail: **22 SCALE-TRAIN ONLY → LOW-CAPACITY
+> RESIDUAL RANKER → SEPARATE TRAINEE/VENUE HEADS → TITLE-NEUTRAL FEATURES → FIXED STRONG RIDGE +
+> MENU-NORMALIZED PAIRWISE LOSS → DETERMINISTIC LEAVE-ONE-ROOT-OUT**. Gate the aggregate, both
+> action heads and collection/evolution slices. Do not reuse development, collect new outcomes,
+> repair the teacher, open sealed Red or Crystal, replay, or grant authority.
 
 > **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
 > SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE

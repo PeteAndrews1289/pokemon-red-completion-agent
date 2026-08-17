@@ -5,28 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): recovery is complete; fit the learner instead of
-> repairing the teacher again.** The immutable recovery successor claimed only the balanced Red
-> campaign's 15 invalid assignments. It measured 10 and retained five as invalid, bringing the
-> fixed 93-trial denominator to **88 measured + 5 invalid** and completing **22/24 scale-train plus
-> 11/12 scale-development questions**. The original 78 measurements were structurally
-> unclaimable, and neither frozen plan may retry.
+> **Current product focus (August 17, 2026): the recovered-evidence fit failed; redesign the
+> learner without reusing development or collecting more Red outcomes.** The third fit trained
+> once on the 22 complete scale-train questions. Training loss fell **1.667 → 0.594**, but the
+> base and update both scored **3/5** on the five newly completed development labels.
+> Cross-entropy worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and
+> all five winner-probability comparisons regressed. The candidate is rejected and has no shadow
+> or live authority.
 >
-> Honest board: **train 30/32 · development 15/16 · fits 2/2 · unseen comparisons 2/2 · live
-> authority 0 · transfer 0**. The existing eight-question outcome model remains the baseline; the
-> previously rejected 26-question candidate remains non-authoritative. Recovery fit no model and
-> granted no authority.
+> Honest board: **train 30/32 · development 15/16 · fits 3/2 · unseen comparisons 3/2 · live
+> authority 0 · transfer 0**. The immutable scale lineage remains **88 measured + 5 invalid = 93
+> trials** and **33/36 joined questions = 22/24 scale-train + 11/12 scale-development**. Both the
+> 26-question and 30-question candidates are negative evidence, not authority.
 >
-> Next, one fail-closed offline runner authenticates the joined lineage, fits on all **22 complete
-> scale-train questions**, excludes six development questions already inspected by the prior
-> comparison, and compares once on only **five newly completed development questions**. It advances
-> only if paired wins favor the update, accuracy does not fall, cross-entropy falls, and winner
-> probability rises; any mixed result sends the learner to redesign before more collection.
-> See the
-> [path-free recovery result](docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json).
+> Next, use only those 22 scale-train questions to build a low-capacity residual ranker with
+> separate trainee and venue heads, title-neutral feature groups, fixed strong ridge
+> regularization, a menu-normalized pairwise loss, and deterministic leave-one-root-out checks.
+> Do not reuse any consumed development label or collect new outcomes. See the
+> [path-free negative-fit result](docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
 > Run `.venv/bin/python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port
-> 8768. The [current audit](docs/current-audit-2026-08-17.md) records the recovery boundary and
-> remaining risks.
+> 8768. The [current audit](docs/current-audit-2026-08-17.md) records the rejection boundary and
+> next train-only falsifier.
 
 > **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
 > exact authorized campaign durably claimed its first development trial, then full-box semantic

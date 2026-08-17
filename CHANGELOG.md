@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Completed the one-time recovered-evidence fit on 22 scale-train questions. Training loss fell
+  from 1.667 to 0.594, but the baseline and update both scored 3/5 on the five newly completed
+  development labels; cross-entropy worsened from 0.633 to 1.116, mean winner probability fell
+  from 0.657 to 0.441, and all five probabilities regressed. Rejected the candidate without
+  shadow or live authority and advanced the honest counters to train 30/32, development 15/16,
+  fits 3/2 and comparisons 3/2. The next lane uses only the 22 scale-train roots for a low-capacity
+  residual ranker with separate trainee/venue heads, title-neutral features, fixed strong ridge,
+  menu-normalized pairwise loss and deterministic leave-one-root-out evaluation. Consumed
+  development, new collection, sealed Red and Crystal remain closed.
 - Executed the immutable 15-trial scale-recovery successor once: ten trials measured and five
   remained invalid, bringing the fixed denominator to 88/93 measured and completing 22/24
   scale-train plus 11/12 scale-development questions. Advanced the cumulative evidence board to

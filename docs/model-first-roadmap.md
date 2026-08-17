@@ -8,7 +8,39 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: partial recovery is enough to test the learner
+## Current checkpoint: lower train loss failed; redesign with train evidence only
+
+The recovered-evidence fitter completed once on all **22 complete scale-train questions**.
+Training loss fell **1.667 → 0.594**, but the base and update both scored **3/5** on the five
+newly completed development labels. The update worsened cross-entropy **0.633 → 1.116**, lowered
+mean winner probability **0.657 → 0.441**, and regressed all five winner probabilities. It is
+rejected and has no shadow or live authority.
+
+The honest board is **30/32 train · 15/16 development · 3/2 fits · 3/2 comparisons · authority
+0 · transfer 0**. The fixed scale lineage remains **88 measured + 5 invalid trials** and **33/36
+complete joined questions = 22/24 train + 11/12 development**. The comparison is consumed: none
+of the eleven scale-development labels may be reused for architecture selection, tuning or a
+second claim.
+
+The cheapest falsifier now changes model capacity and objective without changing evidence:
+
+1. Use only the 22 complete scale-train questions; collect no new outcomes and repair no remaining
+   campaign failure.
+2. Build a low-capacity residual ranker with separate trainee and venue heads and title-neutral
+   feature groups.
+3. Freeze a strong ridge penalty and a menu-normalized pairwise loss before evaluation.
+4. Run deterministic leave-one-root-out evaluation across the 22 scale-train roots. Report the
+   aggregate result, each action head, and the collection/evolution slices.
+5. Advance this design only if every frozen aggregate improves and neither action head nor the
+   collection/evolution slices regress. Mixed or worse evidence closes the design and triggers a
+   representation-collision audit on the same train evidence.
+6. Do not reuse consumed development, collect to make the board say 32/16, open sealed Red or
+   Crystal, run full replay, or grant shadow/live authority.
+
+The [path-free negative-fit result](evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json)
+records the completed comparison and rejection boundary.
+
+## Previous checkpoint: partial recovery was enough to test the learner
 
 The immutable recovery successor executed once and is consumed. It claimed only the 15 invalid
 assignments from the fixed 93-trial scale denominator, measured ten, and retained five as invalid.

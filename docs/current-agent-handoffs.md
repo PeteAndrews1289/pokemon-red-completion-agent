@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: fit the recovered scale evidence; stop repairing the teacher
+## Current override: reject the shared update; test one train-only residual ranker
+
+The joined fitter completed its single authorized comparison. It trained on the **22 complete
+scale-train questions**, reducing loss **1.667 → 0.594**. On the five newly completed development
+labels, both the existing baseline and update scored **3/5**; cross-entropy worsened **0.633 →
+1.116**, mean winner probability fell **0.657 → 0.441**, and all five probability comparisons
+regressed. Reject the update. It receives no shadow or live authority, and the consumed
+development comparison cannot be repeated.
+
+The board is **30/32 train · 15/16 development · 3/2 fits · 3/2 unseen comparisons · authority 0
+· transfer 0**. Codex owns one bounded redesign using only the 22 scale-train questions: a
+low-capacity residual ranker with separate trainee and venue heads, title-neutral feature groups,
+fixed strong ridge regularization, a menu-normalized pairwise loss, and deterministic
+leave-one-root-out evaluation. It must report the frozen aggregate, both action heads, and the
+collection/evolution slices. No consumed development label may influence selection or tuning.
+
+Claude reviews train-only lineage, leakage, the separate-head boundary and slice-level gates.
+Antigravity challenges title neutrality only after the train-only result exists. Neither reviewer
+edits this worktree or blocks routine development. Mixed or worse evidence closes this model
+design and leads to a representation-collision audit on the same evidence—not more collection.
+Do not repair remaining campaign failures, reuse development, collect new outcomes, open sealed
+Red or Crystal, run full replay, or grant authority. See the
+[path-free negative-fit result](evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
+
+## Superseded override: fit the recovered scale evidence; stop repairing the teacher
 
 Codex completed the immutable 15-trial recovery successor once. It measured ten claims and retained
 five invalids, bringing the original 93-trial denominator to **88 measured plus 5 invalid**. The

@@ -54,8 +54,8 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert focus_scorecard(state) == (
         ("Outcome Question · train", 30, 32),
         ("Outcome Question · development", 15, 16),
-        ("Model Fit · train", 2, 2),
-        ("Unseen Comparison · development", 2, 2),
+        ("Model Fit · train", 3, 2),
+        ("Unseen Comparison · development", 3, 2),
     )
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
@@ -65,7 +65,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows[-1] == "Unseen Comparison · development: 2/2"
+    assert rows[-1] == "Unseen Comparison · development: 3/2"
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -231,11 +231,11 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["stage_progress"] == 0.96875
     assert public["actions"] == 0
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 48}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 2, "total": 2}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Shadow fit exists; live authority remains gated" in encoded
-    assert "fit once on train and compare five newly completed labels" in encoded
+    assert "Last candidate rejected; live authority remains zero" in encoded
+    assert "next gate redesigns the learner on the 22 scale-train menus only" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
