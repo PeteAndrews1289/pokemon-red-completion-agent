@@ -14,11 +14,11 @@ from pokemon_red_completion.collection import (
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
 from pokemon_red_completion.goal_manager_state import CompletionProgress, GoalStateEvidence
-from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.observation import MapId, RawGameState
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.party_development_catalog import (
-    PartyDevelopmentCatalogError,
     PartyDevelopmentProspectiveBinding,
+    PartyDevelopmentUnavailableReason,
 )
 from pokemon_red_completion.party_development_question_reservations import (
     PartyDevelopmentContextPreparation,
@@ -45,14 +45,18 @@ from pokemon_red_completion.red_party import party_observation_from_raw
 from pokemon_red_completion.red_party_development_adapter import (
     RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY,
     RedPartyDevelopmentAdapterError,
+    RedPartyDevelopmentExecutionCapabilityError,
     RedPartyDevelopmentQuestionPreflight,
+    _execution_capability_matrix,
     build_red_party_development_snapshot,
     preflight_red_party_development_question,
     red_party_completion_snapshot,
+    red_vermilion_training_transition_available,
 )
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
+from pokemon_red_completion.training_venue import TrainingVenue
 
 _CANONICAL_ROOT = "canonical-reserved-root"
 
@@ -88,9 +92,7 @@ def _observation() -> RedGoalObservation:
         owned_species=owned_refs,
         specimens=tuple(
             LivingSpecimen(
-                species_ref=red_species_ref(
-                    red_internal_species_number(member.species_id)
-                ),
+                species_ref=red_species_ref(red_internal_species_number(member.species_id)),
                 level=member.level,
                 location=CollectionLocation.PARTY,
                 slot_index=index,
@@ -200,9 +202,7 @@ def _registry(*venues: GrindingArea) -> PartyDevelopmentVenuePriorRegistry:
 def _reservation(
     *,
     kind: TrainingChoiceKind = TrainingChoiceKind.TRAINEE,
-    preparation: PartyDevelopmentContextPreparation = (
-        PartyDevelopmentContextPreparation.NONE
-    ),
+    preparation: PartyDevelopmentContextPreparation = (PartyDevelopmentContextPreparation.NONE),
 ) -> PartyDevelopmentQuestionReservation:
     return PartyDevelopmentQuestionReservation(
         scenario_id="party-train-001",
@@ -304,6 +304,126 @@ def test_red_snapshot_derives_completion_evolution_and_retention_semantics() -> 
     assert not diglett.role_complete
     assert snapshot.registration_owned_count == 3
     assert snapshot.living_unique_count == 3
+
+
+def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() -> None:
+    areas = _areas()
+    base_observation = _observation()
+    raw = replace(
+        base_observation.raw,
+        party_pp=((5, 5, 0, 0), (5, 5, 5, 0), (5, 5, 5, 0)),
+    )
+    observation = replace(
+        base_observation,
+        raw=raw,
+        party=party_observation_from_raw(raw),
+    )
+
+    def no_op(*_args: object) -> None:
+        return None
+
+    venues = (
+        TrainingVenue(
+            band=areas[0],
+            map_id=101,
+            walk_to_grass=lambda *_args: 1,
+            heal_and_return=no_op,
+            is_in_center=lambda _raw: False,
+            move_slot=lambda _raw: 1,
+        ),
+        TrainingVenue(
+            band=areas[1],
+            map_id=102,
+            walk_to_grass=lambda *_args: 1,
+            heal_and_return=no_op,
+            is_in_center=lambda _raw: False,
+            move_slot=lambda _raw: 1,
+        ),
+    )
+    transition_guards = (
+        lambda _raw, anchor: anchor == 5,
+        lambda _raw, _anchor: False,
+    )
+    snapshot = build_red_party_development_snapshot(
+        _reservation(),
+        source_root_lineage_id=_CANONICAL_ROOT,
+        observation=observation,
+        evolutions=_evolutions(),
+        policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+        areas=areas,
+        venue_prior_registry=_registry(areas[0]),
+        venue_operational_contract_sha256=("6" * 64, "6" * 64),
+        source_commit="3" * 40,
+        source_bundle_sha256="4" * 64,
+        training_venues=venues,
+        transition_guards=transition_guards,
+        last_blackout_map=5,
+    )
+
+    menu = snapshot.trainee_menu(areas[0])
+
+    assert menu is not None
+    assert menu.candidate_available == (True, True, False)
+    assert menu.candidate_unavailable_reasons == (
+        None,
+        None,
+        PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE,
+    )
+    assert all(
+        profile.execution_capabilities_by_venue[1].unavailable_reason
+        is PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE
+        for profile in snapshot.member_profiles
+    )
+
+    unavailable_pp = replace(observation, raw=replace(raw, party_pp=None))
+    with pytest.raises(RedPartyDevelopmentExecutionCapabilityError) as caught:
+        _execution_capability_matrix(
+            unavailable_pp,
+            policy=BalancedTeamPolicy(minimum_level=30, required_size=3),
+            areas=areas,
+            training_venues=venues,
+            transition_guards=transition_guards,
+            last_blackout_map=5,
+        )
+    assert caught.value.code == "packed_party_pp_unavailable"
+
+
+def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
+    route = RawGameState(True, MapId.ROUTE_11, 8, 4, 6, 0)
+    known_center = RawGameState(True, MapId.CINNABAR_POKECENTER, 13, 4, 6, 0)
+    wrong_center_boundary = replace(known_center, player_x=4, player_y=3)
+    field_dig_source = RawGameState(True, MapId.POKEMON_MANSION_1F, 5, 27, 6, 0)
+
+    assert red_vermilion_training_transition_available(
+        route,
+        int(MapId.CELADON_CITY),
+    )
+    assert red_vermilion_training_transition_available(
+        known_center,
+        int(MapId.CINNABAR_ISLAND),
+    )
+    assert not red_vermilion_training_transition_available(
+        wrong_center_boundary,
+        int(MapId.CINNABAR_ISLAND),
+    )
+    assert red_vermilion_training_transition_available(
+        field_dig_source,
+        int(MapId.SAFFRON_CITY),
+    )
+    assert not red_vermilion_training_transition_available(
+        field_dig_source,
+        int(MapId.CELADON_CITY),
+    )
+    cave_source = replace(field_dig_source, map_id=MapId.DIGLETTS_CAVE)
+    assert not red_vermilion_training_transition_available(cave_source, 0)
+    assert red_vermilion_training_transition_available(
+        cave_source,
+        int(MapId.VERMILION_CITY),
+    )
+    assert not red_vermilion_training_transition_available(
+        replace(route, battle_state=1),
+        int(MapId.VERMILION_CITY),
+    )
 
 
 def test_red_preflight_freezes_identity_free_actionless_trainee_menu() -> None:
@@ -444,10 +564,8 @@ def test_semantic_state_mutation_changes_snapshot_and_menu_digests() -> None:
     assert changed_menu is not None
     assert original.semantic_snapshot_sha256 != changed.semantic_snapshot_sha256
     assert (
-        original.freeze_binding(original_menu, scenario_id="party-train-001")
-        .candidate_menu_sha256
-        != changed.freeze_binding(changed_menu, scenario_id="party-train-001")
-        .candidate_menu_sha256
+        original.freeze_binding(original_menu, scenario_id="party-train-001").candidate_menu_sha256
+        != changed.freeze_binding(changed_menu, scenario_id="party-train-001").candidate_menu_sha256
     )
 
 
@@ -470,9 +588,7 @@ def test_pp_preparation_requires_a_new_authenticated_reservation() -> None:
         match="newly authenticated post-materialization reservation",
     ):
         build_red_party_development_snapshot(
-            _reservation(
-                preparation=PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION
-            ),
+            _reservation(preparation=PartyDevelopmentContextPreparation.NATURAL_PP_DEPLETION),
             source_root_lineage_id=_CANONICAL_ROOT,
             observation=_observation(),
             evolutions=_evolutions(),
@@ -488,8 +604,8 @@ def test_pp_preparation_requires_a_new_authenticated_reservation() -> None:
 def test_venue_preflight_cannot_freeze_with_only_one_independent_prior() -> None:
     areas = _areas()
     with pytest.raises(
-        PartyDevelopmentCatalogError,
-        match="candidate availability is invalid",
+        RedPartyDevelopmentAdapterError,
+        match="does not produce a multi-candidate question",
     ):
         preflight_red_party_development_question(
             _reservation(kind=TrainingChoiceKind.VENUE),

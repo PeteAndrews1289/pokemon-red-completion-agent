@@ -12,6 +12,8 @@ from pokemon_red_completion.party import (
 )
 from pokemon_red_completion.party_development_adapter import (
     PartyDevelopmentAdapterError,
+    PartyDevelopmentCapabilityState,
+    PartyDevelopmentExecutionCapability,
     PartyDevelopmentMemberProfile,
     PartyDevelopmentSemanticSnapshot,
 )
@@ -92,10 +94,12 @@ def _snapshot(
         )
     )
     areas = _areas()
+    ready = tuple(PartyDevelopmentExecutionCapability.ready() for _ in areas)
     profiles = (
         PartyDevelopmentMemberProfile(
             member=party.members[0],
             evolution=EvolutionSemantics(False, 0, EvolutionRouteKind.NONE),
+            execution_capabilities_by_venue=ready,
             role_complete=True,
             projected_survival_by_venue=(0.9, 0.7, 0.5),
         ),
@@ -107,6 +111,7 @@ def _snapshot(
                 EvolutionRouteKind.LEVEL,
                 levels_to_next=4,
             ),
+            execution_capabilities_by_venue=ready,
             registration_needed=True,
             living_target_needed=True,
             emergency_escort_required=True,
@@ -120,6 +125,7 @@ def _snapshot(
                 EvolutionRouteKind.ITEM,
                 feasible_now=True,
             ),
+            execution_capabilities_by_venue=ready,
             role_needed=True,
             projected_survival_by_venue=(0.75, 0.45, 0.1),
         ),
@@ -245,6 +251,69 @@ def test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes() 
         None,
         PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE,
     )
+
+
+def test_execution_capabilities_mask_before_selection_with_portable_reasons() -> None:
+    snapshot = _snapshot()
+    baseline_menu = snapshot.trainee_menu(snapshot.areas[0])
+    transition_blocked = PartyDevelopmentExecutionCapability(
+        PartyDevelopmentCapabilityState.BLOCKED,
+        PartyDevelopmentCapabilityState.READY,
+        PartyDevelopmentCapabilityState.READY,
+    )
+    battle_blocked = PartyDevelopmentExecutionCapability(
+        PartyDevelopmentCapabilityState.READY,
+        PartyDevelopmentCapabilityState.BLOCKED,
+        PartyDevelopmentCapabilityState.READY,
+    )
+    changed_profiles = (
+        replace(
+            snapshot.member_profiles[0],
+            execution_capabilities_by_venue=(
+                transition_blocked,
+                *snapshot.member_profiles[0].execution_capabilities_by_venue[1:],
+            ),
+        ),
+        snapshot.member_profiles[1],
+        snapshot.member_profiles[2],
+    )
+    changed = replace(snapshot, member_profiles=changed_profiles)
+
+    menu = changed.trainee_menu(changed.areas[0])
+
+    assert baseline_menu is not None
+    assert menu is not None
+    assert menu.candidate_set == baseline_menu.candidate_set
+    assert menu.candidate_available == (False, True, True)
+    assert menu.candidate_unavailable_reasons == (
+        PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE,
+        None,
+        None,
+    )
+    assert (
+        battle_blocked.unavailable_reason
+        is PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE
+    )
+
+
+def test_execution_capability_reports_known_blocker_before_unknown_state() -> None:
+    capability = PartyDevelopmentExecutionCapability(
+        PartyDevelopmentCapabilityState.UNKNOWN,
+        PartyDevelopmentCapabilityState.READY,
+        PartyDevelopmentCapabilityState.BLOCKED,
+    )
+    unknown_only = PartyDevelopmentExecutionCapability(
+        PartyDevelopmentCapabilityState.READY,
+        PartyDevelopmentCapabilityState.UNKNOWN,
+        PartyDevelopmentCapabilityState.READY,
+    )
+
+    assert not capability.available
+    assert (
+        capability.unavailable_reason
+        is PartyDevelopmentUnavailableReason.INSUFFICIENT_RECOVERY_CAPACITY
+    )
+    assert unknown_only.unavailable_reason is PartyDevelopmentUnavailableReason.WORLD_STATE_UNKNOWN
 
 
 def test_venue_context_selects_unique_weakest_goal_relevant_trainee() -> None:

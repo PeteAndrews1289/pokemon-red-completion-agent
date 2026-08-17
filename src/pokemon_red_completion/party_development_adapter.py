@@ -16,6 +16,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import asdict, dataclass
+from enum import StrEnum
 from typing import Generic, TypeVar
 
 from pokemon_red_completion.party import (
@@ -66,12 +67,87 @@ class PartyDevelopmentAdapterError(ValueError):
     """Raised when a semantic snapshot cannot support an honest menu."""
 
 
+class PartyDevelopmentCapabilityState(StrEnum):
+    """Prospective status of one title adapter's execution capability."""
+
+    READY = "ready"
+    BLOCKED = "blocked"
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True, slots=True)
+class PartyDevelopmentExecutionCapability:
+    """Title-neutral readiness of one trainee/venue pair before selection.
+
+    A title adapter may use any private facts required to derive these three
+    statuses.  The shared learner sees only the resulting availability mask and
+    portable reason.  Keeping the axes separate prevents a later title from
+    treating a static map edge, one usable move, or a nearby healer as proof
+    that the complete action can actually finish.
+    """
+
+    transition: PartyDevelopmentCapabilityState
+    battle: PartyDevelopmentCapabilityState
+    recovery: PartyDevelopmentCapabilityState
+
+    def __post_init__(self) -> None:
+        if any(
+            not isinstance(value, PartyDevelopmentCapabilityState)
+            for value in (self.transition, self.battle, self.recovery)
+        ):
+            raise PartyDevelopmentAdapterError(
+                "party-development execution capability states are invalid"
+            )
+
+    @classmethod
+    def ready(cls) -> PartyDevelopmentExecutionCapability:
+        return cls(
+            PartyDevelopmentCapabilityState.READY,
+            PartyDevelopmentCapabilityState.READY,
+            PartyDevelopmentCapabilityState.READY,
+        )
+
+    @property
+    def available(self) -> bool:
+        return all(
+            value is PartyDevelopmentCapabilityState.READY
+            for value in (self.transition, self.battle, self.recovery)
+        )
+
+    @property
+    def unavailable_reason(self) -> PartyDevelopmentUnavailableReason | None:
+        states_and_reasons = (
+            (
+                self.transition,
+                PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE,
+            ),
+            (
+                self.battle,
+                PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE,
+            ),
+            (
+                self.recovery,
+                PartyDevelopmentUnavailableReason.INSUFFICIENT_RECOVERY_CAPACITY,
+            ),
+        )
+        for state, blocked_reason in states_and_reasons:
+            if state is PartyDevelopmentCapabilityState.BLOCKED:
+                return blocked_reason
+        if any(
+            state is PartyDevelopmentCapabilityState.UNKNOWN
+            for state, _reason in states_and_reasons
+        ):
+            return PartyDevelopmentUnavailableReason.WORLD_STATE_UNKNOWN
+        return None
+
+
 @dataclass(frozen=True, slots=True)
 class PartyDevelopmentMemberProfile:
     """Private completion facts for one exact observed party member."""
 
     member: PartyMemberObservation
     evolution: EvolutionSemantics
+    execution_capabilities_by_venue: tuple[PartyDevelopmentExecutionCapability, ...]
     registration_needed: bool = False
     living_target_needed: bool = False
     living_retention_risk: bool = False
@@ -116,6 +192,13 @@ class PartyDevelopmentMemberProfile:
             raise PartyDevelopmentAdapterError(
                 "projected venue survival margins must be finite signed unit values"
             )
+        capabilities = self.execution_capabilities_by_venue
+        if not isinstance(capabilities, tuple) or any(
+            not isinstance(value, PartyDevelopmentExecutionCapability) for value in capabilities
+        ):
+            raise PartyDevelopmentAdapterError(
+                "party-development execution capabilities must be typed"
+            )
 
     def semantics_for_venue(self, venue_index: int) -> CandidateCompletionSemantics:
         if type(venue_index) is not int or venue_index not in range(  # noqa: E721
@@ -132,6 +215,16 @@ class PartyDevelopmentMemberProfile:
             emergency_escort_required=self.emergency_escort_required,
             projected_survival_margin=float(self.projected_survival_by_venue[venue_index]),
         )
+
+    def execution_capability_for_venue(
+        self,
+        venue_index: int,
+    ) -> PartyDevelopmentExecutionCapability:
+        if type(venue_index) is not int or venue_index not in range(  # noqa: E721
+            len(self.execution_capabilities_by_venue)
+        ):
+            raise PartyDevelopmentAdapterError("execution capability venue index is invalid")
+        return self.execution_capabilities_by_venue[venue_index]
 
 
 @dataclass(frozen=True, slots=True)
@@ -169,8 +262,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
             or not isinstance(self.candidate_unavailable_reasons, tuple)
             or len(self.candidate_unavailable_reasons) != count
             or any(
-                reason is not None
-                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                reason is not None and not isinstance(reason, PartyDevelopmentUnavailableReason)
                 for reason in self.candidate_unavailable_reasons
             )
             or not isinstance(self.venue_priors, tuple)
@@ -194,24 +286,42 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
         if self.candidate_set.kind is TrainingChoiceKind.TRAINEE:
             if (
                 any(not isinstance(value, PartyMemberObservation) for value in self.bindings)
-                or not all(self.candidate_available)
-                or any(reason is not None for reason in self.candidate_unavailable_reasons)
                 or not isinstance(self.shared_venue, GrindingArea)
                 or not isinstance(self.shared_venue_prior, VenueOperationalPrior)
                 or not self.shared_venue_prior.available
                 or any(prior != self.shared_venue_prior for prior in self.venue_priors)
+                or any(
+                    reason is PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                    for reason in self.candidate_unavailable_reasons
+                )
             ):
                 raise PartyDevelopmentAdapterError(
                     "trainee menus need one frozen shared venue and only member bindings"
                 )
         elif (
             any(not isinstance(value, GrindingArea) for value in self.bindings)
-            or self.candidate_available != tuple(prior.available for prior in self.venue_priors)
             or self.shared_venue is not None
             or self.shared_venue_prior is not None
+            or any(
+                available and not prior.available
+                for available, prior in zip(
+                    self.candidate_available,
+                    self.venue_priors,
+                    strict=True,
+                )
+            )
+            or any(
+                (not prior.available)
+                != (reason is PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE)
+                for prior, reason in zip(
+                    self.venue_priors,
+                    self.candidate_unavailable_reasons,
+                    strict=True,
+                )
+            )
         ):
             raise PartyDevelopmentAdapterError(
-                "venue menus must derive availability exactly from candidate priors"
+                "venue menus must preserve prior and execution availability causality"
             )
 
 
@@ -288,6 +398,7 @@ class PartyDevelopmentSemanticSnapshot:
             or tuple(item.member for item in self.member_profiles) != self.party.members
             or any(
                 len(item.projected_survival_by_venue) != len(self.areas)
+                or len(item.execution_capabilities_by_venue) != len(self.areas)
                 for item in self.member_profiles
             )
         ):
@@ -430,6 +541,7 @@ class PartyDevelopmentSemanticSnapshot:
         profiles = tuple(self._profile_for_member(item) for item in bindings)
         self._require_candidates_can_serve_goal(profiles)
         semantics = tuple(item.semantics_for_venue(venue_index) for item in profiles)
+        capabilities = tuple(item.execution_capability_for_venue(venue_index) for item in profiles)
         repeated_prior = tuple(shared_prior for _ in bindings)
         candidate_set = augment_training_candidate_set(
             base,
@@ -437,12 +549,14 @@ class PartyDevelopmentSemanticSnapshot:
             semantics,
             venue_priors=repeated_prior,
         )
+        if sum(item.available for item in capabilities) < 2:
+            return None
         return BoundPartyDevelopmentMenu(
             candidate_set=candidate_set,
             semantic_snapshot_sha256=self.semantic_snapshot_sha256,
             bindings=bindings,
-            candidate_available=tuple(True for _ in bindings),
-            candidate_unavailable_reasons=tuple(None for _ in bindings),
+            candidate_available=tuple(item.available for item in capabilities),
+            candidate_unavailable_reasons=tuple(item.unavailable_reason for item in capabilities),
             venue_priors=repeated_prior,
             shared_venue=shared_venue,
             shared_venue_prior=shared_prior,
@@ -478,23 +592,33 @@ class PartyDevelopmentSemanticSnapshot:
             for item, index in zip(bindings, indexes, strict=True)
         )
         semantics = tuple(profile.semantics_for_venue(index) for index in indexes)
+        capabilities = tuple(profile.execution_capability_for_venue(index) for index in indexes)
         candidate_set = augment_training_candidate_set(
             base,
             self.context,
             semantics,
             venue_priors=priors,
         )
+        availability = tuple(
+            prior.available and capability.available
+            for prior, capability in zip(priors, capabilities, strict=True)
+        )
+        reasons = tuple(
+            (
+                PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
+                if not prior.available
+                else capability.unavailable_reason
+            )
+            for prior, capability in zip(priors, capabilities, strict=True)
+        )
+        if sum(availability) < 2:
+            return None
         return BoundPartyDevelopmentMenu(
             candidate_set=candidate_set,
             semantic_snapshot_sha256=self.semantic_snapshot_sha256,
             bindings=bindings,
-            candidate_available=tuple(item.available for item in priors),
-            candidate_unavailable_reasons=tuple(
-                None
-                if item.available
-                else PartyDevelopmentUnavailableReason.INSUFFICIENT_VENUE_EVIDENCE
-                for item in priors
-            ),
+            candidate_available=availability,
+            candidate_unavailable_reasons=reasons,
             venue_priors=priors,
         )
 
@@ -521,7 +645,7 @@ class PartyDevelopmentSemanticSnapshot:
             ):
                 continue
             menu = self.venue_menu(profile.member)
-            if menu is not None and len(menu.bindings) >= 2:
+            if menu is not None and sum(menu.candidate_available) >= 2:
                 eligible.append(profile.member)
         if not eligible:
             raise PartyDevelopmentAdapterError(
@@ -623,9 +747,7 @@ class PartyDevelopmentSemanticSnapshot:
                 "candidate menu cannot reduce its declared completion pressure"
             )
 
-    def _profile_can_serve_goal(
-        self, profile: PartyDevelopmentMemberProfile
-    ) -> bool:
+    def _profile_can_serve_goal(self, profile: PartyDevelopmentMemberProfile) -> bool:
         useful = {
             PartyDevelopmentGoal.BALANCE: lambda item: member_needs_training(
                 item.member, self.policy
@@ -642,6 +764,8 @@ class PartyDevelopmentSemanticSnapshot:
 __all__ = [
     "BoundPartyDevelopmentMenu",
     "PartyDevelopmentAdapterError",
+    "PartyDevelopmentCapabilityState",
+    "PartyDevelopmentExecutionCapability",
     "PartyDevelopmentMemberProfile",
     "PartyDevelopmentSemanticSnapshot",
 ]

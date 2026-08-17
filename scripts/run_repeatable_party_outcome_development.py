@@ -107,7 +107,11 @@ from pokemon_red_completion.party_development_scenarios import (  # noqa: E402
 from pokemon_red_completion.party_development_venue_priors import (  # noqa: E402
     PartyDevelopmentVenuePriorRegistry,
 )
-from pokemon_red_completion.private_artifacts import open_private_root  # noqa: E402
+from pokemon_red_completion.private_artifacts import (  # noqa: E402
+    PRIVATE_ARTIFACT_SCHEMA_VERSION,
+    PRIVATE_JSON_ARTIFACT_FORMAT,
+    open_private_root,
+)
 from pokemon_red_completion.provenance import (  # noqa: E402
     canonical_sha256,
     detect_source_identity,
@@ -123,6 +127,8 @@ from pokemon_red_completion.red_goal_manager import RedGoalObservation  # noqa: 
 from pokemon_red_completion.red_party import PokemonRedPartyReader  # noqa: E402
 from pokemon_red_completion.red_party_development_adapter import (  # noqa: E402
     RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY,
+    RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS,
+    RedPartyDevelopmentExecutionCapabilityError,
     build_red_party_development_snapshot,
     red_party_completion_snapshot,
 )
@@ -211,6 +217,16 @@ class _TrialMeasurement:
     frames_executed: int
 
 
+@dataclass(frozen=True, slots=True)
+class _DevelopmentArtifactExclusion:
+    """Verified, path-free exclusions recovered from one prior pilot."""
+
+    root_lineage_ids: frozenset[str]
+    initial_state_sha256: frozenset[str]
+    manifest_sha256: str
+    plan_sha256: str
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inventory", type=Path, required=True)
@@ -230,6 +246,13 @@ def _parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         help="development-private roots with consumed outcome trials",
+    )
+    parser.add_argument(
+        "--exclude-development-artifact",
+        type=Path,
+        action="append",
+        default=[],
+        help="verified prior repeatable-development artifact whose roots must not recur",
     )
     parser.add_argument("--watch", action="store_true")
     parser.add_argument("--execute", action="store_true")
@@ -256,6 +279,150 @@ def _require_external(path: Path, *, subject: str) -> Path:
             f"repeatable development {subject} must remain outside the repository"
         )
     return resolved
+
+
+def _development_artifact_exclusion(
+    artifact_path: Path,
+) -> _DevelopmentArtifactExclusion:
+    """Authenticate one prior pilot and recover only disjointness identities.
+
+    The current runner never opens its outcomes or failures. It verifies the
+    immutable manifest and the single plan stream, then retains only root and
+    state digests needed to prevent accidental reuse.
+    """
+
+    artifact = _require_external(
+        artifact_path,
+        subject="excluded development artifact",
+    )
+    manifest, manifest_sha256 = _load_json(
+        artifact / "manifest.json",
+        subject="excluded development artifact manifest",
+    )
+    if (
+        manifest.get("format") != PRIVATE_JSON_ARTIFACT_FORMAT
+        or manifest.get("schema_version") != PRIVATE_ARTIFACT_SCHEMA_VERSION
+        or manifest.get("kind") != "repeatable_party_outcome_development"
+        or manifest.get("status") != "complete"
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact manifest identity is invalid"
+        )
+    files = manifest.get("files")
+    if not isinstance(files, list):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact file inventory is invalid"
+        )
+    plan_entries = tuple(
+        entry
+        for entry in files
+        if isinstance(entry, Mapping) and entry.get("filename") == "plan.jsonl"
+    )
+    if len(plan_entries) != 1:
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact must bind exactly one plan stream"
+        )
+    plan_entry = plan_entries[0]
+    try:
+        plan_payload = (artifact / "plan.jsonl").read_bytes()
+    except OSError as error:
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan is unavailable"
+        ) from error
+    declared_bytes = plan_entry.get("bytes")
+    declared_records = plan_entry.get("records")
+    declared_sha256 = plan_entry.get("sha256")
+    if (
+        type(declared_bytes) is not int  # noqa: E721
+        or declared_bytes != len(plan_payload)
+        or declared_records != 1
+        or not isinstance(declared_sha256, str)
+        or hashlib.sha256(plan_payload).hexdigest() != declared_sha256
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan differs from its manifest"
+        )
+    try:
+        lines = plan_payload.decode("ascii").splitlines()
+        record = json.loads(lines[0]) if len(lines) == 1 else None
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan is invalid ASCII JSONL"
+        ) from error
+    if not isinstance(record, Mapping) or record.get("record_type") != (
+        "repeatable_party_development_plan"
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan record identity is invalid"
+        )
+    plan = record.get("plan")
+    plan_sha256 = record.get("plan_sha256")
+    if (
+        not isinstance(plan, Mapping)
+        or plan.get("schema") != "pokemon.core.repeatable-party-development-scenario-plan.v1"
+        or not isinstance(plan_sha256, str)
+        or canonical_sha256(plan) != plan_sha256
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact semantic plan binding is invalid"
+        )
+    assignments = plan.get("assignments")
+    if not isinstance(assignments, list) or not assignments:
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan has no assignments"
+        )
+    roots: list[str] = []
+    states: list[str] = []
+    partition_counts: Counter[str] = Counter()
+    for assignment in assignments:
+        if not isinstance(assignment, Mapping):
+            raise RepeatablePartyOutcomeRunError(
+                "excluded development artifact assignment is invalid"
+            )
+        root = assignment.get("root_lineage_id")
+        state = assignment.get("initial_state_sha256")
+        partition = assignment.get("partition")
+        if (
+            assignment.get("schema") != "pokemon.core.repeatable-party-development-assignment.v1"
+            or not isinstance(root, str)
+            or not root
+            or not isinstance(state, str)
+            or len(state) != 64
+            or any(character not in "0123456789abcdef" for character in state)
+            or partition
+            not in {
+                ScenarioPartition.TRAIN.value,
+                ScenarioPartition.DEVELOPMENT.value,
+            }
+            or type(assignment.get("candidate_count")) is not int  # noqa: E721
+            or assignment["candidate_count"] < 2
+            or assignment.get("private_path_fields") != 0
+        ):
+            raise RepeatablePartyOutcomeRunError(
+                "excluded development artifact assignment semantics are invalid"
+            )
+        roots.append(root)
+        states.append(state)
+        partition_counts[partition] += 1
+    if (
+        len(set(roots)) != len(roots)
+        or len(set(states)) != len(states)
+        or plan.get("unique_root_count") != len(roots)
+        or plan.get("unique_initial_state_count") != len(states)
+        or plan.get("partition_counts") != dict(partition_counts)
+        or plan.get("teacher_choice_targets") != 0
+        or plan.get("sealed_test_cases_opened") != 0
+        or plan.get("private_path_fields") != 0
+    ):
+        raise RepeatablePartyOutcomeRunError(
+            "excluded development artifact plan summary is inconsistent"
+        )
+    return _DevelopmentArtifactExclusion(
+        root_lineage_ids=frozenset(roots),
+        initial_state_sha256=frozenset(states),
+        manifest_sha256=manifest_sha256,
+        plan_sha256=plan_sha256,
+    )
 
 
 def _inventory_reservation(
@@ -335,7 +502,7 @@ def _build_option_pool(
     excluded_states: frozenset[str],
     source_commit: str,
     source_bundle_sha256: str,
-) -> tuple[_RedOptionRuntime, ...]:
+) -> tuple[tuple[_RedOptionRuntime, ...], dict[str, int]]:
     try:
         context_document = json.loads(context_catalog_payload.decode("ascii"))
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
@@ -368,6 +535,7 @@ def _build_option_pool(
     )
     evolutions = evolution_graph(rom_path.read_bytes())
     runtimes: list[_RedOptionRuntime] = []
+    capability_rejected_roots: dict[str, set[str]] = {}
     for entry in inventory.entries:
         if (
             entry.checkpoint_id.startswith("red-party-pp-v1-")
@@ -402,6 +570,8 @@ def _build_option_pool(
                 reader=reader,
             )
             observation = runtime.adapter.observe()
+            last_blackout_map = reader.read_last_blackout_map()
+        reject_entry = False
         for goal in entry.goal_hints:
             for kind in TrainingChoiceKind:
                 option_id = f"repeatable-option-{entry.checkpoint_id}-{kind.value}-{goal.value}"
@@ -423,8 +593,19 @@ def _build_option_pool(
                         venue_operational_contract_sha256=contracts,
                         source_commit=source_commit,
                         source_bundle_sha256=source_bundle_sha256,
+                        training_venues=_TRAINING_VENUES,
+                        transition_guards=RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS,
+                        last_blackout_map=last_blackout_map,
                     )
                     menu, venue_trainee = _menu_for_snapshot(snapshot, kind)
+                except RedPartyDevelopmentExecutionCapabilityError as error:
+                    if error.code == "adapter_contract_misaligned":
+                        raise RepeatablePartyOutcomeRunError(
+                            "repeatable development capability contract is misaligned"
+                        ) from error
+                    capability_rejected_roots.setdefault(error.code, set()).add(root_lineage_id)
+                    reject_entry = True
+                    break
                 except (RuntimeError, ValueError):
                     continue
                 if menu is None or sum(menu.candidate_available) < 2:
@@ -450,11 +631,15 @@ def _build_option_pool(
                         profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
                     )
                 )
+            if reject_entry:
+                break
     if not runtimes:
         raise RepeatablePartyOutcomeRunError(
             "repeatable development produced no genuine candidate menus"
         )
-    return tuple(runtimes)
+    return tuple(runtimes), {
+        code: len(roots) for code, roots in sorted(capability_rejected_roots.items())
+    }
 
 
 def _selected_runtimes(
@@ -581,6 +766,7 @@ def _require_randomization_preserves_question(
     venue_registry: PartyDevelopmentVenuePriorRegistry,
     source_commit: str,
     source_bundle_sha256: str,
+    last_blackout_map: int,
 ) -> None:
     route_evidence = venue_registry.evidence_for(ROUTE_11_TRAINING_VENUE.band)
     cave_evidence = venue_registry.evidence_for(DIGLETTS_CAVE_TRAINING_VENUE.band)
@@ -602,6 +788,9 @@ def _require_randomization_preserves_question(
         ),
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
+        training_venues=_TRAINING_VENUES,
+        transition_guards=RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS,
+        last_blackout_map=last_blackout_map,
     )
     delayed_menu, delayed_trainee = _menu_for_snapshot(
         delayed,
@@ -615,11 +804,7 @@ def _require_randomization_preserves_question(
         delayed_menu,
         runtime.assignment.candidate_order,
     )
-    if (
-        delayed_menu.candidate_set != runtime.menu.candidate_set
-        or delayed_menu.bindings != runtime.menu.bindings
-        or delayed_trainee != runtime.venue_question_trainee
-    ):
+    if delayed_menu != runtime.menu or delayed_trainee != runtime.venue_question_trainee:
         raise RepeatablePartyOutcomeRunError(
             "repeatable timing randomization changed learner-visible semantics"
         )
@@ -662,6 +847,7 @@ def _execute_trial(
             reader=ports.reader,
         )
         before_observation = goal_runtime.adapter.observe()
+        last_blackout_map = ports.reader.read_last_blackout_map()
         _require_randomization_preserves_question(
             runtime,
             observation=before_observation,
@@ -669,6 +855,7 @@ def _execute_trial(
             venue_registry=venue_registry,
             source_commit=source_commit,
             source_bundle_sha256=source_bundle_sha256,
+            last_blackout_map=last_blackout_map,
         )
         before_party = ports.party_reader.read()
         before_completion = red_party_completion_snapshot(
@@ -843,7 +1030,11 @@ def _assemble_examples(
     return tuple(examples)
 
 
-def _pool_summary(pool: tuple[_RedOptionRuntime, ...]) -> dict[str, object]:
+def _pool_summary(
+    pool: tuple[_RedOptionRuntime, ...],
+    *,
+    capability_rejected_root_counts: Mapping[str, int],
+) -> dict[str, object]:
     roots_by_partition = {
         partition.value: len(
             {item.option.root_lineage_id for item in pool if item.option.partition is partition}
@@ -870,6 +1061,17 @@ def _pool_summary(pool: tuple[_RedOptionRuntime, ...]) -> dict[str, object]:
             )
         ),
         "candidate_widths": sorted({item.option.available_candidate_count for item in pool}),
+        "unavailable_reason_counts": dict(
+            sorted(
+                Counter(
+                    reason.value
+                    for item in pool
+                    for reason in item.menu.candidate_unavailable_reasons
+                    if reason is not None
+                ).items()
+            )
+        ),
+        "capability_rejected_root_counts": dict(capability_rejected_root_counts),
         "candidate_feature_values_public": False,
         "private_path_fields": 0,
     }
@@ -912,13 +1114,33 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     inventory = PartyDevelopmentCheckpointInventory.from_private_dict(inventory_document)
     venue_registry = PartyDevelopmentVenuePriorRegistry.from_private_dict(venue_document)
     prior_plan = PartyDevelopmentQuestionReservationPlan.from_private_dict(prior_document)
+    artifact_exclusions = tuple(
+        _development_artifact_exclusion(path) for path in args.exclude_development_artifact
+    )
     rom_path = resolve_rom_path(args.rom)
     fingerprint = verify_rom(rom_path)
-    excluded_roots = frozenset(
-        (*prior_plan.excluded_root_lineage_ids, *args.exclude_root_lineage_id)
+    manual_consumed_roots = frozenset(args.exclude_root_lineage_id)
+    artifact_roots = frozenset(
+        root for exclusion in artifact_exclusions for root in exclusion.root_lineage_ids
     )
-    excluded_states = frozenset(prior_plan.excluded_state_sha256)
-    pool = _build_option_pool(
+    excluded_roots = frozenset(
+        (
+            *prior_plan.excluded_root_lineage_ids,
+            *manual_consumed_roots,
+            *artifact_roots,
+        )
+    )
+    excluded_states = frozenset(
+        (
+            *prior_plan.excluded_state_sha256,
+            *(
+                state
+                for exclusion in artifact_exclusions
+                for state in exclusion.initial_state_sha256
+            ),
+        )
+    )
+    pool, capability_rejected_root_counts = _build_option_pool(
         inventory=inventory,
         context_catalog_payload=context_path.read_bytes(),
         venue_registry=venue_registry,
@@ -949,15 +1171,27 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "context_catalog": hashlib.sha256(context_path.read_bytes()).hexdigest(),
             "venue_prior_registry": venue_file_sha,
             "prior_reservation_plan": prior_file_sha,
+            "excluded_development_artifact_manifests": sorted(
+                exclusion.manifest_sha256 for exclusion in artifact_exclusions
+            ),
         },
         "rom": fingerprint.public_dict(),
-        "scenario_pool": _pool_summary(pool),
+        "scenario_pool": _pool_summary(
+            pool,
+            capability_rejected_root_counts=capability_rejected_root_counts,
+        ),
         "plan": plan.public_dict(),
         "plan_sha256": plan.plan_sha256,
         "question_count": len(selected),
         "candidate_trial_count": sum(len(value) for value in assignments.values()),
         "excluded_prior_root_count": len(prior_plan.excluded_root_lineage_ids),
-        "excluded_consumed_root_count": len(set(args.exclude_root_lineage_id)),
+        "excluded_consumed_root_count": len(manual_consumed_roots),
+        "excluded_development_artifact_count": len(artifact_exclusions),
+        "excluded_development_artifact_root_count": len(artifact_roots),
+        "excluded_total_unique_root_count": len(excluded_roots),
+        "excluded_development_plan_sha256": sorted(
+            exclusion.plan_sha256 for exclusion in artifact_exclusions
+        ),
         "development_repeatable": True,
         "teacher_queries": 0,
         "teacher_choice_targets": 0,

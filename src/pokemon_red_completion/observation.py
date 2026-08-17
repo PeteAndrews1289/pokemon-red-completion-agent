@@ -144,6 +144,7 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
     WALK_BIKE_SURF_STATE = 0xD700
+    LAST_BLACKOUT_MAP = 0xD719
     NPC_TRADE_FLAGS = 0xD737
     VERMILION_GYM_FIRST_LOCK = 0xD743
     VERMILION_GYM_SECOND_LOCK = 0xD744
@@ -4312,6 +4313,17 @@ class PokemonRedStateReader:
         """
 
         return self._memory.read_u8(RamAddress.LAST_MAP)
+
+    def read_last_blackout_map(self) -> int:
+        """Read the live destination used by Dig, Escape Rope, and blackout.
+
+        This is dynamic execution context rather than spatial map identity: a
+        checkpoint in the same room can return to a different healing anchor.
+        Party-development eligibility consumes it only inside the Red adapter
+        and projects a title-neutral transition verdict.
+        """
+
+        return self._memory.read_u8(RamAddress.LAST_BLACKOUT_MAP)
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""

@@ -105,6 +105,15 @@ def test_retained_outside_map_uses_the_engine_wlastmap_byte() -> None:
     assert memory.reads == [0xD365]
 
 
+def test_last_blackout_map_uses_the_engine_healing_anchor_byte() -> None:
+    # Literal upstream address is intentional: deriving the fixture from
+    # RamAddress would let a wrong production constant change both sides.
+    memory = RecordingMemory({0xD719: MapId.LAVENDER_POKECENTER})
+
+    assert PokemonRedStateReader(memory).read_last_blackout_map() == MapId.LAVENDER_POKECENTER
+    assert memory.reads == [0xD719]
+
+
 def test_visible_map_objects_use_the_engine_unavailable_marker_and_live_coordinates() -> None:
     # Literal upstream addresses are intentional: deriving this fixture from
     # RamAddress would let a wrong production constant change both sides of

@@ -15,7 +15,7 @@ learner boundary.
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
 from pokemon_red_completion.collection import (
@@ -24,9 +24,12 @@ from pokemon_red_completion.collection import (
     summarize_collection,
 )
 from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
+from pokemon_red_completion.observation import MapId, RawGameState
 from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
 from pokemon_red_completion.party_development_adapter import (
     BoundPartyDevelopmentMenu,
+    PartyDevelopmentCapabilityState,
+    PartyDevelopmentExecutionCapability,
     PartyDevelopmentMemberProfile,
     PartyDevelopmentSemanticSnapshot,
 )
@@ -52,7 +55,17 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
-from pokemon_red_completion.red_party import RED_BALANCED_ROSTER, party_observation_from_raw
+from pokemon_red_completion.red_party import (
+    BLASTOISE_SPECIES_ID,
+    RED_BALANCED_ROSTER,
+    party_observation_from_raw,
+)
+from pokemon_red_completion.red_party_pp import RedPartyPpState, decode_red_party_pp
+from pokemon_red_completion.red_team_training import (
+    ESCORT_LEVEL_CAP,
+    TRAINING_MOVE_IDS,
+    training_attack_pp_reserve,
+)
 from pokemon_red_completion.team_training import (
     MINIMUM_FIGHTABLE_SHARE,
     BalancedTeamPolicy,
@@ -62,6 +75,7 @@ from pokemon_red_completion.team_training import (
     training_safety_ceiling,
 )
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
+from pokemon_red_completion.training_venue import TrainingVenue
 
 RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY = BalancedTeamPolicy(
     minimum_level=60,
@@ -83,6 +97,59 @@ class RedPartyDevelopmentAdapterError(ValueError):
     """Raised when Red state cannot support an honest prospective question."""
 
 
+class RedPartyDevelopmentExecutionCapabilityError(RedPartyDevelopmentAdapterError):
+    """Raised when an exact Red checkpoint cannot support capability screening."""
+
+    def __init__(self, code: str, message: str) -> None:
+        super().__init__(message)
+        self.code = code
+
+
+RedPartyDevelopmentTransitionGuard = Callable[[RawGameState, int], bool | None]
+
+
+def red_vermilion_training_transition_available(
+    raw: RawGameState,
+    last_blackout_map: int,
+) -> bool:
+    """Whether the existing Vermilion training navigator accepts this state.
+
+    This Red-private adapter mirrors already-implemented entry boundaries; it
+    adds no route and exposes only a title-neutral verdict. In-cave states must
+    still validate the live healing anchor because a recovery trip can require
+    Field Dig after the candidate has been selected.
+    """
+
+    if raw.battle_state or raw.map_id is None:
+        return False
+    position = (raw.player_x, raw.player_y)
+    if raw.map_id == MapId.ROUTE_11:
+        return True
+    if raw.map_id == MapId.VERMILION_POKECENTER:
+        return position in {(3, 3), (3, 7)}
+    if raw.map_id == MapId.CINNABAR_POKECENTER:
+        return position in {(3, 3), (13, 4)}
+    if raw.map_id == MapId.SAFFRON_POKECENTER:
+        return position == (3, 3)
+    if raw.map_id in {MapId.CINNABAR_ISLAND, MapId.SAFFRON_CITY}:
+        return True
+    if raw.map_id == MapId.VERMILION_CITY:
+        return position == (11, 4)
+    return last_blackout_map in {
+        MapId.CINNABAR_ISLAND,
+        MapId.SAFFRON_CITY,
+        MapId.VERMILION_CITY,
+    }
+
+
+RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS: tuple[
+    RedPartyDevelopmentTransitionGuard, ...
+] = (
+    red_vermilion_training_transition_available,
+    red_vermilion_training_transition_available,
+)
+
+
 @dataclass(frozen=True, slots=True)
 class RedPartyDevelopmentQuestionPreflight:
     """One in-memory, action-free candidate binding ready for catalog freeze."""
@@ -91,8 +158,7 @@ class RedPartyDevelopmentQuestionPreflight:
     source_root_lineage_id: str
     snapshot: PartyDevelopmentSemanticSnapshot
     menu: (
-        BoundPartyDevelopmentMenu[PartyMemberObservation]
-        | BoundPartyDevelopmentMenu[GrindingArea]
+        BoundPartyDevelopmentMenu[PartyMemberObservation] | BoundPartyDevelopmentMenu[GrindingArea]
     )
     binding: PartyDevelopmentProspectiveBinding
 
@@ -103,9 +169,7 @@ class RedPartyDevelopmentQuestionPreflight:
         menu = self.menu
         binding = self.binding
         if not isinstance(reservation, PartyDevelopmentQuestionReservation):
-            raise RedPartyDevelopmentAdapterError(
-                "Red party preflight needs a typed reservation"
-            )
+            raise RedPartyDevelopmentAdapterError("Red party preflight needs a typed reservation")
         if not isinstance(snapshot, PartyDevelopmentSemanticSnapshot):
             raise RedPartyDevelopmentAdapterError(
                 "Red party preflight needs a typed semantic snapshot"
@@ -115,9 +179,7 @@ class RedPartyDevelopmentQuestionPreflight:
                 "Red party preflight needs a bound candidate menu"
             )
         if not isinstance(binding, PartyDevelopmentProspectiveBinding):
-            raise RedPartyDevelopmentAdapterError(
-                "Red party preflight needs a prospective binding"
-            )
+            raise RedPartyDevelopmentAdapterError("Red party preflight needs a prospective binding")
         expected_binding = snapshot.freeze_binding(
             menu,
             scenario_id=reservation.scenario_id,
@@ -137,11 +199,9 @@ class RedPartyDevelopmentQuestionPreflight:
             or binding.kind is not reservation.kind
             or binding.goal is not reservation.goal
             or binding.semantic_snapshot_sha256 != snapshot.semantic_snapshot_sha256
-            or len(binding.candidate_feature_sha256)
-            != len(menu.candidate_set.candidates)
+            or len(binding.candidate_feature_sha256) != len(menu.candidate_set.candidates)
             or binding.candidate_available != menu.candidate_available
-            or binding.candidate_unavailable_reasons
-            != menu.candidate_unavailable_reasons
+            or binding.candidate_unavailable_reasons != menu.candidate_unavailable_reasons
             or binding != expected_binding
         ):
             raise RedPartyDevelopmentAdapterError(
@@ -172,8 +232,7 @@ class RedPartyDevelopmentQuestionPreflight:
                 self.binding.shared_venue_prior_evidence_sha256 is not None
             ),
             "candidate_venue_prior_count": sum(
-                value is not None
-                for value in self.binding.venue_prior_evidence_sha256
+                value is not None for value in self.binding.venue_prior_evidence_sha256
             ),
             "ready_to_freeze": True,
             "actions_executed": 0,
@@ -201,6 +260,9 @@ def build_red_party_development_snapshot(
     roster: TeamRosterPlan = RED_BALANCED_ROSTER,
     trade_available: bool = False,
     active_conditions: tuple[str, ...] = (),
+    training_venues: tuple[TrainingVenue, ...] | None = None,
+    transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None = None,
+    last_blackout_map: int | None = None,
 ) -> PartyDevelopmentSemanticSnapshot:
     """Derive the shared snapshot from one coherent, action-free Red read."""
 
@@ -211,9 +273,7 @@ def build_red_party_development_snapshot(
     if not isinstance(policy, BalancedTeamPolicy):
         raise TypeError("policy must be a BalancedTeamPolicy")
     if not isinstance(venue_prior_registry, PartyDevelopmentVenuePriorRegistry):
-        raise TypeError(
-            "venue_prior_registry must be a PartyDevelopmentVenuePriorRegistry"
-        )
+        raise TypeError("venue_prior_registry must be a PartyDevelopmentVenuePriorRegistry")
     if not isinstance(collection_contract, CollectionContract):
         raise TypeError("collection_contract must be a CollectionContract")
     if not isinstance(roster, TeamRosterPlan):
@@ -230,9 +290,7 @@ def build_red_party_development_snapshot(
         or not areas
         or any(not isinstance(area, GrindingArea) for area in areas)
     ):
-        raise RedPartyDevelopmentAdapterError(
-            "Red party snapshot needs typed training areas"
-        )
+        raise RedPartyDevelopmentAdapterError("Red party snapshot needs typed training areas")
     if (
         not observation.raw.game_started
         or observation.raw.battle_state != 0
@@ -254,28 +312,30 @@ def build_red_party_development_snapshot(
     specimen_counts = Counter(item.species_ref for item in collection.specimens)
     living_targets = set(collection_contract.resolved_living_target_species)
     registration_targets = set(collection_contract.target_species)
-    missing_registration = {
-        red_species_number(item) for item in registration_targets - owned
-    }
+    missing_registration = {red_species_number(item) for item in registration_targets - owned}
     missing_living = {
-        red_species_number(item)
-        for item in living_targets
-        if specimen_counts[item] == 0
+        red_species_number(item) for item in living_targets if specimen_counts[item] == 0
     }
     roster_internal = set(roster.species_ids)
-    roster_national = {
-        red_internal_species_number(species_id) for species_id in roster_internal
-    }
+    roster_national = {red_internal_species_number(species_id) for species_id in roster_internal}
     present_national = {
-        red_internal_species_number(member.species_id)
-        for member in observation.party.members
+        red_internal_species_number(member.species_id) for member in observation.party.members
     }
     missing_roles = roster_national - present_national
     inventory = dict(observation.raw.bag_items)
+    execution_capabilities = _execution_capability_matrix(
+        observation,
+        policy=policy,
+        areas=areas,
+        training_venues=training_venues,
+        transition_guards=transition_guards,
+        last_blackout_map=last_blackout_map,
+    )
 
     profiles = tuple(
         _member_profile(
             member,
+            execution_capabilities_by_venue=execution_capabilities[index],
             party=observation.party.members,
             evolutions=evolutions,
             policy=policy,
@@ -290,7 +350,7 @@ def build_red_party_development_snapshot(
             trade_available=trade_available,
             active_conditions=active_conditions,
         )
-        for member in observation.party.members
+        for index, member in enumerate(observation.party.members)
     )
     report = summarize_collection(collection_contract, collection)
     return PartyDevelopmentSemanticSnapshot(
@@ -334,6 +394,9 @@ def preflight_red_party_development_question(
     roster: TeamRosterPlan = RED_BALANCED_ROSTER,
     trade_available: bool = False,
     active_conditions: tuple[str, ...] = (),
+    training_venues: tuple[TrainingVenue, ...] | None = None,
+    transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None = None,
+    last_blackout_map: int | None = None,
 ) -> RedPartyDevelopmentQuestionPreflight:
     """Build one exact question without selecting an answer or acting."""
 
@@ -352,6 +415,9 @@ def preflight_red_party_development_question(
         roster=roster,
         trade_available=trade_available,
         active_conditions=active_conditions,
+        training_venues=training_venues,
+        transition_guards=transition_guards,
+        last_blackout_map=last_blackout_map,
     )
     menu: (
         BoundPartyDevelopmentMenu[PartyMemberObservation]
@@ -430,21 +496,14 @@ def red_party_completion_snapshot(
     specimen_counts = Counter(item.species_ref for item in collection.specimens)
     living_targets = set(collection_contract.resolved_living_target_species)
     registration_targets = set(collection_contract.target_species)
-    missing_registration = {
-        red_species_number(item) for item in registration_targets - owned
-    }
+    missing_registration = {red_species_number(item) for item in registration_targets - owned}
     missing_living = {
-        red_species_number(item)
-        for item in living_targets
-        if specimen_counts[item] == 0
+        red_species_number(item) for item in living_targets if specimen_counts[item] == 0
     }
     roster_internal = set(roster.species_ids)
-    roster_national = {
-        red_internal_species_number(species_id) for species_id in roster_internal
-    }
+    roster_national = {red_internal_species_number(species_id) for species_id in roster_internal}
     present_national = {
-        red_internal_species_number(member.species_id)
-        for member in observation.party.members
+        red_internal_species_number(member.species_id) for member in observation.party.members
     }
     missing_roles = roster_national - present_national
     inventory = dict(observation.raw.bag_items)
@@ -452,9 +511,9 @@ def red_party_completion_snapshot(
     for member in observation.party.members:
         national = red_internal_species_number(member.species_id)
         descendants = _descendant_distances(national, evolutions)
-        required_targets = (
-            missing_registration | missing_living | missing_roles
-        ) & set(descendants)
+        required_targets = (missing_registration | missing_living | missing_roles) & set(
+            descendants
+        )
         evolution_steps += _evolution_semantics(
             member,
             national_species=national,
@@ -473,8 +532,7 @@ def red_party_completion_snapshot(
         role_target_total=len(roster.slots),
         evolution_steps_remaining=evolution_steps,
         level_floor_deficit=sum(
-            max(0, policy.minimum_level - member.level)
-            for member in observation.party.members
+            max(0, policy.minimum_level - member.level) for member in observation.party.members
         ),
     )
 
@@ -482,6 +540,7 @@ def red_party_completion_snapshot(
 def _member_profile(
     member: PartyMemberObservation,
     *,
+    execution_capabilities_by_venue: tuple[PartyDevelopmentExecutionCapability, ...],
     party: tuple[PartyMemberObservation, ...],
     evolutions: Mapping[int, tuple[Evolution, ...]],
     policy: BalancedTeamPolicy,
@@ -501,9 +560,7 @@ def _member_profile(
     registration_needed = bool(set(descendants) & missing_registration)
     living_needed = bool(set(descendants) & missing_living)
     role_needed = bool(set(descendants) & missing_roles)
-    required_targets = (
-        missing_registration | missing_living | missing_roles
-    ) & set(descendants)
+    required_targets = (missing_registration | missing_living | missing_roles) & set(descendants)
     evolution = _evolution_semantics(
         member,
         national_species=national,
@@ -516,12 +573,11 @@ def _member_profile(
     return PartyDevelopmentMemberProfile(
         member=member,
         evolution=evolution,
+        execution_capabilities_by_venue=execution_capabilities_by_venue,
         registration_needed=registration_needed,
         living_target_needed=living_needed,
         living_retention_risk=(
-            evolution.required
-            and member_ref in living_targets
-            and specimen_counts[member_ref] == 1
+            evolution.required and member_ref in living_targets and specimen_counts[member_ref] == 1
         ),
         role_needed=role_needed,
         role_complete=member.species_id in roster_internal,
@@ -533,9 +589,155 @@ def _member_profile(
             active_conditions=active_conditions,
         ),
         projected_survival_by_venue=tuple(
-            _projected_survival_margin(member, policy=policy, area=area)
-            for area in areas
+            _projected_survival_margin(member, policy=policy, area=area) for area in areas
         ),
+    )
+
+
+def _execution_capability_matrix(
+    observation: RedGoalObservation,
+    *,
+    policy: BalancedTeamPolicy,
+    areas: tuple[GrindingArea, ...],
+    training_venues: tuple[TrainingVenue, ...] | None,
+    transition_guards: tuple[RedPartyDevelopmentTransitionGuard, ...] | None,
+    last_blackout_map: int | None,
+) -> tuple[tuple[PartyDevelopmentExecutionCapability, ...], ...]:
+    """Derive dynamic Red facts, then discard every Red identity.
+
+    Historical catalog reconstruction did not carry an execution-capability
+    contract, so callers that omit both optional inputs retain their exact
+    all-ready behavior. New outcome development must supply all three dynamic
+    inputs. Supplying only part of that contract fails closed rather than
+    mixing prospective and legacy menus.
+    """
+
+    if (
+        training_venues is None
+        and transition_guards is None
+        and last_blackout_map is None
+    ):
+        return tuple(
+            tuple(PartyDevelopmentExecutionCapability.ready() for _ in areas)
+            for _ in observation.party.members
+        )
+    if (
+        not isinstance(training_venues, tuple)
+        or tuple(venue.band for venue in training_venues) != areas
+        or not isinstance(transition_guards, tuple)
+        or len(transition_guards) != len(areas)
+        or any(not callable(guard) for guard in transition_guards)
+        or type(last_blackout_map) is not int  # noqa: E721
+        or last_blackout_map < 0
+    ):
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "adapter_contract_misaligned",
+            "Red prospective execution inputs must align with every venue",
+        )
+    raw = observation.raw
+    if raw.party_moves is None or raw.party_pp is None:
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "packed_party_pp_unavailable",
+            "Red prospective execution needs complete packed party PP",
+        )
+    if len(raw.party_moves) != len(observation.party.members) or len(raw.party_pp) != len(
+        observation.party.members
+    ):
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "packed_party_pp_misaligned",
+            "Red prospective execution PP differs from the party",
+        )
+    try:
+        decoded = tuple(
+            decode_red_party_pp(tuple(moves), tuple(pp))
+            for moves, pp in zip(raw.party_moves, raw.party_pp, strict=True)
+        )
+    except (TypeError, ValueError) as error:
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "packed_party_pp_misaligned",
+            "Red prospective execution PP differs from the party",
+        ) from error
+    escorts = tuple(
+        (index, member)
+        for index, member in enumerate(observation.party.members)
+        if member.species_id == BLASTOISE_SPECIES_ID
+    )
+    if len(escorts) != 1:
+        raise RedPartyDevelopmentExecutionCapabilityError(
+            "qualified_escape_escort_unavailable",
+            "Red prospective execution needs one qualified escape escort",
+        )
+    escort_index, escort = escorts[0]
+    escort_slots, escort_maximum_pp = _recoverable_attack_profile(
+        escort,
+        decoded[escort_index],
+    )
+    escort_recoverable = escort_maximum_pp > training_attack_pp_reserve(escort, policy)
+    escort_can_win = len(escort_slots) >= 2 and escort.level < ESCORT_LEVEL_CAP
+
+    rows = []
+    for member_index, member in enumerate(observation.party.members):
+        attack_slots, maximum_attack_pp = _recoverable_attack_profile(
+            member,
+            decoded[member_index],
+        )
+        member_recoverable = maximum_attack_pp > training_attack_pp_reserve(member, policy)
+        row = []
+        for area, transition_guard in zip(
+            areas,
+            transition_guards,
+            strict=True,
+        ):
+            transition = transition_guard(raw, last_blackout_map)
+            if transition is not None and not isinstance(transition, bool):
+                raise RedPartyDevelopmentExecutionCapabilityError(
+                    "transition_guard_invalid",
+                    "Red prospective transition guard returned no boolean verdict",
+                )
+            transition_state = (
+                PartyDevelopmentCapabilityState.UNKNOWN
+                if transition is None
+                else PartyDevelopmentCapabilityState.READY
+                if transition
+                else PartyDevelopmentCapabilityState.BLOCKED
+            )
+            member_fights_here = member_can_train_at(member, policy, area)
+            direct_fight_ready = member_fights_here and len(attack_slots) >= 2
+            battle_state = (
+                PartyDevelopmentCapabilityState.READY
+                if direct_fight_ready or (not member_fights_here and escort_can_win)
+                else PartyDevelopmentCapabilityState.BLOCKED
+            )
+            recovery_state = (
+                PartyDevelopmentCapabilityState.READY
+                if member_recoverable and escort_recoverable
+                else PartyDevelopmentCapabilityState.BLOCKED
+            )
+            row.append(
+                PartyDevelopmentExecutionCapability(
+                    transition=transition_state,
+                    battle=battle_state,
+                    recovery=recovery_state,
+                )
+            )
+        rows.append(tuple(row))
+    return tuple(rows)
+
+
+def _recoverable_attack_profile(
+    member: PartyMemberObservation,
+    pp_state: RedPartyPpState,
+) -> tuple[tuple[int, ...], int]:
+    """Return slots and PP after the venue's explicit heal-and-return action."""
+
+    preferred = frozenset(TRAINING_MOVE_IDS.get(member.species_id, ()))
+    eligible = tuple(
+        item
+        for item in pp_state.moves
+        if item.move_id and (not preferred or item.move_id in preferred)
+    )
+    return tuple(item.slot for item in eligible if item.maximum_pp > 0), sum(
+        item.maximum_pp for item in eligible
     )
 
 
@@ -558,8 +760,7 @@ def _evolution_semantics(
         route = _route_kind(step.method)
         levels_to_next = (
             max(0, int(step.requirement) - member.level)
-            if step.method is EvolutionMethod.LEVEL
-            and isinstance(step.requirement, int)
+            if step.method is EvolutionMethod.LEVEL and isinstance(step.requirement, int)
             else None
         )
         feasible = _evolution_feasible(
@@ -602,9 +803,7 @@ def _descendant_distances(
     while frontier:
         species, distance, ancestors = frontier.pop()
         if species in ancestors:
-            raise RedPartyDevelopmentAdapterError(
-                "Red evolution graph contains a cycle"
-            )
+            raise RedPartyDevelopmentAdapterError("Red evolution graph contains a cycle")
         previous = distances.get(species)
         if previous is not None and previous <= distance:
             continue
@@ -613,8 +812,7 @@ def _descendant_distances(
             continue
         next_ancestors = ancestors | {species}
         frontier.extend(
-            (step.to_species, distance + 1, next_ancestors)
-            for step in evolutions.get(species, ())
+            (step.to_species, distance + 1, next_ancestors) for step in evolutions.get(species, ())
         )
     if initial_distance == 0:
         distances.pop(national_species, None)
@@ -639,10 +837,7 @@ def _evolution_feasible(
     if step.method is EvolutionMethod.LEVEL:
         return member.is_trainable
     if step.method is EvolutionMethod.STONE:
-        return (
-            isinstance(step.requirement, int)
-            and inventory.get(step.requirement, 0) > 0
-        )
+        return isinstance(step.requirement, int) and inventory.get(step.requirement, 0) > 0
     if step.method is EvolutionMethod.TRADE:
         return trade_available
     return False
@@ -667,9 +862,7 @@ def _projected_survival_margin(
         return -1.0
     share = area.fightable_share(training_safety_ceiling(member, policy))
     if share >= MINIMUM_FIGHTABLE_SHARE:
-        return (share - MINIMUM_FIGHTABLE_SHARE) / (
-            1.0 - MINIMUM_FIGHTABLE_SHARE
-        )
+        return (share - MINIMUM_FIGHTABLE_SHARE) / (1.0 - MINIMUM_FIGHTABLE_SHARE)
     return (share - MINIMUM_FIGHTABLE_SHARE) / MINIMUM_FIGHTABLE_SHARE
 
 
@@ -696,20 +889,14 @@ def _is_only_emergency_escort(
 def _require_party_matches_raw(observation: RedGoalObservation) -> None:
     raw_party = party_observation_from_raw(observation.raw)
     if len(raw_party.members) != len(observation.party.members):
-        raise RedPartyDevelopmentAdapterError(
-            "Red raw and semantic party counts differ"
-        )
+        raise RedPartyDevelopmentAdapterError("Red raw and semantic party counts differ")
     for raw_member, member in zip(
         raw_party.members,
         observation.party.members,
         strict=True,
     ):
-        raw_moves = tuple(
-            (move.move_id, move.current_pp) for move in raw_member.moves
-        )
-        observed_moves = tuple(
-            (move.move_id, move.current_pp) for move in member.moves
-        )
+        raw_moves = tuple((move.move_id, move.current_pp) for move in raw_member.moves)
+        observed_moves = tuple((move.move_id, move.current_pp) for move in member.moves)
         if (
             raw_member.slot != member.slot
             or raw_member.species_id != member.species_id
@@ -719,9 +906,7 @@ def _require_party_matches_raw(observation: RedGoalObservation) -> None:
             or raw_member.status is not member.status
             or raw_moves != observed_moves
         ):
-            raise RedPartyDevelopmentAdapterError(
-                "Red raw and semantic party observations differ"
-            )
+            raise RedPartyDevelopmentAdapterError("Red raw and semantic party observations differ")
 
 
 def _require_collection_matches_party(observation: RedGoalObservation) -> None:
@@ -740,25 +925,17 @@ def _require_collection_matches_party(observation: RedGoalObservation) -> None:
         for index, member in enumerate(observation.party.members)
     )
     if party_specimens != expected:
-        raise RedPartyDevelopmentAdapterError(
-            "Red collection and party observations differ"
-        )
+        raise RedPartyDevelopmentAdapterError("Red collection and party observations differ")
     report = observation.collection.collection
-    if (
-        report.pokedex_owned_count
-        != len(
-            set(observation.collection_observation.owned_species)
-            & set(RED_SOLO_COLLECTION_CONTRACT.target_species)
-        )
-        or report.living_count
-        != len(
-            {
-                item.species_ref
-                for item in observation.collection_observation.specimens
-                if item.species_ref
-                in set(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species)
-            }
-        )
+    if report.pokedex_owned_count != len(
+        set(observation.collection_observation.owned_species)
+        & set(RED_SOLO_COLLECTION_CONTRACT.target_species)
+    ) or report.living_count != len(
+        {
+            item.species_ref
+            for item in observation.collection_observation.specimens
+            if item.species_ref in set(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species)
+        }
     ):
         raise RedPartyDevelopmentAdapterError(
             "Red collection summary differs from its specimen observation"
@@ -776,13 +953,10 @@ def _require_evolution_graph(
             or species <= 0
             or not isinstance(steps, tuple)
             or any(
-                not isinstance(step, Evolution) or step.from_species != species
-                for step in steps
+                not isinstance(step, Evolution) or step.from_species != species for step in steps
             )
         ):
-            raise RedPartyDevelopmentAdapterError(
-                "Red evolution graph is invalid"
-            )
+            raise RedPartyDevelopmentAdapterError("Red evolution graph is invalid")
 
 
 __all__ = [

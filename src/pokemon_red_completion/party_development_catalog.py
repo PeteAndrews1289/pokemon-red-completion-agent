@@ -28,10 +28,10 @@ from pokemon_red_completion.scenario_outcomes import ScenarioOutcomeExample
 from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
 
 PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA = (
-    "pokemon.core.party-development-prospective-catalog.v5"
+    "pokemon.core.party-development-prospective-catalog.v6"
 )
 PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA = (
-    "pokemon.core.party-development-prospective-binding.v5"
+    "pokemon.core.party-development-prospective-binding.v6"
 )
 
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -47,11 +47,14 @@ class PartyDevelopmentUnavailableReason(StrEnum):
     """Why a party candidate is visible but excluded from causal authority."""
 
     EXTERNAL_DEPENDENCY = "external_dependency"
+    BATTLE_POLICY_INCOMPATIBLE = "battle_policy_incompatible"
     INSUFFICIENT_VENUE_EVIDENCE = "insufficient_venue_evidence"
+    INSUFFICIENT_RECOVERY_CAPACITY = "insufficient_recovery_capacity"
     MISSING_RESOURCE = "missing_resource"
     STORAGE_BLOCKED = "storage_blocked"
     STORY_GATE_CLOSED = "story_gate_closed"
     TEMPORARILY_UNSAFE = "temporarily_unsafe"
+    TRANSITION_UNAVAILABLE = "transition_unavailable"
     WORLD_STATE_UNKNOWN = "world_state_unknown"
 
 

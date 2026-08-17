@@ -8,6 +8,7 @@ from pokemon_red_completion.party import MoveObservation, PartyMemberObservation
 from pokemon_red_completion.party_development_adapter import BoundPartyDevelopmentMenu
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
+    PartyDevelopmentUnavailableReason,
 )
 from pokemon_red_completion.party_development_outcomes import (
     PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
@@ -305,8 +306,12 @@ def test_private_candidate_permutation_reindexes_every_parallel_binding() -> Non
         candidate_set=candidates,
         semantic_snapshot_sha256="d" * 64,
         bindings=members,
-        candidate_available=(True, True, True),
-        candidate_unavailable_reasons=(None, None, None),
+        candidate_available=(True, False, True),
+        candidate_unavailable_reasons=(
+            None,
+            PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE,
+            None,
+        ),
         venue_priors=priors,
         shared_venue=venue,
         shared_venue_prior=shared,
@@ -324,6 +329,12 @@ def test_private_candidate_permutation_reindexes_every_parallel_binding() -> Non
         candidates.candidates[2].features,
         candidates.candidates[0].features,
         candidates.candidates[1].features,
+    )
+    assert reordered.candidate_available == (True, True, False)
+    assert reordered.candidate_unavailable_reasons == (
+        None,
+        None,
+        PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE,
     )
     assert reordered.shared_venue == venue
     with pytest.raises(RepeatablePartyScenarioError, match="does not match"):
