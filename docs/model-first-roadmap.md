@@ -25,9 +25,11 @@ The bounded sequence is now:
    menu weight.
 2. Locate the first information loss: identical raw semantic contrasts indicate observation
    aliasing or unstable outcomes; distinct raw contrasts collapsed by the projection indicate a
-   compression defect; tolerance-only matches indicate scaling.
+   compression defect; tolerance-only projected matches are reported without assigning a cause.
 3. Report full-data and leave-one-root-out spectra, normalized ranks, zero columns, and per-menu
-   quality/safety/cost ranges. Do not fit, predict, tune, rank features, or open development.
+   quality/safety/cost ranges. The historical frozen-prior forward projection is required to
+   reproduce the consumed audit; do not fit, commit preference predictions, compute evaluation
+   metrics, tune, rank replacement features, or open development.
 4. Retire v2 regardless. Do not run v3 on these menus or freeze the conditional missing-cell slice.
 5. Reorient to the design of one fresh repeatable Red goal-manager composition episode with three
    genuine heterogeneous choices, including one acquisition/evolution/storage goal and one

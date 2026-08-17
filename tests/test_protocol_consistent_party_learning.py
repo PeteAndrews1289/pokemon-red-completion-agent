@@ -12,6 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 import protocol_consistent_party_learning as protocol  # noqa: E402
+import protocol_party_collision_postmortem as postmortem  # noqa: E402
 from protocol_consistent_party_learning import (  # noqa: E402
     PROTOCOL_PAIRWISE_RIDGE,
     ProtocolMetricPair,
@@ -342,6 +343,108 @@ def test_representation_audit_requires_each_goal_conditioned_venue_component() -
 
     assert audit.passed is False
     assert audit.venue_interaction_variance["venue:collection:cost"] is False
+
+
+def test_collision_postmortem_explains_conflicts_without_optimizer_or_private_ids(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    examples = list(_training_examples())
+    original = examples[0]
+    examples.append(
+        replace(
+            original,
+            scenario_id="protocol-scenario-duplicate",
+            root_lineage_id="protocol-root-duplicate",
+            initial_state_sha256="f" * 64,
+            outcomes=tuple(reversed(original.outcomes)),
+        )
+    )
+
+    def forbidden(*_args: object, **_kwargs: object) -> object:
+        raise AssertionError("postmortem called the optimizer")
+
+    monkeypatch.setattr(protocol, "_fit_protocol_ranker", forbidden)
+    audit = audit_protocol_party_representation(_prior_model(), examples)
+    report = postmortem.audit_protocol_party_collisions(_prior_model(), examples)
+    public = report.public_dict()
+
+    assert report.contradictory_pairwise_relationships == audit.contradictory_pairwise_rows
+    assert report.contradictory_pairwise_relationships > 0
+    assert set(report.classification_counts) == {
+        "raw_semantics_aliased_or_outcome_instability"
+    }
+    assert sum(report.classification_counts.values()) >= 1
+    assert public["model_fits"] == 0
+    assert public["fitted_model_predictions"] == 0
+    assert public["frozen_prior_forward_scores_used"] is True
+    assert public["preference_predictions_committed"] == 0
+    assert public["optimizer_steps"] == 0
+    assert public["development_examples_opened"] == 0
+    assert public["development_metrics_computed"] == 0
+    assert public["spectra_by_action"]["trainee"]["leave_one_root_out"]  # type: ignore[index]
+    encoded = json.dumps(public, sort_keys=True)
+    assert "protocol-root-duplicate" not in encoded
+    assert "protocol-scenario-duplicate" not in encoded
+
+
+def test_collision_classification_separates_projection_loss_from_numerical_nearness() -> None:
+    common = {
+        "action": "venue",
+        "goal": "collection",
+        "menu_ordinal": 1,
+        "pair_ordinal": 1,
+        "root_ordinal": 1,
+        "target": 1.0,
+        "menu_normalized_weight": 0.5,
+    }
+    left = postmortem._DiagnosticRow(
+        **common,
+        projected=np.asarray([1.0, 0.0]),
+        raw_semantics=np.asarray([1.0, 0.0]),
+    )
+    compressed = postmortem._DiagnosticRow(
+        **{**common, "menu_ordinal": 2, "root_ordinal": 2, "target": 0.0},
+        projected=np.asarray([1.0, 0.0]),
+        raw_semantics=np.asarray([0.0, 1.0]),
+    )
+    near = postmortem._DiagnosticRow(
+        **{**common, "menu_ordinal": 3, "root_ordinal": 3, "target": 0.0},
+        projected=np.asarray([1.0 + 1e-12, 0.0]),
+        raw_semantics=np.asarray([1.0, 0.0]),
+    )
+
+    assert postmortem._classify_relationship(left, compressed) == (
+        "frozen_projection_compression"
+    )
+    assert postmortem._classify_relationship(left, near) == (
+        "tolerance_only_projected_near_collision"
+    )
+
+
+def test_collision_postmortem_rejects_development_labels() -> None:
+    examples = list(_training_examples())
+    examples[0] = replace(examples[0], partition=ScenarioPartition.DEVELOPMENT)
+
+    with pytest.raises(ProtocolPartyLearningError, match="development labels"):
+        postmortem.audit_protocol_party_collisions(_prior_model(), examples)
+
+
+def test_collision_postmortem_fails_if_consumed_audit_count_diverges(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    examples = _training_examples()
+    consumed = audit_protocol_party_representation(_prior_model(), examples)
+    monkeypatch.setattr(
+        protocol,
+        "audit_protocol_party_representation",
+        lambda *_args, **_kwargs: replace(
+            consumed,
+            contradictory_pairwise_rows=consumed.contradictory_pairwise_rows + 1,
+        ),
+    )
+
+    with pytest.raises(ProtocolPartyLearningError, match="diverges"):
+        postmortem.audit_protocol_party_collisions(_prior_model(), examples)
 
 
 def test_every_goal_slice_is_an_independent_nonregression_gate() -> None:

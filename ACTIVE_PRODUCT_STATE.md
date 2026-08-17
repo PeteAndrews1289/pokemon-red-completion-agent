@@ -66,15 +66,15 @@ outputs.
 | Authority delta | The consumed v2 screen grants no authority. Party-development shadow and live authority remain zero; goal-manager authority does not expand from this result. |
 | Transfer result | Not run. Crystal remains closed. A later open transfer design requires a successful fresh Red goal-manager composition episode and a title-neutral contract that can compare Red initialization with zero initialization. |
 | Blocker | The one-shot v2 representation failed before fit: 28 conflicting row-pair comparisons and no within-menu venue-cost variation in collection, evolution, or role coverage. Evaluation and model identity are null, the gate is consumed, and the proposed missing-cell slice is closed. |
-| Decision | Retire v2. Run one bounded no-optimizer postmortem on the same train evidence to distinguish raw observation aliasing, projection compression, and numerical near-collisions. Do not rescue v2 or fit v3 on these menus. Then redirect to one fresh repeatable Red goal-manager micro-episode with three genuine heterogeneous choices, including a living-Pokedex goal, before designing any open Crystal transfer probe. |
+| Decision | Retire v2. Run one bounded no-optimizer postmortem on the same train evidence to distinguish raw observation aliasing, exact projection compression, and tolerance-only projected near-collisions. Do not rescue v2 or fit v3 on these menus. Then redirect to one fresh repeatable Red goal-manager micro-episode with three genuine heterogeneous choices, including a living-Pokedex goal, before designing any open Crystal transfer probe. |
 | Next session | Complete and publish the bounded collision postmortem, close v2 permanently, and freeze the minimal design for one fresh repeatable Red goal-manager micro-episode; do not execute the episode in this maintenance session. |
 | Next falsifier | Run one deterministic train-only no-optimizer postmortem tied to gate 7a148a5d: report exact versus near collision clusters, affected rows, menus and roots, target histograms, raw-versus-projected distinctions, singular spectra, zero columns and per-menu quality, safety and cost ranges. |
-| Stop condition | Stop after one diagnostic report. Do not fit, tune, rank replacement features, reuse development, collect new outcomes, retry the consumed identity, freeze the old missing-cell slice, patch a route, open Crystal or sealed Red, or run a full replay. If no single compression defect emerges, close the party-utility lane rather than sweep architectures. |
+| Stop condition | Stop after one diagnostic report. The historical frozen-prior forward projection is allowed only to reproduce the consumed audit; do not fit, tune, commit preference predictions, rank replacement features, reuse development, collect outcomes, retry the identity, freeze the old slice, patch routes, open Crystal or sealed Red, or replay. If no single defect emerges, close the lane. |
 
 ### Stop conditions
 
-- The postmortem attempts any optimizer, prediction, metric, feature ranking, tolerance tuning, development-label access, new outcome collection, or consumed-identity retry.
-- No single raw-observation, projection-compression, or numerical-scaling defect explains the collision clusters within one session.
+- Stop if the postmortem fits or tunes, ranks features, commits predictions, evaluates, opens development labels, collects outcomes, or retries the consumed identity.
+- No single raw-observation or exact-projection defect explains the clusters, and tolerance-only projected near-collisions remain non-causal, within one session.
 - Infrastructure exceeds the two-hour maintenance budget instead of producing one path-free diagnostic and a fresh goal-manager episode design.
 
 ### Hard boundaries for this lane
