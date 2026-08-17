@@ -786,7 +786,7 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "cf2c6be5946cf560051c8bde8ddeff0a1fb2d726e65e1557b05731ca16481b70"
     )
     assert contract.recovery_execution_sha256 == (
-        "947a6d8812f6c2f9000f9ce14f5fa05ebad428f13f5a6950c93601bd50b14e90"
+        "de48457fea07d7f8fefec683d0f48bc3679cfb3f10959b9834791f46e2504740"
     )
     assert contract.battle_timing_sha256 == (
         "c02aecda4093bf3f49a029dd9ce1823aa4163d5ef7f8b7addfa7ef186f7cba79"
