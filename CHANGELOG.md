@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Retired `first-develop-team-causal-goal-outcome-v1` after its sole action-free freeze at published
+  source `6077173618bf9fce9fb57804a6a1ce82249c9cee`, green CI `32177113545/1`, authenticated
+  manifest `d77d9f9d…cdea1`, then returned `failed_closed` at `readiness_authentication` with effects
+  not attested and no campaign plan. The
+  [failure receipt](docs/evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+  (SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+  adds zero to every counter. A static public-source audit found an import-order bootstrap defect
+  without upgrading the historical effect attestation. No retry or replacement is allowed; boards
+  remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero. Activated public/synthetic
+  maintenance lane `causal-bootstrap-origin-qualification-v1`; after its clean-process origin and
+  sanitized readiness-stage qualification, stop and separately design a rootless, species-neutral
+  living-Dex dependency curriculum rather than another scarce-root loop.
+
 - Published and qualified the canonical causal readiness-manifest tooling at exact source
   `ece32d81a1bd7ad3de037ba14361ef2f00849e35` under green CI `32174872005/1`. The
   [qualification receipt](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

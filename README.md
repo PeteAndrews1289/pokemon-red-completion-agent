@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): public readiness manifests are qualified; design one
+> **Current product focus (August 18, 2026): the DEVELOP_TEAM freeze failed closed; qualify the
+> reusable bootstrap before a rootless living-Dex curriculum.** Published source
+> `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`; its sole authorized
+> action-free freeze, bound by manifest `d77d9f9d…cdea1`, returned `failed_closed` at
+> `readiness_authentication`, with effects not attested and no campaign plan. The
+> [failure receipt](docs/evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+> (SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+> preserves that boundary. A later static public-source audit found an import-order bootstrap
+> defect, but it does not upgrade the historical effect attestation. Retire the exact lane without
+> retry or replacement. Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic
+> zero.
+>
+> Active maintenance lane `causal-bootstrap-origin-qualification-v1` is public/synthetic only. It
+> must prove a clean-process project-origin bootstrap and sanitized readiness substages without a
+> ROM, private input, root, claim, prediction, action, or fit, then stop for reorientation. Its
+> successor is a separately designed rootless, species-neutral living-Dex dependency curriculum,
+> not a rescue of the consumed Red lane and not gameplay, competence, authority, or transfer.
+
+> **Previous product focus (August 18, 2026): public readiness manifests were qualified; design one
 > distinct `DEVELOP_TEAM` causal outcome.** Exact source
 > `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 > [maintenance qualification](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

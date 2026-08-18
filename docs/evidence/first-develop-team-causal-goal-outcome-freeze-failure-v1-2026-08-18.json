@@ -1,0 +1,82 @@
+{
+  "active_lane": "first-develop-team-causal-goal-outcome-v1",
+  "claim_boundary": {
+    "supported": "The sole actual action-free freeze attempt authenticated its exact public invocation, then returned the runner's sanitized failed-closed readiness-authentication envelope and produced no campaign plan. The exact DEVELOP_TEAM lane is closed without retry, replacement root, or root-specific repair.",
+    "unsupported": "The runner did not attest runtime effects or the specific readiness cause. This receipt supports no root-availability diagnosis, causal train example, atomic goal episode, model fit, competence, authority, transfer, Red-completion, or living-Pokedex claim."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution": {
+    "campaign_plan_present_after_return": false,
+    "effects_attested_by_runner": false,
+    "failure_stage": "readiness_authentication",
+    "operation": "freeze",
+    "process_running_after_return": false,
+    "retry_allowed": false,
+    "runner_status": "failed_closed"
+  },
+  "input_bindings": {
+    "context_plan_sha256": "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51",
+    "development_runner_sha256": "f4f461a7e812ad27126a3a925c9d6fe1294b0bfb81eda3812b4e9efee5ad1507",
+    "fit_result_receipt_sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace",
+    "freeze_execution_manifest_sha256": "d77d9f9d26b5f821b93fb18e426d9ce514c7e96a6fb0c646a2adda3f9edcdea1",
+    "manifest_freezer_sha256": "ea301dca074f79ef16a5f6e332da029ddc7be4963cc7a7d1f0cb4e48a8bc147f",
+    "multiroot_runner_sha256": "336bf4855a236347cff12daacd3c23e469163793689057cb90b1c8eb863b8cc6",
+    "numpy_runtime_sha256": "5091e63c30caf85620de0b8c28b596f6b6290fa871c84527b9de4eacb9195751",
+    "paired_runner_sha256": "ddbdc1f03fe07e00e35d8660719c98af34b4f46fa2267eecef21bc007927e3e3",
+    "prior_campaign_sha256": [
+      "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14",
+      "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9"
+    ],
+    "public_manifest_sha256": "d96ded3eae0bb462c8f88291cf3546144dfd2149a478f1f67a8788e318ad22a6",
+    "runner_sha256": "5fa70e10f90be47f4ea781f2e3d3cddd4210e29c63544e4e145929a8644459b6",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "skill_manifest_sha256": "9cbeba69af697cc2777ad7d64c634b179744d7943d9b3b1d05e72ca733ee687f",
+    "source_bundle_sha256": "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17"
+  },
+  "public_review": {
+    "antigravity_verdict": "go_no_p0_or_p1_blocker",
+    "claude_status": "session_limit_unavailable",
+    "internal_adversarial_verdict": "go_no_p0_or_p1_blocker"
+  },
+  "public_source_postmortem": {
+    "finding": "The published runner imported the public-manifest freezer before the development bootstrap. The freezer imports pokemon_red_completion modules, so the development bootstrap deterministically recorded preloaded project modules and its first origin check rejected readiness.",
+    "historical_effects_upgraded": false,
+    "scope": "Static public-source control-flow analysis only; no failed private input, ROM, model, context, campaign, root, or claim was reopened.",
+    "successor_constraint": "A future distinct lane must import the development bootstrap first and pass an isolated clean-process origin regression. The failed DEVELOP_TEAM lane remains retired."
+  },
+  "observed_failure_envelope": {
+    "development_labels_opened": 0,
+    "effects": "not_attested_on_failure",
+    "failure_stage": "readiness_authentication",
+    "invocation_model_fits": 0,
+    "private_path_fields": 0,
+    "schema": "pokemon.red.develop-team-causal-goal-outcome-failure.v1",
+    "status": "failed_closed",
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.red.first-develop-team-causal-goal-outcome-freeze-failure-receipt.v1",
+  "source_verification": {
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 32177113545,
+    "source_commit": "6077173618bf9fce9fb57804a6a1ce82249c9cee",
+    "worktree_dirty_before_execution": false
+  },
+  "status": "sole_action_free_freeze_failed_closed_develop_team_lane_retired",
+  "title_role": "Red DEVELOP_TEAM-lane readiness failure; not gameplay, training, evaluation, transfer, completion, or living-Pokedex evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

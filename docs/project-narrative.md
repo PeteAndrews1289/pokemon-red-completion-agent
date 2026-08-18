@@ -1,6 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: canonical readiness qualifies; DEVELOP_TEAM becomes the distinct causal question
+## August 18: DEVELOP_TEAM fails closed; bootstrap qualification protects the next curriculum
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
+action-free DEVELOP_TEAM freeze authenticated manifest `d77d9f9d…cdea1`, then returned
+`failed_closed` at `readiness_authentication`, with effects not attested and no campaign plan. The
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+adds no learning or authority evidence. Static public-source analysis found a deterministic
+import-order bootstrap defect without upgrading the failed invocation's historical effect
+attestation. The exact lane retires without retry or replacement. Counters remain
+**30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Active maintenance lane `causal-bootstrap-origin-qualification-v1` uses public and synthetic
+clean-process tests only. It must establish reusable project-origin bootstrap ordering and
+sanitized readiness substages without a ROM, private input, root, claim, prediction, action, label,
+or fit, then stop for reorientation. Its intended successor is a separately designed rootless,
+species-neutral living-Dex dependency curriculum. Neither maintenance nor its failure history is
+gameplay, competence, completion, Crystal, authority, or transfer evidence.
+
+## Previous August 18 checkpoint: canonical readiness qualified; DEVELOP_TEAM became the distinct causal question
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [readiness-manifest qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

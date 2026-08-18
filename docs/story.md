@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the manifest is ready; the next honest question is team development
+## Current checkpoint: team development stopped at the bootstrap, so the next lesson is rootless
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its one
+authorized action-free DEVELOP_TEAM freeze authenticated manifest `d77d9f9d…cdea1`, then returned
+`failed_closed` at `readiness_authentication`. The
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+says effects were not attested and no campaign plan remained. It taught the model nothing: boards
+stay **30/15/4/3/0/0** and **14/4/0/1/1**, with causal and atomic counts at zero. The exact lane
+closes without retry or replacement.
+
+Reading the published code later revealed an import-order bootstrap defect. That explains what the
+public control flow gets wrong; it cannot rewrite what the failed invocation did or did not touch.
+So `causal-bootstrap-origin-qualification-v1` stays off the Pokémon screen: public and synthetic
+clean-process tests must establish the reusable project origin and safe readiness substages, then
+stop. The next real learning design is rootless and species-neutral: teach the dependency structure
+behind a living Pokédex before risking another scarce game root. This is infrastructure toward the
+player, not gameplay or competence.
+
+## Previous checkpoint: the manifest was ready; team development was the next honest question
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [maintenance receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

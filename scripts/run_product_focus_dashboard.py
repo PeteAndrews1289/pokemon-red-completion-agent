@@ -98,22 +98,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Public-only readiness-manifest tooling is qualified. A scientifically distinct "
-            "DEVELOP_TEAM causal lane is now in design and implementation."
+            "The sole DEVELOP_TEAM freeze failed closed at readiness authentication. A public, "
+            "synthetic clean-bootstrap qualification is now active; learning counters did not move."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red train · first unused DEVELOP_TEAM root · manifest before private",
+        location="Public synthetic boundary · clean causal bootstrap · no private inputs",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Unchanged shadow base · no prediction yet",
-            choice="Build distinct runner; bind manifest; one full-menu decision",
+            candidate="Shadow authority unchanged · no new causal evidence",
+            choice="Qualify clean import origin; then design rootless living-Dex curriculum",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="qualification",
             zero_shot_completed=causal_train_examples,
             zero_shot_total=causal_train_total,
             adaptation_completed=fits,
@@ -136,8 +136,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority target", _text(authority, "target")),
             output_event,
             (
-                f"Active causal contract · train examples {causal_train_examples}/1 · logical "
-                f"atomic {atomic_episodes}/1 · attempts {development_episodes} · verified outcomes "
+                f"Cumulative causal board · train examples {causal_train_examples} · logical "
+                f"atomic {atomic_episodes} · attempts {development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
             ),
@@ -174,8 +174,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "decision · actions 244/244 · frames 16,296/16,296"
             ),
             (
-                "Closed multiroot gate · 13fa0b6 · CI 32166168758/1 green · freeze returned "
-                "unexpected_failure · campaign 0 · counters +0 · retry 0"
+                "Closed DEVELOP_TEAM freeze · 6077173 · CI 32177113545/1 green · manifest d77d9f9d "
+                "· readiness_authentication · effects not attested · reported labels/fits/teacher "
+                "0 · retry 0"
             ),
             (
                 "Closed first-causal · 61f9b44 · CI 32171116652/1 · readiness_authentication · "

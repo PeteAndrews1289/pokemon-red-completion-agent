@@ -6,7 +6,24 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns distinct DEVELOP_TEAM causal design and implementation
+## Current override: Codex owns public/synthetic causal-bootstrap qualification
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
+action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at
+`readiness_authentication`, with effects not attested and no campaign plan. The
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+adds zero to every counter. Static public-source analysis found an import-order bootstrap defect but
+does not upgrade the historical effect attestation. Retire the exact DEVELOP_TEAM lane without
+retry or replacement. Keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Codex owns `causal-bootstrap-origin-qualification-v1`: implement and mutation-test one reusable
+clean-process project-origin bootstrap and safe readiness-stage map using public and synthetic
+inputs only, publish it green, and stop for reorientation. Reviewers remain read-only. Do not open
+a ROM, private input, root, claim, prediction, action, label, or fit. A pass supports only a
+separate rootless, species-neutral living-Dex dependency curriculum, not a rescue or product claim.
+
+## Previous override: Codex owned distinct DEVELOP_TEAM causal design and implementation
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [manifest qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

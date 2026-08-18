@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: readiness manifests qualified; distinct DEVELOP_TEAM causal design is active
+## 2026-08-18: DEVELOP_TEAM froze closed; bootstrap qualification is active
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. The sole
+action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at
+`readiness_authentication`, with effects not attested and no campaign plan. The
+[failure receipt](docs/evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+records zero development labels, invocation fits, teacher queries, and private path fields. Those
+are narrow envelope facts, not proof of zero runtime effects. A static public-source audit later
+found the import-order bootstrap defect; it does not change the historical effect attestation.
+Retire `first-develop-team-causal-goal-outcome-v1` without retry or replacement. Boards remain
+**30/15/4/3/0/0** and **14/4/0/1/1**, with causal and atomic counts zero.
+
+Codex now owns public/synthetic-only `causal-bootstrap-origin-qualification-v1`: qualify one
+clean-process project-origin bootstrap plus sanitized readiness substages, then stop without a ROM,
+private input, root, claim, prediction, action, label, or fit. A pass permits only a separate
+rootless, species-neutral living-Dex dependency curriculum. It does not reopen the failed lane or
+grant gameplay, competence, completion, Crystal, authority, or transfer.
+
+## Previous checkpoint — 2026-08-18: readiness manifests qualified; DEVELOP_TEAM design was active
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [maintenance receipt](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

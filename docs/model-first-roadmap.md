@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: public readiness is qualified; design one distinct DEVELOP_TEAM outcome
+## Current checkpoint: DEVELOP_TEAM failed closed; qualify the reusable bootstrap
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
+action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at
+`readiness_authentication`, with effects not attested and no campaign plan. The
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+records no counter increment. Static public-source analysis found an import-order bootstrap defect,
+but cannot retroactively attest runtime effects. Retire the exact lane without retry or replacement;
+keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+`causal-bootstrap-origin-qualification-v1` is the active public/synthetic maintenance lane. Prove
+the reusable clean-process project-origin bootstrap and sanitized readiness substages without a
+ROM, private input, root, claim, prediction, action, label, or fit, then stop for reorientation. A
+pass permits only separate design of a rootless, species-neutral living-Dex dependency curriculum;
+it does not revive the failed Red lane or establish gameplay, competence, completion, or transfer.
+
+## Previous checkpoint: public readiness was qualified; one distinct DEVELOP_TEAM outcome was next
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [maintenance qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)

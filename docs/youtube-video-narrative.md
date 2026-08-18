@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: public readiness qualifies; DEVELOP_TEAM becomes the next causal question
+## August 18 scene: DEVELOP_TEAM stops at readiness; the next lesson moves off-root
+
+Open on **SOURCE 6077173** (`6077173618bf9fce9fb57804a6a1ce82249c9cee`) **· CI
+32177113545/1 GREEN · MANIFEST D77D9F9D…CDEA1 · SOLE DEVELOP_TEAM FREEZE FAILED_CLOSED ·
+READINESS_AUTHENTICATION · EFFECTS NOT ATTESTED · CAMPAIGN PLAN 0 · RETRY 0**. Link the
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+with **SHA-256 171A1032…313D2**. Hold **30/15/4/3/0/0 · 14/4/0/1/1 · CAUSAL 0 · ATOMIC 0**.
+
+Show a separate source-review card: **IMPORT-ORDER BOOTSTRAP DEFECT FOUND IN PUBLIC CODE**. Stamp
+**DOES NOT UPGRADE HISTORICAL EFFECT ATTESTATION**. Retire the exact lane with **NO RETRY · NO
+REPLACEMENT**.
+
+Cut away from the game to `causal-bootstrap-origin-qualification-v1`: **PUBLIC + SYNTHETIC ONLY ·
+CLEAN PROCESS · PROJECT ORIGIN FIRST · SANITIZED READINESS SUBSTAGES · ROM 0 · PRIVATE 0 · ROOT 0
+· CLAIM 0 · PREDICTION 0 · ACTION 0 · FIT 0**. End on **QUALIFY ONCE → PUBLISH GREEN → STOP →
+ROOTLESS SPECIES-NEUTRAL LIVING-DEX DEPENDENCY CURRICULUM**. Caption it **INFRASTRUCTURE TOWARD
+THE PLAYER · NOT GAMEPLAY, COMPETENCE, COMPLETION, CRYSTAL, AUTHORITY, OR TRANSFER**.
+
+## Previous August 18 scene: public readiness qualified; DEVELOP_TEAM became the next causal question
 
 Open on **SOURCE ECE32D8** (`ece32d81a1bd7ad3de037ba14361ef2f00849e35`) **· CI
 32174872005/1 GREEN · CANONICAL PUBLIC MANIFEST QUALIFIED · FOCUSED TESTS 24 · PROTECTED EFFECTS

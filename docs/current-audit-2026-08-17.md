@@ -1,6 +1,26 @@
 # Current audit — 2026-08-18
 
-## Current result: public readiness manifests qualified; distinct DEVELOP_TEAM learning is active
+## Current result: DEVELOP_TEAM failed closed; causal-bootstrap qualification is active
+
+Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
+action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at
+`readiness_authentication`, with effects not attested and no campaign plan. The
+[failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `171a1032c173999993b3170fbb403c8087db2287852cdd311118b0541de313d2`)
+records development labels 0, invocation fits 0, teacher queries 0, private path fields 0, and zero
+counter deltas. Those envelope fields do not prove other runtime effects were zero. Static
+public-source analysis found a deterministic import-order bootstrap defect, but does not upgrade
+the historical effect attestation or establish a private cause.
+
+Retire `first-develop-team-causal-goal-outcome-v1` without retry or replacement. Legacy remains
+**30/15/4/3/0/0**, product-focus-v2 remains **14/4/0/1/1**, and causal and atomic counts remain
+zero. Active `causal-bootstrap-origin-qualification-v1` is public/synthetic maintenance only:
+qualify one reusable clean-process project-origin bootstrap and sanitized readiness-stage map, then
+stop without a ROM, private input, root, claim, prediction, action, label, or fit. Its successor is
+a separately designed rootless, species-neutral living-Dex dependency curriculum, not gameplay,
+competence, completion, Crystal, authority, or transfer evidence.
+
+## Previous result: public readiness manifests qualified; distinct DEVELOP_TEAM learning was active
 
 Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
 [qualification receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
