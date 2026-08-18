@@ -5,7 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): bounded context rollover qualified; the actual freeze
+> **Current product focus (August 18, 2026): the six-root curriculum failed closed; collect one
+> causal train example next.** Exact source `13fa0b6de423115b506361a1d4c0491395d74421`
+> passed CI `32166168758/1`. Its sole actual action-free freeze returned `failed_closed` at
+> `unexpected_failure`, with effects not attested and no campaign plan. The
+> [failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+> preserves that boundary: the stage identifies no cause or runtime effect. The exact multiroot
+> lane is retired without retry, diagnosis, or root-specific rescue. All counters add zero and
+> remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+>
+> Active lane `first-causal-goal-outcome-v1` deterministically takes the first unused train root
+> whose full menu includes `ACQUIRE_SPECIES`, lets the model choose from that full menu once, and
+> consumes one lane-wide no-replacement identity plus exactly one root/trial before retaining one
+> durable positive or negative outcome. The root is not replaced if its action-free inspection
+> fails.
+> `causal_train_example` is **0/1**. This permits no fit, development label, evaluation, authority,
+> Crystal access, or competence claim; it is intermediate causal training data. Finish and publish
+> the stage-observable runner under green CI, then allow one action-free freeze and preflight and at
+> most one execute/admit, stopping at the first durable terminal.
+
+> **Previous product focus (August 18, 2026): bounded context rollover qualified; the actual freeze
 > is still unstarted.** Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI
 > `32165489924/1`. The
 > [rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

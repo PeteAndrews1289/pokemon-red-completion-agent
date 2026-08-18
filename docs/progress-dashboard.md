@@ -5,7 +5,22 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`)
+> **Current rail:** Show **SOURCE 13FA0B6** (`13fa0b6de423115b506361a1d4c0491395d74421`)
+> **· CI 32166168758/1 GREEN · SOLE SIX-ROOT FREEZE FAILED_CLOSED · STAGE
+> UNEXPECTED_FAILURE · EFFECTS NOT ATTESTED · CAMPAIGN PLAN 0**. Link the
+> [failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json).
+> Mark **STAGE, NOT CAUSE · RUNTIME INFERENCE 0 · RETRY 0 · LANE RETIRED · COUNTER DELTAS 0**
+> and hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**.
+>
+> Display active lane `first-causal-goal-outcome-v1`: **DETERMINISTIC FIRST UNUSED TRAIN ROOT ·
+> ACQUIRE_SPECIES AVAILABLE IN FULL MENU · LANE-WIDE NO-REPLACEMENT CLAIM · ONE ROOT/TRIAL CLAIM ·
+> NO ROOT SUBSTITUTION AFTER INSPECTION · ONE FULL-MENU MODEL CHOICE ·
+> DURABLE POSITIVE OR NEGATIVE TERMINAL · CAUSAL TRAIN EXAMPLE 0/1**. Stamp **INTERMEDIATE CAUSAL
+> TRAINING DATA · FIT 0 · DEVELOPMENT LABEL 0 · EVALUATION 0 · AUTHORITY +0 · CRYSTAL 0 · NOT
+> LEARNED COMPETENCE**. Next rail: **FINISH/PUBLISH RUNNER → GREEN CI → ONE ACTION-FREE
+> FREEZE+PREFLIGHT → AT MOST ONE EXECUTE/ADMIT → STOP AT FIRST TERMINAL**.
+>
+> **Previous rail:** Show **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`)
 > **· CI 32165489924/1 GREEN · CONTEXT ROLLOVER QUALIFIED · ENGINEERING GO · MISSION GO**.
 > Link the
 > [rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

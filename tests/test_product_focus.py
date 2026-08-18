@@ -118,6 +118,11 @@ RESETTABLE_MULTIROOT_CONTEXT_ROLLOVER_QUALIFICATION = (
     / "docs/evidence"
     / "resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json"
 )
+RESETTABLE_MULTIROOT_FREEZE_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -168,22 +173,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "resettable-goal-manager-multiroot-learning-v1"
+    assert state.active_lane["id"] == "first-causal-goal-outcome-v1"
     assert state.active_lane["kind"] == "learning"
-    assert len(state.retired_lanes) == 22
-    assert focus_progress_fraction(state) == pytest.approx((14 / 26 + 4 / 14 + 4 / 5 + 3 / 4) / 4)
-    assert focus_scorecard(state) == (
-        ("Development Episode · development", 14, 26),
-        ("Verified Outcome Example · development", 4, 14),
-        ("Model Fit · train", 4, 5),
-        ("Unseen Comparison · development", 3, 4),
-    )
+    assert len(state.retired_lanes) == 23
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
     assert state.progress["development_episode_attempts"] == 14
     assert state.progress["verified_outcome_examples"] == 4
     assert state.progress["verified_composition_episodes"] == 1
+    assert state.progress["causal_train_examples"] == 0
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -368,6 +369,25 @@ def test_multiroot_context_rollover_is_exclusion_only_and_zero_effect() -> None:
     assert receipt["readiness_history"]["root_inspections"] == 0
     assert set(receipt["zero_effects"].values()) == {0}
     assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_multiroot_freeze_failure_closes_lane_without_inferred_cause() -> None:
+    receipt = json.loads(RESETTABLE_MULTIROOT_FREEZE_FAILURE.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "sole_action_free_freeze_failed_closed_campaign_retired"
+    assert receipt["execution"] == {
+        "campaign_plan_created": False,
+        "effects_attested_by_runner": False,
+        "failure_stage": "unexpected_failure",
+        "process_running_after_return": False,
+        "retry_allowed": False,
+        "runner_status": "failed_closed",
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert "does not identify" in receipt["claim_boundary"]["unsupported"]
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
 
 
 def test_paired_screen_design_is_action_free_and_nonpromoting() -> None:
@@ -645,12 +665,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Development Episode · development: 14/26",
-        "Verified Outcome Example · development: 4/14",
-        "Model Fit · train: 4/5",
-        "Unseen Comparison · development: 3/4",
-    )
+    assert rows == ("Causal Train Example · train: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -724,6 +739,25 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
         ("Verified Outcome Example · development", 4, 12),
         ("Verified Composition Episode · development", 1, 2),
     )
+
+
+def test_learning_lane_accepts_one_honest_causal_train_example() -> None:
+    state = validate_product_focus_document(_document())
+
+    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
+
+
+def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
+    document = _document()
+    lane = _active(document)
+    outputs = lane["measurable_outputs"]
+    assert isinstance(outputs, list)
+    output = outputs[0]
+    assert isinstance(output, dict)
+    output["partition"] = "development"
+
+    with pytest.raises(ProductFocusError, match="causal train example must use"):
+        validate_product_focus_document(document)
 
 
 def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
@@ -839,12 +873,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx((14 / 26 + 4 / 14 + 4 / 5 + 3 / 4) / 4)
+    assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Resettable multi-root goal-manager learning V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 26}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 5}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 4}  # type: ignore[index]
+    assert "First causal goal outcome V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Unchanged shadow base eb5c6515" in encoded
     assert "loss 1.2667" in encoded
@@ -853,11 +887,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "unexpected_failure" in encoded
     assert "candidate bundle 0" in encoded
     assert "actions 244/244" in encoded
-    assert "8 train / 4 dev" in encoded
-    assert "2cb18bf" in encoded
-    assert "root inspections 0" in encoded
-    assert "not frozen" in encoded
-    assert "stop before gameplay" in encoded
+    assert "one stage-observable causal Red train outcome" in encoded
+    assert "first unused acquisition-capable root" in encoded
+    assert "consume one lane identity" in encoded
+    assert "13fa0b6" in encoded
+    assert "campaign 0" in encoded
+    assert "retry 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

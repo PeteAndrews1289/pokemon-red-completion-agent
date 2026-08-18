@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Retired the resettable multiroot curriculum after its sole actual six-root action-free freeze at
+  source `13fa0b6de423115b506361a1d4c0491395d74421`, green CI `32166168758/1`, returned
+  `failed_closed` at `unexpected_failure`. The
+  [failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+  records no campaign plan and does not attest effects, so neither cause nor runtime effects are
+  inferred. Retry is forbidden and every counter delta is zero; boards remain **30/15/4/3/0/0**
+  and **14/4/0/1/1**. Activated `first-causal-goal-outcome-v1`: finish and publish a
+  stage-observable runner, then deterministically freeze the first unused train root whose full
+  menu includes `ACQUIRE_SPECIES`, consume one lane-wide no-replacement identity plus one
+  root/trial, make one full-menu model choice, and admit at most one durable positive or negative
+  outcome. Failed inspection cannot substitute a later root. `causal_train_example` is **0/1**. This creates
+  no fit, development label, evaluation, authority, Crystal access, or competence claim. After
+  green CI, allow one freeze/preflight and at most one execute/admit, then stop at first terminal.
+
 - Published the bounded multiroot context-rollover repair at exact source
   `2cb18bf2e72362dd405a2198414ce946790e1f5f` under green CI `32165489924/1`. The
   [qualification receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

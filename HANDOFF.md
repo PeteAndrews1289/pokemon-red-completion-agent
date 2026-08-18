@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: bounded context rollover qualified; actual root inventory remains next
+## 2026-08-18: multiroot freeze failed closed; one causal train example is next
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
+[freeze-failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+records that the sole actual six-root action-free freeze returned `failed_closed` at
+`unexpected_failure`, with effects not attested and no campaign plan. Treat that stage as neither
+cause nor runtime diagnosis. Retire `resettable-goal-manager-multiroot-learning-v1` without retry
+or rescue. Counter deltas are zero; boards stay **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+Codex now owns `first-causal-goal-outcome-v1`. Finish and publish its stage-observable runner under
+green CI. It must deterministically select the first unused train root whose full menu contains
+`ACQUIRE_SPECIES`, consume one lane-wide no-replacement identity plus one root/trial, let the model
+choose once from the full menu, and durably retain either a positive or negative terminal. A failed
+inspection does not select another root. `causal_train_example` starts at **0/1**. Then run
+one action-free freeze and preflight, at most one execute/admit, and stop at the first terminal. No
+fit, development label, evaluation, authority, Crystal, or learned-competence claim follows; this
+is only intermediate causal training data.
+
+## Previous checkpoint — 2026-08-18: bounded context rollover qualified; root inventory was next
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

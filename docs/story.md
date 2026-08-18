@@ -7,7 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: two readiness stops fix the ledger boundary, not the game
+## Current checkpoint: six roots fail opaquely, so the next lesson gets smaller
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
+[failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+records the sole actual action-free six-root freeze stopping `failed_closed` at
+`unexpected_failure`. It made no campaign plan and did not attest effects. That stage is not an
+explanation, so the story invents neither a cause nor what happened at runtime. The exact multiroot
+lane is retired without retry, while the boards stay **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+The next lesson is deliberately atomic. In `first-causal-goal-outcome-v1`, a published green
+runner will take the first unused train root whose full menu includes `ACQUIRE_SPECIES`, claim one
+lane-wide no-replacement identity plus one root/trial, and let the model make one choice from the
+complete menu. Failed inspection ends the lesson rather than selecting another root. It must retain the first
+durable success or failure, moving `causal_train_example` from **0/1** only on strict admission.
+There is one action-free freeze/preflight, at most one execution, and then a stop. This is an
+intermediate causal training example—not a fit, development label, evaluation, authority, Crystal
+result, or proof that the model has learned the game.
+
+## Previous checkpoint: two readiness stops fixed the ledger boundary, not the game
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

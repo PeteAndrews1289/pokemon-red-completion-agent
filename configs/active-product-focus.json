@@ -8,60 +8,46 @@
   },
   "lanes": [
     {
-      "capability": "Learn a reusable Red goal-selection update from diversified resettable outcomes, then test it once on root-disjoint development episodes before attempting multi-decision composition.",
-      "cheapest_falsifier": "Action-free inventory must prove four resettable train roots and two distinct development roots with acquisition, storage, team, and recovery choices. Stop before execution if the six roots, three train goal kinds including collection, or root-disjoint split cannot be established without a root-specific patch.",
-      "id": "resettable-goal-manager-multiroot-learning-v1",
+      "capability": "Prove that the exact shadow goal manager can make and execute one bounded title-neutral decision from an unused acquisition-capable Red train root and retain one strict causal outcome before any new fit or composition claim.",
+      "cheapest_falsifier": "One action-free inventory must select the deterministic first unused nonsealed Red train root focused on ACQUIRE_SPECIES, then inspect exactly that root for at least two executable goals including ACQUIRE_SPECIES. If that root does not qualify, or if any execution failure cannot be classified by a named path-free stage, close the attempt without a replacement root or route patch.",
+      "id": "first-causal-goal-outcome-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Published implementation and review evidence add no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority.",
-        "blocker": "No implementation blocker remains. Two readiness invocations stopped before root inventory: one used an obsolete catalog path and one exposed an over-strict historical context-plan equality. No plan, root inspection, identity, claim, prediction, or action occurred.",
-        "decision": "Published source 2cb18bf preserves exact historical campaign authentication while using those plans only as root-exclusion ledgers across the intentional context extension. Run the sole actual action-free freeze and, only if it succeeds, one exact-plan preflight; stop before gameplay.",
+        "authority_delta": "None. The failed action-free freeze adds no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority.",
+        "blocker": "The sole six-root freeze returned failed_closed at unexpected_failure with effects not attested and no campaign plan. Its sanitized envelope cannot distinguish a missing root from an implementation exception, so that exact lane is retired without diagnosis or retry.",
+        "decision": "Retire the six-root curriculum. Build one reusable, stage-observable single-root runner with a lane-wide no-replacement identity, publish it under green CI, then allow one action-free freeze, one zero-prediction preflight, and at most one model-led train episode with a durable terminal.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json",
-          "sha256": "8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc"
+          "path": "docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json",
+          "sha256": "f7f8c3cf89085b7d8ae902edc5a1202afd62faa229ffe79a1b17d63893925c7f"
         },
-        "learning_output": "No new measured learning output. Source 2cb18bf2e72362dd405a2198414ce946790e1f5f passed CI 32165489924/1 after the bounded context-rollover repair. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition.",
-        "next_falsifier": "The action-free freeze must find four train roots and two distinct development roots, with no physical or lineage overlap and the frozen acquisition, storage, team, and recovery focus strata. Otherwise close the attempt without a root-specific patch.",
-        "next_session_goal": "Run one exact-head action-free six-root campaign freeze and, only on success, one exact-plan zero-prediction preflight. Stop before execute or resume; gameplay remains a separate reorientation.",
-        "product_alignment": "This is the final readiness gate for the first compact root-diverse Red goal-selection curriculum. A later favorable one-decision result permits only a separately frozen two-decision composition pilot, not authority or transfer.",
-        "session_id": "2026-08-18-multiroot-context-rollover-qualified",
+        "learning_output": "No new measured learning output. The sole multiroot freeze produced no campaign, episode, target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition.",
+        "next_falsifier": "The new exact-head runner must action-freeze the deterministic first unused acquisition-capable train root, pass a zero-prediction preflight, consume one lane-wide no-replacement identity before prediction, and then durably terminate exactly one full-menu model-led decision. Any opaque failure, missing menu, reused root, or non-durable terminal closes the lane.",
+        "next_session_goal": "Implement and mutation-test the single-root causal runner, publish it, pass exact-head CI, perform one action-free freeze and preflight, then execute at most one authorized episode and stop at its first durable terminal.",
+        "product_alignment": "This is an intentionally small Red causal-data step, not the product. It tests the atomic model-to-goal-to-skill-to-outcome loop needed before broader resettable curricula, multi-decision planning, Crystal transfer, or living-Pokedex completion can be credible.",
+        "session_id": "2026-08-18-multiroot-freeze-closed-causal-outcome-next",
         "status": "active",
-        "stop_condition": "Stop before controller input. Any missing root stratum, train/development overlap, prior-root reuse, private binding drift, prediction, action, teacher query, fallback, sealed Red access, Crystal access, or root-specific repair closes this readiness attempt.",
-        "transfer_result": "Not run. Crystal remains closed; this implementation and its action-free readiness gate are Red curriculum prerequisites only."
+        "stop_condition": "Stop after the first durable success or failure terminal. Any retry, replacement root, root-specific patch, opaque failure, teacher query, fallback, sealed Red access, Crystal access, fit, or second episode closes the lane.",
+        "transfer_result": "Not run. Crystal remains closed; one Red causal outcome cannot establish cross-title transfer or living-Pokedex ability."
       },
       "learned_authority": {
         "current": "The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority.",
-        "target": "Demonstrate one shadow-only root-disjoint development comparison after a fixed multi-root fit. Grant no live, completion, sealed, or transfer authority."
+        "target": "Retain one strictly admitted model-led Red causal outcome. Grant no fit, promotion, completion, sealed, or transfer authority."
       },
       "maintenance_unblocks": null,
       "measurable_outputs": [
         {
-          "kind": "development_episode",
-          "minimum": 26,
-          "partition": "development"
-        },
-        {
-          "kind": "verified_outcome_example",
-          "minimum": 14,
-          "partition": "development"
-        },
-        {
-          "kind": "model_fit",
-          "minimum": 5,
+          "kind": "causal_train_example",
+          "minimum": 1,
           "partition": "train"
-        },
-        {
-          "kind": "unseen_comparison",
-          "minimum": 4,
-          "partition": "development"
         }
       ],
-      "name": "Resettable multi-root goal-manager learning V1",
-      "next_decision": "A favorable untouched four-episode comparison permits a separately frozen two-decision composition pilot. Failure closes this curriculum and redirects to representation or data-design analysis without root-specific rescue.",
+      "name": "First causal goal outcome V1",
+      "next_decision": "A strictly admitted outcome permits a separate data-design decision for the smallest root-diverse train cohort; it does not itself authorize a fit. Failure closes the single-root attempt without replacement or rescue.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
+        "causal_train_examples": 0,
         "composition_attempts": 1,
         "development_episode_attempts": 14,
         "evidence": [
@@ -116,15 +102,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any train/development root overlap, development outcome access before the fit is frozen, teacher query, fallback action, sealed Red access, Crystal access, or full replay stops the lane.",
-        "Any attempt to patch a specific root, route, skill, or menu into compliance stops the lane; use only existing qualified title-neutral capabilities.",
-        "Stop after twelve durably terminated episodes, one fit attempt, one frozen development comparison, or a documented falsification within eight hours."
+        "Any reused or sealed root, teacher query, fallback action, opaque failure, sealed Red access, Crystal access, or full replay stops the lane.",
+        "Any attempt to patch or replace the selected root, route, skill, or menu into compliance stops the lane; use only existing qualified title-neutral capabilities.",
+        "Stop after one durably terminated model-led episode or a documented action-free falsification within four hours."
       ],
       "time_box": {
-        "maximum_hours": 8,
+        "maximum_hours": 4,
         "maximum_sessions": 1
       },
-      "transfer_test": "Not in this lane. The four root-disjoint Red development episodes are the prerequisite generalization check; Crystal remains closed until they show a useful signal."
+      "transfer_test": "Not in this lane. This single Red episode tests only the causal execution/data seam; Crystal and cross-game living-Pokedex claims remain closed."
+    },
+    {
+      "id": "resettable-goal-manager-multiroot-learning-v1",
+      "kind": "learning",
+      "name": "Resettable multi-root goal-manager learning V1",
+      "preserve_evidence": true,
+      "reason": "The sole actual action-free six-root freeze at source 13fa0b6de423115b506361a1d4c0491395d74421 returned failed_closed at unexpected_failure with effects not attested and produced no campaign plan. The cause is not inferred, all learning counters remain unchanged, and the exact curriculum is closed without retry or root-specific rescue.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "goal-manager-acquisition-successor-learning-v1",

@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: context rollover is bounded; actual root inventory remains unstarted
+## Current checkpoint: retire the opaque multiroot freeze; retain one causal outcome
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
+[freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+records the sole actual six-root action-free freeze returning `failed_closed` at
+`unexpected_failure`, with effects not attested and no campaign plan. The sanitized stage supports
+no cause or runtime inference. Retire `resettable-goal-manager-multiroot-learning-v1` without
+retry; all counter deltas are zero and boards remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+Active lane `first-causal-goal-outcome-v1` is a smaller causal-data test. Finish and publish its
+runner under green CI, deterministically choose the first unused train root whose full menu offers
+`ACQUIRE_SPECIES`, consume one lane-wide no-replacement identity plus one root/trial, let the model
+choose once from the entire menu, and retain one durable positive or negative terminal. Failed
+inspection closes the lane rather than substituting a later root. `causal_train_example` is **0/1**. After publication,
+allow one action-free freeze and preflight and at most one execute/admit; stop at the first durable
+terminal. Do not fit, create a development label, evaluate, promote, open Crystal, or call this
+learned competence. It is intermediate causal training data only.
+
+## Previous checkpoint: context rollover was bounded; actual root inventory remained unstarted
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

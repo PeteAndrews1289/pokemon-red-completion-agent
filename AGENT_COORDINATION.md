@@ -1,7 +1,24 @@
 # Three-agent coordination
 
-> **2026-08-18 bounded context rollover qualified; the actual freeze remains the only current work
-> — highest checkpoint:** Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI
+> **2026-08-18 six-root freeze failed closed; one causal outcome is the only current work — highest
+> checkpoint:** Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI
+> `32166168758/1`. Its sole actual action-free freeze returned `failed_closed` at
+> `unexpected_failure`, with no campaign plan and effects not attested. The
+> [failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+> supports no causal or runtime inference. Retire `resettable-goal-manager-multiroot-learning-v1`
+> without retry or rescue. Keep counter deltas zero and boards **30/15/4/3/0/0** and
+> **14/4/0/1/1** unchanged.
+>
+> Codex owns `first-causal-goal-outcome-v1`: finish and publish the stage-observable runner under
+> green CI, then use the deterministic first unused train root with `ACQUIRE_SPECIES` in its full
+> menu. Consume one lane-wide no-replacement identity plus exactly one root/trial, allow one model
+> choice from the complete menu, and retain the first durable positive or negative terminal. Do not
+> substitute a later root after inspection. `causal_train_example` is **0/1**. Permit one
+> action-free freeze and preflight and at most one execute/admit; stop at the first terminal. No
+> fit, development label, evaluation, authority, Crystal, or competence claim is authorized.
+
+> **Previous checkpoint — 2026-08-18 bounded context rollover qualified; the actual freeze was the
+> only current work:** Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI
 > `32165489924/1`. The
 > [rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
 > (SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)

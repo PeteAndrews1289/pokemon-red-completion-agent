@@ -27,6 +27,7 @@ _RIGOR_TIERS = {"development", "benchmark", "sealed"}
 _OUTPUT_KINDS = {
     "atomic_goal_episode",
     "authority_promotion",
+    "causal_train_example",
     "composition_attempt",
     "development_episode",
     "model_fit",
@@ -643,6 +644,8 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
             raise ProductFocusError(
                 "model-led development output must use the development partition"
             )
+        if kind == "causal_train_example" and partition != "train":
+            raise ProductFocusError("causal train example must use the train partition")
         identity = (kind, partition)
         if identity in identities:
             raise ProductFocusError("measurable output identities must be unique")
@@ -654,10 +657,11 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         "development_episode",
         "verified_outcome_example",
     } <= kinds
-    if not legacy_contract and not development_contract:
+    causal_train_contract = "causal_train_example" in kinds
+    if not legacy_contract and not development_contract and not causal_train_contract:
         raise ProductFocusError(
             "learning lane must require either the legacy fit/evaluation outputs or "
-            "model-led development episodes with verified outcomes"
+            "model-led development episodes with verified outcomes or a causal train example"
         )
 
 
@@ -667,6 +671,7 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
         {
             "authority_promotions",
             "atomic_goal_episodes",
+            "causal_train_examples",
             "composition_attempts",
             "development_episode_attempts",
             "evidence",
@@ -686,6 +691,7 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
     for key in (
         "authority_promotions",
         "atomic_goal_episodes",
+        "causal_train_examples",
         "composition_attempts",
         "development_episode_attempts",
         "model_fits",
@@ -924,6 +930,7 @@ def _current_output_count(
     progress_key = {
         "atomic_goal_episode": "atomic_goal_episodes",
         "authority_promotion": "authority_promotions",
+        "causal_train_example": "causal_train_examples",
         "composition_attempt": "composition_attempts",
         "development_episode": "development_episode_attempts",
         "model_fit": "model_fits",
@@ -949,6 +956,7 @@ def _current_progress_counts(progress: Mapping[str, object]) -> tuple[int, ...]:
         _count(progress, "development_episode_attempts", subject="active lane progress"),
         _count(progress, "verified_outcome_examples", subject="active lane progress"),
         _count(progress, "atomic_goal_episodes", subject="active lane progress"),
+        _count(progress, "causal_train_examples", subject="active lane progress"),
         _count(progress, "composition_attempts", subject="active lane progress"),
         _count(progress, "verified_composition_episodes", subject="active lane progress"),
     )

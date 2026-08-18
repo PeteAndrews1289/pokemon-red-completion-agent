@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: two readiness stops narrow the rollover boundary
+## August 18 scene: six-root freeze closes; one causal example is next
+
+Open on **SOURCE 13FA0B6** (`13fa0b6de423115b506361a1d4c0491395d74421`) **· CI
+32166168758/1 GREEN · SOLE SIX-ROOT FREEZE FAILED_CLOSED · UNEXPECTED_FAILURE · CAMPAIGN PLAN
+0 · EFFECTS NOT ATTESTED**. Link the
+[failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json),
+then stamp **STAGE, NOT CAUSE · NO RUNTIME INFERENCE · RETRY 0 · LANE RETIRED · COUNTER DELTAS
+0**. Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+Cut to `first-causal-goal-outcome-v1`: **FIRST UNUSED TRAIN ROOT · ACQUIRE_SPECIES IN FULL MENU ·
+LANE-WIDE NO-REPLACEMENT CLAIM · ONE ROOT/TRIAL CLAIM · NO ROOT SUBSTITUTION AFTER INSPECTION ·
+ONE FULL-MENU MODEL CHOICE · DURABLE POSITIVE OR NEGATIVE TERMINAL ·
+CAUSAL TRAIN EXAMPLE 0/1**. The rail reads **FINISH/PUBLISH RUNNER → GREEN CI → ONE ACTION-FREE
+FREEZE+PREFLIGHT → AT MOST ONE EXECUTE/ADMIT → STOP AT FIRST TERMINAL**. Cross out **FIT**,
+**DEVELOPMENT LABEL**, **EVALUATION**, **AUTHORITY**, **CRYSTAL**, and **LEARNED COMPETENCE**;
+caption it **INTERMEDIATE CAUSAL TRAINING DATA ONLY**.
+
+## Previous August 18 scene: two readiness stops narrowed the rollover boundary
 
 Open on **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`) **· CI
 32165489924/1 GREEN · CONTEXT ROLLOVER QUALIFIED · ENGINEERING GO · MISSION GO**. Link the

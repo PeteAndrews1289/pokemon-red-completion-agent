@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the first actual multiroot root inventory
+## Current override: Codex owns one causal train example, not another multiroot retry
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The sole
+actual six-root action-free freeze returned `failed_closed` at `unexpected_failure`, with effects
+not attested and no campaign plan. The
+[failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+supports no cause or runtime diagnosis. Retire `resettable-goal-manager-multiroot-learning-v1`
+without retry or rescue. Counter deltas are zero; **30/15/4/3/0/0** and **14/4/0/1/1** remain.
+
+Codex owns `first-causal-goal-outcome-v1`. Finish and publish its stage-observable runner under
+green CI, then deterministically freeze the first unused train root with `ACQUIRE_SPECIES` in its
+full menu. Consume one lane-wide no-replacement identity plus exactly one root/trial, allow one
+model-led choice from the complete menu, and retain the first durable positive or negative
+terminal. Failed inspection closes the lane without substitution. `causal_train_example` is **0/1**. One
+action-free freeze/preflight and at most one execute/admit are allowed; stop at the first terminal.
+Reviewers remain read-only. No fit, development label, evaluation, authority, Crystal access, or
+competence claim follows from this intermediate training example.
+
+## Previous override: Codex owned the first actual multiroot root inventory
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

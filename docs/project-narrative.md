@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: context rollover is narrowed to exclusion evidence
+## August 18: the multiroot freeze closes; one causal example becomes the target
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
+[freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+records the sole actual action-free six-root freeze returning `failed_closed` at
+`unexpected_failure`, with effects not attested and no campaign plan. That sanitized stage supports
+no cause or runtime inference. The exact multiroot curriculum is retired without retry or rescue;
+all deltas are zero and counters stay **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+Active lane `first-causal-goal-outcome-v1` narrows the next evidence to one atomic seam. Finish and
+publish its stage-observable runner under green CI, deterministically choose the first unused train
+root whose full menu includes `ACQUIRE_SPECIES`, consume one lane-wide no-replacement identity plus
+one root/trial, let the model choose once from the full menu, and durably retain the first positive
+or negative outcome. Failed inspection ends the lane without substituting another root. The new
+`causal_train_example` counter is **0/1**. One action-free freeze/preflight and at most one
+execute/admit are authorized before the first terminal stop. This is intermediate causal training
+data, not a fit, development label, evaluation, authority, Crystal result, or competence claim.
+
+## Previous August 18 checkpoint: context rollover was narrowed to exclusion evidence
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)

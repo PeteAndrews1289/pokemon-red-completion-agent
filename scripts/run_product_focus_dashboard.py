@@ -58,6 +58,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     development_episodes = _count(progress, "development_episode_attempts")
     verified_outcomes = _count(progress, "verified_outcome_examples")
     atomic_episodes = _count(progress, "atomic_goal_episodes")
+    causal_train_examples = _count(progress, "causal_train_examples")
     composition_attempts = _count(progress, "composition_attempts")
     verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
@@ -71,10 +72,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    development_episode_total = max(
+    causal_train_total = max(
         [
-            development_episodes,
-            *(minimum for label, _, minimum in outputs if label.startswith("Development Episode")),
+            causal_train_examples,
+            *(minimum for label, _, minimum in outputs if label.startswith("Causal Train Example")),
         ]
     )
     fit_total = max(
@@ -97,26 +98,30 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The resettable multi-root implementation and context-rollover repair are published. "
-            "The first actual freeze is next; no root was inspected and gameplay has not begun."
+            "The sole six-root freeze failed closed without a campaign or diagnosable cause. "
+            "That lane is retired; one stage-observable causal Red train outcome is next."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Resettable Red curriculum · 8 train episodes · 4 root-disjoint development episodes"
+            "Red causal train · first unused acquisition-capable root · "
+            "1 full-menu choice · 1 outcome"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate="Unchanged shadow base eb5c6515…",
-            choice="Freeze six roots action-free, preflight once, then stop before execution",
+            choice=(
+                "Publish runner, freeze the first root action-free, consume one lane identity, "
+                "execute once, stop"
+            ),
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
-            zero_shot_completed=development_episodes,
-            zero_shot_total=development_episode_total,
+            phase="training",
+            zero_shot_completed=causal_train_examples,
+            zero_shot_total=causal_train_total,
             adaptation_completed=fits,
             adaptation_total=fit_total,
             sealed_completed=unseen,
@@ -125,7 +130,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Development episodes",
+                "Causal train examples",
                 "Model fits",
                 "Unseen comparisons",
             ),
@@ -137,7 +142,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority target", _text(authority, "target")),
             output_event,
             (
-                f"New curriculum · attempts {development_episodes} · verified outcomes "
+                f"Causal curriculum · train examples {causal_train_examples} · attempts "
+                f"{development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
             ),
@@ -182,8 +188,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "unexpected_failure · accepted fits 0 · candidate bundle 0 · retry 0"
             ),
             (
-                "Repair · 2cb18bf · CI 32165489924/1 green · GO · root inspections 0 · "
-                "8 train / 4 dev · not frozen · next freeze + preflight · stop before gameplay"
+                "Closed multiroot gate · 13fa0b6 · CI 32166168758/1 green · freeze returned "
+                "unexpected_failure · campaign 0 · counters +0 · retry 0"
             ),
         ),
     )
@@ -245,6 +251,7 @@ def main(argv: list[str] | None = None) -> int:
                     "stage_progress": snapshot.stage_progress,
                     "model_fits": focus.progress["model_fits"],
                     "development_episode_attempts": focus.progress["development_episode_attempts"],
+                    "causal_train_examples": focus.progress["causal_train_examples"],
                     "verified_outcome_examples": focus.progress["verified_outcome_examples"],
                     "verified_composition_episodes": focus.progress[
                         "verified_composition_episodes"

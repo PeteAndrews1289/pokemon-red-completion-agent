@@ -1,6 +1,25 @@
 # Current audit — 2026-08-18
 
-## Current result: bounded context rollover qualified; actual root inventory remains unstarted
+## Current result: the only multiroot freeze failed closed; causal single-root data is next
+
+Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
+[freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+records that the sole actual action-free six-root freeze returned `failed_closed` at
+`unexpected_failure`. Effects were not attested and no campaign plan was created. The public stage
+does not identify a cause or support a runtime-effect inference. The exact multiroot lane is
+retired without retry or root-specific rescue.
+
+All deltas are zero: legacy counters remain **30/15/4/3/0/0**, product-focus-v2 remains
+**14/4/0/1/1**, and authority and transfer do not change. Active lane
+`first-causal-goal-outcome-v1` starts `causal_train_example` at **0/1**. Its runner must be finished,
+published, and green before it deterministically selects the first unused train root whose full
+menu contains `ACQUIRE_SPECIES`, consumes one lane-wide no-replacement identity plus one root/trial,
+permits one full-menu model choice, and retains one durable positive or negative outcome. Failed
+inspection cannot substitute a later root. Then allow one action-free freeze/preflight and
+at most one execute/admit, stopping at the first terminal. No fit, development label, evaluation,
+authority, Crystal, or learned-competence claim is in scope; this is intermediate causal data.
+
+## Previous result: bounded context rollover qualified; actual root inventory remained unstarted
 
 Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
 [rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
