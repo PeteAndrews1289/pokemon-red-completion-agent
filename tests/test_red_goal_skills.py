@@ -41,6 +41,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedCenterRestoreGoalProvider,
     RedControlRecoveryGoalProvider,
     RedEncounterDiscoveryGoalProvider,
+    RedEncounterSourceDevelopmentGoalProvider,
     RedFieldRestoreGoalProvider,
     RedGoalSkillAvailability,
     RedMartPurchase,
@@ -791,3 +792,32 @@ def test_progress_provider_requires_fresh_semantic_improvement(kind: GoalKind) -
     offer = provider.offer(before)
     assert offer.binding is not None
     assert offer.binding.verify(offer.binding.execute()).status.value == "succeeded"
+
+
+def test_red_encounter_source_development_offer_is_action_free_and_verified() -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    adapter = _adapter(reader)
+    executions = 0
+
+    def execute() -> GoalExecutionReport:
+        nonlocal executions
+        executions += 1
+        reader.raw = replace(reader.raw, party_levels=(56,))
+        return GoalExecutionReport(3, 90, {"bounded": True, "completed_battles": 1})
+
+    provider = RedEncounterSourceDevelopmentGoalProvider(
+        source_ref="encounter-source-fixture",
+        binding_ref="pokemon.red:development:encounter-source-fixture",
+        adapter=adapter,
+        boundary=lambda _observation: RedGoalSkillAvailability.available(),
+        executor=execute,
+    )
+
+    offer = provider.offer(adapter.observe())
+
+    assert executions == 0
+    assert offer.binding is not None
+    assert offer.binding.kind is GoalKind.DEVELOP_TEAM
+    verdict = offer.binding.verify(offer.binding.execute())
+    assert executions == 1
+    assert verdict.status.value == "succeeded"

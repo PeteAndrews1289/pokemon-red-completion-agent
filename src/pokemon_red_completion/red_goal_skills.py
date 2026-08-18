@@ -15,6 +15,10 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.domain import GameMode
+from pokemon_red_completion.encounter_source_development import (
+    EncounterSourceDevelopmentProvider,
+    EncounterSourceDevelopmentSnapshot,
+)
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.field_recovery import (
     FieldRecoveryError,
@@ -261,6 +265,96 @@ class RedProgressGoalProvider:
                 verify=verify,
             )
         )
+
+
+@dataclass(frozen=True, slots=True)
+class RedEncounterSourceDevelopmentGoalProvider:
+    """Bind the portable local-development contract to one Red encounter source.
+
+    The provider receives an already bounded source-local executor.  It neither
+    navigates to a venue nor embeds map coordinates, so a later title can bind
+    the same semantic contract through its own encounter-source adapter.
+    """
+
+    source_ref: str
+    binding_ref: str
+    adapter: PokemonRedGoalStateAdapter
+    boundary: GoalAvailabilityCheck
+    executor: GoalSkillExecutor
+    estimated_effort: float = 0.30
+    estimated_risk: float = 0.15
+    kind: GoalKind = GoalKind.DEVELOP_TEAM
+
+    def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
+        availability = self.boundary(observation)
+        if not isinstance(availability, RedGoalSkillAvailability):
+            raise RedGoalSkillError(
+                "encounter-source development returned invalid boundary evidence"
+            )
+        if not availability.executable:
+            assert availability.unavailable_reason is not None
+            return RedGoalBindingOffer.unavailable(
+                self.kind,
+                availability.unavailable_reason,
+            )
+
+        def observe_after() -> EncounterSourceDevelopmentSnapshot:
+            current = self.adapter.observe()
+            current_boundary = self.boundary(current)
+            if not isinstance(current_boundary, RedGoalSkillAvailability):
+                raise RedGoalSkillError(
+                    "encounter-source development returned invalid fresh boundary evidence"
+                )
+            return red_encounter_source_development_snapshot(
+                current,
+                source_ref=self.source_ref,
+                local_encounters_available=current_boundary.executable,
+            )
+
+        provider = EncounterSourceDevelopmentProvider(
+            binding_ref=self.binding_ref,
+            observer=observe_after,
+            executor=self.executor,
+            estimated_effort=self.estimated_effort,
+            estimated_risk=self.estimated_risk,
+        )
+        offered = provider.offer(
+            red_encounter_source_development_snapshot(
+                observation,
+                source_ref=self.source_ref,
+                local_encounters_available=True,
+            )
+        )
+        if offered.binding is None:
+            assert offered.unavailable_reason is not None
+            return RedGoalBindingOffer.unavailable(
+                self.kind,
+                offered.unavailable_reason,
+            )
+        return RedGoalBindingOffer.available(offered.binding)
+
+
+def red_encounter_source_development_snapshot(
+    observation: RedGoalObservation,
+    *,
+    source_ref: str,
+    local_encounters_available: bool,
+) -> EncounterSourceDevelopmentSnapshot:
+    """Project one coherent Red observation into the portable verifier input."""
+
+    if not isinstance(observation, RedGoalObservation):
+        raise TypeError("observation must be a RedGoalObservation")
+    living = observation.evidence.living_collection
+    return EncounterSourceDevelopmentSnapshot(
+        source_ref=source_ref,
+        team_readiness=observation.evidence.team_readiness,
+        living_specimens=len(observation.collection_observation.specimens),
+        required_specimens_remaining=max(0, living.target - living.completed),
+        fainted_party_members=observation.party.fainted_count,
+        input_ready=observation.input_ready,
+        in_battle=bool(observation.raw.battle_state),
+        local_encounters_available=local_encounters_available,
+    )
 
 
 @dataclass(frozen=True, slots=True)
