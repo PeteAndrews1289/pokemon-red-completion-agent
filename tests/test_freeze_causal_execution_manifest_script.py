@@ -199,6 +199,20 @@ def test_failure_output_never_contains_destination_or_private_error(
     assert not manifest.exists()
 
 
+def test_invalid_argument_never_prints_private_value_or_stderr(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    arguments = _arguments(tmp_path / "manifest.json", action="freeze")
+    arguments[1] = "/private/secret-invalid-action"
+
+    assert SCRIPT["main"](arguments) == 1
+    captured = capsys.readouterr()
+    assert "/private/secret" not in captured.out
+    assert captured.err == ""
+    assert json.loads(captured.out)["failure_stage"] == "public_manifest_qualification"
+
+
 def test_refuses_arbitrary_manifest_destination_before_write(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: close acquisition; qualify canonical public readiness bindings
+## Current checkpoint: public readiness is qualified; design one distinct DEVELOP_TEAM outcome
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[maintenance qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+records 24 focused tests and a canonical public-only validator for exact source, invocation, and
+transitive runner bindings. It rejects stale, swapped, rehashed, reordered, noncanonical, aliased,
+and retired targets before protected inputs. No future-lane manifest or learning output exists.
+Boards stay **30/15/4/3/0/0**, **14/4/0/1/1**, causal **0/1**, and logically atomic **0/1**.
+
+`first-develop-team-causal-goal-outcome-v1` is the active learning design/implementation lane.
+Build and publish a scientifically distinct runner, validate its canonical manifest before private
+access, then select only the deterministic first unused train root focused on `DEVELOP_TEAM`, with
+no substitution. Allow one model choice from the full menu and strictly retain the first settled
+`+1` or `-1`. The same admission must satisfy both causal-train and logical atomic contracts. Stop
+without retry, teacher/fallback, fit, development label, authority, Crystal, transfer, completion,
+or living-Pokédex claim.
+
+## Previous checkpoint: acquisition was closed; canonical public readiness binding was active
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
 [first-causal freeze failure](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)

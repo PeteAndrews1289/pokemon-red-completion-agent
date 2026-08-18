@@ -59,6 +59,11 @@ FIRST_CAUSAL_FREEZE_FAILURE = (
     / "docs/evidence"
     / "first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json"
 )
+CAUSAL_READINESS_MANIFEST_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "causal-readiness-manifest-qualification-v1-2026-08-18.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -178,11 +183,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "causal-readiness-manifest-qualification-v1"
-    assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 24
+    assert state.active_lane["id"] == "first-develop-team-causal-goal-outcome-v1"
+    assert state.active_lane["kind"] == "learning"
+    assert len(state.retired_lanes) == 25
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -670,7 +675,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == ("Causal Train Example · train: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -892,23 +897,27 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Causal readiness manifest qualification V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
+    assert "First DEVELOP_TEAM causal goal outcome V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 1}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "No model opened" in encoded
+    assert "Unchanged shadow base" in encoded
     assert "loss 1.2667" in encoded
     assert "unexpected_failure" in encoded
     assert "actions 244/244" in encoded
-    assert "public-only readiness-manifest qualification" in encoded
-    assert "ROM/private-free public manifest" in encoded
-    assert "Qualify canonical public bindings" in encoded
+    assert "readiness-manifest tooling is qualified" in encoded
+    assert "first unused DEVELOP_TEAM root" in encoded
+    assert "Build distinct runner; bind manifest" in encoded
+    assert "logical atomic 0/1" in encoded
     assert "13fa0b6" in encoded
     assert "61f9b44" in encoded
     assert "readiness_authentication" in encoded
     assert "effects not attested" in encoded
     assert "paired-runner binding mismatched" in encoded
+    assert "ece32d8" in encoded
+    assert "32174872005/1" in encoded
+    assert "future-lane manifest 0" in encoded
     assert "campaign 0" in encoded
     assert "retry 0" in encoded
     assert "/Users/" not in encoded
@@ -946,6 +955,31 @@ def test_first_causal_freeze_failure_is_path_free_and_does_not_attest_effects() 
         ),
     }
     assert set(receipt["counter_treatment"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_causal_readiness_manifest_qualification_is_public_only_and_zero_effect() -> None:
+    receipt = json.loads(
+        CAUSAL_READINESS_MANIFEST_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["schema"] == (
+        "pokemon.core.causal-readiness-manifest-qualification-receipt.v1"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32174872005,
+        "source_commit": "ece32d81a1bd7ad3de037ba14361ef2f00849e35",
+    }
+    assert receipt["qualification"]["focused_tests_passed"] == 24
+    assert receipt["qualification"]["future_lane_manifest_frozen"] is False
+    assert receipt["qualification"]["future_lane_private_readiness_authorized"] is False
+    assert receipt["qualification"]["retired_lane_and_runner_rejected"] is True
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

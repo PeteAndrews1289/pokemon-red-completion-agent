@@ -1,6 +1,25 @@
 # Current audit — 2026-08-18
 
-## Current result: first-causal acquisition closed; public readiness manifest is active
+## Current result: public readiness manifests qualified; distinct DEVELOP_TEAM learning is active
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[qualification receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+binds the public-only canonical manifest implementation and its 24 focused tests. Exact current
+source/invocation/transitive runner equality is required; stale, swapped, rehashed, reordered,
+noncanonical, aliased, and retired targets fail closed. Protected effects, future-lane manifests,
+and counter deltas are zero. Legacy remains **30/15/4/3/0/0**, product-focus-v2 remains
+**14/4/0/1/1**, and causal and atomic counts remain zero.
+
+Retire maintenance and activate `first-develop-team-causal-goal-outcome-v1`. Its machine scorecard
+is causal train example **0/1**; atomic goal episode **0/1** is the same logical strict-admission
+condition, not a development label. Design and publish the distinct runner, validate the manifest
+before private access, then allow only the deterministic first unused `DEVELOP_TEAM` train root,
+no substitution, one full-menu model decision, and one settled `+1` or `-1`. No retry,
+teacher/fallback, fit, development label, authority, Crystal, transfer, completion, or living-Dex
+claim is authorized.
+
+## Previous result: first-causal acquisition closed; public readiness manifest was active
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
 [failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)

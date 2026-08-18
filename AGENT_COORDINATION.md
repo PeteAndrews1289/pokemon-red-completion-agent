@@ -1,7 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-18 first-causal lane retired; public readiness-manifest qualification is the only
-> current work — highest checkpoint:** Published source
+> **2026-08-18 readiness manifests qualified; distinct DEVELOP_TEAM causal design is the only
+> current work — highest checkpoint:** Exact source
+> `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+> [maintenance receipt](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+> (SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+> records 24 focused tests and a canonical public-only exact source/invocation/transitive-runner
+> validator. ROM, private input, claim, prediction, action, future-lane manifest, and every counter
+> delta are zero. Keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal **0/1**, and logically atomic
+> **0/1**. Retire `causal-readiness-manifest-qualification-v1` without retry.
+>
+> Codex owns `first-develop-team-causal-goal-outcome-v1`: design, implement, mutation-test, and
+> publish a scientifically distinct runner. Validate its canonical manifest before private access,
+> then use only the first deterministic unused `DEVELOP_TEAM` train root with no substitution, one
+> full-menu model decision, and one strict settled `+1` or `-1`. Stop on any mismatch or terminal;
+> no retry, teacher/fallback, fit, development label, Crystal, authority, or transfer is allowed.
+
+> **Previous checkpoint — 2026-08-18 first-causal lane retired; public readiness-manifest
+> qualification was the only current work:** Published source
 > `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its sole action-free
 > freeze returned `failed_closed` at `readiness_authentication`, with effects not attested and no
 > campaign plan. The

@@ -31,6 +31,7 @@ def public_execution_invocation(
     lane_id: str,
     operation: str,
     expected_campaign_sha256: str | None,
+    expected_freeze_execution_manifest_sha256: str | None,
     expected_context_plan_sha256: str,
     expected_fit_result_receipt_sha256: str,
     expected_prior_campaign_sha256: Sequence[str],
@@ -50,7 +51,14 @@ def public_execution_invocation(
     expected_campaign = (
         None if expected_campaign_sha256 is None else _sha(expected_campaign_sha256, "campaign")
     )
-    if (mode == "freeze") != (expected_campaign is None):
+    freeze_manifest = (
+        None
+        if expected_freeze_execution_manifest_sha256 is None
+        else _sha(expected_freeze_execution_manifest_sha256, "freeze execution manifest")
+    )
+    if (mode == "freeze") != (expected_campaign is None) or (mode == "freeze") != (
+        freeze_manifest is None
+    ):
         raise PublicExecutionManifestError("campaign binding differs from operation")
     bindings = _public_bindings(public_bindings)
     return {
@@ -58,6 +66,7 @@ def public_execution_invocation(
         "lane_id": lane,
         "operation": mode,
         "expected_campaign_sha256": expected_campaign,
+        "expected_freeze_execution_manifest_sha256": freeze_manifest,
         "expected_context_plan_sha256": _sha(
             expected_context_plan_sha256,
             "context plan",
@@ -265,6 +274,7 @@ def _invocation(value: Mapping[str, object]) -> dict[str, object]:
             "expected_campaign_sha256",
             "expected_context_plan_sha256",
             "expected_fit_result_receipt_sha256",
+            "expected_freeze_execution_manifest_sha256",
             "expected_prior_campaign_sha256",
             "lane_id",
             "operation",
@@ -278,8 +288,16 @@ def _invocation(value: Mapping[str, object]) -> dict[str, object]:
         raise PublicExecutionManifestError("execution invocation schema differs")
     expected_campaign = value.get("expected_campaign_sha256")
     campaign = None if expected_campaign is None else _sha(expected_campaign, "campaign")
+    expected_freeze_manifest = value.get("expected_freeze_execution_manifest_sha256")
+    freeze_manifest = (
+        None
+        if expected_freeze_manifest is None
+        else _sha(expected_freeze_manifest, "freeze execution manifest")
+    )
     operation = _token(value.get("operation"), "operation")
-    if (operation == "freeze") != (campaign is None):
+    if (operation == "freeze") != (campaign is None) or (operation == "freeze") != (
+        freeze_manifest is None
+    ):
         raise PublicExecutionManifestError("campaign binding differs from operation")
     prior_raw = value.get("expected_prior_campaign_sha256")
     roles_raw = value.get("private_input_roles")
@@ -301,6 +319,7 @@ def _invocation(value: Mapping[str, object]) -> dict[str, object]:
         "lane_id": _token(value.get("lane_id"), "lane"),
         "operation": operation,
         "expected_campaign_sha256": campaign,
+        "expected_freeze_execution_manifest_sha256": freeze_manifest,
         "expected_context_plan_sha256": _sha(
             value.get("expected_context_plan_sha256"),
             "context plan",

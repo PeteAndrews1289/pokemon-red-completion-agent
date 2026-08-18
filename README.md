@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): the first-causal acquisition lane is closed; qualify
+> **Current product focus (August 18, 2026): public readiness manifests are qualified; design one
+> distinct `DEVELOP_TEAM` causal outcome.** Exact source
+> `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+> [maintenance qualification](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+> (SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+> records a canonical public-only manifest validator, 24 focused tests, mismatch-sensitive exact
+> source/invocation/transitive-runner bindings, and zero ROM, private-input, claim, prediction, or
+> action effects. No future-lane manifest or learning output was created. Counters remain
+> **30/15/4/3/0/0**, **14/4/0/1/1**, causal **0/1**, and logically atomic **0/1**.
+>
+> Active learning lane `first-develop-team-causal-goal-outcome-v1` is scientifically distinct from
+> the retired acquisition lane. Design and implement its runner, publish green, and require the
+> canonical manifest before any private read. Then use only the deterministic first unused train
+> root focused on `DEVELOP_TEAM`, with no substitution, one model choice from the full menu, and one
+> strict settled `+1` or `-1` terminal. No retry, teacher, fallback, fit, development label,
+> authority, Crystal, transfer, completion, or living-Pokédex claim is allowed.
+
+> **Previous product focus (August 18, 2026): the first-causal acquisition lane was closed; qualify
 > public readiness bindings only.** Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`
 > passed CI `32171116652/1`. Its sole action-free freeze returned `failed_closed` at
 > `readiness_authentication`, with effects not attested and no campaign plan. The

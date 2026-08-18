@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: first-causal acquisition lane retired; public manifest qualification is active
+## 2026-08-18: readiness manifests qualified; distinct DEVELOP_TEAM causal design is active
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[maintenance receipt](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+qualifies canonical public-only invocation manifests against exact source and transitive runner
+bindings. Twenty-four focused tests reject stale, swapped, rehashed, reordered, noncanonical,
+aliased, and retired inputs. Protected effects and counter deltas are zero; no future-lane manifest
+or private readiness exists. Boards stay **30/15/4/3/0/0** and **14/4/0/1/1**.
+
+Codex now owns `first-develop-team-causal-goal-outcome-v1`. Design, implement, mutation-test, and
+publish the distinct runner; its canonical manifest must validate before any private access. Use
+only the first deterministic unused `DEVELOP_TEAM` train root, never substitute, show the full menu,
+make one model decision, and strictly admit one settled `+1` or `-1`. The machine target is causal
+train example **0/1**, with atomic goal episode **0/1** as the same logical admission. Stop without
+fit, development labels, teacher/fallback, authority, Crystal, transfer, or product claim.
+
+## Previous checkpoint — 2026-08-18: first-causal acquisition retired; manifest qualification was active
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its
 sole action-free freeze returned `failed_closed` at `readiness_authentication`, with effects not

@@ -98,23 +98,22 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The sole first-causal freeze failed closed at readiness authentication with effects "
-            "not attested. That lane is retired; public-only readiness-manifest qualification "
-            "is active."
+            "Public-only readiness-manifest tooling is qualified. A scientifically distinct "
+            "DEVELOP_TEAM causal lane is now in design and implementation."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="ROM/private-free public manifest · no root or claim ledger",
+        location="Red train · first unused DEVELOP_TEAM root · manifest before private",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="No model opened · shadow base unchanged",
-            choice="Qualify canonical public bindings; stop before live readiness",
+            candidate="Unchanged shadow base · no prediction yet",
+            choice="Build distinct runner; bind manifest; one full-menu decision",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="training",
             zero_shot_completed=causal_train_examples,
             zero_shot_total=causal_train_total,
             adaptation_completed=fits,
@@ -125,7 +124,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Active learning outputs",
+                "Causal train examples",
                 "Model fits",
                 "Unseen comparisons",
             ),
@@ -137,8 +136,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority target", _text(authority, "target")),
             output_event,
             (
-                f"Cumulative causal evidence · train examples {causal_train_examples} · attempts "
-                f"{development_episodes} · verified outcomes "
+                f"Active causal contract · train examples {causal_train_examples}/1 · logical "
+                f"atomic {atomic_episodes}/1 · attempts {development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
             ),
@@ -179,13 +178,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "unexpected_failure · campaign 0 · counters +0 · retry 0"
             ),
             (
-                "Closed first-causal gate · 61f9b44 · CI 32171116652/1 green · freeze returned "
-                "readiness_authentication · effects not attested · campaign 0 · retry 0 · "
-                "replacement 0"
+                "Closed first-causal · 61f9b44 · CI 32171116652/1 · readiness_authentication · "
+                "effects not attested · campaign 0 · retry 0 · paired-runner binding mismatched; "
+                "no cause inferred"
             ),
             (
-                "Public invocation audit · supplied paired-runner binding mismatched published "
-                "bytes · historical cause and effects remain not attested"
+                "Manifest maintenance qualified · ece32d8 · CI 32174872005/1 green · public-only "
+                "canonical bindings · protected effects 0 · future-lane manifest 0"
             ),
         ),
     )

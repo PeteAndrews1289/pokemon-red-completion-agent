@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: first-causal acquisition closes; canonical public readiness becomes the repair
+## August 18: canonical readiness qualifies; DEVELOP_TEAM becomes the distinct causal question
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[readiness-manifest qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+records exact public source, invocation, and transitive runner binding with 24 focused tests. Stale,
+swapped, rehashed, reordered, noncanonical, aliased, and retired inputs fail before protected
+access. No future-lane manifest, private readiness, learning output, or authority was created.
+Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Active learning lane `first-develop-team-causal-goal-outcome-v1` deliberately changes the mechanic.
+Design and publish its runner, authenticate the manifest before private access, and select only the
+first deterministic unused train root focused on `DEVELOP_TEAM`, without substitution. One
+full-menu model decision may produce one strictly settled `+1` or `-1`; only that joint admission
+moves causal train example and logical atomic episode from 0 to 1. Fit, development labels,
+teacher/fallback, authority, Crystal, transfer, completion, and living-Pokédex claims remain closed.
+
+## Previous August 18 checkpoint: first-causal acquisition closed; canonical readiness was the repair
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
 [first-causal failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)

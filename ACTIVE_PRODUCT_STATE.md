@@ -29,27 +29,28 @@ Not the product:
 
 ## One active lane
 
-**Causal readiness manifest qualification V1** (`causal-readiness-manifest-qualification-v1`)
+**First DEVELOP_TEAM causal goal outcome V1** (`first-develop-team-causal-goal-outcome-v1`)
 
-- Kind: **maintenance**
+- Kind: **learning**
 - Rigor: **development**
-- Next decision: A passing public-only validator permits designing a scientifically distinct one-decision train lane, preferably DEVELOP_TEAM. It never permits retrying or replacing the closed acquisition lane.
+- Next decision: One strict settled outcome advances causal train example 0 to 1 and logically atomic goal episode 0 to 1, permitting only separate root-diverse data-design work; it does not authorize a fit.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Eliminate manually copied public executable-hash drift before any future causal lane can touch a ROM, private artifact, claim ledger, model prediction, or controller input. |
+| Reusable capability | Let the exact shadow goal manager make one full-menu DEVELOP_TEAM-focused choice from a deterministic unused Red train root and retain one strict settled causal outcome under a manifest-before-private boundary. |
 | Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Qualify only a public readiness-binding manifest for future lanes. Grant no gameplay, fit, promotion, completion, sealed, or transfer authority. |
-| Transfer test | Not in this lane. Public readiness validation supplies no gameplay, Crystal, or cross-game living-Pokedex evidence. |
-| Cheapest falsifier | A ROM/private-free validator must reject a canonical manifest containing any stale public source or runner binding and accept only the exact reviewed dependency graph. If it cannot do that without entering live readiness, close the approach. |
-| Time box | 1 session / 2 hours |
+| Authority target | Retain one strict model-led DEVELOP_TEAM causal train example that also satisfies the logical atomic-goal contract. Grant no fit, promotion, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. This single Red train example tests only the causal goal-to-skill-to-outcome seam; Crystal and cross-game living-Pokedex claims remain closed. |
+| Cheapest falsifier | The exact public manifest must authenticate before any private read, then the first deterministic unused DEVELOP_TEAM train root must expose a full executable menu. Any mismatch, missing root, or ineligible menu closes the lane without substitution. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Causal Train Example · train | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,25 +58,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-first-causal-freeze-closed-readiness-manifest-next** · status **active** · evidence [qualification](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+**2026-08-18-readiness-manifest-qualified-develop-team-next** · status **active** · evidence [qualification](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This bounded repair prevents provenance bookkeeping from consuming future causal-data opportunities. It is infrastructure only; the product remains a learned multi-game completion and living-Pokedex agent. |
-| Learning output | No new measured learning output. The acquisition freeze produced no campaign, episode, causal target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples. |
-| Authority delta | None. The failed readiness attempt adds no causal example, outcome, fit, comparison, promotion, gameplay, completion, or transfer authority. |
-| Transfer result | Not run. Crystal remains closed; readiness tooling cannot establish cross-title transfer or living-Pokedex ability. |
-| Blocker | The sole first-causal acquisition freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. A separate public invocation audit found that the supplied paired-runner binding did not match the published bytes, but that does not upgrade the runner's historical effect or cause attestation. |
-| Decision | Retire the exact acquisition lane without retry or replacement. Build one ROM/private-free canonical readiness-manifest validator, then reorient to a scientifically distinct one-decision train question only after publication and green CI. |
-| Next session | Implement and mutation-test the ROM/private-free canonical readiness manifest, publish it under green CI, and stop for reorientation before any new root, ROM, private model, claim ledger, prediction, or action is opened. |
-| Next falsifier | The validator must prove, using public files and synthetic fixtures only, that exact source and transitive runner bindings are complete, canonical, and mismatch-sensitive before live readiness is callable. |
-| Stop condition | Stop after one public manifest validator and its adversarial tests. Any ROM/private read, claim-ledger access, acquisition-lane retry, model prediction, controller action, fit, sealed Red access, or Crystal access closes the lane. |
+| Product alignment | A real team-development decision and causal outcome exercises transferable party growth rather than another acquisition retry. Red remains the curriculum; the product is multi-game completion and a living Pokedex. |
+| Learning output | No measured learning output was added by maintenance. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples. |
+| Authority delta | None. Public readiness-manifest qualification added no gameplay, causal example, atomic episode, fit, comparison, promotion, completion, or transfer authority. |
+| Transfer result | Not run. One Red DEVELOP_TEAM causal example cannot establish cross-title transfer or living-Pokedex ability. |
+| Blocker | The public manifest validator is qualified, but the scientifically distinct DEVELOP_TEAM runner, exact future-lane manifest, private campaign plan, and causal outcome do not yet exist. |
+| Decision | Retire manifest maintenance as complete. Design and implement one distinct DEVELOP_TEAM causal lane whose exact public manifest authenticates before private inputs, then permit only the deterministic first unused train root and one full-menu model decision. |
+| Next session | Design, implement, and mutation-test the distinct DEVELOP_TEAM runner; publish it under green CI; freeze and validate its public manifest before private access; then allow at most one no-substitution freeze, preflight, execute, and admit sequence. |
+| Next falsifier | The new runner must fail before private access when its canonical public manifest differs, then action-free select exactly the first unused DEVELOP_TEAM train root with no substitution and retain one strict settled +1 or -1 terminal after one full-menu choice. |
+| Stop condition | Stop after the first strictly settled +1 or -1 terminal or any earlier falsification. No retry, replacement root, fallback, teacher query, fit, development label, sealed Red access, or Crystal access is allowed. |
 
 ### Stop conditions
 
-- Any ROM, private artifact, model payload, context state, or fixed-account claim-ledger access stops the lane.
-- Any attempt to retry, replace, diagnose through private inputs, or rescue the closed acquisition lane stops the lane.
-- Stop after one canonical public manifest validator and its adversarial tests within two hours.
+- The exact canonical public manifest must validate before any ROM, private artifact, model payload, context state, or claim-ledger access.
+- Use only the deterministic first unused DEVELOP_TEAM train root; any missing or ineligible root, substitution, retry, teacher query, fallback, or root-specific repair closes the lane.
+- Allow one full-menu model decision and stop after its first strict settled +1 or -1 terminal; do not open development labels, fit, sealed Red, or Crystal.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +114,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Causal readiness manifest qualification V1:** Published source ece32d81a1bd7ad3de037ba14361ef2f00849e35 passed CI 32174872005/1. Its public-only canonical manifest tooling rejects stale, swapped, rehashed, reordered, noncanonical, aliased, and retired bindings before protected inputs; it created no future-lane manifest or learning output and is complete without retry. Evidence is preserved; retry is no.
 - **First causal goal outcome V1:** Published source 61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a passed CI 32171116652/1, but its sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. The exact acquisition lane is closed without retry, replacement root, or gameplay claim; all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Resettable multi-root goal-manager learning V1:** The sole actual action-free six-root freeze at source 13fa0b6de423115b506361a1d4c0491395d74421 returned failed_closed at unexpected_failure with effects not attested and produced no campaign plan. The cause is not inferred, all learning counters remain unchanged, and the exact curriculum is closed without retry or root-specific rescue. Evidence is preserved; retry is no.
 - **Goal-manager acquisition successor learning V1:** Published source 5beb7fa3512ca8ef294524484fccbf13607050e8 passed CI 32152766490/1 and a zero-outcome preflight. Its one fit identity was consumed, reached fit_attempted, and failed closed as unexpected_failure with no candidate bundle or accepted fit. The sanitized cause was not retained, so no gate cause is inferred and no retry is allowed. Evidence is preserved; retry is no.

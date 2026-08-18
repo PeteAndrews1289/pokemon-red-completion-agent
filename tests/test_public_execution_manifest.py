@@ -48,6 +48,7 @@ def _invocation() -> dict[str, object]:
         lane_id="causal-lane-v2",
         operation="freeze",
         expected_campaign_sha256=None,
+        expected_freeze_execution_manifest_sha256=None,
         expected_context_plan_sha256="b" * 64,
         expected_fit_result_receipt_sha256="c" * 64,
         expected_prior_campaign_sha256=("d" * 64, "e" * 64),
@@ -141,6 +142,7 @@ def test_rejects_private_path_injection_and_unsorted_roles() -> None:
             lane_id="causal-lane-v2",
             operation="freeze",
             expected_campaign_sha256=None,
+            expected_freeze_execution_manifest_sha256=None,
             expected_context_plan_sha256="b" * 64,
             expected_fit_result_receipt_sha256="c" * 64,
             expected_prior_campaign_sha256=("d" * 64,),
@@ -152,6 +154,7 @@ def test_rejects_private_path_injection_and_unsorted_roles() -> None:
             lane_id="causal-lane-v2",
             operation="freeze",
             expected_campaign_sha256=None,
+            expected_freeze_execution_manifest_sha256=None,
             expected_context_plan_sha256="b" * 64,
             expected_fit_result_receipt_sha256="c" * 64,
             expected_prior_campaign_sha256=("d" * 64,),
@@ -284,9 +287,35 @@ def test_nonfreeze_requires_exact_campaign_binding() -> None:
             lane_id="causal-lane-v2",
             operation="execute",
             expected_campaign_sha256=None,
+            expected_freeze_execution_manifest_sha256="f" * 64,
             expected_context_plan_sha256="b" * 64,
             expected_fit_result_receipt_sha256="c" * 64,
             expected_prior_campaign_sha256=("d" * 64,),
             public_bindings=_bindings(),
             private_input_roles=("rom",),
+        )
+
+
+def test_nonfreeze_invocation_authenticates_exact_freeze_manifest_binding() -> None:
+    invocation = public_execution_invocation(
+        lane_id="causal-lane-v2",
+        operation="execute",
+        expected_campaign_sha256="a" * 64,
+        expected_freeze_execution_manifest_sha256="f" * 64,
+        expected_context_plan_sha256="b" * 64,
+        expected_fit_result_receipt_sha256="c" * 64,
+        expected_prior_campaign_sha256=("d" * 64,),
+        public_bindings=_bindings(),
+        private_input_roles=("rom",),
+    )
+    payload = canonical_manifest_line(freeze_public_execution_manifest(invocation=invocation))
+    changed = deepcopy(invocation)
+    changed["expected_freeze_execution_manifest_sha256"] = "0" * 64
+
+    with pytest.raises(PublicExecutionManifestError, match="invocation differs"):
+        authenticate_public_execution_manifest(
+            payload,
+            expected_manifest_sha256=hashlib.sha256(payload).hexdigest(),
+            invocation=changed,
+            current_public_bindings=_bindings(),
         )

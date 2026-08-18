@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published and qualified the canonical causal readiness-manifest tooling at exact source
+  `ece32d81a1bd7ad3de037ba14361ef2f00849e35` under green CI `32174872005/1`. The
+  [qualification receipt](docs/evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+  (SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+  records 24 focused tests and exact public source, invocation, and transitive runner binding.
+  Stale, swapped, rehashed, reordered, noncanonical, aliased, and retired targets fail closed before
+  protected inputs. No future-lane manifest, ROM/private input, claim, prediction, action, or
+  learning output was created; counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero,
+  and atomic zero. Retired `causal-readiness-manifest-qualification-v1` and activated
+  `first-develop-team-causal-goal-outcome-v1`: one manifest-before-private, no-substitution train
+  root, one full-menu model decision, and one strict settled `+1`/`-1`, with no fit, development
+  labels, teacher/fallback, authority, or Crystal.
+
 - Retired `first-causal-goal-outcome-v1` after its sole action-free freeze at published source
   `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`, green CI `32171116652/1`, returned
   `failed_closed` at `readiness_authentication` with effects not attested and no campaign plan. The

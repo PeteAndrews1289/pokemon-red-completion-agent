@@ -7,7 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: one stale public binding closes acquisition before the game can teach
+## Current checkpoint: the manifest is ready; the next honest question is team development
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[maintenance receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+records a public-only canonical manifest validator and 24 focused tests. It catches stale, swapped,
+rehashed, reordered, noncanonical, aliased, and retired bindings before the ROM or private data can
+open. It created no future-lane manifest and taught the model nothing. The boards remain
+**30/15/4/3/0/0** and **14/4/0/1/1**, with causal and atomic counts at zero.
+
+The next question changes mechanic instead of replacing the failed acquisition root. In
+`first-develop-team-causal-goal-outcome-v1`, a new runner must publish and bind its manifest before
+private access, then take only the first deterministic unused `DEVELOP_TEAM` train root. There is
+no substitute. The model sees the full menu once, chooses once, and earns one causal train example
+and one logical atomic episode only if the result settles strictly to `+1` or `-1`. No fit,
+development label, teacher rescue, Crystal, or competence claim follows. This is one real party-
+growth lesson toward a transferable living-Pokédex player, not the player itself.
+
+## Previous checkpoint: acquisition closed before teaching; a separate stale binding was found
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its one
 authorized action-free freeze returned `failed_closed` at `readiness_authentication`, with effects

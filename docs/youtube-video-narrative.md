@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: first-causal acquisition closes; public readiness bindings take the frame
+## August 18 scene: public readiness qualifies; DEVELOP_TEAM becomes the next causal question
+
+Open on **SOURCE ECE32D8** (`ece32d81a1bd7ad3de037ba14361ef2f00849e35`) **· CI
+32174872005/1 GREEN · CANONICAL PUBLIC MANIFEST QUALIFIED · FOCUSED TESTS 24 · PROTECTED EFFECTS
+0 · FUTURE-LANE MANIFEST 0 · COUNTER DELTAS 0**. Link the
+[qualification receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json) with
+**SHA-256 C1EA4EB0…84507D**. Flash **STALE · SWAPPED · REHASHED · REORDERED · NONCANONICAL ·
+ALIASED · RETIRED** and stamp each **REJECTED BEFORE PRIVATE**.
+
+Reveal `first-develop-team-causal-goal-outcome-v1`: **CAUSAL TRAIN EXAMPLE 0/1 · LOGICAL ATOMIC
+0/1 · DEVELOP_TEAM · MANIFEST BEFORE PRIVATE · FIRST DETERMINISTIC UNUSED TRAIN ROOT · NO
+SUBSTITUTION · FULL MENU · ONE MODEL DECISION · SETTLED +1/-1**. The rail reads
+**DESIGN/IMPLEMENT/TEST → PUBLISH GREEN → FREEZE/VALIDATE MANIFEST → ONE BOUNDED SEQUENCE → STOP**.
+Cross out **RETRY · TEACHER/FALLBACK · FIT · DEVELOPMENT LABEL · AUTHORITY · CRYSTAL · TRANSFER**.
+Caption it **ONE PARTY-GROWTH LESSON TOWARD THE LIVING-POKÉDEX PLAYER, NOT COMPETENCE YET**.
+
+## Previous August 18 scene: first-causal acquisition closed; public readiness bindings took the frame
 
 Open on **SOURCE 61F9B44** (`61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`) **· CI
 32171116652/1 GREEN · SOLE FREEZE FAILED_CLOSED · READINESS_AUTHENTICATION · EFFECTS NOT

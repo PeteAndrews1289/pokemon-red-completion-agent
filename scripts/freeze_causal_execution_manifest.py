@@ -13,6 +13,7 @@ import re
 import stat
 import sys
 from pathlib import Path
+from typing import Never
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_ROOT = PROJECT_ROOT / "scripts"
@@ -67,8 +68,14 @@ PRIVATE_INPUT_ROLES = tuple(
 )
 
 
+class _SanitizedArgumentParser(argparse.ArgumentParser):
+    def error(self, message: str) -> Never:
+        del message
+        raise PublicExecutionManifestError("manifest arguments differ")
+
+
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = _SanitizedArgumentParser(description=__doc__)
     parser.add_argument("--action", choices=("freeze", "validate"), required=True)
     parser.add_argument("--lane-id", required=True)
     parser.add_argument("--runner", required=True)
@@ -86,6 +93,7 @@ def _parser() -> argparse.ArgumentParser:
         required=True,
     )
     parser.add_argument("--expected-campaign-sha256")
+    parser.add_argument("--expected-freeze-execution-manifest-sha256")
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--expected-manifest-sha256")
     return parser
@@ -98,6 +106,8 @@ def main(argv: list[str] | None = None) -> int:
             args.action == "freeze"
         ) != (args.expected_manifest_sha256 is None):
             raise PublicExecutionManifestError("manifest mode arguments differ")
+        if (args.operation == "freeze") != (args.expected_freeze_execution_manifest_sha256 is None):
+            raise PublicExecutionManifestError("manifest mode arguments differ")
         public_bindings = _current_public_bindings(
             lane_id=args.lane_id,
             runner=args.runner,
@@ -107,6 +117,9 @@ def main(argv: list[str] | None = None) -> int:
             lane_id=args.lane_id,
             operation=args.operation,
             expected_campaign_sha256=args.expected_campaign_sha256,
+            expected_freeze_execution_manifest_sha256=(
+                args.expected_freeze_execution_manifest_sha256
+            ),
             expected_context_plan_sha256=args.expected_context_plan_sha256,
             expected_fit_result_receipt_sha256=(args.expected_fit_result_receipt_sha256),
             expected_prior_campaign_sha256=args.expected_prior_campaign_sha256,

@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns public readiness-manifest qualification, not another root
+## Current override: Codex owns distinct DEVELOP_TEAM causal design and implementation
+
+Exact source `ece32d81a1bd7ad3de037ba14361ef2f00849e35` passed CI `32174872005/1`. The
+[manifest qualification](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json)
+(SHA-256 `c1ea4eb0249d92e95ac46b5c7674f4a7cd6d02f516483f2d86b9fdb1ab84507d`)
+records 24 focused tests, canonical exact public bindings, and zero protected effects. It froze no
+future-lane manifest and changed no counter. Retire `causal-readiness-manifest-qualification-v1`
+without retry. Keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal **0/1**, and logical atomic **0/1**.
+
+Codex owns `first-develop-team-causal-goal-outcome-v1`. Design, implement, mutation-test, and
+publish its distinct runner. The exact canonical manifest must validate before private access.
+Afterward, use only the first deterministic unused train root focused on `DEVELOP_TEAM`; never
+substitute. Allow one full-menu model choice and admit only one settled `+1` or `-1` satisfying both
+causal and atomic contracts. Reviewers remain read-only. No retry, teacher/fallback, fit,
+development label, authority, Crystal, or transfer belongs here.
+
+## Previous override: Codex owned public readiness-manifest qualification, not another root
 
 Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its sole
 action-free freeze returned `failed_closed` at `readiness_authentication`, with effects not attested
