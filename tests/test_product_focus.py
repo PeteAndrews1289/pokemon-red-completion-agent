@@ -113,6 +113,11 @@ RESETTABLE_MULTIROOT_IMPLEMENTATION_QUALIFICATION = (
     / "docs/evidence"
     / "resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json"
 )
+RESETTABLE_MULTIROOT_CONTEXT_ROLLOVER_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -330,6 +335,37 @@ def test_resettable_multiroot_implementation_is_qualified_without_gameplay() -> 
         "train_roots_frozen": 0,
         "trials_frozen": 0,
     }
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_multiroot_context_rollover_is_exclusion_only_and_zero_effect() -> None:
+    receipt = json.loads(
+        RESETTABLE_MULTIROOT_CONTEXT_ROLLOVER_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "published_context_rollover_repair_qualified_actual_freeze_not_started"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32165489924,
+        "source_bundle_sha256": (
+            "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17"
+        ),
+        "source_commit": "2cb18bf2e72362dd405a2198414ce946790e1f5f",
+        "worktree_dirty": False,
+    }
+    exclusion = receipt["historical_exclusion_contract"]
+    assert exclusion["historical_data_consumed"] == [
+        "root_lineage_id",
+        "state_sha256",
+        "envelope_sha256",
+    ]
+    assert exclusion["public_paired_runner_remains_strict"] is True
+    assert receipt["readiness_history"]["root_inventory_attempts"] == 0
+    assert receipt["readiness_history"]["root_inspections"] == 0
     assert set(receipt["zero_effects"].values()) == {0}
     assert set(receipt["counter_treatment"].values()) == {0}
 
@@ -817,8 +853,9 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "unexpected_failure" in encoded
     assert "candidate bundle 0" in encoded
     assert "actions 244/244" in encoded
-    assert "8 train / 4 development" in encoded
-    assert "113aa605" in encoded
+    assert "8 train / 4 dev" in encoded
+    assert "2cb18bf" in encoded
+    assert "root inspections 0" in encoded
     assert "not frozen" in encoded
     assert "stop before gameplay" in encoded
     assert "/Users/" not in encoded

@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+- Published the bounded multiroot context-rollover repair at exact source
+  `2cb18bf2e72362dd405a2198414ce946790e1f5f` under green CI `32165489924/1`. The
+  [qualification receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+  (SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+  records engineering and mission GO. Two invocations stopped in readiness before `_freeze` or
+  `_inspect_root`, first on an obsolete catalog operator binding and then on over-strict historical
+  context-plan equality; plan, root inspection/inventory, identity, claims, predictions, actions,
+  outcomes, fits, and comparisons stayed zero. The repair accepts exact-hash V1/V2 plans only as
+  lineage/state/envelope exclusion ledgers across an intentional context extension, with no reuse
+  or claim of outcomes, labels, menus, compatibility, or qualification; the public paired runner
+  remains strict. Active lane `resettable-goal-manager-multiroot-learning-v1`, counters
+  **30/15/4/3/0/0** and **14/4/0/1/1**, and the 8/4
+  one-decision-to-separate-two-decision rail are unchanged. The next step remains one actual
+  action-free six-root freeze and, on success, one zero-prediction exact-plan preflight before
+  gameplay.
+
 - Published and qualified the resettable multiroot implementation at exact source
   `113aa605a298337fb362f2e0b7d56e5c755b7380` under green CI `32163666327/1`. The
   [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

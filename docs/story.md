@@ -7,7 +7,25 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the root-diverse machine is built, but it has not played
+## Current checkpoint: two readiness stops fix the ledger boundary, not the game
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+(SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+records engineering and mission GO. Two calls stopped before the runner could freeze or inspect a
+root: one exposed an obsolete catalog operator binding, the next an over-strict historical
+context-plan equality. Neither made a plan, root inventory, identity, claim, model choice, button
+press, outcome, fit, or comparison.
+
+The repair lets two exact-hash historical plans say only which lineage and state/envelope pairs to
+exclude after the intentional context extension. Their old outcomes, labels, menus, compatibility,
+and qualification do not cross that boundary, and the public paired runner remains strict. The
+boards stay **30/15/4/3/0/0** and **14/4/0/1/1**. Active lane
+`resettable-goal-manager-multiroot-learning-v1` still gets one actual action-free six-root freeze
+and, only on success, one zero-prediction exact-plan preflight before play stops. The later 8/4
+one-decision result and separately frozen two-decision pilot rail do not change.
+
+## Previous checkpoint: the root-diverse machine was built, but it had not played
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

@@ -1,6 +1,25 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: the multiroot machine passes review, then stops before play
+## August 18 scene: two readiness stops narrow the rollover boundary
+
+Open on **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`) **· CI
+32165489924/1 GREEN · CONTEXT ROLLOVER QUALIFIED · ENGINEERING GO · MISSION GO**. Link the
+[rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+with **SHA-256 8B81DAF0…F86DC**.
+
+Show **READINESS CALL 1: OBSOLETE CATALOG OPERATOR BINDING** and **CALL 2: OVER-STRICT HISTORICAL
+CONTEXT-PLAN EQUALITY**, both stopping before **_FREEZE / _INSPECT_ROOT**. Overlay **PLAN 0 · ROOT
+INVENTORY 0 · INSPECTIONS 0 · IDENTITY 0 · CLAIMS 0 · PREDICTIONS 0 · ACTIONS 0 · OUTCOMES 0
+· FITS +0 · COMPARISONS +0**.
+
+Then show **EXACT-HASH V1/V2 → LINEAGE + STATE/ENVELOPE EXCLUSIONS ONLY**. Cross out
+**OUTCOMES**, **LABELS**, **MENUS**, **COMPATIBILITY**, and **QUALIFICATION**; stamp **PUBLIC
+PAIRED RUNNER STRICT**. Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**. The next rail stays
+**ONE ACTUAL ACTION-FREE SIX-ROOT FREEZE → IF PASS, ONE EXACT-PLAN ZERO-PREDICTION PREFLIGHT →
+STOP BEFORE GAMEPLAY**. The **8/4 ONE-DECISION → SEPARATELY FROZEN TWO-DECISION PILOT** rail is
+unchanged.
+
+## Previous August 18 scene: the multiroot machine passes review, then stops before play
 
 Open on **SOURCE 113AA60** (`113aa605a298337fb362f2e0b7d56e5c755b7380`) **· CI
 32163666327/1 GREEN · IMPLEMENTATION QUALIFIED**. Add **ENGINEERING GO · MISSION GO · CLAUDE

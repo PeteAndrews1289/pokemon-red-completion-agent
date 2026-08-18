@@ -97,8 +97,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The resettable multi-root curriculum implementation is published and independently "
-            "reviewed. Campaign freeze and zero-action preflight are next; gameplay has not begun."
+            "The resettable multi-root implementation and context-rollover repair are published. "
+            "The first actual freeze is next; no root was inspected and gameplay has not begun."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
@@ -182,9 +182,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "unexpected_failure · accepted fits 0 · candidate bundle 0 · retry 0"
             ),
             (
-                "Implementation · 113aa605 · CI 32163666327/1 green · reviews GO · "
-                "8 train / 4 development · not frozen · next action-free freeze + "
-                "zero-prediction preflight · stop before gameplay"
+                "Repair · 2cb18bf · CI 32165489924/1 green · GO · root inspections 0 · "
+                "8 train / 4 dev · not frozen · next freeze + preflight · stop before gameplay"
             ),
         ),
     )

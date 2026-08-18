@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: multiroot implementation qualified; freeze and preflight are next
+## 2026-08-18: bounded context rollover qualified; actual root inventory remains next
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+(SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+records engineering and mission GO. Two invocations stopped in readiness before `_freeze` and
+`_inspect_root`: an obsolete catalog operator binding, then over-strict historical context-plan
+equality. They created no plan, root inventory or inspection, identity, claim, prediction, action,
+outcome, fit, or comparison.
+
+The repair accepts exact-hash V1/V2 plans only as lineage/state/envelope exclusion ledgers across
+the intentional context extension. It reuses no outcome, label, or menu and proves no compatibility
+or qualification; the public paired runner stays strict. Counters remain **30/15/4/3/0/0** and
+**14/4/0/1/1**. Keep `resettable-goal-manager-multiroot-learning-v1` on one actual action-free
+six-root freeze and, only after success, one exact-plan zero-prediction preflight before stopping.
+The fixed 8/4 one-decision denominator and separately frozen two-decision rail remain unchanged.
+
+## Previous checkpoint — 2026-08-18: multiroot implementation qualified; freeze and preflight were next
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

@@ -6,7 +6,24 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free multiroot freeze and preflight
+## Current override: Codex owns the first actual multiroot root inventory
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+(SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+records engineering and mission GO. Two readiness invocations stopped before `_freeze` and
+`_inspect_root`, on obsolete catalog operator binding and then over-strict historical context-plan
+equality. They created zero plan, root inspection/inventory, identity, claims, predictions, actions,
+outcomes, fits, or comparisons.
+
+Codex keeps `resettable-goal-manager-multiroot-learning-v1` within the narrow repair: exact-hash
+V1/V2 plans provide only lineage/state/envelope exclusion ledgers across context extension; no
+outcome, label, menu, compatibility, or qualification is reused, and the public paired runner stays
+strict. Run one actual action-free six-root freeze and, only on success, one exact-plan
+zero-prediction preflight before stopping. Counters remain **30/15/4/3/0/0** and
+**14/4/0/1/1**; the 8/4 one-decision denominator and separate two-decision rail do not change.
+
+## Previous override: Codex owned one action-free multiroot freeze and preflight
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

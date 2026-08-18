@@ -1,0 +1,108 @@
+{
+  "active_lane": "resettable-goal-manager-multiroot-learning-v1",
+  "claim_boundary": {
+    "supported": "Exact published code admits two exact-hash historical Red campaign plans solely as root-lineage and state-envelope exclusion ledgers across one intentional current context-plan extension; every current root remains subject to the unchanged action-free inventory gate.",
+    "unsupported": [
+      "historical_campaign_compatibility_with_current_plan",
+      "historical_outcome_or_menu_reuse",
+      "current_root_qualification",
+      "campaign_plan_frozen",
+      "preflight_passed",
+      "gameplay_executed",
+      "verified_outcome_collected",
+      "accepted_model_fit",
+      "development_comparison",
+      "promotion_or_authority",
+      "red_completion",
+      "living_pokedex_completion",
+      "crystal_or_cross_title_transfer"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "historical_exclusion_contract": {
+    "current_context_plan_sha256": "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51",
+    "historical_campaign_to_context_plan_sha256": {
+      "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9": "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548",
+      "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14": "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548"
+    },
+    "historical_data_consumed": [
+      "root_lineage_id",
+      "state_sha256",
+      "envelope_sha256"
+    ],
+    "historical_data_forbidden": [
+      "outcomes",
+      "labels",
+      "menus",
+      "qualification",
+      "current_candidate_binding"
+    ],
+    "public_paired_runner_remains_strict": true,
+    "unapproved_campaign_or_context_digest_rejected": true
+  },
+  "implementation_bindings": {
+    "multiroot_runner_sha256": "336bf4855a236347cff12daacd3c23e469163793689057cb90b1c8eb863b8cc6",
+    "multiroot_runner_test_sha256": "52d79dc70a69c4a694ddeab985bede2131232edbc424dbc6dd3300b700b4c0c4",
+    "paired_runner_sha256": "ddbdc1f03fe07e00e35d8660719c98af34b4f46fa2267eecef21bc007927e3e3",
+    "paired_runner_test_sha256": "d4af12754a63afe50dcec99bfb9065d919765be60944e9d9193ff29f851b1fbe"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32165489924,
+    "source_bundle_sha256": "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17",
+    "source_commit": "2cb18bf2e72362dd405a2198414ce946790e1f5f",
+    "worktree_dirty": false
+  },
+  "readiness_history": {
+    "campaign_claims": 0,
+    "campaign_plan_created": false,
+    "failed_invocations_before_root_inventory": 2,
+    "failure_stage_public": "unexpected_failure",
+    "identity_created": false,
+    "root_inspections": 0,
+    "root_inventory_attempts": 0
+  },
+  "recorded_on": "2026-08-18",
+  "remaining_gate": {
+    "campaign_plan_created": false,
+    "campaign_preflight_passed": false,
+    "next": "Run the sole actual action-free six-root inventory freeze; if successful, run one exact-plan zero-prediction preflight and stop before gameplay.",
+    "root_inventory_attempts": 0
+  },
+  "review": {
+    "engineering_exact_diff": "GO",
+    "mission_and_claim_boundary": "GO"
+  },
+  "schema": "pokemon.red.resettable-goal-manager-multiroot-context-rollover-qualification.v1",
+  "status": "published_context_rollover_repair_qualified_actual_freeze_not_started",
+  "title_role": "Red readiness integration repair, not campaign readiness, gameplay, learning, promotion, completion, or transfer",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "campaign_claims": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames": 0,
+    "episode_attempts": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "root_inspections": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons": 0,
+    "verified_outcomes": 0
+  }
+}

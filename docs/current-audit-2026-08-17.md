@@ -1,6 +1,26 @@
 # Current audit — 2026-08-18
 
-## Current result: multiroot implementation qualified; campaign readiness remains unproved
+## Current result: bounded context rollover qualified; actual root inventory remains unstarted
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+has SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`;
+engineering and mission reviews are GO.
+
+Two invocations stopped in readiness before `_freeze` or `_inspect_root`. The first found an
+obsolete catalog operator binding; the second found over-strict equality with the historical
+context plan. Both retained plan creation 0, root-inventory attempts and inspections 0, identity 0,
+claims 0, predictions 0, actions 0, outcomes 0, fits 0, and comparisons 0.
+
+The repair admits the two exact-hash V1/V2 plans solely as root-lineage plus state/envelope
+exclusion ledgers across the intentional current context extension. It consumes no outcome, label,
+or menu; it establishes no historical/current compatibility, root qualification, or readiness. The
+public paired runner remains strict. Legacy counters stay **30/15/4/3/0/0** and product-focus-v2
+stays **14/4/0/1/1**. The sole next operation remains one actual action-free six-root freeze and,
+if successful, one exact-plan zero-prediction preflight before gameplay. The fixed 8/4
+one-decision denominator and separately frozen two-decision pilot gate remain unchanged.
+
+## Previous result: multiroot implementation qualified; campaign readiness remained unproved
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

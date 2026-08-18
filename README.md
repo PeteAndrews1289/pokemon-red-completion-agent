@@ -5,7 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): multiroot implementation qualified; action-free
+> **Current product focus (August 18, 2026): bounded context rollover qualified; the actual freeze
+> is still unstarted.** Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI
+> `32165489924/1`. The
+> [rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+> (SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+> records engineering and mission GO. Two invocations stopped in readiness before `_freeze` or
+> `_inspect_root`: first on an obsolete catalog operator binding, then on over-strict equality with
+> the historical context plan. Plan creation, root inventory/inspection, identity, claims,
+> predictions, actions, outcomes, fits, and comparisons were all zero.
+>
+> The repair admits only exact-hash V1/V2 historical plans as lineage plus state/envelope exclusion
+> ledgers across the intentional context extension. It consumes no historical outcomes, labels, or
+> menus and proves no compatibility, root qualification, or current readiness; the public paired
+> runner remains strict. Counters stay **30/15/4/3/0/0** and **14/4/0/1/1**. In
+> `resettable-goal-manager-multiroot-learning-v1`, the sole next operation remains one actual
+> action-free six-root freeze and, if successful, one exact-plan zero-prediction preflight before a
+> gameplay stop. The separately frozen two-decision rail and fixed 8/4 one-decision denominator do
+> not change.
+
+> **Previous product focus (August 18, 2026): multiroot implementation qualified; action-free
 > freeze next.** Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI
 > `32163666327/1`. The
 > [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

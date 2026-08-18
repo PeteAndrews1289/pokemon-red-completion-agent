@@ -5,7 +5,25 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 113AA60** (`113aa605a298337fb362f2e0b7d56e5c755b7380`)
+> **Current rail:** Show **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`)
+> **· CI 32165489924/1 GREEN · CONTEXT ROLLOVER QUALIFIED · ENGINEERING GO · MISSION GO**.
+> Link the
+> [rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+> and display **SHA-256 8B81DAF0E0F37657705A4DF1EE2AC0A9C25D11593FDC6E09C85A5F2AAB7F86DC**.
+>
+> Show **READINESS INVOCATIONS 2 · STOPPED BEFORE _FREEZE/_INSPECT_ROOT · OBSOLETE CATALOG
+> OPERATOR BINDING → OVER-STRICT HISTORICAL CONTEXT-PLAN EQUALITY · PLAN 0 · ROOT INVENTORY 0 ·
+> ROOT INSPECTIONS 0 · IDENTITY 0 · CLAIMS 0 · PREDICTIONS 0 · ACTIONS 0 · OUTCOMES 0 · FITS
+> +0 · COMPARISONS +0**. Mark **EXACT-HASH V1/V2 ONLY · LINEAGE + STATE/ENVELOPE EXCLUSION
+> LEDGER ONLY · OUTCOMES/LABELS/MENUS/COMPATIBILITY/QUALIFICATION 0 · PUBLIC PAIRED RUNNER
+> STRICT**.
+>
+> Keep `resettable-goal-manager-multiroot-learning-v1`, boards **30/15/4/3/0/0** and
+> **14/4/0/1/1**, and the next rail **ONE ACTUAL ACTION-FREE SIX-ROOT FREEZE → IF SUCCESS, ONE
+> EXACT-PLAN ZERO-PREDICTION PREFLIGHT → STOP BEFORE GAMEPLAY**. The fixed **8 TRAIN / 4
+> DEVELOPMENT / ONE DECISION → SEPARATELY FROZEN TWO-DECISION PILOT** rail is unchanged.
+>
+> **Previous rail:** Show **SOURCE 113AA60** (`113aa605a298337fb362f2e0b7d56e5c755b7380`)
 > **· CI 32163666327/1 GREEN · MULTIROOT IMPLEMENTATION QUALIFIED · ENGINEERING GO · MISSION GO
 > · CLAUDE APPROVE + 2 ROM-FREE TESTS COMPLETE · ANTIGRAVITY GO**. Link the
 > [implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

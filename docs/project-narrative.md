@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: the root-diverse implementation qualifies; private readiness is next
+## August 18: context rollover is narrowed to exclusion evidence
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+(SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+records engineering and mission GO. Two invocations stopped in readiness before `_freeze` or
+`_inspect_root`, first because of an obsolete catalog operator binding and then over-strict
+historical context-plan equality. They created no plan, root inventory/inspection, identity, claim,
+prediction, action, outcome, fit, or comparison.
+
+The bounded repair admits exact-hash V1/V2 plans only as lineage/state/envelope exclusion ledgers
+across the intentional context extension. It imports no outcomes, labels, or menus and proves no
+compatibility or qualification; the public paired runner remains strict. Counters stay
+**30/15/4/3/0/0** and **14/4/0/1/1**. Active lane
+`resettable-goal-manager-multiroot-learning-v1` still proceeds to one actual action-free six-root
+freeze and, only on success, one zero-prediction exact-plan preflight before gameplay. The 8/4
+one-decision denominator and separately frozen two-decision composition rail remain unchanged.
+
+## Previous August 18 checkpoint: the root-diverse implementation qualifies; private readiness is next
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation qualification](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)

@@ -1,7 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-18 multiroot implementation qualified; action-free freeze/preflight is the only current
-> work — highest checkpoint:** Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380`
+> **2026-08-18 bounded context rollover qualified; the actual freeze remains the only current work
+> — highest checkpoint:** Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI
+> `32165489924/1`. The
+> [rollover receipt](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+> (SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+> records engineering and mission GO. Two invocations stopped during readiness before `_freeze` or
+> `_inspect_root`: obsolete catalog operator binding, then over-strict historical context-plan
+> equality. Plan, root inventory/inspection, identity, claims, predictions, actions, outcomes, fits,
+> and comparisons remain zero.
+>
+> The repair lets two exact-hash V1/V2 plans contribute only lineage/state/envelope exclusions
+> across the intentional context extension. Historical outcomes, labels, menus, compatibility, and
+> qualification remain unavailable; the public paired runner stays strict. Codex keeps
+> `resettable-goal-manager-multiroot-learning-v1` on one actual action-free six-root freeze and,
+> only if successful, one exact-plan zero-prediction preflight followed by a gameplay stop. Keep
+> **30/15/4/3/0/0**, **14/4/0/1/1**, the fixed 8/4 one-decision denominator, and the separately
+> frozen two-decision rail unchanged.
+
+> **Previous checkpoint — 2026-08-18 multiroot implementation qualified; action-free
+> freeze/preflight was next:** Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380`
 > passed CI `32163666327/1`. The
 > [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
 > (SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)

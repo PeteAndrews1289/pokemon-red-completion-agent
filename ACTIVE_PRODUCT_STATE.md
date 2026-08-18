@@ -61,16 +61,16 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-resettable-multiroot-implementation-qualified** · status **active** · evidence [qualification](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+**2026-08-18-multiroot-context-rollover-qualified** · status **active** · evidence [qualification](docs/evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | This is the final readiness gate for the first compact root-diverse Red goal-selection curriculum. A later favorable one-decision result permits only a separately frozen two-decision composition pilot, not authority or transfer. |
-| Learning output | No new measured learning output. Source 113aa605a298337fb362f2e0b7d56e5c755b7380 passed CI run 32163666327 attempt 1; engineering, mission, Claude, and Antigravity reviews approved the bounded implementation. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. |
+| Learning output | No new measured learning output. Source 2cb18bf2e72362dd405a2198414ce946790e1f5f passed CI 32165489924/1 after the bounded context-rollover repair. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. |
 | Authority delta | None. Published implementation and review evidence add no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority. |
 | Transfer result | Not run. Crystal remains closed; this implementation and its action-free readiness gate are Red curriculum prerequisites only. |
-| Blocker | No implementation blocker remains. The current private context inventory has not yet been frozen into the exact six-root campaign, so root availability and preflight readiness remain unproved. |
-| Decision | The resettable multi-root campaign, strict train-only admission, one shadow fit, and one untouched comparison are implemented and reviewed. Run exactly one action-free campaign freeze and, only if it succeeds, one exact-plan preflight; stop before gameplay. |
+| Blocker | No implementation blocker remains. Two readiness invocations stopped before root inventory: one used an obsolete catalog path and one exposed an over-strict historical context-plan equality. No plan, root inspection, identity, claim, prediction, or action occurred. |
+| Decision | Published source 2cb18bf preserves exact historical campaign authentication while using those plans only as root-exclusion ledgers across the intentional context extension. Run the sole actual action-free freeze and, only if it succeeds, one exact-plan preflight; stop before gameplay. |
 | Next session | Run one exact-head action-free six-root campaign freeze and, only on success, one exact-plan zero-prediction preflight. Stop before execute or resume; gameplay remains a separate reorientation. |
 | Next falsifier | The action-free freeze must find four train roots and two distinct development roots, with no physical or lineage overlap and the frozen acquisition, storage, team, and recovery focus strata. Otherwise close the attempt without a root-specific patch. |
 | Stop condition | Stop before controller input. Any missing root stratum, train/development overlap, prior-root reuse, private binding drift, prediction, action, teacher query, fallback, sealed Red access, Crystal access, or root-specific repair closes this readiness attempt. |

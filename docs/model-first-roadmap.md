@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: multiroot code is qualified; prove the private boundary action-free
+## Current checkpoint: context rollover is bounded; actual root inventory remains unstarted
+
+Exact source `2cb18bf2e72362dd405a2198414ce946790e1f5f` passed CI `32165489924/1`. The
+[rollover qualification](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+(SHA-256 `8b81daf0e0f37657705a4df1ee2ac0a9c25d11593fdc6e09c85a5f2aab7f86dc`)
+records engineering and mission GO. Two invocations stopped during readiness before `_freeze` or
+`_inspect_root`: obsolete catalog operator binding, then over-strict historical context-plan
+equality. No plan, root inventory/inspection, identity, claim, prediction, action, outcome, fit, or
+comparison resulted.
+
+Only exact-hash V1/V2 historical plans may now supply lineage/state/envelope exclusions across the
+intentional context extension. They supply no outcomes, labels, menus, compatibility, or current
+qualification, and the public paired runner stays strict. Boards remain **30/15/4/3/0/0** and
+**14/4/0/1/1**. In `resettable-goal-manager-multiroot-learning-v1`, run one actual action-free
+six-root freeze and, only if it succeeds, one exact-plan zero-prediction preflight before stopping.
+The 8/4 one-decision denominator and separately frozen two-decision composition pilot gate remain
+unchanged.
+
+## Previous checkpoint: multiroot code is qualified; prove the private boundary action-free
 
 Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
 [implementation qualification](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
