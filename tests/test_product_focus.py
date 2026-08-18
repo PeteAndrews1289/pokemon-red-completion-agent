@@ -54,6 +54,10 @@ COMPOSITION_V4_DESIGN = (
 PREFLIGHT_OBSERVABILITY = (
     PROJECT_ROOT / "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json"
 )
+REPEATABLE_FOCUS_INVENTORY = (
+    PROJECT_ROOT
+    / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -73,6 +77,28 @@ def _active(document: dict[str, object]) -> dict[str, object]:
     active = [lane for lane in lanes if isinstance(lane, dict) and lane.get("status") == "active"]
     assert len(active) == 1
     return active[0]
+
+
+def test_repeatable_focus_inventory_replaces_only_the_dead_story_stratum() -> None:
+    receipt = json.loads(REPEATABLE_FOCUS_INVENTORY.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "action_free_inventory_complete_focus_correction_required"
+    assert receipt["inventory"]["advance_story"]["eligible_multi_choice_roots"] == 0
+    assert receipt["inventory"]["develop_team"] == {
+        "eligible_multi_choice_roots": 6,
+        "historically_open_roots": 6,
+        "story_candidate_present_in_every_eligible_menu": True,
+        "train_focus_roots": 6,
+    }
+    assert receipt["campaign_effect"] == {
+        "campaign_plan_created": False,
+        "focus_stratum_replaced": "advance_story",
+        "replacement_focus_stratum": "develop_team",
+        "root_lineages_frozen": 0,
+        "trials_claimed": 0,
+    }
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
 
 
 def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progress() -> None:
@@ -458,13 +484,15 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Publish runner + green CI" in encoded
-    assert "freeze 4 authenticated train roots" in encoded
+    assert "Publish focus correction + green CI" in encoded
+    assert "freeze develop-team" in encoded
     assert "root closed" in encoded
     assert "retry forbidden" in encoded
     assert "execution identity 0" in encoded
     assert "V3 preflight failed at action_free_admission" in encoded
-    assert "Repeatable lane current" in encoded
+    assert "Focus correction current" in encoded
+    assert "story focus multi-choice 0/6" in encoded
+    assert "develop-team 6/6" in encoded
     assert "frozen roots 0" in encoded
     assert "claimed trials 0" in encoded
     assert "advanced frames 0" in encoded

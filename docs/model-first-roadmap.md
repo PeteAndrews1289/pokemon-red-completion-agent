@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-17. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-18. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,30 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: repeatable-development candidate audit GO; publish before qualification
+## Current checkpoint: inventory rejects story focus; publish the four viable strata
+
+Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
+attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or
+global claim, made no prediction or controller action, advanced no frame, produced no outcome, and
+changed no counter. The
+[path-free inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) define
+the public boundary.
+
+`ADVANCE_STORY` was multi-choice in **0/6** focus checks. `DEVELOP_TEAM` was **6/6**, with story a
+candidate in every eligible menu; `RESTORE_TEAM`, `MANAGE_STORAGE`, and `ACQUIRE_SPECIES` were each
+**6/6**. The uncommitted correction makes those four kinds the focus strata while keeping exactly
+four roots/twelve trials, forbidding model-guided campaign selection, and excluding evolution
+pending lineage evidence. Mission review is **GO**: story may be selected from an eligible menu but
+is not a focus stratum or outcome unless selected and settled.
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**, and all five product-focus-v2 counters remain zero. Publish the corrected runner, require green
+CI on its exact head, then run one freeze/preflight. A `training_ready` result for **12/12** proceeds
+directly to the fixed pilot; do not add another qualification loop. Nothing here is gameplay,
+training, a fit, authority, or transfer.
+
+## Previous checkpoint: repeatable-development candidate audit GO; publish before qualification
 
 The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
 byte-frozen and its independent exact-byte audit verdict is **GO**. It authenticates the exact

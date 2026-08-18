@@ -13,11 +13,22 @@
   "campaign": {
     "decisions_per_trial_maximum": 3,
     "focus_goal_kinds": [
-      "advance_story",
+      "develop_team",
       "restore_team",
       "manage_storage",
       "acquire_species"
     ],
+    "focus_correction": {
+      "action_free_inventory_only": true,
+      "advance_story_focus_open_train_roots": 6,
+      "advance_story_focus_multi_choice_roots": 0,
+      "develop_team_focus_open_train_roots": 6,
+      "develop_team_focus_multi_choice_roots": 6,
+      "model_guided_selection": false,
+      "rationale": "A one-choice story-focused root cannot provide a strategic learning target. Develop-team roots preserve genuine multi-choice signal and expose advance-story as a competing candidate without pretending story was a focus stratum.",
+      "controller_actions": 0,
+      "emulator_frames_advanced": 0
+    },
     "historical_selected_labels_accessible_to_authority": false,
     "initial_executable_choices_minimum": 2,
     "evolution_goals_authorized": false,
@@ -89,7 +100,7 @@
     "skill_manifest": "exact_current_source_manifest_required",
     "source_bundle": "exact_published_bundle_required"
   },
-  "implementation_status": "candidate_complete_under_independent_review_no_campaign_freeze_no_gameplay",
+  "implementation_status": "published_candidate_failed_action_free_inventory_story_focus_had_no_multi_choice_root_focus_repaired_without_campaign_freeze_or_gameplay",
   "learning_objective": {
     "failure_reward": -1.0,
     "interrupted_choices": "retained_without_update_target",

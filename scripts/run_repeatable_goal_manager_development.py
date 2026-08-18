@@ -125,7 +125,7 @@ PROJECT_ROOT = _BOOTSTRAP_PROJECT_ROOT
 CONTEXT_PLAN_SCHEMA = "pokemon-red-private-goal-manager-context-plan-v1"
 CAMPAIGN_SCHEMA = "pokemon.red.repeatable-goal-manager-development-campaign.v1"
 REQUIRED_FOCUS_KINDS = (
-    GoalKind.ADVANCE_STORY,
+    GoalKind.DEVELOP_TEAM,
     GoalKind.RESTORE_TEAM,
     GoalKind.MANAGE_STORAGE,
     GoalKind.ACQUIRE_SPECIES,

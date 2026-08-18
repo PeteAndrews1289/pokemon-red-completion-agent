@@ -7,7 +7,31 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the repeatable candidate clears review, but not the starting line
+## Current checkpoint: story stays in the menu, but leaves the quota
+
+Exact source `18bba56d` passed CI run `32100873786`, attempt 1. The zero-action freeze/preflight
+reached action-free inventory and stopped there: no campaign or global claim, no prediction or
+controller input, no advanced frame or outcome, and no counter change. The
+[path-free inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+makes that pause inspectable alongside the
+[frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+
+The surprise was not that story disappeared. It appeared in every eligible team-development menu.
+The problem was quota design: story itself produced a real multi-choice focus menu in **0/6**
+checks, while team development, recovery, storage, and acquisition each produced **6/6**. The
+uncommitted correction makes those four the focus strata, keeps four roots and twelve trials,
+forbids model-guided campaign selection, and leaves evolution out until lineage is provable. Mission
+review is **GO**. Story can still win a learned choice, but it becomes an outcome only when selected
+and settled; the experiment does not promise one in advance.
+
+Both scoreboards remain unchanged: **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY
+ZERO · TRANSFER ZERO**, with all five new counters at zero. Next comes publication, exact-head green
+CI, and one freeze/preflight. A `training_ready` **12/12** result goes directly to the fixed pilot,
+not another qualification loop. Nothing here is gameplay or a learning result.
+
+---
+
+## Previous checkpoint: the repeatable candidate clears review, but not the starting line
 
 The repeatable-development implementation is now frozen byte for byte, and an independent audit
 says **GO**. Before it can read protected material, it must prove the exact external source,

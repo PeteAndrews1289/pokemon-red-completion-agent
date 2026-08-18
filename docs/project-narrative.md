@@ -1,6 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: repeatable-development candidate passes exact-byte review
+## August 18: action-free inventory corrects the outcome strata
+
+Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
+attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or
+global claim, made no prediction or controller action, advanced no frame, produced no outcome, and
+changed no counter. The
+[path-free inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) preserve
+that boundary.
+
+The inventory found `ADVANCE_STORY` focus multi-choice in **0/6** checks. `DEVELOP_TEAM` was **6/6**,
+with story still a candidate in every eligible menu; `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES` were each **6/6**. The uncommitted correction uses those four viable focus strata,
+retains the exact four-root/twelve-trial campaign, forbids model-guided campaign selection, and
+excludes evolution until lineage evidence exists. Mission review is **GO**. This keeps story in the
+model's choice set without predeclaring it as a focus stratum or outcome; only a selected and settled
+story decision counts.
+
+No legacy or product-focus-v2 counter moved; the board remains 30/15/3/3/0/0 with all five new
+counters zero. Publish the corrected runner, require green CI on the exact head, then run one
+freeze/preflight. If `training_ready` is **12/12**, proceed directly to the fixed pilot and do not
+open another qualification loop. No gameplay, fit, authority, or transfer is claimed.
+
+## Previous August 17 checkpoint: repeatable-development candidate passes exact-byte review
 
 The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
 byte-frozen and its independent exact-byte audit verdict is **GO**. Before protected reads it

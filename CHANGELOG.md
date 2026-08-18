@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published repeatable-development candidate source `18bba56d13e32a453c173cbc17d98bef3b1b4030`
+  under green CI run `32100873786` attempt 1, then ran its zero-action freeze/preflight. It reached
+  action-free inventory but created no campaign or global claim, made no prediction or controller
+  action, advanced no frame, produced no outcome, and changed no counter. The
+  [path-free inventory receipt](docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+  records `ADVANCE_STORY` focus at 0/6 multi-choice; `DEVELOP_TEAM` at 6/6 with story present in every
+  eligible menu; and recovery, storage, and acquisition each at 6/6. An uncommitted, mission-review
+  **GO** correction changes the focus strata to `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+  `ACQUIRE_SPECIES`, keeps four roots/twelve trials with no model-guided campaign selection, and
+  excludes evolution pending lineage evidence. Story remains candidate-only unless selected and
+  settled. The board remains 30/15/3/3/0/0 and all five v2 counters remain zero. Next: publish the
+  correction, require exact-head green CI, then run one freeze/preflight; `training_ready` 12/12
+  leads directly to the fixed pilot without another qualification loop.
 - Froze the repeatable goal-manager development implementation candidate and received an independent
   exact-byte audit verdict of **GO**. The candidate attests the exact external source, runtime,
   model, context plan, NumPy, and PyBoy before protected reads; fixes an exact four-root,

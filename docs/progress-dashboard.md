@@ -5,7 +5,26 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current repeatable-development qualification rail:** Display
+> **Current repeatable-development focus-inventory rail:** Show **SOURCE 18BBA56 · CI
+> 32100873786/1 GREEN · ZERO-ACTION FREEZE/PREFLIGHT REACHED ACTION-FREE INVENTORY · CAMPAIGN 0 ·
+> GLOBAL CLAIM 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · OUTCOMES 0 · COUNTER DELTA 0**.
+> Link the
+> [inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+> and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+>
+> Show **ADVANCE_STORY FOCUS MULTI-CHOICE 0/6 · DEVELOP_TEAM 6/6 + STORY CANDIDATE IN EVERY ELIGIBLE
+> MENU · RESTORE_TEAM 6/6 · MANAGE_STORAGE 6/6 · ACQUIRE_SPECIES 6/6**. Mark **UNCOMMITTED
+> CORRECTION · MISSION REVIEW GO · FOUR ROOTS/12 TRIALS UNCHANGED · MODEL-GUIDED CAMPAIGN SELECTION 0
+> · EVOLUTION EXCLUDED PENDING LINEAGE EVIDENCE · STORY = CANDIDATE ONLY, OUTCOME ONLY IF SELECTED +
+> SETTLED**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> five product-focus-v2 counters at zero. The next rail is **PUBLISH CORRECTED RUNNER → EXACT-HEAD
+> GREEN CI → ONE FREEZE/PREFLIGHT → IF TRAINING_READY 12/12, FIXED PILOT DIRECTLY**. Display **NO
+> FURTHER QUALIFICATION LOOP** and do not show gameplay, a fit, authority, transfer, or campaign
+> progress.
+>
+> **Historical exact-byte-audit rail:** Display
 > `repeatable-goal-manager-development-qualification-v1` and show **EXACT-BYTE CANDIDATE FROZEN ·
 > INDEPENDENT AUDIT GO · UNPUBLISHED · UNQUALIFIED**. Show **EXACT EXTERNAL SOURCE + RUNTIME + MODEL
 > + CONTEXT PLAN + NUMPY + PYBOY ATTESTED BEFORE PROTECTED READS · EXACTLY 4 AUTHENTICATED NONSEALED

@@ -37,14 +37,17 @@ SCRIPT = runpy.run_path(
 
 def _campaign() -> dict[str, object]:
     campaign_id = "a" * 64
-    focus_kinds = ("advance_story", "restore_team", "manage_storage", "acquire_species")
+    focus_kinds = ("develop_team", "restore_team", "manage_storage", "acquire_species")
     roots = []
     for index, focus_kind in enumerate(focus_kinds):
         digest = f"{index + 1:x}" * 64
+        available_goal_kinds = [focus_kind, "explore"]
+        if focus_kind == GoalKind.DEVELOP_TEAM.value:
+            available_goal_kinds = [focus_kind, GoalKind.ADVANCE_STORY.value]
         roots.append(
             {
                 "assignment_id": digest,
-                "available_goal_kinds": [focus_kind, "explore"],
+                "available_goal_kinds": available_goal_kinds,
                 "available_menu_sha256": digest,
                 "binding_manifest_sha256": digest,
                 "capture_id": f"red-goal-v1-{index + 1:02d}-train",
@@ -99,6 +102,19 @@ def test_parser_separates_freeze_preflight_and_execution() -> None:
 
 def test_campaign_layout_freezes_four_roots_and_twelve_exact_trials() -> None:
     SCRIPT["_validate_campaign_layout"](_campaign())
+
+
+def test_campaign_focuses_have_real_choice_signal_and_keep_story_as_a_candidate() -> None:
+    assert tuple(SCRIPT["REQUIRED_FOCUS_KINDS"]) == (
+        GoalKind.DEVELOP_TEAM,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.MANAGE_STORAGE,
+        GoalKind.ACQUIRE_SPECIES,
+    )
+
+    develop_root = _campaign()["roots"][0]
+    assert develop_root["focus_kind"] == GoalKind.DEVELOP_TEAM.value
+    assert GoalKind.ADVANCE_STORY.value in develop_root["available_goal_kinds"]
 
 
 def test_freeze_produced_real_identifier_shapes_round_trip_through_campaign_loader(

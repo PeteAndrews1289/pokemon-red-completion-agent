@@ -100,9 +100,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "V4 failed safely before prediction or controller input and its exact root is "
-            "closed. The active lane now qualifies a repeatable, teacher-free Red development "
-            "campaign so model-led successes and failures can finally become training evidence."
+            "The action-free inventory found no genuine choice in the story-focused roots. "
+            "The campaign now uses develop-team roots, whose menus preserve a real "
+            "preparation-versus-story choice, alongside recovery, storage, and acquisition."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Repeatable development qualification · no campaign freeze or gameplay yet",
@@ -110,7 +110,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         model=DashboardModelState(
             mode="waiting",
             candidate="Promoted Red goal manager af29d7e7… · logged exploratory policy",
-            choice="Publish runner + green CI · freeze 4 roots / 12 trials · preflight",
+            choice="Publish focus correction + green CI · freeze 4 roots / 12 trials · preflight",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -168,8 +168,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Training rail · publish exact runner → freeze 4 authenticated train roots / "
-                "12 trials → zero-action preflight → model-led durable outcomes"
+                "Training rail · publish focus-corrected runner → freeze develop-team / "
+                "recovery / storage / acquisition roots → zero-action preflight → "
+                "model-led durable outcomes"
             ),
             (
                 "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
@@ -181,8 +182,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "advanced frames 0 · exact root closed · no cause inferred · no retry"
             ),
             (
-                "Repeatable lane current · frozen roots 0 · claimed trials 0 · predictions 0 "
-                "· controller 0 · outcomes 0 · teacher 0 · Crystal 0"
+                "Focus correction current · story focus multi-choice 0/6 · develop-team 6/6 "
+                "· frozen roots 0 · claimed trials 0 · predictions 0 · controller 0 · "
+                "outcomes 0 · teacher 0 · Crystal 0"
             ),
         ),
     )

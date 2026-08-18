@@ -5,7 +5,30 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the repeatable-development candidate passed its
+> **Current product focus (August 18, 2026): the first repeatable-development inventory stopped
+> safely; correct the focus strata before one final preflight.** Exact published source
+> `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed GitHub CI run `32100873786`, attempt 1. Its
+> zero-action freeze/preflight reached the action-free inventory but created no campaign or global
+> claim, made no prediction or controller action, advanced no frame, produced no outcome, and
+> changed no counter. See the
+> [path-free inventory receipt](docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+> and [frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+>
+> The inventory found `ADVANCE_STORY` multi-choice in **0/6** focus checks. `DEVELOP_TEAM` was
+> multi-choice in **6/6**, with story present as a candidate in every eligible menu; `RESTORE_TEAM`,
+> `MANAGE_STORAGE`, and `ACQUIRE_SPECIES` were each multi-choice in **6/6**. The uncommitted
+> correction therefore uses those four viable focus strata while retaining four roots and twelve
+> trials, forbidding model-guided campaign selection, and excluding evolution pending lineage
+> evidence. Mission review is **GO**: story remains a candidate, not a focus stratum or outcome unless
+> the learned policy selects it and the result settles.
+>
+> The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+> transfer 0**, and all five product-focus-v2 counters remain zero. Next, publish the corrected
+> runner, require green CI on its exact head, then run one freeze/preflight. If and only if it reports
+> `training_ready` for **12/12**, proceed directly to the fixed pilot; do not add another
+> qualification loop. No campaign, claim, gameplay, fit, authority, or transfer exists yet.
+>
+> **Previous product focus (August 17, 2026): the repeatable-development candidate passed its
 > independent exact-byte audit; publish before qualification.** The implementation for
 > `repeatable-goal-manager-development-qualification-v1` is byte-frozen and the independent audit
 > verdict is **GO**. Before any protected read it attests the exact external source, runtime, model,

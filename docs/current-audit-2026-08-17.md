@@ -1,6 +1,30 @@
-# Current audit — 2026-08-17
+# Current audit — 2026-08-18
 
-## Current result: repeatable-development candidate passed independent exact-byte audit
+## Current result: action-free inventory rejects story as a focus stratum
+
+Exact published source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
+`32100873786`, attempt 1. Its zero-action freeze/preflight reached action-free inventory and stopped
+without creating a campaign or global claim, making a prediction or controller action, advancing a
+frame, producing an outcome, or changing a counter. The
+[path-free inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) record
+the result and contract.
+
+`ADVANCE_STORY` was multi-choice in **0/6** focus checks. `DEVELOP_TEAM` was **6/6**, with story
+present as a candidate in every eligible menu. `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES` were each **6/6**. The uncommitted correction changes the four focus strata to
+those viable kinds, keeps four roots/twelve trials without model-guided campaign selection, and
+keeps evolution excluded pending lineage evidence. Mission review is **GO**. Story is a candidate,
+not a focus stratum or outcome unless the learned policy selects it and the result settles.
+
+The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**; product-focus-v2 remains **development attempts 0 · verified outcome examples 0 ·
+atomic episodes 0 · composition attempts 0 · verified compositions 0**. Publish the corrected
+runner, require green CI on its exact head, then run one freeze/preflight. If it reports
+`training_ready` for **12/12**, proceed directly to the fixed pilot without another qualification
+loop. This checkpoint supplies no gameplay, training result, fit, authority, or transfer.
+
+## Previous result: repeatable-development candidate passed independent exact-byte audit
 
 The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
 byte-frozen and the independent exact-byte audit verdict is **GO**. Before any protected read it

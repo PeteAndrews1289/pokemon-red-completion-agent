@@ -1,7 +1,28 @@
 # Three-agent coordination
 
-> **2026-08-17 repeatable-development candidate audit GO; publication is the only active lane —
-> highest checkpoint:** The implementation for
+> **2026-08-18 action-free inventory result; corrected focus publication is the only active lane —
+> highest checkpoint:** Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
+> `32100873786` attempt 1. Its zero-action freeze/preflight reached action-free inventory but created
+> no campaign or global claim, made no prediction or controller action, advanced no frame, produced
+> no outcome, and changed no counter. Link the
+> [inventory receipt](docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+> and [frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+>
+> Inventory is `ADVANCE_STORY` focus **0/6** multi-choice; `DEVELOP_TEAM` **6/6**, with story a
+> candidate in every eligible menu; and `RESTORE_TEAM`, `MANAGE_STORAGE`, and `ACQUIRE_SPECIES` each
+> **6/6**. The uncommitted correction uses those four viable focus strata, keeps four roots/twelve
+> trials, forbids model-guided campaign selection, and excludes evolution pending lineage evidence.
+> Mission review is **GO**. Story is candidate-only and is not a focus-stratum outcome unless the
+> learned policy selects it and independent settlement completes.
+>
+> Codex owns only correction publication and exact-head green CI, followed by one freeze/preflight.
+> If it reports `training_ready` **12/12**, proceed directly to the fixed pilot; no agent may add a
+> qualification loop. No campaign, claim, prediction, action, advanced frame, gameplay, outcome, or
+> fit exists. Legacy counters remain 30/15/3/3/0/0 and all five product-focus-v2 counters remain
+> zero; authority and transfer remain zero.
+>
+> **2026-08-17 repeatable-development candidate audit GO; publication was the only active lane —
+> historical checkpoint:** The implementation for
 > `repeatable-goal-manager-development-qualification-v1` is byte-frozen and its independent
 > exact-byte audit verdict is **GO**. It attests the exact external source, runtime, model, context
 > plan, NumPy, and PyBoy before any protected read. The campaign contract is exactly four

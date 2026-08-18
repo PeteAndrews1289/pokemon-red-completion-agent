@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: exact-byte review says GO; the campaign still has not started
+## August 18 scene: story stays selectable, but the quota changes
+
+Open on **SOURCE 18BBA56 · CI 32100873786/1 GREEN · ZERO-ACTION FREEZE/PREFLIGHT → ACTION-FREE
+INVENTORY**. Stamp **CAMPAIGN 0 · GLOBAL CLAIM 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0
+· OUTCOMES 0 · COUNTER DELTA 0** and link the
+[inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+plus the [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+
+Reveal the inventory cards: **ADVANCE_STORY FOCUS 0/6 MULTI-CHOICE**; **DEVELOP_TEAM 6/6, STORY
+CANDIDATE IN EVERY ELIGIBLE MENU**; **RESTORE_TEAM 6/6 · MANAGE_STORAGE 6/6 · ACQUIRE_SPECIES 6/6**.
+Replace the focus strip with **DEVELOP TEAM · RESTORE TEAM · MANAGE STORAGE · ACQUIRE SPECIES** and
+stamp **UNCOMMITTED CORRECTION · MISSION REVIEW GO · FOUR ROOTS/12 TRIALS · MODEL-GUIDED CAMPAIGN
+SELECTION 0 · EVOLUTION EXCLUDED PENDING LINEAGE EVIDENCE**. Narration: **“Story did not disappear.
+It stays a candidate, and counts only if the learned policy selects it and the outcome settles.”**
+
+Keep **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0** and all five
+new counters at zero. End on **PUBLISH CORRECTED RUNNER → EXACT-HEAD GREEN CI → ONE
+FREEZE/PREFLIGHT → TRAINING_READY 12/12 → FIXED PILOT** and add **NO FURTHER QUALIFICATION LOOP**.
+Do not animate gameplay, an outcome, a fit, authority, or transfer.
+
+## Previous August 17 scene: exact-byte review says GO; the campaign still had not started
 
 Open on **REPEATABLE-DEVELOPMENT CANDIDATE · EXACT BYTES FROZEN · INDEPENDENT AUDIT GO · UNPUBLISHED
 · UNQUALIFIED**. Reveal the pre-read attestation strip: **EXTERNAL SOURCE · RUNTIME · MODEL · CONTEXT

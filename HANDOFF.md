@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-17 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-18 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -18,7 +18,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Repeatable-development candidate audit GO; publish before qualification — 2026-08-17
+## Action-free inventory stops; publish the corrected focus strata — 2026-08-18
+
+Exact published source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
+`32100873786`, attempt 1. Its zero-action freeze/preflight reached the action-free inventory and
+stopped without creating a campaign or global claim, making a prediction or controller action,
+advancing a frame, producing an outcome, or changing a counter. See the
+[path-free inventory receipt](docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+and [frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+
+The inventory measured `ADVANCE_STORY` as multi-choice in **0/6** focus checks. `DEVELOP_TEAM` was
+multi-choice in **6/6**, and story remained a candidate in all six eligible menus. `RESTORE_TEAM`,
+`MANAGE_STORAGE`, and `ACQUIRE_SPECIES` were also each **6/6**. The uncommitted correction changes
+the four focus strata to those viable kinds, keeps the exact four-root/twelve-trial campaign,
+forbids model-guided campaign selection, and keeps evolution excluded pending lineage evidence.
+Mission review is **GO**: story is candidate-only and becomes an outcome only if selected by the
+learned policy and independently settled.
+
+Nothing was trained or counted. The legacy board remains **train 30 · development 15 · fits 3 ·
+comparisons 3 · authority 0 · transfer 0**, and all five product-focus-v2 counters remain zero.
+Publish the corrected runner, require green CI on its exact head, then run one freeze/preflight. If
+it reports `training_ready` for **12/12**, proceed directly to the fixed pilot; do not create another
+qualification loop.
+
+## Previous checkpoint: repeatable-development candidate audit GO; publish before qualification — 2026-08-17
 
 The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
 byte-frozen and its independent exact-byte audit verdict is **GO**. Before any protected read it

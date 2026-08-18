@@ -1,12 +1,32 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-17. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-18. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: audit GO; Codex owns publication before repeatable qualification
+## Current override: Codex owns corrected focus publication, then one final preflight
+
+Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
+attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or
+global claim, prediction, controller action, advanced frame, outcome, or counter change. See the
+[inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+
+Inventory is `ADVANCE_STORY` focus **0/6** multi-choice; `DEVELOP_TEAM` **6/6**, with story present
+as a candidate in every eligible menu; and `RESTORE_TEAM`, `MANAGE_STORAGE`, and `ACQUIRE_SPECIES`
+each **6/6**. The uncommitted correction uses those four viable focus strata, preserves four
+roots/twelve trials, forbids model-guided campaign selection, and excludes evolution pending lineage
+evidence. Mission review is **GO**. Story remains candidate-only unless selected and settled.
+
+Codex may publish the correction and require green CI on its exact head, then run one
+freeze/preflight. If `training_ready` is **12/12**, hand directly to the fixed pilot; no agent may
+request another qualification loop. No campaign, claim, gameplay, outcome, fit, authority, or
+transfer exists, and no counter changed: legacy 30/15/3/3/0/0; all five v2 counters zero. Claude and
+Antigravity remain read-only reviewers.
+
+## Previous override: audit GO; Codex owned publication before repeatable qualification
 
 The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
 byte-frozen, and its independent exact-byte audit verdict is **GO**. It attests the exact external
