@@ -14,8 +14,10 @@ from pokemon_red_completion.paired_goal_manager_screen import (
     PairedGoalManagerScreenError,
     adjudicate_paired_screen,
     paired_screen_arm_claim,
+    paired_screen_arm_execution_identity,
     paired_screen_behavior_contract,
     paired_screen_endpoint_contract,
+    paired_screen_execution_identity,
     select_development_outcome_unused_acquisition_root,
 )
 
@@ -113,3 +115,46 @@ def test_arm_claim_binds_model_and_arm() -> None:
     assert base != candidate
     assert len(base) == 64
     assert len(candidate) == 64
+
+
+def test_execution_identities_bind_successor_source_pair_and_arm() -> None:
+    claims = ("a" * 64, "b" * 64)
+    pair = paired_screen_execution_identity(
+        screen_plan_sha256="c" * 64,
+        screen_id="d" * 64,
+        execution_source_commit="e" * 40,
+        execution_runner_sha256="f" * 64,
+        runtime_sha256="1" * 64,
+        root_consumption_sha256="2" * 64,
+        arm_claim_sha256=claims,
+    )
+    arm = paired_screen_arm_execution_identity(
+        pair_execution_identity_sha256=pair,
+        arm="base",
+        model_canonical_sha256="3" * 64,
+        arm_claim_sha256=claims[0],
+        episode_id="red-pair-" + "a" * 64,
+    )
+
+    assert len(pair) == 64
+    assert len(arm) == 64
+    assert arm != paired_screen_arm_execution_identity(
+        pair_execution_identity_sha256=pair,
+        arm="candidate",
+        model_canonical_sha256="3" * 64,
+        arm_claim_sha256=claims[1],
+        episode_id="red-pair-" + "b" * 64,
+    )
+
+
+def test_execution_identity_rejects_duplicate_arm_claims() -> None:
+    with pytest.raises(PairedGoalManagerScreenError, match="arm claims"):
+        paired_screen_execution_identity(
+            screen_plan_sha256="c" * 64,
+            screen_id="d" * 64,
+            execution_source_commit="e" * 40,
+            execution_runner_sha256="f" * 64,
+            runtime_sha256="1" * 64,
+            root_consumption_sha256="2" * 64,
+            arm_claim_sha256=("a" * 64, "a" * 64),
+        )

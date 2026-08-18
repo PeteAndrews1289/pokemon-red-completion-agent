@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable
 from dataclasses import dataclass
 
@@ -18,6 +19,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 PAIRED_SCREEN_SCHEMA = "pokemon.red.paired-goal-manager-outcome-screen.v1"
 PAIRED_SCREEN_SEED = 20_000
 PAIRED_SCREEN_ARM_ORDER = ("base", "candidate")
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class PairedGoalManagerScreenError(ValueError):
@@ -134,6 +136,85 @@ def paired_screen_arm_claim(
     )
 
 
+def paired_screen_execution_identity(
+    *,
+    screen_plan_sha256: str,
+    screen_id: str,
+    execution_source_commit: str,
+    execution_runner_sha256: str,
+    runtime_sha256: str,
+    root_consumption_sha256: str,
+    arm_claim_sha256: tuple[str, str],
+) -> str:
+    """Bind one successor executor to the already frozen, still-unclaimed pair."""
+
+    for value, subject in (
+        (screen_plan_sha256, "screen plan"),
+        (screen_id, "screen"),
+        (execution_runner_sha256, "execution runner"),
+        (runtime_sha256, "runtime"),
+        (root_consumption_sha256, "root consumption"),
+    ):
+        _require_sha256(value, subject)
+    if not isinstance(execution_source_commit, str) or re.fullmatch(
+        r"[0-9a-f]{40}", execution_source_commit
+    ) is None:
+        raise PairedGoalManagerScreenError("execution source commit is invalid")
+    if len(arm_claim_sha256) != 2 or arm_claim_sha256[0] == arm_claim_sha256[1]:
+        raise PairedGoalManagerScreenError("paired arm claims are invalid")
+    for claim in arm_claim_sha256:
+        _require_sha256(claim, "arm claim")
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.paired-goal-manager-execution-identity.v1",
+            "screen_plan_sha256": screen_plan_sha256,
+            "screen_id": screen_id,
+            "execution_source_commit": execution_source_commit,
+            "execution_runner_sha256": execution_runner_sha256,
+            "runtime_sha256": runtime_sha256,
+            "root_consumption_sha256": root_consumption_sha256,
+            "arm_claim_sha256": list(arm_claim_sha256),
+            "arm_order": list(PAIRED_SCREEN_ARM_ORDER),
+        }
+    )
+
+
+def paired_screen_arm_execution_identity(
+    *,
+    pair_execution_identity_sha256: str,
+    arm: str,
+    model_canonical_sha256: str,
+    arm_claim_sha256: str,
+    episode_id: str,
+) -> str:
+    """Bind one fixed arm to the pair-level execution authorization."""
+
+    if arm not in PAIRED_SCREEN_ARM_ORDER:
+        raise PairedGoalManagerScreenError("paired screen arm is invalid")
+    for value, subject in (
+        (pair_execution_identity_sha256, "pair execution"),
+        (model_canonical_sha256, "model"),
+        (arm_claim_sha256, "arm claim"),
+    ):
+        _require_sha256(value, subject)
+    if (
+        not isinstance(episode_id, str)
+        or not episode_id.startswith("red-pair-")
+        or len(episode_id) != 73
+    ):
+        raise PairedGoalManagerScreenError("paired episode identity is invalid")
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.paired-goal-manager-arm-execution-identity.v1",
+            "pair_execution_identity_sha256": pair_execution_identity_sha256,
+            "arm": arm,
+            "model_canonical_sha256": model_canonical_sha256,
+            "arm_claim_sha256": arm_claim_sha256,
+            "episode_id": episode_id,
+        }
+    )
+
+
 def adjudicate_paired_screen(
     *,
     base_safe_retained_acquisition: bool | None,
@@ -165,6 +246,12 @@ def adjudicate_paired_screen(
     )
 
 
+def _require_sha256(value: object, subject: str) -> str:
+    if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+        raise PairedGoalManagerScreenError(f"{subject} identity is invalid")
+    return value
+
+
 __all__ = [
     "PAIRED_SCREEN_ARM_ORDER",
     "PAIRED_SCREEN_SCHEMA",
@@ -173,7 +260,9 @@ __all__ = [
     "PairedScreenAdjudication",
     "adjudicate_paired_screen",
     "paired_screen_arm_claim",
+    "paired_screen_arm_execution_identity",
     "paired_screen_behavior_contract",
     "paired_screen_endpoint_contract",
+    "paired_screen_execution_identity",
     "select_development_outcome_unused_acquisition_root",
 ]
