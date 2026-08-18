@@ -1,6 +1,30 @@
 # Current audit — 2026-08-18
 
-## Current result: V2 admitted two verified outcomes from one complete episode
+## Current result: one outcome fit passed and produced a shadow candidate
+
+Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
+attempt 1. One and only one update ran; its identity is consumed and cannot retry. Training loss
+fell **1.2667→1.1496**, mean selected probability rose **0.5975→0.6136**, both successful choices
+gained probability, maximum train-menu KL was **0.000486**, and all 18 protected
+acquisition/evolution/story winners stayed fixed. The
+[path-free fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+has SHA-256 `f1613b27…`. Candidate `eb5c6515…` is shadow-only; promotion is unauthorized and
+evaluation is null.
+
+The board is now **train 30 · development 15 · fits 4 · comparisons 3 · authority 0 · transfer
+0**. Product-focus-v2 remains **12 development attempts · 2 verified outcomes · 0 atomic
+episodes · 1 composition attempt · 1 verified composition**. Counter treatment added exactly one
+fit and zero outcomes, comparisons, authority promotions, or transfer results.
+
+The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. It must freeze one
+still-open, outcome-unused acquisition train root selected model-blind and excluding prior, guard,
+validation, test, and sealed lineages. Base and candidate share identical initial state, menu,
+seed, policy, skills, budgets, and verifiers; post-choice trajectories may diverge. One combined
+action-free preflight precedes exactly two executions, each capped at three decisions. Dropped or
+replacement arms are forbidden, and the pair hard-stops. This is feasibility/falsification only,
+not an unseen comparison, evaluation, or promotion.
+
+## Previous result: V2 admitted two verified outcomes from one complete episode
 
 The fixed campaign consumed all **12 attempts** once: **1 complete and 11 failed**. Strict
 admission retained two verified outcomes in one composition episode, specimen-preserving storage

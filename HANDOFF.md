@@ -18,7 +18,30 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## V2 admitted two outcomes; run one diagnostic outcome fit — 2026-08-18
+## Outcome fit complete; design one paired feasibility screen — 2026-08-18
+
+Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
+attempt 1. The single allowed outcome update consumed its identity with no retry and produced
+shadow candidate `eb5c6515…`. Training loss fell from **1.2667 to 1.1496**, mean selected
+probability rose from **0.5975 to 0.6136**, both successful choices gained probability, maximum
+train-menu KL was **0.000486**, and all 18 protected acquisition/evolution/story winners stayed
+fixed. The [path-free fit result](docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+has SHA-256 `f1613b27…`. The candidate is shadow-only and evaluation is null.
+
+The board is now **train 30 · development 15 · fits 4 · comparisons 3 · authority 0 ·
+transfer 0**. Product-focus-v2 remains **12 development attempts, 2 verified outcomes, 0 atomic
+episodes, 1 composition attempt, and 1 verified composition**. The fit added no outcome,
+comparison, evaluation, authority, or transfer result.
+
+The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
+outcome-unused acquisition train root chosen model-blind, excluding every prior, guard,
+validation, test, and sealed lineage. Bind identical initial state, menu, seed, policy, skills,
+budgets, and verifiers for base and candidate while allowing post-choice trajectories to diverge.
+Use one combined action-free preflight, then exactly two executions with at most three decisions per
+arm. No arm may be dropped or replaced; hard-stop after the pair. This screen is only a bounded
+feasibility/falsification check, never an unseen comparison or promotion.
+
+## Previous checkpoint: V2 admitted two outcomes; run one diagnostic outcome fit — 2026-08-18
 
 The fixed replacement campaign consumed all **12 attempts** exactly once: **1 complete and 11
 failed**. Strict admission retained two verified outcomes in one composition episode,

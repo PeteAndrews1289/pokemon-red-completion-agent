@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: V2 yields one composition and two fit-eligible outcomes
+## August 18: one outcome update passes, and authority stays put
+
+Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
+attempt 1. Its only allowed update consumed the one-shot identity without retry and produced shadow
+candidate `eb5c6515…`. Training loss fell 1.2667→1.1496, mean selected probability rose
+0.5975→0.6136, both successful choices gained probability, maximum train-menu KL was 0.000486,
+and all 18 protected acquisition/evolution/story winners were preserved. The
+[path-free fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+has SHA-256 `f1613b27…`. Evaluation is null and promotion is unauthorized.
+
+The legacy board is now 30/15/4/3/0/0. Product-focus-v2 remains 12 development attempts, 2 verified
+outcomes, 0 atomic episodes, 1 composition attempt, and 1 verified composition. The update added
+one fit and no outcome, comparison, evaluation, authority, or transfer result.
+
+The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. It freezes one still-open,
+outcome-unused acquisition train root chosen model-blind and excluding prior, guard, validation,
+test, and sealed lineages. Base and candidate receive identical initial state, menu, seed, policy,
+skills, budgets, and verifiers; post-choice trajectories may diverge. One combined action-free
+preflight precedes exactly two executions, each limited to three decisions. No arm can be dropped
+or replaced, and the screen hard-stops after the pair. Its result is feasibility/falsification
+only, never an unseen comparison or promotion.
+
+## Previous August 18 checkpoint: V2 yields one composition and two fit-eligible outcomes
 
 The fixed campaign consumed all twelve attempts exactly once. One episode completed and eleven
 failed. Strict admission retained two verified outcomes in one composition episode:

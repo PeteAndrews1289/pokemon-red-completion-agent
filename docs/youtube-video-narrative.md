@@ -1,6 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: twelve attempts leave two usable lessons
+## August 18 scene: the weights move once; the authority does not
+
+Open on **SOURCE CDE9F488 · CI 32115274511/1 GREEN · ONE UPDATE · IDENTITY CONSUMED · RETRY 0
+· SHADOW CANDIDATE EB5C6515…**. Animate **LOSS 1.2667→1.1496 · MEAN SELECTED PROBABILITY
+0.5975→0.6136 · BOTH TARGETS REINFORCED · MAX TRAIN KL 0.000486 · PROTECTED WINNER FLIPS
+0/18**. Link the
+[fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json) with **SHA-256
+F1613B27…**, then stamp **EVALUATION NULL · PROMOTION 0**.
+
+Move the rail to `paired-red-goal-manager-outcome-screen-design-v1`. Show **ONE STILL-OPEN
+OUTCOME-UNUSED ACQUISITION TRAIN ROOT · MODEL-BLIND SELECTION · EXCLUDE PRIOR/GUARD/VALIDATION/
+TEST/SEALED LINEAGES**. Match the two arm cards: **IDENTICAL INITIAL STATE · MENU · SEED · POLICY
+· SKILLS · BUDGETS · VERIFIERS**. Then reveal **POST-CHOICE DIVERGENCE ALLOWED · ONE COMBINED
+ACTION-FREE PREFLIGHT · EXACTLY TWO EXECUTIONS · MAX 3 DECISIONS PER ARM · NO DROP · NO
+REPLACEMENT · HARD STOP AFTER PAIR**. Stamp **FEASIBILITY/FALSIFICATION ONLY · NOT UNSEEN
+COMPARISON · NOT PROMOTION**.
+
+Update the scoreboards to **30 TRAIN · 15 DEVELOPMENT · 4 FITS · 3 COMPARISONS · AUTHORITY 0
+· TRANSFER 0** and **ATTEMPTS 12 · VERIFIED OUTCOMES 2 · ATOMIC 0 · COMPOSITION ATTEMPTS 1
+· VERIFIED COMPOSITIONS 1**. Narration: **“The learner changed once. The next pair can falsify its
+feasibility, but it cannot promote it or claim generalization.”**
+
+## Previous August 18 scene: twelve attempts leave two usable lessons
 
 Open on **V2 CAMPAIGN CONSUMED 12/12 · COMPLETE 1 · FAILED 11**. Reveal **VERIFIED OUTCOMES 2 ·
 COMPOSITION 1 · SPECIMEN-PRESERVING STORAGE → RESTORATION · ATOMIC 0 · ACQUISITION 0 ·
@@ -11,7 +33,7 @@ TEACHER 0** and link the
 Show **RECORDED CHOICES 21**, then gray out **FAILED-PREFIX CHOICES 19 · EXCLUDED FROM FIT**. Move
 the active rail to `repeatable-goal-manager-outcome-fit-v1` and link the
 [frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) with
-**SHA-256 B120FAC3…**. Animate **2 ADMITTED TARGETS → ONE FULL-BATCH CAPPED IPS UPDATE → DIAGNOSTIC
+**SHA-256 A950E749…**. Animate **2 ADMITTED TARGETS → ONE FULL-BATCH CAPPED IPS UPDATE → DIAGNOSTIC
 METRICS → STOP**. Lock out **SECOND FIT · FAILED-PREFIX DECODE · PARAMETER SEARCH · UNSEEN
 EVALUATION · PROMOTION · CRYSTAL · AUTHORITY · TRANSFER**.
 

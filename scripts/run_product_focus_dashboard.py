@@ -103,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Teacher-free Red development produced one admitted two-goal episode from twelve "
-            "attempts. Two verified outcomes now support exactly one conservative train-only "
-            "update; the candidate will remain shadow-only."
+            "The first teacher-free Red outcome update is complete and produced a shadow "
+            "candidate. The next bounded step is a fair paired screen against the original "
+            "model from one outcome-unused acquisition and replanning root."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Outcome fit V1 · 2 admitted targets · one update pending",
+        location="Paired Red screen design · no gameplay execution",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Base Red goal manager af29d7e7… · frozen two-target update",
-            choice="Preflight once · claim once · fit once · no promotion",
+            candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
+            choice="Freeze one matched root · later run two arms · max 3 decisions each",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="fitting",
+            phase="qualification",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -172,16 +172,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Next decision", _text(lane, "next_decision")),
             (
                 "Outcome-fit rail · 12 ATTEMPTS → 1 COMPLETE / 11 FAILED → 2 ADMITTED OUTCOMES "
-                "→ 1 VERIFIED COMPOSITION → ONE TRAIN-ONLY UPDATE"
+                "→ 1 TRAIN-ONLY FIT → SHADOW CANDIDATE"
             ),
             (
-                "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
-                "· predictions 0 · controller 0 · advanced frames 0 · exact root closed · "
-                "retry forbidden"
+                "Fit result · loss 1.2667→1.1496 · selected probability 0.5975→0.6136 · "
+                "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
             ),
             (
-                "V4 final · readiness authentication failed · predictions 0 · controller 0 · "
-                "advanced frames 0 · exact root closed · no cause inferred · no retry"
+                "Next evidence · one-root paired Red screen · base versus candidate · "
+                "acquisition + changed-state replan · max 3 decisions/arm · hard stop after pair"
             ),
             (
                 "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "

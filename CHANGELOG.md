@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Completed the single frozen teacher-free outcome update at source
+  `cde9f488ca2bb4c9bfbea086fae1e6407406d661` under green CI run `32115274511` attempt 1. Its
+  one-shot identity is consumed with no retry. Training loss fell 1.2667→1.1496, mean selected
+  probability rose 0.5975→0.6136, both successful choices gained probability, maximum train-menu
+  KL was 0.000486, and protected acquisition/evolution/story winner flips were 0/18. The
+  [path-free fit result](docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+  has SHA-256 `f1613b27…`. The shadow candidate is not promoted and evaluation is null. This adds
+  exactly one model fit: the legacy board is now 30/15/4/3/0/0, while product-focus-v2 stays
+  12/2/0/1/1 and no outcome, comparison, authority, or transfer result was added. Activated
+  `paired-red-goal-manager-outcome-screen-design-v1`: freeze one model-blind still-open,
+  outcome-unused acquisition train root excluding prior/guard/validation/test/sealed lineages;
+  bind identical initial state/menu/seed/policy/skills/budgets/verifiers; allow only post-choice
+  divergence; run one combined action-free preflight and then exactly two maximum-three-decision
+  arms with no drop or replacement and a hard stop after the pair. The screen is
+  feasibility/falsification only, never an unseen comparison or promotion.
 - Consumed all twelve fixed V2 campaign attempts exactly once: one episode completed and eleven
   failed. Strict admission retained two verified outcomes in one composition episode,
   specimen-preserving storage followed by restoration; atomic episodes, acquisitions, and teacher

@@ -8,62 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Apply exactly one conservative train-only outcome update to the frozen Red goal manager using the two strictly admitted teacher-free outcomes, while preserving its title-neutral representation and prior acquisition, evolution, and story winners.",
-      "cheapest_falsifier": "Publish the frozen one-step capped inverse-propensity learner, pass one label-free preflight, then consume the two-target fit identity once. Reject the candidate if either successful choice loses probability, training loss fails to decrease, any protected train winner flips, or the weight/KL trust caps fail.",
-      "id": "repeatable-goal-manager-outcome-fit-v1",
-      "kind": "learning",
+      "capability": "Freeze one paired, teacher-free Red development microepisode that compares the original goal manager with the outcome-updated shadow candidate from one identical, outcome-unused acquisition-bearing root and permits changed-state replanning.",
+      "cheapest_falsifier": "Use action-free inspection only to prove that one outcome-unused Red root supports an executable acquisition choice and a maximum-three-decision replan. Close the screen design if those semantics cannot be frozen without adapting routes, skills, models, or roots after prediction.",
+      "id": "paired-red-goal-manager-outcome-screen-design-v1",
+      "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "None. The campaign created development evidence, not promotion: the existing Red goal manager keeps only its prior bounded same-context authority.",
-        "blocker": "Operational reliability is poor: eleven of twelve episodes failed. One complete episode still yielded two authenticated positive targets from one root, enough only for the preregistered diagnostic fit. There is no unseen evaluation or acquisition success.",
-        "decision": "Retire the consumed V2 campaign with its fixed denominator preserved. Publish and preflight one frozen full-batch outcome update, then fit exactly once from the two admitted targets; decode none of the nineteen settled choices in failed episode prefixes.",
+        "authority_delta": "None. The new candidate is shadow-only; the promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority.",
+        "blocker": "The update used only two correlated positive targets from one completed episode, while eleven of twelve campaign trials failed and no retained acquisition occurred. Independent gameplay evidence is now the limiting factor, not another model fit.",
+        "decision": "Retire the consumed fit lane after one successful bounded update. Freeze one acquisition-bearing Red microepisode comparing the base and candidate from independently reset copies of the same outcome-unused root; do not execute it in this design session.",
         "evidence": {
-          "kind": "development_episode",
-          "path": "docs/evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json",
-          "sha256": "c7dde1703f8bc0581f3c871e555a352bcf23fec6c2ea0d1086b3862fecc164dd"
+          "kind": "model_fit",
+          "path": "docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json",
+          "sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace"
         },
-        "learning_output": "The fixed campaign consumed 12/12 trials: 1 complete and 11 failed. Strict admission retained 2 verified outcomes in one composition episode, including specimen-preserving storage followed by restoration; atomic episodes and acquisitions were 0. Across all terminals 21 choices were recorded, but 19 failed-prefix choices remain excluded. Teacher use was 0.",
-        "next_falsifier": "Run one action-free fit preflight on the published head, then claim and execute the frozen two-target update once. Require finite round-trip weights, probability reinforcement, lower weighted loss, weight-delta L2 <=0.02, train-menu KL <=0.01, and zero acquisition/evolution/story winner flips.",
-        "next_session_goal": "Publish the diagnostic outcome learner and frozen fit plan, pass exact-head CI and one label-free preflight, execute one two-target fit, and publish the candidate metrics without evaluation, promotion, Crystal, or a game replay.",
-        "product_alignment": "This is the first direct teacher-free update to the title-neutral goal manager. It tests whether verified Red storage/restoration outcomes can alter the portable policy safely; it does not yet demonstrate acquisition, robust play, completion, living-Pokedex ability, or transfer.",
-        "session_id": "2026-08-18-repeatable-goal-manager-outcome-fit-v1",
+        "learning_output": "One deterministic teacher-free outcome update produced shadow candidate eb5c6515... from two authenticated positive targets. Weighted training loss fell from 1.2667 to 1.1496, mean selected probability rose from 0.5975 to 0.6136, maximum train-menu KL was 0.000486, and all 18 protected acquisition, evolution, and story winners were preserved. This adds one model fit and no evaluation, promotion, authority, or transfer result.",
+        "next_falsifier": "Freeze one paired base-versus-candidate Red root before prediction. Exclude every prior root, recorded choice, guard menu, validation, test, and sealed lineage; bind identical initial state, initial menu, seed, policy, budgets, skills, and verifiers, while allowing post-choice trajectories to diverge. Any incomplete arm remains in the denominator and closes the screen without replacement.",
+        "next_session_goal": "Publish a path-free paired-screen design and action-free inventory only. If it passes review, reorient separately to exactly two executions of at most three decisions each from reset copies of one root, measuring episode completion, verified outcomes, retained acquisition, collection safety, replanning, and an explicit win, loss, tie, or uninterpretable pair.",
+        "product_alignment": "The first teacher-free update passed its frozen train-only safety guards and changed the portable title-neutral policy. The paired screen is only a feasibility and falsification check for gross regression on outcome-unused Red collection and replanning gameplay.",
+        "session_id": "2026-08-18-paired-red-goal-manager-outcome-screen-design-v1",
         "status": "active",
-        "stop_condition": "Stop on any second fit, failed-prefix target decode, reward relabeling, hyperparameter search, validation/test access, teacher use, trust-cap or protected-winner failure, identity drift, private-data leak, or four hours.",
-        "transfer_result": "Not run. Red development remains the first curriculum only; Crystal and every transfer claim stay closed."
+        "stop_condition": "Stop on any model fit, controller action, teacher query, development outcome access, candidate promotion, route or skill patch, validation or sealed Red access, Crystal execution, private-data leak, or two hours.",
+        "transfer_result": "Not run. Crystal remains closed until Red shows independent acquisition and replanning evidence under a frozen paired screen."
       },
       "learned_authority": {
-        "current": "The promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority. One repeatable composition episode is verified, but it grants no fresh-context, Crystal, acquisition, or living-Pokedex authority.",
-        "target": "Produce one shadow-only outcome-updated diagnostic candidate. A passing fit validates update plumbing only and grants no new gameplay authority."
+        "current": "The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority.",
+        "target": "Freeze a fair one-root paired Red screen capable of falsifying the candidate against the original model without granting authority or executing gameplay during design."
       },
-      "maintenance_unblocks": null,
-      "measurable_outputs": [
-        {
-          "kind": "development_episode",
-          "minimum": 12,
-          "partition": "development"
-        },
-        {
-          "kind": "verified_outcome_example",
-          "minimum": 2,
-          "partition": "development"
-        },
-        {
-          "kind": "composition_attempt",
-          "minimum": 1,
-          "partition": "development"
-        },
-        {
-          "kind": "verified_composition_episode",
-          "minimum": 1,
-          "partition": "development"
-        },
-        {
-          "kind": "model_fit",
-          "minimum": 4,
-          "partition": "train"
-        }
-      ],
-      "name": "Teacher-free Red goal-manager outcome fit V1",
-      "next_decision": "If the one update passes every frozen train-only guard, retain it as a shadow diagnostic candidate and freeze a separate paired untouched-Red development screen. If it fails, reject this learner design without a second fit or parameter change.",
+      "maintenance_unblocks": "paired-red-goal-manager-outcome-screen-v1",
+      "measurable_outputs": [],
+      "name": "Paired Red goal-manager outcome screen design V1",
+      "next_decision": "If the paired design proves one outcome-unused matched root with acquisition and changed-state replanning, publish it and reorient once to exactly two executions capped at three decisions per arm. Otherwise close this candidate evaluation path without another fit or root-specific rescue.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -89,9 +63,14 @@
             "kind": "unseen_comparison",
             "path": "docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json",
             "sha256": "88e371bde589f7bc50521f8cafd0f2b7c7b40b23207810e944a089480d0cd5de"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json",
+            "sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace"
           }
         ],
-        "model_fits": 3,
+        "model_fits": 4,
         "outcome_questions": {
           "development": 15,
           "train": 30
@@ -111,15 +90,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any access to validation or test contexts, any failed episode payload, Crystal, sealed Red, teacher outcomes, or unadmitted historical labels ends the lane.",
-        "Any second update, changed step size or trust cap, hyperparameter search, output overwrite, fit-identity reuse, protected train winner flip, private-data leak, or authority promotion ends the lane.",
-        "Stop after one fit or four hours; failure rejects the outcome learner without retry."
+        "Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the design lane.",
+        "Any post-prediction root selection, unmatched initial pair, dropped or replaced arm, route or skill patch, private-data leak, or use of a previously consumed context ends the design lane.",
+        "Stop after one frozen paired-screen design or two hours; any later execution hard-stops after the two maximum-three-decision arms and requires a separate reorientation."
       ],
       "time_box": {
-        "maximum_hours": 4,
+        "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "After measured repeatable Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal."
+      "transfer_test": "After independent paired Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal."
+    },
+    {
+      "id": "repeatable-goal-manager-outcome-fit-v1",
+      "kind": "learning",
+      "name": "Teacher-free Red goal-manager outcome fit V1",
+      "preserve_evidence": true,
+      "reason": "Its one allowed capped inverse-propensity update completed from two authenticated positive targets in one episode. The candidate passed all frozen train-only loss, probability, weight, KL, round-trip, and protected-winner guards; it remains shadow-only and the consumed fit identity may never retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "repeatable-goal-manager-development-learning-v2",

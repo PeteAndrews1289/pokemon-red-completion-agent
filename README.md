@@ -5,7 +5,29 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): V2 produced two admitted outcomes; fit one diagnostic
+> **Current product focus (August 18, 2026): the outcome fit passed; design one paired feasibility
+> screen.** Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run
+> `32115274511`, attempt 1. The one allowed update consumed its identity with no retry and produced
+> shadow candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
+> **0.5975→0.6136**, both successful choices gained probability, maximum train-menu KL was
+> **0.000486**, and all 18 protected acquisition/evolution/story winners were preserved. See the
+> [path-free fit result](docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+> (SHA-256 `f1613b27…`). The candidate remains shadow-only; evaluation is null.
+>
+> The board is now **30 train · 15 development · 4 fits · 3 comparisons · authority 0 ·
+> transfer 0**. Product-focus-v2 remains **12 attempts · 2 verified outcomes · 0 atomic · 1
+> composition attempt · 1 verified composition**. The fit added no outcome, comparison,
+> evaluation, authority, or transfer result.
+>
+> The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
+> outcome-unused acquisition train root selected model-blind and excluding prior, guard,
+> validation, test, and sealed lineages. Base and candidate must share the identical initial state,
+> menu, seed, policy, skills, budgets, and verifiers; post-choice trajectories may diverge. After
+> one combined action-free preflight, run exactly two arms, one per model, with at most three
+> decisions per arm, no dropped or replacement arm, and a hard stop after the pair. This is
+> feasibility/falsification only—not an unseen comparison or promotion.
+>
+> **Previous product focus (August 18, 2026): V2 produced two admitted outcomes; fit one diagnostic
 > candidate.** The fixed campaign consumed all **12 attempts** exactly once: **1 complete / 11
 > failed**. Strict admission retained **2 verified outcomes** in one composition episode—
 > specimen-preserving storage followed by restoration—with **0 atomic episodes, 0 acquisitions,

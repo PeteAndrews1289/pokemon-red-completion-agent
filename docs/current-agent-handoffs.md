@@ -6,7 +6,29 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one diagnostic outcome fit
+## Current override: Codex owns one-root paired feasibility design
+
+Source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`, attempt
+1. The single allowed update consumed its identity without retry and produced shadow candidate
+`eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
+**0.5975→0.6136**, both target probabilities increased, maximum train-menu KL was **0.000486**, and
+protected winner flips were **0/18**. See the
+[fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json) (SHA-256
+`f1613b27…`). The candidate is not promoted and evaluation is null.
+
+Codex owns `paired-red-goal-manager-outcome-screen-design-v1`: freeze one still-open,
+outcome-unused acquisition train root chosen model-blind and excluding prior, guard, validation,
+test, and sealed lineages. Base and candidate must share the identical initial state, menu, seed,
+policy, skills, budgets, and verifiers, while their post-choice trajectories may diverge. Freeze one
+combined action-free preflight and exactly two later executions, maximum three decisions per arm,
+no dropped or replaced arm, then hard-stop after the pair. Reviewers remain read-only. The result is
+feasibility/falsification only, not an unseen comparison or promotion.
+
+The board is **30/15/4/3/0/0**. Product-focus-v2 remains **12 attempts, 2 verified outcomes, 0
+atomic episodes, 1 composition attempt, and 1 verified composition**. The fit added no outcome,
+comparison, evaluation, authority, or transfer result.
+
+## Previous override: Codex owned one diagnostic outcome fit
 
 The fixed V2 campaign consumed **12/12 attempts** once: **1 complete and 11 failed**. Strict
 admission retained two verified outcomes in one composition episode, specimen-preserving storage

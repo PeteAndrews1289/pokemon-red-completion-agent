@@ -7,7 +7,31 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: twelve attempts became two lessons
+## Current checkpoint: two lessons moved the weights, not the authority
+
+The one allowed update ran once and passed every frozen train-only guard. Loss fell from 1.2667 to
+1.1496, both successful choices gained probability, the mean moved from 0.5975 to 0.6136, and none
+of the 18 protected acquisition, evolution, or story winners changed. The
+[path-free fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+records shadow candidate `eb5c6515…`; it records no evaluation or promotion.
+
+That adds exactly one fit. The familiar scoreboard is now **30 TRAIN · 15 DEVELOPMENT · 4 FITS
+· 3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**. The newer board remains **12 ATTEMPTS · 2
+VERIFIED OUTCOMES · 0 ATOMIC · 1 COMPOSITION ATTEMPT · 1 VERIFIED COMPOSITION**. Nothing about
+the fit created another outcome, comparison, authority grant, or transfer result.
+
+The active lane is `paired-red-goal-manager-outcome-screen-design-v1`, and its next question is
+deliberately smaller than “did the model improve?” One still-open,
+outcome-unused acquisition train root will be chosen without looking at either model, outside every
+prior, guard, validation, test, and sealed lineage. Base and candidate start from identical state,
+menu, seed, policy, skills, budgets, and verifiers. After one shared action-free preflight, each gets
+one execution of at most three decisions. Their paths may diverge after choosing, but neither arm
+can disappear or be replaced, and the experiment ends after the pair. This is a feasibility
+falsifier, not an unseen comparison or promotion.
+
+---
+
+## Previous checkpoint: twelve attempts became two lessons
 
 The replacement campaign used all twelve starting lines exactly once. One episode completed and
 eleven failed. The complete episode made two learned choices—specimen-preserving storage, then

@@ -1,7 +1,28 @@
 # Three-agent coordination
 
-> **2026-08-18 V2 produced two admitted outcomes; one diagnostic fit is the only active lane —
-> highest checkpoint:** The fixed campaign consumed **12/12 attempts** once: **1 complete / 11
+> **2026-08-18 outcome fit complete; one-root paired feasibility design is the only active lane —
+> highest checkpoint:** Source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run
+> `32115274511` attempt 1. The one allowed update consumed its identity without retry and produced
+> shadow candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
+> **0.5975→0.6136**, both successful choices gained probability, maximum train-menu KL was
+> **0.000486**, and protected winner flips were **0/18**. Link the
+> [fit result](docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+> (SHA-256 `f1613b27…`). Evaluation is null and the candidate remains shadow-only.
+>
+> Codex owns `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
+> outcome-unused acquisition train root selected model-blind and excluding prior, guard,
+> validation, test, and sealed lineages. Base and candidate get the identical initial state, menu,
+> seed, policy, skills, budgets, and verifiers; only their post-choice trajectories may diverge.
+> Require one combined action-free preflight, then exactly two executions, maximum three decisions
+> per arm, no dropped or replaced arm, and a hard stop after the pair. Reviewers remain read-only.
+> This is feasibility/falsification only, not an unseen comparison or promotion.
+>
+> The board is **30/15/4/3/0/0**. Product-focus-v2 remains **attempts 12 · verified outcomes 2 ·
+> atomic 0 · composition attempts 1 · verified compositions 1**. The fit added no outcome,
+> comparison, evaluation, authority, or transfer result.
+>
+> **2026-08-18 V2 produced two admitted outcomes; one diagnostic fit was the only active lane —
+> historical checkpoint:** The fixed campaign consumed **12/12 attempts** once: **1 complete / 11
 > failed**. Strict admission retained **2 verified outcomes** in one composition episode,
 > specimen-preserving storage followed by restoration. Atomic episodes, acquisitions, and teacher
 > queries were zero. Of 21 recorded choices, the 19 in failed prefixes remain diagnostic-only and

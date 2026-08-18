@@ -78,6 +78,11 @@ REPEATABLE_OUTCOME_FIT_PLAN = (
     / "docs/evidence"
     / "repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json"
 )
+REPEATABLE_OUTCOME_FIT_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -128,19 +133,13 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "repeatable-goal-manager-outcome-fit-v1"
-    assert state.active_lane["kind"] == "learning"
-    assert len(state.retired_lanes) == 13
-    assert focus_progress_fraction(state) == pytest.approx(0.95)
-    assert focus_scorecard(state) == (
-        ("Development Episode · development", 12, 12),
-        ("Verified Outcome Example · development", 2, 2),
-        ("Composition Attempt · development", 1, 1),
-        ("Verified Composition Episode · development", 1, 1),
-        ("Model Fit · train", 3, 4),
-    )
+    assert state.active_lane["id"] == "paired-red-goal-manager-outcome-screen-design-v1"
+    assert state.active_lane["kind"] == "maintenance"
+    assert len(state.retired_lanes) == 14
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
-    assert state.progress["model_fits"] == 3
+    assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
     assert state.progress["development_episode_attempts"] == 12
     assert state.progress["verified_outcome_examples"] == 2
@@ -189,6 +188,29 @@ def test_repeatable_result_and_fit_plan_keep_the_diagnostic_boundary() -> None:
     assert plan["one_shot"]["claim_before_target_decode"] is True
     assert plan["data_boundary"]["failed_artifact_target_decode"] == 0
     assert plan["claim_boundary"]["unsupported"].endswith("living-Pokedex ability.")
+
+
+def test_outcome_fit_result_records_one_shadow_update_without_promotion() -> None:
+    result = json.loads(REPEATABLE_OUTCOME_FIT_RESULT.read_text(encoding="ascii"))
+
+    assert result["status"] == "diagnostic_candidate_fit_complete"
+    assert result["training_data"] == {
+        "complete_episodes": 1,
+        "eligible_targets": 2,
+        "excluded_failed_prefix_choices": 19,
+        "failed_artifact_targets_decoded": 0,
+        "independent_roots": 1,
+        "negative_targets": 0,
+        "positive_targets": 2,
+        "test_examples": 0,
+        "validation_examples": 0,
+    }
+    assert result["update"]["training_loss_after"] < result["update"]["training_loss_before"]
+    assert result["guards"]["protected_winner_flips"] == 0
+    assert result["guards"]["maximum_train_menu_kl"] < 0.01
+    assert result["counter_treatment"]["model_fits_added"] == 1
+    assert result["model"]["promotion_authorized"] is False
+    assert result["evaluation"] is None
 
 
 def test_collision_result_and_next_composition_design_preserve_the_product_boundary() -> None:
@@ -355,13 +377,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Development Episode · development: 12/12",
-        "Verified Outcome Example · development: 2/2",
-        "Composition Attempt · development: 1/1",
-        "Verified Composition Episode · development: 1/1",
-        "Model Fit · train: 3/4",
-    )
+    assert rows == ()
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -550,25 +566,22 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(0.95)
+    assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Teacher-free Red goal-manager outcome fit V1" in public["stage"]
+    assert "Paired Red goal-manager outcome screen design V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 12, "total": 12}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Preflight once" in encoded
-    assert "ONE TRAIN-ONLY UPDATE" in encoded
-    assert "root closed" in encoded
-    assert "retry forbidden" in encoded
-    assert "execution identity 0" in encoded
-    assert "V3 preflight failed at action_free_admission" in encoded
+    assert "Shadow candidate eb5c6515" in encoded
+    assert "1 TRAIN-ONLY FIT" in encoded
+    assert "loss 1.2667" in encoded
+    assert "one-root paired Red screen" in encoded
     assert "Development result V2" in encoded
     assert "attempts 12/12" in encoded
     assert "complete 1" in encoded
     assert "failed 11" in encoded
     assert "admitted outcomes 2" in encoded
-    assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

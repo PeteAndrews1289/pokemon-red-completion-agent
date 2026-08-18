@@ -8,7 +8,30 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V2 admitted two outcomes; fit one diagnostic candidate
+## Current checkpoint: outcome fit complete; design one paired feasibility screen
+
+Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
+attempt 1. The only allowed outcome update consumed its identity with no retry and produced shadow
+candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
+**0.5975→0.6136**, both successful choices gained probability, maximum train-menu KL was
+**0.000486**, and all 18 protected acquisition/evolution/story winners were preserved. The
+[path-free fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+has SHA-256 `f1613b27…`. Evaluation is null and promotion is unauthorized.
+
+The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
+outcome-unused acquisition train root chosen model-blind, excluding prior, guard, validation, test,
+and sealed lineages. Bind the identical initial state, menu, seed, policy, skills, budgets, and
+verifiers for base and candidate; post-choice trajectories may diverge. Require one combined
+action-free preflight followed by exactly two executions, at most three decisions per arm, no
+dropped or replacement arm, and a hard stop after the pair. Treat the result only as bounded
+feasibility/falsification, never as an unseen comparison or promotion.
+
+The board is **30 train · 15 development · 4 fits · 3 comparisons · authority 0 · transfer
+0**. Product-focus-v2 remains **12 development attempts · 2 verified outcomes · 0 atomic
+episodes · 1 composition attempt · 1 verified composition**. No outcome, comparison, evaluation,
+authority, or transfer result was added by the fit.
+
+## Previous checkpoint: V2 admitted two outcomes; fit one diagnostic candidate
 
 The fixed campaign consumed all **12 attempts** exactly once: **1 complete / 11 failed**. Strict
 admission retained two verified outcomes in one composition episode—specimen-preserving storage
