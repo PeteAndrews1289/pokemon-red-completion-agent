@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the replanning curriculum is frozen; a reusable choice seam is next
+
+Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The
+[design receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json) freezes 16
+prospective episodes across four unused roots: one assigned intervention, then one learned
+conditional replan, with a provisional gate of four verified replans across at least three roots.
+It is not full composition, gameplay, training output, or transfer evidence.
+
+Action-free inventory found zero authenticated post-capture states and only one durable next choice
+after the prior successful acquisition. The next engineering lane therefore builds a title-neutral
+encounter-source capability that can expose a genuine verified non-acquisition choice after capture.
+Claude's schedule-scope blocker was resolved; Antigravity's partial architecture concerns were
+incorporated, although its stalled UI produced no formal final verdict. Counters remain unchanged.
+
 ## August 18: the first paired gameplay screen ties on acquisition
 
 The [strict result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)

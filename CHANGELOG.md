@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published the action-free acquisition-replanning curriculum at source
+  `96379e8074373c5a9ba981f171ee75aa7080ff4a` under green CI `32129847455/1`. The
+  [path-free receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
+  freezes 16 prospective episodes across four roots, one assigned first intervention, one learned
+  conditional replan, and a provisional four-replan/three-root feasibility gate. Inventory found
+  four unused roots with three initial choices but zero authenticated post-capture states; the prior
+  successful capture left one durable next choice. No learning counter advanced. Retired the design
+  lane and activated a bounded title-neutral encounter-source capability lane; fixed Red routes,
+  root rescue, artificial goals, teacher decisions, gameplay, sealed Red, and Crystal remain closed.
+
 - Executed and strictly admitted the frozen paired Red acquisition screen. The
   [path-free result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
   has SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`.

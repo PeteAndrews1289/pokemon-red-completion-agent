@@ -98,6 +98,11 @@ PAIRED_SCREEN_RESULT = (
     / "docs/evidence"
     / "paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json"
 )
+ACQUISITION_REPLANNING_DESIGN = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "acquisition-replanning-curriculum-design-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -148,12 +153,9 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert (
-        state.active_lane["id"]
-        == "fresh-red-acquisition-replanning-curriculum-design-v1"
-    )
+    assert state.active_lane["id"] == "title-neutral-encounter-development-capability-v1"
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 17
+    assert len(state.retired_lanes) == 18
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -165,6 +167,33 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_acquisition_replanning_design_is_action_free_and_product_bounded() -> None:
+    receipt = json.loads(ACQUISITION_REPLANNING_DESIGN.read_text(encoding="ascii"))
+
+    assert receipt["status"] == (
+        "design_frozen_existing_contexts_insufficient_capability_work_required"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32129847455,
+        "source_commit": "96379e8074373c5a9ba981f171ee75aa7080ff4a",
+    }
+    design = receipt["design"]
+    assert design["design_sha256"] == (
+        "76c36119848a2bf68e084851816a258982c51299d66208c129acf8b0a88e5241"
+    )
+    assert design["behavior"]["planned_episodes"] == 16
+    assert design["behavior"]["first_decision_is_model_prediction"] is False
+    assert design["behavior"]["learned_choice_decisions_after_intervention"] == 1
+    assert design["inventory"]["unused_roots"] == 4
+    assert design["inventory"]["authenticated_post_acquisition_captures"] == 0
+    assert design["evidence_gate"]["minimum_verified_distinct_goal_replans"] == 4
+    assert design["evidence_gate"]["minimum_root_lineages_with_verified_replan"] == 3
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
 
 
 def test_paired_screen_design_is_action_free_and_nonpromoting() -> None:
@@ -633,22 +662,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Fresh Red acquisition-replanning curriculum design V1" in public["stage"]
+    assert "Title-neutral encounter-source development capability V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 14}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow candidate eb5c6515" in encoded
-    assert "1 TRAIN-ONLY FIT" in encoded
     assert "loss 1.2667" in encoded
-    assert "ended in a tie" in encoded
+    assert "16-episode acquisition-replanning design is frozen" in encoded
     assert "actions 244/244" in encoded
-    assert "no gameplay or root rescue" in encoded
-    assert "Development result V2" in encoded
-    assert "attempts 12/12" in encoded
-    assert "complete 1" in encoded
-    assert "failed 11" in encoded
-    assert "admitted outcomes 2" in encoded
+    assert "post-acquisition captures 0" in encoded
+    assert "no fixed Red route, root rescue, or gameplay" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

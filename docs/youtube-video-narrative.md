@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the blueprint is ready; the second choice is not
+
+Put the new rail on screen: **4 ROOTS × 4 TRIALS → FROZEN INTERVENTION → ONE LEARNED REPLAN**.
+Then show the honest evidence gate: **4 VERIFIED REPLANS ACROSS ≥3 ROOTS (PROVISIONAL)**. Cut to the
+inventory: **4 UNUSED MULTI-CHOICE ROOTS BEFORE CAPTURE · 0 AUTHENTICATED POST-CAPTURE STATES · 1
+PRIOR DURABLE NEXT CHOICE**. Stamp **NO GAMEPLAY · NO COUNTER DELTA**.
+
+The next scene is architecture, not a victory lap: **TITLE-NEUTRAL ENCOUNTER SOURCE → GENUINE
+NON-ACQUISITION CHOICE → ACTION-FREE QUALIFICATION**. Cross out **FIXED RED ROUTE**, **ROOT
+RESCUE**, and **ARTIFICIAL MENU GOAL**. The audience should understand why this intermediate seam
+matters: a living-Pokédex agent must catch something and then still decide what to do next.
+
 ## August 18 scene: a real catch, and an honest tie
 
 Reveal **BASE: SAFE ACQUISITION 1 · CANDIDATE: SAFE ACQUISITION 1 · RESULT: TIE**. Put the two

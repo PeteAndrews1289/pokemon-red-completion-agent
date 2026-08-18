@@ -7,6 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the experiment is designed, but the second choice is missing
+
+The next experiment is now concrete: four unused Red roots, four trials each, a frozen first
+intervention, and one learned choice after the state changes. That is deliberately a test of one
+conditional replan—not a claim that the model can yet run an entire adventure. The design passed
+green CI and two-agent scrutiny without playing another frame.
+
+The inventory also exposed the honest blocker. The four roots offer three choices before a catch,
+but there are no authenticated saves showing a real menu afterward; the one prior successful catch
+left only one choice. So the next work is not another elaborate ceremony or a scripted route. It is
+a reusable encounter-source capability that leaves the model a genuine reason to choose again.
+That seam must make sense in Crystal and later games even though Red is where it is first bound.
+
 ## Current checkpoint: both models caught one; neither chose again
 
 The first paired gameplay screen ended in a clean tie. From the same reset, the base model and the

@@ -12,6 +12,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-18: acquisition-replanning design frozen; reusable capability work is active
+
+Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed exact-head CI
+`32129847455/1`. The [design receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
+freezes four roots by four trials, an assigned first intervention, one learned changed-state choice,
+and a provisional gate of four verified replans spanning at least three roots. Action-free inventory
+found four unused acquisition roots with three initial choices, but no authenticated post-capture
+states; the prior successful capture left only one next choice. The design produced zero gameplay,
+outcomes, fits, comparisons, promotion, or transfer.
+
+The active lane is `title-neutral-encounter-development-capability-v1`. Implement and qualify one
+generic encounter-source seam that leaves a real, independently verified non-acquisition choice
+after capture. Prefer `DEVELOP_TEAM`, but accept restoration or exploration if genuine. Do not add
+coordinates, a fixed route, a teacher choice, an artificial menu entry, or a root-specific rescue.
+Claude's schedule-scope blocker is resolved. Antigravity's useful architecture concerns were
+incorporated, but its UI stalled before a formal final verdict; do not misreport one.
+
 **How to read this document.** Dated checkpoint sections accumulate at the top, newest first, and
 supersede older handoff evidence when they disagree. They never supersede `MISSION.md`,
 `NORTH_STAR.md`, `ACTIVE_PRODUCT_STATE.md`, or the active model-first roadmap. Sections 1 through 10 below are durable

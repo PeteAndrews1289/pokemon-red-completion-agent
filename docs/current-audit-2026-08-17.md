@@ -1,5 +1,19 @@
 # Current audit — 2026-08-18
 
+## Current result: curriculum design passes; existing post-capture evidence is insufficient
+
+Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The
+[path-free receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json) binds a
+four-root, 16-episode design with one assigned intervention followed by one learned conditional
+replan. The provisional descriptive gate is four verified replans across at least three roots.
+
+The action-free inventory is the limiting fact: four unused acquisition roots have three initial
+choices, but zero authenticated post-acquisition captures exist and the prior successful capture
+left one durable next choice. This is a product-relevant capability gap, not a model failure.
+All counters remain **30/15/4/3/0/0** and **14/4/0/1/1**. The active lane is the bounded,
+non-gameplay `title-neutral-encounter-development-capability-v1`; any fixed route, artificial goal,
+root rescue, teacher choice, sealed Red, or Crystal access fails the lane.
+
 ## Current result: safe acquisition tie; no composition
 
 The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)

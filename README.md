@@ -5,6 +5,17 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): curriculum frozen; build the reusable post-capture
+> choice seam.** Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI
+> `32129847455/1` (4,163 passed, 1 skipped, 3 deselected, 1 xfailed). The
+> [path-free design receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
+> freezes 16 prospective Red episodes across four unused roots: one assigned intervention, then
+> one learned conditional replan, with a provisional feasibility gate of four verified replans
+> across at least three roots. The inventory found four roots with three initial choices, but zero
+> authenticated post-acquisition captures; the prior successful acquisition left one durable next
+> choice. No gameplay or learning counter advanced. The active lane builds a title-neutral
+> encounter-source capability—never a fixed Red route—before any curriculum execution.
+
 > **Current product focus (August 18, 2026): paired screen tied; design acquisition plus
 > replanning next.** The [strict result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
 > (SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)

@@ -6,6 +6,21 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the title-neutral encounter-source capability
+
+The [frozen design](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json) at source
+`96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. It defines 16
+prospective episodes but authorizes no execution. Four unused Red roots have three initial choices;
+none has an authenticated post-capture state, and the prior successful acquisition exposed only one
+durable next choice.
+
+Codex implements and action-free qualifies `title-neutral-encounter-development-capability-v1`.
+The capability must consume a title-neutral encounter-source interface and independently verify a
+real non-acquisition outcome after retained capture. Claude's formal schedule-scope blocker was
+resolved. Antigravity's partial review shaped the conditional-replan wording, provisional threshold,
+and ban on artificial choices/Red routes, but produced no formal final verdict. No agent owns
+gameplay, training collection, fitting, root rescue, sealed Red, or Crystal in this lane.
+
 ## Current override: Codex owns action-free acquisition-replanning curriculum design
 
 The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)

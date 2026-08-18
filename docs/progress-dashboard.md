@@ -5,6 +5,15 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **DESIGN FROZEN · 4 ROOTS × 4 TRIALS · FIRST ACTION INTERVENTION · ONE
+> LEARNED CONDITIONAL REPLAN · PROVISIONAL GATE 4 REPLANS / 3 ROOTS**. Show inventory
+> **ACQUISITION ROOTS 6 · USED 2 · UNUSED 4 · INITIAL MULTI-CHOICE 4 · POST-CAPTURE STATES 0 ·
+> PRIOR DURABLE NEXT CHOICES 1**. Link the
+> [design receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json), source
+> `96379e8`, and CI `32129847455/1`. The active rail is **TITLE-NEUTRAL ENCOUNTER SOURCE → REAL
+> NON-ACQUISITION CHOICE → ACTION-FREE QUALIFICATION → STOP**. Mark **NO GAMEPLAY · NO COUNTER
+> DELTA · NO FIXED RED ROUTE · NO ROOT RESCUE · NO CRYSTAL**.
+>
 > **Current acquisition/replanning rail:** Show **PAIRED RESULT TIE · BASE SAFE ACQUISITION 1 ·
 > CANDIDATE SAFE ACQUISITION 1 · DECISIONS 1/1 · ACTIONS 244/244 · FRAMES 16,296/16,296 ·
 > COMPOSITION FALSE/FALSE · AUTHORITY +0**. Link the

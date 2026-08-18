@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Design a repeatable Red acquisition-and-replanning curriculum that can distinguish safe acquisition from changed-state multi-decision composition without another one-root rescue loop.",
-      "cheapest_falsifier": "Action-free inspect existing unused nonsealed Red contexts and their authenticated post-acquisition states. Require a title-neutral contract with at least two executable choices before and after acquisition; close the design if existing evidence cannot support that sequence without gameplay or route patches.",
-      "id": "fresh-red-acquisition-replanning-curriculum-design-v1",
+      "capability": "Implement and action-free qualify one title-neutral encounter-source capability that exposes a genuine, independently verified non-acquisition choice after a retained capture.",
+      "cheapest_falsifier": "Prove the generic encounter-source contract ROM-free, then enumerate the four unused Red acquisition roots action-free. Close the candidate if independent team progress or another real non-acquisition outcome cannot remain executable after capture without a Red map script, root-specific rescue, or artificial menu entry.",
+      "id": "title-neutral-encounter-development-capability-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "None. Both models acquired safely on one disclosed train root, but the candidate did not beat the base and neither arm demonstrated a second decision, replanning, fresh-context generalization, transfer, or completion.",
-        "blocker": "The paired screen answered acquisition feasibility but not learned improvement or composition: both arms made one identical-cost successful acquisition, then stopped without a second decision.",
-        "decision": "Close the consumed pair as a tie and open one design-only curriculum lane. Use existing authenticated Red contexts to specify a repeatable acquisition-then-replan question before any further gameplay.",
+        "authority_delta": "None. The design, inventory, reviews, publication, and CI add no model prediction, gameplay, verified outcome, fit, comparison, promotion, or transfer authority.",
+        "blocker": "Four unused acquisition roots have three initial choices, but zero authenticated post-acquisition captures exist and the prior successful capture collapsed to one durable next choice. A genuine learned replan is therefore not yet executable.",
+        "decision": "Retire the frozen curriculum design and open one bounded reusable-capability lane. Prefer DEVELOP_TEAM through a title-neutral encounter-source adapter, while accepting another genuine verified non-acquisition goal if it survives acquisition without being manufactured.",
         "evidence": {
-          "kind": "development_episode",
-          "path": "docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json",
-          "sha256": "79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38"
+          "kind": "qualification",
+          "path": "docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json",
+          "sha256": "a879521018996ba588b93b83d6f22d27377f740120a0d3be23be9a1c5d3c115e"
         },
-        "learning_output": "The consumed pair produced two admitted development episodes and two verified outcomes. Base and candidate each made one prediction, safely retained one acquisition, and used 244 actions / 16,296 frames. The primary result was a tie; composition was false for both. Counters are now development attempts 14 and verified outcomes 4, with fits, comparisons, authority, and transfer unchanged.",
-        "next_falsifier": "Action-free prove that existing unused contexts can freeze an acquisition followed by a changed-state menu with at least two executable choices. If not, close this design and specify the minimum new nonsealed capture need without executing it.",
-        "next_session_goal": "Freeze only the curriculum question and counter semantics for repeatable acquisition plus replanning. Do not execute a root, fit a model, reuse the consumed pair, patch routes or skills, open sealed Red, or run Crystal.",
-        "product_alignment": "The tie proves bounded independent acquisition but exposes the missing product capability: choosing again after the collection state changes. The next design targets that reusable hierarchy directly instead of repeating a one-decision root.",
-        "session_id": "2026-08-18-paired-red-screen-tie-reorientation",
+        "learning_output": "No new measured learning output. The action-free design froze 16 prospective episodes across four roots, with one intervention and one learned replan per episode. Existing contexts are insufficient after acquisition, so every cumulative counter remains unchanged.",
+        "next_falsifier": "Show ROM-free that the semantic capability and verifier are title-neutral, then show action-free on unused Red roots that at least two executable choices remain after acquisition. Fail closed if this needs coordinates, a fixed route, a teacher, or a root patch.",
+        "next_session_goal": "Build and qualify only the reusable encounter-source capability boundary and Red adapter. Do not run gameplay, collect outcomes, fit a model, retry consumed roots, open sealed Red, or execute Crystal.",
+        "product_alignment": "A living-Pokedex agent must acquire, retain, then choose what to do next. This lane builds the reusable post-capture choice seam rather than another Red walkthrough or one-decision acquisition test.",
+        "session_id": "2026-08-18-acquisition-replanning-design-complete",
         "status": "active",
-        "stop_condition": "Stop after one action-free curriculum design or immediately if existing contexts cannot establish a genuine acquisition-then-replan sequence. No gameplay, fit, route/skill patch, sealed Red, Crystal, or replay.",
-        "transfer_result": "Not run. Crystal remains closed; the Red result demonstrated one acquisition but no changed-state composition or transferable hierarchy."
+        "stop_condition": "Stop after one ROM-free and action-free capability qualification, or immediately when the only solution is a Red-specific route, root rescue, artificial menu item, teacher decision, gameplay, or scope beyond four hours.",
+        "transfer_result": "Not run. Crystal remains closed; title neutrality is an engineering requirement here, not measured cross-title transfer."
       },
       "learned_authority": {
-        "current": "The shadow candidate and base each have one bounded, disclosed-train-root safe-acquisition result. Neither has improved-model, replanning, fresh-context, completion, Crystal, or living-Pokedex authority.",
-        "target": "Authorize only a later repeatable Red curriculum that measures safe acquisition followed by changed-state goal choice; design grants no authority."
+        "current": "The shadow candidate and base each have one bounded safe-acquisition result on one disclosed Red train root. Neither has learned replanning, fresh-context, completion, Crystal, or living-Pokedex authority.",
+        "target": "Authorize only a later bounded Red acquisition-replanning campaign after the reusable post-capture capability passes ROM-free and action-free qualification; this maintenance lane grants no authority."
       },
       "maintenance_unblocks": "fresh-red-acquisition-replanning-learning-v1",
       "measurable_outputs": [],
-      "name": "Fresh Red acquisition-replanning curriculum design V1",
-      "next_decision": "If an existing-context design proves a genuine two-step acquisition/replanning question, freeze it and reorient separately to bounded collection. Otherwise close it and define the smallest new nonsealed capture requirement without execution.",
+      "name": "Title-neutral encounter-source development capability V1",
+      "next_decision": "If the generic seam passes ROM-free and action-free qualification, freeze a separate bounded execution qualification for the 16-episode curriculum. Otherwise close it and test another genuine post-acquisition goal without patching roots or routes.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -95,15 +95,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-pair reuse stops this design lane.",
-        "Any route or skill patch, sealed Red access, Crystal access, promotion, or full replay stops the lane.",
-        "Stop after one frozen action-free design or a documented proof that existing contexts cannot support it."
+        "Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-root reuse stops this engineering lane.",
+        "Any fixed map route, root-specific rescue, artificial menu goal, sealed Red access, Crystal access, promotion, or full replay stops the lane.",
+        "Stop after one qualified generic capability seam or a documented falsification within four hours."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 4,
         "maximum_sessions": 1
       },
-      "transfer_test": "Not in this lane. A later Crystal curriculum must reuse the title-neutral acquisition/replanning contract only after Red measures it successfully."
+      "transfer_test": "Not in this lane. The capability interface must be title-neutral now; Crystal becomes the first measured transfer only after Red produces a real acquisition-replanning signal."
+    },
+    {
+      "id": "fresh-red-acquisition-replanning-curriculum-design-v1",
+      "kind": "maintenance",
+      "name": "Fresh Red acquisition-replanning curriculum design V1",
+      "preserve_evidence": true,
+      "reason": "The action-free inventory and reviewed contract froze sixteen prospective episodes across four unused roots. Existing contexts cannot yet expose a multi-choice post-acquisition replan, so the design is complete, no gameplay or learning counter advanced, and the next work is a separate reusable capability lane.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "paired-red-goal-manager-outcome-screen-v1",

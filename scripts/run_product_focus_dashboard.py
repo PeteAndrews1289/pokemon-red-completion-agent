@@ -103,17 +103,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The paired Red screen ended in a tie: both models safely acquired once, but neither "
-            "reached a second decision. The next bounded step is an action-free design for a "
-            "repeatable acquisition-then-replan curriculum."
+            "The 16-episode acquisition-replanning design is frozen, but current Red roots do "
+            "not expose a genuine multi-choice post-capture replan. The next bounded step is a "
+            "title-neutral encounter-source capability, with no gameplay in this lane."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Paired Red screen · tie admitted · curriculum design next",
+        location="Curriculum frozen · post-capture choice seam next · no gameplay",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Design acquisition then changed-state replanning · no gameplay",
+            choice="Build generic encounter-source development seam · no gameplay",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -171,10 +171,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Outcome-fit rail · 12 ATTEMPTS → 1 COMPLETE / 11 FAILED → 2 ADMITTED OUTCOMES "
-                "→ 1 TRAIN-ONLY FIT → SHADOW CANDIDATE"
-            ),
-            (
                 "Fit result · loss 1.2667→1.1496 · selected probability 0.5975→0.6136 · "
                 "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
             ),
@@ -183,12 +179,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "decision · actions 244/244 · frames 16,296/16,296"
             ),
             (
-                "Next evidence · action-free curriculum design · acquisition then changed-state "
-                "replanning · existing unused contexts first · no gameplay or root rescue"
+                "Design frozen · 4 roots × 4 trials · first action is an intervention · one "
+                "learned conditional replan · provisional gate 4 replans across at least 3 roots"
             ),
             (
-                "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "
-                "outcomes 2 · atomic 0 · acquisition 0 · teacher 0 · promotion 0"
+                "Current inventory · acquisition roots 6 · previously used 2 · unused 4 · "
+                "post-acquisition captures 0 · prior durable next-choice count 1"
+            ),
+            (
+                "Next evidence · title-neutral encounter-source capability · independently "
+                "verified non-acquisition choice · no fixed Red route, root rescue, or gameplay"
             ),
         ),
     )

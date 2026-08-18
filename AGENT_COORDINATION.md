@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-18 curriculum frozen; reusable post-capture capability is the only active lane —
+> highest checkpoint:** Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI
+> `32129847455/1`. The [design receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
+> freezes 16 prospective episodes across four roots, with an intervention first and one learned
+> conditional replan. Existing authenticated contexts are insufficient after capture: four unused
+> roots have three initial choices, zero post-capture states exist, and the prior durable next menu
+> had one choice. All counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+>
+> Codex owns `title-neutral-encounter-development-capability-v1`. Claude's formal scope blocker was
+> fixed. Antigravity supplied useful partial architecture criticism but no formal final verdict after
+> its UI stalled. Reviewers remain read-only. No gameplay, fixed route, root rescue, teacher, fit,
+> sealed Red, Crystal, or replay belongs in this lane.
+
 > **2026-08-18 paired screen tied; acquisition-replanning design is the only active lane — highest
 > checkpoint:** The [strict result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
 > (SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)

@@ -8,6 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: curriculum frozen; build one reusable post-capture choice
+
+Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The
+[path-free design receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
+freezes 16 prospective train episodes across four roots. Each episode has a frozen first
+intervention and at most one learned post-intervention choice; this measures conditional replanning,
+not full autonomous composition. The provisional feasibility gate requires four verified distinct
+goal replans across at least three roots, while retaining every claimed failure.
+
+Action-free inventory found four unused roots with three initial choices, zero authenticated
+post-acquisition captures, and only one durable next choice after the prior successful acquisition.
+The active lane is therefore `title-neutral-encounter-development-capability-v1`: qualify a generic
+encounter-source adapter and verifier that can expose a real non-acquisition goal after capture.
+Prefer `DEVELOP_TEAM`; restoration or exploration is acceptable if genuine. Stop if this requires a
+Red coordinate script, fixed route, root rescue, artificial menu entry, teacher choice, gameplay,
+sealed Red, or Crystal. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## Current checkpoint: acquisition tied; changed-state replanning is the next missing capability
 
 The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
