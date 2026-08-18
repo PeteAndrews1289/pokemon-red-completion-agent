@@ -219,6 +219,38 @@ def test_public_runner_does_not_expose_train_or_development_label_admission() ->
     assert tuple(choices) == ("freeze", "preflight", "execute", "resume")
 
 
+def test_multiroot_readiness_opts_into_historical_context_plan_exclusions() -> None:
+    build = SCRIPT["_paired_readiness_args"]
+    values = {
+        name: name
+        for name in (
+            "context_plan",
+            "context_catalog",
+            "base_model",
+            "base_fit_summary",
+            "candidate_model",
+            "candidate_fit_summary",
+            "fit_result_receipt",
+            "prior_campaign",
+            "expected_prior_campaign_sha256",
+            "expected_fit_result_receipt_sha256",
+            "expected_source_commit",
+            "expected_source_bundle_sha256",
+            "expected_paired_runner_sha256",
+            "expected_development_runner_sha256",
+            "expected_runtime_sha256",
+            "expected_numpy_runtime_sha256",
+            "expected_skill_manifest_sha256",
+            "expected_context_plan_sha256",
+            "rom",
+        )
+    }
+
+    paired_args = build(SimpleNamespace(**values))
+
+    assert paired_args.allow_historical_context_plan is True
+
+
 def test_prior_root_exclusion_survives_lineage_rollover() -> None:
     prior = {
         "roots": [

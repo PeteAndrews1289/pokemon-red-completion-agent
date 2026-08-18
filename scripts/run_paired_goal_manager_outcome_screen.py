@@ -53,6 +53,14 @@ EXPECTED_PRIOR_CAMPAIGN_SHA256 = (
     "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14",
     "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9",
 )
+_HISTORICAL_CONTEXT_PLAN_BY_CAMPAIGN_SHA256 = {
+    "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14": (
+        "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548"
+    ),
+    "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9": (
+        "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548"
+    ),
+}
 
 
 class PairedScreenRunError(RuntimeError):
@@ -247,6 +255,9 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
 
     campaigns: list[Mapping[str, object]] = []
     authenticated_shas: list[str] = []
+    allow_historical_context_plan = bool(
+        getattr(args, "allow_historical_context_plan", False)
+    )
     for path, expected in zip(campaign_paths, campaign_shas, strict=True):
         resolved = development._external_regular(path, rom_path=base.rom_path)
         payload = resolved.read_bytes()
@@ -254,18 +265,13 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         if digest != _sha(expected, "prior campaign"):
             raise PairedScreenRunError("prior_campaign_attestation")
         campaign = development._canonical_document(payload, subject="prior campaign")
-        candidate = _mapping(campaign.get("candidate"), "prior candidate")
-        if (
-            campaign.get("schema") != development.CAMPAIGN_SCHEMA
-            or campaign.get("context_plan_sha256") != base.context_plan_sha256
-            or candidate.get("model_canonical_sha256")
-            != base.candidate.plan.model_canonical_sha256
-        ):
-            raise PairedScreenRunError("prior_campaign_contract")
-        try:
-            development._validate_campaign_layout(campaign)
-        except development.RepeatableGoalManagerRunError:
-            raise PairedScreenRunError("prior_campaign_contract") from None
+        _require_prior_campaign_contract(
+            campaign,
+            campaign_sha256=digest,
+            current_context_plan_sha256=base.context_plan_sha256,
+            expected_model_canonical_sha256=base.candidate.plan.model_canonical_sha256,
+            allow_historical_context_plan=allow_historical_context_plan,
+        )
         campaigns.append(campaign)
         authenticated_shas.append(digest)
     if len(set(authenticated_shas)) != len(authenticated_shas):
@@ -282,6 +288,33 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         prior_campaigns=tuple(campaigns),
         prior_campaign_sha256=tuple(authenticated_shas),
     )
+
+
+def _require_prior_campaign_contract(
+    campaign: Mapping[str, object],
+    *,
+    campaign_sha256: str,
+    current_context_plan_sha256: str,
+    expected_model_canonical_sha256: str,
+    allow_historical_context_plan: bool,
+) -> None:
+    expected_context_plan = current_context_plan_sha256
+    if allow_historical_context_plan:
+        historical = _HISTORICAL_CONTEXT_PLAN_BY_CAMPAIGN_SHA256.get(campaign_sha256)
+        if historical is None:
+            raise PairedScreenRunError("prior_campaign_contract")
+        expected_context_plan = historical
+    candidate = _mapping(campaign.get("candidate"), "prior candidate")
+    if (
+        campaign.get("schema") != development.CAMPAIGN_SCHEMA
+        or campaign.get("context_plan_sha256") != expected_context_plan
+        or candidate.get("model_canonical_sha256") != expected_model_canonical_sha256
+    ):
+        raise PairedScreenRunError("prior_campaign_contract")
+    try:
+        development._validate_campaign_layout(campaign)
+    except development.RepeatableGoalManagerRunError:
+        raise PairedScreenRunError("prior_campaign_contract") from None
 
 
 def _freeze(

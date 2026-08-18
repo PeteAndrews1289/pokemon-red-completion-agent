@@ -169,7 +169,19 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         or _file_sha256(paired_path) != _sha(args.expected_paired_runner_sha256, "paired runner")
     ):
         raise ResettableMultirootRunError("import_origin_attestation")
-    paired_args = argparse.Namespace(
+    paired_args = _paired_readiness_args(args)
+    paired_readiness = paired._readiness(paired_args)
+    runner_path = Path(__file__).resolve()
+    runner_sha256 = _file_sha256(runner_path)
+    if runner_path.parent != SCRIPTS_ROOT.resolve() or runner_sha256 != _sha(
+        args.expected_runner_sha256, "runner"
+    ):
+        raise ResettableMultirootRunError("executable_attestation")
+    return _Readiness(paired=paired_readiness, runner_sha256=runner_sha256)
+
+
+def _paired_readiness_args(args: argparse.Namespace) -> argparse.Namespace:
+    return argparse.Namespace(
         context_plan=args.context_plan,
         context_catalog=args.context_catalog,
         base_model=args.base_model,
@@ -188,16 +200,9 @@ def _readiness(args: argparse.Namespace) -> _Readiness:
         expected_numpy_runtime_sha256=args.expected_numpy_runtime_sha256,
         expected_skill_manifest_sha256=args.expected_skill_manifest_sha256,
         expected_context_plan_sha256=args.expected_context_plan_sha256,
+        allow_historical_context_plan=True,
         rom=args.rom,
     )
-    paired_readiness = paired._readiness(paired_args)
-    runner_path = Path(__file__).resolve()
-    runner_sha256 = _file_sha256(runner_path)
-    if runner_path.parent != SCRIPTS_ROOT.resolve() or runner_sha256 != _sha(
-        args.expected_runner_sha256, "runner"
-    ):
-        raise ResettableMultirootRunError("executable_attestation")
-    return _Readiness(paired=paired_readiness, runner_sha256=runner_sha256)
 
 
 def _freeze(readiness: _Readiness, destination: Path, private_root: Path) -> dict[str, object]:

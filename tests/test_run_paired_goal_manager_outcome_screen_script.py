@@ -66,6 +66,81 @@ def test_wrong_prior_campaign_set_fails_before_base_readiness() -> None:
     assert called is False
 
 
+def test_historical_context_plan_opt_in_is_exact_and_preserves_layout_guard() -> None:
+    require = SCRIPT["_require_prior_campaign_contract"]
+    globals_ = require.__globals__
+    development = globals_["development"]
+    campaign_sha256, historical_context = next(
+        iter(globals_["_HISTORICAL_CONTEXT_PLAN_BY_CAMPAIGN_SHA256"].items())
+    )
+    campaign = {
+        "schema": development.CAMPAIGN_SCHEMA,
+        "context_plan_sha256": historical_context,
+        "candidate": {"model_canonical_sha256": "1" * 64},
+    }
+    calls = 0
+    original = development._validate_campaign_layout
+
+    def valid(_campaign: object) -> None:
+        nonlocal calls
+        calls += 1
+
+    development._validate_campaign_layout = valid
+    try:
+        require(
+            campaign,
+            campaign_sha256=campaign_sha256,
+            current_context_plan_sha256="9" * 64,
+            expected_model_canonical_sha256="1" * 64,
+            allow_historical_context_plan=True,
+        )
+        assert calls == 1
+
+        for changed in (
+            {**campaign, "schema": "wrong"},
+            {**campaign, "candidate": {"model_canonical_sha256": "2" * 64}},
+        ):
+            with pytest.raises(SCRIPT["PairedScreenRunError"], match="prior_campaign_contract"):
+                require(
+                    changed,
+                    campaign_sha256=campaign_sha256,
+                    current_context_plan_sha256="9" * 64,
+                    expected_model_canonical_sha256="1" * 64,
+                    allow_historical_context_plan=True,
+                )
+
+        with pytest.raises(SCRIPT["PairedScreenRunError"], match="prior_campaign_contract"):
+            require(
+                campaign,
+                campaign_sha256="8" * 64,
+                current_context_plan_sha256="9" * 64,
+                expected_model_canonical_sha256="1" * 64,
+                allow_historical_context_plan=True,
+            )
+        with pytest.raises(SCRIPT["PairedScreenRunError"], match="prior_campaign_contract"):
+            require(
+                campaign,
+                campaign_sha256=campaign_sha256,
+                current_context_plan_sha256="9" * 64,
+                expected_model_canonical_sha256="1" * 64,
+                allow_historical_context_plan=False,
+            )
+
+        development._validate_campaign_layout = lambda _campaign: (_ for _ in ()).throw(
+            development.RepeatableGoalManagerRunError("campaign_layout")
+        )
+        with pytest.raises(SCRIPT["PairedScreenRunError"], match="prior_campaign_contract"):
+            require(
+                campaign,
+                campaign_sha256=campaign_sha256,
+                current_context_plan_sha256="9" * 64,
+                expected_model_canonical_sha256="1" * 64,
+                allow_historical_context_plan=True,
+            )
+    finally:
+        development._validate_campaign_layout = original
+
+
 def test_preflight_root_binding_rejects_a_different_registry_root() -> None:
     require = SCRIPT["_require_selected_root_record"]
     entry_type = SCRIPT["development"]._ContextEntry
