@@ -6,7 +6,26 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one prospective restart amendment
+## Current override: Codex owns direct execution of training-ready V2
+
+Executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+`32111661277`, attempt 1. Campaign `452cff2a…` froze with the failed V1 root absent, four roots, and
+**12/12 available trials** focused on `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced frames,
+teacher queries, or claims. See the
+[V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+(SHA-256 `018115af…`).
+
+Codex owns `repeatable-goal-manager-development-learning-v2`: execute the fixed campaign directly
+under its once-only/no-replacement contract. No agent may add another qualification stage. A second
+predecision protocol failure closes the architecture. Reviewers remain read-only.
+
+Legacy counters remain **30/15/3/3/0/0**, and all development/composition counters remain zero. The
+only current claim is readiness for the first teacher-free same-context Red development data—not
+gameplay, an outcome, competence, completion, a living Pokédex, Crystal transfer, fit, authority, or
+transfer.
+
+## Previous override: Codex owned one prospective restart amendment
 
 Campaign `e99075d9…` produced one durable `development_runtime` terminal before prediction,
 controller action, or outcome. It has one `infrastructure_invalid` claim and eleven

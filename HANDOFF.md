@@ -18,7 +18,26 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Trial 0 infrastructure-invalid; publish one prospective restart — 2026-08-18
+## Replacement V2 training-ready; execute directly — 2026-08-18
+
+Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+`32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1
+root absent, four roots, and **12/12 available trials** focused on `DEVELOP_TEAM`, `RESTORE_TEAM`,
+`MANAGE_STORAGE`, and `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller
+actions, advanced frames, teacher queries, or claims. See the
+[path-free V2 preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+(SHA-256 `018115af…`).
+
+The active lane is `repeatable-goal-manager-development-learning-v2`. Execute the frozen campaign
+directly under its once-only, no-replacement contract. Do not add another qualification stage. A
+second predecision protocol failure closes the architecture.
+
+The legacy board remains **30/15/3/3/0/0**, and every development/composition counter remains zero.
+This is readiness for the first teacher-free same-context Red development data only. Do not claim
+gameplay, an outcome, competence, completion, a living Pokédex, Crystal transfer, a fit, authority,
+or transfer.
+
+## Previous checkpoint: trial 0 infrastructure-invalid; publish one prospective restart — 2026-08-18
 
 Old campaign `e99075d9…` produced one durable `development_runtime` terminal before prediction,
 controller action, or outcome. It now has one `infrastructure_invalid` claim and eleven

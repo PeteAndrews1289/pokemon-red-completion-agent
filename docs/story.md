@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first starting line breaks before the model moves
+## Current checkpoint: twelve replacement starting lines, and no third rehearsal
+
+The replacement executable at source `1c978fb7` passed green CI. Its new campaign excludes the
+failed V1 root, contains four roots and twelve available trials, and keeps the same team-development,
+recovery, storage, and acquisition focuses. The freeze/preflight asked the model nothing, sent no
+controller input, advanced no frame, queried no teacher, and wrote no trial claim. The
+[path-free V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+records **12/12 available**.
+
+The active lane is `repeatable-goal-manager-development-learning-v2`. The fixed replacement now
+executes directly under its once-only/no-replacement contract; there is no more qualification. If a
+second protocol failure occurs before a decision, the architecture closes.
+
+The scoreboard remains **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO ·
+TRANSFER ZERO**, and every new counter remains zero. This is readiness for the first teacher-free
+same-context Red development data—not gameplay, an outcome, competence, completion, a living
+Pokédex, Crystal transfer, a fit, authority, or transfer.
+
+---
+
+## Previous checkpoint: the first starting line broke before the model moved
 
 The old twelve-trial campaign reached trial 0 and wrote one durable infrastructure terminal before
 the model predicted, the controller acted, or an outcome existed. That failed root is now closed

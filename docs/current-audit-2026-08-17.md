@@ -1,6 +1,25 @@
 # Current audit — 2026-08-18
 
-## Current result: trial 0 was infrastructure-invalid before prediction
+## Current result: replacement V2 is training-ready with 12/12 available trials
+
+Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+`32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1
+root absent, four roots, and **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`,
+`MANAGE_STORAGE`, and `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller
+actions, advanced frames, teacher queries, or claims. The
+[path-free V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+has SHA-256 `018115af…`.
+
+The active lane is `repeatable-goal-manager-development-learning-v2`. Execute this fixed campaign
+directly under its once-only/no-replacement contract. There is no further qualification. A second
+predecision protocol failure closes the architecture.
+
+The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**, and all development/composition counters remain zero. This result is readiness for
+the first teacher-free same-context Red development data only. It supplies no gameplay, outcome,
+competence, completion, living-Pokédex, Crystal, fit, authority, or transfer claim.
+
+## Previous result: trial 0 was infrastructure-invalid before prediction
 
 Campaign `e99075d9…` produced one durable `development_runtime` terminal before prediction,
 controller action, or outcome. It now has one `infrastructure_invalid` claim and eleven

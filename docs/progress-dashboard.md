@@ -5,7 +5,23 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current repeatable-development restart rail:** Show **OLD CAMPAIGN E99075D9… RETIRED · ONE
+> **Current repeatable-development learning-V2 rail:** Show **EXECUTABLE SOURCE 1C978FB · CI
+> 32111661277/1 GREEN · CAMPAIGN 452CFF2A… FROZEN · FAILED V1 ROOT ABSENT · 4 ROOTS · AVAILABLE
+> 12/12 · DEVELOP_TEAM + RESTORE_TEAM + MANAGE_STORAGE + ACQUIRE_SPECIES · PREDICTIONS 0 ·
+> CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0 · CLAIMS 0**. Link the
+> [V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+> and display **RECEIPT SHA-256 018115AF…**.
+>
+> Display `repeatable-goal-manager-development-learning-v2` and the next rail **DIRECT ONCE-ONLY
+> EXECUTION · NO REPLACEMENTS · NO FURTHER QUALIFICATION**. Add **SECOND PREDECISION PROTOCOL FAILURE
+> CLOSES ARCHITECTURE**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> development/composition counters at zero. Label **READINESS FOR FIRST TEACHER-FREE SAME-CONTEXT RED
+> DEVELOPMENT DATA ONLY · NO GAMEPLAY · OUTCOME · COMPETENCE · COMPLETION · LIVING-DEX · CRYSTAL ·
+> FIT · AUTHORITY · TRANSFER CLAIM**.
+>
+> **Historical restart rail:** Show **OLD CAMPAIGN E99075D9… RETIRED · ONE
 > DEVELOPMENT_RUNTIME TERMINAL BEFORE PREDICTION/ACTION/OUTCOME · INFRASTRUCTURE_INVALID CLAIM 1 ·
 > RETIRED_UNEXECUTED 11 · FAILED ROOT CLOSED ACCOUNT-WIDE · OLD CAMPAIGN NEVER RESUMES**. Link the
 > [invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)

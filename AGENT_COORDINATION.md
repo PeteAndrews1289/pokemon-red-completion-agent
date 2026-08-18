@@ -1,7 +1,24 @@
 # Three-agent coordination
 
-> **2026-08-18 trial 0 infrastructure-invalid; one prospective restart amendment is the only active
-> lane — highest checkpoint:** Campaign `e99075d9…` produced one durable `development_runtime`
+> **2026-08-18 replacement V2 training-ready; direct execution is the only active lane — highest
+> checkpoint:** Executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+> `32111661277` attempt 1. Campaign `452cff2a…` froze with the failed V1 root absent, four roots, and
+> **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+> `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced frames,
+> teacher queries, or claims. Link the
+> [V2 preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+> (SHA-256 `018115af…`).
+>
+> Codex owns `repeatable-goal-manager-development-learning-v2`: execute the fixed V2 campaign
+> directly under its once-only/no-replacement contract. There is no further qualification. A second
+> predecision protocol failure closes the architecture.
+>
+> Legacy counters remain 30/15/3/3/0/0 and all development/composition counters remain zero. This
+> is readiness for first teacher-free same-context Red development data only—not gameplay, an
+> outcome, competence, completion, living-Pokédex, Crystal, fit, authority, or transfer.
+>
+> **2026-08-18 trial 0 infrastructure-invalid; one prospective restart amendment was the only active
+> lane — historical checkpoint:** Campaign `e99075d9…` produced one durable `development_runtime`
 > terminal before prediction, controller action, or outcome. It has one `infrastructure_invalid`
 > claim and eleven `retired_unexecuted` markers. The failed root is closed account-wide; the old
 > campaign never resumes. Link the

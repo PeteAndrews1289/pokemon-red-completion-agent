@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: retire the infrastructure-invalid campaign; publish one restart amendment
+## Current checkpoint: replacement V2 training-ready; execute without another qualification
+
+Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+`32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1
+root absent, four roots, and **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`,
+`MANAGE_STORAGE`, and `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller
+actions, advanced frames, teacher queries, or claims. The
+[path-free V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+has SHA-256 `018115af…`.
+
+The active lane is `repeatable-goal-manager-development-learning-v2`. Execute the fixed replacement
+campaign directly under the existing once-only/no-replacement contract. There is no further
+qualification. A second predecision protocol failure closes the architecture.
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**, and all development/composition counters remain zero. This is readiness for the first
+teacher-free same-context Red development data only. It proves no gameplay, outcome, competence,
+completion, living Pokédex, Crystal transfer, fit, authority, or transfer.
+
+## Previous checkpoint: retired the infrastructure-invalid campaign; publish one restart amendment
 
 Campaign `e99075d9…` produced one durable `development_runtime` terminal before any prediction,
 controller action, or outcome. It now has one `infrastructure_invalid` claim and eleven

@@ -103,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The first campaign is retired after a predecision execution-interface invalid. "
-            "The repaired source is green; one prospective replacement campaign must now freeze "
-            "and pass a zero-action preflight before model-led development begins."
+            "Training is ready: the replacement teacher-free Red campaign excluded the failed "
+            "root and passed its zero-action preflight with all twelve trials available. The "
+            "next action is model-led development, not another qualification loop."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Development restart · old campaign retired · replacement not yet frozen",
+        location="Repeatable development pilot V2 · 12 replacement trials ready",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Promoted Red goal manager af29d7e7… · no new prediction",
-            choice="Freeze fresh 4-root/12-trial campaign · zero-action preflight",
+            candidate="Promoted Red goal manager af29d7e7… · logged exploratory policy",
+            choice="Execute replacement trials 0–11 once · admit fixed denominator",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="training",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -171,8 +171,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Restart rail · OLD CAMPAIGN RETIRED → failed root excluded → publish amendment "
-                "→ freeze fresh 4×3 denominator → zero-action preflight → direct execution"
+                "Training rail V2 · READY 12/12 → execute each replacement trial once → retain "
+                "every durable success/failure → strict fixed-denominator admission"
             ),
             (
                 "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
@@ -184,8 +184,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "advanced frames 0 · exact root closed · no cause inferred · no retry"
             ),
             (
-                "Infrastructure invalid · durable terminals 1 · predictions 0 · controller 0 · "
-                "outcomes 0 · failed root closed · retired unexecuted 11 · old campaign closed"
+                "Training-ready V2 · failed V1 root absent · frozen roots 4 · available trials "
+                "12/12 · claimed trials 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0"
             ),
         ),
     )

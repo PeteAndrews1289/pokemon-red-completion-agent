@@ -1,6 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: trial 0 invalidates the infrastructure, not the learning hypothesis
+## August 18: replacement V2 reaches a clean starting line
+
+Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+`32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1
+root absent, four roots, and **12/12 available trials** across team development, recovery, storage,
+and acquisition. Freeze/preflight made zero predictions, controller actions, advanced frames,
+teacher queries, or claims. The
+[path-free V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+has SHA-256 `018115af…`.
+
+The active lane is `repeatable-goal-manager-development-learning-v2`. Execute the fixed replacement
+campaign directly under its once-only/no-replacement contract. There is no further qualification.
+A second predecision protocol failure closes the architecture.
+
+No counter moved: the legacy board stays 30/15/3/3/0/0 and all development/composition counters
+stay zero. This is readiness for the first teacher-free same-context Red development data—not
+gameplay, an outcome, competence, completion, a living Pokédex, Crystal transfer, a fit, authority,
+or transfer.
+
+## Previous August 18 checkpoint: trial 0 invalidated the infrastructure, not the learning hypothesis
 
 Campaign `e99075d9…` wrote one durable `development_runtime` terminal before prediction, controller
 action, or outcome. It now has one `infrastructure_invalid` claim and eleven `retired_unexecuted`

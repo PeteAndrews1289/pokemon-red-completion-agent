@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): trial 0 was infrastructure-invalid; publish one
+> **Current product focus (August 18, 2026): replacement V2 is training-ready; execute directly.**
+> Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed GitHub CI run
+> `32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully, excluded the failed
+> V1 root, and returned **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`,
+> `MANAGE_STORAGE`, and `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller
+> actions, advanced frames, teacher queries, or claims. See the
+> [path-free V2 preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+> (SHA-256 `018115af…`).
+>
+> The active lane is `repeatable-goal-manager-development-learning-v2`. Execute the fixed V2
+> campaign directly under the existing once-only, no-replacement contract; there is no further
+> qualification. A second predecision protocol failure closes the architecture.
+>
+> The legacy board remains **30/15/3/3/0/0**, and all development/composition counters remain zero.
+> This is readiness for the first teacher-free same-context Red development data—not gameplay, an
+> outcome, competence, completion, a living Pokédex, Crystal transfer, a fit, authority, or transfer.
+>
+> **Previous product focus (August 18, 2026): trial 0 was infrastructure-invalid; publish one
 > prospective restart amendment.** Campaign `e99075d9…` produced one durable
 > `development_runtime` terminal before any prediction, controller action, or outcome. It now has
 > one `infrastructure_invalid` claim and eleven `retired_unexecuted` markers. The failed root is

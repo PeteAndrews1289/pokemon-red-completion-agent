@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: trial 0 stops before the model moves
+## August 18 scene: replacement V2 is ready; the next input is real
+
+Open on **SOURCE 1C978FB · CI 32111661277/1 GREEN · CAMPAIGN 452CFF2A… FROZEN · FAILED V1 ROOT
+ABSENT · 4 ROOTS · 12/12 AVAILABLE · DEVELOP TEAM · RESTORE TEAM · MANAGE STORAGE · ACQUIRE
+SPECIES**. Stamp **PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0 · CLAIMS 0** and
+link the [V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+with **SHA-256 018115AF…**.
+
+Move the active rail to `repeatable-goal-manager-development-learning-v2`: **DIRECT ONCE-ONLY
+EXECUTION · NO REPLACEMENTS · NO MORE QUALIFICATION**. Lock the rail with **SECOND PREDECISION
+PROTOCOL FAILURE CLOSES ARCHITECTURE**.
+
+Keep **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0** and every
+development/composition counter at zero. Narration: **“This is readiness for the first teacher-free
+same-context Red development data—not gameplay, an outcome, competence, completion, a living Dex,
+Crystal transfer, a fit, authority, or transfer.”**
+
+## Previous August 18 scene: trial 0 stopped before the model moved
 
 Open on **OLD CAMPAIGN E99075D9… · TRIAL 0 · DEVELOPMENT_RUNTIME TERMINAL BEFORE PREDICTION/ACTION/
 OUTCOME**. Stamp **INFRASTRUCTURE_INVALID 1 · RETIRED_UNEXECUTED 11 · FAILED ROOT CLOSED

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` under green CI run
+  `32111661277` attempt 1. Replacement campaign `452cff2a…` froze with the failed V1 root absent,
+  four roots, and 12/12 available trials across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`,
+  and `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced
+  frames, teacher queries, or claims. The
+  [path-free V2 preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+  has SHA-256 `018115af…`. Activated `repeatable-goal-manager-development-learning-v2` for direct
+  once-only execution with no replacements or further qualification. A second predecision protocol
+  failure closes the architecture. Legacy 30/15/3/3/0/0 and all development/composition counters
+  remain unchanged. This is readiness for first teacher-free same-context Red development data,
+  not gameplay, an outcome, competence, completion, living-Pokédex, Crystal, fit, authority, or
+  transfer.
 - Recorded trial 0 of campaign `e99075d9…` as infrastructure-invalid after one durable
   `development_runtime` terminal occurred before prediction, controller action, or outcome. Wrote
   one `infrastructure_invalid` claim and eleven `retired_unexecuted` markers, closed the failed root
