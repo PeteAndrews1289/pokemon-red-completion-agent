@@ -6,6 +6,21 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns bounded Red encounter-development integration
+
+The [qualified capability](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+at source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`.
+It proves only a ROM-free, action-free, title-neutral `DEVELOP_TEAM` contract and collection-safe
+verifier. Claude returned GO; its negative-path test request is complete. Antigravity was consulted
+but its app remained stalled before a formal current verdict; prior architecture constraints are
+already represented in the contract.
+
+Codex owns `red-encounter-development-execution-qualification-v1`. Reuse one existing Red
+wild-corridor movement/battle primitive behind hard action/frame limits. Do not travel, heal, expose
+routes/coordinates to policy, manufacture menu choices, run gameplay, collect outcomes, fit,
+promote, open sealed Red, or run Crystal. If this cannot be done locally, close the mechanic rather
+than rescue a root.
+
 ## Current override: Codex owns the title-neutral encounter-source capability
 
 The [frozen design](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json) at source

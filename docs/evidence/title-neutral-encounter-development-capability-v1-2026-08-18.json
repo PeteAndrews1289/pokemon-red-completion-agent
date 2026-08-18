@@ -1,0 +1,87 @@
+{
+  "claim_boundary": {
+    "supported": "A published ROM-free core and Red adapter expose one title-neutral, action-free encounter-local DEVELOP_TEAM binding whose verifier requires real team-readiness progress without living-collection regression.",
+    "unsupported": [
+      "acquisition_replanning_episode",
+      "cross_title_transfer",
+      "executed_red_skill",
+      "gameplay_authority",
+      "living_pokedex_ability",
+      "model_training_result",
+      "red_completion"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation": {
+    "core_module_sha256": "c74361270add2b333788d6f80921e8fb3f51020d25c6f3d5216577d1d4c9c4fd",
+    "core_test_sha256": "564bec007647e1ca08ba439731af63237f354e8f111df02aee3f7bd0b28ee1ec",
+    "red_adapter_module_sha256": "7cc152f9f7dcbe969c093bb447f55b159eb5d59c6c0c41e86308439876bc42ae",
+    "red_adapter_test_sha256": "6960e3da6cf8a2279483ce1dc1674ee311b8ad3deeeba36db45fc94908aa70c6"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32132328658,
+    "source_commit": "6d028ea2003a4520b93a47d0607f5af01f8969e4"
+  },
+  "qualification": {
+    "action_free_offer": true,
+    "execution_integrated": false,
+    "gameplay_authorized": false,
+    "goal_kind": "develop_team",
+    "independent_verification": [
+      "team_readiness_strictly_increased",
+      "living_specimen_count_nonregressed",
+      "required_specimens_remaining_nonincreased",
+      "fainted_party_members_nonincreased",
+      "same_encounter_source",
+      "positive_action_and_frame_accounting",
+      "settled_input_ready_nonbattle_state"
+    ],
+    "route_or_coordinate_policy_input": false,
+    "source_identity_in_policy_input": false,
+    "teacher_choice": false,
+    "title_identity_in_policy_input": false
+  },
+  "recorded_on": "2026-08-18",
+  "remaining_execution_prerequisites": {
+    "action_free_post_acquisition_menu_qualification": false,
+    "authenticated_red_profile_binding": false,
+    "durable_episode_terminal": false,
+    "hard_in_flight_action_and_frame_limits": false,
+    "one_source_local_red_executor": false,
+    "one_shot_campaign_identity": false
+  },
+  "review": {
+    "antigravity": "The current read-only request was submitted with the full product mission and intermediate claim boundary, but the app remained stalled before a formal verdict. Its earlier architecture findings against artificial menu entries, Red-specific routes, and single-step overclaims are satisfied by this boundary.",
+    "claude": "GO for this intermediate capability only. No blocker; its missing Red boundary negative-path tests were added before the final published source and green CI."
+  },
+  "schema": "pokemon.red.title-neutral-encounter-development-capability-qualification.v1",
+  "status": "rom_free_capability_qualified_execution_integration_required",
+  "title_role": "Reusable post-capture choice capability, not gameplay, model training, completion, or transfer",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames": 0,
+    "episode_attempts": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "verified_outcomes": 0
+  }
+}

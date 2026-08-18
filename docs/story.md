@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the second choice now has a portable shape
+
+The missing post-catch option is no longer a vague idea. The project now has a small,
+title-neutral contract for “train here”: offering it presses no buttons, the model sees no Red map
+or route identity, and success counts only when team readiness rises without sacrificing a living
+specimen or leaving the game in an unsafe state. The full test suite is green, and Claude gave the
+intermediate capability a GO after one final set of failure-path tests.
+
+Nothing played during this phase. The model still has not demonstrated that it can catch a Pokémon
+and then choose again. The next scene is to put one existing, tightly bounded Red wild-battle
+mechanic behind this portable contract—without walking to another venue, healing, or smuggling in a
+scripted route. Only after that action-free integration passes can the four-root curriculum move
+toward real gameplay.
+
 ## Current checkpoint: the experiment is designed, but the second choice is missing
 
 The next experiment is now concrete: four unused Red roots, four trials each, a frozen first

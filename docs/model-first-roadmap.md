@@ -8,6 +8,22 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: portable choice seam qualified; bind one real Red mechanic
+
+Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`. The
+[path-free capability receipt](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+records an action-free `DEVELOP_TEAM` offer whose policy projection contains neither title nor
+source identity, route, or coordinates. Its fresh verifier accepts only positive team-readiness
+progress with living-collection, remaining-target, faint, source, and settled-state guards. Claude
+returned GO; the missing Red boundary failure tests were added before the final green source.
+
+This is capability engineering, not gameplay or a model result. The active lane is
+`red-encounter-development-execution-qualification-v1`: bind the seam to one existing source-local
+Red wild-encounter movement/battle primitive with hard action/frame limits and no travel or healing.
+The offer must remain action-free. Stop before gameplay; then either freeze a separate zero-action
+preflight for the 16-episode curriculum or close this mechanic. Counters remain **30/15/4/3/0/0**
+and **14/4/0/1/1**.
+
 ## Current checkpoint: curriculum frozen; build one reusable post-capture choice
 
 Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The

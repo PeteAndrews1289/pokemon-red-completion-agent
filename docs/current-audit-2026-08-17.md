@@ -1,5 +1,21 @@
 # Current audit — 2026-08-18
 
+## Current result: title-neutral post-capture choice capability passes; execution is unproved
+
+Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1` with
+4,182 passed, 1 skipped, 3 deselected, and 1 xfailed. The
+[path-free qualification](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+binds an action-free `DEVELOP_TEAM` offer and a fresh verifier requiring strict readiness progress,
+living-collection nonregression, no increased remaining targets or faints, source continuity,
+positive accounting, and a settled terminal. Title/source identity and route/coordinates are absent
+from policy input. Claude returned GO and its negative-path coverage request was completed.
+
+The result is deliberately narrow: execution integration, post-acquisition menu feasibility,
+gameplay, learned replanning, completion, and transfer remain unproved. All counters stay
+**30/15/4/3/0/0** and **14/4/0/1/1**. The next falsifier is one hard-bounded Red source-local
+executor that reuses existing wild-corridor mechanics without travel, healing, teacher choice, or
+route policy. Failure closes the mechanic rather than triggering a root patch.
+
 ## Current result: curriculum design passes; existing post-capture evidence is insufficient
 
 Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The

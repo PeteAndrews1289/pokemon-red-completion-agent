@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published the title-neutral encounter-source development capability at source
+  `6d028ea2003a4520b93a47d0607f5af01f8969e4` under green CI `32132328658/1`. The
+  [path-free receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+  records an action-free `DEVELOP_TEAM` offer, identity-free policy projection, and independent
+  collection-safe readiness verification. Claude returned GO; its requested Red boundary negative
+  tests were added before publication. No emulator, prediction, outcome, fit, comparison, authority,
+  or transfer counter moved. Retired the ROM-free lane and opened bounded Red encounter-local
+  execution qualification; travel, healing, route policy, teacher use, gameplay, sealed Red, and
+  Crystal remain closed.
+
 - Published the action-free acquisition-replanning curriculum at source
   `96379e8074373c5a9ba981f171ee75aa7080ff4a` under green CI `32129847455/1`. The
   [path-free receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)

@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the missing second choice gets a real interface
+
+Put **SOURCE 6D028EA · CI GREEN · 4,182 TESTS PASSED** on screen, then reveal the new rail:
+**CATCH → REOBSERVE → DEVELOP TEAM HERE**. Overlay the rules: **ACTION-FREE OFFER · NO TITLE OR
+SOURCE IDENTITY · NO ROUTE OR COORDINATES · COLLECTION MUST NOT REGRESS · TEAM READINESS MUST
+RISE**. Add **CLAUDE: GO** and note that its final failure-path tests were added before publication.
+
+Then stop the victory music. Stamp **GAMEPLAY 0 · MODEL OUTCOMES 0 · AUTHORITY +0**. This is the
+portable contract the future Red, Crystal, and later adapters can share—not proof that transfer has
+happened. The next rail is deliberately small: **EXISTING WILD CORRIDOR → HARD-LIMITED LOCAL
+BATTLE EXECUTOR → ACTION-FREE BINDING → STOP**. Cross out **TRAVEL**, **HEALING**, **TEACHER**,
+**ROOT PATCH**, and **CRYSTAL**.
+
 ## August 18 scene: the blueprint is ready; the second choice is not
 
 Put the new rail on screen: **4 ROOTS × 4 TRIALS → FROZEN INTERVENTION → ONE LEARNED REPLAN**.

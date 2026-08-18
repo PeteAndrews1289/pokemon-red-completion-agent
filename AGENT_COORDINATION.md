@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-18 portable seam qualified; Red execution integration is the only active lane —
+> highest checkpoint:** Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI
+> `32132328658/1`. The [capability receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+> proves a title-neutral, action-free `DEVELOP_TEAM` offer and collection-safe readiness verifier;
+> it proves no gameplay or training result. Claude returned GO and its negative-path coverage gap
+> was closed. Antigravity was consulted but remained stalled before a formal verdict.
+>
+> Codex owns `red-encounter-development-execution-qualification-v1`: bind one existing,
+> source-local Red movement/battle primitive behind hard limits and stop before gameplay. Reviewers
+> are read-only. No travel, healing, fixed route, root rescue, teacher, model prediction, outcome,
+> fit, sealed Red, Crystal, or replay belongs in this lane. Counters stay **30/15/4/3/0/0** and
+> **14/4/0/1/1**.
+
 > **2026-08-18 curriculum frozen; reusable post-capture capability is the only active lane —
 > highest checkpoint:** Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI
 > `32129847455/1`. The [design receipt](docs/evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)

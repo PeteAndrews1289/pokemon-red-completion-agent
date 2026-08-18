@@ -12,6 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-18: portable encounter development qualified; Red execution binding is active
+
+Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed exact-head CI
+`32132328658/1`. The [capability receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+binds a ROM-free, action-free `DEVELOP_TEAM` offer, title/source-free policy projection, and strict
+verification of readiness progress, collection nonregression, party safety, source continuity, and
+a settled terminal. Claude returned GO and its only actionable test gap was closed before the final
+commit. Antigravity was consulted on the same product mission but its app stalled before a verdict;
+its earlier bans on artificial choices, Red routes, and single-step overclaims remain enforced.
+
+The active lane is `red-encounter-development-execution-qualification-v1`. Bind the seam to one
+existing wild-corridor movement-and-battle primitive under hard action/frame limits. It must train
+locally, never travel or heal, expose no route/coordinate to policy, and remain action-free when
+offered. Stop before gameplay. Do not claim training data, replanning, authority, transfer, Red
+completion, or living-Pokédex ability. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## 2026-08-18: acquisition-replanning design frozen; reusable capability work is active
 
 Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed exact-head CI

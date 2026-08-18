@@ -5,6 +5,17 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): portable post-capture choice qualified; bind the
+> real Red executor next.** Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI
+> `32132328658/1` (4,182 passed, 1 skipped, 3 deselected, 1 xfailed). The
+> [path-free capability receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+> records an action-free, title-neutral `DEVELOP_TEAM` offer and a verifier that requires team
+> readiness to rise without losing living specimens, collection progress, or party safety. Claude
+> returned GO; its missing negative-path tests were added before publication. No emulator ran and
+> all counters remain **30/15/4/3/0/0** and **14/4/0/1/1**. The active lane now binds one existing,
+> hard-limited Red encounter-local executor—without travel, healing, a teacher, or route policy—
+> before any acquisition-replanning gameplay is authorized.
+
 > **Current product focus (August 18, 2026): curriculum frozen; build the reusable post-capture
 > choice seam.** Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI
 > `32129847455/1` (4,163 passed, 1 skipped, 3 deselected, 1 xfailed). The

@@ -103,6 +103,11 @@ ACQUISITION_REPLANNING_DESIGN = (
     / "docs/evidence"
     / "acquisition-replanning-curriculum-design-v1-2026-08-18.json"
 )
+ENCOUNTER_DEVELOPMENT_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "title-neutral-encounter-development-capability-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -153,9 +158,9 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "title-neutral-encounter-development-capability-v1"
+    assert state.active_lane["id"] == "red-encounter-development-execution-qualification-v1"
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 18
+    assert len(state.retired_lanes) == 19
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -193,7 +198,27 @@ def test_acquisition_replanning_design_is_action_free_and_product_bounded() -> N
     assert design["evidence_gate"]["minimum_verified_distinct_goal_replans"] == 4
     assert design["evidence_gate"]["minimum_root_lineages_with_verified_replan"] == 3
     assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_encounter_development_qualification_stops_before_gameplay() -> None:
+    receipt = json.loads(
+        ENCOUNTER_DEVELOPMENT_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "rom_free_capability_qualified_execution_integration_required"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32132328658,
+        "source_commit": "6d028ea2003a4520b93a47d0607f5af01f8969e4",
+    }
+    assert receipt["qualification"]["action_free_offer"] is True
+    assert receipt["qualification"]["execution_integrated"] is False
+    assert receipt["qualification"]["gameplay_authorized"] is False
     assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
 
 
 def test_paired_screen_design_is_action_free_and_nonpromoting() -> None:
@@ -662,17 +687,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Title-neutral encounter-source development capability V1" in public["stage"]
+    assert "Red encounter-source development execution qualification V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 14}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow candidate eb5c6515" in encoded
     assert "loss 1.2667" in encoded
-    assert "16-episode acquisition-replanning design is frozen" in encoded
+    assert "title-neutral post-capture development seam is published" in encoded
     assert "actions 244/244" in encoded
     assert "post-acquisition captures 0" in encoded
-    assert "no fixed Red route, root rescue, or gameplay" in encoded
+    assert "execution integration and gameplay remain unproved" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

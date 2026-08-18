@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the portable post-capture choice seam passes
+
+Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`. The
+[qualification receipt](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+records a ROM-free, action-free `DEVELOP_TEAM` offer. Its policy projection excludes title, source,
+route, and coordinate identity; its fresh verifier requires strict readiness progress while
+preserving living specimens, collection requirements, party safety, source continuity, and a
+settled terminal. Claude returned GO and the final negative-path test gap was closed.
+
+This is an intermediate capability, not evidence of model training or gameplay. No emulator frame,
+outcome, fit, comparison, authority, or transfer counter changed. The next lane binds one existing,
+hard-limited Red wild-corridor executor behind this contract without travel, healing, teacher
+choice, or route policy. A pass enables a separate zero-action curriculum preflight; a failure
+closes the mechanic rather than patching a root.
+
 ## August 18: the replanning curriculum is frozen; a reusable choice seam is next
 
 Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The

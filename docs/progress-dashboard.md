@@ -5,6 +5,16 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **SOURCE 6D028EA · CI 32132328658/1 GREEN · PORTABLE DEVELOP_TEAM SEAM
+> QUALIFIED · ACTION-FREE OFFER · TITLE/SOURCE/ROUTE POLICY INPUT 0 · GAMEPLAY 0 · COUNTER DELTA
+> 0**. Link the
+> [capability receipt](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json).
+> Show **CLAUDE GO · NEGATIVE-PATH TESTS CLOSED** and **ANTIGRAVITY CONSULTED · CURRENT VERDICT
+> STALLED**. The active rail is **EXISTING WILD CORRIDOR → HARD-LIMITED LOCAL TRAINING EXECUTOR →
+> ACTION-FREE PROFILE BINDING → STOP BEFORE GAMEPLAY**. Mark **NO TRAVEL · NO HEALING · NO ROUTE
+> POLICY · NO TEACHER · NO ROOT RESCUE · NO CRYSTAL**. Keep cumulative counters
+> **30/15/4/3/0/0** and product-v2 **14/4/0/1/1**.
+>
 > **Current rail:** Show **DESIGN FROZEN · 4 ROOTS × 4 TRIALS · FIRST ACTION INTERVENTION · ONE
 > LEARNED CONDITIONAL REPLAN · PROVISIONAL GATE 4 REPLANS / 3 ROOTS**. Show inventory
 > **ACQUISITION ROOTS 6 · USED 2 · UNUSED 4 · INITIAL MULTI-CHOICE 4 · POST-CAPTURE STATES 0 ·
