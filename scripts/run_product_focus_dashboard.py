@@ -103,17 +103,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The first teacher-free Red outcome update is complete and produced a shadow "
-            "candidate. The next bounded step is a fair paired screen against the original "
-            "model from one outcome-unused acquisition and replanning root."
+            "The paired Red acquisition design is frozen with zero gameplay. The next bounded "
+            "step is execution qualification for one root, two reset arms, and at most three "
+            "decisions per arm."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Paired Red screen design · no gameplay execution",
+        location="Paired Red screen · design frozen · executor qualification",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Freeze one matched root · later run two arms · max 3 decisions each",
+            choice="Qualify one pair claim · two reset arms · max 3 decisions each",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -179,8 +179,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
             ),
             (
-                "Next evidence · one-root paired Red screen · base versus candidate · "
-                "acquisition + changed-state replan · max 3 decisions/arm · hard stop after pair"
+                "Next evidence · executor qualification only · one root · two arms · max 3 "
+                "decisions/arm · hard stop · no gameplay in this lane"
             ),
             (
                 "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "

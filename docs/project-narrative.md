@@ -1,6 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: one outcome update passes, and authority stays put
+## August 18: the paired design freezes one root without executing either arm
+
+Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
+`32122694671`. It action-free selected one model-blind, development-outcome-unused acquisition
+train root with a three-goal initial menu. Supervised-train and guard-only exposure are allowed and
+disclosed, so this is not unseen evidence. The
+[path-free design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+has SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`.
+
+The design freezes two independent-reset arms capped at three decisions each. Safe retained
+acquisition is the only primary endpoint; completion, verified outcomes, and changed-state
+replanning remain unproven secondary reports. The first action-free freeze failed solely because an
+artifact ID exceeded the store-length contract. It wrote no plan or claim and made no prediction or
+action. The repaired freeze succeeded.
+
+The board remains 30/15/4/3/0/0 and product-focus-v2 remains 12/2/0/1/1. Predictions, controller
+actions, advanced frames, executions, outcomes, and counter deltas are all zero. The active lane is
+`paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement execute/admit,
+publish it, require exact-head green CI, and run one zero-action preflight. This lane executes no
+gameplay; a later pair requires separate reorientation.
+
+## Previous August 18 checkpoint: one outcome update passes, and authority stays put
 
 Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
 attempt 1. Its only allowed update consumed the one-shot identity without retry and produced shadow
@@ -15,8 +36,9 @@ outcomes, 0 atomic episodes, 1 composition attempt, and 1 verified composition. 
 one fit and no outcome, comparison, evaluation, authority, or transfer result.
 
 The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. It freezes one still-open,
-outcome-unused acquisition train root chosen model-blind and excluding prior, guard, validation,
-test, and sealed lineages. Base and candidate receive identical initial state, menu, seed, policy,
+development-outcome-unused acquisition train root chosen model-blind, excluding prior teacher-free
+campaign, validation, test, sealed, and closed lineages while allowing and disclosing
+supervised-train and guard-only exposure. Base and candidate receive identical initial state, menu, seed, policy,
 skills, budgets, and verifiers; post-choice trajectories may diverge. One combined action-free
 preflight precedes exactly two executions, each limited to three decisions. No arm can be dropped
 or replaced, and the screen hard-stops after the pair. Its result is feasibility/falsification

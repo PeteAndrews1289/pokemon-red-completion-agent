@@ -18,7 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Outcome fit complete; design one paired feasibility screen — 2026-08-18
+## Paired design frozen; qualify execution without gameplay — 2026-08-18
+
+Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
+`32122694671`. One model-blind, development-outcome-unused acquisition train root was formally
+selected with three initial goals. Supervised-train and guard-only exposure are allowed and
+disclosed, so the root is not unseen. See the
+[path-free design receipt](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+(SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`).
+
+The design freezes base and candidate as two independent-reset arms, each capped at three
+decisions. Safe retained acquisition is the only primary endpoint. Episode completion, verified
+outcomes, and changed-state replanning are secondary reports that have not been executed or proven.
+The first action-free freeze failed only because an artifact ID exceeded the store-length contract;
+it wrote no plan or claim and made no prediction or action. The repaired freeze succeeded.
+
+The freeze made zero predictions, controller actions, advanced frames, executions, or outcomes and
+changed no counter. The board remains **30/15/4/3/0/0**, and product-focus-v2 remains
+**12/2/0/1/1**. The active lane is
+`paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement execute/admit,
+publish it, require exact-head green CI, and run one zero-action preflight. Do not execute gameplay
+in this lane; later execution requires a separate reorientation.
+
+## Previous checkpoint: outcome fit complete; design one paired feasibility screen — 2026-08-18
 
 Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
 attempt 1. The single allowed outcome update consumed its identity with no retry and produced
@@ -34,8 +56,9 @@ episodes, 1 composition attempt, and 1 verified composition**. The fit added no 
 comparison, evaluation, authority, or transfer result.
 
 The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
-outcome-unused acquisition train root chosen model-blind, excluding every prior, guard,
-validation, test, and sealed lineage. Bind identical initial state, menu, seed, policy, skills,
+development-outcome-unused acquisition train root chosen model-blind, excluding prior teacher-free
+campaign, validation, test, sealed, and closed lineages while allowing and disclosing
+supervised-train and guard-only exposure. Bind identical initial state, menu, seed, policy, skills,
 budgets, and verifiers for base and candidate while allowing post-choice trajectories to diverge.
 Use one combined action-free preflight, then exactly two executions with at most three decisions per
 arm. No arm may be dropped or replaced; hard-stop after the pair. This screen is only a bounded

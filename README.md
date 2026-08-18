@@ -5,7 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): the outcome fit passed; design one paired feasibility
+> **Current product focus (August 18, 2026): one-root paired design frozen; qualify execution
+> without gameplay.** Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
+> `32122694671`. One model-blind, development-outcome-unused acquisition train root was formally
+> selected with a three-goal initial menu. Supervised-train and guard-only exposure are allowed and
+> disclosed; this is not an unseen root. The
+> [path-free design receipt](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+> has SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`.
+>
+> Two independent-reset arms are frozen at a maximum of three decisions each. Their sole primary
+> endpoint is safe retained acquisition; episode completion, verified outcomes, and changed-state
+> replanning remain secondary future reports, not proven results or tie-breakers. The first
+> action-free freeze failed only because its artifact ID exceeded the store-length contract; it
+> wrote no plan or claim and made no prediction or action. The repaired freeze then succeeded.
+>
+> Freeze produced zero predictions, controller actions, advanced frames, executions, outcomes, or
+> counter deltas. The board remains **30/15/4/3/0/0**, and product-focus-v2 remains **12/2/0/1/1**.
+> The active lane is `paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement
+> execute/admit, publish it, require exact-head green CI, and run one zero-action preflight. No
+> gameplay belongs to this lane; later execution requires a separate reorientation.
+>
+> **Previous product focus (August 18, 2026): the outcome fit passed; design one paired feasibility
 > screen.** Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run
 > `32115274511`, attempt 1. The one allowed update consumed its identity with no retry and produced
 > shadow candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
@@ -20,8 +40,9 @@
 > evaluation, authority, or transfer result.
 >
 > The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
-> outcome-unused acquisition train root selected model-blind and excluding prior, guard,
-> validation, test, and sealed lineages. Base and candidate must share the identical initial state,
+> development-outcome-unused acquisition train root selected model-blind, excluding prior
+> teacher-free campaign, validation, test, sealed, and closed lineages; supervised-train and
+> guard-only exposure are allowed and disclosed. Base and candidate must share the initial state,
 > menu, seed, policy, skills, budgets, and verifiers; post-choice trajectories may diverge. After
 > one combined action-free preflight, run exactly two arms, one per model, with at most three
 > decisions per arm, no dropped or replacement arm, and a hard stop after the pair. This is

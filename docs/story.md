@@ -7,7 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: two lessons moved the weights, not the authority
+## Current checkpoint: one root is frozen, but neither arm has moved
+
+Published source `952e0ed9` passed green CI and action-free selected one
+development-outcome-unused acquisition train root. Its initial menu has three goals. The root may
+have supervised-train or guard-only exposure, and the
+[path-free design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+discloses that boundary instead of calling the root unseen.
+
+Two reset arms are frozen, each with at most three decisions. The only primary question is whether
+each model safely retains an acquisition. Completion, verified outcomes, and changed-state
+replanning will be secondary reports later; none has happened yet. The first freeze stumbled only
+because an artifact name was too long. It wrote no plan or claim and made no prediction or action.
+The repaired action-free freeze succeeded.
+
+The scoreboard does not move: **30 TRAIN · 15 DEVELOPMENT · 4 FITS · 3 COMPARISONS · AUTHORITY
+ZERO · TRANSFER ZERO**, with the newer board still **12/2/0/1/1**. The active lane,
+`paired-red-goal-manager-outcome-screen-execution-qualification-v1`, now implements execution and
+admission, publishes them, passes exact-head CI, and runs one zero-action preflight. Neither arm
+plays in this lane.
+
+---
+
+## Previous checkpoint: two lessons moved the weights, not the authority
 
 The one allowed update ran once and passed every frozen train-only guard. Loss fell from 1.2667 to
 1.1496, both successful choices gained probability, the mean moved from 0.5975 to 0.6136, and none
@@ -22,8 +44,9 @@ the fit created another outcome, comparison, authority grant, or transfer result
 
 The active lane is `paired-red-goal-manager-outcome-screen-design-v1`, and its next question is
 deliberately smaller than “did the model improve?” One still-open,
-outcome-unused acquisition train root will be chosen without looking at either model, outside every
-prior, guard, validation, test, and sealed lineage. Base and candidate start from identical state,
+development-outcome-unused acquisition train root will be chosen without looking at either model,
+outside prior teacher-free campaign, validation, test, sealed, and closed lineages; supervised-train
+and guard-only exposure are allowed and disclosed. Base and candidate start from identical state,
 menu, seed, policy, skills, budgets, and verifiers. After one shared action-free preflight, each gets
 one execution of at most three decisions. Their paths may diverge after choosing, but neither arm
 can disappear or be replaced, and the experiment ends after the pair. This is a feasibility

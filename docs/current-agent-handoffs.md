@@ -6,7 +6,30 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one-root paired feasibility design
+## Current override: Codex owns paired execution qualification without gameplay
+
+Source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run `32122694671`.
+One model-blind, development-outcome-unused acquisition train root was formally selected with three
+initial goals. Supervised-train and guard-only exposure are allowed and disclosed, so this is not
+an unseen root. See the
+[design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+(SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`).
+
+Two independent-reset arms are frozen at a maximum of three decisions each. Safe retained
+acquisition is the sole primary endpoint; completion, verified outcomes, and changed-state
+replanning are unproven secondary reports. One action-free freeze failed only because its artifact
+ID exceeded the store-length contract, wrote no plan or claim, and made no prediction or action.
+The repaired freeze succeeded.
+
+Codex owns `paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement
+execute/admit, publish it, require exact-head green CI, then run one zero-action preflight. Reviewers
+remain read-only. No gameplay is authorized in this lane, and execution requires a later
+reorientation.
+
+The board remains **30/15/4/3/0/0**, and product-focus-v2 remains **12/2/0/1/1**. Freeze produced
+zero predictions, controller actions, advanced frames, executions, outcomes, or counter deltas.
+
+## Previous override: Codex owned one-root paired feasibility design
 
 Source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`, attempt
 1. The single allowed update consumed its identity without retry and produced shadow candidate
@@ -17,8 +40,9 @@ protected winner flips were **0/18**. See the
 `f1613b27…`). The candidate is not promoted and evaluation is null.
 
 Codex owns `paired-red-goal-manager-outcome-screen-design-v1`: freeze one still-open,
-outcome-unused acquisition train root chosen model-blind and excluding prior, guard, validation,
-test, and sealed lineages. Base and candidate must share the identical initial state, menu, seed,
+development-outcome-unused acquisition train root chosen model-blind, excluding prior teacher-free
+campaign, validation, test, sealed, and closed lineages while allowing and disclosing
+supervised-train and guard-only exposure. Base and candidate must share the initial state, menu, seed,
 policy, skills, budgets, and verifiers, while their post-choice trajectories may diverge. Freeze one
 combined action-free preflight and exactly two later executions, maximum three decisions per arm,
 no dropped or replaced arm, then hard-stop after the pair. Reviewers remain read-only. The result is

@@ -1,7 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-18 outcome fit complete; one-root paired feasibility design is the only active lane —
-> highest checkpoint:** Source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run
+> **2026-08-18 paired design frozen; execution qualification without gameplay is the only active
+> lane — highest checkpoint:** Source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI
+> run `32122694671`. One model-blind, development-outcome-unused acquisition train root was
+> formally selected with three initial goals. Supervised-train and guard-only exposure are allowed
+> and disclosed; the root is not unseen. Link the
+> [design receipt](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+> (SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`).
+>
+> Two independent-reset arms are frozen, maximum three decisions each. Safe retained acquisition
+> is the only primary endpoint; completion, verified outcomes, and changed-state replanning are
+> unproven secondary reports. The first action-free freeze failed only on an overlong artifact ID,
+> wrote no plan or claim, and made no prediction or action; the repaired freeze succeeded.
+>
+> Codex owns `paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement
+> execute/admit, publish the implementation, require exact-head green CI, then run exactly one
+> zero-action preflight. Reviewers remain read-only. No gameplay is authorized in this lane.
+>
+> The board remains **30/15/4/3/0/0**, product-focus-v2 remains **12/2/0/1/1**, and freeze deltas
+> are predictions 0, controller 0, advanced frames 0, executions 0, outcomes 0, and counters 0.
+>
+> **2026-08-18 outcome fit complete; one-root paired feasibility design was the only active lane —
+> historical checkpoint:** Source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run
 > `32115274511` attempt 1. The one allowed update consumed its identity without retry and produced
 > shadow candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected probability rose
 > **0.5975→0.6136**, both successful choices gained probability, maximum train-menu KL was
@@ -10,8 +30,9 @@
 > (SHA-256 `f1613b27…`). Evaluation is null and the candidate remains shadow-only.
 >
 > Codex owns `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
-> outcome-unused acquisition train root selected model-blind and excluding prior, guard,
-> validation, test, and sealed lineages. Base and candidate get the identical initial state, menu,
+> development-outcome-unused acquisition train root selected model-blind, excluding prior
+> teacher-free campaign, validation, test, sealed, and closed lineages; supervised-train and
+> guard-only exposure are allowed and disclosed. Base and candidate get the initial state, menu,
 > seed, policy, skills, budgets, and verifiers; only their post-choice trajectories may diverge.
 > Require one combined action-free preflight, then exactly two executions, maximum three decisions
 > per arm, no dropped or replaced arm, and a hard stop after the pair. Reviewers remain read-only.

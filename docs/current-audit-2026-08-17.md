@@ -1,6 +1,27 @@
 # Current audit — 2026-08-18
 
-## Current result: one outcome fit passed and produced a shadow candidate
+## Current result: paired design frozen without execution or counter change
+
+Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
+`32122694671`. The action-free design selected one model-blind, development-outcome-unused
+acquisition train root with three available initial goals. Supervised-train and guard-only exposure
+are allowed and disclosed; the result is not unseen evidence. The
+[path-free design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+has SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`.
+
+The design freezes two independent-reset arms capped at three decisions each. Its only primary
+endpoint is safe retained acquisition. Completion, verified outcomes, and changed-state replanning
+remain secondary reports that have not run. The first action-free freeze failed solely because an
+artifact ID exceeded the store-length contract; it wrote no plan or claim and made no prediction
+or action. The repaired freeze succeeded.
+
+The active lane is `paired-red-goal-manager-outcome-screen-execution-qualification-v1`: implement
+execute/admit, publish it, require exact-head green CI, and run one zero-action preflight. Gameplay
+is prohibited in this lane. The board remains **30/15/4/3/0/0**, product-focus-v2 remains
+**12/2/0/1/1**, and predictions, controller actions, advanced frames, executions, outcomes, and all
+counter deltas are zero.
+
+## Previous result: one outcome fit passed and produced a shadow candidate
 
 Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
 attempt 1. One and only one update ran; its identity is consumed and cannot retry. Training loss
@@ -17,8 +38,9 @@ episodes · 1 composition attempt · 1 verified composition**. Counter treatment
 fit and zero outcomes, comparisons, authority promotions, or transfer results.
 
 The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. It must freeze one
-still-open, outcome-unused acquisition train root selected model-blind and excluding prior, guard,
-validation, test, and sealed lineages. Base and candidate share identical initial state, menu,
+still-open, development-outcome-unused acquisition train root selected model-blind, excluding prior
+teacher-free campaign, validation, test, sealed, and closed lineages while allowing and disclosing
+supervised-train and guard-only exposure. Base and candidate share identical initial state, menu,
 seed, policy, skills, budgets, and verifiers; post-choice trajectories may diverge. One combined
 action-free preflight precedes exactly two executions, each capped at three decisions. Dropped or
 replacement arms are forbidden, and the pair hard-stops. This is feasibility/falsification only,

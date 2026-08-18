@@ -8,7 +8,29 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: outcome fit complete; design one paired feasibility screen
+## Current checkpoint: paired design frozen; qualify execution without gameplay
+
+Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
+`32122694671`. One model-blind, development-outcome-unused acquisition train root was formally
+selected with three initial goals. Supervised-train and guard-only exposure are allowed and
+disclosed; this is not an unseen root. The
+[path-free design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+has SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`.
+
+Base and candidate are frozen as two independent-reset arms, each capped at three decisions. Safe
+retained acquisition is the sole primary endpoint. Episode completion, verified outcomes, and
+changed-state replanning are secondary future reports, not frozen evidence or tie-breakers. One
+action-free freeze failed only because its artifact ID exceeded the store-length contract; it
+wrote no plan or claim and made no prediction or action. The repaired freeze succeeded.
+
+The active lane is `paired-red-goal-manager-outcome-screen-execution-qualification-v1`. Implement
+execute/admit, publish the implementation, require exact-head green CI, and run one zero-action
+preflight. Do not execute gameplay in this lane; a later execution requires separate reorientation.
+The board remains **30 train · 15 development · 4 fits · 3 comparisons · authority 0 · transfer
+0**, and product-focus-v2 remains **12/2/0/1/1**. Predictions, controller actions, advanced frames,
+executions, outcomes, and all freeze counter deltas are zero.
+
+## Previous checkpoint: outcome fit complete; design one paired feasibility screen
 
 Exact source `cde9f488ca2bb4c9bfbea086fae1e6407406d661` passed CI run `32115274511`,
 attempt 1. The only allowed outcome update consumed its identity with no retry and produced shadow
@@ -19,8 +41,9 @@ candidate `eb5c6515…`. Training loss fell **1.2667→1.1496**, mean selected p
 has SHA-256 `f1613b27…`. Evaluation is null and promotion is unauthorized.
 
 The active lane is `paired-red-goal-manager-outcome-screen-design-v1`. Freeze one still-open,
-outcome-unused acquisition train root chosen model-blind, excluding prior, guard, validation, test,
-and sealed lineages. Bind the identical initial state, menu, seed, policy, skills, budgets, and
+development-outcome-unused acquisition train root chosen model-blind, excluding prior teacher-free
+campaign, validation, test, sealed, and closed lineages while allowing and disclosing
+supervised-train and guard-only exposure. Bind the initial state, menu, seed, policy, skills, budgets, and
 verifiers for base and candidate; post-choice trajectories may diverge. Require one combined
 action-free preflight followed by exactly two executions, at most three decisions per arm, no
 dropped or replacement arm, and a hard stop after the pair. Treat the result only as bounded

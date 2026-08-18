@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Published source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` under green CI run
+  `32122694671` and froze one model-blind, development-outcome-unused acquisition train root with a
+  three-goal initial menu. Supervised-train and guard-only exposure are allowed and disclosed. The
+  [path-free design receipt](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+  has SHA-256 `c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391`.
+  It freezes two independent-reset arms capped at three decisions each and makes safe retained
+  acquisition the sole primary endpoint; completion, verified outcomes, and changed-state
+  replanning remain unproven secondary reports. One action-free freeze first failed only because
+  its artifact ID exceeded the store-length contract; it wrote no plan or claim and made no
+  prediction or action. The repaired freeze succeeded. Freeze effects and counter deltas are all
+  zero, leaving 30/15/4/3/0/0 and product-focus-v2 12/2/0/1/1 unchanged. Activated
+  `paired-red-goal-manager-outcome-screen-execution-qualification-v1` to implement execute/admit,
+  publish it, pass exact-head CI, and run one zero-action preflight; no gameplay belongs to this
+  lane.
 - Completed the single frozen teacher-free outcome update at source
   `cde9f488ca2bb4c9bfbea086fae1e6407406d661` under green CI run `32115274511` attempt 1. Its
   one-shot identity is consumed with no retry. Training loss fell 1.2667→1.1496, mean selected
@@ -12,7 +26,9 @@
   exactly one model fit: the legacy board is now 30/15/4/3/0/0, while product-focus-v2 stays
   12/2/0/1/1 and no outcome, comparison, authority, or transfer result was added. Activated
   `paired-red-goal-manager-outcome-screen-design-v1`: freeze one model-blind still-open,
-  outcome-unused acquisition train root excluding prior/guard/validation/test/sealed lineages;
+  development-outcome-unused acquisition train root excluding prior teacher-free campaign,
+  validation, test, sealed, and closed lineages while allowing disclosed supervised-train and
+  guard-only exposure;
   bind identical initial state/menu/seed/policy/skills/budgets/verifiers; allow only post-choice
   divergence; run one combined action-free preflight and then exactly two maximum-three-decision
   arms with no drop or replacement and a hard stop after the pair. The screen is

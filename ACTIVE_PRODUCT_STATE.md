@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Paired Red goal-manager outcome screen design V1** (`paired-red-goal-manager-outcome-screen-design-v1`)
+**Paired Red goal-manager screen execution qualification V1** (`paired-red-goal-manager-outcome-screen-execution-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the design authenticates one development-outcome-unused matched root with an executable acquisition choice and reobservation support, publish it and reorient once to exactly two executions capped at three decisions per arm. Otherwise close this candidate path without another fit or root search.
+- Next decision: If the exact published executor passes one combined zero-action preflight with the pair identity still unclaimed, reorient once to the fixed two-arm execution. Otherwise close the pair without another root, fit, or rescue patch.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Freeze one paired, teacher-free Red development microepisode that compares the original goal manager with the outcome-updated shadow candidate from identical resets of one development-outcome-unused acquisition-bearing train root. |
+| Reusable capability | Implement and qualify a root-safe two-arm executor and strict paired admission for the exact frozen Red acquisition screen without executing gameplay during qualification. |
 | Authority now | The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Freeze a fair one-root paired Red screen whose win, loss, or tie depends only on safe retained acquisition, without granting authority or executing gameplay during design. |
+| Authority target | Qualify exactly one later two-arm Red feasibility execution whose result depends only on safe retained acquisition; qualification grants no authority. |
 | Transfer test | After independent paired Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal. |
-| Cheapest falsifier | Choose the first eligible acquisition train assignment by a model-blind registry rule before formal inspection. Require a multi-choice initial menu containing executable acquisition and authenticated reobservation support; close the design if that single root fails without searching for a replacement. |
-| Time box | 1 session / 2 hours |
+| Cheapest falsifier | Prove with ROM-free adversarial tests and one exact-head zero-action preflight that a global pair claim and each durable arm claim precede prediction, both arms reopen the same frozen reset, hard-stop after three decisions, retain failures, and admit no replacement or adaptation. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
@@ -57,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-paired-red-goal-manager-outcome-screen-design-v1** · status **active** · evidence [model fit](docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json)
+**2026-08-18-paired-red-goal-manager-outcome-screen-execution-qualification-v1** · status **active** · evidence [qualification](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The first teacher-free update passed its frozen train-only safety guards and changed the portable title-neutral policy. The paired screen is one descriptive feasibility and falsification check on development-outcome-unused Red collection gameplay, not a general regression or improvement test. |
-| Learning output | One deterministic teacher-free outcome update produced shadow candidate eb5c6515... from two authenticated positive targets. Weighted training loss fell from 1.2667 to 1.1496, mean selected probability rose from 0.5975 to 0.6136, maximum train-menu KL was 0.000486, and all 18 protected acquisition, evolution, and story winners were preserved. This adds one model fit and no evaluation, promotion, authority, or transfer result. |
+| Product alignment | This is the shortest engineering bridge from the first teacher-free fitted candidate to a controlled gameplay measurement. It tests reusable model-led acquisition behavior without another teacher, fit, route patch, or full-game claim. |
+| Learning output | No new measured learning output. One action-free freeze selected a development-outcome-unused acquisition train root with three initial goals and froze two reset arms at three decisions each. Predictions, inputs, advanced frames, executions, outcomes, fits, comparisons, authority, and transfer all remained zero. |
 | Authority delta | None. The new candidate is shadow-only; the promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority. |
 | Transfer result | Not run. Crystal remains closed until Red shows independent acquisition and replanning evidence under a frozen paired screen. |
-| Blocker | The update used only two correlated positive targets from one completed episode, while eleven of twelve campaign trials failed and no retained acquisition occurred. Independent gameplay evidence is now the limiting factor, not another model fit. |
-| Decision | Retire the consumed fit lane after one successful bounded update. Freeze one acquisition-bearing Red microepisode comparing the base and candidate from independently reset copies of the same development-outcome-unused train root; do not execute it in this design session. |
-| Next session | Publish a path-free paired-screen design and action-free inventory only. If it passes review, reorient separately to exactly two executions of at most three decisions each from reset copies of one root. The primary endpoint is safe retained acquisition; completion, verified outcomes, and changed-state replanning are secondary reports. |
-| Next falsifier | Freeze one paired base-versus-candidate Red root before prediction. Exclude every prior teacher-free execution, campaign, fit-target, validation, test, sealed, and closed lineage; supervised-train and guard-only exposure are allowed and disclosed. Bind identical reset bytes, initial menu, seed, exploratory policy, budgets, skills, verifiers, runtime, and three-decision cap. Any incomplete arm remains in the denominator without replacement. |
-| Stop condition | Stop on any model fit, controller action, teacher query, development outcome access, candidate promotion, route or skill patch, validation or sealed Red access, Crystal execution, private-data leak, or two hours. |
+| Blocker | The exact one-root pair is frozen, but the published runner supports only freeze and preflight. It cannot yet claim, execute, durably terminate, or strictly admit the two arms. |
+| Decision | Retire the completed design lane and enter one bounded execution-qualification lane. Build the reusable claim-before-prediction, identical-reset, hard-limit, durable-terminal, and strict-admission boundary before any gameplay. |
+| Next session | Build and adversarially test execute and admit support for the frozen pair, publish it under green exact-head CI, and run one combined zero-action preflight. Do not execute either model arm in this qualification lane. |
+| Next falsifier | Implement one source-authenticated executor that claims the full pair before either prediction, durably claims and terminates both arms, enforces identical initial reset and maximum-three-decision limits, retains incomplete arms, and strictly adjudicates only safe retained acquisition. Then run one zero-action exact-head preflight. |
+| Stop condition | Stop on any controller action, model prediction, outcome access, model fit, root replacement, route or skill patch, candidate promotion, sealed Red or Crystal access, private-data leak, or four hours. |
 
 ### Stop conditions
 
-- Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the design lane.
-- Any post-inspection root search, unmatched initial pair, dropped or replaced arm, route or skill patch, private-data leak, or use of a prior teacher-free execution, campaign, fit-target, validation, test, sealed, or closed lineage ends the design lane.
-- Stop after one frozen paired-screen design or two hours; any later execution hard-stops after the two maximum-three-decision arms and requires a separate reorientation.
+- Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the qualification lane.
+- Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair.
+- Stop after one exact-head zero-action preflight or four hours; actual two-arm gameplay requires a separate reorientation.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Paired Red goal-manager outcome screen design V1:** The action-free design froze one development-outcome-unused acquisition train root with three initial goals, two identical-reset arms, a three-decision cap, and safe retained acquisition as the only primary endpoint. The runner made zero predictions or controller actions; execution remains separate. Evidence is preserved; retry is no.
 - **Teacher-free Red goal-manager outcome fit V1:** Its one allowed capped inverse-propensity update completed from two authenticated positive targets in one episode. The candidate passed all frozen train-only loss, probability, weight, KL, round-trip, and protected-winner guards; it remains shadow-only and the consumed fit identity may never retry. Evidence is preserved; retry is no.
 - **Repeatable Red goal-manager development pilot V2:** All twelve replacement trials were consumed exactly once. Strict admission found one complete two-decision composition episode and eleven failed trials; two verified outcomes are fit-eligible, atomic episodes and acquisitions were zero, and nineteen failed-prefix choices remain excluded. The fixed campaign may not run again. Evidence is preserved; retry is no.
 - **Repeatable Red goal-manager development restart:** The old campaign and failed root were durably retired, and replacement campaign 452cff2a... then froze and passed a zero-action preflight under source 1c978fb7f60b41d46a2f74800b28652778d8b8a0 with four lineages and all twelve identities available. Restart maintenance produced no learning output and is complete. Evidence is preserved; retry is no.

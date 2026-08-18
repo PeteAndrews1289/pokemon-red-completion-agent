@@ -83,6 +83,11 @@ REPEATABLE_OUTCOME_FIT_RESULT = (
     / "docs/evidence"
     / "repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json"
 )
+PAIRED_SCREEN_DESIGN = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -133,9 +138,12 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "paired-red-goal-manager-outcome-screen-design-v1"
+    assert (
+        state.active_lane["id"]
+        == "paired-red-goal-manager-outcome-screen-execution-qualification-v1"
+    )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 14
+    assert len(state.retired_lanes) == 15
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -147,6 +155,27 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_paired_screen_design_is_action_free_and_nonpromoting() -> None:
+    receipt = json.loads(PAIRED_SCREEN_DESIGN.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "design_frozen_action_free_execution_not_implemented"
+    assert receipt["root_admission"]["development_outcome_unused"] is True
+    assert receipt["root_admission"]["guard_only_exposure_allowed"] is True
+    assert receipt["root_admission"]["initial_available_goal_count"] == 3
+    assert receipt["paired_contract"]["maximum_decisions_per_arm"] == 3
+    assert receipt["paired_contract"]["primary_endpoint"] == "safe_retained_acquisition"
+    assert receipt["paired_contract"]["adjudication_results"] == [
+        "win",
+        "loss",
+        "tie",
+        "uninterpretable",
+    ]
+    assert receipt["paired_contract"]["unseen_comparison"] is False
+    assert receipt["paired_contract"]["promotion_authorized"] is False
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
 
 
 def test_repeatable_infrastructure_invalid_is_retired_without_learning_output() -> None:
@@ -568,7 +597,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Paired Red goal-manager outcome screen design V1" in public["stage"]
+    assert "Paired Red goal-manager screen execution qualification V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 12, "total": 12}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
@@ -576,7 +605,10 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "Shadow candidate eb5c6515" in encoded
     assert "1 TRAIN-ONLY FIT" in encoded
     assert "loss 1.2667" in encoded
-    assert "one-root paired Red screen" in encoded
+    assert "design is frozen" in encoded
+    assert "two reset arms" in encoded
+    assert "max 3 decisions" in encoded
+    assert "no gameplay in this lane" in encoded
     assert "Development result V2" in encoded
     assert "attempts 12/12" in encoded
     assert "complete 1" in encoded
