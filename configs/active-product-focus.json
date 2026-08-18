@@ -8,23 +8,23 @@
   },
   "lanes": [
     {
-      "capability": "Freeze one paired, teacher-free Red development microepisode that compares the original goal manager with the outcome-updated shadow candidate from one identical, outcome-unused acquisition-bearing root and permits changed-state replanning.",
-      "cheapest_falsifier": "Use action-free inspection only to prove that one outcome-unused Red root supports an executable acquisition choice and a maximum-three-decision replan. Close the screen design if those semantics cannot be frozen without adapting routes, skills, models, or roots after prediction.",
+      "capability": "Freeze one paired, teacher-free Red development microepisode that compares the original goal manager with the outcome-updated shadow candidate from identical resets of one development-outcome-unused acquisition-bearing train root.",
+      "cheapest_falsifier": "Choose the first eligible acquisition train assignment by a model-blind registry rule before formal inspection. Require a multi-choice initial menu containing executable acquisition and authenticated reobservation support; close the design if that single root fails without searching for a replacement.",
       "id": "paired-red-goal-manager-outcome-screen-design-v1",
       "kind": "maintenance",
       "latest_reorientation": {
         "authority_delta": "None. The new candidate is shadow-only; the promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority.",
         "blocker": "The update used only two correlated positive targets from one completed episode, while eleven of twelve campaign trials failed and no retained acquisition occurred. Independent gameplay evidence is now the limiting factor, not another model fit.",
-        "decision": "Retire the consumed fit lane after one successful bounded update. Freeze one acquisition-bearing Red microepisode comparing the base and candidate from independently reset copies of the same outcome-unused root; do not execute it in this design session.",
+        "decision": "Retire the consumed fit lane after one successful bounded update. Freeze one acquisition-bearing Red microepisode comparing the base and candidate from independently reset copies of the same development-outcome-unused train root; do not execute it in this design session.",
         "evidence": {
           "kind": "model_fit",
           "path": "docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json",
           "sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace"
         },
         "learning_output": "One deterministic teacher-free outcome update produced shadow candidate eb5c6515... from two authenticated positive targets. Weighted training loss fell from 1.2667 to 1.1496, mean selected probability rose from 0.5975 to 0.6136, maximum train-menu KL was 0.000486, and all 18 protected acquisition, evolution, and story winners were preserved. This adds one model fit and no evaluation, promotion, authority, or transfer result.",
-        "next_falsifier": "Freeze one paired base-versus-candidate Red root before prediction. Exclude every prior root, recorded choice, guard menu, validation, test, and sealed lineage; bind identical initial state, initial menu, seed, policy, budgets, skills, and verifiers, while allowing post-choice trajectories to diverge. Any incomplete arm remains in the denominator and closes the screen without replacement.",
-        "next_session_goal": "Publish a path-free paired-screen design and action-free inventory only. If it passes review, reorient separately to exactly two executions of at most three decisions each from reset copies of one root, measuring episode completion, verified outcomes, retained acquisition, collection safety, replanning, and an explicit win, loss, tie, or uninterpretable pair.",
-        "product_alignment": "The first teacher-free update passed its frozen train-only safety guards and changed the portable title-neutral policy. The paired screen is only a feasibility and falsification check for gross regression on outcome-unused Red collection and replanning gameplay.",
+        "next_falsifier": "Freeze one paired base-versus-candidate Red root before prediction. Exclude every prior teacher-free execution, campaign, fit-target, validation, test, sealed, and closed lineage; supervised-train and guard-only exposure are allowed and disclosed. Bind identical reset bytes, initial menu, seed, exploratory policy, budgets, skills, verifiers, runtime, and three-decision cap. Any incomplete arm remains in the denominator without replacement.",
+        "next_session_goal": "Publish a path-free paired-screen design and action-free inventory only. If it passes review, reorient separately to exactly two executions of at most three decisions each from reset copies of one root. The primary endpoint is safe retained acquisition; completion, verified outcomes, and changed-state replanning are secondary reports.",
+        "product_alignment": "The first teacher-free update passed its frozen train-only safety guards and changed the portable title-neutral policy. The paired screen is one descriptive feasibility and falsification check on development-outcome-unused Red collection gameplay, not a general regression or improvement test.",
         "session_id": "2026-08-18-paired-red-goal-manager-outcome-screen-design-v1",
         "status": "active",
         "stop_condition": "Stop on any model fit, controller action, teacher query, development outcome access, candidate promotion, route or skill patch, validation or sealed Red access, Crystal execution, private-data leak, or two hours.",
@@ -32,12 +32,12 @@
       },
       "learned_authority": {
         "current": "The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority.",
-        "target": "Freeze a fair one-root paired Red screen capable of falsifying the candidate against the original model without granting authority or executing gameplay during design."
+        "target": "Freeze a fair one-root paired Red screen whose win, loss, or tie depends only on safe retained acquisition, without granting authority or executing gameplay during design."
       },
       "maintenance_unblocks": "paired-red-goal-manager-outcome-screen-v1",
       "measurable_outputs": [],
       "name": "Paired Red goal-manager outcome screen design V1",
-      "next_decision": "If the paired design proves one outcome-unused matched root with acquisition and changed-state replanning, publish it and reorient once to exactly two executions capped at three decisions per arm. Otherwise close this candidate evaluation path without another fit or root-specific rescue.",
+      "next_decision": "If the design authenticates one development-outcome-unused matched root with an executable acquisition choice and reobservation support, publish it and reorient once to exactly two executions capped at three decisions per arm. Otherwise close this candidate path without another fit or root search.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -91,7 +91,7 @@
       "status": "active",
       "stop_conditions": [
         "Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the design lane.",
-        "Any post-prediction root selection, unmatched initial pair, dropped or replaced arm, route or skill patch, private-data leak, or use of a previously consumed context ends the design lane.",
+        "Any post-inspection root search, unmatched initial pair, dropped or replaced arm, route or skill patch, private-data leak, or use of a prior teacher-free execution, campaign, fit-target, validation, test, sealed, or closed lineage ends the design lane.",
         "Stop after one frozen paired-screen design or two hours; any later execution hard-stops after the two maximum-three-decision arms and requires a separate reorientation."
       ],
       "time_box": {
