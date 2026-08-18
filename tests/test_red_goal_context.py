@@ -429,7 +429,7 @@ def test_wild_goal_context_binds_hard_limited_source_local_development(
                 35,
                 80,
                 80,
-                moves=(MoveObservation(10, 20),),
+                moves=(MoveObservation(15, 20),),
             ),
         )
     )
@@ -496,6 +496,21 @@ def test_wild_goal_context_binds_hard_limited_source_local_development(
     assert observed["policy"].max_steps == 64  # type: ignore[union-attr]
     assert observed["fixed_dose"].completed_battles == 4  # type: ignore[union-attr]
     assert normalizations == 1
+
+    boundary = captured["boundary"]
+    assert callable(boundary)
+    unsafe_party = PartyObservation((party.members[0], replace(party.members[1], hp=0)))
+    unsafe = boundary(
+        SimpleNamespace(
+            raw=SimpleNamespace(
+                map_id=MapId.POKEMON_MANSION_1F,
+                player_x=5,
+                player_y=21,
+            ),
+            party=unsafe_party,
+        )
+    )
+    assert unsafe.executable is False
 
 
 def test_targeted_evolution_requires_one_exact_in_place_species_change() -> None:

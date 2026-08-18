@@ -85,6 +85,7 @@ from pokemon_red_completion.red_party import (
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
 from pokemon_red_completion.red_team_training import (
     FixedPartyTrainingDose,
+    member_is_unsafe_for_team_training,
     run_red_team_balancing,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
@@ -349,9 +350,26 @@ def _wild_development_provider(
             )
         before = runtime.adapter.observe()
         trainee = before.party.weakest_trainable_member
+        dose_policy = replace(
+            red_team_development_quantum_policy(
+                before.party,
+                runtime.profile.manager_config,
+                kind=GoalKind.DEVELOP_TEAM,
+            ),
+            max_battles=completed_battles,
+            max_steps=maximum_seek_steps,
+            max_healing_trips=0,
+            max_faints=0,
+        )
         if trainee is None or before.party.species_ids().count(trainee.species_id) != 1:
             raise RedGoalContextError(
                 "encounter-source development lacks one unique trainable member"
+            )
+        if before.party.fainted_count or member_is_unsafe_for_team_training(
+            trainee, dose_policy
+        ):
+            raise RedGoalContextError(
+                "encounter-source development needs restoration before its fixed dose"
             )
         if map_id != MANSION_TRAINING_VENUE.map_id:
             raise RedGoalContextError(
@@ -388,22 +406,11 @@ def _wild_development_provider(
             battle_timing=MANSION_TRAINING_VENUE.battle_timing,
             walk_to_grass_factory=lambda: walk_local_source,
         )
-        policy = replace(
-            red_team_development_quantum_policy(
-                before.party,
-                runtime.profile.manager_config,
-                kind=GoalKind.DEVELOP_TEAM,
-            ),
-            max_battles=completed_battles,
-            max_steps=maximum_seek_steps,
-            max_healing_trips=0,
-            max_faints=0,
-        )
         _report, battles, healing_trips = run_red_team_balancing(
             actions,
             runtime.reader,
             runtime.emulator,
-            policy=policy,
+            policy=dose_policy,
             venues=(local_venue,),
             intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
             flee_timing=MANSION_TRAINING_FLEE_TIMING,
@@ -447,10 +454,23 @@ def _wild_development_provider(
         if not result.executable:
             return result
         trainee = observation.party.weakest_trainable_member
+        dose_policy = replace(
+            red_team_development_quantum_policy(
+                observation.party,
+                runtime.profile.manager_config,
+                kind=GoalKind.DEVELOP_TEAM,
+            ),
+            max_battles=completed_battles,
+            max_steps=maximum_seek_steps,
+            max_healing_trips=0,
+            max_faints=0,
+        )
         if (
             BLASTOISE_SPECIES_ID not in observation.party.species_ids()
             or trainee is None
             or observation.party.species_ids().count(trainee.species_id) != 1
+            or observation.party.fainted_count > 0
+            or member_is_unsafe_for_team_training(trainee, dose_policy)
         ):
             return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.MISSING_CAPABILITY
