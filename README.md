@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): V1 closed as statically impossible; both independent
+> **Current product focus (August 17, 2026): the exact V2 preflight failed closed; diagnose the
+> runner generically before considering another root.** Published source
+> `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed GitHub CI run `32086166416`, attempt 1. Its
+> one authorized V2 preflight returned nonzero before emitting a successful preflight receipt. The
+> internal stage is **not attested**, so this result does not identify a root cause and says nothing
+> against the capture + explore + restore composition design. It was not retried; no execution
+> identity was authorized; and model predictions, controller actions, advanced frames, gameplay,
+> outcomes, and composition episodes all remain zero. Under project policy, the attempted root was
+> permanently closed in the fixed-account ledger. See the
+> [path-free failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+>
+> The board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer
+> 0**. V2 is retired. The active one-hour maintenance lane,
+> `generic-fresh-root-preflight-observability-v1`, is ROM-free and root-agnostic: injected public
+> failures must produce one canonical, sanitized, allowlisted-stage envelope with no private data
+> and no counter change. It opens no root. Only after publication and green CI may the project
+> separately freeze a V3 qualification around a different fresh root.
+>
+> **Previous product focus (August 17, 2026): V1 closed as statically impossible; both independent
 > V2 reviews are GO, but the gate is not published or qualified.** The V1 menu required capture and
 > storage or resupply together even though the existing verified skills made those choices
 > self-excluding and spatially incompatible. It therefore closed before root inspection, prediction,

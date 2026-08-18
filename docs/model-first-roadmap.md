@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: both V2 reviews are GO; publish exact bytes, then preflight
+## Current checkpoint: V2 failed closed before a success receipt; add generic observability only
+
+Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
+attempt 1. Its one authorized V2 preflight returned nonzero before a successful preflight receipt
+was emitted. The runner did not attest its internal stage, so the failure does not diagnose the
+root or falsify the capture + explore + restore design. It was not retried, no execution identity
+was authorized, and predictions, controller actions, advanced frames, gameplay, outcomes, and
+composition episodes remain zero. Project policy permanently closed the attempted root. See the
+[path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+
+The cumulative board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 ·
+transfer 0**. The active one-hour maintenance lane is
+`generic-fresh-root-preflight-observability-v1`. It may use only public injected failures to prove
+that every caught in-process preclaim failure emits exactly one canonical, path-free, sanitized
+allowlisted-stage envelope. It may not access any root, ROM, emulator, model, teacher, sealed Red,
+or Crystal, and it must not expand into repository-wide telemetry. After publication and
+exact-head green CI, close maintenance and separately freeze V3 around a different fresh root.
+
+## Previous checkpoint: both V2 reviews were GO; publish exact bytes, then preflight
 
 V1 closed before root access because its required initial menu was statically impossible: capture
 and storage or resupply could not coexist under the existing verified skill boundaries. Root

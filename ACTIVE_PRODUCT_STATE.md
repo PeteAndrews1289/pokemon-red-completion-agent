@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Fresh Red field-composition execution qualification V2** (`fresh-goal-manager-field-composition-execution-qualification-v2`)
+**Generic fresh-root preflight failure observability** (`generic-fresh-root-preflight-observability-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the tracked path-free zero-action V2 preflight passes, freeze one exact unclaimed execution identity and reorient separately to its development run; otherwise close that root and V2 without gameplay or rescue patches.
+- Next decision: If the bounded failure envelope passes ROM-free injected tests and exact-head CI, close maintenance and separately design a V3 qualification around a different fresh root; otherwise close this composition direction without another root.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify the source-authenticated, root-safe execution seam needed for exactly one later fresh Red three-decision field-composition episode using capture, exploration, and restoration. |
+| Reusable capability | Make every caught in-process composition-runner preclaim failure emit exactly one canonical, path-free, sanitized terminal before process exit without exposing a root identity or requiring a live root. |
 | Authority now | The promoted Red goal manager retains bounded same-context goal-selection authority. Existing verified skills retain low-level execution; party development has no learned authority and Crystal remains closed. |
-| Authority target | Permit exactly one later frozen Red development episode ordering capture, exploration, and restoration only after its root and full execution boundary pass an action-free source-authenticated preflight. |
-| Transfer test | After qualification and a separately authorized successful Red V2 episode, design a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer. |
-| Cheapest falsifier | After the V2 runner is published under exact-head green CI, inspect exactly one historically attested nonsealed Red root action-free and before prediction. Reject it unless its state, provenance, lineage exclusion, exact field menu, model, skills, ledgers, hard limits, and durable terminal path all authenticate without controller input. |
-| Time box | 1 sessions / 2 hours |
+| Authority target | Permit only a separately frozen V3 fresh-root qualification design after generic preclaim failure observability is published under green CI; no new root is authorized here. |
+| Transfer test | Only after a separately qualified and successful future Red composition episode, design a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer. |
+| Cheapest falsifier | Use ROM-free fault injection at every caught pre-prediction gate. Each forced failure must emit one canonical allowlisted-stage terminal, expose no private path or identity, make no root claim, and record zero predictions, controller actions, frames, gameplay, outcomes, or episodes. |
+| Time box | 1 session / 1 hours |
 
 ### Required learning outputs
 
@@ -57,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-17-fresh-goal-manager-field-composition-v2** · status **closed** · evidence [qualification](docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json)
+**2026-08-17-fresh-composition-preflight-failure** · status **closed** · evidence [qualification](docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | V2 tests the smallest feasible hierarchy the final product needs: the learned manager orders three reusable field goals, retains a required specimen, and replans. It does not treat the existing corridor skill as learned navigation or a Red script as the product. |
-| Learning output | No measured learning output. The V1 gate closed with zero root inspection, predictions, actions, frames, outcomes, fits, comparisons, authority, or transfer. The V2 contract and runner remain unpublished and cannot authorize root access. Cumulative counters stay train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0. |
-| Authority delta | None. Closing the impossible V1 contract and implementing V2 grant no fresh-context, party, Crystal, sealed, or full-game authority; the promoted Red goal manager retains only its prior bounded same-context authority. |
-| Transfer result | Not run. Crystal remains closed. A later successful Red V2 episode may permit only a separately frozen matched open Crystal development design; neither this engineering gate nor its preflight is transfer evidence. |
-| Blocker | V1 was statically impossible because capture and storage or resupply could not coexist under the existing verified skill boundaries. V2 uses the already co-located capture, explore, and field-restore skills, but its runner is not yet published or preflight-qualified. |
-| Decision | Close V1 before root access, freeze the field-compatible V2 contract, independently audit its runner, then publish and require exact-head green CI before one action-free zero-prediction preflight. |
-| Next session | Complete the engineering gate through a tracked path-free preflight receipt. On pass, freeze one unclaimed execution identity for a separately reoriented episode; on failure, close the root and V2 without route, profile, or skill rescue. |
-| Next falsifier | Publish the independently reviewed V2 runner, bind exact-head green CI, then perform exactly one action-free preflight of the historically attested root and stop before any model prediction or controller input. |
-| Stop condition | Stop on model-guided admission, controller input, a prior context or lineage, unattested bytes, soft-only budgets, non-durable writes, protected access, or two hours. Do not patch the root, route, profile, skill, party, or model into compliance. |
+| Product alignment | A diagnosable fail-closed preflight prevents additional fresh roots from being consumed opaquely, while the one-session cap and ROM-free tests keep infrastructure subordinate to the transferable learned-play goal. |
+| Learning output | No measured learning output. The V2 preflight made zero predictions, controller actions, advanced frames, gameplay outcomes, fits, comparisons, authority, or transfer results. Its root is permanently closed and cannot retry. Cumulative counters stay train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0. |
+| Authority delta | None. The failed V2 preflight grants no fresh-context, party, Crystal, sealed, or full-game authority; the promoted Red goal manager retains only its prior bounded same-context authority. |
+| Transfer result | Not run. Crystal remains closed. The failed V2 preflight and the observability seam are not transfer evidence and authorize no later-title execution. |
+| Blocker | Published source 3c9ea925 passed CI 32086166416/1, but its one exact V2 preflight returned nonzero before emitting a success receipt. The internal stage is not attested, the root is permanently closed, and retry or root-specific rescue is forbidden. |
+| Decision | Retire the failed root and V2 attempt, then add one small root-agnostic failure envelope for caught in-process preclaim failures. Do not diagnose or reuse the root and do not open another root in this lane. |
+| Next session | Implement and publish only the bounded ROM-free failure envelope. On pass, close this maintenance lane and separately freeze a V3 qualification design around a different fresh root; on failure, close composition execution and return to offline goal-manager design. |
+| Next falsifier | With public injected failures only, prove that every caught in-process composition-runner preclaim failure emits one canonical allowlisted-stage envelope and never emits private data or changes a learning counter. |
+| Stop condition | Stop after one engineering session or on any private-root, ROM, emulator, model, teacher, sealed Red, or Crystal access. Do not infer the failed stage, retry the root, or build repository-wide telemetry. |
 
 ### Stop conditions
 
-- Root admission loads a model prediction, sends controller input, follows a model-guided search, or overlaps any of the 81 prior contexts or their authenticated root lineages.
-- Stop if source, model, provenance, profile, skills, verifiers, collection ledgers, one-shot claims, hard limits, trusted accounting, protected isolation, or durable terminals are not attested.
-- Stop at two hours or before gameplay, outcomes, fitting, adaptation, route, profile or skill patches, party changes, sealed Red, or Crystal.
+- Any access to the closed V2 root, a new private root, ROM, emulator, model, teacher, sealed Red, or Crystal ends the lane.
+- Any exception text, private path or identity, non-allowlisted stage, missing terminal, duplicate terminal, or learning-counter change ends the lane.
+- Stop after one session; do not infer the prior failure stage, patch a route, profile, skill, party, or model, or expand into repository-wide telemetry.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh Red field-composition execution qualification V2:** Published source 3c9ea92562163e41e5045b0ac837dd1b6ca959fb passed CI 32086166416/1, but its one exact preflight returned nonzero before emitting a success receipt. It was not retried, no execution identity was authorized, all learning and authority counters remained unchanged, and project policy permanently closed the attempted root without root-specific rescue. Evidence is preserved; retry is no.
 - **Fresh Red goal-manager composition execution qualification V1:** Its initial menu was statically impossible under the existing verified skill boundaries: capture self-excluded storage or resupply and their execution locations were incompatible. It closed before root inspection, model prediction, emulator frames, controller input, or gameplay and may not be rescued with a route, profile, or composite skill. Evidence is preserved; retry is no.
 - **Fresh Red goal-manager composition design:** Its contract and ROM-free core were published after independent review. No root, prediction, controller input, outcome, fit, comparison, authority, or transfer result was created; execution prerequisites move to a separate qualification lane. Evidence is preserved; retry is no.
 - **Bounded party-representation collision postmortem:** Its single report completed: all six conflicting clusters had exactly identical raw and projected contrasts, leaving semantic aliasing versus outcome instability unresolved but excluding any same-evidence optimizer or projection rescue. Party v2 and its missing-cell slice remain closed. Evidence is preserved; retry is no.

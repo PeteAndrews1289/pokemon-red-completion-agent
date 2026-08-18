@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: V1 closes statically; both field-compatible V2 reviews are GO
+## August 17: the V2 preflight fails closed and the root is retired
+
+Exact source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
+attempt 1. The one authorized V2 preflight then returned nonzero before emitting a successful
+preflight receipt. Its internal stage is not attested, and the attempt was not retried. The result
+therefore supports no diagnosis of the root or the capture + explore + restore design.
+
+No execution identity was authorized. Predictions, controller actions, advanced frames, gameplay,
+outcomes, composition episodes, fits, comparisons, authority, and transfer added are zero. Project
+policy permanently closed the attempted root. The
+[path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json)
+records this boundary without publishing private paths or identities. The cumulative board remains
+thirty train questions, fifteen development questions, three fits, three comparisons, and zero
+authority or transfer.
+
+The active work is one hour of ROM-free, root-agnostic observability: public fault injection must
+prove one canonical sanitized allowlisted-stage envelope for each caught in-process preclaim
+failure. It opens no root and creates no learning result. After publication and green CI, the
+project may separately freeze a V3 qualification around a different fresh root. This keeps the
+repair subordinate to the final goal: transferable hierarchical play and a living Pokédex, not an
+ever-expanding execution framework.
+
+## Previous August 17 checkpoint: V1 closes statically; both field-compatible V2 reviews are GO
 
 V1 failed before touching a root. Its required initial menu combined capture with storage or
 resupply, but the existing verified skill boundaries made those choices self-excluding and

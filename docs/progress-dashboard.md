@@ -5,7 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current qualification rail:** Show **V1 STATICALLY IMPOSSIBLE · ROOTS INSPECTED 0 · ROOTS
+> **Current observability rail:** Show **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · V2 PREFLIGHT
+> FAILED BEFORE SUCCESS RECEIPT · INTERNAL STAGE NOT ATTESTED · NO RETRY · EXECUTION IDENTITY NOT
+> AUTHORIZED · ROOT PERMANENTLY CLOSED BY PROJECT POLICY** and link the
+> [path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+> Display **PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 ·
+> COMPOSITION EPISODES 0** and keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 ·
+> COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**.
+>
+> The active rail is **ROM-FREE PUBLIC FAULT INJECTION → ONE CANONICAL SANITIZED ALLOWLISTED-STAGE
+> ENVELOPE PER CAUGHT IN-PROCESS PRECLAIM FAILURE → PUBLISH + GREEN CI → SEPARATELY FREEZE V3 ON A
+> DIFFERENT ROOT**. Display `generic-fresh-root-preflight-observability-v1`. Do not display a
+> diagnosed cause, another root, episode progress, authority, or transfer.
+>
+> **Historical V2 qualification rail:** Show **V1 STATICALLY IMPOSSIBLE · ROOTS INSPECTED 0 · ROOTS
 > ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 · FRAMES 0 · OUTCOMES 0**. Its capture plus
 > storage-or-resupply menu could not exist under the verified skill boundaries. Link the
 > [path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).

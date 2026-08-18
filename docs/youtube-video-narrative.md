@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: V1 impossible, both V2 reviews GO
+## August 17 scene: the runner fails safely, and the root closes
+
+Open on **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · ONE EXACT V2 PREFLIGHT**. Stop the rail with
+**NONZERO EXIT BEFORE SUCCESS RECEIPT · INTERNAL STAGE NOT ATTESTED · NO RETRY**. Add
+**EXECUTION IDENTITY NOT AUTHORIZED · ROOT PERMANENTLY CLOSED BY PROJECT POLICY** and link the
+[path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+
+Keep every effect counter at zero: **PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY
+0 · OUTCOMES 0 · COMPOSITION EPISODES 0**. Keep the learning strip fixed at **30 TRAIN · 15
+DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0**. Narration: **“We know the
+preflight stopped safely. We do not know its internal stage, so we do not invent a diagnosis and
+we do not spend another root finding out.”**
+
+End on a short, non-gameplay rail: **ROM-FREE PUBLIC FAULT INJECTION → ONE SANITIZED
+ALLOWLISTED-STAGE ENVELOPE → PUBLISH + GREEN CI → SEPARATELY FREEZE V3 ON A DIFFERENT ROOT**. Do
+not animate a model choice, controller input, capture, transfer, or inferred failure cause.
+
+## Previous August 17 scene: V1 impossible, both V2 reviews GO
 
 Open on **V1 STATIC FAILURE · ROOTS INSPECTED 0 · ROOTS ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 ·
 FRAMES 0 · OUTCOMES 0**. Show the impossible menu—**CAPTURE + STORAGE/RESUPPLY**—then cross it out

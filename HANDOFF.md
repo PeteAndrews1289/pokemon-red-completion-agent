@@ -18,7 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## V1 closed; both V2 reviews are GO, but publication and qualification remain — 2026-08-17
+## V2 preflight failed closed; generic observability is next — 2026-08-17
+
+Exact source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
+attempt 1. The one authorized V2 preflight then returned nonzero before emitting a successful
+preflight receipt. The runner did not attest its internal stage, and the attempt was not rerun for
+diagnosis. Do not infer a root, route, profile, skill, model, or design failure from this result.
+
+No execution identity was authorized. Model predictions, controller actions, advanced emulator
+frames, gameplay, outcomes, composition episodes, fits, comparisons, authority, and transfer
+added are all zero. Project policy permanently closed the attempted root in the fixed-account
+ledger, so it may never be reopened or retried. The
+[path-free failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json)
+records the public boundary without publishing a root identity or private path. The cumulative
+board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+
+V2 is retired. The active lane is the one-hour, ROM-free maintenance task
+`generic-fresh-root-preflight-observability-v1`. Add only a canonical, path-free, sanitized failure
+envelope for caught in-process preclaim failures, tested through injected public faults. Do not
+touch a root, ROM, emulator, model, teacher, sealed Red, or Crystal; do not recover exception text
+or infer the failed stage. After publication and exact-head green CI, close maintenance and
+separately design V3 around a different fresh root.
+
+## Previous checkpoint: V1 closed; both V2 reviews were GO — 2026-08-17
 
 The V1 execution contract was statically impossible under the existing verified skills: capture
 could not coexist with storage or resupply in its required initial menu. It closed before any root

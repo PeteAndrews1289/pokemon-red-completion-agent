@@ -35,6 +35,11 @@ COMPOSITION_V1_FAILURE = (
     / "docs/evidence"
     / "fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json"
 )
+COMPOSITION_V2_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -63,11 +68,9 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == (
-        "fresh-goal-manager-field-composition-execution-qualification-v2"
-    )
+    assert state.active_lane["id"] == "generic-fresh-root-preflight-observability-v1"
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 5
+    assert len(state.retired_lanes) == 6
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -134,6 +137,20 @@ def test_collision_result_and_next_composition_design_preserve_the_product_bound
     assert core["zero_effects"]["model_predictions"] == 0
     assert core["zero_effects"]["controller_actions"] == 0
     assert not any(core["remaining_execution_prerequisites"].values())
+
+
+def test_failed_v2_preflight_closes_only_the_root_and_no_learning_counter() -> None:
+    receipt = json.loads(COMPOSITION_V2_FAILURE.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "zero_action_preflight_failed_no_execution_root_closed"
+    assert receipt["failure"]["admission_completed"] == "not_attested"
+    assert receipt["failure"]["runner_success_preflight_receipt_emitted"] is False
+    assert receipt["failure"]["root_closed"] is True
+    assert receipt["root_disposition"]["fixed_account_root_closure_recorded"] is True
+    assert receipt["root_disposition"]["retry_allowed"] is False
+    assert receipt["root_disposition"]["execution_identity_authorized"] is False
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
 
 
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
@@ -300,17 +317,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "field-composition execution qualification" in public["stage"]
+    assert "preflight failure observability" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "V2 publication + exact-head CI pending" in encoded
-    assert "no Red root" in encoded
-    assert "authenticated fresh lineage" in encoded
-    assert "review pending" in encoded
-    assert "roots inspected 0" in encoded
-    assert "full replay 0" in encoded
+    assert "Generic sanitized failure envelope next" in encoded
+    assert "admission not attested" in encoded
+    assert "root closed" in encoded
+    assert "retry forbidden" in encoded
+    assert "execution identity not authorized" in encoded
+    assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

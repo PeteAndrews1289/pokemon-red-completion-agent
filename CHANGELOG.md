@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published the reviewed field-composition V2 runner at
+  `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` under green CI run `32086166416` attempt 1, then ran
+  its one authorized preflight. It returned nonzero before emitting a successful preflight
+  receipt; the internal stage is not attested and the attempt was not retried. No execution
+  identity was authorized and predictions, controller actions, advanced frames, gameplay,
+  outcomes, composition episodes, or learning/authority/transfer counters were added. Project
+  policy permanently closed the attempted root. Recorded the
+  [path-free failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json),
+  retired V2, and activated the one-hour ROM-free
+  `generic-fresh-root-preflight-observability-v1` lane. It may add only a canonical sanitized
+  envelope for caught in-process preclaim failures using public fault injection; it may not open
+  another root. The board remains train 30, development 15, fits 3, comparisons 3, authority 0,
+  and transfer 0.
 - Closed `fresh-goal-manager-composition-execution-qualification-v1` before root access because its
   required capture plus storage-or-resupply menu was statically impossible under the existing
   verified skill boundaries. Root inspections and admissions, model predictions, controller

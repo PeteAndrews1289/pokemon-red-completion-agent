@@ -1,6 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-17 V1 static closure and two-review V2 GO — highest active checkpoint:** V1's
+> **2026-08-17 V2 preflight failure and ROM-free reorientation — highest active checkpoint:**
+> Exact source `3c9ea925` passed CI run `32086166416` attempt 1. Its one authorized V2 preflight
+> returned nonzero before emitting a successful preflight receipt. The internal stage is not
+> attested and no cause may be inferred. It was not retried, no execution identity was authorized,
+> and predictions, controller actions, advanced frames, gameplay, outcomes, episodes, authority,
+> and transfer added are zero. Project policy permanently closed the attempted root. See the
+> [path-free failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+>
+> Codex owns only `generic-fresh-root-preflight-observability-v1`: a one-hour, ROM-free,
+> root-agnostic maintenance lane for a single canonical sanitized envelope covering caught
+> in-process preclaim failures. Claude and Antigravity have completed the engineering and mission
+> reviews of this boundary; they remain read-only reviewers. No agent may access the closed root,
+> open a new root, inspect private diagnostics, infer the failed stage, or use a ROM, emulator,
+> model, teacher, sealed Red, or Crystal in this lane. The board remains train 30 · development
+> 15 · fits 3 · comparisons 3 · authority 0 · transfer 0. Publication and green CI may permit only
+> a separately frozen V3 design around a different root.
+
+> **2026-08-17 V1 static closure and two-review V2 GO — historical checkpoint:** V1's
 > initial menu required capture together with storage or resupply, but the existing verified skill
 > boundaries made those choices self-excluding and spatially incompatible. V1 closed before root
 > inspection or admission, model prediction, controller input, emulator frames, or outcomes. See

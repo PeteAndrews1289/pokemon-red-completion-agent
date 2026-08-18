@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first menu failed, and both field-runner reviews are GO
+## Current checkpoint: a safe failure exposed the next smallest problem
+
+The field-composition runner was published at exact source `3c9ea925` and passed CI run
+`32086166416`, attempt 1. Its one authorized preflight then returned nonzero before it could emit a
+successful receipt. The runner deliberately hid the internal stage, so the project did not invent
+a diagnosis and did not retry. No model prediction was made, no controller action was sent, no
+advanced game frame or gameplay result exists, and no composition episode was counted. Project
+policy permanently closed that attempted root. The
+[path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json)
+records what is known without exposing the private game state.
+
+The scoreboard is still **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO ·
+TRANSFER ZERO**. The next scene is deliberately small and ROM-free: make caught in-process
+preclaim failures produce one sanitized, allowlisted-stage envelope, prove it with public injected
+faults, publish it, and stop. Only then can a separate V3 design consider a different fresh root.
+The failure did not disprove capture + explore + restore; it prevented an opaque runner from
+silently consuming more scarce game states.
+
+---
+
+## Previous checkpoint: the first menu failed, and both field-runner reviews were GO
 
 The first execution contract never reached the cartridge. It demanded capture and storage or
 resupply in the same initial menu, even though the existing verified skills made those choices

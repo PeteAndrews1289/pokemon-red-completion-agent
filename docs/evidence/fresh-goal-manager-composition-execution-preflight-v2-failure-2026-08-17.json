@@ -1,0 +1,78 @@
+{
+  "active_lane": "fresh-goal-manager-field-composition-execution-qualification-v2",
+  "claim_boundary": {
+    "supported": "The exact published V2 runner failed closed before emitting a successful preflight receipt. No execution identity was authorized, no gameplay or learning result was created, and project policy permanently closed the attempted root after the failure without retry.",
+    "unsupported": [
+      "episode_execution_or_pass",
+      "fresh_context_generalization",
+      "living_pokedex_ability",
+      "red_completion",
+      "transfer"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "composition_episodes_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "failure": {
+    "admission_completed": "not_attested",
+    "failed_gate": "preflight_fail_closed_reason_sanitized_by_runner",
+    "runner_success_preflight_receipt_emitted": false,
+    "reason": "The runner returned nonzero before emitting its path-free receipt. Its sanitized CLI deliberately withheld the internal stage, and the exact preflight was not rerun for diagnosis.",
+    "root_closed": true
+  },
+  "input_bindings": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "design_sha256": "0ffc848e43e85a61a7de897e7b48af697ddd1bb19374e104877ba3c09d3bcdff",
+    "fit_summary_file_sha256": "cba3c9c19841c83110ff32b2be044b3ee7dbea350765df09f6ebc95081b117dc",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "model_file_sha256": "16901b701476230d2be6c0327cc3e572f6dc5ce034f99067562916cecd3e77f4",
+    "promotion_plan_sha256": "b648d1825fb7701f38aa00f5625fe88a86040dc7b4b061b4256f6ae665b90c46",
+    "qualification_module_sha256": "6679634cab295ec1ac1f260c15d30fd30bc0903140c01ff17ca48e1aa8cf0322",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "runner_sha256": "8947aebadae8120e902f0285d85d78eb27ebef3e0efc74cae70c31d900780028",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "skill_manifest_sha256": "fad2babfdd6c7ae69e42242607a8acee845e19e2bbadf5951daf6e7590663ce9"
+  },
+  "recorded_on": "2026-08-17",
+  "root_disposition": {
+    "controller_input_before_failure": 0,
+    "execution_identity_authorized": false,
+    "fixed_account_root_closure_recorded": true,
+    "model_predictions_before_failure": 0,
+    "retry_allowed": false,
+    "tracked_root_identity": false
+  },
+  "schema": "pokemon.red.fresh-goal-manager-composition-execution-preflight-failure.v2",
+  "source_verification": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run": 32086166416,
+    "event": "pull_request",
+    "git_commit": "3c9ea92562163e41e5045b0ac837dd1b6ca959fb",
+    "workflow": "CI",
+    "worktree_dirty_before_preflight": false
+  },
+  "status": "zero_action_preflight_failed_no_execution_root_closed",
+  "title_role": "Red development engineering failure, not a gameplay, transfer, promotion, or completion result",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "composition_episodes": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced_after_state_load": 0,
+    "full_replays": 0,
+    "game_executions": 0,
+    "goal_manager_decisions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

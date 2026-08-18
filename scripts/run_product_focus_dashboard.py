@@ -66,11 +66,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     outcome_question_total = max(
         train_outcomes + development_outcomes,
-        sum(
-            minimum
-            for label, _, minimum in outputs
-            if label.startswith("Outcome Question")
-        ),
+        sum(minimum for label, _, minimum in outputs if label.startswith("Outcome Question")),
     )
     model_fit_total = max(
         (
@@ -81,11 +77,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     unseen_comparison_total = max(
         (
             unseen,
-            *(
-            minimum
-            for label, _, minimum in outputs
-            if label.startswith("Unseen Comparison")
-            ),
+            *(minimum for label, _, minimum in outputs if label.startswith("Unseen Comparison")),
         )
     )
     stop_conditions = _text_list(lane, "stop_conditions")
@@ -99,17 +91,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The impossible V1 menu closed before root access. The field-compatible V2 runner "
-            "is implemented and under independent review; no Red root, prediction, controller "
-            "input, or episode outcome exists."
+            "The one exact V2 preflight failed closed before a success receipt; its internal "
+            "stage is not attested and the attempted root is permanently closed. Predictions, "
+            "controller input, advanced frames, gameplay, and outcomes remain zero."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Development scenario laboratory · no cartridge session",
+        location="ROM-free observability laboratory · no cartridge session",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Promoted Red goal manager af29d7e7… · frozen confidence floor 0.80",
-            choice="V2 publication + exact-head CI pending · then one action-free preflight",
+            choice="Generic sanitized failure envelope next · no root or emulator access",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -158,17 +150,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "V2 rail · publish + exact-head CI → authenticated fresh lineage → exact model + "
-                "skills → hard limits + durable writes → zero-action preflight"
+                "Next rail · injected public failures → one allowlisted-stage envelope → "
+                "publication + green CI → separately frozen V3 design"
             ),
             (
                 "V1 static failure · capture and storage/resupply were self-excluding and "
-                "spatially incompatible · roots inspected 0"
+                "spatially incompatible · zero effects"
             ),
-            "V2 capture + explore + restore runner implemented · review pending · unqualified",
             (
-                "Current session roots 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0 "
-                "· sealed Red 0 · Crystal 0 · full replay 0"
+                "V2 preflight failed before success receipt · admission not attested · root "
+                "closed · retry forbidden · execution identity not authorized"
+            ),
+            (
+                "Current session predictions 0 · controller 0 · advanced frames 0 · gameplay 0 "
+                "· outcomes 0 · episodes 0 · teacher 0 · Crystal 0"
             ),
         ),
     )

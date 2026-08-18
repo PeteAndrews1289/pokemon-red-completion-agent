@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: both V2 reviews are GO; publish exact bytes, then preflight
+## Current override: V2 root closed; Codex owns one ROM-free observability repair
+
+Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
+attempt 1. Its one exact V2 preflight returned nonzero before emitting a successful preflight
+receipt. The internal stage is not attested; no agent may infer or privately diagnose it. The
+attempt was not retried, no execution identity was authorized, and predictions, controller
+actions, advanced frames, gameplay, outcomes, composition episodes, and every learning or
+authority counter added are zero. Project policy permanently closed the attempted root. See the
+[path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+
+Codex owns only `generic-fresh-root-preflight-observability-v1`: one hour of ROM-free public fault
+injection proving a canonical, path-free, allowlisted-stage terminal for caught in-process
+preclaim failures. Claude's engineering audit and Antigravity's mission audit are complete; both
+remain read-only reviewers. No agent may reopen the root, choose a new root, use private failure
+details, or access a ROM, emulator, model, teacher, sealed Red, or Crystal. The board stays
+**train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. A green
+published repair permits only a separately frozen V3 design around a different root.
+
+## Previous override: both V2 reviews were GO; publish exact bytes, then preflight
 
 V1's exact menu was statically impossible under the existing verified skills: capture and storage
 or resupply could not be executable together. It closed before root inspection or admission,

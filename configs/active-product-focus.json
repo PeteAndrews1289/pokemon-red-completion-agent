@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Qualify the source-authenticated, root-safe execution seam needed for exactly one later fresh Red three-decision field-composition episode using capture, exploration, and restoration.",
-      "cheapest_falsifier": "After the V2 runner is published under exact-head green CI, inspect exactly one historically attested nonsealed Red root action-free and before prediction. Reject it unless its state, provenance, lineage exclusion, exact field menu, model, skills, ledgers, hard limits, and durable terminal path all authenticate without controller input.",
-      "id": "fresh-goal-manager-field-composition-execution-qualification-v2",
+      "capability": "Make every caught in-process composition-runner preclaim failure emit exactly one canonical, path-free, sanitized terminal before process exit without exposing a root identity or requiring a live root.",
+      "cheapest_falsifier": "Use ROM-free fault injection at every caught pre-prediction gate. Each forced failure must emit one canonical allowlisted-stage terminal, expose no private path or identity, make no root claim, and record zero predictions, controller actions, frames, gameplay, outcomes, or episodes.",
+      "id": "generic-fresh-root-preflight-observability-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "None. Closing the impossible V1 contract and implementing V2 grant no fresh-context, party, Crystal, sealed, or full-game authority; the promoted Red goal manager retains only its prior bounded same-context authority.",
-        "blocker": "V1 was statically impossible because capture and storage or resupply could not coexist under the existing verified skill boundaries. V2 uses the already co-located capture, explore, and field-restore skills, but its runner is not yet published or preflight-qualified.",
-        "decision": "Close V1 before root access, freeze the field-compatible V2 contract, independently audit its runner, then publish and require exact-head green CI before one action-free zero-prediction preflight.",
+        "authority_delta": "None. The failed V2 preflight grants no fresh-context, party, Crystal, sealed, or full-game authority; the promoted Red goal manager retains only its prior bounded same-context authority.",
+        "blocker": "Published source 3c9ea925 passed CI 32086166416/1, but its one exact V2 preflight returned nonzero before emitting a success receipt. The internal stage is not attested, the root is permanently closed, and retry or root-specific rescue is forbidden.",
+        "decision": "Retire the failed root and V2 attempt, then add one small root-agnostic failure envelope for caught in-process preclaim failures. Do not diagnose or reuse the root and do not open another root in this lane.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json",
-          "sha256": "0ffc848e43e85a61a7de897e7b48af697ddd1bb19374e104877ba3c09d3bcdff"
+          "path": "docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json",
+          "sha256": "9446c3e512d43879f62ff3fde1b1e0370b41209de5f9d4f30cabebd1e9f81a95"
         },
-        "learning_output": "No measured learning output. The V1 gate closed with zero root inspection, predictions, actions, frames, outcomes, fits, comparisons, authority, or transfer. The V2 contract and runner remain unpublished and cannot authorize root access. Cumulative counters stay train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0.",
-        "next_falsifier": "Publish the independently reviewed V2 runner, bind exact-head green CI, then perform exactly one action-free preflight of the historically attested root and stop before any model prediction or controller input.",
-        "next_session_goal": "Complete the engineering gate through a tracked path-free preflight receipt. On pass, freeze one unclaimed execution identity for a separately reoriented episode; on failure, close the root and V2 without route, profile, or skill rescue.",
-        "product_alignment": "V2 tests the smallest feasible hierarchy the final product needs: the learned manager orders three reusable field goals, retains a required specimen, and replans. It does not treat the existing corridor skill as learned navigation or a Red script as the product.",
-        "session_id": "2026-08-17-fresh-goal-manager-field-composition-v2",
+        "learning_output": "No measured learning output. The V2 preflight made zero predictions, controller actions, advanced frames, gameplay outcomes, fits, comparisons, authority, or transfer results. Its root is permanently closed and cannot retry. Cumulative counters stay train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0.",
+        "next_falsifier": "With public injected failures only, prove that every caught in-process composition-runner preclaim failure emits one canonical allowlisted-stage envelope and never emits private data or changes a learning counter.",
+        "next_session_goal": "Implement and publish only the bounded ROM-free failure envelope. On pass, close this maintenance lane and separately freeze a V3 qualification design around a different fresh root; on failure, close composition execution and return to offline goal-manager design.",
+        "product_alignment": "A diagnosable fail-closed preflight prevents additional fresh roots from being consumed opaquely, while the one-session cap and ROM-free tests keep infrastructure subordinate to the transferable learned-play goal.",
+        "session_id": "2026-08-17-fresh-composition-preflight-failure",
         "status": "closed",
-        "stop_condition": "Stop on model-guided admission, controller input, a prior context or lineage, unattested bytes, soft-only budgets, non-durable writes, protected access, or two hours. Do not patch the root, route, profile, skill, party, or model into compliance.",
-        "transfer_result": "Not run. Crystal remains closed. A later successful Red V2 episode may permit only a separately frozen matched open Crystal development design; neither this engineering gate nor its preflight is transfer evidence."
+        "stop_condition": "Stop after one engineering session or on any private-root, ROM, emulator, model, teacher, sealed Red, or Crystal access. Do not infer the failed stage, retry the root, or build repository-wide telemetry.",
+        "transfer_result": "Not run. Crystal remains closed. The failed V2 preflight and the observability seam are not transfer evidence and authorize no later-title execution."
       },
       "learned_authority": {
         "current": "The promoted Red goal manager retains bounded same-context goal-selection authority. Existing verified skills retain low-level execution; party development has no learned authority and Crystal remains closed.",
-        "target": "Permit exactly one later frozen Red development episode ordering capture, exploration, and restoration only after its root and full execution boundary pass an action-free source-authenticated preflight."
+        "target": "Permit only a separately frozen V3 fresh-root qualification design after generic preclaim failure observability is published under green CI; no new root is authorized here."
       },
-      "maintenance_unblocks": "fresh-goal-manager-field-composition-learning-v2",
+      "maintenance_unblocks": "fresh-goal-manager-field-composition-learning-v3",
       "measurable_outputs": [],
-      "name": "Fresh Red field-composition execution qualification V2",
-      "next_decision": "If the tracked path-free zero-action V2 preflight passes, freeze one exact unclaimed execution identity and reorient separately to its development run; otherwise close that root and V2 without gameplay or rescue patches.",
+      "name": "Generic fresh-root preflight failure observability",
+      "next_decision": "If the bounded failure envelope passes ROM-free injected tests and exact-head CI, close maintenance and separately design a V3 qualification around a different fresh root; otherwise close this composition direction without another root.",
       "progress": {
         "authority_promotions": 0,
         "evidence": [
@@ -80,15 +80,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Root admission loads a model prediction, sends controller input, follows a model-guided search, or overlaps any of the 81 prior contexts or their authenticated root lineages.",
-        "Stop if source, model, provenance, profile, skills, verifiers, collection ledgers, one-shot claims, hard limits, trusted accounting, protected isolation, or durable terminals are not attested.",
-        "Stop at two hours or before gameplay, outcomes, fitting, adaptation, route, profile or skill patches, party changes, sealed Red, or Crystal."
+        "Any access to the closed V2 root, a new private root, ROM, emulator, model, teacher, sealed Red, or Crystal ends the lane.",
+        "Any exception text, private path or identity, non-allowlisted stage, missing terminal, duplicate terminal, or learning-counter change ends the lane.",
+        "Stop after one session; do not infer the prior failure stage, patch a route, profile, skill, party, or model, or expand into repository-wide telemetry."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 1,
         "maximum_sessions": 1
       },
-      "transfer_test": "After qualification and a separately authorized successful Red V2 episode, design a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer."
+      "transfer_test": "Only after a separately qualified and successful future Red composition episode, design a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer."
+    },
+    {
+      "id": "fresh-goal-manager-field-composition-execution-qualification-v2",
+      "kind": "maintenance",
+      "name": "Fresh Red field-composition execution qualification V2",
+      "preserve_evidence": true,
+      "reason": "Published source 3c9ea92562163e41e5045b0ac837dd1b6ca959fb passed CI 32086166416/1, but its one exact preflight returned nonzero before emitting a success receipt. It was not retried, no execution identity was authorized, all learning and authority counters remained unchanged, and project policy permanently closed the attempted root without root-specific rescue.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "fresh-goal-manager-composition-execution-qualification-v1",

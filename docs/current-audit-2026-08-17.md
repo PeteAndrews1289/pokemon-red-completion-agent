@@ -1,6 +1,27 @@
 # Current audit — 2026-08-17
 
-## Current result: V1 impossible; both independent V2 reviews are GO
+## Current result: V2 preflight failed closed; the root is retired
+
+Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
+attempt 1. Its one authorized V2 preflight returned nonzero before emitting a successful preflight
+receipt. The internal stage is not attested, and the attempt was not rerun for diagnosis. This is
+an observability failure, not evidence that the capture + explore + restore semantics are wrong.
+
+No execution identity was authorized. Model predictions, controller actions, advanced emulator
+frames, gameplay, outcomes, composition episodes, fits, comparisons, authority, and transfer
+added are all zero. Project policy permanently closed the attempted root in the fixed-account
+ledger. The [path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json)
+records the public boundary without publishing a private path or root identity. The cumulative
+board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+
+V2 is retired. The next lane is a one-hour ROM-free maintenance task,
+`generic-fresh-root-preflight-observability-v1`: use injected public faults to require one
+canonical sanitized allowlisted-stage envelope from every caught in-process preclaim failure. It
+must not open a root, access a ROM/emulator/model, infer the prior stage, or grow into general
+telemetry. Publication and exact-head green CI may permit only a separately frozen V3 design
+around a different fresh root.
+
+## Previous result: V1 impossible; both independent V2 reviews were GO
 
 V1 failed its static initial-menu gate before root access. Its capture requirement could not
 coexist with storage or resupply under the existing independently verified skill boundaries, so
