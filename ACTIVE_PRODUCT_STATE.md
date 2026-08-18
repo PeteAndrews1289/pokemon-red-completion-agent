@@ -29,30 +29,31 @@ Not the product:
 
 ## One active lane
 
-**Goal-manager acquisition successor learning V1** (`goal-manager-acquisition-successor-learning-v1`)
+**Resettable multi-root goal-manager learning V1** (`resettable-goal-manager-multiroot-learning-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Pass retains a shadow-only successor and opens design of an 8-train/4-development resettable multi-root curriculum. Failure closes this exact update without retry and redirects to representation/data redesign.
+- Next decision: A favorable untouched four-episode comparison permits a separately frozen two-decision composition pilot. Failure closes this curriculum and redirects to representation or data-design analysis without root-specific rescue.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Assimilate one already-collected safe retained-acquisition outcome into the shadow Red goal manager while proving that its earlier storage and restoration choices do not regress. |
-| Authority now | The shadow candidate safely retained one acquisition on one disclosed Red train root and previously learned from one storage/restoration episode. It has no replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Produce one distinct shadow successor that improves the known acquisition target without regressing the two earlier outcomes. Grant no gameplay, promotion, completion, or transfer authority. |
-| Transfer test | Not in this lane. The next resettable curriculum must reserve root-disjoint development episodes; Crystal remains closed until Red demonstrates broader learned decisions. |
-| Cheapest falsifier | Run one fixed train-only successor update from the candidate acquisition arm. Stop without retry if acquisition probability or loss fails to improve, either evaluation-only anchor regresses, a protected semantic winner flips, or the existing weight/KL cap fails. |
-| Time box | 1 session / 4 hours |
+| Reusable capability | Learn a reusable Red goal-selection update from diversified resettable outcomes, then test it once on root-disjoint development episodes before attempting multi-decision composition. |
+| Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
+| Authority target | Demonstrate one shadow-only root-disjoint development comparison after a fixed multi-root fit. Grant no live, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. The four root-disjoint Red development episodes are the prerequisite generalization check; Crystal remains closed until they show a useful signal. |
+| Cheapest falsifier | Action-free inventory must prove four resettable train roots and two distinct development roots with acquisition, storage, team, and recovery choices. Stop before execution if the six roots, three train goal kinds including collection, or root-disjoint split cannot be established without a root-specific patch. |
+| Time box | 1 session / 8 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Outcome Question · train | 30 | 30 |
+| Development Episode · development | 14 | 26 |
+| Verified Outcome Example · development | 4 | 14 |
 | Model Fit · train | 4 | 5 |
-| Unseen Comparison · development | 3 | 3 |
+| Unseen Comparison · development | 3 | 4 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -60,25 +61,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-acquisition-freeze-failed-successor-fit-next** · status **active** · evidence [qualification](docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+**2026-08-18-successor-failed-resettable-multiroot-next** · status **active** · evidence [qualification](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is actual model training on collection-relevant causal outcome evidence. It remains deliberately small: its purpose is to prove safe assimilation before a broader resettable acquisition/storage/team/recovery curriculum. |
-| Learning output | No new measured learning output from the failed freeze; every counter remains unchanged at 30 train outcomes, 15 development outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. The successor plan freezes one new acquisition target and two evaluation-only anchors. |
-| Authority delta | None. The published acquisition-replanning campaign failed during its single action-free freeze at action_free_root_inventory. No campaign plan, preflight, prediction, controller action, outcome, fit, promotion, or transfer result occurred. |
-| Transfer result | Not run. Crystal remains closed; title neutrality is an engineering requirement here, not measured cross-title transfer. |
-| Blocker | The four-root acquisition-replanning design is closed without retry or root/menu/skill repair. The existing shadow candidate has one separately collected safe retained-acquisition outcome that has not yet been assimilated. |
-| Decision | Run exactly one frozen offline successor update from the candidate acquisition outcome, with the two earlier storage/restoration targets used only as no-regression anchors. Then proceed to a separately designed resettable multi-root curriculum rather than another scarce-root qualification loop. |
-| Next session | Complete one offline successor fit from the already-collected candidate acquisition outcome. Do not collect new gameplay, reuse the duplicate base arm, decode failed prefixes, tune hyperparameters, evaluate on sealed data, promote authority, or execute Crystal. |
-| Next falsifier | Publish and preflight the fixed successor fitter, then consume exactly one fit identity. Reject the exact update on any acquisition, anchor, protected-winner, KL, weight, provenance, or durability failure. |
-| Stop condition | Stop after one fit result, or immediately on a failed gate, consumed identity, anchor regression, tuning request, new gameplay proposal, or scope beyond four hours. |
+| Product alignment | This replaces one-target assimilation with the first compact root-diverse train/development loop for acquisition, storage, team, and recovery choices. It is still Red curriculum evidence, not completion or cross-title proof. |
+| Learning output | One fit attempt was consumed but no model fit was accepted, so all counters remain 30 train outcomes, 15 development outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. The prior shadow base remains the training starting point. |
+| Authority delta | None. The acquisition successor preflight passed, but its single fit identity was consumed and failed closed during fit_attempted. No candidate model, comparison, promotion, transfer result, or gameplay authority was produced. |
+| Transfer result | Not run. Crystal remains closed until Red produces a root-disjoint unseen comparison from the reusable goal manager. |
+| Blocker | The failed runner retained only unexpected_failure, so it cannot distinguish a preregistered learning-gate rejection from an unclassified implementation exception. The exact identity is consumed and may not retry; the prior shadow base remains unchanged. |
+| Decision | Close the one-target successor and move directly to a resettable multi-root curriculum: eight train episodes across four roots, four untouched development episodes across two root-disjoint roots, one model-led decision per reset, then one fixed fit and one frozen comparison if admission thresholds pass. |
+| Next session | Implement and freeze the resettable 8-train/4-development curriculum, its durable admission boundary, one fixed fit, and one untouched development comparison. Do not build another scarce-root qualification campaign or retry the consumed successor. |
+| Next falsifier | Freeze the six-root split before any prediction. Require at least six admitted train targets from three roots and three goal kinds including collection; keep all four development episodes untouched until the single comparison. |
+| Stop condition | Stop on root overlap, fewer than six admitted train targets, fewer than three train roots or goal kinds, any development reuse before fit, any teacher or fallback action, any second fit/comparison, or scope beyond eight hours. |
 
 ### Stop conditions
 
-- Any new controller action, emulator advancement, teacher query, failed-prefix decode, duplicate base-arm training use, validation reuse, or hyperparameter search stops the lane.
-- Any anchor regression, protected-winner flip, KL or weight-cap breach, sealed Red access, Crystal access, promotion, or full replay stops the lane.
-- Stop after exactly one consumed fit identity or a documented falsification within four hours.
+- Any train/development root overlap, development outcome access before the fit is frozen, teacher query, fallback action, sealed Red access, Crystal access, or full replay stops the lane.
+- Any attempt to patch a specific root, route, skill, or menu into compliance stops the lane; use only existing qualified title-neutral capabilities.
+- Stop after twelve durably terminated episodes, one fit attempt, one frozen development comparison, or a documented falsification within eight hours.
 
 ### Hard boundaries for this lane
 
@@ -116,6 +117,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Goal-manager acquisition successor learning V1:** Published source 5beb7fa3512ca8ef294524484fccbf13607050e8 passed CI 32152766490/1 and a zero-outcome preflight. Its one fit identity was consumed, reached fit_attempted, and failed closed as unexpected_failure with no candidate bundle or accepted fit. The sanitized cause was not retained, so no gate cause is inferred and no retry is allowed. Evidence is preserved; retry is no.
 - **Fresh Red acquisition-replanning execution qualification V1:** Published source 458d47eace849d55712ff12e7a93f7ca5439579c passed CI 32147795552/1, but its single action-free freeze failed at action_free_root_inventory. No campaign plan, preflight, prediction, action, outcome, or fit occurred; the exact campaign is closed without retry or root/menu/skill repair. Evidence is preserved; retry is no.
 - **Red encounter-source development execution qualification V1:** Published source 944fdc5b79aa240fb42084e47913f9446883e739 passed CI 32135801933/1. The Red adapter binds the title-neutral seam to a hard-limited four-battle, zero-heal, source-local executor; successful capture and development return to the same source boundary, and unsafe starts fail closed. No game ran and all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Title-neutral encounter-source development capability V1:** Published source 6d028ea2003a4520b93a47d0607f5af01f8969e4 passed CI 32132328658/1. The ROM-free core and Red observation adapter expose an action-free, title-neutral DEVELOP_TEAM offer with strict collection-safe readiness verification. No game ran and execution integration remains separate. Evidence is preserved; retry is no.

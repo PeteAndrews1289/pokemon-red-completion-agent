@@ -5,6 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): the one-target fit failed closed; start the
+> root-diverse Red curriculum.** Published source `5beb7fa3512ca8ef294524484fccbf13607050e8`
+> passed CI `32152766490/1`. Its zero-outcome preflight passed, then exact fit identity
+> `83556d3e…5ca70e` was consumed once. The sole attempt reached `fit_attempted` and failed closed as
+> `unexpected_failure`. The
+> [failure receipt](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+> (SHA-256 `02c2994f…20bbb`) records no candidate bundle or model and no accepted fit. Because the
+> cause was not durably retained, do not infer whether a prespecified gate rejected the update or an
+> implementation exception occurred. There is no retry; authority and transfer remain zero.
+>
+> The active lane is `resettable-goal-manager-multiroot-learning-v1`: eight train episodes across
+> four roots, then four untouched development episodes across two root-disjoint roots, with one
+> model-led decision per reset across acquisition, storage, team, and recovery strata. Teacher and
+> fallback use are zero. Fit only with at least six admitted train targets from at least three roots
+> and three goal kinds including collection; allow exactly one fit and one comparison. A favorable
+> comparison opens a separately frozen two-decision composition pilot. Counters remain
+> **30/15/4/3/0/0** and **14/4/0/1/1**. This is Red curriculum only: no completion, promotion,
+> Crystal, transfer, or living-Pokédex claim.
+
 > **Current product focus (August 18, 2026): acquisition campaign closed; assimilate one retained
 > acquisition outcome.** Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI
 > `32147795552/1`. Its one authorized action-free freeze failed at the sanitized

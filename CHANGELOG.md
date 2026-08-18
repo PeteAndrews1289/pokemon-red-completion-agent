@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Published the one-target acquisition successor at source
+  `5beb7fa3512ca8ef294524484fccbf13607050e8` under green CI `32152766490/1`. Its zero-outcome
+  preflight passed, exact identity `83556d3e…5ca70e` was consumed once, and the only attempt reached
+  `fit_attempted` before failing closed as `unexpected_failure`. The
+  [failure receipt](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+  records no candidate bundle/model or accepted fit and retains no cause that distinguishes a
+  prespecified gate from an implementation exception. Retired it without retry or authority/transfer
+  change. Activated `resettable-goal-manager-multiroot-learning-v1`: eight one-decision train
+  episodes across four roots, four untouched development episodes across two root-disjoint roots,
+  acquisition/storage/team/recovery strata, no teacher/fallback, a minimum fit admission of six
+  targets from three roots and three goal kinds including collection, then at most one fit and one
+  comparison. A favorable comparison opens a separate two-decision composition pilot. Counters stay
+  **30/15/4/3/0/0** and **14/4/0/1/1**. This remains Red curriculum, not completion, promotion,
+  Crystal, transfer, or living-Pokédex evidence.
+
 - Closed the published acquisition-replanning campaign after its single authorized action-free
   freeze at source `458d47eace849d55712ff12e7a93f7ca5439579c`, green CI `32147795552/1`,
   failed at sanitized stage `action_free_root_inventory`. The

@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the one-target successor fails; the learning loop becomes root-diverse
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
+zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once. Its only attempt
+reached `fit_attempted` and failed closed as `unexpected_failure`. The
+[failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+records no candidate bundle/model or accepted fit. It did not durably retain whether a prespecified
+gate rejected the update or an implementation exception occurred, so neither cause is claimed. The
+identity cannot retry; authority and transfer remain zero. Counters remain **30/15/4/3/0/0** and
+**14/4/0/1/1**.
+
+The active `resettable-goal-manager-multiroot-learning-v1` lane runs eight one-decision train
+episodes across four roots and holds four development episodes untouched across two root-disjoint
+roots. The four strata are acquisition, storage, team, and recovery; teacher and fallback use are
+forbidden. One fit is allowed only after admission of at least six targets from three roots and
+three goal kinds including collection, followed by one frozen comparison. A favorable comparison
+opens a separately frozen two-decision composition pilot. This establishes at most Red curriculum
+evidence—not completion, promotion, Crystal, transfer, or living-Pokédex capability.
+
 ## August 18: the acquisition campaign closes; one acquisition outcome becomes the lesson
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.

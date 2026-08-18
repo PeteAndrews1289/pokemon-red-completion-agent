@@ -12,6 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-18: acquisition successor failed closed; resettable multiroot learning is active
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
+zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once; its single attempt
+reached `fit_attempted` and returned `unexpected_failure`. The
+[failure receipt](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+records no candidate bundle/model or accepted fit. It did not durably retain a cause, so neither a
+prespecified-gate rejection nor an implementation exception may be inferred. Do not retry. Counters
+remain **30/15/4/3/0/0** and **14/4/0/1/1**; authority and transfer remain zero.
+
+Codex now owns `resettable-goal-manager-multiroot-learning-v1`: eight train episodes over four
+roots and four untouched development episodes over two root-disjoint roots, one model-led decision
+per reset, stratified across acquisition, storage, team, and recovery. No teacher or fallback is
+allowed. Admit a fit only with at least six train targets, three roots, and three goal kinds including
+collection; allow one fit and one comparison only. A favorable comparison opens a separately frozen
+two-decision composition pilot. This is Red curriculum evidence, not completion, promotion, Crystal,
+transfer, or a living-Pokédex result.
+
 ## 2026-08-18: acquisition campaign freeze failed closed; one offline successor fit is active
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.

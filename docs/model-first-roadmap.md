@@ -8,6 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: the one-target fit is closed; learn once from root-diverse resets
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and its
+zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once. The only attempt
+reached `fit_attempted` and failed closed as `unexpected_failure`; the
+[failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+records no candidate bundle/model or accepted fit. The cause was not durably retained, so the record
+does not distinguish a prespecified learning-gate rejection from an implementation exception. The
+identity cannot retry, and authority and transfer remain zero.
+
+The active lane is `resettable-goal-manager-multiroot-learning-v1`. Run eight one-decision train
+episodes across four resettable roots in acquisition, storage, team, and recovery strata, then hold
+four development episodes untouched across two root-disjoint roots. No teacher or fallback is
+allowed. Fit only after at least six targets are admitted from at least three roots and three goal
+kinds including collection; permit exactly one fit and one frozen comparison. A favorable comparison
+opens a separately frozen two-decision composition pilot. Boards remain **30/15/4/3/0/0** and
+**14/4/0/1/1**. This is a Red curriculum loop, not completion, promotion, Crystal, transfer, or a
+living-Pokédex claim.
+
 ## Current checkpoint: the scarce-root campaign is closed; train once on the retained acquisition
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.

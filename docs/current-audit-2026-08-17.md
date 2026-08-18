@@ -1,5 +1,25 @@
 # Current audit — 2026-08-18
 
+## Current result: the one-target fit failed closed; multiroot learning is active
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1`. The
+zero-outcome preflight passed with no controller action, teacher query, or fit. Exact fit identity
+`83556d3e…5ca70e` was then consumed once; the only fit attempt reached `fit_attempted` and failed
+closed as `unexpected_failure`. The
+[failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+(SHA-256 `02c2994f…20bbb`) records no candidate bundle, candidate model, or accepted fit and forbids a
+retry. Because it did not durably retain the cause, neither a prespecified gate rejection nor an
+implementation exception may be inferred. Authority and transfer remain zero. Legacy counters stay
+**30/15/4/3/0/0** and product-focus-v2 stays **14/4/0/1/1**.
+
+`resettable-goal-manager-multiroot-learning-v1` is active: eight one-decision train episodes across
+four roots, four untouched development episodes across two root-disjoint roots, and acquisition,
+storage, team, and recovery strata. Teacher/fallback use is forbidden. Fit admission requires at
+least six targets from at least three roots and three goal kinds including collection. Exactly one
+fit and one development comparison are permitted. A favorable comparison opens only a separately
+frozen two-decision composition pilot. This is Red curriculum evidence, not completion, promotion,
+Crystal, transfer, or a living-Pokédex result.
+
 ## Current result: acquisition freeze failed closed; one successor fit is frozen
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.

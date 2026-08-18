@@ -22,6 +22,9 @@ FIT_PLAN = (
 FAILURE_RECEIPT = (
     PROJECT_ROOT / "docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json"
 )
+FIT_FAILURE_RECEIPT = (
+    PROJECT_ROOT / "docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json"
+)
 
 
 def test_fit_plan_freezes_one_new_target_and_two_evaluation_only_anchors() -> None:
@@ -51,6 +54,29 @@ def test_failed_acquisition_campaign_is_closed_with_zero_effects() -> None:
     assert receipt["campaign_state"]["campaign_plan_created"] is False
     assert receipt["campaign_state"]["retry_allowed"] is False
     assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert receipt["tracked_private_paths"] == 0
+    assert receipt["tracked_private_identities"] == 0
+
+
+def test_successor_fit_failure_is_consumed_without_counter_or_authority_gain() -> None:
+    receipt = json.loads(FIT_FAILURE_RECEIPT.read_bytes())
+
+    assert receipt["status"] == "fit_attempt_consumed_failed_closed_no_retry"
+    assert receipt["attempt"] == {
+        "candidate_bundle_created": False,
+        "candidate_model_sha256": None,
+        "cause_retained": False,
+        "failure_stage": "unexpected_failure",
+        "fit_identity_sha256": "83556d3e1aa4af942109c134ebd090f2ed0b2fd47f42fbd407ae0d34b15ca70e",
+        "identity_consumed": True,
+        "model_fit_attempts": 1,
+        "model_fits_added": 0,
+        "phase": "fit_attempted",
+        "retry_allowed": False,
+    }
+    assert receipt["claim"]["durable_before_outcome_decode"] is True
+    assert receipt["claim"]["semantic_outcomes_decoded_before_claim"] == 0
     assert set(receipt["counter_treatment"].values()) == {0}
     assert receipt["tracked_private_paths"] == 0
     assert receipt["tracked_private_identities"] == 0

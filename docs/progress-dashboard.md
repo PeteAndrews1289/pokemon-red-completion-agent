@@ -5,6 +5,22 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **SOURCE 5BEB7FA** (`5beb7fa3512ca8ef294524484fccbf13607050e8`)
+> **· CI 32152766490/1 GREEN · ZERO-OUTCOME PREFLIGHT
+> PASS · FIT ID 83556D3E… CONSUMED ONCE · PHASE FIT_ATTEMPTED · UNEXPECTED_FAILURE ·
+> CANDIDATE BUNDLE 0 · CANDIDATE MODEL 0 · ACCEPTED FIT 0 · RETRY 0**. Link the
+> [failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+> and display **SHA-256 02C2994F…20BBB**. Mark **CAUSE NOT RETAINED · GATE VS IMPLEMENTATION
+> EXCEPTION UNKNOWN · DO NOT INFER · AUTHORITY +0 · TRANSFER +0**.
+>
+> Display `resettable-goal-manager-multiroot-learning-v1`: **TRAIN 8 / 4 ROOTS · UNTOUCHED
+> DEVELOPMENT 4 / 2 ROOT-DISJOINT ROOTS · ONE MODEL DECISION PER RESET · ACQUISITION + STORAGE
+> + TEAM + RECOVERY · TEACHER 0 · FALLBACK 0**. Gate the sole fit on **ADMITTED TARGETS ≥6 ·
+> TRAIN ROOTS ≥3 · GOAL KINDS ≥3 INCLUDING COLLECTION**, then allow **FITS ≤1 · COMPARISONS
+> ≤1**. Keep boards **30/15/4/3/0/0** and **14/4/0/1/1**. A favorable comparison opens a
+> **SEPARATELY FROZEN TWO-DECISION COMPOSITION PILOT**. Stamp **RED CURRICULUM ONLY · NO
+> COMPLETION/PROMOTION/CRYSTAL/TRANSFER/LIVING-POKÉDEX CLAIM**.
+>
 > **Current rail:** Show **SOURCE 458D47E · CI 32147795552/1 GREEN · ONE ACTION-FREE FREEZE ·
 > FAILED STAGE ACTION_FREE_ROOT_INVENTORY · PLAN 0 · PREFLIGHT 0 · PREDICTIONS 0 · ACTIONS 0 ·
 > OUTCOMES 0 · FITS 0 · GAMEPLAY 0**. Link the

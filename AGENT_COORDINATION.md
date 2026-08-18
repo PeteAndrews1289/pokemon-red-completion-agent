@@ -1,5 +1,22 @@
 # Three-agent coordination
 
+> **2026-08-18 one-target successor failed; root-diverse learning is the only active lane — highest
+> checkpoint:** Source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI
+> `32152766490/1` and a zero-outcome preflight. Fit identity `83556d3e…5ca70e` was durably consumed
+> once; its sole attempt reached `fit_attempted` and failed closed as `unexpected_failure`. The
+> [failure receipt](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+> records no candidate bundle/model, accepted fit, retry, authority, or transfer. Its retained data
+> cannot distinguish a prespecified-gate rejection from an implementation exception; infer neither.
+>
+> Codex owns `resettable-goal-manager-multiroot-learning-v1`: freeze and run eight train episodes
+> across four roots plus four untouched development episodes across two root-disjoint roots, one
+> model-led decision per reset, spanning acquisition, storage, team, and recovery. Teacher/fallback
+> use is forbidden. A fit requires at least six admitted train targets, three roots, and three goal
+> kinds including collection. Stop after one fit and one comparison. A favorable comparison opens a
+> separately frozen two-decision composition pilot. Keep **30/15/4/3/0/0** and **14/4/0/1/1**
+> unchanged now. This is Red curriculum only, not completion, promotion, Crystal, transfer, or a
+> living-Pokédex claim.
+
 > **2026-08-18 acquisition freeze failed; the one-update successor fit is the only active lane —
 > highest checkpoint:** Source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI
 > `32147795552/1`. One authorized action-free freeze failed at sanitized stage

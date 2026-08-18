@@ -158,14 +158,15 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "goal-manager-acquisition-successor-learning-v1"
+    assert state.active_lane["id"] == "resettable-goal-manager-multiroot-learning-v1"
     assert state.active_lane["kind"] == "learning"
-    assert len(state.retired_lanes) == 21
-    assert focus_progress_fraction(state) == pytest.approx(14 / 15)
+    assert len(state.retired_lanes) == 22
+    assert focus_progress_fraction(state) == pytest.approx((14 / 26 + 4 / 14 + 4 / 5 + 3 / 4) / 4)
     assert focus_scorecard(state) == (
-        ("Outcome Question · train", 30, 30),
+        ("Development Episode · development", 14, 26),
+        ("Verified Outcome Example · development", 4, 14),
         ("Model Fit · train", 4, 5),
-        ("Unseen Comparison · development", 3, 3),
+        ("Unseen Comparison · development", 3, 4),
     )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
@@ -566,9 +567,10 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     assert rows == (
-        "Outcome Question · train: 30/30",
+        "Development Episode · development: 14/26",
+        "Verified Outcome Example · development: 4/14",
         "Model Fit · train: 4/5",
-        "Unseen Comparison · development: 3/3",
+        "Unseen Comparison · development: 3/4",
     )
 
 
@@ -758,18 +760,19 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == pytest.approx(14 / 15)
+    assert public["stage_progress"] == pytest.approx((14 / 26 + 4 / 14 + 4 / 5 + 3 / 4) / 4)
     assert public["actions"] == 0
-    assert "Goal-manager acquisition successor learning V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 30, "total": 30}  # type: ignore[index]
+    assert "Resettable multi-root goal-manager learning V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 14, "total": 26}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 5}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 4}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Shadow successor from candidate eb5c6515" in encoded
+    assert "Unchanged shadow base eb5c6515" in encoded
     assert "loss 1.2667" in encoded
     assert "action_free_root_inventory" in encoded
-    assert "fresh acquisition targets 1" in encoded
-    assert "evaluation-only anchors 2" in encoded
+    assert "fit_attempted" in encoded
+    assert "unexpected_failure" in encoded
+    assert "candidate bundle 0" in encoded
     assert "actions 244/244" in encoded
     assert "8 resettable train episodes" in encoded
     assert "/Users/" not in encoded

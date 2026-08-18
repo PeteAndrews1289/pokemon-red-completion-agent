@@ -7,6 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: one catch was not enough, so learning widens across roots
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
+zero-outcome preflight. The exact fit identity `83556d3e…` was consumed once, reached
+`fit_attempted`, and failed closed as `unexpected_failure`. It produced no candidate bundle, model,
+or accepted fit. The [failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+does not retain enough cause to tell whether a frozen learning gate or an implementation exception
+stopped it, so the story tells neither. There is no retry, promotion, authority, or transfer.
+
+The active lane, `resettable-goal-manager-multiroot-learning-v1`, replaces that single lesson with
+eight train resets across four roots and four untouched development resets across two different
+roots. Each episode gives the model one choice among acquisition, storage, team, and recovery work;
+there is no teacher or fallback. At least six admitted lessons from three roots and three goal kinds,
+including collection, are required before one fit and one comparison. A favorable result earns only
+a separately frozen two-decision composition pilot. The scoreboards stay **30/15/4/3/0/0** and
+**14/4/0/1/1**. This is still Red curriculum—not completion, Crystal, transfer, or a living Pokédex.
+
 ## Current checkpoint: the four-root plan stops, but one real catch can still teach
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.

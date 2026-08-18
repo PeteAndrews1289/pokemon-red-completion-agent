@@ -1,5 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the one-catch lesson fails; the curriculum gets wider
+
+Open on **SOURCE 5BEB7FA** (`5beb7fa3512ca8ef294524484fccbf13607050e8`) **· CI
+32152766490/1 GREEN · ZERO-OUTCOME PREFLIGHT PASS**. Move exact fit
+identity **83556D3E…** once into **FIT_ATTEMPTED**, then stop at **UNEXPECTED_FAILURE**. Overlay
+**BUNDLE 0 · MODEL 0 · ACCEPTED FIT 0 · RETRY 0 · AUTHORITY +0 · TRANSFER +0** and link the
+[failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json).
+Show two crossed-out explanations—**PRESPECIFIED GATE** and **IMPLEMENTATION EXCEPTION**—under the
+caption **CAUSE NOT RETAINED; INFER NEITHER**.
+
+Then reveal active lane `resettable-goal-manager-multiroot-learning-v1`: **8 TRAIN / 4 ROOTS → 4
+UNTOUCHED DEVELOPMENT / 2 ROOT-DISJOINT ROOTS**, one model-led decision per reset across
+**ACQUISITION · STORAGE · TEAM · RECOVERY**, with **TEACHER 0 · FALLBACK 0**. Before the only
+fit, require **≥6 TARGETS · ≥3 ROOTS · ≥3 GOAL KINDS INCLUDING COLLECTION**; after it, allow
+one comparison. Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**. A favorable result unlocks a
+separate two-decision composition pilot, not a victory screen: **RED CURRICULUM ONLY · NO
+COMPLETION/PROMOTION/CRYSTAL/TRANSFER/LIVING-POKÉDEX CLAIM**.
+
 ## August 18 scene: one campaign closes; one real catch becomes the lesson
 
 Open on **SOURCE 458D47E** (`458d47eace849d55712ff12e7a93f7ca5439579c`) **· CI

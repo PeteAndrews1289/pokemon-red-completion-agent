@@ -71,10 +71,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    train_outcome_total = max(
+    development_episode_total = max(
         [
-            train_outcomes,
-            *(minimum for label, _, minimum in outputs if label.startswith("Outcome Question")),
+            development_episodes,
+            *(minimum for label, _, minimum in outputs if label.startswith("Development Episode")),
         ]
     )
     fit_total = max(
@@ -97,25 +97,26 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The four-root campaign failed its one action-free freeze and is closed. Now training "
-            "one retained-acquisition outcome while preserving earlier storage/restoration "
-            "behavior."
+            "The one-target successor fit failed closed with no accepted model. Now building the "
+            "first resettable, root-diverse train/development curriculum."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Offline successor fit · one acquisition target · two no-regression anchors",
+        location=(
+            "Resettable Red curriculum · 8 train episodes · 4 root-disjoint development episodes"
+        ),
         collection_target=150,
         model=DashboardModelState(
-            mode="fitting",
-            candidate="Shadow successor from candidate eb5c6515…",
-            choice="Increase acquisition probability without regressing storage or restoration",
+            mode="shadow",
+            candidate="Unchanged shadow base eb5c6515…",
+            choice="Freeze six roots before any prediction, then collect one decision per reset",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="fitting",
-            zero_shot_completed=train_outcomes,
-            zero_shot_total=train_outcome_total,
+            phase="qualification",
+            zero_shot_completed=development_episodes,
+            zero_shot_total=development_episode_total,
             adaptation_completed=fits,
             adaptation_total=fit_total,
             sealed_completed=unseen,
@@ -124,7 +125,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Authenticated train outcomes",
+                "Development episodes",
                 "Model fits",
                 "Unseen comparisons",
             ),
@@ -177,11 +178,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "· campaign plan 0 · preflight 0 · predictions 0 · actions 0 · outcomes 0"
             ),
             (
-                "Successor data · fresh acquisition targets 1 · evaluation-only anchors 2 "
-                "(storage + restoration) · duplicate base arm excluded 1 · failed prefixes 19"
+                "Successor attempt · preflight passed · identity consumed · fit_attempted → "
+                "unexpected_failure · accepted fits 0 · candidate bundle 0 · retry 0"
             ),
             (
-                "Next curriculum after this fit · 8 resettable train episodes across 4 roots · "
+                "Active curriculum · 8 resettable train episodes across 4 roots · "
                 "4 root-disjoint development episodes across 2 roots · one decision per reset"
             ),
         ),

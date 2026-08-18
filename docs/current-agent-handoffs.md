@@ -6,6 +6,24 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the resettable multiroot train/development loop
+
+Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
+zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once; the only attempt
+reached `fit_attempted` and failed closed as `unexpected_failure`. The
+[failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+records no candidate bundle/model or accepted fit, and no retained cause distinguishes a frozen-gate
+rejection from an implementation exception. No agent may retry it or infer a cause. Counters stay
+**30/15/4/3/0/0** and **14/4/0/1/1**; authority and transfer stay zero.
+
+Codex owns `resettable-goal-manager-multiroot-learning-v1`: eight train episodes across four roots,
+four untouched development episodes across two root-disjoint roots, and one model-led decision per
+reset across acquisition, storage, team, and recovery. Claude and Antigravity remain read-only. No
+teacher or fallback is permitted. Fit only with at least six admitted targets from three roots and
+three goal kinds including collection, then allow one fit and one comparison. A favorable result
+opens a separately frozen two-decision composition pilot. It grants no completion, promotion,
+Crystal, transfer, or living-Pokédex claim.
+
 ## Current override: Codex owns one acquisition-successor fit
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`,
