@@ -61,19 +61,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-successor-failed-resettable-multiroot-next** · status **active** · evidence [qualification](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+**2026-08-18-resettable-multiroot-implementation-qualified** · status **active** · evidence [qualification](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This replaces one-target assimilation with the first compact root-diverse train/development loop for acquisition, storage, team, and recovery choices. It is still Red curriculum evidence, not completion or cross-title proof. |
-| Learning output | One fit attempt was consumed but no model fit was accepted, so all counters remain 30 train outcomes, 15 development outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. The prior shadow base remains the training starting point. |
-| Authority delta | None. The acquisition successor preflight passed, but its single fit identity was consumed and failed closed during fit_attempted. No candidate model, comparison, promotion, transfer result, or gameplay authority was produced. |
-| Transfer result | Not run. Crystal remains closed until Red produces a root-disjoint unseen comparison from the reusable goal manager. |
-| Blocker | The failed runner retained only unexpected_failure, so it cannot distinguish a preregistered learning-gate rejection from an unclassified implementation exception. The exact identity is consumed and may not retry; the prior shadow base remains unchanged. |
-| Decision | Close the one-target successor and move directly to a resettable multi-root curriculum: eight train episodes across four roots, four untouched development episodes across two root-disjoint roots, one model-led decision per reset, then one fixed fit and one frozen comparison if admission thresholds pass. |
-| Next session | Implement and freeze the resettable 8-train/4-development curriculum, its durable admission boundary, one fixed fit, and one untouched development comparison. Do not build another scarce-root qualification campaign or retry the consumed successor. |
-| Next falsifier | Freeze the six-root split before any prediction. Require at least six admitted train targets from three roots and three goal kinds including collection; keep all four development episodes untouched until the single comparison. |
-| Stop condition | Stop on root overlap, fewer than six admitted train targets, fewer than three train roots or goal kinds, any development reuse before fit, any teacher or fallback action, any second fit/comparison, or scope beyond eight hours. |
+| Product alignment | This is the final readiness gate for the first compact root-diverse Red goal-selection curriculum. A later favorable one-decision result permits only a separately frozen two-decision composition pilot, not authority or transfer. |
+| Learning output | No new measured learning output. Source 113aa605a298337fb362f2e0b7d56e5c755b7380 passed CI run 32163666327 attempt 1; engineering, mission, Claude, and Antigravity reviews approved the bounded implementation. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. |
+| Authority delta | None. Published implementation and review evidence add no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority. |
+| Transfer result | Not run. Crystal remains closed; this implementation and its action-free readiness gate are Red curriculum prerequisites only. |
+| Blocker | No implementation blocker remains. The current private context inventory has not yet been frozen into the exact six-root campaign, so root availability and preflight readiness remain unproved. |
+| Decision | The resettable multi-root campaign, strict train-only admission, one shadow fit, and one untouched comparison are implemented and reviewed. Run exactly one action-free campaign freeze and, only if it succeeds, one exact-plan preflight; stop before gameplay. |
+| Next session | Run one exact-head action-free six-root campaign freeze and, only on success, one exact-plan zero-prediction preflight. Stop before execute or resume; gameplay remains a separate reorientation. |
+| Next falsifier | The action-free freeze must find four train roots and two distinct development roots, with no physical or lineage overlap and the frozen acquisition, storage, team, and recovery focus strata. Otherwise close the attempt without a root-specific patch. |
+| Stop condition | Stop before controller input. Any missing root stratum, train/development overlap, prior-root reuse, private binding drift, prediction, action, teacher query, fallback, sealed Red access, Crystal access, or root-specific repair closes this readiness attempt. |
 
 ### Stop conditions
 

@@ -1,0 +1,178 @@
+{
+  "active_lane": "resettable-goal-manager-multiroot-learning-v1",
+  "campaign_contract": {
+    "campaign_modes": [
+      "freeze",
+      "preflight",
+      "execute",
+      "resume"
+    ],
+    "development_episodes": 4,
+    "development_focus_goal_kinds": [
+      "acquire_species",
+      "develop_team"
+    ],
+    "development_roots": 2,
+    "episodes_per_root": 2,
+    "evolution_allowed": false,
+    "maximum_actions_per_reset": 6000,
+    "maximum_decisions_per_reset": 1,
+    "maximum_frames_per_reset": 600000,
+    "minimum_available_goals_at_freeze": 2,
+    "prior_campaign_lineages_excluded": true,
+    "prior_campaign_state_envelope_pairs_excluded": true,
+    "train_episodes": 8,
+    "train_focus_goal_kinds": [
+      "acquire_species",
+      "manage_storage",
+      "develop_team",
+      "restore_team"
+    ],
+    "train_roots": 4
+  },
+  "claim_boundary": {
+    "supported": "Exact published code implements and tests a path-free six-root, twelve-reset Red curriculum boundary, strict train-only admission, one fixed shadow fit, and one fixed-denominator root-disjoint development comparison.",
+    "unsupported": [
+      "campaign_plan_frozen",
+      "current_root_inventory_available",
+      "preflight_passed",
+      "gameplay_executed",
+      "verified_outcome_collected",
+      "accepted_model_fit",
+      "development_comparison",
+      "two_decision_composition",
+      "promotion_or_authority",
+      "red_completion",
+      "living_pokedex_completion",
+      "sealed_red_evaluation",
+      "crystal_or_cross_title_transfer"
+    ]
+  },
+  "counter_baseline": {
+    "legacy": {
+      "authority_promotions": 0,
+      "development_outcomes": 15,
+      "model_fits": 4,
+      "train_outcomes": 30,
+      "transfer_results": 0,
+      "unseen_comparisons": 3
+    },
+    "product_focus_v2": {
+      "atomic_goal_episodes": 0,
+      "composition_attempts": 1,
+      "development_episode_attempts": 14,
+      "verified_composition_episodes": 1,
+      "verified_outcome_examples": 4
+    }
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "campaign_runner_sha256": "36e66c1a03968f2116779daed5d5c6843656c0fffd8c59b6d1a437fa697762bb",
+    "campaign_runner_test_sha256": "55c11670dc5683dc229ca5f25d40cab258be91d4beb0a661e1dc6bf1955cba04",
+    "development_loader_sha256": "326b09e5124ed99507518dde8a36b8a70781c24fa05d15aba68b69569ebf62d0",
+    "development_loader_test_sha256": "5a53707ab138da48c290ec3693a4c9557c1989c0cdf405c810608c0b88b1a8ad",
+    "fit_comparison_runner_sha256": "decef558a33f3deca2bdd8e43e9ca79f8b088a6aec7256c40973c4076e860d5b",
+    "fit_comparison_runner_test_sha256": "b04bd558480847e351d4093f936db068925705b5ada70312939b0350a6750176",
+    "learning_core_sha256": "44b2713e7d1c482e2eada00e0f70eeae6da823996a1a0a6267cd211b32131071",
+    "learning_core_test_sha256": "b6b22bec96d45ae7be6bd54de49f21db7afea5c90358ef9d1e8427400486a045",
+    "outcome_learning_sha256": "f948614fccfd2350e8e3affe914d78ef1764698d515992c05e907f030c3c47b1",
+    "outcome_learning_test_sha256": "ac1773fde37420d59cc6e9cc375aa9351bcc018b8a9f702524bfad527591aa6f"
+  },
+  "learning_contract": {
+    "acquire_species_train_target_required": true,
+    "comparison_decision_rule": {
+      "candidate_cross_entropy": "strictly_lower",
+      "maximum_directional_losses": 0,
+      "minimum_directional_wins": 3
+    },
+    "comparison_fixed_denominator": 4,
+    "comparison_root_overlap_allowed": false,
+    "comparisons_maximum": 1,
+    "development_outcomes_decoded_during_fit": 0,
+    "fit_attempts_maximum": 1,
+    "guard_menu_examples": 54,
+    "guard_winner_examples": 18,
+    "maximum_importance_weight": 4.0,
+    "maximum_menu_kl": 0.01,
+    "maximum_weight_delta_l2": 0.02,
+    "minimum_admitted_train_goal_kinds": 3,
+    "minimum_admitted_train_roots": 3,
+    "minimum_admitted_train_targets": 6,
+    "objective_id": "pokemon.core.goal-manager.capped-ips-policy-gradient.v1",
+    "step_size": 0.02,
+    "update_steps": 1
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32163666327,
+    "source_bundle_sha256": "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17",
+    "source_commit": "113aa605a298337fb362f2e0b7d56e5c755b7380",
+    "worktree_dirty": false
+  },
+  "readiness_guards": {
+    "all_campaign_and_trial_claims_before_first_prediction": true,
+    "campaign_terminal_required_before_fit_inventory": true,
+    "comparison_claim_before_development_outcome_decode": true,
+    "development_payload_untouched_until_comparison": true,
+    "durable_campaign_terminal": true,
+    "durable_episode_terminals": true,
+    "exact_propensity_required": true,
+    "exact_source_runtime_model_context_numpy_skill_attestation": true,
+    "existing_terminal_retried_on_resume": false,
+    "exploration_mix": 0.15,
+    "fit_claim_before_train_outcome_decode": true,
+    "model_led_selection": true,
+    "persisted_specimen_counts_rederived_at_admission": true,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "temperature": 1.0
+  },
+  "recorded_on": "2026-08-18",
+  "remaining_gate": {
+    "campaign_plan_created": false,
+    "campaign_plan_sha256": null,
+    "campaign_preflight_passed": false,
+    "claims_consumed": 0,
+    "development_roots_frozen": 0,
+    "next": "Run one exact-head action-free freeze; if successful, run one exact-plan preflight and stop before execution.",
+    "train_roots_frozen": 0,
+    "trials_frozen": 0
+  },
+  "review": {
+    "antigravity_architecture_and_transfer": "GO",
+    "claude_forensic_and_experimental": "APPROVE_WITH_TWO_ROM_FREE_TESTS_COMPLETED",
+    "engineering_exact_bytes": "GO",
+    "mission_and_claim_boundary": "GO"
+  },
+  "schema": "pokemon.red.resettable-goal-manager-multiroot-implementation-qualification.v1",
+  "status": "published_implementation_qualified_action_free_freeze_and_preflight_required",
+  "title_role": "Red curriculum implementation qualification, not root readiness, gameplay, learning, promotion, completion, or transfer",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "campaign_claims": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames": 0,
+    "episode_attempts": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons": 0,
+    "verified_outcomes": 0
+  }
+}

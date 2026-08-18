@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published and qualified the resettable multiroot implementation at exact source
+  `113aa605a298337fb362f2e0b7d56e5c755b7380` under green CI `32163666327/1`. The
+  [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+  (SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+  records engineering and mission GO, Claude approval after two requested ROM-free tests, and
+  Antigravity GO. This is code qualification only: campaign plan, frozen roots, preflight,
+  gameplay, outcomes, fit, comparison, authority, Crystal, and transfer remain absent, leaving
+  **30/15/4/3/0/0** and **14/4/0/1/1** unchanged. The next bounded action is one action-free
+  six-root freeze and, only on success, one exact-plan zero-prediction preflight before stopping.
+  A favorable later 8/4 one-decision result can open only a separately frozen two-decision
+  composition pilot; the denominator and completion/transfer claim boundary remain fixed.
+
 - Published the one-target acquisition successor at source
   `5beb7fa3512ca8ef294524484fccbf13607050e8` under green CI `32152766490/1`. Its zero-outcome
   preflight passed, exact identity `83556d3e…5ca70e` was consumed once, and the only attempt reached

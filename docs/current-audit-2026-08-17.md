@@ -1,6 +1,25 @@
 # Current audit — 2026-08-18
 
-## Current result: the one-target fit failed closed; multiroot learning is active
+## Current result: multiroot implementation qualified; campaign readiness remains unproved
+
+Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
+[implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+has SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`.
+Engineering and mission reviews are GO; Claude approved after two requested ROM-free tests were
+completed, and Antigravity returned GO.
+
+The supported claim is exact published implementation only. Campaign plan, frozen train or
+development root, campaign preflight, gameplay, verified outcome, accepted fit, comparison,
+authority, Crystal access, and transfer are all zero or absent for this checkpoint. Legacy counters
+remain **30/15/4/3/0/0** and product-focus-v2 remains **14/4/0/1/1**.
+
+`resettable-goal-manager-multiroot-learning-v1` remains active. Its next and only operation is one
+action-free six-root freeze; a success permits one exact-plan zero-prediction preflight, followed by
+a hard stop before gameplay. A favorable later 8-train/4-development one-decision result permits
+only a separately frozen two-decision composition pilot. Expanding the one-decision denominator or
+claiming completion, living-Pokédex ability, Crystal, or transfer remains outside scope.
+
+## Previous result: the one-target fit failed closed; multiroot learning was active
 
 Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1`. The
 zero-outcome preflight passed with no controller action, teacher query, or fit. Exact fit identity

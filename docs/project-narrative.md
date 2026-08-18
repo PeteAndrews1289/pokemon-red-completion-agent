@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: the one-target successor fails; the learning loop becomes root-diverse
+## August 18: the root-diverse implementation qualifies; private readiness is next
+
+Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
+[implementation qualification](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+(SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+records engineering and mission GO, Claude approval after two requested ROM-free tests were
+completed, and Antigravity GO.
+
+This is an implementation milestone only. It produced no campaign plan, frozen root, preflight,
+gameplay, outcome, fit, comparison, authority, Crystal access, or transfer. Counters remain
+**30/15/4/3/0/0** and **14/4/0/1/1**. Active lane
+`resettable-goal-manager-multiroot-learning-v1` now permits one action-free six-root freeze and,
+only after success, one exact-plan zero-prediction preflight followed by a stop before gameplay. A
+favorable later 8-train/4-development one-decision result opens only a separately frozen
+two-decision composition pilot. Neither the denominator nor completion/transfer claims expand here.
+
+## Previous August 18 checkpoint: the one-target successor fails; the learning loop becomes root-diverse
 
 Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
 zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once. Its only attempt

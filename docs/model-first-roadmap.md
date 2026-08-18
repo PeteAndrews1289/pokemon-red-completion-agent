@@ -8,7 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the one-target fit is closed; learn once from root-diverse resets
+## Current checkpoint: multiroot code is qualified; prove the private boundary action-free
+
+Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
+[implementation qualification](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+(SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+records engineering and mission GO, Claude approval after both requested ROM-free tests were
+completed, and Antigravity GO.
+
+Implementation is not execution: no campaign plan, root freeze, preflight, gameplay, outcome, fit,
+comparison, authority, Crystal, or transfer was created. Boards remain **30/15/4/3/0/0** and
+**14/4/0/1/1**. Keep `resettable-goal-manager-multiroot-learning-v1` active and run exactly one
+action-free six-root freeze; if it succeeds, run one exact-plan zero-prediction preflight and stop
+before gameplay. Only a favorable later 8-train/4-development one-decision result may open a
+separately frozen two-decision composition pilot. Do not expand that denominator or convert Red
+curriculum evidence into completion or transfer authority.
+
+## Previous checkpoint: the one-target fit is closed; learn once from root-diverse resets
 
 Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and its
 zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once. The only attempt

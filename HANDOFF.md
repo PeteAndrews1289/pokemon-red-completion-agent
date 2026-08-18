@@ -12,7 +12,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: acquisition successor failed closed; resettable multiroot learning is active
+## 2026-08-18: multiroot implementation qualified; freeze and preflight are next
+
+Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
+[implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+(SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+records engineering and mission GO, Claude approval after completion of two requested ROM-free
+tests, and Antigravity GO.
+
+This qualified code, not a campaign. Plan, frozen roots, preflight, gameplay, outcomes, fit,
+comparison, authority, Crystal, and transfer are all absent for this checkpoint. Counters stay
+**30/15/4/3/0/0** and **14/4/0/1/1**. Codex retains
+`resettable-goal-manager-multiroot-learning-v1` only to run one action-free six-root freeze and,
+if it succeeds, one exact-plan zero-prediction preflight before stopping. A favorable later 8/4
+one-decision result may open a separately frozen two-decision composition pilot; never enlarge the
+one-decision denominator or convert this readiness into completion or transfer language.
+
+## Previous checkpoint — 2026-08-18: acquisition successor failed closed; multiroot learning is active
 
 Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
 zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once; its single attempt

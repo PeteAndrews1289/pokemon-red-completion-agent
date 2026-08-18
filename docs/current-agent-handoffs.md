@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the resettable multiroot train/development loop
+## Current override: Codex owns one action-free multiroot freeze and preflight
+
+Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380` passed CI `32163666327/1`. The
+[implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+(SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+records engineering/mission GO, Claude approval after its two requested ROM-free tests, and
+Antigravity GO.
+
+Codex retains `resettable-goal-manager-multiroot-learning-v1`, but owns no gameplay in this
+checkpoint. Run one action-free six-root freeze; only on success run one exact-plan zero-prediction
+preflight, then stop. The implementation created no plan, frozen root, preflight, gameplay, outcome,
+fit, comparison, authority, Crystal, or transfer, so **30/15/4/3/0/0** and **14/4/0/1/1** remain
+unchanged. Reviewers return to read-only. A favorable later 8/4 one-decision result opens at most a
+separately frozen two-decision composition pilot; do not widen the denominator or claims.
+
+## Previous override: Codex owned the resettable multiroot train/development loop
 
 Published source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI `32152766490/1` and a
 zero-outcome preflight. Exact fit identity `83556d3e…5ca70e` was consumed once; the only attempt

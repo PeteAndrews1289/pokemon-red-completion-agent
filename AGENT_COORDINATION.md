@@ -1,7 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-18 one-target successor failed; root-diverse learning is the only active lane — highest
-> checkpoint:** Source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI
+> **2026-08-18 multiroot implementation qualified; action-free freeze/preflight is the only current
+> work — highest checkpoint:** Exact source `113aa605a298337fb362f2e0b7d56e5c755b7380`
+> passed CI `32163666327/1`. The
+> [implementation receipt](docs/evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+> (SHA-256 `53676c698bc6890abb1838312569a0c87d06f21ca46b5d66e2d7320b30561f2a`)
+> records engineering/mission GO, Claude approval after two requested ROM-free tests, and
+> Antigravity GO.
+>
+> Codex owns `resettable-goal-manager-multiroot-learning-v1`, but the next operation is only one
+> action-free six-root freeze and, on success, one exact-plan zero-prediction preflight followed by
+> a stop before gameplay. This checkpoint adds no plan, frozen root, preflight, gameplay, outcome,
+> fit, comparison, authority, Crystal, or transfer. Keep **30/15/4/3/0/0** and
+> **14/4/0/1/1** unchanged. A favorable later 8/4 one-decision result may authorize only a
+> separately frozen two-decision composition pilot. Do not expand the denominator or claim
+> completion or transfer.
+
+> **Previous checkpoint — 2026-08-18 one-target successor failed; root-diverse learning was the
+> active lane:** Source `5beb7fa3512ca8ef294524484fccbf13607050e8` passed CI
 > `32152766490/1` and a zero-outcome preflight. Fit identity `83556d3e…5ca70e` was durably consumed
 > once; its sole attempt reached `fit_attempted` and failed closed as `unexpected_failure`. The
 > [failure receipt](docs/evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)

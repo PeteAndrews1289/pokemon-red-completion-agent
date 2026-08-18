@@ -108,6 +108,11 @@ ENCOUNTER_DEVELOPMENT_EXECUTION_QUALIFICATION = (
     / "docs/evidence"
     / "red-encounter-development-execution-qualification-v1-2026-08-18.json"
 )
+RESETTABLE_MULTIROOT_IMPLEMENTATION_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -287,6 +292,44 @@ def test_red_encounter_development_execution_is_qualified_without_gameplay() -> 
     assert binding["hard_action_limiter_required"] is True
     assert binding["hard_frame_limiter_required"] is True
     assert binding["unsafe_or_fainted_party_admitted"] is False
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_resettable_multiroot_implementation_is_qualified_without_gameplay() -> None:
+    receipt = json.loads(
+        RESETTABLE_MULTIROOT_IMPLEMENTATION_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "published_implementation_qualified_action_free_freeze_and_preflight_required"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32163666327,
+        "source_bundle_sha256": (
+            "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17"
+        ),
+        "source_commit": "113aa605a298337fb362f2e0b7d56e5c755b7380",
+        "worktree_dirty": False,
+    }
+    assert receipt["campaign_contract"]["train_roots"] == 4
+    assert receipt["campaign_contract"]["development_roots"] == 2
+    assert receipt["campaign_contract"]["maximum_decisions_per_reset"] == 1
+    assert receipt["remaining_gate"] == {
+        "campaign_plan_created": False,
+        "campaign_plan_sha256": None,
+        "campaign_preflight_passed": False,
+        "claims_consumed": 0,
+        "development_roots_frozen": 0,
+        "next": (
+            "Run one exact-head action-free freeze; if successful, run one exact-plan "
+            "preflight and stop before execution."
+        ),
+        "train_roots_frozen": 0,
+        "trials_frozen": 0,
+    }
     assert set(receipt["zero_effects"].values()) == {0}
     assert set(receipt["counter_treatment"].values()) == {0}
 
@@ -774,7 +817,10 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "unexpected_failure" in encoded
     assert "candidate bundle 0" in encoded
     assert "actions 244/244" in encoded
-    assert "8 resettable train episodes" in encoded
+    assert "8 train / 4 development" in encoded
+    assert "113aa605" in encoded
+    assert "not frozen" in encoded
+    assert "stop before gameplay" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

@@ -97,8 +97,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The one-target successor fit failed closed with no accepted model. Now building the "
-            "first resettable, root-diverse train/development curriculum."
+            "The resettable multi-root curriculum implementation is published and independently "
+            "reviewed. Campaign freeze and zero-action preflight are next; gameplay has not begun."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
@@ -108,7 +108,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         model=DashboardModelState(
             mode="shadow",
             candidate="Unchanged shadow base eb5c6515…",
-            choice="Freeze six roots before any prediction, then collect one decision per reset",
+            choice="Freeze six roots action-free, preflight once, then stop before execution",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -182,8 +182,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "unexpected_failure · accepted fits 0 · candidate bundle 0 · retry 0"
             ),
             (
-                "Active curriculum · 8 resettable train episodes across 4 roots · "
-                "4 root-disjoint development episodes across 2 roots · one decision per reset"
+                "Implementation · 113aa605 · CI 32163666327/1 green · reviews GO · "
+                "8 train / 4 development · not frozen · next action-free freeze + "
+                "zero-prediction preflight · stop before gameplay"
             ),
         ),
     )

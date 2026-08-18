@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: the one-catch lesson fails; the curriculum gets wider
+## August 18 scene: the multiroot machine passes review, then stops before play
+
+Open on **SOURCE 113AA60** (`113aa605a298337fb362f2e0b7d56e5c755b7380`) **· CI
+32163666327/1 GREEN · IMPLEMENTATION QUALIFIED**. Add **ENGINEERING GO · MISSION GO · CLAUDE
+APPROVE + 2 ROM-FREE TESTS COMPLETE · ANTIGRAVITY GO** and link the
+[implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+with **SHA-256 53676C69…61F2A**.
+
+Immediately stamp **PLAN 0 · ROOTS FROZEN 0 · PREFLIGHT 0 · GAMEPLAY 0 · OUTCOMES 0 · FITS +0 ·
+COMPARISONS +0 · AUTHORITY +0 · CRYSTAL 0 · TRANSFER +0** and hold boards at
+**30/15/4/3/0/0** and **14/4/0/1/1**. Show active lane
+`resettable-goal-manager-multiroot-learning-v1` as **ONE ACTION-FREE SIX-ROOT FREEZE → IF PASS,
+ONE EXACT-PLAN ZERO-PREDICTION PREFLIGHT → STOP BEFORE GAMEPLAY**. The later rail is **FAVORABLE
+8/4 ONE-DECISION RESULT → SEPARATELY FROZEN TWO-DECISION COMPOSITION PILOT**. Cross out
+**EXPAND DENOMINATOR**, **COMPLETION**, and **TRANSFER**.
+
+## Previous August 18 scene: the one-catch lesson fails; the curriculum gets wider
 
 Open on **SOURCE 5BEB7FA** (`5beb7fa3512ca8ef294524484fccbf13607050e8`) **· CI
 32152766490/1 GREEN · ZERO-OUTCOME PREFLIGHT PASS**. Move exact fit
