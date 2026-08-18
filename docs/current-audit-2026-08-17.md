@@ -1,6 +1,29 @@
 # Current audit — 2026-08-17
 
-## Reorientation result: design and core published; execution qualification remains
+## Current result: V1 impossible; both independent V2 reviews are GO
+
+V1 failed its static initial-menu gate before root access. Its capture requirement could not
+coexist with storage or resupply under the existing independently verified skill boundaries, so
+the contract closed without root inspection or admission, model prediction, controller input,
+emulator frames, gameplay, or outcomes. The
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json)
+records those zero effects.
+
+V2 replaces the impossible menu with the field-compatible capture + explore + restore contract.
+The contract and implementation are frozen. Both independent reviews are GO: mission review, plus
+exact-byte engineering review of runner `8947aeba…`, qualification `6679634c…`, and design
+`0ffc848e…`. The gate remains unpublished and unqualified. No root, model, controller, frame, or
+outcome boundary has been crossed. The active maintenance lane is
+`fresh-goal-manager-field-composition-execution-qualification-v2`, and the cumulative board remains
+**train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. See the
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+
+Commit and push exactly the reviewed bytes. Green CI must then bind that exact published head
+before one action-free, zero-prediction preflight. That preflight is not an
+episode, outcome, authority promotion, or transfer result; failure closes the root or V2 without a
+route, profile, model, party, or skill rescue.
+
+## Previous result: design and core published; V1 execution qualification remained
 
 Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
 attempt 1. Review confirms that the ROM-free composition core freezes the three-decision contract,

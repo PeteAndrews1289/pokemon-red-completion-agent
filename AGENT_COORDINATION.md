@@ -1,16 +1,35 @@
 # Three-agent coordination
 
-> **2026-08-17 composition core published — highest active checkpoint:** Exact source `c4d8c729`
+> **2026-08-17 V1 static closure and two-review V2 GO — highest active checkpoint:** V1's
+> initial menu required capture together with storage or resupply, but the existing verified skill
+> boundaries made those choices self-excluding and spatially incompatible. V1 closed before root
+> inspection or admission, model prediction, controller input, emulator frames, or outcomes. See
+> the [path-free V1 closure](docs/evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+>
+> V2 freezes the field-compatible **capture + explore + restore** contract. Its implementation is
+> frozen and both independent reviews are GO: mission review, plus exact-byte engineering review of
+> runner `8947aeba…`, qualification `6679634c…`, and design `0ffc848e…`. It is still unpublished
+> and unqualified. Codex owns only
+> `fresh-goal-manager-field-composition-execution-qualification-v2`: commit and push exactly those
+> reviewed bytes, require exact-head green CI, and then perform one action-free zero-prediction
+> preflight. Claude's exact-byte audit is complete. Antigravity's mission review is GO;
+> it remains deferred until an executed result creates a new architecture or transfer question.
+> No agent may inspect a root before publication and CI, execute the episode, patch a root or skill,
+> reuse development, grant authority, or open sealed Red or Crystal. Counters remain train 30 ·
+> development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0. See the
+> [path-free V2 contract](docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+
+> **2026-08-17 composition core published — historical checkpoint:** Exact source `c4d8c729`
 > passed CI run `32076494276` attempt 1. The reviewed ROM-free design and core freeze the
 > three-decision contract and fail-closed orchestration, but no fresh root has been admitted, no
 > prediction loaded, no controller input sent, and no outcome created. Counters remain train 30 ·
 > development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0. See the
 > [path-free core qualification](docs/evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
 >
-> Codex owns `fresh-goal-manager-composition-execution-qualification-v1`, a maintenance lane with
+> At that checkpoint Codex owned `fresh-goal-manager-composition-execution-qualification-v1`, a maintenance lane with
 > five remaining gate groups: **action-free fresh-root admission; authenticated root-safe runner +
 > one-shot ledger; exact skill/protected-source attestation; hard action/frame limiters; durable
-> composition terminal**. Runner qualification—not gameplay—is next. Claude may audit the frozen
+> composition terminal**. Runner qualification—not gameplay—was next. Claude could audit the frozen
 > source/skill/claim boundary. Antigravity remains deferred until an executed fresh Red result
 > creates a real architecture or transfer question. No agent may execute the episode, patch a root
 > or skill into compliance, reuse consumed development, grant authority, or open sealed Red or

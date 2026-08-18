@@ -18,7 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Composition core published; qualify the runner before gameplay — 2026-08-17
+## V1 closed; both V2 reviews are GO, but publication and qualification remain — 2026-08-17
+
+The V1 execution contract was statically impossible under the existing verified skills: capture
+could not coexist with storage or resupply in its required initial menu. It closed before any root
+inspection or admission, model prediction, controller input, emulator frame, or outcome. The
+[path-free V1 closure](docs/evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json)
+records the zero-effect result.
+
+The replacement V2 contract uses three co-located field goals: capture, explore, and restore. Its
+implementation is frozen, and both independent reviews are GO: mission review, plus exact-byte
+engineering review of runner `8947aeba…`, qualification `6679634c…`, and design `0ffc848e…`.
+The gate remains unpublished and unqualified.
+The active maintenance lane is
+`fresh-goal-manager-field-composition-execution-qualification-v2`; root inspections and admissions,
+model predictions, controller actions, emulator frames, and outcomes remain zero. The board stays
+**train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. See the
+[path-free V2 contract](docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+
+Commit and push exactly the reviewed bytes, require exact-head green CI, and then perform exactly
+one action-free, zero-prediction preflight. Do not execute an episode, patch a root or skill into
+compliance, grant authority, or open sealed Red or Crystal.
+
+## Previous checkpoint: composition core published; qualify the V1 runner — 2026-08-17
 
 Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
 attempt 1. The reviewed ROM-free implementation freezes the three-decision composition contract,

@@ -28,8 +28,12 @@ CHECKER = runpy.run_path(str(SCRIPTS / "check_product_focus.py"))
 CHECK_DOCS = runpy.run_path(str(SCRIPTS / "check_docs.py"))
 DASHBOARD = runpy.run_path(str(SCRIPTS / "run_product_focus_dashboard.py"))
 COMPOSITION_DESIGN = (
+    PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
+)
+COMPOSITION_V1_FAILURE = (
     PROJECT_ROOT
-    / "docs/evidence/fresh-goal-manager-composition-design-v1-2026-08-17.json"
+    / "docs/evidence"
+    / "fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json"
 )
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
@@ -60,10 +64,10 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "fresh-goal-manager-composition-execution-qualification-v1"
+        "fresh-goal-manager-field-composition-execution-qualification-v2"
     )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 4
+    assert len(state.retired_lanes) == 5
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -96,20 +100,28 @@ def test_collision_result_and_next_composition_design_preserve_the_product_bound
     }
 
     assert design["implementation_status"] == (
-        "contract_and_core_orchestration_frozen_root_claim_runner_not_implemented_no_execution"
+        "v2_contract_frozen_runner_under_review_no_root_access_no_execution"
     )
     assert design["bounds"]["decisions"] == 3
     assert design["admission"]["prediction_before_root_freeze"] is False
     assert design["pass_rule"]["available_goal_minimum_each_decision"] == 2
-    assert design["pass_rule"]["selected_goal_kinds_distinct"] == 3
-    assert design["pass_rule"]["selected_goal_kinds_must_include"] == [
-        "acquire_species"
+    assert design["pass_rule"]["selected_goal_kinds_exact"] == [
+        "acquire_species",
+        "explore",
+        "restore_team",
     ]
     assert design["pass_rule"]["required_retained_specimens_acquired_minimum"] == 1
     assert design["pass_rule"]["available_menu_changes_minimum"] == 1
     assert design["execution_prerequisites"]["root_safe_runner_required"] is True
     assert design["authority"]["teacher_fallback_allowed"] is False
     assert design["authority"]["confidence_floor"] == 0.8
+
+    v1_failure = json.loads(COMPOSITION_V1_FAILURE.read_text(encoding="ascii"))
+    assert v1_failure["decision"]["status"] == "close_v1_before_root_access"
+    assert v1_failure["failure"]["status"] == "static_contract_impossibility"
+    assert v1_failure["zero_effects"]["roots_inspected"] == 0
+    assert v1_failure["zero_effects"]["model_predictions"] == 0
+    assert v1_failure["zero_effects"]["controller_actions"] == 0
 
     core = json.loads(COMPOSITION_CORE_QUALIFICATION.read_text(encoding="ascii"))
     assert core["publication"] == {
@@ -232,28 +244,24 @@ def test_nonzero_progress_requires_a_tracked_path_free_evidence_file() -> None:
         validate_product_focus_document(document)
 
 
-def test_latest_reorientation_must_bind_current_progress_evidence() -> None:
+def test_latest_reorientation_can_bind_noncounting_qualification_evidence() -> None:
     document = _document()
     lane = _active(document)
-    progress = lane["progress"]
-    assert isinstance(progress, dict)
-    outcomes = progress["outcome_questions"]
-    assert isinstance(outcomes, dict)
-    outcomes["train"] = 1
-    progress["evidence"] = [
-        {
-            "kind": "outcome_question",
-            "path": "docs/evidence/example.json",
-            "sha256": "e" * 64,
-        }
-    ]
     reorientation = lane["latest_reorientation"]
     assert isinstance(reorientation, dict)
+    reorientation["evidence"] = {
+        "kind": "qualification",
+        "path": "docs/evidence/example-qualification.json",
+        "sha256": "e" * 64,
+    }
+
+    validate_product_focus_document(document)
+
     evidence = reorientation["evidence"]
     assert isinstance(evidence, dict)
-    evidence["sha256"] = "f" * 64
+    evidence["path"] = "../private.json"
 
-    with pytest.raises(ProductFocusError, match="bind one current progress evidence"):
+    with pytest.raises(ProductFocusError, match="reorientation evidence path is unsafe"):
         validate_product_focus_document(document)
 
 
@@ -292,15 +300,16 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "composition execution qualification" in public["stage"]
+    assert "field-composition execution qualification" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Execution qualification pending" in encoded
-    assert "No Red root is admitted" in encoded
-    assert "one-shot ledger" in encoded
-    assert "runner not yet qualified" in encoded
+    assert "V2 publication + exact-head CI pending" in encoded
+    assert "no Red root" in encoded
+    assert "authenticated fresh lineage" in encoded
+    assert "review pending" in encoded
+    assert "roots inspected 0" in encoded
     assert "full replay 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

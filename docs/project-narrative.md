@@ -1,6 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: the composition core is published; the runner is not qualified
+## August 17: V1 closes statically; both field-compatible V2 reviews are GO
+
+V1 failed before touching a root. Its required initial menu combined capture with storage or
+resupply, but the existing verified skill boundaries made those choices self-excluding and
+spatially incompatible. The contract therefore closed with zero root inspection or admission,
+model prediction, controller input, emulator frames, gameplay, or outcomes. The
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json)
+preserves the precise failure and its zero-effect boundary.
+
+The replacement V2 contract uses three co-located field goals: capture, explore, and restore. Its
+contract and implementation are frozen, and both independent reviews are GO: mission review on the
+bounded transferable-play and living-collection claim, plus exact-byte engineering review of
+runner `8947aeba…`, qualification `6679634c…`, and design `0ffc848e…`. The gate is still
+unpublished and unqualified. No root has been inspected or admitted, no model prediction loaded,
+no controller action or emulator frame executed, and no outcome created. The cumulative board remains thirty
+train questions, fifteen development questions, three fits, three comparisons, and zero authority
+or transfer. The
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json)
+records that boundary.
+
+The active lane is `fresh-goal-manager-field-composition-execution-qualification-v2`. Commit and
+push exactly the reviewed bytes; green CI must then bind that exact head before one
+action-free, zero-prediction preflight. That preflight is not an episode or learning result, and a
+failure closes the root or V2 without a route, profile, model, party, or skill rescue.
+
+## Previous August 17 checkpoint: the composition core was published; the V1 runner was not qualified
 
 Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
 attempt 1. The reviewed ROM-free implementation freezes the fresh three-decision contract and its

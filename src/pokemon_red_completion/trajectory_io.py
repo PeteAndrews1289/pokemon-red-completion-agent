@@ -31,6 +31,7 @@ class EpisodeTrajectorySink:
     writer: EpisodeWriter
     episode_id: str
     game_id: str
+    durable_writes: bool = False
     _decision_count: int = field(default=0, init=False)
     _execution_count: int = field(default=0, init=False)
     _event_count: int = field(default=0, init=False)
@@ -46,6 +47,8 @@ class EpisodeTrajectorySink:
     def __post_init__(self) -> None:
         _require_non_empty(self.episode_id, name="episode_id")
         _require_non_empty(self.game_id, name="game_id")
+        if type(self.durable_writes) is not bool:  # noqa: E721
+            raise TypeError("durable_writes must be a bool")
 
     def write_episode_header(self, *, metadata: Mapping[str, object]) -> None:
         """Write the sole episode header with caller-supplied provenance metadata."""
@@ -61,7 +64,7 @@ class EpisodeTrajectorySink:
         # Round-tripping through the trajectory validator freezes no caller-owned
         # objects into the durable record and rejects binary/path/sensitive values.
         safe_metadata = json.loads(canonical_json(metadata))
-        self.writer.append(
+        self._append(
             "episode",
             {
                 "record_type": "episode",
@@ -85,7 +88,7 @@ class EpisodeTrajectorySink:
         payload = record.to_dict()
         del payload["snapshot"]
         payload["record_type"] = "decision"
-        self.writer.append("decisions", payload)
+        self._append("decisions", payload)
         self._record_ids.add(record.decision_id)
         self._decision_ids.add(record.decision_id)
         self._decision_count += 1
@@ -116,7 +119,7 @@ class EpisodeTrajectorySink:
         del payload["before_snapshot"]
         del payload["after_snapshot"]
         payload["record_type"] = "execution"
-        self.writer.append("executions", payload)
+        self._append("executions", payload)
         self._record_ids.add(record.execution_id)
         self._last_execution_index = record.step_index
         self._execution_count += 1
@@ -130,7 +133,7 @@ class EpisodeTrajectorySink:
 
         payload = event.to_dict()
         payload["record_type"] = "event"
-        self.writer.append("events", payload)
+        self._append("events", payload)
         self._record_ids.add(event.event_id)
         self._event_count += 1
         if event.kind == "terminal":
@@ -158,7 +161,7 @@ class EpisodeTrajectorySink:
     def _write_snapshot(self, snapshot: SemanticSnapshot, digest: str) -> None:
         if digest in self._snapshot_hashes:
             return
-        self.writer.append(
+        self._append(
             "snapshots",
             {
                 "record_type": "snapshot",
@@ -168,6 +171,12 @@ class EpisodeTrajectorySink:
         )
         self._snapshot_hashes.add(digest)
         self._snapshot_count += 1
+
+    def _append(self, stream: str, record: Mapping[str, object]) -> None:
+        if self.durable_writes:
+            self.writer.append(stream, record, durable=True)
+        else:
+            self.writer.append(stream, record)
 
     def _validate_episode(self, episode_id: str) -> None:
         if episode_id != self.episode_id:

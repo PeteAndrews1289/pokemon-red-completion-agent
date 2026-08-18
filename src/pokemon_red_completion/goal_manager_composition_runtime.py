@@ -32,6 +32,13 @@ FRESH_COMPOSITION_ACTIONS_PER_DECISION = 6_000
 FRESH_COMPOSITION_FRAMES_PER_DECISION = 600_000
 FRESH_COMPOSITION_MAX_ACTIONS = 18_000
 FRESH_COMPOSITION_MAX_FRAMES = 1_800_000
+FRESH_COMPOSITION_REQUIRED_KINDS = frozenset(
+    {
+        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.EXPLORE,
+        GoalKind.RESTORE_TEAM,
+    }
+)
 FROZEN_RED_GOAL_MANAGER_SHA256 = (
     "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d"
 )
@@ -55,6 +62,7 @@ class LivingCollectionCheckpoint:
     completion_contract_sha256: str
     specimen_ledger_sha256: str
     required_specimens_sha256: str
+    specimen_counts: tuple[tuple[str, int], ...]
 
     def __post_init__(self) -> None:
         for name in (
@@ -79,6 +87,27 @@ class LivingCollectionCheckpoint:
                 raise GoalManagerCompositionError(
                     f"composition collection {name} is invalid"
                 )
+        if (
+            not isinstance(self.specimen_counts, tuple)
+            or not self.specimen_counts
+            or tuple(sorted(self.specimen_counts)) != self.specimen_counts
+            or len({species for species, _count in self.specimen_counts})
+            != len(self.specimen_counts)
+            or any(
+                not isinstance(species, str)
+                or not species
+                or type(count) is not int  # noqa: E721
+                or count <= 0
+                for species, count in self.specimen_counts
+            )
+        ):
+            raise GoalManagerCompositionError(
+                "composition specimen counts must be a sorted positive inventory"
+            )
+        if sum(count for _species, count in self.specimen_counts) < self.living_species:
+            raise GoalManagerCompositionError(
+                "composition specimen inventory is smaller than its living count"
+            )
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -89,6 +118,9 @@ class LivingCollectionCheckpoint:
             "retained_captures": self.retained_captures,
             "required_specimens_sha256": self.required_specimens_sha256,
             "specimen_ledger_sha256": self.specimen_ledger_sha256,
+            "total_living_specimens": sum(
+                count for _species, count in self.specimen_counts
+            ),
             "undeclared_specimen_losses": self.undeclared_specimen_losses,
         }
 
@@ -261,11 +293,9 @@ def run_goal_manager_composition_episode(
         raise GoalManagerCompositionError("composition observation attempted emulator work")
     initial_collection = current.collection
     initial_kinds = {binding.kind for binding in current.binding_set.bindings}
-    if GoalKind.ACQUIRE_SPECIES not in initial_kinds or not initial_kinds.intersection(
-        {GoalKind.MANAGE_STORAGE, GoalKind.RESUPPLY}
-    ):
+    if not FRESH_COMPOSITION_REQUIRED_KINDS.issubset(initial_kinds):
         raise GoalManagerCompositionError(
-            "composition root lacks the frozen acquisition/prerequisite menu"
+            "composition root lacks the frozen field-composition menu"
         )
     steps: list[GoalManagerCompositionStep] = []
     policy_contexts: list[str] = []
@@ -309,6 +339,10 @@ def run_goal_manager_composition_episode(
         def guard(selection: object, *, final_decision: bool = final_decision) -> None:
             selected_kind = getattr(selection, "kind", None)
             already_selected = {step.selected_kind for step in steps}
+            if selected_kind not in FRESH_COMPOSITION_REQUIRED_KINDS:
+                raise GoalManagerCompositionError(
+                    "composition model selected outside the frozen field contract"
+                )
             if selected_kind in already_selected:
                 raise GoalManagerCompositionError(
                     "composition model repeated a selected goal kind"
@@ -406,10 +440,10 @@ def run_goal_manager_composition_episode(
 
     trajectory.require_settled()
     selected = tuple(step.selected_kind for step in steps)
-    if len(set(selected)) != FRESH_COMPOSITION_DECISIONS:
-        raise GoalManagerCompositionError("composition did not select three distinct goal kinds")
-    if GoalKind.ACQUIRE_SPECIES not in selected:
-        raise GoalManagerCompositionError("composition did not select an acquisition goal")
+    if set(selected) != FRESH_COMPOSITION_REQUIRED_KINDS:
+        raise GoalManagerCompositionError(
+            "composition did not select the three frozen field goal kinds"
+        )
     acquisition = next(
         step for step in steps if step.selected_kind is GoalKind.ACQUIRE_SPECIES
     )
@@ -480,6 +514,12 @@ def _require_collection_transition(
     *,
     selected_kind: GoalKind,
 ) -> None:
+    before_specimens = dict(before.specimen_counts)
+    after_specimens = dict(after.specimen_counts)
+    lost_specimens = sum(
+        max(0, count - after_specimens.get(species, 0))
+        for species, count in before_specimens.items()
+    )
     if (
         after.registered_species < before.registered_species
         or after.living_species < before.living_species
@@ -488,6 +528,7 @@ def _require_collection_transition(
         or after.undeclared_specimen_losses != 0
         or before.undeclared_specimen_losses != 0
         or after.completion_contract_sha256 != before.completion_contract_sha256
+        or lost_specimens
     ):
         raise GoalManagerCompositionError("composition collection state regressed")
     collection_changed = any(
@@ -497,6 +538,7 @@ def _require_collection_transition(
             (before.living_species, after.living_species),
             (before.required_specimens_remaining, after.required_specimens_remaining),
             (before.retained_captures, after.retained_captures),
+            (before.specimen_counts, after.specimen_counts),
         )
     )
     ledger_changed = before.specimen_ledger_sha256 != after.specimen_ledger_sha256

@@ -5,15 +5,31 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current qualification rail:** Source `c4d8c729` and CI run `32076494276` attempt 1 are green.
+> **Current qualification rail:** Show **V1 STATICALLY IMPOSSIBLE · ROOTS INSPECTED 0 · ROOTS
+> ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 · FRAMES 0 · OUTCOMES 0**. Its capture plus
+> storage-or-resupply menu could not exist under the verified skill boundaries. Link the
+> [path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+>
+> Then show **V2 CAPTURE + EXPLORE + RESTORE · IMPLEMENTATION FROZEN · MISSION REVIEW GO ·
+> EXACT-BYTE ENGINEERING REVIEW GO · RUNNER 8947AEBA… · QUALIFICATION 6679634C… · DESIGN
+> 0FFC848E… · UNPUBLISHED · UNQUALIFIED** and link the
+> [path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+> Display the active lane as
+> `fresh-goal-manager-field-composition-execution-qualification-v2`. The board remains **TRAIN
+> OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 ·
+> AUTHORITY 0 · TRANSFER 0**. The only forward rail is **COMMIT + PUSH EXACT REVIEWED BYTES →
+> EXACT-HEAD GREEN CI → ONE ACTION-FREE ZERO-PREDICTION PREFLIGHT**. Do not display episode
+> progress, model decisions, controller activity, authority, or transfer.
+>
+> **Historical V1 qualification rail:** Source `c4d8c729` and CI run `32076494276` attempt 1 are green.
 > The reviewed design and ROM-free core are published, with **ROOTS ADMITTED 0 · PREDICTIONS 0 ·
 > CONTROLLER 0 · OUTCOMES 0**. Link the
 > [path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
 >
-> Display the active lane as **FRESH COMPOSITION EXECUTION QUALIFICATION · ACTION-FREE ROOT
+> At that checkpoint the rail was **FRESH COMPOSITION EXECUTION QUALIFICATION · ACTION-FREE ROOT
 > ADMISSION → AUTHENTICATED ROOT-SAFE RUNNER + ONE-SHOT LEDGER → EXACT SKILL/PROTECTED-SOURCE
 > ATTESTATION → HARD ACTION/FRAME LIMITERS → DURABLE COMPOSITION TERMINAL**. Runner qualification—
-> not gameplay—is next. The cumulative board remains **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT
+> not gameplay—was next. The cumulative board remained **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT
 > OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Do not
 > display episode progress, model decisions, controller activity, authority, or transfer.
 >

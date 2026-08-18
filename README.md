@@ -5,22 +5,37 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the fresh composition design and ROM-free core are
-> published; execution qualification is next.** Exact source
+> **Current product focus (August 17, 2026): V1 closed as statically impossible; both independent
+> V2 reviews are GO, but the gate is not published or qualified.** The V1 menu required capture and
+> storage or resupply together even though the existing verified skills made those choices
+> self-excluding and spatially incompatible. It therefore closed before root inspection, prediction,
+> emulator, or gameplay with zero effects. See the
+> [path-free V1 closure](docs/evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+>
+> V2 replaces that menu with the co-located field contract **capture + explore + restore**. Its
+> implementation is frozen and both independent reviews are GO: mission review, plus exact-byte
+> engineering review of runner `8947aeba…`, qualification `6679634c…`, and design `0ffc848e…`.
+> The gate is still unpublished and unqualified. No root has been
+> inspected or admitted, no model prediction loaded, no controller action or emulator frame run,
+> and no outcome created. The active maintenance lane is
+> `fresh-goal-manager-field-composition-execution-qualification-v2`; the board remains **train 30 ·
+> development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**. See the
+> [path-free V2 contract](docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+> Next, commit and push exactly those reviewed bytes, require exact-head green CI, and only then
+> perform one action-free, zero-prediction preflight. No episode executes in this lane.
+>
+> **Previous checkpoint (August 17, 2026): the fresh composition design and ROM-free core were
+> published; V1 execution qualification was next.** Exact source
 > `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed GitHub CI run `32076494276`, attempt 1.
-> The reviewed core freezes the three-decision contract and fail-closed orchestration, but it is
-> not a root-safe cartridge runner. No fresh root was admitted, no model prediction was loaded, no
+> The reviewed core froze the three-decision contract and fail-closed orchestration, but it was not
+> a root-safe cartridge runner. No fresh root was admitted, no model prediction was loaded, no
 > controller input occurred, and no outcome was created. See the
 > [path-free core qualification](docs/evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+> At that checkpoint the next lane was `fresh-goal-manager-composition-execution-qualification-v1`,
+> with five execution gates still open. The cumulative board remained **train 30 · development 15 ·
+> fits 3 · comparisons 3 · authority 0 · transfer 0**.
 >
-> The active maintenance lane is
-> `fresh-goal-manager-composition-execution-qualification-v1`. Five gate groups remain before any
-> episode may run: **action-free fresh-root admission; an authenticated root-safe runner plus
-> one-shot ledger; exact skill/protected-source attestation; hard action/frame limiters; and a
-> durable composition terminal**. Runner qualification—not gameplay—is next. The cumulative board
-> remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
->
-> **Previous checkpoint (August 17, 2026): the collision postmortem is complete, party v2 is
+> **Historical checkpoint (August 17, 2026): the collision postmortem is complete, party v2 is
 > closed, and the next lane is design only.** Exact source `1395e446` passed GitHub CI run
 > `32072706947`, attempt 1. The read-only diagnostic reused the consumed gate's 22 train questions
 > and 48 pairwise rows: 39 trainee and 9 venue. Its 28 contradictory relationships—25 trainee and

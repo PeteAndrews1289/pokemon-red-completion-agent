@@ -41,6 +41,20 @@ class _MemoryWriter:
         self.records.append((stream, dict(record)))
 
 
+@dataclass
+class _DurableMemoryWriter:
+    records: list[tuple[str, dict[str, object], bool]] = field(default_factory=list)
+
+    def append(
+        self,
+        stream: str,
+        record: Mapping[str, object],
+        *,
+        durable: bool = False,
+    ) -> None:
+        self.records.append((stream, dict(record), durable))
+
+
 def _sink(writer: _MemoryWriter | None = None) -> EpisodeTrajectorySink:
     memory_writer = writer if writer is not None else _MemoryWriter()
     return EpisodeTrajectorySink(
@@ -103,6 +117,23 @@ def _write_header(sink: EpisodeTrajectorySink) -> None:
             "runtime": runtime.public_dict(),
         }
     )
+
+
+def test_episode_sink_opts_every_record_into_durable_writes() -> None:
+    writer = _DurableMemoryWriter()
+    sink = EpisodeTrajectorySink(
+        cast(EpisodeWriter, writer),
+        episode_id=EPISODE_ID,
+        game_id=GAME_ID,
+        durable_writes=True,
+    )
+    _write_header(sink)
+    sink.record_decision(_decision())
+    sink.record_event(_event())
+    sink.record_event(_event(event_id="terminal", step_index=1, kind="terminal"))
+
+    assert writer.records
+    assert all(durable for _stream, _record, durable in writer.records)
 
 
 def _snapshot(*, game_id: str = GAME_ID, mode: str = "overworld") -> SemanticSnapshot:

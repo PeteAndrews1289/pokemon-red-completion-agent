@@ -99,8 +99,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The reviewed three-decision composition core is published under green CI. No Red "
-            "root is admitted and no prediction, controller input, or episode outcome exists."
+            "The impossible V1 menu closed before root access. The field-compatible V2 runner "
+            "is implemented and under independent review; no Red root, prediction, controller "
+            "input, or episode outcome exists."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Development scenario laboratory · no cartridge session",
@@ -108,7 +109,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         model=DashboardModelState(
             mode="waiting",
             candidate="Promoted Red goal manager af29d7e7… · frozen confidence floor 0.80",
-            choice="Execution qualification pending · action-free root admission only",
+            choice="V2 publication + exact-head CI pending · then one action-free preflight",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -153,14 +154,18 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"{'session' if _count(time_box, 'maximum_sessions') == 1 else 'sessions'} / "
                 f"{_count(time_box, 'maximum_hours')} hours"
             ),
-            f"Stop 1 · {stop_conditions[0]}",
-            f"Stop 2 · {stop_conditions[1]}",
+            _event("Stop 1", stop_conditions[0]),
+            _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Qualification rail · fresh root → exact model + skills → one-shot ledger → hard "
-                "limits → durable terminal → separate execution decision"
+                "V2 rail · publish + exact-head CI → authenticated fresh lineage → exact model + "
+                "skills → hard limits + durable writes → zero-action preflight"
             ),
-            "Composition design + ROM-free core published · runner not yet qualified",
+            (
+                "V1 static failure · capture and storage/resupply were self-excluding and "
+                "spatially incompatible · roots inspected 0"
+            ),
+            "V2 capture + explore + restore runner implemented · review pending · unqualified",
             (
                 "Current session roots 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0 "
                 "· sealed Red 0 · Crystal 0 · full replay 0"

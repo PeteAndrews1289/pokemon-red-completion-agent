@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: core published, runner gates still closed
+## August 17 scene: V1 impossible, both V2 reviews GO
+
+Open on **V1 STATIC FAILURE · ROOTS INSPECTED 0 · ROOTS ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 ·
+FRAMES 0 · OUTCOMES 0**. Show the impossible menu—**CAPTURE + STORAGE/RESUPPLY**—then cross it out
+with **SELF-EXCLUDING · SPATIALLY INCOMPATIBLE UNDER EXISTING VERIFIED SKILLS**. Link the
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+
+Replace it with **V2 FIELD CONTRACT · CAPTURE + EXPLORE + RESTORE**. Stamp the next cards
+**IMPLEMENTATION FROZEN · INDEPENDENT MISSION REVIEW GO · EXACT-BYTE ENGINEERING REVIEW GO ·
+RUNNER 8947AEBA… · QUALIFICATION 6679634C… · DESIGN 0FFC848E… · UNPUBLISHED · UNQUALIFIED** and
+link the
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+Keep the learning strip fixed at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY
+0 · TRANSFER 0**.
+
+End on **COMMIT + PUSH EXACT REVIEWED BYTES → EXACT-HEAD GREEN CI → ONE ACTION-FREE
+ZERO-PREDICTION PREFLIGHT**. Narration: **“Both reviews are GO. The gate is still unpublished and
+unqualified, and no game has run.”** Do not animate a root, model
+choice, controller input, capture, outcome, authority gain, or Crystal transfer.
+
+## Previous August 17 scene: core published, V1 runner gates still closed
 
 Open on **SOURCE c4d8c729 · CI 32076494276/1 GREEN · DESIGN + ROM-FREE CORE REVIEWED**. Put four
 large zeros underneath: **ROOTS ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 · OUTCOMES 0**. Hold the

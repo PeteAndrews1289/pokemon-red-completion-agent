@@ -814,8 +814,16 @@ class EpisodeWriter:
                 raise
         return False
 
-    def append(self, stream: str, record: Mapping[str, object]) -> None:
-        """Append one canonical JSON object to a named JSONL stream."""
+    def append(
+        self,
+        stream: str,
+        record: Mapping[str, object],
+        *,
+        durable: bool = False,
+    ) -> None:
+        """Append one canonical JSON object, optionally syncing it before return."""
+        if type(durable) is not bool:  # noqa: E721
+            raise TypeError("durable must be a bool")
         self._require_active()
         _validate_stream_name(stream)
         payload = _canonical_record(
@@ -827,6 +835,7 @@ class EpisodeWriter:
         )
 
         target = self._streams.get(stream)
+        opened_stream = target is None
         if target is None:
             target = self._open_stream(stream)
             self._streams[stream] = target
@@ -835,6 +844,17 @@ class EpisodeWriter:
         except OSError as error:
             raise PrivateArtifactError("unable to write a private episode record") from error
         target.records += 1
+        if not durable:
+            return
+        try:
+            target.handle.flush()
+            os.fsync(target.handle.fileno())
+            if opened_stream:
+                _fsync_directory(self._partial)
+        except (OSError, PrivateArtifactError):
+            raise PrivateArtifactError(
+                "unable to synchronize a private episode record"
+            ) from None
 
     def complete(self) -> EpisodeSummary:
         """Write the manifest last and atomically publish the completed directory."""

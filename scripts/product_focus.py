@@ -31,6 +31,7 @@ _OUTPUT_KINDS = {
     "transfer_result",
     "unseen_comparison",
 }
+_REORIENTATION_EVIDENCE_KINDS = _OUTPUT_KINDS | {"qualification"}
 _OUTPUT_PARTITIONS = {"development", "none", "train", "transfer"}
 _REQUIRED_DEVELOPMENT_PROHIBITIONS = {
     "consumed_trial_retry",
@@ -585,7 +586,6 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
     _validate_progress(progress)
     _validate_latest_reorientation(
         _mapping(lane, "latest_reorientation", subject="active lane"),
-        progress=progress,
     )
 
 
@@ -683,8 +683,6 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
 
 def _validate_latest_reorientation(
     reorientation: Mapping[str, object],
-    *,
-    progress: Mapping[str, object],
 ) -> None:
     _require_keys(
         reorientation,
@@ -724,22 +722,16 @@ def _validate_latest_reorientation(
         _text(reorientation, key, subject="latest reorientation")
     evidence = _mapping(reorientation, "evidence", subject="latest reorientation")
     _require_keys(evidence, {"kind", "path", "sha256"}, subject="reorientation evidence")
-    progress_evidence = _sequence(
-        progress,
-        "evidence",
-        subject="active lane progress",
-    )
-    if not progress_evidence:
-        return
-    matching_progress_evidence = tuple(
-        _mapping_value(value, subject="progress evidence")
-        for value in progress_evidence
-        if value == evidence
-    )
-    if len(matching_progress_evidence) != 1:
-        raise ProductFocusError(
-            "latest reorientation must bind one current progress evidence entry"
-        )
+    kind = _text(evidence, "kind", subject="reorientation evidence")
+    if kind not in _REORIENTATION_EVIDENCE_KINDS:
+        raise ProductFocusError("reorientation evidence kind is unsupported")
+    path = _text(evidence, "path", subject="reorientation evidence")
+    pure = PurePosixPath(path)
+    if pure.is_absolute() or ".." in pure.parts:
+        raise ProductFocusError("reorientation evidence path is unsafe")
+    digest = _text(evidence, "sha256", subject="reorientation evidence")
+    if _SHA256.fullmatch(digest) is None:
+        raise ProductFocusError("reorientation evidence SHA-256 is invalid")
 
 
 def _validate_progress_evidence(
@@ -760,14 +752,23 @@ def _validate_progress_evidence(
     if project_root is None:
         return
     root = project_root.resolve()
-    for item in evidence:
-        relative = _text(item, "path", subject="progress evidence")
+    reorientation = _mapping(lane, "latest_reorientation", subject="active lane")
+    reorientation_evidence = _mapping(
+        reorientation,
+        "evidence",
+        subject="latest reorientation",
+    )
+    evidence_to_check = tuple((item, "progress evidence") for item in evidence) + (
+        (reorientation_evidence, "reorientation evidence"),
+    )
+    for item, subject in evidence_to_check:
+        relative = _text(item, "path", subject=subject)
         target = (root / relative).resolve()
         if not target.is_relative_to(root) or not target.is_file():
-            raise ProductFocusError("progress evidence file is unavailable")
+            raise ProductFocusError(f"{subject} file is unavailable")
         digest = hashlib.sha256(target.read_bytes()).hexdigest()
-        if digest != _text(item, "sha256", subject="progress evidence"):
-            raise ProductFocusError("progress evidence file digest differs")
+        if digest != _text(item, "sha256", subject=subject):
+            raise ProductFocusError(f"{subject} file digest differs")
 
 
 def _validate_rigor_policy(policy: Mapping[str, object]) -> None:

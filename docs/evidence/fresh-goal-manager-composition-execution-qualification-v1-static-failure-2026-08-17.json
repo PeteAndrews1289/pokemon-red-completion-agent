@@ -1,0 +1,73 @@
+{
+  "active_lane": "fresh-goal-manager-composition-execution-qualification-v1",
+  "claim_boundary": {
+    "supported": "The frozen V1 initial-menu contract is internally unsatisfiable with the existing independently verified Red skills and must close before root selection or gameplay.",
+    "unsupported": [
+      "episode_execution_or_result",
+      "fresh_context_generalization",
+      "living_pokedex_ability",
+      "red_completion",
+      "red_or_crystal_authority",
+      "transfer"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "composition_episodes_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "decision": {
+    "replacement_contract": "fresh-goal-manager-composition-design-v2",
+    "retry_v1": false,
+    "route_or_skill_patch_allowed": false,
+    "status": "close_v1_before_root_access"
+  },
+  "failure": {
+    "failed_gate": "initial_executable_menu",
+    "reasons": [
+      "The V1 contract requires ACQUIRE_SPECIES together with MANAGE_STORAGE or RESUPPLY in one initial executable menu, but their existing verified execution boundaries are spatially incompatible.",
+      "ACQUIRE_SPECIES is offered only with available capture capacity and supplies, while storage and resupply are prerequisite goals when those resources are unavailable; requiring both creates a self-excluding admission rule."
+    ],
+    "status": "static_contract_impossibility"
+  },
+  "independent_reviews": [
+    {
+      "reviewer": "claude_opus",
+      "verdict": "no_go_v1_use_existing_field_profile_without_new_route_or_composite_skill"
+    },
+    {
+      "reviewer": "antigravity",
+      "verdict": "no_go_v1_replace_with_field_compatible_existing_goal_kinds"
+    }
+  ],
+  "input_binding": {
+    "core_qualification_receipt_sha256": "db7a14740bb89c82c5d52aa7129aefefd6a63e196c6c59cc8a6d7b91f5c1355d",
+    "design_sha256": "bff983a187c07932daeb637feddc396dd8a20fe7518a1924632bc7d30db5bfb0"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32077112958,
+    "source_commit": "76ed0fad605263eb08bf8ba64d0d6454c0b583bc"
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.fresh-goal-manager-composition-execution-qualification-static-failure.v1",
+  "title_role": "Red development design falsification; not gameplay, evaluation, promotion, transfer, or completion evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_outcomes_accessed": 0,
+    "emulator_frames": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "roots_admitted": 0,
+    "roots_inspected": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

@@ -24,6 +24,31 @@ class ControllerFrameBudgetError(RuntimeError):
     """Raised before controller time can exceed a declared frame budget."""
 
 
+class ControllerInputForbiddenError(RuntimeError):
+    """Raised before a read-only controller boundary can send any input or tick."""
+
+
+class ReadOnlyController:
+    """Expose read-only emulator state while refusing every controller primitive."""
+
+    __slots__ = ("_delegate",)
+
+    def __init__(self, delegate: object) -> None:
+        self._delegate = delegate
+
+    def press(self, _button: str) -> None:
+        raise ControllerInputForbiddenError("controller input is forbidden")
+
+    def release(self, _button: str) -> None:
+        raise ControllerInputForbiddenError("controller input is forbidden")
+
+    def tick(self, _frames: int) -> None:
+        raise ControllerInputForbiddenError("controller frames are forbidden")
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
 class FrameBudgetController:
     """Transparent controller proxy that refuses the first over-budget tick.
 
@@ -82,6 +107,75 @@ class FrameBudgetController:
             or self.frames_executed + frames > self._maximum_frames
         ):
             raise self._error_type(self._error_message)
+        self._delegate.tick(frames)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
+class WindowedFrameBudgetController:
+    """Refuse a tick before it exceeds either a resettable window or total cap."""
+
+    __slots__ = (
+        "_delegate",
+        "_initial_frame",
+        "_maximum_frames_per_window",
+        "_maximum_total_frames",
+        "_window_start",
+    )
+
+    def __init__(
+        self,
+        delegate: ControllerPort,
+        *,
+        maximum_frames_per_window: int,
+        maximum_total_frames: int,
+    ) -> None:
+        for name, value in (
+            ("maximum_frames_per_window", maximum_frames_per_window),
+            ("maximum_total_frames", maximum_total_frames),
+        ):
+            if type(value) is not int or value <= 0:  # noqa: E721
+                raise ValueError(f"{name} must be a positive integer")
+        if maximum_frames_per_window > maximum_total_frames:
+            raise ValueError("per-window frames cannot exceed the total cap")
+        frame_count = getattr(delegate, "frame_count", None)
+        if type(frame_count) is not int or frame_count < 0:  # noqa: E721
+            raise TypeError("windowed frame budget needs an integer frame_count")
+        self._delegate = delegate
+        self._initial_frame = frame_count
+        self._window_start = frame_count
+        self._maximum_frames_per_window = maximum_frames_per_window
+        self._maximum_total_frames = maximum_total_frames
+
+    @property
+    def frame_count(self) -> int:
+        value = getattr(self._delegate, "frame_count", None)
+        if type(value) is not int or value < self._initial_frame:  # noqa: E721
+            raise ControllerFrameBudgetError("controller frame_count is invalid")
+        return value
+
+    @property
+    def frames_executed(self) -> int:
+        return self.frame_count - self._initial_frame
+
+    @property
+    def frames_this_window(self) -> int:
+        return self.frame_count - self._window_start
+
+    def begin_window(self) -> None:
+        self._window_start = self.frame_count
+
+    def tick(self, frames: int) -> None:
+        if (
+            type(frames) is not int  # noqa: E721
+            or frames < 0
+            or self.frames_executed + frames > self._maximum_total_frames
+            or self.frames_this_window + frames > self._maximum_frames_per_window
+        ):
+            raise ControllerFrameBudgetError(
+                "controller exhausted its hard windowed frame budget"
+            )
         self._delegate.tick(frames)
 
     def __getattr__(self, name: str) -> Any:

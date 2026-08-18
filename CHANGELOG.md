@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Closed `fresh-goal-manager-composition-execution-qualification-v1` before root access because its
+  required capture plus storage-or-resupply menu was statically impossible under the existing
+  verified skill boundaries. Root inspections and admissions, model predictions, controller
+  actions, emulator frames, outcomes, and all learning or authority deltas were zero. Froze the
+  field-compatible V2 capture + explore + restore contract and implementation under
+  `fresh-goal-manager-field-composition-execution-qualification-v2`. Both independent reviews are
+  GO: mission review, plus exact-byte engineering review of runner `8947aeba…`, qualification
+  `6679634c…`, and design `0ffc848e…`. Commit/push, exact-head CI, and one later action-free
+  zero-prediction preflight remain pending. The gate is unpublished and unqualified; the board
+  remains train 30, development 15, fits 3, comparisons 3, authority 0, and transfer 0. Recorded
+  the path-free V1 closure and V2 design receipts without executing a game or advancing a counter.
 - Published and reviewed the fresh goal-manager composition design and ROM-free core at
   `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` under green CI run `32076494276` attempt 1. The
   source freezes the three-decision contract and core fail-closed orchestration but admits no fresh

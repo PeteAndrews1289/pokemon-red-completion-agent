@@ -7,7 +7,32 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the blueprint has a core, not a cartridge runner
+## Current checkpoint: the first menu failed, and both field-runner reviews are GO
+
+The first execution contract never reached the cartridge. It demanded capture and storage or
+resupply in the same initial menu, even though the existing verified skills made those choices
+self-excluding and spatially incompatible. V1 closed with zero root inspection or admission, zero
+model predictions, zero controller actions, zero emulator frames, and zero outcomes. The
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json)
+makes that failure useful instead of hiding it.
+
+V2 keeps the hierarchical question but uses three field goals that can genuinely coexist:
+capture, explore, and restore. The contract and implementation are frozen, and both independent
+reviews say GO: mission review, plus exact-byte engineering review of runner `8947aeba…`,
+qualification `6679634c…`, and design `0ffc848e…`. The gate remains unpublished, unqualified, and
+has not seen a root or asked the model a question. The
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json)
+records the boundary.
+
+The scoreboard remains **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO ·
+TRANSFER ZERO**. The next scene is commit and push, exact-head green CI, and only then one
+action-free zero-prediction preflight—not gameplay. That is how a cross-game story-and-living-
+Pokédex agent learns from a bad abstraction without pretending that replacement code has already
+proved itself.
+
+---
+
+## Previous checkpoint: the blueprint had a core, not a cartridge runner
 
 The three-decision composition design is no longer just prose. Exact source `c4d8c729` passed CI
 run `32076494276`, attempt 1, and publishes a reviewed ROM-free core that can enforce the learned

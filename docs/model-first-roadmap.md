@@ -8,7 +8,31 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: qualify the composition runner; do not play yet
+## Current checkpoint: both V2 reviews are GO; publish exact bytes, then preflight
+
+V1 closed before root access because its required initial menu was statically impossible: capture
+and storage or resupply could not coexist under the existing verified skill boundaries. Root
+inspection and admission, model prediction, controller input, emulator frames, and outcomes were
+all zero. The
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json)
+preserves that result.
+
+The active maintenance lane,
+`fresh-goal-manager-field-composition-execution-qualification-v2`, replaces V1 with the co-located
+field contract **capture + explore + restore**. Its implementation is frozen, and both independent
+reviews are GO: mission review, plus exact-byte engineering review of runner `8947aeba…`,
+qualification `6679634c…`, and design `0ffc848e…`. The gate is still unpublished and unqualified.
+No root has been inspected or admitted, no model prediction
+loaded, no controller action or emulator frame executed, and no outcome created. The board remains
+**30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer 0**. See the
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+
+The only next sequence is: commit and push exactly the reviewed bytes; require green CI on that
+exact head; then perform exactly one action-free, zero-prediction preflight. The preflight
+is not gameplay or a learning output. Failure closes the root or V2 without a route, profile,
+model, party, or skill rescue.
+
+## Previous checkpoint: qualify the V1 composition runner; do not play yet
 
 Exact source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
 attempt 1. The published, reviewed ROM-free design and core freeze the exact three-decision

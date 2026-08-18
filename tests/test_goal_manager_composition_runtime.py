@@ -125,11 +125,11 @@ def _situation(stage: int) -> GoalSituation:
         collection_pressure=0.9 if stage >= 2 else 0.2,
         team_pressure=0.1,
         evolution_pressure=0.1,
-        safety_pressure=0.1,
-        resource_pressure=0.9 if stage == 1 else 0.1,
-        storage_pressure=0.9 if stage == 0 else 0.1,
+        safety_pressure=0.9 if stage == 0 else 0.1,
+        resource_pressure=0.1,
+        storage_pressure=0.1,
         recovery_pressure=0.0,
-        exploration_pressure=0.1,
+        exploration_pressure=0.9 if stage == 1 else 0.1,
     )
 
 
@@ -138,23 +138,35 @@ def _observation_factory(
     failed_verifier: bool = False,
     singleton: bool = False,
     drift_required_digest: bool = False,
+    swap_specimen_on_acquisition: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0}
 
     def observe() -> GoalManagerCompositionObservation:
         stage = state["stage"]
         desired = (
-            GoalKind.MANAGE_STORAGE
+            GoalKind.RESTORE_TEAM
             if stage == 0
-            else GoalKind.RESUPPLY
+            else GoalKind.EXPLORE
             if stage == 1
             else GoalKind.ACQUIRE_SPECIES
         )
-        available = (
-            {desired}
-            if singleton
-            else {desired, GoalKind.ACQUIRE_SPECIES, GoalKind.ADVANCE_STORY}
-        )
+        if singleton:
+            available = {desired}
+        elif stage == 0:
+            available = {
+                GoalKind.ACQUIRE_SPECIES,
+                GoalKind.EXPLORE,
+                GoalKind.RESTORE_TEAM,
+            }
+        elif stage == 1:
+            available = {
+                GoalKind.ACQUIRE_SPECIES,
+                GoalKind.EXPLORE,
+                GoalKind.ADVANCE_STORY,
+            }
+        else:
+            available = {GoalKind.ACQUIRE_SPECIES, GoalKind.ADVANCE_STORY}
         opportunities = tuple(
             GoalOpportunity(
                 binding_ref=f"private:red:{kind.value}",
@@ -196,6 +208,19 @@ def _observation_factory(
 
         bindings = tuple(binding(kind) for kind in GoalKind if kind in available)
         acquired = stage >= 3
+        specimen_counts = (
+            (
+                ("pokemon:red:living:new", 1),
+                ("pokemon:red:living:replacement", 10),
+            )
+            if acquired and swap_specimen_on_acquisition
+            else (
+                ("pokemon:red:living:new", 1),
+                ("pokemon:red:living:starter", 10),
+            )
+            if acquired
+            else (("pokemon:red:living:starter", 10),)
+        )
         return GoalManagerCompositionObservation(
             semantic_state_sha256=f"{stage + 1:064x}",
             situation=_situation(stage),
@@ -211,6 +236,7 @@ def _observation_factory(
                 required_specimens_sha256=f"{202 if acquired else 201:064x}"
                 if not (drift_required_digest and stage == 1)
                 else f"{203:064x}",
+                specimen_counts=specimen_counts,
             ),
         )
 
@@ -233,8 +259,8 @@ def test_composition_runs_three_distinct_learned_choices_and_retains_capture(
     public = result.public_dict()
 
     assert [step.selected_kind for step in result.steps] == [
-        GoalKind.MANAGE_STORAGE,
-        GoalKind.RESUPPLY,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.EXPLORE,
         GoalKind.ACQUIRE_SPECIES,
     ]
     assert result.policy_context_changes == 2
@@ -260,7 +286,7 @@ def test_composition_rejects_a_singleton_menu_before_prediction_or_action(
     policy = _policy(monkeypatch)
     observe, meter = _observation_factory(singleton=True)
 
-    with pytest.raises(GoalManagerCompositionError, match="acquisition/prerequisite"):
+    with pytest.raises(GoalManagerCompositionError, match="field-composition"):
         run_goal_manager_composition_episode(
             observe=observe,
             policy=policy,
@@ -375,3 +401,22 @@ def test_composition_rejects_required_target_drift_after_the_first_skill(
 
     assert len(sink.decisions) == 1
     assert len(sink.events) == 1
+
+
+def test_composition_rejects_capture_that_replaces_an_existing_specimen(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trajectory, sink = _trajectory()
+    policy = _policy(monkeypatch)
+    observe, meter = _observation_factory(swap_specimen_on_acquisition=True)
+
+    with pytest.raises(GoalManagerCompositionError, match="collection state regressed"):
+        run_goal_manager_composition_episode(
+            observe=observe,
+            policy=policy,
+            trajectory=trajectory,
+            budget_meter=meter,
+        )
+
+    assert len(sink.decisions) == 3
+    assert len(sink.events) == 3

@@ -6,7 +6,29 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: qualify the root-safe composition runner; do not execute it
+## Current override: both V2 reviews are GO; publish exact bytes, then preflight
+
+V1's exact menu was statically impossible under the existing verified skills: capture and storage
+or resupply could not be executable together. It closed before root inspection or admission,
+model prediction, controller input, emulator frames, or outcomes. See the
+[path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+
+The V2 replacement freezes the co-located capture + explore + restore contract and implementation.
+Both independent reviews are GO: mission review, plus exact-byte engineering review of runner
+`8947aeba…`, qualification `6679634c…`, and design `0ffc848e…`. The gate remains unpublished and
+unqualified. Counters remain **train 30 · development 15 · fits 3 ·
+comparisons 3 · authority 0 · transfer 0**, with root inspections/admissions, predictions,
+controller actions, emulator frames, and outcomes all zero. See the
+[path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+
+Codex owns only `fresh-goal-manager-field-composition-execution-qualification-v2`: commit and push
+exactly the reviewed bytes, bind exact-head green CI, and then perform one action-free,
+zero-prediction preflight. Claude's exact-byte source, attestation, limiter, ledger, and terminal
+review is complete. Antigravity's mission review is complete and it remains deferred until a real
+execution result creates another architecture question. No agent may execute the episode, patch a
+root or skill, reuse development, grant authority, or open sealed Red or Crystal.
+
+## Previous override: qualify the V1 root-safe composition runner; do not execute it
 
 Published source `c4d8c7294a4c68ce0b9c506cf978a389c88a222f` passed CI run `32076494276`,
 attempt 1. Its reviewed ROM-free design and core freeze the three-decision composition contract

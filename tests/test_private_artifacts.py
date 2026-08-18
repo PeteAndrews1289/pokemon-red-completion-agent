@@ -48,6 +48,25 @@ def _mode(path: Path) -> int:
     return stat.S_IMODE(path.stat().st_mode)
 
 
+def test_episode_writer_can_sync_a_record_before_return(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    writer = store.begin_episode("durable-record-before-action")
+    synchronized: list[int] = []
+    monkeypatch.setattr(
+        private_artifacts_module.os,
+        "fsync",
+        lambda descriptor: synchronized.append(descriptor),
+    )
+
+    writer.append("decisions", {"kind": "goal"}, durable=True)
+
+    assert len(synchronized) == 2
+    writer.abort("identity_probe")
+
+
 def test_strategic_assignments_fit_the_private_episode_namespace(tmp_path: Path) -> None:
     _, _, store = _make_store(tmp_path)
     project_root = Path(__file__).resolve().parents[1]
