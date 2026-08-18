@@ -98,7 +98,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
             "The four-root campaign failed its one action-free freeze and is closed. Now training "
-            "one retained-acquisition outcome while preserving earlier storage/restoration behavior."
+            "one retained-acquisition outcome while preserving earlier storage/restoration "
+            "behavior."
         ),
         stage_progress=focus_progress_fraction(state),
         location="Offline successor fit · one acquisition target · two no-regression anchors",
