@@ -10,8 +10,11 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.blaine import DIGLETT_SPECIES_ID
-from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.executor import CountingExecutor, WindowedFrameBudgetController
 from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    HardCompositionActionLimiter,
+)
 from pokemon_red_completion.goal_manager_context_catalog import (
     open_goal_manager_context_capture,
 )
@@ -24,7 +27,11 @@ from pokemon_red_completion.observation import (
     RedCurrentBoxState,
     RedPokedexState,
 )
-from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
+from pokemon_red_completion.party import (
+    MoveObservation,
+    PartyMemberObservation,
+    PartyObservation,
+)
 from pokemon_red_completion.red_acquisition import RedAreaExecutionPolicy
 from pokemon_red_completion.red_goal_context import (
     _targeted_evolution_index,
@@ -38,7 +45,7 @@ from pokemon_red_completion.red_goal_context_profile import (
     parse_red_goal_context_profile,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
-from pokemon_red_completion.red_party import DUGTRIO_SPECIES_ID
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID, DUGTRIO_SPECIES_ID
 
 
 class _Reader:
@@ -325,7 +332,9 @@ def test_wild_goal_context_binds_one_capture_quantum(
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_goal_context.LiveWildCorridorSurveyExecutor",
-        lambda *_args, **_kwargs: object(),
+        lambda *_args, **_kwargs: SimpleNamespace(
+            finish_at_starting_endpoint=lambda: None
+        ),
     )
 
     def provider(**kwargs: object) -> object:
@@ -362,6 +371,131 @@ def test_wild_goal_context_binds_one_capture_quantum(
     assert isinstance(policy, RedAreaExecutionPolicy)
     assert policy.capture_quota == 1
     assert policy.capture_in_requirement_order is True
+    assert callable(captured["normalize_after_capture"])
+
+
+def test_wild_goal_context_binds_hard_limited_source_local_development(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    normalizations = 0
+
+    def finish_at_starting_endpoint() -> None:
+        nonlocal normalizations
+        normalizations += 1
+
+    area = SimpleNamespace(
+        seek_encounter=lambda: None,
+        finish_at_starting_endpoint=finish_at_starting_endpoint,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.LiveWildCorridorSurveyExecutor",
+        lambda *_args, **_kwargs: area,
+    )
+    captured: dict[str, object] = {}
+
+    def provider(**kwargs: object) -> object:
+        captured.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.RedEncounterSourceDevelopmentGoalProvider",
+        provider,
+    )
+
+    emulator = WindowedFrameBudgetController(
+        _Emulator(),
+        maximum_frames_per_window=1_000,
+        maximum_total_frames=2_000,
+    )
+    hard_actions = HardCompositionActionLimiter(
+        _ActionDelegate(),
+        maximum_actions_per_decision=100,
+        maximum_episode_actions=200,
+    )
+    actions = CountingExecutor(hard_actions)
+    party = PartyObservation(
+        (
+            PartyMemberObservation(
+                1,
+                BLASTOISE_SPECIES_ID,
+                60,
+                120,
+                120,
+                moves=(MoveObservation(57, 15),),
+            ),
+            PartyMemberObservation(
+                2,
+                64,
+                35,
+                80,
+                80,
+                moves=(MoveObservation(10, 20),),
+            ),
+        )
+    )
+    runtime = SimpleNamespace(
+        emulator=emulator,
+        reader=object(),
+        adapter=SimpleNamespace(observe=lambda: SimpleNamespace(party=party)),
+        profile=SimpleNamespace(manager_config=RedGoalManagerConfig()),
+    )
+    observed: dict[str, object] = {}
+
+    def run_local(
+        received_actions: CountingExecutor,
+        _reader: object,
+        received_emulator: WindowedFrameBudgetController,
+        **kwargs: object,
+    ) -> tuple[None, int, int]:
+        observed.update(kwargs)
+        received_actions.execute(MacroAction(MacroActionKind.WAIT))
+        received_emulator.tick(1)
+        return None, 4, 0
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_goal_context.run_red_team_balancing",
+        run_local,
+    )
+    parameters = {
+        "source_id": "wild:PokemonMansion1F:grass",
+        "label": "Mansion source-local development",
+        "map_id": int(MapId.POKEMON_MANSION_1F),
+        "player_x": 5,
+        "player_y": 21,
+        "forward_directions": ("up",),
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 64,
+        "maximum_encounters": 16,
+        "completed_battles": 4,
+    }
+
+    _wild_provider(
+        runtime,
+        SimpleNamespace(
+            parameters=parameters,
+            mechanic=RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+        ),
+        actions,
+    )
+
+    assert captured["source_ref"] == "wild:PokemonMansion1F:grass"
+    executor = captured["executor"]
+    assert callable(executor)
+    report = executor()
+    assert report.actions_executed == 1
+    assert report.frames_executed == 1
+    assert report.evidence == {
+        "bounded": True,
+        "source_local": True,
+        "completed_battles": 4,
+        "healing_trips": 0,
+        "travel_transitions": 0,
+    }
+    assert observed["policy"].max_healing_trips == 0  # type: ignore[union-attr]
+    assert observed["policy"].max_steps == 64  # type: ignore[union-attr]
+    assert observed["fixed_dose"].completed_battles == 4  # type: ignore[union-attr]
+    assert normalizations == 1
 
 
 def test_targeted_evolution_requires_one_exact_in_place_species_change() -> None:

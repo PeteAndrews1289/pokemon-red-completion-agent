@@ -988,6 +988,7 @@ class RedAreaSurveyGoalProvider:
     emulator: RedGoalSkillEmulator
     adapter: PokemonRedGoalStateAdapter
     boundary: GoalAvailabilityCheck | None = None
+    normalize_after_capture: Callable[[], None] | None = None
     policy: RedAreaExecutionPolicy = RedAreaExecutionPolicy()
     catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
     kind: GoalKind = GoalKind.ACQUIRE_SPECIES
@@ -997,6 +998,10 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey source identity is absent")
         if self.boundary is not None and not callable(self.boundary):
             raise RedGoalSkillError("area-survey boundary must be callable")
+        if self.normalize_after_capture is not None and not callable(
+            self.normalize_after_capture
+        ):
+            raise RedGoalSkillError("area-survey normalizer must be callable")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         if observation.raw.battle_state or not observation.input_ready:
@@ -1047,6 +1052,8 @@ class RedAreaSurveyGoalProvider:
                 policy=self.policy,
                 catalog=self.catalog,
             )
+            if report.captures and self.normalize_after_capture is not None:
+                self.normalize_after_capture()
             final_survey = summarize_red_area_survey(
                 self.source_id,
                 self.area_executor.read_collection(),
@@ -1060,6 +1067,7 @@ class RedAreaSurveyGoalProvider:
                     "semantic_actions": report.actions_executed,
                     "encounters_seen": report.encounters_seen,
                     "captures": report.captures,
+                    "source_normalized": self.normalize_after_capture is not None,
                     "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
                     "final_missing": len(report.final_missing_species_refs),
@@ -1077,6 +1085,14 @@ class RedAreaSurveyGoalProvider:
             after_story = self.adapter.graph.completed_ids(after.game_state)
             if before_story.difference(after_story):
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+            if self.boundary is not None:
+                normalized_boundary = self.boundary(after)
+                if not isinstance(normalized_boundary, RedGoalSkillAvailability):
+                    raise RedGoalSkillError(
+                        "area-survey boundary returned invalid post-capture evidence"
+                    )
+                if not normalized_boundary.executable:
+                    return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             after_survey = summarize_red_area_survey(
                 self.source_id,
                 after.collection_observation,

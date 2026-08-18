@@ -513,12 +513,21 @@ def test_area_survey_verifies_one_required_duplicate_precursor() -> None:
         source_id,
         adapter.observe().collection_observation,
     )
+    normalizations = 0
+
+    def normalize_after_capture() -> None:
+        nonlocal normalizations
+        normalizations += 1
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+
     provider = RedAreaSurveyGoalProvider(
         source_id=source_id,
         area_executor=_AreaExecutor(reader, actions, source_id),
         actions=actions,
         emulator=port,
         adapter=adapter,
+        boundary=lambda _observation: RedGoalSkillAvailability.available(),
+        normalize_after_capture=normalize_after_capture,
         policy=RedAreaExecutionPolicy(
             max_actions=20,
             max_encounters=20,
@@ -537,7 +546,9 @@ def test_area_survey_verifies_one_required_duplicate_precursor() -> None:
         adapter.observe().collection_observation,
     )
     assert verdict.status.value == "succeeded"
+    assert normalizations == 1
     assert report.evidence["captures"] == 1
+    assert report.evidence["source_normalized"] is True
     assert report.evidence["initial_missing_specimens"] == before_survey.missing_specimen_count
     assert report.evidence["final_missing_specimens"] == before_survey.missing_specimen_count - 1
     assert survey.missing_species_refs[0] == red_species_ref(17)

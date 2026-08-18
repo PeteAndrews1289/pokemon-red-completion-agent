@@ -47,6 +47,7 @@ def test_builder_emits_a_fixed_mansion_profile_without_policy_knobs(
     assert tuple(provider.kind for provider in profile.providers) == (
         GoalKind.ADVANCE_STORY,
         GoalKind.ACQUIRE_SPECIES,
+        GoalKind.DEVELOP_TEAM,
         GoalKind.RESTORE_TEAM,
         GoalKind.RECOVER_CONTROL,
         GoalKind.EXPLORE,

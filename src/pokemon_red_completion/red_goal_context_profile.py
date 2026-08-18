@@ -37,6 +37,7 @@ class RedGoalContextProfileError(RuntimeError):
 class RedGoalMechanic(StrEnum):
     MIDGAME_STORY = "midgame_story"
     WILD_CORRIDOR_CAPTURE = "wild_corridor_capture"
+    WILD_CORRIDOR_DEVELOPMENT = "wild_corridor_development"
     BALANCED_TEAM = "balanced_team"
     DIGLETT_EVOLUTION = "diglett_evolution"
     FIELD_RESTORE = "field_restore"
@@ -50,6 +51,7 @@ class RedGoalMechanic(StrEnum):
 _MECHANIC_KIND = {
     RedGoalMechanic.MIDGAME_STORY: GoalKind.ADVANCE_STORY,
     RedGoalMechanic.WILD_CORRIDOR_CAPTURE: GoalKind.ACQUIRE_SPECIES,
+    RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.BALANCED_TEAM: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.DIGLETT_EVOLUTION: GoalKind.EVOLVE_SPECIES,
     RedGoalMechanic.FIELD_RESTORE: GoalKind.RESTORE_TEAM,
@@ -310,6 +312,7 @@ def _parse_parameters(
         return row
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
     }:
         required = {
@@ -324,6 +327,8 @@ def _parse_parameters(
             "maximum_seek_steps",
             "maximum_encounters",
         }
+        if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
+            required.add("completed_battles")
         _exact_keys(row, required)
         source_id = _bounded_text(row["source_id"], "source identity")
         label = _bounded_text(row["label"], "corridor label")
@@ -338,7 +343,7 @@ def _parse_parameters(
         starting_endpoint = row["starting_endpoint"]
         if starting_endpoint not in {"south", "north"}:
             raise RedGoalContextProfileError("corridor endpoint is invalid")
-        return {
+        parsed = {
             "source_id": source_id,
             "label": label,
             "map_id": int(_map_id(row["map_id"])),
@@ -354,6 +359,11 @@ def _parse_parameters(
                 row["maximum_encounters"], "encounter bound"
             ),
         }
+        if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
+            parsed["completed_battles"] = _positive_integer(
+                row["completed_battles"], "development battle dose"
+            )
+        return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(
             row,

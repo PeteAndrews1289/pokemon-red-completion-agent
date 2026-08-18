@@ -118,6 +118,11 @@ def _providers(
                 RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
                 wild,
             ),
+            (
+                GoalKind.DEVELOP_TEAM,
+                RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+                {**wild, "completed_battles": 4},
+            ),
             _empty(RedGoalMechanic.FIELD_RESTORE),
             recovery,
             (

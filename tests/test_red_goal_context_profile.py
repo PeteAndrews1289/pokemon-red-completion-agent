@@ -130,6 +130,46 @@ def test_profile_rejects_callbacks_paths_and_kind_mechanic_mismatches() -> None:
         )
 
 
+def test_profile_requires_a_positive_fixed_dose_for_corridor_development() -> None:
+    corridor = {
+        "source_id": "wild:PokemonMansion1F:grass",
+        "label": "Mansion source-local development",
+        "map_id": int(MapId.POKEMON_MANSION_1F),
+        "player_x": 5,
+        "player_y": 21,
+        "forward_directions": ["up"],
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 64,
+        "maximum_encounters": 16,
+        "completed_battles": 4,
+    }
+    profile = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(
+                GoalKind.DEVELOP_TEAM,
+                RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+                corridor,
+            ),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+        )
+    )
+
+    assert profile.providers[1].parameters["completed_battles"] == 4
+    with pytest.raises(RedGoalContextProfileError, match="development battle dose"):
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                _provider(
+                    GoalKind.DEVELOP_TEAM,
+                    RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+                    {**corridor, "completed_battles": 0},
+                ),
+                _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            )
+        )
+
 def test_profile_rejects_duplicate_goal_kinds_and_noncanonical_json() -> None:
     with pytest.raises(RedGoalContextProfileError, match="duplicates"):
         parse_red_goal_context_profile(

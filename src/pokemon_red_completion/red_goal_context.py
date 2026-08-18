@@ -20,11 +20,14 @@ from pokemon_red_completion.blaine import (
     ROUTE_11_TRAINING_VENUE,
     _flee,
 )
-from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.executor import CountingExecutor, WindowedFrameBudgetController
 from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
     GoalUnavailableReason,
+)
+from pokemon_red_completion.goal_manager_composition_qualification import (
+    HardCompositionActionLimiter,
 )
 from pokemon_red_completion.goal_manager_context_catalog import GoalManagerContextCapture
 from pokemon_red_completion.goal_manager_runtime import (
@@ -64,6 +67,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedCenterRestoreGoalProvider,
     RedControlRecoveryGoalProvider,
     RedEncounterDiscoveryGoalProvider,
+    RedEncounterSourceDevelopmentGoalProvider,
     RedFieldRestoreGoalProvider,
     RedGoalSkillAvailability,
     RedMartPurchase,
@@ -79,13 +83,17 @@ from pokemon_red_completion.red_party import (
     DUGTRIO_SPECIES_ID,
 )
 from pokemon_red_completion.red_player_observer import CapturedPokemonRedObserver
-from pokemon_red_completion.red_team_training import run_red_team_balancing
+from pokemon_red_completion.red_team_training import (
+    FixedPartyTrainingDose,
+    run_red_team_balancing,
+)
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.surge import (
     DEFAULT_SURGE_TIMING,
     LiveWildCorridorSurveyExecutor,
 )
 from pokemon_red_completion.team_training import BalancedTeamPolicy
+from pokemon_red_completion.training_venue import TrainingVenue
 
 
 class RedGoalContextError(RuntimeError):
@@ -216,6 +224,7 @@ def _build_provider(
         )
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
     }:
         return _wild_provider(runtime, spec, actions)
@@ -287,12 +296,21 @@ def _wild_provider(
             emulator=runtime.emulator,
             adapter=runtime.adapter,
             boundary=boundary,
+            normalize_after_capture=area.finish_at_starting_endpoint,
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
                 max_encounters=_integer(parameters, "maximum_encounters"),
                 capture_in_requirement_order=True,
                 capture_quota=1,
             ),
+        )
+    if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
+        return _wild_development_provider(
+            runtime,
+            spec,
+            actions,
+            area=area,
+            boundary=boundary,
         )
     return RedEncounterDiscoveryGoalProvider(
         source_id=source_id,
@@ -303,6 +321,150 @@ def _wild_provider(
         boundary=boundary,
         maximum_seek_steps=_integer(parameters, "maximum_seek_steps"),
         maximum_encounters=_integer(parameters, "maximum_encounters"),
+    )
+
+
+def _wild_development_provider(
+    runtime: RedGoalContextRuntime,
+    spec: RedGoalProviderSpec,
+    actions: CountingExecutor,
+    *,
+    area: LiveWildCorridorSurveyExecutor,
+    boundary: Callable[[RedGoalObservation], RedGoalSkillAvailability],
+) -> RedGoalBindingProvider:
+    """Bind one fixed local battle dose without permitting travel or healing."""
+
+    parameters = spec.parameters
+    source_id = _text(parameters, "source_id")
+    map_id = MapId(_integer(parameters, "map_id"))
+    completed_battles = _integer(parameters, "completed_battles")
+    maximum_seek_steps = _integer(parameters, "maximum_seek_steps")
+
+    def execute() -> GoalExecutionReport:
+        if not isinstance(actions.delegate, HardCompositionActionLimiter) or not isinstance(
+            runtime.emulator, WindowedFrameBudgetController
+        ):
+            raise RedGoalContextError(
+                "encounter-source development lacks hard action/frame limiters"
+            )
+        before = runtime.adapter.observe()
+        trainee = before.party.weakest_trainable_member
+        if trainee is None or before.party.species_ids().count(trainee.species_id) != 1:
+            raise RedGoalContextError(
+                "encounter-source development lacks one unique trainable member"
+            )
+        if map_id != MANSION_TRAINING_VENUE.map_id:
+            raise RedGoalContextError(
+                "encounter-source development lacks a measured local venue"
+            )
+        before_actions = actions.actions_executed
+        before_frames = runtime.emulator.frame_count
+
+        def walk_local_source(
+            _actions: object,
+            _reader: object,
+            _emulator: object,
+        ) -> int:
+            area.seek_encounter()
+            return 1
+
+        def reject_recovery(
+            _actions: object,
+            _reader: object,
+            _emulator: object,
+        ) -> None:
+            raise RedGoalContextError(
+                "encounter-source development cannot travel or heal"
+            )
+
+        local_venue = TrainingVenue(
+            band=MANSION_TRAINING_VENUE.band,
+            map_id=int(map_id),
+            walk_to_grass=walk_local_source,
+            heal_and_return=reject_recovery,
+            is_in_center=lambda _raw: False,
+            move_slot=MANSION_TRAINING_VENUE.move_slot,
+            move_guard=MANSION_TRAINING_VENUE.move_guard,
+            battle_timing=MANSION_TRAINING_VENUE.battle_timing,
+            walk_to_grass_factory=lambda: walk_local_source,
+        )
+        policy = replace(
+            red_team_development_quantum_policy(
+                before.party,
+                runtime.profile.manager_config,
+                kind=GoalKind.DEVELOP_TEAM,
+            ),
+            max_battles=completed_battles,
+            max_steps=maximum_seek_steps,
+            max_healing_trips=0,
+            max_faints=0,
+        )
+        _report, battles, healing_trips = run_red_team_balancing(
+            actions,
+            runtime.reader,
+            runtime.emulator,
+            policy=policy,
+            venues=(local_venue,),
+            intent=MANSION_BALANCED_TEAM_TRAINING_INTENT,
+            flee_timing=MANSION_TRAINING_FLEE_TIMING,
+            hideout_timing=DEFAULT_HIDEOUT_TIMING,
+            flee_func=cast(Callable[..., None], _flee),
+            volatile_enemy_species=MANSION_VOLATILE_ENEMY_SPECIES,
+            escort_enemy_species=MANSION_ESCORT_ENEMY_SPECIES,
+            max_consecutive_flees=MANSION_MAX_CONSECUTIVE_FLEES,
+            cancel_interval=MANSION_LEVEL_UP_MOVE_CANCEL_INTERVAL,
+            report_label="goal-manager encounter-source development",
+            checkpoint_count=1,
+            fixed_dose=FixedPartyTrainingDose(
+                (trainee.species_id,),
+                local_venue.band.identity,
+                completed_battles,
+            ),
+        )
+        if battles != completed_battles or healing_trips:
+            raise RedGoalContextError(
+                "encounter-source development left its fixed local dose"
+            )
+        # Return to the same source boundary so the next goal-manager decision
+        # is based on a fresh, co-available menu rather than corridor interior.
+        area.finish_at_starting_endpoint()
+        return GoalExecutionReport(
+            actions_executed=actions.actions_executed - before_actions,
+            frames_executed=runtime.emulator.frame_count - before_frames,
+            evidence={
+                "bounded": True,
+                "source_local": True,
+                "completed_battles": battles,
+                "healing_trips": healing_trips,
+                "travel_transitions": 0,
+            },
+        )
+
+    def development_boundary(
+        observation: RedGoalObservation,
+    ) -> RedGoalSkillAvailability:
+        result = boundary(observation)
+        if not result.executable:
+            return result
+        trainee = observation.party.weakest_trainable_member
+        if (
+            BLASTOISE_SPECIES_ID not in observation.party.species_ids()
+            or trainee is None
+            or observation.party.species_ids().count(trainee.species_id) != 1
+        ):
+            return RedGoalSkillAvailability.unavailable(
+                GoalUnavailableReason.MISSING_CAPABILITY
+            )
+        return result
+
+    return RedEncounterSourceDevelopmentGoalProvider(
+        source_ref=source_id,
+        binding_ref=f"pokemon.red:development:{source_id}",
+        adapter=runtime.adapter,
+        boundary=development_boundary,
+        executor=execute,
+        estimated_effort=min(1.0, completed_battles / 12),
+        estimated_risk=0.20,
     )
 
 
