@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns public/synthetic causal-bootstrap qualification
+## Current override: Codex owns the rootless living-Dex dependency pure design
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[bootstrap receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records a clean bootstrap with project preloads 0 and no private-input, ROM, claim, prediction,
+gameplay, or counter effects. Retire `causal-bootstrap-origin-qualification-v1` without retry;
+keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Codex owns `rootless-living-dex-dependency-curriculum-design-v1`. Design and adversarially test the
+proposed title-neutral multiplicity/dependency signal that separates precursor-scarce and duplicate-ready
+states. Freeze exactly six family-disjoint pairs: four train and two unopened development, with two
+scenarios per pair and preassigned counterbalanced `ACQUIRE`/`EVOLVE` independent of the shadow
+model. Storage is excluded. Outcomes must come from exact pre/post specimen multisets and
+dependency potential; predecision features must exclude identity, assigned/normative action,
+reward, and post-state leakage. Reviewers remain read-only. Stop before prediction, fit,
+development decode, private input, or gameplay.
+
+## Previous override: Codex owned public/synthetic causal-bootstrap qualification
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
 action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at

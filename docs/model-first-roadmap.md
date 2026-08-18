@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: DEVELOP_TEAM failed closed; qualify the reusable bootstrap
+## Current checkpoint: bootstrap origin qualified; design the rootless dependency curriculum
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[bootstrap qualification](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records an isolated clean bootstrap with project preloads 0 and zero private-input, ROM, claim,
+prediction, gameplay, or counter effects. Retire `causal-bootstrap-origin-qualification-v1`
+without retry. Boards remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Active `rootless-living-dex-dependency-curriculum-design-v1` is public pure design. The existing
+model aliases precursor-scarce and duplicate-ready states; the fixed successor adds a transferable
+multiplicity/dependency signal. Specify exactly six family-disjoint abstract pairs—four train and
+two unopened development—for eight train and four development scenarios. Treatments are
+counterbalanced, preassigned `ACQUIRE` versus `EVOLVE`, never shadow-selected; storage is outside
+V1. Outcomes derive solely from exact pre/post specimen multisets and dependency potential. Block
+species/family/title/route identity, assigned or normative action, reward, and post-state leakage
+from predecision features. Stop after reviewed design: no prediction, fit, development decode,
+private input, gameplay, authority, or transfer.
+
+## Previous checkpoint: DEVELOP_TEAM failed closed; reusable bootstrap qualification was next
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
 action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at

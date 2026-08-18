@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published and qualified the reusable clean-process causal bootstrap at source
+  `aa65504899f51cf73aa28bfdb725abffeeec7d0a` under green CI `32179177930/1`. The
+  [qualification receipt](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+  (SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+  records zero preloaded project modules and no private-input, ROM, claim, prediction, gameplay, or
+  counter effect. Retired `causal-bootstrap-origin-qualification-v1` without retry and activated
+  pure-design lane `rootless-living-dex-dependency-curriculum-design-v1`. Its fixed V1 contract
+  adds a proposed title-neutral multiplicity/dependency signal, exactly six family-disjoint abstract pairs
+  split four train/two unopened development, preassigned counterbalanced `ACQUIRE`/`EVOLVE`, no
+  storage, exact multiset/dependency outcomes, and strict predecision leakage guards. No prediction,
+  fit, development decode, private input, or gameplay has begun; boards remain **30/15/4/3/0/0**,
+  **14/4/0/1/1**, causal zero, and atomic zero.
+
 - Retired `first-develop-team-causal-goal-outcome-v1` after its sole action-free freeze at published
   source `6077173618bf9fce9fb57804a6a1ce82249c9cee`, green CI `32177113545/1`, authenticated
   manifest `d77d9f9d…cdea1`, then returned `failed_closed` at `readiness_authentication` with effects

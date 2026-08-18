@@ -98,16 +98,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The sole DEVELOP_TEAM freeze failed closed at readiness authentication. A public, "
-            "synthetic clean-bootstrap qualification is now active; learning counters did not move."
+            "The clean causal bootstrap is qualified. A rootless living-Dex dependency curriculum "
+            "is now in pure-core design; learning counters have not moved."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Public synthetic boundary · clean causal bootstrap · no private inputs",
+        location="Rootless synthetic design · six abstract families · no game inputs",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate="Shadow authority unchanged · no new causal evidence",
-            choice="Qualify clean import origin; then design rootless living-Dex curriculum",
+            choice="Design collision-free multiplicity and dependency features",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -184,8 +184,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "no cause inferred"
             ),
             (
-                "Manifest maintenance qualified · ece32d8 · CI 32174872005/1 green · public-only "
-                "canonical bindings · protected effects 0 · future-lane manifest 0"
+                "Causal bootstrap qualified · aa65504 · CI 32179177930/1 green · clean process "
+                "preloads 0 · private/ROM/claim/prediction effects 0"
             ),
         ),
     )

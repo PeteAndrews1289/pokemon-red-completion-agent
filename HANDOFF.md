@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: DEVELOP_TEAM froze closed; bootstrap qualification is active
+## 2026-08-18: bootstrap origin qualified; rootless living-Dex design is active
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[qualification receipt](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records a clean isolated bootstrap with preloaded project modules 0 and no private-input, ROM,
+claim, prediction, gameplay, or counter effect. Retire `causal-bootstrap-origin-qualification-v1`
+without retry. Keep **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Codex owns public pure-design lane `rootless-living-dex-dependency-curriculum-design-v1`. Replace
+the current scarce/duplicate-ready representation collision with a proposed title-neutral multiplicity and
+dependency signal. Freeze exactly six family-disjoint abstract pairs: four train and two unopened
+development, or eight train and four development scenarios. Counterbalance preassigned `ACQUIRE`
+and `EVOLVE` treatments without consulting the shadow model; storage is excluded from V1. Admit
+outcomes only from exact pre/post specimen multisets plus dependency potential, and exclude
+identity, action assignment, normative action, reward, and post-transition leakage. Stop after the
+reviewed design; no predictions, fit, development decode, private input, or gameplay.
+
+## Previous checkpoint — 2026-08-18: DEVELOP_TEAM froze closed; bootstrap qualification was active
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. The sole
 action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at

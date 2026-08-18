@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Causal bootstrap origin qualification V1** (`causal-bootstrap-origin-qualification-v1`)
+**Rootless living-Dex dependency curriculum design V1** (`rootless-living-dex-dependency-curriculum-design-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: A passing clean-process bootstrap permits only a separate rootless living-Dex dependency curriculum design. It never permits retrying or replacing the retired DEVELOP_TEAM root lane.
+- Next decision: A passing pure-core design permits one separately frozen twelve-scenario rootless campaign. It does not authorize a fit, development-outcome decode, gameplay claim, or Crystal transfer claim.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Guarantee that every future causal runner enters the authenticated development bootstrap before any helper can preload project modules, and expose safe readiness substages without opening a ROM or private input. |
+| Reusable capability | Freeze a title-neutral, rootless living-Pokedex dependency curriculum whose proposed predecision representation distinguishes a scarce precursor from a duplicate-ready precursor; future game-title adapters must validate that seam independently. |
 | Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Qualify only a reusable clean causal-runner bootstrap and safe readiness-stage boundary. Grant no gameplay, fit, promotion, completion, sealed, or transfer authority. |
-| Transfer test | Not in this lane. Public bootstrap qualification supplies no gameplay, Crystal, or cross-game living-Pokedex evidence. |
-| Cheapest falsifier | An isolated clean Python process must load the reusable causal bootstrap with no preloaded pokemon_red_completion modules and pass the real project-origin guard. Any need for ROM, private inputs, or the retired DEVELOP_TEAM invocation closes this maintenance lane. |
-| Time box | 1 session / 1 hours |
+| Authority target | Freeze only a collision-free, title-neutral rootless dependency curriculum design. Grant no outcome, fit, gameplay, promotion, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. Later Crystal work must compute the same predecision multiplicity and dependency signals from Crystal's acquisition graph and remain a separate held-out comparison. |
+| Cheapest falsifier | Before any prediction or outcome exists, the pure core must prove scarce and duplicate-ready feature rows differ without species, family, title, route, assigned-action, normative-action, reward, or post-transition leakage. Any exact collision closes the design. |
+| Time box | 1 session / 3 hours |
 
 ### Required learning outputs
 
@@ -57,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-develop-team-freeze-closed-bootstrap-qualification** · status **active** · evidence [qualification](docs/evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+**2026-08-18-bootstrap-qualified-rootless-dependency-design** · status **active** · evidence [qualification](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This bounded fix prevents infrastructure import order from consuming future causal-data opportunities. The immediate successor is a species-neutral living-Dex dependency curriculum, not another Red root rescue. |
-| Learning output | No measured learning output was added. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples. |
-| Authority delta | None. The failed freeze adds no causal example, atomic episode, fit, comparison, promotion, gameplay, completion, or transfer authority. |
-| Transfer result | Not run. Bootstrap maintenance supplies no gameplay, Crystal, or cross-game living-Pokedex evidence. |
-| Blocker | The sole DEVELOP_TEAM freeze failed closed at readiness_authentication with effects not attested. Static public-source analysis found a deterministic import-order defect: the manifest helper preloaded project modules before the inherited development bootstrap's origin guard. |
-| Decision | Retire the exact DEVELOP_TEAM lane without retry or replacement. Qualify one reusable clean-process bootstrap and safe readiness-stage seam using public and synthetic inputs only, then reorient to a rootless living-Dex dependency curriculum rather than another scarce Red-root attempt. |
-| Next session | Implement and mutation-test the reusable causal bootstrap and sanitized readiness-stage map, publish under green CI, and stop for reorientation before any new root, ROM, private model, claim, prediction, or action. |
-| Next falsifier | A clean subprocess must prove the development bootstrap sees zero preloaded project modules and the real origin guard passes; safe synthetic mutations must distinguish bootstrap, runtime, candidate/context, and prior-campaign readiness stages. |
-| Stop condition | Stop after one public/synthetic bootstrap qualification. Any ROM/private read, claim-ledger access, retired-lane retry, model prediction, controller action, fit, sealed Red access, or Crystal access closes the lane. |
+| Product alignment | The curriculum teaches the reusable collection decision at the heart of a living Pokedex: preserve the only precursor, acquire a duplicate when needed, and evolve only when dependency state permits. Red supplies mechanics; later titles reuse the same species-neutral semantics. |
+| Learning output | No measured learning output was added. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples; rootless counters do not yet exist. |
+| Authority delta | None. Bootstrap qualification adds no gameplay, causal example, rootless outcome, fit, comparison, promotion, completion, or transfer authority. |
+| Transfer result | Not run. A rootless Red-derived design is not Crystal transfer; it only prepares a title-neutral dependency contract for later adapters. |
+| Blocker | The clean bootstrap is qualified. The current goal-manager representation still aliases precursor-scarce and duplicate-ready collection states, shadow-selected actions would be observational rather than counterbalanced evidence, and the rootless outcome/partition contract is not yet frozen. |
+| Decision | Retire bootstrap maintenance as complete. Design a pure rootless collection-dependency core with a proposed title-neutral multiplicity/dependency signal, four public train families and two nonce-sealed development families, counterbalanced assigned actions, and multiset-derived outcomes. |
+| Next session | Implement and audit the pure rootless dependency scenario, representation, transition, fixed 8-train/4-development schedule, and strict admission contracts. Do not run a policy, fit a model, or decode development outcomes in this design lane. |
+| Next falsifier | Mutation tests must kill removal of multiplicity, dependency distance, family-disjoint partitioning, action counterbalancing, pre/post multiset verification, nonce-backed development-input sealing, fit-terminal authentication, and identity-leak guards before any rootless campaign can be frozen. |
+| Stop condition | Stop after one reviewed pure-core design. Any ROM/private input, real-game claim, prediction-selected treatment, teacher/planner label, storage treatment, fit, development-outcome decode, Crystal execution, or gameplay claim closes the lane. |
 
 ### Stop conditions
 
-- Any ROM, private artifact, model payload, context state, or fixed-account claim-ledger access stops the lane.
-- Any retry, replacement, or private diagnosis of the retired DEVELOP_TEAM lane stops the lane.
-- Stop after one isolated bootstrap/origin qualification and safe readiness-stage test suite within one hour.
+- Any ROM, private artifact, context state, game root, controller action, or retired-lane retry stops the lane.
+- Any species, family, title, route, assigned-action, normative-action, reward, or post-transition leakage into policy features stops the lane.
+- Stop after one pure-core design and adversarial test suite; do not predict, execute the campaign, fit, or open development outcomes.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Causal bootstrap origin qualification V1:** Published source aa65504899f51cf73aa28bfdb725abffeeec7d0a passed CI 32179177930/1. Its public-only bootstrap loads the development runner first, verifies zero preloaded project modules and exact origins in an isolated process, and exposes path-free readiness substages. It opened no ROM, private input, claim, prediction, or gameplay and is complete without retry. Evidence is preserved; retry is no.
 - **First DEVELOP_TEAM causal goal outcome V1:** Published source 6077173618bf9fce9fb57804a6a1ce82249c9cee passed CI 32177113545/1 and its exact public freeze manifest validated, but the sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan present after return. Static public-source analysis found a deterministic import-order defect; the exact lane remains closed without retry, replacement root, or gameplay claim, and all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Causal readiness manifest qualification V1:** Published source ece32d81a1bd7ad3de037ba14361ef2f00849e35 passed CI 32174872005/1. Its public-only canonical manifest tooling rejects stale, swapped, rehashed, reordered, noncanonical, aliased, and retired bindings before protected inputs; it created no future-lane manifest or learning output and is complete without retry. Evidence is preserved; retry is no.
 - **First causal goal outcome V1:** Published source 61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a passed CI 32171116652/1, but its sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. The exact acquisition lane is closed without retry, replacement root, or gameplay claim; all learning counters remain unchanged. Evidence is preserved; retry is no.

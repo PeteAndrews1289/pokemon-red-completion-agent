@@ -5,7 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): the DEVELOP_TEAM freeze failed closed; qualify the
+> **Current product focus (August 18, 2026): bootstrap origin is qualified; design the rootless
+> living-Dex dependency curriculum.** Published source
+> `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+> [bootstrap qualification](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+> (SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+> proves an isolated clean bootstrap with zero preloaded project modules and zero private-input,
+> ROM, claim, prediction, or learning-counter effects. Retire
+> `causal-bootstrap-origin-qualification-v1` without retry. Boards remain **30/15/4/3/0/0** and
+> **14/4/0/1/1**, with causal and atomic counts zero.
+>
+> Active `rootless-living-dex-dependency-curriculum-design-v1` is public pure design only. Its proposed
+> existing model aliases precursor-scarce and duplicate-ready states, so V1 must add a transferable
+> multiplicity/dependency signal. Freeze exactly six abstract family-disjoint pairs: four train and
+> two unopened development, yielding eight train and four development scenarios. Preassign and
+> counterbalance `ACQUIRE` versus `EVOLVE` independently of shadow prediction; exclude storage.
+> Derive outcomes only from exact pre/post specimen multisets and dependency potential, with no
+> identity, reward, assigned-action, normative-action, or post-state leakage into predecision
+> features. No prediction, fit, development decode, private input, or gameplay exists yet.
+
+> **Previous product focus (August 18, 2026): the DEVELOP_TEAM freeze failed closed; qualify the
 > reusable bootstrap before a rootless living-Dex curriculum.** Published source
 > `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`; its sole authorized
 > action-free freeze, bound by manifest `d77d9f9d…cdea1`, returned `failed_closed` at

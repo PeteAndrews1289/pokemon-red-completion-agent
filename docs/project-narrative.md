@@ -1,6 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: DEVELOP_TEAM fails closed; bootstrap qualification protects the next curriculum
+## August 18: clean bootstrap qualifies; rootless dependency design becomes the learning bridge
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[bootstrap qualification](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records zero preloaded project modules in an isolated process and no private-input, ROM, claim,
+prediction, gameplay, or counter effect. Retire `causal-bootstrap-origin-qualification-v1`
+without retry. Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+
+Review of the proposed rootless curriculum found a representation collision: precursor-scarce and
+duplicate-ready states were aliased. Active pure-design lane
+`rootless-living-dex-dependency-curriculum-design-v1` therefore requires a proposed title-neutral
+multiplicity/dependency signal and exactly six abstract family-disjoint pairs. Four pairs are train
+and two remain unopened development, producing eight train and four development scenarios.
+`ACQUIRE`/`EVOLVE` treatments are preassigned and counterbalanced independently of the shadow
+model; storage is excluded from V1. Outcomes derive from exact pre/post specimen multisets and
+dependency potential. Identity, assigned/normative action, reward, and post-state leakage are
+forbidden. No prediction, fit, development decode, private input, gameplay, authority, or transfer
+has occurred.
+
+## Previous August 18 checkpoint: DEVELOP_TEAM failed closed; bootstrap qualification protected the next curriculum
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
 action-free DEVELOP_TEAM freeze authenticated manifest `d77d9f9d…cdea1`, then returned

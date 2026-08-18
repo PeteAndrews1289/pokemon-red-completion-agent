@@ -1,6 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-18 DEVELOP_TEAM freeze failed closed; reusable bootstrap qualification is the only
+> **2026-08-18 bootstrap origin qualified; rootless living-Dex design is the only current work —
+> highest checkpoint:** Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a`
+> passed CI `32179177930/1`. The
+> [qualification receipt](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+> (SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+> records clean-process project preloads 0 and no private-input, ROM, claim, prediction, gameplay,
+> or counter effect. Retire `causal-bootstrap-origin-qualification-v1` without retry. Keep
+> **30/15/4/3/0/0**, **14/4/0/1/1**, causal zero, and atomic zero.
+>
+> Codex owns public pure design `rootless-living-dex-dependency-curriculum-design-v1`. Add the
+> proposed title-neutral multiplicity/dependency signal that separates precursor-scarce from duplicate-ready.
+> Freeze exactly six family-disjoint abstract pairs—four train and two unopened development—with
+> counterbalanced preassigned `ACQUIRE`/`EVOLVE` independent of shadow prediction. Exclude storage
+> V1. Outcomes come only from exact pre/post specimen multisets and dependency potential. No
+> identity, assigned/normative action, reward, or post-state leakage; no prediction, fit,
+> development decode, private input, or gameplay.
+
+> **Previous checkpoint — 2026-08-18 DEVELOP_TEAM freeze failed closed; reusable bootstrap qualification was the only
 > current work — highest checkpoint:** Published source
 > `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole action-free
 > freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at

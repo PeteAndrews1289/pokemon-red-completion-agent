@@ -1,6 +1,26 @@
 # Current audit — 2026-08-18
 
-## Current result: DEVELOP_TEAM failed closed; causal-bootstrap qualification is active
+## Current result: bootstrap origin qualified; rootless dependency design is active
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[qualification receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records an isolated clean bootstrap with preloaded project modules 0 and no private-input, ROM,
+claim, prediction, gameplay, or counter effect. Retire `causal-bootstrap-origin-qualification-v1`
+without retry. Legacy remains **30/15/4/3/0/0**, product-focus-v2 remains **14/4/0/1/1**, and
+causal and atomic counts remain zero.
+
+Active `rootless-living-dex-dependency-curriculum-design-v1` is public pure design only. Review
+found that the existing model aliases precursor-scarce and duplicate-ready states, so the fixed
+design requires a proposed title-neutral multiplicity/dependency signal. It contains exactly six abstract,
+family-disjoint pairs: four train and two unopened development, yielding eight train and four
+development scenarios. `ACQUIRE` and `EVOLVE` are preassigned and counterbalanced independently of
+shadow prediction; storage is excluded from V1. Outcomes use only exact pre/post specimen multisets
+and dependency potential. Predecision features may contain no identity, assigned/normative action,
+reward, or post-state leakage. No prediction, fit, development decode, private input, gameplay,
+authority, or transfer is authorized in this lane.
+
+## Previous result: DEVELOP_TEAM failed closed; causal-bootstrap qualification was active
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its sole
 action-free freeze authenticated manifest `d77d9f9d…cdea1`, then returned `failed_closed` at

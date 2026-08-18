@@ -69,6 +69,11 @@ CAUSAL_READINESS_MANIFEST_QUALIFICATION = (
     / "docs/evidence"
     / "causal-readiness-manifest-qualification-v1-2026-08-18.json"
 )
+CAUSAL_BOOTSTRAP_ORIGIN_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "causal-bootstrap-origin-qualification-v1-2026-08-18.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -188,9 +193,9 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "causal-bootstrap-origin-qualification-v1"
+    assert state.active_lane["id"] == "rootless-living-dex-dependency-curriculum-design-v1"
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 26
+    assert len(state.retired_lanes) == 27
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -902,7 +907,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Causal bootstrap origin qualification V1" in public["stage"]
+    assert "Rootless living-Dex dependency curriculum design V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
@@ -910,20 +915,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "Shadow authority unchanged" in encoded
     assert "loss 1.2667" in encoded
     assert "actions 244/244" in encoded
-    assert "sole DEVELOP_TEAM freeze failed closed" in encoded
-    assert "clean import origin" in encoded
-    assert "rootless living-Dex curriculum" in encoded
+    assert "clean causal bootstrap is qualified" in encoded
+    assert "multiplicity and dependency features" in encoded
+    assert "six abstract families" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded
     assert "32177113545/1" in encoded
     assert "d77d9f9d" in encoded
+    assert "aa65504" in encoded
+    assert "32179177930/1" in encoded
+    assert "preloads 0" in encoded
     assert "61f9b44" in encoded
     assert "readiness_authentication" in encoded
     assert "effects not attested" in encoded
     assert "paired-runner binding mismatched" in encoded
-    assert "ece32d8" in encoded
-    assert "32174872005/1" in encoded
-    assert "future-lane manifest 0" in encoded
     assert "campaign 0" in encoded
     assert "retry 0" in encoded
     assert "/Users/" not in encoded
@@ -1017,6 +1022,30 @@ def test_causal_readiness_manifest_qualification_is_public_only_and_zero_effect(
     assert receipt["qualification"]["future_lane_manifest_frozen"] is False
     assert receipt["qualification"]["future_lane_private_readiness_authorized"] is False
     assert receipt["qualification"]["retired_lane_and_runner_rejected"] is True
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_causal_bootstrap_origin_qualification_is_public_only_and_zero_effect() -> None:
+    receipt = json.loads(CAUSAL_BOOTSTRAP_ORIGIN_QUALIFICATION.read_text(encoding="ascii"))
+
+    assert receipt["schema"] == (
+        "pokemon.core.causal-bootstrap-origin-qualification-receipt.v1"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32179177930,
+        "source_commit": "aa65504899f51cf73aa28bfdb725abffeeec7d0a",
+    }
+    qualification = receipt["qualification"]
+    assert qualification["preloaded_project_modules"] == 0
+    assert qualification["development_bootstrap_loaded_first"] is True
+    assert qualification["isolated_process_origin_guard_passed"] is True
+    assert qualification["retired_lane_changed_or_retried"] is False
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)

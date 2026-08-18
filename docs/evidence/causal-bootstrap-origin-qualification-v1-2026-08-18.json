@@ -1,0 +1,56 @@
+{
+  "claim_boundary": {
+    "supported": "Published public-only bootstrap code loads the authenticated development runner before any helper can preload pokemon_red_completion modules, verifies an empty captured preload inventory and real project origins in an isolated process, and maps reviewed readiness errors to path-free substages.",
+    "unsupported": "No ROM, private input, claim registry, root, gameplay, prediction, causal outcome, model fit, competence, authority, transfer, Red-completion, or living-Pokedex claim was created."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "bootstrap_sha256": "76d0f935b83c9d46f7084a060a423719ec0d5e7c0089fe19edfd92f44f38b17b",
+    "bootstrap_test_sha256": "89f98f1cd70446a8d8bd7e2ec827f2376ae127231ee69821d52f9c2669bd1948"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32179177930,
+    "source_commit": "aa65504899f51cf73aa28bfdb725abffeeec7d0a"
+  },
+  "qualification": {
+    "cached_partial_bundle_possible": false,
+    "development_bootstrap_loaded_first": true,
+    "focused_tests_passed": 8,
+    "full_rom_free_tests_passed": 4353,
+    "isolated_process_origin_guard_passed": true,
+    "path_free_readiness_substages": true,
+    "preloaded_project_modules": 0,
+    "relevant_tests_passed": 110,
+    "retired_lane_changed_or_retried": false,
+    "script_origins_authenticated": true
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.core.causal-bootstrap-origin-qualification-receipt.v1",
+  "status": "public_clean_process_causal_bootstrap_qualified",
+  "title_role": "Cross-title causal-runner bootstrap maintenance; not gameplay, learning, evaluation, completion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "model_predictions": 0,
+    "private_inputs_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0
+  }
+}

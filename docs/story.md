@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: team development stopped at the bootstrap, so the next lesson is rootless
+## Current checkpoint: the clean bootstrap passes; the next lesson is collection dependency
+
+Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
+[bootstrap receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+(SHA-256 `67e1bc664156f23c07c076aeace5624cf2417aad4902462703349f94260d536b`)
+records a clean isolated start with zero preloaded project modules. It opened no private input,
+ROM, claim, or prediction and changed no counter. Bootstrap maintenance is done; boards remain
+**30/15/4/3/0/0** and **14/4/0/1/1**, with causal and atomic counts at zero.
+
+The next lesson asks a living-Pokédex question without spending a game root: should the agent
+acquire another precursor or evolve the one it has? The old representation gives the same answer
+space to a scarce only copy and a duplicate-ready collection, so
+`rootless-living-dex-dependency-curriculum-design-v1` must add multiplicity and dependency
+potential. Six abstract family pairs are fixed—four train, two unopened development. Each pair has
+counterbalanced, preassigned `ACQUIRE` and `EVOLVE` scenarios; the shadow model does not choose the
+treatment, and storage waits for a later design. Outcomes come from exact before/after specimen
+multisets and the dependency graph, never an identity, reward, normative action, or leaked future
+state. This is still design: no prediction, fit, development decode, or gameplay has happened.
+
+## Previous checkpoint: team development stopped at the bootstrap, so the next lesson was rootless
 
 Published source `6077173618bf9fce9fb57804a6a1ce82249c9cee` passed CI `32177113545/1`. Its one
 authorized action-free DEVELOP_TEAM freeze authenticated manifest `d77d9f9d…cdea1`, then returned

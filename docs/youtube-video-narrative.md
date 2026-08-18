@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: DEVELOP_TEAM stops at readiness; the next lesson moves off-root
+## August 18 scene: the bootstrap is clean; build the living-Dex dependency lesson
+
+Open on **SOURCE AA65504** (`aa65504899f51cf73aa28bfdb725abffeeec7d0a`) **· CI 32179177930/1
+GREEN · CLEAN BOOTSTRAP QUALIFIED · PROJECT PRELOADS 0 · PRIVATE 0 · ROM 0 · CLAIM 0 · PREDICTION
+0 · COUNTER DELTAS 0**. Link the
+[qualification receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json) with
+**SHA-256 67E1BC66…0D536B**. Retire `causal-bootstrap-origin-qualification-v1` and hold
+**30/15/4/3/0/0 · 14/4/0/1/1 · CAUSAL 0 · ATOMIC 0**.
+
+Split the screen: **PRECURSOR-SCARCE** and **DUPLICATE-READY** currently collide. Reveal active
+`rootless-living-dex-dependency-curriculum-design-v1`: **TRANSFERABLE MULTIPLICITY + DEPENDENCY ·
+SIX ABSTRACT FAMILY PAIRS · FOUR TRAIN/TWO
+UNOPENED DEVELOPMENT · EIGHT TRAIN/FOUR DEVELOPMENT SCENARIOS · PREASSIGNED COUNTERBALANCED
+ACQUIRE/EVOLVE · SHADOW DOES NOT ASSIGN TREATMENT · STORAGE OUT**. Animate outcomes from **EXACT
+PRE/POST SPECIMEN MULTISETS + DEPENDENCY POTENTIAL**. Cross out **IDENTITY · ASSIGNED ACTION ·
+NORMATIVE ACTION · REWARD · POST-STATE LEAKAGE**. End on **PUBLIC PURE DESIGN ONLY · PREDICTIONS 0
+· FIT 0 · DEVELOPMENT DECODE 0 · PRIVATE 0 · GAMEPLAY 0**.
+
+## Previous August 18 scene: DEVELOP_TEAM stopped at readiness; the next lesson moved off-root
 
 Open on **SOURCE 6077173** (`6077173618bf9fce9fb57804a6a1ce82249c9cee`) **· CI
 32177113545/1 GREEN · MANIFEST D77D9F9D…CDEA1 · SOLE DEVELOP_TEAM FREEZE FAILED_CLOSED ·
