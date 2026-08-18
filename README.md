@@ -5,7 +5,49 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): V3 failed at action-free admission; qualify one
+> **Current product focus (August 17, 2026): the repeatable-development candidate passed its
+> independent exact-byte audit; publish before qualification.** The implementation for
+> `repeatable-goal-manager-development-qualification-v1` is byte-frozen and the independent audit
+> verdict is **GO**. Before any protected read it attests the exact external source, runtime, model,
+> context plan, NumPy, and PyBoy. The contract remains exactly four authenticated nonsealed train
+> roots and twelve trials—three per root—with a zero-action campaign freeze/preflight. Any later
+> prediction must follow a durable global claim. Hard action and frame limits and strict propensity,
+> identity, and living-collection admission fail closed. Evolution is excluded until lineage
+> evidence can authenticate it.
+>
+> The candidate is still unpublished and unqualified. Campaign roots frozen, global claims,
+> predictions, controller actions, frames, gameplay, outcomes, episodes, and fits are all zero. The
+> legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer
+> 0**; all five product-focus-v2 counters remain zero. Publish the candidate, require green CI on
+> that exact published head, then freeze the exact campaign and run one zero-action preflight. This
+> checkpoint is not training readiness, gameplay evidence, a fit, or new authority.
+>
+> **Previous product focus (August 17, 2026): V4 failed safely; qualify repeatable model-led
+> development.** Exact published source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022`
+> passed GitHub CI run `32092299544`, attempt 1. Its single V4 preflight emitted the sanitized
+> `readiness_authentication` stage. That stage is not a cause. The invocation wrote no execution
+> claim, authorized no execution identity, made no goal-manager decision or prediction, sent no
+> controller input, advanced no frame, and produced no gameplay, outcome, or episode. Project
+> policy durably closed the exact root account-wide; it may never retry. See the
+> [path-free V4 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+>
+> The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+> transfer 0**. Product-focus-v2 counters also remain **development attempts 0 · verified outcome
+> examples 0 · atomic episodes 0 · composition attempts 0 · verified compositions 0**. The active
+> lane is `repeatable-goal-manager-development-qualification-v1`. Its candidate implementation is
+> under independent review, unpublished, and unqualified; campaign roots frozen, trial claims,
+> model predictions, controller actions, frames, and gameplay are all zero.
+>
+> The [frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json)
+> proposes four authenticated nonsealed train root lineages with three trials each. Their focus
+> kinds are story advancement, team recovery, storage management, and species acquisition. The
+> model samples with 15% declared exploration and records the exact behavior propensity. Verified
+> success scores +1, verified failure scores -1, and an interrupted choice is retained without an
+> update target. Decisions and terminals are durable, action and frame limits are hard, and
+> teacher queries and fallbacks are zero. Review and publication come before any campaign freeze
+> or zero-action preflight; no gameplay is authorized at this checkpoint.
+>
+> **Previous product focus (August 17, 2026): V3 failed at action-free admission; qualify one
 > operational-composition V4 root.** Exact published source
 > `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed GitHub CI run `32090038721`, attempt 1.
 > Its single V3 preflight emitted a sanitized failure at `action_free_admission`. That stage is not

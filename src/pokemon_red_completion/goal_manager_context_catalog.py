@@ -73,6 +73,17 @@ def open_goal_manager_context_capture(
         raise GoalManagerContextCatalogError(
             "goal-manager context capture is unavailable"
         ) from None
+    return parse_goal_manager_context_capture(state_bytes, envelope_bytes)
+
+
+def parse_goal_manager_context_capture(
+    state_bytes: bytes,
+    envelope_bytes: bytes,
+) -> GoalManagerContextCapture:
+    """Authenticate retained bytes so execution and frozen digests share one read."""
+
+    if not isinstance(state_bytes, bytes) or not isinstance(envelope_bytes, bytes):
+        raise TypeError("goal-manager context capture inputs must be bytes")
     envelope = parse_captured_progress(envelope_bytes, state_bytes=state_bytes)
     return GoalManagerContextCapture(
         capture_id=envelope.checkpoint_id,

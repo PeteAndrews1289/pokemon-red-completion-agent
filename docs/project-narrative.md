@@ -1,6 +1,53 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: V3 fails action-free; V4 tests story, recovery, and storage
+## August 17: repeatable-development candidate passes exact-byte review
+
+The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
+byte-frozen and its independent exact-byte audit verdict is **GO**. Before protected reads it
+attests the exact external source, runtime, model, context plan, NumPy, and PyBoy. Its experiment is
+fixed at exactly four authenticated nonsealed train roots and twelve trials, three per root, behind
+a zero-action campaign freeze/preflight. A durable global claim must precede any prediction. Hard
+action/frame limits and strict propensity, identity, and living-collection admission fail closed.
+Evolution remains excluded pending lineage evidence.
+
+The candidate remains unpublished and unqualified. No campaign has been frozen; no global claim,
+prediction, controller action, frame, gameplay, outcome, episode, or fit has occurred. The legacy
+board remains thirty train questions, fifteen development questions, three fits, three comparisons,
+and zero authority or transfer; all five product-focus-v2 counters remain zero. The only next step
+is to publish the candidate, require green CI on the exact published head, then freeze the exact
+campaign and run one zero-action preflight. This is not training readiness, gameplay evidence, a
+fit, or new authority.
+
+## Previous August 17 checkpoint: V4 fails safely; repeatable development replaces the fresh-root carousel
+
+Exact published source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022` passed CI run
+`32092299544`, attempt 1. Its single V4 preflight emitted the sanitized
+`readiness_authentication` stage. That stage is not a cause and supports no diagnosis. The
+invocation wrote no execution claim, authorized no execution identity, made no goal-manager
+decision or prediction, sent no controller input, advanced no frame, and produced no gameplay,
+outcome, or episode. Project policy durably closed the exact root account-wide; it may never
+retry. See the
+[path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+
+The active `repeatable-goal-manager-development-qualification-v1` lane replaces more scarce fresh
+roots with a teacher-free development curriculum built from four authenticated nonsealed train
+root lineages and three trials per root. Their focus kinds are story advancement, team recovery,
+storage management, and species acquisition. The learned distribution is mixed with 15% declared
+exploration, and every selected behavior propensity is recorded. Independently verified success
+scores +1, verified failure scores -1, and interruption is retained without an update target.
+Hard action and frame bounds, durable decisions and terminals, and zero teacher/fallback keep the
+result usable for later outcome learning. See the
+[frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+
+The candidate implementation remains under independent review, unpublished, and unqualified. No
+campaign root has been frozen, no trial claimed, and no gameplay run. The legacy board remains
+thirty train questions, fifteen development questions, three fits, three comparisons, and zero
+authority or transfer. Product-focus-v2 counters also remain zero development attempts, zero
+verified outcome examples, zero atomic episodes, zero composition attempts, and zero verified
+compositions. This redirects effort toward repeatable model-led evidence while preserving the
+later cross-game and living-Pokédex claim boundary.
+
+## Previous August 17 checkpoint: V3 fails action-free; V4 tests story, recovery, and storage
 
 Exact published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run
 `32090038721`, attempt 1. Its single V3 preflight emitted the sanitized

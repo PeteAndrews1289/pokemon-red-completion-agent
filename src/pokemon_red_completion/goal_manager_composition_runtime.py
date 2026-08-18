@@ -403,7 +403,7 @@ def run_goal_manager_composition_episode(
             or total_frames > FRESH_COMPOSITION_MAX_FRAMES
         ):
             raise GoalManagerCompositionError("composition episode exceeded its frozen budget")
-        _require_collection_transition(
+        require_living_collection_transition(
             current.collection,
             after.collection,
             selected_kind=execution.selected_kind,
@@ -505,11 +505,12 @@ def _require_success(result: GoalManagerExecutionResult) -> None:
         )
 
 
-def _require_collection_transition(
+def require_living_collection_transition(
     before: LivingCollectionCheckpoint,
     after: LivingCollectionCheckpoint,
     *,
     selected_kind: GoalKind,
+    require_selected_goal_progress: bool = True,
 ) -> None:
     before_specimens = dict(before.specimen_counts)
     after_specimens = dict(after.specimen_counts)
@@ -547,7 +548,9 @@ def _require_collection_transition(
         before.required_specimens_sha256 != after.required_specimens_sha256
     )
     if selected_kind in {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}:
-        if not ledger_changed or not required_digest_changed:
+        if require_selected_goal_progress and (
+            not ledger_changed or not required_digest_changed
+        ):
             raise GoalManagerCompositionError(
                 "composition collection goal did not change its authenticated ledgers"
             )

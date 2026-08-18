@@ -14,6 +14,7 @@ for evidence and hard-masked before selection.
 
 from __future__ import annotations
 
+import math
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
@@ -22,7 +23,9 @@ from types import MappingProxyType
 
 from pokemon_red_completion.provenance import canonical_sha256
 
-_PARTITIONS = frozenset({"train", "adaptation", "validation", "test", "unassigned"})
+_PARTITIONS = frozenset(
+    {"train", "adaptation", "development", "validation", "test", "unassigned"}
+)
 
 
 class GoalManagerError(ValueError):
@@ -520,6 +523,12 @@ class GoalManagerExample:
     selected_candidate_index: int
     outcome_status: GoalDecisionOutcome
     failure_reason: GoalFailureReason | None = None
+    behavior_policy_id: str | None = None
+    behavior_probability: float | None = None
+    behavior_candidate_probabilities: tuple[float, ...] | None = None
+    behavior_base_probability: float | None = None
+    behavior_exploration_mix: float | None = None
+    behavior_temperature: float | None = None
 
     def __post_init__(self) -> None:
         for field_name in (
@@ -549,6 +558,90 @@ class GoalManagerExample:
                 )
         elif not isinstance(self.failure_reason, GoalFailureReason):
             raise GoalManagerError("a failed or interrupted goal-manager example needs a reason")
+        behavior_values = (
+            self.behavior_probability,
+            self.behavior_candidate_probabilities,
+            self.behavior_base_probability,
+            self.behavior_exploration_mix,
+            self.behavior_temperature,
+        )
+        if (self.behavior_policy_id is None) != all(
+            value is None for value in behavior_values
+        ):
+            raise GoalManagerError(
+                "goal-manager behavior identity and metadata must be recorded together"
+            )
+        if self.behavior_policy_id is not None and (
+            not isinstance(self.behavior_policy_id, str)
+            or not self.behavior_policy_id
+            or isinstance(self.behavior_probability, bool)
+            or not isinstance(self.behavior_probability, (int, float))
+            or not math.isfinite(float(self.behavior_probability))
+            or not 0.0 < float(self.behavior_probability) <= 1.0
+        ):
+            raise GoalManagerError("goal-manager behavior policy metadata is invalid")
+        if self.behavior_probability is not None:
+            object.__setattr__(self, "behavior_probability", float(self.behavior_probability))
+            probabilities = self.behavior_candidate_probabilities
+            if (
+                not isinstance(probabilities, tuple)
+                or len(probabilities) != len(self.question.opportunities)
+                or any(
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not math.isfinite(float(value))
+                    or not 0.0 <= float(value) <= 1.0
+                    for value in probabilities
+                )
+                or abs(sum(float(value) for value in probabilities) - 1.0) > 1e-9
+                or float(probabilities[self.selected_candidate_index])
+                != self.behavior_probability
+                or any(
+                    float(probabilities[index]) != 0.0
+                    for index in range(len(probabilities))
+                    if index not in self.question.available_indices
+                )
+            ):
+                raise GoalManagerError(
+                    "goal-manager behavior candidate probabilities are invalid"
+                )
+            normalized_behavior_values: list[float] = []
+            for value, subject, lower_inclusive in (
+                (self.behavior_base_probability, "base probability", True),
+                (self.behavior_exploration_mix, "exploration mix", True),
+                (self.behavior_temperature, "temperature", False),
+            ):
+                if (
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not math.isfinite(float(value))
+                    or (lower_inclusive and not 0.0 <= float(value) <= 1.0)
+                    or (not lower_inclusive and float(value) <= 0.0)
+                ):
+                    raise GoalManagerError(
+                        f"goal-manager behavior {subject} is invalid"
+                    )
+                normalized_behavior_values.append(float(value))
+            object.__setattr__(
+                self,
+                "behavior_candidate_probabilities",
+                tuple(float(value) for value in probabilities),
+            )
+            object.__setattr__(
+                self,
+                "behavior_base_probability",
+                normalized_behavior_values[0],
+            )
+            object.__setattr__(
+                self,
+                "behavior_exploration_mix",
+                normalized_behavior_values[1],
+            )
+            object.__setattr__(
+                self,
+                "behavior_temperature",
+                normalized_behavior_values[2],
+            )
 
     @property
     def teacher_choice_target(self) -> int | None:

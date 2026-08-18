@@ -21,6 +21,7 @@ from pokemon_red_completion.goal_manager_composition_runtime import (
     GoalManagerCompositionError,
     GoalManagerCompositionObservation,
     LivingCollectionCheckpoint,
+    require_living_collection_transition,
     run_goal_manager_composition_episode,
 )
 from pokemon_red_completion.goal_manager_model import (
@@ -273,6 +274,32 @@ def test_composition_runs_three_distinct_learned_choices_and_gains_storage_headr
     assert "composition-root" not in encoded
 
 
+def test_failed_acquisition_requires_nonregression_but_not_false_progress() -> None:
+    checkpoint = LivingCollectionCheckpoint(
+        registered_species=10,
+        living_species=10,
+        required_specimens_remaining=5,
+        retained_captures=0,
+        storage_headroom=1,
+        undeclared_specimen_losses=0,
+        completion_contract_sha256="1" * 64,
+        specimen_ledger_sha256="2" * 64,
+        required_specimens_sha256="3" * 64,
+        specimen_counts=(("pokemon:red:living:starter", 10),),
+    )
+
+    require_living_collection_transition(
+        checkpoint,
+        checkpoint,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        require_selected_goal_progress=False,
+    )
+    with pytest.raises(GoalManagerCompositionError, match="did not change"):
+        require_living_collection_transition(
+            checkpoint,
+            checkpoint,
+            selected_kind=GoalKind.ACQUIRE_SPECIES,
+        )
 def test_composition_rejects_a_singleton_menu_before_prediction_or_action(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

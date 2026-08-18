@@ -38,6 +38,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     CompositionIndependentBudgetMeter,
     HardCompositionActionLimiter,
     composition_skill_manifest,
+    fixed_account_claim_registry_lease,
     living_collection_checkpoint,
     open_fixed_account_claim_registry,
     root_claim_is_available,
@@ -929,6 +930,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     return _execute(args, readiness, admission)
 
 
+def _run_with_registry_lease(args: argparse.Namespace) -> dict[str, object]:
+    registry = open_fixed_account_claim_registry()
+    with fixed_account_claim_registry_lease(registry, exclusive=False):
+        return _run(args)
+
+
 def _observe_preclaim_failure(
     stage: str,
     operation: Callable[[], _ResultT],
@@ -1196,7 +1203,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
     try:
-        result = _run(args)
+        result = _run_with_registry_lease(args)
         encoded = _serialize_success_result(args, result)
     except FreshCompositionPreclaimFailure as failure:
         print(

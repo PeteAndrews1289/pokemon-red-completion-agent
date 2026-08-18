@@ -1,6 +1,46 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: V3 closes at admission; V4 freezes three operational choices
+## August 17 scene: exact-byte review says GO; the campaign still has not started
+
+Open on **REPEATABLE-DEVELOPMENT CANDIDATE · EXACT BYTES FROZEN · INDEPENDENT AUDIT GO · UNPUBLISHED
+· UNQUALIFIED**. Reveal the pre-read attestation strip: **EXTERNAL SOURCE · RUNTIME · MODEL · CONTEXT
+PLAN · NUMPY · PYBOY**. Then show **4 AUTHENTICATED NONSEALED TRAIN ROOTS × 3 TRIALS · ZERO-ACTION
+FREEZE/PREFLIGHT · DURABLE GLOBAL CLAIM BEFORE PREDICTION · HARD ACTION/FRAME LIMITS · STRICT
+PROPENSITY + IDENTITY + LIVING-COLLECTION ADMISSION · EVOLUTION EXCLUDED UNTIL LINEAGE EVIDENCE**.
+
+Keep both scoreboards unchanged: **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0
+· TRANSFER 0** and **DEVELOPMENT ATTEMPTS 0 · VERIFIED OUTCOME EXAMPLES 0 · ATOMIC EPISODES 0 ·
+COMPOSITION ATTEMPTS 0 · VERIFIED COMPOSITIONS 0**. Stamp **CAMPAIGN FROZEN 0 · GLOBAL CLAIMS 0 ·
+PREDICTIONS 0 · CONTROLLER 0 · FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0 · FITS ADDED 0**.
+End on **PUBLISH CANDIDATE → EXACT-PUBLISHED-HEAD GREEN CI → FREEZE EXACT CAMPAIGN → ONE ZERO-ACTION
+PREFLIGHT**. Narration: **“The code passed review. The experiment has not started.”** Do not animate
+a model choice, controller input, gameplay, training readiness, a fit, authority, or transfer.
+
+## Previous August 17 scene: V4 closes safely; twelve repeatable trials waited behind review
+
+Open on **SOURCE 20D4B153 · CI 32092299544/1 GREEN · ONE V4 PREFLIGHT**. Stop at
+**READINESS_AUTHENTICATION · SANITIZED STAGE, NOT A CAUSE · EXACT ROOT CLOSED · NO RETRY**. Stamp
+the zero strip **EXECUTION CLAIM 0 · IDENTITY AUTHORIZATIONS 0 · GOAL-MANAGER DECISIONS 0 ·
+PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0** and
+link the
+[path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+
+Keep the legacy strip at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 ·
+TRANSFER 0**. Add a separate new strip: **DEVELOPMENT ATTEMPTS 0 · VERIFIED OUTCOME EXAMPLES 0 ·
+ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 0 · VERIFIED COMPOSITIONS 0**.
+
+Then reveal the
+[repeatable design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json):
+**4 AUTHENTICATED NONSEALED TRAIN ROOTS × 3 TRIALS → STORY · RECOVERY · STORAGE · ACQUISITION →
+LEARNED DISTRIBUTION + 15% EXPLORATION → EXACT BEHAVIOR PROPENSITY → SUCCESS +1 · FAILURE -1 ·
+INTERRUPTED RETAINED WITHOUT TARGET**. Lock the bottom with **HARD ACTION/FRAME LIMITS · DURABLE
+DECISION + TERMINAL · TEACHER 0 · FALLBACK 0 · UNDER REVIEW · UNPUBLISHED · CAMPAIGN FREEZE 0 ·
+GAMEPLAY 0**. Narration: **“The next bet is repeatable learning, not another scarce root. But this
+is still the contract, not the result.”** End on **REVIEW → PUBLISH → GREEN CI → ZERO-ACTION
+CAMPAIGN FREEZE + PREFLIGHT**. Do not animate a model choice, controller input, authority, or
+transfer.
+
+## Previous August 17 scene: V3 closes at admission; V4 freezes three operational choices
 
 Open on **SOURCE 1BBC4F3 · CI 32090038721/1 GREEN · ONE V3 PREFLIGHT**. Stop at
 **ACTION_FREE_ADMISSION · SANITIZED STAGE, NOT A CAUSE · NO RETRY**. Stamp the zero strip

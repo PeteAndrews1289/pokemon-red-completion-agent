@@ -7,7 +7,52 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: a safe stage closed V3, and V4 changes the operational question
+## Current checkpoint: the repeatable candidate clears review, but not the starting line
+
+The repeatable-development implementation is now frozen byte for byte, and an independent audit
+says **GO**. Before it can read protected material, it must prove the exact external source,
+runtime, model, context plan, NumPy, and PyBoy it is using. The intended experiment is deliberately
+small: four authenticated nonsealed train roots, three trials each. A zero-action freeze/preflight
+comes first, a durable global claim must exist before any prediction, and hard action/frame limits
+and strict propensity, identity, and living-collection checks fail closed. Evolution stays out until
+the project can prove lineage rather than merely infer it.
+
+Review passing is not the same as learning. The candidate is still unpublished and unqualified;
+there is no frozen campaign, claim, prediction, controller input, advanced frame, gameplay,
+outcome, episode, or fit. The old scoreboard remains **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3
+COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**, and the five new counters remain zero. The next
+scene is only **PUBLISH → EXACT-HEAD GREEN CI → FREEZE THE EXACT CAMPAIGN → ONE ZERO-ACTION
+PREFLIGHT**. It is not yet training readiness or evidence that the agent can play or transfer.
+
+---
+
+## Previous checkpoint: V4 closes, and scarce roots give way to repeatable learning
+
+Exact source `20d4b153` passed CI run `32092299544`, attempt 1. Its one V4 preflight stopped at
+the sanitized `readiness_authentication` stage. That tells us where it stopped, not why. No
+execution claim or identity was created; no model decision, prediction, controller input, frame,
+gameplay, outcome, or episode followed. The exact root is durably closed and may never retry. The
+[path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json)
+preserves the failure without turning a safe stage into a story about its cause.
+
+The project is ending the fresh-root carousel. The next design reuses four authenticated nonsealed
+train roots, three trials each, to let the model choose among story progress, team recovery,
+storage, and acquisition. It mixes 15% declared exploration into the learned distribution and
+records the exact odds of every choice. Success teaches +1, failure teaches -1, and interruption
+is kept without pretending it supplied a target. Hard limits and durable records make both good
+and bad trials usable; the teacher supplies no choices or fallbacks. The
+[frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) is still
+under review, unpublished, and unqualified. No campaign is frozen and no gameplay has run.
+
+The old scoreboard remains **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO
+· TRANSFER ZERO**. The new scoreboard also begins honestly at **DEVELOPMENT ATTEMPTS 0 · VERIFIED
+OUTCOMES 0 · ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 0 · VERIFIED COMPOSITIONS 0**. This is a
+route toward transferable story and living-Pokédex decisions, not evidence that the route has
+already worked.
+
+---
+
+## Previous checkpoint: a safe stage closed V3, and V4 changed the operational question
 
 Exact source `1bbc4f3` passed CI run `32090038721`, attempt 1. Its one V3 preflight stopped at the
 sanitized `action_free_admission` stage. That name tells us where the boundary stopped, not why.

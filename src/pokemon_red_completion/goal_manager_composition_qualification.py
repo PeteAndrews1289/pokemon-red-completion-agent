@@ -9,6 +9,7 @@ and before any controller input.
 
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
 import os
@@ -17,9 +18,10 @@ import re
 import stat
 import sys
 from collections import Counter
+from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 from pokemon_red_completion.executor import WindowedFrameBudgetController
 from pokemon_red_completion.goal_manager_composition_runtime import (
@@ -52,6 +54,76 @@ _SKILL_SOURCE_FILES = (
 
 class FreshCompositionQualificationError(RuntimeError):
     """Raised before the qualified execution boundary can be crossed."""
+
+
+class FixedAccountClaimRegistryLease:
+    """Prevent a root from being closed while another runner authenticates it."""
+
+    __slots__ = ("_descriptor", "_exclusive", "_registry")
+
+    def __init__(self, registry: Path, *, exclusive: bool) -> None:
+        self._registry = registry
+        self._exclusive = exclusive
+        self._descriptor = -1
+
+    def __enter__(self) -> FixedAccountClaimRegistryLease:
+        marker = self._registry / ".coordination.lock"
+        flags = os.O_RDWR | os.O_CREAT
+        if hasattr(os, "O_CLOEXEC"):
+            flags |= os.O_CLOEXEC
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = -1
+        try:
+            descriptor = os.open(marker, flags, 0o600)
+            metadata = os.fstat(descriptor)
+            named = marker.lstat()
+            if (
+                not stat.S_ISREG(metadata.st_mode)
+                or metadata.st_nlink != 1
+                or metadata.st_uid != os.getuid()
+                or stat.S_IMODE(metadata.st_mode) != 0o600
+                or named.st_dev != metadata.st_dev
+                or named.st_ino != metadata.st_ino
+            ):
+                raise OSError("unsafe coordination file")
+            operation = fcntl.LOCK_EX if self._exclusive else fcntl.LOCK_SH
+            fcntl.flock(descriptor, operation | fcntl.LOCK_NB)
+            self._descriptor = descriptor
+            return self
+        except OSError:
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+            raise FreshCompositionQualificationError(
+                "fresh-composition claim registry is busy or unsafe"
+            ) from None
+
+    def __exit__(
+        self,
+        _exception_type: type[BaseException] | None,
+        _exception: BaseException | None,
+        _traceback: object,
+    ) -> Literal[False]:
+        if self._descriptor >= 0:
+            with suppress(OSError):
+                fcntl.flock(self._descriptor, fcntl.LOCK_UN)
+            with suppress(OSError):
+                os.close(self._descriptor)
+            self._descriptor = -1
+        return False
+
+
+def fixed_account_claim_registry_lease(
+    registry: Path,
+    *,
+    exclusive: bool,
+) -> FixedAccountClaimRegistryLease:
+    """Return a nonblocking lease held for a full root-sensitive invocation."""
+
+    if type(exclusive) is not bool:  # noqa: E721
+        raise TypeError("exclusive must be a bool")
+    return FixedAccountClaimRegistryLease(registry, exclusive=exclusive)
 
 
 class ActionExecutor(Protocol):
@@ -383,9 +455,11 @@ def _require_sha256(value: object, *, subject: str) -> str:
 
 __all__ = [
     "CompositionIndependentBudgetMeter",
+    "FixedAccountClaimRegistryLease",
     "FreshCompositionQualificationError",
     "HardCompositionActionLimiter",
     "composition_skill_manifest",
+    "fixed_account_claim_registry_lease",
     "fixed_account_claim_registry_root",
     "living_collection_checkpoint",
     "open_fixed_account_claim_registry",

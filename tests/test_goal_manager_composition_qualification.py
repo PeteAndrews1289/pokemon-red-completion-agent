@@ -16,6 +16,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     CompositionIndependentBudgetMeter,
     FreshCompositionQualificationError,
     HardCompositionActionLimiter,
+    fixed_account_claim_registry_lease,
     open_fixed_account_claim_registry,
     root_claim_is_available,
     root_consumption_sha256,
@@ -178,3 +179,26 @@ def test_fixed_account_registry_must_be_preprovisioned_0700(tmp_path: Path) -> N
     os.chmod(invalid, 0o755)
     with pytest.raises(FreshCompositionQualificationError, match="invalid"):
         open_fixed_account_claim_registry(invalid)
+
+
+def test_fixed_account_registry_lease_coordinates_shared_and_exclusive_users(
+    tmp_path: Path,
+) -> None:
+    registry = tmp_path / "claims"
+    registry.mkdir(mode=0o700)
+    os.chmod(registry, 0o700)
+
+    with (
+        fixed_account_claim_registry_lease(registry, exclusive=False),
+        fixed_account_claim_registry_lease(registry, exclusive=False),
+        pytest.raises(FreshCompositionQualificationError, match="busy"),
+        fixed_account_claim_registry_lease(registry, exclusive=True),
+    ):
+        pass
+
+    with (
+        fixed_account_claim_registry_lease(registry, exclusive=True),
+        pytest.raises(FreshCompositionQualificationError, match="busy"),
+        fixed_account_claim_registry_lease(registry, exclusive=False),
+    ):
+        pass

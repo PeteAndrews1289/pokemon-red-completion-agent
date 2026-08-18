@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+- Froze the repeatable goal-manager development implementation candidate and received an independent
+  exact-byte audit verdict of **GO**. The candidate attests the exact external source, runtime,
+  model, context plan, NumPy, and PyBoy before protected reads; fixes an exact four-root,
+  twelve-trial train campaign behind a zero-action freeze/preflight; writes a durable global claim
+  before prediction; enforces hard action/frame limits and strict propensity, identity, and
+  living-collection admission; and excludes evolution pending lineage evidence. It remains
+  unpublished and unqualified: no campaign is frozen and no prediction, controller action, frame,
+  gameplay, outcome, episode, fit, authority, or transfer was added. The legacy board remains
+  30/15/3/3/0/0 and all five product-focus-v2 counters remain zero. Next: publish the candidate,
+  require exact-head green CI, then freeze the exact campaign and run one zero-action preflight.
+- Published V4 source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022` under green CI run
+  `32092299544` attempt 1, then ran its single preflight. It failed at the sanitized
+  `readiness_authentication` stage, which supplies no cause. It wrote no execution claim,
+  authorized no execution identity, made no goal-manager decision or prediction, sent no
+  controller input, advanced no frame, and produced no gameplay, outcome, or episode. The exact
+  root was durably closed account-wide with no retry. Recorded the
+  [path-free V4 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json),
+  retired V4 and the fresh-root carousel, and activated
+  `repeatable-goal-manager-development-qualification-v1`. Its
+  [design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) freezes a
+  candidate four-root, twelve-trial train curriculum for story, recovery, storage, and acquisition
+  with 15% model exploration, exact behavior propensities, +1/-1 verified outcomes, interrupted
+  choices retained without targets, hard limits, durable records, and zero teacher/fallback. The
+  implementation remains under review, unpublished, and unqualified; no campaign is frozen and no
+  gameplay has run. The legacy board remains 30/15/3/3/0/0 and all five product-focus-v2 counters
+  remain zero.
 - Published V3 source `1bbc4f34a339db1f861247990a4944053eb5fb3a` under green CI run
   `32090038721` attempt 1, then ran its single action-free preflight. It failed at the sanitized
   `action_free_admission` stage; no cause is inferred. It wrote no execution claim, authorized no

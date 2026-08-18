@@ -18,18 +18,23 @@ from pathlib import Path, PurePosixPath
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FOCUS_CONFIG = PROJECT_ROOT / "configs" / "active-product-focus.json"
 DEFAULT_FOCUS_DOCUMENT = PROJECT_ROOT / "ACTIVE_PRODUCT_STATE.md"
-FOCUS_SCHEMA = "pokemon.product-focus.v1"
+FOCUS_SCHEMA = "pokemon.product-focus.v2"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _IDENTIFIER = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 _LANE_KINDS = {"learning", "maintenance"}
 _RIGOR_TIERS = {"development", "benchmark", "sealed"}
 _OUTPUT_KINDS = {
+    "atomic_goal_episode",
     "authority_promotion",
+    "composition_attempt",
+    "development_episode",
     "model_fit",
     "outcome_question",
     "transfer_result",
     "unseen_comparison",
+    "verified_composition_episode",
+    "verified_outcome_example",
 }
 _REORIENTATION_EVIDENCE_KINDS = _OUTPUT_KINDS | {"qualification"}
 _OUTPUT_PARTITIONS = {"development", "none", "train", "transfer"}
@@ -628,15 +633,31 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         partition = _text(output, "partition", subject="measurable output")
         if kind not in _OUTPUT_KINDS or partition not in _OUTPUT_PARTITIONS:
             raise ProductFocusError("measurable output kind or partition is unsupported")
+        if kind in {
+            "atomic_goal_episode",
+            "composition_attempt",
+            "development_episode",
+            "verified_composition_episode",
+            "verified_outcome_example",
+        } and partition != "development":
+            raise ProductFocusError(
+                "model-led development output must use the development partition"
+            )
         identity = (kind, partition)
         if identity in identities:
             raise ProductFocusError("measurable output identities must be unique")
         identities.add(identity)
         kinds.add(kind)
         _positive_int(output, "minimum", subject="measurable output")
-    if not {"outcome_question", "model_fit", "unseen_comparison"} <= kinds:
+    legacy_contract = {"outcome_question", "model_fit", "unseen_comparison"} <= kinds
+    development_contract = {
+        "development_episode",
+        "verified_outcome_example",
+    } <= kinds
+    if not legacy_contract and not development_contract:
         raise ProductFocusError(
-            "learning lane must require outcomes, a model fit and unseen evaluation"
+            "learning lane must require either the legacy fit/evaluation outputs or "
+            "model-led development episodes with verified outcomes"
         )
 
 
@@ -645,11 +666,16 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
         progress,
         {
             "authority_promotions",
+            "atomic_goal_episodes",
+            "composition_attempts",
+            "development_episode_attempts",
             "evidence",
             "model_fits",
             "outcome_questions",
             "transfer_results",
             "unseen_comparisons",
+            "verified_composition_episodes",
+            "verified_outcome_examples",
         },
         subject="active lane progress",
     )
@@ -659,9 +685,14 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
     _count(outcomes, "development", subject="outcome progress")
     for key in (
         "authority_promotions",
+        "atomic_goal_episodes",
+        "composition_attempts",
+        "development_episode_attempts",
         "model_fits",
         "transfer_results",
         "unseen_comparisons",
+        "verified_composition_episodes",
+        "verified_outcome_examples",
     ):
         _count(progress, key, subject="active lane progress")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
@@ -891,10 +922,15 @@ def _current_output_count(
             raise ProductFocusError("outcome question must use train or development partition")
         return _count(outcomes, partition, subject="outcome progress")
     progress_key = {
+        "atomic_goal_episode": "atomic_goal_episodes",
         "authority_promotion": "authority_promotions",
+        "composition_attempt": "composition_attempts",
+        "development_episode": "development_episode_attempts",
         "model_fit": "model_fits",
         "transfer_result": "transfer_results",
         "unseen_comparison": "unseen_comparisons",
+        "verified_composition_episode": "verified_composition_episodes",
+        "verified_outcome_example": "verified_outcome_examples",
     }.get(kind)
     if progress_key is None:
         raise ProductFocusError("measurable output has no progress counter")
@@ -910,6 +946,11 @@ def _current_progress_counts(progress: Mapping[str, object]) -> tuple[int, ...]:
         _count(progress, "unseen_comparisons", subject="active lane progress"),
         _count(progress, "authority_promotions", subject="active lane progress"),
         _count(progress, "transfer_results", subject="active lane progress"),
+        _count(progress, "development_episode_attempts", subject="active lane progress"),
+        _count(progress, "verified_outcome_examples", subject="active lane progress"),
+        _count(progress, "atomic_goal_episodes", subject="active lane progress"),
+        _count(progress, "composition_attempts", subject="active lane progress"),
+        _count(progress, "verified_composition_episodes", subject="active lane progress"),
     )
 
 

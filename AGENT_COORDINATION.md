@@ -1,6 +1,43 @@
 # Three-agent coordination
 
-> **2026-08-17 V3 failed action-free; V4 operational qualification active — highest checkpoint:**
+> **2026-08-17 repeatable-development candidate audit GO; publication is the only active lane —
+> highest checkpoint:** The implementation for
+> `repeatable-goal-manager-development-qualification-v1` is byte-frozen and its independent
+> exact-byte audit verdict is **GO**. It attests the exact external source, runtime, model, context
+> plan, NumPy, and PyBoy before any protected read. The campaign contract is exactly four
+> authenticated nonsealed train roots × three trials, behind a zero-action freeze/preflight. A
+> durable global claim precedes any prediction; hard action/frame limits and strict propensity,
+> identity, and living-collection admission fail closed. Evolution is excluded pending lineage
+> evidence.
+>
+> Codex owns only publication of this candidate, followed by exact-head green CI. Only then may the
+> exact campaign be frozen and one zero-action preflight run. The candidate is unpublished and
+> unqualified: campaign freezes, global claims, predictions, controller inputs, frames, gameplay,
+> outcomes, episodes, and fits are zero. No agent may call it training-ready, grant authority, open
+> validation/test/Crystal/sealed inputs, or execute a campaign. Legacy counters remain
+> 30/15/3/3/0/0 and all five product-focus-v2 counters remain zero.
+>
+> **2026-08-17 V4 failed safely; repeatable development qualification active — historical
+> checkpoint:** Exact published source `20d4b153` passed CI run `32092299544` attempt 1. Its one
+> V4 preflight emitted `readiness_authentication`, a sanitized stage and not a cause. It wrote no
+> execution claim, authorized no identity, made no goal-manager decision or prediction, sent no
+> controller input, advanced no frame, and produced no gameplay, outcome, or episode. The exact
+> root is durably closed account-wide and may never retry. See the
+> [path-free V4 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+>
+> Codex owns only `repeatable-goal-manager-development-qualification-v1`. The candidate is under
+> independent review, unpublished, and unqualified. Its
+> [frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json)
+> proposes four authenticated nonsealed train roots × three trials, focused on story, recovery,
+> storage, and acquisition. Learned sampling uses a declared 15% exploration mixture and records
+> exact propensities; verified success/failure score +1/-1, interruption creates no update target,
+> hard limits and durable records are mandatory, and teacher/fallback are zero. No agent may
+> freeze the campaign before review and publication. Prediction, controller input, gameplay,
+> validation/test/Crystal/sealed inputs, or replacement of a failed trial remain forbidden through
+> the subsequent zero-action preflight. Legacy counters remain 30/15/3/3/0/0; the five new v2
+> counters remain zero.
+
+> **2026-08-17 V3 failed action-free; V4 operational qualification active — historical checkpoint:**
 > Exact published source `1bbc4f3` passed CI run `32090038721` attempt 1. Its single V3 preflight
 > emitted a sanitized `action_free_admission` failure, which is not a cause. It wrote no execution
 > claim, authorized no identity, made no prediction or controller action, advanced no frame, and

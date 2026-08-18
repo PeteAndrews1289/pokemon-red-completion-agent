@@ -55,6 +55,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     unseen = _count(progress, "unseen_comparisons")
     authority_promotions = _count(progress, "authority_promotions")
     transfer_results = _count(progress, "transfer_results")
+    development_episodes = _count(progress, "development_episode_attempts")
+    verified_outcomes = _count(progress, "verified_outcome_examples")
+    atomic_episodes = _count(progress, "atomic_goal_episodes")
+    composition_attempts = _count(progress, "composition_attempts")
+    verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
     output_event = (
         " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
@@ -64,22 +69,26 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    outcome_question_total = max(
-        train_outcomes + development_outcomes,
-        sum(minimum for label, _, minimum in outputs if label.startswith("Outcome Question")),
-    )
-    model_fit_total = max(
-        (
-            fits,
-            *(minimum for label, _, minimum in outputs if label.startswith("Model Fit")),
-        )
-    )
-    unseen_comparison_total = max(
-        (
-            unseen,
-            *(minimum for label, _, minimum in outputs if label.startswith("Unseen Comparison")),
-        )
-    )
+    development_episode_total = max([
+        development_episodes,
+        *(minimum for label, _, minimum in outputs if label.startswith("Development Episode")),
+    ])
+    verified_outcome_total = max([
+        verified_outcomes,
+        *(
+            minimum
+            for label, _, minimum in outputs
+            if label.startswith("Verified Outcome Example")
+        ),
+    ])
+    verified_composition_total = max([
+        verified_compositions,
+        *(
+            minimum
+            for label, _, minimum in outputs
+            if label.startswith("Verified Composition Episode")
+        ),
+    ])
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
         value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
@@ -91,36 +100,36 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "V3 failed safely at action-free admission and its exact root is permanently "
-            "closed. V4 now qualifies one different Red root for story, restoration, and "
-            "specimen-preserving storage; no prediction or controller input is authorized yet."
+            "V4 failed safely before prediction or controller input and its exact root is "
+            "closed. The active lane now qualifies a repeatable, teacher-free Red development "
+            "campaign so model-led successes and failures can finally become training evidence."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="V4 execution qualification · no cartridge session yet",
+        location="Repeatable development qualification · no campaign freeze or gameplay yet",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Promoted Red goal manager af29d7e7… · frozen confidence floor 0.80",
-            choice="Publish V4 successor + green CI · then one different action-free root",
+            candidate="Promoted Red goal manager af29d7e7… · logged exploratory policy",
+            choice="Publish runner + green CI · freeze 4 roots / 12 trials · preflight",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
             phase="qualification",
-            zero_shot_completed=train_outcomes + development_outcomes,
-            zero_shot_total=outcome_question_total,
-            adaptation_completed=fits,
-            adaptation_total=model_fit_total,
-            sealed_completed=unseen,
-            sealed_total=unseen_comparison_total,
+            zero_shot_completed=development_episodes,
+            zero_shot_total=development_episode_total,
+            adaptation_completed=verified_outcomes,
+            adaptation_total=verified_outcome_total,
+            sealed_completed=verified_compositions,
+            sealed_total=verified_composition_total,
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Measured outcome questions",
-                "Train-only model fits",
-                "Unseen comparisons",
+                "Model-led development episodes",
+                "Verified outcome examples",
+                "Verified composition episodes",
             ),
         ),
         events=(
@@ -129,6 +138,15 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority now", _text(authority, "current")),
             _event("Authority target", _text(authority, "target")),
             output_event,
+            (
+                f"New curriculum · attempts {development_episodes} · verified outcomes "
+                f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
+                f"{composition_attempts} · verified compositions {verified_compositions}"
+            ),
+            (
+                f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
+                f"fits {fits} · unseen comparisons {unseen}"
+            ),
             f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
             _event("Current blocker", _text(reorientation, "blocker")),
@@ -150,20 +168,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "V4 rail · early closed-root rejection → origin + lineage only from history → "
-                "current story + restore + storage binding → one action-free root receipt"
-            ),
-            (
-                "V1 static failure · capture and storage/resupply were self-excluding and "
-                "spatially incompatible · zero effects"
-            ),
-            (
-                "V2 preflight failed before success receipt · admission not attested · root "
-                "closed · retry forbidden · execution identity not authorized"
-            ),
-            (
-                "Observability source af04830 · CI 32089092868/1 green · four allowlisted stages "
-                "· private inputs 0 · roots 0"
+                "Training rail · publish exact runner → freeze 4 authenticated train roots / "
+                "12 trials → zero-action preflight → model-led durable outcomes"
             ),
             (
                 "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
@@ -171,8 +177,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "retry forbidden"
             ),
             (
-                "V4 current session roots 0 · predictions 0 · controller 0 · advanced frames 0 "
-                "· gameplay 0 · outcomes 0 · episodes 0 · teacher 0 · Crystal 0"
+                "V4 final · readiness authentication failed · predictions 0 · controller 0 · "
+                "advanced frames 0 · exact root closed · no cause inferred · no retry"
+            ),
+            (
+                "Repeatable lane current · frozen roots 0 · claimed trials 0 · predictions 0 "
+                "· controller 0 · outcomes 0 · teacher 0 · Crystal 0"
             ),
         ),
     )
@@ -233,6 +243,15 @@ def main(argv: list[str] | None = None) -> int:
                     "active_lane": focus.active_lane["id"],
                     "stage_progress": snapshot.stage_progress,
                     "model_fits": focus.progress["model_fits"],
+                    "development_episode_attempts": focus.progress[
+                        "development_episode_attempts"
+                    ],
+                    "verified_outcome_examples": focus.progress[
+                        "verified_outcome_examples"
+                    ],
+                    "verified_composition_episodes": focus.progress[
+                        "verified_composition_episodes"
+                    ],
                     "authority_promotions": focus.progress["authority_promotions"],
                     "transfer_results": focus.progress["transfer_results"],
                     "controller_endpoints": 0,

@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Fresh Red operational-composition execution qualification V4** (`fresh-goal-manager-operational-composition-execution-qualification-v4`)
+**Repeatable Red goal-manager development qualification** (`repeatable-goal-manager-development-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If one exact V4 action-free preflight passes, freeze its unclaimed execution identity and activate one separately authorized development episode; otherwise close that root and V4 without retry, V5 root carousel, or rescue work.
+- Next decision: If the published runner and strict loader pass review, CI, campaign freeze, and zero-action preflight, activate the twelve-trial model-led development pilot; otherwise close the design without returning to fresh-root qualification or patching a chosen root into compliance.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify one exact published V4 execution seam and one different fresh nonsealed Red root for a later three-decision model-led story, restoration, and storage episode that preserves the living collection. |
-| Authority now | The promoted Red goal manager retains bounded same-context goal-selection authority. Existing verified skills retain low-level execution; party development has no learned authority and Crystal remains closed. |
-| Authority target | Freeze one exact unclaimed V4 execution identity for a separately reoriented development episode; qualification itself grants no new authority. |
-| Transfer test | Only after the separately authorized V4 Red episode succeeds, freeze a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer. |
-| Cheapest falsifier | Publish the V4 successor runner under exact-head green CI, then inspect exactly one different unused root action-free. Reject and permanently close it unless early collision rejection, origin and lineage, current-source story/restore/storage bindings, exact model and skill identity, hard limits, durable terminals, and sanitized success or failure receipts all pass before prediction. |
+| Reusable capability | Qualify a repeatable teacher-free Red development campaign that lets the promoted goal manager choose among current executable goals, records exact behavior propensities, executes bounded verified skills, and retains every success or failure for later outcome learning. |
+| Authority now | The promoted Red goal manager has bounded same-context semantic goal-selection authority; existing verified skills retain low-level execution. No repeatable development episode, fresh-context authority, Crystal authority, or living-Pokedex completion claim exists yet. |
+| Authority target | Freeze one exact repeatable Red development campaign and pass its zero-action preflight so a separately reoriented model-led pilot may start. Qualification itself grants no new authority. |
+| Transfer test | After measured repeatable Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal. |
+| Cheapest falsifier | Publish the dedicated runner and strict development loader under green exact-head CI, then freeze four authenticated nonsealed train roots and twelve trials without prediction or controller input. Reject the campaign if any root has fewer than two executable choices, exposes an evolution choice without lineage evidence, drifts from its current binding, leaks a private identity, or permits replacement of a planned failure. |
 | Time box | 1 session / 2 hours |
 
 ### Required learning outputs
@@ -57,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-17-v3-action-free-failure-v4-frozen** · status **closed** · evidence [qualification](docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json)
+**2026-08-17-v4-closed-repeatable-development-qualification** · status **active** · evidence [qualification](docs/evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | V3 failed without gameplay and exposed no private cause. V4 keeps the model-led composition question but moves to three existing operational capabilities: story unlocking, party recovery, and specimen-preserving storage. These directly support long-horizon living-Pokedex play without manufacturing a new acquisition root. |
-| Learning output | No measured learning output. Source 1bbc4f3 passed CI 32090038721/1; its single V3 preflight failed at action_free_admission with zero claim, identity authorization, predictions, actions, frames, gameplay, outcomes, episodes, fits, comparisons, authority, or transfer. The root is durably closed. Counters remain 30/15/3/3/0/0. |
-| Authority delta | None. The failed V3 preflight made no model decision and grants no authority. The promoted Red goal manager retains only its prior bounded same-context authority. |
-| Transfer result | Not run. Crystal remains closed. The V3 failure and V4 design are not transfer evidence; only a later successful Red composition episode can permit a separately frozen matched Crystal design. |
-| Blocker | V3 failed safely at action-free admission and its exact root is closed. Training now requires the V4 operational-composition successor to pass exact-head CI and one different action-free root preflight. |
-| Decision | Retire V3 without cause inference or retry. Freeze V4 around story, restoration, and storage on a different preexisting root; historical bytes prove only origin and lineage, while the current published source must freeze the exact executable menu before prediction. |
-| Next session | Finish and publish only the V4 operational contract, exact current-source binding freeze, and storage-preservation verifier; obtain green exact-head CI; then run one different action-free preflight and stop before model prediction or controller input. |
-| Next falsifier | Publish the exact V4 successor and use one different action-free root admission only. It must freeze the current-source story/restore/storage binding into one unclaimed identity or close the root without prediction, controller action, advanced frame, retry, or root-specific patch. |
-| Stop condition | Stop after one exact V4 preflight or on any prediction, controller input, frame advance, closed or prior root, unattested identity, protected access, or two hours. Do not retry, open a V5 carousel, or patch a failed root. |
+| Product alignment | Repeatable model-led outcomes directly teach the portable goal manager when story, healing, storage, and acquisition choices work. This replaces days of scarce-root qualification with a reusable Red curriculum while preserving the living-Pokedex and later Crystal transfer boundary. |
+| Learning output | No new measured learning output. The one V4 action-free preflight failed at readiness_authentication with zero model prediction, controller action, advanced frame, episode, fit, comparison, authority, or transfer. Its exact root is closed. Existing counters remain 30 train outcomes, 15 development outcomes, 3 fits, 3 comparisons, 0 authority promotions, and 0 transfer results; all new model-led episode counters remain zero. |
+| Authority delta | None. V4 failed before prediction or controller input. The promoted Red goal manager retains only its prior bounded same-context goal-selection authority. |
+| Transfer result | Not run. Repeated Red train captures are development evidence, not unseen generalization or Crystal transfer; Crystal remains closed until a separately frozen Red promotion gate succeeds. |
+| Blocker | The exact V4 root failed readiness authentication and is permanently closed. The repeatable campaign candidate now includes strict outcome admission, exact NumPy and PyBoy import provenance, atomic one-shot claims, a bound private store, and an explicit evolution exclusion until lineage evidence exists. Training still needs final exact-byte review, publication, green exact-head CI, and one action-free campaign freeze and preflight. |
+| Decision | Close V4 without retry or cause inference and stop the fresh-root carousel. Reuse authenticated nonsealed train captures as a repeatable model-led development curriculum with four root lineages, diverse goal menus, logged exploration propensities, hard limits, durable outcomes, and no teacher fallback. |
+| Next session | Complete exact-byte review of the locally green repeatable campaign candidate, publish it under green exact-head CI, then freeze and preflight the private twelve-trial plan without starting gameplay. |
+| Next falsifier | After publication, freeze and preflight exactly twelve teacher-free trials across four authenticated train root lineages. The preflight must preserve zero prediction, action, and frame effects while proving exact model, source, context-plan digest, NumPy and PyBoy loaded origins, skills, non-evolution menus, campaign digest, bound private store, and unused trial identities. |
+| Stop condition | Stop on any validation or test context access, closed V2/V3/V4 root access, teacher or fallback choice, unsupported evolution menu, pre-freeze prediction, controller input during freeze or preflight, missing propensity, replaceable failure, soft-only budget, private-data leak, or two hours. |
 
 ### Stop conditions
 
-- Any access to a closed V2 or V3 root, an existing context or lineage, a sealed root, Crystal, teacher outcomes, or a model-guided root search ends the lane.
-- Any prediction, controller input, frame advance, unattested source/model/runtime/skill, non-durable terminal, private-data leak, or missing sanitized failure receipt ends the lane.
-- Stop after one exact preflight or two hours; never retry, open a V5 root carousel, or patch the root, route, profile, skill, party, or model into compliance.
+- Any access to validation or test contexts, a closed V2/V3/V4 root, Crystal, sealed Red, teacher outcomes, or historical selected labels ends the lane.
+- Any pre-freeze model prediction, controller input during freeze or preflight, unsupported evolution menu, missing behavior propensity, unattested source/model/context-plan/NumPy/PyBoy/skill, non-durable decision or terminal, replaceable trial, private-data leak, or soft-only action or frame bound ends the lane.
+- Stop after one exact campaign preflight or two hours; do not rescue a failed root, silently replace a planned trial, or claim repeated train captures as generalization.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh Red operational-composition execution qualification V4:** Published source 20d4b1532ee78a3ffc5b762b2f90ae536dfa2022 passed CI 32092299544/1. Its single action-free preflight failed at the sanitized readiness_authentication stage before model prediction, controller input, advanced frame, gameplay, or learning output. The exact root is durably closed and may never retry; no private cause is inferred. Evidence is preserved; retry is no.
 - **Fresh Red field-composition execution qualification V3:** Published source 1bbc4f34a339db1f861247990a4944053eb5fb3a passed CI 32090038721/1. Its single action-free preflight failed at the sanitized action_free_admission stage before any claim, prediction, controller input, frame, gameplay, or learning result. No private cause is inferred; the exact root was durably closed account-wide and may never retry. Evidence is preserved; retry is no.
 - **Generic fresh-root preflight failure observability:** Source af04830fa51cc624a3047822d9fa582163444bea passed CI 32089092868/1. Four allowlisted caught in-process preclaim stages now emit one canonical sanitized nonzero JSON envelope without private exception text or a learning-counter change. The ROM-free lane opened no root and is complete. Evidence is preserved; retry is no.
 - **Fresh Red field-composition execution qualification V2:** Published source 3c9ea92562163e41e5045b0ac837dd1b6ca959fb passed CI 32086166416/1, but its one exact preflight returned nonzero before emitting a success receipt. It was not retried, no execution identity was authorized, all learning and authority counters remained unchanged, and project policy permanently closed the attempted root without root-specific rescue. Evidence is preserved; retry is no.

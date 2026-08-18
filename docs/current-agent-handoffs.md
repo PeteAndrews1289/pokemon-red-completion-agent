@@ -6,7 +6,49 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: V3 root closed; Codex owns one operational V4 qualification
+## Current override: audit GO; Codex owns publication before repeatable qualification
+
+The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
+byte-frozen, and its independent exact-byte audit verdict is **GO**. It attests the exact external
+source, runtime, model, context plan, NumPy, and PyBoy before protected reads; fixes exactly four
+authenticated nonsealed train roots and twelve trials behind a zero-action campaign
+freeze/preflight; writes a durable global claim before any prediction; and enforces hard
+action/frame limits plus strict propensity, identity, and living-collection admission. Evolution is
+excluded pending lineage evidence.
+
+Codex owns publication of the candidate and the exact-head green-CI requirement. Only after both
+may Codex freeze the exact campaign and run one zero-action preflight. Claude and Antigravity remain
+read-only reviewers. No campaign is frozen and no global claim, prediction, controller action,
+frame, gameplay, outcome, episode, or fit exists. No agent may call the candidate training-ready,
+grant authority, execute a trial, replace a failure, or open validation/test/Crystal/sealed inputs.
+The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**; all five product-focus-v2 counters remain zero.
+
+## Previous override: V4 root closed; Codex owned repeatable development qualification
+
+Published source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022` passed CI run `32092299544`,
+attempt 1. Its one V4 preflight emitted the sanitized `readiness_authentication` stage. No agent
+may infer a cause. It wrote no execution claim, authorized no execution identity, made no
+goal-manager decision or prediction, sent no controller input, advanced no frame, and produced no
+gameplay, outcome, or episode. The exact root is durably closed account-wide and may never retry.
+See the
+[path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+
+Codex owns only `repeatable-goal-manager-development-qualification-v1`. The implementation is
+under independent review, unpublished, and unqualified. The
+[frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) specifies
+four authenticated nonsealed train roots × three trials, covering story, recovery, storage, and
+acquisition. A 15% exploratory mixture records exact behavior propensities; verified success and
+failure score +1 and -1, while an interrupted choice is retained without a target. Hard limits,
+durable decisions and terminals, and zero teacher/fallback are required. Claude and Antigravity
+remain independent reviewers. No agent may freeze the campaign before review and publication;
+the later zero-action preflight must pass before gameplay can be considered.
+
+The legacy board stays **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. Product-focus-v2 counters stay **development attempts 0 · verified outcome examples
+0 · atomic episodes 0 · composition attempts 0 · verified compositions 0**.
+
+## Previous override: V3 root closed; Codex owned one operational V4 qualification
 
 Published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run `32090038721`,
 attempt 1. Its one V3 action-free preflight emitted the sanitized `action_free_admission` stage.

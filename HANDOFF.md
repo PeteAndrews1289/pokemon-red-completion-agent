@@ -18,7 +18,49 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## V3 failed at action-free admission; qualify the operational V4 successor — 2026-08-17
+## Repeatable-development candidate audit GO; publish before qualification — 2026-08-17
+
+The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
+byte-frozen and its independent exact-byte audit verdict is **GO**. Before any protected read it
+attests the exact external source, runtime, model, context plan, NumPy, and PyBoy. It fixes the
+campaign at exactly four authenticated nonsealed train roots and twelve trials, three per root,
+behind a zero-action campaign freeze/preflight. A durable global claim must precede any model
+prediction. Hard action and frame limits and strict propensity, identity, and living-collection
+admission fail closed. Evolution is excluded until lineage evidence exists.
+
+The candidate remains unpublished and unqualified. No campaign is frozen; no global claim,
+prediction, controller action, frame, gameplay, outcome, episode, or fit exists. The legacy board
+remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**, and all
+five product-focus-v2 counters remain zero. Publish these exact candidate bytes, require green CI
+on the exact published head, then freeze the exact campaign and run one zero-action preflight. Do
+not call this checkpoint training-ready or treat it as gameplay, a fit, authority, or transfer.
+
+## Previous checkpoint: V4 failed safely; qualify repeatable goal-manager development — 2026-08-17
+
+Exact published source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022` passed CI run
+`32092299544`, attempt 1. Its one V4 preflight emitted the sanitized
+`readiness_authentication` stage. The stage identifies no cause. The invocation wrote no
+execution claim, authorized no execution identity, made no goal-manager decision or prediction,
+sent no controller input, advanced no frame, and produced no gameplay, outcome, or episode. The
+exact root is durably closed account-wide and may never retry. See the
+[path-free V4 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+
+The active maintenance lane is `repeatable-goal-manager-development-qualification-v1`. Its
+candidate implementation remains under independent review, unpublished, and unqualified. The
+[frozen design](docs/evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json)
+defines four authenticated nonsealed train roots and three trials per root, focused on story,
+recovery, storage, and acquisition. A 15% exploratory mixture samples the learned distribution and
+records exact behavior propensities. Verified success is +1, verified failure is -1, and an
+interrupted choice is retained without an update target. Decisions and terminals are durable,
+action and frame limits are hard, and teacher queries and fallbacks are zero.
+
+Do not freeze a campaign before review and publication. After publication, the freeze and
+zero-action preflight must pass before gameplay can be considered. The legacy board remains
+**train 30 · development 15 · fits 3 · comparisons 3 ·
+authority 0 · transfer 0**. Product-focus-v2 counters remain **development attempts 0 · verified
+outcome examples 0 · atomic episodes 0 · composition attempts 0 · verified compositions 0**.
+
+## Previous checkpoint: V3 failed at action-free admission; qualify the operational V4 successor — 2026-08-17
 
 Exact published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run
 `32090038721`, attempt 1. Its one V3 action-free preflight emitted the sanitized

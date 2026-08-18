@@ -8,7 +8,48 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V3 failed action-free; qualify one operational-composition V4 root
+## Current checkpoint: repeatable-development candidate audit GO; publish before qualification
+
+The implementation candidate for `repeatable-goal-manager-development-qualification-v1` is
+byte-frozen and its independent exact-byte audit verdict is **GO**. It authenticates the exact
+external source, runtime, model, context plan, NumPy, and PyBoy before any protected read. The
+contract fixes exactly four authenticated nonsealed train roots and twelve trials, three per root,
+behind a zero-action campaign freeze/preflight. A durable global claim must precede prediction.
+Hard action/frame limits and strict propensity, identity, and living-collection admission fail
+closed. Evolution is excluded pending lineage evidence.
+
+The candidate remains unpublished and unqualified. Campaign freezes, global claims, predictions,
+controller actions, frames, gameplay, outcomes, episodes, and fits remain zero. The legacy board is
+still **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer 0**, and all
+five product-focus-v2 counters remain zero. Publish the candidate, require green CI on the exact
+published head, then freeze the exact campaign and run one zero-action preflight. That gate is not
+training readiness, gameplay evidence, a fit, or new authority.
+
+## Previous checkpoint: V4 failed safely; qualify repeatable model-led development
+
+Published source `20d4b1532ee78a3ffc5b762b2f90ae536dfa2022` passed CI run `32092299544`,
+attempt 1. Its single V4 preflight emitted the sanitized `readiness_authentication` stage. That is
+not a diagnosis. The invocation wrote no execution claim, authorized no execution identity, made
+no goal-manager decision or prediction, sent no controller input, advanced no frame, and produced
+no gameplay, outcome, or episode. Project policy durably closed the exact root account-wide; it
+may never retry. See the
+[path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+
+The active maintenance lane is `repeatable-goal-manager-development-qualification-v1`. Its
+candidate implementation is under independent review, unpublished, and unqualified. The
+[frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json) specifies
+four authenticated nonsealed train roots with three trials each, spanning story advancement, team
+recovery, storage management, and species acquisition. A declared 15% exploration mixture samples
+the learned policy and records exact behavior propensities. Verified success scores +1, verified
+failure scores -1, and interrupted choices remain durable but create no update target. Hard action
+and frame bounds, durable decisions and terminals, and zero teacher/fallback are mandatory.
+
+Review and publication precede any campaign freeze or zero-action preflight. No gameplay is
+authorized now. The legacy board remains **30 train · 15 development · 3 fits · 3 comparisons ·
+authority 0 · transfer 0**. Product-focus-v2 counters remain **development attempts 0 · verified
+outcome examples 0 · atomic episodes 0 · composition attempts 0 · verified compositions 0**.
+
+## Previous checkpoint: V3 failed action-free; qualify one operational-composition V4 root
 
 Published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run `32090038721`,
 attempt 1. Its single V3 preflight emitted a sanitized failure at `action_free_admission`. That

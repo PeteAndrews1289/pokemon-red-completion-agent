@@ -3,8 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -17,6 +19,7 @@ from pokemon_red_completion.runtime_identity import (
     build_runtime_identity_from,
     is_canonical_distribution_inventory_name,
     is_runtime_identity_public_document,
+    require_pyboy_import_origins,
 )
 
 
@@ -107,6 +110,23 @@ def test_active_runtime_identity_is_path_free_canonical_and_content_addressed() 
     assert all(".." not in file.name.split("/") for file in identity.pyboy_files)
     assert all("__pycache__" not in file.name for file in identity.pyboy_files)
     assert all(not file.name.casefold().endswith((".pyc", ".pyo")) for file in identity.pyboy_files)
+
+
+def test_runtime_identity_rejects_a_loaded_pyboy_module_outside_inventory(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    identity = build_runtime_identity()
+    shadow = tmp_path / "shadow.py"
+    shadow.write_text("# shadow\n")
+    monkeypatch.setitem(
+        sys.modules,
+        "pyboy.shadowed_test_module",
+        SimpleNamespace(__file__=str(shadow)),
+    )
+
+    with pytest.raises(RuntimeIdentityError, match="differs from its distribution"):
+        require_pyboy_import_origins(identity)
 
 
 @pytest.mark.parametrize(

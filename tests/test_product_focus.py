@@ -83,15 +83,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "fresh-goal-manager-operational-composition-execution-qualification-v4"
+        "repeatable-goal-manager-development-qualification-v1"
     )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 8
+    assert len(state.retired_lanes) == 9
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 3
     assert state.progress["unseen_comparisons"] == 3
+    assert state.progress["development_episode_attempts"] == 0
+    assert state.progress["verified_outcome_examples"] == 0
+    assert state.progress["verified_composition_episodes"] == 0
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -295,7 +298,7 @@ def test_focus_requires_exactly_one_active_lane() -> None:
         validate_product_focus_document(document)
 
 
-def test_learning_lane_requires_outcomes_fit_and_unseen_evaluation() -> None:
+def test_learning_lane_requires_a_complete_legacy_or_development_contract() -> None:
     document = _document()
     lane = _active(document)
     lane["kind"] = "learning"
@@ -305,8 +308,36 @@ def test_learning_lane_requires_outcomes_fit_and_unseen_evaluation() -> None:
         {"kind": "unseen_comparison", "minimum": 1, "partition": "development"},
     ]
 
-    with pytest.raises(ProductFocusError, match="outcomes, a model fit and unseen"):
+    with pytest.raises(ProductFocusError, match="legacy fit/evaluation outputs"):
         validate_product_focus_document(document)
+
+
+def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = [
+        {"kind": "development_episode", "minimum": 12, "partition": "development"},
+        {
+            "kind": "verified_outcome_example",
+            "minimum": 12,
+            "partition": "development",
+        },
+        {
+            "kind": "verified_composition_episode",
+            "minimum": 2,
+            "partition": "development",
+        },
+    ]
+
+    state = validate_product_focus_document(document)
+
+    assert focus_scorecard(state) == (
+        ("Development Episode · development", 0, 12),
+        ("Verified Outcome Example · development", 0, 12),
+        ("Verified Composition Episode · development", 0, 2),
+    )
 
 
 def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
@@ -422,18 +453,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "operational-composition execution qualification V4" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
+    assert "Repeatable Red goal-manager development qualification" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Publish V4 successor + green CI" in encoded
-    assert "early closed-root rejection" in encoded
+    assert "Publish runner + green CI" in encoded
+    assert "freeze 4 authenticated train roots" in encoded
     assert "root closed" in encoded
     assert "retry forbidden" in encoded
     assert "execution identity 0" in encoded
     assert "V3 preflight failed at action_free_admission" in encoded
-    assert "V4 current session roots 0" in encoded
+    assert "Repeatable lane current" in encoded
+    assert "frozen roots 0" in encoded
+    assert "claimed trials 0" in encoded
     assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

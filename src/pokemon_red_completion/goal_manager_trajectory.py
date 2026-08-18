@@ -113,6 +113,7 @@ def goal_manager_decision_record(
     collection_id: str,
     assignment_id: str,
     source_commit: str,
+    behavior_policy: Mapping[str, object] | None = None,
 ) -> DecisionRecord:
     """Encode an identity-free choice before its selected goal executes."""
 
@@ -125,6 +126,19 @@ def goal_manager_decision_record(
             "goal-manager snapshot environment differs from its assignment"
         )
     bind_goal_selection(pending.question, pending.selected_candidate_index)
+    metadata: dict[str, object] = {
+        "assignment_id": assignment_id,
+        "collection_id": collection_id,
+        "environment_id": environment_id,
+        "goal_decision_index": pending.decision_index,
+        "partition": partition,
+        "policy_input": pending.question.policy_input,
+        "root_lineage_id": root_lineage_id,
+        "skill_id": GOAL_MANAGER_SKILL_ID,
+        "source_commit": source_commit,
+    }
+    if behavior_policy is not None:
+        metadata["behavior_policy"] = behavior_policy
     return DecisionRecord(
         decision_id=pending.decision_id,
         episode_id=episode_id,
@@ -133,19 +147,7 @@ def goal_manager_decision_record(
         context=DecisionContext(
             policy_id=policy_id,
             actor=actor,
-            metadata=_json_mapping(
-                {
-                    "assignment_id": assignment_id,
-                    "collection_id": collection_id,
-                    "environment_id": environment_id,
-                    "goal_decision_index": pending.decision_index,
-                    "partition": partition,
-                    "policy_input": pending.question.policy_input,
-                    "root_lineage_id": root_lineage_id,
-                    "skill_id": GOAL_MANAGER_SKILL_ID,
-                    "source_commit": source_commit,
-                }
-            ),
+            metadata=_json_mapping(metadata),
         ),
         decision_type=GOAL_MANAGER_DECISION_TYPE,
         action={
@@ -198,6 +200,7 @@ class GoalManagerTrajectoryObserver:
     snapshot_provider: SnapshotProvider
     recorder: GoalDecisionRecorder
     sink: TrajectorySink
+    ordering_assignment_id: str | None = None
     allow_test: bool = False
     _next_decision_index: int = field(default=0, init=False)
     _pending: PendingGoalManagerDecision | None = field(default=None, init=False)
@@ -217,9 +220,21 @@ class GoalManagerTrajectoryObserver:
         ):
             if not isinstance(getattr(self, name), str) or not getattr(self, name):
                 raise GoalManagerTrajectoryError(f"{name} must be non-empty")
+        if self.ordering_assignment_id is None:
+            self.ordering_assignment_id = self.assignment_id
+        elif not isinstance(self.ordering_assignment_id, str) or not self.ordering_assignment_id:
+            raise GoalManagerTrajectoryError(
+                "ordering_assignment_id must be non-empty"
+            )
         if self.partition == "test" and not self.allow_test:
             raise GoalManagerTrajectoryError("the goal-manager test partition must remain unopened")
-        if self.partition not in {"train", "validation", "test", "unassigned"}:
+        if self.partition not in {
+            "train",
+            "development",
+            "validation",
+            "test",
+            "unassigned",
+        }:
             raise GoalManagerTrajectoryError("goal-manager partition is unsupported")
         if self.recorder.episode_id != self.episode_id:
             raise GoalManagerTrajectoryError(
@@ -242,6 +257,14 @@ class GoalManagerTrajectoryObserver:
 
         return self._pending is not None and self._pending_was_recorded
 
+    @property
+    def question_ordering_assignment_id(self) -> str:
+        """Return the frozen ordering nonce after constructor validation."""
+
+        if self.ordering_assignment_id is None:  # Defensive; __post_init__ fills it.
+            raise GoalManagerTrajectoryError("ordering assignment is absent")
+        return self.ordering_assignment_id
+
     def ordered_question(
         self,
         situation: GoalSituation,
@@ -252,7 +275,7 @@ class GoalManagerTrajectoryObserver:
         if self._pending is not None:
             raise GoalManagerTrajectoryError("a goal-manager decision still awaits its outcome")
         return ordered_goal_manager_question(
-            assignment_id=self.assignment_id,
+            assignment_id=self.question_ordering_assignment_id,
             decision_index=self._next_decision_index,
             situation=situation,
             opportunities=opportunities,
@@ -262,13 +285,15 @@ class GoalManagerTrajectoryObserver:
         self,
         question: GoalManagerQuestion,
         selected_candidate_index: int,
+        *,
+        behavior_policy: Mapping[str, object] | None = None,
     ) -> PendingGoalManagerDecision:
         """Write the choice before returning execution authority to its caller."""
 
         if self._pending is not None:
             raise GoalManagerTrajectoryError("a goal-manager decision still awaits its outcome")
         expected = ordered_goal_manager_question(
-            assignment_id=self.assignment_id,
+            assignment_id=self.question_ordering_assignment_id,
             decision_index=self._next_decision_index,
             situation=question.situation,
             opportunities=question.opportunities,
@@ -299,6 +324,7 @@ class GoalManagerTrajectoryObserver:
                 collection_id=self.collection_id,
                 assignment_id=self.assignment_id,
                 source_commit=self.source_commit,
+                behavior_policy=behavior_policy,
             )
         )
         self._next_decision_index += 1
@@ -517,8 +543,10 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
             decision_metadata.get("goal_decision_index"),
             subject="goal-manager decision index",
         )
-        if decision_index <= previous_index:
-            raise GoalManagerTrajectoryError("goal-manager decision indexes must strictly increase")
+        if decision_index != len(examples) or decision_index <= previous_index:
+            raise GoalManagerTrajectoryError(
+                "goal-manager decision indexes must be contiguous from zero"
+            )
         previous_index = decision_index
         policy_input = _mapping(
             decision_metadata.get("policy_input"), subject="goal-manager policy input"
@@ -527,6 +555,17 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
             question = GoalManagerQuestion.from_policy_input(policy_input)
         except GoalManagerError as error:
             raise GoalManagerTrajectoryError(str(error)) from error
+        (
+            behavior_policy_id,
+            behavior_probability,
+            behavior_candidate_probabilities,
+            behavior_base_probability,
+            behavior_exploration_mix,
+            behavior_temperature,
+        ) = _parse_behavior_policy(
+            decision_metadata.get("behavior_policy"),
+            question=question,
+        )
         action = _mapping(row.get("action"), subject="goal-manager action")
         if (
             set(action) != {"kind", "selected_candidate_index"}
@@ -540,6 +579,14 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
             bind_goal_selection(question, selected)
         except GoalManagerError as error:
             raise GoalManagerTrajectoryError(str(error)) from error
+        if (
+            behavior_candidate_probabilities is not None
+            and behavior_probability
+            != behavior_candidate_probabilities[selected]
+        ):
+            raise GoalManagerTrajectoryError(
+                "selected behavior probability differs from its candidate probability"
+            )
         try:
             outcome = events_by_decision.pop(decision_id)
         except KeyError as error:
@@ -577,6 +624,12 @@ def load_goal_manager_episode(reader: GoalEpisodeReader) -> CollectedGoalManager
                 selected_candidate_index=selected,
                 outcome_status=status,
                 failure_reason=failure_reason,
+                behavior_policy_id=behavior_policy_id,
+                behavior_probability=behavior_probability,
+                behavior_candidate_probabilities=behavior_candidate_probabilities,
+                behavior_base_probability=behavior_base_probability,
+                behavior_exploration_mix=behavior_exploration_mix,
+                behavior_temperature=behavior_temperature,
             )
         )
     if events_by_decision:
@@ -646,6 +699,99 @@ def _integer(value: object, *, subject: str) -> int:
     if type(value) is not int or value < 0:  # noqa: E721
         raise GoalManagerTrajectoryError(f"{subject} must be a non-negative integer")
     return value
+
+
+def _number(value: object, *, subject: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise GoalManagerTrajectoryError(f"{subject} must be numeric")
+    return float(value)
+
+
+def _probability(value: object, *, subject: str, positive: bool) -> float:
+    result = _number(value, subject=subject)
+    if not 0.0 <= result <= 1.0 or (positive and result == 0.0):
+        raise GoalManagerTrajectoryError(f"{subject} must be a valid probability")
+    return result
+
+
+def _positive_number(value: object, *, subject: str) -> float:
+    result = _number(value, subject=subject)
+    if result <= 0.0:
+        raise GoalManagerTrajectoryError(f"{subject} must be positive")
+    return result
+
+
+def _parse_behavior_policy(
+    value: object,
+    *,
+    question: GoalManagerQuestion,
+) -> tuple[
+    str | None,
+    float | None,
+    tuple[float, ...] | None,
+    float | None,
+    float | None,
+    float | None,
+]:
+    if value is None:
+        return None, None, None, None, None, None
+    behavior = _mapping(value, subject="goal-manager behavior policy")
+    if set(behavior) != {
+        "base_selected_probability",
+        "behavior_policy_id",
+        "candidate_probabilities",
+        "exploration_mix",
+        "schema",
+        "selected_probability",
+        "temperature",
+    } or behavior.get("schema") != "pokemon.core.goal-manager-behavior-policy.v1":
+        raise GoalManagerTrajectoryError("goal-manager behavior policy schema is invalid")
+    policy_id = _string(
+        behavior.get("behavior_policy_id"),
+        subject="goal-manager behavior policy identity",
+    )
+    selected_probability = _probability(
+        behavior.get("selected_probability"),
+        subject="goal-manager selected behavior probability",
+        positive=True,
+    )
+    base_probability = _probability(
+        behavior.get("base_selected_probability"),
+        subject="goal-manager selected base probability",
+        positive=False,
+    )
+    exploration_mix = _probability(
+        behavior.get("exploration_mix"),
+        subject="goal-manager exploration mix",
+        positive=False,
+    )
+    temperature = _positive_number(
+        behavior.get("temperature"),
+        subject="goal-manager behavior temperature",
+    )
+    candidate_probabilities = behavior.get("candidate_probabilities")
+    if (
+        not isinstance(candidate_probabilities, (list, tuple))
+        or len(candidate_probabilities) != len(question.opportunities)
+        or any(
+            not isinstance(item, (int, float))
+            or isinstance(item, bool)
+            or not 0.0 <= float(item) <= 1.0
+            for item in candidate_probabilities
+        )
+        or abs(sum(float(item) for item in candidate_probabilities) - 1.0) > 1e-9
+    ):
+        raise GoalManagerTrajectoryError(
+            "goal-manager behavior probabilities are invalid"
+        )
+    return (
+        policy_id,
+        selected_probability,
+        tuple(float(item) for item in candidate_probabilities),
+        base_probability,
+        exploration_mix,
+        temperature,
+    )
 
 
 def _digest(value: object, *, subject: str) -> str:

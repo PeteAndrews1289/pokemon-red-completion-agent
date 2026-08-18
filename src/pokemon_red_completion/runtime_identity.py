@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import os
 import platform
@@ -149,7 +150,7 @@ def is_runtime_identity_public_document(value: object) -> bool:
     }
     return (
         hashlib.sha256(_canonical_json_line(inventory)).hexdigest()
-        == pyboy["inventory_sha256"]
+        == str(pyboy["inventory_sha256"])
     )
 
 
@@ -214,12 +215,92 @@ def build_runtime_identity() -> RuntimeIdentity:
         distribution = metadata.distribution(_DISTRIBUTION_NAME)
     except metadata.PackageNotFoundError:
         raise RuntimeIdentityError("PyBoy distribution is unavailable") from None
-    return build_runtime_identity_from(
+    try:
+        module = importlib.import_module(_DISTRIBUTION_NAME)
+    except ImportError:
+        raise RuntimeIdentityError("PyBoy import is unavailable") from None
+    if getattr(module, "PyBoy", None) is None:
+        raise RuntimeIdentityError("PyBoy import surface is invalid")
+    identity = build_runtime_identity_from(
         python_executable=Path(sys.executable),
         python_implementation=platform.python_implementation(),
         python_version=platform.python_version(),
         pyboy_distribution=distribution,
     )
+    _require_pyboy_import_origins(distribution, identity)
+    return identity
+
+
+def require_pyboy_import_origins(identity: RuntimeIdentity) -> None:
+    """Fail unless every loaded PyBoy module belongs to the frozen distribution."""
+
+    if not isinstance(identity, RuntimeIdentity):
+        raise TypeError("identity must be a RuntimeIdentity")
+    try:
+        distribution = metadata.distribution(_DISTRIBUTION_NAME)
+    except metadata.PackageNotFoundError:
+        raise RuntimeIdentityError("PyBoy distribution is unavailable") from None
+    if (
+        _distribution_name(distribution) != identity.pyboy_distribution_name
+        or _safe_version(
+            getattr(distribution, "version", None),
+            subject="PyBoy distribution version",
+        )
+        != identity.pyboy_distribution_version
+        or _distribution_inventory(distribution) != identity.pyboy_files
+    ):
+        raise RuntimeIdentityError("loaded PyBoy distribution differs from runtime identity")
+    _require_pyboy_import_origins(distribution, identity)
+
+
+def _require_pyboy_import_origins(
+    distribution: Any,
+    identity: RuntimeIdentity,
+) -> None:
+    expected_files = _distribution_resolved_files(distribution)
+    loaded_origins: list[Path] = []
+    for name, module in tuple(sys.modules.items()):
+        if name != _DISTRIBUTION_NAME and not name.startswith(f"{_DISTRIBUTION_NAME}."):
+            continue
+        raw = getattr(module, "__file__", None)
+        if raw is None:
+            continue
+        if not isinstance(raw, str):
+            raise RuntimeIdentityError("loaded PyBoy import origin is invalid")
+        try:
+            loaded_origins.append(Path(raw).resolve(strict=True))
+        except OSError:
+            raise RuntimeIdentityError("loaded PyBoy import origin is unavailable") from None
+    if (
+        not loaded_origins
+        or any(origin not in expected_files for origin in loaded_origins)
+        or _distribution_inventory(distribution) != identity.pyboy_files
+    ):
+        raise RuntimeIdentityError("loaded PyBoy import differs from its distribution")
+
+
+def _distribution_resolved_files(distribution: Any) -> frozenset[Path]:
+    raw_files = getattr(distribution, "files", None)
+    if raw_files is None:
+        raise RuntimeIdentityError("PyBoy distribution inventory is unavailable")
+    try:
+        entries = tuple(raw_files)
+    except (TypeError, OSError):
+        raise RuntimeIdentityError("PyBoy distribution inventory is unavailable") from None
+    console_scripts = _console_script_names(distribution)
+    resolved: set[Path] = set()
+    for entry in entries:
+        raw_name = _entry_text(entry)
+        if _excluded_cache_entry(raw_name):
+            continue
+        _canonical_inventory_name(raw_name, console_scripts=console_scripts)
+        try:
+            resolved.add(Path(distribution.locate_file(entry)).resolve(strict=True))
+        except (AttributeError, OSError, TypeError, ValueError):
+            raise RuntimeIdentityError(
+                "PyBoy distribution file cannot be located"
+            ) from None
+    return frozenset(resolved)
 
 
 def build_runtime_identity_from(

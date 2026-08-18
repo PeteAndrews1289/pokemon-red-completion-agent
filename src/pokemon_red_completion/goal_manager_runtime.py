@@ -332,7 +332,22 @@ def execute_goal_manager_decision(
     if selection_guard is not None:
         selection_guard(bound)
     binding = binding_set.require(bound.binding_ref)
-    pending = trajectory.record_selection(question, selected_index)
+    behavior_policy: Mapping[str, object] | None = None
+    metadata_provider = getattr(authority, "selection_metadata", None)
+    if metadata_provider is not None:
+        if not callable(metadata_provider):
+            raise GoalManagerRuntimeError(
+                "goal authority selection metadata provider is invalid"
+            )
+        provided = metadata_provider()
+        if not isinstance(provided, Mapping):
+            raise GoalManagerRuntimeError("goal authority selection metadata is invalid")
+        behavior_policy = provided
+    pending = trajectory.record_selection(
+        question,
+        selected_index,
+        behavior_policy=behavior_policy,
+    )
     decision_recorded = trajectory.pending_was_recorded
     if require_durable_decision and not decision_recorded:
         trajectory.abandon_unrecorded_selection(pending)
