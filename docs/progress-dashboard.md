@@ -5,6 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current paired gameplay rail:** Show **SUCCESSOR SOURCE E77BBE12 · CI 32126183561 GREEN ·
+> ZERO-ACTION PREFLIGHT PASSED · PAIR D5FDCDC5 UNCLAIMED · ARM IDENTITIES 2/2 AVAILABLE ·
+> PREDICTIONS 0 · ACTIONS 0 · GAMEPLAY 0 · OUTCOMES 0**. Link the
+> [preflight receipt](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json) and
+> display **SHA-256 F7FEA1B17B113F7CB9E1D3996D6C3BE4A485EF227A99DE2C924A47FF030A742C**.
+>
+> Display `paired-red-goal-manager-outcome-screen-v1` and the rail **CLAIM PAIR → CLAIM BASE +
+> CANDIDATE → BASE RESET / MAX 3 → CANDIDATE RESET / MAX 3 → STRICT ADMISSION → STOP**. Mark
+> **PRIMARY SAFE RETAINED ACQUISITION ONLY · SECONDARY METRICS CANNOT BREAK TIES · NO RETRY · NO
+> REPLACEMENT · NO ADAPTATION · NO PROMOTION · NO CRYSTAL**. Keep cumulative counters unchanged
+> until the durable result is admitted.
+>
 > **Current paired execution-qualification rail:** Show **DESIGN SOURCE 952E0ED9 · CI 32122694671
 > GREEN · DESIGN FROZEN ACTION-FREE · ONE FORMAL DEVELOPMENT-OUTCOME-UNUSED ACQUISITION TRAIN ROOT
 > · INITIAL GOALS 3 · SUPERVISED-TRAIN EXPOSURE ALLOWED · GUARD-ONLY EXPOSURE ALLOWED · NOT

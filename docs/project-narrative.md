@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: execution qualification passes; the frozen pair is ready
+
+Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run
+`32126183561`. Its [zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+authenticated pair identity `d5fdcdc5...`, two unused arm identities, identical resets,
+base-then-candidate order, three-decision hard stops, durable claim/terminal handling, and strict
+offline admission. The preflight made no prediction, controller input, gameplay execution, outcome,
+fit, comparison, authority change, transfer result, or counter change.
+
+The project is now at its first controlled gameplay test of the teacher-free outcome-updated model.
+The pair will run exactly once and will be judged only on safe retained acquisition. Secondary
+completion, replanning, action, and frame reports remain descriptive. This is an intermediate
+feasibility screen toward reusable acquisition and living-Pokédex planning—not evidence of full-game
+play or cross-title transfer. No retry, replacement, adaptation, promotion, sealed Red, or Crystal
+execution is allowed in this lane.
+
 ## August 18: the paired design freezes one root without executing either arm
 
 Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run

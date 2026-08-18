@@ -6,6 +6,20 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns one exact paired gameplay screen
+
+Source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed green CI run
+`32126183561`; the [zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+with SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`
+left pair identity `d5fdcdc5...` and both arms unclaimed. It authenticated identical resets,
+base-then-candidate order, claims before prediction, three-decision bounds, durable terminals, and
+strict endpoint-only admission. No gameplay or learning counter moved.
+
+Codex may now execute and admit this pair exactly once. Claude and Antigravity remain read-only
+reviewers if consulted. Safe retained acquisition is primary; secondary metrics never break ties.
+Stop after one result or retained failure. No retry, replacement, adaptation, fit, promotion,
+sealed Red, Crystal, route/skill patch, or full replay.
+
 ## Current override: Codex owns paired execution qualification without gameplay
 
 Source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run `32122694671`.

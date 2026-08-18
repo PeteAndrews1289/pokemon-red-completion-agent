@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the safety rails are built; the next move is real gameplay
+
+The successor executor at `e77bbe12` passed green CI and then a zero-action preflight. It proved
+that the pair and both arms are still unused, both models will start from the same save state, the
+base runs before the candidate, each gets at most three decisions, and the evidence will be admitted
+under the one question chosen in advance: did it safely retain a new specimen?
+
+Nothing moved during that check—no model choice, button press, gameplay, outcome, or scoreboard
+counter. That restraint matters because the next step finally does move: one base arm, one candidate
+arm, one result, no do-over. A win would justify a broader acquisition curriculum; a tie, loss, or
+uninterpretable result would send the project back to data/design analysis, not another patched run.
+This is still a feasibility screen, not proof of Red completion, Crystal transfer, or a living
+Pokédex agent.
+
 ## Current checkpoint: one root is frozen, but neither arm has moved
 
 Published source `952e0ed9` passed green CI and action-free selected one

@@ -18,6 +18,22 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Paired execution qualified; exact gameplay screen next — 2026-08-18
+
+Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run
+`32126183561`. The [zero-action preflight](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+(SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`)
+authenticated the frozen pair, both arms, identical resets, base-then-candidate ordering, hard
+three-decision bounds, durable claim/terminal handling, and strict offline admission. Pair identity
+`d5fdcdc5...` remains unclaimed. This moved no counter and produced no prediction, action, gameplay,
+or outcome.
+
+The only next action is one exact paired Red gameplay screen under
+`paired-red-goal-manager-outcome-screen-v1`. Strict admission adjudicates safe retained acquisition
+as win, loss, tie, or uninterpretable; secondary efficiency/composition metrics cannot rescue the
+primary endpoint. The pair closes after its first retained result or failure with no retry,
+replacement, adaptation, route/skill patch, fit, promotion, sealed Red, Crystal, or full replay.
+
 ## Paired design frozen; qualify execution without gameplay — 2026-08-18
 
 Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run

@@ -1,5 +1,20 @@
 # Current audit — 2026-08-18
 
+## Current result: paired execution qualified without consuming the screen
+
+Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run
+`32126183561`. One [path-free zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+(SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`)
+authenticated pair identity `d5fdcdc5...`, both exact arms, identical resets, global and per-arm
+claims before prediction, base-then-candidate ordering, three-decision hard stops, durable terminal
+retention, and strict safe-acquisition admission. The pair and arms remain unclaimed.
+
+Preflight added zero predictions, actions, gameplay, outcomes, fits, comparisons, authority,
+transfer, or counters. The board stays **30/15/4/3/0/0** and product-focus-v2 stays
+**12/2/0/1/1**. The active lane is now `paired-red-goal-manager-outcome-screen-v1`: execute and
+admit the pair exactly once, then close it regardless of result. No retry, replacement, adaptation,
+secondary tie-break, promotion, sealed Red, Crystal, or full replay is permitted.
+
 ## Current result: paired design frozen without execution or counter change
 
 Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run

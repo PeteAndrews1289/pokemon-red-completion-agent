@@ -88,6 +88,11 @@ PAIRED_SCREEN_DESIGN = (
     / "docs/evidence"
     / "paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json"
 )
+PAIRED_EXECUTION_PREFLIGHT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "paired-red-goal-manager-execution-preflight-v1-2026-08-18.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -140,12 +145,15 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     )
     assert (
         state.active_lane["id"]
-        == "paired-red-goal-manager-outcome-screen-execution-qualification-v1"
+        == "paired-red-goal-manager-outcome-screen-v1"
     )
-    assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 15
-    assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert state.active_lane["kind"] == "learning"
+    assert len(state.retired_lanes) == 16
+    assert focus_progress_fraction(state) == pytest.approx((12 / 14 + 2 / 4) / 2)
+    assert focus_scorecard(state) == (
+        ("Development Episode · development", 12, 14),
+        ("Verified Outcome Example · development", 2, 4),
+    )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -174,6 +182,18 @@ def test_paired_screen_design_is_action_free_and_nonpromoting() -> None:
     ]
     assert receipt["paired_contract"]["unseen_comparison"] is False
     assert receipt["paired_contract"]["promotion_authorized"] is False
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+
+
+def test_paired_execution_preflight_is_zero_action_and_unclaimed() -> None:
+    receipt = json.loads(PAIRED_EXECUTION_PREFLIGHT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "paired_execution_ready_without_prediction_or_action"
+    assert receipt["execution_qualification"]["pair_identity_available"] is True
+    assert receipt["execution_qualification"]["arm_identities_available"] == 2
+    assert receipt["execution_qualification"]["hard_maximum_decisions_per_arm"] == 3
+    assert receipt["execution_qualification"]["strict_offline_admission_implemented"] is True
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
 
@@ -406,7 +426,10 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == (
+        "Development Episode · development: 12/14",
+        "Verified Outcome Example · development: 2/4",
+    )
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -595,20 +618,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     public = snapshot.public_dict()
 
     assert public["run_status"] == "waiting"
-    assert public["stage_progress"] == 0.0
+    assert public["stage_progress"] == pytest.approx((12 / 14 + 2 / 4) / 2)
     assert public["actions"] == 0
-    assert "Paired Red goal-manager screen execution qualification V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 12, "total": 12}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 2, "total": 2}  # type: ignore[index]
+    assert "Paired Red goal-manager outcome screen V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 12, "total": 14}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 2, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow candidate eb5c6515" in encoded
     assert "1 TRAIN-ONLY FIT" in encoded
     assert "loss 1.2667" in encoded
-    assert "design is frozen" in encoded
-    assert "two reset arms" in encoded
+    assert "executor passed its zero-action preflight" in encoded
+    assert "identical resets" in encoded
     assert "max 3 decisions" in encoded
-    assert "no gameplay in this lane" in encoded
+    assert "no retry or replacement" in encoded
     assert "Development result V2" in encoded
     assert "attempts 12/12" in encoded
     assert "complete 1" in encoded

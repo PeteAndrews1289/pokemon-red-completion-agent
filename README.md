@@ -5,6 +5,18 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): paired execution qualified; one gameplay screen is
+> next.** Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed green CI run
+> `32126183561`. The [zero-action preflight](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+> (SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`)
+> authenticated pair identity `d5fdcdc5...`, both arm identities, identical resets, base-then-candidate
+> order, three-decision hard stops, durable claims and terminals, and strict endpoint-only admission.
+> The pair remains unclaimed; predictions, actions, gameplay, outcomes, fits, comparisons, authority,
+> transfer, and all counters remain unchanged. The active lane is now
+> `paired-red-goal-manager-outcome-screen-v1`: run and admit this pair exactly once, using safe
+> retained acquisition as the sole primary endpoint. No retry, replacement, adaptation, promotion,
+> sealed Red, Crystal, or full-game claim is allowed.
+
 > **Current product focus (August 18, 2026): one-root paired design frozen; qualify execution
 > without gameplay.** Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
 > `32122694671`. One model-blind, development-outcome-unused acquisition train root was formally

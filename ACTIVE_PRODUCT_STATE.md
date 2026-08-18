@@ -29,27 +29,29 @@ Not the product:
 
 ## One active lane
 
-**Paired Red goal-manager screen execution qualification V1** (`paired-red-goal-manager-outcome-screen-execution-qualification-v1`)
+**Paired Red goal-manager outcome screen V1** (`paired-red-goal-manager-outcome-screen-v1`)
 
-- Kind: **maintenance**
+- Kind: **learning**
 - Rigor: **development**
-- Next decision: If the exact published executor passes one combined zero-action preflight with the pair identity still unclaimed, reorient once to the fixed two-arm execution. Otherwise close the pair without another root, fit, or rescue patch.
+- Next decision: After strict admission, close the screen. A candidate win supports designing a fresh acquisition-development curriculum; a tie, loss, or uninterpretable result redirects to data/design analysis without rerunning this root.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Implement and qualify a root-safe two-arm executor and strict paired admission for the exact frozen Red acquisition screen without executing gameplay during qualification. |
+| Reusable capability | Execute and strictly admit the one frozen paired Red acquisition screen to test whether the first teacher-free fitted goal manager can produce safe retained acquisition and changed-state replanning from an identical reset. |
 | Authority now | The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority. |
 | Authority target | Qualify exactly one later two-arm Red feasibility execution whose result depends only on safe retained acquisition; qualification grants no authority. |
-| Transfer test | After independent paired Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal. |
-| Cheapest falsifier | Prove with ROM-free adversarial tests and one exact-head zero-action preflight that a global pair claim and each durable arm claim precede prediction, both arms reopen the same frozen reset, hard-stop after three decisions, retain failures, and admit no replacement or adaptation. |
-| Time box | 1 session / 4 hours |
+| Transfer test | Not in this lane. Crystal remains closed until Red produces independent acquisition evidence and passes a separate authority decision. |
+| Cheapest falsifier | Run the frozen base arm and candidate arm exactly once, in that order, under the preflighted pair identity. Stop after both durable terminals or the first retained failure, then strictly admit the fixed pair without retry, replacement, adaptation, or secondary-metric tie-breaking. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Development Episode · development | 12 | 14 |
+| Verified Outcome Example · development | 2 | 4 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,25 +59,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-paired-red-goal-manager-outcome-screen-execution-qualification-v1** · status **active** · evidence [qualification](docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json)
+**2026-08-18-paired-red-goal-manager-outcome-screen-v1** · status **active** · evidence [qualification](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is the shortest engineering bridge from the first teacher-free fitted candidate to a controlled gameplay measurement. It tests reusable model-led acquisition behavior without another teacher, fit, route patch, or full-game claim. |
-| Learning output | No new measured learning output. One action-free freeze selected a development-outcome-unused acquisition train root with three initial goals and froze two reset arms at three decisions each. Predictions, inputs, advanced frames, executions, outcomes, fits, comparisons, authority, and transfer all remained zero. |
-| Authority delta | None. The new candidate is shadow-only; the promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority. |
+| Product alignment | This is the first controlled gameplay test of the teacher-free fitted candidate. It asks a narrow but product-relevant question: can learned semantic goal choice lead to a safely retained new specimen and replanning, without implying full-game or living-Pokedex competence? |
+| Learning output | No new measured learning output. Exact-head CI run 32126183561 passed and one action-free preflight authenticated pair identity d5fdcdc5, both arm identities, identical reset, three-decision hard stops, durable claims and terminals, and strict admission. Predictions, actions, executions, outcomes, fits, comparisons, authority, and transfer remained zero. |
+| Authority delta | None. Passing execution qualification authorizes one descriptive screen only; the candidate remains shadow-only and gains no acquisition, completion, Crystal, or living-Pokedex authority before the result is admitted. |
 | Transfer result | Not run. Crystal remains closed until Red shows independent acquisition and replanning evidence under a frozen paired screen. |
-| Blocker | The exact one-root pair is frozen, but the published runner supports only freeze and preflight. It cannot yet claim, execute, durably terminate, or strictly admit the two arms. |
-| Decision | Retire the completed design lane and enter one bounded execution-qualification lane. Build the reusable claim-before-prediction, identical-reset, hard-limit, durable-terminal, and strict-admission boundary before any gameplay. |
-| Next session | Build and adversarially test execute and admit support for the frozen pair, publish it under green exact-head CI, and run one combined zero-action preflight. Do not execute either model arm in this qualification lane. |
-| Next falsifier | Implement one source-authenticated executor that claims the full pair before either prediction, durably claims and terminates both arms, enforces identical initial reset and maximum-three-decision limits, retains incomplete arms, and strictly adjudicates only safe retained acquisition. Then run one zero-action exact-head preflight. |
-| Stop condition | Stop on any controller action, model prediction, outcome access, model fit, root replacement, route or skill patch, candidate promotion, sealed Red or Crystal access, private-data leak, or four hours. |
+| Blocker | No engineering blocker remains. The exact pair is frozen, the successor executor is published under green exact-head CI, and a zero-action preflight left the pair and both arms available and unclaimed. |
+| Decision | Retire execution qualification and run exactly the frozen base-then-candidate screen. The primary endpoint is safe retained acquisition; secondary efficiency or composition metrics cannot break a tie or rescue an uninterpretable pair. |
+| Next session | Run and admit exactly one base-then-candidate paired Red screen under pair identity d5fdcdc5. Do not retry, replace the root, patch a route or skill, fit a model, open sealed Red, or execute Crystal. |
+| Next falsifier | Execute the exact unclaimed pair once, admit both durable artifacts, and adjudicate only safe retained acquisition as win, loss, tie, or uninterpretable. The result closes this screen regardless of outcome. |
+| Stop condition | Stop after the first admitted pair result or any retained failure. No retry, replacement, adaptation, model fit, route or skill patch, promotion, sealed Red, Crystal, or full replay is permitted. |
 
 ### Stop conditions
 
-- Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the qualification lane.
-- Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair.
-- Stop after one exact-head zero-action preflight or four hours; actual two-arm gameplay requires a separate reorientation.
+- Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair without execution.
+- Any controller intervention, teacher query, model update, retry, replacement root, sealed Red access, Crystal access, or full replay stops the lane.
+- Stop after one durable paired result or the first retained failure; secondary metrics cannot rescue the primary endpoint.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +115,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Paired Red goal-manager screen execution qualification V1:** The exact successor executor passed green CI and one zero-action preflight with the pair and both arm identities still unclaimed. It enforces pair-before-arm claims, identical resets, base-then-candidate order, three-decision hard stops, durable failure retention, and strict endpoint-only admission. Evidence is preserved; retry is no.
 - **Paired Red goal-manager outcome screen design V1:** The action-free design froze one development-outcome-unused acquisition train root with three initial goals, two identical-reset arms, a three-decision cap, and safe retained acquisition as the only primary endpoint. The runner made zero predictions or controller actions; execution remains separate. Evidence is preserved; retry is no.
 - **Teacher-free Red goal-manager outcome fit V1:** Its one allowed capped inverse-propensity update completed from two authenticated positive targets in one episode. The candidate passed all frozen train-only loss, probability, weight, KL, round-trip, and protected-winner guards; it remains shadow-only and the consumed fit identity may never retry. Evidence is preserved; retry is no.
 - **Repeatable Red goal-manager development pilot V2:** All twelve replacement trials were consumed exactly once. Strict admission found one complete two-decision composition episode and eleven failed trials; two verified outcomes are fit-eligible, atomic episodes and acquisitions were zero, and nineteen failed-prefix choices remain excluded. The fixed campaign may not run again. Evidence is preserved; retry is no.

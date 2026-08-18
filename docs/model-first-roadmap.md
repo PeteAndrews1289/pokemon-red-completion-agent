@@ -8,6 +8,21 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: paired execution qualified; run the exact screen once
+
+Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run
+`32126183561`. The [zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+(SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`)
+authenticated pair identity `d5fdcdc5...`, both arms, identical initial resets, base-then-candidate
+order, pair/arm claims before prediction, three-decision hard stops, durable terminals, and strict
+offline admission. The pair remains unclaimed and all learning counters remain unchanged.
+
+The next bounded learning action is exactly one execution and admission of the frozen pair. Safe
+retained acquisition is the sole primary endpoint; completion, verified outcomes, replanning,
+actions, and frames are descriptive secondary reports only. Close the screen after win, loss, tie,
+uninterpretable evidence, or retained failure. Do not retry, replace the root, adapt the model,
+patch routes or skills, fit, promote, open sealed Red, execute Crystal, or replay the game.
+
 ## Current checkpoint: paired design frozen; qualify execution without gameplay
 
 Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run

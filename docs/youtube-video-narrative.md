@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the rails pass; the next cut is gameplay
+
+Open on **SUCCESSOR E77BBE12 · CI 32126183561 GREEN · ZERO-ACTION PREFLIGHT PASSED**. Reveal
+**PAIR D5FDCDC5 UNCLAIMED · BOTH ARMS AVAILABLE · IDENTICAL RESET · BASE THEN CANDIDATE · MAX 3
+DECISIONS EACH · CLAIMS BEFORE PREDICTION · DURABLE TERMINALS**. Link the
+[preflight receipt](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json) with
+**SHA-256 F7FEA1B17B113F7CB9E1D3996D6C3BE4A485EF227A99DE2C924A47FF030A742C**.
+
+Hold the counters still: **PREDICTIONS 0 · ACTIONS 0 · GAMEPLAY 0 · OUTCOMES 0 · BOARD
+30/15/4/3/0/0 · PRODUCT V2 12/2/0/1/1**. Then move the rail to **CLAIM PAIR → CLAIM BOTH ARMS →
+BASE / MAX 3 → CANDIDATE / MAX 3 → STRICT ADMISSION → STOP**. Stamp **PRIMARY: SAFE RETAINED
+ACQUISITION · NO TIE-BREAKER · NO RETRY · NO REPLACEMENT**. Close with the honest scale: this is
+the first teacher-free gameplay feasibility screen, not Red completion, Crystal transfer, or a
+living-Pokédex victory.
+
 ## August 18 scene: one root freezes; both arms stay still
 
 Open on **DESIGN SOURCE 952E0ED9 · CI 32122694671 GREEN · ACTION-FREE DESIGN FROZEN**. Reveal

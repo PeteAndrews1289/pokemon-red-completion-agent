@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published the paired successor executor at source
+  `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` under green CI run `32126183561` and completed one
+  exact-head zero-action preflight. The
+  [path-free receipt](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+  has SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`.
+  Pair identity `d5fdcdc5...` and both arms remain unclaimed. The runner enforces pair-before-arm
+  claims, both arm claims before prediction, identical resets, base-then-candidate order, three
+  decisions per arm, durable failure retention, and strict safe-acquisition admission. Preflight
+  changed no counter and produced no prediction, action, gameplay, or outcome. Activated the one-run
+  `paired-red-goal-manager-outcome-screen-v1` lane; no retry, replacement, adaptation, promotion,
+  sealed Red, Crystal, or full replay is permitted.
+
 - Published source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` under green CI run
   `32122694671` and froze one model-blind, development-outcome-unused acquisition train root with a
   three-goal initial menu. Supervised-train and guard-only exposure are allowed and disclosed. The

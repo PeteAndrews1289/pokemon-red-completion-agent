@@ -8,36 +8,47 @@
   },
   "lanes": [
     {
-      "capability": "Implement and qualify a root-safe two-arm executor and strict paired admission for the exact frozen Red acquisition screen without executing gameplay during qualification.",
-      "cheapest_falsifier": "Prove with ROM-free adversarial tests and one exact-head zero-action preflight that a global pair claim and each durable arm claim precede prediction, both arms reopen the same frozen reset, hard-stop after three decisions, retain failures, and admit no replacement or adaptation.",
-      "id": "paired-red-goal-manager-outcome-screen-execution-qualification-v1",
-      "kind": "maintenance",
+      "capability": "Execute and strictly admit the one frozen paired Red acquisition screen to test whether the first teacher-free fitted goal manager can produce safe retained acquisition and changed-state replanning from an identical reset.",
+      "cheapest_falsifier": "Run the frozen base arm and candidate arm exactly once, in that order, under the preflighted pair identity. Stop after both durable terminals or the first retained failure, then strictly admit the fixed pair without retry, replacement, adaptation, or secondary-metric tie-breaking.",
+      "id": "paired-red-goal-manager-outcome-screen-v1",
+      "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The new candidate is shadow-only; the promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority.",
-        "blocker": "The exact one-root pair is frozen, but the published runner supports only freeze and preflight. It cannot yet claim, execute, durably terminate, or strictly admit the two arms.",
-        "decision": "Retire the completed design lane and enter one bounded execution-qualification lane. Build the reusable claim-before-prediction, identical-reset, hard-limit, durable-terminal, and strict-admission boundary before any gameplay.",
+        "authority_delta": "None. Passing execution qualification authorizes one descriptive screen only; the candidate remains shadow-only and gains no acquisition, completion, Crystal, or living-Pokedex authority before the result is admitted.",
+        "blocker": "No engineering blocker remains. The exact pair is frozen, the successor executor is published under green exact-head CI, and a zero-action preflight left the pair and both arms available and unclaimed.",
+        "decision": "Retire execution qualification and run exactly the frozen base-then-candidate screen. The primary endpoint is safe retained acquisition; secondary efficiency or composition metrics cannot break a tie or rescue an uninterpretable pair.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json",
-          "sha256": "c8cea9a42bf5b0dc673195b7898258562ace3fe92211f1f8d08ec3e3db460391"
+          "path": "docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json",
+          "sha256": "f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c"
         },
-        "learning_output": "No new measured learning output. One action-free freeze selected a development-outcome-unused acquisition train root with three initial goals and froze two reset arms at three decisions each. Predictions, inputs, advanced frames, executions, outcomes, fits, comparisons, authority, and transfer all remained zero.",
-        "next_falsifier": "Implement one source-authenticated executor that claims the full pair before either prediction, durably claims and terminates both arms, enforces identical initial reset and maximum-three-decision limits, retains incomplete arms, and strictly adjudicates only safe retained acquisition. Then run one zero-action exact-head preflight.",
-        "next_session_goal": "Build and adversarially test execute and admit support for the frozen pair, publish it under green exact-head CI, and run one combined zero-action preflight. Do not execute either model arm in this qualification lane.",
-        "product_alignment": "This is the shortest engineering bridge from the first teacher-free fitted candidate to a controlled gameplay measurement. It tests reusable model-led acquisition behavior without another teacher, fit, route patch, or full-game claim.",
-        "session_id": "2026-08-18-paired-red-goal-manager-outcome-screen-execution-qualification-v1",
+        "learning_output": "No new measured learning output. Exact-head CI run 32126183561 passed and one action-free preflight authenticated pair identity d5fdcdc5, both arm identities, identical reset, three-decision hard stops, durable claims and terminals, and strict admission. Predictions, actions, executions, outcomes, fits, comparisons, authority, and transfer remained zero.",
+        "next_falsifier": "Execute the exact unclaimed pair once, admit both durable artifacts, and adjudicate only safe retained acquisition as win, loss, tie, or uninterpretable. The result closes this screen regardless of outcome.",
+        "next_session_goal": "Run and admit exactly one base-then-candidate paired Red screen under pair identity d5fdcdc5. Do not retry, replace the root, patch a route or skill, fit a model, open sealed Red, or execute Crystal.",
+        "product_alignment": "This is the first controlled gameplay test of the teacher-free fitted candidate. It asks a narrow but product-relevant question: can learned semantic goal choice lead to a safely retained new specimen and replanning, without implying full-game or living-Pokedex competence?",
+        "session_id": "2026-08-18-paired-red-goal-manager-outcome-screen-v1",
         "status": "active",
-        "stop_condition": "Stop on any controller action, model prediction, outcome access, model fit, root replacement, route or skill patch, candidate promotion, sealed Red or Crystal access, private-data leak, or four hours.",
+        "stop_condition": "Stop after the first admitted pair result or any retained failure. No retry, replacement, adaptation, model fit, route or skill patch, promotion, sealed Red, Crystal, or full replay is permitted.",
         "transfer_result": "Not run. Crystal remains closed until Red shows independent acquisition and replanning evidence under a frozen paired screen."
       },
       "learned_authority": {
         "current": "The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority.",
         "target": "Qualify exactly one later two-arm Red feasibility execution whose result depends only on safe retained acquisition; qualification grants no authority."
       },
-      "maintenance_unblocks": "paired-red-goal-manager-outcome-screen-v1",
-      "measurable_outputs": [],
-      "name": "Paired Red goal-manager screen execution qualification V1",
-      "next_decision": "If the exact published executor passes one combined zero-action preflight with the pair identity still unclaimed, reorient once to the fixed two-arm execution. Otherwise close the pair without another root, fit, or rescue patch.",
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "development_episode",
+          "minimum": 14,
+          "partition": "development"
+        },
+        {
+          "kind": "verified_outcome_example",
+          "minimum": 4,
+          "partition": "development"
+        }
+      ],
+      "name": "Paired Red goal-manager outcome screen V1",
+      "next_decision": "After strict admission, close the screen. A candidate win supports designing a fresh acquisition-development curriculum; a tie, loss, or uninterpretable result redirects to data/design analysis without rerunning this root.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -90,15 +101,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any prediction, controller action, teacher query, model update, outcome access, Crystal, sealed Red, or candidate promotion ends the qualification lane.",
-        "Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair.",
-        "Stop after one exact-head zero-action preflight or four hours; actual two-arm gameplay requires a separate reorientation."
+        "Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair without execution.",
+        "Any controller intervention, teacher query, model update, retry, replacement root, sealed Red access, Crystal access, or full replay stops the lane.",
+        "Stop after one durable paired result or the first retained failure; secondary metrics cannot rescue the primary endpoint."
       ],
       "time_box": {
-        "maximum_hours": 4,
+        "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "After independent paired Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal."
+      "transfer_test": "Not in this lane. Crystal remains closed until Red produces independent acquisition evidence and passes a separate authority decision."
+    },
+    {
+      "id": "paired-red-goal-manager-outcome-screen-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Paired Red goal-manager screen execution qualification V1",
+      "preserve_evidence": true,
+      "reason": "The exact successor executor passed green CI and one zero-action preflight with the pair and both arm identities still unclaimed. It enforces pair-before-arm claims, identical resets, base-then-candidate order, three-decision hard stops, durable failure retention, and strict endpoint-only admission.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "paired-red-goal-manager-outcome-screen-design-v1",

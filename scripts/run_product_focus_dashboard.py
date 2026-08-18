@@ -103,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The paired Red acquisition design is frozen with zero gameplay. The next bounded "
-            "step is execution qualification for one root, two reset arms, and at most three "
-            "decisions per arm."
+            "The paired Red acquisition executor passed its zero-action preflight. The next "
+            "bounded step is one base-then-candidate gameplay screen on identical resets, with "
+            "at most three decisions per arm and no retry."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Paired Red screen · design frozen · executor qualification",
+        location="Paired Red screen · execution preflight passed · pair unclaimed",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Qualify one pair claim · two reset arms · max 3 decisions each",
+            choice="Run base then candidate · identical reset · max 3 decisions each",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="live_evaluation",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -179,8 +179,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
             ),
             (
-                "Next evidence · executor qualification only · one root · two arms · max 3 "
-                "decisions/arm · hard stop · no gameplay in this lane"
+                "Preflight · exact-head CI green · pair plus both arms unclaimed · one root · "
+                "identical resets · max 3 decisions/arm · strict admission"
+            ),
+            (
+                "Next evidence · execute base then candidate once · safe retained acquisition "
+                "is primary · tie-breakers forbidden · no retry or replacement"
             ),
             (
                 "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "

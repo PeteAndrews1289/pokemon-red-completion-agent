@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+> **2026-08-18 paired execution qualified; the frozen gameplay screen is now the only active
+> lane — highest checkpoint:** Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8`
+> passed CI `32126183561`. The
+> [zero-action preflight](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+> (SHA-256 `f7fea1b17b113f7cb9e1d3996d6c3be4a485ef227a99de2c924a47ff030a742c`)
+> left pair identity `d5fdcdc5...` and both arms unclaimed while authenticating identical resets,
+> claim-before-prediction ordering, base then candidate, three decisions per arm, durable terminals,
+> and strict endpoint-only admission. Counters remain 30/15/4/3/0/0 and product-focus-v2 remains
+> 12/2/0/1/1.
+>
+> Codex owns exactly one execution/admission of `paired-red-goal-manager-outcome-screen-v1`.
+> Reviewers are read-only. Safe retained acquisition is the only primary endpoint. Stop after one
+> result or retained failure; no retry, replacement, adaptation, fit, promotion, sealed Red,
+> Crystal, or full replay.
+
 > **2026-08-18 paired design frozen; execution qualification without gameplay is the only active
 > lane — highest checkpoint:** Source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI
 > run `32122694671`. One model-blind, development-outcome-unused acquisition train root was
