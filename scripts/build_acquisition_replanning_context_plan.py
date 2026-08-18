@@ -55,6 +55,7 @@ from pokemon_red_completion.goal_manager_protocol import (
 )
 from pokemon_red_completion.provenance import (
     EvaluationIdentityError,
+    canonical_sha256,
     detect_source_identity,
     require_clean_source,
     require_published_source,
@@ -500,7 +501,7 @@ def _repeatable_roots(
         stripped.pop("trial_claim_sha256", None)
         stripped_trials.append(stripped)
     identity["trials"] = stripped_trials
-    if campaign_id != _canonical_sha256(identity):
+    if campaign_id != canonical_sha256(identity):
         raise AcquisitionReplanningPlanError("prior campaign authentication")
     roots = tuple(_mapping(value, "prior root") for value in roots_raw)
     for root in roots:
@@ -544,7 +545,7 @@ def _paired_root(
     identity = dict(paired)
     screen_id = identity.pop("screen_id", None)
     identity.pop("arms", None)
-    if screen_id != _canonical_sha256(identity):
+    if screen_id != canonical_sha256(identity):
         raise AcquisitionReplanningPlanError("paired plan authentication")
     root = _mapping(paired.get("root"), "paired root")
     _validate_root_record(root, subject="paired root")

@@ -112,7 +112,7 @@ def _campaign(root: dict[str, object], source_plan_sha256: str) -> dict[str, obj
         "source_commit": "e" * 40,
         "trials": [],
     }
-    return {"campaign_id": SCRIPT["_canonical_sha256"](document), **document}
+    return {"campaign_id": SCRIPT["canonical_sha256"](document), **document}
 
 
 def _paired(
@@ -146,7 +146,7 @@ def _paired(
     return {
         "arms": [],
         **identity,
-        "screen_id": SCRIPT["_canonical_sha256"](identity),
+        "screen_id": SCRIPT["canonical_sha256"](identity),
     }
 
 
