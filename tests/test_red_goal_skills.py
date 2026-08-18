@@ -9,7 +9,11 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroPath
-from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind
+from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
+    GoalKind,
+    GoalUnavailableReason,
+)
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
 from pokemon_red_completion.goal_manager_state import CompletionProgress
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
@@ -44,6 +48,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedEncounterSourceDevelopmentGoalProvider,
     RedFieldRestoreGoalProvider,
     RedGoalSkillAvailability,
+    RedGoalSkillError,
     RedMartPurchase,
     RedMartResupplyGoalProvider,
     RedProgressGoalProvider,
@@ -821,3 +826,66 @@ def test_red_encounter_source_development_offer_is_action_free_and_verified() ->
     verdict = offer.binding.verify(offer.binding.execute())
     assert executions == 1
     assert verdict.status.value == "succeeded"
+
+
+def test_red_encounter_source_development_preserves_unavailable_boundary() -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    adapter = _adapter(reader)
+    provider = RedEncounterSourceDevelopmentGoalProvider(
+        source_ref="encounter-source-fixture",
+        binding_ref="pokemon.red:development:encounter-source-fixture",
+        adapter=adapter,
+        boundary=lambda _observation: RedGoalSkillAvailability.unavailable(
+            GoalUnavailableReason.MISSING_CAPABILITY
+        ),
+        executor=lambda: GoalExecutionReport(1, 1, {"bounded": True}),
+    )
+
+    offer = provider.offer(adapter.observe())
+
+    assert offer.binding is None
+    assert offer.unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+
+
+@pytest.mark.parametrize("invalid_boundary", (None, True, "available"))
+def test_red_encounter_source_development_rejects_invalid_boundary_evidence(
+    invalid_boundary: object,
+) -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    adapter = _adapter(reader)
+    provider = RedEncounterSourceDevelopmentGoalProvider(
+        source_ref="encounter-source-fixture",
+        binding_ref="pokemon.red:development:encounter-source-fixture",
+        adapter=adapter,
+        boundary=lambda _observation: invalid_boundary,  # type: ignore[arg-type,return-value]
+        executor=lambda: GoalExecutionReport(1, 1, {"bounded": True}),
+    )
+
+    with pytest.raises(RedGoalSkillError, match="invalid boundary evidence"):
+        provider.offer(adapter.observe())
+
+
+def test_red_encounter_source_development_rejects_invalid_fresh_boundary() -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    adapter = _adapter(reader)
+    boundary_calls = 0
+
+    def boundary(_observation: object) -> RedGoalSkillAvailability | object:
+        nonlocal boundary_calls
+        boundary_calls += 1
+        if boundary_calls == 1:
+            return RedGoalSkillAvailability.available()
+        return "invalid-fresh-boundary"
+
+    provider = RedEncounterSourceDevelopmentGoalProvider(
+        source_ref="encounter-source-fixture",
+        binding_ref="pokemon.red:development:encounter-source-fixture",
+        adapter=adapter,
+        boundary=boundary,  # type: ignore[arg-type]
+        executor=lambda: GoalExecutionReport(1, 1, {"bounded": True}),
+    )
+    offer = provider.offer(adapter.observe())
+    assert offer.binding is not None
+
+    with pytest.raises(RedGoalSkillError, match="invalid fresh boundary evidence"):
+        offer.binding.verify(offer.binding.execute())
