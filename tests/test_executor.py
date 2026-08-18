@@ -8,11 +8,14 @@ import pytest
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import (
     ControllerFrameBudgetError,
+    ControllerInputForbiddenError,
     ControllerTiming,
     FrameBudgetController,
     FrameSafeExecutor,
+    ReadOnlyController,
     UnsupportedMacroActionError,
 )
+from pokemon_red_completion.observation import ReadOnlyCartridgeRam
 
 
 class RecordingController:
@@ -33,6 +36,10 @@ class RecordingController:
         if self.fail_tick:
             raise RuntimeError("emulator failed")
         self.frame_count += frames
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        self.events.append(("cartridge_read", bank * 0x10000 + address))
+        return 0xA5
 
 
 def test_executor_applies_declared_press_and_release_timing() -> None:
@@ -100,6 +107,17 @@ def test_frame_budget_controller_refuses_before_overrun_and_delegates_reads() ->
     with pytest.raises(ControllerFrameBudgetError, match="frame budget"):
         bounded.tick(3)
     assert controller.events == [("tick", 3)]
+
+
+def test_read_only_controller_exposes_bounded_cartridge_reads_but_no_time() -> None:
+    controller = RecordingController()
+    read_only = ReadOnlyController(controller)
+
+    assert isinstance(read_only, ReadOnlyCartridgeRam)
+    assert read_only.read_cartridge_ram_u8(2, 0xA123) == 0xA5
+    with pytest.raises(ControllerInputForbiddenError, match="frames are forbidden"):
+        read_only.tick(1)
+    assert controller.events == [("cartridge_read", 0x2A123)]
 
 
 def test_only_emulator_and_executor_modules_call_controller_primitives() -> None:

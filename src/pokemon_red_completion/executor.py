@@ -45,6 +45,17 @@ class ReadOnlyController:
     def tick(self, _frames: int) -> None:
         raise ControllerInputForbiddenError("controller frames are forbidden")
 
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Expose the narrow banked-RAM read needed by complete collection state."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("read-only controller lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
+
     def __getattr__(self, name: str) -> Any:
         return getattr(self._delegate, name)
 
