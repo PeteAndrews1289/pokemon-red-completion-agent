@@ -1005,3 +1005,7 @@ def _sanitized_failure_stage(error: Exception) -> str:
     if not isinstance(candidate, str) or _SAFE_STAGE.fullmatch(candidate) is None:
         return "paired_execution_internal"
     return candidate
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

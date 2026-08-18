@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import runpy
+import subprocess
+import sys
 from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
@@ -66,6 +68,26 @@ def test_parser_separates_preflight_execution_and_admission() -> None:
     assert tuple(mode.choices) == ("preflight", "execute", "admit")
     assert "--expected-pair-execution-identity-sha256" in options
     assert "--arm" not in options
+
+
+def test_command_line_entry_point_executes_the_runner() -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(
+                PROJECT_ROOT
+                / "scripts/run_paired_goal_manager_outcome_execution.py"
+            ),
+            "--help",
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert "--expected-pair-execution-identity-sha256" in result.stdout
 
 
 def test_pair_claim_precedes_both_arm_claims_under_one_exclusive_lease(
