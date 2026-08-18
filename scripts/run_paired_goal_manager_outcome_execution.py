@@ -762,9 +762,16 @@ def _admit_pair(
         ),
         "adjudication": adjudication.public_dict(),
         "arms": secondary,
-        "development_attempts_added": 2,
-        "composition_episodes_added": sum(
+        "development_episode_attempts_added": 2,
+        "development_episodes_admitted": sum(
             item.get("admitted") is True for item in secondary
+        ),
+        "verified_outcome_examples_added": sum(
+            _integer(item.get("verified_outcomes", 0), "verified outcomes")
+            for item in secondary
+        ),
+        "verified_composition_episodes_added": sum(
+            item.get("composition") is True for item in secondary
         ),
         "model_fits_added": 0,
         "unseen_comparisons_added": 0,

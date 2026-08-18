@@ -1,5 +1,19 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the first paired gameplay screen ties on acquisition
+
+The [strict result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+admits both frozen arms. Base and candidate each made one model decision, safely retained one
+acquisition, and used 244 actions / 16,296 frames. The preregistered primary endpoint is a tie;
+secondary metrics did not change it. Neither arm reached a second decision, so both are
+non-compositional and changed-state replanning remains unproved.
+
+This adds two development attempts and two verified outcomes, not a fit, unseen comparison,
+promotion, transfer result, or verified composition. It proves bounded acquisition on one disclosed
+train root and shows the next missing capability precisely: choosing again after collection state
+changes. The consumed pair cannot retry. The next lane designs that acquisition-replanning
+curriculum action-free from existing unused contexts before any further gameplay.
+
 ## August 18: execution qualification passes; the frozen pair is ready
 
 Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run

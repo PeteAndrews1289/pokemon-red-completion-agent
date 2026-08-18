@@ -8,6 +8,21 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: acquisition tied; changed-state replanning is the next missing capability
+
+The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+(SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
+admits both exact episodes. Base and candidate each made one decision, safely retained one
+acquisition, and consumed 244 actions / 16,296 frames. The frozen endpoint is a tie. Because both
+episodes stopped after one decision, composition and changed-state replanning remain unproved; the
+candidate did not beat the base and gains no authority.
+
+The pair is consumed. The next lane is design only: use existing unused nonsealed contexts to
+freeze a repeatable acquisition-then-replan curriculum with at least two executable choices before
+and after collection state changes. If existing evidence cannot prove that question action-free,
+close the lane and specify the smallest new capture requirement. Do not execute, patch routes or
+skills, fit, promote, open sealed Red, or run Crystal.
+
 ## Current checkpoint: paired execution qualified; run the exact screen once
 
 Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run

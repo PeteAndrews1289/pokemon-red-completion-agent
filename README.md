@@ -5,6 +5,17 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): paired screen tied; design acquisition plus
+> replanning next.** The [strict result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+> (SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
+> admits both exact arms. Base and candidate each made one decision, safely retained one
+> acquisition, and used 244 actions / 16,296 frames. The primary endpoint is a tie. Neither arm
+> reached a second decision, so composition and changed-state replanning remain unproved; the
+> candidate gains no authority. The board is still **30/15/4/3/0/0**; product-focus-v2 is now
+> **14 development attempts / 4 verified outcomes / 0 atomic / 1 composition attempt / 1 verified
+> composition**. The consumed pair cannot retry. The active lane is action-free design of a
+> repeatable acquisition-then-replan curriculum using existing unused contexts first.
+
 > **Current product focus (August 18, 2026): paired execution qualified; one gameplay screen is
 > next.** Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed green CI run
 > `32126183561`. The [zero-action preflight](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)

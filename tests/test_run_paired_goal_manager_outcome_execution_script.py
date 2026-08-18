@@ -267,3 +267,13 @@ def test_failure_stage_never_echoes_private_exception_text() -> None:
     assert sanitize(SCRIPT["PairedExecutionRunError"]("screen_root_drift")) == (
         "screen_root_drift"
     )
+
+
+def test_admission_summary_never_calls_noncomposition_episodes_composition() -> None:
+    source = (
+        PROJECT_ROOT / "scripts/run_paired_goal_manager_outcome_execution.py"
+    ).read_text(encoding="utf-8")
+
+    assert '"composition_episodes_added"' not in source
+    assert '"development_episodes_admitted"' in source
+    assert '"verified_composition_episodes_added"' in source

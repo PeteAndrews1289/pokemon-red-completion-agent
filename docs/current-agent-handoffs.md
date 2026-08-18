@@ -6,6 +6,19 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns action-free acquisition-replanning curriculum design
+
+The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+records a tie: base and candidate each safely retained one acquisition in one decision, with
+identical 244-action / 16,296-frame cost. Both episodes are non-compositional. The pair is consumed,
+adds two development attempts and two verified outcomes, and adds no verified composition, fit,
+comparison, authority, or transfer.
+
+Codex owns `fresh-red-acquisition-replanning-curriculum-design-v1`. Use existing authenticated,
+unused, nonsealed Red contexts action-free to freeze a genuine acquisition-then-replanning
+question. Claude and Antigravity are read-only reviewers if consulted. No gameplay, root rescue,
+route/skill patch, model fit, promotion, sealed Red, or Crystal.
+
 ## Current override: Codex owns one exact paired gameplay screen
 
 Source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed green CI run

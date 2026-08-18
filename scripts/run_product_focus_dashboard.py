@@ -103,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The paired Red acquisition executor passed its zero-action preflight. The next "
-            "bounded step is one base-then-candidate gameplay screen on identical resets, with "
-            "at most three decisions per arm and no retry."
+            "The paired Red screen ended in a tie: both models safely acquired once, but neither "
+            "reached a second decision. The next bounded step is an action-free design for a "
+            "repeatable acquisition-then-replan curriculum."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Paired Red screen · execution preflight passed · pair unclaimed",
+        location="Paired Red screen · tie admitted · curriculum design next",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Run base then candidate · identical reset · max 3 decisions each",
+            choice="Design acquisition then changed-state replanning · no gameplay",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="live_evaluation",
+            phase="qualification",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -179,12 +179,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
             ),
             (
-                "Preflight · exact-head CI green · pair plus both arms unclaimed · one root · "
-                "identical resets · max 3 decisions/arm · strict admission"
+                "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "
+                "decision · actions 244/244 · frames 16,296/16,296"
             ),
             (
-                "Next evidence · execute base then candidate once · safe retained acquisition "
-                "is primary · tie-breakers forbidden · no retry or replacement"
+                "Next evidence · action-free curriculum design · acquisition then changed-state "
+                "replanning · existing unused contexts first · no gameplay or root rescue"
             ),
             (
                 "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "

@@ -1,5 +1,19 @@
 # Current audit — 2026-08-18
 
+## Current result: safe acquisition tie; no composition
+
+The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+(SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
+admits both exact arms. Base and candidate each made one prediction, safely retained one
+acquisition, and used 244 controller actions / 16,296 frames. The sole primary endpoint is a tie;
+secondary metrics were not used. Both episodes have `composition: false`, so no changed-state
+replanning claim survives audit.
+
+Canonical deltas are +2 development attempts and +2 verified outcomes, with +0 verified
+compositions, fits, comparisons, authority, or transfer. The pair is permanently consumed. The
+active lane is action-free `fresh-red-acquisition-replanning-curriculum-design-v1`, targeting the
+missing second decision without another root rescue or gameplay patch.
+
 ## Current result: paired execution qualified without consuming the screen
 
 Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run

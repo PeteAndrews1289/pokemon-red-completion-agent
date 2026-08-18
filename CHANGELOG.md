@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Executed and strictly admitted the frozen paired Red acquisition screen. The
+  [path-free result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+  has SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`.
+  Base and candidate each made one prediction, safely retained one acquisition, and used 244
+  actions / 16,296 frames, producing a primary-endpoint tie. Neither episode composed a second
+  decision, so changed-state replanning remains unproved and authority stays zero. Added exactly
+  two development attempts and two verified outcomes; added zero verified compositions, fits,
+  comparisons, authority, or transfer. Retired the consumed pair with no retry and activated an
+  action-free acquisition-replanning curriculum-design lane.
+
 - Published the paired successor executor at source
   `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` under green CI run `32126183561` and completed one
   exact-head zero-action preflight. The

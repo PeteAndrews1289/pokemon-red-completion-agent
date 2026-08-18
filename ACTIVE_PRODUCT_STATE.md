@@ -29,29 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Paired Red goal-manager outcome screen V1** (`paired-red-goal-manager-outcome-screen-v1`)
+**Fresh Red acquisition-replanning curriculum design V1** (`fresh-red-acquisition-replanning-curriculum-design-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: After strict admission, close the screen. A candidate win supports designing a fresh acquisition-development curriculum; a tie, loss, or uninterpretable result redirects to data/design analysis without rerunning this root.
+- Next decision: If an existing-context design proves a genuine two-step acquisition/replanning question, freeze it and reorient separately to bounded collection. Otherwise close it and define the smallest new nonsealed capture requirement without execution.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Execute and strictly admit the one frozen paired Red acquisition screen to test whether the first teacher-free fitted goal manager can produce safe retained acquisition and changed-state replanning from an identical reset. |
-| Authority now | The outcome-updated model is a shadow diagnostic candidate only. It has no fresh-context, acquisition, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Qualify exactly one later two-arm Red feasibility execution whose result depends only on safe retained acquisition; qualification grants no authority. |
-| Transfer test | Not in this lane. Crystal remains closed until Red produces independent acquisition evidence and passes a separate authority decision. |
-| Cheapest falsifier | Run the frozen base arm and candidate arm exactly once, in that order, under the preflighted pair identity. Stop after both durable terminals or the first retained failure, then strictly admit the fixed pair without retry, replacement, adaptation, or secondary-metric tie-breaking. |
+| Reusable capability | Design a repeatable Red acquisition-and-replanning curriculum that can distinguish safe acquisition from changed-state multi-decision composition without another one-root rescue loop. |
+| Authority now | The shadow candidate and base each have one bounded, disclosed-train-root safe-acquisition result. Neither has improved-model, replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
+| Authority target | Authorize only a later repeatable Red curriculum that measures safe acquisition followed by changed-state goal choice; design grants no authority. |
+| Transfer test | Not in this lane. A later Crystal curriculum must reuse the title-neutral acquisition/replanning contract only after Red measures it successfully. |
+| Cheapest falsifier | Action-free inspect existing unused nonsealed Red contexts and their authenticated post-acquisition states. Require a title-neutral contract with at least two executable choices before and after acquisition; close the design if existing evidence cannot support that sequence without gameplay or route patches. |
 | Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Development Episode · development | 12 | 14 |
-| Verified Outcome Example · development | 2 | 4 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -59,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-paired-red-goal-manager-outcome-screen-v1** · status **active** · evidence [qualification](docs/evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
+**2026-08-18-paired-red-screen-tie-reorientation** · status **active** · evidence [development episode](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is the first controlled gameplay test of the teacher-free fitted candidate. It asks a narrow but product-relevant question: can learned semantic goal choice lead to a safely retained new specimen and replanning, without implying full-game or living-Pokedex competence? |
-| Learning output | No new measured learning output. Exact-head CI run 32126183561 passed and one action-free preflight authenticated pair identity d5fdcdc5, both arm identities, identical reset, three-decision hard stops, durable claims and terminals, and strict admission. Predictions, actions, executions, outcomes, fits, comparisons, authority, and transfer remained zero. |
-| Authority delta | None. Passing execution qualification authorizes one descriptive screen only; the candidate remains shadow-only and gains no acquisition, completion, Crystal, or living-Pokedex authority before the result is admitted. |
-| Transfer result | Not run. Crystal remains closed until Red shows independent acquisition and replanning evidence under a frozen paired screen. |
-| Blocker | No engineering blocker remains. The exact pair is frozen, the successor executor is published under green exact-head CI, and a zero-action preflight left the pair and both arms available and unclaimed. |
-| Decision | Retire execution qualification and run exactly the frozen base-then-candidate screen. The primary endpoint is safe retained acquisition; secondary efficiency or composition metrics cannot break a tie or rescue an uninterpretable pair. |
-| Next session | Run and admit exactly one base-then-candidate paired Red screen under pair identity d5fdcdc5. Do not retry, replace the root, patch a route or skill, fit a model, open sealed Red, or execute Crystal. |
-| Next falsifier | Execute the exact unclaimed pair once, admit both durable artifacts, and adjudicate only safe retained acquisition as win, loss, tie, or uninterpretable. The result closes this screen regardless of outcome. |
-| Stop condition | Stop after the first admitted pair result or any retained failure. No retry, replacement, adaptation, model fit, route or skill patch, promotion, sealed Red, Crystal, or full replay is permitted. |
+| Product alignment | The tie proves bounded independent acquisition but exposes the missing product capability: choosing again after the collection state changes. The next design targets that reusable hierarchy directly instead of repeating a one-decision root. |
+| Learning output | The consumed pair produced two admitted development episodes and two verified outcomes. Base and candidate each made one prediction, safely retained one acquisition, and used 244 actions / 16,296 frames. The primary result was a tie; composition was false for both. Counters are now development attempts 14 and verified outcomes 4, with fits, comparisons, authority, and transfer unchanged. |
+| Authority delta | None. Both models acquired safely on one disclosed train root, but the candidate did not beat the base and neither arm demonstrated a second decision, replanning, fresh-context generalization, transfer, or completion. |
+| Transfer result | Not run. Crystal remains closed; the Red result demonstrated one acquisition but no changed-state composition or transferable hierarchy. |
+| Blocker | The paired screen answered acquisition feasibility but not learned improvement or composition: both arms made one identical-cost successful acquisition, then stopped without a second decision. |
+| Decision | Close the consumed pair as a tie and open one design-only curriculum lane. Use existing authenticated Red contexts to specify a repeatable acquisition-then-replan question before any further gameplay. |
+| Next session | Freeze only the curriculum question and counter semantics for repeatable acquisition plus replanning. Do not execute a root, fit a model, reuse the consumed pair, patch routes or skills, open sealed Red, or run Crystal. |
+| Next falsifier | Action-free prove that existing unused contexts can freeze an acquisition followed by a changed-state menu with at least two executable choices. If not, close this design and specify the minimum new nonsealed capture need without executing it. |
+| Stop condition | Stop after one action-free curriculum design or immediately if existing contexts cannot establish a genuine acquisition-then-replan sequence. No gameplay, fit, route/skill patch, sealed Red, Crystal, or replay. |
 
 ### Stop conditions
 
-- Any changed frozen root, model, seed, policy, arm order, three-decision cap, endpoint, route, skill, verifier, or replacement rule closes the pair without execution.
-- Any controller intervention, teacher query, model update, retry, replacement root, sealed Red access, Crystal access, or full replay stops the lane.
-- Stop after one durable paired result or the first retained failure; secondary metrics cannot rescue the primary endpoint.
+- Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-pair reuse stops this design lane.
+- Any route or skill patch, sealed Red access, Crystal access, promotion, or full replay stops the lane.
+- Stop after one frozen action-free design or a documented proof that existing contexts cannot support it.
 
 ### Hard boundaries for this lane
 
@@ -115,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Paired Red goal-manager outcome screen V1:** The exact pair is consumed and strictly admitted. Base and candidate each safely retained one acquisition with identical action/frame cost, producing a tie; both stopped after one decision, so composition and changed-state replanning remain unproved. No retry is allowed. Evidence is preserved; retry is no.
 - **Paired Red goal-manager screen execution qualification V1:** The exact successor executor passed green CI and one zero-action preflight with the pair and both arm identities still unclaimed. It enforces pair-before-arm claims, identical resets, base-then-candidate order, three-decision hard stops, durable failure retention, and strict endpoint-only admission. Evidence is preserved; retry is no.
 - **Paired Red goal-manager outcome screen design V1:** The action-free design froze one development-outcome-unused acquisition train root with three initial goals, two identical-reset arms, a three-decision cap, and safe retained acquisition as the only primary endpoint. The runner made zero predictions or controller actions; execution remains separate. Evidence is preserved; retry is no.
 - **Teacher-free Red goal-manager outcome fit V1:** Its one allowed capped inverse-propensity update completed from two authenticated positive targets in one episode. The candidate passed all frozen train-only loss, probability, weight, KL, round-trip, and protected-winner guards; it remains shadow-only and the consumed fit identity may never retry. Evidence is preserved; retry is no.
@@ -149,4 +148,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **5**.
+Current evidence entries: **6**.

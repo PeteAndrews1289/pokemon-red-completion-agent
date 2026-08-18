@@ -5,6 +5,17 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current acquisition/replanning rail:** Show **PAIRED RESULT TIE · BASE SAFE ACQUISITION 1 ·
+> CANDIDATE SAFE ACQUISITION 1 · DECISIONS 1/1 · ACTIONS 244/244 · FRAMES 16,296/16,296 ·
+> COMPOSITION FALSE/FALSE · AUTHORITY +0**. Link the
+> [result receipt](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json) and
+> display **SHA-256 79C4E171C5833C17E0AB328267A09C0AB538119559347447123D5699702FDE38**.
+>
+> Show **PAIR CONSUMED · NO RETRY** and the active rail **ACTION-FREE EXISTING-CONTEXT INSPECTION
+> → FREEZE ACQUISITION + CHANGED-STATE REPLAN QUESTION → STOP**. Display cumulative product-v2
+> **DEVELOPMENT ATTEMPTS 14 · VERIFIED OUTCOMES 4 · ATOMIC 0 · COMPOSITION ATTEMPTS 1 · VERIFIED
+> COMPOSITIONS 1**. Mark **NO GAMEPLAY · NO ROOT RESCUE · NO ROUTE/SKILL PATCH · NO CRYSTAL**.
+>
 > **Current paired gameplay rail:** Show **SUCCESSOR SOURCE E77BBE12 · CI 32126183561 GREEN ·
 > ZERO-ACTION PREFLIGHT PASSED · PAIR D5FDCDC5 UNCLAIMED · ARM IDENTITIES 2/2 AVAILABLE ·
 > PREDICTIONS 0 · ACTIONS 0 · GAMEPLAY 0 · OUTCOMES 0**. Link the

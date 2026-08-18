@@ -18,6 +18,22 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
+## Paired screen tied; acquisition-replanning design next — 2026-08-18
+
+The [strict paired result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+(SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
+admits both exact arms. Base and candidate each made one model decision, safely retained one
+acquisition, and used 244 actions / 16,296 frames. The sole primary endpoint is therefore a tie;
+secondary metrics did not break it. Both episodes are explicitly non-compositional, so no
+changed-state replanning claim is allowed. Add two development attempts and two verified outcomes;
+add zero verified compositions, fits, comparisons, authority, or transfer.
+
+The pair and both arms are consumed forever. The active lane is
+`fresh-red-acquisition-replanning-curriculum-design-v1`: action-free use existing unused nonsealed
+contexts to freeze a repeatable acquisition-then-replan question with at least two executable
+choices before and after the state change. No gameplay, root rescue, route/skill patch, fit,
+sealed Red, or Crystal belongs to this design lane.
+
 ## Paired execution qualified; exact gameplay screen next — 2026-08-18
 
 Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run

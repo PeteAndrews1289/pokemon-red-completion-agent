@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: a real catch, and an honest tie
+
+Reveal **BASE: SAFE ACQUISITION 1 · CANDIDATE: SAFE ACQUISITION 1 · RESULT: TIE**. Put the two
+traces side by side: **DECISIONS 1/1 · ACTIONS 244/244 · FRAMES 16,296/16,296**. Then stamp the
+important negative: **COMPOSITION FALSE/FALSE · NO SECOND DECISION · NO REPLANNING CLAIM ·
+AUTHORITY +0**. Link the
+[result receipt](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json) with
+**SHA-256 79C4E171C5833C17E0AB328267A09C0AB538119559347447123D5699702FDE38**.
+
+Move the scoreboard to **DEVELOPMENT ATTEMPTS 14 · VERIFIED OUTCOMES 4**, while fits,
+comparisons, authority, and transfer stay still. Cross out **RETRY**: the pair is consumed. The next
+rail is **EXISTING UNUSED CONTEXTS → ACQUISITION → CHANGED-STATE CHOICE → REPLAN**, built
+action-free before another game run. The story is not “the candidate won”; it is “the system can
+catch, and now we know exactly what it still cannot demonstrate.”
+
 ## August 18 scene: the rails pass; the next cut is gameplay
 
 Open on **SUCCESSOR E77BBE12 · CI 32126183561 GREEN · ZERO-ACTION PREFLIGHT PASSED**. Reveal

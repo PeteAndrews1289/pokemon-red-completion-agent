@@ -7,6 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: both models caught one; neither chose again
+
+The first paired gameplay screen ended in a clean tie. From the same reset, the base model and the
+new candidate each made one decision, safely kept one newly acquired specimen, and used exactly 244
+actions and 16,296 frames. That proves the existing stack can carry out a bounded acquisition
+without a teacher. It does not show that the update improved anything.
+
+More importantly, both episodes ended before a second decision. The screen never reached the part
+the full product needs most: noticing that the collection changed and choosing what to do next.
+The pair is consumed, so there is no do-over. The next scene is deliberately action-free: design a
+repeatable acquisition-then-replanning curriculum from existing unused contexts. This is progress
+toward a living Pokédex agent, not evidence that one exists yet.
+
 ## Current checkpoint: the safety rails are built; the next move is real gameplay
 
 The successor executor at `e77bbe12` passed green CI and then a zero-action preflight. It proved

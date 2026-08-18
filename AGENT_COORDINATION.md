@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-18 paired screen tied; acquisition-replanning design is the only active lane — highest
+> checkpoint:** The [strict result](docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
+> (SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
+> admits both arms: base and candidate each safely retained one acquisition in one decision with
+> 244 actions / 16,296 frames. Result **TIE**; composition **false / false**; authority delta 0.
+> Product-focus-v2 is now 14 development attempts and 4 verified outcomes; verified compositions
+> remain 1 cumulatively.
+>
+> The pair is consumed and may never retry. Codex owns one action-free design lane for a repeatable
+> acquisition-then-changed-state-replanning curriculum using existing unused contexts. Reviewers
+> remain read-only. No gameplay, new root execution, route/skill patch, fit, promotion, sealed Red,
+> Crystal, or full replay.
+
 > **2026-08-18 paired execution qualified; the frozen gameplay screen is now the only active
 > lane — highest checkpoint:** Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8`
 > passed CI `32126183561`. The
