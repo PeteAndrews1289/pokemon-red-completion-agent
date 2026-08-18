@@ -98,28 +98,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The sole six-root freeze failed closed without a campaign or diagnosable cause. "
-            "That lane is retired; one stage-observable causal Red train outcome is next."
+            "The sole first-causal freeze failed closed at readiness authentication with effects "
+            "not attested. That lane is retired; public-only readiness-manifest qualification "
+            "is active."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=(
-            "Red causal train · first unused acquisition-capable root · "
-            "1 full-menu choice · 1 outcome"
-        ),
+        location="ROM/private-free public manifest · no root or claim ledger",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Unchanged shadow base eb5c6515…",
-            choice=(
-                "Publish runner, freeze the first root action-free, consume one lane identity, "
-                "execute once, stop"
-            ),
+            candidate="No model opened · shadow base unchanged",
+            choice="Qualify canonical public bindings; stop before live readiness",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="qualification",
             zero_shot_completed=causal_train_examples,
             zero_shot_total=causal_train_total,
             adaptation_completed=fits,
@@ -130,7 +125,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Causal train examples",
+                "Active learning outputs",
                 "Model fits",
                 "Unseen comparisons",
             ),
@@ -142,7 +137,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Authority target", _text(authority, "target")),
             output_event,
             (
-                f"Causal curriculum · train examples {causal_train_examples} · attempts "
+                f"Cumulative causal evidence · train examples {causal_train_examples} · attempts "
                 f"{development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
@@ -180,16 +175,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "decision · actions 244/244 · frames 16,296/16,296"
             ),
             (
-                "Closed falsifier · one action-free freeze failed at action_free_root_inventory "
-                "· campaign plan 0 · preflight 0 · predictions 0 · actions 0 · outcomes 0"
-            ),
-            (
-                "Successor attempt · preflight passed · identity consumed · fit_attempted → "
-                "unexpected_failure · accepted fits 0 · candidate bundle 0 · retry 0"
-            ),
-            (
                 "Closed multiroot gate · 13fa0b6 · CI 32166168758/1 green · freeze returned "
                 "unexpected_failure · campaign 0 · counters +0 · retry 0"
+            ),
+            (
+                "Closed first-causal gate · 61f9b44 · CI 32171116652/1 green · freeze returned "
+                "readiness_authentication · effects not attested · campaign 0 · retry 0 · "
+                "replacement 0"
+            ),
+            (
+                "Public invocation audit · supplied paired-runner binding mismatched published "
+                "bytes · historical cause and effects remain not attested"
             ),
         ),
     )

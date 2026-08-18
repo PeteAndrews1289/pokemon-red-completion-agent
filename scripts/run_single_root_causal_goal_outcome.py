@@ -104,56 +104,20 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    stage = "argument_validation"
-    try:
-        args = _parser().parse_args(argv)
-        stage = "readiness_authentication"
-        readiness = _at_stage(stage, lambda: _readiness(args))
-        if args.mode == "freeze":
-            if args.expected_campaign_sha256 is not None:
-                raise SingleRootCausalRunError("mode_arguments")
-            stage = "campaign_freeze"
-            result = _at_stage(
-                stage,
-                lambda: _freeze(readiness, args.campaign_plan, args.private_root),
-            )
-        else:
-            expected = _sha(args.expected_campaign_sha256, "campaign")
-            stage = "campaign_qualification"
-            qualified = _at_stage(
-                stage,
-                lambda: _qualify(
-                    readiness,
-                    args.campaign_plan,
-                    args.private_root,
-                    expected_campaign_sha256=expected,
-                    require_unclaimed=args.mode in {"preflight", "execute"},
-                ),
-            )
-            if args.mode == "preflight":
-                result = _preflight(readiness, qualified)
-            elif args.mode == "execute":
-                stage = "development_execution"
-                result = _at_stage(stage, lambda: _execute(readiness, qualified))
-            else:
-                stage = "outcome_admission"
-                result = _at_stage(stage, lambda: _admit(readiness, qualified))
-        print(json.dumps(result, indent=2, sort_keys=True))
-        return 0
-    except Exception as error:
-        print(
-            json.dumps(
-                {
-                    "schema": "pokemon.red.single-root-causal-goal-outcome-failure.v1",
-                    "status": "failed_closed",
-                    "failure_stage": _failure_stage(error, default=stage),
-                    "effects": "not_attested_on_failure",
-                    "private_path_fields": 0,
-                },
-                sort_keys=True,
-            )
+    del argv
+    print(
+        json.dumps(
+            {
+                "schema": "pokemon.red.single-root-causal-goal-outcome-failure.v1",
+                "status": "failed_closed",
+                "failure_stage": "lane_retired",
+                "effects": "no_manifest_readiness_or_private_access",
+                "private_path_fields": 0,
+            },
+            sort_keys=True,
         )
-        return 1
+    )
+    return 1
 
 
 def _at_stage(stage: str, operation: Callable[[], _T]) -> _T:

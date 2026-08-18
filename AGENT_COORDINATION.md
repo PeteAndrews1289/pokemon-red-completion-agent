@@ -1,7 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-18 six-root freeze failed closed; one causal outcome is the only current work — highest
-> checkpoint:** Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI
+> **2026-08-18 first-causal lane retired; public readiness-manifest qualification is the only
+> current work — highest checkpoint:** Published source
+> `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its sole action-free
+> freeze returned `failed_closed` at `readiness_authentication`, with effects not attested and no
+> campaign plan. The
+> [failure receipt](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+> (SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+> separately records a supplied paired-runner binding that did not match published bytes; do not
+> turn that audit into a historical cause or effects claim. Retire the exact acquisition lane with
+> no retry or replacement. Keep **30/15/4/3/0/0**, **14/4/0/1/1**, atomic zero, and causal train
+> examples zero.
+>
+> Codex owns `causal-readiness-manifest-qualification-v1`: one ROM/private-free canonical validator
+> for public source and transitive runner bindings, tested with synthetic mismatches. No root, ROM,
+> private artifact, claim ledger, prediction, or action is allowed. Publish under green CI and stop
+> for reorientation. A pass permits only a separately designed, scientifically distinct
+> one-decision train question, preferably `DEVELOP_TEAM`; it grants no gameplay or product claim.
+
+> **Previous checkpoint — 2026-08-18 six-root freeze failed closed; one causal outcome was the only
+> current work:** Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI
 > `32166168758/1`. Its sole actual action-free freeze returned `failed_closed` at
 > `unexpected_failure`, with no campaign plan and effects not attested. The
 > [failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

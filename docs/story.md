@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: six roots fail opaquely, so the next lesson gets smaller
+## Current checkpoint: one stale public binding closes acquisition before the game can teach
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its one
+authorized action-free freeze returned `failed_closed` at `readiness_authentication`, with effects
+not attested and no campaign plan. The
+[failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+also records a separate public fact: the supplied paired-runner binding did not match the bytes that
+were published. That mismatch explains why the next tool must be better, not what historically
+happened inside the failed runner. The acquisition lane closes without retry or replacement.
+
+The next scene has no Pokémon screen at all. `causal-readiness-manifest-qualification-v1` builds a
+canonical public manifest and proves with synthetic mismatches that stale source or transitive
+runner bindings cannot reach live readiness. It opens no root, ROM, private artifact, claim,
+prediction, or action, then publishes green and stops. The boards remain **30/15/4/3/0/0** and
+**14/4/0/1/1**, with zero atomic and causal train examples. Only a separately designed,
+scientifically different one-decision train question—preferably `DEVELOP_TEAM`—may follow. This is
+maintenance for a transferable living-Pokédex player, not evidence that the player learned.
+
+## Previous checkpoint: six roots failed opaquely, so the next lesson got smaller
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
 [failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

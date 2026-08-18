@@ -54,6 +54,11 @@ COMPOSITION_V4_DESIGN = (
 PREFLIGHT_OBSERVABILITY = (
     PROJECT_ROOT / "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json"
 )
+FIRST_CAUSAL_FREEZE_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -173,11 +178,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "first-causal-goal-outcome-v1"
-    assert state.active_lane["kind"] == "learning"
-    assert len(state.retired_lanes) == 23
+    assert state.active_lane["id"] == "causal-readiness-manifest-qualification-v1"
+    assert state.active_lane["kind"] == "maintenance"
+    assert len(state.retired_lanes) == 24
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
+    assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -665,7 +670,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Causal Train Example · train: 0/1",)
+    assert rows == ()
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -742,7 +747,14 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
 
 
 def test_learning_lane_accepts_one_honest_causal_train_example() -> None:
-    state = validate_product_focus_document(_document())
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = [
+        {"kind": "causal_train_example", "minimum": 1, "partition": "train"}
+    ]
+    state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (("Causal Train Example · train", 0, 1),)
 
@@ -750,6 +762,11 @@ def test_learning_lane_accepts_one_honest_causal_train_example() -> None:
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
     document = _document()
     lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = [
+        {"kind": "causal_train_example", "minimum": 1, "partition": "train"}
+    ]
     outputs = lane["measurable_outputs"]
     assert isinstance(outputs, list)
     output = outputs[0]
@@ -875,24 +892,61 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "First causal goal outcome V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert "Causal readiness manifest qualification V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Unchanged shadow base eb5c6515" in encoded
+    assert "No model opened" in encoded
     assert "loss 1.2667" in encoded
-    assert "action_free_root_inventory" in encoded
-    assert "fit_attempted" in encoded
     assert "unexpected_failure" in encoded
-    assert "candidate bundle 0" in encoded
     assert "actions 244/244" in encoded
-    assert "one stage-observable causal Red train outcome" in encoded
-    assert "first unused acquisition-capable root" in encoded
-    assert "consume one lane identity" in encoded
+    assert "public-only readiness-manifest qualification" in encoded
+    assert "ROM/private-free public manifest" in encoded
+    assert "Qualify canonical public bindings" in encoded
     assert "13fa0b6" in encoded
+    assert "61f9b44" in encoded
+    assert "readiness_authentication" in encoded
+    assert "effects not attested" in encoded
+    assert "paired-runner binding mismatched" in encoded
     assert "campaign 0" in encoded
     assert "retry 0" in encoded
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_first_causal_freeze_failure_is_path_free_and_does_not_attest_effects() -> None:
+    receipt = json.loads(FIRST_CAUSAL_FREEZE_FAILURE.read_text(encoding="ascii"))
+
+    assert receipt["schema"] == (
+        "pokemon.red.first-causal-goal-outcome-freeze-failure-receipt.v1"
+    )
+    assert receipt["source_verification"] == {
+        "github_ci_attempt": 1,
+        "github_ci_conclusion": "success",
+        "github_ci_run": 32171116652,
+        "source_commit": "61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a",
+        "worktree_dirty_before_execution": False,
+    }
+    assert receipt["execution"] == {
+        "campaign_plan_created": False,
+        "effects_attested_by_runner": False,
+        "failure_stage": "readiness_authentication",
+        "historical_failure_cause": "not_attested",
+        "process_running_after_return": False,
+        "retry_allowed": False,
+        "runner_status": "failed_closed",
+    }
+    assert receipt["public_invocation_audit"] == {
+        "historical_cause_inference_allowed": False,
+        "manual_expected_paired_runner_binding_matched_published_bytes": False,
+        "purpose": (
+            "Record a public invocation inconsistency for future tooling without upgrading the "
+            "runner's non-attested historical failure envelope."
+        ),
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 

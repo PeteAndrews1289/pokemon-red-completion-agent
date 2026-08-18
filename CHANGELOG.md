@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Retired `first-causal-goal-outcome-v1` after its sole action-free freeze at published source
+  `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`, green CI `32171116652/1`, returned
+  `failed_closed` at `readiness_authentication` with effects not attested and no campaign plan. The
+  [failure receipt](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+  (SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+  separately records that the supplied paired-runner binding did not match published bytes; this
+  does not upgrade historical cause or effect attestation. No retry or replacement is allowed.
+  Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, atomic zero, and causal examples zero.
+  Activated maintenance lane `causal-readiness-manifest-qualification-v1`: build one canonical,
+  ROM/private-free public source/transitive-runner manifest validator, publish it under green CI,
+  and stop before any root, claim, prediction, action, or gameplay. A pass permits only separate
+  design of a scientifically distinct one-decision train lane, preferably `DEVELOP_TEAM`.
+
 - Retired the resettable multiroot curriculum after its sole actual six-root action-free freeze at
   source `13fa0b6de423115b506361a1d4c0491395d74421`, green CI `32166168758/1`, returned
   `failed_closed` at `unexpected_failure`. The

@@ -10,6 +10,7 @@ __pycache__/
 htmlcov/
 dist/
 build/
+/.public-execution-manifests/
 
 # Copyrighted or private game artifacts
 *.gb

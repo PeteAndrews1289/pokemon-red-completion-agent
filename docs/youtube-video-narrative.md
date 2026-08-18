@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: six-root freeze closes; one causal example is next
+## August 18 scene: first-causal acquisition closes; public readiness bindings take the frame
+
+Open on **SOURCE 61F9B44** (`61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`) **· CI
+32171116652/1 GREEN · SOLE FREEZE FAILED_CLOSED · READINESS_AUTHENTICATION · EFFECTS NOT
+ATTESTED · CAMPAIGN PLAN 0 · RETRY 0 · REPLACEMENT 0**. Link the
+[failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json) with
+**SHA-256 43E6BE47…2A7101**.
+
+Add a separate card: **PUBLIC INVOCATION AUDIT · SUPPLIED PAIRED-RUNNER BINDING ≠ PUBLISHED
+BYTES**. Under it, stamp **DOES NOT IDENTIFY HISTORICAL CAUSE OR EFFECTS**. Hold boards at
+**30/15/4/3/0/0** and **14/4/0/1/1**, with **ATOMIC 0 · CAUSAL TRAIN EXAMPLES 0**.
+
+Cut away from gameplay to `causal-readiness-manifest-qualification-v1`: **PUBLIC FILES + SYNTHETIC
+FIXTURES ONLY · CANONICAL SOURCE/TRANSITIVE-RUNNER BINDINGS · REJECT STALE HASHES · ROM 0 · ROOT
+0 · PRIVATE 0 · CLAIM 0 · PREDICTION 0 · ACTION 0**. The rail is **PUBLISH GREEN → STOP FOR
+REORIENTATION → SEPARATELY DESIGN DISTINCT ONE-DECISION TRAIN QUESTION, PREFER DEVELOP_TEAM**.
+Caption it **MAINTENANCE FOR A TRANSFERABLE LIVING-POKÉDEX PLAYER · NOT LEARNED COMPETENCE**.
+
+## Previous August 18 scene: six-root freeze closed; one causal example was next
 
 Open on **SOURCE 13FA0B6** (`13fa0b6de423115b506361a1d4c0491395d74421`) **· CI
 32166168758/1 GREEN · SOLE SIX-ROOT FREEZE FAILED_CLOSED · UNEXPECTED_FAILURE · CAMPAIGN PLAN

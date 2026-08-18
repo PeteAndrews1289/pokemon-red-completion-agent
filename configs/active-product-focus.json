@@ -8,42 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Prove that the exact shadow goal manager can make and execute one bounded title-neutral decision from an unused acquisition-capable Red train root and retain one strict causal outcome before any new fit or composition claim.",
-      "cheapest_falsifier": "One action-free inventory must select the deterministic first unused nonsealed Red train root focused on ACQUIRE_SPECIES, then inspect exactly that root for at least two executable goals including ACQUIRE_SPECIES. If that root does not qualify, or if any execution failure cannot be classified by a named path-free stage, close the attempt without a replacement root or route patch.",
-      "id": "first-causal-goal-outcome-v1",
-      "kind": "learning",
+      "capability": "Eliminate manually copied public executable-hash drift before any future causal lane can touch a ROM, private artifact, claim ledger, model prediction, or controller input.",
+      "cheapest_falsifier": "A ROM/private-free validator must reject a canonical manifest containing any stale public source or runner binding and accept only the exact reviewed dependency graph. If it cannot do that without entering live readiness, close the approach.",
+      "id": "causal-readiness-manifest-qualification-v1",
+      "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "None. The failed action-free freeze adds no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority.",
-        "blocker": "The sole six-root freeze returned failed_closed at unexpected_failure with effects not attested and no campaign plan. Its sanitized envelope cannot distinguish a missing root from an implementation exception, so that exact lane is retired without diagnosis or retry.",
-        "decision": "Retire the six-root curriculum. Build one reusable, stage-observable single-root runner with a lane-wide no-replacement identity, publish it under green CI, then allow one action-free freeze, one zero-prediction preflight, and at most one model-led train episode with a durable terminal.",
+        "authority_delta": "None. The failed readiness attempt adds no causal example, outcome, fit, comparison, promotion, gameplay, completion, or transfer authority.",
+        "blocker": "The sole first-causal acquisition freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. A separate public invocation audit found that the supplied paired-runner binding did not match the published bytes, but that does not upgrade the runner's historical effect or cause attestation.",
+        "decision": "Retire the exact acquisition lane without retry or replacement. Build one ROM/private-free canonical readiness-manifest validator, then reorient to a scientifically distinct one-decision train question only after publication and green CI.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json",
-          "sha256": "f7f8c3cf89085b7d8ae902edc5a1202afd62faa229ffe79a1b17d63893925c7f"
+          "path": "docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json",
+          "sha256": "43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101"
         },
-        "learning_output": "No new measured learning output. The sole multiroot freeze produced no campaign, episode, target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition.",
-        "next_falsifier": "The new exact-head runner must action-freeze the deterministic first unused acquisition-capable train root, pass a zero-prediction preflight, consume one lane-wide no-replacement identity before prediction, and then durably terminate exactly one full-menu model-led decision. Any opaque failure, missing menu, reused root, or non-durable terminal closes the lane.",
-        "next_session_goal": "Implement and mutation-test the single-root causal runner, publish it, pass exact-head CI, perform one action-free freeze and preflight, then execute at most one authorized episode and stop at its first durable terminal.",
-        "product_alignment": "This is an intentionally small Red causal-data step, not the product. It tests the atomic model-to-goal-to-skill-to-outcome loop needed before broader resettable curricula, multi-decision planning, Crystal transfer, or living-Pokedex completion can be credible.",
-        "session_id": "2026-08-18-multiroot-freeze-closed-causal-outcome-next",
+        "learning_output": "No new measured learning output. The acquisition freeze produced no campaign, episode, causal target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples.",
+        "next_falsifier": "The validator must prove, using public files and synthetic fixtures only, that exact source and transitive runner bindings are complete, canonical, and mismatch-sensitive before live readiness is callable.",
+        "next_session_goal": "Implement and mutation-test the ROM/private-free canonical readiness manifest, publish it under green CI, and stop for reorientation before any new root, ROM, private model, claim ledger, prediction, or action is opened.",
+        "product_alignment": "This bounded repair prevents provenance bookkeeping from consuming future causal-data opportunities. It is infrastructure only; the product remains a learned multi-game completion and living-Pokedex agent.",
+        "session_id": "2026-08-18-first-causal-freeze-closed-readiness-manifest-next",
         "status": "active",
-        "stop_condition": "Stop after the first durable success or failure terminal. Any retry, replacement root, root-specific patch, opaque failure, teacher query, fallback, sealed Red access, Crystal access, fit, or second episode closes the lane.",
-        "transfer_result": "Not run. Crystal remains closed; one Red causal outcome cannot establish cross-title transfer or living-Pokedex ability."
+        "stop_condition": "Stop after one public manifest validator and its adversarial tests. Any ROM/private read, claim-ledger access, acquisition-lane retry, model prediction, controller action, fit, sealed Red access, or Crystal access closes the lane.",
+        "transfer_result": "Not run. Crystal remains closed; readiness tooling cannot establish cross-title transfer or living-Pokedex ability."
       },
       "learned_authority": {
         "current": "The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority.",
-        "target": "Retain one strictly admitted model-led Red causal outcome. Grant no fit, promotion, completion, sealed, or transfer authority."
+        "target": "Qualify only a public readiness-binding manifest for future lanes. Grant no gameplay, fit, promotion, completion, sealed, or transfer authority."
       },
-      "maintenance_unblocks": null,
-      "measurable_outputs": [
-        {
-          "kind": "causal_train_example",
-          "minimum": 1,
-          "partition": "train"
-        }
-      ],
-      "name": "First causal goal outcome V1",
-      "next_decision": "A strictly admitted outcome permits a separate data-design decision for the smallest root-diverse train cohort; it does not itself authorize a fit. Failure closes the single-root attempt without replacement or rescue.",
+      "maintenance_unblocks": "distinct-goal-causal-train-example-v1",
+      "measurable_outputs": [],
+      "name": "Causal readiness manifest qualification V1",
+      "next_decision": "A passing public-only validator permits designing a scientifically distinct one-decision train lane, preferably DEVELOP_TEAM. It never permits retrying or replacing the closed acquisition lane.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -102,15 +96,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any reused or sealed root, teacher query, fallback action, opaque failure, sealed Red access, Crystal access, or full replay stops the lane.",
-        "Any attempt to patch or replace the selected root, route, skill, or menu into compliance stops the lane; use only existing qualified title-neutral capabilities.",
-        "Stop after one durably terminated model-led episode or a documented action-free falsification within four hours."
+        "Any ROM, private artifact, model payload, context state, or fixed-account claim-ledger access stops the lane.",
+        "Any attempt to retry, replace, diagnose through private inputs, or rescue the closed acquisition lane stops the lane.",
+        "Stop after one canonical public manifest validator and its adversarial tests within two hours."
       ],
       "time_box": {
-        "maximum_hours": 4,
+        "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "Not in this lane. This single Red episode tests only the causal execution/data seam; Crystal and cross-game living-Pokedex claims remain closed."
+      "transfer_test": "Not in this lane. Public readiness validation supplies no gameplay, Crystal, or cross-game living-Pokedex evidence."
+    },
+    {
+      "id": "first-causal-goal-outcome-v1",
+      "kind": "learning",
+      "name": "First causal goal outcome V1",
+      "preserve_evidence": true,
+      "reason": "Published source 61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a passed CI 32171116652/1, but its sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. The exact acquisition lane is closed without retry, replacement root, or gameplay claim; all learning counters remain unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "resettable-goal-manager-multiroot-learning-v1",

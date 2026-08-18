@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: retire the opaque multiroot freeze; retain one causal outcome
+## Current checkpoint: close acquisition; qualify canonical public readiness bindings
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
+[first-causal freeze failure](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+records one action-free freeze returning `failed_closed` at `readiness_authentication`, effects not
+attested, and no campaign plan. Its separate public invocation audit found a supplied paired-runner
+binding mismatch with published bytes; that does not establish the historical cause or effects.
+The exact acquisition lane is retired without retry or replacement. Boards remain
+**30/15/4/3/0/0** and **14/4/0/1/1**; atomic and causal train examples remain zero.
+
+`causal-readiness-manifest-qualification-v1` is a two-hour maintenance lane, not a learning result.
+Build one canonical validator that uses public files and synthetic fixtures to reject stale source
+or transitive runner bindings. It may not touch a root, ROM, private artifact, claim ledger, model
+prediction, or controller action. Publish it under green CI and stop for reorientation. A pass may
+support separate design of a distinct one-decision train question, preferably `DEVELOP_TEAM`; it
+does not authorize gameplay or any competence, authority, Crystal, transfer, completion, or
+living-Pokédex claim.
+
+## Previous checkpoint: the opaque multiroot freeze was retired; one causal outcome was next
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
 [freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

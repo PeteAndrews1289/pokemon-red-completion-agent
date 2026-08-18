@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-18: multiroot freeze failed closed; one causal train example is next
+## 2026-08-18: first-causal acquisition lane retired; public manifest qualification is active
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its
+sole action-free freeze returned `failed_closed` at `readiness_authentication`, with effects not
+attested and no campaign plan. The
+[failure receipt](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+records a separate public mismatch between the supplied paired-runner binding and published bytes;
+do not use it to infer the historical cause or effects. Retire `first-causal-goal-outcome-v1`
+without retry or replacement. Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, atomic zero,
+and causal train examples zero.
+
+Codex owns maintenance lane `causal-readiness-manifest-qualification-v1`. Build and adversarially
+test one canonical validator using only public files and synthetic fixtures; it must reject stale
+source or transitive runner bindings. Do not open a root, ROM, private artifact, claim ledger,
+model prediction, or controller action. Publish under green CI and stop for reorientation. A pass
+may inform a separate one-decision train design, preferably `DEVELOP_TEAM`; it does not authorize
+gameplay or establish competence, authority, Crystal, transfer, completion, or a living Pokédex.
+
+## Previous checkpoint — 2026-08-18: multiroot freeze failed closed; one causal train example was next
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
 [freeze-failure receipt](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one causal train example, not another multiroot retry
+## Current override: Codex owns public readiness-manifest qualification, not another root
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. Its sole
+action-free freeze returned `failed_closed` at `readiness_authentication`, with effects not attested
+and no campaign plan. The
+[failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+also records a separate public paired-runner binding mismatch; it does not prove the historical
+cause or effects. Retire `first-causal-goal-outcome-v1` without retry or replacement. Keep
+**30/15/4/3/0/0**, **14/4/0/1/1**, atomic zero, and causal examples zero.
+
+Codex owns `causal-readiness-manifest-qualification-v1`. Implement and adversarially test one
+canonical validator using only public files and synthetic fixtures, publish it under green CI, and
+stop for reorientation. Do not open any root, ROM, private artifact, model payload, claim ledger,
+prediction, or action. Reviewers remain read-only. A pass may support a separate scientifically
+distinct one-decision train design, preferably `DEVELOP_TEAM`; it grants no gameplay or product
+authority.
+
+## Previous override: Codex owned one causal train example, not another multiroot retry
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The sole
 actual six-root action-free freeze returned `failed_closed` at `unexpected_failure`, with effects

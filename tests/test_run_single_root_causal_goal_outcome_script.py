@@ -641,54 +641,31 @@ def test_admission_rejects_mutated_lane_claim(
         SCRIPT["_admit"](readiness, qualified)
 
 
-def test_real_invocation_exception_is_reduced_to_named_path_free_stage(
+def test_retired_runner_stops_before_manifest_readiness_or_private_access(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
+    calls: list[str] = []
     monkeypatch.setitem(
         SCRIPT["main"].__globals__,
         "_readiness",
-        lambda args: (_ for _ in ()).throw(RuntimeError("/private/root/secret")),
+        lambda args: calls.append("readiness"),
     )
-    path_flags = (
-        "context-plan",
-        "context-catalog",
-        "base-model",
-        "base-fit-summary",
-        "candidate-model",
-        "candidate-fit-summary",
-        "fit-result-receipt",
-        "prior-campaign",
-        "private-root",
-        "campaign-plan",
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_freeze",
+        lambda *args: calls.append("private freeze"),
     )
-    sha_flags = (
-        "expected-prior-campaign-sha256",
-        "expected-fit-result-receipt-sha256",
-        "expected-source-commit",
-        "expected-source-bundle-sha256",
-        "expected-runner-sha256",
-        "expected-multiroot-runner-sha256",
-        "expected-paired-runner-sha256",
-        "expected-development-runner-sha256",
-        "expected-runtime-sha256",
-        "expected-numpy-runtime-sha256",
-        "expected-skill-manifest-sha256",
-        "expected-context-plan-sha256",
-    )
-    argv = ["--mode", "freeze"]
-    for flag in path_flags:
-        argv.extend((f"--{flag}", "placeholder"))
-    for flag in sha_flags:
-        argv.extend((f"--{flag}", "a" * (40 if flag == "expected-source-commit" else 64)))
 
-    assert SCRIPT["main"](argv) == 1
+    assert SCRIPT["main"](["--mode", "freeze", "--rom", "/private/rom.gb"]) == 1
     output = capsys.readouterr().out
     result = json.loads(output)
 
-    assert result["failure_stage"] == "readiness_authentication"
-    assert "/private/root/secret" not in output
+    assert result["failure_stage"] == "lane_retired"
+    assert result["effects"] == "no_manifest_readiness_or_private_access"
+    assert "/private/rom.gb" not in output
     assert result["private_path_fields"] == 0
+    assert calls == []
 
 
 def test_runner_attestation_fails_before_inherited_private_readiness(

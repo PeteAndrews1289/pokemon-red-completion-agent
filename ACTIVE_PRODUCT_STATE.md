@@ -29,28 +29,27 @@ Not the product:
 
 ## One active lane
 
-**First causal goal outcome V1** (`first-causal-goal-outcome-v1`)
+**Causal readiness manifest qualification V1** (`causal-readiness-manifest-qualification-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: A strictly admitted outcome permits a separate data-design decision for the smallest root-diverse train cohort; it does not itself authorize a fit. Failure closes the single-root attempt without replacement or rescue.
+- Next decision: A passing public-only validator permits designing a scientifically distinct one-decision train lane, preferably DEVELOP_TEAM. It never permits retrying or replacing the closed acquisition lane.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Prove that the exact shadow goal manager can make and execute one bounded title-neutral decision from an unused acquisition-capable Red train root and retain one strict causal outcome before any new fit or composition claim. |
+| Reusable capability | Eliminate manually copied public executable-hash drift before any future causal lane can touch a ROM, private artifact, claim ledger, model prediction, or controller input. |
 | Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Retain one strictly admitted model-led Red causal outcome. Grant no fit, promotion, completion, sealed, or transfer authority. |
-| Transfer test | Not in this lane. This single Red episode tests only the causal execution/data seam; Crystal and cross-game living-Pokedex claims remain closed. |
-| Cheapest falsifier | One action-free inventory must select the deterministic first unused nonsealed Red train root focused on ACQUIRE_SPECIES, then inspect exactly that root for at least two executable goals including ACQUIRE_SPECIES. If that root does not qualify, or if any execution failure cannot be classified by a named path-free stage, close the attempt without a replacement root or route patch. |
-| Time box | 1 session / 4 hours |
+| Authority target | Qualify only a public readiness-binding manifest for future lanes. Grant no gameplay, fit, promotion, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. Public readiness validation supplies no gameplay, Crystal, or cross-game living-Pokedex evidence. |
+| Cheapest falsifier | A ROM/private-free validator must reject a canonical manifest containing any stale public source or runner binding and accept only the exact reviewed dependency graph. If it cannot do that without entering live readiness, close the approach. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-multiroot-freeze-closed-causal-outcome-next** · status **active** · evidence [qualification](docs/evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)
+**2026-08-18-first-causal-freeze-closed-readiness-manifest-next** · status **active** · evidence [qualification](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is an intentionally small Red causal-data step, not the product. It tests the atomic model-to-goal-to-skill-to-outcome loop needed before broader resettable curricula, multi-decision planning, Crystal transfer, or living-Pokedex completion can be credible. |
-| Learning output | No new measured learning output. The sole multiroot freeze produced no campaign, episode, target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. |
-| Authority delta | None. The failed action-free freeze adds no outcome, fit, comparison, promotion, gameplay, completion, or transfer authority. |
-| Transfer result | Not run. Crystal remains closed; one Red causal outcome cannot establish cross-title transfer or living-Pokedex ability. |
-| Blocker | The sole six-root freeze returned failed_closed at unexpected_failure with effects not attested and no campaign plan. Its sanitized envelope cannot distinguish a missing root from an implementation exception, so that exact lane is retired without diagnosis or retry. |
-| Decision | Retire the six-root curriculum. Build one reusable, stage-observable single-root runner with a lane-wide no-replacement identity, publish it under green CI, then allow one action-free freeze, one zero-prediction preflight, and at most one model-led train episode with a durable terminal. |
-| Next session | Implement and mutation-test the single-root causal runner, publish it, pass exact-head CI, perform one action-free freeze and preflight, then execute at most one authorized episode and stop at its first durable terminal. |
-| Next falsifier | The new exact-head runner must action-freeze the deterministic first unused acquisition-capable train root, pass a zero-prediction preflight, consume one lane-wide no-replacement identity before prediction, and then durably terminate exactly one full-menu model-led decision. Any opaque failure, missing menu, reused root, or non-durable terminal closes the lane. |
-| Stop condition | Stop after the first durable success or failure terminal. Any retry, replacement root, root-specific patch, opaque failure, teacher query, fallback, sealed Red access, Crystal access, fit, or second episode closes the lane. |
+| Product alignment | This bounded repair prevents provenance bookkeeping from consuming future causal-data opportunities. It is infrastructure only; the product remains a learned multi-game completion and living-Pokedex agent. |
+| Learning output | No new measured learning output. The acquisition freeze produced no campaign, episode, causal target, fit, or comparison. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples. |
+| Authority delta | None. The failed readiness attempt adds no causal example, outcome, fit, comparison, promotion, gameplay, completion, or transfer authority. |
+| Transfer result | Not run. Crystal remains closed; readiness tooling cannot establish cross-title transfer or living-Pokedex ability. |
+| Blocker | The sole first-causal acquisition freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. A separate public invocation audit found that the supplied paired-runner binding did not match the published bytes, but that does not upgrade the runner's historical effect or cause attestation. |
+| Decision | Retire the exact acquisition lane without retry or replacement. Build one ROM/private-free canonical readiness-manifest validator, then reorient to a scientifically distinct one-decision train question only after publication and green CI. |
+| Next session | Implement and mutation-test the ROM/private-free canonical readiness manifest, publish it under green CI, and stop for reorientation before any new root, ROM, private model, claim ledger, prediction, or action is opened. |
+| Next falsifier | The validator must prove, using public files and synthetic fixtures only, that exact source and transitive runner bindings are complete, canonical, and mismatch-sensitive before live readiness is callable. |
+| Stop condition | Stop after one public manifest validator and its adversarial tests. Any ROM/private read, claim-ledger access, acquisition-lane retry, model prediction, controller action, fit, sealed Red access, or Crystal access closes the lane. |
 
 ### Stop conditions
 
-- Any reused or sealed root, teacher query, fallback action, opaque failure, sealed Red access, Crystal access, or full replay stops the lane.
-- Any attempt to patch or replace the selected root, route, skill, or menu into compliance stops the lane; use only existing qualified title-neutral capabilities.
-- Stop after one durably terminated model-led episode or a documented action-free falsification within four hours.
+- Any ROM, private artifact, model payload, context state, or fixed-account claim-ledger access stops the lane.
+- Any attempt to retry, replace, diagnose through private inputs, or rescue the closed acquisition lane stops the lane.
+- Stop after one canonical public manifest validator and its adversarial tests within two hours.
 
 ### Hard boundaries for this lane
 
@@ -114,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **First causal goal outcome V1:** Published source 61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a passed CI 32171116652/1, but its sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. The exact acquisition lane is closed without retry, replacement root, or gameplay claim; all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Resettable multi-root goal-manager learning V1:** The sole actual action-free six-root freeze at source 13fa0b6de423115b506361a1d4c0491395d74421 returned failed_closed at unexpected_failure with effects not attested and produced no campaign plan. The cause is not inferred, all learning counters remain unchanged, and the exact curriculum is closed without retry or root-specific rescue. Evidence is preserved; retry is no.
 - **Goal-manager acquisition successor learning V1:** Published source 5beb7fa3512ca8ef294524484fccbf13607050e8 passed CI 32152766490/1 and a zero-outcome preflight. Its one fit identity was consumed, reached fit_attempted, and failed closed as unexpected_failure with no candidate bundle or accepted fit. The sanitized cause was not retained, so no gate cause is inferred and no retry is allowed. Evidence is preserved; retry is no.
 - **Fresh Red acquisition-replanning execution qualification V1:** Published source 458d47eace849d55712ff12e7a93f7ca5439579c passed CI 32147795552/1, but its single action-free freeze failed at action_free_root_inventory. No campaign plan, preflight, prediction, action, outcome, or fit occurred; the exact campaign is closed without retry or root/menu/skill repair. Evidence is preserved; retry is no.

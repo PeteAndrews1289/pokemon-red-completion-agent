@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: the multiroot freeze closes; one causal example becomes the target
+## August 18: first-causal acquisition closes; canonical public readiness becomes the repair
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
+[first-causal failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+records the sole action-free freeze returning `failed_closed` at `readiness_authentication`, effects
+not attested, and no campaign plan. Its separate public invocation audit found that the supplied
+paired-runner binding did not match the published bytes. That is a tooling input, not a retroactive
+cause or effect attestation. The acquisition lane retires without retry or replacement; counters
+remain **30/15/4/3/0/0**, **14/4/0/1/1**, atomic zero, and causal train examples zero.
+
+Active `causal-readiness-manifest-qualification-v1` is a bounded maintenance lane. It constructs
+one canonical public source/transitive-runner manifest and uses synthetic fixtures to prove stale
+bindings fail before any root, ROM, private artifact, claim ledger, prediction, or action. Publish
+under green CI and stop for reorientation. A pass supports only separate design of a scientifically
+distinct one-decision train question, preferably `DEVELOP_TEAM`. It adds no gameplay, competence,
+authority, Crystal, transfer, completion, or living-Pokédex evidence.
+
+## Previous August 18 checkpoint: the multiroot freeze closed; one causal example became the target
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
 [freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

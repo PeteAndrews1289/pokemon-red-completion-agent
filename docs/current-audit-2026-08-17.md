@@ -1,6 +1,26 @@
 # Current audit — 2026-08-18
 
-## Current result: the only multiroot freeze failed closed; causal single-root data is next
+## Current result: first-causal acquisition closed; public readiness manifest is active
+
+Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a` passed CI `32171116652/1`. The
+[failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+(SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+records the sole action-free freeze returning `failed_closed` at `readiness_authentication`, with
+effects not attested and no campaign plan. A separate public audit found that the supplied
+paired-runner binding did not match published bytes. This inconsistency motivates future tooling;
+it does not identify the historical failure cause or effects. The exact acquisition lane is
+retired without retry or replacement.
+
+All deltas are zero: legacy counters remain **30/15/4/3/0/0**, product-focus-v2 remains
+**14/4/0/1/1**, and atomic goal episodes and causal train examples remain zero. Active maintenance
+lane `causal-readiness-manifest-qualification-v1` must build one public-only canonical source and
+transitive-runner validator with synthetic mismatch tests. It may not open a root, ROM, private
+artifact, claim ledger, prediction, or action. Publish under green CI and stop for reorientation.
+Only a separate later design may ask one scientifically distinct train question, preferably
+`DEVELOP_TEAM`; no gameplay, competence, authority, Crystal, transfer, completion, or living-Dex
+claim follows.
+
+## Previous result: the only multiroot freeze failed closed; causal single-root data was next
 
 Exact source `13fa0b6de423115b506361a1d4c0491395d74421` passed CI `32166168758/1`. The
 [freeze-failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json)

@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): the six-root curriculum failed closed; collect one
+> **Current product focus (August 18, 2026): the first-causal acquisition lane is closed; qualify
+> public readiness bindings only.** Published source `61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`
+> passed CI `32171116652/1`. Its sole action-free freeze returned `failed_closed` at
+> `readiness_authentication`, with effects not attested and no campaign plan. The
+> [failure receipt](docs/evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+> (SHA-256 `43e6be471482c7513d06406af9543a5022250c8581b1e92a97020fc8d82a7101`)
+> also records a separate public invocation mismatch between the supplied paired-runner binding and
+> published bytes; that fact does not identify the historical cause or effects. The exact lane is
+> retired without retry or replacement. Counters stay **30/15/4/3/0/0** and **14/4/0/1/1**;
+> atomic goal episodes and causal train examples remain zero.
+>
+> Active maintenance lane `causal-readiness-manifest-qualification-v1` builds one canonical,
+> ROM/private-free validator for exact public source and transitive runner bindings. It opens no
+> root, ROM, private model, claim ledger, prediction, or controller action. Publish it under green
+> CI and stop for reorientation. Only then may a separate, scientifically distinct one-decision
+> train lane—preferably `DEVELOP_TEAM`—be designed. This infrastructure grants no gameplay,
+> competence, authority, Crystal, transfer, completion, or living-Pokédex claim.
+
+> **Previous product focus (August 18, 2026): the six-root curriculum failed closed; collect one
 > causal train example next.** Exact source `13fa0b6de423115b506361a1d4c0491395d74421`
 > passed CI `32166168758/1`. Its sole actual action-free freeze returned `failed_closed` at
 > `unexpected_failure`, with effects not attested and no campaign plan. The
