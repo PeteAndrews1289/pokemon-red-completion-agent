@@ -154,6 +154,7 @@ def _trajectory(
     *,
     assignment_id: str = "b" * 64,
     ordering_assignment_id: str | None = None,
+    partition: str = "development",
 ) -> tuple[GoalManagerTrajectoryObserver, InMemoryTrajectorySink]:
     sink = InMemoryTrajectorySink()
     recorder: RecordingExecutor[object, object] = RecordingExecutor(
@@ -165,7 +166,7 @@ def _trajectory(
     observer = GoalManagerTrajectoryObserver(
         episode_id="development-episode",
         root_lineage_id="red-goal-root-" + "4" * 64,
-        partition="development",
+        partition=partition,
         environment_id=RED_COLLECTION_GAME_ID,
         actor="exploratory_goal_manager",
         policy_id="red-goal-manager-outcome-development-v1",
@@ -391,6 +392,8 @@ class _DevelopmentReader:
         tamper_environment: bool = False,
         tamper_decision_identity: bool = False,
         tamper_terminal_identity: bool = False,
+        partition: str = "development",
+        maximum_decisions: int = 3,
     ) -> None:
         self._sink = sink
         self._result = result
@@ -399,6 +402,8 @@ class _DevelopmentReader:
         self._tamper_environment = tamper_environment
         self._tamper_decision_identity = tamper_decision_identity
         self._tamper_terminal_identity = tamper_terminal_identity
+        self._partition = partition
+        self._maximum_decisions = maximum_decisions
 
     def read_header(self) -> Mapping[str, object]:
         return {
@@ -412,7 +417,7 @@ class _DevelopmentReader:
                     "policy_id": "red-goal-manager-outcome-development-v1",
                 },
                 "split": {
-                    "partition": "development",
+                    "partition": self._partition,
                     "root_lineage_id": "red-goal-root-" + "4" * 64,
                 },
                 "goal_manager": {
@@ -429,7 +434,7 @@ class _DevelopmentReader:
                 "development": {
                     "exploration_mix": 0.15,
                     "maximum_importance_weight": 4.0,
-                    "maximum_decisions": 3,
+                    "maximum_decisions": self._maximum_decisions,
                     "outcome_objective_id": (
                         "pokemon.core.goal-manager.selected-outcome-objective.v1"
                     ),
@@ -540,6 +545,49 @@ def test_strict_development_admission_builds_outcome_targets() -> None:
     assert {target.reward for target in admitted.targets} == {1.0}
     assert all(0.0 < target.behavior_probability <= 1.0 for target in admitted.targets)
     assert all(1.0 <= target.importance_weight <= 4.0 for target in admitted.targets)
+
+
+def test_strict_one_decision_train_admission_is_explicit() -> None:
+    trajectory, sink = _trajectory(partition="train")
+    observe, meter = _observe_factory()
+    result = run_repeatable_goal_manager_development_episode(
+        observe=observe,
+        policy=ExploratoryGoalManagerPolicy(_model(), seed=17),
+        trajectory=trajectory,
+        budget_meter=meter,
+        maximum_decisions=1,
+    )
+    reader = _DevelopmentReader(
+        sink,
+        result,
+        partition="train",
+        maximum_decisions=1,
+    )
+
+    admitted = load_repeatable_goal_manager_development_episode(
+        reader,
+        expected_campaign_id="a" * 64,
+        expected_trial_claim_sha256="b" * 64,
+        expected_episode_id="development-episode",
+        expected_root_lineage_id="red-goal-root-" + "4" * 64,
+        expected_seed=17,
+        expected_execution_identity_sha256="8" * 64,
+        expected_context_catalog_sha256="e" * 64,
+        expected_context_id="f" * 64,
+        expected_binding_manifest_sha256="d" * 64,
+        expected_state_sha256="2" * 64,
+        expected_envelope_sha256="1" * 64,
+        expected_first_question_sha256=_first_question(sink).ordered_policy_input_sha256,
+        expected_first_policy_context_sha256=_first_question(sink).policy_context_sha256,
+        expected_first_available_menu_sha256=_first_question(sink).available_menu_sha256,
+        expected_model=_model(),
+        expected_source_commit="1" * 40,
+        expected_partition="train",
+        expected_maximum_decisions=1,
+    )
+
+    assert admitted.dataset.partition == "train"
+    assert len(admitted.targets) == 1
 
 
 def test_strict_development_admission_rejects_wrong_model() -> None:

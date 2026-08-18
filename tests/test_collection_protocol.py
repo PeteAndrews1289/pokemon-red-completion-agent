@@ -141,11 +141,11 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     assert len(payload) == 7000
     assert (
         registry.registry_sha256
-        == "f2f0f2e6ff218853d7ae0e44c7615a87f99b9d2e51f3cd4057fe5ec255060f0f"
+        == "cf030a7a48b3138636d5fada876bc33364214a0108560f78191a8a5acb0b7b74"
     )
     assert (
         registry.execution.source_bundle_sha256
-        == "5670955333560a796108aaf898ff2491d2dbdb429d1d0343dc089c8a2b5cbd1b"
+        == "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17"
     )
     assert (
         registry.execution.behavior_configuration_sha256
@@ -157,9 +157,9 @@ def test_final_campaign_identity_has_public_golden_values() -> None:
     )
     assert (
         registry.execution.teacher_execution_sha256
-        == "d8b634b246b249fabc246519dac929a857f8f6cf27ae0c976d674adb65c5dbc3"
+        == "dcdd1746bc33ffd1e8d5ed12237d7778c8168096677e12dce51a85823902bed7"
     )
-    assert first.assignment_id == "c429a957de3dcb9657a48d463651745a2d2b8ca8f60c3b643df00f76db017558"
+    assert first.assignment_id == "900877ba3e3fbdac462b28adbbd6ba633c1e608779d3faf04a07cde3534917ba"
 
 
 def test_canonical_newline_hash_has_an_independent_golden_vector() -> None:
@@ -459,11 +459,14 @@ def test_committed_source_blob_reads_exact_commit_not_working_copy(
     expected = (repository / relative_path).read_bytes()
     (repository / relative_path).write_bytes(b"working tree tampering\n")
 
-    assert committed_executable_source_blob(
-        repository,
-        revision="HEAD",
-        relative_path=relative_path,
-    ) == expected
+    assert (
+        committed_executable_source_blob(
+            repository,
+            revision="HEAD",
+            relative_path=relative_path,
+        )
+        == expected
+    )
 
 
 @pytest.mark.parametrize(

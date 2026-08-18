@@ -76,13 +76,20 @@ class GoalManagerDevelopmentError(RuntimeError):
     """Raised when a repeatable development episode crosses its declared boundary."""
 
 
-def goal_manager_development_contract() -> dict[str, object]:
+def goal_manager_development_contract(
+    *, maximum_decisions: int = DEVELOPMENT_MAX_DECISIONS
+) -> dict[str, object]:
     """Return the one canonical episode-header contract for collection and admission."""
+
+    if type(maximum_decisions) is not int or not 1 <= maximum_decisions <= 3:  # noqa: E721
+        raise GoalManagerDevelopmentError(
+            "development decision bound must be one to three"
+        )
 
     return {
         "exploration_mix": DEVELOPMENT_EXPLORATION_MIX,
         "maximum_importance_weight": DEVELOPMENT_MAX_IMPORTANCE_WEIGHT,
-        "maximum_decisions": DEVELOPMENT_MAX_DECISIONS,
+        "maximum_decisions": maximum_decisions,
         "outcome_objective_id": DEVELOPMENT_OUTCOME_OBJECTIVE_ID,
         "repeatable_capture": True,
         "temperature": DEVELOPMENT_TEMPERATURE,
@@ -636,6 +643,8 @@ def load_repeatable_goal_manager_development_episode(
     expected_first_available_menu_sha256: str,
     expected_model: GoalManagerScorer,
     expected_source_commit: str,
+    expected_partition: str = "development",
+    expected_maximum_decisions: int = DEVELOPMENT_MAX_DECISIONS,
 ) -> AdmittedGoalManagerDevelopmentEpisode:
     """Admit one complete episode without turning failures into teacher labels.
 
@@ -645,12 +654,21 @@ def load_repeatable_goal_manager_development_episode(
     weighted with a fixed cap; candidate probabilities remain in the durable decision.
     """
 
+    if expected_partition not in {"train", "development"}:
+        raise GoalManagerDevelopmentError("development partition is invalid")
+    if (
+        type(expected_maximum_decisions) is not int  # noqa: E721
+        or not 1 <= expected_maximum_decisions <= DEVELOPMENT_MAX_DECISIONS
+    ):
+        raise GoalManagerDevelopmentError(
+            "development decision bound must be one to three"
+        )
     try:
         dataset = load_goal_manager_episode(reader)
     except GoalManagerTrajectoryError as error:
         raise GoalManagerDevelopmentError(str(error)) from error
     if (
-        dataset.partition != "development"
+        dataset.partition != expected_partition
         or dataset.actor != "exploratory_goal_manager"
         or dataset.policy_id != "red-goal-manager-outcome-development-v1"
         or dataset.environment_id != RED_COLLECTION_GAME_ID
@@ -664,7 +682,7 @@ def load_repeatable_goal_manager_development_episode(
         or dataset.capture_state_sha256 != expected_state_sha256
         or dataset.capture_envelope_sha256 != expected_envelope_sha256
         or dataset.source_commit != expected_source_commit
-        or not 1 <= len(dataset.examples) <= DEVELOPMENT_MAX_DECISIONS
+        or not 1 <= len(dataset.examples) <= expected_maximum_decisions
     ):
         raise GoalManagerDevelopmentError("development episode provenance differs")
     first_question = dataset.examples[0].question
@@ -741,7 +759,9 @@ def load_repeatable_goal_manager_development_episode(
         metadata.get("development"),
         subject="development episode contract",
     )
-    if development != goal_manager_development_contract():
+    if development != goal_manager_development_contract(
+        maximum_decisions=expected_maximum_decisions
+    ):
         raise GoalManagerDevelopmentError("development episode contract differs")
 
     terminals = [
@@ -926,7 +946,7 @@ def load_repeatable_goal_manager_development_episode(
         "verified_failure"
         if dataset.examples[-1].outcome_status is not GoalDecisionOutcome.SUCCEEDED
         else "decision_limit"
-        if len(dataset.examples) == DEVELOPMENT_MAX_DECISIONS
+        if len(dataset.examples) == expected_maximum_decisions
         else "menu_became_singleton"
     )
     if stopped_reason != expected_stop_reason:

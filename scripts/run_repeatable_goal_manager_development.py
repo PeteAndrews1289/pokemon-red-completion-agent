@@ -1432,7 +1432,7 @@ def _roots(plan: Mapping[str, object]) -> tuple[Mapping[str, object], ...]:
 
 
 def _outcome_objective() -> dict[str, object]:
-    return goal_manager_development_outcome_objective()
+    return cast(dict[str, object], goal_manager_development_outcome_objective())
 
 
 def _trials(plan: Mapping[str, object]) -> tuple[Mapping[str, object], ...]:

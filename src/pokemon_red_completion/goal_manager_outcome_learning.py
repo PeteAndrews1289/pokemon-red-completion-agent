@@ -96,8 +96,31 @@ def fit_goal_manager_outcome_update(
 
     if not isinstance(base_model, GoalManagerLinearModel):
         raise TypeError("base_model must be a GoalManagerLinearModel")
-    evidence = _validated_rows(rows)
-    before = evaluate_goal_manager_outcomes(base_model, evidence)
+    evidence = _validated_rows(rows, expected_partition="development")
+    return _fit_validated_goal_manager_outcome_update(base_model, evidence)
+
+
+def fit_goal_manager_train_outcome_update(
+    base_model: GoalManagerLinearModel,
+    rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
+) -> GoalManagerOutcomeUpdate:
+    """Apply the frozen update to explicitly train-partitioned outcome evidence."""
+
+    if not isinstance(base_model, GoalManagerLinearModel):
+        raise TypeError("base_model must be a GoalManagerLinearModel")
+    evidence = _validated_rows(rows, expected_partition="train")
+    return _fit_validated_goal_manager_outcome_update(base_model, evidence)
+
+
+def _fit_validated_goal_manager_outcome_update(
+    base_model: GoalManagerLinearModel,
+    evidence: tuple[tuple[GoalManagerExample, GoalManagerDevelopmentTarget], ...],
+) -> GoalManagerOutcomeUpdate:
+    before = evaluate_goal_manager_outcomes(
+        base_model,
+        evidence,
+        expected_partition=evidence[0][0].partition,
+    )
     gradient = np.zeros_like(base_model.weights)
     for example, target in evidence:
         features = goal_manager_feature_matrix(example.question)
@@ -124,7 +147,11 @@ def fit_goal_manager_outcome_update(
         l2=base_model.l2,
         training_epochs=1,
     )
-    after = evaluate_goal_manager_outcomes(candidate, evidence)
+    after = evaluate_goal_manager_outcomes(
+        candidate,
+        evidence,
+        expected_partition=evidence[0][0].partition,
+    )
     comparisons = tuple(
         (target.reward, old, new)
         for (_, target), old, new in zip(
@@ -166,8 +193,8 @@ def fit_goal_manager_outcome_successor_update(
     successor experiment from counting the same outcomes as fresh training data.
     """
 
-    fresh = _validated_rows(new_rows)
-    anchors = _validated_rows(anchor_rows)
+    fresh = _validated_rows(new_rows, expected_partition="development")
+    anchors = _validated_rows(anchor_rows, expected_partition="development")
     if {target.decision_id for _, target in fresh} & {target.decision_id for _, target in anchors}:
         raise GoalManagerOutcomeLearningError(
             "successor evidence overlaps its no-regression anchors"
@@ -197,10 +224,12 @@ def fit_goal_manager_outcome_successor_update(
 def evaluate_goal_manager_outcomes(
     model: GoalManagerLinearModel,
     rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
+    *,
+    expected_partition: str = "development",
 ) -> GoalManagerOutcomeFitMetrics:
     """Evaluate the frozen selected-action binary outcome objective."""
 
-    evidence = _validated_rows(rows)
+    evidence = _validated_rows(rows, expected_partition=expected_partition)
     losses: list[float] = []
     selected_probabilities: list[float] = []
     importance: list[float] = []
@@ -288,7 +317,11 @@ def outcome_update_configuration() -> dict[str, object]:
 
 def _validated_rows(
     rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
+    *,
+    expected_partition: str,
 ) -> tuple[tuple[GoalManagerExample, GoalManagerDevelopmentTarget], ...]:
+    if expected_partition not in {"train", "development"}:
+        raise GoalManagerOutcomeLearningError("outcome update partition is invalid")
     result = tuple(rows)
     if not result:
         raise GoalManagerOutcomeLearningError("outcome update evidence is empty")
@@ -300,7 +333,7 @@ def _validated_rows(
         ):
             raise TypeError("outcome update rows are invalid")
         if (
-            example.partition != "development"
+            example.partition != expected_partition
             or example.decision_id != target.decision_id
             or example.selected_candidate_index != target.selected_candidate_index
             or target.selected_candidate_index not in example.question.available_indices
@@ -332,6 +365,7 @@ __all__ = [
     "evaluate_goal_manager_outcomes",
     "fit_goal_manager_outcome_update",
     "fit_goal_manager_outcome_successor_update",
+    "fit_goal_manager_train_outcome_update",
     "maximum_policy_kl",
     "outcome_update_configuration",
     "require_unchanged_guard_winners",

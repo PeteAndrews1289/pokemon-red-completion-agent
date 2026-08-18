@@ -24,6 +24,7 @@ from pokemon_red_completion.goal_manager_outcome_learning import (
     GoalManagerOutcomeLearningError,
     fit_goal_manager_outcome_successor_update,
     fit_goal_manager_outcome_update,
+    fit_goal_manager_train_outcome_update,
     outcome_update_configuration,
     require_unchanged_guard_winners,
 )
@@ -73,6 +74,7 @@ def _row(
     *,
     selected: int,
     reward: float = 1.0,
+    partition: str = "development",
 ) -> tuple[GoalManagerExample, GoalManagerDevelopmentTarget]:
     question = _question(safety=0.3 + index * 0.1, storage=0.8 - index * 0.1)
     decision = f"decision-{index}"
@@ -82,7 +84,7 @@ def _row(
         episode_id="episode",
         decision_index=index,
         root_lineage_id="root",
-        partition="development",
+        partition=partition,
         environment_id="pokemon.mainline:red:gb:us:rev0",
         actor="exploratory_goal_manager",
         policy_id="red-goal-manager-outcome-development-v1",
@@ -133,6 +135,24 @@ def test_single_frozen_update_reinforces_both_successes() -> None:
     assert result.maximum_weight_delta > 0.0
     assert outcome_update_configuration()["update_steps"] == 1
     assert outcome_update_configuration()["hyperparameter_search"] is False
+
+
+def test_train_only_update_requires_explicit_train_partition() -> None:
+    rows = (
+        _row(0, selected=1, partition="train"),
+        _row(1, selected=1, partition="train"),
+    )
+
+    result = fit_goal_manager_train_outcome_update(_model(), rows)
+
+    assert result.after.weighted_binary_cross_entropy < (
+        result.before.weighted_binary_cross_entropy
+    )
+    with pytest.raises(GoalManagerOutcomeLearningError, match="row differs"):
+        fit_goal_manager_train_outcome_update(
+            _model(),
+            (_row(2, selected=1, partition="development"),),
+        )
 
 
 def test_negative_outcome_reduces_selected_probability() -> None:
