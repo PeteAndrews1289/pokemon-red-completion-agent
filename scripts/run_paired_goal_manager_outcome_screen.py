@@ -593,7 +593,7 @@ def _selection_contract() -> dict[str, object]:
     return {
         "rule": (
             "first_registry_order_train_acquire_species_excluding_prior_"
-            "teacher_free_campaigns_and_closed_roots"
+            "teacher_free_campaign_states_and_closed_roots"
         ),
         "development_outcome_unused": True,
         "supervised_train_exposure_allowed": True,
@@ -611,11 +611,26 @@ def _selected_assignment(readiness: _Readiness) -> GoalManagerAssignment:
         for campaign in readiness.prior_campaigns
         for root in development._roots(campaign)
     }
+    prior_state_envelopes = {
+        (
+            _sha(root.get("state_sha256"), "prior root state"),
+            _sha(root.get("envelope_sha256"), "prior root envelope"),
+        )
+        for campaign in readiness.prior_campaigns
+        for root in development._roots(campaign)
+    }
     root_registry = open_fixed_account_claim_registry()
     excluded.update(
         base.candidate.registry.assignment(entry.slot_id).root_lineage_id
         for entry in base.entries
-        if not development._historical_root_is_open(base, entry, root_registry)
+        if (
+            not development._historical_root_is_open(base, entry, root_registry)
+            or (
+                base.candidate.catalog.entry(entry.slot_id).state_sha256,
+                base.candidate.catalog.entry(entry.slot_id).envelope_sha256,
+            )
+            in prior_state_envelopes
+        )
     )
     assignments = tuple(
         base.candidate.registry.assignment(entry.slot_id) for entry in base.entries

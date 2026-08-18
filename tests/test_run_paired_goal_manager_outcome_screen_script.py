@@ -24,7 +24,7 @@ def test_runner_freezes_the_exact_two_prior_campaign_set() -> None:
         "replacement_root_allowed": False,
         "rule": (
             "first_registry_order_train_acquire_species_excluding_prior_"
-            "teacher_free_campaigns_and_closed_roots"
+            "teacher_free_campaign_states_and_closed_roots"
         ),
         "supervised_train_exposure_allowed": True,
     }
@@ -114,10 +114,15 @@ def test_formal_selection_excludes_closed_roots_before_choosing() -> None:
         slot_id="second",
     )
     assignments = {"first": first, "second": second}
+    contexts = {
+        "first": SimpleNamespace(state_sha256="3" * 64, envelope_sha256="4" * 64),
+        "second": SimpleNamespace(state_sha256="5" * 64, envelope_sha256="6" * 64),
+    }
     base = SimpleNamespace(
         entries=(SimpleNamespace(slot_id="first"), SimpleNamespace(slot_id="second")),
         candidate=SimpleNamespace(
-            registry=SimpleNamespace(assignment=assignments.__getitem__)
+            registry=SimpleNamespace(assignment=assignments.__getitem__),
+            catalog=SimpleNamespace(entry=contexts.__getitem__),
         ),
     )
     readiness = SimpleNamespace(development=base, prior_campaigns=())
@@ -127,6 +132,56 @@ def test_formal_selection_excludes_closed_roots_before_choosing() -> None:
     development._historical_root_is_open = (
         lambda _base, entry, _registry: entry.slot_id != "first"
     )
+    try:
+        assert select(readiness) is second
+    finally:
+        development._historical_root_is_open = original_open
+        globals_["open_fixed_account_claim_registry"] = open_registry
+
+
+def test_formal_selection_excludes_prior_state_across_lineage_rollover() -> None:
+    select = SCRIPT["_selected_assignment"]
+    globals_ = select.__globals__
+    development = globals_["development"]
+    open_registry = globals_["open_fixed_account_claim_registry"]
+    first = SimpleNamespace(
+        partition="train",
+        focus_kind=SCRIPT["GoalKind"].ACQUIRE_SPECIES,
+        root_lineage_id="red-goal-root-" + "7" * 64,
+        slot_id="first",
+    )
+    second = SimpleNamespace(
+        partition="train",
+        focus_kind=SCRIPT["GoalKind"].ACQUIRE_SPECIES,
+        root_lineage_id="red-goal-root-" + "8" * 64,
+        slot_id="second",
+    )
+    assignments = {"first": first, "second": second}
+    contexts = {
+        "first": SimpleNamespace(state_sha256="a" * 64, envelope_sha256="b" * 64),
+        "second": SimpleNamespace(state_sha256="c" * 64, envelope_sha256="d" * 64),
+    }
+    base = SimpleNamespace(
+        entries=(SimpleNamespace(slot_id="first"), SimpleNamespace(slot_id="second")),
+        candidate=SimpleNamespace(
+            registry=SimpleNamespace(assignment=assignments.__getitem__),
+            catalog=SimpleNamespace(entry=contexts.__getitem__),
+        ),
+    )
+    prior = {
+        "roots": [
+            {
+                "root_lineage_id": "red-goal-root-" + "9" * 64,
+                "state_sha256": "a" * 64,
+                "envelope_sha256": "b" * 64,
+            }
+        ]
+    }
+    readiness = SimpleNamespace(development=base, prior_campaigns=(prior,))
+
+    globals_["open_fixed_account_claim_registry"] = lambda: object()
+    original_open = development._historical_root_is_open
+    development._historical_root_is_open = lambda _base, _entry, _registry: True
     try:
         assert select(readiness) is second
     finally:
