@@ -246,7 +246,7 @@ def test_main_emits_exactly_one_canonical_failure_envelope_and_returns_nonzero(
         error = RuntimeError("opaque-private-root-id")
         raise SCRIPT["FreshCompositionPreclaimFailure"]("readiness_authentication") from error
 
-    monkeypatch.setitem(runtime_globals, "_run", failed)
+    monkeypatch.setitem(runtime_globals, "_run_with_registry_lease", failed)
 
     assert SCRIPT["main"]([]) == 2
     captured = capsys.readouterr()
@@ -277,7 +277,11 @@ def test_preflight_success_serialization_failure_uses_the_same_sanitized_stage(
             return SimpleNamespace(preflight_only=True)
 
     monkeypatch.setitem(runtime_globals, "_parser", lambda: Parser())
-    monkeypatch.setitem(runtime_globals, "_run", lambda _args: {"invalid": object()})
+    monkeypatch.setitem(
+        runtime_globals,
+        "_run_with_registry_lease",
+        lambda _args: {"invalid": object()},
+    )
 
     assert SCRIPT["main"]([]) == 2
     captured = capsys.readouterr()
