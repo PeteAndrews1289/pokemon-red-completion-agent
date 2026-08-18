@@ -5,6 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): acquisition campaign closed; assimilate one retained
+> acquisition outcome.** Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI
+> `32147795552/1`. Its one authorized action-free freeze failed at the sanitized
+> `action_free_root_inventory` stage. The
+> [path-free failure receipt](docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+> records campaign plan 0, preflight 0, predictions 0, controller actions 0, episode outcomes 0,
+> model fits 0, and no gameplay. The exact campaign is closed: no retry, replacement root, menu
+> patch, or skill patch, and no private cause is inferred from the stage.
+>
+> The active learning lane is `goal-manager-acquisition-successor-learning-v1`. Its
+> [frozen fit plan](docs/evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json)
+> permits one fixed offline update from candidate-arm acquisition manifest `ca107bc2…cdf5`, starting
+> from shadow model `eb5c6515…d2ce`. The two prior storage/restoration targets are evaluation-only
+> no-regression anchors; the duplicate base arm and 19 failed prefixes are excluded. There is no
+> tuning, evaluation, promotion, or authority change. Counters stay **30/15/4/3/0/0** and
+> **14/4/0/1/1**; the active scorecard is **30/30 · 4/5 · 3/3**. A passing fit remains shadow-only
+> and leads directly to a resettable, root-disjoint **8-train/4-development one-decision** curriculum,
+> not another qualification carousel.
+
 > **Current product focus (August 18, 2026): private context plan built; execution qualification
 > continues.** Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI
 > `32141939995/1`. The

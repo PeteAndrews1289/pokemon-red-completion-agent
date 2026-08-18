@@ -8,6 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: the scarce-root campaign is closed; train once on the retained acquisition
+
+Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.
+Its single authorized action-free freeze failed at sanitized stage `action_free_root_inventory`.
+The [failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+records no campaign plan, preflight, prediction, controller action, episode outcome, fit, or
+gameplay. The stage is not a diagnosis. The exact campaign is closed without retry, replacement,
+root/menu/skill repair, or a narrower rescue loop.
+
+The active learning lane is `goal-manager-acquisition-successor-learning-v1`. Its
+[fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json) freezes one
+full-batch capped-IPS update from the independently collected candidate acquisition manifest
+`ca107bc2…cdf5`, initialized from shadow model `eb5c6515…d2ce`. Two prior storage/restoration
+targets are evaluation-only no-regression anchors; the duplicate base arm and all 19 failed prefixes
+are excluded. Hyperparameters are fixed; there is no tuning, evaluation, promotion, or new gameplay.
+The boards remain **30/15/4/3/0/0** and **14/4/0/1/1**; active scorecard
+**30/30 · 4/5 · 3/3**. A pass retains only a shadow successor and moves directly to a resettable,
+root-disjoint 8-train/4-development one-decision curriculum.
+
 ## Current checkpoint: the private plan exists; execution and preflight remain closed
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The

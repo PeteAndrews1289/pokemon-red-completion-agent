@@ -7,6 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the four-root plan stops, but one real catch can still teach
+
+Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.
+The acquisition runner then got one action-free chance to freeze its campaign and stopped at
+`action_free_root_inventory`. That label is a stage, not an explanation. It created no campaign
+plan, preflight, model choice, button press, outcome, fit, or gameplay. The exact campaign is over:
+no retry, substitute root, or menu/skill rescue. The
+[path-free receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+keeps that failure honest without exposing its private inputs.
+
+One already-collected catch still carries unused learning signal. The active lane,
+`goal-manager-acquisition-successor-learning-v1`, follows the
+[frozen fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json): start
+from shadow model `eb5c6515…` and train once on the candidate arm's retained-acquisition outcome.
+Earlier storage and restoration successes are guardrails, not repeated lessons; the duplicate base
+catch and 19 failed prefixes stay out. There is no tuning, evaluation, or promotion.
+The scoreboards remain **30/15/4/3/0/0**, **14/4/0/1/1**, and **30/30 · 4/5 · 3/3** until the fit
+exists. A pass goes straight to a resettable 8-train/4-development one-decision curriculum—the next
+place the model can actually play repeatedly.
+
 ## Current checkpoint: the four unused roots now have a plan, not permission to play
 
 The project mechanically rebuilt its private 81-context plan while leaving the historical contexts

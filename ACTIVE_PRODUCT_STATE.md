@@ -29,27 +29,30 @@ Not the product:
 
 ## One active lane
 
-**Fresh Red acquisition-replanning execution qualification V1** (`fresh-red-acquisition-replanning-execution-qualification-v1`)
+**Goal-manager acquisition successor learning V1** (`goal-manager-acquisition-successor-learning-v1`)
 
-- Kind: **maintenance**
+- Kind: **learning**
 - Rigor: **development**
-- Next decision: If the exact four-root, sixteen-episode zero-action preflight passes with every identity unused, reorient separately to the repeatable development run. Otherwise close the rejected roots or campaign without route, teacher, or menu patches.
+- Next decision: Pass retains a shadow-only successor and opens design of an 8-train/4-development resettable multi-root curriculum. Failure closes this exact update without retry and redirects to representation/data redesign.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Implement execution and strict admission, then freeze and zero-action preflight one repeatable four-root, sixteen-episode Red acquisition-replanning campaign that uses the qualified source-local DEVELOP_TEAM executor as a genuine post-acquisition choice. |
-| Authority now | The shadow candidate and base each have one bounded safe-acquisition result on one disclosed Red train root. Neither has learned replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Authorize only one later repeatable Red development campaign after its exact zero-action preflight passes; this lane grants no gameplay, promotion, completion, or transfer authority. |
-| Transfer test | Not in this lane. The core interface remains title-neutral; Crystal becomes the first measured transfer only after Red produces a real acquisition-replanning signal. |
-| Cheapest falsifier | From the successfully transformed private context plan, implement the durable execution/admission boundary and authenticate four unused train roots, exact model/runtime/profile/skill bindings, initial menus, sixteen prospective identities, hard limits, terminals, and retry-safe ledgers without prediction or controller input. Close the campaign if any root needs a route, teacher, artificial goal, unsafe party, or reused identity. |
-| Time box | 1 session / 6 hours |
+| Reusable capability | Assimilate one already-collected safe retained-acquisition outcome into the shadow Red goal manager while proving that its earlier storage and restoration choices do not regress. |
+| Authority now | The shadow candidate safely retained one acquisition on one disclosed Red train root and previously learned from one storage/restoration episode. It has no replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
+| Authority target | Produce one distinct shadow successor that improves the known acquisition target without regressing the two earlier outcomes. Grant no gameplay, promotion, completion, or transfer authority. |
+| Transfer test | Not in this lane. The next resettable curriculum must reserve root-disjoint development episodes; Crystal remains closed until Red demonstrates broader learned decisions. |
+| Cheapest falsifier | Run one fixed train-only successor update from the candidate acquisition arm. Stop without retry if acquisition probability or loss fails to improve, either evaluation-only anchor regresses, a protected semantic winner flips, or the existing weight/KL cap fails. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Outcome Question · train | 30 | 30 |
+| Model Fit · train | 4 | 5 |
+| Unseen Comparison · development | 3 | 3 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,25 +60,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-acquisition-replanning-context-plan-built** · status **active** · evidence [qualification](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+**2026-08-18-acquisition-freeze-failed-successor-fit-next** · status **active** · evidence [qualification](docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The private plan now carries the qualified source-local development action into four unused acquisition contexts without changing the other 77 profiles. Execution qualification is the remaining bridge to a repeatable curriculum that can measure acquisition followed by replanning. |
-| Learning output | No new measured learning output. The published builder copied 81 authenticated contexts, excluded two prior-used acquisition roots, and transformed exactly four eligible unused profiles without prediction, controller input, emulator advancement, teacher use, outcome access, fit, comparison, authority, or transfer. Every cumulative counter remains unchanged. |
-| Authority delta | None. Source 343cadf921af2b82e79c352163c18d54b3d72d78 passed CI 32141939995/1 and mechanically built only a private context plan. No game, prediction, verified outcome, fit, comparison, promotion, or transfer result occurred. |
+| Product alignment | This is actual model training on collection-relevant causal outcome evidence. It remains deliberately small: its purpose is to prove safe assimilation before a broader resettable acquisition/storage/team/recovery curriculum. |
+| Learning output | No new measured learning output from the failed freeze; every counter remains unchanged at 30 train outcomes, 15 development outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition. The successor plan freezes one new acquisition target and two evaluation-only anchors. |
+| Authority delta | None. The published acquisition-replanning campaign failed during its single action-free freeze at action_free_root_inventory. No campaign plan, preflight, prediction, controller action, outcome, fit, promotion, or transfer result occurred. |
 | Transfer result | Not run. Crystal remains closed; title neutrality is an engineering requirement here, not measured cross-title transfer. |
-| Blocker | The exact 81-context private plan now exists with four eligible unused acquisition profiles transformed and two prior-used roots excluded, but campaign freeze and zero-action preflight have not occurred, and the execution/admission runner boundary remains missing. |
-| Decision | Keep the bounded execution-qualification lane active. Treat the private plan as an authenticated mechanical input only; implement and publish execution/admission, then freeze the four-root sixteen-episode campaign and run one zero-action preflight before any gameplay. |
-| Next session | Implement and publish execution/admission, require green exact-head CI, then freeze the campaign and run one zero-action preflight. Do not execute an episode, make a prediction, send controller input, collect an outcome, fit a model, open sealed Red, or execute Crystal. |
-| Next falsifier | Implement and publish one path-free, retry-safe execution/admission runner, then prove action-free that the four transformed roots, sixteen trial identities, exact bindings, ledgers, limits, and durable terminal contracts are ready. Reject rather than patch any incompatible root. |
-| Stop condition | Stop after one zero-action preflight receipt, or immediately on execution/admission drift, any reused root, inaccessible binding, route or teacher patch, artificial menu entry, prediction, controller input, game frame, or scope beyond six hours. |
+| Blocker | The four-root acquisition-replanning design is closed without retry or root/menu/skill repair. The existing shadow candidate has one separately collected safe retained-acquisition outcome that has not yet been assimilated. |
+| Decision | Run exactly one frozen offline successor update from the candidate acquisition outcome, with the two earlier storage/restoration targets used only as no-regression anchors. Then proceed to a separately designed resettable multi-root curriculum rather than another scarce-root qualification loop. |
+| Next session | Complete one offline successor fit from the already-collected candidate acquisition outcome. Do not collect new gameplay, reuse the duplicate base arm, decode failed prefixes, tune hyperparameters, evaluate on sealed data, promote authority, or execute Crystal. |
+| Next falsifier | Publish and preflight the fixed successor fitter, then consume exactly one fit identity. Reject the exact update on any acquisition, anchor, protected-winner, KL, weight, provenance, or durability failure. |
+| Stop condition | Stop after one fit result, or immediately on a failed gate, consumed identity, anchor regression, tuning request, new gameplay proposal, or scope beyond four hours. |
 
 ### Stop conditions
 
-- Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-root reuse stops this qualification lane.
-- Any fixed map route, root-specific rescue, artificial menu goal, sealed Red access, Crystal access, promotion, or full replay stops the lane.
-- Stop after one path-free zero-action preflight receipt or a documented falsification within six hours.
+- Any new controller action, emulator advancement, teacher query, failed-prefix decode, duplicate base-arm training use, validation reuse, or hyperparameter search stops the lane.
+- Any anchor regression, protected-winner flip, KL or weight-cap breach, sealed Red access, Crystal access, promotion, or full replay stops the lane.
+- Stop after exactly one consumed fit identity or a documented falsification within four hours.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +116,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh Red acquisition-replanning execution qualification V1:** Published source 458d47eace849d55712ff12e7a93f7ca5439579c passed CI 32147795552/1, but its single action-free freeze failed at action_free_root_inventory. No campaign plan, preflight, prediction, action, outcome, or fit occurred; the exact campaign is closed without retry or root/menu/skill repair. Evidence is preserved; retry is no.
 - **Red encounter-source development execution qualification V1:** Published source 944fdc5b79aa240fb42084e47913f9446883e739 passed CI 32135801933/1. The Red adapter binds the title-neutral seam to a hard-limited four-battle, zero-heal, source-local executor; successful capture and development return to the same source boundary, and unsafe starts fail closed. No game ran and all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Title-neutral encounter-source development capability V1:** Published source 6d028ea2003a4520b93a47d0607f5af01f8969e4 passed CI 32132328658/1. The ROM-free core and Red observation adapter expose an action-free, title-neutral DEVELOP_TEAM offer with strict collection-safe readiness verification. No game ran and execution integration remains separate. Evidence is preserved; retry is no.
 - **Fresh Red acquisition-replanning curriculum design V1:** The action-free inventory and reviewed contract froze sixteen prospective episodes across four unused roots. Existing contexts cannot yet expose a multi-choice post-acquisition replan, so the design is complete, no gameplay or learning counter advanced, and the next work is a separate reusable capability lane. Evidence is preserved; retry is no.

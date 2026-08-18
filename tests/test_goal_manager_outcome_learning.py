@@ -22,6 +22,7 @@ from pokemon_red_completion.goal_manager_model import (
 )
 from pokemon_red_completion.goal_manager_outcome_learning import (
     GoalManagerOutcomeLearningError,
+    fit_goal_manager_outcome_successor_update,
     fit_goal_manager_outcome_update,
     outcome_update_configuration,
     require_unchanged_guard_winners,
@@ -88,9 +89,7 @@ def _row(
         question=question,
         selected_candidate_index=selected,
         outcome_status=(
-            GoalDecisionOutcome.SUCCEEDED
-            if reward == 1.0
-            else GoalDecisionOutcome.FAILED
+            GoalDecisionOutcome.SUCCEEDED if reward == 1.0 else GoalDecisionOutcome.FAILED
         ),
         failure_reason=(None if reward == 1.0 else GoalFailureReason.BINDING_FAILED),
     )
@@ -172,3 +171,44 @@ def test_guard_rejects_a_winner_flip() -> None:
 
     with pytest.raises(GoalManagerOutcomeLearningError, match="protected"):
         require_unchanged_guard_winners(base, candidate, (guard,))
+
+
+def test_successor_uses_only_fresh_row_and_preserves_aligned_anchor() -> None:
+    fresh = _row(0, selected=1)
+    anchor = _row(1, selected=1)
+
+    result = fit_goal_manager_outcome_successor_update(
+        _model(),
+        (fresh,),
+        (anchor,),
+    )
+
+    assert result.update.before.examples == 1
+    assert result.anchor_before.examples == 1
+    assert (
+        result.update.after.selected_probabilities[0]
+        > (result.update.before.selected_probabilities[0])
+    )
+    assert (
+        result.anchor_after.selected_probabilities[0]
+        >= (result.anchor_before.selected_probabilities[0])
+    )
+
+
+def test_successor_rejects_anchor_regression() -> None:
+    fresh = _row(0, selected=1)
+    opposed_anchor = _row(1, selected=2)
+
+    with pytest.raises(GoalManagerOutcomeLearningError, match="regressed"):
+        fit_goal_manager_outcome_successor_update(
+            _model(),
+            (fresh,),
+            (opposed_anchor,),
+        )
+
+
+def test_successor_rejects_fresh_anchor_identity_overlap() -> None:
+    row = _row(0, selected=1)
+
+    with pytest.raises(GoalManagerOutcomeLearningError, match="overlaps"):
+        fit_goal_manager_outcome_successor_update(_model(), (row,), (row,))

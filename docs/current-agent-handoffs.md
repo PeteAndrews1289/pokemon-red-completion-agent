@@ -6,6 +6,25 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns one acquisition-successor fit
+
+Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`,
+then its one action-free acquisition-campaign freeze failed at sanitized stage
+`action_free_root_inventory`. The
+[failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+reports no plan, preflight, prediction, controller action, outcome, fit, or gameplay. No agent may
+retry, replace a root, patch a menu/skill, or infer a private cause.
+
+Codex owns `goal-manager-acquisition-successor-learning-v1`. The
+[frozen fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json) permits
+one fixed offline update: acquisition manifest `ca107bc2…cdf5` is the only fresh gradient target;
+`eb5c6515…d2ce` is the starting shadow model; the storage/restoration pair is evaluation-only
+no-regression evidence; duplicate base arm `094a4aae…e3a` and 19 failed prefixes are excluded.
+Claude and Antigravity remain read-only. No tuning, evaluation, promotion, new collection, sealed
+data, or Crystal. Counters stay **30/15/4/3/0/0**, **14/4/0/1/1**; scorecard
+**30/30 · 4/5 · 3/3**. A pass moves directly to the resettable 8-train/4-development curriculum,
+not a new qualification carousel.
+
 ## Current override: Codex owns execution/admission, freeze, and zero-action preflight
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The

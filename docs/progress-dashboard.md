@@ -5,6 +5,21 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **SOURCE 458D47E · CI 32147795552/1 GREEN · ONE ACTION-FREE FREEZE ·
+> FAILED STAGE ACTION_FREE_ROOT_INVENTORY · PLAN 0 · PREFLIGHT 0 · PREDICTIONS 0 · ACTIONS 0 ·
+> OUTCOMES 0 · FITS 0 · GAMEPLAY 0**. Link the
+> [failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json).
+> Mark **STAGE, NOT CAUSE · EXACT CAMPAIGN CLOSED · RETRY 0 · REPLACEMENT ROOT 0 · MENU/SKILL
+> PATCH 0**.
+>
+> Display `goal-manager-acquisition-successor-learning-v1` and link the
+> [fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json). Show
+> **START EB5C6515… · FRESH ACQUISITION TARGET CA107BC2… · STORAGE/RESTORATION ANCHORS 2
+> EVALUATION-ONLY · DUPLICATE BASE EXCLUDED · FAILED PREFIXES EXCLUDED 19 · ONE FIXED UPDATE ·
+> TUNING 0 · EVALUATION 0 · PROMOTION 0**. Keep boards **30/15/4/3/0/0**, **14/4/0/1/1**, and
+> scorecard **TRAIN OUTCOMES 30/30 · FITS 4/5 · COMPARISONS 3/3**. Next on pass:
+> **RESETTABLE ROOT-DISJOINT 8 TRAIN / 4 DEVELOPMENT / ONE DECISION → NO QUALIFICATION CAROUSEL**.
+>
 > **Current rail:** Show **SOURCE 343CADF · CI 32141939995/1 GREEN · PRIVATE CONTEXT PLAN BUILT ·
 > CONTEXTS 81 · PRIOR-USED ACQUISITION ROOTS EXCLUDED 2 · UNUSED PROFILES TRANSFORMED 4 · OUTPUT
 > PLAN 09AF29BA…FF51**. Link the

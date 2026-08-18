@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Closed the published acquisition-replanning campaign after its single authorized action-free
+  freeze at source `458d47eace849d55712ff12e7a93f7ca5439579c`, green CI `32147795552/1`,
+  failed at sanitized stage `action_free_root_inventory`. The
+  [path-free failure receipt](docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+  records zero plan, preflight, prediction, controller action, outcome, fit, or gameplay. No retry,
+  replacement root, menu patch, skill patch, or cause inference is allowed. Activated
+  `goal-manager-acquisition-successor-learning-v1` with a
+  [frozen fit plan](docs/evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json):
+  one fixed update from candidate acquisition manifest `ca107bc2…cdf5`, starting `eb5c6515…d2ce`,
+  with storage/restoration used only as no-regression anchors and the duplicate base arm plus 19
+  failed prefixes excluded. No tuning, evaluation, promotion, or counter changed: legacy remains
+  **30/15/4/3/0/0**, product-focus-v2 remains **14/4/0/1/1**, and the scorecard remains
+  **30/30 · 4/5 · 3/3**. A passing shadow successor leads directly to a resettable root-disjoint
+  8-train/4-development one-decision curriculum, not a new qualification carousel.
+
 - Published the acquisition-replanning context-plan builder at exact source
   `343cadf921af2b82e79c352163c18d54b3d72d78` under green CI `32141939995/1`. Its
   [path-free build receipt](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)

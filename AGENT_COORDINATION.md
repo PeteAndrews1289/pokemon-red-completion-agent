@@ -1,5 +1,23 @@
 # Three-agent coordination
 
+> **2026-08-18 acquisition freeze failed; the one-update successor fit is the only active lane —
+> highest checkpoint:** Source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI
+> `32147795552/1`. One authorized action-free freeze failed at sanitized stage
+> `action_free_root_inventory`; the
+> [failure receipt](docs/evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+> reports plan 0, preflight 0, predictions 0, actions 0, outcomes 0, fits 0, and no gameplay. Close
+> the exact campaign with no retry, replacement root, menu patch, skill patch, or inferred cause.
+>
+> Codex owns `goal-manager-acquisition-successor-learning-v1`: publish/preflight the
+> [frozen fit plan](docs/evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json)
+> and consume exactly one fit identity. Manifest `ca107bc2…cdf5` is the sole fresh acquisition target
+> from starting model `eb5c6515…d2ce`. The storage/restoration pair is evaluation-only anchor
+> evidence; duplicate base arm and 19 failed prefixes are excluded. Reviewers remain read-only. No
+> tuning, new gameplay, evaluation, promotion, sealed data, or Crystal. Keep **30/15/4/3/0/0**,
+> **14/4/0/1/1**, and scorecard **30/30 · 4/5 · 3/3** unchanged until a fit result exists. A pass
+> opens the resettable root-disjoint 8-train/4-development one-decision curriculum directly, not a
+> new qualification carousel.
+
 > **2026-08-18 private context plan built; execution qualification remains the only active lane —
 > highest checkpoint:** Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI
 > `32141939995/1`. The

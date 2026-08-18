@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the acquisition campaign closes; one acquisition outcome becomes the lesson
+
+Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.
+Its one authorized action-free freeze failed at sanitized stage `action_free_root_inventory`. The
+[failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+records no campaign plan, preflight, prediction, controller action, outcome, fit, or gameplay. The
+stage reveals no private cause. The exact campaign is closed with no retry, replacement root,
+menu patch, or skill patch.
+
+The active lane, `goal-manager-acquisition-successor-learning-v1`, uses already-collected evidence
+instead of opening another qualification loop. Its
+[fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json) permits one
+fixed offline update from candidate acquisition manifest `ca107bc2…cdf5`, starting from shadow model
+`eb5c6515…d2ce`. Storage/restoration targets are evaluation-only anchors; the duplicate base arm and
+19 failed prefixes are excluded. No tuning, evaluation, promotion, authority, or transfer follows
+automatically. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**; the active scorecard is
+**30/30 · 4/5 · 3/3**. A pass leads directly to a resettable root-disjoint
+8-train/4-development one-decision curriculum, not a new qualification carousel.
+
 ## August 18: the private acquisition-replanning context plan builds
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The

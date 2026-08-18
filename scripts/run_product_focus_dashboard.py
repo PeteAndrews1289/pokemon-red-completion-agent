@@ -63,8 +63,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     outputs = focus_scorecard(state)
     output_event = (
         " · ".join(
-            f"{label.split(' ·', 1)[0]} {current}/{minimum}"
-            for label, current, minimum in outputs
+            f"{label.split(' ·', 1)[0]} {current}/{minimum}" for label, current, minimum in outputs
         )
         if outputs
         else (
@@ -72,26 +71,21 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    development_episode_total = max([
-        development_episodes,
-        *(minimum for label, _, minimum in outputs if label.startswith("Development Episode")),
-    ])
-    verified_outcome_total = max([
-        verified_outcomes,
-        *(
-            minimum
-            for label, _, minimum in outputs
-            if label.startswith("Verified Outcome Example")
-        ),
-    ])
-    verified_composition_total = max([
-        verified_compositions,
-        *(
-            minimum
-            for label, _, minimum in outputs
-            if label.startswith("Verified Composition Episode")
-        ),
-    ])
+    train_outcome_total = max(
+        [
+            train_outcomes,
+            *(minimum for label, _, minimum in outputs if label.startswith("Outcome Question")),
+        ]
+    )
+    fit_total = max(
+        [fits, *(minimum for label, _, minimum in outputs if label.startswith("Model Fit"))]
+    )
+    comparison_total = max(
+        [
+            unseen,
+            *(minimum for label, _, minimum in outputs if label.startswith("Unseen Comparison")),
+        ]
+    )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
         value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
@@ -103,36 +97,35 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The exact 81-context private plan was mechanically built with four unused "
-            "acquisition profiles transformed and two prior-used roots excluded. Next: publish "
-            "execution/admission, freeze the campaign, and run one zero-action preflight."
+            "The four-root campaign failed its one action-free freeze and is closed. Now training "
+            "one retained-acquisition outcome while preserving earlier storage/restoration behavior."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Context plan built · execution/admission and preflight next · no gameplay",
+        location="Offline successor fit · one acquisition target · two no-regression anchors",
         collection_target=150,
         model=DashboardModelState(
-            mode="waiting",
-            candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Qualify 4-root × 4-trial acquisition-replanning execution · no gameplay",
+            mode="fitting",
+            candidate="Shadow successor from candidate eb5c6515…",
+            choice="Increase acquisition probability without regressing storage or restoration",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
-            zero_shot_completed=development_episodes,
-            zero_shot_total=development_episode_total,
-            adaptation_completed=verified_outcomes,
-            adaptation_total=verified_outcome_total,
-            sealed_completed=verified_compositions,
-            sealed_total=verified_composition_total,
+            phase="fitting",
+            zero_shot_completed=train_outcomes,
+            zero_shot_total=train_outcome_total,
+            adaptation_completed=fits,
+            adaptation_total=fit_total,
+            sealed_completed=unseen,
+            sealed_total=comparison_total,
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Model-led development episodes",
-                "Verified outcome examples",
-                "Verified composition episodes",
+                "Authenticated train outcomes",
+                "Model fits",
+                "Unseen comparisons",
             ),
         ),
         events=(
@@ -179,17 +172,16 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "decision · actions 244/244 · frames 16,296/16,296"
             ),
             (
-                "Design frozen · 4 roots × 4 trials · first action is an intervention · one "
-                "learned conditional replan · provisional gate 4 replans across at least 3 roots"
+                "Closed falsifier · one action-free freeze failed at action_free_root_inventory "
+                "· campaign plan 0 · preflight 0 · predictions 0 · actions 0 · outcomes 0"
             ),
             (
-                "Current inventory · acquisition roots 6 · previously used 2 · unused 4 · "
-                "post-acquisition captures 0 · prior durable next-choice count 1"
+                "Successor data · fresh acquisition targets 1 · evaluation-only anchors 2 "
+                "(storage + restoration) · duplicate base arm excluded 1 · failed prefixes 19"
             ),
             (
-                "Execution + plan · fixed 4-battle source-local dose · same-source normalization "
-                "· 81 contexts · prior-used acquisition roots excluded 2 · unused acquisition "
-                "profiles transformed 4"
+                "Next curriculum after this fit · 8 resettable train episodes across 4 roots · "
+                "4 root-disjoint development episodes across 2 roots · one decision per reset"
             ),
         ),
     )
@@ -250,12 +242,8 @@ def main(argv: list[str] | None = None) -> int:
                     "active_lane": focus.active_lane["id"],
                     "stage_progress": snapshot.stage_progress,
                     "model_fits": focus.progress["model_fits"],
-                    "development_episode_attempts": focus.progress[
-                        "development_episode_attempts"
-                    ],
-                    "verified_outcome_examples": focus.progress[
-                        "verified_outcome_examples"
-                    ],
+                    "development_episode_attempts": focus.progress["development_episode_attempts"],
+                    "verified_outcome_examples": focus.progress["verified_outcome_examples"],
                     "verified_composition_episodes": focus.progress[
                         "verified_composition_episodes"
                     ],

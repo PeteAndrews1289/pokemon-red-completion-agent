@@ -19,9 +19,7 @@ OUTCOME_UPDATE_STEP_SIZE = 0.02
 OUTCOME_UPDATE_WEIGHT_DELTA_L2_CAP = 0.02
 OUTCOME_UPDATE_MENU_KL_CAP = 0.01
 OUTCOME_UPDATE_MAX_IMPORTANCE_WEIGHT = 4.0
-OUTCOME_UPDATE_OBJECTIVE_ID = (
-    "pokemon.core.goal-manager.capped-ips-policy-gradient.v1"
-)
+OUTCOME_UPDATE_OBJECTIVE_ID = "pokemon.core.goal-manager.capped-ips-policy-gradient.v1"
 
 
 class GoalManagerOutcomeLearningError(ValueError):
@@ -73,6 +71,23 @@ class GoalManagerOutcomeUpdate:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class GoalManagerOutcomeSuccessorUpdate:
+    """One fixed update plus no-regression measurements on earlier outcomes."""
+
+    update: GoalManagerOutcomeUpdate
+    anchor_before: GoalManagerOutcomeFitMetrics
+    anchor_after: GoalManagerOutcomeFitMetrics
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.goal-manager-outcome-successor-update.v1",
+            "update": self.update.public_dict(),
+            "anchor_before": self.anchor_before.public_dict(),
+            "anchor_after": self.anchor_after.public_dict(),
+        }
+
+
 def fit_goal_manager_outcome_update(
     base_model: GoalManagerLinearModel,
     rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
@@ -92,11 +107,7 @@ def fit_goal_manager_outcome_update(
         selected = target.selected_candidate_index
         expectation = probabilities[available] @ normalized[available]
         selected_features = normalized[selected]
-        gradient += (
-            target.importance_weight
-            * target.reward
-            * (selected_features - expectation)
-        )
+        gradient += target.importance_weight * target.reward * (selected_features - expectation)
     gradient /= len(evidence)
     delta = OUTCOME_UPDATE_STEP_SIZE * gradient
     delta_l2 = float(np.linalg.norm(delta))
@@ -139,10 +150,47 @@ def fit_goal_manager_outcome_update(
         model=candidate,
         before=before,
         after=after,
-        maximum_weight_delta=float(
-            np.max(np.abs(candidate.weights - base_model.weights))
-        ),
+        maximum_weight_delta=float(np.max(np.abs(candidate.weights - base_model.weights))),
         weight_delta_l2=delta_l2,
+    )
+
+
+def fit_goal_manager_outcome_successor_update(
+    base_model: GoalManagerLinearModel,
+    new_rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
+    anchor_rows: Iterable[tuple[GoalManagerExample, GoalManagerDevelopmentTarget]],
+) -> GoalManagerOutcomeSuccessorUpdate:
+    """Assimilate fresh evidence while preserving earlier settled choices.
+
+    Anchor rows are evaluated but never included in the gradient.  This keeps the
+    successor experiment from counting the same outcomes as fresh training data.
+    """
+
+    fresh = _validated_rows(new_rows)
+    anchors = _validated_rows(anchor_rows)
+    if {target.decision_id for _, target in fresh} & {target.decision_id for _, target in anchors}:
+        raise GoalManagerOutcomeLearningError(
+            "successor evidence overlaps its no-regression anchors"
+        )
+    update = fit_goal_manager_outcome_update(base_model, fresh)
+    anchor_before = evaluate_goal_manager_outcomes(base_model, anchors)
+    anchor_after = evaluate_goal_manager_outcomes(update.model, anchors)
+    comparisons = zip(
+        anchors,
+        anchor_before.selected_probabilities,
+        anchor_after.selected_probabilities,
+        strict=True,
+    )
+    for (_, target), old, new in comparisons:
+        regressed = new + 1e-12 < old if target.reward == 1.0 else new > old + 1e-12
+        if regressed:
+            raise GoalManagerOutcomeLearningError(
+                "successor update regressed an earlier settled choice"
+            )
+    return GoalManagerOutcomeSuccessorUpdate(
+        update=update,
+        anchor_before=anchor_before,
+        anchor_after=anchor_after,
     )
 
 
@@ -157,17 +205,16 @@ def evaluate_goal_manager_outcomes(
     selected_probabilities: list[float] = []
     importance: list[float] = []
     for example, target in evidence:
-        probability = float(
-            model.probabilities(example.question)[target.selected_candidate_index]
-        )
+        probability = float(model.probabilities(example.question)[target.selected_candidate_index])
         selected_probabilities.append(probability)
         importance.append(target.importance_weight)
         likelihood = probability if target.reward == 1.0 else 1.0 - probability
         losses.append(-math.log(max(likelihood, 1e-12)))
     total_importance = sum(importance)
-    weighted_loss = sum(
-        weight * loss for weight, loss in zip(importance, losses, strict=True)
-    ) / total_importance
+    weighted_loss = (
+        sum(weight * loss for weight, loss in zip(importance, losses, strict=True))
+        / total_importance
+    )
     return GoalManagerOutcomeFitMetrics(
         examples=len(evidence),
         positive_examples=sum(target.reward == 1.0 for _, target in evidence),
@@ -212,8 +259,7 @@ def maximum_policy_kl(
             np.sum(
                 base[available]
                 * np.log(
-                    np.maximum(base[available], 1e-12)
-                    / np.maximum(candidate[available], 1e-12)
+                    np.maximum(base[available], 1e-12) / np.maximum(candidate[available], 1e-12)
                 )
             )
         )
@@ -277,6 +323,7 @@ __all__ = [
     "GoalManagerOutcomeFitMetrics",
     "GoalManagerOutcomeLearningError",
     "GoalManagerOutcomeUpdate",
+    "GoalManagerOutcomeSuccessorUpdate",
     "OUTCOME_UPDATE_MAX_IMPORTANCE_WEIGHT",
     "OUTCOME_UPDATE_MENU_KL_CAP",
     "OUTCOME_UPDATE_OBJECTIVE_ID",
@@ -284,6 +331,7 @@ __all__ = [
     "OUTCOME_UPDATE_WEIGHT_DELTA_L2_CAP",
     "evaluate_goal_manager_outcomes",
     "fit_goal_manager_outcome_update",
+    "fit_goal_manager_outcome_successor_update",
     "maximum_policy_kl",
     "outcome_update_configuration",
     "require_unchanged_guard_winners",

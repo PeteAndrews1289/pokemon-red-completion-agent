@@ -1,5 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: one campaign closes; one real catch becomes the lesson
+
+Open on **SOURCE 458D47E** (`458d47eace849d55712ff12e7a93f7ca5439579c`) **· CI
+32147795552/1 GREEN**, then stop the campaign rail at
+**ACTION_FREE_ROOT_INVENTORY**. Overlay **STAGE, NOT CAUSE · FREEZE ATTEMPTS 1 · PLAN 0 ·
+PREFLIGHT 0 · PREDICTIONS 0 · ACTIONS 0 · OUTCOMES 0 · FITS 0 · GAMEPLAY 0**. Link the
+[failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json), then
+stamp **CAMPAIGN CLOSED · RETRY 0 · REPLACEMENT ROOT 0 · MENU/SKILL PATCH 0**.
+
+Cut to active lane `goal-manager-acquisition-successor-learning-v1` and its
+[successor fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json):
+**START EB5C6515… · ONE ACQUISITION TARGET CA107BC2… · STORAGE + RESTORATION ANCHORS 2,
+EVALUATION-ONLY · DUPLICATE BASE OUT · FAILED PREFIXES 19 OUT · ONE FIXED UPDATE · NO TUNING · NO
+EVALUATION · NO PROMOTION**. Hold the boards at **30/15/4/3/0/0**, **14/4/0/1/1**, and
+**30/30 · 4/5 · 3/3**. A pass advances to **RESETTABLE 8 TRAIN / 4 DEVELOPMENT / ONE DECISION**,
+not another qualification montage.
+
 ## August 18 scene: the private plan changes; the scoreboard does not
 
 Open on **SOURCE 343CADF · CI 32141939995/1 GREEN**. Animate **81 CONTEXTS → EXCLUDE 2 USED

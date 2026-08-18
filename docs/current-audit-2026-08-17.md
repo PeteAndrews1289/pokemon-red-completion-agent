@@ -1,5 +1,25 @@
 # Current audit — 2026-08-18
 
+## Current result: acquisition freeze failed closed; one successor fit is frozen
+
+Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.
+One authorized action-free freeze returned sanitized stage `action_free_root_inventory`. The
+[path-free failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json)
+records campaign plan 0, preflight 0, model predictions 0, controller actions 0, episode outcomes 0,
+model fits 0, and no gameplay. Protected access is `not_attested`, so the stage must not be expanded
+into a private cause or an unsupported access claim. The exact campaign is closed without retry,
+replacement root, menu patch, or skill patch.
+
+The active lane is `goal-manager-acquisition-successor-learning-v1`. Its
+[successor fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json) freezes
+exactly one new gradient target: candidate-arm acquisition manifest `ca107bc2…cdf5`, starting
+from `eb5c6515…d2ce`. Two storage/restoration targets remain evaluation-only no-regression anchors;
+duplicate base arm `094a4aae…e3a` and 19 failed prefixes are excluded. The update is fixed before
+private decode, with no hyperparameter search, evaluation, promotion, or authority grant. The
+legacy board remains **30/15/4/3/0/0**, product-focus-v2 remains **14/4/0/1/1**, and the active
+scorecard is **30/30 · 4/5 · 3/3**. Passing only retains a shadow successor for the separately
+resettable, root-disjoint 8-train/4-development one-decision curriculum.
+
 ## Current result: the private context plan builds; campaign readiness is still unproved
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
