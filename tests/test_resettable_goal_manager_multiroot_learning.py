@@ -145,6 +145,19 @@ def _model() -> GoalManagerLinearModel:
     )
 
 
+def _acquisition_favoring_model() -> GoalManagerLinearModel:
+    model = _model()
+    weights = model.weights.copy()
+    weights[GOAL_MANAGER_FEATURE_NAMES.index("candidate.kind.acquire_species")] = 1.0
+    return GoalManagerLinearModel(
+        weights=weights,
+        feature_mean=model.feature_mean,
+        feature_scale=model.feature_scale,
+        l2=model.l2,
+        training_epochs=model.training_epochs,
+    )
+
+
 def test_admits_six_train_targets_across_three_roots_and_goal_kinds() -> None:
     kinds = (
         GoalKind.ACQUIRE_SPECIES,
@@ -228,6 +241,49 @@ def test_comparison_requires_four_episodes_on_two_disjoint_roots() -> None:
     assert comparison.directional_wins == 0
     assert comparison.directional_ties == 4
     assert comparison.favorable is False
+
+
+def test_comparison_favorable_path_requires_improvement_without_a_loss() -> None:
+    episodes = tuple(
+        _episode(
+            index,
+            partition="development",
+            root=f"development-root-{index // 2}",
+            selected_kind=GoalKind.ACQUIRE_SPECIES,
+        )
+        for index in range(4)
+    )
+
+    favorable = compare_resettable_goal_manager_development(
+        _model(),
+        _acquisition_favoring_model(),
+        episodes,
+        train_roots=("train-root-0", "train-root-1"),
+    )
+
+    assert favorable.directional_wins == 4
+    assert favorable.directional_losses == 0
+    assert favorable.candidate.weighted_binary_cross_entropy < (
+        favorable.base.weighted_binary_cross_entropy
+    )
+    assert favorable.favorable is True
+
+    one_loss = (*episodes[:3], _episode(
+        3,
+        partition="development",
+        root="development-root-1",
+        selected_kind=GoalKind.DEVELOP_TEAM,
+    ))
+    rejected = compare_resettable_goal_manager_development(
+        _model(),
+        _acquisition_favoring_model(),
+        one_loss,
+        train_roots=("train-root-0", "train-root-1"),
+    )
+
+    assert rejected.directional_wins == 3
+    assert rejected.directional_losses == 1
+    assert rejected.favorable is False
 
 
 def test_comparison_rejects_train_root_overlap() -> None:

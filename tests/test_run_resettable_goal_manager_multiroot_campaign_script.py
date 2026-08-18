@@ -120,6 +120,42 @@ def _plan() -> dict[str, object]:
     }
 
 
+def _rebind_plan_identity(plan: dict[str, object]) -> None:
+    trials = plan["trials"]
+    assert isinstance(trials, list)
+    stripped_trials = []
+    for trial in trials:
+        assert isinstance(trial, dict)
+        stripped = dict(trial)
+        stripped.pop("episode_id")
+        stripped.pop("trial_claim_sha256")
+        stripped_trials.append(stripped)
+    identity = dict(plan)
+    identity.pop("campaign_id")
+    identity.pop("campaign_consumption_sha256")
+    identity["trials"] = stripped_trials
+    campaign_id = canonical_sha256(identity)
+    plan["campaign_id"] = campaign_id
+    plan["campaign_consumption_sha256"] = canonical_sha256(
+        {
+            "campaign_id": campaign_id,
+            "schema": "pokemon.red.resettable-goal-manager-campaign-consumption.v1",
+        }
+    )
+    for trial in trials:
+        assert isinstance(trial, dict)
+        trial_index = trial["trial_index"]
+        assert isinstance(trial_index, int)
+        trial["episode_id"] = f"red-multiroot-{campaign_id[:32]}-{trial_index:02d}"
+        trial["trial_claim_sha256"] = canonical_sha256(
+            {
+                "campaign_id": campaign_id,
+                "schema": "pokemon.red.resettable-goal-manager-trial-claim.v1",
+                "trial_index": trial_index,
+            }
+        )
+
+
 def test_validates_exact_four_by_two_plus_two_by_two_layout() -> None:
     SCRIPT["_validate_plan"](
         _readiness(),
@@ -131,6 +167,31 @@ def test_validates_exact_four_by_two_plus_two_by_two_layout() -> None:
 def test_rejects_development_root_relabelled_as_train() -> None:
     plan = deepcopy(_plan())
     plan["roots"][4]["partition"] = "train"  # type: ignore[index]
+
+    with pytest.raises(SCRIPT["ResettableMultirootRunError"], match="campaign_layout"):
+        SCRIPT["_validate_plan"](
+            _readiness(),
+            plan,
+            private_root_identity="3" * 64,
+        )
+
+
+def test_rejects_duplicate_physical_root_across_train_and_development() -> None:
+    plan = deepcopy(_plan())
+    roots = plan["roots"]
+    assert isinstance(roots, list)
+    train = roots[0]
+    development = roots[4]
+    assert isinstance(train, dict)
+    assert isinstance(development, dict)
+    train_root = train["root"]
+    development_root = development["root"]
+    assert isinstance(train_root, dict)
+    assert isinstance(development_root, dict)
+    development_root["state_sha256"] = train_root["state_sha256"]
+    development_root["envelope_sha256"] = train_root["envelope_sha256"]
+    development["root_consumption_sha256"] = train["root_consumption_sha256"]
+    _rebind_plan_identity(plan)
 
     with pytest.raises(SCRIPT["ResettableMultirootRunError"], match="campaign_layout"):
         SCRIPT["_validate_plan"](
