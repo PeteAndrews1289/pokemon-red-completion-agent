@@ -887,6 +887,7 @@ def _inspect_root(
     entry: _ContextEntry,
     *,
     entry_index: int,
+    ordering_assignment_id: str | None = None,
 ) -> _Root | None:
     assignment = readiness.candidate.registry.assignment(entry.slot_id)
     capture, profile, digests = _open_context_input(readiness, entry)
@@ -914,7 +915,7 @@ def _inspect_root(
             raise RepeatableGoalManagerRunError("action_free_root_inventory")
         require_pyboy_import_origins(readiness.runtime)
         question = ordered_goal_manager_question(
-            assignment_id=assignment.assignment_id,
+            assignment_id=ordering_assignment_id or assignment.assignment_id,
             decision_index=0,
             situation=observation.situation,
             opportunities=binding_set.opportunities,
@@ -979,6 +980,7 @@ def _live_observer(
     actions: CountingExecutor,
     meter: CompositionIndependentBudgetMeter,
     root: _Root,
+    ordering_assignment_id: str | None = None,
 ) -> Callable[[], GoalManagerCompositionObservation]:
     observations = 0
 
@@ -1017,7 +1019,7 @@ def _live_observer(
         )
         if observations == 0:
             question = ordered_goal_manager_question(
-                assignment_id=root.assignment.assignment_id,
+                assignment_id=ordering_assignment_id or root.assignment.assignment_id,
                 decision_index=0,
                 situation=live.situation,
                 opportunities=binding_set.opportunities,

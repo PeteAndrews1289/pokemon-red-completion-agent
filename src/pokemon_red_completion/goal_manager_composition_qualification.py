@@ -30,6 +30,9 @@ from pokemon_red_completion.goal_manager_composition_runtime import (
     CompositionBudgetCheckpoint,
     LivingCollectionCheckpoint,
 )
+from pokemon_red_completion.private_artifacts import (
+    _rename_no_replace as atomic_no_replace_rename,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
 from pokemon_red_completion.red_collection import (
@@ -39,6 +42,7 @@ from pokemon_red_completion.red_collection import (
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _SKILL_SOURCE_FILES = (
     "src/pokemon_red_completion/executor.py",
     "src/pokemon_red_completion/goal_manager_composition_runtime.py",
@@ -410,14 +414,18 @@ def write_root_claim(
         ).encode("ascii")
         + b"\n"
     )
+    temporary = registry / (
+        f".{marker.name}.pending-{os.getpid()}-{os.urandom(8).hex()}"
+    )
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     if hasattr(os, "O_CLOEXEC"):
         flags |= os.O_CLOEXEC
     if hasattr(os, "O_NOFOLLOW"):
         flags |= os.O_NOFOLLOW
     descriptor = -1
+    directory_descriptor = -1
     try:
-        descriptor = os.open(marker, flags, 0o600)
+        descriptor = os.open(temporary, flags, 0o600)
         offset = 0
         while offset < len(payload):
             written = os.write(descriptor, payload[offset:])
@@ -425,11 +433,19 @@ def write_root_claim(
                 raise OSError("claim write made no progress")
             offset += written
         os.fsync(descriptor)
-        directory = os.open(registry, os.O_RDONLY)
+        os.close(descriptor)
+        descriptor = -1
         try:
-            os.fsync(directory)
-        finally:
-            os.close(directory)
+            atomic_no_replace_rename(temporary, marker)
+        except FileExistsError:
+            raise FreshCompositionQualificationError(
+                "fresh-composition root is already consumed"
+            ) from None
+        directory_descriptor = os.open(
+            registry,
+            os.O_RDONLY | getattr(os, "O_DIRECTORY", 0),
+        )
+        os.fsync(directory_descriptor)
     except FileExistsError as error:
         raise FreshCompositionQualificationError(
             "fresh-composition root is already consumed"
@@ -441,6 +457,100 @@ def write_root_claim(
     finally:
         if descriptor >= 0:
             os.close(descriptor)
+        if directory_descriptor >= 0:
+            os.close(directory_descriptor)
+        with suppress(OSError):
+            temporary.unlink()
+
+
+def read_root_claim(
+    registry: Path,
+    root_consumption_sha256: str,
+) -> dict[str, str]:
+    """Read and strictly authenticate one durable root-consumption claim."""
+
+    identity = _require_sha256(root_consumption_sha256, subject="root consumption")
+    marker = _root_claim_marker(registry, identity)
+    descriptor = -1
+    flags = os.O_RDONLY
+    if hasattr(os, "O_CLOEXEC"):
+        flags |= os.O_CLOEXEC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    try:
+        named = marker.lstat()
+        descriptor = os.open(marker, flags)
+        metadata = os.fstat(descriptor)
+        if (
+            named.st_dev != metadata.st_dev
+            or named.st_ino != metadata.st_ino
+            or not stat.S_ISREG(metadata.st_mode)
+            or metadata.st_nlink != 1
+            or metadata.st_uid != os.getuid()
+            or stat.S_IMODE(metadata.st_mode) != 0o600
+            or not 1 <= metadata.st_size <= 4096
+        ):
+            raise OSError("unsafe root claim")
+        payload = os.read(descriptor, metadata.st_size + 1)
+    except OSError:
+        raise FreshCompositionQualificationError(
+            "fresh-composition root claim cannot be authenticated"
+        ) from None
+    finally:
+        if descriptor >= 0:
+            with suppress(OSError):
+                os.close(descriptor)
+    if len(payload) != metadata.st_size:
+        raise FreshCompositionQualificationError(
+            "fresh-composition root claim cannot be authenticated"
+        )
+    try:
+        document = json.loads(payload.decode("ascii"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise FreshCompositionQualificationError(
+            "fresh-composition root claim cannot be authenticated"
+        ) from None
+    canonical = (
+        json.dumps(
+            document,
+            ensure_ascii=True,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("ascii")
+        + b"\n"
+    )
+    expected_keys = {
+        "schema",
+        "root_consumption_sha256",
+        "execution_identity_sha256",
+        "source_commit",
+        "runner_sha256",
+    }
+    if (
+        not isinstance(document, dict)
+        or set(document) != expected_keys
+        or canonical != payload
+        or document.get("schema") != "pokemon.red.fresh-composition-root-claim.v1"
+        or document.get("root_consumption_sha256") != identity
+        or not isinstance(document.get("source_commit"), str)
+        or _GIT_COMMIT.fullmatch(document["source_commit"]) is None
+    ):
+        raise FreshCompositionQualificationError(
+            "fresh-composition root claim cannot be authenticated"
+        )
+    return {
+        "schema": document["schema"],
+        "root_consumption_sha256": identity,
+        "execution_identity_sha256": _require_sha256(
+            document.get("execution_identity_sha256"),
+            subject="execution identity",
+        ),
+        "source_commit": document["source_commit"],
+        "runner_sha256": _require_sha256(
+            document.get("runner_sha256"),
+            subject="runner",
+        ),
+    }
 
 
 def _root_claim_marker(registry: Path, identity: str) -> Path:
@@ -463,6 +573,7 @@ __all__ = [
     "fixed_account_claim_registry_root",
     "living_collection_checkpoint",
     "open_fixed_account_claim_registry",
+    "read_root_claim",
     "root_claim_is_available",
     "root_consumption_sha256",
     "write_root_claim",

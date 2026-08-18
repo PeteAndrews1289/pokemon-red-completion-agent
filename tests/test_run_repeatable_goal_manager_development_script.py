@@ -502,6 +502,7 @@ def test_live_observer_passes_a_real_counting_executor_to_context_enumerator(
         lambda _live: checkpoint,
     )
     assignment_id = "b" * 64
+    current_assignment_id = "c" * 64
     question = SCRIPT["ordered_goal_manager_question"](
         assignment_id=assignment_id,
         decision_index=0,
@@ -509,7 +510,7 @@ def test_live_observer_passes_a_real_counting_executor_to_context_enumerator(
         opportunities=opportunities,
     )
     root = SimpleNamespace(
-        assignment=SimpleNamespace(assignment_id=assignment_id),
+        assignment=SimpleNamespace(assignment_id=current_assignment_id),
         question_sha256=question.ordered_policy_input_sha256,
         binding_manifest_sha256=SCRIPT["goal_binding_manifest_sha256"](binding_set),
     )
@@ -518,6 +519,7 @@ def test_live_observer_passes_a_real_counting_executor_to_context_enumerator(
         actions=CountingExecutor(Delegate()),
         meter=Meter(),
         root=root,
+        ordering_assignment_id=assignment_id,
     )
 
     result = observe()

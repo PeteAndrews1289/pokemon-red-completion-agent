@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,6 +17,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     HardCompositionActionLimiter,
     fixed_account_claim_registry_lease,
     open_fixed_account_claim_registry,
+    read_root_claim,
     root_claim_is_available,
     root_consumption_sha256,
     write_root_claim,
@@ -156,8 +156,13 @@ def test_fixed_account_registry_is_read_only_exclusive_and_durable(
 
     assert len(synced) == 2
     assert not root_claim_is_available(opened, identity)
-    marker = opened / f"{identity}.json"
-    assert json.loads(marker.read_text(encoding="ascii"))["root_consumption_sha256"] == identity
+    assert read_root_claim(opened, identity) == {
+        "schema": "pokemon.red.fresh-composition-root-claim.v1",
+        "root_consumption_sha256": identity,
+        "execution_identity_sha256": "d" * 64,
+        "source_commit": "e" * 40,
+        "runner_sha256": "f" * 64,
+    }
     with pytest.raises(FreshCompositionQualificationError, match="already consumed"):
         write_root_claim(
             opened,
@@ -166,6 +171,21 @@ def test_fixed_account_registry_is_read_only_exclusive_and_durable(
             source_commit="e" * 40,
             runner_sha256="f" * 64,
         )
+
+
+def test_root_claim_reader_rejects_noncanonical_or_unsafe_markers(
+    tmp_path: Path,
+) -> None:
+    registry = tmp_path / "claims"
+    registry.mkdir(mode=0o700)
+    os.chmod(registry, 0o700)
+    identity = "a" * 64
+    marker = registry / f"{identity}.json"
+    marker.write_text('{"schema": "wrong"}\n', encoding="ascii")
+    os.chmod(marker, 0o600)
+
+    with pytest.raises(FreshCompositionQualificationError, match="authenticated"):
+        read_root_claim(registry, identity)
 
 
 def test_fixed_account_registry_must_be_preprovisioned_0700(tmp_path: Path) -> None:
