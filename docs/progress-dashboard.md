@@ -5,6 +5,16 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **SOURCE 944FDC5 · CI 32135801933/1 GREEN · RED SOURCE-LOCAL EXECUTOR
+> QUALIFIED · FIXED DOSE 4 BATTLES · HARD ACTION/FRAME LIMITS · HEALING 0 · TRAVEL 0 · UNSAFE
+> STARTS REJECTED · GAMEPLAY 0 · COUNTER DELTA 0**. Link the
+> [execution receipt](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json).
+> Show **CLAUDE GO · ANTIGRAVITY UNSAFE-START FINDING CLOSED · OTHER CLAIMS REJECTED ON SOURCE**.
+> The active rail is **4 UNUSED ROOTS × 4 TRIALS → EXACT BINDINGS/LEDGERS → ZERO-ACTION PREFLIGHT
+> → STOP BEFORE GAMEPLAY**. Mark **NO PREDICTION · NO CONTROLLER INPUT · NO TEACHER · NO ROOT
+> PATCH · NO SEALED RED · NO CRYSTAL**. Keep cumulative counters **30/15/4/3/0/0** and
+> product-v2 **14/4/0/1/1**.
+>
 > **Current rail:** Show **SOURCE 6D028EA · CI 32132328658/1 GREEN · PORTABLE DEVELOP_TEAM SEAM
 > QUALIFIED · ACTION-FREE OFFER · TITLE/SOURCE/ROUTE POLICY INPUT 0 · GAMEPLAY 0 · COUNTER DELTA
 > 0**. Link the

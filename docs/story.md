@@ -7,6 +7,19 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the second choice now has a real Red action
+
+The portable “train here” idea is now connected to a real Red mechanic. At the Pokémon Mansion
+source it can run exactly four completed battles under hard action and frame caps, cannot heal or
+travel away, refuses an unsafe party, and returns to the same source boundary so another choice can
+be made. Capture now returns to that boundary too. The whole repository stayed green, and Claude's
+independent audit gave the engineering candidate a GO.
+
+That does not mean the model played. No buttons were pressed in this phase, no outcome was added,
+and no ability was promoted. The next scene is the last safety boundary before a repeatable test:
+freeze four unused roots and sixteen exact episode identities, prove every binding and ledger
+without a prediction or controller input, and stop. Only the following lane may let the model act.
+
 ## Current checkpoint: the second choice now has a portable shape
 
 The missing post-catch option is no longer a vague idea. The project now has a small,

@@ -12,6 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-18: Red encounter execution qualified; campaign preflight is active
+
+Source `944fdc5b79aa240fb42084e47913f9446883e739` passed exact-head CI
+`32135801933/1`. The [execution receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+records a hard-limited four-completed-battle dose at the existing Mansion source, zero healing and
+travel, rejection of unsafe/fainted starts, and normalization back to the same decision boundary
+after successful capture or development. Claude returned GO. Antigravity's useful unsafe-party
+finding was closed; its accounting and failed-survey objections did not match the outer counters or
+one-shot terminal semantics, and exact direct wrappers remain deliberate fail-closed authorization.
+
+The active lane is `fresh-red-acquisition-replanning-execution-qualification-v1`. Build and run
+only a path-free zero-action preflight for four unused roots × four prospective trials. It must bind
+the exact model/runtime/profile/skills, hard limits, durable terminals, and unused trial ledgers
+before any prediction or controller input. No gameplay is authorized. Counters stay
+**30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## 2026-08-18: portable encounter development qualified; Red execution binding is active
 
 Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed exact-head CI

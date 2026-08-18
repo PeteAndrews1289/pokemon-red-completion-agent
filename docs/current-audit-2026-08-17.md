@@ -1,5 +1,20 @@
 # Current audit — 2026-08-18
 
+## Current result: the Red source-local executor passes; campaign execution is still closed
+
+Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1` with
+4,191 passed, 3 deselected, and 1 xfailed. The
+[path-free execution qualification](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+records a fixed four-battle Mansion-local dose behind exact hard action/frame wrappers. Healing and
+travel are forbidden; unsafe/fainted starts are rejected; successful capture and development
+normalize to the same source; and the portable verifier still requires collection-safe readiness
+progress. Claude returned GO. Antigravity's unsafe-start finding was fixed; its claimed accounting
+bypass was contradicted by the outer deltas, and failed surveys terminate rather than replan.
+
+No emulator or model ran, so counters remain **30/15/4/3/0/0** and **14/4/0/1/1**. The active
+falsifier is one zero-action preflight for four roots × four trial identities with exact bindings,
+hard limits, durable terminals, and retry-safe ledgers. Gameplay remains a separate later lane.
+
 ## Current result: title-neutral post-capture choice capability passes; execution is unproved
 
 Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1` with

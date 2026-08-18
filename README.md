@@ -5,6 +5,18 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): Red source-local execution qualified; campaign
+> preflight next.** Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI
+> `32135801933/1` (4,191 passed, 3 deselected, 1 xfailed). The
+> [path-free execution receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+> binds a fixed four-battle `DEVELOP_TEAM` dose to the Mansion encounter source with hard
+> action/frame limits, zero healing/travel, safe-party admission, and return to the same decision
+> boundary after successful capture or development. Claude returned GO. Antigravity found the
+> unsafe-start edge case that the final source closes; its other objections were contradicted by
+> outer accounting, terminal failure semantics, and the intentional exact-wrapper gate. No game ran
+> and counters remain **30/15/4/3/0/0** and **14/4/0/1/1**. The active lane now builds and runs only
+> a zero-action preflight for the four-root, sixteen-episode acquisition-replanning campaign.
+
 > **Current product focus (August 18, 2026): portable post-capture choice qualified; bind the
 > real Red executor next.** Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI
 > `32132328658/1` (4,182 passed, 1 skipped, 3 deselected, 1 xfailed). The

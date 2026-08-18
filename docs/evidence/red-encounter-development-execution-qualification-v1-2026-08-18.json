@@ -1,0 +1,91 @@
+{
+  "claim_boundary": {
+    "supported": "Published Red adapter code binds the title-neutral DEVELOP_TEAM seam to one hard-bounded four-battle encounter-source executor, rejects unsafe zero-heal starts, and normalizes successful acquisition and development back to the same source boundary.",
+    "unsupported": [
+      "acquisition_replanning_episode",
+      "cross_title_transfer",
+      "executed_red_skill",
+      "gameplay_authority",
+      "living_pokedex_ability",
+      "model_training_result",
+      "red_completion"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_binding": {
+    "action_free_offer": true,
+    "capture_success_returns_to_source_boundary": true,
+    "completed_battle_dose": 4,
+    "development_success_returns_to_source_boundary": true,
+    "hard_action_limiter_required": true,
+    "hard_frame_limiter_required": true,
+    "healing_trips_allowed": 0,
+    "independent_outcome_verification": true,
+    "living_collection_regression_allowed": false,
+    "measured_local_venue_required": true,
+    "policy_route_or_coordinate_input": false,
+    "source_local": true,
+    "teacher_choice": false,
+    "title_identity_in_policy_input": false,
+    "travel_transitions_allowed": 0,
+    "unsafe_or_fainted_party_admitted": false
+  },
+  "implementation": {
+    "context_module_sha256": "04f5f57126fa94fa4734d594d0af5962c5b0a7d3d550156737c30c9b748c67cc",
+    "context_profile_module_sha256": "b3750b0ecbe05f9626bafb1d0958439dfefa2f08d492b86454b0ca9061e0a3a9",
+    "context_test_sha256": "8940bcde3ef87b061afc1c5b3203cd1f9586535a074ba3c66f38adc50c9a6ac5",
+    "goal_manager_collection_registry_sha256": "020e195f1533a58cfb948e075fd67bd3fe6d8e368395811246735a72b48d5064",
+    "profile_builder_sha256": "843cde56037e64685811f5e79565b933f83aa50c096ec7e11b70418da75dc28e",
+    "profile_test_sha256": "87aeac039f9e0a2a1215e957ba8b07731f1aa3971c9ff140f998a75d1d44b3b6",
+    "red_goal_skills_module_sha256": "a1369b0da4f00db72fb59daf285b93687b9c8dcb8bd0646c6d2ab25c96be0cfc",
+    "red_goal_skills_test_sha256": "205db2a4647f2894aeb39edd7ebf2ef91730606dde5433b0c4abe4d4af8715dc",
+    "title_neutral_core_sha256": "c74361270add2b333788d6f80921e8fb3f51020d25c6f3d5216577d1d4c9c4fd"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32135801933,
+    "source_commit": "944fdc5b79aa240fb42084e47913f9446883e739"
+  },
+  "recorded_on": "2026-08-18",
+  "remaining_campaign_prerequisites": {
+    "action_free_private_root_admission": false,
+    "authenticated_campaign_plan": false,
+    "durable_episode_terminal": false,
+    "exact_model_and_runtime_binding": false,
+    "one_shot_trial_identities": false,
+    "post_acquisition_menu_preflight": false
+  },
+  "review": {
+    "antigravity": "Its first audit challenged normalization accounting, failed-survey handling, unsafe-party admission, and exact wrapper shape. Outer action/frame deltas already include successful normalization; failed surveys terminate the one-shot decision; unsafe and fainted starts are now rejected; and exact direct wrappers remain an intentional fail-closed authorization boundary. A latest-source reassessment ended before a second verdict.",
+    "claude": "GO on the published executor candidate with no blocker. It confirmed the fixed dose, zero-heal and zero-travel guards, exact hard limiters, independent verifier, source-bound registries, and narrow intermediate claim boundary."
+  },
+  "schema": "pokemon.red.encounter-development-execution-qualification.v1",
+  "status": "red_execution_binding_qualified_campaign_preflight_required",
+  "title_role": "Red execution engineering qualification, not gameplay, model training, completion, or transfer",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames": 0,
+    "episode_attempts": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "verified_outcomes": 0
+  }
+}

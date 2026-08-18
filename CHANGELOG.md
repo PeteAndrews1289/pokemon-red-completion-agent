@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published the source-local Red encounter-development executor at source
+  `944fdc5b79aa240fb42084e47913f9446883e739` under green CI `32135801933/1`. The
+  [path-free receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+  records a fixed four-battle dose, hard action/frame limits, zero healing/travel, unsafe-start
+  rejection, collection-safe independent verification, and same-source normalization after
+  successful capture or development. Claude returned GO; Antigravity's unsafe-party finding was
+  fixed and its contradicted accounting/failure claims were not adopted. No game or learning
+  counter advanced. Retired the executor lane and opened a zero-action campaign-preflight lane for
+  the frozen four-root, sixteen-episode acquisition-replanning curriculum.
+
 - Published the title-neutral encounter-source development capability at source
   `6d028ea2003a4520b93a47d0607f5af01f8969e4` under green CI `32132328658/1`. The
   [path-free receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)

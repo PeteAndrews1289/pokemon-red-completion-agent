@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the interface is connected, but the model still has not acted
+
+Put **SOURCE 944FDC5 · CI GREEN · 4,191 TESTS PASSED** on screen. Advance the rail to **CATCH →
+RETURN TO SOURCE → DEVELOP FOR 4 BATTLES → RETURN TO SOURCE → CHOOSE AGAIN**. Overlay **HARD
+ACTION/FRAME CAPS · HEALING 0 · TRAVEL 0 · UNSAFE STARTS REJECTED · LIVING COLLECTION
+PROTECTED**. Add **CLAUDE: GO**. Note that Antigravity caught the unsafe-party edge case and that
+the final commit closed it; its claimed accounting bypass did not survive direct source review.
+
+Then stamp **GAMEPLAY 0 · MODEL OUTCOMES 0 · AUTHORITY +0**. The next rail is **4 ROOTS × 4
+TRIALS → FREEZE EXACT BINDINGS AND LEDGERS → ZERO-ACTION PREFLIGHT → STOP**. The scene should feel
+like the last safety lock before a repeatable curriculum, not a victory over Red or proof of living-
+Pokédex transfer.
+
 ## August 18 scene: the missing second choice gets a real interface
 
 Put **SOURCE 6D028EA · CI GREEN · 4,182 TESTS PASSED** on screen, then reveal the new rail:

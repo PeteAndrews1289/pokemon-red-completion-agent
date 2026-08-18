@@ -6,6 +6,21 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns the acquisition-replanning campaign preflight
+
+The [qualified Red executor](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+at source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. It
+supplies one hard-limited four-battle source-local `DEVELOP_TEAM` action, refuses unsafe zero-heal
+starts, preserves living-collection evidence, and returns successful capture/development to the
+same decision boundary. This is engineering qualification only; no game ran.
+
+Codex owns `fresh-red-acquisition-replanning-execution-qualification-v1`. Build the exact
+four-root × four-trial plan, retry-safe ledgers, source/model/runtime/profile/skill attestations,
+hard limits, durable terminal boundary, and one path-free zero-action preflight. Claude returned GO
+on the executor candidate. Antigravity's unsafe-party finding is fixed; its remaining claims were
+not supported by the source. No agent owns episode execution, fitting, promotion, sealed Red, or
+Crystal until the preflight is published and the project reorients again.
+
 ## Current override: Codex owns bounded Red encounter-development integration
 
 The [qualified capability](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)

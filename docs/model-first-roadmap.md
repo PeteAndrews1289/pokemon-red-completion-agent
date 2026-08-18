@@ -8,6 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: Red local execution qualified; freeze the curriculum boundary
+
+Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. The
+[path-free execution receipt](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+binds the portable `DEVELOP_TEAM` seam to a fixed four-completed-battle Mansion-local dose. It
+requires exact hard action/frame wrappers, allows zero healing and travel, refuses unsafe or
+fainted starts, independently verifies collection-safe readiness progress, and returns successful
+capture and development to the same encounter boundary. Claude returned GO; Antigravity's valid
+unsafe-party concern was closed, while its accounting and failed-survey claims were contradicted by
+the source and one-shot terminal contract.
+
+This still is not gameplay or learning evidence. The active lane is
+`fresh-red-acquisition-replanning-execution-qualification-v1`: freeze exact bindings and sixteen
+unused identities, then run one zero-action campaign preflight. A pass permits a separate
+repeatable development run; a failure closes the incompatible root or campaign without patches.
+Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## Current checkpoint: portable choice seam qualified; bind one real Red mechanic
 
 Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`. The

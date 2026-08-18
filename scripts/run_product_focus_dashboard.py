@@ -103,17 +103,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The title-neutral post-capture development seam is published and green. Next: "
-            "bind one hard-limited, source-local Red executor without travel, healing, route "
-            "policy, gameplay, or a learning-counter change."
+            "The source-local Red encounter executor is published and green. Next: freeze and "
+            "zero-action preflight the exact four-root, sixteen-episode acquisition-replanning "
+            "campaign without gameplay or a learning-counter change."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Portable seam qualified · Red source-local executor next · no gameplay",
+        location="Red executor qualified · campaign preflight next · no gameplay",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Qualify bounded Red encounter-local execution binding · no gameplay",
+            choice="Qualify 4-root × 4-trial acquisition-replanning campaign · no gameplay",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -187,8 +187,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "post-acquisition captures 0 · prior durable next-choice count 1"
             ),
             (
-                "Capability qualified · title-neutral action-free offer · collection-safe "
-                "readiness verifier · execution integration and gameplay remain unproved"
+                "Execution qualified · fixed 4-battle source-local dose · zero healing/travel · "
+                "same-source normalization · gameplay remains unexecuted"
             ),
         ),
     )

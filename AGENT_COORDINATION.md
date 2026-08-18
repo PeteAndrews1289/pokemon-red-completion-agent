@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-18 Red executor qualified; acquisition-replanning preflight is the only active lane —
+> highest checkpoint:** Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI
+> `32135801933/1`. The [execution receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+> binds one fixed four-battle Mansion-local development dose with hard limits, zero healing/travel,
+> safe-party admission, independent verification, and same-source normalization. No game ran.
+>
+> Codex owns `fresh-red-acquisition-replanning-execution-qualification-v1`: implement and execute
+> only the zero-action preflight for four roots × four trials. Claude's published-candidate verdict
+> was GO. Antigravity's real unsafe-start finding is fixed; its remaining objections were rejected
+> on source evidence. Reviewers stay read-only. No prediction, controller input, episode, teacher,
+> fit, root patch, sealed Red, Crystal, or replay belongs in this lane. Counters remain
+> **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 > **2026-08-18 portable seam qualified; Red execution integration is the only active lane —
 > highest checkpoint:** Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI
 > `32132328658/1`. The [capability receipt](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)

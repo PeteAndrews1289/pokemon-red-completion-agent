@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the portable choice gains a real Red executor
+
+Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. The
+[execution qualification](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+binds one fixed four-completed-battle development dose to the existing Mansion encounter source.
+It requires exact hard action/frame limiters, permits no healing or travel, rejects unsafe starts,
+independently verifies living-collection-safe readiness progress, and normalizes successful capture
+or development back to the same decision boundary. Claude returned GO. Antigravity exposed the
+unsafe-start edge case fixed in the final source; its other objections were rejected on code and
+terminal-semantics evidence.
+
+No game ran and every learning/authority/transfer counter is unchanged. The active lane now builds
+the exact retry-safe four-root, sixteen-episode campaign boundary and runs only a zero-action
+preflight. It still does not establish model gameplay, changed-state replanning, Red completion, a
+living Pokédex, or cross-title transfer.
+
 ## August 18: the portable post-capture choice seam passes
 
 Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`. The

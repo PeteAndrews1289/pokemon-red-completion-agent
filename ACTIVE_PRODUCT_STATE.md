@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Red encounter-source development execution qualification V1** (`red-encounter-development-execution-qualification-v1`)
+**Fresh Red acquisition-replanning execution qualification V1** (`fresh-red-acquisition-replanning-execution-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the bounded source-local executor and profile binding pass without route leakage, freeze a separate zero-action campaign preflight for the 16 episodes. Otherwise close this mechanic and test another genuine post-acquisition goal without patching roots.
+- Next decision: If the exact four-root, sixteen-episode zero-action preflight passes with every identity unused, reorient separately to the repeatable development run. Otherwise close the rejected roots or campaign without route, teacher, or menu patches.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Bind the qualified title-neutral DEVELOP_TEAM seam to one hard-bounded, source-local Red encounter executor and prove action-free that it can be offered beside acquisition without a route, teacher, or root patch. |
+| Reusable capability | Freeze and zero-action preflight one repeatable four-root, sixteen-episode Red acquisition-replanning campaign that uses the qualified source-local DEVELOP_TEAM executor as a genuine post-acquisition choice. |
 | Authority now | The shadow candidate and base each have one bounded safe-acquisition result on one disclosed Red train root. Neither has learned replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Authorize only a later zero-action preflight for the bounded Red acquisition-replanning campaign after the real source-local executor and profile binding pass qualification; this lane grants no gameplay authority. |
+| Authority target | Authorize only one later repeatable Red development campaign after its exact zero-action preflight passes; this lane grants no gameplay, promotion, completion, or transfer authority. |
 | Transfer test | Not in this lane. The core interface remains title-neutral; Crystal becomes the first measured transfer only after Red produces a real acquisition-replanning signal. |
-| Cheapest falsifier | Reuse only existing wild-corridor movement and battle primitives behind the qualified semantic boundary. Close the candidate if one real readiness quantum requires travel, healing, fixed coordinates in policy input, a title-specific teacher, or an artificial menu entry. |
+| Cheapest falsifier | Authenticate the four unused train roots, exact model/runtime/profile/skill bindings, initial menus, sixteen prospective identities, hard limits, durable terminals, and retry-safe ledgers without prediction or controller input. Close the campaign if any root needs a route, teacher, artificial goal, unsafe party, or reused identity. |
 | Time box | 1 session / 6 hours |
 
 ### Required learning outputs
@@ -57,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-encounter-development-capability-qualified** · status **active** · evidence [qualification](docs/evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
+**2026-08-18-red-encounter-development-executor-qualified** · status **active** · evidence [qualification](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The living-Pokedex agent now has a portable post-capture choice contract. This lane supplies the smallest real Red mechanic behind it so the next campaign can test acquisition followed by a learned changed-state choice. |
-| Learning output | No new measured learning output. The title-neutral action-free offer and collection-safe verifier are published and independently reviewed, but the executor is not integrated and no game ran. All cumulative counters remain unchanged. |
-| Authority delta | None. Source 6d028ea passed CI 32132328658/1, but ROM-free capability code and tests add no model prediction, gameplay, verified outcome, fit, comparison, promotion, or transfer authority. |
+| Product alignment | The living-Pokedex agent now has the real acquisition and source-local development actions needed for a changed-state choice. This lane packages those actions into the first repeatable curriculum that can measure acquisition followed by replanning. |
+| Learning output | No new measured learning output. The published Red adapter now supplies a hard-bounded four-battle source-local development action and safe same-source normalization, but no game ran and every cumulative learning counter remains unchanged. |
+| Authority delta | None. Source 944fdc5 passed CI 32135801933/1 and qualifies only the Red execution binding. No game, prediction, verified outcome, fit, comparison, promotion, or transfer result occurred. |
 | Transfer result | Not run. Crystal remains closed; title neutrality is an engineering requirement here, not measured cross-title transfer. |
-| Blocker | The semantic seam and Red observation adapter are qualified, but no authenticated Red profile yet binds them to a hard-bounded source-local encounter executor. Post-acquisition menu feasibility is therefore still unproved. |
-| Decision | Retire the ROM-free capability lane after green CI and open one bounded Red execution-integration qualification. Reuse the encounter source already present for acquisition; do not add travel, healing, a teacher, or a bespoke route. |
-| Next session | Implement and ROM-free qualify only the bounded Red execution binding, its negative paths, and profile schema. Do not execute gameplay, collect outcomes, fit a model, retry consumed roots, open sealed Red, or execute Crystal. |
-| Next falsifier | Bind one existing source-local Red movement-and-battle primitive under hard action/frame limits and prove the offer stays action-free. Fail closed if the adapter must leave the source, heal, expose a route to policy, query a teacher, or patch a root. |
-| Stop condition | Stop after one ROM-free integration qualification, or immediately when the executor needs travel, healing, a root-specific route, artificial menu entry, teacher decision, gameplay, or scope beyond six hours. |
+| Blocker | The reusable seam and Red source-local executor are qualified, but the four-root sixteen-episode acquisition-replanning campaign has no authenticated plan, exact trial identities, durable runner boundary, or zero-action preflight. |
+| Decision | Retire the Red executor qualification after green exact-head CI and open one bounded campaign execution-qualification lane. Build and run only a zero-action preflight; gameplay remains a separate learning lane. |
+| Next session | Implement, publish, and run only the zero-action campaign preflight. Do not execute an episode, make a prediction, send controller input, collect an outcome, fit a model, open sealed Red, or execute Crystal. |
+| Next falsifier | Build one path-free, retry-safe campaign runner and prove action-free that all four roots, sixteen trial identities, exact bindings, ledgers, limits, and durable terminal contracts are ready. Reject rather than patch any incompatible root. |
+| Stop condition | Stop after one zero-action preflight receipt, or immediately on any reused root, inaccessible binding, route or teacher patch, artificial menu entry, prediction, controller input, game frame, or scope beyond six hours. |
 
 ### Stop conditions
 
-- Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-root reuse stops this engineering lane.
+- Any model prediction, controller action, emulator advancement, outcome access, teacher query, fit, or consumed-root reuse stops this qualification lane.
 - Any fixed map route, root-specific rescue, artificial menu goal, sealed Red access, Crystal access, promotion, or full replay stops the lane.
-- Stop after one qualified Red execution binding or a documented falsification within six hours.
+- Stop after one path-free zero-action preflight receipt or a documented falsification within six hours.
 
 ### Hard boundaries for this lane
 
@@ -113,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red encounter-source development execution qualification V1:** Published source 944fdc5b79aa240fb42084e47913f9446883e739 passed CI 32135801933/1. The Red adapter binds the title-neutral seam to a hard-limited four-battle, zero-heal, source-local executor; successful capture and development return to the same source boundary, and unsafe starts fail closed. No game ran and all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Title-neutral encounter-source development capability V1:** Published source 6d028ea2003a4520b93a47d0607f5af01f8969e4 passed CI 32132328658/1. The ROM-free core and Red observation adapter expose an action-free, title-neutral DEVELOP_TEAM offer with strict collection-safe readiness verification. No game ran and execution integration remains separate. Evidence is preserved; retry is no.
 - **Fresh Red acquisition-replanning curriculum design V1:** The action-free inventory and reviewed contract froze sixteen prospective episodes across four unused roots. Existing contexts cannot yet expose a multi-choice post-acquisition replan, so the design is complete, no gameplay or learning counter advanced, and the next work is a separate reusable capability lane. Evidence is preserved; retry is no.
 - **Paired Red goal-manager outcome screen V1:** The exact pair is consumed and strictly admitted. Base and candidate each safely retained one acquisition with identical action/frame cost, producing a tie; both stopped after one decision, so composition and changed-state replanning remain unproved. No retry is allowed. Evidence is preserved; retry is no.
