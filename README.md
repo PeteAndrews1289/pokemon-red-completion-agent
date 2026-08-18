@@ -16,7 +16,7 @@
 >
 > The active lane is `repeatable-goal-manager-outcome-fit-v1`. Its
 > [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
-> (SHA-256 `b120fac3…`) permits exactly one full-batch capped inverse-propensity update from the two
+> (SHA-256 `a950e749…`) permits exactly one full-batch capped inverse-propensity update from the two
 > admitted targets. It is diagnostic only: no second fit, failed-prefix decode, model selection,
 > unseen evaluation, promotion, authority gain, Crystal access, or transfer claim.
 >

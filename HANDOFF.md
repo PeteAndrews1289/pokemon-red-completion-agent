@@ -30,7 +30,7 @@ prefixes remain diagnostic-only and must not be decoded as fit targets. See the
 
 The active lane is `repeatable-goal-manager-outcome-fit-v1`. The
 [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
-(SHA-256 `b120fac3…`) authorizes one diagnostic full-batch capped inverse-propensity update using
+(SHA-256 `a950e749…`) authorizes one diagnostic full-batch capped inverse-propensity update using
 only the two admitted targets. Do not run a second fit, decode failed prefixes, search parameters,
 evaluate on unseen data, promote the candidate, access Crystal, or claim new authority or transfer.
 

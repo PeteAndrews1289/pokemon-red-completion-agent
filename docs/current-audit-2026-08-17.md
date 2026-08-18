@@ -12,7 +12,7 @@ has SHA-256 `c7dde170…`.
 
 The active lane is `repeatable-goal-manager-outcome-fit-v1`. Its
 [frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) (SHA-256
-`b120fac3…`) permits one diagnostic full-batch capped inverse-propensity update using only the two
+`a950e749…`) permits one diagnostic full-batch capped inverse-propensity update using only the two
 admitted targets. There is no second fit, failed-prefix decode, hyperparameter search, unseen
 evaluation, promotion, Crystal access, authority gain, or transfer result.
 

@@ -20,7 +20,7 @@ has SHA-256 `c7dde170…`.
 
 The active lane is `repeatable-goal-manager-outcome-fit-v1`. Its
 [frozen plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) (SHA-256
-`b120fac3…`) allows one conservative full-batch capped inverse-propensity update from the two
+`a950e749…`) allows one conservative full-batch capped inverse-propensity update from the two
 admitted targets. Publish and label-free-preflight the learner, then consume the fit identity once.
 Do not run a second fit, mine or decode failed prefixes, tune parameters, evaluate unseen data,
 promote the candidate, access Crystal, or claim new authority or transfer.

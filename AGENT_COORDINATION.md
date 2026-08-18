@@ -11,7 +11,7 @@
 >
 > Codex owns `repeatable-goal-manager-outcome-fit-v1`. Its
 > [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
-> (SHA-256 `b120fac3…`) allows one full-batch capped inverse-propensity update from only the two
+> (SHA-256 `a950e749…`) allows one full-batch capped inverse-propensity update from only the two
 > admitted targets. Reviewers remain read-only. No agent may run a second fit, decode failed
 > prefixes, tune parameters, evaluate unseen data, promote, access Crystal, or claim authority or
 > transfer.

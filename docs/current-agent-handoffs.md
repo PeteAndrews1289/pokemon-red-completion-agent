@@ -19,7 +19,7 @@ targets. See the
 Codex owns `repeatable-goal-manager-outcome-fit-v1`: publish and label-free-preflight the frozen
 learner, then run exactly one full-batch capped inverse-propensity update from the two admitted
 targets. The [fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
-(SHA-256 `b120fac3…`) forbids a second fit, failed-prefix decode, parameter search, unseen evaluation,
+(SHA-256 `a950e749…`) forbids a second fit, failed-prefix decode, parameter search, unseen evaluation,
 promotion, Crystal access, and any new authority or transfer claim. Reviewers remain read-only.
 
 Legacy counters remain **30/15/3/3/0/0**. Product-focus-v2 is **12 development attempts, 2 verified

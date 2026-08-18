@@ -42,7 +42,7 @@ from pokemon_red_completion.goal_manager_outcome_learning import (
 )
 from pokemon_red_completion.goal_manager_protocol import (
     GoalManagerCollectionRegistry,
-    load_committed_goal_manager_registry,
+    load_committed_goal_manager_registry_at_revision,
 )
 from pokemon_red_completion.goal_manager_trajectory import load_goal_manager_episode
 from pokemon_red_completion.private_artifacts import open_private_root
@@ -217,7 +217,21 @@ def _readiness(args: argparse.Namespace) -> dict[str, object]:
     if entry_index >= len(entries):
         raise GoalManagerOutcomeFitError("campaign_root_identity")
     slot_id = _text(_mapping(entries[entry_index], "context entry").get("slot_id"), "slot")
-    registry = load_committed_goal_manager_registry(PROJECT_ROOT)
+    base_training_source = _commit(
+        fit_plan.get("base_training_source_commit"),
+        "base training source",
+    )
+    registry = load_committed_goal_manager_registry_at_revision(
+        PROJECT_ROOT,
+        base_training_source,
+    )
+    if registry.registry_sha256 != fit_plan.get("base_registry_sha256"):
+        raise GoalManagerOutcomeFitError("base_registry_attestation")
+    if (
+        context_plan.get("registry_sha256") != registry.registry_sha256
+        or context_plan.get("source_commit") != base_training_source
+    ):
+        raise GoalManagerOutcomeFitError("historical_context_plan_attestation")
     assignment = registry.assignment(slot_id)
     if assignment.partition != "train":
         raise GoalManagerOutcomeFitError("historical_train_partition")
@@ -251,6 +265,7 @@ def _readiness(args: argparse.Namespace) -> dict[str, object]:
         "base": base,
         "base_sha256": base_sha256,
         "registry": registry,
+        "base_training_source_commit": base_training_source,
         "trial": trial,
         "root": root,
         "assignment": assignment,
@@ -413,6 +428,9 @@ def _fit(
         ),
         registry,
     )
+    fit_plan = _mapping(readiness.get("fit_plan"), "fit plan")
+    if context_catalog.catalog_sha256 != fit_plan.get("base_context_catalog_sha256"):
+        raise GoalManagerOutcomeFitError("base_context_catalog_attestation")
     train_examples: list[GoalManagerExample] = []
     guard_examples: list[GoalManagerExample] = []
     for slot in registry.slots:
@@ -455,6 +473,7 @@ def _fit(
         "result_receipt_sha256": readiness["receipt_sha256"],
         "fit_plan_sha256": readiness["fit_plan_sha256"],
         "campaign_plan_sha256": readiness["campaign_sha256"],
+        "base_training_source_commit": readiness["base_training_source_commit"],
         "base_model_canonical_sha256": readiness["base_sha256"],
         "candidate_model_canonical_sha256": model_sha256,
         "candidate_model_file_sha256": hashlib.sha256(model_payload).hexdigest(),

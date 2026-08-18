@@ -12,7 +12,7 @@
   development attempts, 2 verified outcomes, 0 atomic episodes, 1 composition attempt, and 1
   verified composition. Activated `repeatable-goal-manager-outcome-fit-v1`; its
   [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
-  (SHA-256 `b120fac3…`) permits one diagnostic full-batch capped inverse-propensity update from only
+  (SHA-256 `a950e749…`) permits one diagnostic full-batch capped inverse-propensity update from only
   those two admitted targets. No fit has yet been added, and no second fit, failed-prefix decode,
   unseen evaluation, promotion, authority gain, Crystal access, or transfer claim is allowed.
 - Published executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` under green CI run
