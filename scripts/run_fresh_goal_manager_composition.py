@@ -101,7 +101,7 @@ from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 PROJECT_ROOT = _BOOTSTRAP_PROJECT_ROOT
 DESIGN_PATH = (
-    PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
+    PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json"
 )
 QUALIFICATION_MODULE_PATH = (
     PROJECT_ROOT / "src/pokemon_red_completion/goal_manager_composition_qualification.py"
@@ -227,7 +227,7 @@ def _prepare_readiness(args: argparse.Namespace) -> _Readiness:
         QUALIFICATION_MODULE_PATH,
         subject="qualification module",
     )
-    design_sha256 = _file_sha256(DESIGN_PATH, subject="V2 design")
+    design_sha256 = _file_sha256(DESIGN_PATH, subject="V3 design")
     for actual, expected, subject in (
         (runner_sha256, args.expected_runner_sha256, "runner"),
         (
@@ -235,12 +235,28 @@ def _prepare_readiness(args: argparse.Namespace) -> _Readiness:
             args.expected_qualification_module_sha256,
             "qualification module",
         ),
-        (design_sha256, args.expected_design_sha256, "V2 design"),
+        (design_sha256, args.expected_design_sha256, "V3 design"),
     ):
         if actual != _require_sha256(expected, subject=subject):
             raise FreshCompositionRunError(
                 "composition executable bytes differ from external attestation"
             )
+
+    expected_state_sha256 = _require_sha256(
+        args.expected_state_sha256,
+        subject="state",
+    )
+    expected_envelope_sha256 = _require_sha256(
+        args.expected_envelope_sha256,
+        subject="envelope",
+    )
+    root_identity = root_consumption_sha256(
+        state_sha256=expected_state_sha256,
+        envelope_sha256=expected_envelope_sha256,
+    )
+    claim_registry = open_fixed_account_claim_registry()
+    if not root_claim_is_available(claim_registry, root_identity):
+        raise FreshCompositionRunError("composition root is already consumed")
 
     skill_manifest = composition_skill_manifest(PROJECT_ROOT)
     if skill_manifest.get("manifest_sha256") != _require_sha256(
@@ -255,14 +271,6 @@ def _prepare_readiness(args: argparse.Namespace) -> _Readiness:
     ):
         raise FreshCompositionRunError("composition runtime differs from external attestation")
 
-    expected_state_sha256 = _require_sha256(
-        args.expected_state_sha256,
-        subject="state",
-    )
-    expected_envelope_sha256 = _require_sha256(
-        args.expected_envelope_sha256,
-        subject="envelope",
-    )
     expected_profile_sha256 = _require_sha256(
         args.expected_profile_sha256,
         subject="profile",
@@ -359,16 +367,9 @@ def _prepare_readiness(args: argparse.Namespace) -> _Readiness:
         args.private_artifact_root,
         repository_root=PROJECT_ROOT,
     )
-    root_identity = root_consumption_sha256(
-        state_sha256=capture.state_sha256,
-        envelope_sha256=capture.envelope_sha256,
-    )
-    episode_id = f"red-fresh-composition-v2-{root_identity[:32]}"
+    episode_id = f"red-fresh-composition-v3-{root_identity[:32]}"
     if output_root.inspect_episode_state(episode_id).status != "absent":
         raise FreshCompositionRunError("composition root is already consumed locally")
-    claim_registry = open_fixed_account_claim_registry()
-    if not root_claim_is_available(claim_registry, root_identity):
-        raise FreshCompositionRunError("composition root is already consumed")
     return _Readiness(
         source=source,
         capture=capture,
@@ -424,7 +425,7 @@ def _admit_root(readiness: _Readiness) -> _Admission:
             )
         available = tuple(binding.kind for binding in binding_set.bindings)
         if not FRESH_COMPOSITION_REQUIRED_KINDS.issubset(set(available)):
-            raise FreshCompositionRunError("composition root lacks the V2 field-composition menu")
+            raise FreshCompositionRunError("composition root lacks the V3 field-composition menu")
         checkpoint = living_collection_checkpoint(live)
         semantic_state_sha256 = canonical_sha256(
             {
@@ -473,7 +474,7 @@ def _execution_identity_sha256(
 
     identity = canonical_sha256(
         {
-            "schema": "pokemon.red.fresh-composition-execution-identity.v2",
+            "schema": "pokemon.red.fresh-composition-execution-identity.v3",
             "root_consumption_sha256": readiness.root_consumption_sha256,
             "source_commit": _source_commit(readiness.source),
             "runner_sha256": readiness.runner_sha256,
@@ -507,7 +508,7 @@ def _preflight_receipt(
     admission: _Admission,
 ) -> dict[str, object]:
     return {
-        "schema": "pokemon.red.fresh-goal-manager-composition-execution-preflight.v2",
+        "schema": "pokemon.red.fresh-goal-manager-composition-execution-preflight.v3",
         "status": "zero_action_preflight_passed_execution_identity_unclaimed",
         "source": readiness.source.public_dict(),
         "input_bindings": {
@@ -613,7 +614,7 @@ def _preflight_receipt(
         },
         "claim_boundary": {
             "supported": (
-                "One exact published V2 runner/root identity passed a zero-action, "
+                "One exact published V3 runner/root identity passed a zero-action, "
                 "zero-prediction execution preflight and remains unclaimed."
             ),
             "unsupported": [
@@ -658,7 +659,7 @@ def _execute(
         writer.append(
             "preregistration",
             {
-                "schema": "pokemon.red.fresh-composition-preregistration.v2",
+                "schema": "pokemon.red.fresh-composition-preregistration.v3",
                 "execution_identity_sha256": admission.execution_identity_sha256,
                 "root_consumption_sha256": readiness.root_consumption_sha256,
                 "design_sha256": readiness.design_sha256,
@@ -682,7 +683,7 @@ def _execute(
         )
         trajectory_sink.write_episode_header(
             metadata={
-                "schema": "pokemon.red.fresh-composition-episode-header.v2",
+                "schema": "pokemon.red.fresh-composition-episode-header.v3",
                 "execution_identity_sha256": admission.execution_identity_sha256,
                 "root_consumption_sha256": readiness.root_consumption_sha256,
                 "model_canonical_sha256": readiness.candidate.plan.model_canonical_sha256,
@@ -737,7 +738,7 @@ def _execute(
                 environment_id="pokemon.mainline:red:gb:us:rev0",
                 actor="learned_goal_manager",
                 policy_id="red-goal-manager-af29d7e7",
-                collection_id="fresh-goal-manager-composition-v2",
+                collection_id="fresh-goal-manager-composition-v3",
                 assignment_id=admission.execution_identity_sha256,
                 source_commit=source_commit,
                 snapshot_provider=snapshot_provider,
@@ -781,7 +782,7 @@ def _execute(
         sink.finalize()
         summary = writer.complete()
         return {
-            "schema": "pokemon.red.fresh-composition-execution-summary.v2",
+            "schema": "pokemon.red.fresh-composition-execution-summary.v3",
             "status": "complete",
             "execution_identity_sha256": admission.execution_identity_sha256,
             "episode": summary.public_dict(),
@@ -871,7 +872,7 @@ def _retain_failure_terminal(
             writer.append(
                 "terminal",
                 {
-                    "schema": "pokemon.red.fresh-composition-terminal.v2",
+                    "schema": "pokemon.red.fresh-composition-terminal.v3",
                     **terminal,
                 },
                 durable=True,

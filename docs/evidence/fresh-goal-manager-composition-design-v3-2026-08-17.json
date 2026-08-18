@@ -3,7 +3,7 @@
   "admission": {
     "closed_v2_root_allowed": false,
     "fixed_account_collision_check_before_private_input_read": true,
-    "initial_available_goal_kinds_exact": [
+    "required_initial_available_goal_kinds": [
       "acquire_species",
       "explore",
       "restore_team"

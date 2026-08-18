@@ -33,6 +33,19 @@ def test_parser_requires_an_explicit_safe_mode() -> None:
     assert "--execute" in option_strings
     assert "--expected-execution-identity-sha256" in option_strings
     assert "--expected-runtime-sha256" in option_strings
+    assert SCRIPT["DESIGN_PATH"].name == (
+        "fresh-goal-manager-composition-design-v3-2026-08-17.json"
+    )
+
+
+def test_v3_checks_the_fixed_account_collision_before_private_input_reads() -> None:
+    source = inspect.getsource(SCRIPT["_prepare_readiness"])
+
+    collision_check = source.index("root_claim_is_available(")
+    assert source.index("root_consumption_sha256(") < collision_check
+    assert collision_check < source.index("_external_regular(")
+    assert collision_check < source.index("open_goal_manager_context_capture(")
+    assert collision_check < source.index("resolve_rom_path(")
 
 
 def test_execution_presentation_is_frozen_before_any_readiness_work() -> None:
@@ -337,6 +350,9 @@ def test_preflight_receipt_is_path_free_and_advances_no_counter() -> None:
     receipt = SCRIPT["_preflight_receipt"](readiness, admission)
     encoded = json.dumps(receipt, sort_keys=True)
 
+    assert receipt["schema"] == (
+        "pokemon.red.fresh-goal-manager-composition-execution-preflight.v3"
+    )
     assert receipt["zero_effects"]["model_predictions"] == 0
     assert receipt["zero_effects"]["composition_episodes"] == 0
     assert receipt["runner_and_one_shot"]["execution_identity_consumed"] is False

@@ -184,6 +184,11 @@ def test_observability_result_and_v3_design_preserve_the_training_boundary() -> 
     assert design["schema"] == "pokemon.red.fresh-goal-manager-composition-design.v3"
     assert design["admission"]["closed_v2_root_allowed"] is False
     assert design["admission"]["fixed_account_collision_check_before_private_input_read"] is True
+    assert design["admission"]["required_initial_available_goal_kinds"] == [
+        "acquire_species",
+        "explore",
+        "restore_team",
+    ]
     assert design["episode_contract"]["selected_goal_kinds_exact"] == [
         "acquire_species",
         "explore",
