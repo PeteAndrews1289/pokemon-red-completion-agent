@@ -7,6 +7,8 @@ from types import SimpleNamespace
 
 import pytest
 
+from pokemon_red_completion.private_artifacts import _validate_episode_id
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = runpy.run_path(str(PROJECT_ROOT / "scripts/run_paired_goal_manager_outcome_screen.py"))
 
@@ -28,6 +30,13 @@ def test_runner_freezes_the_exact_two_prior_campaign_set() -> None:
         ),
         "supervised_train_exposure_allowed": True,
     }
+
+
+def test_arm_episode_identity_fits_the_private_store_contract() -> None:
+    episode_id = SCRIPT["_arm_episode_id"]("a" * 64)
+
+    _validate_episode_id(episode_id)
+    assert episode_id == "red-pair-" + "a" * 64
 
 
 def test_wrong_prior_campaign_set_fails_before_base_readiness() -> None:

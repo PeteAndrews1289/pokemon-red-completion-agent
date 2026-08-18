@@ -356,12 +356,13 @@ def _freeze(
     for arm in arms:
         arm_name = arm["arm"]
         model_sha = arm["model_canonical_sha256"]
-        arm["episode_id"] = f"red-goal-pair-{screen_id}-{arm_name}"
-        arm["claim_sha256"] = paired_screen_arm_claim(
+        claim_sha256 = paired_screen_arm_claim(
             screen_id=screen_id,
             arm=arm_name,
             model_canonical_sha256=model_sha,
         )
+        arm["claim_sha256"] = claim_sha256
+        arm["episode_id"] = _arm_episode_id(claim_sha256)
     plan = {**identity_source, "screen_id": screen_id, "arms": arms}
     if any(
         store.inspect_episode_state(arm["episode_id"]).status != "absent"
@@ -523,13 +524,14 @@ def _validate_plan(
             set(arm)
             != {"arm", "claim_sha256", "episode_id", "model_canonical_sha256"}
             or arm.get("model_canonical_sha256") != expected_model
-            or arm.get("episode_id") != f"red-goal-pair-{screen_id}-{arm_name}"
             or arm.get("claim_sha256")
             != paired_screen_arm_claim(
                 screen_id=screen_id,
                 arm=arm_name,
                 model_canonical_sha256=expected_model,
             )
+            or arm.get("episode_id")
+            != _arm_episode_id(_sha(arm.get("claim_sha256"), "arm claim"))
         ):
             raise PairedScreenRunError("screen_arm_contract")
 
@@ -602,6 +604,10 @@ def _selection_contract() -> dict[str, object]:
         "replacement_root_allowed": False,
         "distinct_roots_formally_inspected": 1,
     }
+
+
+def _arm_episode_id(claim_sha256: str) -> str:
+    return f"red-pair-{_sha(claim_sha256, 'arm claim')}"
 
 
 def _selected_assignment(readiness: _Readiness) -> GoalManagerAssignment:
