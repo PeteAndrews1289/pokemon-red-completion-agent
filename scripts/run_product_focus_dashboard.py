@@ -103,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Training is ready: the replacement teacher-free Red campaign excluded the failed "
-            "root and passed its zero-action preflight with all twelve trials available. The "
-            "next action is model-led development, not another qualification loop."
+            "Teacher-free Red development produced one admitted two-goal episode from twelve "
+            "attempts. Two verified outcomes now support exactly one conservative train-only "
+            "update; the candidate will remain shadow-only."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Repeatable development pilot V2 · 12 replacement trials ready",
+        location="Outcome fit V1 · 2 admitted targets · one update pending",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
-            candidate="Promoted Red goal manager af29d7e7… · logged exploratory policy",
-            choice="Execute replacement trials 0–11 once · admit fixed denominator",
+            candidate="Base Red goal manager af29d7e7… · frozen two-target update",
+            choice="Preflight once · claim once · fit once · no promotion",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="fitting",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -171,8 +171,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Training rail V2 · READY 12/12 → execute each replacement trial once → retain "
-                "every durable success/failure → strict fixed-denominator admission"
+                "Outcome-fit rail · 12 ATTEMPTS → 1 COMPLETE / 11 FAILED → 2 ADMITTED OUTCOMES "
+                "→ 1 VERIFIED COMPOSITION → ONE TRAIN-ONLY UPDATE"
             ),
             (
                 "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
@@ -184,8 +184,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "advanced frames 0 · exact root closed · no cause inferred · no retry"
             ),
             (
-                "Training-ready V2 · failed V1 root absent · frozen roots 4 · available trials "
-                "12/12 · claimed trials 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0"
+                "Development result V2 · attempts 12/12 · complete 1 · failed 11 · admitted "
+                "outcomes 2 · atomic 0 · acquisition 0 · teacher 0 · promotion 0"
             ),
         ),
     )

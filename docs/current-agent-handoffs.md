@@ -6,7 +6,28 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns direct execution of training-ready V2
+## Current override: Codex owns one diagnostic outcome fit
+
+The fixed V2 campaign consumed **12/12 attempts** once: **1 complete and 11 failed**. Strict
+admission retained two verified outcomes in one composition episode, specimen-preserving storage
+followed by restoration. Atomic episodes, acquisitions, and teacher queries were zero. Although 21
+choices were recorded, the 19 from failed prefixes remain diagnostic-only and must not become fit
+targets. See the
+[V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+(SHA-256 `c7dde170…`).
+
+Codex owns `repeatable-goal-manager-outcome-fit-v1`: publish and label-free-preflight the frozen
+learner, then run exactly one full-batch capped inverse-propensity update from the two admitted
+targets. The [fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
+(SHA-256 `b120fac3…`) forbids a second fit, failed-prefix decode, parameter search, unseen evaluation,
+promotion, Crystal access, and any new authority or transfer claim. Reviewers remain read-only.
+
+Legacy counters remain **30/15/3/3/0/0**. Product-focus-v2 is **12 development attempts, 2 verified
+outcomes, 0 atomic episodes, 1 composition attempt, and 1 verified composition**; the planned fit
+has not happened. This is bounded teacher-free same-context Red development evidence, not reliable
+gameplay, competence, completion, living-Pokédex ability, generalization, or transfer.
+
+## Previous override: Codex owned direct execution of training-ready V2
 
 Executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
 `32111661277`, attempt 1. Campaign `452cff2a…` froze with the failed V1 root absent, four roots, and

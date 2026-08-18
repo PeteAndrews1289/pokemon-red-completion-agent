@@ -1,6 +1,27 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: replacement V2 is ready; the next input is real
+## August 18 scene: twelve attempts leave two usable lessons
+
+Open on **V2 CAMPAIGN CONSUMED 12/12 · COMPLETE 1 · FAILED 11**. Reveal **VERIFIED OUTCOMES 2 ·
+COMPOSITION 1 · SPECIMEN-PRESERVING STORAGE → RESTORATION · ATOMIC 0 · ACQUISITION 0 ·
+TEACHER 0** and link the
+[V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json) with
+**SHA-256 C7DDE170…**.
+
+Show **RECORDED CHOICES 21**, then gray out **FAILED-PREFIX CHOICES 19 · EXCLUDED FROM FIT**. Move
+the active rail to `repeatable-goal-manager-outcome-fit-v1` and link the
+[frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) with
+**SHA-256 B120FAC3…**. Animate **2 ADMITTED TARGETS → ONE FULL-BATCH CAPPED IPS UPDATE → DIAGNOSTIC
+METRICS → STOP**. Lock out **SECOND FIT · FAILED-PREFIX DECODE · PARAMETER SEARCH · UNSEEN
+EVALUATION · PROMOTION · CRYSTAL · AUTHORITY · TRANSFER**.
+
+Keep **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0**.
+Add the new board: **DEVELOPMENT ATTEMPTS 12 · VERIFIED OUTCOMES 2 · ATOMIC 0 · COMPOSITION
+ATTEMPTS 1 · VERIFIED COMPOSITIONS 1 · FITS ADDED 0**. Narration: **“One teacher-free Red episode
+gave us two honest learning targets. It did not prove reliable play, competence, completion, a
+living Dex, generalization, or transfer.”**
+
+## Previous August 18 scene: replacement V2 is ready; the next input is real
 
 Open on **SOURCE 1C978FB · CI 32111661277/1 GREEN · CAMPAIGN 452CFF2A… FROZEN · FAILED V1 ROOT
 ABSENT · 4 ROOTS · 12/12 AVAILABLE · DEVELOP TEAM · RESTORE TEAM · MANAGE STORAGE · ACQUIRE

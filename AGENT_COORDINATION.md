@@ -1,7 +1,28 @@
 # Three-agent coordination
 
-> **2026-08-18 replacement V2 training-ready; direct execution is the only active lane — highest
-> checkpoint:** Executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
+> **2026-08-18 V2 produced two admitted outcomes; one diagnostic fit is the only active lane —
+> highest checkpoint:** The fixed campaign consumed **12/12 attempts** once: **1 complete / 11
+> failed**. Strict admission retained **2 verified outcomes** in one composition episode,
+> specimen-preserving storage followed by restoration. Atomic episodes, acquisitions, and teacher
+> queries were zero. Of 21 recorded choices, the 19 in failed prefixes remain diagnostic-only and
+> are excluded from fit targets. Link the
+> [V2 result receipt](docs/evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+> (SHA-256 `c7dde170…`).
+>
+> Codex owns `repeatable-goal-manager-outcome-fit-v1`. Its
+> [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
+> (SHA-256 `b120fac3…`) allows one full-batch capped inverse-propensity update from only the two
+> admitted targets. Reviewers remain read-only. No agent may run a second fit, decode failed
+> prefixes, tune parameters, evaluate unseen data, promote, access Crystal, or claim authority or
+> transfer.
+>
+> The legacy board remains 30/15/3/3/0/0. Product-focus-v2 is **attempts 12 · verified outcomes 2
+> · atomic 0 · composition attempts 1 · verified compositions 1**; no new fit exists yet. This
+> is bounded teacher-free same-context Red development evidence, not reliable gameplay,
+> competence, completion, living-Pokédex ability, generalization, or transfer.
+>
+> **2026-08-18 replacement V2 training-ready; direct execution was the only active lane —
+> historical checkpoint:** Executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
 > `32111661277` attempt 1. Campaign `452cff2a…` froze with the failed V1 root absent, four roots, and
 > **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
 > `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced frames,

@@ -5,7 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): replacement V2 is training-ready; execute directly.**
+> **Current product focus (August 18, 2026): V2 produced two admitted outcomes; fit one diagnostic
+> candidate.** The fixed campaign consumed all **12 attempts** exactly once: **1 complete / 11
+> failed**. Strict admission retained **2 verified outcomes** in one composition episode—
+> specimen-preserving storage followed by restoration—with **0 atomic episodes, 0 acquisitions,
+> and 0 teacher queries**. Across all terminals 21 choices were recorded, but the 19 choices from
+> failed prefixes remain diagnostic-only and are excluded from fitting. See the
+> [path-free V2 result receipt](docs/evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+> (SHA-256 `c7dde170…`).
+>
+> The active lane is `repeatable-goal-manager-outcome-fit-v1`. Its
+> [frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
+> (SHA-256 `b120fac3…`) permits exactly one full-batch capped inverse-propensity update from the two
+> admitted targets. It is diagnostic only: no second fit, failed-prefix decode, model selection,
+> unseen evaluation, promotion, authority gain, Crystal access, or transfer claim.
+>
+> The legacy board remains **30/15/3/3/0/0**. Product-focus-v2 now reads **development attempts 12
+> · verified outcomes 2 · atomic episodes 0 · composition attempts 1 · verified
+> compositions 1**. No fit has yet been added. This is one teacher-free same-context Red
+> development result, not reliable gameplay, competence, completion, living-Pokédex ability,
+> generalization, or transfer.
+>
+> **Previous product focus (August 18, 2026): replacement V2 was training-ready; execute directly.**
 > Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed GitHub CI run
 > `32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully, excluded the failed
 > V1 root, and returned **12/12 available trials** across `DEVELOP_TEAM`, `RESTORE_TEAM`,

@@ -18,7 +18,28 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Replacement V2 training-ready; execute directly — 2026-08-18
+## V2 admitted two outcomes; run one diagnostic outcome fit — 2026-08-18
+
+The fixed replacement campaign consumed all **12 attempts** exactly once: **1 complete and 11
+failed**. Strict admission retained two verified outcomes in one composition episode,
+specimen-preserving storage followed by restoration. Atomic episodes, acquisitions, and teacher
+queries were all zero. Although all terminals recorded 21 choices, the 19 choices from failed
+prefixes remain diagnostic-only and must not be decoded as fit targets. See the
+[path-free V2 result receipt](docs/evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+(SHA-256 `c7dde170…`).
+
+The active lane is `repeatable-goal-manager-outcome-fit-v1`. The
+[frozen fit plan](docs/evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json)
+(SHA-256 `b120fac3…`) authorizes one diagnostic full-batch capped inverse-propensity update using
+only the two admitted targets. Do not run a second fit, decode failed prefixes, search parameters,
+evaluate on unseen data, promote the candidate, access Crystal, or claim new authority or transfer.
+
+The legacy board remains **30/15/3/3/0/0**. Product-focus-v2 is now **12 development attempts, 2
+verified outcomes, 0 atomic episodes, 1 composition attempt, and 1 verified composition**; no new
+fit exists yet. This is limited teacher-free same-context Red development evidence, not reliable
+play, competence, completion, living-Pokédex ability, generalization, or transfer.
+
+## Previous checkpoint: replacement V2 training-ready; execute directly — 2026-08-18
 
 Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
 `32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1

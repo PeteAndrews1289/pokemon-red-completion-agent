@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: replacement V2 reaches a clean starting line
+## August 18: V2 yields one composition and two fit-eligible outcomes
+
+The fixed campaign consumed all twelve attempts exactly once. One episode completed and eleven
+failed. Strict admission retained two verified outcomes in one composition episode:
+specimen-preserving storage followed by restoration. Atomic episodes, acquisitions, and teacher
+queries were zero. Across all terminals 21 choices were recorded, but the 19 choices in failed
+prefixes remain diagnostic-only and are excluded from fitting. The
+[path-free V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+has SHA-256 `c7dde170…`.
+
+The active lane is `repeatable-goal-manager-outcome-fit-v1`. Its
+[frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) (SHA-256
+`b120fac3…`) permits one diagnostic full-batch capped inverse-propensity update using only those two
+targets. It permits no second fit, failed-prefix decode, hyperparameter search, unseen evaluation,
+promotion, Crystal access, or new authority or transfer claim.
+
+The legacy board remains 30/15/3/3/0/0. Product-focus-v2 is now 12 development attempts, 2 verified
+outcomes, 0 atomic episodes, 1 composition attempt, and 1 verified composition; the planned fit has
+not happened. This is the first admitted teacher-free same-context Red development result, not
+evidence of reliable gameplay, competence, completion, living-Pokédex ability, generalization, or
+transfer.
+
+## Previous August 18 checkpoint: replacement V2 reaches a clean starting line
 
 Exact executable source `1c978fb7f60b41d46a2f74800b28652778d8b8a0` passed CI run
 `32111661277`, attempt 1. Replacement campaign `452cff2a…` froze successfully with the failed V1

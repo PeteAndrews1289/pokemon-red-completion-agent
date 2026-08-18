@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon.red.repeatable-goal-manager-outcome-fit-plan.v1",
+  "recorded_on": "2026-08-18",
+  "status": "frozen_before_target_decode",
+  "result_receipt_sha256": "c7dde1703f8bc0581f3c871e555a352bcf23fec6c2ea0d1086b3862fecc164dd",
+  "campaign_plan_sha256": "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9",
+  "complete_episode_manifest_sha256": "2d8b98ff496d609f77071f9b93b6dee98749a91b405fa7eecf914651200df0a4",
+  "base_model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+  "complete_trial_index": 8,
+  "eligible_targets": 2,
+  "complete_episodes": 1,
+  "independent_roots": 1,
+  "excluded_failed_prefix_choices": 19,
+  "configuration": {
+    "schema": "pokemon.core.goal-manager-outcome-update-configuration.v1",
+    "objective_id": "pokemon.core.goal-manager.capped-ips-policy-gradient.v1",
+    "update_steps": 1,
+    "optimizer": "full_batch_gradient_descent",
+    "step_size": 0.02,
+    "importance_weight": "inverse_behavior_probability_capped",
+    "maximum_importance_weight": 4.0,
+    "normalization": "frozen_authenticated_base",
+    "initialization": "frozen_authenticated_base_weights",
+    "weight_delta_l2_cap": 0.02,
+    "menu_kl_cap": 0.01,
+    "hyperparameter_search": false
+  },
+  "fit_gate": {
+    "both_successful_selected_probabilities_nondecreasing": true,
+    "at_least_one_successful_selected_probability_strictly_increases": true,
+    "weighted_training_loss_strictly_decreases": true,
+    "maximum_weight_delta_l2_at_most": 0.02,
+    "maximum_train_menu_kl_at_most": 0.01,
+    "acquisition_evolution_story_train_winner_flips": 0,
+    "finite_deterministic_round_trip": true
+  },
+  "one_shot": {
+    "collision_identity": "campaign_plan_sha256_plus_complete_episode_manifest_sha256",
+    "claim_before_target_decode": true,
+    "retry_after_claim": false,
+    "alternate_source_or_output_path_mints_new_identity": false
+  },
+  "data_boundary": {
+    "failed_artifact_target_decode": 0,
+    "validation_examples": 0,
+    "test_examples": 0,
+    "teacher_queries": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0
+  },
+  "decision": {
+    "pass": "Publish one outcome-updated diagnostic candidate and freeze a separate paired untouched-Red development screen.",
+    "fail": "Reject this learner design without a second fit, target mining, failure relabeling, or hyperparameter search."
+  },
+  "claim_boundary": {
+    "supported": "A passing fit validates the train-only outcome-update plumbing on two authenticated targets from one Red root.",
+    "unsupported": "A pass is not unseen improvement, reliable gameplay, acquisition competence, promotion, authority, transfer, Red completion, or living-Pokedex ability."
+  },
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

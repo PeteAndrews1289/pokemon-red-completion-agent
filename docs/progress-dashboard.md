@@ -5,7 +5,27 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current repeatable-development learning-V2 rail:** Show **EXECUTABLE SOURCE 1C978FB · CI
+> **Current repeatable outcome-fit rail:** Show **V2 CAMPAIGN CONSUMED 12/12 · COMPLETE 1 · FAILED
+> 11 · VERIFIED OUTCOMES 2 · COMPOSITION ATTEMPTS 1 · VERIFIED COMPOSITIONS 1 ·
+> SPECIMEN-PRESERVING STORAGE + RESTORATION · ATOMIC EPISODES 0 · ACQUISITIONS 0 · TEACHER
+> 0**. Show **RECORDED CHOICES 21 · FAILED-PREFIX CHOICES EXCLUDED 19**. Link the
+> [V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json) and
+> display **RECEIPT SHA-256 C7DDE170…**.
+>
+> Display `repeatable-goal-manager-outcome-fit-v1` and link the
+> [frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) with
+> **SHA-256 B120FAC3…**. The active rail is **PUBLISH + LABEL-FREE PREFLIGHT → ONE FULL-BATCH CAPPED
+> IPS UPDATE FROM 2 ADMITTED TARGETS → PUBLISH DIAGNOSTIC METRICS → STOP**. Add **NO SECOND FIT ·
+> FAILED-PREFIX DECODE 0 · PARAMETER SEARCH 0 · UNSEEN EVALUATION 0 · PROMOTION 0 · CRYSTAL 0
+> · AUTHORITY DELTA 0 · TRANSFER 0**.
+>
+> Keep the legacy board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY
+> 0 · TRANSFER 0**. Show product-focus-v2 as **DEVELOPMENT ATTEMPTS 12 · VERIFIED OUTCOMES 2 ·
+> ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 1 · VERIFIED COMPOSITIONS 1** and **FITS ADDED 0**.
+> Label **TEACHER-FREE SAME-CONTEXT RED DEVELOPMENT EVIDENCE ONLY · NO RELIABLE GAMEPLAY ·
+> COMPETENCE · COMPLETION · LIVING-DEX · GENERALIZATION · AUTHORITY · TRANSFER CLAIM**.
+>
+> **Historical repeatable-development learning-V2 rail:** Show **EXECUTABLE SOURCE 1C978FB · CI
 > 32111661277/1 GREEN · CAMPAIGN 452CFF2A… FROZEN · FAILED V1 ROOT ABSENT · 4 ROOTS · AVAILABLE
 > 12/12 · DEVELOP_TEAM + RESTORE_TEAM + MANAGE_STORAGE + ACQUIRE_SPECIES · PREDICTIONS 0 ·
 > CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0 · CLAIMS 0**. Link the

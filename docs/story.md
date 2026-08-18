@@ -7,7 +7,30 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: twelve replacement starting lines, and no third rehearsal
+## Current checkpoint: twelve attempts became two lessons
+
+The replacement campaign used all twelve starting lines exactly once. One episode completed and
+eleven failed. The complete episode made two learned choices—specimen-preserving storage, then
+restoration—and strict admission retained those two verified outcomes as one composition episode.
+It produced no atomic episode or acquisition and asked no teacher. The
+[path-free V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json)
+records that narrow result.
+
+There were 21 recorded choices across the full campaign, but 19 live inside failed episode prefixes.
+They remain evidence that the attempts occurred, not labels the learner may use. The active lane,
+`repeatable-goal-manager-outcome-fit-v1`, therefore gets exactly two targets and one chance: a
+full-batch capped inverse-propensity diagnostic update under the
+[frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json). There is no
+second fit, unseen evaluation, promotion, Crystal access, or new authority.
+
+The familiar scoreboard stays **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY
+ZERO · TRANSFER ZERO**. The new board now reads **12 ATTEMPTS · 2 VERIFIED OUTCOMES · 0 ATOMIC
+· 1 COMPOSITION ATTEMPT · 1 VERIFIED COMPOSITION**. This is a real teacher-free Red lesson, but
+not reliable gameplay, competence, completion, living-Pokédex ability, generalization, or transfer.
+
+---
+
+## Previous checkpoint: twelve replacement starting lines, and no third rehearsal
 
 The replacement executable at source `1c978fb7` passed green CI. Its new campaign excludes the
 failed V1 root, contains four roots and twelve available trials, and keeps the same team-development,

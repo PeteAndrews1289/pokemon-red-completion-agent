@@ -1,0 +1,87 @@
+{
+  "schema": "pokemon.red.repeatable-goal-manager-development-result-receipt.v2",
+  "recorded_on": "2026-08-18",
+  "status": "fixed_denominator_admitted_with_partial_success",
+  "source_verification": {
+    "execution_source_commit": "1c978fb7f60b41d46a2f74800b28652778d8b8a0",
+    "execution_source_bundle_sha256": "f561ca7efd1d5a383332e9f9cd358f041e83231dc0faa4d6d9bd72c3b3587efb",
+    "runner_sha256": "ee1d9c311f9947b516dbf12b06956be8dd1910b9597e33671d47b83ec2811206",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "numpy_runtime_sha256": "5091e63c30caf85620de0b8c28b596f6b6290fa871c84527b9de4eacb9195751",
+    "skill_manifest_sha256": "80bd6359545f9d27d4fdc3a041088fbdd8e03c41b2b6e0f60465bcc451b00a38",
+    "github_ci_run": 32111661277,
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "worktree_dirty": false
+  },
+  "input_bindings": {
+    "campaign_plan_sha256": "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9",
+    "context_plan_sha256": "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548",
+    "preflight_receipt_sha256": "018115afe929cd4dab86546570511759aea17d53f0da8a3d2fd3eeb124ce85a5",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d"
+  },
+  "fixed_denominator": {
+    "planned_trials": 12,
+    "claimed_trials": 12,
+    "durable_terminals": 12,
+    "complete_episodes": 1,
+    "invalid_trials": 11,
+    "invalid_trial_states": {
+      "failed": 11
+    },
+    "retried_trials": 0,
+    "replacement_trials": 0
+  },
+  "admitted_evidence": {
+    "complete_episode_manifest_sha256": "2d8b98ff496d609f77071f9b93b6dee98749a91b405fa7eecf914651200df0a4",
+    "verified_outcomes": 2,
+    "atomic_goal_episodes": 0,
+    "composition_attempts": 1,
+    "verified_composition_episodes": 1,
+    "selected_goal_kinds": [
+      "manage_storage",
+      "restore_team"
+    ],
+    "collection_relevant_selections": 1,
+    "successful_retained_acquisitions": 0,
+    "successful_specimen_preserving_storage": 1,
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0
+  },
+  "nonadmitted_diagnostics": {
+    "recorded_choices_across_all_terminals": 21,
+    "recorded_success_events_across_all_terminals": 13,
+    "recorded_failure_events_across_all_terminals": 8,
+    "use_as_fit_targets": false,
+    "reason": "Only complete episodes satisfy the frozen strict admission contract; settled prefixes from failed episodes remain retained diagnostic evidence and are not retroactively admitted."
+  },
+  "counter_treatment": {
+    "development_episode_attempts_added": 12,
+    "verified_outcome_examples_added": 2,
+    "atomic_goal_episodes_added": 0,
+    "composition_attempts_added": 1,
+    "verified_composition_episodes_added": 1,
+    "outcome_questions_added": 0,
+    "model_fits_added": 0,
+    "unseen_comparisons_added": 0,
+    "authority_promotions_added": 0,
+    "transfer_results_added": 0
+  },
+  "next_fit_boundary": {
+    "eligible_targets": 2,
+    "partition": "development_train_only",
+    "development_reused_for_model_selection": false,
+    "unseen_evaluation_available": false,
+    "promotion_authorized": false,
+    "fit_requires_separate_frozen_contract": true
+  },
+  "claim_boundary": {
+    "supported": "One fixed twelve-trial teacher-free Red campaign produced one strictly admitted two-decision composition episode with two verified outcomes, including specimen-preserving storage followed by restoration.",
+    "unsupported": "The result does not establish reliable multi-episode execution, atomic-goal coverage, acquisition success, unseen generalization, model improvement, learned navigation, Red completion, living-Pokedex completion, Crystal transfer, or authority promotion."
+  },
+  "sealed_red_accesses": 0,
+  "crystal_accesses": 0,
+  "full_replays": 0,
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}
