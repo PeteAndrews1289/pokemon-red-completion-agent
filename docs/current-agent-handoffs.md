@@ -6,7 +6,27 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: observability is green; Codex owns one V3 action-free qualification
+## Current override: V3 root closed; Codex owns one operational V4 qualification
+
+Published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run `32090038721`,
+attempt 1. Its one V3 action-free preflight emitted the sanitized `action_free_admission` stage.
+No agent may infer a cause. It wrote no execution claim, authorized no execution identity, made no
+prediction or controller action, advanced no frame, and produced no gameplay, outcome, or
+composition episode. The exact root is durably closed account-wide and may never retry. See the
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+
+Codex owns only `fresh-goal-manager-operational-composition-execution-qualification-v4`: publish
+the current-source binding under exact-head green CI, then run one action-free preflight on one
+different unused preexisting nonsealed Red root. Its initial menu and exact three learned
+selections must be `advance_story`, `restore_team`, and `manage_storage`, with no teacher,
+fallback, or fixed dispatch. Storage must preserve the exact specimen multiset and increase
+immediate capture headroom. Historical preflight evidence proves only origin and lineage. No agent
+may reopen V3, retry, patch a chosen root, start a V5 carousel, predict, act, grant authority, or
+open sealed Red or Crystal. See the
+[frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json). Counters
+remain **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+
+## Previous override: observability was green; Codex owned one V3 action-free qualification
 
 Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
 attempt 1. Four caught preclaim stages now emit one canonical sanitized nonzero envelope, with no

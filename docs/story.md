@@ -7,7 +7,29 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the opaque failure now has a safe language
+## Current checkpoint: a safe stage closed V3, and V4 changes the operational question
+
+Exact source `1bbc4f3` passed CI run `32090038721`, attempt 1. Its one V3 preflight stopped at the
+sanitized `action_free_admission` stage. That name tells us where the boundary stopped, not why.
+The runner wrote no execution claim, authorized no execution identity, made no prediction, sent no
+controller input, advanced no frame, and created no gameplay, outcome, or composition episode.
+The exact root is now durably closed account-wide and may never retry. The
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json)
+makes the restraint inspectable without turning the stage into a diagnosis.
+
+The scoreboard stays **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO ·
+TRANSFER ZERO**. V4 asks a different but still mission-facing question on one different unused
+preexisting nonsealed Red root: can the learned policy choose story progress, team restoration,
+and specimen-safe storage exactly once each? Storage must preserve the exact living-specimen
+multiset while creating immediate room for another capture. Historical bytes prove only where the
+root came from; the exact current published runner must freeze what those three choices execute.
+There is one action-free preflight, no teacher or fallback, and no retry or V5 carousel. The
+[frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json) is a narrow
+bridge back toward cross-game story play and a living Pokédex, not a learning result.
+
+---
+
+## Previous checkpoint: the opaque failure got a safe language
 
 Exact source `af04830` passed CI run `32089092868`, attempt 1. Without touching a ROM or another
 root, the runner learned to report four coarse moments where a future preflight can stop:

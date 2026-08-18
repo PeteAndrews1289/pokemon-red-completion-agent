@@ -43,6 +43,14 @@ COMPOSITION_V2_FAILURE = (
 COMPOSITION_V3_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json"
 )
+COMPOSITION_V3_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json"
+)
+COMPOSITION_V4_DESIGN = (
+    PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json"
+)
 PREFLIGHT_OBSERVABILITY = (
     PROJECT_ROOT / "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json"
 )
@@ -75,10 +83,10 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "fresh-goal-manager-field-composition-execution-qualification-v3"
+        "fresh-goal-manager-operational-composition-execution-qualification-v4"
     )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 7
+    assert len(state.retired_lanes) == 8
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -194,6 +202,59 @@ def test_observability_result_and_v3_design_preserve_the_training_boundary() -> 
         "explore",
         "restore_team",
     ]
+    assert design["zero_effects_before_preflight"]["new_root_inspections"] == 0
+
+
+def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
+    failure = json.loads(COMPOSITION_V3_FAILURE.read_text(encoding="ascii"))
+    design = json.loads(COMPOSITION_V4_DESIGN.read_text(encoding="ascii"))
+
+    assert failure["status"] == (
+        "zero_action_preflight_failed_at_action_free_admission_root_closed"
+    )
+    assert failure["failure"] == {
+        "admission_completed": False,
+        "failed_gate": "action_free_admission",
+        "root_closed": True,
+        "runner_success_preflight_receipt_emitted": False,
+        "sanitized_failure_receipt_emitted": True,
+    }
+    assert failure["root_disposition"]["fixed_account_root_closure_recorded"] is True
+    assert failure["root_disposition"]["retry_allowed"] is False
+    assert failure["root_disposition"]["execution_identity_authorized"] is False
+    assert set(failure["zero_effects"].values()) == {0}
+    assert set(failure["counter_treatment"].values()) == {0}
+
+    assert design["schema"] == "pokemon.red.fresh-goal-manager-composition-design.v4"
+    assert design["admission"]["closed_v2_or_v3_root_allowed"] is False
+    assert design["admission"]["required_initial_available_goal_kinds"] == [
+        "advance_story",
+        "manage_storage",
+        "restore_team",
+    ]
+    assert design["admission"]["historical_preflight_role"] == (
+        "authenticate_origin_capture_and_root_lineage_only"
+    )
+    assert design["binding_freeze"] == {
+        "cross_source_historical_binding_equality_required": False,
+        "current_published_source_binding_manifest_frozen_by_action_free_admission": True,
+        "execution_identity_binds_current_binding_manifest": True,
+        "rationale": (
+            "Historical binding bytes authenticate an older executable and are not the "
+            "execution contract for a new published runner. V4 authenticates root origin "
+            "and lineage historically, then freezes the exact current-source menu before "
+            "prediction."
+        ),
+    }
+    assert design["episode_contract"]["selected_goal_kinds_exact"] == [
+        "advance_story",
+        "manage_storage",
+        "restore_team",
+    ]
+    assert design["episode_contract"]["specimen_multiset_preserved_exactly"] is True
+    assert design["episode_contract"]["required_storage_headroom_gain_minimum"] == 1
+    assert design["episode_contract"]["teacher_queries"] == 0
+    assert design["episode_contract"]["teacher_fallbacks"] == 0
     assert design["zero_effects_before_preflight"]["new_root_inspections"] == 0
 
 
@@ -361,18 +422,18 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "field-composition execution qualification V3" in public["stage"]
+    assert "operational-composition execution qualification V4" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Publish V3 successor + green CI" in encoded
+    assert "Publish V4 successor + green CI" in encoded
     assert "early closed-root rejection" in encoded
     assert "root closed" in encoded
     assert "retry forbidden" in encoded
-    assert "execution identity not authorized" in encoded
-    assert "CI 32089092868/1 green" in encoded
-    assert "V3 current session roots 0" in encoded
+    assert "execution identity 0" in encoded
+    assert "V3 preflight failed at action_free_admission" in encoded
+    assert "V4 current session roots 0" in encoded
     assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

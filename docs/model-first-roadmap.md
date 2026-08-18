@@ -8,7 +8,29 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: observability is green; qualify one different V3 root
+## Current checkpoint: V3 failed action-free; qualify one operational-composition V4 root
+
+Published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run `32090038721`,
+attempt 1. Its single V3 preflight emitted a sanitized failure at `action_free_admission`. That
+stage does not diagnose a cause. The invocation wrote no execution claim, authorized no execution
+identity, made no prediction or controller action, advanced no frame, and produced no gameplay,
+outcome, or composition episode. Project policy durably closed the exact root account-wide; it may
+never retry. See the
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**. V3 is retired. The active lane is
+`fresh-goal-manager-operational-composition-execution-qualification-v4`. Its
+[frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json) permits one
+different unused preexisting nonsealed Red root. The initial menu and exact three learned
+selections must be `advance_story`, `restore_team`, and `manage_storage`, with zero teacher,
+fallback, or fixed dispatch. Storage must preserve the exact specimen multiset and increase
+immediate capture headroom. Historical preflight evidence authenticates origin and lineage only;
+the exact current published source must freeze the executable binding before prediction. Publish
+the successor under green exact-head CI, run one action-free preflight, and stop. Failure closes
+the root and V4; do not retry, rescue the root, or open a V5 carousel.
+
+## Previous checkpoint: observability was green; qualify one different V3 root
 
 Published source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
 attempt 1. Its bounded ROM-free repair converts readiness, action-free admission, success-receipt

@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: four safe failure stages, then V3
+## August 17 scene: V3 closes at admission; V4 freezes three operational choices
+
+Open on **SOURCE 1BBC4F3 · CI 32090038721/1 GREEN · ONE V3 PREFLIGHT**. Stop at
+**ACTION_FREE_ADMISSION · SANITIZED STAGE, NOT A CAUSE · NO RETRY**. Stamp the zero strip
+**EXECUTION CLAIM 0 · IDENTITY AUTHORIZATIONS 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES
+0 · GAMEPLAY 0 · OUTCOMES 0 · COMPOSITION EPISODES 0**. Add **EXACT ROOT DURABLY CLOSED
+ACCOUNT-WIDE · NEVER RETRY** and link the
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+
+Keep the learning strip at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 ·
+TRANSFER 0**. Then reveal the
+[V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json): **ONE DIFFERENT
+UNUSED PREEXISTING NONSEALED RED ROOT → INITIAL MENU STORY + RESTORE + STORAGE → EXACTLY 3 LEARNED
+SELECTIONS OF THOSE KINDS → SPECIMEN MULTISET PRESERVED → IMMEDIATE CAPTURE HEADROOM +1 OR MORE**.
+Lock the lower rail with **TEACHER 0 · FALLBACK 0 · FIXED DISPATCH 0 · HISTORICAL PREFLIGHT PROVES
+ORIGIN + LINEAGE ONLY · CURRENT PUBLISHED SOURCE FREEZES EXACT BINDING · ONE ACTION-FREE PREFLIGHT
+· NO RETRY · NO V5 CAROUSEL**. Narration: **“V4 does not spend another root on a diagnosis. It
+asks whether a learned policy can safely compose three reusable prerequisites for story progress
+and a living Pokédex.”** Do not animate gameplay, a model choice, authority, or transfer.
+
+## Previous August 17 scene: four safe failure stages, then V3
 
 Open on **SOURCE AF04830 · CI 32089092868/1 GREEN · ROM-FREE · NEW ROOTS 0**. Reveal four cards:
 **READINESS → ACTION-FREE ADMISSION → SUCCESS RECEIPT → EXECUTION AUTHORIZATION**. Stamp them

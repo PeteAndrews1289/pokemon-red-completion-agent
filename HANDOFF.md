@@ -18,7 +18,29 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Observability published; qualify one different V3 root — 2026-08-17
+## V3 failed at action-free admission; qualify the operational V4 successor — 2026-08-17
+
+Exact published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run
+`32090038721`, attempt 1. Its one V3 action-free preflight emitted the sanitized
+`action_free_admission` failure stage. The stage does not identify a cause. The invocation wrote
+no execution claim, authorized no execution identity, made no prediction or controller action,
+advanced no frame, and produced no gameplay, outcome, or composition episode. The exact root is
+durably closed account-wide and may never be retried. See the
+[path-free V3 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+
+V3 is retired and the cumulative board remains **train 30 · development 15 · fits 3 · comparisons
+3 · authority 0 · transfer 0**. The active lane is
+`fresh-goal-manager-operational-composition-execution-qualification-v4`. Qualify only one
+different unused preexisting nonsealed Red root. Its initial menu and exact three learned
+selections must be `advance_story`, `restore_team`, and `manage_storage`; none may be a fixed
+dispatch, teacher choice, or fallback. Storage must preserve the exact specimen multiset and
+increase immediate capture headroom. Historical preflight evidence proves only origin and lineage;
+the current published source must freeze the exact executable binding before prediction. Publish
+under green exact-head CI, run one action-free preflight, and stop. Any failure closes the root and
+V4 without retry, root-specific rescue, or a V5 carousel. See the
+[frozen V4 design](docs/evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json).
+
+## Previous checkpoint: observability published; qualify one different V3 root — 2026-08-17
 
 Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
 attempt 1. The bounded ROM-free repair now emits one canonical sanitized nonzero envelope for each

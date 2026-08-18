@@ -188,6 +188,7 @@ def living_collection_checkpoint(
         living_species=report.living_count,
         required_specimens_remaining=sum(remaining.values()),
         retained_captures=retained,
+        storage_headroom=observation.immediate_capture_slots,
         undeclared_specimen_losses=0,
         completion_contract_sha256=completion_contract_sha256,
         specimen_ledger_sha256=canonical_sha256(

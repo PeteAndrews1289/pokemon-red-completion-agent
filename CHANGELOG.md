@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+- Published V3 source `1bbc4f34a339db1f861247990a4944053eb5fb3a` under green CI run
+  `32090038721` attempt 1, then ran its single action-free preflight. It failed at the sanitized
+  `action_free_admission` stage; no cause is inferred. It wrote no execution claim, authorized no
+  execution identity, made no prediction or controller action, advanced no frame, and produced no
+  gameplay, outcome, or composition episode. The exact root was durably closed account-wide and
+  may never retry. Recorded the
+  [path-free V3 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json),
+  retired V3, and activated
+  `fresh-goal-manager-operational-composition-execution-qualification-v4`. V4 qualifies one
+  different unused preexisting nonsealed Red root for exactly three learned selections of
+  `advance_story`, `restore_team`, and `manage_storage`, with no teacher or fallback. Historical
+  preflight evidence proves origin and lineage only; the current published source must freeze the
+  exact binding. Storage must preserve the exact specimen multiset and increase immediate capture
+  headroom. Exactly one preflight is allowed, with no retry or V5 root carousel. The board remains
+  train 30, development 15, fits 3, comparisons 3, authority 0, and transfer 0. See the
+  [frozen V4 design](docs/evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json).
 - Published the generic preclaim-observability repair at
   `af04830fa51cc624a3047822d9fa582163444bea` under green CI run `32089092868` attempt 1. Four
   allowlisted caught stages now emit exactly one canonical sanitized nonzero JSON envelope without

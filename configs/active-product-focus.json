@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Qualify one exact published V3 execution seam and one different fresh nonsealed Red root for a later three-decision model-led capture, exploration, and restoration episode.",
-      "cheapest_falsifier": "Publish the V3 successor runner, require exact-head green CI, then inspect exactly one different fresh nonsealed Red root action-free. Reject and permanently close it unless early collision rejection, provenance, lineage exclusion, field-goal availability, exact model and skill identity, hard limits, durable terminals, and sanitized success or failure receipts all pass before prediction.",
-      "id": "fresh-goal-manager-field-composition-execution-qualification-v3",
+      "capability": "Qualify one exact published V4 execution seam and one different fresh nonsealed Red root for a later three-decision model-led story, restoration, and storage episode that preserves the living collection.",
+      "cheapest_falsifier": "Publish the V4 successor runner under exact-head green CI, then inspect exactly one different unused root action-free. Reject and permanently close it unless early collision rejection, origin and lineage, current-source story/restore/storage bindings, exact model and skill identity, hard limits, durable terminals, and sanitized success or failure receipts all pass before prediction.",
+      "id": "fresh-goal-manager-operational-composition-execution-qualification-v4",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "None. Preclaim observability changes no model decision or authority; the promoted Red goal manager retains only its prior bounded same-context authority.",
-        "blocker": "The generic failure envelope is published and green, but no V3 successor runner or different fresh-root identity is yet frozen. Training cannot start until one exact V3 preflight passes without prediction or controller input.",
-        "decision": "Close the one-session observability repair, freeze the V3 field-composition design, and qualify exactly one different fresh root under a published successor. A pass freezes one unclaimed execution identity; a failure permanently closes that root and V3 without rescue patches.",
+        "authority_delta": "None. The failed V3 preflight made no model decision and grants no authority. The promoted Red goal manager retains only its prior bounded same-context authority.",
+        "blocker": "V3 failed safely at action-free admission and its exact root is closed. Training now requires the V4 operational-composition successor to pass exact-head CI and one different action-free root preflight.",
+        "decision": "Retire V3 without cause inference or retry. Freeze V4 around story, restoration, and storage on a different preexisting root; historical bytes prove only origin and lineage, while the current published source must freeze the exact executable menu before prediction.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json",
-          "sha256": "8e8f3f8ea2aaf0ef9d05b908e9cf3353297f4ba65741e9b9c51c502acd79b8f6"
+          "path": "docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json",
+          "sha256": "33f2f7dcf966386aaa7d8fe9c6de494bf214df57dfad4480013f2fa7688ac7c1"
         },
-        "learning_output": "No measured learning output. Source af04830 passed CI 32089092868/1 and proves four sanitized preclaim stages with zero private inputs, roots, predictions, controller actions, frames, gameplay, outcomes, episodes, fits, comparisons, authority, or transfer. Cumulative counters stay train 30, development 15, fits 3, comparisons 3, authority 0, transfer 0.",
-        "next_falsifier": "Publish the exact V3 successor and use one action-free root admission only. The sanitized preflight must either freeze one unclaimed execution identity or close that different root without a prediction, controller action, advanced frame, retry, or root-specific patch.",
-        "next_session_goal": "Implement only the V3 identity and early closed-root rejection delta, publish it under green CI, then run one action-free preflight on a different fresh nonsealed Red root. Stop before model prediction or controller input.",
-        "product_alignment": "The completed repair makes scarce fresh-root failures diagnosable. V3 now returns directly to the smallest model-led hierarchical play test needed before broader Red learning and Crystal transfer.",
-        "session_id": "2026-08-17-preclaim-observability-complete-v3-frozen",
+        "learning_output": "No measured learning output. Source 1bbc4f3 passed CI 32090038721/1; its single V3 preflight failed at action_free_admission with zero claim, identity authorization, predictions, actions, frames, gameplay, outcomes, episodes, fits, comparisons, authority, or transfer. The root is durably closed. Counters remain 30/15/3/3/0/0.",
+        "next_falsifier": "Publish the exact V4 successor and use one different action-free root admission only. It must freeze the current-source story/restore/storage binding into one unclaimed identity or close the root without prediction, controller action, advanced frame, retry, or root-specific patch.",
+        "next_session_goal": "Finish and publish only the V4 operational contract, exact current-source binding freeze, and storage-preservation verifier; obtain green exact-head CI; then run one different action-free preflight and stop before model prediction or controller input.",
+        "product_alignment": "V3 failed without gameplay and exposed no private cause. V4 keeps the model-led composition question but moves to three existing operational capabilities: story unlocking, party recovery, and specimen-preserving storage. These directly support long-horizon living-Pokedex play without manufacturing a new acquisition root.",
+        "session_id": "2026-08-17-v3-action-free-failure-v4-frozen",
         "status": "closed",
-        "stop_condition": "Stop after one exact V3 preflight or on any prediction, controller input, frame advance, closed or prior root, unattested identity, protected access, or two hours. Do not retry or patch a failed root.",
-        "transfer_result": "Not run. Crystal remains closed. The observability result and V3 design are not transfer evidence; only a later successful Red composition episode can permit a separately frozen matched Crystal design."
+        "stop_condition": "Stop after one exact V4 preflight or on any prediction, controller input, frame advance, closed or prior root, unattested identity, protected access, or two hours. Do not retry, open a V5 carousel, or patch a failed root.",
+        "transfer_result": "Not run. Crystal remains closed. The V3 failure and V4 design are not transfer evidence; only a later successful Red composition episode can permit a separately frozen matched Crystal design."
       },
       "learned_authority": {
         "current": "The promoted Red goal manager retains bounded same-context goal-selection authority. Existing verified skills retain low-level execution; party development has no learned authority and Crystal remains closed.",
-        "target": "Freeze one exact unclaimed V3 execution identity for a separately reoriented development episode; qualification itself grants no new authority."
+        "target": "Freeze one exact unclaimed V4 execution identity for a separately reoriented development episode; qualification itself grants no new authority."
       },
-      "maintenance_unblocks": "fresh-goal-manager-field-composition-learning-v3",
+      "maintenance_unblocks": "fresh-goal-manager-operational-composition-learning-v4",
       "measurable_outputs": [],
-      "name": "Fresh Red field-composition execution qualification V3",
-      "next_decision": "If one exact V3 action-free preflight passes, freeze its unclaimed execution identity and activate one separately authorized development episode; otherwise close that root and V3 without retry or rescue work.",
+      "name": "Fresh Red operational-composition execution qualification V4",
+      "next_decision": "If one exact V4 action-free preflight passes, freeze its unclaimed execution identity and activate one separately authorized development episode; otherwise close that root and V4 without retry, V5 root carousel, or rescue work.",
       "progress": {
         "authority_promotions": 0,
         "evidence": [
@@ -80,15 +80,25 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Any access to the closed V2 root, an existing context or lineage, a sealed root, Crystal, teacher outcomes, or a model-guided root search ends the lane.",
+        "Any access to a closed V2 or V3 root, an existing context or lineage, a sealed root, Crystal, teacher outcomes, or a model-guided root search ends the lane.",
         "Any prediction, controller input, frame advance, unattested source/model/runtime/skill, non-durable terminal, private-data leak, or missing sanitized failure receipt ends the lane.",
-        "Stop after one exact preflight or two hours; never retry or patch the root, route, profile, skill, party, or model into compliance."
+        "Stop after one exact preflight or two hours; never retry, open a V5 root carousel, or patch the root, route, profile, skill, party, or model into compliance."
       ],
       "time_box": {
         "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "Only after the separately authorized V3 Red episode succeeds, freeze a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer."
+      "transfer_test": "Only after the separately authorized V4 Red episode succeeds, freeze a matched open Crystal development comparison between the frozen Red initialization and an identical zero-initialized goal scorer."
+    },
+    {
+      "id": "fresh-goal-manager-field-composition-execution-qualification-v3",
+      "kind": "maintenance",
+      "name": "Fresh Red field-composition execution qualification V3",
+      "preserve_evidence": true,
+      "reason": "Published source 1bbc4f34a339db1f861247990a4944053eb5fb3a passed CI 32090038721/1. Its single action-free preflight failed at the sanitized action_free_admission stage before any claim, prediction, controller input, frame, gameplay, or learning result. No private cause is inferred; the exact root was durably closed account-wide and may never retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "generic-fresh-root-preflight-observability-v1",

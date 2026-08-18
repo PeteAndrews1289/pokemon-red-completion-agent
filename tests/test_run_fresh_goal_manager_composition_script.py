@@ -34,11 +34,11 @@ def test_parser_requires_an_explicit_safe_mode() -> None:
     assert "--expected-execution-identity-sha256" in option_strings
     assert "--expected-runtime-sha256" in option_strings
     assert SCRIPT["DESIGN_PATH"].name == (
-        "fresh-goal-manager-composition-design-v3-2026-08-17.json"
+        "fresh-goal-manager-composition-design-v4-2026-08-17.json"
     )
 
 
-def test_v3_checks_the_fixed_account_collision_before_private_input_reads() -> None:
+def test_v4_checks_the_fixed_account_collision_before_private_input_reads() -> None:
     source = inspect.getsource(SCRIPT["_prepare_readiness"])
 
     collision_check = source.index("root_claim_is_available(")
@@ -341,9 +341,9 @@ def test_preflight_receipt_is_path_free_and_advances_no_counter() -> None:
         execution_identity_sha256="c" * 64,
         initial_available_goal_count=3,
         initial_available_goal_kinds=(
-            "acquire_species",
+            "advance_story",
+            "manage_storage",
             "restore_team",
-            "explore",
         ),
     )
 
@@ -351,12 +351,21 @@ def test_preflight_receipt_is_path_free_and_advances_no_counter() -> None:
     encoded = json.dumps(receipt, sort_keys=True)
 
     assert receipt["schema"] == (
-        "pokemon.red.fresh-goal-manager-composition-execution-preflight.v3"
+        "pokemon.red.fresh-goal-manager-composition-execution-preflight.v4"
     )
     assert receipt["zero_effects"]["model_predictions"] == 0
     assert receipt["zero_effects"]["composition_episodes"] == 0
     assert receipt["runner_and_one_shot"]["execution_identity_consumed"] is False
     assert receipt["root_admission"]["prior_contexts_checked"] == 81
+    assert receipt["root_admission"]["required_operational_goal_kinds"] == [
+        "advance_story",
+        "manage_storage",
+        "restore_team",
+    ]
+    assert receipt["attestations"]["current_source_binding_manifest_frozen"] is True
+    assert receipt["attestations"]["historical_preflight_role"] == (
+        "origin_and_root_lineage_only"
+    )
     assert receipt["input_bindings"]["runtime_sha256"] == "5" * 64
     assert (
         receipt["durability"]["pre_writer_storage_failure_leaves_durable_root_consumption_claim"]
@@ -415,11 +424,13 @@ def test_execution_identity_binds_exact_source_runner_candidate_and_root() -> No
     assert identity(readiness(root="a" * 64)) != baseline
 
 
-def test_admission_rejects_bindings_that_differ_from_historical_root() -> None:
+def test_admission_freezes_current_bindings_without_cross_source_byte_equality() -> None:
     source = inspect.getsource(SCRIPT["_admit_root"])
 
-    assert "readiness.historical_binding_manifest_sha256" in source
-    assert "authenticated historical root" in source
+    assert "goal_binding_manifest_sha256(binding_set)" in source
+    assert "historical_binding_manifest_sha256" not in source
+    identity_source = inspect.getsource(SCRIPT["_execution_identity_sha256"])
+    assert '"binding_manifest_sha256": binding_manifest_sha256' in identity_source
 
 
 def test_pre_writer_storage_failure_occurs_after_durable_global_claim(
@@ -559,14 +570,13 @@ def test_root_provenance_authenticates_the_preexisting_lineage(tmp_path: Path) -
         capture_id=document["capture_id"],
     )
 
-    lineage, binding_manifest_sha256 = SCRIPT["_authenticate_root_provenance"](
+    lineage = SCRIPT["_authenticate_root_provenance"](
         path,
         capture=capture,
         expected_sha256=digest,
     )
 
     assert lineage == f"red-goal-root-{document['assignment_id']}"
-    assert binding_manifest_sha256 == document["binding_manifest_sha256"]
 
     path.write_text(json.dumps(document), encoding="ascii")
     changed_digest = SCRIPT["hashlib"].sha256(path.read_bytes()).hexdigest()

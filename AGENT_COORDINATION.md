@@ -1,6 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-17 observability complete; V3 execution qualification active — highest checkpoint:**
+> **2026-08-17 V3 failed action-free; V4 operational qualification active — highest checkpoint:**
+> Exact published source `1bbc4f3` passed CI run `32090038721` attempt 1. Its single V3 preflight
+> emitted a sanitized `action_free_admission` failure, which is not a cause. It wrote no execution
+> claim, authorized no identity, made no prediction or controller action, advanced no frame, and
+> produced no gameplay, outcome, or episode. Project policy durably closed the exact root
+> account-wide; it may never retry. See the
+> [path-free V3 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+>
+> Codex owns only `fresh-goal-manager-operational-composition-execution-qualification-v4`: freeze
+> and publish the current-source binding, require exact-head green CI, then run one action-free
+> preflight on one different unused preexisting nonsealed Red root. The initial menu and exact
+> three learned selections are `advance_story`, `restore_team`, and `manage_storage`; teacher and
+> fallback are zero. Storage must preserve the exact specimen multiset and increase immediate
+> capture headroom. Historical preflight evidence proves origin and lineage only. No agent may
+> reopen V3, patch a root, retry, start a V5 carousel, predict, act, or call qualification a
+> learning result. Counters remain train 30 · development 15 · fits 3 · comparisons 3 · authority
+> 0 · transfer 0. See the
+> [V4 design](docs/evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json).
+
+> **2026-08-17 observability complete; V3 execution qualification active — historical checkpoint:**
 > Exact source `af04830` passed CI run `32089092868` attempt 1. Four caught preclaim stages now
 > emit one canonical sanitized nonzero envelope; the ROM-free repair opened no root and changed no
 > counter. See the

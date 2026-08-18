@@ -1,6 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: preclaim observability passes and V3 returns to the game boundary
+## August 17: V3 fails action-free; V4 tests story, recovery, and storage
+
+Exact published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run
+`32090038721`, attempt 1. Its single V3 preflight emitted the sanitized
+`action_free_admission` failure stage. That stage is not a diagnosis and no cause is inferred. The
+invocation wrote no execution claim, authorized no execution identity, made no prediction or
+controller action, advanced no frame, and produced no gameplay, outcome, or composition episode.
+Project policy durably closed the exact root account-wide; it may never retry. See the
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+
+V3 is retired. The active
+`fresh-goal-manager-operational-composition-execution-qualification-v4` lane permits one different
+unused preexisting nonsealed Red root. Its initial menu and exact three learned selections must be
+story advancement, team restoration, and storage management, with no teacher, fallback, or fixed
+dispatch. Storage must preserve the exact specimen multiset while increasing immediate capture
+headroom. Historical preflight evidence authenticates origin and lineage only; the exact current
+published source must freeze the executable binding before prediction. There is one action-free
+preflight and no retry, root-specific rescue, or V5 carousel. The
+[frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json) keeps this
+operational test subordinate to transferable story play and the living-Pokédex mission.
+
+The cumulative board remains thirty train questions, fifteen development questions, three fits,
+three comparisons, and zero authority or transfer. Qualification adds none of those results.
+
+## Previous August 17 checkpoint: preclaim observability passes and V3 returns to the game boundary
 
 Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
 attempt 1. The generic repair now turns four caught preclaim failures into one canonical sanitized

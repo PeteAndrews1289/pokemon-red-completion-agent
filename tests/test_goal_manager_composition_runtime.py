@@ -121,15 +121,15 @@ def _trajectory():  # type: ignore[no-untyped-def]
 
 def _situation(stage: int) -> GoalSituation:
     return GoalSituation(
-        story_pressure=0.1,
-        collection_pressure=0.9 if stage >= 2 else 0.2,
+        story_pressure=0.9 if stage >= 2 else 0.1,
+        collection_pressure=0.2,
         team_pressure=0.1,
         evolution_pressure=0.1,
         safety_pressure=0.9 if stage == 0 else 0.1,
         resource_pressure=0.1,
-        storage_pressure=0.1,
+        storage_pressure=0.9 if stage == 1 else 0.1,
         recovery_pressure=0.0,
-        exploration_pressure=0.9 if stage == 1 else 0.1,
+        exploration_pressure=0.1,
     )
 
 
@@ -138,7 +138,8 @@ def _observation_factory(
     failed_verifier: bool = False,
     singleton: bool = False,
     drift_required_digest: bool = False,
-    swap_specimen_on_acquisition: bool = False,
+    swap_specimen_on_storage: bool = False,
+    block_storage_headroom_gain: bool = False,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0}
 
@@ -147,26 +148,20 @@ def _observation_factory(
         desired = (
             GoalKind.RESTORE_TEAM
             if stage == 0
-            else GoalKind.EXPLORE
+            else GoalKind.MANAGE_STORAGE
             if stage == 1
-            else GoalKind.ACQUIRE_SPECIES
+            else GoalKind.ADVANCE_STORY
         )
         if singleton:
             available = {desired}
-        elif stage == 0:
+        elif stage in {0, 1}:
             available = {
-                GoalKind.ACQUIRE_SPECIES,
-                GoalKind.EXPLORE,
+                GoalKind.ADVANCE_STORY,
+                GoalKind.MANAGE_STORAGE,
                 GoalKind.RESTORE_TEAM,
             }
-        elif stage == 1:
-            available = {
-                GoalKind.ACQUIRE_SPECIES,
-                GoalKind.EXPLORE,
-                GoalKind.ADVANCE_STORY,
-            }
         else:
-            available = {GoalKind.ACQUIRE_SPECIES, GoalKind.ADVANCE_STORY}
+            available = {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM}
         opportunities = tuple(
             GoalOpportunity(
                 binding_ref=f"private:red:{kind.value}",
@@ -207,18 +202,12 @@ def _observation_factory(
             )
 
         bindings = tuple(binding(kind) for kind in GoalKind if kind in available)
-        acquired = stage >= 3
+        storage_managed = stage >= 2
         specimen_counts = (
             (
-                ("pokemon:red:living:new", 1),
                 ("pokemon:red:living:replacement", 10),
             )
-            if acquired and swap_specimen_on_acquisition
-            else (
-                ("pokemon:red:living:new", 1),
-                ("pokemon:red:living:starter", 10),
-            )
-            if acquired
+            if storage_managed and swap_specimen_on_storage
             else (("pokemon:red:living:starter", 10),)
         )
         return GoalManagerCompositionObservation(
@@ -226,14 +215,19 @@ def _observation_factory(
             situation=_situation(stage),
             binding_set=GoalBindingSet(opportunities, bindings),
             collection=LivingCollectionCheckpoint(
-                registered_species=11 if acquired else 10,
-                living_species=11 if acquired else 10,
-                required_specimens_remaining=4 if acquired else 5,
-                retained_captures=1 if acquired else 0,
+                registered_species=10,
+                living_species=10,
+                required_specimens_remaining=5,
+                retained_captures=0,
+                storage_headroom=(1 if block_storage_headroom_gain else 9)
+                if storage_managed
+                else 1,
                 undeclared_specimen_losses=0,
                 completion_contract_sha256=f"{301:064x}",
-                specimen_ledger_sha256=f"{102 if acquired else 101:064x}",
-                required_specimens_sha256=f"{202 if acquired else 201:064x}"
+                specimen_ledger_sha256=(
+                    f"{102 if storage_managed and swap_specimen_on_storage else 101:064x}"
+                ),
+                required_specimens_sha256=f"{201:064x}"
                 if not (drift_required_digest and stage == 1)
                 else f"{203:064x}",
                 specimen_counts=specimen_counts,
@@ -243,7 +237,7 @@ def _observation_factory(
     return observe, _Meter(state)
 
 
-def test_composition_runs_three_distinct_learned_choices_and_retains_capture(
+def test_composition_runs_three_distinct_learned_choices_and_gains_storage_headroom(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     trajectory, sink = _trajectory()
@@ -260,11 +254,11 @@ def test_composition_runs_three_distinct_learned_choices_and_retains_capture(
 
     assert [step.selected_kind for step in result.steps] == [
         GoalKind.RESTORE_TEAM,
-        GoalKind.EXPLORE,
-        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.MANAGE_STORAGE,
+        GoalKind.ADVANCE_STORY,
     ]
     assert result.policy_context_changes == 2
-    assert result.available_menu_changes == 2
+    assert result.available_menu_changes == 1
     assert public["status"] == "core_composition_contract_satisfied"
     assert public["minimum_confidence"] >= 0.8
     assert public["fixed_dispatches"] == 0
@@ -403,12 +397,12 @@ def test_composition_rejects_required_target_drift_after_the_first_skill(
     assert len(sink.events) == 1
 
 
-def test_composition_rejects_capture_that_replaces_an_existing_specimen(
+def test_composition_rejects_storage_that_replaces_an_existing_specimen(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     trajectory, sink = _trajectory()
     policy = _policy(monkeypatch)
-    observe, meter = _observation_factory(swap_specimen_on_acquisition=True)
+    observe, meter = _observation_factory(swap_specimen_on_storage=True)
 
     with pytest.raises(GoalManagerCompositionError, match="collection state regressed"):
         run_goal_manager_composition_episode(
@@ -418,5 +412,24 @@ def test_composition_rejects_capture_that_replaces_an_existing_specimen(
             budget_meter=meter,
         )
 
-    assert len(sink.decisions) == 3
-    assert len(sink.events) == 3
+    assert len(sink.decisions) == 2
+    assert len(sink.events) == 2
+
+
+def test_composition_rejects_storage_without_more_capture_headroom(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    trajectory, sink = _trajectory()
+    policy = _policy(monkeypatch)
+    observe, meter = _observation_factory(block_storage_headroom_gain=True)
+
+    with pytest.raises(GoalManagerCompositionError, match="gain headroom"):
+        run_goal_manager_composition_episode(
+            observe=observe,
+            policy=policy,
+            trajectory=trajectory,
+            budget_meter=meter,
+        )
+
+    assert len(sink.decisions) == 2
+    assert len(sink.events) == 2

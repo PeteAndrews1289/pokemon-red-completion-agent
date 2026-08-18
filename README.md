@@ -5,7 +5,29 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): generic preclaim observability is green; qualify one
+> **Current product focus (August 17, 2026): V3 failed at action-free admission; qualify one
+> operational-composition V4 root.** Exact published source
+> `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed GitHub CI run `32090038721`, attempt 1.
+> Its single V3 preflight emitted a sanitized failure at `action_free_admission`. That stage is not
+> a diagnosis and no cause may be inferred. The invocation wrote no execution claim, authorized no
+> execution identity, made no model prediction or controller action, advanced no frame, and
+> produced no gameplay, outcome, or composition episode. Project policy durably closed the exact
+> root account-wide; it may never be retried. See the
+> [path-free V3 failure receipt](docs/evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+>
+> The board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer
+> 0**. V3 is retired. The active lane,
+> `fresh-goal-manager-operational-composition-execution-qualification-v4`, is limited to one
+> different unused preexisting nonsealed Red root. Its initial menu and exact three learned
+> selections must have the kinds `advance_story`, `restore_team`, and `manage_storage`, with no
+> fixed dispatch, teacher, or fallback. The storage result must preserve the exact specimen
+> multiset and increase immediate capture headroom. Historical preflight evidence authenticates
+> origin and lineage only; the exact current published source must freeze the current executable
+> binding before prediction. Publish and bind that successor under green exact-head CI, perform
+> one action-free preflight, and stop. Failure closes the root and V4; there is no retry or V5 root
+> carousel. See the [frozen V4 design](docs/evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json).
+>
+> **Previous product focus (August 17, 2026): generic preclaim observability was green; qualify one
 > different V3 root next.** Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed GitHub
 > CI run `32089092868`, attempt 1. Four caught in-process preclaim stages now emit one canonical,
 > sanitized, nonzero JSON envelope without exception text, private identity, claim, prediction,

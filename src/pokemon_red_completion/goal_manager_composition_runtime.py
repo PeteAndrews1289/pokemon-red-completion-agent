@@ -34,8 +34,8 @@ FRESH_COMPOSITION_MAX_ACTIONS = 18_000
 FRESH_COMPOSITION_MAX_FRAMES = 1_800_000
 FRESH_COMPOSITION_REQUIRED_KINDS = frozenset(
     {
-        GoalKind.ACQUIRE_SPECIES,
-        GoalKind.EXPLORE,
+        GoalKind.ADVANCE_STORY,
+        GoalKind.MANAGE_STORAGE,
         GoalKind.RESTORE_TEAM,
     }
 )
@@ -58,6 +58,7 @@ class LivingCollectionCheckpoint:
     living_species: int
     required_specimens_remaining: int
     retained_captures: int
+    storage_headroom: int
     undeclared_specimen_losses: int
     completion_contract_sha256: str
     specimen_ledger_sha256: str
@@ -70,6 +71,7 @@ class LivingCollectionCheckpoint:
             "living_species",
             "required_specimens_remaining",
             "retained_captures",
+            "storage_headroom",
             "undeclared_specimen_losses",
         ):
             value = getattr(self, name)
@@ -116,6 +118,7 @@ class LivingCollectionCheckpoint:
             "living_species": self.living_species,
             "required_specimens_remaining": self.required_specimens_remaining,
             "retained_captures": self.retained_captures,
+            "storage_headroom": self.storage_headroom,
             "required_specimens_sha256": self.required_specimens_sha256,
             "specimen_ledger_sha256": self.specimen_ledger_sha256,
             "total_living_specimens": sum(
@@ -233,7 +236,7 @@ class GoalManagerCompositionResult:
             "policy_context_changes": self.policy_context_changes,
             "private_binding_fields": 0,
             "private_path_fields": 0,
-            "schema": "pokemon.red.fresh-goal-manager-composition-result.v1",
+            "schema": "pokemon.red.fresh-goal-manager-composition-result.v2",
             "selected_goal_kinds": [step.selected_kind.value for step in self.steps],
             "status": "core_composition_contract_satisfied",
             "steps": [step.public_dict() for step in self.steps],
@@ -349,11 +352,11 @@ def run_goal_manager_composition_episode(
                 )
             if (
                 final_decision
-                and GoalKind.ACQUIRE_SPECIES not in already_selected
-                and selected_kind is not GoalKind.ACQUIRE_SPECIES
+                and GoalKind.ADVANCE_STORY not in already_selected
+                and selected_kind is not GoalKind.ADVANCE_STORY
             ):
                 raise GoalManagerCompositionError(
-                    "composition final choice cannot satisfy the acquisition contract"
+                    "composition final choice cannot satisfy the story contract"
                 )
 
         try:
@@ -408,15 +411,12 @@ def run_goal_manager_composition_episode(
         state_changed = after.semantic_state_sha256 != current.semantic_state_sha256
         if not state_changed:
             raise GoalManagerCompositionError("composition skill did not change semantic state")
-        if execution.selected_kind is GoalKind.ACQUIRE_SPECIES and (
-            after.collection.retained_captures
-            - current.collection.retained_captures
-            < 1
-            or after.collection.required_specimens_remaining
-            >= current.collection.required_specimens_remaining
+        if execution.selected_kind is GoalKind.MANAGE_STORAGE and (
+            after.collection.storage_headroom <= current.collection.storage_headroom
+            or after.collection.specimen_counts != current.collection.specimen_counts
         ):
             raise GoalManagerCompositionError(
-                "composition acquisition did not retain a required specimen"
+                "composition storage step did not preserve specimens and gain headroom"
             )
         policy_contexts.append(question.policy_context_sha256)
         available_menus.append(question.available_menu_sha256)
@@ -444,27 +444,24 @@ def run_goal_manager_composition_episode(
         raise GoalManagerCompositionError(
             "composition did not select the three frozen field goal kinds"
         )
-    acquisition = next(
-        step for step in steps if step.selected_kind is GoalKind.ACQUIRE_SPECIES
+    storage = next(
+        step for step in steps if step.selected_kind is GoalKind.MANAGE_STORAGE
     )
     if (
-        acquisition.collection_after.retained_captures
-        - acquisition.collection_before.retained_captures
-        < 1
-        or acquisition.collection_after.required_specimens_remaining
-        >= acquisition.collection_before.required_specimens_remaining
+        storage.collection_after.storage_headroom
+        <= storage.collection_before.storage_headroom
+        or storage.collection_after.specimen_counts
+        != storage.collection_before.specimen_counts
     ):
         raise GoalManagerCompositionError(
-            "composition acquisition step did not retain a required specimen"
+            "composition storage step did not preserve specimens and gain headroom"
         )
     if (
-        current.collection.retained_captures - initial_collection.retained_captures < 1
-        or current.collection.required_specimens_remaining
-        >= initial_collection.required_specimens_remaining
-        or current.collection.living_species < initial_collection.living_species
+        current.collection.living_species < initial_collection.living_species
         or current.collection.registered_species < initial_collection.registered_species
+        or current.collection.specimen_counts != initial_collection.specimen_counts
     ):
-        raise GoalManagerCompositionError("composition did not retain a verified acquisition")
+        raise GoalManagerCompositionError("composition did not preserve the living collection")
     policy_changes = sum(
         left != right
         for left, right in zip(policy_contexts, policy_contexts[1:], strict=False)

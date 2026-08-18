@@ -1,6 +1,29 @@
 # Current audit — 2026-08-17
 
-## Current result: preclaim observability is published and V3 is frozen
+## Current result: V3 failed at action-free admission; V4 is the only successor
+
+Exact published source `1bbc4f34a339db1f861247990a4944053eb5fb3a` passed CI run
+`32090038721`, attempt 1. Its single V3 preflight emitted the sanitized
+`action_free_admission` failure stage. The stage supplies no private cause and supports no cause
+inference. The invocation wrote no execution claim, authorized no execution identity, made no
+model prediction or controller action, advanced no frame, and created no gameplay, outcome, or
+composition episode. Project policy durably closed the exact root account-wide; it may never be
+retried. The
+[path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json)
+records that boundary.
+
+The cumulative board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. V3 is retired. The active lane is
+`fresh-goal-manager-operational-composition-execution-qualification-v4`. Its
+[frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json) permits one
+different unused preexisting nonsealed Red root and exactly three learned selections with kinds
+`advance_story`, `restore_team`, and `manage_storage`. Teacher, fallback, and fixed dispatch are
+zero. Storage must preserve the exact specimen multiset and increase immediate capture headroom.
+Historical preflight evidence authenticates origin and lineage only; the current published source
+must freeze the exact current binding before prediction. Only one action-free preflight is
+allowed. A failure closes the root and V4 without retry, root-specific rescue, or a V5 carousel.
+
+## Previous result: preclaim observability was published and V3 was frozen
 
 Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
 attempt 1. The bounded repair handles four caught preclaim stages with one canonical sanitized

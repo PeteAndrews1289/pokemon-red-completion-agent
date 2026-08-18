@@ -5,7 +5,24 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current V3 qualification rail:** Show **OBSERVABILITY SOURCE AF04830 · CI 32089092868/1 GREEN ·
+> **Current V4 qualification rail:** Show **V3 SOURCE 1BBC4F3 · CI 32090038721/1 GREEN · ONE
+> PREFLIGHT · FAILED AT ACTION_FREE_ADMISSION · CAUSE NOT INFERRED · CLAIM 0 · IDENTITY
+> AUTHORIZATIONS 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 ·
+> EPISODES 0**. Show **EXACT ROOT DURABLY CLOSED ACCOUNT-WIDE · NEVER RETRY** and link the
+> [path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+> Keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0**.
+>
+> Then display `fresh-goal-manager-operational-composition-execution-qualification-v4` and link the
+> [frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json). Show
+> **ONE DIFFERENT UNUSED PREEXISTING NONSEALED RED ROOT · INITIAL MENU STORY + RESTORE + STORAGE ·
+> EXACTLY 3 LEARNED SELECTIONS OF THOSE KINDS · FIXED DISPATCH 0 · TEACHER 0 · FALLBACK 0 · EXACT
+> SPECIMEN MULTISET PRESERVED · IMMEDIATE CAPTURE HEADROOM INCREASED**. Show **HISTORICAL
+> PREFLIGHT = ORIGIN + LINEAGE ONLY → CURRENT PUBLISHED SOURCE FREEZES EXACT BINDING → EXACT-HEAD
+> GREEN CI → ONE ACTION-FREE PREFLIGHT → STOP**. Failure closes V4 and the root; display **NO
+> RETRY · NO V5 CAROUSEL**. Qualification is not gameplay or learning evidence.
+>
+> **Historical V3 qualification rail:** Show **OBSERVABILITY SOURCE AF04830 · CI 32089092868/1 GREEN ·
 > FOUR ALLOWLISTED PRECLAIM STAGES · PRIVATE INPUTS 0 · NEW ROOTS 0** and link the
 > [path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
 > Keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
