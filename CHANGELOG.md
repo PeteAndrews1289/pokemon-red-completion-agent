@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published the generic preclaim-observability repair at
+  `af04830fa51cc624a3047822d9fa582163444bea` under green CI run `32089092868` attempt 1. Four
+  allowlisted caught stages now emit exactly one canonical sanitized nonzero JSON envelope without
+  exception text, private identities, a claim, prediction, controller input, or learning-counter
+  change. The ROM-free lane inspected no new root. Recorded the path-free qualification, retired
+  observability maintenance, froze the field-compatible V3 design, and activated
+  `fresh-goal-manager-field-composition-execution-qualification-v3`. Its next bounded sequence is
+  V3 successor identity plus early closed-root rejection, publication and exact-head CI, then one
+  action-free preflight on one different fresh nonsealed Red root. The board remains train 30,
+  development 15, fits 3, comparisons 3, authority 0, and transfer 0.
 - Published the reviewed field-composition V2 runner at
   `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` under green CI run `32086166416` attempt 1, then ran
   its one authorized preflight. It returned nonzero before emitting a successful preflight

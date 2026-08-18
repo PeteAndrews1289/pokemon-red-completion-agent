@@ -1,6 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 17: the V2 preflight fails closed and the root is retired
+## August 17: preclaim observability passes and V3 returns to the game boundary
+
+Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
+attempt 1. The generic repair now turns four caught preclaim failures into one canonical sanitized
+nonzero envelope: readiness authentication, action-free admission, success-receipt construction,
+and execution authorization. Private exception text is suppressed, claim wording is limited to
+this invocation, and protected access is described only when it can be attested. The ROM-free lane
+opened no root and changed no counter. See the
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+
+The project has frozen [V3](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json)
+around the same product-relevant hierarchy: the model must compose capture, exploration, and team
+restoration from changed state while retaining the acquired specimen. V3 forbids the closed V2
+root and requires an early collision check before private input reads. The next bounded work is a
+published successor plus one action-free preflight on one different fresh nonsealed Red root. A
+pass freezes one unclaimed identity for a separate model-led development episode; it adds no
+learning result itself. The board remains thirty train questions, fifteen development questions,
+three fits, three comparisons, and zero authority or transfer.
+
+## Previous August 17 checkpoint: the V2 preflight fails closed and the root is retired
 
 Exact source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
 attempt 1. The one authorized V2 preflight then returned nonzero before emitting a successful

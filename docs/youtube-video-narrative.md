@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 17 scene: the runner fails safely, and the root closes
+## August 17 scene: four safe failure stages, then V3
+
+Open on **SOURCE AF04830 · CI 32089092868/1 GREEN · ROM-FREE · NEW ROOTS 0**. Reveal four cards:
+**READINESS → ACTION-FREE ADMISSION → SUCCESS RECEIPT → EXECUTION AUTHORIZATION**. Stamp them
+**ONE CANONICAL SANITIZED NONZERO ENVELOPE · EXCEPTION TEXT 0 · PRIVATE IDENTITIES 0 · CLAIMS 0 ·
+PREDICTIONS 0** and link the
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+
+Keep the learning strip at **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 ·
+TRANSFER 0**. Then reveal the [V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json):
+**CLOSED V2 ROOT FORBIDDEN → EARLY COLLISION REJECTION → PUBLISH EXACT SUCCESSOR + GREEN CI → ONE
+DIFFERENT FRESH ROOT, ACTION-FREE → SANITIZED PASS OR FAIL**. Narration: **“This still is not the
+gameplay result. A pass gives the model one safe starting line for the separate three-choice
+episode.”** Do not animate a model choice, controller input, capture, authority gain, or transfer.
+
+## Previous August 17 scene: the runner fails safely, and the root closes
 
 Open on **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · ONE EXACT V2 PREFLIGHT**. Stop the rail with
 **NONZERO EXIT BEFORE SUCCESS RECEIPT · INTERNAL STAGE NOT ATTESTED · NO RETRY**. Add

@@ -91,17 +91,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The one exact V2 preflight failed closed before a success receipt; its internal "
-            "stage is not attested and the attempted root is permanently closed. Predictions, "
-            "controller input, advanced frames, gameplay, and outcomes remain zero."
+            "Generic preclaim observability is published and green. V3 now qualifies one "
+            "different fresh Red root action-free; no new root, prediction, controller input, "
+            "advanced frame, gameplay, or outcome exists yet."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="ROM-free observability laboratory · no cartridge session",
+        location="V3 execution qualification · no cartridge session yet",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Promoted Red goal manager af29d7e7… · frozen confidence floor 0.80",
-            choice="Generic sanitized failure envelope next · no root or emulator access",
+            choice="Publish V3 successor + green CI · then one different action-free root",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -150,8 +150,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Next rail · injected public failures → one allowlisted-stage envelope → "
-                "publication + green CI → separately frozen V3 design"
+                "V3 rail · early closed-root rejection → exact source + model + skills → one "
+                "different action-free root → sanitized success or failure receipt"
             ),
             (
                 "V1 static failure · capture and storage/resupply were self-excluding and "
@@ -162,8 +162,12 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "closed · retry forbidden · execution identity not authorized"
             ),
             (
-                "Current session predictions 0 · controller 0 · advanced frames 0 · gameplay 0 "
-                "· outcomes 0 · episodes 0 · teacher 0 · Crystal 0"
+                "Observability source af04830 · CI 32089092868/1 green · four allowlisted stages "
+                "· private inputs 0 · roots 0"
+            ),
+            (
+                "V3 current session roots 0 · predictions 0 · controller 0 · advanced frames 0 · "
+                "gameplay 0 · outcomes 0 · episodes 0 · teacher 0 · Crystal 0"
             ),
         ),
     )

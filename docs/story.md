@@ -7,7 +7,26 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: a safe failure exposed the next smallest problem
+## Current checkpoint: the opaque failure now has a safe language
+
+Exact source `af04830` passed CI run `32089092868`, attempt 1. Without touching a ROM or another
+root, the runner learned to report four coarse moments where a future preflight can stop:
+readiness, action-free admission, success-receipt construction, or execution authorization. The
+report is one sanitized JSON envelope and cannot carry the private exception with it. The
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json)
+records the boundary.
+
+Nothing learned to play in this scene, so the scoreboard stays **30 TRAIN · 15 DEVELOPMENT · 3
+FITS · 3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**. The next scene returns to the game under
+a frozen [V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json): reject the
+closed root before reading it, publish the exact successor, then inspect one different fresh Red
+root without prediction or input. If it passes, the project finally has one unclaimed identity for
+the separate model-led capture + explore + restore episode. If it fails, the new envelope closes
+the root without another mystery or rescue patch.
+
+---
+
+## Previous checkpoint: a safe failure exposed the next smallest problem
 
 The field-composition runner was published at exact source `3c9ea925` and passed CI run
 `32086166416`, attempt 1. Its one authorized preflight then returned nonzero before it could emit a

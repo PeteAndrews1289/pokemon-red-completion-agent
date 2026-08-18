@@ -5,7 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 17, 2026): the exact V2 preflight failed closed; diagnose the
+> **Current product focus (August 17, 2026): generic preclaim observability is green; qualify one
+> different V3 root next.** Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed GitHub
+> CI run `32089092868`, attempt 1. Four caught in-process preclaim stages now emit one canonical,
+> sanitized, nonzero JSON envelope without exception text, private identity, claim, prediction,
+> controller input, or learning-counter change. The ROM-free lane opened no root. See the
+> [path-free observability qualification](docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+>
+> The board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer
+> 0**. The frozen [V3 design](docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json)
+> retains the model-led **capture + explore + restore** episode and forbids the closed V2 root.
+> The active lane, `fresh-goal-manager-field-composition-execution-qualification-v3`, may add only
+> the V3 successor identity, reject a closed root before private input reads, publish under green
+> CI, and perform one action-free preflight on one different fresh nonsealed Red root. It stops
+> before prediction or controller input. A pass freezes one unclaimed identity for a separate
+> development episode; it is not itself training evidence.
+>
+> **Previous product focus (August 17, 2026): the exact V2 preflight failed closed; diagnose the
 > runner generically before considering another root.** Published source
 > `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed GitHub CI run `32086166416`, attempt 1. Its
 > one authorized V2 preflight returned nonzero before emitting a successful preflight receipt. The

@@ -1,0 +1,71 @@
+{
+  "claim_boundary": {
+    "supported": "The published composition runner emits one canonical sanitized JSON envelope with an allowlisted coarse stage and nonzero exit for every caught in-process failure before this invocation writes an execution claim or makes a model decision.",
+    "unsupported": [
+      "episode_execution_or_outcome",
+      "fresh_root_admission",
+      "fresh_context_generalization",
+      "living_pokedex_ability",
+      "private_failure_cause",
+      "red_completion",
+      "root_identity",
+      "transfer"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "composition_episodes_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "implementation": {
+    "allowlisted_failure_stages": [
+      "action_free_admission",
+      "execution_authorization",
+      "readiness_authentication",
+      "success_receipt_construction"
+    ],
+    "canonical_single_json_envelope": true,
+    "claim_field": "claim_written_by_this_invocation",
+    "exception_text_serialized": false,
+    "nonzero_exit_code": 2,
+    "protected_access_status_is_stage_qualified": true,
+    "runner_sha256": "9e08d9e34956f0d4f3ce461f617a098a15f6510c5d596e90eea411dca862c1da",
+    "test_sha256": "3380223e711179afc678137e51266bf36aa60d6815cdb9b299f25ef5c0146879"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32089092868,
+    "source_commit": "af04830fa51cc624a3047822d9fa582163444bea"
+  },
+  "qualification": {
+    "focused_tests_passed": 20,
+    "full_local_tests_passed": 4069,
+    "private_inputs_accessed": 0,
+    "review_verdict": "independent_engineering_and_mission_go",
+    "rom_or_emulator_accessed": 0,
+    "scope": "caught_in_process_preclaim_failures_only",
+    "stdout_or_process_termination_failure_covered": false
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.fresh-root.preflight-observability-qualification.v1",
+  "status": "complete_published_green_no_root_access",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "composition_episodes": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "episode_outcomes": 0,
+    "game_executions": 0,
+    "goal_manager_decisions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "new_root_inspections": 0,
+    "teacher_queries": 0
+  }
+}

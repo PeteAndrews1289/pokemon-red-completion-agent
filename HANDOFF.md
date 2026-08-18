@@ -18,7 +18,27 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## V2 preflight failed closed; generic observability is next — 2026-08-17
+## Observability published; qualify one different V3 root — 2026-08-17
+
+Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
+attempt 1. The bounded ROM-free repair now emits one canonical sanitized nonzero envelope for each
+of four caught preclaim stages: readiness authentication, action-free admission, success-receipt
+construction, and execution authorization. It serializes no exception text or private identity,
+writes no claim, and changes no learning counter. Twenty focused runner tests and 4,069 full local
+tests passed. See the
+[path-free observability qualification](docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+
+The cumulative board stays **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. The active maintenance lane is
+`fresh-goal-manager-field-composition-execution-qualification-v3`, bound to the frozen
+[V3 design](docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json). Implement only
+the V3 successor identity and early fixed-account closed-root check, publish under exact-head green
+CI, then inspect one different fresh nonsealed Red root action-free. Stop before prediction,
+controller input, or advanced frames. Pass freezes one unclaimed identity for a separately
+reoriented development episode; failure permanently closes that root and V3 without a retry or
+root-specific route, profile, skill, party, or model patch.
+
+## Previous checkpoint: V2 preflight failed closed; generic observability was next — 2026-08-17
 
 Exact source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
 attempt 1. The one authorized V2 preflight then returned nonzero before emitting a successful

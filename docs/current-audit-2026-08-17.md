@@ -1,6 +1,25 @@
 # Current audit — 2026-08-17
 
-## Current result: V2 preflight failed closed; the root is retired
+## Current result: preclaim observability is published and V3 is frozen
+
+Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
+attempt 1. The bounded repair handles four caught preclaim stages with one canonical sanitized
+nonzero envelope. It distinguishes whether admission passed, qualifies protected-access status,
+never serializes the private exception, and says only whether this invocation wrote a claim. The
+ROM-free work inspected no root and changed no learning or authority counter. The
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json)
+records the exact source, tests, and claim boundary.
+
+The cumulative board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**. The active lane is
+`fresh-goal-manager-field-composition-execution-qualification-v3`. The frozen
+[V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json) requires a different
+fresh nonsealed Red root, fixed-account collision rejection before private input reads, the same
+model-led capture + explore + restore contract, and one action-free preflight only. Its successor
+must be published under green exact-head CI before root access. Pass freezes one unclaimed identity
+for a separate episode; failure closes the root and V3 without retry or rescue.
+
+## Previous result: V2 preflight failed closed; the root is retired
 
 Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
 attempt 1. Its one authorized V2 preflight returned nonzero before emitting a successful preflight

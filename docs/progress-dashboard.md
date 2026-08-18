@@ -5,7 +5,21 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current observability rail:** Show **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · V2 PREFLIGHT
+> **Current V3 qualification rail:** Show **OBSERVABILITY SOURCE AF04830 · CI 32089092868/1 GREEN ·
+> FOUR ALLOWLISTED PRECLAIM STAGES · PRIVATE INPUTS 0 · NEW ROOTS 0** and link the
+> [path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+> Keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0**.
+>
+> Then show **V3 DESIGN FROZEN · CLOSED V2 ROOT FORBIDDEN · EARLY FIXED-ACCOUNT COLLISION CHECK →
+> PUBLISH V3 SUCCESSOR + EXACT-HEAD CI → ONE DIFFERENT ACTION-FREE FRESH NONSEALED RED ROOT →
+> SANITIZED SUCCESS OR FAILURE RECEIPT**. Link the
+> [V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json) and display
+> `fresh-goal-manager-field-composition-execution-qualification-v3`. Keep **V3 ROOTS 0 ·
+> PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0** until
+> an exact published preflight occurs. A preflight pass is training readiness, not training.
+>
+> **Historical observability rail:** Show **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · V2 PREFLIGHT
 > FAILED BEFORE SUCCESS RECEIPT · INTERNAL STAGE NOT ATTESTED · NO RETRY · EXECUTION IDENTITY NOT
 > AUTHORIZED · ROOT PERMANENTLY CLOSED BY PROJECT POLICY** and link the
 > [path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).

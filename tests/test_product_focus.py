@@ -40,6 +40,12 @@ COMPOSITION_V2_FAILURE = (
     / "docs/evidence"
     / "fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json"
 )
+COMPOSITION_V3_DESIGN = (
+    PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json"
+)
+PREFLIGHT_OBSERVABILITY = (
+    PROJECT_ROOT / "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json"
+)
 COLLISION_POSTMORTEM = (
     PROJECT_ROOT / "docs/evidence/protocol-party-collision-postmortem-v1-2026-08-17.json"
 )
@@ -68,9 +74,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "generic-fresh-root-preflight-observability-v1"
+    assert state.active_lane["id"] == (
+        "fresh-goal-manager-field-composition-execution-qualification-v3"
+    )
     assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 6
+    assert len(state.retired_lanes) == 7
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -151,6 +159,37 @@ def test_failed_v2_preflight_closes_only_the_root_and_no_learning_counter() -> N
     assert receipt["root_disposition"]["execution_identity_authorized"] is False
     assert set(receipt["zero_effects"].values()) == {0}
     assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_observability_result_and_v3_design_preserve_the_training_boundary() -> None:
+    observability = json.loads(PREFLIGHT_OBSERVABILITY.read_text(encoding="ascii"))
+    design = json.loads(COMPOSITION_V3_DESIGN.read_text(encoding="ascii"))
+
+    assert observability["status"] == "complete_published_green_no_root_access"
+    assert observability["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32089092868,
+        "source_commit": "af04830fa51cc624a3047822d9fa582163444bea",
+    }
+    assert observability["implementation"]["allowlisted_failure_stages"] == [
+        "action_free_admission",
+        "execution_authorization",
+        "readiness_authentication",
+        "success_receipt_construction",
+    ]
+    assert set(observability["counter_treatment"].values()) == {0}
+    assert set(observability["zero_effects"].values()) == {0}
+
+    assert design["schema"] == "pokemon.red.fresh-goal-manager-composition-design.v3"
+    assert design["admission"]["closed_v2_root_allowed"] is False
+    assert design["admission"]["fixed_account_collision_check_before_private_input_read"] is True
+    assert design["episode_contract"]["selected_goal_kinds_exact"] == [
+        "acquire_species",
+        "explore",
+        "restore_team",
+    ]
+    assert design["zero_effects_before_preflight"]["new_root_inspections"] == 0
 
 
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
@@ -317,16 +356,18 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "preflight failure observability" in public["stage"]
+    assert "field-composition execution qualification V3" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 45, "total": 45}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 3, "total": 3}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Generic sanitized failure envelope next" in encoded
-    assert "admission not attested" in encoded
+    assert "Publish V3 successor + green CI" in encoded
+    assert "early closed-root rejection" in encoded
     assert "root closed" in encoded
     assert "retry forbidden" in encoded
     assert "execution identity not authorized" in encoded
+    assert "CI 32089092868/1 green" in encoded
+    assert "V3 current session roots 0" in encoded
     assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded

@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V2 failed closed before a success receipt; add generic observability only
+## Current checkpoint: observability is green; qualify one different V3 root
+
+Published source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
+attempt 1. Its bounded ROM-free repair converts readiness, action-free admission, success-receipt
+construction, and execution-authorization failures into one canonical sanitized nonzero envelope.
+It exposes no exception text or private identity and opened no root. See the
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**. The active lane is `fresh-goal-manager-field-composition-execution-qualification-v3`. Its
+[frozen V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json) keeps the
+capture + explore + restore episode, excludes the closed V2 root, and requires collision rejection
+before private input reads. Implement and publish only that successor delta, require exact-head
+green CI, then perform one action-free preflight on one different fresh nonsealed Red root. Stop
+before model prediction or controller input. A pass freezes one unclaimed execution identity for
+a separately reoriented development episode; a failure closes the root and V3 without rescue.
+
+## Previous checkpoint: V2 failed closed before a success receipt; add generic observability only
 
 Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
 attempt 1. Its one authorized V2 preflight returned nonzero before a successful preflight receipt

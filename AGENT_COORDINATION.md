@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-17 V2 preflight failure and ROM-free reorientation — highest active checkpoint:**
+> **2026-08-17 observability complete; V3 execution qualification active — highest checkpoint:**
+> Exact source `af04830` passed CI run `32089092868` attempt 1. Four caught preclaim stages now
+> emit one canonical sanitized nonzero envelope; the ROM-free repair opened no root and changed no
+> counter. See the
+> [path-free qualification](docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+>
+> Codex owns `fresh-goal-manager-field-composition-execution-qualification-v3`: publish the V3
+> successor with early closed-root rejection, require exact-head green CI, then run one action-free
+> preflight on one different fresh nonsealed Red root. Claude's exact-byte observability review is
+> GO; Antigravity's mission review is GO. Both remain read-only. No agent may reopen V2, choose a
+> root with model guidance, send controller input, make a prediction, patch a selected root, open
+> sealed Red or Crystal, or call qualification a learning result. Counters remain train 30 ·
+> development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0. See the
+> [V3 design](docs/evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json).
+
+> **2026-08-17 V2 preflight failure and ROM-free reorientation — historical checkpoint:**
 > Exact source `3c9ea925` passed CI run `32086166416` attempt 1. Its one authorized V2 preflight
 > returned nonzero before emitting a successful preflight receipt. The internal stage is not
 > attested and no cause may be inferred. It was not retried, no execution identity was authorized,

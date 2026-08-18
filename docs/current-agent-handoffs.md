@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-17. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: V2 root closed; Codex owns one ROM-free observability repair
+## Current override: observability is green; Codex owns one V3 action-free qualification
+
+Exact source `af04830fa51cc624a3047822d9fa582163444bea` passed CI run `32089092868`,
+attempt 1. Four caught preclaim stages now emit one canonical sanitized nonzero envelope, with no
+private input, root, claim, prediction, controller action, or learning-counter change. See the
+[path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+
+Codex owns only `fresh-goal-manager-field-composition-execution-qualification-v3`: implement the
+V3 successor identity and early closed-root rejection, publish under green exact-head CI, then run
+one action-free preflight on one different fresh nonsealed Red root. Claude's engineering verdict
+and Antigravity's mission verdict are GO; both remain read-only. No agent may reopen V2, infer its
+private cause, choose a root using the model, execute an episode, patch the selected root, grant
+authority, or open sealed Red or Crystal. The
+[V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json) is the contract.
+Counters remain **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer 0**.
+
+## Previous override: V2 root closed; Codex owned one ROM-free observability repair
 
 Published source `3c9ea92562163e41e5045b0ac837dd1b6ca959fb` passed CI run `32086166416`,
 attempt 1. Its one exact V2 preflight returned nonzero before emitting a successful preflight
