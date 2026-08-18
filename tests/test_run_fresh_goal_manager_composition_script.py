@@ -4,6 +4,7 @@ import argparse
 import inspect
 import json
 import runpy
+import traceback
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -63,6 +64,216 @@ def test_preflight_returns_before_any_claim_or_execution(
     monkeypatch.setitem(runtime_globals, "_execute", forbidden)
 
     assert SCRIPT["_run"](_args(preflight_only=True)) == expected
+
+
+@pytest.mark.parametrize(
+    ("failed_stage", "expected_calls"),
+    [
+        ("readiness_authentication", ["readiness_authentication"]),
+        (
+            "action_free_admission",
+            ["readiness_authentication", "action_free_admission"],
+        ),
+        (
+            "success_receipt_construction",
+            [
+                "readiness_authentication",
+                "action_free_admission",
+                "success_receipt_construction",
+            ],
+        ),
+    ],
+)
+def test_run_reduces_preclaim_failures_to_allowlisted_stages(
+    monkeypatch: pytest.MonkeyPatch,
+    failed_stage: str,
+    expected_calls: list[str],
+) -> None:
+    runtime_globals = SCRIPT["_run"].__globals__
+    calls: list[str] = []
+    private_failure = RuntimeError("opaque-private-root-id must never escape")
+
+    def step(stage: str, value: object) -> object:
+        calls.append(stage)
+        if stage == failed_stage:
+            raise private_failure
+        return value
+
+    monkeypatch.setitem(
+        runtime_globals,
+        "_prepare_readiness",
+        lambda _args: step("readiness_authentication", object()),
+    )
+    monkeypatch.setitem(
+        runtime_globals,
+        "_admit_root",
+        lambda _readiness: step("action_free_admission", object()),
+    )
+    monkeypatch.setitem(
+        runtime_globals,
+        "_preflight_receipt",
+        lambda _readiness, _admission: step("success_receipt_construction", {}),
+    )
+
+    with pytest.raises(SCRIPT["FreshCompositionPreclaimFailure"]) as raised:
+        SCRIPT["_run"](_args(preflight_only=True))
+
+    assert raised.value.stage == failed_stage
+    assert raised.value.__cause__ is None
+    assert raised.value.__suppress_context__ is True
+    assert "opaque-private-root-id" not in "".join(traceback.format_exception(raised.value))
+    assert calls == expected_calls
+
+
+def test_execution_authorization_failure_is_observable_before_claim(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime_globals = SCRIPT["_execute"].__globals__
+    claims = 0
+
+    def forbidden_claim(*_args: object, **_kwargs: object) -> None:
+        nonlocal claims
+        claims += 1
+
+    monkeypatch.setitem(runtime_globals, "write_root_claim", forbidden_claim)
+    readiness = SimpleNamespace(
+        rom_path=Path("private-rom"),
+        source=SimpleNamespace(git_commit="1" * 40),
+    )
+    admission = SimpleNamespace(execution_identity_sha256="2" * 64)
+    args = SimpleNamespace(expected_execution_identity_sha256="3" * 64)
+
+    with pytest.raises(SCRIPT["FreshCompositionPreclaimFailure"]) as raised:
+        SCRIPT["_execute"](args, readiness, admission)
+
+    assert raised.value.stage == "execution_authorization"
+    assert claims == 0
+
+
+def test_late_execution_authorization_failure_still_precedes_identity_authorization(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runtime_globals = SCRIPT["_execute"].__globals__
+    claims = 0
+
+    def forbidden_claim(*_args: object, **_kwargs: object) -> None:
+        nonlocal claims
+        claims += 1
+
+    monkeypatch.setitem(runtime_globals, "write_root_claim", forbidden_claim)
+    monkeypatch.setitem(
+        runtime_globals,
+        "rom_adjacent_artifacts",
+        lambda _path: (_ for _ in ()).throw(RuntimeError("opaque-private-root-id")),
+    )
+    readiness = SimpleNamespace(
+        rom_path=Path("private-rom"),
+        source=SimpleNamespace(git_commit="1" * 40),
+    )
+    admission = SimpleNamespace(execution_identity_sha256="2" * 64)
+    args = SimpleNamespace(expected_execution_identity_sha256="2" * 64)
+
+    with pytest.raises(SCRIPT["FreshCompositionPreclaimFailure"]) as raised:
+        SCRIPT["_execute"](args, readiness, admission)
+
+    assert raised.value.stage == "execution_authorization"
+    assert raised.value.__cause__ is None
+    assert "opaque-private-root-id" not in "".join(traceback.format_exception(raised.value))
+    assert claims == 0
+
+
+def test_preclaim_failure_receipt_is_fixed_path_free_and_non_counting() -> None:
+    assert SCRIPT["_PREFLIGHT_FAILURE_STAGES"] == {
+        "action_free_admission",
+        "execution_authorization",
+        "readiness_authentication",
+        "success_receipt_construction",
+    }
+    for stage in sorted(SCRIPT["_PREFLIGHT_FAILURE_STAGES"]):
+        failure = SCRIPT["FreshCompositionPreclaimFailure"](stage)
+        receipt = SCRIPT["_preclaim_failure_receipt"](failure)
+        encoded = json.dumps(receipt, sort_keys=True)
+
+        assert receipt["failure_stage"] == stage
+        assert receipt["claim_written_by_this_invocation"] is False
+        assert receipt["execution_identity_authorized"] is False
+        assert receipt["admission_status"] == (
+            "passed"
+            if stage in {"execution_authorization", "success_receipt_construction"}
+            else "not_attested"
+        )
+        assert receipt["protected_access_status"] == (
+            "not_attested" if stage == "readiness_authentication" else "verified_absent"
+        )
+        assert set(receipt["counter_treatment"].values()) == {0}
+        assert set(receipt["zero_effects"].values()) == {0}
+        assert "sealed_red_accesses" not in receipt["zero_effects"]
+        assert "crystal_accesses" not in receipt["zero_effects"]
+        assert "/Volumes/" not in encoded
+        assert "opaque-private-root-id" not in encoded
+
+    with pytest.raises(ValueError, match="not allowlisted"):
+        SCRIPT["FreshCompositionPreclaimFailure"]("private_dynamic_stage")
+
+
+def test_main_emits_exactly_one_canonical_failure_envelope_and_returns_nonzero(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    runtime_globals = SCRIPT["main"].__globals__
+
+    class Parser:
+        @staticmethod
+        def parse_args(_argv: list[str] | None) -> object:
+            return object()
+
+    monkeypatch.setitem(runtime_globals, "_parser", lambda: Parser())
+
+    def failed(_args: object) -> dict[str, object]:
+        error = RuntimeError("opaque-private-root-id")
+        raise SCRIPT["FreshCompositionPreclaimFailure"]("readiness_authentication") from error
+
+    monkeypatch.setitem(runtime_globals, "_run", failed)
+
+    assert SCRIPT["main"]([]) == 2
+    captured = capsys.readouterr()
+    lines = captured.out.splitlines()
+    assert len(lines) == 1
+    assert captured.err == ""
+    assert json.loads(lines[0]) == SCRIPT["_preclaim_failure_receipt"](
+        SCRIPT["FreshCompositionPreclaimFailure"]("readiness_authentication")
+    )
+    assert lines[0] == json.dumps(
+        json.loads(lines[0]),
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    assert "opaque-private-root-id" not in lines[0]
+
+
+def test_preflight_success_serialization_failure_uses_the_same_sanitized_stage(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    runtime_globals = SCRIPT["main"].__globals__
+
+    class Parser:
+        @staticmethod
+        def parse_args(_argv: list[str] | None) -> object:
+            return SimpleNamespace(preflight_only=True)
+
+    monkeypatch.setitem(runtime_globals, "_parser", lambda: Parser())
+    monkeypatch.setitem(runtime_globals, "_run", lambda _args: {"invalid": object()})
+
+    assert SCRIPT["main"]([]) == 2
+    captured = capsys.readouterr()
+    lines = captured.out.splitlines()
+    assert len(lines) == 1
+    receipt = json.loads(lines[0])
+    assert receipt["failure_stage"] == "success_receipt_construction"
+    assert receipt["admission_status"] == "passed"
+    assert captured.err == ""
 
 
 def test_live_source_orders_global_claim_before_local_claim_and_emulator() -> None:

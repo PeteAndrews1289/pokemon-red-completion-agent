@@ -14,7 +14,7 @@ import sys
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, TypeVar, cast
 
 _BOOTSTRAP_PROJECT_ROOT = Path(__file__).resolve().parents[1]
 _BOOTSTRAP_SRC = _BOOTSTRAP_PROJECT_ROOT / "src"
@@ -109,10 +109,29 @@ QUALIFICATION_MODULE_PATH = (
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _MAX_ATTESTATION_BYTES = 64 * 1024
+_PREFLIGHT_FAILURE_STAGES = frozenset(
+    {
+        "action_free_admission",
+        "execution_authorization",
+        "readiness_authentication",
+        "success_receipt_construction",
+    }
+)
+_ResultT = TypeVar("_ResultT")
 
 
 class FreshCompositionRunError(RuntimeError):
     """Raised without disclosing a private path or root identity."""
+
+
+class FreshCompositionPreclaimFailure(RuntimeError):
+    """A caught preclaim failure reduced to one public, allowlisted stage."""
+
+    def __init__(self, stage: str) -> None:
+        if stage not in _PREFLIGHT_FAILURE_STAGES:
+            raise ValueError("preclaim failure stage is not allowlisted")
+        super().__init__(stage)
+        self.stage = stage
 
 
 @dataclass(frozen=True, slots=True)
@@ -452,7 +471,7 @@ def _execution_identity_sha256(
 ) -> str:
     """Bind authorization to the exact root, executable, and promoted candidate."""
 
-    return canonical_sha256(
+    identity = canonical_sha256(
         {
             "schema": "pokemon.red.fresh-composition-execution-identity.v2",
             "root_consumption_sha256": readiness.root_consumption_sha256,
@@ -460,7 +479,7 @@ def _execution_identity_sha256(
             "runner_sha256": readiness.runner_sha256,
             "qualification_module_sha256": readiness.qualification_module_sha256,
             "design_sha256": readiness.design_sha256,
-            "nonsealed_attestation_sha256": (readiness.nonsealed_attestation_sha256),
+            "nonsealed_attestation_sha256": readiness.nonsealed_attestation_sha256,
             "root_provenance_sha256": readiness.root_provenance_sha256,
             "rom_sha256": readiness.rom.sha256,
             "runtime_sha256": readiness.runtime.sha256,
@@ -468,7 +487,7 @@ def _execution_identity_sha256(
             "registry_sha256": readiness.candidate.registry.registry_sha256,
             "context_catalog_sha256": readiness.candidate.catalog.catalog_sha256,
             "model_file_sha256": readiness.candidate.plan.model_file_sha256,
-            "model_canonical_sha256": (readiness.candidate.plan.model_canonical_sha256),
+            "model_canonical_sha256": readiness.candidate.plan.model_canonical_sha256,
             "fit_summary_file_sha256": readiness.candidate.fit_summary_sha256,
             "profile_sha256": readiness.profile.profile_sha256,
             "skill_manifest_sha256": readiness.skill_manifest["manifest_sha256"],
@@ -480,6 +499,7 @@ def _execution_identity_sha256(
             "root_lineage_sha256": canonical_sha256({"root_lineage_id": readiness.root_lineage_id}),
         }
     )
+    return cast(str, identity)
 
 
 def _preflight_receipt(
@@ -615,12 +635,15 @@ def _execute(
     readiness: _Readiness,
     admission: _Admission,
 ) -> dict[str, object]:
-    if args.expected_execution_identity_sha256 != admission.execution_identity_sha256:
-        raise FreshCompositionRunError("execution identity differs from authorization")
-    adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
+    try:
+        adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
+        source_commit = _source_commit(readiness.source)
+        if args.expected_execution_identity_sha256 != admission.execution_identity_sha256:
+            raise FreshCompositionRunError("execution identity differs from authorization")
+    except Exception:
+        raise FreshCompositionPreclaimFailure("execution_authorization") from None
     # Crash ordering is intentional: the account-wide root marker is the source of
     # truth across output roots, so it is synchronized before the local episode claim.
-    source_commit = _source_commit(readiness.source)
     write_root_claim(
         readiness.claim_registry,
         root_consumption_sha256=readiness.root_consumption_sha256,
@@ -891,11 +914,91 @@ def _failure_class(failure: BaseException) -> str:
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    readiness = _prepare_readiness(args)
-    admission = _admit_root(readiness)
+    readiness = _observe_preclaim_failure(
+        "readiness_authentication",
+        lambda: _prepare_readiness(args),
+    )
+    admission = _observe_preclaim_failure(
+        "action_free_admission",
+        lambda: _admit_root(readiness),
+    )
     if args.preflight_only:
-        return _preflight_receipt(readiness, admission)
+        return _observe_preclaim_failure(
+            "success_receipt_construction",
+            lambda: _preflight_receipt(readiness, admission),
+        )
     return _execute(args, readiness, admission)
+
+
+def _observe_preclaim_failure(
+    stage: str,
+    operation: Callable[[], _ResultT],
+) -> _ResultT:
+    if stage not in _PREFLIGHT_FAILURE_STAGES:
+        raise ValueError("preclaim failure stage is not allowlisted")
+    try:
+        return operation()
+    except Exception:
+        raise FreshCompositionPreclaimFailure(stage) from None
+
+
+def _preclaim_failure_receipt(failure: FreshCompositionPreclaimFailure) -> dict[str, object]:
+    admission_status = (
+        "passed"
+        if failure.stage in {"execution_authorization", "success_receipt_construction"}
+        else "not_attested"
+    )
+    return {
+        "schema": "pokemon.fresh-root.composition-preclaim-failure.v1",
+        "status": "caught_in_process_preclaim_failure",
+        "failure_stage": failure.stage,
+        "admission_status": admission_status,
+        "runner_success_receipt_emitted": False,
+        "claim_written_by_this_invocation": False,
+        "execution_identity_authorized": False,
+        "protected_access_status": (
+            "not_attested" if failure.stage == "readiness_authentication" else "verified_absent"
+        ),
+        "counter_treatment": {
+            "outcome_questions_added": 0,
+            "composition_episodes_added": 0,
+            "model_fits_added": 0,
+            "unseen_comparisons_added": 0,
+            "authority_promotions_added": 0,
+            "transfer_results_added": 0,
+        },
+        "zero_effects": {
+            "model_predictions": 0,
+            "goal_manager_decisions": 0,
+            "controller_actions": 0,
+            "emulator_frames": 0,
+            "game_executions": 0,
+            "composition_episodes": 0,
+            "episode_outcomes": 0,
+            "model_fits": 0,
+            "model_updates": 0,
+            "teacher_queries": 0,
+            "full_replays": 0,
+        },
+        "claim_boundary": {
+            "supported": (
+                "A caught in-process composition-runner preclaim failure was reduced to one "
+                "allowlisted stage before this invocation wrote an execution claim or made a "
+                "model decision."
+            ),
+            "unsupported": [
+                "private_failure_cause",
+                "root_identity",
+                "episode_execution_or_outcome",
+                "learned_authority",
+                "transfer",
+                "red_completion",
+                "living_pokedex_ability",
+            ],
+        },
+        "tracked_private_identities": 0,
+        "tracked_private_paths": 0,
+    }
 
 
 def _require_nonsealed_attestation(
@@ -1064,7 +1167,7 @@ def _require_sha256(value: object, *, subject: str) -> str:
 def _source_commit(source: SourceIdentity) -> str:
     if source.git_commit is None or _GIT_COMMIT.fullmatch(source.git_commit) is None:
         raise FreshCompositionRunError("composition source commit is unavailable")
-    return source.git_commit
+    return cast(str, source.git_commit)
 
 
 def _require_imported_code_from_project() -> None:
@@ -1092,10 +1195,33 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         result = _run(args)
+        encoded = _serialize_success_result(args, result)
+    except FreshCompositionPreclaimFailure as failure:
+        print(
+            json.dumps(
+                _preclaim_failure_receipt(failure),
+                ensure_ascii=True,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+        )
+        return 2
     except Exception:
         parser.error("Fresh composition runner failed closed; private details were withheld.")
-    print(json.dumps(result, indent=2, sort_keys=True))
+    print(encoded)
     return 0
+
+
+def _serialize_success_result(
+    args: argparse.Namespace,
+    result: dict[str, object],
+) -> str:
+    def operation() -> str:
+        return json.dumps(result, indent=2, sort_keys=True)
+
+    if args.preflight_only:
+        return _observe_preclaim_failure("success_receipt_construction", operation)
+    return operation()
 
 
 if __name__ == "__main__":
