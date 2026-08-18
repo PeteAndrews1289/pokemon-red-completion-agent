@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 from types import MappingProxyType
+from typing import cast
 
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.observation import ItemId, MapId
@@ -176,6 +177,82 @@ def build_red_goal_context_profile_payload(
     if parsed.profile_id != profile_id:
         raise RedGoalContextProfileError("built context profile identity differs")
     return payload
+
+
+def build_acquisition_replanning_profile_payload(
+    profile: RedGoalContextProfile,
+    *,
+    completed_battles: int = 4,
+) -> bytes:
+    """Add the source-local development skill to one wild acquisition profile.
+
+    The transformation is deliberately mechanical: it reuses the already authenticated
+    capture corridor byte-for-byte, requires the discovery corridor to describe the same
+    source, and adds no route, healing, or root-specific behavior.
+    """
+
+    if not isinstance(profile, RedGoalContextProfile):
+        raise TypeError("profile must be a RedGoalContextProfile")
+    if type(completed_battles) is not int or completed_battles != 4:  # noqa: E721
+        raise RedGoalContextProfileError(
+            "acquisition replanning requires the qualified four-battle dose"
+        )
+    if any(provider.kind is GoalKind.DEVELOP_TEAM for provider in profile.providers):
+        raise RedGoalContextProfileError(
+            "acquisition profile already exposes team development"
+        )
+    capture = next(
+        (
+            provider
+            for provider in profile.providers
+            if provider.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+        ),
+        None,
+    )
+    discovery = next(
+        (
+            provider
+            for provider in profile.providers
+            if provider.mechanic is RedGoalMechanic.WILD_CORRIDOR_DISCOVERY
+        ),
+        None,
+    )
+    if capture is None or discovery is None:
+        raise RedGoalContextProfileError(
+            "acquisition replanning needs capture and discovery corridors"
+        )
+    capture_parameters = _thaw(capture.parameters)
+    discovery_parameters = _thaw(discovery.parameters)
+    if capture_parameters != discovery_parameters or not isinstance(
+        capture_parameters, dict
+    ):
+        raise RedGoalContextProfileError(
+            "acquisition and discovery corridors describe different sources"
+        )
+    if capture_parameters.get("map_id") != int(MapId.POKEMON_MANSION_1F):
+        raise RedGoalContextProfileError(
+            "acquisition replanning requires the measured Mansion venue"
+        )
+    providers: list[tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]] = [
+        (
+            provider.kind,
+            provider.mechanic,
+            cast(Mapping[str, object], _thaw(provider.parameters)),
+        )
+        for provider in profile.providers
+    ]
+    providers.append(
+        (
+            GoalKind.DEVELOP_TEAM,
+            RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
+            {**capture_parameters, "completed_battles": completed_battles},
+        )
+    )
+    providers.sort(key=lambda row: tuple(GoalKind).index(row[0]))
+    return build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers),
+    )
 
 
 def red_goal_manager_contract_document() -> dict[str, object]:

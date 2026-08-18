@@ -10,6 +10,7 @@ from pokemon_red_completion.red_goal_context_profile import (
     RED_GOAL_CONTEXT_PROFILE_SCHEMA,
     RedGoalContextProfileError,
     RedGoalMechanic,
+    build_acquisition_replanning_profile_payload,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
@@ -169,6 +170,111 @@ def test_profile_requires_a_positive_fixed_dose_for_corridor_development() -> No
                 _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
             )
         )
+
+
+def test_acquisition_replanning_profile_reuses_the_exact_wild_source() -> None:
+    corridor = {
+        "source_id": "wild:PokemonMansion1F:grass",
+        "label": "Mansion source-local development",
+        "map_id": int(MapId.POKEMON_MANSION_1F),
+        "player_x": 5,
+        "player_y": 21,
+        "forward_directions": ["up"],
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 64,
+        "maximum_encounters": 16,
+    }
+    original = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(
+                GoalKind.ACQUIRE_SPECIES,
+                RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                corridor,
+            ),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
+            _provider(
+                GoalKind.EXPLORE,
+                RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                corridor,
+            ),
+        )
+    )
+
+    extended = parse_red_goal_context_profile(
+        build_acquisition_replanning_profile_payload(original)
+    )
+    providers = {provider.kind: provider for provider in extended.providers}
+
+    assert tuple(providers) == (
+        GoalKind.ADVANCE_STORY,
+        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.DEVELOP_TEAM,
+        GoalKind.RESTORE_TEAM,
+        GoalKind.RECOVER_CONTROL,
+        GoalKind.EXPLORE,
+    )
+    development = dict(providers[GoalKind.DEVELOP_TEAM].parameters)
+    assert development.pop("completed_battles") == 4
+    assert development == dict(providers[GoalKind.ACQUIRE_SPECIES].parameters)
+    assert development == dict(providers[GoalKind.EXPLORE].parameters)
+    with pytest.raises(RedGoalContextProfileError, match="four-battle"):
+        build_acquisition_replanning_profile_payload(original, completed_battles=3)
+
+
+def test_acquisition_replanning_profile_rejects_different_sources() -> None:
+    corridor = {
+        "source_id": "wild:PokemonMansion1F:grass",
+        "label": "Mansion source-local development",
+        "map_id": int(MapId.POKEMON_MANSION_1F),
+        "player_x": 5,
+        "player_y": 21,
+        "forward_directions": ["up"],
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 64,
+        "maximum_encounters": 16,
+    }
+    mismatched = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(
+                GoalKind.ACQUIRE_SPECIES,
+                RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                corridor,
+            ),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(
+                GoalKind.EXPLORE,
+                RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                {**corridor, "source_id": "wild:Route1:grass"},
+            ),
+        )
+    )
+
+    with pytest.raises(RedGoalContextProfileError, match="different sources"):
+        build_acquisition_replanning_profile_payload(mismatched)
+
+    unsupported = parse_red_goal_context_profile(
+        _payload(
+            _provider(
+                GoalKind.ACQUIRE_SPECIES,
+                RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                {**corridor, "map_id": int(MapId.ROUTE_1)},
+            ),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(
+                GoalKind.EXPLORE,
+                RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                {**corridor, "map_id": int(MapId.ROUTE_1)},
+            ),
+        )
+    )
+    with pytest.raises(RedGoalContextProfileError, match="measured Mansion"):
+        build_acquisition_replanning_profile_payload(unsupported)
+
 
 def test_profile_rejects_duplicate_goal_kinds_and_noncanonical_json() -> None:
     with pytest.raises(RedGoalContextProfileError, match="duplicates"):
