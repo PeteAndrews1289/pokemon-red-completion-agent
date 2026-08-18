@@ -1,6 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: the corrected campaign reaches training readiness
+## August 18: trial 0 invalidates the infrastructure, not the learning hypothesis
+
+Campaign `e99075d9…` wrote one durable `development_runtime` terminal before prediction, controller
+action, or outcome. It now has one `infrastructure_invalid` claim and eleven `retired_unexecuted`
+markers. The failed root is closed account-wide, and the old campaign never resumes. The
+[path-free invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+has SHA-256 `9a646550…`.
+
+Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`,
+attempt 1, and 4,111 local tests. Claude and internal reviews are **GO**. Antigravity agreed with the
+fix but dissented from campaign replacement; the project overruled that dissent because the old
+`cfa07f8c…` executable deterministically burns the remaining cells. This is a prospective
+amendment, not permission to resume the invalidated campaign.
+
+The active lane is `repeatable-goal-manager-development-restart-v1`. Publish the amendment, require
+green CI on its exact head, freeze one new same-contract four-root/twelve-trial campaign excluding
+the failed root, run one zero-action preflight, and execute directly. A second predecision protocol
+failure closes the architecture.
+
+The legacy board remains 30/15/3/3/0/0 and all development/composition counters remain zero. The
+only mission claim is intermediary progress toward the first teacher-free within-Red data—not
+competence, completion, a living Pokédex, Crystal transfer, a fit, authority, or transfer.
+
+## Previous August 18 checkpoint: the corrected campaign reached training readiness
 
 Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
 `32101788892`, attempt 1. Private campaign plan

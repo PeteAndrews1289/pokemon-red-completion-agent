@@ -29,32 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Repeatable Red goal-manager development pilot** (`repeatable-goal-manager-development-learning-v1`)
+**Repeatable Red goal-manager development restart** (`repeatable-goal-manager-development-restart-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: After all twelve trials terminate and strict admission succeeds, report the fixed-denominator outcome and composition evidence. If at least one verified outcome exists, freeze a separate train-only fit contract; otherwise close or redesign from the retained evidence without retrying a trial.
+- Next decision: If the replacement campaign freezes and preflights with twelve available identities and the failed root excluded, retire this maintenance lane and begin its trials exactly once. If not, close this curriculum architecture rather than opening another replacement carousel.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Run the frozen teacher-free Red campaign so the promoted goal manager chooses among current executable goals, records exact propensities, executes bounded verified skills, and retains every planned success or failure as causal outcome evidence for the first goal-level training update. |
-| Authority now | The promoted Red goal manager has bounded same-context semantic goal-selection authority; existing verified skills retain low-level execution. No repeatable development episode, fresh-context authority, Crystal authority, or living-Pokedex completion claim exists yet. |
-| Authority target | Collect and strictly admit the fixed twelve-trial model-led Red development denominator so verified goal choices and outcomes can support one separately reviewed outcome-model fit. The pilot itself grants no new authority. |
-| Transfer test | After measured repeatable Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal. |
-| Cheapest falsifier | Execute each of the twelve frozen trials exactly once under campaign e99075d9... and published source cfa07f8, then admit the complete fixed denominator once. Stop only on an attestation, protected-source, teacher, or durability boundary; an ordinary verified gameplay failure is retained as training evidence and does not authorize retry or replacement. |
-| Time box | 1 session / 8 hours |
+| Reusable capability | Prospectively restart the first teacher-free Red goal-manager development campaign after a predecision execution-interface invalid, while permanently excluding the failed root and every identity from the retired campaign. |
+| Authority now | The promoted Red goal manager retains only its prior bounded same-context semantic goal-selection authority. No repeatable development episode, fresh-context authority, Crystal authority, or living-Pokedex completion claim exists. |
+| Authority target | Unblock one fresh twelve-trial Red development campaign whose eventual verified outcomes can support a separately reviewed train-only fit; this maintenance lane itself grants no authority. |
+| Transfer test | After measured repeatable Red development and a separate promotion gate, compare a frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal. |
+| Cheapest falsifier | From the next published green head, freeze one deterministic four-root, twelve-trial campaign with the unchanged develop-team, restoration, storage, and acquisition focus contract. Require the closed root to be absent and a zero-action preflight to report twelve available identities; then reorient directly to execution without another qualification loop. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Development Episode · development | 0 | 12 |
-| Verified Outcome Example · development | 0 | 1 |
-| Atomic Goal Episode · development | 0 | 1 |
-| Composition Attempt · development | 0 | 1 |
-| Verified Composition Episode · development | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -62,25 +57,25 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-repeatable-development-training-ready** · status **active** · evidence [qualification](docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+**2026-08-18-repeatable-development-infrastructure-restart** · status **active** · evidence [qualification](docs/evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The corrected curriculum teaches portable preparation-versus-story, healing, storage, and acquisition choices from genuine multi-choice menus. It preserves collection-critical evidence while avoiding fabricated story-choice data and keeps later Red promotion and Crystal transfer separate. |
-| Learning output | Training readiness is complete but measured learning output is still zero. The frozen campaign has four authenticated train roots and twelve available one-shot trials; freeze and preflight used zero model predictions, controller actions, advanced frames, episodes, fits, comparisons, authority promotions, or transfer results. All existing counters remain unchanged. |
-| Authority delta | None. The campaign freeze and preflight made no prediction, controller input, or outcome. The promoted Red goal manager retains only its prior bounded same-context goal-selection authority while the pilot collects development evidence. |
-| Transfer result | Not run. Repeated Red train captures are development evidence, not unseen generalization or Crystal transfer; Crystal remains closed until a separately frozen Red promotion gate succeeds. |
-| Blocker | No engineering blocker remains. Published source cfa07f8c29635e759efd7f80b3055518a3ec08a6 passed CI 32101788892/1, and the immutable campaign preflight returned training_ready with all twelve trials available, four root lineages, and zero prediction, controller action, advanced frame, or teacher use. |
-| Decision | Close qualification and begin the fixed model-led pilot. Execute trial indices 0 through 11 once under the unchanged campaign and executable identity, retain every durable success or failure, and admit the twelve-cell denominator once; do not add another inventory or qualification loop. |
-| Next session | Begin actual model-led Red development: execute the twelve frozen trials once under unchanged source and campaign identities, then run strict admission and report episode, outcome, atomic, composition, collection, teacher, and failure totals without fitting or promotion. |
-| Next falsifier | Run frozen trials 0 through 11 exactly once. Each controller-started trial must end in one durable terminal; every verified choice/outcome join is retained, ordinary failures remain in the denominator, and only never-claimed trials may continue after interruption. Admit the fixed campaign once after all twelve identities are consumed. |
-| Stop condition | Stop on any validation or test context access, closed V2/V3/V4 root access, teacher or fallback choice, unsupported evolution menu, identity or source drift, missing propensity, non-durable terminal, claimed-trial retry, replacement trial, soft-only budget, private-data leak, or eight hours. |
+| Product alignment | The restart preserves the first causal, teacher-free Red goal-level curriculum while refusing to burn eleven identities with an executable known to fail before model choice. The product remains transferable multi-game living-Pokedex competence; this maintenance step creates no such evidence. |
+| Learning output | Zero new learning output. The retired campaign produced no model prediction, controller action, verified outcome, admitted development episode, fit, comparison, authority promotion, or transfer result; all counters remain unchanged. |
+| Authority delta | None. Trial 0 failed before a model prediction, controller action, or verified outcome, so no gameplay or learning authority changed. |
+| Transfer result | Not run. Red development remains the first curriculum only; Crystal and every transfer claim stay closed. |
+| Blocker | The old campaign is unusable because its exact executable contains the deterministic pre-observation proxy defect. It is now durably retired: one infrastructure-invalid claim, eleven retired-unexecuted identities, and the failed root closed account-wide. The repaired source 2c50cde0b248d17c7e2e25d34057908a4f126308 passed CI 32110273126/1. |
+| Decision | Publish this prospective amendment, then freeze a new twelve-trial campaign under the amended head with the same title-neutral focus contract and no model-guided root selection. The replacement is infrastructure recovery, not a retry or learner-outcome replacement. |
+| Next session | Freeze the prospective replacement campaign, run its zero-action preflight, then reorient directly to the bounded twelve-trial model-led Red pilot without another engineering review stage. |
+| Next falsifier | Freeze and preflight one replacement campaign only after this amendment is published and green. It must contain four roots and twelve fresh identities, exclude the closed root, expose the same four focus kinds, use zero predictions/actions/teacher queries during freeze and preflight, and report training_ready before execution. |
+| Stop condition | Stop on reuse of the failed root or retired campaign, model-guided root selection, any prediction/controller/frame/teacher use during freeze or preflight, identity drift, private-data leak, a non-training-ready preflight, or two hours. |
 
 ### Stop conditions
 
-- Any access to validation or test contexts, a closed V2/V3/V4 root, Crystal, sealed Red, teacher outcomes, or historical selected labels ends the lane.
-- Any pre-freeze model prediction, controller input during freeze or preflight, unsupported evolution menu, missing behavior propensity, unattested source/model/context-plan/NumPy/PyBoy/skill, non-durable decision or terminal, replaceable trial, private-data leak, or soft-only action or frame bound ends the lane.
-- Stop after strict admission or eight hours; do not rescue a failed root, retry a claimed trial, silently replace a planned trial, fit during collection, or claim repeated train captures as generalization.
+- Any access to validation or test contexts, the failed or other closed roots, the retired campaign, Crystal, sealed Red, teacher outcomes, or historical selected labels ends the lane.
+- Any model prediction, controller input, advanced frame, teacher query, source drift, model-guided root selection, private-data leak, or non-training-ready preflight during this maintenance lane ends it.
+- Stop after one replacement preflight or two hours; a second predecision protocol failure closes this curriculum architecture rather than authorizing another replacement.
 
 ### Hard boundaries for this lane
 
@@ -118,6 +113,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Repeatable Red goal-manager development pilot V1:** Its first trial encountered a deterministic execution-interface invalid before any model prediction, controller action, or verified outcome. Trial 0 remains an infrastructure invalid, the failed root is closed account-wide, and the eleven untouched identities are durably retired_unexecuted; the campaign may never resume or enter learning counters. Evidence is preserved; retry is no.
 - **Repeatable Red goal-manager development qualification:** Published source cfa07f8c29635e759efd7f80b3055518a3ec08a6 passed CI 32101788892/1. Its corrected four-root, twelve-trial campaign froze before prediction and passed the zero-action preflight with all identities available. Qualification is complete with every learning and authority counter unchanged. Evidence is preserved; retry is no.
 - **Fresh Red operational-composition execution qualification V4:** Published source 20d4b1532ee78a3ffc5b762b2f90ae536dfa2022 passed CI 32092299544/1. Its single action-free preflight failed at the sanitized readiness_authentication stage before model prediction, controller input, advanced frame, gameplay, or learning output. The exact root is durably closed and may never retry; no private cause is inferred. Evidence is preserved; retry is no.
 - **Fresh Red field-composition execution qualification V3:** Published source 1bbc4f34a339db1f861247990a4944053eb5fb3a passed CI 32090038721/1. Its single action-free preflight failed at the sanitized action_free_admission stage before any claim, prediction, controller input, frame, gameplay, or learning result. No private cause is inferred; the exact root was durably closed account-wide and may never retry. Evidence is preserved; retry is no.

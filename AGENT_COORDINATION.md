@@ -1,7 +1,29 @@
 # Three-agent coordination
 
-> **2026-08-18 training readiness achieved; fixed twelve-trial collection is the only active lane —
-> highest checkpoint:** Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
+> **2026-08-18 trial 0 infrastructure-invalid; one prospective restart amendment is the only active
+> lane — highest checkpoint:** Campaign `e99075d9…` produced one durable `development_runtime`
+> terminal before prediction, controller action, or outcome. It has one `infrastructure_invalid`
+> claim and eleven `retired_unexecuted` markers. The failed root is closed account-wide; the old
+> campaign never resumes. Link the
+> [invalidation receipt](docs/evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+> (SHA-256 `9a646550…`).
+>
+> Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`
+> attempt 1 and 4,111 local tests. Claude/internal verdicts are **GO**. Antigravity agreed with the
+> fix but dissented from replacement; that dissent is overruled because the old `cfa07f8c…`
+> executable deterministically burns the remaining cells.
+>
+> Codex owns `repeatable-goal-manager-development-restart-v1`: publish the prospective amendment,
+> then under its amended green head freeze one new same-contract four-root/twelve-trial campaign
+> excluding the failed root, run one zero-action preflight, and execute directly. A second
+> predecision protocol failure closes the architecture. No further restart is allowed.
+>
+> Legacy counters remain 30/15/3/3/0/0 and all development/composition counters remain zero. The
+> lane seeks only the first teacher-free within-Red intermediary data; it grants no competence,
+> completion, living-Pokédex, Crystal, fit, authority, or transfer claim.
+>
+> **2026-08-18 training readiness achieved; fixed twelve-trial collection was the only active lane —
+> historical checkpoint:** Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
 > `32101788892` attempt 1. Private campaign plan
 > `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze with four roots and
 > twelve trials focused on `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and `ACQUIRE_SPECIES`.

@@ -6,7 +6,31 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one unchanged twelve-trial learning pass
+## Current override: Codex owns one prospective restart amendment
+
+Campaign `e99075d9…` produced one durable `development_runtime` terminal before prediction,
+controller action, or outcome. It has one `infrastructure_invalid` claim and eleven
+`retired_unexecuted` markers. The failed root is closed account-wide, and the old campaign never
+resumes. See the
+[invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+(SHA-256 `9a646550…`).
+
+Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`,
+attempt 1, and 4,111 local tests. Claude/internal verdicts are **GO**. Antigravity agreed with the
+fix but dissented from replacement; the dissent was overruled because old `cfa07f8c…` bytes
+deterministically burn the remaining cells.
+
+Codex owns `repeatable-goal-manager-development-restart-v1`: publish the prospective amendment,
+then under its amended green head freeze one new same-contract four-root/twelve-trial campaign that
+excludes the failed root, run one zero-action preflight, and execute directly. A second predecision
+protocol failure closes the architecture; no further restart is allowed. Reviewers remain
+read-only.
+
+Legacy counters remain **30/15/3/3/0/0**, and all development/composition counters remain zero. The
+only mission claim is intermediary work toward the first teacher-free within-Red data—not
+competence, completion, a living Pokédex, Crystal transfer, fit, authority, or transfer.
+
+## Previous override: Codex owned one unchanged twelve-trial learning pass
 
 Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run `32101788892`,
 attempt 1. Private plan

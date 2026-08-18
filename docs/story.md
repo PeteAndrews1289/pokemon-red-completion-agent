@@ -7,7 +7,35 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the twelve starting lines are finally real
+## Current checkpoint: the first starting line breaks before the model moves
+
+The old twelve-trial campaign reached trial 0 and wrote one durable infrastructure terminal before
+the model predicted, the controller acted, or an outcome existed. That failed root is now closed
+account-wide. One claim is marked infrastructure-invalid; the other eleven are durably retired
+unexecuted. The campaign never resumes. The
+[path-free invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+records the stop.
+
+Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`,
+attempt 1, and 4,111 local tests. Claude and the internal review are **GO**. Antigravity agreed with
+the fix but opposed replacement; the project overruled that dissent because reusing the old
+executable would deterministically waste every remaining cell. The active lane,
+`repeatable-goal-manager-development-restart-v1`, is one prospective restart amendment, not a
+repaired continuation.
+
+If published under a green amended head, the project will freeze one new campaign with the same four
+focuses and twelve trials, excluding the failed root; run one zero-action preflight; and execute
+directly. A second failure before a decision closes the architecture for good. The scoreboard stays
+**30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY ZERO · TRANSFER ZERO**, and every
+new counter stays zero.
+
+The point remains modest: obtain the first teacher-free within-Red intermediary data. This is not
+evidence of competence, completion, a living Pokédex, Crystal transfer, a fit, authority, or
+transfer.
+
+---
+
+## Previous checkpoint: the twelve starting lines were finally real
 
 Exact source `cfa07f8c` passed CI run `32101788892`, attempt 1. A private campaign plan with four
 roots and twelve trials froze successfully around team development, recovery, storage, and

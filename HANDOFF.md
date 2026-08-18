@@ -18,7 +18,31 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Training readiness achieved; execute the fixed twelve trials once — 2026-08-18
+## Trial 0 infrastructure-invalid; publish one prospective restart — 2026-08-18
+
+Old campaign `e99075d9…` produced one durable `development_runtime` terminal before prediction,
+controller action, or outcome. It now has one `infrastructure_invalid` claim and eleven
+`retired_unexecuted` markers. The failed root is closed account-wide, and the old campaign must
+never resume. See the
+[path-free invalidation receipt](docs/evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+(SHA-256 `9a646550…`).
+
+Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`,
+attempt 1, and 4,111 local tests. Claude and the internal audit are **GO**. Antigravity agreed with
+the fix but dissented from replacement; the dissent was overruled because the old `cfa07f8c…`
+executable deterministically burns every remaining cell. The active lane is
+`repeatable-goal-manager-development-restart-v1`.
+
+Publish the prospective amendment. Under its amended green head, freeze one new same-contract
+four-root/twelve-trial campaign that excludes the failed root, run one zero-action preflight, and
+execute directly. A second predecision protocol failure closes the architecture; do not restart
+again. The legacy board remains **30/15/3/3/0/0**, and every development/composition counter remains
+zero.
+
+The restart is only an intermediary toward the first teacher-free within-Red data. Do not claim
+competence, completion, a living Pokédex, Crystal transfer, a fit, authority, or transfer.
+
+## Previous checkpoint: training readiness achieved; execute the fixed twelve trials once — 2026-08-18
 
 Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
 `32101788892`, attempt 1. Private campaign plan

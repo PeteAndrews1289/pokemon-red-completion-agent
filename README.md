@@ -5,7 +5,30 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): repeatable-development training readiness achieved.**
+> **Current product focus (August 18, 2026): trial 0 was infrastructure-invalid; publish one
+> prospective restart amendment.** Campaign `e99075d9…` produced one durable
+> `development_runtime` terminal before any prediction, controller action, or outcome. It now has
+> one `infrastructure_invalid` claim and eleven `retired_unexecuted` markers. The failed root is
+> closed account-wide, and the old campaign never resumes. See the
+> [path-free invalidation receipt](docs/evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+> (SHA-256 `9a646550…`).
+>
+> Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed GitHub CI run
+> `32110273126`, attempt 1, plus 4,111 local tests. Claude and the internal audit are **GO**.
+> Antigravity agreed with the fix but dissented from replacement; that dissent was overruled because
+> the old `cfa07f8c…` executable deterministically burns the remaining cells. The active lane is
+> `repeatable-goal-manager-development-restart-v1`.
+>
+> Next, publish the prospective amendment. Under its amended green head, freeze one new
+> same-contract four-root/twelve-trial campaign excluding the failed root, run one zero-action
+> preflight, then execute directly. A second predecision protocol failure closes this architecture;
+> there is no further restart. The legacy board remains **30/15/3/3/0/0**, and all development and
+> composition counters remain zero.
+>
+> This restart is only an intermediary toward the first teacher-free within-Red data. It makes no
+> competence, completion, living-Pokédex, Crystal, fit, authority, or transfer claim.
+>
+> **Previous product focus (August 18, 2026): repeatable-development training readiness achieved.**
 > Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed GitHub CI run
 > `32101788892`, attempt 1. Private campaign plan
 > `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with

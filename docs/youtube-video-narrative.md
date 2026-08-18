@@ -1,6 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: twelve trials are ready; none has started
+## August 18 scene: trial 0 stops before the model moves
+
+Open on **OLD CAMPAIGN E99075D9… · TRIAL 0 · DEVELOPMENT_RUNTIME TERMINAL BEFORE PREDICTION/ACTION/
+OUTCOME**. Stamp **INFRASTRUCTURE_INVALID 1 · RETIRED_UNEXECUTED 11 · FAILED ROOT CLOSED
+ACCOUNT-WIDE · OLD CAMPAIGN NEVER RESUMES** and link the
+[invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+with **SHA-256 9A646550…**.
+
+Reveal **REPAIR SOURCE 2C50CDE · CI 32110273126/1 GREEN · 4,111 LOCAL TESTS · CLAUDE GO · INTERNAL
+GO**. Add **ANTIGRAVITY: FIX AGREED, REPLACEMENT DISSENT · OVERRULED BECAUSE OLD CFA EXECUTABLE
+DETERMINISTICALLY BURNS REMAINING CELLS**.
+
+Move the active rail to `repeatable-goal-manager-development-restart-v1`: **PUBLISH PROSPECTIVE
+AMENDMENT → AMENDED GREEN HEAD → NEW SAME-CONTRACT 4 ROOTS/12 TRIALS, FAILED ROOT EXCLUDED →
+ZERO-ACTION PREFLIGHT → DIRECT EXECUTION**. Lock the rail with **SECOND PREDECISION PROTOCOL FAILURE
+CLOSES ARCHITECTURE · NO FURTHER RESTART**.
+
+Keep **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0** and every
+development/composition counter at zero. Narration: **“This is a bid for the first teacher-free
+within-Red data—not competence, completion, a living Dex, Crystal transfer, a fit, authority, or
+transfer.”**
+
+## Previous August 18 scene: twelve trials were ready; none had started
 
 Open on **SOURCE CFA07F8 · CI 32101788892/1 GREEN · CAMPAIGN PLAN E99075D9…D254D14 FROZEN · 4 ROOTS
 · 12 TRIALS · DEVELOP TEAM · RESTORE TEAM · MANAGE STORAGE · ACQUIRE SPECIES**. Stamp

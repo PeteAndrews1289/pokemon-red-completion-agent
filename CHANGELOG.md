@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Recorded trial 0 of campaign `e99075d9…` as infrastructure-invalid after one durable
+  `development_runtime` terminal occurred before prediction, controller action, or outcome. Wrote
+  one `infrastructure_invalid` claim and eleven `retired_unexecuted` markers, closed the failed root
+  account-wide, and permanently retired the old campaign. The
+  [path-free invalidation receipt](docs/evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+  has SHA-256 `9a646550…`. Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308`
+  passed CI run `32110273126` attempt 1 and 4,111 local tests; Claude/internal reviews are **GO**.
+  Antigravity agreed with the fix but dissented from replacement, which was overruled because the
+  old `cfa07f8c…` executable deterministically burns the remaining cells. Activated
+  `repeatable-goal-manager-development-restart-v1`: publish the prospective amendment, then freeze
+  one new same-contract four-root/twelve-trial campaign excluding the failed root under the amended
+  green head, run one zero-action preflight, and execute directly. A second predecision protocol
+  failure closes the architecture. Legacy 30/15/3/3/0/0 and all development/composition counters
+  remain unchanged. This lane seeks only first teacher-free within-Red intermediary data, not a
+  competence, completion, living-Pokédex, Crystal, fit, authority, or transfer claim.
 - Published corrected repeatable-development source `cfa07f8c29635e759efd7f80b3055518a3ec08a6`
   under green CI run `32101788892` attempt 1. Private campaign plan
   `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four

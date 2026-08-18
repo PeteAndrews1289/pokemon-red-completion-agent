@@ -8,7 +8,32 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: training-ready; collect the fixed campaign exactly once
+## Current checkpoint: retire the infrastructure-invalid campaign; publish one restart amendment
+
+Campaign `e99075d9…` produced one durable `development_runtime` terminal before any prediction,
+controller action, or outcome. It now has one `infrastructure_invalid` claim and eleven
+`retired_unexecuted` markers. Its failed root is closed account-wide, and the old campaign never
+resumes. The
+[path-free invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+has SHA-256 `9a646550…`.
+
+Repair source `2c50cde0b248d17c7e2e25d34057908a4f126308` passed CI run `32110273126`,
+attempt 1, and 4,111 local tests. Claude and internal audits are **GO**. Antigravity agreed with the
+fix but dissented from campaign replacement; that dissent was overruled because the old
+`cfa07f8c…` executable deterministically burns the remaining cells. The active lane is
+`repeatable-goal-manager-development-restart-v1`.
+
+Publish the prospective amendment. Under its amended green head, freeze one new same-contract
+four-root/twelve-trial campaign excluding the failed root, run one zero-action preflight, then
+execute directly. A second predecision protocol failure closes the architecture; no further restart
+is permitted.
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**, and all development/composition counters remain zero. This is only an intermediary toward the
+first teacher-free within-Red data. It proves no competence, completion, living Pokédex, Crystal
+transfer, fit, authority, or transfer.
+
+## Previous checkpoint: training-ready; collect the fixed campaign exactly once
 
 Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run `32101788892`,
 attempt 1. Private campaign plan
