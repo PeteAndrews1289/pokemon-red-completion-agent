@@ -12,6 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-18: private acquisition-replanning context plan built; qualification remains active
+
+Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`.
+The [path-free build receipt](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+records an exact mechanical transformation of 81 authenticated private contexts: two prior-used
+acquisition roots were excluded and four eligible unused profiles gained the qualified source-local
+development binding. The output plan is `09af29ba…ff51`; the profile-lineage manifest is
+`db660df2…324`; the profile-set digest is `792a0b54…c02`.
+
+This is not a menu preflight or campaign freeze and created no trial identity. It made zero
+predictions, controller actions, advanced frames, teacher queries, outcomes, fits, comparisons,
+authority promotions, or transfer results. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+The active lane remains `fresh-red-acquisition-replanning-execution-qualification-v1`: implement
+and publish execution/admission, then freeze and zero-action preflight the exact four-root,
+sixteen-episode campaign. Gameplay remains unauthorized.
+
 ## 2026-08-18: Red encounter execution qualified; campaign preflight is active
 
 Source `944fdc5b79aa240fb42084e47913f9446883e739` passed exact-head CI

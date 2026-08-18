@@ -6,6 +6,20 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
+## Current override: Codex owns execution/admission, freeze, and zero-action preflight
+
+Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
+[context-plan build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+records 81 contexts in the transformed private plan, two prior-used acquisition roots excluded, and
+four eligible unused profiles extended. This proves only the mechanical plan transformation; it
+does not prove current menus, campaign/trial identity readiness, gameplay, training, or an outcome.
+
+Codex retains `fresh-red-acquisition-replanning-execution-qualification-v1`. Implement and publish
+the strict execution/admission boundary, require green exact-head CI, then freeze the exact four-root
+× four-trial campaign and run one zero-action preflight. Claude and Antigravity remain read-only.
+No prediction, controller action, frame, teacher query, episode, fit, promotion, sealed Red, or
+Crystal is authorized. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## Current override: Codex owns the acquisition-replanning campaign preflight
 
 The [qualified Red executor](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)

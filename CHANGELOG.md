@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published the acquisition-replanning context-plan builder at exact source
+  `343cadf921af2b82e79c352163c18d54b3d72d78` under green CI `32141939995/1`. Its
+  [path-free build receipt](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+  records one mechanical private-plan transformation: 81 contexts retained, two prior-used
+  acquisition roots excluded, and exactly four eligible unused profiles extended. Output plan
+  `09af29ba…ff51`, profile lineage `db660df2…324`, and profile set `792a0b54…c02` are bound to the
+  published builder/source inputs. This was not menu preflight, campaign freeze, trial-identity
+  creation, gameplay, training, or an outcome. All counters remain unchanged. Kept
+  `fresh-red-acquisition-replanning-execution-qualification-v1` active for execution/admission,
+  campaign freeze, and one zero-action preflight.
+
 - Published the source-local Red encounter-development executor at source
   `944fdc5b79aa240fb42084e47913f9446883e739` under green CI `32135801933/1`. The
   [path-free receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)

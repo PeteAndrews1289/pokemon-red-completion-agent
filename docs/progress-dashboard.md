@@ -5,6 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
+> **Current rail:** Show **SOURCE 343CADF · CI 32141939995/1 GREEN · PRIVATE CONTEXT PLAN BUILT ·
+> CONTEXTS 81 · PRIOR-USED ACQUISITION ROOTS EXCLUDED 2 · UNUSED PROFILES TRANSFORMED 4 · OUTPUT
+> PLAN 09AF29BA…FF51**. Link the
+> [build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json). Mark
+> **MECHANICAL TRANSFORMATION ONLY · MENU PREFLIGHT 0 · CAMPAIGN FREEZE 0 · TRIAL IDENTITIES 0 ·
+> PREDICTIONS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0**.
+>
+> Keep `fresh-red-acquisition-replanning-execution-qualification-v1` active. The next rail is
+> **IMPLEMENT/PUBLISH EXECUTION + ADMISSION → EXACT-HEAD GREEN CI → FREEZE 4 ROOTS × 4 TRIALS →
+> ONE ZERO-ACTION PREFLIGHT → STOP BEFORE GAMEPLAY**. Keep **30/15/4/3/0/0** and
+> **14/4/0/1/1** unchanged; authority and transfer remain zero.
+>
 > **Current rail:** Show **SOURCE 944FDC5 · CI 32135801933/1 GREEN · RED SOURCE-LOCAL EXECUTOR
 > QUALIFIED · FIXED DOSE 4 BATTLES · HARD ACTION/FRAME LIMITS · HEALING 0 · TRAVEL 0 · UNSAFE
 > STARTS REJECTED · GAMEPLAY 0 · COUNTER DELTA 0**. Link the

@@ -103,6 +103,11 @@ ACQUISITION_REPLANNING_DESIGN = (
     / "docs/evidence"
     / "acquisition-replanning-curriculum-design-v1-2026-08-18.json"
 )
+ACQUISITION_REPLANNING_CONTEXT_PLAN_BUILD = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "acquisition-replanning-context-plan-build-v1-2026-08-18.json"
+)
 ENCOUNTER_DEVELOPMENT_QUALIFICATION = (
     PROJECT_ROOT
     / "docs/evidence"
@@ -205,6 +210,62 @@ def test_acquisition_replanning_design_is_action_free_and_product_bounded() -> N
     assert design["evidence_gate"]["minimum_verified_distinct_goal_replans"] == 4
     assert design["evidence_gate"]["minimum_root_lineages_with_verified_replan"] == 3
     assert set(receipt["counter_treatment"].values()) == {0}
+
+
+def test_acquisition_replanning_context_plan_build_is_mechanical_and_zero_effect() -> None:
+    receipt = json.loads(
+        ACQUISITION_REPLANNING_CONTEXT_PLAN_BUILD.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "private_context_plan_built_campaign_freeze_and_preflight_required"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32141939995,
+        "source_commit": "343cadf921af2b82e79c352163c18d54b3d72d78",
+    }
+    assert receipt["source_bindings"] == {
+        "builder_sha256": (
+            "918b6ea7aa0dff5fafe937cc2b0271a95316858c3ae3c03cc22e6b26301c08db"
+        ),
+        "context_catalog_sha256": (
+            "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959"
+        ),
+        "source_bundle_sha256": (
+            "d323ec89e92c34de160294e848aae08b5771c0d74701f9d189240dba4c693076"
+        ),
+        "source_profile_manifest_sha256": (
+            "adf671bfb8780fb6470ad3b15fd7632f8cd3eed06e33dc308384d3701e5012a6"
+        ),
+    }
+    assert receipt["build"] == {
+        "completed_battles_per_development_dose": 4,
+        "context_catalog_sha256": (
+            "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959"
+        ),
+        "contexts": 81,
+        "excluded_used_acquisition_roots": 2,
+        "extended_unused_acquisition_roots": 4,
+        "output_plan_sha256": (
+            "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51"
+        ),
+        "profile_lineage_manifest_sha256": (
+            "db660df20ffcadb8e1520f50861093dcc1cb7e1f8a24687fac44cf1350db6324"
+        ),
+        "profile_set_sha256": (
+            "792a0b548f58f19937b54dd7c0aca795c2b8d4617647fb15f10fbf9846f16c02"
+        ),
+        "source_profile_manifest_sha256": (
+            "adf671bfb8780fb6470ad3b15fd7632f8cd3eed06e33dc308384d3701e5012a6"
+        ),
+    }
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert set(receipt["counter_treatment"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
 
 
 def test_encounter_development_qualification_stops_before_gameplay() -> None:
@@ -726,7 +787,9 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow candidate eb5c6515" in encoded
     assert "loss 1.2667" in encoded
-    assert "source-local Red encounter executor is published" in encoded
+    assert "exact 81-context private plan was mechanically built" in encoded
+    assert "prior-used acquisition roots excluded 2" in encoded
+    assert "unused acquisition profiles transformed 4" in encoded
     assert "actions 244/244" in encoded
     assert "post-acquisition captures 0" in encoded
     assert "same-source normalization" in encoded

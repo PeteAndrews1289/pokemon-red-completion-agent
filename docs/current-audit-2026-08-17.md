@@ -1,5 +1,24 @@
 # Current audit — 2026-08-18
 
+## Current result: the private context plan builds; campaign readiness is still unproved
+
+Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
+[path-free build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+binds source bundle `d323ec89e92c34de160294e848aae08b5771c0d74701f9d189240dba4c693076`,
+builder `918b6ea7aa0dff5fafe937cc2b0271a95316858c3ae3c03cc22e6b26301c08db`,
+catalog `f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959`,
+source-profile manifest `adf671bfb8780fb6470ad3b15fd7632f8cd3eed06e33dc308384d3701e5012a6`,
+output plan `09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51`,
+profile lineage `db660df20ffcadb8e1520f50861093dcc1cb7e1f8a24687fac44cf1350db6324`,
+and profile set `792a0b548f58f19937b54dd7c0aca795c2b8d4617647fb15f10fbf9846f16c02`.
+
+The supported result is only an exact mechanical transformation: 81 contexts retained, two
+prior-used acquisition roots excluded, and four eligible unused profiles extended. Menu preflight,
+campaign freeze, trial identities, execution/admission, gameplay, training, outcomes, promotion,
+completion, and transfer remain unproved. Predictions, controller actions, frames, teacher queries,
+outcomes, fits, comparisons, authority, and transfer are zero, leaving **30/15/4/3/0/0** and
+**14/4/0/1/1** unchanged. The active lane remains execution qualification.
+
 ## Current result: the Red source-local executor passes; campaign execution is still closed
 
 Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1` with

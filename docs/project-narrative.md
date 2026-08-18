@@ -1,5 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 18: the private acquisition-replanning context plan builds
+
+Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
+[path-free build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+records an exact mechanical transformation of the authenticated private plan: 81 contexts copied,
+two prior-used acquisition roots excluded, and four eligible unused profiles extended with the
+qualified source-local development binding. Output plan `09af29ba…ff51`, profile lineage
+`db660df2…324`, and profile set `792a0b54…c02` bind the result without public paths or identities.
+
+This creates no menu preflight, campaign freeze, trial identity, gameplay, training example, fit,
+comparison, authority, completion, living-Pokédex result, or transfer evidence. All counters remain
+unchanged. The active lane continues as
+`fresh-red-acquisition-replanning-execution-qualification-v1`: execution/admission must be
+implemented and published before one exact campaign freeze and zero-action preflight.
+
 ## August 18: the portable choice gains a real Red executor
 
 Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. The

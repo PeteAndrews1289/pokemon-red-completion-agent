@@ -1,5 +1,19 @@
 # Three-agent coordination
 
+> **2026-08-18 private context plan built; execution qualification remains the only active lane —
+> highest checkpoint:** Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI
+> `32141939995/1`. The
+> [path-free build receipt](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+> records 81 mechanically copied contexts, two prior-used acquisition roots excluded, and four
+> eligible unused profiles transformed. The output plan digest is `09af29ba…ff51`; no private path
+> or identity is public.
+>
+> Codex continues to own `fresh-red-acquisition-replanning-execution-qualification-v1`: implement
+> and publish strict execution/admission, then freeze and run one zero-action campaign preflight.
+> The plan build did not preflight a menu, freeze a campaign, create a trial identity, or run a
+> model/game. Reviewers remain read-only. Counters stay **30/15/4/3/0/0** and **14/4/0/1/1**; no
+> gameplay, teacher, fit, promotion, sealed Red, Crystal, or replay belongs in this lane.
+
 > **2026-08-18 Red executor qualified; acquisition-replanning preflight is the only active lane —
 > highest checkpoint:** Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI
 > `32135801933/1`. The [execution receipt](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)

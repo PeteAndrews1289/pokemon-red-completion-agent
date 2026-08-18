@@ -5,6 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 18, 2026): private context plan built; execution qualification
+> continues.** Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI
+> `32141939995/1`. The
+> [path-free build receipt](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+> records a purely mechanical transformation of the authenticated private plan: **81 contexts**, two
+> previously used acquisition roots excluded, and exactly four eligible unused acquisition profiles
+> extended with the qualified four-battle source-local development binding. Output plan
+> `09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51` is bound to source bundle
+> `d323ec89e92c34de160294e848aae08b5771c0d74701f9d189240dba4c693076` and builder
+> `918b6ea7aa0dff5fafe937cc2b0271a95316858c3ae3c03cc22e6b26301c08db`.
+>
+> This does not preflight menus, freeze a campaign, create trial identities, execute gameplay, or
+> establish training, outcomes, authority, completion, or transfer. Predictions, controller actions,
+> frames, teacher queries, outcomes, fits, comparisons, authority, and transfer were all zero. The
+> board remains **30/15/4/3/0/0** and product-focus-v2 remains **14/4/0/1/1**. The active lane stays
+> `fresh-red-acquisition-replanning-execution-qualification-v1`: implement and publish strict
+> execution/admission, then freeze the four-root/sixteen-episode campaign and run one zero-action
+> preflight before any gameplay.
+
 > **Current product focus (August 18, 2026): Red source-local execution qualified; campaign
 > preflight next.** Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI
 > `32135801933/1` (4,191 passed, 3 deselected, 1 xfailed). The

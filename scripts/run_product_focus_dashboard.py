@@ -103,17 +103,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The source-local Red encounter executor is published and green. Next: freeze and "
-            "zero-action preflight the exact four-root, sixteen-episode acquisition-replanning "
-            "campaign without gameplay or a learning-counter change."
+            "The exact 81-context private plan was mechanically built with four unused "
+            "acquisition profiles transformed and two prior-used roots excluded. Next: publish "
+            "execution/admission, freeze the campaign, and run one zero-action preflight."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red executor qualified · campaign preflight next · no gameplay",
+        location="Context plan built · execution/admission and preflight next · no gameplay",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Shadow candidate eb5c6515… versus base af29d7e7…",
-            choice="Qualify 4-root × 4-trial acquisition-replanning campaign · no gameplay",
+            choice="Qualify 4-root × 4-trial acquisition-replanning execution · no gameplay",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -187,8 +187,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "post-acquisition captures 0 · prior durable next-choice count 1"
             ),
             (
-                "Execution qualified · fixed 4-battle source-local dose · zero healing/travel · "
-                "same-source normalization · gameplay remains unexecuted"
+                "Execution + plan · fixed 4-battle source-local dose · same-source normalization "
+                "· 81 contexts · prior-used acquisition roots excluded 2 · unused acquisition "
+                "profiles transformed 4"
             ),
         ),
     )

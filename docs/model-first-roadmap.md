@@ -8,6 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
+## Current checkpoint: the private plan exists; execution and preflight remain closed
+
+Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
+[path-free build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
+records the narrow mechanical result: all 81 contexts were carried into a new private plan, the two
+previously used acquisition roots were excluded, and the four eligible unused acquisition profiles
+were extended with the qualified source-local development action. It binds output plan
+`09af29ba…ff51`, profile lineage `db660df2…324`, and profile set `792a0b54…c02` without exposing a
+private path or identity.
+
+No menu was preflighted, campaign frozen, trial identity created, or gameplay executed. Predictions,
+controller actions, frames, teacher use, outcomes, fits, comparisons, authority, and transfer all
+remain zero for this checkpoint. The active lane remains
+`fresh-red-acquisition-replanning-execution-qualification-v1`: implement and publish strict
+execution/admission, then freeze and run one zero-action preflight for the four-root, sixteen-episode
+campaign. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
+
 ## Current checkpoint: Red local execution qualified; freeze the curriculum boundary
 
 Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. The

@@ -1,5 +1,17 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 18 scene: the private plan changes; the scoreboard does not
+
+Open on **SOURCE 343CADF · CI 32141939995/1 GREEN**. Animate **81 CONTEXTS → EXCLUDE 2 USED
+ACQUISITION ROOTS → EXTEND 4 UNUSED PROFILES**, then stamp **OUTPUT PLAN 09AF29BA…FF51**. Link the
+[path-free build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json).
+
+Immediately overlay **MECHANICAL TRANSFORMATION ONLY · MENU PREFLIGHT 0 · CAMPAIGN FREEZE 0 ·
+TRIAL IDENTITIES 0 · PREDICTIONS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0**. Keep the boards fixed at
+**30/15/4/3/0/0** and **14/4/0/1/1**. The next rail is **IMPLEMENT/PUBLISH EXECUTION + ADMISSION →
+FREEZE 4 × 4 → ZERO-ACTION PREFLIGHT → STOP**. No gameplay, promotion, completion, living-Pokédex,
+or transfer celebration belongs in this scene.
+
 ## August 18 scene: the interface is connected, but the model still has not acted
 
 Put **SOURCE 944FDC5 · CI GREEN · 4,191 TESTS PASSED** on screen. Advance the rail to **CATCH →

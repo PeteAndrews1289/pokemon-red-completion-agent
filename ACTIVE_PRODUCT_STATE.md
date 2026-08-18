@@ -39,11 +39,11 @@ Not the product:
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Freeze and zero-action preflight one repeatable four-root, sixteen-episode Red acquisition-replanning campaign that uses the qualified source-local DEVELOP_TEAM executor as a genuine post-acquisition choice. |
+| Reusable capability | Implement execution and strict admission, then freeze and zero-action preflight one repeatable four-root, sixteen-episode Red acquisition-replanning campaign that uses the qualified source-local DEVELOP_TEAM executor as a genuine post-acquisition choice. |
 | Authority now | The shadow candidate and base each have one bounded safe-acquisition result on one disclosed Red train root. Neither has learned replanning, fresh-context, completion, Crystal, or living-Pokedex authority. |
 | Authority target | Authorize only one later repeatable Red development campaign after its exact zero-action preflight passes; this lane grants no gameplay, promotion, completion, or transfer authority. |
 | Transfer test | Not in this lane. The core interface remains title-neutral; Crystal becomes the first measured transfer only after Red produces a real acquisition-replanning signal. |
-| Cheapest falsifier | Authenticate the four unused train roots, exact model/runtime/profile/skill bindings, initial menus, sixteen prospective identities, hard limits, durable terminals, and retry-safe ledgers without prediction or controller input. Close the campaign if any root needs a route, teacher, artificial goal, unsafe party, or reused identity. |
+| Cheapest falsifier | From the successfully transformed private context plan, implement the durable execution/admission boundary and authenticate four unused train roots, exact model/runtime/profile/skill bindings, initial menus, sixteen prospective identities, hard limits, terminals, and retry-safe ledgers without prediction or controller input. Close the campaign if any root needs a route, teacher, artificial goal, unsafe party, or reused identity. |
 | Time box | 1 session / 6 hours |
 
 ### Required learning outputs
@@ -57,19 +57,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-red-encounter-development-executor-qualified** · status **active** · evidence [qualification](docs/evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
+**2026-08-18-acquisition-replanning-context-plan-built** · status **active** · evidence [qualification](docs/evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The living-Pokedex agent now has the real acquisition and source-local development actions needed for a changed-state choice. This lane packages those actions into the first repeatable curriculum that can measure acquisition followed by replanning. |
-| Learning output | No new measured learning output. The published Red adapter now supplies a hard-bounded four-battle source-local development action and safe same-source normalization, but no game ran and every cumulative learning counter remains unchanged. |
-| Authority delta | None. Source 944fdc5 passed CI 32135801933/1 and qualifies only the Red execution binding. No game, prediction, verified outcome, fit, comparison, promotion, or transfer result occurred. |
+| Product alignment | The private plan now carries the qualified source-local development action into four unused acquisition contexts without changing the other 77 profiles. Execution qualification is the remaining bridge to a repeatable curriculum that can measure acquisition followed by replanning. |
+| Learning output | No new measured learning output. The published builder copied 81 authenticated contexts, excluded two prior-used acquisition roots, and transformed exactly four eligible unused profiles without prediction, controller input, emulator advancement, teacher use, outcome access, fit, comparison, authority, or transfer. Every cumulative counter remains unchanged. |
+| Authority delta | None. Source 343cadf921af2b82e79c352163c18d54b3d72d78 passed CI 32141939995/1 and mechanically built only a private context plan. No game, prediction, verified outcome, fit, comparison, promotion, or transfer result occurred. |
 | Transfer result | Not run. Crystal remains closed; title neutrality is an engineering requirement here, not measured cross-title transfer. |
-| Blocker | The reusable seam and Red source-local executor are qualified, but the four-root sixteen-episode acquisition-replanning campaign has no authenticated plan, exact trial identities, durable runner boundary, or zero-action preflight. |
-| Decision | Retire the Red executor qualification after green exact-head CI and open one bounded campaign execution-qualification lane. Build and run only a zero-action preflight; gameplay remains a separate learning lane. |
-| Next session | Implement, publish, and run only the zero-action campaign preflight. Do not execute an episode, make a prediction, send controller input, collect an outcome, fit a model, open sealed Red, or execute Crystal. |
-| Next falsifier | Build one path-free, retry-safe campaign runner and prove action-free that all four roots, sixteen trial identities, exact bindings, ledgers, limits, and durable terminal contracts are ready. Reject rather than patch any incompatible root. |
-| Stop condition | Stop after one zero-action preflight receipt, or immediately on any reused root, inaccessible binding, route or teacher patch, artificial menu entry, prediction, controller input, game frame, or scope beyond six hours. |
+| Blocker | The exact 81-context private plan now exists with four eligible unused acquisition profiles transformed and two prior-used roots excluded, but campaign freeze and zero-action preflight have not occurred, and the execution/admission runner boundary remains missing. |
+| Decision | Keep the bounded execution-qualification lane active. Treat the private plan as an authenticated mechanical input only; implement and publish execution/admission, then freeze the four-root sixteen-episode campaign and run one zero-action preflight before any gameplay. |
+| Next session | Implement and publish execution/admission, require green exact-head CI, then freeze the campaign and run one zero-action preflight. Do not execute an episode, make a prediction, send controller input, collect an outcome, fit a model, open sealed Red, or execute Crystal. |
+| Next falsifier | Implement and publish one path-free, retry-safe execution/admission runner, then prove action-free that the four transformed roots, sixteen trial identities, exact bindings, ledgers, limits, and durable terminal contracts are ready. Reject rather than patch any incompatible root. |
+| Stop condition | Stop after one zero-action preflight receipt, or immediately on execution/admission drift, any reused root, inaccessible binding, route or teacher patch, artificial menu entry, prediction, controller input, game frame, or scope beyond six hours. |
 
 ### Stop conditions
 

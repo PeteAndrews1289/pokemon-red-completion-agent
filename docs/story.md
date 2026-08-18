@@ -7,6 +7,20 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
+## Current checkpoint: the four unused roots now have a plan, not permission to play
+
+The project mechanically rebuilt its private 81-context plan while leaving the historical contexts
+intact. It excluded the two acquisition roots already used and added the qualified local training
+action to exactly four eligible unused profiles. The published source and CI are green, and a
+[path-free receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json) binds the
+output without exposing the private plan.
+
+That is plumbing, not learning. No menu was preflighted, no campaign or trial identity was frozen,
+and no model choice, button press, frame, teacher answer, outcome, fit, authority, or transfer
+happened. The scoreboard stays **30/15/4/3/0/0** and **14/4/0/1/1**. The next scene builds strict
+execution and admission, then freezes the four-root campaign and performs one zero-action preflight.
+Only a later reorientation may authorize gameplay.
+
 ## Current checkpoint: the second choice now has a real Red action
 
 The portable “train here” idea is now connected to a real Red mechanic. At the Pokémon Mansion
