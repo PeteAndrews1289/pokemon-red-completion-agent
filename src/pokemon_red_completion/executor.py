@@ -120,6 +120,17 @@ class FrameBudgetController:
             raise self._error_type(self._error_message)
         self._delegate.tick(frames)
 
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Preserve the delegate's bounded cartridge-RAM observation port."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("frame-budget controller lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
+
     def __getattr__(self, name: str) -> Any:
         return getattr(self._delegate, name)
 
@@ -188,6 +199,17 @@ class WindowedFrameBudgetController:
                 "controller exhausted its hard windowed frame budget"
             )
         self._delegate.tick(frames)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Preserve the delegate's bounded cartridge-RAM observation port."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("windowed frame budget lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
 
     def __getattr__(self, name: str) -> Any:
         return getattr(self._delegate, name)

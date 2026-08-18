@@ -14,6 +14,7 @@ from pokemon_red_completion.executor import (
     FrameSafeExecutor,
     ReadOnlyController,
     UnsupportedMacroActionError,
+    WindowedFrameBudgetController,
 )
 from pokemon_red_completion.observation import ReadOnlyCartridgeRam
 
@@ -104,9 +105,37 @@ def test_frame_budget_controller_refuses_before_overrun_and_delegates_reads() ->
 
     assert bounded.frames_executed == 3
     assert bounded.marker == "coherent-reader-state"
+    assert isinstance(bounded, ReadOnlyCartridgeRam)
+    assert bounded.read_cartridge_ram_u8(2, 0xA123) == 0xA5
     with pytest.raises(ControllerFrameBudgetError, match="frame budget"):
         bounded.tick(3)
-    assert controller.events == [("tick", 3)]
+    assert controller.events == [("tick", 3), ("cartridge_read", 0x2A123)]
+
+
+def test_windowed_frame_budget_preserves_cartridge_reads_and_both_caps() -> None:
+    controller = RecordingController()
+    bounded = WindowedFrameBudgetController(
+        controller,
+        maximum_frames_per_window=4,
+        maximum_total_frames=6,
+    )
+
+    assert isinstance(bounded, ReadOnlyCartridgeRam)
+    assert bounded.read_cartridge_ram_u8(2, 0xA123) == 0xA5
+    bounded.tick(4)
+    with pytest.raises(ControllerFrameBudgetError, match="windowed frame budget"):
+        bounded.tick(1)
+    bounded.begin_window()
+    bounded.tick(2)
+    with pytest.raises(ControllerFrameBudgetError, match="windowed frame budget"):
+        bounded.tick(1)
+
+    assert bounded.frames_executed == 6
+    assert controller.events == [
+        ("cartridge_read", 0x2A123),
+        ("tick", 4),
+        ("tick", 2),
+    ]
 
 
 def test_read_only_controller_exposes_bounded_cartridge_reads_but_no_time() -> None:
