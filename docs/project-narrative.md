@@ -1,6 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: action-free inventory corrects the outcome strata
+## August 18: the corrected campaign reaches training readiness
+
+Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
+`32101788892`, attempt 1. Private campaign plan
+`e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four
+roots and twelve trials across team development, recovery, storage, and acquisition. Freeze and
+preflight made zero predictions, controller actions, advanced frames, or teacher queries. The
+zero-action
+[preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+returned `status=training_ready` with all **12/12 trials available**.
+
+The active lane is now `repeatable-goal-manager-development-learning-v1`. The next session executes
+indices **0–11 exactly once and unchanged**, retains ordinary independently verified successes and
+failures, then strictly admits the campaign once. There is no further qualification loop, retry,
+replacement, collection-session fit, or promotion.
+
+No evidence counter moved: the legacy board stays 30/15/3/3/0/0 and all five product-focus-v2
+counters stay zero until controller-started durable terminals exist. The preflight proves readiness,
+not gameplay, an outcome, a fit, authority, or transfer.
+
+## Previous August 18 checkpoint: action-free inventory corrected the outcome strata
 
 Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
 attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or

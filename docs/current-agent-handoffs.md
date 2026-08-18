@@ -6,7 +6,27 @@ Status: active operating assignment as of 2026-08-18. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns corrected focus publication, then one final preflight
+## Current override: Codex owns one unchanged twelve-trial learning pass
+
+Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run `32101788892`,
+attempt 1. Private plan
+`e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four
+roots and twelve trials focused on `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES`. It made zero predictions, controller actions, advanced frames, or teacher
+queries. The zero-action
+[preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+reports `status=training_ready` and **12/12 available trials**.
+
+Codex owns `repeatable-goal-manager-development-learning-v1`: execute indices **0–11 exactly once
+and unchanged**, retain ordinary verified successes and failures, then strictly admit once. Claude
+and Antigravity remain read-only. No agent may add another qualification loop, retry or replace a
+trial, or fit or promote a model during collection.
+
+Legacy counters stay **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 · transfer
+0**; all five product-focus-v2 counters stay zero until controller-started durable terminals. This
+is readiness, not gameplay, an outcome, a fit, authority, or transfer.
+
+## Previous override: Codex owned corrected focus publication, then one final preflight
 
 Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
 attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or

@@ -18,7 +18,27 @@ supersede older handoff evidence when they disagree. They never supersede `MISSI
 orientation. A stale statement is a documentation bug; a newer task that contradicts the product is
 an invalid task.
 
-## Action-free inventory stops; publish the corrected focus strata — 2026-08-18
+## Training readiness achieved; execute the fixed twelve trials once — 2026-08-18
+
+Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
+`32101788892`, attempt 1. Private campaign plan
+`e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four
+roots and twelve trials across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES`. Freeze and preflight made zero predictions, controller actions, advanced frames,
+or teacher queries. The zero-action preflight returned `status=training_ready` with **12/12
+available trials**. See the
+[path-free preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json).
+
+The active lane is `repeatable-goal-manager-development-learning-v1`. The next session is actual
+model-led training: execute indices **0–11 exactly once and unchanged**, retain ordinary verified
+successes and failures, and perform strict admission once. Do not run another qualification loop,
+retry or replace a trial, or fit or promote a model in the collection session.
+
+The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+transfer 0**, and all five product-focus-v2 counters remain zero until controller-started durable
+terminals exist. This is readiness, not gameplay, an outcome, a fit, authority, or transfer.
+
+## Previous checkpoint: action-free inventory stopped; publish the corrected focus strata — 2026-08-18
 
 Exact published source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
 `32100873786`, attempt 1. Its zero-action freeze/preflight reached the action-free inventory and

@@ -8,36 +8,62 @@
   },
   "lanes": [
     {
-      "capability": "Qualify a repeatable teacher-free Red development campaign that lets the promoted goal manager choose among current executable goals, records exact behavior propensities, executes bounded verified skills, and retains every success or failure for later outcome learning.",
-      "cheapest_falsifier": "Publish the focus-corrected runner under green exact-head CI, then freeze four authenticated nonsealed train roots for develop-team, recovery, storage, and acquisition and twelve trials without prediction or controller input. Reject the campaign if any root has fewer than two executable choices, exposes an evolution choice without lineage evidence, drifts from its current binding, leaks a private identity, or permits replacement of a planned failure.",
-      "id": "repeatable-goal-manager-development-qualification-v1",
-      "kind": "maintenance",
+      "capability": "Run the frozen teacher-free Red campaign so the promoted goal manager chooses among current executable goals, records exact propensities, executes bounded verified skills, and retains every planned success or failure as causal outcome evidence for the first goal-level training update.",
+      "cheapest_falsifier": "Execute each of the twelve frozen trials exactly once under campaign e99075d9... and published source cfa07f8, then admit the complete fixed denominator once. Stop only on an attestation, protected-source, teacher, or durability boundary; an ordinary verified gameplay failure is retained as training evidence and does not authorize retry or replacement.",
+      "id": "repeatable-goal-manager-development-learning-v1",
+      "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The published inventory and focus correction made no model prediction, controller input, or outcome. The promoted Red goal manager retains only its prior bounded same-context goal-selection authority.",
-        "blocker": "Published source 18bba56d13e32a453c173cbc17d98bef3b1b4030 passed CI 32100873786/1, but its action-free inventory proved that all six open advance-story focus roots were singleton menus. No campaign or trial identity was created. The corrected runner must replace that dead stratum with develop-team, pass exact-head CI, then freeze and preflight once.",
-        "decision": "Preserve the four-root/twelve-trial denominator but replace the impossible advance-story focus stratum with develop-team. All six eligible develop-team roots expose genuine multi-choice menus and include advance-story as a competing candidate; story is not claimed as a focus stratum or outcome unless selected and independently settled.",
+        "authority_delta": "None. The campaign freeze and preflight made no prediction, controller input, or outcome. The promoted Red goal manager retains only its prior bounded same-context goal-selection authority while the pilot collects development evidence.",
+        "blocker": "No engineering blocker remains. Published source cfa07f8c29635e759efd7f80b3055518a3ec08a6 passed CI 32101788892/1, and the immutable campaign preflight returned training_ready with all twelve trials available, four root lineages, and zero prediction, controller action, advanced frame, or teacher use.",
+        "decision": "Close qualification and begin the fixed model-led pilot. Execute trial indices 0 through 11 once under the unchanged campaign and executable identity, retain every durable success or failure, and admit the twelve-cell denominator once; do not add another inventory or qualification loop.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json",
-          "sha256": "ea94dce22bbee2da9e93b7782d49dcdf11e39f162a42bd1ffa48b2bc339c3a9e"
+          "path": "docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json",
+          "sha256": "a8269c6529d847ca264a694035d083ead1740d11979f17c417191082240c1618"
         },
-        "learning_output": "No new measured learning output. Action-free inventory examined aggregate menu shape only: advance-story focus 0/6 multi-choice, develop-team 6/6, recovery 6/6, storage 6/6, and acquisition 6/6. It made zero model predictions, controller actions, advanced frames, episodes, fits, comparisons, authority promotions, or transfer results; every counter is unchanged.",
-        "next_falsifier": "Publish the focus-corrected runner, require green exact-head CI, then freeze and preflight exactly twelve teacher-free trials across develop-team, recovery, storage, and acquisition train roots. The gate must preserve zero prediction, action, and advanced-frame effects and authenticate the exact model, source, context plan, NumPy, PyBoy, skills, campaign, store, menus, and unused identities.",
-        "next_session_goal": "Publish the reviewed focus correction under green exact-head CI, then freeze and preflight the exact twelve-trial campaign without starting gameplay. If it reports training_ready 12/12, reorient directly to the bounded pilot rather than another qualification loop.",
+        "learning_output": "Training readiness is complete but measured learning output is still zero. The frozen campaign has four authenticated train roots and twelve available one-shot trials; freeze and preflight used zero model predictions, controller actions, advanced frames, episodes, fits, comparisons, authority promotions, or transfer results. All existing counters remain unchanged.",
+        "next_falsifier": "Run frozen trials 0 through 11 exactly once. Each controller-started trial must end in one durable terminal; every verified choice/outcome join is retained, ordinary failures remain in the denominator, and only never-claimed trials may continue after interruption. Admit the fixed campaign once after all twelve identities are consumed.",
+        "next_session_goal": "Begin actual model-led Red development: execute the twelve frozen trials once under unchanged source and campaign identities, then run strict admission and report episode, outcome, atomic, composition, collection, teacher, and failure totals without fitting or promotion.",
         "product_alignment": "The corrected curriculum teaches portable preparation-versus-story, healing, storage, and acquisition choices from genuine multi-choice menus. It preserves collection-critical evidence while avoiding fabricated story-choice data and keeps later Red promotion and Crystal transfer separate.",
-        "session_id": "2026-08-18-repeatable-development-focus-correction",
+        "session_id": "2026-08-18-repeatable-development-training-ready",
         "status": "active",
-        "stop_condition": "Stop on any validation or test context access, closed V2/V3/V4 root access, teacher or fallback choice, unsupported evolution menu, pre-freeze prediction, controller input during freeze or preflight, missing propensity, replaceable failure, soft-only budget, private-data leak, or two hours.",
+        "stop_condition": "Stop on any validation or test context access, closed V2/V3/V4 root access, teacher or fallback choice, unsupported evolution menu, identity or source drift, missing propensity, non-durable terminal, claimed-trial retry, replacement trial, soft-only budget, private-data leak, or eight hours.",
         "transfer_result": "Not run. Repeated Red train captures are development evidence, not unseen generalization or Crystal transfer; Crystal remains closed until a separately frozen Red promotion gate succeeds."
       },
       "learned_authority": {
         "current": "The promoted Red goal manager has bounded same-context semantic goal-selection authority; existing verified skills retain low-level execution. No repeatable development episode, fresh-context authority, Crystal authority, or living-Pokedex completion claim exists yet.",
-        "target": "Freeze one exact repeatable Red development campaign across develop-team, recovery, storage, and acquisition and pass its zero-action preflight so the fixed twelve-trial model-led pilot may start. Qualification itself grants no new authority."
+        "target": "Collect and strictly admit the fixed twelve-trial model-led Red development denominator so verified goal choices and outcomes can support one separately reviewed outcome-model fit. The pilot itself grants no new authority."
       },
-      "maintenance_unblocks": "repeatable-goal-manager-development-learning-v1",
-      "measurable_outputs": [],
-      "name": "Repeatable Red goal-manager development qualification",
-      "next_decision": "If the focus-corrected runner passes review, exact-head CI, campaign freeze, and zero-action preflight, activate the fixed twelve-trial model-led development pilot immediately; otherwise close the design without returning to fresh-root qualification or patching a chosen root into compliance.",
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "development_episode",
+          "minimum": 12,
+          "partition": "development"
+        },
+        {
+          "kind": "verified_outcome_example",
+          "minimum": 1,
+          "partition": "development"
+        },
+        {
+          "kind": "atomic_goal_episode",
+          "minimum": 1,
+          "partition": "development"
+        },
+        {
+          "kind": "composition_attempt",
+          "minimum": 1,
+          "partition": "development"
+        },
+        {
+          "kind": "verified_composition_episode",
+          "minimum": 1,
+          "partition": "development"
+        }
+      ],
+      "name": "Repeatable Red goal-manager development pilot",
+      "next_decision": "After all twelve trials terminate and strict admission succeeds, report the fixed-denominator outcome and composition evidence. If at least one verified outcome exists, freeze a separate train-only fit contract; otherwise close or redesign from the retained evidence without retrying a trial.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -87,13 +113,23 @@
       "stop_conditions": [
         "Any access to validation or test contexts, a closed V2/V3/V4 root, Crystal, sealed Red, teacher outcomes, or historical selected labels ends the lane.",
         "Any pre-freeze model prediction, controller input during freeze or preflight, unsupported evolution menu, missing behavior propensity, unattested source/model/context-plan/NumPy/PyBoy/skill, non-durable decision or terminal, replaceable trial, private-data leak, or soft-only action or frame bound ends the lane.",
-        "Stop after one exact campaign preflight or two hours; do not rescue a failed root, silently replace a planned trial, or claim repeated train captures as generalization."
+        "Stop after strict admission or eight hours; do not rescue a failed root, retry a claimed trial, silently replace a planned trial, fit during collection, or claim repeated train captures as generalization."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 8,
         "maximum_sessions": 1
       },
       "transfer_test": "After measured repeatable Red development and a separate promotion gate, compare the frozen Red-initialized goal manager with a zero-initialized scorer on an open matched Crystal development curriculum; no current work executes Crystal."
+    },
+    {
+      "id": "repeatable-goal-manager-development-qualification-v1",
+      "kind": "maintenance",
+      "name": "Repeatable Red goal-manager development qualification",
+      "preserve_evidence": true,
+      "reason": "Published source cfa07f8c29635e759efd7f80b3055518a3ec08a6 passed CI 32101788892/1. Its corrected four-root, twelve-trial campaign froze before prediction and passed the zero-action preflight with all identities available. Qualification is complete with every learning and authority counter unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "fresh-goal-manager-operational-composition-execution-qualification-v4",

@@ -8,7 +8,27 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: inventory rejects story focus; publish the four viable strata
+## Current checkpoint: training-ready; collect the fixed campaign exactly once
+
+Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run `32101788892`,
+attempt 1. Private campaign plan
+`e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four
+roots and twelve trials focused on `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+`ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced frames, or
+teacher queries. The zero-action
+[preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+reports `status=training_ready` with **12/12 available trials**.
+
+The active lane is `repeatable-goal-manager-development-learning-v1`. The next session executes
+indices **0–11 exactly once and unchanged**, retains ordinary verified successes and failures, then
+performs strict admission once. Do not add another qualification loop, retry or replace any trial,
+or fit or promote during collection.
+
+The board remains **30 train · 15 development · 3 fits · 3 comparisons · authority 0 · transfer
+0**, and all five product-focus-v2 counters remain zero until controller-started durable terminals
+exist. This checkpoint is readiness only—not gameplay, an outcome, a fit, authority, or transfer.
+
+## Previous checkpoint: inventory rejected story focus; publish the four viable strata
 
 Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run `32100873786`,
 attempt 1. Its zero-action freeze/preflight reached action-free inventory but created no campaign or

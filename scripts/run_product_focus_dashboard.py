@@ -62,7 +62,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
     output_event = (
-        " · ".join(f"{label} {current}/{minimum}" for label, current, minimum in outputs)
+        " · ".join(
+            f"{label.split(' ·', 1)[0]} {current}/{minimum}"
+            for label, current, minimum in outputs
+        )
         if outputs
         else (
             f"Cumulative learning · train outcomes {train_outcomes} · development outcomes "
@@ -100,23 +103,23 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The action-free inventory found no genuine choice in the story-focused roots. "
-            "The campaign now uses develop-team roots, whose menus preserve a real "
-            "preparation-versus-story choice, alongside recovery, storage, and acquisition."
+            "Training is ready: the immutable teacher-free Red campaign passed its zero-action "
+            "preflight with all twelve trials available. The next session begins model-led "
+            "development outcomes, not another engineering qualification loop."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Repeatable development qualification · no campaign freeze or gameplay yet",
+        location="Repeatable development pilot · 12 frozen trials ready · gameplay not started",
         collection_target=150,
         model=DashboardModelState(
             mode="waiting",
             candidate="Promoted Red goal manager af29d7e7… · logged exploratory policy",
-            choice="Publish focus correction + green CI · freeze 4 roots / 12 trials · preflight",
+            choice="Execute frozen trials 0–11 once · admit fixed denominator",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="training",
             zero_shot_completed=development_episodes,
             zero_shot_total=development_episode_total,
             adaptation_completed=verified_outcomes,
@@ -168,9 +171,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Training rail · publish focus-corrected runner → freeze develop-team / "
-                "recovery / storage / acquisition roots → zero-action preflight → "
-                "model-led durable outcomes"
+                "Training rail · READY 12/12 → execute each frozen trial once → retain every "
+                "durable success/failure → strict fixed-denominator admission"
             ),
             (
                 "V3 preflight failed at action_free_admission · claim 0 · execution identity 0 "
@@ -182,9 +184,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "advanced frames 0 · exact root closed · no cause inferred · no retry"
             ),
             (
-                "Focus correction current · story focus multi-choice 0/6 · develop-team 6/6 "
-                "· frozen roots 0 · claimed trials 0 · predictions 0 · controller 0 · "
-                "outcomes 0 · teacher 0 · Crystal 0"
+                "Training-ready current · frozen roots 4 · available trials 12/12 · claimed "
+                "trials 0 · predictions 0 · controller 0 · outcomes 0 · teacher 0 · Crystal 0"
             ),
         ),
     )

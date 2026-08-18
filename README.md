@@ -5,7 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 18, 2026): the first repeatable-development inventory stopped
+> **Current product focus (August 18, 2026): repeatable-development training readiness achieved.**
+> Exact published source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed GitHub CI run
+> `32101788892`, attempt 1. Private campaign plan
+> `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with
+> four roots and twelve trials across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+> `ACQUIRE_SPECIES`. Freeze and preflight made zero predictions, sent zero controller actions,
+> advanced zero frames, and queried no teacher. The zero-action preflight returned
+> `status=training_ready` with **12/12 available trials**. See the
+> [path-free preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json).
+>
+> The active lane is `repeatable-goal-manager-development-learning-v1`. In the next session, execute
+> trial indices **0–11 exactly once and unchanged**, retain ordinary independently verified
+> successes and failures, then perform strict admission once. Do not add another qualification loop,
+> retry or replace a trial, or fit or promote a model during collection.
+>
+> The legacy board remains **train 30 · development 15 · fits 3 · comparisons 3 · authority 0 ·
+> transfer 0**, and all five product-focus-v2 counters remain zero until controller-started durable
+> terminals exist. This checkpoint proves readiness only—not gameplay, an outcome, a fit, authority,
+> or transfer.
+>
+> **Previous product focus (August 18, 2026): the first repeatable-development inventory stopped
 > safely; correct the focus strata before one final preflight.** Exact published source
 > `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed GitHub CI run `32100873786`, attempt 1. Its
 > zero-action freeze/preflight reached the action-free inventory but created no campaign or global

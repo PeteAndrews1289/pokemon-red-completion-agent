@@ -109,12 +109,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "repeatable-goal-manager-development-qualification-v1"
+        "repeatable-goal-manager-development-learning-v1"
     )
-    assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 9
+    assert state.active_lane["kind"] == "learning"
+    assert len(state.retired_lanes) == 10
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_scorecard(state) == (
+        ("Development Episode · development", 0, 12),
+        ("Verified Outcome Example · development", 0, 1),
+        ("Atomic Goal Episode · development", 0, 1),
+        ("Composition Attempt · development", 0, 1),
+        ("Verified Composition Episode · development", 0, 1),
+    )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 3
     assert state.progress["unseen_comparisons"] == 3
@@ -290,7 +296,13 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == (
+        "Development Episode · development: 0/12",
+        "Verified Outcome Example · development: 0/1",
+        "Atomic Goal Episode · development: 0/1",
+        "Composition Attempt · development: 0/1",
+        "Verified Composition Episode · development: 0/1",
+    )
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -369,7 +381,9 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
 def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
     document = _document()
     lane = _active(document)
+    lane["kind"] = "maintenance"
     lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = []
 
     with pytest.raises(ProductFocusError, match="must name the learning lane"):
         validate_product_focus_document(document)
@@ -479,21 +493,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Repeatable Red goal-manager development qualification" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 0}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
+    assert "Repeatable Red goal-manager development pilot" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 12}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Publish focus correction + green CI" in encoded
-    assert "freeze develop-team" in encoded
+    assert "Execute frozen trials 0" in encoded
+    assert "READY 12/12" in encoded
     assert "root closed" in encoded
     assert "retry forbidden" in encoded
     assert "execution identity 0" in encoded
     assert "V3 preflight failed at action_free_admission" in encoded
-    assert "Focus correction current" in encoded
-    assert "story focus multi-choice 0/6" in encoded
-    assert "develop-team 6/6" in encoded
-    assert "frozen roots 0" in encoded
+    assert "Training-ready current" in encoded
+    assert "available trials 12/12" in encoded
+    assert "frozen roots 4" in encoded
     assert "claimed trials 0" in encoded
     assert "advanced frames 0" in encoded
     assert "/Users/" not in encoded

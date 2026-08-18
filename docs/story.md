@@ -7,7 +7,27 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: story stays in the menu, but leaves the quota
+## Current checkpoint: the twelve starting lines are finally real
+
+Exact source `cfa07f8c` passed CI run `32101788892`, attempt 1. A private campaign plan with four
+roots and twelve trials froze successfully around team development, recovery, storage, and
+acquisition. The freeze and preflight asked the model nothing, sent no controller input, advanced no
+frame, and queried no teacher. The zero-action
+[preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+returned `training_ready`: all **12/12** fixed trials are available.
+
+That is permission to start the experiment, not evidence that it has happened. The next session
+runs indices **0 through 11 once each, unchanged**. Ordinary verified successes and failures both
+stay in the record, and the complete campaign is strictly admitted once. There are no replacement
+trials, retries, extra qualification loops, or model fit or promotion during collection.
+
+The familiar scoreboard remains **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY
+ZERO · TRANSFER ZERO**, and the five new counters remain zero until controller-started durable
+terminals exist. This scene is readiness, not gameplay, an outcome, a fit, authority, or transfer.
+
+---
+
+## Previous checkpoint: story stayed in the menu, but left the quota
 
 Exact source `18bba56d` passed CI run `32100873786`, attempt 1. The zero-action freeze/preflight
 reached action-free inventory and stopped there: no campaign or global claim, no prediction or

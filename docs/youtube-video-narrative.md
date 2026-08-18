@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: story stays selectable, but the quota changes
+## August 18 scene: twelve trials are ready; none has started
+
+Open on **SOURCE CFA07F8 · CI 32101788892/1 GREEN · CAMPAIGN PLAN E99075D9…D254D14 FROZEN · 4 ROOTS
+· 12 TRIALS · DEVELOP TEAM · RESTORE TEAM · MANAGE STORAGE · ACQUIRE SPECIES**. Stamp
+**PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0**. Reveal the
+[preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json):
+**ZERO-ACTION · STATUS TRAINING_READY · AVAILABLE 12/12**.
+
+Move the active rail to **REPEATABLE-GOAL-MANAGER-DEVELOPMENT-LEARNING-V1**. Show **INDICES 0–11 ·
+EXACTLY ONCE · UNCHANGED · RETAIN VERIFIED SUCCESS + FAILURE · STRICT ADMISSION ONCE**. Lock out
+**ANOTHER QUALIFICATION LOOP · RETRIES · REPLACEMENTS · COLLECTION-SESSION FIT · PROMOTION**.
+
+Keep **30 TRAIN · 15 DEVELOPMENT · 3 FITS · 3 COMPARISONS · AUTHORITY 0 · TRANSFER 0** and all five
+new counters at zero until a controller-started durable terminal exists. Narration: **“Every
+starting line is ready. Not one outcome exists yet.”** Do not animate gameplay, an outcome, a fit,
+authority, or transfer.
+
+## Previous August 18 scene: story stayed selectable, but the quota changed
 
 Open on **SOURCE 18BBA56 · CI 32100873786/1 GREEN · ZERO-ACTION FREEZE/PREFLIGHT → ACTION-FREE
 INVENTORY**. Stamp **CAMPAIGN 0 · GLOBAL CLAIM 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0

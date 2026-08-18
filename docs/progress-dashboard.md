@@ -5,7 +5,23 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current repeatable-development focus-inventory rail:** Show **SOURCE 18BBA56 · CI
+> **Current repeatable-development learning rail:** Show **SOURCE CFA07F8 · CI 32101788892/1 GREEN ·
+> CAMPAIGN PLAN E99075D9…D254D14 FROZEN · 4 ROOTS · 12 TRIALS · DEVELOP_TEAM + RESTORE_TEAM +
+> MANAGE_STORAGE + ACQUIRE_SPECIES · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0**.
+> Link the
+> [preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json) and
+> show **ZERO-ACTION PREFLIGHT · STATUS TRAINING_READY · AVAILABLE TRIALS 12/12**.
+>
+> Display `repeatable-goal-manager-development-learning-v1` and the next rail **EXECUTE INDICES 0–11
+> EXACTLY ONCE + UNCHANGED → RETAIN ORDINARY VERIFIED SUCCESS/FAILURE → STRICT ADMISSION ONCE**. Add
+> **NO QUALIFICATION LOOP · NO RETRIES · NO REPLACEMENTS · NO COLLECTION-SESSION FIT · NO
+> PROMOTION**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> five product-focus-v2 counters at zero until controller-started durable terminals. Label the
+> result **READINESS, NOT GAMEPLAY · OUTCOME · FIT · AUTHORITY · TRANSFER**.
+>
+> **Historical focus-inventory rail:** Show **SOURCE 18BBA56 · CI
 > 32100873786/1 GREEN · ZERO-ACTION FREEZE/PREFLIGHT REACHED ACTION-FREE INVENTORY · CAMPAIGN 0 ·
 > GLOBAL CLAIM 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · OUTCOMES 0 · COUNTER DELTA 0**.
 > Link the

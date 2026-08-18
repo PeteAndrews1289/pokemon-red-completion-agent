@@ -1,7 +1,25 @@
 # Three-agent coordination
 
-> **2026-08-18 action-free inventory result; corrected focus publication is the only active lane —
-> highest checkpoint:** Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
+> **2026-08-18 training readiness achieved; fixed twelve-trial collection is the only active lane —
+> highest checkpoint:** Exact source `cfa07f8c29635e759efd7f80b3055518a3ec08a6` passed CI run
+> `32101788892` attempt 1. Private campaign plan
+> `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze with four roots and
+> twelve trials focused on `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and `ACQUIRE_SPECIES`.
+> Freeze/preflight made zero predictions, controller actions, advanced frames, or teacher queries.
+> The zero-action result is `status=training_ready` with **12/12 available trials**. Link the
+> [preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json).
+>
+> Codex owns `repeatable-goal-manager-development-learning-v1`: in the next session, execute indices
+> **0–11 exactly once and unchanged**, retain ordinary verified successes and failures, then perform
+> strict admission once. No agent may add another qualification loop, retry or replace a trial, or
+> fit or promote during collection.
+>
+> Legacy counters remain 30/15/3/3/0/0 and all five product-focus-v2 counters remain zero until
+> controller-started durable terminals exist. Readiness is not gameplay, an outcome, a fit,
+> authority, or transfer.
+>
+> **2026-08-18 action-free inventory result; corrected focus publication was the only active lane —
+> historical checkpoint:** Exact source `18bba56d13e32a453c173cbc17d98bef3b1b4030` passed CI run
 > `32100873786` attempt 1. Its zero-action freeze/preflight reached action-free inventory but created
 > no campaign or global claim, made no prediction or controller action, advanced no frame, produced
 > no outcome, and changed no counter. Link the

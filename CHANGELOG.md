@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published corrected repeatable-development source `cfa07f8c29635e759efd7f80b3055518a3ec08a6`
+  under green CI run `32101788892` attempt 1. Private campaign plan
+  `e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14` froze successfully with four
+  roots and twelve trials across `DEVELOP_TEAM`, `RESTORE_TEAM`, `MANAGE_STORAGE`, and
+  `ACQUIRE_SPECIES`. Freeze/preflight made zero predictions, controller actions, advanced frames,
+  or teacher queries. The zero-action
+  [preflight receipt](docs/evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json)
+  reports `status=training_ready` and 12/12 available trials. Activated
+  `repeatable-goal-manager-development-learning-v1`: execute indices 0–11 exactly once and
+  unchanged, retain ordinary verified successes/failures, and strictly admit once, with no further
+  qualification loop, retry, replacement, collection-session fit, or promotion. Legacy
+  30/15/3/3/0/0 and all five v2 counters remain unchanged until controller-started durable
+  terminals. This is readiness only, not gameplay, an outcome, fit, authority, or transfer.
 - Published repeatable-development candidate source `18bba56d13e32a453c173cbc17d98bef3b1b4030`
   under green CI run `32100873786` attempt 1, then ran its zero-action freeze/preflight. It reached
   action-free inventory but created no campaign or global claim, made no prediction or controller
