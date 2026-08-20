@@ -5,7 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 ADMITTED ·
+> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · AUTHORIZATION CHECKPOINT
+> AB838CF · CI 32381558510/1 GREEN · ROOTLESS FIT COMPLETE · ACCURACY 1.0 · CROSS-ENTROPY
+> 0.693147→0.205636 · DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
+> [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) and show
+> **SHA-256 D570FCC4…B9D7B**.
+>
+> Active rail: **ROOTLESS FIT 1/1 → AUTHENTICATE FIT MANIFEST 27F2358D + TERMINAL BABE6A96 →
+> ZERO-DISCLOSURE COMPARISON PREFLIGHT → STOP BEFORE DEVELOPMENT DECODE**. Keep **ROOTLESS
+> HELD-OUT COMPARISON 0/1 · GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/AUTHORITY/TRANSFER
+> 0**. Antigravity is the sole external auditor; Claude is unavailable and not a blocker.
+>
+> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 ADMITTED ·
 > TRAIN 8/8 · ATOMIC 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES CONSUMED 12/12 ·
 > DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
 > [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)

@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## August 20: the first rootless dependency model fit; held-out evidence remains untouched
+
+After the reviewed fit checkpoint merged, exact execution source
+`048bea66d205b0e784b3321763e2725d2ccfff32` performed its one allowed train-only update. The
+[fit result](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) records
+accuracy 1.0 and cross-entropy reduction from 0.693147 to 0.205636 across the eight authenticated
+synthetic train outcomes. The fixed fit identity is consumed and its model, manifest, and terminal
+are durable. All four development openings remain sealed.
+
+This is a genuine parameter update, but a deliberately narrow one: it learns an abstract
+state-by-action rule for preserving scarce precursors versus evolving duplicates. It adds one
+scoped rootless fit without changing the historical gameplay-fit board, unseen comparisons,
+authority, completion, or transfer. The next lane only qualifies a fit-bound, zero-disclosure
+comparison preflight. Actual held-out evaluation, Red gameplay, and Crystal transfer remain
+separate decisions.
+
 ## August 20: the fixed dependency dataset is admitted; the first rootless fit is next
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` completed campaign

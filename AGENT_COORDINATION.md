@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-20 train set admitted; one rootless fit is the highest checkpoint:** Exact executable
+> **2026-08-20 train-only fit complete; sealed-comparison qualification is the highest
+> checkpoint:** Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+> `32336487689/1`; authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`
+> passed CI `32381558510/1` and merged first. The
+> [fit receipt](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+> (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+> records **ROOTLESS FIT 1/1 · TRAIN ACCURACY 1.0 · CE 0.693147→0.205636 · DEV OPENINGS 0 ·
+> HELD-OUT COMPARISON 0/1 · GAMEPLAY/AUTHORITY/TRANSFER 0**.
+>
+> Codex owns one zero-disclosure comparison preflight and then stops. Antigravity's post-fit
+> read-only audit returned GO with no P0/P1 blocker; it remains the sole external reviewer while
+> Claude is unavailable. No agent owns a refit, development opening, comparison execution,
+> ROM/controller action, promotion, Crystal, completion, or transfer.
+
+> **Previous checkpoint — 2026-08-20 train set admitted; one rootless fit was next:** Exact executable
 > source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 > (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)

@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns exactly one rootless dependency fit
+## Current override: Codex owns one zero-disclosure comparison preflight
+
+The [fit result](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+(SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+records the consumed rootless fit: eight authenticated train rows, accuracy 1.0, cross-entropy
+0.693147→0.205636, and zero development disclosure. Scoped fits are 1/1; held-out comparisons
+remain 0/1. Gameplay, authority, completion, and transfer did not move.
+
+Codex may only freeze, validate, and run one action-free `preflight-compare` bound to the exact fit
+manifest and terminal, then stop. Antigravity is the sole external auditor while Claude is at its
+usage limit; its post-fit read-only audit returned GO with no P0/P1 blocker. No agent owns a
+refit, development payload opening, comparison execution, ROM/game action, promotion, Crystal,
+completion, or transfer in this lane.
+
+## Previous override: Codex owned exactly one rootless dependency fit
 
 The [campaign result](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)

@@ -12,7 +12,27 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: eight balanced rootless outcomes admitted; one train-only fit is active
+## 2026-08-20: train-only dependency fit complete; comparison qualification is active
+
+Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`; authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`
+passed CI `32381558510/1` and merged before fitting. The
+[fit result receipt](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+(SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+records one consumed fit over eight authenticated train rows. Accuracy is 1.0 and cross-entropy
+fell from 0.693147 to 0.205636. The durable fit, model, manifest, and terminal exist; all four
+development payloads remain sealed and ROM/controller, comparison, authority, and transfer effects
+are zero.
+
+Codex now owns only `rootless-living-dex-dependency-comparison-qualification-v1`: bind the exact
+fit manifest `27f2358d…3e7f4` and terminal `babe6a96…5bc8`, freeze and validate one
+`preflight-compare` invocation, run only that zero-disclosure preflight, and stop. Antigravity is
+the sole external auditor while Claude is unavailable; its post-fit read-only audit returned GO
+with no P0/P1 correctness, counter, leakage, provenance, or claim-boundary blocker. No agent owns
+a refit, development decode, actual comparison, gameplay, promotion, Crystal run, completion
+claim, or transfer claim.
+
+## Previous checkpoint — 2026-08-20: eight balanced rootless outcomes admitted
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`. The
