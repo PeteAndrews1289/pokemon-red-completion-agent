@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Rootless living-Dex dependency curriculum design V1** (`rootless-living-dex-dependency-curriculum-design-v1`)
+**Rootless living-Dex dependency campaign qualification V1** (`rootless-living-dex-dependency-campaign-qualification-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: A passing pure-core design permits one separately frozen twelve-scenario rootless campaign. It does not authorize a fit, development-outcome decode, gameplay claim, or Crystal transfer claim.
+- Next decision: A passing preflight permits a separate learning reorientation for the fixed eight-row train campaign only. It does not itself authorize execute, admit, fit, development-payload disclosure, comparison, gameplay, or Crystal transfer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Freeze a title-neutral, rootless living-Pokedex dependency curriculum whose proposed predecision representation distinguishes a scarce precursor from a duplicate-ready precursor; future game-title adapters must validate that seam independently. |
+| Reusable capability | Freeze one exact title-neutral rootless living-Pokedex dependency campaign and prove, without materializing a train outcome, that its eight train cells, four opaque development commitments, twelve global one-shot identities, and ten local output namespaces are ready and unused. |
 | Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Freeze only a collision-free, title-neutral rootless dependency curriculum design. Grant no outcome, fit, gameplay, promotion, completion, sealed, or transfer authority. |
-| Transfer test | Not in this lane. Later Crystal work must compute the same predecision multiplicity and dependency signals from Crystal's acquisition graph and remain a separate held-out comparison. |
-| Cheapest falsifier | Before any prediction or outcome exists, the pure core must prove scarce and duplicate-ready feature rows differ without species, family, title, route, assigned-action, normative-action, reward, or post-transition leakage. Any exact collision closes the design. |
-| Time box | 1 session / 3 hours |
+| Authority target | Qualify only one exact synthetic campaign for later train execution. Grant no outcome, fit, comparison, gameplay, promotion, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. A later Crystal adapter must independently compute the same title-neutral dependency signals and remain a separately claimed transfer test. |
+| Cheapest falsifier | Authenticate one exact published freeze invocation, bind the sealed provision and four public commitments, write only the immutable campaign plan, then run one read-only preflight. Any stale binding, missing provision record, occupied local namespace, consumed global identity, private-path leak, prediction, transition, fit, comparison, ROM access, or controller action closes the exact campaign. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
@@ -57,31 +57,34 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-18-bootstrap-qualified-rootless-dependency-design** · status **active** · evidence [qualification](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
+**2026-08-20-rootless-dependency-design-qualified** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The curriculum teaches the reusable collection decision at the heart of a living Pokedex: preserve the only precursor, acquire a duplicate when needed, and evolve only when dependency state permits. Red supplies mechanics; later titles reuse the same species-neutral semantics. |
-| Learning output | No measured learning output was added. Counters remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, 0 atomic goal episodes, and 0 causal train examples; rootless counters do not yet exist. |
-| Authority delta | None. Bootstrap qualification adds no gameplay, causal example, rootless outcome, fit, comparison, promotion, completion, or transfer authority. |
-| Transfer result | Not run. A rootless Red-derived design is not Crystal transfer; it only prepares a title-neutral dependency contract for later adapters. |
-| Blocker | The clean bootstrap is qualified. The current goal-manager representation still aliases precursor-scarce and duplicate-ready collection states, shadow-selected actions would be observational rather than counterbalanced evidence, and the rootless outcome/partition contract is not yet frozen. |
-| Decision | Retire bootstrap maintenance as complete. Design a pure rootless collection-dependency core with a proposed title-neutral multiplicity/dependency signal, four public train families and two nonce-sealed development families, counterbalanced assigned actions, and multiset-derived outcomes. |
-| Next session | Implement and audit the pure rootless dependency scenario, representation, transition, fixed 8-train/4-development schedule, and strict admission contracts. Do not run a policy, fit a model, or decode development outcomes in this design lane. |
-| Next falsifier | Mutation tests must kill removal of multiplicity, dependency distance, family-disjoint partitioning, action counterbalancing, pre/post multiset verification, nonce-backed development-input sealing, fit-terminal authentication, and identity-leak guards before any rootless campaign can be frozen. |
-| Stop condition | Stop after one reviewed pure-core design. Any ROM/private input, real-game claim, prediction-selected treatment, teacher/planner label, storage treatment, fit, development-outcome decode, Crystal execution, or gameplay claim closes the lane. |
+| Product alignment | This isolates the reusable living-Pokedex choice - acquire another precursor or evolve now - before spending more time on fragile game roots. It is a pipeline qualification only; later Red and Crystal adapters must independently prove the same semantics in gameplay. |
+| Learning output | No measured learning output was added. The board remains 30/15 historical outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, and 0 synthetic rootless outcomes or atomic episodes. Provisioning created four sealed private openings plus one provision record, while disclosing zero development payloads to training. |
+| Authority delta | None. Published design and runner qualification add no synthetic outcome, model fit, comparison, gameplay, promotion, completion, or transfer authority. |
+| Transfer result | Not run. A rootless synthetic design and readiness preflight are not Red gameplay or Crystal transfer; they only qualify a future train campaign. |
+| Blocker | The reviewed design, dedicated interaction ranker, one-shot campaign/fit/comparison runners, and opaque development roster are published and green. The exact campaign plan is not yet frozen and its zero-action readiness has not yet authenticated unused global and local identities. |
+| Decision | Retire the pure design lane as qualified. Open one bounded campaign-qualification lane that may freeze exactly one immutable plan and perform exactly one zero-action, zero-transition preflight; execute, admit, fit, and compare remain closed. |
+| Next session | Publish the design closeout, freeze exactly one rootless campaign plan from the path-free four-row commitment roster, and run exactly one zero-action preflight. Stop before execute, admit, fit, or compare. |
+| Next falsifier | Freeze the exact public invocation and campaign plan, then require all twelve account-global identities and ten local output namespaces to be unused. The preflight must report zero predictions, transitions, fits, development disclosures, gameplay, and counter deltas. |
+| Stop condition | Stop after one immutable plan freeze and one exact zero-action preflight. Any synthetic transition, campaign execution, admission, fit, development-payload disclosure, comparison, ROM access, controller action, teacher query, Crystal access, or authority claim closes the lane. |
 
 ### Stop conditions
 
-- Any ROM, private artifact, context state, game root, controller action, or retired-lane retry stops the lane.
-- Any species, family, title, route, assigned-action, normative-action, reward, or post-transition leakage into policy features stops the lane.
-- Stop after one pure-core design and adversarial test suite; do not predict, execute the campaign, fit, or open development outcomes.
+- Any ROM, context state, game root, controller action, prediction, synthetic transition, teacher query, or retired-lane retry stops the lane.
+- Any stale public binding, missing or mismatched provision record, occupied local output namespace, consumed global identity, private-path field, or development-payload disclosure closes the exact campaign.
+- Stop after one immutable campaign-plan freeze and one zero-action preflight; do not execute, admit, fit, compare, or open development payloads.
 
 ### Hard boundaries for this lane
 
+- **Prohibited:** campaign execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
+- **Prohibited:** development payload disclosure
 - **Prohibited:** full game replay
+- **Prohibited:** model fit
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -113,6 +116,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Rootless living-Dex dependency curriculum design V1:** Published source 9569afa681eb4d9806230b6d4c5caa79845a7fb8 passed CI 32335706089/1 with 4,410 ROM-free tests. It freezes eight title-neutral train scenarios, four opaque development commitments, a dedicated interaction ranker, separate one-shot campaign/fit/comparison boundaries, and honest synthetic counters. Claude returned GO with no P0/P1 for zero-action freeze/preflight. No campaign, fit, comparison, gameplay, or transfer result occurred. Evidence is preserved; retry is no.
 - **Causal bootstrap origin qualification V1:** Published source aa65504899f51cf73aa28bfdb725abffeeec7d0a passed CI 32179177930/1. Its public-only bootstrap loads the development runner first, verifies zero preloaded project modules and exact origins in an isolated process, and exposes path-free readiness substages. It opened no ROM, private input, claim, prediction, or gameplay and is complete without retry. Evidence is preserved; retry is no.
 - **First DEVELOP_TEAM causal goal outcome V1:** Published source 6077173618bf9fce9fb57804a6a1ce82249c9cee passed CI 32177113545/1 and its exact public freeze manifest validated, but the sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan present after return. Static public-source analysis found a deterministic import-order defect; the exact lane remains closed without retry, replacement root, or gameplay claim, and all learning counters remain unchanged. Evidence is preserved; retry is no.
 - **Causal readiness manifest qualification V1:** Published source ece32d81a1bd7ad3de037ba14361ef2f00849e35 passed CI 32174872005/1. Its public-only canonical manifest tooling rejects stale, swapped, rehashed, reordered, noncanonical, aliased, and retired bindings before protected inputs; it created no future-lane manifest or learning output and is complete without retry. Evidence is preserved; retry is no.

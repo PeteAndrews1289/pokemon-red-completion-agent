@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the clean bootstrap passes; the next lesson is collection dependency
+## Current checkpoint: the lesson is built; now prove the classroom is sealed
+
+Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
+4,410 ROM-free tests. The
+[design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+records a small but real teaching seam: eight abstract situations ask whether a living collection
+should acquire another precursor or evolve now, while four future situations stay hidden behind
+opaque commitments. A dedicated interaction ranker exists, but it has not been fitted.
+
+The next scene is intentionally uneventful. The system writes one immutable lesson plan and checks
+that 12 global one-shot identities and 10 local output slots are untouched. Nothing plays the game;
+nothing learns yet. That restraint matters: a green preflight means the experiment is ready, not
+that the model can catch a Pokémon, complete Red, or transfer to Crystal.
+
+## Previous checkpoint: the clean bootstrap passes; the next lesson is collection dependency
 
 Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
 [bootstrap receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)

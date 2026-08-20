@@ -1,12 +1,26 @@
 # Current agent handoffs
 
-Status: active operating assignment as of 2026-08-18. This document applies the durable roles in
+Status: active operating assignment as of 2026-08-20. This document applies the durable roles in
 [three-agent-workflow.md](three-agent-workflow.md) to the current checkpoint. It does not override
 [MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md), the generated
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the rootless living-Dex dependency pure design
+## Current override: Codex owns rootless campaign qualification only
+
+Source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410
+ROM-free tests. The
+[design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+(SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+qualifies the 8-train/4-commitment rootless design and records zero learning-counter deltas.
+
+Codex may freeze one exact campaign plan and run one zero-action preflight. Claude is the primary
+claim/lifecycle reviewer; Antigravity reviews mission alignment and overclaiming. Reviewers remain
+read-only. Preflight must prove 12 unused global identities and 10 empty local output namespaces.
+No one owns execute, admission, fit, development disclosure, comparison, gameplay, or Crystal in
+this lane. Stop and reorient after the preflight result.
+
+## Previous override: Codex owned the rootless living-Dex dependency pure design
 
 Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
 [bootstrap receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)

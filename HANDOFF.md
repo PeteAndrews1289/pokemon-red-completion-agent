@@ -1,6 +1,6 @@
 # Handoff
 
-Originally written 2026-08-07 and updated through 2026-08-18 for the agent taking over. Read this
+Originally written 2026-08-07 and updated through 2026-08-20 for the agent taking over. Read this
 once, completely, before touching anything.
 It is meant to make you *actually* oriented, not politely briefed — which means most of it is about
 what is wrong, what is unproven, and what this codebase has repeatedly fooled people into believing.
@@ -11,6 +11,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [docs/model-first-roadmap.md](docs/model-first-roadmap.md) (the active strategy),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
+
+## 2026-08-20: rootless dependency design qualified; campaign freeze/preflight is active
+
+Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
+4,410 ROM-free tests. The
+[design receipt](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+(SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+qualifies the fixed 8-train/4-commitment synthetic design and its dedicated interaction ranker,
+without producing an outcome, fit, comparison, gameplay example, or authority change. Private
+provisioning created four sealed openings and one provision record; zero opening payloads were
+disclosed to training. Boards remain **30/15/4/3/0/0**, **14/4/0/1/1**, and rootless **0/0**.
+
+Codex owns only `rootless-living-dex-dependency-campaign-qualification-v1`. Freeze one exact
+published invocation and immutable campaign plan, then run one zero-action preflight proving all
+12 global identities and 10 local output namespaces unused. Stop before execute, admit, fit,
+development disclosure, compare, ROM access, controller input, or Crystal. Claude's exact-head and
+hardening-delta audits both returned GO with no P0/P1 for this narrow step.
 
 ## 2026-08-18: bootstrap origin qualified; rootless living-Dex design is active
 

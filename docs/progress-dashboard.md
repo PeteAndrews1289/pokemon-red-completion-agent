@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE AA65504** (`aa65504899f51cf73aa28bfdb725abffeeec7d0a`)
+> **Current rail:** Show **SOURCE 9569AFA** (`9569afa681eb4d9806230b6d4c5caa79845a7fb8`)
+> **· CI 32335706089/1 GREEN · ROOTLESS DESIGN QUALIFIED · 4,410 TESTS · TRAIN 8 · OPAQUE DEV
+> COMMITMENTS 4 · PRIVATE OPENINGS 4 + PROVISION 1 · DEV PAYLOADS DISCLOSED TO TRAINING 0**. Link
+> the [design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+> and show **SHA-256 F115731B…24CCD8**.
+>
+> Hold every board: **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS OUTCOMES 0/8 · ROOTLESS ATOMIC 0/8
+> · CAUSAL 0 · ATOMIC 0**. Display active
+> `rootless-living-dex-dependency-campaign-qualification-v1`: **FREEZE ONE PLAN → PREFLIGHT ONE
+> IDENTITY · GLOBAL UNUSED 12/12 · LOCAL EMPTY 10/10 · PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0
+> · FITS 0 · COMPARISONS 0 · ROM 0 · CONTROLLER 0**. Stop before campaign execution.
+>
+> **Previous rail:** Show **SOURCE AA65504** (`aa65504899f51cf73aa28bfdb725abffeeec7d0a`)
 > **· CI 32179177930/1 GREEN · CLEAN BOOTSTRAP QUALIFIED · PROJECT PRELOADS 0 · PRIVATE/ROM/CLAIM/
 > PREDICTION EFFECTS 0 · COUNTER DELTAS 0**. Link the
 > [qualification receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json) and

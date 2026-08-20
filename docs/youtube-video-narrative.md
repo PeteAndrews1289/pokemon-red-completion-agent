@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 18 scene: the bootstrap is clean; build the living-Dex dependency lesson
+## August 20 scene: the dependency lesson exists; seal the experiment before teaching
+
+Open on **SOURCE 9569AFA · CI 32335706089/1 GREEN · 4,410 TESTS · ROOTLESS DESIGN QUALIFIED**.
+Link the
+[design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+with **SHA-256 F115731B…24CCD8**. Show **8 TRAIN SCENARIOS · 4 OPAQUE DEVELOPMENT COMMITMENTS ·
+STATE × ACTION INTERACTION RANKER · PRIVATE OPENINGS 4 + PROVISION 1 · DEV PAYLOADS DISCLOSED 0**.
+
+Then make the lack of spectacle the point: **FREEZE ONE PLAN · CHECK 12 GLOBAL IDENTITIES · CHECK
+10 LOCAL OUTPUT SLOTS · PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0 · FITS 0 · COMPARISONS 0 ·
+GAMEPLAY 0**. Caption: **READY TO RUN THE SYNTHETIC LESSON, NOT READY TO CLAIM POKÉMON MASTERY**.
+End before execute. Red gameplay, full living-Pokédex completion, Crystal, promotion, and transfer
+remain future gates.
+
+## Previous August 18 scene: the bootstrap is clean; build the living-Dex dependency lesson
 
 Open on **SOURCE AA65504** (`aa65504899f51cf73aa28bfdb725abffeeec7d0a`) **· CI 32179177930/1
 GREEN · CLEAN BOOTSTRAP QUALIFIED · PROJECT PRELOADS 0 · PRIVATE 0 · ROM 0 · CLAIM 0 · PREDICTION

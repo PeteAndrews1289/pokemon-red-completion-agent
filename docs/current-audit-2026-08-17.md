@@ -1,6 +1,23 @@
-# Current audit — 2026-08-18
+# Current audit — 2026-08-20
 
-## Current result: bootstrap origin qualified; rootless dependency design is active
+## Current result: rootless dependency design qualified; zero-action campaign gate is next
+
+Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
+4,410 ROM-free tests. The
+[design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+(SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+binds eight deterministic train transitions, four opaque development commitments, a dedicated
+interaction ranker, and separately claimed campaign, fit, and aggregate comparison stages. Claude's
+exact-head and delta audits returned GO with no P0/P1 for freeze/preflight. Four private openings
+and one provision record exist; their payloads have not been disclosed to training.
+
+This advances no learning counter: historical boards remain **30/15/4/3/0/0** and
+**14/4/0/1/1**; synthetic rootless outcomes/atomic episodes remain **0/0**. The only active work is
+one immutable plan freeze and one read-only preflight over 12 global identities and 10 local output
+namespaces. No synthetic transition, outcome, fit, comparison, gameplay, authority, or transfer is
+authorized.
+
+## Previous result: bootstrap origin qualified; rootless dependency design was active
 
 Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
 [qualification receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)

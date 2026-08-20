@@ -5,6 +5,23 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 20, 2026): the rootless dependency design is qualified;
+> freeze and preflight exactly one campaign.** Published source
+> `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410
+> ROM-free tests. The
+> [design qualification](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+> (SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+> binds eight deterministic train scenarios, four opaque development commitments, a dedicated
+> state-by-action interaction ranker, and separate one-shot campaign, fit, and comparison stages.
+> Four sealed opening records and one provision record exist privately; no opening payload reached
+> training. Counters remain **30/15/4/3/0/0**, **14/4/0/1/1**, synthetic rootless **0/0**, causal
+> zero, and atomic zero.
+>
+> Active `rootless-living-dex-dependency-campaign-qualification-v1` may write only one immutable
+> campaign plan and run one read-only preflight. It must find all **12 global identities** and **10
+> local output namespaces** unused, with predictions, transitions, outcomes, fits, comparisons,
+> ROM, controller actions, and authority deltas all zero. Stop before execute, admit, fit, or compare.
+
 > **Current product focus (August 18, 2026): bootstrap origin is qualified; design the rootless
 > living-Dex dependency curriculum.** Published source
 > `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The

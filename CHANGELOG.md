@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Published and qualified the rootless living-Dex dependency pipeline at source
+  `9569afa681eb4d9806230b6d4c5caa79845a7fb8` under green CI `32335706089/1` and 4,410
+  ROM-free tests. The
+  [design receipt](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+  binds eight deterministic train transitions, four opaque development commitments, a fixed
+  state-by-action interaction ranker, generic public manifests, durable one-shot campaign/fit/
+  comparison boundaries, censored interruption handling, admission deduplication, and honest
+  synthetic counters. Four private openings plus one provision record were created, but zero
+  development payloads were disclosed to training. Activated campaign qualification for one plan
+  freeze and one zero-action preflight; execute, admit, fit, compare, gameplay, authority, and
+  Crystal remain closed. All counters remain unchanged, including rootless **0/0**.
+
 - Published and qualified the reusable clean-process causal bootstrap at source
   `aa65504899f51cf73aa28bfdb725abffeeec7d0a` under green CI `32179177930/1`. The
   [qualification receipt](docs/evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)

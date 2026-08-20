@@ -1,5 +1,18 @@
 # Three-agent coordination
 
+> **2026-08-20 rootless design qualified; campaign qualification is the only current work -
+> highest checkpoint:** Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8`
+> passed CI `32335706089/1` with 4,410 ROM-free tests. The
+> [design receipt](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+> (SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+> binds eight train scenarios, four opaque development commitments, and separate one-shot
+> campaign/fit/comparison stages. Counters remain unchanged, including rootless **0/0**.
+>
+> Codex owns `rootless-living-dex-dependency-campaign-qualification-v1`: exactly one plan freeze
+> and one read-only preflight. Claude and Antigravity remain read-only reviewers. The gate is **12
+> GLOBAL IDENTITIES UNUSED · 10 LOCAL OUTPUT NAMESPACES EMPTY · PREDICTIONS/TRANSITIONS/OUTCOMES/
+> FITS/COMPARISONS/GAMEPLAY 0**. Stop before execute, admit, fit, compare, Red gameplay, or Crystal.
+
 > **2026-08-18 bootstrap origin qualified; rootless living-Dex design is the only current work —
 > highest checkpoint:** Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a`
 > passed CI `32179177930/1`. The

@@ -100,8 +100,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         [fits, *(minimum for label, _, minimum in outputs if label.startswith("Model Fit"))]
     )
     stop_conditions = _text_list(lane, "stop_conditions")
-    prohibited = ", ".join(
-        value.replace("_", " ") for value in _text_list(lane, "prohibited_actions")
+    boundary_labels = {
+        "campaign_execution": "execute",
+        "consumed_trial_retry": "retry",
+        "crystal_execution": "Crystal",
+        "development_payload_disclosure": "dev disclosure",
+        "full_game_replay": "replay",
+        "model_fit": "fit",
+        "sealed_red_evaluation": "sealed Red",
+        "teacher_route_hardening": "teacher routes",
+    }
+    prohibited = " / ".join(
+        boundary_labels.get(value, value.replace("_", " "))
+        for value in _text_list(lane, "prohibited_actions")
     )
     budgets = _mapping(state.document, "session_budget_percent")
     time_box = _mapping(lane, "time_box")
@@ -110,16 +121,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The rootless dependency design is qualified. Campaign and zero-action preflight "
-            "engineering are active; no synthetic outcome or gameplay counter has moved."
+            "The published rootless dependency design is qualified. One exact campaign-plan "
+            "freeze and zero-action preflight are next; no learning or gameplay counter moved."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=("Rootless qualification · 4 train families · 4 opaque dev commitments · no game"),
+        location=(
+            "Rootless campaign qualification · 12 global identities · "
+            "10 local namespaces · no game"
+        ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Shadow authority unchanged · no new causal evidence",
-            choice="Freeze one exact 8-train/4-commitment synthetic campaign",
+            candidate="Exact campaign unfrozen · preflight not run · no learning authority",
+            choice="Freeze one plan; prove 12/12 global and 10/10 local identities unused",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -155,7 +169,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             (
                 f"Rootless synthetic board · train outcomes {synthetic_train_outcomes}/8 · "
-                f"atomic episodes {synthetic_atomic_episodes}/8 · development openings 0"
+                f"atomic episodes {synthetic_atomic_episodes}/8 · development openings 0 · "
+                "campaign plan 0 · preflight 0"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "

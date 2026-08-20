@@ -1,6 +1,6 @@
 # Model-first development roadmap
 
-Status: active strategy as of 2026-08-18. This document supersedes the execution order in older
+Status: active strategy as of 2026-08-20. This document supersedes the execution order in older
 dated roadmap and handoff checkpoints. Historical evidence remains valid; historical instructions
 to harden or replay the full deterministic route do not.
 
@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: bootstrap origin qualified; design the rootless dependency curriculum
+## Current checkpoint: rootless dependency design qualified; freeze and preflight one campaign
+
+Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
+4,410 ROM-free tests. The
+[design qualification](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+(SHA-256 `f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8`)
+freezes the design of eight train scenarios, four opaque commitments, a small state-by-action
+interaction ranker, and separate one-shot campaign, fit, and comparison stages. It is deterministic
+pipeline-learning infrastructure, not causal gameplay evidence. No outcome, fit, development
+comparison, promotion, gameplay, completion, or transfer result exists; rootless counters are 0/0.
+
+Active `rootless-living-dex-dependency-campaign-qualification-v1` permits exactly one immutable
+plan freeze followed by one read-only preflight. Authenticate the sealed provision and public
+roster, then require 12 global identities unused and 10 local output namespaces absent. All effect
+counters remain zero. A pass permits a separate reorientation to the fixed eight-row train campaign;
+it does not authorize execute, admit, fit, development disclosure, compare, Red gameplay, or Crystal.
+
+## Previous checkpoint: bootstrap origin qualified; design the rootless dependency curriculum
 
 Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
 [bootstrap qualification](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)

@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 18: clean bootstrap qualifies; rootless dependency design becomes the learning bridge
+## August 20: the rootless dependency lesson is qualified; its one-shot campaign is next
+
+Source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410
+ROM-free tests. The
+[design qualification](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+binds eight deterministic train scenarios, four opaque development commitments, a fixed
+state-by-action interaction ranker, generic public manifests, and separate one-shot campaign, fit,
+and aggregate comparison stages. The training rule is deliberately small: learn when preserving a
+living precursor requires acquisition and when surplus makes evolution safe. This is deterministic
+rule-learning infrastructure, not gameplay evidence.
+
+Provisioning created four sealed private openings and one provision record without exposing their
+payloads to training. No train outcome, fit, comparison, gameplay example, authority, or transfer
+result has occurred. The active step is only one immutable plan freeze and one zero-action preflight
+requiring 12 unused global identities and 10 empty local namespaces. A pass makes the fixed train
+campaign ready; it does not make the model ready for Red or Crystal gameplay.
+
+## Previous August 18 checkpoint: clean bootstrap qualified; rootless dependency design became the learning bridge
 
 Published source `aa65504899f51cf73aa28bfdb725abffeeec7d0a` passed CI `32179177930/1`. The
 [bootstrap qualification](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json)
