@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: the envelope opened during inventory; cancel the exam
+## August 20 scene: build a lock that reads the envelope, not the answer
+
+Open on **SOURCE C0F7894 · CI 32425750185/1 GREEN · LOCAL 4,444 PASS · CI 4,443 PASS**. Link the
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+with **SHA-256 9C3DD435…286AFA**.
+
+Animate the inspector touching only the envelope: **MANIFEST READ 1 · PAYLOAD OPEN 0 · PAYLOAD
+READ 0 · PAYLOAD HASH 0 · PAYLOAD DECODE 0 · DECLARED INTEGRITY UNVERIFIED**. Then lock the fit
+to **MODEL + DATASET + FIT + MANIFEST + TERMINAL + EXECUTION + BUNDLE**, and bounce every swapped
+card. Stamp **ANTIGRAVITY GO · P0/P1 0**.
+
+Keep the achievement proportional: **OUTCOMES +0 · FITS +0 · COMPARISONS +0 · GAMEPLAY 0 ·
+AUTHORITY 0 · TRANSFER 0**. Move the rail to
+`rootless-living-dex-dependency-fresh-evaluation-design-v2`: **FRESH NAMESPACE + 4 OPAQUE
+COMMITMENTS + FRESH FIT IDENTITY + SEPARATE FIT/COMPARE CLAIMS → PUBLIC DESIGN ONLY → STOP**.
+Remind the audience that the destination is still multi-game story completion plus a living
+Pokédex; this scene makes later evidence trustworthy but does not show the model playing.
+
+## Previous August 20 scene: the envelope opened during inventory; cancel the exam
 
 Open on **MAIN 8168F82 · CI 32403421924/1 GREEN · AFFECTED SOURCE 048BEA6 · CI
 32336487689/1 GREEN · INTEGRITY FAILED BEFORE COMPARISON**. Link the

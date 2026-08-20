@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import stat
 from pathlib import Path
 
@@ -795,6 +796,162 @@ def test_sealed_record_is_canonical_private_idempotent_and_immutable(
         ).read()
         == record
     )
+
+
+def test_sealed_record_metadata_inspection_never_opens_payload(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    record_id = "metadata-only-" + "a" * 64
+    published = store.publish_sealed_record(
+        record_id,
+        kind="collection_seal",
+        record={"schema": "metadata-only-test-v1", "commitment": "b" * 64},
+    )
+    read_entry = private_artifacts_module._read_private_entry
+    open_file = private_artifacts_module.os.open
+    opened_entries: list[str] = []
+
+    def reject_payload_open(
+        directory_descriptor: int,
+        filename: str,
+        *,
+        subject: str,
+        maximum_bytes: int,
+        expected_bytes: int | None = None,
+    ) -> bytes:
+        opened_entries.append(filename)
+        if filename == "record.json":
+            raise AssertionError("metadata inspection opened the sealed payload")
+        return read_entry(
+            directory_descriptor,
+            filename,
+            subject=subject,
+            maximum_bytes=maximum_bytes,
+            expected_bytes=expected_bytes,
+        )
+
+    monkeypatch.setattr(private_artifacts_module, "_read_private_entry", reject_payload_open)
+
+    def reject_payload_descriptor(path, flags, *arguments, **keywords):
+        if str(path) == "record.json":
+            raise AssertionError("metadata inspection opened a payload descriptor")
+        return open_file(path, flags, *arguments, **keywords)
+
+    monkeypatch.setattr(private_artifacts_module.os, "open", reject_payload_descriptor)
+
+    metadata = store.inspect_sealed_record_metadata(
+        record_id,
+        expected_kind="collection_seal",
+    )
+
+    assert metadata is not None
+    assert opened_entries == ["manifest.json"]
+    assert metadata.declared_record_sha256 == published.summary.record_sha256
+    assert metadata.manifest_sha256 == published.summary.manifest_sha256
+    assert metadata.declared_total_bytes == published.summary.total_bytes
+    assert metadata.public_dict()["payload_integrity_verified"] is False
+    assert metadata.public_dict()["payload_opened"] is False
+    assert str(root) not in json.dumps(metadata.public_dict())
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "symlink",
+        "hardlink",
+        "mode",
+        "size",
+        "payload_swap",
+        "directory_swap",
+        "manifest",
+    ),
+)
+def test_sealed_record_metadata_inspection_rejects_unsafe_or_changed_payload_metadata(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    record_id = "metadata-mutation-" + "c" * 60
+    store.publish_sealed_record(
+        record_id,
+        kind="collection_seal",
+        record={"schema": "metadata-mutation-test-v1", "commitment": "d" * 64},
+    )
+    record_directory = root / record_id
+    payload_path = record_directory / "record.json"
+    payload = payload_path.read_bytes()
+    if mutation == "symlink":
+        payload_path.unlink()
+        payload_path.symlink_to(record_directory / "manifest.json")
+    elif mutation == "hardlink":
+        os.link(payload_path, root / "metadata-payload-hardlink")
+    elif mutation == "mode":
+        payload_path.chmod(0o640)
+    elif mutation == "size":
+        payload_path.write_bytes(payload + b"x")
+        payload_path.chmod(0o600)
+    elif mutation == "manifest":
+        manifest_path = record_directory / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="ascii"))
+        manifest["schema_version"] = True
+        manifest_path.write_text(
+            json.dumps(manifest, ensure_ascii=True, separators=(",", ":"), sort_keys=True) + "\n",
+            encoding="ascii",
+        )
+        manifest_path.chmod(0o600)
+    elif mutation == "payload_swap":
+        entry_metadata = private_artifacts_module._entry_metadata
+        payload_checks = 0
+
+        def swap_before_second_check(
+            directory_descriptor: int,
+            filename: str,
+        ) -> os.stat_result | None:
+            nonlocal payload_checks
+            if filename == "record.json":
+                payload_checks += 1
+                if payload_checks == 2:
+                    replacement = record_directory / "replacement.tmp"
+                    replacement.write_bytes(payload)
+                    replacement.chmod(0o600)
+                    os.replace(replacement, payload_path)
+            return entry_metadata(directory_descriptor, filename)
+
+        monkeypatch.setattr(
+            private_artifacts_module,
+            "_entry_metadata",
+            swap_before_second_check,
+        )
+    else:
+        entry_metadata = private_artifacts_module._entry_metadata
+        directory_checks = 0
+
+        def swap_directory_before_final_check(
+            directory_descriptor: int,
+            filename: str,
+        ) -> os.stat_result | None:
+            nonlocal directory_checks
+            if filename == record_id:
+                directory_checks += 1
+                if directory_checks == 2:
+                    record_directory.rename(root / "metadata-directory-swapped-away")
+                    record_directory.mkdir(mode=0o700)
+            return entry_metadata(directory_descriptor, filename)
+
+        monkeypatch.setattr(
+            private_artifacts_module,
+            "_entry_metadata",
+            swap_directory_before_final_check,
+        )
+
+    with pytest.raises(PrivateArtifactError):
+        store.inspect_sealed_record_metadata(
+            record_id,
+            expected_kind="collection_seal",
+        )
 
 
 def test_sealed_record_rejects_path_content_and_recovers_after_a_stale_temp(

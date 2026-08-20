@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the V1 evaluation boundary failed before comparison
+## August 20: the reusable evaluation-integrity boundary passed
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. Its
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+(SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+records two reusable guarantees: sealed-record inventory consumes only canonical manifest and
+filesystem metadata while opening zero payload files, and a loaded dependency fit cannot pass
+unless its exact model, dataset, fit, manifest, terminal, execution-manifest, and executable
+identities match external pins. Antigravity returned GO with no P0/P1 blocker. Local validation
+passed 4,444 tests and exact-head CI passed 4,443 non-integration tests.
+
+This is scientific infrastructure, not a learning result. It adds zero outcomes, fits,
+comparisons, gameplay actions, authority promotions, or transfer results. The next bounded lane,
+`rootless-living-dex-dependency-fresh-evaluation-design-v2`, freezes only a fresh V1-disjoint
+experiment design and counter contract. It may not provision private openings, execute, fit,
+decode development records, compare, or play Red/Crystal. The mission remains a transferable
+story-completion and living-Pokédex agent; this checkpoint only makes future evidence believable.
+
+## Previous August 20 checkpoint: the V1 evaluation boundary failed before comparison
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. A final
 public-source audit of the pipeline used by affected source

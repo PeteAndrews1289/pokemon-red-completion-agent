@@ -195,6 +195,65 @@ class DependencyRankerFit:
             "train_examples": 8,
         }
 
+    @classmethod
+    def from_dict(cls, value: Mapping[str, object]) -> DependencyRankerFit:
+        expected_fields = {
+            "schema",
+            "design_sha256",
+            "train_dataset_sha256",
+            "model",
+            "model_sha256",
+            "objective",
+            "ridge",
+            "learning_rate",
+            "iterations",
+            "baseline_cross_entropy",
+            "fitted_cross_entropy",
+            "train_accuracy",
+            "train_examples",
+        }
+        if not isinstance(value, Mapping) or set(value) != expected_fields:
+            raise LivingDexDependencyRankerError("dependency fit document differs")
+        model_value = value.get("model")
+        if not isinstance(model_value, Mapping):
+            raise LivingDexDependencyRankerError("dependency fit document differs")
+        model = DependencyRankerModel.from_dict(model_value)
+        design_sha256 = value.get("design_sha256")
+        train_dataset_sha256 = value.get("train_dataset_sha256")
+        baseline_cross_entropy = value.get("baseline_cross_entropy")
+        fitted_cross_entropy = value.get("fitted_cross_entropy")
+        train_accuracy = value.get("train_accuracy")
+        if (
+            value.get("schema") != DEPENDENCY_RANKER_FIT_SCHEMA
+            or not isinstance(design_sha256, str)
+            or not isinstance(train_dataset_sha256, str)
+            or value.get("model_sha256") != model.model_sha256
+            or value.get("objective") != DEPENDENCY_RANKER_OBJECTIVE
+            or type(value.get("ridge")) is not float  # noqa: E721
+            or value.get("ridge") != DEPENDENCY_RANKER_RIDGE
+            or type(value.get("learning_rate")) is not float  # noqa: E721
+            or value.get("learning_rate") != DEPENDENCY_RANKER_LEARNING_RATE
+            or type(value.get("iterations")) is not int  # noqa: E721
+            or value.get("iterations") != DEPENDENCY_RANKER_ITERATIONS
+            or type(baseline_cross_entropy) is not float  # noqa: E721
+            or type(fitted_cross_entropy) is not float  # noqa: E721
+            or type(train_accuracy) is not float  # noqa: E721
+            or type(value.get("train_examples")) is not int  # noqa: E721
+            or value.get("train_examples") != 8
+        ):
+            raise LivingDexDependencyRankerError("dependency fit document differs")
+        fit = cls(
+            design_sha256=design_sha256,
+            train_dataset_sha256=train_dataset_sha256,
+            model=model,
+            baseline_cross_entropy=baseline_cross_entropy,
+            fitted_cross_entropy=fitted_cross_entropy,
+            train_accuracy=train_accuracy,
+        )
+        if fit.to_dict() != dict(value):
+            raise LivingDexDependencyRankerError("dependency fit document differs")
+        return fit
+
 
 def fit_dependency_ranker(
     design: RootlessLivingDexDependencyDesign,

@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Qualify a payload-blind sealed-record inventory and an exact fit-record join before any fresh synthetic living-Pokedex development comparison can exist.",
-      "cheapest_falsifier": "Use public and synthetic fixtures to prove metadata-only inventory never opens record.json and that any swapped fit record, model, dataset, manifest, terminal, or executable binding fails before development disclosure; no private V1 artifact may be opened.",
-      "id": "rootless-living-dex-dependency-evaluation-integrity-qualification-v1",
+      "capability": "Freeze one fresh V2 rootless living-Pokedex dependency experiment whose development commitments, fit identity, and comparison boundary are disjoint from the retired V1 evidence and preserve the qualified payload-blind seal.",
+      "cheapest_falsifier": "Using public and synthetic fixtures only, prove the proposed V2 design requires four fresh opaque development commitments, a fresh fit, separate fit and comparison claims, and exact external bundle pins while referencing no retired V1 opening, model, fit, or comparison identity.",
+      "id": "rootless-living-dex-dependency-fresh-evaluation-design-v2",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. V1 produced no comparison result; its counted synthetic fit is evaluation-ineligible, and no Red, Crystal, completion, living-Pokedex, or transfer capability was established.",
-        "blocker": "V1 inventory decoded all four development records before fitting, and its comparison loader did not join the loaded fit/model/datasets to every pinned manifest identity. The old fit, openings, and unconsumed comparison identity are permanently retired.",
-        "decision": "Stop V1 before comparison and qualify a public-only successor boundary: manifest-only sealed metadata plus an exact fit/model/dataset/manifest/terminal join. Antigravity's post-change review returned GO with no P0/P1 blocker. Do not open old private artifacts or run a replacement experiment in this lane.",
+        "authority_delta": "No authority changed. The integrity implementation is maintenance evidence only; no fresh fit, comparison, gameplay, Red, Crystal, completion, living-Pokedex, or transfer result was created.",
+        "blocker": "The reusable payload-blind inventory and exact fit-bundle join are qualified. A fresh V2 design, commitment namespace, fit identity, staged runner contract, and externally pinned comparison boundary do not yet exist; every V1 opening, fit, model, and comparison identity remains retired.",
+        "decision": "Close the evaluation-integrity qualification after source c0f7894 passed CI run 32425750185/1 and Antigravity returned GO with no P0/P1 blocker. Activate design only of a fresh V2 synthetic experiment; do not provision openings, fit, compare, or touch private artifacts in this lane.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json",
-          "sha256": "0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686"
+          "path": "docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json",
+          "sha256": "9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa"
         },
-        "learning_output": "No new measured learning output. A public-source audit invalidated V1's zero-disclosure and evaluation-eligibility claims before comparison. The completed fit remains counted, but comparison, authority, gameplay, and transfer counters stay unchanged.",
-        "next_falsifier": "Mutation-test a metadata-only record inspector and a strict fit bundle join entirely with public/synthetic fixtures; any record.json read before comparison claim or any accepted swapped identity closes the successor direction.",
-        "next_session_goal": "Implement, test, externally audit, and publish only the reusable evaluation-integrity boundary, then stop before provisioning fresh commitments, fitting, comparing, or touching private artifacts.",
-        "product_alignment": "A trustworthy held-out boundary is required before collection-dependency learning can inform a cross-game living-Pokedex planner. This repair prevents contaminated synthetic evidence from being mistaken for gameplay or transfer progress.",
-        "session_id": "2026-08-20-rootless-dependency-v1-integrity-failure",
+        "learning_output": "No new measured learning output. Public source now provides manifest-only sealed metadata inspection and an exact typed fit/model/dataset/manifest/terminal/executable join. All learning, comparison, authority, gameplay, and transfer counters remain unchanged.",
+        "next_falsifier": "Reject the V2 design if any retired V1 identity or payload is reusable, if fit and comparison can share one adaptive process, if development bytes can open before an externally pinned completed fit and comparison claim, or if synthetic evidence can inflate gameplay counters.",
+        "next_session_goal": "Freeze and test only the public V2 experiment design, schemas, identity graph, staged stop rules, and counter semantics; stop before private provisioning, campaign execution, fitting, development decode, or comparison.",
+        "product_alignment": "The final cross-game living-Pokedex planner needs trustworthy collection-dependency evaluation. The qualified integrity seam now permits a fresh experiment to be designed without repeating V1 leakage or mistaking synthetic evidence for gameplay progress.",
+        "session_id": "2026-08-20-rootless-dependency-evaluation-integrity-qualified",
         "status": "active",
-        "stop_condition": "Stop after public implementation, adversarial tests, external audit, and exact-head green CI. Do not open V1 private artifacts, provision V2, fit, compare, access a ROM/controller, promote, or run Crystal.",
-        "transfer_result": "Not run. V1 comparison never executed, and this maintenance lane tests only scientific isolation and identity integrity."
+        "stop_condition": "Stop after one public V2 design, adversarial design tests, external review, and exact-head green CI. Do not provision openings, execute a campaign, fit, decode development payloads, compare, access a ROM/controller, promote, or run Crystal.",
+        "transfer_result": "Not run. The qualified integrity boundary and active V2 design lane contain no title execution or transfer test."
       },
       "learned_authority": {
-        "current": "One synthetic V1 fit remains counted but is ineligible for held-out evaluation because its process decoded development records. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
-        "target": "Permit only a separately frozen fresh V2 experiment to preserve a real informational seal and authenticate its exact evaluated model; this maintenance pass grants no learned authority."
+        "current": "One synthetic V1 fit remains counted but evaluation-ineligible. The new integrity seam is qualified, but no fresh V2 evidence or gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
+        "target": "Permit a separately qualified V2 provisioning and execution lane to use one frozen fresh design while preserving the informational seal; this design pass grants no learned authority."
       },
-      "maintenance_unblocks": "rootless-living-dex-dependency-fresh-evaluation-v2",
+      "maintenance_unblocks": "rootless-living-dex-dependency-fresh-evaluation-qualification-v2",
       "measurable_outputs": [],
-      "name": "Rootless living-Dex evaluation-integrity qualification V1",
-      "next_decision": "A published pass permits design only of one fresh V2 synthetic experiment with new development commitments and a fresh fit. A failure closes this rootless comparison direction. Neither outcome authorizes gameplay or transfer.",
+      "name": "Fresh rootless living-Dex evaluation design V2",
+      "next_decision": "A published design pass permits a separate public-only V2 implementation and provisioning qualification. A failure closes the rootless dependency comparison direction. Neither outcome authorizes fitting, development disclosure, gameplay, or transfer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -114,14 +114,24 @@
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Stop if metadata-only inspection opens, hashes, reads, or decodes record.json, or if any swapped fit/model/dataset/manifest/terminal/executable identity is accepted.",
-        "Stop after one public implementation and exact-head CI result. Never open V1 private artifacts, provision V2, fit, compare, access a ROM/controller, query a teacher, promote authority, or run Crystal."
+        "Stop if the V2 design can reuse any V1 opening/model/fit/comparison identity, combine fit and development decode adaptively, or report synthetic evidence as gameplay progress.",
+        "Stop after one public design and exact-head CI result. Never provision V2 openings, execute its campaign, fit, compare, open private artifacts, access a ROM/controller, query a teacher, promote authority, or run Crystal."
       ],
       "time_box": {
         "maximum_hours": 2,
         "maximum_sessions": 1
       },
-      "transfer_test": "None. This lane qualifies evaluation isolation only; fresh synthetic V2, a later Red observation adapter, and Crystal transfer remain separate gates."
+      "transfer_test": "None. This lane freezes a synthetic experiment design only; a later Red observation adapter and Crystal transfer remain separate gates."
+    },
+    {
+      "id": "rootless-living-dex-dependency-evaluation-integrity-qualification-v1",
+      "kind": "maintenance",
+      "name": "Rootless living-Dex evaluation-integrity qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source c0f7894b222dcf44490915a7ae7ebeed664096ea passed CI run 32425750185 attempt 1 with a payload-blind sealed-record metadata inspector, exact typed fit loader, and strict fit/model/dataset/manifest/terminal/executable joins. Antigravity returned GO with no P0/P1 blocker. No private artifact, ROM, fit, comparison, gameplay, authority, or transfer counter changed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-comparison-v1",

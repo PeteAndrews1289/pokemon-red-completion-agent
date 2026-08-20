@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: V1 comparison integrity failed; public/synthetic maintenance is active
+## 2026-08-20: integrity boundary qualified; fresh V2 design is active
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI run `32425750185`
+attempt 1. The
+[qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+(SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+binds a manifest-only sealed-record inspector and exact typed fit/model/dataset/manifest/terminal/
+executable joins. The inspector opens, reads, hashes, and decodes zero payload files; declared
+payload integrity remains explicitly unverified until the later authorized opening stage.
+Antigravity returned GO with no P0/P1 blocker. Local validation passed 4,444 tests and exact-head
+CI passed 4,443 non-integration tests.
+
+Codex now owns only `rootless-living-dex-dependency-fresh-evaluation-design-v2`: freeze a fresh
+public experiment design, new opaque commitment namespace, fresh fit identity, separate fit and
+comparison claims, disclosure order, stop rules, and counter semantics. No private provisioning,
+campaign execution, fit, development decode, comparison, ROM/controller action, Red or Crystal
+play, authority, completion, or transfer is permitted in this lane. Counters remain
+**30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: V1 comparison integrity failed
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. The affected
 execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`, but

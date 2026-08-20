@@ -6,7 +6,24 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns public/synthetic evaluation-integrity maintenance
+## Current override: Codex owns fresh V2 public experiment design
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+(SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+records zero payload opens/reads/hashes/decodes in metadata inventory and exact typed fit-bundle
+joins. Antigravity returned GO with no P0/P1 blocker; Claude remains unavailable and is not a
+blocker.
+
+Codex may modify only public/synthetic design surfaces for
+`rootless-living-dex-dependency-fresh-evaluation-design-v2`: define fresh identities and opaque
+commitments, separate fit and comparison claims/processes, exact external pins, terminal rules,
+and honest counters, then stop. Reviewers remain read-only. No private provisioning, campaign,
+fit, development decode, comparison, ROM/controller action, Red/Crystal play, promotion,
+completion, or transfer is owned. Keep **30/15/4/3/0/0**, development **14/4/0/1/1**, and
+rootless **8/8/1/0**.
+
+## Previous override: Codex owned public/synthetic evaluation-integrity maintenance
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`; affected
 execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The

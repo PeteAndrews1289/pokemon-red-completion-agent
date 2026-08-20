@@ -12,6 +12,7 @@ from pokemon_red_completion.living_dex_dependency_curriculum import (
 )
 from pokemon_red_completion.living_dex_dependency_ranker import (
     DEPENDENCY_RANKER_FEATURE_NAMES,
+    DependencyRankerFit,
     DependencyRankerModel,
     LivingDexDependencyRankerError,
     dependency_train_examples,
@@ -111,3 +112,33 @@ def test_model_loader_rejects_fabricated_feature_names_and_integer_weights() -> 
     document["weights"] = [1, 2, 3, 4]
     with pytest.raises(LivingDexDependencyRankerError):
         DependencyRankerModel.from_dict(document)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("objective", "tuned-after-development"),
+        ("ridge", 1),
+        ("learning_rate", 1),
+        ("iterations", 511),
+        ("train_examples", 7),
+        ("model_sha256", "f" * 64),
+    ),
+)
+def test_fit_loader_round_trips_exact_frozen_document_and_rejects_mutations(
+    field: str,
+    value: object,
+) -> None:
+    design = _design()
+    fit = fit_dependency_ranker(
+        design,
+        tuple(
+            materialize_train_dependency_outcome(scenario) for scenario in design.train_scenarios
+        ),
+    )
+    assert DependencyRankerFit.from_dict(fit.to_dict()) == fit
+
+    document = fit.to_dict()
+    document[field] = value
+    with pytest.raises(LivingDexDependencyRankerError):
+        DependencyRankerFit.from_dict(document)

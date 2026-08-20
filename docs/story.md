@@ -7,7 +7,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the envelope opened during inventory, so the exam was cancelled
+## Current checkpoint: we built a lock that can inspect the envelope without opening it
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+records the repair in deliberately plain terms: the inventory can read the outside manifest and
+filesystem facts while opening, reading, hashing, and decoding zero payload files. Before any
+future exam answer can be seen, the loaded fit must also match every externally frozen model,
+dataset, manifest, terminal, and executable identity. Antigravity attacked that boundary and
+returned GO with no P0/P1 blocker; 4,444 local tests and exact-head CI agreed.
+
+That is a better lock, not a smarter Pokémon player. No new lesson, fit, comparison, emulator
+action, authority, or transfer happened. The next scene is still public design:
+`rootless-living-dex-dependency-fresh-evaluation-design-v2` defines a brand-new envelope set,
+fresh fit, and separate comparison ritual without touching private contents. Only a later lane may
+provision or run it. The long-term story remains cross-game story completion plus a living
+Pokédex; the evidence still stops far short of that ending.
+
+## Previous checkpoint: the envelope opened during inventory, so the exam was cancelled
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`, but its final
 public-source audit changed the story of affected source

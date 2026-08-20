@@ -1,0 +1,96 @@
+{
+  "antigravity_review": {
+    "claim_scope": "public_source_and_synthetic_tests_only",
+    "private_or_runtime_execution_during_review": false,
+    "verdict": "go_no_p0_or_p1_blocker"
+  },
+  "claim_boundary": {
+    "supported": "Published public code can inventory a sealed record through canonical manifest and filesystem metadata without opening its payload, and can reject any loaded rootless dependency fit whose exact fit, model, dataset, manifest, terminal, or executable identity differs from externally frozen pins.",
+    "unsupported": "This qualification is not a fresh V2 design, private opening provision, model fit, held-out comparison, gameplay result, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "evaluation_integrity_sha256": "82d71cc16e298d770cc95d2f9b79eb033af5121159a0d962e533fd4303bf4937",
+    "evaluation_integrity_test_sha256": "2d2b79c97d995c4c1daf69b396f1673915dacbade0102c6d9912e437c528b64f",
+    "private_artifacts_sha256": "57d823a0a1e75cd946d0ff5caba0f09e21ad03390eedbba11040bbf99d9b0033",
+    "private_artifacts_test_sha256": "79f365d7b0eacb235891eaa98706b25242b663bf2b8e603aea87625e3dba5c85",
+    "ranker_sha256": "251a56b975b1ebc319538d7957dfcc5fd329b7905bf378b84d4735c5dc2ddf45",
+    "ranker_test_sha256": "6af69d5fef0f2e355f539e54dbdb3f62d5eac0cfef82a03ab5cedca1d6afdecd",
+    "source_bundle_sha256": "e266b031b7486bf6b0da80d30656820e40d5d753d82edc970d8344298734096c"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32425750185,
+    "source_commit": "c0f7894b222dcf44490915a7ae7ebeed664096ea"
+  },
+  "qualification": {
+    "fit_bundle_join": {
+      "design_sha256_joined": true,
+      "exact_typed_fit_round_trip_required": true,
+      "executable_bundle_sha256_joined": true,
+      "fit_execution_manifest_sha256_joined": true,
+      "fit_record_sha256_joined": true,
+      "fit_sha256_joined": true,
+      "manifest_record_sha256_joined": true,
+      "model_sha256_joined": true,
+      "self_consistent_unpinned_replacement_rejected": true,
+      "terminal_record_sha256_joined": true,
+      "train_dataset_sha256_joined": true
+    },
+    "metadata_only_inspector": {
+      "declared_payload_integrity_reported_as_unverified": true,
+      "manifest_payloads_decoded_per_inspection": 1,
+      "payload_bytes_decoded_per_inspection": 0,
+      "payload_bytes_hashed_per_inspection": 0,
+      "payload_files_opened_per_inspection": 0,
+      "payload_files_read_per_inspection": 0,
+      "symlink_hardlink_mode_size_and_inode_mutations_rejected": true
+    },
+    "tests": {
+      "ci_deselected": 3,
+      "ci_expected_failures": 1,
+      "ci_passed": 4443,
+      "ci_skipped": 1,
+      "local_expected_failures": 1,
+      "local_passed": 4444,
+      "local_skipped": 3,
+      "mypy_source_modules_checked": 250
+    }
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-evaluation-integrity-qualification-receipt.v1",
+  "status": "public_evaluation_integrity_boundary_published_and_qualified",
+  "title_role": "Synthetic evaluation-integrity maintenance; not learning, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_opening_payloads_accessed": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}
