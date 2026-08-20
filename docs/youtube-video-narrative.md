@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: the experiment is sealed; the synthetic lesson can begin
+## August 20 scene: all eight lessons landed; now fit the first rootless dependency head
+
+Open on **CAMPAIGN 404E3A02 · TRAIN 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES
+CONSUMED 12/12 · DEVELOPMENT OPENINGS SEALED 4/4**. Link the
+[result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json) with
+**SHA-256 415AF97D…CF3C4**. Show the only counter movement: **ROOTLESS TRAIN OUTCOMES +8 ·
+ROOTLESS ATOMIC EPISODES +8**. Keep **GLOBAL FITS 4 · COMPARISONS 3 · GAMEPLAY 0 · AUTHORITY 0 ·
+TRANSFER 0** unchanged.
+
+Animate **DATASET 8207EB89…85F37 → ONE FIXED INTERACTION-RANKER FIT → DURABLE TERMINAL → CUT**.
+The next cards remain locked: **DEVELOPMENT OPENING · HELD-OUT COMPARISON · RED GAMEPLAY · CRYSTAL
+TRANSFER**. Add **ANTIGRAVITY: GO, P0/P1 0** and **CLAUDE: USAGE WINDOW EXHAUSTED, NOT A BLOCKER**.
+The honest victory is a real parameter-update input, not a Pokémon-playing model yet.
+
+## Previous August 20 scene: the experiment was sealed; the synthetic lesson could begin
 
 Open on **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN · TRAINING_READY**.
 Link the

@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom is sealed; the eight examples are ready to run
+## Current checkpoint: the eight lessons are recorded; the small model can finally learn
+
+The fixed campaign completed without a missing row: eight examples settled, split four positive
+and four negative, and all twelve one-shot identities were consumed. The
+[result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+binds the admitted dataset while all four future examples remain sealed. There was no model fit,
+gameplay, ROM input, teacher answer, authority promotion, or transfer claim.
+
+The next scene is deliberately small but finally literal training: fit one interaction ranker to
+learn the abstract living-collection rule, “preserve the only precursor; evolve when a duplicate is
+safe.” Antigravity found no P0/P1 blocker and recommended going straight to that fit. Claude is out
+of usage for this window, so the work does not wait. The camera must cut at the fit terminal—before
+the four held-out examples open, and long before Red or Crystal gameplay is claimed.
+
+## Previous checkpoint: the classroom was sealed; the eight examples were ready to run
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

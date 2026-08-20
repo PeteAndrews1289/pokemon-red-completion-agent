@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the rootless campaign is frozen and training-ready
+## August 20: the fixed dependency dataset is admitted; the first rootless fit is next
+
+Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` completed campaign
+`404e3a02…0bc9b92`. The
+[result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+binds an eight-row deterministic train set with four positive, four negative, and zero interrupted
+outcomes. All twelve one-shot identities are consumed, while the four development openings remain
+sealed. The result advances only the scoped synthetic board to 8 outcomes and 8 atomic episodes;
+fits, comparisons, gameplay, authority, and transfer did not move.
+
+Antigravity returned GO with no P0/P1 blocker. The next bounded stage is one fixed train-only fit
+of the title-neutral state-by-action interaction ranker. Product tracking now separates scoped
+rootless fits/comparisons from global model and gameplay evidence. A successful fit permits only a
+later externally pinned held-out comparison; it does not grant Red or Crystal competence. Claude
+is unavailable for this usage window and is not part of the current critical path.
+
+## Previous August 20 checkpoint: the rootless campaign was frozen and training-ready
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

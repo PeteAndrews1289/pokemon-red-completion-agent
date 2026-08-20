@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: campaign 404e3a02 is frozen and training-ready
+## 2026-08-20: eight balanced rootless outcomes admitted; one train-only fit is active
+
+Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`. The
+[campaign result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+(SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+records campaign `404e3a02…0bc9b92` with 8/8 settled rows, 4 positive, 4 negative, 0
+interrupted, all 12 global one-shot identities consumed, and all four development payloads still
+sealed. It adds only 8 scoped synthetic outcomes and 8 scoped synthetic atomic episodes. The
+historical boards remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4
+verified examples, and 1 verified composition; gameplay, authority, and transfer do not move.
+
+Codex owns only `rootless-living-dex-dependency-fit-v1`: freeze and validate the exact fit
+invocation, run its required train-only preflight, fit the fixed interaction ranker once, and stop
+at the durable fit terminal. Antigravity returned GO with no P0/P1 blocker and is the sole external
+auditor while Claude is at its usage limit. Never refit, tune, open a development payload, compare,
+touch a ROM/controller, promote, or claim gameplay, completion, or transfer.
+
+## Previous checkpoint — 2026-08-20: campaign 404e3a02 was frozen and training-ready
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

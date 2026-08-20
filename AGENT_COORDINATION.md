@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-20 campaign frozen and preflight passed—highest checkpoint:** Source
+> **2026-08-20 train set admitted; one rootless fit is the highest checkpoint:** Exact executable
+> source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+> [result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+> (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+> records **TRAIN 8/8 · ATOMIC 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES
+> CONSUMED 12/12 · DEV DISCLOSURE 0 · FIT 0 · GAMEPLAY 0**.
+>
+> Codex owns exactly one fixed train-only fit, then stops. Antigravity is the sole external auditor
+> during Claude's usage-window outage and returned GO with no P0/P1 blocker for this transition.
+> Claude is not a dependency and must not be queried until the user says its window has reset.
+> Scoped rootless fits are 0/1 and comparisons 0/1. No refit, tuning, development opening,
+> comparison, ROM/controller action, authority, Crystal, completion, or transfer is allowed.
+
+> **Previous checkpoint — 2026-08-20 campaign frozen and preflight passed:** Source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 > (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)

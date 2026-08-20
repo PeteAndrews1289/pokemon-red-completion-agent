@@ -1,0 +1,77 @@
+{
+  "campaign": {
+    "campaign_plan_manifest_sha256": "66c578705d2440bb36f3b10062dab793258cbae0fdd7dfc51a36d33664555d24",
+    "campaign_plan_record_sha256": "2390c2c22fe19df799cc5ad664053b5baf1c0e1bfaf7694f6464ad66f51f4a29",
+    "campaign_sha256": "404e3a028cce695e23d20a4df8dc26ccfebbf48ca100800a5fe8e6a0d0bc9b92",
+    "campaign_terminal_sha256": "3e8b6fea80f742e3e90abe6cf40307d5c95a35f940c1a3e64f5147edbf989545",
+    "design_qualification_sha256": "f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8",
+    "design_sha256": "b57cd393eb28338d94a90a35974b106a379444c638e8b1923aa38cf3f35d140a",
+    "development_commitments": 4,
+    "development_opening_payloads_disclosed": 0,
+    "development_roster_sha256": "f7630b8b09ba5b6962892335588bb376129a74554dee8442962ac1c92f5c4ce6",
+    "global_one_shot_identities_consumed": 12,
+    "local_output_namespaces_materialized": 10,
+    "train_scenarios": 8
+  },
+  "claim_boundary": {
+    "supported": "One exact synthetic title-neutral living-Pokedex dependency campaign durably materialized and strictly admitted eight balanced deterministic train outcomes: four positive, four negative, four acquire treatments, and four evolve treatments.",
+    "unsupported": "This result is not an empirical gameplay outcome, model fit, unseen comparison, statistical promotion, Red or Crystal play, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 8,
+    "synthetic_rootless_train_outcomes_added": 8,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_manifests": {
+    "admit_execution_manifest_sha256": "b1a5dda020cfed3b22f7c6d55445a9c4aba90b6c9865ef78929f87ec3de858fe",
+    "admit_invocation_sha256": "13baaca8e1be54e2343e19f09cc367c95aca1de0a5577a270d031a061b2213ec",
+    "execute_execution_manifest_sha256": "49bc64ee3d3f1ddf4ed3f0bd1d4abfe5d8955807149e1cc2006a99348a035a46",
+    "execute_invocation_sha256": "fa5d2b65b29288abf27f54e1ba29cddb07e8731032edcf84dbd55bcd522fb317",
+    "freeze_execution_manifest_sha256": "4f61155d11b8174ab12a46a657f3ad44c4327ed74f75a5a71facd893dbb928ca",
+    "preflight_execution_manifest_sha256": "6f24a6549146b759c9348e9197287c18f1dee4c8697ce9a9cd210ac823a87ffb",
+    "private_input_roles": 3,
+    "public_binding_count": 11
+  },
+  "outcome": {
+    "interrupted_outcomes": 0,
+    "negative_outcomes": 4,
+    "positive_outcomes": 4,
+    "settled_outcomes": 8,
+    "status": "admitted",
+    "train_admission_record_sha256": "acf32bb8e5a910ded570ec2f0aa686bf810b18f202c51cf9f1a12063abad9254",
+    "train_dataset_sha256": "8207eb89a430a5bbb6bca7bd960e000c728710fded2bceef027dd4179e385f37"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32336487689,
+    "source_commit": "048bea66d205b0e784b3321763e2725d2ccfff32"
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-campaign-result-receipt.v1",
+  "status": "eight_balanced_synthetic_train_outcomes_admitted_fit_not_started",
+  "title_role": "Synthetic rootless train-dataset result; not gameplay, model improvement, completion, promotion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_comparisons": 0,
+    "development_opening_payloads_disclosed": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}
