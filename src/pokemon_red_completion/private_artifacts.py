@@ -59,6 +59,7 @@ _SAFE_NAME = re.compile(r"[a-z0-9][a-z0-9._-]{0,79}\Z")
 _SAFE_KIND = re.compile(r"[a-z][a-z0-9_-]{0,63}\Z")
 _SAFE_STREAM = re.compile(r"[a-z][a-z0-9_-]{0,63}\Z")
 _SAFE_REASON = re.compile(r"[a-z][a-z0-9_-]{0,63}\Z")
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _WINDOWS_DRIVE_PATH = re.compile(r"[A-Za-z]:[\\/]")
 _PATH_KEYS = {
     "cwd",
@@ -97,6 +98,35 @@ class SealedRecordSummary:
             "record_sha256": self.record_sha256,
             "manifest_sha256": self.manifest_sha256,
             "total_bytes": self.total_bytes,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class SealedRecordManifestMetadata:
+    """Manifest-only metadata for one sealed record whose payload was not opened.
+
+    ``declared_record_sha256`` and ``declared_total_bytes`` are authenticated as
+    canonical manifest fields and checked against the payload file's filesystem
+    metadata.  They do not assert that the payload bytes themselves were read,
+    hashed, decoded, or otherwise verified.
+    """
+
+    record_id: str
+    kind: str
+    declared_record_sha256: str
+    manifest_sha256: str
+    declared_total_bytes: int
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "private-sealed-record-manifest-metadata-v1",
+            "record_id": self.record_id,
+            "kind": self.kind,
+            "declared_record_sha256": self.declared_record_sha256,
+            "manifest_sha256": self.manifest_sha256,
+            "declared_total_bytes": self.declared_total_bytes,
+            "payload_integrity_verified": False,
+            "payload_opened": False,
         }
 
 
@@ -349,6 +379,33 @@ class PrivateArtifactRoot:
         if not _lexists(self._root / record_id):
             return None
         return _open_private_sealed_record(
+            self._root,
+            record_id,
+            expected_kind=expected_kind,
+        )
+
+    def inspect_sealed_record_metadata(
+        self,
+        record_id: str,
+        *,
+        expected_kind: str | None = None,
+    ) -> SealedRecordManifestMetadata | None:
+        """Inspect only a sealed record's manifest and payload file metadata.
+
+        This method deliberately never opens ``record.json``.  The returned digest
+        is therefore a manifest declaration suitable for commitment inventory, not
+        proof that the payload currently hashes to that value.  Call
+        :meth:`find_sealed_record` only at the separately authorized payload-opening
+        stage when full integrity and canonical JSON verification are required.
+        """
+
+        _validate_artifact_id(record_id)
+        if expected_kind is not None:
+            _validate_artifact_kind(expected_kind)
+        self._revalidate()
+        if not _lexists(self._root / record_id):
+            return None
+        return _inspect_private_sealed_record_metadata(
             self._root,
             record_id,
             expected_kind=expected_kind,
@@ -1498,48 +1555,11 @@ def _open_private_sealed_record(
             subject="sealed record manifest",
             maximum_bytes=_MAX_MANIFEST_BYTES,
         )
-        manifest = _decode_canonical_json_object(
+        kind, size, record_sha256 = _sealed_record_manifest_fields(
             manifest_bytes,
-            subject="sealed record manifest",
-            maximum_bytes=_MAX_MANIFEST_BYTES,
+            record_id=record_id,
+            expected_kind=expected_kind,
         )
-        _require_exact_keys(
-            manifest,
-            {
-                "bytes",
-                "format",
-                "kind",
-                "record_id",
-                "record_sha256",
-                "schema_version",
-                "status",
-            },
-            subject="sealed record manifest",
-        )
-        if manifest["format"] != PRIVATE_SEALED_RECORD_FORMAT:
-            raise PrivateArtifactError("sealed private record format is unsupported")
-        if manifest["schema_version"] != PRIVATE_ARTIFACT_SCHEMA_VERSION:
-            raise PrivateArtifactError("sealed private record schema is unsupported")
-        if manifest["status"] != "complete" or manifest["record_id"] != record_id:
-            raise PrivateArtifactError("sealed private record identity is invalid")
-        kind = manifest["kind"]
-        if not isinstance(kind, str):
-            raise PrivateArtifactError("sealed private record kind is invalid")
-        try:
-            _validate_artifact_kind(kind)
-        except PrivateArtifactError:
-            raise PrivateArtifactError("sealed private record kind is invalid") from None
-        if expected_kind is not None and kind != expected_kind:
-            raise PrivateArtifactError("sealed private record kind does not match")
-        size = _manifest_integer(manifest, "bytes")
-        if size <= 0 or size > _MAX_SEALED_RECORD_BYTES:
-            raise PrivateArtifactError("sealed private record size is invalid")
-        record_sha256 = manifest["record_sha256"]
-        if (
-            not isinstance(record_sha256, str)
-            or re.fullmatch(r"[0-9a-f]{64}", record_sha256) is None
-        ):
-            raise PrivateArtifactError("sealed private record digest is invalid")
         payload = _read_private_entry(
             record_descriptor,
             "record.json",
@@ -1583,6 +1603,165 @@ def _open_private_sealed_record(
             if descriptor >= 0:
                 with suppress(OSError):
                     os.close(descriptor)
+
+
+def _inspect_private_sealed_record_metadata(
+    root: Path,
+    record_id: str,
+    *,
+    expected_kind: str | None,
+) -> SealedRecordManifestMetadata:
+    root_descriptor = -1
+    record_descriptor = -1
+    try:
+        root_descriptor = os.open(root, _directory_read_flags())
+        expected_directory = _entry_metadata(root_descriptor, record_id)
+        if expected_directory is None:
+            raise PrivateArtifactError("sealed private record is absent")
+        if (
+            not stat.S_ISDIR(expected_directory.st_mode)
+            or stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("sealed private record directory is unsafe")
+        record_descriptor = os.open(
+            record_id,
+            _directory_read_flags(),
+            dir_fd=root_descriptor,
+        )
+        opened_directory = _fstat(
+            record_descriptor,
+            subject="sealed private record directory",
+        )
+        if (
+            not _same_file(expected_directory, opened_directory)
+            or not stat.S_ISDIR(opened_directory.st_mode)
+            or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+        ):
+            raise PrivateArtifactError("sealed private record changed while opening")
+        expected_entries = {"manifest.json", "record.json"}
+        if _directory_entries(record_descriptor) != expected_entries:
+            raise PrivateArtifactError("sealed private record contents do not match its format")
+
+        manifest_bytes = _read_private_entry(
+            record_descriptor,
+            "manifest.json",
+            subject="sealed record manifest",
+            maximum_bytes=_MAX_MANIFEST_BYTES,
+        )
+        kind, size, declared_record_sha256 = _sealed_record_manifest_fields(
+            manifest_bytes,
+            record_id=record_id,
+            expected_kind=expected_kind,
+        )
+        expected_payload = _entry_metadata(record_descriptor, "record.json")
+        _validate_sealed_payload_metadata(expected_payload, expected_bytes=size)
+
+        final_payload = _entry_metadata(record_descriptor, "record.json")
+        _validate_sealed_payload_metadata(final_payload, expected_bytes=size)
+        final_directory = _fstat(
+            record_descriptor,
+            subject="sealed private record directory",
+        )
+        named_directory = _entry_metadata(root_descriptor, record_id)
+        if (
+            final_payload is None
+            or expected_payload is None
+            or named_directory is None
+            or not _same_file(expected_payload, final_payload)
+            or not _same_file(opened_directory, final_directory)
+            or not _same_file(opened_directory, named_directory)
+            or stat.S_IMODE(final_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
+            or _directory_entries(record_descriptor) != expected_entries
+        ):
+            raise PrivateArtifactError("sealed private record changed during metadata inspection")
+        return SealedRecordManifestMetadata(
+            record_id=record_id,
+            kind=kind,
+            declared_record_sha256=declared_record_sha256,
+            manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+            declared_total_bytes=size,
+        )
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to inspect sealed private record metadata") from None
+    finally:
+        for descriptor in (record_descriptor, root_descriptor):
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+
+def _sealed_record_manifest_fields(
+    manifest_bytes: bytes,
+    *,
+    record_id: str,
+    expected_kind: str | None,
+) -> tuple[str, int, str]:
+    manifest = _decode_canonical_json_object(
+        manifest_bytes,
+        subject="sealed record manifest",
+        maximum_bytes=_MAX_MANIFEST_BYTES,
+    )
+    _require_exact_keys(
+        manifest,
+        {
+            "bytes",
+            "format",
+            "kind",
+            "record_id",
+            "record_sha256",
+            "schema_version",
+            "status",
+        },
+        subject="sealed record manifest",
+    )
+    if manifest["format"] != PRIVATE_SEALED_RECORD_FORMAT:
+        raise PrivateArtifactError("sealed private record format is unsupported")
+    schema_version = manifest["schema_version"]
+    if (
+        isinstance(schema_version, bool)
+        or not isinstance(schema_version, int)
+        or schema_version != PRIVATE_ARTIFACT_SCHEMA_VERSION
+    ):
+        raise PrivateArtifactError("sealed private record schema is unsupported")
+    if manifest["status"] != "complete" or manifest["record_id"] != record_id:
+        raise PrivateArtifactError("sealed private record identity is invalid")
+    kind = manifest["kind"]
+    if not isinstance(kind, str):
+        raise PrivateArtifactError("sealed private record kind is invalid")
+    try:
+        _validate_artifact_kind(kind)
+    except PrivateArtifactError:
+        raise PrivateArtifactError("sealed private record kind is invalid") from None
+    if expected_kind is not None and kind != expected_kind:
+        raise PrivateArtifactError("sealed private record kind does not match")
+    size = _manifest_integer(manifest, "bytes")
+    if size <= 0 or size > _MAX_SEALED_RECORD_BYTES:
+        raise PrivateArtifactError("sealed private record size is invalid")
+    record_sha256 = manifest["record_sha256"]
+    if not isinstance(record_sha256, str) or _SHA256.fullmatch(record_sha256) is None:
+        raise PrivateArtifactError("sealed private record digest is invalid")
+    return kind, size, record_sha256
+
+
+def _validate_sealed_payload_metadata(
+    metadata: os.stat_result | None,
+    *,
+    expected_bytes: int,
+) -> None:
+    if metadata is None:
+        raise PrivateArtifactError("sealed private record payload is absent")
+    if not stat.S_ISREG(metadata.st_mode):
+        raise PrivateArtifactError("sealed private record payload is not a regular file")
+    if stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE:
+        raise PrivateArtifactError("sealed private record payload permissions are unsafe")
+    if metadata.st_nlink != 1:
+        raise PrivateArtifactError("sealed private record payload has an unsafe link count")
+    if metadata.st_size != expected_bytes:
+        raise PrivateArtifactError(
+            "sealed private record payload byte count does not match its manifest"
+        )
 
 
 def _inspect_episode_artifact_state(
