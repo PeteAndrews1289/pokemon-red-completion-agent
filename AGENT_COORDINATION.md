@@ -1,57 +1,70 @@
 # Three-agent coordination
 
-> **2026-08-20 comparison preflight passed; one aggregate held-out check is the highest
-> checkpoint:** Source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+> **2026-08-20 integrity correction; public/synthetic maintenance is the highest checkpoint:**
+> Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`; affected source
+> `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+> [integrity-failure receipt](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+> (SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`)
+> records **DEV RECORDS PRIVATELY DECODED 4/4 · ROW CONTENTS PUBLISHED 0 · ROOTLESS FIT 1
+> COUNTED/EVALUATION-INELIGIBLE · COMPARISON IDENTITY UNCONSUMED/INELIGIBLE · COMPARISON
+> EXECUTIONS/RESULTS 0 · COUNTER DELTAS 0**.
+>
+> Codex owns only `rootless-living-dex-dependency-evaluation-integrity-qualification-v1`: a
+> public/synthetic metadata-only inspector and strict loaded-fit semantic join, with mutation tests,
+> then stop. Reviewers remain read-only. No agent owns private access, reuse of the old fit or
+> openings, a fit, comparison, ROM/controller action, promotion, Crystal, completion, or transfer.
+> Preserve **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+>
+> Do not describe the result as a failed comparison: it never ran. Do not say the fit never
+> happened, that its optimizer used development labels, or that a stored record mismatched. The
+> proven defect is exposure plus an unenforced semantic join.
+>
+> Antigravity's post-change public-diff review returned GO with no P0/P1 blocker and agreed the
+> exact stop is public implementation plus exact-head green CI, with no private access, V2, fit,
+> comparison, or gameplay.
+
+> **Previous checkpoint — 2026-08-20 comparison preflight was recorded; later invalidated:**
+> Source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 > `32336487689/1`. The
 > [preflight receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 > (SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
-> records **PREFLIGHT PASSED · COMMITMENTS 4 · IDENTITY UNUSED · DEV OPENINGS 0 · ROOTLESS
-> COMPARISON 0/1 · GAMEPLAY/AUTHORITY/TRANSFER 0**. Antigravity returned pre/post GO with no
-> P0/P1 blocker.
+> recorded **PREFLIGHT PASSED · COMMITMENTS 4 · IDENTITY UNUSED · DEV OPENINGS 0** at the
+> time. Its zero-disclosure and comparison-readiness claims were later invalidated.
 >
-> Codex owns exactly one claimed aggregate comparison and then stops at its first terminal.
-> Antigravity remains the sole external reviewer while Claude is unavailable. No agent owns a
-> retry, refit, post-comparison tuning, row-level disclosure, ROM/controller action, promotion,
-> Crystal, completion, or transfer.
+> The planned aggregate comparison never ran; the old lane and identity are retired without retry.
 
-> **Previous checkpoint — 2026-08-20 train-only fit complete; sealed-comparison qualification was the
-> checkpoint:** Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+> **Previous checkpoint — 2026-08-20 train-only fit complete; sealing claim later invalidated:**
+> Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 > `32336487689/1`; authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`
 > passed CI `32381558510/1` and merged first. The
 > [fit receipt](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
 > (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
-> records **ROOTLESS FIT 1/1 · TRAIN ACCURACY 1.0 · CE 0.693147→0.205636 · DEV OPENINGS 0 ·
-> HELD-OUT COMPARISON 0/1 · GAMEPLAY/AUTHORITY/TRANSFER 0**.
+> records **ROOTLESS FIT 1/1 · TRAIN ACCURACY 1.0 · CE 0.693147→0.205636**. The later audit
+> invalidated its development-openings-zero and held-out-readiness claims, not the fit count.
 >
-> Codex owns one zero-disclosure comparison preflight and then stops. Antigravity's post-fit
-> read-only audit returned GO with no P0/P1 blocker; it remains the sole external reviewer while
-> Claude is unavailable. No agent owns a refit, development opening, comparison execution,
-> ROM/controller action, promotion, Crystal, completion, or transfer.
+> The historical zero-disclosure instruction is superseded. No agent owns a refit, development
+> opening, comparison execution, ROM/controller action, promotion, Crystal, completion, or transfer.
 
-> **Previous checkpoint — 2026-08-20 train set admitted; one rootless fit was next:** Exact executable
+> **Previous checkpoint — 2026-08-20 train set admitted; sealing claim later invalidated:** Exact executable
 > source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 > (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
 > records **TRAIN 8/8 · ATOMIC 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES
-> CONSUMED 12/12 · DEV DISCLOSURE 0 · FIT 0 · GAMEPLAY 0**.
+> CONSUMED 12/12**. Its development-disclosure-zero claim was later invalidated.
 >
-> Codex owns exactly one fixed train-only fit, then stops. Antigravity is the sole external auditor
-> during Claude's usage-window outage and returned GO with no P0/P1 blocker for this transition.
-> Claude is not a dependency and must not be queried until the user says its window has reset.
-> Scoped rootless fits are 0/1 and comparisons 0/1. No refit, tuning, development opening,
-> comparison, ROM/controller action, authority, Crystal, completion, or transfer is allowed.
+> The historical next step was one fixed train-only fit. It later completed and remains counted;
+> its sealing and comparison-readiness claims are superseded.
 
-> **Previous checkpoint — 2026-08-20 campaign frozen and preflight passed:** Source
+> **Previous checkpoint — 2026-08-20 campaign frozen; disclosure claim later invalidated:** Source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 > (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
 > records campaign `404e3a02…0bc9b92`, **TRAIN 0/8 · ATOMIC 0/8 · GLOBAL UNUSED 12/12 · LOCAL
-> EMPTY 10/10 · DEV DISCLOSURE 0 · FIT 0 · GAMEPLAY 0**.
+> EMPTY 10/10 · FIT 0 · GAMEPLAY 0**. Its development-disclosure-zero claim was later
+> invalidated.
 >
-> Codex owns the one-shot train campaign only. Claude and Antigravity remain read-only reviewers.
-> Execute/admit exactly eight preassigned synthetic rows; no retry, replacement, fit, development
-> opening, comparison, ROM, controller action, authority, or Crystal. Reorient immediately after
-> admission or a terminal condition that makes eight-row admission impossible.
+> The historical next step was the one-shot train campaign. It later completed, but did not retain
+> a valid zero-disclosure boundary.
 
 > **2026-08-20 rootless design qualified; campaign qualification is the only current work -
 > highest checkpoint:** Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8`

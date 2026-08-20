@@ -7,42 +7,64 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the exam desk is ready; the envelope is still closed
+## Current checkpoint: the envelope opened during inventory, so the exam was cancelled
 
-The project authenticated the exact model, fit, four sealed commitments, and unused comparison
-identity without opening a single future example. The
+Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`, but its final
+public-source audit changed the story of affected source
+`048bea66d205b0e784b3321763e2725d2ccfff32` and CI `32336487689/1`. The
+[integrity-failure receipt](evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+with SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`
+records that inventory privately decoded all four future examples before the promised boundary.
+Their row contents were never published, but they are no longer an unseen exam. The audit also
+found that the loaded fit was not strictly joined to every manifest semantic pin.
+
+The comparison never ran. Its identity is still unconsumed, but it is ineligible; there is no
+aggregate score or unseen result to narrate. The small fit really happened and stays counted, yet
+it cannot serve as held-out evidence. That distinction matters: exposure is proven, while use of
+development labels by the optimizer and an actual stored-record mismatch are not.
+
+The next scene stays off the game screen. Active public/synthetic maintenance
+`rootless-living-dex-dependency-evaluation-integrity-qualification-v1` builds a metadata-only
+envelope inspector and a strict fit-bundle join, attacks both with mutations, and stops. It does
+not reopen the old examples, refit, compare, play Red, touch Crystal, finish a story, or claim
+living-Pokédex competence. The boards hold at **30/15/4/3/0/0**, development **14/4/0/1/1**,
+and rootless **8/8/1/0**.
+
+Antigravity's post-change public-diff review returned GO with no P0/P1 blocker and agreed the exact
+stop is public implementation plus exact-head green CI, with no private access, V2, fit,
+comparison, or gameplay.
+
+## Previous checkpoint: the exam desk looked ready; that claim was later invalidated
+
+The project recorded the exact model, fit, four commitments, and unused comparison identity as
+authenticated without opening a future example. The
 [preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
-records zero development disclosure and zero learning, gameplay, authority, or transfer movement.
-Antigravity found no P0/P1 blocker before the check or after reviewing the path-free result and
-reorientation.
+recorded zero development disclosure at the time. The newer integrity receipt supersedes that
+claim.
 
-The next scene finally opens the four-example envelope once. The camera shows only the aggregate:
-did the learned dependency rule beat a coin-flip baseline on two unseen structures? Then it cuts.
-Even a clean pass merely earns the right to design a real Red observation adapter; it does not show
-the agent walking, catching Pokémon, completing a story, or transferring to Crystal.
+The planned four-example comparison never ran. Its old lane, identity, fit, and openings retired
+without retry or reuse.
 
-## Previous checkpoint: the small dependency model learned; the exam was still sealed
+## Previous checkpoint: the small dependency model learned; the sealing claim was later invalidated
 
 The first rootless parameter update is complete. Across the eight authenticated lessons, the
 interaction ranker reached perfect train accuracy and cut cross-entropy from 0.693147 to 0.205636.
 The [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) binds the
-durable model, fit manifest, and terminal. It also records the more important restraint: none of
-the four future examples opened, and no emulator, controller, teacher, promotion, or transfer was
-involved.
+durable model, fit manifest, and terminal. Its claim that none of the four future examples opened
+was later invalidated. The fit count and train metrics remain historical; no emulator, controller,
+teacher, promotion, or transfer was involved.
 
-The next scene is not the exam itself. First the project must prove, without opening an answer,
-that the sealed comparison is bound to this exact model and still unused. Only a later separately
-reviewed run may reveal whether the abstract rule survives held-out structures. Even a pass there
-would still be one small planning concept—not evidence that the agent can walk through Red,
-complete a living Pokédex, or transfer to Crystal.
+The historical plan for a zero-disclosure preflight is superseded. This fit and these openings may
+not support a comparison.
 
-## Previous checkpoint: the eight lessons were recorded; the small model could finally learn
+## Previous checkpoint: the eight lessons were recorded; the sealing claim was later invalidated
 
 The fixed campaign completed without a missing row: eight examples settled, split four positive
 and four negative, and all twelve one-shot identities were consumed. The
 [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
-binds the admitted dataset while all four future examples remain sealed. There was no model fit,
-gameplay, ROM input, teacher answer, authority promotion, or transfer claim.
+binds the admitted dataset. Its claim that all four future examples remained sealed was later
+invalidated. There was no model fit in that campaign, gameplay, ROM input, teacher answer,
+authority promotion, or transfer claim.
 
 The next scene is deliberately small but finally literal training: fit one interaction ranker to
 learn the abstract living-collection rule, “preserve the only precursor; evolve when a duplicate is
@@ -50,13 +72,14 @@ safe.” Antigravity found no P0/P1 blocker and recommended going straight to th
 of usage for this window, so the work does not wait. The camera must cut at the fit terminal—before
 the four held-out examples open, and long before Red or Crystal gameplay is claimed.
 
-## Previous checkpoint: the classroom was sealed; the eight examples were ready to run
+## Previous checkpoint: the classroom looked sealed; that disclosure claim was later invalidated
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
-records campaign `404e3a02…0bc9b92`: eight fixed teaching examples, four future examples still
-sealed, 12 unused one-shot identities, and 10 empty output slots. The plan freeze and readiness
-check made no predictions, applied no transitions, and changed no learning counter.
+records campaign `404e3a02…0bc9b92`: eight fixed teaching examples, four future commitments, 12
+unused one-shot identities, and 10 empty output slots. The plan freeze and readiness check made no
+predictions, applied no transitions, and changed no learning counter, but its claim that the future
+examples stayed unopened was later invalidated.
 
 The next scene is the first actual pass through this abstract lesson. Each example asks whether a
 living collection should acquire another precursor or safely evolve one. The campaign must keep

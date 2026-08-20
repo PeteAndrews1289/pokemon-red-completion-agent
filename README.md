@@ -5,72 +5,89 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): the held-out comparison is preflight-qualified and
-> still unopened.** Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32`
-> passed CI `32336487689/1`. The
+> **Current product focus (August 20, 2026): the V1 comparison boundary failed its integrity
+> audit; maintenance only.** Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI
+> `32403421924/1`. The affected execution source
+> `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`, but the
+> [integrity-failure receipt](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+> (SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`)
+> records **4 DEVELOPMENT RECORDS PRIVATELY DECODED DURING INVENTORY · ROW CONTENTS PUBLISHED 0 ·
+> ROOTLESS FIT 1 COUNTED BUT EVALUATION-INELIGIBLE · COMPARISON IDENTITY UNCONSUMED AND INELIGIBLE
+> · COMPARISON EXECUTIONS/RESULTS 0 · COUNTER DELTAS 0**.
+>
+> The comparison never ran, so this is not a failed comparison and supplies no unseen metric. The
+> fit happened and remains counted, but it cannot support a held-out claim; no evidence shows that
+> its optimizer used development labels or that a stored fit record mismatched. Active maintenance
+> `rootless-living-dex-dependency-evaluation-integrity-qualification-v1` is public/synthetic only:
+> implement a metadata-only commitment inspector and a strict loaded-fit-to-bundle semantic join,
+> then stop. It may not open private inputs, reuse the old fit or four decoded openings, fit,
+> compare, play Red or Crystal, promote authority, or claim completion or living-Pokédex transfer.
+> Boards remain **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+> Antigravity's post-change public-diff review returned GO with no P0/P1 blocker and agreed the
+> exact stop is public implementation plus exact-head green CI, with no private access, V2, fit,
+> comparison, or gameplay.
+>
+> The immediately following V1 campaign, fit, and comparison-preflight checkpoints are preserved as
+> history. Their claims that the four development openings remained sealed or that disclosure was
+> zero were later invalidated by this audit.
+
+> **Previous product focus (August 20, 2026; later invalidated): the comparison preflight was
+> recorded as qualified and unopened.** Exact execution source
+> `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [comparison-preflight receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 > (SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
-> records **FIT-BOUND PREFLIGHT PASSED · COMMITMENTS 4 · COMPARISON IDENTITY UNUSED · DEVELOPMENT
-> PAYLOADS OPENED 0 · FIT/COMPARISON/GAMEPLAY/AUTHORITY/TRANSFER DELTAS 0**.
+> recorded **FIT-BOUND PREFLIGHT PASSED · COMMITMENTS 4 · COMPARISON IDENTITY UNUSED ·
+> DEVELOPMENT PAYLOADS OPENED 0** at the time. The integrity receipt above supersedes its
+> zero-disclosure and evaluation-readiness claims.
 >
-> Active `rootless-living-dex-dependency-comparison-v1` may claim and run the aggregate comparison
-> exactly once, then stop at its first durable terminal. Its descriptive gate requires at least
-> 3/4 correct, cross-entropy below 0.693147, and mean winner probability above 0.5. A pass is only
-> held-out abstract-structure evidence; it is not proof that the model can play or complete Pokémon.
-> Antigravity returned GO with no P0/P1 blocker both before the preflight and after reviewing its
-> path-free result and reorientation.
+> The comparison authorization described here is retired without execution or retry. Its identity
+> remains unconsumed but is ineligible; no aggregate or row-level result exists.
 
-> **Previous product focus (August 20, 2026): the first rootless dependency fit completed; the
-> held-out comparison remains sealed.** Exact execution source
+> **Previous product focus (August 20, 2026; sealing claim later invalidated): the first rootless
+> dependency fit completed.** Exact execution source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`; the fit began only after
 > authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0` passed CI
 > `32381558510/1` and merged to `main`. The
 > [fit result receipt](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
 > (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
-> records **8 train rows · accuracy 1.0 · cross-entropy 0.693147 → 0.205636 · development
-> payloads opened 0 · ROM/controller 0**.
+> records **8 train rows · accuracy 1.0 · cross-entropy 0.693147 → 0.205636**. Its
+> development-opened-zero field is a historical claim superseded by the integrity receipt above.
 >
 > The fit identity is consumed and may never retry. Scoped rootless fits are now **1/1**;
 > held-out comparisons remain **0/1**, and the historical gameplay board remains **30/15 outcomes
 > · 4 fits · 3 comparisons · authority 0 · transfer 0**. Active
-> `rootless-living-dex-dependency-comparison-qualification-v1` may only freeze and run one
-> zero-disclosure comparison preflight bound to the exact fit manifest and terminal. Stop before
-> opening a development payload or executing the comparison. This is an abstract dependency
-> learner—not yet a model that can play or complete Pokémon. Antigravity's post-fit read-only
-> audit returned GO with no P0/P1 correctness, counter, leakage, provenance, or claim-boundary
-> blocker and agreed with this narrow next step.
+> `rootless-living-dex-dependency-comparison-qualification-v1` was the historical next lane. It and
+> the fit are now retired without reuse or retry. This remains an abstract dependency learner—not
+> a model proven to play or complete Pokémon.
 
-> **Previous product focus (August 20, 2026): eight rootless outcomes were admitted; fit once.**
+> **Previous product focus (August 20, 2026; sealing claim later invalidated): eight rootless
+> outcomes were admitted; fit once.**
 > Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 > `32336487689/1`. The
 > [campaign result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 > (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
 > records **8/8 settled · 4 positive · 4 negative · 0 interrupted · 12/12 one-shot identities
-> consumed · 4 development openings still sealed**. It adds exactly **8 synthetic rootless train
+> consumed**. It reported **4 development openings still sealed**, a claim later invalidated by the
+> integrity audit. It adds exactly **8 synthetic rootless train
 > outcomes** and **8 synthetic atomic episodes**; fits, comparisons, gameplay, ROM/controller,
 > teacher, authority, and transfer all remain unchanged.
 >
-> Active `rootless-living-dex-dependency-fit-v1` is the first parameter-update step in this
-> abstract lane: run exactly one fixed train-only fit and stop at its durable terminal. Scoped
-> rootless fits are **0/1** and held-out comparisons **0/1**; global boards remain **30/15
-> outcomes · 4 fits · 3 comparisons**. Antigravity returned GO with no P0/P1 blocker. Claude is
-> unavailable for the current usage window and is not a dependency. Development disclosure,
-> comparison, Red/Crystal gameplay, promotion, completion, and transfer remain closed.
+> The historical next step was one fixed train-only fit. That fit later completed and remains
+> counted; the sealing claim and subsequent comparison path are superseded by the integrity audit.
 
-> **Previous product focus (August 20, 2026): the rootless campaign was training-ready.** Exact
+> **Previous product focus (August 20, 2026; zero-disclosure claim later invalidated): the rootless
+> campaign was training-ready.** Exact
 > source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [campaign preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 > (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
 > records frozen campaign `404e3a02…0bc9b92`, **8 train scenarios**, **4 opaque development
 > commitments**, **12/12 global identities unused**, and **10/10 local output namespaces empty**.
-> The freeze and preflight made zero predictions or transitions, disclosed zero development
-> payloads, and moved no learning counter.
+> The freeze and preflight made zero predictions or transitions and moved no learning counter. Its
+> zero-development-disclosure claim was later invalidated because inventory decoded all four
+> records.
 >
-> Active `rootless-living-dex-dependency-curriculum-v1` may execute and strictly admit only those
-> eight fixed synthetic train rows. The board is **0/8 outcomes · 0/8 atomic episodes**. Claimed
-> cells never retry; missing or censored rows receive no replacement. Stop before fit, development
-> disclosure, comparison, ROM/gameplay, authority, or Crystal. “Training-ready” here means the
-> bounded synthetic curriculum can begin—not that the agent can yet play or complete a game.
+> The historical next step was the fixed eight-row train campaign. It later completed, but its
+> zero-disclosure claim is not valid evidence that development stayed unopened.
 
 > **Current product focus (August 20, 2026): the rootless dependency design is qualified;
 > freeze and preflight exactly one campaign.** Published source

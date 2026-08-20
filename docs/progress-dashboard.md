@@ -5,46 +5,63 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · MANIFEST F1A03497 ·
-> COMPARISON PREFLIGHT PASSED · COMMITMENTS 4 · IDENTITY UNUSED · DEV OPENINGS 0 · ANTIGRAVITY
-> PRE/POST GO**. Link the
+> **Current rail:** Show **MAIN 8168F82 · CI 32403421924/1 GREEN · AFFECTED SOURCE 048BEA6 ·
+> CI 32336487689/1 GREEN · INTEGRITY FAILED BEFORE COMPARISON · DEV RECORDS PRIVATELY DECODED
+> 4/4 · ROW CONTENTS PUBLISHED 0 · FIT 1 COUNTED/EVALUATION-INELIGIBLE · COMPARISON IDENTITY
+> UNCONSUMED/INELIGIBLE · COMPARISON EXECUTIONS/RESULTS 0**. Link the
+> [integrity-failure receipt](evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+> and show **SHA-256 0EEE3874…CF0686**.
+>
+> Display active maintenance
+> `rootless-living-dex-dependency-evaluation-integrity-qualification-v1`. Active rail:
+> **PUBLIC/SYNTHETIC METADATA-ONLY INSPECTOR + STRICT LOADED-FIT BUNDLE JOIN → MUTATION TEST →
+> STOP**. Show **PRIVATE INPUT 0 · OLD FIT/OPENING REUSE 0 · FITS +0 · COMPARISONS +0 ·
+> GAMEPLAY/AUTHORITY/TRANSFER 0**. Hold **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/0**.
+> Caption: **COMPARISON NEVER RAN; EXPOSURE AND MISSING JOIN PROVEN, LABEL USE OR RECORD MISMATCH
+> NOT INFERRED**.
+>
+> Antigravity's post-change public-diff review returned **GO · P0/P1 0** and agreed the exact stop
+> is **PUBLIC IMPLEMENTATION + EXACT-HEAD GREEN CI**, with **PRIVATE/V2/FIT/COMPARE/GAMEPLAY 0**.
+>
+> **Previous rail — later invalidated:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN ·
+> MANIFEST F1A03497 · COMPARISON PREFLIGHT RECORDED · COMMITMENTS 4 · IDENTITY UNUSED ·
+> DEV OPENINGS REPORTED 0 · ANTIGRAVITY PRE/POST GO**. Link the
 > [preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 > and show **SHA-256 F8DA36C2…A95F7**.
 >
-> Active rail: **ROOTLESS TRAIN 8/8 → FIT 1/1 → PREFLIGHT PASSED → HELD-OUT COMPARISON 0/1 →
-> ONE AGGREGATE TERMINAL → STOP**. Keep **GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/
-> AUTHORITY/TRANSFER 0**. Gate: **≥3/4 CORRECT · CE <0.693147 · MEAN WINNER P >0.5**.
+> This historical rail is superseded: the old lane and identity retired, and the comparison never
+> ran.
 >
-> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · AUTHORIZATION CHECKPOINT
+> **Previous rail — sealing claim later invalidated:** Show **SOURCE 048BEA6 · CI
+> 32336487689/1 GREEN · AUTHORIZATION CHECKPOINT
 > AB838CF · CI 32381558510/1 GREEN · ROOTLESS FIT COMPLETE · ACCURACY 1.0 · CROSS-ENTROPY
-> 0.693147→0.205636 · DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
+> 0.693147→0.205636 · DEV OPENINGS REPORTED SEALED 4**. Link the
 > [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) and show
 > **SHA-256 D570FCC4…B9D7B**.
 >
-> Active rail: **ROOTLESS FIT 1/1 → AUTHENTICATE FIT MANIFEST 27F2358D + TERMINAL BABE6A96 →
-> ZERO-DISCLOSURE COMPARISON PREFLIGHT → STOP BEFORE DEVELOPMENT DECODE**. Keep **ROOTLESS
-> HELD-OUT COMPARISON 0/1 · GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/AUTHORITY/TRANSFER
-> 0**. Antigravity is the sole external auditor; Claude is unavailable and not a blocker.
+> The fit remains counted, but this historical zero-disclosure/evaluation rail is invalidated.
 >
-> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 ADMITTED ·
+> **Previous rail — sealing claim later invalidated:** Show **SOURCE 048BEA6 · CI
+> 32336487689/1 GREEN · CAMPAIGN 404E3A02 ADMITTED ·
 > TRAIN 8/8 · ATOMIC 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES CONSUMED 12/12 ·
-> DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
+> DEV OPENINGS REPORTED SEALED 4**. Link the
 > [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 > and show **SHA-256 415AF97D…CF3C4**.
 >
-> Active rail: **AUTHENTICATE DATASET 8207EB89…85F37 → REQUIRED TRAIN-ONLY PREFLIGHT → FIT FIXED
+> Historical rail: **AUTHENTICATE DATASET 8207EB89…85F37 → REQUIRED TRAIN-ONLY PREFLIGHT → FIT FIXED
 > INTERACTION RANKER ONCE → DURABLE TERMINAL → STOP BEFORE DEVELOPMENT**. Show **ROOTLESS FIT 0/1
 > · ROOTLESS HELD-OUT COMPARISON 0/1 · GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/AUTHORITY/
 > TRANSFER 0**. Antigravity **GO · P0/P1 0**; Claude **USAGE WINDOW EXHAUSTED · NOT A BLOCKER**.
 >
-> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN ·
-> TRAINING_READY · TRAIN 0/8 · ATOMIC 0/8 · DEV COMMITMENTS 4 SEALED · GLOBAL UNUSED 12/12 ·
+> **Previous rail — zero-disclosure claim later invalidated:** Show **SOURCE 048BEA6 · CI
+> 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN · TRAINING_READY · TRAIN 0/8 · ATOMIC 0/8 ·
+> DEV COMMITMENTS 4 · GLOBAL UNUSED 12/12 ·
 > LOCAL EMPTY 10/10**. Link the
 > [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 > and show **SHA-256 6D650FC9…1E1BA2**.
 >
-> Show **FREEZE/PREFLIGHT PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0 · DEV DISCLOSURES 0 · FITS 0
-> · GAMEPLAY 0**. Active rail: **FREEZE EXECUTE IDENTITY → RUN EXACT 8 PREASSIGNED TRANSITIONS →
+> Show **FREEZE/PREFLIGHT PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0 · FITS 0
+> · GAMEPLAY 0**. Historical rail: **FREEZE EXECUTE IDENTITY → RUN EXACT 8 PREASSIGNED TRANSITIONS →
 > STRICT ADMISSION 8/8 → STOP BEFORE FIT**. Never retry or replace a claimed cell. Hold historical
 > boards at **30/15/4/3/0/0 · 14/4/0/1/1**.
 >

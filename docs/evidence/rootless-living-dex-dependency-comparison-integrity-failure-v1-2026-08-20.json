@@ -1,0 +1,122 @@
+{
+  "affected_evidence": {
+    "campaign_preflight": {
+      "path": "docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json",
+      "sha256": "6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2"
+    },
+    "campaign_result": {
+      "path": "docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json",
+      "sha256": "415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4"
+    },
+    "comparison_preflight": {
+      "path": "docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json",
+      "sha256": "f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7"
+    },
+    "fit_result": {
+      "path": "docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json",
+      "sha256": "d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b"
+    }
+  },
+  "affected_lane": "rootless-living-dex-dependency-comparison-v1",
+  "audit": {
+    "audit_private_inputs_opened": 0,
+    "development_row_contents_published": 0,
+    "distinct_development_opening_records_decoded_by_affected_inventory": 4,
+    "loaded_fit_semantically_closed_to_manifest_pins": false,
+    "scope": "public_source_and_public_receipts_only",
+    "zero_disclosure_claim_valid": false
+  },
+  "boards_after": {
+    "atomic_goal_episodes": 0,
+    "causal_train_examples": 0,
+    "development_v2": "14/4/0/1/1",
+    "legacy": "30/15/4/3/0/0",
+    "synthetic_rootless": "8/8/1/0"
+  },
+  "claim_boundary": {
+    "supported": "A public-source audit invalidated V1's zero-disclosure and held-out-evaluation eligibility before any comparison invocation. Four private development records had been decoded during V1 inventory; no row contents were published, the comparison never ran, and the old fit and openings are retired.",
+    "unsupported": "This audit is not a development comparison, proof that the optimizer used development contents, an observed fit-record mismatch, gameplay evidence, Red or Crystal play, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "comparison": {
+    "aggregate_metrics_computed": false,
+    "claim_written_by_comparison_invocation": false,
+    "comparison_execution_manifest_sha256": "64099c3611a47e6aeba02340d9bc92dfc8e7af1ea4f0f5104f78b893467184db",
+    "comparison_result_published": false,
+    "execution_started": false,
+    "identity_consumed": false,
+    "identity_eligible": false,
+    "retry_allowed": false,
+    "terminal_created": false
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "historical_gameplay_model_fits_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "fit_integrity": {
+    "actual_fit_record_mismatch_observed": null,
+    "fit_record_sha256_pin_enforced": false,
+    "fit_sha256_join_to_authenticated_manifest_enforced": false,
+    "manifest_and_terminal_arguments_joined_to_semantic_pins": false,
+    "model_sha256_pin_enforced": false,
+    "train_dataset_join_to_manifest_and_admission_enforced": false
+  },
+  "hash_identity_clarification": {
+    "design_qualification_receipt_sha256": "f115731b24f1b3343ef88af7bdef619d93ca6c11b914eb7e19d6e4253424ccd8",
+    "semantic_design_sha256": "b57cd393eb28338d94a90a35974b106a379444c638e8b1923aa38cf3f35d140a",
+    "status": "intentionally_distinct_no_hash_mismatch"
+  },
+  "recorded_on": "2026-08-20",
+  "retirement": {
+    "old_comparison_identity_eligible": false,
+    "old_development_openings_reusable": false,
+    "old_fit_evaluation_eligible": false,
+    "old_fit_remains_counted": true,
+    "old_fit_retry_allowed": false,
+    "old_lane_retired": true,
+    "old_model_reusable": false
+  },
+  "review": {
+    "antigravity_pre_execution_verdict": "no_go_before_comparison",
+    "exact_source_followup_verdict": "no_go_two_p1_blockers",
+    "private_or_runtime_execution_during_review": false
+  },
+  "schema": "pokemon.core.rootless-living-dex-dependency-comparison-integrity-failure-receipt.v1",
+  "source_verification": {
+    "affected_execution_ci_attempt": 1,
+    "affected_execution_ci_conclusion": "success",
+    "affected_execution_ci_run": 32336487689,
+    "affected_execution_git_commit": "048bea66d205b0e784b3321763e2725d2ccfff32",
+    "audited_git_commit": "8168f82f16ad5fe9f60a6d64198343ebfaaad112",
+    "audited_worktree_clean_before_receipt": true,
+    "current_main_ci_attempt": 1,
+    "current_main_ci_conclusion": "success",
+    "current_main_ci_run": 32403421924
+  },
+  "status": "integrity_audit_failed_comparison_not_run_old_fit_and_openings_retired",
+  "successor_contract": {
+    "fresh_development_commitments_required": 4,
+    "fresh_fit_required": true,
+    "metadata_only_sealed_record_inspection_required": true,
+    "old_development_payloads_must_not_be_opened": true,
+    "strict_fit_record_join_before_development_decode_required": true,
+    "v1_train_values_may_only_be_independently_recomputed": true,
+    "v1_train_value_revalidation_counter_delta": 0
+  },
+  "title_role": "Synthetic rootless V1 evaluation-integrity failure; not comparison, gameplay, promotion, completion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}
