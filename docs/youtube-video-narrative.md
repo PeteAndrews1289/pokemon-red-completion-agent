@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## August 20 scene: the first dependency head learns; keep the exam envelope closed
+
+Open on **ROOTLESS FIT 1/1 · TRAIN ROWS 8 · ACCURACY 1.0 · CROSS-ENTROPY
+0.693147→0.205636**. Link the
+[fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) with
+**SHA-256 D570FCC4…B9D7B**. Show **DEVELOPMENT OPENINGS DISCLOSED 0 · HELD-OUT COMPARISON 0/1 ·
+ROM 0 · CONTROLLER 0 · AUTHORITY 0 · TRANSFER 0**.
+
+Animate **FIT MANIFEST 27F2358D + TERMINAL BABE6A96 → ZERO-DISCLOSURE PREFLIGHT → CUT BEFORE
+OPENING**. Keep the scale honest: the model learned one abstract living-collection dependency
+rule. It has not yet passed held-out structures, played Red, finished a story, built a living
+Pokédex, or transferred to Crystal.
+
 ## August 20 scene: all eight lessons landed; now fit the first rootless dependency head
 
 Open on **CAMPAIGN 404E3A02 · TRAIN 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES

@@ -5,7 +5,27 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): eight rootless outcomes are admitted; fit once.**
+> **Current product focus (August 20, 2026): the first rootless dependency fit completed; the
+> held-out comparison remains sealed.** Exact execution source
+> `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`; the fit began only after
+> authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0` passed CI
+> `32381558510/1` and merged to `main`. The
+> [fit result receipt](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+> (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+> records **8 train rows · accuracy 1.0 · cross-entropy 0.693147 → 0.205636 · development
+> payloads opened 0 · ROM/controller 0**.
+>
+> The fit identity is consumed and may never retry. Scoped rootless fits are now **1/1**;
+> held-out comparisons remain **0/1**, and the historical gameplay board remains **30/15 outcomes
+> · 4 fits · 3 comparisons · authority 0 · transfer 0**. Active
+> `rootless-living-dex-dependency-comparison-qualification-v1` may only freeze and run one
+> zero-disclosure comparison preflight bound to the exact fit manifest and terminal. Stop before
+> opening a development payload or executing the comparison. This is an abstract dependency
+> learner—not yet a model that can play or complete Pokémon. Antigravity's post-fit read-only
+> audit returned GO with no P0/P1 correctness, counter, leakage, provenance, or claim-boundary
+> blocker and agreed with this narrow next step.
+
+> **Previous product focus (August 20, 2026): eight rootless outcomes were admitted; fit once.**
 > Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 > `32336487689/1`. The
 > [campaign result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)

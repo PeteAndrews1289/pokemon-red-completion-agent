@@ -1,0 +1,75 @@
+{
+  "campaign": {
+    "admitted_train_dataset_sha256": "8207eb89a430a5bbb6bca7bd960e000c728710fded2bceef027dd4179e385f37",
+    "campaign_plan_record_sha256": "2390c2c22fe19df799cc5ad664053b5baf1c0e1bfaf7694f6464ad66f51f4a29",
+    "campaign_sha256": "404e3a028cce695e23d20a4df8dc26ccfebbf48ca100800a5fe8e6a0d0bc9b92",
+    "design_sha256": "b57cd393eb28338d94a90a35974b106a379444c638e8b1923aa38cf3f35d140a",
+    "development_commitments": 4,
+    "development_opening_payloads_disclosed": 0,
+    "train_admission_record_sha256": "acf32bb8e5a910ded570ec2f0aa686bf810b18f202c51cf9f1a12063abad9254",
+    "train_examples": 8
+  },
+  "claim_boundary": {
+    "supported": "One exact fixed interaction ranker was fit once to the eight authenticated deterministic synthetic train outcomes, reached perfect train accuracy, and reduced train cross-entropy below the fixed 0.5 baseline while all development openings remained sealed.",
+    "unsupported": "This fit is not an unseen comparison, statistical promotion, empirical gameplay outcome, Red or Crystal play, story completion, living-Pokedex competence, learned gameplay authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "development_episode_attempts_added": 0,
+    "historical_gameplay_model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_model_fits_added": 1,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_manifests": {
+    "fit_execution_manifest_sha256": "32b68cbf7a459f3e1c0464af134be31d1ac3cd87591df3d54176627821d1feed",
+    "fit_invocation_sha256": "fa1cf42501fec2d05f5340b9c8652032319eebd4a83d1358e5578ad6c529736d",
+    "preflight_execution_manifest_sha256": "554f4de20a6c4c21d6b768d1a1ee2d50f6929fa934c76d35a85828f3b4525036",
+    "preflight_invocation_sha256": "a03c006d40f728826819bc3be410dcfbd4f969a5c25733657457b907cdd95127",
+    "private_input_roles": 3,
+    "public_binding_count": 11
+  },
+  "fit": {
+    "baseline_cross_entropy": 0.6931471805599453,
+    "fit_manifest_record_sha256": "27f2358d88e9dab138452e6a1bba06dcc69bdc0d4420222e32b490bebea3e7f4",
+    "fit_record_sha256": "ee102f6711de77de8335860dce2b7c855414985c57d1cb6222914f9e63f85be4",
+    "fit_sha256": "0f1089aa0a66da4c6f626eb3b8cbb5383bdecdd0d785847cc56b02a4d1eac48d",
+    "fit_terminal_record_sha256": "babe6a96a13f732573bbd1cd93227d27d75ea291ab70fa7c7fd35edf531b5bc8",
+    "fitted_cross_entropy": 0.2056356330860733,
+    "learner_train_dataset_sha256": "99a1563783ff5bad79cacf2664cfc3d075872125855b7424b86882aff6c6e256",
+    "model_sha256": "d6f48d3429d99850e52fb75c43f6a84d27bdfd3e611d43fbf0f66e377f9f749e",
+    "status": "completed_train_only_fit",
+    "train_accuracy": 1.0
+  },
+  "publication": {
+    "authorization_checkpoint_ci_attempt": 1,
+    "authorization_checkpoint_ci_conclusion": "success",
+    "authorization_checkpoint_ci_run_id": 32381558510,
+    "authorization_checkpoint_merge_commit": "ab838cfc72699359b5306b2316748c953f1a5ec0",
+    "execution_ci_attempt": 1,
+    "execution_ci_conclusion": "success",
+    "execution_ci_run_id": 32336487689,
+    "execution_source_commit": "048bea66d205b0e784b3321763e2725d2ccfff32"
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-fit-result-receipt.v1",
+  "status": "completed_train_only_fit_development_remains_sealed",
+  "title_role": "Synthetic rootless train-only model-fit result; not gameplay, unseen evaluation, promotion, completion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_comparisons": 0,
+    "development_opening_payloads_disclosed": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}

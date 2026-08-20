@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the fixed train set is admitted; fit the dependency ranker once
+## Current checkpoint: the dependency ranker fit; qualify the sealed comparison boundary
+
+Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`, and authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`
+passed CI `32381558510/1` before the one-shot fit. The
+[fit result](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+(SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+records accuracy 1.0 and cross-entropy 0.693147→0.205636 on eight authenticated train rows.
+Development disclosure, held-out comparisons, ROM/controller use, authority, and transfer remain
+zero. The scoped rootless fit board is 1/1; the held-out comparison board is 0/1.
+
+Active `rootless-living-dex-dependency-comparison-qualification-v1` is maintenance only. Freeze
+and validate one exact `preflight-compare` invocation pinned to fit manifest `27f2358d…3e7f4`
+and terminal `babe6a96…5bc8`; run only the zero-disclosure preflight and stop. A later separately
+reviewed comparison—not this qualification—will ask whether the learned rule works on held-out
+dependency structures. Red/Crystal gameplay and living-Pokédex authority remain later gates.
+Antigravity's post-fit read-only audit returned GO with no P0/P1 blocker and endorsed this exact
+zero-disclosure next action.
+
+## Previous checkpoint: the fixed train set was admitted; fit the dependency ranker once
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`. The

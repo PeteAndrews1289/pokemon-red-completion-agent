@@ -1,6 +1,24 @@
 # Current audit — 2026-08-20
 
-## Current result: eight balanced synthetic rows admitted; train-only fit is next
+## Current result: train-only dependency fit passed; development remains sealed
+
+Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`, and the reviewed authorization checkpoint merged under green CI
+`32381558510/1` before the one-shot fit. The
+[fit result receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+(SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
+records one completed fixed interaction-ranker fit: train accuracy 1.0, baseline cross-entropy
+0.693147, fitted cross-entropy 0.205636, and a durable model/bundle/terminal. Development openings,
+held-out comparison, ROM/controller, authority, and transfer all remain zero.
+
+Counter treatment is deliberately scoped: synthetic rootless fits advance to 1/1, but the legacy
+gameplay model-fit board remains 4 and unseen comparisons remain 3 globally and 0/1 in this lane.
+The consumed fit may never retry. The only next work is a zero-disclosure comparison preflight
+pinned to the exact fit manifest and terminal; stop before opening or comparing development data.
+Antigravity's post-fit read-only audit returned GO with no P0/P1 correctness, counter, leakage,
+provenance, or claim-boundary blocker and endorsed that exact boundary.
+
+## Previous result: eight balanced synthetic rows admitted; train-only fit was next
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`. The

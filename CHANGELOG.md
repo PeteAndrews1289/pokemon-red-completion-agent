@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Completed exactly one train-only rootless living-Dex dependency fit from published source
+  `048bea66d205b0e784b3321763e2725d2ccfff32` after the reviewed authorization checkpoint merged.
+  The [path-free fit result](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+  records 1.0 accuracy across eight authenticated synthetic train rows and cross-entropy reduction
+  from 0.693147 to 0.205636. The fit identity is consumed; all four development openings remain
+  sealed. Added exactly one scoped synthetic rootless fit without changing historical gameplay
+  fits, comparisons, outcomes, authority, or transfer. Activated a bounded zero-disclosure
+  comparison-qualification lane and stopped before development decode or comparison execution.
+
 - Executed and strictly admitted the exact rootless living-Dex dependency campaign from source
   `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
   [path-free result](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)

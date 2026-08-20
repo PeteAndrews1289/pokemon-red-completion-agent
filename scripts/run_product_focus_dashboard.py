@@ -134,18 +134,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Campaign 404e3a02 admitted all eight balanced synthetic train rows. The exact "
-            "one-shot train-only fit is next; every development opening remains sealed."
+            "The fixed synthetic dependency fit completed at 1.0 train accuracy and reduced "
+            "cross-entropy from 0.6931 to 0.2056. A zero-disclosure comparison preflight is next; "
+            "every development opening remains sealed."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Rootless dependency fit · train set 8/8 · 4 development commitments sealed · no game"
+            "Rootless comparison qualification · train fit 1/1 · 4 development commitments "
+            "sealed · no game"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Train set admitted · 4 positive / 4 negative · fit identity unclaimed",
-            choice="Run exactly one fixed train-only fit; stop before development comparison",
+            candidate="Fit complete · accuracy 1.0 · cross-entropy 0.2056 · development opened 0",
+            choice="Qualify the exact fit-bound comparison; stop before development decode",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -210,8 +212,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Fit result · loss 1.2667→1.1496 · selected probability 0.5975→0.6136 · "
-                "max KL 0.000486 · protected winner flips 0/18 · promotion 0"
+                "Rootless fit · COMPLETE · accuracy 1.0 · cross-entropy 0.693147→0.205636 · "
+                "development openings 0 · comparison 0 · authority 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

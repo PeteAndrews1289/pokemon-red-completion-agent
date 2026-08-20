@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the eight lessons are recorded; the small model can finally learn
+## Current checkpoint: the small dependency model learned; the exam is still sealed
+
+The first rootless parameter update is complete. Across the eight authenticated lessons, the
+interaction ranker reached perfect train accuracy and cut cross-entropy from 0.693147 to 0.205636.
+The [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) binds the
+durable model, fit manifest, and terminal. It also records the more important restraint: none of
+the four future examples opened, and no emulator, controller, teacher, promotion, or transfer was
+involved.
+
+The next scene is not the exam itself. First the project must prove, without opening an answer,
+that the sealed comparison is bound to this exact model and still unused. Only a later separately
+reviewed run may reveal whether the abstract rule survives held-out structures. Even a pass there
+would still be one small planning concept—not evidence that the agent can walk through Red,
+complete a living Pokédex, or transfer to Crystal.
+
+## Previous checkpoint: the eight lessons were recorded; the small model could finally learn
 
 The fixed campaign completed without a missing row: eight examples settled, split four positive
 and four negative, and all twelve one-shot identities were consumed. The
