@@ -88,6 +88,11 @@ ROOTLESS_DEPENDENCY_COMPARISON_INTEGRITY_FAILURE = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json"
 )
+ROOTLESS_DEPENDENCY_EVALUATION_INTEGRITY_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -207,14 +212,12 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-evaluation-integrity-qualification-v1"
-    )
+    assert state.active_lane["id"] == "rootless-living-dex-dependency-fresh-evaluation-design-v2"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
-        "rootless-living-dex-dependency-fresh-evaluation-v2"
+        "rootless-living-dex-dependency-fresh-evaluation-qualification-v2"
     )
-    assert len(state.retired_lanes) == 33
+    assert len(state.retired_lanes) == 34
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -348,6 +351,32 @@ def test_rootless_dependency_integrity_failure_retires_fit_and_openings() -> Non
         "legacy": "30/15/4/3/0/0",
         "synthetic_rootless": "8/8/1/0",
     }
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_evaluation_integrity_is_public_only_and_counter_neutral() -> None:
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_EVALUATION_INTEGRITY_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == "public_evaluation_integrity_boundary_published_and_qualified"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32425750185,
+        "source_commit": "c0f7894b222dcf44490915a7ae7ebeed664096ea",
+    }
+    metadata = receipt["qualification"]["metadata_only_inspector"]
+    assert metadata["payload_files_opened_per_inspection"] == 0
+    assert metadata["payload_files_read_per_inspection"] == 0
+    assert metadata["payload_bytes_hashed_per_inspection"] == 0
+    assert metadata["payload_bytes_decoded_per_inspection"] == 0
+    assert metadata["declared_payload_integrity_reported_as_unverified"] is True
+    assert set(receipt["qualification"]["fit_bundle_join"].values()) == {True}
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -1161,16 +1190,17 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Rootless living-Dex evaluation-integrity qualification V1" in public["stage"]
+    assert "Fresh rootless living-Dex evaluation design V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "V1 stopped before comparison" in encoded
+    assert "Evaluation integrity is qualified" in encoded
     assert "actions 244/244" in encoded
-    assert "compare not run" in encoded
-    assert "dev records 4/4 decoded+retired" in encoded
-    assert "metadata-only inventory" in encoded
+    assert "V1 retired" in encoded
+    assert "V2 public design only" in encoded
+    assert "payload files opened 0" in encoded
+    assert "exact fit join" in encoded
     assert "fit 1 counted/evaluation-ineligible" in encoded
     assert "comparisons 0" in encoded
     assert "Rootless board" in encoded

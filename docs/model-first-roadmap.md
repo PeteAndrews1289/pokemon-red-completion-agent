@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V1 evaluation integrity failed; qualify the public boundary
+## Current checkpoint: integrity boundary qualified; design one fresh V2 experiment
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+(SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+records a payload-blind manifest inspector and exact typed fit/model/dataset/manifest/terminal/
+executable joins. Antigravity returned GO with no P0/P1 blocker. No private artifact, fit,
+comparison, gameplay, authority, or transfer counter moved.
+
+The next lane is `rootless-living-dex-dependency-fresh-evaluation-design-v2`, and it ends at a
+public design. Freeze a V1-disjoint namespace, four fresh opaque commitments, fresh fit identity,
+separate one-shot fit/comparison claims, external pins, disclosure order, terminal behavior, and
+honest synthetic counters. Falsify the direction if any retired V1 opening/model/fit/comparison can
+be reused, if fit and held-out decode can occur adaptively in one stage, or if synthetic outcomes
+can inflate gameplay claims. Stop before provisioning, campaign execution, fitting, development
+decode, comparison, ROM/controller input, Red/Crystal play, promotion, completion, or transfer.
+
+## Previous checkpoint: V1 evaluation integrity failed; qualify the public boundary
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. The affected
 execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`, but

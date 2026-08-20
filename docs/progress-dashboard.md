@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 8168F82 · CI 32403421924/1 GREEN · AFFECTED SOURCE 048BEA6 ·
+> **Current rail:** Show **SOURCE C0F7894 · CI 32425750185/1 GREEN · LOCAL 4,444 PASS · CI 4,443
+> PASS · PAYLOAD OPEN/READ/HASH/DECODE 0 · EXACT FIT/MODEL/DATASET/MANIFEST/TERMINAL/EXECUTABLE
+> JOIN · ANTIGRAVITY GO · P0/P1 0 · COUNTER DELTAS 0**. Link the
+> [qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+> and show **SHA-256 9C3DD435…286AFA**.
+>
+> Display active `rootless-living-dex-dependency-fresh-evaluation-design-v2`. Active rail:
+> **FRESH V1-DISJOINT NAMESPACE + 4 OPAQUE COMMITMENTS + FRESH FIT IDENTITY + SEPARATE FIT/COMPARE
+> CLAIMS + EXTERNAL PINS + STOP RULES → PUBLIC DESIGN ONLY → STOP**. Show **PRIVATE PROVISION 0 ·
+> CAMPAIGN 0 · FIT +0 · DEV DECODE 0 · COMPARISON +0 · GAMEPLAY/AUTHORITY/TRANSFER 0**. Hold
+> **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/0**.
+>
+> **Previous rail:** Show **MAIN 8168F82 · CI 32403421924/1 GREEN · AFFECTED SOURCE 048BEA6 ·
 > CI 32336487689/1 GREEN · INTEGRITY FAILED BEFORE COMPARISON · DEV RECORDS PRIVATELY DECODED
 > 4/4 · ROW CONTENTS PUBLISHED 0 · FIT 1 COUNTED/EVALUATION-INELIGIBLE · COMPARISON IDENTITY
 > UNCONSUMED/INELIGIBLE · COMPARISON EXECUTIONS/RESULTS 0**. Link the

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published the rootless evaluation-integrity boundary at exact source
+  `c0f7894b222dcf44490915a7ae7ebeed664096ea` under green CI `32425750185/1`. The
+  [path-free qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+  (SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+  records a manifest-only inspector with zero payload opens/reads/hashes/decodes and exact typed
+  fit/model/dataset/manifest/terminal/executable joins. Antigravity returned GO with no P0/P1;
+  local 4,444-test and exact-head CI 4,443-test gates passed. Retired the maintenance lane without
+  retry and activated public-only `rootless-living-dex-dependency-fresh-evaluation-design-v2`.
+  Every learning, gameplay, comparison, authority, and transfer counter remains unchanged; no
+  private V2 provisioning, fit, comparison, Red/Crystal execution, completion, or transfer ran.
+
 - Recorded the public-source integrity failure at clean main
   `8168f82f16ad5fe9f60a6d64198343ebfaaad112` under green CI `32403421924/1`. The
   [path-free failure receipt](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)

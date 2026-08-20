@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-20 integrity correction; public/synthetic maintenance is the highest checkpoint:**
+> **2026-08-20 integrity boundary qualified; fresh V2 design is the highest checkpoint:** Exact
+> source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
+> [qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+> (SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+> records **PAYLOAD OPEN/READ/HASH/DECODE 0 · EXACT FIT BUNDLE JOIN · ANTIGRAVITY GO · P0/P1 0 ·
+> COUNTER DELTAS 0**.
+>
+> Codex owns only `rootless-living-dex-dependency-fresh-evaluation-design-v2`: public design of a
+> fresh commitment namespace, four opaque development commitments, fresh fit identity, separate
+> fit/comparison claims, and staged stop/counter rules. Antigravity remains the read-only external
+> auditor while Claude is unavailable. No agent owns private provisioning, campaign execution,
+> fit, development decode, comparison, ROM/controller action, promotion, Crystal, completion, or
+> transfer. Preserve **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+> **Previous checkpoint — 2026-08-20 integrity correction; public/synthetic maintenance:**
 > Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`; affected source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [integrity-failure receipt](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)

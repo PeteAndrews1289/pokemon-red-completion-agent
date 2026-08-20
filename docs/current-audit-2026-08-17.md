@@ -1,6 +1,24 @@
 # Current audit — 2026-08-20
 
-## Current result: V1 evaluation-integrity audit failed before comparison
+## Current result: reusable evaluation-integrity boundary qualified
+
+Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI run `32425750185`
+attempt 1. The
+[qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+(SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+binds manifest-only sealed-record metadata inspection and exact typed joins across the loaded fit,
+model, train dataset, fit record, fit manifest, terminal, execution manifest, and executable
+bundle. Metadata inspection opens, reads, hashes, and decodes zero payload files and labels the
+declared payload digest unverified. Antigravity returned GO with no P0/P1 blocker. Local validation
+passed 4,444 tests; exact-head CI passed 4,443 non-integration tests.
+
+No private artifact, ROM, prediction, fit, comparison, gameplay, authority, or transfer action
+occurred. Counters remain legacy **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless
+**8/8/1/0**. Active `rootless-living-dex-dependency-fresh-evaluation-design-v2` freezes only a
+fresh experiment design and stops before provisioning, execution, fit, development decode, or
+comparison.
+
+## Previous result: V1 evaluation-integrity audit failed before comparison
 
 Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. The affected
 execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The

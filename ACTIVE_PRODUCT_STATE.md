@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Rootless living-Dex evaluation-integrity qualification V1** (`rootless-living-dex-dependency-evaluation-integrity-qualification-v1`)
+**Fresh rootless living-Dex evaluation design V2** (`rootless-living-dex-dependency-fresh-evaluation-design-v2`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: A published pass permits design only of one fresh V2 synthetic experiment with new development commitments and a fresh fit. A failure closes this rootless comparison direction. Neither outcome authorizes gameplay or transfer.
+- Next decision: A published design pass permits a separate public-only V2 implementation and provisioning qualification. A failure closes the rootless dependency comparison direction. Neither outcome authorizes fitting, development disclosure, gameplay, or transfer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify a payload-blind sealed-record inventory and an exact fit-record join before any fresh synthetic living-Pokedex development comparison can exist. |
-| Authority now | One synthetic V1 fit remains counted but is ineligible for held-out evaluation because its process decoded development records. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Permit only a separately frozen fresh V2 experiment to preserve a real informational seal and authenticate its exact evaluated model; this maintenance pass grants no learned authority. |
-| Transfer test | None. This lane qualifies evaluation isolation only; fresh synthetic V2, a later Red observation adapter, and Crystal transfer remain separate gates. |
-| Cheapest falsifier | Use public and synthetic fixtures to prove metadata-only inventory never opens record.json and that any swapped fit record, model, dataset, manifest, terminal, or executable binding fails before development disclosure; no private V1 artifact may be opened. |
+| Reusable capability | Freeze one fresh V2 rootless living-Pokedex dependency experiment whose development commitments, fit identity, and comparison boundary are disjoint from the retired V1 evidence and preserve the qualified payload-blind seal. |
+| Authority now | One synthetic V1 fit remains counted but evaluation-ineligible. The new integrity seam is qualified, but no fresh V2 evidence or gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Permit a separately qualified V2 provisioning and execution lane to use one frozen fresh design while preserving the informational seal; this design pass grants no learned authority. |
+| Transfer test | None. This lane freezes a synthetic experiment design only; a later Red observation adapter and Crystal transfer remain separate gates. |
+| Cheapest falsifier | Using public and synthetic fixtures only, prove the proposed V2 design requires four fresh opaque development commitments, a fresh fit, separate fit and comparison claims, and exact external bundle pins while referencing no retired V1 opening, model, fit, or comparison identity. |
 | Time box | 1 session / 2 hours |
 
 ### Required learning outputs
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-20-rootless-dependency-v1-integrity-failure** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+**2026-08-20-rootless-dependency-evaluation-integrity-qualified** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A trustworthy held-out boundary is required before collection-dependency learning can inform a cross-game living-Pokedex planner. This repair prevents contaminated synthetic evidence from being mistaken for gameplay or transfer progress. |
-| Learning output | No new measured learning output. A public-source audit invalidated V1's zero-disclosure and evaluation-eligibility claims before comparison. The completed fit remains counted, but comparison, authority, gameplay, and transfer counters stay unchanged. |
-| Authority delta | No authority changed. V1 produced no comparison result; its counted synthetic fit is evaluation-ineligible, and no Red, Crystal, completion, living-Pokedex, or transfer capability was established. |
-| Transfer result | Not run. V1 comparison never executed, and this maintenance lane tests only scientific isolation and identity integrity. |
-| Blocker | V1 inventory decoded all four development records before fitting, and its comparison loader did not join the loaded fit/model/datasets to every pinned manifest identity. The old fit, openings, and unconsumed comparison identity are permanently retired. |
-| Decision | Stop V1 before comparison and qualify a public-only successor boundary: manifest-only sealed metadata plus an exact fit/model/dataset/manifest/terminal join. Antigravity's post-change review returned GO with no P0/P1 blocker. Do not open old private artifacts or run a replacement experiment in this lane. |
-| Next session | Implement, test, externally audit, and publish only the reusable evaluation-integrity boundary, then stop before provisioning fresh commitments, fitting, comparing, or touching private artifacts. |
-| Next falsifier | Mutation-test a metadata-only record inspector and a strict fit bundle join entirely with public/synthetic fixtures; any record.json read before comparison claim or any accepted swapped identity closes the successor direction. |
-| Stop condition | Stop after public implementation, adversarial tests, external audit, and exact-head green CI. Do not open V1 private artifacts, provision V2, fit, compare, access a ROM/controller, promote, or run Crystal. |
+| Product alignment | The final cross-game living-Pokedex planner needs trustworthy collection-dependency evaluation. The qualified integrity seam now permits a fresh experiment to be designed without repeating V1 leakage or mistaking synthetic evidence for gameplay progress. |
+| Learning output | No new measured learning output. Public source now provides manifest-only sealed metadata inspection and an exact typed fit/model/dataset/manifest/terminal/executable join. All learning, comparison, authority, gameplay, and transfer counters remain unchanged. |
+| Authority delta | No authority changed. The integrity implementation is maintenance evidence only; no fresh fit, comparison, gameplay, Red, Crystal, completion, living-Pokedex, or transfer result was created. |
+| Transfer result | Not run. The qualified integrity boundary and active V2 design lane contain no title execution or transfer test. |
+| Blocker | The reusable payload-blind inventory and exact fit-bundle join are qualified. A fresh V2 design, commitment namespace, fit identity, staged runner contract, and externally pinned comparison boundary do not yet exist; every V1 opening, fit, model, and comparison identity remains retired. |
+| Decision | Close the evaluation-integrity qualification after source c0f7894 passed CI run 32425750185/1 and Antigravity returned GO with no P0/P1 blocker. Activate design only of a fresh V2 synthetic experiment; do not provision openings, fit, compare, or touch private artifacts in this lane. |
+| Next session | Freeze and test only the public V2 experiment design, schemas, identity graph, staged stop rules, and counter semantics; stop before private provisioning, campaign execution, fitting, development decode, or comparison. |
+| Next falsifier | Reject the V2 design if any retired V1 identity or payload is reusable, if fit and comparison can share one adaptive process, if development bytes can open before an externally pinned completed fit and comparison claim, or if synthetic evidence can inflate gameplay counters. |
+| Stop condition | Stop after one public V2 design, adversarial design tests, external review, and exact-head green CI. Do not provision openings, execute a campaign, fit, decode development payloads, compare, access a ROM/controller, promote, or run Crystal. |
 
 ### Stop conditions
 
-- Stop if metadata-only inspection opens, hashes, reads, or decodes record.json, or if any swapped fit/model/dataset/manifest/terminal/executable identity is accepted.
-- Stop after one public implementation and exact-head CI result. Never open V1 private artifacts, provision V2, fit, compare, access a ROM/controller, query a teacher, promote authority, or run Crystal.
+- Stop if the V2 design can reuse any V1 opening/model/fit/comparison identity, combine fit and development decode adaptively, or report synthetic evidence as gameplay progress.
+- Stop after one public design and exact-head CI result. Never provision V2 openings, execute its campaign, fit, compare, open private artifacts, access a ROM/controller, query a teacher, promote authority, or run Crystal.
 
 ### Hard boundaries for this lane
 
@@ -116,6 +116,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Rootless living-Dex evaluation-integrity qualification V1:** Published source c0f7894b222dcf44490915a7ae7ebeed664096ea passed CI run 32425750185 attempt 1 with a payload-blind sealed-record metadata inspector, exact typed fit loader, and strict fit/model/dataset/manifest/terminal/executable joins. Antigravity returned GO with no P0/P1 blocker. No private artifact, ROM, fit, comparison, gameplay, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency held-out comparison V1:** A public-source audit found that common inventory had already read and JSON-decoded all four development records before the V1 fit and that the comparison loader did not close the loaded fit/model/dataset identities against every manifest pin. The comparison never ran and its identity remains unconsumed but permanently ineligible; the counted fit, old model, four openings, and lane are retired without retry. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency comparison qualification V1:** Published execution source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1 and one comparison preflight ran without consuming the comparison identity. A later exact-source audit proved its zero-disclosure claim false because inventory read and decoded all four development records, so the preflight is preserved only as historical execution evidence and grants no evaluation eligibility. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency train-only fit V1:** Published execution source 048bea66d205b0e784b3321763e2725d2ccfff32 fit the fixed interaction ranker exactly once to eight deterministic synthetic train rows. Accuracy reached 1.0 and cross-entropy fell from 0.693147 to 0.205636, so the completed fit remains counted. A later audit proved its process had decoded all four development records during inventory and found incomplete fit-record joins, making the fit evaluation-ineligible without proving optimizer use of those contents. Evidence is preserved; retry is no.

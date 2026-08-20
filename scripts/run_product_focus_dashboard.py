@@ -135,27 +135,24 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "V1 stopped before comparison: inventory decoded all four development records and "
-            "the fit bundle join was incomplete. Public evaluation-integrity repair is active."
+            "Evaluation integrity is qualified: sealed metadata stays payload-blind and exact "
+            "fit-bundle joins fail closed. Fresh V2 public design is active."
         ),
         stage_progress=focus_progress_fraction(state),
-        location=(
-            "Rootless · V1 compare not run · dev records 4/4 decoded+retired · public repair"
-        ),
+        location="Rootless · integrity gate green · V1 retired · V2 public design only",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V1 fit counted 1 · evaluation-ineligible · comparison identity unconsumed and "
-                "retired"
+                "V1 fit counted 1/evaluation-ineligible · V2 model and comparison do not exist"
             ),
-            choice="Qualify metadata-only inventory and exact fit-bundle joins; no private access",
+            choice="Freeze fresh V2 identities and staged disclosure rules; no private access",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="catalog",
             zero_shot_completed=synthetic_train_outcomes,
             zero_shot_total=synthetic_train_total,
             adaptation_completed=synthetic_model_fits,
@@ -187,7 +184,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} "
                 "counted/evaluation-ineligible · comparisons "
-                f"{synthetic_unseen_comparisons} · dev records 4/4 decoded+retired"
+                f"{synthetic_unseen_comparisons} · integrity qualified · V2 design only"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -214,9 +211,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Rootless V1 integrity gate · COMPARISON NOT RUN · identity unconsumed/ineligible "
-                "· development records decoded 4/4 · fit counted/evaluation-ineligible · "
-                "authority 0"
+                "Rootless integrity qualified · c0f7894 · CI 32425750185/1 green · payload files "
+                "opened 0 · exact fit join · V2 design only · authority 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

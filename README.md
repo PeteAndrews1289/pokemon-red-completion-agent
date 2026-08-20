@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): the V1 comparison boundary failed its integrity
+> **Current product focus (August 20, 2026): evaluation integrity is qualified; design fresh V2
+> only.** Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI
+> `32425750185/1`. The
+> [qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)
+> (SHA-256 `9c3dd435201695a8a8e3d92cba650b87f6fac400a2a912ca595ba84abf286afa`)
+> records **PAYLOAD FILES OPENED/READ/HASHED/DECODED 0 · MANIFEST-ONLY METADATA · EXACT TYPED
+> FIT/MODEL/DATASET/MANIFEST/TERMINAL/EXECUTABLE JOIN · ANTIGRAVITY GO · P0/P1 0 · COUNTER
+> DELTAS 0**. Local validation passed 4,444 tests; exact-head CI passed 4,443 non-integration tests.
+>
+> Active `rootless-living-dex-dependency-fresh-evaluation-design-v2` is public design only. Freeze
+> a fresh namespace, four new opaque commitments, a fresh fit identity, separate fit/comparison
+> claims, exact stop rules, and honest synthetic counters. Do not provision private openings,
+> execute a campaign, fit, decode development rows, compare, play Red or Crystal, promote
+> authority, or claim completion/transfer. Boards stay **30/15/4/3/0/0**, development
+> **14/4/0/1/1**, and rootless **8/8/1/0**. This remains an intermediary toward the model that can
+> finish stories and maintain a living Pokédex across games—not evidence that it can do so yet.
+
+> **Previous product focus (August 20, 2026): the V1 comparison boundary failed its integrity
 > audit; maintenance only.** Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI
 > `32403421924/1`. The affected execution source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`, but the
