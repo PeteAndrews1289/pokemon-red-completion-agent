@@ -378,6 +378,16 @@ class VerifiedDevelopmentOpening:
 
 
 @dataclass(frozen=True, slots=True)
+class AuthenticatedDependencyFit:
+    """Opaque proof that the externally pinned fit bundle completed for this design."""
+
+    design_sha256: str
+    fit_manifest_sha256: str
+    fit_terminal_sha256: str
+    canonical_fit_sha256: str
+
+
+@dataclass(frozen=True, slots=True)
 class VerifiedDevelopmentComparison:
     fit_manifest_sha256: str
     fit_terminal_sha256: str
@@ -456,6 +466,31 @@ def verify_development_openings_for_comparison(
 
     if not isinstance(design, RootlessLivingDexDependencyDesign):
         raise TypeError("design must be a RootlessLivingDexDependencyDesign")
+    authenticated_fit = authenticate_completed_dependency_fit_bundle(
+        design,
+        completed_fit_manifest_bytes,
+        expected_fit_manifest_sha256,
+        completed_fit_terminal_bytes,
+        expected_fit_terminal_sha256,
+    )
+    return verify_development_openings_after_fit(
+        design,
+        authenticated_fit=authenticated_fit,
+        opening_payloads=opening_payloads,
+    )
+
+
+def authenticate_completed_dependency_fit_bundle(
+    design: RootlessLivingDexDependencyDesign,
+    completed_fit_manifest_bytes: bytes,
+    expected_fit_manifest_sha256: str,
+    completed_fit_terminal_bytes: bytes,
+    expected_fit_terminal_sha256: str,
+) -> AuthenticatedDependencyFit:
+    """Authenticate the completed fit before a caller is allowed to open dev payloads."""
+
+    if not isinstance(design, RootlessLivingDexDependencyDesign):
+        raise TypeError("design must be a RootlessLivingDexDependencyDesign")
     fit_sha = _authenticate_completed_fit_bundle(
         completed_fit_manifest_bytes,
         expected_fit_manifest_sha256,
@@ -463,6 +498,29 @@ def verify_development_openings_for_comparison(
         expected_fit_terminal_sha256,
         design.design_sha256,
     )
+    return AuthenticatedDependencyFit(
+        design_sha256=design.design_sha256,
+        fit_manifest_sha256=expected_fit_manifest_sha256,
+        fit_terminal_sha256=expected_fit_terminal_sha256,
+        canonical_fit_sha256=fit_sha,
+    )
+
+
+def verify_development_openings_after_fit(
+    design: RootlessLivingDexDependencyDesign,
+    *,
+    authenticated_fit: AuthenticatedDependencyFit,
+    opening_payloads: tuple[bytes, ...],
+) -> VerifiedDevelopmentComparison:
+    """Decode the fixed development roster only after independent fit authentication."""
+
+    if not isinstance(design, RootlessLivingDexDependencyDesign):
+        raise TypeError("design must be a RootlessLivingDexDependencyDesign")
+    if (
+        not isinstance(authenticated_fit, AuthenticatedDependencyFit)
+        or authenticated_fit.design_sha256 != design.design_sha256
+    ):
+        raise LivingDexDependencyCurriculumError("authenticated fit design differs")
     if not isinstance(opening_payloads, tuple) or len(opening_payloads) != 4:
         raise LivingDexDependencyCurriculumError(
             "comparison requires exactly four opening payloads"
@@ -471,9 +529,9 @@ def verify_development_openings_for_comparison(
     openings = tuple(_parse_opening(payload, commitments) for payload in opening_payloads)
     _validate_opening_set(openings, design.train_scenarios)
     return VerifiedDevelopmentComparison(
-        fit_manifest_sha256=expected_fit_manifest_sha256,
-        fit_terminal_sha256=expected_fit_terminal_sha256,
-        canonical_fit_sha256=fit_sha,
+        fit_manifest_sha256=authenticated_fit.fit_manifest_sha256,
+        fit_terminal_sha256=authenticated_fit.fit_terminal_sha256,
+        canonical_fit_sha256=authenticated_fit.canonical_fit_sha256,
         openings=openings,
     )
 
@@ -853,8 +911,15 @@ def _parse_canonical_document(
 
 
 def _canonical_bytes(document: object) -> bytes:
-    return json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode(
-        "utf-8"
+    return (
+        json.dumps(
+            document,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+        ).encode("ascii")
+        + b"\n"
     )
 
 

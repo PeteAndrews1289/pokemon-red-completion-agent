@@ -81,6 +81,8 @@
           "development": 15,
           "train": 30
         },
+        "synthetic_rootless_atomic_goal_episodes": 0,
+        "synthetic_rootless_train_outcomes": 0,
         "transfer_results": 0,
         "unseen_comparisons": 3,
         "verified_composition_episodes": 1,
@@ -421,7 +423,7 @@
       "repeatable": false
     }
   },
-  "schema": "pokemon.product-focus.v2",
+  "schema": "pokemon.product-focus.v3",
   "session_budget_percent": {
     "data_and_scenarios": 10,
     "maintenance_and_docs": 15,

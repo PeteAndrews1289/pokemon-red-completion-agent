@@ -18,7 +18,7 @@ from pathlib import Path, PurePosixPath
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FOCUS_CONFIG = PROJECT_ROOT / "configs" / "active-product-focus.json"
 DEFAULT_FOCUS_DOCUMENT = PROJECT_ROOT / "ACTIVE_PRODUCT_STATE.md"
-FOCUS_SCHEMA = "pokemon.product-focus.v2"
+FOCUS_SCHEMA = "pokemon.product-focus.v3"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _IDENTIFIER = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
@@ -32,6 +32,8 @@ _OUTPUT_KINDS = {
     "development_episode",
     "model_fit",
     "outcome_question",
+    "synthetic_rootless_atomic_goal_episode",
+    "synthetic_rootless_train_outcome",
     "transfer_result",
     "unseen_comparison",
     "verified_composition_episode",
@@ -628,40 +630,69 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         raise ProductFocusError("learning lane must declare measurable outputs")
     identities: set[tuple[str, str]] = set()
     kinds: set[str] = set()
+    minima: dict[str, int] = {}
     for output in outputs:
         _require_keys(output, {"kind", "minimum", "partition"}, subject="measurable output")
         kind = _text(output, "kind", subject="measurable output")
         partition = _text(output, "partition", subject="measurable output")
         if kind not in _OUTPUT_KINDS or partition not in _OUTPUT_PARTITIONS:
             raise ProductFocusError("measurable output kind or partition is unsupported")
-        if kind in {
-            "atomic_goal_episode",
-            "composition_attempt",
-            "development_episode",
-            "verified_composition_episode",
-            "verified_outcome_example",
-        } and partition != "development":
+        if (
+            kind
+            in {
+                "atomic_goal_episode",
+                "composition_attempt",
+                "development_episode",
+                "verified_composition_episode",
+                "verified_outcome_example",
+            }
+            and partition != "development"
+        ):
             raise ProductFocusError(
                 "model-led development output must use the development partition"
             )
         if kind == "causal_train_example" and partition != "train":
             raise ProductFocusError("causal train example must use the train partition")
+        if (
+            kind
+            in {
+                "synthetic_rootless_atomic_goal_episode",
+                "synthetic_rootless_train_outcome",
+            }
+            and partition != "train"
+        ):
+            raise ProductFocusError("synthetic rootless output must use the train partition")
         identity = (kind, partition)
         if identity in identities:
             raise ProductFocusError("measurable output identities must be unique")
         identities.add(identity)
         kinds.add(kind)
-        _positive_int(output, "minimum", subject="measurable output")
+        minima[kind] = _positive_int(output, "minimum", subject="measurable output")
     legacy_contract = {"outcome_question", "model_fit", "unseen_comparison"} <= kinds
     development_contract = {
         "development_episode",
         "verified_outcome_example",
     } <= kinds
     causal_train_contract = "causal_train_example" in kinds
-    if not legacy_contract and not development_contract and not causal_train_contract:
+    synthetic_rootless_contract = {
+        "synthetic_rootless_atomic_goal_episode",
+        "synthetic_rootless_train_outcome",
+    } <= kinds
+    if synthetic_rootless_contract and (
+        minima["synthetic_rootless_atomic_goal_episode"]
+        != minima["synthetic_rootless_train_outcome"]
+    ):
+        raise ProductFocusError("synthetic rootless output minima must match")
+    if (
+        not legacy_contract
+        and not development_contract
+        and not causal_train_contract
+        and not (synthetic_rootless_contract)
+    ):
         raise ProductFocusError(
             "learning lane must require either the legacy fit/evaluation outputs or "
-            "model-led development episodes with verified outcomes or a causal train example"
+            "model-led development episodes with verified outcomes, a causal train example, "
+            "or paired synthetic rootless outputs"
         )
 
 
@@ -677,6 +708,8 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
             "evidence",
             "model_fits",
             "outcome_questions",
+            "synthetic_rootless_atomic_goal_episodes",
+            "synthetic_rootless_train_outcomes",
             "transfer_results",
             "unseen_comparisons",
             "verified_composition_episodes",
@@ -695,6 +728,8 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
         "composition_attempts",
         "development_episode_attempts",
         "model_fits",
+        "synthetic_rootless_atomic_goal_episodes",
+        "synthetic_rootless_train_outcomes",
         "transfer_results",
         "unseen_comparisons",
         "verified_composition_episodes",
@@ -934,6 +969,8 @@ def _current_output_count(
         "composition_attempt": "composition_attempts",
         "development_episode": "development_episode_attempts",
         "model_fit": "model_fits",
+        "synthetic_rootless_atomic_goal_episode": ("synthetic_rootless_atomic_goal_episodes"),
+        "synthetic_rootless_train_outcome": "synthetic_rootless_train_outcomes",
         "transfer_result": "transfer_results",
         "unseen_comparison": "unseen_comparisons",
         "verified_composition_episode": "verified_composition_episodes",
@@ -959,6 +996,16 @@ def _current_progress_counts(progress: Mapping[str, object]) -> tuple[int, ...]:
         _count(progress, "causal_train_examples", subject="active lane progress"),
         _count(progress, "composition_attempts", subject="active lane progress"),
         _count(progress, "verified_composition_episodes", subject="active lane progress"),
+        _count(
+            progress,
+            "synthetic_rootless_train_outcomes",
+            subject="active lane progress",
+        ),
+        _count(
+            progress,
+            "synthetic_rootless_atomic_goal_episodes",
+            subject="active lane progress",
+        ),
     )
 
 

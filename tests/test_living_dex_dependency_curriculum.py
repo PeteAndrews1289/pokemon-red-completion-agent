@@ -21,16 +21,21 @@ from pokemon_red_completion.living_dex_dependency_curriculum import (
     LivingDexDependencyCurriculumError,
     RootlessDependencyOutcome,
     RootlessLivingDexDependencyDesign,
+    authenticate_completed_dependency_fit_bundle,
     build_rootless_living_dex_dependency_design,
     dependency_distance,
     materialize_train_dependency_outcome,
     transition_dependency_multiset,
+    verify_development_openings_after_fit,
     verify_development_openings_for_comparison,
 )
 
 
 def _canonical(document: object) -> bytes:
-    return json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()
+    return (
+        json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()
+        + b"\n"
+    )
 
 
 def _runtime_openings() -> tuple[bytes, ...]:
@@ -146,6 +151,40 @@ def test_train_structures_and_assignments_remain_balanced() -> None:
     assert [row.assigned_action for row in train].count(GoalKind.EVOLVE_SPECIES) == 4
     assert rewards.count(1) == 4
     assert rewards.count(-1) == 4
+
+
+def test_scarce_and_duplicate_ready_policy_rows_differ_for_both_actions() -> None:
+    train = _design(_runtime_openings()).train_scenarios
+    for family_ordinal in range(4):
+        scarce, duplicate = (row for row in train if row.family_ordinal == family_ordinal)
+        assert scarce.multiplicity is DependencyMultiplicity.SCARCE
+        assert duplicate.multiplicity is DependencyMultiplicity.DUPLICATE_READY
+        for action in (GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES):
+            assert scarce.candidate_features(action).policy_dict() != (
+                duplicate.candidate_features(action).policy_dict()
+            )
+
+
+def test_fit_authentication_is_a_separate_preopening_capability() -> None:
+    payloads = _runtime_openings()
+    design = _design(payloads)
+    manifest, manifest_sha, terminal, terminal_sha = _fit_bundle(design)
+    authenticated = authenticate_completed_dependency_fit_bundle(
+        design,
+        manifest,
+        manifest_sha,
+        terminal,
+        terminal_sha,
+    )
+
+    comparison = verify_development_openings_after_fit(
+        design,
+        authenticated_fit=authenticated,
+        opening_payloads=payloads,
+    )
+
+    assert comparison.canonical_fit_sha256 == authenticated.canonical_fit_sha256
+    assert len(comparison.openings) == 4
 
 
 def test_comparison_authenticates_fit_then_opens_distinct_held_out_families() -> None:

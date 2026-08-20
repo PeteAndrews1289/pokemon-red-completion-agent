@@ -55,9 +55,7 @@ PREFLIGHT_OBSERVABILITY = (
     PROJECT_ROOT / "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json"
 )
 FIRST_CAUSAL_FREEZE_FAILURE = (
-    PROJECT_ROOT
-    / "docs/evidence"
-    / "first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json"
+    PROJECT_ROOT / "docs/evidence" / "first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json"
 )
 FIRST_DEVELOP_TEAM_FREEZE_FAILURE = (
     PROJECT_ROOT
@@ -65,14 +63,10 @@ FIRST_DEVELOP_TEAM_FREEZE_FAILURE = (
     / "first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json"
 )
 CAUSAL_READINESS_MANIFEST_QUALIFICATION = (
-    PROJECT_ROOT
-    / "docs/evidence"
-    / "causal-readiness-manifest-qualification-v1-2026-08-18.json"
+    PROJECT_ROOT / "docs/evidence" / "causal-readiness-manifest-qualification-v1-2026-08-18.json"
 )
 CAUSAL_BOOTSTRAP_ORIGIN_QUALIFICATION = (
-    PROJECT_ROOT
-    / "docs/evidence"
-    / "causal-bootstrap-origin-qualification-v1-2026-08-18.json"
+    PROJECT_ROOT / "docs/evidence" / "causal-bootstrap-origin-qualification-v1-2026-08-18.json"
 )
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
@@ -205,6 +199,8 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert state.progress["verified_outcome_examples"] == 4
     assert state.progress["verified_composition_episodes"] == 1
     assert state.progress["causal_train_examples"] == 0
+    assert state.progress["synthetic_rootless_train_outcomes"] == 0
+    assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 0
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -792,6 +788,62 @@ def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:
         validate_product_focus_document(document)
 
 
+def test_learning_lane_accepts_paired_synthetic_rootless_outputs() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = [
+        {
+            "kind": "synthetic_rootless_train_outcome",
+            "minimum": 8,
+            "partition": "train",
+        },
+        {
+            "kind": "synthetic_rootless_atomic_goal_episode",
+            "minimum": 8,
+            "partition": "train",
+        },
+    ]
+
+    state = validate_product_focus_document(document)
+
+    assert focus_scorecard(state) == (
+        ("Synthetic Rootless Train Outcome · train", 0, 8),
+        ("Synthetic Rootless Atomic Goal Episode · train", 0, 8),
+    )
+
+
+@pytest.mark.parametrize("mutation", ("missing_pair", "wrong_partition", "unequal_minimum"))
+def test_synthetic_rootless_outputs_cannot_inflate_gameplay_counters(mutation: str) -> None:
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    outputs = [
+        {
+            "kind": "synthetic_rootless_train_outcome",
+            "minimum": 8,
+            "partition": "train",
+        },
+        {
+            "kind": "synthetic_rootless_atomic_goal_episode",
+            "minimum": 8,
+            "partition": "train",
+        },
+    ]
+    lane["measurable_outputs"] = outputs
+    if mutation == "missing_pair":
+        outputs.pop()
+    elif mutation == "wrong_partition":
+        outputs[0]["partition"] = "development"
+    else:
+        outputs[1]["minimum"] = 7
+
+    with pytest.raises(ProductFocusError):
+        validate_product_focus_document(document)
+
+
 def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
     document = _document()
     lane = _active(document)
@@ -908,16 +960,18 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
     assert "Rootless living-Dex dependency curriculum design V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 0}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 4, "total": 4}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 3, "total": 3}  # type: ignore[index]
+    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 4}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
     assert "Shadow authority unchanged" in encoded
     assert "loss 1.2667" in encoded
     assert "actions 244/244" in encoded
-    assert "clean causal bootstrap is qualified" in encoded
-    assert "multiplicity and dependency features" in encoded
-    assert "six abstract families" in encoded
+    assert "rootless dependency design is qualified" in encoded
+    assert "8-train/4-commitment synthetic campaign" in encoded
+    assert "4 train families" in encoded
+    assert "4 opaque dev commitments" in encoded
+    assert "Rootless synthetic board" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded
     assert "32177113545/1" in encoded
@@ -925,11 +979,8 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "aa65504" in encoded
     assert "32179177930/1" in encoded
     assert "preloads 0" in encoded
-    assert "61f9b44" in encoded
     assert "readiness_authentication" in encoded
     assert "effects not attested" in encoded
-    assert "paired-runner binding mismatched" in encoded
-    assert "campaign 0" in encoded
     assert "retry 0" in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -971,9 +1022,7 @@ def test_develop_team_freeze_failure_is_path_free_and_closes_the_exact_lane() ->
 def test_first_causal_freeze_failure_is_path_free_and_does_not_attest_effects() -> None:
     receipt = json.loads(FIRST_CAUSAL_FREEZE_FAILURE.read_text(encoding="ascii"))
 
-    assert receipt["schema"] == (
-        "pokemon.red.first-causal-goal-outcome-freeze-failure-receipt.v1"
-    )
+    assert receipt["schema"] == ("pokemon.red.first-causal-goal-outcome-freeze-failure-receipt.v1")
     assert receipt["source_verification"] == {
         "github_ci_attempt": 1,
         "github_ci_conclusion": "success",
@@ -1005,13 +1054,9 @@ def test_first_causal_freeze_failure_is_path_free_and_does_not_attest_effects() 
 
 
 def test_causal_readiness_manifest_qualification_is_public_only_and_zero_effect() -> None:
-    receipt = json.loads(
-        CAUSAL_READINESS_MANIFEST_QUALIFICATION.read_text(encoding="ascii")
-    )
+    receipt = json.loads(CAUSAL_READINESS_MANIFEST_QUALIFICATION.read_text(encoding="ascii"))
 
-    assert receipt["schema"] == (
-        "pokemon.core.causal-readiness-manifest-qualification-receipt.v1"
-    )
+    assert receipt["schema"] == ("pokemon.core.causal-readiness-manifest-qualification-receipt.v1")
     assert receipt["publication"] == {
         "ci_attempt": 1,
         "ci_conclusion": "success",
@@ -1032,9 +1077,7 @@ def test_causal_readiness_manifest_qualification_is_public_only_and_zero_effect(
 def test_causal_bootstrap_origin_qualification_is_public_only_and_zero_effect() -> None:
     receipt = json.loads(CAUSAL_BOOTSTRAP_ORIGIN_QUALIFICATION.read_text(encoding="ascii"))
 
-    assert receipt["schema"] == (
-        "pokemon.core.causal-bootstrap-origin-qualification-receipt.v1"
-    )
+    assert receipt["schema"] == ("pokemon.core.causal-bootstrap-origin-qualification-receipt.v1")
     assert receipt["publication"] == {
         "ci_attempt": 1,
         "ci_conclusion": "success",

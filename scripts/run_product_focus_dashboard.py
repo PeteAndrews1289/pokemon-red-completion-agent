@@ -59,6 +59,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     verified_outcomes = _count(progress, "verified_outcome_examples")
     atomic_episodes = _count(progress, "atomic_goal_episodes")
     causal_train_examples = _count(progress, "causal_train_examples")
+    synthetic_train_outcomes = _count(progress, "synthetic_rootless_train_outcomes")
+    synthetic_atomic_episodes = _count(progress, "synthetic_rootless_atomic_goal_episodes")
     composition_attempts = _count(progress, "composition_attempts")
     verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
@@ -72,20 +74,30 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             f"{development_outcomes} · fits {fits} · comparisons {unseen}"
         )
     )
-    causal_train_total = max(
+    synthetic_train_total = max(
         [
-            causal_train_examples,
-            *(minimum for label, _, minimum in outputs if label.startswith("Causal Train Example")),
+            8,
+            synthetic_train_outcomes,
+            *(
+                minimum
+                for label, _, minimum in outputs
+                if label.startswith("Synthetic Rootless Train Outcome")
+            ),
+        ]
+    )
+    synthetic_atomic_total = max(
+        [
+            8,
+            synthetic_atomic_episodes,
+            *(
+                minimum
+                for label, _, minimum in outputs
+                if label.startswith("Synthetic Rootless Atomic Goal Episode")
+            ),
         ]
     )
     fit_total = max(
         [fits, *(minimum for label, _, minimum in outputs if label.startswith("Model Fit"))]
-    )
-    comparison_total = max(
-        [
-            unseen,
-            *(minimum for label, _, minimum in outputs if label.startswith("Unseen Comparison")),
-        ]
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     prohibited = ", ".join(
@@ -98,35 +110,35 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The clean causal bootstrap is qualified. A rootless living-Dex dependency curriculum "
-            "is now in pure-core design; learning counters have not moved."
+            "The rootless dependency design is qualified. Campaign and zero-action preflight "
+            "engineering are active; no synthetic outcome or gameplay counter has moved."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Rootless synthetic design · six abstract families · no game inputs",
+        location=("Rootless qualification · 4 train families · 4 opaque dev commitments · no game"),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate="Shadow authority unchanged · no new causal evidence",
-            choice="Design collision-free multiplicity and dependency features",
+            choice="Freeze one exact 8-train/4-commitment synthetic campaign",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
             phase="qualification",
-            zero_shot_completed=causal_train_examples,
-            zero_shot_total=causal_train_total,
-            adaptation_completed=fits,
-            adaptation_total=fit_total,
-            sealed_completed=unseen,
-            sealed_total=comparison_total,
+            zero_shot_completed=synthetic_train_outcomes,
+            zero_shot_total=synthetic_train_total,
+            adaptation_completed=synthetic_atomic_episodes,
+            adaptation_total=synthetic_atomic_total,
+            sealed_completed=fits,
+            sealed_total=fit_total,
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
-                "Causal train examples",
+                "Synthetic train outcomes",
+                "Synthetic atomic episodes",
                 "Model fits",
-                "Unseen comparisons",
             ),
         ),
         events=(
@@ -140,6 +152,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"atomic {atomic_episodes} · attempts {development_episodes} · verified outcomes "
                 f"{verified_outcomes} · atomic {atomic_episodes} · composition attempts "
                 f"{composition_attempts} · verified compositions {verified_compositions}"
+            ),
+            (
+                f"Rootless synthetic board · train outcomes {synthetic_train_outcomes}/8 · "
+                f"atomic episodes {synthetic_atomic_episodes}/8 · development openings 0"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -177,11 +193,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "Closed DEVELOP_TEAM freeze · 6077173 · CI 32177113545/1 green · manifest d77d9f9d "
                 "· readiness_authentication · effects not attested · reported labels/fits/teacher "
                 "0 · retry 0"
-            ),
-            (
-                "Closed first-causal · 61f9b44 · CI 32171116652/1 · readiness_authentication · "
-                "effects not attested · campaign 0 · retry 0 · paired-runner binding mismatched; "
-                "no cause inferred"
             ),
             (
                 "Causal bootstrap qualified · aa65504 · CI 32179177930/1 green · clean process "
@@ -248,6 +259,12 @@ def main(argv: list[str] | None = None) -> int:
                     "model_fits": focus.progress["model_fits"],
                     "development_episode_attempts": focus.progress["development_episode_attempts"],
                     "causal_train_examples": focus.progress["causal_train_examples"],
+                    "synthetic_rootless_train_outcomes": focus.progress[
+                        "synthetic_rootless_train_outcomes"
+                    ],
+                    "synthetic_rootless_atomic_goal_episodes": focus.progress[
+                        "synthetic_rootless_atomic_goal_episodes"
+                    ],
                     "verified_outcome_examples": focus.progress["verified_outcome_examples"],
                     "verified_composition_episodes": focus.progress[
                         "verified_composition_episodes"
