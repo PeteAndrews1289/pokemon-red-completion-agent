@@ -83,6 +83,11 @@ ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json"
 )
+ROOTLESS_DEPENDENCY_COMPARISON_INTEGRITY_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -202,14 +207,16 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "rootless-living-dex-dependency-comparison-v1"
-    assert state.active_lane["kind"] == "learning"
-    assert state.active_lane["maintenance_unblocks"] is None
-    assert len(state.retired_lanes) == 32
-    assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == (
-        ("Synthetic Rootless Unseen Comparison · development", 0, 1),
+    assert state.active_lane["id"] == (
+        "rootless-living-dex-dependency-evaluation-integrity-qualification-v1"
     )
+    assert state.active_lane["kind"] == "maintenance"
+    assert state.active_lane["maintenance_unblocks"] == (
+        "rootless-living-dex-dependency-fresh-evaluation-v2"
+    )
+    assert len(state.retired_lanes) == 33
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -255,13 +262,12 @@ def test_rootless_dependency_campaign_result_is_balanced_and_scoped() -> None:
         if not key.startswith("synthetic_rootless_")
     } == {0}
     assert receipt["campaign"]["global_one_shot_identities_consumed"] == 12
-    assert receipt["campaign"]["development_opening_payloads_disclosed"] == 0
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 
 
-def test_rootless_dependency_fit_result_is_train_only_and_scoped() -> None:
+def test_rootless_dependency_fit_result_remains_counted_but_not_evaluation_evidence() -> None:
     receipt = json.loads(ROOTLESS_DEPENDENCY_FIT_RESULT.read_text(encoding="ascii"))
 
     assert receipt["status"] == "completed_train_only_fit_development_remains_sealed"
@@ -272,14 +278,12 @@ def test_rootless_dependency_fit_result_is_train_only_and_scoped() -> None:
     assert receipt["counter_treatment"]["synthetic_rootless_model_fits_added"] == 1
     assert receipt["counter_treatment"]["historical_gameplay_model_fits_added"] == 0
     assert receipt["counter_treatment"]["synthetic_rootless_unseen_comparisons_added"] == 0
-    assert receipt["campaign"]["development_opening_payloads_disclosed"] == 0
-    assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 
 
-def test_rootless_dependency_comparison_preflight_keeps_development_sealed() -> None:
+def test_rootless_dependency_comparison_preflight_is_historical_and_unconsumed() -> None:
     receipt = json.loads(
         ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT.read_text(encoding="ascii")
     )
@@ -302,7 +306,48 @@ def test_rootless_dependency_comparison_preflight_keeps_development_sealed() -> 
         "claude_available": False,
     }
     assert set(receipt["counter_treatment"].values()) == {0}
-    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_integrity_failure_retires_fit_and_openings() -> None:
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_COMPARISON_INTEGRITY_FAILURE.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "integrity_audit_failed_comparison_not_run_old_fit_and_openings_retired"
+    )
+    assert receipt["audit"] == {
+        "audit_private_inputs_opened": 0,
+        "development_row_contents_published": 0,
+        "distinct_development_opening_records_decoded_by_affected_inventory": 4,
+        "loaded_fit_semantically_closed_to_manifest_pins": False,
+        "scope": "public_source_and_public_receipts_only",
+        "zero_disclosure_claim_valid": False,
+    }
+    assert receipt["comparison"]["execution_started"] is False
+    assert receipt["comparison"]["identity_consumed"] is False
+    assert receipt["comparison"]["identity_eligible"] is False
+    assert receipt["comparison"]["comparison_result_published"] is False
+    assert receipt["retirement"] == {
+        "old_comparison_identity_eligible": False,
+        "old_development_openings_reusable": False,
+        "old_fit_evaluation_eligible": False,
+        "old_fit_remains_counted": True,
+        "old_fit_retry_allowed": False,
+        "old_lane_retired": True,
+        "old_model_reusable": False,
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert receipt["boards_after"] == {
+        "atomic_goal_episodes": 0,
+        "causal_train_examples": 0,
+        "development_v2": "14/4/0/1/1",
+        "legacy": "30/15/4/3/0/0",
+        "synthetic_rootless": "8/8/1/0",
+    }
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -783,7 +828,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ("Synthetic Rootless Unseen Comparison · development: 0/1",)
+    assert rows == ()
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1116,19 +1161,19 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Rootless living-Dex dependency held-out comparison V1" in public["stage"]
+    assert "Rootless living-Dex evaluation-integrity qualification V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "zero-disclosure preflight passed" in encoded
+    assert "V1 stopped before comparison" in encoded
     assert "actions 244/244" in encoded
-    assert "preflight passed" in encoded
-    assert "comparison 0/1" in encoded
-    assert "Run one aggregate held-out comparison" in encoded
-    assert "dependency fits 1/1" in encoded
-    assert "held-out comparisons 0/1" in encoded
-    assert "Rootless synthetic board" in encoded
+    assert "compare not run" in encoded
+    assert "dev records 4/4 decoded+retired" in encoded
+    assert "metadata-only inventory" in encoded
+    assert "fit 1 counted/evaluation-ineligible" in encoded
+    assert "comparisons 0" in encoded
+    assert "Rootless board" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded
     assert "32177113545/1" in encoded

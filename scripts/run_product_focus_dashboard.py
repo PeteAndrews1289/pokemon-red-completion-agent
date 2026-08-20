@@ -103,7 +103,6 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     )
     synthetic_comparison_total = max(
         [
-            1,
             synthetic_unseen_comparisons,
             *(
                 minimum
@@ -117,9 +116,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "campaign_execution": "execute",
         "consumed_trial_retry": "retry",
         "crystal_execution": "Crystal",
+        "development_payload_decode": "dev decode",
         "development_payload_disclosure": "dev disclosure",
         "full_game_replay": "replay",
         "model_fit": "fit",
+        "private_artifact_access": "private artifacts",
         "sealed_red_evaluation": "sealed Red",
         "teacher_route_hardening": "teacher routes",
     }
@@ -134,24 +135,27 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The fit-bound zero-disclosure preflight passed with all four development openings "
-            "still sealed. The one aggregate held-out comparison is ready but has not run."
+            "V1 stopped before comparison: inventory decoded all four development records and "
+            "the fit bundle join was incomplete. Public evaluation-integrity repair is active."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Rootless · preflight passed · comparison 0/1 · four commitments sealed · no game"
+            "Rootless · V1 compare not run · dev records 4/4 decoded+retired · public repair"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Fit complete · preflight passed · comparison identity unused · dev opened 0",
-            choice="Run one aggregate held-out comparison; stop at its first durable terminal",
+            candidate=(
+                "V1 fit counted 1 · evaluation-ineligible · comparison identity unconsumed and "
+                "retired"
+            ),
+            choice="Qualify metadata-only inventory and exact fit-bundle joins; no private access",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="sealed_test",
+            phase="qualification",
             zero_shot_completed=synthetic_train_outcomes,
             zero_shot_total=synthetic_train_total,
             adaptation_completed=synthetic_model_fits,
@@ -164,7 +168,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             counter_labels=(
                 "Synthetic train outcomes",
                 "Synthetic rootless fits",
-                "Synthetic held-out comparisons",
+                "Eligible held-out comparisons",
             ),
         ),
         events=(
@@ -180,10 +184,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"{composition_attempts} · verified compositions {verified_compositions}"
             ),
             (
-                f"Rootless synthetic board · train outcomes {synthetic_train_outcomes}/8 · "
-                f"atomic episodes {synthetic_atomic_episodes}/8 · dependency fits "
-                f"{synthetic_model_fits}/1 · held-out comparisons "
-                f"{synthetic_unseen_comparisons}/1 · development openings 0"
+                f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
+                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} "
+                "counted/evaluation-ineligible · comparisons "
+                f"{synthetic_unseen_comparisons} · dev records 4/4 decoded+retired"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -210,8 +214,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Rootless comparison gate · PREFLIGHT PASSED · commitments 4 · identity unused · "
-                "development openings 0 · comparison 0 · authority 0"
+                "Rootless V1 integrity gate · COMPARISON NOT RUN · identity unconsumed/ineligible "
+                "· development records decoded 4/4 · fit counted/evaluation-ineligible · "
+                "authority 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

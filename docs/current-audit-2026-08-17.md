@@ -1,6 +1,35 @@
 # Current audit — 2026-08-20
 
-## Current result: comparison preflight passed; development remains sealed
+## Current result: V1 evaluation-integrity audit failed before comparison
+
+Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. The affected
+execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[integrity-failure receipt](evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+(SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`)
+records two public-source findings: common inventory privately decoded all four development records
+before the comparison boundary, and the loaded fit was not strictly joined to all declared
+manifest semantic pins. No development row content was published.
+
+The comparison never ran. Its identity remains unconsumed but is ineligible; no comparison claim,
+terminal, aggregate metric, or unseen result exists. The fit happened and remains counted at one,
+but is evaluation-ineligible. The audit does not establish that the optimizer used development
+labels or that a stored fit record mismatched. The old fit, openings, and comparison lane retire
+without retry or reuse.
+
+All counters remain unchanged: legacy **30/15/4/3/0/0**, development **14/4/0/1/1**, and
+rootless **8/8/1/0**. This adds no gameplay, completion, living-Pokédex competence, Crystal,
+authority, or transfer evidence.
+
+Active maintenance `rootless-living-dex-dependency-evaluation-integrity-qualification-v1` is
+public/synthetic only. Its bounded deliverable is a metadata-only commitment inspector plus a
+strict loaded-fit-to-record/manifest/terminal/model/dataset semantic join and mutation tests. It
+must not open private inputs, load the old fit or openings, fit, compare, or play a game.
+
+Antigravity's post-change public-diff review returned GO with no P0/P1 blocker and agreed the exact
+stop is public implementation plus exact-head green CI, with no private access, V2, fit,
+comparison, or gameplay.
+
+## Previous result: comparison preflight was recorded; later invalidated
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`.
 Manifest `f1a03497…8b7295` froze and validated 17 semantic bindings; Antigravity returned GO with
@@ -8,15 +37,13 @@ no P0/P1 blocker before execution and again after reviewing the path-free result
 reorientation. The
 [comparison-preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 (SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
-records four authenticated commitments, an available comparison identity, zero development-payload
-disclosure, and zero fit, comparison, gameplay, authority, or transfer delta.
+recorded four commitments, an available comparison identity, and zero development-payload
+disclosure at the time. The newer integrity receipt supersedes its disclosure and readiness claims.
 
-The next lane is one benchmark comparison at 0/1. Its fixed descriptive gate is at least 3/4
-correct, cross-entropy below 0.693147, and mean winner probability above 0.5. This denominator is
-only four rows across two held-out families, so even a pass is abstract structural evidence—not
-statistical promotion, gameplay, living-Pokédex competence, or cross-title transfer.
+The planned benchmark comparison never ran. Its old lane and unconsumed identity are retired
+without retry.
 
-## Previous result: train-only dependency fit passed; development remained sealed
+## Previous result: train-only dependency fit passed; sealing claim later invalidated
 
 Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`, and the reviewed authorization checkpoint merged under green CI
@@ -24,47 +51,42 @@ Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 [fit result receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
 (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)
 records one completed fixed interaction-ranker fit: train accuracy 1.0, baseline cross-entropy
-0.693147, fitted cross-entropy 0.205636, and a durable model/bundle/terminal. Development openings,
-held-out comparison, ROM/controller, authority, and transfer all remain zero.
+0.693147, fitted cross-entropy 0.205636, and a durable model/bundle/terminal. The later audit
+invalidated the development-openings-zero and held-out-readiness claims.
 
 Counter treatment is deliberately scoped: synthetic rootless fits advance to 1/1, but the legacy
 gameplay model-fit board remains 4 and unseen comparisons remain 3 globally and 0/1 in this lane.
-The consumed fit may never retry. The only next work is a zero-disclosure comparison preflight
-pinned to the exact fit manifest and terminal; stop before opening or comparing development data.
-Antigravity's post-fit read-only audit returned GO with no P0/P1 correctness, counter, leakage,
-provenance, or claim-boundary blocker and endorsed that exact boundary.
+The consumed fit may never retry and is no longer eligible for comparison. Its metrics remain a
+historical train diagnostic only.
 
-## Previous result: eight balanced synthetic rows admitted; train-only fit was next
+## Previous result: eight balanced synthetic rows admitted; sealing claim later invalidated
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`. The
 [campaign result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
-records dataset `8207eb89…85f37`, 8/8 settled rows, 4 positive, 4 negative, 0 interrupted,
-12/12 identities consumed, and zero development disclosure. It adds exactly 8 scoped rootless
-outcomes and 8 scoped atomic episodes. Model fits remain 4 globally and 0/1 in this rootless lane;
+records dataset `8207eb89…85f37`, 8/8 settled rows, 4 positive, 4 negative, 0 interrupted, and
+12/12 identities consumed. It recorded zero development disclosure at the time, a claim later
+invalidated. It adds exactly 8 scoped rootless outcomes and 8 scoped atomic episodes. Model fits
+remain 4 globally and 0/1 in this rootless lane;
 unseen comparisons remain 3 globally and 0/1 here. Gameplay, authority, and transfer remain zero.
 
-Antigravity returned GO with no P0/P1 blocker and recommended proceeding directly to the existing
-one-shot train-only fit. Claude is unavailable for the current usage window and is not a gate.
-Authenticate the fixed dataset and fit identity, fit once, and stop at the durable terminal. A
-failed fit closes the identity; a successful fit permits only a separate later comparison
-preflight. Development payloads, ROM/gameplay, promotion, Crystal, and transfer stay closed.
+The historical next step was the one-shot train-only fit. It later completed and remains counted,
+but its sealing and comparison-readiness claims are superseded.
 
-## Previous result: campaign frozen and preflight passed; the fixed train set was ready
+## Previous result: campaign frozen; zero-disclosure claim later invalidated
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
 authenticates campaign `404e3a02…0bc9b92`, eight train cells, four opaque development commitments,
 12/12 available global identities, and 10/10 empty local namespaces. The plan freeze and preflight
-made no prediction or transition, opened no development payload, consumed no claim, and added no
-outcome, fit, comparison, gameplay, authority, or transfer evidence.
+made no prediction or transition, consumed no claim, and added no outcome, fit, comparison,
+gameplay, authority, or transfer evidence. Its claim that no development payload opened was later
+invalidated because inventory decoded all four records.
 
-The active lane is the exact eight-row synthetic train campaign at **0/8 outcomes · 0/8 atomic
-episodes**. Execute the preassigned treatments, retain every terminal, and admit all eight rows or
-close the campaign. No retry/replacement is allowed. Stop before fit or development disclosure;
-the result will still be deterministic abstract rule-learning data, not gameplay or completion.
+The historical next step was the exact eight-row synthetic train campaign. It later completed, but
+its disclosure claim did not survive the integrity audit.
 
 ## Previous result: rootless dependency design qualified; zero-action campaign gate was next
 

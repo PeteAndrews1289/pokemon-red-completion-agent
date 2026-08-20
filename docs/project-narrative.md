@@ -1,44 +1,68 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the held-out comparison is authenticated and still untouched
+## August 20: the V1 evaluation boundary failed before comparison
+
+Main `8168f82f16ad5fe9f60a6d64198343ebfaaad112` passed CI `32403421924/1`. A final
+public-source audit of the pipeline used by affected source
+`048bea66d205b0e784b3321763e2725d2ccfff32`, CI `32336487689/1`, found that common inventory
+privately decoded all four development records before the intended disclosure boundary. The
+[integrity-failure receipt](evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+(SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`)
+also records that the loaded fit was not strictly joined to every execution-manifest semantic pin.
+No development row content was published.
+
+The comparison never ran. Its identity remains unconsumed but is now ineligible; no aggregate
+metric, comparison terminal, or unseen result exists. The fit remains a counted parameter update
+with its historical train metrics, but it is evaluation-ineligible. The audit proves exposure and
+a missing enforcement join, not that the optimizer used development labels or that a stored fit
+record actually mismatched. The old fit, openings, and lane retire without reuse or retry.
+
+Active `rootless-living-dex-dependency-evaluation-integrity-qualification-v1` is deliberately
+public and synthetic: add a metadata-only commitment inspector, enforce a strict loaded-fit bundle
+join, mutation-test both, and stop. It adds no private access, fit, comparison, gameplay,
+completion, living-Pokédex competence, Crystal, authority, or transfer evidence. Boards remain
+**30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+Antigravity's post-change public-diff review returned GO with no P0/P1 blocker and agreed the exact
+stop is public implementation plus exact-head green CI, with no private access, V2, fit,
+comparison, or gameplay.
+
+## Previous August 20 checkpoint: the comparison looked authenticated; later invalidated
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` froze manifest
 `f1a03497…8b7295`, passed Antigravity's pre-execution review, and ran one read-only comparison
 preflight. Antigravity's post-result review also returned GO with no P0/P1 blocker. The
 [receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
-records four authenticated commitments, an unused comparison identity, zero development opening
-disclosures, and no learning-counter or gameplay-authority change.
+recorded four commitments, an unused comparison identity, and zero development opening disclosure
+at the time. The newer integrity receipt supersedes its disclosure and readiness claims.
 
-The next bounded result is one four-row aggregate held-out comparison. It is the first test of
-whether the learned acquire-versus-evolve rule survives unseen dependency structures, but its two
-families support only a descriptive claim. Pass or fail, the pipeline stops before refit or gameplay.
-A pass points toward a real Red observation adapter; Crystal and cross-title living-Pokédex transfer
-remain later, independent gates.
+The planned four-row comparison never ran. Its old lane and unconsumed identity are retired
+without retry.
 
-## Previous August 20 checkpoint: the first rootless dependency model fit
+## Previous August 20 checkpoint: the first rootless dependency fit; sealing claim invalidated
 
 After the reviewed fit checkpoint merged, exact execution source
 `048bea66d205b0e784b3321763e2725d2ccfff32` performed its one allowed train-only update. The
 [fit result](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) records
 accuracy 1.0 and cross-entropy reduction from 0.693147 to 0.205636 across the eight authenticated
 synthetic train outcomes. The fixed fit identity is consumed and its model, manifest, and terminal
-are durable. All four development openings remain sealed.
+are durable. Its claim that all four development openings remained sealed was later invalidated.
 
 This is a genuine parameter update, but a deliberately narrow one: it learns an abstract
 state-by-action rule for preserving scarce precursors versus evolving duplicates. It adds one
 scoped rootless fit without changing the historical gameplay-fit board, unseen comparisons,
-authority, completion, or transfer. The next lane only qualifies a fit-bound, zero-disclosure
-comparison preflight. Actual held-out evaluation, Red gameplay, and Crystal transfer remain
-separate decisions.
+authority, completion, or transfer. The historical zero-disclosure comparison instruction is
+superseded, and the fit is no longer evaluation-eligible.
 
-## August 20: the fixed dependency dataset is admitted; the first rootless fit is next
+## Previous August 20 checkpoint: the fixed dataset was admitted; sealing claim invalidated
 
 Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` completed campaign
 `404e3a02…0bc9b92`. The
 [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
 binds an eight-row deterministic train set with four positive, four negative, and zero interrupted
-outcomes. All twelve one-shot identities are consumed, while the four development openings remain
-sealed. The result advances only the scoped synthetic board to 8 outcomes and 8 atomic episodes;
+outcomes. All twelve one-shot identities are consumed. Its claim that the four development
+openings remained sealed was later invalidated. The result advances only the scoped synthetic
+board to 8 outcomes and 8 atomic episodes;
 fits, comparisons, gameplay, authority, and transfer did not move.
 
 Antigravity returned GO with no P0/P1 blocker. The next bounded stage is one fixed train-only fit
@@ -47,14 +71,15 @@ rootless fits/comparisons from global model and gameplay evidence. A successful 
 later externally pinned held-out comparison; it does not grant Red or Crystal competence. Claude
 is unavailable for this usage window and is not part of the current critical path.
 
-## Previous August 20 checkpoint: the rootless campaign was frozen and training-ready
+## Previous August 20 checkpoint: the campaign was frozen; disclosure claim invalidated
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 binds campaign `404e3a02…0bc9b92`, eight preassigned train transitions, and four development
-commitments whose payloads remain sealed. One immutable plan was written, then a zero-action check
-confirmed 12/12 account-global identities unused and 10/10 local namespaces empty. It consumed no
-claim and produced no prediction, transition, outcome, fit, comparison, or gameplay effect.
+commitments whose payloads were reported sealed. One immutable plan was written, then a zero-action
+check confirmed 12/12 account-global identities unused and 10/10 local namespaces empty. It
+consumed no claim and produced no prediction, transition, outcome, fit, comparison, or gameplay
+effect, but its zero-disclosure claim was later invalidated.
 
 The next bounded step is actual synthetic training-data materialization: execute and strictly
 admit all eight deterministic rows, preserving their four-positive/four-negative and

@@ -1,34 +1,53 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: the exam is authenticated; open it only once
+## August 20 scene: the envelope opened during inventory; cancel the exam
 
-Open on **MANIFEST F1A03497 · PREFLIGHT PASSED · COMMITMENTS 4 · COMPARISON IDENTITY UNUSED ·
-DEVELOPMENT PAYLOADS OPENED 0**. Link the
+Open on **MAIN 8168F82 · CI 32403421924/1 GREEN · AFFECTED SOURCE 048BEA6 · CI
+32336487689/1 GREEN · INTEGRITY FAILED BEFORE COMPARISON**. Link the
+[integrity-failure receipt](evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+with **SHA-256 0EEE3874…CF0686**.
+
+Reveal **DEV RECORDS PRIVATELY DECODED 4/4 · ROW CONTENTS PUBLISHED 0 · FIT 1 COUNTED BUT
+EVALUATION-INELIGIBLE · COMPARISON IDENTITY UNCONSUMED/INELIGIBLE · COMPARISON EXECUTIONS 0 ·
+RESULTS 0**. Stamp **THE COMPARISON NEVER RAN**. Do not animate a bad score, label leakage into
+optimization, or a mismatched stored record: the audit proves exposure and a missing semantic
+join, not those stronger claims.
+
+Cut to active `rootless-living-dex-dependency-evaluation-integrity-qualification-v1`:
+**PUBLIC/SYNTHETIC MAINTENANCE ONLY → METADATA-ONLY INSPECTOR + STRICT FIT-BUNDLE JOIN → MUTATION
+TEST → STOP**. Hold **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/0** and show
+**PRIVATE 0 · OLD FIT/OPENING REUSE 0 · NEW FIT 0 · COMPARISON 0 · GAMEPLAY 0 · CRYSTAL 0 ·
+AUTHORITY/TRANSFER 0**. The mission remains a model that can play across games and maintain a
+living Pokédex; this repair is evidence hygiene, not that capability.
+
+Add that Antigravity's post-change public-diff review returned **GO · P0/P1 0** and agreed the
+exact stop is **PUBLIC IMPLEMENTATION + EXACT-HEAD GREEN CI**, with
+**PRIVATE/V2/FIT/COMPARE/GAMEPLAY 0**.
+
+## Previous August 20 scene: the exam looked authenticated; later invalidated
+
+Open on the historical card **MANIFEST F1A03497 · PREFLIGHT RECORDED · COMMITMENTS 4 ·
+COMPARISON IDENTITY UNUSED · DEVELOPMENT PAYLOADS REPORTED OPENED 0**. Link the
 [preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 with **SHA-256 F8DA36C2…A95F7**. Add **ANTIGRAVITY PRE/POST GO · P0/P1 0**.
 
-Animate **CLAIM ONCE → OPEN EXACTLY 4 → AGGREGATE METRICS → DURABLE TERMINAL → CUT**. Put the
-descriptive gate on screen: **≥3/4 CORRECT · CE <0.693147 · MEAN WINNER P >0.5**. Then show the
-honesty card: **NOT GAMEPLAY · NOT COMPLETION · NOT TRANSFER · NOT AUTHORITY**. A pass earns only
-the next engineering question: can real Red observations supply the same title-neutral signal?
+Stamp the whole planned comparison sequence **SUPERSEDED · NEVER EXECUTED · NO RETRY**.
 
-## Previous August 20 scene: the first dependency head learned; the exam envelope stayed closed
+## Previous August 20 scene: the first dependency head learned; sealing claim later invalidated
 
 Open on **ROOTLESS FIT 1/1 · TRAIN ROWS 8 · ACCURACY 1.0 · CROSS-ENTROPY
 0.693147→0.205636**. Link the
 [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) with
-**SHA-256 D570FCC4…B9D7B**. Show **DEVELOPMENT OPENINGS DISCLOSED 0 · HELD-OUT COMPARISON 0/1 ·
-ROM 0 · CONTROLLER 0 · AUTHORITY 0 · TRANSFER 0**.
+**SHA-256 D570FCC4…B9D7B**. Show **HISTORICAL TRAIN METRICS PRESERVED · DEVELOPMENT-SEALED
+CLAIM LATER INVALIDATED · COMPARISON NEVER RAN · ROM 0 · CONTROLLER 0 · AUTHORITY 0 · TRANSFER 0**.
 
-Animate **FIT MANIFEST 27F2358D + TERMINAL BABE6A96 → ZERO-DISCLOSURE PREFLIGHT → CUT BEFORE
-OPENING**. Keep the scale honest: the model learned one abstract living-collection dependency
-rule. It has not yet passed held-out structures, played Red, finished a story, built a living
-Pokédex, or transferred to Crystal.
+Mark the historical zero-disclosure rail **INVALIDATED**. The counted fit supplies no held-out,
+gameplay, completion, living-Pokédex, or transfer evidence.
 
-## August 20 scene: all eight lessons landed; now fit the first rootless dependency head
+## Previous August 20 scene: all eight lessons landed; sealing claim later invalidated
 
 Open on **CAMPAIGN 404E3A02 · TRAIN 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES
-CONSUMED 12/12 · DEVELOPMENT OPENINGS SEALED 4/4**. Link the
+CONSUMED 12/12 · DEVELOPMENT OPENINGS REPORTED SEALED 4/4**. Link the
 [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json) with
 **SHA-256 415AF97D…CF3C4**. Show the only counter movement: **ROOTLESS TRAIN OUTCOMES +8 ·
 ROOTLESS ATOMIC EPISODES +8**. Keep **GLOBAL FITS 4 · COMPARISONS 3 · GAMEPLAY 0 · AUTHORITY 0 ·
@@ -37,20 +56,22 @@ TRANSFER 0** unchanged.
 Animate **DATASET 8207EB89…85F37 → ONE FIXED INTERACTION-RANKER FIT → DURABLE TERMINAL → CUT**.
 The next cards remain locked: **DEVELOPMENT OPENING · HELD-OUT COMPARISON · RED GAMEPLAY · CRYSTAL
 TRANSFER**. Add **ANTIGRAVITY: GO, P0/P1 0** and **CLAUDE: USAGE WINDOW EXHAUSTED, NOT A BLOCKER**.
-The honest victory is a real parameter-update input, not a Pokémon-playing model yet.
+At the time, the honest victory was a real parameter-update input, not a Pokémon-playing model;
+the later audit removed its evaluation eligibility.
 
-## Previous August 20 scene: the experiment was sealed; the synthetic lesson could begin
+## Previous August 20 scene: the experiment looked sealed; disclosure claim later invalidated
 
 Open on **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN · TRAINING_READY**.
 Link the
 [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
-with **SHA-256 6D650FC9…1E1BA2**. Show **8 TRAIN CELLS · 4 DEVELOPMENT COMMITMENTS SEALED · GLOBAL
+with **SHA-256 6D650FC9…1E1BA2**. Show **8 TRAIN CELLS · 4 DEVELOPMENT COMMITMENTS · GLOBAL
 UNUSED 12/12 · LOCAL EMPTY 10/10 · CLAIMS CONSUMED 0**.
 
 Animate the next rail: **EXECUTE EXACT 8 PREASSIGNED TRANSITIONS → RETAIN EVERY TERMINAL → ADMIT
 8/8 OR CLOSE → STOP BEFORE FIT**. Keep the honesty card on-screen: **ROOTLESS OUTCOMES 0/8 ·
-ATOMIC 0/8 · GAMEPLAY 0 · RED COMPLETION 0 · CRYSTAL TRANSFER 0**. The achievement is that the
-small dependency lesson can finally run without contamination—not that the model can play Pokémon.
+ATOMIC 0/8 · GAMEPLAY 0 · RED COMPLETION 0 · CRYSTAL TRANSFER 0**. This was presented as a
+lesson ready to run without contamination; the later audit invalidated that disclosure claim. It
+was never evidence that the model could play Pokémon.
 
 ## Previous August 20 scene: the dependency lesson existed; the experiment still needed sealing
 

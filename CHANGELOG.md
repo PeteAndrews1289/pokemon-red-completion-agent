@@ -2,40 +2,61 @@
 
 ## Unreleased
 
-- Froze and validated manifest `f1a03497…8b7295`, received Antigravity pre/post GO with no P0/P1,
+- Recorded the public-source integrity failure at clean main
+  `8168f82f16ad5fe9f60a6d64198343ebfaaad112` under green CI `32403421924/1`. The
+  [path-free failure receipt](docs/evidence/rootless-living-dex-dependency-comparison-integrity-failure-v1-2026-08-20.json)
+  (SHA-256 `0eee3874c664bdda0bdd6f4cfb3ec3f3e6b36f8b442173a37f8dcdd5a6cf0686`)
+  records that the affected source `048bea66d205b0e784b3321763e2725d2ccfff32` privately decoded
+  all four development records during inventory while publishing no row contents. The comparison
+  never ran; its identity is unconsumed but ineligible. The completed rootless fit remains counted
+  at 1 but is evaluation-ineligible, and no actual record mismatch or optimizer use of development
+  labels is inferred. Retired the old fit, openings, and comparison lane without retry and activated
+  public/synthetic `rootless-living-dex-dependency-evaluation-integrity-qualification-v1` for a
+  metadata-only inspector plus strict loaded-fit semantic join. Counters remain **30/15/4/3/0/0**,
+  development **14/4/0/1/1**, and rootless **8/8/1/0**; gameplay, authority, Crystal, completion,
+  and transfer remain unclaimed. Antigravity's post-change public-diff review returned GO with no
+  P0/P1 blocker and agreed the exact stop is public implementation plus exact-head green CI, with
+  no private access, V2, fit, comparison, or gameplay.
+
+- Historical, later invalidated: froze and validated manifest `f1a03497…8b7295`, received
+  Antigravity pre/post GO with no P0/P1,
   and
   passed exactly one fit-bound zero-disclosure held-out-comparison preflight at published source
   `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
   [path-free receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
-  records four authenticated commitments, an unused comparison identity, zero development-payload
-  disclosure, and zero learning/gameplay/authority/transfer deltas. Activated one benchmark
-  comparison at 0/1 and stopped before development decode.
+  recorded four commitments, an unused comparison identity, and zero development-payload
+  disclosure. The newer integrity receipt supersedes its zero-disclosure and readiness claims;
+  the benchmark comparison never ran.
 
-- Completed exactly one train-only rootless living-Dex dependency fit from published source
+- Historical, with its sealing claim later invalidated: completed exactly one train-only rootless
+  living-Dex dependency fit from published source
   `048bea66d205b0e784b3321763e2725d2ccfff32` after the reviewed authorization checkpoint merged.
   The [path-free fit result](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
   records 1.0 accuracy across eight authenticated synthetic train rows and cross-entropy reduction
-  from 0.693147 to 0.205636. The fit identity is consumed; all four development openings remain
-  sealed. Added exactly one scoped synthetic rootless fit without changing historical gameplay
-  fits, comparisons, outcomes, authority, or transfer. Activated a bounded zero-disclosure
-  comparison-qualification lane and stopped before development decode or comparison execution.
+  from 0.693147 to 0.205636. The fit identity is consumed and the fit remains counted, but the
+  later audit invalidated the claim that all four development openings remained sealed and made
+  the fit ineligible for evaluation. No comparison ran.
 
-- Executed and strictly admitted the exact rootless living-Dex dependency campaign from source
+- Historical, with its sealing claim later invalidated: executed and strictly admitted the exact
+  rootless living-Dex dependency campaign from source
   `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
   [path-free result](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
-  records 8/8 settled deterministic train rows, 4 positive, 4 negative, 0 interrupted, all 12
-  one-shot identities consumed, and all four development openings sealed. Added 8 scoped
+  records 8/8 settled deterministic train rows, 4 positive, 4 negative, 0 interrupted, and all 12
+  one-shot identities consumed. Its claim that all four development openings remained sealed was
+  later invalidated. Added 8 scoped
   synthetic rootless outcomes and 8 scoped synthetic atomic episodes; every legacy fit,
   comparison, gameplay, authority, and transfer counter stayed unchanged. Added scoped rootless
   fit/comparison counters and activated one fixed train-only fit at 0/1. Antigravity returned GO
   with no P0/P1 blocker; Claude is unavailable for the current usage window.
 
-- Froze campaign `404e3a02…0bc9b92` and passed its zero-action readiness preflight at exact source
+- Historical, with its zero-disclosure claim later invalidated: froze campaign
+  `404e3a02…0bc9b92` and passed its zero-action readiness preflight at exact source
   `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
   [path-free receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
   records eight fixed train scenarios, four opaque development commitments, 12/12 unused global
   identities, and 10/10 empty local namespaces. Freeze/preflight produced no transition, outcome,
-  fit, comparison, development disclosure, ROM/controller effect, or counter delta. Activated the
+  fit, comparison, ROM/controller effect, or counter delta, but its development-disclosure-zero
+  claim was later invalidated. Activated the
   exact eight-row synthetic train lane at 0/8 outcomes and 0/8 atomic episodes; fit, development
   comparison, gameplay, authority, and Crystal remain closed.
 
