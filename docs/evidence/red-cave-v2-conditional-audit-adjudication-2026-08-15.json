@@ -1,0 +1,73 @@
+{
+  "audit": {
+    "audited_source_commit": "346b2e5d0bcb1aa1b55eac1ff839199a16f138cd",
+    "exact_head_ci_run": 31922419713,
+    "reviewer": "claude",
+    "verdict": "approve_with_conditions"
+  },
+  "authorization": {
+    "live_v2_authorized": false,
+    "live_v2_executed": false,
+    "model_fit": false,
+    "next_gate": "obtain fresh explicit user authorization for exactly one V2 execution"
+  },
+  "delta_reaudit": {
+    "codex_executed_falsifiers": [
+      "suppress targeted-evolution multiway emission",
+      "restore singleton emission in both venue branches"
+    ],
+    "exact_source_commit": "ff2ccfb7830ab5663226ffc295d6d37658cc81a3",
+    "reviewer": "claude",
+    "reviewer_executed_mutation_probes": false,
+    "reviewer_limitation": "the detached review environment permitted source inspection but denied test and mutation execution; exact-head CI and Codex's executed local probes supplied the runtime evidence",
+    "reviewer_scope": "eligible candidate cardinality, targeted-evolution behavioral authority, sparse record durability, and Route 11 waiver accounting",
+    "verdict": "approve_for_requesting_exactly_one_v2_user_authorization"
+  },
+  "findings": [
+    {
+      "decision": "accepted",
+      "finding": "two-venue targeted evolution lacked a behavioral oracle",
+      "resolution": "an alternate-authority test now proves the selected venue transition executes and fails when the evolution decision is suppressed"
+    },
+    {
+      "decision": "accepted",
+      "finding": "venue emission counted supplied bands rather than learner-visible eligible candidates",
+      "resolution": "both training branches now require more than one projected candidate; two supplied bands with one eligible destination emit no menu"
+    },
+    {
+      "decision": "accepted_and_scoped",
+      "finding": "terminal evidence was not synchronized before returning",
+      "resolution": "the plan, terminal attempt, execution failure and accepted measurement use durable typed appends"
+    },
+    {
+      "decision": "accepted_and_scoped",
+      "finding": "abort and blackout wording was broader than the implementation",
+      "resolution": "the public V2 contract says a mid-controller power loss can retain only the durable plan and distinguishes execution aborts from plan or finalization I/O failures"
+    },
+    {
+      "decision": "preserved_as_history",
+      "finding": "the old V1 prospective plan can look live in isolation",
+      "resolution": "the immutable historical plan is not rewritten; the path-free failure receipt and every active handoff name V1 consumed and non-retryable"
+    }
+  ],
+  "repaired_source": {
+    "executable_source_bundle_sha256": "5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe",
+    "executable_source_commit": "ff2ccfb7830ab5663226ffc295d6d37658cc81a3",
+    "non_integration_tests_passed": 3576,
+    "intentional_deselections": 3,
+    "expected_failures": 1,
+    "exact_head_ci_run": 31925553137,
+    "mypy_source_files_checked": 227,
+    "published": true,
+    "quality_privacy_documentation_and_registry_gates": "passed",
+    "route_11_focused_tests_passed": 55,
+    "semantic_and_durability_focused_tests_passed": 92
+  },
+  "schema": "pokemon.red.party-development-cave-v2-audit-adjudication.v1",
+  "sealed_red_cases_opened": 0,
+  "teacher_queries": 0,
+  "learner_outcomes_opened": 0,
+  "model_predictions": 0,
+  "private_path_fields": 0,
+  "status": "approved_to_request_fresh_user_authorization"
+}

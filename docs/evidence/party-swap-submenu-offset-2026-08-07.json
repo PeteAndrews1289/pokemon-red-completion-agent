@@ -1,0 +1,20 @@
+{
+  "schema": "pokemon-measured-defect-v1",
+  "recorded_on": "2026-08-07",
+  "defect_id": "field-party-swap-submenu-off-by-one",
+  "found_by": "two diagnostic runs, after instrumenting the failure to report what it saw",
+  "symptom": "'Could not select menu item.' while placing a trainee into slot one, with no other information.",
+  "measurement": {
+    "first_run": "cursor read [0, 1, 2, 3, 4, 4, 4, 4] against a target of 5 — it moved and then stopped, which already ruled out the stale-submenu explanation the code's own comments elsewhere would have suggested",
+    "second_run": "max_menu_item=4, party_count=6, top=(12, 8)",
+    "conclusion": "A five-entry menu while the party holds six. That is not the party list. With Blastoise selected it is the member submenu: Surf, Strength, SWITCH, STATS, CANCEL."
+  },
+  "root_cause": "The submenu lists a Pokemon's usable field moves first, then SWITCH, STATS and CANCEL, so SWITCH sits at index field_move_count. The code stepped down field_move_count + 1 times and confirmed on STATS. Every later selection was driving the five-entry submenu while believing it was choosing a party slot, and ran off the end of it.",
+  "why_the_guard_did_not_catch_it": "The step count and the assertion that followed it were derived from the same wrong belief, so the check confirmed the mistake instead of catching it. A guard written from the same assumption as the code it guards can only agree with it.",
+  "harness_gap_closed": {
+    "before": "The fake accepted any submenu index as SWITCH and moved on to target selection, so the wrong index led to the right place and the tests passed.",
+    "after": "The fake models the submenu's real length and only advances on SWITCH. Reintroducing the off-by-one now fails two tests in milliseconds.",
+    "lesson": "The harness could not have found this on its own: it was built from the same belief about the menu as the code. The run supplied the belief correction, and the harness now holds it."
+  },
+  "cost": "three runs at roughly five minutes each — one to reach the defect, one to read the cursor sequence, one to read the menu bounds. Each instrumentation step was cheap because the failure was made to carry its own evidence."
+}

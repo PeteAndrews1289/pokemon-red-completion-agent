@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_verified_movement_acknowledgement_defect",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990019 exercised the stabilized wild-exit repair and accepted five protected Route 1 flees, but one movement pulse after an exit was still not consumed. The fixed-length corridor ended one tile short of the north transition. The run stopped before any learned battle or training decision. This is a preserved closed-loop movement defect, not a model-prediction failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990019,
+    "initial_wait_frames": 162,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "faa66fb29b8c1fa10a2763ef5c1f27cd3e095b9e7c7947c5b0e26e8ad63be571"
+  },
+  "source": {
+    "git_commit": "d3461f0ebb59b752e09e96b4c1e46f75cc8180a1",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "f55a1836d12815f9444e40e84950e8091bb39dd40bc0778f0ca8cbaaedeeb76e",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "QualifiedPlayError",
+    "message": "The clean run missed the stable Viridian City entrance gate.",
+    "frames_executed": 43818,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "direct_reproduction": {
+    "verified_flees": [
+      {"position": [8, 28], "enemy_species_id": 165, "enemy_level": 3},
+      {"position": [12, 25], "enemy_species_id": 165, "enemy_level": 2},
+      {"position": [14, 15], "enemy_species_id": 165, "enemy_level": 3},
+      {"position": [14, 12], "enemy_species_id": 165, "enemy_level": 4},
+      {"position": [14, 9], "enemy_species_id": 165, "enemy_level": 3}
+    ],
+    "all_flees": {
+      "battle_result": 2,
+      "run_attempts_each": 1,
+      "stabilization_frames_each": 120,
+      "protected_state_verified": true
+    },
+    "observed_terminal_position": {"map": 12, "position": [11, 1]},
+    "expected_terminal_position": {"map": 1, "position": [21, 35]},
+    "causal_trial": "A wrapper that required directional coordinate or map progress after every MOVE, waited 24 frames, and retried an unchanged tile reached the exact Viridian gate. It needed one retry. Because that retry changes subsequent RNG consumption, the causal trace encountered two rather than five wild Pokemon; it was stopped immediately after independently verifying Viridian."
+  },
+  "diagnosis": {
+    "category": "open_loop_movement_assumed_input_consumption",
+    "finding": "A fixed wait reduces transition risk but cannot prove that a later input was consumed. The corridor counted requested directions rather than observed movement. One ignored north input therefore shifted every later coordinate and left the final transition one tile short.",
+    "model_boundary": "No learned battle, switch-target, training-control, or trainee/venue decision had occurred. The scheduled trainer-battle perturbation controller had consumed zero of 74 entries."
+  },
+  "repair": {
+    "status": "implemented_full_rom_free_gate_passed_pending_fresh_perturbation",
+    "behavior": "Every shared Route 1 step now requires progress in the requested direction or a map transition. An unchanged, otherwise identical Route 1 boundary waits 24 frames and retries the same direction at most eight times; perpendicular motion, protected-state drift, an unconsumed encounter trigger, or exhaustion fails closed.",
+    "public_receipt": "Oak and Pewter reports now expose aggregate movement-retry counts in addition to each wild-flee receipt. Requested actions are no longer treated as executed movement.",
+    "rom_free_regressions": "One ignored direction is retried and counted; a drift during post-flee stabilization is rejected; bounded wild and route allowances remain enforced.",
+    "next_gate": "Commit and push the source-bound repair that passed 2167 ROM-free tests plus Ruff, mypy, public-artifact, documentation, and registry checks, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "authority_promoted": false,
+  "candidate_feature_values_public": false,
+  "candidate_menus_frozen": 0,
+  "catalog_freeze_ready": false,
+  "choice_kind_partition_counts": {
+    "development:trainee": 3,
+    "development:venue": 3,
+    "train:trainee": 4,
+    "train:venue": 4
+  },
+  "controller_actions": 0,
+  "crystal_cases_opened": 0,
+  "goal_partition_counts": {
+    "development:balance": 2,
+    "development:collection": 1,
+    "development:evolution": 2,
+    "development:role_coverage": 1,
+    "train:balance": 2,
+    "train:collection": 2,
+    "train:evolution": 2,
+    "train:role_coverage": 2
+  },
+  "inventory_sha256": "b8c10704f2307e24ecff5af565a2ff8f97bde20aec78f34a15640649bcef4c94",
+  "minimum_venue_priors_for_genuine_venue_menu": 2,
+  "model_updates": 0,
+  "outcomes_opened": 0,
+  "partition_counts": {
+    "development": 6,
+    "train": 8
+  },
+  "plan_sha256": "9097f73eecaf0e38949fb6e76b0cc7a3c8bafa50c353b60a87f77e5519f4e30d",
+  "pp_materialization_protocol_sha256": "fcc0d4ae4260dee271bc4affe7af1187031d7382c8a4ff5568e7ba569c1cee87",
+  "preparation_partition_counts": {
+    "development:natural_pp_depletion": 1,
+    "development:none": 5,
+    "train:natural_pp_depletion": 1,
+    "train:none": 7
+  },
+  "private_path_fields": 0,
+  "private_plan_file_sha256": "bb7f32b320499239d0582e2deebcb12759fa388eb6289b62bdb839ab083554e8",
+  "private_plan_file_tracked": false,
+  "prospective_pp_bins_after_materialization": {
+    "development": [
+      "high",
+      "middle"
+    ],
+    "train": [
+      "high",
+      "middle"
+    ]
+  },
+  "qualified_venue_priors": 1,
+  "reservation_count": 14,
+  "schema": "pokemon.core.party-development-question-reservation-summary.v1",
+  "sealed_test_cases_opened": 0,
+  "source_checkpoint_identity_public": false,
+  "source_evolution_route_kinds": {
+    "development": [
+      "level",
+      "none"
+    ],
+    "train": [
+      "level",
+      "none"
+    ]
+  },
+  "source_health_bins": {
+    "development": [
+      "high",
+      "low",
+      "middle"
+    ],
+    "train": [
+      "high",
+      "low",
+      "middle"
+    ]
+  },
+  "source_pp_bins": {
+    "development": [
+      "high"
+    ],
+    "train": [
+      "high"
+    ]
+  },
+  "source_semantic_context_counts": {
+    "development": 6,
+    "train": 8
+  },
+  "source_trainable_widths": {
+    "development": [
+      6
+    ],
+    "train": [
+      6
+    ]
+  },
+  "teacher_prior_sha256": "323f80330ff9ee84633a38415f21a101c056057706d40327bd3c45c7aeaedfc0",
+  "teacher_queries": 0,
+  "unresolved_blockers": [
+    "concrete_red_candidate_bindings_not_frozen",
+    "prospective_8_plus_6_catalog_not_frozen",
+    "reserved_pp_contexts_not_materialized",
+    "second_compatible_venue_prior_missing"
+  ],
+  "venue_prior_registry_sha256": "d7f45da14d203705c56cf0c1097d9f7b2e0c6f2c712a2bab8a6ffee0327f7a45"
+}

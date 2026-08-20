@@ -1,0 +1,100 @@
+{
+  "capture": {
+    "checkpoint_id": "scenario_002_shared_prerequisites_cleared",
+    "envelope_sha256": "44957675bf422b119c5b6fdffa5683a6356df8b318cd9923d7edd7e7ab60ac99",
+    "state_sha256": "f19c0263f44c0a9821244744d5014a04a9f08a66a5e676563270f8217be5a42f"
+  },
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 3,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "episode": {
+    "assignment_id": "83c1facbfb1ba0cfe172709cf5e568d605dbfd94375c0b878dac813e10a1d583",
+    "dataset": {
+      "candidate_count": 2,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-83c1facbfb1ba0cfe172709cf5e568d605dbfd94375c0b878dac813e10a1d583",
+    "execution": {
+      "acknowledged_steps": 14,
+      "interruptions": {},
+      "movement_requests": 14,
+      "replans": 0,
+      "selected_candidate_index": 0,
+      "selected_objective": "defeat_misty",
+      "status": "succeeded",
+      "wait_actions": 1
+    },
+    "manifest": {
+      "bytes": 64527,
+      "records": 35,
+      "sha256": "ee68ec7eeaf7374b51996b8760e653186dfea013efb4f6495bf26ccdfb5ab282",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 15,
+        "snapshots": 16
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 2,
+    "candidates_in_policy_order": [
+      {
+        "field_actions": 0,
+        "map_transitions": 1,
+        "objective_id": "defeat_misty",
+        "route_cost": 15,
+        "route_steps": 14
+      },
+      {
+        "field_actions": 0,
+        "map_transitions": 8,
+        "objective_id": "reach_vermilion",
+        "route_cost": 205,
+        "route_steps": 201
+      }
+    ],
+    "private_episode_existed_before_execution": false,
+    "story_route_executed": false,
+    "story_route_role": "unselected_candidate_preflight",
+    "status": "ready"
+  },
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-002-train",
+    "scenario_sha256": "e91ed937017b5c0bed2ac020d9036b4f3ced9da17ce0143cbad5f08c3e16d1aa",
+    "source_partition": "train"
+  },
+  "recorded_on": "2026-08-11",
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31551065013,
+    "ci_status": "success",
+    "git_commit": "a546d79451b275bc6ddd03cd9c14382946f7b19d",
+    "source_bundle_sha256": "2a3051a14d42057d8ee33aa7da4ddbd7ff9d8156ccdeb4b9085ecfaae71b8d25",
+    "teacher_execution_sha256": "706381aea37f21f8ad5a7cb665c3a8b8c19bc8e51b2bccb94d5f91c1b8f50c49"
+  },
+  "story_predicate": {
+    "capability": "story:cerulean_robbed_house_open",
+    "displaced_object_at": [
+      12,
+      27
+    ],
+    "durable_event": "LEFT_BILLS_HOUSE_AFTER_HELPING",
+    "remaining_object_at": [
+      12,
+      28
+    ]
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

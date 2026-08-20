@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_role": "exposed_repair_nonheldout",
+  "counted": false,
+  "harness_seed": 1160004,
+  "source_commit": "f5626a3ac400a5728526d195c87b688523ff51a4",
+  "source_bundle_sha256": "3e55b0bf6aee7800b77a0ff09bffb568a099444833d3f883b83a667c76190f77",
+  "collection_registry_sha256": "e8d8d1cff31707d214865821d55252ce2c23dd46b0ae28c6bee032e946926c79",
+  "objective_model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "battle_start_schedule_sha256": "9a74a9954e40adda1d1f53a2b1ac72cb3af5eaabca5fa9d35aa9bb4985d57ae2",
+  "private_log_sha256": "802b2246471297c6456253f2e0ee211e44e7a0edc4ff6d1537702f98c866c67e",
+  "outcome": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_declared": 312,
+    "objectives_verified": 36,
+    "objectives_declared": 36,
+    "scheduled_battles_finished": 71,
+    "scheduled_battles_expected": 71,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "safe_stop_reason": "completion_verified"
+  },
+  "repair_evidence": {
+    "boundary": "victory_road_route_22_rival",
+    "balanced_team_continuation_observed": true,
+    "fixed_party_slot_selection_removed": true,
+    "sacrifice_only_recovery_removed": true
+  },
+  "interpretation": "The exact previously exposed schedule completes on the repaired source. This is regression evidence only and does not count as held-out validation or test evidence."
+}

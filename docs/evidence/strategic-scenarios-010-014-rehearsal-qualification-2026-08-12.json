@@ -1,0 +1,150 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "source_partition": "train"
+  },
+  "scenarios": [
+    {
+      "capture": {
+        "checkpoint_id": "red-strategic-scenario-v2-010-train-skill-materialized",
+        "envelope_sha256": "ac6be6ecc8dd5afb41ea8d4ba59f27b5cdabf40822079a99863d04c4393a6711",
+        "state_sha256": "232d0b3dac73b33913a8c3c15922d13df13af6964fa3d146fbdc2115746147ea",
+        "verified_objective_count": 18
+      },
+      "construction": {
+        "counted": false,
+        "episode_created": false,
+        "objective_ids_added": [
+          "rescue_fuji"
+        ],
+        "post_skill_relocation": {
+          "acknowledged_steps": 163,
+          "interruptions": 0,
+          "replans": 0,
+          "wait_actions": 11
+        },
+        "pre_skill_relocation": {
+          "acknowledged_steps": 167,
+          "interruptions": 0,
+          "replans": 0,
+          "wait_actions": 11
+        },
+        "skill": {
+          "actions_executed": 2492,
+          "frames_executed": 165959
+        },
+        "source_registry_assignment_opened": false,
+        "target_scenario_exact": true
+      },
+      "episode": {
+        "assignment_id": "39eb5ede082c2c12b359e3583666273a4624c7e731f8bb699f1d61fb7ed364f5",
+        "candidate_route_costs": [
+          153,
+          19
+        ],
+        "dataset": {
+          "censored_examples": 0,
+          "movement_labels": 0,
+          "partition": "unassigned",
+          "strategic_contexts": 1,
+          "teacher_choice_examples": 1
+        },
+        "execution": {
+          "acknowledged_steps": 149,
+          "interruptions": 0,
+          "replans": 0,
+          "selected_candidate_index": 0,
+          "selected_objective": "reach_fuchsia",
+          "status": "succeeded",
+          "wait_actions": 12
+        },
+        "manifest": {
+          "bytes": 534321,
+          "records": 324,
+          "sha256": "331f5db44aca0e00f6dc7b8b6001f075481e5fb6db284f48bacce0465d1db587"
+        }
+      },
+      "scenario_id": "red-strategic-scenario-v2-010-train",
+      "scenario_sha256": "d62f9c44debc5d50fb8ef46bd2ab14098c593a64e78ee70bee8fbf8bca1bbeca"
+    },
+    {
+      "capture": {
+        "checkpoint_id": "red-strategic-scenario-v2-014-train-skill-materialized",
+        "envelope_sha256": "c28be5a6dd3969874abf40db818338dd7ab4d61f9bee293d99b9f07eb0e7d15f",
+        "state_sha256": "af3ae9b1e912f4ba240b6e8bc78356531a0c732ddb7a29cb9ef24466f3523bdd",
+        "verified_objective_count": 19
+      },
+      "construction": {
+        "counted": false,
+        "episode_created": false,
+        "objective_ids_added": [
+          "reach_saffron"
+        ],
+        "post_skill_relocation": {
+          "acknowledged_steps": 0,
+          "interruptions": 0,
+          "replans": 0,
+          "wait_actions": 0
+        },
+        "pre_skill_relocation": {
+          "acknowledged_steps": 14,
+          "interruptions": 0,
+          "replans": 0,
+          "wait_actions": 1
+        },
+        "skill": {
+          "actions_executed": 534,
+          "frames_executed": 61167
+        },
+        "source_registry_assignment_opened": false,
+        "target_scenario_exact": true
+      },
+      "episode": {
+        "assignment_id": "8cecd8427e3056d348a5cd50274ba527107b389ec599b4813c9d25631c0d4db7",
+        "candidate_route_costs": [
+          137,
+          36
+        ],
+        "dataset": {
+          "censored_examples": 0,
+          "movement_labels": 0,
+          "partition": "unassigned",
+          "strategic_contexts": 1,
+          "teacher_choice_examples": 1
+        },
+        "execution": {
+          "acknowledged_steps": 136,
+          "interruptions": 0,
+          "replans": 0,
+          "selected_candidate_index": 0,
+          "selected_objective": "reach_fuchsia",
+          "status": "succeeded",
+          "wait_actions": 7
+        },
+        "manifest": {
+          "bytes": 475875,
+          "records": 288,
+          "sha256": "24cebbad1c4f86e252ce66f60c8576406a2a916c0f47a28c312f9b21e890cdbc"
+        }
+      },
+      "scenario_id": "red-strategic-scenario-v2-014-train",
+      "scenario_sha256": "40866a7f6a9b2972e79166704e03554fb39eac5019378b427707e1c2c1ff52ca"
+    }
+  ],
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31576607328,
+    "ci_status": "success",
+    "git_commit": "1efec83313a126884925b9cb8ddb4c3ae903a282",
+    "source_bundle_sha256": "4155df70b05229f86534de366b6fb56e522b854556251c3589a634826e2605e4",
+    "teacher_execution_sha256": "f0e05f2c30c8ff7ae7f997c2c8591ab129c733a0b2dc6cad577e0bf7141be74b"
+  },
+  "status": "qualified_uncounted_rehearsals"
+}

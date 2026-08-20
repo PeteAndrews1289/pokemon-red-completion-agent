@@ -1,0 +1,54 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_verified_pre_step_encounter_defect",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990020 reached the closed-loop Route 1 contract, then a legitimate wild battle began before the requested north step changed coordinates. The verifier correctly refused to count that step, but initially treated the unconsumed encounter as fatal instead of fleeing and retrying the same direction. The run stopped before any learned battle or training decision.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990020,
+    "initial_wait_frames": 193,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "2ca520b8a595989c398812f201209b57cff46a20f68cfe51149d22c48aa8e435"
+  },
+  "source": {
+    "git_commit": "869e9a8e0df93f4e78daa23b9321414e2cc1e4be",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "1bade0d9019a3f58ee38c1b001c77a38bcd3048905f44864b0f2c24afd7bb670",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "QualifiedPlayError",
+    "message": "Route 1 wild battle did not consume Route 1 northbound step 36.",
+    "frames_executed": 40801,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "direct_reproduction": {
+    "requested_direction": "up",
+    "before": {"map": 12, "position": [14, 14], "battle_state": 0},
+    "encounter": {
+      "map": 12,
+      "position": [14, 14],
+      "battle_state": 1,
+      "enemy_species_id": 165,
+      "enemy_level": 3
+    },
+    "finding": "The encounter was real and ordinary, but the player remained on the pre-step tile. It therefore consumed an encounter allowance, not the requested northward movement."
+  },
+  "diagnosis": {
+    "category": "wild_encounter_preempted_coordinate_progress",
+    "finding": "Closed-loop movement must distinguish a battle triggered after entering the next tile from one triggered at the unchanged boundary. Both require an authenticated flee; only the first acknowledges the movement step.",
+    "model_boundary": "No learned battle, switch-target, training-control, or trainee/venue decision had occurred. The scheduled trainer-battle perturbation controller had consumed zero of 74 entries."
+  },
+  "repair": {
+    "status": "implemented_full_rom_free_gate_passed_pending_fresh_perturbation",
+    "behavior": "A same-map, same-coordinate ordinary encounter is accepted only when party identity, level, HP, max HP, PP, and status match the pre-step boundary. After the existing authenticated flee, it counts one movement retry and reissues the same direction under the same eight-attempt ceiling. A drifted encounter still fails closed.",
+    "rom_free_regressions": "A pre-step wild encounter is fled, the same direction is retried, and exactly one retry is reported. The existing consumed-step, stabilization-drift, allowance-exhaustion, and excess-wild cases remain covered.",
+    "next_gate": "Commit and push the source-bound repair that passed 2168 ROM-free tests plus Ruff, mypy, public-artifact, documentation, and registry checks, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

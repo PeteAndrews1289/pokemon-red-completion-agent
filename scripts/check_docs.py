@@ -5,15 +5,22 @@ import re
 from pathlib import Path
 from urllib.parse import unquote
 
+from check_product_focus import check_product_focus
+from product_focus import ProductFocusError
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 IGNORED_PREFIXES = ("#", "http://", "https://", "mailto:")
+IGNORED_DIRECTORIES = {".git", ".venv", "scratch"}
 
 
 def main() -> int:
     problems: list[str] = []
     for document in sorted(PROJECT_ROOT.rglob("*.md")):
-        if any(part in {".git", ".venv"} for part in document.relative_to(PROJECT_ROOT).parts):
+        if any(
+            part in IGNORED_DIRECTORIES
+            for part in document.relative_to(PROJECT_ROOT).parts
+        ):
             continue
         text = document.read_text(encoding="utf-8")
         for raw_target in MARKDOWN_LINK.findall(text):
@@ -27,10 +34,15 @@ def main() -> int:
                     f"{document.relative_to(PROJECT_ROOT)}: missing link target {target!r}"
                 )
 
+    try:
+        check_product_focus()
+    except ProductFocusError as error:
+        problems.append(f"active product focus: {error}")
+
     if problems:
         print("\n".join(problems))
         return 1
-    print("Documentation links passed.")
+    print("Documentation links and active product focus passed.")
     return 0
 
 

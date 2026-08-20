@@ -1,0 +1,54 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_forest_encounter_boundary",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990023 qualified the intro and Route 2 repairs, then stopped at an incidental battle on Viridian Forest training-route step 65. The failure preceded scheduled battles and every learned battle or training decision. It preserves another authored traversal assumption rather than attributing it to a model.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990023,
+    "initial_wait_frames": 93,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "f8f966032c173003d49216d5b136fb36bc763e1b477b6a3a113869c0fc5fa44d"
+  },
+  "source": {
+    "git_commit": "cea2da8decfa9a90678c755d2ca191cd7594546a",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "ffe461ad34f54820d6d7729d9f76746adbbf7c64e08cfee7c7d6b489d065fc8e",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "Unexpected battle interrupted forest training route at step 65.",
+    "frames_executed": 78183,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "incidental_encounter_inside_authored_training_corridor",
+    "finding": "The first ninety Forest directions were open-loop until a separately seeded Kakuna lesson. Timing variance can produce an ordinary encounter earlier, and the chapter rejected it instead of distinguishing incidental travel from its three intentional training battles.",
+    "model_boundary": "No scheduled battle, learned move, battle-control, switch-target, training-control, or trainee/venue decision had occurred. The objective model had only selected the singleton first composite."
+  },
+  "repair": {
+    "status": "implemented_and_qualified_rom_free_pending_fresh_perturbation",
+    "behavior": "Every Forest travel segment now uses the map-bound authenticated traversal, while the three Kakuna triggers and mandatory Bug Catcher remain separate fight contracts. Incidental Forest wilds may be fled under one chapter-wide budget; intentional training encounters are never routed through the flee helper. Upper Route 2 now uses the same cumulative Route 2 receipt as the lower crossing.",
+    "forest_bounds": {
+      "maximum_wild_flees_across_all_segments": 12,
+      "maximum_step_attempts": 8,
+      "step_retry_wait_frames": 24,
+      "wild_exit_stabilization_frames": 120
+    },
+    "route_2_bounds": {
+      "maximum_wild_flees_across_lower_and_upper_segments": 8,
+      "maximum_step_attempts": 8,
+      "step_retry_wait_frames": 24,
+      "wild_exit_stabilization_frames": 120
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,182 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Commit and push the qualified repair, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

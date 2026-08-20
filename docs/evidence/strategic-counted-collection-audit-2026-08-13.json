@@ -1,0 +1,48 @@
+{
+  "audit_scope": {
+    "assignment_binding": "each episode was independently reconstructed from the committed scenario registry, exact capture envelope, and source-bound execution",
+    "counted_scenarios": 36,
+    "declared_learning_scenarios": 36,
+    "loaded_assigned_episodes": 36,
+    "sealed_test_scenarios_opened": 0,
+    "unique_assignment_ids": 36
+  },
+  "collection_source": {
+    "behavior_configuration_sha256": "bdca346b2cbb97cf43d79a8cf7f0d8eab90dacfb6610bb5c2f97028435f985b8",
+    "decision_contract_sha256": "d62f16a23ad54742c97a52ffaa50b0617042d5e35518af4ae61b623631e539a6",
+    "git_commit": "ed4d6726c615a49235cd1262fb8964937555f54f",
+    "objective_graph_sha256": "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523",
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "source_bundle_sha256": "a49612b82ff114f8ad06407b99fdec3619b51f515079665050d5ef7e0051376d",
+    "teacher_execution_sha256": "abdea2e1c5e13f662b320682ee56c1394d80856e297adf617b05a510dd03b4ec"
+  },
+  "dataset": {
+    "candidate_count_counts": {
+      "2": 17,
+      "3": 16,
+      "4": 2,
+      "5": 1
+    },
+    "examples": 36,
+    "outcomes": {
+      "succeeded": 36
+    },
+    "partition_counts": {
+      "train": 24,
+      "validation": 12
+    },
+    "train_validation_context_overlap_count": 0,
+    "unique_teacher_choice_contexts": 36
+  },
+  "model_admission": {
+    "minimum_validation_cost_baseline_disagreements": 6,
+    "model_development_admitted": true,
+    "partition_audit_reasons": [],
+    "perfect_scorer_minimum_two_sided_exact_p": 0.0078125,
+    "statistical_design_reasons": [],
+    "validation_cost_baseline_disagreements": 8,
+    "validation_cost_baseline_matches": 4,
+    "validation_unique_context_cases": 12
+  },
+  "schema": "strategic-counted-collection-audit-v1"
+}

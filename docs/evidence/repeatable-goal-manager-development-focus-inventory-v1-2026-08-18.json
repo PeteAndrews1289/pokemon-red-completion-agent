@@ -1,0 +1,98 @@
+{
+  "active_lane": "repeatable-goal-manager-development-qualification-v1",
+  "campaign_effect": {
+    "campaign_plan_created": false,
+    "focus_stratum_replaced": "advance_story",
+    "replacement_focus_stratum": "develop_team",
+    "root_lineages_frozen": 0,
+    "trials_claimed": 0
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "legacy_model_fits_added": 0,
+    "legacy_outcome_questions_added": 0,
+    "legacy_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "decision": {
+    "model_guided_root_selection": false,
+    "reason": "The story-focused train roots exposed no genuine multi-choice menu. Develop-team roots preserve a real preparation-versus-story choice while retaining recovery, storage, and acquisition coverage.",
+    "replacement_is_post_outcome_adaptation": false,
+    "story_candidate_exposure_claimed_as_story_outcome": false
+  },
+  "inventory": {
+    "acquire_species": {
+      "eligible_multi_choice_roots": 6,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "advance_story": {
+      "eligible_multi_choice_roots": 0,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "develop_team": {
+      "eligible_multi_choice_roots": 6,
+      "historically_open_roots": 6,
+      "story_candidate_present_in_every_eligible_menu": true,
+      "train_focus_roots": 6
+    },
+    "explore": {
+      "eligible_multi_choice_roots": 0,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "manage_storage": {
+      "eligible_multi_choice_roots": 6,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "recover_control": {
+      "eligible_multi_choice_roots": 5,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "restore_team": {
+      "eligible_multi_choice_roots": 6,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    },
+    "resupply": {
+      "eligible_multi_choice_roots": 0,
+      "historically_open_roots": 6,
+      "train_focus_roots": 6
+    }
+  },
+  "mission_boundary": {
+    "supported": "An action-free aggregate inventory falsified advance_story as a multi-choice focus stratum and identified develop_team as a title-neutral replacement with genuine story-versus-preparation choice exposure.",
+    "unsupported": "This is not a campaign freeze, model prediction, gameplay result, training episode, story outcome, fit, authority promotion, Red completion, living-Pokedex result, or Crystal transfer result."
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.red.repeatable-goal-manager-development-focus-inventory.v1",
+  "source_verification": {
+    "ci_conclusion": "success",
+    "ci_run_attempt": 1,
+    "ci_run_id": 32100873786,
+    "runner_sha256": "c9687c0385577e2269754065280e982b0c00686f97e2da082e58b851a5a90ab3",
+    "source_commit": "18bba56d13e32a453c173cbc17d98bef3b1b4030",
+    "worktree_dirty": false
+  },
+  "status": "action_free_inventory_complete_focus_correction_required",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  }
+}

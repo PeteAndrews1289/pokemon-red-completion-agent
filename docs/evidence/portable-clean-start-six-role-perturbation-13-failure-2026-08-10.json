@@ -1,0 +1,103 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-10",
+  "status": "failed_uncounted_perturbation_after_authenticated_lab_rival_loss",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990027 produced a legitimate lab-rival loss before any learned battle or training decision. The published recovery lane authenticates the loss, regains the semantic level floor, and completes two post-loss lessons before the clean source replay exhausts its bounded search for a safe final Weedle. Counted v95 remains unopened.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990027,
+    "initial_wait_frames": 48,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "1052d749759ddba2b2811c9138511158d5103f686f537e0db0cbcb596dca7c63"
+  },
+  "first_failure": {
+    "source_commit": "164e2687a18043afb0db7b71f9730a5f17786c97",
+    "raw_report_sha256": "fd606af162070d0e05363c87bf8c171ab0fbf7c2c227e3dfae303574999e5749",
+    "frames_executed": 43428,
+    "exception_type": "QualifiedPlayError",
+    "message": "The lab rival failed the bounded verified-victory gate.",
+    "observed_outcome": "Squirtle fainted; the cartridge persisted battle result 1 and returned a healed level-five starter rather than a level-six victory state.",
+    "learned_battle_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "published_repair_chain": [
+    {
+      "commit": "68fdb7a",
+      "change": "accept only an authenticated lab loss and enter a bounded recovery curriculum"
+    },
+    {
+      "commit": "d33b69f",
+      "change": "freeze the lab outcome before later wild battles overwrite mutable battle-result RAM"
+    },
+    {
+      "commit": "10ed903",
+      "change": "recover to the semantic level-six floor rather than accepting a weakened route"
+    },
+    {
+      "commit": "f5aca26",
+      "change": "target lower-defense recovery prey to bound damage and PP"
+    },
+    {
+      "commit": "d940c78",
+      "change": "use the correct Pokemon Red Viridian Forest encounter identifiers"
+    },
+    {
+      "commit": "35b62f3",
+      "change": "balance one Kakuna and one Weedle recovery lesson to reach level six alive"
+    },
+    {
+      "commit": "c2aeb12",
+      "change": "replace the victory suffix only after a lab loss with level-aware Kakuna and Weedle lessons"
+    }
+  ],
+  "earlier_clean_source_failure": {
+    "source_commit": "35b62f334a1e473eec9faefef0bb614381705e55",
+    "worktree_dirty": false,
+    "raw_report_sha256": "4a2add91425fc279ce6c83b1b90814e702071f5a1e0fd9591c6130a13ee71dec",
+    "frames_executed": 136720,
+    "exception_type": "PewterChapterError",
+    "message": "first Kakuna exhausted its bounded Kakuna search.",
+    "objective_decisions": 1,
+    "learned_battle_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "current_clean_source_failure": {
+    "source_commit": "c2aeb12525ea0ac5bd7e6b13993e3fb23655a93f",
+    "worktree_dirty": false,
+    "raw_report_sha256": "e3abc37167850af52985a890ac91db71cbf8698eb3179452ee053cbe3b3caba7",
+    "frames_executed": 171585,
+    "exception_type": "PewterChapterError",
+    "message": "third post-loss training Weedle exhausted its bounded target-species search.",
+    "objective_decisions": 1,
+    "learned_battle_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0,
+    "verified_progress": "The authenticated loss branch completed its level-six recovery plus the first two post-loss Forest lessons before failing closed at the final safe-target search."
+  },
+  "diagnosis": {
+    "category": "recovery_changes_rng_and_early_game_resource_budget",
+    "finding": "The loss branch is not equivalent to the victory branch. Extra recovery battles advance encounter RNG, consume Tackle PP, and change the experience schedule. The level-aware K/W/W suffix is safe for the prey it accepts, but a single Forest search origin does not reliably supply its final low-level Weedle.",
+    "instrumented_probe": "Non-promotable same-root probes mapped the boundary. Kakuna then level-four Weedle then level-three Caterpie leaves the starter level seven, healthy at 12/23 HP, unpoisoned, and slightly short of Bubble. Replacing the Caterpie with the available level-five Weedle reaches level eight and Bubble but leaves only 3/25 HP while poisoned. Tail Whip against Kakuna did not conserve Tackle because Harden cancelled the defense reduction. These probes monkeypatched runtime behavior outside the source provenance digest, so they are diagnosis only and not qualification evidence.",
+    "model_boundary": "Every failure occurs inside the authored opening composite before the learned battle, switch-target, training-control, or trainee/venue heads receive authority. It is a teacher/executor reliability defect, not evidence that the learned models chose incorrectly."
+  },
+  "next_gate": {
+    "implementation": "Move only the authenticated-loss catch-up lessons to Route 1, using bounded low-defense Pidgey/Rattata encounters near Viridian City. Prove a Viridian Center visit restores HP, status, and PP and returns to the exact route gate, then reuse the unchanged three-Kakuna Forest curriculum from that healed semantic floor.",
+    "required_receipts": [
+      "authenticated lab outcome",
+      "each observed Route 1 recovery species and search attempt count",
+      "level and HP after every battle",
+      "damaging and status PP before and after each lesson",
+      "Viridian Center HP, status, PP, map, coordinate, and input-ready restoration proof",
+      "exact return from the Center to the declared route gate",
+      "exact level-eight Bubble boundary before the mandatory trainer"
+    ],
+    "validation": "Pass the complete ROM-free gate, publish clean source, replay seed 990027 without monkeypatches, then use a fresh uncounted root. Do not open counted v95 yet."
+  },
+  "counted_v95": {
+    "consumed": 0,
+    "total": 10
+  }
+}

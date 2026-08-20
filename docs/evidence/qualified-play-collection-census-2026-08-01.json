@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon-red-qualified-collection-census-receipt-v1",
+  "recorded_on": "2026-08-01",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run completed the game and produced a coherent all-box collection census. This is a baseline, not a completed collection or learned-policy claim.",
+  "source_identity": {
+    "collection_registry_sha256": "47f5ad03d344771ff35a9d6a0017ce074fd187d2a78d777752220b7744ffeee5",
+    "source_bundle_sha256": "70ffea73c5f56a618a8c48c7a1e943bd4928afd79b7a8bb86a8a85f948c8670c",
+    "teacher_execution_sha256": "d7dd86e6e831d476c19b551a2dfa98c1f40ef71d6486f7e56be3187567ec013e"
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 516338
+  },
+  "balanced_training": {
+    "battles_won": 5445,
+    "healing_trips": 529,
+    "fainted": false,
+    "minimum_level_at_gate": 82,
+    "level_spread_at_gate": 5
+  },
+  "collection_contract": {
+    "id": "red-solo-living-dex-level-100-v1",
+    "target_species": 124,
+    "explicit_exclusions": 27,
+    "target_level": 100
+  },
+  "terminal_census": {
+    "all_boxes_verified": true,
+    "storage_initialized": false,
+    "current_box": 1,
+    "box_counts": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "pokedex_owned_targets": 12,
+    "pokedex_seen_targets": 85,
+    "living_targets": 7,
+    "level_100_targets": 0,
+    "living_specimens": [
+      {"national_dex_number": 9, "level": 90},
+      {"national_dex_number": 41, "level": 7},
+      {"national_dex_number": 51, "level": 82},
+      {"national_dex_number": 83, "level": 82},
+      {"national_dex_number": 106, "level": 82},
+      {"national_dex_number": 135, "level": 82},
+      {"national_dex_number": 143, "level": 82}
+    ],
+    "pokedex_target_complete": false,
+    "living_collection_verified": false,
+    "level_100_collection_verified": false
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false
+  }
+}

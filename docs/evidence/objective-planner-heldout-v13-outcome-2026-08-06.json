@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v13",
+  "status": "failed",
+  "source_commit": "c05896d33b586a9659462c3cf6c29006318575cb",
+  "source_bundle_sha256": "cfec6763e7e369193e5e4ffb09588e9b038e73be1b533df2e8e5fa76ecd4d774",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v13-validation-01",
+      "harness_seed": 1310001,
+      "status": "passed",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "hall_of_fame": true,
+      "battle_start_schedule_sha256": "df15dd7fccb4fc32149b1820828efde4d6969ba79921960c0941ba1263fe6f38",
+      "private_log_sha256": "e2833ec0f96c9cba821cc7ed54af650c73f4ff6dc0c4025bf2138240519a9bf0"
+    },
+    {
+      "run_id": "red-objective-v13-validation-02",
+      "harness_seed": 1310002,
+      "status": "passed",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "hall_of_fame": true,
+      "battle_start_schedule_sha256": "6aabc0f9b20357d964969387f643e601b92eae1b9f92d550f166df706cf1d093",
+      "private_log_sha256": "23a97c08216b2bc2d0e5766c0f6b00acd95f03d3452f40f1c839e42cd89ffcd4"
+    },
+    {
+      "run_id": "red-objective-v13-validation-03",
+      "harness_seed": 1310003,
+      "status": "failed",
+      "qualified_checkpoints": 41,
+      "failure": "Route 24 trainer 3 active battler fainted with the final Ekans at 8/37 HP.",
+      "private_log_sha256": "16f283a4baa5260815b03fdbffcc11f93beabf0b80418f1f50c9f6360a529d46"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The live PP-aware Route 24 specialist continued to prefer lower-accuracy Mega Punch even when accurate Water Gun was sufficient to finish a critically weakened opponent. A miss exposed Wartortle to the final damaging reply without a reserve party member.",
+  "next_gate": "Repair the low-HP finishing policy, replay seed 1310003 to the Hall of Fame, and preregister fresh validation and sealed-test schedules."
+}

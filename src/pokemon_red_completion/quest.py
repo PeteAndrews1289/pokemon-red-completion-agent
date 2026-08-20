@@ -12,6 +12,7 @@ from types import MappingProxyType
 from pokemon_red_completion.domain import Fact, GameState
 
 _OBJECTIVE_ID = re.compile(r"^[a-z][a-z0-9_]*$")
+_SEMANTIC_REGION = re.compile(r"^[a-z][a-z0-9_]*$")
 
 
 class Specialist(StrEnum):
@@ -54,6 +55,7 @@ class Objective:
     prerequisites: frozenset[str] = field(default_factory=frozenset)
     priority: int = 100
     description: str = ""
+    target_region: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.id, str) or not _OBJECTIVE_ID.fullmatch(self.id):
@@ -69,6 +71,11 @@ class Objective:
             raise TypeError("priority must be an integer")
         if self.priority < 0:
             raise ValueError("priority must be non-negative")
+        if self.target_region is not None and (
+            not isinstance(self.target_region, str)
+            or _SEMANTIC_REGION.fullmatch(self.target_region) is None
+        ):
+            raise ValueError("target_region must be a lowercase semantic region or None")
 
         facts = _as_string_set(self.completion_facts, "completion_facts")
         if not facts:
@@ -200,6 +207,14 @@ class QuestGraph:
         )
         return tuple(objective for objective in self.objectives if objective.id not in referenced)
 
+    def direct_dependant_count(self, objective_id: str) -> int:
+        """Return how many immediate objectives one completion unlocks."""
+
+        self.objective(objective_id)
+        return sum(
+            objective_id in objective.prerequisites for objective in self.objectives
+        )
+
     def topological_order(self) -> tuple[Objective, ...]:
         """Return a deterministic dependency-first ordering of all objectives."""
 
@@ -231,3 +246,21 @@ class QuestGraph:
                     heapq.heappush(ready, (dependant.priority, dependant.id))
 
         return tuple(ordered)
+
+
+def quest_graph_payload(graph: QuestGraph) -> list[dict[str, object]]:
+    """Return the canonical game-neutral public projection of a quest graph."""
+
+    if not isinstance(graph, QuestGraph):
+        raise TypeError("graph must be a QuestGraph")
+    return [
+        {
+            "id": objective.id,
+            "title": objective.title,
+            "specialist": objective.specialist.value,
+            "prerequisites": sorted(objective.prerequisites),
+            "completion_facts": sorted(objective.completion_facts),
+            "target_region": objective.target_region,
+        }
+        for objective in graph.topological_order()
+    ]

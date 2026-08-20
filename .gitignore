@@ -10,6 +10,7 @@ __pycache__/
 htmlcov/
 dist/
 build/
+/.public-execution-manifests/
 
 # Copyrighted or private game artifacts
 *.gb
@@ -27,11 +28,24 @@ savestates/
 runs/
 datasets/
 checkpoints/
+models/
 recordings/
+trajectories/
 videos/
 screenshots/
+*.arrow
 *.ckpt
+*.jsonl
+*.npy
+*.npz
 *.onnx
+*.parquet
+*.pkl
 *.pt
 *.pth
 *.safetensors
+*.zst
+mypy_errors.txt
+
+# Agent scratch scripts: kept on disk, never committed.
+scratch/

@@ -1,0 +1,26 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "evaluation_id": "red-objective-planner-heldout-v11",
+  "status": "superseded_before_validation",
+  "source_commit": "248955b",
+  "source_bundle_sha256": "417c11e63f9ff7bb2540de49adcdbd1e8de5c11834457828e81170c3d429de68",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "exposed_repair_runs": [
+    {
+      "run_id": "red-objective-v11-exposed-repair-1230002",
+      "harness_seed": 1230002,
+      "battle_start_schedule_sha256": "555739486884dff917da51622738f239a1e16206a4d2d32d6de0176a75bafd0e",
+      "private_log_sha256": "0e2324de0daca89d62f8b49e2b9cdcc83bff0686330392d51706e7b9026aa618",
+      "status": "failed",
+      "checkpoints_verified": 305,
+      "balanced_party_continuation_verified": true,
+      "failure_boundary": "league_agatha",
+      "failure_reason": "all six party members fainted after the lead recovery gate forced attacks between newly necessary healing turns",
+      "terminal_party_hp": [0, 0, 0, 0, 0, 0],
+      "terminal_enemy": {"species_id": 14, "level": 56, "hp": 99, "max_hp": 142}
+    }
+  ],
+  "validation_runs_opened": 0,
+  "sealed_test_runs_opened": 0,
+  "interpretation": "The matchup-aware forced-switch path worked through every living teammate, exposing the preceding workhorse recovery policy as the actual failure. V11 is superseded before validation."
+}

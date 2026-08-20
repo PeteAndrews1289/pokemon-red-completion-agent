@@ -23,6 +23,7 @@ from pokemon_red_completion.celadon import (
     _RunState,
 )
 from pokemon_red_completion.erika import DEFAULT_ERIKA_TIMING, _cut
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     EventFlag,
     ItemId,
@@ -37,15 +38,22 @@ from pokemon_red_completion.silph import (
     ROUTE_7_WEST_TO_CONNECTION,
     SAFFRON_CENTER_TO_ROUTE_7_GATE,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 CINNABAR_CHECKPOINT_COUNT = 6
+CINNABAR_MIN_LEAD_LEVEL = 44
+CINNABAR_MAX_INPUT_BAG_SLOTS = 19
 FLY_MOVE_ID = 0x13
 DUX_MOVES_BEFORE = (0x40, 0x1C, 0x0F, 0x1F)
 DUX_MOVES_AFTER = (0x40, 0x1C, 0x0F, FLY_MOVE_ID)
 DUX_PP_BEFORE = (35, 15, 30, 20)
 DUX_PP_AFTER = (35, 15, 30, 15)
 ROUTE_21_EVENTS = tuple(range(0x511, 0x51A))
+LEAD_MOVE_PP_LINEAGES = {
+    (0x82, 0x46, 0x3A, 0x39): (15, 15, 10, 15),
+    (0x2C, 0x46, 0x3D, 0x39): (25, 15, 20, 15),
+    (0x2C, 0x27, 0x3D, 0x39): (25, 30, 20, 15),
+}
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -53,9 +61,17 @@ def _directions(value: str) -> tuple[str, ...]:
 
 
 CELADON_TO_ROUTE_16_TREE = _directions("DDDD" + "L" * 16)
+CELADON_CENTER_TO_ROUTE_16_TREE = (
+    ("down",) * 8
+    + ("left",) * 22
+    + ("down", "left")
+    + ("down",) * 4
+    + ("left",) * 24
+)
 TREE_TO_FLY_HOUSE = _directions("UUUULLLLLULLLLLLLLLLDLLLLDLLLLLLLLLLU")
 PALLET_TO_SHORE = _directions("DDLL" + "D" * 9)
 ROUTE_21_TO_CINNABAR = _directions("D" * 17 + "RDL" + "D" * 5 + "L" + "D" * 67)
+ROUTE_21_STEP_ATTEMPTS = 8
 CINNABAR_TO_CENTER = _directions("D" * 12 + "R" * 8 + "U")
 
 
@@ -67,10 +83,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class CinnabarChapterError(RuntimeError):
@@ -117,25 +129,33 @@ class CinnabarChapterReport:
     route21_events_before: tuple[bool, ...]
     route21_events_after: tuple[bool, ...]
     wild_flees: tuple[CeladonWildFleeEvidence, ...]
+    route16_wild_battles: int
     wild_battles: int
     trainer_battles: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    input_map: int
 
     @property
     def passed(self) -> bool:
         return (
             len(self.records) == CINNABAR_CHECKPOINT_COUNT
-            and self.rare_candy_before == 1
-            and self.rare_candy_after == 0
-            and self.bag_slots_before == 20
-            and self.bag_slots_after_candy == 19
-            and self.lead_stats_before == (45, 139, 139, 98, 109, 90, 104)
-            and self.lead_stats_after == (46, 142, 142, 100, 112, 92, 106)
+            and _cinnabar_rare_candy_preserved(
+                self.rare_candy_before,
+                self.rare_candy_after,
+            )
+            and _cinnabar_bag_capacity_preserved(
+                self.bag_slots_before,
+                self.bag_slots_after_candy,
+            )
+            and len(self.lead_stats_before) == 7
+            and self.lead_stats_before == self.lead_stats_after
+            and self.lead_stats_before[0] >= CINNABAR_MIN_LEAD_LEVEL
+            and all(value > 0 for value in self.lead_stats_before[1:])
             and self.hm02_item_before_event
             and self.got_hm02
             and self.hm02_quantity == 1
@@ -154,17 +174,27 @@ class CinnabarChapterReport:
                 and item.inventory_preserved
                 for item in self.wild_flees
             )
-            and 0 <= self.wild_battles <= 5
+            and 0 <= self.route16_wild_battles <= 3
+            and 0 <= self.wild_battles - self.route16_wild_battles <= 5
             and self.trainer_battles == 0
             and self.final_raw.map_id == MapId.CINNABAR_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 46
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (142, 52, 37)
-            and self.party_status == (0, 0, 0)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.final_raw.first_party_level == self.lead_stats_before[0]
+            and _cinnabar_lead_moves_restored(
+                self.final_raw.first_party_moves,
+                self.final_raw.first_party_pp,
+            )
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
+            and self.input_map in {
+                int(MapId.SAFFRON_POKECENTER),
+                int(MapId.CELADON_POKECENTER),
+            }
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -177,6 +207,11 @@ class CinnabarChapterReport:
             "route16": {
                 "bicycle_required": False,
                 "cut_lane": True,
+                "wild_battles": self.route16_wild_battles,
+                "wild_flees": [
+                    _wild_flee_public(item)
+                    for item in self.wild_flees[: self.route16_wild_battles]
+                ],
                 "rare_candy": {
                     "quantity": [self.rare_candy_before, self.rare_candy_after],
                     "bag_slots": [self.bag_slots_before, self.bag_slots_after_candy],
@@ -195,19 +230,10 @@ class CinnabarChapterReport:
             "route21": {
                 "moves": len(ROUTE_21_TO_CINNABAR),
                 "trainers_defeated": sum(self.route21_events_after),
-                "wild_battles": self.wild_battles,
+                "wild_battles": self.wild_battles - self.route16_wild_battles,
                 "wild_flees": [
-                    {
-                        "map": item.map_id,
-                        "position": [item.x, item.y],
-                        "species": item.species,
-                        "level": item.level,
-                        "party_preserved": item.party_preserved,
-                        "pp_preserved": item.pp_preserved,
-                        "hp_safe": item.hp_safe,
-                        "inventory_preserved": item.inventory_preserved,
-                    }
-                    for item in self.wild_flees
+                    _wild_flee_public(item)
+                    for item in self.wild_flees[self.route16_wild_battles :]
                 ],
                 "trainer_battles": self.trainer_battles,
             },
@@ -221,18 +247,42 @@ class CinnabarChapterReport:
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
+            "input_map": self.input_map,
         }
 
 
-class _CountingExecutor:
-    def __init__(self, delegate: ChapterExecutor) -> None:
-        self.delegate = delegate
-        self.actions_executed = 0
+def _wild_flee_public(item: CeladonWildFleeEvidence) -> dict[str, object]:
+    return {
+        "map": item.map_id,
+        "position": [item.x, item.y],
+        "species": item.species,
+        "level": item.level,
+        "party_preserved": item.party_preserved,
+        "pp_preserved": item.pp_preserved,
+        "hp_safe": item.hp_safe,
+        "inventory_preserved": item.inventory_preserved,
+    }
 
-    def execute(self, action: MacroAction) -> object:
-        result = self.delegate.execute(action)
-        self.actions_executed += 1
-        return result
+
+def _cinnabar_bag_capacity_preserved(before: int, after_optional_candy: int) -> bool:
+    """Require one free HM02 slot without silently changing bag capacity."""
+
+    return 0 < before <= CINNABAR_MAX_INPUT_BAG_SLOTS and after_optional_candy == before
+
+
+def _cinnabar_rare_candy_preserved(before: int, after: int) -> bool:
+    """Preserve an absent or valid carried stack across the Fly lesson."""
+
+    return 0 <= before == after <= 99
+
+
+def _cinnabar_lead_moves_restored(
+    moves: tuple[int, ...],
+    pp: tuple[int, ...],
+) -> bool:
+    """Accept either qualified lead curriculum and its exact restored PP."""
+
+    return LEAD_MOVE_PP_LINEAGES.get(moves) == pp
 
 
 def run_cinnabar_chapter(
@@ -243,10 +293,13 @@ def run_cinnabar_chapter(
     progress: ProgressSink | None = None,
 ) -> CinnabarChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[CinnabarCheckpoint] = []
     initial = reader.read()
-    _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Sabrina boundary")
+    if initial.map_id not in {MapId.SAFFRON_POKECENTER, MapId.CELADON_POKECENTER}:
+        raise CinnabarChapterError("Cinnabar route requires a qualified city-center boundary.")
+    _require(initial, initial.map_id, (3, 3), "Cinnabar input boundary")
+    input_map = int(initial.map_id)
     initial_bag = _bag(emulator)
     rare_candy_before = initial_bag.get(ItemId.RARE_CANDY, 0)
     bag_slots_before = len(initial_bag)
@@ -256,24 +309,31 @@ def run_cinnabar_chapter(
         raise CinnabarChapterError("HM02 input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "cinnabar_ready", "Cinnabar route ready")
 
-    for label, route in (
-        ("Saffron gate", SAFFRON_CENTER_TO_ROUTE_7_GATE),
-        ("Route 7 west", ROUTE_7_GATE_TO_WEST),
-        ("Route 7 connection", ROUTE_7_WEST_TO_CONNECTION),
-        ("Celadon arrival", ROUTE_7_CONNECTION_TO_CELADON_CITY),
-    ):
-        _move(actions, reader, route, label, frames=720)
-    _move(actions, reader, CELADON_TO_ROUTE_16_TREE, "Route 16 Cut tree")
+    if initial.map_id == MapId.SAFFRON_POKECENTER:
+        for label, route in (
+            ("Saffron gate", SAFFRON_CENTER_TO_ROUTE_7_GATE),
+            ("Route 7 west", ROUTE_7_GATE_TO_WEST),
+            ("Route 7 connection", ROUTE_7_WEST_TO_CONNECTION),
+            ("Celadon arrival", ROUTE_7_CONNECTION_TO_CELADON_CITY),
+        ):
+            _move(actions, reader, route, label, frames=720)
+    tree_route = (
+        CELADON_CENTER_TO_ROUTE_16_TREE
+        if initial.map_id == MapId.CELADON_POKECENTER
+        else CELADON_TO_ROUTE_16_TREE
+    )
+    _move(actions, reader, tree_route, "Route 16 Cut tree")
     _require(reader.read(), MapId.ROUTE_16, (34, 10), "Route 16 tree")
     _cut(actions, reader, emulator, DEFAULT_ERIKA_TIMING, "up", 0x2C, "Route 16 Cut")
     _move(actions, reader, ("up",), "Cut crossing")
-    _move(actions, reader, TREE_TO_FLY_HOUSE, "Fly House route")
+    route16_wild_flees = _move_with_wild_flees(
+        actions, reader, emulator, TREE_TO_FLY_HOUSE, "Fly House route"
+    )
     _require(reader.read(), MapId.ROUTE_16_FLY_HOUSE, (2, 7), "Fly House entry")
     _checkpoint(
         records, progress, emulator, reader.read(), "fly_house_reached", "Reached Fly House"
     )
 
-    _use_rare_candy(actions, reader, emulator)
     rare_candy_after = _bag(emulator).get(ItemId.RARE_CANDY, 0)
     bag_slots_after_candy = len(_bag(emulator))
     lead_stats_after = _lead_stats(emulator)
@@ -299,7 +359,8 @@ def run_cinnabar_chapter(
     _surf(actions, reader, emulator)
     _move(actions, reader, ("down",), "Route 21 connection")
     _require(reader.read(), MapId.ROUTE_21, (4, 0), "Route 21 entry")
-    wild_flees = _move_route21(actions, reader, emulator, ROUTE_21_TO_CINNABAR)
+    route21_wild_flees = _move_route21(actions, reader, emulator, ROUTE_21_TO_CINNABAR)
+    wild_flees = route16_wild_flees + route21_wild_flees
     cinnabar = reader.read()
     _require(cinnabar, MapId.CINNABAR_ISLAND, (3, 0), "Cinnabar arrival")
     _checkpoint(
@@ -334,6 +395,7 @@ def run_cinnabar_chapter(
         route21_before,
         _events(emulator),
         wild_flees,
+        len(route16_wild_flees),
         len(wild_flees),
         0,
         _party_hp(emulator),
@@ -342,29 +404,11 @@ def run_cinnabar_chapter(
         emulator.frame_count - start_frames,
         actions.actions_executed,
         not emulator.pressed_buttons,
+        input_map,
     )
     if not report.passed:
         raise CinnabarChapterError(f"Cinnabar evidence contract failed: {report.public_dict()!r}.")
     return report
-
-
-def _use_rare_candy(actions, reader, emulator) -> None:
-    _open_bag(actions, emulator)
-    _select_bag_item(actions, emulator, ItemId.RARE_CANDY)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(24):
-        if _menu_origin(emulator) == (0, 1):
-            break
-        _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, 0)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    for _ in range(24):
-        if ItemId.RARE_CANDY not in _bag(emulator):
-            break
-        _pulse(actions, MacroActionKind.CONFIRM)
-    else:
-        raise CinnabarChapterError("Rare Candy did not free one bag slot.")
-    _close(actions, reader)
 
 
 def _receive_hm02(actions, emulator) -> bool:
@@ -442,7 +486,9 @@ def _surf(actions, reader, emulator) -> None:
 def _heal(actions, reader, emulator) -> None:
     for _ in range(20):
         _pulse(actions, MacroActionKind.CONFIRM)
-        if _party_hp(emulator) == _party_max_hp(emulator) and _party_status(emulator) == (0, 0, 0):
+        if _party_hp(emulator) == _party_max_hp(emulator) and all(
+            status == 0 for status in _party_status(emulator)
+        ):
             break
     _close(actions, reader)
 
@@ -469,24 +515,74 @@ def _move(actions, reader, route: Iterable[str], label: str, *, frames: int = 24
 def _move_route21(
     actions, reader, emulator, route: Iterable[str]
 ) -> tuple[CeladonWildFleeEvidence, ...]:
+    """Cross Route 21, absorbing however many wild encounters actually occur.
+
+    A surfing encounter can consume a movement step without advancing the
+    player.  Treating that as a blocked tile made the crossing depend on the
+    exact encounter sequence one recorded run happened to see, so a different
+    RNG schedule failed a corridor that was never obstructed.  Each step now
+    retries under the same bounded budget :func:`_move` already uses, which
+    makes the traversal depend on the corridor rather than on the encounters.
+    """
+
+    run = _RunState([])
+    steps = tuple(route)
+    for index, direction in enumerate(steps, 1):
+        before = reader.read()
+        for _ in range(ROUTE_21_STEP_ATTEMPTS):
+            _pulse(actions, MacroActionKind.MOVE, direction, 240)
+            after = reader.read()
+            if after.battle_state == 2:
+                raise CinnabarChapterError(f"Route 21 entered a trainer battle at step {index}.")
+            if after.battle_state == 1:
+                _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+                after = reader.read()
+            if _events(emulator) != (False,) * 9:
+                raise CinnabarChapterError("Route 21 changed an optional trainer event.")
+            if (after.map_id, after.player_x, after.player_y) != (
+                before.map_id,
+                before.player_x,
+                before.player_y,
+            ):
+                break
+        else:
+            raise CinnabarChapterError(
+                f"Route 21 blocked at step {index}/{len(steps)} after "
+                f"{ROUTE_21_STEP_ATTEMPTS} attempts."
+            )
+    return tuple(run.wilds)
+
+
+def _move_with_wild_flees(
+    actions,
+    reader,
+    emulator,
+    route: Iterable[str],
+    label: str,
+) -> tuple[CeladonWildFleeEvidence, ...]:
     run = _RunState([])
     for index, direction in enumerate(tuple(route), 1):
         before = reader.read()
-        _pulse(actions, MacroActionKind.MOVE, direction, 240)
-        after = reader.read()
-        if after.battle_state == 2:
-            raise CinnabarChapterError(f"Route 21 entered a trainer battle at step {index}.")
-        if after.battle_state == 1:
-            _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+        for _ in range(8):
+            _pulse(actions, MacroActionKind.MOVE, direction, 240)
             after = reader.read()
-        if (after.map_id, after.player_x, after.player_y) == (
-            before.map_id,
-            before.player_x,
-            before.player_y,
-        ):
-            raise CinnabarChapterError(f"Route 21 blocked at step {index}.")
-        if _events(emulator) != (False,) * 9:
-            raise CinnabarChapterError("Route 21 changed an optional trainer event.")
+            if after.battle_state == 2:
+                raise CinnabarChapterError(
+                    f"{label} entered a trainer battle at step {index}."
+                )
+            if after.battle_state == 1:
+                _flee(actions, reader, emulator, run, DEFAULT_CELADON_TIMING)
+                after = reader.read()
+            if (after.map_id, after.player_x, after.player_y) != (
+                before.map_id,
+                before.player_x,
+                before.player_y,
+            ):
+                break
+            if not reader.read_input_readiness().ready:
+                _pulse(actions, MacroActionKind.CONFIRM, 240)
+        else:
+            raise CinnabarChapterError(f"{label} blocked at step {index}.")
     return tuple(run.wilds)
 
 
@@ -582,7 +678,7 @@ def _require(raw, map_id: int, position: tuple[int, int], label: str) -> None:
         raw.map_id != int(map_id)
         or (raw.player_x, raw.player_y) != position
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise CinnabarChapterError(
             f"{label} failed: map={raw.map_id:#04x}, "

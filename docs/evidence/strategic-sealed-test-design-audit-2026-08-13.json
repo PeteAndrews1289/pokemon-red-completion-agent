@@ -1,0 +1,125 @@
+{
+  "cases": [
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [],
+      "scenario_id": "red-strategic-scenario-v2-004-test",
+      "structurally_challenge_eligible": false
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "defeat_erika"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-008-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "defeat_erika",
+        "defeat_sabrina"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-012-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "defeat_erika",
+        "defeat_sabrina",
+        "obtain_strength",
+        "defeat_koga"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-016-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "liberate_silph",
+        "obtain_strength"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-020-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "defeat_erika",
+        "defeat_sabrina",
+        "obtain_strength"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-024-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "liberate_silph"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-028-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "defeat_erika",
+        "defeat_sabrina"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-032-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "liberate_silph"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-036-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [],
+      "scenario_id": "red-strategic-scenario-v2-040-test",
+      "structurally_challenge_eligible": false
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "obtain_secret_key"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-044-test",
+      "structurally_challenge_eligible": true
+    },
+    {
+      "declared_challenge_hypothesis": false,
+      "local_non_teacher_objective_ids": [
+        "obtain_secret_key"
+      ],
+      "scenario_id": "red-strategic-scenario-v2-048-test",
+      "structurally_challenge_eligible": true
+    }
+  ],
+  "current_design_admitted": false,
+  "declared_challenge_best_case_two_sided_exact_p": 1.0,
+  "declared_challenge_hypotheses": 0,
+  "eligible_repair_best_case_two_sided_exact_p": 0.001953125,
+  "inputs": {
+    "committed_registry_only": true,
+    "live_route_costs_accessed": false,
+    "model_predictions_accessed": false,
+    "private_captures_accessed": false,
+    "private_episodes_accessed": false
+  },
+  "interpretation": {
+    "current_sealed_design_status": "blocked",
+    "reason": "No test challenge hypotheses were preregistered; structural eligibility cannot substitute for a measured disagreement.",
+    "safe_next_step": "Preregister a replacement sealed-test design with at least six eligible challenge hypotheses before opening private test evidence."
+  },
+  "minimum_challenge_hypotheses": 6,
+  "schema": "strategic-sealed-test-design-audit-v1",
+  "structural_eligibility_is_measured_disagreement": false,
+  "structurally_challenge_eligible": 10,
+  "test_scenarios": 12
+}

@@ -12,12 +12,35 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    learned_switch_party_index,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    protected_lead_recovery,
+    switch_active_battler,
+)
+from pokemon_red_completion.battle_recovery import (
+    _select_battle_main_command as _select_shared_battle_main_command,
+)
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
     run_adaptive_trainer_battle,
 )
-from pokemon_red_completion.blaine import _select_cursor
+from pokemon_red_completion.blaine import (
+    MANSION_TRAINING_POLICY,
+    _select_cursor,
+    _sell_bag_item_stack,
+)
 from pokemon_red_completion.celadon import (
     DEFAULT_CELADON_TIMING,
     _bag,
@@ -28,6 +51,7 @@ from pokemon_red_completion.celadon import (
     _party_status,
     _RunState,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.giovanni import _sell_current_bag_item
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.lavender import (
@@ -39,7 +63,6 @@ from pokemon_red_completion.lavender import (
     _use_bag_item,
 )
 from pokemon_red_completion.observation import (
-    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -47,6 +70,7 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.sabrina import SabrinaChapterError, _deposit_pc_item
 from pokemon_red_completion.saffron import (
     CITY_TO_MART,
     MART_1F_TO_2F,
@@ -58,7 +82,7 @@ from pokemon_red_completion.saffron import (
     MART_TO_CITY,
 )
 from pokemon_red_completion.silph import DEFAULT_SILPH_TIMING, _battle_hyper_potion
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 VICTORY_ROAD_CHECKPOINT_COUNT = 9
 RIVAL_PARTY = (
@@ -74,9 +98,36 @@ RIVAL_POLICY = {
     0x12: 4,
     0x16: 3,
     0x21: 4,
-    0x95: 4,
+    0x95: 2,
     0x9A: 3,
 }
+RIVAL_PRIORITIES = {
+    0x97: (3, 4, 2, 1),
+    0x12: (4, 3, 2, 1),
+    0x16: (3, 4, 2, 1),
+    0x21: (4, 2, 3, 1),
+    0x95: (2, 4, 3, 1),
+    0x9A: (3, 2, 4, 1),
+}
+ROUTE_22_VENUSAUR_HEAL_THRESHOLD = 120
+ROUTE_22_DEFAULT_HEAL_THRESHOLD = 100
+#: Deliberately empty: this is a kill switch, not an oversight.  Proactively
+#: replacing a healthy workhorse because a particular species appeared is the
+#: sacrifice behaviour V35 exposed.  The guarded block below is therefore
+#: unreachable by design; re-populating this set re-enables it.
+ROUTE_22_PROACTIVE_PIVOT_SPECIES: frozenset[int] = frozenset()
+#: A pivot target must arrive able to fight rather than as damage padding.
+ROUTE_22_PIVOT_MIN_HP_RATIO = 0.5
+#: One strategic switch is a decision; walking the party is a sacrifice loop.
+ROUTE_22_MAX_TEAM_PIVOTS = 1
+VICTORY_ROAD_MAX_REPEL_PURCHASE = 2
+INDIGO_FULL_RESTORE_RESERVE = 7
+INDIGO_FULL_HEAL_RESERVE = 6
+INDIGO_X_SPECIAL_RESERVE = 8
+INDIGO_X_SPECIAL_PURCHASE = 8
+INDIGO_REVIVE_RESERVE = 3
+COLLECTION_POKE_BALL_REMAINDER_BOUNDS = (0, 30)
+VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS = (0, 7)
 BADGE_CHECK_EVENTS = (
     EventFlag.PASSED_CASCADE_BADGE_CHECK,
     EventFlag.PASSED_THUNDER_BADGE_CHECK,
@@ -120,10 +171,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class VictoryRoadChapterError(RuntimeError):
@@ -174,15 +221,19 @@ class VictoryRoadChapterReport:
     vr2_switch2_set: bool
     full_restores: int
     full_heals: int
+    revives: int
     hyper_potions: int
     x_specials: int
     max_repels: int
+    poke_balls_sold: int
+    poke_balls_remaining: int
     tm27_sold: bool
     tm38_sold: bool
+    tm28_sold: bool
     tm06_consumed: bool
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -201,22 +252,33 @@ class VictoryRoadChapterReport:
             and self.vr3_switch_set
             and self.vr3_hole_set
             and self.vr2_switch2_set
-            and self.full_restores == 11
-            and self.full_heals == 10
+            and self.full_restores == INDIGO_FULL_RESTORE_RESERVE
+            and self.full_heals == INDIGO_FULL_HEAL_RESERVE
+            and self.revives == INDIGO_REVIVE_RESERVE
             and self.hyper_potions == 11
-            and self.x_specials == 6
-            and self.max_repels == 8
+            and self.x_specials == INDIGO_X_SPECIAL_RESERVE
+            and self.max_repels == 0
+            and (
+                COLLECTION_POKE_BALL_REMAINDER_BOUNDS[0]
+                <= self.poke_balls_sold
+                <= COLLECTION_POKE_BALL_REMAINDER_BOUNDS[1]
+            )
+            and self.poke_balls_remaining == 0
             and self.tm27_sold
             and self.tm38_sold
+            and self.tm28_sold
             and self.tm06_consumed
             and self.final_raw.map_id == MapId.INDIGO_PLATEAU_LOBBY
             and (self.final_raw.player_x, self.final_raw.player_y) == (2, 5)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 51
+            and party_core_intact(self.final_raw.party_species_ids)
+            and (self.final_raw.first_party_level or 0) >= MANSION_TRAINING_POLICY.target_level
             and self.final_raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
             and self.final_raw.first_party_pp == (25, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (157, 52, 37)
-            and self.party_status == (0, 0, 0)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -253,9 +315,12 @@ class VictoryRoadChapterReport:
             "indigo_supplies": {
                 "full_restores": self.full_restores,
                 "full_heals": self.full_heals,
+                "revives": self.revives,
                 "hyper_potions": self.hyper_potions,
                 "x_specials": self.x_specials,
                 "max_repels": self.max_repels,
+                "poke_balls_sold": self.poke_balls_sold,
+                "poke_balls_remaining": self.poke_balls_remaining,
                 "money_remaining": self.money_remaining,
             },
             "terminal": {
@@ -273,17 +338,6 @@ class VictoryRoadChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_victory_road_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -292,7 +346,7 @@ def run_victory_road_chapter(
     progress: ProgressSink | None = None,
 ) -> VictoryRoadChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[VictoryRoadCheckpoint] = []
     wild_run = _RunState([])
     initial = reader.read()
@@ -302,7 +356,11 @@ def run_victory_road_chapter(
         or not _event(initial, EventFlag.SECOND_ROUTE_22_RIVAL_BATTLE)
         or not _event(initial, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)
         or _event(initial, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
-        or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 6
+        or not (
+            VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS[0]
+            <= _bag(emulator).get(ItemId.HYPER_POTION, 0)
+            <= VICTORY_ROAD_INPUT_HYPER_POTION_BOUNDS[1]
+        )
     ):
         raise VictoryRoadChapterError("Victory Road input boundary is not qualified.")
     _checkpoint(
@@ -367,20 +425,22 @@ def run_victory_road_chapter(
         quantity=hyper_purchase,
         target_bag_quantity=11,
     )
-    _buy_mart_item(
-        actions,
-        emulator,
-        DEFAULT_LAVENDER_TIMING,
-        absolute_index=2,
-        item=ItemId.MAX_REPEL,
-        quantity=10,
-        target_bag_quantity=10,
-    )
+    current_repels = _bag(emulator).get(ItemId.MAX_REPEL, 0)
+    if current_repels < VICTORY_ROAD_MAX_REPEL_PURCHASE:
+        _buy_mart_item(
+            actions,
+            emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=2,
+            item=ItemId.MAX_REPEL,
+            quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE - current_repels,
+            target_bag_quantity=VICTORY_ROAD_MAX_REPEL_PURCHASE,
+        )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     supplied = reader.read()
     if (
         _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
-        or _bag(emulator).get(ItemId.MAX_REPEL, 0) != 10
+        or _bag(emulator).get(ItemId.MAX_REPEL, 0) != VICTORY_ROAD_MAX_REPEL_PURCHASE
         or ItemId.TM27_FISSURE in _bag(emulator)
     ):
         raise VictoryRoadChapterError("Saffron resupply failed.")
@@ -422,7 +482,13 @@ def run_victory_road_chapter(
         or not _event(rival_raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
         or _event(rival_raw, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)
     ):
-        raise VictoryRoadChapterError("Route 22 rival evidence changed.")
+        raise VictoryRoadChapterError(
+            "Route 22 rival evidence changed: "
+            f"party={rival_party!r}, defeated="
+            f"{_event(rival_raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)!r}, "
+            f"wants_battle="
+            f"{_event(rival_raw, EventFlag.ROUTE_22_RIVAL_WANTS_BATTLE)!r}."
+        )
     _checkpoint(
         records,
         progress,
@@ -437,6 +503,7 @@ def run_victory_road_chapter(
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron recovery entry")
     _move(actions, reader, ("up",) * 4, "Saffron recovery nurse")
     _heal(actions, reader, emulator)
+    _archive_master_ball(actions, reader, emulator)
     _move(actions, reader, ("down",) * 5, "Saffron recovery exit")
     _move(actions, reader, SAFFRON_TO_MART, "Saffron recovery Mart")
     _require(reader.read(), MapId.SAFFRON_MART, (3, 7), "Saffron recovery Mart entry")
@@ -457,10 +524,27 @@ def run_victory_road_chapter(
             target_bag_quantity=11,
         )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
+    if ItemId.TM24_THUNDERBOLT in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.TM24_THUNDERBOLT)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    _sell_current_bag_item(actions, emulator, ItemId.TM21_MEGA_DRAIN)
-    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    late_capacity_sale = _indigo_capacity_sale_item(
+        _bag(emulator).get(ItemId.TM21_MEGA_DRAIN, 0),
+        _bag(emulator).get(ItemId.POTION, 0),
+    )
+    if late_capacity_sale == ItemId.TM21_MEGA_DRAIN:
+        _sell_current_bag_item(actions, emulator, late_capacity_sale)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    else:
+        _sell_bag_item_stack(
+            actions,
+            reader,
+            emulator,
+            late_capacity_sale,
+            _bag(emulator).get(late_capacity_sale, 0),
+        )
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _move(actions, reader, ("right", "down", "down", "down"), "Saffron recovery Mart exit")
     _acquire_and_teach_submission(actions, reader, emulator)
     _field_fly(actions, reader, emulator, "up", MapId.VIRIDIAN_CITY)
@@ -649,16 +733,55 @@ def run_victory_road_chapter(
     _settle_confirm(actions, reader, 16)
     _move(actions, reader, ("up",) * 10, "Indigo lobby")
     _require(reader.read(), MapId.INDIGO_PLATEAU_LOBBY, (7, 11), "Indigo lobby")
-
     _move(actions, reader, ("up",) * 4, "Indigo nurse")
     _heal(actions, reader, emulator)
     _move(actions, reader, _directions("LLLLUUL"), "Indigo clerk")
     _require(reader.read(), MapId.INDIGO_PLATEAU_LOBBY, (2, 5), "Indigo clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
-    _sell_current_bag_item(actions, emulator, ItemId.TM38_FIRE_BLAST)
-    _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
-    _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
-    _pulse(actions, MacroActionKind.CANCEL)
+    # The completionist lineage may liquidate the Nugget earlier to finance its
+    # larger capture reserve without reducing the Rock Tunnel safety inventory.
+    if ItemId.NUGGET in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.NUGGET)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    # A lower-level held-out Diglett legally consumed TM28 to learn Dig before
+    # Surge. The default lineage carries the unused TM here. Sell it only when
+    # present; either path has already proved the same durable Dig capability.
+    if ItemId.TM28_DIG in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.TM28_DIG)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    if ItemId.TM17_SUBMISSION in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.TM17_SUBMISSION)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    if ItemId.ULTRA_BALL in _bag(emulator):
+        _sell_current_bag_item(actions, emulator, ItemId.ULTRA_BALL)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    obsolete_super_potions = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    if obsolete_super_potions:
+        _sell_bag_stack(
+            actions,
+            emulator,
+            ItemId.SUPER_POTION,
+            obsolete_super_potions,
+        )
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    remaining_repels = _bag(emulator).get(ItemId.MAX_REPEL, 0)
+    if remaining_repels:
+        _sell_bag_stack(actions, emulator, ItemId.MAX_REPEL, remaining_repels)
+        _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    # The Indigo purchase replaces these narrow status cures with Full Heals.
+    # Selling both legacy stacks also preserves one bag slot for Blaine's
+    # Fire Blast TM until it is taught for the Champion matchup.
+    for obsolete_cure in (ItemId.AWAKENING, ItemId.PARLYZ_HEAL, ItemId.ANTIDOTE):
+        quantity = _bag(emulator).get(obsolete_cure, 0)
+        if quantity:
+            _sell_bag_stack(actions, emulator, obsolete_cure, quantity)
+            _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
+    poke_balls_sold = _validate_collection_poke_ball_remainder(
+        _bag(emulator).get(ItemId.POKE_BALL, 0)
+    )
+    if poke_balls_sold:
+        _sell_bag_stack(actions, emulator, ItemId.POKE_BALL, poke_balls_sold)
+    _pulse(actions, _indigo_buy_entry_action(poke_balls_sold))
     _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
     _pulse(actions, MacroActionKind.CONFIRM)
     _buy_mart_item(
@@ -667,8 +790,8 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=2,
         item=ItemId.FULL_RESTORE,
-        quantity=11,
-        target_bag_quantity=11,
+        quantity=INDIGO_FULL_RESTORE_RESERVE,
+        target_bag_quantity=INDIGO_FULL_RESTORE_RESERVE,
     )
     _buy_mart_item(
         actions,
@@ -676,8 +799,17 @@ def run_victory_road_chapter(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=4,
         item=ItemId.FULL_HEAL,
-        quantity=10,
-        target_bag_quantity=10,
+        quantity=INDIGO_FULL_HEAL_RESERVE,
+        target_bag_quantity=INDIGO_FULL_HEAL_RESERVE,
+    )
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=5,
+        item=ItemId.REVIVE,
+        quantity=INDIGO_REVIVE_RESERVE,
+        target_bag_quantity=INDIGO_REVIVE_RESERVE,
     )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     final = reader.read()
@@ -698,11 +830,15 @@ def run_victory_road_chapter(
         vr2_switch2_set=vr2_switch2,
         full_restores=final_bag.get(ItemId.FULL_RESTORE, 0),
         full_heals=final_bag.get(ItemId.FULL_HEAL, 0),
+        revives=final_bag.get(ItemId.REVIVE, 0),
         hyper_potions=final_bag.get(ItemId.HYPER_POTION, 0),
         x_specials=final_bag.get(ItemId.X_SPECIAL, 0),
         max_repels=final_bag.get(ItemId.MAX_REPEL, 0),
+        poke_balls_sold=poke_balls_sold,
+        poke_balls_remaining=final_bag.get(ItemId.POKE_BALL, 0),
         tm27_sold=ItemId.TM27_FISSURE not in final_bag,
         tm38_sold=ItemId.TM38_FIRE_BLAST not in final_bag,
+        tm28_sold=ItemId.TM28_DIG not in final_bag,
         tm06_consumed=ItemId.TM06_TOXIC not in final_bag,
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
@@ -717,8 +853,44 @@ def run_victory_road_chapter(
     return report
 
 
+def _indigo_capacity_sale_item(tm21_quantity: int, potion_quantity: int) -> ItemId:
+    """Choose one obsolete stack to free the preregistered Indigo TM slot."""
+
+    if tm21_quantity == 1:
+        return ItemId.TM21_MEGA_DRAIN
+    if tm21_quantity == 0 and potion_quantity > 0:
+        return ItemId.POTION
+    raise VictoryRoadChapterError(
+        "Indigo preparation lacks TM21 or obsolete Potions for its capacity sale."
+    )
+
+
+def _validate_collection_poke_ball_remainder(quantity: int) -> int:
+    """Accept every remainder permitted by the bounded capture curriculum."""
+
+    minimum, maximum = COLLECTION_POKE_BALL_REMAINDER_BOUNDS
+    if not minimum <= quantity <= maximum:
+        raise VictoryRoadChapterError(
+            "Indigo cleanup expected zero to thirty remaining Poké Balls after the "
+            f"bounded collection route, got {quantity}."
+        )
+    return quantity
+
+
+def _indigo_buy_entry_action(poke_balls_sold: int) -> MacroActionKind:
+    """Enter BUY from either the completed-sale state or clerk field control."""
+
+    if poke_balls_sold:
+        # A completed sale is still inside the SELL flow; CANCEL returns to the
+        # clerk's BUY/SELL menu.
+        return MacroActionKind.CANCEL
+    # With no stack to sell, cleanup is still standing at field control and
+    # must interact with the clerk before selecting BUY.
+    return MacroActionKind.INTERACT
+
+
 def _defeat_route22_rival(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> tuple[tuple[RivalTurn, ...], int]:
@@ -732,44 +904,61 @@ def _defeat_route22_rival(
     turns: list[RivalTurn] = []
 
     def policy(raw: RawGameState) -> int:
-        species = raw.enemy_species_id or 0
-        try:
-            slot = (
-                1
-                if species == 0x9A and (raw.first_party_pp or (0, 0, 0, 0))[0] == 10
-                else RIVAL_POLICY[species]
-            )
-        except KeyError as error:
-            raise VictoryRoadChapterError(f"Unexpected Route 22 species {species:#04x}.") from error
+        return _route22_rival_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             RivalTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                raw.first_party_hp or 0,
-                raw.first_party_pp or (0, 0, 0, 0),
+                raw.battler_hp or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
             )
         )
-        return slot
 
-    class _HealBoundary(Exception):
-        pass
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
 
-    def health_aware_policy(raw: RawGameState) -> int:
-        venusaur_threshold = 100 if next_sacrifice < 3 else 50
-        heal_threshold = {
-            0x95: 140,
-            0x9A: venusaur_threshold,
-        }.get(raw.enemy_species_id or 0, 0)
-        if (raw.first_party_hp or 0) < heal_threshold:
-            raise _HealBoundary
-        return policy(raw)
+    class _PivotBoundary(BattleControlRequest):
+        default_action = BattleAction.switch()
 
     potions_used = 0
     recovery_reserve = _bag(emulator).get(ItemId.HYPER_POTION, 0)
+    last_recovery_turn = -1
+    pivoted_species: set[int] = set()
+
+    def health_aware_policy(raw: RawGameState) -> int:
+        species = raw.enemy_species_id or 0
+        if (
+            species in ROUTE_22_PROACTIVE_PIVOT_SPECIES
+            and species not in pivoted_species
+            and _route22_recovery_pivot_target(raw, next_sacrifice) is not None
+        ):
+            # Preserve the observed opponent and intended move in the receipt
+            # before yielding to recovery. With a stronger reserve the pivot
+            # itself can end the battle, leaving no later MAIN-menu turn on
+            # which to record this final species.
+            record_turn(raw, policy(raw))
+            raise _PivotBoundary
+        heal_threshold = {
+            0x95: 140,
+            0x9A: ROUTE_22_VENUSAUR_HEAL_THRESHOLD,
+        }.get(species, ROUTE_22_DEFAULT_HEAL_THRESHOLD)
+        if (
+            raw.active_party_index in {None, 0}
+            and (raw.battler_hp or 0) < heal_threshold
+            and len(turns) != last_recovery_turn
+            and potions_used < recovery_reserve
+        ):
+            raise _HealBoundary
+        return policy(raw)
+
     next_sacrifice = 1
     pivot_heals = 0
+    faint_pivots = 0
+    team_pivots = 0
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -777,40 +966,104 @@ def _defeat_route22_rival(
                 actions,
                 health_aware_policy,
                 expected_map=MapId.ROUTE_22,
+                intent=BattleIntent(
+                    "cross_victory_road",
+                    battle_plan_id=RedBattlePlanId.VICTORY_ROAD_ROUTE_22_RIVAL,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                    recovery_capabilities=frozenset(
+                        {BattleRecoveryCapability.RESTORE_HP}
+                    ),
+                    switch_capabilities=frozenset(
+                        {BattleSwitchCapability.PROTECTED_RECOVERY}
+                    ),
+                    switch_limit=ROUTE_22_MAX_TEAM_PIVOTS,
+                ),
                 timing=BattleRuntimeTiming(max_runtime_pulses=720),
                 label="Route 22 rival",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _HealBoundary):
+            cause = error.__cause__
+            learned_pivot = learned_switch_party_index(cause)
+            failed = reader.read()
+            continuation_target = _route22_fainted_pivot_target(
+                failed,
+                _party_hp(emulator),
+            )
+            if continuation_target is not None:
+                party_hp = _party_hp(emulator)
+                if faint_pivots >= max(0, len(party_hp) - 1):
+                    raise VictoryRoadChapterError(
+                        "Route 22 rival exhausted its living-party continuation bound."
+                    ) from error
+                _route22_switch_with_faint_continuation(
+                    actions,
+                    reader,
+                    emulator,
+                    continuation_target,
+                    label="Route 22 rival fainted-member continuation",
+                )
+                faint_pivots += 1
+                continue
+            if (
+                not recovery_request_matches(cause, _HealBoundary)
+                and not isinstance(cause, _PivotBoundary)
+                and learned_pivot is None
+            ):
                 raise VictoryRoadChapterError(
                     "Route 22 rival battle runtime failed after recovery: "
                     f"party_hp={_party_hp(emulator)!r}, potions={potions_used}, "
-                    f"pivot_heals={pivot_heals}, next_sacrifice={next_sacrifice}."
+                    f"pivot_heals={pivot_heals}, next_sacrifice={next_sacrifice}, "
+                    f"enemy={(failed.enemy_species_id, failed.enemy_hp)!r}, "
+                    f"turns={turns[-8:]!r}."
                 ) from error
+            if isinstance(cause, _PivotBoundary) or learned_pivot is not None:
+                species = reader.read().enemy_species_id or 0
+                requested_target = next_sacrifice if learned_pivot is None else learned_pivot
+                pivot_target = (
+                    _route22_battle_ready_pivot_target(reader.read(), requested_target)
+                    if team_pivots < ROUTE_22_MAX_TEAM_PIVOTS
+                    else None
+                )
+                if pivot_target is None:
+                    # No battle-ready reserve, or the pivot budget is spent.
+                    # Recover in place with the already-funded reserve rather
+                    # than feeding another teammate to the opponent.
+                    if potions_used >= recovery_reserve:
+                        raise VictoryRoadChapterError(
+                            "Route 22 rival needed recovery with no battle-ready reserve "
+                            f"and no Hyper Potion left: party_hp={_party_hp(emulator)!r}, "
+                            f"potions={potions_used}, team_pivots={team_pivots}."
+                        ) from error
+                    _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
+                    potions_used += 1
+                    last_recovery_turn = len(turns)
+                    continue
+                pivot_target = _route22_switch_with_faint_continuation(
+                    actions,
+                    reader,
+                    emulator,
+                    pivot_target,
+                    label="Route 22 rival balanced-team pivot",
+                )
+                pivoted_species.add(species)
+                team_pivots += 1
+                next_sacrifice = max(next_sacrifice + 1, pivot_target + 1)
+                last_recovery_turn = len(turns)
+                continue
             if potions_used >= recovery_reserve:
                 raise VictoryRoadChapterError(
                     "Route 22 rival exceeded the bounded recovery reserve."
                 ) from error
-            if reader.read().enemy_species_id == 0x9A and next_sacrifice < 3:
-                potion_spent = _battle_sacrifice(
-                    actions,
-                    reader,
-                    emulator,
-                    next_sacrifice,
-                    heal_lead=True,
-                )
-                next_sacrifice += 1
-                pivot_heals += int(potion_spent)
-            else:
-                _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
-                potion_spent = True
-            potions_used += int(potion_spent)
+            _battle_hyper_potion(reader, actions, emulator, DEFAULT_SILPH_TIMING)
+            potions_used += 1
+            last_recovery_turn = len(turns)
     _settle_confirm(actions, reader, 30)
     return tuple(turns), potions_used
 
 
 def _teach_toxic(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -854,7 +1107,7 @@ def _teach_toxic(
 
 
 def _acquire_and_teach_submission(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -925,8 +1178,26 @@ def _acquire_and_teach_submission(
         DEFAULT_LAVENDER_TIMING,
         absolute_index=6,
         item=ItemId.X_SPECIAL,
-        quantity=6,
-        target_bag_quantity=6,
+        quantity=INDIGO_X_SPECIAL_PURCHASE,
+        target_bag_quantity=INDIGO_X_SPECIAL_PURCHASE,
+    )
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=0,
+        item=ItemId.X_ACCURACY,
+        quantity=2,
+        target_bag_quantity=3,
+    )
+    _buy_mart_item(
+        actions,
+        emulator,
+        DEFAULT_LAVENDER_TIMING,
+        absolute_index=3,
+        item=ItemId.X_ATTACK,
+        quantity=1,
+        target_bag_quantity=1,
     )
     _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     _move(
@@ -944,7 +1215,7 @@ def _acquire_and_teach_submission(
 
 
 def _teach_submission(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -978,8 +1249,9 @@ def _teach_submission(
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
         raw = reader.read()
-        if raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39) and ItemId.TM17_SUBMISSION not in _bag(
-            emulator
+        if (
+            raw.first_party_moves == (0x42, 0x46, 0x3A, 0x39)
+            and _bag(emulator).get(ItemId.TM17_SUBMISSION, 0) == 0
         ):
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
@@ -987,8 +1259,43 @@ def _teach_submission(
     raise VictoryRoadChapterError("TM17 did not replace Toxic.")
 
 
+def _archive_master_ball(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+) -> None:
+    if _bag(emulator).get(ItemId.MASTER_BALL, 0) != 1:
+        raise VictoryRoadChapterError("Late-game PC cleanup requires the unused Master Ball.")
+    _move(
+        actions,
+        reader,
+        ("down",) + ("right",) * 10,
+        "Saffron PC approach",
+    )
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
+    try:
+        _deposit_pc_item(
+            actions,
+            reader,
+            emulator,
+            ItemId.MASTER_BALL,
+            DEFAULT_SILPH_TIMING,
+        )
+    except SabrinaChapterError as error:
+        raise VictoryRoadChapterError("Late-game PC cleanup failed.") from error
+    if ItemId.MASTER_BALL in _bag(emulator):
+        raise VictoryRoadChapterError("Late-game PC cleanup retained the Master Ball.")
+    _move(
+        actions,
+        reader,
+        ("left",) * 10 + ("up",),
+        "Saffron PC return",
+    )
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Saffron PC return")
+
+
 def _battle_sacrifice(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     party_index: int,
@@ -996,141 +1303,80 @@ def _battle_sacrifice(
     heal_lead: bool,
     healing_item: ItemId = ItemId.HYPER_POTION,
 ) -> bool:
-    if _party_hp(emulator)[party_index] <= 0:
-        raise VictoryRoadChapterError("Route 22 pivot target had already fainted.")
-    _select_battle_main_command(actions, reader, 2)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _select_cursor(actions, emulator, party_index, DEFAULT_HIDEOUT_TIMING)
-    _pulse(actions, MacroActionKind.CONFIRM)
-    _pulse(actions, MacroActionKind.CONFIRM)
-
-    pivot_ready = False
-    for pulse_index in range(24):
-        if _party_hp(emulator)[party_index] == 0:
-            break
-        raw = reader.read()
-        if (
-            raw.battle_state == 2
-            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-        ):
-            pivot_ready = True
-            break
-        _pulse(
+    before = _bag(emulator).get(healing_item, 0)
+    try:
+        return protected_lead_recovery(
             actions,
-            MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-        )
-
-    potion_spent = False
-    if heal_lead and pivot_ready:
-        _select_battle_main_command(actions, reader, 1)
-        _pulse(actions, MacroActionKind.CONFIRM)
-        before = _bag(emulator).get(healing_item, 0)
-        _select_bag_item(
-            actions,
+            reader,
             emulator,
-            healing_item,
-            DEFAULT_LAVENDER_TIMING,
+            party_index,
+            heal_lead=heal_lead,
+            preserve_reserve=_party_max_hp(emulator)[party_index] > 100,
+            healing_item=healing_item,
+            wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
         )
-        _pulse(actions, MacroActionKind.CONFIRM)
-        _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
-        _pulse(actions, MacroActionKind.CONFIRM)
-        for _ in range(24):
-            if _party_hp(emulator)[party_index] == 0:
-                break
-            raw = reader.read()
-            if (
-                raw.battle_state == 2
-                and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-            ):
-                break
-            _pulse(actions, MacroActionKind.CONFIRM)
-        if before - _bag(emulator).get(healing_item, 0) != 1:
-            raise VictoryRoadChapterError("Route 22 pivot recovery did not spend one item.")
-        potion_spent = True
-
-    for pulse_index in range(64):
-        if _party_hp(emulator)[party_index] == 0:
-            break
+    except ProtectedRecoveryError as error:
         raw = reader.read()
-        if raw.battle_state != 2:
-            raise VictoryRoadChapterError("Route 22 pivot left its trainer battle.")
-        menu = reader.read_battle_menu_state(raw)
-        if menu.phase is BattleMenuPhase.MAIN:
-            _select_battle_main_command(actions, reader, 0)
-            _pulse(actions, MacroActionKind.CONFIRM)
-            _select_cursor(actions, emulator, 1, DEFAULT_HIDEOUT_TIMING)
-            _pulse(actions, MacroActionKind.CONFIRM)
-        else:
-            _pulse(
-                actions,
-                MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-            )
-    else:
-        raise VictoryRoadChapterError(
-            "Route 22 pivot did not absorb a bounded attack: "
-            f"party_hp={_party_hp(emulator)!r}, "
-            f"menu={reader.read_battle_menu_state(reader.read())!r}."
-        )
+        spent = before - _bag(emulator).get(healing_item, 0)
+        # A stronger balanced party can finish the rival battle while the old
+        # single-carry route is still inside its bounded pivot sequence.  That
+        # is a successful terminal transition, not a recovery failure, but it
+        # is accepted only with the immutable rival-win flag, a surviving
+        # party member, and an exact zero-or-one item delta.
+        if (
+            raw.battle_state == 0
+            and _event(raw, EventFlag.BEAT_ROUTE_22_RIVAL_2ND_BATTLE)
+            and any(hp > 0 for hp in _party_hp(emulator))
+            and spent in (0, 1)
+        ):
+            return bool(spent)
+        raise VictoryRoadChapterError(f"Route 22 protected recovery failed: {error}") from error
 
-    for _ in range(1):
-        _pulse(actions, MacroActionKind.CONFIRM)
-    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) > 2:
+
+def _sell_bag_stack(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    quantity: int,
+    *,
+    expected_quantity: int | None = None,
+) -> None:
+    before = quantity if expected_quantity is None else expected_quantity
+    if _bag(emulator).get(item, 0) != before or not 1 <= quantity <= before:
         raise VictoryRoadChapterError(
-            "Route 22 forced-switch cursor was not a party slot: "
-            f"current={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-            f"scroll={emulator.read_u8(RamAddress.LIST_SCROLL_OFFSET)}."
+            f"Expected {before} {item.name} items at the Indigo sale boundary."
         )
-    _select_cursor(actions, emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.INTERACT)
+    _pulse(actions, MacroActionKind.MOVE, "down")
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 1:
+        raise VictoryRoadChapterError("Indigo shop did not select SELL.")
     _pulse(actions, MacroActionKind.CONFIRM)
     for _ in range(24):
-        raw = reader.read()
-        if (
-            raw.battle_state == 2
-            and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
-        ):
-            return potion_spent
-        _pulse(actions, MacroActionKind.CONFIRM)
-    raise VictoryRoadChapterError(
-        "Route 22 pivot did not restore Blastoise: "
-        f"party_hp={_party_hp(emulator)!r}, "
-        f"active={emulator.read_u8(RamAddress.PLAYER_MON_NUMBER)}, "
-        f"cursor={emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)}, "
-        f"menu={reader.read_battle_menu_state(reader.read())!r}."
-    )
-
-
-def _select_battle_main_command(
-    actions: _CountingExecutor,
-    reader: PokemonRedStateReader,
-    target: int,
-) -> None:
-    coordinates = {0: (0, 0), 1: (0, 1), 2: (1, 0), 3: (1, 1)}
-    for pulse_index in range(24):
-        menu = reader.read_battle_menu_state(reader.read())
-        if menu.phase is not BattleMenuPhase.MAIN:
-            _pulse(
-                actions,
-                MacroActionKind.CANCEL if pulse_index % 4 == 3 else MacroActionKind.CONFIRM,
-            )
-            continue
-        current = menu.selected_main_command
-        if current == target:
-            return
-        if current not in coordinates:
-            raise VictoryRoadChapterError("Route 22 battle command cursor was invalid.")
-        x, y = coordinates[current]
-        target_x, target_y = coordinates[target]
-        direction = (
-            "right"
-            if x < target_x
-            else "left"
-            if x > target_x
-            else "down"
-            if y < target_y
-            else "up"
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
         )
-        _pulse(actions, MacroActionKind.MOVE, direction, 120)
-    raise VictoryRoadChapterError("Route 22 battle command cursor did not settle.")
+        if absolute < len(_bag(emulator)) and tuple(_bag(emulator))[absolute] == item:
+            break
+        _pulse(actions, MacroActionKind.MOVE, "down", 120)
+    else:
+        raise VictoryRoadChapterError(f"Indigo sell list could not select {item.name}.")
+    _pulse(actions, MacroActionKind.CONFIRM)
+    for _ in range(quantity + 2):
+        if (
+            emulator.read_u8(RamAddress.SHOP_SELECTED_ITEM) == item
+            and emulator.read_u8(RamAddress.SHOP_QUANTITY) == quantity
+        ):
+            break
+        _pulse(actions, MacroActionKind.MOVE, "up", 120)
+    else:
+        raise VictoryRoadChapterError(
+            f"Indigo sale quantity selector missed {quantity} {item.name}."
+        )
+    for _ in range(24):
+        if _bag(emulator).get(item, 0) == before - quantity:
+            return
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise VictoryRoadChapterError(f"Indigo did not sell the {item.name} stack.")
 
 
 def _menu_cursor_active(emulator: EmulatorState) -> bool:
@@ -1140,8 +1386,26 @@ def _menu_cursor_active(emulator: EmulatorState) -> bool:
     return tile_map <= address < tile_map + 360 and emulator.read_u8(address) == 0xED
 
 
+def _select_battle_main_command(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    target: int,
+) -> None:
+    """Compatibility wrapper around the shared battle-command selector."""
+
+    try:
+        _select_shared_battle_main_command(
+            actions,
+            reader,
+            target,
+            DEFAULT_HIDEOUT_TIMING.wait_frames,
+        )
+    except ProtectedRecoveryError as error:
+        raise VictoryRoadChapterError(str(error)) from error
+
+
 def _field_fly(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     town_direction: str | Iterable[str],
@@ -1168,7 +1432,7 @@ def _field_fly(
 
 
 def _field_surf(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1189,7 +1453,7 @@ def _field_surf(
 
 
 def _activate_strength(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1207,7 +1471,7 @@ def _activate_strength(
 
 
 def _pass_badge_gate(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1224,7 +1488,7 @@ def _pass_badge_gate(
 
 
 def _heal(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
 ) -> None:
@@ -1234,7 +1498,7 @@ def _heal(
     expected_pp = (25, 15, 10, 15) if moves and moves[0] == 0x42 else (10, 15, 10, 15)
     if (
         _party_hp(emulator) != _party_max_hp(emulator)
-        or _party_status(emulator) != (0, 0, 0)
+        or any(status != 0 for status in _party_status(emulator))
         or reader.read().first_party_pp != expected_pp
     ):
         raise VictoryRoadChapterError("Pokémon Center did not restore the qualified party.")
@@ -1245,7 +1509,7 @@ def _heal(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     route: Iterable[str],
     label: str,
@@ -1255,7 +1519,7 @@ def _move(
 
 
 def _move_with_wilds(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -1282,7 +1546,7 @@ def _move_with_wilds(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | None = None,
     frames: int = DEFAULT_HIDEOUT_TIMING.wait_frames,
@@ -1292,7 +1556,7 @@ def _pulse(
 
 
 def _step(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     label: str,
@@ -1310,7 +1574,7 @@ def _step(
 
 
 def _settle_confirm(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     limit: int,
 ) -> None:
@@ -1336,14 +1600,153 @@ def _encounter_party(turns: Iterable[RivalTurn]) -> tuple[tuple[int, int], ...]:
 
 
 def _rival_moves_valid(turns: Iterable[RivalTurn]) -> bool:
-    toxic_seen = False
-    for turn in turns:
-        if turn.species == 0x9A and turn.move_slot == 1 and not toxic_seen:
-            toxic_seen = True
-            continue
-        if turn.move_slot != RIVAL_POLICY[turn.species]:
-            return False
-    return toxic_seen
+    return all(turn.move_slot in RIVAL_PRIORITIES[turn.species] for turn in turns)
+
+
+def _route22_rival_move_slot(raw: RawGameState) -> int:
+    if raw.active_party_index not in {None, 0}:
+        if raw.battler_moves is None or raw.battler_pp is None:
+            raise VictoryRoadChapterError("Route 22 reserve lacks active move evidence.")
+        for slot, (move, pp) in enumerate(
+            zip(raw.battler_moves, raw.battler_pp, strict=True),
+            start=1,
+        ):
+            if (
+                move
+                and pp & 0x3F
+                and not (
+                    raw.player_disabled_move_slot == slot
+                    and (raw.player_disable_turns or 0) > 0
+                )
+            ):
+                return slot
+        raise VictoryRoadChapterError("Route 22 reserve has no legal move with PP.")
+    species = raw.enemy_species_id or 0
+    try:
+        priorities = RIVAL_PRIORITIES[species]
+    except KeyError as error:
+        raise VictoryRoadChapterError(f"Unexpected Route 22 species {species:#04x}.") from error
+    pp = raw.first_party_pp or ()
+    for slot in priorities:
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0)
+        ):
+            return slot
+    raise VictoryRoadChapterError("Route 22 rival policy has no legal move with PP.")
+
+
+def _route22_fainted_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+) -> int | None:
+    """Choose a living teammate after a nonterminal Route 22 faint."""
+
+    if raw.battle_state != 2 or (raw.battler_hp or 0) > 0:
+        return None
+    active_index = raw.active_party_index
+    return next(
+        (
+            index
+            for index, hp in enumerate(party_hp)
+            if hp > 0 and index != active_index
+        ),
+        None,
+    )
+
+
+def _route22_recovery_pivot_target(
+    raw: RawGameState,
+    preferred_index: int,
+) -> int | None:
+    """Choose a currently living reserve, starting at the preferred party slot."""
+
+    party_hp = raw.party_hp or ()
+    active_index = raw.active_party_index
+    candidates = [
+        index
+        for index, hp in enumerate(party_hp)
+        if index > 0 and hp > 0 and index != active_index
+    ]
+    return next(
+        (index for index in candidates if index >= preferred_index),
+        candidates[0] if candidates else None,
+    )
+
+
+def _route22_battle_ready_pivot_target(
+    raw: RawGameState,
+    preferred_index: int,
+) -> int | None:
+    """Choose a reserve healthy enough to fight, not one spent as damage padding.
+
+    :func:`_route22_recovery_pivot_target` accepts any *living* member, which is
+    what let a held-out schedule walk the whole party into Venusaur one faint at
+    a time.  Requiring a real health fraction makes a pivot a strategic choice
+    and makes the wipe structurally unreachable.
+    """
+
+    party_hp = raw.party_hp or ()
+    party_max_hp = raw.party_max_hp or ()
+    active_index = raw.active_party_index
+    candidates = [
+        index
+        for index, hp in enumerate(party_hp)
+        if index > 0
+        and index != active_index
+        and hp > 0
+        and index < len(party_max_hp)
+        and party_max_hp[index] > 0
+        and hp / party_max_hp[index] >= ROUTE_22_PIVOT_MIN_HP_RATIO
+    ]
+    if not candidates:
+        return None
+    return next(
+        (index for index in candidates if index >= preferred_index),
+        candidates[0],
+    )
+
+
+def _route22_switch_with_faint_continuation(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    party_index: int,
+    *,
+    label: str,
+) -> int:
+    """Switch once, then recover if the incoming reserve is knocked out."""
+
+    try:
+        switch_active_battler(
+            actions,
+            reader,
+            emulator,
+            party_index,
+            label=label,
+            wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+        )
+        return party_index
+    except ProtectedRecoveryError as first_error:
+        failed = reader.read()
+        continuation = _route22_fainted_pivot_target(failed, _party_hp(emulator))
+        if continuation is None:
+            raise VictoryRoadChapterError(f"{label} failed: {first_error}") from first_error
+        try:
+            switch_active_battler(
+                actions,
+                reader,
+                emulator,
+                continuation,
+                label=f"{label} after switch-in faint",
+                wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+            )
+        except ProtectedRecoveryError as continuation_error:
+            raise VictoryRoadChapterError(
+                f"{label} continuation failed: {continuation_error}"
+            ) from continuation_error
+        return continuation
 
 
 def _checkpoint(

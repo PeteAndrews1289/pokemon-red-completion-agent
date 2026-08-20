@@ -1,0 +1,85 @@
+{
+  "candidate": {
+    "candidate_id": "red-goal-manager-74922cc-r3",
+    "catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "fit_summary_file_sha256": "cba3c9c19841c83110ff32b2be044b3ee7dbea350765df09f6ebc95081b117dc",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "model_file_sha256": "16901b701476230d2be6c0327cc3e572f6dc5ce034f99067562916cecd3e77f4",
+    "training_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038"
+  },
+  "causal": {
+    "actions_executed": 80613,
+    "agreements": 27,
+    "contexts": 27,
+    "episodes_created": 0,
+    "frames_executed": 8077586,
+    "mean_confidence": 0.9884906214044127,
+    "minimum_confidence": 0.8809568117777317,
+    "model_had_execution_authority": true,
+    "receipt_sha256": "07e0956932b23018348b9c7a9d1c27f5b3a6c451abbf7680d8162b1e065ab11e",
+    "successful_contexts": 27,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "evaluation_source": {
+    "git_commit": "20b77ca977ae9e2da0add7b6238a6e5f69740228",
+    "source_bundle_sha256": "179d778d659c1c5b3bb64aa25560331e8673c29a834eeb342d2849b8197af84c"
+  },
+  "goal_family_counts": {
+    "acquire_species": 3,
+    "advance_story": 3,
+    "develop_team": 3,
+    "evolve_species": 3,
+    "explore": 3,
+    "manage_storage": 3,
+    "recover_control": 3,
+    "restore_team": 3,
+    "resupply": 3
+  },
+  "offline_development_validation": {
+    "examples": 27,
+    "fixed_priority_accuracy": 0.5555555555555556,
+    "highest_pressure_accuracy": 0.9259259259259259,
+    "lowest_effort_accuracy": 0.5925925925925926,
+    "model_accuracy": 1.0
+  },
+  "promotion": {
+    "eligible_for_bounded_red_goal_authority": true,
+    "establishes": "same-context-live-authority-integration",
+    "not_established": [
+      "unseen-context-generalization",
+      "cross-title-transfer",
+      "end-to-end-game-completion"
+    ],
+    "promotion_plan_sha256": "b648d1825fb7701f38aa00f5625fe88a86040dc7b4b061b4256f6ae665b90c46"
+  },
+  "sealed_destination_test": {
+    "captures": 12,
+    "evaluated": 0,
+    "opened": 0,
+    "status": "sealed_unopened"
+  },
+  "shadow": {
+    "actions_executed": 80613,
+    "agreements": 27,
+    "contexts": 27,
+    "episodes_created": 0,
+    "frames_executed": 8077586,
+    "mean_confidence": 0.9884906214044127,
+    "minimum_confidence": 0.8809568117777317,
+    "model_had_execution_authority": false,
+    "receipt_sha256": "f064a66394946a6a942a50123c0106075290c824ebb8d2c14e03467f6136ca3d",
+    "successful_contexts": 27,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0
+  },
+  "source_gate": {
+    "mypy": "passed",
+    "public_artifacts": "passed",
+    "pytest_expected_failures": 1,
+    "pytest_passed": 3056,
+    "ruff": "passed",
+    "source_bound_registries": "passed"
+  },
+  "schema": "pokemon-red-goal-manager-public-promotion-evidence-v1"
+}

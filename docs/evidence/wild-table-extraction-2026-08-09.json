@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon-wild-table-extraction-v1",
+  "recorded_on": "2026-08-09",
+  "scope": "per-map grass and water tables only. Fishing, Game Corner, gifts, fossils, in-game trades and evolution are separate routes stored elsewhere, so absence here is not unobtainability.",
+  "wild_species_count": {
+    "red": 78,
+    "blue": 78
+  },
+  "red_wild_tables_only": [
+    23,
+    24,
+    43,
+    44,
+    56,
+    58,
+    116,
+    117,
+    123,
+    125
+  ],
+  "blue_wild_tables_only": [
+    27,
+    28,
+    37,
+    52,
+    69,
+    70,
+    98,
+    99,
+    126,
+    127
+  ]
+}

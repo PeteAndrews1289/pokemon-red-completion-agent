@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon-training-venue-measurement-v1",
+  "recorded_on": "2026-08-06",
+  "measurement_id": "red-mansion-1f-encounter-band",
+  "harness_seed": 1810001,
+  "source_commit": "HEAD at measurement",
+  "superseded_by": "docs/evidence/encounter-bands-2026-08-07.json",
+  "correction": "The band recorded here is too narrow. It was taken from the eight encounters that preceded the venue-mismatch stop; a later harvest of 155 wild encounters in the same area measured 28-39, median 32, with 90% at or below 34. The ceiling was understated by seven levels. The finding below is unaffected and in fact strengthened: the trainees were further out of their depth than this file claimed.",
+  "method": "Observed live during the Mansion balancing block. The repository declares no wild encounter tables, so the band is measured from actual encounters rather than asserted. Sample count was not recorded, which is why the band could be this wrong without looking wrong; measurements now carry their sample count.",
+  "observed": {
+    "area": "pokemon_mansion_1f",
+    "encounter_level_min": 30,
+    "encounter_level_max": 32,
+    "samples": 8,
+    "party_levels": [
+      22,
+      20,
+      60,
+      30,
+      25,
+      30
+    ],
+    "flees_before_stop": 8,
+    "battles_won": 0
+  },
+  "finding": "Four of six members are below the band this area fields. With max_enemy_level_delta=0 a trainee must meet or exceed the encounter level, so the members at 20, 22 and 25 cannot fight here at all, and the two at 30 are still two levels short of the top of the band.",
+  "consequence": "The escort cap and switch training are incompatible: switch training grants shared experience only when the escort wins, and a capped escort never wins. Matching the venue to the trainee removes the need for an escort entirely.",
+  "recurrence": "Every newly caught member arrives near level 20 and every newly evolved one at its evolution level, so venue selection is permanent infrastructure for a living Pokedex rather than a fix for one area.",
+  "next": [
+    "Measure the bands of the lower-level areas the route already visits, the same way",
+    "Seed GrindingArea entries from measurements, never from memory",
+    "Decide whether max_enemy_level_delta=0 should relax; at delta 2 the two members at 30 could train here"
+  ]
+}

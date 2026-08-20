@@ -1,0 +1,86 @@
+{
+  "schema": "private-trajectory-foundation-receipt-v1",
+  "recorded_on": "2026-07-30",
+  "evidence_lane": "deterministic_teacher_control_trace",
+  "claim_scope": {
+    "game_complete": true,
+    "learned_policy": false,
+    "transfer_result": false,
+    "model_ready_dataset": false
+  },
+  "source": {
+    "git_commit": "f67e9db807fba2841dc95f9337cc613a81ab0957",
+    "worktree_dirty": false
+  },
+  "runtime": {
+    "emulator_name": "PyBoy",
+    "emulator_version": "2.7.0",
+    "python_version": "3.14.3"
+  },
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "objective_graph_sha256": "fd0dd3395f15145ee32822e12f73644e4987c9ec362a6e874ac09dd29c5aba18",
+  "configuration_sha256": "40a29b6fd8a29c85991dea44043968333e1756501074fb3b1e2b2410c0119aac",
+  "collection": {
+    "assistance_class": "teacher",
+    "start_type": "clean_power_on",
+    "human_input": false,
+    "save_restore_used": false,
+    "perturbation_schedule": "none",
+    "seed_protocol": "native_power_on_rng",
+    "series_id": "red-teacher-nominal-v1",
+    "attempt_counted": true
+  },
+  "episode": {
+    "episode_id": "red-teacher-bcaf7dfccebc4e58a3f167345bec533b",
+    "status": "complete",
+    "storage": "private_external_volume",
+    "distributed": false,
+    "manifest_sha256": "db95c7dde7be01c62e19b21f1634efaf74e61111b4425ef310ee207ccab0d5d1",
+    "streams": {
+      "episode": 1,
+      "events": 300,
+      "executions": 41330,
+      "snapshots": 14760
+    },
+    "total_records": 56391,
+    "total_bytes": 38888768
+  },
+  "gameplay": {
+    "checkpoints_verified": 299,
+    "checkpoints_total": 299,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "frames_executed": 4796436,
+    "actions_executed": 41330,
+    "qualified_through": "enter_hall_of_fame",
+    "controller_released": true
+  },
+  "integrity_audit": {
+    "manifest_file_sizes_and_hashes_verified": true,
+    "execution_ids_and_indices_verified": true,
+    "snapshot_references_verified": true,
+    "adjacent_state_hash_transitions_verified": 41329,
+    "checkpoint_sequence_verified": true,
+    "terminal_record_verified": true,
+    "source_identity_verified": true,
+    "configuration_hash_verified": true
+  },
+  "privacy_audit": {
+    "private_paths_absent": true,
+    "rom_filename_absent": true,
+    "raw_memory_absent": true,
+    "event_flag_bytes_absent": true,
+    "save_states_absent": true,
+    "screenshots_absent": true,
+    "policy_snapshots_exclude_privileged_story_facts": true
+  },
+  "limitations": {
+    "decision_records": 0,
+    "description": "This is an integrity-checked executor control trace. Specialist decisions, perturbed recovery examples, learned-policy evaluation, and cross-game transfer remain future work."
+  }
+}

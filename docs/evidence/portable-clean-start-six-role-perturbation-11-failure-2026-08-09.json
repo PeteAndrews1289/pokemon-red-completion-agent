@@ -1,0 +1,168 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_unrecovered_brock_resources",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990026 passed the repaired front end, Route 1, Route 2, all three species-authenticated Kakuna lessons, and the mandatory Forest trainer before the post-Forest Brock-readiness gate failed. No learned battle or training decision occurred.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990026,
+    "initial_wait_frames": 215,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "ffd40e598b7f28e7f038785c21abe035ee5c31588d946e3a71f86eabd58f6d9c"
+  },
+  "source": {
+    "git_commit": "8efd140184b698e6af5eb34c4d72ca9bc2192708",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "31136e702e40281a0797409620ca54c6b0cd3f2661fdc4af3d5940991dcc8310",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "Viridian Forest exit failed the Brock-readiness party gate.",
+    "frames_executed": 158394,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "required_resource_boundary_without_a_recovery_mechanic",
+    "finding": "The authored Forest curriculum proved level 9, a living lead, Bubble, three exact Kakuna victories, and the required Bug Catcher victory, but then demanded a zero status byte without supplying recovery. A clean same-root runtime probe observed level 9, 19/27 HP, Bubble at 26 PP, and poison status 0x08. The first repair still reused the healthy-status gate before the Center and therefore reproduced the failure at the same 158,394-frame boundary.",
+    "model_boundary": "The failure remained inside the authored first composite. Objective selection made one singleton choice; all learned battle, target, and training counters were zero."
+  },
+  "repair": {
+    "status": "mt_moon_traversal_and_rocket_strategy_qualified_evolution_cleanup_pending",
+    "behavior": "The Forest exit still requires the exact level-9 lead, at least 19 HP, at least four Bubble PP, and either healthy or poison status; every other status remains fatal. The independent progress referee admits poison only at the Forest north gate, upper Route 2 return, and Pewter south edge. The teacher takes the direct finite Pewter route to the Pokémon Center, proves full HP, clear status, and positive PP for every learned move, withdraws exactly RED's guaranteed PC Potion, exits, and follows the measured finite route to the Gym. After the first required Route 3 trainer, it consumes exactly that Potion under map, HP, inventory, and field-control gates before the 51-step return. During trainer one it may consume one further Potion only at a verified MAIN menu at or below 13 HP and above a twelve-Potion floor. Cerulean purchases the original four from a measured 12–14 starting window; the rival accepts 16–18, and the existing cleanup still protects six, so downstream reserves and total spend are unchanged. Mt. Moon now carries one report-visible 64-encounter flee/retry ledger across its target search, all three floors, TM01 detours, trainer approaches, and exits. TM01 is taught immediately after pickup and Mega Punch is verified before the required Rocket without changing the economy.",
+    "bounds": {
+      "center_route_inputs": 15,
+      "nurse_approach_inputs": 4,
+      "heal_dialogue_pulses": 9,
+      "center_exit_inputs": 5,
+      "center_to_gym_inputs": 40,
+      "mt_moon_maximum_incidental_flees": 64
+    },
+    "same_root_probe": {
+      "source_commit": "0773d75df57663f52269e14684732f879ea89d84",
+      "raw_report_sha256": "416f086079c2d037282ca91886a48bf9455677c60eacd185444017957ab428d4",
+      "frames_executed": 158394,
+      "observed_level": 9,
+      "observed_hp": 19,
+      "observed_max_hp": 27,
+      "observed_status": 8,
+      "observed_bubble_pp": 26
+    },
+    "same_root_referee_replay": {
+      "source_commit": "87343eccb36cb82a86e7df1be7bbcabb008d8c5c",
+      "raw_report_sha256": "a79090336bbc960dd43b7c36b375954042441f49f9494c7b5d1a38d66aa56e91",
+      "frames_executed": 158972,
+      "exception_type": "PewterProgressError",
+      "message": "Travel boundary failed its stable semantic snapshot.",
+      "finding": "The controller crossed the repaired Forest-exit gate, but the independent progress referee duplicated the old global status-zero assumption at the first north-gate checkpoint."
+    },
+    "same_root_center_route_replay": {
+      "source_commit": "fb2da00e9f4a8fccf1ad31b9d12e9806b43a7ab7",
+      "raw_report_sha256": "cc15b96c4f58bd4c996d6631c78bb4214709e49975ae2d6ec2452e6eed330781",
+      "frames_executed": 167565,
+      "exception_type": "PewterChapterError",
+      "message": "The clean run missed the pewter_gym_entrance boundary.",
+      "observed_endpoint": {
+        "map_id": 2,
+        "position": [10, 16],
+        "level": 9,
+        "hp": 27,
+        "max_hp": 27,
+        "status": 0,
+        "bubble_pp": 30
+      },
+      "finding": "The Center recovery passed completely. The assumed exterior start was one tile too low, so ten north inputs overshot the proven corridor before the final Gym leg. The measured Center exit is Pewter (13,26); nine north inputs restore the source-stable (19,13) junction."
+    },
+    "same_root_measured_route_replay": {
+        "source_commit": "e6c2ebeb7f80569a15563e740122dc7f4a6fccc2",
+        "raw_report_sha256": "f0e7b742602e05969745d1fb358dea60117352ad3fb14313a9c9cc516c7e76c6",
+        "frames_executed": 217494,
+        "exception_type": "CeruleanChapterError",
+        "message": "Squirtle's lineage fainted during Pewter Center recovery route: map=2, coordinate=(19,22), status=0.",
+        "finding": "The measured route qualified the Center-to-Gym recovery and Brock. The first required Route 3 trainer then left a poisoned lead without enough HP to survive the authored return walk; the terminal status byte cleared only because the lead had already fainted. Every learned battle and training counter remained zero because the failure was still inside the first authored composite."
+    },
+    "same_root_route3_entry_probe": {
+        "source_commit": "e6c2ebeb7f80569a15563e740122dc7f4a6fccc2",
+        "private_probe_log_sha256": "6a2de893c98a7e86811b49c5b86e8c109f1c142ce322b78d61bf2118f4e05a7a",
+        "map_id": 14,
+        "position": [11, 6],
+        "route_prefix_inputs": 15,
+        "observed_level": 13,
+        "observed_hp": 10,
+        "observed_max_hp": 35,
+        "observed_status": 8,
+        "observed_bubble_pp": 18
+    },
+    "same_root_route3_wrap_replay": {
+      "source_commit": "55b255e3d0a39a1e0e20114c8358328865aa8bcc",
+      "raw_report_sha256": "41c7c405ab4c4936a08c1a3964be96e63b87884eb1b8c3cc9fcb8cdd0e58d0ea",
+      "private_trace_log_sha256": "251b5c6487f9b3a9bbe56aab8b303490d972b95e444dad0601db32480d338d3f",
+      "frames_executed": 237342,
+      "exception_type": "CeruleanChapterError",
+      "message": "Squirtle's lineage fainted during Route 3 trainer 1.",
+      "trace": {
+        "first_opponent_exit_hp": 13,
+        "second_opponent_max_hp": 30,
+        "lowest_verified_main_menu_hp_before_faint": 2,
+        "field_potion_repair_qualified": true
+      },
+      "finding": "The field Potion qualified the former recovery-walk defect. Trainer one's second opponent then used repeated Wrap while the confirmation-only finisher had no recovery branch. A legal Potion was available at multiple verified MAIN boundaries; this remained authored early-game execution before every learned battle and training decision."
+    },
+    "same_root_route3_menu_handoff_replay": {
+      "source_commit": "1a2892bdae79f720b318a6b22520c683723d3144",
+      "raw_report_sha256": "3cc27c0721ee8a5de4bfe250555aeab61b72d60c58ec261e81c9772c538cb99d",
+      "frames_executed": 268674,
+      "exception_type": "CeruleanChapterError",
+      "message": "Route 3 trainer 1 failed its bounded battle-completion gate.",
+      "finding": "The Potion prevented the prior faint but returned at a stable MAIN menu with ITEM still selected. The legacy confirmation-only finisher therefore reopened the bag until its 180-pulse cap expired. The item receipt now restores FIGHT through the observed semantic cursor before returning control."
+    },
+    "same_root_route3_wild_replay": {
+      "source_commit": "58691855280a405790c60dcd2a80bcd29c05ea5e",
+      "raw_report_sha256": "8d44c6604f91319465a9b4518445f3233529161e0f7092cbb18a15acbc269c94",
+      "frames_executed": 294342,
+      "exception_type": "CeruleanChapterError",
+      "message": "Unexpected battle interrupted Route 3 east route at step 7.",
+      "finding": "Post-item FIGHT restoration qualified trainer one, all four required Route 3 trainers, and every Center recovery. A normal wild then began on the post-trainer east route. The chapter now reuses the shared map-scoped, state-preserving, bounded flee traversal and publishes flee receipts and movement retries in its report."
+    },
+    "same_root_mt_moon_zubat_replay": {
+      "source_commit": "c48fb4bbf9db73164ece01f65cd19b38c54876cf",
+      "raw_report_sha256": "cdc6267dd9e73df9ac2c7d39173d8edc6dc7c9049b62763952077b1fba60e18b",
+      "frames_executed": 303017,
+      "exception_type": "CeruleanChapterError",
+      "message": "Mt. Moon capture missed the qualified Zubat encounter: map=59, battle=0, species=36, level=8, hp=(25,25), party=(177,), balls=1.",
+      "finding": "The shared Route 3 traversal qualified the incidental wild and reached Mt. Moon. The fixed 155-frame Zubat trigger then produced no battle, repeating the earlier Kakuna lesson defect. The capture now searches a reversible grass edge for observed species 0x6B at level 7, authenticates and reports non-target flees, restores the route coordinate, and retains the sole-ball capture gate."
+    },
+    "same_root_mt_moon_capture_qualification": {
+      "source_commit": "70b4f22004a58a09d1b9b8aebe2fd165dd4b8e07",
+      "raw_report_sha256": "644c43a367ddb1c8f0ad781cb5648d524b0092a9df3975f48eed6593b6086905",
+      "frames_executed": 307294,
+      "exception_type": "CeruleanChapterError",
+      "message": "Unexpected battle interrupted Mt. Moon 1F route before TM01 step 10 at step 1.",
+      "finding": "The semantic search found and captured the exact level-seven Zubat with the sole Ball, restored the route coordinate, and continued. A later ordinary wild exposed the remaining cave-wide zero-encounter movement assumption. The next repair must use one cumulative Mt. Moon flee/retry ledger across 1F, B1F, B2F, TM01 detours, and return paths rather than patching this single step."
+    },
+    "same_root_cave_traversal_qualification": {
+      "source_commit": "7052b03e4040062844f7d38876bd095613e85ece",
+      "raw_report_sha256": "43f21c2aa4a563dfcf50cf1613eedd0b90304d2c38a6d49933c5bd8c283bf721",
+      "frames_executed": 353339,
+      "exception_type": "CeruleanChapterError",
+      "message": "Squirtle's lineage fainted during Mt. Moon required Rocket.",
+      "finding": "The cave-wide ledger crossed the former failure, TM01 detour, B1F, and B2F. Read-only same-root instrumentation recorded sixteen first-attempt flees with zero HP, PP, status, or party loss. Wartortle entered the Rocket at 39/39 and fainted with the final level-13 Zubat at 6 HP, isolating an authored move-strategy defect rather than traversal attrition."
+    },
+    "same_root_rocket_strategy_qualification": {
+      "source_commit": "fd6da86377be2e565f52f0e64146a982d5a74d9f",
+      "raw_report_sha256": "b6ddb765093fd908a9c18f8c3ec2fabf370354b66b0fa9532f4859eafe80faeb",
+      "frames_executed": 355295,
+      "exception_type": "CeruleanChapterError",
+      "message": "The required Rocket victory or Squirtle evolution did not persist.",
+      "finding": "Teaching the already-collected TM01 before the Rocket eliminated the faint and completed the battle. The returned state was a healthy level-16 Squirtle at 16/41 with Mega Punch installed; the fixed post-KO CANCEL schedule had declined the evolution. The next repair is semantic switch-prompt versus evolution handling, not another combat or resource allowance."
+    },
+    "rom_free_gate": "The cave-wide traversal and early TM01 lesson pass public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,199 tests; three integration tests are deselected and one expected failure remains expected. Its source-bound v95 registry is SHA-256 53e60ac7b9d21c44e76e4863162b5bc6c63f5d394c6b511c26bb15b963cc76d5 and source bundle SHA-256 213290efd0b772fd44250fb6cc58f5ccb36c1c46d695ca2e40282d546df6c99e.",
+    "next_gate": "Replace the fixed post-KO CANCEL count with a semantic distinction between trainer switch prompts and the level-16 evolution, pass the full gate, publish, and replay seed 990026 causally before assigning a fresh uncounted root. Counted v95 remains unopened."
+  }
+}

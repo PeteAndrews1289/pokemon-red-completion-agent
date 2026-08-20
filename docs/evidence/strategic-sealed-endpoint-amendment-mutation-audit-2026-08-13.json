@@ -1,0 +1,112 @@
+{
+  "access": {
+    "live_test_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "method": {
+    "canonical_digest_test_used_as_probe_oracle": false,
+    "mutation_target": "scripts/regenerate_strategic_navigation_sealed_evaluation_plan.py",
+    "plan_regenerated_after_each_mutation": true,
+    "probe_style": "one mutation at a time against the matching semantic test",
+    "restoration": "source restored exactly and canonical plan regenerated after every probe"
+  },
+  "mutations": [
+    {
+      "mutation": "reverse the primary case filter from challenge to non-challenge",
+      "result": "killed"
+    },
+    {
+      "mutation": "lower the measured teacher-baseline disagreement floor from six to five",
+      "result": "killed"
+    },
+    {
+      "mutation": "replace the two-sided exact paired test with a one-sided test",
+      "result": "killed"
+    },
+    {
+      "mutation": "weaken the significance threshold from 0.05 to 0.10",
+      "result": "killed"
+    },
+    {
+      "mutation": "reverse the required model-better direction",
+      "result": "killed"
+    },
+    {
+      "mutation": "expand the primary expected count from ten to all twelve cases",
+      "result": "killed"
+    },
+    {
+      "mutation": "reduce mandatory all-case reporting from twelve to ten cases",
+      "result": "killed"
+    },
+    {
+      "mutation": "omit route-cost baseline accuracy from the all-case report",
+      "result": "killed"
+    },
+    {
+      "mutation": "reverse the safety filter from non-challenge to challenge cases",
+      "result": "killed"
+    },
+    {
+      "mutation": "invert the safety criterion to forbid model-only wins",
+      "result": "killed"
+    },
+    {
+      "mutation": "remove the safety failure block on live authority",
+      "result": "killed"
+    },
+    {
+      "mutation": "claim the amendment occurred after private access",
+      "result": "killed"
+    },
+    {
+      "mutation": "change the superseded-plan digest in the amendment chain",
+      "result": "killed"
+    },
+    {
+      "mutation": "allow case reruns",
+      "result": "killed"
+    },
+    {
+      "mutation": "stop consuming failed attempts",
+      "result": "killed"
+    },
+    {
+      "mutation": "make failed-case scoring asymmetric between model and baseline",
+      "result": "killed"
+    },
+    {
+      "mutation": "accept a tied route-cost baseline prediction",
+      "result": "killed"
+    },
+    {
+      "mutation": "change the private-access counter from zero to one",
+      "result": "killed"
+    }
+  ],
+  "plan": {
+    "bytes": 8697,
+    "sha256": "230c90aa7120cd6badef8e933ccf014639889781fa1e32ecb4a486a6a2ef5537",
+    "supersedes_sha256": "ef9f823e6f5e0e766b071cf8a98bb5ff743af11bcf6bcb0eb3ec160344b7331b"
+  },
+  "result": {
+    "killed": 18,
+    "probes": 18,
+    "survivors": 0
+  },
+  "schema": "strategic-sealed-endpoint-amendment-mutation-audit-v1",
+  "verification": {
+    "documentation_links": "passed",
+    "mypy_source_files": 164,
+    "public_artifact_check": "passed",
+    "pytest_deselected_integration": 3,
+    "pytest_passed": 2821,
+    "pytest_xfailed": 1,
+    "registry_and_plan_reproduction_checks": "passed",
+    "ruff": "passed",
+    "source_bundle_sha256": "f8330ec8fbe4866318e3930170e2afc3fc05f08d3824422f9b4223618f42161c"
+  }
+}

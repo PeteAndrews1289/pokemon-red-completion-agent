@@ -1,0 +1,60 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-preregistration-v1",
+  "evaluation_id": "red-objective-planner-heldout-v3",
+  "status": "retired_after_validation_failure",
+  "game_id": "pokemon.mainline:red:gb:us:rev0",
+  "ontology_id": "pokemon.core.v1",
+  "model": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "artifact_manifest_sha256": "27a106ffdfb167cd34ed2173953844a596bdb6ee66014e1d082c277c069cdc2f",
+    "training_episode_ids": [
+      "red-teacher-11e3045eaf5347f4b867db6b09495096"
+    ]
+  },
+  "objective_graph_sha256": "d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de",
+  "perturbation": {
+    "schema": "pokemon-red-battle-start-offset-v1",
+    "derivation": "sha256-mod-v1",
+    "max_offset_frames": 255,
+    "scope": "battle_start_timing_and_resulting_rng"
+  },
+  "exposed_repair_seeds": [910002, 910003, 930002],
+  "validation_runs": [
+    {"run_id": "red-objective-v3-validation-01", "harness_seed": 950001},
+    {"run_id": "red-objective-v3-validation-02", "harness_seed": 950002},
+    {"run_id": "red-objective-v3-validation-03", "harness_seed": 950003},
+    {"run_id": "red-objective-v3-validation-04", "harness_seed": 950004},
+    {"run_id": "red-objective-v3-validation-05", "harness_seed": 950005}
+  ],
+  "sealed_test_runs": [
+    {"run_id": "red-objective-v3-test-01", "harness_seed": 960001},
+    {"run_id": "red-objective-v3-test-02", "harness_seed": 960002},
+    {"run_id": "red-objective-v3-test-03", "harness_seed": 960003},
+    {"run_id": "red-objective-v3-test-04", "harness_seed": 960004},
+    {"run_id": "red-objective-v3-test-05", "harness_seed": 960005}
+  ],
+  "acceptance": {
+    "validation_runs_required": 5,
+    "checkpoints_per_run": 312,
+    "objectives_per_run": 36,
+    "scheduled_battles_per_run": 71,
+    "teacher_objective_fallbacks_per_run": 0,
+    "minimum_objective_confidence": 0.5,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "model_or_source_changes_between_runs": false,
+    "failed_runs_retained": true
+  },
+  "claim_boundary": {
+    "held_out_battle_timing": true,
+    "held_out_encounter_and_battle_rng": true,
+    "direct_damage_injection": false,
+    "direct_status_injection": false,
+    "direct_position_injection": false,
+    "learned_navigation": false,
+    "cross_game_transfer": false
+  }
+}

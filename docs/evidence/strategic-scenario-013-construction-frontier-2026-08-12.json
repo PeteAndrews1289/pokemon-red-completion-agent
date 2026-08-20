@@ -1,0 +1,38 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-013-train-toward-liberate_silph-skill-materialized",
+    "envelope_sha256": "40eb23ea5c99b3b66ffd0b19dacc814767a24796989c980fc79e5c9a6978a8b0",
+    "state_sha256": "bebd5a05df3baa8b6fdb5487768e9a77d3ab140fa9acbf9b63caa844d4af3e10",
+    "verified_objective_count": 19
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "episode_created": false,
+    "exact_scenario": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "actions_executed": 6447,
+    "frames_executed": 1945171,
+    "objective_ids_added": [
+      "liberate_silph"
+    ],
+    "status": "complete"
+  },
+  "live_blocker": {
+    "next_objective": "defeat_sabrina",
+    "observed_party_members": 3,
+    "qualified_skill_required_party_members": 5,
+    "reason": "The balanced-team Sabrina lesson recruits the sixth member from a five-member input party; this alternate-order frontier needs two honest pre-Fuchsia recruitment lessons."
+  },
+  "recorded_on": "2026-08-12",
+  "source": {
+    "ci_run_id": 31581448352,
+    "ci_status": "success",
+    "git_commit": "f41f437f2b9c63cf03fd17ec877919f4784e4d46",
+    "source_bundle_sha256": "a83d72fd796eaaca12bc69712827e3c803260a5044691886caf6d7734d4d265d",
+    "teacher_execution_sha256": "a840433f5f07cd56010821a62d5a40afbdde222448659ec54fe8aeeec31d8d01"
+  },
+  "status": "authenticated_intermediate_blocked_before_exact_scenario",
+  "target_scenario_id": "red-strategic-scenario-v2-013-train"
+}

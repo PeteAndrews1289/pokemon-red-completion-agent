@@ -5,8 +5,10 @@ from types import SimpleNamespace
 
 import pytest
 
-import pokemon_red_completion.vermilion as vermilion
+from pokemon_red_completion import vermilion
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_runtime import BattleResourcePolicy, BattleRuntimeError
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.observation import (
     CERULEAN_ROCKET_TRAINER_NUMBER,
     ROCKET_OPPONENT_ID,
@@ -202,6 +204,7 @@ def _raw(state: VermilionState) -> RawGameState:
         first_party_hp=state.first_party_hp,
         first_party_max_hp=state.first_party_max_hp,
         first_party_status=state.first_party_status,
+        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
         battle_result=state.battle_result,
     )
 
@@ -239,6 +242,11 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     reader = ScriptedReader(_ordered_evidence())
     progress: list[vermilion.VermilionProgress] = []
     monkeypatch.setattr(vermilion, "_move", lambda *args, **kwargs: reader.read())
+    monkeypatch.setattr(
+        vermilion,
+        "_move_route_6_with_wild_flees",
+        lambda *args, **kwargs: (),
+    )
     monkeypatch.setattr(vermilion, "_wait", lambda *args, **kwargs: None)
     monkeypatch.setattr(vermilion, "_heal", lambda *args, **kwargs: None)
     monkeypatch.setattr(
@@ -247,6 +255,16 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
         lambda *args, **kwargs: reader.read(),
     )
     monkeypatch.setattr(vermilion, "_battle", lambda *args, **kwargs: reader.read())
+    monkeypatch.setattr(
+        vermilion,
+        "_run_rocket_thief_with_potion",
+        lambda *args, **kwargs: reader.read(),
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "_run_route_6_trainer_f_with_potion",
+        lambda *args, **kwargs: reader.read(),
+    )
     monkeypatch.setattr(
         vermilion,
         "_backtrack_heal_and_replay",
@@ -288,6 +306,7 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
     )
 
     assert report.passed
+    assert replace(report, route_6_wild_flees=()).passed
     assert len(report.records) == vermilion.VERMILION_CHECKPOINT_COUNT == 15
     assert [record.evidence.phase for record in report.records] == [
         state.phase for state in _ordered_evidence()
@@ -302,9 +321,95 @@ def test_runner_records_all_fifteen_ordered_semantic_boundaries(
 
 
 def test_live_route_constants_preserve_the_qualified_corridors() -> None:
+    assert vermilion.ROUTE_6_JR_TRAINER_F_MOVE_SLOT == 3
+    assert vermilion.ROUTE_6_JR_TRAINER_M_MOVE_SLOT == 3
     assert vermilion._directions(
         "R" * 3 + "D" * 9 + "R" * 3 + "D" * 13 + "L" * 23 + "D" * 5
     ) == vermilion.ROCKET_TO_ROUTE_5_DIRECTIONS
+
+
+@pytest.mark.parametrize("label", ("trashed house approach", "trashed house approach replay"))
+def test_trashed_house_route_yields_to_the_cerulean_walker(
+    monkeypatch: pytest.MonkeyPatch,
+    label: str,
+) -> None:
+    class Reader:
+        state = replace(
+            _raw(_evidence()),
+            map_id=MapId.CERULEAN_CITY,
+            player_x=16,
+            player_y=16,
+            first_party_hp=66,
+        )
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts_from_block = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (16, 16):
+                reader.state = replace(reader.state, player_x=17)
+            elif action.value == "left" and position == (17, 16):
+                reader.state = replace(reader.state, player_x=16)
+            elif action.value == "left" and position == (16, 16):
+                self.left_attempts_from_block += 1
+                if self.left_attempts_from_block == 3:
+                    reader.state = replace(reader.state, player_x=15)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(vermilion, "_wait", lambda *args: None)
+
+    final = vermilion._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        ("left",),
+        vermilion.DEFAULT_VERMILION_TIMING,
+        label,
+    )
+
+    assert (final.player_x, final.player_y) == (15, 16)
+    assert executor.left_attempts_from_block == 3
+
+
+@pytest.mark.parametrize(
+    ("learn_level_up_move", "expected_interval"),
+    ((False, 3), (True, 10_000)),
+)
+def test_battle_only_suppresses_unknown_cancels_for_level_up_learning(
+    monkeypatch: pytest.MonkeyPatch,
+    learn_level_up_move: bool,
+    expected_interval: int,
+) -> None:
+    observed: dict[str, object] = {}
+    terminal = _raw(_evidence())
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        observed.update(kwargs)
+        return terminal
+
+    monkeypatch.setattr(vermilion, "run_adaptive_trainer_battle", fake_runtime)
+
+    result = vermilion._battle(
+        object(),  # type: ignore[arg-type]
+        FakeExecutor(),
+        lambda _: 1,
+        MapId.CERULEAN_CITY,
+        vermilion.DEFAULT_VERMILION_TIMING,
+        "battle",
+        "battle-plan",
+        learn_level_up_move=learn_level_up_move,
+    )
+
+    assert result is terminal
+    assert observed["unknown_cancel_interval"] == expected_interval
     assert vermilion._directions(
         "D" * 27 + "R" * 12 + "D" + "R" * 2 + "U"
     ) == vermilion.ROUTE_5_TO_UNDERGROUND_DIRECTIONS
@@ -320,7 +425,7 @@ def test_live_route_constants_preserve_the_qualified_corridors() -> None:
     )
 
 
-def test_rocket_policy_uses_water_gun_after_the_sleep_bound() -> None:
+def test_rocket_policy_uses_exactly_one_bite_against_drowzee() -> None:
     machop = RawGameState(
         True,
         MapId.CERULEAN_CITY,
@@ -330,20 +435,194 @@ def test_rocket_policy_uses_water_gun_after_the_sleep_bound() -> None:
         2,
         enemy_species_id=0x6A,
         enemy_hp=53,
+        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
+        first_party_pp=(25, 30, 20, 25),
     )
     drowzee = replace(machop, enemy_species_id=0x30, enemy_hp=50)
 
     assert vermilion._choose_rocket_move(machop) == 4
     assert vermilion._choose_rocket_move(drowzee) == 1
-    assert vermilion._choose_rocket_move(replace(drowzee, enemy_hp=11)) == 4
+    assert (
+        vermilion._choose_rocket_move(
+            replace(drowzee, enemy_hp=24, first_party_pp=(24, 30, 20, 23))
+        )
+        == 3
+    )
+
+    assert (
+        vermilion._choose_rocket_move(
+            replace(
+                drowzee,
+                enemy_hp=24,
+                first_party_pp=(24, 30, 20, 23),
+                player_disabled_move_slot=3,
+            )
+        )
+        == 1
+    )
+
+
+def test_rocket_recovery_consumes_the_extra_potion_and_reuses_intent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    quantity = vermilion.ROCKET_THIEF_POTION_RESERVE
+    calls = 0
+    intents = []
+    terminal = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        30,
+        9,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+
+    def fake_bag_quantity(*_args: object) -> int:
+        return quantity
+
+    def fake_runtime(*args: object, **kwargs: object) -> RawGameState:
+        nonlocal calls
+        calls += 1
+        intents.append(kwargs["intent"])
+        if calls == 1:
+            policy = args[2]
+            try:
+                policy(
+                    RawGameState(
+                        True,
+                        MapId.CERULEAN_CITY,
+                        30,
+                        9,
+                        1,
+                        2,
+                        enemy_species_id=0x30,
+                        enemy_hp=24,
+                        first_party_hp=40,
+                        first_party_max_hp=66,
+                        first_party_moves=vermilion.POST_ROCKET_WARTORTLE_MOVES,
+                        first_party_pp=(24, 30, 20, 23),
+                    )
+                )
+            except vermilion._PauseForRocketThiefPotion as pause:
+                raise BattleRuntimeError("paused for Rocket recovery") from pause
+        return terminal
+
+    def fake_use(*_args: object) -> None:
+        nonlocal quantity
+        quantity -= 1
+
+    monkeypatch.setattr(vermilion, "_bag_quantity", fake_bag_quantity)
+    monkeypatch.setattr(vermilion, "run_adaptive_trainer_battle", fake_runtime)
+    monkeypatch.setattr(vermilion, "_use_cerulean_rival_potion", fake_use)
+
+    observed = vermilion._run_rocket_thief_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+    )
+
+    assert observed is terminal
+    assert quantity == vermilion.VERMILION_ROUTE_6_POTION_RESERVE
+    assert calls == 2
+    assert intents[0] is intents[1]
+    assert intents[0].resource_policy is BattleResourcePolicy.BOUNDED_RECOVERY
+
+
+@pytest.mark.parametrize("starting_reserve", [4, 7])
+def test_rocket_victory_may_preserve_the_extra_potion_when_recovery_is_not_needed(
+    monkeypatch: pytest.MonkeyPatch,
+    starting_reserve: int,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.CERULEAN_CITY,
+        30,
+        9,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "_bag_quantity",
+        lambda *_args: starting_reserve,
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "run_adaptive_trainer_battle",
+        lambda *_args, **_kwargs: terminal,
+    )
+
+    observed = vermilion._run_rocket_thief_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+    )
+
+    assert observed is terminal
+
+
+@pytest.mark.parametrize("starting_reserve", [3, 7])
+def test_route_6_victory_may_preserve_potion_when_recovery_is_not_needed(
+    monkeypatch: pytest.MonkeyPatch,
+    starting_reserve: int,
+) -> None:
+    terminal = RawGameState(
+        True,
+        MapId.ROUTE_6,
+        10,
+        25,
+        1,
+        0,
+        first_party_hp=45,
+        first_party_max_hp=66,
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "_bag_quantity",
+        lambda *_args: starting_reserve,
+    )
+    monkeypatch.setattr(
+        vermilion,
+        "run_adaptive_trainer_battle",
+        lambda *_args, **_kwargs: terminal,
+    )
+
+    observed = vermilion._run_route_6_trainer_f_with_potion(
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+        vermilion.RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_F,
+    )
+
+    assert observed is terminal
 
 
 class WildFleeSimulation:
-    def __init__(self, *, mutate_pp: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        mutate_pp: bool = False,
+        trainer_events: tuple[bool, ...] = (
+            False,
+            False,
+            False,
+            False,
+            True,
+            False,
+        ),
+    ) -> None:
         self.battle_state = 1
         self.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
         self.pp = (25, 30, 30, 25)
         self.mutate_pp = mutate_pp
+        self.trainer_events = trainer_events
         self.actions: list[MacroAction] = []
 
     def read(self) -> RawGameState:
@@ -373,14 +652,7 @@ class WildFleeSimulation:
             map_id=MapId.ROUTE_6,
             player_x=15,
             player_y=19,
-            route_6_trainer_events=(
-                False,
-                False,
-                False,
-                False,
-                True,
-                False,
-            ),
+            route_6_trainer_events=self.trainer_events,
         )
 
     def execute(self, action: MacroAction) -> object:
@@ -418,7 +690,7 @@ def test_wild_flee_navigates_observed_run_menu_and_proves_resources() -> None:
     encounter = simulation.read()
 
     evidence = vermilion._flee_qualified_route_6_wild(
-        vermilion._CountingExecutor(simulation),
+        CountingExecutor(simulation),
         simulation,  # type: ignore[arg-type]
         vermilion.DEFAULT_VERMILION_TIMING,
         encounter,
@@ -435,6 +707,21 @@ def test_wild_flee_navigates_observed_run_menu_and_proves_resources() -> None:
     assert evidence.control_ready
 
 
+def test_wild_flee_accepts_pretrainer_route_6_event_state() -> None:
+    simulation = WildFleeSimulation(trainer_events=(False,) * 6)
+
+    evidence = vermilion._flee_qualified_route_6_wild(
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        vermilion.DEFAULT_VERMILION_TIMING,
+        simulation.read(),
+        expected_trainer_events=(False,) * 6,
+    )
+
+    assert evidence.verified
+    assert evidence.trainer_events == evidence.expected_trainer_events == (False,) * 6
+
+
 def test_wild_flee_rejects_any_pp_change() -> None:
     simulation = WildFleeSimulation(mutate_pp=True)
 
@@ -443,7 +730,7 @@ def test_wild_flee_rejects_any_pp_change() -> None:
         match="post-RUN semantic evidence",
     ):
         vermilion._flee_qualified_route_6_wild(
-            vermilion._CountingExecutor(simulation),
+            CountingExecutor(simulation),
             simulation,  # type: ignore[arg-type]
             vermilion.DEFAULT_VERMILION_TIMING,
             simulation.read(),

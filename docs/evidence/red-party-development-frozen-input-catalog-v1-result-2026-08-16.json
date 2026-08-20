@@ -1,0 +1,98 @@
+{
+  "acceptance": {
+    "candidate_feature_values_public": false,
+    "capture_identity_public": false,
+    "exact_partition_counts": true,
+    "input_files_unchanged": true,
+    "minimum_available_candidates": 2,
+    "path_and_target_scan_clean": true,
+    "profile_identity_public": false,
+    "rom_adjacent_artifacts_unchanged": true,
+    "typed_round_trip_authenticated": true
+  },
+  "catalog": {
+    "available_width_partition_counts": {
+      "development:2": 3,
+      "development:5": 1,
+      "development:6": 2,
+      "train:2": 4,
+      "train:6": 4
+    },
+    "catalog_file_sha256": "2f412460b828588e8391eea63b832b985925f3443f0c682ad6ef45dc0603b979",
+    "catalog_file_tracked": false,
+    "catalog_sha256": "7f955e6a05a8f666dd2aef9cfad1401fd871b4c6d0c105667765faefe21b0ae4",
+    "choice_kind_partition_counts": {
+      "development:trainee": 3,
+      "development:venue": 3,
+      "train:trainee": 4,
+      "train:venue": 4
+    },
+    "goal_partition_counts": {
+      "development:balance": 2,
+      "development:collection": 1,
+      "development:evolution": 2,
+      "development:role_coverage": 1,
+      "train:balance": 2,
+      "train:collection": 2,
+      "train:evolution": 2,
+      "train:role_coverage": 2
+    },
+    "partition_counts": {
+      "development": 6,
+      "train": 8
+    },
+    "prepared_context_count": 2,
+    "prospective_catalog_sha256": "b308c06369e09d1b8970205ea120ac5edf08226aaacbe1b8a8d30624b7f8dc6f",
+    "question_count": 14,
+    "summary_file_sha256": "bbe33ef03253184790cb11f756858350576178578f175804ed2e36ca3b10c51f"
+  },
+  "freeze_identity": {
+    "exact_ci_attempt": 1,
+    "exact_ci_conclusion": "success",
+    "exact_ci_run": 31969641298,
+    "source_bundle_sha256": "f6a8361b419e1ebbbef856d90285110c27a211305348ba622b00818e8af22765",
+    "source_commit": "065c68af79ef71c69764f22229192a819d2965f3"
+  },
+  "input_lineage": {
+    "context_catalog_file_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+    "current_inventory_file_sha256": "733326e35b2c29b9627054f08935793b7b20898934b042f38217b126d1a89d63",
+    "current_inventory_sha256": "4e668c321cea11f4340f76755a52f1a012efb43a728ea87f142a9c6c989d89a8",
+    "development_materialization_manifest_sha256": "94f47d9005e163bbfaaf89f8d208d5313699d1c5566fa21c45a1e84468d6c175",
+    "historical_checkpoint_count": 81,
+    "new_prepared_checkpoint_count": 2,
+    "pp_exact_ci_attempt": 1,
+    "pp_exact_ci_run": 31962598106,
+    "pp_execution_source_commit": "27e966b9230f254619d735cb3721eff202314089",
+    "pp_plan_file_sha256": "b9d1eeeff906f4fe55e1907aa15c158d8de11c989a2506f71e548e0a97207265",
+    "pp_plan_sha256": "2ae07f3a89503bf96191e6a18bc06685be5bb633d5ed2b3e1494cf0b2cc24710",
+    "previous_inventory_file_sha256": "9c665db0892729d4327739b6dae46b9ed5c8e808567a33dee7ab1de8faccf881",
+    "re_inventory_checkpoint_count": 83,
+    "reservation_plan_file_sha256": "45bbf024695e0057333f8352b43c11f02405e2d65fbf2941f397e7d82491b8d4",
+    "reservation_plan_sha256": "8085f8e1bc259b1b4c4fda08e6b1fc635b987d7a7cd1293caa26fa2f7a89d4f0",
+    "train_materialization_manifest_sha256": "e0d21dc81199b2a93988768465dde003fb92319e13a9cda08ce64f5b957cc35c",
+    "venue_prior_registry_file_sha256": "da32ef5ba736348a5abc3c93c6c9a3c9217cc958b2905b65cd11c45347a42bfc",
+    "venue_prior_registry_sha256": "4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "candidate_menus_frozen": 14,
+    "learner_outcomes_created": 0,
+    "model_fit": false,
+    "next": "Independently attack the immutable input catalog without opening an answer. After review, request a separate outcome-collection authorization for eight train and six untouched development questions; fit once on train and report descriptive development generalization with authority still zero.",
+    "training_examples_created": 0
+  },
+  "private_path_fields": 0,
+  "protected_access": {
+    "answers_selected": 0,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-16",
+  "schema": "pokemon.red.party-development-frozen-input-catalog-v1-result.v1",
+  "status": "exact_inputs_frozen_outcomes_closed"
+}

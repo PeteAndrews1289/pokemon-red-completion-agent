@@ -12,7 +12,17 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    note_observed_battle_exit,
+    run_adaptive_trainer_battle,
+)
+from pokemon_red_completion.economy import (
+    LAVENDER_SUPER_POTION_RESERVE,
+)
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     EventFlag,
@@ -22,12 +32,15 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.red_party import PARTY_STRUCT_STRIDE
 
 CELADON_CHECKPOINT_COUNT = 12
 WARTORTLE = 0xB3
 DUX = 0x40
 DIGLETT = 0x3B
 BITE = 0x2C
+ROUTE_8_TRAINER_REWARD = 330
 PROTECTED_PARTY = (WARTORTLE, DUX, DIGLETT)
 ROUTE_8_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_ROUTE_8_TRAINER_0) + index) for index in range(9)
@@ -41,9 +54,7 @@ def _directions(value: str) -> tuple[str, ...]:
 CENTER_EXIT = _directions("DDDDD")
 LAVENDER_TO_ROUTE_8 = _directions("LLLDDL")
 ROUTE_8_TRAINER_TRIGGER = _directions("LLLLDDDDDLLLLLU")
-ROUTE_8_AFTER_TRAINER = _directions(
-    "LLLLUUUUULLLLLULLLLLLLLLLLLDLDDDDDLLLLLLLLLLLLUUUUULL"
-)
+ROUTE_8_AFTER_TRAINER = _directions("LLLLUUUUULLLLLULLLLLLLLLLLLDLDDDDDLLLLLLLLLLLLUUUUULL")
 ROUTE_8_TO_GATE = _directions("UUULU")
 GATE_TO_TUNNEL = _directions("RUUU")
 TUNNEL_TO_ROUTE_7_GATE = _directions("DDD" + "L" * 45)
@@ -60,10 +71,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class CeladonChapterError(RuntimeError):
@@ -140,11 +147,12 @@ class CeladonChapterReport:
     route_8_events_before: tuple[bool, ...]
     route_8_events_after: tuple[bool, ...]
     final_raw: RawGameState
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     super_potions_remaining: int
     repels_remaining: int
+    money_before: int
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -172,10 +180,11 @@ class CeladonChapterReport:
             and self.final_raw.party_species_ids == PROTECTED_PARTY
             and self.final_raw.battle_state == 0
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
-            and self.super_potions_remaining == 4
+            and all(status == 0 for status in self.party_status)
+            and self.super_potions_remaining == LAVENDER_SUPER_POTION_RESERVE
             and self.repels_remaining == 0
-            and self.money_remaining == 14_631
+            and self.money_before >= 0
+            and self.money_remaining == self.money_before + ROUTE_8_TRAINER_REWARD
             and self.controller_released
         )
 
@@ -187,16 +196,18 @@ class CeladonChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "reach_celadon",
-            "trainer_battles": [{
-                "label": trainer.label,
-                "map_id": trainer.map_id,
-                "event": trainer.event,
-                "opponent": trainer.opponent,
-                "class": trainer.trainer_class,
-                "set": trainer.trainer_set,
-                "move_id": trainer.move_id,
-                "selected_pp_spent": trainer.selected_pp_spent,
-            }],
+            "trainer_battles": [
+                {
+                    "label": trainer.label,
+                    "map_id": trainer.map_id,
+                    "event": trainer.event,
+                    "opponent": trainer.opponent,
+                    "class": trainer.trainer_class,
+                    "set": trainer.trainer_set,
+                    "move_id": trainer.move_id,
+                    "selected_pp_spent": trainer.selected_pp_spent,
+                }
+            ],
             "route_8_trainers_bypassed": [
                 index for index, defeated in enumerate(self.route_8_events_after) if not defeated
             ],
@@ -204,6 +215,7 @@ class CeladonChapterReport:
             "inventory": {
                 "super_potions_remaining": self.super_potions_remaining,
                 "repels_remaining": self.repels_remaining,
+                "money_before": self.money_before,
                 "money_remaining": self.money_remaining,
             },
             "party": {
@@ -216,17 +228,6 @@ class CeladonChapterReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
-
-
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
 
 
 @dataclass(slots=True)
@@ -245,12 +246,13 @@ def run_celadon_chapter(
     """Continue the verified Lavender boundary to a stable Celadon Center."""
 
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     run = _RunState([])
     records: list[CeladonCheckpoint] = []
     start = reader.read()
     _require(start, MapId.LAVENDER_POKECENTER, (3, 3), "Lavender terminal boundary")
     _require_resources(emulator)
+    money_before = _money(emulator)
     events_before = _events(emulator)
     if events_before != (False,) * 9:
         raise CeladonChapterError(f"Route 8 trainer events were not pristine: {events_before!r}.")
@@ -296,6 +298,12 @@ def run_celadon_chapter(
         actions,
         lambda _: 1,
         expected_map=int(MapId.ROUTE_8),
+        intent=BattleIntent(
+            "reach_celadon",
+            battle_plan_id=RedBattlePlanId.CELADON_ROUTE_8_LASS,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(BITE),
+        ),
         required_move_id=BITE,
         label="Route 8 Lass",
     )
@@ -305,12 +313,22 @@ def run_celadon_chapter(
     if spent <= 0 or _events(emulator) != (False,) * 8 + (True,):
         raise CeladonChapterError("Route 8 Lass missed its move/event transition proof.")
     trainer = Route8TrainerEvidence(
-        "Route 8 Lass", int(MapId.ROUTE_8), int(EventFlag.BEAT_ROUTE_8_TRAINER_8),
-        0xCB, 0x03, 16, BITE, spent,
+        "Route 8 Lass",
+        int(MapId.ROUTE_8),
+        int(EventFlag.BEAT_ROUTE_8_TRAINER_8),
+        0xCB,
+        0x03,
+        16,
+        BITE,
+        spent,
     )
     _checkpoint(
-        records, progress, emulator, final_battle,
-        "route8_trainer8_defeated", "Defeated only the required Route 8 trainer",
+        records,
+        progress,
+        emulator,
+        final_battle,
+        "route8_trainer8_defeated",
+        "Defeated only the required Route 8 trainer",
     )
 
     _move(actions, reader, emulator, run, ROUTE_8_AFTER_TRAINER, timing, "Route 8 westbound")
@@ -343,8 +361,12 @@ def run_celadon_chapter(
     raw = reader.read()
     _require(raw, MapId.UNDERGROUND_PATH_ROUTE_7, (4, 4), "Route 7 gate")
     _checkpoint(
-        records, progress, emulator, raw,
-        "west_east_tunnel_crossed", "Crossed the west-east Underground Path",
+        records,
+        progress,
+        emulator,
+        raw,
+        "west_east_tunnel_crossed",
+        "Crossed the west-east Underground Path",
     )
 
     _move(actions, reader, emulator, run, ROUTE_7_GATE_EXIT, timing, "Route 7 gate exit")
@@ -377,6 +399,7 @@ def run_celadon_chapter(
         party_status=_party_status(emulator),
         super_potions_remaining=_bag(emulator).get(ItemId.SUPER_POTION, 0),
         repels_remaining=_bag(emulator).get(ItemId.REPEL, 0),
+        money_before=money_before,
         money_remaining=_money(emulator),
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
@@ -390,7 +413,7 @@ def run_celadon_chapter(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -441,7 +464,7 @@ def _move(
 
 
 def _enter_trainer_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: CeladonTiming,
     label: str,
@@ -457,7 +480,7 @@ def _enter_trainer_battle(
 
 
 def _flee(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -468,8 +491,57 @@ def _flee(
     hp, inventory = _party_hp(emulator), _bag(emulator)
     if before.battle_state != 1:
         raise CeladonChapterError("Wild flee requires an active wild battle.")
+    trace: list[tuple[int, str, int | None, int | None, int | None]] = []
     for _ in range(timing.flee_pulses):
-        menu = reader.read_battle_menu_state(reader.read())
+        final = reader.read()
+        if final.battle_state == 0 and reader.read_input_readiness().ready:
+            final_hp = _party_hp(emulator)
+            evidence = CeladonWildFleeEvidence(
+                int(before.map_id or 0),
+                int(before.player_x or 0),
+                int(before.player_y or 0),
+                int(before.enemy_species_id or 0),
+                int(before.enemy_level or 0),
+                final.party_species_ids == species,
+                final.first_party_pp == pp,
+                all(0 < after <= prior for prior, after in zip(hp, final_hp, strict=True)),
+                _bag(emulator) == inventory,
+            )
+            if not all(
+                (
+                    evidence.party_preserved,
+                    evidence.pp_preserved,
+                    evidence.hp_safe,
+                    evidence.inventory_preserved,
+                )
+            ):
+                raise CeladonChapterError("Wild flee violated protected state.")
+            run.wilds.append(evidence)
+            note_observed_battle_exit()
+            return
+        if final.battle_state != 1:
+            trace.append(
+                (
+                    final.battle_state,
+                    "field-transition",
+                    None,
+                    final.first_party_hp,
+                    final.enemy_hp,
+                )
+            )
+            _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            continue
+        menu = reader.read_battle_menu_state(final)
+        trace.append(
+            (
+                final.battle_state,
+                menu.phase.value,
+                menu.selected_main_command,
+                final.first_party_hp,
+                final.enemy_hp,
+            )
+        )
+        del trace[:-12]
         if menu.phase is BattleMenuPhase.UNKNOWN:
             _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
             continue
@@ -478,38 +550,17 @@ def _flee(
             continue
         command = menu.selected_main_command
         if command == 3:
-            break
+            _pulse(executor, MacroActionKind.CONFIRM, frames=240)
+            continue
         direction = {0: "right", 1: "right", 2: "down"}.get(command)
         if direction is None:
             raise CeladonChapterError("Wild flee exposed an invalid main-menu cursor.")
         _pulse(executor, MacroActionKind.MOVE, direction, timing.wait_frames)
-    else:
-        raise CeladonChapterError("Wild flee could not select RUN.")
-    _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for _ in range(timing.flee_pulses):
-        final = reader.read()
-        if final.battle_state == 0 and reader.read_input_readiness().ready:
-            final_hp = _party_hp(emulator)
-            evidence = CeladonWildFleeEvidence(
-                int(before.map_id or 0), int(before.player_x or 0), int(before.player_y or 0),
-                int(before.enemy_species_id or 0), int(before.enemy_level or 0),
-                final.party_species_ids == species, final.first_party_pp == pp,
-                all(0 < after <= prior for prior, after in zip(hp, final_hp, strict=True)),
-                _bag(emulator) == inventory,
-            )
-            if not all((
-                evidence.party_preserved, evidence.pp_preserved,
-                evidence.hp_safe, evidence.inventory_preserved,
-            )):
-                raise CeladonChapterError("Wild flee violated protected state.")
-            run.wilds.append(evidence)
-            return
-        _pulse(executor, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    raise CeladonChapterError("Wild flee exceeded its bounded dialogue.")
+    raise CeladonChapterError(f"Wild flee exceeded its bounded dialogue: trace={trace!r}.")
 
 
 def _heal_center(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -523,7 +574,7 @@ def _heal_center(
     for _ in range(timing.dialogue_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return
@@ -534,9 +585,11 @@ def _heal_center(
 def _require_resources(emulator: EmulatorState) -> None:
     bag = _bag(emulator)
     resources = (bag.get(ItemId.SUPER_POTION, 0), bag.get(ItemId.REPEL, 0), _money(emulator))
-    if resources != (4, 0, 14_301):
+    if resources[0] != LAVENDER_SUPER_POTION_RESERVE or resources[1] != 0 or resources[2] < 0:
         raise CeladonChapterError(f"Unexpected starting resources: {resources!r}.")
-    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
+    if _party_hp(emulator) != _party_max_hp(emulator) or any(
+        status != 0 for status in _party_status(emulator)
+    ):
         raise CeladonChapterError("Lavender boundary party was not fully healed.")
 
 
@@ -550,9 +603,11 @@ def _checkpoint(
 ) -> None:
     records.append(CeladonCheckpoint(checkpoint_id, label, raw))
     if progress is not None:
-        progress(CeladonProgress(
-            checkpoint_id, label, len(records), CELADON_CHECKPOINT_COUNT, emulator.frame_count
-        ))
+        progress(
+            CeladonProgress(
+                checkpoint_id, label, len(records), CELADON_CHECKPOINT_COUNT, emulator.frame_count
+            )
+        )
 
 
 def _require(
@@ -607,30 +662,49 @@ def _u16(emulator: EmulatorState, address: int) -> int:
     return emulator.read_u8(address) * 0x100 + emulator.read_u8(address + 1)
 
 
-def _party_hp(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(_u16(emulator, address) for address in (
-        RamAddress.PARTY_MON_1_HP, RamAddress.PARTY_MON_2_HP, RamAddress.PARTY_MON_3_HP
-    ))
+def _party_size(emulator: EmulatorState) -> int:
+    """Return the bounded live party size used by whole-party receipts."""
+
+    return min(emulator.read_u8(RamAddress.PARTY_COUNT), 6)
 
 
-def _party_max_hp(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(_u16(emulator, address) for address in (
-        RamAddress.PARTY_MON_1_MAX_HP,
-        RamAddress.PARTY_MON_2_MAX_HP,
-        RamAddress.PARTY_MON_3_MAX_HP,
-    ))
+def _party_hp(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        _u16(emulator, int(RamAddress.PARTY_MON_1_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
 
 
-def _party_status(emulator: EmulatorState) -> tuple[int, int, int]:
-    return tuple(emulator.read_u8(address) for address in (
-        RamAddress.PARTY_MON_1_STATUS,
-        RamAddress.PARTY_MON_2_STATUS,
-        RamAddress.PARTY_MON_3_STATUS,
-    ))
+def _party_levels(emulator: EmulatorState) -> tuple[int, ...]:
+    """Read every party member's level.
+
+    Receipts previously reported the Champion's fixed party levels as though
+    they were ours, which is why twelve independent runs all recorded the same
+    six numbers.  Sourcing our own levels makes that class of claim checkable.
+    """
+
+    return tuple(
+        emulator.read_u8(int(RamAddress.PARTY_MON_1_LEVEL) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
+
+
+def _party_max_hp(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        _u16(emulator, int(RamAddress.PARTY_MON_1_MAX_HP) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
+
+
+def _party_status(emulator: EmulatorState) -> tuple[int, ...]:
+    return tuple(
+        emulator.read_u8(int(RamAddress.PARTY_MON_1_STATUS) + index * PARTY_STRUCT_STRIDE)
+        for index in range(_party_size(emulator))
+    )
 
 
 def _pulse(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     frames: int = 180,
@@ -639,5 +713,5 @@ def _pulse(
     _wait(executor, frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

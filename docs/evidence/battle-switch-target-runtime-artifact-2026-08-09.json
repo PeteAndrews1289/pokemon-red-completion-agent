@@ -1,0 +1,94 @@
+{
+  "schema": "pokemon-battle-switch-target-runtime-artifact-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "authenticated_for_shadow_and_isolated_causal_trial",
+  "source": {
+    "commit": "69c927a3700c1222263e1f835298809e83a42322",
+    "branch": "agent/balanced-team-curriculum",
+    "pushed_before_publication": true,
+    "source_clean_before_publication": true
+  },
+  "artifact": {
+    "artifact_id": "red-battle-switch-target-model-28a63094f845403bb5254fc4bc3ec449",
+    "kind": "battle_switch_target_model",
+    "manifest_sha256": "6ec25dd70ec232eb9b89760fb0bafae9d2b31a3db14507d8f2dbf876e6a6c92a",
+    "status": "complete",
+    "stream_records": {
+      "model": 1,
+      "qualification": 1,
+      "training": 1
+    },
+    "total_records": 3,
+    "total_bytes": 5326,
+    "private_path_published": false
+  },
+  "model": {
+    "model_id": "pokemon.core.battle.switch-target-ranker.mlp.v1",
+    "feature_schema_id": "pokemon.core.battle.switch-target.features.v1",
+    "canonical_payload_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "rebuilt_from_authenticated_lineages": true,
+    "digest_matched_frozen_candidate": true,
+    "refit_after_prospective_test": false
+  },
+  "lineage_contract": {
+    "training_artifact_ids": [
+      "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+      "red-battle-control-b5e47ba327754f1dbd412d6dd8fd5b74",
+      "red-battle-control-5152060e8a1e4b3ab4c3a9c15c95c0de"
+    ],
+    "validation_artifact_ids": [
+      "red-battle-control-517db549407846dfad8b0ded219e02d1"
+    ],
+    "prospective_test_artifact_id": "red-battle-control-01eddee2e2374b149d78fafae831ea42",
+    "prospective_test_manifest_sha256": "8fdd50bb5c46a0a8fd31b899a52d287e57ead0ff80d4a25e3c37112a7b55d43f",
+    "development_and_test_disjoint": true,
+    "prospective_test_correct": 17,
+    "prospective_test_examples": 17
+  },
+  "runtime_contract": {
+    "shadow_authority": true,
+    "isolated_causal_trial_authority": true,
+    "deployment_authority": false,
+    "teacher_owns_switch_class_during_isolated_trial": true,
+    "model_owns_switch_target_during_isolated_trial": true,
+    "ordinary_move_teacher_gate_retained": true,
+    "target_metrics": [
+      "decisions",
+      "agreements",
+      "accuracy",
+      "mean_confidence",
+      "unavailable",
+      "rebindings",
+      "fallbacks"
+    ]
+  },
+  "authentication": {
+    "typed_manifest_required": true,
+    "exact_stream_roster_required": true,
+    "canonical_jsonl_required": true,
+    "stream_bytes_and_sha256_required": true,
+    "feature_schema_required": true,
+    "canonical_model_sha256_required": true,
+    "disjoint_lineage_identities_required": true,
+    "perfect_single_evaluation_prospective_gate_required": true,
+    "symlinks_and_undeclared_files_rejected": true,
+    "post_publication_loader_round_trip_passed": true
+  },
+  "verification": {
+    "pytest_passed": 2152,
+    "integration_deselected": 3,
+    "expected_failures": 1,
+    "ruff": "passed",
+    "mypy_source_modules": 127,
+    "documentation_links": "passed",
+    "public_artifact_scan": "passed",
+    "collection_registry_check": "passed"
+  },
+  "next_gate": {
+    "run_live_shadow_first": true,
+    "require_zero_target_projection_failures": true,
+    "then_run_fresh_uncounted_isolated_causal_completion": true,
+    "counted_v95_roots_consumed": 0,
+    "reason_deployment_false": "Live shadow and fresh causal completion have not yet passed."
+  }
+}

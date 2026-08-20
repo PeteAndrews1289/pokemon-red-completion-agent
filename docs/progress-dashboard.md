@@ -1,0 +1,992 @@
+# Pokémon Learning Observatory
+
+> **Authoritative product view:** The generated
+> [active product state](../ACTIVE_PRODUCT_STATE.md) and the view-only focus dashboard replace the
+> historical gates below as the answer to “what are we doing now?” Run
+> `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
+>
+> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN ·
+> TRAINING_READY · TRAIN 0/8 · ATOMIC 0/8 · DEV COMMITMENTS 4 SEALED · GLOBAL UNUSED 12/12 ·
+> LOCAL EMPTY 10/10**. Link the
+> [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+> and show **SHA-256 6D650FC9…1E1BA2**.
+>
+> Show **FREEZE/PREFLIGHT PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0 · DEV DISCLOSURES 0 · FITS 0
+> · GAMEPLAY 0**. Active rail: **FREEZE EXECUTE IDENTITY → RUN EXACT 8 PREASSIGNED TRANSITIONS →
+> STRICT ADMISSION 8/8 → STOP BEFORE FIT**. Never retry or replace a claimed cell. Hold historical
+> boards at **30/15/4/3/0/0 · 14/4/0/1/1**.
+>
+> **Previous rail:** Show **SOURCE 9569AFA** (`9569afa681eb4d9806230b6d4c5caa79845a7fb8`)
+> **· CI 32335706089/1 GREEN · ROOTLESS DESIGN QUALIFIED · 4,410 TESTS · TRAIN 8 · OPAQUE DEV
+> COMMITMENTS 4 · PRIVATE OPENINGS 4 + PROVISION 1 · DEV PAYLOADS DISCLOSED TO TRAINING 0**. Link
+> the [design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+> and show **SHA-256 F115731B…24CCD8**.
+>
+> Hold every board: **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS OUTCOMES 0/8 · ROOTLESS ATOMIC 0/8
+> · CAUSAL 0 · ATOMIC 0**. Display active
+> `rootless-living-dex-dependency-campaign-qualification-v1`: **FREEZE ONE PLAN → PREFLIGHT ONE
+> IDENTITY · GLOBAL UNUSED 12/12 · LOCAL EMPTY 10/10 · PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0
+> · FITS 0 · COMPARISONS 0 · ROM 0 · CONTROLLER 0**. Stop before campaign execution.
+>
+> **Previous rail:** Show **SOURCE AA65504** (`aa65504899f51cf73aa28bfdb725abffeeec7d0a`)
+> **· CI 32179177930/1 GREEN · CLEAN BOOTSTRAP QUALIFIED · PROJECT PRELOADS 0 · PRIVATE/ROM/CLAIM/
+> PREDICTION EFFECTS 0 · COUNTER DELTAS 0**. Link the
+> [qualification receipt](evidence/causal-bootstrap-origin-qualification-v1-2026-08-18.json) and
+> show **SHA-256 67E1BC664156F23C07C076AEACE5624CF2417AAD4902462703349F94260D536B**.
+>
+> Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**; show **CAUSAL 0 · ATOMIC 0 · ROOTLESS
+> OUTCOMES 0**. Display active pure-design lane
+> `rootless-living-dex-dependency-curriculum-design-v1`: **SCARCE ≠ DUPLICATE-READY · TRANSFERABLE
+> MULTIPLICITY/DEPENDENCY SIGNAL · SIX FAMILY-DISJOINT PAIRS · FOUR TRAIN/TWO UNOPENED DEVELOPMENT
+> · EIGHT TRAIN/FOUR DEVELOPMENT SCENARIOS · PREASSIGNED COUNTERBALANCED ACQUIRE/EVOLVE · SHADOW
+> SELECTION 0 · STORAGE V1 0 · EXACT PRE/POST MULTISETS + DEPENDENCY POTENTIAL**. Stamp **IDENTITY/
+> ASSIGNED-ACTION/NORMATIVE-ACTION/REWARD/POST-STATE LEAKAGE 0 · PREDICTIONS 0 · FIT 0 ·
+> DEVELOPMENT DECODE 0 · PRIVATE INPUT 0 · GAMEPLAY 0**. Next rail: **IMPLEMENT + MUTATION-TEST
+> PURE DESIGN → REVIEW → STOP BEFORE CAMPAIGN**.
+>
+> **Previous rail:** Show **SOURCE 6077173** (`6077173618bf9fce9fb57804a6a1ce82249c9cee`)
+> **· CI 32177113545/1 GREEN · SOLE DEVELOP_TEAM FREEZE FAILED_CLOSED · MANIFEST
+> D77D9F9D…CDEA1 · READINESS_AUTHENTICATION · EFFECTS NOT ATTESTED · CAMPAIGN PLAN 0 · RETRY 0 ·
+> COUNTER DELTAS 0**. Link the
+> [failure receipt](evidence/first-develop-team-causal-goal-outcome-freeze-failure-v1-2026-08-18.json)
+> and show **SHA-256 171A1032C173999993B3170FBB403C8087DB2287852CDD311118B0541DE313D2**.
+> Separately mark **STATIC PUBLIC-SOURCE AUDIT: IMPORT-ORDER BOOTSTRAP DEFECT · HISTORICAL EFFECT
+> ATTESTATION NOT UPGRADED**.
+>
+> Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**; show **CAUSAL 0 · ATOMIC 0**. Display
+> active maintenance lane `causal-bootstrap-origin-qualification-v1`: **PUBLIC/SYNTHETIC ONLY ·
+> CLEAN-PROCESS PROJECT ORIGIN · SANITIZED READINESS SUBSTAGES · ROM 0 · PRIVATE INPUT 0 · ROOT 0
+> · CLAIM 0 · PREDICTION 0 · ACTION 0 · FIT 0**. Next rail: **QUALIFY ONCE → PUBLISH GREEN → STOP
+> FOR REORIENTATION → SEPARATELY DESIGN ROOTLESS SPECIES-NEUTRAL LIVING-DEX DEPENDENCY
+> CURRICULUM**. Stamp **FAILED LANE RETIRED · NO RETRY/REPLACEMENT · NO GAMEPLAY/COMPETENCE/
+> COMPLETION/CRYSTAL/AUTHORITY/TRANSFER CLAIM**.
+>
+> **Previous rail:** Show **SOURCE ECE32D8** (`ece32d81a1bd7ad3de037ba14361ef2f00849e35`)
+> **· CI 32174872005/1 GREEN · PUBLIC READINESS MANIFEST QUALIFIED · FOCUSED TESTS 24 · EXACT
+> SOURCE/INVOCATION/TRANSITIVE-RUNNER BINDINGS · PROTECTED EFFECTS 0 · FUTURE-LANE MANIFEST 0 ·
+> COUNTER DELTAS 0**. Link the
+> [qualification receipt](evidence/causal-readiness-manifest-qualification-v1-2026-08-18.json) and
+> show **SHA-256 C1EA4EB0249D92E95AC46B5C7674F4A7CD6D02F516483F2D86B9FDB1AB84507D**.
+>
+> Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**. Display active learning lane
+> `first-develop-team-causal-goal-outcome-v1`: **CAUSAL TRAIN EXAMPLE 0/1 · LOGICAL ATOMIC GOAL
+> EPISODE 0/1 · DISTINCT DEVELOP_TEAM FOCUS · MANIFEST BEFORE PRIVATE · FIRST DETERMINISTIC UNUSED
+> TRAIN ROOT · NO SUBSTITUTION · FULL-MENU DECISIONS 1 · STRICT SETTLED +1/-1**. Next rail:
+> **DESIGN/IMPLEMENT/MUTATION-TEST → PUBLISH GREEN → FREEZE/VALIDATE MANIFEST → AT MOST ONE
+> FREEZE/PREFLIGHT/EXECUTE/ADMIT → STOP**. Stamp **TEACHER/FALLBACK 0 · FIT 0 · DEVELOPMENT LABEL
+> 0 · AUTHORITY +0 · CRYSTAL 0 · TRANSFER +0**.
+>
+> **Previous rail:** Show **SOURCE 61F9B44** (`61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a`)
+> **· CI 32171116652/1 GREEN · SOLE FIRST-CAUSAL FREEZE FAILED_CLOSED · STAGE
+> READINESS_AUTHENTICATION · EFFECTS NOT ATTESTED · CAMPAIGN PLAN 0 · RETRY 0 · REPLACEMENT
+> 0**. Link the
+> [failure receipt](evidence/first-causal-goal-outcome-freeze-failure-v1-2026-08-18.json) and show
+> **SHA-256 43E6BE471482C7513D06406AF9543A5022250C8581B1E92A97020FC8D82A7101**. Mark
+> **SEPARATE PUBLIC AUDIT: SUPPLIED PAIRED-RUNNER BINDING ≠ PUBLISHED BYTES · HISTORICAL
+> CAUSE/EFFECTS STILL NOT ATTESTED**.
+>
+> Hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**; show **ATOMIC 0 · CAUSAL TRAIN EXAMPLES
+> 0 · ALL DELTAS 0**. Display active maintenance lane
+> `causal-readiness-manifest-qualification-v1`: **PUBLIC FILES + SYNTHETIC FIXTURES ONLY ·
+> CANONICAL SOURCE/TRANSITIVE-RUNNER MANIFEST · MISMATCH-SENSITIVE · ROM 0 · PRIVATE ARTIFACT 0 ·
+> ROOT 0 · CLAIM LEDGER 0 · PREDICTION 0 · ACTION 0**. Next rail: **PUBLISH UNDER GREEN CI → STOP
+> FOR REORIENTATION → SEPARATELY DESIGN DISTINCT ONE-DECISION TRAIN QUESTION, PREFER DEVELOP_TEAM**.
+> Stamp **MAINTENANCE ONLY · NO GAMEPLAY/COMPETENCE/AUTHORITY/CRYSTAL/TRANSFER/COMPLETION/LIVING-DEX
+> CLAIM**.
+>
+> **Previous rail:** Show **SOURCE 13FA0B6** (`13fa0b6de423115b506361a1d4c0491395d74421`)
+> **· CI 32166168758/1 GREEN · SOLE SIX-ROOT FREEZE FAILED_CLOSED · STAGE
+> UNEXPECTED_FAILURE · EFFECTS NOT ATTESTED · CAMPAIGN PLAN 0**. Link the
+> [failure receipt](evidence/resettable-goal-manager-multiroot-freeze-failure-v1-2026-08-18.json).
+> Mark **STAGE, NOT CAUSE · RUNTIME INFERENCE 0 · RETRY 0 · LANE RETIRED · COUNTER DELTAS 0**
+> and hold boards at **30/15/4/3/0/0** and **14/4/0/1/1**.
+>
+> Display active lane `first-causal-goal-outcome-v1`: **DETERMINISTIC FIRST UNUSED TRAIN ROOT ·
+> ACQUIRE_SPECIES AVAILABLE IN FULL MENU · LANE-WIDE NO-REPLACEMENT CLAIM · ONE ROOT/TRIAL CLAIM ·
+> NO ROOT SUBSTITUTION AFTER INSPECTION · ONE FULL-MENU MODEL CHOICE ·
+> DURABLE POSITIVE OR NEGATIVE TERMINAL · CAUSAL TRAIN EXAMPLE 0/1**. Stamp **INTERMEDIATE CAUSAL
+> TRAINING DATA · FIT 0 · DEVELOPMENT LABEL 0 · EVALUATION 0 · AUTHORITY +0 · CRYSTAL 0 · NOT
+> LEARNED COMPETENCE**. Next rail: **FINISH/PUBLISH RUNNER → GREEN CI → ONE ACTION-FREE
+> FREEZE+PREFLIGHT → AT MOST ONE EXECUTE/ADMIT → STOP AT FIRST TERMINAL**.
+>
+> **Previous rail:** Show **SOURCE 2CB18BF** (`2cb18bf2e72362dd405a2198414ce946790e1f5f`)
+> **· CI 32165489924/1 GREEN · CONTEXT ROLLOVER QUALIFIED · ENGINEERING GO · MISSION GO**.
+> Link the
+> [rollover receipt](evidence/resettable-goal-manager-multiroot-context-rollover-qualification-v1-2026-08-18.json)
+> and display **SHA-256 8B81DAF0E0F37657705A4DF1EE2AC0A9C25D11593FDC6E09C85A5F2AAB7F86DC**.
+>
+> Show **READINESS INVOCATIONS 2 · STOPPED BEFORE _FREEZE/_INSPECT_ROOT · OBSOLETE CATALOG
+> OPERATOR BINDING → OVER-STRICT HISTORICAL CONTEXT-PLAN EQUALITY · PLAN 0 · ROOT INVENTORY 0 ·
+> ROOT INSPECTIONS 0 · IDENTITY 0 · CLAIMS 0 · PREDICTIONS 0 · ACTIONS 0 · OUTCOMES 0 · FITS
+> +0 · COMPARISONS +0**. Mark **EXACT-HASH V1/V2 ONLY · LINEAGE + STATE/ENVELOPE EXCLUSION
+> LEDGER ONLY · OUTCOMES/LABELS/MENUS/COMPATIBILITY/QUALIFICATION 0 · PUBLIC PAIRED RUNNER
+> STRICT**.
+>
+> Keep `resettable-goal-manager-multiroot-learning-v1`, boards **30/15/4/3/0/0** and
+> **14/4/0/1/1**, and the next rail **ONE ACTUAL ACTION-FREE SIX-ROOT FREEZE → IF SUCCESS, ONE
+> EXACT-PLAN ZERO-PREDICTION PREFLIGHT → STOP BEFORE GAMEPLAY**. The fixed **8 TRAIN / 4
+> DEVELOPMENT / ONE DECISION → SEPARATELY FROZEN TWO-DECISION PILOT** rail is unchanged.
+>
+> **Previous rail:** Show **SOURCE 113AA60** (`113aa605a298337fb362f2e0b7d56e5c755b7380`)
+> **· CI 32163666327/1 GREEN · MULTIROOT IMPLEMENTATION QUALIFIED · ENGINEERING GO · MISSION GO
+> · CLAUDE APPROVE + 2 ROM-FREE TESTS COMPLETE · ANTIGRAVITY GO**. Link the
+> [implementation receipt](evidence/resettable-goal-manager-multiroot-implementation-qualification-v1-2026-08-18.json)
+> and display **SHA-256 53676C698BC6890ABB1838312569A0C87D06F21CA46B5D66E2D7320B30561F2A**.
+>
+> Mark **IMPLEMENTATION ONLY · CAMPAIGN PLAN 0 · FROZEN ROOTS 0 · PREFLIGHT 0 · GAMEPLAY 0 ·
+> OUTCOMES 0 · FITS +0 · COMPARISONS +0 · AUTHORITY +0 · CRYSTAL 0 · TRANSFER +0**. Keep
+> boards **30/15/4/3/0/0** and **14/4/0/1/1**. Display active lane
+> `resettable-goal-manager-multiroot-learning-v1` and next rail **ONE ACTION-FREE SIX-ROOT FREEZE
+> → IF SUCCESS, ONE EXACT-PLAN ZERO-PREDICTION PREFLIGHT → STOP BEFORE GAMEPLAY**. The later
+> mission rail is **FAVORABLE 8 TRAIN / 4 DEVELOPMENT / ONE DECISION → SEPARATELY FROZEN
+> TWO-DECISION COMPOSITION PILOT**. Stamp **DO NOT EXPAND DENOMINATOR · NO COMPLETION/TRANSFER
+> CLAIM**.
+>
+> **Previous rail:** Show **SOURCE 5BEB7FA** (`5beb7fa3512ca8ef294524484fccbf13607050e8`)
+> **· CI 32152766490/1 GREEN · ZERO-OUTCOME PREFLIGHT
+> PASS · FIT ID 83556D3E… CONSUMED ONCE · PHASE FIT_ATTEMPTED · UNEXPECTED_FAILURE ·
+> CANDIDATE BUNDLE 0 · CANDIDATE MODEL 0 · ACCEPTED FIT 0 · RETRY 0**. Link the
+> [failure receipt](evidence/goal-manager-acquisition-successor-fit-failure-v1-2026-08-18.json)
+> and display **SHA-256 02C2994F…20BBB**. Mark **CAUSE NOT RETAINED · GATE VS IMPLEMENTATION
+> EXCEPTION UNKNOWN · DO NOT INFER · AUTHORITY +0 · TRANSFER +0**.
+>
+> Display `resettable-goal-manager-multiroot-learning-v1`: **TRAIN 8 / 4 ROOTS · UNTOUCHED
+> DEVELOPMENT 4 / 2 ROOT-DISJOINT ROOTS · ONE MODEL DECISION PER RESET · ACQUISITION + STORAGE
+> + TEAM + RECOVERY · TEACHER 0 · FALLBACK 0**. Gate the sole fit on **ADMITTED TARGETS ≥6 ·
+> TRAIN ROOTS ≥3 · GOAL KINDS ≥3 INCLUDING COLLECTION**, then allow **FITS ≤1 · COMPARISONS
+> ≤1**. Keep boards **30/15/4/3/0/0** and **14/4/0/1/1**. A favorable comparison opens a
+> **SEPARATELY FROZEN TWO-DECISION COMPOSITION PILOT**. Stamp **RED CURRICULUM ONLY · NO
+> COMPLETION/PROMOTION/CRYSTAL/TRANSFER/LIVING-POKÉDEX CLAIM**.
+>
+> **Current rail:** Show **SOURCE 458D47E · CI 32147795552/1 GREEN · ONE ACTION-FREE FREEZE ·
+> FAILED STAGE ACTION_FREE_ROOT_INVENTORY · PLAN 0 · PREFLIGHT 0 · PREDICTIONS 0 · ACTIONS 0 ·
+> OUTCOMES 0 · FITS 0 · GAMEPLAY 0**. Link the
+> [failure receipt](evidence/acquisition-replanning-campaign-freeze-failure-v1-2026-08-18.json).
+> Mark **STAGE, NOT CAUSE · EXACT CAMPAIGN CLOSED · RETRY 0 · REPLACEMENT ROOT 0 · MENU/SKILL
+> PATCH 0**.
+>
+> Display `goal-manager-acquisition-successor-learning-v1` and link the
+> [fit plan](evidence/goal-manager-acquisition-successor-fit-plan-v1-2026-08-18.json). Show
+> **START EB5C6515… · FRESH ACQUISITION TARGET CA107BC2… · STORAGE/RESTORATION ANCHORS 2
+> EVALUATION-ONLY · DUPLICATE BASE EXCLUDED · FAILED PREFIXES EXCLUDED 19 · ONE FIXED UPDATE ·
+> TUNING 0 · EVALUATION 0 · PROMOTION 0**. Keep boards **30/15/4/3/0/0**, **14/4/0/1/1**, and
+> scorecard **TRAIN OUTCOMES 30/30 · FITS 4/5 · COMPARISONS 3/3**. Next on pass:
+> **RESETTABLE ROOT-DISJOINT 8 TRAIN / 4 DEVELOPMENT / ONE DECISION → NO QUALIFICATION CAROUSEL**.
+>
+> **Current rail:** Show **SOURCE 343CADF · CI 32141939995/1 GREEN · PRIVATE CONTEXT PLAN BUILT ·
+> CONTEXTS 81 · PRIOR-USED ACQUISITION ROOTS EXCLUDED 2 · UNUSED PROFILES TRANSFORMED 4 · OUTPUT
+> PLAN 09AF29BA…FF51**. Link the
+> [build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json). Mark
+> **MECHANICAL TRANSFORMATION ONLY · MENU PREFLIGHT 0 · CAMPAIGN FREEZE 0 · TRIAL IDENTITIES 0 ·
+> PREDICTIONS 0 · ACTIONS 0 · FRAMES 0 · OUTCOMES 0**.
+>
+> Keep `fresh-red-acquisition-replanning-execution-qualification-v1` active. The next rail is
+> **IMPLEMENT/PUBLISH EXECUTION + ADMISSION → EXACT-HEAD GREEN CI → FREEZE 4 ROOTS × 4 TRIALS →
+> ONE ZERO-ACTION PREFLIGHT → STOP BEFORE GAMEPLAY**. Keep **30/15/4/3/0/0** and
+> **14/4/0/1/1** unchanged; authority and transfer remain zero.
+>
+> **Current rail:** Show **SOURCE 944FDC5 · CI 32135801933/1 GREEN · RED SOURCE-LOCAL EXECUTOR
+> QUALIFIED · FIXED DOSE 4 BATTLES · HARD ACTION/FRAME LIMITS · HEALING 0 · TRAVEL 0 · UNSAFE
+> STARTS REJECTED · GAMEPLAY 0 · COUNTER DELTA 0**. Link the
+> [execution receipt](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json).
+> Show **CLAUDE GO · ANTIGRAVITY UNSAFE-START FINDING CLOSED · OTHER CLAIMS REJECTED ON SOURCE**.
+> The active rail is **4 UNUSED ROOTS × 4 TRIALS → EXACT BINDINGS/LEDGERS → ZERO-ACTION PREFLIGHT
+> → STOP BEFORE GAMEPLAY**. Mark **NO PREDICTION · NO CONTROLLER INPUT · NO TEACHER · NO ROOT
+> PATCH · NO SEALED RED · NO CRYSTAL**. Keep cumulative counters **30/15/4/3/0/0** and
+> product-v2 **14/4/0/1/1**.
+>
+> **Current rail:** Show **SOURCE 6D028EA · CI 32132328658/1 GREEN · PORTABLE DEVELOP_TEAM SEAM
+> QUALIFIED · ACTION-FREE OFFER · TITLE/SOURCE/ROUTE POLICY INPUT 0 · GAMEPLAY 0 · COUNTER DELTA
+> 0**. Link the
+> [capability receipt](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json).
+> Show **CLAUDE GO · NEGATIVE-PATH TESTS CLOSED** and **ANTIGRAVITY CONSULTED · CURRENT VERDICT
+> STALLED**. The active rail is **EXISTING WILD CORRIDOR → HARD-LIMITED LOCAL TRAINING EXECUTOR →
+> ACTION-FREE PROFILE BINDING → STOP BEFORE GAMEPLAY**. Mark **NO TRAVEL · NO HEALING · NO ROUTE
+> POLICY · NO TEACHER · NO ROOT RESCUE · NO CRYSTAL**. Keep cumulative counters
+> **30/15/4/3/0/0** and product-v2 **14/4/0/1/1**.
+>
+> **Current rail:** Show **DESIGN FROZEN · 4 ROOTS × 4 TRIALS · FIRST ACTION INTERVENTION · ONE
+> LEARNED CONDITIONAL REPLAN · PROVISIONAL GATE 4 REPLANS / 3 ROOTS**. Show inventory
+> **ACQUISITION ROOTS 6 · USED 2 · UNUSED 4 · INITIAL MULTI-CHOICE 4 · POST-CAPTURE STATES 0 ·
+> PRIOR DURABLE NEXT CHOICES 1**. Link the
+> [design receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json), source
+> `96379e8`, and CI `32129847455/1`. The active rail is **TITLE-NEUTRAL ENCOUNTER SOURCE → REAL
+> NON-ACQUISITION CHOICE → ACTION-FREE QUALIFICATION → STOP**. Mark **NO GAMEPLAY · NO COUNTER
+> DELTA · NO FIXED RED ROUTE · NO ROOT RESCUE · NO CRYSTAL**.
+>
+> **Current acquisition/replanning rail:** Show **PAIRED RESULT TIE · BASE SAFE ACQUISITION 1 ·
+> CANDIDATE SAFE ACQUISITION 1 · DECISIONS 1/1 · ACTIONS 244/244 · FRAMES 16,296/16,296 ·
+> COMPOSITION FALSE/FALSE · AUTHORITY +0**. Link the
+> [result receipt](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json) and
+> display **SHA-256 79C4E171C5833C17E0AB328267A09C0AB538119559347447123D5699702FDE38**.
+>
+> Show **PAIR CONSUMED · NO RETRY** and the active rail **ACTION-FREE EXISTING-CONTEXT INSPECTION
+> → FREEZE ACQUISITION + CHANGED-STATE REPLAN QUESTION → STOP**. Display cumulative product-v2
+> **DEVELOPMENT ATTEMPTS 14 · VERIFIED OUTCOMES 4 · ATOMIC 0 · COMPOSITION ATTEMPTS 1 · VERIFIED
+> COMPOSITIONS 1**. Mark **NO GAMEPLAY · NO ROOT RESCUE · NO ROUTE/SKILL PATCH · NO CRYSTAL**.
+>
+> **Current paired gameplay rail:** Show **SUCCESSOR SOURCE E77BBE12 · CI 32126183561 GREEN ·
+> ZERO-ACTION PREFLIGHT PASSED · PAIR D5FDCDC5 UNCLAIMED · ARM IDENTITIES 2/2 AVAILABLE ·
+> PREDICTIONS 0 · ACTIONS 0 · GAMEPLAY 0 · OUTCOMES 0**. Link the
+> [preflight receipt](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json) and
+> display **SHA-256 F7FEA1B17B113F7CB9E1D3996D6C3BE4A485EF227A99DE2C924A47FF030A742C**.
+>
+> Display `paired-red-goal-manager-outcome-screen-v1` and the rail **CLAIM PAIR → CLAIM BASE +
+> CANDIDATE → BASE RESET / MAX 3 → CANDIDATE RESET / MAX 3 → STRICT ADMISSION → STOP**. Mark
+> **PRIMARY SAFE RETAINED ACQUISITION ONLY · SECONDARY METRICS CANNOT BREAK TIES · NO RETRY · NO
+> REPLACEMENT · NO ADAPTATION · NO PROMOTION · NO CRYSTAL**. Keep cumulative counters unchanged
+> until the durable result is admitted.
+>
+> **Current paired execution-qualification rail:** Show **DESIGN SOURCE 952E0ED9 · CI 32122694671
+> GREEN · DESIGN FROZEN ACTION-FREE · ONE FORMAL DEVELOPMENT-OUTCOME-UNUSED ACQUISITION TRAIN ROOT
+> · INITIAL GOALS 3 · SUPERVISED-TRAIN EXPOSURE ALLOWED · GUARD-ONLY EXPOSURE ALLOWED · NOT
+> UNSEEN**. Link the
+> [design receipt](evidence/paired-red-goal-manager-outcome-screen-design-v1-2026-08-18.json) and
+> display **SHA-256 C8CEA9A42BF5B0DC673195B7898258562ACE3FE92211F1F8D08EC3E3DB460391**.
+>
+> Show **ARMS FROZEN 2 · ARMS CLAIMED 0 · INDEPENDENT RESETS · MAX 3 DECISIONS PER ARM · PRIMARY
+> ENDPOINT SAFE RETAINED ACQUISITION ONLY · COMPLETION + VERIFIED OUTCOMES + REPLANNING SECONDARY
+> AND UNPROVEN**. Show **FIRST ACTION-FREE FREEZE FAILED: ARTIFACT ID TOO LONG · PLAN 0 · CLAIM 0
+> · PREDICTION 0 · ACTION 0 · REPAIRED FREEZE SUCCESS**.
+>
+> Display `paired-red-goal-manager-outcome-screen-execution-qualification-v1` and the rail
+> **IMPLEMENT EXECUTE/ADMIT → PUBLISH → EXACT-HEAD GREEN CI → ONE ZERO-ACTION PREFLIGHT → STOP**.
+> Add **GAMEPLAY 0 IN THIS LANE · LATER EXECUTION REQUIRES SEPARATE REORIENTATION**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 4 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and
+> product-focus-v2 **12/2/0/1/1**. Show **PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 ·
+> EXECUTIONS 0 · OUTCOMES 0 · COUNTER DELTAS 0**.
+>
+> **Historical one-root paired-feasibility rail:** Show **FIT SOURCE CDE9F488 · CI 32115274511/1 GREEN
+> · ONE UPDATE · IDENTITY CONSUMED · RETRY 0 · SHADOW CANDIDATE EB5C6515… · PROMOTION 0 ·
+> EVALUATION NULL**. Show **LOSS 1.2667→1.1496 · MEAN SELECTED PROBABILITY 0.5975→0.6136 · BOTH
+> TARGETS REINFORCED · MAX TRAIN KL 0.000486 · PROTECTED WINNER FLIPS 0/18**. Link the
+> [fit result](evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json) and display
+> **RECEIPT SHA-256 F1613B27…**.
+>
+> Display `paired-red-goal-manager-outcome-screen-design-v1`. The active design rail is **ONE
+> STILL-OPEN DEVELOPMENT-OUTCOME-UNUSED ACQUISITION TRAIN ROOT · MODEL-BLIND SELECTION · EXCLUDE
+> PRIOR TEACHER-FREE CAMPAIGN + VALIDATION + TEST + SEALED + CLOSED LINEAGES · SUPERVISED-TRAIN +
+> GUARD-ONLY EXPOSURE ALLOWED AND DISCLOSED · IDENTICAL INITIAL STATE + MENU + SEED + POLICY + SKILLS +
+> BUDGETS + VERIFIERS · POST-CHOICE DIVERGENCE ALLOWED · ONE COMBINED ACTION-FREE PREFLIGHT ·
+> EXACTLY TWO EXECUTIONS · MAX 3 DECISIONS PER ARM · NO DROPPED/REPLACED ARM · HARD STOP AFTER
+> PAIR**. Label **FEASIBILITY/FALSIFICATION ONLY · NOT UNSEEN COMPARISON · NOT PROMOTION**.
+>
+> Show the board as **TRAIN 30 · DEVELOPMENT 15 · FITS 4 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0** and product-focus-v2 as **ATTEMPTS 12 · VERIFIED OUTCOMES 2 · ATOMIC 0 ·
+> COMPOSITION ATTEMPTS 1 · VERIFIED COMPOSITIONS 1**. Add **FIT DELTA +1 · OUTCOME DELTA 0 ·
+> COMPARISON DELTA 0 · AUTHORITY DELTA 0 · TRANSFER DELTA 0**.
+>
+> **Historical repeatable outcome-fit rail:** Show **V2 CAMPAIGN CONSUMED 12/12 · COMPLETE 1 · FAILED
+> 11 · VERIFIED OUTCOMES 2 · COMPOSITION ATTEMPTS 1 · VERIFIED COMPOSITIONS 1 ·
+> SPECIMEN-PRESERVING STORAGE + RESTORATION · ATOMIC EPISODES 0 · ACQUISITIONS 0 · TEACHER
+> 0**. Show **RECORDED CHOICES 21 · FAILED-PREFIX CHOICES EXCLUDED 19**. Link the
+> [V2 result receipt](evidence/repeatable-goal-manager-development-result-v2-2026-08-18.json) and
+> display **RECEIPT SHA-256 C7DDE170…**.
+>
+> Display `repeatable-goal-manager-outcome-fit-v1` and link the
+> [frozen fit plan](evidence/repeatable-goal-manager-outcome-fit-plan-v1-2026-08-18.json) with
+> **SHA-256 A950E749…**. The active rail was **PUBLISH + LABEL-FREE PREFLIGHT → ONE FULL-BATCH CAPPED
+> IPS UPDATE FROM 2 ADMITTED TARGETS → PUBLISH DIAGNOSTIC METRICS → STOP**. Add **NO SECOND FIT ·
+> FAILED-PREFIX DECODE 0 · PARAMETER SEARCH 0 · UNSEEN EVALUATION 0 · PROMOTION 0 · CRYSTAL 0
+> · AUTHORITY DELTA 0 · TRANSFER 0**.
+>
+> Keep the legacy board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY
+> 0 · TRANSFER 0**. Show product-focus-v2 as **DEVELOPMENT ATTEMPTS 12 · VERIFIED OUTCOMES 2 ·
+> ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 1 · VERIFIED COMPOSITIONS 1** and **FITS ADDED 0**.
+> Label **TEACHER-FREE SAME-CONTEXT RED DEVELOPMENT EVIDENCE ONLY · NO RELIABLE GAMEPLAY ·
+> COMPETENCE · COMPLETION · LIVING-DEX · GENERALIZATION · AUTHORITY · TRANSFER CLAIM**.
+>
+> **Historical repeatable-development learning-V2 rail:** Show **EXECUTABLE SOURCE 1C978FB · CI
+> 32111661277/1 GREEN · CAMPAIGN 452CFF2A… FROZEN · FAILED V1 ROOT ABSENT · 4 ROOTS · AVAILABLE
+> 12/12 · DEVELOP_TEAM + RESTORE_TEAM + MANAGE_STORAGE + ACQUIRE_SPECIES · PREDICTIONS 0 ·
+> CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0 · CLAIMS 0**. Link the
+> [V2 preflight receipt](evidence/repeatable-goal-manager-development-preflight-v2-2026-08-18.json)
+> and display **RECEIPT SHA-256 018115AF…**.
+>
+> Display `repeatable-goal-manager-development-learning-v2` and the next rail **DIRECT ONCE-ONLY
+> EXECUTION · NO REPLACEMENTS · NO FURTHER QUALIFICATION**. Add **SECOND PREDECISION PROTOCOL FAILURE
+> CLOSES ARCHITECTURE**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> development/composition counters at zero. Label **READINESS FOR FIRST TEACHER-FREE SAME-CONTEXT RED
+> DEVELOPMENT DATA ONLY · NO GAMEPLAY · OUTCOME · COMPETENCE · COMPLETION · LIVING-DEX · CRYSTAL ·
+> FIT · AUTHORITY · TRANSFER CLAIM**.
+>
+> **Historical restart rail:** Show **OLD CAMPAIGN E99075D9… RETIRED · ONE
+> DEVELOPMENT_RUNTIME TERMINAL BEFORE PREDICTION/ACTION/OUTCOME · INFRASTRUCTURE_INVALID CLAIM 1 ·
+> RETIRED_UNEXECUTED 11 · FAILED ROOT CLOSED ACCOUNT-WIDE · OLD CAMPAIGN NEVER RESUMES**. Link the
+> [invalidation receipt](evidence/repeatable-goal-manager-development-infrastructure-invalid-v1-2026-08-18.json)
+> and display **RECEIPT SHA-256 9A646550…**.
+>
+> Show **REPAIR SOURCE 2C50CDE · CI 32110273126/1 GREEN · LOCAL TESTS 4,111 · CLAUDE GO · INTERNAL
+> GO · ANTIGRAVITY AGREED FIX / DISSENTED REPLACEMENT · DISSENT OVERRULED: OLD CFA EXECUTABLE
+> DETERMINISTICALLY BURNS REMAINING CELLS**. Display
+> `repeatable-goal-manager-development-restart-v1`.
+>
+> The next rail is **PUBLISH PROSPECTIVE AMENDMENT → AMENDED EXACT-HEAD GREEN CI → FREEZE ONE NEW
+> SAME-CONTRACT 4-ROOT/12-TRIAL CAMPAIGN EXCLUDING FAILED ROOT → ZERO-ACTION PREFLIGHT → DIRECT
+> EXECUTION**. Add **SECOND PREDECISION PROTOCOL FAILURE CLOSES ARCHITECTURE · NO FURTHER RESTART**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> development/composition counters at zero. Label **INTERMEDIARY FIRST TEACHER-FREE WITHIN-RED DATA
+> ONLY · NO COMPETENCE · COMPLETION · LIVING-DEX · CRYSTAL · FIT · AUTHORITY · TRANSFER CLAIM**.
+>
+> **Historical training-readiness rail:** Show **SOURCE CFA07F8 · CI 32101788892/1 GREEN ·
+> CAMPAIGN PLAN E99075D9…D254D14 FROZEN · 4 ROOTS · 12 TRIALS · DEVELOP_TEAM + RESTORE_TEAM +
+> MANAGE_STORAGE + ACQUIRE_SPECIES · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · TEACHER 0**.
+> Link the
+> [preflight receipt](evidence/repeatable-goal-manager-development-preflight-v1-2026-08-18.json) and
+> show **ZERO-ACTION PREFLIGHT · STATUS TRAINING_READY · AVAILABLE TRIALS 12/12**.
+>
+> Display `repeatable-goal-manager-development-learning-v1` and the next rail **EXECUTE INDICES 0–11
+> EXACTLY ONCE + UNCHANGED → RETAIN ORDINARY VERIFIED SUCCESS/FAILURE → STRICT ADMISSION ONCE**. Add
+> **NO QUALIFICATION LOOP · NO RETRIES · NO REPLACEMENTS · NO COLLECTION-SESSION FIT · NO
+> PROMOTION**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> five product-focus-v2 counters at zero until controller-started durable terminals. Label the
+> result **READINESS, NOT GAMEPLAY · OUTCOME · FIT · AUTHORITY · TRANSFER**.
+>
+> **Historical focus-inventory rail:** Show **SOURCE 18BBA56 · CI
+> 32100873786/1 GREEN · ZERO-ACTION FREEZE/PREFLIGHT REACHED ACTION-FREE INVENTORY · CAMPAIGN 0 ·
+> GLOBAL CLAIM 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · OUTCOMES 0 · COUNTER DELTA 0**.
+> Link the
+> [inventory receipt](evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json)
+> and [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json).
+>
+> Show **ADVANCE_STORY FOCUS MULTI-CHOICE 0/6 · DEVELOP_TEAM 6/6 + STORY CANDIDATE IN EVERY ELIGIBLE
+> MENU · RESTORE_TEAM 6/6 · MANAGE_STORAGE 6/6 · ACQUIRE_SPECIES 6/6**. Mark **UNCOMMITTED
+> CORRECTION · MISSION REVIEW GO · FOUR ROOTS/12 TRIALS UNCHANGED · MODEL-GUIDED CAMPAIGN SELECTION 0
+> · EVOLUTION EXCLUDED PENDING LINEAGE EVIDENCE · STORY = CANDIDATE ONLY, OUTCOME ONLY IF SELECTED +
+> SETTLED**.
+>
+> Keep **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0** and all
+> five product-focus-v2 counters at zero. The next rail is **PUBLISH CORRECTED RUNNER → EXACT-HEAD
+> GREEN CI → ONE FREEZE/PREFLIGHT → IF TRAINING_READY 12/12, FIXED PILOT DIRECTLY**. Display **NO
+> FURTHER QUALIFICATION LOOP** and do not show gameplay, a fit, authority, transfer, or campaign
+> progress.
+>
+> **Historical exact-byte-audit rail:** Display
+> `repeatable-goal-manager-development-qualification-v1` and show **EXACT-BYTE CANDIDATE FROZEN ·
+> INDEPENDENT AUDIT GO · UNPUBLISHED · UNQUALIFIED**. Show **EXACT EXTERNAL SOURCE + RUNTIME + MODEL
+> + CONTEXT PLAN + NUMPY + PYBOY ATTESTED BEFORE PROTECTED READS · EXACTLY 4 AUTHENTICATED NONSEALED
+> TRAIN ROOTS × 3 TRIALS · ZERO-ACTION CAMPAIGN FREEZE/PREFLIGHT · DURABLE GLOBAL CLAIM BEFORE
+> PREDICTION · HARD ACTION/FRAME LIMITS · STRICT PROPENSITY + IDENTITY + LIVING-COLLECTION ADMISSION
+> · EVOLUTION EXCLUDED PENDING LINEAGE EVIDENCE**.
+>
+> Keep the legacy board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0** and product-focus-v2 at **DEVELOPMENT ATTEMPTS 0 · VERIFIED OUTCOME EXAMPLES 0 ·
+> ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 0 · VERIFIED COMPOSITIONS 0**. Show **CAMPAIGN FROZEN 0 ·
+> GLOBAL CLAIMS 0 · PREDICTIONS 0 · CONTROLLER 0 · FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0 ·
+> FITS ADDED 0**. The next rail is **PUBLISH CANDIDATE → EXACT-PUBLISHED-HEAD GREEN CI → FREEZE EXACT
+> CAMPAIGN + ONE ZERO-ACTION PREFLIGHT → STOP**. Do not display training readiness, campaign
+> progress, gameplay, a fit, generalization, authority, or transfer.
+>
+> **Historical V4-failure/repeatable-design rail:** Show **V4 SOURCE 20D4B153 · CI
+> 32092299544/1 GREEN · ONE PREFLIGHT · FAILED AT READINESS_AUTHENTICATION · STAGE IS NOT A CAUSE ·
+> EXECUTION CLAIM 0 · IDENTITY AUTHORIZATIONS 0 · GOAL-MANAGER DECISIONS 0 · PREDICTIONS 0 ·
+> CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0**. Show **EXACT ROOT
+> DURABLY CLOSED ACCOUNT-WIDE · NO RETRY** and link the
+> [path-free V4 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v4-failure-2026-08-17.json).
+>
+> Display `repeatable-goal-manager-development-qualification-v1` and link the
+> [frozen design](evidence/repeatable-goal-manager-development-design-v1-2026-08-17.json). Show
+> **CANDIDATE UNDER REVIEW · UNPUBLISHED · UNQUALIFIED · CAMPAIGN ROOTS FROZEN 0 · TRIALS CLAIMED 0
+> · GAMEPLAY 0**. The planned rail is **4 AUTHENTICATED NONSEALED TRAIN ROOTS × 3 TRIALS · STORY +
+> RECOVERY + STORAGE + ACQUISITION · LEARNED DISTRIBUTION + 15% EXPLORATION · EXACT BEHAVIOR
+> PROPENSITIES · VERIFIED SUCCESS +1 · VERIFIED FAILURE -1 · INTERRUPTED = RETAINED, NO TARGET ·
+> HARD ACTION/FRAME LIMITS · DURABLE DECISION + TERMINAL · TEACHER 0 · FALLBACK 0**.
+>
+> Keep the legacy board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0**. Separately show product-focus-v2 counters **DEVELOPMENT ATTEMPTS 0 · VERIFIED
+> OUTCOME EXAMPLES 0 · ATOMIC EPISODES 0 · COMPOSITION ATTEMPTS 0 · VERIFIED COMPOSITIONS 0**.
+> The next rail is **REVIEW → PUBLISH → GREEN CI → FREEZE + ZERO-ACTION PREFLIGHT**. Do not display
+> a gameplay result, campaign progress, generalization, authority, or transfer.
+>
+> **Historical V4 qualification rail:** Show **V3 SOURCE 1BBC4F3 · CI 32090038721/1 GREEN · ONE
+> PREFLIGHT · FAILED AT ACTION_FREE_ADMISSION · CAUSE NOT INFERRED · CLAIM 0 · IDENTITY
+> AUTHORIZATIONS 0 · PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 ·
+> EPISODES 0**. Show **EXACT ROOT DURABLY CLOSED ACCOUNT-WIDE · NEVER RETRY** and link the
+> [path-free V3 failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v3-failure-2026-08-17.json).
+> Keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0**.
+>
+> Then display `fresh-goal-manager-operational-composition-execution-qualification-v4` and link the
+> [frozen V4 design](evidence/fresh-goal-manager-composition-design-v4-2026-08-17.json). Show
+> **ONE DIFFERENT UNUSED PREEXISTING NONSEALED RED ROOT · INITIAL MENU STORY + RESTORE + STORAGE ·
+> EXACTLY 3 LEARNED SELECTIONS OF THOSE KINDS · FIXED DISPATCH 0 · TEACHER 0 · FALLBACK 0 · EXACT
+> SPECIMEN MULTISET PRESERVED · IMMEDIATE CAPTURE HEADROOM INCREASED**. Show **HISTORICAL
+> PREFLIGHT = ORIGIN + LINEAGE ONLY → CURRENT PUBLISHED SOURCE FREEZES EXACT BINDING → EXACT-HEAD
+> GREEN CI → ONE ACTION-FREE PREFLIGHT → STOP**. Failure closes V4 and the root; display **NO
+> RETRY · NO V5 CAROUSEL**. Qualification is not gameplay or learning evidence.
+>
+> **Historical V3 qualification rail:** Show **OBSERVABILITY SOURCE AF04830 · CI 32089092868/1 GREEN ·
+> FOUR ALLOWLISTED PRECLAIM STAGES · PRIVATE INPUTS 0 · NEW ROOTS 0** and link the
+> [path-free qualification](evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json).
+> Keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 · COMPARISONS 3 · AUTHORITY 0 ·
+> TRANSFER 0**.
+>
+> Then show **V3 DESIGN FROZEN · CLOSED V2 ROOT FORBIDDEN · EARLY FIXED-ACCOUNT COLLISION CHECK →
+> PUBLISH V3 SUCCESSOR + EXACT-HEAD CI → ONE DIFFERENT ACTION-FREE FRESH NONSEALED RED ROOT →
+> SANITIZED SUCCESS OR FAILURE RECEIPT**. Link the
+> [V3 design](evidence/fresh-goal-manager-composition-design-v3-2026-08-17.json) and display
+> `fresh-goal-manager-field-composition-execution-qualification-v3`. Keep **V3 ROOTS 0 ·
+> PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 · EPISODES 0** until
+> an exact published preflight occurs. A preflight pass is training readiness, not training.
+>
+> **Historical observability rail:** Show **SOURCE 3C9EA925 · CI 32086166416/1 GREEN · V2 PREFLIGHT
+> FAILED BEFORE SUCCESS RECEIPT · INTERNAL STAGE NOT ATTESTED · NO RETRY · EXECUTION IDENTITY NOT
+> AUTHORIZED · ROOT PERMANENTLY CLOSED BY PROJECT POLICY** and link the
+> [path-free failure receipt](evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json).
+> Display **PREDICTIONS 0 · CONTROLLER 0 · ADVANCED FRAMES 0 · GAMEPLAY 0 · OUTCOMES 0 ·
+> COMPOSITION EPISODES 0** and keep the cumulative board at **TRAIN 30 · DEVELOPMENT 15 · FITS 3 ·
+> COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**.
+>
+> The active rail is **ROM-FREE PUBLIC FAULT INJECTION → ONE CANONICAL SANITIZED ALLOWLISTED-STAGE
+> ENVELOPE PER CAUGHT IN-PROCESS PRECLAIM FAILURE → PUBLISH + GREEN CI → SEPARATELY FREEZE V3 ON A
+> DIFFERENT ROOT**. Display `generic-fresh-root-preflight-observability-v1`. Do not display a
+> diagnosed cause, another root, episode progress, authority, or transfer.
+>
+> **Historical V2 qualification rail:** Show **V1 STATICALLY IMPOSSIBLE · ROOTS INSPECTED 0 · ROOTS
+> ADMITTED 0 · PREDICTIONS 0 · CONTROLLER 0 · FRAMES 0 · OUTCOMES 0**. Its capture plus
+> storage-or-resupply menu could not exist under the verified skill boundaries. Link the
+> [path-free V1 closure](evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json).
+>
+> Then show **V2 CAPTURE + EXPLORE + RESTORE · IMPLEMENTATION FROZEN · MISSION REVIEW GO ·
+> EXACT-BYTE ENGINEERING REVIEW GO · RUNNER 8947AEBA… · QUALIFICATION 6679634C… · DESIGN
+> 0FFC848E… · UNPUBLISHED · UNQUALIFIED** and link the
+> [path-free V2 contract](evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json).
+> Display the active lane as
+> `fresh-goal-manager-field-composition-execution-qualification-v2`. The board remains **TRAIN
+> OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 ·
+> AUTHORITY 0 · TRANSFER 0**. The only forward rail is **COMMIT + PUSH EXACT REVIEWED BYTES →
+> EXACT-HEAD GREEN CI → ONE ACTION-FREE ZERO-PREDICTION PREFLIGHT**. Do not display episode
+> progress, model decisions, controller activity, authority, or transfer.
+>
+> **Historical V1 qualification rail:** Source `c4d8c729` and CI run `32076494276` attempt 1 are green.
+> The reviewed design and ROM-free core are published, with **ROOTS ADMITTED 0 · PREDICTIONS 0 ·
+> CONTROLLER 0 · OUTCOMES 0**. Link the
+> [path-free core qualification](evidence/fresh-goal-manager-composition-core-qualification-v1-2026-08-17.json).
+>
+> At that checkpoint the rail was **FRESH COMPOSITION EXECUTION QUALIFICATION · ACTION-FREE ROOT
+> ADMISSION → AUTHENTICATED ROOT-SAFE RUNNER + ONE-SHOT LEDGER → EXACT SKILL/PROTECTED-SOURCE
+> ATTESTATION → HARD ACTION/FRAME LIMITERS → DURABLE COMPOSITION TERMINAL**. Runner qualification—
+> not gameplay—was next. The cumulative board remained **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT
+> OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Do not
+> display episode progress, model decisions, controller activity, authority, or transfer.
+>
+> **Historical postmortem/design checkpoint:** Source `1395e446` and CI run `32072706947` attempt 1 are
+> green. The read-only postmortem reports **48 PAIRWISE ROWS · 28 CONTRADICTORY RELATIONSHIPS · 25
+> TRAINEE / 3 VENUE · 6 EXACT RAW-SEMANTIC-ALIAS/OUTCOME-INSTABILITY CLUSTERS · 0 PROJECTION · 0
+> TOLERANCE · VENUE COST RANGE 0 IN 9/9 MENUS**. It cannot distinguish semantic aliasing from
+> unstable outcomes and identifies no party-v2 repair. Link the
+> [path-free postmortem](evidence/protocol-party-collision-postmortem-v1-2026-08-17.json).
+>
+> The cumulative board remains **TRAIN OUTCOME QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 ·
+> MODEL FITS 3 · UNSEEN COMPARISONS 3 · AUTHORITY 0 · TRANSFER 0**. Display the active rail as
+> **DESIGN ONLY · FRESH NONSEALED ROOT SELECTED ACTION-FREE BEFORE PREDICTIONS → EXACTLY 3
+> DECISIONS → ≥2 EXECUTABLE CHOICES EACH → 3 DISTINCT SELECTED KINDS → ACQUIRE_SPECIES + RETAINED
+> CAPTURE → REOBSERVE + VERIFY EACH STEP → REPLAN FROM CHANGED STATE → CONFIDENCE ≥0.80 → EXISTING
+> SKILLS · TEACHER 0 · FALLBACK 0**. The lane is
+> `fresh-goal-manager-composition-design-v1`; show no game execution, fit, prediction, authority,
+> or transfer progress for this maintenance session.
+>
+> **Historical consumed-screen checkpoint:** The cumulative learning board was **TRAIN OUTCOME
+> QUESTIONS 30 · DEVELOPMENT OUTCOME QUESTIONS 15 · MODEL FITS 3 · UNSEEN COMPARISONS 3 ·
+> AUTHORITY 0 · TRANSFER 0**. Source `19f53e1` and CI
+> run `32070285183` attempt 1 are green. The one-shot screen failed before fit with **28 conflicting
+> pairwise-row comparisons · VENUE COST VARIANCE 0/3 GOAL SLICES · EVALUATION NULL · MODEL NULL ·
+> GATE CONSUMED**. It decoded zero development outcomes and advances no counter. See the
+> [path-free result](evidence/protocol-consistent-party-train-gate-v2-result-2026-08-17.json).
+>
+> Its then-next rail was **SAME-EVIDENCE COLLISION POSTMORTEM · NO OPTIMIZER · NO DEVELOPMENT ·
+> RETIRE V2 → DESIGN ONE FRESH RED GOAL-MANAGER COMPOSITION EPISODE**. Do not show the old 3/4 fit
+> target, the conditional 12-question slice, a v2 rescue, authority, or Crystal access.
+>
+> The latest measured third fit trained on
+> 22 scale-train questions and reduced training loss **1.667 → 0.594**, but the base and update
+> both scored 3/5 on the five-label comparison.
+> Cross-entropy worsened **0.633 → 1.116**, mean winner probability fell **0.657 → 0.441**, and all
+> five probabilities regressed. The shared update is rejected with no shadow or live authority.
+> See the
+> [negative-fit result](evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
+
+> **Current learning rail:** the immutable scale record remains **88 measured + 5 invalid = 93
+> trials** and **33/36 complete joined questions = 22/24 train + 11/12 development**. All
+> scale-development labels are now consumed. Next rail: **22 SCALE-TRAIN ONLY → LOW-CAPACITY
+> RESIDUAL RANKER → SEPARATE TRAINEE/VENUE HEADS → TITLE-NEUTRAL FEATURES → FIXED STRONG RIDGE +
+> MENU-NORMALIZED PAIRWISE LOSS → DETERMINISTIC LEAVE-ONE-ROOT-OUT**. Gate the aggregate, both
+> action heads and collection/evolution slices. Do not reuse development, collect new outcomes,
+> repair the teacher, open sealed Red or Crystal, replay, or grant authority.
+
+> **Current gate — INPUT INTEGRITY VERIFIED · 55-TRIAL COLLECTOR MISSING:** Display **AUDIT
+> SOURCE e849e43 · CI 31973374921 ATTEMPT 1 GREEN · QUESTIONS 14/14 RECONSTRUCTED · 55 CANDIDATE
+> ROWS · 66 FEATURES · 49 VARY · 12 DISTINCT MENUS**. Link the
+> [path-free audit receipt](evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json).
+>
+> Display the attack result as **BOUNDARY PROBES 19/19 REJECTED · RE-HASHED FORGERIES 2/2
+> REJECTED**. The safety strip remains **ANSWERS 0 · OUTCOMES 0/14 · CONTROLLER 0 · TEACHER 0 ·
+> PREDICTIONS 0 · UPDATES 0 · SEALED RED 0 · CRYSTAL 0 · AUTHORITY ZERO**. Also display
+> **REQUIRED 14 EXAMPLES / 55 CLONED TRIALS · COLLECTED 0/55**. The next rail is **BUILD + ATTACK
+> COLLECTOR → PUBLISH + GREEN CI → READ-ONLY 55-TRIAL PREFLIGHT → OWNER AUTHORIZES EXACT PLAN
+> → FIT 8 TRAIN ONCE → REPORT 6 UNTOUCHED DEVELOPMENT → DECIDE CRYSTAL GATE**. Do not show
+> input verification as model training or imply that authorization can precede the collector.
+
+> **Current gate — V4 VERIFIED · BOTH PREFLIGHTS READY · TRAIN AUTHORIZATION PENDING:** Display
+> **SOURCE 27e966b · CI 31962598106 ATTEMPT 1 GREEN · PLAN b9d1eeef… · CLAUDE APPROVE · PP STATES
+> 0/2 · CONTROLLER 0**. Both train and development authenticate in read-only mode; neither is
+> authorized. Link the
+> [path-free v4 receipt](evidence/red-party-development-pp-materialization-v4-preflight-2026-08-16.json).
+>
+> The next rail is **OWNER AUTHORIZES TRAIN EXACTLY → TRAIN MATERIALIZES ONCE → READ-ONLY VERIFY →
+> SEPARATE DEVELOPMENT AUTHORIZATION**. Never display Claude's verdict as controller authority,
+> never reuse the approval for development, and never retry an identity after controller input.
+
+> **Current gate — V4 HARDENED LOCALLY · V3 SUPERSEDED · EXECUTION UNAUTHORIZED:** Display
+> **FOCUSED 193/193 · MUTATIONS 67/67 KILLED · FULL 3,792 PASS · MYPY 230 FILES · BATTLE CAP 32 · REQUIRED
+> HEADROOM 5 · CONTROLLER 0**. The private v4 contract separately binds package source and exact
+> runner bytes, authenticates GitHub run plus retry attempt, and re-derives the Route 11
+> cartridge/prior join before claiming a one-shot output.
+>
+> Display the honest board as **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP
+> STATES 0/2 · FROZEN MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO · SEALED RED 0 ·
+> CRYSTAL 0 · REPLAY 0**. Next rail: **PUBLISH → EXACT-HEAD CI → PRIVATE V4 PLAN →
+> READ-ONLY TRAIN + DEVELOPMENT PREFLIGHTS → CLAUDE DELTA AUDIT → FRESH OWNER AUTHORIZATION FOR
+> ONE PARTITION**. Never display a v1/v2/v3 plan as runnable.
+
+> **Current gate — CI ATTESTATION HARDENED · V2 PLAN SUPERSEDED · EXECUTION UNAUTHORIZED:** Review
+> found that the old runner recorded a positive CI number without independently proving it was the
+> successful `CI` pull-request run for the exact source. This was caught before controller input;
+> the private v2 plan must not run. The successor authenticates run ID, repository URL, exact head,
+> workflow, event, completed/success status and attempt before claiming an output. Focused checks
+> are **106/106** and the targeted mutation gate is **53/53 KILLED**.
+>
+> Display **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP STATES 0/2 · FROZEN
+> MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. Repair counters are **CONTROLLER 0 ·
+> TEACHER 0 · MODEL 0 · OUTCOMES 0 · SEALED 0 · CRYSTAL 0**. Next rail: **PUBLISH SUCCESSOR →
+> GREEN EXACT-HEAD CI → REGENERATE PRIVATE V3 PLAN → READ-ONLY PREFLIGHT BOTH PARTITIONS →
+> INDEPENDENT AUDIT → OWNER AUTHORIZATION FOR ONE PARTITION**.
+
+> **Current gate — PP PREPARATION SOURCE READY · EXECUTION UNAUTHORIZED:** The view-only readiness
+> page now reports **PRIORS 2 · RESERVED ROOTS 8 TRAIN / 6 DEVELOPMENT · NATURAL PP STATES 0/2 ·
+> FROZEN MENUS 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. It distinguishes the historical
+> 81-state high-PP inventory from the two missing authentic middle-PP contexts.
+>
+> The preparation contract uses ordinary bounded battles and hard per-source caps of 27 battles,
+> 10,000 encounter steps, 250,000 controller actions and 5,000,000 frames. It permits no healing,
+> switching, capture, memory edit, teacher/model query or learner outcome, and it reloads the output
+> save before publication. These are prospective safety facts, not run progress. Publication,
+> exact-head CI and both read-only preflights are complete. Next rail: **INDEPENDENT REVIEW → OWNER
+> AUTHORIZATION PER SOURCE → MATERIALIZE 2 ONCE → RE-INVENTORY → FREEZE 8+6 MENUS**.
+
+> **Current gate — TWO PRIORS FROZEN · PP PREPARATION NEXT:** Published source `107e034` passed
+> exact CI run `31947146884`. A source-only composer proved the measured Cave runtime byte-identical
+> and added exactly one Cave prior beside Route 11. Display **PRIORS 2 · RESERVED ROOTS 14 · MENUS
+> 0 · OUTCOMES 0/14 · FIT FALSE · AUTHORITY ZERO**. Link the
+> [path-free composition receipt](evidence/red-cave-venue-prior-composition-v2-2026-08-16.json),
+> registry SHA `4379309d…`, receipt SHA `015d2d25…`.
+>
+> Composition counters must read **ROM READS 0 · EMULATOR STARTS 0 · CONTROLLER 0 · TEACHER 0 ·
+> MODEL 0 · OUTCOMES 0 · SEALED 0 · CRYSTAL 0**. Keep V1 and V2 marked consumed with no retry.
+> The next rail is **AUDIT TWO NATURAL MIDDLE-PP CONTRACTS → NEW OWNER AUTHORIZATION → MATERIALIZE
+> TRAIN PP ONCE + DEVELOPMENT PP ONCE → READ-ONLY RE-INVENTORY → FREEZE 8+6 MENUS**. Do not show
+> PP preparation, a prior, or a frozen input as a learned outcome.
+
+> **Current gate — V2 ACCEPTED ONCE · NO RETRY:** Published source `755fe53` under green CI run
+> `31926299036` completed the one authorized Cave measurement. Display **4/4 PROGRESS · 67 BATTLES
+> · 4,319 STEPS · 1,853,750 FRAMES · 58,829 CONTROLLER ACTIONS · 0 FAINTS · 0 OPTIONAL RECOVERIES
+> · 0 CANDIDATE DECISIONS**. Display Center accounting as **1 TRANSITION + 7 REQUIRED + 0 OPTIONAL
+> = 8 BUDGETED; +1 CLEANUP = 9 TOTAL** and traversal as **4,319 SUCCESS + 94 BLOCKED = 4,413
+> ATTEMPTS**. The artifact is complete with plan 1, attempt 1, measurement 1.
+>
+> Link the [path-free result](evidence/red-cave-venue-measurement-result-v2-2026-08-16.json). The
+> board must still say **PRIORS 1 PENDING SOURCE-ONLY COMPOSITION · ROOTS 14 · MENUS 0 · OUTCOMES
+> 0/14 · ACCEPTED CAVE MEASUREMENTS 1 · FAILED CONSUMED ATTEMPTS 1 · FIT FALSE · AUTHORITY ZERO**.
+> Do not call this model training. Teacher/model/learner/sealed/Crystal counters remain zero.
+>
+> Next rail: **PUBLISH DISTINCT COMPOSITION SOURCE → EXACT CI → BYTE-IDENTICAL RUNTIME PROOF →
+> ADD EXACTLY ONE CAVE PRIOR → MATERIALIZE 2 MIDDLE-PP ROOTS → FREEZE 8+6 MENUS**. The composition
+> rail uses no ROM, emulator or controller.
+
+> **Current V2 gate:** Claude's audit was conditional, and exact source `ff2ccfb` now resolves its
+> three live conditions: eligible menu cardinality, behavioral evolution-venue authority and
+> per-record durability. The dashboard should show **FOCUSED 92/92 · ROUTE 11 55/55 · FULL GATE
+> 3,576 GREEN · SOURCE ff2ccfb PUBLISHED · CI 31925553137 GREEN · CLAUDE APPROVE TO ASK USER ·
+> AUTHORIZATION PENDING**. Claude's verdict is not a run command. Fresh explicit user authorization
+> remains pending.
+> Do not show a training percentage. V2 is unexecuted; the board remains **priors 1 · roots 14 ·
+> menus 0 · outcomes 0/14 · failed attempts 1 · accepted Cave measurements 0 · fit false ·
+> authority zero**.
+>
+> Crash status must be displayed precisely: **PLAN DURABLE BEFORE CONTROLLER**; **TERMINAL DURABLE
+> AFTER CONTROLLER RETURNS**; **MID-CONTROLLER BLACKOUT MAY LEAVE PLAN ONLY**. This is stronger
+> evidence retention without pretending a power loss can preserve an observation the runner never
+> received. See the [path-free adjudication](evidence/red-cave-v2-conditional-audit-adjudication-2026-08-15.json).
+
+> **Current Cave status:** V1 is **FAILED · CONSUMED · NOT RETRYABLE**. It retained one plan row
+> and no terminal/measurement row, so the dashboard must not infer completion or advance a prior.
+> The cause was a singleton venue presented as a strategic menu. The shared trainer now treats a
+> forced destination as a fact and emits venue decisions only for two or more viable destinations.
+> Future attempts retain terminal counters and a path-redacted error before aborting.
+>
+> V2 is **PROSPECTIVE · DISTINCT ROOT · NOT EXECUTED**. Its root semantics are bound through the
+> 81-entry inventory, and its artifact namespace is unused. Show its gates separately: focused
+> behavior green; full suite/registries green (3,568 passing); publication pending; exact CI pending; Claude
+> audit pending; authorization pending. Honest scoreboard: **venue priors 1 · roots 14 · menus 0 ·
+> outcomes 0/14 · accepted Cave measurements 0 · failed consumed attempts 1 · fit false · authority
+> zero**. Never roll a failed attempt into a percentage-complete training bar.
+
+> **Historical V1 safety gate:** before execution, the prospective Cave measurement remained
+> unexecuted. Its typed artifact
+> now durably claims the attempt before emulator input, binds execution to the private root holding
+> all authenticated inputs, and cannot publish complete until protected files and ROM sidecars are
+> unchanged. Exact source `41dd817` passed CI run `31919075770`; the readiness page may show this as
+> **measurement source awaiting independent re-audit** only. V1 later failed; the current V2 status
+> is the block above. Neither version advances priors, menus, outcomes, fit or authority without an
+> independently accepted result.
+
+> **Reservation checkpoint:** the project now has 14 privately reserved source roots—8 train and
+> 6 development—but still has zero frozen candidate menus and zero outcomes. The reservation spans
+> both trainee/venue choices, all four completion goals, three health bins and two evolution-route
+> types. Existing PP remains high only, so one root per partition is preregistered for a future
+> natural middle-PP materialization. The protocol forbids labels, teacher/model consultation,
+> memory edits, sealed access and replacement. One Route 11 prior is also insufficient for a real
+> venue comparison. The readiness display must therefore show **reserved 14 · menus 0 · outcomes
+> 0/14 · fit false · authority zero**, with the four blockers from the
+> [reservation receipt](evidence/party-development-question-reservation-2026-08-15.json). Do not
+> convert reservations or prospective PP bins into training progress.
+
+> **Model-first pivot:** the first Red shadow dashboard stopped safely after 1,250 team-training
+> battles. It retained the failed state and correction count, but exposed two missing diagnostics:
+> the exact exception message was not retained, and live heal/party/efficiency data was too sparse
+> to explain the long training block. The next dashboard iteration follows
+> [model-first-roadmap.md](model-first-roadmap.md): scenario throughput, unseen success,
+> interventions, collisions/path overhead, battle outcomes, experience per frame, battles per heal,
+> party rotations, collection dependencies, and transfer replace whole-route percentage as the
+> primary progress view. Do not start another full run merely to populate this dashboard.
+> Future private failure records preserve exact path-free text and replace path tokens inside
+> otherwise useful messages instead of discarding the entire diagnostic.
+
+Exact head `3a24a2e` passed CI and Claude's delta audit approved one private Route 11 prior. That
+prior now exists, so the honest readiness view is **venue priors 1 · train 0/8 · development 0/6 ·
+fit false · authority zero**. Its path-free summary records zero ROM reads, controller actions,
+teacher queries and outcomes. The Cave sibling remains unavailable because its cost evidence is
+stale, not because the route is impossible.
+
+Exact source `16ed83d` closes the audit's three forward conditions locally. The proof now has 51
+source elements and nine exact waivers, including eight module-assignment fingerprints; isolated
+generic-parameter and closure-call tests kill the two test gaps. Python 3.11 and 3.14 agree, 3,508
+ROM-free tests pass, and source bundle `ce43f6d…` reproduces across all registries. The dashboard
+must show this as **source qualification pending CI/re-review**, not as training progress. The next
+data-facing step is a read-only PP-diversity inventory after that gate.
+
+Exact source `587fb18` adds one new readiness fact without changing a progress counter: every
+masked party candidate now has a typed, identity-free cause, and the cause vector is frozen with
+the prospective menu. A missing compatible venue prior appears as
+`insufficient_venue_evidence`; changing that explanation invalidates the binding. The page may show
+cause counts once a concrete catalog exists, but it must remain **0/8 train, 0/6 development, fit
+false, authority zero** today.
+
+Claude's exact-commit mutation audit approved source qualification and input
+materialization/freeze. The reason commitment had no drift channel; agreement checks that survived
+alone were redundant and failed when removed together. The dashboard must reject catalog freeze if
+any real mask is labelled `insufficient_venue_evidence` for a different causal constraint. The
+[qualification receipt](evidence/party-development-causal-reason-qualification-2026-08-15.json)
+advances no experiment counter.
+
+The source audit also removed a misleading dashboard prerequisite. Storage/capture capacity,
+resource pressure and money-aware renewal, version/trade/external reach, and item-evolution
+feasibility already exist at their correct hierarchy levels. The dashboard should link those
+existing goal/campaign views rather than wait for a duplicate “completion context” object. Later
+autonomous multi-save execution remains open product work; it is not a license to call this party
+model trained.
+
+The next dashboard revision is now specified by the completion-aware party v2 source checkpoint.
+It must not show a fictional “training percent” before data exists. Its pre-fit view should show:
+eligible train/development preferences against the 8/6 minimum; goal and trainee/venue coverage;
+candidate-menu widths; health, PP and evolution-route bins; complete/missing venue priors; censored
+and partial trials; unique roots/states; and the reason the gate remains closed. After fitting it
+adds prior/update loss, winner probability, paired correctness wins/losses/ties and discordant-pair
+exact p-value. Authority and sealed/Crystal counters remain separate and zero. The current V2 party
+page remains historical; it is not rewritten as v2 model-training progress.
+
+The dashboard is the human view of a run. It combines the live emulator screen with the evidence
+needed to understand what the agent is doing and how far the experiment has progressed.
+
+The prospective join hardening at exact source `85ae878` changes what the readiness page can trust,
+not what it may count. Any future party outcome must carry the digest of its frozen feature schema,
+objective, candidate menu/availability and evidence. Until concrete Red menus and priors are frozen
+and executed, the page must remain **0/8 train, 0/6 development, fit false, authority zero**. The
+[join-hardening receipt](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
+is a source checkpoint, not a training event. Exact `587fb18` closes the genuine typed mask-cause
+gap after the source audit confirmed the other four constraints already exist at their proper
+hierarchy boundaries.
+
+The v1 bounded curve stopped before fitting when one selected development turn was mechanically
+suppressed; no model or evaluation exists for that attempt. V2 completed from four train captures
+and four fresh development captures. The dashboard now shows all 1/2/4 points, exact correct/total
+results, fit loss, paired prior wins/update wins/ties, outcome diversity, the shared development
+denominator, and zero authority. Its most important result is the ceiling warning: the prior and
+all updates were 4/4, three development contexts were completely flat, and 26/32 branches were
+one-turn knockouts. It must not turn a descriptive eight-context curve into the 200-battle
+promotion gate.
+
+The first party-development result has its own completed-experiment failure view. It shows both
+same-trainee trials, exact target-XP rates, battles, encounter steps, controller actions, frames,
+rotations and Center-route accounting. It makes the key tradeoff visible: the higher encounter band
+finished 11.4% faster but reported 42 aggregate Center calls against a configured 40-trip policy.
+Because phase accounting was absent, the page labels the target rejected, with no learner example,
+fitted party model or authority.
+
+The default party page now shows the corrected V2 result. Both fresh clones evolved safely and the
+phase counters close exactly. It reports the accepted lower-band target, 10/50 versus 40/50
+budgeted Center calls, one cleanup each and the higher band's 39 venue transitions. The page also
+states the limit: this is one source-bound example under the current executor, with no fitted party
+model, generalization result or authority.
+
+The subsequent traversal repair does not rewrite that completed page. Exact commit `51f0912`
+qualified the source; independent live commit `66ed6ee` then recovered a damaged party and made 12
+successful Cave steps in 14 attempts with two blocks, one excluded-transition skip and zero map
+departures or battle commands. That separate qualification creates no party preference, so the
+dashboard must continue to show V2 under its original source rather than retroactively replacing
+the 39 transitions. Future party outcomes will carry movement attempts, successful steps, blocked
+attempts, excluded-transition skips and no-progress cycles in their own summaries.
+
+## Show the completion-aware party-learning readiness gate
+
+This is the current page. It is deliberately separate from the historical dashboard on port 8765.
+Without campaign arguments it uses only tracked, path-free readiness, frozen-catalog and
+independent-audit receipts. It does not load a ROM or private state, query a teacher, make a
+prediction, execute a candidate, fit a model or expose a controller.
+
+```sh
+source .venv/bin/activate
+python scripts/run_party_development_readiness_dashboard.py --no-browser
+```
+
+Open `http://127.0.0.1:8767/`. The page reports the authenticated historical prior, both completed
+natural-PP preparations, the frozen 8-train/6-development catalog and its independent
+reconstruction audit. The current board is 14 verified questions, 55 required candidate trials,
+0/55 terminals, 0/14 complete menus, fit false and authority zero. Its event list shows menu shape,
+feature diversity, partition isolation, mutation/forgery rejection and prohibited operations
+without exposing checkpoint, species, map, slot or private-path identities. The underlying receipts
+include the
+[prior initialization](evidence/party-development-v2-prior-initialization-2026-08-15.json),
+[checkpoint inventory](evidence/party-development-v2-checkpoint-inventory-2026-08-15.json) and
+[current readiness snapshot](evidence/party-development-v2-readiness-2026-08-16.json), plus the
+[frozen catalog](evidence/red-party-development-frozen-input-catalog-v1-result-2026-08-16.json) and
+[independent audit](evidence/red-party-development-frozen-input-catalog-v1-audit-2026-08-16.json).
+The earlier
+[input-contract qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json),
+[join-hardening qualification](evidence/party-development-prospective-outcome-join-hardening-2026-08-15.json)
+and [causal-mask qualification](evidence/party-development-causal-reason-qualification-2026-08-15.json)
+record why implementation readiness does not advance the 0/14 outcome counter.
+
+For an explicitly authorized natural-PP preparation, restart the same view with its private
+artifact root and named partition:
+
+```sh
+python scripts/run_party_development_readiness_dashboard.py \
+  --no-browser \
+  --private-artifact-root /private/artifact/root \
+  --partition development
+```
+
+This monitor is outside the frozen runner. It reads only the runner's path-free durable progress,
+terminal or failure stream and displays battles, total PP, encounter steps, controller actions,
+frames and fail-closed status. It has no ROM, state, teacher, model or controller access. The first
+v4 runner remains deliberately headless, so its game-frame pane stays blank; adding live frames to
+that exact runner would change its audited bytes. Later model-training runners can bind the existing
+frame-observer interface prospectively and show the game without retroactively changing v4.
+
+The separately authorized train preparation has now completed once. Its
+[path-free result](evidence/red-party-development-pp-materialization-v4-train-result-2026-08-16.json)
+records 27 battles, 53/80 final PP and zero learner/model access. The dashboard reports PP states
+1/2 and points to the still-separate development authorization; it does not infer permission from
+the completed train receipt. In development-monitor mode it authenticates the path-free train
+terminal, resets the live action/frame counters to zero and waits at 50% for the independent gate.
+
+After an exact campaign plan is frozen and separately authorized, start the same page with both the
+plan and immutable artifact ledger:
+
+```sh
+python scripts/run_party_development_readiness_dashboard.py \
+  --no-browser \
+  --campaign-plan /private/campaign-plan.json \
+  --campaign-plan-file-sha256 <exact-64-character-sha256> \
+  --private-artifact-root /private/artifact/root
+```
+
+This mode polls only sealed claims and terminals. It reports claimed, measured, invalid and
+censored trials; completed train/development menus; cumulative battles, steps, actions, frames,
+heals and rotations; the current consumed trial; exact per-trial bounds; and the no-retry rule.
+It never displays the private trainee or venue binding. The authorized campaign runner's
+`--watch` option supplies the separate live emulator window; the browser dashboard remains an
+observer and intentionally has no game-control endpoint.
+
+Future authenticated collection may advance only its 0/55 trial and 0/14 complete-menu counters.
+A fitted model may appear only after usable train menus are complete, and it may fit on train only.
+Sealed Red, Crystal, full-replay and authority counters remain independent; none may move merely
+because a training fit completed.
+
+## What it shows
+
+- the rendered game frame, run state, current stage, progress, actions, frames and emulation speed;
+- the model's current goal choice, confidence, teacher-query count and fallback count;
+- registered, living and level-cap collection totals, capture supplies and free storage;
+- party levels, health and status plus the currently available goal pressures;
+- either the prospective Crystal V3 27-adaptation/54-sealed boundary or the Red
+  fitted/gated/live-run counters;
+- each Red learned head's role, authority, exact correct/total pair, independent validation units,
+  paired comparison, candidate-count subset and model fingerprint;
+- live Red teacher agreement over classified comparisons, execution over all decisions, saved
+  corrections, low-confidence, unsupported, non-move, failed and unclassified decisions, plus
+  exact team-development agreement; and
+- recent identity-safe evidence events.
+
+The initial Crystal preview intentionally shows zero model and experiment progress. It authenticates
+the 1.1 cartridge and proves the display path without opening a context, asking the teacher, making
+a prediction, sending controller input or saving cartridge state.
+
+## Show the latest Red outcome-learning curve
+
+The current dashboard is a completed experiment view, not another full run. It shows eight
+authenticated captures, 32 selected-turn outcomes, all three from-prior fits, the frozen-prior
+comparison, outcome-diversity diagnostics, zero protected-access counters and the held-authority
+state. With only the public receipt it shows a neutral screen; optionally supply any authenticated
+v2 private capture to show its exact in-game battle frame. Loading that frame sends no controller
+input and saves nothing.
+
+```sh
+source .venv/bin/activate
+python scripts/run_battle_outcome_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --capture-state /private/path/to/v2-development.state \
+  --capture-manifest /private/path/to/v2-development.manifest.json
+```
+
+The capture is accepted only when its manifest digest appears in the tracked v2 result. Use
+`--no-browser` if the existing browser tab already points at `http://127.0.0.1:8765/`. The page is
+view-only and remains open until `Ctrl-C`. Learned-stack rows wrap at ordinary desktop widths and
+label all three candidates and frozen-prior scores explicitly so a ceiling cannot be mistaken for
+improvement.
+
+## Show the party-development outcome
+
+The party view uses only the tracked, path-free result by default. Optionally pass the exact
+authenticated source state and private Red cartridge to display the starting Cinnabar frame. The
+state and ROM must match the published SHA-256 bindings; loading the frame sends no controller
+input and saves nothing.
+
+```sh
+source .venv/bin/activate
+python scripts/run_party_outcome_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --state /private/path/to/authenticated-evolution-training.state
+```
+
+Use `--no-browser` when the existing browser tab already points at
+`http://127.0.0.1:8765/`. The headline result is 108 battles / 1,050,047 frames in the lower band
+versus 69 / 1,158,371 in the higher band, with both trainees evolving at level 26 and zero faints.
+It displays one accepted learner target plus the 39-transition caveat—not a fitted model, a
+generalization result or a new run.
+
+## Historical Red full-run harness — not currently authorized
+
+The command below produced the failed 85-million-frame shadow evidence. It is retained for
+reproducibility, but `NORTH_STAR.md` prohibits another full run until the bounded scenario gates
+pass. Do not launch it merely to populate the dashboard:
+
+```sh
+source .venv/bin/activate
+python scripts/run_red_training_dashboard.py \
+  --rom "$POKEMON_RED_ROM" \
+  --battle-model /private/path/to/battle-model/model.jsonl \
+  --training-candidate-model /private/path/to/team-development-model.json \
+  --training-candidate-file-sha256 53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3 \
+  --corrections-root /private/path/to/initialized-artifact-root
+```
+
+The page opens at `http://127.0.0.1:8765/` and stays available after the run until `Ctrl-C`.
+`--no-browser` reuses a window already showing that address; `--hold-seconds 300` closes five
+minutes after the terminal result.
+
+The historical run was deliberately teacher-supervised. A confident battle proposal executed only when the
+teacher agrees; disagreement or low confidence executes the teacher's choice and saves a private
+correction. The team-development ranker is measured but has no execution authority. The fitted
+goal manager and destination ranker appear in the learned-stack table but remain offline in this
+fixed full-game route. A green Hall-of-Fame result therefore proves fresh-model compatibility and
+correction coverage—not an autonomous end-to-end player. The frozen plan is
+[`configs/red-player-training-v1.json`](../configs/red-player-training-v1.json).
+
+## Start the authenticated preview
+
+From the repository folder, activate the project environment, provide the path to a private,
+lawfully obtained international Crystal 1.1 cartridge, and start the preview:
+
+```sh
+source .venv/bin/activate
+export POKEMON_CRYSTAL_ROM="/Users/user/path/to/private-crystal-1.1.gbc"
+python scripts/run_crystal_dashboard.py
+```
+
+The browser opens automatically. Stop the preview with `Ctrl-C`. Use `--no-browser` when another
+browser window already has the displayed local address, or `--duration-seconds 60` for a bounded
+one-minute preview.
+
+After an exact source commit is pushed and its GitHub checks pass, the official banked-memory
+qualification can show the real setup and its semantic result in the same view:
+
+```sh
+COMMIT=$(git rev-parse HEAD)
+python scripts/qualify_crystal_banked_observation.py \
+  --expected-source-commit "$COMMIT" \
+  --dashboard \
+  --hold-seconds 30
+```
+
+This is an adapter test, not a lesson. It starts from clean power, performs a bounded new-game
+setup and real in-game save, then compares two complete semantic reads. All zero-shot, adaptation,
+sealed-test, prediction and teacher counters remain zero.
+
+The first official run passed in 46 inputs / 33,276 frames after exact-commit CI. Its identity-safe
+result is preserved in the
+[Crystal banked-observation qualification receipt](evidence/crystal-banked-observation-qualification-2026-08-14.json).
+
+Once the starting vertical-slice source is published and green, its two real goal bindings use the
+same view:
+
+```sh
+COMMIT=$(git rev-parse HEAD)
+python scripts/qualify_crystal_starting_vertical_slice.py \
+  --expected-source-commit "$COMMIT" \
+  --dashboard \
+  --hold-seconds 30
+```
+
+This highlights executable story/exploration pressures while the model remains **not executed**.
+It is a binding qualification, not a zero-shot prediction or teaching example.
+
+The first exact-commit run passed with 75 total controller inputs. Its two binding results and
+all-zero experiment counters are preserved in the
+[starting vertical-slice qualification receipt](evidence/crystal-starting-vertical-slice-qualification-2026-08-14.json).
+
+## Safety boundary
+
+The dashboard binds only to this computer at `127.0.0.1`. Its server supports view-only GET
+requests and has no controller, teacher, prediction or save endpoint. Runtime code publishes a
+validated, identity-safe snapshot to the display; the display never feeds data or instructions
+back into the agent. Private paths, raw memory addresses and binding identities are excluded from
+the status document.
+
+The next active display target is the single-process battle scenario adapter. It should show
+bounded episode throughput, learner-update eligibility, untouched-lineage outcomes, interventions
+and exact failures only after the real snapshot-backed adapter exists. Navigation and
+party-development views follow only after that first loop closes; synthetic contract tests must
+not move a training counter.
+
+The same observer boundary is intended for live qualification, demonstration collection, model
+fitting, zero-shot evaluation and later causal runs. A counter advances only when the corresponding
+authenticated workflow publishes real progress. Crystal V3 remains at zero and private-context
+access remains false until the published plan passes both external reviews.

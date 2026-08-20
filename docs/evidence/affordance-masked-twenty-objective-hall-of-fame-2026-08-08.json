@@ -1,0 +1,88 @@
+{
+  "schema": "pokemon-model-selected-objective-execution-summary-v1",
+  "status": "ok",
+  "claim": "From one authenticated Celadon capture, an affordance-masked learned ranker selected 20 objectives without expected labels; registered fixed skills executed them; fresh observations verified every declared objective and side effect through the Hall of Fame.",
+  "source": {
+    "git_commit": "f9f778ffd5312ee339acb5859e700cd064b4b4ce",
+    "worktree_dirty": false
+  },
+  "capture": {
+    "checkpoint_id": "celadon_stable",
+    "checkpoints_completed": 124,
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22"
+  },
+  "loop": {
+    "decisions": 20,
+    "objectives_completed": 20,
+    "actions_executed": 502175,
+    "frames_executed": 37369283,
+    "replans": 0,
+    "teacher_fallbacks": 0,
+    "expected_route_label_provided": false
+  },
+  "policy": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "candidate_set_mode": "dependency_legal_and_skill_affordance_masked",
+    "branching_decisions": 1,
+    "singleton_decisions": 19,
+    "minimum_branching_confidence": 0.9640747386427077,
+    "mean_candidate_count": 1.05
+  },
+  "before": {
+    "location": "celadon_pokecenter",
+    "mode": "overworld",
+    "available_objectives": [
+      "clear_rocket_hideout",
+      "defeat_erika",
+      "reach_saffron"
+    ]
+  },
+  "after": {
+    "location": "hall_of_fame",
+    "mode": "hall_of_fame",
+    "available_objectives": [],
+    "completed_objective_count": 36,
+    "terminal_facts": [
+      "league:champion_defeated",
+      "game:hall_of_fame"
+    ]
+  },
+  "decisions_and_executions": [
+    {"objective_id": "clear_rocket_hideout", "actions": 1143, "frames": 98237, "executable_candidates": 1},
+    {"objective_id": "rescue_fuji", "actions": 2508, "frames": 167351, "executable_candidates": 1},
+    {"objective_id": "reach_fuchsia", "actions": 3132, "frames": 373072, "executable_candidates": 1},
+    {"objective_id": "obtain_surf", "actions": 1648, "frames": 209136, "executable_candidates": 1},
+    {"objective_id": "defeat_koga", "actions": 1555, "frames": 179476, "executable_candidates": 2},
+    {"objective_id": "obtain_strength", "actions": 726, "frames": 93816, "executable_candidates": 1},
+    {"objective_id": "defeat_erika", "actions": 3551, "frames": 506453, "executable_candidates": 1},
+    {"objective_id": "reach_saffron", "actions": 1330, "frames": 168448, "executable_candidates": 1},
+    {"objective_id": "liberate_silph", "actions": 5041, "frames": 1675457, "executable_candidates": 1},
+    {"objective_id": "defeat_sabrina", "actions": 3058, "frames": 949298, "executable_candidates": 1},
+    {"objective_id": "reach_cinnabar", "actions": 830, "frames": 148680, "executable_candidates": 1},
+    {"objective_id": "obtain_secret_key", "actions": 732, "frames": 87564, "executable_candidates": 1},
+    {"objective_id": "defeat_blaine", "actions": 469232, "frames": 31883961, "executable_candidates": 1},
+    {"objective_id": "defeat_giovanni", "actions": 1409, "frames": 156305, "executable_candidates": 1},
+    {"objective_id": "cross_victory_road", "actions": 3857, "frames": 453733, "executable_candidates": 1},
+    {"objective_id": "defeat_lorelei", "actions": 480, "frames": 42783, "executable_candidates": 1},
+    {"objective_id": "defeat_bruno", "actions": 328, "frames": 32538, "executable_candidates": 1},
+    {"objective_id": "defeat_agatha", "actions": 466, "frames": 45854, "executable_candidates": 1},
+    {"objective_id": "defeat_lance", "actions": 582, "frames": 51905, "executable_candidates": 1},
+    {"objective_id": "defeat_champion", "actions": 567, "frames": 45216, "executable_candidates": 1, "automatic_side_effect": "game:hall_of_fame"}
+  ],
+  "measured_bottleneck": {
+    "objective_id": "defeat_blaine",
+    "share_of_total_actions": 0.93438,
+    "team_development_battles": 1716,
+    "healing_trips": 885,
+    "final_form_party_levels": [60, 55, 55, 55, 55, 55]
+  },
+  "limitations": [
+    "captured_state_diagnostic",
+    "bounded_model_decision_sequence",
+    "singleton_dispatches_do_not_measure_ranking_quality",
+    "fixed_teacher_authored_mechanic_skills",
+    "not_a_clean_start_evaluation",
+    "not_end_to_end_learned_gameplay"
+  ]
+}

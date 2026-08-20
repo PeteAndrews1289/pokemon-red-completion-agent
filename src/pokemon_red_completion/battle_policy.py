@@ -5,6 +5,7 @@ from __future__ import annotations
 from pokemon_red_completion.observation import (
     ABRA_SPECIES_ID,
     BULBASAUR_SPECIES_ID,
+    MEGA_PUNCH_MOVE_ID,
     PIDGEOTTO_SPECIES_ID,
     RATTATA_SPECIES_ID,
     TACKLE_MOVE_ID,
@@ -16,6 +17,7 @@ from pokemon_red_completion.observation import (
 _TRAINER_BATTLE_STATE = 2
 _TACKLE_SLOT = 1
 _TAIL_WHIP_SLOT = 2
+_MEGA_PUNCH_SLOT = 3
 _WATER_GUN_SLOT = 4
 _CURRENT_PP_MASK = 0x3F
 _MIN_STAT_STAGE = 1
@@ -57,16 +59,30 @@ def choose_cerulean_rival_move_slot(state: RawGameState) -> int:
                 slot=_TAIL_WHIP_SLOT,
                 move_id=TAIL_WHIP_MOVE_ID,
             )
+        if (
+            _require_move_current_pp(
+                state,
+                slot=_MEGA_PUNCH_SLOT,
+                move_id=MEGA_PUNCH_MOVE_ID,
+            )
+            > 0
+        ):
+            return _MEGA_PUNCH_SLOT
+        return _require_usable_move(state, slot=_TACKLE_SLOT, move_id=TACKLE_MOVE_ID)
+    if state.enemy_species_id in _WATER_GUN_TARGETS:
+        if (
+            _require_move_current_pp(
+                state,
+                slot=_WATER_GUN_SLOT,
+                move_id=WATER_GUN_MOVE_ID,
+            )
+            > 0
+        ):
+            return _WATER_GUN_SLOT
         return _require_usable_move(
             state,
             slot=_TACKLE_SLOT,
             move_id=TACKLE_MOVE_ID,
-        )
-    if state.enemy_species_id in _WATER_GUN_TARGETS:
-        return _require_usable_move(
-            state,
-            slot=_WATER_GUN_SLOT,
-            move_id=WATER_GUN_MOVE_ID,
         )
     raise BattlePolicyEvidenceError(
         "Cerulean rival policy rejected an unexpected enemy species."
@@ -86,6 +102,17 @@ def _require_stat_stage(value: int | None, *, label: str) -> int:
 
 
 def _require_usable_move(state: RawGameState, *, slot: int, move_id: int) -> int:
+    if _require_move_current_pp(state, slot=slot, move_id=move_id) == 0:
+        raise BattlePolicyEvidenceError(f"Cerulean rival policy requires usable PP in slot {slot}.")
+    return slot
+
+
+def _require_move_current_pp(
+    state: RawGameState,
+    *,
+    slot: int,
+    move_id: int,
+) -> int:
     moves = state.first_party_moves
     pp = state.first_party_pp
     index = slot - 1
@@ -99,6 +126,4 @@ def _require_usable_move(state: RawGameState, *, slot: int, move_id: int) -> int
         raise BattlePolicyEvidenceError(
             f"Cerulean rival policy expected move {move_id:#04x} in slot {slot}."
         )
-    if pp[index] & _CURRENT_PP_MASK == 0:
-        raise BattlePolicyEvidenceError(f"Cerulean rival policy requires usable PP in slot {slot}.")
-    return slot
+    return pp[index] & _CURRENT_PP_MASK

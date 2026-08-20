@@ -16,11 +16,69 @@ from pokemon_red_completion.rom import RomFingerprint, RomValidationError
 
 
 class FakeMemory:
-    def __init__(self, values: dict[int, int] | None = None) -> None:
+    def __init__(self, values: dict[int | tuple[int, int], int] | None = None) -> None:
         self.values = values or {}
 
-    def __getitem__(self, address: int) -> int:
+    def __getitem__(self, address: int | tuple[int, int]) -> int:
         return self.values.get(address, 0)
+
+
+class FakePixelArray:
+    shape = (2, 3, 4)
+
+    def tobytes(self) -> bytes:
+        return bytes(
+            (
+                1,
+                2,
+                3,
+                255,
+                4,
+                5,
+                6,
+                255,
+                7,
+                8,
+                9,
+                255,
+                10,
+                11,
+                12,
+                255,
+                13,
+                14,
+                15,
+                255,
+                16,
+                17,
+                18,
+                255,
+            )
+        )
+
+
+class FakeScreen:
+    ndarray = FakePixelArray()
+
+
+class RecordingFrameObserver:
+    def __init__(self, *, wants: bool = True) -> None:
+        self.wants = wants
+        self.requests: list[int] = []
+        self.frames: list[tuple[int, int, bytes, int]] = []
+
+    def wants_frame(self, logical_frame: int) -> bool:
+        self.requests.append(logical_frame)
+        return self.wants
+
+    def publish_frame(
+        self,
+        width: int,
+        height: int,
+        rgb: bytes,
+        logical_frame: int,
+    ) -> None:
+        self.frames.append((width, height, rgb, logical_frame))
 
 
 class FakePyBoy:
@@ -32,10 +90,12 @@ class FakePyBoy:
         self.rom_stream = rom_stream
         self.kwargs = kwargs
         self.memory = FakeMemory({0xD732: 0x12})
+        self.screen = FakeScreen()
         self.events: list[tuple[str, str | int | bool]] = []
         self.tick_calls: list[tuple[int, bool, bool]] = []
         self.speed: int | None = None
         self.alive = True
+        self.loaded_states: list[bytes] = []
 
     def set_emulation_speed(self, target_speed: int) -> None:
         self.speed = target_speed
@@ -55,6 +115,9 @@ class FakePyBoy:
         assert not kwargs
         self.events.append(("stop", save))
 
+    def load_state(self, handle: io.BytesIO) -> None:
+        self.loaded_states.append(handle.read())
+
 
 class RecordingFactory:
     def __init__(self) -> None:
@@ -67,7 +130,14 @@ class RecordingFactory:
         return self.backend
 
 
-def _fingerprint(payload: bytes) -> RomFingerprint:
+def _fingerprint(payload: bytes, expected: object | None = None) -> RomFingerprint:
+    """Stand-in for ``verify_rom_bytes``.
+
+    It accepts the expected cartridge because the real function does. The
+    adapter now passes which cartridge it was told to load, so a double that
+    takes only the payload would hide that argument rather than check it.
+    """
+
     return RomFingerprint(
         filename="<private>",
         title="POKEMON RED",
@@ -145,6 +215,35 @@ def test_adapter_uses_verified_stream_and_safe_backend_flags(
     assert rom_stream.closed
 
 
+def test_adapter_reads_fixed_and_switchable_wram_without_writes(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+
+    with PyBoyAdapter(rom_path) as emulator:
+        assert recording_factory.backend is not None
+        recording_factory.backend.memory.values.update(
+            {
+                (0, 0xC100): 1,
+                (0, 0xC101): 2,
+                (1, 0xD100): 3,
+                (1, 0xD101): 4,
+            }
+        )
+        assert emulator.read_wram(0, 0xC100, 2) == bytes((1, 2))
+        assert emulator.read_wram(1, 0xD100, 2) == bytes((3, 4))
+
+        with pytest.raises(ValueError, match="fixed"):
+            emulator.read_wram(1, 0xC100, 1)
+        with pytest.raises(ValueError, match="switchable"):
+            emulator.read_wram(0, 0xD100, 1)
+        with pytest.raises(ValueError, match="one banked region"):
+            emulator.read_wram(0, 0xCFFF, 2)
+
+
 def test_adapter_satisfies_frame_safe_controller_contract(
     tmp_path: Path,
     accept_test_rom: None,
@@ -174,6 +273,44 @@ def test_adapter_satisfies_frame_safe_controller_contract(
             (2, False, False),
             (3, False, False),
         ]
+
+
+def test_headless_frame_observer_gets_rendered_rgb_without_controller_authority(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+    observer = RecordingFrameObserver()
+
+    with PyBoyAdapter(rom_path, frame_observer=observer) as emulator:
+        emulator.tick(4)
+
+    assert recording_factory.backend is not None
+    assert recording_factory.backend.tick_calls == [(4, True, False)]
+    assert observer.requests == [4]
+    assert observer.frames == [
+        (3, 2, bytes(range(1, 19)), 4),
+    ]
+
+
+def test_adapter_loads_already_authenticated_state_bytes(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+
+    with PyBoyAdapter(rom_path) as emulator:
+        emulator.load_state_bytes(b"verified private state")
+
+        assert recording_factory.backend is not None
+        assert recording_factory.backend.loaded_states == [b"verified private state"]
+
+        with pytest.raises(EmulatorError, match="unavailable"):
+            emulator.load_state_bytes(b"")
 
 
 def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
@@ -297,6 +434,31 @@ def test_adapter_fails_closed_on_invalid_operations(
         for forbidden_address in (-1, False, 0x0000, 0x8000, 0xA000, 0xFF00, 0x10000):
             with pytest.raises(ValueError, match="Work RAM"):
                 emulator.read_u8(forbidden_address)
+
+        recording_factory.backend.memory.values[(2, 0xA000)] = 0x34
+        recording_factory.backend.memory.values[(3, 0xBFFF)] = 0x56
+        assert emulator.read_cartridge_ram_u8(2, 0xA000) == 0x34
+        assert emulator.read_cartridge_ram_u8(3, 0xBFFF) == 0x56
+        recording_factory.backend.memory.values[(1, 0xAD10)] = 0x78
+        recording_factory.backend.memory.values[(1, 0xAD11)] = 0x9A
+        assert emulator.read_cartridge_ram(1, 0xAD10, 2) == bytes((0x78, 0x9A))
+        for bank in (-1, 0, 1, 4, True):
+            with pytest.raises(ValueError, match="bank must be 2 or 3"):
+                emulator.read_cartridge_ram_u8(bank, 0xA000)
+        for address in (-1, 0x9FFF, 0xC000, 0x10000, True):
+            with pytest.raises(ValueError, match="between 0xA000 and 0xBFFF"):
+                emulator.read_cartridge_ram_u8(2, address)
+        for bank in (-1, 4, True):
+            with pytest.raises(ValueError, match="between 0 and 3"):
+                emulator.read_cartridge_ram(bank, 0xA000, 1)
+        for address in (-1, 0x9FFF, 0xC000, True):
+            with pytest.raises(ValueError, match="between 0xA000 and 0xBFFF"):
+                emulator.read_cartridge_ram(1, address, 1)
+        for length in (-1, 0, True):
+            with pytest.raises(ValueError, match="positive"):
+                emulator.read_cartridge_ram(1, 0xA000, length)
+        with pytest.raises(ValueError, match="inside one bank"):
+            emulator.read_cartridge_ram(1, 0xBFFF, 2)
 
         emulator.press("a")
         with pytest.raises(EmulatorError, match="already pressed"):

@@ -9,6 +9,7 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     EventFlag,
     ItemId,
@@ -17,14 +18,23 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 STRENGTH_CHECKPOINT_COUNT = 8
+BITE = 0x2C
+SKULL_BASH = 0x82
 TAIL_WHIP = 0x27
 STRENGTH = 0x46
-EXPECTED_MOVES_BEFORE = (0x2C, TAIL_WHIP, 0x3D, 0x39)
-EXPECTED_MOVES_AFTER = (0x2C, STRENGTH, 0x3D, 0x39)
+WATER_GUN = 0x37
+EXPECTED_MOVES_BEFORE = (BITE, TAIL_WHIP, 0x3D, 0x39)
+EXPECTED_MOVES_AFTER = (BITE, STRENGTH, 0x3D, 0x39)
 EXPECTED_PP_AFTER = (25, 15, 20, 15)
+PRE_SURF_MOVES_BEFORE = (BITE, TAIL_WHIP, 0x3D, WATER_GUN)
+PRE_SURF_MOVES_AFTER = (BITE, STRENGTH, 0x3D, WATER_GUN)
+PRE_SURF_PP_AFTER = (25, 15, 20, 25)
+NATURAL_MOVES_BEFORE = (SKULL_BASH, TAIL_WHIP, 0x3D, 0x39)
+NATURAL_MOVES_AFTER = (SKULL_BASH, STRENGTH, 0x3D, 0x39)
+NATURAL_PP_AFTER = (15, 15, 20, 15)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -53,10 +63,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class StrengthChapterError(RuntimeError):
@@ -116,9 +122,9 @@ class StrengthChapterReport:
     moves_before: tuple[int, ...]
     moves_after: tuple[int, ...]
     pp_after: tuple[int, ...]
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -140,15 +146,20 @@ class StrengthChapterReport:
             and self.gold_teeth_removed
             and self.hm04_retained
             and self.final_bag == expected_bag
-            and self.initial_money == self.final_money == 37_489
-            and self.moves_before == EXPECTED_MOVES_BEFORE
-            and self.moves_after == EXPECTED_MOVES_AFTER
-            and self.pp_after == EXPECTED_PP_AFTER
+            and self.initial_money >= 0
+            and self.final_money == self.initial_money
+            and (self.moves_before, self.moves_after, self.pp_after)
+            in {
+                (EXPECTED_MOVES_BEFORE, EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+                (NATURAL_MOVES_BEFORE, NATURAL_MOVES_AFTER, NATURAL_PP_AFTER),
+                (PRE_SURF_MOVES_BEFORE, PRE_SURF_MOVES_AFTER, PRE_SURF_PP_AFTER),
+            }
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp == self.party_max_hp == (124, 52, 37)
-            and self.party_status == (0, 0, 0)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -180,17 +191,6 @@ class StrengthChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_strength_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -200,7 +200,7 @@ def run_strength_chapter(
     progress: ProgressSink | None = None,
 ) -> StrengthChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[StrengthCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Koga boundary")
@@ -208,7 +208,8 @@ def run_strength_chapter(
     initial_money = _money(emulator)
     moves_before = tuple(initial.first_party_moves or ())
     if (
-        moves_before != EXPECTED_MOVES_BEFORE
+        moves_before
+        not in {EXPECTED_MOVES_BEFORE, NATURAL_MOVES_BEFORE, PRE_SURF_MOVES_BEFORE}
         or ItemId.GOLD_TEETH not in _bag(emulator)
         or ItemId.HM04_STRENGTH in _bag(emulator)
         or _event(emulator, EventFlag.GOT_HM04)
@@ -248,7 +249,19 @@ def run_strength_chapter(
     for _ in range(6):
         _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
 
-    _teach_strength(actions, reader, emulator, timing)
+    expected_moves_after, expected_pp_after = {
+        EXPECTED_MOVES_BEFORE: (EXPECTED_MOVES_AFTER, EXPECTED_PP_AFTER),
+        NATURAL_MOVES_BEFORE: (NATURAL_MOVES_AFTER, NATURAL_PP_AFTER),
+        PRE_SURF_MOVES_BEFORE: (PRE_SURF_MOVES_AFTER, PRE_SURF_PP_AFTER),
+    }[moves_before]
+    _teach_strength(
+        actions,
+        reader,
+        emulator,
+        timing,
+        expected_moves_after=expected_moves_after,
+        expected_pp_after=expected_pp_after,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "strength", "Taught Strength")
 
     _move(actions, reader, WARDEN_TO_HOUSE, timing, "Warden house exit route")
@@ -256,7 +269,7 @@ def run_strength_chapter(
     _require(reader.read(), MapId.FUCHSIA_POKECENTER, (3, 7), "Center entrance")
     _checkpoint(records, progress, emulator, reader.read(), "center_return", "Returned to Center")
     _move(actions, reader, CENTER_TO_NURSE, timing, "Fuchsia nurse")
-    _heal(actions, reader, emulator, timing)
+    _heal(actions, reader, emulator, timing, expected_pp=expected_pp_after)
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Strength boundary")
     _checkpoint(records, progress, emulator, final, "strength_stable", "Stable healed boundary")
@@ -283,15 +296,20 @@ def run_strength_chapter(
         not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise StrengthChapterError("Strength chapter failed its public evidence contract.")
+        raise StrengthChapterError(
+            f"Strength chapter failed its public evidence contract: {report.public_dict()!r}."
+        )
     return report
 
 
 def _teach_strength(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
+    *,
+    expected_moves_after: tuple[int, ...],
+    expected_pp_after: tuple[int, ...],
 ) -> None:
     actions.execute(MacroAction(MacroActionKind.OPEN_MENU))
     _wait(actions, timing.wait_frames)
@@ -318,8 +336,8 @@ def _teach_strength(
     for _ in range(timing.menu_pulses):
         raw = reader.read()
         if (
-            raw.first_party_moves == EXPECTED_MOVES_AFTER
-            and raw.first_party_pp == EXPECTED_PP_AFTER
+            raw.first_party_moves == expected_moves_after
+            and raw.first_party_pp == expected_pp_after
             and ItemId.HM04_STRENGTH in _bag(emulator)
         ):
             break
@@ -331,7 +349,7 @@ def _teach_strength(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: StrengthTiming,
@@ -355,23 +373,25 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
-        if state.party_species_ids != TOWER_FINAL_PARTY:
+        if not party_core_intact(state.party_species_ids):
             raise StrengthChapterError(f"{label} changed the qualified party.")
 
 
 def _heal(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: StrengthTiming,
+    *,
+    expected_pp: tuple[int, ...],
 ) -> None:
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     for _ in range(timing.heal_pulses):
         _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
-            and reader.read().first_party_pp == EXPECTED_PP_AFTER
+            and all(status == 0 for status in _party_status(emulator))
+            and reader.read().first_party_pp == expected_pp
         ):
             for _ in range(6):
                 _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
@@ -380,7 +400,7 @@ def _heal(
 
 
 def _select_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: StrengthTiming,
@@ -395,7 +415,7 @@ def _select_cursor(
 
 
 def _select_bag_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     item: ItemId,
     timing: StrengthTiming,
@@ -447,7 +467,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise StrengthChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "
@@ -476,12 +496,12 @@ def _checkpoint(
         )
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,

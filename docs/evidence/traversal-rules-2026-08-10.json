@@ -1,0 +1,948 @@
+{
+  "schema": "pokemon-gen1-traversal-rules-v1",
+  "recorded_on": "2026-08-10",
+  "scope": "Complete cartridge tables for directed ledges, land/water tile-pair restrictions and Cut block swaps; initial boulder object events across all reachable maps; and the complete static land graph.",
+  "interpretation": "Only walk, directed ledge hops and elevation-pair restrictions are executable static edges. Cut mutates blocks, Strength moves objects, Surf changes movement mode, and story scripts change access; those inventories are evidence for future state-space adapters, not permission to traverse them now.",
+  "pret_pokered_commit": "1e96034092686d006e863cace09e87273051a3d8",
+  "static_rule_tables_agree": true,
+  "initial_boulder_events_agree": true,
+  "static_local_graphs_agree": true,
+  "rules": {
+    "ledges": [
+      {
+        "direction": "down",
+        "standing_tile": 44,
+        "ledge_tile": 55
+      },
+      {
+        "direction": "down",
+        "standing_tile": 57,
+        "ledge_tile": 54
+      },
+      {
+        "direction": "down",
+        "standing_tile": 57,
+        "ledge_tile": 55
+      },
+      {
+        "direction": "left",
+        "standing_tile": 44,
+        "ledge_tile": 39
+      },
+      {
+        "direction": "left",
+        "standing_tile": 57,
+        "ledge_tile": 39
+      },
+      {
+        "direction": "right",
+        "standing_tile": 44,
+        "ledge_tile": 13
+      },
+      {
+        "direction": "right",
+        "standing_tile": 44,
+        "ledge_tile": 29
+      },
+      {
+        "direction": "right",
+        "standing_tile": 57,
+        "ledge_tile": 13
+      }
+    ],
+    "land_pair_restrictions": [
+      {
+        "tileset": 17,
+        "tiles": [
+          32,
+          5
+        ]
+      },
+      {
+        "tileset": 17,
+        "tiles": [
+          65,
+          5
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          48,
+          46
+        ]
+      },
+      {
+        "tileset": 17,
+        "tiles": [
+          42,
+          5
+        ]
+      },
+      {
+        "tileset": 17,
+        "tiles": [
+          5,
+          33
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          82,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          85,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          86,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          32,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          94,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          95,
+          46
+        ]
+      }
+    ],
+    "water_pair_restrictions": [
+      {
+        "tileset": 3,
+        "tiles": [
+          20,
+          46
+        ]
+      },
+      {
+        "tileset": 3,
+        "tiles": [
+          72,
+          46
+        ]
+      },
+      {
+        "tileset": 17,
+        "tiles": [
+          20,
+          5
+        ]
+      }
+    ],
+    "cut_block_swaps": [
+      {
+        "before": 50,
+        "after": 109
+      },
+      {
+        "before": 51,
+        "after": 108
+      },
+      {
+        "before": 52,
+        "after": 111
+      },
+      {
+        "before": 53,
+        "after": 76
+      },
+      {
+        "before": 96,
+        "after": 110
+      },
+      {
+        "before": 11,
+        "after": 10
+      },
+      {
+        "before": 60,
+        "after": 53
+      },
+      {
+        "before": 63,
+        "after": 53
+      },
+      {
+        "before": 61,
+        "after": 54
+      }
+    ]
+  },
+  "by_title": {
+    "red": {
+      "static_local_graph": {
+        "coordinate_nodes": 48216,
+        "directed_edges": 154653,
+        "controller_inputs": {
+          "down": 38071,
+          "left": 39607,
+          "right": 39604,
+          "up": 37371
+        },
+        "transition_kinds": {
+          "ledge": 749,
+          "walk": 153904
+        },
+        "pair_restricted_directed_transitions": 1152,
+        "maps_with_pair_restrictions": [
+          {
+            "map_id": 59,
+            "map_name": "MT_MOON_1F",
+            "directed_transitions": 262
+          },
+          {
+            "map_id": 61,
+            "map_name": "MT_MOON_B2F",
+            "directed_transitions": 24
+          },
+          {
+            "map_id": 82,
+            "map_name": "ROCK_TUNNEL_1F",
+            "directed_transitions": 214
+          },
+          {
+            "map_id": 108,
+            "map_name": "VICTORY_ROAD_1F",
+            "directed_transitions": 16
+          },
+          {
+            "map_id": 159,
+            "map_name": null,
+            "directed_transitions": 14
+          },
+          {
+            "map_id": 160,
+            "map_name": null,
+            "directed_transitions": 38
+          },
+          {
+            "map_id": 161,
+            "map_name": null,
+            "directed_transitions": 8
+          },
+          {
+            "map_id": 194,
+            "map_name": "VICTORY_ROAD_2F",
+            "directed_transitions": 34
+          },
+          {
+            "map_id": 197,
+            "map_name": "DIGLETTS_CAVE",
+            "directed_transitions": 60
+          },
+          {
+            "map_id": 198,
+            "map_name": "VICTORY_ROAD_3F",
+            "directed_transitions": 32
+          },
+          {
+            "map_id": 217,
+            "map_name": "SAFARI_ZONE_EAST",
+            "directed_transitions": 30
+          },
+          {
+            "map_id": 218,
+            "map_name": "SAFARI_ZONE_NORTH",
+            "directed_transitions": 48
+          },
+          {
+            "map_id": 219,
+            "map_name": "SAFARI_ZONE_WEST",
+            "directed_transitions": 40
+          },
+          {
+            "map_id": 227,
+            "map_name": null,
+            "directed_transitions": 28
+          },
+          {
+            "map_id": 228,
+            "map_name": null,
+            "directed_transitions": 16
+          },
+          {
+            "map_id": 232,
+            "map_name": "ROCK_TUNNEL_B1F",
+            "directed_transitions": 288
+          }
+        ],
+        "maps_with_ledge_transitions": [
+          {
+            "map_id": 1,
+            "map_name": "VIRIDIAN_CITY",
+            "directed_transitions": 36
+          },
+          {
+            "map_id": 2,
+            "map_name": "PEWTER_CITY",
+            "directed_transitions": 27
+          },
+          {
+            "map_id": 3,
+            "map_name": "CERULEAN_CITY",
+            "directed_transitions": 19
+          },
+          {
+            "map_id": 6,
+            "map_name": "CELADON_CITY",
+            "directed_transitions": 15
+          },
+          {
+            "map_id": 7,
+            "map_name": "FUCHSIA_CITY",
+            "directed_transitions": 22
+          },
+          {
+            "map_id": 12,
+            "map_name": "ROUTE_1",
+            "directed_transitions": 42
+          },
+          {
+            "map_id": 13,
+            "map_name": "ROUTE_2",
+            "directed_transitions": 52
+          },
+          {
+            "map_id": 14,
+            "map_name": "ROUTE_3",
+            "directed_transitions": 36
+          },
+          {
+            "map_id": 15,
+            "map_name": "ROUTE_4",
+            "directed_transitions": 167
+          },
+          {
+            "map_id": 16,
+            "map_name": "ROUTE_5",
+            "directed_transitions": 40
+          },
+          {
+            "map_id": 17,
+            "map_name": "ROUTE_6",
+            "directed_transitions": 27
+          },
+          {
+            "map_id": 18,
+            "map_name": "ROUTE_7",
+            "directed_transitions": 14
+          },
+          {
+            "map_id": 19,
+            "map_name": "ROUTE_8",
+            "directed_transitions": 8
+          },
+          {
+            "map_id": 20,
+            "map_name": "ROUTE_9",
+            "directed_transitions": 75
+          },
+          {
+            "map_id": 21,
+            "map_name": "ROUTE_10",
+            "directed_transitions": 20
+          },
+          {
+            "map_id": 25,
+            "map_name": "ROUTE_14",
+            "directed_transitions": 6
+          },
+          {
+            "map_id": 26,
+            "map_name": "ROUTE_15",
+            "directed_transitions": 44
+          },
+          {
+            "map_id": 30,
+            "map_name": null,
+            "directed_transitions": 18
+          },
+          {
+            "map_id": 33,
+            "map_name": "ROUTE_22",
+            "directed_transitions": 56
+          },
+          {
+            "map_id": 35,
+            "map_name": "ROUTE_24",
+            "directed_transitions": 17
+          },
+          {
+            "map_id": 36,
+            "map_name": "ROUTE_25",
+            "directed_transitions": 8
+          }
+        ]
+      },
+      "boulders": {
+        "total": 25,
+        "strength_enabled": 21,
+        "fixed_or_already_dropped": 4,
+        "by_map": [
+          {
+            "map_id": 108,
+            "map_name": "VICTORY_ROAD_1F",
+            "count": 3,
+            "initial_coordinates_yx": [
+              [
+                15,
+                5
+              ],
+              [
+                2,
+                14
+              ],
+              [
+                10,
+                2
+              ]
+            ]
+          },
+          {
+            "map_id": 155,
+            "map_name": "WARDENS_HOUSE",
+            "count": 1,
+            "initial_coordinates_yx": [
+              [
+                4,
+                8
+              ]
+            ]
+          },
+          {
+            "map_id": 159,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                6,
+                17
+              ],
+              [
+                6,
+                22
+              ]
+            ]
+          },
+          {
+            "map_id": 160,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                6,
+                18
+              ],
+              [
+                6,
+                23
+              ]
+            ]
+          },
+          {
+            "map_id": 161,
+            "map_name": null,
+            "count": 6,
+            "initial_coordinates_yx": [
+              [
+                14,
+                5
+              ],
+              [
+                15,
+                3
+              ],
+              [
+                14,
+                8
+              ],
+              [
+                14,
+                9
+              ],
+              [
+                6,
+                18
+              ],
+              [
+                6,
+                19
+              ]
+            ]
+          },
+          {
+            "map_id": 162,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                15,
+                4
+              ],
+              [
+                15,
+                5
+              ]
+            ]
+          },
+          {
+            "map_id": 192,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                10,
+                18
+              ],
+              [
+                7,
+                26
+              ]
+            ]
+          },
+          {
+            "map_id": 194,
+            "map_name": "VICTORY_ROAD_2F",
+            "count": 3,
+            "initial_coordinates_yx": [
+              [
+                14,
+                4
+              ],
+              [
+                5,
+                5
+              ],
+              [
+                16,
+                23
+              ]
+            ]
+          },
+          {
+            "map_id": 198,
+            "map_name": "VICTORY_ROAD_3F",
+            "count": 4,
+            "initial_coordinates_yx": [
+              [
+                3,
+                22
+              ],
+              [
+                12,
+                13
+              ],
+              [
+                10,
+                24
+              ],
+              [
+                15,
+                22
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "blue": {
+      "static_local_graph": {
+        "coordinate_nodes": 48216,
+        "directed_edges": 154653,
+        "controller_inputs": {
+          "down": 38071,
+          "left": 39607,
+          "right": 39604,
+          "up": 37371
+        },
+        "transition_kinds": {
+          "ledge": 749,
+          "walk": 153904
+        },
+        "pair_restricted_directed_transitions": 1152,
+        "maps_with_pair_restrictions": [
+          {
+            "map_id": 59,
+            "map_name": "MT_MOON_1F",
+            "directed_transitions": 262
+          },
+          {
+            "map_id": 61,
+            "map_name": "MT_MOON_B2F",
+            "directed_transitions": 24
+          },
+          {
+            "map_id": 82,
+            "map_name": "ROCK_TUNNEL_1F",
+            "directed_transitions": 214
+          },
+          {
+            "map_id": 108,
+            "map_name": "VICTORY_ROAD_1F",
+            "directed_transitions": 16
+          },
+          {
+            "map_id": 159,
+            "map_name": null,
+            "directed_transitions": 14
+          },
+          {
+            "map_id": 160,
+            "map_name": null,
+            "directed_transitions": 38
+          },
+          {
+            "map_id": 161,
+            "map_name": null,
+            "directed_transitions": 8
+          },
+          {
+            "map_id": 194,
+            "map_name": "VICTORY_ROAD_2F",
+            "directed_transitions": 34
+          },
+          {
+            "map_id": 197,
+            "map_name": "DIGLETTS_CAVE",
+            "directed_transitions": 60
+          },
+          {
+            "map_id": 198,
+            "map_name": "VICTORY_ROAD_3F",
+            "directed_transitions": 32
+          },
+          {
+            "map_id": 217,
+            "map_name": "SAFARI_ZONE_EAST",
+            "directed_transitions": 30
+          },
+          {
+            "map_id": 218,
+            "map_name": "SAFARI_ZONE_NORTH",
+            "directed_transitions": 48
+          },
+          {
+            "map_id": 219,
+            "map_name": "SAFARI_ZONE_WEST",
+            "directed_transitions": 40
+          },
+          {
+            "map_id": 227,
+            "map_name": null,
+            "directed_transitions": 28
+          },
+          {
+            "map_id": 228,
+            "map_name": null,
+            "directed_transitions": 16
+          },
+          {
+            "map_id": 232,
+            "map_name": "ROCK_TUNNEL_B1F",
+            "directed_transitions": 288
+          }
+        ],
+        "maps_with_ledge_transitions": [
+          {
+            "map_id": 1,
+            "map_name": "VIRIDIAN_CITY",
+            "directed_transitions": 36
+          },
+          {
+            "map_id": 2,
+            "map_name": "PEWTER_CITY",
+            "directed_transitions": 27
+          },
+          {
+            "map_id": 3,
+            "map_name": "CERULEAN_CITY",
+            "directed_transitions": 19
+          },
+          {
+            "map_id": 6,
+            "map_name": "CELADON_CITY",
+            "directed_transitions": 15
+          },
+          {
+            "map_id": 7,
+            "map_name": "FUCHSIA_CITY",
+            "directed_transitions": 22
+          },
+          {
+            "map_id": 12,
+            "map_name": "ROUTE_1",
+            "directed_transitions": 42
+          },
+          {
+            "map_id": 13,
+            "map_name": "ROUTE_2",
+            "directed_transitions": 52
+          },
+          {
+            "map_id": 14,
+            "map_name": "ROUTE_3",
+            "directed_transitions": 36
+          },
+          {
+            "map_id": 15,
+            "map_name": "ROUTE_4",
+            "directed_transitions": 167
+          },
+          {
+            "map_id": 16,
+            "map_name": "ROUTE_5",
+            "directed_transitions": 40
+          },
+          {
+            "map_id": 17,
+            "map_name": "ROUTE_6",
+            "directed_transitions": 27
+          },
+          {
+            "map_id": 18,
+            "map_name": "ROUTE_7",
+            "directed_transitions": 14
+          },
+          {
+            "map_id": 19,
+            "map_name": "ROUTE_8",
+            "directed_transitions": 8
+          },
+          {
+            "map_id": 20,
+            "map_name": "ROUTE_9",
+            "directed_transitions": 75
+          },
+          {
+            "map_id": 21,
+            "map_name": "ROUTE_10",
+            "directed_transitions": 20
+          },
+          {
+            "map_id": 25,
+            "map_name": "ROUTE_14",
+            "directed_transitions": 6
+          },
+          {
+            "map_id": 26,
+            "map_name": "ROUTE_15",
+            "directed_transitions": 44
+          },
+          {
+            "map_id": 30,
+            "map_name": null,
+            "directed_transitions": 18
+          },
+          {
+            "map_id": 33,
+            "map_name": "ROUTE_22",
+            "directed_transitions": 56
+          },
+          {
+            "map_id": 35,
+            "map_name": "ROUTE_24",
+            "directed_transitions": 17
+          },
+          {
+            "map_id": 36,
+            "map_name": "ROUTE_25",
+            "directed_transitions": 8
+          }
+        ]
+      },
+      "boulders": {
+        "total": 25,
+        "strength_enabled": 21,
+        "fixed_or_already_dropped": 4,
+        "by_map": [
+          {
+            "map_id": 108,
+            "map_name": "VICTORY_ROAD_1F",
+            "count": 3,
+            "initial_coordinates_yx": [
+              [
+                15,
+                5
+              ],
+              [
+                2,
+                14
+              ],
+              [
+                10,
+                2
+              ]
+            ]
+          },
+          {
+            "map_id": 155,
+            "map_name": "WARDENS_HOUSE",
+            "count": 1,
+            "initial_coordinates_yx": [
+              [
+                4,
+                8
+              ]
+            ]
+          },
+          {
+            "map_id": 159,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                6,
+                17
+              ],
+              [
+                6,
+                22
+              ]
+            ]
+          },
+          {
+            "map_id": 160,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                6,
+                18
+              ],
+              [
+                6,
+                23
+              ]
+            ]
+          },
+          {
+            "map_id": 161,
+            "map_name": null,
+            "count": 6,
+            "initial_coordinates_yx": [
+              [
+                14,
+                5
+              ],
+              [
+                15,
+                3
+              ],
+              [
+                14,
+                8
+              ],
+              [
+                14,
+                9
+              ],
+              [
+                6,
+                18
+              ],
+              [
+                6,
+                19
+              ]
+            ]
+          },
+          {
+            "map_id": 162,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                15,
+                4
+              ],
+              [
+                15,
+                5
+              ]
+            ]
+          },
+          {
+            "map_id": 192,
+            "map_name": null,
+            "count": 2,
+            "initial_coordinates_yx": [
+              [
+                10,
+                18
+              ],
+              [
+                7,
+                26
+              ]
+            ]
+          },
+          {
+            "map_id": 194,
+            "map_name": "VICTORY_ROAD_2F",
+            "count": 3,
+            "initial_coordinates_yx": [
+              [
+                14,
+                4
+              ],
+              [
+                5,
+                5
+              ],
+              [
+                16,
+                23
+              ]
+            ]
+          },
+          {
+            "map_id": 198,
+            "map_name": "VICTORY_ROAD_3F",
+            "count": 4,
+            "initial_coordinates_yx": [
+              [
+                3,
+                22
+              ],
+              [
+                12,
+                13
+              ],
+              [
+                10,
+                24
+              ],
+              [
+                15,
+                22
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

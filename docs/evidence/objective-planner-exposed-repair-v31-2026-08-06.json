@@ -1,0 +1,42 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v31",
+  "source_commit": "cee817efa11276abd131be4ac1eecb3edf853f78",
+  "source_bundle_sha256": "de5c54268a14f8adac52dd03b741bff7e22ddfaaf25efe1f0304e11ec1671ba3",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1680001,
+    "battle_start_schedule_sha256": "303436bfff1ad0fd0c969505bf063e4b67155979e775fb9e14a39c878c1f4694",
+    "private_log_sha256": "880447fbab308a010ed50aed45a87094853716b4b9edecbb32d040c30d738102",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 90247,
+    "party_size": 6,
+    "surge_dig_attacks": 5,
+    "surge_wrong_move_count": 0,
+    "champion_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
+  },
+  "repairs_verified": [
+    "Lt. Surge uses the shared semantic battle runtime instead of a chapter-local cursor and PP loop",
+    "Every Surge turn binds the exact Dig move identity to the live battler move menu and PP decrement",
+    "Bounded Super Potion recovery can pause and resume the shared controller without consuming the held-out trainer schedule",
+    "The exposed transition schedule defeats all three Surge opponents using only Dig and preserves the exact reward evidence",
+    "The same run completes all downstream objectives with a balanced six-member party, Champion, and Hall of Fame evidence"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "active_lane": "repeatable-goal-manager-development-restart-v1",
+  "campaign_retirement": {
+    "campaign_plan_sha256": "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14",
+    "failed_root_closed_account_wide": true,
+    "infrastructure_invalid_claims": 1,
+    "retired_unexecuted_trials": 11,
+    "retirement_reason": "predecision_infrastructure_failure",
+    "retirement_schema": "pokemon.red.repeatable-goal-manager-trial-retirement.v1",
+    "retirement_status": "retired_unexecuted",
+    "trial_count": 12,
+    "trial_zero_retry_allowed": false
+  },
+  "claim_boundary": {
+    "supported": "The first frozen Red development campaign encountered one deterministic execution-interface invalid before any model prediction, controller action, or verified outcome. The exact failed root and every remaining unexecuted campaign identity are durably retired, and the narrow read-only proxy defect is repaired on a published green source.",
+    "unsupported": "This is not a gameplay failure, learner outcome, development episode, fit, comparison, authority promotion, Red completion result, living-Pokedex result, sealed evaluation, or Crystal transfer result. It does not authorize retry of the failed root or any identity from the retired campaign."
+  },
+  "failure": {
+    "artifact_manifest_file_sha256": "549c7c4f46509a7af731de6f0a39863713a14f6d639530dcf87df227173c407b",
+    "durable_terminal_count": 1,
+    "failure_stage": "development_runtime",
+    "recorded_decisions": 0,
+    "recorded_outcomes": 0,
+    "trial_index": 0
+  },
+  "repair": {
+    "ci_conclusion": "success",
+    "ci_run_attempt": 1,
+    "ci_run_id": 32110273126,
+    "description": "Both frame-budget controller proxies now explicitly preserve the emulator's validated read-only cartridge-RAM port while leaving action and frame enforcement unchanged.",
+    "full_suite_passed": 4111,
+    "runner_sha256": "ee1d9c311f9947b516dbf12b06956be8dd1910b9597e33671d47b83ec2811206",
+    "source_bundle_sha256": "f561ca7efd1d5a383332e9f9cd358f041e83231dc0faa4d6d9bd72c3b3587efb",
+    "source_commit": "2c50cde0b248d17c7e2e25d34057908a4f126308"
+  },
+  "review": {
+    "antigravity": "Agreed the repair is correct but preferred preserving the original denominator. That recommendation was rejected because the frozen original executable retains the deterministic pre-observation defect and would knowingly consume the eleven remaining identities without a model decision.",
+    "claude": "GO after conservative root and campaign retirement; no remaining static blocker in the repaired observation seam.",
+    "codex_adjudication": "A prospective replacement campaign is permitted only because the invalid preceded prediction, action, and outcome. It must use a different root, a newly frozen denominator, and the published repaired source."
+  },
+  "schema": "pokemon.red.repeatable-goal-manager-development-infrastructure-invalid.v1",
+  "status": "old_campaign_durably_retired_repair_published",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "controller_actions": 0,
+    "development_episode_attempts_added": 0,
+    "legacy_model_fits_added": 0,
+    "legacy_outcome_questions_added": 0,
+    "legacy_unseen_comparisons_added": 0,
+    "model_predictions": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "transfer_results_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  }
+}

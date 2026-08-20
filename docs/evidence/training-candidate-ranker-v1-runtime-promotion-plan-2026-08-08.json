@@ -1,0 +1,86 @@
+{
+  "schema": "pokemon-training-candidate-runtime-promotion-plan-v1",
+  "status": "preregistered_before_shadow_or_causal_control",
+  "offline_promotion_plan_sha256": "7176a2e8685439f2e3936613709eb93e34331ecd229624fbb5a31c2a9db4b40a",
+  "required_offline_gate": {
+    "offline_candidate_eligible": true,
+    "shadow_may_start": true
+  },
+  "lineages": {
+    "shadow": {
+      "lineage_id": "training-candidate-v1-shadow-01",
+      "root_sha256": "0360a80ff93f9a3f45220671004d37192a92c5a30b2cb38fdc823a394ed9cbb8"
+    },
+    "causal_control": {
+      "lineage_id": "training-candidate-v1-control-01",
+      "root_sha256": "fccacf52b335d449b405588518d1c2313e38bf904a69a112a11c7139b991648d"
+    }
+  },
+  "claim_boundary": {
+    "learned_authority": [
+      "select an ephemeral below-floor trainee candidate",
+      "select an ephemeral safe measured venue candidate"
+    ],
+    "fixed_referee": [
+      "candidate eligibility and feature projection",
+      "hard health, status, PP, encounter, budget, and terminal-readiness checks"
+    ],
+    "fixed_mechanics": [
+      "navigation",
+      "party-menu execution",
+      "healing",
+      "battle execution"
+    ],
+    "prohibited_claims": [
+      "end-to-end autonomous Pokemon play",
+      "learned navigation or battle tactics",
+      "cross-title transfer"
+    ]
+  },
+  "shadow_gates": {
+    "required_status": "ok",
+    "model_artifact_authenticated": true,
+    "model_had_execution_authority": false,
+    "required_choice_kinds": [
+      "trainee",
+      "venue"
+    ],
+    "minimum_genuine_multi_candidate_decisions": 100,
+    "minimum_genuine_accuracy": 0.9,
+    "minimum_genuine_per_kind_accuracy": 0.85,
+    "maximum_faints": 0,
+    "required_final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ]
+  },
+  "causal_gates": {
+    "required_status": "ok",
+    "model_artifact_authenticated": true,
+    "authority_choice_kinds": [
+      "trainee",
+      "venue"
+    ],
+    "teacher_fallback_on_model_disagreement": false,
+    "minimum_controlled_genuine_decisions": 100,
+    "minimum_model_teacher_disagreements": 1,
+    "maximum_candidate_decisions": 125000,
+    "maximum_battles": 1900,
+    "maximum_healing_trips": 1150,
+    "maximum_faints": 0,
+    "required_final_party_levels": [
+      55,
+      55,
+      55,
+      55,
+      55,
+      55
+    ]
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

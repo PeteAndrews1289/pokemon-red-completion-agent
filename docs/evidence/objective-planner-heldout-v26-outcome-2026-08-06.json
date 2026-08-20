@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v26",
+  "status": "failed",
+  "source_commit": "ef5e6d153e679c19afaeee6b5630ce0b2584cacf",
+  "source_bundle_sha256": "788e9b8e4bef5a0c415dae5551e00400e719fa99260164f99b3aac8ba0457c4e",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v26-validation-01",
+      "harness_seed": 1570001,
+      "battle_start_schedule_sha256": "744be1f8dd5f2529ecafab0454e266ccb94cd24c7d1a4773ab64793d7362fd34",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 74,
+      "teacher_objective_fallbacks": 0,
+      "minimum_objective_confidence": 0.7983486180511433,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "human_input": false,
+      "save_restore_used": false,
+      "actions_executed": 91062,
+      "private_log_sha256": "c9714eada708754e9b77ebabe8adadf102ae83c649aadc7c5b7eeb12964359d3"
+    },
+    {
+      "run_id": "red-objective-v26-validation-02",
+      "harness_seed": 1570002,
+      "battle_start_schedule_sha256": "f9f21b64a460c225f24170c1be3d900f4306fd3bcfe08760620576f7ea25aae3",
+      "status": "failed",
+      "qualified_checkpoints": 102,
+      "failure": "The Mart quantity selector registered seven of eight requested Super Potions. Money remained sufficient, but the purchase helper advanced through dialogue while waiting for the fixed target instead of observing and topping up the partial bag delta.",
+      "private_log_sha256": "12bff98916cf897995e4617159314d7787ef1eaf84e5dae6c5778825ee9b64ab"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The purchase policy proved the requested quantity before confirmation but treated the resulting bag target as atomic. A legal missed quantity input produced a positive partial purchase, after which blind confirmation pulses entered the next item instead of replanning from the observed inventory.",
+  "repair_direction": "After every positive purchase delta, settle back to the priced list, recompute the exact remaining quantity from the live bag, and retry within a fixed bound. Retire the unopened v26 remainder and preregister disjoint fresh cohorts."
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "pokemon-red-party-development-outcome-evidence-v1",
+  "status": "complete_rejected_accounting_ambiguity",
+  "experiment_id": "red-party-development-evolution-venue-v1",
+  "source": {
+    "git_commit": "71f36bffdb1b76c775729ac81a973086c23afed0",
+    "exact_commit_ci_run": 31857086445,
+    "exact_commit_ci_conclusion": "success",
+    "source_bundle_sha256": "799e8864a3e440bd4a503b01e7b9618fd6d427194afa797969e7d2eec451fe30"
+  },
+  "prospective_bindings": {
+    "public_plan_sha256": "4b999a333eb8e251405437fdd6d102090d3039ab64579c2f9d3bbb3f5e6ea79f",
+    "ordered_policy_input_sha256": "6fc3292ad8eca4eeba757991e47e1eb276c1195f424be44909f8ef461e8264e6",
+    "public_catalog_sha256": "30ac6fc776b809b2fed99cf3722f00a4816230ac8d1fe5a1ed43362129afbd2e",
+    "outcome_example_sha256": "2dcf874b6cf7ef62d58ecc9fd1debf735a20a06f047328f309b8cf2ea029d42e",
+    "candidate_count": 2,
+    "runner_executions": 1,
+    "candidate_retries": 0,
+    "candidate_substitutions": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "4348fd2bc9b20772f9607ea6242a53ed56656843c1a68c25671bc770ce484a64",
+    "capture_envelope_sha256": "825e270d8974afabd5650b1dee618a975baeffa965124de3eff041d6dca8a4f3",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false
+  },
+  "outcome_collection": {
+    "objective_id": "party-development.progress-efficiency.v1",
+    "objective_sha256": "b6544effa3c1849b4e03111a18b47f4435c9150e0b534a7501fbac70143dcbb6",
+    "candidate_outcomes": 2,
+    "runner_reported_fully_measured": true,
+    "runner_reported_learner_update_eligible": true,
+    "publication_learner_update_eligible": false,
+    "runner_best_candidate_indices": [1],
+    "runner_target_distribution": [0.0, 1.0],
+    "trials": [
+      {
+        "candidate_index": 0,
+        "candidate_kind": "lower_encounter_band_9_15",
+        "evolution_completed": true,
+        "initial_target_level": 22,
+        "final_target_level": 26,
+        "target_experience_gained": 6921,
+        "target_experience_per_1000_frames": 5.168968,
+        "total_experience_gained": 13842,
+        "total_experience_per_1000_frames": 10.337936,
+        "target_experience_per_battle": 67.194175,
+        "battles_completed": 103,
+        "steps_taken": 2819,
+        "total_counted_center_routes": 13,
+        "battles_per_counted_center_route": 7.923077,
+        "rotations_executed": 244,
+        "controller_actions": 33565,
+        "frames_executed": 1338952,
+        "faints": 0
+      },
+      {
+        "candidate_index": 1,
+        "candidate_kind": "higher_encounter_band_15_21",
+        "evolution_completed": true,
+        "initial_target_level": 22,
+        "final_target_level": 26,
+        "target_experience_gained": 6945,
+        "target_experience_per_1000_frames": 5.857453,
+        "total_experience_gained": 13890,
+        "total_experience_per_1000_frames": 11.714905,
+        "target_experience_per_battle": 102.132353,
+        "battles_completed": 68,
+        "steps_taken": 1046,
+        "total_counted_center_routes": 42,
+        "battles_per_counted_center_route": 1.619048,
+        "rotations_executed": 153,
+        "controller_actions": 20658,
+        "frames_executed": 1185669,
+        "faints": 0
+      }
+    ]
+  },
+  "recovery_accounting": {
+    "configured_max_healing_trips": 40,
+    "observed_total_counted_center_routes": [13, 42],
+    "phase_breakdown_retained": false,
+    "required_recovery_trips_known": false,
+    "venue_transition_trips_known": false,
+    "cleanup_trips_known": false,
+    "policy_conformance_proven": false,
+    "training_target_rejected": true,
+    "reason": "The aggregate counter includes recovery, venue-positioning and final-cleanup calls, but the retained journal cannot separate them. Source also lacked a healing-budget guard on the venue-transition branch. The 42 total therefore cannot prove conformance to the configured 40-trip bound, and no post-hoc decomposition is accepted."
+  },
+  "artifact": {
+    "artifact_id": "red-party-outcome-71f36bffdb1b-4348fd2bc9b2",
+    "manifest_sha256": "4b30f664f9a93c5838e71b7e4fcbaf78607c1004130ef163762e6230f4ef871d",
+    "status": "complete",
+    "total_records": 4,
+    "total_bytes": 6952,
+    "catalog_stream_sha256": "5f2d0f6744d1e59c01abca2840ca5aee23326305c127186d3cbb45fb45540bcb",
+    "trial_stream_sha256": "e7d371e0c1a21af90edf93a90a9d8d4cdde60ac03c3290751f6eeee102a02c13",
+    "outcome_stream_sha256": "1e1410714aec01b95cc132e6acc87443640993b1d9f47b39e1cf9d4ab660ecd8"
+  },
+  "decision": {
+    "real_party_development_execution_completed": true,
+    "same_trainee_comparison_executed": true,
+    "real_party_development_training_target_validated": false,
+    "training_target_accepted": false,
+    "model_fit": false,
+    "party_policy_generalization_demonstrated": false,
+    "authority_promoted": false,
+    "descriptive_result": "Both identical-state trials evolved the same level-22 trainee at level 26 with zero faints. The runner preferred candidate 1 because it earned 5.857453 target experience per 1,000 frames versus 5.168968 and used 153,283 fewer frames.",
+    "reason": "The higher-band trial reported 42 aggregate Center routes against a configured 40-trip policy, while the frozen journal retained no phase breakdown and the venue-transition branch had no bound check. Outcome execution is real, but policy conformance is not proven, so the preference cannot enter model training.",
+    "limit": "This result remains useful descriptive and failure evidence. It is not a learner target, a validated party adapter, a learned policy, or authority evidence.",
+    "next": "Retire this experiment identity without retry. Add phase-separated Center counters and bound every in-loop Center call, then freeze a new independent preassigned party context before observing another outcome."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

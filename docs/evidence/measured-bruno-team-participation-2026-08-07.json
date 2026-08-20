@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-red-league-team-participation-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "source_commit": "14a7c0b",
+  "regime": "clean-power deterministic-teacher run; one uninterrupted process; no save-state restore; no validation or sealed evaluation seed opened",
+  "completion": {
+    "status": "ok",
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "qualified_through": "enter_hall_of_fame",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 540273
+  },
+  "whole_league": {
+    "turns_per_member": [51, 0, 0, 0, 0, 1],
+    "observed_turns": 52,
+    "unobserved_turns": 0,
+    "participating_members": 2,
+    "busiest_member_turns": 51,
+    "busiest_member_share": 0.9807692307692307
+  },
+  "bruno": {
+    "turns_per_member": [5, 0, 0, 0, 0, 1],
+    "observed_turns": 6,
+    "unobserved_turns": 0,
+    "participating_members": 2,
+    "busiest_member_turns": 5,
+    "busiest_member_share": 0.8333333333333334,
+    "team_switches": 2,
+    "lesson": {
+      "opponent": "Onix",
+      "opponent_species_id": 34,
+      "participant": "Hitmonlee",
+      "participant_species_id": 43,
+      "target_resolution": "living party member selected by species rather than fixed slot",
+      "move": "Jump Kick",
+      "move_id": 26,
+      "move_slot": 4,
+      "lead_restored_after_participant_attack": true
+    },
+    "post_battle_recovery": {
+      "target": "Hitmonlee",
+      "hyper_potions_used": 1,
+      "full_restores_used": 0,
+      "target_selected_from_observed_party_damage": true
+    }
+  },
+  "comparison_to_single_carry_baseline": {
+    "baseline_source_commit": "d56eee7",
+    "baseline_turns_per_member": [49, 0, 0, 0, 0, 0],
+    "baseline_participating_members": 1,
+    "baseline_busiest_member_share": 1.0,
+    "result": "The first non-cosmetic League team lesson increased participation from one member to two and reduced the whole-League busiest-member share below 100% while preserving clean-power completion."
+  },
+  "claim": "The exact pushed deterministic teacher selected Hitmonlee by observed species and health, used it for a real matchup attack against Bruno's opening Onix, restored Blastoise, recovered the damaged participant, and entered the Hall of Fame in the same uninterrupted run.",
+  "remaining_limitations": [
+    "Only two of six party members supplied recorded League attack decisions.",
+    "The whole-League busiest-member share remains 98.08%, so this is the first team lesson rather than a complete balanced-battle curriculum.",
+    "No learned policy produced this switch, attack, recovery, or completion behavior.",
+    "No unseen-seed or cross-game generalization was measured."
+  ]
+}

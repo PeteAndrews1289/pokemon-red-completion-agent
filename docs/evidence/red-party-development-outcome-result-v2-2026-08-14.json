@@ -1,0 +1,149 @@
+{
+  "schema": "pokemon-red-party-development-outcome-evidence-v2",
+  "status": "complete_learner_target_accepted",
+  "experiment_id": "red-party-development-evolution-venue-v2",
+  "prospective_bindings": {
+    "public_plan_sha256": "24bc09099260e7dea14c8e759fcc2ed3a97c19486379c06bcf728ad168e46493",
+    "ordered_policy_input_sha256": "6fc3292ad8eca4eeba757991e47e1eb276c1195f424be44909f8ef461e8264e6",
+    "public_catalog_sha256": "6f594f05eea54e8a8ca2243ceb28c74118e93c0884a6eed2b4f9df0ed48d618f",
+    "outcome_example_sha256": "8b902b0c087685b0ee75c381b29e0e56a197d51a70e76f71f8c642e222a28c07",
+    "candidate_count": 2,
+    "runner_executions": 1,
+    "candidate_retries": 0,
+    "candidate_substitutions": 0
+  },
+  "source": {
+    "git_commit": "00499bc68b099ffcd0125a6777bc3b836a84ff0b",
+    "exact_commit_ci_run": 31858937755,
+    "exact_commit_ci_conclusion": "success",
+    "source_bundle_sha256": "969f6ae2f60282848d26d4097fcefe6e9881f3739d78b560bdf0f186482f6294"
+  },
+  "authenticated_root": {
+    "state_sha256": "24b848eeb9d0d7b13d2edb96105cdbe58fde6c3212889a24eaaf210463141e3d",
+    "capture_envelope_sha256": "9a4e26a3710fafb78417c33decb01b90583524a151c0feceb3b3d84bc940c660",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "partition": "train",
+    "sealed_test": false,
+    "crystal": false,
+    "initial_party_size": 6,
+    "initial_fainted_members": 0,
+    "initial_statused_members": 1,
+    "identical_start_for_both_candidates": true
+  },
+  "outcome_collection": {
+    "objective_id": "party-development.progress-efficiency.v1",
+    "objective_sha256": "b6544effa3c1849b4e03111a18b47f4435c9150e0b534a7501fbac70143dcbb6",
+    "candidate_outcomes": 2,
+    "fully_measured": true,
+    "learner_update_eligible": true,
+    "best_candidate_indices": [0],
+    "target_distribution": [1.0, 0.0],
+    "trials": [
+      {
+        "candidate_index": 0,
+        "candidate_kind": "lower_encounter_band_9_15",
+        "evolution_completed": true,
+        "initial_target_level": 22,
+        "final_target_level": 26,
+        "target_experience_gained": 6998,
+        "target_experience_per_1000_frames": 6.664464,
+        "total_experience_gained": 13996,
+        "total_experience_per_1000_frames": 13.328927,
+        "target_experience_per_battle": 64.796296,
+        "battles_completed": 108,
+        "steps_taken": 1961,
+        "budgeted_center_calls": 10,
+        "venue_transition_trips": 0,
+        "required_recovery_trips": 10,
+        "optional_recovery_trips": 0,
+        "cleanup_trips": 1,
+        "total_counted_center_routes": 11,
+        "battles_per_counted_center_route": 9.818182,
+        "rotations_executed": 195,
+        "controller_actions": 26468,
+        "frames_executed": 1050047,
+        "faints": 0
+      },
+      {
+        "candidate_index": 1,
+        "candidate_kind": "higher_encounter_band_15_21",
+        "evolution_completed": true,
+        "initial_target_level": 22,
+        "final_target_level": 26,
+        "target_experience_gained": 6924,
+        "target_experience_per_1000_frames": 5.977360,
+        "total_experience_gained": 13848,
+        "total_experience_per_1000_frames": 11.954719,
+        "target_experience_per_battle": 100.347826,
+        "battles_completed": 69,
+        "steps_taken": 1036,
+        "budgeted_center_calls": 40,
+        "venue_transition_trips": 39,
+        "required_recovery_trips": 1,
+        "optional_recovery_trips": 0,
+        "cleanup_trips": 1,
+        "total_counted_center_routes": 41,
+        "battles_per_counted_center_route": 1.682927,
+        "rotations_executed": 154,
+        "controller_actions": 20505,
+        "frames_executed": 1158371,
+        "faints": 0
+      }
+    ]
+  },
+  "center_call_accounting": {
+    "configured_maximum_budgeted_center_calls": 50,
+    "budgeted_phases": [
+      "venue_transition",
+      "required_recovery",
+      "optional_recovery"
+    ],
+    "observed_budgeted_center_calls": [10, 40],
+    "observed_cleanup_calls": [1, 1],
+    "observed_total_counted_center_routes": [11, 41],
+    "phase_sum_equals_total_for_every_trial": true,
+    "every_in_loop_call_was_bounded": true,
+    "budget_conformance_proven": true,
+    "optional_recovery_calls": 0,
+    "exactly_one_cleanup_per_trial": true
+  },
+  "representation_audit": {
+    "outcome_includes_current_executor_reliability": true,
+    "higher_band_venue_transition_trips": 39,
+    "lower_band_venue_transition_trips": 0,
+    "intrinsic_lower_band_superiority_demonstrated": false,
+    "cross_context_party_policy_demonstrated": false,
+    "cross_game_party_policy_demonstrated": false,
+    "interpretation": "Candidate 0 was more frame-efficient under the exact frozen controller. Candidate 1 required 39 bounded venue-transition routes, so this target includes current traversal reliability and cannot be generalized into a claim that lower encounter bands are intrinsically better."
+  },
+  "artifact": {
+    "artifact_id": "red-party-outcome-00499bc68b09-24b848eeb9d0",
+    "manifest_sha256": "c6d7081b1653b4092529494665f7216da4bd5e5bc6ddbb27dcdaaa4e201e054c",
+    "status": "complete",
+    "total_records": 4,
+    "total_bytes": 7208,
+    "catalog_stream_sha256": "b22af382e9f413f91b45409066bebc212eae3017c5cebc57c38e4af53e0e8049",
+    "trial_stream_sha256": "e6e26ebb87001d62010d733b74e66766fb96287787c54f603cbb7b192068cca0",
+    "outcome_stream_sha256": "9fb27530e8d537d8fcc515b7aa535bfb7f3547fa399c3bbd82181be3a8ee45f3"
+  },
+  "decision": {
+    "real_party_development_execution_completed": true,
+    "same_trainee_comparison_executed": true,
+    "phase_accounting_validated": true,
+    "training_target_accepted": true,
+    "model_fit": false,
+    "party_policy_generalization_demonstrated": false,
+    "authority_promoted": false,
+    "descriptive_result": "Both identical-state trials evolved the same level-22 trainee at level 26 with zero faints. The lower band earned 6.664464 target experience per 1,000 frames versus 5.977360 and finished 108,324 frames sooner, while the higher band used 39 bounded venue-transition routes.",
+    "limit": "This is one authenticated train example for the exact frozen controller, not a learned party policy, proof of lower-band superiority, cross-context validation, cross-game transfer or authority evidence.",
+    "next": "Keep the example source-bound and shadow-only; diagnose and represent venue traversal reliability before fitting a party model, then collect independent party contexts and the harder battle/navigation curricula without opening an unseen gate."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

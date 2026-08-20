@@ -1,0 +1,101 @@
+{
+  "schema": "pokemon.red.repeatable-goal-manager-outcome-fit-result-receipt.v1",
+  "recorded_on": "2026-08-18",
+  "status": "diagnostic_candidate_fit_complete",
+  "source_verification": {
+    "source_commit": "cde9f488ca2bb4c9bfbea086fae1e6407406d661",
+    "source_bundle_sha256": "568341e64789031412917dcfbd4604ef9e616185e432b991c135921f60edd81e",
+    "runner_sha256": "af6bed2e940d2000ca40005e3ba7dd2755d39c2e6819dffdba1f7a52a9c9eb2f",
+    "github_ci_run": 32115274511,
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "worktree_dirty": false
+  },
+  "input_bindings": {
+    "result_receipt_sha256": "c7dde1703f8bc0581f3c871e555a352bcf23fec6c2ea0d1086b3862fecc164dd",
+    "fit_plan_sha256": "a950e7491edede73face1ecc1db14145346dfbdf8d61347d4bbe1fc442e86702",
+    "campaign_plan_sha256": "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9",
+    "complete_episode_manifest_sha256": "2d8b98ff496d609f77071f9b93b6dee98749a91b405fa7eecf914651200df0a4",
+    "base_training_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+    "base_registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "base_context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959"
+  },
+  "one_shot": {
+    "fit_identity_sha256": "c0ce2c832c110823c2c105adcf8c8b662f9e3bafdb04c04110ca2bcb011cb8dd",
+    "identity_consumed": true,
+    "retry_allowed": false,
+    "updates_executed": 1,
+    "hyperparameter_searches": 0
+  },
+  "training_data": {
+    "eligible_targets": 2,
+    "positive_targets": 2,
+    "negative_targets": 0,
+    "complete_episodes": 1,
+    "independent_roots": 1,
+    "excluded_failed_prefix_choices": 19,
+    "failed_artifact_targets_decoded": 0,
+    "validation_examples": 0,
+    "test_examples": 0
+  },
+  "model": {
+    "base_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "candidate_canonical_sha256": "eb5c6515dd4c7a7c1021199c82e2a5475184dbb7eae0eec473161054c8b0d2ce",
+    "candidate_file_sha256": "f4f5761a23bd0a258ca2d894d2da6649b0f49beef7e41e5d1fbf1167f8cd3819",
+    "private_summary_sha256": "70fdd9ddcb74ef5aa95083e5f2e9cf11b8d8b4fbf73ffb1a32f7d039d05bc279",
+    "promotion_authorized": false,
+    "mode": "shadow_diagnostic_candidate"
+  },
+  "update": {
+    "objective_id": "pokemon.core.goal-manager.capped-ips-policy-gradient.v1",
+    "update_steps": 1,
+    "step_size": 0.02,
+    "weight_delta_l2": 0.02,
+    "weight_delta_l2_cap": 0.02,
+    "maximum_weight_delta": 0.007862254058013073,
+    "training_loss_before": 1.2667235383095694,
+    "training_loss_after": 1.1496104593178456,
+    "mean_selected_probability_before": 0.5974944038373854,
+    "mean_selected_probability_after": 0.6136256179767433,
+    "selected_probabilities_before": [
+      0.9968450354840275,
+      0.19814377219074325
+    ],
+    "selected_probabilities_after": [
+      0.9971180260516429,
+      0.2301332099018437
+    ]
+  },
+  "guards": {
+    "train_menus_checked": 54,
+    "acquisition_evolution_story_winner_menus_checked": 18,
+    "protected_winner_flips": 0,
+    "maximum_train_menu_kl": 0.0004864894331527807,
+    "maximum_train_menu_kl_cap": 0.01,
+    "finite_exact_round_trip": true,
+    "all_frozen_fit_gates_passed": true
+  },
+  "counter_treatment": {
+    "development_episode_attempts_added": 0,
+    "verified_outcome_examples_added": 0,
+    "atomic_goal_episodes_added": 0,
+    "composition_attempts_added": 0,
+    "verified_composition_episodes_added": 0,
+    "outcome_questions_added": 0,
+    "model_fits_added": 1,
+    "unseen_comparisons_added": 0,
+    "authority_promotions_added": 0,
+    "transfer_results_added": 0
+  },
+  "claim_boundary": {
+    "supported": "One deterministic train-only outcome update safely reinforced both authenticated successful choices and produced a distinct shadow candidate while preserving all frozen trust and semantic-winner guards.",
+    "unsupported": "This training-set result is not unseen improvement, reliable multi-episode play, acquisition competence, promotion, authority, transfer, Red completion, or living-Pokedex ability."
+  },
+  "evaluation": null,
+  "teacher_queries": 0,
+  "sealed_red_accesses": 0,
+  "crystal_accesses": 0,
+  "full_replays": 0,
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

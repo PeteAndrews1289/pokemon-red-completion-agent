@@ -1,0 +1,93 @@
+{
+  "schema": "pokemon-party-development-v2-prior-initialization-evidence-v1",
+  "date": "2026-08-15",
+  "status": "authenticated_prior_initialized_no_outcome_training",
+  "mission": "Use Red as the first curriculum for a transferable Pokemon completion agent that can finish games and build a complete retained living Pokedex.",
+  "source": {
+    "commit": "7190be6b979e51534f033b5ac9c1782093de996d",
+    "branch": "agent/balanced-team-curriculum",
+    "source_bundle_sha256": "94a04d6fc814a4e8203ee43a6d03647e5e7d4ed11be36275531bb8a6bd10b695",
+    "local_non_integration_tests_passed": 3394,
+    "local_integration_tests_deselected": 3,
+    "local_expected_failures": 1,
+    "ruff_passed": true,
+    "mypy_source_files_passed": 220,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true
+  },
+  "historical_v1_prior": {
+    "model_id": "pokemon.core.training.candidate-ranker.mlp.v1",
+    "model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+    "canonical_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+    "offline_evidence_file": "docs/evidence/training-candidate-ranker-v1-offline-2026-08-08.json",
+    "offline_evidence_sha256": "8c2b0fdaeccfdfc7b300daf026145da1daab4dbc062b1ebcfc986236b324ad97",
+    "training_lineages": [
+      {
+        "lineage_id": "training-candidate-v1-train-01",
+        "root_sha256": "7b6f6bb4dbbf8478b9bb6addfd0b86863b6dfd5ca198d7859cd32e1c03147af5"
+      },
+      {
+        "lineage_id": "training-candidate-v1-train-02",
+        "root_sha256": "ab7bb41c3e220a8d094cf39cb8b2b75694195c2e272cfd62fb127b053fcd0965"
+      }
+    ],
+    "evaluation_lineages": [
+      {
+        "lineage_id": "training-candidate-v1-validation-01",
+        "root_sha256": "20de5cee4a644c4d339f3277bc78fc8cf9058fb87198f4e464d34f37c3d8d3cb"
+      }
+    ],
+    "train_examples": 13709,
+    "validation_examples": 7030,
+    "validation_correct": 7023,
+    "shape_baseline_correct": 6725,
+    "independent_validation_lineages": 1,
+    "teacher_derived": true,
+    "outcome_trained": false
+  },
+  "completion_aware_v2_initialization": {
+    "model_id": "pokemon.core.party-development.outcome-ranker.mlp.v2",
+    "feature_schema_id": "pokemon.core.party-development.completion-candidate.v2",
+    "model_format_version": 3,
+    "private_model_file_sha256": "575b77d1f6448248c947fed0bf82296210d560df0dca8989505ffc5516507d06",
+    "canonical_model_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+    "score_preserving_v1_embedding": true,
+    "new_completion_feature_weights_zero": true,
+    "outcome_training_examples": 0,
+    "outcome_training_roots": 0,
+    "outcome_training_states": 0,
+    "private_model_tracked": false,
+    "private_path_fields": 0
+  },
+  "fail_closed_guards": {
+    "exact_v1_model_required": true,
+    "offline_evidence_authenticated": true,
+    "lineage_pairs_canonically_ordered": true,
+    "prior_training_and_evaluation_overlap_rejected": true,
+    "new_train_prior_overlap_rejected": true,
+    "new_development_prior_overlap_rejected": true,
+    "reused_outcome_root_rejected": true,
+    "reused_outcome_state_rejected": true,
+    "typed_model_round_trip_required": true
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "outcomes_opened": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_updates": 0,
+    "authority_promoted": false
+  },
+  "claim_boundary": {
+    "supported": "The exact authenticated historical scorer now initializes the wider completion-aware model without changing its initial scores, and all known historical roots remain blocked from reuse.",
+    "not_supported": [
+      "completion-aware outcome training has begun",
+      "the v2 model improves on untouched Red decisions",
+      "the model has party-development authority",
+      "the representation transfers to Crystal",
+      "the agent can autonomously complete a game or living Pokedex"
+    ]
+  }
+}

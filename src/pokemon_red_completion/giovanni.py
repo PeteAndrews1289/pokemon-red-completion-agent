@@ -12,8 +12,16 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import run_adaptive_trainer_battle
-from pokemon_red_completion.blaine import _select_cursor
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
+from pokemon_red_completion.blaine import (
+    CENTER_TO_MART as CINNABAR_CENTER_TO_MART,
+)
+from pokemon_red_completion.blaine import MANSION_TRAINING_POLICY, _select_cursor
 from pokemon_red_completion.celadon import (
     _bag,
     _money,
@@ -21,6 +29,7 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.observation import (
     Badge,
@@ -31,7 +40,8 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.tower import party_core_intact
 
 GIOVANNI_CHECKPOINT_COUNT = 8
 GIOVANNI_OPPONENT = 0xE5
@@ -46,6 +56,7 @@ GIOVANNI_PARTY = (
 )
 SURF_MOVE_ID = 0x39
 ICE_BEAM_MOVE_ID = 0x3A
+HYDRO_PUMP_MOVE_ID = 0x38
 GYM_TRAINER_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_VIRIDIAN_GYM_TRAINER_0) + offset)
     for offset in range(8)
@@ -93,10 +104,6 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
-
-
 class GiovanniChapterError(RuntimeError):
     """Raised when the Viridian Gym evidence contract fails."""
 
@@ -140,9 +147,17 @@ class TrainerReceipt:
 
     @property
     def passed(self) -> bool:
+        """Verify the controlled choices without rejecting legal opponent status RNG.
+
+        The required trainer circuit is followed immediately by a Pokémon Center
+        recovery.  A trainer may therefore inflict a persistent status without
+        changing the demonstrated party, move policy, or survival outcome.  The
+        chapter's pre-Giovanni and terminal boundaries independently require a
+        fully healed, status-free party.
+        """
         return (
             _encounter_party(self.turns) == self.expected_party
-            and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
+            and all(turn.lead_hp > 0 for turn in self.turns)
         )
 
 
@@ -177,9 +192,9 @@ class GiovanniChapterReport:
     route22_rival_wants_battle: bool
     initial_money: int
     money_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
@@ -210,7 +225,8 @@ class GiovanniChapterReport:
             and self.identity
             == (GIOVANNI_OPPONENT, GIOVANNI_TRAINER_CLASS, GIOVANNI_TRAINER_SET)
             and _encounter_party(self.turns) == GIOVANNI_PARTY
-            and tuple(turn.move_slot for turn in self.turns) == (4, 4, 4, 4, 4)
+            and self.turns
+            and all(turn.move_slot == 4 for turn in self.turns)
             and all(turn.lead_hp > 0 and turn.lead_status == 0 for turn in self.turns)
             and self.tm46_sold
             and self.tm27_quantity == 1
@@ -223,12 +239,17 @@ class GiovanniChapterReport:
             and self.money_remaining == self.initial_money + 14_855
             and self.final_raw.map_id == MapId.VIRIDIAN_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.final_raw.first_party_level == 49
-            and self.final_raw.first_party_moves == (0x82, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
-            and self.party_hp == self.party_max_hp == (151, 52, 37)
-            and self.party_status == (0, 0, 0)
+            and party_core_intact(self.final_raw.party_species_ids)
+            and (self.final_raw.first_party_level or 0)
+            >= MANSION_TRAINING_POLICY.target_level
+            and self.final_raw.first_party_moves
+            == (HYDRO_PUMP_MOVE_ID, 0x46, ICE_BEAM_MOVE_ID, SURF_MOVE_ID)
+            and self.final_raw.first_party_pp == (5, 15, 10, 15)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and self.final_raw.first_party_hp == self.party_hp[0]
+            and self.final_raw.first_party_max_hp == self.party_max_hp[0]
+            and all(status == 0 for status in self.party_status)
             and self.controller_released
         )
 
@@ -254,6 +275,7 @@ class GiovanniChapterReport:
                         "identity": list(receipt.identity),
                         "party": [list(member) for member in receipt.expected_party],
                         "move_slots": [turn.move_slot for turn in receipt.turns],
+                        "lead_statuses": [turn.lead_status for turn in receipt.turns],
                     }
                     for receipt in self.trainer_receipts
                 ],
@@ -285,17 +307,6 @@ class GiovanniChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, delegate: ChapterExecutor) -> None:
-        self.delegate = delegate
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self.delegate.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_giovanni_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -304,7 +315,7 @@ def run_giovanni_chapter(
     progress: ProgressSink | None = None,
 ) -> GiovanniChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[GiovanniCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.CINNABAR_POKECENTER, (3, 3), "post-Blaine boundary")
@@ -326,24 +337,22 @@ def run_giovanni_chapter(
         raise GiovanniChapterError("Expected full seven-badge inventory was not present.")
     _checkpoint(records, progress, emulator, initial, "giovanni_ready", "Viridian route ready")
 
-    _move(actions, reader, ("down",) * 5, "Cinnabar Center exit")
-    _field_fly_to_viridian(actions, reader, emulator)
-    _require(reader.read(), MapId.VIRIDIAN_CITY, (23, 26), "Viridian Fly arrival")
-    _checkpoint(records, progress, emulator, reader.read(), "viridian_arrived", "Flew to Viridian")
-
-    _move(actions, reader, FLY_ARRIVAL_TO_MART, "Viridian Mart")
-    _require(reader.read(), MapId.VIRIDIAN_MART, (3, 7), "Viridian Mart entry")
-    _move(actions, reader, ("up", "up", "left"), "Viridian clerk")
+    _move(actions, reader, CINNABAR_CENTER_TO_MART, "Cinnabar Mart")
+    _require(reader.read(), MapId.CINNABAR_MART, (3, 7), "Cinnabar Mart entry")
+    _move(actions, reader, ("up", "up", "left"), "Cinnabar clerk")
     _pulse(actions, MacroActionKind.MOVE, "left", 120)
     _sell_current_bag_item(actions, emulator, ItemId.TM46_PSYWAVE)
     _close(actions, reader)
     if _bag(emulator).get(ItemId.TM46_PSYWAVE, 0) or len(_bag(emulator)) != 19:
         raise GiovanniChapterError("TM46 sale did not free exactly one bag slot.")
+    _move(actions, reader, ("right", "down", "down", "down"), "Cinnabar Mart exit")
+    _require(reader.read(), MapId.CINNABAR_ISLAND, (15, 12), "Cinnabar Mart exterior")
+    _field_fly_to_viridian(actions, reader, emulator)
+    _require(reader.read(), MapId.VIRIDIAN_CITY, (23, 26), "Viridian Fly arrival")
+    _checkpoint(records, progress, emulator, reader.read(), "viridian_arrived", "Flew to Viridian")
     _checkpoint(records, progress, emulator, reader.read(), "tm_slot_freed", "Freed TM27 slot")
 
-    _move(actions, reader, ("right", "down", "down", "down"), "Viridian Mart exit")
-    _require(reader.read(), MapId.VIRIDIAN_CITY, (29, 20), "Viridian Mart exterior")
-    _move(actions, reader, MART_EXIT_TO_GYM, "Viridian Gym")
+    _move(actions, reader, CENTER_EXIT_TO_GYM, "Viridian Gym")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (16, 17), "Viridian Gym entry")
     _checkpoint(records, progress, emulator, reader.read(), "viridian_gym_entered", "Entered Gym")
 
@@ -351,19 +360,51 @@ def run_giovanni_chapter(
     _move(actions, reader, GYM_ENTRY_TO_HIKER, "Hiker approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (11, 1), "Hiker approach")
     _face_and_interact(actions, "left")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[0]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[0],
+            RedBattlePlanId.GIOVANNI_HIKER_SET_8,
+        )
+    )
 
     _move(actions, reader, HIKER_TO_BLACKBELT, "Blackbelt approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (12, 11), "Blackbelt approach")
     _pulse(actions, MacroActionKind.INTERACT)
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[1]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[1],
+            RedBattlePlanId.GIOVANNI_BLACKBELT_SET_6,
+        )
+    )
 
     _trigger_line_battle(actions, reader, BLACKBELT_TO_COOLTRAINER_9, "Cooltrainer set 9")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[2]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[2],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_9,
+        )
+    )
 
     _move(actions, reader, COOLTRAINER_9_TO_TAMER[:-1], "Tamer approach")
     _trigger_line_battle(actions, reader, COOLTRAINER_9_TO_TAMER[-1:], "Tamer set 3")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[3]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[3],
+            RedBattlePlanId.GIOVANNI_TAMER_SET_3,
+        )
+    )
 
     _move(actions, reader, TAMER_TO_COOLTRAINER_10[:-1], "Cooltrainer set 10 approach")
     _trigger_line_battle(
@@ -372,12 +413,28 @@ def run_giovanni_chapter(
         TAMER_TO_COOLTRAINER_10[-1:],
         "Cooltrainer set 10",
     )
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[4]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[4],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_10,
+        )
+    )
 
     _move(actions, reader, COOLTRAINER_10_TO_COOLTRAINER_1[:-1], "Gym gate approach")
     _require(reader.read(), MapId.VIRIDIAN_GYM, (6, 4), "Gym gate approach")
     _face_and_interact(actions, "down")
-    receipts.append(_finish_trainer(actions, reader, emulator, REQUIRED_TRAINERS[5]))
+    receipts.append(
+        _finish_trainer(
+            actions,
+            reader,
+            emulator,
+            REQUIRED_TRAINERS[5],
+            RedBattlePlanId.GIOVANNI_COOLTRAINER_SET_1,
+        )
+    )
 
     trainer_before_giovanni = _events(emulator, GYM_TRAINER_EVENTS)
     if trainer_before_giovanni != REQUIRED_TRAINER_EVENTS:
@@ -422,7 +479,13 @@ def run_giovanni_chapter(
     identity = _identity(emulator)
     if identity != (GIOVANNI_OPPONENT, GIOVANNI_TRAINER_CLASS, GIOVANNI_TRAINER_SET):
         raise GiovanniChapterError(f"Unexpected Giovanni identity: {identity!r}.")
-    turns = _run_policy_battle(actions, reader, 4, "Giovanni")
+    turns = _run_policy_battle(
+        actions,
+        reader,
+        4,
+        "Giovanni",
+        RedBattlePlanId.GIOVANNI_LEADER,
+    )
     if _encounter_party(turns) != GIOVANNI_PARTY:
         raise GiovanniChapterError(f"Giovanni party or Surf policy changed: {turns!r}.")
     _checkpoint(
@@ -550,6 +613,7 @@ def _finish_trainer(
         tuple[tuple[int, int], ...],
         int,
     ],
+    battle_plan_id: str,
 ) -> TrainerReceipt:
     label, expected_identity, expected_party, move_slot = expected
     _await_trainer_battle(actions, reader, label)
@@ -558,17 +622,23 @@ def _finish_trainer(
         raise GiovanniChapterError(
             f"{label} identity changed: expected {expected_identity!r}, got {identity!r}."
         )
-    turns = _run_policy_battle(actions, reader, move_slot, label)
+    turns = _run_policy_battle(actions, reader, move_slot, label, battle_plan_id)
     receipt = TrainerReceipt(label, identity, expected_party, turns)
     if not receipt.passed:
         raise GiovanniChapterError(f"{label} party or move policy changed: {turns!r}.")
     return receipt
 
 
-def _run_policy_battle(actions, reader, move_slot: int, label: str) -> tuple[GiovanniTurn, ...]:
+def _run_policy_battle(
+    actions,
+    reader,
+    move_slot: int,
+    label: str,
+    battle_plan_id: str,
+) -> tuple[GiovanniTurn, ...]:
     turns: list[GiovanniTurn] = []
 
-    def policy(raw: RawGameState) -> int:
+    def record_turn(raw: RawGameState, selected_slot: int) -> None:
         turns.append(
             GiovanniTurn(
                 raw.enemy_species_id or 0,
@@ -577,18 +647,26 @@ def _run_policy_battle(actions, reader, move_slot: int, label: str) -> tuple[Gio
                 raw.first_party_hp or 0,
                 raw.first_party_status or 0,
                 raw.first_party_pp or (0, 0, 0, 0),
-                move_slot,
+                selected_slot,
             )
         )
-        return move_slot
 
     run_adaptive_trainer_battle(
         reader,
         actions,
-        policy,
+        lambda _raw: move_slot,
         expected_map=MapId.VIRIDIAN_GYM,
+        intent=BattleIntent(
+            "defeat_giovanni",
+            battle_plan_id=battle_plan_id,
+            required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+            required_move_ref=pokemon_red_move_ref(
+                {2: 0x46, 3: ICE_BEAM_MOVE_ID, 4: SURF_MOVE_ID}[move_slot]
+            ),
+        ),
         required_move_id={2: 0x46, 3: ICE_BEAM_MOVE_ID, 4: SURF_MOVE_ID}[move_slot],
         label=label,
+        move_decision_sink=record_turn,
     )
     return tuple(turns)
 
@@ -615,10 +693,14 @@ def _heal(actions, reader, emulator) -> None:
         _pulse(actions, MacroActionKind.CONFIRM)
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
-            and reader.read().first_party_pp == (15, 15, 10, 15)
+            and all(status == 0 for status in _party_status(emulator))
+            and reader.read().first_party_pp == (5, 15, 10, 15)
         ):
             break
+    else:
+        raise GiovanniChapterError(
+            "Pokémon Center did not restore party HP, status, and lead PP."
+        )
     _close(actions, reader)
 
 

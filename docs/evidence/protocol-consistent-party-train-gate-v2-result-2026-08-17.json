@@ -1,0 +1,133 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the residual ranker was fit or evaluated",
+      "the representation generalizes to unseen Red development contexts",
+      "the model has shadow or live party-development authority",
+      "the representation transfers to Crystal",
+      "the agent can complete Red or a living Pokedex"
+    ],
+    "supported": "The frozen train-only v2 screen executed exactly once, consumed its semantic identity, and rejected the representation before fitting because the fixed train design contained contradictory pairwise rows and lacked venue-cost interaction variance in every observed venue-goal slice."
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "decision": {
+    "candidate_has_live_authority": false,
+    "candidate_has_shadow_authority": false,
+    "candidate_retained_for_development_design": false,
+    "crystal_execution_authorized": false,
+    "development_execution_authorized": false,
+    "evaluation_passed": null,
+    "full_game_replay_authorized": false,
+    "representation_audit_passed": false,
+    "result": "stop_before_fit_and_audit_representation_collisions",
+    "sealed_red_execution_authorized": false
+  },
+  "model_artifact": {
+    "manifest_sha256": "32f29a1de9612567642f99d15d2bae4b0ee2ee4ff1ff7dcf0bdb598ca2c32edf",
+    "private_artifact_tracked": false,
+    "status": "complete",
+    "stream_records": {
+      "decision": 1,
+      "preregistration": 1,
+      "representation_audit": 1
+    },
+    "total_bytes": 5275,
+    "total_records": 3
+  },
+  "protected_access": {
+    "authority_promoted": false,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "development_examples_passed_to_learner": 0,
+    "development_label_free_questions_reconstructed": 12,
+    "development_metrics_computed": 0,
+    "development_outcome_examples_materialized": 0,
+    "development_outcome_payloads_decoded": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-17",
+  "representation_audit": {
+    "action_goal_counts": {
+      "trainee:balance": 13,
+      "venue:collection": 3,
+      "venue:evolution": 3,
+      "venue:role_coverage": 3
+    },
+    "contradictory_pairwise_rows": 28,
+    "effective_rank_by_action": {
+      "trainee": 14,
+      "venue": 4
+    },
+    "nonzero_design_by_action_goal": {
+      "trainee:balance": true,
+      "venue:collection": true,
+      "venue:evolution": true,
+      "venue:role_coverage": true
+    },
+    "pairwise_rows_by_action": {
+      "trainee": 39,
+      "venue": 9
+    },
+    "passed": false,
+    "required_rank_by_action": {
+      "trainee": 1,
+      "venue": 3
+    },
+    "venue_interaction_variance": {
+      "venue:collection:cost": false,
+      "venue:collection:quality": true,
+      "venue:collection:safety": true,
+      "venue:evolution:cost": false,
+      "venue:evolution:quality": true,
+      "venue:evolution:safety": true,
+      "venue:role_coverage:cost": false,
+      "venue:role_coverage:quality": true,
+      "venue:role_coverage:safety": true
+    }
+  },
+  "screen": {
+    "design_id": "pokemon.red.party-development.train-only-architecture-selection.v2",
+    "development_assignment_headers_authenticated": 31,
+    "development_stream_bytes_authenticated": true,
+    "gate_identity_sha256": "7a148a5d0f5b7bd1eebb4a8059ac92185c4281e36b2b5e0dea94352f08b986a3",
+    "learner_sha256": "7fb1783ea6e798ea55ba6cf650c29cbb16f4c22b6c1e04290b0265b6dfb97e3c",
+    "model_canonical_sha256": null,
+    "one_shot_claim_retained": true,
+    "predecessor_manifest_sha256": "472afd3909e4fd672da022ba18706d2d09e9f9c43013d39b3d658dc3f5d9483f",
+    "preflight_receipt_sha256": "ec1a1841a213ef6e60e23942c6d0950996567cbabbe705350ac8c3dd1341d197",
+    "prior_attestation_sha256": "6ee20ab898f255c19af18364a11d82b6dab8e42deec3c92c2a92975b74a26daa",
+    "prior_model_canonical_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+    "runner_sha256": "e782cdaa28b2b49bc85ac26e733ec26ef071744bfd9e8f551169703f8dd9d373",
+    "status": "complete",
+    "successor_manifest_sha256": "0975b651ab05980c51374e5ff32e50a130108d0a7e8ffd11d712dcc920770b6d",
+    "training_action_goal_counts": {
+      "trainee:balance": 13,
+      "venue:collection": 3,
+      "venue:evolution": 3,
+      "venue:role_coverage": 3
+    },
+    "training_outcome_subset_sha256": "5b47b7f4872be02f566cd6e5321c868231aa0c705f1c3fb06f4e49e0b3ed8647",
+    "training_question_set_sha256": "b1949d0b2e0c429bc7c2b8389050499ac336b0c2f62dade7565e0471d28986fe",
+    "training_questions": 22
+  },
+  "source_verification": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run": 32070285183,
+    "commit": "19f53e1faee1ea4c651bfe2d6ab3ff900c38db7c"
+  },
+  "status": "representation_rejected_before_fit",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

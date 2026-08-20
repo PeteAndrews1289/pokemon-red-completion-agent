@@ -7,10 +7,21 @@ the revision-pinned observation adapter.
 
 from __future__ import annotations
 
+import re
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager, nullcontext
+from contextvars import ContextVar
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleBoostStat
+from pokemon_red_completion.battle_schedule import (
+    BattleStartScheduleController,
+    bound_battle_start_schedule,
+)
+from pokemon_red_completion.collection_protocol import BattleStartOffset
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
@@ -24,6 +35,12 @@ _FIGHT_COMMAND = 0
 _CURRENT_PP_MASK = 0x3F
 _MIN_MOVE_SLOT = 1
 _MAX_MOVE_SLOT = 4
+_OBJECTIVE_ID = re.compile(r"^[a-z][a-z0-9_]*$")
+_BATTLE_PLAN_ID = re.compile(r"^[a-z0-9][a-z0-9._-]{0,95}$")
+_SEMANTIC_REF = re.compile(r"^[a-z0-9][a-z0-9._:-]{0,159}$")
+_ACTIVE_BATTLE_STATE: ContextVar[int] = ContextVar(
+    "pokemon_red_active_battle_state", default=_TRAINER_BATTLE_STATE
+)
 
 
 class BattleActionExecutor(Protocol):
@@ -43,9 +60,348 @@ class BattleStateReader(Protocol):
 
 
 class MoveSlotPolicy(Protocol):
-    """A pure policy that chooses a one-based move slot from current evidence."""
+    """Legacy pure policy that chooses a one-based move slot from raw state."""
 
     def __call__(self, state: RawGameState, /) -> int: ...
+
+
+class MoveDecisionSink(Protocol):
+    """Non-authoritative observer of one validated move selection."""
+
+    def __call__(self, state: RawGameState, slot: int, /) -> None: ...
+
+
+class MoveDecisionGuard(Protocol):
+    """Fail-closed semantic precondition checked before any policy selects."""
+
+    def __call__(self, state: RawGameState, /) -> None: ...
+
+
+class BattleGoal(StrEnum):
+    """Game-neutral outcome requested by the actor for one battle."""
+
+    WIN = "win"
+
+
+class RequiredMovePolicy(StrEnum):
+    """Whether the actor may rank any usable move or must use one declared move."""
+
+    ANY_USABLE = "any_usable"
+    EXACT_REQUIRED = "exact_required"
+
+
+class BattleResourcePolicy(StrEnum):
+    """Actor-visible resource policy for one battle."""
+
+    NO_ADDITIONAL_CONSTRAINT = "none"
+    BOUNDED_RECOVERY = "bounded_recovery"
+
+
+class BattleRecoveryCapability(StrEnum):
+    """Game-neutral recovery effects one bound executor can legally perform."""
+
+    RESTORE_HP = "restore_hp"
+    REVIVE_FAINTED = "revive_fainted"
+    CURE_SLEEP = "cure_sleep"
+    CURE_PARALYSIS = "cure_paralysis"
+    CURE_POISON = "cure_poison"
+    CURE_BURN = "cure_burn"
+    CURE_FREEZE = "cure_freeze"
+    CURE_ANY_STATUS = "cure_any_status"
+
+
+class BattleSwitchCapability(StrEnum):
+    """Game-neutral switch effects one bound executor can safely perform."""
+
+    DIRECT = "direct"
+    RESET_STAT_STAGES = "reset_stat_stages"
+    TEMPORARY_ROLE_PIVOT = "temporary_role_pivot"
+    PROTECTED_RECOVERY = "protected_recovery"
+
+
+@dataclass(frozen=True, slots=True)
+class BattleIntent:
+    """Inference-available objective and constraints for a battle policy."""
+
+    objective_id: str
+    battle_plan_id: str
+    goal: BattleGoal = BattleGoal.WIN
+    required_move_policy: RequiredMovePolicy = RequiredMovePolicy.ANY_USABLE
+    required_move_ref: str | None = None
+    resource_policy: BattleResourcePolicy = BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+    recovery_capabilities: frozenset[BattleRecoveryCapability] = frozenset()
+    boost_capabilities: frozenset[BattleBoostStat] = frozenset()
+    boost_use_limits: tuple[tuple[BattleBoostStat, int], ...] = ()
+    switch_capabilities: frozenset[BattleSwitchCapability] = frozenset()
+    switch_limit: int | None = None
+    required_boost_before_first_move: BattleBoostStat | None = None
+    minimum_hp_before_move: int | None = None
+    require_status_clear_before_move: bool = False
+    require_move_before_first_switch: bool = False
+    require_move_between_switches: bool = False
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.objective_id, str)
+            or _OBJECTIVE_ID.fullmatch(self.objective_id) is None
+        ):
+            raise ValueError("objective_id must be a lowercase semantic objective id")
+        if (
+            not isinstance(self.battle_plan_id, str)
+            or _BATTLE_PLAN_ID.fullmatch(self.battle_plan_id) is None
+        ):
+            raise ValueError("battle_plan_id must be a safe public battle identity")
+        if not isinstance(self.goal, BattleGoal):
+            raise TypeError("goal must be a BattleGoal")
+        if not isinstance(self.required_move_policy, RequiredMovePolicy):
+            raise TypeError("required_move_policy must be a RequiredMovePolicy")
+        if self.required_move_policy is RequiredMovePolicy.ANY_USABLE:
+            if self.required_move_ref is not None:
+                raise ValueError("an unconstrained battle intent cannot name a required move")
+        elif (
+            not isinstance(self.required_move_ref, str)
+            or _SEMANTIC_REF.fullmatch(self.required_move_ref) is None
+        ):
+            raise ValueError("an exact battle intent requires a safe semantic move reference")
+        if not isinstance(self.resource_policy, BattleResourcePolicy):
+            raise TypeError("resource_policy must be a BattleResourcePolicy")
+        if not isinstance(self.recovery_capabilities, frozenset) or any(
+            not isinstance(value, BattleRecoveryCapability)
+            for value in self.recovery_capabilities
+        ):
+            raise TypeError("recovery_capabilities must contain recovery capabilities")
+        if (
+            self.recovery_capabilities
+            and self.resource_policy is not BattleResourcePolicy.BOUNDED_RECOVERY
+        ):
+            raise ValueError("recovery capabilities require bounded recovery policy")
+        if not isinstance(self.boost_capabilities, frozenset) or any(
+            not isinstance(value, BattleBoostStat) for value in self.boost_capabilities
+        ):
+            raise TypeError("boost_capabilities must contain boost stats")
+        if (
+            not isinstance(self.boost_use_limits, tuple)
+            or any(
+                not isinstance(value, tuple)
+                or len(value) != 2
+                or not isinstance(value[0], BattleBoostStat)
+                or type(value[1]) is not int  # noqa: E721
+                or value[1] < 1
+                for value in self.boost_use_limits
+            )
+            or len({stat for stat, _limit in self.boost_use_limits})
+            != len(self.boost_use_limits)
+        ):
+            raise TypeError("boost_use_limits must contain unique positive typed limits")
+        if any(
+            stat not in self.boost_capabilities for stat, _limit in self.boost_use_limits
+        ):
+            raise ValueError("boost use limits require matching executor capabilities")
+        if not isinstance(self.switch_capabilities, frozenset) or any(
+            not isinstance(value, BattleSwitchCapability)
+            for value in self.switch_capabilities
+        ):
+            raise TypeError("switch_capabilities must contain switch capabilities")
+        if self.switch_limit is not None and (
+            type(self.switch_limit) is not int or self.switch_limit < 1  # noqa: E721
+        ):
+            raise TypeError("switch_limit must be a positive integer or None")
+        if self.switch_limit is not None and not self.switch_capabilities:
+            raise ValueError("switch limit requires a switch executor capability")
+        if self.required_boost_before_first_move is not None:
+            if not isinstance(self.required_boost_before_first_move, BattleBoostStat):
+                raise TypeError("required pre-move boost must be a boost stat or None")
+            if self.required_boost_before_first_move not in self.boost_capabilities:
+                raise ValueError(
+                    "required pre-move boost requires a matching executor capability"
+                )
+            if dict(self.boost_use_limits).get(self.required_boost_before_first_move, 0) < 1:
+                raise ValueError("required pre-move boost requires a matching use budget")
+        if self.minimum_hp_before_move is not None and (
+            type(self.minimum_hp_before_move) is not int  # noqa: E721
+            or self.minimum_hp_before_move < 1
+        ):
+            raise TypeError("minimum_hp_before_move must be a positive integer or None")
+        if (
+            self.minimum_hp_before_move is not None
+            and BattleRecoveryCapability.RESTORE_HP not in self.recovery_capabilities
+        ):
+            raise ValueError("minimum move HP requires an HP recovery capability")
+        if not isinstance(self.require_status_clear_before_move, bool):
+            raise TypeError("require_status_clear_before_move must be a bool")
+        status_recovery_capabilities = frozenset(
+            {
+                BattleRecoveryCapability.CURE_SLEEP,
+                BattleRecoveryCapability.CURE_PARALYSIS,
+                BattleRecoveryCapability.CURE_POISON,
+                BattleRecoveryCapability.CURE_BURN,
+                BattleRecoveryCapability.CURE_FREEZE,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        )
+        if (
+            self.require_status_clear_before_move
+            and not self.recovery_capabilities & status_recovery_capabilities
+        ):
+            raise ValueError(
+                "status-clear move constraint requires a status recovery capability"
+            )
+        if not isinstance(self.require_move_before_first_switch, bool):
+            raise TypeError("require_move_before_first_switch must be a bool")
+        if self.require_move_before_first_switch and not self.switch_capabilities:
+            raise ValueError("initial switch residency requires a switch executor capability")
+        if not isinstance(self.require_move_between_switches, bool):
+            raise TypeError("require_move_between_switches must be a bool")
+        if self.require_move_between_switches and not self.switch_capabilities:
+            raise ValueError("switch residency requires a switch executor capability")
+
+
+@dataclass(frozen=True, slots=True)
+class BattlePolicyObservation:
+    """Raw battle evidence paired with the planner intent available at inference."""
+
+    state: RawGameState
+    intent: BattleIntent | None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.state, RawGameState):
+            raise TypeError("state must be a RawGameState")
+        if self.intent is not None and not isinstance(self.intent, BattleIntent):
+            raise TypeError("intent must be a BattleIntent or None")
+
+
+@dataclass(frozen=True, slots=True)
+class BattleTurnExecution:
+    """Observed boundary of exactly one selected battle turn.
+
+    This is deliberately a Red-adapter result rather than a learner target.
+    The controller reports only the mechanically proved fact that the selected
+    move spent PP (or was observably replaced after executing).  The cartridge
+    states let an independent outcome projector decide what changed and whether
+    that result was good or bad.
+    """
+
+    initial_state: RawGameState
+    final_state: RawGameState
+    selected_slot: int
+    actions_executed: int
+    frames_executed: int
+    move_executed: bool
+    pre_attack_frames: int = 0
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.initial_state, RawGameState) or not isinstance(
+            self.final_state, RawGameState
+        ):
+            raise TypeError("battle turn states must be RawGameState values")
+        if (
+            type(self.selected_slot) is not int  # noqa: E721
+            or not _MIN_MOVE_SLOT <= self.selected_slot <= _MAX_MOVE_SLOT
+        ):
+            raise ValueError("selected_slot must be a one-based move slot")
+        if type(self.actions_executed) is not int or self.actions_executed < 1:  # noqa: E721
+            raise ValueError("actions_executed must be a positive integer")
+        if type(self.frames_executed) is not int or self.frames_executed < 1:  # noqa: E721
+            raise ValueError("frames_executed must be a positive integer")
+        if type(self.move_executed) is not bool:  # noqa: E721
+            raise TypeError("move_executed must be a bool")
+        if (
+            type(self.pre_attack_frames) is not int  # noqa: E721
+            or not 0 <= self.pre_attack_frames <= self.frames_executed
+        ):
+            raise ValueError("pre_attack_frames must fit inside the execution frame count")
+
+
+@dataclass(frozen=True, slots=True)
+class BattlePolicyBoundary:
+    """A live MAIN-menu state reached before any move policy was queried."""
+
+    state: RawGameState
+    actions_executed: int
+    frames_executed: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.state, RawGameState):
+            raise TypeError("battle policy boundary state must be a RawGameState")
+        for name in ("actions_executed", "frames_executed"):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:  # noqa: E721
+                raise ValueError(f"{name} must be a non-negative integer")
+        if (self.actions_executed == 0) is not (self.frames_executed == 0):
+            raise ValueError("battle policy boundary action and frame evidence disagree")
+
+
+class IntentAwareMoveSlotPolicy(Protocol):
+    """Policy interface for learned rankers that consume planner constraints."""
+
+    def choose_move(self, observation: BattlePolicyObservation, /) -> int: ...
+
+
+class BattlePolicyOverride(Protocol):
+    """Deployment policy that may defer one decision to the routed teacher."""
+
+    def choose_move(
+        self,
+        observation: BattlePolicyObservation,
+        fallback: Callable[[], int],
+        /,
+    ) -> int: ...
+
+
+class BattleDecisionObserver(Protocol):
+    """Encode a validated policy choice without persisting privileged raw state."""
+
+    def note_instrumentation_failure(self) -> None: ...
+
+    def battle_started(self, *, intent: BattleIntent | None) -> None: ...
+
+    def battle_finished(self) -> None: ...
+
+    def decision_scope(
+        self,
+        *,
+        policy_state: RawGameState,
+        policy_menu: BattleMenuState,
+        selected_slot: int,
+        intent: BattleIntent | None,
+    ) -> AbstractContextManager[None]: ...
+
+
+class BattleScheduleObserver(Protocol):
+    """Record collection-harness applications without action authority."""
+
+    def note_instrumentation_failure(self) -> None: ...
+
+    def offset_applied(
+        self,
+        *,
+        intent: BattleIntent,
+        offset: BattleStartOffset,
+        before_state: RawGameState,
+        before_menu: BattleMenuState,
+        after_state: RawGameState,
+        after_menu: BattleMenuState,
+    ) -> None: ...
+
+
+_BATTLE_DECISION_OBSERVER: ContextVar[BattleDecisionObserver | None] = ContextVar(
+    "pokemon_red_battle_decision_observer",
+    default=None,
+)
+_BATTLE_SCHEDULE_OBSERVER: ContextVar[BattleScheduleObserver | None] = ContextVar(
+    "pokemon_red_battle_schedule_observer",
+    default=None,
+)
+_BATTLE_POLICY_OVERRIDE: ContextVar[BattlePolicyOverride | None] = ContextVar(
+    "pokemon_red_battle_policy_override",
+    default=None,
+)
+
+
+def battle_policy_override_active() -> bool:
+    """Report whether a learned deployment policy currently owns move selection."""
+
+    return _BATTLE_POLICY_OVERRIDE.get() is not None
 
 
 class BattleRuntimeError(RuntimeError):
@@ -68,10 +424,11 @@ class BattleRuntimeTiming:
     max_main_navigation_pulses: int = 4
     max_move_menu_transition_pulses: int = 4
     max_move_navigation_pulses: int = 4
-    max_pp_confirmation_pulses: int = 6
+    max_pp_confirmation_pulses: int = 12
     max_attack_confirmation_pulses: int = 3
     max_post_attack_transition_pulses: int = 12
     max_sleep_recovery_pulses: int = 48
+    max_sleep_reapplications: int = 2
     required_ready_reads: int = 2
 
     def __post_init__(self) -> None:
@@ -84,25 +441,301 @@ class BattleRuntimeTiming:
 DEFAULT_BATTLE_RUNTIME_TIMING = BattleRuntimeTiming()
 
 
+def recovery_action_due(
+    *,
+    hp: int,
+    status: int,
+    safe_hp: int,
+    decisions_made: int,
+    last_recovery_decision: int,
+) -> bool:
+    """Require one actor decision between consecutive recovery-item turns."""
+
+    return (hp < safe_hp or bool(status)) and decisions_made != last_recovery_decision
+
+
+@contextmanager
+def bind_battle_decision_observer(
+    observer: BattleDecisionObserver,
+) -> Iterator[None]:
+    """Install one concurrency-local observer for the duration of a recorded run."""
+
+    for method_name in ("battle_started", "battle_finished", "decision_scope"):
+        method = getattr(observer, method_name, None)
+        if not callable(method):
+            raise TypeError(f"observer must provide {method_name}")
+    if not callable(getattr(observer, "note_instrumentation_failure", None)):
+        raise TypeError("observer must provide note_instrumentation_failure")
+    token = _BATTLE_DECISION_OBSERVER.set(observer)
+    try:
+        yield
+    finally:
+        _BATTLE_DECISION_OBSERVER.reset(token)
+
+
+@contextmanager
+def bind_battle_schedule_observer(
+    observer: BattleScheduleObserver,
+) -> Iterator[None]:
+    """Install one private metadata observer for schedule attestations."""
+
+    for method_name in ("note_instrumentation_failure", "offset_applied"):
+        if not callable(getattr(observer, method_name, None)):
+            raise TypeError(f"schedule observer must provide {method_name}")
+    if _BATTLE_SCHEDULE_OBSERVER.get() is not None:
+        raise BattleRuntimeError("a battle schedule observer is already bound")
+    token = _BATTLE_SCHEDULE_OBSERVER.set(observer)
+    try:
+        yield
+    finally:
+        _BATTLE_SCHEDULE_OBSERVER.reset(token)
+
+
+@contextmanager
+def bind_battle_policy_override(policy: BattlePolicyOverride) -> Iterator[None]:
+    """Install one model-assisted policy above every adaptive battle runtime."""
+
+    if not callable(getattr(policy, "choose_move", None)):
+        raise TypeError("battle policy override must provide choose_move")
+    if _BATTLE_POLICY_OVERRIDE.get() is not None:
+        raise BattleRuntimeError("a battle policy override is already bound")
+    token = _BATTLE_POLICY_OVERRIDE.set(policy)
+    try:
+        yield
+    finally:
+        _BATTLE_POLICY_OVERRIDE.reset(token)
+
+
+class _MeasuredTurnExecutor:
+    """Count the exact controller work reported by ``FrameSafeExecutor``."""
+
+    def __init__(self, delegate: BattleActionExecutor) -> None:
+        self._delegate = delegate
+        self.actions_executed = 0
+        self.frames_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self._delegate.execute(action)
+        frames = getattr(result, "frames", None)
+        if type(frames) is not int or frames < 1:  # noqa: E721
+            raise BattleRuntimeError(
+                "bounded battle-turn execution requires exact positive frame evidence."
+            )
+        self.actions_executed += 1
+        self.frames_executed += frames
+        return result
+
+
+def advance_battle_to_policy_boundary(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    *,
+    expected_map: int,
+    expected_battle_state: int,
+    timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
+    label: str = "battle policy boundary",
+) -> BattlePolicyBoundary:
+    """Advance battle-introduction dialogue to MAIN without selecting a move."""
+
+    if (
+        not isinstance(expected_map, int)
+        or isinstance(expected_map, bool)
+        or not 0 <= expected_map <= 0xFF
+    ):
+        raise ValueError("expected_map must be an unsigned one-byte map id")
+    if expected_battle_state not in {_WILD_BATTLE_STATE, _TRAINER_BATTLE_STATE}:
+        raise ValueError("expected_battle_state must identify a wild or trainer battle")
+    if not isinstance(label, str) or not label:
+        raise ValueError("label must be a non-empty string")
+
+    measured = _MeasuredTurnExecutor(executor)
+    token = _ACTIVE_BATTLE_STATE.set(expected_battle_state)
+    try:
+        for _ in range(timing.max_runtime_pulses):
+            raw = reader.read()
+            _require_present_state(raw, expected_map=expected_map, label=label)
+            if raw.battle_state != expected_battle_state:
+                raise BattleRuntimeError(f"{label} ended before a policy boundary.")
+            menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+            if menu.phase is BattleMenuPhase.MAIN:
+                if raw.enemy_hp is None or raw.enemy_hp <= 0:
+                    raise BattleRuntimeError(f"{label} lacks a live opponent.")
+                return BattlePolicyBoundary(
+                    state=raw,
+                    actions_executed=measured.actions_executed,
+                    frames_executed=measured.frames_executed,
+                )
+            if menu.phase is BattleMenuPhase.MOVE:
+                initial_pp = raw.battler_pp
+                _pulse(
+                    measured,
+                    MacroAction(MacroActionKind.CANCEL),
+                    timing.menu_wait_frames,
+                )
+                normalized = reader.read()
+                _require_active_trainer_state(
+                    normalized,
+                    expected_map=expected_map,
+                    label=label,
+                )
+                if normalized.battler_pp != initial_pp:
+                    raise BattleRuntimeError(
+                        f"{label} changed PP while cancelling an unowned move menu."
+                    )
+                continue
+            _pulse(
+                measured,
+                MacroAction(MacroActionKind.CONFIRM),
+                timing.dialogue_wait_frames,
+            )
+    finally:
+        _ACTIVE_BATTLE_STATE.reset(token)
+    raise BattleRuntimeTimeoutError(f"{label} exceeded its bounded introduction pulses.")
+
+
+def execute_bounded_battle_move_turn(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    *,
+    expected_map: int,
+    selected_slot: int,
+    expected_battle_state: int,
+    minimum_pre_attack_frames: int | None = None,
+    timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
+    label: str = "bounded battle turn",
+) -> BattleTurnExecution:
+    """Execute one semantic move choice and stop after its observed turn effect.
+
+    Unlike :func:`run_adaptive_trainer_battle`, this entry point never calls a
+    teacher or policy and never continues to the next decision.  It reuses the
+    same cursor, PP-decrement, controller-release, and transition gates as the
+    qualified full-battle runtime.  The caller owns candidate selection and
+    independently converts the returned cartridge states into an outcome.
+    """
+
+    if (
+        not isinstance(expected_map, int)
+        or isinstance(expected_map, bool)
+        or not 0 <= expected_map <= 0xFF
+    ):
+        raise ValueError("expected_map must be an unsigned one-byte map id")
+    if expected_battle_state not in {_WILD_BATTLE_STATE, _TRAINER_BATTLE_STATE}:
+        raise ValueError("expected_battle_state must identify a wild or trainer battle")
+    if not isinstance(label, str) or not label:
+        raise ValueError("label must be a non-empty string")
+    if minimum_pre_attack_frames is not None and (
+        type(minimum_pre_attack_frames) is not int  # noqa: E721
+        or minimum_pre_attack_frames < 1
+    ):
+        raise ValueError("minimum_pre_attack_frames must be a positive integer or None")
+    if _BATTLE_POLICY_OVERRIDE.get() is not None:
+        raise BattleRuntimeError(
+            f"{label} cannot run while a global battle-policy override is active."
+        )
+
+    token = _ACTIVE_BATTLE_STATE.set(expected_battle_state)
+    try:
+        initial = reader.read()
+        _require_present_state(initial, expected_map=expected_map, label=label)
+        if initial.battle_state != expected_battle_state:
+            raise BattleRuntimeError(
+                f"{label} must start in battle state {expected_battle_state}."
+            )
+        menu = _validated_menu(reader.read_battle_menu_state(initial), label=label)
+        if menu.phase is not BattleMenuPhase.MAIN:
+            raise BattleRuntimeError(f"{label} must start at the semantic MAIN menu.")
+        if initial.enemy_hp is None or initial.enemy_hp <= 0:
+            raise BattleRuntimeError(
+                f"{label} lacks a live opponent at the policy boundary."
+            )
+
+        slot = _choose_usable_slot(
+            lambda _state: selected_slot,
+            initial,
+            intent=None,
+            label=label,
+        )
+        if slot != selected_slot:
+            raise BattleRuntimeError(f"{label} did not preserve its requested move slot.")
+        initial_pp = _current_pp(initial, slot=slot, label=label)
+        measured = _MeasuredTurnExecutor(executor)
+        observed_pre_attack_frames = 0
+
+        def equalize_and_record_pre_attack_frames() -> None:
+            nonlocal observed_pre_attack_frames
+            if minimum_pre_attack_frames is not None:
+                remaining = minimum_pre_attack_frames - measured.frames_executed
+                if remaining < 0:
+                    raise BattleRuntimeError(
+                        f"{label} exceeded its counterfactual pre-attack frame target."
+                    )
+                if remaining:
+                    measured.execute(MacroAction(MacroActionKind.WAIT, repeat=remaining))
+                if measured.frames_executed != minimum_pre_attack_frames:
+                    raise BattleRuntimeError(
+                        f"{label} could not prove its counterfactual pre-attack frame target."
+                    )
+            observed_pre_attack_frames = measured.frames_executed
+
+        move_executed = _execute_policy_turn(
+            reader,
+            measured,
+            expected_map=expected_map,
+            initial_raw=initial,
+            initial_menu=menu,
+            slot=slot,
+            initial_pp=initial_pp,
+            required_move_id=None,
+            timing=timing,
+            label=label,
+            before_attack=equalize_and_record_pre_attack_frames,
+        )
+        final = reader.read()
+        _require_present_state(final, expected_map=expected_map, label=label)
+        if final.battle_state not in {0, expected_battle_state}:
+            raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        return BattleTurnExecution(
+            initial_state=initial,
+            final_state=final,
+            selected_slot=slot,
+            actions_executed=measured.actions_executed,
+            frames_executed=measured.frames_executed,
+            move_executed=move_executed,
+            pre_attack_frames=observed_pre_attack_frames,
+        )
+    finally:
+        _ACTIVE_BATTLE_STATE.reset(token)
+
+
 def run_adaptive_trainer_battle(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
     move_slot_policy: MoveSlotPolicy,
     *,
     expected_map: int,
+    intent: BattleIntent | None = None,
     required_move_id: int | None = None,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "trainer battle",
     unknown_cancel_interval: int = 3,
+    transient_zero_pp_main_is_dialogue: bool = False,
+    consume_battle_start_schedule: bool = True,
+    move_decision_guard: MoveDecisionGuard | None = None,
+    move_decision_sink: MoveDecisionSink | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
-    The policy is called exactly once for each newly observed main battle-menu
-    turn. Its choice is latched while the controller moves to FIGHT, proves the
-    requested move cursor, and proves that the selected move spent exactly one
-    current PP. Unknown menu state is treated as dialogue between turns and
-    after a cursor-proven attack confirmation, where bounded CONFIRM pulses
-    cover opponent-first attack text, level-up text, and move-learning prompts.
+    The selected policy is called exactly once for each newly observed main
+    battle-menu turn. Its choice is latched while the controller moves to
+    FIGHT, proves the requested move cursor, and proves that the selected move
+    spent exactly one current PP. ``move_decision_guard`` enforces semantic
+    execution preconditions before either policy can act; it never supplies a
+    move label. ``move_decision_sink`` observes the validated selection without
+    participating in it, so chapter receipts remain complete whether the legacy
+    teacher or a bound learned policy chose the move. Unknown menu state is
+    treated as dialogue between turns and after a cursor-proven attack
+    confirmation, where bounded CONFIRM pulses cover opponent-first attack text,
+    level-up text, and move-learning prompts.
     """
 
     if (
@@ -119,25 +752,55 @@ def run_adaptive_trainer_battle(
         or unknown_cancel_interval <= 0
     ):
         raise ValueError("unknown_cancel_interval must be a positive integer")
+    if not isinstance(transient_zero_pp_main_is_dialogue, bool):
+        raise TypeError("transient_zero_pp_main_is_dialogue must be a bool")
+    if not isinstance(consume_battle_start_schedule, bool):
+        raise TypeError("consume_battle_start_schedule must be a bool")
+    if move_decision_guard is not None and not callable(move_decision_guard):
+        raise TypeError("move_decision_guard must be callable or None")
+    if move_decision_sink is not None and not callable(move_decision_sink):
+        raise TypeError("move_decision_sink must be callable or None")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
         or not 1 <= required_move_id <= 0xFF
     ):
         raise ValueError("required_move_id must be a non-zero one-byte move id")
+    if intent is not None and not isinstance(intent, BattleIntent):
+        raise TypeError("intent must be a BattleIntent or None")
+    if intent is not None:
+        exact_required = intent.required_move_policy is RequiredMovePolicy.EXACT_REQUIRED
+        if exact_required is not (required_move_id is not None):
+            raise ValueError("intent required_move_policy must agree with required_move_id")
 
+    expected_battle_state = _ACTIVE_BATTLE_STATE.get()
     initial = reader.read()
     _require_present_state(initial, expected_map=expected_map, label=label)
-    if initial.battle_state != _TRAINER_BATTLE_STATE:
-        raise BattleRuntimeError(f"{label} must start in an active trainer battle.")
+    if initial.battle_state != expected_battle_state:
+        kind = "trainer" if expected_battle_state == _TRAINER_BATTLE_STATE else "wild"
+        raise BattleRuntimeError(f"{label} must start in an active {kind} battle.")
+    battle_start_schedule = (
+        bound_battle_start_schedule()
+        if expected_battle_state == _TRAINER_BATTLE_STATE and consume_battle_start_schedule
+        else None
+    )
+    if battle_start_schedule is not None:
+        battle_start_schedule.start_or_resume(intent)
+    _battle_observation_started(intent=intent)
 
     ready_reads = 0
     unknown_menu_pulses = 0
+    battle_exit_notified = False
     for _ in range(timing.max_runtime_pulses):
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
 
         if raw.battle_state == 0:
+            if not battle_exit_notified:
+                if battle_start_schedule is not None:
+                    battle_start_schedule.finish(intent)
+                _battle_observation_finished()
+                battle_exit_notified = True
             if reader.read_input_readiness().ready:
                 ready_reads += 1
                 if ready_reads >= timing.required_ready_reads:
@@ -152,7 +815,7 @@ def run_adaptive_trainer_battle(
                 )
             continue
 
-        if raw.battle_state != _TRAINER_BATTLE_STATE:
+        if raw.battle_state != expected_battle_state:
             raise BattleRuntimeError(
                 f"{label} changed to unsupported battle state {raw.battle_state!r}."
             )
@@ -161,19 +824,37 @@ def run_adaptive_trainer_battle(
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.UNKNOWN:
             unknown_menu_pulses += 1
+            trainer_switch_prompt = _trainer_switch_prompt_visible(reader, raw)
             _pulse(
                 executor,
                 MacroAction(
                     MacroActionKind.CANCEL
-                    if unknown_menu_pulses % unknown_cancel_interval == 0
+                    if trainer_switch_prompt
+                    or unknown_menu_pulses % unknown_cancel_interval == 0
                     else MacroActionKind.CONFIRM
                 ),
                 timing.dialogue_wait_frames,
             )
             continue
         unknown_menu_pulses = 0
+        if (
+            transient_zero_pp_main_is_dialogue
+            and raw.battler_pp is not None
+            and raw.battler_pp
+            and all((pp & 0x3F) == 0 for pp in raw.battler_pp)
+        ):
+            # Gen I's choose-a-move-to-forget screen briefly reuses battle-menu
+            # state while exposing no battler PP.  A caller that deliberately
+            # accepts a level-up move may opt into treating only this impossible
+            # combat snapshot as dialogue and confirm the default first slot.
+            _pulse(
+                executor,
+                MacroAction(MacroActionKind.CONFIRM),
+                timing.dialogue_wait_frames,
+            )
+            continue
         if menu.phase is BattleMenuPhase.MOVE:
-            initial_pp = raw.first_party_pp
+            initial_pp = raw.battler_pp
             _pulse(
                 executor,
                 MacroAction(MacroActionKind.CANCEL),
@@ -185,7 +866,7 @@ def run_adaptive_trainer_battle(
                 expected_map=expected_map,
                 label=label,
             )
-            if normalized.first_party_pp != initial_pp:
+            if normalized.battler_pp != initial_pp:
                 raise BattleRuntimeError(
                     f"{label} changed PP while normalizing an unlatched move menu."
                 )
@@ -204,24 +885,318 @@ def run_adaptive_trainer_battle(
             _wait(executor, timing.dialogue_wait_frames)
             continue
 
-        slot = _choose_usable_slot(move_slot_policy, raw, label=label)
-        initial_pp = _current_pp(raw, slot=slot, label=label)
-        _execute_policy_turn(
-            reader,
-            executor,
+        raw, menu = _apply_battle_start_offset(
+            battle_start_schedule,
+            reader=reader,
+            executor=executor,
+            intent=intent,
             expected_map=expected_map,
-            initial_raw=raw,
-            initial_menu=menu,
-            slot=slot,
-            initial_pp=initial_pp,
-            required_move_id=required_move_id,
-            timing=timing,
+            policy_state=raw,
+            policy_menu=menu,
             label=label,
         )
+        if move_decision_guard is not None:
+            try:
+                move_decision_guard(raw)
+            except Exception as error:
+                raise BattleRuntimeError(
+                    f"{label} move-decision guard rejected the current MAIN-menu turn."
+                ) from error
+        slot = _choose_usable_slot(
+            move_slot_policy,
+            raw,
+            intent=intent,
+            label=label,
+        )
+        if move_decision_sink is not None:
+            move_decision_sink(raw, slot)
+        initial_pp = _current_pp(raw, slot=slot, label=label)
+        with _battle_decision_scope(
+            policy_state=raw,
+            policy_menu=menu,
+            selected_slot=slot,
+            intent=intent,
+        ):
+            _execute_policy_turn(
+                reader,
+                executor,
+                expected_map=expected_map,
+                initial_raw=raw,
+                initial_menu=menu,
+                slot=slot,
+                initial_pp=initial_pp,
+                required_move_id=required_move_id,
+                timing=timing,
+                label=label,
+            )
+
+    # A bounded one-pulse caller may end the battle inside its final policy
+    # action. Close schedule/observer lifecycle state even though the caller
+    # still receives the timeout and remains responsible for post-battle
+    # readiness/dialogue handling.
+    final_raw = reader.read()
+    _require_present_state(final_raw, expected_map=expected_map, label=label)
+    if final_raw.battle_state == 0:
+        if battle_start_schedule is not None:
+            battle_start_schedule.finish(intent)
+        _battle_observation_finished()
 
     raise BattleRuntimeTimeoutError(
         f"{label} exceeded {timing.max_runtime_pulses} bounded runtime pulses."
     )
+
+
+def _trainer_switch_prompt_visible(
+    reader: BattleStateReader,
+    raw: RawGameState,
+) -> bool:
+    detector = getattr(reader, "trainer_switch_prompt_visible", None)
+    return bool(detector(raw)) if callable(detector) else False
+
+
+def run_adaptive_wild_battle(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    move_slot_policy: MoveSlotPolicy,
+    *,
+    expected_map: int,
+    intent: BattleIntent | None = None,
+    timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
+    label: str = "wild battle",
+    unknown_cancel_interval: int = 3,
+    transient_zero_pp_main_is_dialogue: bool = False,
+    move_decision_guard: MoveDecisionGuard | None = None,
+) -> RawGameState:
+    """Finish one active wild battle using the same semantic turn controller.
+
+    Wild training deliberately does not consume the held-out trainer-battle
+    start schedule.  It still exposes the truthful wild battle state to the
+    policy and any observational decision recorder.
+    """
+
+    token = _ACTIVE_BATTLE_STATE.set(_WILD_BATTLE_STATE)
+    try:
+        return run_adaptive_trainer_battle(
+            reader,
+            executor,
+            move_slot_policy,
+            expected_map=expected_map,
+            intent=intent,
+            timing=timing,
+            label=label,
+            unknown_cancel_interval=unknown_cancel_interval,
+            transient_zero_pp_main_is_dialogue=transient_zero_pp_main_is_dialogue,
+            move_decision_guard=move_decision_guard,
+        )
+    finally:
+        _ACTIVE_BATTLE_STATE.reset(token)
+
+
+def note_observed_battle_exit() -> None:
+    """Close recorder lifecycle state after a battle exits outside this runtime.
+
+    Some bounded recovery paths leave the adaptive turn loop and then flee via
+    the field controller.  Once that controller has independently proved the
+    battle ended, it calls this observational hook so the next physical
+    encounter receives a new battle-instance identity.  The hook remains
+    fail-open and has no effect when trajectory recording is disabled.
+    """
+
+    _battle_observation_finished()
+
+
+def note_observed_trainer_battle_exit(intent: BattleIntent) -> None:
+    """Close schedule and recorder state after a proven external trainer exit."""
+
+    if not isinstance(intent, BattleIntent):
+        raise TypeError("intent must be a BattleIntent")
+    schedule = bound_battle_start_schedule()
+    if schedule is not None:
+        schedule.finish_if_active(intent)
+    _battle_observation_finished()
+
+
+def _apply_battle_start_offset(
+    schedule: BattleStartScheduleController | None,
+    *,
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    intent: BattleIntent | None,
+    expected_map: int,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    label: str,
+) -> tuple[RawGameState, BattleMenuState]:
+    """Apply one collection-only WAIT before the first policy decision."""
+
+    if schedule is None:
+        return policy_state, policy_menu
+    offset = schedule.claim_at_main(intent)
+    if offset is None:
+        return policy_state, policy_menu
+    try:
+        if offset.frames:
+            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=offset.frames))
+        refreshed = reader.read()
+        _require_active_trainer_state(
+            refreshed,
+            expected_map=expected_map,
+            label=label,
+        )
+        refreshed_menu = _validated_menu(
+            reader.read_battle_menu_state(refreshed),
+            label=label,
+        )
+        if refreshed_menu.phase is not BattleMenuPhase.MAIN:
+            raise BattleRuntimeError(f"{label} left the MAIN menu during its battle-start offset.")
+        if refreshed.enemy_hp is None or refreshed.enemy_hp <= 0:
+            raise BattleRuntimeError(
+                f"{label} lost live enemy evidence during its battle-start offset."
+            )
+        if refreshed != policy_state or refreshed_menu != policy_menu:
+            raise BattleRuntimeError(
+                f"{label} changed policy-visible state during its battle-start offset."
+            )
+        schedule.mark_applied(intent, offset)
+        if intent is not None:
+            _observe_schedule_offset(
+                intent=intent,
+                offset=offset,
+                before_state=policy_state,
+                before_menu=policy_menu,
+                after_state=refreshed,
+                after_menu=refreshed_menu,
+            )
+        return refreshed, refreshed_menu
+    except Exception:
+        schedule.mark_failed()
+        raise
+
+
+def _battle_decision_scope(
+    *,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    selected_slot: int,
+    intent: BattleIntent | None,
+) -> AbstractContextManager[None]:
+    """Contain observer lifecycle failures without altering actor behavior."""
+
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return nullcontext()
+    return _fail_open_battle_decision_scope(
+        observer,
+        policy_state=policy_state,
+        policy_menu=policy_menu,
+        selected_slot=selected_slot,
+        intent=intent,
+    )
+
+
+@contextmanager
+def _fail_open_battle_decision_scope(
+    observer: BattleDecisionObserver,
+    *,
+    policy_state: RawGameState,
+    policy_menu: BattleMenuState,
+    selected_slot: int,
+    intent: BattleIntent | None,
+) -> Iterator[None]:
+    try:
+        manager = observer.decision_scope(
+            policy_state=policy_state,
+            policy_menu=policy_menu,
+            selected_slot=selected_slot,
+            intent=intent,
+        )
+        manager.__enter__()
+    except Exception:
+        _note_observer_failure(observer)
+        yield
+        return
+
+    try:
+        yield
+    except BaseException as actor_error:
+        try:
+            manager.__exit__(
+                type(actor_error),
+                actor_error,
+                actor_error.__traceback__,
+            )
+        except BaseException as exit_error:
+            # A generator-based context manager re-raises the actor's own
+            # exception after running its cleanup.  That is normal propagation,
+            # not lost instrumentation.  Only a distinct exit failure makes the
+            # episode ineligible for promotion.
+            if exit_error is not actor_error:
+                _note_observer_failure(observer)
+        raise
+    else:
+        try:
+            manager.__exit__(None, None, None)
+        except Exception:
+            _note_observer_failure(observer)
+
+
+def _battle_observation_started(*, intent: BattleIntent | None) -> None:
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.battle_started(intent=intent)
+    except Exception:
+        # Recording is observational and must never replace actor behavior.
+        _note_observer_failure(observer)
+        return
+
+
+def _battle_observation_finished() -> None:
+    observer = _BATTLE_DECISION_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.battle_finished()
+    except Exception:
+        # Recording is observational and must never replace actor behavior.
+        _note_observer_failure(observer)
+        return
+
+
+def _note_observer_failure(observer: BattleDecisionObserver) -> None:
+    try:
+        observer.note_instrumentation_failure()
+    except Exception:
+        return
+
+
+def _observe_schedule_offset(
+    *,
+    intent: BattleIntent,
+    offset: BattleStartOffset,
+    before_state: RawGameState,
+    before_menu: BattleMenuState,
+    after_state: RawGameState,
+    after_menu: BattleMenuState,
+) -> None:
+    observer = _BATTLE_SCHEDULE_OBSERVER.get()
+    if observer is None:
+        return
+    try:
+        observer.offset_applied(
+            intent=intent,
+            offset=offset,
+            before_state=before_state,
+            before_menu=before_menu,
+            after_state=after_state,
+            after_menu=after_menu,
+        )
+    except Exception:
+        try:
+            observer.note_instrumentation_failure()
+        except Exception:
+            return
 
 
 def _execute_policy_turn(
@@ -236,7 +1211,8 @@ def _execute_policy_turn(
     required_move_id: int | None,
     timing: BattleRuntimeTiming,
     label: str,
-) -> None:
+    before_attack: Callable[[], None] | None = None,
+) -> bool:
     raw = initial_raw
     menu = initial_menu
 
@@ -298,16 +1274,25 @@ def _execute_policy_turn(
             expected_map=expected_map,
             slot=slot,
             initial_pp=initial_pp,
-            initial_pp_vector=initial_raw.first_party_pp,
+            initial_pp_vector=initial_raw.battler_pp,
             timing=timing,
             label=label,
         ):
-            return
-        if (raw.first_party_status or 0) != 0 and raw.first_party_pp == initial_raw.first_party_pp:
+            return False
+        if (raw.battler_status or 0) != 0 and raw.battler_pp == initial_raw.battler_pp:
             # A status-suppressed turn (notably full paralysis) may consume
             # FIGHT before the move menu becomes observable.  An unchanged
             # PP vector proves that no move was substituted or spent.
-            return
+            return False
+        if (
+            initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move
+        ) and raw.battler_pp == initial_raw.battler_pp:
+            # Gen I trapping moves such as Bind suppress the trapped player's
+            # move selection on continuation turns. The enemy battle-status
+            # bit can clear before the menu returns, so evidence at either the
+            # policy gate or the final transition gate proves the forced
+            # no-action turn; unchanged PP proves no player move was spent.
+            return False
         raise BattleRuntimeError(f"{label} never exposed a semantic move menu.")
 
     menu = move_menu
@@ -334,14 +1319,16 @@ def _execute_policy_turn(
     if menu.selected_move_slot != slot:
         raise BattleRuntimeError(f"{label} could not select move slot {slot} inside its bound.")
     if required_move_id is not None:
-        moves = raw.first_party_moves
+        moves = raw.battler_moves
         if moves is None or len(moves) < slot or moves[slot - 1] != required_move_id:
             observed = None if moves is None or len(moves) < slot else moves[slot - 1]
             raise BattleRuntimeError(
                 f"{label} selected move id {observed!r}, "
                 f"expected {required_move_id:#04x} in slot {slot}."
             )
-    _confirm_attack_with_pp_gate(
+    if before_attack is not None:
+        before_attack()
+    return _confirm_attack_with_pp_gate(
         reader,
         executor,
         expected_map=expected_map,
@@ -363,7 +1350,7 @@ def _confirm_attack_with_pp_gate(
     initial_pp: int,
     timing: BattleRuntimeTiming,
     label: str,
-) -> None:
+) -> bool:
     confirmation_count = 1
     _pulse(
         executor,
@@ -374,8 +1361,13 @@ def _confirm_attack_with_pp_gate(
     for _ in range(timing.max_pp_confirmation_pulses):
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
-        current_pp = _current_pp(
+        observed_pp = _original_battler_pp_vector(
+            initial_raw,
             raw,
+            label=label,
+        )
+        current_pp = _pp_value(
+            observed_pp,
             slot=slot,
             label=label,
             require_usable=False,
@@ -392,15 +1384,67 @@ def _confirm_attack_with_pp_gate(
                 timing=timing,
                 label=label,
             )
-            return
+            return True
+        if _selected_move_identity_replaced(initial_raw, raw, slot=slot):
+            # At high emulator speeds, a terminal wild-battle attack, level-up,
+            # and accepted move replacement can all complete inside the first
+            # attack wait.  The new non-zero move identity in the exact selected
+            # slot is then stronger semantic evidence than the overwritten PP
+            # counter, whose old one-point decrement is no longer observable.
+            return True
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
-        if raw.enemy_hp == 0 and raw.first_party_pp == initial_raw.first_party_pp:
+        if raw.enemy_hp == 0 and observed_pp == initial_raw.battler_pp:
             # An opponent can move first and faint from recoil or
             # Selfdestruct before the cursor-proven move executes. The full
             # unchanged PP vector proves that no player move was substituted.
-            return
-        if raw.battle_state != _TRAINER_BATTLE_STATE:
+            return False
+        if (
+            raw.player_disabled_move_slot == slot
+            and (raw.player_disable_turns or 0) > 0
+            and observed_pp == initial_raw.battler_pp
+        ):
+            # A faster opponent can use Disable after the player selects a
+            # move. The selected turn is suppressed without spending PP; the
+            # outer loop must return to MAIN and let the policy choose a
+            # different legal slot.
+            return False
+        if raw.enemy_using_trapping_move and observed_pp == initial_raw.battler_pp:
+            # A faster opponent can begin a Gen I trapping sequence after the
+            # player selected a move. The selected turn is forcibly suppressed;
+            # unchanged full PP proves no player move executed or was replaced.
+            return False
+        if (
+            (raw.battler_status or 0) & 0x07
+            and observed_pp == initial_raw.battler_pp
+            and _recover_sleep_transition(
+                reader,
+                executor,
+                expected_map=expected_map,
+                slot=slot,
+                initial_pp=initial_pp,
+                initial_pp_vector=initial_raw.battler_pp,
+                timing=timing,
+                label=label,
+            )
+        ):
+            # A faster opponent can apply sleep after the player has already
+            # selected a move. The move menu was real, but the chosen attack
+            # is suppressed before spending PP. Recover the bounded sleep
+            # counter and return to a fresh policy boundary.
+            return False
+        expected_battle_state = _ACTIVE_BATTLE_STATE.get()
+        if (
+            expected_battle_state == _WILD_BATTLE_STATE
+            and raw.battle_state == 0
+            and observed_pp == initial_raw.battler_pp
+        ):
+            # Wild opponents can end the battle with Selfdestruct or recoil
+            # before the cursor-proven player move executes. Unlike a trainer
+            # battle there is no next party member, so battle exit plus the
+            # unchanged full PP vector is the truthful terminal proof.
+            return False
+        if raw.battle_state != expected_battle_state:
             raise BattleRuntimeError(
                 f"{label} ended without the required move-slot {slot} PP decrement."
             )
@@ -425,15 +1469,49 @@ def _confirm_attack_with_pp_gate(
                 timing.attack_wait_frames,
             )
             continue
-        if menu.phase is BattleMenuPhase.MAIN and raw.first_party_pp == initial_raw.first_party_pp:
+        if menu.phase is BattleMenuPhase.MAIN and observed_pp == initial_raw.battler_pp:
             # A suppressed turn can return to MAIN without spending PP.
             # Persistent causes such as paralysis appear in the status byte,
             # while volatile causes such as confusion do not.  The unchanged
             # complete PP vector proves that no alternate move was used.
-            return
+            return False
         raise BattleRuntimeError(f"{label} left move selection without its required PP decrement.")
 
-    raise BattleRuntimeError(f"{label} failed its bounded move-slot {slot} PP-decrement gate.")
+    raise BattleRuntimeError(
+        f"{label} failed its bounded move-slot {slot} PP-decrement gate: "
+        f"initial_pp={initial_pp}, current_pp={raw.battler_pp}, "
+        f"hp={raw.battler_hp}/{raw.battler_max_hp}, "
+        f"status={raw.battler_status}, menu="
+        f"{_validated_menu(reader.read_battle_menu_state(raw), label=label).phase.value}, "
+        f"enemy_trapping="
+        f"{raw.enemy_using_trapping_move}, battle_state={raw.battle_state}."
+    )
+
+
+def _selected_move_identity_replaced(
+    initial_raw: RawGameState,
+    current_raw: RawGameState,
+    *,
+    slot: int,
+) -> bool:
+    """Recognize an accepted level-up move that overwrote the selected slot."""
+
+    before_moves = initial_raw.battler_moves
+    after_moves = current_raw.battler_moves
+    after_pp = current_raw.battler_pp
+    index = slot - 1
+    return bool(
+        before_moves is not None
+        and after_moves is not None
+        and after_pp is not None
+        and len(before_moves) > index
+        and len(after_moves) > index
+        and len(after_pp) > index
+        and before_moves[index] != 0
+        and after_moves[index] != 0
+        and before_moves[index] != after_moves[index]
+        and (after_pp[index] & 0x3F) > 0
+    )
 
 
 def _recover_sleep_transition(
@@ -450,30 +1528,112 @@ def _recover_sleep_transition(
     """Recover only the Gen I sleep countdown that suppresses move selection."""
 
     raw = reader.read()
-    sleep_count = (raw.first_party_status or 0) & 0x07
+    sleep_count = (raw.battler_status or 0) & 0x07
     if sleep_count == 0:
         return False
 
+    initial_count = sleep_count
     previous_count = sleep_count
+    sleep_reapplications = 0
     saw_decrease = False
-    for _ in range(timing.max_sleep_recovery_pulses):
+    # Gen I stores the remaining sleep duration as a three-bit turn counter.
+    # Give each observed sleeping turn the configured transition allowance
+    # instead of making every turn share one allowance.  Long move animations
+    # and dialogue can otherwise consume the whole budget even while the
+    # semantic counter is decreasing normally.
+    max_recovery_pulses = timing.max_sleep_recovery_pulses * (
+        initial_count + 7 * timing.max_sleep_reapplications
+    )
+    for _ in range(max_recovery_pulses):
+        if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
+            _require_present_state(raw, expected_map=expected_map, label=label)
+            if (raw.battler_hp or 0) <= 0:
+                raise BattleRuntimeError(f"{label} fainted as the wild battle ended during sleep.")
+            if raw.battler_pp != initial_pp_vector:
+                raise BattleRuntimeError(
+                    f"{label} changed PP as the wild battle ended during sleep recovery."
+                )
+            return True
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
-        if (raw.first_party_hp or 0) <= 0:
+        if (raw.battler_hp or 0) <= 0:
             raise BattleRuntimeError(f"{label} fainted during sleep recovery.")
         if _current_pp(raw, slot=slot, label=label, require_usable=False) != initial_pp:
             raise BattleRuntimeError(
                 f"{label} changed PP during sleep recovery without a selected attack."
             )
-        if raw.first_party_pp != initial_pp_vector:
+        if raw.battler_pp != initial_pp_vector:
             raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
 
+        menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+        if menu.phase is BattleMenuPhase.MAIN:
+            for _ in range(timing.max_main_navigation_pulses + 1):
+                command = menu.selected_main_command
+                if command == _FIGHT_COMMAND:
+                    break
+                direction = {1: "up", 2: "left", 3: "up"}.get(command)
+                if direction is None:
+                    raise BattleRuntimeError(
+                        f"{label} exposed an invalid command during sleep recovery."
+                    )
+                _pulse(
+                    executor,
+                    MacroAction(MacroActionKind.MOVE, direction),
+                    timing.menu_wait_frames,
+                )
+                raw = reader.read()
+                _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+                menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+                if menu.phase is not BattleMenuPhase.MAIN:
+                    raise BattleRuntimeError(f"{label} left MAIN while navigating sleep recovery.")
+            else:
+                raise BattleRuntimeError(
+                    f"{label} could not navigate to FIGHT during sleep recovery."
+                )
+            _pulse(
+                executor,
+                MacroAction(MacroActionKind.CONFIRM),
+                timing.menu_wait_frames,
+            )
+            raw = reader.read()
+            _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+            menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+
+        if menu.phase is BattleMenuPhase.MOVE:
+            for _ in range(timing.max_move_navigation_pulses + 1):
+                selected_slot = menu.selected_move_slot
+                if selected_slot == slot:
+                    break
+                if selected_slot is None:
+                    raise BattleRuntimeError(
+                        f"{label} exposed an invalid move cursor during sleep recovery."
+                    )
+                _pulse(
+                    executor,
+                    MacroAction(
+                        MacroActionKind.MOVE,
+                        "down" if selected_slot < slot else "up",
+                    ),
+                    timing.menu_wait_frames,
+                )
+                raw = reader.read()
+                _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+                menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+                if menu.phase is not BattleMenuPhase.MOVE:
+                    raise BattleRuntimeError(f"{label} left MOVE while navigating sleep recovery.")
+            else:
+                raise BattleRuntimeError(
+                    f"{label} could not restore its move cursor during sleep recovery."
+                )
+
+        if menu.phase not in {BattleMenuPhase.MOVE, BattleMenuPhase.UNKNOWN}:
+            raise BattleRuntimeError(f"{label} exposed an invalid sleep-recovery phase.")
         _pulse(
             executor,
             MacroAction(MacroActionKind.CONFIRM),
             timing.dialogue_wait_frames,
         )
         raw = reader.read()
-        current_count = (raw.first_party_status or 0) & 0x07
+        current_count = (raw.battler_status or 0) & 0x07
         if current_count == 0:
             menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
             if menu.phase is BattleMenuPhase.MOVE:
@@ -484,7 +1644,17 @@ def _recover_sleep_transition(
                 )
             return True
         if current_count > previous_count:
-            raise BattleRuntimeError(f"{label} sleep counter increased during bounded recovery.")
+            # The observer can miss the zero between waking and an opponent
+            # immediately applying sleep again in the same turn.  Accept that
+            # as a new sleep episode only from the final observed sleeping
+            # turn, and keep the number of episodes strictly bounded.
+            if previous_count != 1:
+                raise BattleRuntimeError(
+                    f"{label} sleep counter increased before its wake-up boundary."
+                )
+            sleep_reapplications += 1
+            if sleep_reapplications > timing.max_sleep_reapplications:
+                raise BattleRuntimeError(f"{label} exceeded its bounded sleep reapplications.")
         saw_decrease = saw_decrease or current_count < previous_count
         previous_count = current_count
 
@@ -493,7 +1663,7 @@ def _recover_sleep_transition(
     menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
     raise BattleRuntimeError(
         f"{label} exceeded its bounded sleep recovery: "
-        f"sleep={previous_count}, hp={raw.first_party_hp}, phase={menu.phase.value}."
+        f"sleep={previous_count}, hp={raw.battler_hp}, phase={menu.phase.value}."
     )
 
 
@@ -539,6 +1709,8 @@ def _await_selected_turn_effect(
             _wait(executor, timing.attack_wait_frames)
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
+        if _selected_turn_effect_observed(initial_raw, raw):
+            return
         current_pp = _current_pp(
             raw,
             slot=slot,
@@ -547,7 +1719,12 @@ def _await_selected_turn_effect(
         )
         if current_pp != spent_pp:
             raise BattleRuntimeError(
-                f"{label} changed move-slot {slot} PP after its single-attack proof."
+                f"{label} changed move-slot {slot} PP after its single-attack proof: "
+                f"species={raw.active_party_species_id!r}, "
+                f"moves={initial_raw.battler_moves!r}->{raw.battler_moves!r}, "
+                f"pp={initial_raw.battler_pp!r}->{raw.battler_pp!r}, "
+                f"enemy={initial_raw.enemy_species_id!r}/{initial_raw.enemy_hp!r}"
+                f"->{raw.enemy_species_id!r}/{raw.enemy_hp!r}."
             )
     if raw.battle_state == 0:
         return
@@ -561,24 +1738,40 @@ def _selected_turn_effect_observed(
     current: RawGameState,
 ) -> bool:
     return (
-        current.enemy_species_id != initial.enemy_species_id
+        current.active_party_index != initial.active_party_index
+        or current.enemy_species_id != initial.enemy_species_id
         or current.enemy_hp != initial.enemy_hp
+        or current.battler_moves != initial.battler_moves
         or current.enemy_defense_stage != initial.enemy_defense_stage
-        or current.first_party_hp != initial.first_party_hp
-        or current.first_party_status != initial.first_party_status
+        or current.battler_hp != initial.battler_hp
+        or current.battler_status != initial.battler_status
         or current.player_attack_stage != initial.player_attack_stage
         or current.player_accuracy_stage != initial.player_accuracy_stage
     )
 
 
 def _choose_usable_slot(
-    policy: MoveSlotPolicy,
+    policy: MoveSlotPolicy | IntentAwareMoveSlotPolicy,
     raw: RawGameState,
     *,
+    intent: BattleIntent | None,
     label: str,
 ) -> int:
     try:
-        slot = policy(raw)
+        observation = BattlePolicyObservation(raw, intent)
+
+        def routed_teacher() -> int:
+            choose_with_intent = getattr(policy, "choose_move", None)
+            if callable(choose_with_intent):
+                return choose_with_intent(observation)
+            return policy(raw)  # type: ignore[operator]
+
+        override = _BATTLE_POLICY_OVERRIDE.get()
+        slot = (
+            override.choose_move(observation, routed_teacher)
+            if override is not None
+            else routed_teacher()
+        )
     except Exception as error:
         raise BattleRuntimeError(
             f"{label} move-slot policy rejected the current MAIN-menu turn."
@@ -592,12 +1785,14 @@ def _choose_usable_slot(
             f"{label} move-slot policy returned invalid one-based slot {slot!r}."
         )
 
-    moves = raw.first_party_moves
+    moves = raw.battler_moves
     index = slot - 1
     if moves is None or len(moves) <= index or moves[index] == 0:
         raise BattleRuntimeError(
             f"{label} move-slot policy selected slot {slot} without move evidence."
         )
+    if raw.player_disabled_move_slot == slot and (raw.player_disable_turns or 0) > 0:
+        raise BattleRuntimeError(f"{label} move-slot policy selected disabled slot {slot}.")
     _current_pp(raw, slot=slot, label=label)
     return slot
 
@@ -609,7 +1804,21 @@ def _current_pp(
     label: str,
     require_usable: bool = True,
 ) -> int:
-    pp = raw.first_party_pp
+    return _pp_value(
+        raw.battler_pp,
+        slot=slot,
+        label=label,
+        require_usable=require_usable,
+    )
+
+
+def _pp_value(
+    pp: tuple[int, ...] | None,
+    *,
+    slot: int,
+    label: str,
+    require_usable: bool = True,
+) -> int:
     index = slot - 1
     if pp is None or len(pp) <= index:
         raise BattleRuntimeError(f"{label} lacks PP evidence for move slot {slot}.")
@@ -617,6 +1826,25 @@ def _current_pp(
     if require_usable and current_pp <= 0:
         raise BattleRuntimeError(f"{label} move slot {slot} has no usable PP.")
     return current_pp
+
+
+def _original_battler_pp_vector(
+    initial: RawGameState,
+    current: RawGameState,
+    *,
+    label: str,
+) -> tuple[int, ...] | None:
+    """Read PP from the originally selected battler after any forced switch."""
+
+    initial_index = initial.active_party_index
+    if initial_index is None or current.active_party_index == initial_index:
+        return current.battler_pp
+    party_pp = current.party_pp
+    if party_pp is None or not 0 <= initial_index < len(party_pp):
+        raise BattleRuntimeError(
+            f"{label} cannot prove selected-move PP after the active party changed."
+        )
+    return party_pp[initial_index]
 
 
 def _validated_menu(menu: BattleMenuState, *, label: str) -> BattleMenuState:
@@ -652,8 +1880,10 @@ def _require_active_trainer_state(
     label: str,
 ) -> None:
     _require_present_state(raw, expected_map=expected_map, label=label)
-    if raw.battle_state != _TRAINER_BATTLE_STATE:
-        raise BattleRuntimeError(f"{label} left its active trainer battle unexpectedly.")
+    expected_battle_state = _ACTIVE_BATTLE_STATE.get()
+    if raw.battle_state != expected_battle_state:
+        kind = "trainer" if expected_battle_state == _TRAINER_BATTLE_STATE else "wild"
+        raise BattleRuntimeError(f"{label} left its active {kind} battle unexpectedly.")
 
 
 def _require_present_state(
@@ -666,13 +1896,21 @@ def _require_present_state(
         raise BattleRuntimeError(
             f"{label} left expected map {expected_map:#04x} for {raw.map_id!r}."
         )
-    if raw.party_count is None or raw.party_count <= 0 or raw.first_party_hp is None:
-        raise BattleRuntimeError(f"{label} lacks living party-lead evidence.")
-    if raw.first_party_hp <= 0:
-        raise BattleRuntimeError(f"{label} party lead fainted.")
-    if raw.battle_state == _WILD_BATTLE_STATE:
+    if raw.party_count is None or raw.party_count <= 0 or raw.battler_hp is None:
+        raise BattleRuntimeError(f"{label} lacks living active-battler evidence.")
+    terminal_enemy_ko = raw.enemy_hp == 0 and raw.battle_state in {0, _ACTIVE_BATTLE_STATE.get()}
+    if raw.battler_hp <= 0 and not terminal_enemy_ko:
+        raise BattleRuntimeError(
+            f"{label} active battler fainted: hp={raw.battler_hp}/"
+            f"{raw.battler_max_hp}, status={raw.battler_status}, "
+            f"enemy_species={raw.enemy_species_id}, enemy_hp={raw.enemy_hp}/"
+            f"{raw.enemy_max_hp}, enemy_trapping={raw.enemy_using_trapping_move}, "
+            f"pp={raw.battler_pp}."
+        )
+    expected_battle_state = _ACTIVE_BATTLE_STATE.get()
+    if expected_battle_state == _TRAINER_BATTLE_STATE and raw.battle_state == _WILD_BATTLE_STATE:
         raise BattleRuntimeError(f"{label} changed to an unexpected wild battle.")
-    if raw.battle_state not in {0, _TRAINER_BATTLE_STATE}:
+    if raw.battle_state not in {0, expected_battle_state}:
         raise BattleRuntimeError(f"{label} exposed unsupported battle state {raw.battle_state!r}.")
 
 

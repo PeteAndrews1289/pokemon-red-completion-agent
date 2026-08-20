@@ -1,0 +1,22 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v14",
+  "status": "failed",
+  "source_commit": "e6402dfac453ebc330bde21cc6703d70f686dcd6",
+  "source_bundle_sha256": "60837fb7b54575c5bc519a85209bd208f70435c9d1bac7c60b6f44fb961abcca",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v14-validation-01",
+      "harness_seed": 1330001,
+      "status": "failed",
+      "qualified_checkpoints": 102,
+      "failure": "Rock Tunnel supply plan was P1849 short after the near-worst early capture-spend branch exhausted every declared sale fallback.",
+      "private_log_sha256": "f129088f2210a1e82c4a6b1bc4710cdfce4497094ac23d9883beb201e68ba987"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The teacher earned one fixed Route 11 payout but still assumed that unused capture Balls would finance the full Rock Tunnel safety inventory. This schedule left only one Ball and contradicted that hidden luck dependency.",
+  "repair_direction": "Add two source-pinned Route 11 Gambler battles and their exact P2520 payout to the authenticated battle curriculum instead of shrinking the healing, status, or repel reserve."
+}

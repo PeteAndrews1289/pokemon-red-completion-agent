@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v35",
+  "source_commit": "9e13af0a31d4b5b22623debed291256bd3ac6b74",
+  "source_bundle_sha256": "84c3f6d51bcbfcdf4d7d53507658e1442ec6ea7fbec33d736a2b26720a4ef57e",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1780001,
+    "battle_start_schedule_sha256": "1a0a5270ad712035f4cb1e96416e97fcfd8ad2abcf07b9678321db9806594609",
+    "private_log_sha256": "70ee3d2e822dd3deb701472634564e95e1c095cf5abd666e3a27c923224272ba",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 114402,
+    "party_size": 6,
+    "surge_dig_attacks": 3,
+    "surge_super_potions_used": 0,
+    "champion_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
+  },
+  "repairs_verified": [
+    "The Diglett acquisition policy selects the cave's naturally available level-21 or level-22 band instead of treating every level as equally battle-ready",
+    "The exact failed schedule defeats all three Lt. Surge opponents with three Dig attacks and no recovery item",
+    "The preparation lesson preserves the Dig-only matchup contract without adding a trainer-specific cursor exception or teammate sacrifice",
+    "The same run completes every downstream objective with a balanced six-member party, Champion, and Hall of Fame evidence"
+  ]
+}

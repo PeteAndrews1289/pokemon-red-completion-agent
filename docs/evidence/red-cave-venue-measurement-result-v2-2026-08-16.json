@@ -1,0 +1,105 @@
+{
+  "acceptance": {
+    "all_declared_conditions_met": true,
+    "candidate_decisions": 0,
+    "faints": 0,
+    "maximum_battles": 200,
+    "maximum_budgeted_center_calls": 50,
+    "maximum_steps": 20000,
+    "objective_completed": true,
+    "optional_recovery_calls": 0,
+    "progress_units_gained": 4,
+    "required_cleanup_calls": 1,
+    "rom_adjacent_artifacts_unchanged": true,
+    "source_envelope_unchanged": true,
+    "source_state_unchanged": true
+  },
+  "artifact": {
+    "artifact_id": "red-cave-venue-measurement-v2",
+    "attempt_stream_sha256": "63fa60fa3d69c744c7d709eacfa38faa15229f16b5f1de5475b8e18dde72899c",
+    "kind": "party_development_venue_measurement",
+    "manifest_sha256": "633c4d153379e87fa09b11366b6a52823c4a77205039a3a623170d9673e22a25",
+    "measurement_stream_sha256": "ffbada267182ca1e666f556bf8b1245ba6cc35141edea5a598fa34b8ae55f68e",
+    "plan_stream_sha256": "fb6e34906ccebc465ea64cd37be89663add56dc9ae71a91af86517f74b4f9616",
+    "status": "complete",
+    "stream_records": {
+      "attempt": 1,
+      "measurement": 1,
+      "plan": 1
+    },
+    "total_bytes": 5061,
+    "total_records": 3
+  },
+  "authorization": {
+    "authorized_executions": 1,
+    "controller_input_occurred": true,
+    "execution_count": 1,
+    "retry_after_controller_input": false,
+    "terminal_attempt_consumed": true
+  },
+  "execution_identity": {
+    "exact_ci_conclusion": "success",
+    "exact_ci_run": 31926299036,
+    "public_plan_file_sha256": "ff277a2483fce53e1e86c032ec3c8c3376e33b8d118145d6137a6a1e8ca00ff0",
+    "source_bundle_sha256": "5d6ad452624f273920e642b266ba26724f6fccc8c57551acd2eead72b68d5bbe",
+    "source_commit": "755fe53d127c764f4213c2335cdbd5c9cb136dda"
+  },
+  "independence": {
+    "canonical_root_lineage_authenticated": true,
+    "checkpoint_inventory_sha256": "b8c10704f2307e24ecff5af565a2ff8f97bde20aec78f34a15640649bcef4c94",
+    "historical_context_catalog_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+    "independent_of_existing_priors": true,
+    "independent_of_reserved_questions": true,
+    "measurement_contract_sha256": "64823bc335f4d4e8f7028103e3a6dd0e5fcd493ae5885f35dc552262b96af2ec",
+    "support_semantics_authenticated": true,
+    "venue_binding_sha256": "e486eb4a7d9c0f84908d7b94df00a9af19ee84da33c163f9e56ffc701ac8a326"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "learner_outcomes_opened": 0,
+    "measurement_accepted": true,
+    "model_fit": false,
+    "model_predictions": 0,
+    "next": "From a distinct published source, attest execution-source compatibility and compose exactly one Cave venue prior before materializing the frozen 8-train and 6-development question catalog.",
+    "teacher_queries": 0,
+    "training_example_created": false,
+    "venue_prior_entries_added": 0
+  },
+  "measurement": {
+    "battles_completed": 67,
+    "budgeted_center_calls": 8,
+    "candidate_decisions": 0,
+    "cleanup_trips": 1,
+    "controller_actions": 58829,
+    "faints": 0,
+    "frames_executed": 1853750,
+    "objective_completed": true,
+    "optional_recovery_trips": 0,
+    "progress_units_gained": 4,
+    "progress_units_required": 4,
+    "required_recovery_trips": 7,
+    "rotations_executed": 497,
+    "steps_taken": 4319,
+    "target_experience_gained": 6986,
+    "total_counted_center_routes": 9,
+    "traversal_blocked_attempts": 94,
+    "traversal_instrumented_walkers": 1,
+    "traversal_movement_attempts": 4413,
+    "traversal_successful_steps": 4319,
+    "venue_transition_trips": 1
+  },
+  "measurement_id": "red-cave-venue-prior-measurement-v2",
+  "private_path_fields": 0,
+  "protected_access": {
+    "candidate_menus_constructed": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "learner_outcomes_opened": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0
+  },
+  "schema": "pokemon.red.party-development-cave-venue-measurement-result.v2",
+  "status": "complete_measurement_accepted"
+}

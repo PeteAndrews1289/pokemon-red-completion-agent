@@ -1,0 +1,60 @@
+{
+  "authorization": {
+    "campaign_plan_file_sha256": "e8647ac8b232b0f892fd2dcf174d83e331bc5833dede71fa5510f9cdbb1960be",
+    "campaign_plan_sha256": "8742a06e5f9b4a9a781c1c76874ad133829085fe7972928398d0fc1edc231416",
+    "candidate_trials": 55,
+    "completed_battles_per_trial": 4,
+    "exact_ci_attempt": 1,
+    "exact_ci_run": 31978843670,
+    "questions": 14,
+    "source_commit": "44156676d23225b8330ff7b318ad2f6cc481b8dc"
+  },
+  "campaign": {
+    "censored_trials": 0,
+    "complete_examples": 0,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "development_trials_remaining": 22,
+    "full_game_replays": 0,
+    "invalid_trials": 1,
+    "measured_trials": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "remaining_candidate_trials": 54,
+    "sealed_red_cases_opened": 0,
+    "teacher_queries": 0,
+    "terminal_trials": 1,
+    "train_trials_remaining": 32,
+    "trial_claims": 1
+  },
+  "failure": {
+    "controller_port_reached": false,
+    "diagnostic_reproduction": "read_only_same_state_before_controller_construction",
+    "failure_code": "execution_error",
+    "failure_stage": "initial_completion_aware_observation",
+    "root_cause": "frame_budget_controller_proxy_hid_the_bounded_read_only_cartridge_ram_capability",
+    "status": "invalid_nonretryable"
+  },
+  "integrity": {
+    "claim_manifest_sha256": "bee8e8e498b3ba5dd0eea382c74186cde88ed4ac3b72f6a288bfa938b83d58ed",
+    "claim_record_sha256": "60533a35316e9aae26fc76ff97ba972fb9d0f40edcb8e04b39ed7ef983ad6d41",
+    "input_files_unchanged": true,
+    "private_path_fields": 0,
+    "retry_allowed": false,
+    "rom_adjacent_artifacts_unchanged": true,
+    "terminal_manifest_sha256": "40433195278c8bb309e4602e1410bf60311ab0faae524ee1bc17d04c6807b86b",
+    "terminal_record_sha256": "0070dad58d313e1ba3c1f40d27cd1cc79a109c86e6d37355ff5143a5ff8f661a",
+    "terminal_sha256": "ffbe85850c07609ebb428b5a38fe1b2893d9cd0c60ee034a7fc146dd42733da8"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "development_question_with_invalid_candidate_is_unusable": true,
+    "model_fit_authorized": false,
+    "next_action": "publish_repair_freeze_successor_and_request_new_exact_authorization",
+    "old_campaign_may_resume": false,
+    "train_partition_remains_fully_untouched": true
+  },
+  "schema": "pokemon.red.party-development-outcome-campaign-v1-failure.v1",
+  "status": "failed_closed_one_development_trial_consumed"
+}

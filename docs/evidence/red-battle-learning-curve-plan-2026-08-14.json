@@ -1,0 +1,88 @@
+{
+  "schema": "pokemon-red-battle-learning-curve-plan-v1",
+  "status": "prospective_unmaterialized",
+  "experiment_id": "red-battle-learning-curve-v1",
+  "purpose": "Draw the smallest descriptive outcome-learning curve that can falsify immediate Red battle generalization before the battle catalog is scaled.",
+  "scope": {
+    "title": "pokemon_red",
+    "scenario_family": "battle",
+    "battle_kind": "wild",
+    "decision_kind": "usable_move",
+    "bounded_turns_per_candidate": 1,
+    "full_game_replays": 0
+  },
+  "outcome_objective": {
+    "objective_id": "battle.turn.health-terminal-utility.v1",
+    "objective_sha256": "221f1fb63a02a6a015987e643b129fcfc2cb11297fc70b7e070ed7df3a346984",
+    "teacher_choice_is_target": false,
+    "ties_remain_equivalent": true
+  },
+  "catalog": {
+    "train_contexts": 4,
+    "development_contexts": 4,
+    "total_contexts": 8,
+    "training_prefix_sizes": [
+      1,
+      2,
+      4
+    ],
+    "training_order": "prospective_catalog_slot_order",
+    "development_reused_for_fitting": false,
+    "required_unique_root_lineages": 8,
+    "required_unique_root_state_sha256": 8,
+    "required_unique_capture_state_sha256": 8,
+    "required_unique_initial_observation_sha256": 8,
+    "semantic_diversity_is_reported_not_selected": true
+  },
+  "collection": {
+    "accept_first_qualified_encounter_after_each_assigned_root": true,
+    "replace_after_observing_opponent_or_outcome": false,
+    "repartition_after_observing_outcome": false,
+    "measure_every_available_candidate": true,
+    "equal_pre_attack_frames_required": true,
+    "flat_outcome_prefix_policy": "retain_as_typed_no_update_point",
+    "failed_or_interrupted_trial_policy": "retain_and_stop_before_fit"
+  },
+  "learner": {
+    "base_model": "frozen_red_battle_mlp_prior",
+    "update_scope": "last_layer_only",
+    "epochs": 100,
+    "learning_rate": 0.01,
+    "prior_l2": 0.1,
+    "restart_from_same_prior_at_each_prefix": true
+  },
+  "evaluation": {
+    "same_untouched_development_contexts_at_every_point": true,
+    "metrics": [
+      "preference_accuracy",
+      "mean_selected_utility",
+      "paired_updated_wins",
+      "paired_prior_wins",
+      "paired_equivalent_choices"
+    ],
+    "paired_sign_test_is_descriptive": true,
+    "inferential_claim": false,
+    "promotion_decision": false
+  },
+  "stop_conditions": [
+    "any root lineage or state crosses train and development",
+    "any assigned context is replaced after its opponent, candidate menu, or outcome is observed",
+    "any available candidate lacks a controller-proven equal-timing outcome",
+    "any teacher choice, sealed Red case, Crystal context, or full-game replay is requested",
+    "the title-neutral outcome adapter cannot preserve the battle preference exactly"
+  ],
+  "after_result": {
+    "build_navigation_adapter_even_if_curve_regresses": true,
+    "build_party_development_adapter_even_if_curve_regresses": true,
+    "scale_or_stratify_battle_catalog_before_three_family_check": false,
+    "battle_authority_promoted": false
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

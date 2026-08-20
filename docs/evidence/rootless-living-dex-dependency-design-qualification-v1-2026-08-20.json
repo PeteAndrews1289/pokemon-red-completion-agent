@@ -1,0 +1,90 @@
+{
+  "claim_boundary": {
+    "supported": "Published pure-core and one-shot tooling define one fixed synthetic living-Pokedex dependency curriculum: eight deterministic train transitions, four opaque committed development openings, a train-only state-by-action interaction ranker, and separately claimed fit and aggregate-only descriptive comparison stages.",
+    "unsupported": "No campaign outcome, model fit, development comparison, gameplay example, Red completion, Crystal transfer, statistical promotion, learned authority, or living-Pokedex competence was produced."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "campaign_runner_sha256": "ea25f35927ece441a20f162e020bbe0aa0aa8b539bd7e118dc5612948e992247",
+    "campaign_runner_test_sha256": "a05d29e80e8ef67f7fe5cabd32432b8a070c7876215aeeff1120934b2cea0155",
+    "comparison_sha256": "7876fb65c276b2209fac1f23a1a16299f28c557a5279e0feabc2451f1f6749ca",
+    "comparison_test_sha256": "b6b4fc73e13caea3e85a23369f87fa07cea494abd0edf89732d842d71aaa539e",
+    "curriculum_sha256": "4acca8d718af0aff9fb9bff65a573a37c62225c18c9b9c672cf17e553c6f4e79",
+    "curriculum_test_sha256": "6148ea43c4f04c6361b6826c73c79a79c305b474b5a92871c1f11d97751903db",
+    "learning_runner_sha256": "0eadaf9d9821451940c29b1ed588fd377203122bf6f134a5e0858016ad071759",
+    "learning_runner_test_sha256": "f15f060a86ebc659414a6ef4f511a9b9eb4322ccf34d0b51c648b934b3b7b987",
+    "manifest_freezer_sha256": "2243d8e2c55c4f04f3481f960c6412b1168076929c0c17785523e30919472b7d",
+    "manifest_freezer_test_sha256": "43bf0b015cfb278a26ee70555591db5afc5e62e2e412c4a5e4044102c6c5780b",
+    "provisioner_sha256": "6c06c802a81ac9b8488bbfb8f887b191edbc151a6a8a076f8ac5295097c9a932",
+    "public_manifest_sha256": "218bc52bd1a4e6d5546f76770691bbe94f26afaf059974828b3eae13bf238de8",
+    "public_manifest_test_sha256": "fae236d2a4cabd274a6b9ba4028a09c2ab42aad554f3c844af384ff5d9ecd8da",
+    "ranker_sha256": "6cd7901c7f40a1b5f4b3d3788332c3474f3375783532f7eaa01a4abb6634e8ed",
+    "ranker_test_sha256": "53d56013adf5368200369a40081b9fd823689c0200670312646bdec400ccdb44"
+  },
+  "provisioning": {
+    "development_opening_payloads_disclosed_to_training": 0,
+    "private_opening_records": 4,
+    "private_path_fields": 0,
+    "private_provision_records": 1,
+    "provision_record_sha256": "e5f61b5b15d420dc0cba33f6bfee8c15a8eabcd057b8f8ac2bfca5f61b55fba3",
+    "public_commitments": 4,
+    "public_roster_sha256": "f7630b8b09ba5b6962892335588bb376129a74554dee8442962ac1c92f5c4ce6"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32335706089,
+    "source_commit": "9569afa681eb4d9806230b6d4c5caa79845a7fb8"
+  },
+  "qualification": {
+    "assigned_action_balance": "4_acquire_4_evolve",
+    "claude_exact_head_review": "go_no_p0_or_p1_for_zero_action_freeze_and_preflight",
+    "development_commitments": 4,
+    "development_families": 2,
+    "development_openings_are_fit_gated": true,
+    "focused_tests_passed": 98,
+    "full_rom_free_tests_passed": 4410,
+    "global_one_shot_identities_planned": 12,
+    "local_output_namespaces_required_absent": 10,
+    "model_fit_completed": false,
+    "one_shot_admission_claimed": false,
+    "ranker_uses_state_by_action_interactions": true,
+    "rootless_campaign_frozen": false,
+    "synthetic_reward_balance": "4_positive_4_negative",
+    "train_families": 4,
+    "train_scenarios": 8,
+    "zero_action_preflight_completed": false
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-design-qualification-receipt.v1",
+  "status": "published_rootless_dependency_design_qualified_campaign_unfrozen",
+  "title_role": "Synthetic cross-title dependency-learning design qualification; not gameplay, completion, promotion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "campaign_claims_consumed": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_comparisons": 0,
+    "development_opening_payloads_disclosed_to_training": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "synthetic_train_outcomes": 0
+  }
+}

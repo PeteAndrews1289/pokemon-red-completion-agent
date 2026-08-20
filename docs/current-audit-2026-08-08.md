@@ -1,0 +1,306 @@
+# Current audit: what this Pokémon agent can actually do
+
+**Audit date:** 2026-08-08  
+**Scope:** architecture, evidence quality, learned authority, transfer readiness, repository health,
+and portfolio value.
+
+## Executive verdict
+
+This is already an unusually rigorous game-agent engineering project. Its strongest achievement is
+not merely that code can finish Pokémon Red. It is the infrastructure that separates an expert
+teacher, a learned decision-maker, fixed mechanic skills, and an independent referee—and then
+preserves the failures that reveal when those boundaries are wrong.
+
+The project is **not yet a general Pokémon-playing model**. The cleanest current description is:
+
+> A verified Pokémon Red teacher and evaluation platform with bounded learned battle, objective,
+> and training-control components, progressing toward a teacher-free cross-title player.
+
+That wording is both credible and compelling. It gives the finished Red route its proper weight
+without claiming that a model discovered the route, navigation, team strategy, or recovery logic.
+
+The newest result sharpens that boundary. The portable clean-start player and prospective 8-of-10
+campaign machinery are implemented. A lighter learned stack completed all 36 objectives through
+Hall of Fame, but the strict four-model stack failed closed after defeating Lorelei because every
+attack came from one party member. The infrastructure can now measure the intended experiment; the
+current battle representation cannot yet learn the intended team behavior.
+
+## Scorecard
+
+Scores measure the repository against its stated end goal, not against a typical hobby project.
+
+| Dimension | Score | Evidence and limiting factor |
+| --- | ---: | --- |
+| Deterministic completion and referee | 9/10 | Clean power-on; 312/312 semantic checkpoints; 36/36 objectives; Champion and Hall of Fame. The remaining point is for more cartridge revisions/titles. |
+| Experimental honesty | 9/10 | Failed and rejected lineages remain visible, authority modes are separated, and operational gates can overrule headline accuracy. A few historical claims remain scattered through very long documents. |
+| Safety and artifact integrity | 9/10 | Exact hashes, clean-source binding, root-overlap rejection, atomic failed-stream retention, affordance masks, and fail-closed control. Private ROM-derived assets remain external. |
+| Tests and static checks | 8/10 | 2,074 non-integration tests pass locally, with Ruff, documentation, public-artifact, registry, and mypy gates. Forty-four legacy modules still use mypy `ignore_errors` overrides. |
+| Architecture and modularity | 8/10 | Typed observations, objectives, skills, results, four-model binding, prospective campaign identities, and fail-closed series evaluation are strong seams. The 141,647-line Python surface remains costly to reason about. |
+| Learned battle control | 6/10 | Strict clean-start execution reached and defeated Lorelei with 3,220 model move decisions and no teacher query/fallback, but failed the balanced role contract. Reserve-matchup representation is missing. |
+| Learned objective planning | 6/10 | One clean-start run selected 21 composites and verified 15 automatic effects through Hall of Fame without expected labels. Affordance masking still makes many decisions singletons and fixed skills press the buttons. |
+| Learned training strategy | 7/10 | The identity-free trainee/venue scorer beat its sealed shape baseline by 4.239 points, completed isolated causal control with 191 disagreements, and controlled 114,831 choices with 400 disagreements in both portable and clean-power execution. Evidence remains one fixed Red curriculum and one uncounted clean-power root. |
+| Cross-title transfer | 2/10 | Several representations are intentionally identity-free, but no Crystal or other-title result exists yet. |
+| Autonomous living Pokédex / level 100 | 1/10 | Target and planning foundations exist; autonomous collection, storage, evolution, resource planning, and long-horizon recovery are not integrated. |
+| Portfolio presentation | 8/10 | The README now leads with a concise claim boundary, the architecture guide is current, and the failure/diagnosis/repair story is excellent. A two-minute visual demo remains the largest opportunity. |
+
+## What is verified now
+
+### 1. A complete teacher and independent completion contract
+
+The deterministic system completes Red from clean power-on through the Hall of Fame while satisfying
+312 semantic checkpoints and all 36 graph objectives. It develops a six-member final-form party and
+retains explicit evidence for the run instead of inferring success from emulator uptime or a final
+screen alone.
+
+This makes the teacher useful in three roles:
+
+- an expert demonstration generator;
+- a library of bounded mechanic skills; and
+- a referee that can reject unsafe or semantically invalid learned actions.
+
+### 2. A portable loop that really returns control between objectives
+
+From an authenticated Celadon state, one emulator process accepted 20 model dispatches and reached
+the Hall of Fame in 502,175 actions / 37,369,283 frames. It did not restore a state, request the
+expected route label, fall back to the teacher, or replan around a failed skill between objectives.
+
+The important denominator is public: Koga versus Strength was the one genuine ranking branch; the
+other 19 decisions had one executable candidate. This verifies loop continuity, typed dispatch,
+skill contracts, and observation-driven closure. It does not verify broad open-world planning.
+
+### 3. Causal learned control rather than agreement-only metrics
+
+The latest training controller passed both shadow and full-authority causal evaluation. In the
+causal run it owned all 57,644 strategic decisions across battle and overworld phases, completed
+1,801 battles and 1,046 healing trips, reached 55/55/55/55/55/55, and recorded zero faints or
+teacher fallback.
+
+That success closes an important engineering risk: an authenticated model can sit in the live loop,
+change execution, remain inside the safety referee, and produce a mechanically checkable receipt.
+
+It also exposed the next scientific risk. The legal candidate set alone predicts every current v6
+label. Therefore the correct result is **safe authority integration passed; state-dependent policy
+learning not yet demonstrated**.
+
+### 4. State-dependent trainee and venue strategy under real authority
+
+The newest interface ranks variable-sized candidate sets for two strategic choices:
+
+- which viable below-floor party member should train next; and
+- which safe measured encounter band should be used.
+
+Each candidate is represented with 27 normalized, identity-free features. Species IDs, move IDs,
+party-slot identity, map IDs, area names, and memory addresses are excluded from the model vector.
+The scorer shares one network across candidates and is permutation-equivariant. Unobservable ties
+that the teacher resolves by hidden identity are excluded rather than mislabeled.
+
+This is the first current training target where state features demonstrably add value. On 7,030
+genuine sealed-validation choices, the shared scorer reached 99.9004% accuracy versus 95.6615% for
+the choice-shape baseline—a 4.239-point margin. A separate shadow root retained 119,353 genuine
+choices at 99.9941% agreement and completed at all six level 55 with zero faints.
+
+The first causal root then failed at 15,449 controlled choices despite zero model/teacher
+disagreements. A same-root teacher run completed, revealing that the authority wrapper recomputed a
+downstream directive merely because a callback existed. The failed lineage remains preserved. The
+repair makes agreement behaviorally identical to teacher execution; on a newly preregistered root,
+the unchanged model controlled 119,668 choices, executed 191 trainee disagreements with no
+fallback, completed 1,803 battles and 1,114 heals, and ended all six level 55 with zero faints. All
+8 shadow and 11 causal gates passed.
+
+The portable objective loop then supplied the system-composition proof. The objective model
+dispatched `defeat_blaine`; the candidate ranker controlled 114,831 choices and executed 400
+teacher disagreements without fallback; development completed in 1,803 battles and 1,048 heals.
+The fixed skill defeated Blaine and returned a fully healed 60/55/55/55/55/55 party. Fresh
+observation added the Volcano Badge and opened Giovanni. Ten independent integration checks passed.
+The objective choice was a singleton and mechanics remained authored, so this is captured-state
+portable composition rather than clean-start autonomy.
+
+The same frozen ranker then passed one explicitly uncounted clean-power rehearsal. It owned 114,831
+candidate choices, executed 400 disagreements with zero fallback, developed the party through 1,803
+battles to 60/55/55/55/55/55, and the same process verified all 312 checkpoints, all 36 objectives,
+and Hall of Fame. This removes the runtime uncertainty around clean-power injection. It remains a
+single fixed-route rehearsal, not a teacher-free objective planner or an 8/10 campaign result.
+
+### 5. A clean-start evaluator that rejects the wrong kind of win
+
+The new portable clean-start runner closes three previous infrastructure gaps: early-game typed
+skills now join the midgame registry, objective dispatch no longer receives the expected answer,
+and one authenticated envelope can bind source, runtime, objective graph, behavior, and all four
+model artifacts. A frozen campaign registry and independent checker enforce one attempt per root
+and require at least 8 of 10 valid successes. The campaign remains unopened at 0/10.
+
+The first objective-plus-trainee/venue baseline completed 21 selected composites and 15 automatic
+effects through Hall of Fame. It used 638,520 actions / 45,766,774 frames, recorded 114,831
+controlled training choices with 400 disagreements, and had zero expected labels, fixed objective
+dispatches, or replans. This proves the new orchestration lane can finish Red; it is not evidence
+for battle-model ownership because the authored battle path remained available.
+
+The strict rehearsal bound the objective, battle-move, battle-control, and trainee/venue models in
+one clean-start process. Two defects were found and fixed before interpreting the result: learned
+move choices bypassed the normal evidence sink, and teacher-free training moves bypassed the
+teacher callback that had contained the live retreat and PP guard. Moving evidence and safety to
+policy-neutral runtime seams let the model safely train the full party to 63/55/55/55/55/55, clear
+Blaine and Giovanni, cross Victory Road, and defeat Lorelei with zero teacher query or fallback.
+
+The run still failed—and should have. All 19 Lorelei attack turns came from party slot 1 and the
+model made no role switch, below the declared minimum of two. Battle-control schema v2 sees active
+types and aggregate reserve readiness, but no reserve types, moves, or candidate-relative matchup
+advantage. The generic switch resolver likewise favors a healthy high-level reserve rather than
+the best matchup. The correct response is a reserve-aware schema and new artifact, not relaxing the
+verifier. The complete sanitized result is in the
+[five-role rehearsal audit](evidence/portable-clean-start-five-role-rehearsal-2026-08-08.json).
+
+That response is now implemented at the interface level. Feature schema v3 records all observable
+party moves and PP, projects identity-free reserve matchup values, binds generic switches to the
+same best candidate above a 50% HP floor, and measures teacher-target agreement separately from the
+switch action class. Candidate-order permutation and opponent-type counterfactual tests pass. The
+old v2 artifact is intentionally incompatible, so this is not yet a new model result; fresh v3
+lineages remain the next gate. The design is preserved in the
+[v3 receipt](evidence/battle-control-reserve-matchup-v3-design-2026-08-08.json).
+
+## Principal risks
+
+### The learned surface is still small relative to the scripted surface
+
+The teacher owns route discovery, navigation, menu execution, recovery, inventory operations, and
+most tactical structure. Learned components sit at real boundaries, but those boundaries do not yet
+compose into a clean-start teacher-free run.
+
+### The Red implementation is much larger than the portable core
+
+The Python surface is 141,647 lines across 121 source modules, 28 scripts, and 129 test files. Much
+of that size is earned evidence and hardened game mechanics, but it raises regression, review, and
+onboarding costs. A second title is the only convincing way to distinguish genuinely portable
+abstractions from carefully renamed Red assumptions.
+
+### Static typing is a gate with explicit debt, not a finished migration
+
+Mypy runs across `src/`, but 44 legacy modules are temporarily exempted with per-module
+`ignore_errors`. The debt register is honest and must only shrink. Shared emulator/run-state
+protocols and removal of `int | None` mismatches are the highest-leverage cleanup.
+
+### The public repository tells the truth, but tells too much of it at once
+
+The evidence archive is valuable for technical reviewers, yet the README and handoff remain long.
+A two-minute demo, one architecture diagram, and a compact “claims / evidence / not claimed” page
+would improve first-pass comprehension more than another historical milestone paragraph.
+
+### CI must remain boring
+
+The collection registry is intentionally derived from source and goes stale after source changes.
+Regeneration should be one isolated generated-file commit after verifying that its changed hashes
+match the intended source diff. Repeated red mail from a known derived-artifact mismatch obscures
+real regressions and weakens the otherwise strong evidence story.
+
+**Resolved during this audit:** the stale registry was regenerated from source, all four public
+golden identities were updated from generator output, and the full 2,074-test local gate passed.
+At least **19 consecutive GitHub Actions runs** were green after the registry fix, with later audit
+and interface commits also passing. This is why the
+prior email storm was not intended behavior—it was one repeatedly retriggered derived-artifact
+mismatch, not useful Dependabot noise. GitHub's repository APIs also report that Dependabot alerts
+are disabled, no CodeQL/code-scanning analysis exists, and secret scanning has zero alerts. The
+current email diagnosis is therefore specific: those messages came from failed Actions runs.
+Enabling dependency and code scanning is a separate future repository-hardening decision and should
+be done with a quiet, reviewed notification policy rather than during an experimental campaign.
+
+### The branch now needs integration, not more accumulated history
+
+Draft PR #8 is mergeable and its current checks are green, but it spans **more than 650 commits,
+more than 620 changed files, roughly 124,000 additions, and 4,000 deletions** relative to `main`.
+That is the accumulated project,
+not a focused review unit. Continuing indefinitely on the same branch raises recovery and review
+risk even when every commit is sound.
+
+The controlled handoff is: keep PR #8 draft until the owner reviews this audit; preserve/tag the
+current `main`; use GitHub's squash merge so the canonical branch receives one coherent project
+snapshot; immediately create a fresh short-lived branch; and rerun the full local and GitHub gates
+after merge. Do not rewrite the shared branch or force-push its history.
+
+## Dependency-ordered next work
+
+1. **Represent the reserve party semantically.** Add identity-free reserve type and move coverage,
+   offensive advantage, defensive resistance, health, status, and level margins to a versioned
+   battle-control feature schema.
+2. **Make switches executable for the same reason they were selected.** Rank safe reserve
+   candidates by matchup value and bind the chosen semantic candidate to the menu target. Keep
+   health, faint, status, and required-party constraints as hard referee rules.
+3. **Train a balanced-role artifact.** Collect fresh demonstrations under the new schema and
+   preserve chapter and opponent-position coverage. Use whole-lineage splits and class weighting so
+   Lorelei, Bruno, Agatha, and Lance switches are not washed out by attack-heavy turns.
+4. **Qualify before replaying the whole game.** Require offline held-out role accuracy,
+   counterfactual reserve permutation tests, and target-binding tests before one strict canonical
+   clean-start rehearsal.
+5. **Harden perturbations before counting.** Diagnose the exposed lab-rival, Diglett-capture, and
+   Rocket-thief failures, then pass a fresh uncounted perturbation rehearsal with the frozen stack.
+6. **Only then open v95.** Freeze source and all artifact hashes, execute the ten assignments once
+   each, and let the independent checker decide whether at least eight count as successes.
+7. **Use the stable Red benchmark for transfer.** Compare zero-shot, few-shot, and from-scratch
+   behavior on a small Crystal battle/navigation/training benchmark, then expand collection through
+   the portable loop.
+
+## Portfolio narrative
+
+### Thirty-second version
+
+> I built a Pokémon Red agent as an evidence-driven autonomy project. First I created a verified
+> expert teacher and independent referee that complete all 36 objectives through the Hall of Fame.
+> Then I replaced decision boundaries one at a time with authenticated learned policies, using
+> sealed lineages, causal emulator control, fail-closed safety, and receipts that distinguish real
+> choices from single-option decisions. The new clean-start evaluator completed Red with the
+> objective and training models, then correctly rejected the stricter four-model run after Lorelei
+> because its battle controller reverted to a one-Pokémon sweep. That failure exposed a precise
+> missing representation—reserve matchup value—which is now the next training target.
+
+### Resume bullets
+
+- Built a typed Pokémon Red agent and independent semantic referee that verify 312 checkpoints,
+  all 36 objectives, the Champion, and Hall of Fame from clean power-on.
+- Designed an auditable model-promotion pipeline with whole-lineage splits, exact SHA-256 artifact
+  authentication, candidate masks, fail-closed causal control, and preserved rejected experiments;
+  qualified a trainee/venue controller offline, in shadow, under isolated causal control, and inside
+  the portable objective loop; the final proof controlled 114,831 choices with 400 executed
+  disagreements and no fallback.
+- Implemented an observation-driven objective loop that completed 20 sequential model dispatches
+  and 502,175 mechanic actions in one emulator process, while publishing the crucial limitation
+  that only one dispatch was a genuine multi-option ranking decision.
+- Built a source- and artifact-bound clean-start evaluation lane with one-attempt assignments and an
+  independent 8-of-10 gate; its strict rehearsal preserved a failed single-carry Lorelei result and
+  localized the next model gap to reserve matchup representation.
+
+### Interview story
+
+The best story is not “I scripted Pokémon.” It is the sequence of increasingly difficult
+falsifications:
+
+1. A complete run exposed a one-member carry strategy, so completion quality and teaching quality
+   were separated.
+2. High offline accuracy failed operational heal gates, so model accuracy and safe control were
+   separated.
+3. Shadow agreement looked promising, but causal authority exposed under-fighting and exhausted the
+   lesson budget.
+4. A later controller passed causal evaluation, but a candidate-only baseline also scored 100%, so
+   authority integration and state-dependent learning were separated.
+5. The next representation was redesigned around variable trainee and venue choices; it beat the
+   sealed shape baseline by 4.239 points.
+6. Its first causal run failed despite perfect agreement. A same-root control isolated an
+   authority-wrapper defect, an invariant test pinned the repair, and a fresh causal run completed
+   with 191 executed disagreements.
+7. The unchanged ranker then composed with learned objective dispatch and the fixed Blaine skill,
+   executing 400 disagreements before fresh observation opened Giovanni.
+8. The clean-start infrastructure then composed four learned roles with zero fallback, but the
+   curriculum verifier rejected a Lorelei win because all 19 attacks came from one slot. Inspecting
+   the feature and target-resolution seams showed that reserve matchup information did not exist.
+
+That progression demonstrates systems engineering, ML evaluation, debugging discipline, and the
+ability to revise a hypothesis when the evidence contradicts it.
+
+## Claims to avoid
+
+- “The AI autonomously beat Pokémon Red.”
+- “The model learned the full game from scratch.”
+- “A 100% validation score proves it understands training strategy.”
+- “Identity-free features prove cross-game transfer.”
+- “The project is close to a living Pokédex because the deterministic route is complete.”
+
+Use the narrower verified claims. They are technically stronger because every one has a stated
+authority boundary, denominator, source identity, and falsification condition.

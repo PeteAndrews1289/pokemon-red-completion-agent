@@ -1,0 +1,88 @@
+{
+  "schema": "pokemon-battle-switch-target-development-candidate-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "development_candidate_frozen_awaiting_unopened_test",
+  "source_commit_before_implementation": "119984bed7b6a6404416f24d63063cb6676a05fc",
+  "first_candidate_test": {
+    "model_canonical_payload_sha256": "bb2d6d10aa18185c8ef906c430fc3450cb68fa36531dcbdacfa999a87a4b4411",
+    "test_artifact_id": "red-battle-control-5152060e8a1e4b3ab4c3a9c15c95c0de",
+    "test_manifest_sha256": "88947f5bbb8a6cb52f9a0e2bc021b88780fecd2c03b62f84e6879015fe672020",
+    "examples": 13,
+    "learned_correct": 11,
+    "learned_accuracy": 0.8461538461538461,
+    "learned_cross_entropy": 0.3333601482146842,
+    "deterministic_baseline_correct": 9,
+    "deterministic_baseline_accuracy": 0.6923076923076923,
+    "missed_plans": {
+      "battle-060-league-bruno": "one_of_two_targets",
+      "battle-061-league-agatha": "golbat_jolteon_target"
+    }
+  },
+  "development_selection": {
+    "opened_lineages": 4,
+    "opened_explicit_switch_targets": 54,
+    "method": "leave_one_whole_lineage_out_grid",
+    "selected_hidden_units": 2,
+    "selected_epochs": 1000,
+    "selected_learning_rate": 0.01,
+    "selected_l2": 0.003,
+    "training_weighting": "equal_total_weight_per_battle_plan",
+    "leave_one_lineage_out_correct": 54,
+    "leave_one_lineage_out_examples": 54,
+    "leave_one_lineage_out_accuracy": 1.0,
+    "identity_added_to_model_inputs": false
+  },
+  "second_candidate": {
+    "model_id": "pokemon.core.battle.switch-target-ranker.mlp.v1",
+    "feature_schema_id": "pokemon.core.battle.switch-target.features.v1",
+    "canonical_payload_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "canonical_payload_bytes": 1381,
+    "training_artifact_ids": [
+      "red-battle-control-4121905b04bd438f999cc52f6351cdc9",
+      "red-battle-control-b5e47ba327754f1dbd412d6dd8fd5b74",
+      "red-battle-control-5152060e8a1e4b3ab4c3a9c15c95c0de"
+    ],
+    "validation_artifact_ids": [
+      "red-battle-control-517db549407846dfad8b0ded219e02d1"
+    ],
+    "training": {
+      "examples": 41,
+      "learned_correct": 41,
+      "learned_accuracy": 1.0,
+      "learned_cross_entropy": 0.05137326323816159,
+      "deterministic_baseline_correct": 31,
+      "deterministic_baseline_accuracy": 0.7560975609756098
+    },
+    "validation": {
+      "examples": 13,
+      "learned_correct": 13,
+      "learned_accuracy": 1.0,
+      "learned_cross_entropy": 0.05826396285002804,
+      "deterministic_baseline_correct": 10,
+      "deterministic_baseline_accuracy": 0.7692307692307693,
+      "bruno_accuracy": 1.0,
+      "agatha_accuracy": 1.0
+    },
+    "deployment_authority": false
+  },
+  "integrity": {
+    "party_slot_used_as_input": false,
+    "species_identity_used_as_input": false,
+    "move_identity_used_as_input": false,
+    "opponent_identity_used_as_input": false,
+    "map_identity_used_as_input": false,
+    "objective_identity_used_as_input": false,
+    "battle_plan_identity_used_as_input": false,
+    "battle_plan_identity_used_for_training_weight_only": true,
+    "counted_campaign_root_consumed": false
+  },
+  "next_gate": {
+    "candidate_hyperparameters_frozen": true,
+    "fresh_unopened_lineage_seed": 990006,
+    "require_all_explicit_targets_correct": true,
+    "require_bruno_targets_correct": true,
+    "require_agatha_golbat_target_correct": true,
+    "runtime_deployment_authority_after_test": false,
+    "reason_runtime_authority_still_false": "The model still needs an authenticated artifact format, runtime target binding, and causal replay after the unopened offline test."
+  }
+}

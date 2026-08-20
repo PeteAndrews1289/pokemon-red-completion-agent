@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon-model-authorized-objective-completion-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "learned_objective_selection": true,
+    "all_objective_boundaries_model_authorized": true,
+    "teacher_objective_fallbacks": 0,
+    "fixed_specialist_execution": true,
+    "learned_navigation": false,
+    "held_out_planner_evaluation": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "source": {
+    "git_commit": "c8f95115a7d39b16c2efe4492d0ac55610869939",
+    "worktree_dirty": false,
+    "collection_registry": "red-battle-heldout-v75",
+    "registry_sha256": "f346967186256cb371c652544f48773ebcd425455cea9632ecf5b68a6cd84023",
+    "objective_graph_sha256": "d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de"
+  },
+  "model": {
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "artifact_id": "red-objective-planner-f2a7c2d969d34d2e95094f1266b67a63",
+    "artifact_manifest_sha256": "27a106ffdfb167cd34ed2173953844a596bdb6ee66014e1d082c277c069cdc2f",
+    "training_decisions": 36,
+    "training_accuracy": 1.0
+  },
+  "live_evaluation": {
+    "schema": "qualified-play-v26",
+    "status": "ok",
+    "safe_stop_reason": "completion_verified",
+    "checkpoints_completed": 312,
+    "objectives_verified": 36,
+    "objective_decisions": 36,
+    "objective_decisions_authorized": 36,
+    "objectives_completed": 36,
+    "teacher_objective_fallbacks": 0,
+    "mean_objective_confidence": 0.9813686026885455,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "route_dispatch_mode": "model_authorized_fixed_specialists",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "controller_released": true,
+    "frames_executed": 9826693,
+    "actions_executed": 92721,
+    "full_report_sha256": "cedc730515812a59080377d417c3ab98daa83f9271043280a5bd87ca61bcf4c5"
+  },
+  "interpretation": {
+    "result": "The authenticated semantic objective ranker authorized every one of the 36 live objective boundaries in a clean-power completion through Champion and Hall of Fame, with no teacher objective fallback.",
+    "remaining_gap": "The model selects objectives, while deterministic fixed specialists still execute route navigation, menus, resource handling, and other bounded skills. Single-lineage training is not evidence of held-out timing, RNG, state-perturbation, or cross-game transfer."
+  }
+}

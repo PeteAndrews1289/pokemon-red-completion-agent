@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon-red-perfect-save-foundation-receipt-v1",
+  "recorded_on": "2026-08-01",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run verified the corrected registration/living contract, reversible PC box switching, robust balanced training, and Hall-of-Fame completion. Acquisition and level-100 collection remain open; this is not a learned-policy claim.",
+  "source_identity": {
+    "collection_registry_sha256": "5fc9e4cbeccdf3305f5b8e79d5095e588d060d5e1e92316780c1e671ad680a69",
+    "source_bundle_sha256": "7e439ba59906f3bc865ca087656c04bf2eee144a7e7914a7296ba2b84519051b",
+    "teacher_execution_sha256": "5f397db8a28e1c1c0527899c0218f32704746bc560c8ffd0d5f024994eda966f"
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 803831,
+    "frames_executed": 92027363
+  },
+  "balanced_training": {
+    "battles_won": 6493,
+    "healing_trips": 426,
+    "faints": 0,
+    "minimum_level_at_gate": 88,
+    "maximum_level_at_gate": 93,
+    "level_spread_at_gate": 5
+  },
+  "collection_contract": {
+    "id": "red-solo-perfect-save-level-100-v2",
+    "pokedex_registration_targets": 124,
+    "coexisting_living_targets": 120,
+    "consumed_unique_forms": [7, 8, 133, 138],
+    "explicit_exclusions": 27,
+    "target_level": 100
+  },
+  "terminal_census": {
+    "all_boxes_verified": true,
+    "storage_initialized": true,
+    "reversible_box_cycle_verified": true,
+    "current_box": 1,
+    "box_counts": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "pokedex_owned_targets": 12,
+    "pokedex_seen_targets": 84,
+    "living_targets": 7,
+    "level_100_targets": 0,
+    "living_specimens": [
+      {"national_dex_number": 9, "level": 96},
+      {"national_dex_number": 41, "level": 7},
+      {"national_dex_number": 51, "level": 88},
+      {"national_dex_number": 83, "level": 88},
+      {"national_dex_number": 106, "level": 88},
+      {"national_dex_number": 135, "level": 88},
+      {"national_dex_number": 143, "level": 88}
+    ],
+    "pokedex_target_complete": false,
+    "living_collection_verified": false,
+    "level_100_collection_verified": false
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false
+  }
+}

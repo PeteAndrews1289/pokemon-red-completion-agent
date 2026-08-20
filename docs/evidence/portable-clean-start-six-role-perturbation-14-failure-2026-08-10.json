@@ -1,0 +1,68 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-10",
+  "status": "failed_uncounted_dirty_diagnostic_at_agatha_specialist_recovery",
+  "promotion_eligible": false,
+  "claim": "A non-promotable traced replay of seed 990027 qualified the complete lab-loss recovery prefix and reached Agatha before a fainted planned specialist exposed one missing bounded recovery effect. It cannot replace an exact-source clean-power replay or enter v95.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990027,
+    "initial_wait_frames": 48,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "1052d749759ddba2b2811c9138511158d5103f686f537e0db0cbcb596dca7c63"
+  },
+  "source": {
+    "reported_base_commit": "7a79a4868a8f7143539855038dac98a6b35c76f0",
+    "worktree_dirty": true,
+    "temporary_runtime_tracing": true,
+    "raw_report_sha256": "b978daae3911b5827c82dfc0ff83854aba2e0e11901cd7e486a7640bc86d8757"
+  },
+  "failure": {
+    "frames_executed": 47180832,
+    "actions_executed": 662953,
+    "objective_decisions": 19,
+    "objectives_completed": 18,
+    "scheduled_battles_completed": 71,
+    "scheduled_battles_total": 74,
+    "exception_type": "AgathaChapterError",
+    "message": "Agatha lacks its planned matchup specialist: enemy=(14, 0), wanted=118, active=104.",
+    "party_hp": [200, 140, 0, 135, 265, 159],
+    "active_party_index": 5,
+    "active_hp": 159,
+    "enemy_species_id": 14,
+    "enemy_level": 56,
+    "revives_remaining": 3,
+    "hyper_potions_remaining": 7,
+    "full_restores_remaining": 7
+  },
+  "verified_prefix": {
+    "lab_rival_loss_authenticated": true,
+    "route_1_recovery_lessons": 13,
+    "viridian_center_heals": 13,
+    "brock_defeated": true,
+    "required_route_3_trainers_defeated": 4,
+    "zubat_weakened_before_capture": true,
+    "mt_moon_cleared": true,
+    "misty_defeated": true,
+    "wartortle_evolution_accepted": true,
+    "level_24_bite_preserved": true,
+    "lorelei_defeated": true,
+    "bruno_defeated": true
+  },
+  "diagnosis": {
+    "category": "bounded_specialist_recovery_omission",
+    "finding": "Dugtrio was the declared grounded Agatha specialist and fainted while three Revives remained. Agatha rejected the living Jolteon because its recovery executor could heal only living targets. Lance already reserves at most two Revives, leaving exactly one legal Agatha revival without weakening the downstream contract.",
+    "model_boundary": "The failure occurred in the deterministic Agatha specialist executor. It is not evidence that a learned action or target policy chose incorrectly."
+  },
+  "published_repair": {
+    "commit": "56e9be5",
+    "registry_sha256": "91ee64aa12e70df57b2ad7d443557b05086bb4bff865492198d818f25a7ff341",
+    "behavior": "Allow one source-visible Revive for the fainted declared specialist, heal it to the existing 60-HP switch floor, preserve two Revives for Lance, and verify exact item decrement plus a living target.",
+    "local_gate": "Public artifacts, docs, regenerated registry, Ruff, mypy over 128 source files, and 2228 tests passed; three integration tests were deselected and one expected failure remained expected."
+  },
+  "next_gate": "GitHub CI passed. Replay seed 990027 from clean power under exact commit 56e9be5. Preserve the first later failure or the complete Hall-of-Fame receipt. Counted v95 remains unopened.",
+  "counted_v95": {
+    "consumed": 0,
+    "total": 10
+  }
+}

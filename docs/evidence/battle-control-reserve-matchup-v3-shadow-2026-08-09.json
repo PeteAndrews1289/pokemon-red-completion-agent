@@ -1,0 +1,82 @@
+{
+  "schema": "pokemon-red-battle-control-v3-shadow-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "complete_shadow_qualified",
+  "source_commit": "a8f1a268d0d03786c97c7f1ab2724f2254d4da61",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "feature_schema_id": "pokemon.core.battle.control.features.v3",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated",
+    "high_level_battle_control": "shadow_only",
+    "deterministic_teacher_requests_executed": true,
+    "human_input": false,
+    "save_state_used": false
+  },
+  "completion": {
+    "game_complete": true,
+    "champion_and_hall_of_fame_verified_by_completion_contract": true,
+    "actions_executed": 639230,
+    "frames_executed": 45819749
+  },
+  "shadow": {
+    "decisions": 2959,
+    "agreements": 2897,
+    "accuracy": 0.9790469753295032,
+    "balanced_accuracy": 0.9726413712705694,
+    "mean_confidence": 0.9912411864540818,
+    "unavailable_observations": 0,
+    "class_recall": {
+      "select_move": {
+        "correct": 2858,
+        "examples": 2918,
+        "recall": 0.9794379712131597
+      },
+      "recovery": {
+        "correct": 14,
+        "examples": 15,
+        "recall": 0.9333333333333333
+      },
+      "boost_accuracy": {
+        "correct": 4,
+        "examples": 4,
+        "recall": 1.0
+      },
+      "boost_attack": {
+        "correct": 1,
+        "examples": 1,
+        "recall": 1.0
+      },
+      "boost_special": {
+        "correct": 8,
+        "examples": 8,
+        "recall": 1.0
+      },
+      "switch": {
+        "correct": 12,
+        "examples": 13,
+        "recall": 0.9230769230769231
+      }
+    },
+    "false_positive_special_actions": {
+      "recovery": 43,
+      "boost_accuracy": 5,
+      "boost_special": 1,
+      "switch": 11,
+      "total": 60
+    }
+  },
+  "qualification": {
+    "shadow_gate_passed": true,
+    "live_high_level_control_started": true,
+    "live_high_level_control_complete": false,
+    "ordinary_move_model_promoted_by_this_run": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false,
+    "remaining_risk": "The live run must show whether capability masks and target authorization safely contain false-positive special actions."
+  }
+}

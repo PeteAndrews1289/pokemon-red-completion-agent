@@ -1,0 +1,79 @@
+{
+  "schema": "pokemon-battle-switch-target-canonical-runtime-qualification-v1",
+  "recorded_on": "2026-08-09",
+  "status": "isolated_causal_completion_qualified",
+  "promotion_eligible": false,
+  "counted": false,
+  "counted_roots_consumed": 0,
+  "source": {
+    "commit": "67da45eeca96c0ad56d9ed0036dab56165d88363",
+    "dirty": false
+  },
+  "model": {
+    "model_id": "pokemon.core.battle.switch-target-ranker.mlp.v1",
+    "model_sha256": "bd1ba4bd1ca6e9de1a94bc6f958bb54f80c45cce3e14421df3a4eded7a70186e",
+    "artifact_sha256": "fb21668a0a5f51983a704aee1bfc926b63bd9b4b9d13ddf8d97c41471e32dafe"
+  },
+  "shadow": {
+    "diagnostic_seed": 990009,
+    "raw_report_sha256": "b238fc2eccaf594b8ed53daa478eba6481435958bf568f037b19be96cac32dab",
+    "status": "passed_uncounted_rehearsal",
+    "timing_mode": "canonical_unperturbed_baseline",
+    "target_decisions": 13,
+    "target_agreements": 13,
+    "target_accuracy": 1.0,
+    "mean_confidence": 0.9565880806558632,
+    "unavailable": {},
+    "execution_enabled": false,
+    "frames_executed": 45819749,
+    "verified_objectives": 36,
+    "terminal_location": "hall_of_fame"
+  },
+  "isolated_causal": {
+    "diagnostic_seed": 990010,
+    "raw_report_sha256": "7feb87e5c56d7c6b434010f358218b1b1e8ca2c42265ab6cd8a6d4c464c11645",
+    "status": "passed_uncounted_rehearsal",
+    "timing_mode": "canonical_unperturbed_baseline",
+    "target_decisions": 13,
+    "target_rebindings": 13,
+    "target_fallbacks": {},
+    "shadow_agreements": 13,
+    "shadow_accuracy": 1.0,
+    "frames_executed": 45819749,
+    "verified_objectives": 36,
+    "graph_complete": true,
+    "terminal_location": "hall_of_fame",
+    "terminal_mode": "hall_of_fame"
+  },
+  "authority": {
+    "learned": [
+      "semantic objective dispatch among executable composites",
+      "reserve target binding for each teacher-authored switch request"
+    ],
+    "teacher_gated": [
+      "ordinary move choice",
+      "whether and when to switch"
+    ],
+    "authored": [
+      "chapter mechanics",
+      "menu execution",
+      "navigation",
+      "semantic referee"
+    ],
+    "ordinary_move_teacher_queries": 2959,
+    "ordinary_move_teacher_fallbacks": 1220
+  },
+  "interpretation": {
+    "qualified_claim": "The exact authenticated target head causally bound all 13 live reserve requests in a canonical clean-power Red completion with zero target fallback.",
+    "same_frame_count_as_shadow": true,
+    "why_this_is_causal": "The shadow and causal runs used the same clean source, artifact identities, and canonical timing; only target execution changed, and all 13 predicted targets matched the observed teacher targets.",
+    "not_proven": [
+      "teacher-free battle completion",
+      "timing-perturbation robustness",
+      "multi-root reliability",
+      "cross-title transfer",
+      "living-Pokedex autonomy"
+    ]
+  },
+  "next_gate": "Run one uncounted combined learned-stack rehearsal with teacher battle queries forbidden; preserve either the Hall-of-Fame receipt or its first fail-closed integration defect."
+}

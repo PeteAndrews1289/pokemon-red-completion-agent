@@ -1,0 +1,586 @@
+{
+  "schema": "pallet-strategic-safe-hub-route-probe-v1",
+  "recorded_on": "2026-08-11",
+  "status": "ok",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "source": {
+    "git_commit": "bf3fc76d8c571fd56acdb81da7aaed4fa97e5255",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "098b7004f6bf822164cf66d8d15b353313f95cb6e49681e4e38762d64233fd0e",
+  "precondition": "Qualified teachers established a clean-power-on post-Pok\u00e9dex run and exited Oak's Lab to the verified Pallet coordinate (12, 12).",
+  "authority_under_test": "From the Pallet start onward, cartridge map headers, exact connection geometry, destination warp indices, terrain and traversal rules supplied the multi-map route. A game-neutral executor required live acknowledgement for every requested movement, bounded readiness and retries, delegated authenticated wild exits, and could replace its route around newly observed blockers.",
+  "destination": "home",
+  "plan": {
+    "maps": [
+      "PALLET_TOWN",
+      "REDS_HOUSE_1F"
+    ],
+    "map_ids": [
+      0,
+      37
+    ],
+    "start_yx": [
+      12,
+      12
+    ],
+    "terminal_yx": [
+      7,
+      2
+    ],
+    "actions": [
+      "left",
+      "left",
+      "left",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "left",
+      "left",
+      "left",
+      "left",
+      "up"
+    ],
+    "segments": [
+      {
+        "source_map": "PALLET_TOWN",
+        "source_map_id": 0,
+        "target_map": "REDS_HOUSE_1F",
+        "target_map_id": 37,
+        "approach_coordinates_yx": [
+          [
+            12,
+            12
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            11,
+            9
+          ],
+          [
+            10,
+            9
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            7,
+            9
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "actions": [
+          "left",
+          "left",
+          "left",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "up",
+          "left",
+          "left",
+          "left",
+          "left",
+          "up"
+        ],
+        "transition": {
+          "exit_yx": [
+            5,
+            5
+          ],
+          "arrival_yx": [
+            7,
+            2
+          ],
+          "action": "up",
+          "action_in_approach": true
+        }
+      }
+    ]
+  },
+  "execution": {
+    "passed": true,
+    "movement_requests": 14,
+    "wait_actions": 1,
+    "acknowledged_steps": 14,
+    "steps": [
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          12
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          12,
+          11
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          11
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          12,
+          10
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          10
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          12,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          12,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          11,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          11,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          10,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          10,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          9,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          9,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          8,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          8,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          7,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          7,
+          9
+        ],
+        "action": "up",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          9
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          9
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          8
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          8
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          7
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          7
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          6
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          6
+        ],
+        "action": "left",
+        "expected_map_id": 0,
+        "expected_yx": [
+          6,
+          5
+        ],
+        "kind": "walk",
+        "movement_requests": 1,
+        "interruption_count": 0
+      },
+      {
+        "source_map_id": 0,
+        "source_yx": [
+          6,
+          5
+        ],
+        "action": "up",
+        "expected_map_id": 37,
+        "expected_yx": [
+          7,
+          2
+        ],
+        "kind": "warp",
+        "movement_requests": 1,
+        "interruption_count": 0
+      }
+    ],
+    "interruptions": [],
+    "replans": [],
+    "terminal_map_id": 37,
+    "terminal_yx": [
+      7,
+      2
+    ],
+    "terminal_ready": true
+  },
+  "fault_injection": {
+    "enabled": false,
+    "kind": null,
+    "source_map_id": null,
+    "source_yx": null,
+    "blocked_yx": null,
+    "direction": null,
+    "suppressed_requests": 0,
+    "disclosure": null
+  },
+  "wild_flees": [],
+  "final_map": {
+    "id": 37,
+    "name": "REDS_HOUSE_1F"
+  },
+  "final_yx": [
+    7,
+    2
+  ],
+  "planned_actions": 14,
+  "actions_executed_during_plan": 15,
+  "frames_executed": 53748,
+  "controller_released": true,
+  "rom_adjacent_artifacts_unchanged": true,
+  "strategic_navigation": {
+    "scope": "unassigned calibration; excluded from model development",
+    "selection_rule": "lowest route cost among two available safe hubs",
+    "record": {
+      "schema": "strategic-navigation-record-v1",
+      "decision": {
+        "schema": "strategic-navigation-decision-v1",
+        "decision_id": "9db0d3531d5cc57c592a3bfe722b1a796681193c4fceba09cf258370673763b8",
+        "episode_id": "pallet-safe-hub-calibration-2026-08-11",
+        "decision_index": 0,
+        "root_lineage_id": "pallet-safe-hub-diagnostic-root",
+        "partition": "unassigned",
+        "provenance": {
+          "actor": "deterministic_teacher",
+          "policy_id": "lowest-route-cost-safe-hub-v1"
+        },
+        "semantic_need_tags": [
+          "return_to_safety"
+        ],
+        "origin_semantic_tags": [
+          "overworld"
+        ],
+        "origin_region_ref": "pokemon.red:region:pallet",
+        "candidates": [
+          {
+            "destination_ref": "pokemon.red:destination:pallet_home",
+            "binding_index": 0,
+            "semantic_tags": [
+              "recovery",
+              "safe_hub"
+            ],
+            "availability": "available",
+            "route_cost": 15,
+            "route_steps": 14,
+            "map_transitions": 1,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          },
+          {
+            "destination_ref": "pokemon.red:destination:viridian_center",
+            "binding_index": 1,
+            "semantic_tags": [
+              "recovery",
+              "safe_hub"
+            ],
+            "availability": "available",
+            "route_cost": 87,
+            "route_steps": 86,
+            "map_transitions": 3,
+            "field_actions": 0,
+            "mode_changes": 0,
+            "unavailability_reason": null
+          }
+        ],
+        "selected_destination_ref": "pokemon.red:destination:pallet_home",
+        "selected_index": 0
+      },
+      "outcome": {
+        "schema": "strategic-navigation-outcome-v1",
+        "decision_id": "9db0d3531d5cc57c592a3bfe722b1a796681193c4fceba09cf258370673763b8",
+        "selected_destination_ref": "pokemon.red:destination:pallet_home",
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 14,
+        "acknowledged_steps": 14,
+        "wait_actions": 1,
+        "replans": [],
+        "interruptions": [],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "identity_free_trajectory_decision": {
+      "schema_version": 1,
+      "decision_id": "9db0d3531d5cc57c592a3bfe722b1a796681193c4fceba09cf258370673763b8",
+      "episode_id": "pallet-safe-hub-calibration-2026-08-11",
+      "step_index": 0,
+      "snapshot": {
+        "schema_version": 1,
+        "game_id": "pokemon.red",
+        "mode": "overworld",
+        "location": null,
+        "facts": [
+          "need:return_to_safety"
+        ],
+        "features": {
+          "candidate_count": 2
+        }
+      },
+      "snapshot_sha256": "07c418f0481d975f69f09658a0439c5ba31b7f5700e0a7ee9dfb3ee85126e4e5",
+      "context": {
+        "schema_version": 1,
+        "objective_id": null,
+        "policy_id": "lowest-route-cost-safe-hub-v1",
+        "actor": "deterministic_teacher",
+        "metadata": {
+          "skill_id": "pokemon.core.strategic-navigation.v1",
+          "root_lineage_id": "pallet-safe-hub-diagnostic-root",
+          "partition": "unassigned",
+          "strategic_decision_index": 0,
+          "policy_input": {
+            "schema": "strategic-navigation-policy-input-v1",
+            "semantic_need_tags": [
+              "return_to_safety"
+            ],
+            "origin_semantic_tags": [
+              "overworld"
+            ],
+            "candidates": [
+              {
+                "binding_index": 0,
+                "semantic_tags": [
+                  "recovery",
+                  "safe_hub"
+                ],
+                "availability": "available",
+                "route_cost": 15,
+                "route_steps": 14,
+                "map_transitions": 1,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              },
+              {
+                "binding_index": 1,
+                "semantic_tags": [
+                  "recovery",
+                  "safe_hub"
+                ],
+                "availability": "available",
+                "route_cost": 87,
+                "route_steps": 86,
+                "map_transitions": 3,
+                "field_actions": 0,
+                "mode_changes": 0,
+                "unavailability_reason": null
+              }
+            ]
+          }
+        }
+      },
+      "decision_type": "strategic_navigation_selection",
+      "action": {
+        "kind": "select_destination",
+        "selected_candidate_index": 0
+      }
+    },
+    "identity_free_trajectory_outcome": {
+      "schema_version": 1,
+      "event_id": "9db0d3531d5cc57c592a3bfe722b1a796681193c4fceba09cf258370673763b8:outcome",
+      "episode_id": "pallet-safe-hub-calibration-2026-08-11",
+      "step_index": 14,
+      "kind": "strategic_navigation_outcome",
+      "payload": {
+        "decision_id": "9db0d3531d5cc57c592a3bfe722b1a796681193c4fceba09cf258370673763b8",
+        "selected_candidate_index": 0,
+        "status": "succeeded",
+        "terminal_reached": true,
+        "movement_requests": 14,
+        "acknowledged_steps": 14,
+        "wait_actions": 1,
+        "replans": [],
+        "interruptions": [],
+        "resource_renewals": [],
+        "failure_reason": null
+      }
+    },
+    "numeric_feature_schema_frozen": false,
+    "promotion_eligible": false
+  }
+}

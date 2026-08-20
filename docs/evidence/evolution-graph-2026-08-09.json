@@ -1,0 +1,520 @@
+{
+  "schema": "pokemon-evolution-graph-v1",
+  "recorded_on": "2026-08-09",
+  "method": "Read from both cartridges. The pointer array was located by anchoring on two facts this repository already declared -- Diglett evolves at level 26 into Dugtrio, and Kadabra evolves by trade into Alakazam -- each of which matches exactly one byte pattern in the ROM. The reproducing reader now verifies both anchors, the complete 151-species mapping, 70 evolving species and all 72 evolution methods before it emits.",
+  "cartridges_agree": true,
+  "species_with_evolutions": 70,
+  "totals_by_method": {
+    "level": 52,
+    "stone": 16,
+    "trade": 4
+  },
+  "trade_evolutions": {
+    "65": 64,
+    "68": 67,
+    "76": 75,
+    "94": 93
+  },
+  "graph": {
+    "1": [
+      {
+        "to": 2,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "2": [
+      {
+        "to": 3,
+        "method": "level",
+        "requirement": 32
+      }
+    ],
+    "4": [
+      {
+        "to": 5,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "5": [
+      {
+        "to": 6,
+        "method": "level",
+        "requirement": 36
+      }
+    ],
+    "7": [
+      {
+        "to": 8,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "8": [
+      {
+        "to": 9,
+        "method": "level",
+        "requirement": 36
+      }
+    ],
+    "10": [
+      {
+        "to": 11,
+        "method": "level",
+        "requirement": 7
+      }
+    ],
+    "11": [
+      {
+        "to": 12,
+        "method": "level",
+        "requirement": 10
+      }
+    ],
+    "13": [
+      {
+        "to": 14,
+        "method": "level",
+        "requirement": 7
+      }
+    ],
+    "14": [
+      {
+        "to": 15,
+        "method": "level",
+        "requirement": 10
+      }
+    ],
+    "16": [
+      {
+        "to": 17,
+        "method": "level",
+        "requirement": 18
+      }
+    ],
+    "17": [
+      {
+        "to": 18,
+        "method": "level",
+        "requirement": 36
+      }
+    ],
+    "19": [
+      {
+        "to": 20,
+        "method": "level",
+        "requirement": 20
+      }
+    ],
+    "21": [
+      {
+        "to": 22,
+        "method": "level",
+        "requirement": 20
+      }
+    ],
+    "23": [
+      {
+        "to": 24,
+        "method": "level",
+        "requirement": 22
+      }
+    ],
+    "25": [
+      {
+        "to": 26,
+        "method": "stone",
+        "requirement": 33
+      }
+    ],
+    "27": [
+      {
+        "to": 28,
+        "method": "level",
+        "requirement": 22
+      }
+    ],
+    "29": [
+      {
+        "to": 30,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "30": [
+      {
+        "to": 31,
+        "method": "stone",
+        "requirement": 10
+      }
+    ],
+    "32": [
+      {
+        "to": 33,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "33": [
+      {
+        "to": 34,
+        "method": "stone",
+        "requirement": 10
+      }
+    ],
+    "35": [
+      {
+        "to": 36,
+        "method": "stone",
+        "requirement": 10
+      }
+    ],
+    "37": [
+      {
+        "to": 38,
+        "method": "stone",
+        "requirement": 32
+      }
+    ],
+    "39": [
+      {
+        "to": 40,
+        "method": "stone",
+        "requirement": 10
+      }
+    ],
+    "41": [
+      {
+        "to": 42,
+        "method": "level",
+        "requirement": 22
+      }
+    ],
+    "43": [
+      {
+        "to": 44,
+        "method": "level",
+        "requirement": 21
+      }
+    ],
+    "44": [
+      {
+        "to": 45,
+        "method": "stone",
+        "requirement": 47
+      }
+    ],
+    "46": [
+      {
+        "to": 47,
+        "method": "level",
+        "requirement": 24
+      }
+    ],
+    "48": [
+      {
+        "to": 49,
+        "method": "level",
+        "requirement": 31
+      }
+    ],
+    "50": [
+      {
+        "to": 51,
+        "method": "level",
+        "requirement": 26
+      }
+    ],
+    "52": [
+      {
+        "to": 53,
+        "method": "level",
+        "requirement": 28
+      }
+    ],
+    "54": [
+      {
+        "to": 55,
+        "method": "level",
+        "requirement": 33
+      }
+    ],
+    "56": [
+      {
+        "to": 57,
+        "method": "level",
+        "requirement": 28
+      }
+    ],
+    "58": [
+      {
+        "to": 59,
+        "method": "stone",
+        "requirement": 32
+      }
+    ],
+    "60": [
+      {
+        "to": 61,
+        "method": "level",
+        "requirement": 25
+      }
+    ],
+    "61": [
+      {
+        "to": 62,
+        "method": "stone",
+        "requirement": 34
+      }
+    ],
+    "63": [
+      {
+        "to": 64,
+        "method": "level",
+        "requirement": 16
+      }
+    ],
+    "64": [
+      {
+        "to": 65,
+        "method": "trade",
+        "requirement": null
+      }
+    ],
+    "66": [
+      {
+        "to": 67,
+        "method": "level",
+        "requirement": 28
+      }
+    ],
+    "67": [
+      {
+        "to": 68,
+        "method": "trade",
+        "requirement": null
+      }
+    ],
+    "69": [
+      {
+        "to": 70,
+        "method": "level",
+        "requirement": 21
+      }
+    ],
+    "70": [
+      {
+        "to": 71,
+        "method": "stone",
+        "requirement": 47
+      }
+    ],
+    "72": [
+      {
+        "to": 73,
+        "method": "level",
+        "requirement": 30
+      }
+    ],
+    "74": [
+      {
+        "to": 75,
+        "method": "level",
+        "requirement": 25
+      }
+    ],
+    "75": [
+      {
+        "to": 76,
+        "method": "trade",
+        "requirement": null
+      }
+    ],
+    "77": [
+      {
+        "to": 78,
+        "method": "level",
+        "requirement": 40
+      }
+    ],
+    "79": [
+      {
+        "to": 80,
+        "method": "level",
+        "requirement": 37
+      }
+    ],
+    "81": [
+      {
+        "to": 82,
+        "method": "level",
+        "requirement": 30
+      }
+    ],
+    "84": [
+      {
+        "to": 85,
+        "method": "level",
+        "requirement": 31
+      }
+    ],
+    "86": [
+      {
+        "to": 87,
+        "method": "level",
+        "requirement": 34
+      }
+    ],
+    "88": [
+      {
+        "to": 89,
+        "method": "level",
+        "requirement": 38
+      }
+    ],
+    "90": [
+      {
+        "to": 91,
+        "method": "stone",
+        "requirement": 34
+      }
+    ],
+    "92": [
+      {
+        "to": 93,
+        "method": "level",
+        "requirement": 25
+      }
+    ],
+    "93": [
+      {
+        "to": 94,
+        "method": "trade",
+        "requirement": null
+      }
+    ],
+    "96": [
+      {
+        "to": 97,
+        "method": "level",
+        "requirement": 26
+      }
+    ],
+    "98": [
+      {
+        "to": 99,
+        "method": "level",
+        "requirement": 28
+      }
+    ],
+    "100": [
+      {
+        "to": 101,
+        "method": "level",
+        "requirement": 30
+      }
+    ],
+    "102": [
+      {
+        "to": 103,
+        "method": "stone",
+        "requirement": 47
+      }
+    ],
+    "104": [
+      {
+        "to": 105,
+        "method": "level",
+        "requirement": 28
+      }
+    ],
+    "109": [
+      {
+        "to": 110,
+        "method": "level",
+        "requirement": 35
+      }
+    ],
+    "111": [
+      {
+        "to": 112,
+        "method": "level",
+        "requirement": 42
+      }
+    ],
+    "116": [
+      {
+        "to": 117,
+        "method": "level",
+        "requirement": 32
+      }
+    ],
+    "118": [
+      {
+        "to": 119,
+        "method": "level",
+        "requirement": 33
+      }
+    ],
+    "120": [
+      {
+        "to": 121,
+        "method": "stone",
+        "requirement": 34
+      }
+    ],
+    "129": [
+      {
+        "to": 130,
+        "method": "level",
+        "requirement": 20
+      }
+    ],
+    "133": [
+      {
+        "to": 136,
+        "method": "stone",
+        "requirement": 32
+      },
+      {
+        "to": 135,
+        "method": "stone",
+        "requirement": 33
+      },
+      {
+        "to": 134,
+        "method": "stone",
+        "requirement": 34
+      }
+    ],
+    "138": [
+      {
+        "to": 139,
+        "method": "level",
+        "requirement": 40
+      }
+    ],
+    "140": [
+      {
+        "to": 141,
+        "method": "level",
+        "requirement": 40
+      }
+    ],
+    "147": [
+      {
+        "to": 148,
+        "method": "level",
+        "requirement": 30
+      }
+    ],
+    "148": [
+      {
+        "to": 149,
+        "method": "level",
+        "requirement": 55
+      }
+    ]
+  }
+}

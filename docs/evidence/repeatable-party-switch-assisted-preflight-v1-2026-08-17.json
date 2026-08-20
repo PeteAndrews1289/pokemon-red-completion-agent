@@ -1,0 +1,133 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "battle_credit_protocol": {
+    "calibrated_venue_performance_values_reused": false,
+    "candidate_eligibility_is_direct_combat_claim": false,
+    "candidate_eligibility_scope": "curriculum_venue_band_relevant",
+    "qualified_escort_completes_battle": true,
+    "selected_member_participates": true,
+    "venue_prior_feature_mode": "masked_uncalibrated"
+  },
+  "claim_boundary": {
+    "not_supported": [
+      "the switch-assisted pilot has executed",
+      "a completion-aware model has been fit",
+      "the scorer beats a baseline on unseen Red questions",
+      "party-development authority has been promoted",
+      "the representation transfers to Crystal",
+      "the agent can complete a game or living Pokedex autonomously"
+    ],
+    "supported": "The repaired repeatable Red lane can form a fresh, diverse, root-disjoint switch-assisted 8-train plus 4-development plan while prospectively screening transition, battle and recovery capability. The action-free rehearsal used no controller, teacher, model, protected test or transfer context."
+  },
+  "decision": {
+    "full_scale_statistical_milestone": {
+      "development_questions": 16,
+      "train_questions": 32
+    },
+    "immediate_learning_gate": {
+      "development_questions": 4,
+      "model_fits": 1,
+      "train_questions": 8,
+      "unseen_comparisons": 1
+    },
+    "next_step": "Publish the repair, pass exact-head CI, regenerate the action-free plan from that exact source, and request owner authorization for one switch-assisted pilot. If all twelve questions are learner eligible, fit once on the eight train questions and compare once on the four untouched development questions before deciding whether to scale.",
+    "why": "The earlier direct-combat outcomes were collected under a different intervention and cannot honestly be pooled with switch-assisted outcomes. Requiring 32 plus 16 before the first descriptive fit would delay the cheapest useful falsifier without strengthening the first decision."
+  },
+  "historical_direct_protocol_pilot": {
+    "candidate_trials": 36,
+    "controller_actions": 16391,
+    "fully_measured_questions": 4,
+    "invalid_trial_classes": {
+      "field_dig_transition_illegal": 7,
+      "long_form_no_win_retreat": 6
+    },
+    "invalid_trials": 13,
+    "learner_update_eligible_questions": {
+      "development": 2,
+      "train": 2
+    },
+    "manifest_sha256": "ffc98d734008b2401ee993a5127bd3c0bd57bdf36f1436b8b6fc41169bf3c184",
+    "measured_trials": 23,
+    "plan_sha256": "ea750b441a073ff2a2521b92ec52f895d19dca2978e370eab46c6e8c606a8b4e",
+    "questions": 12,
+    "role": "Historical falsifier evidence only; excluded from the switch-assisted model fit.",
+    "total_frames": 1488892
+  },
+  "implementation_contract": {
+    "catalog_schema": "pokemon.core.party-development-prospective-catalog.v7",
+    "field_dig_requires_current_cartridge_tileset": true,
+    "legacy_catalog_v6_readable": true,
+    "legacy_prospective_binding_v6_readable": true,
+    "prospective_binding_schema": "pokemon.core.party-development-prospective-binding.v7",
+    "recovery_can_precede_battle_when_escort_is_fainted": true,
+    "root_level_identity_free_rejection_reporting": true,
+    "transition_anchor_alone_implies_field_dig_legality": false,
+    "venue_prior_features_masked_count": 7
+  },
+  "protected_access": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_choice_targets": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons": 0
+  },
+  "provenance": {
+    "exact_source_published": false,
+    "plan_sha256": "0344c9212a7b034f08b009210252493de3e08b05de7767091ad3bad5eda6586c",
+    "source_commit_ancestor": "c10b5dcb0bbf4e124b2de3976cd3c8d14cbfe99f",
+    "working_source_bundle_sha256": "667eb123ec8f5fb5eac3e8c6c5f56db03e16e873ed72536462f203f21ffec326"
+  },
+  "recorded_on": "2026-08-17",
+  "rehearsal": {
+    "candidate_trials": 48,
+    "candidate_widths": [
+      2,
+      6
+    ],
+    "choice_kinds_in_both_partitions": true,
+    "completion_goals_represented": 4,
+    "option_count": 144,
+    "questions": {
+      "development": 4,
+      "train": 8
+    },
+    "remaining_root_pool": {
+      "development": 8,
+      "total": 18,
+      "train": 10
+    },
+    "root_rejection_counts": {
+      "all_battle_capabilities_blocked": 16,
+      "all_transition_capabilities_blocked": 8,
+      "qualified_escort_unavailable": 4
+    },
+    "status": "ready"
+  },
+  "review_status": {
+    "antigravity": "Command-line audit attempted; no verdict returned before timeout.",
+    "claude": "Command-line audit attempted; no verdict returned before timeout.",
+    "codex": "Implementation, action-free rehearsal and complete local verification are green; publication remains."
+  },
+  "schema": "pokemon.red.repeatable-party-switch-assisted-preflight.v1",
+  "status": "source_qualified_action_free_preflight",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_paths": 0,
+  "verification": {
+    "documentation_check_passed": true,
+    "expected_failures": 1,
+    "integration_tests_skipped": 3,
+    "mypy_source_files": 236,
+    "mypy_passed": true,
+    "non_integration_tests_passed": 3961,
+    "product_focus_check_passed": true,
+    "public_artifact_check_passed": true,
+    "ruff_passed": true,
+    "source_bound_registries_refreshed": true
+  }
+}

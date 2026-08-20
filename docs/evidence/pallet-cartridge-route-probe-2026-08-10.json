@@ -1,0 +1,93 @@
+{
+  "schema": "pallet-cartridge-route-probe-v1",
+  "recorded_on": "2026-08-10",
+  "status": "ok",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "precondition": "The existing qualified opening corridors established clean power-on and the stable Pallet Town state outside Red's house.",
+  "authority_under_test": "The cartridge map graph selected Oak's Lab, the decoded terrain computed the Pallet segment, and live emulator memory checked every intermediate coordinate plus the final map transition.",
+  "start_yx": [
+    6,
+    5
+  ],
+  "goal_warp_yx": [
+    11,
+    12
+  ],
+  "computed_coordinates_yx": [
+    [
+      6,
+      5
+    ],
+    [
+      7,
+      5
+    ],
+    [
+      8,
+      5
+    ],
+    [
+      8,
+      6
+    ],
+    [
+      8,
+      7
+    ],
+    [
+      8,
+      8
+    ],
+    [
+      9,
+      8
+    ],
+    [
+      10,
+      8
+    ],
+    [
+      11,
+      8
+    ],
+    [
+      12,
+      8
+    ],
+    [
+      12,
+      9
+    ],
+    [
+      12,
+      10
+    ],
+    [
+      12,
+      11
+    ],
+    [
+      12,
+      12
+    ],
+    [
+      11,
+      12
+    ]
+  ],
+  "movement_steps": 14,
+  "verified_intermediate_coordinates": 13,
+  "final_map": {
+    "id": 40,
+    "name": "OAKS_LAB"
+  },
+  "frames_executed": 10980,
+  "actions_executed": 100,
+  "controller_released": true,
+  "rom_adjacent_artifacts_unchanged": true
+}

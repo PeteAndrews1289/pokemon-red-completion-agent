@@ -1,0 +1,30 @@
+{
+  "schema": "pokemon-training-control-controlled-summary-v1",
+  "status": "failed",
+  "lineage_id": "training-control-v2-battle-control-01",
+  "source_commit": "e0aca511f374c1cc9b35f2721a0a82174cc3e6e3",
+  "root_state_sha256": "c9143707ec58ac493a0c801e0ba66b82e2dbf1d40f8d865f9511cf4ed8a67d3f",
+  "decision_stream_sha256": "987b563dc1ee5d5d445a339e1d74aabe3b4094c4673b18dcf585a368bb8f9a61",
+  "control_summary_sha256": "29b63f63d4e046e36744ed80ba005523846746bec0bacf5f25c73815f9454407",
+  "model_sha256": "d04546c2a999aa4b5f85da983b4cf3e24aab7b2d29b691dbe27e5157ddf91d7d",
+  "authority_phases": ["battle"],
+  "teacher_fallback_on_model_disagreement": false,
+  "decisions": 480,
+  "agreements": 479,
+  "accuracy": 0.9979166666666667,
+  "battle_accuracy": 0.975609756097561,
+  "failure": {
+    "decision_index": 479,
+    "teacher_action": "flee",
+    "model_action": "fight",
+    "reason": "live attack PP was exhausted or disabled",
+    "referee_result": "terminated_without_fallback"
+  },
+  "root_cause": {
+    "category": "legal_affordance_not_updated_after_runtime_control_change",
+    "evidence": "The preceding safe fight and failing flee carried the same feature vector even though fight was no longer an admissible training action.",
+    "repair": "Remove fight from candidate actions at volatile, excluded, unsafe, capped-escort, and unavailable-attack boundaries."
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

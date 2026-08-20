@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v26",
+  "source_commit": "f362a7cec641baeecb5369e92c865777c2fff89d",
+  "source_bundle_sha256": "788e9b8e4bef5a0c415dae5551e00400e719fa99260164f99b3aac8ba0457c4e",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1550002,
+    "battle_start_schedule_sha256": "bebe05e2cf5c86918736c76b47cbe844179e26e507509f926e55bbd02342261f",
+    "private_log_sha256": "3ee79ce3e89799751964407f01153d074aaa1693ca565029e3c3266b2609f032",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 95711,
+    "party_size": 6,
+    "workhorse_level": 60
+  },
+  "repair_iterations": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "qualified_checkpoints": 112,
+      "failure": "The new income route and purchases passed, but the Lavender evidence contract still required the former fourteen-trainer chapter ledger.",
+      "private_log_sha256": "aab9a831f0c3a823d394dbc1ef39e229079807272006eee0b37f072d2e7f6bac"
+    },
+    {
+      "attempt": 2,
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "3ee79ce3e89799751964407f01153d074aaa1693ca565029e3c3266b2609f032"
+    }
+  ],
+  "repairs_verified": [
+    "A fourth untouched Route 11 Gambler is reached and left through a reversible collision-derived route",
+    "The added source-pinned battle earns 1,260 and raises guaranteed tunnel-supply income to 5,040",
+    "The worst observed capture-spend lineage buys eleven Super Potions, seven Parlyz Heals, seven Awakenings, and four Repels without weakening any reserve",
+    "The chapter and global battle audits bind all 74 scheduled battles",
+    "All downstream balanced-party, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}

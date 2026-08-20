@@ -1,0 +1,105 @@
+{
+  "active_lane": "fresh-goal-manager-field-composition-execution-qualification-v3",
+  "admission": {
+    "closed_v2_root_allowed": false,
+    "fixed_account_collision_check_before_private_input_read": true,
+    "required_initial_available_goal_kinds": [
+      "acquire_species",
+      "explore",
+      "restore_team"
+    ],
+    "model_guided_root_search": false,
+    "prediction_before_root_freeze": false,
+    "prior_goal_manager_contexts_excluded": 81,
+    "prior_root_lineages_excluded": true,
+    "root_partition": "fresh_nonsealed_red_development",
+    "sealed_capture_allowed": false,
+    "selection_basis": "title_neutral_semantic_admission_only"
+  },
+  "authority": {
+    "confidence_floor": 0.8,
+    "goal_selection": "frozen_promoted_red_goal_manager_only",
+    "low_level_execution": "existing_independently_verified_skills_only",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "teacher_fallback_allowed": false,
+    "teacher_queries_allowed": false
+  },
+  "bounds": {
+    "controller_input_consumes_exact_root": true,
+    "decisions": 3,
+    "maximum_actions_per_decision": 6000,
+    "maximum_episode_actions": 18000,
+    "maximum_episode_frames": 1800000,
+    "maximum_frames_per_decision": 600000,
+    "retry_same_root_after_controller_input": false,
+    "stop_on_first_failed_decision": true
+  },
+  "counter_treatment_before_execution": {
+    "authority_promotions_added": 0,
+    "composition_episodes_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "episode_contract": {
+    "available_goal_minimum_each_decision": 2,
+    "available_menu_changes_minimum": 1,
+    "collection_never_regresses": true,
+    "decisions_and_outcomes_durably_paired": 3,
+    "fixed_dispatches": 0,
+    "minimum_model_confidence": 0.8,
+    "policy_context_changes_between_decisions": 2,
+    "required_retained_specimens_acquired_minimum": 1,
+    "selected_goal_kinds_exact": [
+      "acquire_species",
+      "explore",
+      "restore_team"
+    ],
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "undeclared_living_specimens_lost": 0
+  },
+  "implementation_status": "v3_design_frozen_successor_runner_not_yet_published_no_root_access",
+  "preclaim_observability": {
+    "failure_receipt_required": true,
+    "qualification_receipt": "docs/evidence/generic-fresh-root-preflight-observability-v1-2026-08-17.json",
+    "qualification_receipt_sha256": "8e8f3f8ea2aaf0ef9d05b908e9cf3353297f4ba65741e9b9c51c502acd79b8f6",
+    "success_receipt_required": true
+  },
+  "preflight_pass_boundary": "One exact published V3 runner and one different fresh action-free admitted root may freeze one unclaimed execution identity for a separately reoriented development episode. A pass is not gameplay, a learning result, authority, transfer, Red completion, or living-Pokedex evidence.",
+  "prohibited": [
+    "closed_v2_root_access",
+    "crystal_execution",
+    "development_outcome_reuse",
+    "full_game_replay",
+    "model_adaptation",
+    "model_fit",
+    "new_route_profile_or_skill_for_selected_root",
+    "sealed_red_evaluation",
+    "teacher_choice_or_fallback"
+  ],
+  "recorded_on": "2026-08-17",
+  "replacement_rationale": {
+    "observability_repair_source_commit": "af04830fa51cc624a3047822d9fa582163444bea",
+    "superseded_attempt": "fresh-goal-manager-field-composition-execution-qualification-v2",
+    "v2_failure_receipt": "docs/evidence/fresh-goal-manager-composition-execution-preflight-v2-failure-2026-08-17.json"
+  },
+  "schema": "pokemon.red.fresh-goal-manager-composition-design.v3",
+  "stop_rule": "Fail closed and permanently retire the exact root on any sanitized preflight failure, collision, nonfresh lineage, missing field goal, unattested source/model/runtime/skill/protected boundary, controller input, prediction, or frame advance. Do not retry or patch the root into compliance.",
+  "title_role": "Red development qualification for one later model-led composition episode; not transfer, promotion, sealed evaluation, completion, or living-Pokedex evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects_before_preflight": {
+    "composition_episodes": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "game_executions": 0,
+    "goal_manager_decisions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "new_root_inspections": 0,
+    "teacher_queries": 0
+  }
+}

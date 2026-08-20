@@ -1,0 +1,87 @@
+{
+  "final_verification": {
+    "full_rom_free_gate": {
+      "deselected_integration": 3,
+      "expected_failures": 1,
+      "passed": 2817
+    },
+    "full_rom_free_gate_passed_after_restoration": true,
+    "prospective_source_bundle_sha256": "f8330ec8fbe4866318e3930170e2afc3fc05f08d3824422f9b4223618f42161c",
+    "targeted_tests_after_restoration": 20
+  },
+  "private_test_inputs_accessed": false,
+  "probes": [
+    {
+      "id": "preserved_mlp_fit_accepts_validation",
+      "killed": true,
+      "target": "MLP training-partition guard"
+    },
+    {
+      "id": "linear_fit_accepts_validation",
+      "killed": true,
+      "target": "linear training-partition guard"
+    },
+    {
+      "id": "selector_reaches_fit_before_rejecting_validation",
+      "killed": true,
+      "target": "train-only selector boundary"
+    },
+    {
+      "id": "leave_one_out_fold_keeps_held_out_row",
+      "killed": true,
+      "target": "cross-validation fold construction"
+    },
+    {
+      "id": "one_standard_error_adds_uncertainty",
+      "killed": true,
+      "target": "one-standard-error threshold direction"
+    },
+    {
+      "id": "one_standard_error_prefers_more_parameters",
+      "killed": true,
+      "target": "simplicity ordering"
+    },
+    {
+      "id": "disabled_linear_weight_is_accepted",
+      "killed": true,
+      "target": "serialized feature firewall"
+    },
+    {
+      "id": "boolean_is_accepted_as_parameter_count_one",
+      "killed": true,
+      "target": "model metadata type boundary"
+    },
+    {
+      "id": "structural_eligibility_is_counted_as_preregistration",
+      "killed": true,
+      "target": "declared-versus-eligible separation"
+    },
+    {
+      "id": "sealed_challenge_minimum_drops_from_six_to_five",
+      "killed": true,
+      "target": "best-case paired-power floor"
+    },
+    {
+      "id": "two_sided_perfect_scorer_p_becomes_one_sided",
+      "killed": true,
+      "target": "exact-p arithmetic"
+    },
+    {
+      "id": "sealed_audit_counts_learning_partitions",
+      "killed": true,
+      "target": "test-partition filter"
+    },
+    {
+      "id": "teacher_destination_counts_as_local_non_teacher",
+      "killed": true,
+      "target": "structural challenge eligibility"
+    }
+  ],
+  "result": {
+    "killed": 13,
+    "survived": 0,
+    "total": 13
+  },
+  "schema": "strategic-linear-and-sealed-design-mutation-audit-v1",
+  "test_outcomes_opened": 0
+}

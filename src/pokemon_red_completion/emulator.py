@@ -6,8 +6,9 @@ from contextlib import suppress
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Protocol
+from typing import Any, Protocol, runtime_checkable
 
+from pokemon_red_completion.constants import POKEMON_RED_US_REV_0, SupportedRom
 from pokemon_red_completion.rom import (
     RomFingerprint,
     resolve_rom_path,
@@ -32,7 +33,7 @@ class EmulatorEndedError(EmulatorError):
 
 
 class MemoryView(Protocol):
-    def __getitem__(self, address: int) -> int: ...
+    def __getitem__(self, address: int | tuple[int, int]) -> int: ...
 
 
 class PyBoyBackend(Protocol):
@@ -47,6 +48,25 @@ class PyBoyBackend(Protocol):
     def button_release(self, button: str) -> None: ...
 
     def stop(self, save: bool = True, **kwargs: Any) -> None: ...
+
+    def save_state(self, file_like_object: Any) -> None: ...
+
+    def load_state(self, file_like_object: Any) -> None: ...
+
+
+@runtime_checkable
+class EmulatorFrameObserver(Protocol):
+    """Read-only rendered-frame sink; it has no controller methods."""
+
+    def wants_frame(self, logical_frame: int) -> bool: ...
+
+    def publish_frame(
+        self,
+        width: int,
+        height: int,
+        rgb: bytes,
+        logical_frame: int,
+    ) -> None: ...
 
 
 PyBoyFactory = Callable[..., PyBoyBackend]
@@ -77,7 +97,7 @@ def _load_sdl2_window_pump() -> WindowEventPump:
         from sdl2.ext import get_events
     except ImportError as error:
         raise EmulatorDependencyError(
-            'SDL2 display support is unavailable. Reinstall with: '
+            "SDL2 display support is unavailable. Reinstall with: "
             'python -m pip install -e ".[emulator]"'
         ) from error
 
@@ -104,10 +124,7 @@ def _load_sdl2_window_pump() -> WindowEventPump:
                 and event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE
             ):
                 return False
-            if (
-                event.type == sdl2.SDL_KEYUP
-                and event.key.keysym.sym == sdl2.SDLK_ESCAPE
-            ):
+            if event.type == sdl2.SDL_KEYUP and event.key.keysym.sym == sdl2.SDLK_ESCAPE:
                 return False
         return True
 
@@ -129,9 +146,24 @@ class PyBoyAdapter:
         *,
         watch: bool = False,
         speed: int | None = None,
+        expected_rom: SupportedRom = POKEMON_RED_US_REV_0,
+        frame_observer: EmulatorFrameObserver | None = None,
     ) -> None:
+        """``expected_rom`` names which cartridge this adapter will load.
+
+        It defaults to Red so every existing caller is unchanged. It exists
+        because a living Pokedex needs a second version -- ten species are
+        exclusive to Blue -- and until now the fingerprint check here was
+        hard-coded, so the repository could refuse a cartridge it had already
+        been told to expect.
+        """
+
         if not isinstance(watch, bool):
             raise TypeError("watch must be a boolean")
+        if not isinstance(expected_rom, SupportedRom):
+            raise TypeError("expected_rom must be a SupportedRom")
+        if frame_observer is not None and not isinstance(frame_observer, EmulatorFrameObserver):
+            raise TypeError("frame_observer must implement EmulatorFrameObserver")
         if speed is not None and (not isinstance(speed, int) or isinstance(speed, bool)):
             raise TypeError("speed must be an integer or None")
         if watch:
@@ -147,9 +179,11 @@ class PyBoyAdapter:
             window_name = "null"
 
         self._rom_path = Path(rom_path)
+        self._expected_rom = expected_rom
         self._watch = watch
         self._window_name = window_name
         self._speed = resolved_speed
+        self._frame_observer = frame_observer
         self._backend: PyBoyBackend | None = None
         self._window_event_pump: WindowEventPump | None = None
         self._rom_stream: io.BytesIO | None = None
@@ -197,7 +231,7 @@ class PyBoyAdapter:
 
         path = resolve_rom_path(self._rom_path)
         payload = path.read_bytes()
-        fingerprint = verify_rom_bytes(payload)
+        fingerprint = verify_rom_bytes(payload, self._expected_rom)
         rom_stream = io.BytesIO(payload)
         factory = _load_pyboy_factory()
         window_event_pump = _load_sdl2_window_pump() if self._watch else None
@@ -232,6 +266,50 @@ class PyBoyAdapter:
         self._fingerprint = fingerprint
         self._logical_frame = 0
         return self
+
+    def save_state(self, destination: str | Path) -> None:
+        """Write the emulator's exact state to a file we name.
+
+        This does not weaken the no-save property above. That property is about
+        never letting PyBoy discover or create RAM and RTC files beside the
+        user's private ROM, which is why the ROM arrives as an in-memory
+        stream. Here the destination is explicit and chosen by the caller, so
+        nothing is written near the ROM.
+
+        The written file is derived from the ROM and is private data in exactly
+        the way the ROM is. It belongs outside the repository and must never be
+        committed; ``trajectory`` already refuses ``savestate`` keys in public
+        artifacts for the same reason.
+        """
+
+        path = Path(destination)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("wb") as handle:
+            self._require_backend().save_state(handle)
+
+    def load_state(self, source: str | Path) -> None:
+        """Restore a state written by :meth:`save_state`.
+
+        A state captured mid-route is a faithful starting point rather than an
+        approximation: it restores real memory, so code under test meets the
+        same bytes it would have met at that moment in a full run. That is the
+        difference between this and a fake -- the fake can only answer what we
+        thought to teach it.
+        """
+
+        path = Path(source)
+        if not path.exists():
+            raise EmulatorError(f"no saved state at {path}")
+        with path.open("rb") as handle:
+            self._require_backend().load_state(handle)
+
+    def load_state_bytes(self, payload: bytes) -> None:
+        """Restore already-authenticated state bytes without reopening a path."""
+
+        if not isinstance(payload, bytes) or not payload:
+            raise EmulatorError("saved state bytes are unavailable")
+        with io.BytesIO(payload) as handle:
+            self._require_backend().load_state(handle)
 
     def close(self) -> None:
         backend = self._backend
@@ -273,6 +351,63 @@ class PyBoyAdapter:
             raise ValueError("Address must be an integer in Work RAM (0xC000 to 0xDFFF)")
         return int(self._require_backend().memory[address])
 
+    def read_wram(self, bank: int, address: int, length: int) -> bytes:
+        """Read one exact fixed or switchable WRAM bank without changing it.
+
+        PyBoy's bank-qualified memory view addresses CGB WRAM directly.  This
+        avoids changing the live SVBK register merely to observe Crystal's
+        bank-one campaign state.
+        """
+
+        if type(bank) is not int or not 0 <= bank <= 7:  # noqa: E721
+            raise ValueError("WRAM bank must be between 0 and 7")
+        if type(address) is not int or not 0xC000 <= address <= 0xDFFF:  # noqa: E721
+            raise ValueError("WRAM address must be between 0xC000 and 0xDFFF")
+        if type(length) is not int or length < 1:  # noqa: E721
+            raise ValueError("WRAM read length must be positive")
+        region_end = 0xCFFF if address < 0xD000 else 0xDFFF
+        if address + length - 1 > region_end:
+            raise ValueError("WRAM read must remain inside one banked region")
+        if address < 0xD000 and bank != 0:
+            raise ValueError("fixed WRAM must use bank 0")
+        if address >= 0xD000 and bank == 0:
+            raise ValueError("switchable WRAM must use bank 1 through 7")
+        memory = self._require_backend().memory
+        return bytes(int(memory[bank, address + offset]) for offset in range(length))
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Read one byte from Red's two dedicated saved-box SRAM banks.
+
+        This is intentionally narrower than a general cartridge-memory port:
+        only banks 2 and 3, which the pinned Red source reserves for boxes
+        1–12, are visible. There is no corresponding write operation.
+        """
+
+        if type(bank) is not int or bank not in (2, 3):
+            raise ValueError("Collection SRAM bank must be 2 or 3")
+        if type(address) is not int or not 0xA000 <= address <= 0xBFFF:
+            raise ValueError("Collection SRAM address must be between 0xA000 and 0xBFFF")
+        return int(self._require_backend().memory[bank, address])
+
+    def read_cartridge_ram(self, bank: int, address: int, length: int) -> bytes:
+        """Read one exact MBC cartridge-RAM bank without changing emulator state.
+
+        The shared port is intentionally read-only and restricted to the four
+        SRAM banks used by the pinned Red and Crystal cartridges. Title
+        adapters retain responsibility for allowlisting semantic regions.
+        """
+
+        if type(bank) is not int or not 0 <= bank <= 3:  # noqa: E721
+            raise ValueError("Cartridge RAM bank must be between 0 and 3")
+        if type(address) is not int or not 0xA000 <= address <= 0xBFFF:  # noqa: E721
+            raise ValueError("Cartridge RAM address must be between 0xA000 and 0xBFFF")
+        if type(length) is not int or length < 1:  # noqa: E721
+            raise ValueError("Cartridge RAM read length must be positive")
+        if address + length - 1 > 0xBFFF:
+            raise ValueError("Cartridge RAM read must remain inside one bank")
+        memory = self._require_backend().memory
+        return bytes(int(memory[bank, address + offset]) for offset in range(length))
+
     def press(self, button: str) -> None:
         normalized = self._validated_button(button)
         if normalized in self._pressed_buttons:
@@ -292,7 +427,7 @@ class PyBoyAdapter:
             raise ValueError("frames must be a positive integer")
         backend = self._require_backend()
         if not self._watch:
-            self._tick_backend(backend, frames, render=False)
+            self._tick_backend(backend, frames, render=self._frame_observer is not None)
             return
         for _ in range(frames):
             if self._window_event_pump is None:
@@ -308,12 +443,48 @@ class PyBoyAdapter:
         *,
         render: bool,
     ) -> None:
-        alive = bool(backend.tick(frames, render=render, sound=False))
+        observer = self._frame_observer
+        next_logical_frame = self._logical_frame + frames
+        capture_frame = observer is not None and observer.wants_frame(next_logical_frame)
+        render_frame = render if observer is None or self._watch else capture_frame
+        alive = bool(backend.tick(frames, render=render_frame, sound=False))
         self._logical_frame += frames
         if not alive:
             raise EmulatorEndedError(
                 f"Emulator ended before completing frame {self._logical_frame}."
             )
+        if observer is not None and capture_frame:
+            width, height, rgb = self._screen_rgb(backend)
+            observer.publish_frame(width, height, rgb, self._logical_frame)
+
+    @staticmethod
+    def _screen_rgb(backend: PyBoyBackend) -> tuple[int, int, bytes]:
+        """Copy PyBoy's rendered RGB/RGBA ndarray without exposing its backend."""
+
+        screen = getattr(backend, "screen", None)
+        pixels = getattr(screen, "ndarray", None)
+        shape = getattr(pixels, "shape", None)
+        tobytes = getattr(pixels, "tobytes", None)
+        if (
+            not isinstance(shape, tuple)
+            or len(shape) != 3
+            or any(type(value) is not int or value < 1 for value in shape)  # noqa: E721
+            or not callable(tobytes)
+        ):
+            raise EmulatorError("Rendered emulator frame is unavailable.")
+        height, width, channels = shape
+        if channels not in (3, 4) or width > 1024 or height > 1024:
+            raise EmulatorError("Rendered emulator frame dimensions are unsupported.")
+        raw = tobytes()
+        if not isinstance(raw, bytes) or len(raw) != width * height * channels:
+            raise EmulatorError("Rendered emulator frame bytes are inconsistent.")
+        if channels == 4:
+            rgb = bytearray(width * height * 3)
+            rgb[0::3] = raw[0::4]
+            rgb[1::3] = raw[1::4]
+            rgb[2::3] = raw[2::4]
+            raw = bytes(rgb)
+        return width, height, raw
 
     @staticmethod
     def _validated_button(button: str) -> str:

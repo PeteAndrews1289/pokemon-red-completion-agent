@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from pokemon_red_completion.domain import GameMode, GameState
+from pokemon_red_completion.encounters import encounter_log_path, is_wild_encounter
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
 from pokemon_red_completion.route import HALL_OF_FAME_FACT
 
@@ -15,6 +17,13 @@ class ReadOnlyMemory(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
+@runtime_checkable
+class ReadOnlyCartridgeRam(Protocol):
+    """Narrow read-only access to banked cartridge RAM."""
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int: ...
+
+
 class RamAddress(IntEnum):
     """Verified symbols for the supported US revision-zero ROM.
 
@@ -23,25 +32,33 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    SPRITE_STATE_DATA_1 = 0xC100
+    SPRITE_STATE_DATA_2 = 0xC200
     TILE_MAP = 0xC3A0
+    OVERWORLD_MAP = 0xC6E8
+    PLAYER_FACING_DIRECTION = 0xC109
     TOP_MENU_ITEM_Y = 0xCC24
     TOP_MENU_ITEM_X = 0xCC25
     CURRENT_MENU_ITEM = 0xCC26
+    MAX_MENU_ITEM = 0xCC28
     LIST_SCROLL_OFFSET = 0xCC36
     MENU_WATCHED_KEYS = 0xCC29
     PLAYER_MON_NUMBER = 0xCC2F
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
     PLAYER_ATTACK_STAGE = 0xCD1A
+    PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
     ENEMY_DEFENSE_STAGE = 0xCD2F
     ENGAGED_TRAINER_CLASS = 0xCD2D
     ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
+    MISC_FLAGS = 0xCD60
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
     SHOP_SELECTED_ITEM = 0xCF91
     SHOP_QUANTITY = 0xCF96
+    WALK_COUNTER = 0xCFC5
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
@@ -51,12 +68,15 @@ class RamAddress(IntEnum):
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
+    ENEMY_BATTLE_STATUS_1 = 0xD067
+    PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
     REPEL_REMAINING_STEPS = 0xD0DB
     PLAYER_MONEY = 0xD347
     PARTY_COUNT = 0xD163
     PARTY_SPECIES = 0xD164
+    PARTY_MON_1 = 0xD16B
     PARTY_MON_1_HP = 0xD16C
     PARTY_MON_1_STATUS = 0xD16F
     PARTY_MON_1_MOVES = 0xD173
@@ -77,13 +97,27 @@ class RamAddress(IntEnum):
     PARTY_MON_3_LEVEL = 0xD1E4
     PARTY_MON_3_MAX_HP = 0xD1E5
     PARTY_MON_3_NICKNAME = 0xD2CB
+    POKEDEX_OWNED = 0xD2F7
+    POKEDEX_SEEN = 0xD30A
     NUM_BAG_ITEMS = 0xD31D
     BAG_ITEMS = 0xD31E
     OBTAINED_BADGES = 0xD356
     CURRENT_MAP = 0xD35E
+    CURRENT_TILE_BLOCK_MAP_VIEW_POINTER = 0xD35F
     PLAYER_Y = 0xD361
     PLAYER_X = 0xD362
+    Y_BLOCK_COORD = 0xD363
+    X_BLOCK_COORD = 0xD364
+    LAST_MAP = 0xD365
+    CURRENT_MAP_TILESET = 0xD367
+    CURRENT_MAP_HEIGHT = 0xD368
+    CURRENT_MAP_WIDTH = 0xD369
+    NUM_SPRITES = 0xD4E1
+    MAP_SPRITE_DATA = 0xD4E4
+    CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
+    TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
+    TOGGLEABLE_OBJECT_LIST = 0xD5CE
     OAKS_LAB_SCRIPT = 0xD5F0
     PALLET_TOWN_SCRIPT = 0xD5F1
     VIRIDIAN_CITY_SCRIPT = 0xD5F4
@@ -109,6 +143,8 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
+    WALK_BIKE_SURF_STATE = 0xD700
+    LAST_BLACKOUT_MAP = 0xD719
     NPC_TRADE_FLAGS = 0xD737
     VERMILION_GYM_FIRST_LOCK = 0xD743
     VERMILION_GYM_SECOND_LOCK = 0xD744
@@ -116,6 +152,9 @@ class RamAddress(IntEnum):
     SAFARI_STEPS = 0xD70D
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
+    CURRENT_BOX_COUNT = 0xDA80
+    CURRENT_BOX_SPECIES = 0xDA81
+    CURRENT_BOX_MONS = 0xDA96
 
 
 class MapId(IntEnum):
@@ -157,6 +196,7 @@ class MapId(IntEnum):
     VIRIDIAN_POKECENTER = 0x29
     VIRIDIAN_MART = 0x2A
     VIRIDIAN_GYM = 0x2D
+    DIGLETTS_CAVE_ROUTE_2 = 0x2E
     VICTORY_ROAD_1F = 0x6C
     LANCES_ROOM = 0x71
     VIRIDIAN_FOREST_NORTH_GATE = 0x2F
@@ -164,6 +204,7 @@ class MapId(IntEnum):
     VIRIDIAN_FOREST_SOUTH_GATE = 0x32
     VIRIDIAN_FOREST = 0x33
     PEWTER_GYM = 0x36
+    PEWTER_MART = 0x38
     PEWTER_POKECENTER = 0x3A
     MT_MOON_1F = 0x3B
     MT_MOON_B1F = 0x3C
@@ -171,9 +212,11 @@ class MapId(IntEnum):
     CERULEAN_TRASHED_HOUSE = 0x3E
     CERULEAN_POKECENTER = 0x40
     CERULEAN_GYM = 0x41
+    CERULEAN_MART = 0x43
     MT_MOON_POKECENTER = 0x44
     UNDERGROUND_PATH_ROUTE_5 = 0x47
     UNDERGROUND_PATH_ROUTE_6 = 0x4A
+    ROUTE_7_GATE = 0x4C
     UNDERGROUND_PATH_ROUTE_7 = 0x4D
     UNDERGROUND_PATH_ROUTE_8 = 0x50
     DIGLETTS_CAVE_ROUTE_11 = 0x55
@@ -203,6 +246,7 @@ class MapId(IntEnum):
     POKEMON_TOWER_6F = 0x93
     POKEMON_TOWER_7F = 0x94
     MR_FUJIS_HOUSE = 0x95
+    LAVENDER_MART = 0x96
     CELADON_POKECENTER = 0x85
     CELADON_GYM = 0x86
     GAME_CORNER = 0x87
@@ -211,8 +255,13 @@ class MapId(IntEnum):
     CELADON_MART_3F = 0x7C
     CELADON_MART_4F = 0x7D
     CELADON_MART_ROOF = 0x7E
+    CELADON_MANSION_1F = 0x80
+    CELADON_MANSION_2F = 0x81
+    CELADON_MANSION_3F = 0x82
+    CELADON_MANSION_ROOF = 0x83
+    CELADON_MANSION_ROOF_HOUSE = 0x84
     CELADON_MART_5F = 0x88
-    ROUTE_7_GATE = 0x4C
+    FIGHTING_DOJO = 0xB1
     SAFFRON_GYM = 0xB2
     SAFFRON_MART = 0xB4
     SILPH_CO_1F = 0xB5
@@ -345,6 +394,10 @@ class EventFlag(IntEnum):
     BEAT_ROUTE_9_TRAINER_0 = 0x441
     BEAT_ROUTE_9_TRAINER_8 = 0x449
     BEAT_ROUTE_10_TRAINER_2 = 0x453
+    BEAT_ROUTE_11_TRAINER_0 = 0x471
+    BEAT_ROUTE_11_TRAINER_1 = 0x472
+    BEAT_ROUTE_11_TRAINER_5 = 0x476
+    BEAT_ROUTE_11_TRAINER_6 = 0x477
     BEAT_ROCK_TUNNEL_1_TRAINER_3 = 0x45C
     BEAT_ROCK_TUNNEL_1_TRAINER_4 = 0x45D
     BEAT_ROCK_TUNNEL_1_TRAINER_5 = 0x45E
@@ -451,6 +504,14 @@ class EventFlag(IntEnum):
     CINNABAR_GYM_GATE_5_UNLOCKED = 0x2AD
     CINNABAR_GYM_GATE_6_UNLOCKED = 0x2AE
     GOT_TM46 = 0x360
+    DEFEATED_FIGHTING_DOJO = 0x350
+    BEAT_KARATE_MASTER = 0x351
+    BEAT_FIGHTING_DOJO_TRAINER_0 = 0x352
+    BEAT_FIGHTING_DOJO_TRAINER_1 = 0x353
+    BEAT_FIGHTING_DOJO_TRAINER_2 = 0x354
+    BEAT_FIGHTING_DOJO_TRAINER_3 = 0x355
+    GOT_HITMONLEE = 0x356
+    GOT_HITMONCHAN = 0x357
     BEAT_SABRINA = 0x361
     BEAT_SAFFRON_GYM_TRAINER_0 = 0x362
     BEAT_SAFFRON_GYM_TRAINER_1 = 0x363
@@ -540,11 +601,19 @@ class EventFlag(IntEnum):
 
 class ItemId(IntEnum):
     MASTER_BALL = 0x01
+    ULTRA_BALL = 0x02
+    GREAT_BALL = 0x03
     POKE_BALL = 0x04
+    ANTIDOTE = 0x0B
+    AWAKENING = 0x0E
+    PARLYZ_HEAL = 0x0F
     FULL_RESTORE = 0x10
     SUPER_POTION = 0x13
     HYPER_POTION = 0x12
+    POTION = 0x14
     REPEL = 0x1E
+    THUNDER_STONE = 0x21
+    SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
@@ -552,6 +621,7 @@ class ItemId(IntEnum):
     NUGGET = 0x31
     SS_TICKET = 0x3F
     GOLD_TEETH = 0x40
+    X_ATTACK = 0x41
     OAKS_PARCEL = 0x46
     SILPH_SCOPE = 0x48
     POKE_FLUTE = 0x49
@@ -565,15 +635,18 @@ class ItemId(IntEnum):
     LIFT_KEY = 0x4A
     EXP_ALL = 0x4B
     SUPER_ROD = 0x4E
+    ELIXIR = 0x52
     HM01_CUT = 0xC4
     HM02_FLY = 0xC5
     HM03_SURF = 0xC6
     HM04_STRENGTH = 0xC7
     TM06_TOXIC = 0xCE
     TM01_MEGA_PUNCH = 0xC9
+    TM05_MEGA_KICK = 0xCD
     TM09_TAKE_DOWN = 0xD1
     TM11_BUBBLEBEAM = 0xD3
     TM13_ICE_BEAM = 0xD5
+    TM14_BLIZZARD = 0xD6
     TM16_PAY_DAY = 0xD8
     TM17_SUBMISSION = 0xD9
     TM20_RAGE = 0xDC
@@ -584,6 +657,7 @@ class ItemId(IntEnum):
     TM28_DIG = 0xE4
     TM34_BIDE = 0xEA
     TM38_FIRE_BLAST = 0xEE
+    TM40_SKULL_BASH = 0xF0
     FRESH_WATER = 0x3C
     SODA_POP = 0x3D
     LEMONADE = 0x3E
@@ -600,6 +674,8 @@ class Badge(IntFlag):
     EARTH = 1 << 7
 
 
+SAFFRON_GUARD_ACCESS_MASK = 0x40
+SAFFRON_GUARD_ACCESS_FACT = "story:saffron_guards_open"
 GAME_TIMER_COUNTING_MASK = 0x01
 REDS_HOUSE_2F_NOOP_SCRIPT = 1
 OAKS_LAB_SELECTION_READY_SCRIPT = 6
@@ -613,6 +689,7 @@ ABRA_SPECIES_ID = 0x94
 PIDGEOTTO_SPECIES_ID = 0x96
 BULBASAUR_SPECIES_ID = 0x99
 RATTATA_SPECIES_ID = 0xA5
+ZUBAT_SPECIES_ID = 0x6B
 SQUIRTLE_SPECIES_ID = 0xB1
 WARTORTLE_SPECIES_ID = 0xB3
 BLASTOISE_SPECIES_ID = 0x1C
@@ -621,8 +698,10 @@ SQUIRTLE_LINEAGE_SPECIES_IDS = frozenset(
 )
 TACKLE_MOVE_ID = 0x21
 TAIL_WHIP_MOVE_ID = 0x27
+MEGA_PUNCH_MOVE_ID = 0x05
 WATER_GUN_MOVE_ID = 0x37
 BUBBLE_MOVE_ID = 0x91
+BUBBLEBEAM_MOVE_ID = 0x3D
 BROCK_OPPONENT_ID = 0xEA
 BROCK_TRAINER_CLASS_ID = 0x22
 BROCK_GYM_LEADER_NUMBER = 1
@@ -780,6 +859,11 @@ ROUTE_6_JR_TRAINER_M_NUMBER = 5
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
+# ``EnemySendOut`` draws Red's two-option trainer-switch prompt at (1, 8).
+# The live prompt responds only to A/B and has exactly two entries.  Requiring
+# the already-loaded next enemy and an active cursor excludes stale menu RAM
+# during final-KO dialogue and evolution.
+TRAINER_SWITCH_PROMPT_SIGNATURE = (0x08, 0x01, 0x01, 0x03)
 FILLED_MENU_CURSOR_TILE = 0xED
 TILE_MAP_SIZE = 20 * 18
 MIN_BATTLE_COMMAND = 0
@@ -787,9 +871,124 @@ MAX_BATTLE_COMMAND = 3
 MIN_MOVE_MENU_SLOT = 1
 MAX_MOVE_MENU_SLOT = 4
 PARTY_LIMIT = 6
+PARTY_STRUCT_STRIDE = 44
+PARTY_SPECIES_OFFSET = 0
+PARTY_HP_OFFSET = 1
+PARTY_STATUS_OFFSET = 4
+PARTY_MOVES_OFFSET = 8
+PARTY_PP_OFFSET = 29
+PARTY_LEVEL_OFFSET = 33
+PARTY_MAX_HP_OFFSET = 34
 MAX_BAG_ITEMS = 20
 EVENT_FLAGS_END = 0xD886
 EVENT_FLAG_BYTES = EVENT_FLAGS_END - int(RamAddress.EVENT_FLAGS)
+POKEDEX_SPECIES_COUNT = 151
+POKEDEX_FLAG_BYTES = 19
+RED_BOX_LIMIT = 12
+RED_BOX_CAPACITY = 20
+RED_BOX_STRUCT_STRIDE = 33
+RED_BOX_SPECIES_OFFSET = 0
+RED_BOX_LEVEL_OFFSET = 3
+RED_BOX_DATA_BYTES = 0x462
+RED_BOXES_PER_SRAM_BANK = 6
+RED_BOX_SRAM_BASE = 0xA000
+RED_BOX_SRAM_BANKS = (2, 3)
+RED_BOX_CHANGED_MASK = 0x80
+
+
+@dataclass(frozen=True, slots=True)
+class RedPokedexState:
+    """National Pokédex ownership and sighting flags from the supported Red revision."""
+
+    owned_species: frozenset[int]
+    seen_species: frozenset[int]
+
+    def __post_init__(self) -> None:
+        for name in ("owned_species", "seen_species"):
+            species = getattr(self, name)
+            if any(
+                type(number) is not int or not 1 <= number <= POKEDEX_SPECIES_COUNT
+                for number in species
+            ):
+                raise ValueError(f"{name} must contain National Pokédex numbers 1 through 151")
+        if not self.owned_species <= self.seen_species:
+            raise ValueError("every owned species must also be marked seen")
+
+
+@dataclass(frozen=True, slots=True)
+class RedCurrentBoxState:
+    """The currently loaded Bill's PC box using internal Red species identifiers."""
+
+    box_index: int
+    species_ids: tuple[int, ...]
+    levels: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if type(self.box_index) is not int or not 0 <= self.box_index < RED_BOX_LIMIT:
+            raise ValueError("box_index must identify one of Red's twelve boxes")
+        if len(self.species_ids) != len(self.levels):
+            raise ValueError("box species and levels must have equal lengths")
+        if len(self.species_ids) > RED_BOX_CAPACITY:
+            raise ValueError("a Red box cannot contain more than twenty Pokémon")
+        if any(type(species) is not int or species <= 0 for species in self.species_ids):
+            raise ValueError("box species IDs must be positive integers")
+        if any(type(level) is not int or not 1 <= level <= 100 for level in self.levels):
+            raise ValueError("box levels must be between 1 and 100")
+
+
+@dataclass(frozen=True, slots=True)
+class RedBoxCollectionState:
+    """A complete, checksum-verified view of all twelve PC boxes."""
+
+    boxes: tuple[RedCurrentBoxState, ...]
+    current_box_index: int
+    storage_initialized: bool
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.storage_initialized, bool):
+            raise TypeError("storage_initialized must be a boolean")
+        if (
+            type(self.current_box_index) is not int
+            or not 0 <= self.current_box_index < RED_BOX_LIMIT
+        ):
+            raise ValueError("current_box_index must identify one of Red's twelve boxes")
+        if len(self.boxes) != RED_BOX_LIMIT:
+            raise ValueError("box collection must contain all twelve boxes")
+        if tuple(box.box_index for box in self.boxes) != tuple(range(RED_BOX_LIMIT)):
+            raise ValueError("box collection must be ordered from box zero through eleven")
+
+    @property
+    def counts(self) -> tuple[int, ...]:
+        return tuple(len(box.species_ids) for box in self.boxes)
+
+
+@dataclass(frozen=True, slots=True)
+class MenuCursorState:
+    """Revision-decoded position and geometry of one live linear menu."""
+
+    selected_visible_index: int
+    scroll_offset: int
+    maximum_visible_index: int
+    top_x: int
+    top_y: int
+
+    def __post_init__(self) -> None:
+        for name in (
+            "selected_visible_index",
+            "scroll_offset",
+            "maximum_visible_index",
+            "top_x",
+            "top_y",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise ValueError(f"{name} must be a non-negative integer")
+        if self.selected_visible_index > self.maximum_visible_index:
+            raise ValueError("selected menu index cannot exceed its visible maximum")
+
+    @property
+    def selected_absolute_index(self) -> int:
+        return self.selected_visible_index + self.scroll_offset
 
 
 @dataclass(frozen=True, slots=True)
@@ -804,8 +1003,15 @@ class RawGameState:
     battle_state: int | None
     badge_bits: int | None = None
     bag_item_ids: tuple[int, ...] | None = None
+    bag_items: tuple[tuple[int, int], ...] | None = None
     event_flags: bytes | None = None
     party_species_ids: tuple[int, ...] | None = None
+    party_levels: tuple[int, ...] | None = None
+    party_hp: tuple[int, ...] | None = None
+    party_max_hp: tuple[int, ...] | None = None
+    party_status: tuple[int, ...] | None = None
+    party_moves: tuple[tuple[int, ...], ...] | None = None
+    party_pp: tuple[tuple[int, ...], ...] | None = None
     first_party_level: int | None = None
     first_party_hp: int | None = None
     first_party_max_hp: int | None = None
@@ -818,8 +1024,67 @@ class RawGameState:
     enemy_level: int | None = None
     enemy_max_hp: int | None = None
     player_attack_stage: int | None = None
+    player_special_stage: int | None = None
     player_accuracy_stage: int | None = None
     enemy_defense_stage: int | None = None
+    player_disabled_move_slot: int | None = None
+    player_disable_turns: int | None = None
+    enemy_using_trapping_move: bool | None = None
+    active_party_index: int | None = None
+    active_party_species_id: int | None = None
+    active_party_level: int | None = None
+    active_party_hp: int | None = None
+    active_party_max_hp: int | None = None
+    active_party_status: int | None = None
+    active_party_moves: tuple[int, ...] | None = None
+    active_party_pp: tuple[int, ...] | None = None
+    player_money: int | None = None
+    status_flags_1: int | None = None
+    repel_remaining_steps: int | None = None
+
+    @property
+    def battler_level(self) -> int | None:
+        """The active battler's level, falling back to the field lead."""
+
+        return self.active_party_level or self.first_party_level
+
+    @property
+    def battler_hp(self) -> int | None:
+        """The active battler's HP, falling back to the field lead."""
+
+        return self.active_party_hp if self.active_party_hp is not None else self.first_party_hp
+
+    @property
+    def battler_max_hp(self) -> int | None:
+        """The active battler's maximum HP, falling back to the field lead."""
+
+        return (
+            self.active_party_max_hp
+            if self.active_party_max_hp is not None
+            else self.first_party_max_hp
+        )
+
+    @property
+    def battler_status(self) -> int | None:
+        """The active battler's persistent status, falling back to the field lead."""
+
+        return (
+            self.active_party_status
+            if self.active_party_status is not None
+            else self.first_party_status
+        )
+
+    @property
+    def battler_moves(self) -> tuple[int, ...] | None:
+        """The active battler's moves, falling back to the field lead."""
+
+        return self.active_party_moves or self.first_party_moves
+
+    @property
+    def battler_pp(self) -> tuple[int, ...] | None:
+        """The active battler's PP, falling back to the field lead."""
+
+        return self.active_party_pp or self.first_party_pp
 
 
 @dataclass(frozen=True, slots=True)
@@ -894,6 +1159,8 @@ class OaksErrandState:
 
     @property
     def rival_victory_snapshot(self) -> bool:
+        hp = self.first_party_hp
+        max_hp = self.first_party_max_hp
         return (
             self.phase is OaksErrandPhase.RIVAL_DEFEATED
             and self.map_id == MapId.OAKS_LAB
@@ -904,9 +1171,49 @@ class OaksErrandState:
             and self.battled_rival
             and self.first_party_species == SQUIRTLE_SPECIES_ID
             and self.first_party_level == 6
-            and self.first_party_hp == 21
-            and self.first_party_max_hp == 21
+            # Gen I DVs legitimately place a level-six, zero-stat-exp
+            # Squirtle between 21 and 23 max HP.  The clean-start timing root
+            # influences those DVs, so one exact stat vector is not semantic
+            # victory evidence.  Keep the cartridge win/event proof and
+            # require a living, internally consistent supported starter.
+            and hp is not None
+            and max_hp is not None
+            and 0 < hp <= max_hp
+            and 21 <= max_hp <= 23
         )
+
+    @property
+    def rival_resolution_snapshot(self) -> bool:
+        """Authenticate either legal terminal outcome of the optional lab battle.
+
+        Red advances Oak's script after both a win and a loss.  A loss restores the
+        level-five starter to full health, while a win leaves the surviving
+        level-six starter at its battle HP.  Keep those outcomes distinct so a
+        completion teacher can recover the missed experience without claiming a
+        victory that did not happen.
+        """
+
+        hp = self.first_party_hp
+        max_hp = self.first_party_max_hp
+        common = (
+            self.phase is OaksErrandPhase.RIVAL_DEFEATED
+            and self.map_id == MapId.OAKS_LAB
+            and self.battle_state == 0
+            and self.lab_script == 18
+            and self.controls_ready
+            and self.battled_rival
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
+            and hp is not None
+            and max_hp is not None
+            and 0 < hp <= max_hp
+        )
+        if not common:
+            return False
+        if self.battle_result == 0:
+            return self.first_party_level == 6 and 21 <= max_hp <= 23
+        if self.battle_result == 1:
+            return self.first_party_level == 5 and hp == max_hp and 19 <= max_hp <= 21
+        return False
 
     @property
     def parcel_snapshot(self) -> bool:
@@ -971,6 +1278,7 @@ class InputReadiness:
     player_moving_direction: int
     status_flags_5: int
     movement_flags: int = 0
+    walk_counter: int = 0
 
     @property
     def ready(self) -> bool:
@@ -981,7 +1289,134 @@ class InputReadiness:
             and self.player_moving_direction == 0
             and not bool(self.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK)
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
+            and self.walk_counter == 0
         )
+
+
+class VisibleMapObjectError(ValueError):
+    """Raised when revision-pinned live sprite state is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class VisibleMapObject:
+    """One currently rendered, collision-bearing non-player map sprite."""
+
+    sprite_index: int
+    picture_id: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a map sprite index must be between 1 and 15")
+        if not 1 <= self.picture_id <= 0xFF:
+            raise ValueError("a visible map sprite needs a picture id")
+        if self.image_index == 0xFF:
+            raise ValueError("an off-screen sprite is not visibly occupying a coordinate")
+
+    @property
+    def moving(self) -> bool:
+        return self.movement_status == 3
+
+
+class CurrentStrengthBoulderError(ValueError):
+    """Raised when revision-pinned live boulder state is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentStrengthBoulder:
+    """One currently pushable boulder, including objects outside the viewport."""
+
+    sprite_index: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+    movement_byte_2: int
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a boulder sprite index must be between 1 and 15")
+        if self.movement_byte_2 != 0x10:
+            raise ValueError("a Strength boulder needs the engine's pushable movement byte")
+
+    @property
+    def visible(self) -> bool:
+        return self.image_index != 0xFF
+
+
+class CurrentMapObjectError(ValueError):
+    """Raised when the active map-wide sprite table is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentMapObject:
+    """One toggle-present map object, whether inside the viewport or not."""
+
+    sprite_index: int
+    picture_id: int
+    at: tuple[int, int]
+    movement_status: int
+    image_index: int
+    facing_direction: int = 0
+
+    def __post_init__(self) -> None:
+        if not 1 <= self.sprite_index <= 15:
+            raise ValueError("a map sprite index must be between 1 and 15")
+        if not 1 <= self.picture_id <= 0xFF:
+            raise ValueError("a current map sprite needs a picture id")
+
+    @property
+    def visible(self) -> bool:
+        return self.image_index != 0xFF
+
+    @property
+    def moving(self) -> bool:
+        return self.movement_status == 3
+
+
+class CurrentMapBlocksError(ValueError):
+    """Raised when Red's live bordered block buffer is internally impossible."""
+
+
+@dataclass(frozen=True, slots=True)
+class CurrentMapBlocks:
+    """The current map's mutable block ids, excluding its three-block border."""
+
+    map_id: int
+    rows: tuple[tuple[int, ...], ...]
+
+    def __post_init__(self) -> None:
+        widths = tuple(len(row) for row in self.rows)
+        if not widths or not widths[0] or len(set(widths)) != 1:
+            raise ValueError("current map blocks must form a non-empty rectangular grid")
+
+    @property
+    def height(self) -> int:
+        return len(self.rows)
+
+    @property
+    def width(self) -> int:
+        return len(self.rows[0])
+
+    def at(self, y: int, x: int) -> int:
+        return self.rows[y][x]
+
+
+class OverworldMovementModeError(ValueError):
+    """Raised when the revision exposes an unknown locomotion byte."""
+
+
+class OverworldMovementMode(IntEnum):
+    """Revision-decoded player locomotion state from ``wWalkBikeSurfState``."""
+
+    WALKING = 0
+    BIKING = 1
+    SURFING = 2
+
+    @property
+    def traversal_mode(self) -> str:
+        return "water" if self is OverworldMovementMode.SURFING else "land"
 
 
 class BattleMenuPhase(StrEnum):
@@ -1052,10 +1487,31 @@ class PewterChapterState:
     @property
     def stable_travel_snapshot(self) -> bool:
         return (
-            self.unbeaten_brock_invariants
+            self.unbeaten_brock_transit_invariants
             and self.battle_state == 0
             and self.controls.ready
             and self.current_map_script == 0
+        )
+
+    @property
+    def unbeaten_brock_transit_invariants(self) -> bool:
+        status_is_safe = self.first_party_status == 0 or (
+            self.first_party_status == 0x08
+            and self.boundary
+            in {
+                TravelBoundary.FOREST_NORTH_GATE,
+                TravelBoundary.ROUTE_2_NORTH_RETURN,
+                TravelBoundary.PEWTER_SOUTH_EDGE,
+            }
+        )
+        return (
+            self.post_pokedex_invariants
+            and status_is_safe
+            and not self.beat_brock
+            and not self.got_tm34
+            and not self.tm34_in_bag
+            and not self.boulder_badge
+            and not self.boulder_badge_mirror
         )
 
     @property
@@ -2860,8 +3316,6 @@ class SSAnneState:
             and self.current_opponent == RIVAL2_OPPONENT_ID
             and self.trainer_class == RIVAL2_TRAINER_CLASS_ID
             and self.trainer_number == SS_ANNE_RIVAL_TRAINER_NUMBER
-            and self.engaged_trainer_class == SS_ANNE_RIVAL_ENGAGED_CLASS
-            and self.engaged_trainer_set == SS_ANNE_RIVAL_ENGAGED_SET
             and self.no_cut_evidence
         )
 
@@ -3053,6 +3507,8 @@ class SurgeProgressTracker:
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
+        self._last_encounter: tuple[int | None, ...] | None = None
+        self._encounter_log = encounter_log_path()
 
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
@@ -3061,14 +3517,38 @@ class PokemonRedStateReader:
             return RawGameState(False, None, None, None, None, None)
 
         bag_count = min(self._memory.read_u8(RamAddress.NUM_BAG_ITEMS), MAX_BAG_ITEMS)
-        bag_items = tuple(
-            self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2)
+        bag_entries = tuple(
+            (
+                self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2),
+                self._memory.read_u8(int(RamAddress.BAG_ITEMS) + index * 2 + 1),
+            )
             for index in range(bag_count)
         )
+        bag_items = tuple(item_id for item_id, _quantity in bag_entries)
         party_count = min(self._memory.read_u8(RamAddress.PARTY_COUNT), PARTY_LIMIT)
         party_species = tuple(
             self._memory.read_u8(int(RamAddress.PARTY_SPECIES) + index)
             for index in range(party_count)
+        )
+        party_bases = tuple(
+            int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+            for index in range(party_count)
+        )
+        party_levels = tuple(
+            self._memory.read_u8(base + PARTY_LEVEL_OFFSET) for base in party_bases
+        )
+        party_hp = tuple(self._read_u16_be(base + PARTY_HP_OFFSET) for base in party_bases)
+        party_max_hp = tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases)
+        party_status = tuple(
+            self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
+        )
+        party_moves = tuple(
+            tuple(self._memory.read_u8(base + PARTY_MOVES_OFFSET + index) for index in range(4))
+            for base in party_bases
+        )
+        party_pp = tuple(
+            tuple(self._memory.read_u8(base + PARTY_PP_OFFSET + index) for index in range(4))
+            for base in party_bases
         )
         first_party_level = (
             self._memory.read_u8(RamAddress.PARTY_MON_1_LEVEL) if party_count else None
@@ -3095,12 +3575,39 @@ class PokemonRedStateReader:
             if party_count
             else None
         )
+        battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+        active_party_index = (
+            self._memory.read_u8(RamAddress.PLAYER_MON_NUMBER) if battle_state else None
+        )
+        if active_party_index is not None and 0 <= active_party_index < party_count:
+            active_base = int(RamAddress.PARTY_MON_1) + active_party_index * PARTY_STRUCT_STRIDE
+            active_party_species_id = self._memory.read_u8(active_base + PARTY_SPECIES_OFFSET)
+            active_party_level = self._memory.read_u8(active_base + PARTY_LEVEL_OFFSET)
+            active_party_hp = self._read_u16_be(active_base + PARTY_HP_OFFSET)
+            active_party_max_hp = self._read_u16_be(active_base + PARTY_MAX_HP_OFFSET)
+            active_party_status = self._memory.read_u8(active_base + PARTY_STATUS_OFFSET)
+            active_party_moves = tuple(
+                self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index) for index in range(4)
+            )
+            active_party_pp = tuple(
+                self._memory.read_u8(active_base + PARTY_PP_OFFSET + index) for index in range(4)
+            )
+        else:
+            active_party_index = None
+            active_party_species_id = None
+            active_party_level = None
+            active_party_hp = None
+            active_party_max_hp = None
+            active_party_status = None
+            active_party_moves = None
+            active_party_pp = None
         events = bytes(
             self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + index)
             for index in range(EVENT_FLAG_BYTES)
         )
-        battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
-        return RawGameState(
+        disabled_move = self._memory.read_u8(RamAddress.PLAYER_DISABLED_MOVE) if battle_state else 0
+        disabled_slot = (disabled_move >> 4) & 0x0F
+        raw = RawGameState(
             game_started=True,
             map_id=self._memory.read_u8(RamAddress.CURRENT_MAP),
             player_x=self._memory.read_u8(RamAddress.PLAYER_X),
@@ -3109,8 +3616,15 @@ class PokemonRedStateReader:
             battle_state=battle_state,
             badge_bits=self._memory.read_u8(RamAddress.OBTAINED_BADGES),
             bag_item_ids=bag_items,
+            bag_items=bag_entries,
             event_flags=events,
             party_species_ids=party_species,
+            party_levels=party_levels,
+            party_hp=party_hp,
+            party_max_hp=party_max_hp,
+            party_status=party_status,
+            party_moves=party_moves,
+            party_pp=party_pp,
             first_party_level=first_party_level,
             first_party_hp=first_party_hp,
             first_party_max_hp=first_party_max_hp,
@@ -3125,12 +3639,194 @@ class PokemonRedStateReader:
             player_attack_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE) if battle_state else None
             ),
+            player_special_stage=(
+                self._memory.read_u8(RamAddress.PLAYER_SPECIAL_STAGE) if battle_state else None
+            ),
             player_accuracy_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ACCURACY_STAGE) if battle_state else None
             ),
             enemy_defense_stage=(
                 self._memory.read_u8(RamAddress.ENEMY_DEFENSE_STAGE) if battle_state else None
             ),
+            player_disabled_move_slot=(
+                disabled_slot if battle_state and 1 <= disabled_slot <= 4 else None
+            ),
+            player_disable_turns=(disabled_move & 0x0F) if battle_state else None,
+            enemy_using_trapping_move=(
+                bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & (1 << 5))
+                if battle_state
+                else None
+            ),
+            active_party_index=active_party_index,
+            active_party_species_id=active_party_species_id,
+            active_party_level=active_party_level,
+            active_party_hp=active_party_hp,
+            active_party_max_hp=active_party_max_hp,
+            active_party_status=active_party_status,
+            active_party_moves=active_party_moves,
+            active_party_pp=active_party_pp,
+            player_money=self._read_bcd(RamAddress.PLAYER_MONEY, 3),
+            status_flags_1=self._memory.read_u8(RamAddress.STATUS_FLAGS_1),
+            repel_remaining_steps=self._memory.read_u8(RamAddress.REPEL_REMAINING_STEPS),
+        )
+
+        if self._encounter_log is not None:
+            self._record_encounter(raw)
+        return raw
+
+    def _record_encounter(self, raw: RawGameState) -> None:
+        """Append one newly seen encounter to the harvest log.
+
+        Only distinct encounters are written, so the cost is per battle rather
+        than per read.  Battle memory is not populated the instant the battle
+        flag flips: reads taken during that transition report species zero at
+        level zero, which is how five nonexistent "wild encounters in Pallet
+        Town" reached an earlier log.  Those are dropped here rather than left
+        for the harvester, because a band is only as honest as its samples.
+        """
+
+        if not is_wild_encounter(raw):
+            return
+        encounter = (raw.map_id, raw.enemy_species_id, raw.enemy_level)
+        if encounter == self._last_encounter:
+            return
+        self._last_encounter = encounter
+        entry = {
+            "map_id": raw.map_id,
+            "enemy_species": raw.enemy_species_id,
+            "enemy_level": raw.enemy_level,
+            "battle_state": raw.battle_state,
+        }
+        with self._encounter_log.open("a", encoding="utf-8") as log:
+            log.write(json.dumps(entry) + "\n")
+
+    def read_pokedex_state(self) -> RedPokedexState:
+        """Decode Red's two 151-bit National Pokédex flag arrays."""
+
+        owned = bytes(
+            self._memory.read_u8(int(RamAddress.POKEDEX_OWNED) + index)
+            for index in range(POKEDEX_FLAG_BYTES)
+        )
+        seen = bytes(
+            self._memory.read_u8(int(RamAddress.POKEDEX_SEEN) + index)
+            for index in range(POKEDEX_FLAG_BYTES)
+        )
+        return RedPokedexState(
+            owned_species=_decode_pokedex_flags(owned),
+            seen_species=_decode_pokedex_flags(seen),
+        )
+
+    def read_current_box_state(self) -> RedCurrentBoxState:
+        """Read and cross-check the current 20-slot Bill's PC box."""
+
+        count = self._memory.read_u8(RamAddress.CURRENT_BOX_COUNT)
+        if count > RED_BOX_CAPACITY:
+            raise SemanticStateError(
+                f"current box reports {count} Pokémon, above Red's {RED_BOX_CAPACITY}-slot limit"
+            )
+        box_index = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER) & 0x7F
+        species_ids = tuple(
+            self._memory.read_u8(int(RamAddress.CURRENT_BOX_SPECIES) + index)
+            for index in range(count)
+        )
+        struct_species = tuple(
+            self._memory.read_u8(
+                int(RamAddress.CURRENT_BOX_MONS)
+                + index * RED_BOX_STRUCT_STRIDE
+                + RED_BOX_SPECIES_OFFSET
+            )
+            for index in range(count)
+        )
+        if species_ids != struct_species:
+            raise SemanticStateError(
+                "current box species list disagrees with its boxed Pokémon structures"
+            )
+        levels = tuple(
+            self._memory.read_u8(
+                int(RamAddress.CURRENT_BOX_MONS)
+                + index * RED_BOX_STRUCT_STRIDE
+                + RED_BOX_LEVEL_OFFSET
+            )
+            for index in range(count)
+        )
+        return RedCurrentBoxState(
+            box_index=box_index,
+            species_ids=species_ids,
+            levels=levels,
+        )
+
+    def read_all_box_states(self) -> RedBoxCollectionState:
+        """Read all twelve boxes without exposing banked bytes to a planner.
+
+        Red keeps the active box in Work RAM. After the first in-game box
+        change, the other eleven boxes live in two checksummed SRAM banks and
+        the active box's SRAM slot is deliberately marked empty. Before that
+        first change, the source defines every non-active box as logically
+        empty even though their backing SRAM has not been initialized.
+        """
+
+        current_box = self.read_current_box_state()
+        raw_box_number = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER)
+        storage_initialized = bool(raw_box_number & RED_BOX_CHANGED_MASK)
+        if not storage_initialized:
+            return RedBoxCollectionState(
+                boxes=tuple(
+                    current_box
+                    if box_index == current_box.box_index
+                    else RedCurrentBoxState(box_index, (), ())
+                    for box_index in range(RED_BOX_LIMIT)
+                ),
+                current_box_index=current_box.box_index,
+                storage_initialized=False,
+            )
+
+        if not isinstance(self._memory, ReadOnlyCartridgeRam):
+            raise SemanticStateError(
+                "all-box inspection requires the bounded read-only cartridge-RAM port"
+            )
+
+        saved_boxes: list[RedCurrentBoxState] = []
+        for bank_offset, bank in enumerate(RED_BOX_SRAM_BANKS):
+            bank_payload = bytes(
+                self._memory.read_cartridge_ram_u8(
+                    bank,
+                    RED_BOX_SRAM_BASE + offset,
+                )
+                for offset in range(RED_BOXES_PER_SRAM_BANK * RED_BOX_DATA_BYTES)
+            )
+            checksum_base = RED_BOX_SRAM_BASE + len(bank_payload)
+            expected_bank_checksum = self._memory.read_cartridge_ram_u8(bank, checksum_base)
+            if _red_box_checksum(bank_payload) != expected_bank_checksum:
+                raise SemanticStateError(f"saved box SRAM bank {bank} failed its checksum")
+
+            for bank_box_index in range(RED_BOXES_PER_SRAM_BANK):
+                box_index = bank_offset * RED_BOXES_PER_SRAM_BANK + bank_box_index
+                start = bank_box_index * RED_BOX_DATA_BYTES
+                payload = bank_payload[start : start + RED_BOX_DATA_BYTES]
+                expected_box_checksum = self._memory.read_cartridge_ram_u8(
+                    bank,
+                    checksum_base + 1 + bank_box_index,
+                )
+                if _red_box_checksum(payload) != expected_box_checksum:
+                    raise SemanticStateError(f"saved box {box_index + 1} failed its checksum")
+                saved_boxes.append(_decode_saved_red_box(box_index, payload))
+
+        saved_boxes[current_box.box_index] = current_box
+        return RedBoxCollectionState(
+            boxes=tuple(saved_boxes),
+            current_box_index=current_box.box_index,
+            storage_initialized=True,
+        )
+
+    def read_menu_cursor_state(self) -> MenuCursorState:
+        """Translate Red's current linear-menu cursor fields."""
+
+        return MenuCursorState(
+            selected_visible_index=self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM),
+            scroll_offset=self._memory.read_u8(RamAddress.LIST_SCROLL_OFFSET),
+            maximum_visible_index=self._memory.read_u8(RamAddress.MAX_MENU_ITEM),
+            top_x=self._memory.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            top_y=self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),
         )
 
     def read_bedroom_input_state(self) -> BedroomInputState:
@@ -3319,6 +4015,30 @@ class PokemonRedStateReader:
                 )
         return BattleMenuState(BattleMenuPhase.UNKNOWN)
 
+    def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
+        """Return whether Red's live trainer-switch yes/no prompt owns input.
+
+        The pinned battle engine loads the next enemy before displaying this
+        prompt.  Evolution follows only after the final enemy has zero HP, so
+        the enemy-HP gate and active two-option cursor distinguish the two
+        transitions without relying on frame or button counts.
+        """
+
+        if raw.battle_state != 2 or (raw.enemy_hp or 0) <= 0 or (raw.party_count or 0) <= 1:
+            return False
+        signature = (
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+            self._memory.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            self._memory.read_u8(RamAddress.MAX_MENU_ITEM),
+            self._memory.read_u8(RamAddress.MENU_WATCHED_KEYS),
+        )
+        selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        return (
+            signature == TRAINER_SWITCH_PROMPT_SIGNATURE
+            and selected in {0, 1}
+            and self._active_menu_cursor()
+        )
+
     def _active_menu_cursor(self) -> bool:
         cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
         cursor_address |= self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
@@ -3336,7 +4056,274 @@ class PokemonRedStateReader:
             player_moving_direction=self._memory.read_u8(RamAddress.PLAYER_MOVING_DIRECTION),
             status_flags_5=self._memory.read_u8(RamAddress.STATUS_FLAGS_5),
             movement_flags=self._memory.read_u8(RamAddress.MOVEMENT_FLAGS),
+            walk_counter=self._memory.read_u8(RamAddress.WALK_COUNTER),
         )
+
+    def read_visible_map_objects(self) -> tuple[VisibleMapObject, ...]:
+        """Project collision-bearing sprites that Red currently renders.
+
+        The pinned engine stores fifteen non-player sprite slots in two
+        parallel 16-byte tables. ``image_index == 0xff`` is the engine's own
+        unavailable marker for a hidden or off-screen object, so this method
+        deliberately promises visible occupancy rather than every object on
+        the map. Failed-step discovery remains necessary outside that window.
+        """
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise VisibleMapObjectError(f"current map exposes impossible sprite count {count}")
+        found: list[VisibleMapObject] = []
+        for sprite_index in range(1, count + 1):
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            picture_id = self._memory.read_u8(state_1)
+            image_index = self._memory.read_u8(state_1 + 2)
+            if picture_id == 0 or image_index == 0xFF:
+                continue
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise VisibleMapObjectError(
+                    f"visible sprite {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            found.append(
+                VisibleMapObject(
+                    sprite_index=sprite_index,
+                    picture_id=picture_id,
+                    at=(padded_y - 4, padded_x - 4),
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=image_index,
+                )
+            )
+        return tuple(found)
+
+    def read_visible_object_coordinates(self) -> frozenset[tuple[int, int]]:
+        return frozenset(item.at for item in self.read_visible_map_objects())
+
+    def read_current_map_objects(self) -> tuple[CurrentMapObject, ...]:
+        """Read every toggle-present object from the map-wide sprite table."""
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise CurrentMapObjectError(f"current map exposes impossible sprite count {count}")
+        hidden = self._read_hidden_current_sprite_indices()
+        found: list[CurrentMapObject] = []
+        occupied: set[tuple[int, int]] = set()
+        for sprite_index in range(1, count + 1):
+            if sprite_index in hidden:
+                continue
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            picture_id = self._memory.read_u8(state_1)
+            if picture_id == 0:
+                continue
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise CurrentMapObjectError(
+                    f"current sprite {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            at = padded_y - 4, padded_x - 4
+            if at in occupied:
+                raise CurrentMapObjectError(f"multiple current map objects occupy coordinate {at}")
+            occupied.add(at)
+            found.append(
+                CurrentMapObject(
+                    sprite_index=sprite_index,
+                    picture_id=picture_id,
+                    at=at,
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=self._memory.read_u8(state_1 + 2),
+                    facing_direction=self._memory.read_u8(state_1 + 9),
+                )
+            )
+        return tuple(found)
+
+    def read_current_object_coordinates(self) -> frozenset[tuple[int, int]]:
+        return frozenset(item.at for item in self.read_current_map_objects())
+
+    def trainer_engagement_active(self) -> bool:
+        """Recognize the field interval between sight and trainer battle.
+
+        ``wMiscFlags`` bit zero is overloaded by field actions, so it is not
+        sufficient by itself.  A sight engagement also owns movement input,
+        runs the engine's scripted NPC walk, or leaves the map's trainer-text
+        script active. Requiring both sides avoids treating a stale successful-
+        item flag as an encounter while retaining defeated-trainer dialogue.
+
+        Cerulean's required Rocket begins through a custom map script. On its
+        first frame the ordinary sight flag and script bytes are still clear;
+        the only live control evidence is Red's otherwise-ready movement latch
+        at one of the cartridge-pinned Rocket trigger squares. Recognize that
+        exact preamble before applying the ordinary trainer rule.
+        """
+
+        readiness = self.read_input_readiness()
+        rocket_event = int(EventFlag.BEAT_CERULEAN_ROCKET_THIEF)
+        rocket_defeated = bool(
+            self._memory.read_u8(int(RamAddress.EVENT_FLAGS) + rocket_event // 8)
+            & (1 << (rocket_event % 8))
+        )
+        only_movement_latched = (
+            readiness.player_moving_direction != 0
+            and replace(readiness, player_moving_direction=0).ready
+        )
+        if (
+            self._memory.read_u8(RamAddress.CURRENT_MAP) == MapId.CERULEAN_CITY
+            and self._memory.read_u8(RamAddress.PLAYER_X) == CERULEAN_ROCKET_TRIGGER_X
+            and self._memory.read_u8(RamAddress.PLAYER_Y) in CERULEAN_ROCKET_TRIGGER_YS
+            and self._memory.read_u8(RamAddress.IS_IN_BATTLE) == 0
+            and self._memory.read_u8(RamAddress.CERULEAN_CITY_SCRIPT) == 0
+            and self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
+            and not rocket_defeated
+            and only_movement_latched
+        ):
+            return True
+        if not self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x01:
+            return False
+        return bool(
+            readiness.joy_ignore & JOY_IGNORE_MOVEMENT_MASK
+            or readiness.npc_movement_script_table
+            or readiness.status_flags_5 & 0x01
+            or self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+        )
+
+    def read_current_strength_boulders(self) -> tuple[CurrentStrengthBoulder, ...]:
+        """Read every pushable boulder from the current map's live sprite slots.
+
+        Unlike :meth:`read_visible_map_objects`, this observation deliberately
+        retains ``image_index == 0xff`` entries. Red keeps off-screen boulders'
+        map coordinates in state data 2, and a puzzle planner must not turn
+        those temporarily unrendered objects into empty floor. It does exclude
+        objects whose current-map toggle flag says they are removed: those
+        slots also retain coordinates and an off-screen image marker, but the
+        collision engine no longer treats them as present.
+        """
+
+        count = self._memory.read_u8(RamAddress.NUM_SPRITES)
+        if count > 15:
+            raise CurrentStrengthBoulderError(
+                f"current map exposes impossible sprite count {count}"
+            )
+        hidden = self._read_hidden_current_sprite_indices()
+        found: list[CurrentStrengthBoulder] = []
+        occupied: set[tuple[int, int]] = set()
+        for sprite_index in range(1, count + 1):
+            if sprite_index in hidden:
+                continue
+            state_1 = int(RamAddress.SPRITE_STATE_DATA_1) + sprite_index * 0x10
+            if self._memory.read_u8(state_1) != 0x3F:
+                continue
+            movement_byte_2 = self._memory.read_u8(
+                int(RamAddress.MAP_SPRITE_DATA) + 2 * (sprite_index - 1)
+            )
+            if movement_byte_2 != 0x10:
+                continue
+            state_2 = int(RamAddress.SPRITE_STATE_DATA_2) + sprite_index * 0x10
+            padded_y = self._memory.read_u8(state_2 + 4)
+            padded_x = self._memory.read_u8(state_2 + 5)
+            if padded_y < 4 or padded_x < 4:
+                raise CurrentStrengthBoulderError(
+                    f"Strength boulder {sprite_index} has invalid padded coordinate "
+                    f"{(padded_y, padded_x)}"
+                )
+            at = padded_y - 4, padded_x - 4
+            if at in occupied:
+                raise CurrentStrengthBoulderError(
+                    f"multiple Strength boulders occupy coordinate {at}"
+                )
+            occupied.add(at)
+            found.append(
+                CurrentStrengthBoulder(
+                    sprite_index=sprite_index,
+                    at=at,
+                    movement_status=self._memory.read_u8(state_1 + 1),
+                    image_index=self._memory.read_u8(state_1 + 2),
+                    movement_byte_2=movement_byte_2,
+                )
+            )
+        return tuple(found)
+
+    def _read_hidden_current_sprite_indices(self) -> frozenset[int]:
+        """Resolve the engine's current-map sprite/global-toggle pairs."""
+
+        base = int(RamAddress.TOGGLEABLE_OBJECT_LIST)
+        hidden: set[int] = set()
+        seen: set[int] = set()
+        for entry_index in range(16 + 1):
+            sprite_index = self._memory.read_u8(base + entry_index * 2)
+            if sprite_index == 0xFF:
+                return frozenset(hidden)
+            if not 1 <= sprite_index <= 15:
+                raise CurrentStrengthBoulderError(
+                    f"toggleable object list exposes invalid sprite {sprite_index}"
+                )
+            if sprite_index in seen:
+                raise CurrentStrengthBoulderError(
+                    f"toggleable object list repeats sprite {sprite_index}"
+                )
+            seen.add(sprite_index)
+            toggle_index = self._memory.read_u8(base + entry_index * 2 + 1)
+            address = int(RamAddress.TOGGLEABLE_OBJECT_FLAGS) + toggle_index // 8
+            if self._memory.read_u8(address) & (1 << (toggle_index % 8)):
+                hidden.add(sprite_index)
+        raise CurrentStrengthBoulderError("toggleable object list lacks its bounded sentinel")
+
+    def read_current_map_blocks(self) -> CurrentMapBlocks:
+        """Read the active mutable block grid from Red's bordered map buffer.
+
+        The engine copies a map into ``wOverworldMap`` with three connection
+        blocks of padding on every side. Cut mutates that buffer rather than
+        cartridge data, so current traversal must read the inner grid back
+        before it claims a tree changed the map.
+        """
+
+        map_id = self._memory.read_u8(RamAddress.CURRENT_MAP)
+        height = self._memory.read_u8(RamAddress.CURRENT_MAP_HEIGHT)
+        width = self._memory.read_u8(RamAddress.CURRENT_MAP_WIDTH)
+        stride = width + 6
+        if height == 0 or width == 0 or (height + 6) * stride > 1300:
+            raise CurrentMapBlocksError(
+                f"current map exposes impossible block dimensions {(height, width)}"
+            )
+        origin = int(RamAddress.OVERWORLD_MAP) + 3 * stride + 3
+        rows = tuple(
+            tuple(self._memory.read_u8(origin + y * stride + x) for x in range(width))
+            for y in range(height)
+        )
+        return CurrentMapBlocks(map_id, rows)
+
+    def read_overworld_movement_mode(self) -> OverworldMovementMode:
+        raw = self._memory.read_u8(RamAddress.WALK_BIKE_SURF_STATE)
+        try:
+            return OverworldMovementMode(raw)
+        except ValueError as error:
+            raise OverworldMovementModeError(
+                f"unsupported overworld movement mode {raw}"
+            ) from error
+
+    def read_retained_outside_map(self) -> int:
+        """Read Gen I's live ``wLastMap`` return-warp context.
+
+        Despite the historical name, this byte is retained across nested
+        interiors and records the outside map to which a ``$FF`` warp returns.
+        It is therefore route state, not merely diagnostic previous-map data.
+        """
+
+        return self._memory.read_u8(RamAddress.LAST_MAP)
+
+    def read_last_blackout_map(self) -> int:
+        """Read the live destination used by Dig, Escape Rope, and blackout.
+
+        This is dynamic execution context rather than spatial map identity: a
+        checkpoint in the same room can return to a different healing anchor.
+        Party-development eligibility consumes it only inside the Red adapter
+        and projects a title-neutral transition verdict.
+        """
+
+        return self._memory.read_u8(RamAddress.LAST_BLACKOUT_MAP)
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""
@@ -3874,6 +4861,16 @@ class PokemonRedStateReader:
     def _read_u16_be(self, address: int) -> int:
         return (self._memory.read_u8(address) << 8) | self._memory.read_u8(address + 1)
 
+    def _read_bcd(self, address: int, length: int) -> int:
+        value = 0
+        for offset in range(length):
+            packed = self._memory.read_u8(address + offset)
+            high, low = packed >> 4, packed & 0x0F
+            if high > 9 or low > 9:
+                raise SemanticStateError("packed decimal observation contains an invalid digit")
+            value = value * 100 + high * 10 + low
+        return value
+
 
 def _travel_boundary(raw: RawGameState) -> TravelBoundary:
     position = (raw.map_id, raw.player_x, raw.player_y)
@@ -3996,7 +4993,7 @@ def _vermilion_prior_chapter_complete(
             )
         )
         and ItemId.SS_TICKET in items
-        and ItemId.TM11_BUBBLEBEAM in items
+        and (ItemId.TM11_BUBBLEBEAM in items or BUBBLEBEAM_MOVE_ID in (raw.first_party_moves or ()))
         and bool((raw.badge_bits or 0) & Badge.CASCADE)
         and bool(badge_mirror & Badge.CASCADE)
     )
@@ -4122,6 +5119,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
+        MapId.ROUTE_7_GATE: "route_7_gate",
         MapId.UNDERGROUND_PATH_ROUTE_7: "underground_path_route_7",
         MapId.UNDERGROUND_PATH_ROUTE_8: "underground_path_route_8",
         MapId.BILLS_HOUSE: "bills_house",
@@ -4131,6 +5129,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.ROCK_TUNNEL_1F: "rock_tunnel_1f",
         MapId.ROCK_TUNNEL_B1F: "rock_tunnel_b1f",
         MapId.LAVENDER_POKECENTER: "lavender_pokecenter",
+        MapId.LAVENDER_MART: "lavender_mart",
         MapId.FUCHSIA_POKECENTER: "fuchsia_pokecenter",
         MapId.WARDENS_HOUSE: "wardens_house",
         MapId.FUCHSIA_GYM: "fuchsia_gym",
@@ -4168,12 +5167,15 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("story:starter_selection_ready")
     if _event(events, EventFlag.GOT_POKEDEX):
         facts.add("story:pokedex_received")
+    if raw.status_flags_1 is not None and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK:
+        facts.add(SAFFRON_GUARD_ACCESS_FACT)
 
     map_facts = {
         MapId.PEWTER_CITY: "location:pewter_city",
         MapId.CERULEAN_CITY: "location:cerulean_city",
         MapId.LAVENDER_TOWN: "location:lavender_town",
         MapId.LAVENDER_POKECENTER: "location:lavender_town",
+        MapId.LAVENDER_MART: "location:lavender_town",
         MapId.VERMILION_CITY: "location:vermilion_city",
         MapId.CELADON_CITY: "location:celadon_city",
         MapId.CELADON_POKECENTER: "location:celadon_city",
@@ -4230,6 +5232,8 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("item:silph_scope")
     if ItemId.POKE_FLUTE in items or _event(events, EventFlag.GOT_POKE_FLUTE):
         facts.add("item:poke_flute")
+    if ItemId.GOLD_TEETH in items:
+        facts.add("item:gold_teeth")
     if ItemId.SECRET_KEY in items:
         facts.add("item:secret_key")
     if ItemId.HM01_CUT in items or _event(events, EventFlag.GOT_HM01):
@@ -4238,10 +5242,64 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add("move:surf_available")
     if ItemId.HM04_STRENGTH in items or _event(events, EventFlag.GOT_HM04):
         facts.add("move:strength_available")
+    if (
+        raw.first_party_moves is not None
+        and len(raw.first_party_moves) == 4
+        and raw.first_party_moves[2] in {0x3A, 0x3D}
+        and 0x39 not in raw.first_party_moves
+        and 0x46 not in raw.first_party_moves
+    ):
+        facts.add("move:koga_attack_slot_3")
 
     if raw.map_id == MapId.HALL_OF_FAME and _event(events, EventFlag.BEAT_CHAMPION_RIVAL):
         facts.add(HALL_OF_FAME_FACT)
     return frozenset(facts)
+
+
+def _decode_pokedex_flags(payload: bytes) -> frozenset[int]:
+    if len(payload) != POKEDEX_FLAG_BYTES:
+        raise ValueError(f"Pokédex flags must contain exactly {POKEDEX_FLAG_BYTES} bytes")
+    return frozenset(
+        national_number
+        for national_number in range(1, POKEDEX_SPECIES_COUNT + 1)
+        if payload[(national_number - 1) // 8] & (1 << ((national_number - 1) % 8))
+    )
+
+
+def _red_box_checksum(payload: bytes) -> int:
+    """Match Red's complemented one-byte ``CalcCheckSum`` routine."""
+
+    return (~sum(payload)) & 0xFF
+
+
+def _decode_saved_red_box(box_index: int, payload: bytes) -> RedCurrentBoxState:
+    if len(payload) != RED_BOX_DATA_BYTES:
+        raise ValueError(f"saved Red box must contain exactly {RED_BOX_DATA_BYTES} bytes")
+    count = payload[0]
+    if count > RED_BOX_CAPACITY:
+        raise SemanticStateError(
+            f"saved box {box_index + 1} reports {count} Pokémon, "
+            f"above Red's {RED_BOX_CAPACITY}-slot limit"
+        )
+    species_ids = tuple(payload[1 : 1 + count])
+    structures_base = 1 + RED_BOX_CAPACITY + 1
+    struct_species = tuple(
+        payload[structures_base + index * RED_BOX_STRUCT_STRIDE + RED_BOX_SPECIES_OFFSET]
+        for index in range(count)
+    )
+    if species_ids != struct_species:
+        raise SemanticStateError(
+            f"saved box {box_index + 1} species list disagrees with its Pokémon structures"
+        )
+    levels = tuple(
+        payload[structures_base + index * RED_BOX_STRUCT_STRIDE + RED_BOX_LEVEL_OFFSET]
+        for index in range(count)
+    )
+    return RedCurrentBoxState(
+        box_index=box_index,
+        species_ids=species_ids,
+        levels=levels,
+    )
 
 
 def _event(events: bytes | None, event: EventFlag) -> bool:

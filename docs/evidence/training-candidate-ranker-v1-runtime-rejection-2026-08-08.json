@@ -1,0 +1,107 @@
+{
+  "schema": "pokemon-training-candidate-runtime-receipt-v1",
+  "status": "causal_control_rejected",
+  "runtime_promotion_plan_sha256": "82e1a4b94092ad60dd33b3f907206d7d6ba397299561d2367ea74a93daa925fd",
+  "offline_gate_evaluation_sha256": "44fd149703bb7c6031e176e3c2329ea1e99f6f91d4f90f83e00cb2cde89a6115",
+  "candidate_model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+  "candidate_model_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+  "shadow": {
+    "status": "ok",
+    "lineage_id": "training-candidate-v1-shadow-01",
+    "source_commit": "d05dbb7ecbae19836eaa1a1ebdd6cdf72a8939fa",
+    "root_sha256": "0360a80ff93f9a3f45220671004d37192a92c5a30b2cb38fdc823a394ed9cbb8",
+    "replay_sha256": "de77b1d2c07834b2fb41a468b2415bfe868cf59f774f1f89ea89a6e680c6d26d",
+    "audit_sha256": "ceaed6f8ccc2c0e5a28017b61aeaa76eca2120a1a300869c8d1fe485326251d9",
+    "model_had_execution_authority": false,
+    "decisions": 119776,
+    "genuine_multi_candidate_decisions": 119353,
+    "genuine_accuracy": 0.9999413504478313,
+    "genuine_kind_accuracy": {
+      "trainee": 0.9998804787679069,
+      "venue": 1.0
+    },
+    "model_teacher_disagreements": 7,
+    "battles": 1802,
+    "healing_trips": 1098,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_fainted_count": 0,
+    "all_shadow_gates_passed": true
+  },
+  "causal_control": {
+    "status": "failed",
+    "error": "RuntimeError: Team training stopped before readiness: healing budget exhausted",
+    "lineage_id": "training-candidate-v1-control-01",
+    "source_commit": "d37de9cb138f8dda6dc0e7be2cb5d64b7194214b",
+    "root_sha256": "fccacf52b335d449b405588518d1c2313e38bf904a69a112a11c7139b991648d",
+    "replay_sha256": "e5e23eb11acd01927def3139d80442665e6584caf1999660b10af097bb5238ec",
+    "audit_sha256": "03b3d50e59d70d3ed069561050a4bc7d143d5282c86f86de18b039f12fc11f6f",
+    "terminal_log_sha256": "a36dbbc7c39b86c84ccd86226c80d7d8ab7d374a8163461a260e6af70715e0bc",
+    "model_had_execution_authority": true,
+    "authority_choice_kinds": ["trainee", "venue"],
+    "teacher_fallback_on_model_disagreement": false,
+    "decisions": 15449,
+    "genuine_multi_candidate_decisions": 15270,
+    "accuracy": 1.0,
+    "model_teacher_disagreements": 0,
+    "latest_emitted_balance_battle_milestone": 250,
+    "final_party_levels": [51, 32, 32, 31, 31, 31],
+    "final_fainted_count": 0,
+    "complete_execution_counts_available": false
+  },
+  "same_root_teacher_diagnostic": {
+    "status": "ok",
+    "source_commit": "de4c874a9d23727dba2e3b8c913c3038b24b5d13",
+    "root_sha256": "fccacf52b335d449b405588518d1c2313e38bf904a69a112a11c7139b991648d",
+    "action_replay_sha256": "52c9a37691d0541b46f8cc3915acd37c6e5783a1c56659d961f0cdf3dc5768a2",
+    "candidate_replay_sha256": "a461c99802b970ccff1a07f59a08678bf9277dd519424c2ae3c0ab9524646033",
+    "terminal_log_sha256": "ddefd40af581469eac7bcfd0d800f3990b4e78814c9cd012b245b0eeb8ba961f",
+    "portable_training_decisions": 57917,
+    "observed_candidate_decisions": 113267,
+    "retained_candidate_decisions": 6844,
+    "evolution_battles": 69,
+    "evolution_healing_trips": 45,
+    "balance_battles": 1733,
+    "balance_healing_trips": 986,
+    "total_battles": 1802,
+    "total_healing_trips": 1031,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_fainted_count": 0,
+    "controlled_candidate_stream_is_exact_teacher_prefix": true,
+    "shared_evolution_transitions": 92,
+    "shared_balance_transitions_before_control_failure": 1259
+  },
+  "gate_evaluation": {
+    "sha256": "60dd60cbfd3507c57f37e259c79eacd595c78a006aba3377d447ca8ec8fb6b56",
+    "shadow_eligible": true,
+    "causal_control_eligible": false,
+    "portable_training_loop_may_start": false,
+    "causal_checks_passed": 6,
+    "causal_checks_failed": 5,
+    "failed_checks": [
+      "status",
+      "model_teacher_disagreements",
+      "complete_battle_count",
+      "complete_healing_trip_count",
+      "final_party_levels"
+    ]
+  },
+  "interpretation": {
+    "supported": [
+      "the frozen model passed the preregistered no-authority shadow gate",
+      "the authenticated candidate model executed 15449 live trainee and venue predictions with no teacher fallback before the causal lineage terminated",
+      "the causal lineage is an authenticated operational rejection rather than a model promotion"
+    ],
+    "not_supported": [
+      "a causal model-teacher disagreement",
+      "successful causal strategic authority",
+      "portable-loop integration of the strategic ranker",
+      "clean-start autonomy",
+      "cross-title transfer",
+      "living Pokedex completion"
+    ],
+    "diagnostic_boundary": "The same-root teacher completed under every operational bound, and every controlled candidate transition was an exact prefix of that successful teacher stream. Merely enabling the authority wrapper changed a downstream directive despite zero alternate model selections."
+  },
+  "next_gate": "Preserve v1 as rejected, require agreement to be a behaviorally exact no-op, then preregister a fresh repaired causal root before portable integration.",
+  "private_artifacts_tracked": false,
+  "promotion_eligible": false
+}

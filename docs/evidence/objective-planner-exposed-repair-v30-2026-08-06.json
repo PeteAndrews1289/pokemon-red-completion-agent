@@ -1,0 +1,32 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v30",
+  "source_commit": "a1af6f2fd5075ba9c6bb2602b1b2a636e105ddeb",
+  "source_bundle_sha256": "770e879c0509d33e36af526e4ede9c1f9038163ac24e2d1a18a570306de99f99",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1660001,
+    "battle_start_schedule_sha256": "3775a79036495787d36dca1d61750660d1adbfb16b1d3cf470c9474fbd54a725",
+    "private_log_sha256": "c1f0dd8dc3f594978157e99856ddf3db40a579152bbda88aa9f6e3b2ecbf93f3",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 103769,
+    "party_size": 6,
+    "workhorse_level": 60,
+    "pokemon_center_visits_before_koga": 3
+  },
+  "repairs_verified": [
+    "Juggler 3 is followed by a full-party Center recovery before Tamer 2 is initiated",
+    "The later Tamer 2 and Juggler 4 recovery boundaries remain intact",
+    "All required Fuchsia Gym trainers and Koga are defeated with the party restored at the chapter boundary",
+    "The balanced six-member party, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}

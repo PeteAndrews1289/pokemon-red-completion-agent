@@ -1,0 +1,21 @@
+{
+  "assignment_id": "29cae8b694e7e6d94092b83272fdf2c3477d2f4b872ed2a06995736180658b26",
+  "candidate_count": 2,
+  "counted": false,
+  "episode_created": true,
+  "examples": 1,
+  "manifest_sha256": "72c96d384de2674de2a6cc866085573d1ebd1b84f84c5f211c2c30d3aeb40927",
+  "movement_action_labels": 0,
+  "partition": "unassigned",
+  "private_episode_bytes": 87633,
+  "private_episode_records": 41,
+  "promotion_eligible": false,
+  "route_cost_max": 137,
+  "route_cost_min": 18,
+  "route_movement_requests": 17,
+  "scenario_id": "red-strategic-scenario-v2-009-train",
+  "source_partition": "train",
+  "status": "qualified",
+  "teacher_choice_examples": 1,
+  "test_scenarios_opened": 0
+}

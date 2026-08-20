@@ -1,0 +1,77 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the residual ranker improves leave-one-root-out train metrics",
+      "the representation generalizes to unseen Red development contexts",
+      "the model has shadow or live party-development authority",
+      "the representation transfers to Crystal",
+      "the agent can complete Red or a living Pokedex"
+    ],
+    "supported": "The published train-only v2 gate authenticated its frozen historical inputs without decoding development outcomes, fitting a model, consuming the one-shot identity, or changing any learning counter."
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "preflight": {
+    "authenticated_terminal_records": 108,
+    "authority_promoted": false,
+    "claim_safe_label_free_reconstruction_complete": true,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "design_id": "pokemon.red.party-development.train-only-architecture-selection.v2",
+    "development_assignment_headers_authenticated": 31,
+    "development_label_free_questions_reconstructed": 12,
+    "development_outcome_examples_materialized": 0,
+    "development_outcome_payloads_decoded": 0,
+    "development_stream_bytes_authenticated": true,
+    "full_game_replays": 0,
+    "gate_identity_sha256": "7a148a5d0f5b7bd1eebb4a8059ac92185c4281e36b2b5e0dea94352f08b986a3",
+    "learner_sha256": "7fb1783ea6e798ea55ba6cf650c29cbb16f4c22b6c1e04290b0265b6dfb97e3c",
+    "model_fits": 0,
+    "predecessor_manifest_sha256": "472afd3909e4fd672da022ba18706d2d09e9f9c43013d39b3d658dc3f5d9483f",
+    "prior_attestation_sha256": "6ee20ab898f255c19af18364a11d82b6dab8e42deec3c92c2a92975b74a26daa",
+    "prior_model_canonical_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+    "private_path_fields": 0,
+    "runner_sha256": "e782cdaa28b2b49bc85ac26e733ec26ef071744bfd9e8f551169703f8dd9d373",
+    "schema": "pokemon.red.protocol-consistent-party-train-gate-preflight.v2",
+    "sealed_red_cases_opened": 0,
+    "semantic_identity_available_fixed_host_account": true,
+    "semantic_identity_available_locally": true,
+    "source": {
+      "git_commit": "fa96c48e69c564e3d422bc6404b0f4850c869919",
+      "worktree_dirty": false
+    },
+    "status": "ready_for_single_train_only_architecture_gate",
+    "successor_manifest_sha256": "0975b651ab05980c51374e5ff32e50a130108d0a7e8ffd11d712dcc920770b6d",
+    "support_limitations": {
+      "action_and_goal_are_confounded_in_train": true,
+      "pass_requires_fresh_missing_trainee_goal_cells": true
+    },
+    "teacher_queries": 0,
+    "training_action_goal_counts": {
+      "trainee:balance": 13,
+      "venue:collection": 3,
+      "venue:evolution": 3,
+      "venue:role_coverage": 3
+    },
+    "training_outcome_subset_sha256": "5b47b7f4872be02f566cd6e5321c868231aa0c705f1c3fb06f4e49e0b3ed8647",
+    "training_question_set_sha256": "b1949d0b2e0c429bc7c2b8389050499ac336b0c2f62dade7565e0471d28986fe",
+    "training_questions": 22
+  },
+  "recorded_on": "2026-08-17",
+  "source_verification": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run": 32069542599,
+    "commit": "fa96c48e69c564e3d422bc6404b0f4850c869919"
+  },
+  "status": "label_free_preflight_passed_gate_unclaimed",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v30",
+  "status": "failed",
+  "source_commit": "a1af6f2fd5075ba9c6bb2602b1b2a636e105ddeb",
+  "source_bundle_sha256": "770e879c0509d33e36af526e4ede9c1f9038163ac24e2d1a18a570306de99f99",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v30-validation-01",
+      "harness_seed": 1680001,
+      "battle_start_schedule_sha256": "303436bfff1ad0fd0c969505bf063e4b67155979e775fb9e14a39c878c1f4694",
+      "status": "failed",
+      "qualified_checkpoints": 95,
+      "failure": "Diglett carried damage from Voltorb above the two-thirds recovery cutoff into Pikachu, whose priority attack knocked it out before the next Dig could establish its PP proof.",
+      "private_log_sha256": "180827a49570207f60a2533449553577b6ebb1776242e6cad8cdb5becd3994d7"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The teacher funded two Surge recoveries but used an HP threshold tuned to previously observed damage. A fragile newly caught Diglett could legally survive the first opponent above that threshold yet remain vulnerable to Pikachu's priority move after the opponent transition.",
+  "repair_direction": "At a stable MAIN boundary, restore any missing Diglett HP before selecting Dig, while retaining the existing two-item cap and exact inventory accounting. This protects the intended Ground-type lesson without switching to a reserve or weakening the evidence contract."
+}

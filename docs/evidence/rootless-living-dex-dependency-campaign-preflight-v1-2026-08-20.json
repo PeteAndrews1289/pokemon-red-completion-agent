@@ -1,0 +1,85 @@
+{
+  "campaign": {
+    "campaign_plan_created": true,
+    "campaign_plan_manifest_sha256": "66c578705d2440bb36f3b10062dab793258cbae0fdd7dfc51a36d33664555d24",
+    "campaign_plan_record_sha256": "2390c2c22fe19df799cc5ad664053b5baf1c0e1bfaf7694f6464ad66f51f4a29",
+    "campaign_sha256": "404e3a028cce695e23d20a4df8dc26ccfebbf48ca100800a5fe8e6a0d0bc9b92",
+    "design_sha256": "b57cd393eb28338d94a90a35974b106a379444c638e8b1923aa38cf3f35d140a",
+    "development_commitments": 4,
+    "development_roster_sha256": "f7630b8b09ba5b6962892335588bb376129a74554dee8442962ac1c92f5c4ce6",
+    "train_scenarios": 8
+  },
+  "claim_boundary": {
+    "supported": "One exact published synthetic living-Pokedex dependency campaign is frozen and passed a zero-action readiness preflight with all twelve account-global one-shot identities and all ten local output namespaces unused.",
+    "unsupported": "No train outcome, model fit, development comparison, gameplay example, Red completion, Crystal transfer, statistical promotion, learned authority, or living-Pokedex competence was produced."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_manifests": {
+    "freeze_execution_manifest_sha256": "4f61155d11b8174ab12a46a657f3ad44c4327ed74f75a5a71facd893dbb928ca",
+    "freeze_invocation_sha256": "f76cb08c77ef9f6a3f6a613b84ae31c9ff46eeae0ed36503cd6640281fd655ee",
+    "preflight_execution_manifest_sha256": "6f24a6549146b759c9348e9197287c18f1dee4c8697ce9a9cd210ac823a87ffb",
+    "preflight_invocation_sha256": "fc57d13b838c08fd7560c483d05401e86c60b417c1a42f9aab965d7c7345cb16",
+    "private_input_roles": 3,
+    "public_binding_count": 11
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32336487689,
+    "source_commit": "048bea66d205b0e784b3321763e2725d2ccfff32"
+  },
+  "readiness": {
+    "available_campaign_identities": 12,
+    "available_local_output_namespaces": 10,
+    "available_train_identities": 8,
+    "claims_consumed": 0,
+    "development_opening_payloads_disclosed": 0,
+    "fit_identity_claimed": false,
+    "status": "training_ready"
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-campaign-preflight-receipt.v1",
+  "source_bindings": {
+    "comparison_sha256": "7876fb65c276b2209fac1f23a1a16299f28c557a5279e0feabc2451f1f6749ca",
+    "core_sha256": "4acca8d718af0aff9fb9bff65a573a37c62225c18c9b9c672cf17e553c6f4e79",
+    "learning_runner_sha256": "0eadaf9d9821451940c29b1ed588fd377203122bf6f134a5e0858016ad071759",
+    "manifest_freezer_sha256": "2243d8e2c55c4f04f3481f960c6412b1168076929c0c17785523e30919472b7d",
+    "provisioner_sha256": "6c06c802a81ac9b8488bbfb8f887b191edbc151a6a8a076f8ac5295097c9a932",
+    "ranker_sha256": "6cd7901c7f40a1b5f4b3d3788332c3474f3375783532f7eaa01a4abb6634e8ed",
+    "rootless_manifest_sha256": "218bc52bd1a4e6d5546f76770691bbe94f26afaf059974828b3eae13bf238de8",
+    "runner_sha256": "ea25f35927ece441a20f162e020bbe0aa0aa8b539bd7e118dc5612948e992247",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "source_bundle_sha256": "f884d67629bfae227429ceb187fc95dad191d4c194f7480864eaab7891c3051e"
+  },
+  "status": "campaign_frozen_zero_action_preflight_passed_training_ready",
+  "title_role": "Synthetic rootless train-campaign readiness; not gameplay, model improvement, completion, promotion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "admitted_train_outcomes": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_comparisons": 0,
+    "development_opening_payloads_disclosed": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "synthetic_train_transitions": 0,
+    "teacher_queries": 0
+  }
+}

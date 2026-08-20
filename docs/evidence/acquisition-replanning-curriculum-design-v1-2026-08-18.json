@@ -1,0 +1,157 @@
+{
+  "active_lane": "fresh-red-acquisition-replanning-curriculum-design-v1",
+  "claim_boundary": {
+    "supported": "The action-free inventory can seed a four-root acquisition curriculum, but the current authenticated contexts cannot yet expose a genuine multi-choice post-acquisition replan.",
+    "unsupported": "This record is not gameplay, training evidence, learned replanning, Red completion, living-Pokedex completion, authority promotion, or cross-title transfer."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design": {
+    "behavior": {
+      "first_decision_assignment": "frozen_intervention_before_outcomes",
+      "first_decision_is_model_prediction": false,
+      "first_decision_schedule_per_root": [
+        "acquire_species",
+        "acquire_species",
+        "develop_team",
+        "explore"
+      ],
+      "first_decision_schedule_scope": "per_trial_within_each_root",
+      "learned_choice_decisions_after_intervention": 1,
+      "maximum_controller_started_decisions_per_episode": 2,
+      "minimum_initial_executable_choices": 3,
+      "minimum_post_acquisition_executable_choices": 2,
+      "planned_episodes": 16,
+      "replacement_or_retry_allowed": false,
+      "require_action_free_reobservation_after_first_outcome": true,
+      "require_changed_available_menu_before_second_decision": true,
+      "require_changed_policy_context_before_second_decision": true,
+      "require_distinct_second_goal_kind_after_acquisition": true,
+      "retain_all_claimed_failures": true,
+      "root_lineages": 4,
+      "schema": "pokemon.core.acquisition-replanning-behavior.v1",
+      "second_decision_authority": "exploratory_goal_manager",
+      "teacher_fallbacks": 0,
+      "teacher_queries": 0,
+      "trials_per_root": 4
+    },
+    "capability_gap": {
+      "acceptable_goal_kinds": [
+        "develop_team",
+        "restore_team",
+        "explore"
+      ],
+      "execution_authorized": false,
+      "must_not_add": [
+        "fixed_route_walkthrough",
+        "teacher_choice",
+        "root_specific_rescue",
+        "silent_singleton_dispatch_as_learned_choice"
+      ],
+      "preferred_candidate": "develop_team",
+      "required_capability": "Expose at least one title-neutral, independently verified non-acquisition choice at an encounter source after one retained acquisition.",
+      "schema": "pokemon.core.acquisition-replanning-capability-gap.v1",
+      "status": "reusable_same_area_second_goal_required",
+      "why_generic": "The preferred team-development capability must consume an encounter-source adapter rather than a Pokemon Red map script so later titles can bind the same semantic skill. An existing alternative is acceptable only when it remains executable after acquisition and is not added merely to inflate menu cardinality."
+    },
+    "claim_boundary": {
+      "supported": "The current Red inventory can seed a four-root acquisition curriculum, but it cannot yet expose a genuine multi-choice post-acquisition replan.",
+      "unsupported": "This design is not gameplay, training evidence, learned replanning, Red completion, living-Pokedex completion, or cross-title transfer."
+    },
+    "design_sha256": "76c36119848a2bf68e084851816a258982c51299d66208c129acf8b0a88e5241",
+    "evidence_gate": {
+      "acquisition_requirements": [
+        "independent_success_verification",
+        "required_specimen_count_decreased",
+        "living_collection_nonregression"
+      ],
+      "authority_promotion": false,
+      "descriptive_development_result_only": true,
+      "fit_partition": "train_only",
+      "minimum_admitted_acquisition_first_episodes": 4,
+      "minimum_root_lineages_with_verified_replan": 3,
+      "minimum_verified_distinct_goal_replans": 4,
+      "replanning_requirements": [
+        "post_acquisition_menu_has_at_least_two_executable_choices",
+        "policy_context_changed",
+        "available_menu_changed",
+        "second_selected_goal_differs_from_acquire_species",
+        "second_outcome_independently_verified"
+      ],
+      "schema": "pokemon.core.acquisition-replanning-evidence-gate.v1",
+      "threshold_basis": "provisional feasibility gate: four verified replans across at least three of four roots; all sixteen outcomes remain retained regardless of gate",
+      "transfer_claim": false,
+      "unseen_comparison": false
+    },
+    "inventory": {
+      "acquisition_train_roots": 6,
+      "authenticated_post_acquisition_captures": 0,
+      "controller_actions": 0,
+      "emulator_frames": 0,
+      "model_predictions": 0,
+      "outcomes_added": 0,
+      "previously_used_roots": 2,
+      "prior_durable_post_acquisition_choice_count": 1,
+      "schema": "pokemon.core.acquisition-replanning-inventory.v1",
+      "status": "existing_contexts_insufficient",
+      "unused_roots": 4,
+      "unused_roots_with_multiple_initial_choices": 4
+    },
+    "schema": "pokemon.core.acquisition-replanning-curriculum.v1",
+    "zero_effects": {
+      "authority_promotions": 0,
+      "controller_actions": 0,
+      "emulator_frames": 0,
+      "episode_attempts": 0,
+      "model_fits": 0,
+      "model_predictions": 0,
+      "transfer_results": 0,
+      "unseen_comparisons": 0,
+      "verified_outcomes": 0
+    }
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32129847455,
+    "source_commit": "96379e8074373c5a9ba981f171ee75aa7080ff4a"
+  },
+  "recorded_on": "2026-08-18",
+  "review": {
+    "antigravity": "A partial read-only architecture review produced useful concerns but no formal final verdict after the UI stalled. Its concerns about single-step scope, artificial menu cardinality, thresholds, and Red-specific routing were incorporated.",
+    "claude": "The formal read-only review's schedule-scope blocker was resolved, and its threshold, capability, and inventory hardening points were incorporated."
+  },
+  "schema": "pokemon.red.acquisition-replanning-curriculum-design-receipt.v1",
+  "source_bindings": {
+    "curriculum_module_sha256": "4d5bfe64f9476b2c34be953bb728871f8f280482f363c710a98dcdf3b504b917",
+    "curriculum_test_sha256": "2e1307692c797c6631812ce7c99da66024458096c2a5ae89069c34a2eb54ef7e",
+    "goal_manager_collection_registry_sha256": "83f04a89cd5823d493f1a9d14f0682e52bcbc5c63ca8c112b45683591062c2f3",
+    "paired_screen_result_receipt_sha256": "79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38",
+    "source_bundle_sha256": "b6aa444c7a0622797b6e33fcc2cb74e91b0ba35a9ac3caf29462668726af06a6"
+  },
+  "status": "design_frozen_existing_contexts_insufficient_capability_work_required",
+  "title_role": "Red development curriculum design, not the cross-game product or a gameplay result",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "episode_attempts": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "teacher_queries": 0,
+    "transfer_executions": 0,
+    "verified_outcomes": 0
+  }
+}

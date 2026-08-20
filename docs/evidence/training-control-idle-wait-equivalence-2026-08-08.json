@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon-training-control-root-equivalence-v1",
+  "status": "rejected_as_independent_lineage",
+  "source": {
+    "git_commit": "4c885d8f90d506529d720e1581b7ed0c8ff83107",
+    "worktree_dirty": false
+  },
+  "comparison": {
+    "first_wait_frames": 17,
+    "second_wait_frames": 43,
+    "first_root_state_sha256": "62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e1315171925e80c9c",
+    "second_root_state_sha256": "62f7862e6f7e15c6f7c14a4cbb7488d6ff946502809dde5e1315171925e80c9c",
+    "first_decision_stream_sha256": "f13f9f1031632a8f1158c280c241d6f6a24ab5eeed4c30bdf76d802917e1aca1",
+    "second_decision_stream_sha256": "09ece4f5c97f7ef696db24b85c59fcf5c915949588809ecc424c4e49eda3995d",
+    "decision_sequences_equal": true,
+    "decisions_each": 46687,
+    "unique_action_feature_pairs_each": 45902,
+    "shared_unique_action_feature_pairs": 45902,
+    "novel_unique_action_feature_pairs": 0,
+    "action_counts_each": {
+      "fight": 1719,
+      "flee": 1022,
+      "heal": 434,
+      "seek": 43511,
+      "stop": 1
+    }
+  },
+  "conclusion": {
+    "independent_training_data": false,
+    "retained_role": "private_reproducibility_control",
+    "reason": "Idle waiting did not change the serialized root and reproduced the exact teacher-decision sequence.",
+    "replacement_strategy": "Use a reversible, semantically verified movement perturbation and require a distinct root-state digest before collection."
+  },
+  "private_artifacts_tracked": false
+}

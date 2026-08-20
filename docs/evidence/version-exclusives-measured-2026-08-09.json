@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon-cartridge-measurement-v1",
+  "recorded_on": "2026-08-09",
+  "finding_id": "version-exclusives-read-from-both-cartridges",
+  "question": "Are the eleven version exclusives per cartridge real, or reasoned?",
+  "why_not_a_playthrough": "Sampling encounters shows what a place offers and can never show what it does not. Proving Ekans absent from Blue by walking would require exhausting every area and then arguing about how much walking is enough. The tables are static data, so reading them settles presence and absence together.",
+  "how_the_tables_were_located": {
+    "method": "search, anchored on bands this repository had already measured from live encounters",
+    "wild_data": "Diglett's Cave was measured to hold only Diglett and Dugtrio. Exactly one structure in the Red ROM matches that shape, at file offset 0x0d5b1, and the pointer array indexing it starts at 0x0ceeb -- index 197, which is DIGLETTS_CAVE. Index 165 then yields the Mansion at levels 28-39, which is precisely the band measured over 164 live encounters.",
+    "species_map": "Anchored on the four internal indices the party adapter already asserts -- Blastoise 0x1C, Diglett 0x3B, Dugtrio 0x76, Snorlax 0x84. Exactly one table satisfies all four, at 0x41024, and all 151 indices map to valid dex numbers.",
+    "guard": "The extractor re-derives both measured bands on every run and refuses to emit if either disagrees, so a different cartridge revision fails loudly rather than producing plausible nonsense."
+  },
+  "result": {
+    "wild_species_per_cartridge": {"red": 78, "blue": 78},
+    "red_wild_tables_only": [23, 24, 43, 44, 56, 58, 116, 117, 123, 125],
+    "blue_wild_tables_only": [27, 28, 37, 52, 69, 70, 98, 99, 126, 127]
+  },
+  "verdict_on_the_declared_table": {
+    "confirmed_directly": 16,
+    "confirmed_by_inheritance": 6,
+    "inheritance_detail": "Vileplume, Primeape, Arcanine, Ninetales, Persian and Victreebel never appear in a wild table because you evolve into them. Each inherits its pre-evolution's availability, and every one of those pre-evolutions is confirmed directly.",
+    "the_correction_this_was_run_to_check": "Scyther appears in Red's wild tables only and Pinsir in Blue's only. Both were missing from an earlier version of the table, which made every Red-only campaign figure one too high. They are now read from the cartridges rather than reasoned about."
+  },
+  "unresolved": {
+    "what": "Red's water tables hold Horsea and Seadra where Blue's hold Krabby and Kingler, and neither pair is declared version-exclusive.",
+    "why_this_measurement_cannot_settle_it": "Fishing is a separate table this reader does not parse, and fishing plausibly supplies each pair in the other version. A byte-count probe was tried and cannot distinguish an encounter entry from any other byte.",
+    "status": "held by a test that fails if the set of undeclared differences changes, so it stays visible rather than being quietly dropped",
+    "how_to_settle_it": "parse the fishing tables the same way the wild data was located"
+  },
+  "scope": "Per-map grass and water tables only. Fishing, Game Corner prizes, gifts, fossils, in-game trades and evolution are separate acquisition routes stored elsewhere, so absence from this extraction is not unobtainability."
+}

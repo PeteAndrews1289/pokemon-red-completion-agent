@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_verified_route_defect",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990017 qualified the repaired lab-rival boundary, then produced an ordinary Route 1 wild encounter that the deterministic opening still classified as fatal. The run stopped before any learned battle or training decision. This is a preserved route-robustness failure, not a model-prediction failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990017,
+    "initial_wait_frames": 213,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "d2459cc29859116ab4405acf52114190a558274fe87068ee5a07b768f4baa04c"
+  },
+  "source": {
+    "git_commit": "4f5f8707bbd5e691da5dda83412b7aaf1ab2c6c7",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "2d911cb62c05dfada847ee98984ca501e7eaf110072060be0c7974b21b00d0e4",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "QualifiedPlayError",
+    "message": "Unexpected battle interrupted Route 1 northbound at step 2.",
+    "frames_executed": 40005,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "ordinary_wild_encounter_misclassified_as_route_failure",
+    "finding": "Route 1 contains random grass encounters, but the Oak's errand movement helper required zero encounters. Initial timing changed the normal RNG sequence and exposed that unsupported assumption immediately after the repaired rival gate.",
+    "model_boundary": "No learned battle, switch-target, training-control, or trainee/venue decision had occurred. The scheduled trainer-battle perturbation controller had consumed zero of 74 entries."
+  },
+  "repair": {
+    "status": "implemented_pending_full_gate_and_fresh_perturbation",
+    "behavior": "The two Route 1 crossings may now dismiss at most eight ordinary wild encounters in total. Only wild battle state on Route 1 is accepted; a trainer or wrong-map battle still fails closed.",
+    "flee_contract": "Navigate to RUN under a bounded 128-transition and 16-selection envelope, then require battle result two, released controls, the same map and coordinate, living HP no greater than the pre-flee value, and exact preservation of party, level, maximum HP, PP, and status.",
+    "public_receipt": "Every accepted Route 1 flee records opponent identity and level, coordinate, before/after HP, RUN attempts, control readiness, and preservation checks. A route does not silently ignore random encounters.",
+    "rom_free_regressions": "A one-step route resumes after one verified wild flee without replaying the consumed movement. Encounters beyond the declared allowance are rejected before a flee is attempted.",
+    "next_gate": "Regenerate the source-bound registry, pass the full repository gate, commit and push, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

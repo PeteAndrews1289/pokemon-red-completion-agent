@@ -1,0 +1,59 @@
+{
+  "claim_boundary": {
+    "supported": "Published public-only tooling freezes and validates one canonical future-lane invocation against exact current public source and transitive executable bindings before protected inputs are opened.",
+    "unsupported": "No future-lane manifest, private readiness, root, gameplay, causal outcome, fit, competence, authority, transfer, Red-completion, or living-Pokedex claim was created."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "manifest_freezer_sha256": "a6469624755322c4b86ac1a8812ba1e8f5fa99cea3f5096d87dab2296c8933ce",
+    "manifest_freezer_test_sha256": "ee27d72c9d4bf5fa1c01dd30e0f158197cff2e317859e650d24f263464fd5c07",
+    "public_execution_manifest_sha256": "5b322444814b556645ab11bcbae362a10fee95fcabbba65cd346ba20ab191d6d",
+    "public_execution_manifest_test_sha256": "b90dc3c980a2e23587fd536e0b0082bfe343535bc46f1344c3efe2e1ce644ac2"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32174872005,
+    "source_commit": "ece32d81a1bd7ad3de037ba14361ef2f00849e35"
+  },
+  "qualification": {
+    "canonical_exact_bytes_required": true,
+    "current_public_binding_equality_required": true,
+    "duplicate_or_noncanonical_documents_rejected": true,
+    "exact_invocation_equality_required": true,
+    "focused_tests_passed": 24,
+    "future_lane_manifest_frozen": false,
+    "future_lane_private_readiness_authorized": false,
+    "hardlink_symlink_and_swap_inputs_rejected": true,
+    "private_input_roles_are_path_free": true,
+    "retired_lane_and_runner_rejected": true,
+    "stale_rehashed_or_reordered_bindings_rejected": true,
+    "synthetic_freeze_and_validation_passed": true
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.core.causal-readiness-manifest-qualification-receipt.v1",
+  "status": "public_only_readiness_manifest_validator_published_and_qualified",
+  "title_role": "Cross-title public readiness-binding maintenance; not gameplay, learning, evaluation, completion, or transfer evidence",
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "future_lane_manifests_frozen": 0,
+    "model_predictions": 0,
+    "private_inputs_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0
+  }
+}

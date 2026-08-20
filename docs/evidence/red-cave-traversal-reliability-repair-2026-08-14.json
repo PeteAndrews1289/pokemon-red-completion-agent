@@ -1,0 +1,84 @@
+{
+  "schema": "pokemon-red-venue-traversal-reliability-repair-v1",
+  "status": "implementation_qualified_live_validation_pending",
+  "source": {
+    "git_commit": "51f09125acc57d8ba38de640c38a8b8f5fb599b8",
+    "exact_commit_ci_run": 31860628652,
+    "exact_commit_ci_conclusion": "success",
+    "source_bundle_sha256": "92c578c27ca2ba85b9e2fc5115de2dc4a8f4fcaaf1c32a301f00d157b4ff694f"
+  },
+  "triggering_evidence": {
+    "result": "red-party-development-outcome-result-v2-2026-08-14.json",
+    "accepted_target_remains_source_bound": true,
+    "higher_band_venue_transitions": 39,
+    "lower_band_venue_transitions": 0,
+    "same_v2_identity_retried": false
+  },
+  "diagnosis": {
+    "method": "cartridge_geometry_plus_deterministic_regression",
+    "automatic_exit_coordinates": 2,
+    "arrival_coordinate_is_an_automatic_exit": true,
+    "old_controller_trace": [
+      "move_left_from_arrival_succeeds",
+      "second_left_move_is_blocked_by_terrain",
+      "reverse_right_move_crosses_the_automatic_exit"
+    ],
+    "cause_demonstrated": true,
+    "new_live_run_used_for_diagnosis": false,
+    "interpretation": "The old global horizontal pacing helper could reverse across the Cave entrance after one blocked step. The 39 transitions are therefore explained by a deterministic controller defect rather than by the encounter band itself."
+  },
+  "repair": {
+    "generic_warp_safe_walker": true,
+    "adapter_owns_transition_coordinates": true,
+    "learner_receives_transition_coordinates": false,
+    "fresh_walker_per_venue_per_run": true,
+    "map_departure_fails_closed": true,
+    "bounded_consecutive_no_progress_cycles": 2,
+    "public_identity_free_counters": [
+      "instrumented_walkers",
+      "movement_attempts",
+      "successful_steps",
+      "blocked_attempts",
+      "excluded_transition_skips",
+      "no_progress_cycles"
+    ]
+  },
+  "validation": {
+    "full_nonintegration_tests_passed": 3344,
+    "tests_deselected": 3,
+    "tests_xfailed": 1,
+    "ruff": "passed",
+    "mypy": "passed",
+    "public_artifact_check": "passed",
+    "documentation_check": "passed",
+    "generated_registry_check": "passed",
+    "positive_regression": {
+      "successful_steps": 12,
+      "movement_attempts": 14,
+      "blocked_attempts": 2,
+      "excluded_transition_skips": 1,
+      "map_departures": 0
+    },
+    "negative_control_without_exclusion_reproduced_map_departure": true,
+    "bounded_no_progress_regression_passed": true,
+    "live_emulator_execution_under_repaired_source": false
+  },
+  "decision": {
+    "v2_result_reinterpreted": false,
+    "v2_result_retried": false,
+    "training_target_count_added": 0,
+    "model_fit": false,
+    "party_policy_generalization_demonstrated": false,
+    "authority_promoted": false,
+    "repair_accepted_at_source_test_boundary": true,
+    "next": "Freeze a fresh independent non-sealed party context under a new plan and identity, require exact-commit CI and read-only preflight, then execute a bounded live traversal qualification before collecting more party outcomes. Do not rerun V2 or open an unseen gate."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

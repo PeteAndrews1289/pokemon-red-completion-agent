@@ -5,9 +5,23 @@ import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from pokemon_red_completion.constants import POKEMON_RED_US_REV_0, SupportedRom
+from pokemon_red_completion.constants import (
+    POKEMON_RED_US_REV_0,
+    SUPPORTED_ROMS,
+    SupportedRom,
+)
 
 ROM_ENVIRONMENT_VARIABLE = "POKEMON_RED_ROM"
+
+#: Where each title's private ROM path is supplied, keyed by title reference.
+#:
+#: A campaign runs more than one cartridge, so one variable cannot name them
+#: all. Red keeps its original variable so every existing command and receipt
+#: keeps working.
+ROM_ENVIRONMENT_VARIABLES = {
+    "red": ROM_ENVIRONMENT_VARIABLE,
+    "blue": "POKEMON_BLUE_ROM",
+}
 
 
 class RomValidationError(ValueError):
@@ -40,6 +54,36 @@ def resolve_rom_path(argument: str | Path | None) -> Path:
     if not path.is_file():
         raise RomValidationError(f"ROM file does not exist: {path}")
     return path
+
+
+def resolve_title_rom_path(title_ref: str, argument: str | Path | None = None) -> Path:
+    """Find one title's private ROM, from its own environment variable.
+
+    A campaign runs several cartridges at once, so a single variable cannot
+    name them all. Red keeps ``POKEMON_RED_ROM`` so nothing that already works
+    stops working.
+    """
+
+    if title_ref not in ROM_ENVIRONMENT_VARIABLES:
+        known = ", ".join(sorted(ROM_ENVIRONMENT_VARIABLES))
+        raise RomValidationError(f"unknown title {title_ref!r}; known titles are {known}")
+    if argument is not None:
+        return resolve_rom_path(argument)
+    variable = ROM_ENVIRONMENT_VARIABLES[title_ref]
+    raw_path = os.environ.get(variable)
+    if not raw_path:
+        raise RomValidationError(f"set {variable} to the private {title_ref} ROM path")
+    return resolve_rom_path(raw_path)
+
+
+def supported_rom_for(title_ref: str) -> SupportedRom:
+    """The identity this repository will accept for a title."""
+
+    try:
+        return SUPPORTED_ROMS[title_ref]
+    except KeyError:
+        known = ", ".join(sorted(SUPPORTED_ROMS))
+        raise RomValidationError(f"unknown title {title_ref!r}; known titles are {known}") from None
 
 
 def fingerprint_rom(path: Path) -> RomFingerprint:

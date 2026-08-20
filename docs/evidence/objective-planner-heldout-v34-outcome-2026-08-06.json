@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v34",
+  "status": "failed",
+  "source_commit": "395886fab148cddf30602a2da7006d1acf79de67",
+  "source_bundle_sha256": "f68d547b40103d06a594b373d0a460ed326878d667decc41d75b4073579f1cb4",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v34-validation-01",
+      "harness_seed": 1780001,
+      "battle_start_schedule_sha256": "1a0a5270ad712035f4cb1e96416e97fcfd8ad2abcf07b9678321db9806594609",
+      "private_log_sha256": "b0eb8ad5608666c5583ed04dd0d8930f83583672381f7c45109f54976620a911",
+      "status": "failed",
+      "qualified_checkpoints": 95,
+      "failure": "A lower-level Diglett exhausted the two-use recovery reserve and fainted against Pikachu before selecting the next required Dig."
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The route accepted every natural Diglett level from 17 through 22 and then tried to compensate for the weakest legal lineage with trainer-specific item timing. Full-health recovery still cannot make the lowest-level specialist consistently survive every held-out priority-attack schedule within two items.",
+  "repair_direction": "Teach preparation rather than another cursor exception: capture a naturally available level-21 or level-22 Diglett, preserve the existing Dig-only matchup lesson and bounded recovery ledger, replay this exposed schedule diagnostically, then reserve entirely fresh validation and sealed-test seeds."
+}

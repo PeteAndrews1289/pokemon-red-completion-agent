@@ -1,0 +1,90 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "complete_unpromoted_development_lineage",
+  "source_commit": "119984bed7b6a6404416f24d63063cb6676a05fc",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990005,
+    "schedule_sha256": "d5b3ee894b808ba04c759f2b4e479457b54319da062e743d8aa0ecc952161188",
+    "scheduled_battles": 74,
+    "schedule_complete": true,
+    "counted_campaign_root": false
+  },
+  "completion": {
+    "checkpoints": "312/312",
+    "objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 693947
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-5152060e8a1e4b3ab4c3a9c15c95c0de",
+    "manifest_sha256": "88947f5bbb8a6cb52f9a0e2bc021b88780fecd2c03b62f84e6879015fe672020",
+    "label_records": 3166,
+    "total_records": 3168,
+    "bytes": 14010209,
+    "private_path_published": false
+  },
+  "label_distribution": {
+    "select_move": 3118,
+    "use_recovery": 22,
+    "use_boost": 13,
+    "switch": 13,
+    "typed_non_move_total": 48,
+    "explicit_switch_targets": 13,
+    "legacy_generic_switch_targets": 0
+  },
+  "battle_move_runtime": {
+    "decisions": 3166,
+    "model_decisions": 3112,
+    "model_coverage": 0.9829437776373974,
+    "teacher_fallbacks": 6,
+    "shadow_teacher_disagreements": 1418,
+    "teacher_queries": 3166,
+    "teacher_queries_allowed": true
+  },
+  "team_development": {
+    "battles": 1808,
+    "healing_trips": 1175,
+    "final_forms_complete": true,
+    "observed_levels": [60, 55, 55, 55, 55, 55],
+    "workhorse_target_level": 60,
+    "fainted_count": 0
+  },
+  "league_variation": {
+    "lorelei_strict_contract_passed": true,
+    "bruno_strict_contract_passed": true,
+    "agatha_strict_contract_passed": true,
+    "agatha_required_role_switches": 3,
+    "agatha_observed_role_switches": 3,
+    "agatha_participating_specialists": 2,
+    "lance_defeated": true,
+    "champion_defeated": true
+  },
+  "independence": {
+    "different_from_prior_lineages": true,
+    "observable_examples": [
+      "Route 12 Snorlax was caught in two throws.",
+      "Balanced development required 1808 battles and 1175 healing trips.",
+      "The canonical Agatha opponent-role sequence required three switches."
+    ],
+    "held_out_from_first_target_candidate_training": true,
+    "first_target_candidate_evaluated_once_before_reuse": true,
+    "opened_as_development_after_first_evaluation": true,
+    "used_as_whole_lineage_training_for_second_candidate": true
+  },
+  "claim_scope": {
+    "fresh_v3_demonstration_complete": true,
+    "viridian_status_receipt_emulator_qualified": true,
+    "strict_model_control_complete": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false
+  }
+}

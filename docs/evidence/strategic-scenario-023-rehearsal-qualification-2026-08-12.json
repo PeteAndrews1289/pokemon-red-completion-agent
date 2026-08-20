@@ -1,0 +1,22 @@
+{
+  "assignment_id": "ba065b2515f85ffd0625232d150d056fc1ff9437f85bf1a8b8625f327ed00245",
+  "candidate_count": 2,
+  "counted": false,
+  "examples": 1,
+  "interruptions": 3,
+  "manifest_sha256": "88bc7abe0c8d285a536c9d3e2063c5933a5b95ae6cc51098b49b8401d78ab13e",
+  "movement_action_labels": 0,
+  "partition": "unassigned",
+  "private_episode_bytes": 2423124,
+  "private_episode_records": 1437,
+  "promotion_eligible": false,
+  "replans": 0,
+  "route_cost_max": 605,
+  "route_cost_min": 68,
+  "route_movement_requests": 604,
+  "scenario_id": "red-strategic-scenario-v2-023-validation",
+  "source_partition": "validation",
+  "status": "qualified",
+  "teacher_choice_examples": 1,
+  "test_scenarios_opened": 0
+}

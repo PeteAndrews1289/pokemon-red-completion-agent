@@ -1,0 +1,47 @@
+{
+  "claim": "The historical semantic objective ranker responds to location context in a bounded exhaustive audit, but this does not prove correct objective choice or live dispatch.",
+  "limitations": [
+    "synthetic_semantic_snapshots",
+    "no_gameplay_execution",
+    "no_correct_action_labels",
+    "single_historical_model",
+    "model_not_promotion_eligible",
+    "location_sensitivity_is_not_transfer"
+  ],
+  "metrics": {
+    "branching_states": 129,
+    "evaluations": 446,
+    "local_target_opportunities": 317,
+    "local_target_rate": 0.7476340694006309,
+    "local_target_selections": 237,
+    "location_sensitive_states": 73,
+    "location_sensitivity_rate": 0.5658914728682171,
+    "mean_confidence": 0.9108695893525524,
+    "mean_margin": 0.8325085077902449,
+    "reachable_states": 166
+  },
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "next_gate": "Evaluate the 80 candidate-local misses, label decisions from balanced teacher and recovery contexts, then execute a captured-state Red branch through the portable player loop.",
+  "schema": "pokemon-objective-counterfactual-audit-receipt-v1",
+  "selection_counts": {
+    "clear_rocket_hideout": 8,
+    "defeat_blaine": 18,
+    "defeat_erika": 52,
+    "defeat_giovanni": 1,
+    "defeat_koga": 26,
+    "defeat_misty": 4,
+    "defeat_sabrina": 22,
+    "help_bill": 2,
+    "liberate_silph": 48,
+    "obtain_cut": 1,
+    "obtain_secret_key": 58,
+    "obtain_silph_scope": 18,
+    "obtain_strength": 28,
+    "obtain_surf": 94,
+    "reach_cinnabar": 11,
+    "reach_fuchsia": 12,
+    "reach_saffron": 18,
+    "reach_vermilion": 1,
+    "rescue_fuji": 24
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v19",
+  "source_commit": "e3bae040a1153dd3c21add3c146fed61c5e4b93a",
+  "source_bundle_sha256": "a8898bdb660e045327e542bc2f66f56893b4470af1f5b01732843cb0c7f5d870",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1410001,
+    "battle_start_schedule_sha256": "ae4288544ac4740ce299e22f63c8f987596b706ad55e01894176287ea2df2ec1",
+    "private_log_sha256": "f280410a7cfa7b72b36af0793d214710130247dbe945bf3b4a6f8f7d4e26ef51",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 6 throws"
+  },
+  "repair_iterations": [
+    {
+      "status": "failed",
+      "qualified_checkpoints": 109,
+      "failure": "A one-cure-per-battle cap allowed repeated paralysis to prevent required Peck evidence before Rock Tunnel trainer 4 ended.",
+      "private_log_sha256": "9edd7b5acbea3b8c78744f2a2a24811e220686633e4232f6ce2ef059296b0618"
+    },
+    {
+      "status": "failed",
+      "qualified_checkpoints": 109,
+      "failure": "Removing the quota alone was insufficient because the status policy pivoted DUX away before it had spent the required Peck PP.",
+      "private_log_sha256": "9edd7b5acbea3b8c78744f2a2a24811e220686633e4232f6ce2ef059296b0618"
+    },
+    {
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "f280410a7cfa7b72b36af0793d214710130247dbe945bf3b4a6f8f7d4e26ef51"
+    }
+  ],
+  "repairs_verified": [
+    "Seven funded Parlyz Heals cover the exposed five-cure Tunnel lineage while retaining a downstream reserve",
+    "The post-purchase wait preserves the previously qualified RNG residue despite the larger quantity menu",
+    "A status-locked DUX uses a carried cure until required Peck evidence exists, then prefers the healthy Wartortle pivot",
+    "All downstream inventory, balanced-team, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}

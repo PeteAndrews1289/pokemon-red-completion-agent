@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v5",
+  "status": "failed",
+  "source_commit": "5bf2e665171284401c27bfec8f451a7164229a93",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v5-validation-01",
+      "harness_seed": 1060001,
+      "status": "failed",
+      "qualified_checkpoints": 41,
+      "failure": "Squirtle's lineage fainted during Route 24 trainer 3.",
+      "diagnosis": "The four-opponent Bug/Poison trainer still used a fixed Water Gun slot. A legal poison-and-Wrap branch exhausted the fully healed lead before the fixed sequence could finish.",
+      "failure_log_sha256": "5163e99b54f0fb8e6001fc1a55ae99002289fb54c043fd965230fb16658190b8"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 1060001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 91936,
+      "frames": 9617347,
+      "full_report_sha256": "6cafcc7681b8705bf820f5636431ba4dfc427290d71a576b9abf2f2277dadd17"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "All objective decisions before the failure were model-authorized; the failure occurred in a fixed low-level battle specialist rather than objective selection.",
+    "evaluation_result": "The preregistered v5 series failed its five-run completion contract and is retired. The exposed-seed repair completion cannot replace a held-out result.",
+    "repair_result": "Route 24 trainer 3 now uses a live PP-aware move policy without consuming a scheduled-battle slot. The post-Nugget supply visit also replenishes Antidotes spent by legal Route 24 branches before Route 25 and Rock Tunnel.",
+    "next_gate": "Run the unchanged repaired source and model on the fresh v6 validation schedules, leaving v6 test schedules sealed."
+  }
+}

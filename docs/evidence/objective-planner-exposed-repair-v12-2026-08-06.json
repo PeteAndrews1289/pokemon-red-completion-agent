@@ -1,0 +1,36 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v12",
+  "source_commit": "4af034845ee5d416488a834c02bff3757a1f6709",
+  "source_bundle_sha256": "0dc1c6a1b9d3129a9ca76390160a891b7878e76a01db9e588f3ad6dc4b83205c",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1230002,
+    "battle_start_schedule_sha256": "555739486884dff917da51622738f239a1e16206a4d2d32d6de0176a75bafd0e",
+    "private_log_sha256": "33f31b3ea2898545f769dab2d925211e1586cfdf6dedc962de3b314204cf8700",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 71,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax required 18 throws"
+  },
+  "repairs_verified": [
+    "Silph rival recovery re-entry preserves one semantic battle intent",
+    "Agatha workhorse recovery follows live HP and status on consecutive turns",
+    "Agatha retains matchup-aware six-member forced-switch continuation"
+  ],
+  "agatha": {
+    "status": "passed",
+    "hyper_potions_used": 1,
+    "full_restores_used": 1,
+    "x_specials_used": 1,
+    "party_hp": [209, 51, 56, 141, 68, 71],
+    "party_max_hp": [209, 51, 56, 141, 68, 71],
+    "party_status": [0, 0, 0, 0, 0, 0]
+  }
+}

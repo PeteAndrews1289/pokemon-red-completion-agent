@@ -1,0 +1,49 @@
+{
+  "claim_boundary": "Uncounted robustness diagnostic for the deterministic teacher; not collection qualification or learned-policy evaluation.",
+  "episode_id": "red-schedule-diagnostic-a2bedeaf2d9041839955e2ab9a89904a",
+  "game_complete": true,
+  "harness_seed": 61002,
+  "manifest_sha256": "bd6cfb2ae8eb223f962394f71fc63932d9a1d0fd1cd29ca1545affe1bc544b51",
+  "objectives": {
+    "total": 36,
+    "verified": 36
+  },
+  "route": {
+    "checkpoints_total": 312,
+    "checkpoints_verified": 312,
+    "controller_released": true,
+    "frames": 9683648,
+    "qualified_through": "enter_hall_of_fame"
+  },
+  "schedule": {
+    "complete": true,
+    "expected_battles": 71,
+    "finished_battles": 71,
+    "sha256": "90005efa174956d354d08521c9682829110aee3974ae2039ef10bfcdd140d7dc"
+  },
+  "schema": "pokemon-red-private-stress-receipt-v1",
+  "source_commit": "741debac7c7d598aa6999aa618376fa399a83737",
+  "status": "complete",
+  "stream": {
+    "bytes": 79606311,
+    "decisions": 666,
+    "events": 384,
+    "executions": 93201,
+    "records": 116396,
+    "snapshots": 22144
+  },
+  "teacher_change": {
+    "cinnabar_battles": [
+      {
+        "battle_plan_id": "battle-070-blaine-gym-burglar-set-4",
+        "reward": 3240
+      },
+      {
+        "battle_plan_id": "battle-071-blaine-gym-burglar-set-5",
+        "reward": 3690
+      }
+    ],
+    "income_buffer": 6930,
+    "purpose": "Replace capture-luck-dependent late-game liquidity with auditable trainer income and experience."
+  }
+}

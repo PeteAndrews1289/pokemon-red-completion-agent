@@ -1,0 +1,136 @@
+{
+  "schema": "pokemon-party-development-completion-v2-source-qualification-v1",
+  "date": "2026-08-15",
+  "status": "source_qualified_data_collection_not_started",
+  "mission": "Learn transferable party development for story completion and a retained living Pokedex, with Red as the first curriculum and later titles as adaptation tests.",
+  "source": {
+    "commit": "42196d462c32cb9c244938017b527a8672a5ab1d",
+    "branch": "agent/balanced-team-curriculum",
+    "github_ci_run": 31863588955,
+    "github_ci_conclusion": "success",
+    "local_non_integration_tests_passed": 3373,
+    "local_integration_tests_deselected": 3,
+    "local_expected_failures": 1,
+    "ruff_passed": true,
+    "mypy_source_files_passed": 217,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "source_bundle_sha256": "502fc9e937d8f340edbabee13b8c5923521a0e1f21f1cbfa11e2637d14ced827"
+  },
+  "representation": {
+    "feature_schema_id": "pokemon.core.party-development.completion-candidate.v2",
+    "feature_count": 66,
+    "historical_v1_prefix_features": 27,
+    "new_completion_features": 39,
+    "historical_v1_schema_changed": false,
+    "portable_goal_pressures": [
+      "balance",
+      "evolution",
+      "collection",
+      "role_coverage"
+    ],
+    "new_semantics": [
+      "global registration, living-collection and role-coverage progress",
+      "party-wide level, evolution, collection, role, health, exhaustion and faint pressure",
+      "candidate evolution stages, next-level distance, route mechanism and immediate feasibility",
+      "candidate registration need, living-target need and living-retention risk",
+      "candidate role need, completed role and emergency-escort need",
+      "candidate projected survival margin",
+      "prospectively frozen venue reliability, expected yield, matchup safety, travel cost, recovery cost and evidence support"
+    ],
+    "identity_fields_present": false,
+    "species_fields_present": false,
+    "map_fields_present": false,
+    "party_slot_fields_present": false,
+    "controller_sequence_fields_present": false,
+    "private_path_fields_present": false
+  },
+  "counterfactual_menu": {
+    "teacher_free_trainee_projection_added": true,
+    "teacher_free_venue_projection_added": true,
+    "hidden_identity_ties_preserved_as_candidate_menus": true,
+    "teacher_choice_used_as_outcome_target": false,
+    "historical_teacher_label_projection_behavior_changed": false
+  },
+  "outcome_contract": {
+    "objective_id": "party-development.completion-progress-efficiency.v2",
+    "ordered_criteria": 15,
+    "priorities": [
+      "avoid blackout",
+      "avoid regression in registration, living retention, role coverage, evolution work and level balance",
+      "advance the declared primary completion goal",
+      "then compare completion gains, evolution, experience efficiency, Center efficiency, faints and frames"
+    ],
+    "censored_trials_become_targets": false,
+    "partial_candidate_menus_become_targets": false,
+    "ties_use_soft_target_distributions": true
+  },
+  "learner": {
+    "model_id": "pokemon.core.party-development.outcome-ranker.mlp.v2",
+    "initialization": "exact score-preserving embedding of the frozen v1 teacher-derived candidate ranker",
+    "new_feature_weights_at_initialization": "zero",
+    "fit_target": "independently measured counterfactual outcome preference",
+    "teacher_choice_fit_target": false,
+    "fit_partition": "train_only",
+    "development_partition_mutated": false,
+    "update": "prior-anchored deterministic MLP adaptation with soft listwise targets",
+    "paired_development_comparison": true,
+    "paired_exact_test_uses": "discordant correctness pairs only",
+    "consumed_outcome_roots_persisted_in_model": true,
+    "consumed_outcome_states_persisted_in_model": true,
+    "duplicate_outcome_root_or_state_reuse_rejected": true,
+    "authenticated_model_round_trip": true
+  },
+  "initial_fit_gate": {
+    "purpose": "Minimum diversity for a descriptive first Red outcome fit; this is not the authority-promotion gate.",
+    "minimum_learner_eligible_train_preferences": 8,
+    "minimum_untouched_learner_eligible_development_preferences": 6,
+    "minimum_completion_goals_per_partition": 2,
+    "trainee_and_venue_choices_required_in_each_partition": true,
+    "at_least_one_candidate_menu_width": 3,
+    "minimum_health_bins": 2,
+    "minimum_pp_bins": 2,
+    "minimum_evolution_route_kinds": 2,
+    "complete_prospective_prior_evidence_required_for_every_venue_menu": true,
+    "paired_development_evaluation_required": true,
+    "inferential_claim_allowed": false,
+    "authority_promotion_allowed": false,
+    "milestone_4_promotion_gate_episodes_unchanged": 120
+  },
+  "protected_access": {
+    "red_controller_inputs": 0,
+    "red_state_executions": 0,
+    "teacher_queries": 0,
+    "teacher_targets": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_adaptation_contexts_opened": 0,
+    "crystal_sealed_contexts_opened": 0,
+    "full_replays_started": 0,
+    "models_fit_from_live_outcomes": 0,
+    "authority_promotions": 0
+  },
+  "claim_boundary": {
+    "supported": [
+      "the code can represent completion-aware trainee and venue decisions without execution identity",
+      "the historical v1 scorer can initialize the wider model without changing any initial v1 score",
+      "measured multi-candidate outcomes, including partial ties, can update the wider model while preserving partition and provenance guards",
+      "a path-free catalog audit can stop a semantically thin campaign before fitting"
+    ],
+    "not_supported": [
+      "a live v2 party-development outcome catalog exists",
+      "the party-development outcome model has been fit",
+      "the model improves on untouched Red development contexts",
+      "the model has party-development authority",
+      "the agent can complete Red autonomously",
+      "the representation transfers to Crystal or another title",
+      "the agent can complete or retain a living Pokedex"
+    ]
+  },
+  "next": [
+    "bind the exact historical v1 model and its two training roots as the initialization prior",
+    "inventory non-sealed Red checkpoints semantically without executing a candidate",
+    "freeze independent train and development contexts that meet the v2 diversity gate instead of consuming near-duplicate Cinnabar roots",
+    "have Claude and Antigravity attack the representation, objective and data gate before any new live candidate execution",
+    "publish an exact-source prospective collection plan and require green CI before controller input"
+  ]
+}

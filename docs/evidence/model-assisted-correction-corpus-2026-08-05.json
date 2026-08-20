@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-red-battle-correction-corpus-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "clean_power_on": true,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "teacher_corrections_recorded": true,
+    "artifact_integrity_verified": true,
+    "replacement_model_trained": false,
+    "autonomous_completion": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "completion": {
+    "checkpoints_completed": 312,
+    "checkpoints_declared": 312,
+    "objectives_verified": 36,
+    "objectives_declared": 36
+  },
+  "corpus": {
+    "artifact_id": "red-battle-corrections-e64eb791ba58447f9fdaa22c20095936",
+    "manifest_sha256": "a78975d373977c97cbbb9a2cae33d68ab07069bb3883892437db5792e8133647",
+    "source_model_sha256": "ab164860aa591d4bf1703e52e40069cf0663a683f091785dc462ffef4dbbce16",
+    "records": 126,
+    "battle_groups": 36,
+    "total_bytes": 679959,
+    "reason_counts": {
+      "low_confidence": 74,
+      "teacher_disagreement": 52
+    }
+  },
+  "privacy": {
+    "stored_outside_repository": true,
+    "rom_bytes_in_artifact": false,
+    "save_states_in_artifact": false,
+    "machine_paths_in_public_receipt": false,
+    "semantic_feature_vectors_private": true
+  },
+  "next_gate": "Refit on the five historical train roots plus this correction corpus, retain the two historical validation roots, then require a fresh model-assisted rollout."
+}

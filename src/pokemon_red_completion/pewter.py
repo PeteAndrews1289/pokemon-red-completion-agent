@@ -14,6 +14,10 @@ from typing import Protocol
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
     BUBBLE_MOVE_ID,
+    RATTATA_SPECIES_ID,
+    TACKLE_MOVE_ID,
+    TAIL_WHIP_MOVE_ID,
+    BattleMenuPhase,
     ItemId,
     MapId,
     NorthboundPhase,
@@ -25,8 +29,19 @@ from pokemon_red_completion.observation import (
     RawGameState,
     TravelBoundary,
 )
+from pokemon_red_completion.route_1_wild import (
+    Route1WildFleeEvidence,
+    flee_wild,
+    move_route_1_with_wild_flees,
+    move_with_wild_flees,
+)
 
 PEWTER_CHECKPOINT_COUNT = 10
+KAKUNA_SPECIES_ID = 0x71
+PIDGEY_SPECIES_ID = 0x24
+KAKUNA_TARGET_SPECIES_IDS = frozenset({KAKUNA_SPECIES_ID})
+ROUTE_1_TRAINING_TARGET_SPECIES_IDS = frozenset({PIDGEY_SPECIES_ID, RATTATA_SPECIES_ID})
+MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES = 20
 
 LAB_TO_PALLET_DIRECTIONS = ("down",) * 9
 PALLET_TO_ROUTE_1_DIRECTIONS = (
@@ -47,6 +62,35 @@ ROUTE_1_TO_VIRIDIAN_DIRECTIONS = (
     *(("up",) * 12),
     *(("left",) * 3),
     *(("up",) * 3),
+)
+VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS = (
+    *(("down",) * 2),
+    *(("right",) * 3),
+    *(("down",) * 6),
+)
+ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS = (
+    *(("up",) * 6),
+    *(("left",) * 3),
+    *(("up",) * 3),
+)
+VIRIDIAN_TO_CENTER_DIRECTIONS = (
+    *(("up",) * 5),
+    "left",
+    *(("up",) * 2),
+    "left",
+    *(("up",) * 2),
+    *(("right",) * 4),
+    "up",
+)
+VIRIDIAN_CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
+VIRIDIAN_CENTER_EXIT_DIRECTIONS = ("down",) * 5
+VIRIDIAN_CENTER_RETURN_DIRECTIONS = (
+    *(("left",) * 4),
+    *(("down",) * 2),
+    "right",
+    *(("down",) * 2),
+    "right",
+    *(("down",) * 5),
 )
 VIRIDIAN_TO_ROUTE_2_DIRECTIONS = (
     *(("up",) * 5),
@@ -128,6 +172,25 @@ PEWTER_TO_GYM_DIRECTIONS = (
     *(("right",) * 6),
     "up",
 )
+PEWTER_TO_CENTER_DIRECTIONS = (
+    *(("up",) * 9),
+    *(("left",) * 5),
+    "up",
+)
+PEWTER_CENTER_HEAL_APPROACH_DIRECTIONS = ("up",) * 4
+PEWTER_CENTER_EXIT_DIRECTIONS = ("down",) * 5
+PEWTER_CENTER_TO_GYM_DIRECTIONS = (
+    *(("right",) * 3),
+    *(("up",) * 4),
+    *(("right",) * 3),
+    *(("up",) * 9),
+    *(("left",) * 8),
+    *(("down",) * 3),
+    "left",
+    *(("down",) * 2),
+    *(("right",) * 6),
+    "up",
+)
 GYM_TO_BROCK_DIRECTIONS = (
     *(("up",) * 5),
     *(("left",) * 3),
@@ -156,6 +219,12 @@ class EmulatorState(Protocol):
 class PewterTiming:
     transition_wait_frames: int = 120
     route_1_seed_wait_frames: int = 6
+    route_1_wild_exit_stabilization_frames: int = 120
+    route_1_step_retry_wait_frames: int = 24
+    route_2_wild_exit_stabilization_frames: int = 120
+    route_2_step_retry_wait_frames: int = 24
+    forest_wild_exit_stabilization_frames: int = 120
+    forest_step_retry_wait_frames: int = 24
     encounter_wait_frames: int = 240
     battle_wait_frames: int = 180
     dialogue_wait_frames: int = 240
@@ -175,12 +244,19 @@ class PewterTiming:
     max_brock_battle_pulses: int = 100
     max_brock_reward_pulses: int = 40
     max_control_release_pulses: int = 10
+    max_route_1_wild_flees: int = 8
+    max_route_1_loss_recovery_wild_flees: int = 48
+    max_route_1_step_attempts: int = 8
+    max_route_1_target_search_cycles: int = 64
+    max_route_2_wild_flees: int = 8
+    max_route_2_step_attempts: int = 8
+    max_forest_wild_flees: int = 12
+    max_forest_step_attempts: int = 8
+    max_forest_target_search_cycles: int = 64
+    heal_dialogue_pulses: int = 9
 
     def __post_init__(self) -> None:
-        for name, value in (
-            (name, getattr(self, name))
-            for name in self.__dataclass_fields__
-        ):
+        for name, value in ((name, getattr(self, name)) for name in self.__dataclass_fields__):
             if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
                 raise ValueError(f"{name} must be a positive integer")
 
@@ -210,6 +286,7 @@ class PewterChapterReport:
     forest_entered: RawGameState
     forest_cleared: RawGameState
     pewter_reached: RawGameState
+    pewter_center_healed: RawGameState
     gym_entered: RawGameState
     brock_battle: RawGameState
     brock_defeated: RawGameState
@@ -218,6 +295,19 @@ class PewterChapterReport:
     brock_victory_evidence: PewterChapterState
     reached_boundaries: tuple[TravelBoundary, ...]
     saw_brock_battle: bool
+    route_1_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_1_movement_retries: int
+    route_2_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_2_movement_retries: int
+    forest_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    forest_movement_retries: int
+    lab_rival_loss_recovery_required: bool
+    rival_loss_recovery_search_attempts: tuple[int, ...]
+    rival_loss_recovery_species_ids: tuple[int, ...]
+    rival_loss_recovery_level: int | None
+    rival_loss_recovery_heals: tuple[RawGameState, ...]
+    forest_target_search_attempts: tuple[int, ...]
+    forest_training_species_ids: tuple[int, ...]
     overworld_control_verified: bool
     frames_executed: int
     actions_executed: int
@@ -225,16 +315,50 @@ class PewterChapterReport:
 
     @property
     def passed(self) -> bool:
+        recovery_battles = len(self.rival_loss_recovery_search_attempts)
+        expected_forest_species = (
+            () if self.lab_rival_loss_recovery_required else (KAKUNA_SPECIES_ID,) * 3
+        )
         return (
             self.pokedex_evidence.pokedex_snapshot
             and self.reached_boundaries
             == tuple(
-                boundary
-                for boundary in TravelBoundary
-                if boundary is not TravelBoundary.UNKNOWN
+                boundary for boundary in TravelBoundary if boundary is not TravelBoundary.UNKNOWN
             )
             and self.gym_entry_evidence.brock_ready_snapshot
+            and _is_healed_brock_party(self.pewter_center_healed)
             and self.saw_brock_battle
+            and all(item.verified for item in self.route_1_wild_flees)
+            and self.route_1_movement_retries >= 0
+            and all(item.verified for item in self.route_2_wild_flees)
+            and self.route_2_movement_retries >= 0
+            and all(item.verified for item in self.forest_wild_flees)
+            and self.forest_movement_retries >= 0
+            and (
+                1 <= recovery_battles <= MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES
+                if self.lab_rival_loss_recovery_required
+                else recovery_battles == 0
+            )
+            and all(attempts > 0 for attempts in self.rival_loss_recovery_search_attempts)
+            and len(self.rival_loss_recovery_species_ids) == recovery_battles
+            and all(
+                species_id in ROUTE_1_TRAINING_TARGET_SPECIES_IDS
+                for species_id in self.rival_loss_recovery_species_ids
+            )
+            and self.rival_loss_recovery_level
+            == (9 if self.lab_rival_loss_recovery_required else None)
+            and (
+                len(self.rival_loss_recovery_heals) == recovery_battles
+                and all(_is_healed_rival_loss_party(raw) for raw in self.rival_loss_recovery_heals)
+                and self.rival_loss_recovery_heals[-1].first_party_level
+                == self.rival_loss_recovery_level
+                if self.lab_rival_loss_recovery_required
+                else not self.rival_loss_recovery_heals
+            )
+            and len(self.forest_target_search_attempts)
+            == (0 if self.lab_rival_loss_recovery_required else 3)
+            and all(attempts > 0 for attempts in self.forest_target_search_attempts)
+            and self.forest_training_species_ids == expected_forest_species
             and self.brock_battle_evidence.brock_battle_snapshot
             and self.brock_victory_evidence.brock_victory_snapshot
             and self.overworld_control_verified
@@ -281,16 +405,39 @@ class PewterChapterReport:
                 "ordered_boundaries_verified": len(self.reached_boundaries),
                 "ordered_boundaries_total": len(TravelBoundary) - 1,
                 "brock_battle_observed": self.saw_brock_battle,
+                "route_1_wild_flees": [item.public_dict() for item in self.route_1_wild_flees],
+                "route_1_movement_retries": self.route_1_movement_retries,
+                "route_2_wild_flees": [item.public_dict() for item in self.route_2_wild_flees],
+                "route_2_movement_retries": self.route_2_movement_retries,
+                "forest_wild_flees": [item.public_dict() for item in self.forest_wild_flees],
+                "forest_movement_retries": self.forest_movement_retries,
+                "lab_rival_loss_recovery_required": (self.lab_rival_loss_recovery_required),
+                "rival_loss_recovery_search_attempts": list(
+                    self.rival_loss_recovery_search_attempts
+                ),
+                "rival_loss_recovery_species_ids": list(self.rival_loss_recovery_species_ids),
+                "rival_loss_recovery_level": self.rival_loss_recovery_level,
+                "rival_loss_recovery_heals": [
+                    {
+                        "state": _public_state(healed),
+                        "tackle_pp": _move_pp(healed, TACKLE_MOVE_ID),
+                        "tail_whip_pp": _move_pp(healed, TAIL_WHIP_MOVE_ID),
+                        "verified": _is_healed_rival_loss_party(healed),
+                    }
+                    for healed in self.rival_loss_recovery_heals
+                ],
+                "forest_target_search_attempts": list(self.forest_target_search_attempts),
+                "forest_training_species_ids": list(self.forest_training_species_ids),
             },
             "brock": {
+                "pre_battle_healing_verified": _is_healed_brock_party(self.pewter_center_healed),
                 "victory_verified": self.brock_victory_evidence.brock_victory_snapshot,
                 "boulder_badge_verified": (
                     self.brock_victory_evidence.boulder_badge
                     and self.brock_victory_evidence.boulder_badge_mirror
                 ),
                 "tm34_verified": (
-                    self.brock_victory_evidence.got_tm34
-                    and self.brock_victory_evidence.tm34_in_bag
+                    self.brock_victory_evidence.got_tm34 and self.brock_victory_evidence.tm34_in_bag
                 ),
                 "overworld_control_verified": self.overworld_control_verified,
                 "squirtle_level": self.brock_defeated.first_party_level,
@@ -323,8 +470,11 @@ def run_pewter_chapter(
     *,
     timing: PewterTiming = DEFAULT_PEWTER_TIMING,
     progress: ProgressSink | None = None,
+    lab_rival_loss_recovery_required: bool = False,
 ) -> PewterChapterReport:
     """Continue one clean run from the verified Pokédex gate through Brock."""
+    if type(lab_rival_loss_recovery_required) is not bool:  # noqa: E721
+        raise TypeError("lab_rival_loss_recovery_required must be a bool")
     start_frames = emulator.frame_count
     chapter_executor = _CountingChapterExecutor(executor)
     starting_raw = reader.read()
@@ -347,7 +497,20 @@ def run_pewter_chapter(
     _wait(chapter_executor, timing.transition_wait_frames)
     _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
     _wait(chapter_executor, timing.route_1_seed_wait_frames)
-    _move(chapter_executor, reader, ROUTE_1_TO_VIRIDIAN_DIRECTIONS, "Route 1 northbound")
+    _, route_1_wild_flees, route_1_movement_retries = _move_route_1_with_wild_flees(
+        chapter_executor,
+        reader,
+        ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+        "Route 1 northbound",
+        maximum_flees=timing.max_route_1_wild_flees,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
+    rival_loss_recovery_search_attempts: tuple[int, ...] = ()
+    rival_loss_recovery_species_ids: tuple[int, ...] = ()
+    rival_loss_recovery_level: int | None = None
+    rival_loss_recovery_heals: tuple[RawGameState, ...] = ()
     _wait(chapter_executor, timing.transition_wait_frames)
     viridian_reached, _ = _observe_boundary(
         reader,
@@ -355,6 +518,108 @@ def run_pewter_chapter(
         TravelBoundary.VIRIDIAN_SOUTH_EDGE,
     )
     _emit(progress, emulator, "viridian_northbound", "Reached Viridian City northbound", 2)
+
+    if lab_rival_loss_recovery_required:
+        _expect_party(
+            viridian_reached,
+            level=5,
+            minimum_hp=1,
+            label="authenticated lab-rival loss at Viridian",
+        )
+        more_flees, more_retries = _enter_route_1_loss_recovery(
+            chapter_executor,
+            reader,
+            timing,
+            used_flees=len(route_1_wild_flees),
+        )
+        route_1_wild_flees += more_flees
+        route_1_movement_retries += more_retries
+
+        for recovery_battle in range(1, MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES + 1):
+            label = f"lab-rival loss Route 1 lesson {recovery_battle}"
+            recovery_encounter, more_flees, more_retries, search_attempts, step_consumed = (
+                _seek_route_1_training_battle(
+                    chapter_executor,
+                    reader,
+                    "up",
+                    timing.route_1_seed_wait_frames,
+                    timing,
+                    label,
+                    used_flees=len(route_1_wild_flees),
+                )
+            )
+            route_1_wild_flees += more_flees
+            route_1_movement_retries += more_retries
+            rival_loss_recovery_search_attempts += (search_attempts,)
+            rival_loss_recovery_species_ids += (recovery_encounter.enemy_species_id or 0,)
+            _finish_battle(
+                chapter_executor,
+                reader,
+                expected_battle_state=1,
+                max_pulses=timing.max_battle_pulses,
+                timing=timing,
+                label=label,
+            )
+            if step_consumed:
+                _, more_flees, more_retries = _move_route_1_with_wild_flees(
+                    chapter_executor,
+                    reader,
+                    ("down",),
+                    f"{label} origin return",
+                    maximum_flees=(
+                        timing.max_route_1_loss_recovery_wild_flees - len(route_1_wild_flees)
+                    ),
+                    stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+                    maximum_step_attempts=timing.max_route_1_step_attempts,
+                    step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+                )
+                route_1_wild_flees += more_flees
+                route_1_movement_retries += more_retries
+            rival_loss_recovery_level = reader.read().first_party_level
+            if rival_loss_recovery_level not in {5, 6, 7, 8, 9}:
+                raise PewterChapterError(
+                    "Route 1 loss recovery reached an unsupported starter level."
+                )
+            more_flees, more_retries = _return_route_1_loss_recovery(
+                chapter_executor,
+                reader,
+                timing,
+                used_flees=len(route_1_wild_flees),
+            )
+            route_1_wild_flees += more_flees
+            route_1_movement_retries += more_retries
+            rival_loss_recovery_heals += (
+                _heal_viridian_loss_recovery(
+                    chapter_executor,
+                    reader,
+                    timing,
+                ),
+            )
+            if rival_loss_recovery_level == 9:
+                break
+            if recovery_battle < MAX_LAB_RIVAL_LOSS_RECOVERY_BATTLES:
+                more_flees, more_retries = _enter_route_1_loss_recovery(
+                    chapter_executor,
+                    reader,
+                    timing,
+                    used_flees=len(route_1_wild_flees),
+                )
+                route_1_wild_flees += more_flees
+                route_1_movement_retries += more_retries
+        _expect_party(
+            reader.read(),
+            level=9,
+            minimum_hp=1,
+            label="Route 1 lab-rival loss recovery",
+            required_move=BUBBLE_MOVE_ID,
+        )
+    else:
+        _expect_party(
+            viridian_reached,
+            level=6,
+            minimum_hp=1,
+            label="lab-rival victory at Viridian",
+        )
 
     _move(chapter_executor, reader, VIRIDIAN_TO_ROUTE_2_DIRECTIONS, "Viridian north route")
     _wait(chapter_executor, timing.transition_wait_frames)
@@ -365,11 +630,18 @@ def run_pewter_chapter(
     )
     _emit(progress, emulator, "route_2_reached", "Reached Route 2", 3)
 
-    _move(
+    _, route_2_wild_flees, route_2_movement_retries = move_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
         "Route 2 forest-gate route",
+        expected_map_id=MapId.ROUTE_2,
+        route_name="Route 2",
+        maximum_flees=timing.max_route_2_wild_flees,
+        stabilization_frames=timing.route_2_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_2_step_attempts,
+        step_retry_wait_frames=timing.route_2_step_retry_wait_frames,
+        error_type=PewterChapterError,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     forest_gate_reached, _ = _observe_boundary(
@@ -393,75 +665,57 @@ def run_pewter_chapter(
     )
     _emit(progress, emulator, "forest_entered", "Entered Viridian Forest", 5)
 
-    _move(chapter_executor, reader, FOREST_ROUTE_DIRECTIONS[:90], "forest training route")
-    _trigger_wild_battle(
+    _, forest_wild_flees, forest_movement_retries = _move_forest_with_wild_flees(
         chapter_executor,
         reader,
-        "down",
-        timing.first_kakuna_seed_wait_frames,
-        timing,
-        "first Kakuna",
-    )
-    _finish_battle(
-        chapter_executor,
-        reader,
-        expected_battle_state=1,
-        max_pulses=timing.max_battle_pulses,
+        FOREST_ROUTE_DIRECTIONS[:90],
+        "forest training route",
         timing=timing,
-        label="first Kakuna",
+        used_flees=0,
     )
-    _expect_party(reader.read(), level=7, minimum_hp=1, label="first Kakuna")
-
-    _move(chapter_executor, reader, ("down",) * 2, "second Kakuna approach")
-    _trigger_wild_battle(
-        chapter_executor,
-        reader,
-        "down",
-        timing.second_kakuna_seed_wait_frames,
-        timing,
-        "second Kakuna",
-    )
-    _finish_battle(
-        chapter_executor,
-        reader,
-        expected_battle_state=1,
-        max_pulses=timing.max_battle_pulses,
-        timing=timing,
-        label="second Kakuna",
-    )
-    _expect_party(reader.read(), level=7, minimum_hp=1, label="second Kakuna")
-
-    _move(chapter_executor, reader, ("down",) * 2, "third Kakuna approach")
-    _trigger_wild_battle(
-        chapter_executor,
-        reader,
-        "down",
-        timing.third_kakuna_seed_wait_frames,
-        timing,
-        "third Kakuna",
-    )
-    _finish_battle(
-        chapter_executor,
-        reader,
-        expected_battle_state=1,
-        max_pulses=timing.max_battle_pulses,
-        timing=timing,
-        label="third Kakuna",
-    )
-    _expect_party(
-        reader.read(),
-        level=8,
-        minimum_hp=1,
-        required_move=BUBBLE_MOVE_ID,
-        label="third Kakuna",
-    )
-
-    _move(
-        chapter_executor,
-        reader,
-        FOREST_ROUTE_DIRECTIONS[97:117],
-        "mandatory Bug Catcher approach",
-    )
+    forest_target_search_attempts: tuple[int, ...] = ()
+    forest_training_species_ids: tuple[int, ...] = ()
+    if lab_rival_loss_recovery_required:
+        _expect_party(
+            reader.read(),
+            level=9,
+            minimum_hp=1,
+            required_move=BUBBLE_MOVE_ID,
+            label="Route 1 capability-ready Forest entry",
+        )
+        _, more_flees, more_retries = _move_forest_with_wild_flees(
+            chapter_executor,
+            reader,
+            FOREST_ROUTE_DIRECTIONS[90:117],
+            "capability-ready Forest traversal",
+            timing=timing,
+            used_flees=len(forest_wild_flees),
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
+    else:
+        (
+            forest_wild_flees,
+            forest_movement_retries,
+            forest_target_search_attempts,
+            forest_training_species_ids,
+        ) = _run_forest_kakuna_curriculum(
+            chapter_executor,
+            reader,
+            timing,
+            wild_flees=forest_wild_flees,
+            movement_retries=forest_movement_retries,
+        )
+        _, more_flees, more_retries = _move_forest_with_wild_flees(
+            chapter_executor,
+            reader,
+            FOREST_ROUTE_DIRECTIONS[97:117],
+            "mandatory Bug Catcher approach",
+            timing=timing,
+            used_flees=len(forest_wild_flees),
+        )
+        forest_wild_flees += more_flees
+        forest_movement_retries += more_retries
     _enter_trainer_battle(
         chapter_executor,
         reader,
@@ -477,6 +731,7 @@ def run_pewter_chapter(
         label="Bug Catcher opening Tackle",
     )
     _select_third_move(chapter_executor, reader, timing, "Bug Catcher Bubble")
+    _select_first_move(chapter_executor, reader, timing, "Bug Catcher Tackle continuation")
     _finish_battle(
         chapter_executor,
         reader,
@@ -484,13 +739,45 @@ def run_pewter_chapter(
         max_pulses=timing.max_battle_pulses,
         timing=timing,
         label="Viridian Forest Bug Catcher",
+        continuation=_select_bug_catcher_continuation,
     )
-    _expect_brock_party_ready(reader.read(), "Viridian Forest exit")
+    _expect_brock_transit_ready(
+        reader.read(),
+        "Viridian Forest exit",
+        authenticated_loss_recovery=lab_rival_loss_recovery_required,
+    )
 
-    _move(chapter_executor, reader, ("up",) * 5, "forest north route prefix")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",) * 5,
+        "forest north route prefix",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _wait(chapter_executor, timing.forest_exit_seed_wait_frames)
-    _move(chapter_executor, reader, ("up",) * 13, "forest north route")
-    _move(chapter_executor, reader, ("up",), "forest north-gate transition")
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",) * 13,
+        "forest north route",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
+    _, more_flees, more_retries = _move_forest_with_wild_flees(
+        chapter_executor,
+        reader,
+        ("up",),
+        "forest north-gate transition",
+        timing=timing,
+        used_flees=len(forest_wild_flees),
+    )
+    forest_wild_flees += more_flees
+    forest_movement_retries += more_retries
     _wait(chapter_executor, timing.transition_wait_frames)
     forest_cleared, _ = _observe_boundary(
         reader,
@@ -508,19 +795,27 @@ def run_pewter_chapter(
     _wait(chapter_executor, timing.transition_wait_frames)
     _observe_boundary(reader, tracker, TravelBoundary.ROUTE_2_NORTH_RETURN)
 
-    _move(
+    _, more_flees, more_retries = _move_route_2_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_2_TO_PEWTER_PREFIX_DIRECTIONS,
         "upper Route 2 prefix",
+        timing=timing,
+        used_flees=len(route_2_wild_flees),
     )
+    route_2_wild_flees += more_flees
+    route_2_movement_retries += more_retries
     _wait(chapter_executor, timing.pewter_seed_wait_frames)
-    _move(
+    _, more_flees, more_retries = _move_route_2_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_2_TO_PEWTER_SUFFIX_DIRECTIONS,
         "upper Route 2 to Pewter",
+        timing=timing,
+        used_flees=len(route_2_wild_flees),
     )
+    route_2_wild_flees += more_flees
+    route_2_movement_retries += more_retries
     _wait(chapter_executor, timing.transition_wait_frames)
     pewter_reached, _ = _observe_boundary(
         reader,
@@ -529,8 +824,27 @@ def run_pewter_chapter(
     )
     _emit(progress, emulator, "pewter_reached", "Reached Pewter City", 7)
 
-    _move(chapter_executor, reader, PEWTER_TO_GYM_DIRECTIONS, "Pewter Gym route")
+    _move(
+        chapter_executor,
+        reader,
+        PEWTER_TO_CENTER_DIRECTIONS,
+        "Pewter Center route",
+    )
     _wait(chapter_executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.PEWTER_POKECENTER, 3, 7, "Pewter Center")
+    pewter_center_healed = _heal_pewter_center(
+        chapter_executor,
+        reader,
+        timing,
+    )
+    _move(
+        chapter_executor,
+        reader,
+        PEWTER_CENTER_TO_GYM_DIRECTIONS,
+        "Pewter Center to Gym route",
+    )
+    _wait(chapter_executor, timing.transition_wait_frames)
+    _expect_brock_party_ready(reader.read(), "Pewter Gym entrance")
     gym_entered, gym_entry_evidence = _observe_boundary(
         reader,
         tracker,
@@ -598,6 +912,7 @@ def run_pewter_chapter(
         forest_entered=forest_entered,
         forest_cleared=forest_cleared,
         pewter_reached=pewter_reached,
+        pewter_center_healed=pewter_center_healed,
         gym_entered=gym_entered,
         brock_battle=brock_battle,
         brock_defeated=brock_defeated,
@@ -606,6 +921,19 @@ def run_pewter_chapter(
         brock_victory_evidence=brock_victory_evidence,
         reached_boundaries=tracker.reached_boundaries,
         saw_brock_battle=tracker.saw_brock_battle,
+        route_1_wild_flees=route_1_wild_flees,
+        route_1_movement_retries=route_1_movement_retries,
+        route_2_wild_flees=route_2_wild_flees,
+        route_2_movement_retries=route_2_movement_retries,
+        forest_wild_flees=forest_wild_flees,
+        forest_movement_retries=forest_movement_retries,
+        lab_rival_loss_recovery_required=lab_rival_loss_recovery_required,
+        rival_loss_recovery_search_attempts=rival_loss_recovery_search_attempts,
+        rival_loss_recovery_species_ids=rival_loss_recovery_species_ids,
+        rival_loss_recovery_level=rival_loss_recovery_level,
+        rival_loss_recovery_heals=rival_loss_recovery_heals,
+        forest_target_search_attempts=forest_target_search_attempts,
+        forest_training_species_ids=forest_training_species_ids,
         overworld_control_verified=True,
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=chapter_executor.actions_executed,
@@ -625,37 +953,443 @@ def _move(
     state = reader.read()
     for step, direction in enumerate(directions, start=1):
         if state.battle_state:
-            raise PewterChapterError(
-                f"Unexpected battle interrupted {label} before step {step}."
-            )
+            raise PewterChapterError(f"Unexpected battle interrupted {label} before step {step}.")
         executor.execute(MacroAction(MacroActionKind.MOVE, direction))
         state = reader.read()
         if state.battle_state:
-            raise PewterChapterError(
-                f"Unexpected battle interrupted {label} at step {step}."
-            )
+            raise PewterChapterError(f"Unexpected battle interrupted {label} at step {step}.")
         if state.first_party_hp == 0:
             raise PewterChapterError(f"Squirtle fainted during {label}.")
     return state
 
 
-def _trigger_wild_battle(
+def _move_route_1_with_wild_flees(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    maximum_flees: int,
+    stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    return move_route_1_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        maximum_flees=maximum_flees,
+        stabilization_frames=stabilization_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
+        error_type=PewterChapterError,
+    )
+
+
+def _enter_route_1_loss_recovery(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+    *,
+    used_flees: int,
+) -> tuple[tuple[Route1WildFleeEvidence, ...], int]:
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 21, 35, "Viridian recovery anchor")
+    _move(executor, reader, ("down",), "Viridian loss-recovery Route 1 entry")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entry")
+    _, flees, retries = _move_route_1_with_wild_flees(
+        executor,
+        reader,
+        VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS,
+        "Route 1 loss-recovery approach",
+        maximum_flees=timing.max_route_1_loss_recovery_wild_flees - used_flees,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
+    _expect_position(reader.read(), MapId.ROUTE_1, 14, 8, "Route 1 recovery grass")
+    return flees, retries
+
+
+def _return_route_1_loss_recovery(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+    *,
+    used_flees: int,
+) -> tuple[tuple[Route1WildFleeEvidence, ...], int]:
+    _expect_position(reader.read(), MapId.ROUTE_1, 14, 8, "Route 1 recovery grass")
+    _, flees, retries = _move_route_1_with_wild_flees(
+        executor,
+        reader,
+        ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS,
+        "Route 1 loss-recovery return",
+        maximum_flees=timing.max_route_1_loss_recovery_wild_flees - used_flees,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 21, 35, "Route 1 recovery return")
+    return flees, retries
+
+
+def _move_route_2_with_wild_flees(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    timing: PewterTiming,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    if not 0 <= used_flees <= timing.max_route_2_wild_flees:
+        raise PewterChapterError("Route 2 traversal has invalid prior flee accounting.")
+    return move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=MapId.ROUTE_2,
+        route_name="Route 2",
+        maximum_flees=timing.max_route_2_wild_flees - used_flees,
+        stabilization_frames=timing.route_2_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_2_step_attempts,
+        step_retry_wait_frames=timing.route_2_step_retry_wait_frames,
+        error_type=PewterChapterError,
+    )
+
+
+def _move_forest_with_wild_flees(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    timing: PewterTiming,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    if not 0 <= used_flees <= timing.max_forest_wild_flees:
+        raise PewterChapterError("Forest traversal has invalid prior flee accounting.")
+    return move_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        expected_map_id=MapId.VIRIDIAN_FOREST,
+        route_name="Viridian Forest",
+        maximum_flees=timing.max_forest_wild_flees - used_flees,
+        stabilization_frames=timing.forest_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_forest_step_attempts,
+        step_retry_wait_frames=timing.forest_step_retry_wait_frames,
+        error_type=PewterChapterError,
+    )
+
+
+def _run_forest_kakuna_curriculum(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+    *,
+    wild_flees: tuple[Route1WildFleeEvidence, ...],
+    movement_retries: int,
+) -> tuple[
+    tuple[Route1WildFleeEvidence, ...],
+    int,
+    tuple[int, ...],
+    tuple[int, ...],
+]:
+    """Preserve the qualified victory-path three-Kakuna curriculum."""
+
+    _expect_party(reader.read(), level=6, minimum_hp=1, label="Forest training origin")
+    search_attempts_receipt: tuple[int, ...] = ()
+    species_receipt: tuple[int, ...] = ()
+    lessons = (
+        (
+            "first Kakuna",
+            (),
+            timing.first_kakuna_seed_wait_frames,
+            7,
+            None,
+        ),
+        (
+            "second Kakuna",
+            ("down",) * 2,
+            timing.second_kakuna_seed_wait_frames,
+            7,
+            None,
+        ),
+        (
+            "third Kakuna",
+            ("down",) * 2,
+            timing.third_kakuna_seed_wait_frames,
+            8,
+            BUBBLE_MOVE_ID,
+        ),
+    )
+    for label, approach, seed_wait_frames, expected_level, required_move in lessons:
+        if approach:
+            _, more_flees, more_retries = _move_forest_with_wild_flees(
+                executor,
+                reader,
+                approach,
+                f"{label} approach",
+                timing=timing,
+                used_flees=len(wild_flees),
+            )
+            wild_flees += more_flees
+            movement_retries += more_retries
+        encounter, more_flees, more_retries, search_attempts, step_consumed = (
+            _seek_forest_training_battle(
+                executor,
+                reader,
+                "down",
+                seed_wait_frames,
+                timing,
+                label,
+                used_flees=len(wild_flees),
+            )
+        )
+        wild_flees += more_flees
+        movement_retries += more_retries
+        search_attempts_receipt += (search_attempts,)
+        species_receipt += (encounter.enemy_species_id or 0,)
+        _finish_battle(
+            executor,
+            reader,
+            expected_battle_state=1,
+            max_pulses=timing.max_battle_pulses,
+            timing=timing,
+            label=label,
+        )
+        if not step_consumed:
+            _, more_flees, more_retries = _move_forest_with_wild_flees(
+                executor,
+                reader,
+                ("down",),
+                f"{label} deferred step",
+                timing=timing,
+                used_flees=len(wild_flees),
+            )
+            wild_flees += more_flees
+            movement_retries += more_retries
+        _expect_party(
+            reader.read(),
+            level=expected_level,
+            minimum_hp=1,
+            required_move=required_move,
+            label=label,
+        )
+    return wild_flees, movement_retries, search_attempts_receipt, species_receipt
+
+
+def _seek_forest_training_battle(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     direction: str,
     seed_wait_frames: int,
     timing: PewterTiming,
     label: str,
-) -> RawGameState:
+    *,
+    used_flees: int,
+    target_species_ids: frozenset[int] = KAKUNA_TARGET_SPECIES_IDS,
+    maximum_target_level: int | None = None,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
+    return _seek_training_battle(
+        executor,
+        reader,
+        direction,
+        seed_wait_frames,
+        timing,
+        label,
+        expected_map_id=MapId.VIRIDIAN_FOREST,
+        route_name="Viridian Forest",
+        used_flees=used_flees,
+        maximum_flees=timing.max_forest_wild_flees,
+        maximum_search_cycles=timing.max_forest_target_search_cycles,
+        maximum_step_attempts=timing.max_forest_step_attempts,
+        step_retry_wait_frames=timing.forest_step_retry_wait_frames,
+        stabilization_frames=timing.forest_wild_exit_stabilization_frames,
+        target_species_ids=target_species_ids,
+        maximum_target_level=maximum_target_level,
+    )
+
+
+def _seek_route_1_training_battle(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    seed_wait_frames: int,
+    timing: PewterTiming,
+    label: str,
+    *,
+    used_flees: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
+    return _seek_training_battle(
+        executor,
+        reader,
+        direction,
+        seed_wait_frames,
+        timing,
+        label,
+        expected_map_id=MapId.ROUTE_1,
+        route_name="Route 1",
+        used_flees=used_flees,
+        maximum_flees=timing.max_route_1_loss_recovery_wild_flees,
+        maximum_search_cycles=timing.max_route_1_target_search_cycles,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        target_species_ids=ROUTE_1_TRAINING_TARGET_SPECIES_IDS,
+        maximum_target_level=4,
+    )
+
+
+def _seek_training_battle(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    seed_wait_frames: int,
+    timing: PewterTiming,
+    label: str,
+    *,
+    expected_map_id: MapId,
+    route_name: str,
+    used_flees: int,
+    maximum_flees: int,
+    maximum_search_cycles: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+    stabilization_frames: int,
+    target_species_ids: frozenset[int],
+    maximum_target_level: int | None,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int, int, bool]:
+    """Seek one safe target while preserving one exact route coordinate."""
+
+    if direction not in {"up", "down", "left", "right"}:
+        raise PewterChapterError(f"{label} has an invalid search direction.")
+    if not 0 <= used_flees <= maximum_flees:
+        raise PewterChapterError(f"{label} has invalid prior flee accounting.")
+    if not target_species_ids or any(
+        not isinstance(species_id, int)
+        or isinstance(species_id, bool)
+        or not 0 <= species_id <= 0xFF
+        for species_id in target_species_ids
+    ):
+        raise PewterChapterError(f"{label} has invalid target species.")
+    if maximum_target_level is not None and (
+        not isinstance(maximum_target_level, int)
+        or isinstance(maximum_target_level, bool)
+        or maximum_target_level <= 0
+    ):
+        raise PewterChapterError(f"{label} has an invalid target-level ceiling.")
     _wait(executor, seed_wait_frames)
-    if reader.read().battle_state:
+    origin = reader.read()
+    if origin.battle_state:
         raise PewterChapterError(f"{label} began before its intentional trigger.")
-    executor.execute(MacroAction(MacroActionKind.MOVE, direction))
-    _wait(executor, timing.encounter_wait_frames)
-    raw = reader.read()
-    if raw.battle_state != 1:
-        raise PewterChapterError(f"{label} failed its expected wild-battle gate.")
-    return raw
+    if origin.map_id != expected_map_id or origin.player_x is None or origin.player_y is None:
+        raise PewterChapterError(f"{label} lacks its exact {route_name} search origin.")
+    origin_position = (origin.player_x, origin.player_y)
+    flees: tuple[Route1WildFleeEvidence, ...] = ()
+    movement_retries = 0
+    opposite = {
+        "up": "down",
+        "down": "up",
+        "left": "right",
+        "right": "left",
+    }[direction]
+
+    for search_attempt in range(1, maximum_search_cycles + 1):
+        before = reader.read()
+        if (
+            before.battle_state
+            or before.map_id != expected_map_id
+            or (before.player_x, before.player_y) != origin_position
+        ):
+            raise PewterChapterError(f"{label} lost its bounded search origin.")
+
+        observed: RawGameState | None = None
+        for movement_attempt in range(1, maximum_step_attempts + 1):
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            _wait(executor, timing.encounter_wait_frames)
+            candidate = reader.read()
+            if candidate.battle_state or _direction_progressed(before, candidate, direction):
+                observed = candidate
+                break
+            if (
+                candidate.map_id != expected_map_id
+                or (candidate.player_x, candidate.player_y) != origin_position
+                or candidate.first_party_hp == 0
+            ):
+                raise PewterChapterError(f"{label} drifted during its search step.")
+            if movement_attempt == maximum_step_attempts:
+                raise PewterChapterError(f"{label} exhausted its search-step retry bound.")
+            movement_retries += 1
+            _wait(executor, step_retry_wait_frames)
+        if observed is None:  # pragma: no cover - loop always assigns or raises
+            raise AssertionError("unreachable target-search movement")
+
+        consumed = _direction_progressed(before, observed, direction)
+        if observed.battle_state:
+            if observed.battle_state != 1 or observed.map_id != expected_map_id:
+                raise PewterChapterError(f"{label} encountered a non-wild battle while searching.")
+            if not consumed and (observed.player_x, observed.player_y) != origin_position:
+                raise PewterChapterError(f"{label} wild encounter drifted from its search step.")
+            target_level_matches = maximum_target_level is None or (
+                observed.enemy_level is not None and observed.enemy_level <= maximum_target_level
+            )
+            if observed.enemy_species_id in target_species_ids and target_level_matches:
+                return observed, flees, movement_retries, search_attempt, consumed
+            if used_flees + len(flees) >= maximum_flees:
+                raise PewterChapterError(f"{label} exhausted the shared {route_name} flee budget.")
+            flees += (
+                flee_wild(
+                    executor,
+                    reader,
+                    observed,
+                    expected_map_id=expected_map_id,
+                    route_name=route_name,
+                    stabilization_frames=stabilization_frames,
+                    error_type=PewterChapterError,
+                ),
+            )
+
+        if consumed:
+            _, return_flees, return_retries = move_with_wild_flees(
+                executor,
+                reader,
+                (opposite,),
+                f"{label} search-origin return",
+                expected_map_id=expected_map_id,
+                route_name=route_name,
+                maximum_flees=maximum_flees - used_flees - len(flees),
+                stabilization_frames=stabilization_frames,
+                maximum_step_attempts=maximum_step_attempts,
+                step_retry_wait_frames=step_retry_wait_frames,
+                error_type=PewterChapterError,
+            )
+            flees += return_flees
+            movement_retries += return_retries
+
+    raise PewterChapterError(f"{label} exhausted its bounded target-species search.")
+
+
+def _direction_progressed(before: RawGameState, after: RawGameState, direction: str) -> bool:
+    if before.map_id != after.map_id:
+        return True
+    if None in (before.player_x, before.player_y, after.player_x, after.player_y):
+        return False
+    assert before.player_x is not None
+    assert before.player_y is not None
+    assert after.player_x is not None
+    assert after.player_y is not None
+    return {
+        "up": (after.player_x == before.player_x and after.player_y < before.player_y),
+        "down": (after.player_x == before.player_x and after.player_y > before.player_y),
+        "left": (after.player_y == before.player_y and after.player_x < before.player_x),
+        "right": (after.player_y == before.player_y and after.player_x > before.player_x),
+    }.get(direction, False)
 
 
 def _enter_trainer_battle(
@@ -700,26 +1434,122 @@ def _advance_until_pp_decreases(
     raise PewterChapterError(f"{label} failed its bounded PP-decrement gate.")
 
 
+def _select_move_by_slot(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+    *,
+    move_id: int,
+    one_based_slot: int,
+    label: str,
+) -> None:
+    before = _move_pp(reader.read(), move_id)
+    if before is None or before < 1:
+        raise PewterChapterError(f"{label} was unavailable.")
+    for _ in range(48):
+        raw = reader.read()
+        if raw.battle_state not in {1, 2}:
+            raise PewterChapterError(f"{label} left battle before its menu gate.")
+        menu = reader.read_battle_menu_state(raw)
+        if menu.phase is BattleMenuPhase.MOVE:
+            break
+        if menu.phase is BattleMenuPhase.MAIN:
+            command = menu.selected_main_command
+            if command == 0:
+                executor.execute(MacroAction(MacroActionKind.CONFIRM))
+                _wait(executor, timing.fight_menu_wait_frames)
+                continue
+            if command is None:
+                raise PewterChapterError(f"{label} lacked a MAIN-menu cursor.")
+            direction = {1: "up", 2: "left", 3: "up"}.get(command)
+            if direction is None:
+                raise PewterChapterError(f"{label} exposed an invalid MAIN-menu cursor.")
+            executor.execute(MacroAction(MacroActionKind.MOVE, direction))
+            _wait(executor, timing.move_cursor_wait_frames)
+            continue
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
+    else:
+        raise PewterChapterError(f"{label} never reached its MOVE-menu gate.")
+
+    for _ in range(8):
+        menu = reader.read_battle_menu_state(reader.read())
+        if menu.phase is not BattleMenuPhase.MOVE:
+            raise PewterChapterError(f"{label} left the MOVE menu before selection.")
+        if menu.selected_move_slot == one_based_slot:
+            break
+        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
+        _wait(executor, timing.move_cursor_wait_frames)
+    else:
+        raise PewterChapterError(f"{label} never selected its declared move slot.")
+
+    for _ in range(timing.max_attack_start_pulses):
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.selected_move_wait_frames)
+        after = _move_pp(reader.read(), move_id)
+        if after is not None and after < before:
+            return
+    raise PewterChapterError(f"{label} failed its persistent move-PP gate.")
+
+
+def _select_first_move(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+    label: str,
+) -> None:
+    _select_move_by_slot(
+        executor,
+        reader,
+        timing,
+        move_id=TACKLE_MOVE_ID,
+        one_based_slot=1,
+        label=label,
+    )
+
+
 def _select_third_move(
     executor: _CountingChapterExecutor,
     reader: PokemonRedStateReader,
     timing: PewterTiming,
     label: str,
 ) -> None:
-    before = _move_pp(reader.read(), BUBBLE_MOVE_ID)
-    if before is None or before < 1:
-        raise PewterChapterError(f"{label} was unavailable.")
-    executor.execute(MacroAction(MacroActionKind.CONFIRM))
-    _wait(executor, timing.fight_menu_wait_frames)
-    executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
-    _wait(executor, timing.move_cursor_wait_frames)
-    executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
-    _wait(executor, timing.move_cursor_wait_frames)
-    executor.execute(MacroAction(MacroActionKind.CONFIRM))
-    _wait(executor, timing.selected_move_wait_frames)
-    after = _move_pp(reader.read(), BUBBLE_MOVE_ID)
-    if after is None or after >= before:
-        raise PewterChapterError(f"{label} failed its persistent Bubble-PP gate.")
+    _select_move_by_slot(
+        executor,
+        reader,
+        timing,
+        move_id=BUBBLE_MOVE_ID,
+        one_based_slot=3,
+        label=label,
+    )
+
+
+def _bug_catcher_continuation_move(raw: RawGameState) -> int:
+    """Select a usable attack for every remaining turn of the mandatory battle."""
+
+    if raw.battle_state != 2:
+        raise PewterChapterError("Viridian Forest Bug Catcher battle ended before continuation.")
+    tackle_pp = _move_pp(raw, TACKLE_MOVE_ID)
+    if tackle_pp is not None and tackle_pp > 0:
+        return TACKLE_MOVE_ID
+    bubble_pp = _move_pp(raw, BUBBLE_MOVE_ID)
+    if bubble_pp is not None and bubble_pp > 0:
+        return BUBBLE_MOVE_ID
+    raise PewterChapterError(
+        "Viridian Forest Bug Catcher has no usable Tackle or Bubble continuation."
+    )
+
+
+def _select_bug_catcher_continuation(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> None:
+    move_id = _bug_catcher_continuation_move(reader.read())
+    if move_id == TACKLE_MOVE_ID:
+        _select_first_move(executor, reader, timing, "Bug Catcher usable Tackle continuation")
+        return
+    _select_third_move(executor, reader, timing, "Bug Catcher usable Bubble continuation")
 
 
 def _finish_battle(
@@ -730,6 +1560,10 @@ def _finish_battle(
     max_pulses: int,
     timing: PewterTiming,
     label: str,
+    continuation: Callable[
+        [_CountingChapterExecutor, PokemonRedStateReader, PewterTiming], None
+    ]
+    | None = None,
 ) -> RawGameState:
     saw_expected_battle = False
     stable_reads = 0
@@ -737,29 +1571,29 @@ def _finish_battle(
         before = reader.read()
         if before.battle_state not in {0, expected_battle_state}:
             raise PewterChapterError(f"{label} changed to an unexpected battle type.")
-        saw_expected_battle = saw_expected_battle or (
+        saw_expected_battle = saw_expected_battle or (before.battle_state == expected_battle_state)
+        continuation_ready = (
             before.battle_state == expected_battle_state
+            and continuation is not None
+            and reader.read_battle_menu_state(before).phase
+            in {BattleMenuPhase.MAIN, BattleMenuPhase.MOVE}
         )
-        executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        _wait(
-            executor,
-            timing.battle_wait_frames
-            if before.battle_state
-            else timing.dialogue_wait_frames,
-        )
+        if continuation_ready:
+            assert continuation is not None
+            continuation(executor, reader, timing)
+        else:
+            executor.execute(MacroAction(MacroActionKind.CONFIRM))
+            _wait(
+                executor,
+                timing.battle_wait_frames if before.battle_state else timing.dialogue_wait_frames,
+            )
         after = reader.read()
         if after.first_party_hp == 0:
             raise PewterChapterError(f"Squirtle fainted during {label}.")
         if after.battle_state not in {0, expected_battle_state}:
             raise PewterChapterError(f"{label} changed to an unexpected battle type.")
-        saw_expected_battle = saw_expected_battle or (
-            after.battle_state == expected_battle_state
-        )
-        if (
-            saw_expected_battle
-            and after.battle_state == 0
-            and reader.read_input_readiness().ready
-        ):
+        saw_expected_battle = saw_expected_battle or (after.battle_state == expected_battle_state)
+        if saw_expected_battle and after.battle_state == 0 and reader.read_input_readiness().ready:
             stable_reads += 1
             if stable_reads >= 2:
                 return after
@@ -800,9 +1634,7 @@ def _release_and_probe_overworld_control(
         before = reader.read()
         evidence = reader.read_pewter_chapter_state(before)
         if not evidence.brock_victory_snapshot:
-            raise PewterChapterError(
-                "Brock evidence changed while restoring overworld control."
-            )
+            raise PewterChapterError("Brock evidence changed while restoring overworld control.")
         if before.map_id != MapId.PEWTER_GYM or before.player_x != 4:
             raise PewterChapterError("Brock control probe left the expected Gym column.")
 
@@ -821,9 +1653,7 @@ def _release_and_probe_overworld_control(
                 or stable.player_y != after.player_y
                 or not stable_evidence.brock_victory_snapshot
             ):
-                raise PewterChapterError(
-                    "Post-Brock overworld control did not remain stable."
-                )
+                raise PewterChapterError("Post-Brock overworld control did not remain stable.")
             return stable, stable_evidence
         if (
             after.map_id != before.map_id
@@ -881,10 +1711,7 @@ def _expect_party(
         or raw.first_party_level != level
         or (raw.first_party_hp or 0) < minimum_hp
         or raw.first_party_status != 0
-        or (
-            required_move is not None
-            and required_move not in set(raw.first_party_moves or ())
-        )
+        or (required_move is not None and required_move not in set(raw.first_party_moves or ()))
     ):
         raise PewterChapterError(f"{label} failed its persistent party-state gate.")
 
@@ -900,6 +1727,142 @@ def _expect_brock_party_ready(raw: RawGameState, label: str) -> None:
         or bubble_pp < 4
     ):
         raise PewterChapterError(f"{label} failed the Brock-readiness party gate.")
+
+
+def _expect_brock_transit_ready(
+    raw: RawGameState,
+    label: str,
+    *,
+    authenticated_loss_recovery: bool = False,
+) -> None:
+    bubble_pp = _move_pp(raw, BUBBLE_MOVE_ID)
+    accepted_statuses = {0} if authenticated_loss_recovery else {0, 0x08}
+    minimum_hp = 19 if raw.first_party_status == 0x08 else 1
+    if (
+        raw.party_count != 1
+        or raw.first_party_level != 9
+        or (raw.first_party_hp or 0) < minimum_hp
+        or raw.first_party_status not in accepted_statuses
+        or bubble_pp is None
+        or bubble_pp < 4
+    ):
+        raise PewterChapterError(
+            f"{label} failed the Brock-transit party gate: "
+            f"level={raw.first_party_level!r}, hp={raw.first_party_hp!r}, "
+            f"status={raw.first_party_status!r}, bubble_pp={bubble_pp!r}."
+        )
+
+
+def _is_healed_brock_party(raw: RawGameState) -> bool:
+    pp = tuple(value & 0x3F for value in (raw.first_party_pp or ()))
+    learned_pp = tuple(
+        value for move, value in zip(raw.first_party_moves or (), pp, strict=False) if move
+    )
+    return (
+        raw.map_id == MapId.PEWTER_POKECENTER
+        and raw.battle_state == 0
+        and raw.party_count == 1
+        and raw.first_party_level == 9
+        and raw.first_party_hp is not None
+        and raw.first_party_hp == raw.first_party_max_hp
+        and raw.first_party_status == 0
+        and BUBBLE_MOVE_ID in set(raw.first_party_moves or ())
+        and bool(learned_pp)
+        and all(value > 0 for value in learned_pp)
+    )
+
+
+def _is_healed_rival_loss_party(raw: RawGameState | None) -> bool:
+    return (
+        raw is not None
+        and raw.map_id == MapId.VIRIDIAN_POKECENTER
+        and raw.battle_state == 0
+        and raw.party_count == 1
+        and raw.first_party_level in {5, 6, 7, 8, 9}
+        and raw.first_party_hp is not None
+        and raw.first_party_hp == raw.first_party_max_hp
+        and raw.first_party_status == 0
+        and _move_pp(raw, TACKLE_MOVE_ID) == 35
+        and _move_pp(raw, TAIL_WHIP_MOVE_ID) == 30
+        and (
+            _move_pp(raw, BUBBLE_MOVE_ID) == 30
+            if raw.first_party_level >= 8
+            else BUBBLE_MOVE_ID not in set(raw.first_party_moves or ())
+        )
+    )
+
+
+def _heal_viridian_loss_recovery(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> RawGameState:
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 21, 35, "Viridian recovery anchor")
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_TO_CENTER_DIRECTIONS,
+        "Viridian loss-recovery Center route",
+    )
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_POKECENTER, 3, 7, "Viridian Center")
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_CENTER_HEAL_APPROACH_DIRECTIONS,
+        "Viridian Center nurse",
+    )
+    for _ in range(timing.heal_dialogue_pulses):
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
+    healed = reader.read()
+    if not _is_healed_rival_loss_party(healed):
+        raise PewterChapterError("Viridian Center failed the lab-loss restoration gate.")
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_CENTER_EXIT_DIRECTIONS,
+        "Viridian Center exit",
+    )
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(
+        reader.read(),
+        MapId.VIRIDIAN_CITY,
+        23,
+        26,
+        "Viridian Center exterior",
+    )
+    _move(
+        executor,
+        reader,
+        VIRIDIAN_CENTER_RETURN_DIRECTIONS,
+        "Viridian recovery return",
+    )
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 21, 35, "Viridian recovery return")
+    return healed
+
+
+def _heal_pewter_center(
+    executor: _CountingChapterExecutor,
+    reader: PokemonRedStateReader,
+    timing: PewterTiming,
+) -> RawGameState:
+    _expect_position(reader.read(), MapId.PEWTER_POKECENTER, 3, 7, "Pewter Center")
+    _move(
+        executor,
+        reader,
+        PEWTER_CENTER_HEAL_APPROACH_DIRECTIONS,
+        "Pewter Center nurse",
+    )
+    for _ in range(timing.heal_dialogue_pulses):
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        _wait(executor, timing.dialogue_wait_frames)
+    healed = reader.read()
+    if not _is_healed_brock_party(healed):
+        raise PewterChapterError("Pewter Center failed its persistent healing gate.")
+    _move(executor, reader, PEWTER_CENTER_EXIT_DIRECTIONS, "Pewter Center exit")
+    _wait(executor, timing.transition_wait_frames)
+    return healed
 
 
 def _move_pp(raw: RawGameState, move_id: int) -> int | None:

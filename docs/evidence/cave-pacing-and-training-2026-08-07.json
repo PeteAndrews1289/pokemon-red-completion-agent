@@ -1,0 +1,21 @@
+{
+  "schema": "pokemon-measured-defect-v1",
+  "recorded_on": "2026-08-07",
+  "defect_id": "cave-walk-into-a-wall",
+  "found_by": "a captured mid-route state, in seconds per attempt",
+  "symptom": "The Mansion block ran to its 500,000-step budget without the progress sink firing once, which needs 250 battles. It looked like training and was not.",
+  "measurement": {
+    "before": "250 walks produced 1 encounter and no level change",
+    "after": "120 walks took the trainee from level 20 to 21",
+    "party": "(48, 20, 22, 30, 25, 30) at the Cinnabar nurse"
+  },
+  "root_cause": "The cave walk chose its direction from the player's x once per call -- left whenever x was 10 or more. Diglett's Cave is a winding tunnel, so after about eight tiles west the player met rock and every later press was blocked. A blocked press is not a step, so the game's encounter check never ran, while the loop still counted a step each time.",
+  "fix": "Pace the tunnel and reverse at each wall, keeping the direction between calls and flipping it whenever the player did not actually move. This is what surge's own Diglett search does in the same cave.",
+  "what_else_this_run_confirmed": [
+    "The travel chain works end to end: Cinnabar nurse, Fly to Vermilion, the walk east to Route 11, the gate, and into Diglett's Cave",
+    "The party swap works: (48, 20, ...) became (20, 48, ...), putting the trainee in front",
+    "Venue selection sends the level-20 member to digletts_cave, exactly as computed"
+  ],
+  "correction": "An earlier report in this session described the 500,000-step run as training. It was not -- it was spinning against a wall. The distinction was invisible without the step-to-battle ratio, which is why the ratio is recorded here.",
+  "still_open": "Whether the block reaches the level floor of 55 within its real budget, and at what cost in battles and healing trips. That needs a full run rather than a capture, because the capture is one starting point."
+}

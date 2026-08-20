@@ -1,0 +1,113 @@
+{
+  "schema": "route1-cartridge-ledge-probe-v1",
+  "recorded_on": "2026-08-10",
+  "status": "ok",
+  "rom": {
+    "title": "POKEMON RED",
+    "size_bytes": 1048576,
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+  },
+  "source": {
+    "git_commit": "64625135fb114a9df978ab51f242b1931c1beb1e",
+    "worktree_dirty": false
+  },
+  "executable_source_bundle_sha256": "3b4d4f1a50fe2d229b42e348b6ac429505557538009c374274c65e2d6ec2fe39",
+  "precondition": "The qualified teacher established clean power-on, a verified starter, Oak's parcel delivery and the Pok\u00e9dex before entering Route 1.",
+  "authority_under_test": "Cartridge terrain, object events, ledge rules and the game-neutral local router selected every approach input and the final ledge input.",
+  "start_yx": [
+    35,
+    10
+  ],
+  "ledge_source_yx": [
+    26,
+    10
+  ],
+  "ledge_landing_yx": [
+    28,
+    10
+  ],
+  "approach_coordinates_yx": [
+    [
+      35,
+      10
+    ],
+    [
+      34,
+      10
+    ],
+    [
+      33,
+      10
+    ],
+    [
+      32,
+      10
+    ],
+    [
+      31,
+      10
+    ],
+    [
+      30,
+      10
+    ],
+    [
+      29,
+      10
+    ],
+    [
+      28,
+      10
+    ],
+    [
+      28,
+      9
+    ],
+    [
+      28,
+      8
+    ],
+    [
+      27,
+      8
+    ],
+    [
+      26,
+      8
+    ],
+    [
+      26,
+      9
+    ],
+    [
+      26,
+      10
+    ]
+  ],
+  "approach_inputs": [
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "left",
+    "left",
+    "up",
+    "up",
+    "right",
+    "right"
+  ],
+  "ledge_input": "down",
+  "ledge_transition_kind": "ledge",
+  "reverse_input": "up",
+  "reverse_was_blocked": true,
+  "wild_flees": 0,
+  "movement_retries": 0,
+  "frames_executed": 54330,
+  "actions_executed_after_opening": 487,
+  "controller_released": true,
+  "rom_adjacent_artifacts_unchanged": true
+}

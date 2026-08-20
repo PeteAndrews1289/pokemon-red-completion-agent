@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon-training-control-lineage-summary-v1",
+  "status": "ok",
+  "claim": "One authenticated post-Secret-Key teacher replay emitted portable seek/fight/flee/heal/stop decisions through complete six-member development.",
+  "source": {
+    "git_commit": "778e6cb",
+    "worktree_dirty": false
+  },
+  "private_artifact": {
+    "sha256": "6685c889c4e5ea55c56b0194074f0c4b6b82376d40dfb8f475f7d903856f5a64",
+    "bytes": 65814327,
+    "tracked": false
+  },
+  "capture": {
+    "checkpoint_id": "portable_loop_post_secret_key",
+    "state_sha256": "0f3bca16995984dbe3d21bf1c1d8beb926c8fc1536af391f0b8b8890df042047"
+  },
+  "execution": {
+    "evolution_battles": 64,
+    "evolution_healing_trips": 37,
+    "balance_battles": 1652,
+    "balance_healing_trips": 848,
+    "total_battles": 1716,
+    "total_healing_trips": 885,
+    "faints": 0,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_level_spread": 0
+  },
+  "dataset": {
+    "feature_schema_id": "pokemon.core.training.control.features.v1",
+    "feature_count": 21,
+    "decisions": 48156,
+    "action_counts": {
+      "fight": 1710,
+      "flee": 1064,
+      "heal": 499,
+      "seek": 44882,
+      "stop": 1
+    },
+    "phase_counts": {
+      "battle": 2774,
+      "overworld": 45382
+    },
+    "phase_legality_violations": 0,
+    "unique_feature_vectors": 47370,
+    "duplicate_feature_vectors": 786,
+    "terminal_action": "stop"
+  },
+  "limitations": [
+    "single_diagnostic_lineage",
+    "unassigned_partition",
+    "v1_stream_predates_embedded_source_and_lineage_provenance",
+    "class_imbalance_requires_weighting",
+    "no_model_trained",
+    "not_promotion_eligible"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "access": {
+    "actual_case_catalog_created": false,
+    "live_test_route_costs_accessed": false,
+    "live_test_session_started": false,
+    "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "adapter": {
+    "candidate_order": "exact source-and-capture-bound assignment hash",
+    "candidate_planning": "after authenticated challenge relocation",
+    "challenge_relocation": "after claim, deterministic route to declared origin, zero objective delta",
+    "input_representation": "unlabeled identity-free policy question",
+    "model_type": "exact StrategicNavigationLinear production class",
+    "private_case_open": "only after durable case claim",
+    "teacher_execution": "only after durable prediction commitment"
+  },
+  "catalog_bootstrap": {
+    "acceptable_next_inputs": [
+      "explicit inventory-only owner permission to hash the twelve private capture envelopes and state files without opening an evaluation case",
+      "a custodian-supplied canonical path-free catalog already containing those authenticated digests"
+    ],
+    "reason": "an authorization receipt must bind the exact catalog digest, while constructing that catalog requires read-only access to private capture bytes",
+    "status": "blocked_pending_separate_inventory_authority_or_custodian_manifest"
+  },
+  "plan": {
+    "bytes": 12914,
+    "execution_configuration_sha256": "ac51ec8e2d3aff1e327d00447d43245ce77af9d7a2924cca8b41c727c83bcdaf",
+    "execution_source_bundle_sha256": "6dcf2e9237e5a5f1c52b87869cbb5eed5def8c8130520b6295ef0e0e48a422db",
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v6",
+    "sha256": "9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440",
+    "teacher_execution_sha256": "7866f7627af0b56fa78553fb29c8d8d21bd33b278907bbf04dac546d9d27a0cd"
+  },
+  "qualification": {
+    "candidate_count_counts": {
+      "2": 17,
+      "3": 16,
+      "4": 2,
+      "5": 1
+    },
+    "full_repository_gate": {
+      "expected_failures": 1,
+      "integration_tests_deselected": 3,
+      "mypy_source_files": 168,
+      "passed": 2872,
+      "ruff_clean": true
+    },
+    "live_emulator_qualification_completed": false,
+    "non_test_public_scenario_shapes": 36,
+    "partition_counts": {
+      "train": 24,
+      "validation": 12
+    },
+    "rom_free_checks": [
+      "strict canonical path-free catalog parsing and exact twelve-case coverage",
+      "safe case input opening rejects relative roots, path escapes, symlinks at every absolute-path component, nonregular files, size drift and digest drift",
+      "loader-issued plan, authorization, grant, catalog, entry and input objects cannot be forged directly or cloned through dataclass replacement",
+      "external-audit and non-test qualification receipt digests are authorization-bound and rechecked before runtime authority",
+      "the executor requires a prepared-session abort boundary before publishing its start record",
+      "runner refuses a forged candidate-order nonce and a noncanonical model implementation",
+      "source capture origin and objective frontier authenticate before relocation",
+      "challenge relocation finishes before candidate planning and cannot create a policy label",
+      "relocation objective drift closes the emulator and refuses candidate planning",
+      "model and cost-baseline predictions are prepared before deterministic teacher execution",
+      "teacher trajectory records the declared challenge origin rather than the source snapshot origin",
+      "abort closes a prepared session without teacher action",
+      "caught candidate-unavailable, preparation and teacher failures invoke abort before their consumed outcome"
+    ],
+    "targeted_tests_passed": 124
+  },
+  "schema": "strategic-sealed-adapter-rom-free-qualification-v1",
+  "verdict": {
+    "external_adapter_audit_required": true,
+    "ready_for_external_adapter_audit": true,
+    "ready_for_owner_authorization": false,
+    "ready_for_private_test_access": false
+  }
+}

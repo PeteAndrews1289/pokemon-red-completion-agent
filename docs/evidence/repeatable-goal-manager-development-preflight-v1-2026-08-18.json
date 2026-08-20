@@ -1,0 +1,78 @@
+{
+  "active_lane": "repeatable-goal-manager-development-qualification-v1",
+  "campaign": {
+    "available_trials": 12,
+    "campaign_plan_sha256": "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14",
+    "focus_goal_kinds": [
+      "develop_team",
+      "restore_team",
+      "manage_storage",
+      "acquire_species"
+    ],
+    "planned_trials": 12,
+    "root_lineages": 4,
+    "trials_per_root": 3
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "legacy_model_fits_added": 0,
+    "legacy_outcome_questions_added": 0,
+    "legacy_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "executable_identity": {
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "context_plan_sha256": "74a89eafd467e44ca41ad262e5ddc40ec22a05f8368aa08487af6d139061a548",
+    "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+    "model_file_sha256": "16901b701476230d2be6c0327cc3e572f6dc5ce034f99067562916cecd3e77f4",
+    "numpy_runtime_sha256": "5091e63c30caf85620de0b8c28b596f6b6290fa871c84527b9de4eacb9195751",
+    "promotion_plan_sha256": "b648d1825fb7701f38aa00f5625fe88a86040dc7b4b061b4256f6ae665b90c46",
+    "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+    "runner_sha256": "ee1d9c311f9947b516dbf12b06956be8dd1910b9597e33671d47b83ec2811206",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "skill_manifest_sha256": "063a45871a5d33664beebf700c02825dbe0ae48e578d50d19951e9354914af9d",
+    "source_bundle_sha256": "b09c1f1b3133775ede32d88395e34f118d0ccc7447b32eb1245af41f039d9c44",
+    "source_commit": "cfa07f8c29635e759efd7f80b3055518a3ec08a6"
+  },
+  "mission_boundary": {
+    "supported": "One exact published Red campaign froze and passed its zero-action preflight with four authenticated train lineages and all twelve one-shot trials available. The next bounded session may begin model-led development execution under this unchanged identity.",
+    "unsupported": "This is not gameplay, a model outcome, a fit, fresh-context generalization, authority promotion, Red completion, living-Pokedex completion, sealed evaluation, or Crystal transfer evidence."
+  },
+  "next_execution_contract": {
+    "all_trials_run_under_unchanged_executable_identity": true,
+    "claimed_trial_retry_allowed": false,
+    "fixed_denominator": 12,
+    "no_additional_qualification_loop": true,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "terminal_required_for_every_controller_started_trial": true
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.red.repeatable-goal-manager-development-preflight.v1",
+  "source_verification": {
+    "ci_conclusion": "success",
+    "ci_run_attempt": 1,
+    "ci_run_id": 32101788892,
+    "source_commit": "cfa07f8c29635e759efd7f80b3055518a3ec08a6",
+    "worktree_dirty": false
+  },
+  "status": "training_ready",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "trials_claimed": 0
+  }
+}

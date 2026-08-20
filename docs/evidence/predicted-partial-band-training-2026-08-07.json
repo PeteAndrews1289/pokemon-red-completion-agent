@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon-run-prediction-v1",
+  "recorded_on": "2026-08-07",
+  "prediction_id": "mansion-block-with-partial-band-training",
+  "tests": "the fightable-share rule replacing the all-or-nothing venue test",
+  "supersedes_context": "docs/evidence/measured-run-2026-08-07.json",
+  "change_under_test": "A member could only train in an area if it could engage the whole typical band. That was too strict by a wide margin: measured over 164 Mansion encounters a level-30 member can fight 71% of what it meets there and a level-28 member 40%, and both were locked out. A venue now qualifies when at least a quarter of its band is fightable, the rest being what fleeing is for.",
+  "assumed_party": {
+    "source": "the party the previous run actually produced, not the older receipt",
+    "levels": [55, 20, 26, 30, 25, 30]
+  },
+  "predicted": {
+    "mansion_block_outcome": "trains, where it previously stopped at once",
+    "first_trainee": "slot 4, level 30 — the weakest member that can meaningfully fight a 28-34 band",
+    "escort": "not trained; at level 55 it is exactly at the floor and excluded",
+    "excluded_and_why": [
+      "slot 2 at level 20: can engage 0% of the band",
+      "slot 5 at level 25: 0%",
+      "slot 3 at level 26: 0% — a ceiling of 28 reaches only the very bottom"
+    ],
+    "then": "the two level-30 members train toward the floor of 55. Once both reach it, nobody is left who both needs training and can train here, so the block stops again and names digletts_cave for the level-20 member.",
+    "expected_final_stop": "'No party member can train here' naming digletts_cave, but only after real battles rather than before any"
+  },
+  "what_would_refute_this": [
+    "Zero battles again — the share rule is not reaching the live selection",
+    "The escort is trained — the floor exclusion has stopped binding",
+    "A level-20 or level-25 member is put in front — the share estimate is wrong at the bottom of the band, where it matters most",
+    "Battles occur but levels do not rise — the members are fighting and losing, meaning the +2 margin is too generous",
+    "A faint — +2 is unsafe and the margin needs to come down"
+  ],
+  "honest_limit": "This trains two of the five members that need it. Three sit below the Mansion's reach and still have nowhere to go until Diglett's Cave has an implemented heal-and-return. The prediction is that this run makes real progress and then stops for the same reason as before, further along.",
+  "cost": "the previous run took 367 seconds to reach this point; training will make it longer, and how much longer is itself worth recording"
+}

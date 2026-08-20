@@ -4,6 +4,7 @@ from dataclasses import fields, replace
 
 import pytest
 
+from pokemon_red_completion.battle_recovery import first_living_reserve
 from pokemon_red_completion.hideout import (
     DEFAULT_HIDEOUT_TIMING,
     HIDEOUT_CHECKPOINT_COUNT,
@@ -13,8 +14,10 @@ from pokemon_red_completion.hideout import (
     HideoutCheckpoint,
     HideoutTiming,
     HideoutTrainerEvidence,
+    _lead_needs_recovery,
+    _protected_party_can_continue,
 )
-from pokemon_red_completion.observation import MapId, RawGameState
+from pokemon_red_completion.observation import BLASTOISE_SPECIES_ID, MapId, RawGameState
 
 
 def _raw() -> RawGameState:
@@ -58,12 +61,13 @@ def _report() -> HideoutChapterReport:
         entered_hideout_bug_event=False,
         lift_key_carried=True,
         silph_scope_carried=True,
-        super_potions_used=2,
-        super_potions_remaining=2,
+        super_potions_used=3,
+        super_potions_remaining=9,
         party_hp=(86, 52, 37),
         party_max_hp=(86, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=20_112,
+        money_before=5_333,
+        money_remaining=10_814,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -77,6 +81,48 @@ def test_hideout_timing_is_positive_and_bounded() -> None:
         and getattr(DEFAULT_HIDEOUT_TIMING, field.name) > 0
         for field in fields(HideoutTiming)
     )
+
+
+def test_protected_recovery_selects_only_a_living_non_lead_party_member() -> None:
+    assert first_living_reserve((40, 52, 37)) == 1
+    assert first_living_reserve((40, 0, 37)) == 2
+    assert first_living_reserve((40, 0, 0)) is None
+    assert first_living_reserve((40,)) is None
+
+
+def test_hideout_navigation_accepts_a_living_reserve_after_the_lead_faints() -> None:
+    raw = replace(
+        _raw(),
+        first_party_hp=0,
+        party_hp=(0, 52, 37),
+    )
+
+    assert _protected_party_can_continue(raw)
+    assert not _protected_party_can_continue(replace(raw, party_hp=(0, 0, 0)))
+    assert _protected_party_can_continue(replace(raw, party_hp=None), (0, 52, 37))
+    assert _protected_party_can_continue(
+        replace(raw, party_species_ids=(BLASTOISE_SPECIES_ID, 0x40, 0x3B))
+    )
+
+
+@pytest.mark.parametrize(
+    ("current_hp", "maximum_hp", "expected"),
+    ((93, 93, False), (92, 93, True)),
+)
+def test_hideout_only_recovers_a_damaged_lead(
+    monkeypatch: pytest.MonkeyPatch,
+    current_hp: int,
+    maximum_hp: int,
+    expected: bool,
+) -> None:
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._party_hp", lambda _emulator: (current_hp,)
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.hideout._party_max_hp", lambda _emulator: (maximum_hp,)
+    )
+
+    assert _lead_needs_recovery(object()) is expected  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
@@ -97,11 +143,22 @@ def test_hideout_report_requires_source_bug_and_all_terminal_gates() -> None:
         replace(report, entered_hideout_bug_event=True),
         replace(report, lift_key_carried=False),
         replace(report, silph_scope_carried=False),
-        replace(report, super_potions_remaining=3),
+        replace(report, super_potions_remaining=5),
         replace(report, party_hp=(85, 52, 37)),
+        replace(report, money_remaining=10_813),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_hideout_report_accepts_conserved_surplus_recovery_inventory() -> None:
+    report = replace(
+        _report(),
+        super_potions_used=2,
+        super_potions_remaining=10,
+    )
+
+    assert report.passed
 
 
 def test_hideout_public_report_discloses_bug_and_assistance_scope() -> None:
@@ -113,7 +170,8 @@ def test_hideout_public_report_discloses_bug_and_assistance_scope() -> None:
     assert public["inventory"] == {
         "lift_key_carried": True,
         "silph_scope_carried": True,
-        "super_potions_used": 2,
-        "super_potions_remaining": 2,
-        "money_remaining": 20_112,
+        "super_potions_used": 3,
+        "super_potions_remaining": 9,
+        "money_before": 5_333,
+        "money_remaining": 10_814,
     }

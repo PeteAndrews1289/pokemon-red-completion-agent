@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon-run-outcome-v1",
+  "recorded_on": "2026-08-07",
+  "run_id": "diagnostic-venue-aware-training",
+  "tests": "docs/evidence/predicted-training-behaviour-2026-08-07.json",
+  "command": "cli play, no model artifacts, no corrections root, no schedule seed",
+  "counted": false,
+  "note_on_slots": "This consumed no evaluation slot and created no run identity. It wrote no artifact beyond the encounter log.",
+  "duration_seconds": 367,
+  "checkpoints_reached": "275 of 312",
+  "stopped_at": "the Mansion team-balancing pass",
+  "prediction_outcome": "confirmed on every testable field; one stated assumption was wrong",
+  "confirmed": [
+    {
+      "predicted": "stops immediately, before executing a single input",
+      "observed": "raised from the pre-loop trainee selection; no flees, no battles, no inputs"
+    },
+    {
+      "predicted": "message contains 'No party member can train here'",
+      "observed": "present"
+    },
+    {
+      "predicted": "message contains 'pokemon_mansion_1f fields levels 28-34'",
+      "observed": "present"
+    },
+    {
+      "predicted": "message names digletts_cave",
+      "observed": "'The level-20 member in slot 2 belongs at digletts_cave (15-21), measured over 29 encounters.'"
+    },
+    {
+      "predicted": "flees 0, battles 0",
+      "observed": "0 and 0, against 33 flees and 0 battles in the previous receipt"
+    },
+    {
+      "refutation_watched_for": "the escort being trained",
+      "observed": "it was not; the level-floor exclusion held on a live party"
+    }
+  ],
+  "diverged": {
+    "assumption": "party levels [68, 20, 26, 30, 25, 30], taken from the previous receipt",
+    "observed": [55, 20, 26, 30, 25, 30],
+    "reading": "The escort arrived at 55 rather than 68. That is ESCORT_LEVEL_CAP working — parity against the League's level 65 less the ten-level tolerance — so the escort is no longer overleveled by thirteen levels. It is a separate improvement confirmed incidentally, and it does not weaken the prediction: at exactly the level floor the escort is still excluded from training, which is what kept it out of the trainee slot.",
+    "lesson": "The prediction named its assumption and said what would follow if the assumption failed. That is the only reason this divergence is legible rather than invisible."
+  },
+  "bands_replicated": {
+    "finding": "All five trusted bands reproduced exactly against the earlier harvest: digletts_cave 15-21 rare 31, pokemon_mansion_1f 28-34 rare 39, route_11 9-15 rare 17, route_2 2-5, viridian_forest 3-5 rare 6.",
+    "why_it_matters": "The route is deterministic, so bands replicate. That makes a measured band durable evidence rather than one sample of a noisy process — and it means harvesting more of the same route will not discover new venues. Only changing where the route goes will.",
+    "mansion_samples": "155 previously, 164 here; the extra nine come from the block behaving differently, not from a different area."
+  },
+  "what_this_does_not_show": "Nothing was trained. This run confirms the diagnosis is correct, fast, and specific. The cure — routing a trainee to Diglett's Cave — does not exist yet, and the run stopped exactly where it said it would because of that.",
+  "next": "Build the Diglett's Cave venue. Its navigation exists and is proven in the Vermilion chapter: the Route 11 gate walk, VERMILION_CENTER_TO_ROUTE_11, and the Vermilion nurse path. It is now the only thing between this party and a trained team."
+}

@@ -1,0 +1,37 @@
+{
+  "checkpoint_id_is_root_lineage_id": false,
+  "controller_actions": 0,
+  "current_reservations_prior_independent": true,
+  "historical_context_catalog_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+  "historical_goal_manager_registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+  "historical_goal_manager_source_commit": "4207981a3c7b7dfbfa47f0a7add6975068bcfc50",
+  "inventory_sha256": "b8c10704f2307e24ecff5af565a2ff8f97bde20aec78f34a15640649bcef4c94",
+  "legacy_root_alias_is_authoritative": false,
+  "model_predictions": 0,
+  "outcomes_opened": 0,
+  "partition_counts": {
+    "development": {
+      "canonical_root_match_count": 0,
+      "canonical_root_or_state_match_count": 0,
+      "inventory_count": 27,
+      "legacy_checkpoint_alias_match_count": 0,
+      "state_digest_match_count": 0
+    },
+    "train": {
+      "canonical_root_match_count": 0,
+      "canonical_root_or_state_match_count": 1,
+      "inventory_count": 54,
+      "legacy_checkpoint_alias_match_count": 1,
+      "state_digest_match_count": 1
+    }
+  },
+  "plan_sha256": "9097f73eecaf0e38949fb6e76b0cc7a3c8bafa50c353b60a87f77e5519f4e30d",
+  "private_identity_values_public": false,
+  "private_path_fields": 0,
+  "reserved_root_overlap_count": 0,
+  "reserved_state_overlap_count": 0,
+  "schema": "pokemon.core.party-development-exclusion-effectiveness-audit.v1",
+  "source_commit": "9476b974a3e702b0c58a073a8c2afb6638ea9f51",
+  "state_digest_filter_is_independent": true,
+  "teacher_queries": 0
+}

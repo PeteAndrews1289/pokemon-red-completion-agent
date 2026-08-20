@@ -1,0 +1,103 @@
+{
+  "campaign": {
+    "registry_sha256": "76807c8906c0a60150c3fde8ea44523c0edd437664abb35e378837042d7b6bc2",
+    "source_bundle_sha256": "521b119a067a1ea6072291656ee9c7547b6933d288bb3d03617a8d7b83c82c24",
+    "source_commit": "5a8617ee59bfab34b76316071bf11466aeb534d2"
+  },
+  "fingerprint_method": {
+    "ordered": "sha256 of canonical identity-free policy input",
+    "permutation_invariant": "remove binding_index, canonicalize candidate order, then sha256",
+    "selected_candidate": "remove binding_index from selected candidate, then sha256"
+  },
+  "observed": {
+    "nominal_examples": 9,
+    "ordered_policy_inputs": 4,
+    "permutation_invariant_contexts": 3,
+    "selected_candidate_feature_rows": 3
+  },
+  "permutation_invariant_context_multiplicity": {
+    "506e248b1da4471731dbd5686879dc893a9c017e5fa2d438c4f577a3da8468f0": 3,
+    "a2a16ca0ca1c8541c2fb7a3d1f203b722734b87d2d58fe2bf56e0232544509c2": 3,
+    "a43db9cb6092d1e6559cab8532431c3e8d7ee9a7bb9ded406a1b4c5081dc1a0e": 3
+  },
+  "rows": [
+    {
+      "decision_index": 0,
+      "ordered_policy_input_sha256": "e19eb8967d55038427daeb287958be291960a45aa9cf02ee73e21675ff6127df",
+      "permutation_invariant_context_sha256": "506e248b1da4471731dbd5686879dc893a9c017e5fa2d438c4f577a3da8468f0",
+      "run_id": "red-strategic-v1-02-train",
+      "selected_candidate_sha256": "13aa8a1fe46519a8fc7f9190f745980dc25379b05ae6cc03af2aaf2e62769f9b",
+      "selected_index": 1
+    },
+    {
+      "decision_index": 1,
+      "ordered_policy_input_sha256": "ebeccbb8ab165d616461dd9b9bacd6d0745f206684c840b5a9a738136b2eacda",
+      "permutation_invariant_context_sha256": "a43db9cb6092d1e6559cab8532431c3e8d7ee9a7bb9ded406a1b4c5081dc1a0e",
+      "run_id": "red-strategic-v1-02-train",
+      "selected_candidate_sha256": "f13bf8ecf0da9f60d8bd0bb690d8100bf79a1ccfca797cc63c668ccf3fc517ee",
+      "selected_index": 0
+    },
+    {
+      "decision_index": 2,
+      "ordered_policy_input_sha256": "e1b5514dd57863a8c98deb343e05ef6517c5e9b5f07d1c16ee51401a45e638f0",
+      "permutation_invariant_context_sha256": "a2a16ca0ca1c8541c2fb7a3d1f203b722734b87d2d58fe2bf56e0232544509c2",
+      "run_id": "red-strategic-v1-02-train",
+      "selected_candidate_sha256": "e50b52df57c65412285366dab28a9e2a24391c30ab896a077c401695ad4a0cbc",
+      "selected_index": 0
+    },
+    {
+      "decision_index": 0,
+      "ordered_policy_input_sha256": "e19eb8967d55038427daeb287958be291960a45aa9cf02ee73e21675ff6127df",
+      "permutation_invariant_context_sha256": "506e248b1da4471731dbd5686879dc893a9c017e5fa2d438c4f577a3da8468f0",
+      "run_id": "red-strategic-v1-04-train",
+      "selected_candidate_sha256": "13aa8a1fe46519a8fc7f9190f745980dc25379b05ae6cc03af2aaf2e62769f9b",
+      "selected_index": 1
+    },
+    {
+      "decision_index": 1,
+      "ordered_policy_input_sha256": "14c2a734ce53600e04f6bb5b6e637e80eb69ee6688909edb4c4e35c18f66b1c0",
+      "permutation_invariant_context_sha256": "a43db9cb6092d1e6559cab8532431c3e8d7ee9a7bb9ded406a1b4c5081dc1a0e",
+      "run_id": "red-strategic-v1-04-train",
+      "selected_candidate_sha256": "f13bf8ecf0da9f60d8bd0bb690d8100bf79a1ccfca797cc63c668ccf3fc517ee",
+      "selected_index": 1
+    },
+    {
+      "decision_index": 2,
+      "ordered_policy_input_sha256": "e1b5514dd57863a8c98deb343e05ef6517c5e9b5f07d1c16ee51401a45e638f0",
+      "permutation_invariant_context_sha256": "a2a16ca0ca1c8541c2fb7a3d1f203b722734b87d2d58fe2bf56e0232544509c2",
+      "run_id": "red-strategic-v1-04-train",
+      "selected_candidate_sha256": "e50b52df57c65412285366dab28a9e2a24391c30ab896a077c401695ad4a0cbc",
+      "selected_index": 0
+    },
+    {
+      "decision_index": 0,
+      "ordered_policy_input_sha256": "e19eb8967d55038427daeb287958be291960a45aa9cf02ee73e21675ff6127df",
+      "permutation_invariant_context_sha256": "506e248b1da4471731dbd5686879dc893a9c017e5fa2d438c4f577a3da8468f0",
+      "run_id": "red-strategic-v1-05-train",
+      "selected_candidate_sha256": "13aa8a1fe46519a8fc7f9190f745980dc25379b05ae6cc03af2aaf2e62769f9b",
+      "selected_index": 1
+    },
+    {
+      "decision_index": 1,
+      "ordered_policy_input_sha256": "ebeccbb8ab165d616461dd9b9bacd6d0745f206684c840b5a9a738136b2eacda",
+      "permutation_invariant_context_sha256": "a43db9cb6092d1e6559cab8532431c3e8d7ee9a7bb9ded406a1b4c5081dc1a0e",
+      "run_id": "red-strategic-v1-05-train",
+      "selected_candidate_sha256": "f13bf8ecf0da9f60d8bd0bb690d8100bf79a1ccfca797cc63c668ccf3fc517ee",
+      "selected_index": 0
+    },
+    {
+      "decision_index": 2,
+      "ordered_policy_input_sha256": "e1b5514dd57863a8c98deb343e05ef6517c5e9b5f07d1c16ee51401a45e638f0",
+      "permutation_invariant_context_sha256": "a2a16ca0ca1c8541c2fb7a3d1f203b722734b87d2d58fe2bf56e0232544509c2",
+      "run_id": "red-strategic-v1-05-train",
+      "selected_candidate_sha256": "e50b52df57c65412285366dab28a9e2a24391c30ab896a077c401695ad4a0cbc",
+      "selected_index": 0
+    }
+  ],
+  "schema": "strategic-context-duplication-audit-v1",
+  "statistics": {
+    "paired_perfect_model_row_level_two_sided_exact_p": 0.5,
+    "perfect_six_of_six_against_two_thirds_one_sided_exact_p": 0.08779149519890257,
+    "unique_context_baseline_disagreements": 1
+  }
+}

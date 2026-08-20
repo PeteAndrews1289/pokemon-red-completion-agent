@@ -1,0 +1,22 @@
+{
+  "schema": "pokemon-training-control-shadow-summary-v1",
+  "status": "ok",
+  "lineage_id": "training-control-v3-shadow-01",
+  "source_commit": "378ad2653486c5822cd751ea89b3deccab3a65fc",
+  "root_state_sha256": "0352eae6aeace721de98b8408a6bc7a736d2178ce8358ef6258e2f27c8e18e58",
+  "decision_stream_sha256": "465eebb3f7256bda19248cf43ec50c21b6211088ee50342c589cb97d31366f3a",
+  "private_shadow_summary_sha256": "8bfa90eb4a8a8bf1a566f907c402b06ab63a0c43badb235e92325cab5239cf77",
+  "model_sha256": "e5a8a862ce3b9edb5153890f1d4c0af2a18b912b45770d77d99ce223177361f2",
+  "execution": {"decisions": 57342, "total_battles": 1744, "total_healing_trips": 1035, "faints": 0, "final_party_levels": [55, 55, 55, 55, 55, 55]},
+  "shadow": {
+    "accuracy": 0.7918802971643821,
+    "balanced_accuracy": 0.8904742693060482,
+    "battle_accuracy": 1.0,
+    "overworld_accuracy": 0.7782732289170058,
+    "teacher_counts": {"fight": 1975, "flee": 1544, "heal": 651, "seek": 53171, "stop": 1},
+    "confusion": {"fight -> fight": 1975, "flee -> flee": 1544, "heal -> heal": 438, "heal -> seek": 213, "seek -> heal": 11721, "seek -> seek": 41450, "stop -> stop": 1}
+  },
+  "model_had_execution_authority": false,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

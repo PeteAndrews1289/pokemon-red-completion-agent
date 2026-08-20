@@ -14,10 +14,30 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleBoostStat,
+    BattleControlRequest,
+    control_request_matches,
+    learned_switch_party_index,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRuntimeError,
+    BattleRuntimeTiming,
+    BattleSwitchCapability,
+    RequiredMovePolicy,
+    note_observed_trainer_battle_exit,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.lavender import LavenderTiming, _select_bag_item
 from pokemon_red_completion.observation import (
     Badge,
+    BattleMenuPhase,
     EventFlag,
     ItemId,
     MapId,
@@ -25,14 +45,29 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.route_executor import RouteExecutionReport
+from pokemon_red_completion.tower import party_core_intact
 
 KOGA_CHECKPOINT_COUNT = 11
+KOGA_TRAINER_REWARD_TOTAL = 7_852
 SURF = 0x39
 SURF_SLOT = 4
+STRENGTH = 0x46
+STRENGTH_SLOT = 2
+BUBBLE_BEAM = 0x3D
+BUBBLE_BEAM_SLOT = 3
+ICE_BEAM = 0x3A
+ICE_BEAM_SLOT = 3
 KOGA_OPPONENT = 0xEE
 KOGA_TRAINER_CLASS = 0x26
 KOGA_TRAINER_NUMBER = 1
+MUK_SPECIES_ID = 0x88
+# Disable can legally force Juggler 3 onto reserve moves and extend the battle.
+# Bound its Surf consumption by the carried 15-PP pool rather than one historical
+# eight-turn outcome; the remaining fights retain their tighter qualified limits.
+KOGA_PP_BOUNDS = ((0, 15), (1, 8), (1, 8), (1, 15))
+JUGGLER_4_PIVOT_HP_THRESHOLD = 50
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -42,22 +77,13 @@ def _directions(value: str) -> tuple[str, ...]:
 CENTER_TO_GYM = _directions("DDDDDLLLLLLLLLLLLLLU")
 GYM_TO_JUGGLER3 = _directions("URRRRRUUUUUUULU")
 JUGGLER3_TO_TAMER2 = _directions("UUUU")
-TAMER2_TO_CENTER = _directions(
-    "DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU"
-)
-CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions(
-    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD"
-)
-JUGGLER4_TO_CENTER = _directions(
-    "UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU"
-)
-CENTER_TO_KOGA = CENTER_TO_GYM + _directions(
-    "URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR"
-)
-KOGA_TO_CENTER = _directions(
-    "LUULLUUUURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLL"
-    "DRRRRRRRRRRRRRRUUUU"
-)
+TAMER2_TO_CENTER = _directions("DDDDDDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU")
+JUGGLER3_TO_CENTER = _directions("DDDDRDDDDDLLLLDRRRRRRRRRRRRRRUUUU")
+CENTER_TO_TAMER2 = CENTER_TO_GYM + GYM_TO_JUGGLER3 + JUGGLER3_TO_TAMER2
+CENTER_TO_JUGGLER4 = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDD")
+JUGGLER4_TO_CENTER = _directions("UURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU")
+CENTER_TO_KOGA = CENTER_TO_GYM + _directions("URRRRRUUUUUUUUUUUUUUULLLLLLLLDDRDDLDDDDRRDDR")
+KOGA_TO_CENTER = _directions("LUULLUUUURUULUURRRRRRRRDDDDDDDDDDDDDDDDLLLLLDRRRRRRRRRRRRRRUUUU")
 
 REGULAR_TRAINER_EVENTS = (
     EventFlag.BEAT_FUCHSIA_GYM_TRAINER_0,
@@ -87,8 +113,10 @@ class EmulatorState(Protocol):
     def read_u8(self, address: int) -> int: ...
 
 
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
+class KogaStrategicApproach(Protocol):
+    """Generated strategic route allowed to own only the Gym approach."""
+
+    def execute(self, executor: ChapterExecutor) -> RouteExecutionReport: ...
 
 
 class KogaChapterError(RuntimeError):
@@ -150,6 +178,9 @@ class KogaBattleEvidence:
     hp_after: int
     max_hp_after: int
     status_after: int
+    terminal_mutual_ko: bool = False
+    continued_after_faint: bool = False
+    x_accuracy_used: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -167,42 +198,63 @@ class KogaChapterReport:
     beat_koga: bool
     soul_badge: bool
     soul_badge_mirror: bool
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
-    surf_pp: int
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    attack_move_id: int
+    attack_move_slot: int
+    attack_pp: int
     frames_executed: int
     actions_executed: int
     controller_released: bool
 
     @property
     def passed(self) -> bool:
-        expected_bag = tuple(
-            sorted((*self.initial_bag, (int(ItemId.TM06_TOXIC), 1)))
-        )
+        expected_bag = _koga_reward_bag(self.initial_bag)
         return (
             len(self.records) == KOGA_CHECKPOINT_COUNT
             and tuple(item.trainer_number for item in self.battles) == (3, 2, 4, 1)
-            and tuple(item.selected_pp_spent for item in self.battles) == (6, 5, 5, 8)
-            and tuple(item.hp_after for item in self.battles) == (84, 66, 102, 107)
-            and tuple(item.max_hp_after for item in self.battles) == (117, 120, 120, 124)
-            and tuple(item.status_after for item in self.battles) == (0, 0x40, 0, 0)
+            and len(self.battles) == len(KOGA_PP_BOUNDS)
+            and all(
+                lower <= battle.selected_pp_spent <= upper
+                for battle, (lower, upper) in zip(self.battles, KOGA_PP_BOUNDS, strict=True)
+            )
+            and all(
+                0 < item.hp_after <= item.max_hp_after
+                or (
+                    (item.terminal_mutual_ko or item.continued_after_faint)
+                    and item.hp_after == 0
+                )
+                for item in self.battles
+            )
             and self.trainer_events_before_koga == (False, True, False, False, True, True)
             and self.trainer_events_after_koga == (True,) * 6
             and self.got_tm06
             and self.beat_koga
             and self.soul_badge
             and self.soul_badge_mirror
+            and self.battles[-1].x_accuracy_used
             and all(item != int(ItemId.TM06_TOXIC) for item, _ in self.initial_bag)
             and self.final_bag == expected_bag
-            and self.initial_money == 29_637
-            and self.final_money == 37_489
+            and self.initial_money >= 0
+            and self.final_money == self.initial_money + KOGA_TRAINER_REWARD_TOTAL
             and self.final_raw.map_id == MapId.FUCHSIA_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
-            and self.party_hp == self.party_max_hp == (124, 52, 37)
-            and self.party_status == (0, 0, 0)
-            and self.surf_pp == 15
+            and party_core_intact(self.final_raw.party_species_ids)
+            and self.party_hp == self.party_max_hp
+            and all(hp > 0 for hp in self.party_hp)
+            and all(status == 0 for status in self.party_status)
+            and (self.attack_move_id, self.attack_move_slot)
+            in {
+                (SURF, SURF_SLOT),
+                (STRENGTH, STRENGTH_SLOT),
+                (BUBBLE_BEAM, BUBBLE_BEAM_SLOT),
+                (ICE_BEAM, ICE_BEAM_SLOT),
+            }
+            and self.final_raw.first_party_moves is not None
+            and self.final_raw.first_party_moves[self.attack_move_slot - 1]
+            == self.attack_move_id
+            and self.attack_pp == _koga_attack_max_pp(self.attack_move_id)
             and self.controller_released
         )
 
@@ -214,7 +266,7 @@ class KogaChapterReport:
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_koga",
             "geographic_dependency": {
-                "reason": "post-Surf Fuchsia cannot legally return to Celadon before Soul Badge",
+                "reason": "eastern Fuchsia cannot legally return to Celadon before Soul Badge",
                 "route15_return": "one_way_blocked",
                 "cycling_road": "bicycle_required",
                 "surf": "soul_badge_required",
@@ -227,23 +279,33 @@ class KogaChapterReport:
                     "trainer_class": item.trainer_class,
                     "trainer_number": item.trainer_number,
                     "event": item.event,
-                    "move_id": SURF,
+                    "move_id": self.attack_move_id,
+                    "move_slot": self.attack_move_slot,
                     "selected_pp_spent": item.selected_pp_spent,
                 }
                 for item in self.battles[:-1]
             ],
             "recoveries": {
-                "pokemon_center_visits_before_koga": 2,
+                "pokemon_center_visits_before_koga": 3,
                 "mart_purchases": 0,
-                "consumables_used": 0,
+                "consumables_used": 1,
             },
             "koga": {
                 "opponent": self.battles[-1].opponent,
                 "trainer_class": self.battles[-1].trainer_class,
                 "trainer_number": self.battles[-1].trainer_number,
                 "party": ["Koffing L37", "Muk L39", "Koffing L37", "Weezing L43"],
-                "surf_pp_spent": self.battles[-1].selected_pp_spent,
+                "primary_move_id": self.attack_move_id,
+                "primary_move_slot": self.attack_move_slot,
+                "primary_move_pp_spent": self.battles[-1].selected_pp_spent,
+                # Retained for receipt-schema compatibility. This describes
+                # the healed chapter boundary, not whether Selfdestruct
+                # caused a temporary terminal mutual KO inside the battle.
                 "no_faint": all(value > 0 for value in self.party_hp),
+                "terminal_mutual_ko": self.battles[-1].terminal_mutual_ko,
+                "continued_after_faint": self.battles[-1].continued_after_faint,
+                "x_accuracy_used": self.battles[-1].x_accuracy_used,
+                "party_restored_at_boundary": all(value > 0 for value in self.party_hp),
             },
             "rewards": {
                 "beat_koga_event": self.beat_koga,
@@ -260,15 +322,38 @@ class KogaChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
+def _koga_primary_attack(raw: RawGameState) -> tuple[int, int]:
+    """Select one of the cartridge-qualified Koga input curricula."""
 
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
+    moves = raw.first_party_moves
+    if moves is None or len(moves) != 4:
+        raise KogaChapterError("Koga input lacks complete lead move evidence.")
+    if moves[SURF_SLOT - 1] == SURF:
+        return SURF, SURF_SLOT
+    if moves[STRENGTH_SLOT - 1] == STRENGTH and SURF not in moves:
+        return STRENGTH, STRENGTH_SLOT
+    if (
+        moves[BUBBLE_BEAM_SLOT - 1] in {BUBBLE_BEAM, ICE_BEAM}
+        and SURF not in moves
+        and STRENGTH not in moves
+    ):
+        return moves[BUBBLE_BEAM_SLOT - 1], BUBBLE_BEAM_SLOT
+    raise KogaChapterError(
+        "Koga input lacks Surf, pre-Surf Strength, and the authenticated "
+        "pre-HM BubbleBeam/Ice Beam layout."
+    )
+
+
+def _koga_attack_max_pp(attack_move_id: int) -> int:
+    try:
+        return {
+            SURF: 15,
+            STRENGTH: 15,
+            BUBBLE_BEAM: 20,
+            ICE_BEAM: 10,
+        }[attack_move_id]
+    except KeyError:
+        raise KogaChapterError("Koga primary move has no qualified PP contract.") from None
 
 
 def run_koga_chapter(
@@ -278,17 +363,18 @@ def run_koga_chapter(
     *,
     timing: KogaTiming = DEFAULT_KOGA_TIMING,
     progress: ProgressSink | None = None,
+    strategic_approach: KogaStrategicApproach | None = None,
 ) -> KogaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[KogaCheckpoint] = []
     battles: list[KogaBattleEvidence] = []
     initial = reader.read()
     _require(initial, MapId.FUCHSIA_POKECENTER, (3, 3), "Surf boundary")
     initial_bag = _bag_tuple(emulator)
     initial_money = _money(emulator)
-    if initial.first_party_moves is None or initial.first_party_moves[SURF_SLOT - 1] != SURF:
-        raise KogaChapterError("Koga input lacks Surf in slot four.")
+    attack_move_id, attack_move_slot = _koga_primary_attack(initial)
+    attack_move_max_pp = _koga_attack_max_pp(attack_move_id)
     if any(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS):
         raise KogaChapterError("Fuchsia Gym trainers were not pristine at chapter start.")
     if _event(emulator, EventFlag.BEAT_KOGA) or _event(emulator, EventFlag.GOT_TM06):
@@ -297,7 +383,19 @@ def run_koga_chapter(
         raise KogaChapterError("TM06 was already present at chapter start.")
     _checkpoint(records, progress, emulator, initial, "koga_ready", "Surf-ready Fuchsia boundary")
 
-    _move(actions, reader, CENTER_TO_GYM, timing, "Fuchsia Gym entry")
+    if strategic_approach is None:
+        _move(actions, reader, CENTER_TO_GYM, timing, "Fuchsia Gym entry")
+    else:
+        approach = strategic_approach.execute(actions)
+        if not approach.passed:
+            raise KogaChapterError("Strategic Koga approach returned a failed route report.")
+        after_approach = reader.read()
+        if (
+            after_approach.party_species_ids != initial.party_species_ids
+            or _bag_tuple(emulator) != initial_bag
+            or _money(emulator) != initial_money
+        ):
+            raise KogaChapterError("Strategic Koga approach changed protected resources.")
     _require(reader.read(), MapId.FUCHSIA_GYM, (4, 17), "Fuchsia Gym entry")
     _checkpoint(records, progress, emulator, reader.read(), "gym_entry", "Entered Fuchsia Gym")
 
@@ -311,7 +409,11 @@ def run_koga_chapter(
             "Juggler 3",
             (0xDD, 0x15, 3),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_1,
-                6,
+            KOGA_PP_BOUNDS[0][1],
+            RedBattlePlanId.KOGA_JUGGLER_3,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
+            allow_disable_fallback=True,
         )
     )
     _checkpoint(
@@ -323,7 +425,19 @@ def run_koga_chapter(
         "Defeated mandatory Juggler 3",
     )
 
-    _move(actions, reader, JUGGLER3_TO_TAMER2, timing, "Tamer 2 sight line")
+    # A long Disable branch can make Juggler 3 end with the story lead
+    # fainted even though a reserve legally finishes the trainer. Restore the
+    # complete party before initiating another sight-line battle.
+    _move(actions, reader, JUGGLER3_TO_CENTER, timing, "post-Juggler 3 recovery")
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
+    )
+    _move(actions, reader, CENTER_TO_TAMER2, timing, "Tamer 2 sight line")
     battles.append(
         _fight(
             actions,
@@ -333,13 +447,23 @@ def run_koga_chapter(
             "Tamer 2",
             (0xDE, 0x16, 2),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_4,
-            5,
+            8,
+            RedBattlePlanId.KOGA_TAMER_2,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "tamer2", "Defeated mandatory Tamer 2")
 
     _move(actions, reader, TAMER2_TO_CENTER, timing, "first Fuchsia recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
+    )
     _checkpoint(
         records,
         progress,
@@ -359,7 +483,12 @@ def run_koga_chapter(
             "Juggler 4",
             (0xDD, 0x15, 4),
             EventFlag.BEAT_FUCHSIA_GYM_TRAINER_5,
-            5,
+            8,
+            RedBattlePlanId.KOGA_JUGGLER_4,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
+            allow_disable_fallback=True,
+            reserve_pivot_threshold=JUGGLER_4_PIVOT_HP_THRESHOLD,
         )
     )
     _checkpoint(
@@ -371,15 +500,18 @@ def run_koga_chapter(
         "Defeated mandatory Juggler 4",
     )
 
-    trainer_events_before_koga = tuple(
-        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
-    )
+    trainer_events_before_koga = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     if trainer_events_before_koga != (False, True, False, False, True, True):
-        raise KogaChapterError(
-            f"Minimum-trainer gate changed: {trainer_events_before_koga!r}."
-        )
+        raise KogaChapterError(f"Minimum-trainer gate changed: {trainer_events_before_koga!r}.")
     _move(actions, reader, JUGGLER4_TO_CENTER, timing, "second Fuchsia recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
+    )
     _checkpoint(records, progress, emulator, reader.read(), "recovery2", "Healed before Koga")
 
     _move(actions, reader, CENTER_TO_KOGA, timing, "Koga stance")
@@ -389,6 +521,8 @@ def run_koga_chapter(
     _pulse(actions, MacroActionKind.MOVE, "up", frames=120)
     actions.execute(MacroAction(MacroActionKind.INTERACT))
     bag_before_koga = _bag_tuple(emulator)
+    if _bag(emulator).get(ItemId.X_ACCURACY, 0) < 1:
+        raise KogaChapterError("Koga requires a carried X Accuracy.")
     battles.append(
         _fight(
             actions,
@@ -398,32 +532,39 @@ def run_koga_chapter(
             "Koga",
             (KOGA_OPPONENT, KOGA_TRAINER_CLASS, KOGA_TRAINER_NUMBER),
             EventFlag.BEAT_KOGA,
-            8,
+            15,
+            RedBattlePlanId.KOGA_LEADER,
+            attack_move_id=attack_move_id,
+            attack_move_slot=attack_move_slot,
             clear_text=False,
+            allow_disable_fallback=True,
+            reserve_pivot_enemy_species=MUK_SPECIES_ID,
+            x_accuracy_enemy_species=MUK_SPECIES_ID,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "koga_defeated", "Defeated Koga")
 
     _clear_text(actions, reader, timing)
-    trainer_events_after_koga = tuple(
-        _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
-    )
+    trainer_events_after_koga = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     got_tm06 = _event(emulator, EventFlag.GOT_TM06)
     beat_koga = _event(emulator, EventFlag.BEAT_KOGA)
     soul_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & int(Badge.SOUL))
-    soul_badge_mirror = bool(
-        emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL)
-    )
+    soul_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & int(Badge.SOUL))
     if (
-        _bag_tuple(emulator)
-        != tuple(sorted((*bag_before_koga, (int(ItemId.TM06_TOXIC), 1))))
+        _bag_tuple(emulator) != _koga_reward_bag(bag_before_koga)
         or not got_tm06
         or not beat_koga
         or not soul_badge
         or not soul_badge_mirror
         or trainer_events_after_koga != (True,) * 6
     ):
-        raise KogaChapterError("Koga reward or trainer-deactivation gate failed.")
+        raise KogaChapterError(
+            "Koga reward or trainer-deactivation gate failed: "
+            f"bag_before={bag_before_koga!r}, bag_after={_bag_tuple(emulator)!r}, "
+            f"events={(got_tm06, beat_koga)!r}, "
+            f"badges={(soul_badge, soul_badge_mirror)!r}, "
+            f"trainers={trainer_events_after_koga!r}."
+        )
     _checkpoint(
         records,
         progress,
@@ -434,7 +575,14 @@ def run_koga_chapter(
     )
 
     _move(actions, reader, KOGA_TO_CENTER, timing, "post-Koga recovery")
-    _heal_center(actions, reader, emulator, timing)
+    _heal_center(
+        actions,
+        reader,
+        emulator,
+        timing,
+        attack_move_slot=attack_move_slot,
+        attack_move_max_pp=attack_move_max_pp,
+    )
     final = reader.read()
     _require(final, MapId.FUCHSIA_POKECENTER, (3, 3), "stable Koga boundary")
     _checkpoint(records, progress, emulator, final, "koga_stable", "Stable healed Fuchsia boundary")
@@ -456,51 +604,218 @@ def run_koga_chapter(
         _party_hp(emulator),
         _party_max_hp(emulator),
         _party_status(emulator),
-        int((final.first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1] & 0x3F),
+        attack_move_id,
+        attack_move_slot,
+        int((final.first_party_pp or (0, 0, 0, 0))[attack_move_slot - 1] & 0x3F),
         emulator.frame_count - start_frames,
         actions.actions_executed,
         not emulator.pressed_buttons,
     )
     if not report.passed:
-        raise KogaChapterError("Koga chapter failed its public evidence contract.")
+        raise KogaChapterError(
+            f"Koga chapter failed its public evidence contract: {report.public_dict()!r}."
+        )
     return report
 
 
 def _fight(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
     label: str,
     identity: tuple[int, int, int],
     event: EventFlag,
-    exact_spent: int,
+    max_spent: int,
+    battle_plan_id: str,
     *,
+    attack_move_id: int,
+    attack_move_slot: int,
     clear_text: bool = True,
+    allow_disable_fallback: bool = False,
+    reserve_pivot_threshold: int | None = None,
+    reserve_pivot_enemy_species: int | None = None,
+    x_accuracy_enemy_species: int | None = None,
 ) -> KogaBattleEvidence:
     battle = _settle_trainer_identity(actions, reader, emulator, timing, label, identity)
     before_pp = battle.first_party_pp
-    final = run_adaptive_trainer_battle(
-        reader,
-        actions,
-        lambda _: SURF_SLOT,
-        expected_map=MapId.FUCHSIA_GYM,
-        required_move_id=SURF,
-        timing=KOGA_BATTLE_TIMING,
-        label=label,
-        unknown_cancel_interval=3,
+    required_policy = (
+        RequiredMovePolicy.ANY_USABLE
+        if allow_disable_fallback
+        else RequiredMovePolicy.EXACT_REQUIRED
     )
+
+    last_active_party_index = battle.active_party_index
+    x_accuracy_used = False
+
+    def choose_move(raw: RawGameState) -> int:
+        nonlocal last_active_party_index
+        if raw.active_party_index is not None:
+            last_active_party_index = raw.active_party_index
+        party_hp = _party_hp(emulator)
+        if (
+            not x_accuracy_used
+            and x_accuracy_enemy_species is not None
+            and raw.enemy_species_id == x_accuracy_enemy_species
+            and raw.active_party_index in {None, 0}
+        ):
+            raise _PauseForKogaXAccuracy
+        pivot_target = _koga_matchup_pivot_target(
+            raw,
+            party_hp,
+            None if x_accuracy_used else reserve_pivot_enemy_species,
+        ) or _koga_reserve_pivot_target(
+            raw, party_hp, reserve_pivot_threshold
+        )
+        if pivot_target is not None:
+            raise _PauseForKogaReservePivot(pivot_target)
+        try:
+            return _koga_move_slot(
+                raw,
+                primary_slot=attack_move_slot,
+                allow_disable_fallback=allow_disable_fallback,
+            )
+        except KogaChapterError as error:
+            raise KogaChapterError(f"{label}: {error}") from error
+
+    terminal_mutual_ko = False
+    continued_after_faint = False
+    faint_pivots = 0
+    intent = BattleIntent(
+        "defeat_koga",
+        battle_plan_id=battle_plan_id,
+        required_move_policy=required_policy,
+        required_move_ref=(
+            None if allow_disable_fallback else pokemon_red_move_ref(attack_move_id)
+        ),
+        boost_capabilities=(
+            frozenset({BattleBoostStat.ACCURACY})
+            if x_accuracy_enemy_species is not None
+            else frozenset()
+        ),
+        boost_use_limits=(
+            ((BattleBoostStat.ACCURACY, 1),)
+            if x_accuracy_enemy_species is not None
+            else ()
+        ),
+        switch_capabilities=frozenset({BattleSwitchCapability.DIRECT}),
+    )
+    try:
+        while True:
+            try:
+                final = run_adaptive_trainer_battle(
+                    reader,
+                    actions,
+                    choose_move,
+                    expected_map=MapId.FUCHSIA_GYM,
+                    intent=intent,
+                    required_move_id=None if allow_disable_fallback else attack_move_id,
+                    timing=KOGA_BATTLE_TIMING,
+                    label=label,
+                    unknown_cancel_interval=3,
+                )
+                break
+            except BattleRuntimeError as error:
+                if control_request_matches(
+                    error.__cause__, _PauseForKogaXAccuracy.default_action
+                ):
+                    _battle_koga_x_accuracy(actions, reader, emulator, timing)
+                    x_accuracy_used = True
+                    continue
+                learned_pivot = learned_switch_party_index(error.__cause__)
+                proactive_pivot = isinstance(
+                    error.__cause__, _PauseForKogaReservePivot
+                ) or learned_pivot is not None
+                if isinstance(error.__cause__, _PauseForKogaReservePivot):
+                    pivot_target = error.__cause__.party_index
+                    pivot_label = f"{label} healthy reserve pivot"
+                elif learned_pivot is not None:
+                    pivot_target = learned_pivot
+                    pivot_label = f"{label} learned healthy reserve pivot"
+                else:
+                    if (
+                        not allow_disable_fallback
+                        or "active battler fainted" not in str(error)
+                    ):
+                        raise
+                    pivot_target = _settle_koga_fainted_pivot_target(
+                        actions,
+                        reader,
+                        emulator,
+                        timing,
+                        last_active_party_index=last_active_party_index,
+                    )
+                    party_hp = _party_hp(emulator)
+                    if faint_pivots >= max(0, len(party_hp) - 1):
+                        raise KogaChapterError(
+                            f"{label} exhausted its living-party continuation bound."
+                        ) from error
+                    pivot_label = f"{label} fainted-member continuation"
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        pivot_target,
+                        label=pivot_label,
+                        wait_frames=timing.wait_frames,
+                    )
+                except ProtectedRecoveryError as pivot_error:
+                    raise KogaChapterError(str(pivot_error)) from pivot_error
+                if not proactive_pivot:
+                    faint_pivots += 1
+                    continued_after_faint = True
+    except BattleRuntimeError:
+        mutual = reader.read()
+        if (
+            label != "Koga"
+            or mutual.battle_state != 2
+            or mutual.battler_hp != 0
+            or mutual.enemy_hp != 0
+            or not any(hp > 0 for hp in _party_hp(emulator)[1:])
+        ):
+            raise
+        final = _settle_terminal_mutual_ko(actions, reader, emulator, timing)
+        note_observed_trainer_battle_exit(intent)
+        terminal_mutual_ko = True
+    hp = _party_hp(emulator)
+    if not terminal_mutual_ko and _observed_terminal_mutual_ko_after_exit(
+        label=label,
+        final=final,
+        event_set=_event(emulator, event),
+        party_hp=hp,
+        last_active_party_index=last_active_party_index,
+    ):
+        # Selfdestruct can set the trainer event and leave battle mode between
+        # two observer reads.  Classify the same proven terminal exchange even
+        # when no forced-switch menu was sampled.
+        terminal_mutual_ko = True
     if before_pp is None or final.first_party_pp is None:
         raise KogaChapterError(f"{label} lacks PP evidence.")
-    spent = (before_pp[SURF_SLOT - 1] & 0x3F) - (
-        final.first_party_pp[SURF_SLOT - 1] & 0x3F
+    spent = (before_pp[attack_move_slot - 1] & 0x3F) - (
+        final.first_party_pp[attack_move_slot - 1] & 0x3F
     )
-    hp = _party_hp(emulator)
     max_hp = _party_max_hp(emulator)
     status = _party_status(emulator)
     if clear_text:
         _clear_text(actions, reader, timing)
-    if spent != exact_spent or not _event(emulator, event) or any(value <= 0 for value in hp):
+    minimum_spent = 0 if allow_disable_fallback else 1
+    if (
+        not minimum_spent <= spent <= max_spent
+        or not _event(emulator, event)
+        or (
+            any(value <= 0 for value in hp)
+            and not (
+                terminal_mutual_ko
+                and hp[0] == 0
+                and all(value > 0 for value in hp[1:])
+            )
+            and not (
+                continued_after_faint
+                and any(value > 0 for value in hp)
+            )
+        )
+    ):
         raise KogaChapterError(
             f"{label} evidence mismatch: spent={spent}, event={_event(emulator, event)}, hp={hp!r}."
         )
@@ -514,11 +829,282 @@ def _fight(
         hp[0],
         max_hp[0],
         status[0],
+        terminal_mutual_ko,
+        continued_after_faint,
+        x_accuracy_used,
+    )
+
+
+def _observed_terminal_mutual_ko_after_exit(
+    *,
+    label: str,
+    final: RawGameState,
+    event_set: bool,
+    party_hp: tuple[int, ...],
+    last_active_party_index: int | None,
+) -> bool:
+    """Recognize Koga's terminal Selfdestruct when battle exit wins the sampling race."""
+
+    return bool(
+        label == "Koga"
+        and final.battle_state == 0
+        and event_set
+        and last_active_party_index in {None, 0}
+        and len(party_hp) > 1
+        and party_hp[0] == 0
+        and all(hp > 0 for hp in party_hp[1:])
+    )
+
+
+def _settle_terminal_mutual_ko(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+) -> RawGameState:
+    """Select a living teammate after Weezing's terminal Selfdestruct."""
+
+    target = next(index for index, hp in enumerate(_party_hp(emulator)) if hp > 0)
+    for pulse_index in range(64):
+        raw = reader.read()
+        if raw.battle_state == 0:
+            if reader.read_input_readiness().ready:
+                return raw
+            _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            continue
+        if raw.battle_state != 2:
+            raise KogaChapterError("Koga mutual-KO recovery changed battle type.")
+        if (raw.battler_hp or 0) > 0:
+            _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+            continue
+        cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if cursor == target:
+            _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+        else:
+            _pulse(
+                actions,
+                MacroActionKind.MOVE,
+                "down" if cursor < target else "up",
+                frames=120,
+            )
+        if pulse_index % 5 == 4:
+            _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    raise KogaChapterError("Koga terminal mutual-KO recovery exceeded its bound.")
+
+
+def _koga_move_slot(
+    raw: RawGameState,
+    *,
+    primary_slot: int = SURF_SLOT,
+    allow_disable_fallback: bool,
+) -> int:
+    """Choose the authenticated primary move or a legal reserve after Disable."""
+
+    moves = raw.battler_moves
+    pp = raw.battler_pp
+    if moves is None or pp is None:
+        raise KogaChapterError("battle lacks live move and PP evidence")
+    candidates = (
+        (1, 2, 3, 4)
+        if raw.active_party_index not in {None, 0}
+        else (
+            (primary_slot, *(slot for slot in (4, 3, 1, 2) if slot != primary_slot))
+            if allow_disable_fallback
+            else (primary_slot,)
+        )
+    )
+    for slot in candidates:
+        index = slot - 1
+        if (
+            len(moves) > index
+            and len(pp) > index
+            and moves[index] != 0
+            and pp[index] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise KogaChapterError("battle has no legal ranked attack")
+
+
+class _PauseForKogaReservePivot(BattleControlRequest):
+    def __init__(self, party_index: int) -> None:
+        self.party_index = party_index
+        super().__init__(BattleAction.switch(party_index + 1))
+
+
+class _PauseForKogaXAccuracy(BattleControlRequest):
+    """Pause move selection for the preregistered Muk setup item."""
+
+    default_action = BattleAction.boost(BattleBoostStat.ACCURACY)
+
+
+def _battle_koga_x_accuracy(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+) -> None:
+    raw = reader.read()
+    if (
+        raw.battle_state != 2
+        or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+    ):
+        raise KogaChapterError("Koga X Accuracy requires the trainer MAIN menu.")
+    before = _bag(emulator).get(ItemId.X_ACCURACY, 0)
+    if before < 1:
+        raise KogaChapterError(f"Koga X Accuracy reserve mismatch: {before!r}.")
+    command = reader.read_battle_menu_state(raw).selected_main_command
+    if command == 0:
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
+    elif command == 2:
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=120)
+        _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
+    elif command == 3:
+        _pulse(actions, MacroActionKind.MOVE, "left", frames=120)
+    elif command != 1:
+        raise KogaChapterError("Koga X Accuracy exposed an invalid MAIN cursor.")
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    _select_bag_item(
+        actions,
+        emulator,
+        ItemId.X_ACCURACY,
+        LavenderTiming(wait_frames=timing.wait_frames),
+    )
+    _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
+    for pulse_index in range(48):
+        current = reader.read()
+        if (
+            _bag(emulator).get(ItemId.X_ACCURACY, 0) == before - 1
+            and current.battle_state == 2
+            and reader.read_battle_menu_state(current).phase is BattleMenuPhase.MAIN
+        ):
+            return
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=timing.wait_frames,
+        )
+    raise KogaChapterError("Koga X Accuracy did not consume once and return to MAIN.")
+
+
+def _koga_reward_bag(
+    initial_bag: tuple[tuple[int, int], ...],
+) -> tuple[tuple[int, int], ...]:
+    inventory = Counter(dict(initial_bag))
+    if inventory[int(ItemId.X_ACCURACY)] < 1:
+        return ()
+    inventory[int(ItemId.X_ACCURACY)] -= 1
+    if inventory[int(ItemId.X_ACCURACY)] == 0:
+        del inventory[int(ItemId.X_ACCURACY)]
+    inventory[int(ItemId.TM06_TOXIC)] += 1
+    return tuple(sorted(inventory.items()))
+
+
+def _koga_reserve_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    threshold: int | None,
+) -> int | None:
+    """Protect the story lead by handing a dangerous finish to the healthiest reserve."""
+
+    if (
+        threshold is None
+        or raw.active_party_index not in {None, 0}
+        or not 0 < (raw.battler_hp or 0) <= threshold
+    ):
+        return None
+    living_reserves = tuple(
+        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > threshold
+    )
+    return max(living_reserves, default=(0, -1))[1] if living_reserves else None
+
+
+def _koga_matchup_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    enemy_species_id: int | None,
+) -> int | None:
+    """Hand a preregistered dangerous matchup to the healthiest living teammate."""
+
+    if (
+        enemy_species_id is None
+        or raw.enemy_species_id != enemy_species_id
+        or raw.active_party_index not in {None, 0}
+        or (raw.battler_hp or 0) <= 0
+    ):
+        return None
+    living_reserves = tuple(
+        (hp, index) for index, hp in enumerate(party_hp[1:], start=1) if hp > 0
+    )
+    return max(living_reserves, default=(0, -1))[1] if living_reserves else None
+
+
+def _koga_fainted_pivot_target(
+    raw: RawGameState,
+    party_hp: tuple[int, ...],
+    *,
+    last_active_party_index: int | None = None,
+) -> int | None:
+    """Choose the healthiest living teammate after an observed active-member KO."""
+
+    active_party_index = raw.active_party_index
+    if active_party_index is None:
+        active_party_index = last_active_party_index
+    if raw.battle_state != 2 or (
+        raw.active_party_index is not None and (raw.battler_hp or 0) > 0
+    ):
+        return None
+    # PLAYER_MON_NUMBER briefly carries an out-of-party sentinel while the
+    # forced-switch dialogue is opening, so RawGameState intentionally exposes
+    # no active index at this exact boundary, before the fainted HP is copied
+    # back into the ordinary party table.  Carrying forward the last active
+    # index excludes that member without trusting the temporarily stale HP.
+    living = tuple(
+        (hp, index)
+        for index, hp in enumerate(party_hp)
+        if index != active_party_index and hp > 0
+    )
+    return max(living, default=(0, -1))[1] if living else None
+
+
+def _settle_koga_fainted_pivot_target(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: KogaTiming,
+    *,
+    last_active_party_index: int | None,
+) -> int:
+    """Advance the transient KO boundary until the party table is stable."""
+
+    raw = reader.read()
+    party_hp = _party_hp(emulator)
+    for pulse_index in range(16):
+        target = _koga_fainted_pivot_target(
+            raw,
+            party_hp,
+            last_active_party_index=last_active_party_index,
+        )
+        if target is not None:
+            return target
+        if raw.battle_state != 2:
+            raise KogaChapterError("Koga faint continuation left its trainer battle.")
+        _pulse(
+            actions,
+            MacroActionKind.CANCEL if (pulse_index + 1) % 4 == 0 else MacroActionKind.CONFIRM,
+            frames=timing.wait_frames,
+        )
+        raw = reader.read()
+        party_hp = _party_hp(emulator)
+    raise KogaChapterError(
+        "Koga faint continuation never exposed a living teammate: "
+        f"party_hp={party_hp!r}, active={raw.active_party_index!r}, "
+        f"battler_hp={raw.battler_hp!r}."
     )
 
 
 def _settle_trainer_identity(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
@@ -539,7 +1125,7 @@ def _settle_trainer_identity(
 
 
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: KogaTiming,
@@ -563,15 +1149,18 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
-        if state.party_species_ids != TOWER_FINAL_PARTY:
+        if not party_core_intact(state.party_species_ids):
             raise KogaChapterError(f"{label} changed the qualified party.")
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: KogaTiming,
+    *,
+    attack_move_slot: int = SURF_SLOT,
+    attack_move_max_pp: int = 15,
 ) -> None:
     approach = reader.read()
     _move(
@@ -587,16 +1176,18 @@ def _heal_center(
         _pulse(actions, MacroActionKind.CONFIRM, frames=240)
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and (
-                (reader.read().first_party_pp or (0, 0, 0, 0))[SURF_SLOT - 1]
+                (reader.read().first_party_pp or (0, 0, 0, 0))[attack_move_slot - 1]
                 & 0x3F
             )
-            == 15
+            == attack_move_max_pp
         ):
             _clear_text(actions, reader, timing)
             return
-    raise KogaChapterError("Fuchsia Center did not restore the complete party and Surf PP.")
+    raise KogaChapterError(
+        "Fuchsia Center did not restore the complete party and primary-move PP."
+    )
 
 
 def _nurse_approach_directions(raw: RawGameState) -> tuple[str, ...]:
@@ -608,7 +1199,7 @@ def _nurse_approach_directions(raw: RawGameState) -> tuple[str, ...]:
 
 
 def _clear_text(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: KogaTiming,
 ) -> None:
@@ -620,16 +1211,11 @@ def _clear_text(
 
 def _event(emulator: EmulatorState, event: EventFlag) -> bool:
     value = int(event)
-    return bool(
-        emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8)
-        & (1 << (value % 8))
-    )
+    return bool(emulator.read_u8(int(RamAddress.EVENT_FLAGS) + value // 8) & (1 << (value % 8)))
 
 
 def _bag_tuple(emulator: EmulatorState) -> tuple[tuple[int, int], ...]:
-    return tuple(
-        sorted((int(item), count) for item, count in Counter(_bag(emulator)).items())
-    )
+    return tuple(sorted((int(item), count) for item, count in Counter(_bag(emulator)).items()))
 
 
 def _require(
@@ -642,7 +1228,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(raw.party_species_ids)
     ):
         raise KogaChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "
@@ -672,7 +1258,7 @@ def _checkpoint(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     *,

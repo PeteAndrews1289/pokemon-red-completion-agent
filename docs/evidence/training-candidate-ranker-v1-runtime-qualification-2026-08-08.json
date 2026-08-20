@@ -1,0 +1,98 @@
+{
+  "schema": "pokemon-training-candidate-runtime-receipt-v1",
+  "status": "runtime_qualified",
+  "offline_promotion_plan_sha256": "7176a2e8685439f2e3936613709eb93e34331ecd229624fbb5a31c2a9db4b40a",
+  "original_runtime_plan_sha256": "82e1a4b94092ad60dd33b3f907206d7d6ba397299561d2367ea74a93daa925fd",
+  "repaired_runtime_plan_sha256": "31ce25b02520d90d3d12476596d4a9b168c9c29e739f68a839988ea536ddaf81",
+  "offline_gate_evaluation_sha256": "44fd149703bb7c6031e176e3c2329ea1e99f6f91d4f90f83e00cb2cde89a6115",
+  "candidate_model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+  "candidate_model_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+  "preserved_rejection": {
+    "receipt_sha256": "e28d9355895f066ce64971bb068d9499523039aac82e2c6d97ac889672adde6d",
+    "cause": "the authority wrapper recomputed a downstream directive despite returning the teacher candidate index",
+    "same_root_teacher_total_battles": 1802,
+    "same_root_teacher_total_healing_trips": 1031,
+    "same_root_teacher_final_party_levels": [55, 55, 55, 55, 55, 55],
+    "repair_source_commit": "a089988eb5717ea6b8f5449deb0b36c070b87495",
+    "repair_invariant": "returning the teacher candidate index is behaviorally identical to teacher-only execution"
+  },
+  "shadow": {
+    "status": "ok",
+    "lineage_id": "training-candidate-v1-shadow-01",
+    "source_commit": "d05dbb7ecbae19836eaa1a1ebdd6cdf72a8939fa",
+    "root_sha256": "0360a80ff93f9a3f45220671004d37192a92c5a30b2cb38fdc823a394ed9cbb8",
+    "replay_sha256": "de77b1d2c07834b2fb41a468b2415bfe868cf59f774f1f89ea89a6e680c6d26d",
+    "audit_sha256": "ceaed6f8ccc2c0e5a28017b61aeaa76eca2120a1a300869c8d1fe485326251d9",
+    "model_had_execution_authority": false,
+    "decisions": 119776,
+    "genuine_multi_candidate_decisions": 119353,
+    "genuine_accuracy": 0.9999413504478313,
+    "genuine_kind_accuracy": {
+      "trainee": 0.9998804787679069,
+      "venue": 1.0
+    },
+    "model_teacher_disagreements": 7,
+    "battles": 1802,
+    "healing_trips": 1098,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_fainted_count": 0
+  },
+  "causal_control": {
+    "status": "ok",
+    "lineage_id": "training-candidate-v1-control-02",
+    "source_commit": "f0325312a1b9f48ebac5631ecaae5ffd9b389764",
+    "root_sha256": "1d89c037716bfffe4dabf6a0360f1a9e73d3b7cbb2dce379e4dc20e7edc0f73e",
+    "replay_sha256": "26408c74ac06ce70b4f1cb545ce8d332a549140d491afda888b4141b45ec399d",
+    "audit_sha256": "fbac6723a23c2abc7f35a9b0cf7098f0abfb0ae23b69c7cbe684ed532a00e3d2",
+    "terminal_log_sha256": "9c54113fe41111bb90bd87c6bab4defdf934aba5716eaa0369bc31441b4e1fc5",
+    "model_had_execution_authority": true,
+    "authority_choice_kinds": ["trainee", "venue"],
+    "teacher_fallback_on_model_disagreement": false,
+    "decisions": 119668,
+    "genuine_multi_candidate_decisions": 119101,
+    "genuine_accuracy": 0.9983963190905198,
+    "genuine_kind_accuracy": {
+      "trainee": 0.9967256955754032,
+      "venue": 1.0
+    },
+    "model_teacher_disagreements": 191,
+    "disagreement_kinds": ["trainee"],
+    "evolution_battles": 66,
+    "evolution_healing_trips": 45,
+    "balance_battles": 1737,
+    "balance_healing_trips": 1069,
+    "total_battles": 1803,
+    "total_healing_trips": 1114,
+    "final_party_levels": [55, 55, 55, 55, 55, 55],
+    "final_fainted_count": 0
+  },
+  "gate_evaluation": {
+    "sha256": "3f248e22bc208dd19296903b81fb3e7e553023e90267a240d45eac659e77751a",
+    "shadow_checks_passed": 8,
+    "shadow_checks_failed": 0,
+    "causal_checks_passed": 11,
+    "causal_checks_failed": 0,
+    "shadow_eligible": true,
+    "causal_control_eligible": true,
+    "portable_training_loop_may_start": true
+  },
+  "claim_boundary": {
+    "supported": [
+      "one identity-free model learned state-dependent trainee and venue ranking on disjoint Pokemon Red captured-state lineages",
+      "the authenticated model safely controlled live trainee and venue selection with no teacher fallback",
+      "191 model-teacher trainee disagreements changed the live execution path while the lesson still completed inside every preregistered operational bound"
+    ],
+    "not_supported": [
+      "a causal venue disagreement",
+      "portable objective-loop integration of the strategic ranker",
+      "clean-start autonomous Pokemon play",
+      "learned navigation or battle tactics",
+      "cross-title transfer",
+      "living Pokedex completion"
+    ]
+  },
+  "portable_training_loop_may_start": true,
+  "cross_title_transfer_eligible": false,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

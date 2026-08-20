@@ -1,0 +1,15 @@
+{
+  "killed": 7,
+  "probes": [
+    {"mutation": "accept validation rows during fitting", "result": "killed"},
+    {"mutation": "accept sealed-test rows as development validation", "result": "killed"},
+    {"mutation": "leave unseen semantic-tag weights randomly initialized", "result": "killed"},
+    {"mutation": "add candidate-position bias to shared scores", "result": "killed"},
+    {"mutation": "reverse the cheapest-route baseline", "result": "killed"},
+    {"mutation": "report a one-sided paired tail as the two-sided p-value", "result": "killed"},
+    {"mutation": "accept a reordered feature vocabulary in a saved model", "result": "killed"}
+  ],
+  "schema": "strategic-navigation-model-mutation-audit-v1",
+  "survived": 0,
+  "test_partition_opened": false
+}

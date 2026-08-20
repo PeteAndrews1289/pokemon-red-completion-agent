@@ -1,0 +1,16 @@
+{
+  "actions_executed": 3338,
+  "badge_bits_after": 15,
+  "badge_bits_before": 7,
+  "ci_run_id": 31571116510,
+  "controller_released": true,
+  "curriculum": "post_strength_pre_koga_fuchsia",
+  "frames_executed": 493055,
+  "money_remaining": 25073,
+  "optional_route_trainers_preserved": 4,
+  "party_healed": true,
+  "party_species_ids": [28, 64, 59, 132],
+  "source_commit": "225b918e0e4efbca9882788715a7c0e973bb3342",
+  "status": "qualified",
+  "test_scenarios_opened": 0
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "pokemon-red-teacher-free-recovery-completion-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "claim_scope": {
+    "clean_power_on": true,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "learned_battle_controller_deployed": true,
+    "teacher_free_boost_execution": true,
+    "teacher_free_recovery_execution": true,
+    "teacher_free_switch_execution": false,
+    "navigation_learned": false,
+    "cross_game_transfer_evaluated": false
+  },
+  "completion": {
+    "checkpoints_completed": 312,
+    "checkpoints_declared": 312,
+    "actions_executed": 95790
+  },
+  "battle_controller": {
+    "decisions": 673,
+    "teacher_agreements": 669,
+    "teacher_agreement": 0.9940564635958395,
+    "mean_confidence": 0.9846117492997294,
+    "typed_requests_executed": 31,
+    "teacher_free_requests": 27,
+    "teacher_requests_suppressed": 21,
+    "safety_fallbacks": 4,
+    "target_resolution_failures": {
+      "capability_mask": 4
+    },
+    "resolved_targets": {
+      "boost_accuracy": 4,
+      "boost_attack": 1,
+      "boost_special": 8,
+      "recovery_hp": 12,
+      "recovery_hp_and_status": 5,
+      "recovery_status": 1,
+      "switch": 4
+    }
+  },
+  "model": {
+    "model_id": "pokemon.core.battle.control.mlp.v1",
+    "model_sha256": "9542220ad090c4014fd089f654d88dd523055832561952d4d44a99ad3f1be28a"
+  },
+  "execution": {
+    "collection_registry": "red-battle-heldout-v70",
+    "source_bundle_sha256": "9f8df540906b6832697751eeec9c746e9394d35b39c11524f2190aeef7092a95",
+    "rom_identity_private": true,
+    "save_state_used": false,
+    "human_input": false
+  },
+  "interpretation": {
+    "result": "A learned, game-neutral controller selected boosts and recovery effects from semantic state and completed Pokemon Red while qualified executors enforced explicit recovery capabilities.",
+    "remaining_gap": "Four party-switch requests still used the teacher-bound switch handler. Navigation and objective selection remain scripted, so this is not an autonomous full-game claim."
+  }
+}

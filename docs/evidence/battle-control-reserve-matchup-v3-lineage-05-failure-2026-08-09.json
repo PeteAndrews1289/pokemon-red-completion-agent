@@ -1,0 +1,81 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_retained_excluded_from_fitting",
+  "source_commit": "7ce344c6835e8f752f44715efcb6a74728e8bb8f",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990004,
+    "schedule_sha256": "6b970ed925b1322f2d76bc630c76f235ce6e1449585f8b80bff616d73ed74e7d",
+    "counted_campaign_root": false
+  },
+  "progress": {
+    "verified_checkpoints": 284,
+    "total_checkpoints": 312,
+    "balanced_team_training_complete": true,
+    "balanced_team_terminal_levels": [
+      51,
+      52,
+      52,
+      55,
+      51,
+      51
+    ],
+    "blaine_defeated": true,
+    "viridian_required_trainers_completed": false,
+    "game_complete": false
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-7e8c4f03db294b37b92b399b01cea187",
+    "manifest_sha256": "4d7aa92daf592ab3b7dfc81033c400af52d10e0283943ebc4e3e810826e2dbcc",
+    "status": "failed",
+    "reason_code": "unhandled_exception",
+    "label_records": 3123,
+    "total_records": 3124,
+    "bytes": 13827926,
+    "private_path_published": false
+  },
+  "failure": {
+    "phase": "viridian_gym_required_trainer_circuit",
+    "trainer": "cooltrainer_set_1",
+    "expected_party": [[167, 39], [7, 39]],
+    "observed_party": [[167, 39], [7, 39]],
+    "required_move_slot": 3,
+    "observed_move_slots": [3, 3, 3],
+    "lead_hp": [193, 190, 190],
+    "lead_status": [0, 8, 8],
+    "error": "cooltrainer_set_1 party or move policy changed after the opponent inflicted poison"
+  },
+  "diagnosis": {
+    "direct_cause": "The receipt required a zero status value on every recorded trainer-battle decision, so legal opponent-inflicted poison was misclassified as a controlled party or move-policy change.",
+    "controlled_policy_correct": true,
+    "lead_survived": true,
+    "required_party_observed": true,
+    "required_move_policy_observed": true,
+    "existing_recovery_boundary": "The route immediately visits the Viridian Pokemon Center and requires full HP, clear status, and restored lead PP before Giovanni.",
+    "route_regression": false,
+    "model_target_error": false,
+    "route_11_sleep_repair_emulator_qualified": true
+  },
+  "repair": {
+    "direction": "Accept legal opponent-inflicted status in required-trainer receipts while retaining lead survival, exact party, exact move-policy, explicit pre-Giovanni recovery, status-free Giovanni turns, and the status-free terminal contract.",
+    "same_failed_seed_rerun": false,
+    "failed_labels_used_for_fitting": false,
+    "counted_root_consumed": false
+  },
+  "claim_scope": {
+    "new_complete_lineage": false,
+    "balanced_team_development_emulator_qualified": true,
+    "blaine_chapter_emulator_qualified": true,
+    "viridian_status_receipt_unit_qualified": false,
+    "viridian_status_receipt_emulator_qualified": false,
+    "switch_target_candidate_retrained": false,
+    "cross_game_transfer_complete": false
+  }
+}

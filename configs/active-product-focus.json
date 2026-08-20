@@ -1,0 +1,480 @@
+{
+  "alarms": {
+    "maximum_consecutive_ci_only_repairs": 1,
+    "maximum_full_replays_during_active_lane": 0,
+    "maximum_sessions_without_measured_learning_output": 1,
+    "stop_on_repeated_fixed_route_patch": true,
+    "stop_on_unmeasured_teacher_label_copy": true
+  },
+  "lanes": [
+    {
+      "capability": "Materialize and strictly admit exactly eight balanced synthetic train outcomes for the title-neutral living-Pokedex decision to acquire another precursor or evolve now, while keeping all four development openings sealed.",
+      "cheapest_falsifier": "Execute only the frozen campaign 404e3a02 under its unused one-shot identities and admit the exact eight canonical rows. Any interruption, missing terminal, imbalance, replacement scenario, development disclosure, retry, fit, ROM access, or gameplay action closes the campaign without claiming a usable train dataset.",
+      "id": "rootless-living-dex-dependency-curriculum-v1",
+      "kind": "learning",
+      "latest_reorientation": {
+        "authority_delta": "None. Freezing a plan and passing a zero-action preflight add no synthetic outcome, model fit, comparison, gameplay, promotion, completion, or transfer authority.",
+        "blocker": "The exact eight-row campaign is frozen and training-ready: all twelve account-global one-shot identities and ten local output namespaces were unused at preflight. The train transitions have not been materialized or admitted, and all four development payloads remain sealed.",
+        "decision": "Retire campaign qualification as passed. Activate exactly one fixed eight-row synthetic train campaign; stop after its one-shot execution and strict admission, before any fit or development comparison.",
+        "evidence": {
+          "kind": "qualification",
+          "path": "docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json",
+          "sha256": "6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2"
+        },
+        "learning_output": "No measured learning output was added by qualification. The board remains 30/15 historical outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, and 0/8 synthetic rootless outcomes and atomic episodes. The immutable plan and read-only preflight consumed no claim.",
+        "next_falsifier": "Under one separately frozen execute identity, materialize the eight preassigned deterministic transitions, durably retain every terminal, then admit exactly eight canonical balanced outcomes. Any censored row, imbalance, or missing artifact fails fit eligibility without replacement.",
+        "next_session_goal": "Execute and strictly admit only campaign 404e3a02. Stop immediately at a complete eight-row admission or the first terminal state that makes full admission impossible; do not fit or open a development payload.",
+        "product_alignment": "These outcomes teach the reusable living-Pokedex dependency rule - preserve a scarce precursor and evolve when a duplicate is safe - without spending another cycle on brittle emulator roots. Red gameplay and Crystal transfer remain separate later tests.",
+        "session_id": "2026-08-20-rootless-dependency-campaign-training-ready",
+        "status": "active",
+        "stop_condition": "Stop after one settled eight-row admission or any terminal condition that prevents it. Never retry a claimed cell, substitute a scenario, fit, decode development payloads, compare, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer.",
+        "transfer_result": "Not run. Synthetic train outcomes are not Red gameplay or Crystal transfer; they only prepare a later separately claimed fit and held-out comparison."
+      },
+      "learned_authority": {
+        "current": "The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority.",
+        "target": "Add exactly eight admitted synthetic rootless train outcomes and eight matching synthetic atomic episodes. Grant no fit, comparison, gameplay, promotion, completion, sealed, or transfer authority."
+      },
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "synthetic_rootless_atomic_goal_episode",
+          "minimum": 8,
+          "partition": "train"
+        },
+        {
+          "kind": "synthetic_rootless_train_outcome",
+          "minimum": 8,
+          "partition": "train"
+        }
+      ],
+      "name": "Rootless living-Dex dependency train campaign V1",
+      "next_decision": "Eight admitted balanced rows permit a separate one-fit reorientation. Any missing or censored row closes this exact campaign without replacement. Neither result authorizes development disclosure, gameplay, or transfer.",
+      "progress": {
+        "atomic_goal_episodes": 0,
+        "authority_promotions": 0,
+        "causal_train_examples": 0,
+        "composition_attempts": 1,
+        "development_episode_attempts": 14,
+        "evidence": [
+          {
+            "kind": "unseen_comparison",
+            "path": "docs/evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json",
+            "sha256": "79228a80b0c77a8a9210d01103870895f18cfb64c14e370b0ed09d1381c137a5"
+          },
+          {
+            "kind": "unseen_comparison",
+            "path": "docs/evidence/repeatable-party-outcome-scale-fit-v2-2026-08-17.json",
+            "sha256": "5e34b811328d10262c64db0c5e49f271952693758c3a45d842be4c4c36efd0df"
+          },
+          {
+            "kind": "outcome_question",
+            "path": "docs/evidence/repeatable-party-outcome-recovery-successor-v1-2026-08-17.json",
+            "sha256": "b08d80989fb628085daa352bb3df0642e2b4ac232fc05c9d515bfa2913c68093"
+          },
+          {
+            "kind": "unseen_comparison",
+            "path": "docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json",
+            "sha256": "88e371bde589f7bc50521f8cafd0f2b7c7b40b23207810e944a089480d0cd5de"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/repeatable-goal-manager-outcome-fit-result-v1-2026-08-18.json",
+            "sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace"
+          },
+          {
+            "kind": "development_episode",
+            "path": "docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json",
+            "sha256": "79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38"
+          }
+        ],
+        "model_fits": 4,
+        "outcome_questions": {
+          "development": 15,
+          "train": 30
+        },
+        "synthetic_rootless_atomic_goal_episodes": 0,
+        "synthetic_rootless_train_outcomes": 0,
+        "transfer_results": 0,
+        "unseen_comparisons": 3,
+        "verified_composition_episodes": 1,
+        "verified_outcome_examples": 4
+      },
+      "prohibited_actions": [
+        "consumed_trial_retry",
+        "crystal_execution",
+        "development_payload_disclosure",
+        "full_game_replay",
+        "model_fit",
+        "sealed_red_evaluation",
+        "teacher_route_hardening"
+      ],
+      "rigor": "development",
+      "status": "active",
+      "stop_conditions": [
+        "Execute only the frozen eight scenarios with their preassigned treatments; any claimed cell is permanently nonretryable and no replacement scenario may enter the denominator.",
+        "Any ROM, context state, game root, controller action, teacher query, development-payload disclosure, private-path leak, or stale public binding closes the campaign.",
+        "Stop after strict eight-row admission or the first campaign terminal that prevents it; do not fit, compare, promote, or open development payloads."
+      ],
+      "time_box": {
+        "maximum_hours": 1,
+        "maximum_sessions": 1
+      },
+      "transfer_test": "Not in this lane. After a separate fit and sealed abstract comparison, a later Crystal adapter must independently compute the same title-neutral dependency signals."
+    },
+    {
+      "id": "rootless-living-dex-dependency-campaign-qualification-v1",
+      "kind": "maintenance",
+      "name": "Rootless living-Dex dependency campaign qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1. Campaign 404e3a02 was frozen with eight train scenarios and four opaque development commitments, then passed one zero-action preflight with all 12 global identities and 10 local namespaces unused. It consumed no claim and produced no outcome, fit, comparison, gameplay, or authority delta.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "rootless-living-dex-dependency-curriculum-design-v1",
+      "kind": "maintenance",
+      "name": "Rootless living-Dex dependency curriculum design V1",
+      "preserve_evidence": true,
+      "reason": "Published source 9569afa681eb4d9806230b6d4c5caa79845a7fb8 passed CI 32335706089/1 with 4,410 ROM-free tests. It freezes eight title-neutral train scenarios, four opaque development commitments, a dedicated interaction ranker, separate one-shot campaign/fit/comparison boundaries, and honest synthetic counters. Claude returned GO with no P0/P1 for zero-action freeze/preflight. No campaign, fit, comparison, gameplay, or transfer result occurred.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "causal-bootstrap-origin-qualification-v1",
+      "kind": "maintenance",
+      "name": "Causal bootstrap origin qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source aa65504899f51cf73aa28bfdb725abffeeec7d0a passed CI 32179177930/1. Its public-only bootstrap loads the development runner first, verifies zero preloaded project modules and exact origins in an isolated process, and exposes path-free readiness substages. It opened no ROM, private input, claim, prediction, or gameplay and is complete without retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "first-develop-team-causal-goal-outcome-v1",
+      "kind": "learning",
+      "name": "First DEVELOP_TEAM causal goal outcome V1",
+      "preserve_evidence": true,
+      "reason": "Published source 6077173618bf9fce9fb57804a6a1ce82249c9cee passed CI 32177113545/1 and its exact public freeze manifest validated, but the sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan present after return. Static public-source analysis found a deterministic import-order defect; the exact lane remains closed without retry, replacement root, or gameplay claim, and all learning counters remain unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "causal-readiness-manifest-qualification-v1",
+      "kind": "maintenance",
+      "name": "Causal readiness manifest qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source ece32d81a1bd7ad3de037ba14361ef2f00849e35 passed CI 32174872005/1. Its public-only canonical manifest tooling rejects stale, swapped, rehashed, reordered, noncanonical, aliased, and retired bindings before protected inputs; it created no future-lane manifest or learning output and is complete without retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "first-causal-goal-outcome-v1",
+      "kind": "learning",
+      "name": "First causal goal outcome V1",
+      "preserve_evidence": true,
+      "reason": "Published source 61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a passed CI 32171116652/1, but its sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan. The exact acquisition lane is closed without retry, replacement root, or gameplay claim; all learning counters remain unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "resettable-goal-manager-multiroot-learning-v1",
+      "kind": "learning",
+      "name": "Resettable multi-root goal-manager learning V1",
+      "preserve_evidence": true,
+      "reason": "The sole actual action-free six-root freeze at source 13fa0b6de423115b506361a1d4c0491395d74421 returned failed_closed at unexpected_failure with effects not attested and produced no campaign plan. The cause is not inferred, all learning counters remain unchanged, and the exact curriculum is closed without retry or root-specific rescue.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "goal-manager-acquisition-successor-learning-v1",
+      "kind": "learning",
+      "name": "Goal-manager acquisition successor learning V1",
+      "preserve_evidence": true,
+      "reason": "Published source 5beb7fa3512ca8ef294524484fccbf13607050e8 passed CI 32152766490/1 and a zero-outcome preflight. Its one fit identity was consumed, reached fit_attempted, and failed closed as unexpected_failure with no candidate bundle or accepted fit. The sanitized cause was not retained, so no gate cause is inferred and no retry is allowed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-red-acquisition-replanning-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Fresh Red acquisition-replanning execution qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source 458d47eace849d55712ff12e7a93f7ca5439579c passed CI 32147795552/1, but its single action-free freeze failed at action_free_root_inventory. No campaign plan, preflight, prediction, action, outcome, or fit occurred; the exact campaign is closed without retry or root/menu/skill repair.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "red-encounter-development-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Red encounter-source development execution qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published source 944fdc5b79aa240fb42084e47913f9446883e739 passed CI 32135801933/1. The Red adapter binds the title-neutral seam to a hard-limited four-battle, zero-heal, source-local executor; successful capture and development return to the same source boundary, and unsafe starts fail closed. No game ran and all learning counters remain unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "title-neutral-encounter-development-capability-v1",
+      "kind": "maintenance",
+      "name": "Title-neutral encounter-source development capability V1",
+      "preserve_evidence": true,
+      "reason": "Published source 6d028ea2003a4520b93a47d0607f5af01f8969e4 passed CI 32132328658/1. The ROM-free core and Red observation adapter expose an action-free, title-neutral DEVELOP_TEAM offer with strict collection-safe readiness verification. No game ran and execution integration remains separate.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-red-acquisition-replanning-curriculum-design-v1",
+      "kind": "maintenance",
+      "name": "Fresh Red acquisition-replanning curriculum design V1",
+      "preserve_evidence": true,
+      "reason": "The action-free inventory and reviewed contract froze sixteen prospective episodes across four unused roots. Existing contexts cannot yet expose a multi-choice post-acquisition replan, so the design is complete, no gameplay or learning counter advanced, and the next work is a separate reusable capability lane.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "paired-red-goal-manager-outcome-screen-v1",
+      "kind": "learning",
+      "name": "Paired Red goal-manager outcome screen V1",
+      "preserve_evidence": true,
+      "reason": "The exact pair is consumed and strictly admitted. Base and candidate each safely retained one acquisition with identical action/frame cost, producing a tie; both stopped after one decision, so composition and changed-state replanning remain unproved. No retry is allowed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "paired-red-goal-manager-outcome-screen-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Paired Red goal-manager screen execution qualification V1",
+      "preserve_evidence": true,
+      "reason": "The exact successor executor passed green CI and one zero-action preflight with the pair and both arm identities still unclaimed. It enforces pair-before-arm claims, identical resets, base-then-candidate order, three-decision hard stops, durable failure retention, and strict endpoint-only admission.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "paired-red-goal-manager-outcome-screen-design-v1",
+      "kind": "maintenance",
+      "name": "Paired Red goal-manager outcome screen design V1",
+      "preserve_evidence": true,
+      "reason": "The action-free design froze one development-outcome-unused acquisition train root with three initial goals, two identical-reset arms, a three-decision cap, and safe retained acquisition as the only primary endpoint. The runner made zero predictions or controller actions; execution remains separate.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-goal-manager-outcome-fit-v1",
+      "kind": "learning",
+      "name": "Teacher-free Red goal-manager outcome fit V1",
+      "preserve_evidence": true,
+      "reason": "Its one allowed capped inverse-propensity update completed from two authenticated positive targets in one episode. The candidate passed all frozen train-only loss, probability, weight, KL, round-trip, and protected-winner guards; it remains shadow-only and the consumed fit identity may never retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-goal-manager-development-learning-v2",
+      "kind": "learning",
+      "name": "Repeatable Red goal-manager development pilot V2",
+      "preserve_evidence": true,
+      "reason": "All twelve replacement trials were consumed exactly once. Strict admission found one complete two-decision composition episode and eleven failed trials; two verified outcomes are fit-eligible, atomic episodes and acquisitions were zero, and nineteen failed-prefix choices remain excluded. The fixed campaign may not run again.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-goal-manager-development-restart-v1",
+      "kind": "maintenance",
+      "name": "Repeatable Red goal-manager development restart",
+      "preserve_evidence": true,
+      "reason": "The old campaign and failed root were durably retired, and replacement campaign 452cff2a... then froze and passed a zero-action preflight under source 1c978fb7f60b41d46a2f74800b28652778d8b8a0 with four lineages and all twelve identities available. Restart maintenance produced no learning output and is complete.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-goal-manager-development-learning-v1",
+      "kind": "learning",
+      "name": "Repeatable Red goal-manager development pilot V1",
+      "preserve_evidence": true,
+      "reason": "Its first trial encountered a deterministic execution-interface invalid before any model prediction, controller action, or verified outcome. Trial 0 remains an infrastructure invalid, the failed root is closed account-wide, and the eleven untouched identities are durably retired_unexecuted; the campaign may never resume or enter learning counters.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-goal-manager-development-qualification-v1",
+      "kind": "maintenance",
+      "name": "Repeatable Red goal-manager development qualification",
+      "preserve_evidence": true,
+      "reason": "Published source cfa07f8c29635e759efd7f80b3055518a3ec08a6 passed CI 32101788892/1. Its corrected four-root, twelve-trial campaign froze before prediction and passed the zero-action preflight with all identities available. Qualification is complete with every learning and authority counter unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-goal-manager-operational-composition-execution-qualification-v4",
+      "kind": "maintenance",
+      "name": "Fresh Red operational-composition execution qualification V4",
+      "preserve_evidence": true,
+      "reason": "Published source 20d4b1532ee78a3ffc5b762b2f90ae536dfa2022 passed CI 32092299544/1. Its single action-free preflight failed at the sanitized readiness_authentication stage before model prediction, controller input, advanced frame, gameplay, or learning output. The exact root is durably closed and may never retry; no private cause is inferred.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-goal-manager-field-composition-execution-qualification-v3",
+      "kind": "maintenance",
+      "name": "Fresh Red field-composition execution qualification V3",
+      "preserve_evidence": true,
+      "reason": "Published source 1bbc4f34a339db1f861247990a4944053eb5fb3a passed CI 32090038721/1. Its single action-free preflight failed at the sanitized action_free_admission stage before any claim, prediction, controller input, frame, gameplay, or learning result. No private cause is inferred; the exact root was durably closed account-wide and may never retry.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "generic-fresh-root-preflight-observability-v1",
+      "kind": "maintenance",
+      "name": "Generic fresh-root preflight failure observability",
+      "preserve_evidence": true,
+      "reason": "Source af04830fa51cc624a3047822d9fa582163444bea passed CI 32089092868/1. Four allowlisted caught in-process preclaim stages now emit one canonical sanitized nonzero JSON envelope without private exception text or a learning-counter change. The ROM-free lane opened no root and is complete.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-goal-manager-field-composition-execution-qualification-v2",
+      "kind": "maintenance",
+      "name": "Fresh Red field-composition execution qualification V2",
+      "preserve_evidence": true,
+      "reason": "Published source 3c9ea92562163e41e5045b0ac837dd1b6ca959fb passed CI 32086166416/1, but its one exact preflight returned nonzero before emitting a success receipt. It was not retried, no execution identity was authorized, all learning and authority counters remained unchanged, and project policy permanently closed the attempted root without root-specific rescue.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-goal-manager-composition-execution-qualification-v1",
+      "kind": "maintenance",
+      "name": "Fresh Red goal-manager composition execution qualification V1",
+      "preserve_evidence": true,
+      "reason": "Its initial menu was statically impossible under the existing verified skill boundaries: capture self-excluded storage or resupply and their execution locations were incompatible. It closed before root inspection, model prediction, emulator frames, controller input, or gameplay and may not be rescued with a route, profile, or composite skill.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "fresh-goal-manager-composition-design-v1",
+      "kind": "maintenance",
+      "name": "Fresh Red goal-manager composition design",
+      "preserve_evidence": true,
+      "reason": "Its contract and ROM-free core were published after independent review. No root, prediction, controller input, outcome, fit, comparison, authority, or transfer result was created; execution prerequisites move to a separate qualification lane.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "protocol-party-representation-collision-audit-v1",
+      "kind": "maintenance",
+      "name": "Bounded party-representation collision postmortem",
+      "preserve_evidence": true,
+      "reason": "Its single report completed: all six conflicting clusters had exactly identical raw and projected contrasts, leaving semantic aliasing versus outcome instability unresolved but excluding any same-evidence optimizer or projection rescue. Party v2 and its missing-cell slice remain closed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "repeatable-party-outcome-learning-v1",
+      "kind": "learning",
+      "name": "Protocol-consistent title-neutral party utility learning",
+      "preserve_evidence": true,
+      "reason": "Its frozen v2 representation produced 28 contradictory row-pair comparisons and lacked venue-cost contrast in every observed goal slice, so the consumed gate stopped before fit and the design is closed.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
+    },
+    {
+      "id": "one-shot-party-outcome-campaign-v1-v2",
+      "kind": "learning",
+      "name": "One-shot 14-question party outcome campaign",
+      "preserve_evidence": true,
+      "reason": "Its provenance cost and non-retryable failures dominate the learning signal, so it is no longer the development leading edge.",
+      "retry_allowed": false,
+      "rigor": "benchmark",
+      "status": "retired"
+    }
+  ],
+  "product": {
+    "environment_role": "Red is the first curriculum and Crystal is the first transfer test; neither title is the product.",
+    "goal": "Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.",
+    "non_goals": [
+      "A perfect fixed Pokemon Red walkthrough.",
+      "An overleveled teacher replay that removes the decisions the model should learn.",
+      "Process, provenance, or CI evidence without measured learner outcomes.",
+      "A separate hand-scripted teacher for every game."
+    ],
+    "success_conditions": [
+      "Complete each title's story and supported mechanics under declared learned authority.",
+      "Acquire, retain, evolve, and trade every legitimately obtainable species required by the living collection contract.",
+      "Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.",
+      "Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability."
+    ]
+  },
+  "review_roles": {
+    "antigravity": "Challenge architecture and cross-game transfer at milestone decisions, with at most three falsifiable claims and explicit work to delete.",
+    "claude": "Audit frozen benchmark or sealed designs, statistics, leakage, and claims; routine development does not wait for a forensic review.",
+    "codex": "Own implementation, measurement, adjudication, documentation, publication, and the active-lane counter."
+  },
+  "rigor_policy": {
+    "benchmark": {
+      "exact_source_ci_binding": true,
+      "external_review": "before_execution",
+      "owner_authorization_per_case": false,
+      "purpose": "Freeze a meaningful comparison or authority gate after development has produced a signal.",
+      "repeatable": false
+    },
+    "development": {
+      "exact_source_ci_binding": false,
+      "external_review": "design_freeze_or_promotion_only",
+      "owner_authorization_per_case": false,
+      "purpose": "Generate diverse outcomes, fit models, falsify ideas, and iterate quickly on non-sealed scenarios.",
+      "repeatable": true
+    },
+    "sealed": {
+      "exact_source_ci_binding": true,
+      "external_review": "before_execution",
+      "owner_authorization_per_case": true,
+      "purpose": "Protect a one-shot claim whose result cannot be tuned, replaced, or retried.",
+      "repeatable": false
+    }
+  },
+  "schema": "pokemon.product-focus.v3",
+  "session_budget_percent": {
+    "data_and_scenarios": 10,
+    "maintenance_and_docs": 15,
+    "model_and_evaluation": 75
+  },
+  "status_report": {
+    "counter_source": "Tracked path-free evidence only; inputs, preflights, CI passes, and teacher runs do not advance learning counters.",
+    "required_fields": [
+      "product_goal",
+      "active_lane",
+      "learning_output",
+      "current_counters",
+      "authority_delta",
+      "transfer_result",
+      "blocker",
+      "next_decision",
+      "time_box",
+      "stop_condition"
+    ]
+  }
+}

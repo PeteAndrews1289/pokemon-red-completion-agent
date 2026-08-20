@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v28",
+  "status": "failed",
+  "source_commit": "7daec60eb82d1a4f5af0944f4544d5c6ce76ea9a",
+  "source_bundle_sha256": "729d36d41fb212aded9bc901a5e6d0b220e9c466151a09aa66d2b59b75ce68a1",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v28-validation-01",
+      "harness_seed": 1640001,
+      "battle_start_schedule_sha256": "338f9fc7172c304698324b6320acfeab86d859fe89c98de5389f44a0940a91cc",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 74,
+      "teacher_objective_fallbacks": 0,
+      "minimum_objective_confidence": 0.7983486180511433,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "human_input": false,
+      "save_restore_used": false,
+      "actions_executed": 109742,
+      "private_log_sha256": "eca65234ff75d67473c6511e58a1f231930a6e44b0ae5c153da95f464fc67d28"
+    },
+    {
+      "run_id": "red-objective-v28-validation-02",
+      "harness_seed": 1640002,
+      "battle_start_schedule_sha256": "85ed45f0b7db1fcc0fa9abd20a41d368a1ce0ae70dddd3fddb1d4b09d46b41ff",
+      "status": "failed",
+      "qualified_checkpoints": 96,
+      "failure": "The collection detour returned to the Vermilion PC and deposited its temporary specimens but exited without using the adjacent nurse. Diglett then defeated Lt. Surge, after which restoring the original party order exposed a fainted Wartortle.",
+      "private_log_sha256": "4182dbd4d5690ddcd7b79a4520a4c73acab03fdf86e53094852a5e459c3674cf"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The route correctly healed the full party before its long Route 1 and Viridian Forest acquisition curriculum, but it did not restore the party again after those encounters. Storage and Gym entry proved party membership and Diglett's battle readiness, not every preserved member's health.",
+  "repair_direction": "Use the already visited Vermilion Center nurse immediately after depositing temporary collection specimens, prove all three retained members are fully healed and status-free, then enter the Gym with the intended Diglett lead."
+}

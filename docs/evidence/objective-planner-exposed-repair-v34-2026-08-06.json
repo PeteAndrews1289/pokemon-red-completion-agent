@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v34",
+  "source_commit": "395886fab148cddf30602a2da7006d1acf79de67",
+  "source_bundle_sha256": "f68d547b40103d06a594b373d0a460ed326878d667decc41d75b4073579f1cb4",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1750002,
+    "battle_start_schedule_sha256": "d09c2cea3c5ecdf528c33ba9aa6de07356b2806be0543846cca8a467bd9d67ba",
+    "private_log_sha256": "ca7004cfd110860fa9fb5b9787685ccef2bc7cfac84117e96502f44b92330e7d",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 99263,
+    "party_size": 6,
+    "champion_party_levels": [
+      61,
+      59,
+      61,
+      61,
+      63,
+      65
+    ],
+    "champion_party_levels_note": "Recorded as final_party_levels in the original receipt. These are the Champion's fixed party levels, identical in every run, not this run's own party. Our party levels were not captured by the run report at the time and cannot be recovered."
+  },
+  "repairs_verified": [
+    "Failed-flee recovery delegates mandatory party selection to the shared observed switch primitive",
+    "Wild-capture helper recovery uses the same reusable switch skill instead of a second cursor heuristic",
+    "The shared switch consumes semantic party-health observations when available and retains RAM fallback compatibility",
+    "The exact failed seed crosses the former checkpoint-91 failure and completes the Champion and Hall of Fame"
+  ]
+}

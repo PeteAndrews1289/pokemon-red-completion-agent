@@ -5,6 +5,7 @@ from dataclasses import fields, replace
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _normalized_run_actions,
@@ -12,16 +13,35 @@ from pokemon_red_completion.lavender import (
 )
 from pokemon_red_completion.observation import EventFlag, MapId, RamAddress, RawGameState
 from pokemon_red_completion.tower import (
+    BUBBLEBEAM,
     DEFAULT_TOWER_TIMING,
+    ICE_BEAM,
     OPTIONAL_EVENTS,
     REQUIRED_EVENTS,
+    ROUTE_8_EAST_GOAL,
+    ROUTE_8_SAFE_ROW_MASKS,
+    TOWER_5F_MIN_SUPER_POTION_RESERVE,
+    TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD,
     TOWER_CHECKPOINT_COUNT,
+    TOWER_FINAL_PARTY,
     TOWER_LAVENDER_TIMING,
+    TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD,
+    TOWER_RIVAL_IVYSAUR,
+    TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD,
     TowerBattleEvidence,
+    TowerChapterError,
     TowerChapterReport,
     TowerCheckpoint,
     TowerTiming,
+    _is_restless_marowak_battle,
+    _observe_protected_party,
+    _plan_route_8_east,
+    _qualified_tower_special_move,
+    _route_8_coordinate_is_safe,
+    _RunState,
     _scripted_trainer_identity,
+    _tower_rival_needs_accuracy_reset,
+    party_core_intact,
 )
 
 
@@ -79,20 +99,22 @@ def _report() -> TowerChapterReport:
         optional_events=(False,) * len(OPTIONAL_EVENTS),
         required_events=(True,) * len(REQUIRED_EVENTS),
         x_accuracy_carried=True,
-        rare_candy_carried=True,
+        rare_candy_used_for_evolution=True,
+        elixir_carried=True,
         poke_flute_carried=True,
         evolution_before=(0xB3, 0x40, 0x3B),
         evolution_after=(0x1C, 0x40, 0x3B),
         evolution_moves_preserved=True,
         purified_zone_event=True,
         purified_heals=3,
-        super_potions_used=2,
-        super_potions_remaining=0,
-        super_potion_inventory_path=(2, 1, 0),
+        super_potions_used=3,
+        super_potions_remaining=3,
+        super_potion_inventory_path=(6, 5, 4, 3),
         party_hp=(111, 52, 37),
         party_max_hp=(111, 52, 37),
         party_status=(0, 0, 0),
-        money_remaining=27_437,
+        money_before=10_814,
+        money_remaining=18_139,
         frames_executed=100,
         actions_executed=50,
         controller_released=True,
@@ -108,6 +130,10 @@ def test_tower_timing_is_positive_and_bounded() -> None:
     )
     assert DEFAULT_LAVENDER_TIMING.flee_pulses == 20
     assert TOWER_LAVENDER_TIMING.flee_pulses == 64
+    assert TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD == 55
+    assert TOWER_5F_MIN_SUPER_POTION_RESERVE == 1
+    assert TOWER_6F_PAIR_FIELD_RECOVERY_HP_THRESHOLD == 40
+    assert TOWER_ROCKET_FIELD_RECOVERY_HP_THRESHOLD == 30
     assert _unknown_flee_action(cancel_for_safety=True) is MacroActionKind.CANCEL
     assert _normalized_run_actions(TOWER_LAVENDER_TIMING) == (
         (MacroActionKind.CANCEL, None, TOWER_LAVENDER_TIMING.wait_frames),
@@ -115,6 +141,77 @@ def test_tower_timing_is_positive_and_bounded() -> None:
         (MacroActionKind.MOVE, "right", TOWER_LAVENDER_TIMING.wait_frames),
         (MacroActionKind.CONFIRM, None, 240),
     )
+
+
+@pytest.mark.parametrize("move_id", (BUBBLEBEAM, ICE_BEAM))
+def test_tower_accepts_each_qualified_slot_three_lineage(move_id: int) -> None:
+    state = replace(
+        _raw(),
+        first_party_moves=(0x2C, 0x27, move_id, 0x37),
+        first_party_pp=(25, 30, 5, 25),
+    )
+
+    assert _qualified_tower_special_move(state) == move_id
+
+
+@pytest.mark.parametrize(
+    ("moves", "pp"),
+    (
+        ((0x2C, 0x27, 0x01, 0x37), (25, 30, 5, 25)),
+        ((0x2C, 0x27, ICE_BEAM, 0x37), (25, 30, 0, 25)),
+        (None, (25, 30, 5, 25)),
+        ((0x2C, 0x27, ICE_BEAM, 0x37), None),
+    ),
+)
+def test_tower_rejects_unqualified_or_unusable_slot_three_lineage(
+    moves: tuple[int, ...] | None,
+    pp: tuple[int, ...] | None,
+) -> None:
+    with pytest.raises(TowerChapterError, match="qualified BubbleBeam or Ice Beam"):
+        _qualified_tower_special_move(replace(_raw(), first_party_moves=moves, first_party_pp=pp))
+
+
+def test_tower_rival_resets_inherited_accuracy_loss_against_ivysaur_once() -> None:
+    rival = replace(
+        _raw(),
+        battle_state=2,
+        active_party_index=0,
+        enemy_species_id=TOWER_RIVAL_IVYSAUR,
+        player_accuracy_stage=6,
+    )
+
+    assert _tower_rival_needs_accuracy_reset(
+        rival,
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=False,
+    )
+    assert not _tower_rival_needs_accuracy_reset(
+        replace(rival, player_accuracy_stage=7),
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=False,
+    )
+    assert not _tower_rival_needs_accuracy_reset(
+        rival,
+        battle_plan_id=RedBattlePlanId.TOWER_RIVAL,
+        reset_complete=True,
+    )
+
+
+def test_route_8_planner_uses_the_source_derived_trainer_safe_map() -> None:
+    assert len(ROUTE_8_SAFE_ROW_MASKS) == 18
+    route = _plan_route_8_east((13, 5))
+    assert "".join(direction[0].upper() for direction in route) == (
+        "RRRDDDDDDDRRRRRRRRRRRRUUUUURURRRRRRRRRRRR"
+        "DRRRRRDDDDDRRRRDRRRRRUUUUURRRR"
+    )
+    coordinate = (13, 5)
+    deltas = {"up": (0, -1), "left": (-1, 0), "right": (1, 0), "down": (0, 1)}
+    for direction in route:
+        dx, dy = deltas[direction]
+        coordinate = (coordinate[0] + dx, coordinate[1] + dy)
+        assert _route_8_coordinate_is_safe(coordinate)
+    assert coordinate == ROUTE_8_EAST_GOAL
+    assert not _route_8_coordinate_is_safe((51, 12))
 
 
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
@@ -133,18 +230,54 @@ def test_tower_report_requires_every_terminal_gate() -> None:
         replace(report, optional_events=(True,) + report.optional_events[1:]),
         replace(report, required_events=(False,) + report.required_events[1:]),
         replace(report, x_accuracy_carried=False),
-        replace(report, rare_candy_carried=False),
+        replace(report, elixir_carried=False),
         replace(report, poke_flute_carried=False),
         replace(report, evolution_after=(0xB3, 0x40, 0x3B)),
         replace(report, evolution_moves_preserved=False),
         replace(report, purified_zone_event=False),
         replace(report, purified_heals=2),
-        replace(report, super_potions_remaining=2),
+        replace(report, super_potions_remaining=1),
         replace(report, party_hp=(110, 52, 37)),
-        replace(report, money_remaining=27_438),
+        replace(report, money_before=-1),
+        replace(report, money_remaining=23_338),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_tower_report_accepts_natural_evolution_without_spending_rare_candy() -> None:
+    report = replace(_report(), rare_candy_used_for_evolution=False)
+
+    assert report.passed
+
+
+def test_tower_report_accepts_blastoise_that_evolved_before_tower() -> None:
+    report = replace(
+        _report(),
+        rare_candy_used_for_evolution=False,
+        evolution_before=TOWER_FINAL_PARTY,
+    )
+
+    assert report.passed
+
+
+def test_tower_guard_learns_a_natural_mid_chapter_evolution() -> None:
+    run = _RunState()
+    evolved = replace(_raw(), party_species_ids=TOWER_FINAL_PARTY, first_party_hp=78)
+
+    assert _observe_protected_party(run, evolved)
+    assert run.evolved
+
+
+def test_tower_report_accepts_a_conserved_surplus_inventory_path() -> None:
+    report = replace(
+        _report(),
+        super_potions_used=3,
+        super_potions_remaining=4,
+        super_potion_inventory_path=(7, 6, 5, 4),
+    )
+
+    assert report.passed
 
 
 def test_tower_report_requires_selected_move_evidence_and_marowak_level() -> None:
@@ -168,6 +301,25 @@ def test_tower_report_requires_selected_move_evidence_and_marowak_level() -> Non
     assert not wrong_marowak.passed
 
 
+def test_restless_marowak_is_not_classified_as_a_random_wild() -> None:
+    battle = replace(
+        _raw(),
+        map_id=MapId.POKEMON_TOWER_6F,
+        player_x=10,
+        player_y=16,
+        battle_state=1,
+        enemy_species_id=0x91,
+        enemy_level=30,
+    )
+    intro = replace(battle, enemy_species_id=None, enemy_level=None)
+
+    assert _is_restless_marowak_battle(battle)
+    assert _is_restless_marowak_battle(intro)
+    assert not _is_restless_marowak_battle(replace(battle, enemy_level=29))
+    assert not _is_restless_marowak_battle(replace(battle, player_x=9))
+    assert not _is_restless_marowak_battle(replace(battle, map_id=MapId.POKEMON_TOWER_5F))
+
+
 def test_tower_public_report_discloses_route_assistance() -> None:
     public = _report().public_dict()
     assert public["status"] == "ok"
@@ -177,6 +329,7 @@ def test_tower_public_report_discloses_route_assistance() -> None:
     assert public["required_pickups"] == {
         "x_accuracy": True,
         "rare_candy": True,
+        "elixir": True,
         "poke_flute": True,
     }
 
@@ -202,3 +355,34 @@ def test_scripted_rival_identity_ignores_stale_engaged_set() -> None:
             return self.values[address]
 
     assert _scripted_trainer_identity(Memory()) == (0xF2, 0x2A, 5)
+
+
+def test_party_core_intact_detects_loss_reorder_and_substitution() -> None:
+    """The guard must still catch every failure exact equality caught."""
+
+    assert party_core_intact(TOWER_FINAL_PARTY)
+    assert not party_core_intact(None)
+    assert not party_core_intact(())
+    # a lost member
+    assert not party_core_intact(TOWER_FINAL_PARTY[:2])
+    # a reordered core
+    assert not party_core_intact((TOWER_FINAL_PARTY[1], TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[2]))
+    # a substituted member
+    assert not party_core_intact((TOWER_FINAL_PARTY[0], 0x99, TOWER_FINAL_PARTY[2]))
+    # an unevolved lead
+    assert not party_core_intact((0xB3, TOWER_FINAL_PARTY[1], TOWER_FINAL_PARTY[2]))
+
+
+def test_party_core_intact_allows_the_balanced_roster_to_recruit() -> None:
+    """Appending members must not trip a guard that exists to catch losses."""
+
+    assert party_core_intact((*TOWER_FINAL_PARTY, 0x84))
+    assert party_core_intact((*TOWER_FINAL_PARTY, 0x84, 0x68, 0x2B))
+    assert party_core_intact((TOWER_FINAL_PARTY[0], TOWER_FINAL_PARTY[1], 0x76))
+    # growth still cannot hide damage to the core
+    assert not party_core_intact((TOWER_FINAL_PARTY[0], 0x84, TOWER_FINAL_PARTY[2]))
+
+
+def test_party_core_intact_accepts_an_explicit_core() -> None:
+    assert party_core_intact((0x1C, 0x84), core=(0x1C,))
+    assert not party_core_intact((0x84, 0x1C), core=(0x1C,))

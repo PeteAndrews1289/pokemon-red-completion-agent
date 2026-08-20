@@ -63,7 +63,8 @@ the earlier Brock and Mt. Moon gates,
 the live Cerulean rival and required Route 24/25 trainer identities, Bill's complete story and
 S.S. Ticket sequence, the mandatory Gym trainer, Misty's live identity, and concurrent Cascade
 Badge and TM11 proof, plus the Rocket thief, TM28, Underground Path, exact Route 6 trainer events,
-three explicitly verified wild-flee recoveries, the live S.S. Anne rival, and concurrent raw
+three explicitly verified wild-flee recoveries, bounded pre-ship Diglett's Cave development to
+level 30, the live S.S. Anne rival, and concurrent raw
 Captain-rub event, HM01 event, inventory, and derived Cut-fact gates. The Surge segment adds
 bounded Spearow capture and the DUX trade, a source-valid Diglett Ground specialist with natural
 or exactly consumed TM28 Dig, the live variable `D743`/`D744` electric-lock puzzle, and concurrent
@@ -102,7 +103,8 @@ Teeth and reusable HM03 rewards, slot-four Water Gun replacement with Surf, and 
 Time's Up cleanup before another healed Fuchsia boundary. No behavioral-cloning, DAgger,
 timing/RNG generalization, or full-game result is implied. The Koga segment adds the exact three
 mandatory-trainer minimum, two Center recoveries, six-trainer post-victory deactivation, Koga's
-live identity, Soul Badge raw and mirror bits, retained TM06, and a final healed Fuchsia boundary.
+live identity, a Tower-sourced X Accuracy counter to Muk's Minimize, Soul Badge raw and mirror bits,
+retained TM06, later replacement of the consumed battle item, and a final healed Fuchsia boundary.
 Koga must precede the return to Erika here: Route 15 is one-way eastbound, Cycling Road requires
 the Bicycle, and field Surf requires the Soul Badge.
 The Cinnabar segment uses Route 16's upper Cut lane without a Bicycle, consumes the retained Rare
@@ -150,17 +152,133 @@ Watch mode does not provide a human controller, record the screen, expose the RO
 save, or change the teacher. It renders the same bounded execution while checkpoint progress is
 printed to the terminal.
 
+## Party composition and what the demonstrations teach
+
+The qualified segment above completes the game with one overleveled lead. That satisfies the
+completion contract, but it degrades every dataset derived from it: when a single member outclasses
+every opponent, the teacher's move label is almost always "use the strongest attack," and the
+switching, matchup, and resource decisions a learner needs to acquire never appear in the data.
+A single carry also concentrates all route risk in one Pokémon, which is how the first held-out
+schedule rehearsal ended at Route 25.
+
+Teaching therefore targets a **developed six-member party** instead:
+
+- acquire and retain six members with complementary roles;
+- evolve every member to its declared final form available in the title and save-lineage contract;
+- train the designated completion workhorse to level 60, then require full-route qualification;
+- avoid grinding already-final non-workhorses merely to imitate the carry's level; and
+- permit temporary deviations only when progression requires them, with the reason recorded.
+
+The stricter equal-level curriculum remains available for experiments that explicitly need it. It
+is not the main completion gate: a future Pokédex teacher needs to demonstrate evolution across
+many species, not spend thousands of redundant battles equalizing every specimen.
+
+## Collection curriculum and multi-game north star
+
+The curriculum uses four cumulative, independently reported tiers:
+
+1. **Finish** — complete the story and reach the title's verified terminal.
+2. **Master** — finish with reusable party, battle, recovery, navigation, and resource skills.
+3. **Complete** — satisfy the title-specific 100% contract, including every legitimately
+   obtainable species and supported optional objective.
+4. **Perfect collection** — retain every species that can coexist in the declared save lineage and
+   train every retained specimen to level 100.
+
+This ordering makes level 100 a genuine completeness proof without letting brute-force experience
+grinding masquerade as the ability to understand a new game.
+
+The balanced Hall-of-Fame route is the prerequisite, not the final collection target. After that
+route qualifies, Red gains a separate completionist curriculum that surveys every encounter area,
+catches every species legitimately obtainable in the supported Red cartridge, performs every
+available evolution, manages the active party and PC as one living collection, and trains every
+coexisting target to level 100. Trade- and version-exclusive gaps are reported explicitly rather
+than silently claimed as solo-cartridge completions.
+
+For the declared Squirtle, Helix Fossil, Hitmonlee, and Jolteon lineage, the executable contract
+partitions all 151 National Pokédex entries into 124 obtainable registrations and 27 named
+exclusions. Four registered earlier forms cannot coexist after evolving the route's unique
+Squirtle, Eevee, and Helix Fossil specimens, so the living and level-100 gates use an honest
+120-species denominator. Progress is deliberately reported through three non-interchangeable
+gates: registered as owned in the Pokédex, presently retained as a living specimen, and presently
+retained at level 100. The Red
+adapter now reads the Pokédex and performs a checksum-verified census of the party plus all twelve
+PC boxes. It overlays the active Work-RAM box on the saved-box banks exactly as the game does and
+treats the other eleven boxes as logically empty before the game's first box change. The latter
+two gates are therefore measurable, but remain false until the actual collection and training
+curricula satisfy them.
+
+The Red acquisition adapter now gives every one of the 124 registration targets exactly one
+canonical method at the pinned pret/pokered revision: 67 ordinary wild sources, 11 Safari sources,
+7 fishing sources, 4 gifts, 5 static encounters, 2 Game Corner prizes, 2 fossils, 4 in-game trades,
+and 22 evolutions. Starting from the 120 living targets and propagating every evolution/trade
+dependency produces **120 root specimens across 98 source species**. This catches subtle duplicate
+requirements that “one of each” misses: two Pidgeotto, two Spearow, two Abra, two Slowbro, three
+Poliwhirl, and three Dratini. It also derives the finite stone budget—3 Moon, 2 Leaf, 3 Water,
+1 Fire, and 1 Thunder Stone—before route execution can consume an irreplaceable resource.
+
+A bounded semantic area executor now consumes that graph. It seeks encounters, captures only a
+species still required at that source, flees non-progress encounters, catches into verified PC
+space when the party is full, switches boxes before the next search when needed, and proves each
+capture increased the coherent living census by exactly one. Its Route 1 simulation covers the
+complete Pidgey/Rattata loop and a Box 1→2 rotation. This is ROM-free executor qualification, not
+yet evidence that the live game traversed and captured those two species.
+
+Level-100 collection is deliberately a separate teacher mode. It supplies abundant capture,
+storage, evolution, resource-restocking, and long-horizon grinding examples, but ordinary learner
+evaluation retains level caps and variable matchups so overwhelming levels cannot substitute for
+battle competence.
+
+The project north star is a learned/hybrid agent that can reach a declared 100% contract across
+every technically supported main-series Pokémon title. Shared policies own exploration, battling,
+catching, party building, grinding,
+evolution, inventory, economy, recovery, and collection planning. Generation adapters describe
+mechanics such as abilities, breeding, and battle-system changes; game adapters provide maps,
+encounters, story dependencies, puzzles, and title-specific optional objectives. Transfer is
+measured by how much less title-specific teaching the next game requires, not by assuming Red's
+exact route will solve it. Each title publishes exclusions for requirements that cannot be
+performed in its evaluation environment, such as unavailable events or retired online services.
+
+“Every Pokémon game” is not one universal ROM script. Each supported title must pass four frozen
+evaluations: story completion on unseen seeds, its published perfect-save contract, its maximal
+coexisting level-100 collection, and transfer efficiency relative to training from scratch. A
+portfolio layer may combine multiple legitimate save lineages and versions for all-species
+coverage, but it cannot retroactively turn an unavailable event into a completed objective.
+
+The rules are expressed against the game-neutral party contract—membership, species, active-party
+position, level, health, status, moves, power points, experience, and the derived team metrics—so
+the same policy can be evaluated in a second title behind a small adapter. Only the species
+bindings are Red-specific.
+
+The declared Red roster is Blastoise, Dugtrio, DUX (Farfetch'd), Jolteon, Snorlax, and Hitmonlee,
+bound respectively to the lead-attacker, speed-control, field-utility, special-sweeper,
+bulky-absorber, and physical-sweeper roles. Any substitution must record why it was made; the
+roster type rejects an unexplained one.
+
+The live integration now catches Route 12 Snorlax, receives Eevee, evolves Jolteon, defeats the
+five Fighting Dojo trainers, chooses Hitmonlee, and rotates all six members through bounded switch
+participation. Its clean-power proof meets the level-floor and spread contract at levels 82–87
+with zero faints and reaches the Hall of Fame through 312 checkpoints. The deterministic teacher
+is therefore ready to generate the finalized six-member demonstrations; the learned policy has
+not yet earned a completion claim.
+
+Existing recorded demonstrations still describe single-carry play because the new balanced
+lineage has not yet been collected. Any dataset card derived from those recordings must say so.
+
 ## What each learning stage needs
 
 ### Behavioral cloning
 
 Action-aligned examples for individual skills:
 
-- semantic observation and current objective;
+- policy-observable semantic state plus a separately stored teacher objective label;
 - macro-action plus button press/release duration;
 - resulting observation and event delta;
 - success, retry, recovery, or terminal label; and
 - both nominal and deliberately perturbed starts.
+
+Hidden story flags and completion-referee evidence may label examples, but they are never model
+features. Dataset exports keep the policy view and privileged annotation view separate and test
+that changing annotation-only state cannot change the policy observation hash.
 
 Perturbations cover nearby legal positions, menu cursor state, encounter identity and timing,
 remaining HP and PP, damage rolls, status conditions, inventory/resource differences, and initial
@@ -183,15 +301,44 @@ DAgger rather than applied to the entire game at once.
 
 Three versioned artifact types remain outside Git:
 
-- **Episode manifest:** ROM, source, configuration, teacher and policy hashes; assistance class;
-  seed; start type; outcome; terminal reason; attempt denominator; and completion evidence.
+- **Episode manifest:** ROM, source bundle, teacher behavior, objective graph, execution, registry,
+  assignment, schedule, runtime, and policy hashes; assistance class; global and partition-local
+  slot ordinals; seed; start type; outcome; terminal reason; attempt denominator; and completion
+  evidence.
 - **Decision table:** emulator frame; structured observation; objective and skill; macro and
-  primitive action; duration; teacher label; next-state hash; event delta; and recovery state.
+  primitive action; duration; teacher label; next-state hash; event delta; v2 battle policy
+  context; and a descriptive recovery marker.
 - **Sparse event log:** map, objective, badge, party, item, battle, checkpoint, recovery, and
-  terminal transitions.
+  terminal transitions. Scheduled runs additionally record one
+  `battle_start_offset_applied` attestation for each of the 71 stable battle IDs and a terminal
+  71/71 schedule attestation.
 
-Decision tables should use Parquet. Manifests and sparse events should use canonical JSON or JSONL.
+Recorder v1 uses canonical JSONL for inspectable, append-only episode streams. Columnar Parquet
+training views are derived from validated episodes later; they are not the source of record.
 Screens, ROMs, saves, snapshots, and recordings remain private and content-addressed.
+
+A separate private campaign seal binds the registry, exact pushed source commit, live source
+bundle, behavior, objective graph, teacher execution, CPython/PyBoy runtime, ROM, and full slot
+roster before the first counted slot. Immutable per-slot outcome records and
+a path-free ledger preserve `complete`, `failed`, `interrupted`, and `invalid` results with their
+rationales. An orphan partial after a power loss becomes `interrupted` unless reconciliation can
+prove that a complete valid manifest had already been written.
+
+The recorder audits the durable episode before reporting success: each positive battle offset must
+link to its exact WAIT execution and frame count, while a zero offset must not invent an execution.
+The campaign status command can reconcile the same artifacts after a power loss without beginning
+a new slot.
+
+The successful non-counted rehearsal publishes a separate immutable qualification bound to its
+source, runtime, ROM, schedule, episode, manifest, and 71/71 audit. A counted slot cannot create its
+campaign seal or episode namespace until that qualification is reopened and re-audited. The slot's
+partial episode directory is then synchronously persisted before emulator execution begins, making
+the one-attempt claim durable across power loss.
+
+The battle feature view is `pokemon.core.battle.move-ranker.v2`. It retains the inference-available
+goal and move-policy context and adds `constraint.matches_required_move`. Exact-required and
+free-choice decisions are counted and scored separately. The `teacher_recovery_marker` is
+descriptive only: it is not a model feature, recovery budget, or sufficient recovery-policy label.
 
 ## Staged policy build
 
@@ -218,6 +365,11 @@ Evaluation seeds are preregistered harness schedules for timing and perturbation
 claim that Pokémon Red exposes a user-selectable seed. Training, tuning, and held-out seeds are
 disjoint.
 
+Before collection, the exact source/configuration/registry commit must be committed and pushed.
+The registry's disjoint, unassigned, non-counted schedule dry run must then complete and attest all
+71 battles before slot `01`. It is excluded from train, validation, test, and every performance
+denominator.
+
 - **Exact teacher:** repeat the frozen clean-power-on route and report its own attempts,
   checkpoints, actions, frames, recoveries, and terminal reasons.
 - **Perturbed teacher:** run preregistered timing/RNG schedules without restoration and report
@@ -229,10 +381,23 @@ Targeted snapshot-start specialist suites may measure position, battle, menu, an
 coverage, but must be labeled component tests. Official full-game attempts start clean and never
 restore, rewind, or import state from another run.
 
+Every declared slot has one attempt. Completion, failure, invalid evidence, and interruption all
+consume it and remain in the ledger denominator with an explicit reason; an outcome cannot be
+replaced after inspection. A protocol-wide restart requires a new registry version.
+
+Battle reports separate `free_choice_accuracy` from `forced_choice_accuracy` and include the
+unobserved-context count. Forced-choice accuracy measures obedience to an exact move constraint,
+not autonomous action selection, and cannot substitute for the free-choice result. Reports also
+disclose cross-partition policy-visible snapshot overlap and novel-visible-state performance.
+Visible semantic overlap is report-only because distinct hidden timing histories can converge on
+the same observation; copied episode identities, manifests, assignments, schedules, or root
+lineages remain hard leakage.
+
 ## Collection order
 
-1. Freeze the trajectory schema and logger.
-2. Record and exactly replay the clean-start bedroom trace.
+1. Freeze the first trajectory schema, private writer, and Pokémon Red adapter. **Done.**
+2. Record and exactly replay the clean-start bedroom trace. **Done as part of the first full
+   control trajectory.**
 3. Preserve the qualified **6/6** checkpoint segment through verified Squirtle. **Done.**
 4. Extend the same clean session through the lab rival, Oak's Parcel, and the Pokédex. **Done.**
 5. Extend and replay-qualify the route through Pewter City and Brock. **Done.**
@@ -245,20 +410,47 @@ restore, rewind, or import state from another run.
     **Done.**
 12. Extend and replay-qualify the Rocket Hideout, Giovanni, and Silph Scope. **Done.**
 13. Extend and replay-qualify Pokémon Tower, Mr. Fuji, and the Poké Flute. **Done.**
-14. Extend and replay-qualify Route 12 Snorlax through stable Fuchsia Center. **Done.**
+14. Extend and replay-qualify a bounded Route 12 Snorlax capture through stable Fuchsia Center.
+    **Done.**
 15. Extend and replay-qualify the Safari Zone, HM03 Surf, Fuchsia Gym, Koga, and HM04 Strength.
     **Done.**
 16. Extend and replay-qualify all remaining badges, the final Route 22 rival, Route 23, Victory
     Road, and Indigo Plateau preparation. **Done.**
-17. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
+17. Freeze explicit adaptive-battle identities, planner context, and prospective train,
+   validation, and test timing schedules, including exact execution identities, one-shot ledger
+   accounting, global plus partition-local slots, and an authenticated fitting lane that consumes
+   only complete train/validation outcomes while leaving test sealed. **Done as protocol
+   infrastructure; the fitting lane has not executed because collection is pending.**
+18. Commit and push the exact source/configuration state, then complete the disjoint, unassigned,
+   non-counted 71/71 schedule dry run before slot `01`. **Pending; v48 completed the exact formerly
+   failing economy seed but stress seeds `61003` and `61005` exposed conditional-recovery and
+   moving-NPC assumptions. Both exact schedules now complete 312/312 checkpoints, 36/36 objectives,
+   71/71 battles, and Hall of Fame under state-observed repairs. V48 remains historical and the
+   v49 rehearsal then exposed a late-corridor condition and was retired with every counted slot
+   unopened. The exact seed-62001 diagnostic now completes the full terminal under the corrected
+   observed-progress rule. V50's rehearsal completed, but its first counted lineage exposed a
+   lower-level-Diglett economy branch and is preserved as a failed immutable attempt. V51 uses the
+   qualified Bide sale only when live cash plus obsolete Potions cannot fund Tunnel supplies; its
+   fresh slots remain unopened until the committed-source rehearsal. The first Forest-lineage
+   rehearsal exposed a Route 24 moving-NPC collision at checkpoint 38/312. The qualified repair
+   cleared that point, but the second rehearsal exposed a final Rock Tunnel trapping-recovery gap
+   at checkpoint 109/312. Neither attempt consumed a declared slot; all twelve remain pending while
+   the type-aware move, full-party sleep pivot, Tower reserve, Sabrina recovery, and one-turn
+   Mansion grinding fixes are committed and pushed after their successful 312/312 clean-power
+   Hall-of-Fame replay. The first rehearsal of that source cleared Route 24 and Route 25 but
+   exposed a remaining Wrap lock at checkpoint 109/312; it consumed no slot. The prepared DUX/Peck
+   assignment for both final Grass trainers, Safari TM40 lesson, and semantic battle-item
+   confirmation have now passed a new 312/312-checkpoint clean-power Hall-of-Fame replay. The
+   exact source is being frozen for the next uncounted rehearsal; no declared slot is open.**
+19. Generate clean demonstrations plus perturbed starts and recoverable mistakes for each
    qualified skill.
-18. Train a small behavior-cloning baseline per specialist.
-19. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
+20. Train a small behavior-cloning baseline per specialist.
+21. Run DAgger until there are zero teacher interventions across 20 preregistered held-out rollouts
    from the frozen perturbation suite for that skill.
-20. Extend the teacher through the Elite Four, Champion, and Hall of Fame. **Done.**
-21. Produce multiple clean teacher completions with timing and RNG variation.
-22. Train the semantic planner and full-game composition only after that coverage exists.
-23. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
+22. Extend the teacher through the Elite Four, Champion, and Hall of Fame. **Done.**
+23. Produce multiple clean teacher completions with timing and RNG variation.
+24. Train the semantic planner and full-game composition only after that coverage exists.
+25. Evaluate the frozen learned/hybrid stack across held-out seeds with teacher fallback disabled.
 
 The deterministic-teacher gate of three intervention-free clean-power-on Hall-of-Fame runs is
 complete. Learned reliability still requires at least 8/10 frozen clean-start runs on the

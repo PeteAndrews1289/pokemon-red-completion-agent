@@ -1,0 +1,68 @@
+{
+  "claim_boundary": {
+    "supported": "The reviewed ROM-free core enforces the frozen three-decision composition contract and is published under green CI.",
+    "unsupported": [
+      "authenticated_execution_runner",
+      "episode_result",
+      "fresh_root_admission",
+      "fresh_context_generalization",
+      "living_pokedex_ability",
+      "red_completion",
+      "red_or_crystal_authority",
+      "transfer"
+    ]
+  },
+  "counter_treatment": {
+    "authority_promotions_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0
+  },
+  "implementation": {
+    "composition_runtime_sha256": "d9454924f5ab56a1bfda13fc8637a9b2ef24a9d737f890c454f025c33a5b1d35",
+    "design_sha256": "bff983a187c07932daeb637feddc396dd8a20fe7518a1924632bc7d30db5bfb0",
+    "goal_manager_runtime_sha256": "9378aeb8d74a56d9f60050f3a49c0e9943a846d28a9b7322029512871196780e",
+    "goal_manager_trajectory_sha256": "b66ed84582421f33b87e0f42b4a8aefe593de9de0be7e3b6de7b28d80362d57a"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32076494276,
+    "source_commit": "c4d8c7294a4c68ce0b9c506cf978a389c88a222f"
+  },
+  "qualification": {
+    "core_contract_only": true,
+    "design_decisions": 3,
+    "exact_model_identity_checked_before_observation": true,
+    "failed_decision_write_stops_before_action": true,
+    "independent_accounting_compared_with_skill_report": true,
+    "required_specimen_and_completion_ledgers_enforced": true,
+    "result_requires_separate_execution_receipt": true,
+    "review_verdict": "go_for_design_and_core_publication_only"
+  },
+  "recorded_on": "2026-08-17",
+  "remaining_execution_prerequisites": {
+    "authenticated_canonical_collection_ledgers": false,
+    "authenticated_exact_model_loader": false,
+    "authenticated_existing_skill_and_verifier_bindings": false,
+    "durable_composition_failure_and_terminal_evidence": false,
+    "fixed_account_one_shot_root_ledger": false,
+    "fresh_nonsealed_red_root_admitted": false,
+    "hard_in_flight_action_and_frame_limiters": false,
+    "protected_source_isolation_attested": false,
+    "root_safe_runner_qualified": false
+  },
+  "schema": "pokemon.red.fresh-goal-manager-composition-core-qualification.v1",
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_outcomes_decoded": 0,
+    "episode_outcomes": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "roots_admitted": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

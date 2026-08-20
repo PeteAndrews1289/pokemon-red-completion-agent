@@ -1,0 +1,155 @@
+{
+  "active_lane": "repeatable-goal-manager-development-qualification-v1",
+  "behavior_policy": {
+    "candidate_propensities_recorded": true,
+    "exploration_mix": 0.15,
+    "model_distribution_required": true,
+    "numpy_distribution_and_loaded_origins_authenticated": true,
+    "policy_id": "pokemon.core.goal-manager.exploratory-softmax.v1",
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "temperature": 1.0
+  },
+  "campaign": {
+    "decisions_per_trial_maximum": 3,
+    "focus_goal_kinds": [
+      "develop_team",
+      "restore_team",
+      "manage_storage",
+      "acquire_species"
+    ],
+    "focus_correction": {
+      "action_free_inventory_only": true,
+      "advance_story_focus_open_train_roots": 6,
+      "advance_story_focus_multi_choice_roots": 0,
+      "develop_team_focus_open_train_roots": 6,
+      "develop_team_focus_multi_choice_roots": 6,
+      "model_guided_selection": false,
+      "rationale": "A one-choice story-focused root cannot provide a strategic learning target. Develop-team roots preserve genuine multi-choice signal and expose advance-story as a competing candidate without pretending story was a focus stratum.",
+      "controller_actions": 0,
+      "emulator_frames_advanced": 0
+    },
+    "historical_selected_labels_accessible_to_authority": false,
+    "initial_executable_choices_minimum": 2,
+    "evolution_goals_authorized": false,
+    "evolution_exclusion_reason": "The current collection checkpoint cannot yet prove a precursor-to-evolution lineage transformation. Every frozen initial menu excludes evolution, and any later evolution opportunity stops the trial before prediction rather than fabricating living-Pokedex evidence.",
+    "partition": "train",
+    "repeatable_development_not_unseen_generalization": true,
+    "root_lineages": 4,
+    "trials": 12,
+    "trials_per_root": 3
+  },
+  "closed_root_boundary": {
+    "closed_v2_v3_v4_roots_allowed": false,
+    "fixed_account_collision_check_before_context_profile_or_episode_open": true,
+    "v4_failure_receipt_sha256": "ca76552fcf2f5cf868656ddffdeed34dfca702ad4767d9c53a52e3c30898a4b9"
+  },
+  "counter_contract": {
+    "atomic_goal_episodes": "one_choice_controller_started_durable_terminal",
+    "composition_attempts": "at_least_two_settled_choices_on_one_continuing_state",
+    "development_episode_attempts": "every_controller_started_trial_with_one_durable_terminal",
+    "existing_counters_changed_by_design_or_preflight": 0,
+    "verified_composition_episodes": "composition_attempt_with_changed_policy_context",
+    "verified_outcome_examples": "each_durably_joined_model_choice_and_independent_outcome"
+  },
+  "counter_baseline": {
+    "atomic_goal_episodes": 0,
+    "authority_promotions": 0,
+    "composition_attempts": 0,
+    "development_episode_attempts": 0,
+    "legacy_development_outcomes": 15,
+    "legacy_model_fits": 3,
+    "legacy_train_outcomes": 30,
+    "legacy_unseen_comparisons": 3,
+    "transfer_results": 0,
+    "verified_composition_episodes": 0,
+    "verified_outcome_examples": 0
+  },
+  "durability_and_limits": {
+    "actions_per_decision_maximum": 6000,
+    "campaign_plan_frozen_before_prediction": true,
+    "campaign_private_store_identity_frozen": true,
+    "decision_durable_before_controller_input": true,
+    "episode_actions_maximum": 18000,
+    "episode_frames_maximum": 1800000,
+    "failed_planned_trials_replaced": false,
+    "fixed_account_claim_before_prediction": true,
+    "fixed_account_claim_atomic_no_replace_publication": true,
+    "hard_action_limit_with_attempted_action_accounting": true,
+    "hard_frame_limit_with_independent_reconciliation": true,
+    "frames_per_decision_maximum": 600000,
+    "local_episode_identity_non_overwriting": true,
+    "strict_end_campaign_admission_requires_all_twelve_exact_claims": true,
+    "verified_failures_retained": true
+  },
+  "exact_binding_contract": {
+    "campaign_plan_digest_required_at_preflight_and_execution": true,
+    "context_plan": "externally_expected_digest_required_before_context_admission",
+    "context_catalog": "frozen_in_private_campaign",
+    "current_binding_manifest_per_root": "frozen_in_private_campaign",
+    "fit_summary": "frozen_in_private_campaign",
+    "goal_manager_model": "frozen_in_private_campaign",
+    "numpy_runtime": "exact_distribution_file_inventory_and_loaded_origin_census_required",
+    "outcome_objective": "pokemon.core.goal-manager.selected-outcome-objective.v1",
+    "promotion_plan": "frozen_in_private_campaign",
+    "private_artifact_store": "one_inode_and_sentinel_bound_identity_frozen_in_private_campaign",
+    "registry": "authenticated_historical_train_partition",
+    "runner": "exact_published_bytes_required",
+    "runtime": "exact_runtime_identity_required",
+    "runtime_imports": "PyBoy_distribution_and_every_loaded_module_origin_must_match_the_frozen_inventory",
+    "skill_manifest": "exact_current_source_manifest_required",
+    "source_bundle": "exact_published_bundle_required"
+  },
+  "implementation_status": "published_candidate_failed_action_free_inventory_story_focus_had_no_multi_choice_root_focus_repaired_without_campaign_freeze_or_gameplay",
+  "learning_objective": {
+    "failure_reward": -1.0,
+    "interrupted_choices": "retained_without_update_target",
+    "maximum_importance_weight": 4.0,
+    "objective_id": "pokemon.core.goal-manager.selected-outcome-objective.v1",
+    "strict_complete_campaign_denominator_required": true,
+    "success_reward": 1.0
+  },
+  "mission_boundary": {
+    "crystal_execution_authorized": false,
+    "evolution_outcomes_claimed": false,
+    "fresh_context_generalization_claimed": false,
+    "living_pokedex_ability_claimed": false,
+    "model_authority_promotion_claimed": false,
+    "sealed_red_evaluation_authorized": false,
+    "transfer_claimed": false
+  },
+  "pilot_evidence_requirements": {
+    "collection_relevant_selections_reported_separately_from_successes": true,
+    "successful_retained_acquisition_required_before_promotion": true,
+    "specimen_multiset_and_required_collection_digests_recomputed_at_admission": true,
+    "verified_specimen_preserving_storage_headroom_gain_counts_as_supporting_collection_evidence": true,
+    "storage_headroom_reconstruction_boundary": "The exact attested Red runner and independent box-switch verifier produce storage headroom; offline admission authenticates the persisted delta but does not reconstruct raw box memory."
+  },
+  "public_boundary": {
+    "private_capture_ids": 0,
+    "private_paths": 0,
+    "private_root_lineage_ids": 0,
+    "public_episode_summary_excludes_episode_identity": true
+  },
+  "recorded_on": "2026-08-17",
+  "replacement_rationale": {
+    "fresh_root_carousel_closed": true,
+    "reason": "Repeatable authenticated train captures provide causal model-led outcomes without consuming another scarce fresh root for infrastructure qualification.",
+    "v4_retry_allowed": false
+  },
+  "schema": "pokemon.red.repeatable-goal-manager-development-design.v1",
+  "status": "frozen_for_code_review",
+  "zero_effects": {
+    "campaign_roots_frozen": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_episode_attempts": 0,
+    "emulator_frames": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "teacher_queries": 0,
+    "trials_claimed": 0,
+    "verified_outcome_examples": 0
+  }
+}

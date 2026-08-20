@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 
@@ -18,6 +18,201 @@ class ControllerPort(Protocol):
 
 class UnsupportedMacroActionError(ValueError):
     """Raised when a specialist requests an action without a qualified compiler."""
+
+
+class ControllerFrameBudgetError(RuntimeError):
+    """Raised before controller time can exceed a declared frame budget."""
+
+
+class ControllerInputForbiddenError(RuntimeError):
+    """Raised before a read-only controller boundary can send any input or tick."""
+
+
+class ReadOnlyController:
+    """Expose read-only emulator state while refusing every controller primitive."""
+
+    __slots__ = ("_delegate",)
+
+    def __init__(self, delegate: object) -> None:
+        self._delegate = delegate
+
+    def press(self, _button: str) -> None:
+        raise ControllerInputForbiddenError("controller input is forbidden")
+
+    def release(self, _button: str) -> None:
+        raise ControllerInputForbiddenError("controller input is forbidden")
+
+    def tick(self, _frames: int) -> None:
+        raise ControllerInputForbiddenError("controller frames are forbidden")
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Expose the narrow banked-RAM read needed by complete collection state."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("read-only controller lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
+class FrameBudgetController:
+    """Transparent controller proxy that refuses the first over-budget tick.
+
+    Timing authority remains inside the executor layer even when a chapter
+    needs a campaign-specific hard frame ceiling.  Read-only emulator
+    attributes continue through the proxy so observation adapters can share
+    the same coherent state.
+    """
+
+    __slots__ = (
+        "_delegate",
+        "_error_message",
+        "_error_type",
+        "_maximum_frames",
+        "_start_frame",
+    )
+
+    def __init__(
+        self,
+        delegate: ControllerPort,
+        *,
+        maximum_frames: int,
+        error_type: type[RuntimeError] = ControllerFrameBudgetError,
+        error_message: str = "controller exhausted its hard frame budget",
+    ) -> None:
+        if type(maximum_frames) is not int or maximum_frames <= 0:  # noqa: E721
+            raise ValueError("maximum_frames must be a positive integer")
+        if not isinstance(error_type, type) or not issubclass(error_type, RuntimeError):
+            raise TypeError("error_type must be a RuntimeError class")
+        if not isinstance(error_message, str) or not error_message:
+            raise ValueError("error_message must be non-empty")
+        frame_count = getattr(delegate, "frame_count", None)
+        if type(frame_count) is not int or frame_count < 0:  # noqa: E721
+            raise TypeError("frame-budget controller needs an integer frame_count")
+        self._delegate = delegate
+        self._maximum_frames = maximum_frames
+        self._start_frame = frame_count
+        self._error_type = error_type
+        self._error_message = error_message
+
+    @property
+    def frame_count(self) -> int:
+        value = getattr(self._delegate, "frame_count", None)
+        if type(value) is not int or value < self._start_frame:  # noqa: E721
+            raise ControllerFrameBudgetError("controller frame_count is invalid")
+        return value
+
+    @property
+    def frames_executed(self) -> int:
+        return self.frame_count - self._start_frame
+
+    def tick(self, frames: int) -> None:
+        if (
+            type(frames) is not int  # noqa: E721
+            or frames < 0
+            or self.frames_executed + frames > self._maximum_frames
+        ):
+            raise self._error_type(self._error_message)
+        self._delegate.tick(frames)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Preserve the delegate's bounded cartridge-RAM observation port."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("frame-budget controller lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
+class WindowedFrameBudgetController:
+    """Refuse a tick before it exceeds either a resettable window or total cap."""
+
+    __slots__ = (
+        "_delegate",
+        "_initial_frame",
+        "_maximum_frames_per_window",
+        "_maximum_total_frames",
+        "_window_start",
+    )
+
+    def __init__(
+        self,
+        delegate: ControllerPort,
+        *,
+        maximum_frames_per_window: int,
+        maximum_total_frames: int,
+    ) -> None:
+        for name, value in (
+            ("maximum_frames_per_window", maximum_frames_per_window),
+            ("maximum_total_frames", maximum_total_frames),
+        ):
+            if type(value) is not int or value <= 0:  # noqa: E721
+                raise ValueError(f"{name} must be a positive integer")
+        if maximum_frames_per_window > maximum_total_frames:
+            raise ValueError("per-window frames cannot exceed the total cap")
+        frame_count = getattr(delegate, "frame_count", None)
+        if type(frame_count) is not int or frame_count < 0:  # noqa: E721
+            raise TypeError("windowed frame budget needs an integer frame_count")
+        self._delegate = delegate
+        self._initial_frame = frame_count
+        self._window_start = frame_count
+        self._maximum_frames_per_window = maximum_frames_per_window
+        self._maximum_total_frames = maximum_total_frames
+
+    @property
+    def frame_count(self) -> int:
+        value = getattr(self._delegate, "frame_count", None)
+        if type(value) is not int or value < self._initial_frame:  # noqa: E721
+            raise ControllerFrameBudgetError("controller frame_count is invalid")
+        return value
+
+    @property
+    def frames_executed(self) -> int:
+        return self.frame_count - self._initial_frame
+
+    @property
+    def frames_this_window(self) -> int:
+        return self.frame_count - self._window_start
+
+    def begin_window(self) -> None:
+        self._window_start = self.frame_count
+
+    def tick(self, frames: int) -> None:
+        if (
+            type(frames) is not int  # noqa: E721
+            or frames < 0
+            or self.frames_executed + frames > self._maximum_total_frames
+            or self.frames_this_window + frames > self._maximum_frames_per_window
+        ):
+            raise ControllerFrameBudgetError(
+                "controller exhausted its hard windowed frame budget"
+            )
+        self._delegate.tick(frames)
+
+    def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
+        """Preserve the delegate's bounded cartridge-RAM observation port."""
+
+        reader = getattr(self._delegate, "read_cartridge_ram_u8", None)
+        if not callable(reader):
+            raise TypeError("windowed frame budget lacks cartridge-RAM access")
+        value = reader(bank, address)
+        if type(value) is not int or not 0 <= value <= 0xFF:  # noqa: E721
+            raise TypeError("cartridge-RAM reader returned an invalid byte")
+        return value
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
 
 
 @dataclass(frozen=True, slots=True)
@@ -97,3 +292,18 @@ class FrameSafeExecutor:
         raise UnsupportedMacroActionError(
             f"{action.kind.value} requires a qualified specialist compiler"
         )
+
+
+class ChapterExecutor(Protocol):
+    def execute(self, action: MacroAction) -> object: ...
+
+
+class CountingExecutor:
+    def __init__(self, delegate: ChapterExecutor) -> None:
+        self.delegate = delegate
+        self.actions_executed = 0
+
+    def execute(self, action: MacroAction) -> object:
+        result = self.delegate.execute(action)
+        self.actions_executed += 1
+        return result

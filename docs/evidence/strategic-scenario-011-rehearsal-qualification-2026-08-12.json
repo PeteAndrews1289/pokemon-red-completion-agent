@@ -1,0 +1,74 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-011-validation-skill-materialized",
+    "envelope_sha256": "85191441fe93e86c8a685e561f8a5ad9a14a18884fefdae32e21c3ea9e7b07d1",
+    "state_sha256": "fdcf7e328ebfc0c78f1940fdd5122dd8d5910e15bf6f9310ad9a8f0079393df0",
+    "verified_objective_count": 17
+  },
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "episode": {
+    "assignment_id": "5f8fdc729cbea907453963bed8d8eda5f5c814be85edc0dca692b6db79ea8ca4",
+    "dataset": {
+      "candidate_count": 3,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-5f8fdc729cbea907453963bed8d8eda5f5c814be85edc0dca692b6db79ea8ca4",
+    "execution": {
+      "acknowledged_steps": 149,
+      "interruptions": {
+        "trainer_engagement": 1
+      },
+      "movement_requests": 149,
+      "replans": 0,
+      "selected_objective": "reach_fuchsia",
+      "status": "succeeded",
+      "wait_actions": 13
+    },
+    "manifest": {
+      "bytes": 676600,
+      "records": 465,
+      "sha256": "fdf07835b3e18ef86b316e0b7dfd27312eb6001ecf277ec09921f3eae6570454",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 276,
+        "snapshots": 185
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "route_cost_max": 153,
+    "route_cost_min": 19,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-12",
+  "registry": {
+    "registry_sha256": "d06ecc9c1bc9d4103b966c83df0ee6e49c2329ed7785c63751ada1e74c11cd71",
+    "scenario_id": "red-strategic-scenario-v2-011-validation",
+    "scenario_sha256": "9eed2112e736a0a18d8493f6a8abcb467ce1459148b530624e9df9e6038f2012",
+    "source_partition": "validation"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31561745716,
+    "ci_status": "success",
+    "git_commit": "9320a99fa8dde75abafc87f5a3311a20d0db220e",
+    "source_bundle_sha256": "24873b1a9c29d02cc6ad11c88c8dca1dcd22737570b503db73f906a55f723f2b",
+    "teacher_execution_sha256": "997cc82a03de8c750b4f3f73e665884ef6ebe49c2c73c7caf2912aaafb30e1af"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon-red-qualified-play-receipt-v1",
+  "recorded_on": "2026-08-02",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run qualified type-aware and reserve-bounded Rock Tunnel recovery, active-party Awakening and Super Potion use, a preserved Tower status reserve, natural-or-item evolution handling, the level-41 Rare Candy and TM40 Skull Bash lessons, transient-NPC movement recovery, adaptive Silph rival healing, the balanced six-member curriculum, and Hall-of-Fame completion. The collection rehearsal, counted train/validation runs, learned-policy rollout, obtainable Pokédex completion, level-100 collection, and cross-game transfer remain open.",
+  "source_identity": {
+    "collection_registry_sha256": "a919194f6517d9e715a8ad0ee59cc2122eb7fa4aa4e8e3d21a612f652a2c4aa9",
+    "source_bundle_sha256": "696b8a6313672f2b2b94a9a8dc41378c2ed6f354a7386c0493a4924b75b44afa",
+    "teacher_execution_sha256": "43c8c0703e4071506c5654f87fcd1ee1b26874e8cdaeecc7f8c413270f6b3fc7"
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "exact_source_teacher_executions": 1
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 771022
+  },
+  "qualified_lessons": {
+    "prepared_dux_final_tunnel_trainers": true,
+    "dux_status_escape": true,
+    "active_party_awakening": true,
+    "active_party_super_potion": true,
+    "tower_awakening_reserve_preserved": true,
+    "slowpoke_type_aware_bite": true,
+    "natural_or_rare_candy_evolution": true,
+    "route_level_41_rare_candy_used": true,
+    "safari_tm40_collected": true,
+    "tm40_skull_bash_taught": true,
+    "transient_npc_movement_retry": true,
+    "silph_water_flying_ice_beam": true,
+    "silph_bounded_rival_recovery": true,
+    "sabrina_hyper_potions_used": 1,
+    "duplicate_battle_item_consumption": false
+  },
+  "balanced_team": {
+    "curriculum_battles_won_minimum": 4000,
+    "minimum_level": 77,
+    "level_spread": 5,
+    "contract_passed": true
+  },
+  "collection_boundary": {
+    "uncounted_schedule_rehearsal_passed": false,
+    "counted_slots_consumed": 0,
+    "declared_slots_pending": 12,
+    "sealed_test_partition_opened": false,
+    "candidate_model_fitted": false,
+    "learned_policy_rollout_completed": false
+  },
+  "validation": {
+    "public_tests_passed": 1468,
+    "integration_execution_passed": true,
+    "integration_tests_deselected": 3,
+    "lint_passed": true,
+    "documentation_links_passed": true,
+    "public_artifact_check_passed": true,
+    "registry_regeneration_check_passed": true
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false,
+    "model_weights_included": false,
+    "trajectory_rows_included": false
+  }
+}

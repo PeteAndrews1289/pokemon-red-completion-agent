@@ -1,0 +1,304 @@
+{
+  "schema": "pokemon-terrain-v1",
+  "recorded_on": "2026-08-10",
+  "comparison_scope": "cartridges_agree compares every decoded Terrain across all reachable maps plus every grass/passability rule. Raw ROM storage pointers are compared and reported separately because their addresses do not affect traversability.",
+  "scope": "per-map walkability from tileset collision data. Says which squares are standable ground; does not model Surf, Cut, Strength, ledges, one-way jumps, doors that open on a story flag, or people standing in the way.",
+  "cartridges_agree": true,
+  "terrain_grids_agree": true,
+  "tileset_traversal_rules_agree": true,
+  "raw_tileset_records_agree": false,
+  "raw_tileset_differences": [
+    {
+      "tileset": 2,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 3,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 5,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 6,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 7,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 9,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 10,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 12,
+      "fields": [
+        "blockset"
+      ]
+    },
+    {
+      "tileset": 22,
+      "fields": [
+        "blockset"
+      ]
+    }
+  ],
+  "by_title": {
+    "red": {
+      "maps": 220,
+      "standable_squares": 48216,
+      "grass_squares": 2537,
+      "tilesets": 24,
+      "tilesets_with_grass": [
+        0,
+        3,
+        23
+      ],
+      "warps_on_passable_ground": 0.9826,
+      "pallet_town": {
+        "size": [
+          18,
+          20
+        ],
+        "picture": [
+          "...#.....#\"\"#.....#.",
+          "##########\"\"########",
+          "#..................#",
+          "#...####....####...#",
+          "#...####....####...#",
+          "#..##.##...##.##...#",
+          "#..................#",
+          "#..................#",
+          "#.........######...#",
+          "#...####..######...#",
+          "#.........######...#",
+          "#.........##.###...#",
+          "#..................#",
+          "#.........######...#",
+          "#...####...........#",
+          "#...####...........#",
+          "#...####...........#",
+          "##..################"
+        ],
+        "doors": [
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            13
+          ],
+          [
+            11,
+            12
+          ]
+        ],
+        "computed_walk": [
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            8,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            10,
+            8
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            8
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            12,
+            12
+          ],
+          [
+            11,
+            12
+          ]
+        ]
+      }
+    },
+    "blue": {
+      "maps": 220,
+      "standable_squares": 48216,
+      "grass_squares": 2537,
+      "tilesets": 24,
+      "tilesets_with_grass": [
+        0,
+        3,
+        23
+      ],
+      "warps_on_passable_ground": 0.9826,
+      "pallet_town": {
+        "size": [
+          18,
+          20
+        ],
+        "picture": [
+          "...#.....#\"\"#.....#.",
+          "##########\"\"########",
+          "#..................#",
+          "#...####....####...#",
+          "#...####....####...#",
+          "#..##.##...##.##...#",
+          "#..................#",
+          "#..................#",
+          "#.........######...#",
+          "#...####..######...#",
+          "#.........######...#",
+          "#.........##.###...#",
+          "#..................#",
+          "#.........######...#",
+          "#...####...........#",
+          "#...####...........#",
+          "#...####...........#",
+          "##..################"
+        ],
+        "doors": [
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            13
+          ],
+          [
+            11,
+            12
+          ]
+        ],
+        "computed_walk": [
+          [
+            5,
+            5
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            8,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            10,
+            8
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            8
+          ],
+          [
+            12,
+            9
+          ],
+          [
+            12,
+            10
+          ],
+          [
+            12,
+            11
+          ],
+          [
+            12,
+            12
+          ],
+          [
+            11,
+            12
+          ]
+        ]
+      }
+    }
+  }
+}

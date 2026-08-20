@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v27",
+  "status": "failed",
+  "source_commit": "846c7afa2801005039578d932cb51c59423fb07e",
+  "source_bundle_sha256": "c1c23218589aa6fd650c228ffd138ce6165a39e7ca9930b6765570a14d3bd8aa",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v27-validation-01",
+      "harness_seed": 1620001,
+      "battle_start_schedule_sha256": "1bd9aff259e2e58106af8fb4051eaeae7ab145a4f0da146b15642628fb553308",
+      "status": "failed",
+      "qualified_checkpoints": 174,
+      "failure": "The static-capture policy allowed the qualified lead to remain in battle just above its generic 35% recovery threshold, after which a legal Snorlax damage roll fainted it during the bounded capture attempt.",
+      "private_log_sha256": "13a3e0a3fc824ad29339aa175da69104b09f222a19329d8f9969abd3c5dcd5a7"
+    }
+  ],
+  "remaining_validation_runs_opened": false,
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The capture planner checked catcher safety before every action, but the Snorlax adapter reused a generic low-health threshold that did not reserve enough health for the opponent's free turn after a failed throw. Earlier schedules caught Snorlax in one to six throws and never exercised this longer hostile damage sequence.",
+  "repair_direction": "Use a conservative static-capture survival threshold before every weakening hit or throw, retain the bounded healing reserve, improve failure telemetry, replay the exposed seed, and preregister disjoint fresh cohorts."
+}

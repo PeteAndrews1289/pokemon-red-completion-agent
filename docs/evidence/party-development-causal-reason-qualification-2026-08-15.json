@@ -1,0 +1,156 @@
+{
+  "schema": "pokemon-party-development-causal-reason-qualification-v1",
+  "date": "2026-08-15",
+  "status": "source_qualified_catalog_unfrozen",
+  "source": {
+    "commit": "587fb18308eaffe3f69719ed79154c9fdf9f70c9",
+    "source_bundle_sha256": "8f474e2fee84038face3b51ddd642252b5c7ad98e84c12522aeaac7201cb7fc2",
+    "local_tests_passed": 3435,
+    "local_tests_skipped": 3,
+    "local_expected_failures": 1,
+    "typed_source_files": 222,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "generated_registries_match": true
+  },
+  "implemented_contract": {
+    "party_binding_schema": "pokemon.core.party-development-prospective-binding.v5",
+    "party_catalog_schema": "pokemon.core.party-development-prospective-catalog.v5",
+    "candidate_menu_document_schema": "pokemon.core.party-development-candidate-menu.v4",
+    "available_candidate_requires_no_unavailable_reason": true,
+    "masked_candidate_requires_one_typed_unavailable_reason": true,
+    "ordered_reason_vector_frozen_in_candidate_menu_digest": true,
+    "candidate_menu_digest_frozen_in_binding_digest": true,
+    "outcome_re_attests_binding_digest": true,
+    "current_red_missing_prior_reason": "insufficient_venue_evidence",
+    "title_map_species_move_slot_button_or_path_identity_in_reason_vocabulary": false
+  },
+  "claude_exact_commit_audit": {
+    "commit_verified": "587fb18308eaffe3f69719ed79154c9fdf9f70c9",
+    "source_test_config_and_script_worktree_clean": true,
+    "documentation_files_modified_outside_source_audit": 9,
+    "focused_baseline_tests_passed": 59,
+    "mutation_results": [
+      {
+        "mutation": "omit ordered reasons from the candidate menu document",
+        "result": "killed",
+        "semantic_oracle": "test_prospective_menu_binds_the_causal_reason_for_a_masked_candidate"
+      },
+      {
+        "mutation": "silently default an unexplained mask",
+        "result": "killed",
+        "semantic_oracle": "test_prospective_build_rejects_an_unexplained_mask_before_hashing"
+      },
+      {
+        "mutation": "derive a different Red adapter cause",
+        "result": "killed",
+        "semantic_oracle": "test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes"
+      },
+      {
+        "mutation": "derive no cause for an unavailable Red venue",
+        "result": "killed",
+        "semantic_oracle": "test_venue_adapter_marks_missing_prior_unavailable_and_binds_exact_hashes"
+      },
+      {
+        "mutation": "remove the menu agreement guard alone",
+        "result": "survived_by_redundancy",
+        "semantic_oracle": null
+      },
+      {
+        "mutation": "remove the binding post-init agreement guard alone",
+        "result": "survived_by_redundancy",
+        "semantic_oracle": null
+      },
+      {
+        "mutation": "remove the binding builder agreement guard alone",
+        "result": "survived_by_redundancy",
+        "semantic_oracle": null
+      },
+      {
+        "mutation": "remove all three independent agreement guards together",
+        "result": "killed",
+        "semantic_oracle": "test_prospective_build_rejects_an_unexplained_mask_before_hashing"
+      }
+    ],
+    "causal_reason_drift_channel_found": false,
+    "import_layering_approved": true,
+    "party_specific_reason_vocabulary_approved": true,
+    "verdict": "approve_source_qualification_and_concrete_red_8_plus_6_materialization_and_freeze_only",
+    "condition": "Every masked real candidate must be verified as an insufficient-venue-evidence case. Add a real producer before using any other cause."
+  },
+  "constraint_adjudication": {
+    "item_evolution_feasibility": {
+      "status": "already_model_facing_at_party_boundary",
+      "evidence": [
+        "EvolutionRouteKind.ITEM",
+        "candidate.evolution_method.item",
+        "candidate.evolution_feasible_now"
+      ]
+    },
+    "candidate_mask_causes": {
+      "status": "genuine_gap_closed_for_current_red_catalog",
+      "current_producers": [
+        "insufficient_venue_evidence"
+      ],
+      "declared_future_causes_without_current_party_producers": 6
+    },
+    "storage_and_box_pressure": {
+      "status": "implemented_at_higher_goal_and_collection_layers_not_duplicated_in_party_features",
+      "model_facing_goal_features": [
+        "resource_pressure",
+        "storage_pressure"
+      ],
+      "red_adapter_reads_all_boxes_and_immediate_capture_capacity": true,
+      "blocks_current_party_input_freeze": false
+    },
+    "capture_resources_and_currency": {
+      "status": "implemented_at_goal_resource_and_red_skill_layers_not_duplicated_in_party_features",
+      "portable_affordability_and_renewal_contract_exists": true,
+      "red_skill_checks_private_raw_money_and_stock": true,
+      "raw_currency_is_a_portable_model_feature": false,
+      "blocks_current_party_input_freeze": false
+    },
+    "version_and_external_acquisition_blocks": {
+      "status": "represented_in_campaign_and_pokedex_planning_but_runtime_multi_save_integration_remains_thin",
+      "version_exclusive_and_trade_link_derivation_exists": true,
+      "autonomous_multi_save_consolidation_complete": false,
+      "blocks_current_party_input_freeze": false,
+      "blocks_later_living_pokedex_product_completion": true
+    }
+  },
+  "mission_check": {
+    "capability_added": "A model-facing party candidate can now be masked only with an explicit title-neutral causal reason.",
+    "learned_authority_added": false,
+    "transfer_falsifier": "A later title adapter must express the same causal constraint without adding map, species, title or controller identity.",
+    "cheapest_falsifiers": [
+      "construct an unavailable candidate without a reason",
+      "change a frozen reason before outcome re-attestation"
+    ],
+    "time_box": "one exact source checkpoint",
+    "stop_condition": "Stop materialization if a real mask needs a cause for which no honest producer exists."
+  },
+  "remaining_gate": {
+    "concrete_red_candidate_menus": 0,
+    "frozen_venue_prior_entries": 0,
+    "prospective_catalog_frozen": false,
+    "train_outcomes_collected": 0,
+    "train_outcomes_required": 8,
+    "development_outcomes_collected": 0,
+    "development_outcomes_required": 6,
+    "completion_aware_model_fit": false,
+    "authority_promoted": false
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "candidate_outcomes_executed": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "next_authorized_step": "Compose a typed Route 11 venue prior from the immutable non-sealed historical outcome, then materialize and freeze the exact 8-train and 6-development input catalog. Keep unsupported venues masked and execute no candidate.",
+  "claim_boundary": "This qualifies one prospective input constraint and its semantic oracles. It is not a concrete Red catalog, an outcome campaign, a model fit, learned gameplay, cross-game transfer, living-Pokedex completion or authority.",
+  "private_path_fields": 0
+}

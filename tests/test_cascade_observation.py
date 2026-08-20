@@ -38,6 +38,7 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
+    _ss_anne_prior_chapter_complete,
     location_label,
 )
 
@@ -890,4 +891,42 @@ def test_reader_requires_all_misty_rewards_and_both_badge_mirrors() -> None:
     assert (
         PokemonRedStateReader(one_badge_mirror).read_cascade_state(raw).phase
         is CascadePhase.UNKNOWN
+    )
+
+
+def test_ss_anne_foundation_accepts_tm11_consumed_into_bubblebeam() -> None:
+    events = FOUNDATION_EVENTS + (
+        EventFlag.BEAT_CERULEAN_RIVAL,
+        EventFlag.GOT_NUGGET,
+        EventFlag.BEAT_ROUTE_24_ROCKET,
+        EventFlag.BILL_SAID_USE_CELL_SEPARATOR,
+        EventFlag.USED_CELL_SEPARATOR_ON_BILL,
+        EventFlag.MET_BILL,
+        EventFlag.MET_BILL_2,
+        EventFlag.GOT_SS_TICKET,
+        EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING,
+        EventFlag.BEAT_CERULEAN_GYM_TRAINER_0,
+        EventFlag.GOT_TM11,
+        EventFlag.BEAT_MISTY,
+        EventFlag.BEAT_CERULEAN_ROCKET_THIEF,
+        EventFlag.BEAT_ROUTE_6_TRAINER_3,
+        EventFlag.BEAT_ROUTE_6_TRAINER_4,
+    )
+    raw = replace(
+        _raw(
+            map_id=MapId.VERMILION_DOCK,
+            player_x=14,
+            player_y=0,
+            battle_state=0,
+            events=events,
+            items=(ItemId.HELIX_FOSSIL, ItemId.SS_TICKET, ItemId.TM28_DIG),
+            badges=Badge.BOULDER | Badge.CASCADE,
+        ),
+        first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
+    )
+
+    assert _ss_anne_prior_chapter_complete(
+        raw,
+        set(raw.bag_item_ids or ()),
+        int(Badge.BOULDER | Badge.CASCADE),
     )

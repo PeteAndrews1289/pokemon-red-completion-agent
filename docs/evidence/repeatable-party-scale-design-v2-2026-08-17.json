@@ -1,0 +1,93 @@
+{
+  "active_lane": "repeatable-party-outcome-learning-v1",
+  "claim_boundary": {
+    "not_supported": [
+      "the 24 plus 12 campaign has executed",
+      "the existing scorer improved on a larger untouched comparison",
+      "party-development authority is ready for promotion",
+      "the representation transfers to Crystal",
+      "the agent can complete a story or living Pokedex autonomously"
+    ],
+    "supported": "An action-free Red reconstruction found 36 independent unconsumed questions and a balanced V2 selection for the next completion-aware outcome campaign. The rehearsal used no controller, teacher, model, sealed Red case, Crystal case or full-game replay."
+  },
+  "design": {
+    "battle_credit_protocol": {
+      "candidate_eligibility_is_direct_combat_claim": false,
+      "direct_safe_selected_member_completes": true,
+      "fixed_completed_battle_dose": 1,
+      "qualified_escort_completes_when_direct_unsafe": true,
+      "selected_member_participates": true,
+      "stale_calibrated_venue_values_reused": false
+    },
+    "candidate_trials": 93,
+    "control_settle": {
+      "maximum_no_input_frames": 1,
+      "protected_semantics_may_change": false,
+      "roots_recovered": 9
+    },
+    "independence": {
+      "development_roots_available": 15,
+      "excluded_completed_pilots": 3,
+      "selected_roots": 36,
+      "selected_states": 36,
+      "train_roots_available": 24
+    },
+    "questions": {
+      "development": 12,
+      "train": 24
+    },
+    "scenario_pool": {
+      "candidate_options": 200,
+      "candidate_widths": [
+        2,
+        3,
+        4
+      ],
+      "rejected_root_counts": {
+        "qualified_escape_escort_unavailable": 4
+      }
+    },
+    "selected_completion_goal_counts": {
+      "development:balance": 3,
+      "development:collection": 3,
+      "development:evolution": 3,
+      "development:role_coverage": 3,
+      "train:balance": 14,
+      "train:collection": 3,
+      "train:evolution": 4,
+      "train:role_coverage": 3
+    },
+    "selected_kind_counts": {
+      "development:trainee": 6,
+      "development:venue": 6,
+      "train:trainee": 14,
+      "train:venue": 10
+    },
+    "selection_protocol": "balanced-kind-goal-coverage-v2"
+  },
+  "implementation": {
+    "consumed_v1_selection_reconstruction_preserved": true,
+    "frozen_plan_required_before_hybrid_controller_input": true,
+    "new_transition_boundaries_share_one_prospective_guard_with_the_executor": true,
+    "one_frame_control_settle_requires_semantic_equivalence": true,
+    "selection_optimizes_globally_feasible_kind_and_goal_margins": true
+  },
+  "next_step": "Publish the implementation, require green CI on the exact head, regenerate one external immutable plan from that clean source, execute the unsealed development campaign under standing approval, then fit on train only and compare once on development without opening sealed Red or Crystal.",
+  "protected_access": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_cases_opened": 0,
+    "teacher_choice_targets": 0,
+    "teacher_queries": 0
+  },
+  "recorded_on": "2026-08-17",
+  "schema": "pokemon.red.repeatable-party-scale-design.v2",
+  "status": "action_free_scale_design_ready",
+  "title_role": "Red curriculum development; not the product or transfer test",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

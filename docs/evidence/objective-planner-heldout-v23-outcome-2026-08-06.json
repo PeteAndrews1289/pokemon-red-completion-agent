@@ -1,0 +1,36 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v23",
+  "status": "failed",
+  "source_commit": "6a5ceb9f8b1aaed97d3250fc281a904eeedba69e",
+  "source_bundle_sha256": "6017ec8b3be2b84b6b7ed47ceeb6cb35c6bd831bc24172212eb76e353bc91753",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v23-validation-01",
+      "harness_seed": 1510001,
+      "battle_start_schedule_sha256": "755d777ee02a007c94be2767494eead5b3661eff9cf6f4ead74af7f3e6f46bc8",
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 73,
+      "teacher_objective_fallbacks": 0,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true,
+      "private_log_sha256": "5dc4d78695181c13fba25a1bc8f2c7ec0b6b59ff1e3085a3b47360b5e15c8256"
+    },
+    {
+      "run_id": "red-objective-v23-validation-02",
+      "harness_seed": 1510002,
+      "battle_start_schedule_sha256": "e1ace486d434f844ba505ecfded3cd1f4ec6e750ce08188c3d965f80f9b23925",
+      "status": "failed",
+      "qualified_checkpoints": 101,
+      "failure": "The final Route 11 income battle left the lead paralyzed. A subsequent wild encounter denied the first escape, and the flee loop advanced failed-RUN dialogue with an unsafe command instead of returning to RUN.",
+      "private_log_sha256": "f40515f910a379739ae647c48b4c077b8ff01ff2e9ff963b58459d7ef59b598e"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The income curriculum crossed encounter grass without first clearing an observed terminal status, while both the supply purchase and flee controller assumed the usual no-survivor/no-failed-escape branch.",
+  "repair_direction": "Cure supported lead status before the grass return, top up tunnel status supplies from live surviving inventory, and count actual RUN selections while using CANCEL to settle failed-escape dialogue. Retire the unopened v23 remainder and preregister fresh validation and sealed cohorts."
+}

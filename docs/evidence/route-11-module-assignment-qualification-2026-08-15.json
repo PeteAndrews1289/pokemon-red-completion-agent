@@ -1,0 +1,42 @@
+{
+  "authority_promoted": false,
+  "controller_actions": 0,
+  "crystal_contexts_opened": 0,
+  "finding_disposition": {
+    "H2_module_level_assignments": "closed_locally",
+    "L2_independent_attestation_closure": "closed_locally",
+    "M2_isolated_type_parameters": "closed_locally"
+  },
+  "module_assignment_source_elements": 8,
+  "outcomes_executed": 0,
+  "private_path_fields": 0,
+  "python_3_11_focused": {
+    "passed": 54,
+    "skipped": 1
+  },
+  "python_3_14_focused": {
+    "passed": 55,
+    "skipped": 0
+  },
+  "review_status": "pending_immutable_delta_review",
+  "schema": "pokemon.red.route-11-module-assignment-qualification.v1",
+  "sealed_test_cases_opened": 0,
+  "source_bundle_sha256": "ce43f6d9978d02fe36bf3f1fbb4b1aa7e78b67aab135f6c7893167d1745a67e4",
+  "source_commit": "16ed83decccf0f50cf1cc5af45dca6a92d0e7093",
+  "source_element_count": 51,
+  "source_element_sha256": "5237cf04bf0769aff8c73e8117cc6e6d133d882023df60e668537b57713bd2dc",
+  "teacher_queries": 0,
+  "validation": {
+    "full_rom_free": {
+      "deselected": 3,
+      "passed": 3508,
+      "xfailed": 1
+    },
+    "generated_registries": "passed",
+    "mypy_source_files": 223,
+    "public_and_documentation": "passed",
+    "ruff": "passed"
+  },
+  "waiver_allowlist_sha256": "1bafdcefd1859f133efa2a3b2fb8f0d06e5973abe60e323030cd8889a74b28f0",
+  "waiver_count": 9
+}

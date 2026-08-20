@@ -1,0 +1,45 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "48daa61ef0a5059a54e23d2c2c5b1c9589c61154",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated",
+    "high_level_battle_control": "model_authority",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "failure": {
+    "chapter": "Koga",
+    "battle": "Koga leader",
+    "predicted_action": "pokemon.core:battle:boost:accuracy",
+    "teacher_action_class": "pokemon.core:battle:select_move",
+    "observed_accuracy_boost_inventory": 0,
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "prior_repair_worked": "The unsupported Route 12 boost was masked and the replay advanced into Koga.",
+    "remaining_contract_error": "The Koga loop had a bound accuracy-boost executor, but target resolution did not require positive observable inventory before emitting the request.",
+    "why_failure_is_useful": "The item executor rejected the impossible second use instead of fabricating an item or substituting the teacher."
+  },
+  "repair": {
+    "direction": "Require the matching positive semantic resource count for every accuracy, attack, or special boost before typed execution.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "shadow_qualification_preserved": true,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

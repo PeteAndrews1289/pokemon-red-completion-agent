@@ -1,0 +1,21 @@
+{
+  "schema": "pokemon-training-control-candidate-summary-v1",
+  "model_id": "pokemon.core.training.control.mlp.v1",
+  "model_sha256": "e5a8a862ce3b9edb5153890f1d4c0af2a18b912b45770d77d99ce223177361f2",
+  "private_model_file_sha256": "7656c420fa528463fa90f0e3829a456af3e64c4cc26efcbb8fa3f6d042ce0e6b",
+  "fit": {"seed": 20260808, "hidden_units": 24, "epochs": 500, "learning_rate": 0.01, "l2": 0.0001, "class_balance_power": 1.0, "candidate_masked_loss": true},
+  "training": {"examples": 119328, "accuracy": 0.7819120407615983, "balanced_accuracy": 0.8974481222339324, "cross_entropy": 0.40507166580758985},
+  "validation": {
+    "examples": 58117,
+    "accuracy": 0.7805977596916565,
+    "balanced_accuracy": 0.8925099353203405,
+    "cross_entropy": 0.4018212433057826,
+    "per_class_recall": {"fight": 1.0, "flee": 1.0, "heal": 0.6952526799387443, "seek": 0.7672969966629588, "stop": 1.0}
+  },
+  "training_lineages": ["training-control-v3-train-01", "training-control-v3-train-02b"],
+  "validation_lineages": ["training-control-v3-validation-01"],
+  "state_overlap_count": 0,
+  "validation_novel_unique_fraction": 0.9985513064423228,
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

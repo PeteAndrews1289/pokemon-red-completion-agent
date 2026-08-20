@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon-red-autonomous-move-rollout-v1",
+  "recorded_on": "2026-08-05",
+  "status": "learner_failure_captured",
+  "model": {
+    "artifact_id": "red-battle-corrected-101b6e00095a4cd99d7c5053e4143de0",
+    "sha256": "98e506f89565f86de95132a78523b7b467737e182485e0fe7f04a5634bbfb271"
+  },
+  "action_authority": {
+    "model_selected_every_move": true,
+    "teacher_replaced_model_moves": false,
+    "teacher_non_move_control_signals_preserved": true,
+    "learned_item_use": false,
+    "learned_switching": false,
+    "scripted_navigation": true
+  },
+  "progress": {
+    "former_cerulean_failure_cleared": true,
+    "last_completed_checkpoint": 102,
+    "failure_boundary": "rock_tunnel_supply_shortfall",
+    "projected_money": 8951,
+    "required_cost": 10500,
+    "shortfall": 1549,
+    "game_complete": false
+  },
+  "corrections": {
+    "artifact_id": "red-battle-corrections-dc5b973073bc41639be2c6581632ee66",
+    "manifest_sha256": "5a0cbc914864866586be5ee9d968baa584fa1413940d9caa02233987a1ce6720",
+    "rollout_status": "learner_failure",
+    "records": 69,
+    "battle_groups": 7,
+    "reason_counts": {
+      "teacher_disagreement": 69
+    }
+  },
+  "interpretation": "Move choices were sufficient to win all battles through Lt. Surge, but their recovery cost made the next strategic purchase infeasible. The next model must connect tactical efficiency to downstream resource budgets."
+}

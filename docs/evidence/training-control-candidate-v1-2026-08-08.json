@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon-training-control-candidate-summary-v1",
+  "model_id": "pokemon.core.training.control.mlp.v1",
+  "model_sha256": "d04546c2a999aa4b5f85da983b4cf3e24aab7b2d29b691dbe27e5157ddf91d7d",
+  "private_model_file_sha256": "8088efbf25ccd5df0fe7838c21df7636eed5a0ab7c095dff3caa561c3a52307f",
+  "class_refs": ["seek", "fight", "flee", "heal", "stop"],
+  "fit": {"seed": 20260808, "hidden_units": 24, "epochs": 500, "learning_rate": 0.01, "l2": 0.0001, "class_balance_power": 1.0},
+  "training": {"examples": 106879, "accuracy": 0.7538431310173187, "balanced_accuracy": 0.7661853818821498, "cross_entropy": 0.48545465361378176},
+  "validation": {"examples": 60459, "accuracy": 0.7561653351858284, "balanced_accuracy": 0.76905559748557, "cross_entropy": 0.4820143515574484},
+  "training_lineages": ["training-control-v2-train-01", "training-control-v2-train-02-motion-repair"],
+  "validation_lineages": ["training-control-v2-validation-02"],
+  "state_overlap_count": 0,
+  "validation_classes_missing_from_training": [],
+  "promotion_eligible": false,
+  "limitations": ["offline_candidate_only", "shadow_and_model_control_not_yet_qualified"],
+  "private_artifacts_tracked": false
+}

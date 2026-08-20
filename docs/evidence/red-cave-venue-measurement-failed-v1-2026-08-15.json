@@ -1,0 +1,51 @@
+{
+  "artifact": {
+    "artifact_id": "red-cave-venue-measurement-v1",
+    "failure_reason_code": "unhandled_exception",
+    "manifest_sha256": "a1d0c5bdcbc457241d287db33f290822363ad07a3b5b3152bcda61e19f8745d1",
+    "measurement_records": 0,
+    "plan_records": 1,
+    "plan_stream_sha256": "c53bfef103ee5d6e867c9fc62d922f77596b1ddbefa64f5dad530e4444eb3bc1",
+    "status": "failed",
+    "terminal_attempt_records": 0,
+    "total_bytes": 897,
+    "total_records": 1
+  },
+  "cause": {
+    "candidate_projection_for_single_venue": 1,
+    "candidate_sink_enabled": true,
+    "failure_detected_after_teacher_return": true,
+    "no_choice_guard_rejected_any_candidate_record": true,
+    "read_only_zero_controller_probe_confirmed_singleton_projection": true,
+    "summary": "The training loop represented a fixed venue as a one-item candidate menu, while the measurement runner correctly required zero choices. The two individually plausible contracts were structurally incompatible.",
+    "terminal_accounting_was_not_retained": true
+  },
+  "execution_identity": {
+    "exact_ci_run": 31919075770,
+    "public_plan_file_sha256": "e463e6ef52c8d9eb1057c2c27013574cecc7be4be6a25e82c331722972d7c025",
+    "source_bundle_sha256": "beae0f56dd3f614e859640d1492851ef72addf9721c850f3986a13d2f0f61d11",
+    "source_commit": "f85ea17ec4a6dc26dcdf4b94e1a71f4a36fa1d34"
+  },
+  "interpretation": {
+    "authority_promoted": false,
+    "learner_outcomes_opened": 0,
+    "measurement_accepted": false,
+    "model_fit": false,
+    "model_predictions": 0,
+    "retry_or_root_copy_allowed": false,
+    "teacher_queries": 0,
+    "training_example_created": false,
+    "v1_attempt_consumed": true,
+    "venue_prior_entries_added": 0
+  },
+  "private_path_fields": 0,
+  "remediation": {
+    "future_failures_retain_path_free_reason": true,
+    "future_runs_retain_terminal_attempt_before_acceptance": true,
+    "singleton_venue_menus_suppressed_title_neutrally": true,
+    "v2_requires_distinct_authenticated_root": true,
+    "v2_requires_fresh_source_ci_and_authorization": true
+  },
+  "schema": "pokemon.red.party-development-cave-venue-measurement-failure.v1",
+  "status": "failed_consumed"
+}

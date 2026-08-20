@@ -1,0 +1,80 @@
+{
+  "schema": "pokemon-red-viridian-forest-receipt-v1",
+  "recorded_on": "2026-08-02",
+  "status": "passed",
+  "claim_scope": "The deterministic teacher qualified Viridian Forest as a second reusable ordinary-wild source, retained the declared six-specimen dependency set, restored the story roster, and completed an uninterrupted clean-power run through the Hall of Fame. The remaining acquisition curriculum, learned-policy rollout, obtainable Pokédex completion, level-100 collection, and cross-game transfer remain open.",
+  "source_identity": {
+    "collection_registry_sha256": "ca50411f02fe0ea2e6be75f38f1f081253ef150e82cc58449241ed533269dde5",
+    "source_bundle_sha256": "50ac06a5fc586844cf51e6a1c82ca7ba9a61fa103ddbb8c98e2ce10b35eee7bb",
+    "teacher_execution_sha256": "81e90e1ee77c4419f7dfb01f126a96d792f73d548d653922d8796d310dd5e05e"
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "adjacent_private_artifacts_unchanged": true,
+    "exact_source_teacher_executions": 1
+  },
+  "viridian_forest_acquisition": {
+    "live_emulator_execution": true,
+    "reusable_semantic_source_controller": true,
+    "global_pokedex_observation": true,
+    "global_party_observation": true,
+    "all_twelve_boxes_observed": true,
+    "species_quantities": {
+      "10": 1,
+      "11": 2,
+      "14": 2,
+      "25": 1
+    },
+    "physical_specimens_retained": 6,
+    "distinct_species_retained": 4,
+    "exact_party_deposit_transitions_verified": 3,
+    "duplicate_specimens_sent_directly_to_storage": 3,
+    "forest_and_gate_warps_normalized": true,
+    "story_party_restored": true
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "frames_executed": 83619428,
+    "actions_executed": 765088
+  },
+  "terminal_collection": {
+    "pokedex_registered_targets": 18,
+    "distinct_living_target_species": 13,
+    "level_100_targets": 0,
+    "physical_specimens": 15,
+    "party_count": 6,
+    "box_counts": [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    "all_boxes_verified": true,
+    "storage_initialized": true
+  },
+  "learning_boundary": {
+    "formal_train_validation_fitter_implemented": true,
+    "candidate_model_fitted": false,
+    "sealed_test_partition_opened": false,
+    "learned_policy_rollout_completed": false
+  },
+  "validation": {
+    "public_tests_passed": 1458,
+    "private_integration_tests_passed": 1,
+    "private_integration_tests_deselected": 42,
+    "lint_passed": true,
+    "documentation_links_passed": true,
+    "public_artifact_check_passed": true,
+    "registry_regeneration_check_passed": true
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false,
+    "model_weights_included": false,
+    "trajectory_rows_included": false
+  }
+}

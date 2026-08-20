@@ -1,0 +1,1071 @@
+{
+  "collection": {
+    "admission_audit": {
+      "available_route_cost": {
+        "count": 95,
+        "max": 843,
+        "min": 15
+      },
+      "candidate_availability_counts": {
+        "available": 95
+      },
+      "candidate_count_counts": {
+        "2": 17,
+        "3": 16,
+        "4": 2,
+        "5": 1
+      },
+      "candidate_shape_baseline": {
+        "matches": 5,
+        "training_selected_indexes": {
+          "advance_story+reach_next_challenge/2": 1,
+          "advance_story+reach_next_challenge/3": 1,
+          "advance_story+reach_next_challenge/4": 1
+        },
+        "validation_cases": 12
+      },
+      "example_count": 36,
+      "failure_reason_counts": {},
+      "interruption_kind_counts": {
+        "trainer_engagement": 9,
+        "wild_battle": 27
+      },
+      "model_development_admitted": true,
+      "numeric_feature_schema_frozen": false,
+      "outcomes": {
+        "succeeded": 36
+      },
+      "paired_evaluation_capability": {
+        "minimum_validation_disagreements_required": 6,
+        "perfect_scorer_minimum_two_sided_exact_p": 0.0078125,
+        "reasons": [],
+        "validation_baseline_disagreements": 8,
+        "validation_baseline_matches": 4,
+        "validation_unique_context_cases": 12
+      },
+      "partition_audit": {
+        "context_target_conflict_count": 0,
+        "decision_overlap_count": 0,
+        "lineage_count": 36,
+        "partition_counts": {
+          "train": 24,
+          "validation": 12
+        },
+        "partition_unique_teacher_choice_context_counts": {
+          "train": 24,
+          "validation": 12
+        },
+        "ready_for_model_development": true,
+        "reasons": [],
+        "replicated_teacher_choice_example_count": 0,
+        "schema": "strategic-navigation-partition-audit-v2",
+        "teacher_choice_example_count": 36,
+        "train_validation_context_overlap_count": 0,
+        "unique_teacher_choice_context_count": 36,
+        "validation_need_tags_missing_from_training": []
+      },
+      "partition_example_counts": {
+        "train": 24,
+        "validation": 12
+      },
+      "replan_reason_counts": {
+        "visible_object": 5
+      },
+      "resource_renewal_counts": {},
+      "route_cost_only_baseline": {
+        "matches": 17,
+        "ties_excluded": 0,
+        "unique_minimum_cases": 36
+      },
+      "schema": "strategic-navigation-collection-audit-v2",
+      "selected_index_counts": {
+        "0": 13,
+        "1": 18,
+        "2": 4,
+        "3": 1
+      },
+      "semantic_need_tag_counts": {
+        "advance_story": 36,
+        "reach_next_challenge": 36
+      },
+      "unique_context_route_cost_baseline": {
+        "matches": 17,
+        "ties_excluded": 0,
+        "unique_minimum_cases": 36
+      },
+      "unique_contexts": {
+        "replicated_teacher_choice_examples": 0,
+        "teacher_choice_contexts": 36
+      }
+    },
+    "audit_receipt_sha256": "4e5e0767e51cfa6b231ed2c2193069acfe8469371012ca7f31ed6aaa8ec2a010",
+    "collection_source_commit": "ed4d6726c615a49235cd1262fb8964937555f54f",
+    "examples": 36,
+    "sealed_test_examples_opened": 0,
+    "train_examples": 24,
+    "validation_examples": 12
+  },
+  "feature_schema": {
+    "candidate_order_used_as_feature": false,
+    "candidate_scoring": "shared_per_candidate",
+    "feature_count": 92,
+    "feature_names": [
+      "set.candidate_count_scaled",
+      "candidate.availability.available",
+      "candidate.availability.unavailable",
+      "candidate.availability.unknown",
+      "candidate.route_cost.log1p",
+      "candidate.route_steps.log1p",
+      "candidate.map_transitions.log1p",
+      "candidate.field_actions.log1p",
+      "candidate.mode_changes.log1p",
+      "candidate.route_cost.relative_rank",
+      "candidate.route_steps.relative_rank",
+      "candidate.map_transitions.relative_rank",
+      "candidate.field_actions.relative_rank",
+      "candidate.mode_changes.relative_rank",
+      "candidate.route_cost.log_gap_to_minimum",
+      "candidate.route_steps.log_gap_to_minimum",
+      "candidate.map_transitions.log_gap_to_minimum",
+      "candidate.field_actions.log_gap_to_minimum",
+      "candidate.mode_changes.log_gap_to_minimum",
+      "context.need.acquire_party_member",
+      "context.need.acquire_resource",
+      "context.need.advance_story",
+      "context.need.challenge",
+      "context.need.collection",
+      "context.need.complete_collection",
+      "context.need.encounter_venue",
+      "context.need.evolution",
+      "context.need.explore",
+      "context.need.healing",
+      "context.need.improve_team",
+      "context.need.optional_reward",
+      "context.need.overworld",
+      "context.need.puzzle",
+      "context.need.reach_next_challenge",
+      "context.need.recovery",
+      "context.need.remove_blocker",
+      "context.need.resupply",
+      "context.need.return_to_safety",
+      "context.need.safe_hub",
+      "context.need.shop",
+      "context.need.story_progress",
+      "context.need.training",
+      "context.need.transit",
+      "context.origin.acquire_party_member",
+      "context.origin.acquire_resource",
+      "context.origin.advance_story",
+      "context.origin.challenge",
+      "context.origin.collection",
+      "context.origin.complete_collection",
+      "context.origin.encounter_venue",
+      "context.origin.evolution",
+      "context.origin.explore",
+      "context.origin.healing",
+      "context.origin.improve_team",
+      "context.origin.optional_reward",
+      "context.origin.overworld",
+      "context.origin.puzzle",
+      "context.origin.reach_next_challenge",
+      "context.origin.recovery",
+      "context.origin.remove_blocker",
+      "context.origin.resupply",
+      "context.origin.return_to_safety",
+      "context.origin.safe_hub",
+      "context.origin.shop",
+      "context.origin.story_progress",
+      "context.origin.training",
+      "context.origin.transit",
+      "candidate.tag.acquire_party_member",
+      "candidate.tag.acquire_resource",
+      "candidate.tag.advance_story",
+      "candidate.tag.challenge",
+      "candidate.tag.collection",
+      "candidate.tag.complete_collection",
+      "candidate.tag.encounter_venue",
+      "candidate.tag.evolution",
+      "candidate.tag.explore",
+      "candidate.tag.healing",
+      "candidate.tag.improve_team",
+      "candidate.tag.optional_reward",
+      "candidate.tag.overworld",
+      "candidate.tag.puzzle",
+      "candidate.tag.reach_next_challenge",
+      "candidate.tag.recovery",
+      "candidate.tag.remove_blocker",
+      "candidate.tag.resupply",
+      "candidate.tag.return_to_safety",
+      "candidate.tag.safe_hub",
+      "candidate.tag.shop",
+      "candidate.tag.story_progress",
+      "candidate.tag.training",
+      "candidate.tag.transit",
+      "candidate.need_overlap_ratio"
+    ],
+    "feature_schema_id": "pokemon.core.strategic-navigation.destination-ranker.v1",
+    "title_specific_identity_used_as_feature": false
+  },
+  "model": {
+    "enabled_feature_names": [
+      "candidate.route_cost.relative_rank",
+      "candidate.route_steps.relative_rank",
+      "candidate.map_transitions.relative_rank",
+      "candidate.field_actions.relative_rank",
+      "candidate.mode_changes.relative_rank"
+    ],
+    "feature_set_id": "relative_route",
+    "l2": 0.1,
+    "model_id": "pokemon.core.strategic-navigation.destination-ranker.linear.v1",
+    "model_sha256": "753e3dbdb983d85acd9da5910fb92679a5406df39dfde84f68200d85378dd0c1",
+    "parameter_count": 5,
+    "private_model_file_sha256": "6ef826bc92fae3092e9ccaefaad4107a687a564f7d35818f844fadba68540cdd",
+    "supersedes_development_candidate_model_id": "pokemon.core.strategic-navigation.destination-ranker.mlp.v1",
+    "training_epochs": 600
+  },
+  "pre_test_gate": {
+    "accuracy_exceeds_route_cost_baseline": true,
+    "capacity_repair_passed": true,
+    "minimum_paired_wins": true,
+    "paired_two_sided_exact_p_below_0_05": true,
+    "ready_for_external_audit": true,
+    "ready_for_sealed_test_after_external_audit": false,
+    "sealed_test_design_repair_required": true,
+    "validation_result_is_final_claim": false,
+    "zero_paired_losses": true
+  },
+  "schema": "strategic-navigation-model-development-summary-v2",
+  "sealed_test": {
+    "evaluated": false,
+    "opened": false
+  },
+  "selection": {
+    "best_leave_one_out_accuracy": 0.7083333333333334,
+    "best_leave_one_out_standard_error": 0.09278048066588464,
+    "cross_validation": "leave_one_training_example_out",
+    "feature_set_selection": "one_standard_error_simplicity_rule",
+    "one_standard_error_accuracy_threshold": 0.6155528526674487,
+    "regularization_selection": "highest_correct_then_lowest_cross_entropy_then_strongest_l2",
+    "role": "training_only_model_selection",
+    "schema": "strategic-navigation-linear-selection-v1",
+    "sealed_test_used_for_selection": false,
+    "selected_feature_names": [
+      "candidate.route_cost.relative_rank",
+      "candidate.route_steps.relative_rank",
+      "candidate.map_transitions.relative_rank",
+      "candidate.field_actions.relative_rank",
+      "candidate.mode_changes.relative_rank"
+    ],
+    "selected_feature_set_id": "relative_route",
+    "selected_l2": 0.1,
+    "selected_parameter_count": 5,
+    "selection_data": "train_only",
+    "trials": [
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank"
+        ],
+        "feature_set_id": "route_cost_rank",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.858481205798356,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 1,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank"
+        ],
+        "feature_set_id": "route_cost_rank",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8579425125340575,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 1,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank"
+        ],
+        "feature_set_id": "route_cost_rank",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8539767604900675,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 1,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "candidate.route_cost.relative_rank"
+        ],
+        "feature_set_id": "route_cost_rank",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8539372141192406,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 1,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank"
+        ],
+        "feature_set_id": "route_cost_rank",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.881214587568893,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 1,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank"
+        ],
+        "feature_set_id": "relative_route",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 1.07850490260694,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 5,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank"
+        ],
+        "feature_set_id": "relative_route",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 0.9936529934230292,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 5,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank"
+        ],
+        "feature_set_id": "relative_route",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "cross_entropy": 0.8464097501277212,
+          "examples": 24
+        },
+        "one_standard_error_eligible": true,
+        "parameter_count": 5,
+        "selected": true
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank"
+        ],
+        "feature_set_id": "relative_route",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8125642871090945,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 5,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank"
+        ],
+        "feature_set_id": "relative_route",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8494007594856009,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 5,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "cross_entropy": 1.080346667180809,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 7,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "cross_entropy": 1.0201608271788325,
+          "examples": 24
+        },
+        "one_standard_error_eligible": true,
+        "parameter_count": 7,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 0.9307821740078047,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 7,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 0.8720408127224211,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 7,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 0.8835145536818262,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 7,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_cost",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.4583333333333333,
+          "correct": 11,
+          "cross_entropy": 1.1555807215876552,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 8,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_cost",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.4583333333333333,
+          "correct": 11,
+          "cross_entropy": 1.0785569495942928,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 8,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_cost",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.4583333333333333,
+          "correct": 11,
+          "cross_entropy": 0.9611961286256246,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 8,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_cost",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5,
+          "correct": 12,
+          "cross_entropy": 0.8671670100668534,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 8,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_cost",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5,
+          "correct": 12,
+          "cross_entropy": 0.8759166370458306,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 8,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_relative_route",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "cross_entropy": 1.4328934830069422,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 12,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_relative_route",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "cross_entropy": 1.2304167348327997,
+          "examples": 24
+        },
+        "one_standard_error_eligible": true,
+        "parameter_count": 12,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_relative_route",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.94991600373534,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 12,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_relative_route",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5,
+          "correct": 12,
+          "cross_entropy": 0.8410461174866851,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 12,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit"
+        ],
+        "feature_set_id": "candidate_tags_plus_relative_route",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8484447755718154,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 12,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": true,
+        "feature_names": [
+          "set.candidate_count_scaled",
+          "candidate.route_cost.log1p",
+          "candidate.route_steps.log1p",
+          "candidate.map_transitions.log1p",
+          "candidate.field_actions.log1p",
+          "candidate.mode_changes.log1p",
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.route_cost.log_gap_to_minimum",
+          "candidate.route_steps.log_gap_to_minimum",
+          "candidate.map_transitions.log_gap_to_minimum",
+          "candidate.field_actions.log_gap_to_minimum",
+          "candidate.mode_changes.log_gap_to_minimum",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit",
+          "candidate.need_overlap_ratio"
+        ],
+        "feature_set_id": "all_training_active",
+        "l2": 0.001,
+        "leave_one_out": {
+          "accuracy": 0.7083333333333334,
+          "correct": 17,
+          "cross_entropy": 1.4981751434385275,
+          "examples": 24
+        },
+        "one_standard_error_eligible": true,
+        "parameter_count": 24,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "set.candidate_count_scaled",
+          "candidate.route_cost.log1p",
+          "candidate.route_steps.log1p",
+          "candidate.map_transitions.log1p",
+          "candidate.field_actions.log1p",
+          "candidate.mode_changes.log1p",
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.route_cost.log_gap_to_minimum",
+          "candidate.route_steps.log_gap_to_minimum",
+          "candidate.map_transitions.log_gap_to_minimum",
+          "candidate.field_actions.log_gap_to_minimum",
+          "candidate.mode_changes.log_gap_to_minimum",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit",
+          "candidate.need_overlap_ratio"
+        ],
+        "feature_set_id": "all_training_active",
+        "l2": 0.01,
+        "leave_one_out": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "cross_entropy": 1.1865968239348927,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 24,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "set.candidate_count_scaled",
+          "candidate.route_cost.log1p",
+          "candidate.route_steps.log1p",
+          "candidate.map_transitions.log1p",
+          "candidate.field_actions.log1p",
+          "candidate.mode_changes.log1p",
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.route_cost.log_gap_to_minimum",
+          "candidate.route_steps.log_gap_to_minimum",
+          "candidate.map_transitions.log_gap_to_minimum",
+          "candidate.field_actions.log_gap_to_minimum",
+          "candidate.mode_changes.log_gap_to_minimum",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit",
+          "candidate.need_overlap_ratio"
+        ],
+        "feature_set_id": "all_training_active",
+        "l2": 0.1,
+        "leave_one_out": {
+          "accuracy": 0.5833333333333334,
+          "correct": 14,
+          "cross_entropy": 0.8809983138351597,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 24,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "set.candidate_count_scaled",
+          "candidate.route_cost.log1p",
+          "candidate.route_steps.log1p",
+          "candidate.map_transitions.log1p",
+          "candidate.field_actions.log1p",
+          "candidate.mode_changes.log1p",
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.route_cost.log_gap_to_minimum",
+          "candidate.route_steps.log_gap_to_minimum",
+          "candidate.map_transitions.log_gap_to_minimum",
+          "candidate.field_actions.log_gap_to_minimum",
+          "candidate.mode_changes.log_gap_to_minimum",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit",
+          "candidate.need_overlap_ratio"
+        ],
+        "feature_set_id": "all_training_active",
+        "l2": 1.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.808101798332729,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 24,
+        "selected": false
+      },
+      {
+        "best_regularization_for_feature_set": false,
+        "feature_names": [
+          "set.candidate_count_scaled",
+          "candidate.route_cost.log1p",
+          "candidate.route_steps.log1p",
+          "candidate.map_transitions.log1p",
+          "candidate.field_actions.log1p",
+          "candidate.mode_changes.log1p",
+          "candidate.route_cost.relative_rank",
+          "candidate.route_steps.relative_rank",
+          "candidate.map_transitions.relative_rank",
+          "candidate.field_actions.relative_rank",
+          "candidate.mode_changes.relative_rank",
+          "candidate.route_cost.log_gap_to_minimum",
+          "candidate.route_steps.log_gap_to_minimum",
+          "candidate.map_transitions.log_gap_to_minimum",
+          "candidate.field_actions.log_gap_to_minimum",
+          "candidate.mode_changes.log_gap_to_minimum",
+          "candidate.tag.acquire_resource",
+          "candidate.tag.challenge",
+          "candidate.tag.puzzle",
+          "candidate.tag.reach_next_challenge",
+          "candidate.tag.remove_blocker",
+          "candidate.tag.story_progress",
+          "candidate.tag.transit",
+          "candidate.need_overlap_ratio"
+        ],
+        "feature_set_id": "all_training_active",
+        "l2": 10.0,
+        "leave_one_out": {
+          "accuracy": 0.5416666666666666,
+          "correct": 13,
+          "cross_entropy": 0.8102829533143855,
+          "examples": 24
+        },
+        "one_standard_error_eligible": false,
+        "parameter_count": 24,
+        "selected": false
+      }
+    ],
+    "validation_used_for_selection": false
+  },
+  "training": {
+    "accuracy": 0.7916666666666666,
+    "candidate_count_accuracy": {
+      "2": 0.6153846153846154,
+      "3": 1.0,
+      "4": 1.0
+    },
+    "cross_entropy": 0.7015253557190831,
+    "examples": 24,
+    "paired_comparison": {
+      "both_correct": 13,
+      "both_wrong": 5,
+      "losses": 0,
+      "two_sided_exact_p": 0.03125,
+      "wins": 6
+    },
+    "route_cost_baseline_accuracy": 0.5416666666666666,
+    "schema": "strategic-navigation-model-metrics-v1"
+  },
+  "validation": {
+    "accuracy": 0.8333333333333334,
+    "candidate_count_accuracy": {
+      "2": 0.5,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0
+    },
+    "cross_entropy": 0.7465133697055509,
+    "examples": 12,
+    "paired_comparison": {
+      "both_correct": 4,
+      "both_wrong": 2,
+      "losses": 0,
+      "two_sided_exact_p": 0.03125,
+      "wins": 6
+    },
+    "route_cost_baseline_accuracy": 0.3333333333333333,
+    "schema": "strategic-navigation-model-metrics-v1"
+  }
+}

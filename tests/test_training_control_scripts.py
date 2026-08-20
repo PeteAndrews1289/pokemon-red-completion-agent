@@ -1,0 +1,264 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+from pokemon_red_completion.training_control import (
+    TRAINING_CONTROL_FEATURE_NAMES,
+    TRAINING_CONTROL_FEATURE_SCHEMA_ID,
+    TrainingControlAction,
+    TrainingControlDecision,
+    TrainingControlObservation,
+    TrainingControlPhase,
+)
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _write_lineage(path: Path, lineage: str, partition: str, state: str) -> str:
+    actions = tuple(TrainingControlAction)
+    rows = []
+    for index, action in enumerate(actions):
+        battle = action in {TrainingControlAction.FIGHT, TrainingControlAction.FLEE}
+        candidates = (
+            (TrainingControlAction.FIGHT, TrainingControlAction.FLEE)
+            if battle
+            else (
+                TrainingControlAction.SEEK,
+                TrainingControlAction.HEAL,
+                TrainingControlAction.STOP,
+            )
+        )
+        values = [0.0] * len(TRAINING_CONTROL_FEATURE_NAMES)
+        values[0] = float(battle)
+        values[index + 1] = 0.5
+        observation = TrainingControlObservation(
+            TrainingControlPhase.BATTLE if battle else TrainingControlPhase.OVERWORLD,
+            tuple(values),
+            candidates,
+        )
+        rows.append(TrainingControlDecision(index, action, observation, "synthetic").public_dict())
+    payload = {
+        "schema": "pokemon-training-control-replay-v2",
+        "status": "ok",
+        "feature_schema_id": TRAINING_CONTROL_FEATURE_SCHEMA_ID,
+        "feature_names": list(TRAINING_CONTROL_FEATURE_NAMES),
+        "error": None,
+        "provenance": {
+            "lineage_id": lineage,
+            "partition": partition,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
+            "state_sha256": state * 64,
+        },
+        "segments": {"evolution": [], "balance": rows},
+    }
+    encoded = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode()
+    path.write_bytes(encoded)
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def test_selection_and_fit_scripts_keep_validation_in_its_own_stage(tmp_path: Path) -> None:
+    train_one = tmp_path / "train-one.json"
+    train_two = tmp_path / "train-two.json"
+    validation = tmp_path / "validation.json"
+    train_one_sha = _write_lineage(train_one, "train-one", "train", "1")
+    train_two_sha = _write_lineage(train_two, "train-two", "train", "2")
+    validation_sha = _write_lineage(validation, "validation-one", "validation", "3")
+    selection = tmp_path / "selection.json"
+
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/select_training_control_balance.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--out",
+            str(selection),
+            "--epochs",
+            "2",
+            "--class-balance-power",
+            "0",
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    selection_payload = json.loads(selection.read_text())
+    assert selection_payload["validation_opened"] is False
+    assert selection_payload["selected_class_balance_power"] == 0.0
+
+    model = tmp_path / "model.json"
+    summary = tmp_path / "summary.json"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/fit_training_control.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--validation",
+            str(validation),
+            validation_sha,
+            "--out-model",
+            str(model),
+            "--out-summary",
+            str(summary),
+            "--epochs",
+            "2",
+            "--class-balance-power",
+            "0",
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    summary_payload = json.loads(summary.read_text())
+    assert summary_payload["validation_lineages"] == ["validation-one"]
+    assert summary_payload["partition_audit"]["promotion_eligible"] is True
+    assert summary_payload["lineage_roots"] == [
+        {
+            "lineage_id": "train-one",
+            "partition": "train",
+            "state_sha256": "1" * 64,
+            "artifact_sha256": train_one_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
+        },
+        {
+            "lineage_id": "train-two",
+            "partition": "train",
+            "state_sha256": "2" * 64,
+            "artifact_sha256": train_two_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
+        },
+        {
+            "lineage_id": "validation-one",
+            "partition": "validation",
+            "state_sha256": "3" * 64,
+            "artifact_sha256": validation_sha,
+            "source_commit": "a" * 40,
+            "source_dirty": False,
+        },
+    ]
+    assert hashlib.sha256(model.read_bytes()).hexdigest() == summary_payload[
+        "private_model_file_sha256"
+    ]
+
+    plan = tmp_path / "plan.json"
+    plan_payload = {
+        "schema": "pokemon-training-control-promotion-plan-v2",
+        "feature_schema_id": "pokemon.core.training.control.features.v2",
+        "source_commit": "a" * 40,
+        "lineages": {
+            "training": [
+                {"lineage_id": "train-one", "root_sha256": "1" * 64},
+                {"lineage_id": "train-two", "root_sha256": "2" * 64},
+            ],
+            "sealed_validation": {
+                "lineage_id": "validation-one",
+                "root_sha256": "3" * 64,
+            },
+        },
+        "offline_validation_gates": {
+            "missed_required_heal": 1_000_000,
+            "premature_stop": 1_000_000,
+            "missed_stop": 1_000_000,
+            "maximum_unnecessary_heals": 1_000_000,
+            "maximum_safe_seek_false_heal_rate": 1.0,
+            "minimum_heal_precision": 0.0,
+            "minimum_genuine_accuracy": 0.0,
+            "minimum_battle_accuracy": 0.0,
+        },
+    }
+    plan.write_text(json.dumps(plan_payload, indent=2, sort_keys=True) + "\n")
+    plan_sha = hashlib.sha256(plan.read_bytes()).hexdigest()
+    summary_sha = hashlib.sha256(summary.read_bytes()).hexdigest()
+    gate_report = tmp_path / "gate-report.json"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/check_training_control_offline_gates.py",
+            "--plan",
+            str(plan),
+            plan_sha,
+            "--candidate",
+            str(summary),
+            summary_sha,
+            "--out",
+            str(gate_report),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    gate_payload = json.loads(gate_report.read_text())
+    assert gate_payload["offline_validation_eligible"] is True
+    assert gate_payload["shadow_may_start"] is True
+    assert gate_payload["promotion_eligible"] is False
+
+    plan_payload["source_commit"] = "b" * 40
+    plan.write_text(json.dumps(plan_payload, indent=2, sort_keys=True) + "\n")
+    mismatched_plan_sha = hashlib.sha256(plan.read_bytes()).hexdigest()
+    rejected = subprocess.run(
+        [
+            sys.executable,
+            "scripts/check_training_control_offline_gates.py",
+            "--plan",
+            str(plan),
+            mismatched_plan_sha,
+            "--candidate",
+            str(summary),
+            summary_sha,
+            "--out",
+            str(gate_report),
+        ],
+        cwd=PROJECT_ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert rejected.returncode == 2
+    assert "candidate lineage source does not match" in rejected.stderr
+
+    diversity = tmp_path / "diversity.json"
+    subprocess.run(
+        [
+            sys.executable,
+            "scripts/audit_training_control_choice_diversity.py",
+            "--train",
+            str(train_one),
+            train_one_sha,
+            "--train",
+            str(train_two),
+            train_two_sha,
+            "--validation",
+            str(validation),
+            validation_sha,
+            "--out",
+            str(diversity),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    diversity_payload = json.loads(diversity.read_text())
+    assert diversity_payload["validation_candidate_coverage"] == 1.0
+    assert diversity_payload["validation_candidate_only_accuracy"] == 0.4
+    assert diversity_payload["candidate_only_baseline_saturates_validation"] is False
+    assert diversity_payload["state_dependent_choice_demonstrated"] is True

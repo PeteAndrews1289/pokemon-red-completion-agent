@@ -1,0 +1,45 @@
+{
+  "schema": "pokemon-red-battle-control-v3-causal-failure-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "rejected_fail_closed",
+  "source_commit": "a8f1a268d0d03786c97c7f1ab2724f2254d4da61",
+  "candidate": {
+    "artifact_id": "red-battle-control-model-d4bc15ba53354fa2980a47b57f2dda78",
+    "manifest_sha256": "e742f32893ddca66911e1dbeb31bea1fca93f07ad6f09d6dedfeb8d07c3b382e",
+    "model_sha256": "916aa21097d7b087125dce6cb9b01180c2ee3aa929a843d7b580021ac00246e0",
+    "private_path_published": false
+  },
+  "authority": {
+    "ordinary_move_selection": "authenticated_move_ranker_teacher_gated",
+    "high_level_battle_control": "model_authority",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "failure": {
+    "chapter": "Fuchsia approach",
+    "battle": "Route 12 Rocker",
+    "predicted_action": "pokemon.core:battle:boost:accuracy",
+    "teacher_action_class": "pokemon.core:battle:select_move",
+    "exception_boundary": "generic adaptive trainer move-slot loop",
+    "game_complete": false,
+    "counted_campaign_root_consumed": false
+  },
+  "diagnosis": {
+    "model_error": "A shadow-measured false-positive accuracy boost occurred on an ordinary move turn.",
+    "executor_contract_error": "Battle intent declared recovery and switch capabilities but had no equivalent boost capability mask, so the learned controller emitted a typed request to a loop with no bound boost executor.",
+    "why_failure_is_useful": "The request failed closed before an unverified menu action or hidden teacher substitution."
+  },
+  "repair": {
+    "direction": "Add typed boost capabilities to BattleIntent, declare them only for chapter loops that bind the matching item executor, and degrade every unsupported boost prediction to the legal move path.",
+    "increase_retry_budget": false,
+    "change_teacher_route": false,
+    "change_model_weights": false,
+    "open_counted_root": false
+  },
+  "claim_scope": {
+    "causal_control_qualified": false,
+    "shadow_qualification_preserved": true,
+    "candidate_retrained_after_failure": false,
+    "cross_game_transfer_complete": false
+  }
+}

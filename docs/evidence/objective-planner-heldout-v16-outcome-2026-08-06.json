@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v16",
+  "status": "failed",
+  "source_commit": "c6b0936d4ab821ab60142778b975ad4fc66b42a4",
+  "source_bundle_sha256": "b971bf23c5d583ce271b44c3760b9d457a5521248fe30fe81db823344d793ae8",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v16-validation-01",
+      "harness_seed": 1370001,
+      "battle_start_schedule_sha256": "039bcce6077f404bcb7db767e516a12d0214b741a89d5f58f45a1d7b8eb240a6",
+      "status": "failed",
+      "qualified_checkpoints": 84,
+      "failure": "The Vermilion top-up used fixed dialogue pulses after the 30-Ball purchase and failed to reach the Super Potion quantity selector under this schedule.",
+      "private_log_sha256": "05492157bfd0615913f244f7e9fe49192b1db58c060ce3e69a7c3c60c331fbfc"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The capture reserve itself was purchased correctly, but the following Mart transaction assumed a fixed number of receipt-dialogue pulses. Timing variation left a different menu phase active, so the chapter could not top one surviving Super Potion up to two.",
+  "repair_direction": "Observe the live priced-list coordinates, select the source-pinned Super Potion entry by absolute index, verify its item identity and quantity selector, and finish only when the exact bag target is observed."
+}

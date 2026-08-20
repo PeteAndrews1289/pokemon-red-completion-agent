@@ -7,8 +7,16 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
-    BattleActionExecutor,
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
@@ -16,11 +24,21 @@ from pokemon_red_completion.battle_runtime import (
 from pokemon_red_completion.cascade import (
     CENTER_EXIT_DIRECTIONS,
     CENTER_HEAL_APPROACH_DIRECTIONS,
+    CERULEAN_GYM_START_POTION_RESERVE,
+    DEFAULT_CASCADE_TIMING,
     GYM_TO_CENTER_DIRECTIONS,
     GYM_TRAINER_TO_EXIT_DIRECTIONS,
+    ROCKET_THIEF_POTION_RESERVE,
+    SS_ANNE_RIVAL_POTION_RESERVE,
+    VERMILION_ROUTE_6_POTION_RESERVE,
+    CascadeChapterError,
+    _bag_quantity,
+    _use_cerulean_rival_potion,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
+    ItemId,
     MapId,
     PokemonRedStateReader,
     RawGameState,
@@ -33,11 +51,18 @@ from pokemon_red_completion.observation import (
 VERMILION_CHECKPOINT_COUNT = 15
 MACHOP_SPECIES_ID = 0x6A
 DROWZEE_SPECIES_ID = 0x30
+ROUTE_6_JR_TRAINER_F_MOVE_SLOT = 3
+ROUTE_6_JR_TRAINER_M_MOVE_SLOT = 3
+POST_ROCKET_WARTORTLE_MOVES = (0x2C, 0x27, 0x05, 0x37)
+BITE_MOVE_ID = 0x2C
+BITE_BASE_PP = 25
+ROCKET_THIEF_BATTLE_PLAN_ID = RedBattlePlanId.VERMILION_ROCKET_THIEF
 QUALIFIED_ROUTE_6_WILDS = (
     (15, 19, 0x24),
     (15, 22, 0x24),
     (15, 26, 0x24),
 )
+"""Historical control-lineage encounters; current replay tolerates zero or more wilds."""
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -75,6 +100,10 @@ VERMILION_ENTRY_DIRECTIONS = _directions("D" * 5)
 ROUTE_6_FIRST_TRAINER_TO_SOUTH_BUILDING_DIRECTIONS = _directions(
     "U" + "R" * 6 + "U" * 15 + "R" * 2 + "U"
 )
+CERULEAN_WALKER_BLOCK_POSITION = (16, 16)
+CERULEAN_WALKER_CLEAR_POSITION = (15, 16)
+CERULEAN_WALKER_YIELD_POSITION = (17, 16)
+CERULEAN_WALKER_CLEAR_ATTEMPTS = 12
 UNDERGROUND_TUNNEL_NORTHBOUND_DIRECTIONS = _directions("U" * 37 + "R" * 3)
 ROUTE_5_TO_CERULEAN_DIRECTIONS = _directions(
     "L" * 2 + "U" + "L" * 12 + "U" * 28
@@ -100,9 +129,7 @@ class EmulatorState(Protocol):
     @property
     def pressed_buttons(self) -> frozenset[str]: ...
 
-
-class ChapterExecutor(BattleActionExecutor, Protocol):
-    def execute(self, action: MacroAction) -> object: ...
+    def read_u8(self, address: int) -> int: ...
 
 
 class VermilionChapterError(RuntimeError):
@@ -185,6 +212,14 @@ class Route6WildFleeEvidence:
     final_status: int
     trainer_events: tuple[bool, ...]
     control_ready: bool
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    )
 
     @property
     def verified(self) -> bool:
@@ -199,8 +234,7 @@ class Route6WildFleeEvidence:
             and all((value & 0x3F) > 0 for value in self.final_pp)
             and self.final_hp > 0
             and self.final_status == 0
-            and self.trainer_events
-            == (False, False, False, False, True, False)
+            and self.trainer_events == self.expected_trainer_events
             and self.control_ready
         )
 
@@ -228,11 +262,7 @@ class VermilionChapterReport:
         return (
             len(self.records) == VERMILION_CHECKPOINT_COUNT
             and self.final_evidence.vermilion_snapshot
-            and tuple(
-                (item.player_x, item.player_y, item.enemy_species_id)
-                for item in self.route_6_wild_flees
-            )
-            == QUALIFIED_ROUTE_6_WILDS
+            and self.final_raw.first_party_moves == POST_ROCKET_WARTORTLE_MOVES
             and all(item.verified for item in self.route_6_wild_flees)
             and self.controller_released
         )
@@ -286,17 +316,6 @@ class VermilionChapterReport:
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
-
-
 def run_vermilion_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -308,7 +327,7 @@ def run_vermilion_chapter(
     """Continue a verified Misty victory to stable Vermilion City."""
 
     start_frames = emulator.frame_count
-    chapter_executor = _CountingExecutor(executor)
+    chapter_executor = CountingExecutor(executor)
     starting_raw = reader.read()
     try:
         tracker = VermilionProgressTracker(
@@ -403,20 +422,18 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _battle(
+    _run_rocket_thief_with_potion(
         reader,
         chapter_executor,
-        _choose_rocket_move,
-        MapId.CERULEAN_CITY,
+        emulator,
         timing,
-        "Rocket thief",
     )
     _confirm_pulses(
         chapter_executor,
         timing.rocket_reward_pulses,
         timing.dialogue_wait_frames,
     )
-    _checkpoint(
+    rocket_reward, _ = _checkpoint(
         reader,
         tracker,
         VermilionPhase.TM28_OBTAINED,
@@ -426,7 +443,10 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-
+    if rocket_reward.first_party_moves != POST_ROCKET_WARTORTLE_MOVES:
+        raise VermilionChapterError(
+            "Rocket victory did not learn Bite into Wartortle's first move slot."
+        )
     _move(
         chapter_executor,
         reader,
@@ -517,12 +537,12 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _move(
+    initial_route_6_wild_flees = _move_route_6_with_wild_flees(
         chapter_executor,
         reader,
         ROUTE_6_TO_FIRST_TRAINER_DIRECTIONS,
         timing,
-        "Route 6 lower gap",
+        expected_trainer_events=(False,) * 6,
     )
     _wait(chapter_executor, timing.transition_wait_frames)
     _enter_trainer_battle(
@@ -542,13 +562,12 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    _battle(
+    _run_route_6_trainer_f_with_potion(
         reader,
         chapter_executor,
-        lambda state: 1,
-        MapId.ROUTE_6,
+        emulator,
         timing,
-        "Route 6 Jr Trainer F",
+        RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_F,
     )
     _confirm_pulses(
         chapter_executor,
@@ -570,10 +589,13 @@ def run_vermilion_chapter(
         progress,
         emulator,
     )
-    route_6_wild_flees = _backtrack_heal_and_replay(
-        chapter_executor,
-        reader,
-        timing,
+    route_6_wild_flees = (
+        *initial_route_6_wild_flees,
+        *_backtrack_heal_and_replay(
+            chapter_executor,
+            reader,
+            timing,
+        ),
     )
     _move(
         chapter_executor,
@@ -603,10 +625,11 @@ def run_vermilion_chapter(
     _battle(
         reader,
         chapter_executor,
-        lambda state: 1,
+        lambda state: ROUTE_6_JR_TRAINER_M_MOVE_SLOT,
         MapId.ROUTE_6,
         timing,
         "Route 6 Jr Trainer M",
+        RedBattlePlanId.VERMILION_ROUTE_6_JR_TRAINER_M,
     )
     _confirm_pulses(
         chapter_executor,
@@ -666,23 +689,41 @@ def _choose_rocket_move(state: RawGameState) -> int:
     if state.enemy_species_id == MACHOP_SPECIES_ID:
         return 4
     if state.enemy_species_id == DROWZEE_SPECIES_ID:
-        return 1 if (state.enemy_hp or 0) > 11 else 4
+        moves = state.first_party_moves or ()
+        pp = state.first_party_pp or ()
+        # One fresh Bite wins enough tempo to survive, but Drowzee can then
+        # disable it. Its exact PP decrement is the semantic one-use latch.
+        if (
+            len(moves) >= 1
+            and len(pp) >= 1
+            and moves[0] == BITE_MOVE_ID
+            and (pp[0] & 0x3F) == BITE_BASE_PP
+        ):
+            return 1
+        for slot in (3, 1, 4):
+            if (
+                len(pp) >= slot
+                and (pp[slot - 1] & 0x3F) > 0
+                and state.player_disabled_move_slot != slot
+            ):
+                return slot
+        raise VermilionChapterError("Rocket thief Drowzee left no usable ranked attack.")
     raise VermilionChapterError(
         f"Unexpected Rocket thief species {state.enemy_species_id!r}."
     )
 
 
 def _backtrack_heal_and_replay(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> tuple[Route6WildFleeEvidence, ...]:
-    _move(
+    backtrack_wild_flees = _move_route_6_with_wild_flees(
         executor,
         reader,
         ROUTE_6_FIRST_TRAINER_TO_SOUTH_BUILDING_DIRECTIONS,
         timing,
-        "Route 6 healing backtrack",
+        expected_trainer_events=(False, False, False, False, True, False),
     )
     _wait(executor, timing.transition_wait_frames)
     _move(
@@ -825,17 +866,22 @@ def _backtrack_heal_and_replay(
         raise VermilionChapterError(
             "Route 6 healing replay failed its persistent return gate."
         )
-    return wild_flees
+    return (*backtrack_wild_flees, *wild_flees)
 
 
 def _replay_route_6_lower_gap(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> tuple[Route6WildFleeEvidence, ...]:
     prefix = _directions("LL" + "D" * 4)
 
-    _move(executor, reader, prefix, timing, "Route 6 lower-gap replay prefix")
+    prefix_wild_flees = _move_route_6_with_wild_flees(
+        executor,
+        reader,
+        prefix,
+        timing,
+    )
     before = reader.read()
     if (
         before.map_id != MapId.ROUTE_6
@@ -846,55 +892,32 @@ def _replay_route_6_lower_gap(
             "Route 6 replay missed its exact wild-encounter approach gate."
         )
 
-    encounter = before
-    for attempt in range(timing.movement_retries):
-        executor.execute(MacroAction(MacroActionKind.MOVE, "down"))
-        encounter = reader.read()
-        if (
-            encounter.battle_state
-            or encounter.map_id != before.map_id
-            or (encounter.player_x, encounter.player_y)
-            != (before.player_x, before.player_y)
-        ):
-            break
-        _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
-    else:
-        raise VermilionChapterError(
-            "Route 6 replay wild-encounter step was blocked."
-        )
-
-    if (
-        encounter.battle_state != 1
-        or encounter.map_id != MapId.ROUTE_6
-        or (encounter.player_x, encounter.player_y) != (15, 19)
-        or encounter.enemy_species_id != 0x24
-        or encounter.first_party_pp is None
-    ):
-        raise VermilionChapterError(
-            "Route 6 replay missed the qualified step-7 wild Pidgey encounter."
-        )
-    first_wild_flee = _flee_qualified_route_6_wild(
-        executor,
-        reader,
-        timing,
-        encounter,
+    return (
+        *prefix_wild_flees,
+        *_move_route_6_with_wild_flees(
+            executor,
+            reader,
+            ("down", *ROUTE_6_REPLAY_AFTER_WILD_DIRECTIONS),
+            timing,
+        ),
     )
-    additional_wild_flees = _move_route_6_replay_suffix(
-        executor,
-        reader,
-        ROUTE_6_REPLAY_AFTER_WILD_DIRECTIONS,
-        timing,
-    )
-    return (first_wild_flee, *additional_wild_flees)
 
 
-def _move_route_6_replay_suffix(
-    executor: _CountingExecutor,
+def _move_route_6_with_wild_flees(
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: VermilionTiming,
+    *,
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    ),
 ) -> tuple[Route6WildFleeEvidence, ...]:
-    expected_wilds = QUALIFIED_ROUTE_6_WILDS[1:]
     wild_flees: list[Route6WildFleeEvidence] = []
     state = reader.read()
     for step_number, direction in enumerate(directions, start=1):
@@ -912,43 +935,46 @@ def _move_route_6_replay_suffix(
             _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
         else:
             raise VermilionChapterError(
-                "Route 6 lower-gap replay suffix was blocked at "
+                "Route 6 traversal was blocked at "
                 f"{(before.player_x, before.player_y)!r}."
             )
 
         if state.battle_state:
-            if state.battle_state != 1 or len(wild_flees) >= len(expected_wilds):
+            if state.battle_state != 1:
                 raise VermilionChapterError(
-                    "Unexpected battle interrupted Route 6 lower-gap replay "
-                    f"suffix at step {step_number}: type={state.battle_state}, "
+                    "Unexpected battle interrupted Route 6 traversal "
+                    f"at step {step_number}: type={state.battle_state}, "
                     f"coordinate={(state.player_x, state.player_y)!r}, "
                     f"enemy={state.enemy_species_id!r}."
                 )
-            expected_x, expected_y, expected_species = expected_wilds[len(wild_flees)]
-            if (
-                (state.player_x, state.player_y) != (expected_x, expected_y)
-                or state.enemy_species_id != expected_species
-            ):
-                raise VermilionChapterError(
-                    "Route 6 replay exposed an unqualified additional wild battle."
-                )
             wild_flees.append(
-                _flee_qualified_route_6_wild(executor, reader, timing, state)
+                _flee_qualified_route_6_wild(
+                    executor,
+                    reader,
+                    timing,
+                    state,
+                    expected_trainer_events=expected_trainer_events,
+                )
             )
             state = reader.read()
 
-    if len(wild_flees) != len(expected_wilds):
-        raise VermilionChapterError(
-            "Route 6 replay missed its recorded additional wild Pidgey encounters."
-        )
     return tuple(wild_flees)
 
 
 def _flee_qualified_route_6_wild(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
     encounter: RawGameState,
+    *,
+    expected_trainer_events: tuple[bool, ...] = (
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+    ),
 ) -> Route6WildFleeEvidence:
     initial_pp = encounter.first_party_pp
     if initial_pp is None:
@@ -1024,6 +1050,7 @@ def _flee_qualified_route_6_wild(
         ),
         trainer_events=evidence.route_6_trainer_events,
         control_ready=control_ready,
+        expected_trainer_events=expected_trainer_events,
     )
     if not result.verified:
         raise VermilionChapterError(
@@ -1033,7 +1060,7 @@ def _flee_qualified_route_6_wild(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     timing: VermilionTiming,
@@ -1054,6 +1081,14 @@ def _move(
                 or (state.player_x, state.player_y)
                 != (before.player_x, before.player_y)
             ):
+                break
+            if (
+                label in {"trashed house approach", "trashed house approach replay"}
+                and before.map_id == MapId.CERULEAN_CITY
+                and (before.player_x, before.player_y) == CERULEAN_WALKER_BLOCK_POSITION
+                and direction == "left"
+            ):
+                state = _yield_to_cerulean_walker(executor, reader, timing)
                 break
             _wait(
                 executor,
@@ -1078,8 +1113,52 @@ def _move(
     return state
 
 
+def _yield_to_cerulean_walker(
+    executor: CountingExecutor,
+    reader: PokemonRedStateReader,
+    timing: VermilionTiming,
+) -> RawGameState:
+    """Let the north/south Cerulean walker vacate the house corridor."""
+
+    for attempt in range(CERULEAN_WALKER_CLEAR_ATTEMPTS):
+        state = reader.read()
+        if (state.player_x, state.player_y) == CERULEAN_WALKER_CLEAR_POSITION:
+            return state
+        if (
+            state.map_id != MapId.CERULEAN_CITY
+            or state.battle_state != 0
+            or (state.player_x, state.player_y) != CERULEAN_WALKER_BLOCK_POSITION
+        ):
+            raise VermilionChapterError(
+                "Cerulean walker recovery left its bounded corridor gate."
+            )
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "right"))
+        yielded = reader.read()
+        if (yielded.player_x, yielded.player_y) != CERULEAN_WALKER_YIELD_POSITION:
+            raise VermilionChapterError(
+                "Cerulean walker recovery could not yield the corridor."
+            )
+        _wait(executor, timing.movement_retry_wait_frames * (attempt + 1))
+
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        returned = reader.read()
+        if (returned.player_x, returned.player_y) != CERULEAN_WALKER_BLOCK_POSITION:
+            raise VermilionChapterError(
+                "Cerulean walker recovery could not restore its approach gate."
+            )
+        executor.execute(MacroAction(MacroActionKind.MOVE, "left"))
+        state = reader.read()
+        if (state.player_x, state.player_y) == CERULEAN_WALKER_CLEAR_POSITION:
+            return state
+
+    raise VermilionChapterError(
+        "Cerulean walker did not clear the replay corridor within its bounded retries."
+    )
+
+
 def _heal(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
 ) -> None:
@@ -1115,7 +1194,7 @@ def _heal(
 
 
 def _enter_trainer_battle(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: VermilionTiming,
     expected_map: MapId,
@@ -1134,13 +1213,204 @@ def _enter_trainer_battle(
     raise VermilionChapterError(f"{label} missed its bounded battle gate.")
 
 
+class _PauseForRocketThiefPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
+def _run_rocket_thief_with_potion(
+    reader: PokemonRedStateReader,
+    executor: CountingExecutor,
+    emulator: EmulatorState,
+    timing: VermilionTiming,
+) -> RawGameState:
+    """Spend at most one retained Potion when live Rocket damage requires it."""
+
+    starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    if not (
+        ROCKET_THIEF_POTION_RESERVE
+        <= starting_reserve
+        <= CERULEAN_GYM_START_POTION_RESERVE
+    ):
+        raise VermilionChapterError("Rocket thief lacks its planned Potion recovery boundary.")
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) == starting_reserve
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= 40
+        ):
+            raise _PauseForRocketThiefPotion
+        return _choose_rocket_move(raw)
+
+    intent = BattleIntent(
+        "reach_vermilion",
+        battle_plan_id=ROCKET_THIEF_BATTLE_PLAN_ID,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+    )
+    used_potion = False
+    while True:
+        try:
+            result = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.CERULEAN_CITY,
+                intent=intent,
+                timing=timing.battle_runtime,
+                label="Rocket thief",
+                # The level-24 prompt occurs inside this battle and must accept
+                # Bite over Tackle when no switch prompt is possible.
+                unknown_cancel_interval=10_000,
+            )
+        except BattleRuntimeError as error:
+            if not recovery_request_matches(error.__cause__, _PauseForRocketThiefPotion):
+                raise VermilionChapterError(str(error)) from error
+            if used_potion:
+                raise VermilionChapterError(
+                    "Rocket thief requested more than one Potion recovery."
+                ) from error
+            try:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    DEFAULT_CASCADE_TIMING,
+                )
+            except CascadeChapterError as recovery_error:
+                raise VermilionChapterError(str(recovery_error)) from recovery_error
+            used_potion = True
+            continue
+
+        expected_quantity = starting_reserve - int(used_potion)
+        if _bag_quantity(emulator, ItemId.POTION) != expected_quantity:
+            raise VermilionChapterError(
+                "Rocket thief changed its bounded Potion reserve unexpectedly."
+            )
+        return result
+
+
+class _PauseForRoute6Potion(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
+def _run_route_6_trainer_f_with_potion(
+    reader: PokemonRedStateReader,
+    executor: CountingExecutor,
+    emulator: EmulatorState,
+    timing: VermilionTiming,
+    battle_plan_id: str,
+) -> RawGameState:
+    """Spend at most one Route 6 Potion while preserving the S.S. Anne reserve."""
+
+    starting_reserve = _bag_quantity(emulator, ItemId.POTION)
+    if not (
+        VERMILION_ROUTE_6_POTION_RESERVE
+        <= starting_reserve
+        <= CERULEAN_GYM_START_POTION_RESERVE
+    ):
+        raise VermilionChapterError("Route 6 recovery reserve is outside its bounded range.")
+
+    def guarded_policy(raw: RawGameState) -> int:
+        if (
+            _bag_quantity(emulator, ItemId.POTION) > SS_ANNE_RIVAL_POTION_RESERVE
+            and raw.first_party_hp is not None
+            and 0 < raw.first_party_hp <= 40
+        ):
+            raise _PauseForRoute6Potion
+        return _choose_route_6_trainer_f_move(raw)
+
+    recoveries = 0
+    while True:
+        try:
+            result = run_adaptive_trainer_battle(
+                reader,
+                executor,
+                guarded_policy,
+                expected_map=MapId.ROUTE_6,
+                intent=BattleIntent(
+                    "reach_vermilion",
+                    battle_plan_id=battle_plan_id,
+                    resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                    recovery_capabilities=frozenset(
+                        {BattleRecoveryCapability.RESTORE_HP}
+                    ),
+                ),
+                timing=timing.battle_runtime,
+                label="Route 6 Jr Trainer F",
+                unknown_cancel_interval=3,
+            )
+        except BattleRuntimeError as error:
+            if not recovery_request_matches(error.__cause__, _PauseForRoute6Potion):
+                raise VermilionChapterError(str(error)) from error
+            if recoveries >= starting_reserve - SS_ANNE_RIVAL_POTION_RESERVE:
+                raise VermilionChapterError(
+                    "Route 6 exhausted its protected S.S. Anne reserve."
+                ) from error
+            try:
+                _use_cerulean_rival_potion(
+                    reader,
+                    executor,
+                    emulator,
+                    DEFAULT_CASCADE_TIMING,
+                )
+            except CascadeChapterError as recovery_error:
+                raise VermilionChapterError(str(recovery_error)) from recovery_error
+            recoveries += 1
+            continue
+
+        remaining = _bag_quantity(emulator, ItemId.POTION)
+        if (
+            remaining != starting_reserve - recoveries
+            or not SS_ANNE_RIVAL_POTION_RESERVE <= remaining <= starting_reserve
+        ):
+            raise VermilionChapterError(
+                "Route 6 changed its bounded Potion reserve unexpectedly."
+            )
+        return result
+
+
+def _choose_route_6_trainer_f_move(raw: RawGameState) -> int:
+    """Prefer power at neutral accuracy and Bite after Sand-Attack or near a KO."""
+
+    moves = raw.first_party_moves
+    pp = raw.first_party_pp
+    if moves is None or pp is None or raw.enemy_hp is None:
+        raise VermilionChapterError("Route 6 move policy lacks live battle evidence.")
+    lowered_accuracy = (
+        raw.player_accuracy_stage is not None and raw.player_accuracy_stage < 7
+    )
+    candidates = (
+        (1, BITE_MOVE_ID),
+        (3, POST_ROCKET_WARTORTLE_MOVES[2]),
+        (4, POST_ROCKET_WARTORTLE_MOVES[3]),
+    ) if lowered_accuracy or raw.enemy_hp <= 10 else (
+        (3, POST_ROCKET_WARTORTLE_MOVES[2]),
+        (1, BITE_MOVE_ID),
+        (4, POST_ROCKET_WARTORTLE_MOVES[3]),
+    )
+    for slot, expected_move in candidates:
+        if (
+            len(moves) >= slot
+            and len(pp) >= slot
+            and moves[slot - 1] == expected_move
+            and pp[slot - 1] & 0x3F
+            and raw.player_disabled_move_slot != slot
+        ):
+            return slot
+    raise VermilionChapterError("Route 6 move policy lacks a usable ranked attack.")
+
+
 def _battle(
     reader: PokemonRedStateReader,
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     policy: Callable[[RawGameState], int],
     expected_map: MapId,
     timing: VermilionTiming,
     label: str,
+    battle_plan_id: str,
+    *,
+    learn_level_up_move: bool = False,
 ) -> RawGameState:
     try:
         return run_adaptive_trainer_battle(
@@ -1148,8 +1418,16 @@ def _battle(
             executor,
             policy,
             expected_map=expected_map,
+            intent=BattleIntent(
+                "reach_vermilion",
+                battle_plan_id=battle_plan_id,
+            ),
             timing=timing.battle_runtime,
             label=label,
+            # The Rocket battle is the pinned level-24 transition. With only
+            # Wartortle in the party there is no switch prompt to decline, so
+            # confirming UNKNOWN phases accepts Bite and replaces Tackle.
+            unknown_cancel_interval=10_000 if learn_level_up_move else 3,
         )
     except BattleRuntimeError as error:
         raise VermilionChapterError(str(error)) from error
@@ -1206,7 +1484,7 @@ def _checkpoint(
 
 
 def _confirm_pulses(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     pulses: int,
     wait_frames: int,
 ) -> None:
@@ -1215,5 +1493,5 @@ def _confirm_pulses(
         _wait(executor, wait_frames)
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

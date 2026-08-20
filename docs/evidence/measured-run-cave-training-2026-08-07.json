@@ -1,0 +1,22 @@
+{
+  "schema": "pokemon-run-outcome-v1",
+  "recorded_on": "2026-08-07",
+  "run_id": "first-cave-training-in-a-full-run",
+  "counted": false,
+  "duration_seconds": 317,
+  "checkpoints_reached": "275 of 312",
+  "result": "the training block reached Diglett's Cave and fought there during a full route run, not only from a captured state",
+  "evidence": {
+    "cave_encounters_this_run": 31,
+    "cave_encounters_in_every_previous_run": 29,
+    "reading": "The route's own Diglett capture accounts for 29 in every run to date. The two extra are the training block's, which is the first time a full run has fought anywhere it chose to go."
+  },
+  "next_failure": {
+    "message": "Diglett no longer exposes Dig in field slot zero.",
+    "cause": "Field Dig addressed Diglett as the third party member with Dig in move slot two. Both held only while nothing ever reordered the party. The party swap started working earlier today, the trainee was moved to the front, and the constants stopped describing the party.",
+    "class": "the same defect already fixed for Fly -- a helper that remembers a slot instead of finding its Pokemon",
+    "fix": "One lookup, _field_move_menu_indices, reads the party for whichever member knows a given field move and which submenu row it occupies. Fly and Dig both use it. The power-point guard addresses the same member rather than a fixed slot."
+  },
+  "what_this_says_about_the_work": "Making the party movable was the point, and everything that assumed it never moved has to be found. Two such assumptions are now fixed; there may be more, and they will surface the same way -- as a constant that was true only by accident.",
+  "still_unshown": "Whether the block reaches the level floor of 55 within its budget, and at what cost. This run stopped on the Dig assumption before it could get far enough to say."
+}

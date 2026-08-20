@@ -1,0 +1,76 @@
+{
+  "access": {
+    "live_test_route_costs_accessed": false,
+    "model_test_predictions_accessed": false,
+    "owner_authorization_receipt_created": false,
+    "private_test_captures_accessed": false,
+    "private_test_episodes_accessed": false,
+    "test_cases_opened": 0
+  },
+  "boundary": {
+    "cartridge_facing_case_runner_implemented": false,
+    "exact_private_case_catalog_created": false,
+    "implementation": "ROM-free sealed protocol core with injected case-runner boundary",
+    "live_execution_authorized": false,
+    "module": "src/pokemon_red_completion/strategic_navigation_sealed_evaluation.py"
+  },
+  "implemented_invariants": [
+    "strict canonical schema-v3 plan and digest loading",
+    "owner authorization bound to plan, source, model, teacher execution and case catalog",
+    "preflight identity refusal before case one",
+    "durable fixed-order claim before private case input access",
+    "durable model and route-cost-baseline prediction commitment before teacher action",
+    "immutable one-outcome ledger with no reopening or reruns",
+    "plan-global ledger namespace prevents a second authorization from creating a fresh attempt",
+    "hard crash consumes the open case and permanently marks protocol failure",
+    "restart continues only at the next unconsumed case",
+    "intermediate progress exposes counts but no case result or statistic",
+    "scorer refuses to calculate until all twelve ordered outcomes exist",
+    "primary exact McNemar calculation uses only ten challenge cases",
+    "two safety cases are reported separately and cannot alter the primary statistic",
+    "failed primary teacher execution is a protocol failure rather than an omission",
+    "final result is recomputed from the immutable ledger and never grants live authority"
+  ],
+  "plan": {
+    "bytes": 11208,
+    "case_order_sha256": "8c913e7101efdfe33c21c849d46da6076653066869077e5043bcf60928a4f2ba",
+    "execution_source_bundle_sha256": "585fab5b42d9b409b9d7d6659d191987ba5a31958f9ac39734f6d1e07f9833b7",
+    "schema": "pokemon-strategic-navigation-sealed-evaluation-plan-v3",
+    "sha256": "f4429dce83b99c4c5dce05785b2222e590c6d670adc0966d8f6b86e5c88d4fec",
+    "teacher_execution_sha256": "07748caa2e1aa4a2d582c80d1d06ab1afc9b9f6725c6d0fc8224ef9b1946073e"
+  },
+  "schema": "strategic-sealed-executor-implementation-audit-v1",
+  "test_scope": {
+    "canonical_digest_assertion_used_as_mutation_oracle": false,
+    "external_mutation_score_claimed": false,
+    "targeted_tests": 19,
+    "targeted_tests_cover": [
+      "authorization and preflight binding",
+      "unforgeable runtime-grant construction path",
+      "fixed order and exact candidate counts",
+      "claim-before-access and prediction-before-teacher sequencing",
+      "no intermediate exact-test calculation",
+      "incomplete-score refusal",
+      "challenge-only primary and separate safety scoring",
+      "failed-primary anti-selection rule",
+      "cached-final ledger recomputation",
+      "pre-claim crash leaves case one unopened and consumable",
+      "crash consumption, restart advancement and no reopening",
+      "second-authorization fresh-ledger refusal",
+      "runner identity mismatch consumption and protocol failure"
+    ]
+  },
+  "verification": {
+    "mypy_source_files": 165,
+    "pytest_deselected_integration": 3,
+    "pytest_passed": 2832,
+    "pytest_xfailed": 1,
+    "ruff": "passed"
+  },
+  "verdict": {
+    "external_core_audit_required": true,
+    "ready_for_external_core_audit": true,
+    "ready_for_owner_authorization": false,
+    "ready_for_private_test_access": false
+  }
+}

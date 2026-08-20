@@ -1,0 +1,54 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-05",
+  "evaluation_id": "red-objective-planner-heldout-v2",
+  "status": "failed",
+  "source_commit": "ec18f7ff61d2aed2e6b5ae60ea07a0d09384b961",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v2-validation-01",
+      "harness_seed": 930001,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 103474,
+      "frames": 10223211,
+      "schedule_sha256": "2736d906871e432b433564b20d919870714b958d40907d94a21c239b6ba6406e",
+      "full_report_sha256": "9294d18a98fc9e8a3f436e4ae58f164e60c30ad30ff12ac4a914676ca309977f"
+    },
+    {
+      "run_id": "red-objective-v2-validation-02",
+      "harness_seed": 930002,
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "failure": "Route 1 survey blocked moving down at (12, 14, 12).",
+      "diagnosis": "A moving Route 1 youngster occupied the southbound crossing; recovery existed only for the same walker's northbound approach.",
+      "failure_log_sha256": "fec4ea08888fc8e87269b7c0c65ade7c4c8ff3c68ae9b8f4a88124815e20bb84"
+    }
+  ],
+  "repair_diagnostics": [
+    {
+      "harness_seed": 930002,
+      "status": "complete",
+      "checkpoints": 312,
+      "objectives": 36,
+      "scheduled_battles": 71,
+      "teacher_objective_fallbacks": 0,
+      "hall_of_fame": true,
+      "actions": 95698,
+      "frames": 9955373,
+      "great_balls_purchased": 32,
+      "snorlax_throws": 6,
+      "full_report_sha256": "3b416f259e3f55cf41dd6f80d1c67e6ae2f2222e32d66a95e4638c913ace65ea"
+    }
+  ],
+  "interpretation": {
+    "planner_result": "Every objective decision in both v2 runs was model-authorized; the failure occurred in a deterministic navigation specialist rather than objective selection.",
+    "evaluation_result": "The preregistered v2 series failed its five-run completion contract and is retired. The exposed-seed repair completion cannot replace a held-out result.",
+    "next_gate": "Run the unchanged repaired source and model on the fresh v3 validation schedules, leaving v3 test schedules sealed."
+  }
+}

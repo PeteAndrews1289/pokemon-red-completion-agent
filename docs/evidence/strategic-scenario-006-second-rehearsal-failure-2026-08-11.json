@@ -1,0 +1,73 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-006-train-authenticated",
+    "envelope_sha256": "f62d3930e46e478411defc0d61f57f8bfccae9a15481b813351cee17ded5011a",
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22",
+    "verified_objective_count": 14
+  },
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 6,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "diagnosis": {
+    "code_repair": "Treat a map with trainer objects but no plausible trainer-header reference as having no line-of-sight lanes; continue rejecting any referenced malformed table.",
+    "last_observed_location": {
+      "area_ref": "pokemon.red.gb.us.rev0:area:game_corner",
+      "input_ready": true,
+      "mode": "interactive",
+      "x": 15,
+      "y": 17
+    },
+    "result": "The repaired transition settled correctly. Hazard projection then found the Game Corner's interaction-only Rocket object, whose map script contains no line-of-sight trainer-header table."
+  },
+  "episode": {
+    "assignment_id": "5393971386a0efa0d358808150b9d51279357c039745dfbd2fe783d7ec04f2a0",
+    "episode_id": "red-scen-reh-5393971386a0efa0d358808150b9d51279357c039745dfbd2fe783d7ec04f2a0",
+    "failure_reason": "unhandled_exception",
+    "immutable": true,
+    "manifest": {
+      "bytes": 128045,
+      "records": 65,
+      "sha256": "90d48525e826df3c59072ba334f05a864e7e52de1d4e794820c92af347345d35",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "executions": 31,
+        "snapshots": 32
+      }
+    },
+    "movement_requests_recorded": 30,
+    "outcome_recorded": false,
+    "selected_objective": "clear_rocket_hideout",
+    "status": "failed",
+    "transition_waits_recorded": 1
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "route_cost_max": 104,
+    "route_cost_min": 30,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-11",
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-006-train",
+    "scenario_sha256": "cd3efcf6bf47ba420183a77bc3a8caaff9e988cbede221addda972782909084c",
+    "source_partition": "train"
+  },
+  "schema": "strategic-scenario-rehearsal-failure-v1",
+  "source": {
+    "ci_run_id": 31557693436,
+    "ci_status": "success",
+    "git_commit": "889bc5bf33d1a88a4f522418fcd844d541bbffae",
+    "source_bundle_sha256": "1a6be05bd2401880fd48ce25e43a8f0e33f3f66b03951045f991bd5e8a70d90d",
+    "teacher_execution_sha256": "cf97196719c6e53853b55baecbbe5b140567c0c7b8876c5d6e27a6e65b684709"
+  },
+  "status": "failed_immutable_rehearsal"
+}

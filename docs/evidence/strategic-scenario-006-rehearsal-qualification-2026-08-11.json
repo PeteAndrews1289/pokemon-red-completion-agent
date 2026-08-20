@@ -1,0 +1,106 @@
+{
+  "capture": {
+    "checkpoint_id": "red-strategic-scenario-v2-006-train-authenticated",
+    "envelope_sha256": "f62d3930e46e478411defc0d61f57f8bfccae9a15481b813351cee17ded5011a",
+    "state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22",
+    "verified_objective_count": 14
+  },
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 7,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0,
+    "validation_challenge_contexts_measured": 2,
+    "validation_challenge_contexts_required": 6
+  },
+  "diagnostic_lineage": [
+    {
+      "assignment_id": "a259bb38db368c15907c5d2b7480335deba50e01248209a9a2a13b709ce78230",
+      "outcome_recorded": false,
+      "result": "Unsafe map-local projection during a not-ready transition",
+      "source_commit": "e26d7d4bd4d8b98f25bf3b513ee0207ab741542b"
+    },
+    {
+      "assignment_id": "5393971386a0efa0d358808150b9d51279357c039745dfbd2fe783d7ec04f2a0",
+      "outcome_recorded": false,
+      "result": "Interaction-only Game Corner trainer had no line-of-sight header table",
+      "source_commit": "889bc5bf33d1a88a4f522418fcd844d541bbffae"
+    }
+  ],
+  "episode": {
+    "assignment_id": "eb4c000d3022b3040b0c151d6f1c0681d140946f9cc9e3089a2ce15114d34032",
+    "dataset": {
+      "candidate_count": 3,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-eb4c000d3022b3040b0c151d6f1c0681d140946f9cc9e3089a2ce15114d34032",
+    "execution": {
+      "acknowledged_steps": 29,
+      "interruptions": {},
+      "movement_requests": 29,
+      "replans": 0,
+      "selected_candidate_index": 0,
+      "selected_objective": "clear_rocket_hideout",
+      "status": "succeeded",
+      "wait_actions": 2
+    },
+    "manifest": {
+      "bytes": 129013,
+      "records": 67,
+      "sha256": "1563dfa761755a32eb7dc56d70549472c732c1ebba65f3073122ff4c644ee2f3",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 31,
+        "snapshots": 32
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "candidates_in_policy_order": [
+      {
+        "objective_id": "clear_rocket_hideout",
+        "route_cost": 30,
+        "route_steps": 29
+      },
+      {
+        "objective_id": "reach_saffron",
+        "route_cost": 33,
+        "route_steps": 32
+      },
+      {
+        "field_actions": 1,
+        "objective_id": "defeat_erika",
+        "route_cost": 104,
+        "route_steps": 100
+      }
+    ],
+    "private_episode_existed_before_execution": false,
+    "registry_teacher_ordinal": 1,
+    "status": "ready"
+  },
+  "recorded_on": "2026-08-11",
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-006-train",
+    "scenario_sha256": "cd3efcf6bf47ba420183a77bc3a8caaff9e988cbede221addda972782909084c",
+    "source_partition": "train"
+  },
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31558012949,
+    "ci_status": "success",
+    "git_commit": "6a62e610e87b77720d41e1a1be49ea2a4bf2d4d2",
+    "source_bundle_sha256": "cb363b144d61b99d62152be3123e66d2dd719d3a9d1c7bb7e17e7a010ea0ca68",
+    "teacher_execution_sha256": "3714ed98afbcd09a9d11745710e20e99c3a3bf739f8a9279712846ceb6a19f58"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

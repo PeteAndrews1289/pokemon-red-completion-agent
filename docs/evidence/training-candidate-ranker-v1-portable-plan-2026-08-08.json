@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon-training-candidate-portable-plan-v1",
+  "status": "preregistered_before_portable_authority_run",
+  "source_commit": "2564317647e080f1ac9884cb014f7dde6d43e3b4",
+  "runtime_qualification_receipt_sha256": "5252bf0a072635cdfa536c031c8e95bb1b3774cf97ecdff0ec03f41c005d7665",
+  "runtime_gate_evaluation_sha256": "3f248e22bc208dd19296903b81fb3e7e553023e90267a240d45eac659e77751a",
+  "root": {
+    "state_sha256": "0f3bca16995984dbe3d21bf1c1d8beb926c8fc1536af391f0b8b8890df042047",
+    "envelope_sha256": "5ffcd5130e781e6f46716b794b2c0d013933522f73275e37cef00fb50ffd64ce",
+    "checkpoint_id": "portable_loop_obtain_secret_key_terminal",
+    "reuse_scope": "captured-state system-integration root; not counted as new offline, shadow, causal, or cross-title evidence"
+  },
+  "models": {
+    "objective": {
+      "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+      "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+      "artifact_manifest_sha256": "27474ec5390351045f594782a2aa0235080105dc1c61a246c66627e041f30f53"
+    },
+    "training_candidate": {
+      "model_id": "pokemon.core.training.candidate-ranker.mlp.v1",
+      "model_file_sha256": "53104c999f0289f8a1dcef9816c34e6963963a047bf710a05544e383c328fdd3",
+      "canonical_model_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+      "retrained_after_causal_qualification": false
+    }
+  },
+  "authority": {
+    "objective_selection": "learned_ranker_without_expected_route_label",
+    "objective_candidate_count_expected": 1,
+    "training_candidate_choice_kinds": ["trainee", "venue"],
+    "training_candidate_teacher_fallback": false,
+    "fixed_mechanics": ["navigation", "party menus", "healing", "battle execution", "Blaine gym route"]
+  },
+  "gates": {
+    "required_status": "ok",
+    "required_selected_objective": "defeat_blaine",
+    "minimum_controlled_candidate_decisions": 100,
+    "minimum_model_teacher_disagreements": 1,
+    "required_authority_choice_kinds": ["trainee", "venue"],
+    "teacher_fallback_on_model_disagreement": false,
+    "maximum_team_development_battles": 1900,
+    "maximum_team_development_healing_trips": 1150,
+    "required_minimum_party_levels": [55, 55, 55, 55, 55, 55],
+    "required_terminal_party_fully_healed": true,
+    "required_terminal_party_status_free": true,
+    "required_blaine_defeated": true,
+    "required_facts_added": ["badge:volcano"],
+    "required_next_available_objective": "defeat_giovanni",
+    "required_teacher_fallbacks": 0
+  },
+  "claim_boundary": {
+    "may_establish": [
+      "the already-qualified strategic ranker composes with learned objective dispatch and the bounded Blaine skill",
+      "live candidate authority survives the objective-loop handoff and returns control to a fresh semantic observation"
+    ],
+    "cannot_establish": [
+      "a genuine branching objective choice",
+      "clean-start learned completion",
+      "learned navigation, menus, recovery, or battle tactics",
+      "cross-title transfer",
+      "autonomous living Pokedex completion"
+    ]
+  },
+  "promotion_eligible": false,
+  "private_artifacts_tracked": false
+}

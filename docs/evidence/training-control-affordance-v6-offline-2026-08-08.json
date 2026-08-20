@@ -1,0 +1,95 @@
+{
+  "schema": "pokemon-training-control-offline-qualification-v1",
+  "status": "eligible_for_shadow",
+  "source_commit": "e342dcea00258713c58b19fdf7594af1b573fd40",
+  "feature_schema_id": "pokemon.core.training.control.features.v2",
+  "model_id": "pokemon.core.training.control.mlp.v1",
+  "promotion_plan_sha256": "fb3d764a01e6871dfe22d65df03e1af2539038771ee67047658173c6b4e759b8",
+  "selection": {
+    "artifact_sha256": "3568314ebe82c2f831ebcaee2f348429609760dce7996a1b191c2fec4eeb9fba",
+    "validation_opened": false,
+    "method": "bidirectional whole-lineage train-to-train cross-validation",
+    "selected_class_balance_power": 0.25,
+    "selection_reason": "all trials had zero operational errors and perfect genuine accuracy; power 0.25 had the lowest mean cross-entropy"
+  },
+  "lineages": [
+    {
+      "lineage_id": "training-control-v6-train-01",
+      "partition": "train",
+      "root_sha256": "7be5e5b7125251099197dec1dd48fc7c86dd8abe68a8395d9d525a43625fb0df",
+      "artifact_sha256": "0a12eee34307b765a549ca82d1a5c989bfe64a29ecee4bf4c9db4984a800b993",
+      "decisions": 58491,
+      "battles": 1807,
+      "healing_trips": 1072,
+      "faints": 0,
+      "final_party_levels": [55, 55, 55, 55, 55, 55]
+    },
+    {
+      "lineage_id": "training-control-v6-train-02",
+      "partition": "train",
+      "root_sha256": "340f2e86754dd56a15ef0c27981de533c766eaeb4459ee32b59282a032cb22d8",
+      "artifact_sha256": "a70068ce64894b2c82b841f8ec72410e9ad61fde3836d522e03f2694f784b1b9",
+      "decisions": 61723,
+      "battles": 1814,
+      "healing_trips": 1080,
+      "faints": 0,
+      "final_party_levels": [55, 55, 55, 55, 55, 55]
+    },
+    {
+      "lineage_id": "training-control-v6-validation-01",
+      "partition": "validation",
+      "root_sha256": "1b89e05d088450d32acb30dea886ba40bebabdd51ed000274d9326e6b7f181be",
+      "artifact_sha256": "8ecc98dca689a15b80f03aada7b503df24a6543358b8e20f2c87e85ecd9848dd",
+      "decisions": 60164,
+      "battles": 1802,
+      "healing_trips": 1067,
+      "faints": 0,
+      "final_party_levels": [55, 55, 55, 55, 55, 55]
+    }
+  ],
+  "partition_audit": {
+    "training_examples": 120214,
+    "validation_examples": 60164,
+    "root_overlap_count": 0,
+    "validation_classes_missing_from_training": []
+  },
+  "candidate": {
+    "summary_sha256": "8ef5e857e42a2325a3c28b3346649c99b1d9a7fcb7110ac1abc3bb13becb5cec",
+    "model_sha256": "cd8463ba77edc6f37b4e2321f5b644d7bb04a84622fa7af3f09fad968e289bd6",
+    "private_model_file_sha256": "62f3eab12d9c3ecf0d2623b0c8ebbc7f55fc055673124cb3939e678677025b7b",
+    "validation": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "genuine_accuracy": 1.0,
+      "battle_accuracy": 1.0,
+      "heal_precision": 1.0,
+      "safe_seek_false_heal_rate": 0.0,
+      "operational_errors": {
+        "missed_required_heal": 0,
+        "premature_stop": 0,
+        "missed_stop": 0,
+        "unnecessary_heal": 0
+      }
+    }
+  },
+  "offline_gate_evaluation_sha256": "59331a83b4dbb4359aab939c8ad7a3c0696f7a9dfa7cc7a21e62779f3778f58a",
+  "offline_gates_passed": 8,
+  "offline_gates_total": 8,
+  "choice_diversity": {
+    "audit_sha256": "c6b4516fd8f1f3984219824a226771fc3b4a9615aeffe5f1bbc86344f8a02c21",
+    "candidate_only_validation_accuracy": 1.0,
+    "candidate_only_genuine_validation_accuracy": 1.0,
+    "state_dependent_candidate_sets": [],
+    "interpretation": "The candidate set alone fully determines every observed label. The learned model has not demonstrated predictive value from the other 25 features."
+  },
+  "qualification": {
+    "shadow_may_start": true,
+    "shadow_started_after_gate": true,
+    "shadow_result_included": false,
+    "causal_control_attempted_at_publication": false,
+    "model_had_execution_authority": false,
+    "promotion_eligible": false
+  },
+  "claim_boundary": "This is a preregistered offline safety-and-integration qualification. Mandatory heal, flee, travel/preparation, and stop boundaries are referee-owned singleton affordances. Live shadow and causal authority remain required, and the current dataset does not demonstrate state-dependent action choice within a fixed candidate set.",
+  "private_artifacts_tracked": false
+}

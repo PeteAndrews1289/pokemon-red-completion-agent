@@ -1,0 +1,24 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v15",
+  "status": "failed",
+  "source_commit": "47c7989395483be7826510fd13c220de7ff760f7",
+  "source_bundle_sha256": "533e22e3fe658ef02fe19d60a18daeed87c29f9fc879e0a155888d926f8959c9",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v15-validation-01",
+      "harness_seed": 1350001,
+      "battle_start_schedule_sha256": "b0d06199fc3dc6bec68e835b91b8562cc79d78a937fda692b676661bc40b2b91",
+      "status": "failed",
+      "qualified_checkpoints": 228,
+      "gameplay_state": "Erika defeated, Rainbow Badge obtained, party fully healed, controller released",
+      "failure": "The Erika evidence contract rejected a legitimate level-44 lead because its stale upper bound allowed only level 43.",
+      "private_log_sha256": "dcb639314c724e792b65cdedb531fcf2432ae3af43ca74f74ba0ab66f0551390"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "Fresh schedule variation changed experience timing enough for the level-42 lead to gain two legitimate levels across the required Celadon Gym battles. Gameplay succeeded, but the chapter receipt encoded a one-level-only assumption.",
+  "repair_direction": "Accept the source-valid level-44 post-Erika boundary while retaining the exact badge, event, move, PP, healing, money, optional-trainer, and controller-release checks."
+}

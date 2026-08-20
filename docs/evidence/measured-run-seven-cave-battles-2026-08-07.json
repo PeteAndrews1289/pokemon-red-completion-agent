@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-run-outcome-v1",
+  "recorded_on": "2026-08-07",
+  "run_id": "cave-training-seven-battles",
+  "counted": false,
+  "duration_seconds": 355,
+  "checkpoints_reached": "275 of 312",
+  "progress": {
+    "cave_encounters": 36,
+    "attributable_to_the_route": 29,
+    "attributable_to_training": 7,
+    "previous_run": "31 encounters, 2 from training",
+    "reading": "The block is training in the venue it chose, and doing more of it each time the thing in front of it is fixed."
+  },
+  "next_failure": {
+    "message": "Battle menu did not settle before switching to Blastoise PP-exhaustion escape escort.",
+    "when": "after seven battles, once the trainee had spent its attacking power points",
+    "why_it_is_newly_reachable": "The power-point escape only runs when a trainee has actually been fighting long enough to run dry. Nothing reached that state before today.",
+    "status": "not yet diagnosed. The failure now reports the battle-menu phases it saw across all 48 attempts, and distinguishes a menu stuck in one phase -- which advance_toward_main does not know how to leave -- from one cycling without arriving."
+  },
+  "pattern": "This is the fifth failure in a row whose first message carried no state, and the fifth that needed instrumenting before it could be fixed. The cheapest change available to this codebase is not a fix; it is making failures say what they saw.",
+  "still_unshown": "Whether the block reaches the level floor of 55 within its budget. Each run gets further; none has got there."
+}

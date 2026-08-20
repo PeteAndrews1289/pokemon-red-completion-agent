@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon-measured-negative-result-v1",
+  "recorded_on": "2026-08-07",
+  "finding_id": "town-map-cursor-not-at-any-standard-menu-address",
+  "tests": "docs/evidence/predicted-cave-routing-2026-08-07.json",
+  "counted": false,
+  "prediction_outcome": "confirmed",
+  "predicted": "the run reaches the venue-travel path and fails inside it, most likely with 'Fly to Vermilion failed'",
+  "observed": "Fly to Vermilion failed: arrived at map 1 (VIRIDIAN_CITY) at (23, 26). The venue selection was also exactly as computed: slot 2 at level 20, sent to digletts_cave.",
+  "measurement": {
+    "method": "Five candidate addresses sampled after every town-map cursor move.",
+    "addresses": [
+      "CURRENT_MENU_ITEM",
+      "MENU_CURSOR_LOCATION",
+      "MAX_MENU_ITEM",
+      "TOP_MENU_ITEM_X",
+      "TOP_MENU_ITEM_Y"
+    ],
+    "readings": {
+      "opened": [1, 116, 4, 12, 8],
+      "after_up": [1, 116, 4, 12, 8],
+      "after_up_2": [1, 116, 4, 12, 8],
+      "after_up_3": [1, 116, 4, 12, 8],
+      "after_right": [1, 116, 4, 12, 8],
+      "after_down": [1, 116, 4, 12, 8],
+      "after_down_2": [1, 116, 4, 12, 8]
+    },
+    "result": "Every candidate is frozen across every move. None of them is the town-map cursor."
+  },
+  "corroboration": {
+    "observation": "MAX_MENU_ITEM=4 with TOP=(12, 8) is the exact signature recorded for the party member submenu in docs/evidence/party-swap-submenu-offset-2026-08-07.json.",
+    "reading": "These are stale values left by the last list menu. The town map does not write to the standard menu RAM at all, which is consistent with it being a custom screen rather than a list."
+  },
+  "consequence": "The technique that fixed the party switch -- ask the menu where the cursor is, and recognise the right row by what the game reports -- cannot be applied here. There is no observable cursor to read, so no amount of care with these addresses will produce a self-verifying fly.",
+  "what_this_rules_out": [
+    "Reading the cursor and stepping until it points at the target",
+    "Any further refinement of the hand-derived hop sequence, which is guessing with extra steps and has now cost two runs"
+  ],
+  "recommended_approach": {
+    "name": "verify by outcome, not by cursor",
+    "shape": "Fly, read map_id, and if it is not the destination, open the town map and try again with a different hop count -- bounded, and reporting every (attempt, landing) pair on exhaustion.",
+    "why_it_is_safe": "A wrong fly lands in another flyable town and costs only in-game time. Nothing is consumed and no state is damaged, so attempts are cheap and repeatable.",
+    "why_it_is_honest": "It recognises success by the game's own answer -- the map we are standing on -- rather than by a belief about the town map's layout. That is the same principle that fixed the party switch; only the observable changes.",
+    "bonus": "Each landing is data. A few attempts map the hop-count-to-town relation for real, and that mapping can then be recorded as evidence rather than assumed."
+  },
+  "still_unknown": "Whether the real cursor lives at some address this repository has not catalogued. Worth finding, but not required by the recommended approach."
+}

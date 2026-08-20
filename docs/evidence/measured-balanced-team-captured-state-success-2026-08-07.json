@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon-red-balanced-team-training-evidence-v1",
+  "recorded_at": "2026-08-07",
+  "regime": "captured-state diagnostic; no validation or sealed evaluation seed opened",
+  "starting_checkpoint": "Returned safely from Mansion (275/312)",
+  "starting_party_levels": [48, 20, 22, 30, 25, 30],
+  "mechanisms_under_test": [
+    "measured Route 11, Diglett's Cave, and Pokemon Mansion venue routing",
+    "five-level direct-training advantage",
+    "super-effective opponent STAB refusal",
+    "participation-based precursor evolution",
+    "immediate ground-line attacks preferred over two-turn Dig",
+    "level-55 escort cap"
+  ],
+  "evolution_block": {
+    "battles": 64,
+    "healing_trips": 37,
+    "result": "Diglett evolved without directly fighting and without a faint."
+  },
+  "balancing_block": {
+    "battles": 1652,
+    "healing_trips": 848,
+    "progress_levels": {
+      "250": [30, 31, 31, 51, 31, 30],
+      "500": [33, 34, 34, 53, 34, 33],
+      "750": [38, 55, 38, 38, 38, 38],
+      "1000": [44, 55, 45, 44, 44, 44],
+      "1250": [48, 49, 49, 55, 49, 49],
+      "1500": [52, 53, 53, 55, 53, 52]
+    },
+    "final_report": {
+      "party_size": 6,
+      "minimum_level": 55,
+      "maximum_level": 55,
+      "level_spread": 0,
+      "fainted_count": 0,
+      "passed": true
+    }
+  },
+  "combined_cost": {
+    "battles": 1716,
+    "healing_trips": 885
+  },
+  "comparison": "The captured-state result is below the approximately 1,878-battle escort-era baseline and far below the 4,570-battle run that chased an internal spread to an overlevelled escort.",
+  "claim": "From this captured post-Mansion state, the teacher built a six-member level-55 team with zero faints and without overlevelling the escort.",
+  "not_claimed": [
+    "A full uninterrupted route has not yet reproduced this result.",
+    "The balanced party has not yet completed all five League battles in the same run.",
+    "No learned policy produced these decisions.",
+    "No cross-game transfer has been measured."
+  ]
+}

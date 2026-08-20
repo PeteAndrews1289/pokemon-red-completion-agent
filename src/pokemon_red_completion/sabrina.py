@@ -6,15 +6,27 @@ pinned to pret/pokered commit ``1e96034092686d006e863cace09e87273051a3d8``.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
+from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.celadon import _bag, _money, _party_hp, _party_max_hp, _party_status
+from pokemon_red_completion.dojo import _prove_center_field_control
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
 from pokemon_red_completion.observation import (
     Badge,
     EventFlag,
@@ -28,18 +40,20 @@ from pokemon_red_completion.silph import (
     CENTER_EXIT,
     CITY_TO_MART_APPROACH,
     DEFAULT_SILPH_TIMING,
-    ChapterExecutor,
     EmulatorState,
     SilphTiming,
     _await_trainer_battle,
     _battle_hyper_potion,
-    _CountingExecutor,
+    _battle_x_special,
     _event,
     _heal,
     _interact,
     _move,
+    _move_verified,
+    _navigate_saffron_coordinate,
+    _pulse,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 
 SABRINA_CHECKPOINT_COUNT = 6
 SABRINA_OPPONENT = 0xF0
@@ -47,7 +61,30 @@ SABRINA_TRAINER_CLASS = 0xF0
 SABRINA_TRAINER_SET = 1
 SABRINA_PARTY = ((0x26, 38), (0x2A, 37), (0x77, 38), (0x95, 43))
 REGULAR_TRAINER_EVENTS = tuple(range(0x362, 0x369))
+PC_DEPOSIT_ITEMS = (ItemId.SILPH_SCOPE, ItemId.CARD_KEY)
 HYPER_POTION_THRESHOLD = 70
+# The exposed v38 schedule produced a 94-HP critical hit from Alakazam after
+# Recover. Preserve at least that observed damage plus one HP before attacking.
+ALAKAZAM_HYPER_POTION_THRESHOLD = 95
+# The next chapter restocks before its first required battle, so Sabrina may
+# consume the complete held-out reserve when her Alakazam damage requires it.
+MAX_SABRINA_HYPER_POTIONS = 7
+SABRINA_X_SPECIAL_USES = 2
+PRE_SURF_SABRINA_MOVES = (0x2C, 0x27, 0x3A, 0x37)
+POST_SURF_SABRINA_MOVES = (0x82, 0x46, 0x3A, 0x39)
+POST_SURF_NO_STRENGTH_SABRINA_MOVES = (0x2C, 0x27, 0x3A, 0x39)
+SABRINA_TERMINAL_PP_BY_MOVES = {
+    PRE_SURF_SABRINA_MOVES: (25, 30, 10, 25),
+    POST_SURF_SABRINA_MOVES: (15, 15, 10, 15),
+    POST_SURF_NO_STRENGTH_SABRINA_MOVES: (25, 30, 10, 15),
+}
+SABRINA_BATTLE_TIMING = BattleRuntimeTiming(
+    max_runtime_pulses=720,
+    max_move_menu_transition_pulses=24,
+    max_pp_confirmation_pulses=12,
+    max_attack_confirmation_pulses=6,
+    max_post_attack_transition_pulses=24,
+)
 
 
 def _directions(value: str) -> tuple[str, ...]:
@@ -114,22 +151,34 @@ class SabrinaChapterReport:
     hyper_potions_before: int
     hyper_potions_used: int
     hyper_potions_remaining: int
+    x_specials_before: int
+    x_specials_used: int
+    x_specials_remaining: int
     initial_money: int
     money_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     controller_released: bool
     frames_executed: int
     actions_executed: int
+    require_teacher_strategy_evidence: bool
 
     @property
-    def passed(self) -> bool:
+    def teacher_strategy_evidence_passed(self) -> bool:
+        return (
+            _encounter_party(self.turns) == SABRINA_PARTY
+            and all(_sabrina_turn_is_allowed(turn) for turn in self.turns)
+            and all(turn.lead_hp > 0 for turn in self.turns)
+            and all(_sabrina_status_is_supported(turn.lead_status) for turn in self.turns)
+        )
+
+    @property
+    def completion_evidence_passed(self) -> bool:
         return (
             len(self.records) == SABRINA_CHECKPOINT_COUNT
-            and self.identity == (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET)
-            and _encounter_party(self.turns) == SABRINA_PARTY
-            and tuple(turn.move_slot for turn in self.turns) == (2, 2, 3, 3, 3, 2)
+            and self.identity
+            == (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET)
             and self.trainer_events_before == (False,) * 7
             and self.trainer_events_after == (True,) * 7
             and self.got_tm46
@@ -137,19 +186,28 @@ class SabrinaChapterReport:
             and self.marsh_badge
             and self.marsh_badge_mirror
             and self.tm46_quantity == 1
-            and 0 <= self.hyper_potions_used <= 1
-            and self.hyper_potions_remaining == self.hyper_potions_before - self.hyper_potions_used
+            and 0 <= self.hyper_potions_used <= MAX_SABRINA_HYPER_POTIONS
+            and self.hyper_potions_remaining
+            == self.hyper_potions_before - self.hyper_potions_used
+            and self.x_specials_before == SABRINA_X_SPECIAL_USES
+            and self.x_specials_used == SABRINA_X_SPECIAL_USES
+            and self.x_specials_remaining == 0
             and self.money_remaining == self.initial_money + 4_257
-            and all(turn.lead_hp > 0 for turn in self.turns)
             and self.final_raw.map_id == MapId.SAFFRON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
             and self.final_raw.battle_state == 0
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
-            and self.final_raw.first_party_moves == (0x82, 0x46, 0x3A, 0x39)
-            and self.final_raw.first_party_pp == (15, 15, 10, 15)
+            and all(status == 0 for status in self.party_status)
+            and _sabrina_terminal_moves_ready(self.final_raw)
             and self.controller_released
+        )
+
+    @property
+    def passed(self) -> bool:
+        return self.completion_evidence_passed and (
+            not self.require_teacher_strategy_evidence
+            or self.teacher_strategy_evidence_passed
         )
 
     def checkpoints(self) -> tuple[tuple[str, str, RawGameState], ...]:
@@ -159,6 +217,11 @@ class SabrinaChapterReport:
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_sabrina",
+            "verification": {
+                "completion_evidence_passed": self.completion_evidence_passed,
+                "teacher_strategy_required": self.require_teacher_strategy_evidence,
+                "teacher_strategy_evidence_passed": self.teacher_strategy_evidence_passed,
+            },
             "trainer_free_warp_route": self.trainer_events_before == (False,) * 7,
             "identity": list(self.identity),
             "party": [list(member) for member in SABRINA_PARTY],
@@ -175,6 +238,9 @@ class SabrinaChapterReport:
                 "hyper_potions_before": self.hyper_potions_before,
                 "used": self.hyper_potions_used,
                 "remaining": self.hyper_potions_remaining,
+                "x_specials_before": self.x_specials_before,
+                "x_specials_used": self.x_specials_used,
+                "x_specials_remaining": self.x_specials_remaining,
             },
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
@@ -189,14 +255,19 @@ def run_sabrina_chapter(
     *,
     timing: SilphTiming = DEFAULT_SILPH_TIMING,
     progress: ProgressSink | None = None,
+    require_teacher_strategy_evidence: bool = True,
 ) -> SabrinaChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[SabrinaCheckpoint] = []
     initial = reader.read()
     _require(initial, MapId.SAFFRON_POKECENTER, (3, 3), "post-Silph boundary")
     initial_money = _money(emulator)
     initial_bag = _bag(emulator)
+    if initial.first_party_moves not in SABRINA_TERMINAL_PP_BY_MOVES:
+        raise SabrinaChapterError(
+            "Sabrina input boundary has no qualified lead move lineage."
+        )
     if (
         _event(emulator, EventFlag.BEAT_SABRINA)
         or _event(emulator, EventFlag.GOT_TM46)
@@ -206,8 +277,11 @@ def run_sabrina_chapter(
     ):
         raise SabrinaChapterError("Sabrina input boundary is not pristine.")
     _checkpoint(records, progress, emulator, initial, "sabrina_ready", "Sabrina plan ready")
+    _store_obsolete_key_items(actions, reader, emulator, timing)
 
-    _move(actions, reader, CENTER_TO_GYM, timing)
+    _move_verified(actions, reader, CENTER_EXIT, timing, "Saffron Center exit")
+    _navigate_saffron_coordinate(actions, reader, timing, (34, 4), "Saffron Gym")
+    _move_verified(actions, reader, ("up",), timing, "Saffron Gym entry")
     _require(reader.read(), MapId.SAFFRON_GYM, (8, 17), "Saffron Gym entrance")
     trainer_events_before = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
     if trainer_events_before != (False,) * 7:
@@ -236,10 +310,26 @@ def run_sabrina_chapter(
     if identity != (SABRINA_OPPONENT, SABRINA_TRAINER_CLASS, SABRINA_TRAINER_SET):
         raise SabrinaChapterError(f"Unexpected Sabrina identity: {identity!r}.")
 
+    x_special_before = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    if x_special_before != SABRINA_X_SPECIAL_USES:
+        raise SabrinaChapterError(
+            f"Sabrina requires two staged X Specials, found {x_special_before}."
+        )
+    for _ in range(SABRINA_X_SPECIAL_USES):
+        _battle_x_special(reader, actions, emulator, timing)
+    x_special_after = _bag(emulator).get(ItemId.X_SPECIAL, 0)
+    if x_special_before - x_special_after != SABRINA_X_SPECIAL_USES:
+        raise SabrinaChapterError(
+            "Sabrina X Special setup did not consume exactly two items: "
+            f"before={x_special_before}, after={x_special_after}."
+        )
+
     turns: list[SabrinaTurn] = []
 
     def policy(raw: RawGameState) -> int:
-        slot = 3 if raw.enemy_species_id == 0x77 else 2
+        return _sabrina_move_slot(raw)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             SabrinaTurn(
                 raw.enemy_species_id or 0,
@@ -251,7 +341,6 @@ def run_sabrina_chapter(
                 slot,
             )
         )
-        return slot
 
     hyper_before = initial_bag.get(ItemId.HYPER_POTION, 0)
     while True:
@@ -259,27 +348,60 @@ def run_sabrina_chapter(
             reader,
             actions,
             policy,
-            lambda raw: 0 < (raw.first_party_hp or 0) < HYPER_POTION_THRESHOLD,
+            record_turn,
+            _sabrina_recovery_required,
             "Sabrina",
         )
         if complete:
             break
-        if hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0) >= 1:
-            raise SabrinaChapterError("Sabrina recovery exceeded one Hyper Potion.")
+        if (
+            hyper_before - _bag(emulator).get(ItemId.HYPER_POTION, 0)
+            >= min(MAX_SABRINA_HYPER_POTIONS, hyper_before)
+        ):
+            raise SabrinaChapterError(
+                "Sabrina recovery exhausted its live Hyper Potion reserve."
+            )
         _battle_hyper_potion(reader, actions, emulator, timing)
 
-    if _encounter_party(turns) != SABRINA_PARTY:
+    if require_teacher_strategy_evidence and _encounter_party(turns) != SABRINA_PARTY:
         raise SabrinaChapterError(f"Sabrina party or turn policy changed: {turns!r}.")
-    if any(turn.lead_status for turn in turns):
+    if require_teacher_strategy_evidence and any(
+        not _sabrina_status_is_supported(turn.lead_status) for turn in turns
+    ):
         raise SabrinaChapterError("Sabrina policy encountered an unsupported persistent status.")
     _checkpoint(records, progress, emulator, reader.read(), "sabrina_defeated", "Defeated Sabrina")
 
-    got_tm46 = _event(emulator, EventFlag.GOT_TM46)
-    beat_sabrina = _event(emulator, EventFlag.BEAT_SABRINA)
-    trainer_events_after = tuple(_event(emulator, event) for event in REGULAR_TRAINER_EVENTS)
-    marsh_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & Badge.MARSH)
-    marsh_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.MARSH)
-    tm46_quantity = _bag(emulator).get(ItemId.TM46_PSYWAVE, 0)
+    for _ in range(64):
+        got_tm46 = _event(emulator, EventFlag.GOT_TM46)
+        beat_sabrina = _event(emulator, EventFlag.BEAT_SABRINA)
+        trainer_events_after = tuple(
+            _event(emulator, event) for event in REGULAR_TRAINER_EVENTS
+        )
+        marsh_badge = bool(emulator.read_u8(RamAddress.OBTAINED_BADGES) & Badge.MARSH)
+        marsh_badge_mirror = bool(emulator.read_u8(RamAddress.BEAT_GYM_FLAGS) & Badge.MARSH)
+        tm46_quantity = _bag(emulator).get(ItemId.TM46_PSYWAVE, 0)
+        if (
+            got_tm46
+            and beat_sabrina
+            and trainer_events_after == (True,) * 7
+            and marsh_badge
+            and marsh_badge_mirror
+            and tm46_quantity == 1
+            and reader.read_input_readiness().ready
+        ):
+            break
+        _interact(actions, timing.dialogue_frames)
+    else:
+        readiness = reader.read_input_readiness()
+        raw = reader.read()
+        raise SabrinaChapterError(
+            "Sabrina rewards did not settle inside the dialogue bound: "
+            f"got_tm46={got_tm46}, beat_sabrina={beat_sabrina}, "
+            f"trainer_events={trainer_events_after!r}, marsh_badge={marsh_badge}, "
+            f"marsh_badge_mirror={marsh_badge_mirror}, tm46_quantity={tm46_quantity}, "
+            f"input_ready={readiness.ready}, map={raw.map_id!r}, "
+            f"position={(raw.player_x, raw.player_y)!r}, battle={raw.battle_state}."
+        )
     if not (
         got_tm46
         and beat_sabrina
@@ -294,10 +416,12 @@ def run_sabrina_chapter(
     _move(actions, reader, SABRINA_TO_CITY, timing)
     _require(reader.read(), MapId.SAFFRON_CITY, (34, 4), "Saffron Gym exit")
     _checkpoint(records, progress, emulator, reader.read(), "gym_exited", "Exited Saffron Gym")
-    _move(actions, reader, CITY_TO_CENTER, timing)
+    _navigate_saffron_coordinate(actions, reader, timing, (9, 30), "Saffron Center")
+    _move_verified(actions, reader, ("up",), timing, "Saffron Center entry")
     _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 7), "Saffron Center entry")
     _move(actions, reader, ("up",) * 4, timing)
     _heal(actions, timing)
+    _prove_center_field_control(actions, reader, timing)
     final = reader.read()
     _require(final, MapId.SAFFRON_POKECENTER, (3, 3), "healed Sabrina boundary")
     _checkpoint(records, progress, emulator, final, "sabrina_terminal", "Healed Sabrina boundary")
@@ -318,6 +442,9 @@ def run_sabrina_chapter(
         hyper_before,
         hyper_before - hyper_remaining,
         hyper_remaining,
+        x_special_before,
+        x_special_before - x_special_after,
+        x_special_after,
         initial_money,
         _money(emulator),
         _party_hp(emulator),
@@ -326,20 +453,22 @@ def run_sabrina_chapter(
         not emulator.pressed_buttons,
         emulator.frame_count - start_frames,
         actions.actions_executed,
+        require_teacher_strategy_evidence,
     )
     if not report.passed:
         raise SabrinaChapterError(f"Sabrina chapter failed its evidence contract: {report!r}.")
     return report
 
 
-class _PauseBattle(Exception):
-    pass
+class _PauseBattle(BattleControlRequest):
+    default_action = BattleAction.recovery()
 
 
 def _run_until_sabrina(
     reader: PokemonRedStateReader,
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     policy: Callable[[RawGameState], int],
+    record_turn: Callable[[RawGameState, int], None],
     pause: Callable[[RawGameState], bool],
     label: str,
 ) -> bool:
@@ -354,12 +483,23 @@ def _run_until_sabrina(
             actions,
             guarded,
             expected_map=int(MapId.SAFFRON_GYM),
-            timing=BattleRuntimeTiming(max_runtime_pulses=720),
+            intent=BattleIntent(
+                "defeat_sabrina",
+                battle_plan_id=RedBattlePlanId.SABRINA_LEADER,
+                resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+                recovery_capabilities=frozenset(
+                    {BattleRecoveryCapability.RESTORE_HP}
+                ),
+            ),
+            timing=SABRINA_BATTLE_TIMING,
             label=label,
             unknown_cancel_interval=3,
+            move_decision_sink=record_turn,
         )
     except BattleRuntimeError as error:
-        if not isinstance(error.__cause__, _PauseBattle):
+        if not recovery_request_matches(
+            error.__cause__, _PauseBattle, accepted_needs=frozenset({"hp"})
+        ):
             raise
         return False
     return True
@@ -374,6 +514,198 @@ def _encounter_party(
         if not party or party[-1] != member:
             party.append(member)
     return tuple(party)
+
+
+def _sabrina_move_slot(raw: RawGameState) -> int:
+    if raw.first_party_moves == PRE_SURF_SABRINA_MOVES:
+        priorities = (3, 1, 4)
+    elif raw.first_party_moves in {
+        POST_SURF_SABRINA_MOVES,
+        POST_SURF_NO_STRENGTH_SABRINA_MOVES,
+    }:
+        priorities = (3, 2, 4) if raw.enemy_species_id == 0x77 else (2, 4, 3)
+    else:
+        raise SabrinaChapterError("Sabrina policy observed an unqualified move lineage.")
+    pp = raw.first_party_pp or ()
+    for slot in priorities:
+        if (
+            len(pp) >= slot
+            and pp[slot - 1] & 0x3F
+            and not (
+                raw.player_disabled_move_slot == slot
+                and (raw.player_disable_turns or 0) > 0
+            )
+        ):
+            return slot
+    raise SabrinaChapterError("Sabrina policy has no legal move with PP.")
+
+
+def _sabrina_turn_is_allowed(turn: SabrinaTurn) -> bool:
+    allowed = {1, 2, 3, 4}
+    return turn.move_slot in allowed
+
+
+def _sabrina_terminal_moves_ready(raw: RawGameState) -> bool:
+    expected_pp = SABRINA_TERMINAL_PP_BY_MOVES.get(raw.first_party_moves)
+    return expected_pp is not None and raw.first_party_pp == expected_pp
+
+
+def _sabrina_status_is_supported(status: int) -> bool:
+    return status == 0 or 1 <= status <= 7 or status == 0x40
+
+
+def _sabrina_recovery_required(raw: RawGameState) -> bool:
+    threshold = (
+        ALAKAZAM_HYPER_POTION_THRESHOLD
+        if raw.enemy_species_id == 0x95
+        else HYPER_POTION_THRESHOLD
+    )
+    return 0 < (raw.first_party_hp or 0) < threshold
+
+
+def _store_obsolete_key_items(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SilphTiming,
+) -> None:
+    before = _bag(emulator)
+    deposit_items = _sabrina_capacity_deposit_items(before)
+    if deposit_items is None:
+        raise SabrinaChapterError(
+            "Sabrina inventory cleanup lacks safe capacity or its spent key items."
+        )
+    if not deposit_items:
+        return
+    expected_slots = len(before) - len(deposit_items)
+
+    _move(actions, reader, ("down",) + ("right",) * 10, timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (13, 4), "Saffron PC approach")
+    for item in deposit_items:
+        _deposit_pc_item(actions, reader, emulator, item, timing)
+    returned = reader.read()
+    after = _bag(emulator)
+    if (
+        returned.map_id != MapId.SAFFRON_POKECENTER
+        or (returned.player_x, returned.player_y) != (13, 4)
+        or not reader.read_input_readiness().ready
+        or len(after) != expected_slots
+        or len(after) > 18
+        or any(item in after for item in deposit_items)
+    ):
+        raise SabrinaChapterError("Saffron PC cleanup did not restore safe field capacity.")
+    _move(actions, reader, ("left",) * 10 + ("up",), timing)
+    _require(reader.read(), MapId.SAFFRON_POKECENTER, (3, 3), "Saffron PC return")
+
+
+def _sabrina_capacity_ready(bag: Mapping[object, int]) -> bool:
+    """Prove that the remaining obsolete keys can make room for the Gym reward."""
+
+    return _sabrina_capacity_deposit_items(bag) is not None
+
+
+def _sabrina_capacity_deposit_items(
+    bag: Mapping[object, int],
+) -> tuple[ItemId, ...] | None:
+    """Select present obsolete keys only when archiving them reaches 18 slots."""
+
+    available = tuple(item for item in PC_DEPOSIT_ITEMS if bag.get(item, 0) == 1)
+    return available if len(bag) - len(available) <= 18 else None
+
+
+def _deposit_pc_item(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    _pulse(actions, MacroActionKind.MOVE, timing, "up", timing.menu_frames)
+    _pulse(actions, MacroActionKind.INTERACT, timing, frames=timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_menu_cursor(actions, emulator, 1, timing)
+    for _ in range(3):
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) != 0:
+        raise SabrinaChapterError("Saffron PC did not expose WITHDRAW ITEM.")
+    _pulse(actions, MacroActionKind.MOVE, timing, "down", timing.menu_frames)
+    _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    _select_bag_list_item(actions, emulator, item, timing)
+    _confirm_selected_pc_deposit(actions, emulator, item, timing)
+    if item in _bag(emulator):
+        raise SabrinaChapterError(f"Saffron PC did not store {item.name}.")
+    for _ in range(4):
+        _pulse(actions, MacroActionKind.CANCEL, timing, frames=timing.menu_frames)
+    if not reader.read_input_readiness().ready:
+        raise SabrinaChapterError(f"Saffron PC did not close after storing {item.name}.")
+
+
+def _confirm_selected_pc_deposit(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    """Confirm only until the selected item leaves the bag.
+
+    The number of menus between the bag list and the deposit result depends on
+    the selected stack.  A fixed confirmation count can acknowledge the result
+    and then select the next bag entry, silently depositing an unrelated item.
+    The live bag transition is the semantic terminal we actually require.
+    """
+
+    for _ in range(3):
+        if item not in _bag(emulator):
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, timing, frames=timing.menu_frames)
+    if item in _bag(emulator):
+        raise SabrinaChapterError(f"Saffron PC did not store {item.name}.")
+
+
+def _select_menu_cursor(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    target: int,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(16):
+        current = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if current == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if current < target else "up",
+            timing.menu_frames,
+        )
+    raise SabrinaChapterError(f"Menu could not select cursor {target}.")
+
+
+def _select_bag_list_item(
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    item: ItemId,
+    timing: SilphTiming,
+) -> None:
+    for _ in range(24):
+        items = tuple(_bag(emulator))
+        if item not in items:
+            raise SabrinaChapterError(f"Required PC item {item.name} is unavailable.")
+        absolute = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) + emulator.read_u8(
+            RamAddress.LIST_SCROLL_OFFSET
+        )
+        target = items.index(item)
+        if absolute == target:
+            return
+        _pulse(
+            actions,
+            MacroActionKind.MOVE,
+            timing,
+            "down" if absolute < target else "up",
+            timing.menu_frames,
+        )
+    raise SabrinaChapterError(f"Could not select PC item {item.name}.")
 
 
 def _checkpoint(

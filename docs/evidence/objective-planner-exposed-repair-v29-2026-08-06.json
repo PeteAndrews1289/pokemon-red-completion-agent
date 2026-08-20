@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v29",
+  "source_commit": "fab80e7971df02e536896c7da71ae31c39924532",
+  "source_bundle_sha256": "d028ff483df58c0b22c8e3f2b09bde71cf184e8d2993c86777dfb3a13825123a",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1640002,
+    "battle_start_schedule_sha256": "85ed45f0b7db1fcc0fa9abd20a41d368a1ce0ae70dddd3fddb1d4b09d46b41ff",
+    "private_log_sha256": "6104edc910ddc77fe975a53083d01637d3fb8f6dd7fec6b7ee39ba0507b62e78",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 74,
+    "teacher_objective_fallbacks": 0,
+    "minimum_objective_confidence": 0.7983486180511433,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "actions_executed": 93159,
+    "party_size": 6,
+    "workhorse_level": 60,
+    "surge_dig_attacks": 4,
+    "surge_terminal_lead_hp": 82,
+    "surge_terminal_lead_max_hp": 82
+  },
+  "repairs_verified": [
+    "The already visited Vermilion Center nurse restores all retained members after the long collection detour",
+    "The post-storage boundary proves exact party identity, full HP, and clear status before Gym entry",
+    "Diglett defeats all three Lt. Surge Pokémon using only Dig and Wartortle returns as a fully healthy lead",
+    "The balanced six-member party, level-60 workhorse, Champion, and Hall of Fame contracts pass together"
+  ]
+}

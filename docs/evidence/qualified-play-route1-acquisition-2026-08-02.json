@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon-red-route1-acquisition-receipt-v1",
+  "recorded_on": "2026-08-02",
+  "status": "passed",
+  "claim_scope": "One uninterrupted clean-power deterministic-teacher run captured Route 1 Pidgey and Rattata through live encounters, deposited both through verified PC transitions, restored the story route, satisfied the balanced six-member gate, and entered the Hall of Fame. The remaining 118 living targets, level-100 collection, learned-policy completion, and cross-game transfer remain open.",
+  "source_identity": {
+    "collection_registry_sha256": "03700d46bc91afbc89c2cbae8cfde5f15df50fa669db39c9586264756b1a2b0b",
+    "source_bundle_sha256": "7df759ec9ce276ef2c94ade5f7968b08b67c67aba517717e03b898a428924afb",
+    "teacher_execution_sha256": "6afe9315db0704d250319a25fc693cf65bd12bd80dc5b71ad33725f16a47884b"
+  },
+  "evaluation": {
+    "clean_power_on": true,
+    "human_input": false,
+    "save_state_restoration": false,
+    "runs": 1
+  },
+  "route_1_acquisition": {
+    "live_emulator_execution": true,
+    "species_captured_in_order": [16, 19],
+    "pokedex_owned_flags_verified": [16, 19],
+    "exact_pc_deposit_transitions_verified": 2,
+    "current_box_tail_verified": [16, 19],
+    "party_restored_to_story_roster": true,
+    "vermilion_gym_route_restored": true
+  },
+  "balanced_training": {
+    "battle_budget": 7000,
+    "healing_trip_budget": 1250,
+    "faints": 0,
+    "minimum_level_at_gate": 77,
+    "maximum_level_at_gate": 82,
+    "level_spread_at_gate": 5
+  },
+  "completion": {
+    "checkpoints_verified": 312,
+    "checkpoints_total": 312,
+    "objectives_verified": 36,
+    "objectives_total": 36,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 758430
+  },
+  "terminal_collection": {
+    "all_boxes_verified": true,
+    "storage_initialized": true,
+    "pokedex_registered_targets": 14,
+    "living_targets": 9,
+    "level_100_targets": 0,
+    "pokedex_target_complete": false,
+    "living_collection_verified": false,
+    "level_100_collection_verified": false
+  },
+  "privacy": {
+    "rom_bytes_included": false,
+    "save_data_included": false,
+    "private_paths_included": false,
+    "screenshots_included": false
+  }
+}

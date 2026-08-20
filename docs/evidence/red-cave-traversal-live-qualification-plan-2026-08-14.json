@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon-red-cave-traversal-live-qualification-plan-v1",
+  "status": "prospective_unexecuted",
+  "experiment_id": "red-cave-traversal-live-qualification-v1",
+  "purpose": "Qualify the warp-safe Cave walker once on a fresh independent non-sealed train lineage before collecting another party-development outcome.",
+  "predecessor": {
+    "evidence": "red-cave-traversal-reliability-repair-2026-08-14.json",
+    "status": "implementation_qualified_live_validation_pending",
+    "same_identity_retry_allowed": false
+  },
+  "scope": {
+    "title": "pokemon_red",
+    "scenario_family": "local_traversal_reliability",
+    "source_context": "next_preassigned_damaged_center_evolution_train_boundary",
+    "learner_target_collection": false,
+    "full_game_replays": 0
+  },
+  "authenticated_root": {
+    "state_sha256": "6af97317599bc22b8ccaa9c052db588ff80a0b4b5df8b16b75322bbb7cba0d95",
+    "capture_envelope_sha256": "42b12865ab549e57da1c95e4b10dca792f79a34324bfdf18ea1b7644bcd7c087",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "checkpoint_id": "red-goal-v1-030-evolve_species-train-03",
+    "partition": "train",
+    "independent_from_v2_root": true,
+    "sealed_test": false,
+    "crystal": false,
+    "initial_party_size": 6,
+    "initial_fainted_members": 0,
+    "initial_damaged_members": 2,
+    "initial_statused_members": 2
+  },
+  "qualification_policy": {
+    "route_and_recovery_calls": 1,
+    "minimum_successful_steps": 2,
+    "maximum_successful_steps": 12,
+    "maximum_movement_attempts": 48,
+    "require_entry_on_declared_transition": true,
+    "require_excluded_transition_skip": true,
+    "require_full_recovery_before_walking": true,
+    "unexpected_map_departure_fails": true,
+    "battle_before_minimum_steps_fails": true,
+    "battle_after_minimum_steps_is_a_natural_terminal": true,
+    "battle_commands_allowed": 0,
+    "candidate_count": 1
+  },
+  "execution": {
+    "exact_published_source_required": true,
+    "exact_commit_ci_success_required_before_execution": true,
+    "read_only_preflight_required": true,
+    "open_private_artifact_before_first_controller_input": true,
+    "execute_exactly_once": true,
+    "retry_after_observation": false,
+    "save_cartridge_state": false,
+    "append_complete_qualification_immediately": true,
+    "unexpected_failure_stops_and_retains_partial_artifact": true
+  },
+  "interpretation": {
+    "training_example_added": false,
+    "model_fit": false,
+    "authority_promotion": false,
+    "success_claim": "one independent live source qualifies the repaired Cave entry and two-step reversal seam for later party-outcome collection",
+    "failure_claim": "a failed or interrupted qualification remains immutable evidence and is not retried",
+    "next_if_complete": "freeze multiple independent party-development train and development contexts; do not reinterpret or rerun V2"
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

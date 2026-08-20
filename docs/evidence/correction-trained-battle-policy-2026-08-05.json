@@ -1,0 +1,67 @@
+{
+  "schema": "pokemon-red-correction-trained-policy-evaluation-v1",
+  "recorded_on": "2026-08-05",
+  "status": "complete",
+  "baseline": {
+    "model_sha256": "ab164860aa591d4bf1703e52e40069cf0663a683f091785dc462ffef4dbbce16",
+    "validation_accuracy": 0.8580441640378549,
+    "validation_free_choice_accuracy": 0.8423817863397548,
+    "live_confidence_threshold": 0.5,
+    "live_decision_attempts": 707,
+    "live_model_decisions": 537,
+    "live_teacher_interventions": 126,
+    "live_reported_model_coverage": 0.7595473833097596,
+    "game_complete": true
+  },
+  "selected_round_one": {
+    "artifact_id": "red-battle-corrected-101b6e00095a4cd99d7c5053e4143de0",
+    "artifact_manifest_sha256": "ab71d1bda8b7757a547a84d936a24e06312bf6f5d4bbf235cb67094e888d8e41",
+    "model_sha256": "98e506f89565f86de95132a78523b7b467737e182485e0fe7f04a5634bbfb271",
+    "feature_schema_id": "pokemon.core.battle.move-ranker.v3",
+    "historical_train_episodes": 5,
+    "historical_validation_episodes": 2,
+    "correction_examples": 126,
+    "correction_repetitions": 8,
+    "validation_accuracy": 0.8761829652996845,
+    "validation_free_choice_accuracy": 0.862521891418564,
+    "validation_novel_visible_accuracy": 0.8876298394711992,
+    "validation_legal_choice_rate": 1.0,
+    "selected_confidence_threshold": 0.3381057247068503,
+    "live_decision_attempts": 707,
+    "live_model_decisions": 579,
+    "live_teacher_interventions": 84,
+    "live_low_confidence_interventions": 1,
+    "live_disagreement_interventions": 83,
+    "live_reported_model_coverage": 0.8189533239038189,
+    "live_checkpoints": "312/312",
+    "live_objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true
+  },
+  "rejected_round_two": {
+    "artifact_id": "red-battle-corrected-5c6dd9d09ccb4db48524c7bb8a6034b7",
+    "artifact_manifest_sha256": "11ea3034ce337cd9d0864adacf6f5d157175fb529c69251a8b1640cdbd1863b3",
+    "model_sha256": "e76553365c284fe20801a6d0fa2ebdafc11227a57a23e50b719db1b0c8fecbdf",
+    "correction_examples": 84,
+    "validation_accuracy": 0.8651419558359621,
+    "validation_free_choice_accuracy": 0.850262697022767,
+    "selected_confidence_threshold": 0.32851367750161226,
+    "live_model_decisions": 571,
+    "live_teacher_interventions": 92,
+    "live_reported_model_coverage": 0.8076379066478077,
+    "game_complete": true,
+    "selection_status": "rejected_below_round_one_offline_and_live"
+  },
+  "claim_scope": {
+    "correction_training_improved_validation": true,
+    "correction_training_reduced_live_interventions": true,
+    "model_assisted_completion": true,
+    "autonomous_battle_completion": false,
+    "learned_navigation": false,
+    "cross_game_transfer": false
+  },
+  "selection": {
+    "selected_model_sha256": "98e506f89565f86de95132a78523b7b467737e182485e0fe7f04a5634bbfb271",
+    "reason": "Round one improved unchanged validation accuracy and reduced live interventions from 126 to 84. Round two regressed on both selection signals."
+  }
+}

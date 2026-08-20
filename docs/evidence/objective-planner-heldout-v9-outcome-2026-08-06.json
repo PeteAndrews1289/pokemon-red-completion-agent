@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "evaluation_id": "red-objective-planner-heldout-v9",
+  "status": "retired_after_validation_failure",
+  "source_commit": "243f5c1",
+  "source_bundle_sha256": "64eec1d5aa6f383c67efa8d87ebe0c66f56b82ba6b18cada6c73dc36cd78b364",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_runs": [
+    {
+      "run_id": "red-objective-v9-validation-01",
+      "harness_seed": 1230001,
+      "battle_start_schedule_sha256": "66374d68f844819f86654c57ccf7b6911f36df61407456123d228f415d077a03",
+      "private_log_sha256": "31d8543b9c64d8a6de9d8882169f93d431aa4b1eca0071a92e68fdbb42b41d9a",
+      "status": "passed",
+      "checkpoints_verified": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 71,
+      "champion_defeated": true,
+      "hall_of_fame_entered": true
+    },
+    {
+      "run_id": "red-objective-v9-validation-02",
+      "harness_seed": 1230002,
+      "battle_start_schedule_sha256": "555739486884dff917da51622738f239a1e16206a4d2d32d6de0176a75bafd0e",
+      "private_log_sha256": "ac7e0edd0d4ed103a8e224bb2ee53551b0607d4801aa55a40598c1a3ba4a3f92",
+      "status": "failed",
+      "checkpoints_verified": 243,
+      "failure_boundary": "silph_7f_rival",
+      "failure_reason": "bounded healing exhaustion re-entered the active rival battle with a different recovery-capability declaration",
+      "observed_capture_variation": "Route 12 Snorlax required 18 throws"
+    }
+  ],
+  "sealed_test_runs_opened": 0,
+  "interpretation": "The second fresh validation schedule exposed an inconsistent semantic intent during an in-progress Silph rival battle. V9 is retired without opening any sealed test schedule."
+}

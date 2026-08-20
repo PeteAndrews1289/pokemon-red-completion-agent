@@ -1,0 +1,91 @@
+{
+  "schema": "pokemon.red.party-development-pp-materialization-v4-preflight-evidence.v1",
+  "recorded_on": "2026-08-16",
+  "status": "ready_for_one_partition_owner_authorization",
+  "execution_source": {
+    "git_commit": "27e966b9230f254619d735cb3721eff202314089",
+    "github_ci_run": 31962598106,
+    "github_ci_attempt": 1,
+    "github_ci_workflow": "CI",
+    "github_ci_event": "pull_request",
+    "github_ci_conclusion": "success",
+    "source_bundle_sha256": "5c0a7c4332b983d1b2e79f0ddcf25854e9379839f511f4f7aaee5098013c9859",
+    "runner_source_sha256": "ab943397f8d274e1db6a6ae2cb3e884164fc206fad89bc900bf0a79450bf2357"
+  },
+  "immutable_packet": {
+    "private_plan_file_sha256": "b9d1eeeff906f4fe55e1907aa15c158d8de11c989a2506f71e548e0a97207265",
+    "private_plan_sha256": "2ae07f3a89503bf96191e6a18bc06685be5bb633d5ed2b3e1494cf0b2cc24710",
+    "path_free_summary_file_sha256": "8fcde88919e1de67cf4a269e6a91c7e6b1f25bc4ce6c23c8b2aa382eb866d3d9",
+    "execution_contract_sha256": "d90e2e4ed39a6fbfa7e42ba7d95999dc53d75b4bdbb8261065711053a00ccad5",
+    "reservation_plan_file_sha256": "45bbf024695e0057333f8352b43c11f02405e2d65fbf2941f397e7d82491b8d4",
+    "checkpoint_inventory_file_sha256": "9c665db0892729d4327739b6dae46b9ed5c8e808567a33dee7ab1de8faccf881",
+    "venue_prior_registry_file_sha256": "da32ef5ba736348a5abc3c93c6c9a3c9217cc958b2905b65cd11c45347a42bfc",
+    "venue_prior_registry_sha256": "4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb",
+    "context_catalog_file_sha256": "7b1cb754bcf9884c82363bfff5e6848953f6b6c61a7796ab8a2d8b1a9be5ba83",
+    "entry_partitions": [
+      "development",
+      "train"
+    ],
+    "entry_count": 2,
+    "unique_authenticated_roots": 2,
+    "source_pp_bin": "high",
+    "target_pp_bin": "middle",
+    "maximum_completed_battles": 32,
+    "minimum_battle_headroom": 5
+  },
+  "read_only_preflight": {
+    "plan_generation_status": "read_only_preflight_complete_controller_authorization_required",
+    "train_status": "ready_authorization_required",
+    "development_status": "ready_authorization_required",
+    "authenticated_source_roots": 2,
+    "authenticated_source_states": 2,
+    "safe_move_capacity_sufficient": 2,
+    "declared_wild_species_coverage_complete": 2,
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "model_predictions": 0,
+    "model_updates": 0,
+    "learner_outcomes_opened": 0,
+    "materializations_completed": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0,
+    "authority_promoted": false
+  },
+  "independent_audit": {
+    "reviewer_role": "Claude authorization auditor",
+    "verdict": "approve_request_for_exactly_one_named_partition",
+    "focused_tests_passed": 208,
+    "high_findings": 0,
+    "medium_findings": 1,
+    "low_findings": 4,
+    "valid_mutation_probes": 68,
+    "mutation_probes_killed": 59,
+    "genuine_survivors": 8,
+    "equivalent_mutants_discarded": 1,
+    "invalid_anchor_probes_discarded_and_rerun": 3,
+    "medium_finding": "The correct output-claim byte recheck was not protected by an exact call-count assertion.",
+    "medium_finding_disposition": "Closed in the follow-up test-only documentation checkpoint; the immutable execution runner and packet were unchanged.",
+    "target_worktree_modified_by_reviewer": false,
+    "immutable_packet_modified_by_reviewer": false,
+    "controller_invoked_by_reviewer": false
+  },
+  "authorization": {
+    "granted": false,
+    "authorized_partition": null,
+    "retry_after_controller_input": false,
+    "required_binding_fields": [
+      "partition",
+      "git_commit",
+      "github_ci_run",
+      "github_ci_attempt",
+      "private_plan_file_sha256"
+    ]
+  },
+  "privacy": {
+    "private_paths_published": false,
+    "source_checkpoint_identity_published": false,
+    "party_identity_published": false,
+    "candidate_features_published": false
+  }
+}

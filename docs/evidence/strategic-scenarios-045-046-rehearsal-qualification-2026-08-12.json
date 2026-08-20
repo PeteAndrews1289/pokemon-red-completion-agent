@@ -1,0 +1,89 @@
+{
+  "claim_boundary": {
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "construction": {
+    "scenario_045": {
+      "completion_mode": "bounded_origin_route",
+      "episode_created": false,
+      "objective_ids_added": ["reach_saffron"],
+      "route": {
+        "acknowledged_steps": 649,
+        "interruptions": 10,
+        "movement_requests": 652,
+        "replans": 1,
+        "wait_actions": 26
+      },
+      "skill_executed": false,
+      "state_sha256": "745ad5e0d0c95ee8ac7b8c6576650d7b0f1417b4e4cd2d14e8d2e5801058209d",
+      "envelope_sha256": "fa27ce8d8ff93265b1652b3734f2b625f4db6e54e9908db1cba267bacb362a44",
+      "verified_objective_count": 25
+    },
+    "scenario_046": {
+      "actions_executed": 5443,
+      "episode_created": false,
+      "frames_executed": 1713963,
+      "objective_ids_added": ["liberate_silph"],
+      "pre_skill_route_steps": 58,
+      "state_sha256": "f79f1caa88dc8e317a3cbaf575355ab6ea3ef7a9ae6ef7b34dc78d72b6110c9b",
+      "envelope_sha256": "228c340257651c105dc3996d88a9fa5bc644dc8343a51dbb6893f70cdc20c9a2",
+      "verified_objective_count": 26
+    }
+  },
+  "failure_lineage": {
+    "reach_objective_completed_during_relocation": {
+      "finding": "routing toward a Celadon chapter boundary crossed Saffron and completed the location objective before the skill ran",
+      "repair": "restrict a new construction mode to location-only objectives and prove the exact delta while routing directly to the declared origin"
+    },
+    "silph_capacity": {
+      "finding": "the 20-slot late-game bag needed four obsolete story items archived, while the cleanup vocabulary contained only three",
+      "repair": "add the already-spent Silph Scope while retaining future key, battle, capture and healing resources"
+    },
+    "silph_giovanni": {
+      "finding": "Skull Bash gave Rhyhorn a free charge turn despite observed STAB Surf",
+      "repair": "rank Surf, Ice Beam and Water Gun before neutral physical fallback under the same PP and Disable gates"
+    },
+    "silph_repel_contract": {
+      "finding": "the terminal asserted a historical zero Max Repel count although this lineage legitimately carried seven and Silph consumed none",
+      "repair": "prove exact Max Repel preservation from chapter input to terminal"
+    }
+  },
+  "recorded_on": "2026-08-12",
+  "scenarios": [
+    {
+      "scenario_id": "red-strategic-scenario-v2-045-train",
+      "scenario_sha256": "baec564c0bf2dbafdfd394f425a0e9cb03597824f36baca3c3bb4b25c17ea2e7",
+      "assignment_id": "3ff94f33500a8f0851f909909f4664a75f8f84cda3028a0514d7a20c45fa9769",
+      "candidate_route_costs": [620, 56],
+      "selected_candidate_index": 1,
+      "selected_teacher_destination": "liberate_silph",
+      "episode": {"bytes": 230415, "manifest_sha256": "1f2beb799b050ed86912478c8c410003bd899a57ce8cea2bbf00694b0cf3aba1", "records": 117},
+      "route": {"acknowledged_steps": 55, "interruptions": 0, "movement_requests": 55, "replans": 0, "wait_actions": 1}
+    },
+    {
+      "scenario_id": "red-strategic-scenario-v2-046-train",
+      "scenario_sha256": "512c4e54b187cc7ac96d55dea3f609d5e6fc559b722da104fc82fee67f50987a",
+      "assignment_id": "2c1b67365100da808a800dcb3137f5f9f961323125c72e6e4af0277cbd76a6c7",
+      "candidate_route_costs": [578, 68],
+      "selected_candidate_index": 1,
+      "selected_teacher_destination": "defeat_sabrina",
+      "episode": {"bytes": 276787, "manifest_sha256": "2b377380ec5b5a059d2dd36707c1d514484836f1639d925bb4542b4f2f7b6705", "records": 143},
+      "route": {"acknowledged_steps": 67, "interruptions": 0, "movement_requests": 67, "replans": 0, "wait_actions": 2}
+    }
+  ],
+  "source": {
+    "scenario_045": {"ci_run_id": 31602305917, "git_commit": "dbe0d8b08b47c9a674eff8e001b480a169a3e436"},
+    "scenario_046": {"ci_run_id": 31604366152, "git_commit": "af672ceeae4072ab63111579692b2f99bad64b49"}
+  },
+  "status": "qualified",
+  "supervision": {
+    "censored_examples": 0,
+    "movement_action_labels": 0,
+    "outcome_examples": 2,
+    "teacher_choice_examples": 2,
+    "unique_teacher_choice_contexts": 2
+  }
+}

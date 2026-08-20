@@ -5,12 +5,15 @@ from dataclasses import FrozenInstanceError, fields, replace
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
     BROCK_GYM_LEADER_NUMBER,
     BROCK_OPPONENT_ID,
     BROCK_TRAINER_CLASS_ID,
     BUBBLE_MOVE_ID,
     SQUIRTLE_SPECIES_ID,
+    BattleMenuPhase,
+    BattleMenuState,
     InputReadiness,
     ItemId,
     MapId,
@@ -26,14 +29,28 @@ from pokemon_red_completion.pewter import (
     FOREST_ROUTE_DIRECTIONS,
     GYM_TO_BROCK_DIRECTIONS,
     LAB_TO_PALLET_DIRECTIONS,
+    PALLET_TO_ROUTE_1_DIRECTIONS,
+    PEWTER_CENTER_TO_GYM_DIRECTIONS,
     PEWTER_CHECKPOINT_COUNT,
+    PEWTER_TO_CENTER_DIRECTIONS,
     PEWTER_TO_GYM_DIRECTIONS,
     ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+    ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS,
     ROUTE_2_TO_FOREST_GATE_DIRECTIONS,
+    VIRIDIAN_CENTER_RETURN_DIRECTIONS,
+    VIRIDIAN_TO_CENTER_DIRECTIONS,
+    VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS,
     VIRIDIAN_TO_ROUTE_2_DIRECTIONS,
+    PewterChapterError,
     PewterChapterReport,
     PewterProgress,
     PewterTiming,
+    _bug_catcher_continuation_move,
+    _expect_brock_transit_ready,
+    _finish_battle,
+    _is_healed_rival_loss_party,
+    _seek_forest_training_battle,
+    _seek_route_1_training_battle,
 )
 
 
@@ -90,6 +107,80 @@ def _pokedex() -> OaksErrandState:
         map_id=MapId.OAKS_LAB,
         battle_state=0,
     )
+
+
+def test_bug_catcher_continuation_uses_tackle_then_falls_back_to_bubble() -> None:
+    battle = _raw(
+        MapId.VIRIDIAN_FOREST,
+        1,
+        18,
+        level=8,
+        battle_state=2,
+    )
+
+    assert (
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(1, 30, 29, 0)))
+        == 0x21
+    )
+    assert (
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(0, 30, 29, 0)))
+        == BUBBLE_MOVE_ID
+    )
+    with pytest.raises(PewterChapterError, match="no usable Tackle or Bubble"):
+        _bug_catcher_continuation_move(replace(battle, first_party_pp=(0, 30, 0, 0)))
+    with pytest.raises(PewterChapterError, match="ended before continuation"):
+        _bug_catcher_continuation_move(replace(battle, battle_state=0))
+
+
+@pytest.mark.parametrize(
+    ("phase", "expected_continuations"),
+    ((BattleMenuPhase.MOVE, 1), (BattleMenuPhase.UNKNOWN, 0)),
+)
+def test_battle_continuation_runs_only_at_an_actionable_menu(
+    phase: BattleMenuPhase,
+    expected_continuations: int,
+) -> None:
+    class Reader:
+        state = _raw(MapId.VIRIDIAN_FOREST, 1, 18, battle_state=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+        def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+            del raw
+            return BattleMenuState(phase, selected_move_slot=1)
+
+        def read_input_readiness(self) -> InputReadiness:
+            return InputReadiness(0, 0, 0, 0, 0, 0)
+
+    reader = Reader()
+
+    class Executor:
+        def execute(self, action: MacroAction) -> object:
+            if action.kind is MacroActionKind.CONFIRM and reader.state.battle_state == 2:
+                reader.state = replace(reader.state, battle_state=0)
+            return object()
+
+    calls = 0
+
+    def continuation(*args: object) -> None:
+        nonlocal calls
+        del args
+        calls += 1
+        reader.state = replace(reader.state, battle_state=0)
+
+    final = _finish_battle(
+        Executor(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        expected_battle_state=2,
+        max_pulses=4,
+        timing=DEFAULT_PEWTER_TIMING,
+        label="unit adaptive battle",
+        continuation=continuation,  # type: ignore[arg-type]
+    )
+
+    assert final.battle_state == 0
+    assert calls == expected_continuations
 
 
 def _gym_ready() -> PewterChapterState:
@@ -183,6 +274,7 @@ def _report() -> PewterChapterReport:
         forest_entered=_raw(MapId.VIRIDIAN_FOREST, 17, 47, level=6, max_hp=21),
         forest_cleared=_raw(MapId.VIRIDIAN_FOREST_NORTH_GATE, 4, 7),
         pewter_reached=_raw(MapId.PEWTER_CITY, 18, 35),
+        pewter_center_healed=_raw(MapId.PEWTER_POKECENTER, 3, 3, hp=27),
         gym_entered=_raw(MapId.PEWTER_GYM, 4, 13),
         brock_battle=_raw(MapId.PEWTER_GYM, 4, 2, battle_state=2),
         brock_defeated=_raw(
@@ -201,6 +293,19 @@ def _report() -> PewterChapterReport:
         brock_victory_evidence=brock_victory,
         reached_boundaries=tuple(TravelBoundary)[1:],
         saw_brock_battle=True,
+        route_1_wild_flees=(),
+        route_1_movement_retries=0,
+        route_2_wild_flees=(),
+        route_2_movement_retries=0,
+        forest_wild_flees=(),
+        forest_movement_retries=0,
+        lab_rival_loss_recovery_required=False,
+        rival_loss_recovery_search_attempts=(),
+        rival_loss_recovery_species_ids=(),
+        rival_loss_recovery_level=None,
+        rival_loss_recovery_heals=(),
+        forest_target_search_attempts=(1, 1, 1),
+        forest_training_species_ids=(0x71, 0x71, 0x71),
         overworld_control_verified=True,
         frames_executed=70_043,
         actions_executed=954,
@@ -210,7 +315,12 @@ def _report() -> PewterChapterReport:
 
 def test_pewter_route_is_source_stable_at_critical_segments() -> None:
     assert LAB_TO_PALLET_DIRECTIONS == ("down",) * 9
+    assert len(PALLET_TO_ROUTE_1_DIRECTIONS) == 17
     assert len(ROUTE_1_TO_VIRIDIAN_DIRECTIONS) == 53
+    assert len(VIRIDIAN_TO_ROUTE_1_TRAINING_DIRECTIONS) == 11
+    assert len(ROUTE_1_TRAINING_TO_VIRIDIAN_DIRECTIONS) == 12
+    assert len(VIRIDIAN_TO_CENTER_DIRECTIONS) == 16
+    assert len(VIRIDIAN_CENTER_RETURN_DIRECTIONS) == 15
     assert len(VIRIDIAN_TO_ROUTE_2_DIRECTIONS) == 39
     assert len(ROUTE_2_TO_FOREST_GATE_DIRECTIONS) == 43
     assert len(FOREST_ROUTE_DIRECTIONS) == 135
@@ -222,6 +332,8 @@ def test_pewter_route_is_source_stable_at_critical_segments() -> None:
         "up",
     )
     assert len(PEWTER_TO_GYM_DIRECTIONS) == 44
+    assert len(PEWTER_TO_CENTER_DIRECTIONS) == 15
+    assert len(PEWTER_CENTER_TO_GYM_DIRECTIONS) == 40
     assert len(GYM_TO_BROCK_DIRECTIONS) == 17
 
 
@@ -236,11 +348,202 @@ def test_pewter_timing_defaults_are_positive_bounded_integers() -> None:
     )
 
 
+@pytest.mark.parametrize(("hp", "status"), ((1, 0), (19, 0x08)))
+def test_brock_transit_accepts_living_healthy_or_resourced_poisoned_party(
+    hp: int,
+    status: int,
+) -> None:
+    _expect_brock_transit_ready(
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=hp), first_party_status=status),
+        "unit Forest exit",
+    )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    (
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=0),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=18), first_party_status=0x08),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=0x40),
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19, bubble_pp=3),
+    ),
+)
+def test_brock_transit_rejects_unsafe_resource_or_status_boundary(raw: RawGameState) -> None:
+    with pytest.raises(PewterChapterError, match="Brock-transit"):
+        _expect_brock_transit_ready(raw, "unit Forest exit")
+
+
+def test_brock_transit_accepts_living_status_free_authenticated_loss_recovery() -> None:
+    _expect_brock_transit_ready(
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=1),
+        "unit Forest exit",
+        authenticated_loss_recovery=True,
+    )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    (
+        _raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=0),
+        replace(_raw(MapId.VIRIDIAN_FOREST, 1, 18, hp=19), first_party_status=0x08),
+    ),
+)
+def test_brock_transit_rejects_unsafe_authenticated_loss_recovery(
+    raw: RawGameState,
+) -> None:
+    with pytest.raises(PewterChapterError, match="Brock-transit"):
+        _expect_brock_transit_ready(
+            raw,
+            "unit Forest exit",
+            authenticated_loss_recovery=True,
+        )
+
+
 @pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
 def test_pewter_timing_rejects_unbounded_values(invalid: object) -> None:
     for field in fields(PewterTiming):
         with pytest.raises(ValueError, match=f"{field.name} must be a positive integer"):
             replace(DEFAULT_PEWTER_TIMING, **{field.name: invalid})
+
+
+def test_forest_training_search_retries_empty_grass_and_authenticates_kakuna() -> None:
+    origin = _raw(MapId.VIRIDIAN_FOREST, 10, 10)
+    destination = _raw(MapId.VIRIDIAN_FOREST, 10, 11)
+    kakuna = replace(
+        destination,
+        battle_state=1,
+        enemy_species_id=0x71,
+        enemy_level=4,
+    )
+
+    class _Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+        down_steps = 0
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is not MacroActionKind.MOVE:
+                return object()
+            if action.value == "down":
+                self.down_steps += 1
+                reader.state = destination if self.down_steps == 1 else kakuna
+            elif action.value == "up":
+                reader.state = origin
+            return object()
+
+    executor = _Executor()
+    encounter, flees, retries, attempts, consumed = _seek_forest_training_battle(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        "down",
+        1,
+        replace(DEFAULT_PEWTER_TIMING, max_forest_target_search_cycles=3),
+        "unit Kakuna",
+        used_flees=0,
+    )
+
+    assert encounter is kakuna
+    assert not flees
+    assert retries == 0
+    assert attempts == 2
+    assert consumed
+    assert [action.value for action in executor.actions if action.kind is MacroActionKind.MOVE] == [
+        "down",
+        "up",
+        "down",
+    ]
+
+
+def test_route_1_loss_training_search_accepts_only_low_level_local_prey() -> None:
+    origin = _raw(MapId.ROUTE_1, 14, 8, level=5, hp=19, max_hp=19)
+    rattata = replace(
+        _raw(MapId.ROUTE_1, 14, 7, level=5, hp=19, max_hp=19),
+        battle_state=1,
+        enemy_species_id=0xA5,
+        enemy_level=3,
+    )
+
+    class _Reader:
+        state = origin
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = _Reader()
+
+    class _Executor:
+        actions: list[MacroAction] = []
+
+        def execute(self, action: MacroAction) -> object:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE and action.value == "up":
+                reader.state = rattata
+            return object()
+
+    executor = _Executor()
+    encounter, flees, retries, attempts, consumed = _seek_route_1_training_battle(  # type: ignore[arg-type]
+        executor,
+        reader,  # type: ignore[arg-type]
+        "up",
+        1,
+        DEFAULT_PEWTER_TIMING,
+        "unit Route 1 lesson",
+        used_flees=0,
+    )
+
+    assert encounter is rattata
+    assert not flees
+    assert retries == 0
+    assert attempts == 1
+    assert consumed
+
+
+def test_rival_loss_heal_requires_full_hp_status_and_move_pp() -> None:
+    healed = replace(
+        _raw(MapId.VIRIDIAN_POKECENTER, 3, 3, level=6, hp=21, max_hp=21),
+        first_party_moves=(0x21, 0x27, 0, 0),
+        first_party_pp=(35, 30, 0, 0),
+    )
+
+    assert _is_healed_rival_loss_party(healed)
+    assert _is_healed_rival_loss_party(replace(healed, first_party_level=5))
+    assert _is_healed_rival_loss_party(
+        replace(
+            healed,
+            first_party_level=8,
+            first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+            first_party_pp=(35, 30, 30, 0),
+        )
+    )
+    assert not _is_healed_rival_loss_party(None)
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_hp=20))
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_status=0x08))
+    assert not _is_healed_rival_loss_party(replace(healed, first_party_pp=(34, 30, 0, 0)))
+
+
+@pytest.mark.parametrize("invalid", (0, -1, True, 1.5))
+def test_forest_training_search_rejects_invalid_target_level_ceiling(
+    invalid: object,
+) -> None:
+    with pytest.raises(PewterChapterError, match="invalid target-level ceiling"):
+        _seek_forest_training_battle(  # type: ignore[arg-type]
+            None,
+            None,
+            "down",
+            1,
+            DEFAULT_PEWTER_TIMING,
+            "unit target",
+            used_flees=0,
+            maximum_target_level=invalid,  # type: ignore[arg-type]
+        )
 
 
 def test_pewter_progress_is_sanitized_and_immutable() -> None:
@@ -270,8 +573,22 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         "ordered_boundaries_verified": 9,
         "ordered_boundaries_total": 9,
         "brock_battle_observed": True,
+        "route_1_wild_flees": [],
+        "route_1_movement_retries": 0,
+        "route_2_wild_flees": [],
+        "route_2_movement_retries": 0,
+        "forest_wild_flees": [],
+        "forest_movement_retries": 0,
+        "lab_rival_loss_recovery_required": False,
+        "rival_loss_recovery_search_attempts": [],
+        "rival_loss_recovery_species_ids": [],
+        "rival_loss_recovery_level": None,
+        "rival_loss_recovery_heals": [],
+        "forest_target_search_attempts": [1, 1, 1],
+        "forest_training_species_ids": [0x71, 0x71, 0x71],
     }
     assert public["brock"] == {
+        "pre_battle_healing_verified": True,
         "victory_verified": True,
         "boulder_badge_verified": True,
         "tm34_verified": True,
@@ -295,6 +612,40 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         assert private_key not in serialized
 
 
+def test_pewter_report_requires_the_authenticated_lab_loss_recovery_lesson() -> None:
+    healed = replace(
+        _raw(MapId.VIRIDIAN_POKECENTER, 3, 3, level=6, hp=21, max_hp=21),
+        first_party_moves=(0x21, 0x27, 0, 0),
+        first_party_pp=(35, 30, 0, 0),
+    )
+    healed_with_bubble = replace(
+        healed,
+        first_party_level=9,
+        first_party_hp=27,
+        first_party_max_hp=27,
+        first_party_moves=(0x21, 0x27, BUBBLE_MOVE_ID, 0),
+        first_party_pp=(35, 30, 30, 0),
+    )
+    recovered = replace(
+        _report(),
+        lab_rival_loss_recovery_required=True,
+        rival_loss_recovery_search_attempts=(3, 2),
+        rival_loss_recovery_species_ids=(0x24, 0xA5),
+        rival_loss_recovery_level=9,
+        rival_loss_recovery_heals=(healed, healed_with_bubble),
+        forest_target_search_attempts=(),
+        forest_training_species_ids=(),
+    )
+
+    assert recovered.passed
+    assert recovered.public_dict()["route"]["rival_loss_recovery_search_attempts"] == [3, 2]
+    assert not replace(recovered, rival_loss_recovery_search_attempts=()).passed
+    assert not replace(recovered, rival_loss_recovery_species_ids=(0x7B,)).passed
+    assert not replace(recovered, rival_loss_recovery_level=7).passed
+    assert not replace(recovered, rival_loss_recovery_heals=(healed,)).passed
+    assert not replace(recovered, forest_training_species_ids=(0x71, 0x71, 0x71)).passed
+
+
 @pytest.mark.parametrize(
     "changes",
     (
@@ -302,6 +653,18 @@ def test_pewter_report_is_complete_honest_and_privacy_safe() -> None:
         {"overworld_control_verified": False},
         {"controller_released": False},
         {"reached_boundaries": tuple(TravelBoundary)[1:-1]},
+        {"lab_rival_loss_recovery_required": True},
+        {"rival_loss_recovery_search_attempts": (1,)},
+        {"rival_loss_recovery_species_ids": (0x71,)},
+        {"rival_loss_recovery_level": 6},
+        {"forest_target_search_attempts": (1, 1)},
+        {"forest_training_species_ids": (0x71, 0x71, 0x70)},
+        {
+            "pewter_center_healed": replace(
+                _report().pewter_center_healed,
+                first_party_hp=26,
+            )
+        },
         {"gym_entry_evidence": replace(_gym_ready(), first_party_hp=18)},
         {
             "brock_battle_evidence": replace(

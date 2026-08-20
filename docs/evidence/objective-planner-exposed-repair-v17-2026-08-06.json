@@ -1,0 +1,41 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v17",
+  "source_commit": "dfdb4b12809f23fe468124bff44a1011cf54c71a",
+  "source_bundle_sha256": "9e4622c2af207df15552fd6c8f849da5818069fc6ca0d9429d9c36437ac38d23",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1370001,
+    "battle_start_schedule_sha256": "039bcce6077f404bcb7db767e516a12d0214b741a89d5f58f45a1d7b8eb240a6",
+    "private_log_sha256": "bdd03ebb51bf9ed770ceb8185c0528c36a67b677580dfcbade35c35bdec72328",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 2 throws"
+  },
+  "repair_iterations": [
+    {
+      "status": "failed",
+      "qualified_checkpoints": 239,
+      "failure": "A moving Celadon Mart 2F customer blocked reentry from the yield tile.",
+      "private_log_sha256": "f9e4da9afb1b3262579cc5b2f1f9b3c288dd22aedb510541b3bdd39b445b6c46"
+    },
+    {
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "bdd03ebb51bf9ed770ceb8185c0528c36a67b677580dfcbade35c35bdec72328"
+    }
+  ],
+  "repairs_verified": [
+    "Variable Vermilion purchase dialogue settles to the observed priced-list state before selecting Super Potion",
+    "The exact one-copy Super Potion top-up is verified by live item identity, quantity, and bag target",
+    "The Celadon Mart 2F route remains on its safe yield tile when the moving customer blocks reentry and retries until the aisle clears",
+    "All downstream inventory, six-member party, level-60 workhorse, Elite Four, Champion, and Hall of Fame contracts pass together"
+  ]
+}

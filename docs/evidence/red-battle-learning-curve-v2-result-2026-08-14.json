@@ -1,0 +1,191 @@
+{
+  "schema": "pokemon-red-battle-outcome-learning-curve-evidence-v2",
+  "status": "descriptive_curve_complete_no_authority",
+  "experiment_id": "red-battle-learning-curve-v2",
+  "source": {
+    "git_commit": "e6fae7fdedaad2b201a378d1848dcf04cb952ffa",
+    "exact_commit_ci_run": 31852867031,
+    "exact_commit_ci_conclusion": "success"
+  },
+  "prospective_bindings": {
+    "public_plan_sha256": "6e4278d6cce02fa6f29aa0a5423981e5dc413c884574423caff12921c481905c",
+    "private_root_assignment_sha256": "8e5983e5b57314633b8b39a919c5a376252584ca49bd4e2c5d34288a35c1cbdd",
+    "private_execution_catalog_sha256": "f17b0d398f10750df9c5f580512585e90c649b5785132f333cef453c435f7cda",
+    "base_model_canonical_sha256": "822fb66ec27c0aee267fcb1b7103d389133d7e8c74274eee3e72bfc1f616c01f",
+    "training_sizes": [1, 2, 4],
+    "runner_executions": 1,
+    "catalog_repartitioned": false,
+    "catalog_context_replaced": false
+  },
+  "catalog": {
+    "train_contexts": 4,
+    "development_contexts": 4,
+    "unique_root_lineages": 8,
+    "unique_source_states": 8,
+    "unique_capture_states": 8,
+    "unique_initial_observations": 8,
+    "unique_manifests": 8,
+    "supported_candidates_per_context": 4,
+    "v1_training_roots_reused": 4,
+    "v1_development_roots_reused": 0,
+    "fresh_development_roots": 4,
+    "future_unseen_evaluation_eligible": false
+  },
+  "captures": [
+    {
+      "slot": "train-01",
+      "partition": "train",
+      "capture_id": "red-battle-curve-e6fae7f-train-01",
+      "manifest_sha256": "bb606670b37cf6ef4e4b0bb70292ecc6b2208ad5ad1af951e0c08fd086249b9a",
+      "encounter_steps": 71
+    },
+    {
+      "slot": "train-02",
+      "partition": "train",
+      "capture_id": "red-battle-curve-e6fae7f-train-02",
+      "manifest_sha256": "12f393b96339407f4d08ea9b569d228566999de5b10c52defbd973201022568c",
+      "encounter_steps": 3
+    },
+    {
+      "slot": "train-03",
+      "partition": "train",
+      "capture_id": "red-battle-curve-e6fae7f-train-03",
+      "manifest_sha256": "f7f0e512a0047ece7f447b0f2ca83b6a337260fd3a66e782f7862a392dda1204",
+      "encounter_steps": 9
+    },
+    {
+      "slot": "train-04",
+      "partition": "train",
+      "capture_id": "red-battle-curve-e6fae7f-train-04",
+      "manifest_sha256": "904ac74376263c9dbfff2c9de4428866fc753f480bac08f2b92fb7ca824ae257",
+      "encounter_steps": 4
+    },
+    {
+      "slot": "development-01",
+      "partition": "development",
+      "capture_id": "red-battle-curve-e6fae7f-development-01",
+      "manifest_sha256": "5305af7ce5dbbc3064763b4381a1ef27bbef73aa302956d81c882beb2425aa74",
+      "encounter_steps": 17
+    },
+    {
+      "slot": "development-02",
+      "partition": "development",
+      "capture_id": "red-battle-curve-e6fae7f-development-02",
+      "manifest_sha256": "2920cecba1adb0c8ee013e5423183e04c1931b77f25b35d7c0786e3694462b2d",
+      "encounter_steps": 33
+    },
+    {
+      "slot": "development-03",
+      "partition": "development",
+      "capture_id": "red-battle-curve-e6fae7f-development-03",
+      "manifest_sha256": "ddc39ee3c8218729fd1dcbdf77ded34678f3b1459a6c1a9f0c5a99b8b5e9a224",
+      "encounter_steps": 19
+    },
+    {
+      "slot": "development-04",
+      "partition": "development",
+      "capture_id": "red-battle-curve-e6fae7f-development-04",
+      "manifest_sha256": "0f61a120b531b4929e50bf1ef7bf9394d13e1a8a840e1885b4b4348b0a0f2ad1",
+      "encounter_steps": 25
+    }
+  ],
+  "counterfactual_collection": {
+    "objective_id": "battle.selected-turn.health-terminal-utility.v2",
+    "objective_sha256": "05b72216781d592032bd24fa19fe97fbaa6db62f33fe2dd043dbba7888db4dd4",
+    "candidate_outcomes": 32,
+    "complete_contexts": 8,
+    "pre_attack_frames_per_candidate": 2048,
+    "total_candidate_actions": 350,
+    "total_candidate_frames": 81652,
+    "move_executed_outcomes": 32,
+    "mechanically_suppressed_outcomes": 0,
+    "opponent_faint_outcomes": 26,
+    "player_faint_outcomes": 0,
+    "player_damage_outcomes": 4,
+    "informative_contexts": 5,
+    "flat_contexts": 3,
+    "informative_train_contexts": 4,
+    "informative_development_contexts": 1,
+    "development_contexts_with_all_candidates_tied_best": 3,
+    "best_set_size_counts": {
+      "1": 1,
+      "2": 1,
+      "3": 3,
+      "4": 3
+    }
+  },
+  "learning_curve": {
+    "development_examples": 4,
+    "development_reused_for_fitting": false,
+    "base_development_correct": 4,
+    "base_development_mean_selected_utility": 3.0,
+    "points": [
+      {
+        "training_examples": 1,
+        "status": "updated",
+        "objective_loss_before": 4.9856662343577876,
+        "objective_loss_after": 2.376216027761419,
+        "updated_model_sha256": "7441db20fdc7001570c65b8de0e65ddf24e1624d89bc0c422e6cf791c6e34b30",
+        "updated_development_correct": 4,
+        "updated_development_mean_selected_utility": 3.0,
+        "paired_updated_wins": 0,
+        "paired_prior_wins": 0,
+        "paired_equivalent_choices": 4,
+        "discordant_examples": 0
+      },
+      {
+        "training_examples": 2,
+        "status": "updated",
+        "objective_loss_before": 2.519131006484778,
+        "objective_loss_after": 1.6205178808950873,
+        "updated_model_sha256": "98e83314d5c8f914a2f2e365327a7287babd49628d8af4a37267ea95c78f6130",
+        "updated_development_correct": 4,
+        "updated_development_mean_selected_utility": 3.0,
+        "paired_updated_wins": 0,
+        "paired_prior_wins": 0,
+        "paired_equivalent_choices": 4,
+        "discordant_examples": 0
+      },
+      {
+        "training_examples": 4,
+        "status": "updated",
+        "objective_loss_before": 3.054783793170893,
+        "objective_loss_after": 1.507030136713115,
+        "updated_model_sha256": "823aad75edb2eb327f809d88b957b90cfea5edce5b9279d609dcefb6b2a1dc49",
+        "updated_development_correct": 4,
+        "updated_development_mean_selected_utility": 3.0,
+        "paired_updated_wins": 0,
+        "paired_prior_wins": 0,
+        "paired_equivalent_choices": 4,
+        "discordant_examples": 0
+      }
+    ]
+  },
+  "artifact": {
+    "artifact_id": "red-battle-learning-curve-86318f34cb6b4497ab96386773371d2d",
+    "manifest_sha256": "a852cc4b5f523c27c03bdde72df58628d85c0b84d76e3152bfd3858e537a431f",
+    "status": "complete",
+    "total_records": 44,
+    "candidate_outcome_stream_sha256": "8c5d1c98dbd305d5e053678319b3120e83ea8356b2e189f553bb4fd016fd717f",
+    "outcome_collection_stream_sha256": "ea23b386a0a5ef1b98386565e7f6ea79426f6e2e5f6ba7ca0e1bb1f93c7d917f",
+    "model_stream_sha256": "f2c446efeabee06a976e7471eff5a35303ba8beaf75e5886c5b9b9d728ebe533",
+    "evaluation_stream_sha256": "99aa6f5ee3119df18e12e89a4e658d8f1d9f9d3b022b98c5dbe39d2352464472"
+  },
+  "decision": {
+    "training_pipeline_validated": true,
+    "battle_generalization_improvement_demonstrated": false,
+    "development_ceiling_observed": true,
+    "promotion_gate_passed": false,
+    "authority_promoted": false,
+    "reason": "The prior was already 4/4 with maximum selected utility, and all three updates were choice-equivalent on development. Three of four development contexts gave every candidate the same maximum utility.",
+    "next": "Do not scale this easy encounter distribution. Complete one real navigation outcome and one real party-development outcome, then prospectively target level-matched, non-OHKO battle decision boundaries before any unseen promotion gate."
+  },
+  "protected_access": {
+    "teacher_queries": 0,
+    "teacher_choice_targets": 0,
+    "red_sealed_test_cases_opened": 0,
+    "crystal_contexts_opened": 0,
+    "full_game_replays": 0
+  },
+  "private_path_fields": 0
+}

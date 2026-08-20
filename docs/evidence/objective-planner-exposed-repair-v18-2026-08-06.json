@@ -1,0 +1,42 @@
+{
+  "schema": "pokemon-semantic-objective-exposed-repair-v1",
+  "evaluation_id": "red-objective-planner-heldout-v18",
+  "source_commit": "d834ee97a4eb6e3fe80e8f414e38c77edf170045",
+  "source_bundle_sha256": "54f753931462e03e08dd17d6dec4f69d07b08679555678cfedf87a5d1e413bb7",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "run": {
+    "harness_seed": 1390003,
+    "battle_start_schedule_sha256": "b5fac6a28a8e42d0bb2645cb76db4903d41b3ab731656615e194c39c73ccc3f9",
+    "private_log_sha256": "5c8f71f88c93f4810b5b0bb68b7e27bdf78291334ac7f193d88400846716e8f0",
+    "status": "passed",
+    "checkpoints_verified": 312,
+    "objectives_verified": 36,
+    "scheduled_battles_verified": 73,
+    "teacher_objective_fallbacks": 0,
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "human_input": false,
+    "save_restore_used": false,
+    "observed_capture_variation": "Route 12 Snorlax caught in 1 throw"
+  },
+  "repair_iterations": [
+    {
+      "status": "failed",
+      "qualified_checkpoints": 238,
+      "gameplay_state": "Saffron opened and the five-member party healed safely",
+      "failure": "The downstream Saffron receipt retained a stale level-43 upper bound after Erika had legitimately advanced the lead to level 44.",
+      "private_log_sha256": "0ed469570b33dabcb8f9af74b6471e7bf8441d031f32935f1dd6df93e6ef4964"
+    },
+    {
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "private_log_sha256": "5c8f71f88c93f4810b5b0bb68b7e27bdf78291334ac7f193d88400846716e8f0"
+    }
+  ],
+  "repairs_verified": [
+    "A helper fainted during a proactive wild-battle switch is recovered through the mandatory party prompt",
+    "The unsafe weakening attempt is abandoned while preserving the living party and encounter curriculum",
+    "The source-valid level-44 lineage is accepted at both the post-Erika and Saffron boundaries",
+    "All downstream five-member, six-member, level-60 workhorse, Elite Four, Champion, and Hall of Fame contracts pass together"
+  ]
+}

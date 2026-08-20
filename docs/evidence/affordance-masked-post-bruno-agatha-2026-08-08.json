@@ -1,0 +1,383 @@
+{
+  "after": {
+    "available_objectives": [
+      "defeat_lance"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "cross_victory_road",
+      "defeat_agatha",
+      "defeat_blaine",
+      "defeat_brock",
+      "defeat_bruno",
+      "defeat_erika",
+      "defeat_giovanni",
+      "defeat_koga",
+      "defeat_lorelei",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_secret_key",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "facts_added": [
+      "league:agatha_defeated"
+    ],
+    "location": "lances_room",
+    "mode": "overworld"
+  },
+  "assistance": {
+    "branching_model_decisions": 0,
+    "candidate_set_mode": "dependency_legal_and_skill_affordance_masked",
+    "expected_route_label_provided": false,
+    "mechanic_execution": "teacher_authored_bounded_skill",
+    "model_decisions_executed": 1,
+    "objective_selection": "learned_ranker",
+    "singleton_dispatches": 1,
+    "teacher_fallbacks": 0
+  },
+  "before": {
+    "available_objectives": [
+      "defeat_agatha"
+    ],
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "cross_victory_road",
+      "defeat_blaine",
+      "defeat_brock",
+      "defeat_bruno",
+      "defeat_erika",
+      "defeat_giovanni",
+      "defeat_koga",
+      "defeat_lorelei",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_secret_key",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "location": "agathas_room",
+    "mode": "overworld"
+  },
+  "capture": {
+    "checkpoint_id": "portable_loop_defeat_bruno_terminal",
+    "checkpoints_completed": 303,
+    "state_sha256": "d95052c4b016a1487cba5620a6f883c4e96b618246f62c8555dc4b4715d0aac4"
+  },
+  "claim": "An affordance-masked learned ranker selected executable objectives without expected labels; registered fixed skills executed them; fresh emulator observations verified every declared objective and side effect.",
+  "decisions_and_executions": [
+    {
+      "action": null,
+      "dependency_legal_objectives": [
+        "defeat_agatha"
+      ],
+      "excluded_objectives": [],
+      "executable_objectives": [
+        "defeat_agatha"
+      ],
+      "facts_added": [
+        "league:agatha_defeated"
+      ],
+      "kind": "skill_completed",
+      "objective_id": "defeat_agatha",
+      "reason": "Executed a registered bounded objective skill and independently verified it.",
+      "skill_actions_executed": 466,
+      "skill_evidence": {
+        "actions_executed": 466,
+        "controller_released": true,
+        "frames_executed": 45854,
+        "objective": "defeat_agatha",
+        "participation": {
+          "busiest_member_share": 0.6666666666666666,
+          "busiest_member_turns": 4,
+          "observed_turns": 6,
+          "participating_members": 2,
+          "turns_per_member": [
+            0,
+            0,
+            4,
+            0,
+            2,
+            0
+          ],
+          "unobserved_turns": 0
+        },
+        "party": [
+          [
+            14,
+            56
+          ],
+          [
+            130,
+            56
+          ],
+          [
+            147,
+            55
+          ],
+          [
+            45,
+            58
+          ],
+          [
+            14,
+            60
+          ]
+        ],
+        "recovery": {
+          "full_restores_used": 0,
+          "hyper_potions_used": 1,
+          "x_specials_used": 1
+        },
+        "source_party": [
+          [
+            14,
+            56
+          ],
+          [
+            130,
+            56
+          ],
+          [
+            147,
+            55
+          ],
+          [
+            45,
+            58
+          ],
+          [
+            14,
+            60
+          ]
+        ],
+        "status": "ok",
+        "team_switches": 3,
+        "terminal": {
+          "map": 113,
+          "moves": [
+            36,
+            70,
+            58,
+            57
+          ],
+          "party_hp": [
+            202,
+            139,
+            118,
+            272,
+            167,
+            151
+          ],
+          "party_max_hp": [
+            202,
+            139,
+            118,
+            272,
+            167,
+            151
+          ],
+          "party_status": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "position": [
+            18,
+            23
+          ],
+          "pp": [
+            20,
+            15,
+            10,
+            15
+          ]
+        },
+        "turns": [
+          {
+            "active_party_index": 4,
+            "active_party_species_id": 104,
+            "enemy_hp": 158,
+            "lead_hp": 167,
+            "lead_status": 0,
+            "level": 56,
+            "move_slot": 1,
+            "party_position": 1,
+            "pp": [
+              7,
+              15,
+              30,
+              30
+            ],
+            "species": 130
+          },
+          {
+            "active_party_index": 4,
+            "active_party_species_id": 104,
+            "enemy_hp": 158,
+            "lead_hp": 167,
+            "lead_status": 0,
+            "level": 56,
+            "move_slot": 1,
+            "party_position": 1,
+            "pp": [
+              6,
+              15,
+              30,
+              30
+            ],
+            "species": 130
+          },
+          {
+            "active_party_index": 2,
+            "active_party_species_id": 118,
+            "enemy_hp": 142,
+            "lead_hp": 62,
+            "lead_status": 0,
+            "level": 56,
+            "move_slot": 1,
+            "party_position": 0,
+            "pp": [
+              10,
+              40,
+              10,
+              15
+            ],
+            "species": 14
+          },
+          {
+            "active_party_index": 2,
+            "active_party_species_id": 118,
+            "enemy_hp": 123,
+            "lead_hp": 62,
+            "lead_status": 0,
+            "level": 55,
+            "move_slot": 1,
+            "party_position": 2,
+            "pp": [
+              9,
+              40,
+              10,
+              15
+            ],
+            "species": 147
+          },
+          {
+            "active_party_index": 2,
+            "active_party_species_id": 118,
+            "enemy_hp": 146,
+            "lead_hp": 62,
+            "lead_status": 0,
+            "level": 58,
+            "move_slot": 1,
+            "party_position": 3,
+            "pp": [
+              8,
+              40,
+              10,
+              15
+            ],
+            "species": 45
+          },
+          {
+            "active_party_index": 2,
+            "active_party_species_id": 118,
+            "enemy_hp": 151,
+            "lead_hp": 62,
+            "lead_status": 0,
+            "level": 60,
+            "move_slot": 1,
+            "party_position": 4,
+            "pp": [
+              7,
+              40,
+              10,
+              15
+            ],
+            "species": 14
+          }
+        ]
+      },
+      "skill_frames_executed": 45854,
+      "specialist": "battle"
+    }
+  ],
+  "limitations": [
+    "captured_state_diagnostic",
+    "bounded_model_decision_sequence",
+    "singleton_dispatches_do_not_measure_ranking_quality",
+    "fixed_teacher_authored_mechanic_skills",
+    "not_a_clean_start_evaluation",
+    "not_end_to_end_learned_gameplay"
+  ],
+  "loop": {
+    "actions_executed": 466,
+    "decisions": 1,
+    "objectives_completed": 1,
+    "replans": 0,
+    "schema": "pokemon-portable-player-loop-v2"
+  },
+  "policy": {
+    "authorized_decisions": 0,
+    "branching_decisions": 0,
+    "completed_objectives": 1,
+    "decisions": 1,
+    "mean_branching_confidence": 0.0,
+    "mean_candidate_count": 1.0,
+    "mean_confidence": 1.0,
+    "minimum_branching_confidence": 0.0,
+    "minimum_confidence": 1.0,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "route_dispatch_mode": "model_selected_specialists",
+    "schema": "pokemon-semantic-objective-live-policy-v1",
+    "selected_decisions": 1,
+    "singleton_decisions": 1,
+    "teacher_fallbacks": 0
+  },
+  "schema": "pokemon-model-selected-objective-execution-v3",
+  "source": {
+    "git_commit": "b60cb6796a1f2d0f82d1b3c344b135f8ede23aaf",
+    "worktree_dirty": false
+  },
+  "status": "ok"
+}

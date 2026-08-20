@@ -1,0 +1,50 @@
+{
+  "schema": "pokemon-party-development-title-neutral-input-contract-evidence-v1",
+  "date": "2026-08-15",
+  "status": "source_qualified_catalog_unfrozen",
+  "source": {
+    "commit": "4b4e267dea06599c2f17a6b2570bc9091440bc33",
+    "source_bundle_sha256": "ebd9794af3cd92b520fe1f5f73e40112240860557321c1306e5036905bc830a3",
+    "non_integration_tests_passed": 3415,
+    "integration_tests_deselected": 3,
+    "expected_failures": 1,
+    "typed_source_files": 222,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "generated_registries_match": true
+  },
+  "implemented_contract": {
+    "semantic_snapshot_binds_private_projection_inputs": true,
+    "title_map_species_move_slot_and_button_identity_in_features": false,
+    "trainee_menu_binds_one_shared_venue": true,
+    "trainee_features_repeat_one_shared_frozen_prior": true,
+    "venue_menu_availability_requires_compatible_frozen_prior": true,
+    "operational_contract_mismatch_fails_unavailable": true,
+    "prior_support_root_or_state_reuse_rejected": true,
+    "cross_snapshot_menu_reuse_rejected": true,
+    "prospective_binding_binds_snapshot_and_registry": true,
+    "public_registry_contains_private_venue_or_support_identity": false
+  },
+  "remaining_gate": {
+    "concrete_red_candidate_menus": 0,
+    "frozen_venue_prior_entries": 0,
+    "prospective_catalog_frozen": false,
+    "train_outcomes_collected": 0,
+    "train_outcomes_required": 8,
+    "development_outcomes_collected": 0,
+    "development_outcomes_required": 6,
+    "depleted_pp_context_available": false,
+    "completion_aware_model_fit": false,
+    "authority_promoted": false
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "claim_boundary": "This qualifies the title-neutral input and evidence-binding implementation only. It is not a concrete Red catalog, a prospective outcome, a model fit, a gameplay result, a transfer result, or authority."
+}

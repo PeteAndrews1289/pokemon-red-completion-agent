@@ -12,14 +12,11 @@ from pokemon_red_completion.navigation import path_to_directions
 from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.opening import (
     BEDROOM_CORRIDOR,
-    DEFAULT_OPENING_TIMING,
     HOUSE_1F_CORRIDOR,
     PALLET_CORRIDOR,
     PRET_POKERED_COMMIT,
     SQUIRTLE_APPROACH,
 )
-from pokemon_red_completion.pewter import DEFAULT_PEWTER_TIMING
-from pokemon_red_completion.play import DEFAULT_QUALIFIED_PLAY_TIMING
 from pokemon_red_completion.provenance import GIT_COMMIT, canonical_sha256
 from pokemon_red_completion.vermilion import DEFAULT_VERMILION_TIMING
 
@@ -54,15 +51,89 @@ SILPH_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-silph-2026-
 SABRINA_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-sabrina-2026-07-29.json"
 CINNABAR_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-cinnabar-2026-07-29.json"
 BLAINE_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-blaine-2026-07-29.json"
-GIOVANNI_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
-)
+GIOVANNI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-giovanni-2026-07-29.json"
 VICTORY_ROAD_RECEIPT = (
     PROJECT_ROOT / "docs" / "evidence" / "qualified-play-victory-road-2026-07-29.json"
 )
-LORELEI_RECEIPT = (
-    PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2026-07-29.json"
+LORELEI_RECEIPT = PROJECT_ROOT / "docs" / "evidence" / "qualified-play-lorelei-2026-07-29.json"
+TRAJECTORY_FOUNDATION_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "private-trajectory-foundation-2026-07-30.json"
 )
+BATTLE_DECISION_RECEIPT = (
+    PROJECT_ROOT / "docs" / "evidence" / "private-battle-decisions-2026-07-30.json"
+)
+BATTLE_IMITATION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "private-battle-imitation-diagnostic-2026-07-30.json"
+)
+V44_BATTLE_VALIDATION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "private-battle-imitation-v44-validation-2026-08-05.json"
+)
+ROUTE1_ACQUISITION_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "qualified-play-route1-acquisition-2026-08-02.json"
+)
+VIRIDIAN_FOREST_RECEIPT = (
+    PROJECT_ROOT
+    / "docs"
+    / "evidence"
+    / "qualified-play-viridian-forest-2026-08-02.json"
+)
+
+# These source-bound July receipts must remain pinned to the timing that
+# produced them.  Reconstructing historical evidence from today's defaults
+# would make a later robustness repair look like receipt corruption.
+JULY_28_QUALIFIED_PLAY_TIMING = {
+    "battle_wait_frames": 180,
+    "dialogue_wait_frames": 240,
+    "mart_prompt_wait_frames": 240,
+    "max_parcel_pulses": 5,
+    "max_pokedex_pulses": 42,
+    "max_rival_pulses": 56,
+    "rival_trigger_wait_frames": 360,
+    "route_1_north_seed_wait_frames": 192,
+    "route_1_south_seed_wait_frames": 48,
+    "transition_wait_frames": 120,
+}
+JULY_28_OPENING_TIMING = {
+    "dialogue_wait_frames": 240,
+    "max_escort_pulses": 32,
+    "max_starter_cancel_pulses": 12,
+    "max_starter_confirm_pulses": 12,
+    "oak_trigger_wait_frames": 360,
+    "starter_text_wait_frames": 180,
+    "transition_wait_frames": 120,
+}
+JULY_28_PEWTER_TIMING = {
+    "battle_wait_frames": 180,
+    "brock_setup_pulses": 3,
+    "dialogue_wait_frames": 240,
+    "encounter_wait_frames": 240,
+    "fight_menu_wait_frames": 120,
+    "final_stability_wait_frames": 1,
+    "first_kakuna_seed_wait_frames": 467,
+    "forest_exit_seed_wait_frames": 2,
+    "max_attack_start_pulses": 20,
+    "max_battle_pulses": 120,
+    "max_brock_battle_pulses": 100,
+    "max_brock_reward_pulses": 40,
+    "max_control_release_pulses": 10,
+    "max_trainer_intro_pulses": 12,
+    "move_cursor_wait_frames": 60,
+    "pewter_seed_wait_frames": 1,
+    "route_1_seed_wait_frames": 6,
+    "second_kakuna_seed_wait_frames": 420,
+    "selected_move_wait_frames": 600,
+    "third_kakuna_seed_wait_frames": 2,
+    "transition_wait_frames": 120,
+}
 
 
 def test_bootstrap_receipt_is_source_bound_and_privacy_safe() -> None:
@@ -156,7 +227,6 @@ def test_opening_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    timing = DEFAULT_OPENING_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -179,15 +249,7 @@ def test_opening_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {
-            "dialogue_wait_frames": timing.dialogue_wait_frames,
-            "max_escort_pulses": timing.max_escort_pulses,
-            "max_starter_cancel_pulses": timing.max_starter_cancel_pulses,
-            "max_starter_confirm_pulses": timing.max_starter_confirm_pulses,
-            "oak_trigger_wait_frames": timing.oak_trigger_wait_frames,
-            "starter_text_wait_frames": timing.starter_text_wait_frames,
-            "transition_wait_frames": timing.transition_wait_frames,
-        },
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
         "qualified_actions": {
             "bedroom": [direction.value for direction in path_to_directions(BEDROOM_CORRIDOR)],
@@ -270,8 +332,6 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -294,9 +354,9 @@ def test_pokedex_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": "fail_closed",
         "starter": "squirtle",
     }
@@ -377,9 +437,6 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
-    pewter = DEFAULT_PEWTER_TIMING
     expected_configuration = {
         "controller_timing": {
             "press_frames": intro.press_frames,
@@ -402,10 +459,10 @@ def test_brock_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
-        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
+        "pewter_timing": JULY_28_PEWTER_TIMING,
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": ("fail_closed_except_three_verified_kakuna_and_one_bug_catcher"),
         "starter": "squirtle",
     }
@@ -490,9 +547,6 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
     assert receipt["recorded_on"] == "2026-07-28"
 
     intro = DEFAULT_NEW_GAME_TIMING
-    opening = DEFAULT_OPENING_TIMING
-    play = DEFAULT_QUALIFIED_PLAY_TIMING
-    pewter = DEFAULT_PEWTER_TIMING
     cerulean = DEFAULT_CERULEAN_TIMING
     expected_configuration = {
         "controller_timing": {
@@ -516,13 +570,13 @@ def test_cerulean_receipt_is_source_bound_repeatable_and_privacy_safe() -> None:
             "normal_wait_frames": intro.normal_wait_frames,
         },
         "new_game_names": "built_in_red_blue",
-        "opening_timing": {name: getattr(opening, name) for name in opening.__dataclass_fields__},
-        "pewter_timing": {name: getattr(pewter, name) for name in pewter.__dataclass_fields__},
+        "opening_timing": JULY_28_OPENING_TIMING,
+        "pewter_timing": JULY_28_PEWTER_TIMING,
         "cerulean_timing": {
             name: getattr(cerulean, name) for name in cerulean.__dataclass_fields__
         },
         "pret_pokered_commit": PRET_POKERED_COMMIT,
-        "qualified_play_timing": {name: getattr(play, name) for name in play.__dataclass_fields__},
+        "qualified_play_timing": JULY_28_QUALIFIED_PLAY_TIMING,
         "route_encounter_policy": (
             "fail_closed_except_three_verified_kakuna_and_required_trainers"
         ),
@@ -726,6 +780,11 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
     assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
 
     controller = DEFAULT_NEW_GAME_TIMING
+    historical_vermilion_timing = asdict(DEFAULT_VERMILION_TIMING)
+    # This immutable receipt predates the explicit per-curriculum sleep
+    # reapplication field. Its historical default was the same value (two),
+    # but the absent key remains part of the artifact's authenticated schema.
+    historical_vermilion_timing["battle_runtime"].pop("max_sleep_reapplications")
     expected_configuration = {
         "battle_policy": ("adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"),
         "controller_timing": {
@@ -747,7 +806,7 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
             "three_exact_route6_pidgey_encounters_with_semantic_run_and_pp_event_gates"
         ),
         "starter": "squirtle",
-        "vermilion_timing": asdict(DEFAULT_VERMILION_TIMING),
+        "vermilion_timing": historical_vermilion_timing,
     }
     assert receipt["configuration"] == expected_configuration
     assert canonical_sha256(expected_configuration) == VERMILION_CONFIGURATION_SHA256
@@ -1599,3 +1658,480 @@ def test_lorelei_receipt_is_repeatable_complete_and_privacy_safe() -> None:
     assert "/Users/" not in serialized
     assert "Downloads" not in serialized
     assert ".gb" not in serialized
+
+
+def test_trajectory_foundation_receipt_is_integrity_scoped_and_privacy_safe() -> None:
+    receipt = json.loads(TRAJECTORY_FOUNDATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "private-trajectory-foundation-receipt-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "deterministic_teacher_control_trace"
+    assert receipt["claim_scope"] == {
+        "game_complete": True,
+        "learned_policy": False,
+        "transfer_result": False,
+        "model_ready_dataset": False,
+    }
+    assert GIT_COMMIT.fullmatch(receipt["source"]["git_commit"])
+    assert receipt["source"]["worktree_dirty"] is False
+    assert receipt["rom"] == {
+        "title": POKEMON_RED_US_REV_0.title,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+    }
+    assert receipt["episode"]["status"] == "complete"
+    assert receipt["episode"]["distributed"] is False
+    assert receipt["episode"]["streams"] == {
+        "episode": 1,
+        "events": 300,
+        "executions": 41_330,
+        "snapshots": 14_760,
+    }
+    assert receipt["episode"]["total_records"] == 56_391
+    assert receipt["gameplay"] == {
+        "checkpoints_verified": 299,
+        "checkpoints_total": 299,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "frames_executed": 4_796_436,
+        "actions_executed": 41_330,
+        "qualified_through": "enter_hall_of_fame",
+        "controller_released": True,
+    }
+    assert receipt["integrity_audit"]["adjacent_state_hash_transitions_verified"] == 41_329
+    assert all(
+        value
+        for key, value in receipt["integrity_audit"].items()
+        if key != "adjacent_state_hash_transitions_verified"
+    )
+    assert all(receipt["privacy_audit"].values())
+    assert receipt["limitations"]["decision_records"] == 0
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_battle_decision_receipt_is_linked_limited_and_privacy_safe() -> None:
+    receipt = json.loads(BATTLE_DECISION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "private-battle-decision-receipt-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "deterministic_teacher_adaptive_battle_decisions"
+    assert receipt["claim_scope"] == {
+        "game_complete": True,
+        "adaptive_battle_decision_labels": True,
+        "all_battle_decisions_labeled": False,
+        "model_ready_dataset": False,
+        "learned_policy": False,
+        "transfer_result": False,
+    }
+    assert receipt["source"] == {
+        "git_commit": "fb6a7b9ab73daf202e8ca74e5537d449ce4b466e",
+        "worktree_dirty": False,
+    }
+    assert receipt["rom"] == {
+        "title": POKEMON_RED_US_REV_0.title,
+        "size_bytes": POKEMON_RED_US_REV_0.size_bytes,
+        "sha1": POKEMON_RED_US_REV_0.sha1,
+        "sha256": POKEMON_RED_US_REV_0.sha256,
+    }
+    assert receipt["episode"]["status"] == "complete"
+    assert receipt["episode"]["distributed"] is False
+    assert receipt["episode"]["streams"] == {
+        "episode": 1,
+        "decisions": 422,
+        "events": 300,
+        "executions": 41_330,
+        "snapshots": 14_760,
+    }
+    assert receipt["episode"]["total_records"] == 56_813
+    assert receipt["episode"]["total_bytes"] == 39_291_235
+    assert receipt["gameplay"] == {
+        "checkpoints_verified": 299,
+        "checkpoints_total": 299,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "frames_executed": 4_796_436,
+        "actions_executed": 41_330,
+        "qualified_through": "enter_hall_of_fame",
+        "controller_released": True,
+    }
+
+    decision_audit = receipt["decision_audit"]
+    assert decision_audit["decision_records"] == 422
+    assert decision_audit["unique_decision_snapshots"] == 421
+    assert decision_audit["battle_locations_observed"] == 32
+    assert decision_audit["shared_runtime_call_sites_covered"] == 22
+    assert sum(decision_audit["slot_counts"].values()) == 422
+    assert (
+        decision_audit["linked_execution_records"]
+        + decision_audit["unlinked_execution_records"]
+        == 41_330
+    )
+    assert decision_audit["conflicting_actions_for_duplicate_snapshots"] == 0
+    assert all(
+        decision_audit[key]
+        for key in (
+            "all_decisions_have_linked_executions",
+            "first_execution_step_matches_decision",
+            "first_execution_snapshot_matches_decision",
+            "linked_execution_spans_are_contiguous",
+        )
+    )
+
+    assert receipt["integrity_audit"]["adjacent_state_hash_transitions_verified"] == 41_329
+    assert all(
+        value
+        for key, value in receipt["integrity_audit"].items()
+        if key != "adjacent_state_hash_transitions_verified"
+    )
+    assert all(receipt["privacy_audit"].values())
+    assert receipt["limitations"]["single_nominal_teacher_episode"] is True
+    assert receipt["limitations"]["adaptive_runtime_only"] is True
+    assert receipt["limitations"]["custom_battle_controllers_labeled"] is False
+    assert receipt["limitations"]["perturbed_examples"] == 0
+    assert receipt["limitations"]["held_out_evaluation_attempts"] == 0
+
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_battle_imitation_receipt_is_diagnostic_aggregate_and_privacy_safe() -> None:
+    receipt = json.loads(BATTLE_IMITATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "battle-imitation-diagnostic-v1"
+    assert receipt["recorded_on"] == "2026-07-30"
+    assert receipt["evidence_lane"] == "single_lineage_grouped_battle_imitation_diagnostic"
+    assert receipt["status"] == "complete"
+    assert receipt["claim_scope"] == {
+        "battle_imitation_model_trained": True,
+        "same_lineage_grouped_diagnostic": True,
+        "held_out_evaluation": False,
+        "learned_policy_rollout": False,
+        "learned_full_game_completion": False,
+        "promotion_eligible": False,
+        "transfer_result": False,
+    }
+    assert receipt["scope"] == {
+        "decisions": 422,
+        "groups": 63,
+        "source_episodes": 1,
+        "source_root_lineages": 1,
+    }
+    assert receipt["dataset_manifest_sha256"] == (
+        "3ed9e3f7cfccb9dcf2e1f0c11b6a53f687854e35bf1766f66c44e8ebfe07a750"
+    )
+    assert receipt["model"] == {
+        "model_id": "pokemon.core.battle.masked-linear-ranker.v1",
+        "feature_schema_id": "pokemon.core.battle.move-ranker.v1",
+        "feature_count": 100,
+        "sha256": "0051da799e6d95b64bde2a3c09ed46d34b43aaf61660217c77f7fd635ddf950a",
+        "serialization": "canonical_json",
+    }
+    assert receipt["training"] == {
+        "seed": 1289,
+        "folds": 5,
+        "epochs": 300,
+        "learning_rate": 0.03,
+        "l2": 0.0001,
+        "split_unit": "diagnostic_battle_group",
+    }
+
+    metrics = receipt["metrics"]
+    assert metrics["accuracy"] == 0.7251184834123223
+    assert metrics["macro_f1"] == 0.6830197450601863
+    assert metrics["per_slot_recall"] == [
+        0.8605769230769231,
+        0.74,
+        0.4942528735632184,
+        0.6103896103896104,
+    ]
+    assert metrics["cross_entropy"] == 0.7131798266065661
+    assert metrics["majority_accuracy"] == 0.504739336492891
+    assert metrics["training_accuracy"] == 0.8056872037914692
+    assert metrics["legal_choice_rate"] == 1.0
+    assert metrics["accuracy"] > metrics["majority_accuracy"]
+    folds = metrics["folds"]
+    assert [fold["fold_index"] for fold in folds] == list(range(5))
+    assert [fold["accuracy"] for fold in folds] == [
+        0.6588235294117647,
+        0.8117647058823529,
+        0.5833333333333334,
+        0.9166666666666666,
+        0.6547619047619048,
+    ]
+    assert [fold["cross_entropy"] for fold in folds] == [
+        0.7859594101860107,
+        0.677667240016898,
+        0.8236010302364283,
+        0.3596113660777685,
+        0.9186164317896561,
+    ]
+    assert [fold["majority_accuracy"] for fold in folds] == [
+        0.5882352941176471,
+        0.6235294117647059,
+        0.42857142857142855,
+        0.5238095238095238,
+        0.35714285714285715,
+    ]
+    assert sum(fold["test_decisions"] for fold in folds) == 422
+    assert sum(fold["test_groups"] for fold in folds) == 63
+
+    assert receipt["qualification"] == {
+        "promotion_eligible": False,
+        "held_out_evaluation": False,
+        "learned_policy_rollout": False,
+        "reasons": [
+            "grouped_cross_validation_is_not_held_out",
+            "inferred_battle_groups",
+            "policy_goal_not_fully_observed",
+            "single_recorded_root_lineage",
+            "unassigned_root_lineage",
+        ],
+    }
+    assert receipt["source"] == {
+        "git_commit": "2d8f711092d6a279a9143b6f9db41a840461a4c3",
+        "worktree_dirty": False,
+    }
+    artifact = receipt["private_artifact"]
+    assert artifact == {
+        "artifact_id": "red-battle-ranker-8e12f910fad2422c8d494771740d351d",
+        "kind": "battle_model",
+        "status": "complete",
+        "schema": "private-json-artifact-summary-v1",
+        "stream_records": {"metrics": 1, "model": 1, "training": 1},
+        "total_records": 3,
+        "total_bytes": 8251,
+        "manifest_sha256": (
+            "a9173fe9aa8139584e23c8abb5d7c912d1d2c3242204a48c3d67810870d0022c"
+        ),
+    }
+
+    limitations = receipt["limitations"]
+    assert limitations["single_nominal_teacher_episode"] is True
+    assert limitations["unassigned_root_lineage"] is True
+    assert limitations["inferred_battle_groups"] is True
+    assert limitations["adaptive_runtime_decisions_only"] is True
+    assert limitations["all_battle_decisions_labeled"] is False
+    assert limitations["policy_goal_not_fully_observed"] is True
+    assert limitations["held_out_root_lineages"] == 0
+    assert limitations["learned_policy_rollouts"] == 0
+
+    serialized = json.dumps(receipt)
+    for forbidden in (
+        "/Users/",
+        "/Volumes/",
+        "Downloads",
+        ".gb",
+        ".jsonl",
+        '"weights"',
+        "candidate_vectors",
+        "decision_id",
+        "snapshot_sha256",
+    ):
+        assert forbidden not in serialized
+
+
+def test_v44_battle_validation_receipt_is_held_out_and_privacy_safe() -> None:
+    receipt = json.loads(V44_BATTLE_VALIDATION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "battle-imitation-preassigned-validation-v1"
+    assert receipt["recorded_on"] == "2026-08-05"
+    assert receipt["status"] == "complete"
+    assert receipt["claim_scope"] == {
+        "battle_imitation_model_trained": True,
+        "held_out_validation": True,
+        "held_out_test_evaluation": False,
+        "test_partition_opened": False,
+        "learned_policy_rollout": False,
+        "learned_full_game_completion": False,
+        "promotion_eligible": False,
+        "transfer_result": False,
+    }
+    assert receipt["collection"]["train_outcomes_complete"] == 5
+    assert receipt["collection"]["validation_outcomes_complete"] == 2
+    assert receipt["collection"]["test_outcomes_opened"] == 0
+    assert receipt["scope"]["train_root_lineages"] == 5
+    assert receipt["scope"]["validation_root_lineages"] == 2
+    assert receipt["scope"]["novel_visible_decisions"] == 1059
+
+    model = receipt["model"]
+    assert model["model_id"] == "pokemon.core.battle.masked-linear-ranker.v1"
+    assert model["feature_schema_id"] == "pokemon.core.battle.move-ranker.v2"
+    assert model["feature_count"] == 102
+    assert re.fullmatch(r"[0-9a-f]{64}", model["sha256"])
+
+    validation = receipt["validation"]
+    assert validation["accuracy"] == 0.8580441640378549
+    assert validation["free_choice_accuracy"] == 0.8423817863397548
+    assert validation["novel_visible_accuracy"] == 0.874409820585458
+    assert validation["legal_choice_rate"] == 1.0
+    assert validation["accuracy"] > validation["majority_accuracy"]
+    assert validation["free_choice_accuracy"] > validation["free_choice_majority_accuracy"]
+    assert validation["cross_entropy"] < validation["uniform_legal_cross_entropy"]
+    assert validation["confidence"]["eligible"] is True
+    assert validation["confidence"]["selection_partition"] == "validation"
+
+    assert receipt["qualification"] == {
+        "freeze_eligible": True,
+        "held_out_validation": True,
+        "test_partition_opened": False,
+        "held_out_test_evaluation": False,
+        "learned_policy_rollout": False,
+        "promotion_eligible": False,
+        "reasons": [],
+    }
+    assert receipt["source"] == {
+        "git_commit": "c0dbbc675211466c83f57366db96cac3ba9a8941",
+        "worktree_dirty": False,
+    }
+    assert receipt["limitations"]["held_out_test_root_lineages_opened"] == 0
+    assert receipt["limitations"]["learned_policy_rollouts"] == 0
+
+    serialized = json.dumps(receipt)
+    for forbidden in (
+        "/Users/",
+        "/Volumes/",
+        "Downloads",
+        ".gb",
+        ".jsonl",
+        '"weights"',
+        "candidate_vectors",
+        "decision_id",
+        "snapshot_sha256",
+    ):
+        assert forbidden not in serialized
+
+
+def test_route1_acquisition_receipt_is_narrow_complete_and_privacy_safe() -> None:
+    receipt = json.loads(ROUTE1_ACQUISITION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "pokemon-red-route1-acquisition-receipt-v1"
+    assert receipt["status"] == "passed"
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "runs": 1,
+    }
+    assert receipt["route_1_acquisition"] == {
+        "live_emulator_execution": True,
+        "species_captured_in_order": [16, 19],
+        "pokedex_owned_flags_verified": [16, 19],
+        "exact_pc_deposit_transitions_verified": 2,
+        "current_box_tail_verified": [16, 19],
+        "party_restored_to_story_roster": True,
+        "vermilion_gym_route_restored": True,
+    }
+    assert receipt["balanced_training"] == {
+        "battle_budget": 7000,
+        "healing_trip_budget": 1250,
+        "faints": 0,
+        "minimum_level_at_gate": 77,
+        "maximum_level_at_gate": 82,
+        "level_spread_at_gate": 5,
+    }
+    assert receipt["completion"] == {
+        "checkpoints_verified": 312,
+        "checkpoints_total": 312,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "champion_defeated": True,
+        "hall_of_fame_entered": True,
+        "actions_executed": 758430,
+    }
+    assert receipt["terminal_collection"] == {
+        "all_boxes_verified": True,
+        "storage_initialized": True,
+        "pokedex_registered_targets": 14,
+        "living_targets": 9,
+        "level_100_targets": 0,
+        "pokedex_target_complete": False,
+        "living_collection_verified": False,
+        "level_100_collection_verified": False,
+    }
+    assert not any(receipt["privacy"].values())
+    serialized = json.dumps(receipt)
+    assert "/Users/" not in serialized
+    assert "/Volumes/" not in serialized
+    assert "Downloads" not in serialized
+    assert ".gb" not in serialized
+
+
+def test_viridian_forest_receipt_is_source_bound_narrow_and_privacy_safe() -> None:
+    receipt = json.loads(VIRIDIAN_FOREST_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["schema"] == "pokemon-red-viridian-forest-receipt-v1"
+    assert receipt["status"] == "passed"
+    assert receipt["source_identity"] == {
+        "collection_registry_sha256": (
+            "ca50411f02fe0ea2e6be75f38f1f081253ef150e82cc58449241ed533269dde5"
+        ),
+        "source_bundle_sha256": (
+            "50ac06a5fc586844cf51e6a1c82ca7ba9a61fa103ddbb8c98e2ce10b35eee7bb"
+        ),
+        "teacher_execution_sha256": (
+            "81e90e1ee77c4419f7dfb01f126a96d792f73d548d653922d8796d310dd5e05e"
+        ),
+    }
+    assert receipt["evaluation"] == {
+        "clean_power_on": True,
+        "human_input": False,
+        "save_state_restoration": False,
+        "adjacent_private_artifacts_unchanged": True,
+        "exact_source_teacher_executions": 1,
+    }
+    assert receipt["viridian_forest_acquisition"] == {
+        "live_emulator_execution": True,
+        "reusable_semantic_source_controller": True,
+        "global_pokedex_observation": True,
+        "global_party_observation": True,
+        "all_twelve_boxes_observed": True,
+        "species_quantities": {"10": 1, "11": 2, "14": 2, "25": 1},
+        "physical_specimens_retained": 6,
+        "distinct_species_retained": 4,
+        "exact_party_deposit_transitions_verified": 3,
+        "duplicate_specimens_sent_directly_to_storage": 3,
+        "forest_and_gate_warps_normalized": True,
+        "story_party_restored": True,
+    }
+    assert receipt["completion"] == {
+        "checkpoints_verified": 312,
+        "checkpoints_total": 312,
+        "objectives_verified": 36,
+        "objectives_total": 36,
+        "champion_defeated": True,
+        "hall_of_fame_entered": True,
+        "frames_executed": 83_619_428,
+        "actions_executed": 765_088,
+    }
+    assert receipt["terminal_collection"] == {
+        "pokedex_registered_targets": 18,
+        "distinct_living_target_species": 13,
+        "level_100_targets": 0,
+        "physical_specimens": 15,
+        "party_count": 6,
+        "box_counts": [9, *(0 for _ in range(11))],
+        "all_boxes_verified": True,
+        "storage_initialized": True,
+    }
+    assert receipt["learning_boundary"] == {
+        "formal_train_validation_fitter_implemented": True,
+        "candidate_model_fitted": False,
+        "sealed_test_partition_opened": False,
+        "learned_policy_rollout_completed": False,
+    }
+    assert receipt["validation"]["public_tests_passed"] == 1458
+    assert receipt["validation"]["private_integration_tests_passed"] == 1
+    assert not any(receipt["privacy"].values())
+
+    serialized = json.dumps(receipt)
+    for forbidden in ("/Users/", "/Volumes/", "Downloads", ".gb", ".jsonl"):
+        assert forbidden not in serialized

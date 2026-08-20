@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon-red-battle-control-v3-lineage-receipt-v1",
+  "recorded_on": "2026-08-09",
+  "status": "complete_unpromoted_validation_lineage",
+  "source_commit": "1b4b0b2f0ecbcbcec1e7b94e73af601f2f5ba7ae",
+  "authority": {
+    "battle_moves": "authenticated_nonlinear_move_ranker_with_teacher_queries_allowed",
+    "high_level_labels": "deterministic_teacher",
+    "human_input": false,
+    "save_state_used": false
+  },
+  "perturbation": {
+    "kind": "reproducible_battle_start_timing_schedule",
+    "harness_seed": 990001,
+    "schedule_sha256": "9a204298da0137238229a50c6016f3708759202f4f4b269b0c73487022e3c30c",
+    "scheduled_battles": 74,
+    "schedule_complete": true
+  },
+  "completion": {
+    "checkpoints": "312/312",
+    "objectives": "36/36",
+    "champion_defeated": true,
+    "hall_of_fame_entered": true,
+    "actions_executed": 664868
+  },
+  "private_artifact": {
+    "artifact_id": "red-battle-control-517db549407846dfad8b0ded219e02d1",
+    "manifest_sha256": "21a7ebf2617588ad368f551def2cc5fd2c53304fdee0789bfad7ab097e93ff50",
+    "records": 3124,
+    "bytes": 13809113,
+    "private_path_published": false
+  },
+  "label_distribution": {
+    "select_move": 3071,
+    "use_recovery": 27,
+    "use_boost": 13,
+    "switch": 13,
+    "typed_non_move_total": 53,
+    "explicit_switch_targets": 13,
+    "legacy_generic_switch_targets": 0
+  },
+  "battle_move_runtime": {
+    "decisions": 3124,
+    "model_decisions": 3068,
+    "teacher_fallbacks": 3,
+    "shadow_teacher_disagreements": 1427,
+    "teacher_queries": 3124
+  },
+  "team_development": {
+    "battles": 1796,
+    "healing_trips": 1124,
+    "final_forms_complete": true,
+    "observed_levels": [60, 55, 55, 55, 55, 55],
+    "fainted_count": 0
+  },
+  "independence": {
+    "different_from_lineage_01": true,
+    "observable_examples": [
+      "Snorlax required nine throws rather than one.",
+      "Battle outcomes and decision counts changed under the perturbation schedule."
+    ],
+    "held_out_from_candidate_training": true
+  },
+  "claim_scope": {
+    "fresh_v3_demonstration_complete": true,
+    "used_as_whole_lineage_validation": true,
+    "strict_model_control_complete": false,
+    "counted_campaign_roots_consumed": 0,
+    "cross_game_transfer_complete": false
+  }
+}

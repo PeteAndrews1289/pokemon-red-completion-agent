@@ -1,0 +1,755 @@
+{
+  "actions_executed_after_strength_boundary": 230,
+  "capture": {
+    "checkpoint_id": "portable_loop_defeat_giovanni_terminal",
+    "required_verified_objectives": [
+      "defeat_giovanni",
+      "obtain_strength"
+    ]
+  },
+  "controller_released": true,
+  "decision": {
+    "battle_observed": false,
+    "hazard_kind": "trainer_sight",
+    "hazard_yx": [
+      4,
+      3
+    ],
+    "input_sent_toward_hazard": false,
+    "trainer_engagement_observed": false
+  },
+  "execution": {
+    "acknowledged_steps": 50,
+    "interruptions": [],
+    "movement_requests": 50,
+    "passed": true,
+    "replans": [
+      {
+        "at_yx": [
+          5,
+          3
+        ],
+        "candidate_hazard_yx": [
+          4,
+          3
+        ],
+        "map_id": 108,
+        "ordinal": 1,
+        "reason": "trainer_sight",
+        "replacement_steps": 5
+      }
+    ],
+    "terminal_map_id": 108,
+    "terminal_ready": true,
+    "terminal_yx": [
+      1,
+      2
+    ],
+    "wait_actions": 0
+  },
+  "frames_executed_after_strength_boundary": 15180,
+  "recorded_on": "2026-08-10",
+  "rom": {
+    "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+    "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "size_bytes": 1048576,
+    "title": "POKEMON RED"
+  },
+  "rom_adjacent_artifacts_unchanged": true,
+  "schema": "victory-road-trainer-sight-route-probe-v1",
+  "selection": {
+    "rom_object_positions_used_as_solid_blockers": true,
+    "trainer_lanes_used_as_solid_objects": false,
+    "trainer_sight_crossings_yx": [
+      [
+        4,
+        3
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "unprotected_plan": {
+      "start_yx": [
+        12,
+        17
+      ],
+      "steps": [
+        {
+          "action": "left",
+          "expected_yx": [
+            12,
+            16
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            17
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            13,
+            16
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            16
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            14,
+            16
+          ],
+          "kind": "walk",
+          "source_yx": [
+            13,
+            16
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            15
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            16
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            14
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            15
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            13
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            14
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            12
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            13
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            12
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            10
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            11
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            14,
+            9
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            10
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            15,
+            9
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            9
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            16,
+            9
+          ],
+          "kind": "walk",
+          "source_yx": [
+            15,
+            9
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            16,
+            8
+          ],
+          "kind": "walk",
+          "source_yx": [
+            16,
+            9
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            16,
+            7
+          ],
+          "kind": "walk",
+          "source_yx": [
+            16,
+            8
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            16,
+            6
+          ],
+          "kind": "walk",
+          "source_yx": [
+            16,
+            7
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            16,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            16,
+            6
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            15,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            16,
+            5
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            14,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            15,
+            5
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            13,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            14,
+            5
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            12,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            13,
+            5
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            6
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            5
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            7
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            6
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            8
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            7
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            9
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            8
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            10
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            9
+          ]
+        },
+        {
+          "action": "right",
+          "expected_yx": [
+            12,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            10
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            11,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            12,
+            11
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            10,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            11,
+            11
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            9,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            10,
+            11
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            8,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            9,
+            11
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            7,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            11
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            6,
+            11
+          ],
+          "kind": "walk",
+          "source_yx": [
+            7,
+            11
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            6,
+            10
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            11
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            6,
+            9
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            10
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            6,
+            8
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            9
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            6,
+            7
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            8
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            7,
+            7
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            7
+          ]
+        },
+        {
+          "action": "down",
+          "expected_yx": [
+            8,
+            7
+          ],
+          "kind": "walk",
+          "source_yx": [
+            7,
+            7
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            8,
+            6
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            7
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            8,
+            5
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            6
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            8,
+            4
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            5
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            8,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            4
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            7,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            8,
+            3
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            6,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            7,
+            3
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            5,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            6,
+            3
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            4,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            5,
+            3
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            3,
+            3
+          ],
+          "kind": "walk",
+          "source_yx": [
+            4,
+            3
+          ]
+        },
+        {
+          "action": "left",
+          "expected_yx": [
+            3,
+            2
+          ],
+          "kind": "walk",
+          "source_yx": [
+            3,
+            3
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            2,
+            2
+          ],
+          "kind": "walk",
+          "source_yx": [
+            3,
+            2
+          ]
+        },
+        {
+          "action": "up",
+          "expected_yx": [
+            1,
+            2
+          ],
+          "kind": "walk",
+          "source_yx": [
+            2,
+            2
+          ]
+        }
+      ],
+      "terminal_yx": [
+        1,
+        2
+      ]
+    }
+  },
+  "source": {
+    "git_commit": "95e8b827668a165b6ca707dceb594460a5bf2d42",
+    "source_bundle_sha256": "07c2604cc9ed8e48c6536e271fa00d195eb9c8e08fd9f28e7fc09d36c4703c7e"
+  },
+  "status": "ok",
+  "strength_boundary": {
+    "execution_passed": true,
+    "explored_states": 3934,
+    "initial_yx": [
+      17,
+      8
+    ],
+    "plan_steps": 58,
+    "planned_terminal_yx": [
+      12,
+      17
+    ],
+    "switch_event_set": true
+  },
+  "trainers": [
+    {
+      "defeated": false,
+      "engage_distance_tiles": 2,
+      "event_flag": 2321,
+      "facing": "right",
+      "reserved_lane_yx": [
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          9
+        ]
+      ],
+      "sprite_index": 1,
+      "trainer_class": 232,
+      "trainer_set": 5,
+      "trainer_yx": [
+        5,
+        7
+      ],
+      "visible_at_planning_boundary": false
+    },
+    {
+      "defeated": false,
+      "engage_distance_tiles": 2,
+      "event_flag": 2322,
+      "facing": "down",
+      "reserved_lane_yx": [
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "sprite_index": 2,
+      "trainer_class": 231,
+      "trainer_set": 5,
+      "trainer_yx": [
+        2,
+        3
+      ],
+      "visible_at_planning_boundary": false
+    }
+  ]
+}

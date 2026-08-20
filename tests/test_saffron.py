@@ -2,17 +2,30 @@ from dataclasses import fields, replace
 
 import pytest
 
+import pokemon_red_completion.saffron as saffron
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import Badge, ItemId, MapId, RawGameState
 from pokemon_red_completion.saffron import (
     DEFAULT_SAFFRON_TIMING,
     FRESH_WATER_PRICE,
     GUARD_DRINK_FLAG,
+    SAFFRON_ACCESS_CHECKPOINT_COUNT,
     SAFFRON_CHECKPOINT_COUNT,
+    SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT,
+    SAFFRON_RETURN_CHECKPOINT_COUNT,
+    THUNDER_STONE_PRICE,
+    JolteonResourceReport,
+    SaffronAccessChapterReport,
     SaffronChapterReport,
     SaffronCheckpoint,
+    SaffronGuardResourceReport,
+    SaffronReturnReport,
     SaffronTiming,
 )
 from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+
+PARTY_BEFORE = (*TOWER_FINAL_PARTY, 0x84)
+PARTY_AFTER = (*PARTY_BEFORE, 0x68)
 
 
 def _terminal() -> RawGameState:
@@ -21,18 +34,16 @@ def _terminal() -> RawGameState:
         map_id=MapId.SAFFRON_POKECENTER,
         player_x=3,
         player_y=3,
-        party_count=3,
+        party_count=5,
         battle_state=0,
-        badge_bits=int(
-            Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL
-        ),
-        party_species_ids=TOWER_FINAL_PARTY,
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER | Badge.RAINBOW | Badge.SOUL),
+        party_species_ids=PARTY_AFTER,
         first_party_level=42,
         first_party_hp=130,
         first_party_max_hp=130,
         first_party_status=0,
-        first_party_moves=(0x82, 0x46, 0x3D, 0x39),
-        first_party_pp=(15, 15, 20, 15),
+        first_party_moves=(0x82, 0x46, 0x3A, 0x39),
+        first_party_pp=(15, 15, 10, 15),
     )
 
 
@@ -42,6 +53,315 @@ def test_saffron_timing_is_positive_and_bounded() -> None:
         assert getattr(DEFAULT_SAFFRON_TIMING, field.name) > 0
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_SAFFRON_TIMING, **{field.name: 0})
+
+
+def test_stone_clerk_route_yields_to_fourth_floor_walker(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=4, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+        return_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (4, 2):
+                reader.state = replace(reader.state, player_x=5)
+            elif action.value == "left" and position == (5, 2):
+                self.return_attempts += 1
+                if self.return_attempts >= 3:
+                    reader.state = replace(reader.state, player_x=4)
+            elif action.value == "left" and position == (4, 2):
+                self.left_attempts += 1
+                if self.left_attempts == 3:
+                    reader.state = replace(reader.state, player_x=3)
+            return action
+
+    executor = Executor()
+
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "evolution-stone clerk",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (3, 2)
+    assert executor.left_attempts == 3
+    assert executor.return_attempts == 4
+
+
+def test_stone_clerk_route_yields_at_west_fourth_floor_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=2, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "right" and position == (2, 2):
+                reader.state = replace(reader.state, player_x=3)
+            elif action.value == "left" and position == (3, 2):
+                reader.state = replace(reader.state, player_x=2)
+            elif action.value == "left" and position == (2, 2):
+                self.left_attempts += 1
+                if self.left_attempts == 2:
+                    reader.state = replace(reader.state, player_x=1)
+            return action
+
+    executor = Executor()
+
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "evolution-stone clerk",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (1, 2)
+    assert executor.left_attempts == 2
+
+
+def test_mart_roof_route_yields_to_fifth_floor_customer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_5F, player_x=15, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        left_attempts = 0
+        return_attempts = 0
+        yielded = False
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            position = (reader.state.player_x, reader.state.player_y)
+            if action.value == "down" and position == (15, 2):
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and position == (15, 3):
+                self.return_attempts += 1
+                if self.return_attempts >= 2:
+                    reader.state = replace(reader.state, player_y=2)
+            elif action.value == "left" and position == (15, 2) and self.yielded:
+                self.left_attempts += 1
+                if self.left_attempts >= 2:
+                    reader.state = replace(reader.state, player_x=14)
+            return action
+
+    executor = Executor()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        object(),  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "mart_roof",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (14, 2)
+    assert executor.return_attempts == 3
+    assert executor.left_attempts == 2
+
+
+def test_stone_clerk_return_retreats_until_fourth_floor_walker_clears(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=5, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        retreated = False
+        yielded = False
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            x = reader.state.player_x or 0
+            if action.value == "left":
+                reader.state = replace(reader.state, player_x=x - 1)
+                if x - 1 == 1:
+                    self.retreated = True
+            elif action.value == "down" and x == 1:
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and reader.state.player_y == 3:
+                reader.state = replace(reader.state, player_y=2)
+            elif action.value == "right" and (self.yielded or x != 5):
+                reader.state = replace(reader.state, player_x=x + 1)
+            return action
+
+    executor = Executor()
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            return 11 if address == saffron.STONE_CLERK_WALKER_X else 6
+
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        ("right",),
+        DEFAULT_SAFFRON_TIMING,
+        "fourth-floor stair return",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (6, 2)
+    assert executor.retreated
+    assert executor.yielded
+
+
+def test_stone_clerk_return_recovers_a_later_corridor_deadlock(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_4F, player_x=9, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Executor:
+        retreated = False
+        yielded = False
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is not MacroActionKind.MOVE:
+                return action
+            x = reader.state.player_x or 0
+            if action.value == "left":
+                reader.state = replace(reader.state, player_x=x - 1)
+                if x - 1 == 1:
+                    self.retreated = True
+            elif action.value == "down" and x == 1:
+                reader.state = replace(reader.state, player_y=3)
+                self.yielded = True
+            elif action.value == "up" and reader.state.player_y == 3:
+                reader.state = replace(reader.state, player_y=2)
+            elif action.value == "right" and (self.yielded or x != 9):
+                reader.state = replace(reader.state, player_x=x + 1)
+            return action
+
+    executor = Executor()
+
+    class Emulator:
+        def read_u8(self, address: int) -> int:
+            # The walker only needs to clear the x=1 alcove entrance. It does
+            # not need to move beyond this late x=10 corridor destination.
+            return 9 if address == saffron.STONE_CLERK_WALKER_X else 6
+
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        Emulator(),  # type: ignore[arg-type]
+        ("right",),
+        DEFAULT_SAFFRON_TIMING,
+        "fourth-floor stair return",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (10, 2)
+    assert executor.retreated
+    assert executor.yielded
+
+
+def test_mart_2f_return_observes_customer_before_crossing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Reader:
+        state = replace(_terminal(), map_id=MapId.CELADON_MART_2F, player_x=15, player_y=2)
+
+        def read(self) -> RawGameState:
+            return self.state
+
+    reader = Reader()
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = frozenset()
+        observations = 0
+
+        def read_u8(self, address: int) -> int:
+            if address == saffron.MART_2F_GIRL_X:
+                self.observations += 1
+                return 18 if self.observations < 4 else 17
+            if address == saffron.MART_2F_GIRL_Y:
+                return 6
+            raise AssertionError(address)
+
+    class Executor:
+        waits = 0
+        left_attempts = 0
+
+        def execute(self, action: MacroAction) -> MacroAction:
+            if action.kind is MacroActionKind.WAIT:
+                self.waits += 1
+            elif action.kind is MacroActionKind.MOVE and action.value == "left":
+                self.left_attempts += 1
+                if emulator.observations >= 4:
+                    reader.state = replace(reader.state, player_x=14)
+            return action
+
+    executor = Executor()
+    emulator = Emulator()
+    monkeypatch.setattr(saffron, "_wait", lambda *args: None)
+
+    saffron._move(
+        executor,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        emulator,  # type: ignore[arg-type]
+        ("left",),
+        DEFAULT_SAFFRON_TIMING,
+        "mart_1f_return",
+    )
+
+    assert (reader.state.player_x, reader.state.player_y) == (14, 2)
+    assert executor.waits == 3
+    assert executor.left_attempts == 2
 
 
 def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
@@ -56,9 +376,10 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
             for index in range(SAFFRON_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=41_545,
-        money_after_purchase=41_545 - FRESH_WATER_PRICE,
-        money_after=41_345,
+        money_before=32_247,
+        money_after_stone=32_247 - THUNDER_STONE_PRICE,
+        money_after_purchase=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
+        money_after=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
         vending_cursor=0,
         fresh_water_before=0,
         fresh_water_after_purchase=1,
@@ -68,9 +389,11 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
         guard_flag_after_dialogue=GUARD_DRINK_FLAG,
         bag_before=bag,
         bag_after=bag,
-        party_hp=(130, 52, 37),
-        party_max_hp=(130, 52, 37),
-        party_status=(0, 0, 0),
+        party_before=PARTY_BEFORE,
+        party_after=PARTY_AFTER,
+        party_hp=(130, 47, 40, 120, 65),
+        party_max_hp=(130, 47, 40, 120, 65),
+        party_status=(0, 0, 0, 0, 0),
         battle_free=True,
         frames_executed=1,
         actions_executed=1,
@@ -85,6 +408,338 @@ def test_saffron_report_proves_purchase_handoff_order_and_terminal() -> None:
         "flag_after_dialogue": GUARD_DRINK_FLAG,
         "consumed_before_global_access": True,
     }
+
+
+def test_saffron_access_report_accepts_pre_erika_party_and_preserves_it() -> None:
+    party = TOWER_FINAL_PARTY
+    moves = (0x2C, 0x27, 0x3D, 0x37)
+    pp = (25, 30, 20, 25)
+    raw = replace(
+        _terminal(),
+        badge_bits=int(Badge.BOULDER | Badge.CASCADE | Badge.THUNDER),
+        party_count=len(party),
+        party_species_ids=party,
+        first_party_level=36,
+        first_party_hp=98,
+        first_party_max_hp=98,
+        first_party_moves=moves,
+        first_party_pp=pp,
+    )
+    bag = ((int(ItemId.POKE_BALL), 8),)
+    report = SaffronAccessChapterReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_ACCESS_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        money_before=11_852,
+        money_after_purchase=11_852 - FRESH_WATER_PRICE,
+        money_after=11_852 - FRESH_WATER_PRICE,
+        vending_cursor=0,
+        fresh_water_before=0,
+        fresh_water_after_purchase=1,
+        fresh_water_after_guard=0,
+        guard_flag_before=0,
+        guard_flag_after_consumption=0,
+        guard_flag_after_dialogue=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        party_before=party,
+        party_after=party,
+        lead_level_before=36,
+        lead_moves_before=moves,
+        lead_pp_before=pp,
+        party_hp=(98, 53, 37),
+        party_max_hp=(98, 53, 37),
+        party_status=(0, 0, 0),
+        battle_free=True,
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["optional_party_construction"] is False
+    assert not replace(report, party_after=(*party, 0x68)).passed
+    assert not replace(report, final_raw=replace(raw, first_party_level=37)).passed
+    restored = replace(
+        report,
+        final_raw=replace(raw, first_party_pp=(25, 30, 25, 25)),
+        lead_pp_before=(20, 25, 20, 20),
+    )
+    assert restored.passed
+    assert not replace(
+        restored,
+        final_raw=replace(raw, first_party_pp=(19, 30, 25, 25)),
+    ).passed
+
+
+def test_saffron_guard_resource_report_preserves_frontier_party_and_inventory() -> None:
+    party = TOWER_FINAL_PARTY
+    moves = (0x82, 0x46, 0x3A, 0x39)
+    pp = (15, 15, 10, 15)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_POKECENTER,
+        party_count=len(party),
+        party_species_ids=party,
+        first_party_level=44,
+        first_party_hp=130,
+        first_party_max_hp=130,
+        first_party_moves=moves,
+        first_party_pp=pp,
+    )
+    bag = ((int(ItemId.POKE_BALL), 8),)
+    report = SaffronGuardResourceReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_GUARD_RESOURCE_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        money_before=11_852,
+        money_after=11_852 - FRESH_WATER_PRICE,
+        vending_cursor=0,
+        fresh_water_before=0,
+        fresh_water_after_purchase=1,
+        fresh_water_after_guard=0,
+        guard_flag_before=0,
+        guard_flag_after_consumption=0,
+        guard_flag_after_dialogue=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        party_before=party,
+        party_after=party,
+        lead_level_before=44,
+        lead_moves_before=moves,
+        lead_pp_before=pp,
+        party_hp_before=(130, 53, 37),
+        party_hp_after=(130, 53, 37),
+        party_max_hp=(130, 53, 37),
+        party_status=(0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["objective_label_created"] is False
+    assert not replace(report, bag_after=(*bag, (int(ItemId.FRESH_WATER), 1))).passed
+    assert not replace(report, guard_flag_after_consumption=GUARD_DRINK_FLAG).passed
+
+
+def test_saffron_return_report_reuses_open_gate_without_resource_drift() -> None:
+    raw = _terminal()
+    bag = ((int(ItemId.POKE_BALL), 8), (int(ItemId.X_ACCURACY), 1))
+    party = tuple(raw.party_species_ids or ())
+    report = SaffronReturnReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_RETURN_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        guard_flag_before=GUARD_DRINK_FLAG,
+        guard_flag_after=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        money_before=23_285,
+        money_after=23_285,
+        party_before=party,
+        party_after=party,
+        lead_level_before=raw.first_party_level,
+        lead_moves_before=raw.first_party_moves,
+        lead_level_after=raw.first_party_level,
+        lead_moves_after=raw.first_party_moves,
+        party_hp=(130, 53, 37, 144, 75, 79),
+        party_max_hp=(130, 53, 37, 144, 75, 79),
+        party_status=(0,) * 6,
+        frames_executed=50_000,
+        actions_executed=500,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["guard_access_reused"] is True
+    assert not replace(report, guard_flag_before=0).passed
+    assert not replace(report, money_after=23_284).passed
+    assert not replace(report, bag_after=bag[:-1]).passed
+
+
+@pytest.mark.parametrize(
+    ("guard_flag", "selected"),
+    ((0, "access"), (GUARD_DRINK_FLAG, "return")),
+)
+def test_saffron_objective_dispatches_from_observed_guard_flag(
+    monkeypatch: pytest.MonkeyPatch,
+    guard_flag: int,
+    selected: str,
+) -> None:
+    calls: list[str] = []
+
+    class Emulator:
+        def read_u8(self, address: object) -> int:
+            return guard_flag
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return replace(_terminal(), party_species_ids=PARTY_AFTER)
+
+    def access(*args: object, **kwargs: object) -> str:
+        calls.append("access")
+        return "access"
+
+    def returned(*args: object, **kwargs: object) -> str:
+        calls.append("return")
+        return "return"
+
+    monkeypatch.setattr(saffron, "run_saffron_access_chapter", access)
+    monkeypatch.setattr(saffron, "run_saffron_return_chapter", returned)
+
+    assert saffron.run_saffron_objective_chapter(Emulator(), Reader(), object()) == selected  # type: ignore[arg-type]
+    assert calls == [selected]
+
+
+def test_saffron_objective_recruits_missing_jolteon_before_access(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    class Emulator:
+        def read_u8(self, address: object) -> int:
+            return 0
+
+    class Reader:
+        def read(self) -> RawGameState:
+            return replace(_terminal(), party_species_ids=PARTY_BEFORE)
+
+    class Part:
+        passed = True
+        actions_executed = 10
+        frames_executed = 20
+
+        def public_dict(self) -> dict[str, object]:
+            return {"status": "ok"}
+
+    def recruit(*args: object, **kwargs: object) -> Part:
+        calls.append("jolteon")
+        return Part()
+
+    def access(*args: object, **kwargs: object) -> Part:
+        calls.append("access")
+        return Part()
+
+    monkeypatch.setattr(saffron, "run_jolteon_resource_chapter", recruit)
+    monkeypatch.setattr(saffron, "run_saffron_access_chapter", access)
+
+    report = saffron.run_saffron_objective_chapter(Emulator(), Reader(), object())  # type: ignore[arg-type]
+
+    assert isinstance(report, saffron.SaffronResourceAccessReport)
+    assert report.passed
+    assert report.actions_executed == 20
+    assert report.frames_executed == 40
+    assert calls == ["jolteon", "access"]
+
+
+def test_jolteon_resource_report_adds_one_member_without_an_objective_claim() -> None:
+    party_after = (*TOWER_FINAL_PARTY, 0x68)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=4,
+        party_species_ids=party_after,
+    )
+    report = JolteonResourceReport(
+        records=tuple(SaffronCheckpoint(str(index), str(index), raw) for index in range(4)),
+        final_raw=raw,
+        money_before=10_000,
+        money_after=10_000 - THUNDER_STONE_PRICE,
+        party_before=TOWER_FINAL_PARTY,
+        party_after=party_after,
+        party_hp=(130, 52, 37, 72),
+        party_max_hp=(130, 52, 37, 72),
+        party_status=(0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["resource"] == "jolteon_party_member"
+    assert not replace(report, money_after=report.money_after + 1).passed
+    assert not replace(report, party_before=TOWER_FINAL_PARTY[:2]).passed
+    assert not replace(report, controller_released=False).passed
+
+
+def test_jolteon_resource_report_accepts_a_four_member_alternate_order_party() -> None:
+    party_before = (*TOWER_FINAL_PARTY, 0x84)
+    party_after = (*party_before, 0x68)
+    raw = replace(
+        _terminal(),
+        map_id=MapId.CELADON_POKECENTER,
+        player_x=3,
+        player_y=3,
+        party_count=5,
+        party_species_ids=party_after,
+    )
+    report = JolteonResourceReport(
+        records=tuple(SaffronCheckpoint(str(index), str(index), raw) for index in range(4)),
+        final_raw=raw,
+        money_before=10_000,
+        money_after=10_000 - THUNDER_STONE_PRICE,
+        party_before=party_before,
+        party_after=party_after,
+        party_hp=(130, 52, 37, 120, 72),
+        party_max_hp=(130, 52, 37, 120, 72),
+        party_status=(0, 0, 0, 0, 0),
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+
+
+def test_saffron_report_accepts_level_44_healed_lineage() -> None:
+    raw = replace(
+        _terminal(),
+        first_party_level=44,
+        first_party_hp=137,
+        first_party_max_hp=137,
+    )
+    bag = ((int(ItemId.TM21_MEGA_DRAIN), 1),)
+    report = SaffronChapterReport(
+        records=tuple(
+            SaffronCheckpoint(str(index), str(index), raw)
+            for index in range(SAFFRON_CHECKPOINT_COUNT)
+        ),
+        final_raw=raw,
+        money_before=32_247,
+        money_after_stone=32_247 - THUNDER_STONE_PRICE,
+        money_after_purchase=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
+        money_after=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
+        vending_cursor=0,
+        fresh_water_before=0,
+        fresh_water_after_purchase=1,
+        fresh_water_after_guard=0,
+        guard_flag_before=0,
+        guard_flag_after_consumption=0,
+        guard_flag_after_dialogue=GUARD_DRINK_FLAG,
+        bag_before=bag,
+        bag_after=bag,
+        party_before=PARTY_BEFORE,
+        party_after=PARTY_AFTER,
+        party_hp=(137, 47, 40, 120, 65),
+        party_max_hp=(137, 47, 40, 120, 65),
+        party_status=(0, 0, 0, 0, 0),
+        battle_free=True,
+        frames_executed=1,
+        actions_executed=1,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert not replace(report, final_raw=replace(raw, first_party_level=45)).passed
 
 
 @pytest.mark.parametrize(
@@ -106,9 +761,10 @@ def test_saffron_report_rejects_missing_evidence(field_name: str, value: object)
             for index in range(SAFFRON_CHECKPOINT_COUNT)
         ),
         final_raw=raw,
-        money_before=41_545,
-        money_after_purchase=41_345,
-        money_after=41_345,
+        money_before=32_247,
+        money_after_stone=32_247 - THUNDER_STONE_PRICE,
+        money_after_purchase=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
+        money_after=32_247 - THUNDER_STONE_PRICE - FRESH_WATER_PRICE,
         vending_cursor=0,
         fresh_water_before=0,
         fresh_water_after_purchase=1,
@@ -118,9 +774,11 @@ def test_saffron_report_rejects_missing_evidence(field_name: str, value: object)
         guard_flag_after_dialogue=GUARD_DRINK_FLAG,
         bag_before=bag,
         bag_after=bag,
-        party_hp=(130, 52, 37),
-        party_max_hp=(130, 52, 37),
-        party_status=(0, 0, 0),
+        party_before=PARTY_BEFORE,
+        party_after=PARTY_AFTER,
+        party_hp=(130, 47, 40, 120, 65),
+        party_max_hp=(130, 47, 40, 120, 65),
+        party_status=(0, 0, 0, 0, 0),
         battle_free=True,
         frames_executed=1,
         actions_executed=1,

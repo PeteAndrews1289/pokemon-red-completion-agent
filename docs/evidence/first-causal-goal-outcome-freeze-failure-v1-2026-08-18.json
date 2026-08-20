@@ -1,0 +1,64 @@
+{
+  "active_lane": "first-causal-goal-outcome-v1",
+  "claim_boundary": {
+    "supported": "The sole actual action-free freeze attempt returned the runner's sanitized failed-closed readiness-authentication envelope and produced no campaign plan. The exact acquisition lane is closed without retry or replacement.",
+    "unsupported": "The runner did not attest runtime effects or the specific historical cause. This receipt supports no root-availability diagnosis, causal train example, model fit, competence, authority, transfer, Red-completion, or living-Pokedex claim."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution": {
+    "campaign_plan_created": false,
+    "effects_attested_by_runner": false,
+    "failure_stage": "readiness_authentication",
+    "historical_failure_cause": "not_attested",
+    "process_running_after_return": false,
+    "retry_allowed": false,
+    "runner_status": "failed_closed"
+  },
+  "input_bindings": {
+    "context_plan_sha256": "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51",
+    "development_runner_sha256": "f4f461a7e812ad27126a3a925c9d6fe1294b0bfb81eda3812b4e9efee5ad1507",
+    "fit_result_receipt_sha256": "f1613b275403bdb9f3ef141f341392bd7ec888bb49313a33055eebf52a707ace",
+    "multiroot_runner_sha256": "336bf4855a236347cff12daacd3c23e469163793689057cb90b1c8eb863b8cc6",
+    "numpy_runtime_sha256": "5091e63c30caf85620de0b8c28b596f6b6290fa871c84527b9de4eacb9195751",
+    "prior_campaign_sha256": [
+      "e99075d98cd9f3cd390b290fa336c6fe0ecbeccc6b50a643208a89b12d254d14",
+      "452cff2afa25278900334b8c0e69583a0c511e943ef727593fed938653f995b9"
+    ],
+    "provided_expected_paired_runner_sha256": "522c2966b3709e2c2d6ae484140a13ca8de1f93e2dfb69d46f0f637af8223758",
+    "published_paired_runner_sha256": "ddbdc1f03fe07e00e35d8660719c98af34b4f46fa2267eecef21bc007927e3e3",
+    "runner_sha256": "c67880c266bc282bf0c373ecf7c614b4b2a5a42d40468f7930bc88624aa11ef0",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "skill_manifest_sha256": "9cbeba69af697cc2777ad7d64c634b179744d7943d9b3b1d05e72ca733ee687f",
+    "source_bundle_sha256": "a55a35d54e943d3e35dd43f0ffaafd77685ba9a11e569be575b98057be8a2b17"
+  },
+  "public_invocation_audit": {
+    "historical_cause_inference_allowed": false,
+    "manual_expected_paired_runner_binding_matched_published_bytes": false,
+    "purpose": "Record a public invocation inconsistency for future tooling without upgrading the runner's non-attested historical failure envelope."
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.red.first-causal-goal-outcome-freeze-failure-receipt.v1",
+  "source_verification": {
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 32171116652,
+    "source_commit": "61f9b44b7dadcbe8e70bcd641f8d532ed2c8337a",
+    "worktree_dirty_before_execution": false
+  },
+  "status": "sole_action_free_freeze_failed_closed_acquisition_lane_retired",
+  "title_role": "Red acquisition-lane readiness failure; not gameplay, training, evaluation, transfer, completion, or living-Pokedex evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0
+}

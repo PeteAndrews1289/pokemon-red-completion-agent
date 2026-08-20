@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_route_2_encounter_boundary",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990022 qualified the recovered front end and then stopped at an unexpected battle on Route 2 forest-gate step 25. The failure preceded scheduled battles and every learned battle or training decision. It is preserved as an authored traversal boundary, not reported as a model failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990022,
+    "initial_wait_frames": 124,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "9e89542e1e3bf17da8986aaeca9c1cb3985278593c82b67e5790d474c906e804"
+  },
+  "source": {
+    "git_commit": "3f116477d1ffad0d96981d8838bff34e064fb44e",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "29b88cfcb8e7145f930f7cafe33277c767d52642294b8da8d02da9b6e11d5bd8",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "PewterChapterError",
+    "message": "Unexpected battle interrupted Route 2 forest-gate route at step 25.",
+    "frames_executed": 79462,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "diagnosis": {
+    "category": "zero_incidental_encounter_assumption_on_route_2",
+    "finding": "The post-Pokedex teacher had generalized authenticated incidental wild handling only across Route 1. Its next grass corridor still rejected every battle before classifying wild versus trainer or preserving an exit receipt.",
+    "uncertainty": "The historical failure message did not publish battle type or opponent identity. The repair does not assume them: it admits only battle-state-one encounters on the exact Route 2 map and will still reject a trainer or map drift on replay.",
+    "model_boundary": "The objective model had selected its singleton first composite, but the chapter completed none. All learned battle, target, training-control, and trainee/venue counters remained zero."
+  },
+  "repair": {
+    "status": "implemented_and_qualified_rom_free_pending_fresh_perturbation",
+    "behavior": "The Route 1 traversal primitive now accepts an explicit expected map and route label while retaining directional acknowledgement, same-coordinate pre-step encounter handling, finite movement retries, at most sixteen RUN selections per encounter, post-exit stabilization, and exact party/level/HP/max-HP/PP/status/control proofs. Route 1 keeps its compatibility wrapper; only the 43-step Route 2 forest-gate corridor opts into the new map-bound contract.",
+    "route_2_bounds": {
+      "maximum_wild_flees": 4,
+      "maximum_step_attempts": 8,
+      "step_retry_wait_frames": 24,
+      "wild_exit_stabilization_frames": 120
+    },
+    "rom_free_gate": "Public-artifact and documentation checks, regenerated-registry check, Ruff, mypy across 128 source modules, and 2,181 tests passed; three integration tests were deselected and one expected failure remained expected.",
+    "next_gate": "Commit and push the qualified repair, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}

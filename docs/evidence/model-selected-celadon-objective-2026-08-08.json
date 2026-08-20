@@ -1,0 +1,52 @@
+{
+  "available_objectives": [
+    "clear_rocket_hideout",
+    "defeat_erika",
+    "reach_saffron"
+  ],
+  "claim": "From a real captured Celadon Pokecenter state, the historical objective model selected one of three legal objectives without receiving an expected route label.",
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "defeat_brock",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_vermilion",
+    "receive_pokedex"
+  ],
+  "decision": {
+    "confidence": 0.9970024147810569,
+    "expected_route_label_provided": false,
+    "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "selected_objective": "clear_rocket_hideout",
+    "teacher_fallbacks": 0
+  },
+  "limitations": [
+    "captured_state_diagnostic",
+    "no_skill_dispatched",
+    "no_action_executed",
+    "no_objective_completion",
+    "single_state",
+    "not_a_clean_start_evaluation"
+  ],
+  "private_state_sha256": "2f5adf158fced5dfddf9695c178abd75a272bc74befe6ae8f712db73d49f4d22",
+  "schema": "pokemon-model-selected-objective-diagnostic-v1",
+  "source_commit": "bfe03726943318de872b0effb00383a4e4af19e6",
+  "state": {
+    "checkpoint_count": 124,
+    "location": "celadon_pokecenter",
+    "map_id": 133,
+    "mode": "overworld",
+    "position": [
+      3,
+      3
+    ]
+  }
+}

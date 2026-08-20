@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v21",
+  "status": "failed",
+  "source_commit": "77e901569d7a75ba9d025266f8316d871ac29f5e",
+  "source_bundle_sha256": "5e144d011ff33d4bd95592940f01ee5f563e0e140f0dc2f551d69b6a63bf972b",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v21-validation-01",
+      "harness_seed": 1470001,
+      "battle_start_schedule_sha256": "ba40bab6a18078630bea9b76dd2a2d620ef1754886ce2c877aaf9a0b3da4a8df",
+      "status": "failed",
+      "qualified_checkpoints": 87,
+      "failure": "After the bounded Spearow capture, wild Diglett knocked out the active catcher during repeated throws and the legacy direct-capture loop treated the mandatory living-party selection as generic unknown battle-menu state.",
+      "private_log_sha256": "d92419bbabf1ff6dbfd46fc4ec065669614ed59aaba5065a06ca248c52cd2b6f"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The reusable wild-capture path already had explicit fainted-catcher recovery, but the older mandatory Diglett capture retained a separate direct-throw loop. Its generic menu navigator could not semantically handle a forced party-selection screen.",
+  "repair_direction": "Detect a zero-HP active catcher from the observation adapter, select the first observed living party member through the existing bounded forced-switch routine, verify the same Diglett identity and HP, and resume the remaining throw budget."
+}

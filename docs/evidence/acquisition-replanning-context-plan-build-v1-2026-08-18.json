@@ -1,0 +1,70 @@
+{
+  "active_lane": "fresh-red-acquisition-replanning-execution-qualification-v1",
+  "build": {
+    "completed_battles_per_development_dose": 4,
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "contexts": 81,
+    "excluded_used_acquisition_roots": 2,
+    "extended_unused_acquisition_roots": 4,
+    "output_plan_sha256": "09af29ba008ea24e16be75b64a8ff91e69ee4b32abc767bf01a90f937d45ff51",
+    "profile_lineage_manifest_sha256": "db660df20ffcadb8e1520f50861093dcc1cb7e1f8a24687fac44cf1350db6324",
+    "profile_set_sha256": "792a0b548f58f19937b54dd7c0aca795c2b8d4617647fb15f10fbf9846f16c02",
+    "source_profile_manifest_sha256": "adf671bfb8780fb6470ad3b15fd7632f8cd3eed06e33dc308384d3701e5012a6"
+  },
+  "claim_boundary": {
+    "supported": "Under one exact published source, the path-free builder summary records a mechanical transformation of the authenticated 81-context private plan: two previously used acquisition roots were excluded and exactly four eligible unused acquisition profiles gained the qualified source-local development binding.",
+    "unsupported": [
+      "campaign_freeze_or_trial_identity_creation",
+      "completion_or_living_pokedex_ability",
+      "cross_title_transfer",
+      "gameplay_or_model_training",
+      "menu_or_execution_preflight",
+      "model_prediction_or_verified_outcome",
+      "promotion_or_authority"
+    ]
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32141939995,
+    "source_commit": "343cadf921af2b82e79c352163c18d54b3d72d78"
+  },
+  "recorded_on": "2026-08-18",
+  "schema": "pokemon.red.acquisition-replanning-context-plan-build-receipt.v1",
+  "source_bindings": {
+    "builder_sha256": "918b6ea7aa0dff5fafe937cc2b0271a95316858c3ae3c03cc22e6b26301c08db",
+    "context_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "source_bundle_sha256": "d323ec89e92c34de160294e848aae08b5771c0d74701f9d189240dba4c693076",
+    "source_profile_manifest_sha256": "adf671bfb8780fb6470ad3b15fd7632f8cd3eed06e33dc308384d3701e5012a6"
+  },
+  "status": "private_context_plan_built_campaign_freeze_and_preflight_required",
+  "title_role": "Red private-plan mechanical transformation evidence, not gameplay, training, completion, authority, or transfer",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0,
+    "unseen_comparisons": 0,
+    "verified_outcomes": 0
+  }
+}

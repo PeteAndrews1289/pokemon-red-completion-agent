@@ -1,0 +1,134 @@
+{
+  "schema": "pokemon-party-development-v2-readiness-evidence-v2",
+  "date": "2026-08-16",
+  "status": "two_venue_priors_pp_preparation_ready_catalog_unfrozen",
+  "prior": {
+    "bound": true,
+    "v1_model_canonical_sha256": "9286f1b42fcbffb2741d52a11359df0281c50501fe66100e8c795b4ffa37e026",
+    "v2_initial_model_canonical_sha256": "583061b2b5e4579b246b75dddc896a842e65847696eaa43deb1000a58c156fa9",
+    "train_examples": 13709,
+    "validation_examples": 7030,
+    "validation_correct": 7023,
+    "shape_baseline_correct": 6725,
+    "independent_validation_lineages": 1,
+    "outcome_updates": 0
+  },
+  "checkpoint_inventory": {
+    "checkpoint_count": 81,
+    "partition_counts": {
+      "development": 27,
+      "train": 54
+    },
+    "unique_semantic_contexts": {
+      "development": 14,
+      "train": 30
+    },
+    "ready_multi_candidate_contexts": {
+      "development": 24,
+      "train": 48
+    },
+    "hp_bins": {
+      "development": [
+        "high",
+        "low",
+        "middle"
+      ],
+      "train": [
+        "high",
+        "low",
+        "middle"
+      ]
+    },
+    "pp_bins": {
+      "development": [
+        "high"
+      ],
+      "train": [
+        "high"
+      ]
+    },
+    "evolution_routes": {
+      "development": [
+        "level",
+        "none"
+      ],
+      "train": [
+        "level",
+        "none"
+      ]
+    },
+    "goal_hints": {
+      "development": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ],
+      "train": [
+        "balance",
+        "collection",
+        "evolution",
+        "role_coverage"
+      ]
+    }
+  },
+  "reservation": {
+    "reserved_roots": {
+      "development": 6,
+      "train": 8
+    },
+    "direct_roots_preflighted": 12,
+    "frozen_menus": 0
+  },
+  "venue_priors": {
+    "entries": 2,
+    "frozen": true,
+    "registry_sha256": "4379309d1e87eaa896254ac945897353ede418472ea011bc3c03675c9b4542eb"
+  },
+  "pp_preparation": {
+    "reserved_sources": {
+      "development": 1,
+      "train": 1
+    },
+    "materialized_sources": {
+      "development": 0,
+      "train": 0
+    },
+    "contract_qualified": true,
+    "controller_authorization_granted": false,
+    "ordinary_battle_consumption": true,
+    "healing_allowed": false,
+    "party_switching_allowed": false,
+    "memory_edit_allowed": false,
+    "teacher_or_model_allowed": false,
+    "maximum_completed_battles_per_source": 27,
+    "maximum_encounter_steps_per_source": 10000,
+    "maximum_controller_actions_per_source": 250000,
+    "maximum_frames_per_source": 5000000
+  },
+  "first_fit_gate": {
+    "minimum_train_outcomes": 8,
+    "minimum_development_outcomes": 6,
+    "collected_train_outcomes": 0,
+    "collected_development_outcomes": 0,
+    "prospective_catalog_frozen": false,
+    "candidate_adapter_ready": true,
+    "venue_prior_registry_frozen": true,
+    "model_fit": false,
+    "authority_promoted": false
+  },
+  "protected_access": {
+    "controller_actions": 0,
+    "teacher_queries": 0,
+    "sealed_red_cases_opened": 0,
+    "crystal_cases_opened": 0,
+    "full_game_replays": 0
+  },
+  "claim_boundary": {
+    "historical_prior_only": true,
+    "completion_aware_training_started": false,
+    "pp_diversity_gate_satisfied": false,
+    "preparation_execution_authorized": false,
+    "next": "Independently review both frozen read-only plans, obtain one explicit authorization per source, materialize each once, then freeze and review the 8+6 menu catalog before collecting outcomes."
+  }
+}

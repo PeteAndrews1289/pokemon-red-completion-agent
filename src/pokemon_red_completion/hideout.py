@@ -7,7 +7,26 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming, run_adaptive_trainer_battle
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import (
+    ProtectedRecoveryError,
+    first_living_reserve,
+    protected_lead_recovery,
+)
+from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
+    BattleRuntimeError,
+    BattleRuntimeTiming,
+    RequiredMovePolicy,
+    run_adaptive_trainer_battle,
+)
 from pokemon_red_completion.celadon import (
     PROTECTED_PARTY,
     _bag,
@@ -16,8 +35,19 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
-from pokemon_red_completion.lavender import _use_super_potion
+from pokemon_red_completion.economy import (
+    HIDEOUT_SUPER_POTION_RESERVE,
+    LAVENDER_SUPER_POTION_RESERVE,
+)
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.lavender import (
+    DEFAULT_LAVENDER_TIMING,
+    _use_bag_item,
+    _use_battle_super_potion,
+    _use_super_potion,
+)
 from pokemon_red_completion.observation import (
+    BLASTOISE_SPECIES_ID,
     EventFlag,
     ItemId,
     MapId,
@@ -25,13 +55,21 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
 
 HIDEOUT_CHECKPOINT_COUNT = 19
+HIDEOUT_TRAINER_REWARD_TOTAL = 5_481
 BITE = 0x2C
 BUBBLEBEAM = 0x3D
 DIG = 0x5B
 ROCKET = (0xE6, 0x1E)
 GIOVANNI = (0xE5, 0x1D)
+PROTECTED_PARTIES = frozenset(
+    {
+        PROTECTED_PARTY,
+        (BLASTOISE_SPECIES_ID, *PROTECTED_PARTY[1:]),
+    }
+)
 OPTIONAL_EVENTS = (
     EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_0,
     EventFlag.BEAT_ROCKET_HIDEOUT_1_TRAINER_1,
@@ -81,10 +119,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class HideoutChapterError(RuntimeError):
@@ -153,9 +187,10 @@ class HideoutChapterReport:
     silph_scope_carried: bool
     super_potions_used: int
     super_potions_remaining: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
+    money_before: int
     money_remaining: int
     frames_executed: int
     actions_executed: int
@@ -174,14 +209,16 @@ class HideoutChapterReport:
             and not self.entered_hideout_bug_event
             and self.lift_key_carried
             and self.silph_scope_carried
-            and self.super_potions_used == 2
-            and self.super_potions_remaining == 2
+            and self.super_potions_used + self.super_potions_remaining
+            == LAVENDER_SUPER_POTION_RESERVE
+            and self.super_potions_remaining >= HIDEOUT_SUPER_POTION_RESERVE
             and self.final_raw.map_id == MapId.CELADON_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == PROTECTED_PARTY
+            and self.final_raw.party_species_ids in PROTECTED_PARTIES
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
-            and self.money_remaining == 20_112
+            and all(status == 0 for status in self.party_status)
+            and self.money_before >= 0
+            and self.money_remaining == self.money_before + HIDEOUT_TRAINER_REWARD_TOTAL
             and self.controller_released
         )
 
@@ -211,6 +248,7 @@ class HideoutChapterReport:
                 "silph_scope_carried": self.silph_scope_carried,
                 "super_potions_used": self.super_potions_used,
                 "super_potions_remaining": self.super_potions_remaining,
+                "money_before": self.money_before,
                 "money_remaining": self.money_remaining,
             },
             "party": {
@@ -223,17 +261,6 @@ class HideoutChapterReport:
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
         }
-
-
-class _CountingExecutor:
-    def __init__(self, executor: ChapterExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> object:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
 
 
 @dataclass(slots=True)
@@ -251,18 +278,19 @@ def run_hideout_chapter(
     progress: ProgressSink | None = None,
 ) -> HideoutChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     run = _RunState([])
     records: list[HideoutCheckpoint] = []
     trainers: list[HideoutTrainerEvidence] = []
     start = reader.read()
     _require(start, MapId.CELADON_POKECENTER, (3, 3), "Celadon boundary")
     if (
-        _bag(emulator).get(ItemId.SUPER_POTION, 0) != 4
-        or _money(emulator) != 14_631
+        _bag(emulator).get(ItemId.SUPER_POTION, 0) != LAVENDER_SUPER_POTION_RESERVE
+        or _money(emulator) < 0
         or _optional(emulator) != (False,) * len(OPTIONAL_EVENTS)
     ):
         raise HideoutChapterError("Hideout starting resources/events are not pristine.")
+    money_before = _money(emulator)
     _checkpoint(records, progress, emulator, start, "celadon_ready", "Verified Celadon boundary")
 
     _move(actions, reader, emulator, run, CENTER_EXIT, timing, "Center exit")
@@ -276,7 +304,19 @@ def run_hideout_chapter(
     _move(actions, reader, emulator, run, GAME_CORNER_TO_GUARD, timing, "poster guard")
     _face(actions, "up", timing)
     trainers.append(
-        _fight(actions, reader, emulator, timing, "Game Corner guard", 7, None, BITE, 1)
+        _fight(
+            actions,
+            reader,
+            emulator,
+            run,
+            timing,
+            "Game Corner guard",
+            7,
+            None,
+            BITE,
+            1,
+            RedBattlePlanId.HIDEOUT_GAME_CORNER_GUARD,
+        )
     )
     _checkpoint(
         records, progress, emulator, reader.read(), "guard_defeated", "Defeated poster guard"
@@ -293,7 +333,14 @@ def run_hideout_chapter(
     _wait(actions, timing.transition_frames)
     _move(actions, reader, emulator, run, B2_TO_B3, timing, "B3 stairs")
     _wait(actions, timing.transition_frames)
-    _checkpoint(records, progress, emulator, reader.read(), "b3_reached", "Bypassed B1/B2 trainers")
+    _checkpoint(
+        records,
+        progress,
+        emulator,
+        reader.read(),
+        "b3_reached",
+        "Bypassed B1 and B2 trainers",
+    )
 
     _spinner(actions, B3_TO_B4, timing)
     _require(reader.read(), MapId.ROCKET_HIDEOUT_B4F, (19, 10), "B4 key wing")
@@ -308,12 +355,14 @@ def run_hideout_chapter(
             actions,
             reader,
             emulator,
+            run,
             timing,
             "Lift Key Rocket",
             18,
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_2,
             BITE,
             1,
+            RedBattlePlanId.HIDEOUT_LIFT_KEY_ROCKET,
         )
     )
     _face(actions, "up", timing)
@@ -325,7 +374,8 @@ def run_hideout_chapter(
     _checkpoint(records, progress, emulator, reader.read(), "lift_key", "Obtained Lift Key")
 
     _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
-    _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
+    if _lead_needs_recovery(emulator):
+        _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
     _checkpoint(
         records, progress, emulator, reader.read(), "recovered", "Recovered before boss wing"
     )
@@ -357,12 +407,14 @@ def run_hideout_chapter(
             actions,
             reader,
             emulator,
+            run,
             timing,
             "B4 door guard 2",
             17,
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_1,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_B4_DOOR_GUARD_2,
         )
     )
     _checkpoint(records, progress, emulator, reader.read(), "guard_2", "Defeated second door guard")
@@ -374,12 +426,14 @@ def run_hideout_chapter(
             actions,
             reader,
             emulator,
+            run,
             timing,
             "B4 door guard 1",
             16,
             EventFlag.BEAT_ROCKET_HIDEOUT_4_TRAINER_0,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_B4_DOOR_GUARD_1,
         )
     )
     for _ in range(timing.dialogue_pulses):
@@ -390,7 +444,8 @@ def run_hideout_chapter(
         raise HideoutChapterError("Both guards did not unlock the Giovanni door.")
     _checkpoint(records, progress, emulator, reader.read(), "boss_door", "Unlocked Giovanni door")
 
-    if _party_hp(emulator)[0] < 75:
+    _cure_giovanni_poison_if_present(actions, reader, emulator, timing)
+    if _lead_needs_recovery(emulator):
         _use_super_potion(actions, reader, emulator, run, timing, 0)  # type: ignore[arg-type]
     _move(actions, reader, emulator, run, DOOR_TO_GIOVANNI, timing, "Giovanni")
     _face(actions, "right", timing)
@@ -399,12 +454,14 @@ def run_hideout_chapter(
             actions,
             reader,
             emulator,
+            run,
             timing,
             "Rocket Hideout Giovanni",
             1,
             EventFlag.BEAT_ROCKET_HIDEOUT_GIOVANNI,
             BUBBLEBEAM,
             3,
+            RedBattlePlanId.HIDEOUT_GIOVANNI,
             giovanni=True,
         )
     )
@@ -447,6 +504,7 @@ def run_hideout_chapter(
         party_hp=_party_hp(emulator),
         party_max_hp=_party_max_hp(emulator),
         party_status=_party_status(emulator),
+        money_before=money_before,
         money_remaining=_money(emulator),
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
@@ -458,15 +516,17 @@ def run_hideout_chapter(
 
 
 def _fight(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
+    run: _RunState,
     timing: HideoutTiming,
     label: str,
     trainer_set: int,
     event: EventFlag | None,
     move_id: int,
     move_slot: int,
+    battle_plan_id: str,
     *,
     giovanni: bool = False,
 ) -> HideoutTrainerEvidence:
@@ -489,17 +549,42 @@ def _fight(
     if identity != (opponent, trainer_class, opponent, trainer_set):
         raise HideoutChapterError(f"{label} identity mismatch: {identity!r}.")
     before_pp = battle.first_party_pp
-    final = run_adaptive_trainer_battle(
-        reader,
-        actions,
-        lambda _: move_slot,
-        expected_map=int(battle.map_id or 0),
-        required_move_id=move_id,
-        timing=HIDEOUT_BATTLE_TIMING,
-        label=label,
-    )
-    if before_pp is None or final.first_party_pp is None:
+    before_moves = battle.first_party_moves
+    if giovanni:
+        final = _run_hideout_giovanni_with_recovery(
+            reader,
+            actions,
+            emulator,
+            run,
+            label=label,
+            map_id=int(battle.map_id or 0),
+            move_slot=move_slot,
+            battle_plan_id=battle_plan_id,
+        )
+    else:
+        final = run_adaptive_trainer_battle(
+            reader,
+            actions,
+            lambda _: move_slot,
+            expected_map=int(battle.map_id or 0),
+            intent=BattleIntent(
+                "clear_rocket_hideout",
+                battle_plan_id=battle_plan_id,
+                required_move_policy=RequiredMovePolicy.EXACT_REQUIRED,
+                required_move_ref=pokemon_red_move_ref(move_id),
+            ),
+            required_move_id=move_id,
+            timing=HIDEOUT_BATTLE_TIMING,
+            label=label,
+            unknown_cancel_interval=2,
+        )
+    if before_pp is None or final.first_party_pp is None or before_moves is None:
         raise HideoutChapterError(f"{label} lacks PP evidence.")
+    if final.first_party_moves != before_moves:
+        raise HideoutChapterError(
+            f"{label} changed the protected move set: {before_moves!r} -> "
+            f"{final.first_party_moves!r}."
+        )
     spent = (before_pp[move_slot - 1] & 0x3F) - (final.first_party_pp[move_slot - 1] & 0x3F)
     if spent <= 0:
         raise HideoutChapterError(f"{label} did not spend required-move PP.")
@@ -521,8 +606,128 @@ def _fight(
     )
 
 
+class _PauseForGiovanniSuperPotion(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
+def _lead_needs_recovery(emulator: EmulatorState) -> bool:
+    """Return whether the lead can validly receive an HP recovery item."""
+
+    return _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
+
+
+def _run_hideout_giovanni_with_recovery(
+    reader: PokemonRedStateReader,
+    actions: CountingExecutor,
+    emulator: EmulatorState,
+    run: _RunState,
+    *,
+    label: str,
+    map_id: int,
+    move_slot: int,
+    battle_plan_id: str,
+) -> RawGameState:
+    """Use ranked legal attacks and bounded, protected recovery against Giovanni."""
+
+    starting_reserve = _bag(emulator).get(ItemId.SUPER_POTION, 0)
+    must_attack_after_recovery = False
+
+    def guarded_policy(raw: RawGameState) -> int:
+        nonlocal must_attack_after_recovery
+        if (
+            not must_attack_after_recovery
+            and (raw.first_party_hp or 0) <= 65
+            and _bag(emulator).get(ItemId.SUPER_POTION, 0) > 0
+        ):
+            raise _PauseForGiovanniSuperPotion
+        must_attack_after_recovery = False
+        moves = raw.first_party_moves
+        pp = raw.first_party_pp
+        if moves is None or pp is None:
+            raise HideoutChapterError("Giovanni recovery lacks move and PP evidence.")
+        for candidate in dict.fromkeys((move_slot, 3, 1, 4)):
+            index = candidate - 1
+            if (
+                len(moves) > index
+                and len(pp) > index
+                and moves[index] != 0
+                and pp[index] & 0x3F
+                and raw.player_disabled_move_slot != candidate
+            ):
+                return candidate
+        raise HideoutChapterError("Giovanni recovery lacks a usable ranked attack.")
+
+    intent = BattleIntent(
+        "clear_rocket_hideout",
+        battle_plan_id=battle_plan_id,
+        required_move_policy=RequiredMovePolicy.ANY_USABLE,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset({BattleRecoveryCapability.RESTORE_HP}),
+    )
+    recoveries = 0
+    while True:
+        try:
+            return run_adaptive_trainer_battle(
+                reader,
+                actions,
+                guarded_policy,
+                expected_map=map_id,
+                intent=intent,
+                timing=HIDEOUT_BATTLE_TIMING,
+                label=label,
+                unknown_cancel_interval=2,
+            )
+        except BattleRuntimeError as error:
+            if not recovery_request_matches(
+                error.__cause__, _PauseForGiovanniSuperPotion
+            ):
+                failed = reader.read()
+                raise HideoutChapterError(
+                    f"{error} Recovery evidence: starting_reserve={starting_reserve}, "
+                    f"remaining={_bag(emulator).get(ItemId.SUPER_POTION, 0)}, "
+                    f"hp={failed.first_party_hp}/{failed.first_party_max_hp}, "
+                    f"recoveries={recoveries}."
+                ) from error
+        helper_index = first_living_reserve(_party_hp(emulator))
+        if helper_index is not None:
+            try:
+                potion_spent = protected_lead_recovery(
+                    actions,
+                    reader,
+                    emulator,
+                    helper_index,
+                    heal_lead=True,
+                    preserve_reserve=True,
+                    healing_item=ItemId.SUPER_POTION,
+                    wait_frames=DEFAULT_HIDEOUT_TIMING.wait_frames,
+                )
+            except ProtectedRecoveryError as error:
+                raise HideoutChapterError(
+                    f"Giovanni protected recovery failed with party slot {helper_index}."
+                ) from error
+            run.potions_used += int(potion_spent)
+            recoveries += int(potion_spent)
+            must_attack_after_recovery = potion_spent
+            if recoveries > starting_reserve:
+                raise HideoutChapterError("Giovanni exceeded the bounded recovery reserve.")
+            continue
+
+        _use_battle_super_potion(
+            reader,
+            actions,
+            emulator,
+            run,  # type: ignore[arg-type]
+            DEFAULT_LAVENDER_TIMING,
+            label,
+        )
+        must_attack_after_recovery = True
+        recoveries += 1
+        if recoveries > starting_reserve:
+            raise HideoutChapterError("Giovanni exceeded the bounded recovery reserve.")
+
+
 def _move(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -542,13 +747,27 @@ def _move(
                 break
         else:
             raise HideoutChapterError(f"{label} blocked at step {step}: {direction}.")
-        if state.party_species_ids != PROTECTED_PARTY or (state.first_party_hp or 0) <= 0:
-            raise HideoutChapterError(f"{label} changed the protected party.")
+        observed_party_hp = _party_hp(emulator)
+        if not _protected_party_can_continue(state, observed_party_hp):
+            raise HideoutChapterError(
+                f"{label} changed the protected party: "
+                f"species={state.party_species_ids!r}, hp={observed_party_hp!r}."
+            )
     return state
 
 
+def _protected_party_can_continue(
+    raw: RawGameState,
+    observed_party_hp: tuple[int, ...] | None = None,
+) -> bool:
+    """Keep navigating when a reserve is alive even if the field lead fainted."""
+
+    living_hp = observed_party_hp or raw.party_hp or ((raw.first_party_hp or 0),)
+    return raw.party_species_ids in PROTECTED_PARTIES and any(hp > 0 for hp in living_hp)
+
+
 def _spinner(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     directions: Iterable[str],
     timing: HideoutTiming,
 ) -> None:
@@ -558,7 +777,7 @@ def _spinner(
 
 
 def _field_dig(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -589,7 +808,7 @@ def _field_dig(
 
 
 def _heal_center(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     run: _RunState,
@@ -603,7 +822,7 @@ def _heal_center(
     for _ in range(timing.dialogue_pulses):
         if (
             _party_hp(emulator) == _party_max_hp(emulator)
-            and _party_status(emulator) == (0, 0, 0)
+            and all(status == 0 for status in _party_status(emulator))
             and reader.read_input_readiness().ready
         ):
             return
@@ -611,8 +830,32 @@ def _heal_center(
     raise HideoutChapterError("Celadon Center did not heal the complete party.")
 
 
+def _cure_giovanni_poison_if_present(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: HideoutTiming,
+) -> None:
+    """Spend the carried conditional Antidote only when live poison evidence requires it."""
+
+    status = _party_status(emulator)[0]
+    quantity = _bag(emulator).get(ItemId.ANTIDOTE, 0)
+    if status == 0:
+        return
+    if status != 8 or quantity < 1:
+        raise HideoutChapterError(
+            f"Giovanni recovery lacks its poison reserve: status={status}, quantity={quantity}."
+        )
+    _use_bag_item(actions, reader, emulator, timing, ItemId.ANTIDOTE)  # type: ignore[arg-type]
+    if (
+        _party_status(emulator)[0] != 0
+        or _bag(emulator).get(ItemId.ANTIDOTE, 0) != quantity - 1
+    ):
+        raise HideoutChapterError("Giovanni Antidote did not prove its exact status cure.")
+
+
 def _interact_until(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -628,7 +871,7 @@ def _interact_until(
 
 
 def _interact_until_item(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     timing: HideoutTiming,
@@ -644,7 +887,7 @@ def _interact_until_item(
 
 
 def _select_cursor(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     emulator: EmulatorState,
     target: int,
     timing: HideoutTiming,
@@ -662,7 +905,7 @@ def _select_cursor(
     raise HideoutChapterError(f"Menu cursor could not select {target}.")
 
 
-def _face(actions: _CountingExecutor, direction: str, timing: HideoutTiming) -> None:
+def _face(actions: CountingExecutor, direction: str, timing: HideoutTiming) -> None:
     _pulse(actions, MacroActionKind.MOVE, direction, 120)
 
 
@@ -702,7 +945,7 @@ def _require(
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate
         or raw.battle_state != 0
-        or raw.party_species_ids != PROTECTED_PARTY
+        or raw.party_species_ids not in PROTECTED_PARTIES
     ):
         raise HideoutChapterError(
             f"{label} missed gate: map={raw.map_id!r}, "
@@ -711,7 +954,7 @@ def _require(
 
 
 def _pulse(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     kind: MacroActionKind,
     value: str | int | None = None,
     frames: int = 180,
@@ -720,5 +963,5 @@ def _pulse(
     _wait(actions, frames)
 
 
-def _wait(actions: _CountingExecutor, frames: int) -> None:
+def _wait(actions: CountingExecutor, frames: int) -> None:
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))

@@ -1,0 +1,93 @@
+{
+  "claim_boundary": {
+    "authenticated_live_contexts_total": 2,
+    "counted_training_contexts": 0,
+    "counted_validation_contexts": 0,
+    "promotion_eligible": false,
+    "test_scenarios_opened": 0
+  },
+  "episode": {
+    "assignment_id": "b1bcea8beb3be448ee1c7298aff1b38386d868f56fc1956ee72dab66577f00a9",
+    "dataset": {
+      "candidate_count": 3,
+      "censored_examples": 0,
+      "movement_labels": 0,
+      "partition": "unassigned",
+      "strategic_contexts": 1,
+      "teacher_choice_examples": 1
+    },
+    "episode_id": "red-scen-reh-b1bcea8beb3be448ee1c7298aff1b38386d868f56fc1956ee72dab66577f00a9",
+    "execution": {
+      "acknowledged_steps": 174,
+      "interruptions": {
+        "trainer_engagement": 1
+      },
+      "movement_requests": 174,
+      "replans": 0,
+      "selected_candidate_index": 1,
+      "selected_objective": "rescue_fuji",
+      "status": "succeeded",
+      "wait_actions": 14
+    },
+    "manifest": {
+      "bytes": 758445,
+      "records": 517,
+      "sha256": "925592867d0cbd1c07a22872852ebcd77122245dde3d42a6a5f24aae65d3ee10",
+      "stream_records": {
+        "decisions": 1,
+        "episode": 1,
+        "events": 2,
+        "executions": 302,
+        "snapshots": 211
+      }
+    }
+  },
+  "preflight": {
+    "all_candidates_available": true,
+    "candidate_count": 3,
+    "candidates_in_policy_order": [
+      {
+        "field_actions": 1,
+        "map_transitions": 2,
+        "objective_id": "defeat_erika",
+        "route_cost": 104,
+        "route_steps": 100,
+        "staged_field_action": "cut:down"
+      },
+      {
+        "field_actions": 0,
+        "map_transitions": 8,
+        "objective_id": "rescue_fuji",
+        "route_cost": 178,
+        "route_steps": 174
+      },
+      {
+        "field_actions": 0,
+        "map_transitions": 3,
+        "objective_id": "reach_saffron",
+        "route_cost": 33,
+        "route_steps": 32
+      }
+    ],
+    "cut_route_executed": false,
+    "cut_route_role": "unselected_candidate_preflight",
+    "private_episode_existed_before_execution": false,
+    "status": "ready"
+  },
+  "registry": {
+    "registry_sha256": "c8c1899204ff5a351b0f7015bd3ff489508789a17b78cad0b55a5c9529c885f7",
+    "scenario_id": "red-strategic-scenario-v2-007-validation",
+    "scenario_sha256": "1291ce7e85cfaaa768acbf9b74d060cd875d3330a5b60bc333fc42b0d4336af7",
+    "source_partition": "validation"
+  },
+  "recorded_on": "2026-08-11",
+  "schema": "strategic-scenario-rehearsal-qualification-v1",
+  "source": {
+    "ci_run_id": 31549887418,
+    "ci_status": "success",
+    "git_commit": "926587ea160671cc40c946abb518ac9465340e6f",
+    "source_bundle_sha256": "0dd25d28c83d987e4cef88a4665d34ee334bdb2595109f136e3e6c01ec1dd273",
+    "teacher_execution_sha256": "12b2706c4fea5b102d6d5953a64e174b6824f34a49c338f8cd95d31c07c72135"
+  },
+  "status": "qualified_uncounted_rehearsal"
+}

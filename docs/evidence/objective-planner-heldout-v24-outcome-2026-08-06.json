@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v24",
+  "status": "failed",
+  "source_commit": "7d9125ae54271f16bd9f75b573633bb1d6bd0fe9",
+  "source_bundle_sha256": "03b70dc448ad2a6e9d03bf82c82a0c81ddc02ac3b7322749b909dc6b5fc1f8db",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v24-validation-01",
+      "harness_seed": 1530001,
+      "battle_start_schedule_sha256": "5d92803b73e7e18882f464b70590c0b0160de1b2644a1aff979308800b19cf77",
+      "status": "failed",
+      "qualified_checkpoints": 40,
+      "failure": "A legal early battle lineage left the single workhorse too weak after the first Nugget Bridge trainer, and the route postponed its free Center recovery until after the second trainer.",
+      "private_log_sha256": "76e8fa10f10bd99c3dc0f288033d893b8b305568e63302cdada6c1789f053e90"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The bridge route already performed repeated free Center recoveries later in the five-trainer sequence but retained an unnecessary two-battle opening segment. Held-out timing proved the first battle can legally consume the entire safe HP margin.",
+  "repair_direction": "Return to the Cerulean Center after the first required bridge trainer, replay the verified prefix, and preserve all item reserves. Retire the unopened v24 remainder and preregister fresh validation and sealed cohorts."
+}

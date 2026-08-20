@@ -1,0 +1,132 @@
+{
+    "active_lane": "fresh-goal-manager-field-composition-execution-qualification-v2",
+    "admission": {
+        "initial_available_goal_minimum": 3,
+        "initial_menu_must_include_exact_field_contract": [
+            "acquire_species",
+            "explore",
+            "restore_team"
+        ],
+        "model_guided_root_search": false,
+        "prediction_before_root_freeze": false,
+        "prior_goal_manager_contexts_excluded": 81,
+        "prior_root_lineages_excluded": true,
+        "root_partition": "fresh_nonsealed_red_development",
+        "sealed_capture_allowed": false,
+        "selection_basis": "title-neutral semantic admission only"
+    },
+    "authority": {
+        "confidence_floor": 0.8,
+        "goal_selection": "frozen_promoted_red_goal_manager_only",
+        "low_level_execution": "existing_independently_verified_skills_only",
+        "model_canonical_sha256": "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d",
+        "party_development_authority": false,
+        "teacher_fallback_allowed": false,
+        "teacher_queries_allowed": false
+    },
+    "bounds": {
+        "controller_input_consumes_exact_root": true,
+        "decisions": 3,
+        "maximum_actions_per_decision": 6000,
+        "maximum_episode_actions": 18000,
+        "maximum_episode_frames": 1800000,
+        "maximum_frames_per_decision": 600000,
+        "retry_same_root_after_controller_input": false,
+        "stop_on_first_failed_decision": true
+    },
+    "counter_treatment_before_execution": {
+        "authority_promotions_added": 0,
+        "composition_episodes_added": 0,
+        "model_fits_added": 0,
+        "outcome_questions_added": 0,
+        "transfer_results_added": 0,
+        "unseen_comparisons_added": 0
+    },
+    "episode_loop": [
+        "observe title-neutral semantic state and living-collection ledger",
+        "enumerate the complete masked goal menu and require at least two executable choices",
+        "select one unused field-contract goal with the frozen learned goal manager at confidence at least 0.80",
+        "durably record the decision before controller input",
+        "execute only the selected existing bounded skill under hard in-flight action and frame limits",
+        "independently verify and durably pair exactly one outcome",
+        "reobserve state and rebuild the next complete menu"
+    ],
+    "episode_pass_boundary": "A pass is one fresh Red hierarchical composition episode only. It grants no new authority and permits only a separately frozen design for the already named matched open Crystal development comparison; it does not authorize that comparison.",
+    "execution_prerequisites": {
+        "authenticated_exact_model_loader": true,
+        "authenticated_exact_python_and_pyboy_runtime": true,
+        "authenticated_existing_skill_bindings": true,
+        "canonical_collection_ledgers": true,
+        "durable_composition_terminal_before_result_claim": true,
+        "fail_before_action_when_decision_write_is_not_durable": true,
+        "fixed_account_root_consumption_ledger": true,
+        "hard_action_and_frame_limiters": true,
+        "independent_action_and_frame_accounting": true,
+        "protected_source_access_attestation": true,
+        "root_safe_runner_required": true
+    },
+    "implementation_status": "v2_contract_frozen_runner_under_review_no_root_access_no_execution",
+    "pass_rule": {
+        "all_outcomes_independently_verified_success": true,
+        "available_goal_minimum_each_decision": 2,
+        "available_menu_changes_minimum": 1,
+        "collection_never_regresses": true,
+        "completion_contract_digest_constant": true,
+        "decisions_and_outcomes_durably_paired": 3,
+        "fixed_dispatches": 0,
+        "minimum_model_confidence": 0.8,
+        "policy_context_changes_between_decisions": 2,
+        "remaining_required_specimen_digest": "dynamic_only_after_verified_acquisition_or_evolution",
+        "required_retained_specimens_acquired_minimum": 1,
+        "selected_goal_kinds_exact": [
+            "acquire_species",
+            "explore",
+            "restore_team"
+        ],
+        "specimen_ledger_digest_before_and_after_required": true,
+        "teacher_fallbacks": 0,
+        "teacher_queries": 0,
+        "undeclared_living_specimens_lost": 0
+    },
+    "preflight_pass_boundary": "A preflight pass establishes only that one exact published runner and action-free admitted root identity satisfy the engineering boundary. It freezes an unclaimed identity for separate authorization and is not gameplay, an episode result, learned progress, authority, or transfer evidence.",
+    "prohibited": [
+        "bespoke_route_for_selected_root",
+        "composite_travel_skill",
+        "crystal_execution",
+        "development_outcome_reuse",
+        "expected_goal_or_route_input",
+        "full_game_replay",
+        "model_adaptation",
+        "model_fit",
+        "new_party_mechanic",
+        "new_skill_or_profile_for_selected_root",
+        "sealed_red_evaluation",
+        "teacher_choice_or_fallback"
+    ],
+    "recorded_on": "2026-08-17",
+    "replacement_rationale": {
+        "review_consensus": "Use only already co-located and independently verified field skills; do not create a route or composite skill to rescue V1.",
+        "superseded_design": "fresh-goal-manager-composition-design-v1",
+        "v1_failure_receipt": "docs/evidence/fresh-goal-manager-composition-execution-qualification-v1-static-failure-2026-08-17.json"
+    },
+    "root_admission_boundary": "Action-free admission can certify only freshness, nonsealed Red identity, initial state integrity, exact source and model identity, and the initial field-contract menu. Later menus, model confidence, three distinct selections, acquisition, and replanning remain execution-time falsifiers.",
+    "schema": "pokemon.red.fresh-goal-manager-composition-design.v2",
+    "stop_rule": "Fail and durably close the exact root on low confidence, a singleton menu, fixed dispatch, binding or verifier failure, missing durable join, repeated or out-of-contract goal selection, absent required-specimen acquisition, collection regression or undeclared specimen loss, unchanged policy context, no menu change, bound exhaustion, or protected access. Do not retry or patch that root into compliance.",
+    "title_role": "Red curriculum composition; not a transfer, promotion, sealed, or completion test",
+    "tracked_private_identities": 0,
+    "tracked_private_paths": 0,
+    "zero_effects_before_preflight": {
+        "composition_episodes": 0,
+        "controller_actions": 0,
+        "crystal_accesses": 0,
+        "emulator_frames": 0,
+        "full_replays": 0,
+        "game_executions": 0,
+        "goal_manager_decisions": 0,
+        "model_fits": 0,
+        "model_predictions": 0,
+        "model_updates": 0,
+        "sealed_red_accesses": 0,
+        "teacher_queries": 0
+    }
+}

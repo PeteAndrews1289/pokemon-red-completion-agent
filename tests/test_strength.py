@@ -12,6 +12,12 @@ from pokemon_red_completion.strength import (
     EXPECTED_MOVES_AFTER,
     EXPECTED_MOVES_BEFORE,
     EXPECTED_PP_AFTER,
+    NATURAL_MOVES_AFTER,
+    NATURAL_MOVES_BEFORE,
+    NATURAL_PP_AFTER,
+    PRE_SURF_MOVES_AFTER,
+    PRE_SURF_MOVES_BEFORE,
+    PRE_SURF_PP_AFTER,
     STRENGTH_CHECKPOINT_COUNT,
     StrengthChapterReport,
     StrengthCheckpoint,
@@ -49,8 +55,8 @@ def _report() -> StrengthChapterReport:
         final_raw=raw,
         initial_bag=initial_bag,
         final_bag=final_bag,
-        initial_money=37_489,
-        final_money=37_489,
+        initial_money=28_191,
+        final_money=28_191,
         gave_gold_teeth=True,
         got_hm04=True,
         gold_teeth_removed=True,
@@ -58,8 +64,8 @@ def _report() -> StrengthChapterReport:
         moves_before=EXPECTED_MOVES_BEFORE,
         moves_after=EXPECTED_MOVES_AFTER,
         pp_after=EXPECTED_PP_AFTER,
-        party_hp=(124, 52, 37),
-        party_max_hp=(124, 52, 37),
+        party_hp=(124, 47, 40),
+        party_max_hp=(124, 47, 40),
         party_status=(0, 0, 0),
         frames_executed=93_936,
         actions_executed=726,
@@ -94,10 +100,51 @@ def test_strength_report_requires_every_terminal_gate() -> None:
         replace(report, hm04_retained=False),
         replace(report, moves_after=EXPECTED_MOVES_BEFORE),
         replace(report, pp_after=(25, 30, 20, 15)),
+        replace(report, party_hp=(123, 47, 40)),
         replace(report, final_money=37_488),
         replace(report, controller_released=False),
     )
     assert all(not candidate.passed for candidate in invalid)
+
+
+def test_strength_report_accepts_naturally_learned_skull_bash_lineage() -> None:
+    report = _report()
+    natural_raw = replace(
+        report.final_raw,
+        first_party_moves=NATURAL_MOVES_AFTER,
+        first_party_pp=NATURAL_PP_AFTER,
+    )
+    natural = replace(
+        report,
+        final_raw=natural_raw,
+        moves_before=NATURAL_MOVES_BEFORE,
+        moves_after=NATURAL_MOVES_AFTER,
+        pp_after=NATURAL_PP_AFTER,
+    )
+
+    assert natural.passed
+    assert natural.public_dict()["strength"]["moves_before"] == list(NATURAL_MOVES_BEFORE)
+
+
+def test_strength_report_accepts_gold_teeth_before_surf() -> None:
+    report = _report()
+    pre_surf_raw = replace(
+        report.final_raw,
+        first_party_moves=PRE_SURF_MOVES_AFTER,
+        first_party_pp=PRE_SURF_PP_AFTER,
+    )
+    pre_surf = replace(
+        report,
+        final_raw=pre_surf_raw,
+        moves_before=PRE_SURF_MOVES_BEFORE,
+        moves_after=PRE_SURF_MOVES_AFTER,
+        pp_after=PRE_SURF_PP_AFTER,
+    )
+
+    assert pre_surf.passed
+    assert pre_surf.public_dict()["strength"]["moves_before"] == list(
+        PRE_SURF_MOVES_BEFORE
+    )
 
 
 def test_strength_public_report_discloses_exact_reusable_hm_teaching() -> None:

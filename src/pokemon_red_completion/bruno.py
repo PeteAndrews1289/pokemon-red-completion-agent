@@ -12,9 +12,23 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import (
+    BattleAction,
+    BattleControlRequest,
+    recovery_request_matches,
+    switch_request_party_index,
+)
+from pokemon_red_completion.battle_plan import RedBattlePlanId
+from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
+    BattleIntent,
+    BattleRecoveryCapability,
+    BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
+    BattleSwitchCapability,
+    note_observed_trainer_battle_exit,
+    recovery_action_due,
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.blaine import _select_cursor
@@ -24,13 +38,14 @@ from pokemon_red_completion.celadon import (
     _party_max_hp,
     _party_status,
 )
+from pokemon_red_completion.executor import ChapterExecutor, CountingExecutor
+from pokemon_red_completion.field_recovery import plan_party_recovery, use_field_recovery_item
 from pokemon_red_completion.hideout import DEFAULT_HIDEOUT_TIMING
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _close_menus,
     _open_bag,
     _select_bag_item,
-    _use_bag_item,
 )
 from pokemon_red_completion.observation import (
     EventFlag,
@@ -40,19 +55,19 @@ from pokemon_red_completion.observation import (
     RamAddress,
     RawGameState,
 )
+from pokemon_red_completion.participation import summarize_party_participation
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID, HITMONLEE_SPECIES_ID
 from pokemon_red_completion.silph import (
     DEFAULT_SILPH_TIMING,
     SilphChapterError,
     _battle_healing_item,
 )
-from pokemon_red_completion.tower import TOWER_FINAL_PARTY
+from pokemon_red_completion.tower import party_core_intact
 from pokemon_red_completion.victory_road import (
-    _CountingExecutor,
     _event,
     _menu_cursor_active,
     _move,
     _pulse,
-    _settle_confirm,
 )
 
 BRUNO_CHECKPOINT_COUNT = 3
@@ -64,8 +79,11 @@ BRUNO_PARTY = (
     (0x7E, 58),
 )
 BRUNO_APPROACH = ("right", "up", "up")
-BRUNO_RNG_DELAY_FRAMES = 15
+BRUNO_RNG_DELAY_FRAMES = 185
 BRUNO_SAFE_HP = 90
+BRUNO_HITMONLEE_SAFE_HP = 120
+BRUNO_LANCE_SURF_RESERVE = 1
+BRUNO_AFTER_BATTLE_TEXT_PULSES = 2
 
 
 class EmulatorState(Protocol):
@@ -76,10 +94,6 @@ class EmulatorState(Protocol):
     def pressed_buttons(self) -> frozenset[str]: ...
 
     def read_u8(self, address: int) -> int: ...
-
-
-class ChapterExecutor(Protocol):
-    def execute(self, action: MacroAction) -> object: ...
 
 
 class BrunoChapterError(RuntimeError):
@@ -114,6 +128,7 @@ class BrunoTurn:
     lead_status: int
     pp: tuple[int, int, int, int]
     move_slot: int
+    active_party_index: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -124,12 +139,13 @@ class BrunoChapterReport:
     party: tuple[tuple[int, int], ...]
     hyper_potions_used: int
     full_restores_used: int
-    party_hp: tuple[int, int, int]
-    party_max_hp: tuple[int, int, int]
-    party_status: tuple[int, int, int]
+    party_hp: tuple[int, ...]
+    party_max_hp: tuple[int, ...]
+    party_status: tuple[int, ...]
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    team_switches: int
 
     @property
     def passed(self) -> bool:
@@ -139,9 +155,11 @@ class BrunoChapterReport:
             and _turns_valid(self.turns)
             and _event(self.final_raw, EventFlag.BEAT_BRUNO)
             and self.final_raw.map_id == MapId.AGATHAS_ROOM
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and party_core_intact(self.final_raw.party_species_ids)
             and self.party_hp == self.party_max_hp
-            and self.party_status == (0, 0, 0)
+            and all(status == 0 for status in self.party_status)
+            and _bruno_team_participation_satisfied(self.turns)
+            and self.team_switches == 2
             and self.controller_released
         )
 
@@ -149,6 +167,10 @@ class BrunoChapterReport:
         return tuple((item.checkpoint_id, item.label, item.raw) for item in self.records)
 
     def public_dict(self) -> dict[str, object]:
+        participation = summarize_party_participation(
+            (turn.active_party_index for turn in self.turns),
+            party_size=len(self.party_hp),
+        )
         return {
             "status": "ok" if self.passed else "failed",
             "objective": "defeat_bruno",
@@ -162,9 +184,12 @@ class BrunoChapterReport:
                     "lead_status": item.lead_status,
                     "pp": list(item.pp),
                     "move_slot": item.move_slot,
+                    "active_party_index": item.active_party_index,
                 }
                 for item in self.turns
             ],
+            "participation": participation.public_dict(),
+            "team_switches": self.team_switches,
             "recovery": {
                 "hyper_potions_used": self.hyper_potions_used,
                 "full_restores_used": self.full_restores_used,
@@ -192,13 +217,13 @@ def run_bruno_chapter(
     progress: ProgressSink | None = None,
 ) -> BrunoChapterReport:
     start_frames = emulator.frame_count
-    actions = _CountingExecutor(executor)
+    actions = CountingExecutor(executor)
     records: list[BrunoCheckpoint] = []
     initial = reader.read()
     if (
         initial.map_id != MapId.BRUNOS_ROOM
         or (initial.player_x, initial.player_y) != (4, 5)
-        or initial.party_species_ids != TOWER_FINAL_PARTY
+        or not party_core_intact(initial.party_species_ids)
         or not _event(initial, EventFlag.BEAT_LORELEI)
         or _event(initial, EventFlag.BEAT_BRUNO)
     ):
@@ -219,41 +244,76 @@ def run_bruno_chapter(
 
     turns: list[BrunoTurn] = []
 
-    class _HealBoundary(Exception):
+    class _HealBoundary(BattleControlRequest):
+        default_action = BattleAction.recovery()
+
+    class _TeamSwitchBoundary(BattleControlRequest):
         pass
 
+    last_recovery_turn = -1
+    team_switches = 0
+
     def policy(raw: RawGameState) -> int:
-        hp = raw.first_party_hp or 0
-        status = raw.first_party_status or 0
-        if hp < BRUNO_SAFE_HP or status:
+        hp = raw.battler_hp or 0
+        status = raw.battler_status or 0
+        reserve_has_attacked = any(
+            turn.active_party_index not in {None, 0} for turn in turns
+        )
+        if raw.active_party_index not in {None, 0} and reserve_has_attacked:
+            target = _bruno_matchup_switch_target(raw, BLASTOISE_SPECIES_ID)
+            if target is None:
+                raise BrunoChapterError("Bruno could not restore its protected lead.")
+            raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+        if (
+            raw.enemy_species_id == BRUNO_PARTY[0][0]
+            and raw.active_party_index in {None, 0}
+            and not reserve_has_attacked
+        ):
+            target = _bruno_matchup_switch_target(raw, HITMONLEE_SPECIES_ID)
+            if target is None:
+                raise BrunoChapterError("Bruno lacks its planned Hitmonlee participant.")
+            raise _TeamSwitchBoundary(BattleAction.switch(target + 1))
+        if recovery_action_due(
+            hp=hp,
+            status=status,
+            safe_hp=_bruno_recovery_threshold(raw),
+            decisions_made=len(turns),
+            last_recovery_decision=last_recovery_turn,
+        ):
             raise _HealBoundary
-        species = raw.enemy_species_id or 0
-        pp = raw.first_party_pp or (0, 0, 0, 0)
-        if species == 0x22:
-            slot = 4
-        elif pp[0] > 0:
-            slot = 1
-        elif pp[1] > 0:
-            slot = 2
-        elif pp[2] > 0:
-            slot = 3
-        else:
-            slot = 4
+        pp = raw.battler_pp or (0, 0, 0, 0)
+        return _bruno_move_slot(pp)
+
+    def record_turn(raw: RawGameState, slot: int) -> None:
         turns.append(
             BrunoTurn(
-                species,
+                raw.enemy_species_id or 0,
                 raw.enemy_level or 0,
                 raw.enemy_hp or 0,
-                hp,
-                status,
-                raw.first_party_pp or (0, 0, 0, 0),
+                raw.battler_hp or 0,
+                raw.battler_status or 0,
+                raw.battler_pp or (0, 0, 0, 0),
                 slot,
+                raw.active_party_index,
             )
         )
-        return slot
 
     hyper_before = _bag(emulator).get(ItemId.HYPER_POTION, 0)
     restore_before = _bag(emulator).get(ItemId.FULL_RESTORE, 0)
+    battle_intent = BattleIntent(
+        "defeat_bruno",
+        battle_plan_id=RedBattlePlanId.LEAGUE_BRUNO,
+        resource_policy=BattleResourcePolicy.BOUNDED_RECOVERY,
+        recovery_capabilities=frozenset(
+            {
+                BattleRecoveryCapability.RESTORE_HP,
+                BattleRecoveryCapability.CURE_ANY_STATUS,
+            }
+        ),
+        switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
+        switch_limit=2,
+        require_move_between_switches=True,
+    )
     while reader.read().battle_state:
         try:
             run_adaptive_trainer_battle(
@@ -261,12 +321,42 @@ def run_bruno_chapter(
                 actions,
                 policy,
                 expected_map=MapId.BRUNOS_ROOM,
+                intent=battle_intent,
                 timing=BattleRuntimeTiming(max_runtime_pulses=1200),
                 label="Bruno",
+                move_decision_sink=record_turn,
             )
         except BattleRuntimeError as error:
-            if not isinstance(error.__cause__, _HealBoundary):
-                raise BrunoChapterError("Bruno battle runtime failed.") from error
+            cause = error.__cause__
+            switch_target = switch_request_party_index(cause, _TeamSwitchBoundary)
+            if isinstance(cause, _TeamSwitchBoundary) or switch_target is not None:
+                if switch_target is None:
+                    raise BrunoChapterError("Bruno team switch lacked a party target.") from error
+                try:
+                    switch_active_battler(
+                        actions,
+                        reader,
+                        emulator,
+                        switch_target,
+                        label="Bruno matchup-aware participation",
+                        wait_frames=DEFAULT_SILPH_TIMING.menu_frames,
+                    )
+                except ProtectedRecoveryError as switch_error:
+                    raise BrunoChapterError(
+                        f"Bruno matchup-aware switch failed: {switch_error}"
+                    ) from switch_error
+                team_switches += 1
+                continue
+            if not recovery_request_matches(error.__cause__, _HealBoundary):
+                current = reader.read()
+                raise BrunoChapterError(
+                    "Bruno battle runtime failed: "
+                    f"party_hp={_party_hp(emulator)!r}, "
+                    f"enemy={(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"lead_status={current.first_party_status!r}, "
+                    f"pp={current.first_party_pp!r}, "
+                    f"bag={_bag(emulator)!r}, turns={turns!r}."
+                ) from error
             raw = reader.read()
             if (raw.first_party_status or 0) and (raw.first_party_hp or 0) >= BRUNO_SAFE_HP:
                 item = ItemId.FULL_HEAL
@@ -281,7 +371,7 @@ def run_bruno_chapter(
             if _bag(emulator).get(item, 0) == 0:
                 raise BrunoChapterError("Bruno exhausted the recovery reserve.") from error
             try:
-                _battle_healing_item(
+                terminal_exit = _battle_healing_item(
                     reader,
                     actions,
                     emulator,
@@ -289,33 +379,37 @@ def run_bruno_chapter(
                     item,
                 )
             except SilphChapterError as healing_error:
-                raise BrunoChapterError("Bruno recovery failed.") from healing_error
+                current = reader.read()
+                raise BrunoChapterError(
+                    "Bruno recovery failed: "
+                    f"item={item.name}, hp={current.first_party_hp}/"
+                    f"{current.first_party_max_hp}, enemy="
+                    f"{(current.enemy_species_id, current.enemy_hp, current.enemy_level)!r}, "
+                    f"bag={_bag(emulator)!r}, cause={healing_error}."
+                ) from healing_error
+            if terminal_exit:
+                note_observed_trainer_battle_exit(battle_intent)
+            last_recovery_turn = len(turns)
 
-    for _ in range(5):
-        _pulse(actions, MacroActionKind.CONFIRM)
-    _settle_confirm(actions, reader, 40)
-    if _party_hp(emulator) != _party_max_hp(emulator) or _party_status(emulator) != (0, 0, 0):
-        try:
-            item = (
-                ItemId.FULL_RESTORE
-                if _party_hp(emulator)[0] < _party_max_hp(emulator)[0]
-                else ItemId.FULL_HEAL
-            )
-            _use_bag_item(
-                actions,
-                reader,
-                emulator,
-                DEFAULT_LAVENDER_TIMING,
-                item,
-            )
-        except Exception as error:
-            raise BrunoChapterError("Post-Bruno recovery failed.") from error
+    _settle_bruno_victory(actions, reader, emulator)
     defeated = reader.read()
     if not _event(defeated, EventFlag.BEAT_BRUNO):
         raise BrunoChapterError("Bruno event did not set after battle.")
     _checkpoint(records, progress, emulator, defeated, "bruno_defeated", "Defeated Bruno")
 
+    # Bruno's completed-room script can continue suppressing START after
+    # movement control returns. Cross the unlocked progression boundary first;
+    # Agatha's entry room provides a stable field-menu recovery gate.
     _move(actions, reader, ("left", "up", "up", "up", "up"), "Agatha room entry")
+    try:
+        for party_index, item in plan_party_recovery(
+            _party_hp(emulator),
+            _party_max_hp(emulator),
+            _party_status(emulator),
+        ):
+            use_field_recovery_item(actions, reader, emulator, party_index, item)
+    except Exception as error:
+        raise BrunoChapterError(f"Post-Bruno recovery failed: {error}.") from error
     final = reader.read()
     report = BrunoChapterReport(
         records=tuple(records),
@@ -330,6 +424,7 @@ def run_bruno_chapter(
         frames_executed=emulator.frame_count - start_frames,
         actions_executed=actions.actions_executed,
         controller_released=not emulator.pressed_buttons,
+        team_switches=team_switches,
     )
     if not report.passed:
         raise BrunoChapterError(f"Bruno terminal evidence failed: {report!r}.")
@@ -357,6 +452,42 @@ def _checkpoint(
         )
 
 
+def _settle_bruno_victory(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    limit: int = 40,
+) -> RawGameState:
+    """Advance until Bruno's source-defined map script returns to default."""
+
+    for _ in range(limit):
+        raw = reader.read()
+        if (
+            raw.battle_state == 0
+            and _event(raw, EventFlag.BEAT_BRUNO)
+            and reader.read_input_readiness().ready
+            and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
+        ):
+            # DisplayTextID outlives the end-battle map script by one text
+            # layer. Confirm it only after the script is back at default;
+            # earlier confirmations are consumed by the active script.
+            for _ in range(BRUNO_AFTER_BATTLE_TEXT_PULSES):
+                _pulse(actions, MacroActionKind.CONFIRM)
+            released = reader.read()
+            if (
+                released.battle_state == 0
+                and released.map_id == MapId.BRUNOS_ROOM
+                and _event(released, EventFlag.BEAT_BRUNO)
+                and reader.read_input_readiness().ready
+                and emulator.read_u8(RamAddress.CURRENT_MAP_SCRIPT) == 0
+            ):
+                return released
+            raise BrunoChapterError("Bruno text release left its qualified room boundary.")
+        _pulse(actions, MacroActionKind.CONFIRM)
+    raise BrunoChapterError("Bruno victory script did not settle at the overworld boundary.")
+
+
 def _encounter_party(turns: Iterable[BrunoTurn]) -> tuple[tuple[int, int], ...]:
     result: list[tuple[int, int]] = []
     for turn in turns:
@@ -369,13 +500,62 @@ def _encounter_party(turns: Iterable[BrunoTurn]) -> tuple[tuple[int, int], ...]:
 def _turns_valid(turns: Iterable[BrunoTurn]) -> bool:
     items = tuple(turns)
     return bool(items) and all(
-        item.move_slot in {1, 2, 3, 4} and item.lead_hp >= 70 and item.lead_status == 0
+        item.move_slot in {1, 2, 3, 4}
+        and item.lead_hp > 0
+        and 0 <= item.lead_status <= 0x7F
         for item in items
     )
 
 
+def _bruno_team_participation_satisfied(turns: Iterable[BrunoTurn]) -> bool:
+    """Require at least one real attack from the lead and from a teammate."""
+    indexes = {
+        turn.active_party_index for turn in turns if turn.active_party_index is not None
+    }
+    return 0 in indexes and any(index > 0 for index in indexes)
+
+
+def _bruno_matchup_switch_target(raw: RawGameState, species_id: int) -> int | None:
+    """Resolve a living matchup role by species instead of a brittle party slot."""
+    party_hp = raw.party_hp or ()
+    for index, species in enumerate(raw.party_species_ids or ()):
+        if (
+            species == species_id
+            and index < len(party_hp)
+            and party_hp[index] > 0
+            and index != raw.active_party_index
+        ):
+            return index
+    return None
+
+
+def _bruno_move_slot(pp: tuple[int, int, int, int]) -> int:
+    """Prefer STAB Surf while preserving the explicit downstream reserve."""
+
+    if pp[3] > BRUNO_LANCE_SURF_RESERVE:
+        return 4
+    if pp[2] > 0:
+        return 3
+    if pp[0] > 0:
+        return 1
+    if pp[1] > 0:
+        return 2
+    return 4
+
+
+def _bruno_recovery_threshold(raw: RawGameState) -> int:
+    if raw.enemy_species_id in {0x2C, 0x7E}:
+        # Machoke and Machamp can both produce a near-full-health critical
+        # Submission. Heal before entering that damage window; waiting until
+        # after the hit lets the opponent knock out the lead on the item turn.
+        return raw.first_party_max_hp or BRUNO_HITMONLEE_SAFE_HP
+    if raw.enemy_species_id == 0x2B:
+        return BRUNO_HITMONLEE_SAFE_HP
+    return BRUNO_SAFE_HP
+
+
 def _teach_mega_punch(
-    actions: _CountingExecutor,
+    actions: CountingExecutor,
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,
@@ -422,4 +602,9 @@ def _teach_mega_punch(
             _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
             return
         _pulse(actions, MacroActionKind.CONFIRM)
-    raise BrunoChapterError("TM01 did not replace Submission.")
+    raise BrunoChapterError(
+        "TM01 did not install the expected move set: "
+        f"actual={reader.read().first_party_moves!r}, expected={expected_moves!r}, "
+        f"remaining={_bag(emulator).get(ItemId.TM01_MEGA_PUNCH, 0)!r}, "
+        f"expected_remaining={expected_remaining!r}."
+    )

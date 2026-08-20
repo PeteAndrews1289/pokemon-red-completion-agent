@@ -1,0 +1,43 @@
+{
+  "schema": "pokemon-semantic-objective-evaluation-outcome-v1",
+  "recorded_on": "2026-08-06",
+  "evaluation_id": "red-objective-planner-heldout-v17",
+  "status": "failed",
+  "source_commit": "4c26d55b3a027cdfc3719fcb37a02fe4e4f22e5c",
+  "source_bundle_sha256": "9e4622c2af207df15552fd6c8f849da5818069fc6ca0d9429d9c36437ac38d23",
+  "model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+  "validation_results": [
+    {
+      "run_id": "red-objective-v17-validation-01",
+      "harness_seed": 1390001,
+      "battle_start_schedule_sha256": "5eb169fc921e4211dd6dc958df31b69efb2712e607564ed18b38aa284f771465",
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 73,
+      "private_log_sha256": "9e65f65763e6eae49ee33b9461df0366acb25df2f11f4a68b79c665d2d8a52a1"
+    },
+    {
+      "run_id": "red-objective-v17-validation-02",
+      "harness_seed": 1390002,
+      "battle_start_schedule_sha256": "57044146fb3d06b2794a29c20c213becd7755e5a23660498df16c8a6c9402e22",
+      "status": "passed",
+      "qualified_checkpoints": 312,
+      "objectives_verified": 36,
+      "scheduled_battles_verified": 73,
+      "private_log_sha256": "d2c4ada7b46b11e00e87985ec42729e78ab8065068d9e36a09d421643876d1ec"
+    },
+    {
+      "run_id": "red-objective-v17-validation-03",
+      "harness_seed": 1390003,
+      "battle_start_schedule_sha256": "b5fac6a28a8e42d0bb2645cb76db4903d41b3ab731656615e194c39c73ccc3f9",
+      "status": "failed",
+      "qualified_checkpoints": 91,
+      "failure": "A low-level capture helper fainted to the free enemy attack while switching into a Route 1 wild battle, and the normal switch path treated the mandatory replacement prompt as terminal failure.",
+      "private_log_sha256": "e33082ccdbbc552bffc46bacfd9da2a3cb33dafd6904717ae72129b0cd88b61d"
+    }
+  ],
+  "sealed_test_runs_opened": false,
+  "diagnosis": "The wild-capture policy already handled a helper fainting after an attack, but not a helper fainting from the opponent's turn during a proactive switch. The party still had living catchers and the protected encounter remained active.",
+  "repair_direction": "Detect the fainted incoming helper, complete the mandatory party replacement with the first living catcher, then abandon that weakening attempt safely instead of treating the recoverable battle state as a lost run."
+}

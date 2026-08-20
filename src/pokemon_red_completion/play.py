@@ -8,10 +8,11 @@ session. It is a deterministic teacher baseline, not a learned-policy claim.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
-from contextlib import nullcontext
+from collections.abc import Callable, Iterable, Mapping
+from contextlib import ExitStack, nullcontext
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.agatha import (
@@ -20,6 +21,17 @@ from pokemon_red_completion.agatha import (
     AgathaChapterReport,
     AgathaProgress,
     run_agatha_chapter,
+)
+from pokemon_red_completion.battle_control_model import BattleControlMLP
+from pokemon_red_completion.battle_neural_model import BattleMoveRanker
+from pokemon_red_completion.battle_runtime import (
+    bind_battle_decision_observer,
+    bind_battle_policy_override,
+    bind_battle_schedule_observer,
+)
+from pokemon_red_completion.battle_schedule import (
+    BattleStartScheduleController,
+    bind_battle_start_schedule,
 )
 from pokemon_red_completion.blaine import (
     BLAINE_CHECKPOINT_COUNT,
@@ -71,6 +83,14 @@ from pokemon_red_completion.cinnabar import (
     CinnabarProgress,
     run_cinnabar_chapter,
 )
+from pokemon_red_completion.collection_protocol import BattleStartOffset
+from pokemon_red_completion.dojo import (
+    DOJO_CHECKPOINT_COUNT,
+    DojoChapterError,
+    DojoChapterReport,
+    DojoProgress,
+    run_dojo_chapter,
+)
 from pokemon_red_completion.domain import GameState
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.erika import (
@@ -80,7 +100,11 @@ from pokemon_red_completion.erika import (
     ErikaProgress,
     run_erika_chapter,
 )
-from pokemon_red_completion.executor import ExecutedAction, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    CountingExecutor,
+    ExecutedAction,
+    FrameSafeExecutor,
+)
 from pokemon_red_completion.fuchsia import (
     FUCHSIA_CHECKPOINT_COUNT,
     FuchsiaChapterError,
@@ -123,6 +147,8 @@ from pokemon_red_completion.lavender import (
     LavenderProgress,
     run_lavender_chapter,
 )
+from pokemon_red_completion.learned_battle_policy import ModelAssistedBattlePolicy
+from pokemon_red_completion.learned_planner_policy import ModelObjectivePolicy
 from pokemon_red_completion.lorelei import (
     LORELEI_CHECKPOINT_COUNT,
     LoreleiChapterError,
@@ -136,6 +162,7 @@ from pokemon_red_completion.observation import (
     OaksErrandState,
     PokemonRedStateReader,
     RawGameState,
+    RedPokedexState,
     game_mode,
     location_label,
     semantic_facts,
@@ -148,6 +175,7 @@ from pokemon_red_completion.opening import (
     OpeningTiming,
     run_opening_chapter,
 )
+from pokemon_red_completion.participation import summarize_party_participation
 from pokemon_red_completion.pewter import (
     PEWTER_CHECKPOINT_COUNT,
     PewterChapterError,
@@ -155,8 +183,40 @@ from pokemon_red_completion.pewter import (
     PewterProgress,
     run_pewter_chapter,
 )
+from pokemon_red_completion.planner_model import ObjectiveRanker
+from pokemon_red_completion.planner_trajectory import SemanticObjectiveDecisionObserver
+from pokemon_red_completion.post_hideout_strategic_route import (
+    PostHideoutStrategicApproach,
+    PostHideoutStrategicRouteError,
+)
+from pokemon_red_completion.post_safari_strategic_route import (
+    PostSafariStrategicApproach,
+    PostSafariStrategicRouteError,
+)
+from pokemon_red_completion.post_silph_strategic_route import (
+    PostSilphStrategicApproach,
+    PostSilphStrategicRouteError,
+)
+from pokemon_red_completion.red_collection import (
+    RedCollectionProgress,
+    summarize_red_collection,
+    summarize_red_pokedex,
+)
+from pokemon_red_completion.red_party import PokemonRedPartyReader
+from pokemon_red_completion.red_trajectory import (
+    POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+    PokemonRedBattleDecisionObserver,
+    PokemonRedBattleScheduleObserver,
+    PokemonRedObservationEncoder,
+)
 from pokemon_red_completion.rom import RomFingerprint
 from pokemon_red_completion.route import COMPLETION_QUEST
+from pokemon_red_completion.route_1_wild import (
+    Route1WildFleeEvidence,
+    move_route_1_with_wild_flees,
+)
+from pokemon_red_completion.route_executor import RouteExecutionError
+from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.sabrina import (
     SABRINA_CHECKPOINT_COUNT,
     SabrinaChapterError,
@@ -192,6 +252,15 @@ from pokemon_red_completion.ss_anne import (
     SSAnneProgress,
     run_ss_anne_chapter,
 )
+from pokemon_red_completion.strategic_navigation import StrategicNavigationError
+from pokemon_red_completion.strategic_navigation_protocol import (
+    StrategicNavigationAssignment,
+    StrategicNavigationEpisodeAssignment,
+    StrategicNavigationRehearsalAssignment,
+)
+from pokemon_red_completion.strategic_navigation_trajectory import (
+    StrategicNavigationTrajectoryObserver,
+)
 from pokemon_red_completion.strength import (
     STRENGTH_CHECKPOINT_COUNT,
     StrengthChapterError,
@@ -213,6 +282,16 @@ from pokemon_red_completion.tower import (
     TowerProgress,
     run_tower_chapter,
 )
+from pokemon_red_completion.training_candidate_model import (
+    TrainingCandidateMLP,
+    TrainingCandidateShadowAudit,
+)
+from pokemon_red_completion.training_candidate_rank import TrainingCandidateDecision
+from pokemon_red_completion.trajectory import (
+    RecordingExecutor,
+    SparseEvent,
+    TrajectorySink,
+)
 from pokemon_red_completion.vermilion import (
     VERMILION_CHECKPOINT_COUNT,
     VermilionChapterError,
@@ -229,6 +308,58 @@ from pokemon_red_completion.victory_road import (
 )
 
 POKEDEX_CHECKPOINT_COUNT = 11
+
+# The actual qualified teacher order.  Branches deliberately preserve the
+# teacher's demonstrated choice (for example Koga before Strength) instead of
+# pretending the quest graph has only one legal route.
+QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS: tuple[tuple[int, str], ...] = (
+    (1, "power_on"),
+    (5, "begin_adventure"),
+    (6, "choose_starter"),
+    (11, "receive_pokedex"),
+    (18, "reach_pewter"),
+    (21, "defeat_brock"),
+    (36, "reach_cerulean"),
+    (54, "help_bill"),
+    (59, "defeat_misty"),
+    (74, "reach_vermilion"),
+    (83, "obtain_cut"),
+    (98, "defeat_surge"),
+    (113, "reach_lavender"),
+    (125, "reach_celadon"),
+    (141, "clear_rocket_hideout"),
+    (144, "obtain_silph_scope"),
+    (172, "rescue_fuji"),
+    (186, "reach_fuchsia"),
+    (198, "obtain_surf"),
+    (208, "defeat_koga"),
+    (217, "obtain_strength"),
+    (229, "defeat_erika"),
+    (238, "reach_saffron"),
+    (250, "liberate_silph"),
+    (265, "defeat_sabrina"),
+    (271, "reach_cinnabar"),
+    (275, "obtain_secret_key"),
+    (280, "defeat_blaine"),
+    (288, "defeat_giovanni"),
+    (297, "cross_victory_road"),
+    (300, "defeat_lorelei"),
+    (303, "defeat_bruno"),
+    (306, "defeat_agatha"),
+    (309, "defeat_lance"),
+    (312, "defeat_champion"),
+    (312, "enter_hall_of_fame"),
+)
+QUALIFIED_OBJECTIVE_SEQUENCE = tuple(
+    objective_id for _, objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS
+)
+_QUALIFIED_OBJECTIVES_BY_CHECKPOINT: dict[int, tuple[str, ...]] = {}
+for _checkpoint_count, _objective_id in QUALIFIED_OBJECTIVE_COMPLETION_CHECKPOINTS:
+    _QUALIFIED_OBJECTIVES_BY_CHECKPOINT[_checkpoint_count] = (
+        *_QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(_checkpoint_count, ()),
+        _objective_id,
+    )
+
 QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     POKEDEX_CHECKPOINT_COUNT
     + PEWTER_CHECKPOINT_COUNT
@@ -248,6 +379,7 @@ QUALIFIED_PLAY_CHECKPOINT_COUNT = (
     + ERIKA_CHECKPOINT_COUNT
     + SAFFRON_CHECKPOINT_COUNT
     + SILPH_CHECKPOINT_COUNT
+    + DOJO_CHECKPOINT_COUNT
     + SABRINA_CHECKPOINT_COUNT
     + CINNABAR_CHECKPOINT_COUNT
     + BLAINE_CHECKPOINT_COUNT
@@ -326,6 +458,33 @@ LAB_TO_OAK_DIRECTIONS = ("left", *(("up",) * 6), "right", "up", "up")
 class QualifiedPlayError(RuntimeError):
     """Raised when the clean run misses a bounded route or semantic gate."""
 
+    def __init__(
+        self,
+        message: str,
+        *,
+        evidence: Mapping[str, object] | None = None,
+    ) -> None:
+        super().__init__(message)
+        if evidence is not None and not isinstance(evidence, Mapping):
+            raise TypeError("qualified-play failure evidence must be a mapping or None")
+        self.evidence = dict(evidence) if evidence is not None else None
+
+
+def _qualified_play_chapter_error(
+    error: Exception,
+    model_policy: ModelAssistedBattlePolicy | None,
+) -> QualifiedPlayError:
+    """Attach the sanitized learned-policy audit to a failed chapter boundary."""
+
+    return QualifiedPlayError(
+        str(error),
+        evidence={
+            "schema": "pokemon-red-qualified-play-failure-evidence-v1",
+            "exception_type": type(error).__name__,
+            "battle_policy": (model_policy.public_dict() if model_policy is not None else None),
+        },
+    )
+
 
 @dataclass(frozen=True, slots=True)
 class QualifiedPlayTiming:
@@ -336,7 +495,11 @@ class QualifiedPlayTiming:
     route_1_north_seed_wait_frames: int = 192
     mart_prompt_wait_frames: int = 240
     route_1_south_seed_wait_frames: int = 48
-    max_rival_pulses: int = 56
+    max_route_1_wild_flees: int = 8
+    route_1_wild_exit_stabilization_frames: int = 120
+    max_route_1_step_attempts: int = 8
+    route_1_step_retry_wait_frames: int = 24
+    max_rival_pulses: int = 96
     max_parcel_pulses: int = 5
     max_pokedex_pulses: int = 42
 
@@ -349,6 +512,13 @@ class QualifiedPlayTiming:
             ("route_1_north_seed_wait_frames", self.route_1_north_seed_wait_frames),
             ("mart_prompt_wait_frames", self.mart_prompt_wait_frames),
             ("route_1_south_seed_wait_frames", self.route_1_south_seed_wait_frames),
+            ("max_route_1_wild_flees", self.max_route_1_wild_flees),
+            (
+                "route_1_wild_exit_stabilization_frames",
+                self.route_1_wild_exit_stabilization_frames,
+            ),
+            ("max_route_1_step_attempts", self.max_route_1_step_attempts),
+            ("route_1_step_retry_wait_frames", self.route_1_step_retry_wait_frames),
             ("max_rival_pulses", self.max_rival_pulses),
             ("max_parcel_pulses", self.max_parcel_pulses),
             ("max_pokedex_pulses", self.max_pokedex_pulses),
@@ -370,6 +540,60 @@ class QualifiedPlayProgress:
 
 
 ProgressSink = Callable[[QualifiedPlayProgress], None]
+
+
+@dataclass(frozen=True, slots=True)
+class OaksErrandChapterReport:
+    """Reusable post-starter chapter through the verified Pokédex boundary."""
+
+    rival_defeated: RawGameState
+    rival_evidence: OaksErrandState
+    saw_trainer_battle: bool
+    viridian_reached: RawGameState
+    parcel_received: RawGameState
+    parcel_evidence: OaksErrandState
+    pallet_returned: RawGameState
+    pokedex_received: RawGameState
+    pokedex_evidence: OaksErrandState
+    route_1_wild_flees: tuple[Route1WildFleeEvidence, ...]
+    route_1_movement_retries: int
+    frames_executed: int
+    actions_executed: int
+
+    @property
+    def passed(self) -> bool:
+        return (
+            is_rival_resolution_verified(
+                self.rival_evidence,
+                saw_trainer_battle=self.saw_trainer_battle,
+            )
+            and is_parcel_verified(self.parcel_evidence)
+            and is_pokedex_verified(self.pokedex_evidence)
+            and all(item.verified for item in self.route_1_wild_flees)
+            and self.route_1_movement_retries >= 0
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        rival_won = is_rival_victory_verified(
+            self.rival_evidence,
+            saw_trainer_battle=self.saw_trainer_battle,
+        )
+        return {
+            "actions_executed": self.actions_executed,
+            "frames_executed": self.frames_executed,
+            "parcel_verified": is_parcel_verified(self.parcel_evidence),
+            "pokedex_verified": is_pokedex_verified(self.pokedex_evidence),
+            "rival_battle_resolved": is_rival_resolution_verified(
+                self.rival_evidence,
+                saw_trainer_battle=self.saw_trainer_battle,
+            ),
+            "rival_outcome": "victory" if rival_won else "loss",
+            "rival_victory_verified": rival_won,
+            "route_1_wild_flees": [item.public_dict() for item in self.route_1_wild_flees],
+            "route_1_movement_retries": self.route_1_movement_retries,
+            "schema": "pokemon-red-oaks-errand-chapter-v2",
+            "status": "ok" if self.passed else "failed",
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -401,6 +625,7 @@ class QualifiedPlayReport:
     erika: ErikaChapterReport
     saffron: SaffronChapterReport
     silph: SilphChapterReport
+    dojo: DojoChapterReport
     sabrina: SabrinaChapterReport
     cinnabar: CinnabarChapterReport
     blaine: BlaineChapterReport
@@ -421,12 +646,20 @@ class QualifiedPlayReport:
     frames_executed: int
     actions_executed: int
     controller_released: bool
+    pokedex_state: RedPokedexState | None = None
+    collection_progress: RedCollectionProgress | None = None
+    battle_policy_report: dict[str, object] | None = None
+    battle_policy_teacher_free_required: bool = False
+    objective_policy_report: dict[str, object] | None = None
+    battle_start_schedule_report: dict[str, object] | None = None
+    training_candidate_policy_report: dict[str, object] | None = None
+    training_candidate_authority_required: bool = False
 
     @property
     def passed(self) -> bool:
         return (
             self.opening.passed
-            and is_rival_victory_verified(
+            and is_rival_resolution_verified(
                 self.rival_evidence,
                 saw_trainer_battle=self.saw_trainer_battle,
             )
@@ -449,6 +682,7 @@ class QualifiedPlayReport:
             and self.erika.passed
             and self.saffron.passed
             and self.silph.passed
+            and self.dojo.passed
             and self.sabrina.passed
             and self.cinnabar.passed
             and self.blaine.passed
@@ -461,9 +695,74 @@ class QualifiedPlayReport:
             and self.champion.passed
             and QUALIFIED_THROUGH_OBJECTIVE in self.verified_objectives
             and self.controller_released
+            and (
+                not self.battle_policy_teacher_free_required
+                or self._teacher_free_battle_policy_passed
+            )
+            and (self.objective_policy_report is None or self._objective_policy_passed)
+            and (
+                not self.training_candidate_authority_required
+                or self._training_candidate_authority_passed
+            )
+        )
+
+    @property
+    def _teacher_free_battle_policy_passed(self) -> bool:
+        report = self.battle_policy_report
+        if report is None:
+            return False
+        if report.get("teacher_queries_allowed") is not False:
+            return False
+        if report.get("teacher_queries") != 0 or report.get("teacher_fallbacks") != 0:
+            return False
+        if report.get("fallback_reasons") not in ({}, None):
+            return False
+        execution = report.get("control_model_execution")
+        if not isinstance(execution, Mapping):
+            return True
+        return (
+            execution.get("safety_fallbacks") == 0
+            and execution.get("low_confidence_fallbacks") == 0
+        )
+
+    @property
+    def _training_candidate_authority_passed(self) -> bool:
+        report = self.training_candidate_policy_report
+        if report is None:
+            return False
+        controlled_decisions = report.get("controlled_decisions")
+        return (
+            report.get("model_had_execution_authority") is True
+            and isinstance(controlled_decisions, int)
+            and controlled_decisions > 0
+            and report.get("teacher_fallback_on_model_disagreement") is False
+        )
+
+    @property
+    def _objective_policy_passed(self) -> bool:
+        report = self.objective_policy_report
+        if report is None:
+            return False
+        common = (
+            report.get("completed_objectives") == len(COMPLETION_QUEST)
+            and report.get("teacher_fallbacks") == 0
+        )
+        if not common:
+            return False
+        # Historical receipts used expected-answer authorization. New runs
+        # score the same fixed route as singleton dispatches and explicitly
+        # keep them outside the learned-choice denominator.
+        return report.get("authorized_decisions") == len(COMPLETION_QUEST) or (
+            report.get("fixed_dispatch_decisions") == len(COMPLETION_QUEST)
+            and report.get("expected_answer_labels_supplied") == 0
+            and report.get("learned_choice_decisions") == 0
         )
 
     def public_dict(self) -> dict[str, object]:
+        rival_won = is_rival_victory_verified(
+            self.rival_evidence,
+            saw_trainer_battle=self.saw_trainer_battle,
+        )
         checkpoints = (
             (
                 "bedroom_ready",
@@ -487,7 +786,11 @@ class QualifiedPlayReport:
                 "Selected and verified Squirtle",
                 self.opening.starter,
             ),
-            ("rival_defeated", "Defeated the lab rival", self.rival_defeated),
+            (
+                "rival_defeated" if rival_won else "rival_loss_recovered",
+                "Defeated the lab rival" if rival_won else "Recovered from the lab rival loss",
+                self.rival_defeated,
+            ),
             ("viridian_reached", "Reached Viridian City", self.viridian_reached),
             ("parcel_received", "Received Oak's Parcel", self.parcel_received),
             ("pallet_returned", "Returned safely to Pallet Town", self.pallet_returned),
@@ -513,6 +816,7 @@ class QualifiedPlayReport:
             *self.erika.checkpoints(),
             *self.saffron.checkpoints(),
             *self.silph.checkpoints(),
+            *self.dojo.checkpoints(),
             *self.sabrina.checkpoints(),
             *self.cinnabar.checkpoints(),
             *self.blaine.checkpoints(),
@@ -525,8 +829,30 @@ class QualifiedPlayReport:
             *self.champion.checkpoints(),
         )
         pewter = self.pewter.public_dict()
+        pokedex = {
+            "received_verified": is_pokedex_verified(self.pokedex_evidence),
+            "controls_ready": self.pokedex_evidence.controls_ready,
+        }
+        if self.collection_progress is not None:
+            pokedex["collection_progress"] = self.collection_progress.public_dict()
+        elif self.pokedex_state is not None:
+            pokedex["collection_progress"] = summarize_red_pokedex(self.pokedex_state).public_dict()
+        league_participation = summarize_party_participation(
+            (
+                turn.active_party_index
+                for chapter in (
+                    self.lorelei,
+                    self.bruno,
+                    self.agatha,
+                    self.lance,
+                    self.champion,
+                )
+                for turn in getattr(chapter, "turns", ())
+            ),
+            party_size=len(getattr(self.champion, "party_hp", (0,) * 6)),
+        )
         return {
-            "schema": "qualified-play-v26",
+            "schema": "qualified-play-v27",
             "status": "ok" if self.passed else "failed",
             "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
             "game_complete": True,
@@ -552,10 +878,12 @@ class QualifiedPlayReport:
             ],
             "rival": {
                 "trainer_battle_observed": self.saw_trainer_battle,
-                "victory_verified": is_rival_victory_verified(
+                "battle_resolved": is_rival_resolution_verified(
                     self.rival_evidence,
                     saw_trainer_battle=self.saw_trainer_battle,
                 ),
+                "outcome": "victory" if rival_won else "loss",
+                "victory_verified": rival_won,
                 "species": "squirtle",
                 "species_id": self.rival_evidence.first_party_species,
                 "level": self.rival_evidence.first_party_level,
@@ -567,10 +895,7 @@ class QualifiedPlayReport:
                 "delivered_verified": self.pokedex_evidence.oak_got_parcel,
                 "present_after_delivery": self.pokedex_evidence.parcel_in_bag,
             },
-            "pokedex": {
-                "received_verified": is_pokedex_verified(self.pokedex_evidence),
-                "controls_ready": self.pokedex_evidence.controls_ready,
-            },
+            "pokedex": pokedex,
             "northbound": pewter["route"],
             "brock": pewter["brock"],
             "cerulean_chapter": self.cerulean.public_dict(),
@@ -589,6 +914,7 @@ class QualifiedPlayReport:
             "erika_chapter": self.erika.public_dict(),
             "saffron_chapter": self.saffron.public_dict(),
             "silph_chapter": self.silph.public_dict(),
+            "dojo_chapter": self.dojo.public_dict(),
             "sabrina_chapter": self.sabrina.public_dict(),
             "cinnabar_chapter": self.cinnabar.public_dict(),
             "blaine_chapter": self.blaine.public_dict(),
@@ -599,6 +925,7 @@ class QualifiedPlayReport:
             "agatha_chapter": self.agatha.public_dict(),
             "lance_chapter": self.lance.public_dict(),
             "champion_chapter": self.champion.public_dict(),
+            "league_participation": league_participation.public_dict(),
             "facts": sorted(self.facts),
             "objective_progress": {
                 "verified": len(self.verified_objectives),
@@ -609,18 +936,17 @@ class QualifiedPlayReport:
             "frames_executed": self.frames_executed,
             "actions_executed": self.actions_executed,
             "controller_released": self.controller_released,
+            "battle_policy": self.battle_policy_report,
+            "battle_policy_teacher_free_required": (self.battle_policy_teacher_free_required),
+            "objective_policy": self.objective_policy_report,
+            "battle_start_schedule": self.battle_start_schedule_report,
+            "training_candidate_policy": self.training_candidate_policy_report,
+            "training_candidate_authority_required": (self.training_candidate_authority_required),
         }
 
 
-class _CountingExecutor:
-    def __init__(self, executor: FrameSafeExecutor) -> None:
-        self._executor = executor
-        self.actions_executed = 0
-
-    def execute(self, action: MacroAction) -> ExecutedAction:
-        result = self._executor.execute(action)
-        self.actions_executed += 1
-        return result
+class QualifiedExecutor(Protocol):
+    def execute(self, action: MacroAction) -> ExecutedAction: ...
 
 
 def is_rival_victory_verified(
@@ -632,12 +958,169 @@ def is_rival_victory_verified(
     return saw_trainer_battle and state.rival_victory_snapshot
 
 
+def is_rival_resolution_verified(
+    state: OaksErrandState,
+    *,
+    saw_trainer_battle: bool,
+) -> bool:
+    """Require observed battle entry and one authenticated legal terminal outcome."""
+
+    return saw_trainer_battle and state.rival_resolution_snapshot
+
+
 def is_parcel_verified(state: OaksErrandState) -> bool:
     return state.parcel_snapshot
 
 
 def is_pokedex_verified(state: OaksErrandState) -> bool:
     return state.pokedex_snapshot
+
+
+def run_oaks_errand_chapter(
+    emulator: PyBoyAdapter,
+    reader: PokemonRedStateReader,
+    executor: CountingExecutor,
+    *,
+    timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
+    progress: ProgressSink | None = None,
+) -> OaksErrandChapterReport:
+    """Continue the live opening boundary through Oak's verified Pokédex handoff."""
+
+    start_frames = emulator.frame_count
+    start_actions = executor.actions_executed
+    _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
+    _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
+    _wait(executor, timing.rival_trigger_wait_frames)
+    rival_raw, rival_evidence, saw_trainer_battle = _resolve_lab_rival(
+        executor,
+        reader,
+        timing,
+    )
+    rival_won = is_rival_victory_verified(
+        rival_evidence,
+        saw_trainer_battle=saw_trainer_battle,
+    )
+    _emit(
+        progress,
+        emulator,
+        "rival_defeated" if rival_won else "rival_loss_recovered",
+        "Defeated the lab rival" if rival_won else "Recovered from the lab rival loss",
+        7,
+    )
+
+    _move(executor, reader, LAB_EXIT_DIRECTIONS, "Oak's Lab exit")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.PALLET_TOWN, 12, 12, "Oak's Lab exit")
+    _move(executor, reader, PALLET_TO_ROUTE_1_DIRECTIONS, "Pallet Town north route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
+
+    _wait(executor, timing.route_1_north_seed_wait_frames)
+    _, northbound_flees, northbound_retries = _move_route_1_with_wild_flees(
+        executor,
+        reader,
+        ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
+        "Route 1 northbound",
+        maximum_flees=timing.max_route_1_wild_flees,
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
+    _wait(executor, timing.transition_wait_frames)
+    viridian = reader.read()
+    _expect_position(viridian, MapId.VIRIDIAN_CITY, 21, 35, "Viridian City entrance")
+    _emit(progress, emulator, "viridian_reached", "Reached Viridian City", 8)
+
+    _move(executor, reader, VIRIDIAN_TO_MART_DIRECTIONS, "Viridian Mart route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_MART, 3, 7, "Viridian Mart entrance")
+    _wait(executor, timing.mart_prompt_wait_frames)
+    parcel_raw, parcel_evidence = _receive_parcel(executor, reader, timing)
+    _emit(progress, emulator, "parcel_received", "Received Oak's Parcel", 9)
+
+    _move(executor, reader, MART_EXIT_DIRECTIONS, "Viridian Mart exit")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 29, 20, "Viridian Mart exterior")
+    _move(executor, reader, VIRIDIAN_TO_ROUTE_1_DIRECTIONS, "Viridian City south route")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entrance")
+
+    _wait(executor, timing.route_1_south_seed_wait_frames)
+    _, southbound_flees, southbound_retries = _move_route_1_with_wild_flees(
+        executor,
+        reader,
+        ROUTE_1_TO_PALLET_DIRECTIONS,
+        "Route 1 southbound",
+        maximum_flees=timing.max_route_1_wild_flees - len(northbound_flees),
+        stabilization_frames=timing.route_1_wild_exit_stabilization_frames,
+        maximum_step_attempts=timing.max_route_1_step_attempts,
+        step_retry_wait_frames=timing.route_1_step_retry_wait_frames,
+    )
+    _wait(executor, timing.transition_wait_frames)
+    pallet_returned = reader.read()
+    _expect_position(pallet_returned, MapId.PALLET_TOWN, 10, 0, "Pallet Town return")
+    _emit(progress, emulator, "pallet_returned", "Returned safely to Pallet Town", 10)
+
+    _move(executor, reader, PALLET_TO_LAB_DIRECTIONS, "Professor Oak return")
+    _wait(executor, timing.transition_wait_frames)
+    _expect_position(reader.read(), MapId.OAKS_LAB, 5, 11, "Oak's Lab return")
+    _move(executor, reader, LAB_TO_OAK_DIRECTIONS, "Professor Oak approach")
+    _expect_position(reader.read(), MapId.OAKS_LAB, 5, 3, "Professor Oak")
+    executor.execute(MacroAction(MacroActionKind.INTERACT))
+    _wait(executor, timing.dialogue_wait_frames)
+    pokedex_raw, pokedex_evidence = _receive_pokedex(executor, reader, timing)
+    _emit(
+        progress,
+        emulator,
+        "pokedex_received",
+        "Delivered the parcel and received the Pokédex",
+        11,
+    )
+
+    report = OaksErrandChapterReport(
+        rival_defeated=rival_raw,
+        rival_evidence=rival_evidence,
+        saw_trainer_battle=saw_trainer_battle,
+        viridian_reached=viridian,
+        parcel_received=parcel_raw,
+        parcel_evidence=parcel_evidence,
+        pallet_returned=pallet_returned,
+        pokedex_received=pokedex_raw,
+        pokedex_evidence=pokedex_evidence,
+        route_1_wild_flees=(*northbound_flees, *southbound_flees),
+        route_1_movement_retries=northbound_retries + southbound_retries,
+        frames_executed=emulator.frame_count - start_frames,
+        actions_executed=executor.actions_executed - start_actions,
+    )
+    if not report.passed:
+        raise QualifiedPlayError("Oak's errand evidence failed its public contract.")
+    return report
+
+
+def _training_candidate_runtime_report(
+    audit: TrainingCandidateShadowAudit | None,
+    *,
+    model_file_sha256: str | None,
+    authority: bool,
+    controlled_decisions: int,
+    progress_sink_errors: int,
+) -> dict[str, object] | None:
+    if audit is None:
+        return None
+    summary = audit.public_dict()
+    summary.update(
+        {
+            "model_file_sha256": model_file_sha256,
+            "authority_choice_kinds": ["trainee", "venue"] if authority else [],
+            "controlled_decisions": controlled_decisions,
+            "model_had_execution_authority": authority and controlled_decisions > 0,
+            "teacher_fallback_on_model_disagreement": False if authority else None,
+            "runtime_scope": "clean_power_fixed_objective_sequence",
+            "promotion_eligible": False,
+            "progress_sink_errors": progress_sink_errors,
+        }
+    )
+    return summary
 
 
 def run_qualified_play(
@@ -649,124 +1132,281 @@ def run_qualified_play(
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     play_timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
     progress: ProgressSink | None = None,
+    trajectory_sink: TrajectorySink | None = None,
+    trajectory_episode_id: str | None = None,
+    strategic_navigation_assignment: StrategicNavigationEpisodeAssignment | None = None,
+    battle_start_offsets: tuple[BattleStartOffset, ...] | None = None,
+    battle_model: BattleMoveRanker | None = None,
+    battle_control_model: BattleControlMLP | None = None,
+    execute_battle_control_model: bool = False,
+    battle_control_confidence_threshold: float = 0.0,
+    objective_model: ObjectiveRanker | None = None,
+    objective_model_confidence_threshold: float = 0.0,
+    training_candidate_model: TrainingCandidateMLP | None = None,
+    training_candidate_model_file_sha256: str | None = None,
+    execute_training_candidate_model: bool = False,
+    battle_model_confidence_threshold: float = 0.0,
+    require_battle_model_teacher_agreement: bool = True,
+    require_teacher_free_battle_policy: bool = False,
+    battle_correction_sink: Callable[[Mapping[str, object]], None] | None = None,
+    battle_control_sink: Callable[[Mapping[str, object]], None] | None = None,
+    battle_policy_progress_sink: Callable[[Mapping[str, object]], None] | None = None,
+    training_candidate_progress_sink: Callable[[Mapping[str, object]], None] | None = None,
     _emulator: PyBoyAdapter | None = None,
 ) -> QualifiedPlayReport:
     """Run every currently qualified objective in one clean, no-save session."""
+    if (trajectory_sink is None) != (trajectory_episode_id is None):
+        raise ValueError("trajectory_sink and trajectory_episode_id must be provided together")
+    if strategic_navigation_assignment is not None:
+        if not isinstance(
+            strategic_navigation_assignment,
+            (StrategicNavigationAssignment, StrategicNavigationRehearsalAssignment),
+        ):
+            raise TypeError("strategic_navigation_assignment has an unsupported type")
+        if trajectory_sink is None or trajectory_episode_id is None:
+            raise ValueError(
+                "strategic navigation collection requires a trajectory sink and episode"
+            )
+        if trajectory_episode_id != strategic_navigation_assignment.episode_id:
+            raise ValueError(
+                "strategic navigation assignment must match the trajectory episode"
+            )
+    if (
+        battle_start_offsets is not None
+        and trajectory_sink is None
+        and battle_control_sink is None
+        and objective_model is None
+    ):
+        raise ValueError(
+            "battle_start_offsets require trajectory, battle-control, or objective-policy evidence"
+        )
+    if not 0.0 <= battle_model_confidence_threshold <= 1.0:
+        raise ValueError("battle_model_confidence_threshold must be between zero and one")
+    if not isinstance(require_battle_model_teacher_agreement, bool):
+        raise TypeError("require_battle_model_teacher_agreement must be a bool")
+    if not isinstance(require_teacher_free_battle_policy, bool):
+        raise TypeError("require_teacher_free_battle_policy must be a bool")
+    if require_teacher_free_battle_policy and battle_model is None:
+        raise ValueError("teacher-free battle evaluation requires a battle model")
+    if require_teacher_free_battle_policy and require_battle_model_teacher_agreement:
+        raise ValueError("teacher-free battle evaluation requires model-disagreement execution")
+    if require_teacher_free_battle_policy and (
+        battle_correction_sink is not None or battle_control_sink is not None
+    ):
+        raise ValueError("teacher-free battle evaluation cannot collect teacher labels")
+    if battle_correction_sink is not None and battle_model is None:
+        raise ValueError("battle_correction_sink requires a battle model")
+    if battle_control_sink is not None and battle_model is None:
+        raise ValueError("battle_control_sink requires a battle model")
+    if battle_policy_progress_sink is not None and battle_model is None:
+        raise ValueError("battle policy progress requires a battle model")
+    if battle_control_model is not None and battle_model is None:
+        raise ValueError("battle_control_model requires a battle move model")
+    if execute_battle_control_model and battle_control_model is None:
+        raise ValueError("battle control execution requires a control model")
+    if not 0.0 <= battle_control_confidence_threshold <= 1.0:
+        raise ValueError("battle_control_confidence_threshold must be between zero and one")
+    if not 0.0 <= objective_model_confidence_threshold <= 1.0:
+        raise ValueError("objective_model_confidence_threshold must be between zero and one")
+    if (training_candidate_model is None) != (training_candidate_model_file_sha256 is None):
+        raise ValueError("training candidate model and file digest must be provided together")
+    if execute_training_candidate_model and training_candidate_model is None:
+        raise ValueError("training candidate execution requires an authenticated model")
+    if training_candidate_progress_sink is not None and training_candidate_model is None:
+        raise ValueError("training candidate progress requires an authenticated model")
+    battle_start_schedule = (
+        BattleStartScheduleController(battle_start_offsets)
+        if battle_start_offsets is not None
+        else None
+    )
     emulator_context = (
         PyBoyAdapter(rom_path, watch=watch, speed=speed)
         if _emulator is None
         else nullcontext(_emulator)
     )
-    with emulator_context as emulator:
+    with ExitStack() as stack:
+        if battle_start_schedule is not None:
+            stack.enter_context(bind_battle_start_schedule(battle_start_schedule))
+        emulator = stack.enter_context(emulator_context)
+        reader = PokemonRedStateReader(emulator)
+        model_policy = None
+        if battle_model is not None:
+            model_policy = ModelAssistedBattlePolicy(
+                model=battle_model,
+                encoder=PokemonRedObservationEncoder.from_state_reader(reader),
+                confidence_threshold=battle_model_confidence_threshold,
+                control_model=battle_control_model,
+                execute_control_model=execute_battle_control_model,
+                control_confidence_threshold=battle_control_confidence_threshold,
+                require_teacher_agreement=require_battle_model_teacher_agreement,
+                correction_sink=battle_correction_sink,
+                control_sink=battle_control_sink,
+                progress_sink=battle_policy_progress_sink,
+                observe_teacher_when_not_required=(
+                    (battle_correction_sink is not None or battle_control_sink is not None)
+                    and not require_battle_model_teacher_agreement
+                ),
+                allow_teacher_queries=not require_teacher_free_battle_policy,
+            )
+            stack.enter_context(bind_battle_policy_override(model_policy))
+        base_executor: QualifiedExecutor = FrameSafeExecutor(
+            emulator,
+            new_game_timing.controller_timing(),
+        )
+        recording_executor: RecordingExecutor[MacroAction, ExecutedAction] | None = None
+        objective_observer: SemanticObjectiveDecisionObserver | None = None
+        strategic_navigation_observer: StrategicNavigationTrajectoryObserver | None = None
+        strategic_tower_approach: PostHideoutStrategicApproach | None = None
+        strategic_koga_approach: PostSafariStrategicApproach | None = None
+        strategic_dojo_approach: PostSilphStrategicApproach | None = None
+        objective_policy: ModelObjectivePolicy | None = None
+        training_candidate_audit = (
+            TrainingCandidateShadowAudit(training_candidate_model)
+            if training_candidate_model is not None
+            else None
+        )
+        training_candidate_controlled_decisions = 0
+        training_candidate_progress_errors = 0
+
+        def observe_training_candidate(decision: TrainingCandidateDecision) -> None:
+            nonlocal training_candidate_progress_errors
+            assert training_candidate_audit is not None
+            training_candidate_audit.observe(decision)
+            if training_candidate_progress_sink is None:
+                return
+            try:
+                training_candidate_progress_sink(training_candidate_audit.public_dict())
+            except Exception:
+                # Observer failures cannot change what the game executes.
+                training_candidate_progress_errors += 1
+
+        def training_candidate_decision_authority(
+            decision: TrainingCandidateDecision,
+        ) -> int:
+            nonlocal training_candidate_controlled_decisions
+            assert training_candidate_audit is not None
+            assert training_candidate_model is not None
+            observe_training_candidate(decision)
+            training_candidate_controlled_decisions += 1
+            return training_candidate_model.predict(decision.observation)
+
+        recording_failures = [0]
+        effective_progress = progress
+        snapshot_encoder = (
+            PokemonRedObservationEncoder.from_state_reader(reader)
+            if trajectory_sink is not None or objective_model is not None
+            else None
+        )
+        if objective_model is not None:
+            assert snapshot_encoder is not None
+            objective_policy = ModelObjectivePolicy(
+                model=objective_model,
+                graph=COMPLETION_QUEST,
+                snapshot_provider=snapshot_encoder,
+                confidence_threshold=objective_model_confidence_threshold,
+            )
+            objective_policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+            effective_progress = _objective_model_fixed_dispatch_bridge(
+                effective_progress,
+                objective_policy,
+            )
+        if trajectory_sink is not None and trajectory_episode_id is not None:
+            assert snapshot_encoder is not None
+            recording_executor = RecordingExecutor(
+                delegate=base_executor,
+                snapshot_provider=snapshot_encoder,
+                sink=trajectory_sink,
+                episode_id=trajectory_episode_id,
+            )
+            base_executor = recording_executor
+            objective_observer = SemanticObjectiveDecisionObserver(
+                graph=COMPLETION_QUEST,
+                snapshot_provider=snapshot_encoder,
+                recorder=recording_executor,
+                policy_id=POKEMON_RED_QUALIFIED_TEACHER_POLICY_ID,
+            )
+            if strategic_navigation_assignment is not None:
+                strategic_navigation_observer = StrategicNavigationTrajectoryObserver(
+                    assignment=strategic_navigation_assignment,
+                    snapshot_provider=snapshot_encoder,
+                    recorder=recording_executor,
+                    sink=trajectory_sink,
+                )
+                strategic_rom = Path(rom_path).read_bytes()
+                strategic_tower_approach = PostHideoutStrategicApproach(
+                    rom=strategic_rom,
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
+                strategic_koga_approach = PostSafariStrategicApproach(
+                    rom=strategic_rom,
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
+                strategic_dojo_approach = PostSilphStrategicApproach(
+                    rom=strategic_rom,
+                    reader=reader,
+                    trajectory=strategic_navigation_observer,
+                )
+            try:
+                objective_observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[0])
+            except Exception:
+                recording_executor.note_instrumentation_failure()
+            stack.enter_context(
+                bind_battle_decision_observer(
+                    PokemonRedBattleDecisionObserver(
+                        encoder=snapshot_encoder,
+                        recorder=recording_executor,
+                    )
+                )
+            )
+            if battle_start_schedule is not None:
+                stack.enter_context(
+                    bind_battle_schedule_observer(
+                        PokemonRedBattleScheduleObserver(
+                            encoder=snapshot_encoder,
+                            recorder=recording_executor,
+                            sink=trajectory_sink,
+                            schedule_sha256=battle_start_schedule.schedule_sha256,
+                        )
+                    )
+                )
+            effective_progress = _trajectory_progress_bridge(
+                progress,
+                trajectory_sink,
+                trajectory_episode_id,
+                recording_executor,
+                recording_failures,
+                objective_observer,
+            )
+        progress = effective_progress
+
         opening = run_opening_chapter(
             rom_path,
             new_game_timing=new_game_timing,
             opening_timing=opening_timing,
-            progress=_opening_progress_bridge(progress),
+            progress=_opening_progress_bridge(effective_progress),
             _emulator=emulator,
+            _executor=base_executor,
         )
-        reader = PokemonRedStateReader(emulator)
-        executor = _CountingExecutor(
-            FrameSafeExecutor(emulator, new_game_timing.controller_timing())
-        )
+        executor = CountingExecutor(base_executor)
 
-        _move(executor, reader, LAB_RIVAL_TRIGGER_DIRECTIONS, "lab rival trigger")
-        _expect_position(reader.read(), MapId.OAKS_LAB, 4, 6, "lab rival trigger")
-        _wait(executor, play_timing.rival_trigger_wait_frames)
-        rival_raw, rival_evidence, saw_trainer_battle = _defeat_lab_rival(
-            executor,
-            reader,
-            play_timing,
-        )
-        _emit(progress, emulator, "rival_defeated", "Defeated the lab rival", 7)
-
-        _move(executor, reader, LAB_EXIT_DIRECTIONS, "Oak's Lab exit")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.PALLET_TOWN, 12, 12, "Oak's Lab exit")
-
-        _move(
-            executor,
-            reader,
-            PALLET_TO_ROUTE_1_DIRECTIONS,
-            "Pallet Town north route",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.ROUTE_1, 10, 35, "Route 1 south entrance")
-
-        _wait(executor, play_timing.route_1_north_seed_wait_frames)
-        _move(
-            executor,
-            reader,
-            ROUTE_1_TO_VIRIDIAN_DIRECTIONS,
-            "Route 1 northbound",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        viridian = reader.read()
-        _expect_position(viridian, MapId.VIRIDIAN_CITY, 21, 35, "Viridian City entrance")
-        _emit(progress, emulator, "viridian_reached", "Reached Viridian City", 8)
-
-        _move(executor, reader, VIRIDIAN_TO_MART_DIRECTIONS, "Viridian Mart route")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.VIRIDIAN_MART, 3, 7, "Viridian Mart entrance")
-        _wait(executor, play_timing.mart_prompt_wait_frames)
-        parcel_raw, parcel_evidence = _receive_parcel(
-            executor,
-            reader,
-            play_timing,
-        )
-        _emit(progress, emulator, "parcel_received", "Received Oak's Parcel", 9)
-
-        _move(executor, reader, MART_EXIT_DIRECTIONS, "Viridian Mart exit")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.VIRIDIAN_CITY, 29, 20, "Viridian Mart exterior")
-
-        _move(
-            executor,
-            reader,
-            VIRIDIAN_TO_ROUTE_1_DIRECTIONS,
-            "Viridian City south route",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.ROUTE_1, 11, 0, "Route 1 north entrance")
-
-        _wait(executor, play_timing.route_1_south_seed_wait_frames)
-        _move(
-            executor,
-            reader,
-            ROUTE_1_TO_PALLET_DIRECTIONS,
-            "Route 1 southbound",
-        )
-        _wait(executor, play_timing.transition_wait_frames)
-        pallet_returned = reader.read()
-        _expect_position(pallet_returned, MapId.PALLET_TOWN, 10, 0, "Pallet Town return")
-        _emit(
-            progress,
+        oaks_errand = run_oaks_errand_chapter(
             emulator,
-            "pallet_returned",
-            "Returned safely to Pallet Town",
-            10,
-        )
-
-        _move(executor, reader, PALLET_TO_LAB_DIRECTIONS, "Professor Oak return")
-        _wait(executor, play_timing.transition_wait_frames)
-        _expect_position(reader.read(), MapId.OAKS_LAB, 5, 11, "Oak's Lab return")
-        _move(executor, reader, LAB_TO_OAK_DIRECTIONS, "Professor Oak approach")
-        _expect_position(reader.read(), MapId.OAKS_LAB, 5, 3, "Professor Oak")
-
-        executor.execute(MacroAction(MacroActionKind.INTERACT))
-        _wait(executor, play_timing.dialogue_wait_frames)
-        pokedex_raw, pokedex_evidence = _receive_pokedex(
-            executor,
             reader,
-            play_timing,
+            executor,
+            timing=play_timing,
+            progress=progress,
         )
-        _emit(
-            progress,
-            emulator,
-            "pokedex_received",
-            "Delivered the parcel and received the Pokédex",
-            11,
-        )
+        rival_raw = oaks_errand.rival_defeated
+        rival_evidence = oaks_errand.rival_evidence
+        saw_trainer_battle = oaks_errand.saw_trainer_battle
+        viridian = oaks_errand.viridian_reached
+        parcel_raw = oaks_errand.parcel_received
+        parcel_evidence = oaks_errand.parcel_evidence
+        pallet_returned = oaks_errand.pallet_returned
+        pokedex_raw = oaks_errand.pokedex_received
+        pokedex_evidence = oaks_errand.pokedex_evidence
 
         try:
             pewter = run_pewter_chapter(
@@ -774,6 +1414,10 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_pewter_progress_bridge(progress),
+                lab_rival_loss_recovery_required=not is_rival_victory_verified(
+                    rival_evidence,
+                    saw_trainer_battle=saw_trainer_battle,
+                ),
             )
         except PewterChapterError as error:
             raise QualifiedPlayError(str(error)) from error
@@ -864,8 +1508,15 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_tower_progress_bridge(progress),
+                strategic_approach=strategic_tower_approach,
             )
-        except TowerChapterError as error:
+        except (
+            PostHideoutStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+            TowerChapterError,
+        ) as error:
             raise QualifiedPlayError(str(error)) from error
 
         try:
@@ -894,8 +1545,15 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_koga_progress_bridge(progress),
+                strategic_approach=strategic_koga_approach,
             )
-        except KogaChapterError as error:
+        except (
+            KogaChapterError,
+            PostSafariStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+        ) as error:
             raise QualifiedPlayError(str(error)) from error
 
         try:
@@ -939,11 +1597,29 @@ def run_qualified_play(
             raise QualifiedPlayError(str(error)) from error
 
         try:
+            dojo = run_dojo_chapter(
+                emulator,
+                reader,
+                executor,
+                progress=_dojo_progress_bridge(progress),
+                strategic_approach=strategic_dojo_approach,
+            )
+        except (
+            DojoChapterError,
+            PostSilphStrategicRouteError,
+            RouteExecutionError,
+            RoutePlanningError,
+            StrategicNavigationError,
+        ) as error:
+            raise QualifiedPlayError(str(error)) from error
+
+        try:
             sabrina = run_sabrina_chapter(
                 emulator,
                 reader,
                 executor,
                 progress=_sabrina_progress_bridge(progress),
+                require_teacher_strategy_evidence=(not execute_battle_control_model),
             )
         except SabrinaChapterError as error:
             raise QualifiedPlayError(str(error)) from error
@@ -964,6 +1640,16 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_blaine_progress_bridge(progress),
+                training_candidate_decision_sink=(
+                    observe_training_candidate
+                    if training_candidate_audit is not None and not execute_training_candidate_model
+                    else None
+                ),
+                training_candidate_decision_authority=(
+                    training_candidate_decision_authority
+                    if execute_training_candidate_model
+                    else None
+                ),
             )
         except BlaineChapterError as error:
             raise QualifiedPlayError(str(error)) from error
@@ -996,7 +1682,7 @@ def run_qualified_play(
                 progress=_lorelei_progress_bridge(progress),
             )
         except LoreleiChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             bruno = run_bruno_chapter(
@@ -1006,7 +1692,7 @@ def run_qualified_play(
                 progress=_bruno_progress_bridge(progress),
             )
         except BrunoChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             agatha = run_agatha_chapter(
@@ -1016,7 +1702,7 @@ def run_qualified_play(
                 progress=_agatha_progress_bridge(progress),
             )
         except AgathaChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             lance = run_lance_chapter(
@@ -1026,7 +1712,7 @@ def run_qualified_play(
                 progress=_lance_progress_bridge(progress),
             )
         except LanceChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         try:
             champion = run_champion_chapter(
@@ -1034,9 +1720,10 @@ def run_qualified_play(
                 reader,
                 executor,
                 progress=_champion_progress_bridge(progress),
+                require_teacher_strategy_evidence=(not execute_battle_control_model),
             )
         except ChampionChapterError as error:
-            raise QualifiedPlayError(str(error)) from error
+            raise _qualified_play_chapter_error(error, model_policy) from error
 
         facts = (
             opening.facts
@@ -1058,6 +1745,7 @@ def run_qualified_play(
             | semantic_facts(erika.final_raw)
             | semantic_facts(saffron.final_raw)
             | semantic_facts(silph.final_raw)
+            | semantic_facts(dojo.final_raw)
             | semantic_facts(sabrina.final_raw)
             | semantic_facts(cinnabar.final_raw)
             | semantic_facts(blaine.final_raw)
@@ -1081,6 +1769,11 @@ def run_qualified_play(
         )
         available = COMPLETION_QUEST.available_objectives(state)
         next_objective = available[0].id if available else None
+        final_pokedex = reader.read_pokedex_state()
+        final_boxes = reader.read_all_box_states()
+        final_party = PokemonRedPartyReader(emulator).read()
+        if battle_start_schedule is not None:
+            battle_start_schedule.require_complete()
         report = QualifiedPlayReport(
             rom=emulator.fingerprint,
             pyboy_version=emulator.pyboy_version,
@@ -1109,6 +1802,7 @@ def run_qualified_play(
             erika=erika,
             saffron=saffron,
             silph=silph,
+            dojo=dojo,
             sabrina=sabrina,
             cinnabar=cinnabar,
             blaine=blaine,
@@ -1129,14 +1823,97 @@ def run_qualified_play(
             frames_executed=emulator.frame_count,
             actions_executed=opening.actions_executed + executor.actions_executed,
             controller_released=not emulator.pressed_buttons,
+            pokedex_state=final_pokedex,
+            collection_progress=summarize_red_collection(
+                final_pokedex,
+                final_party,
+                final_boxes,
+            ),
+            battle_policy_report=(model_policy.public_dict() if model_policy is not None else None),
+            battle_policy_teacher_free_required=require_teacher_free_battle_policy,
+            objective_policy_report=(
+                objective_policy.public_dict() if objective_policy is not None else None
+            ),
+            battle_start_schedule_report=(
+                {
+                    "complete": True,
+                    "expected_battles": battle_start_schedule.expected_count,
+                    "finished_battles": battle_start_schedule.finished_count,
+                    "schedule_sha256": battle_start_schedule.schedule_sha256,
+                    "schema": "pokemon-red-battle-start-schedule-result-v1",
+                }
+                if battle_start_schedule is not None
+                else None
+            ),
+            training_candidate_policy_report=_training_candidate_runtime_report(
+                training_candidate_audit,
+                model_file_sha256=training_candidate_model_file_sha256,
+                authority=execute_training_candidate_model,
+                controlled_decisions=training_candidate_controlled_decisions,
+                progress_sink_errors=training_candidate_progress_errors,
+            ),
+            training_candidate_authority_required=execute_training_candidate_model,
         )
         if not report.passed:
             raise QualifiedPlayError("Qualified play evidence failed its public contract.")
+        if (
+            trajectory_sink is not None
+            and trajectory_episode_id is not None
+            and recording_executor is not None
+        ):
+            if strategic_navigation_observer is not None:
+                strategic_navigation_observer.require_settled()
+            try:
+                trajectory_sink.record_event(
+                    SparseEvent(
+                        event_id=f"{trajectory_episode_id}:terminal",
+                        episode_id=trajectory_episode_id,
+                        step_index=recording_executor.next_step_index,
+                        kind="terminal",
+                        payload={
+                            "status": "complete",
+                            "game_complete": True,
+                            "qualified_through": QUALIFIED_THROUGH_OBJECTIVE,
+                            "objectives_verified": len(verified_objectives),
+                            "objectives_total": len(COMPLETION_QUEST),
+                            "frames": report.frames_executed,
+                            "actions": report.actions_executed,
+                            "controller_released": report.controller_released,
+                            "battle_start_schedule": (
+                                {
+                                    "complete": True,
+                                    "expected_battles": battle_start_schedule.expected_count,
+                                    "finished_battles": battle_start_schedule.finished_count,
+                                    "schedule_sha256": (battle_start_schedule.schedule_sha256),
+                                }
+                                if battle_start_schedule is not None
+                                else None
+                            ),
+                        },
+                    )
+                )
+            except Exception:
+                recording_failures[0] += 1
+            failures = recording_failures[0] + recording_executor.recording_failures
+            if failures:
+                reasons = dict(recording_executor.recording_failure_reasons)
+                if recording_failures[0]:
+                    reasons["sparse_event"] = recording_failures[0]
+                raise QualifiedPlayError(
+                    f"Trajectory recording lost {failures} record(s); "
+                    f"categories={reasons!r}; the private episode was not promoted."
+                )
+            try:
+                trajectory_sink.finalize()
+            except Exception as error:
+                raise QualifiedPlayError(
+                    "Trajectory finalization failed; the private episode was not promoted."
+                ) from error
         return report
 
 
-def _defeat_lab_rival(
-    executor: _CountingExecutor,
+def _resolve_lab_rival(
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState, bool]:
@@ -1146,7 +1923,7 @@ def _defeat_lab_rival(
         state = reader.read_oaks_errand_state(raw)
         if state.phase is OaksErrandPhase.RIVAL_BATTLE:
             saw_trainer_battle = True
-        if is_rival_victory_verified(
+        if is_rival_resolution_verified(
             state,
             saw_trainer_battle=saw_trainer_battle,
         ):
@@ -1156,11 +1933,11 @@ def _defeat_lab_rival(
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         wait_frames = timing.battle_wait_frames if raw.battle_state else timing.dialogue_wait_frames
         _wait(executor, wait_frames)
-    raise QualifiedPlayError("The lab rival failed the bounded verified-victory gate.")
+    raise QualifiedPlayError("The lab rival failed the bounded verified-resolution gate.")
 
 
 def _receive_parcel(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState]:
@@ -1177,7 +1954,7 @@ def _receive_parcel(
 
 
 def _receive_pokedex(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     timing: QualifiedPlayTiming,
 ) -> tuple[RawGameState, OaksErrandState]:
@@ -1194,7 +1971,7 @@ def _receive_pokedex(
 
 
 def _move(
-    executor: _CountingExecutor,
+    executor: CountingExecutor,
     reader: PokemonRedStateReader,
     directions: Iterable[str],
     label: str,
@@ -1208,6 +1985,30 @@ def _move(
         if state.battle_state:
             raise QualifiedPlayError(f"Unexpected battle interrupted {label} at step {step}.")
     return state
+
+
+def _move_route_1_with_wild_flees(
+    executor: CountingExecutor,
+    reader: PokemonRedStateReader,
+    directions: Iterable[str],
+    label: str,
+    *,
+    maximum_flees: int,
+    stabilization_frames: int,
+    maximum_step_attempts: int,
+    step_retry_wait_frames: int,
+) -> tuple[RawGameState, tuple[Route1WildFleeEvidence, ...], int]:
+    return move_route_1_with_wild_flees(
+        executor,
+        reader,
+        directions,
+        label,
+        maximum_flees=maximum_flees,
+        stabilization_frames=stabilization_frames,
+        maximum_step_attempts=maximum_step_attempts,
+        step_retry_wait_frames=step_retry_wait_frames,
+        error_type=QualifiedPlayError,
+    )
 
 
 def _expect_position(
@@ -1226,7 +2027,7 @@ def _expect_position(
         raise QualifiedPlayError(f"The clean run missed the stable {label} gate.")
 
 
-def _wait(executor: _CountingExecutor, frames: int) -> None:
+def _wait(executor: CountingExecutor, frames: int) -> None:
     executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
@@ -1797,6 +2598,38 @@ def _sabrina_progress_bridge(
     return emit
 
 
+def _dojo_progress_bridge(
+    sink: ProgressSink | None,
+) -> Callable[[DojoProgress], None] | None:
+    if sink is None:
+        return None
+
+    def emit(progress: DojoProgress) -> None:
+        sink(
+            QualifiedPlayProgress(
+                checkpoint_id=progress.checkpoint_id,
+                label=progress.label,
+                completed=QUALIFIED_PLAY_CHECKPOINT_COUNT
+                - CHAMPION_CHECKPOINT_COUNT
+                - LANCE_CHECKPOINT_COUNT
+                - AGATHA_CHECKPOINT_COUNT
+                - BRUNO_CHECKPOINT_COUNT
+                - LORELEI_CHECKPOINT_COUNT
+                - VICTORY_ROAD_CHECKPOINT_COUNT
+                - GIOVANNI_CHECKPOINT_COUNT
+                - BLAINE_CHECKPOINT_COUNT
+                - CINNABAR_CHECKPOINT_COUNT
+                - SABRINA_CHECKPOINT_COUNT
+                - DOJO_CHECKPOINT_COUNT
+                + progress.completed,
+                total=QUALIFIED_PLAY_CHECKPOINT_COUNT,
+                frames_executed=progress.frames_executed,
+            )
+        )
+
+    return emit
+
+
 def _cinnabar_progress_bridge(
     sink: ProgressSink | None,
 ) -> Callable[[CinnabarProgress], None] | None:
@@ -2029,6 +2862,91 @@ def _champion_progress_bridge(
         )
 
     return emit
+
+
+def _trajectory_progress_bridge(
+    downstream: ProgressSink | None,
+    sink: TrajectorySink,
+    episode_id: str,
+    recorder: RecordingExecutor[MacroAction, ExecutedAction],
+    recording_failures: list[int],
+    objective_observer: SemanticObjectiveDecisionObserver | None = None,
+) -> ProgressSink:
+    def emit(progress: QualifiedPlayProgress) -> None:
+        if downstream is not None:
+            downstream(progress)
+        try:
+            sink.record_event(
+                SparseEvent(
+                    event_id=(
+                        f"{episode_id}:checkpoint:{recorder.next_step_index}:"
+                        f"{progress.completed}:{progress.checkpoint_id}"
+                    ),
+                    episode_id=episode_id,
+                    step_index=recorder.next_step_index,
+                    kind="checkpoint",
+                    payload={
+                        "checkpoint_id": progress.checkpoint_id,
+                        "label": progress.label,
+                        "completed": progress.completed,
+                        "total": progress.total,
+                        "frames": progress.frames_executed,
+                    },
+                )
+            )
+        except Exception:
+            recording_failures[0] += 1
+        if objective_observer is not None:
+            try:
+                completed_at_boundary = _QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(
+                    progress.completed,
+                    (),
+                )
+                for objective_id in completed_at_boundary:
+                    # Long-running chapter work may emit several progress updates
+                    # without advancing the qualified checkpoint count.  A repeated
+                    # update at an objective boundary is not fresh verifier evidence.
+                    if objective_id in objective_observer.completed_ids:
+                        continue
+                    objective_observer.complete(objective_id)
+                    completed_count = len(objective_observer.completed_ids)
+                    if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
+                        objective_observer.select(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
+            except Exception:
+                recorder.note_instrumentation_failure()
+
+    return emit
+
+
+def _objective_model_fixed_dispatch_bridge(
+    downstream: ProgressSink | None,
+    policy: ModelObjectivePolicy,
+) -> ProgressSink:
+    """Advance facts and score every fixed segment outside the learned denominator."""
+
+    completed_objectives: set[str] = set()
+
+    def emit(progress: QualifiedPlayProgress) -> None:
+        if downstream is not None:
+            downstream(progress)
+        for objective_id in _QUALIFIED_OBJECTIVES_BY_CHECKPOINT.get(
+            progress.completed,
+            (),
+        ):
+            if objective_id in completed_objectives:
+                continue
+            policy.complete(objective_id)
+            completed_objectives.add(objective_id)
+            completed_count = policy.completed_objective_count
+            if completed_count < len(QUALIFIED_OBJECTIVE_SEQUENCE):
+                policy.dispatch_fixed(QUALIFIED_OBJECTIVE_SEQUENCE[completed_count])
+
+    return emit
+
+
+# Kept as an import-compatible alias for historical tests and downstream tools.
+# The implementation no longer supplies an expected answer to ``authorize``.
+_objective_model_progress_bridge = _objective_model_fixed_dispatch_bridge
 
 
 def _emit(

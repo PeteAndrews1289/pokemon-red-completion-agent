@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon-red-portable-clean-start-six-role-perturbation-failure-v1",
+  "recorded_on": "2026-08-09",
+  "status": "failed_uncounted_perturbation_with_verified_route_resume_defect",
+  "promotion_eligible": false,
+  "claim": "Fresh derived-timing seed 990018 qualified the repaired rival and ordinary-wild boundaries, then stopped at the Viridian entrance because movement resumed before the battle-to-overworld handoff was stable. The run stopped before any learned battle or training decision. This is a preserved input-handoff defect, not a model-prediction failure.",
+  "diagnostic_root": {
+    "counted": false,
+    "harness_seed": 990018,
+    "initial_wait_frames": 22,
+    "timing_mode": "derived_initial_wait_and_battle_offsets",
+    "battle_schedule_sha256": "5cafc4a1da6cac12270b4b4c379d1be288a9dc28c8d0df70fba28f851b110c39"
+  },
+  "source": {
+    "git_commit": "883be4f858c14b2cb0e698372e803545520a2370",
+    "worktree_dirty": false
+  },
+  "raw_report_sha256": "a34e4561f9f4655ebf7d35cc28303053a88cffdf0b4ba79e67ca4e319d56d91e",
+  "failure": {
+    "stage": "objective_loop_execution",
+    "exception_type": "QualifiedPlayError",
+    "message": "The clean run missed the stable Viridian City entrance gate.",
+    "frames_executed": 46006,
+    "objective_decisions": 1,
+    "objectives_completed": 0,
+    "battle_schedule_entries_consumed": 0,
+    "battle_model_decisions": 0,
+    "training_control_decisions": 0,
+    "training_candidate_decisions": 0
+  },
+  "direct_reproduction": {
+    "encounters": [
+      {
+        "map": 12,
+        "position": [14, 14],
+        "enemy_species_id": 165,
+        "enemy_level": 3,
+        "run_attempts": 1,
+        "flee_evidence_verified": true
+      },
+      {
+        "map": 12,
+        "position": [14, 8],
+        "enemy_species_id": 36,
+        "enemy_level": 3,
+        "run_attempts": 1,
+        "flee_evidence_verified": true
+      }
+    ],
+    "observed_terminal_position": {
+      "map": 12,
+      "position": [11, 6]
+    },
+    "expected_terminal_position": {
+      "map": 1,
+      "position": [21, 35]
+    },
+    "causal_trial": "Adding only a 120-frame post-flee stabilization wait reached the exact Viridian City entrance gate at map 1, coordinate 21,35. The same trial then advanced beyond Oak's errand and exposed another ordinary Route 1 encounter in the Pewter chapter."
+  },
+  "diagnosis": {
+    "category": "battle_exit_input_handoff_not_stable",
+    "finding": "The first battle-state-zero and input-readiness observation precedes the stable overworld input boundary. Immediate route actions can therefore be accepted by the executor but ignored by the game, producing silent coordinate drift.",
+    "secondary_finding": "The post-Pokedex Pewter chapter used a separate zero-wild Route 1 traversal, so incidental-wild support had not yet been applied consistently across both early-game crossings.",
+    "model_boundary": "No learned battle, switch-target, training-control, or trainee/venue decision had occurred. The scheduled trainer-battle perturbation controller had consumed zero of 74 entries."
+  },
+  "repair": {
+    "status": "implemented_full_rom_free_gate_passed_pending_fresh_perturbation",
+    "behavior": "A shared Route 1 wild-escape primitive now waits a declared positive stabilization interval after the first ready battle exit, rereads the cartridge, and requires the same coordinate, living party, exact party/level/max-HP/PP/status preservation, result two, and released controls before route movement resumes.",
+    "chapter_coverage": "Both Oak's errand crossings and the post-Pokedex Pewter crossing use the same bounded helper. Each chapter retains an eight-encounter ceiling and rejects trainer battles, wrong maps, failed preservation, invalid menu state, or a seventeenth RUN attempt.",
+    "public_receipt": "Each flee receipt now includes the stabilization interval in addition to opponent, coordinate, HP, RUN attempts, control readiness, and protected-state checks. Pewter's chapter report carries its own Route 1 flee receipts.",
+    "next_gate": "Commit and push the source-bound repair that passed 2165 ROM-free tests plus Ruff, mypy, public-artifact, documentation, and registry checks, then run a fresh uncounted derived-timing root. Counted v95 remains unopened."
+  }
+}
