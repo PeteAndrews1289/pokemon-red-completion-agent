@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Froze and validated manifest `f1a03497…8b7295`, received Antigravity pre/post GO with no P0/P1,
+  and
+  passed exactly one fit-bound zero-disclosure held-out-comparison preflight at published source
+  `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
+  [path-free receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+  records four authenticated commitments, an unused comparison identity, zero development-payload
+  disclosure, and zero learning/gameplay/authority/transfer deltas. Activated one benchmark
+  comparison at 0/1 and stopped before development decode.
+
 - Completed exactly one train-only rootless living-Dex dependency fit from published source
   `048bea66d205b0e784b3321763e2725d2ccfff32` after the reviewed authorization checkpoint merged.
   The [path-free fit result](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)

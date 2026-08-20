@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: train-only dependency fit complete; comparison qualification is active
+## 2026-08-20: comparison preflight passed; one aggregate held-out check is active
+
+Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`. Manifest `f1a03497…8b7295` froze and validated 17 semantic bindings, and
+Antigravity returned GO with no P0/P1 blocker before execution and again after reviewing the
+path-free result and reorientation. The
+[comparison-preflight receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+(SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+records an available comparison identity, four authenticated commitments, zero development-payload
+disclosure, and zero counter, gameplay, authority, or transfer delta.
+
+Codex now owns only `rootless-living-dex-dependency-comparison-v1`: claim once, decode exactly four
+committed openings, publish aggregate metrics plus one durable terminal, and stop. The fixed
+descriptive gate is at least 3/4 correct, cross-entropy below 0.693147, and mean winner probability
+above 0.5. Never retry, refit, tune on the opened rows, expose row-level labels publicly, access a
+ROM/controller, promote, run Crystal, or claim gameplay, completion, or transfer.
+
+## Previous checkpoint — 2026-08-20: train-only dependency fit complete
 
 Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`; authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`

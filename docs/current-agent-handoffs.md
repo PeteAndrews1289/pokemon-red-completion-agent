@@ -6,7 +6,20 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one zero-disclosure comparison preflight
+## Current override: Codex owns one aggregate held-out comparison
+
+The [comparison-preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+(SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+records the exact completed fit, four commitments, and unused comparison identity authenticated
+with zero development-payload disclosure. Antigravity returned GO with no P0/P1 before preflight
+and after reviewing the path-free result and reorientation. Claude remains unavailable and is not
+a gate.
+
+Codex may claim and run exactly one four-row aggregate comparison and must stop at its first durable
+terminal. No retry, refit, tuning, row-level public disclosure, ROM/game action, promotion, Crystal,
+completion, or transfer is owned by any agent. Antigravity reviews the result and mission boundary.
+
+## Previous override: Codex owned one zero-disclosure comparison preflight
 
 The [fit result](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
 (SHA-256 `d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b`)

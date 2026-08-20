@@ -1,6 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: the first dependency head learns; keep the exam envelope closed
+## August 20 scene: the exam is authenticated; open it only once
+
+Open on **MANIFEST F1A03497 · PREFLIGHT PASSED · COMMITMENTS 4 · COMPARISON IDENTITY UNUSED ·
+DEVELOPMENT PAYLOADS OPENED 0**. Link the
+[preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+with **SHA-256 F8DA36C2…A95F7**. Add **ANTIGRAVITY PRE/POST GO · P0/P1 0**.
+
+Animate **CLAIM ONCE → OPEN EXACTLY 4 → AGGREGATE METRICS → DURABLE TERMINAL → CUT**. Put the
+descriptive gate on screen: **≥3/4 CORRECT · CE <0.693147 · MEAN WINNER P >0.5**. Then show the
+honesty card: **NOT GAMEPLAY · NOT COMPLETION · NOT TRANSFER · NOT AUTHORITY**. A pass earns only
+the next engineering question: can real Red observations supply the same title-neutral signal?
+
+## Previous August 20 scene: the first dependency head learned; the exam envelope stayed closed
 
 Open on **ROOTLESS FIT 1/1 · TRAIN ROWS 8 · ACCURACY 1.0 · CROSS-ENTROPY
 0.693147→0.205636**. Link the

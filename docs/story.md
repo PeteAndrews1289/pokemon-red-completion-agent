@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the small dependency model learned; the exam is still sealed
+## Current checkpoint: the exam desk is ready; the envelope is still closed
+
+The project authenticated the exact model, fit, four sealed commitments, and unused comparison
+identity without opening a single future example. The
+[preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+records zero development disclosure and zero learning, gameplay, authority, or transfer movement.
+Antigravity found no P0/P1 blocker before the check or after reviewing the path-free result and
+reorientation.
+
+The next scene finally opens the four-example envelope once. The camera shows only the aggregate:
+did the learned dependency rule beat a coin-flip baseline on two unseen structures? Then it cuts.
+Even a clean pass merely earns the right to design a real Red observation adapter; it does not show
+the agent walking, catching Pokémon, completing a story, or transferring to Crystal.
+
+## Previous checkpoint: the small dependency model learned; the exam was still sealed
 
 The first rootless parameter update is complete. Across the eight authenticated lessons, the
 interaction ranker reached perfect train accuracy and cut cross-entropy from 0.693147 to 0.205636.

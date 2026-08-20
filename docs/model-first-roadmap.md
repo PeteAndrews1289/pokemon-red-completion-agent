@@ -8,7 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: the dependency ranker fit; qualify the sealed comparison boundary
+## Current checkpoint: comparison preflight passed; run the aggregate held-out check once
+
+Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`. Manifest `f1a03497…8b7295` froze and validated the campaign, datasets, fit,
+model, manifest, terminal, and four commitments; Antigravity returned GO with no P0/P1 before the
+read-only run and again after reviewing the path-free result and reorientation. The
+[preflight result](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+(SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+records an unused comparison identity and zero development-payload disclosure or counter delta.
+
+Active `rootless-living-dex-dependency-comparison-v1` runs exactly once. Claim before disclosure,
+decode all four committed openings, publish only aggregate metrics and one terminal, and stop. A
+descriptive pass requires at least 3/4 correct, lower cross-entropy than 0.693147, and mean winner
+probability above 0.5. Pass or fail, do not retry, refit, tune, open a ROM, promote authority, run
+Crystal, or continue into gameplay. A pass permits only a later real-Red observation-adapter design.
+
+## Previous checkpoint: the dependency ranker fit; qualify the sealed comparison boundary
 
 Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`, and authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`

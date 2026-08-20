@@ -134,26 +134,24 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The fixed synthetic dependency fit completed at 1.0 train accuracy and reduced "
-            "cross-entropy from 0.6931 to 0.2056. A zero-disclosure comparison preflight is next; "
-            "every development opening remains sealed."
+            "The fit-bound zero-disclosure preflight passed with all four development openings "
+            "still sealed. The one aggregate held-out comparison is ready but has not run."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Rootless comparison qualification · train fit 1/1 · 4 development commitments "
-            "sealed · no game"
+            "Rootless · preflight passed · comparison 0/1 · four commitments sealed · no game"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Fit complete · accuracy 1.0 · cross-entropy 0.2056 · development opened 0",
-            choice="Qualify the exact fit-bound comparison; stop before development decode",
+            candidate="Fit complete · preflight passed · comparison identity unused · dev opened 0",
+            choice="Run one aggregate held-out comparison; stop at its first durable terminal",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="training",
+            phase="sealed_test",
             zero_shot_completed=synthetic_train_outcomes,
             zero_shot_total=synthetic_train_total,
             adaptation_completed=synthetic_model_fits,
@@ -212,7 +210,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Rootless fit · COMPLETE · accuracy 1.0 · cross-entropy 0.693147→0.205636 · "
+                "Rootless comparison gate · PREFLIGHT PASSED · commitments 4 · identity unused · "
                 "development openings 0 · comparison 0 · authority 0"
             ),
             (

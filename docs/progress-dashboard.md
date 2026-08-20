@@ -5,7 +5,17 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · AUTHORIZATION CHECKPOINT
+> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · MANIFEST F1A03497 ·
+> COMPARISON PREFLIGHT PASSED · COMMITMENTS 4 · IDENTITY UNUSED · DEV OPENINGS 0 · ANTIGRAVITY
+> PRE/POST GO**. Link the
+> [preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+> and show **SHA-256 F8DA36C2…A95F7**.
+>
+> Active rail: **ROOTLESS TRAIN 8/8 → FIT 1/1 → PREFLIGHT PASSED → HELD-OUT COMPARISON 0/1 →
+> ONE AGGREGATE TERMINAL → STOP**. Keep **GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/
+> AUTHORITY/TRANSFER 0**. Gate: **≥3/4 CORRECT · CE <0.693147 · MEAN WINNER P >0.5**.
+>
+> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · AUTHORIZATION CHECKPOINT
 > AB838CF · CI 32381558510/1 GREEN · ROOTLESS FIT COMPLETE · ACCURACY 1.0 · CROSS-ENTROPY
 > 0.693147→0.205636 · DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
 > [fit receipt](evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json) and show

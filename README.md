@@ -5,7 +5,22 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): the first rootless dependency fit completed; the
+> **Current product focus (August 20, 2026): the held-out comparison is preflight-qualified and
+> still unopened.** Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32`
+> passed CI `32336487689/1`. The
+> [comparison-preflight receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+> (SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+> records **FIT-BOUND PREFLIGHT PASSED · COMMITMENTS 4 · COMPARISON IDENTITY UNUSED · DEVELOPMENT
+> PAYLOADS OPENED 0 · FIT/COMPARISON/GAMEPLAY/AUTHORITY/TRANSFER DELTAS 0**.
+>
+> Active `rootless-living-dex-dependency-comparison-v1` may claim and run the aggregate comparison
+> exactly once, then stop at its first durable terminal. Its descriptive gate requires at least
+> 3/4 correct, cross-entropy below 0.693147, and mean winner probability above 0.5. A pass is only
+> held-out abstract-structure evidence; it is not proof that the model can play or complete Pokémon.
+> Antigravity returned GO with no P0/P1 blocker both before the preflight and after reviewing its
+> path-free result and reorientation.
+
+> **Previous product focus (August 20, 2026): the first rootless dependency fit completed; the
 > held-out comparison remains sealed.** Exact execution source
 > `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`; the fit began only after
 > authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0` passed CI

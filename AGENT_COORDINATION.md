@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-20 train-only fit complete; sealed-comparison qualification is the highest
+> **2026-08-20 comparison preflight passed; one aggregate held-out check is the highest
+> checkpoint:** Source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+> `32336487689/1`. The
+> [preflight receipt](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+> (SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+> records **PREFLIGHT PASSED · COMMITMENTS 4 · IDENTITY UNUSED · DEV OPENINGS 0 · ROOTLESS
+> COMPARISON 0/1 · GAMEPLAY/AUTHORITY/TRANSFER 0**. Antigravity returned pre/post GO with no
+> P0/P1 blocker.
+>
+> Codex owns exactly one claimed aggregate comparison and then stops at its first terminal.
+> Antigravity remains the sole external reviewer while Claude is unavailable. No agent owns a
+> retry, refit, post-comparison tuning, row-level disclosure, ROM/controller action, promotion,
+> Crystal, completion, or transfer.
+
+> **Previous checkpoint — 2026-08-20 train-only fit complete; sealed-comparison qualification was the
 > checkpoint:** Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 > `32336487689/1`; authorization checkpoint `ab838cfc72699359b5306b2316748c953f1a5ec0`
 > passed CI `32381558510/1` and merged first. The
