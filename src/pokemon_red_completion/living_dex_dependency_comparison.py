@@ -134,7 +134,7 @@ def compare_dependency_ranker(
             else 1.0 - acquire_probability
         )
         winner_probabilities.append(winner_probability)
-        correct += int(winner_probability >= 0.5)
+        correct += int(winner_probability > 0.5)
     if Counter(opening.derived_reward for opening in verified.openings) != {-1: 2, 1: 2}:
         raise LivingDexDependencyComparisonError("comparison reward balance differs")
     candidate_loss = -sum(math.log(max(1e-12, value)) for value in winner_probabilities) / 4

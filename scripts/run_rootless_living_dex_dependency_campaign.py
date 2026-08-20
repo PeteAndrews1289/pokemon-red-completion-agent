@@ -42,7 +42,11 @@ from pokemon_red_completion.living_dex_dependency_curriculum import (
     build_rootless_living_dex_dependency_design,
     materialize_train_dependency_outcome,
 )
-from pokemon_red_completion.private_artifacts import PrivateArtifactRoot, open_private_root
+from pokemon_red_completion.private_artifacts import (
+    PrivateArtifactRoot,
+    PrivateSealedRecord,
+    open_private_root,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 
 LANE_ID = "rootless-living-dex-dependency-curriculum-v1"
@@ -55,6 +59,8 @@ OUTCOME_KIND = "rootless-dependency-train-outcome"
 CAMPAIGN_TERMINAL_KIND = "rootless-dependency-campaign-terminal"
 TRAIN_ADMISSION_KIND = "rootless-dependency-train-admission"
 OPENING_KIND = "rootless-dependency-development-opening"
+PROVISION_RECORD_ID = "rootless-dependency-development-provision-v1"
+PROVISION_KIND = "rootless-dependency-development-provision"
 RUNNER_RELATIVE = "scripts/run_rootless_living_dex_dependency_campaign.py"
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -254,6 +260,14 @@ def _reconstruct_campaign(
     roster_sha: str,
     gate: _Gate,
 ) -> _Campaign:
+    provision = store.find_sealed_record(
+        PROVISION_RECORD_ID,
+        expected_kind=PROVISION_KIND,
+    )
+    if provision is None or (
+        provision.summary.record_sha256 != roster_document.get("provision_record_sha256")
+    ):
+        raise RootlessCampaignError("campaign_reconstruction")
     rows = _roster_rows(roster_document)
     commitments: list[DevelopmentCommitmentRow] = []
     summaries: list[dict[str, str]] = []
@@ -329,6 +343,12 @@ def _freeze(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> dic
 
 def _preflight(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> dict[str, object]:
     _require_plan(store, campaign)
+    local_identities = _local_output_identities(campaign)
+    if any(
+        store.find_sealed_record(record_id, expected_kind=kind) is not None
+        for record_id, kind in local_identities
+    ):
+        raise RootlessCampaignError("campaign_preflight")
     registry = open_fixed_account_claim_registry()
     identities = _campaign_claim_identities(campaign)
     with fixed_account_claim_registry_lease(registry, exclusive=False):
@@ -345,6 +365,7 @@ def _preflight(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> 
         "train_scenarios": 8,
         "available_train_identities": 8,
         "available_campaign_identities": len(identities),
+        "available_local_output_namespaces": len(local_identities),
         "development_commitments": 4,
         "claim_boundary": (
             "fixed synthetic train campaign ready; no outcome, fit, gameplay, authority, "
@@ -358,7 +379,7 @@ def _execute(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> di
     _require_plan(store, campaign)
     registry = open_fixed_account_claim_registry()
     lane_identity, campaign_identity, *scenario_identities, terminal_identity = (
-        _campaign_claim_identities(campaign)
+        _execution_claim_identities(campaign)
     )
     execution_identity = _execution_identity(
         campaign,
@@ -397,27 +418,27 @@ def _execute(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> di
             else:
                 _require_claim(registry, identity, execution_identity)
                 if existing is None:
-                    interrupted = materialize_train_dependency_outcome(
+                    interrupted_outcome = materialize_train_dependency_outcome(
                         scenario,
                         interrupted=True,
                     )
                     store.publish_sealed_record(
                         record_id,
                         kind=OUTCOME_KIND,
-                        record=interrupted.public_dict(),
+                        record=interrupted_outcome.public_dict(),
                     )
             outcome_record = store.find_sealed_record(record_id, expected_kind=OUTCOME_KIND)
             if outcome_record is None:
                 raise RootlessCampaignError("train_campaign_execution")
             actual = outcome_record.read()
             settled = materialize_train_dependency_outcome(scenario).public_dict()
-            interrupted = materialize_train_dependency_outcome(
+            interrupted_document = materialize_train_dependency_outcome(
                 scenario,
                 interrupted=True,
             ).public_dict()
             if actual == settled:
                 settled_outcomes += 1
-            elif actual == interrupted:
+            elif actual == interrupted_document:
                 interrupted_outcomes += 1
             else:
                 raise RootlessCampaignError("train_campaign_execution")
@@ -462,7 +483,8 @@ def _execute(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> di
 def _admit(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> dict[str, object]:
     _require_plan(store, campaign)
     registry = open_fixed_account_claim_registry()
-    identities = _campaign_claim_identities(campaign)
+    execution_identities = _execution_claim_identities(campaign)
+    admission_identity = _admission_claim_identity(campaign)
     execute_execution_manifest_sha256 = gate.semantic_bindings.get(
         "execute_execution_manifest_sha256"
     )
@@ -475,64 +497,28 @@ def _admit(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> dict
         gate,
         execution_manifest_sha256=execute_execution_manifest_sha256,
     )
-    outcome_hashes: list[str] = []
-    rewards: list[int] = []
-    with fixed_account_claim_registry_lease(registry, exclusive=False):
-        for identity in identities:
+    admission_execution_identity = _execution_identity(
+        campaign,
+        gate,
+        execution_manifest_sha256=gate.execution_manifest_sha256,
+    )
+    with fixed_account_claim_registry_lease(registry, exclusive=True):
+        for identity in execution_identities:
             _require_claim(registry, identity, execution_identity)
-        terminal_record = store.find_sealed_record(
-            _terminal_record_id(campaign),
-            expected_kind=CAMPAIGN_TERMINAL_KIND,
-        )
-        if terminal_record is None:
+        if not root_claim_is_available(registry, admission_identity):
             raise RootlessCampaignError("train_outcome_admission")
-        for scenario in campaign.design.train_scenarios:
-            record = store.find_sealed_record(
-                _outcome_record_id(scenario.scenario_id),
-                expected_kind=OUTCOME_KIND,
-            )
-            expected_outcome = materialize_train_dependency_outcome(scenario)
-            if record is None or record.read() != expected_outcome.public_dict():
-                raise RootlessCampaignError("train_outcome_admission")
-            outcome_hashes.append(record.summary.record_sha256)
-            if expected_outcome.reward is None:
-                raise RootlessCampaignError("train_outcome_admission")
-            rewards.append(expected_outcome.reward)
-        expected_terminal = {
-            "schema": CAMPAIGN_TERMINAL_SCHEMA,
-            "status": "completed",
-            "campaign_sha256": campaign.campaign_sha256,
-            "design_sha256": campaign.design.design_sha256,
-            "train_outcome_record_sha256": outcome_hashes,
-            "settled_outcomes": 8,
-            "interrupted_outcomes": 0,
-        }
-        if terminal_record.read() != expected_terminal or sorted(rewards) != [-1] * 4 + [1] * 4:
-            raise RootlessCampaignError("train_outcome_admission")
-        dataset_sha = canonical_sha256(
-            {
-                "schema": "pokemon.core.rootless-dependency-admitted-dataset.v1",
-                "campaign_sha256": campaign.campaign_sha256,
-                "outcome_record_sha256": outcome_hashes,
-            }
+        write_root_claim(
+            registry,
+            root_consumption_sha256=admission_identity,
+            execution_identity_sha256=admission_execution_identity,
+            source_commit=gate.public_bindings["source_commit"],
+            runner_sha256=gate.public_bindings["runner_sha256"],
         )
-        admission = {
-            "schema": TRAIN_ADMISSION_SCHEMA,
-            "status": "admitted",
-            "campaign_sha256": campaign.campaign_sha256,
-            "design_sha256": campaign.design.design_sha256,
-            "train_dataset_sha256": dataset_sha,
-            "outcome_record_sha256": outcome_hashes,
-            "settled_outcomes": 8,
-            "positive_outcomes": 4,
-            "negative_outcomes": 4,
-            "development_opening_payloads_disclosed_to_stage": 0,
-        }
-        admission_record = store.publish_sealed_record(
-            _admission_record_id(campaign),
-            kind=TRAIN_ADMISSION_KIND,
-            record=admission,
-        )
+        try:
+            dataset_sha, admission_record = _materialize_train_admission(store, campaign)
+        except Exception:
+            _retain_admission_failure(store, campaign)
+            raise RootlessCampaignError("train_outcome_admission") from None
     return {
         "schema": "pokemon.core.rootless-dependency-campaign-admission.v1",
         "status": "eight_synthetic_train_outcomes_admitted",
@@ -557,6 +543,86 @@ def _admit(store: PrivateArtifactRoot, campaign: _Campaign, gate: _Gate) -> dict
     }
 
 
+def _materialize_train_admission(
+    store: PrivateArtifactRoot,
+    campaign: _Campaign,
+) -> tuple[str, PrivateSealedRecord]:
+    outcome_hashes: list[str] = []
+    rewards: list[int] = []
+    terminal_record = store.find_sealed_record(
+        _terminal_record_id(campaign),
+        expected_kind=CAMPAIGN_TERMINAL_KIND,
+    )
+    if terminal_record is None:
+        raise RootlessCampaignError("train_outcome_admission")
+    for scenario in campaign.design.train_scenarios:
+        record = store.find_sealed_record(
+            _outcome_record_id(scenario.scenario_id),
+            expected_kind=OUTCOME_KIND,
+        )
+        expected_outcome = materialize_train_dependency_outcome(scenario)
+        if record is None or record.read() != expected_outcome.public_dict():
+            raise RootlessCampaignError("train_outcome_admission")
+        outcome_hashes.append(record.summary.record_sha256)
+        if expected_outcome.reward is None:
+            raise RootlessCampaignError("train_outcome_admission")
+        rewards.append(expected_outcome.reward)
+    expected_terminal = {
+        "schema": CAMPAIGN_TERMINAL_SCHEMA,
+        "status": "completed",
+        "campaign_sha256": campaign.campaign_sha256,
+        "design_sha256": campaign.design.design_sha256,
+        "train_outcome_record_sha256": outcome_hashes,
+        "settled_outcomes": 8,
+        "interrupted_outcomes": 0,
+    }
+    if terminal_record.read() != expected_terminal or sorted(rewards) != [-1] * 4 + [1] * 4:
+        raise RootlessCampaignError("train_outcome_admission")
+    dataset_sha = canonical_sha256(
+        {
+            "schema": "pokemon.core.rootless-dependency-admitted-dataset.v1",
+            "campaign_sha256": campaign.campaign_sha256,
+            "outcome_record_sha256": outcome_hashes,
+        }
+    )
+    admission = {
+        "schema": TRAIN_ADMISSION_SCHEMA,
+        "status": "admitted",
+        "campaign_sha256": campaign.campaign_sha256,
+        "design_sha256": campaign.design.design_sha256,
+        "train_dataset_sha256": dataset_sha,
+        "outcome_record_sha256": outcome_hashes,
+        "settled_outcomes": 8,
+        "positive_outcomes": 4,
+        "negative_outcomes": 4,
+        "development_opening_payloads_disclosed_to_stage": 0,
+    }
+    admission_record = store.publish_sealed_record(
+        _admission_record_id(campaign),
+        kind=TRAIN_ADMISSION_KIND,
+        record=admission,
+    )
+    return dataset_sha, admission_record
+
+
+def _retain_admission_failure(store: PrivateArtifactRoot, campaign: _Campaign) -> None:
+    try:
+        store.publish_sealed_record(
+            _admission_record_id(campaign),
+            kind=TRAIN_ADMISSION_KIND,
+            record={
+                "schema": "pokemon.private.rootless-dependency-admission-failure.v1",
+                "status": "failed",
+                "failure_stage": "train_outcome_admission",
+                "campaign_sha256": campaign.campaign_sha256,
+                "design_sha256": campaign.design.design_sha256,
+                "private_path_fields": 0,
+            },
+        )
+    except Exception:
+        return
+
+
 def _require_plan(store: PrivateArtifactRoot, campaign: _Campaign) -> None:
     record = store.find_sealed_record(
         campaign.plan_record_id,
@@ -567,6 +633,10 @@ def _require_plan(store: PrivateArtifactRoot, campaign: _Campaign) -> None:
 
 
 def _campaign_claim_identities(campaign: _Campaign) -> tuple[str, ...]:
+    return (*_execution_claim_identities(campaign), _admission_claim_identity(campaign))
+
+
+def _execution_claim_identities(campaign: _Campaign) -> tuple[str, ...]:
     identities = [
         _claim_identity("lane", campaign.campaign_sha256, None),
         _claim_identity("campaign", campaign.campaign_sha256, None),
@@ -579,7 +649,19 @@ def _campaign_claim_identities(campaign: _Campaign) -> tuple[str, ...]:
     return tuple(identities)
 
 
+def _admission_claim_identity(campaign: _Campaign) -> str:
+    return _claim_identity("admission", campaign.campaign_sha256, None)
+
+
 def _claim_identity(kind: str, campaign_sha256: str, scenario_id: str | None) -> str:
+    if kind == "lane":
+        return canonical_sha256(
+            {
+                "schema": "pokemon.core.rootless-dependency-one-shot-claim.v1",
+                "kind": kind,
+                "lane_id": LANE_ID,
+            }
+        )
     return canonical_sha256(
         {
             "schema": "pokemon.core.rootless-dependency-one-shot-claim.v1",
@@ -587,6 +669,18 @@ def _claim_identity(kind: str, campaign_sha256: str, scenario_id: str | None) ->
             "campaign_sha256": campaign_sha256,
             "scenario_id": scenario_id,
         }
+    )
+
+
+def _local_output_identities(campaign: _Campaign) -> tuple[tuple[str, str], ...]:
+    rows = tuple(
+        (_outcome_record_id(scenario.scenario_id), OUTCOME_KIND)
+        for scenario in campaign.design.train_scenarios
+    )
+    return (
+        *rows,
+        (_terminal_record_id(campaign), CAMPAIGN_TERMINAL_KIND),
+        (_admission_record_id(campaign), TRAIN_ADMISSION_KIND),
     )
 
 

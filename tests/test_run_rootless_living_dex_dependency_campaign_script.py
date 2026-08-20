@@ -71,6 +71,12 @@ class _Store:
 
 def _roster_and_store() -> tuple[dict[str, object], _Store, tuple[_Record, ...]]:
     store = _Store()
+    provision = _Record(
+        SCRIPT["PROVISION_RECORD_ID"],
+        SCRIPT["PROVISION_KIND"],
+        {"opaque_provision": True},
+    )
+    store.add(provision)
     rows = []
     openings = []
     for index in range(4):
@@ -89,7 +95,7 @@ def _roster_and_store() -> tuple[dict[str, object], _Store, tuple[_Record, ...]]
         "schema": SCRIPT["PUBLIC_ROSTER_SCHEMA"],
         "row_count": 4,
         "rows": rows,
-        "provision_record_sha256": "a" * 64,
+        "provision_record_sha256": provision.summary.record_sha256,
         "private_path_fields": 0,
     }
     return roster, store, tuple(openings)
@@ -138,6 +144,8 @@ def test_freeze_preflight_execute_and_admit_have_exact_counter_boundary(
     ready = SCRIPT["_preflight"](store, campaign, gate)
     assert ready["status"] == "training_ready"
     assert ready["available_train_identities"] == 8
+    assert ready["available_campaign_identities"] == 12
+    assert ready["available_local_output_namespaces"] == 10
     assert ready["development_opening_payloads_disclosed_to_stage"] == 0
 
     def write_claim(registry: Path, **values: str) -> None:
@@ -161,6 +169,8 @@ def test_freeze_preflight_execute_and_admit_have_exact_counter_boundary(
     assert admitted["causal_train_examples_added"] == 0
     assert admitted["model_fits_added"] == 0
     assert all(record.reads == 0 for record in opening_records)
+    with pytest.raises(SCRIPT["RootlessCampaignError"]):
+        SCRIPT["_admit"](store, campaign, gate)
 
 
 def test_nonfreeze_operation_reconstructs_the_exact_frozen_plan() -> None:
@@ -290,6 +300,29 @@ def test_consumed_scenario_without_artifact_is_censored_and_not_retried(
     assert executed["interrupted_outcomes"] == 1
     with pytest.raises(SCRIPT["RootlessCampaignError"]):
         SCRIPT["_admit"](store, campaign, gate)
+
+
+def test_preflight_rejects_a_preexisting_local_output_namespace() -> None:
+    roster, store, _ = _roster_and_store()
+    gate = _gate()
+    campaign = SCRIPT["_reconstruct_campaign"](store, roster, "f" * 64, gate)
+    SCRIPT["_freeze"](store, campaign, gate)
+    scenario = campaign.design.train_scenarios[0]
+    store.publish_sealed_record(
+        SCRIPT["_outcome_record_id"](scenario.scenario_id),
+        kind=SCRIPT["OUTCOME_KIND"],
+        record=SCRIPT["materialize_train_dependency_outcome"](scenario).public_dict(),
+    )
+
+    with pytest.raises(SCRIPT["RootlessCampaignError"], match="campaign_preflight"):
+        SCRIPT["_preflight"](store, campaign, gate)
+
+
+def test_lane_claim_identity_is_independent_of_campaign_bytes() -> None:
+    first = SCRIPT["_claim_identity"]("lane", "a" * 64, None)
+    second = SCRIPT["_claim_identity"]("lane", "b" * 64, None)
+
+    assert first == second
 
 
 def test_main_authenticates_public_manifest_before_private_store(
