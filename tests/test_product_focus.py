@@ -78,6 +78,11 @@ ROOTLESS_DEPENDENCY_FIT_RESULT = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-fit-result-v1-2026-08-20.json"
 )
+ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -197,16 +202,14 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-comparison-qualification-v1"
-    )
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == (
-        "rootless-living-dex-dependency-comparison-v1"
-    )
-    assert len(state.retired_lanes) == 31
+    assert state.active_lane["id"] == "rootless-living-dex-dependency-comparison-v1"
+    assert state.active_lane["kind"] == "learning"
+    assert state.active_lane["maintenance_unblocks"] is None
+    assert len(state.retired_lanes) == 32
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_scorecard(state) == (
+        ("Synthetic Rootless Unseen Comparison · development", 0, 1),
+    )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -270,6 +273,35 @@ def test_rootless_dependency_fit_result_is_train_only_and_scoped() -> None:
     assert receipt["counter_treatment"]["historical_gameplay_model_fits_added"] == 0
     assert receipt["counter_treatment"]["synthetic_rootless_unseen_comparisons_added"] == 0
     assert receipt["campaign"]["development_opening_payloads_disclosed"] == 0
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_comparison_preflight_keeps_development_sealed() -> None:
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "sealed_comparison_ready_development_remains_unopened"
+    )
+    assert receipt["preflight"] == {
+        "claim_registry_access": "read_only",
+        "comparison_identity_available": True,
+        "comparison_identity_consumed": False,
+        "development_commitments_authenticated": 4,
+        "development_opening_payloads_disclosed_to_stage": 0,
+        "status": "sealed_comparison_ready",
+    }
+    assert receipt["execution_manifest"]["operation"] == "preflight-compare"
+    assert receipt["review"] == {
+        "antigravity_post_result_verdict": "go_no_p0_or_p1_blocker",
+        "antigravity_pre_execution_verdict": "go_no_p0_or_p1_blocker",
+        "claude_available": False,
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
@@ -751,7 +783,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == ("Synthetic Rootless Unseen Comparison · development: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -982,6 +1014,7 @@ def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
 def test_development_cannot_silently_open_a_protected_action() -> None:
     document = _document()
     lane = _active(document)
+    lane["rigor"] = "development"
     prohibited = lane["prohibited_actions"]
     assert isinstance(prohibited, list)
     prohibited.remove("full_game_replay")
@@ -1083,18 +1116,16 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Rootless living-Dex dependency comparison qualification V1" in public["stage"]
+    assert "Rootless living-Dex dependency held-out comparison V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "fixed synthetic dependency fit completed" in encoded
-    assert "cross-entropy 0.693147" in encoded
+    assert "zero-disclosure preflight passed" in encoded
     assert "actions 244/244" in encoded
-    assert "fixed synthetic dependency fit completed" in encoded
-    assert "train fit 1/1" in encoded
-    assert "accuracy 1.0" in encoded
-    assert "Qualify the exact fit-bound comparison" in encoded
+    assert "preflight passed" in encoded
+    assert "comparison 0/1" in encoded
+    assert "Run one aggregate held-out comparison" in encoded
     assert "dependency fits 1/1" in encoded
     assert "held-out comparisons 0/1" in encoded
     assert "Rootless synthetic board" in encoded

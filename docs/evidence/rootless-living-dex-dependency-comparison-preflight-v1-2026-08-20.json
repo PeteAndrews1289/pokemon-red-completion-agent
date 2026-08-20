@@ -1,0 +1,86 @@
+{
+  "campaign": {
+    "campaign_sha256": "404e3a028cce695e23d20a4df8dc26ccfebbf48ca100800a5fe8e6a0d0bc9b92",
+    "design_sha256": "b57cd393eb28338d94a90a35974b106a379444c638e8b1923aa38cf3f35d140a",
+    "development_commitments": 4,
+    "development_opening_payloads_disclosed": 0,
+    "development_roster_sha256": "f7630b8b09ba5b6962892335588bb376129a74554dee8442962ac1c92f5c4ce6",
+    "train_dataset_sha256": "8207eb89a430a5bbb6bca7bd960e000c728710fded2bceef027dd4179e385f37"
+  },
+  "claim_boundary": {
+    "supported": "One exact published fit-bound comparison identity passed a read-only preflight: the completed train-only fit, four sealed development commitments, and unused comparison identity authenticated while zero development opening payloads were disclosed.",
+    "unsupported": "This preflight is not a development comparison, unseen result, statistical promotion, empirical gameplay outcome, Red or Crystal play, story completion, living-Pokedex competence, learned gameplay authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "development_episode_attempts_added": 0,
+    "historical_gameplay_model_fits_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_manifest": {
+    "execution_manifest_sha256": "f1a034973bc294d86fa771c21833b2b69b0ad08b3b266b593e16a471e98b7295",
+    "invocation_sha256": "a9c3836261a3bd2bfabe19ceca1e60851c328774c1a3854b18ed4df7d335966e",
+    "operation": "preflight-compare",
+    "private_input_roles": 3,
+    "public_binding_count": 11,
+    "semantic_binding_count": 17
+  },
+  "fit": {
+    "fit_execution_manifest_sha256": "32b68cbf7a459f3e1c0464af134be31d1ac3cd87591df3d54176627821d1feed",
+    "fit_manifest_record_sha256": "27f2358d88e9dab138452e6a1bba06dcc69bdc0d4420222e32b490bebea3e7f4",
+    "fit_record_sha256": "ee102f6711de77de8335860dce2b7c855414985c57d1cb6222914f9e63f85be4",
+    "fit_sha256": "0f1089aa0a66da4c6f626eb3b8cbb5383bdecdd0d785847cc56b02a4d1eac48d",
+    "fit_terminal_record_sha256": "babe6a96a13f732573bbd1cd93227d27d75ea291ab70fa7c7fd35edf531b5bc8",
+    "model_sha256": "d6f48d3429d99850e52fb75c43f6a84d27bdfd3e611d43fbf0f66e377f9f749e"
+  },
+  "preflight": {
+    "claim_registry_access": "read_only",
+    "comparison_identity_available": true,
+    "comparison_identity_consumed": false,
+    "development_commitments_authenticated": 4,
+    "development_opening_payloads_disclosed_to_stage": 0,
+    "status": "sealed_comparison_ready"
+  },
+  "publication": {
+    "authorization_checkpoint_ci_attempt": 1,
+    "authorization_checkpoint_ci_conclusion": "success",
+    "authorization_checkpoint_ci_run_id": 32385720779,
+    "authorization_checkpoint_merge_commit": "354957c547bad3fc80f4cd5f99bb5852f49efc94",
+    "execution_ci_attempt": 1,
+    "execution_ci_conclusion": "success",
+    "execution_ci_run_id": 32336487689,
+    "execution_source_commit": "048bea66d205b0e784b3321763e2725d2ccfff32"
+  },
+  "recorded_on": "2026-08-20",
+  "review": {
+    "antigravity_post_result_verdict": "go_no_p0_or_p1_blocker",
+    "antigravity_pre_execution_verdict": "go_no_p0_or_p1_blocker",
+    "claude_available": false
+  },
+  "schema": "pokemon.core.rootless-living-dex-dependency-comparison-preflight-receipt.v1",
+  "status": "sealed_comparison_ready_development_remains_unopened",
+  "title_role": "Synthetic rootless held-out-comparison readiness; not comparison, gameplay, promotion, completion, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "comparison_claims_consumed": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_comparisons": 0,
+    "development_opening_payloads_disclosed": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}

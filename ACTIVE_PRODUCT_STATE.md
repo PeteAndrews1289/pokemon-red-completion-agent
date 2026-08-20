@@ -29,27 +29,28 @@ Not the product:
 
 ## One active lane
 
-**Rootless living-Dex dependency comparison qualification V1** (`rootless-living-dex-dependency-comparison-qualification-v1`)
+**Rootless living-Dex dependency held-out comparison V1** (`rootless-living-dex-dependency-comparison-v1`)
 
-- Kind: **maintenance**
-- Rigor: **development**
-- Next decision: A passing zero-disclosure preflight permits a separately reviewed one-shot development comparison. A failed preflight closes that identity. Qualification itself adds no learning, gameplay, authority, or transfer result.
+- Kind: **learning**
+- Rigor: **benchmark**
+- Next decision: A descriptive pass closes the abstract curriculum and permits only design of a title-neutral real-Red collection-decision adapter. A fail or uninterpretable result closes this ranker direction without retry or reuse of the four opened rows. Neither outcome grants gameplay, completion, or transfer authority.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify one exact sealed development comparison for the completed title-neutral living-Pokedex dependency ranker without opening any of the four committed development payloads. |
-| Authority now | One shadow synthetic dependency ranker fits all eight deterministic train rows, while gameplay, unseen comparison, promotion, completion, Crystal, and living-Pokedex authority remain unchanged. |
-| Authority target | Authorize at most one later sealed abstract comparison by proving its exact completed-fit and one-shot boundaries without opening the four development payloads. |
-| Transfer test | Not in this lane. A later separately authorized abstract comparison must first test held-out structures; after that, a Crystal adapter must independently compute the same title-neutral signals. |
-| Cheapest falsifier | Authenticate the consumed fit claim, exact completed fit manifest and terminal, four sealed record commitments, and an unused comparison identity in one zero-disclosure preflight; any mismatch closes qualification before a development opening is read. |
+| Reusable capability | Measure once whether the completed title-neutral living-Pokedex dependency ranker beats the fixed 0.5 baseline on four committed held-out development structures. |
+| Authority now | One shadow synthetic dependency ranker fits all eight deterministic train rows and has one preflight-qualified, still-unopened held-out comparison; gameplay, promotion, completion, Crystal, and living-Pokedex authority remain unchanged. |
+| Authority target | Obtain one descriptive aggregate held-out-structure result that can either justify a later real-Red observation-adapter gate or close this abstract ranker direction, without granting gameplay or transfer authority. |
+| Transfer test | This lane tests only two held-out abstract dependency families. A later Red adapter must derive the same title-neutral signals from real observations, and Crystal remains a still-later independent transfer test. |
+| Cheapest falsifier | Claim the preflight-qualified comparison identity before disclosure, decode exactly the four committed openings, and publish only the frozen aggregate metrics; any missing row, binding mismatch, or terminal failure makes the comparison uninterpretable without retry. |
 | Time box | 1 session / 1 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Synthetic Rootless Unseen Comparison · development | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,35 +58,35 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-20-rootless-dependency-fit-completed** · status **active** · evidence [synthetic rootless model fit](docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json)
+**2026-08-20-rootless-dependency-comparison-preflight-passed** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model has now learned the intended abstract acquire-versus-evolve dependency rule on the frozen train set. The next product question is held-out structure behavior, but first its sealed comparison boundary must be qualified without spending the evidence. |
-| Learning output | Exactly one scoped synthetic rootless fit completed from 8 authenticated train rows: accuracy 1.0 and cross-entropy 0.693147 to 0.205636. Development disclosure, comparisons, ROM access, controller actions, authority, and transfer all remained zero; historical gameplay-fit count remains 4. |
-| Authority delta | No gameplay authority changed. One scoped synthetic rootless ranker now exists in shadow form, but it has no held-out result, promotion, Red or Crystal play, completion, or transfer authority. |
-| Transfer result | Not run. The completed synthetic train fit does not test held-out structures, a Red adapter, Crystal, or any cross-title behavior. |
-| Blocker | The train-only fit succeeded, but no held-out structure has been opened or compared. All four development payloads remain sealed until an exact fit-bound comparison preflight is frozen, validated, and reviewed. |
-| Decision | Retire the consumed fit identity after one successful train-only update. Antigravity's post-fit read-only audit returned GO with no P0/P1 blocker. Open only the bounded comparison-qualification lane; do not decode development payloads or run the comparison in the same session. |
-| Next session | Freeze and validate one exact preflight-compare invocation, run only its zero-disclosure preflight, record the result, and stop before the actual comparison or any development payload decode. |
-| Next falsifier | Run one action-free preflight that externally pins fit manifest 27f2358d, fit terminal babe6a96, the completed fit claim, all four opening commitments, and the unused comparison identity while disclosing zero opening payloads. |
-| Stop condition | Stop after the first comparison preflight result. Never refit, decode a development payload, execute the comparison, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer in this qualification lane. |
+| Product alignment | This is the first held-out check of a learned collection-dependency rule needed for living-Pokedex planning. A pass would justify adapting the title-neutral signal to real Red observations; it would not itself demonstrate Pokemon gameplay or transfer. |
+| Learning output | No new measured learning output. One exact read-only preflight authenticated the completed fit, four sealed commitments, and an unused comparison identity while disclosing zero development payloads and adding zero fits, comparisons, gameplay, authority, or transfer results. |
+| Authority delta | No gameplay authority changed. The exact held-out comparison is now preflight-qualified and unclaimed, but no development opening has been decoded and no unseen result, promotion, Red or Crystal play, completion, or transfer authority exists. |
+| Transfer result | Not run. The preflight disclosed no development payload and tested neither held-out structures nor any Red, Crystal, or cross-title behavior. |
+| Blocker | All four committed development payloads remain sealed, so the ranker's behavior on two held-out dependency families is still unknown. The next comparison is descriptive at four rows and cannot establish statistical, gameplay, or cross-title authority. |
+| Decision | The exact fit-bound zero-disclosure preflight passed under Antigravity's GO review with no P0/P1 blocker. Retire qualification and open one separately claimed aggregate comparison; do not refit, retry, tune, or continue into gameplay in the comparison session. |
+| Next session | Claim and execute exactly one aggregate four-row held-out comparison, publish its durable terminal and path-free result, then stop before refit, promotion, gameplay, Crystal, or any follow-on adaptation. |
+| Next falsifier | Run the one preflight-qualified comparison. It passes descriptively only if the candidate is correct on at least 3 of 4 rows, lowers cross-entropy below 0.693147, and raises mean winner probability above 0.5; otherwise close this ranker direction without development-data reuse. |
+| Stop condition | Stop after the first durable comparison terminal, whether pass, fail, or uninterpretable. Never retry, refit, tune on the opened rows, access a ROM, issue controller input, promote authority, or continue into Red or Crystal gameplay. |
 
 ### Stop conditions
 
-- Authenticate only the exact completed fit claim, model bundle, manifest, terminal, and four committed development record summaries; never refit or substitute evidence.
-- Any development-payload disclosure, comparison execution, ROM or game access, controller action, teacher query, private-path leak, or stale public binding closes the lane.
-- Stop after the first zero-disclosure comparison preflight; do not execute the comparison, promote, open development payloads, or continue into gameplay.
+- Authenticate the exact preflight receipt, completed fit claim, model bundle, manifest, terminal, four commitments, and unused comparison identity before the comparison claim or any development decode.
+- After the durable claim, decode exactly four committed openings, publish one aggregate comparison and terminal, and retain any failure without retry, replacement, tuning, or row-level public disclosure.
+- Stop after the first terminal. Never access a ROM, issue controller input, query a teacher, promote authority, run Crystal, replay a game, or continue into adaptation.
 
 ### Hard boundaries for this lane
 
 - **Prohibited:** campaign execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
-- **Prohibited:** development payload disclosure
+- **Prohibited:** comparison retry
 - **Prohibited:** full game replay
 - **Prohibited:** model refit
-- **Prohibited:** rootless dependency comparison
+- **Prohibited:** post comparison tuning
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -117,6 +118,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Rootless living-Dex dependency comparison qualification V1:** Published execution source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1. Manifest f1a03497 froze and validated 17 exact semantic bindings, then one read-only preflight authenticated the consumed fit, four sealed commitments, and an unused comparison identity with zero development payload disclosure and zero counter, gameplay, authority, or transfer deltas. Antigravity returned GO with no P0/P1 blocker. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency train-only fit V1:** Published execution source 048bea66d205b0e784b3321763e2725d2ccfff32 fit the fixed interaction ranker exactly once to eight authenticated synthetic train outcomes. Accuracy reached 1.0 and cross-entropy fell from 0.693147 to 0.205636; the complete fit bundle and terminal were durably published while all four development openings remained sealed. It adds one scoped synthetic rootless fit and no gameplay, comparison, authority, completion, or transfer result. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency train campaign V1:** Source 048bea66d205b0e784b3321763e2725d2ccfff32 executed campaign 404e3a02. All 8 fixed synthetic rows were admitted: 4 positive, 4 negative, 0 interrupted; all 12 identities are consumed and all 4 development openings remain sealed. It added 8 scoped outcomes and 8 scoped atomic episodes, with no fit, comparison, gameplay, authority, or transfer. Antigravity returned GO with no P0/P1 blocker and recommended the direct train-only fit. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency campaign qualification V1:** Published source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1. Campaign 404e3a02 was frozen with eight train scenarios and four opaque development commitments, then passed one zero-action preflight with all 12 global identities and 10 local namespaces unused. It consumed no claim and produced no outcome, fit, comparison, gameplay, or authority delta. Evidence is preserved; retry is no.

@@ -8,36 +8,42 @@
   },
   "lanes": [
     {
-      "capability": "Qualify one exact sealed development comparison for the completed title-neutral living-Pokedex dependency ranker without opening any of the four committed development payloads.",
-      "cheapest_falsifier": "Authenticate the consumed fit claim, exact completed fit manifest and terminal, four sealed record commitments, and an unused comparison identity in one zero-disclosure preflight; any mismatch closes qualification before a development opening is read.",
-      "id": "rootless-living-dex-dependency-comparison-qualification-v1",
-      "kind": "maintenance",
+      "capability": "Measure once whether the completed title-neutral living-Pokedex dependency ranker beats the fixed 0.5 baseline on four committed held-out development structures.",
+      "cheapest_falsifier": "Claim the preflight-qualified comparison identity before disclosure, decode exactly the four committed openings, and publish only the frozen aggregate metrics; any missing row, binding mismatch, or terminal failure makes the comparison uninterpretable without retry.",
+      "id": "rootless-living-dex-dependency-comparison-v1",
+      "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No gameplay authority changed. One scoped synthetic rootless ranker now exists in shadow form, but it has no held-out result, promotion, Red or Crystal play, completion, or transfer authority.",
-        "blocker": "The train-only fit succeeded, but no held-out structure has been opened or compared. All four development payloads remain sealed until an exact fit-bound comparison preflight is frozen, validated, and reviewed.",
-        "decision": "Retire the consumed fit identity after one successful train-only update. Antigravity's post-fit read-only audit returned GO with no P0/P1 blocker. Open only the bounded comparison-qualification lane; do not decode development payloads or run the comparison in the same session.",
+        "authority_delta": "No gameplay authority changed. The exact held-out comparison is now preflight-qualified and unclaimed, but no development opening has been decoded and no unseen result, promotion, Red or Crystal play, completion, or transfer authority exists.",
+        "blocker": "All four committed development payloads remain sealed, so the ranker's behavior on two held-out dependency families is still unknown. The next comparison is descriptive at four rows and cannot establish statistical, gameplay, or cross-title authority.",
+        "decision": "The exact fit-bound zero-disclosure preflight passed under Antigravity's GO review with no P0/P1 blocker. Retire qualification and open one separately claimed aggregate comparison; do not refit, retry, tune, or continue into gameplay in the comparison session.",
         "evidence": {
-          "kind": "synthetic_rootless_model_fit",
-          "path": "docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json",
-          "sha256": "d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b"
+          "kind": "qualification",
+          "path": "docs/evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json",
+          "sha256": "f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7"
         },
-        "learning_output": "Exactly one scoped synthetic rootless fit completed from 8 authenticated train rows: accuracy 1.0 and cross-entropy 0.693147 to 0.205636. Development disclosure, comparisons, ROM access, controller actions, authority, and transfer all remained zero; historical gameplay-fit count remains 4.",
-        "next_falsifier": "Run one action-free preflight that externally pins fit manifest 27f2358d, fit terminal babe6a96, the completed fit claim, all four opening commitments, and the unused comparison identity while disclosing zero opening payloads.",
-        "next_session_goal": "Freeze and validate one exact preflight-compare invocation, run only its zero-disclosure preflight, record the result, and stop before the actual comparison or any development payload decode.",
-        "product_alignment": "The model has now learned the intended abstract acquire-versus-evolve dependency rule on the frozen train set. The next product question is held-out structure behavior, but first its sealed comparison boundary must be qualified without spending the evidence.",
-        "session_id": "2026-08-20-rootless-dependency-fit-completed",
+        "learning_output": "No new measured learning output. One exact read-only preflight authenticated the completed fit, four sealed commitments, and an unused comparison identity while disclosing zero development payloads and adding zero fits, comparisons, gameplay, authority, or transfer results.",
+        "next_falsifier": "Run the one preflight-qualified comparison. It passes descriptively only if the candidate is correct on at least 3 of 4 rows, lowers cross-entropy below 0.693147, and raises mean winner probability above 0.5; otherwise close this ranker direction without development-data reuse.",
+        "next_session_goal": "Claim and execute exactly one aggregate four-row held-out comparison, publish its durable terminal and path-free result, then stop before refit, promotion, gameplay, Crystal, or any follow-on adaptation.",
+        "product_alignment": "This is the first held-out check of a learned collection-dependency rule needed for living-Pokedex planning. A pass would justify adapting the title-neutral signal to real Red observations; it would not itself demonstrate Pokemon gameplay or transfer.",
+        "session_id": "2026-08-20-rootless-dependency-comparison-preflight-passed",
         "status": "active",
-        "stop_condition": "Stop after the first comparison preflight result. Never refit, decode a development payload, execute the comparison, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer in this qualification lane.",
-        "transfer_result": "Not run. The completed synthetic train fit does not test held-out structures, a Red adapter, Crystal, or any cross-title behavior."
+        "stop_condition": "Stop after the first durable comparison terminal, whether pass, fail, or uninterpretable. Never retry, refit, tune on the opened rows, access a ROM, issue controller input, promote authority, or continue into Red or Crystal gameplay.",
+        "transfer_result": "Not run. The preflight disclosed no development payload and tested neither held-out structures nor any Red, Crystal, or cross-title behavior."
       },
       "learned_authority": {
-        "current": "One shadow synthetic dependency ranker fits all eight deterministic train rows, while gameplay, unseen comparison, promotion, completion, Crystal, and living-Pokedex authority remain unchanged.",
-        "target": "Authorize at most one later sealed abstract comparison by proving its exact completed-fit and one-shot boundaries without opening the four development payloads."
+        "current": "One shadow synthetic dependency ranker fits all eight deterministic train rows and has one preflight-qualified, still-unopened held-out comparison; gameplay, promotion, completion, Crystal, and living-Pokedex authority remain unchanged.",
+        "target": "Obtain one descriptive aggregate held-out-structure result that can either justify a later real-Red observation-adapter gate or close this abstract ranker direction, without granting gameplay or transfer authority."
       },
-      "maintenance_unblocks": "rootless-living-dex-dependency-comparison-v1",
-      "measurable_outputs": [],
-      "name": "Rootless living-Dex dependency comparison qualification V1",
-      "next_decision": "A passing zero-disclosure preflight permits a separately reviewed one-shot development comparison. A failed preflight closes that identity. Qualification itself adds no learning, gameplay, authority, or transfer result.",
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "synthetic_rootless_unseen_comparison",
+          "minimum": 1,
+          "partition": "development"
+        }
+      ],
+      "name": "Rootless living-Dex dependency held-out comparison V1",
+      "next_decision": "A descriptive pass closes the abstract curriculum and permits only design of a title-neutral real-Red collection-decision adapter. A fail or uninterpretable result closes this ranker direction without retry or reuse of the four opened rows. Neither outcome grants gameplay, completion, or transfer authority.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -104,25 +110,35 @@
         "campaign_execution",
         "consumed_trial_retry",
         "crystal_execution",
-        "development_payload_disclosure",
+        "comparison_retry",
         "full_game_replay",
         "model_refit",
-        "rootless_dependency_comparison",
+        "post_comparison_tuning",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
-      "rigor": "development",
+      "rigor": "benchmark",
       "status": "active",
       "stop_conditions": [
-        "Authenticate only the exact completed fit claim, model bundle, manifest, terminal, and four committed development record summaries; never refit or substitute evidence.",
-        "Any development-payload disclosure, comparison execution, ROM or game access, controller action, teacher query, private-path leak, or stale public binding closes the lane.",
-        "Stop after the first zero-disclosure comparison preflight; do not execute the comparison, promote, open development payloads, or continue into gameplay."
+        "Authenticate the exact preflight receipt, completed fit claim, model bundle, manifest, terminal, four commitments, and unused comparison identity before the comparison claim or any development decode.",
+        "After the durable claim, decode exactly four committed openings, publish one aggregate comparison and terminal, and retain any failure without retry, replacement, tuning, or row-level public disclosure.",
+        "Stop after the first terminal. Never access a ROM, issue controller input, query a teacher, promote authority, run Crystal, replay a game, or continue into adaptation."
       ],
       "time_box": {
         "maximum_hours": 1,
         "maximum_sessions": 1
       },
-      "transfer_test": "Not in this lane. A later separately authorized abstract comparison must first test held-out structures; after that, a Crystal adapter must independently compute the same title-neutral signals."
+      "transfer_test": "This lane tests only two held-out abstract dependency families. A later Red adapter must derive the same title-neutral signals from real observations, and Crystal remains a still-later independent transfer test."
+    },
+    {
+      "id": "rootless-living-dex-dependency-comparison-qualification-v1",
+      "kind": "maintenance",
+      "name": "Rootless living-Dex dependency comparison qualification V1",
+      "preserve_evidence": true,
+      "reason": "Published execution source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1. Manifest f1a03497 froze and validated 17 exact semantic bindings, then one read-only preflight authenticated the consumed fit, four sealed commitments, and an unused comparison identity with zero development payload disclosure and zero counter, gameplay, authority, or transfer deltas. Antigravity returned GO with no P0/P1 blocker.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-fit-v1",

@@ -1,6 +1,22 @@
 # Current audit — 2026-08-20
 
-## Current result: train-only dependency fit passed; development remains sealed
+## Current result: comparison preflight passed; development remains sealed
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`.
+Manifest `f1a03497…8b7295` froze and validated 17 semantic bindings; Antigravity returned GO with
+no P0/P1 blocker before execution and again after reviewing the path-free result and
+reorientation. The
+[comparison-preflight receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+(SHA-256 `f8da36c20abffa69de8a7b62492f8bc64fd9c58e2ca40ff084cacb0511da95f7`)
+records four authenticated commitments, an available comparison identity, zero development-payload
+disclosure, and zero fit, comparison, gameplay, authority, or transfer delta.
+
+The next lane is one benchmark comparison at 0/1. Its fixed descriptive gate is at least 3/4
+correct, cross-entropy below 0.693147, and mean winner probability above 0.5. This denominator is
+only four rows across two held-out families, so even a pass is abstract structural evidence—not
+statistical promotion, gameplay, living-Pokédex competence, or cross-title transfer.
+
+## Previous result: train-only dependency fit passed; development remained sealed
 
 Exact execution source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
 `32336487689/1`, and the reviewed authorization checkpoint merged under green CI

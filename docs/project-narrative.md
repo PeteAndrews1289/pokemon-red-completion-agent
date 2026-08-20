@@ -1,6 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the first rootless dependency model fit; held-out evidence remains untouched
+## August 20: the held-out comparison is authenticated and still untouched
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` froze manifest
+`f1a03497…8b7295`, passed Antigravity's pre-execution review, and ran one read-only comparison
+preflight. Antigravity's post-result review also returned GO with no P0/P1 blocker. The
+[receipt](evidence/rootless-living-dex-dependency-comparison-preflight-v1-2026-08-20.json)
+records four authenticated commitments, an unused comparison identity, zero development opening
+disclosures, and no learning-counter or gameplay-authority change.
+
+The next bounded result is one four-row aggregate held-out comparison. It is the first test of
+whether the learned acquire-versus-evolve rule survives unseen dependency structures, but its two
+families support only a descriptive claim. Pass or fail, the pipeline stops before refit or gameplay.
+A pass points toward a real Red observation adapter; Crystal and cross-title living-Pokédex transfer
+remain later, independent gates.
+
+## Previous August 20 checkpoint: the first rootless dependency model fit
 
 After the reviewed fit checkpoint merged, exact execution source
 `048bea66d205b0e784b3321763e2725d2ccfff32` performed its one allowed train-only update. The
