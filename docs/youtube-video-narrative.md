@@ -1,6 +1,19 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: the dependency lesson exists; seal the experiment before teaching
+## August 20 scene: the experiment is sealed; the synthetic lesson can begin
+
+Open on **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN · TRAINING_READY**.
+Link the
+[preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+with **SHA-256 6D650FC9…1E1BA2**. Show **8 TRAIN CELLS · 4 DEVELOPMENT COMMITMENTS SEALED · GLOBAL
+UNUSED 12/12 · LOCAL EMPTY 10/10 · CLAIMS CONSUMED 0**.
+
+Animate the next rail: **EXECUTE EXACT 8 PREASSIGNED TRANSITIONS → RETAIN EVERY TERMINAL → ADMIT
+8/8 OR CLOSE → STOP BEFORE FIT**. Keep the honesty card on-screen: **ROOTLESS OUTCOMES 0/8 ·
+ATOMIC 0/8 · GAMEPLAY 0 · RED COMPLETION 0 · CRYSTAL TRANSFER 0**. The achievement is that the
+small dependency lesson can finally run without contamination—not that the model can play Pokémon.
+
+## Previous August 20 scene: the dependency lesson existed; the experiment still needed sealing
 
 Open on **SOURCE 9569AFA · CI 32335706089/1 GREEN · 4,410 TESTS · ROOTLESS DESIGN QUALIFIED**.
 Link the

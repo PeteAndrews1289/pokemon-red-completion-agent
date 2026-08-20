@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Froze campaign `404e3a02…0bc9b92` and passed its zero-action readiness preflight at exact source
+  `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
+  [path-free receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+  records eight fixed train scenarios, four opaque development commitments, 12/12 unused global
+  identities, and 10/10 empty local namespaces. Freeze/preflight produced no transition, outcome,
+  fit, comparison, development disclosure, ROM/controller effect, or counter delta. Activated the
+  exact eight-row synthetic train lane at 0/8 outcomes and 0/8 atomic episodes; fit, development
+  comparison, gameplay, authority, and Crystal remain closed.
+
 - Published and qualified the rootless living-Dex dependency pipeline at source
   `9569afa681eb4d9806230b6d4c5caa79845a7fb8` under green CI `32335706089/1` and 4,410
   ROM-free tests. The

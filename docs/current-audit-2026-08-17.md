@@ -1,6 +1,21 @@
 # Current audit — 2026-08-20
 
-## Current result: rootless dependency design qualified; zero-action campaign gate is next
+## Current result: campaign frozen and preflight passed; the fixed train set is ready
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+(SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+authenticates campaign `404e3a02…0bc9b92`, eight train cells, four opaque development commitments,
+12/12 available global identities, and 10/10 empty local namespaces. The plan freeze and preflight
+made no prediction or transition, opened no development payload, consumed no claim, and added no
+outcome, fit, comparison, gameplay, authority, or transfer evidence.
+
+The active lane is the exact eight-row synthetic train campaign at **0/8 outcomes · 0/8 atomic
+episodes**. Execute the preassigned treatments, retain every terminal, and admit all eight rows or
+close the campaign. No retry/replacement is allowed. Stop before fit or development disclosure;
+the result will still be deterministic abstract rule-learning data, not gameplay or completion.
+
+## Previous result: rootless dependency design qualified; zero-action campaign gate was next
 
 Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
 4,410 ROM-free tests. The

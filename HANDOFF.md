@@ -12,6 +12,22 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
+## 2026-08-20: campaign 404e3a02 is frozen and training-ready
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[campaign preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+(SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+binds the immutable plan, design, roster, and separate freeze/preflight manifests. Preflight found
+all 12 account-global identities unused and all 10 local namespaces empty. Train rows remain 0/8,
+synthetic atomic episodes 0/8, development disclosures 0, fits 0, comparisons 0, ROM/controller
+effects 0, and every historical board is unchanged.
+
+Codex now owns only `rootless-living-dex-dependency-curriculum-v1`: freeze one exact execute
+manifest, execute the fixed eight preassigned synthetic transitions, and strictly admit all eight
+balanced rows or close the campaign. Never retry or replace a claimed cell. Stop before fit,
+development disclosure, comparison, gameplay, authority, or Crystal. This is training-data
+materialization for an abstract cross-title dependency rule, not proof of Pokémon gameplay.
+
 ## 2026-08-20: rootless dependency design qualified; campaign freeze/preflight is active
 
 Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with

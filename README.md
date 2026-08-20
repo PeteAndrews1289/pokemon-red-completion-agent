@@ -5,6 +5,21 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
+> **Current product focus (August 20, 2026): the rootless campaign is training-ready.** Exact
+> source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+> [campaign preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+> (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+> records frozen campaign `404e3a02…0bc9b92`, **8 train scenarios**, **4 opaque development
+> commitments**, **12/12 global identities unused**, and **10/10 local output namespaces empty**.
+> The freeze and preflight made zero predictions or transitions, disclosed zero development
+> payloads, and moved no learning counter.
+>
+> Active `rootless-living-dex-dependency-curriculum-v1` may execute and strictly admit only those
+> eight fixed synthetic train rows. The board is **0/8 outcomes · 0/8 atomic episodes**. Claimed
+> cells never retry; missing or censored rows receive no replacement. Stop before fit, development
+> disclosure, comparison, ROM/gameplay, authority, or Crystal. “Training-ready” here means the
+> bounded synthetic curriculum can begin—not that the agent can yet play or complete a game.
+
 > **Current product focus (August 20, 2026): the rootless dependency design is qualified;
 > freeze and preflight exactly one campaign.** Published source
 > `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410

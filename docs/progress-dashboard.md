@@ -5,7 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 9569AFA** (`9569afa681eb4d9806230b6d4c5caa79845a7fb8`)
+> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN ·
+> TRAINING_READY · TRAIN 0/8 · ATOMIC 0/8 · DEV COMMITMENTS 4 SEALED · GLOBAL UNUSED 12/12 ·
+> LOCAL EMPTY 10/10**. Link the
+> [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+> and show **SHA-256 6D650FC9…1E1BA2**.
+>
+> Show **FREEZE/PREFLIGHT PREDICTIONS 0 · TRANSITIONS 0 · OUTCOMES 0 · DEV DISCLOSURES 0 · FITS 0
+> · GAMEPLAY 0**. Active rail: **FREEZE EXECUTE IDENTITY → RUN EXACT 8 PREASSIGNED TRANSITIONS →
+> STRICT ADMISSION 8/8 → STOP BEFORE FIT**. Never retry or replace a claimed cell. Hold historical
+> boards at **30/15/4/3/0/0 · 14/4/0/1/1**.
+>
+> **Previous rail:** Show **SOURCE 9569AFA** (`9569afa681eb4d9806230b6d4c5caa79845a7fb8`)
 > **· CI 32335706089/1 GREEN · ROOTLESS DESIGN QUALIFIED · 4,410 TESTS · TRAIN 8 · OPAQUE DEV
 > COMMITMENTS 4 · PRIVATE OPENINGS 4 + PROVISION 1 · DEV PAYLOADS DISCLOSED TO TRAINING 0**. Link
 > the [design receipt](evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)

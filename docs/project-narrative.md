@@ -1,6 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the rootless dependency lesson is qualified; its one-shot campaign is next
+## August 20: the rootless campaign is frozen and training-ready
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+binds campaign `404e3a02…0bc9b92`, eight preassigned train transitions, and four development
+commitments whose payloads remain sealed. One immutable plan was written, then a zero-action check
+confirmed 12/12 account-global identities unused and 10/10 local namespaces empty. It consumed no
+claim and produced no prediction, transition, outcome, fit, comparison, or gameplay effect.
+
+The next bounded step is actual synthetic training-data materialization: execute and strictly
+admit all eight deterministic rows, preserving their four-positive/four-negative and
+four-acquire/four-evolve design. Missing or censored rows cannot be replaced. This advances the
+cross-title dependency-learning seam, but it still provides no Red navigation, capture, completion,
+Crystal transfer, or living-Pokédex authority.
+
+## Previous August 20 checkpoint: the rootless dependency lesson was qualified
 
 Source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410
 ROM-free tests. The

@@ -8,7 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: rootless dependency design qualified; freeze and preflight one campaign
+## Current checkpoint: campaign frozen and preflight passed; materialize the fixed train set
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+(SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+binds campaign `404e3a02…0bc9b92`, its immutable plan, eight train scenarios, and four opaque
+development commitments. Its read-only gate found all 12 global identities and 10 local output
+namespaces unused. Predictions, transitions, outcomes, development disclosures, fits, gameplay,
+and every counter delta were zero.
+
+Active `rootless-living-dex-dependency-curriculum-v1` is one bounded train campaign. Execute only
+the eight preassigned deterministic transitions and admit exactly eight balanced canonical rows.
+A claimed cell cannot retry or be replaced; any censored row closes fit eligibility. Stop after
+admission or terminal failure. Fit, development opening, comparison, Red/Crystal gameplay,
+promotion, completion, and transfer require later reorientations.
+
+## Previous checkpoint: rootless dependency design qualified; freeze and preflight one campaign
 
 Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
 4,410 ROM-free tests. The

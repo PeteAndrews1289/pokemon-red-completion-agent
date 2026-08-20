@@ -121,19 +121,18 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The published rootless dependency design is qualified. One exact campaign-plan "
-            "freeze and zero-action preflight are next; no learning or gameplay counter moved."
+            "Campaign 404e3a02 is frozen and training-ready. Its exact eight-row synthetic "
+            "train set is next; no learning or gameplay counter has moved yet."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Rootless campaign qualification · 12 global identities · "
-            "10 local namespaces · no game"
+            "Rootless train campaign · 8 cells ready · 4 development commitments sealed · no game"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Exact campaign unfrozen · preflight not run · no learning authority",
-            choice="Freeze one plan; prove 12/12 global and 10/10 local identities unused",
+            candidate="Training ready · 12/12 global unused · 10/10 local empty",
+            choice="Execute and admit exactly 8 balanced rows; stop before fit",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -170,7 +169,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             (
                 f"Rootless synthetic board · train outcomes {synthetic_train_outcomes}/8 · "
                 f"atomic episodes {synthetic_atomic_episodes}/8 · development openings 0 · "
-                "campaign plan 0 · preflight 0"
+                "campaign plan 1 · preflight passed"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "

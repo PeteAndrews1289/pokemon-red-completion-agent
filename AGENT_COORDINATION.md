@@ -1,5 +1,17 @@
 # Three-agent coordination
 
+> **2026-08-20 campaign frozen and preflight passed—highest checkpoint:** Source
+> `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+> [preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+> (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+> records campaign `404e3a02…0bc9b92`, **TRAIN 0/8 · ATOMIC 0/8 · GLOBAL UNUSED 12/12 · LOCAL
+> EMPTY 10/10 · DEV DISCLOSURE 0 · FIT 0 · GAMEPLAY 0**.
+>
+> Codex owns the one-shot train campaign only. Claude and Antigravity remain read-only reviewers.
+> Execute/admit exactly eight preassigned synthetic rows; no retry, replacement, fit, development
+> opening, comparison, ROM, controller action, authority, or Crystal. Reorient immediately after
+> admission or a terminal condition that makes eight-row admission impossible.
+
 > **2026-08-20 rootless design qualified; campaign qualification is the only current work -
 > highest checkpoint:** Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8`
 > passed CI `32335706089/1` with 4,410 ROM-free tests. The

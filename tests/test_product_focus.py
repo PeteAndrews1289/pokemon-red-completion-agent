@@ -187,13 +187,14 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-campaign-qualification-v1"
-    )
-    assert state.active_lane["kind"] == "maintenance"
-    assert len(state.retired_lanes) == 28
+    assert state.active_lane["id"] == "rootless-living-dex-dependency-curriculum-v1"
+    assert state.active_lane["kind"] == "learning"
+    assert len(state.retired_lanes) == 29
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_scorecard(state) == (
+        ("Synthetic Rootless Atomic Goal Episode · train", 0, 8),
+        ("Synthetic Rootless Train Outcome · train", 0, 8),
+    )
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -683,7 +684,10 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == (
+        "Synthetic Rootless Atomic Goal Episode · train: 0/8",
+        "Synthetic Rootless Train Outcome · train: 0/8",
+    )
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -961,19 +965,21 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Rootless living-Dex dependency campaign qualification V1" in public["stage"]
+    assert "Rootless living-Dex dependency train campaign V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 0, "total": 8}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 4}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "no learning authority" in encoded
+    assert "no learning or gameplay counter has moved" in encoded
     assert "loss 1.2667" in encoded
     assert "actions 244/244" in encoded
-    assert "published rootless dependency design is qualified" in encoded
-    assert "Exact campaign unfrozen" in encoded
-    assert "12 global identities" in encoded
-    assert "10 local namespaces" in encoded
-    assert "12/12 global and 10/10 local identities unused" in encoded
+    assert "Campaign 404e3a02 is frozen and training-ready" in encoded
+    assert "8 cells ready" in encoded
+    assert "12/12 global unused" in encoded
+    assert "10/10 local empty" in encoded
+    assert "Execute and admit exactly 8 balanced rows" in encoded
+    assert "campaign plan 1" in encoded
+    assert "preflight passed" in encoded
     assert "Rootless synthetic board" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded

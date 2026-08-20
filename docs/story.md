@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the lesson is built; now prove the classroom is sealed
+## Current checkpoint: the classroom is sealed; the eight examples are ready to run
+
+Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+records campaign `404e3a02…0bc9b92`: eight fixed teaching examples, four future examples still
+sealed, 12 unused one-shot identities, and 10 empty output slots. The plan freeze and readiness
+check made no predictions, applied no transitions, and changed no learning counter.
+
+The next scene is the first actual pass through this abstract lesson. Each example asks whether a
+living collection should acquire another precursor or safely evolve one. The campaign must keep
+all eight rows or close; it cannot retry a claimed row until the answer looks nicer. Even a perfect
+dataset here only teaches a small dependency rule. It does not show the model walking through Red,
+catching a Pokémon in an emulator, finishing a Pokédex, or transferring to Crystal.
+
+## Previous checkpoint: the lesson was built; the classroom still needed sealing
 
 Published source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with
 4,410 ROM-free tests. The

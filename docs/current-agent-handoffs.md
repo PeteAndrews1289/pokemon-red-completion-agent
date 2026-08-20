@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns rootless campaign qualification only
+## Current override: Codex owns only the fixed eight-row train campaign
+
+Source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
+[preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
+(SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
+records campaign `404e3a02…0bc9b92`, 12/12 unused global identities, 10/10 empty local namespaces,
+and zero predictions, transitions, development disclosures, fits, or counter deltas.
+
+Codex may freeze the exact execute manifest, execute the eight preassigned synthetic train cells,
+and strictly admit all eight balanced rows. Claude audits lifecycle/claims; Antigravity audits
+mission alignment and overclaiming. Reviewers stay read-only. No claimed cell retries or receives a
+replacement. No agent owns fit, development opening, comparison, ROM/gameplay, promotion, or
+Crystal in this lane. Stop and reorient after admission or a terminal failure.
+
+## Previous override: Codex owned rootless campaign qualification only
 
 Source `9569afa681eb4d9806230b6d4c5caa79845a7fb8` passed CI `32335706089/1` with 4,410
 ROM-free tests. The

@@ -29,27 +29,29 @@ Not the product:
 
 ## One active lane
 
-**Rootless living-Dex dependency campaign qualification V1** (`rootless-living-dex-dependency-campaign-qualification-v1`)
+**Rootless living-Dex dependency train campaign V1** (`rootless-living-dex-dependency-curriculum-v1`)
 
-- Kind: **maintenance**
+- Kind: **learning**
 - Rigor: **development**
-- Next decision: A passing preflight permits a separate learning reorientation for the fixed eight-row train campaign only. It does not itself authorize execute, admit, fit, development-payload disclosure, comparison, gameplay, or Crystal transfer.
+- Next decision: Eight admitted balanced rows permit a separate one-fit reorientation. Any missing or censored row closes this exact campaign without replacement. Neither result authorizes development disclosure, gameplay, or transfer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Freeze one exact title-neutral rootless living-Pokedex dependency campaign and prove, without materializing a train outcome, that its eight train cells, four opaque development commitments, twelve global one-shot identities, and ten local output namespaces are ready and unused. |
+| Reusable capability | Materialize and strictly admit exactly eight balanced synthetic train outcomes for the title-neutral living-Pokedex decision to acquire another precursor or evolve now, while keeping all four development openings sealed. |
 | Authority now | The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority. |
-| Authority target | Qualify only one exact synthetic campaign for later train execution. Grant no outcome, fit, comparison, gameplay, promotion, completion, sealed, or transfer authority. |
-| Transfer test | Not in this lane. A later Crystal adapter must independently compute the same title-neutral dependency signals and remain a separately claimed transfer test. |
-| Cheapest falsifier | Authenticate one exact published freeze invocation, bind the sealed provision and four public commitments, write only the immutable campaign plan, then run one read-only preflight. Any stale binding, missing provision record, occupied local namespace, consumed global identity, private-path leak, prediction, transition, fit, comparison, ROM access, or controller action closes the exact campaign. |
-| Time box | 1 session / 2 hours |
+| Authority target | Add exactly eight admitted synthetic rootless train outcomes and eight matching synthetic atomic episodes. Grant no fit, comparison, gameplay, promotion, completion, sealed, or transfer authority. |
+| Transfer test | Not in this lane. After a separate fit and sealed abstract comparison, a later Crystal adapter must independently compute the same title-neutral dependency signals. |
+| Cheapest falsifier | Execute only the frozen campaign 404e3a02 under its unused one-shot identities and admit the exact eight canonical rows. Any interruption, missing terminal, imbalance, replacement scenario, development disclosure, retry, fit, ROM access, or gameplay action closes the campaign without claiming a usable train dataset. |
+| Time box | 1 session / 1 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Synthetic Rootless Atomic Goal Episode · train | 0 | 8 |
+| Synthetic Rootless Train Outcome · train | 0 | 8 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,29 +59,28 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-20-rootless-dependency-design-qualified** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-design-qualification-v1-2026-08-20.json)
+**2026-08-20-rootless-dependency-campaign-training-ready** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This isolates the reusable living-Pokedex choice - acquire another precursor or evolve now - before spending more time on fragile game roots. It is a pipeline qualification only; later Red and Crystal adapters must independently prove the same semantics in gameplay. |
-| Learning output | No measured learning output was added. The board remains 30/15 historical outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, and 0 synthetic rootless outcomes or atomic episodes. Provisioning created four sealed private openings plus one provision record, while disclosing zero development payloads to training. |
-| Authority delta | None. Published design and runner qualification add no synthetic outcome, model fit, comparison, gameplay, promotion, completion, or transfer authority. |
-| Transfer result | Not run. A rootless synthetic design and readiness preflight are not Red gameplay or Crystal transfer; they only qualify a future train campaign. |
-| Blocker | The reviewed design, dedicated interaction ranker, one-shot campaign/fit/comparison runners, and opaque development roster are published and green. The exact campaign plan is not yet frozen and its zero-action readiness has not yet authenticated unused global and local identities. |
-| Decision | Retire the pure design lane as qualified. Open one bounded campaign-qualification lane that may freeze exactly one immutable plan and perform exactly one zero-action, zero-transition preflight; execute, admit, fit, and compare remain closed. |
-| Next session | Publish the design closeout, freeze exactly one rootless campaign plan from the path-free four-row commitment roster, and run exactly one zero-action preflight. Stop before execute, admit, fit, or compare. |
-| Next falsifier | Freeze the exact public invocation and campaign plan, then require all twelve account-global identities and ten local output namespaces to be unused. The preflight must report zero predictions, transitions, fits, development disclosures, gameplay, and counter deltas. |
-| Stop condition | Stop after one immutable plan freeze and one exact zero-action preflight. Any synthetic transition, campaign execution, admission, fit, development-payload disclosure, comparison, ROM access, controller action, teacher query, Crystal access, or authority claim closes the lane. |
+| Product alignment | These outcomes teach the reusable living-Pokedex dependency rule - preserve a scarce precursor and evolve when a duplicate is safe - without spending another cycle on brittle emulator roots. Red gameplay and Crystal transfer remain separate later tests. |
+| Learning output | No measured learning output was added by qualification. The board remains 30/15 historical outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, and 0/8 synthetic rootless outcomes and atomic episodes. The immutable plan and read-only preflight consumed no claim. |
+| Authority delta | None. Freezing a plan and passing a zero-action preflight add no synthetic outcome, model fit, comparison, gameplay, promotion, completion, or transfer authority. |
+| Transfer result | Not run. Synthetic train outcomes are not Red gameplay or Crystal transfer; they only prepare a later separately claimed fit and held-out comparison. |
+| Blocker | The exact eight-row campaign is frozen and training-ready: all twelve account-global one-shot identities and ten local output namespaces were unused at preflight. The train transitions have not been materialized or admitted, and all four development payloads remain sealed. |
+| Decision | Retire campaign qualification as passed. Activate exactly one fixed eight-row synthetic train campaign; stop after its one-shot execution and strict admission, before any fit or development comparison. |
+| Next session | Execute and strictly admit only campaign 404e3a02. Stop immediately at a complete eight-row admission or the first terminal state that makes full admission impossible; do not fit or open a development payload. |
+| Next falsifier | Under one separately frozen execute identity, materialize the eight preassigned deterministic transitions, durably retain every terminal, then admit exactly eight canonical balanced outcomes. Any censored row, imbalance, or missing artifact fails fit eligibility without replacement. |
+| Stop condition | Stop after one settled eight-row admission or any terminal condition that prevents it. Never retry a claimed cell, substitute a scenario, fit, decode development payloads, compare, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer. |
 
 ### Stop conditions
 
-- Any ROM, context state, game root, controller action, prediction, synthetic transition, teacher query, or retired-lane retry stops the lane.
-- Any stale public binding, missing or mismatched provision record, occupied local output namespace, consumed global identity, private-path field, or development-payload disclosure closes the exact campaign.
-- Stop after one immutable campaign-plan freeze and one zero-action preflight; do not execute, admit, fit, compare, or open development payloads.
+- Execute only the frozen eight scenarios with their preassigned treatments; any claimed cell is permanently nonretryable and no replacement scenario may enter the denominator.
+- Any ROM, context state, game root, controller action, teacher query, development-payload disclosure, private-path leak, or stale public binding closes the campaign.
+- Stop after strict eight-row admission or the first campaign terminal that prevents it; do not fit, compare, promote, or open development payloads.
 
 ### Hard boundaries for this lane
 
-- **Prohibited:** campaign execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
 - **Prohibited:** development payload disclosure
@@ -116,6 +117,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Rootless living-Dex dependency campaign qualification V1:** Published source 048bea66d205b0e784b3321763e2725d2ccfff32 passed CI 32336487689/1. Campaign 404e3a02 was frozen with eight train scenarios and four opaque development commitments, then passed one zero-action preflight with all 12 global identities and 10 local namespaces unused. It consumed no claim and produced no outcome, fit, comparison, gameplay, or authority delta. Evidence is preserved; retry is no.
 - **Rootless living-Dex dependency curriculum design V1:** Published source 9569afa681eb4d9806230b6d4c5caa79845a7fb8 passed CI 32335706089/1 with 4,410 ROM-free tests. It freezes eight title-neutral train scenarios, four opaque development commitments, a dedicated interaction ranker, separate one-shot campaign/fit/comparison boundaries, and honest synthetic counters. Claude returned GO with no P0/P1 for zero-action freeze/preflight. No campaign, fit, comparison, gameplay, or transfer result occurred. Evidence is preserved; retry is no.
 - **Causal bootstrap origin qualification V1:** Published source aa65504899f51cf73aa28bfdb725abffeeec7d0a passed CI 32179177930/1. Its public-only bootstrap loads the development runner first, verifies zero preloaded project modules and exact origins in an isolated process, and exposes path-free readiness substages. It opened no ROM, private input, claim, prediction, or gameplay and is complete without retry. Evidence is preserved; retry is no.
 - **First DEVELOP_TEAM causal goal outcome V1:** Published source 6077173618bf9fce9fb57804a6a1ce82249c9cee passed CI 32177113545/1 and its exact public freeze manifest validated, but the sole action-free freeze returned failed_closed at readiness_authentication with effects not attested and no campaign plan present after return. Static public-source analysis found a deterministic import-order defect; the exact lane remains closed without retry, replacement root, or gameplay claim, and all learning counters remain unchanged. Evidence is preserved; retry is no.
