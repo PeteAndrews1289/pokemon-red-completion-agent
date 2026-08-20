@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Executed and strictly admitted the exact rootless living-Dex dependency campaign from source
+  `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
+  [path-free result](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+  records 8/8 settled deterministic train rows, 4 positive, 4 negative, 0 interrupted, all 12
+  one-shot identities consumed, and all four development openings sealed. Added 8 scoped
+  synthetic rootless outcomes and 8 scoped synthetic atomic episodes; every legacy fit,
+  comparison, gameplay, authority, and transfer counter stayed unchanged. Added scoped rootless
+  fit/comparison counters and activated one fixed train-only fit at 0/1. Antigravity returned GO
+  with no P0/P1 blocker; Claude is unavailable for the current usage window.
+
 - Froze campaign `404e3a02…0bc9b92` and passed its zero-action readiness preflight at exact source
   `048bea66d205b0e784b3321763e2725d2ccfff32` under green CI `32336487689/1`. The
   [path-free receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

@@ -18,7 +18,7 @@ from pathlib import Path, PurePosixPath
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FOCUS_CONFIG = PROJECT_ROOT / "configs" / "active-product-focus.json"
 DEFAULT_FOCUS_DOCUMENT = PROJECT_ROOT / "ACTIVE_PRODUCT_STATE.md"
-FOCUS_SCHEMA = "pokemon.product-focus.v3"
+FOCUS_SCHEMA = "pokemon.product-focus.v4"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _IDENTIFIER = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
@@ -33,7 +33,9 @@ _OUTPUT_KINDS = {
     "model_fit",
     "outcome_question",
     "synthetic_rootless_atomic_goal_episode",
+    "synthetic_rootless_model_fit",
     "synthetic_rootless_train_outcome",
+    "synthetic_rootless_unseen_comparison",
     "transfer_result",
     "unseen_comparison",
     "verified_composition_episode",
@@ -657,11 +659,16 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
             kind
             in {
                 "synthetic_rootless_atomic_goal_episode",
+                "synthetic_rootless_model_fit",
                 "synthetic_rootless_train_outcome",
             }
             and partition != "train"
         ):
             raise ProductFocusError("synthetic rootless output must use the train partition")
+        if kind == "synthetic_rootless_unseen_comparison" and partition != "development":
+            raise ProductFocusError(
+                "synthetic rootless unseen comparison must use the development partition"
+            )
         identity = (kind, partition)
         if identity in identities:
             raise ProductFocusError("measurable output identities must be unique")
@@ -678,6 +685,8 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         "synthetic_rootless_atomic_goal_episode",
         "synthetic_rootless_train_outcome",
     } <= kinds
+    synthetic_rootless_fit_contract = "synthetic_rootless_model_fit" in kinds
+    synthetic_rootless_comparison_contract = "synthetic_rootless_unseen_comparison" in kinds
     if synthetic_rootless_contract and (
         minima["synthetic_rootless_atomic_goal_episode"]
         != minima["synthetic_rootless_train_outcome"]
@@ -688,11 +697,14 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         and not development_contract
         and not causal_train_contract
         and not (synthetic_rootless_contract)
+        and not synthetic_rootless_fit_contract
+        and not synthetic_rootless_comparison_contract
     ):
         raise ProductFocusError(
             "learning lane must require either the legacy fit/evaluation outputs or "
             "model-led development episodes with verified outcomes, a causal train example, "
-            "or paired synthetic rootless outputs"
+            "paired synthetic rootless outputs, a synthetic rootless fit, or a synthetic "
+            "rootless comparison"
         )
 
 
@@ -709,7 +721,9 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
             "model_fits",
             "outcome_questions",
             "synthetic_rootless_atomic_goal_episodes",
+            "synthetic_rootless_model_fits",
             "synthetic_rootless_train_outcomes",
+            "synthetic_rootless_unseen_comparisons",
             "transfer_results",
             "unseen_comparisons",
             "verified_composition_episodes",
@@ -729,7 +743,9 @@ def _validate_progress(progress: Mapping[str, object]) -> None:
         "development_episode_attempts",
         "model_fits",
         "synthetic_rootless_atomic_goal_episodes",
+        "synthetic_rootless_model_fits",
         "synthetic_rootless_train_outcomes",
+        "synthetic_rootless_unseen_comparisons",
         "transfer_results",
         "unseen_comparisons",
         "verified_composition_episodes",
@@ -970,7 +986,11 @@ def _current_output_count(
         "development_episode": "development_episode_attempts",
         "model_fit": "model_fits",
         "synthetic_rootless_atomic_goal_episode": ("synthetic_rootless_atomic_goal_episodes"),
+        "synthetic_rootless_model_fit": "synthetic_rootless_model_fits",
         "synthetic_rootless_train_outcome": "synthetic_rootless_train_outcomes",
+        "synthetic_rootless_unseen_comparison": (
+            "synthetic_rootless_unseen_comparisons"
+        ),
         "transfer_result": "transfer_results",
         "unseen_comparison": "unseen_comparisons",
         "verified_composition_episode": "verified_composition_episodes",
@@ -1004,6 +1024,16 @@ def _current_progress_counts(progress: Mapping[str, object]) -> tuple[int, ...]:
         _count(
             progress,
             "synthetic_rootless_atomic_goal_episodes",
+            subject="active lane progress",
+        ),
+        _count(
+            progress,
+            "synthetic_rootless_model_fits",
+            subject="active lane progress",
+        ),
+        _count(
+            progress,
+            "synthetic_rootless_unseen_comparisons",
             subject="active lane progress",
         ),
     )

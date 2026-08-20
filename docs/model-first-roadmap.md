@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: campaign frozen and preflight passed; materialize the fixed train set
+## Current checkpoint: the fixed train set is admitted; fit the dependency ranker once
+
+Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`. The
+[campaign result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+(SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+binds campaign `404e3a02…0bc9b92`, dataset `8207eb89…85f37`, and exactly 8/8 settled
+deterministic rows: 4 positive, 4 negative, 0 interrupted. All 12 one-shot identities are consumed;
+the four development openings remain sealed. Rootless outcomes and atomic episodes are 8/8;
+scoped fits and comparisons are 0/1. Legacy boards remain 30/15 outcomes, 4 fits, 3 comparisons.
+
+Active `rootless-living-dex-dependency-fit-v1` runs the frozen interaction ranker exactly once on
+the admitted train set. The cheapest falsifier is immediate: train accuracy must be 1.0,
+cross-entropy must beat the 0.5 baseline, serialization must round-trip, and the bundle plus
+terminal must be durable. Stop at that terminal. Development decode/comparison, gameplay,
+promotion, completion, Crystal, and transfer remain later lanes. Antigravity returned GO with no
+P0/P1; Claude is unavailable and not a blocker.
+
+## Previous checkpoint: campaign frozen and preflight passed; materialize the fixed train set
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

@@ -68,6 +68,11 @@ CAUSAL_READINESS_MANIFEST_QUALIFICATION = (
 CAUSAL_BOOTSTRAP_ORIGIN_QUALIFICATION = (
     PROJECT_ROOT / "docs/evidence" / "causal-bootstrap-origin-qualification-v1-2026-08-18.json"
 )
+ROOTLESS_DEPENDENCY_CAMPAIGN_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -187,14 +192,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "rootless-living-dex-dependency-curriculum-v1"
+    assert state.active_lane["id"] == "rootless-living-dex-dependency-fit-v1"
     assert state.active_lane["kind"] == "learning"
-    assert len(state.retired_lanes) == 29
+    assert len(state.retired_lanes) == 30
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == (
-        ("Synthetic Rootless Atomic Goal Episode · train", 0, 8),
-        ("Synthetic Rootless Train Outcome · train", 0, 8),
-    )
+    assert focus_scorecard(state) == (("Synthetic Rootless Model Fit · train", 0, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -202,9 +204,46 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert state.progress["verified_outcome_examples"] == 4
     assert state.progress["verified_composition_episodes"] == 1
     assert state.progress["causal_train_examples"] == 0
-    assert state.progress["synthetic_rootless_train_outcomes"] == 0
-    assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 0
+    assert state.progress["synthetic_rootless_train_outcomes"] == 8
+    assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
+    assert state.progress["synthetic_rootless_model_fits"] == 0
+    assert state.progress["synthetic_rootless_unseen_comparisons"] == 0
     encoded = json.dumps(state.document, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_campaign_result_is_balanced_and_scoped() -> None:
+    receipt = json.loads(ROOTLESS_DEPENDENCY_CAMPAIGN_RESULT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == (
+        "eight_balanced_synthetic_train_outcomes_admitted_fit_not_started"
+    )
+    assert receipt["outcome"] == {
+        "interrupted_outcomes": 0,
+        "negative_outcomes": 4,
+        "positive_outcomes": 4,
+        "settled_outcomes": 8,
+        "status": "admitted",
+        "train_admission_record_sha256": (
+            "acf32bb8e5a910ded570ec2f0aa686bf810b18f202c51cf9f1a12063abad9254"
+        ),
+        "train_dataset_sha256": (
+            "8207eb89a430a5bbb6bca7bd960e000c728710fded2bceef027dd4179e385f37"
+        ),
+    }
+    assert receipt["counter_treatment"]["synthetic_rootless_train_outcomes_added"] == 8
+    assert (
+        receipt["counter_treatment"]["synthetic_rootless_atomic_goal_episodes_added"] == 8
+    )
+    assert {
+        value
+        for key, value in receipt["counter_treatment"].items()
+        if not key.startswith("synthetic_rootless_")
+    } == {0}
+    assert receipt["campaign"]["global_one_shot_identities_consumed"] == 12
+    assert receipt["campaign"]["development_opening_payloads_disclosed"] == 0
+    encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 
@@ -684,10 +723,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Synthetic Rootless Atomic Goal Episode · train: 0/8",
-        "Synthetic Rootless Train Outcome · train: 0/8",
-    )
+    assert rows == ("Synthetic Rootless Model Fit · train: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -815,9 +851,61 @@ def test_learning_lane_accepts_paired_synthetic_rootless_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Synthetic Rootless Train Outcome · train", 0, 8),
-        ("Synthetic Rootless Atomic Goal Episode · train", 0, 8),
+        ("Synthetic Rootless Train Outcome · train", 8, 8),
+        ("Synthetic Rootless Atomic Goal Episode · train", 8, 8),
     )
+
+
+def test_learning_lanes_accept_scoped_rootless_fit_and_comparison() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "learning"
+    lane["maintenance_unblocks"] = None
+    lane["measurable_outputs"] = [
+        {"kind": "synthetic_rootless_model_fit", "minimum": 1, "partition": "train"}
+    ]
+
+    state = validate_product_focus_document(document)
+
+    assert focus_scorecard(state) == (("Synthetic Rootless Model Fit · train", 0, 1),)
+
+    lane["measurable_outputs"] = [
+        {
+            "kind": "synthetic_rootless_unseen_comparison",
+            "minimum": 1,
+            "partition": "development",
+        }
+    ]
+    state = validate_product_focus_document(document)
+    assert focus_scorecard(state) == (
+        ("Synthetic Rootless Unseen Comparison · development", 0, 1),
+    )
+
+
+@pytest.mark.parametrize(
+    ("kind", "partition", "match"),
+    (
+        ("synthetic_rootless_model_fit", "development", "synthetic rootless output"),
+        (
+            "synthetic_rootless_unseen_comparison",
+            "train",
+            "synthetic rootless unseen comparison",
+        ),
+    ),
+)
+def test_scoped_rootless_fit_and_comparison_require_honest_partitions(
+    kind: str,
+    partition: str,
+    match: str,
+) -> None:
+    document = _document()
+    lane = _active(document)
+    lane["measurable_outputs"] = [
+        {"kind": kind, "minimum": 1, "partition": partition}
+    ]
+
+    with pytest.raises(ProductFocusError, match=match):
+        validate_product_focus_document(document)
 
 
 @pytest.mark.parametrize("mutation", ("missing_pair", "wrong_partition", "unequal_minimum"))
@@ -965,21 +1053,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Rootless living-Dex dependency train campaign V1" in public["stage"]
-    assert public["experiment"]["zero_shot"] == {"completed": 0, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 8}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 4, "total": 4}  # type: ignore[index]
+    assert "Rootless living-Dex dependency train-only fit V1" in public["stage"]
+    assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
+    assert public["experiment"]["adaptation"] == {"completed": 0, "total": 1}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "no learning or gameplay counter has moved" in encoded
+    assert "admitted all eight balanced synthetic train rows" in encoded
     assert "loss 1.2667" in encoded
     assert "actions 244/244" in encoded
-    assert "Campaign 404e3a02 is frozen and training-ready" in encoded
-    assert "8 cells ready" in encoded
-    assert "12/12 global unused" in encoded
-    assert "10/10 local empty" in encoded
-    assert "Execute and admit exactly 8 balanced rows" in encoded
-    assert "campaign plan 1" in encoded
-    assert "preflight passed" in encoded
+    assert "Campaign 404e3a02 admitted all eight" in encoded
+    assert "train set 8/8" in encoded
+    assert "4 positive / 4 negative" in encoded
+    assert "Run exactly one fixed train-only fit" in encoded
+    assert "dependency fits 0/1" in encoded
+    assert "held-out comparisons 0/1" in encoded
     assert "Rootless synthetic board" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded

@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the fixed eight-row train campaign
+## Current override: Codex owns exactly one rootless dependency fit
+
+The [campaign result](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+(SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+records 8/8 settled synthetic rows, 4 positive, 4 negative, 0 interrupted, all 12 identities
+consumed, and four development openings still sealed. Scoped rootless outcomes and atomic episodes
+are 8/8; rootless fits and comparisons are 0/1. No gameplay, authority, or transfer changed.
+
+Codex may authenticate and execute only the fixed train-only fit, then must stop at its durable
+terminal. Antigravity is the sole external auditor for this session and returned GO with no P0/P1.
+Claude has reached its usage window and must not be queried or awaited until the user restores it.
+No agent owns a refit, tuning, development opening/comparison, ROM/controller action, promotion,
+Crystal, completion, or transfer in this lane.
+
+## Previous override: Codex owned only the fixed eight-row train campaign
 
 Source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

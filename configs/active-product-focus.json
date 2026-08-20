@@ -8,47 +8,42 @@
   },
   "lanes": [
     {
-      "capability": "Materialize and strictly admit exactly eight balanced synthetic train outcomes for the title-neutral living-Pokedex decision to acquire another precursor or evolve now, while keeping all four development openings sealed.",
-      "cheapest_falsifier": "Execute only the frozen campaign 404e3a02 under its unused one-shot identities and admit the exact eight canonical rows. Any interruption, missing terminal, imbalance, replacement scenario, development disclosure, retry, fit, ROM access, or gameplay action closes the campaign without claiming a usable train dataset.",
-      "id": "rootless-living-dex-dependency-curriculum-v1",
+      "capability": "Fit exactly one low-capacity title-neutral dependency ranker to the eight admitted synthetic living-Pokedex outcomes, teaching when to preserve a scarce precursor and when evolving a duplicate advances the dependency graph.",
+      "cheapest_falsifier": "Run the frozen train-only fit once. It must authenticate the exact eight-row admission, reach 1.0 train accuracy, reduce cross-entropy below the 0.5 baseline, round-trip exactly, and durably publish its fit bundle and terminal; any failure closes the fit identity without opening development payloads.",
+      "id": "rootless-living-dex-dependency-fit-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Freezing a plan and passing a zero-action preflight add no synthetic outcome, model fit, comparison, gameplay, promotion, completion, or transfer authority.",
-        "blocker": "The exact eight-row campaign is frozen and training-ready: all twelve account-global one-shot identities and ten local output namespaces were unused at preflight. The train transitions have not been materialized or admitted, and all four development payloads remain sealed.",
-        "decision": "Retire campaign qualification as passed. Activate exactly one fixed eight-row synthetic train campaign; stop after its one-shot execution and strict admission, before any fit or development comparison.",
+        "authority_delta": "None. The admitted rows are deterministic synthetic training evidence, not a model update, gameplay result, promotion, completion, or transfer result.",
+        "blocker": "The exact eight-row dataset is admitted and fit-eligible, but no rootless dependency model has been fit. All four development openings remain sealed behind a later externally pinned completed-fit manifest and terminal.",
+        "decision": "Retire the consumed campaign with 8/8 balanced outcomes admitted. Following Antigravity GO with no P0/P1 blockers, proceed directly to exactly one train-only dependency fit and stop before any development disclosure or comparison.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json",
-          "sha256": "6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2"
+          "kind": "synthetic_rootless_train_outcome",
+          "path": "docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json",
+          "sha256": "415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4"
         },
-        "learning_output": "No measured learning output was added by qualification. The board remains 30/15 historical outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, 1 verified composition, and 0/8 synthetic rootless outcomes and atomic episodes. The immutable plan and read-only preflight consumed no claim.",
-        "next_falsifier": "Under one separately frozen execute identity, materialize the eight preassigned deterministic transitions, durably retain every terminal, then admit exactly eight canonical balanced outcomes. Any censored row, imbalance, or missing artifact fails fit eligibility without replacement.",
-        "next_session_goal": "Execute and strictly admit only campaign 404e3a02. Stop immediately at a complete eight-row admission or the first terminal state that makes full admission impossible; do not fit or open a development payload.",
-        "product_alignment": "These outcomes teach the reusable living-Pokedex dependency rule - preserve a scarce precursor and evolve when a duplicate is safe - without spending another cycle on brittle emulator roots. Red gameplay and Crystal transfer remain separate later tests.",
-        "session_id": "2026-08-20-rootless-dependency-campaign-training-ready",
+        "learning_output": "Campaign 404e3a02 added exactly 8 synthetic rootless train outcomes and 8 matching synthetic atomic episodes: 4 positive, 4 negative, 0 interrupted. Historical counts remain 30/15 outcomes, 4 fits, 3 comparisons, 14 development attempts, 4 verified examples, and 1 verified composition.",
+        "next_falsifier": "Authenticate the exact admitted dataset and run the fixed pairwise-logistic interaction ranker once. Anything short of 1.0 train accuracy, lower cross-entropy, exact serialization, and a durable complete bundle fails the lane without refit.",
+        "next_session_goal": "Freeze and validate the exact fit invocation, run its required train-only preflight, execute one fit, and stop at the durable fit terminal. Do not open or compare any development payload.",
+        "product_alignment": "This is the first parameter update in the rootless living-Pokedex lane. It targets a reusable acquire-versus-evolve dependency rule without pretending that deterministic abstract evidence is Red gameplay or Crystal transfer.",
+        "session_id": "2026-08-20-rootless-dependency-train-set-admitted",
         "status": "active",
-        "stop_condition": "Stop after one settled eight-row admission or any terminal condition that prevents it. Never retry a claimed cell, substitute a scenario, fit, decode development payloads, compare, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer.",
-        "transfer_result": "Not run. Synthetic train outcomes are not Red gameplay or Crystal transfer; they only prepare a later separately claimed fit and held-out comparison."
+        "stop_condition": "Stop after the first durable fit terminal, successful or failed. Never refit, tune, decode development payloads, compare, access a ROM, issue controller input, or claim gameplay, completion, authority, or transfer.",
+        "transfer_result": "Not run. The admitted synthetic dataset and pending train-only fit do not test a Red adapter, Crystal, or any cross-title behavior."
       },
       "learned_authority": {
         "current": "The unchanged shadow base has one prior train-only storage/restoration fit and one safe acquisition observation, but no accepted acquisition successor, unseen goal-selection improvement, replanning, completion, Crystal, or living-Pokedex authority.",
-        "target": "Add exactly eight admitted synthetic rootless train outcomes and eight matching synthetic atomic episodes. Grant no fit, comparison, gameplay, promotion, completion, sealed, or transfer authority."
+        "target": "Add one scoped synthetic rootless dependency fit while preserving all gameplay, comparison, promotion, completion, sealed, and transfer authority at zero delta."
       },
       "maintenance_unblocks": null,
       "measurable_outputs": [
         {
-          "kind": "synthetic_rootless_atomic_goal_episode",
-          "minimum": 8,
-          "partition": "train"
-        },
-        {
-          "kind": "synthetic_rootless_train_outcome",
-          "minimum": 8,
+          "kind": "synthetic_rootless_model_fit",
+          "minimum": 1,
           "partition": "train"
         }
       ],
-      "name": "Rootless living-Dex dependency train campaign V1",
-      "next_decision": "Eight admitted balanced rows permit a separate one-fit reorientation. Any missing or censored row closes this exact campaign without replacement. Neither result authorizes development disclosure, gameplay, or transfer.",
+      "name": "Rootless living-Dex dependency train-only fit V1",
+      "next_decision": "One completed fixed fit permits a separately frozen development-comparison preflight whose exact fit manifest and terminal are externally pinned. A failed fit closes this model identity. Neither result authorizes gameplay or transfer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -85,6 +80,11 @@
             "kind": "development_episode",
             "path": "docs/evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json",
             "sha256": "79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38"
+          },
+          {
+            "kind": "synthetic_rootless_train_outcome",
+            "path": "docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json",
+            "sha256": "415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4"
           }
         ],
         "model_fits": 4,
@@ -92,34 +92,48 @@
           "development": 15,
           "train": 30
         },
-        "synthetic_rootless_atomic_goal_episodes": 0,
-        "synthetic_rootless_train_outcomes": 0,
+        "synthetic_rootless_atomic_goal_episodes": 8,
+        "synthetic_rootless_model_fits": 0,
+        "synthetic_rootless_train_outcomes": 8,
+        "synthetic_rootless_unseen_comparisons": 0,
         "transfer_results": 0,
         "unseen_comparisons": 3,
         "verified_composition_episodes": 1,
         "verified_outcome_examples": 4
       },
       "prohibited_actions": [
+        "campaign_execution",
         "consumed_trial_retry",
         "crystal_execution",
         "development_payload_disclosure",
         "full_game_replay",
-        "model_fit",
+        "model_refit",
+        "rootless_dependency_comparison",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Execute only the frozen eight scenarios with their preassigned treatments; any claimed cell is permanently nonretryable and no replacement scenario may enter the denominator.",
-        "Any ROM, context state, game root, controller action, teacher query, development-payload disclosure, private-path leak, or stale public binding closes the campaign.",
-        "Stop after strict eight-row admission or the first campaign terminal that prevents it; do not fit, compare, promote, or open development payloads."
+        "Authenticate only the exact admitted eight-row train set and fixed ranker configuration; no scenario replacement, outcome rewrite, tuning, or second fit is allowed.",
+        "Any development-payload disclosure, ROM or game access, controller action, teacher query, private-path leak, or stale public binding closes the lane.",
+        "Stop after the first durable fit terminal; do not compare, promote, open development payloads, or continue into gameplay."
       ],
       "time_box": {
         "maximum_hours": 1,
         "maximum_sessions": 1
       },
-      "transfer_test": "Not in this lane. After a separate fit and sealed abstract comparison, a later Crystal adapter must independently compute the same title-neutral dependency signals."
+      "transfer_test": "Not in this lane. After this fit, a separate sealed abstract comparison must first test held-out dependency structures; a later Crystal adapter must then independently compute the same title-neutral signals."
+    },
+    {
+      "id": "rootless-living-dex-dependency-curriculum-v1",
+      "kind": "learning",
+      "name": "Rootless living-Dex dependency train campaign V1",
+      "preserve_evidence": true,
+      "reason": "Source 048bea66d205b0e784b3321763e2725d2ccfff32 executed campaign 404e3a02. All 8 fixed synthetic rows were admitted: 4 positive, 4 negative, 0 interrupted; all 12 identities are consumed and all 4 development openings remain sealed. It added 8 scoped outcomes and 8 scoped atomic episodes, with no fit, comparison, gameplay, authority, or transfer. Antigravity returned GO with no P0/P1 blocker and recommended the direct train-only fit.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-campaign-qualification-v1",
@@ -429,8 +443,8 @@
     ]
   },
   "review_roles": {
-    "antigravity": "Challenge architecture and cross-game transfer at milestone decisions, with at most three falsifiable claims and explicit work to delete.",
-    "claude": "Audit frozen benchmark or sealed designs, statistics, leakage, and claims; routine development does not wait for a forensic review.",
+    "antigravity": "Act as the sole external auditor while Claude is at its usage limit; challenge architecture, claim boundaries, and cross-game transfer at milestone decisions.",
+    "claude": "Unavailable for the current usage window; do not pause development waiting for it. Resume its statistics and leakage role only after the user says its access has reset.",
     "codex": "Own implementation, measurement, adjudication, documentation, publication, and the active-lane counter."
   },
   "rigor_policy": {
@@ -456,7 +470,7 @@
       "repeatable": false
     }
   },
-  "schema": "pokemon.product-focus.v3",
+  "schema": "pokemon.product-focus.v4",
   "session_budget_percent": {
     "data_and_scenarios": 10,
     "maintenance_and_docs": 15,

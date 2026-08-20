@@ -1,6 +1,23 @@
 # Current audit — 2026-08-20
 
-## Current result: campaign frozen and preflight passed; the fixed train set is ready
+## Current result: eight balanced synthetic rows admitted; train-only fit is next
+
+Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+`32336487689/1`. The
+[campaign result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+(SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+records dataset `8207eb89…85f37`, 8/8 settled rows, 4 positive, 4 negative, 0 interrupted,
+12/12 identities consumed, and zero development disclosure. It adds exactly 8 scoped rootless
+outcomes and 8 scoped atomic episodes. Model fits remain 4 globally and 0/1 in this rootless lane;
+unseen comparisons remain 3 globally and 0/1 here. Gameplay, authority, and transfer remain zero.
+
+Antigravity returned GO with no P0/P1 blocker and recommended proceeding directly to the existing
+one-shot train-only fit. Claude is unavailable for the current usage window and is not a gate.
+Authenticate the fixed dataset and fit identity, fit once, and stop at the durable terminal. A
+failed fit closes the identity; a successful fit permits only a separate later comparison
+preflight. Development payloads, ROM/gameplay, promotion, Crystal, and transfer stay closed.
+
+## Previous result: campaign frozen and preflight passed; the fixed train set was ready
 
 Exact source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 [campaign preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

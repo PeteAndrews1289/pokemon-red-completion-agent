@@ -5,7 +5,18 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN ·
+> **Current rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 ADMITTED ·
+> TRAIN 8/8 · ATOMIC 8/8 · POSITIVE 4 · NEGATIVE 4 · INTERRUPTED 0 · IDENTITIES CONSUMED 12/12 ·
+> DEV OPENINGS 4 SEALED · DEV DISCLOSURE 0**. Link the
+> [result receipt](evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+> and show **SHA-256 415AF97D…CF3C4**.
+>
+> Active rail: **AUTHENTICATE DATASET 8207EB89…85F37 → REQUIRED TRAIN-ONLY PREFLIGHT → FIT FIXED
+> INTERACTION RANKER ONCE → DURABLE TERMINAL → STOP BEFORE DEVELOPMENT**. Show **ROOTLESS FIT 0/1
+> · ROOTLESS HELD-OUT COMPARISON 0/1 · GLOBAL FITS 4 · GLOBAL COMPARISONS 3 · GAMEPLAY/AUTHORITY/
+> TRANSFER 0**. Antigravity **GO · P0/P1 0**; Claude **USAGE WINDOW EXHAUSTED · NOT A BLOCKER**.
+>
+> **Previous rail:** Show **SOURCE 048BEA6 · CI 32336487689/1 GREEN · CAMPAIGN 404E3A02 FROZEN ·
 > TRAINING_READY · TRAIN 0/8 · ATOMIC 0/8 · DEV COMMITMENTS 4 SEALED · GLOBAL UNUSED 12/12 ·
 > LOCAL EMPTY 10/10**. Link the
 > [preflight receipt](evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)

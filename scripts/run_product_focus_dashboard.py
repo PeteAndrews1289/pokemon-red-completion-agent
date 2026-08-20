@@ -61,6 +61,11 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
     causal_train_examples = _count(progress, "causal_train_examples")
     synthetic_train_outcomes = _count(progress, "synthetic_rootless_train_outcomes")
     synthetic_atomic_episodes = _count(progress, "synthetic_rootless_atomic_goal_episodes")
+    synthetic_model_fits = _count(progress, "synthetic_rootless_model_fits")
+    synthetic_unseen_comparisons = _count(
+        progress,
+        "synthetic_rootless_unseen_comparisons",
+    )
     composition_attempts = _count(progress, "composition_attempts")
     verified_compositions = _count(progress, "verified_composition_episodes")
     outputs = focus_scorecard(state)
@@ -85,19 +90,27 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
         ]
     )
-    synthetic_atomic_total = max(
+    synthetic_fit_total = max(
         [
-            8,
-            synthetic_atomic_episodes,
+            1,
+            synthetic_model_fits,
             *(
                 minimum
                 for label, _, minimum in outputs
-                if label.startswith("Synthetic Rootless Atomic Goal Episode")
+                if label.startswith("Synthetic Rootless Model Fit")
             ),
         ]
     )
-    fit_total = max(
-        [fits, *(minimum for label, _, minimum in outputs if label.startswith("Model Fit"))]
+    synthetic_comparison_total = max(
+        [
+            1,
+            synthetic_unseen_comparisons,
+            *(
+                minimum
+                for label, _, minimum in outputs
+                if label.startswith("Synthetic Rootless Unseen Comparison")
+            ),
+        ]
     )
     stop_conditions = _text_list(lane, "stop_conditions")
     boundary_labels = {
@@ -121,37 +134,37 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Campaign 404e3a02 is frozen and training-ready. Its exact eight-row synthetic "
-            "train set is next; no learning or gameplay counter has moved yet."
+            "Campaign 404e3a02 admitted all eight balanced synthetic train rows. The exact "
+            "one-shot train-only fit is next; every development opening remains sealed."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Rootless train campaign · 8 cells ready · 4 development commitments sealed · no game"
+            "Rootless dependency fit · train set 8/8 · 4 development commitments sealed · no game"
         ),
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
-            candidate="Training ready · 12/12 global unused · 10/10 local empty",
-            choice="Execute and admit exactly 8 balanced rows; stop before fit",
+            candidate="Train set admitted · 4 positive / 4 negative · fit identity unclaimed",
+            choice="Run exactly one fixed train-only fit; stop before development comparison",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
         ),
         experiment=DashboardExperimentState(
-            phase="qualification",
+            phase="training",
             zero_shot_completed=synthetic_train_outcomes,
             zero_shot_total=synthetic_train_total,
-            adaptation_completed=synthetic_atomic_episodes,
-            adaptation_total=synthetic_atomic_total,
-            sealed_completed=fits,
-            sealed_total=fit_total,
+            adaptation_completed=synthetic_model_fits,
+            adaptation_total=synthetic_fit_total,
+            sealed_completed=synthetic_unseen_comparisons,
+            sealed_total=synthetic_comparison_total,
             predictions_committed=False,
             heading="Product focus scorecard",
             eyebrow="Living Pokedex · transferable learned play",
             counter_labels=(
                 "Synthetic train outcomes",
-                "Synthetic atomic episodes",
-                "Model fits",
+                "Synthetic rootless fits",
+                "Synthetic held-out comparisons",
             ),
         ),
         events=(
@@ -168,8 +181,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             (
                 f"Rootless synthetic board · train outcomes {synthetic_train_outcomes}/8 · "
-                f"atomic episodes {synthetic_atomic_episodes}/8 · development openings 0 · "
-                "campaign plan 1 · preflight passed"
+                f"atomic episodes {synthetic_atomic_episodes}/8 · dependency fits "
+                f"{synthetic_model_fits}/1 · held-out comparisons "
+                f"{synthetic_unseen_comparisons}/1 · development openings 0"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -278,6 +292,12 @@ def main(argv: list[str] | None = None) -> int:
                     ],
                     "synthetic_rootless_atomic_goal_episodes": focus.progress[
                         "synthetic_rootless_atomic_goal_episodes"
+                    ],
+                    "synthetic_rootless_model_fits": focus.progress[
+                        "synthetic_rootless_model_fits"
+                    ],
+                    "synthetic_rootless_unseen_comparisons": focus.progress[
+                        "synthetic_rootless_unseen_comparisons"
                     ],
                     "verified_outcome_examples": focus.progress["verified_outcome_examples"],
                     "verified_composition_episodes": focus.progress[

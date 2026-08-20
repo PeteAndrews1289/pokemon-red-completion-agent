@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): the rootless campaign is training-ready.** Exact
+> **Current product focus (August 20, 2026): eight rootless outcomes are admitted; fit once.**
+> Exact executable source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI
+> `32336487689/1`. The
+> [campaign result receipt](docs/evidence/rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json)
+> (SHA-256 `415af97d2414fb2da0083c45df30154ac70c05bbd4c83c852006120c953cf3c4`)
+> records **8/8 settled · 4 positive · 4 negative · 0 interrupted · 12/12 one-shot identities
+> consumed · 4 development openings still sealed**. It adds exactly **8 synthetic rootless train
+> outcomes** and **8 synthetic atomic episodes**; fits, comparisons, gameplay, ROM/controller,
+> teacher, authority, and transfer all remain unchanged.
+>
+> Active `rootless-living-dex-dependency-fit-v1` is the first parameter-update step in this
+> abstract lane: run exactly one fixed train-only fit and stop at its durable terminal. Scoped
+> rootless fits are **0/1** and held-out comparisons **0/1**; global boards remain **30/15
+> outcomes · 4 fits · 3 comparisons**. Antigravity returned GO with no P0/P1 blocker. Claude is
+> unavailable for the current usage window and is not a dependency. Development disclosure,
+> comparison, Red/Crystal gameplay, promotion, completion, and transfer remain closed.
+
+> **Previous product focus (August 20, 2026): the rootless campaign was training-ready.** Exact
 > source `048bea66d205b0e784b3321763e2725d2ccfff32` passed CI `32336487689/1`. The
 > [campaign preflight receipt](docs/evidence/rootless-living-dex-dependency-campaign-preflight-v1-2026-08-20.json)
 > (SHA-256 `6d650fc903493b490d6b990b5df6166b99425977e0931830329d84c24b1e1ba2`)
