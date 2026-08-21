@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fit-preflight, one-shot fit, or comparison-preflight for rootless V2."""
+"""One-shot fit or aggregate-only sealed comparison stages for rootless V2."""
 
 # ruff: noqa: E402 -- script-local manifest helpers precede package imports.
 
@@ -11,6 +11,7 @@ import json
 import stat
 import sys
 from collections.abc import Mapping
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Never
 
@@ -35,15 +36,26 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     write_root_claim,
 )
 from pokemon_red_completion.living_dex_dependency_comparison_v2 import (
+    DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+    DEPENDENCY_COMPARISON_FAILURE_SCHEMA_V2,
+    DEPENDENCY_COMPARISON_RESULT_KIND_V2,
+    DEPENDENCY_COMPARISON_TERMINAL_KIND_V2,
+    claim_v2_comparison_before_payload_open,
+    materialize_claimed_v2_comparison,
     preflight_v2_comparison,
+    publish_claimed_v2_comparison,
+    v2_comparison_failure_record_id,
+    v2_comparison_record_ids,
 )
 from pokemon_red_completion.living_dex_dependency_evaluation_v2 import (
     ROOTLESS_DEPENDENCY_EVALUATION_LANE_V2,
+    DependencyComparisonClaimV2,
     DependencyFitClaimV2,
     EvaluationExecutionBindingV2,
     RootlessDependencyEvaluationDesignV2,
     build_dependency_comparison_claim_v2,
     build_dependency_fit_claim_v2,
+    rootless_dependency_counter_contract_v2,
 )
 from pokemon_red_completion.living_dex_dependency_integrity import (
     DependencyEvaluationBundlePins,
@@ -81,6 +93,19 @@ class RootlessDependencyLearningV2Error(RuntimeError):
     """The V2 fit or comparison preflight failed closed at a named stage."""
 
 
+@dataclass(slots=True)
+class _ComparisonRunState:
+    """Retain only the facts needed for honest postclaim failure handling."""
+
+    failure_stage: str = "comparison_authentication"
+    claim_attempted: bool = False
+    claim_consumed: bool = False
+    completed: bool = False
+    store: PrivateArtifactRoot | None = None
+    claim: DependencyComparisonClaimV2 | None = None
+    execution_manifest_sha256: str | None = None
+
+
 class _Parser(argparse.ArgumentParser):
     def error(self, message: str) -> Never:
         del message
@@ -91,7 +116,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = _Parser(description=__doc__)
     parser.add_argument(
         "--mode",
-        choices=("fit-preflight", "fit", "comparison-preflight"),
+        choices=("fit-preflight", "fit", "comparison-preflight", "comparison"),
         required=True,
     )
     parser.add_argument("--execution-manifest", type=Path, required=True)
@@ -124,24 +149,33 @@ def main(argv: list[str] | None = None) -> int:
     claim_consumed = False
     store: PrivateArtifactRoot | None = None
     fit_claim: DependencyFitClaimV2 | None = None
+    comparison_state = _ComparisonRunState()
+    comparison_selected = False
     try:
         args = _parser().parse_args(argv)
+        comparison_selected = args.mode in {"comparison-preflight", "comparison"}
+        if comparison_selected:
+            comparison_state.failure_stage = "comparison_public_design_authentication"
         design_document = _read_public_document(
             args.design,
             expected_sha256=args.expected_design_document_sha256,
         )
         design = RootlessDependencyEvaluationDesignV2.from_dict(design_document)
         stage = "public_manifest_authentication"
+        if comparison_selected:
+            comparison_state.failure_stage = "comparison_public_source_authentication"
         public_bindings = _current_public_bindings(
             lane_id=ROOTLESS_DEPENDENCY_EVALUATION_LANE_V2,
             runner=RUNNER_RELATIVE,
             dependencies=list(DEPENDENCIES),
         )
-        if args.mode == "comparison-preflight":
-            result = _comparison_preflight(
+        if args.mode in {"comparison-preflight", "comparison"}:
+            result = _comparison_stage(
                 args,
                 design,
                 public_bindings,
+                execute=args.mode == "comparison",
+                run_state=comparison_state,
             )
         else:
             fit_binding = _execution_binding("fit", public_bindings)
@@ -261,23 +295,42 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({**result, "private_path_fields": 0}, sort_keys=True))
         return 0
     except Exception:
-        if claim_consumed and store is not None and fit_claim is not None:
+        comparison_attempted = comparison_state.claim_attempted
+        comparison_consumed = comparison_state.claim_consumed
+        any_attempted = claim_attempted or comparison_attempted
+        any_consumed = claim_consumed or comparison_consumed
+        failure_stage = comparison_state.failure_stage if comparison_selected else stage
+        if (
+            comparison_consumed
+            and not comparison_state.completed
+            and comparison_state.store is not None
+            and comparison_state.claim is not None
+        ):
+            _retain_failed_comparison_terminal(
+                comparison_state.store,
+                comparison_state.claim,
+                failure_stage,
+                execution_manifest_sha256=comparison_state.execution_manifest_sha256,
+            )
+        elif claim_consumed and store is not None and fit_claim is not None:
             _retain_failed_fit_terminal(store, fit_claim, stage)
         print(
             json.dumps(
                 {
                     "schema": "pokemon.core.rootless-dependency-learning-failure.v2",
                     "status": "failed_closed",
-                    "failure_stage": stage,
+                    "failure_stage": failure_stage,
                     "claim_state": (
                         "consumed"
-                        if claim_consumed
+                        if any_consumed
                         else "uncertain"
-                        if claim_attempted
+                        if any_attempted
                         else "not_attempted"
                     ),
-                    "claim_consumed": claim_consumed,
-                    "effects": ("not_attested" if claim_attempted else "verified_zero"),
+                    "claim_consumed": any_consumed,
+                    "effects": ("not_attested" if any_attempted else "verified_zero"),
+                    "retry_allowed": not any_attempted,
+                    **_comparison_counter_deltas(completed=False),
                     "private_path_fields": 0,
                 },
                 sort_keys=True,
@@ -291,6 +344,26 @@ def _comparison_preflight(
     design: RootlessDependencyEvaluationDesignV2,
     public_bindings: Mapping[str, str],
 ) -> dict[str, object]:
+    """Compatibility wrapper for the metadata-only comparison preflight."""
+
+    return _comparison_stage(
+        args,
+        design,
+        public_bindings,
+        execute=False,
+        run_state=_ComparisonRunState(),
+    )
+
+
+def _comparison_stage(
+    args: argparse.Namespace,
+    design: RootlessDependencyEvaluationDesignV2,
+    public_bindings: Mapping[str, str],
+    *,
+    execute: bool,
+    run_state: _ComparisonRunState,
+) -> dict[str, object]:
+    run_state.failure_stage = "comparison_identity_authentication"
     fit_binding = EvaluationExecutionBindingV2(
         operation="fit",
         source_commit=_commit(args.fit_source_commit),
@@ -330,6 +403,7 @@ def _comparison_preflight(
         args.comparison_execution_identity_sha256
     ):
         raise RootlessDependencyLearningV2Error("comparison_claim_authentication")
+    run_state.claim = comparison_claim
     semantic = {
         "comparison_claim_sha256": comparison_claim.semantic_claim_sha256,
         "comparison_execution_identity_sha256": (comparison_claim.execution_identity_sha256),
@@ -338,26 +412,36 @@ def _comparison_preflight(
         "development_roster_sha256": design.development_roster.roster_sha256,
         "fit_claim_sha256": fit_claim.semantic_claim_sha256,
         "fit_execution_identity_sha256": fit_claim.execution_identity_sha256,
+        "fit_execution_manifest_sha256": pins.fit_identity.fit_execution_manifest_sha256,
+        "fit_sha256": pins.fit_identity.fit_sha256,
         "fit_manifest_record_sha256": pins.fit_manifest_record_sha256,
         "fit_record_sha256": pins.fit_identity.fit_record_sha256,
         "fit_terminal_record_sha256": pins.fit_terminal_record_sha256,
         "model_sha256": pins.fit_identity.model_sha256,
         "train_dataset_sha256": pins.fit_identity.train_dataset_sha256,
+        "executable_bundle_sha256": pins.fit_identity.executable_bundle_sha256,
     }
-    _authenticate_gate(
+    run_state.failure_stage = "comparison_public_manifest_authentication"
+    gate_sha256 = _authenticate_gate(
         args,
-        operation="comparison-preflight",
+        operation="comparison" if execute else "comparison-preflight",
         semantic_bindings=semantic,
         public_bindings=public_bindings,
-        private_roles=(
-            "claim_registry",
-            "fit_bundle_records",
-            "private_artifact_root",
-            "sealed_development_manifests",
+        private_roles=tuple(
+            sorted(
+                (
+                    "claim_registry",
+                    "fit_bundle_records",
+                    "private_artifact_root",
+                    ("sealed_development_payloads" if execute else "sealed_development_manifests"),
+                )
+            )
         ),
     )
+    run_state.execution_manifest_sha256 = gate_sha256
     registry = open_fixed_account_claim_registry()
-    with fixed_account_claim_registry_lease(registry, exclusive=False):
+    with fixed_account_claim_registry_lease(registry, exclusive=execute):
+        run_state.failure_stage = "comparison_fit_claim_authentication"
         expected_fit_claim = {
             "schema": "pokemon.red.fresh-composition-root-claim.v1",
             "root_consumption_sha256": fit_claim.semantic_claim_sha256,
@@ -368,6 +452,8 @@ def _comparison_preflight(
         if read_root_claim(registry, fit_claim.semantic_claim_sha256) != expected_fit_claim:
             raise RootlessDependencyLearningV2Error("fit_claim_authentication")
         store = open_private_root(args.private_root, repository_root=PROJECT_ROOT)
+        run_state.store = store
+        run_state.failure_stage = "comparison_fit_bundle_authentication"
         fit_id, manifest_id, terminal_id = v2_fit_record_ids(fit_claim.execution_identity_sha256)
         fit_record = store.find_sealed_record(
             fit_id,
@@ -404,7 +490,115 @@ def _comparison_preflight(
                 identity,
             ),
         )
-    return prepared.public_dict()
+        if not execute:
+            return {
+                **prepared.public_dict(),
+                "execution_manifest_sha256": gate_sha256,
+            }
+        run_state.failure_stage = "comparison_local_namespace_authentication"
+        if not _comparison_local_namespace_is_available(store, comparison_claim):
+            raise RootlessDependencyLearningV2Error("comparison_local_namespace")
+
+        run_state.failure_stage = "comparison_claim_before_payload_open"
+
+        def comparison_claim_writer(value: DependencyComparisonClaimV2) -> None:
+            if value is not comparison_claim:
+                raise RootlessDependencyLearningV2Error("comparison_claim")
+            expected = _root_claim_document(
+                comparison_claim.semantic_claim_sha256,
+                comparison_claim.execution_identity_sha256,
+                source_commit=public_bindings["source_commit"],
+                runner_sha256=public_bindings["runner_sha256"],
+            )
+            run_state.claim_attempted = True
+            try:
+                write_root_claim(
+                    registry,
+                    root_consumption_sha256=comparison_claim.semantic_claim_sha256,
+                    execution_identity_sha256=comparison_claim.execution_identity_sha256,
+                    source_commit=public_bindings["source_commit"],
+                    runner_sha256=public_bindings["runner_sha256"],
+                )
+            except Exception:
+                try:
+                    run_state.claim_consumed = (
+                        read_root_claim(
+                            registry,
+                            comparison_claim.semantic_claim_sha256,
+                        )
+                        == expected
+                    )
+                except Exception:
+                    run_state.claim_consumed = False
+                raise
+            run_state.claim_consumed = True
+
+        claimed = claim_v2_comparison_before_payload_open(
+            prepared,
+            claim_writer=comparison_claim_writer,
+        )
+        run_state.failure_stage = "comparison_payload_open_and_aggregate"
+        materialized = materialize_claimed_v2_comparison(claimed, store=store)
+        run_state.failure_stage = "comparison_result_and_terminal_publication"
+        published = publish_claimed_v2_comparison(
+            store,
+            materialized,
+            comparison_execution_manifest_sha256=gate_sha256,
+        )
+        run_state.completed = True
+    return {
+        "schema": "pokemon.core.rootless-dependency-comparison-execution.v2",
+        "status": "completed_descriptive_v2_comparison",
+        "design_sha256": design.design_sha256,
+        "development_roster_sha256": design.development_roster.roster_sha256,
+        "comparison_claim_sha256": comparison_claim.semantic_claim_sha256,
+        "comparison_execution_identity_sha256": (comparison_claim.execution_identity_sha256),
+        "execution_manifest_sha256": gate_sha256,
+        "comparison_claim_consumed": True,
+        "development_payloads_opened": 4,
+        "development_payloads_decoded": 4,
+        "aggregate": published.result.public_dict(),
+        "comparison_result_record_sha256": published.result_record_sha256,
+        "comparison_result_manifest_sha256": published.result_manifest_sha256,
+        "comparison_terminal_record_sha256": published.terminal_record_sha256,
+        "comparison_terminal_manifest_sha256": published.terminal_manifest_sha256,
+        **_comparison_counter_deltas(completed=True),
+        "claim_boundary": (
+            "one descriptive four-row synthetic held-out comparison; not statistical "
+            "promotion, gameplay competence, authority, or cross-title transfer"
+        ),
+    }
+
+
+def _comparison_local_namespace_is_available(
+    store: PrivateArtifactRoot,
+    claim: DependencyComparisonClaimV2,
+) -> bool:
+    result_id, terminal_id = v2_comparison_record_ids(claim.execution_identity_sha256)
+    checks = (
+        (result_id, DEPENDENCY_COMPARISON_RESULT_KIND_V2),
+        (terminal_id, DEPENDENCY_COMPARISON_TERMINAL_KIND_V2),
+        (
+            v2_comparison_failure_record_id(claim.execution_identity_sha256),
+            DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+        ),
+    )
+    return all(
+        store.inspect_sealed_record_metadata(record_id, expected_kind=kind) is None
+        for record_id, kind in checks
+    )
+
+
+def _comparison_counter_deltas(*, completed: bool) -> dict[str, int]:
+    contract = rootless_dependency_counter_contract_v2()
+    key = "completed_comparison" if completed else "failed_or_interrupted_comparison"
+    selected = contract[key]
+    if not isinstance(selected, dict) or any(
+        not isinstance(name, str) or type(value) is not int  # noqa: E721
+        for name, value in selected.items()
+    ):
+        raise RootlessDependencyLearningV2Error("comparison_counter_contract")
+    return dict(selected)
 
 
 def _fit_local_namespace_is_available(
@@ -425,6 +619,22 @@ def _fit_local_namespace_is_available(
         store.inspect_sealed_record_metadata(record_id, expected_kind=kind) is None
         for record_id, kind in checks
     )
+
+
+def _root_claim_document(
+    semantic_claim_sha256: str,
+    execution_identity_sha256: str,
+    *,
+    source_commit: str,
+    runner_sha256: str,
+) -> dict[str, str]:
+    return {
+        "schema": "pokemon.red.fresh-composition-root-claim.v1",
+        "root_consumption_sha256": semantic_claim_sha256,
+        "execution_identity_sha256": execution_identity_sha256,
+        "source_commit": source_commit,
+        "runner_sha256": runner_sha256,
+    }
 
 
 def _fit_semantic_bindings(
@@ -531,6 +741,54 @@ def _retain_failed_fit_terminal(
                 "fit_claim_sha256": fit_claim.semantic_claim_sha256,
                 "fit_execution_identity_sha256": execution_identity,
                 "failure_stage": failure_stage,
+                "retry_allowed": False,
+                "private_path_fields": 0,
+            },
+        )
+    except Exception:
+        return
+
+
+def _retain_failed_comparison_terminal(
+    store: PrivateArtifactRoot,
+    comparison_claim: DependencyComparisonClaimV2,
+    failure_stage: str,
+    *,
+    execution_manifest_sha256: str | None,
+) -> None:
+    """Best-effort immutable evidence for every consumed comparison failure."""
+
+    try:
+        manifest_sha256 = _sha(execution_manifest_sha256)
+        execution_identity = comparison_claim.execution_identity_sha256
+        failure_id = v2_comparison_failure_record_id(execution_identity)
+        store.publish_sealed_record(
+            failure_id,
+            kind=DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+            record={
+                "schema": DEPENDENCY_COMPARISON_FAILURE_SCHEMA_V2,
+                "status": "failed",
+                "comparison_claim_sha256": comparison_claim.semantic_claim_sha256,
+                "comparison_execution_identity_sha256": execution_identity,
+                "comparison_execution_manifest_sha256": manifest_sha256,
+                "design_sha256": comparison_claim.design_sha256,
+                "development_roster_sha256": (comparison_claim.development_roster_sha256),
+                "fit_claim_sha256": comparison_claim.fit_claim_sha256,
+                "fit_execution_identity_sha256": (comparison_claim.fit_execution_identity_sha256),
+                "fit_manifest_record_sha256": (
+                    comparison_claim.fit_bundle_pins.fit_manifest_record_sha256
+                ),
+                "fit_terminal_record_sha256": (
+                    comparison_claim.fit_bundle_pins.fit_terminal_record_sha256
+                ),
+                "fit_sha256": comparison_claim.fit_bundle_pins.fit_identity.fit_sha256,
+                "model_sha256": comparison_claim.fit_bundle_pins.fit_identity.model_sha256,
+                "train_dataset_sha256": (
+                    comparison_claim.fit_bundle_pins.fit_identity.train_dataset_sha256
+                ),
+                "failure_stage": failure_stage,
+                "development_payload_access": "not_attested",
+                "development_rows_publicly_disclosed": 0,
                 "retry_allowed": False,
                 "private_path_fields": 0,
             },
