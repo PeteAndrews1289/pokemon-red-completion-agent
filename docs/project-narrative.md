@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the reusable evaluation-integrity boundary passed
+## August 20: the fresh V2 dependency-evaluation design passed
+
+Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. Its
+[design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+(SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+freezes a V1-disjoint four-commitment namespace, a committed 256-bit private nonce, numerical
+structures from 17 through 10,000, a continuous interaction scorer, and separate fit/comparison
+claims tied to exact external bundle pins. It also corrects the experiment ledger: repeating the
+same eight public deterministic values to produce an untainted fit is compliance, not a second
+learning result, so its fit-counter delta is zero. Antigravity returned pre/post GO with no P0/P1
+blocker; local validation passed 4,471 tests and exact-head CI passed 4,470.
+
+No opening was provisioned, no model was fit, no development row was decoded, and no game ran.
+Active `rootless-living-dex-dependency-fresh-evaluation-qualification-v2` now proves the
+provisioner and staged runners implement this blueprint using only public/synthetic fixtures.
+This is still an intermediary toward transferable story completion and a living Pokédex, not
+evidence of either capability.
+
+## Previous August 20 checkpoint: the reusable evaluation-integrity boundary passed
 
 Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. Its
 [qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

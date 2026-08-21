@@ -135,18 +135,20 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Evaluation integrity is qualified: sealed metadata stays payload-blind and exact "
-            "fit-bundle joins fail closed. Fresh V2 public design is active."
+            "Fresh V2 public design is qualified: the sealed nonce, identity graph, stage order, "
+            "and honest counters are frozen. Public implementation qualification is active."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Rootless · integrity gate green · V1 retired · V2 public design only",
+        location="Rootless · V2 design green · implementation qualification only",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V1 fit counted 1/evaluation-ineligible · V2 model and comparison do not exist"
+                "V1 fit counted 1/evaluation-ineligible · V2 blueprint qualified · no V2 result"
             ),
-            choice="Freeze fresh V2 identities and staged disclosure rules; no private access",
+            choice=(
+                "Qualify V2 provision/fit/compare seams on synthetic fixtures; no private access"
+            ),
             decisions=0,
             teacher_queries=0,
             fallbacks=0,

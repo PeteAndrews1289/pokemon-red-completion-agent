@@ -1,6 +1,23 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: build a lock that reads the envelope, not the answer
+## August 20 scene: design a fresh exam and make guessing the envelopes impractical
+
+Open on **SOURCE 5ADE045 · CI 32437096447/1 GREEN · LOCAL 4,471 PASS · CI 4,470 PASS**. Link
+the
+[design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+with **SHA-256 D2E1C2F1…974385**.
+
+Animate **4 NEW OPAQUE ENVELOPES · PRIVATE 256-BIT NONCE · COUNTS 17..10000 · CONTINUOUS
+SCORER/NO EMBEDDING LIMIT · V1 IDENTITIES REJECTED**. Split the timeline into **FIT PROCESS →
+STOP → EXTERNALLY PIN BUNDLE → CLAIM COMPARISON → OPEN EXACTLY 4**, then stamp **ANTIGRAVITY
+PRE/POST GO · P0/P1 0**.
+
+Keep the scoreboard honest: **SAME 8-ROW CLEAN REFIT = COMPLIANCE, FIT COUNTER +0 · FRESH V2
+COMPARISON NOT RUN · GAMEPLAY/AUTHORITY/TRANSFER 0**. The next scene qualifies implementation on
+synthetic fixtures and still creates no private opening. Remind viewers that cross-game story
+completion and a living Pokédex remain the destination, not the result of this scene.
+
+## Previous August 20 scene: build a lock that reads the envelope, not the answer
 
 Open on **SOURCE C0F7894 · CI 32425750185/1 GREEN · LOCAL 4,444 PASS · CI 4,443 PASS**. Link the
 [qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

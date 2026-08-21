@@ -1,0 +1,130 @@
+{
+  "antigravity_review": {
+    "post_implementation": {
+      "exact_source_sha256": "001000571c9931ec1489eebc49b38c8088ca7586e642ffa6a5a95f96d205ca6f",
+      "exact_test_sha256": "60ddeca96f56c4674b54e15016d16200845e18f009b7588e223dbd61195575b8",
+      "p0_or_p1_blockers": 0,
+      "private_or_runtime_execution_during_review": false,
+      "verdict": "go"
+    },
+    "pre_implementation": {
+      "conditions": [
+        "do_not_double_count_the_identical_eight_row_compliance_refit",
+        "commit_a_cryptographically_secure_256_bit_nonce_inside_each_private_opening",
+        "prove_the_ranker_has_no_bounded_integer_embedding_or_lookup"
+      ],
+      "private_or_runtime_execution_during_review": false,
+      "verdict": "approve_with_conditions"
+    }
+  },
+  "blueprint": {
+    "blueprint_sha256": "964248f11348bf84b8da2e50d16730c9aeb84bc862ce03ba021789e095f6e2d7",
+    "comparison_claim_is_separate": true,
+    "counter_contract_sha256": "5bdefa4ed6651295df1d0633c97e86c75291ff89cd36e2648b280fde871f445d",
+    "development_commitments": 4,
+    "development_payloads_embedded": 0,
+    "fit_claim_is_separate": true,
+    "fresh_record_namespace": "rootless-v2-development",
+    "nonce_bytes_inside_private_payload": 32,
+    "ranker_contract_sha256": "deaf824b66499dca8a5f5dbbb9262d65788940c77ebc01d80e08fb83f19e0c58",
+    "required_count_domain_inclusive": [
+      17,
+      10000
+    ],
+    "retired_v1_identity_set_sha256": "30632171471061fbaebe8b0336bd227a660c63b6081fcb0eb875889a6e333435",
+    "stage_contract_sha256": "376ff94a98299e6e9312c3a7ff62d9a30b318f8f6f489d659e85cf6edbc63ed8",
+    "train_revalidation_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba",
+    "v1_fit_model_or_opening_reuse_allowed": false
+  },
+  "claim_boundary": {
+    "supported": "Published public source freezes a V1-disjoint V2 synthetic dependency-evaluation schema, exact semantic and source-bound fit/comparison identities, four opaque metadata commitments, a 256-bit private nonce requirement, strict stage separation, and zero-count treatment for an identical clean compliance refit.",
+    "unsupported": "This qualification is not private opening provision, a model fit, development-payload disclosure, a held-out comparison, gameplay, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation_bindings": {
+    "collection_registry_sha256": "03c3ca7e340c8f18588fc656b26fa493f93a9427dfd83926f5288100a8022903",
+    "design_module_sha256": "001000571c9931ec1489eebc49b38c8088ca7586e642ffa6a5a95f96d205ca6f",
+    "design_test_sha256": "60ddeca96f56c4674b54e15016d16200845e18f009b7588e223dbd61195575b8",
+    "goal_manager_registry_sha256": "de6dbce5e24c2641d08507650fcf22814bebd631c577ecca73de5f96ee98cead",
+    "source_bundle_sha256": "4ba241365de33a6383bc32486780f00f4c9a737b4b67e55f1f8f5248d943d205",
+    "strategic_navigation_registry_sha256": "9f07c9014a35ed65f8a91004b6a9839e79357b885433732ddc6bbf7ab7acce96"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32437096447,
+    "source_commit": "5ade045859ff00601b2acfd34a6dad9d769f0859"
+  },
+  "qualification": {
+    "counter_semantics": {
+      "future_clean_compliance_refit_learning_counter_delta": 0,
+      "future_fresh_v2_comparison_may_increment_only_after_complete_aggregate": true,
+      "historical_v1_fit_remains_counted": true
+    },
+    "ranker": {
+      "bounded_integer_embedding_or_lookup": false,
+      "maximum_v2_required_count_scored_in_test": 10000,
+      "numeric_representation": "continuous_state_by_action_features"
+    },
+    "stages": {
+      "development_payloads_opened_by_design": 0,
+      "fit_and_comparison_same_process_allowed": false,
+      "fit_bundle_must_be_externally_pinned_before_comparison": true,
+      "ordered": [
+        "design",
+        "provision",
+        "fit_preflight",
+        "fit",
+        "comparison_preflight",
+        "comparison"
+      ]
+    },
+    "tests": {
+      "ci_deselected": 3,
+      "ci_expected_failures": 1,
+      "ci_passed": 4470,
+      "ci_skipped": 1,
+      "focused_and_adjacent_passed": 76,
+      "local_expected_failures": 1,
+      "local_passed": 4471,
+      "local_skipped": 3,
+      "mypy_source_modules_checked": 251
+    }
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-fresh-evaluation-design-qualification.v2",
+  "status": "fresh_v2_public_evaluation_design_published_and_qualified",
+  "title_role": "Synthetic evaluation-design maintenance; not learning, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_opening_payloads_accessed": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "private_openings_provisioned": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Published the fresh rootless living-Dex evaluation V2 public design at exact source
+  `5ade045859ff00601b2acfd34a6dad9d769f0859` under green CI `32437096447/1`. The
+  [path-free design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+  (SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+  freezes a V1-disjoint four-commitment namespace, a committed 256-bit private nonce, continuous
+  numeric ranker support through 10,000, separate semantic/source-bound fit and comparison claims,
+  and zero learning-counter credit for the identical clean compliance refit. Antigravity returned
+  pre/post GO with no P0/P1 blocker; 4,471 local and 4,470 exact-head CI tests passed. Retired the
+  design lane without retry and activated public/synthetic
+  `rootless-living-dex-dependency-fresh-evaluation-qualification-v2`. No private artifact, fit,
+  comparison, gameplay, authority, completion, Crystal, or transfer action occurred; every
+  progress counter remains unchanged.
+
 - Published the rootless evaluation-integrity boundary at exact source
   `c0f7894b222dcf44490915a7ae7ebeed664096ea` under green CI `32425750185/1`. The
   [path-free qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

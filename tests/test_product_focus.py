@@ -74,9 +74,7 @@ ROOTLESS_DEPENDENCY_CAMPAIGN_RESULT = (
     / "rootless-living-dex-dependency-campaign-result-v1-2026-08-20.json"
 )
 ROOTLESS_DEPENDENCY_FIT_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence"
-    / "rootless-living-dex-dependency-fit-result-v1-2026-08-20.json"
+    PROJECT_ROOT / "docs/evidence" / "rootless-living-dex-dependency-fit-result-v1-2026-08-20.json"
 )
 ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT = (
     PROJECT_ROOT
@@ -92,6 +90,11 @@ ROOTLESS_DEPENDENCY_EVALUATION_INTEGRITY_QUALIFICATION = (
     PROJECT_ROOT
     / "docs/evidence"
     / "rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json"
+)
+ROOTLESS_DEPENDENCY_FRESH_EVALUATION_DESIGN_V2_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json"
 )
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
@@ -212,12 +215,14 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "rootless-living-dex-dependency-fresh-evaluation-design-v2"
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == (
+    assert state.active_lane["id"] == (
         "rootless-living-dex-dependency-fresh-evaluation-qualification-v2"
     )
-    assert len(state.retired_lanes) == 34
+    assert state.active_lane["kind"] == "maintenance"
+    assert state.active_lane["maintenance_unblocks"] == (
+        "rootless-living-dex-dependency-v2-private-provisioning-v1"
+    )
+    assert len(state.retired_lanes) == 35
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -239,9 +244,7 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
 def test_rootless_dependency_campaign_result_is_balanced_and_scoped() -> None:
     receipt = json.loads(ROOTLESS_DEPENDENCY_CAMPAIGN_RESULT.read_text(encoding="ascii"))
 
-    assert receipt["status"] == (
-        "eight_balanced_synthetic_train_outcomes_admitted_fit_not_started"
-    )
+    assert receipt["status"] == ("eight_balanced_synthetic_train_outcomes_admitted_fit_not_started")
     assert receipt["outcome"] == {
         "interrupted_outcomes": 0,
         "negative_outcomes": 4,
@@ -256,9 +259,7 @@ def test_rootless_dependency_campaign_result_is_balanced_and_scoped() -> None:
         ),
     }
     assert receipt["counter_treatment"]["synthetic_rootless_train_outcomes_added"] == 8
-    assert (
-        receipt["counter_treatment"]["synthetic_rootless_atomic_goal_episodes_added"] == 8
-    )
+    assert receipt["counter_treatment"]["synthetic_rootless_atomic_goal_episodes_added"] == 8
     assert {
         value
         for key, value in receipt["counter_treatment"].items()
@@ -275,9 +276,7 @@ def test_rootless_dependency_fit_result_remains_counted_but_not_evaluation_evide
 
     assert receipt["status"] == "completed_train_only_fit_development_remains_sealed"
     assert receipt["fit"]["train_accuracy"] == 1.0
-    assert receipt["fit"]["fitted_cross_entropy"] < receipt["fit"][
-        "baseline_cross_entropy"
-    ]
+    assert receipt["fit"]["fitted_cross_entropy"] < receipt["fit"]["baseline_cross_entropy"]
     assert receipt["counter_treatment"]["synthetic_rootless_model_fits_added"] == 1
     assert receipt["counter_treatment"]["historical_gameplay_model_fits_added"] == 0
     assert receipt["counter_treatment"]["synthetic_rootless_unseen_comparisons_added"] == 0
@@ -287,13 +286,9 @@ def test_rootless_dependency_fit_result_remains_counted_but_not_evaluation_evide
 
 
 def test_rootless_dependency_comparison_preflight_is_historical_and_unconsumed() -> None:
-    receipt = json.loads(
-        ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(ROOTLESS_DEPENDENCY_COMPARISON_PREFLIGHT.read_text(encoding="ascii"))
 
-    assert receipt["status"] == (
-        "sealed_comparison_ready_development_remains_unopened"
-    )
+    assert receipt["status"] == ("sealed_comparison_ready_development_remains_unopened")
     assert receipt["preflight"] == {
         "claim_registry_access": "read_only",
         "comparison_identity_available": True,
@@ -375,6 +370,35 @@ def test_rootless_dependency_evaluation_integrity_is_public_only_and_counter_neu
     assert metadata["payload_bytes_decoded_per_inspection"] == 0
     assert metadata["declared_payload_integrity_reported_as_unverified"] is True
     assert set(receipt["qualification"]["fit_bundle_join"].values()) == {True}
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_fresh_rootless_v2_design_is_public_only_and_counter_neutral() -> None:
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_FRESH_EVALUATION_DESIGN_V2_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == "fresh_v2_public_evaluation_design_published_and_qualified"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32437096447,
+        "source_commit": "5ade045859ff00601b2acfd34a6dad9d769f0859",
+    }
+    assert receipt["antigravity_review"]["post_implementation"]["p0_or_p1_blockers"] == 0
+    assert receipt["blueprint"]["development_commitments"] == 4
+    assert receipt["blueprint"]["nonce_bytes_inside_private_payload"] == 32
+    assert receipt["blueprint"]["v1_fit_model_or_opening_reuse_allowed"] is False
+    assert (
+        receipt["qualification"]["counter_semantics"][
+            "future_clean_compliance_refit_learning_counter_delta"
+        ]
+        == 0
+    )
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
@@ -1011,9 +1035,7 @@ def test_learning_lanes_accept_scoped_rootless_fit_and_comparison() -> None:
         }
     ]
     state = validate_product_focus_document(document)
-    assert focus_scorecard(state) == (
-        ("Synthetic Rootless Unseen Comparison · development", 0, 1),
-    )
+    assert focus_scorecard(state) == (("Synthetic Rootless Unseen Comparison · development", 0, 1),)
 
 
 @pytest.mark.parametrize(
@@ -1036,9 +1058,7 @@ def test_scoped_rootless_fit_and_comparison_require_honest_partitions(
     lane = _active(document)
     lane["kind"] = "learning"
     lane["maintenance_unblocks"] = None
-    lane["measurable_outputs"] = [
-        {"kind": kind, "minimum": 1, "partition": partition}
-    ]
+    lane["measurable_outputs"] = [{"kind": kind, "minimum": 1, "partition": partition}]
 
     with pytest.raises(ProductFocusError, match=match):
         validate_product_focus_document(document)
@@ -1190,15 +1210,15 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Fresh rootless living-Dex evaluation design V2" in public["stage"]
+    assert "Fresh rootless living-Dex evaluation implementation qualification V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Evaluation integrity is qualified" in encoded
+    assert "Fresh V2 public design is qualified" in encoded
     assert "actions 244/244" in encoded
-    assert "V1 retired" in encoded
-    assert "V2 public design only" in encoded
+    assert "V2 design green" in encoded
+    assert "implementation qualification only" in encoded
     assert "payload files opened 0" in encoded
     assert "exact fit join" in encoded
     assert "fit 1 counted/evaluation-ineligible" in encoded
