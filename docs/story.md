@@ -7,9 +7,9 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the silent inspector is built; one authentic classroom remains
+## Current checkpoint: the silent inspector passed review; one authentic classroom remains
 
-Main `c3e07d26` passed CI `32470280542/1` with 4603 tests. The
+Main `347f954d` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
 records a reader with one narrow job: open the fixed Red reset only after its public manifest is
 authenticated, prove that semantic travel/capture and Diglett-to-Dugtrio evolution really coexist,
@@ -17,8 +17,8 @@ show exactly two anonymous choices, and stop. It cannot ask the model for a scor
 press a button, or advance the emulator. Even its route counts are only aggregate plan metrics,
 not a walkthrough exposed to the student.
 
-Independent mission and safety audits returned GO. Antigravity's final exact-byte reading is still
-the external gate, followed by one frozen, action-free inspection. This is the last honest systems
+Independent mission and safety audits returned GO, and Antigravity's final exact-byte reading also
+returned GO with no P0, P1, or P2 finding. One frozen, action-free inspection remains. This is the last honest systems
 check before the first separately frozen model-selected outcome. The important word is “before”:
 no new training example, gameplay competence, Red completion, living Pokédex, or Crystal transfer
 has been earned yet.

@@ -8,20 +8,20 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: freeze and run one silent dual-capability inspection
+## Current checkpoint: external GO; freeze and run one silent dual-capability inspection
 
-Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-4603 tests, one skip, three deselections, and one expected failure. The
+Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+(SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 proves the exact runner authenticates its public manifest before private or ROM access, fixes one
 reset and dependency without substitution, requires semantic Diglett's Cave traversal plus
 encounter-only capture and the authentic profile/config-bound evolution offer, and exposes exactly
 two title-neutral rows. Its physical-root identity is code independent; its semantic-scenario
 identity survives a future runner publication. It has no model-scoring or controller path.
 
-The remaining lane is deliberately short: obtain Antigravity's exact-byte review, freeze the
-public invocation, perform one action-free preflight, and reorient. A pass only allows a separately
+Antigravity's [exact-byte audit](evidence/red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1/P2 all zero. The remaining lane is deliberately short: freeze the public
+invocation, perform one action-free preflight, and reorient. A pass only allows a separately
 implemented and frozen one-decision shadow outcome. A failure closes the context. Route step/cost
 fields are aggregate plan metrics, not a hidden arrow script. No counter advances here.
 

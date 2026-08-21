@@ -1,19 +1,18 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the exact Red dual-capability preflight runner published
+## August 21: the exact Red dual-capability preflight runner passed external review
 
-Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-4603 tests. The
+Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+(SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 joins the public curriculum to one fixed nonsealed Red reset without opening it during
 qualification. It authenticates its public manifest first, requires semantic Diglett's Cave
 traversal, encounter-only capture mechanics, the exact profile/config-bound evolution offer, two
 anonymous policy rows, and stable code-independent root plus semantic-scenario identities. It has
 no scoring or controller path; route step/cost values are aggregate plan metrics only.
 
-Independent mission and safety audits returned GO. The requested Antigravity review, one exact
-public invocation freeze, and one action-free private preflight remain. This publication changed no
+Independent mission, safety, and Antigravity audits returned GO with P0/P1/P2 all zero. One exact
+public invocation freeze and one action-free private preflight remain. This publication changed no
 learning or authority counter. A preflight pass would permit only a separate one-decision shadow
 outcome—not a claim that the model can play Red, complete a living Pokédex, or transfer to Crystal.
 

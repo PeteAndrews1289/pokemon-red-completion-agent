@@ -6,19 +6,19 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns the final external review, invocation freeze, and one silent preflight
+## Current override: external GO complete; Codex owns the invocation freeze and one silent preflight
 
-Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
-4603 tests. The
+Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
-(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+(SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)
 records the exact manifest-first runner, fixed reset/dependency, semantic traversal,
 encounter-only capture, exact wrapped evolution binding, anonymous menu, stable identities, and
-zero prediction/action capability. Independent internal reviews are GO.
+zero prediction/action capability. Independent internal reviews and Antigravity's exact-byte audit
+are GO with P0/P1/P2 all zero.
 
-Codex may obtain Antigravity's exact-byte review, freeze one exact public invocation, execute one
-action-free private preflight, and record/reorient from the result. Antigravity is the external
-reviewer; Claude is unavailable. No model score, claim write, controller input, advanced frame,
+Codex may freeze one exact public invocation, execute one action-free private preflight, and
+record/reorient from the result. Antigravity's review is complete; Claude is unavailable. No model
+score, claim write, controller input, advanced frame,
 substitution, route patch, fit, Crystal, promotion, completion, or transfer is owned. Boards remain
 **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
 
