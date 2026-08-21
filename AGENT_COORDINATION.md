@@ -1,6 +1,23 @@
 # Three-agent coordination
 
-> **2026-08-20 four V2 openings sealed; one compliance fit is the highest checkpoint:** Main
+> **2026-08-20 clean V2 fit complete; one metadata-only comparison preflight is the highest
+> checkpoint:** Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI
+> `32443875609/1`. The
+> [compliance-fit result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+> (SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+> records **FIT C544FA92 · MODEL A42DB642 · 4 MANIFESTS AUTHENTICATED · DEV PAYLOAD OPEN/DECODE
+> 0 · FIT CLAIM CONSUMED · RETRY 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO · P0/P1 0 · OVERCLAIM
+> 0**.
+>
+> Codex owns only `rootless-living-dex-dependency-v2-comparison-preflight-v1`: publish the fit
+> checkpoint, freeze one exact fit-bound manifest, run one metadata-only comparison preflight,
+> then stop. Antigravity remains the read-only reviewer; Claude is unavailable and not a blocker.
+> No agent owns development decode, comparison implementation/execution, refit, gameplay,
+> promotion, Crystal, completion, or transfer. Preserve **30/15/4/3/0/0**, development
+> **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+> **Previous checkpoint — 2026-08-20 four V2 openings sealed; one compliance fit was the highest
+> checkpoint:** Main
 > `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
 > [provision result](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
 > (SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)

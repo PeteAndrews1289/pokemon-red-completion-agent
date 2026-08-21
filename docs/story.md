@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: four sealed questions now exist; train without peeking
+## Current checkpoint: the clean model is sealed beside the unopened exam
+
+Main `15b2dbcb` passed CI `32443875609/1`, and the project used its one permitted fit identity.
+The
+[compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+records a model built from the same eight public lessons already counted earlier, while the four
+sealed exam answers stayed unopened and undecoded. Antigravity returned GO with no high-severity
+finding or overclaim.
+
+This is a cleaner model artifact, not another learning win. Its counter is zero because repeating
+the same lessons should not become resume inflation. The next scene checks only that the model,
+exam envelopes, and one unused comparison identity all belong together, then cuts before an
+answer opens. The comparison machinery is not implemented in this session. The project still has
+not shown gameplay, story completion, a living Pokédex, or transfer to Crystal; it has protected
+one small future test of when to preserve a precursor and when to evolve a duplicate.
+
+## Previous checkpoint: four sealed questions now exist; train without peeking
 
 The read-only gate passed against main `ec4c1701` and CI `32442951504/1`, then the project used
 its one permitted provision identity. The

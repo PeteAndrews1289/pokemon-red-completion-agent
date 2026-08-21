@@ -5,7 +5,20 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN EC4C170 · CI 32442951504/1 GREEN · PROVISION PREFLIGHT PASS ·
+> **Current rail:** Show **MAIN 15B2DBCB · CI 32443875609/1 GREEN · CLEAN V2 FIT COMPLETE ·
+> FIT C544FA92 · MODEL A42DB642 · 4 SEALED MANIFESTS AUTHENTICATED · DEV PAYLOAD
+> OPEN/DECODE 0 · FIT CLAIM CONSUMED · RETRY 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO ·
+> P0/P1 0 · OVERCLAIM 0**. Link the
+> [compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+> and show **SHA-256 3A09AB09…E5C01**.
+>
+> Display active `rootless-living-dex-dependency-v2-comparison-preflight-v1`. Active rail:
+> **FREEZE FIT-BOUND MANIFEST → AUTHENTICATE FIT/MODEL/DATASET/MANIFEST/TERMINAL + 4 SEALED
+> MANIFESTS → VERIFY UNUSED COMPARISON IDENTITY → OPEN/DECODE 0 PAYLOADS → TERMINAL →
+> STOP**. Show **COMPARISON EXECUTION 0 · COMPARISON COUNTER +0 · GAMEPLAY/AUTHORITY/TRANSFER
+> 0**. Hold **30/15/4/3/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/0**.
+>
+> **Previous rail:** Show **MAIN EC4C170 · CI 32442951504/1 GREEN · PROVISION PREFLIGHT PASS ·
 > MANIFEST 3204504C · STORE BOUND · CLAIM 27B0F00C CONSUMED · OPENINGS 4 SEALED · ROSTER
 > 68D70487 · RETRY 0 · FIT 0 · DEV DECODE 0 · COMPARISON 0 · ANTIGRAVITY GO · P0/P1 0 ·
 > COUNTER DELTAS 0**. Link the

@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Produce one clean V2 compliance replacement fit from the eight already counted public deterministic train values while authenticating only the four sealed opening manifests, never their payloads, and publishing an exactly joined model, fit manifest, and terminal.",
-      "cheapest_falsifier": "Freeze one exact fit manifest and run one metadata-only preflight; stop before fitting if any public design, sealed manifest, fit identity, local namespace, or global claim differs or if any development payload opens.",
-      "id": "rootless-living-dex-dependency-v2-compliance-fit-v1",
+      "capability": "Authenticate the exact clean V2 fit bundle, its consumed fit claim, four sealed development manifests, and one unused comparison identity without opening or decoding any development payload or executing a comparison.",
+      "cheapest_falsifier": "Freeze one fit-bound comparison-preflight manifest and run exactly one metadata-only preflight; stop if any external bundle pin, fit claim, public design, sealed manifest, or unused comparison identity differs or if a development payload opens.",
+      "id": "rootless-living-dex-dependency-v2-comparison-preflight-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. Provisioning created four hidden evaluation inputs but no model update, outcome, comparison, gameplay, completion, Crystal, promotion, or transfer result.",
-        "blocker": "The four fresh V2 openings and public commitment roster now exist, but no clean V2 fit bundle exists. The V1 fit remains counted and evaluation-ineligible; comparison stays closed until one separately claimed compliance replacement fit completes.",
-        "decision": "Close the one-shot provisioning lane after preflight passed, exactly four V2 openings were sealed under the consumed no-replacement identity, and Antigravity returned GO with no P0/P1 blocker. Activate one metadata-only fit preflight and, only on a pass, one compliance replacement fit; development payload decode and comparison remain prohibited.",
+        "authority_delta": "No authority changed. The clean V2 replacement fit is a zero-credit compliance artifact; no unseen comparison, gameplay, completion, Crystal, promotion, or transfer result exists.",
+        "blocker": "The exact V2 fit bundle now exists, but no fit-bound comparison preflight has authenticated its external pins, the four sealed manifests, and an unused comparison identity. The current runner cannot execute the comparison, which remains a later separately qualified seam.",
+        "decision": "Close the consumed compliance-fit lane after a metadata-only preflight passed, one exactly joined replacement bundle completed with zero new-learning credit, and Antigravity returned GO with no P0/P1 blocker or overclaim. Activate exactly one metadata-only comparison preflight; development payload decode and comparison execution remain prohibited.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json",
-          "sha256": "a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef"
+          "path": "docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json",
+          "sha256": "3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01"
         },
-        "learning_output": "No new measured learning output. Exactly four sealed V2 openings and one immutable private plan were created; zero model fits or comparisons ran, no development evaluation payload opened, and every progress counter remains unchanged.",
-        "next_falsifier": "Stop if fit preflight cannot authenticate the public V2 design, exactly four sealed manifests, an unused fit claim, empty fit namespaces, and zero development payload opens.",
-        "next_session_goal": "Publish this provision result, freeze one exact source-bound fit manifest, run one metadata-only fit preflight, and only if it passes execute the single compliance replacement fit. Record its terminal and stop before comparison preflight.",
-        "product_alignment": "The transferable living-Pokedex planner needs a clean model artifact before its acquire-versus-evolve rule can face genuinely hidden structures. This lane repeats the already counted deterministic fit under a sealed boundary without inflating learning progress.",
-        "session_id": "2026-08-20-rootless-dependency-v2-openings-provisioned",
+        "learning_output": "No new measured learning output. One clean V2 replacement fit was published from the eight already counted public deterministic values; four development manifests were authenticated, zero development payloads opened or decoded, and every progress counter remains unchanged.",
+        "next_falsifier": "Stop if comparison preflight cannot authenticate the public design, exact fit/model/dataset/manifest/terminal/executable pins, consumed fit claim, four sealed manifests, unused comparison claim, and zero development payload opens.",
+        "next_session_goal": "Publish this compliance-fit result, freeze one exact fit-bound comparison-preflight manifest, run exactly one metadata-only comparison preflight, record its path-free terminal result, and stop before implementing or executing comparison.",
+        "product_alignment": "The transferable living-Pokedex planner needs a genuinely unseen acquire-versus-evolve test. This lane proves the clean model and hidden inputs are correctly bound before any answer is exposed, without turning compliance work into learning evidence.",
+        "session_id": "2026-08-20-rootless-dependency-v2-compliance-fit-complete",
         "status": "active",
-        "stop_condition": "Stop after the first terminal fit result, whether success or failure. Never retry, tune, decode a development payload, run comparison preflight in the same session, access a ROM/controller, promote, or run Crystal.",
-        "transfer_result": "Not run. The sealed inputs and compliance-fit lane contain no title execution or transfer test."
+        "stop_condition": "Stop after the first terminal comparison-preflight result, whether success or failure. Never retry, open or decode a development payload, implement or execute comparison in the same session, refit, access a ROM/controller, promote, or run Crystal.",
+        "transfer_result": "Not run. The clean fit and comparison-preflight lane contain no title execution or transfer test."
       },
       "learned_authority": {
-        "current": "Four fresh V2 openings are sealed and undisclosed. The V1 fit remains counted but evaluation-ineligible; no V2 fit, comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
-        "target": "Create one clean, exactly joined V2 compliance fit artifact from the already counted eight public values so a later separately reoriented comparison preflight can authenticate it; the replacement fit grants no new learned authority."
+        "current": "Four fresh V2 openings remain sealed and a clean exactly joined V2 replacement fit exists. It has no new-learning credit; no comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
+        "target": "Prove one exact comparison identity is ready and bound to the clean fit plus four sealed manifests without opening them, so a later separately qualified aggregate comparison runner may be considered; preflight grants no learned authority."
       },
-      "maintenance_unblocks": "rootless-living-dex-dependency-v2-comparison-qualification-v1",
+      "maintenance_unblocks": "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1",
       "measurable_outputs": [],
-      "name": "Fresh rootless living-Dex compliance fit V2",
-      "next_decision": "A completed exactly joined compliance fit permits a separate comparison-preflight reorientation that externally pins the bundle and still opens no development payload. A failed or uncertain fit closes its identity without retry. Neither outcome authorizes comparison execution, gameplay, authority, or transfer.",
+      "name": "Fresh rootless living-Dex comparison preflight V2",
+      "next_decision": "A passed metadata-only preflight permits a separate public implementation-qualification lane for the aggregate comparison runner; it does not authorize comparison execution. A failed preflight closes this identity without retry or replacement. Neither outcome authorizes development decode, gameplay, authority, or transfer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -108,21 +108,31 @@
         "development_payload_decode",
         "full_game_replay",
         "gameplay_execution",
-        "model_hyperparameter_search",
+        "model_refit",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Stop before fitting if the exact source, public V2 design, execution manifest, four sealed record manifests, empty fit namespaces, unused fit claim, or zero-development-payload boundary cannot be authenticated.",
-        "Stop after the first terminal fit result. Never retry, tune, decode a development payload, run comparison preflight in the same session, compare, access a ROM/controller, query a teacher, promote authority, or run Crystal."
+        "Stop before preflight if the exact source, public V2 design, fit/model/dataset/manifest/terminal/executable pins, consumed fit claim, four sealed manifests, unused comparison claim, or zero-development-payload boundary cannot be authenticated.",
+        "Stop after the first terminal comparison-preflight result. Never retry, open or decode a development payload, implement or execute comparison in the same session, refit, access a ROM/controller, query a teacher, promote authority, or run Crystal."
       ],
       "time_box": {
         "maximum_hours": 1,
         "maximum_sessions": 1
       },
-      "transfer_test": "None. This lane creates a clean synthetic compliance fit only; a later Red observation adapter and Crystal transfer remain separate gates."
+      "transfer_test": "None. This lane qualifies a synthetic held-out comparison identity only; a later Red observation adapter and Crystal transfer remain separate gates."
+    },
+    {
+      "id": "rootless-living-dex-dependency-v2-compliance-fit-v1",
+      "kind": "maintenance",
+      "name": "Fresh rootless living-Dex compliance fit V2",
+      "preserve_evidence": true,
+      "reason": "Published main 15b2dbcb3cf881e97285c2611703d3c4dbac5206 passed CI run 32443875609 attempt 1. Manifest 5a38225d passed metadata-only preflight over four sealed manifests, then exactly one consumed fit produced an exact model/manifest/terminal bundle from the eight already counted public values. Development payload opens and counter deltas were zero. Antigravity returned GO with no P0/P1 blocker or overclaim.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-v2-private-provisioning-v1",

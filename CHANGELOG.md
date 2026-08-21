@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Completed exactly one clean V2 compliance replacement fit at published main
+  `15b2dbcb3cf881e97285c2611703d3c4dbac5206` under green CI `32443875609/1`. The
+  [path-free result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+  (SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+  binds fit `c544fa92…8d4bc3c`, model `a42db642…195f6582`, the exact dataset and
+  manifest/terminal bundle, a consumed no-retry fit claim, and four sealed manifests. Zero
+  development payloads opened or decoded, and the replacement of the already counted eight
+  deterministic values adds zero learning credit. Antigravity returned GO with no P0/P1 blocker
+  or overclaim. Retired the fit lane and activated exactly one metadata-only comparison preflight;
+  comparison implementation/execution, gameplay, authority, completion, Crystal, and transfer
+  remain closed.
+
 - Passed the exact store-bound V2 provision preflight and consumed its no-replacement identity
   once, creating four sealed development openings plus one immutable private plan. Main
   `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`; the

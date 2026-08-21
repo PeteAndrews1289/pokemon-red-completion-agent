@@ -109,6 +109,11 @@ ROOTLESS_DEPENDENCY_V2_PRIVATE_PROVISION_RESULT = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json"
 )
+ROOTLESS_DEPENDENCY_V2_COMPLIANCE_FIT_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -232,13 +237,13 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-v2-compliance-fit-v1"
+        "rootless-living-dex-dependency-v2-comparison-preflight-v1"
     )
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
-        "rootless-living-dex-dependency-v2-comparison-qualification-v1"
+        "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1"
     )
-    assert len(state.retired_lanes) == 37
+    assert len(state.retired_lanes) == 38
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -296,6 +301,32 @@ def test_rootless_dependency_fit_result_remains_counted_but_not_evaluation_evide
     assert receipt["counter_treatment"]["synthetic_rootless_model_fits_added"] == 1
     assert receipt["counter_treatment"]["historical_gameplay_model_fits_added"] == 0
     assert receipt["counter_treatment"]["synthetic_rootless_unseen_comparisons_added"] == 0
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_v2_compliance_fit_is_clean_and_zero_credit() -> None:
+    receipt = json.loads(ROOTLESS_DEPENDENCY_V2_COMPLIANCE_FIT_RESULT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "completed_clean_v2_compliance_replacement_fit"
+    assert receipt["fit"]["status"] == "completed_compliance_replacement_fit"
+    assert receipt["fit"]["fit_claim_consumed"] is True
+    assert receipt["fit"]["development_payloads_opened"] == 0
+    assert receipt["fit"]["development_payloads_decoded"] == 0
+    assert receipt["design"]["development_manifest_rows_authenticated"] == 4
+    assert receipt["antigravity_review"] == {
+        "development_payloads_or_private_claims_accessed_during_review": False,
+        "overclaim_detected": False,
+        "p0_or_p1_blockers": 0,
+        "scope": (
+            "public_fit_bundle_counter_boundary_next_comparison_preflight_and_"
+            "mission_alignment"
+        ),
+        "verdict": "go",
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
@@ -1296,21 +1327,22 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Fresh rootless living-Dex compliance fit V2" in public["stage"]
+    assert "Fresh rootless living-Dex comparison preflight V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Four V2 openings are sealed and undisclosed" in encoded
+    assert "clean V2 replacement fit is complete" in encoded
     assert "actions 244/244" in encoded
-    assert "V2 openings sealed" in encoded
-    assert "compliance fit next" in encoded
-    assert "ec4c170" in encoded
-    assert "32442951504/1" in encoded
+    assert "clean fit ready" in encoded
+    assert "comparison preflight next" in encoded
+    assert "15b2dbcb" in encoded
+    assert "32443875609/1" in encoded
     assert "openings 4 sealed" in encoded
-    assert "fit/dev decode/comparison/gameplay 0" in encoded
-    assert "payload files opened 0" in encoded
-    assert "exact fit join" in encoded
+    assert "dev payload opens 0" in encoded
+    assert "counter delta 0" in encoded
+    assert "fit c544fa92" in encoded
+    assert "model a42db642" in encoded
     assert "fit 1 counted/evaluation-ineligible" in encoded
     assert "comparisons 0" in encoded
     assert "Rootless board" in encoded

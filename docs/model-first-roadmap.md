@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: four V2 openings sealed; fit one clean replacement
+## Current checkpoint: clean V2 fit complete; preflight the sealed comparison
+
+Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. The
+[compliance-fit result](evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
+(SHA-256 `3a09ab09e352ba63fcd8bd1ee308cd66326514ac9dc6ef279d625cface0e5c01`)
+binds fit `c544fa92…8d4bc3c`, model `a42db642…195f6582`, exact dataset and bundle
+identities, one consumed no-retry fit claim, and four authenticated sealed manifests. Development
+payloads opened/decoded and all counter deltas are zero. Antigravity returned GO with no P0/P1
+blocker or overclaim.
+
+Active `rootless-living-dex-dependency-v2-comparison-preflight-v1` freezes one fit-bound public
+manifest and executes one metadata-only preflight. It must authenticate every external fit pin,
+the consumed fit claim, all four sealed manifests, one unused comparison identity, and zero
+development payload opens. Stop at the first terminal result. The comparison runner does not yet
+exist; do not implement or execute it in this session. No fit, ROM/controller action, gameplay,
+Crystal, completion, authority, or transfer is permitted.
+
+## Previous checkpoint: four V2 openings sealed; fit one clean replacement
 
 Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
 [provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
