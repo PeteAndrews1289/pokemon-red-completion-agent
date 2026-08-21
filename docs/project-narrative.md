@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the dual-capability curriculum design qualified without a route script
+## August 21: the semantic Red dual-capability runtime qualified
+
+Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+4588 tests. The
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+(SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+connects the public acquire-versus-evolve curriculum to reusable Red mechanics: authenticated
+semantic route execution, measured-venue capture, and bounded evolution from one reset and
+dependency. It rejects direction lists and policy identity, executes only the selected private
+binding, and derives outcomes from exact living-specimen transitions.
+
+Antigravity audited the frozen runtime bytes and returned GO with no P0/P1/P2 finding. This was
+still ROM-free engineering: no context, prediction, action, outcome, fit, authority, or transfer
+counter changed. The next lane is exactly one action-free scenario preflight. Its purpose is to
+prove that one authentic Red reset actually offers both choices; it cannot score the model or act.
+
+## Previous August 21 checkpoint: the dual-capability curriculum design qualified without a route script
 
 Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
 4580 tests. The

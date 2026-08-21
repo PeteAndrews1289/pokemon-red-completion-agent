@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Red dual-capability living-Dex curriculum implementation V1** (`red-living-dex-dual-capability-curriculum-v1`)
+**Red dual-capability action-free scenario preflight V1** (`red-dual-capability-action-free-scenario-preflight-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the generic ROM-free implementation proves semantic venue entry, two same-reset live offers, identity-free rows, and an independent verifier, freeze one action-free Red scenario preflight separately. Otherwise close this dependency-action direction without another root search or route patch.
+- Next decision: If exactly one authentic same-reset menu passes with zero prediction and action, separately freeze one one-decision shadow-outcome execution. Otherwise close the context and reorient without replacement search, route repair, or gameplay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Implement a reusable Red measured-venue capture adapter and dual-capability scenario builder that authenticate acquisition and evolution as distinct live offers from one restored state while keeping the model menu title-neutral and the outcome independently collection-verified. |
-| Authority now | The frozen ranker has descriptive synthetic support and the public dual-capability contract is qualified, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify only the reusable ROM-free implementation needed to build one later dual-capability Red scenario. Implementation success grants no prediction, execution, gameplay, completion, or transfer authority. |
-| Transfer test | The implementation must keep traversal and species bindings behind a private capability interface while exposing only retained multiplicity, unresolved dependency demand, availability, and verified collection transitions, so Crystal can bind the same contract without a copied Red route or teacher script. |
-| Cheapest falsifier | Using only ROM-free fakes and public contracts, prove that semantic traversal can deliver the capture provider from a shared reset without a profile direction sequence, that both offers bind the same reset and dependency, and that every malformed or single-capability menu fails before scoring. |
-| Time box | 1 session / 4 hours |
+| Reusable capability | Authenticate exactly one preselected nonsealed Red reset as a genuine acquire-versus-evolve scenario by proving, without model scoring or controller input, that semantic venue traversal and bounded evolution are both independently executable from the same state and dependency. |
+| Authority now | The frozen ranker has descriptive synthetic support and the reusable Red dual-capability runtime is qualified, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Qualify only one authentic action-free Red scenario and its exact two-choice menu. Preflight success grants no prediction, execution, gameplay, completion, or transfer authority. |
+| Transfer test | The preflight must prove that title-specific traversal and species bindings stay behind private capability interfaces while the model-visible menu contains only retained multiplicity, unresolved dependency demand, availability, and collection-transition semantics. |
+| Cheapest falsifier | Run one manifest-pinned, action-free preflight over the first prospectively frozen eligible context. Require one reset identity, the exact two identity-free rows, a semantic route plan, sufficient capture resources, and an executable evolution offer; any mismatch closes the context without substitution or route repair. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-dual-capability-design-qualified-implementation-next** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+**2026-08-21-dual-capability-runtime-qualified-preflight-next** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The qualified design now states the reusable decision the living-Pokedex agent must learn and exposes the one missing Red capability honestly. Implementing that generic capability is the shortest path to a real model-selected acquire-versus-evolve outcome. |
-| Learning output | No new measured learning output. Source 09e9b04b passed CI 32462322717/1 with 4580 tests. The public design freezes two same-reset capabilities, no preferred action, identity-free rows, and an evolution-aware ledger verifier; Antigravity returned final GO after one route-reuse finding was removed. |
-| Authority delta | No gameplay or transfer authority changed. The public design used no private input, ROM, model prediction, controller action, frame, teacher query, fit, or learning counter. |
-| Transfer result | Not run. The design is title-neutral and explicitly requires a semantic traversal capability, but neither a live Red menu nor a Crystal binding has been produced. |
-| Blocker | Red still lacks the generic semantic venue-entry capture adapter that can make acquisition available beside bounded evolution from one restored state. The existing local-corridor capture cannot honestly satisfy that boundary. |
-| Decision | Retire the qualified public design and implement only its reusable semantic venue-entry capture and same-reset scenario-binding seams. Do not execute a context or score the model in this lane. |
-| Next session | Implement the ROM-free semantic venue-entry capture and dual-capability builder contracts, reuse the existing capture and route-execution interfaces, and stop before private state, model scoring, controller input, fitting, comparison, or Crystal. |
-| Next falsifier | Implement and mutation-test the generic measured-venue capture seam and scenario builder with no hard-coded direction sequence. Require both live offers, identical reset identity, exact private dependency joins, zero policy leakage, and independent outcome verification. |
-| Stop condition | Stop after the ROM-free implementation is qualified or immediately if it requires a predeclared direction sequence, species-specific policy feature, teacher-selected action, fabricated availability/outcome, private context, live prediction, or more than four hours. |
+| Product alignment | The reusable capability seam is finished. Proving that one real Red state can expose both choices is now the shortest honest path to the first model-selected, collection-verified acquire-versus-evolve gameplay outcome. |
+| Learning output | No new measured learning output. Source c946e8db passed CI 32465536131/1 with 4588 tests. The runtime binds semantic route-based capture and bounded evolution to one reset and dependency, exposes zero identity fields, executes only the selected capability, and derives outcomes from the living ledger; Antigravity returned exact-byte GO with no P0/P1/P2 finding. |
+| Authority delta | No gameplay or transfer authority changed. Runtime qualification used no private input, ROM, model prediction, controller action, frame, teacher query, fit, or learning counter. |
+| Transfer result | Not run. The runtime is title-neutral at the model boundary and keeps Red traversal/species bindings private, but no authentic Red menu or Crystal binding has been produced. |
+| Blocker | The reusable Red runtime is now qualified, but no authentic Red reset has yet demonstrated that acquisition and evolution are jointly available under the exact title-neutral menu. |
+| Decision | Retire the implementation lane and qualify exactly one action-free, prospectively selected Red scenario. Do not score the model, claim an outcome, or send controller input in this lane. |
+| Next session | Publish and run exactly one action-free preflight over one prospectively frozen nonsealed Red context, with no model score, claim, controller input, frame advance, context substitution, route patch, fit, Crystal, or promotion. |
+| Next falsifier | Implement a manifest-first preflight that selects one context before scoring, authenticates its reset, semantic route, capture readiness, evolution readiness, exact two-row menu, and unused identity, and then terminates with predictions/actions/frames zero. |
+| Stop condition | Stop after the first action-free result. Any missing capability, reset drift, route mismatch, identity leak, prediction, action, frame advance, or need for substitution closes the context and this lane. |
 
 ### Stop conditions
 
-- Stop if implementation cannot expose both acquisition and evolution from one restored state without a predeclared direction sequence, leaks species/title/venue/route identity to the policy row, or labels an outcome from teacher preference instead of a verified transition.
-- Stop after one ROM-free implementation or four hours. Never open another private context, patch or retry the closed root, run a ROM, score the model, write a claim, act, fit, compare, run Crystal, or promote authority in this lane.
+- Stop if the selected context cannot expose both acquisition and evolution from one restored state through authenticated semantic traversal, or if the policy row leaks species, title, venue, route, or private skill identity.
+- Stop after one action-free preflight or two hours. Never substitute another context, patch a route, score the model, write an outcome claim, send controller input, advance a frame, fit, compare, run Crystal, or promote authority in this lane.
 
 ### Hard boundaries for this lane
 
@@ -88,7 +88,6 @@ outputs.
 - **Prohibited:** model fit
 - **Prohibited:** live model prediction
 - **Prohibited:** model refit
-- **Prohibited:** live private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -120,6 +119,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red dual-capability living-Dex curriculum implementation V1:** Source c946e8dba00ca246d3720b115f81691a1a8cdc91 passed CI 32465536131/1 with 4588 tests. The runtime requires authenticated semantic route execution, binds capture and evolution to one reset and dependency, exposes no policy identity, executes only the selected binding, and verifies exact living-ledger outcomes. Antigravity returned exact-byte GO with P0/P1/P2 all zero. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Red dual-capability living-Dex curriculum design V1:** Source 09e9b04bc2bb09b1d793a0484dca3898e010688b passed CI 32462322717/1 with 4580 tests. The public design freezes two same-reset capability roles, no preferred action, title-neutral rows, and an evolution-aware ledger verifier. Antigravity's initial route-reuse finding was removed and its exact-byte re-audit returned GO. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency zero-action preflight V1:** Main 8d559d230fc06fa83edc8015bb245df531600e16 passed CI 32458785817/1 with 4567 tests. One manifest-pinned nonsealed Red context authenticated its historical replay, exact fit/model, and read-only ledgers, then returned no eligible dependency opportunity. Predictions, claims, actions, frames, teachers, and counters stayed zero. The context is closed with no replacement or retry. Evidence is preserved; retry is no.
 - **Red living-Dex dependency shadow runner qualification V1:** Main d4955fb69fff9a763e14a9b5b19601f834fc0c5f passed CI 32457709720/1 with 4566 ROM-free tests. The runner authenticates public source before private inputs, replays one historical nonsealed context, joins the exact fit/model and profile-bound skill pair, selects before scoring, claims before prediction, retains durable terminals, and enforces zero controller/frame effects. Antigravity audits returned GO with P0/P1/P2 all zero. No live input was opened and no counter changed. Evidence is preserved; retry is no.

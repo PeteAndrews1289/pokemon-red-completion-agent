@@ -1,0 +1,96 @@
+{
+  "antigravity_review": {
+    "audit_report_sha256": "d15e6b2e9a82bebf994f35f2aa66ca118651965002c9cbbafe0035f5824f8358",
+    "exact_bytes_verified": true,
+    "p0_blockers": 0,
+    "p1_blockers": 0,
+    "p2_findings": 0,
+    "private_or_runtime_accesses": 0,
+    "reviewed_source_sha256": "89c0ebbb64e759504a6fb839e1e7693055a6055b26779db9a2d7fc8ddeac5c0f",
+    "reviewed_test_sha256": "0551cdd2fd5ec81a3015f647bcae8bc778cb4b3ea396113b293de3992003dd9b",
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "Published Red runtime code can bind authenticated semantic venue traversal and bounded evolution as two distinct same-reset capabilities, expose only the frozen identity-free acquire-versus-evolve policy rows, execute only the selected binding, and derive a signed or censored result from exact post-transition living-collection evidence.",
+    "unsupported": "This qualification is not an authentic Red scenario, model prediction, controller action, causal gameplay outcome, model update, Red completion, living-Pokedex completion, authority promotion, Crystal result, or cross-title transfer result."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4588,
+    "ci_run_id": 32465536131,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "source_commit": "c946e8dba00ca246d3720b115f81691a1a8cdc91"
+  },
+  "published_bindings": {
+    "battle_collection_registry_sha256": "2d73d1362603cd02008d1abbd019d717cfad456835432a6ffbe8652f383d5ad3",
+    "goal_manager_collection_registry_sha256": "bb887ea99fa9ad2424d2672c13d4aa7e1d633a34d84a4b2a3fa9513a0bc0ad2c",
+    "runtime_source_sha256": "89c0ebbb64e759504a6fb839e1e7693055a6055b26779db9a2d7fc8ddeac5c0f",
+    "source_bundle_sha256": "1bf90757ad5c51c0a5590fe5963e0f2d3f33b0d23179b1cd4f71709a7354ed56",
+    "strategic_navigation_collection_registry_sha256": "423d75c36c4cc235439e260c1c3e68a9ead2c44046ad91eea5a471f814b46ada",
+    "test_sha256": "0551cdd2fd5ec81a3015f647bcae8bc778cb4b3ea396113b293de3992003dd9b"
+  },
+  "qualification": {
+    "adjacent_tests_passed": 106,
+    "candidate_order": [
+      "acquire_species",
+      "evolve_species"
+    ],
+    "canonical_red_catalog_required": true,
+    "capture_can_materialize_redundant_precursor": true,
+    "controller_direction_sequences_accepted": false,
+    "distinct_private_skill_bindings_required": true,
+    "focused_runtime_tests_passed": 7,
+    "full_local_rom_free_tests_passed": 4589,
+    "independent_ledger_outcome_verification": true,
+    "interruption_censored": true,
+    "policy_identity_fields": 0,
+    "registry_checks_passed": true,
+    "ruff_passed": true,
+    "same_dependency_required": true,
+    "same_reset_required": true,
+    "selected_binding_only": true,
+    "semantic_route_execution_required": true,
+    "single_use_selection_required": true,
+    "strict_mypy_passed": true
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.red.dual-capability-living-dex-curriculum-runtime-qualification.v1",
+  "status": "published_runtime_qualified_action_free_scenario_preflight_required",
+  "title_role": "Red dual-capability curriculum runtime maintenance; not gameplay, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_contexts_opened": 0,
+    "emulator_frames_advanced": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

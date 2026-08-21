@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **SOURCE 09E9B04B · CI 32462322717/1 GREEN · 4580 PASSED · DESIGN
+> **Current rail:** Show **SOURCE C946E8DB · CI 32465536131/1 GREEN · 4588 PASSED · RUNTIME
+> QUALIFIED · SEMANTIC ROUTE · SAME-RESET ROLES 2 · DIRECTION/POLICY IDENTITY 0 · SELECTED
+> BINDING ONLY · EXACT LEDGER OUTCOME · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
+> [runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+> and show **SHA-256 DAD315FF…AEDE**.
+>
+> Display active `red-dual-capability-action-free-scenario-preflight-v1`. Active rail:
+> **PROSPECTIVELY SELECT ONE NONSEALED RESET → AUTHENTICATE SEMANTIC ROUTE + CAPTURE READINESS +
+> EVOLUTION READINESS → EXACT TWO-ROW MENU → STOP BEFORE SCORE/ACTION**. No substitution or
+> route patch is allowed. Show **PREDICTION/CLAIM/ACTION/FRAME/FIT/CRYSTAL/AUTHORITY 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **SOURCE 09E9B04B · CI 32462322717/1 GREEN · 4580 PASSED · DESIGN
 > QUALIFIED · SAME-RESET ROLES 2 · PREFERRED ACTIONS/TEACHER LABELS 0 · TITLE/ROUTE IDENTITY
 > 0 · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
 > [design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)

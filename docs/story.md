@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the classroom blueprint is real—and contains no hidden route
+## Current checkpoint: the two real tools are built; now inspect one classroom
+
+Source `c946e8db` passed CI `32465536131/1` with 4588 tests. The
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+shows that Red can now express the lesson without smuggling in a walkthrough: one semantic route
+reaches a measured capture venue, one bounded evolution skill handles the transformation, and both
+are tied to the same reset and living-Dex dependency. The model-visible menu contains no species,
+map, route, title, or skill identity. Only the selected tool may run, and the ledger—not a teacher—
+decides whether the result helped or harmed the living collection.
+
+Antigravity audited the exact implementation and returned GO with no P0, P1, or P2 finding. The
+model still has not played this scene. The next move is a silent inspection of one prospectively
+selected Red reset: prove the two tools are genuinely available together, then stop before the
+model scores them or presses a button. That keeps the project moving toward real learned play
+without turning the setup into another hidden route script.
+
+## Previous checkpoint: the classroom blueprint was real—and contained no hidden route
 
 Source `09e9b04b` passed CI `32462322717/1` with 4580 tests. The
 [design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)

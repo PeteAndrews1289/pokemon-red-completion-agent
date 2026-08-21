@@ -1,6 +1,24 @@
 # Current audit — 2026-08-21
 
-## Current result: dual-capability curriculum design qualified
+## Current result: semantic dual-capability runtime qualified
+
+Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+4588 tests, one skip, three deselections, and one expected failure. The
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+(SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+binds a semantic route plan to measured-venue capture, pairs it with bounded evolution at the same
+reset and dependency, blocks fixed direction sequences and policy identity, and judges only exact
+living-ledger transitions. Antigravity returned exact-byte GO with no P0/P1/P2 finding; 4589 local
+ROM-free tests passed.
+
+This checkpoint opened no private input or ROM, made no prediction, advanced no action or frame,
+fit no model, and changed no counter. Active
+`red-dual-capability-action-free-scenario-preflight-v1` may authenticate one prospectively frozen
+nonsealed context and nothing more. It stops after one result, before scoring, claims, action,
+substitution, route repair, Crystal, or promotion. Boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: dual-capability curriculum design qualified
 
 Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
 4580 tests, one skip, three deselections, and one expected failure. The

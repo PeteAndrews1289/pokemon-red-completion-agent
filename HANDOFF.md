@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: dual-capability design qualified; semantic implementation is active
+## 2026-08-21: dual-capability runtime qualified; one action-free scenario preflight is active
+
+Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+4588 tests, one skip, three deselections, and one expected failure. The
+[runtime qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+(SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+binds semantic route-based capture and bounded evolution to one reset and dependency, rejects
+direction-sequence injection, keeps the model menu identity-free, executes only the selected
+capability, and derives signed/censored results from exact living-ledger changes. Antigravity's
+exact-byte review returned GO with P0/P1/P2 all zero.
+
+Codex owns only `red-dual-capability-action-free-scenario-preflight-v1`: authenticate one
+prospectively selected nonsealed Red reset and prove both capabilities are available without
+scoring or controller input. Stop after the first result; do not substitute another context,
+patch a route, claim an outcome, fit, run Crystal, or promote authority. Claude remains
+unavailable; Antigravity reviews. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous 2026-08-21 checkpoint: dual-capability design qualified; semantic implementation was active
 
 Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
 4580 tests, one skip, three deselections, and one expected failure. The

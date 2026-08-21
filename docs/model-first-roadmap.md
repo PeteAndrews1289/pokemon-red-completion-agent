@@ -8,7 +8,25 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: implement the qualified dual-capability Red curriculum seam
+## Current checkpoint: preflight one authentic dual-capability Red scenario
+
+Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+4588 tests, one skip, three deselections, and one expected failure. The
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+(SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+proves the reusable implementation requires authenticated semantic route execution, binds capture
+and evolution to one reset and dependency, exposes no title/species/route/skill identity to the
+model, executes only the selected capability, and verifies exact collection-ledger transitions.
+The full local ROM-free suite passed 4589 tests, and Antigravity returned exact-byte GO with
+P0/P1/P2 all zero.
+
+Active `red-dual-capability-action-free-scenario-preflight-v1` authenticates exactly one
+prospectively selected nonsealed Red reset and asks only whether both live offers exist. It may
+open that context but may not score the model, claim an outcome, send controller input, advance a
+frame, substitute another context, or patch a route. A pass permits a separately frozen
+one-decision shadow outcome; a failure closes the context and forces reorientation.
+
+## Previous checkpoint: implement the qualified dual-capability Red curriculum seam
 
 Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
 4580 tests, one skip, three deselections, and one expected failure. The
