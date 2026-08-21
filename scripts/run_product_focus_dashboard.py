@@ -122,6 +122,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         "full_game_replay": "replay",
         "gameplay_execution": "gameplay",
         "model_fit": "fit",
+        "model_prediction": "prediction",
         "model_refit": "refit",
         "private_artifact_access": "private artifacts",
         "sealed_red_evaluation": "sealed Red",
@@ -138,17 +139,17 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The abstract dependency ranker passed its one descriptive held-out comparison. "
-            "Next, adapt existing typed Red collection observations into the same identity-free "
-            "features using public and synthetic fixtures only."
+            "The Red observation adapter is published and qualified across all 26 transformation "
+            "edges. Next, freeze one action-free shadow-decision design; no live state or model "
+            "prediction is permitted in this lane."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Red adapter · collection observation → title-neutral dependency features",
+        location="Red shadow design · one observation → one preference → zero actions",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate="V2 model a42db642 · held-out 4/4 · baseline 2/4 · no live authority",
-            choice="Derive exact chain/branch dependency counts from existing Red typed state",
+            choice="Freeze pre-score opportunity selection and a hard zero-action terminal",
             decisions=0,
             teacher_queries=0,
             fallbacks=0,
@@ -186,11 +187,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} counted/ineligible · "
                 f"comparisons {synthetic_unseen_comparisons} · V2 result 4/4 vs 2/4 · "
-                "descriptive only · Red adapter next"
-            ),
-            (
-                f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
-                f"fits {fits} · unseen comparisons {unseen}"
+                "descriptive only · Red adapter qualified · shadow design next"
             ),
             f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
@@ -212,6 +209,10 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 1", stop_conditions[0]),
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
+            (
+                "Red adapter · 6fe9a677 · CI 32451757975/1 · 26 edges · 22 supported · "
+                "4 zero-reserve fail closed · 11 focused tests · Antigravity GO · predictions 0"
+            ),
             (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "
                 "CE 0.206/0.693 · rows disclosed 0 · no retry"

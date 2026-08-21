@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Red living-Dex dependency observation adapter V1** (`red-living-dex-dependency-observation-adapter-v1`)
+**Red living-Dex dependency shadow-decision design V1** (`red-living-dex-dependency-shadow-decision-design-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If exact fixture parity, chain/branch semantics, identity-leak guards, and Antigravity review pass, freeze a separate one-decision Red shadow-observation design with no controller action. Otherwise close or revise the adapter contract before touching live state.
+- Next decision: If the public design proves pre-score eligibility, exact model/adapter binding, one-prediction maximum, identity-free aggregate disclosure, and zero-action termination, implement and qualify its read-only runner separately. Otherwise close the design before touching live state.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Project existing authenticated Red collection observations and cartridge-derived evolution demand into the exact title-neutral dependency-ranker features without leaking species, map, route, or controller identity. |
-| Authority now | The frozen ranker has descriptive synthetic support on four held-out rows across two families. It has no live Red observation, action, gameplay, completion, Crystal, living-Pokedex, or transfer authority. |
-| Authority target | Qualify a deterministic title-specific observation adapter that preserves the title-neutral policy boundary. Adapter qualification alone grants no learned authority; it permits a later separately frozen Red shadow-decision test. |
-| Transfer test | The adapter must keep the exact ranker-facing schema title-neutral so a future Crystal adapter can populate the same fields; no Crystal implementation or transfer measurement occurs here. |
-| Cheapest falsifier | Use public synthetic CollectionObservation fixtures for scarce, duplicate-ready, multi-stage, branching, item-gated, and completed dependencies. Stop if the adapter cannot derive exact ranker inputs deterministically or if any model-visible field contains a Red identity. |
-| Time box | 1 session / 4 hours |
+| Reusable capability | Freeze one action-free, one-decision Red shadow-observation contract that authenticates the published dependency ranker and adapter, selects a rankable two-candidate dependency before scoring, records one model preference, and never gives the model controller authority. |
+| Authority now | The frozen ranker has descriptive synthetic support and the published Red adapter can create its exact title-neutral rows. No authentic Red observation has been scored and no gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Qualify a design for exactly one later authentic Red shadow preference with zero controller authority. Design qualification itself grants no prediction or gameplay authority. |
+| Transfer test | The design must bind only the title-neutral candidate rows at the model boundary so a future Crystal adapter can reuse the same shadow protocol; no Crystal implementation or transfer measurement occurs here. |
+| Cheapest falsifier | On public fixtures only, prove the design binds one exact model, adapter, observation identity, full acquire-versus-transform menu, at most one prediction, aggregate-only disclosure, and a hard zero-action terminal. Stop if eligibility depends on model score or a Red identity reaches policy features. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-rootless-v2-comparison-complete-red-adapter-next** · status **active** · evidence [synthetic rootless unseen comparison](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+**2026-08-21-red-adapter-qualified-shadow-design-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The result supports the abstract preserve-versus-evolve rule. The adapter is the smallest bridge toward using that reusable rule inside real Red collection planning and later implementing the same observation contract for Crystal. |
-| Learning output | One consumed four-row synthetic held-out comparison passed descriptively: candidate 4/4 versus baseline 2/4, cross-entropy 0.205636 versus 0.693147, and mean winner probability 0.814787 versus 0.5. It adds exactly one synthetic and one global unseen comparison. |
-| Authority delta | No gameplay or transfer authority changed. The ranker passed one descriptive synthetic held-out comparison only; it has not read a live Red observation or selected an in-game action. |
-| Transfer result | Not run. The synthetic held-out structures are title-neutral, but no Red observation and no later-title adapter has been evaluated. |
-| Blocker | The validated ranker consumes abstract dependency counts, but no reviewed seam yet derives those counts from the repository's existing Red CollectionObservation, living-collection contract, and cartridge-derived acquisition graph. |
-| Decision | Close the consumed V2 comparison after a 4/4 candidate result versus 2/4 baseline with lower cross-entropy and higher winner probability. Activate one bounded public/synthetic adapter lane, narrower than a redundant rewrite of the existing Red memory system. |
-| Next session | Implement and test the narrow Red dependency observation adapter over existing collection/catalog types; define deterministic edge-demand and executability semantics for multi-stage and branching evolutions; stop before any ROM, private root, live prediction, or action. |
-| Next falsifier | Require exact parity between adapter-derived ranker rows and independently derived Red collection/evolution facts across public fixtures, plus a fail-closed scan proving model-visible rows contain no title identity. |
-| Stop condition | Stop after one public/synthetic adapter implementation and audit. Never access a ROM, private artifact or claim; never predict, act, fit, compare again, promote authority, or run Crystal in this lane. |
+| Product alignment | The adapter closes the title-observation gap without rewriting Red memory. A one-decision shadow design is the shortest honest bridge from the synthetic dependency rule to seeing whether the same model can consume authentic Red state before any causal gameplay trial. |
+| Learning output | No new measured learning output. Published source 6fe9a677 passed CI 32451757975/1; 11 adapter tests and 4533 full ROM-free tests passed, 22 of 26 Red transformation edges fit the ranker contract, four zero-reserve edges fail closed, and Antigravity returned exact-head GO. |
+| Authority delta | No gameplay or transfer authority changed. The published Red adapter has zero predictions and zero actions; the ranker still has only descriptive synthetic held-out support. |
+| Transfer result | Not run. The adapter preserves a title-neutral policy schema, but neither an authentic Red shadow observation nor a Crystal adapter has been evaluated. |
+| Blocker | The adapter can now derive exact title-neutral rows from Red collection facts, but no frozen contract yet binds one authentic Red observation, the exact published model, one pre-score opportunity, one shadow preference, and a zero-action terminal. |
+| Decision | Retire the qualified adapter implementation and open one design-only shadow-observation lane. The next design may specify one future prediction but cannot read a ROM, private context, model bundle, or claim and cannot execute gameplay. |
+| Next session | Freeze and audit the path-free one-decision Red shadow-observation design. Stop before any ROM, private context, model loading, prediction, claim, or controller action; implementation and execution remain separate. |
+| Next falsifier | Require a public design whose opportunity is selected before model scoring, whose policy input is exactly two identity-free adapter rows, whose model and observation bindings are immutable, and whose only permitted live effect is one recorded shadow prediction followed by a zero-action terminal. |
+| Stop condition | Stop after one public design and audit. Never access a ROM, private artifact, claim registry, hidden context, or model bundle; never predict, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
 
 ### Stop conditions
 
-- Stop if exact required counts and current dependency progress cannot be derived from existing typed Red collection/catalog inputs without species-specific policy features, route knowledge, or controller state.
-- Stop after one implementation/audit checkpoint. Never access a ROM, private artifact, claim registry, hidden row, live model prediction, controller, Crystal, or authority promotion.
+- Stop if the design selects a context or transformation after seeing a model score, leaks a private Red binding into policy or public output, permits more than one prediction, or lacks a hard zero-action terminal.
+- Stop after one design/audit checkpoint. Never access a ROM, private artifact, claim registry, hidden context, model bundle, controller, Crystal, or authority promotion.
 
 ### Hard boundaries for this lane
 
@@ -86,6 +86,7 @@ outputs.
 - **Prohibited:** full game replay
 - **Prohibited:** gameplay execution
 - **Prohibited:** model fit
+- **Prohibited:** model prediction
 - **Prohibited:** model refit
 - **Prohibited:** private artifact access
 - **Prohibited:** sealed red evaluation
@@ -119,6 +120,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red living-Dex dependency observation adapter V1:** Published main 6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3 passed CI 32451757975/1. The pure adapter maps all 26 Red transformation edges through chain, branch, completion, and mechanical-readiness semantics into exact identity-free ranker rows; 22 edges are supported and four zero-reserve cases fail closed. Eleven focused tests and 4533 full ROM-free tests passed, and Antigravity returned exact-head GO with no P0/P1/P2 finding. It made zero predictions or actions and advances no learning counter. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution V2:** Published main 90288f57fb0b4d81533e049cc1b2c7bed28a07d3 passed CI 32449287128/1. After exact metadata preflight and Antigravity GO, semantic claim ed906f06 was consumed once; exactly four committed rows across two held-out families produced candidate 4/4 versus baseline 2/4, lower cross-entropy, higher winner probability, aggregate-only output, and durable no-retry records. The result is descriptive synthetic evidence only. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution qualification V2:** Published source 96ef8a1bd105e399963ec8656f3a81cb850742b9 passed CI 32447962527/1 with the exact-bundle, claim-before-open, four-row aggregate-only runner and durable no-retry terminals. Antigravity returned implementation and governance GO. A metadata-only preflight opened zero payloads and consumed no claim; because it occurred one reorientation early, its semantic qualification remains valid but its source-bound identity is superseded for execution. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison preflight V2:** Published main c0956cc634a56f4851102f9bc259e44d112532e8 passed CI run 32445054913 attempt 1. Manifest 583050da authenticated the exact clean fit bundle, four sealed development manifests, and unused comparison identity ed906f06 while opening and decoding zero development payloads. The claim remains unconsumed, all counters stayed unchanged, and Antigravity returned GO with no P0/P1 blocker. Evidence is preserved; retry is no.

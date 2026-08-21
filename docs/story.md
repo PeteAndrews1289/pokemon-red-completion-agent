@@ -7,7 +7,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the abstract student passed; now translate the real world correctly
+## Current checkpoint: the translation layer is ready; design one silent real-world look
+
+Main `6fe9a677` passed CI `32451757975/1` with the new Red dependency adapter. The
+[qualification receipt](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+shows it walking all 26 transformation edges without ever opening the game: 22 fit the student's
+anonymous feature language, while four honest zero-reserve exceptions stop instead of being
+forced into a shape the student never learned. Chains credit descendants, branches reserve
+siblings, item/trade/level facts stay behind the policy wall, and no species or route leaks into
+the eleven model-visible fields. All 4533 ROM-free tests passed, and Antigravity approved the
+exact published bytes.
+
+The next scene is intentionally quiet: design one future shadow observation where the model sees
+two anonymous choices and records one preference, then the program stops before pressing a
+button. That is the smallest bridge from a synthetic rule to authentic Red state. It is still not
+the model playing Pokémon, but it puts the next causal action test on solid ground without another
+teacher route or full-game rehearsal.
+
+## Previous checkpoint: the abstract student passed; now translate the real world correctly
 
 At main `90288f57` under CI `32449287128/1`, the four sealed answers finally opened once. The
 [comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)

@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: four sealed answers, one real positive signal
+## August 21 scene: translate Red into the student's language without pressing a button
+
+Open on **MAIN 6FE9A677 · CI 32451757975/1 GREEN · RED ADAPTER QUALIFIED**. Animate **26 RED
+TRANSFORMATIONS → 22 SUPPORTED ANONYMOUS DEPENDENCIES + 4 HONEST ZERO-RESERVE STOPS**. Show
+**CHAIN DESCENDANTS · BRANCH SIBLING RESERVES · ITEM/TRADE/LEVEL READINESS BEHIND THE WALL ·
+IDENTITY LEAKS 0 · PREDICTIONS 0 · ACTIONS 0**. Link the
+[qualification receipt](evidence/red-living-dex-dependency-observation-adapter-qualification-v1-2026-08-21.json)
+with **SHA-256 6DF5485D…EE8BF** and stamp **11 FOCUSED · 4533 FULL · ANTIGRAVITY GO**.
+
+The next rail is **FREEZE ONE REAL RED OBSERVATION → SELECT BEFORE SCORING → TWO ANONYMOUS ROWS
+→ ONE SHADOW PREFERENCE → ZERO-ACTION TERMINAL → STOP**. Say the boundary aloud: this is the
+design for the model's first silent look through the new adapter, not a move, outcome, completed
+game, living Pokédex, or Crystal transfer.
+
+## Previous August 21 scene: four sealed answers, one real positive signal
 
 Open on **MAIN 90288F57 · CI 32449287128/1 GREEN · CLAIM CONSUMED · RETRY 0**. Reveal only the
 scoreboard: **CANDIDATE 4/4 · BASELINE 2/4 · CE 0.206 VS 0.693 · WINNER P 0.815 VS 0.500 ·
