@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the shadow contract is qualified; build its
+> **Current product focus (August 21, 2026): the exact shadow runner is qualified; run one
+> zero-action preflight.** Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI
+> `32457709720/1`. The
+> [runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+> (SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+> records **4566 ROM-FREE TESTS · MANIFEST BEFORE PRIVATE ACCESS · HISTORICAL CONTEXT REPLAY ·
+> EXACT FIT/MODEL + PROFILE SKILLS · SELECT BEFORE SCORE · PRIVATE ROUND TRIP · ENCOUNTER LOG
+> FORBIDDEN · ANTIGRAVITY GO · P0/P1/P2 0**. Qualification opened no ROM or private artifact,
+> made no prediction, wrote no claim, and advanced no action, frame, or learning counter.
+>
+> Active `red-shadow-zero-action-preflight-v1` permits exactly one manifest-pinned preflight over
+> one nonsealed Red context. It may authenticate the context, historical menu, fit/model, skill
+> pair, and unused identity, but it may not score, claim, press a button, advance a frame, replace
+> the context, or retry. Stop and reorient after the first result. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**; this is still not gameplay, completion,
+> living-Pokédex competence, Crystal, authority, or transfer evidence.
+
+> **Previous product focus (August 21, 2026): the shadow contract was qualified; build its
 > read-only runner.** Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI
 > `32453057425/1`. The
 > [design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
@@ -15,7 +32,7 @@
 > P0/P1/P2 0**. GitHub passed 4537 ROM-free tests; Antigravity independently passed 4538.
 > Every learning, authority, and transfer counter remains unchanged.
 >
-> Active `red-shadow-runner-qualification-v1` may implement and mutation-test only the public,
+> Then-active `red-shadow-runner-qualification-v1` could implement and mutation-test only the public,
 > read-only runner boundary. It must authenticate all bindings before scoring, admit exactly one
 > frozen context and first eligible opportunity, persist at most one preference, and prove zero
 > action/frame effects. Live ROM/private access, an authentic shadow prediction, gameplay, fit,

@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Red living-Dex dependency shadow runner qualification V1** (`red-shadow-runner-qualification-v1`)
+**Red living-Dex dependency zero-action preflight V1** (`red-shadow-zero-action-preflight-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the runner passes adversarial fixture tests, Antigravity audit, publication, and exact-head CI, reorient separately to one metadata-only live preflight. If any binding, ordering, privacy, durability, or zero-action guard fails, repair only the generic runner boundary or close before live state.
+- Next decision: If the exact preflight returns ready with candidate count two, identity unclaimed, and zero prediction/action/frame effects, freeze a separate shadow-execution manifest and reorient before scoring. Any no-eligible, collision, drift, protected-input, or zero-effect failure closes this exact context with no replacement.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Implement and qualify the read-only runner for one frozen Red dependency shadow decision: authenticate exact source, design, adapter, model bundle, and context; select the first eligible opportunity before scoring; persist at most one preference; and terminate with zero controller actions or advanced frames. |
-| Authority now | The frozen ranker has descriptive synthetic support, the Red adapter can create its exact title-neutral rows, and the public shadow contract is qualified. No authentic Red observation has been scored and no gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify the runner for exactly one later authentic Red shadow preference with zero controller authority. Runner qualification itself grants no prediction or gameplay authority. |
-| Transfer test | The runner must consume only the title-neutral candidate rows at the model boundary so a future Crystal adapter can reuse the same shadow protocol; no Crystal implementation or transfer measurement occurs here. |
-| Cheapest falsifier | On public and synthetic fixtures only, mutate every exact binding, selection order, one-context boundary, prediction cap, private/public identity boundary, terminal write, and zero-action guard. Stop if any mismatch can reach scoring or any post-prediction path lacks a durable terminal. |
-| Time box | 1 session / 2 hours |
+| Reusable capability | Run exactly one zero-action, zero-prediction preflight over one manifest-pinned nonsealed Red development-role context, authenticating the published shadow runner, historical context replay, exact fit/model bundle, profile-bound skill pair, and unused one-shot identity. |
+| Authority now | The frozen ranker has descriptive synthetic support, the Red adapter and exact published runner are qualified, and no authentic Red observation has been scored. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | If one exact zero-action preflight passes, permit a separately reoriented one-shot Red shadow preference with zero controller authority. Preflight success itself grants no prediction or gameplay authority. |
+| Transfer test | The preflight must prove the authentic Red adapter still produces only the title-neutral two-row policy boundary intended for later reuse by a Crystal adapter; no Crystal implementation or transfer measurement occurs here. |
+| Cheapest falsifier | Freeze one operation-specific public manifest before private access, then run the published preflight once. Stop if any binding differs, the historical context cannot be replayed without a frame or action, the first opportunity is ineligible, or either one-shot ledger is already consumed. |
+| Time box | 1 session / 1 hour |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-shadow-design-qualified-runner-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
+**2026-08-21-shadow-runner-qualified-preflight-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The qualified design defines the first safe use of the synthetic dependency rule on authentic Red state. A read-only runner is the last engineering bridge before one measured shadow preference and then a separately verified causal gameplay trial. |
-| Learning output | No new measured learning output. Published source 8afb1db0 passed CI 32453057425/1 with 4537 ROM-free tests; the design binds one exact model, two identity-free rows, one pre-score opportunity, one prediction maximum, zero actions/frames, durable termination, and Antigravity exact-head GO with P0/P1/P2 all zero. |
-| Authority delta | No gameplay or transfer authority changed. The published design made zero predictions and zero actions; the ranker still has only descriptive synthetic held-out support. |
-| Transfer result | Not run. The adapter preserves a title-neutral policy schema, but neither an authentic Red shadow observation nor a Crystal adapter has been evaluated. |
-| Blocker | The exact shadow contract is now public and qualified, but no source-authenticated runner yet joins the frozen model and one authentic Red observation, enforces pre-score selection, persists one aggregate preference, and proves a zero-action terminal. |
-| Decision | Retire the qualified public design and implement only its read-only runner on public and synthetic fixtures. Live Red context access and the single shadow prediction remain a later, separately reoriented stage. |
-| Next session | Implement, mutation-test, audit, publish, and exact-head qualify the read-only shadow runner. Stop before any live ROM, private context, claim, authentic model prediction, controller action, Crystal execution, or authority promotion. |
-| Next falsifier | Require a source-authenticated runner whose public fixtures prove exact model/design/adapter joins, one-context admission, first-eligible selection before scoring, no identity leakage, one-prediction maximum, durable failure/success terminals, and zero controller/frame effects. |
-| Stop condition | Stop after one published and audited runner. Never access a live ROM, private artifact, hidden context, or claim registry; never run the authentic model on Red state, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
+| Product alignment | This is the cheapest authentic-state falsifier between the synthetic dependency rule and its first Red preference: prove the model can receive a real title-neutral two-choice menu before spending the one-shot prediction. |
+| Learning output | No new measured learning output. Main d4955fb6 passed CI 32457709720/1 with 4566 tests; exact runner/source bytes passed Antigravity twice with P0/P1/P2 all zero, including real private-store round-trip and an explicit encounter-log side-effect guard. |
+| Authority delta | No gameplay or transfer authority changed. Runner qualification opened no ROM or private context, made zero predictions and zero actions, and advanced no learning counter. |
+| Transfer result | Not run. The runner preserves the title-neutral policy boundary, but no authentic Red preference or Crystal adapter result exists. |
+| Blocker | The exact runner is published and exact-head green, but its one allowed live Red context, fit bundle, historical replay, and unused one-shot identity have not yet passed the zero-action preflight. |
+| Decision | Retire the runner-qualification lane and open exactly one source-authenticated Red preflight. The preflight may read one pinned nonsealed context and the exact fit bundle, but it may not claim an identity, score the model, advance a frame, dispatch an action, or substitute another context. |
+| Next session | Freeze the exact published preflight manifest and run the preflight once. Record its path-free result and reorient immediately; do not score the model, claim the shadow identity, press a button, advance a frame, replace the context, run Crystal, or promote authority. |
+| Next falsifier | Authenticate one preflight manifest, one exact context-plan slot, the historical registry/catalog question, exact profile and fit bundle, read-only PyBoy state, and unused global/local identities; emit only the frozen aggregate with zero prediction/action/frame effects. |
+| Stop condition | Stop after the first preflight result, including no-eligible or failure. Never retry or replace the context after private read; never score, claim, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
 
 ### Stop conditions
 
-- Stop if the runner can score before all exact bindings and the one frozen context/opportunity are authenticated, leaks a Red identity, permits more than one prediction, advances a frame, dispatches an action, or loses a post-prediction terminal.
-- Stop after one runner publication/audit checkpoint. Never access a live ROM, private artifact, claim registry, hidden context, or authentic model bundle; never execute Crystal or promote authority.
+- Stop if public manifest authentication does not precede every private read, the historical context/menu differs, the fit/model/skill pair is not exact, a model score is requested, a claim is written, a frame advances, or an action is attempted.
+- Stop after exactly one preflight invocation, including failure or no eligible opportunity. Never replace or retry the context, execute the shadow decision, run Crystal, or promote authority in this lane.
 
 ### Hard boundaries for this lane
 
@@ -88,7 +88,6 @@ outputs.
 - **Prohibited:** model fit
 - **Prohibited:** live model prediction
 - **Prohibited:** model refit
-- **Prohibited:** live private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -120,6 +119,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red living-Dex dependency shadow runner qualification V1:** Main d4955fb69fff9a763e14a9b5b19601f834fc0c5f passed CI 32457709720/1 with 4566 ROM-free tests. The runner authenticates public source before private inputs, replays one historical nonsealed context, joins the exact fit/model and profile-bound skill pair, selects before scoring, claims before prediction, retains durable terminals, and enforces zero controller/frame effects. Antigravity audits returned GO with P0/P1/P2 all zero. No live input was opened and no counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency shadow-decision design V1:** Main 8afb1db0b345c9cdd83323585f54a1352fb31618 passed CI 32453057425/1. The design freezes one exact model/adapter, one nonsealed Red development context, pre-score selection, two anonymous rows, at most one prediction, zero actions/frames/teacher/update, durable termination, and no retry. GitHub passed 4537 tests; Antigravity passed 4538 and returned exact-head GO with P0/P1/P2 all zero. No live state or learning counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency observation adapter V1:** Published main 6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3 passed CI 32451757975/1. The pure adapter maps all 26 Red transformation edges through chain, branch, completion, and mechanical-readiness semantics into exact identity-free ranker rows; 22 edges are supported and four zero-reserve cases fail closed. Eleven focused tests and 4533 full ROM-free tests passed, and Antigravity returned exact-head GO with no P0/P1/P2 finding. It made zero predictions or actions and advances no learning counter. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution V2:** Published main 90288f57fb0b4d81533e049cc1b2c7bed28a07d3 passed CI 32449287128/1. After exact metadata preflight and Antigravity GO, semantic claim ed906f06 was consumed once; exactly four committed rows across two held-out families produced candidate 4/4 versus baseline 2/4, lower cross-entropy, higher winner probability, aggregate-only output, and durable no-retry records. The result is descriptive synthetic evidence only. Evidence is preserved; retry is no.

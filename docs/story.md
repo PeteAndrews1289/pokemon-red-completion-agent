@@ -7,7 +7,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the silent-look contract is ready; build the reader
+## Current checkpoint: the reader is built; run one silent systems check
+
+Main `d4955fb6` passed CI `32457709720/1` with the exact Red shadow runner. The
+[runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+records 4566 passing ROM-free tests, a real private-store round trip, manifest authentication
+before private access, historical-context replay, the exact fit/model and skills, selection before
+scoring, and an explicit guard against encounter-log side effects. Antigravity audited both the
+exact bytes and the final guard and found no P0, P1, or P2 issue.
+
+The next scene is intentionally quieter than the first model decision. One frozen manifest will
+let the runner open one pinned nonsealed Red state, reconstruct its anonymous two-choice menu,
+and prove the model bundle, skills, and one-shot identity all match. It must then stop without
+scoring, claiming, pressing a button, or advancing a frame. Pass or fail, there is no second
+context and no retry. This is the final systems check before a separately authorized authentic
+preference—not yet gameplay, learning from an outcome, a completed game, a living Pokédex, or
+Crystal transfer.
+
+## Previous checkpoint: the silent-look contract was ready; build the reader
 
 Main `8afb1db0` passed CI `32453057425/1` with the exact shadow-decision contract. The
 [qualification receipt](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)

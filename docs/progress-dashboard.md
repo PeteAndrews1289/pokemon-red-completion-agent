@@ -5,13 +5,25 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 8AFB1DB0 · CI 32453057425/1 GREEN · SHADOW DESIGN QUALIFIED ·
+> **Current rail:** Show **MAIN D4955FB6 · CI 32457709720/1 GREEN · SHADOW RUNNER QUALIFIED ·
+> 4566 PASSED · PRIVATE ROUND TRIP · ENCOUNTER LOG OFF · ANTIGRAVITY GO · P0/P1/P2 0 ·
+> QUALIFICATION LIVE EFFECTS 0**. Link the
+> [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+> and show **SHA-256 B04E6D2F…FD5DC7**.
+>
+> Display active `red-shadow-zero-action-preflight-v1`. Active rail: **FREEZE EXACT PREFLIGHT
+> MANIFEST → OPEN ONE PINNED NONSEALED CONTEXT → REPLAY HISTORICAL MENU → AUTHENTICATE
+> FIT/MODEL/SKILLS → VERIFY UNUSED LOCAL/GLOBAL IDENTITY → PREDICTION/CLAIM/ACTION/FRAME 0 →
+> STOP/REORIENT**. No context replacement or retry. Show boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN 8AFB1DB0 · CI 32453057425/1 GREEN · SHADOW DESIGN QUALIFIED ·
 > EXACT MODEL/ADAPTER · ONE CONTEXT · PRE-SCORE SELECTION · TWO ANONYMOUS ROWS · ONE PREDICTION
 > MAX · ACTIONS/FRAMES 0 · DURABLE TERMINAL · ANTIGRAVITY GO · P0/P1/P2 0**. Link the
 > [design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
 > and show **SHA-256 AA998310…5A056**.
 >
-> Display active `red-shadow-runner-qualification-v1`. Active rail: **AUTHENTICATE SOURCE +
+> Display then-active `red-shadow-runner-qualification-v1`. Historical rail: **AUTHENTICATE SOURCE +
 > DESIGN + ADAPTER + MODEL → ADMIT ONE FIXTURE CONTEXT → SELECT BEFORE SCORE → SCORE ONCE →
 > DURABLE TERMINAL → ZERO ACTION/FRAME → ANTIGRAVITY → EXACT-HEAD CI → STOP**. Show
 > **LIVE ROM/PRIVATE/CLAIM/PREDICTION/ACTION/FIT/COMPARISON/CRYSTAL/AUTHORITY 0** and boards

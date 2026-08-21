@@ -12,7 +12,23 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: shadow design qualified; read-only runner qualification is active
+## 2026-08-21: shadow runner qualified; one zero-action preflight is active
+
+Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
+[runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+(SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+binds the exact source, runner, adapter, model, registries, private-store durability, pre-score
+selection, and encounter-log prohibition. GitHub passed 4566 ROM-free tests. Antigravity audited
+the exact bytes and the final side-effect guard and returned GO with P0/P1/P2 all zero.
+
+Codex owns only `red-shadow-zero-action-preflight-v1`: publish this reorientation, freeze one
+operation-specific manifest, open one pinned nonsealed Red context once, authenticate its
+historical question/menu, fit/model, profile-bound skill pair, and unused identities, then stop.
+The preflight may not score, write a claim, act, advance a frame, substitute a context, or retry.
+Antigravity is the read-only reviewer; Claude is unavailable and not a blocker. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: shadow design qualified; read-only runner qualification was active
 
 Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
 [design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
@@ -22,7 +38,7 @@ rows, one-prediction maximum, zero actions/frames/teacher/update, durable termin
 GitHub passed 4537 ROM-free tests; Antigravity passed 4538 and returned exact-head GO with
 P0/P1/P2 all zero.
 
-Codex owns only `red-shadow-runner-qualification-v1`: implement and adversarially test the
+Codex then owned only `red-shadow-runner-qualification-v1`: implement and adversarially test the
 read-only runner against public/synthetic fixtures, publish it, and stop after exact-head audit.
 No live ROM/private/model/claim access, authentic prediction, action, fit, comparison, Crystal,
 completion, or authority work occurs in this lane. Boards remain

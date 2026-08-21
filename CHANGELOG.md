@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published and qualified the exact Red living-Dex dependency shadow runner at main
+  `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` under green CI `32457709720/1`. The
+  [qualification receipt](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+  (SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+  binds the source, runner, model/adapter, current registries, private-store durability, historical
+  context replay, profile-bound skills, select-before-score ordering, and explicit encounter-log
+  side-effect guard. GitHub passed 4566 ROM-free tests; Antigravity returned exact and delta GO
+  with no P0/P1/P2 finding. Qualification opened no ROM/private artifact, made no prediction,
+  wrote no claim, and changed no counter. Activated one exact zero-action, zero-prediction
+  preflight with no context replacement or retry.
+
 - Published and qualified the one-context Red dependency shadow-decision design at main
   `8afb1db0b345c9cdd83323585f54a1352fb31618` under green CI `32453057425/1`. The
   [qualification receipt](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)

@@ -1,6 +1,23 @@
 # Current audit — 2026-08-21
 
-## Current result: shadow design qualified; runner does not exist yet
+## Current result: exact shadow runner qualified; one zero-action preflight remains
+
+Published main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI
+`32457709720/1`. The
+[runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+(SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+authenticates the exact source, runner, model/adapter, registries, historical context replay,
+profile-bound skills, first-eligible-before-score rule, private-store durability, and encounter-log
+prohibition. GitHub passed 4566 ROM-free tests; Antigravity returned exact and final-delta GO with
+P0/P1/P2 all zero.
+
+No live context, ROM, private artifact, claim registry, prediction, action, frame, outcome, fit,
+authority, or transfer was touched during qualification. Active
+`red-shadow-zero-action-preflight-v1` permits one pinned nonsealed-context preflight and nothing
+else. It must stop after the first result with no replacement or retry. All boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: shadow design qualified; runner did not exist yet
 
 Published main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI
 `32453057425/1`. The
@@ -12,7 +29,7 @@ retry. GitHub passed 4537 ROM-free tests; Antigravity passed 4538 and returned e
 P0/P1/P2 all zero.
 
 No live context, model prediction, action, outcome, fit, comparison, authority, or transfer
-occurred. Active `red-shadow-runner-qualification-v1` is public/synthetic implementation only.
+occurred. Then-active `red-shadow-runner-qualification-v1` was public/synthetic implementation only.
 All boards stay **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
 
 ## Previous result: Red dependency adapter qualified; no live prediction yet
