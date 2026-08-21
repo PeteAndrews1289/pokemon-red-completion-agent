@@ -1,6 +1,24 @@
 # Current audit — 2026-08-21
 
-## Current result: exact shadow runner qualified; one zero-action preflight remains
+## Current result: authentic preflight found the missing curriculum boundary
+
+Published main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI
+`32458785817/1` with 4567 tests. The
+[preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+(SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+authenticates the exact runner, one historical nonsealed Red context, fit/model bundle, profile,
+and read-only claim state. It returned candidate count zero. Predictions, claim writes, controller
+actions, advanced frames, teacher queries, and all learning counters remained zero. The context
+is closed with no retry or replacement.
+
+The engineering gate passed; the authentic menu did not exist. Active
+`red-dual-capability-dependency-curriculum-design-v1` therefore uses only public contracts to
+define a resettable same-state acquire/evolve curriculum plus an independent living-collection
+outcome verifier. It cannot search another context, patch the closed root, run a ROM, predict,
+act, fit, compare, run Crystal, or promote authority. Boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: exact shadow runner qualified; one zero-action preflight remained
 
 Published main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI
 `32457709720/1`. The

@@ -144,6 +144,11 @@ RED_DEPENDENCY_SHADOW_RUNNER_QUALIFICATION = (
     / "docs/evidence"
     / "red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json"
 )
+RED_DEPENDENCY_SHADOW_PREFLIGHT_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -266,16 +271,16 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 1 hour |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == "red-shadow-zero-action-preflight-v1"
+    assert state.active_lane["id"] == "red-dual-capability-dependency-curriculum-design-v1"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
-        "red-living-dex-dependency-shadow-decision-v1"
+        "red-living-dex-dual-capability-curriculum-v1"
     )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 44
+    assert len(state.retired_lanes) == 45
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -292,6 +297,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_product_focus_renderer_uses_singular_hour() -> None:
+    document = deepcopy(_document())
+    lane = _active(document)
+    time_box = lane["time_box"]
+    assert isinstance(time_box, dict)
+    time_box["maximum_hours"] = 1
+
+    rendered = render_product_focus_markdown(validate_product_focus_document(document))
+
+    assert "| Time box | 1 session / 1 hour |" in rendered
 
 
 def test_red_dependency_shadow_design_qualification_is_zero_effect_and_exact_head() -> None:
@@ -357,6 +374,56 @@ def test_red_dependency_shadow_runner_qualification_is_zero_effect_and_exact_hea
         "model_update_allowed": False,
         "teacher_queries": 0,
     }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_red_dependency_shadow_preflight_stops_without_prediction_or_action() -> None:
+    receipt = json.loads(RED_DEPENDENCY_SHADOW_PREFLIGHT_RESULT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "preflight_completed_no_eligible_opportunity_context_closed"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_deselected": 3,
+        "ci_passed": 4567,
+        "ci_run_id": 32458785817,
+        "ci_skipped": 1,
+        "ci_xfailed": 1,
+        "pull_request": 27,
+        "runner_sha256": (
+            "e633b9e1f115f437de337242d44a92d70c764da0f63795e64beec1bf2318af3b"
+        ),
+        "source_bundle_sha256": (
+            "5ca24b648357ebc7799eee64bdd52cc2f779470835a68387c15f37f62e3f1892"
+        ),
+        "source_commit": "8d559d230fc06fa83edc8015bb245df531600e16",
+    }
+    assert receipt["preflight"] == {
+        "candidate_count": 0,
+        "context_replacement_allowed": False,
+        "controller_actions": 0,
+        "emulator_frames_advanced": 0,
+        "execution_identity_consumed": False,
+        "global_claim_writes": 0,
+        "identity_fields_public": 0,
+        "local_episode_writes": 0,
+        "model_predictions": 0,
+        "preflight_output_sha256": (
+            "c98a315d4f13b2181dedd95c0988cb89188d71948b58ba141790dbd3b9246e56"
+        ),
+        "retry_allowed": False,
+        "score_margin": None,
+        "selected_candidate_kind": None,
+        "selected_candidate_probability": None,
+        "status": "no_eligible_opportunity_zero_prediction_zero_action",
+        "teacher_queries": 0,
+    }
+    assert receipt["protected_access"]["nonsealed_red_contexts_opened"] == 1
+    assert receipt["protected_access"]["claim_registry_checked_read_only"] is True
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
@@ -1570,14 +1637,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Red living-Dex dependency zero-action preflight V1" in public["stage"]
+    assert "Red dual-capability living-Dex curriculum design V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "shadow runner is published" in encoded
+    assert "first authentic Red preflight stopped cleanly" in encoded
     assert "actions 244/244" in encoded
-    assert "authenticate" in encoded
+    assert "same state" in encoded
     assert "90288f57" in encoded
     assert "32449287128/1" in encoded
     assert "candidate 4/4" in encoded
@@ -1587,14 +1654,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no retry" in encoded
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
-    assert "shadow runner qualified" in encoded
-    assert "zero-action preflight next" in encoded
-    assert "d4955fb6" in encoded
-    assert "32457709720/1" in encoded
-    assert "qualification prediction/action/frame 0" in encoded
-    assert "Antigravity GO" in encoded
-    assert "fit 1 counted/ineligible" in encoded
-    assert "comparisons 1" in encoded
+    assert "authentic preflight candidate 0" in encoded
+    assert "dual-capability design next" in encoded
+    assert "8d559d23" in encoded
+    assert "32458785817/1" in encoded
+    assert "prediction/claim/action/frame 0" in encoded
+    assert "context closed" in encoded
+    assert "fit 1 ineligible" in encoded
+    assert "comparison 1" in encoded
     assert "Rootless board" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded

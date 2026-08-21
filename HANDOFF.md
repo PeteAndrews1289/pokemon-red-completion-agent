@@ -12,7 +12,27 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: shadow runner qualified; one zero-action preflight is active
+## 2026-08-21: authentic preflight found no two-action menu; curriculum design is active
+
+Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
+tests. The
+[preflight result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+(SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+records one authorized nonsealed context read and an honest `candidate_count: 0`. Predictions,
+claims, controller actions, advanced frames, teacher queries, and learning-counter deltas were all
+zero. The exact context is closed with no replacement or retry. Antigravity's prior exact-byte
+runner audit was GO with no P0/P1/P2 finding; this result exposed a curriculum gap rather than a
+runner failure.
+
+Codex owns only public `red-dual-capability-dependency-curriculum-design-v1`: specify and
+mutation-test a reusable resettable Red scenario in which acquire and evolve are simultaneously
+and independently executable, policy rows remain species/title/route neutral, and a later action
+can be joined to an independent living-collection transition. Do not reopen or patch the closed
+context, search private roots, run a ROM, predict, act, fit, compare, run Crystal, or promote
+authority. Antigravity is the reviewer; Claude is unavailable and not a blocker. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: shadow runner qualified; one zero-action preflight was active
 
 Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
 [runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

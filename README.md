@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the exact shadow runner is qualified; run one
+> **Current product focus (August 21, 2026): the first authentic Red preflight found no valid
+> two-action menu; design the missing curriculum instead of searching for another save.** Main
+> `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567 tests. The
+> [preflight result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+> (SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+> records **ONE AUTHORIZED NONSEALED CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/
+> TEACHER 0 · CONTEXT CLOSED · RETRY 0**. Antigravity had already returned GO with no P0/P1/P2
+> finding on the exact runner; the preflight falsified the chosen context, not that boundary.
+>
+> Active `red-dual-capability-dependency-curriculum-design-v1` is public design only. It must
+> define one resettable, species-neutral Red state in which acquisition and evolution are both
+> independently executable, the full menu is frozen before scoring, and the eventual selected
+> action can be judged by a post-transition living-collection verifier rather than a teacher.
+> Another private context, ROM run, prediction, action, fit, Crystal work, or root-specific patch
+> is prohibited. Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**; this is not
+> gameplay, completion, living-Pokédex competence, authority, or transfer evidence.
+
+> **Previous product focus (August 21, 2026): the exact shadow runner was qualified; run one
 > zero-action preflight.** Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI
 > `32457709720/1`. The
 > [runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

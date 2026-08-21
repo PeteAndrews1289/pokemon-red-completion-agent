@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the reader is built; run one silent systems check
+## Current checkpoint: the first silent look found an empty classroom
+
+Main `8d559d23` passed CI `32458785817/1` with 4567 tests. The
+[preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+records the first real, silent look through the new Red bridge. The reader authenticated the
+context, model, skills, and unused ledgers correctly—and then found nothing honest to ask. There
+was no state where acquiring another precursor and evolving one were both mechanically available.
+It stopped with candidate zero, before a prediction, claim, button press, or frame advance.
+
+That is a useful failure. The student did not guess, and the system did not quietly swap in an
+easier save. The next task is not another hunt through private contexts. It is to build a genuine
+two-action classroom: one resettable, species-neutral Red state where both choices work and the
+result can be judged from the living collection afterward. Only then is a model preference worth
+recording. This remains curriculum engineering—not gameplay, a completed living Pokédex, or
+Crystal transfer.
+
+## Previous checkpoint: the reader was built; run one silent systems check
 
 Main `d4955fb6` passed CI `32457709720/1` with the exact Red shadow runner. The
 [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

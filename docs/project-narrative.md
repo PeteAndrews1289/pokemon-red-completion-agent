@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the exact Red shadow runner qualified; one zero-action preflight is next
+## August 21: the authentic preflight found no jointly executable decision
+
+Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
+tests. One exact
+[preflight](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+(SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+opened the authorized nonsealed context, authenticated its historical state, fit/model, skills,
+and read-only ledgers, and returned zero eligible acquire-versus-evolve candidates. It made zero
+predictions, claims, actions, frame advances, teacher queries, or learning-counter changes. The
+context is permanently closed; there is no replacement or retry.
+
+The result separates two questions that had been conflated. The runner was sound—Antigravity had
+already returned exact-byte GO—but the real state did not provide the causal choice the synthetic
+ranker learned. Active work now designs a reusable resettable Red curriculum in which both actions
+are independently executable and the outcome is verified from the post-transition living
+collection. It is public design only, not another context search, gameplay, completion, authority,
+or Crystal transfer.
+
+## Previous August 21 checkpoint: the exact Red shadow runner qualified; one zero-action preflight was next
 
 Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
 [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

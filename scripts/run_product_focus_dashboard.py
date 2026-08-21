@@ -141,14 +141,13 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "The exact Red shadow runner is published, exact-head green, and independently "
-            "qualified. Next is one manifest-pinned zero-action preflight over one nonsealed "
-            "context; model scoring, claims, actions, and frames remain closed in this lane."
+            "The first authentic Red preflight stopped cleanly with no jointly executable "
+            "acquire-versus-evolve menu. Next is a public reusable curriculum design; another "
+            "context, model score, action, or frame remains closed in this lane."
         ),
         stage_progress=focus_progress_fraction(state),
         location=(
-            "Red shadow preflight · manifest → one context → historical replay → unused identity "
-            "→ stop"
+            "Red curriculum design · same state → acquire + evolve executable → verified outcome"
         ),
         collection_target=150,
         model=DashboardModelState(
@@ -158,7 +157,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 "authority · not scored"
             ),
             choice=(
-                "Authenticate one exact context, menu, fit/model, skill pair, and unused identity"
+                "Design one resettable two-action menu and an independent collection verifier"
             ),
             decisions=0,
             teacher_queries=0,
@@ -195,9 +194,9 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             ),
             (
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
-                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} counted/ineligible · "
-                f"comparisons {synthetic_unseen_comparisons} · V2 result 4/4 vs 2/4 · "
-                "descriptive only · shadow runner qualified · zero-action preflight next"
+                f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} ineligible · "
+                f"comparison {synthetic_unseen_comparisons} · result 4/4 vs 2/4 · descriptive · "
+                "authentic preflight candidate 0 · dual-capability design next"
             ),
             f"Last session · {_text(reorientation, 'session_id')}",
             _event("Reorientation", _text(reorientation, "decision")),
@@ -220,9 +219,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "Shadow runner · d4955fb6 · CI 32457709720/1 · 4566 passed · private round trip "
-                "· encounter log off · qualification prediction/action/frame 0 · Antigravity GO "
-                "· P0/P1/P2 0"
+                "Red preflight · 8d559d23 · CI 32458785817/1 · candidate 0 · prediction/claim/"
+                "action/frame 0 · context closed · retry 0"
             ),
             (
                 "V2 comparison · 90288f57 · CI 32449287128/1 · candidate 4/4 · baseline 2/4 · "

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Ran exactly one manifest-pinned, zero-action Red dependency preflight from main
+  `8d559d230fc06fa83edc8015bb245df531600e16` under green CI `32458785817/1`. The
+  [path-free result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+  (SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+  records one authorized nonsealed context, candidate count zero, and zero predictions, claims,
+  actions, frames, teacher queries, or counter deltas. Closed the exact context with no retry or
+  replacement. Activated public-only dual-capability curriculum design so acquisition and
+  evolution must be genuinely executable from the same resettable state before another score is
+  permitted; this is no gameplay, completion, authority, Crystal, or transfer result.
+
 - Published and qualified the exact Red living-Dex dependency shadow runner at main
   `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` under green CI `32457709720/1`. The
   [qualification receipt](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
