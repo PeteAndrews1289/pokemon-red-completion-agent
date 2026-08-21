@@ -7,7 +7,22 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the fresh exam machinery passed; now seal its questions once
+## Current checkpoint: four sealed questions now exist; train without peeking
+
+The read-only gate passed against main `ec4c1701` and CI `32442951504/1`, then the project used
+its one permitted provision identity. The
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+records four sealed questions and one immutable plan. Their public design reveals only opaque IDs,
+sizes, and hashes—not the hidden family, counts, action, reward, or random nonce. Antigravity
+returned GO with no P0/P1 blocker.
+
+No model learned in this scene. The next scene gets one clean chance to repeat the eight already
+counted public lessons while touching only the outside of the four envelopes. That replacement fit
+earns no new learning credit; its purpose is to make a later held-out score believable. Then the
+camera cuts before any answer opens. The destination remains a model that completes stories and
+builds living Pokédexes across games, and this is still only one abstract planning lesson.
+
+## Previous checkpoint: the fresh exam machinery passed; now seal its questions once
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
 [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

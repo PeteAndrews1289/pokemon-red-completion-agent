@@ -138,19 +138,19 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
         run_status="waiting",
         stage=f"Active lane · {_text(lane, 'name')}",
         message=(
-            "Fresh V2 implementation is qualified. One exact store-bound preflight may now "
-            "authorize one no-replacement four-opening provision, followed by a hard stop."
+            "Four V2 openings are sealed and undisclosed. One metadata-only preflight may now "
+            "authorize one zero-credit compliance replacement fit, followed by a hard stop."
         ),
         stage_progress=focus_progress_fraction(state),
-        location="Rootless · V2 implementation green · private provision next",
+        location="Rootless · V2 openings sealed · compliance fit next",
         collection_target=150,
         model=DashboardModelState(
             mode="shadow",
             candidate=(
-                "V1 fit counted 1/evaluation-ineligible · V2 openings not yet provisioned"
+                "V1 fit counted 1/evaluation-ineligible · four fresh V2 openings sealed"
             ),
             choice=(
-                "Preflight one exact bound store; if green, provision four sealed openings once"
+                "Preflight metadata only; if green, fit one clean replacement on 8 public values"
             ),
             decisions=0,
             teacher_queries=0,
@@ -189,7 +189,7 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
                 f"Rootless board · train {synthetic_train_outcomes}/8 · atomic "
                 f"{synthetic_atomic_episodes}/8 · fit {synthetic_model_fits} "
                 "counted/evaluation-ineligible · comparisons "
-                f"{synthetic_unseen_comparisons} · V2 implementation qualified · provision next"
+                f"{synthetic_unseen_comparisons} · V2 openings 4 sealed · compliance fit next"
             ),
             (
                 f"Prior evidence · teacher outcomes {train_outcomes + development_outcomes} · "
@@ -216,9 +216,8 @@ def product_focus_dashboard_snapshot(state: ProductFocusState) -> DashboardSnaps
             _event("Stop 2", stop_conditions[1]),
             _event("Next decision", _text(lane, "next_decision")),
             (
-                "V2 qualified · 26e353b · CI 32442269879/1 green · store bound · no replacement "
-                "· payload files opened 0 · exact fit join · openings/fit/dev decode/comparison/"
-                "gameplay 0"
+                "V2 provisioned · ec4c170 · CI 32442951504/1 · openings 4 sealed · payload files "
+                "opened 0 · exact fit join next · fit/dev decode/comparison/gameplay 0 · counters 0"
             ),
             (
                 "Paired result · TIE · base acquisition 1 · candidate acquisition 1 · each one "

@@ -8,7 +8,23 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: fresh V2 implementation qualified; provision exactly once
+## Current checkpoint: four V2 openings sealed; fit one clean replacement
+
+Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+(SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+binds exact manifest `3204504c…cfc00`, a consumed store-bound no-replacement claim, four sealed
+openings, roster `68d70487…c764c1`, and public design `1cf7423f…42d74b`. Antigravity returned GO
+with no P0/P1 blocker. No development evaluation payload opened; fits, comparisons, gameplay,
+authority, transfer, and every progress delta remain zero.
+
+Active `rootless-living-dex-dependency-v2-compliance-fit-v1` must authenticate only the four
+manifests, recompute the eight already counted public deterministic values, claim before the
+optimizer, and publish one exact model/manifest/terminal bundle. Freeze one source-bound fit
+manifest, preflight metadata only, and fit once only after a pass. Stop before comparison
+preflight, development decode, ROM/controller input, gameplay, Crystal, completion, or transfer.
+
+## Previous checkpoint: fresh V2 implementation qualified; provision exactly once
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
 [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

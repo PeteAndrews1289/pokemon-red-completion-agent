@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Passed the exact store-bound V2 provision preflight and consumed its no-replacement identity
+  once, creating four sealed development openings plus one immutable private plan. Main
+  `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`; the
+  [path-free provision result](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+  (SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+  binds the public design and roster while disclosing no hidden input or outcome. Antigravity
+  returned GO with no P0/P1 blocker. No fit, comparison, ROM/controller action, gameplay,
+  authority, completion, Crystal, transfer, or learning-counter change occurred. Retired the
+  provision identity without retry and activated one metadata-only compliance-fit gate.
+
 - Published the fresh rootless living-Dex V2 implementation at exact source
   `26e353bee5d96b98c54244845f9a7457b726f842` under green CI `32442269879/1`. The
   [path-free implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

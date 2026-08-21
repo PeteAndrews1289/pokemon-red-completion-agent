@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns exactly one fresh V2 private provision
+## Current override: Codex owns exactly one fresh V2 compliance fit
+
+Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+(SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+records one consumed store-bound provision identity, four sealed V2 openings, zero evaluation
+payload opens, and zero fit/comparison/counter effects. Antigravity returned GO with no P0/P1
+blocker; Claude remains unavailable and is not a blocker.
+
+Codex may perform only `rootless-living-dex-dependency-v2-compliance-fit-v1`: publish the exact
+fit manifest, run one metadata-only preflight, and if it passes fit one clean replacement on the
+eight public values. Stop at the first fit terminal. No development decode, comparison preflight
+or execution, ROM/controller action, gameplay, promotion, completion, Crystal, or transfer is
+owned. Keep **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous override: Codex owned exactly one fresh V2 private provision
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
 [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

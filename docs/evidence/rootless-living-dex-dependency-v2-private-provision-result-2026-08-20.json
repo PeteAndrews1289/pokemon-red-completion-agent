@@ -1,0 +1,85 @@
+{
+  "antigravity_review": {
+    "development_payloads_or_private_claims_accessed_during_review": false,
+    "p0_or_p1_blockers": 0,
+    "scope": "public_provision_receipt_design_commitments_compliance_fit_boundary_and_mission_alignment",
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "Exactly one source-authenticated, store-bound, no-replacement V2 provision completed after an action-free preflight and created four sealed development openings plus one immutable provision plan without fitting or comparing a model.",
+    "unsupported": "This result is not model training, a parameter update, development-payload evaluation, a held-out comparison, gameplay, Red or Crystal execution, story completion, living-Pokedex competence, learned authority, or cross-title transfer evidence."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design": {
+    "design_blueprint_sha256": "964248f11348bf84b8da2e50d16730c9aeb84bc862ce03ba021789e095f6e2d7",
+    "design_document_path": "configs/rootless-living-dex-dependency-evaluation-v2.json",
+    "design_document_sha256": "4c614c71344ef94a894f3a7866d4b3d9d5ec6e32e98f7994be1d88ea533cd5bb",
+    "design_qualification_sha256": "d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385",
+    "design_sha256": "1cf7423f59b5c10a7b76199c35cc3fc1d3742edd17127e371bf1e12ecb42d74b",
+    "development_roster_sha256": "68d704876bd0b3a6b728722e44dda5bf258ac47053ad34b1548c27d781c764c1"
+  },
+  "provision": {
+    "development_openings_provisioned": 4,
+    "development_payloads_disclosed_publicly": 0,
+    "development_payloads_opened_for_fit_or_comparison": 0,
+    "exact_private_store_bound": true,
+    "execution_identity_sha256": "cbe0ef45e0935fd188ac8f95d111117b5b6dae2724955d94654ac41e75845a30",
+    "global_claim_consumed": true,
+    "immutable_provision_plan_published": true,
+    "local_plan_absent_at_preflight": true,
+    "preflight_status": "ready_identity_unclaimed",
+    "private_records_published": 5,
+    "provision_claim_sha256": "27b0f00cfd8951f39a0d10896a039db236069e15fabf3a21c62bca6c84da650e",
+    "replacement_allowed": false,
+    "retry_allowed": false,
+    "status": "four_openings_provisioned_once"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32442951504,
+    "pull_request": 15,
+    "source_commit": "ec4c17018d3a2b569d776e220f3a3b5b32f202bb"
+  },
+  "public_execution": {
+    "execution_manifest_sha256": "3204504cf33153c4789623611324debfda08c0d379548cceb67d3510b59cfc00",
+    "invocation_sha256": "696c90230e2e97fa793abcc1fb0a41386c849366a2545a7e11f85a618d0e4af1",
+    "runner_sha256": "0ecd8d438cd71e092dcfd337294b10ba4b523f2c18b7048e7a8b3333664b8569",
+    "runtime_sha256": "028fc1935cdaa31f2a749ff85a3ba43d24a805c8219aa6c45b843ee0637147f4",
+    "source_bundle_sha256": "06d6428378dedb2d46381672fb79fa181204ec7df263624d028c35cf683d9f14"
+  },
+  "recorded_on": "2026-08-20",
+  "schema": "pokemon.core.rootless-living-dex-dependency-private-provision-result.v2",
+  "status": "four_fresh_v2_openings_provisioned_once",
+  "title_role": "Synthetic hidden-evaluation input provisioning; not learning, gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_evaluation_payloads_opened": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "unseen_comparisons_executed": 0
+  }
+}
