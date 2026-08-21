@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: integrity boundary qualified; design one fresh V2 experiment
+## Current checkpoint: fresh V2 design qualified; qualify its implementation
+
+Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. The
+[design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+(SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+freezes four opaque V2 commitments, a fresh namespace, a committed 256-bit private nonce, numeric
+support from 17 through 10,000 without bounded embeddings, exact semantic/source-bound fit and
+comparison identities, and zero new learning-counter credit for the clean repeat of the already
+counted eight public values. Antigravity returned pre/post GO with no P0/P1 blocker. All learning,
+gameplay, authority, and transfer counters remain unchanged.
+
+Active `rootless-living-dex-dependency-fresh-evaluation-qualification-v2` now implements only the
+public/synthetic provision, fit, bundle-load, comparison-preflight, claim-order, and terminal
+seams. Falsify it if metadata inventory can read a payload, nonce generation is weak or external
+to the committed bytes, a V1 or unpinned fit can pass, fit and comparison can share one adaptive
+process, or any claim follows computation/disclosure. Stop before real private provisioning,
+fitting, development decode, comparison, ROM/controller input, Red/Crystal play, promotion,
+completion, or transfer.
+
+## Previous checkpoint: integrity boundary qualified; design one fresh V2 experiment
 
 Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
 [qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

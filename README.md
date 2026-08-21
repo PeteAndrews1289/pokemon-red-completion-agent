@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): evaluation integrity is qualified; design fresh V2
+> **Current product focus (August 20, 2026): fresh V2 design is qualified; implementation
+> qualification only.** Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI
+> `32437096447/1`. The
+> [design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+> (SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+> records **FRESH V1-DISJOINT NAMESPACE · 4 OPAQUE COMMITMENTS · PRIVATE 256-BIT NONCE ·
+> CONTINUOUS RANKER SUPPORT 17..10000 · SEPARATE FIT/COMPARE CLAIMS · IDENTICAL CLEAN REFIT
+> COUNTER +0 · ANTIGRAVITY PRE/POST GO · P0/P1 0**. Local validation passed 4,471 tests;
+> exact-head CI passed 4,470 non-integration tests.
+>
+> Active `rootless-living-dex-dependency-fresh-evaluation-qualification-v2` is public/synthetic
+> implementation only. Qualify the metadata-only provisioner, fit preflight/bundle, comparison
+> preflight, claim ordering, and terminal boundaries against synthetic fixtures. Do not create a
+> real private opening, fit, decode development rows, compare, access a ROM/controller, play Red
+> or Crystal, promote authority, or claim completion/transfer. Boards stay **30/15/4/3/0/0**,
+> development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+> **Previous product focus (August 20, 2026): evaluation integrity is qualified; design fresh V2
 > only.** Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI
 > `32425750185/1`. The
 > [qualification receipt](docs/evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

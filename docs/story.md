@@ -7,7 +7,24 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: we built a lock that can inspect the envelope without opening it
+## Current checkpoint: we wrote the rules for a fresh exam without reopening the old answers
+
+Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI `32437096447/1`. The
+[design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+freezes four brand-new opaque envelopes and puts a 256-bit random nonce inside each future sealed
+answer, making a dictionary attack impractical. The learner must fit in one process, stop, and
+later face a separately claimed comparison whose exact fit bundle was pinned from outside. The
+old V1 fit, model, openings, and comparison identities cannot enter. Antigravity challenged the
+plan before and after implementation and returned GO with no P0/P1 blocker.
+
+This scene still contains no gameplay or new learning. Recomputing the same eight deterministic
+lessons and producing a clean replacement fit will add zero learning counters; only a later fresh
+four-row comparison can add one descriptive comparison. The next scene qualifies the machinery on
+synthetic fixtures without creating a real private opening. The goal remains a model that finishes
+stories and builds a living Pokédex across games; this design merely makes one future reasoning
+test trustworthy.
+
+## Previous checkpoint: we built a lock that can inspect the envelope without opening it
 
 Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI `32425750185/1`. The
 [qualification receipt](evidence/rootless-living-dex-dependency-evaluation-integrity-qualification-v1-2026-08-20.json)

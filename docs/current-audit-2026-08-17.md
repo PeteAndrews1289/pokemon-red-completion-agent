@@ -1,6 +1,25 @@
 # Current audit — 2026-08-20
 
-## Current result: reusable evaluation-integrity boundary qualified
+## Current result: fresh V2 public design qualified
+
+Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI run `32437096447`
+attempt 1. The
+[design qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+(SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+binds four fresh metadata-only commitments, a 32-byte CSPRNG nonce inside each future private
+payload, requirement counts 17..10000, continuous ranker semantics without bounded embeddings,
+separate semantic/source-bound fit and comparison identities, and exact external fit-bundle pins.
+The identical eight-row clean refit is explicitly a compliance replacement with learning-counter
+delta zero. Antigravity returned pre/post GO with no P0/P1 blocker; local validation passed 4,471
+tests and exact-head CI passed 4,470 non-integration tests.
+
+No private artifact, opening, ROM, prediction, fit, comparison, gameplay, authority, or transfer
+action occurred. Counters remain legacy **30/15/4/3/0/0**, development **14/4/0/1/1**, and
+rootless **8/8/1/0**. Active
+`rootless-living-dex-dependency-fresh-evaluation-qualification-v2` is public/synthetic
+implementation only and stops before real provisioning, fit, development decode, or comparison.
+
+## Previous result: reusable evaluation-integrity boundary qualified
 
 Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI run `32425750185`
 attempt 1. The

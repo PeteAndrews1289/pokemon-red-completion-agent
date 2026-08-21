@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: integrity boundary qualified; fresh V2 design is active
+## 2026-08-20: fresh V2 design qualified; implementation qualification is active
+
+Exact source `5ade045859ff00601b2acfd34a6dad9d769f0859` passed CI run `32437096447`
+attempt 1. The
+[design qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-design-v2-qualification-2026-08-20.json)
+(SHA-256 `d2e1c2f18cd2d7f2ae238ecd6a4e9c6626808329580dd890cb16a91761974385`)
+freezes four opaque V2 commitments, a new record namespace, a 32-byte CSPRNG nonce inside each
+future private payload, numeric scorer support through 10,000 without embeddings, exact semantic
+and source-bound fit/comparison identities, and a zero-count clean refit of the already counted
+eight public values. Antigravity returned pre/post GO with no remaining P0/P1 blocker. Local
+validation passed 4,471 tests; exact-head CI passed 4,470 non-integration tests.
+
+Codex now owns only `rootless-living-dex-dependency-fresh-evaluation-qualification-v2`: implement
+and mutation-test the public/synthetic provision, fit, bundle-load, comparison-preflight, claim,
+and terminal seams. No real private opening may be provisioned or opened; no fit, comparison,
+ROM/controller action, Red/Crystal play, promotion, completion, or transfer is permitted. Counters
+remain **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: integrity boundary qualified; fresh V2 design became active
 
 Exact source `c0f7894b222dcf44490915a7ae7ebeed664096ea` passed CI run `32425750185`
 attempt 1. The
