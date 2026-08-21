@@ -23,6 +23,13 @@ SCRIPT = runpy.run_path(
     run_name="run_rootless_living_dex_dependency_learning_v2_test",
 )
 
+from pokemon_red_completion.living_dex_dependency_comparison_v2 import (
+    DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+    DEPENDENCY_COMPARISON_RESULT_KIND_V2,
+    DEPENDENCY_COMPARISON_TERMINAL_KIND_V2,
+    v2_comparison_failure_record_id,
+    v2_comparison_record_ids,
+)
 from pokemon_red_completion.living_dex_dependency_evaluation_v2 import (
     EvaluationExecutionBindingV2,
     RootlessDependencyEvaluationDesignV2,
@@ -89,6 +96,64 @@ def _actual_store(tmp_path: Path):
         device_id=device_id,
         git_worktree_probe=lambda path: False,
     )
+
+
+def _comparison_fixture(tmp_path: Path):
+    store = _actual_store(tmp_path)
+    provisioned = provision_v2_development_commitments(store)
+    design = RootlessDependencyEvaluationDesignV2(provisioned.roster)
+    fit_binding = EvaluationExecutionBindingV2(
+        operation="fit",
+        source_commit="b" * 40,
+        source_bundle_sha256=_sha("fit-source"),
+        runner_sha256=_sha("fit-runner"),
+        runtime_sha256=_sha("fit-runtime"),
+    )
+    fit_claim = build_dependency_fit_claim_v2(design, execution_binding=fit_binding)
+    claimed = claim_v2_fit_before_computation(fit_claim, claim_writer=lambda value: None)
+    bundle = materialize_claimed_v2_fit_bundle(
+        design,
+        claimed_fit=claimed,
+        fit_execution_manifest_sha256=_sha("fit-manifest"),
+        executable_bundle_sha256=_sha("fit-bundle"),
+    )
+    publish_v2_fit_bundle(store, bundle)
+    comparison_binding = EvaluationExecutionBindingV2(
+        operation="comparison",
+        source_commit=_public()["source_commit"],
+        source_bundle_sha256=_public()["source_bundle_sha256"],
+        runner_sha256=_public()["runner_sha256"],
+        runtime_sha256=_public()["runtime_sha256"],
+    )
+    comparison_claim = build_dependency_comparison_claim_v2(
+        design,
+        fit_claim=fit_claim,
+        fit_bundle_pins=bundle.pins,
+        execution_binding=comparison_binding,
+    )
+    args = SimpleNamespace(
+        fit_source_commit=fit_binding.source_commit,
+        fit_source_bundle_sha256=fit_binding.source_bundle_sha256,
+        fit_runner_sha256=fit_binding.runner_sha256,
+        fit_runtime_sha256=fit_binding.runtime_sha256,
+        fit_claim_sha256=fit_claim.semantic_claim_sha256,
+        fit_execution_identity_sha256=fit_claim.execution_identity_sha256,
+        train_dataset_sha256=bundle.pins.fit_identity.train_dataset_sha256,
+        fit_record_sha256=bundle.pins.fit_identity.fit_record_sha256,
+        fit_sha256=bundle.pins.fit_identity.fit_sha256,
+        model_sha256=bundle.pins.fit_identity.model_sha256,
+        fit_execution_manifest_sha256=(bundle.pins.fit_identity.fit_execution_manifest_sha256),
+        executable_bundle_sha256=bundle.pins.fit_identity.executable_bundle_sha256,
+        fit_manifest_record_sha256=bundle.pins.fit_manifest_record_sha256,
+        fit_terminal_record_sha256=bundle.pins.fit_terminal_record_sha256,
+        comparison_claim_sha256=comparison_claim.semantic_claim_sha256,
+        comparison_execution_identity_sha256=(comparison_claim.execution_identity_sha256),
+        expected_design_document_sha256=_sha("design-document"),
+        execution_manifest=Path("unused"),
+        expected_execution_manifest_sha256=_sha("comparison-manifest"),
+        private_root=Path("/private/root"),
+    )
+    return store, design, fit_claim, bundle, comparison_claim, args
 
 
 def _args(mode: str) -> list[str]:
@@ -482,6 +547,281 @@ def test_comparison_preflight_authenticates_fit_claim_and_opens_no_dev_payload(
     assert result["development_payloads_opened"] == 0
     assert len(opened_ids) == 3
     assert not any(row.record_id in opened_ids for row in design.development_roster.rows)
+
+
+def test_comparison_claim_precedes_exact_four_payload_opens_and_aggregate_publication(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store, design, fit_claim, bundle, comparison_claim, args = _comparison_fixture(tmp_path)
+    events: list[str] = []
+    gate_calls: list[tuple[str, tuple[str, ...], set[str]]] = []
+    development_ids = {row.record_id for row in design.development_roster.rows}
+
+    class ObservedStore:
+        def inspect_sealed_record_metadata(self, *values: object, **kwargs: object):
+            return store.inspect_sealed_record_metadata(*values, **kwargs)  # type: ignore[arg-type]
+
+        def find_sealed_record(self, record_id: str, **kwargs: object):
+            if record_id in development_ids:
+                assert "claim" in events
+                events.append(f"development:{record_id}")
+            else:
+                events.append(f"fit:{record_id}")
+            return store.find_sealed_record(record_id, **kwargs)  # type: ignore[arg-type]
+
+        def publish_sealed_record(self, *values: object, **kwargs: object):
+            events.append(f"publish:{kwargs.get('kind')}")
+            return store.publish_sealed_record(*values, **kwargs)  # type: ignore[arg-type]
+
+    expected_fit_claim = {
+        "schema": "pokemon.red.fresh-composition-root-claim.v1",
+        "root_consumption_sha256": fit_claim.semantic_claim_sha256,
+        "execution_identity_sha256": fit_claim.execution_identity_sha256,
+        "source_commit": fit_claim.execution_binding.source_commit,
+        "runner_sha256": fit_claim.execution_binding.runner_sha256,
+    }
+
+    def gate(*values: object, **kwargs: object) -> str:
+        del values
+        gate_calls.append(
+            (
+                str(kwargs["operation"]),
+                tuple(kwargs["private_roles"]),  # type: ignore[arg-type]
+                set(kwargs["semantic_bindings"]),  # type: ignore[arg-type]
+            )
+        )
+        return _sha("comparison-manifest")
+
+    monkeypatch.setitem(SCRIPT["_comparison_stage"].__globals__, "_authenticate_gate", gate)
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "open_fixed_account_claim_registry",
+        lambda: Path("/fixed/registry"),
+    )
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "fixed_account_claim_registry_lease",
+        lambda *values, **kwargs: nullcontext(),
+    )
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "read_root_claim",
+        lambda *values, **kwargs: expected_fit_claim,
+    )
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "root_claim_is_available",
+        lambda *values, **kwargs: True,
+    )
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "write_root_claim",
+        lambda *values, **kwargs: events.append("claim"),
+    )
+    monkeypatch.setitem(
+        SCRIPT["_comparison_stage"].__globals__,
+        "open_private_root",
+        lambda *values, **kwargs: ObservedStore(),
+    )
+    state = SCRIPT["_ComparisonRunState"]()
+
+    result = SCRIPT["_comparison_stage"](
+        args,
+        design,
+        _public(),
+        execute=True,
+        run_state=state,
+    )
+
+    development_events = [value for value in events if value.startswith("development:")]
+    assert len(development_events) == 4
+    assert events.index("claim") < min(events.index(value) for value in development_events)
+    assert result["status"] == "completed_descriptive_v2_comparison"
+    assert result["development_payloads_opened"] == 4
+    assert result["development_payloads_decoded"] == 4
+    assert result["synthetic_rootless_unseen_comparisons_added"] == 1
+    assert result["unseen_comparisons_added"] == 1
+    assert result["model_fits_added"] == 0
+    assert result["authority_promotions_added"] == 0
+    assert result["transfer_results_added"] == 0
+    assert state.claim_consumed is True
+    assert state.completed is True
+    assert gate_calls == [
+        (
+            "comparison",
+            (
+                "claim_registry",
+                "fit_bundle_records",
+                "private_artifact_root",
+                "sealed_development_payloads",
+            ),
+            {
+                "comparison_claim_sha256",
+                "comparison_execution_identity_sha256",
+                "design_document_sha256",
+                "design_sha256",
+                "development_roster_sha256",
+                "executable_bundle_sha256",
+                "fit_claim_sha256",
+                "fit_execution_identity_sha256",
+                "fit_execution_manifest_sha256",
+                "fit_manifest_record_sha256",
+                "fit_record_sha256",
+                "fit_sha256",
+                "fit_terminal_record_sha256",
+                "model_sha256",
+                "train_dataset_sha256",
+            },
+        )
+    ]
+    serialized = json.dumps(result, sort_keys=True)
+    assert all(row.record_id not in serialized for row in design.development_roster.rows)
+    result_id, terminal_id = v2_comparison_record_ids(comparison_claim.execution_identity_sha256)
+    assert (
+        store.find_sealed_record(
+            result_id,
+            expected_kind=DEPENDENCY_COMPARISON_RESULT_KIND_V2,
+        )
+        is not None
+    )
+    assert (
+        store.find_sealed_record(
+            terminal_id,
+            expected_kind=DEPENDENCY_COMPARISON_TERMINAL_KIND_V2,
+        )
+        is not None
+    )
+    assert result["aggregate"]["model_sha256"] == bundle.pins.fit_identity.model_sha256
+
+
+def test_postclaim_comparison_failure_is_retained_sanitized_and_nonretryable(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store, design, _fit_claim, _bundle, comparison_claim, _args_value = _comparison_fixture(
+        tmp_path
+    )
+    secret = str(tmp_path / "private-opening.json")
+
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_read_public_document",
+        lambda *values, **kwargs: design.public_dict(),
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_current_public_bindings",
+        lambda **kwargs: _public(),
+    )
+
+    def fail_after_claim(
+        args: object,
+        selected_design: object,
+        public: object,
+        *,
+        execute: bool,
+        run_state: object,
+    ) -> object:
+        del args, selected_design, public
+        assert execute is True
+        run_state.claim = comparison_claim
+        run_state.store = store
+        run_state.execution_manifest_sha256 = _sha("comparison-manifest")
+        run_state.claim_attempted = True
+        run_state.claim_consumed = True
+        run_state.failure_stage = "comparison_payload_open_and_aggregate"
+        raise RuntimeError(secret)
+
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_comparison_stage",
+        fail_after_claim,
+    )
+
+    assert SCRIPT["main"](_args("comparison")) == 1
+
+    captured = capsys.readouterr()
+    result = json.loads(captured.out)
+    assert secret not in captured.out
+    assert captured.err == ""
+    assert result["failure_stage"] == "comparison_payload_open_and_aggregate"
+    assert result["claim_state"] == "consumed"
+    assert result["claim_consumed"] is True
+    assert result["retry_allowed"] is False
+    assert result["synthetic_rootless_unseen_comparisons_added"] == 0
+    assert result["unseen_comparisons_added"] == 0
+    failure = store.find_sealed_record(
+        v2_comparison_failure_record_id(comparison_claim.execution_identity_sha256),
+        expected_kind=DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+    )
+    assert failure is not None
+    failure_document = failure.read()
+    assert failure_document["status"] == "failed"
+    assert failure_document["retry_allowed"] is False
+    assert failure_document["development_payload_access"] == "not_attested"
+    assert secret not in json.dumps(failure_document, sort_keys=True)
+
+
+def test_uncertain_comparison_claim_attempt_is_nonretryable_and_adds_no_counter(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    store, design, _fit_claim, _bundle, comparison_claim, _args_value = _comparison_fixture(
+        tmp_path
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_read_public_document",
+        lambda *values, **kwargs: design.public_dict(),
+    )
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_current_public_bindings",
+        lambda **kwargs: _public(),
+    )
+
+    def fail_with_uncertain_claim(
+        args: object,
+        selected_design: object,
+        public: object,
+        *,
+        execute: bool,
+        run_state: object,
+    ) -> object:
+        del args, selected_design, public
+        assert execute is True
+        run_state.claim = comparison_claim
+        run_state.store = store
+        run_state.execution_manifest_sha256 = _sha("comparison-manifest")
+        run_state.claim_attempted = True
+        run_state.claim_consumed = False
+        run_state.failure_stage = "comparison_claim_before_payload_open"
+        raise OSError("claim publication state is uncertain")
+
+    monkeypatch.setitem(
+        SCRIPT["main"].__globals__,
+        "_comparison_stage",
+        fail_with_uncertain_claim,
+    )
+
+    assert SCRIPT["main"](_args("comparison")) == 1
+
+    result = json.loads(capsys.readouterr().out)
+    assert result["claim_state"] == "uncertain"
+    assert result["claim_consumed"] is False
+    assert result["retry_allowed"] is False
+    assert result["synthetic_rootless_unseen_comparisons_added"] == 0
+    assert result["unseen_comparisons_added"] == 0
+    assert (
+        store.inspect_sealed_record_metadata(
+            v2_comparison_failure_record_id(comparison_claim.execution_identity_sha256),
+            expected_kind=DEPENDENCY_COMPARISON_FAILURE_KIND_V2,
+        )
+        is None
+    )
 
 
 def test_argument_failure_is_sanitized(

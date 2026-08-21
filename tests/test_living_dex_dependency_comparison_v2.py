@@ -6,11 +6,16 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.living_dex_dependency_comparison_v2 import (
+    DEPENDENCY_COMPARISON_RESULT_KIND_V2,
+    DEPENDENCY_COMPARISON_TERMINAL_KIND_V2,
     ClaimedV2Comparison,
     LivingDexDependencyComparisonV2Error,
     claim_v2_comparison_before_payload_open,
+    materialize_claimed_v2_comparison,
     open_v2_development_after_claim,
     preflight_v2_comparison,
+    publish_claimed_v2_comparison,
+    v2_comparison_record_ids,
 )
 from pokemon_red_completion.living_dex_dependency_evaluation_v2 import (
     EvaluationExecutionBindingV2,
@@ -229,3 +234,101 @@ def test_preflight_rejects_fit_or_claim_substitution(tmp_path: Path) -> None:
             metadata_store=store,
             claim_is_available=lambda identity: True,
         )
+
+
+def test_claimed_comparison_publishes_only_aggregate_and_binding_terminal(
+    tmp_path: Path,
+) -> None:
+    store, design, authenticated_fit, claim = _prepared_values(tmp_path)
+    prepared = preflight_v2_comparison(
+        design,
+        claim,
+        authenticated_fit=authenticated_fit,
+        metadata_store=store,
+        claim_is_available=lambda identity: True,
+    )
+    claimed = claim_v2_comparison_before_payload_open(
+        prepared,
+        claim_writer=lambda value: None,
+    )
+
+    materialized = materialize_claimed_v2_comparison(claimed, store=store)
+    published = publish_claimed_v2_comparison(
+        store,
+        materialized,
+        comparison_execution_manifest_sha256=_sha("comparison-manifest"),
+    )
+
+    result_id, terminal_id = v2_comparison_record_ids(claim.execution_identity_sha256)
+    result_record = store.find_sealed_record(
+        result_id,
+        expected_kind=DEPENDENCY_COMPARISON_RESULT_KIND_V2,
+    )
+    terminal_record = store.find_sealed_record(
+        terminal_id,
+        expected_kind=DEPENDENCY_COMPARISON_TERMINAL_KIND_V2,
+    )
+    assert result_record is not None
+    assert terminal_record is not None
+    result_document = result_record.read()
+    terminal_document = terminal_record.read()
+    assert materialized.result.row_count == 4
+    assert materialized.result.family_count == 2
+    assert result_document["aggregate"] == materialized.result.public_dict()
+    assert terminal_document["comparison_result_record_sha256"] == (published.result_record_sha256)
+    assert terminal_document["comparison_result_manifest_sha256"] == (
+        published.result_manifest_sha256
+    )
+    serialized = repr((result_document, terminal_document))
+    assert "scenario_id" not in serialized
+    assert "family_id" not in serialized
+    assert "nonce" not in serialized
+    assert all(row.record_id not in serialized for row in design.development_roster.rows)
+
+
+def test_materialized_comparison_cannot_be_rebound_to_a_different_claim(
+    tmp_path: Path,
+) -> None:
+    store, design, authenticated_fit, claim = _prepared_values(tmp_path)
+    prepared = preflight_v2_comparison(
+        design,
+        claim,
+        authenticated_fit=authenticated_fit,
+        metadata_store=store,
+        claim_is_available=lambda identity: True,
+    )
+    claimed = claim_v2_comparison_before_payload_open(
+        prepared,
+        claim_writer=lambda value: None,
+    )
+    materialized = materialize_claimed_v2_comparison(claimed, store=store)
+    different_binding = EvaluationExecutionBindingV2(
+        operation="comparison",
+        source_commit="4" * 40,
+        source_bundle_sha256=_sha("replacement-source"),
+        runner_sha256=_sha("replacement-runner"),
+        runtime_sha256=_sha("replacement-runtime"),
+    )
+    replacement_claim = build_dependency_comparison_claim_v2(
+        design,
+        fit_claim=authenticated_fit.fit_claim,
+        fit_bundle_pins=authenticated_fit.pins,
+        execution_binding=different_binding,
+    )
+    replacement_prepared = preflight_v2_comparison(
+        design,
+        replacement_claim,
+        authenticated_fit=authenticated_fit,
+        metadata_store=store,
+        claim_is_available=lambda identity: True,
+    )
+    replacement = claim_v2_comparison_before_payload_open(
+        replacement_prepared,
+        claim_writer=lambda value: None,
+    )
+
+    with pytest.raises(
+        LivingDexDependencyComparisonV2Error,
+        match="materialization must come from claimed evaluation",
+    ):
+        type(materialized)(replacement, materialized.result, object())
