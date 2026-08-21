@@ -7,19 +7,23 @@ import json
 import os
 import re
 import stat
+import subprocess
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import cast
+from typing import Never, cast
 
 from pokemon_red_completion.provenance import canonical_sha256
 
 PUBLIC_EXECUTION_MANIFEST_SCHEMA = "pokemon.core.public-execution-manifest.v1"
 PUBLIC_EXECUTION_INVOCATION_SCHEMA = "pokemon.core.public-execution-invocation.v1"
 PUBLIC_EXECUTION_MANIFEST_DIRECTORY = ".public-execution-manifests"
+TRACKED_PUBLIC_EVIDENCE_DIRECTORY = Path("docs") / "evidence"
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _TOKEN = re.compile(r"[a-z0-9][a-z0-9_.:-]{0,127}\Z")
+_PUBLIC_EVIDENCE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,191}\.json\Z")
 _MAX_DOCUMENT_BYTES = 1024 * 1024
+_MAX_TRACKED_PUBLIC_EVIDENCE_BYTES = 4 * 1024 * 1024
 
 
 class PublicExecutionManifestError(RuntimeError):
@@ -158,6 +162,243 @@ def canonical_manifest_line(document: Mapping[str, object]) -> bytes:
         ).encode("ascii")
         + b"\n"
     )
+
+
+def canonical_tracked_public_document(document: Mapping[str, object]) -> bytes:
+    """Encode tracked evidence in the repository's exact pretty JSON representation."""
+
+    try:
+        return (
+            json.dumps(
+                document,
+                allow_nan=False,
+                ensure_ascii=True,
+                indent=2,
+                sort_keys=True,
+            ).encode("ascii")
+            + b"\n"
+        )
+    except (RecursionError, TypeError, ValueError):
+        raise PublicExecutionManifestError("tracked public evidence document is invalid") from None
+
+
+def read_tracked_public_evidence(
+    path: Path,
+    *,
+    repository_root: Path,
+    expected_sha256: str,
+    forbidden_aliases: Sequence[Path] = (),
+    maximum_bytes: int = _MAX_TRACKED_PUBLIC_EVIDENCE_BYTES,
+) -> dict[str, object]:
+    """Authenticate one exact Git-tracked public receipt without protected access."""
+
+    expected_digest = _sha(expected_sha256, "tracked public evidence")
+    if type(maximum_bytes) is not int or not 0 < maximum_bytes <= (  # noqa: E721
+        _MAX_TRACKED_PUBLIC_EVIDENCE_BYTES
+    ):
+        raise PublicExecutionManifestError("tracked public evidence size limit differs")
+    root, relative, payload = _read_tracked_public_evidence_bytes(
+        path,
+        repository_root=repository_root,
+        forbidden_aliases=forbidden_aliases,
+        maximum_bytes=maximum_bytes,
+    )
+    if hashlib.sha256(payload).hexdigest() != expected_digest:
+        raise PublicExecutionManifestError("tracked public evidence digest differs")
+    if _committed_public_evidence_bytes(root, relative, maximum_bytes) != payload:
+        raise PublicExecutionManifestError("tracked public evidence differs from HEAD")
+    try:
+        value = json.loads(
+            payload.decode("ascii"),
+            object_pairs_hook=_unique_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (RecursionError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise PublicExecutionManifestError("tracked public evidence document is invalid") from None
+    if not isinstance(value, dict) or canonical_tracked_public_document(value) != payload:
+        raise PublicExecutionManifestError("tracked public evidence is not canonical")
+    return cast(dict[str, object], value)
+
+
+def _read_tracked_public_evidence_bytes(
+    path: Path,
+    *,
+    repository_root: Path,
+    forbidden_aliases: Sequence[Path],
+    maximum_bytes: int,
+) -> tuple[Path, Path, bytes]:
+    try:
+        root = repository_root.resolve(strict=True)
+        docs_root_path = root / "docs"
+        evidence_root_path = root / TRACKED_PUBLIC_EVIDENCE_DIRECTORY
+        docs_root = docs_root_path.resolve(strict=True)
+        evidence_root = evidence_root_path.resolve(strict=True)
+        docs_stat = docs_root_path.lstat()
+        evidence_root_stat = evidence_root_path.lstat()
+        candidate = path if path.is_absolute() else root / path
+        parent = candidate.parent.resolve(strict=True)
+        expected = candidate.lstat()
+    except OSError:
+        raise PublicExecutionManifestError("tracked public evidence is unavailable") from None
+    if (
+        docs_root_path.is_symlink()
+        or evidence_root_path.is_symlink()
+        or not stat.S_ISDIR(docs_stat.st_mode)
+        or not stat.S_ISDIR(evidence_root_stat.st_mode)
+        or docs_root.parent != root
+        or evidence_root.parent != docs_root
+        or parent != evidence_root
+        or _PUBLIC_EVIDENCE_NAME.fullmatch(candidate.name) is None
+        or stat.S_ISLNK(expected.st_mode)
+        or not stat.S_ISREG(expected.st_mode)
+        or expected.st_nlink != 1
+        or expected.st_uid != os.getuid()
+        or expected.st_mode & (stat.S_IWGRP | stat.S_IWOTH)
+        or not 0 < expected.st_size <= maximum_bytes
+    ):
+        raise PublicExecutionManifestError("tracked public evidence is not public regular input")
+    for forbidden in forbidden_aliases:
+        try:
+            forbidden_stat = forbidden.lstat()
+        except OSError:
+            continue
+        if forbidden_stat.st_dev == expected.st_dev and forbidden_stat.st_ino == expected.st_ino:
+            raise PublicExecutionManifestError("tracked public evidence aliases protected input")
+
+    directory_flags = os.O_RDONLY
+    file_flags = os.O_RDONLY
+    if hasattr(os, "O_DIRECTORY"):
+        directory_flags |= os.O_DIRECTORY
+    if hasattr(os, "O_CLOEXEC"):
+        directory_flags |= os.O_CLOEXEC
+        file_flags |= os.O_CLOEXEC
+    if hasattr(os, "O_NOFOLLOW"):
+        directory_flags |= os.O_NOFOLLOW
+        file_flags |= os.O_NOFOLLOW
+    directory_descriptor = -1
+    descriptor = -1
+    try:
+        directory_descriptor = os.open(evidence_root_path, directory_flags)
+        opened_root = os.fstat(directory_descriptor)
+        if (
+            not stat.S_ISDIR(opened_root.st_mode)
+            or opened_root.st_dev != evidence_root_stat.st_dev
+            or opened_root.st_ino != evidence_root_stat.st_ino
+        ):
+            raise PublicExecutionManifestError("tracked public evidence directory changed")
+        descriptor = os.open(candidate.name, file_flags, dir_fd=directory_descriptor)
+        opened = os.fstat(descriptor)
+        if not _same_regular_file(expected, opened):
+            raise PublicExecutionManifestError("tracked public evidence changed while opening")
+        chunks: list[bytes] = []
+        total = 0
+        while True:
+            chunk = os.read(descriptor, min(64 * 1024, maximum_bytes - total + 1))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            total += len(chunk)
+            if total > maximum_bytes:
+                raise PublicExecutionManifestError("tracked public evidence size is invalid")
+        finished = os.fstat(descriptor)
+        named = candidate.lstat()
+        finished_root = os.fstat(directory_descriptor)
+        if (
+            not _same_regular_file(opened, finished)
+            or not _same_regular_file(finished, named)
+            or total != opened.st_size
+            or finished_root.st_dev != opened_root.st_dev
+            or finished_root.st_ino != opened_root.st_ino
+        ):
+            raise PublicExecutionManifestError("tracked public evidence changed while reading")
+        relative = candidate.relative_to(root)
+        return root, relative, b"".join(chunks)
+    except PublicExecutionManifestError:
+        raise
+    except (OSError, ValueError):
+        raise PublicExecutionManifestError("tracked public evidence is unavailable") from None
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+        if directory_descriptor >= 0:
+            os.close(directory_descriptor)
+
+
+def _committed_public_evidence_bytes(
+    repository_root: Path,
+    relative: Path,
+    maximum_bytes: int,
+) -> bytes:
+    if (
+        len(relative.parts) != 3
+        or tuple(relative.parts[:2]) != tuple(TRACKED_PUBLIC_EVIDENCE_DIRECTORY.parts)
+        or _PUBLIC_EVIDENCE_NAME.fullmatch(relative.name) is None
+    ):
+        raise PublicExecutionManifestError("tracked public evidence path differs")
+    object_name = f"HEAD:{relative.as_posix()}"
+    try:
+        size_result = subprocess.run(
+            [
+                "git",
+                "--no-replace-objects",
+                "-C",
+                str(repository_root),
+                "cat-file",
+                "-s",
+                object_name,
+            ],
+            check=False,
+            env=_sanitized_git_environment(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+        )
+        size = int(size_result.stdout.decode("ascii").strip())
+    except (OSError, UnicodeDecodeError, ValueError, subprocess.TimeoutExpired):
+        raise PublicExecutionManifestError("tracked public evidence is not committed") from None
+    if size_result.returncode != 0 or not 0 < size <= maximum_bytes:
+        raise PublicExecutionManifestError("tracked public evidence is not committed")
+    try:
+        content_result = subprocess.run(
+            [
+                "git",
+                "--no-replace-objects",
+                "-C",
+                str(repository_root),
+                "cat-file",
+                "blob",
+                object_name,
+            ],
+            check=False,
+            env=_sanitized_git_environment(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        raise PublicExecutionManifestError("tracked public evidence is not committed") from None
+    if content_result.returncode != 0 or len(content_result.stdout) != size:
+        raise PublicExecutionManifestError("tracked public evidence is not committed")
+    return content_result.stdout
+
+
+def _sanitized_git_environment() -> dict[str, str]:
+    """Return a deterministic read-only Git environment for evidence checks."""
+
+    environment = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    environment.update(
+        {
+            "GIT_ATTR_NOSYSTEM": "1",
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_NO_REPLACE_OBJECTS": "1",
+            "GIT_OPTIONAL_LOCKS": "0",
+            "GIT_TERMINAL_PROMPT": "0",
+            "LANG": "C",
+            "LC_ALL": "C",
+        }
+    )
+    return environment
 
 
 def read_public_manifest(
@@ -372,6 +613,11 @@ def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
             raise ValueError("duplicate key")
         result[key] = value
     return result
+
+
+def _reject_json_constant(value: str) -> Never:
+    del value
+    raise ValueError("non-finite JSON constant")
 
 
 def _mapping(value: object, subject: str) -> Mapping[str, object]:
