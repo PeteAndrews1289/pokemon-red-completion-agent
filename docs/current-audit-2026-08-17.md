@@ -1,6 +1,22 @@
 # Current audit — 2026-08-20
 
-## Current result: fresh V2 implementation qualified
+## Current result: four fresh V2 openings provisioned once
+
+Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI run `32442951504`
+attempt 1. The
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+(SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+records a passed action-free preflight, exact store-bound execution identity, consumed global
+claim, four sealed openings, one immutable plan, no replacement/retry, and a public commitment
+design containing no hidden input or outcome. Antigravity returned GO with no P0/P1 blocker.
+
+No fit or comparison ran, no development evaluation payload opened, and no ROM, controller,
+gameplay, authority, or transfer effect occurred. Counters remain legacy **30/15/4/3/0/0**,
+development **14/4/0/1/1**, and rootless **8/8/1/0**. Active
+`rootless-living-dex-dependency-v2-compliance-fit-v1` permits one metadata-only preflight and,
+only after a pass, one zero-credit replacement fit before stopping.
+
+## Previous result: fresh V2 implementation qualified
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI run `32442269879`
 attempt 1. The

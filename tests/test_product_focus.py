@@ -104,6 +104,14 @@ ROOTLESS_DEPENDENCY_FRESH_EVALUATION_IMPLEMENTATION_V2_QUALIFICATION = (
         "2026-08-20.json"
     )
 )
+ROOTLESS_DEPENDENCY_V2_PRIVATE_PROVISION_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json"
+)
+ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
+    PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
+)
 REPEATABLE_FOCUS_INVENTORY = (
     PROJECT_ROOT
     / "docs/evidence/repeatable-goal-manager-development-focus-inventory-v1-2026-08-18.json"
@@ -224,13 +232,13 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         render_product_focus_markdown(state)
     )
     assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-v2-private-provisioning-v1"
+        "rootless-living-dex-dependency-v2-compliance-fit-v1"
     )
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
-        "rootless-living-dex-dependency-v2-compliance-fit-v1"
+        "rootless-living-dex-dependency-v2-comparison-qualification-v1"
     )
-    assert len(state.retired_lanes) == 36
+    assert len(state.retired_lanes) == 37
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -440,6 +448,46 @@ def test_fresh_rootless_v2_implementation_is_qualified_and_counter_neutral() -> 
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_fresh_rootless_v2_provision_is_sealed_and_counter_neutral() -> None:
+    from pokemon_red_completion.living_dex_dependency_evaluation_v2 import (
+        RootlessDependencyEvaluationDesignV2,
+    )
+
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_V2_PRIVATE_PROVISION_RESULT.read_text(encoding="ascii")
+    )
+    design = json.loads(ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "four_fresh_v2_openings_provisioned_once"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32442951504,
+        "pull_request": 15,
+        "source_commit": "ec4c17018d3a2b569d776e220f3a3b5b32f202bb",
+    }
+    assert receipt["antigravity_review"]["verdict"] == "go"
+    assert receipt["antigravity_review"]["p0_or_p1_blockers"] == 0
+    assert receipt["provision"]["development_openings_provisioned"] == 4
+    assert receipt["provision"]["development_payloads_disclosed_publicly"] == 0
+    assert receipt["provision"]["global_claim_consumed"] is True
+    assert receipt["provision"]["replacement_allowed"] is False
+    parsed_design = RootlessDependencyEvaluationDesignV2.from_dict(design)
+    assert receipt["design"]["design_sha256"] == parsed_design.design_sha256
+    roster = design["development_roster"]
+    assert roster["row_count"] == 4
+    assert roster["payloads_opened"] == 0
+    assert roster["payloads_decoded"] == 0
+    assert set(receipt["counter_treatment"].values()) == {0}
+    roster_encoded = json.dumps(roster, sort_keys=True)
+    assert "nonce" not in roster_encoded
+    assert "family_id" not in roster_encoded
+    assert "assigned_action" not in roster_encoded
+    encoded = json.dumps({"design": design, "receipt": receipt}, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
 
@@ -1248,20 +1296,19 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Fresh rootless living-Dex private provisioning V2" in public["stage"]
+    assert "Fresh rootless living-Dex compliance fit V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "Fresh V2 implementation is qualified" in encoded
+    assert "Four V2 openings are sealed and undisclosed" in encoded
     assert "actions 244/244" in encoded
-    assert "V2 implementation green" in encoded
-    assert "private provision next" in encoded
-    assert "26e353b" in encoded
-    assert "32442269879/1" in encoded
-    assert "store bound" in encoded
-    assert "no replacement" in encoded
-    assert "openings/fit/dev decode/comparison/gameplay 0" in encoded
+    assert "V2 openings sealed" in encoded
+    assert "compliance fit next" in encoded
+    assert "ec4c170" in encoded
+    assert "32442951504/1" in encoded
+    assert "openings 4 sealed" in encoded
+    assert "fit/dev decode/comparison/gameplay 0" in encoded
     assert "payload files opened 0" in encoded
     assert "exact fit join" in encoded
     assert "fit 1 counted/evaluation-ineligible" in encoded

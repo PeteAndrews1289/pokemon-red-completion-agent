@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: qualify the exam machinery, then seal four questions once
+## August 20 scene: seal four questions once, then train without peeking
+
+Open on **MAIN EC4C170 · CI 32442951504/1 GREEN · PREFLIGHT READY**. Animate one irreversible
+stamp: **CLAIM 27B0F00C CONSUMED → 4 SEALED OPENINGS → ROSTER 68D70487 → RETRY 0**. Link the
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+with **SHA-256 A2F138A1…BA9EEF** and stamp **ANTIGRAVITY GO · P0/P1 0**.
+
+Show the public card with only **OPAQUE ID · MANIFEST HASH · DECLARED HASH · SIZE**; keep
+**FAMILY · COUNTS · ACTION · REWARD · NONCE** behind the envelope. Hold the scoreboard at
+**FIT 0 · COMPARISON 0 · GAMEPLAY 0 · AUTHORITY 0 · TRANSFER 0 · ALL COUNTER DELTAS 0**.
+
+The next rail is **FREEZE FIT MANIFEST → INSPECT 4 MANIFESTS / OPEN 0 PAYLOADS → CLAIM → FIT 8
+PUBLIC VALUES ONCE → EXACT BUNDLE → STOP**. Label the fit **CLEAN COMPLIANCE REPLACEMENT,
+LEARNING COUNTER +0**. Explain that it prepares one trustworthy acquire-versus-evolve reasoning
+test; it does not show the model playing or finishing Pokémon.
+
+## Previous August 20 scene: qualify the exam machinery, then seal four questions once
 
 Open on **SOURCE 26E353B · CI 32442269879/1 GREEN · LOCAL 4,511 PASS · CI 4,510 PASS**. Link the
 [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

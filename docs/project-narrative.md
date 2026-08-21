@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: the fresh V2 evaluation implementation passed
+## August 20: four fresh V2 evaluation openings were sealed once
+
+Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. After the exact
+store-bound preflight returned `ready_identity_unclaimed`, one no-replacement provision created
+four sealed openings and an immutable plan. The
+[provision result](evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+(SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+binds the execution manifest, consumed claim, public design, and commitment roster while revealing
+no held-out inputs or outcomes. Antigravity returned GO with no P0/P1 blocker.
+
+Provisioning added no parameter update, comparison, ROM or controller action, authority, or
+transfer result. Active `rootless-living-dex-dependency-v2-compliance-fit-v1` now permits one
+metadata-only preflight and, only on a pass, one clean replacement fit over the already counted
+eight public values. The replacement exists to restore evaluation integrity and earns zero new
+learning credit. It remains an intermediary toward story completion and a cross-game living
+Pokédex, not evidence of either capability.
+
+## Previous August 20 checkpoint: the fresh V2 evaluation implementation passed
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. Its
 [implementation qualification receipt](evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

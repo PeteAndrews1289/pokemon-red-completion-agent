@@ -12,7 +12,25 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: fresh V2 implementation qualified; private provisioning is active
+## 2026-08-20: four V2 openings sealed; compliance-fit gate is active
+
+Main `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI run `32442951504`
+attempt 1. The
+[provision result](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+(SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+binds a passed action-free preflight, exact private-store identity, consumed no-replacement claim,
+four sealed openings, public roster `68d70487…c764c1`, and public design `1cf7423f…42d74b`.
+Development evaluation payloads opened, fits, comparisons, and all counter deltas are zero.
+Antigravity returned GO with no P0/P1 blocker.
+
+Codex now owns only `rootless-living-dex-dependency-v2-compliance-fit-v1`: freeze one exact fit
+manifest, run one metadata-only preflight, and if it passes fit one clean replacement on the eight
+already counted public deterministic values. Stop at the first fit terminal and before comparison
+preflight or development decode. No gameplay, ROM/controller action, Red/Crystal play, promotion,
+completion, or transfer is owned. Counters remain **30/15/4/3/0/0**, development
+**14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: fresh V2 implementation qualified; private provisioning was active
 
 Exact source `26e353bee5d96b98c54244845f9a7457b726f842` passed CI run `32442269879`
 attempt 1. The

@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): fresh V2 implementation is qualified; provision
+> **Current product focus (August 20, 2026): four V2 openings are sealed; run one clean
+> compliance fit only after its metadata-only gate passes.** Main
+> `ec4c17018d3a2b569d776e220f3a3b5b32f202bb` passed CI `32442951504/1`. The
+> [provision result](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
+> (SHA-256 `a2f138a1b8f193071192063cfd67ccabbb05b6a8d8f8e69bfe4db4ea09ba9eef`)
+> records **ACTION-FREE PREFLIGHT PASSED · STORE BOUND · CLAIM CONSUMED · 4 SEALED OPENINGS ·
+> REPLACEMENT/RETRY 0 · DEVELOPMENT EVALUATION PAYLOADS OPENED 0 · FIT 0 · COMPARISON 0 ·
+> ANTIGRAVITY GO · P0/P1 0 · COUNTER DELTAS 0**. The public
+> [V2 design](configs/rootless-living-dex-dependency-evaluation-v2.json) exposes only opaque
+> commitments and hashes to `4c614c71…3cd5bb`.
+>
+> Active `rootless-living-dex-dependency-v2-compliance-fit-v1` permits one exact fit manifest,
+> one metadata-only preflight, and—only on a pass—one no-retry compliance replacement fit over
+> the already counted eight public deterministic values. Stop before opening a development
+> payload or running comparison preflight. Boards stay **30/15/4/3/0/0**, development
+> **14/4/0/1/1**, and rootless **8/8/1/0**. This is clean synthetic evaluation preparation, not
+> evidence that the agent can play, finish a game, or transfer.
+
+> **Previous product focus (August 20, 2026): fresh V2 implementation was qualified; provision
 > exactly once if its read-only gate passes.** Exact source
 > `26e353bee5d96b98c54244845f9a7457b726f842` passed CI `32442269879/1`. The
 > [implementation qualification receipt](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)

@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Fresh rootless living-Dex private provisioning V2** (`rootless-living-dex-dependency-v2-private-provisioning-v1`)
+**Fresh rootless living-Dex compliance fit V2** (`rootless-living-dex-dependency-v2-compliance-fit-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: A successful one-shot provision permits a separate compliance-fit reorientation that still opens only manifests. A failed or uncertain provision closes the identity and retains its evidence without replacement. Neither outcome authorizes development decode, comparison, gameplay, or transfer.
+- Next decision: A completed exactly joined compliance fit permits a separate comparison-preflight reorientation that externally pins the bundle and still opens no development payload. A failed or uncertain fit closes its identity without retry. Neither outcome authorizes comparison execution, gameplay, authority, or transfer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Provision exactly four fresh sealed V2 dependency-evaluation openings in one bound private artifact store under one source-authenticated no-replacement claim, without fitting, decoding an opening for evaluation, comparing, or touching a game. |
-| Authority now | One synthetic V1 fit remains counted but evaluation-ineligible. The fresh V2 implementation is qualified, but no V2 opening, fit, comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Create exactly four sealed V2 openings and one immutable plan so a later separately reoriented compliance fit can be evaluated honestly; provisioning itself grants no learned authority. |
-| Transfer test | None. This lane provisions synthetic evaluation inputs only; a later Red observation adapter and Crystal transfer remain separate gates. |
-| Cheapest falsifier | Run one action-free preflight against the exact published provision runner, manifest, private-store binding, global claim, and empty local plan namespace; stop without provisioning if any binding differs or the identity is not unused. |
+| Reusable capability | Produce one clean V2 compliance replacement fit from the eight already counted public deterministic train values while authenticating only the four sealed opening manifests, never their payloads, and publishing an exactly joined model, fit manifest, and terminal. |
+| Authority now | Four fresh V2 openings are sealed and undisclosed. The V1 fit remains counted but evaluation-ineligible; no V2 fit, comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Create one clean, exactly joined V2 compliance fit artifact from the already counted eight public values so a later separately reoriented comparison preflight can authenticate it; the replacement fit grants no new learned authority. |
+| Transfer test | None. This lane creates a clean synthetic compliance fit only; a later Red observation adapter and Crystal transfer remain separate gates. |
+| Cheapest falsifier | Freeze one exact fit manifest and run one metadata-only preflight; stop before fitting if any public design, sealed manifest, fit identity, local namespace, or global claim differs or if any development payload opens. |
 | Time box | 1 session / 1 hours |
 
 ### Required learning outputs
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-20-rootless-dependency-evaluation-implementation-v2-qualified** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-fresh-evaluation-implementation-v2-qualification-2026-08-20.json)
+**2026-08-20-rootless-dependency-v2-openings-provisioned** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-v2-private-provision-result-2026-08-20.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The transferable living-Pokedex planner needs a genuinely sealed test of acquire-versus-evolve dependency reasoning. This lane creates the four hidden evaluation openings once, without exposing them to the learner or turning infrastructure into gameplay evidence. |
-| Learning output | No new measured learning output. Source 26e353b implements payload-blind inventory, a store-bound write-once provisioner, claim-before-fit, exact fit-bundle joins, and claim-before-development-open. CI and review are green; every progress counter is unchanged. |
-| Authority delta | No authority changed. The V2 implementation is maintenance evidence only; no opening was provisioned, no fit or comparison ran, and no gameplay, completion, living-Pokedex, Crystal, promotion, or transfer result was created. |
-| Transfer result | Not run. The qualified implementation and provisioning lane contain no title execution or transfer test. |
-| Blocker | The exact public implementation is qualified, but the four fresh sealed V2 openings do not yet exist. Fit and comparison remain closed until one bound no-replacement provision completes and is recorded. |
-| Decision | Close the implementation lane after source 26e353b passed CI run 32442269879/1 and Antigravity returned exact-delta GO with no P0/P1 blocker. Activate exactly one private-provisioning action; fit, payload decode, comparison, ROM, gameplay, and transfer remain prohibited. |
-| Next session | Freeze one exact source-bound provision manifest, run one action-free store-bound preflight, and only if it passes perform the single no-replacement provision. Record the terminal result and stop before fit. |
-| Next falsifier | Stop if the exact provision preflight cannot prove an unused global identity, one bound private store, an absent local provision plan, the published source and manifest, and zero opening disclosure. |
-| Stop condition | Stop after the first terminal provision result, whether success or failure. Never retry with another store or opening set, and do not fit, decode for evaluation, compare, access a ROM/controller, promote, or run Crystal. |
+| Product alignment | The transferable living-Pokedex planner needs a clean model artifact before its acquire-versus-evolve rule can face genuinely hidden structures. This lane repeats the already counted deterministic fit under a sealed boundary without inflating learning progress. |
+| Learning output | No new measured learning output. Exactly four sealed V2 openings and one immutable private plan were created; zero model fits or comparisons ran, no development evaluation payload opened, and every progress counter remains unchanged. |
+| Authority delta | No authority changed. Provisioning created four hidden evaluation inputs but no model update, outcome, comparison, gameplay, completion, Crystal, promotion, or transfer result. |
+| Transfer result | Not run. The sealed inputs and compliance-fit lane contain no title execution or transfer test. |
+| Blocker | The four fresh V2 openings and public commitment roster now exist, but no clean V2 fit bundle exists. The V1 fit remains counted and evaluation-ineligible; comparison stays closed until one separately claimed compliance replacement fit completes. |
+| Decision | Close the one-shot provisioning lane after preflight passed, exactly four V2 openings were sealed under the consumed no-replacement identity, and Antigravity returned GO with no P0/P1 blocker. Activate one metadata-only fit preflight and, only on a pass, one compliance replacement fit; development payload decode and comparison remain prohibited. |
+| Next session | Publish this provision result, freeze one exact source-bound fit manifest, run one metadata-only fit preflight, and only if it passes execute the single compliance replacement fit. Record its terminal and stop before comparison preflight. |
+| Next falsifier | Stop if fit preflight cannot authenticate the public V2 design, exactly four sealed manifests, an unused fit claim, empty fit namespaces, and zero development payload opens. |
+| Stop condition | Stop after the first terminal fit result, whether success or failure. Never retry, tune, decode a development payload, run comparison preflight in the same session, access a ROM/controller, promote, or run Crystal. |
 
 ### Stop conditions
 
-- Stop before provisioning if the exact source, execution manifest, private-store binding, empty local plan namespace, or unused global identity cannot be authenticated.
-- Stop after the first terminal provision result. Never retry or substitute an opening/store, fit, decode for evaluation, compare, access a ROM/controller, query a teacher, promote authority, or run Crystal.
+- Stop before fitting if the exact source, public V2 design, execution manifest, four sealed record manifests, empty fit namespaces, unused fit claim, or zero-development-payload boundary cannot be authenticated.
+- Stop after the first terminal fit result. Never retry, tune, decode a development payload, run comparison preflight in the same session, compare, access a ROM/controller, query a teacher, promote authority, or run Crystal.
 
 ### Hard boundaries for this lane
 
@@ -85,7 +85,7 @@ outputs.
 - **Prohibited:** development payload decode
 - **Prohibited:** full game replay
 - **Prohibited:** gameplay execution
-- **Prohibited:** model refit
+- **Prohibited:** model hyperparameter search
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -117,6 +117,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh rootless living-Dex private provisioning V2:** Published main ec4c17018d3a2b569d776e220f3a3b5b32f202bb passed CI run 32442951504 attempt 1. Manifest 3204504c passed an action-free store-bound preflight, then exactly one provision created four fresh sealed V2 openings and one immutable plan under consumed claim 27b0f00c. No development evaluation payload was disclosed, no fit or comparison ran, and every progress counter stayed unchanged. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex evaluation implementation qualification V2:** Published source 26e353bee5d96b98c54244845f9a7457b726f842 passed CI run 32442269879 attempt 1 with 4,510 CI tests and 4,511 local tests. It implements a store-bound no-replacement provisioner, payload-blind fit inventory, claim-before-fit bundle publication, exact external fit joins, comparison preflight, and claim-before-development-open. Antigravity returned exact-delta GO with no P0/P1 blocker. No private opening, fit, comparison, gameplay, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex evaluation design V2:** Published source 5ade045859ff00601b2acfd34a6dad9d769f0859 passed CI run 32437096447 attempt 1 with a V1-disjoint four-commitment blueprint, semantic and source-bound fit/comparison identities, a committed 256-bit private nonce requirement, continuous ranker support through count 10000, and a zero-count compliance refit. Antigravity returned post-implementation GO with no P0/P1 blocker. No private artifact, fit, comparison, gameplay, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Rootless living-Dex evaluation-integrity qualification V1:** Published source c0f7894b222dcf44490915a7ae7ebeed664096ea passed CI run 32425750185 attempt 1 with a payload-blind sealed-record metadata inspector, exact typed fit loader, and strict fit/model/dataset/manifest/terminal/executable joins. Antigravity returned GO with no P0/P1 blocker. No private artifact, ROM, fit, comparison, gameplay, authority, or transfer counter changed. Evidence is preserved; retry is no.
