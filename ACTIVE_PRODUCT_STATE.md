@@ -29,28 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Fresh rootless living-Dex comparison execution V2** (`rootless-living-dex-dependency-v2-comparison-execution-v1`)
+**Red living-Dex dependency observation adapter V1** (`red-living-dex-dependency-observation-adapter-v1`)
 
-- Kind: **learning**
-- Rigor: **benchmark**
-- Next decision: After one durable terminal, reorient immediately. A completed aggregate decides whether to design a Red observation adapter or close/redesign the representation; any claimed failure closes this identity without retry. Neither result promotes authority or opens Crystal.
+- Kind: **maintenance**
+- Rigor: **development**
+- Next decision: If exact fixture parity, chain/branch semantics, identity-leak guards, and Antigravity review pass, freeze a separate one-decision Red shadow-observation design with no controller action. Otherwise close or revise the adapter contract before touching live state.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Execute exactly one source-authenticated V2 held-out dependency comparison: claim before opening exactly four committed rows, publish only the frozen aggregate, and retain a durable terminal with no retry. |
-| Authority now | Four V2 openings remain sealed and semantic comparison claim ed906f06 remains unused. The 96ef8a1b preflight is valid qualification evidence but its source-bound execution identity is superseded. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Measure one aggregate held-out synthetic acquire-versus-evolve result. Even a pass grants no gameplay or transfer authority; it only decides whether this abstract dependency representation merits a later real-observation adapter. |
-| Transfer test | None. This four-row synthetic held-out comparison tests only an abstract dependency rule; a later Red observation adapter and Crystal transfer remain separate gates. |
-| Cheapest falsifier | On a newly published exact head, repeat the metadata-only preflight. Stop before opening any payload if the fit bundle, four commitments, current source, or unused semantic claim fails authentication. |
-| Time box | 1 session / 2 hours |
+| Reusable capability | Project existing authenticated Red collection observations and cartridge-derived evolution demand into the exact title-neutral dependency-ranker features without leaking species, map, route, or controller identity. |
+| Authority now | The frozen ranker has descriptive synthetic support on four held-out rows across two families. It has no live Red observation, action, gameplay, completion, Crystal, living-Pokedex, or transfer authority. |
+| Authority target | Qualify a deterministic title-specific observation adapter that preserves the title-neutral policy boundary. Adapter qualification alone grants no learned authority; it permits a later separately frozen Red shadow-decision test. |
+| Transfer test | The adapter must keep the exact ranker-facing schema title-neutral so a future Crystal adapter can populate the same fields; no Crystal implementation or transfer measurement occurs here. |
+| Cheapest falsifier | Use public synthetic CollectionObservation fixtures for scarce, duplicate-ready, multi-stage, branching, item-gated, and completed dependencies. Stop if the adapter cannot derive exact ranker inputs deterministically or if any model-visible field contains a Red identity. |
+| Time box | 1 session / 4 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Synthetic Rootless Unseen Comparison · development | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -58,32 +57,37 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-rootless-dependency-v2-comparison-execution-reorientation** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+**2026-08-21-rootless-v2-comparison-complete-red-adapter-next** · status **active** · evidence [synthetic rootless unseen comparison](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is the first clean held-out test of a species-neutral acquire-versus-evolve dependency rule needed by a living-Pokedex planner. It evaluates one abstract decision and does not establish gameplay or transfer. |
-| Learning output | No new measured learning output. Source 96ef8a1b passed exact-head CI; its metadata-only preflight authenticated four manifests, opened and decoded zero payloads, consumed no claim, and changed no counter. The execution identity must be refreshed after reorientation. |
-| Authority delta | No authority changed. Published implementation and metadata-only qualification produced no comparison, gameplay, completion, Crystal, promotion, or transfer result. |
-| Transfer result | Not run. This held-out synthetic comparison contains no title execution and cannot establish Red gameplay or cross-title transfer. |
-| Blocker | The 96ef8a1b preflight was scientifically clean but occurred one reorientation early. Its semantic claim remains unused, while its source-bound execution identity is superseded by this reorientation commit and must be refreshed on the newly published exact head. |
-| Decision | Retire public/synthetic runner qualification after source 96ef8a1b passed CI 32447962527/1 and Antigravity returned implementation and governance GO. Transparently preserve the zero-effect early preflight, activate exactly one comparison execution, and require a fresh exact-head metadata preflight first. |
-| Next session | Publish the execution lane, pass a fresh exact-head metadata-only preflight, then consume the semantic claim once, open exactly four committed development payloads, publish one aggregate and terminal, and stop. |
-| Next falsifier | Publish this reorientation, freeze a new exact-head comparison manifest, and stop if the repeated metadata-only preflight does not authenticate the exact fit, all four commitments, and the still-unused semantic claim with zero payload opens. |
-| Stop condition | Stop at the first durable comparison terminal, pass or fail. Never retry, replace an opening, refit, access a ROM/controller, promote authority, run Crystal, or turn this descriptive four-row result into a gameplay or transfer claim. |
+| Product alignment | The result supports the abstract preserve-versus-evolve rule. The adapter is the smallest bridge toward using that reusable rule inside real Red collection planning and later implementing the same observation contract for Crystal. |
+| Learning output | One consumed four-row synthetic held-out comparison passed descriptively: candidate 4/4 versus baseline 2/4, cross-entropy 0.205636 versus 0.693147, and mean winner probability 0.814787 versus 0.5. It adds exactly one synthetic and one global unseen comparison. |
+| Authority delta | No gameplay or transfer authority changed. The ranker passed one descriptive synthetic held-out comparison only; it has not read a live Red observation or selected an in-game action. |
+| Transfer result | Not run. The synthetic held-out structures are title-neutral, but no Red observation and no later-title adapter has been evaluated. |
+| Blocker | The validated ranker consumes abstract dependency counts, but no reviewed seam yet derives those counts from the repository's existing Red CollectionObservation, living-collection contract, and cartridge-derived acquisition graph. |
+| Decision | Close the consumed V2 comparison after a 4/4 candidate result versus 2/4 baseline with lower cross-entropy and higher winner probability. Activate one bounded public/synthetic adapter lane, narrower than a redundant rewrite of the existing Red memory system. |
+| Next session | Implement and test the narrow Red dependency observation adapter over existing collection/catalog types; define deterministic edge-demand and executability semantics for multi-stage and branching evolutions; stop before any ROM, private root, live prediction, or action. |
+| Next falsifier | Require exact parity between adapter-derived ranker rows and independently derived Red collection/evolution facts across public fixtures, plus a fail-closed scan proving model-visible rows contain no title identity. |
+| Stop condition | Stop after one public/synthetic adapter implementation and audit. Never access a ROM, private artifact or claim; never predict, act, fit, compare again, promote authority, or run Crystal in this lane. |
 
 ### Stop conditions
 
-- Before any development payload opens, stop if the newly published exact-head preflight does not authenticate the fit bundle, all four commitments, current execution identity, and unused semantic claim.
-- After the comparison claim is attempted, stop at the first durable success or failure terminal. Never retry, replace a row, refit, inspect individual results publicly, access a ROM/controller, query a teacher, promote authority, or run Crystal.
+- Stop if exact required counts and current dependency progress cannot be derived from existing typed Red collection/catalog inputs without species-specific policy features, route knowledge, or controller state.
+- Stop after one implementation/audit checkpoint. Never access a ROM, private artifact, claim registry, hidden row, live model prediction, controller, Crystal, or authority promotion.
 
 ### Hard boundaries for this lane
 
+- **Prohibited:** campaign execution
+- **Prohibited:** comparison execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
+- **Prohibited:** development payload decode
 - **Prohibited:** full game replay
 - **Prohibited:** gameplay execution
+- **Prohibited:** model fit
 - **Prohibited:** model refit
+- **Prohibited:** private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -115,6 +119,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh rootless living-Dex comparison execution V2:** Published main 90288f57fb0b4d81533e049cc1b2c7bed28a07d3 passed CI 32449287128/1. After exact metadata preflight and Antigravity GO, semantic claim ed906f06 was consumed once; exactly four committed rows across two held-out families produced candidate 4/4 versus baseline 2/4, lower cross-entropy, higher winner probability, aggregate-only output, and durable no-retry records. The result is descriptive synthetic evidence only. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison execution qualification V2:** Published source 96ef8a1bd105e399963ec8656f3a81cb850742b9 passed CI 32447962527/1 with the exact-bundle, claim-before-open, four-row aggregate-only runner and durable no-retry terminals. Antigravity returned implementation and governance GO. A metadata-only preflight opened zero payloads and consumed no claim; because it occurred one reorientation early, its semantic qualification remains valid but its source-bound identity is superseded for execution. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison preflight V2:** Published main c0956cc634a56f4851102f9bc259e44d112532e8 passed CI run 32445054913 attempt 1. Manifest 583050da authenticated the exact clean fit bundle, four sealed development manifests, and unused comparison identity ed906f06 while opening and decoding zero development payloads. The claim remains unconsumed, all counters stayed unchanged, and Antigravity returned GO with no P0/P1 blocker. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex compliance fit V2:** Published main 15b2dbcb3cf881e97285c2611703d3c4dbac5206 passed CI run 32443875609 attempt 1. Manifest 5a38225d passed metadata-only preflight over four sealed manifests, then exactly one consumed fit produced an exact model/manifest/terminal bundle from the eight already counted public values. Development payload opens and counter deltas were zero. Antigravity returned GO with no P0/P1 blocker or overclaim. Evidence is preserved; retry is no.
@@ -173,4 +178,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **8**.
+Current evidence entries: **9**.

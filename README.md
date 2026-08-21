@@ -5,7 +5,25 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): publish the execution lane, refresh its exact-head
+> **Current product focus (August 21, 2026): the abstract dependency ranker passed; bridge it to
+> existing Red observations.** Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI
+> `32449287128/1`. The
+> [comparison result](docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+> (SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+> records **CANDIDATE 4/4 · BASELINE 2/4 · CROSS-ENTROPY 0.206 VS 0.693 · MEAN WINNER
+> PROBABILITY 0.815 VS 0.500 · ROWS DISCLOSED 0 · CLAIM CONSUMED · RETRY 0 · ANTIGRAVITY GO ·
+> P0/P1 0**. It adds exactly one synthetic and one global unseen comparison. Boards are now
+> **30/15/4/4/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/1**.
+>
+> Active `red-living-dex-dependency-observation-adapter-v1` is public/synthetic maintenance. It
+> must reuse the existing Red `CollectionObservation`, living-collection contract, and
+> cartridge-derived acquisition graph to derive the exact identity-free ranker inputs, including
+> multi-stage and branching evolution demand. Stop if species, map, route, or controller identity
+> reaches the model row. No ROM, private artifact, claim, prediction, action, refit, new
+> comparison, Crystal, promotion, or transfer claim is allowed. The 4-row result is descriptive
+> support for one planning rule—not evidence that the model can play or finish Pokémon.
+
+> **Previous product focus (August 21, 2026): publish the execution lane, refresh its exact-head
 > preflight, then run one held-out comparison.** Main
 > `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1` with the complete
 > claim-before-open, four-row, aggregate-only comparison runner. The

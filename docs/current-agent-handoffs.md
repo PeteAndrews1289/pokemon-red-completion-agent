@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-20. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one exact V2 held-out comparison
+## Current override: Codex owns the narrow Red dependency observation adapter
+
+Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+(SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+records candidate 4/4, baseline 2/4, lower CE, higher winner probability, zero row disclosure, and
+one permanently consumed comparison. Antigravity returned GO; the result remains descriptive.
+
+Codex may implement only `red-living-dex-dependency-observation-adapter-v1` against public and
+synthetic fixtures, reusing existing typed Red collection/catalog sources. Antigravity audits
+dependency semantics and leakage. Claude is unavailable. No ROM/private/claim access, prediction,
+action, fit, comparison, promotion, Crystal, completion, or transfer is owned. Boards are
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned one exact V2 held-out comparison
 
 Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
 [execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)

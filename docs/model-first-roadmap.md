@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: publish, re-preflight, then run exactly one comparison
+## Current checkpoint: connect the passed abstract rule to existing Red state
+
+Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. The
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+(SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+records candidate **4/4** versus baseline **2/4**, lower cross-entropy, higher mean winner
+probability, zero row disclosure, a consumed no-retry claim, and Antigravity GO. This increments
+synthetic/global unseen comparisons once; it is descriptive evidence across only two families.
+
+Active `red-living-dex-dependency-observation-adapter-v1` reuses—not rewrites—the existing Red
+memory stack. Its only deliverable is a pure deterministic projection from typed
+`CollectionObservation` plus the cartridge-derived acquisition/evolution graph into the exact
+title-neutral dependency features/candidates. Cover scarce/duplicate-ready, multi-stage,
+branching, item-gated, and complete cases; reject identity leakage. Stop before ROM/private data,
+live prediction/action, fit, comparison, authority, or Crystal. A pass permits only a separately
+designed Red shadow-decision test.
+
+## Previous checkpoint: publish, re-preflight, then run exactly one comparison
 
 Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1` with the complete
 one-shot runner. The

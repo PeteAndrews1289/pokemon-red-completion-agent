@@ -1,6 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the comparison mechanism is published; one exact-head execution remains
+## August 21: the V2 dependency ranker passed its held-out synthetic comparison
+
+Main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI `32449287128/1`. One exact
+claim-before-open execution consumed the frozen comparison and published only the aggregate. The
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+(SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+records candidate 4/4 versus baseline 2/4, CE 0.205636 versus 0.693147, winner probability
+0.814787 versus 0.5, zero row disclosure, and no retry. Antigravity returned GO.
+
+This adds one synthetic/global unseen comparison and nothing else. Active
+`red-living-dex-dependency-observation-adapter-v1` now connects existing typed Red collection and
+acquisition evidence to the title-neutral feature schema, covering multi-stage and branching
+evolution demand without policy-visible title identity. It remains public/synthetic adapter work,
+not gameplay, completion, authority, or transfer.
+
+## Previous August 21 checkpoint: the comparison mechanism was published; one exact-head execution remained
 
 Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
 [execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)

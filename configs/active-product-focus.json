@@ -8,42 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Execute exactly one source-authenticated V2 held-out dependency comparison: claim before opening exactly four committed rows, publish only the frozen aggregate, and retain a durable terminal with no retry.",
-      "cheapest_falsifier": "On a newly published exact head, repeat the metadata-only preflight. Stop before opening any payload if the fit bundle, four commitments, current source, or unused semantic claim fails authentication.",
-      "id": "rootless-living-dex-dependency-v2-comparison-execution-v1",
-      "kind": "learning",
+      "capability": "Project existing authenticated Red collection observations and cartridge-derived evolution demand into the exact title-neutral dependency-ranker features without leaking species, map, route, or controller identity.",
+      "cheapest_falsifier": "Use public synthetic CollectionObservation fixtures for scarce, duplicate-ready, multi-stage, branching, item-gated, and completed dependencies. Stop if the adapter cannot derive exact ranker inputs deterministically or if any model-visible field contains a Red identity.",
+      "id": "red-living-dex-dependency-observation-adapter-v1",
+      "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No authority changed. Published implementation and metadata-only qualification produced no comparison, gameplay, completion, Crystal, promotion, or transfer result.",
-        "blocker": "The 96ef8a1b preflight was scientifically clean but occurred one reorientation early. Its semantic claim remains unused, while its source-bound execution identity is superseded by this reorientation commit and must be refreshed on the newly published exact head.",
-        "decision": "Retire public/synthetic runner qualification after source 96ef8a1b passed CI 32447962527/1 and Antigravity returned implementation and governance GO. Transparently preserve the zero-effect early preflight, activate exactly one comparison execution, and require a fresh exact-head metadata preflight first.",
+        "authority_delta": "No gameplay or transfer authority changed. The ranker passed one descriptive synthetic held-out comparison only; it has not read a live Red observation or selected an in-game action.",
+        "blocker": "The validated ranker consumes abstract dependency counts, but no reviewed seam yet derives those counts from the repository's existing Red CollectionObservation, living-collection contract, and cartridge-derived acquisition graph.",
+        "decision": "Close the consumed V2 comparison after a 4/4 candidate result versus 2/4 baseline with lower cross-entropy and higher winner probability. Activate one bounded public/synthetic adapter lane, narrower than a redundant rewrite of the existing Red memory system.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json",
-          "sha256": "c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae"
+          "kind": "synthetic_rootless_unseen_comparison",
+          "path": "docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json",
+          "sha256": "2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7"
         },
-        "learning_output": "No new measured learning output. Source 96ef8a1b passed exact-head CI; its metadata-only preflight authenticated four manifests, opened and decoded zero payloads, consumed no claim, and changed no counter. The execution identity must be refreshed after reorientation.",
-        "next_falsifier": "Publish this reorientation, freeze a new exact-head comparison manifest, and stop if the repeated metadata-only preflight does not authenticate the exact fit, all four commitments, and the still-unused semantic claim with zero payload opens.",
-        "next_session_goal": "Publish the execution lane, pass a fresh exact-head metadata-only preflight, then consume the semantic claim once, open exactly four committed development payloads, publish one aggregate and terminal, and stop.",
-        "product_alignment": "This is the first clean held-out test of a species-neutral acquire-versus-evolve dependency rule needed by a living-Pokedex planner. It evaluates one abstract decision and does not establish gameplay or transfer.",
-        "session_id": "2026-08-21-rootless-dependency-v2-comparison-execution-reorientation",
+        "learning_output": "One consumed four-row synthetic held-out comparison passed descriptively: candidate 4/4 versus baseline 2/4, cross-entropy 0.205636 versus 0.693147, and mean winner probability 0.814787 versus 0.5. It adds exactly one synthetic and one global unseen comparison.",
+        "next_falsifier": "Require exact parity between adapter-derived ranker rows and independently derived Red collection/evolution facts across public fixtures, plus a fail-closed scan proving model-visible rows contain no title identity.",
+        "next_session_goal": "Implement and test the narrow Red dependency observation adapter over existing collection/catalog types; define deterministic edge-demand and executability semantics for multi-stage and branching evolutions; stop before any ROM, private root, live prediction, or action.",
+        "product_alignment": "The result supports the abstract preserve-versus-evolve rule. The adapter is the smallest bridge toward using that reusable rule inside real Red collection planning and later implementing the same observation contract for Crystal.",
+        "session_id": "2026-08-21-rootless-v2-comparison-complete-red-adapter-next",
         "status": "active",
-        "stop_condition": "Stop at the first durable comparison terminal, pass or fail. Never retry, replace an opening, refit, access a ROM/controller, promote authority, run Crystal, or turn this descriptive four-row result into a gameplay or transfer claim.",
-        "transfer_result": "Not run. This held-out synthetic comparison contains no title execution and cannot establish Red gameplay or cross-title transfer."
+        "stop_condition": "Stop after one public/synthetic adapter implementation and audit. Never access a ROM, private artifact or claim; never predict, act, fit, compare again, promote authority, or run Crystal in this lane.",
+        "transfer_result": "Not run. The synthetic held-out structures are title-neutral, but no Red observation and no later-title adapter has been evaluated."
       },
       "learned_authority": {
-        "current": "Four V2 openings remain sealed and semantic comparison claim ed906f06 remains unused. The 96ef8a1b preflight is valid qualification evidence but its source-bound execution identity is superseded. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
-        "target": "Measure one aggregate held-out synthetic acquire-versus-evolve result. Even a pass grants no gameplay or transfer authority; it only decides whether this abstract dependency representation merits a later real-observation adapter."
+        "current": "The frozen ranker has descriptive synthetic support on four held-out rows across two families. It has no live Red observation, action, gameplay, completion, Crystal, living-Pokedex, or transfer authority.",
+        "target": "Qualify a deterministic title-specific observation adapter that preserves the title-neutral policy boundary. Adapter qualification alone grants no learned authority; it permits a later separately frozen Red shadow-decision test."
       },
-      "maintenance_unblocks": null,
-      "measurable_outputs": [
-        {
-          "kind": "synthetic_rootless_unseen_comparison",
-          "minimum": 1,
-          "partition": "development"
-        }
-      ],
-      "name": "Fresh rootless living-Dex comparison execution V2",
-      "next_decision": "After one durable terminal, reorient immediately. A completed aggregate decides whether to design a Red observation adapter or close/redesign the representation; any claimed failure closes this identity without retry. Neither result promotes authority or opens Crystal.",
+      "maintenance_unblocks": "red-living-dex-dependency-shadow-decision-v1",
+      "measurable_outputs": [],
+      "name": "Red living-Dex dependency observation adapter V1",
+      "next_decision": "If exact fixture parity, chain/branch semantics, identity-leak guards, and Antigravity review pass, freeze a separate one-decision Red shadow-observation design with no controller action. Otherwise close or revise the adapter contract before touching live state.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -90,6 +84,11 @@
             "kind": "synthetic_rootless_model_fit",
             "path": "docs/evidence/rootless-living-dex-dependency-fit-result-v1-2026-08-20.json",
             "sha256": "d570fcc4e47667219b9ecf6881d534a05415901d3b2d12164f112eaa337b9d7b"
+          },
+          {
+            "kind": "synthetic_rootless_unseen_comparison",
+            "path": "docs/evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json",
+            "sha256": "2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7"
           }
         ],
         "model_fits": 4,
@@ -100,32 +99,47 @@
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
-        "synthetic_rootless_unseen_comparisons": 0,
+        "synthetic_rootless_unseen_comparisons": 1,
         "transfer_results": 0,
-        "unseen_comparisons": 3,
+        "unseen_comparisons": 4,
         "verified_composition_episodes": 1,
         "verified_outcome_examples": 4
       },
       "prohibited_actions": [
+        "campaign_execution",
+        "comparison_execution",
         "consumed_trial_retry",
         "crystal_execution",
+        "development_payload_decode",
         "full_game_replay",
         "gameplay_execution",
+        "model_fit",
         "model_refit",
+        "private_artifact_access",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
-      "rigor": "benchmark",
+      "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Before any development payload opens, stop if the newly published exact-head preflight does not authenticate the fit bundle, all four commitments, current execution identity, and unused semantic claim.",
-        "After the comparison claim is attempted, stop at the first durable success or failure terminal. Never retry, replace a row, refit, inspect individual results publicly, access a ROM/controller, query a teacher, promote authority, or run Crystal."
+        "Stop if exact required counts and current dependency progress cannot be derived from existing typed Red collection/catalog inputs without species-specific policy features, route knowledge, or controller state.",
+        "Stop after one implementation/audit checkpoint. Never access a ROM, private artifact, claim registry, hidden row, live model prediction, controller, Crystal, or authority promotion."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 4,
         "maximum_sessions": 1
       },
-      "transfer_test": "None. This four-row synthetic held-out comparison tests only an abstract dependency rule; a later Red observation adapter and Crystal transfer remain separate gates."
+      "transfer_test": "The adapter must keep the exact ranker-facing schema title-neutral so a future Crystal adapter can populate the same fields; no Crystal implementation or transfer measurement occurs here."
+    },
+    {
+      "id": "rootless-living-dex-dependency-v2-comparison-execution-v1",
+      "kind": "learning",
+      "name": "Fresh rootless living-Dex comparison execution V2",
+      "preserve_evidence": true,
+      "reason": "Published main 90288f57fb0b4d81533e049cc1b2c7bed28a07d3 passed CI 32449287128/1. After exact metadata preflight and Antigravity GO, semantic claim ed906f06 was consumed once; exactly four committed rows across two held-out families produced candidate 4/4 versus baseline 2/4, lower cross-entropy, higher winner probability, aggregate-only output, and durable no-retry records. The result is descriptive synthetic evidence only.",
+      "retry_allowed": false,
+      "rigor": "benchmark",
+      "status": "retired"
     },
     {
       "id": "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1",

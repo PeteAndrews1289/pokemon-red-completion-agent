@@ -1,6 +1,23 @@
 # Current audit — 2026-08-21
 
-## Current result: execution runner published; exact-head re-preflight precedes one comparison
+## Current result: V2 held-out dependency comparison passed descriptively
+
+Published main `90288f57fb0b4d81533e049cc1b2c7bed28a07d3` passed CI
+`32449287128/1`. After a clean metadata preflight and exact Antigravity GO, one no-retry execution
+consumed claim `ed906f06…e0583`, opened exactly four committed rows, and published only an
+aggregate. The
+[comparison result](evidence/rootless-living-dex-dependency-v2-comparison-result-2026-08-21.json)
+(SHA-256 `2a722d725000d6d0ae7a627381c77cdb4bfa53445a369b174d568c2b15c3d4c7`)
+records candidate 4/4 versus baseline 2/4, CE 0.205636 versus 0.693147, and mean winner
+probability 0.814787 versus 0.5. Rows disclosed are zero; retry is false.
+
+Counters are now legacy **30/15/4/4/0/0**, development **14/4/0/1/1**, and rootless
+**8/8/1/1**. This is descriptive synthetic evidence across two families, not statistical
+promotion or gameplay. Active `red-living-dex-dependency-observation-adapter-v1` is a pure
+public/synthetic mapping from existing typed Red state to identity-free ranker rows; live state,
+prediction, action, authority, and Crystal remain closed.
+
+## Previous result: execution runner published; exact-head re-preflight preceded one comparison
 
 Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
 [execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)

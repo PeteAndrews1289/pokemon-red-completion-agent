@@ -1,0 +1,104 @@
+{
+  "aggregate": {
+    "baseline_correct": 2,
+    "baseline_cross_entropy": 0.6931471805599453,
+    "baseline_mean_winner_probability": 0.5,
+    "candidate_correct": 4,
+    "candidate_cross_entropy": 0.2056356330860733,
+    "candidate_mean_winner_probability": 0.8147866408745148,
+    "descriptive_gate_passed": true,
+    "development_rows_disclosed": 0,
+    "family_count": 2,
+    "row_count": 4
+  },
+  "antigravity_review": {
+    "development_rows_or_private_artifacts_accessed_during_review": false,
+    "p0_or_p1_blockers": 0,
+    "recommended_next_direction": "bounded_red_observation_adapter",
+    "scope": "aggregate_result_claim_counter_boundary_and_mission_reorientation",
+    "verdict": "go"
+  },
+  "claim_boundary": {
+    "supported": "The frozen interaction ranker descriptively outperformed the fixed 0.5 baseline on all four committed synthetic held-out rows across two held-out dependency families.",
+    "unsupported": "Four rows across two families cannot establish statistical promotion, gameplay competence, Red completion, living-Pokedex competence, learned authority, Crystal execution, or cross-title transfer."
+  },
+  "comparison": {
+    "comparison_claim_consumed": true,
+    "comparison_claim_sha256": "ed906f0660381b5420777d9a4890e1137ef824f9c001bb68db9b1294c2be0583",
+    "comparison_execution_identity_sha256": "657dfe11f4c4ad5491d931e24d3ed5cb0061217bf3f845c57de231e225fa89d0",
+    "comparison_result_manifest_sha256": "c0ee4666b6f8f06765dedf08915969791f2d5154b578c5dc6b90ff32cece8f5c",
+    "comparison_result_record_sha256": "43d36a230eb67bda40d1f1775d714acd05da56b0d0e2aa0ec80c5fcbdb50abb3",
+    "comparison_terminal_manifest_sha256": "e0686c837b1d2cf1cefda335f904f051071bddab21b385ebfbcfeff7cc95d9d6",
+    "comparison_terminal_record_sha256": "a26d0036ae19854b4868a3c4f70a0704a63153e0eebb1db3b64c156ac180037f",
+    "development_payloads_decoded": 4,
+    "development_payloads_opened": 4,
+    "retry_allowed": false,
+    "status": "completed_descriptive_v2_comparison"
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 1,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 1,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design": {
+    "design_document_sha256": "4c614c71344ef94a894f3a7866d4b3d9d5ec6e32e98f7994be1d88ea533cd5bb",
+    "design_sha256": "1cf7423f59b5c10a7b76199c35cc3fc1d3742edd17127e371bf1e12ecb42d74b",
+    "development_roster_sha256": "68d704876bd0b3a6b728722e44dda5bf258ac47053ad34b1548c27d781c764c1"
+  },
+  "execution": {
+    "comparison_execution_manifest_sha256": "376c1f318789becd09a0ed4f6c31e4ca6fada4b45f3b705ab80ddb7817ac9312",
+    "metadata_preflight_manifest_sha256": "7171bfa05ad757e2eef32daa449ee6dd959ceca821ccd3d835b6e854f2a24015",
+    "metadata_preflight_payloads_decoded": 0,
+    "metadata_preflight_payloads_opened": 0,
+    "pre_execution_antigravity_p0_or_p1_blockers": 0,
+    "pre_execution_antigravity_verdict": "go"
+  },
+  "fit_bundle": {
+    "fit_manifest_record_sha256": "1696e37c44b5a10b81c194a0816b35def463baa1a61b05c80da2e8c897fbbf36",
+    "fit_sha256": "c544fa92f0fc9ab51037cb88a79bf2917e112d16f42630d08de6810aa8d4bc3c",
+    "fit_terminal_record_sha256": "ccb77998a63b83ff47bce2575a492cefbdc42821cd93aa956a03f6c3f9fc7fa5",
+    "model_sha256": "a42db6420d3ff999a894c8ca54fbca7714509bbe95a2020cf85c9cee195f6582",
+    "train_dataset_sha256": "77b7d54648b5530f7e90e543e72db5319d17eee7bf681b229305fbed460816ba"
+  },
+  "next_lane": {
+    "capability": "Project existing authenticated Red collection state and cartridge-derived dependency structure into the exact title-neutral ranker features without leaking species, map, route, or controller identity.",
+    "id": "red-living-dex-dependency-observation-adapter-v1",
+    "scope": "public_and_synthetic_adapter_design_and_implementation_only"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_run_id": 32449287128,
+    "source_commit": "90288f57fb0b4d81533e049cc1b2c7bed28a07d3"
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.core.rootless-living-dex-dependency-comparison-result.v2",
+  "status": "completed_descriptive_comparison_reorientation_required",
+  "title_role": "Synthetic held-out dependency result; not gameplay, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_rows_disclosed": 0,
+    "game_executions": 0,
+    "model_fits": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}
