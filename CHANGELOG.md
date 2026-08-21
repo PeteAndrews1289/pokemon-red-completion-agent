@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Published and qualified the Red dual-capability curriculum runtime at source
+  `c946e8dba00ca246d3720b115f81691a1a8cdc91` under green CI `32465536131/1`. The
+  [qualification receipt](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+  (SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+  binds semantic route execution, measured-venue capture, and bounded evolution to one reset and
+  dependency; rejects direction injection and identity leakage; executes only the selected
+  binding; and verifies outcomes from exact living-ledger transitions. Antigravity returned
+  exact-byte GO with no P0/P1/P2 finding. Activated one action-free scenario preflight; all
+  learning, gameplay, authority, and transfer counters remain unchanged.
+
 - Published and qualified the Red dual-capability dependency curriculum design at source
   `09e9b04bc2bb09b1d793a0484dca3898e010688b` under green CI `32462322717/1`. The
   [qualification receipt](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)

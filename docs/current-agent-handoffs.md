@@ -6,7 +6,22 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns semantic dual-capability implementation
+## Current override: Codex owns one action-free dual-capability scenario preflight
+
+Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+4588 tests. The
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+(SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+records semantic route execution, same-reset acquisition/evolution bindings, zero policy identity,
+selected-only execution, exact ledger outcomes, and Antigravity GO with no P0/P1/P2 finding.
+
+Codex may implement and run exactly one manifest-first action-free preflight over one prospectively
+selected nonsealed Red reset. It must prove both capabilities and the full anonymous menu without
+model scoring, claims, controller input, or frame advancement. No substitution or route repair is
+allowed. Antigravity reviews; Claude is unavailable. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned semantic dual-capability implementation
 
 Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
 4580 tests. The

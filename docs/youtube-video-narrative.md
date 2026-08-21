@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: remove the hidden walkthrough from the classroom
+## August 21 scene: build two real tools, then stop before the choice
+
+Open on **SOURCE C946E8DB · CI 32465536131/1 GREEN · 4588 PASSED · DUAL-CAPABILITY RUNTIME
+QUALIFIED**. Animate **SEMANTIC ROUTE → MEASURED CAPTURE VENUE** beside **BOUNDED EVOLUTION**,
+then join them at **ONE RESET · ONE LIVING-DEX DEPENDENCY · TWO ANONYMOUS ROWS**. Link the
+[runtime qualification](evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+with **SHA-256 DAD315FF…AEDE**.
+
+Show the safeguards: **DIRECTION STRINGS 0 · SPECIES/MAP/ROUTE/SKILL IDENTITY 0 · SELECTED
+BINDING ONLY · TEACHER LABEL 0 · EXACT LEDGER OUTCOME · ANTIGRAVITY GO**. The next rail is
+**SELECT ONE REAL RED RESET → AUTHENTICATE BOTH CAPABILITIES → FREEZE THE TWO-ROW MENU → STOP
+BEFORE MODEL SCORE OR BUTTON PRESS**. Say plainly that the tools are ready, but the model has not
+yet played this scene; this is the last availability check before a separate one-decision outcome.
+
+## Previous August 21 scene: remove the hidden walkthrough from the classroom
 
 Open on **SOURCE 09E9B04B · CI 32462322717/1 GREEN · 4580 PASSED · DUAL-CAPABILITY DESIGN
 QUALIFIED**. Animate **ONE RESET → TWO EXECUTABLE CAPABILITY ROLES → FULL ANONYMOUS MENU → NO

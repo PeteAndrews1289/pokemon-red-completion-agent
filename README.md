@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the dual-capability curriculum design is qualified;
+> **Current product focus (August 21, 2026): the semantic dual-capability runtime is qualified;
+> preflight one real Red scenario without scoring.** Source
+> `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with 4588
+> tests, one skip, three deselections, and one expected failure. The
+> [runtime qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+> (SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+> records **SEMANTIC ROUTE EXECUTION · SAME RESET/DEPENDENCY · TWO DISTINCT SKILLS · DIRECTION
+> STRINGS 0 · POLICY IDENTITY 0 · SELECTED BINDING ONLY · EXACT LEDGER OUTCOME · ANTIGRAVITY
+> GO**. No private input, ROM, prediction, action, frame, fit, or learning counter changed.
+>
+> Active `red-dual-capability-action-free-scenario-preflight-v1` may authenticate exactly one
+> prospectively selected nonsealed Red reset and its full acquire-versus-evolve menu. It must stop
+> before model scoring, outcome claims, controller input, or frame advancement; no substitution or
+> route repair is allowed. Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+> This is the last scenario-availability check before a separately frozen one-decision shadow
+> outcome—not gameplay or living-Pokédex competence.
+
+> **Previous product focus (August 21, 2026): the dual-capability curriculum design is qualified;
 > implement its semantic Red capability seam.** Source `09e9b04bc2bb09b1d793a0484dca3898e010688b`
 > passed CI `32462322717/1` with 4580 tests, one skip, three deselections, and one expected failure.
 > The [design qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)

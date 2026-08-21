@@ -154,6 +154,11 @@ RED_DUAL_CAPABILITY_DESIGN_QUALIFICATION = (
     / "docs/evidence"
     / "red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json"
 )
+RED_DUAL_CAPABILITY_RUNTIME_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -276,16 +281,16 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 4 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == "red-living-dex-dual-capability-curriculum-v1"
+    assert state.active_lane["id"] == "red-dual-capability-action-free-scenario-preflight-v1"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
         "red-living-dex-dual-capability-shadow-outcome-v1"
     )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 46
+    assert len(state.retired_lanes) == 47
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -1663,6 +1668,33 @@ def test_contract_is_title_neutral_enough_for_a_later_game_lane() -> None:
     assert state.active_lane["id"] == "repeatable-party-transfer-learning-v1"
 
 
+def test_red_dual_capability_runtime_qualification_is_counter_neutral() -> None:
+    receipt = json.loads(
+        RED_DUAL_CAPABILITY_RUNTIME_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == (
+        "published_runtime_qualified_action_free_scenario_preflight_required"
+    )
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_deselected": 3,
+        "ci_passed": 4588,
+        "ci_run_id": 32465536131,
+        "ci_skipped": 1,
+        "ci_xfailed": 1,
+        "source_commit": "c946e8dba00ca246d3720b115f81691a1a8cdc91",
+    }
+    assert receipt["antigravity_review"]["verdict"] == "go"
+    assert receipt["qualification"]["semantic_route_execution_required"] is True
+    assert receipt["qualification"]["controller_direction_sequences_accepted"] is False
+    assert receipt["qualification"]["same_reset_required"] is True
+    assert receipt["qualification"]["selected_binding_only"] is True
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+
+
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
     snapshot = DASHBOARD["product_focus_dashboard_snapshot"](state)
@@ -1671,12 +1703,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Red dual-capability living-Dex curriculum implementation V1" in public["stage"]
+    assert "Red dual-capability action-free scenario preflight V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "public dual-capability design is qualified" in encoded
+    assert "public dual-capability runtime is qualified" in encoded
     assert "actions 244/244" in encoded
     assert "same-reset" in encoded
     assert "90288f57" in encoded
@@ -1689,12 +1721,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
     assert "authentic preflight candidate 0" in encoded
-    assert "design qualified" in encoded
-    assert "implementation next" in encoded
-    assert "09e9b04b" in encoded
-    assert "32462322717/1" in encoded
+    assert "runtime qualified" in encoded
+    assert "scenario preflight next" in encoded
+    assert "c946e8db" in encoded
+    assert "32465536131/1" in encoded
+    assert "direction strings 0" in encoded
     assert "same-reset roles 2" in encoded
-    assert "preferred actions 0" in encoded
     assert "Antigravity GO" in encoded
     assert "8d559d23" in encoded
     assert "32458785817/1" in encoded

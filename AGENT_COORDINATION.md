@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-21 dual-capability design qualified; semantic implementation is active:** Source
+> **2026-08-21 dual-capability runtime qualified; one action-free scenario preflight is active:**
+> Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
+> 4588 tests. The
+> [runtime qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)
+> (SHA-256 `dad315ffb90614d7d939054435e456fe80414311c6709403cb1f279213bcaede`)
+> records **SEMANTIC ROUTE · SAME RESET/DEPENDENCY · TWO PRIVATE SKILLS · DIRECTION/POLICY
+> IDENTITY 0 · SELECTED BINDING ONLY · LEDGER OUTCOME · ANTIGRAVITY GO · P0/P1/P2 0**.
+>
+> Codex owns exactly one manifest-first, action-free preflight over one prospectively selected
+> nonsealed Red context. Antigravity reviews; Claude is unavailable. No agent owns model scoring,
+> controller input, frame advancement, outcome claims, substitution, route repair, fit, Crystal,
+> promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 dual-capability design qualified; semantic implementation was active:** Source
 > `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with 4580
 > tests. The
 > [design qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
