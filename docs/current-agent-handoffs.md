@@ -6,7 +6,21 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns only the public evidence reader qualification
+## Current override: Codex owns only the public V2 scenario-preflight design
+
+Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618
+tests. The [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+(SHA-256 `7e1e576a…4620c`) records the exact tracked-public-evidence boundary, and
+[Antigravity](evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1 zero. V1 and its selected context remain closed. No protected input or
+learning counter changed.
+
+Codex may write and test only `red-dual-capability-action-free-scenario-preflight-v2-design`.
+Antigravity reviews the exact design; Claude remains unavailable. No agent owns V2 implementation,
+scenario selection, manifest freeze, private/ROM access, scoring, claims, actions, fit, Crystal,
+promotion, completion, or transfer. Reorient after the design is published and reviewed.
+
+## Previous override: Codex owned only the public evidence reader qualification
 
 Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1`. Exact
 manifest `18dd05a4…d71` was frozen once, and the sole V1 preflight failed at

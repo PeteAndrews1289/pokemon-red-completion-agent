@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 188272B0 · CI 32473254566/1 GREEN · MANIFEST 18DD05A4 FROZEN
+> **Current rail:** Show **MAIN 50C64F1C · CI 32475789328/1 GREEN · 4618 PASSED · READER
+> ECB93C44 QUALIFIED · EXACT SHA + GIT BLOB · CANONICAL PRETTY JSON · NO-FOLLOW/INODE STABLE ·
+> ANTIGRAVITY GO · P0/P1 0 · PROTECTED EFFECTS 0 · V1 RETRY NO**. Link the
+> [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+> and show **SHA-256 7E1E576A…4620C**.
+>
+> Display active `red-dual-capability-action-free-scenario-preflight-v2-design`. Active rail:
+> **EXCLUDE V1 INVOCATION/CONTEXT/PHYSICAL ROOT/LINEAGE → FREEZE SOURCE-INDEPENDENT ROOT +
+> ANONYMOUS ACQUIRE/EVOLVE CONTRACT → ADVERSARIAL PUBLIC FIXTURES → ANTIGRAVITY REVIEW → STOP**.
+> Show **SCENARIO/MANIFEST/PRIVATE/ROM/PREDICTION/CLAIM/ACTION/FIT 0** and boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN 188272B0 · CI 32473254566/1 GREEN · MANIFEST 18DD05A4 FROZEN
 > ONCE · PUBLIC_EVIDENCE_AUTHENTICATION FAILED CLOSED · PROTECTED ACCESS 0 ·
 > PREDICTION/CLAIM/ACTION/FRAME 0 · RETRY NO · COUNTERS UNCHANGED**. Link the
 > [failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)

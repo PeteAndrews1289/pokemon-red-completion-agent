@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-> **2026-08-21 V1 stopped before protected access; public-only reader qualification is active:**
+> **2026-08-21 reader qualified; V2 public design is active:** Main
+> `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618 tests.
+> The [qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+> (SHA-256 `7e1e576a…4620c`) records the exact SHA/Git-blob/canonical-pretty/no-follow reader with
+> protected effects and counter deltas zero. Antigravity's
+> [audit](docs/evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+> returned GO with P0/P1 zero and no V1 retry.
+>
+> Codex owns only the public `red-dual-capability-action-free-scenario-preflight-v2-design` and
+> adversarial fixtures. Antigravity reviews the frozen design; Claude remains unavailable. No
+> agent owns V1 reuse, V2 implementation, scenario selection, manifest freeze, private/ROM access,
+> model scoring, claims, actions, fit, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 V1 stopped before protected access; public-only reader qualification was active:**
 > Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
 > 4604 tests. Manifest `18dd05a4…d71` was frozen once; the one V1 preflight failed at
 > `public_evidence_authentication` with private/ROM/claim/prediction/action/frame effects verified

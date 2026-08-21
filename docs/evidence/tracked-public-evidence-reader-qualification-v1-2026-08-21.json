@@ -1,0 +1,91 @@
+{
+  "active_lane": "tracked-public-evidence-reader-qualification-v1",
+  "claim_boundary": {
+    "supported": "Published main contains a reusable tracked-public-evidence reader that authenticates one externally SHA-pinned canonical pretty JSON receipt against the exact Git HEAD blob through a bounded, no-follow, inode-stable, environment-sanitized public-only boundary.",
+    "unsupported": "Qualification does not reopen or retry V1, select or inspect a successor scenario, freeze an execution manifest, access a private input or ROM, predict or act, produce a gameplay outcome, fit or compare a model, promote authority, complete Red, or demonstrate Crystal transfer."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "implementation": {
+    "canonical_representation": "ascii_pretty_sorted_two_space_json_with_terminal_newline",
+    "duplicate_keys_rejected": true,
+    "exact_git_head_blob_required": true,
+    "external_sha256_required": true,
+    "git_environment_sanitized": true,
+    "maximum_bytes": 4194304,
+    "non_ascii_rejected": true,
+    "non_finite_numbers_rejected": true,
+    "reader_sha256": "ecb93c440883ce717569ebd6c6a0b7590fdb560179ff9deac6a858299fa21af2",
+    "regular_single_link_current_owner_required": true,
+    "stable_descriptor_and_inode_required": true,
+    "test_sha256": "f77243f9c8104545d02c8905930eda4e22d174b544ecaa28ba4a54b67ebcb387",
+    "tracked_directory": "docs/evidence"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4618,
+    "ci_run_id": 32475789328,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "exact_published_main": "50c64f1c9cbb0d73d0a3aad0210e326a4005c3de",
+    "implementation_origin_commit": "39482ea64846f327ec2bb4fce94f51f3187cf046",
+    "pull_request": 34
+  },
+  "recorded_on": "2026-08-21",
+  "review": {
+    "antigravity_audit_receipt_sha256": "c5ee6c8e724eb02a3a145db9d1ff5f53e234e828969ab25316942ec9bfcbb39d",
+    "antigravity_p0_blockers": 0,
+    "antigravity_p1_blockers": 0,
+    "antigravity_p2_findings": 4,
+    "antigravity_review_output_sha256": "ff7a23e5e33abc5511d286529c6ba2b73aa28d5dccf58bf46420303197da777e",
+    "antigravity_verdict": "go",
+    "local_full_suite_passed": 4619,
+    "local_full_suite_skipped": 3,
+    "local_full_suite_xfailed": 1
+  },
+  "schema": "pokemon.core.tracked-public-evidence-reader-qualification.v1",
+  "status": "qualified_public_reader_v1_complete",
+  "title_role": "Reusable public evidence boundary qualification; not scenario, execution, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "v1_disposition": {
+    "failure_receipt_sha256": "b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09",
+    "reopen_allowed": false,
+    "retry_allowed": false,
+    "selected_context_reuse_allowed": false
+  },
+  "zero_effects": {
+    "claim_registry_accesses": 0,
+    "claim_writes": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "execution_manifests_frozen": 0,
+    "gameplay_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_inputs_opened": 0,
+    "red_rom_accesses": 0,
+    "scenarios_inspected": 0,
+    "scenarios_selected": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}

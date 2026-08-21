@@ -12,7 +12,27 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: V1 stopped before protected access; public evidence reader is active
+## 2026-08-21: reader qualified; V2 public design is active
+
+Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with
+4618 tests. The
+[reader qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+(SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+binds an externally pinned SHA, the exact Git HEAD blob, canonical pretty sorted JSON,
+duplicate/non-ASCII/non-finite rejection, bounded no-follow reads, stable inode checks, and a
+sanitized Git environment. Antigravity's
+[exact-byte audit](docs/evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1 zero. No scenario, private input, ROM, registry, prediction, action, fit, or
+learning counter changed, and V1 remains closed without retry or selected-context reuse.
+
+Codex now owns only `red-dual-capability-action-free-scenario-preflight-v2-design`: write the
+public contract that excludes every V1 identity and preserves a source-independent physical root
+plus anonymous acquire-versus-evolve semantics. Antigravity reviews the frozen design; Claude
+remains unavailable. Stop before implementation, scenario selection, manifest freeze, private/ROM
+access, prediction, claim, action, fit, Crystal, promotion, completion, or transfer. Boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous 2026-08-21 checkpoint: V1 stopped before protected access; public evidence reader was active
 
 Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
 4604 tests. Manifest `18dd05a4…d71` was frozen once. The sole V1 preflight failed closed at

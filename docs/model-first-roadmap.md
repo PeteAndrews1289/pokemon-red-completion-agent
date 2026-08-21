@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: V1 failed before protected access; qualify the public evidence boundary
+## Current checkpoint: public reader qualified; design the V2 gate without reopening V1
+
+Main `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` passed CI `32475789328/1` with 4618
+tests. The [reader qualification](evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+(SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+proves the exact SHA-pinned tracked receipt is joined to the Git HEAD blob through canonical pretty
+JSON, duplicate/non-ASCII/non-finite rejection, bounded no-follow reads, stable inode checks, and
+sanitized Git provenance. Antigravity's
+[audit](evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+returned GO with P0/P1 zero and confirmed that V1 cannot reopen or retry.
+
+Active `red-dual-capability-action-free-scenario-preflight-v2-design` freezes only a public
+contract: exclude every consumed V1 identity, keep the physical root source independent, expose
+anonymous acquisition and evolution semantics, and stop before implementation or protected
+access. No scenario selection, manifest freeze, private/ROM read, prediction, claim, action, fit,
+Crystal run, authority, or learning counter is permitted.
+
+## Previous checkpoint: V1 failed before protected access; qualify the public evidence boundary
 
 Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
 4604 tests. The exact manifest `18dd05a4…d71` was frozen once; the sole preflight stopped at

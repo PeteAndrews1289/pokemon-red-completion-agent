@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Tracked public evidence reader qualification V1** (`tracked-public-evidence-reader-qualification-v1`)
+**Red dual-capability action-free scenario preflight V2 design** (`red-dual-capability-action-free-scenario-preflight-v2-design`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the generic reader passes exact-head CI and adversarial tests, separately design a new scenario gate without reusing the consumed V1 invocation or selected V1 context. Otherwise close this reader design and choose a different public authentication boundary.
+- Next decision: If the public V2 design passes exact-head CI and Antigravity review without reopening V1 or requiring protected access, implement its runner in a separate lane. Otherwise close this design and choose a different product-aligned real-game learning probe.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify one reusable tracked-public-evidence reader that authenticates an externally pinned SHA-256, rejects duplicate keys and non-ASCII or non-finite JSON, and accepts only the repository's canonical pretty sorted representation without opening any private input, ROM, claim registry, model, or scenario. |
+| Reusable capability | Freeze one public V2 design for a future action-free Red dual-capability scenario preflight that uses the qualified tracked-evidence reader, excludes the consumed V1 invocation and selected physical root, keeps scenario identity source-independent, admits acquisition and evolution only as anonymous semantic capabilities, and stops before selection, private access, prediction, claim, action, or frame. |
 | Authority now | The frozen ranker has descriptive synthetic support, but the sole V1 Red dual-capability preflight stopped at public evidence authentication before inspecting a context. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify only a reusable public-evidence reader. Success grants no scenario, prediction, execution, gameplay, completion, or transfer authority. |
-| Transfer test | None. This lane qualifies a title-independent public-evidence boundary and makes no Red or Crystal claim. |
-| Cheapest falsifier | Feed the reader exact tracked pretty JSON plus mutations for compact-line substitution, duplicate keys, reordered keys, changed bytes, non-ASCII, non-finite numbers, symlink or inode swaps, and oversized input. Any accepted mutation or protected access closes the reader design. |
-| Time box | 1 session / 1 hour |
+| Authority target | Freeze only a reusable public V2 preflight design. Success grants no scenario, prediction, execution, gameplay, completion, or transfer authority. |
+| Transfer test | None. This lane defines a Red curriculum gate but does not execute Red or establish Crystal transfer. |
+| Cheapest falsifier | Use public synthetic fixtures to prove the V2 contract rejects the V1 context or physical root, source-bound semantic identity, compact-versus-pretty evidence substitution, preferred-action leakage, direction scripts, context substitution, or any design path that requires private input or ROM access. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-dual-capability-preflight-v1-public-evidence-failure** · status **active** · evidence [qualification](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+**2026-08-21-tracked-public-evidence-reader-qualified-v1** · status **active** · evidence [qualification](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This one bounded repair removes a generic public-boundary defect that would otherwise invalidate every future protected model or gameplay gate. It does not rescue the consumed Red context or produce learning evidence. |
-| Learning output | No new measured learning output. Main 188272b0 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once; the one preflight failed at public_evidence_authentication with private/ROM/claim/prediction/action/frame effects verified zero. V1 may not retry. |
-| Authority delta | No gameplay or transfer authority changed. The V1 attempt stopped before every protected input and all learning counters stayed unchanged. |
-| Transfer result | Not run. The V1 preflight did not reach the Red context, and this public-only reader lane has no title-specific or transfer authority. |
-| Blocker | The sole V1 invocation is consumed and retired. Its public receipt hashes matched, but its runner required compact canonical JSON while the tracked receipts use the repository's canonical pretty sorted JSON representation. |
-| Decision | Retire the exact V1 preflight without retry. Qualify only the generic tracked-public-evidence reader; do not freeze or run a successor scenario in this lane. |
-| Next session | Implement and qualify the public-only tracked-evidence reader, publish it under exact-head green CI, then stop and reorient separately before any new scenario selection, manifest freeze, private read, ROM access, prediction, action, fit, Crystal run, or promotion. |
-| Next falsifier | Prove the generic reader accepts only the exact SHA-pinned canonical tracked representation and fails before protected access on every representation, byte, path, and inode mutation. |
-| Stop condition | Stop after the reader and adversarial tests are published and green, or immediately if qualification needs any private input, ROM, claim registry, model, scenario, route, or outcome access. |
+| Product alignment | A clean V2 design is the shortest honest route back to one real Red model choice that tests a living-Pokedex dependency decision. It prevents the prior public-boundary defect from turning into another context-specific rescue loop. |
+| Learning output | No new measured learning output. Main 50c64f1c passed CI 32475789328/1 with 4618 tests. The exact tracked-evidence reader passed 4619 local tests and Antigravity GO with P0/P1 zero; it opened no protected input and changed no counter. |
+| Authority delta | No gameplay or transfer authority changed. Reader qualification opened no scenario, private input, ROM, registry, model, controller, or emulator. |
+| Transfer result | Not run. Reader qualification and V2 design carry no Red gameplay, Crystal, completion, or transfer authority. |
+| Blocker | The generic public-evidence boundary is now qualified. A successor still needs a public V2 contract that excludes the consumed V1 context and freezes stable semantic identity before any implementation or live preflight can be considered. |
+| Decision | Retire the reader qualification as complete and design only the V2 action-free scenario contract. Do not implement, freeze, select, inspect, or run a successor scenario in this lane. |
+| Next session | Write and adversarially test only the public V2 scenario-preflight contract, obtain Antigravity review, publish it under exact-head green CI, and stop before implementation or any scenario selection, manifest freeze, private read, ROM access, prediction, action, fit, Crystal run, or promotion. |
+| Next falsifier | Prove a public V2 design can exclude every consumed V1 identity while preserving one source-independent physical root, one anonymous acquire-versus-evolve menu, and a hard stop before every protected or model-guided effect. |
+| Stop condition | Stop after one V2 public design and adversarial fixture suite, or immediately if design work selects a context, opens a private input or ROM, freezes a manifest, predicts, acts, or patches a route. |
 
 ### Stop conditions
 
-- Stop if the reader accepts any non-exact byte representation, duplicate key, non-ASCII or non-finite value, symlink, inode swap, oversized document, or unpinned hash.
-- Stop after one public-only implementation session or one hour. Never inspect a scenario, open a private input or ROM, freeze a successor manifest, predict, act, fit, compare, run Crystal, or promote authority in this lane.
+- Stop if the V2 design can reuse any V1 invocation, selected context, physical root, or lineage; leaks a preferred action, title identity, or direction script; or binds semantic scenario identity to source bytes.
+- Stop after one public-only design session or two hours. Never implement or run the preflight, inspect a scenario, open a private input or ROM, freeze a manifest, predict, act, fit, compare, run Crystal, or promote authority in this lane.
 
 ### Hard boundaries for this lane
 
@@ -124,6 +124,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Tracked public evidence reader qualification V1:** Published main 50c64f1c9cbb0d73d0a3aad0210e326a4005c3de passed CI 32475789328/1 with 4618 tests. The reusable reader authenticates exact SHA-pinned canonical pretty JSON against the Git HEAD blob through bounded no-follow and inode-stable reads with sanitized Git environment. Antigravity returned GO with P0/P1 zero. It opened no private input, ROM, claim registry, model, or scenario and changed no learning counter; V1 remains closed. Evidence is preserved; retry is no.
 - **Red dual-capability action-free scenario preflight V1:** Published main 188272b01f88f549c39f6b693239fc7bc5e63bb5 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once and the sole preflight failed closed at public_evidence_authentication before any private input, ROM, claim registry, model prediction, controller action, or frame. Exact receipt hashes matched, but the runner rejected their tracked pretty JSON representation. The selected V1 context and invocation are closed without retry or replacement; all counters remain unchanged. Evidence is preserved; retry is no.
 - **Red dual-capability living-Dex curriculum implementation V1:** Source c946e8dba00ca246d3720b115f81691a1a8cdc91 passed CI 32465536131/1 with 4588 tests. The runtime requires authenticated semantic route execution, binds capture and evolution to one reset and dependency, exposes no policy identity, executes only the selected binding, and verifies exact living-ledger outcomes. Antigravity returned exact-byte GO with P0/P1/P2 all zero. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.
 - **Red dual-capability living-Dex curriculum design V1:** Source 09e9b04bc2bb09b1d793a0484dca3898e010688b passed CI 32462322717/1 with 4580 tests. The public design freezes two same-reset capability roles, no preferred action, title-neutral rows, and an evolution-aware ledger verifier. Antigravity's initial route-reuse finding was removed and its exact-byte re-audit returned GO. No private input, ROM, prediction, action, outcome, fit, authority, or transfer counter changed. Evidence is preserved; retry is no.

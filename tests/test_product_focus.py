@@ -174,6 +174,16 @@ RED_DUAL_CAPABILITY_PREFLIGHT_V1_FAILURE = (
     / "docs/evidence"
     / "red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json"
 )
+TRACKED_PUBLIC_EVIDENCE_READER_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "tracked-public-evidence-reader-qualification-v1-2026-08-21.json"
+)
+TRACKED_PUBLIC_EVIDENCE_READER_ANTIGRAVITY_AUDIT = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -296,16 +306,18 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 1 hour |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == "tracked-public-evidence-reader-qualification-v1"
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == (
+    assert state.active_lane["id"] == (
         "red-dual-capability-action-free-scenario-preflight-v2-design"
     )
+    assert state.active_lane["kind"] == "maintenance"
+    assert state.active_lane["maintenance_unblocks"] == (
+        "red-dual-capability-action-free-scenario-preflight-v2-implementation"
+    )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 48
+    assert len(state.retired_lanes) == 49
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -1684,9 +1696,7 @@ def test_contract_is_title_neutral_enough_for_a_later_game_lane() -> None:
 
 
 def test_red_dual_capability_runtime_qualification_is_counter_neutral() -> None:
-    receipt = json.loads(
-        RED_DUAL_CAPABILITY_RUNTIME_QUALIFICATION.read_text(encoding="ascii")
-    )
+    receipt = json.loads(RED_DUAL_CAPABILITY_RUNTIME_QUALIFICATION.read_text(encoding="ascii"))
 
     assert receipt["status"] == (
         "published_runtime_qualified_action_free_scenario_preflight_required"
@@ -1711,13 +1721,9 @@ def test_red_dual_capability_runtime_qualification_is_counter_neutral() -> None:
 
 
 def test_red_dual_capability_preflight_qualification_is_counter_neutral() -> None:
-    receipt = json.loads(
-        RED_DUAL_CAPABILITY_PREFLIGHT_QUALIFICATION.read_text(encoding="ascii")
-    )
+    receipt = json.loads(RED_DUAL_CAPABILITY_PREFLIGHT_QUALIFICATION.read_text(encoding="ascii"))
 
-    assert receipt["status"] == (
-        "published_preflight_runner_qualified_private_preflight_not_run"
-    )
+    assert receipt["status"] == ("published_preflight_runner_qualified_private_preflight_not_run")
     assert receipt["publication"] == {
         "ci_attempt": 1,
         "ci_conclusion": "success",
@@ -1752,9 +1758,7 @@ def test_red_dual_capability_preflight_qualification_is_counter_neutral() -> Non
 
 
 def test_red_dual_capability_preflight_v1_failure_is_zero_effect_and_nonretryable() -> None:
-    receipt = json.loads(
-        RED_DUAL_CAPABILITY_PREFLIGHT_V1_FAILURE.read_text(encoding="ascii")
-    )
+    receipt = json.loads(RED_DUAL_CAPABILITY_PREFLIGHT_V1_FAILURE.read_text(encoding="ascii"))
 
     assert receipt["status"] == "failed_closed_before_private_access_v1_retired"
     assert receipt["failure"] == {
@@ -1778,6 +1782,38 @@ def test_red_dual_capability_preflight_v1_failure_is_zero_effect_and_nonretryabl
     assert "/Volumes/" not in encoded
 
 
+def test_tracked_public_evidence_reader_is_qualified_without_protected_effects() -> None:
+    receipt = json.loads(TRACKED_PUBLIC_EVIDENCE_READER_QUALIFICATION.read_text(encoding="ascii"))
+    audit = json.loads(TRACKED_PUBLIC_EVIDENCE_READER_ANTIGRAVITY_AUDIT.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "qualified_public_reader_v1_complete"
+    assert receipt["publication"]["exact_published_main"] == (
+        "50c64f1c9cbb0d73d0a3aad0210e326a4005c3de"
+    )
+    assert receipt["publication"]["ci_run_id"] == 32475789328
+    assert receipt["implementation"]["reader_sha256"] == (
+        "ecb93c440883ce717569ebd6c6a0b7590fdb560179ff9deac6a858299fa21af2"
+    )
+    assert receipt["v1_disposition"] == {
+        "failure_receipt_sha256": (
+            "b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09"
+        ),
+        "reopen_allowed": False,
+        "retry_allowed": False,
+        "selected_context_reuse_allowed": False,
+    }
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    assert audit["audit"]["verdict"] == "go"
+    assert audit["audit"]["p0_blockers"] == 0
+    assert audit["audit"]["p1_blockers"] == 0
+    assert audit["v1_disposition"]["retry_allowed"] is False
+    assert set(audit["zero_effects"].values()) == {0}
+    encoded = json.dumps({"audit": audit, "qualification": receipt}, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
     snapshot = DASHBOARD["product_focus_dashboard_snapshot"](state)
@@ -1786,12 +1822,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Tracked public evidence reader qualification V1" in public["stage"]
+    assert "Red dual-capability action-free scenario preflight V2 design" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "sole V1 dual-capability preflight failed closed" in encoded
+    assert "tracked-public-evidence reader is qualified" in encoded
     assert "actions 244/244" in encoded
     assert "public evidence authentication" in encoded
     assert "90288f57" in encoded
@@ -1804,11 +1840,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
     assert "candidate 0" in encoded
-    assert "V1 manifest 18dd05a4" in encoded
-    assert "protected access 0" in encoded
-    assert "reader qualification next" in encoded
-    assert "188272b0" in encoded
-    assert "32473254566/1" in encoded
+    assert "reader ecb93c44 qualified" in encoded
+    assert "V1 retry 0" in encoded
+    assert "scenario/private/ROM/prediction/action 0" in encoded
+    assert "V2 design only" in encoded
+    assert "50c64f1c" in encoded
+    assert "32475789328/1" in encoded
     assert "rows 2" in encoded
     assert "audits GO" in encoded
     assert "8d559d23" in encoded

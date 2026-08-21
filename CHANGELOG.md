@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Published the generic tracked-public-evidence reader on main
+  `50c64f1c9cbb0d73d0a3aad0210e326a4005c3de` under green CI `32475789328/1` with 4618
+  tests. The
+  [qualification receipt](docs/evidence/tracked-public-evidence-reader-qualification-v1-2026-08-21.json)
+  (SHA-256 `7e1e576aead4b4c9cb36a9cd6c4abd77536d4c8d34190490230942950004620c`)
+  binds exact external SHA, Git HEAD blob equality, canonical pretty JSON, duplicate/non-ASCII/
+  non-finite rejection, bounded no-follow reads, inode stability, and sanitized Git provenance.
+  Antigravity's [audit](docs/evidence/tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json)
+  returned GO with P0/P1 zero. Retired the reader lane and activated public V2 design only; V1
+  remains closed and all learning, gameplay, authority, and transfer counters remain unchanged.
+
 - Ran the sole manifest-pinned Red dual-capability V1 preflight from main
   `188272b01f88f549c39f6b693239fc7bc5e63bb5` under green CI `32473254566/1`.
   Manifest `18dd05a4…d71` failed closed at `public_evidence_authentication` before any private
