@@ -29,22 +29,22 @@ Not the product:
 
 ## One active lane
 
-**Red living-Dex dependency zero-action preflight V1** (`red-shadow-zero-action-preflight-v1`)
+**Red dual-capability living-Dex curriculum design V1** (`red-dual-capability-dependency-curriculum-design-v1`)
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: If the exact preflight returns ready with candidate count two, identity unclaimed, and zero prediction/action/frame effects, freeze a separate shadow-execution manifest and reorient before scoring. Any no-eligible, collision, drift, protected-input, or zero-effect failure closes this exact context with no replacement.
+- Next decision: If a generic public design proves a resettable same-state acquisition/evolution menu and independently verifiable outcome, implement that curriculum separately. Otherwise close this Red dependency-action lane and select a different authentic learned gameplay target; never retry the closed context.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Run exactly one zero-action, zero-prediction preflight over one manifest-pinned nonsealed Red development-role context, authenticating the published shadow runner, historical context replay, exact fit/model bundle, profile-bound skill pair, and unused one-shot identity. |
-| Authority now | The frozen ranker has descriptive synthetic support, the Red adapter and exact published runner are qualified, and no authentic Red observation has been scored. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | If one exact zero-action preflight passes, permit a separately reoriented one-shot Red shadow preference with zero controller authority. Preflight success itself grants no prediction or gameplay authority. |
-| Transfer test | The preflight must prove the authentic Red adapter still produces only the title-neutral two-row policy boundary intended for later reuse by a Crystal adapter; no Crystal implementation or transfer measurement occurs here. |
-| Cheapest falsifier | Freeze one operation-specific public manifest before private access, then run the published preflight once. Stop if any binding differs, the historical context cannot be replayed without a frame or action, the first opportunity is ineligible, or either one-shot ledger is already consumed. |
-| Time box | 1 session / 1 hour |
+| Reusable capability | Design a reusable resettable Red dependency curriculum in which acquisition and evolution are independently executable from the same predecision state, the full title-neutral two-row menu is frozen before scoring, and one later selected action can produce an independently verified living-collection outcome. |
+| Authority now | The frozen ranker has descriptive synthetic support, the Red adapter and runner are qualified, and one authentic zero-action preflight found no jointly executable menu. No authentic Red preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Qualify only the reusable curriculum contract needed to create one later dual-capability Red training scenario. Design success grants no prediction, execution, gameplay, completion, or transfer authority. |
+| Transfer test | The curriculum design must express only retained multiplicity, unresolved dependency demand, mechanical availability, and verified collection transition facts so the same contract can later be instantiated from Crystal without sharing Red routes, species identities, or teacher scripts. |
+| Cheapest falsifier | Using only public skill, profile, adapter, catalog, and collection contracts, prove that one species-neutral scenario construction can co-bind both existing capabilities without a root-specific route patch, teacher choice, hidden model score, or fabricated outcome. Stop if that contract cannot be stated and mutation-tested generically. |
+| Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
@@ -57,24 +57,24 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-shadow-runner-qualified-preflight-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+**2026-08-21-shadow-preflight-no-eligible-dual-capability-design-next** · status **active** · evidence [qualification](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is the cheapest authentic-state falsifier between the synthetic dependency rule and its first Red preference: prove the model can receive a real title-neutral two-choice menu before spending the one-shot prediction. |
-| Learning output | No new measured learning output. Main d4955fb6 passed CI 32457709720/1 with 4566 tests; exact runner/source bytes passed Antigravity twice with P0/P1/P2 all zero, including real private-store round-trip and an explicit encounter-log side-effect guard. |
-| Authority delta | No gameplay or transfer authority changed. Runner qualification opened no ROM or private context, made zero predictions and zero actions, and advanced no learning counter. |
-| Transfer result | Not run. The runner preserves the title-neutral policy boundary, but no authentic Red preference or Crystal adapter result exists. |
-| Blocker | The exact runner is published and exact-head green, but its one allowed live Red context, fit bundle, historical replay, and unused one-shot identity have not yet passed the zero-action preflight. |
-| Decision | Retire the runner-qualification lane and open exactly one source-authenticated Red preflight. The preflight may read one pinned nonsealed context and the exact fit bundle, but it may not claim an identity, score the model, advance a frame, dispatch an action, or substitute another context. |
-| Next session | Freeze the exact published preflight manifest and run the preflight once. Record its path-free result and reorient immediately; do not score the model, claim the shadow identity, press a button, advance a frame, replace the context, run Crystal, or promote authority. |
-| Next falsifier | Authenticate one preflight manifest, one exact context-plan slot, the historical registry/catalog question, exact profile and fit bundle, read-only PyBoy state, and unused global/local identities; emit only the frozen aggregate with zero prediction/action/frame effects. |
-| Stop condition | Stop after the first preflight result, including no-eligible or failure. Never retry or replace the context after private read; never score, claim, act, fit, compare, promote authority, run Crystal, or replay a game in this lane. |
+| Product alignment | A living-Pokedex agent must decide whether to preserve or acquire a precursor versus evolve it, but that is meaningful only when both actions are truly available. The failed preflight exposed this missing causal training environment directly. |
+| Learning output | No new measured learning output. Main 8d559d23 passed CI 32458785817/1 with 4567 tests. One exact preflight authenticated the runner, context, fit bundle, and read-only ledgers, then returned candidate count 0 with prediction, claim, action, frame, teacher, and counter deltas all zero. |
+| Authority delta | No gameplay or transfer authority changed. The preflight opened one authorized nonsealed context but made zero predictions, claims, actions, and frame advances and added no learning counter. |
+| Transfer result | Not run. The title-neutral ranker remains portable in form, but Red has not yet supplied one genuinely executable two-action dependency scenario and Crystal remains unopened. |
+| Blocker | The first authentic Red context produced no dependency opportunity for which both acquisition and transformation were mechanically qualified. The ranker cannot make an honest choice until both actions are executable from one resettable state. |
+| Decision | Retire the exact preflight with no context replacement or retry. Open a public design-only lane for a reusable dual-capability Red curriculum rather than patching the failed root or scoring an unavailable action. |
+| Next session | Design and mutation-test the smallest reusable dual-capability Red curriculum contract. Reuse existing acquisition, evolution, collection, and trajectory primitives; do not open another context, run a ROM, predict, act, fit, compare, patch the closed root, or run Crystal. |
+| Next falsifier | Freeze a public contract and adversarial fixtures proving both candidate actions are simultaneously executable, their identity never reaches the model row, and the selected action can be joined to a post-transition living-collection verifier without a teacher label. |
+| Stop condition | Stop after one public curriculum design or immediately if it needs a root-specific route patch, private-context search, teacher-selected action, species/title identity at the policy boundary, fabricated outcome, or more than two hours. Never reopen or replace the closed context. |
 
 ### Stop conditions
 
-- Stop if public manifest authentication does not precede every private read, the historical context/menu differs, the fit/model/skill pair is not exact, a model score is requested, a claim is written, a frame advances, or an action is attempted.
-- Stop after exactly one preflight invocation, including failure or no eligible opportunity. Never replace or retry the context, execute the shadow decision, run Crystal, or promote authority in this lane.
+- Stop if the proposed curriculum does not expose both acquisition and evolution as independently executable from the same frozen state, leaks species/title/route identity to the policy row, or labels an outcome from teacher preference instead of a verified state transition.
+- Stop after one public design or two hours. Never open another private context, patch or retry the closed root, run a ROM, score the model, write a claim, act, fit, compare, run Crystal, or promote authority in this lane.
 
 ### Hard boundaries for this lane
 
@@ -88,6 +88,7 @@ outputs.
 - **Prohibited:** model fit
 - **Prohibited:** live model prediction
 - **Prohibited:** model refit
+- **Prohibited:** live private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -119,6 +120,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Red living-Dex dependency zero-action preflight V1:** Main 8d559d230fc06fa83edc8015bb245df531600e16 passed CI 32458785817/1 with 4567 tests. One manifest-pinned nonsealed Red context authenticated its historical replay, exact fit/model, and read-only ledgers, then returned no eligible dependency opportunity. Predictions, claims, actions, frames, teachers, and counters stayed zero. The context is closed with no replacement or retry. Evidence is preserved; retry is no.
 - **Red living-Dex dependency shadow runner qualification V1:** Main d4955fb69fff9a763e14a9b5b19601f834fc0c5f passed CI 32457709720/1 with 4566 ROM-free tests. The runner authenticates public source before private inputs, replays one historical nonsealed context, joins the exact fit/model and profile-bound skill pair, selects before scoring, claims before prediction, retains durable terminals, and enforces zero controller/frame effects. Antigravity audits returned GO with P0/P1/P2 all zero. No live input was opened and no counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency shadow-decision design V1:** Main 8afb1db0b345c9cdd83323585f54a1352fb31618 passed CI 32453057425/1. The design freezes one exact model/adapter, one nonsealed Red development context, pre-score selection, two anonymous rows, at most one prediction, zero actions/frames/teacher/update, durable termination, and no retry. GitHub passed 4537 tests; Antigravity passed 4538 and returned exact-head GO with P0/P1/P2 all zero. No live state or learning counter changed. Evidence is preserved; retry is no.
 - **Red living-Dex dependency observation adapter V1:** Published main 6fe9a677f76c06c5da74e50f8a2ad5c391bfa1a3 passed CI 32451757975/1. The pure adapter maps all 26 Red transformation edges through chain, branch, completion, and mechanical-readiness semantics into exact identity-free ranker rows; 22 edges are supported and four zero-reserve cases fail closed. Eleven focused tests and 4533 full ROM-free tests passed, and Antigravity returned exact-head GO with no P0/P1/P2 finding. It made zero predictions or actions and advances no learning counter. Evidence is preserved; retry is no.

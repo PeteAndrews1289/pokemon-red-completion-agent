@@ -8,7 +8,26 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: run one exact zero-action Red preflight
+## Current checkpoint: design the missing dual-capability Red curriculum
+
+Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
+tests. One exact
+[zero-action preflight](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+(SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+authenticated the runner, historical context, exact fit/model, and read-only ledgers, then found
+zero eligible acquire-versus-evolve opportunities. It made zero predictions, claims, actions,
+frame advances, teacher queries, or learning-counter changes. The context is closed and may not
+be replaced or retried.
+
+Active `red-dual-capability-dependency-curriculum-design-v1` is the smallest product-aligned
+response: define a reusable resettable Red scenario with both actions independently executable
+from the same predecision state, an identity-free full menu, and an outcome derived from the
+post-transition living-collection contract. Use only public skill/profile/adapter/catalog
+contracts. Stop if the design requires a root-specific route patch, private search, a teacher
+choice, species/title identity at the policy boundary, or a fabricated outcome. This lane cannot
+open a ROM or private artifact, predict, act, fit, compare, run Crystal, or promote authority.
+
+## Previous checkpoint: run one exact zero-action Red preflight
 
 Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
 [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

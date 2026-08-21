@@ -1,0 +1,89 @@
+{
+  "claim_boundary": {
+    "supported": "One exact published Red shadow runner authenticated its public invocation, one pinned nonsealed historical context, the exact V2 fit/model bundle, and read-only one-shot availability; it then stopped with zero prediction and zero action because no dependency opportunity had both candidates mechanically qualified.",
+    "unsupported": "This result is not a model preference, causal outcome, gameplay action, learning update, competence result, story completion, living-Pokedex completion, Crystal result, authority promotion, or cross-title transfer result."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "execution_manifest": {
+    "execution_manifest_sha256": "0e3916be36ed9baab0dd50b2a8fc47ee49b03344da449d34c5118e4138d28097",
+    "invocation_sha256": "e00a3859963264977eaf66e8b772ca177f1ac7705ce9d3438d9089ead35be85d",
+    "operation": "preflight",
+    "private_input_roles": 9,
+    "public_bindings": 14,
+    "semantic_bindings": 20
+  },
+  "preflight": {
+    "candidate_count": 0,
+    "context_replacement_allowed": false,
+    "controller_actions": 0,
+    "emulator_frames_advanced": 0,
+    "execution_identity_consumed": false,
+    "global_claim_writes": 0,
+    "identity_fields_public": 0,
+    "local_episode_writes": 0,
+    "model_predictions": 0,
+    "preflight_output_sha256": "c98a315d4f13b2181dedd95c0988cb89188d71948b58ba141790dbd3b9246e56",
+    "retry_allowed": false,
+    "score_margin": null,
+    "selected_candidate_kind": null,
+    "selected_candidate_probability": null,
+    "status": "no_eligible_opportunity_zero_prediction_zero_action",
+    "teacher_queries": 0
+  },
+  "protected_access": {
+    "claim_registry_checked_read_only": true,
+    "crystal_accesses": 0,
+    "exact_fit_bundle_authenticated": true,
+    "nonsealed_red_contexts_opened": 1,
+    "private_context_fields_public": 0,
+    "red_rom_authenticated": true,
+    "sealed_red_accesses": 0
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4567,
+    "ci_run_id": 32458785817,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "pull_request": 27,
+    "runner_sha256": "e633b9e1f115f437de337242d44a92d70c764da0f63795e64beec1bf2318af3b",
+    "source_bundle_sha256": "5ca24b648357ebc7799eee64bdd52cc2f779470835a68387c15f37f62e3f1892",
+    "source_commit": "8d559d230fc06fa83edc8015bb245df531600e16"
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.red.living-dex-dependency-shadow-preflight-result.v1",
+  "status": "preflight_completed_no_eligible_opportunity_context_closed",
+  "title_role": "One authentic Red zero-action preflight result; not prediction, gameplay, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "crystal_executions": 0,
+    "emulator_frames_advanced": 0,
+    "gameplay_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "shadow_claims_consumed": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}

@@ -5,7 +5,19 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN D4955FB6 · CI 32457709720/1 GREEN · SHADOW RUNNER QUALIFIED ·
+> **Current rail:** Show **MAIN 8D559D23 · CI 32458785817/1 GREEN · PREFLIGHT MANIFEST
+> 0E3916BE · ONE NONSEALED CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/TEACHER 0 ·
+> CONTEXT CLOSED · RETRY 0**. Link the
+> [preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+> and show **SHA-256 BED18055…E342**.
+>
+> Display active `red-dual-capability-dependency-curriculum-design-v1`. Active rail: **PUBLIC
+> DUAL-CAPABILITY DESIGN → SAME RESETTABLE STATE → ACQUIRE + EVOLVE EXECUTABLE → TITLE-NEUTRAL
+> FULL MENU → INDEPENDENT COLLECTION VERIFIER → STOP**. No context replacement, private search,
+> root patch, ROM, prediction, action, fit, comparison, or Crystal. Show boards
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+>
+> **Previous rail:** Show **MAIN D4955FB6 · CI 32457709720/1 GREEN · SHADOW RUNNER QUALIFIED ·
 > 4566 PASSED · PRIVATE ROUND TRIP · ENCOUNTER LOG OFF · ANTIGRAVITY GO · P0/P1/P2 0 ·
 > QUALIFICATION LIVE EFFECTS 0**. Link the
 > [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

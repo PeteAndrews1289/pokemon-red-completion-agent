@@ -6,7 +6,25 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one exact zero-action Red preflight
+## Current override: Codex owns public dual-capability curriculum design
+
+Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
+tests. The
+[preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+(SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+records one nonsealed Red context, candidate zero, and zero prediction, claim, action, frame,
+teacher, or counter effects. The exact context is permanently closed. Antigravity's exact runner
+review was GO with no P0/P1/P2 issue.
+
+Codex may only design and mutation-test `red-dual-capability-dependency-curriculum-design-v1`
+against public fixtures. The design must make acquire and evolve independently executable from
+one resettable state, freeze the complete title-neutral menu before scoring, and join a later
+selection to an independently verified living-collection outcome. Antigravity reviews; Claude is
+unavailable. No private search, closed-root patch, ROM run, prediction, action, fit, comparison,
+Crystal, promotion, completion, or transfer is owned. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned one exact zero-action Red preflight
 
 Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
 [runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)

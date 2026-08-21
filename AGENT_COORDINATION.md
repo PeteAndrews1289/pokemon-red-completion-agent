@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-21 shadow runner qualified; one zero-action preflight is active:** Main
+> **2026-08-21 authentic preflight returned candidate zero; public curriculum design is active:**
+> Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
+> tests. The
+> [preflight result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+> (SHA-256 `bed180556f053a42b31238c4c08eb44ee49362a1114c958bdd98cb214a03e342`)
+> records **ONE NONSEALED CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/TEACHER 0 ·
+> CONTEXT CLOSED · RETRY 0**. Antigravity's runner verdict was GO with P0/P1/P2 all zero.
+>
+> Codex owns only `red-dual-capability-dependency-curriculum-design-v1`: public design and
+> adversarial fixtures for a resettable same-state acquire-plus-evolve menu with an independent
+> living-collection verifier. Antigravity reviews; Claude is unavailable. No agent owns another
+> context search, root-specific patch, ROM/private access, prediction, action, fit, Crystal,
+> promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 shadow runner qualified; one zero-action preflight was active:** Main
 > `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
 > [runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
 > (SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)

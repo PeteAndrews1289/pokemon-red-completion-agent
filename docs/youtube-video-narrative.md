@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: the reader passes; one silent systems check remains
+## August 21 scene: the first silent look finds no honest choice
+
+Open on **MAIN 8D559D23 · CI 32458785817/1 GREEN · PREFLIGHT MANIFEST 0E3916BE · ONE NONSEALED
+CONTEXT · CANDIDATE 0 · PREDICTION/CLAIM/ACTION/FRAME/TEACHER 0 · CONTEXT CLOSED · RETRY 0**.
+Link the
+[preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)
+with **SHA-256 BED18055…E342**. Make the distinction visual: the runner had Antigravity GO and
+worked exactly as designed; the game state simply did not offer both actions.
+
+The next rail is **PUBLIC DUAL-CAPABILITY DESIGN → SAME RESETTABLE STATE → ACQUIRE + EVOLVE
+EXECUTABLE → TITLE-NEUTRAL FULL MENU → INDEPENDENT COLLECTION VERIFIER → STOP**. Say why this
+matters: a model cannot learn a real preserve-versus-evolve decision when one option is imaginary.
+This builds the classroom for one later causal choice; it is not gameplay, a living Pokédex,
+completion, authority, or Crystal transfer.
+
+## Previous August 21 scene: the reader passes; one silent systems check remains
 
 Open on **MAIN D4955FB6 · CI 32457709720/1 GREEN · SHADOW RUNNER QUALIFIED · 4566 PASSED ·
 ANTIGRAVITY GO · P0/P1/P2 0**. Show **MANIFEST FIRST · HISTORICAL CONTEXT REPLAY · EXACT
