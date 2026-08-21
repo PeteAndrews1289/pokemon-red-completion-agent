@@ -139,6 +139,11 @@ RED_DEPENDENCY_SHADOW_DESIGN_QUALIFICATION = (
     / "docs/evidence"
     / "red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json"
 )
+RED_DEPENDENCY_SHADOW_RUNNER_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -261,13 +266,16 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == "red-shadow-runner-qualification-v1"
+    assert "| Time box | 1 session / 1 hour |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+        encoding="utf-8"
+    )
+    assert state.active_lane["id"] == "red-shadow-zero-action-preflight-v1"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
         "red-living-dex-dependency-shadow-decision-v1"
     )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 43
+    assert len(state.retired_lanes) == 44
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -306,6 +314,49 @@ def test_red_dependency_shadow_design_qualification_is_zero_effect_and_exact_hea
         "5fbe527b3c1d126d376c5aae29ff10e47e9222b23cc408c4c37ad76b53e0f1dd"
     )
     assert receipt["antigravity_review"]["verdict"] == "go"
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_red_dependency_shadow_runner_qualification_is_zero_effect_and_exact_head() -> None:
+    receipt = json.loads(RED_DEPENDENCY_SHADOW_RUNNER_QUALIFICATION.read_text(encoding="ascii"))
+
+    assert receipt["status"] == "published_runner_qualified_no_live_preflight_or_prediction"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_deselected": 3,
+        "ci_passed": 4566,
+        "ci_run_id": 32457709720,
+        "ci_skipped": 1,
+        "ci_xfailed": 1,
+        "pull_request": 26,
+        "source_commit": "d4955fb69fff9a763e14a9b5b19601f834fc0c5f",
+    }
+    assert receipt["antigravity_review"] == {
+        "exact_bytes_verified": True,
+        "focused_tests_passed": 32,
+        "p0_blockers": 0,
+        "p1_blockers": 0,
+        "p2_findings": 0,
+        "private_or_runtime_accesses": 0,
+        "verdict": "go",
+    }
+    assert receipt["runner_bindings"]["runner_sha256"] == (
+        "e633b9e1f115f437de337242d44a92d70c764da0f63795e64beec1bf2318af3b"
+    )
+    assert receipt["qualification"]["provenance"]["manifest_before_private_access"] is True
+    assert receipt["qualification"]["execution_boundary"] == {
+        "controller_actions_maximum": 0,
+        "encounter_harvest_logging_forbidden": True,
+        "emulator_frames_advanced_maximum": 0,
+        "maximum_model_predictions": 1,
+        "model_update_allowed": False,
+        "teacher_queries": 0,
+    }
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
@@ -1519,12 +1570,12 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Red living-Dex dependency shadow runner qualification V1" in public["stage"]
+    assert "Red living-Dex dependency zero-action preflight V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "shadow contract is published" in encoded
+    assert "shadow runner is published" in encoded
     assert "actions 244/244" in encoded
     assert "authenticate" in encoded
     assert "90288f57" in encoded
@@ -1536,12 +1587,11 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "no retry" in encoded
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
-    assert "shadow design qualified" in encoded
-    assert "runner qualification next" in encoded
-    assert "8afb1db0" in encoded
-    assert "32453057425/1" in encoded
-    assert "one prediction max" in encoded
-    assert "actions/frames 0" in encoded
+    assert "shadow runner qualified" in encoded
+    assert "zero-action preflight next" in encoded
+    assert "d4955fb6" in encoded
+    assert "32457709720/1" in encoded
+    assert "qualification prediction/action/frame 0" in encoded
     assert "Antigravity GO" in encoded
     assert "fit 1 counted/ineligible" in encoded
     assert "comparisons 1" in encoded

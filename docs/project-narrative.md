@@ -1,6 +1,23 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the one-decision shadow contract qualified; runner implementation is next
+## August 21: the exact Red shadow runner qualified; one zero-action preflight is next
+
+Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
+[runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+(SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+binds exact source/runner/model/adapter/registry identities, manifest-first private access,
+historical context replay, profile-bound skill verification, pre-score selection, private-store
+durability, and the encounter-log side-effect guard. GitHub passed 4566 ROM-free tests;
+Antigravity returned exact and delta GO with P0/P1/P2 all zero.
+
+Qualification itself opened no live context, made no prediction, wrote no claim, advanced no
+frame, and changed no counter. The next bounded step is one operation-specific zero-action
+preflight over one pinned nonsealed Red state. It authenticates the anonymous menu and all
+bindings, verifies unused identities, and stops. It cannot score, act, substitute another
+context, or retry. Success only permits a separate one-shot shadow-preference gate; it is not Red
+gameplay, living-Pokédex competence, Crystal transfer, or authority.
+
+## Previous August 21 checkpoint: the one-decision shadow contract qualified; runner implementation was next
 
 Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
 [design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)

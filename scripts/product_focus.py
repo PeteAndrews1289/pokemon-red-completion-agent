@@ -233,6 +233,8 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
     time_box = _mapping(lane, "time_box", subject="active lane")
     time_box_sessions = _positive_int(time_box, "maximum_sessions", subject="time box")
     time_box_session_label = "session" if time_box_sessions == 1 else "sessions"
+    time_box_hours = _positive_int(time_box, "maximum_hours", subject="time box")
+    time_box_hour_label = "hour" if time_box_hours == 1 else "hours"
     progress = state.progress
     reorientation = _mapping(
         lane,
@@ -337,7 +339,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             ),
             (
                 f"| Time box | {time_box_sessions} {time_box_session_label} / "
-                f"{_positive_int(time_box, 'maximum_hours', subject='time box')} hours |"
+                f"{time_box_hours} {time_box_hour_label} |"
             ),
             "",
             "### Required learning outputs",

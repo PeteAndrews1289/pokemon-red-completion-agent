@@ -1,13 +1,27 @@
 # Three-agent coordination
 
-> **2026-08-21 shadow design qualified; runner qualification is active:** Main
+> **2026-08-21 shadow runner qualified; one zero-action preflight is active:** Main
+> `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
+> [runner qualification](docs/evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+> (SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+> records **4566 PASSED · MANIFEST FIRST · HISTORICAL REPLAY · EXACT FIT/MODEL/SKILLS ·
+> SELECT BEFORE SCORE · PRIVATE ROUND TRIP · ENCOUNTER LOG OFF · ANTIGRAVITY GO · P0/P1/P2
+> 0 · LIVE EFFECTS 0**.
+>
+> Codex owns only `red-shadow-zero-action-preflight-v1`: publish the gate, freeze one exact
+> manifest, run one nonsealed-context preflight, record it, and reorient. Antigravity may review;
+> Claude is unavailable and not a blocker. No agent owns a score, claim write, action, frame,
+> context replacement, retry, fit, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 shadow design qualified; runner qualification was active:** Main
 > `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
 > [design qualification](docs/evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
 > (SHA-256 `aa998310248c5a67d25e1d4456fc9ec88e6150dc66077961fe969424dea5a056`)
 > records **ONE CONTEXT · PRE-SCORE SELECTION · EXACT MODEL/ADAPTER · TWO ANONYMOUS ROWS · ONE
 > PREDICTION MAX · ACTIONS/FRAMES 0 · DURABLE TERMINAL · ANTIGRAVITY GO · P0/P1/P2 0**.
 >
-> Codex owns only `red-shadow-runner-qualification-v1`: public/synthetic implementation, mutation
+> Codex then owned only `red-shadow-runner-qualification-v1`: public/synthetic implementation, mutation
 > tests, publication, exact-head CI, and audit. Antigravity is the read-only reviewer; Claude is
 > unavailable and not a blocker. No agent owns live ROM/private/model/claim access, authentic
 > prediction, action, fit, comparison, Crystal, promotion, completion, or transfer. Boards remain

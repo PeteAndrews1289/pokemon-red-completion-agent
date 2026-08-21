@@ -8,7 +8,24 @@ Read [MISSION.md](../MISSION.md) and [NORTH_STAR.md](../NORTH_STAR.md) first.
 Then read the generated [active product state](../ACTIVE_PRODUCT_STATE.md). It is the authoritative
 current lane; the accumulated checkpoints below are evidence history when they conflict with it.
 
-## Current checkpoint: qualify the read-only runner for one Red shadow preference
+## Current checkpoint: run one exact zero-action Red preflight
+
+Main `d4955fb69fff9a763e14a9b5b19601f834fc0c5f` passed CI `32457709720/1`. The
+[runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+(SHA-256 `b04e6d2fe2490484594a497b6644c8a85b14a11af81190034855779af7fd5dc7`)
+binds the exact runner/source/model/adapter/registries, manifest-first private boundary, historical
+context replay, profile-bound skill pair, select-before-score ordering, durable private-store
+round trip, and explicit encounter-log prohibition. GitHub passed 4566 ROM-free tests;
+Antigravity returned exact-byte and final-delta GO with no P0/P1/P2 finding.
+
+Active `red-shadow-zero-action-preflight-v1` freezes one operation-specific manifest and runs the
+published preflight once against one pinned nonsealed Red context. It authenticates the exact
+question/menu, fit/model, skills, and unused local/global identities but may not score, claim,
+act, advance a frame, substitute another context, or retry. Stop and reorient after the first
+result. A pass permits only a separately published one-shot shadow-execution lane—not gameplay,
+learning, completion, authority, or transfer.
+
+## Previous checkpoint: qualify the read-only runner for one Red shadow preference
 
 Main `8afb1db0b345c9cdd83323585f54a1352fb31618` passed CI `32453057425/1`. The
 [design qualification](evidence/red-living-dex-dependency-shadow-decision-design-qualification-v1-2026-08-21.json)
@@ -18,7 +35,7 @@ selection before scoring, two identity-free rows, one prediction maximum, zero a
 durable termination, and no retry. GitHub passed 4537 ROM-free tests; Antigravity independently
 passed 4538 and returned exact-head GO with no P0/P1/P2 finding.
 
-Active `red-shadow-runner-qualification-v1` implements and adversarially tests only that read-only
+Then-active `red-shadow-runner-qualification-v1` implemented and adversarially tested only that read-only
 boundary. It must fail before scoring on any source/model/context/menu mismatch and retain every
 post-prediction terminal. This lane opens no live state and runs no authentic prediction. A pass
 permits one separate metadata-only preflight—not gameplay, learning, or authority.

@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 21 scene: the silent-look blueprint passes; build the read-only bridge
+## August 21 scene: the reader passes; one silent systems check remains
+
+Open on **MAIN D4955FB6 · CI 32457709720/1 GREEN · SHADOW RUNNER QUALIFIED · 4566 PASSED ·
+ANTIGRAVITY GO · P0/P1/P2 0**. Show **MANIFEST FIRST · HISTORICAL CONTEXT REPLAY · EXACT
+FIT/MODEL/SKILLS · SELECT BEFORE SCORE · PRIVATE ROUND TRIP · ENCOUNTER LOG OFF**. Link the
+[runner qualification](evidence/red-living-dex-dependency-shadow-runner-qualification-v1-2026-08-21.json)
+with **SHA-256 B04E6D2F…FD5DC7** and stamp **LIVE CONTEXT/ROM/PRIVATE/CLAIM/PREDICTION/ACTION/
+FRAME EFFECTS 0 DURING QUALIFICATION**.
+
+The next rail is **FREEZE PREFLIGHT MANIFEST → OPEN ONE PINNED NONSEALED CONTEXT → REPLAY ITS
+HISTORICAL MENU → AUTHENTICATE FIT/MODEL/SKILLS → VERIFY UNUSED IDENTITY → PREDICTION 0 →
+CLAIM 0 → BUTTONS/FRAMES 0 → STOP**. Say clearly that there is no replacement context or retry.
+This is one authentic-state systems check before a later shadow preference—not the model playing
+Red, learning from an outcome, completing a living Pokédex, or transferring to Crystal.
+
+## Previous August 21 scene: the silent-look blueprint passed; build the read-only bridge
 
 Open on **MAIN 8AFB1DB0 · CI 32453057425/1 GREEN · SHADOW DESIGN QUALIFIED**. Animate **ONE
 CONTEXT FROZEN → FIRST ELIGIBLE DEPENDENCY SELECTED BEFORE SCORING → TWO ANONYMOUS ROWS → ONE
