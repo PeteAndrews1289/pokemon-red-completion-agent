@@ -1,0 +1,90 @@
+{
+  "active_lane": "red-dual-capability-action-free-scenario-preflight-v1",
+  "claim_boundary": {
+    "supported": "The sole manifest-pinned V1 preflight failed closed while authenticating tracked public evidence, before any private input, ROM, claim registry, model prediction, controller input, or emulator frame. The exact invocation and V1 lane are closed without retry.",
+    "unsupported": "This result says nothing about whether the Red reset could expose acquisition and evolution together. It is not a model preference, gameplay outcome, learning update, Red completion result, living-Pokedex result, Crystal result, authority promotion, or transfer result."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "diagnosis": {
+    "failure_class": "tracked_public_json_representation_mismatch",
+    "public_receipt_hashes_matched": true,
+    "root_or_capability_diagnosed": false,
+    "runner_expected_representation": "compact_sorted_ascii_json_line",
+    "tracked_receipt_representation": "pretty_sorted_ascii_json_with_terminal_newline"
+  },
+  "execution_manifest": {
+    "execution_manifest_sha256": "18dd05a49e453962441f2510ff71642ea1147080e1c228fd801b7cde77681d71",
+    "invocation_sha256": "902be51edfbaaa7a4b1f7a0d2725262b9b5ce740bb4276068a1e80652b604d7d",
+    "operation": "preflight",
+    "private_input_roles": 9,
+    "public_bindings": 18,
+    "semantic_bindings": 23
+  },
+  "failure": {
+    "effect_status": "verified_zero",
+    "execution_result_emitted": false,
+    "failure_output_sha256": "292c2ba4e1ac654cc7df1ccd2ec3a6479512689ab533c486b130bcf27827b9d8",
+    "failure_stage": "public_evidence_authentication",
+    "protected_access_status": "verified_absent",
+    "sanitized_failure_receipt_emitted": true
+  },
+  "publication": {
+    "antigravity_audit_receipt_sha256": "4dc5802cf630c9b158964a06c29cf19f2afd7bb8e74f054597735db31d5bff33",
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4604,
+    "ci_run_id": 32473254566,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "qualification_receipt_sha256": "95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31",
+    "runner_sha256": "1bedf16072962b575dd0540507ede2cad1ce47dc01866a59578514f878768aa4",
+    "source_bundle_sha256": "e7f161c160ee36acff1383fbc31d6ebb3f5f653890eb5b41a36adc01cc972f08",
+    "source_commit": "188272b01f88f549c39f6b693239fc7bc5e63bb5"
+  },
+  "recorded_on": "2026-08-21",
+  "root_disposition": {
+    "context_substitutions": 0,
+    "physical_root_claimed": false,
+    "physical_root_inspected": false,
+    "replacement_allowed_in_v1": false,
+    "retry_allowed": false,
+    "selected_v1_context_closed": true
+  },
+  "schema": "pokemon.red.dual-capability-action-free-preflight-failure.v1",
+  "status": "failed_closed_before_private_access_v1_retired",
+  "title_role": "Red action-free engineering failure; not gameplay, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "authority_promotions": 0,
+    "claim_registry_accesses": 0,
+    "claim_writes": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "emulator_frames_advanced": 0,
+    "gameplay_executions": 0,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "private_inputs_opened": 0,
+    "red_rom_accesses": 0,
+    "teacher_queries": 0,
+    "transfer_results": 0
+  }
+}

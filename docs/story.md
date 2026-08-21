@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the silent inspector passed review; one authentic classroom remains
+## Current checkpoint: the inspector stopped at the paperwork desk
+
+Main `188272b0` passed CI `32473254566/1` with 4604 tests. We froze the exact public
+invocation once and ran the promised silent preflight. It never reached the game. The runner
+rejected its own tracked public receipts because it demanded compact JSON while the repository
+stores exact-hash-pinned evidence as pretty sorted JSON. The
+[failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+records the useful part plainly: private reads, ROM access, claims, model scores, buttons, frames,
+and learning counters all stayed at zero.
+
+That makes this a process failure, not a failed Pokémon lesson. V1 is still over: no retry, no
+replacement context, and no quiet route patch. The next job is deliberately small—qualify one
+generic public evidence reader under adversarial mutations, publish it, then choose a new scenario
+gate in a separate decision. It is not training progress, but it removes a real reusable blocker
+without pretending the model played.
+
+## Previous checkpoint: the silent inspector passed review; one authentic classroom remained
 
 Main `347f954d` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

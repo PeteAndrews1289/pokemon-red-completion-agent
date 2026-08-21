@@ -1,6 +1,19 @@
 # Three-agent coordination
 
-> **2026-08-21 external GO recorded; one silent inspection remains:**
+> **2026-08-21 V1 stopped before protected access; public-only reader qualification is active:**
+> Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
+> 4604 tests. Manifest `18dd05a4…d71` was frozen once; the one V1 preflight failed at
+> `public_evidence_authentication` with private/ROM/claim/prediction/action/frame effects verified
+> zero. The [failure receipt](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+> has SHA-256 `b09ef67e…c6d09` and advances no counter.
+>
+> Codex owns only the generic tracked-public-evidence reader and its adversarial public tests.
+> Antigravity reviews the next published milestone; Claude remains unavailable. No agent owns a
+> V1 retry, selected-context reuse, successor manifest freeze, private input, ROM, model score,
+> action, fit, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 external GO recorded; one silent inspection remained:**
 > Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 > [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
 > (SHA-256 `95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31`)

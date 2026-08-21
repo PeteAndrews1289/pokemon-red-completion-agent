@@ -12,7 +12,24 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: external GO recorded; one silent inspection remains
+## 2026-08-21: V1 stopped before protected access; public evidence reader is active
+
+Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
+4604 tests. Manifest `18dd05a4…d71` was frozen once. The sole V1 preflight failed closed at
+`public_evidence_authentication`; its receipt says private inputs, ROM, claim registry, model
+predictions, controller actions, and frames were all zero. See the
+[path-free failure receipt](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+(SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`).
+
+The public cause is exact: both tracked receipt hashes matched, but the runner required compact
+canonical JSON while this repository's tracked evidence is canonical pretty sorted JSON. This is
+not evidence about the Red reset, route, skills, or model. V1 and its selected context may not
+retry. Codex now owns only `tracked-public-evidence-reader-qualification-v1`: qualify a generic
+exact-hash and duplicate-safe tracked JSON reader, publish it green, then reorient before selecting
+or opening any new scenario. Claude remains unavailable; Antigravity reviews the next milestone.
+Boards stay **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous 2026-08-21 checkpoint: external GO recorded; one silent inspection remained
 
 Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

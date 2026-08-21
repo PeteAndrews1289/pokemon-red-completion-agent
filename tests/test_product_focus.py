@@ -169,6 +169,11 @@ RED_DUAL_CAPABILITY_PREFLIGHT_ANTIGRAVITY_AUDIT = (
     / "docs/evidence"
     / "red-dual-capability-action-free-preflight-antigravity-audit-v1-2026-08-21.json"
 )
+RED_DUAL_CAPABILITY_PREFLIGHT_V1_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -291,16 +296,16 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 1 hour |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
-    assert state.active_lane["id"] == "red-dual-capability-action-free-scenario-preflight-v1"
+    assert state.active_lane["id"] == "tracked-public-evidence-reader-qualification-v1"
     assert state.active_lane["kind"] == "maintenance"
     assert state.active_lane["maintenance_unblocks"] == (
-        "red-living-dex-dual-capability-shadow-outcome-v1"
+        "red-dual-capability-action-free-scenario-preflight-v2-design"
     )
     assert state.active_lane["measurable_outputs"] == []
-    assert len(state.retired_lanes) == 47
+    assert len(state.retired_lanes) == 48
     assert focus_progress_fraction(state) == 0.0
     assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
@@ -1746,6 +1751,33 @@ def test_red_dual_capability_preflight_qualification_is_counter_neutral() -> Non
     assert set(receipt["zero_effects"].values()) == {0}
 
 
+def test_red_dual_capability_preflight_v1_failure_is_zero_effect_and_nonretryable() -> None:
+    receipt = json.loads(
+        RED_DUAL_CAPABILITY_PREFLIGHT_V1_FAILURE.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == "failed_closed_before_private_access_v1_retired"
+    assert receipt["failure"] == {
+        "effect_status": "verified_zero",
+        "execution_result_emitted": False,
+        "failure_output_sha256": (
+            "292c2ba4e1ac654cc7df1ccd2ec3a6479512689ab533c486b130bcf27827b9d8"
+        ),
+        "failure_stage": "public_evidence_authentication",
+        "protected_access_status": "verified_absent",
+        "sanitized_failure_receipt_emitted": True,
+    }
+    assert receipt["root_disposition"]["retry_allowed"] is False
+    assert receipt["root_disposition"]["physical_root_inspected"] is False
+    assert receipt["root_disposition"]["physical_root_claimed"] is False
+    assert receipt["diagnosis"]["root_or_capability_diagnosed"] is False
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
     snapshot = DASHBOARD["product_focus_dashboard_snapshot"](state)
@@ -1754,14 +1786,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Red dual-capability action-free scenario preflight V1" in public["stage"]
+    assert "Tracked public evidence reader qualification V1" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
     assert public["experiment"]["sealed_test"] == {"completed": 1, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "exact dual-capability preflight runner is published" in encoded
+    assert "sole V1 dual-capability preflight failed closed" in encoded
     assert "actions 244/244" in encoded
-    assert "same-reset" in encoded
+    assert "public evidence authentication" in encoded
     assert "90288f57" in encoded
     assert "32449287128/1" in encoded
     assert "candidate 4/4" in encoded
@@ -1772,21 +1804,20 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert "model a42db642" in encoded
     assert "no live authority" in encoded
     assert "candidate 0" in encoded
-    assert "runner published" in encoded
-    assert "Antigravity GO" in encoded
-    assert "invocation freeze + preflight next" in encoded
-    assert "347f954d" in encoded
-    assert "32471913419/1" in encoded
+    assert "V1 manifest 18dd05a4" in encoded
+    assert "protected access 0" in encoded
+    assert "reader qualification next" in encoded
+    assert "188272b0" in encoded
+    assert "32473254566/1" in encoded
     assert "rows 2" in encoded
     assert "audits GO" in encoded
-    assert "Antigravity GO" in encoded
     assert "8d559d23" in encoded
     assert "32458785817/1" in encoded
     assert "prediction/claim/action/frame 0" in encoded
     assert "context closed" in encoded
-    assert "fit 1 ineligible" in encoded
+    assert "fit 1" in encoded
     assert "comparison 1" in encoded
-    assert "Rootless board" in encoded
+    assert "Rootless" in encoded
     assert "logical atomic 0" in encoded
     assert "6077173" in encoded
     assert "32177113545/1" in encoded

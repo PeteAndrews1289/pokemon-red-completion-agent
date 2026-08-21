@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the exact dual-capability preflight runner is
+> **Current product focus (August 21, 2026): V1 failed safely before protected access; qualify
+> the generic tracked-evidence reader.** Main
+> `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with 4604
+> tests, one skip, three deselections, and one expected failure. Exact manifest `18dd05a4…d71`
+> was frozen once; the sole preflight returned `public_evidence_authentication` before any private
+> input, ROM, claim registry, prediction, controller input, or frame. The
+> [path-free failure receipt](docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+> (SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`)
+> records **PROTECTED ACCESS 0 · EFFECTS VERIFIED ZERO · COUNTER DELTA 0 · RETRY NO**.
+>
+> Public diagnosis found a representation mismatch: the exact receipt hashes matched, but the
+> runner required compact canonical JSON while tracked evidence uses canonical pretty sorted JSON.
+> V1 and its selected context are closed without retry or substitution. Active
+> `tracked-public-evidence-reader-qualification-v1` is a one-hour public-only repair: exact hash,
+> duplicate-key, representation, path, and inode checks only. It may not freeze a successor
+> manifest or open a scenario. Boards remain **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous product focus (August 21, 2026): the exact dual-capability preflight runner was
 > published and externally approved; freeze and silently inspect one fixed Red scenario.** Main
 > `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 > [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)

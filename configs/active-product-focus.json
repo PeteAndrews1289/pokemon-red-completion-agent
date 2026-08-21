@@ -8,36 +8,36 @@
   },
   "lanes": [
     {
-      "capability": "Authenticate exactly one preselected nonsealed Red reset as a genuine acquire-versus-evolve scenario by proving, without model scoring or controller input, that semantic venue traversal and bounded evolution are both independently executable from the same state and dependency.",
-      "cheapest_falsifier": "Run one manifest-pinned, action-free preflight over the first prospectively frozen eligible context. Require one reset identity, the exact two identity-free rows, a semantic route plan, sufficient capture resources, and an executable evolution offer; any mismatch closes the context without substitution or route repair.",
-      "id": "red-dual-capability-action-free-scenario-preflight-v1",
+      "capability": "Qualify one reusable tracked-public-evidence reader that authenticates an externally pinned SHA-256, rejects duplicate keys and non-ASCII or non-finite JSON, and accepts only the repository's canonical pretty sorted representation without opening any private input, ROM, claim registry, model, or scenario.",
+      "cheapest_falsifier": "Feed the reader exact tracked pretty JSON plus mutations for compact-line substitution, duplicate keys, reordered keys, changed bytes, non-ASCII, non-finite numbers, symlink or inode swaps, and oversized input. Any accepted mutation or protected access closes the reader design.",
+      "id": "tracked-public-evidence-reader-qualification-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No gameplay or transfer authority changed. Antigravity's GO used no private input, ROM, model prediction, controller action, frame, teacher query, fit, claim write, or learning counter.",
-        "blocker": "The exact preflight runner is published, green, and externally reviewed. Only the exact public invocation freeze remains before the one allowed private action-free preflight.",
-        "decision": "Keep this lane active: freeze the exact public invocation and run exactly one action-free preflight. Do not score the model, claim an outcome, or send controller input.",
+        "authority_delta": "No gameplay or transfer authority changed. The V1 attempt stopped before every protected input and all learning counters stayed unchanged.",
+        "blocker": "The sole V1 invocation is consumed and retired. Its public receipt hashes matched, but its runner required compact canonical JSON while the tracked receipts use the repository's canonical pretty sorted JSON representation.",
+        "decision": "Retire the exact V1 preflight without retry. Qualify only the generic tracked-public-evidence reader; do not freeze or run a successor scenario in this lane.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json",
-          "sha256": "95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31"
+          "path": "docs/evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json",
+          "sha256": "b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09"
         },
-        "learning_output": "No new measured learning output. Main 347f954d passed CI 32471913419/1. Antigravity's exact-byte audit returned GO with P0/P1/P2 all zero and permitted one exact public invocation freeze. The runner remains unable to score or act.",
-        "next_falsifier": "Authenticate the frozen public invocation, then run one action-free preflight that verifies the fixed reset, semantic route, capture resources, exact evolution offer, two-row menu, and unused physical root while predictions, actions, frames, and claim writes remain zero.",
-        "next_session_goal": "Freeze the exact reviewed public invocation and run exactly one action-free preflight over the fixed nonsealed Red context; stop immediately after its result with no score, claim write, controller input, frame advance, substitution, route patch, fit, Crystal, or promotion.",
-        "product_alignment": "The preflight engineering gate is now published. One authentic same-reset feasibility result is the shortest remaining bridge from synthetic dependency ranking to the first model-selected, collection-verified Red gameplay outcome.",
-        "session_id": "2026-08-21-dual-capability-preflight-external-review-go",
+        "learning_output": "No new measured learning output. Main 188272b0 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once; the one preflight failed at public_evidence_authentication with private/ROM/claim/prediction/action/frame effects verified zero. V1 may not retry.",
+        "next_falsifier": "Prove the generic reader accepts only the exact SHA-pinned canonical tracked representation and fails before protected access on every representation, byte, path, and inode mutation.",
+        "next_session_goal": "Implement and qualify the public-only tracked-evidence reader, publish it under exact-head green CI, then stop and reorient separately before any new scenario selection, manifest freeze, private read, ROM access, prediction, action, fit, Crystal run, or promotion.",
+        "product_alignment": "This one bounded repair removes a generic public-boundary defect that would otherwise invalidate every future protected model or gameplay gate. It does not rescue the consumed Red context or produce learning evidence.",
+        "session_id": "2026-08-21-dual-capability-preflight-v1-public-evidence-failure",
         "status": "active",
-        "stop_condition": "Stop after the first action-free result. Any missing capability, reset drift, route mismatch, identity leak, prediction, action, frame advance, or need for substitution closes the context and this lane.",
-        "transfer_result": "Not run. The runner keeps Red traversal, venue, species, and skill identity behind private bindings and exposes only two title-neutral rows, but no authentic Red menu or Crystal binding has yet been produced."
+        "stop_condition": "Stop after the reader and adversarial tests are published and green, or immediately if qualification needs any private input, ROM, claim registry, model, scenario, route, or outcome access.",
+        "transfer_result": "Not run. The V1 preflight did not reach the Red context, and this public-only reader lane has no title-specific or transfer authority."
       },
       "learned_authority": {
-        "current": "The frozen ranker has descriptive synthetic support and the exact Red dual-capability preflight runner is published under green CI, but Red has not exposed one authentic jointly executable menu. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
-        "target": "Qualify only one authentic action-free Red scenario and its exact two-choice menu. Preflight success grants no prediction, execution, gameplay, completion, or transfer authority."
+        "current": "The frozen ranker has descriptive synthetic support, but the sole V1 Red dual-capability preflight stopped at public evidence authentication before inspecting a context. No authentic preference, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists.",
+        "target": "Qualify only a reusable public-evidence reader. Success grants no scenario, prediction, execution, gameplay, completion, or transfer authority."
       },
-      "maintenance_unblocks": "red-living-dex-dual-capability-shadow-outcome-v1",
+      "maintenance_unblocks": "red-dual-capability-action-free-scenario-preflight-v2-design",
       "measurable_outputs": [],
-      "name": "Red dual-capability action-free scenario preflight V1",
-      "next_decision": "If exactly one authentic same-reset menu passes with zero prediction and action, separately freeze one one-decision shadow-outcome execution. Otherwise close the context and reorient without replacement search, route repair, or gameplay.",
+      "name": "Tracked public evidence reader qualification V1",
+      "next_decision": "If the generic reader passes exact-head CI and adversarial tests, separately design a new scenario gate without reusing the consumed V1 invocation or selected V1 context. Otherwise close this reader design and choose a different public authentication boundary.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -116,20 +116,35 @@
         "model_fit",
         "live_model_prediction",
         "model_refit",
+        "private_input_access",
+        "public_manifest_freeze",
+        "red_preflight_execution",
+        "rom_access",
+        "scenario_selection",
         "sealed_red_evaluation",
         "teacher_route_hardening"
       ],
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Stop if the selected context cannot expose both acquisition and evolution from one restored state through authenticated semantic traversal, or if the policy row leaks species, title, venue, route, or private skill identity.",
-        "Stop after one action-free preflight or two hours. Never substitute another context, patch a route, score the model, write an outcome claim, send controller input, advance a frame, fit, compare, run Crystal, or promote authority in this lane."
+        "Stop if the reader accepts any non-exact byte representation, duplicate key, non-ASCII or non-finite value, symlink, inode swap, oversized document, or unpinned hash.",
+        "Stop after one public-only implementation session or one hour. Never inspect a scenario, open a private input or ROM, freeze a successor manifest, predict, act, fit, compare, run Crystal, or promote authority in this lane."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 1,
         "maximum_sessions": 1
       },
-      "transfer_test": "The preflight must prove that title-specific traversal and species bindings stay behind private capability interfaces while the model-visible menu contains only retained multiplicity, unresolved dependency demand, availability, and collection-transition semantics."
+      "transfer_test": "None. This lane qualifies a title-independent public-evidence boundary and makes no Red or Crystal claim."
+    },
+    {
+      "id": "red-dual-capability-action-free-scenario-preflight-v1",
+      "kind": "maintenance",
+      "name": "Red dual-capability action-free scenario preflight V1",
+      "preserve_evidence": true,
+      "reason": "Published main 188272b01f88f549c39f6b693239fc7bc5e63bb5 passed CI 32473254566/1. Manifest 18dd05a4 was frozen once and the sole preflight failed closed at public_evidence_authentication before any private input, ROM, claim registry, model prediction, controller action, or frame. Exact receipt hashes matched, but the runner rejected their tracked pretty JSON representation. The selected V1 context and invocation are closed without retry or replacement; all counters remain unchanged.",
+      "retry_allowed": false,
+      "rigor": "development",
+      "status": "retired"
     },
     {
       "id": "red-living-dex-dual-capability-curriculum-v1",

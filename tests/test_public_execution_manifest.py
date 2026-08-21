@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import sys
 from copy import deepcopy
 from pathlib import Path
@@ -22,9 +23,11 @@ from public_execution_manifest import (
     PublicExecutionManifestError,
     authenticate_public_execution_manifest,
     canonical_manifest_line,
+    canonical_tracked_public_document,
     freeze_public_execution_manifest,
     public_execution_invocation,
     read_public_manifest,
+    read_tracked_public_evidence,
 )
 
 
@@ -59,6 +62,15 @@ def _invocation() -> dict[str, object]:
 
 def _payload() -> bytes:
     return canonical_manifest_line(freeze_public_execution_manifest(invocation=_invocation()))
+
+
+def _tracked_evidence(tmp_path: Path, payload: bytes) -> Path:
+    root = tmp_path / "docs" / "evidence"
+    root.mkdir(parents=True)
+    path = root / "receipt.json"
+    path.write_bytes(payload)
+    path.chmod(0o644)
+    return path
 
 
 def test_authenticates_exact_canonical_invocation_and_current_public_code() -> None:
@@ -279,6 +291,203 @@ def test_reader_rejects_public_directory_swap_before_file_open(
 
     with pytest.raises(PublicExecutionManifestError, match="directory changed"):
         read_public_manifest(manifest, repository_root=tmp_path)
+
+
+def test_tracked_evidence_reader_accepts_exact_committed_pretty_receipt() -> None:
+    path = (
+        PROJECT_ROOT
+        / "docs/evidence"
+        / "red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json"
+    )
+
+    result = read_tracked_public_evidence(
+        path,
+        repository_root=PROJECT_ROOT,
+        expected_sha256=("95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31"),
+    )
+
+    assert result["status"] == "published_preflight_runner_qualified_private_preflight_not_run"
+
+
+def test_tracked_evidence_reader_ignores_git_repository_environment_overrides(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    path = (
+        PROJECT_ROOT
+        / "docs/evidence"
+        / "red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json"
+    )
+    other = tmp_path / "other"
+    other.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=other, check=True)
+    monkeypatch.setenv("GIT_DIR", str(other / ".git"))
+    monkeypatch.setenv("GIT_OBJECT_DIRECTORY", str(other / ".git" / "objects"))
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "attacker.gitconfig"))
+
+    result = read_tracked_public_evidence(
+        path,
+        repository_root=PROJECT_ROOT,
+        expected_sha256=("95b59f67e3f16acbc71ef0743f7bb71d5fc867c4e6e3501baa6be2203189ca31"),
+    )
+
+    assert result["status"] == "published_preflight_runner_qualified_private_preflight_not_run"
+
+
+def test_tracked_evidence_reader_accepts_only_exact_pretty_sorted_bytes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    document = {"alpha": 1, "nested": {"beta": [True, None]}, "schema": "example.v1"}
+    payload = canonical_tracked_public_document(document)
+    path = _tracked_evidence(tmp_path, payload)
+    monkeypatch.setattr(
+        public_manifest,
+        "_committed_public_evidence_bytes",
+        lambda *_args: payload,
+    )
+
+    result = read_tracked_public_evidence(
+        path,
+        repository_root=tmp_path,
+        expected_sha256=hashlib.sha256(payload).hexdigest(),
+    )
+
+    assert result == document
+
+
+@pytest.mark.parametrize(
+    "payload",
+    (
+        b'{"alpha":1,"schema":"example.v1"}\n',
+        b'{\n  "schema": "example.v1",\n  "alpha": 1\n}\n',
+        b'{\n  "alpha": 1,\n  "alpha": 1\n}\n',
+        b'{\n  "alpha": NaN\n}\n',
+        b'{\n  "alpha": "\xc3\xa9"\n}\n',
+        b'{\n  "alpha": 1\n}',
+    ),
+)
+def test_tracked_evidence_reader_rejects_alternate_or_invalid_json_representations(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    payload: bytes,
+) -> None:
+    path = _tracked_evidence(tmp_path, payload)
+    monkeypatch.setattr(
+        public_manifest,
+        "_committed_public_evidence_bytes",
+        lambda *_args: payload,
+    )
+
+    with pytest.raises(PublicExecutionManifestError):
+        read_tracked_public_evidence(
+            path,
+            repository_root=tmp_path,
+            expected_sha256=hashlib.sha256(payload).hexdigest(),
+        )
+
+
+def test_tracked_evidence_reader_rejects_wrong_hash_or_uncommitted_bytes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload = canonical_tracked_public_document({"schema": "example.v1"})
+    path = _tracked_evidence(tmp_path, payload)
+    monkeypatch.setattr(
+        public_manifest,
+        "_committed_public_evidence_bytes",
+        lambda *_args: payload + b"x",
+    )
+
+    with pytest.raises(PublicExecutionManifestError, match="digest differs"):
+        read_tracked_public_evidence(
+            path,
+            repository_root=tmp_path,
+            expected_sha256="0" * 64,
+        )
+    with pytest.raises(PublicExecutionManifestError, match="differs from HEAD"):
+        read_tracked_public_evidence(
+            path,
+            repository_root=tmp_path,
+            expected_sha256=hashlib.sha256(payload).hexdigest(),
+        )
+
+
+def test_tracked_evidence_reader_rejects_outside_symlink_hardlink_and_unsafe_mode(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload = canonical_tracked_public_document({"schema": "example.v1"})
+    evidence = _tracked_evidence(tmp_path, payload)
+    outside = tmp_path / "outside.json"
+    outside.write_bytes(payload)
+    symlink = evidence.with_name("symlink.json")
+    symlink.symlink_to(evidence)
+    hardlink = evidence.with_name("hardlink.json")
+    hardlink.hardlink_to(evidence)
+    unsafe = evidence.with_name("unsafe.json")
+    unsafe.write_bytes(payload)
+    unsafe.chmod(0o664)
+    monkeypatch.setattr(
+        public_manifest,
+        "_committed_public_evidence_bytes",
+        lambda *_args: payload,
+    )
+
+    for path in (outside, symlink, hardlink, unsafe):
+        with pytest.raises(PublicExecutionManifestError, match="public regular"):
+            read_tracked_public_evidence(
+                path,
+                repository_root=tmp_path,
+                expected_sha256=hashlib.sha256(payload).hexdigest(),
+            )
+
+
+def test_tracked_evidence_reader_rejects_oversize_before_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = _tracked_evidence(tmp_path, b"x" * 33)
+    monkeypatch.setattr(
+        public_manifest.os,
+        "open",
+        lambda *_args, **_kwargs: pytest.fail("oversize evidence was opened"),
+    )
+
+    with pytest.raises(PublicExecutionManifestError, match="public regular"):
+        read_tracked_public_evidence(
+            path,
+            repository_root=tmp_path,
+            expected_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+            maximum_bytes=32,
+        )
+
+
+def test_tracked_evidence_reader_rejects_inode_swap_between_lstat_and_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    payload = canonical_tracked_public_document({"schema": "example.v1"})
+    path = _tracked_evidence(tmp_path, payload)
+    replacement = path.with_name("replacement.json")
+    replacement.write_bytes(b"x" * len(payload))
+    real_open = public_manifest.os.open
+
+    def swapping_open(name, flags, *, dir_fd=None):  # type: ignore[no-untyped-def]
+        if dir_fd is not None:
+            path.unlink()
+            replacement.rename(path)
+            return real_open(name, flags, dir_fd=dir_fd)
+        return real_open(name, flags)
+
+    monkeypatch.setattr(public_manifest.os, "open", swapping_open)
+
+    with pytest.raises(PublicExecutionManifestError, match="changed while opening"):
+        read_tracked_public_evidence(
+            path,
+            repository_root=tmp_path,
+            expected_sha256=hashlib.sha256(payload).hexdigest(),
+        )
 
 
 def test_nonfreeze_requires_exact_campaign_binding() -> None:

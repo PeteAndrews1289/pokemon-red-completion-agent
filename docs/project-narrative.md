@@ -1,6 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the exact Red dual-capability preflight runner passed external review
+## August 21: the one-shot V1 preflight failed before protected access
+
+Main `188272b01f88f549c39f6b693239fc7bc5e63bb5` passed CI `32473254566/1` with
+4604 tests. Exact invocation manifest `18dd05a4…d71` was frozen once. The sole preflight returned
+`public_evidence_authentication` before opening a private input, ROM, claim registry, model, or
+scenario. The [failure receipt](evidence/red-dual-capability-action-free-preflight-v1-failure-2026-08-21.json)
+(SHA-256 `b09ef67e3cae93ce5033a80fcaf85fae5680e9f22886bc021ab98202f60c6d09`)
+binds the sanitized output and every zero counter delta.
+
+Public diagnosis identified a representation mismatch rather than a gameplay result: pinned
+receipt hashes matched, but the runner required compact canonical JSON while tracked evidence uses
+canonical pretty sorted JSON. V1 and its selected context are retired without retry. The active
+one-hour maintenance lane qualifies a reusable tracked-evidence reader only; a new scenario gate
+requires a later reorientation. No Red, living-Pokédex, Crystal, authority, or transfer claim moved.
+
+## Previous August 21 checkpoint: the exact Red dual-capability preflight runner passed external review
 
 Main `347f954dc029cf01db3bc366b30ce07b80e445b5` passed CI `32471913419/1`. The
 [preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
