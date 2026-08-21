@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-21: authentic preflight found no two-action menu; curriculum design is active
+## 2026-08-21: dual-capability design qualified; semantic implementation is active
+
+Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
+4580 tests, one skip, three deselections, and one expected failure. The
+[design qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+binds two distinct capability roles to one reset state, removes every preferred action and teacher
+label, keeps policy rows title neutral, and verifies acquisition/evolution outcomes against exact
+specimen-ledger transitions. Antigravity's first review correctly rejected reuse of fixed Red
+direction callbacks; the design now requires authenticated semantic traversal and the exact-byte
+re-review returned GO with P0/P1/P2 all zero.
+
+Codex owns only `red-living-dex-dual-capability-curriculum-v1`: implement and mutation-test the
+ROM-free semantic venue-entry capture adapter and same-reset scenario builder. No direction
+strings, profile/curriculum route sequence, private search, ROM run, prediction, controller action,
+fit, Crystal work, or authority promotion is allowed. Antigravity reviews; Claude remains
+unavailable and is not a blocker. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous checkpoint — 2026-08-21: authentic preflight found no two-action menu
 
 Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
 tests. The

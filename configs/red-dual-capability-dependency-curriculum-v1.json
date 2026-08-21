@@ -1,0 +1,131 @@
+{
+  "authority_contract": {
+    "controller_authority": false,
+    "crystal_transfer_measured": false,
+    "curriculum_design_grants_gameplay_authority": false,
+    "living_pokedex_completion_claimed": false,
+    "model_authority_changed": false,
+    "story_completion_claimed": false
+  },
+  "capability_contract": {
+    "candidate_order": [
+      "acquire_species",
+      "evolve_species"
+    ],
+    "capabilities": [
+      {
+        "execution_role": "measured_venue_capture",
+        "goal_kind": "acquire_species",
+        "implementation_status": "semantic_venue_entry_capture_adapter_required",
+        "requirements": [
+          "authenticate_one_measured_encounter_venue",
+          "authenticate_semantic_traversal_from_the_shared_reset_to_that_venue",
+          "reject_profile_or_curriculum_direction_sequences",
+          "capture_one_required_precursor_under_hard_limits",
+          "verify_the_retained_specimen_from_a_fresh_collection_observation"
+        ],
+        "reusable_primitives": [
+          "execute_route",
+          "RedAreaSurveyGoalProvider",
+          "WarpSafeVenueWalker"
+        ]
+      },
+      {
+        "execution_role": "bounded_training_evolution",
+        "goal_kind": "evolve_species",
+        "implementation_status": "existing_provider_candidate_requires_scenario_binding",
+        "requirements": [
+          "start_from_the_shared_reset",
+          "train_one_bound_precursor_under_hard_limits",
+          "verify_the_declared_transformation_from_a_fresh_collection_observation"
+        ],
+        "reusable_primitives": [
+          "TrainingVenue",
+          "run_red_team_balancing",
+          "RedObservedGoalSkillProvider"
+        ]
+      }
+    ],
+    "existing_local_corridor_capture_is_sufficient": false,
+    "independent_availability_required": true,
+    "private_binding_hashes_required": 3,
+    "same_reset_state_sha256_required": true,
+    "selected_action_only_executes": true
+  },
+  "counter_contract": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "design_status": "frozen_public_contract_no_binding_or_execution",
+  "lane_id": "red-dual-capability-dependency-curriculum-design-v1",
+  "outcome_contract": {
+    "acquisition_positive_transition": "precursor_plus_one_evolved_unchanged_unrelated_unchanged",
+    "evolution_positive_transition": "precursor_minus_one_evolved_plus_one_unrelated_unchanged",
+    "interruption_target": null,
+    "negative_target": -1,
+    "positive_requires_dependency_distance_decrease": true,
+    "positive_requires_exact_selected_transition": true,
+    "positive_requires_required_living_reserve": true,
+    "positive_target": 1,
+    "source": "independent_post_transition_living_collection_observation",
+    "teacher_or_planner_preference_is_a_label": false
+  },
+  "policy_contract": {
+    "candidate_count": 2,
+    "candidate_order": [
+      "acquire_species",
+      "evolve_species"
+    ],
+    "feature_schema": "pokemon.core.proposed-rootless-living-dex-dependency-features.v3",
+    "full_menu_frozen_before_score": true,
+    "private_binding_fields_visible_to_model": 0,
+    "route_identity_fields_visible_to_model": 0,
+    "species_identity_fields_visible_to_model": 0,
+    "teacher_choice_fields": 0,
+    "title_identity_fields_visible_to_model": 0
+  },
+  "scenario_contract": {
+    "assigned_actions": 0,
+    "multiplicities": [
+      "scarce",
+      "duplicate_ready"
+    ],
+    "reset_contract": "restore_identical_authenticated_state_before_each_selected_action",
+    "same_dependency_binding_required": true,
+    "same_predecision_state_for_both_candidates": true,
+    "scenario_count": 2,
+    "snapshot_restores_before_each_episode": true
+  },
+  "schema": "pokemon.red.dual-capability-living-dex-curriculum-design.v1",
+  "stage_contract": {
+    "design_stage_controller_actions": 0,
+    "design_stage_emulator_frames": 0,
+    "design_stage_model_predictions": 0,
+    "design_stage_private_accesses": 0,
+    "future_implementation_lane_id": "red-living-dex-dual-capability-curriculum-v1",
+    "future_implementation_must_fail_without_both_live_offers": true,
+    "future_implementation_must_not_embed_route_steps_in_profile": true,
+    "next_stage": "implement_semantic_venue_entry_capture_and_dual_capability_builder",
+    "prediction_or_execution_authorized": false
+  },
+  "stop_conditions": [
+    "Stop if acquisition requires a predeclared or context-specific direction sequence instead of an authenticated semantic traversal capability.",
+    "Stop if both capabilities cannot be authenticated as available from the same restored state before any model score.",
+    "Stop if species, title, venue, route, or binding identity crosses the policy boundary.",
+    "Stop if a teacher preference or expected action becomes the outcome label.",
+    "Stop after this public design; implementation, prediction, gameplay, fitting, comparison, Crystal, and authority remain separate."
+  ]
+}

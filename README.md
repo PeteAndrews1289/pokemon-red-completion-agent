@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the first authentic Red preflight found no valid
+> **Current product focus (August 21, 2026): the dual-capability curriculum design is qualified;
+> implement its semantic Red capability seam.** Source `09e9b04bc2bb09b1d793a0484dca3898e010688b`
+> passed CI `32462322717/1` with 4580 tests, one skip, three deselections, and one expected failure.
+> The [design qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+> (SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+> freezes **TWO DISTINCT CAPABILITY ROLES · ONE RESET STATE · PREFERRED ACTIONS 0 · TEACHER
+> LABELS 0 · TITLE/ROUTE IDENTITY 0 · EVOLUTION-AWARE LEDGER VERIFICATION**. Antigravity first
+> rejected a fixed-direction route dependency; that reference was removed in favor of authenticated
+> semantic traversal, and the exact-byte re-review returned GO with P0/P1/P2 all zero.
+>
+> Active `red-living-dex-dual-capability-curriculum-v1` implements only the ROM-free semantic
+> venue-entry capture adapter and same-reset scenario builder. Direction strings and profile- or
+> curriculum-specific route sequences are forbidden. Stop before private data, ROM execution,
+> model scoring, controller action, fitting, Crystal, or promotion. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**; this is qualified curriculum engineering,
+> not gameplay or living-Pokédex competence.
+
+> **Previous product focus (August 21, 2026): the first authentic Red preflight found no valid
 > two-action menu; design the missing curriculum instead of searching for another save.** Main
 > `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567 tests. The
 > [preflight result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)

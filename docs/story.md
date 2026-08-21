@@ -7,7 +7,23 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the first silent look found an empty classroom
+## Current checkpoint: the classroom blueprint is real—and contains no hidden route
+
+Source `09e9b04b` passed CI `32462322717/1` with 4580 tests. The
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+freezes one reset state where acquisition and evolution are represented by two genuinely distinct
+capability roles. The student gets neither a preferred answer nor a teacher label; it sees only
+identity-free facts. Afterward, the result is judged from the exact specimen ledger, including the
+essential fact that evolution consumes one form while preserving the living collection.
+
+The review caught an important near-miss. The first draft reused fixed Red direction callbacks,
+which would have smuggled a miniature walkthrough into the lesson. We removed them and required
+semantic traversal instead. Antigravity then returned exact-byte GO with no remaining P0, P1, or
+P2 finding. The next job is deliberately narrow: build that semantic venue-entry seam and the
+same-reset scenario in ROM-free tests. The model still has not played this scene, but the lesson
+will now test a reusable decision rather than memorized arrows.
+
+## Previous checkpoint: the first silent look found an empty classroom
 
 Main `8d559d23` passed CI `32458785817/1` with 4567 tests. The
 [preflight result](evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)

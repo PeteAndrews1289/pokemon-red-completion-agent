@@ -1,6 +1,24 @@
 # Current audit — 2026-08-21
 
-## Current result: authentic preflight found the missing curriculum boundary
+## Current result: dual-capability curriculum design qualified
+
+Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
+4580 tests, one skip, three deselections, and one expected failure. The
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+binds two independent capability roles to one reset state, provides no preferred action or teacher
+label, exposes only title-neutral rows, and evaluates exact acquisition/evolution ledger changes.
+Antigravity correctly rejected fixed Red movement callbacks in its first review; the corrected
+design requires semantic traversal and passed exact-byte re-review with P0/P1/P2 all zero.
+
+This checkpoint opened no private input or ROM, made no prediction, advanced no action or frame,
+fit no model, and changed no counter. Active `red-living-dex-dual-capability-curriculum-v1`
+implements only the ROM-free semantic venue-entry capture adapter and same-reset scenario builder.
+Any direction string, root-specific route, private search, gameplay, fit, Crystal work, or
+authority claim stops the lane. Boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: authentic preflight found the missing curriculum boundary
 
 Published main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI
 `32458785817/1` with 4567 tests. The

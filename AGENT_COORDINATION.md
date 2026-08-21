@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-21 authentic preflight returned candidate zero; public curriculum design is active:**
+> **2026-08-21 dual-capability design qualified; semantic implementation is active:** Source
+> `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with 4580
+> tests. The
+> [design qualification](docs/evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+> (SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+> records **TWO CAPABILITY ROLES · ONE RESET · PREFERRED ACTION/TEACHER LABEL 0 · TITLE/ROUTE
+> IDENTITY 0 · EVOLUTION-AWARE LEDGER VERIFIER · ANTIGRAVITY GO · P0/P1/P2 0**. The first
+> Antigravity pass found a fixed-direction dependency; Codex accepted and removed it.
+>
+> Codex owns only `red-living-dex-dual-capability-curriculum-v1`: implement the ROM-free semantic
+> venue-entry capture adapter and same-reset builder, with no direction string or profile-specific
+> route. Antigravity reviews; Claude is unavailable. No agent owns private/ROM access, scoring,
+> actions, fitting, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 authentic preflight returned candidate zero; public curriculum design was active:**
 > Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
 > tests. The
 > [preflight result](docs/evidence/red-living-dex-dependency-shadow-preflight-result-v1-2026-08-21.json)

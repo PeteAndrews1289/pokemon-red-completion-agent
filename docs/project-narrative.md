@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the authentic preflight found no jointly executable decision
+## August 21: the dual-capability curriculum design qualified without a route script
+
+Source `09e9b04bc2bb09b1d793a0484dca3898e010688b` passed CI `32462322717/1` with
+4580 tests. The
+[design qualification](evidence/red-dual-capability-dependency-curriculum-design-qualification-v1-2026-08-21.json)
+(SHA-256 `aad8cf42b038a78be85f1aefa14cda292576b83818144ca85f56246cea12f2f8`)
+freezes two distinct executable capability roles at one reset, a full title-neutral menu with no
+preferred action or teacher label, and an evolution-aware verifier over exact specimen-ledger
+changes. It opened no private input or ROM, made no prediction or action, fit no model, and changed
+no learning counter.
+
+Antigravity's first review found that fixed Red direction callbacks would undermine the intended
+transfer claim. The objection was accepted: those references were removed and replaced with an
+authenticated semantic-traversal requirement. Exact-byte re-review then returned GO with no
+P0/P1/P2 finding. Active work now implements only the ROM-free venue-entry adapter and same-reset
+builder. This advances the path from an abstract dependency rule toward real Red action while
+remaining curriculum infrastructure—not gameplay, completion, authority, or Crystal transfer.
+
+## Previous August 21 checkpoint: the authentic preflight found no jointly executable decision
 
 Main `8d559d230fc06fa83edc8015bb245df531600e16` passed CI `32458785817/1` with 4567
 tests. One exact
