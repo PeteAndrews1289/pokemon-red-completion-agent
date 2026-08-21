@@ -1,6 +1,23 @@
 # Current audit — 2026-08-21
 
-## Current result: semantic dual-capability runtime qualified
+## Current result: exact action-free preflight runner published and green
+
+Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
+4603 tests, one skip, three deselections, and one expected failure. The
+[preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+binds manifest-first authentication, one fixed reset/dependency, semantic traversal,
+encounter-only capture, the exact profile/config-bound evolution offer, two title-neutral rows,
+and stable physical-root plus semantic-scenario identities. Focused tests passed 81/81, the full
+local ROM-free suite passed 4604, and independent mission/safety audits returned GO.
+
+This checkpoint opened no private input or ROM, made no prediction, wrote no claim, advanced no
+action or frame, fit no model, and changed no counter. Antigravity review and one public invocation
+freeze remain before exactly one action-free preflight. Any failure closes the context without a
+replacement or route patch. Aggregate route steps/cost do not expose directions. Boards stay
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous result: semantic dual-capability runtime qualified
 
 Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
 4588 tests, one skip, three deselections, and one expected failure. The

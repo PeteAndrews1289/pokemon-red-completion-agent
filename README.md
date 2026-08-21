@@ -5,7 +5,26 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the semantic dual-capability runtime is qualified;
+> **Current product focus (August 21, 2026): the exact dual-capability preflight runner is
+> published; freeze and silently inspect one fixed Red scenario.** Main
+> `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with 4603
+> tests, one skip, three deselections, and one expected failure. The
+> [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+> (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+> records **MANIFEST BEFORE PRIVATE/ROM · ONE FIXED RESET/DEPENDENCY · SEMANTIC ROUTE ·
+> ENCOUNTER-ONLY CAPTURE · EXACT PROFILE-BOUND EVOLUTION · TWO ANONYMOUS ROWS · STABLE ROOT +
+> SCENARIO IDENTITIES · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0**. Two independent code audits
+> returned GO; the requested Antigravity exact-byte review is still pending. Route steps and cost
+> are aggregate semantic-plan metrics, never a direction script.
+>
+> Active `red-dual-capability-action-free-scenario-preflight-v1` now needs only the final external
+> review, one exact public invocation freeze, and one private action-free preflight. It may read the
+> fixed nonsealed reset and read-only ledgers, but it cannot score the model, write a claim, press a
+> button, advance a frame, substitute a context, or patch the route. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**. A pass permits only a separately frozen
+> one-decision shadow outcome; it is not gameplay competence or living-Pokédex completion.
+
+> **Previous product focus (August 21, 2026): the semantic dual-capability runtime is qualified;
 > preflight one real Red scenario without scoring.** Source
 > `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with 4588
 > tests, one skip, three deselections, and one expected failure. The

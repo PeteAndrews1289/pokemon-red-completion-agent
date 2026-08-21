@@ -1,0 +1,102 @@
+{
+  "claim_boundary": {
+    "supported": "Published Red code can authenticate one fixed nonsealed Diglett's Cave acquire-versus-evolve scenario without model scoring, controller input, frame advancement, gameplay, or one-shot claim consumption. It binds the exact title-neutral two-row menu to semantic venue traversal, encounter-only capture mechanics, bounded Diglett-to-Dugtrio evolution, a stable physical reset identity, and a source-independent semantic scenario identity.",
+    "unsupported": "This qualification is not the private action-free preflight result, a model prediction, a controller action, a causal gameplay outcome, a model update, Red completion, living-Pokedex completion, authority promotion, Crystal evidence, or cross-title transfer evidence. Route steps and cost, when later reported, are aggregate semantic-plan metrics rather than an exposed direction script."
+  },
+  "counter_treatment": {
+    "atomic_goal_episodes_added": 0,
+    "authority_promotions_added": 0,
+    "causal_train_examples_added": 0,
+    "composition_attempts_added": 0,
+    "development_episode_attempts_added": 0,
+    "model_fits_added": 0,
+    "outcome_questions_added": 0,
+    "synthetic_rootless_atomic_goal_episodes_added": 0,
+    "synthetic_rootless_model_fits_added": 0,
+    "synthetic_rootless_train_outcomes_added": 0,
+    "synthetic_rootless_unseen_comparisons_added": 0,
+    "transfer_results_added": 0,
+    "unseen_comparisons_added": 0,
+    "verified_composition_episodes_added": 0,
+    "verified_outcome_examples_added": 0
+  },
+  "independent_code_audits": {
+    "exact_bytes_verified": true,
+    "mission_verdict": "go",
+    "p0_blockers": 0,
+    "p1_blockers": 0,
+    "private_or_runtime_accesses": 0,
+    "safety_verdict": "go_for_publication_private_preflight_requires_exact_published_green_head",
+    "third_party_antigravity_review": "pending"
+  },
+  "publication": {
+    "ci_attempt": 1,
+    "ci_conclusion": "success",
+    "ci_deselected": 3,
+    "ci_passed": 4603,
+    "ci_run_id": 32470280542,
+    "ci_skipped": 1,
+    "ci_xfailed": 1,
+    "pull_request": 31,
+    "source_commit": "c3e07d261545df03b519f5ba270ff0591e43bbe4"
+  },
+  "published_bindings": {
+    "battle_collection_registry_sha256": "6e41c0564787ec8384e6ea061bbc9071caa65ea0baadcdb754438d313c5fec78",
+    "dual_capability_runtime_sha256": "29b3ffed8720dcec4eeab045f7781382efa664900a933f0d82ecf3df06912d0e",
+    "dual_capability_runtime_test_sha256": "90e9a6338ce881a29af4a0d5e307f7ebb732450c4c9173e9787ae188ce09e158",
+    "goal_manager_collection_registry_sha256": "bb50177d137f3f53e23b2ae004cab15388b9f1d73cd4170b5487469e3319059e",
+    "preflight_runner_sha256": "1bedf16072962b575dd0540507ede2cad1ce47dc01866a59578514f878768aa4",
+    "preflight_runner_test_sha256": "1b2d27bdc87adba5a8d01daecadd4bcb343296c3ad0cc624732a31fbfcb78834",
+    "source_bundle_sha256": "e7f161c160ee36acff1383fbc31d6ebb3f5f653890eb5b41a36adc01cc972f08",
+    "strategic_navigation_collection_registry_sha256": "19a9e3d42dc41650ec10ded9306aed589b5e54cb3a99d508b7fed193d4b64329",
+    "surge_runtime_sha256": "2a7cf3930da6853a789c33b12f1c9566de3a3b1c1e4fa574fed192800474a0ce",
+    "surge_test_sha256": "bc2a5b49e7de02182e1c0b6d88d5e2283be2d12aed128fba04239991529c593b"
+  },
+  "qualification": {
+    "action_free_preflight_executed": false,
+    "authentic_profile_config_bound_evolution_offer_required": true,
+    "candidate_order": [
+      "acquire_species",
+      "evolve_species"
+    ],
+    "claim_registry_reads_only": true,
+    "code_independent_physical_root_identity": true,
+    "controller_direction_sequences_exposed": false,
+    "exact_preselected_context_slot": "red-goal-v1-032-evolve_species-train-05",
+    "focused_tests_passed": 81,
+    "full_local_rom_free_tests_passed": 4604,
+    "future_execution_identity_claimed": false,
+    "manifest_authentication_before_private_or_rom_access": true,
+    "model_scoring_available_in_runner": false,
+    "one_shot_identity_consumed": false,
+    "profile_or_context_substitution_available": false,
+    "registry_protocol_tests_passed": 49,
+    "route_metrics_are_aggregate_only": true,
+    "ruff_passed": true,
+    "semantic_route_required": true,
+    "source_independent_scenario_identity": true,
+    "stable_physical_root_availability_checked": true,
+    "strict_mypy_passed": true,
+    "title_neutral_policy_rows": 2
+  },
+  "recorded_on": "2026-08-21",
+  "schema": "pokemon.red.dual-capability-action-free-preflight-qualification.v1",
+  "status": "published_preflight_runner_qualified_private_preflight_not_run",
+  "title_role": "Red action-free scenario-preflight engineering maintenance; not gameplay, learning, completion, authority, or transfer evidence",
+  "tracked_private_identities": 0,
+  "tracked_private_paths": 0,
+  "zero_effects": {
+    "claim_registry_writes": 0,
+    "controller_actions": 0,
+    "crystal_accesses": 0,
+    "development_contexts_opened": 0,
+    "emulator_frames_advanced": 0,
+    "fits_executed": 0,
+    "game_executions": 0,
+    "model_predictions": 0,
+    "private_artifacts_opened": 0,
+    "rom_accesses": 0,
+    "sealed_red_accesses": 0,
+    "teacher_queries": 0
+  }
+}

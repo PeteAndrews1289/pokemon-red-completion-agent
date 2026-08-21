@@ -1,6 +1,21 @@
 # Three-agent coordination
 
-> **2026-08-21 dual-capability runtime qualified; one action-free scenario preflight is active:**
+> **2026-08-21 exact dual-capability preflight runner published; one silent inspection remains:**
+> Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
+> 4603 tests. The
+> [preflight qualification](docs/evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+> (SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+> records **MANIFEST FIRST · FIXED RESET/DEPENDENCY · SEMANTIC ROUTE · ENCOUNTER-ONLY CAPTURE ·
+> EXACT PROFILE-BOUND EVOLUTION · ANONYMOUS ROWS 2 · PREDICTION/CLAIM-WRITE/ACTION/FRAME 0 ·
+> INTERNAL AUDITS GO · ANTIGRAVITY PENDING**.
+>
+> Codex owns final external review, one exact invocation freeze, one action-free preflight, and
+> immediate reorientation. Antigravity is the external reviewer; Claude is unavailable. No agent
+> owns a model score, controller input, claim write, frame advancement, context substitution,
+> route patch, fit, Crystal, promotion, completion, or transfer. Boards remain
+> **30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+> **Previous checkpoint — 2026-08-21 dual-capability runtime qualified; one action-free scenario preflight was active:**
 > Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
 > 4588 tests. The
 > [runtime qualification](docs/evidence/red-dual-capability-curriculum-runtime-qualification-v1-2026-08-21.json)

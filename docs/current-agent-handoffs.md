@@ -6,7 +6,23 @@ Status: active operating assignment as of 2026-08-21. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns one action-free dual-capability scenario preflight
+## Current override: Codex owns the final external review, invocation freeze, and one silent preflight
+
+Main `c3e07d261545df03b519f5ba270ff0591e43bbe4` passed CI `32470280542/1` with
+4603 tests. The
+[preflight qualification](evidence/red-dual-capability-action-free-preflight-qualification-v1-2026-08-21.json)
+(SHA-256 `ce2855601175df8388c80ab9e0070c49a164ac8e5855112a69c593e94de8051f`)
+records the exact manifest-first runner, fixed reset/dependency, semantic traversal,
+encounter-only capture, exact wrapped evolution binding, anonymous menu, stable identities, and
+zero prediction/action capability. Independent internal reviews are GO.
+
+Codex may obtain Antigravity's exact-byte review, freeze one exact public invocation, execute one
+action-free private preflight, and record/reorient from the result. Antigravity is the external
+reviewer; Claude is unavailable. No model score, claim write, controller input, advanced frame,
+substitution, route patch, fit, Crystal, promotion, completion, or transfer is owned. Boards remain
+**30/15/4/4/0/0 · 14/4/0/1/1 · ROOTLESS 8/8/1/1**.
+
+## Previous override: Codex owned one action-free dual-capability scenario preflight
 
 Source `c946e8dba00ca246d3720b115f81691a1a8cdc91` passed CI `32465536131/1` with
 4588 tests. The
