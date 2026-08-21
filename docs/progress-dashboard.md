@@ -5,7 +5,21 @@
 > historical gates below as the answer to “what are we doing now?” Run
 > `python scripts/run_product_focus_dashboard.py` and open `http://127.0.0.1:8768/`.
 >
-> **Current rail:** Show **MAIN 15B2DBCB · CI 32443875609/1 GREEN · CLEAN V2 FIT COMPLETE ·
+> **Current rail:** Show **MAIN C0956CC6 · CI 32445054913/1 GREEN · COMPARISON PREFLIGHT PASS ·
+> MANIFEST 583050DA · FIT BUNDLE AUTHENTICATED · SEALED MANIFESTS 4/4 · PAYLOAD OPEN/DECODE
+> 0 · CLAIM ED906F06 UNUSED · COMPARISON 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO · P0/P1
+> 0**. Link the
+> [comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+> and show **SHA-256 D03EF07A…E1CC6C**.
+>
+> Display active `rootless-living-dex-dependency-v2-comparison-execution-qualification-v1`.
+> Active rail: **PUBLIC/SYNTHETIC EXACT BUNDLE JOIN → CLAIM-BEFORE-OPEN MUTATIONS → EXACT 4-ROW
+> DENOMINATOR → AGGREGATE-ONLY OUTPUT → DURABLE SUCCESS/FAILURE TERMINAL → NO RETRY →
+> ANTIGRAVITY → EXACT-HEAD CI → STOP**. Show **REAL PRIVATE/CLAIM ACCESS 0 · DEV DECODE 0 ·
+> COMPARISON EXECUTION 0 · GAMEPLAY/AUTHORITY/TRANSFER 0**. Hold **30/15/4/3/0/0 ·
+> 14/4/0/1/1 · ROOTLESS 8/8/1/0**.
+>
+> **Previous rail:** Show **MAIN 15B2DBCB · CI 32443875609/1 GREEN · CLEAN V2 FIT COMPLETE ·
 > FIT C544FA92 · MODEL A42DB642 · 4 SEALED MANIFESTS AUTHENTICATED · DEV PAYLOAD
 > OPEN/DECODE 0 · FIT CLAIM CONSUMED · RETRY 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO ·
 > P0/P1 0 · OVERCLAIM 0**. Link the

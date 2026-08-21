@@ -5,7 +5,24 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 20, 2026): the clean V2 fit is complete; authenticate one
+> **Current product focus (August 21, 2026): the sealed comparison preflight passed; qualify its
+> runner without touching the exam.** Main `c0956cc634a56f4851102f9bc259e44d112532e8`
+> passed CI `32445054913/1`. The
+> [comparison-preflight result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+> (SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+> records **FIT BUNDLE AUTHENTICATED · 4 SEALED MANIFESTS AUTHENTICATED · PAYLOAD OPEN/DECODE 0 ·
+> COMPARISON CLAIM ED906F06 UNUSED · COMPARISON EXECUTION 0 · COUNTER DELTAS 0 · ANTIGRAVITY GO
+> · P0/P1 0**.
+>
+> Active `rootless-living-dex-dependency-v2-comparison-execution-qualification-v1` is public and
+> synthetic only. Qualify exact-bundle authentication, durable claim-before-open, the exact
+> four-row denominator, aggregate-only publication, terminal retention, and no retry. Do not
+> access real private storage or claims, open an answer, execute comparison, refit, touch a
+> ROM/controller, play Red or Crystal, or claim authority or transfer. Boards remain
+> **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**. The project still has
+> not demonstrated gameplay or cross-title living-Pokédex competence.
+
+> **Previous product focus (August 20, 2026): the clean V2 fit is complete; authenticate one
 > comparison identity without opening the exam.** Main
 > `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. The
 > [compliance-fit result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)

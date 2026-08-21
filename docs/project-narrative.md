@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 20: a clean V2 replacement fit completed without opening the exam
+## August 21: the V2 comparison preflight passed without opening an answer
+
+Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+(SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+binds the clean fit bundle, all four sealed manifests, and unused comparison identity
+`ed906f06…e0583`. It opened and decoded zero development payloads; no comparison ran and no
+counter changed. Antigravity returned GO with no P0/P1 blocker.
+
+Active `rootless-living-dex-dependency-v2-comparison-execution-qualification-v1` now implements
+and mutation-tests the runner only on public/synthetic fixtures. It must claim before opening,
+enforce exactly four committed rows, publish aggregate metrics only, retain success/failure
+terminals, and never retry. Actual private access and comparison execution remain a later lane.
+This is still evaluation infrastructure for one transferable collection decision, not gameplay,
+completion, living-Pokédex authority, or cross-game transfer.
+
+## Previous August 20 checkpoint: a clean V2 replacement fit completed without opening the exam
 
 Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI `32443875609/1`. After a
 metadata-only fit preflight authenticated all four sealed manifests, exactly one no-retry fit

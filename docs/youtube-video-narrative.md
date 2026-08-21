@@ -1,6 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## August 20 scene: fit cleanly, leave all four answers sealed
+## August 21 scene: authenticate the exam without opening an answer
+
+Open on **MAIN C0956CC6 · CI 32445054913/1 GREEN · MANIFEST 583050DA**. Animate
+**MODEL + FIT + DATASET + MANIFEST + TERMINAL JOINED → 4 ENVELOPES AUTHENTICATED → PAYLOAD
+OPEN/DECODE 0 → CLAIM ED906F06 UNUSED → COMPARISON 0**. Link the
+[comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+with **SHA-256 D03EF07A…E1CC6C** and stamp **ANTIGRAVITY GO · P0/P1 0**.
+
+Hold the scoreboard at **LEARNING +0 · COMPARISON +0 · GAMEPLAY/AUTHORITY/TRANSFER 0**. The
+next rail is public/synthetic only: **EXACT BUNDLE → CLAIM BEFORE OPEN → EXACTLY 4 ROWS →
+AGGREGATE ONLY → DURABLE TERMINAL → NO RETRY → EXACT-HEAD CI → STOP**. Make the hard cut
+before real private access or answer opening. Explain that this secures one acquire-versus-evolve
+test; it does not yet show the model playing, finishing, or transferring Pokémon.
+
+## Previous August 20 scene: fit cleanly, leave all four answers sealed
 
 Open on **MAIN 15B2DBCB · CI 32443875609/1 GREEN · FIT PREFLIGHT PASSED**. Animate
 **4 SEALED MANIFESTS AUTHENTICATED → PAYLOAD OPEN/DECODE 0 → CLAIM EAF6BCB3 CONSUMED → FIT

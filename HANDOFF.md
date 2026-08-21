@@ -12,7 +12,26 @@ Then read, in order: [MISSION.md](MISSION.md) (why the project exists),
 [AGENT_COORDINATION.md](AGENT_COORDINATION.md) (rules and lanes), and
 [docs/story.md](docs/story.md) (the narrative, which doubles as a record of the failure modes).
 
-## 2026-08-20: clean V2 fit complete; comparison-preflight gate is active
+## 2026-08-21: comparison preflight passed; public runner qualification is active
+
+Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI run `32445054913`
+attempt 1. The
+[comparison-preflight result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+(SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+authenticates the exact clean fit bundle and four sealed manifests, opens and decodes zero
+development payloads, and leaves comparison claim `ed906f06…e0583` unused. No comparison ran and
+every counter delta is zero. Antigravity returned GO with no P0/P1 blocker.
+
+Codex now owns only
+`rootless-living-dex-dependency-v2-comparison-execution-qualification-v1`: implement and
+mutation-test a source-authenticated one-shot runner on public and synthetic fixtures. It must
+claim before opening, enforce exactly four committed rows, publish aggregates only, retain durable
+success/failure terminals, and never retry. Stop after Antigravity review and exact-head green CI.
+No real private artifact or claim access, development decode, comparison execution, refit,
+gameplay, ROM/controller action, Red/Crystal play, promotion, completion, or transfer is owned.
+Counters remain **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0**.
+
+## Previous checkpoint — 2026-08-20: clean V2 fit complete; comparison-preflight gate was active
 
 Main `15b2dbcb3cf881e97285c2611703d3c4dbac5206` passed CI run `32443875609`
 attempt 1. The

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Passed exactly one source-bound V2 metadata-only comparison preflight at published main
+  `c0956cc634a56f4851102f9bc259e44d112532e8` under green CI `32445054913/1`. The
+  [path-free result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+  (SHA-256 `d03ef07ac78399766b636e0ac03d9d120ce470634f55f2ed680792d77be1cc6c`)
+  authenticates the exact fit bundle and all four sealed manifests while opening/decoding zero
+  development payloads. Comparison identity `ed906f06…e0583` remains unused; no comparison ran and
+  every counter delta is zero. Antigravity returned GO with no P0/P1 blocker. Retired the
+  preflight lane and activated public/synthetic one-shot comparison-runner qualification only;
+  real private access, claim consumption, comparison execution, gameplay, authority, Crystal,
+  completion, and transfer remain closed.
+
 - Completed exactly one clean V2 compliance replacement fit at published main
   `15b2dbcb3cf881e97285c2611703d3c4dbac5206` under green CI `32443875609/1`. The
   [path-free result](docs/evidence/rootless-living-dex-dependency-v2-compliance-fit-result-2026-08-20.json)
