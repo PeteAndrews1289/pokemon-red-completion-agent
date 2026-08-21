@@ -7,7 +7,21 @@ Every number here is real and traceable to a receipt in `docs/evidence/`.
 
 ---
 
-## Current checkpoint: the doorman checked every seal and left the answers untouched
+## Current checkpoint: the exam mechanism is ready, and the next opening is final
+
+Main `96ef8a1b` passed CI `32447962527/1` with the complete one-shot comparison mechanism. The
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+records Antigravity GO, four intact envelopes, zero opened answers, and an unused semantic claim.
+It also preserves an uncomfortable process truth: the metadata check happened one planning step
+early. Because it read no answer and claimed nothing, the exam is still clean; because the source
+will change when this decision is published, that old execution identity is discarded.
+
+There is no more runner-building scene. Publish the decision, check the seals once on the exact
+new head, open all four under one irreversible claim, show only the aggregate, and stop. Whatever
+the score, this is one small test of “capture another precursor or evolve the duplicate,” not a
+scene of the model walking through Red, finishing a story, or transferring to Crystal.
+
+## Previous checkpoint: the doorman checked every seal and left the answers untouched
 
 At main `c0956cc6` under green CI `32445054913/1`, the project ran its one permitted metadata-only
 preflight. The

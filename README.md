@@ -5,7 +5,28 @@
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (August 21, 2026): the sealed comparison preflight passed; qualify its
+> **Current product focus (August 21, 2026): publish the execution lane, refresh its exact-head
+> preflight, then run one held-out comparison.** Main
+> `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1` with the complete
+> claim-before-open, four-row, aggregate-only comparison runner. The
+> [execution-qualification receipt](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+> (SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+> records **ANTIGRAVITY IMPLEMENTATION + GOVERNANCE GO · P0/P1 0 · 4 MANIFESTS AUTHENTICATED ·
+> PAYLOAD OPEN/DECODE 0 · CLAIM ED906F06 UNUSED · COUNTER DELTAS 0**. It also records the
+> procedural error plainly: the 96ef metadata preflight occurred one reorientation early. That
+> did not contaminate the test or consume the semantic claim, but its source-bound execution
+> identity is superseded and may not be used.
+>
+> Active `rootless-living-dex-dependency-v2-comparison-execution-v1` permits this exact sequence:
+> publish the reorientation, freeze and pass a new exact-head metadata-only preflight, consume the
+> semantic claim once, open exactly four committed rows, publish one aggregate and one durable
+> terminal, then stop. No retry, replacement, refit, row-level publication, ROM/controller,
+> gameplay, promotion, Crystal, completion, or transfer claim is allowed. Boards remain
+> **30/15/4/3/0/0**, development **14/4/0/1/1**, and rootless **8/8/1/0** until a completed
+> comparison terminal exists. This evaluates one abstract living-Pokédex decision; it still does
+> not demonstrate that the model can play a Pokémon game.
+
+> **Previous product focus (August 21, 2026): the sealed comparison preflight passed; qualify its
 > runner without touching the exam.** Main `c0956cc634a56f4851102f9bc259e44d112532e8`
 > passed CI `32445054913/1`. The
 > [comparison-preflight result](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)

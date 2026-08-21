@@ -29,27 +29,28 @@ Not the product:
 
 ## One active lane
 
-**Fresh rootless living-Dex comparison execution qualification V2** (`rootless-living-dex-dependency-v2-comparison-execution-qualification-v1`)
+**Fresh rootless living-Dex comparison execution V2** (`rootless-living-dex-dependency-v2-comparison-execution-v1`)
 
-- Kind: **maintenance**
-- Rigor: **development**
-- Next decision: A clean public implementation, mutation audit, Antigravity GO, and exact-head green CI permit a separately reoriented one-shot comparison execution lane. A failed qualification closes this design. Neither outcome authorizes private access, comparison execution, gameplay, authority, or transfer.
+- Kind: **learning**
+- Rigor: **benchmark**
+- Next decision: After one durable terminal, reorient immediately. A completed aggregate decides whether to design a Red observation adapter or close/redesign the representation; any claimed failure closes this identity without retry. Neither result promotes authority or opens Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Qualify a source-authenticated one-shot V2 comparison runner on public and synthetic fixtures: exact fit-bundle join, durable claim before payload open, exactly four committed rows, aggregate-only output, and durable no-retry terminal behavior. |
-| Authority now | Four V2 openings remain sealed; the clean fit bundle is authenticated and comparison identity ed906f06 remains unused. No comparison, gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
-| Authority target | Qualify the public one-shot comparison runner so a later separately authorized execution may safely consume the frozen identity; implementation qualification grants no learned authority. |
-| Transfer test | None. This lane qualifies only the synthetic evaluation runner; a later Red observation adapter and Crystal transfer remain separate gates. |
-| Cheapest falsifier | Mutation-test the public runner against synthetic stores and claims; stop if any path can open a row before claim, accept a swapped fit or roster, publish row-level data, omit a terminal, retry, or touch real private storage. |
+| Reusable capability | Execute exactly one source-authenticated V2 held-out dependency comparison: claim before opening exactly four committed rows, publish only the frozen aggregate, and retain a durable terminal with no retry. |
+| Authority now | Four V2 openings remain sealed and semantic comparison claim ed906f06 remains unused. The 96ef8a1b preflight is valid qualification evidence but its source-bound execution identity is superseded. No gameplay, completion, Crystal, living-Pokedex, or transfer authority exists. |
+| Authority target | Measure one aggregate held-out synthetic acquire-versus-evolve result. Even a pass grants no gameplay or transfer authority; it only decides whether this abstract dependency representation merits a later real-observation adapter. |
+| Transfer test | None. This four-row synthetic held-out comparison tests only an abstract dependency rule; a later Red observation adapter and Crystal transfer remain separate gates. |
+| Cheapest falsifier | On a newly published exact head, repeat the metadata-only preflight. Stop before opening any payload if the fit bundle, four commitments, current source, or unused semantic claim fails authentication. |
 | Time box | 1 session / 2 hours |
 
 ### Required learning outputs
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Synthetic Rootless Unseen Comparison · development | 0 | 1 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
@@ -57,36 +58,32 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-08-21-rootless-dependency-v2-comparison-preflight-complete** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)
+**2026-08-21-rootless-dependency-v2-comparison-execution-reorientation** · status **active** · evidence [qualification](docs/evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A trustworthy unseen acquire-versus-evolve result needs a runner that cannot peek, retry, cherry-pick, or publish hidden rows. This qualifies that reusable evaluation seam without confusing infrastructure with model capability. |
-| Learning output | No new measured learning output. One metadata-only preflight authenticated the clean fit bundle and four sealed manifests, opened and decoded zero development payloads, left the comparison claim unused, and changed no counter. |
-| Authority delta | No authority changed. The preflight opened no development payload and produced no comparison, gameplay, completion, Crystal, promotion, or transfer result. |
-| Transfer result | Not run. The metadata-only preflight and synthetic runner qualification contain no title execution or transfer test. |
-| Blocker | The fit-bound preflight passed and the comparison identity remains unused, but the current V2 runner has no comparison-execution mode. Claim-before-open, aggregate-only publication, and durable terminal behavior therefore require public/synthetic qualification before any private execution. |
-| Decision | Close the metadata-only preflight lane after exact source c0956cc6 and CI 32445054913/1 authenticated the clean fit, four sealed manifests, and unused comparison identity with zero payload opens. Antigravity returned GO with no P0/P1 blocker. Activate public/synthetic runner qualification only. |
-| Next session | Implement and mutation-test the one-shot comparison runner entirely on public and synthetic fixtures, obtain Antigravity review, publish exact-head green CI, and stop before any real private access, claim, payload decode, or comparison execution. |
-| Next falsifier | Stop qualification if synthetic mutation tests cannot prove exact-bundle authentication, durable claim-before-open, exact four-row denominator, aggregate-only output, failure-terminal retention, and permanent no-retry behavior. |
-| Stop condition | Stop after public implementation, mutation tests, Antigravity audit, and exact-head green CI. Never access the real private store or claim registry, open a real development payload, execute comparison, refit, access a ROM/controller, promote, or run Crystal. |
+| Product alignment | This is the first clean held-out test of a species-neutral acquire-versus-evolve dependency rule needed by a living-Pokedex planner. It evaluates one abstract decision and does not establish gameplay or transfer. |
+| Learning output | No new measured learning output. Source 96ef8a1b passed exact-head CI; its metadata-only preflight authenticated four manifests, opened and decoded zero payloads, consumed no claim, and changed no counter. The execution identity must be refreshed after reorientation. |
+| Authority delta | No authority changed. Published implementation and metadata-only qualification produced no comparison, gameplay, completion, Crystal, promotion, or transfer result. |
+| Transfer result | Not run. This held-out synthetic comparison contains no title execution and cannot establish Red gameplay or cross-title transfer. |
+| Blocker | The 96ef8a1b preflight was scientifically clean but occurred one reorientation early. Its semantic claim remains unused, while its source-bound execution identity is superseded by this reorientation commit and must be refreshed on the newly published exact head. |
+| Decision | Retire public/synthetic runner qualification after source 96ef8a1b passed CI 32447962527/1 and Antigravity returned implementation and governance GO. Transparently preserve the zero-effect early preflight, activate exactly one comparison execution, and require a fresh exact-head metadata preflight first. |
+| Next session | Publish the execution lane, pass a fresh exact-head metadata-only preflight, then consume the semantic claim once, open exactly four committed development payloads, publish one aggregate and terminal, and stop. |
+| Next falsifier | Publish this reorientation, freeze a new exact-head comparison manifest, and stop if the repeated metadata-only preflight does not authenticate the exact fit, all four commitments, and the still-unused semantic claim with zero payload opens. |
+| Stop condition | Stop at the first durable comparison terminal, pass or fail. Never retry, replace an opening, refit, access a ROM/controller, promote authority, run Crystal, or turn this descriptive four-row result into a gameplay or transfer claim. |
 
 ### Stop conditions
 
-- Stop implementation if the runner cannot remain a thin source-authenticated wrapper over the frozen V2 fit authentication, claim-before-open, exact four-row opening, aggregate scorer, and durable terminal seams.
-- Stop after public/synthetic implementation qualification and exact-head green CI. Never access a real private artifact or claim, open or decode a real development payload, execute comparison, refit, access a ROM/controller, query a teacher, promote authority, or run Crystal.
+- Before any development payload opens, stop if the newly published exact-head preflight does not authenticate the fit bundle, all four commitments, current execution identity, and unused semantic claim.
+- After the comparison claim is attempted, stop at the first durable success or failure terminal. Never retry, replace a row, refit, inspect individual results publicly, access a ROM/controller, query a teacher, promote authority, or run Crystal.
 
 ### Hard boundaries for this lane
 
-- **Prohibited:** campaign execution
-- **Prohibited:** comparison execution
 - **Prohibited:** consumed trial retry
 - **Prohibited:** crystal execution
-- **Prohibited:** development payload decode
 - **Prohibited:** full game replay
 - **Prohibited:** gameplay execution
 - **Prohibited:** model refit
-- **Prohibited:** private artifact access
 - **Prohibited:** sealed red evaluation
 - **Prohibited:** teacher route hardening
 
@@ -118,6 +115,7 @@ and unmeasured teacher-label copying are also hard alarms.
 
 ## Retired leading edges
 
+- **Fresh rootless living-Dex comparison execution qualification V2:** Published source 96ef8a1bd105e399963ec8656f3a81cb850742b9 passed CI 32447962527/1 with the exact-bundle, claim-before-open, four-row aggregate-only runner and durable no-retry terminals. Antigravity returned implementation and governance GO. A metadata-only preflight opened zero payloads and consumed no claim; because it occurred one reorientation early, its semantic qualification remains valid but its source-bound identity is superseded for execution. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex comparison preflight V2:** Published main c0956cc634a56f4851102f9bc259e44d112532e8 passed CI run 32445054913 attempt 1. Manifest 583050da authenticated the exact clean fit bundle, four sealed development manifests, and unused comparison identity ed906f06 while opening and decoding zero development payloads. The claim remains unconsumed, all counters stayed unchanged, and Antigravity returned GO with no P0/P1 blocker. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex compliance fit V2:** Published main 15b2dbcb3cf881e97285c2611703d3c4dbac5206 passed CI run 32443875609 attempt 1. Manifest 5a38225d passed metadata-only preflight over four sealed manifests, then exactly one consumed fit produced an exact model/manifest/terminal bundle from the eight already counted public values. Development payload opens and counter deltas were zero. Antigravity returned GO with no P0/P1 blocker or overclaim. Evidence is preserved; retry is no.
 - **Fresh rootless living-Dex private provisioning V2:** Published main ec4c17018d3a2b569d776e220f3a3b5b32f202bb passed CI run 32442951504 attempt 1. Manifest 3204504c passed an action-free store-bound preflight, then exactly one provision created four fresh sealed V2 openings and one immutable plan under consumed claim 27b0f00c. No development evaluation payload was disclosed, no fit or comparison ran, and every progress counter stayed unchanged. Evidence is preserved; retry is no.

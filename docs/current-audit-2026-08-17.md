@@ -1,6 +1,22 @@
 # Current audit — 2026-08-21
 
-## Current result: V2 metadata-only comparison preflight passed once
+## Current result: execution runner published; exact-head re-preflight precedes one comparison
+
+Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+(SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+records exact runner publication, Antigravity implementation and governance GO, four metadata
+checks, zero payload opens/decodes, unused semantic claim, and zero counter delta. The metadata
+preflight ran one reorientation early. This is a process defect, not scientific contamination;
+the 96ef source-bound identity is therefore superseded, while the semantic claim remains clean.
+
+Active `rootless-living-dex-dependency-v2-comparison-execution-v1` first requires a new
+published-head metadata-only preflight and then permits one four-row aggregate comparison. It
+stops at the first durable terminal with no retry. Existing boards remain **30/15/4/3/0/0 ·
+14/4/0/1/1 · ROOTLESS 8/8/1/0** until a completed terminal exists. No gameplay, completion,
+authority, Crystal, or transfer claim follows from this synthetic test.
+
+## Previous result: V2 metadata-only comparison preflight passed once
 
 Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI run `32445054913`
 attempt 1. The

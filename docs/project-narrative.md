@@ -1,6 +1,20 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## August 21: the V2 comparison preflight passed without opening an answer
+## August 21: the comparison mechanism is published; one exact-head execution remains
+
+Main `96ef8a1bd105e399963ec8656f3a81cb850742b9` passed CI `32447962527/1`. The
+[execution-qualification receipt](evidence/rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json)
+(SHA-256 `c07844478a03dd8b31a0e0a3a19acdf2536b9aed5a9a587c200b692acec01bae`)
+binds the aggregate-only runner, Antigravity implementation/governance GO, four metadata checks,
+zero payload opens, and the unused semantic claim. The 96ef preflight occurred one reorientation
+early; it remains scientifically clean but is superseded as an execution identity.
+
+The active sequence is deliberately short: publish this lane, repeat metadata-only preflight on
+the new exact head, execute one four-row comparison, and stop at its durable terminal. This is the
+first clean held-out test of the abstract dependency ranker. It neither runs a Pokémon game nor
+establishes living-Pokédex, completion, authority, or cross-title transfer.
+
+## Previous August 21 checkpoint: the V2 comparison preflight passed without opening an answer
 
 Main `c0956cc634a56f4851102f9bc259e44d112532e8` passed CI `32445054913/1`. The
 [comparison-preflight result](evidence/rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json)

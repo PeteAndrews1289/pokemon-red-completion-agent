@@ -119,6 +119,11 @@ ROOTLESS_DEPENDENCY_V2_COMPARISON_PREFLIGHT_RESULT = (
     / "docs/evidence"
     / "rootless-living-dex-dependency-v2-comparison-preflight-result-2026-08-21.json"
 )
+ROOTLESS_DEPENDENCY_V2_COMPARISON_EXECUTION_QUALIFICATION = (
+    PROJECT_ROOT
+    / "docs/evidence"
+    / "rootless-living-dex-dependency-v2-comparison-execution-qualification-2026-08-21.json"
+)
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
 )
@@ -241,16 +246,19 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert state.active_lane["id"] == (
-        "rootless-living-dex-dependency-v2-comparison-execution-qualification-v1"
-    )
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == (
-        "rootless-living-dex-dependency-v2-comparison-execution-v1"
-    )
-    assert len(state.retired_lanes) == 39
+    assert state.active_lane["id"] == ("rootless-living-dex-dependency-v2-comparison-execution-v1")
+    assert state.active_lane["kind"] == "learning"
+    assert state.active_lane["maintenance_unblocks"] is None
+    assert state.active_lane["measurable_outputs"] == [
+        {
+            "kind": "synthetic_rootless_unseen_comparison",
+            "minimum": 1,
+            "partition": "development",
+        }
+    ]
+    assert len(state.retired_lanes) == 40
     assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_scorecard(state) == (("Synthetic Rootless Unseen Comparison · development", 0, 1),)
     assert state.progress["outcome_questions"] == {"development": 15, "train": 30}
     assert state.progress["model_fits"] == 4
     assert state.progress["unseen_comparisons"] == 3
@@ -325,8 +333,7 @@ def test_rootless_dependency_v2_compliance_fit_is_clean_and_zero_credit() -> Non
         "overclaim_detected": False,
         "p0_or_p1_blockers": 0,
         "scope": (
-            "public_fit_bundle_counter_boundary_next_comparison_preflight_and_"
-            "mission_alignment"
+            "public_fit_bundle_counter_boundary_next_comparison_preflight_and_mission_alignment"
         ),
         "verdict": "go",
     }
@@ -363,6 +370,48 @@ def test_rootless_dependency_v2_comparison_preflight_keeps_openings_sealed() -> 
     )
     assert receipt["antigravity_review"]["verdict"] == "go"
     assert receipt["antigravity_review"]["p0_or_p1_blockers"] == 0
+    assert set(receipt["counter_treatment"].values()) == {0}
+    assert set(receipt["zero_effects"].values()) == {0}
+    encoded = json.dumps(receipt, sort_keys=True)
+    assert "/Users/" not in encoded
+    assert "/Volumes/" not in encoded
+
+
+def test_rootless_dependency_v2_execution_qualification_is_zero_effect_and_superseded() -> None:
+    receipt = json.loads(
+        ROOTLESS_DEPENDENCY_V2_COMPARISON_EXECUTION_QUALIFICATION.read_text(encoding="ascii")
+    )
+
+    assert receipt["status"] == "qualification_complete_execution_reorientation_required"
+    assert receipt["publication"] == {
+        "ci_attempt": 1,
+        "ci_conclusion": "success",
+        "ci_run_id": 32447962527,
+        "source_bundle_sha256": (
+            "46c2f7aa73d4d262afde2d8d11e41e3f85759af4af185d299367dfc94c84af29"
+        ),
+        "source_commit": "96ef8a1bd105e399963ec8656f3a81cb850742b9",
+    }
+    assert receipt["comparison"]["comparison_claim_consumed"] is False
+    assert receipt["comparison"]["development_payloads_opened"] == 0
+    assert receipt["comparison"]["development_payloads_decoded"] == 0
+    assert receipt["comparison"]["identity_status"] == (
+        "valid_qualification_identity_superseded_for_execution_after_reorientation_commit"
+    )
+    assert receipt["procedural_ordering"] == {
+        "claim_or_payload_effect": False,
+        "finding": (
+            "The metadata-only preflight ran after runner publication but one reorientation "
+            "earlier than the active product lane permitted."
+        ),
+        "remedy": (
+            "Track this zero-effect qualification transparently, activate the execution lane, "
+            "publish that reorientation, then freeze and run a new exact-head preflight before "
+            "comparison."
+        ),
+        "root_or_semantic_claim_invalidation_required": False,
+        "scientific_contamination": False,
+    }
     assert set(receipt["counter_treatment"].values()) == {0}
     assert set(receipt["zero_effects"].values()) == {0}
     encoded = json.dumps(receipt, sort_keys=True)
@@ -1036,7 +1085,7 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == ()
+    assert rows == ("Synthetic Rootless Unseen Comparison · development: 0/1",)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -1365,24 +1414,23 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["run_status"] == "waiting"
     assert public["stage_progress"] == 0.0
     assert public["actions"] == 0
-    assert "Fresh rootless living-Dex comparison execution qualification V2" in public["stage"]
+    assert "Fresh rootless living-Dex comparison execution V2" in public["stage"]
     assert public["experiment"]["zero_shot"] == {"completed": 8, "total": 8}  # type: ignore[index]
     assert public["experiment"]["adaptation"] == {"completed": 1, "total": 1}  # type: ignore[index]
-    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 0}  # type: ignore[index]
+    assert public["experiment"]["sealed_test"] == {"completed": 0, "total": 1}  # type: ignore[index]
     encoded = json.dumps(public, sort_keys=True)
-    assert "metadata-only comparison preflight passed" in encoded
+    assert "one-shot comparison runner is published and qualified" in encoded
     assert "actions 244/244" in encoded
-    assert "comparison preflight passed" in encoded
-    assert "runner qualification next" in encoded
-    assert "c0956cc6" in encoded
-    assert "32445054913/1" in encoded
+    assert "exact-head preflight first" in encoded
+    assert "96ef8a1b" in encoded
+    assert "32447962527/1" in encoded
     assert "four openings sealed" in encoded
     assert "openings 0/4" in encoded
     assert "counter delta 0" in encoded
-    assert "manifest 583050da" in encoded
+    assert "manifest 917e5f21" in encoded
     assert "model a42db642" in encoded
-    assert "claim ed906f06 unused" in encoded
-    assert "comparison 0" in encoded
+    assert "semantic claim ed906f06 unused" in encoded
+    assert "source identity superseded" in encoded
     assert "fit 1 counted/ineligible" in encoded
     assert "comparisons 0" in encoded
     assert "Rootless board" in encoded
